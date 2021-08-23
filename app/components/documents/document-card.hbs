@@ -31,6 +31,7 @@
               {{!-- trigger fetch --}}
               {{#if this.piece.publicationFlow}}
                 {{!-- TODO: remove style attributes and replace classes with auk-status-pill --}}
+                {{!-- template-lint-disable no-inline-styles --}}
                 <LinkTo class="auk-pill auk-pill--default auk-u-mr-2"
                   @route="publications.publication"
                   @model={{this.piece.publicationFlow.id}}>
@@ -40,6 +41,7 @@
                     {{this.piece.publicationFlow.identification.idName}}
                   </span>
                 </LinkTo>
+                {{!-- template-lint-enable no-inline-styles --}}
               {{/if}}
             {{/if}}
             <Auk::Toolbar::Item class="auk-o-flex">
@@ -63,7 +65,7 @@
                 as |Menu|>
                   <Menu.Item
                     data-test-document-upload-new-piece
-                    {{on "click" (fn this.openUploadModal)}}
+                    {{on "click" this.openUploadModal}}
                   >
                     {{t "new-version"}}
                   </Menu.Item>
@@ -110,9 +112,11 @@
               </div>
             {{else}}
               <h6 class="auk-h4" data-test-document-card-name-value>
+                {{!-- template-lint-disable no-invalid-interactive --}}
                 <span {{on "click" this.enableEditPieceName}}>
                   {{this.piece.name}}
                 </span>
+                {{!-- template-lint-enable no-invalid-interactive --}}
               </h6>
             {{/if}}
             <div class="vlc-document-card-content__meta">

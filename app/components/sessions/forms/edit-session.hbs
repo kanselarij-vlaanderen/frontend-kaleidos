@@ -1,13 +1,15 @@
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
 <Auk::Modal::Body>
-  {{utils/kind-selector kind=kind setAction=(action "setKind")}}
+  <Utils::KindSelector @kind={{this.kind}} @setAction={{action "setKind"}} />
   <div class="auk-u-mb-2">
     <div class="auk-form-group">
       <Auk::Label>{{t "start-date"}}</Auk::Label>
-      {{web-components/vl-datepicker
-        enableTime=true
-        date=date
-        dateChanged=(action "selectStartDate")
-      }}
+      <WebComponents::VlDatepicker
+        @enableTime={{true}}
+        @date={{this.date}}
+        @dateChanged={{action "selectStartDate"}}
+      />
     </div>
   </div>
   <div class="auk-u-mb-2">
@@ -16,10 +18,10 @@
       <Auk::Input
         @type="number"
         @block={{true}}
-        @value={{meetingNumber}}
+        @value={{this.meetingNumber}}
         data-test-edit-session-meeting-number={{true}}
-        {{on "change" (action "meetingNumberChangedAction" meetingNumber)}}
-        {{on "keyup" (action "meetingNumberChangedAction" meetingNumber)}}
+        {{on "change" (action "meetingNumberChangedAction" this.meeting)}}
+        {{on "keyup" (action "meetingNumberChangedAction" this.meeting)}}
       />
     </div>
   </div>
@@ -30,7 +32,7 @@
       </Auk::Label>
       <Auk::Input
         @block={{true}}
-        @value={{numberRepresentation}}
+        @value={{this.numberRepresentation}}
         data-test-edit-session-number-representation={{true}}
       />
     </div>
@@ -42,15 +44,15 @@
       </Auk::Label>
       <Auk::Input
         @block={{true}}
-        @value={{extraInfo}}
+        @value={{this.extraInfo}}
       />
     </div>
   </div>
 </Auk::Modal::Body>
-{{web-components/vl-modal-footer
-  isLoading=isLoading
-  cancelButtonText=(t "cancel")
-  saveButtonText=(t "edit")
-  cancelAction=(action "cancelForm")
-  saveAction=(action "updateSession")
-}}
+<WebComponents::VlModalFooter
+  @isLoading={{this.isLoading}}
+  @cancelButtonText={{t "cancel"}}
+  @saveButtonText={{t "edit"}}
+  @cancelAction={{action "cancelForm"}}
+  @saveAction={{action "updateSession"}}
+/>

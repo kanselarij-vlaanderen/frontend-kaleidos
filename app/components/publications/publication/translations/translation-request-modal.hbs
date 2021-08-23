@@ -9,12 +9,15 @@
     <Utils::LoadableContent @isLoading={{this.saveRequest.isRunning}} @reserveSpace={{true}}>
       <div class="auk-form-group-layout auk-form-group-layout--standard">
         {{!-- Due date --}}
+        {{!-- TODO: Remove inline style --}}
+        {{!-- template-lint-disable no-inline-styles --}}
         <div class="auk-form-group" style="max-width: 30rem;">
           <Auk::Label for="translationRequestDueDate">{{t "translation-due-date"}}</Auk::Label>
           <Auk::Datepicker id="translationRequestDueDate"
             @date={{this.translationDueDate}}
             @onChange={{this.setTranslationDueDate}} />
         </div>
+        {{!-- template-lint-enable no-inline-styles --}}
         {{!-- Subject --}}
         <div class="auk-form-group">
           <Auk::Label for="translationRequestSubject">

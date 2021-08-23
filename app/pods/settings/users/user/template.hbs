@@ -1,9 +1,9 @@
-{{utils/settings-header
-  showBackButton=true
-  title=(t 'manage-user'
-  firstName=model.firstName
-  lastName=model.lastName)
-}}
+<Utils::SettingsHeader
+  @showBackButton={{true}}
+  @title={{t 'manage-user'
+    firstName=this.model.firstName
+    lastName=this.model.lastName}}
+/>
 
 <div class="auk-o-grid auk-o-grid-col-6">
   <div class="auk-o-grid-col-6 auk-u-m">
@@ -16,21 +16,21 @@
           <dl>
             <Auk::KeyValue
               @key={{t 'manage-users-full-name'}}
-              @value={{model.fullName}}
+              @value={{this.model.fullName}}
               @layout="horizontal"
             />
           </dl>
           <dl>
             <Auk::KeyValue
               @key={{t 'manage-users-email'}}
-              @value={{if model.email model.email "-"}}
+              @value={{if this.model.email this.model.email "-"}}
               @layout="horizontal"
             />
           </dl>
           <dl>
             <Auk::KeyValue
               @key={{t 'manage-users-telephone'}}
-              @value={{if model.phone model.phone "-"}}
+              @value={{if this.model.phone this.model.phone "-"}}
               @layout="horizontal"
             />
           </dl>
@@ -61,14 +61,14 @@
           <dl>
             <Auk::KeyValue
               @key={{t 'manage-users-void'}}
-              @value={{model.account.voId}}
+              @value={{this.model.account.voId}}
               @layout="horizontal"
             />
           </dl>
           <dl>
             <Auk::KeyValue
               @key={{t 'manage-users-ovo'}}
-              @value={{if model.organization.identifier model.organization.identifier "-"}}
+              @value={{if this.model.organization.identifier this.model.organization.identifier "-"}}
               @layout="horizontal"
             />
           </dl>

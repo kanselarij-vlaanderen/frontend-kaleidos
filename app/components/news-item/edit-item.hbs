@@ -1,7 +1,9 @@
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
 <div class="auk-u-mb-4">
   <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--align-end auk-u-mb-2 auk-o-flex--justify-end">
-    {{#if (not (is-pending agendaitem.notaOrVisienota))}}
-      {{#if (not (await agendaitem.notaOrVisienota))}}
+    {{#if (not (is-pending this.agendaitem.notaOrVisienota))}}
+      {{#if (not (await this.agendaitem.notaOrVisienota))}}
         <Auk::Button
           @skin="secondary"
           @icon="document"
@@ -13,7 +15,7 @@
         <Auk::Button
           @skin="secondary"
           @icon="document"
-          {{action "openDocument" agendaitem bubbles=false}}
+          {{action "openDocument" this.agendaitem bubbles=false}}
         >
           {{t "open-note"}}
         </Auk::Button>
@@ -29,21 +31,21 @@
   <div class="auk-form-group">
     <Auk::Label>{{t "title"}}</Auk::Label>
     <p>
-      {{agendaitem.title}}
+      {{this.agendaitem.title}}
     </p>
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "short-title"}}</Auk::Label>
     <Auk::Input
       @block={{true}}
-      @value={{newsletterInfo.title}}
+      @value={{this.newsletterInfo.title}}
     />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "mandatee-proposal"}}</Auk::Label>
     <p>
-      {{#if (await newsletterInfo.newsletterProposal)}}
-        {{await newsletterInfo.newsletterProposal}}
+      {{#if (await this.newsletterInfo.newsletterProposal)}}
+        {{await this.newsletterInfo.newsletterProposal}}
       {{else}}
         {{t "not-applicable"}}
       {{/if}}
@@ -51,29 +53,29 @@
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "decision-in-newsletter"}}</Auk::Label>
-    {{web-components/vl-rdfa-editor
-      data-test-newsletter-edit-item-rdfa-editor=true
-      isLarge=isExpanded
-      richtext=(await newsletterInfo.richtext)
-      handleRdfaEditorInit=(action "handleRdfaEditorInit")
-    }}
+    <WebComponents::VlRdfaEditor
+      data-test-newsletter-edit-item-rdfa-editor={{true}}
+      @isLarge={{this.isExpanded}}
+      @richtext={{await this.newsletterInfo.richtext}}
+      @handleRdfaEditorInit={{action "handleRdfaEditorInit"}}
+    />
   </div>
 
   <div class="auk-form-group auk-u-text-capitalize">
     <Auk::Label>{{t "remark"}}</Auk::Label>
     <Auk::Input
       @block={{true}}
-      @value={{newsletterInfo.remark}}
+      @value={{this.newsletterInfo.remark}}
     />
   </div>
 
   <div class="auk-form-group">
     <Auk::Label>{{t "finished"}}</Auk::Label>
-    {{web-components/vl-toggle value=newsletterInfo.finished}}
+    <WebComponents::VlToggle @value={{this.newsletterInfo.finished}} />
   </div>
   <div class="auk-form-group" data-test-newsletter-edit-item-themes-selector>
     <Auk::Label>{{t "themes"}}</Auk::Label>
-    {{utils/themes-selector selectedThemes=(await newsletterInfo.themes)}}
+    <Utils::ThemesSelector @selectedThemes={{await this.newsletterInfo.themes}} />
   </div>
 
 </div>
@@ -85,23 +87,23 @@
       </Auk::ButtonLink>
     </Auk::Toolbar::Item>
     <Auk::Toolbar::Item>
-      {{web-components/vl-save-button
-        data-test-newsletter-edit-item-save=true
-        text=(t "save")
-        isLoading=isLoading
-        saveAction=(action "trySaveChanges")
-      }}
+      <WebComponents::VlSaveButton
+        data-test-newsletter-edit-item-save={{true}}
+        @text={{t "save"}}
+        @isLoading={{this.isLoading}}
+        @saveAction={{action "trySaveChanges"}}
+      />
     </Auk::Toolbar::Item>
   </Auk::Toolbar::Group>
 </Auk::Toolbar>
-{{#if isTryingToSave}}
-  {{web-components/vl-modal-verify
-    title=(t "no-themes-selected")
-    message=(t "no-themes-selected-message")
-    cancel=(action "cancelSaveChanges")
-    verify=(action "saveChanges")
-    buttonText="save"
-    buttonType="warning"
-    showIcon=false
-  }}
+{{#if this.isTryingToSave}}
+  <WebComponents::VlModalVerify
+    @title={{t "no-themes-selected"}}
+    @message={{t "no-themes-selected-message"}}
+    @cancel={{action "cancelSaveChanges"}}
+    @verify={{action "saveChanges"}}
+    @buttonText="save"
+    @buttonType="warning"
+    @showIcon={{false}}
+  />
 {{/if}}

@@ -1,3 +1,5 @@
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
 <Auk::Navbar @skin="gray-100" @auto={{true}}>
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="left">
@@ -7,29 +9,29 @@
             <h4 class="auk-toolbar-complex__title auk-u-text-capitalize" data-test-newsletter-header-overview-title>
               {{t "newsletter-overview-pdf-name"}}
               -
-              {{await agenda.createdFor.kindToShow.label}}
-              {{moment-format agenda.createdFor.plannedStart "DD MMMM YYYY"}}
+              {{await this.agenda.createdFor.kindToShow.label}}
+              {{moment-format this.agenda.createdFor.plannedStart "DD MMMM YYYY"}}
             </h4>
           </div>
           <Auk::Tabs @reversed={{true}}>
             <Auk::Tab @route="newsletters" @isHierarchicalBack={{true}}/>
-            {{#if currentSession.isEditor}}
+            {{#if this.currentSession.isEditor}}
               <Auk::Tab
                 @route="newsletter.index"
-                @model={{meeting.id}}
+                @model={{this.meeting.id}}
               >
                 {{t "overview"}}
               </Auk::Tab>
               <Auk::Tab
                 @route="newsletter.print"
-                @model={{meeting.id}}
+                @model={{this.meeting.id}}
                 @query={{hash showDraft=true}}
               >
                 {{t "design"}}
               </Auk::Tab>
               <Auk::Tab
                 @route="newsletter.print"
-                @model={{meeting.id}}
+                @model={{this.meeting.id}}
                 @query={{hash showDraft=false}}
               >
                 {{t "definite"}}
@@ -47,22 +49,22 @@
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
-        {{#if currentSession.isEditor}}
+        {{#if this.currentSession.isEditor}}
         {{/if}}
         <DropdownMenu
           @skin="secondary"
           @label={{t "actions"}}
           class="vlc-hide-on-print"
         as |Menu|>
-          {{#if currentSession.isEditor}}
+          {{#if this.currentSession.isEditor}}
             {{#if
-              (or (is-pending agenda.createdFor.mailCampaign) isLoading)
+              (or (is-pending this.agenda.createdFor.mailCampaign) this.isLoading)
             }}
               <Menu.Item @textOnly={{true}}>
                 <Auk::Loader @message={{t "newsletter-loading-text"}} />
               </Menu.Item>
-            {{else if (await agenda.createdFor.mailCampaign)}}
-              {{#if (not (await agenda.createdFor.mailCampaign.isSent))}}
+            {{else if (await this.agenda.createdFor.mailCampaign)}}
+              {{#if (not (await this.agenda.createdFor.mailCampaign.isSent))}}
                 <Menu.Item {{action "sendTestCampaign"}}>
                   {{t "send-test-campaign"}}
                 </Menu.Item>
@@ -74,11 +76,11 @@
               <Menu.Item
                 @href={{concat
                   "/newsletter/xml-newsletter/"
-                  agenda.id
+                  this.agenda.id
                 }}
                 download={{concat
                   "/newsletter/xml-newsletter/"
-                  agenda.id
+                  this.agenda.id
                 }}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -98,7 +100,7 @@
               </Menu.Item>
             {{/if}}
           {{/if}}
-          {{#if shouldShowPrintButton}}
+          {{#if this.shouldShowPrintButton}}
             <Menu.Item {{action "print"}}>
               {{t "print"}}
             </Menu.Item>
@@ -109,31 +111,31 @@
   </Auk::Toolbar>
 </Auk::Navbar>
 
-{{#if isVerifying}}
+{{#if this.isVerifying}}
   <WebComponents::VlModalVerify
     @title={{t "send-campaign"}}
     @buttonType="warning"
-    @isLoading={{isLoading}}
+    @isLoading={{this.isLoading}}
     @verifyButtonText={{t "send-campaign"}}
     @message={{t "send-campaign-warning"}}
     @cancel={{action "toggleIsVerifying"}}
     @verify={{action "sendCampaign"}} />
 {{/if}}
-{{#if (or testCampaignIsLoading newsletterHTML)}}
+{{#if (or this.testCampaignIsLoading this.newsletterHTML)}}
   <WebComponents::VlModal
     @isOverlay={{true}}
     @title={{t "send-test-campaign"}}
     @closeModal={{action "clearNewsletterHTML"}}
   >
     <Auk::Modal::Body>
-      {{#if testCampaignIsLoading}}
+      {{#if this.testCampaignIsLoading}}
         <WebComponents::VlLoader @text={{t "preview-loading-text"}} />
       {{else}}
-        {{sanitize-html raw=true value=newsletterHTML}}
+        <SanitizeHtml @raw={{true}} @value={{this.newsletterHTML}} />
       {{/if}}
     </Auk::Modal::Body>
   </WebComponents::VlModal>
 {{/if}}
-{{#if isLoading}}
+{{#if this.isLoading}}
   <WebComponents::LoadingOverlay />
 {{/if}}

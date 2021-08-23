@@ -1,12 +1,12 @@
-{{#if model.shortTitle}}
-  {{page-title model.shortTitle}}
-{{else if model.title}}
-  {{page-title model.title}}
+{{#if this.model.shortTitle}}
+  {{page-title this.model.shortTitle}}
+{{else if this.model.title}}
+  {{page-title this.model.title}}
 {{else}}
-  {{page-title model.subcaseName}}
+  {{page-title this.model.subcaseName}}
 {{/if}}
 <div class="auk-u-bg-alt">
-  {{subcases/subcase-header subcase=model}}
+  <Subcases::SubcaseHeader @subcase={{this.model}} />
 </div>
 <div class="auk-scroll-wrapper__body">
   <div class="auk-u-m-8">

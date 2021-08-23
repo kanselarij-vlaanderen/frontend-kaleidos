@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { alias } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';
 import { timeout } from 'ember-concurrency';
 import {
@@ -19,9 +18,11 @@ export default class SidebarItem extends Component {
 
   @service router;
 
-  @alias('args.agendaitem.retracted') isRetracted;
   @tracked subcase;
   @tracked newsletterIsVisible;
+  get isRetracted() {
+      return this.args.agendaitem.retracted;
+  }
 
   get class() {
     const classes = [];

@@ -1,9 +1,11 @@
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
 <Auk::Modal::Body>
   <div class="auk-form-group">
     <Auk::Label>{{t "title"}}</Auk::Label>
     <Auk::Input
       @block={{true}}
-      @value={{title}}
+      @value={{this.title}}
       data-test-create-mandatee-title-container={{true}}
     />
   </div>
@@ -11,39 +13,39 @@
     <Auk::Label>{{t "nick-name"}}</Auk::Label>
     <Auk::Input
       @block={{true}}
-      @value={{nickName}}
+      @value={{this.nickName}}
       data-test-create-mandatee-nickname-container={{true}}
     />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "add-people"}}</Auk::Label>
-    {{utils/create-person-selector
-      selectedItems=selectedPerson
-      selectModel=(action "personSelected")
-    }}
+    <Utils::CreatePersonSelector
+      @selectedItems={{this.selectedPerson}}
+      @selectModel={{action "personSelected"}}
+    />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "ise-code"}}</Auk::Label>
-    {{utils/model-selector
-      data-test-create-mandatee-ise-code-container=true
-      modelName="ise-code"
-      searchField="name"
-      propertyToShow="name"
-      sortField="name"
-      multiSelect=true
-      selectedItems=iseCodes
-      selectModel=(action "chooseIseCodes")
-    }}
+    <Utils::ModelSelector
+      data-test-create-mandatee-ise-code-container={{true}}
+      @modelName="ise-code"
+      @searchField="name"
+      @propertyToShow="name"
+      @sortField="name"
+      @multiSelect={{true}}
+      @selectedItems={{this.iseCodes}}
+      @selectModel={{action "chooseIseCodes"}}
+    />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "start-date"}}</Auk::Label>
-    {{web-components/vl-datepicker dateChanged=(action "selectStartDate")}}
+    <WebComponents::VlDatepicker @dateChanged={{action "selectStartDate"}} />
   </div>
 </Auk::Modal::Body>
-{{web-components/vl-modal-footer
-  isLoading=isLoading
-  cancelButtonText=(t "cancel")
-  saveButtonText=(t "create-mandatee")
-  cancelAction=(action "closeModal")
-  saveAction=(action "createMandatee")
-}}
+<WebComponents::VlModalFooter
+  @isLoading={{this.isLoading}}
+  @cancelButtonText={{t "cancel"}}
+  @saveButtonText={{t "create-mandatee"}}
+  @cancelAction={{action "closeModal"}}
+  @saveAction={{action "createMandatee"}}
+/>

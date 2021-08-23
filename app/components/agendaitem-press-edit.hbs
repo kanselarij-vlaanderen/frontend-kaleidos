@@ -1,37 +1,40 @@
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
 <div class="auk-u-mb-4">
   <div class="auk-form-group">
     <Auk::Label>{{t "title"}}</Auk::Label>
     <Auk::Input
       @block={{true}}
-      @value={{agendaitem.titlePress}}
+      @value={{this.agendaitem.titlePress}}
     />
   </div>
   <div class="auk-form-group">
-    <Auk::Label>{{t "content"}}</Auk::Label>
-    {{textarea
+    <Auk::Label id="content">{{t "content"}}</Auk::Label>
+    <Textarea
       class="auk-textarea"
       rows="10"
-      value=agendaitem.textPress
-    }}
+      aria-labelledby="content"
+      @value={{this.agendaitem.textPress}}
+    />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "for-press"}}</Auk::Label>
-    {{web-components/vl-toggle value=agendaitem.forPress}}
+    <WebComponents::VlToggle @value={{this.agendaitem.forPress}} />
   </div>
 </div>
 <Auk::Toolbar>
   <Auk::Toolbar::Group @position="right">
     <Auk::Toolbar::Item>
-      <Auk::ButtonLink {{action "cancelEditing" agendaitem}}>
+      <Auk::ButtonLink {{action "cancelEditing" this.agendaitem}}>
         {{t "cancel"}}
       </Auk::ButtonLink>
     </Auk::Toolbar::Item>
     <Auk::Toolbar::Item>
-      {{web-components/vl-save-button
-        text=(t "save")
-        isLoading=isLoading
-        saveAction=(action "saveChanges" agendaitem)
-      }}
+      <WebComponents::VlSaveButton
+        @text={{t "save"}}
+        @isLoading={{this.isLoading}}
+        @saveAction={{action "saveChanges" this.agendaitem}}
+      />
     </Auk::Toolbar::Item>
   </Auk::Toolbar::Group>
 </Auk::Toolbar>

@@ -1,5 +1,7 @@
-{{utils/model-manager
-  modalTitle=(t "manage-document-types")
-  modelName="document-type"
-  close=(action "close")
-}}
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
+<Utils::ModelManager
+  @modalTitle={{t "manage-document-types"}}
+  @modelName="document-type"
+  @close={{action "close"}}
+/>

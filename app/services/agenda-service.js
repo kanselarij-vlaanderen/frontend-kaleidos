@@ -7,6 +7,8 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
 import { A } from '@ember/array';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Service.extend({
   store: service(),
   toaster: service(),

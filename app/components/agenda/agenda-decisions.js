@@ -1,10 +1,15 @@
 /* eslint-disable class-methods-use-this */
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
+// eslint-disable-next-line ember/no-computed-properties-in-native-classes
 import {
   computed, action
 } from '@ember/object';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/require-tagless-components
 export default class AgendaDecisions extends Component {
   isEditing = false;
 

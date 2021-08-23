@@ -53,9 +53,7 @@
                     {{#each mandateeDomainsFields.domains as |domain|}}
                       {{domain.label}}:
                     {{/each}}
-                    {{#each mandateeDomainsFields.fields as |field index|}}
-                      {{unless (eq index 0) ", "}}{{field.label}}
-                    {{/each}}
+                    {{join ", " (map-by "label" mandateeDomainsFields.fields)}}
                   {{else}}
                     {{t "dash"}}
                   {{/if}}

@@ -1,7 +1,12 @@
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import moment from 'moment';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   store: inject(),
   selectedPerson: null,
@@ -11,6 +16,8 @@ export default Component.extend({
     .toDate(),
   title: null,
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     personSelected(person) {
       this.set('selectedPerson', person);

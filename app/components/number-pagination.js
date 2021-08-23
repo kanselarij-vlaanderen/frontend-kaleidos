@@ -1,9 +1,14 @@
 // BRON: https://github.com/mu-semtech/ember-data-table/blob/master/addon/components/number-pagination.js
 // BRON: https://github.com/mu-semtech/ember-data-table/blob/master/addon/templates/components/number-pagination.hbs
-
+/* eslint-disable ember/no-get */
 import { computed } from '@ember/object';
+import { gt } from '@ember/object/computed';
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   classNames: ['data-table-pagination'],
 
@@ -20,10 +25,10 @@ export default Component.extend({
       return value;
     },
   }),
-  firstPage: computed('links', function() {
+  firstPage: computed('links.first.number', function() {
     return this.get('links.first.number') || 1;
   }),
-  lastPage: computed('links', function() {
+  lastPage: computed('links.last.number', function() {
     const max = this.get('links.last.number') || -1;
     return max ? max + 1 : max;
   }),
@@ -35,9 +40,7 @@ export default Component.extend({
     const currrentPage = this.get('currentPage');
     return lastPage === currrentPage;
   }),
-  hasMultiplePages: computed('lastPage', function() {
-    return this.get('lastPage') > 0;
-  }),
+  hasMultiplePages: gt('lastPage', 0),
   startItem: computed('size', 'currentPage', function() {
     const startitem = this.get('size') * (this.get('currentPage') - 1);
     return startitem + 1;
@@ -50,6 +53,8 @@ export default Component.extend({
     // eslint-disable-next-line no-unused-vars
     return Array.from(new Array(nbOfPages), (val, index) => this.get('firstPage') + index);
   }),
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     changePage(link) {
       this.set('page', link.number || 0);

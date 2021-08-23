@@ -1,14 +1,13 @@
-import DS from 'ember-data';
+import { belongsTo, hasMany, attr } from '@ember-data/model';
+import { PromiseArray } from '@ember-data/store/-private';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { alias } from '@ember/object/computed';
 import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 
-const {
-  attr, hasMany, belongsTo, PromiseArray,
-} = DS;
-
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
 export default ModelWithModifier.extend({
   modelName: alias('constructor.modelName'),
   store: inject(),
@@ -49,7 +48,7 @@ export default ModelWithModifier.extend({
   }),
   accessLevel: belongsTo('access-level'),
 
-  latestActivity: computed('agendaActivities', 'agendaActivities.@each', async function() {
+  latestActivity: computed('agendaActivities', 'agendaActivities.[]', async function() {
     const activities = await this.get('agendaActivities').then((activities) => activities.sortBy('startDate'));
     if (activities && activities.length > 0) {
       return activities.get('lastObject');
@@ -58,7 +57,7 @@ export default ModelWithModifier.extend({
   }),
 
   // eslint-disable-next-line ember/use-brace-expansion
-  phases: computed('agendaActivities.agendaitems', 'agendaActivities.agendaitems.@each', 'latestActivity.agendaitems.@each.retracted', 'approved', async function() {
+  phases: computed('agendaActivities.agendaitems', 'agendaActivities.agendaitems.[]', 'latestActivity.agendaitems.@each.retracted', 'approved', async function() {
     const activities = await this.get('agendaActivities');
     if (activities && activities.length > 0) {
       const phases = await this.get('subcasesService').getSubcasePhases(this);
@@ -81,11 +80,11 @@ export default ModelWithModifier.extend({
     return 'No name found.';
   }),
 
-  sortedMandatees: computed('mandatees.@each', function() {
+  sortedMandatees: computed('mandatees.[]', function() {
     return this.get('mandatees').sortBy('priority');
   }),
 
-  hasActivity: computed('agendaActivities', 'agendaActivities.@each', async function() {
+  hasActivity: computed('agendaActivities', 'agendaActivities.[]', async function() {
     const activities = await this.get('agendaActivities');
     if (activities && activities.length > 0) {
       return true;
@@ -107,7 +106,7 @@ export default ModelWithModifier.extend({
     return await lastMeeting.get('latestAgenda');
   }),
 
-  latestAgendaitem: computed('latestActivity.agendaitems.@each', 'agendaActivities.@each.agendaitems', async function() {
+  latestAgendaitem: computed('latestActivity.agendaitems.[]', 'agendaActivities.@each.agendaitems', async function() {
     const latestActivity = await this.get('latestActivity');
     if (latestActivity) {
       await latestActivity.hasMany('agendaitems').reload();
@@ -125,7 +124,7 @@ export default ModelWithModifier.extend({
     return null;
   }),
 
-  approved: computed('treatments', 'treatments.@each.decisionResultCode', async function() {
+  approved: computed('treatments', 'treatments.@each.decisionResultCode', 'requestedForMeeting', async function() {
     const meeting = await this.get('requestedForMeeting');
     if (meeting.isFinal) {
       const treatments = await this.get('treatments');
@@ -145,7 +144,7 @@ export default ModelWithModifier.extend({
     return false;
   }),
 
-  subcasesFromCase: computed('case.subcases.@each', function() {
+  subcasesFromCase: computed('case.subcases.[]', 'id', function() {
     return PromiseArray.create({
       //  We want to sort descending on date the subcase was concluded.
       //  In practice, sorting on created will be close
