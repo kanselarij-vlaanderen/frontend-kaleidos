@@ -80,7 +80,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
 
   if (meetingNumberVisualRepresentation) {
     cy.get(agenda.newSession.numberRep.edit).click();
-    cy.get(agenda.newSession.numberRep.input).find(auk.input)
+    cy.get(agenda.newSession.numberRep.input)
       .click()
       .clear()
       .type(meetingNumberVisualRepresentation);
@@ -88,7 +88,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   }
   // Get the value from the meetingNumber representation
   cy.get(agenda.newSession.numberRep.edit).click();
-  cy.get(agenda.newSession.numberRep.input).find(auk.input)
+  cy.get(agenda.newSession.numberRep.input)
     .click()
     .invoke('val')
     .then((sometext) => {

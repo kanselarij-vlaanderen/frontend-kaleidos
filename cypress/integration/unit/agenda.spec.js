@@ -182,9 +182,9 @@ context('Agenda tests', () => {
       // Check the values in edit session view
       cy.get(agenda.agendaHeader.showActionOptions).click();
       cy.get(agenda.agendaHeader.actions.toggleEditingSession).click();
-      cy.get(agenda.editSession.meetingNumber).find(auk.input)
+      cy.get(agenda.editSession.meetingNumber)
         .should('have.value', result.meetingNumber);
-      cy.get(agenda.editSession.numberRep).find(auk.input)
+      cy.get(agenda.editSession.numberRep)
         .should('have.value', result.meetingNumberRep);
       cy.get(utils.vlModalFooter.cancel).click();
       // Check if the next automatic number is correct

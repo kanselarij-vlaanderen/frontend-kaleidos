@@ -5,7 +5,6 @@ import dependency from '../../selectors/dependency.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
 import settings from '../../selectors/settings.selectors';
 import utils from '../../selectors/utils.selectors';
-import auk from '../../selectors/auk.selectors';
 
 context('Full test for creating mandatees', () => {
   /**
@@ -46,9 +45,9 @@ context('Full test for creating mandatees', () => {
       timeout: 30000,
     });
     // We could use input fields directly (after au refactor)
-    cy.get(mandatee.createMandatee.titleContainer).find(auk.input)
+    cy.get(mandatee.createMandatee.titleContainer)
       .type(ministerTitle);
-    cy.get(mandatee.createMandatee.nicknameContainer).find(auk.input)
+    cy.get(mandatee.createMandatee.nicknameContainer)
       .type(ministerNickName);
     cy.get(mandatee.personSelector.personDropdown).find(dependency.emberPowerSelect.trigger)
       .scrollIntoView()
