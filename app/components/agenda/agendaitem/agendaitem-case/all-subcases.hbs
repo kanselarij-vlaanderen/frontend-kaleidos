@@ -6,7 +6,7 @@
   </div>
 </div>
 {{#if (is-pending @subcases)}}
-  {{web-components/vl-loader text=(t "all-subcases-loading-text")}}
+  <WebComponents::VlLoader @text={{t "all-subcases-loading-text"}} />
 {{else if @subcases.length}}
   {{#each @subcases as |subcase|}}
     <Subcases::SubcaseItem @subcase={{await subcase}} as |subcase|>
@@ -22,6 +22,6 @@
   {{/each}}
 {{else}}
   <div class="auk-u-mt-2">
-    {{web-components/vl-alert message=(t "no-subcases-yet")}}
+    <WebComponents::VlAlert @message={{t "no-subcases-yet"}} />
   </div>
 {{/if}}

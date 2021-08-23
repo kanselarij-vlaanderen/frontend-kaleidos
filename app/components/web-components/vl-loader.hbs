@@ -1,12 +1,12 @@
 <div data-test-vl-loader class="auk-loader-wrapper auk-loader-wrapper--small auk-u-maximize-width auk-u-maximize-height">
   <div class="auk-loader" role="alert" aria-busy="true"></div>
-  {{#if (not text)}}
+  {{#if (not this.text)}}
     <p>
       {{t "loading-text"}}
     </p>
   {{else}}
     <p>
-      {{text}}
+      {{this.text}}
     </p>
   {{/if}}
 </div>

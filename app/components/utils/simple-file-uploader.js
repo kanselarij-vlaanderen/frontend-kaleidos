@@ -1,13 +1,18 @@
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { task } from 'ember-concurrency';
-import { get } from '@ember/object';
 import { inject } from '@ember/service';
 import { A } from '@ember/array';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   store: inject(),
   fileQueue: inject(),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-component-lifecycle-hooks
   didInsertElement() {
     this._super(...arguments);
     this.set('fileQueue.files', A([]));
@@ -20,9 +25,11 @@ export default Component.extend({
     this.uploadedFile(response);
   }).enqueue(),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     uploadFile(file) {
-      get(this, 'uploadFile').perform(file);
+      this.uploadFile.perform(file);
     },
 
     uploadedFile(uploadedFile) {

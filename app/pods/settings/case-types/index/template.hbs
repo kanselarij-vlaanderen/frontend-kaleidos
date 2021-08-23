@@ -1,5 +1,7 @@
-{{utils/model-manager
-  modalTitle=(t "manage-case-types")
-  modelName="case-type"
-  close=(action "close")
-}}
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
+<Utils::ModelManager
+  @modalTitle={{t "manage-case-types"}}
+  @modelName="case-type"
+  @close={{action "close"}}
+/>

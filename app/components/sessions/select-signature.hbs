@@ -1,0 +1,25 @@
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
+<WebComponents::VlModal
+  @closeModal={{action "closeDialog"}}
+  @isOverlay={{true}}
+  @title={{t "signature-edit"}}
+>
+  <Auk::Modal::Body>
+    <Utils::ModelSelector
+      @modelName="signature"
+      @searchField="name"
+      @propertyToShow="name"
+      @sortField="name"
+      @selectedItems={{this.selectedSignature}}
+      @selectModel={{action "selectSignature"}}
+    />
+  </Auk::Modal::Body>
+  <WebComponents::VlModalFooter
+    @isLoading={{this.isLoading}}
+    @cancelButtonText={{t "cancel"}}
+    @saveButtonText={{t "save"}}
+    @cancelAction={{action "closeDialog"}}
+    @saveAction={{action "saveChanges"}}
+  />
+</WebComponents::VlModal>

@@ -1,10 +1,8 @@
-import DS from 'ember-data';
+import Model, { belongsTo, attr } from '@ember-data/model';
 import { computed } from '@ember/object';
 
-const {
-  Model, attr, belongsTo,
-} = DS;
-
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
   firstName: attr('string'),
   lastName: attr('string'),
