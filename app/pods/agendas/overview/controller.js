@@ -1,10 +1,14 @@
 import Controller from '@ember/controller';
 import moment from 'moment';
+// eslint-disable-next-line ember/no-mixins
 import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Controller.extend(DefaultQueryParamsMixin, {
+  store: inject(),
   sessionService: inject(),
   intl: inject(),
   agendaService: inject(),
@@ -45,6 +49,8 @@ export default Controller.extend(DefaultQueryParamsMixin, {
     return true;
   },
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     setDateFilter(date) {
       const newDate = date.split('/').join('-');

@@ -1,12 +1,14 @@
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
 <fieldset>
-  <legend class="auk-label">{{title}}</legend>
+  <legend class="auk-label">{{this.title}}</legend>
   <Auk::RadioList @layout="inline" as |RadioList|>
-    {{#each optionList as |option index|}}
+    {{#each this.optionList as |option index|}}
       <RadioList.Radio
         @label={{option.label}}
         @checked={{if
-          selectedModel
-          (eq option.id selectedModel.id)
+          this.selectedModel
+          (eq option.id this.selectedModel.id)
           (eq index 0)
         }}
         onchange={{fn (action "modelChanged") option.id}}

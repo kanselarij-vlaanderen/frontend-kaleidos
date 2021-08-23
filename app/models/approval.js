@@ -1,11 +1,7 @@
-import DS from 'ember-data';
+import Model, { belongsTo, attr } from '@ember-data/model';
 
-const {
-  Model,
-  attr,
-  belongsTo,
-} = DS;
-
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
   created: attr('datetime'),
   mandatee: belongsTo('mandatee', {

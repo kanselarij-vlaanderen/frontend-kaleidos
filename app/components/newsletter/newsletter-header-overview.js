@@ -1,14 +1,19 @@
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 import moment from 'moment';
 import SendingOldCampaignError from 'frontend-kaleidos/errors/sending-old-campaign-error';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   intl: service(),
   store: service(),
   session: service(),
-  routing: service('-routing'),
+  router: service(),
   toaster: service(),
   newsletterService: service(),
   currentSession: service(),
@@ -17,8 +22,8 @@ export default Component.extend({
   meeting: null,
   isVerifying: null,
 
-  shouldShowPrintButton: computed('routing.currentRouteName', function() {
-    return this.routing.get('currentRouteName').includes('newsletter.print');
+  shouldShowPrintButton: computed('router.currentRouteName', function() {
+    return this.router.currentRouteName.includes('newsletter.print');
   }),
 
   async validatedCampaign(campaignId) {
@@ -48,6 +53,8 @@ export default Component.extend({
     }
   },
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     print() {
       window.print();

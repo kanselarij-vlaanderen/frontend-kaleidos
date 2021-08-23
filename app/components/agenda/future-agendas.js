@@ -1,11 +1,16 @@
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   classNames: ['auk-u-mb-8'],
   selectedMeeting: null,
 
-  items: computed('meetings', 'type', 'nearestMeeting', function() {
+  items: computed('meetings', 'nearestMeeting.firstObject', 'type', function() {
     if (this.type === 'future') {
       const nearestMeeting = this.get('nearestMeeting.firstObject');
       if (!nearestMeeting) {
@@ -24,6 +29,8 @@ export default Component.extend({
     return false;
   }),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     selectAgenda(meeting) {
       this.selectAgenda(meeting);

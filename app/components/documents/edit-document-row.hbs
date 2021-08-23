@@ -10,33 +10,31 @@
     </h4>
   </td>
   <td>
-    {{utils/model-selector
-      data-test-edit-document-row-type=true
-      modelName="document-type"
-      searchField="label"
-      propertyToShow="label"
-      sortField="priority"
-      selectedItems=this.documentContainer.type
-      selectModel=(fn this.selectDocumentType)
-    }}
+    <Utils::ModelSelector
+      data-test-edit-document-row-type={{true}}
+      @modelName="document-type"
+      @searchField="label"
+      @propertyToShow="label"
+      @sortField="priority"
+      @selectedItems={{this.documentContainer.type}}
+      @selectModel={{this.selectDocumentType}}
+    />
   </td>
   <td>
-    {{utils/model-selector
-      data-test-edit-document-row-access-level=true
-      modelName="access-level"
-      searchField="label"
-      allowClear=true
-      propertyToShow="label"
-      readOnly=@piece.confidential
-      sortField="label"
-      selectedItems=@piece.accessLevel
-      selectModel=(fn this.selectAccessLevel)
-    }}
+    <Utils::ModelSelector
+      data-test-edit-document-row-access-level={{true}}
+      @modelName="access-level"
+      @searchField="label"
+      @allowClear={{true}}
+      @propertyToShow="label"
+      @readOnly={{@piece.confidential}}
+      @sortField="label"
+      @selectedItems={{@piece.accessLevel}}
+      @selectModel={{this.selectAccessLevel}}
+    />
   </td>
   <td>
-    {{web-components/vl-toggle
-      value=(mut @piece.confidential)
-    }}
+    <WebComponents::VlToggle @value={{mut @piece.confidential}} />
   </td>
   <td class="auk-u-text-align--right">
     <Auk::Button

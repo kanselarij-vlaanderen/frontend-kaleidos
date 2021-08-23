@@ -1,10 +1,10 @@
-import DS from 'ember-data';
+import Model, { belongsTo, hasMany, attr } from '@ember-data/model';
+import { PromiseArray } from '@ember-data/store/-private';
 import { computed } from '@ember/object';
 
-const {
-  Model, attr, hasMany, belongsTo, PromiseArray,
-} = DS;
-
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
   created: attr('datetime'),
   modified: attr('datetime'),
@@ -20,7 +20,7 @@ export default Model.extend({
     inverse: null,
   }),
 
-  sortedAttendees: computed('attendees.@each', function() {
+  sortedAttendees: computed('attendees.[]', function() {
     return PromiseArray.create({
       promise: this.get('attendees').then((attendees) => attendees.sortBy('priority')),
     });

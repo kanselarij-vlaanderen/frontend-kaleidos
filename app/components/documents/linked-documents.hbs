@@ -27,21 +27,21 @@
 
 {{#if this.isOpenLinkedPieceModal}}
   <WebComponents::VlModal
-    @closeModal={{fn this.cancelLinkPieces}}
+    @closeModal={{this.cancelLinkPieces}}
     @isOverlay={{true}}
     @large={{true}}
     @title={{t "document-link-old"}} >
     <Auk::Modal::Body>
       <Utils::AddExistingPiece
-        @add={{fn this.linkPiece}}
-        @delete={{fn this.unlinkPiece}}
+        @add={{this.linkPiece}}
+        @delete={{this.unlinkPiece}}
       />
     </Auk::Modal::Body>
     <WebComponents::VlModalFooter
       @isLoading={{this.saveLinkedPieces.isRunning}}
       @cancelButtonText={{t "cancel"}}
       @saveButtonText={{t "document-link-old"}}
-      @cancelAction={{fn this.cancelLinkPieces}}
+      @cancelAction={{this.cancelLinkPieces}}
       @saveAction={{perform this.saveLinkedPieces}}
       @disableSave={{eq this.newLinkedPieces.length 0}} />
   </WebComponents::VlModal>

@@ -1,12 +1,14 @@
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
 <label data-test-vl-checkbox-label class="auk-checkbox">
-  {{input
+  <Input
     class="auk-checkbox__toggle"
-    type="checkbox"
-    checked=value
-    disabled=disabled
-    data-test-vl-checkbox=true
-    input=(action "toggle")
-  }}
-  {{label}}
+    disabled={{this.disabled}}
+    @type="checkbox"
+    @checked={{this.value}}
+    data-test-vl-checkbox={{true}}
+    {{on "input" (action "toggle")}}
+  />
+  {{this.label}}
   <span class="auk-checkbox__box"></span>
 </label>

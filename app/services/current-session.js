@@ -22,6 +22,7 @@ export default class CurrentSessionService extends Service {
   @tracked group;
   @tracked roles;
 
+  /* eslint-disable ember/no-get */
   async load() {
     if (this.session.isAuthenticated) {
       const accountId = get(this.session, 'data.authenticated.relationships.account.data.id');
@@ -36,6 +37,7 @@ export default class CurrentSessionService extends Service {
       this.roles = get(this.session, 'data.authenticated.data.attributes.roles');
     }
   }
+  /* eslint-enable ember/no-get */
 
   get groupUri() {
     return this.group && this.group.uri;

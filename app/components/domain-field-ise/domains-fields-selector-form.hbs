@@ -1,9 +1,11 @@
 <Auk::CheckboxList {{did-update (perform this.calculateDomainSelections) @selectedFields}}
   data-test-domains-fields-selector-form>
   {{#each this.domainSelections as |domainSelection index|}}
+    {{!-- template-lint-disable simple-unless --}}
     {{#unless (eq index 0)}}
       <hr class="auk-u-my-2">
     {{/unless}}
+    {{!-- template-lint-enable simple-unless --}}
     <Auk::Checkbox
       @checked={{domainSelection.isSelected}}
       {{on "input" (fn this.toggleDomainSelection domainSelection)}}>

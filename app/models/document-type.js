@@ -1,9 +1,7 @@
-import DS from 'ember-data';
+import Model, { belongsTo, hasMany, attr } from '@ember-data/model';
 
-const {
-  Model, attr, hasMany, belongsTo,
-} = DS;
-
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
   label: attr('string'),
   scopeNote: attr('string'),

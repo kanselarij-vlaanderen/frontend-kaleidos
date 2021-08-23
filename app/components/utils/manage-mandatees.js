@@ -1,8 +1,13 @@
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
 import { tracked } from '@glimmer/tracking';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   store: service(),
   subcasesService: service(),
@@ -15,11 +20,16 @@ export default Component.extend({
   @tracked showVerificationPopup: null,
   mandateeService: service(),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-component-lifecycle-hooks
   async didInsertElement() {
+    this._super(...arguments);
     const today = moment();
     this.showVerificationPopup = await this.mandateeService.mandateeIsCompetentOnFutureAgendaitem(today, this.mandateeToEdit.id);
   },
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     closeModal() {
       this.closeModal();

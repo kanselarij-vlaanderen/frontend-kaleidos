@@ -1,5 +1,5 @@
 <Auk::Navbar @skin="gray-100">
-  {{#if (not isAddingCase)}}
+  {{#if (not this.isAddingCase)}}
     <Auk::Toolbar @auto={{true}}>
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
@@ -10,7 +10,7 @@
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          {{#if currentSession.isEditor}}
+          {{#if this.currentSession.isEditor}}
             <Auk::Button
               data-test-cases-header-add-case
               @skin="primary"
