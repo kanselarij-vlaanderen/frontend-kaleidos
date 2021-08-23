@@ -10,14 +10,13 @@
     {{did-insert this.conditionallyScrollIntoView}}
     {{in-viewport
       onEnter=(perform this.lazyLoadSideData)
-      onExit=(fn this.cancelLazyLoad)
+      onExit=this.cancelLazyLoad
     }}
   >
     <span class="vlc-agenda-detail-sidebar-sub-item__numbering">
+      {{!-- For legacy data agenda-item number can be unexistent --}}
       {{#if @agendaitem.number}}
         {{@agendaitem.number}}.
-      {{else}}
-        {{add index 1}}.
       {{/if}}
     </span>
     <div class="vlc-agenda-detail-sidebar__text-container">
@@ -59,10 +58,12 @@
                   {{!-- TODO: this icon is merely here as an invisible placeholder.
                     This keeps element-height the same at all times in order to prevent "jumping" when data is being side-loaded.
                     This should be tackled differently through modified design --}}
+                  {{!-- template-lint-disable no-inline-styles --}}
                   <i
                     class="ki ki-not-visible vlc-agenda-detail-sidebar-item__icon--margin-right vlc-u-opacity-50"
                     style="visibility:hidden"
                   ></i>
+                  {{!-- template-lint-enable no-inline-styles --}}
                 {{/if}}
               {{else}}
                 {{!-- TODO: design loading state for newsletter visibility --}}

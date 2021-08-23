@@ -30,6 +30,8 @@
             {{t "publications-number"}}
           </Auk::Label>
           <div class=" auk-o-flex auk-o-flex--vertical-center">
+            {{!-- TODO: fix inline style for side-by-side fields --}}
+            {{!-- template-lint-disable no-inline-styles --}}
             <Auk::Input
               type="number"
               id="publicationNumberInput"
@@ -48,6 +50,7 @@
               data-test-create-publication-modal-suffix-input
               {{on "change" this.isPublicationNumberAlreadyTaken}}
             />
+            {{!-- template-lint-enable no-inline-styles --}}
             <Auk::Icon @name="circle-info" @skin="muted" class="auk-u-mx">
               <EmberTooltip @tooltipClass="auk-tooltip"  @side="top" >
                 <p>
@@ -66,6 +69,8 @@
             </Auk::Label>
           {{/if}}
         </div>
+        {{!-- TODO: fix inline style. What are these needed for? --}}
+        {{!-- template-lint-disable no-inline-styles --}}
         <div class='auk-form-group' style="max-width: 30rem;">
           <Auk::Label>
             {{t "decision-date"}}
@@ -102,6 +107,7 @@
             @date={{this.publicationDueDate}}
             @onChange={{this.setPublicationDueDate}} />
         </div>
+        {{!-- template-lint-enable no-inline-styles --}}
         <div class="auk-form-group {{if this.hasShortTitleError "auk-form-group--error" }}">
           <Auk::Label for="shortTitleInput" @isRequired={{true}}>
             {{t "name-subcase"}}

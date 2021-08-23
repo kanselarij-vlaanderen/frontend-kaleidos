@@ -1,3 +1,5 @@
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import {
@@ -5,6 +7,8 @@ import {
 } from 'ember-concurrency';
 import { computed } from '@ember/object';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   classNames: ['auk-form-group'],
   classNameBindings: [
@@ -82,6 +86,8 @@ export default Component.extend({
     return this.store.query(modelName, queryOptions);
   }),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     toggleIsCreatingPerson() {
       this.toggleProperty('isCreatingPerson');

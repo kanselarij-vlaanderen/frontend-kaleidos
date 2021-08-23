@@ -1,9 +1,11 @@
 import Controller from '@ember/controller';
 import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
+// eslint-disable-next-line ember/no-computed-properties-in-native-classes
 import {
   action,
-  computed
+  computed,
+  set,
 } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
@@ -98,7 +100,8 @@ export default class PublicationsPublicationTranslationsDocumentController exten
 
   @action
   changeSorting(sort) {
-    this.set('sort', sort);
+    // TODO: remove setter once "sort" is tracked
+    set(this, 'sort', sort);
   }
 
   @task

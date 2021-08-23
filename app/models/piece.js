@@ -1,12 +1,11 @@
-import DS from 'ember-data';
+import Model, { hasMany, belongsTo, attr } from '@ember-data/model';
 import { computed } from '@ember/object';
 import sanitize from 'sanitize-filename';
 import moment from 'moment';
 
-const {
-  Model, attr, belongsTo, hasMany,
-} = DS;
-
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
   name: attr('string'),
   pages: attr('number'),

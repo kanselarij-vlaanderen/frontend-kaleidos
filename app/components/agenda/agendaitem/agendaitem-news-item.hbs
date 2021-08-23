@@ -10,10 +10,10 @@
         {{await @newsletterInfo.newsletterProposal}}
       </p>
       <p>
-        {{sanitize-html
-          raw=true
-          value=@newsletterInfo.richtext
-        }}
+        <SanitizeHtml
+          @raw={{true}}
+          @value={{@newsletterInfo.richtext}}
+        />
       </p>
     </div>
   </div>

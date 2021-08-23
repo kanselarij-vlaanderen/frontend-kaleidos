@@ -2,35 +2,26 @@ import Component from '@glimmer/component';
 import { enqueueTask } from 'ember-concurrency-decorators';
 import { inject as service } from '@ember/service';
 import { A } from '@ember/array';
-import {
-  action, get
-} from '@ember/object';
+import { action, set } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { alias } from '@ember/object/computed';
 
 export default class FileUploader extends Component {
   @service store;
-
   @service fileQueue;
-
-  tagName = 'span';
 
   @tracked uploadedFileLength = null;
 
   multipleFiles = this.args.multipleFiles;
+  uploadedFileAction = this.args.uploadedFileAction;
 
   @tracked isLoading = null;
   @tracked blockInterface = false;
-
-  @tracked filesInQueue = alias('fileQueue.files');
-
-  uploadedFileAction = this.args.uploadedFileAction;
 
   @action
   insertElementInDom() {
     this.isLoading = false;
     this.uploadedFileLength = 0;
-    this.filesInQueue = A([]);
+    set(this, 'fileQueue.files', A([]));
   }
 
   @enqueueTask({
@@ -57,6 +48,6 @@ export default class FileUploader extends Component {
 
   @action
   uploadFile(file) {
-    get(this, 'uploadFileTask').perform(file);
+    this.uploadFileTask.perform(file);
   }
 }

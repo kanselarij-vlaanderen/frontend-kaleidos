@@ -46,9 +46,9 @@
             <Auk::Input
               @type="text"
               @block={{true}}
-              @placeholder={{t "search-placeholder"}}
+              placeholder={{t "search-placeholder"}}
               @value={{this.searchTextBuffer}}
-              @enter={{fn this.search}}
+              @enter={{this.search}}
               id="dossierId"
               data-test-route-search-input
             />
@@ -100,7 +100,7 @@
               @type="text"
               @block={{true}}
               @value={{this.mandateesBuffer}}
-              @enter={{fn this.search}}
+              @enter={{this.search}}
               id="ministerName"
             />
           </div>

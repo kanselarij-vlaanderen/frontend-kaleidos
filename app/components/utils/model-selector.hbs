@@ -1,38 +1,38 @@
-{{#if (not multiSelect)}}
-  {{#power-select
-    options=items
-    selected=selectedItems
-    disabled=readOnly
-    allowClear=allowClear
-    searchField=searchField
-    placeholder=placeholder
-    loadingMessage=loadingMessage
-    noMatchesMessage=noMatchesMessage
-    searchMessage=null
-    search=(perform searchTask)
-    oninput=(action "resetValueIfEmpty")
-    onchange=(action "selectModel")
-    searchEnabled=(not hideSearch)
-  as |model|
-  }}
-    {{await (model-property-to-show model propertyToShow)}}
-  {{/power-select}}
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
+{{#if (not this.multiSelect)}}
+  <PowerSelect
+    @options={{this.items}}
+    @selected={{this.selectedItems}}
+    @disabled={{this.readOnly}}
+    @allowClear={{this.allowClear}}
+    @searchField={{this.searchField}}
+    @placeholder={{this.placeholder}}
+    @loadingMessage={{this.loadingMessage}}
+    @noMatchesMessage={{this.noMatchesMessage}}
+    @searchMessage={{null}}
+    @search={{perform this.searchTask}}
+    @oninput={{action "resetValueIfEmpty"}}
+    @onchange={{action "selectModel"}}
+    @searchEnabled={{not this.hideSearch}}
+  as |model|>
+    {{await (model-property-to-show model this.propertyToShow)}}
+  </PowerSelect>
 {{else}}
-  {{#power-select-multiple
-    options=items
-    selected=selectedItems
-    disabled=readOnly
-    searchField=searchField
-    placeholder=placeholder
-    loadingMessage=loadingMessage
-    searchMessage=null
-    noMatchesMessage=noMatchesMessage
-    closeOnSelect=false
-    search=(perform searchTask)
-    oninput=(action "resetValueIfEmpty")
-    onchange=(action "selectModel")
-  as |model|
-  }}
-    {{await (model-property-to-show model propertyToShow)}}
-  {{/power-select-multiple}}
+  <PowerSelectMultiple
+    @options={{this.items}}
+    @selected={{this.selectedItems}}
+    @disabled={{this.readOnly}}
+    @searchField={{this.searchField}}
+    @placeholder={{this.placeholder}}
+    @loadingMessage={{this.loadingMessage}}
+    @searchMessage={{null}}
+    @noMatchesMessage={{this.noMatchesMessage}}
+    @closeOnSelect={{false}}
+    @search={{perform this.searchTask}}
+    @oninput={{action "resetValueIfEmpty"}}
+    @onchange={{action "selectModel"}}
+  as |model|>
+    {{await (model-property-to-show model this.propertyToShow)}}
+  </PowerSelectMultiple>
 {{/if}}

@@ -1,3 +1,5 @@
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
@@ -5,6 +7,8 @@ import {
   task, timeout
 } from 'ember-concurrency';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   classNames: ['auk-form-group'],
   classNameBindings: ['classes'],
@@ -74,6 +78,8 @@ export default Component.extend({
     return this.store.query(modelName, queryOptions);
   }),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     selectModel(items) {
       this.descriptionUpdated(items.get('description'));

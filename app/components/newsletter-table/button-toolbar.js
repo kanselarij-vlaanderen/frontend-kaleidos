@@ -1,21 +1,23 @@
 import Component from '@glimmer/component';
+// TODO: refactor to make computeds sync.
+// eslint-disable-next-line ember/no-computed-properties-in-native-classes
 import {
   action,
   computed
 } from '@ember/object';
 
 export default class ButtonToolbarNewsletterTable extends Component {
-  @computed('this.args.agendaitem')
+  @computed('args.agendaitem')
   get latestMeetingId() {
     return  this.args.agendaitem.get('agenda').then((agenda) => agenda.get('createdFor').then((meeting) => meeting.id));
   }
 
-  @computed('this.args.agendaitem')
+  @computed('args.agendaitem')
   get latestAgendaId() {
     return this.args.agendaitem.get('agenda').then((agenda) => agenda.id);
   }
 
-  @computed('this.args.agendaitem')
+  @computed('args.agendaitem')
   get latestAgendaitemId() {
     return this.args.agendaitem.get('id');
   }

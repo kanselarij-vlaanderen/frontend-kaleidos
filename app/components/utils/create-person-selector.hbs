@@ -1,21 +1,23 @@
-{{#if (not isCreatingPerson)}}
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
+{{#if (not this.isCreatingPerson)}}
   <div data-test-person-selector-dropdown-container class="auk-o-flex auk-o-flex--vertical-center">
-    {{#power-select
-      options=items
-      selected=selectedItems
-      disabled=readOnly
-      searchField=searchField
-      placeholder=placeholder
-      loadingMessage=loadingMessage
-      noMatchesMessage=noMatchesMessage
-      searchMessage=searchMessage
-      search=(perform searchTask)
-      oninput=(action "resetValueIfEmpty")
-      onchange=(action "selectModel")
-    as |model|
-    }}
-      {{await (model-property-to-show model propertyToShow)}}
-    {{/power-select}}
+    <PowerSelect
+      @options={{this.items}}
+      @selected={{this.selectedItems}}
+      @disabled={{this.readOnly}}
+      @searchField={{this.searchField}}
+      @placeholder={{this.placeholder}}
+      @loadingMessage={{this.loadingMessage}}
+      @noMatchesMessage={{this.noMatchesMessage}}
+      @searchMessage={{this.searchMessage}}
+      @search={{perform this.searchTask}}
+      @oninput={{action "resetValueIfEmpty"}}
+      @onchange={{action "selectModel"}}
+      as |model|
+    >
+      {{await (model-property-to-show model this.propertyToShow)}}
+    </PowerSelect>
     <div class="auk-u-mr-2"></div>
     <Auk::Button
       @skin="secondary"
@@ -30,17 +32,17 @@
 {{else}}
   <div class="auk-form-group">
     <Auk::Label>{{t "first-name"}}</Auk::Label>
-    {{web-components/vl-form-input
-      data-test-person-selector-firstname=true
-      value=firstName
-    }}
+    <WebComponents::VlFormInput
+      data-test-person-selector-firstname={{true}}
+      @value={{this.firstName}}
+    />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "name"}}</Auk::Label>
-    {{web-components/vl-form-input
-      data-test-person-selector-lastname=true
-      value=lastName
-    }}
+    <WebComponents::VlFormInput
+      data-test-person-selector-lastname={{true}}
+      @value={{this.lastName}}
+    />
   </div>
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="right">
@@ -50,11 +52,11 @@
         </Auk::ButtonLink>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
-        {{web-components/vl-save-button
-          text=(t "save")
-          isLoading=isLoading
-          saveAction=(action "createPerson")
-        }}
+        <WebComponents::VlSaveButton
+          @text={{t "save"}}
+          @isLoading={{this.isLoading}}
+          @saveAction={{action "createPerson"}}
+        />
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>

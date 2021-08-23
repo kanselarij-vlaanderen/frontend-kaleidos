@@ -8,7 +8,7 @@
             type="text"
             @block={{true}}
             data-test-agendaitem-search-input
-            @placeholder={{t "search-placeholder"}}
+            placeholder={{t "search-placeholder"}}
             value={{this.searchText}}
             @enter={{this.search}}
             {{on "input" this.debouncedSearch}}

@@ -1,6 +1,10 @@
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { all } from 'rsvp';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   placeholder: '...',
   model: null,
@@ -9,6 +13,8 @@ export default Component.extend({
   loading: true,
   waitFor: null,
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-component-lifecycle-hooks
   didInsertElement() {
     this._super(...arguments);
     let promisesToWaitFor = this.waitFor || [];

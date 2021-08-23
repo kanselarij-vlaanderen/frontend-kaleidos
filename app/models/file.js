@@ -1,12 +1,11 @@
-import DS from 'ember-data';
+import Model, { belongsTo, attr } from '@ember-data/model';
 import { alias } from '@ember/object/computed';
 import { computed } from '@ember/object';
 import sanitize from 'sanitize-filename';
 
-const {
-  Model, attr, belongsTo,
-} = DS;
-
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
   piece: belongsTo('piece'),
   signature: belongsTo('signature', {
@@ -14,7 +13,7 @@ export default Model.extend({
   }),
 
   filename: attr('string'),
-  filenameWithoutExtension: computed('filename', {
+  filenameWithoutExtension: computed('filename', 'extension', {
     get() {
       const ext = this.get('extension');
       // eslint-disable-next-line no-useless-escape
