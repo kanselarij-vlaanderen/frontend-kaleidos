@@ -27,7 +27,7 @@
                 (await this.meetings)
               as |meeting|
               }}
-                <Menu.Item {{action "proposeForAgenda" this.subcase this.meeting}}>
+                <Menu.Item {{action "proposeForAgenda" this.subcase meeting}}>
                   {{t "agenda-for"}}
                   {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
                   {{concat " - " meeting.numberRepresentation}}
