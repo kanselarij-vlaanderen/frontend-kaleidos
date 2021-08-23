@@ -2,6 +2,7 @@
 // / <reference types="Cypress" />
 
 
+import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
 
@@ -79,9 +80,7 @@ function loginFlow(name) {
   cy.server();
   cy.route('POST', '/mock/sessions').as('mockLogin');
   cy.visit('mock-login');
-  cy.get('[data-test-mock-login-list]', {
-    timeout: 12000,
-  }).within(() => {
+  cy.get(route.mockLogin.list).within(() => {
     cy.contains(name).click()
       .wait('@mockLogin');
   });
