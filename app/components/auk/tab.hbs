@@ -1,37 +1,37 @@
-
-{{#if @route }}
+{{#if @route}}
   {{!-- Outer LinkTo used merely for active-class (taking into account current-when etc),
       therefore disabled and in need of the deprecated @tagName.
       Inner LinkTo used for navigation --}}
   {{!-- template-lint-disable no-unknown-arguments-for-builtin-components --}}
   <LinkTo
-          @tagName="li"
-          class="auk-tabs__tab {{if @isHierarchicalBack "auk-tabs__hierarchical-back"}}"
-          @activeClass="auk-tabs__tab--active"
-          @loadingClass=""
-          @disabledClass=""
-          @disabled={{true}}
-          @route={{@route}}
-          @models={{this.models}}
-          @current-when={{@current-when}}
-          @query={{@query}}
-          ...attributes
+    @tagName="li"
+    class="auk-tabs__tab
+      {{if @isHierarchicalBack "auk-tabs__hierarchical-back"}}"
+    @activeClass="auk-tabs__tab--active"
+    @loadingClass=""
+    @disabledClass=""
+    @disabled={{true}}
+    @route={{@route}}
+    @models={{this.models}}
+    @current-when={{@current-when}}
+    @query={{@query}}
+    ...attributes
   >
-  {{!-- template-lint-enable no-unknown-arguments-for-builtin-components --}}
+    {{!-- template-lint-enable no-unknown-arguments-for-builtin-components --}}
     <LinkTo
-            @activeClass=""
-            @loadingClass=""
-            @disabledClass=""
-            @route={{@route}}
-            @models={{this.models}}
-            @disabled={{@disabled}}
-            @current-when={{@current-when}}
-            @query={{@query}}
+      @activeClass=""
+      @loadingClass=""
+      @disabledClass=""
+      @route={{@route}}
+      @models={{this.models}}
+      @disabled={{@disabled}}
+      @current-when={{@current-when}}
+      @query={{@query}}
     >
       <Auk::Tab::InnerLayout
-              @layout={{@layout}}
-              @icon={{this.icon}}
-              @counter={{@counter}}
+        @layout={{@layout}}
+        @icon={{this.icon}}
+        @counter={{@counter}}
       >
         {{yield}}
       </Auk::Tab::InnerLayout>
@@ -39,15 +39,15 @@
   </LinkTo>
 {{else}}
   <li
-    class="auk-tabs__tab {{if @isHierarchicalBack "auk-tabs__hierarchical-back"}} {{if @active "auk-tabs__tab--active"}}">
-    <button
-      type="button"
-      {{on "click" @onClick}}
-    >
+    class="auk-tabs__tab
+      {{if @isHierarchicalBack "auk-tabs__hierarchical-back"}}
+      {{if @active "auk-tabs__tab--active"}}"
+  >
+    <button type="button" {{on "click" @onClick}}>
       <Auk::Tab::InnerLayout
-              @layout={{@layout}}
-              @icon={{this.icon}}
-              @counter={{@counter}}
+        @layout={{@layout}}
+        @icon={{this.icon}}
+        @counter={{@counter}}
       >
         {{yield}}
       </Auk::Tab::InnerLayout>
