@@ -1,40 +1,45 @@
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
 <Auk::Navbar @skin="gray-100" @auto={{true}}>
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
           <div class="auk-o-flex auk-o-flex--vertical-center">
-            <h4 class="auk-toolbar-complex__title auk-u-text-capitalize">{{subcase.shortTitle}}</h4>
+            <h4 class="auk-toolbar-complex__title auk-u-text-capitalize">{{this.subcase.shortTitle}}</h4>
           </div>
           <Subcases::SubcaseDetailNav/>
         </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
-      {{#if currentSession.isEditor}}
+      {{#if this.currentSession.isEditor}}
         <Auk::Toolbar::Item>
-          {{#if (or (is-pending canPropose) isLoading)}}
+          {{#if (or (is-pending this.canPropose) this.isLoading)}}
             <div class="auk-loader" role="alert" aria-busy="true"></div>
-          {{else if (await canPropose)}}
+          {{else if (await this.canPropose)}}
             <DropdownMenu
               @skin="primary"
               @label={{t "propose-for-agenda"}}
               data-test-subcase-header-show-proposed-agendas={{true}}
             as |Menu|>
               {{#each
-                (await meetings)
+                (await this.meetings)
               as |meeting|
               }}
-                <Menu.Item data-test-subcase-header-propose-for-agenda {{action "proposeForAgenda" subcase meeting}}>
+                <Menu.Item
+                  data-test-subcase-header-propose-for-agenda
+                  {{action "proposeForAgenda" this.subcase meeting}}
+                >
                   {{t "agenda-for"}}
                   {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
                   {{concat " - " meeting.numberRepresentation}}
                 </Menu.Item>
               {{/each}}
-              {{#if (gt (await meetings.length) 0)}}
+              {{#if (gt (await this.meetings.length) 0)}}
                 <Menu.Divider />
               {{/if}}
-              <Menu.Item {{action "proposeForOtherAgenda" subcase}}>
+              <Menu.Item {{action "proposeForOtherAgenda" this.subcase}}>
                 {{t "other-agenda"}}
               </Menu.Item>
             </DropdownMenu>
@@ -46,11 +51,11 @@
             @label={{t "actions"}}
             data-test-subcase-header-actions-dropdown={{true}}
           as |Menu|>
-            {{#if (await canDelete)}}
+            {{#if (await this.canDelete)}}
               <Menu.Item
                 @skin="danger"
                 data-test-subcase-header-action-delete-subcase
-                {{action "requestDeleteSubcase" subcase}}
+                {{action "requestDeleteSubcase" this.subcase}}
               >
                 {{t "delete-subcase"}}
               </Menu.Item>
@@ -68,49 +73,51 @@
   </Auk::Toolbar>
 </Auk::Navbar>
 
-{{#if promptDeleteCase}}
-  {{web-components/vl-modal-verify
-    title="Leeg dossier verwijderen?"
-    verifyButtonText="Verwijderen"
-    message=(concat "Dossier '" this.caseToDelete.shortTitle "' heeft geen procedurestappen meer. Wilt u het dossier verwijderen?")
-    cancel=(action "cancelDeleteCase")
-    verify=(perform this.deleteCase this.caseToDelete)
-    isLoading=this.deleteCase.isRunning
-  }}
+{{#if this.promptDeleteCase}}
+  <WebComponents::VlModalVerify
+    @title="Leeg dossier verwijderen?"
+    @verifyButtonText="Verwijderen"
+    @message={{concat
+      "Dossier '"
+      this.caseToDelete.shortTitle
+      "' heeft geen procedurestappen meer. Wilt u het dossier verwijderen?"
+    }}
+    @cancel={{action "cancelDeleteCase"}}
+    @verify={{perform this.deleteCase this.caseToDelete}}
+    @isLoading={{this.deleteCase.isRunning}}
+  />
 {{/if}}
 
-{{#if isAssigningToOtherCase}}
-  {{#web-components/vl-modal
-    closeModal=(action "cancel")
-    isOverlay=true
-    title=(t "move-subcase-to-other-case")
-  }}
-    {{utils/case-search
-      onSelect=(action "moveSubcase")
-    }}
-  {{/web-components/vl-modal}}
+{{#if this.isAssigningToOtherCase}}
+  <WebComponents::VlModal
+    @closeModal={{action "cancel"}}
+    @isOverlay={{true}}
+    @title={{t "move-subcase-to-other-case"}}
+  >
+    <Utils::CaseSearch @onSelect={{action "moveSubcase"}} />
+  </WebComponents::VlModal>
 {{/if}}
 
-{{#if isAssigningToOtherAgenda}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    title=(t "propose-for-agenda")
-    closeModal=(action "cancel")
-  }}
-    {{subcases/assign-to-meeting-form
-      subcase=selectedSubcase
-      proposeForAgenda=(action "proposeForAgenda")
-      cancel=(action "cancel")
-      closeModal=(action "cancel")
-    }}
-  {{/web-components/vl-modal}}
+{{#if this.isAssigningToOtherAgenda}}
+  <WebComponents::VlModal
+    @isOverlay={{true}}
+    @title={{t "propose-for-agenda"}}
+    @closeModal={{action "cancel"}}
+  >
+    <Subcases::AssignToMeetingForm
+      @subcase={{this.selectedSubcase}}
+      @proposeForAgenda={{action "proposeForAgenda"}}
+      @cancel={{action "cancel"}}
+      @closeModal={{action "cancel"}}
+    />
+  </WebComponents::VlModal>
 {{/if}}
-{{#if isDeletingSubcase}}
-  {{web-components/vl-modal-verify
-    isLoading=isLoading
-    title=(t "delete-subcase")
-    message=(t "delete-subcase-confirmation")
-    cancel=(action "cancel")
-    verify=(action "deleteSubcase")
-  }}
+{{#if this.isDeletingSubcase}}
+  <WebComponents::VlModalVerify
+    @isLoading={{this.isLoading}}
+    @title={{t "delete-subcase"}}
+    @message={{t "delete-subcase-confirmation"}}
+    @cancel={{action "cancel"}}
+    @verify={{action "deleteSubcase"}}
+  />
 {{/if}}

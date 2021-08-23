@@ -1,11 +1,9 @@
-import DS from 'ember-data';
+import Model, { hasMany, belongsTo, attr } from '@ember-data/model';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 
-const {
-  Model, attr, belongsTo, hasMany,
-} = DS;
-
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
   intl: inject(),
   startDate: attr('date'),
@@ -18,8 +16,9 @@ export default Model.extend({
   }),
   modified: attr('datetime'),
   created: attr('datetime'),
-  treatmentApproval: computed('report', function() {
+  treatmentApproval: computed('report.lastPiece.name', function() {
     return this.intl.t('signed-document-decision', {
+      // eslint-disable-next-line ember/no-get
       name: this.get('report.lastPiece.name'),
     });
   }),

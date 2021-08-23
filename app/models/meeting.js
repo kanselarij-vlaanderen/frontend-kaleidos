@@ -1,4 +1,5 @@
-import DS from 'ember-data';
+import Model, { belongsTo, hasMany, attr } from '@ember-data/model';
+import { PromiseArray, PromiseObject } from '@ember-data/store/-private';
 import EmberObject, { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONFIG from 'frontend-kaleidos/utils/config';
@@ -8,10 +9,9 @@ import {
   sortDocumentContainers, getPropertyLength
 } from 'frontend-kaleidos/utils/documents';
 
-const {
-  Model, attr, hasMany, belongsTo, PromiseArray,
-} = DS;
-
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
   intl: inject(),
   plannedStart: attr('datetime'),
@@ -54,7 +54,7 @@ export default Model.extend({
   }),
 
   // This computed does not seem to be used anywhere
-  documentContainers: computed('pieces.@each.name', function() {
+  documentContainers: computed('pieces.@each.name', 'id', 'store', function() {
     return PromiseArray.create({
       promise: this.get('pieces').then((pieces) => {
         if (pieces && pieces.get('length') > 0) {
@@ -84,8 +84,8 @@ export default Model.extend({
     return this.isFinal && !this.releasedDocuments;
   }),
 
-  latestAgenda: computed('agendas.@each', function() {
-    return DS.PromiseObject.create({
+  latestAgenda: computed('agendas.[]', function() {
+    return PromiseObject.create({
       promise: this.get('agendas').then((agendas) => {
         const sortedAgendas = agendas.sortBy('agendaName').reverse();
         return sortedAgendas.get('firstObject');
@@ -107,10 +107,10 @@ export default Model.extend({
     return await agenda.get('agendaName');
   }),
 
-  defaultSignature: computed('signature', async function() {
+  defaultSignature: computed('signature', 'store', async function() {
     const signature = await this.get('signature');
     if (!signature) {
-      return DS.PromiseObject.create({
+      return PromiseObject.create({
         promise: this.store
           .query('signature', {
             filter: {

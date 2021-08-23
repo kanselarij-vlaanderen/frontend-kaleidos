@@ -1,10 +1,10 @@
-{{#web-components/vl-modal
-  isOverlay=true
-  title=(t "manage-signatures")
-  closeModal=(action "close")
-  large=true
-}}
-  {{utils/manage-signatures
-    closeModal=(action "close")
-  }}
-{{/web-components/vl-modal}}
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
+<WebComponents::VlModal
+  @isOverlay={{true}}
+  @title={{t "manage-signatures"}}
+  @closeModal={{action "close"}}
+  @large={{true}}
+>
+  <Utils::ManageSignatures @closeModal={{action "close"}} />
+</WebComponents::VlModal>
