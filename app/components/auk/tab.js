@@ -10,6 +10,7 @@ import { isPresent } from '@ember/utils';
  * @argument {Number} counter: Count number to display next to tab label
  * @argument {String} layout: can be (default, "icon-left") or "icon-right"
  * @argument {Boolean} isHierarchicalBack: Flag to apply custom styling for "hierarchical back button"-tab
+ * @argument {Boolean} active: Helps achieve active state without route
  */
 export default class Tab extends Component {
   // Workaround for linkTo not accepting @model and @models parameter, regardless if one is null
@@ -30,10 +31,6 @@ export default class Tab extends Component {
       return this.args.models;
     }
     return [];
-  }
-
-  get hasCounter() {
-    return isPresent(this.args.counter); // In order to be able to supply 0
   }
 
   get icon() {
