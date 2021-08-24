@@ -64,26 +64,6 @@ export default Model.extend(LoadableModel, {
 
   isFinal: computed.alias('status.isFinal'),
 
-  lastAgendaitemNumber: computed('agendaitems.@each', function() {
-    return this.get('agendaitems').then((agendaitems) => {
-      const filteredAgendaitems = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark);
-      if (filteredAgendaitems.length === 0) {
-        return 0;
-      }
-      return Math.max(...filteredAgendaitems.map((agendaitem) => agendaitem.number || 0));
-    });
-  }),
-
-  lastAnnouncementNumber: computed('agendaitems.@each', function() {
-    return this.get('agendaitems').then((agendaitems) => {
-      const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
-      if (announcements.length === 0) {
-        return 0;
-      }
-      return Math.max(...announcements.map((announcement) => announcement.number || 0));
-    });
-  }),
-
   firstAgendaitem: computed('agendaitems.@each', function() {
     return DS.PromiseObject.create({
       promise: this.get('agendaitems').then((agendaitems) => agendaitems.sortBy('number').get('firstObject')),
