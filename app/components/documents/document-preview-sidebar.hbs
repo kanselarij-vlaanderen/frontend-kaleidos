@@ -44,6 +44,19 @@
 
   {{!-- VERSIONS --}}
   {{#if this.showVersions}}
+    <div class="auk-u-m-4">
+      {{#each this.docContainer.pieces as |piece|}}
+        <Documents::VersionCard @piece={{piece}} />
+      {{/each}}
+      <div class="auk-u-mt-4">
+        <Auk::Button
+                @skin="tertiary"
+                @icon="add"
+        >
+          {{t "new-version"}}
+        </Auk::Button>
+      </div>
+    </div>
   {{/if}}
 
   {{!-- FOOTER

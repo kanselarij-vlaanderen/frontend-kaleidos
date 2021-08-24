@@ -21,6 +21,7 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
   @task
   *loadData() {
     this.docContainer = yield this.args.piece.documentContainer;
+    yield this.docContainer.hasMany('pieces').reload();
     this.documentType = yield this.docContainer.type;
     this.accessLevel = yield this.args.piece.accessLevel;
   }
