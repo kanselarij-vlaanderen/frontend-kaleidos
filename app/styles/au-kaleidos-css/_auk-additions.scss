@@ -287,3 +287,14 @@ p {
 .auk-case-name-header {
   min-width: 25rem;
 }
+
+
+/* Document-viewer
+   ========================================================================== */
+.version-card{
+  border-radius: 5px;
+  padding: 5px;
+}
+.version-card-selected{
+  background: $au-blue-100;
+}

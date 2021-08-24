@@ -7,6 +7,7 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
   @tracked documentType;
   @tracked docContainer;
   @tracked accessLevel;
+  @tracked lastPiece;
 
   @tracked showDetails = true;
   @tracked showSignatures = false;
@@ -21,7 +22,8 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
   @task
   *loadData() {
     this.docContainer = yield this.args.piece.documentContainer;
-    yield this.docContainer.hasMany('pieces').reload();
+    yield this.docContainer.reverseSortedPieces;
+    this.lastPiece = yield this.docContainer.lastPiece;
     this.documentType = yield this.docContainer.type;
     this.accessLevel = yield this.args.piece.accessLevel;
   }

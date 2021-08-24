@@ -1,13 +1,13 @@
 <div class="auk-u-mb-4">
-  <div class="auk-o-grid">
-    <div class="auk-o-grid-col-1">
-      {{#if @recent}}
+  <div class="auk-o-grid version-card {{if this.isCurrentDocument 'version-card-selected'}}">
+    <div class="auk-o-grid-col-static">
+      {{#if this.isLastPiece}}
         <Auk::Badge @icon="document" @size="large"/>
       {{else}}
-        <Auk::Badge @icon="document" @size="large"/>
+        <Auk::Badge @icon="timeline" @size="large"/>
       {{/if}}
     </div>
-    <div class="auk-o-grid-col-7">
+    <div class="auk-o-grid-col-flex">
       <p class="auk-u-text-bold auk-u-muted">
         {{@piece.name}}
       </p>
@@ -26,7 +26,7 @@
       </p>
       <Utils::ConfidentialityPill @confidential={{@piece.confidential}} />
     </div>
-    <div class="auk-o-grid-col-3">
+    <div class="auk-o-grid-col-static">
       <WebComponents::AuButtonToolbar>
         <Auk::Button
                 @layout="icon-only"
@@ -39,7 +39,9 @@
                 @skin="borderless"
                 @icon="more"
                 as |Menu|>
-          <Menu.Item>
+          <Menu.Item
+            @href={{@piece.viewDocumentURL}} target="_blank"
+          >
             {{t "open-version"}}
           </Menu.Item>
           <Menu.Item @skin="danger">
