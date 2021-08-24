@@ -3,14 +3,18 @@ import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
+/**
+ *
+ * Contains tabs:
+ * - "details"
+ * - "signatures"
+ * - "versions"
+ */
 export default class DocumentsDocumentPreviewSidebar extends Component {
   @tracked documentType;
   @tracked accessLevel;
 
-  @tracked showDetails = true;
-  @tracked showSignatures = false;
-  @tracked showVersions = false;
-
+  @tracked activeTab = 'details';
 
   constructor() {
     super(...arguments);
@@ -25,26 +29,7 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
   }
 
   @action
-  openDetails() {
-    this.resetTabs();
-    this.showDetails = true;
-  }
-
-  @action
-  openSignatures() {
-    this.resetTabs();
-    this.showSignatures = true;
-  }
-
-  @action
-  openVersions() {
-    this.resetTabs();
-    this.showVersions = true;
-  }
-
-  resetTabs() {
-    this.showDetails = false;
-    this.showSignatures = false;
-    this.showVersions = false;
+  setActiveTab(tabName) {
+    this.activeTab = tabName;
   }
 }
