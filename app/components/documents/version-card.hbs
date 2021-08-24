@@ -1,0 +1,52 @@
+<div class="auk-u-mb-4">
+  <div class="auk-o-grid">
+    <div class="auk-o-grid-col-1">
+      {{#if @recent}}
+        <Auk::Badge @icon="document" @size="large"/>
+      {{else}}
+        <Auk::Badge @icon="document" @size="large"/>
+      {{/if}}
+    </div>
+    <div class="auk-o-grid-col-7">
+      <p class="auk-u-text-bold auk-u-muted">
+        {{@piece.name}}
+      </p>
+      <p class="auk-u-muted auk-u-text-small">
+        {{t "uploaded-at"}}
+        {{moment-format @piece.created}}
+        {{t "at"}}
+        {{moment-format @piece.created "HH:mm"}}
+      </p>
+      <Utils::AccessLevelColorBadge @accessLevel={{this.accessLevel}} />
+      <p class="auk-u-muted auk-u-text-small">
+        {{t "access-level-last-modified"}}
+        {{moment-format @piece.accessLevelLastModified}}
+        {{t "at"}}
+        {{moment-format @piece.accessLevelLastModified "HH:mm"}}
+      </p>
+      <Utils::ConfidentialityPill @confidential={{@piece.confidential}} />
+    </div>
+    <div class="auk-o-grid-col-3">
+      <WebComponents::AuButtonToolbar>
+        <Auk::Button
+                @layout="icon-only"
+                @icon="download"
+                @skin="borderless"
+                @href={{@piece.file.namedDownloadLink}}
+                download
+        />
+        <DropdownMenu
+                @skin="borderless"
+                @icon="more"
+                as |Menu|>
+          <Menu.Item>
+            {{t "open-version"}}
+          </Menu.Item>
+          <Menu.Item @skin="danger">
+            {{t "delete"}}
+          </Menu.Item>
+        </DropdownMenu>
+      </WebComponents::AuButtonToolbar>
+    </div>
+  </div>
+</div>
