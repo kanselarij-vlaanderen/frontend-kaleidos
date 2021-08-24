@@ -1,25 +1,27 @@
-{{#if (not multiSelect)}}
-  {{#power-select
-    options=agendas
-    selected=selectedAgenda
-    disabled=readOnly
-    searchEnabled=false
-    placeholder=placeholder
-    onchange=(action "selectModel")
-  as |model|
-  }}
-    {{model-property-to-show model propertyToShow}}
-  {{/power-select}}
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
+{{#if (not this.multiSelect)}}
+  <PowerSelect
+    @options={{this.agendas}}
+    @selected={{this.selectedAgenda}}
+    @disabled={{this.readOnly}}
+    @searchEnabled={{false}}
+    @placeholder={{this.placeholder}}
+    @onchange={{action "selectModel"}}
+    as |model|
+  >
+    {{model-property-to-show model this.propertyToShow}}
+  </PowerSelect>
 {{else}}
-  {{#power-select-multiple
-    options=agendas
-    searchEnabled=false
-    selected=selectedAgenda
-    disabled=readOnly
-    placeholder=placeholder
-    onchange=(action "selectModel")
-  as |model|
-  }}
-    {{model-property-to-show model propertyToShow}}
-  {{/power-select-multiple}}
+  <PowerSelectMultiple
+    @options={{this.agendas}}
+    @searchEnabled={{false}}
+    @selected={{this.selectedAgenda}}
+    @disabled={{this.readOnly}}
+    @placeholder={{this.placeholder}}
+    @onchange={{action "selectModel"}}
+    as |model|
+  >
+    {{model-property-to-show model this.propertyToShow}}
+  </PowerSelectMultiple>
 {{/if}}

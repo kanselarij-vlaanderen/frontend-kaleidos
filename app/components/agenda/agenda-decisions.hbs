@@ -1,7 +1,9 @@
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
 <div class="auk-container auk-container--center">
   <div class="auk-u-mt-8 no-print">
     <h3 class="auk-h2">
-      {{await title}}
+      {{await this.title}}
       <br/>
     </h3>
   </div>
@@ -12,19 +14,23 @@
       {{#each group.agendaitems as |agendaitem|}}
         <div class="auk-o-flex auk-o-flex--horizontal-center">
           <div class="print-only auk-u-mt-8">
+            {{!-- TODO: fix inline style (see logo-header component) --}}
+            {{!-- template-lint-disable no-inline-styles --}}
             <img style="margin:-75px 0px -50px 0px; width:200px"
                  src="/assets/logo_vlaamse_regering.svg"
                  alt={{t "flemish-government"}}
             />
-
+            {{!-- template-lint-enable no-inline-styles --}}
             <p class="auk-u-text-bold auk-u-text-capitalized">
-              {{await title}}
+              {{await this.title}}
             </p>
             <div class="auk-hr">
               <hr/>
             </div>
           </div>
         </div>
+        {{!-- TODO: fix inline style. This looks print-related. Note that a dedicated agenda print route exists --}}
+        {{!-- template-lint-disable no-inline-styles --}}
         <div style="page-break-after:always;">
           <div class="auk-u-mb-8">
             <div class="auk-u-mb-2">
@@ -46,11 +52,11 @@
                         @isEditing={{treatment.isEditing}}
                         @agendaItemTreatment={{treatment}}
                         @subcase={{await agendaitem.agendaActivity.subcase}}
-                        @isTableRow={{isTableRow}}
+                        @isTableRow={{this.isTableRow}}
                         @agendaitem={{agendaitem}} />
-                    {{else if session.isEditor}}
+                    {{else if this.session.isEditor}}
                       <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--align-end">
-                        {{#if allowEditing}}
+                        {{#if this.allowEditing}}
                           <Auk::ButtonLink {{action "toggleIsEditing" treatment}}>
                             {{t "edit"}}
                           </Auk::ButtonLink>
@@ -72,10 +78,11 @@
               </p>
             </div>
           </div>
-          {{#if (not allowEditing)}}
-            <WebComponents::VlSignature @signature={{meeting.defaultSignature}} />
+          {{#if (not this.allowEditing)}}
+            <WebComponents::VlSignature @signature={{this.meeting.defaultSignature}} />
           {{/if}}
         </div>
+        {{!-- template-lint-enable no-inline-styles --}}
       {{/each}}
     {{/each}}
   </div>

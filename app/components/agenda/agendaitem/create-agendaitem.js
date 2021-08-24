@@ -1,12 +1,16 @@
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
-import DataTableRouteMixin from 'ember-data-table/mixins/route';
-import { computed } from '@ember/object';
+import { computed, set } from '@ember/object';
 import {
   task, timeout
 } from 'ember-concurrency';
-export default Component.extend(DataTableRouteMixin, {
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
+export default Component.extend({
   availableSubcases: null,
   showPostponed: null,
   noItemsSelected: true,
@@ -20,7 +24,6 @@ export default Component.extend(DataTableRouteMixin, {
   agendaService: inject(),
   sessionService: inject(),
 
-  modelName: 'subcase',
   page: 0,
   size: 10,
   filter: '',
@@ -85,7 +88,7 @@ export default Component.extend(DataTableRouteMixin, {
     this.findAll.perform();
   },
 
-  model: computed('items.@each', function() {
+  model: computed('items.[]', function() {
     (this.get('items') || []).map((item) => item.set('selected', false));
     return this.items;
   }),
@@ -132,6 +135,8 @@ export default Component.extend(DataTableRouteMixin, {
     this.setFocus();
   }).restartable(),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-component-lifecycle-hooks
   async didInsertElement() {
     this._super(...arguments);
     this.set('availableSubcases', []);
@@ -139,9 +144,11 @@ export default Component.extend(DataTableRouteMixin, {
     this.findAll.perform();
   },
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     selectSize(size) {
-      this.size = size;
+      set(this, 'size', size);
     },
 
     close() {

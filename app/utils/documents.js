@@ -1,11 +1,7 @@
 import { A } from '@ember/array';
 import VRDocumentName, { compareFunction } from 'frontend-kaleidos/utils/vr-document-name';
-import DS from 'ember-data';
+import { PromiseObject } from '@ember-data/store/-private';
 import fetch from 'fetch';
-
-const {
-  PromiseObject,
-} = DS;
 
 export const sortDocumentContainers = (pieces, containers) => {
   // Sorting is done in the frontend to work around a Virtuoso issue, where

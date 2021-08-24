@@ -67,7 +67,7 @@ export default class CasesCaseSubcasesOverview extends Controller {
 
   @action
   async archiveCase() {
-    const caseModel = await this.store.findRecord('case', this.get('selectedCase.id'));
+    const caseModel = await this.store.findRecord('case', this.selectedCase.id);
     caseModel.isArchived = true;
     const subcases = await caseModel.subcases;
     await Promise.all(subcases.map(async(subcase) => {

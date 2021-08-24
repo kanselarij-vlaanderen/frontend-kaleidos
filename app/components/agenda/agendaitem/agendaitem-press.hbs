@@ -1,10 +1,12 @@
-{{#if (not currentSession.isEditing)}}
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
+{{#if (not this.currentSession.isEditing)}}
   <div class="auk-u-mb-2">
     <div class="auk-o-flex auk-o-flex--align-baseline">
       <h3 class="auk-h2">
         {{t "preparation-text"}}
       </h3>
-      {{#if isEditor}}
+      {{#if this.isEditor}}
         <div class="auk-u-ml-2">
           <Auk::ButtonLink {{action "toggleIsEditing"}}>
             {{t "edit"}}
@@ -15,17 +17,17 @@
   </div>
   <div class="auk-u-mb-2">
     <h3 class="auk-h4 auk-u-m-0">
-      {{agendaitem.titlePress}}
+      {{this.agendaitem.titlePress}}
     </h3>
   </div>
   <div class="auk-content">
     <p>
-      {{agendaitem.textPress}}
+      {{this.agendaitem.textPress}}
     </p>
   </div>
   <hr/>
   <div class="auk-u-mt-2">
-    {{#if agendaitem.forPress}}
+    {{#if this.agendaitem.forPress}}
       <Auk::Pill @skin="success">
         {{t "for-press"}}
       </Auk::Pill>
@@ -37,6 +39,6 @@
   </div>
 {{else}}
   <AgendaitemPressEdit
-    @agendaitem={{agendaitem}}
-    @isEditing={{currentSession.isEditing}} />
+    @agendaitem={{this.agendaitem}}
+    @isEditing={{this.currentSession.isEditing}} />
 {{/if}}

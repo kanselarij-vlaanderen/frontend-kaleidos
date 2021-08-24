@@ -1,11 +1,16 @@
 import Controller from '@ember/controller';
 import { inject } from '@ember/service';
 
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-classes
 export default Controller.extend({
   store: inject(),
   isEditingMandatees: false,
   mandatees: null,
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     async editMandatee(subcase) {
       const mandatees = await subcase.get('mandatees');

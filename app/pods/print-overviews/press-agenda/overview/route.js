@@ -6,6 +6,8 @@ import {
   sortByPriority
 } from 'frontend-kaleidos/utils/agendaitem-utils';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Route.extend({
   agendaService: inject(),
   type: 'press-agenda',

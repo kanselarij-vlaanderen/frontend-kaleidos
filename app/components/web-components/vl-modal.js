@@ -1,3 +1,6 @@
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 
@@ -19,6 +22,8 @@ const FOCUSABLE_ELEMENTS = [
   '[tabindex]:not([tabindex^="-"])'
 ];
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   isOverlay: null,
   large: false,
@@ -27,7 +32,10 @@ export default Component.extend({
   isDocumentViewer: null,
   disableFocus: false,
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-component-lifecycle-hooks
   didInsertElement() {
+    this._super(...arguments);
     if (!this.disableFocus) {
       const focusableNodes = this.getFocusableNodes();
       if (focusableNodes.length > 1) {
@@ -85,6 +93,8 @@ export default Component.extend({
     }
   },
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     close() {
       this.closeModal();

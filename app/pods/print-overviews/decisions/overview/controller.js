@@ -4,12 +4,15 @@ import moment from 'moment';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
 
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-classes
 export default Controller.extend({
   intl: inject(),
   queryParams: ['definite'],
 
   meeting: alias('model.currentAgenda.createdFor'),
-  title: computed('meeting', function() {
+  title: computed('meeting.{plannedStart,kindToShow.altLabel}', function() {
     const date = this.get('meeting.plannedStart');
     const kindLabel = this.get('meeting.kindToShow.altLabel');
     return `${this.intl.t('decisions-of-kind', {
@@ -17,7 +20,7 @@ export default Controller.extend({
     })} ${moment(date).format('dddd DD-MM-YYYY')}`;
   }),
 
-  documentTitle: computed('meeting', 'definite', function() {
+  documentTitle: computed('meeting.{plannedStart,kindToShow.altLabel}', 'definite', function() {
     const date = this.get('meeting.plannedStart');
     const kindLabel = this.get('meeting.kindToShow.altLabel');
     let prefix = '';

@@ -1,19 +1,17 @@
-{{#web-components/vl-modal
-  isOverlay=true
-  large=true
-  closeModal=(action "close")
-  title=(t "add-agendaitems")
-}}
-  {{#if (or (is-pending model) loading)}}
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
+<WebComponents::VlModal
+  @isOverlay={{true}}
+  @large={{true}}
+  @closeModal={{action "close"}}
+  @title={{t "add-agendaitems"}}
+>
+  {{#if (or (is-pending this.model) this.loading)}}
     <Auk::Modal::Body>
-      {{#if (is-pending model)}}
-        {{web-components/vl-loader
-          text=(concat (t "cases-loading-text") " " (t "please-be-patient"))
-        }}
+      {{#if (is-pending this.model)}}
+        <WebComponents::VlLoader @text={{concat (t "cases-loading-text") " " (t "please-be-patient")}} />
       {{else}}
-        {{web-components/vl-loader
-          text=(concat (t "agendaitems-creating-text") " " (t "please-be-patient"))
-        }}
+        <WebComponents::VlLoader @text={{concat (t "agendaitems-creating-text") " " (t "please-be-patient")}} />
       {{/if}}
     </Auk::Modal::Body>
   {{else}}
@@ -24,21 +22,21 @@
             <Auk::Toolbar::Group @position="left">
               <Auk::Toolbar::Item class="auk-u-maximize-width">
                 <div class="vl-input-field--inline">
-                  {{input
-                    data-test-create-agendaitem-input=true
-                    value=filterParam
+                  <Input
+                    data-test-create-agendaitem-input={{true}}
                     id="searchId"
-                    placeholder="Zoeken.."
-                    key-press=(perform searchTask)
-                    disabled=showPostponed
                     class="vl-input-field vl-input-field__input"
-                  }}
+                    placeholder="Zoeken.."
+                    disabled={{this.showPostponed}}
+                    @value={{this.filterParam}}
+                    {{on "keypress" (perform this.searchTask)}}
+                  />
                   <Auk::Button
                     @skin="primary"
                     @layout="icon-only"
                     @icon="search"
                     class="vl-input-field__submit"
-                    onclick={{perform searchTask}}
+                    onclick={{perform this.searchTask}}
                   />
                 </div>
               </Auk::Toolbar::Item>
@@ -48,48 +46,38 @@
         <div class="auk-o-grid-col-4">
           <div class="auk-form-group">
             <Auk::Label>{{t "title-postponed-subcases"}}</Auk::Label>
-            {{web-components/vl-checkbox
-              data-test-create-agendaitem-postponed-checkbox=true
-              value=showPostponed
-              toggle=(action "checkShowPostponedValue")
-            }}
+            <WebComponents::VlCheckbox
+              data-test-create-agendaitem-postponed-checkbox={{true}}
+              @value={{this.showPostponed}}
+              @toggle={{action "checkShowPostponedValue"}}
+            />
           </div>
         </div>
         <div class="auk-o-grid-col-3">
-          {{#if searchTask.isRunning}}
+          {{#if this.searchTask.isRunning}}
             <div class="auk-o-flex auk-o-flex--center auk-u-mt-4">
               <Auk::Loader @message={{t "loading"}} />
             </div>
           {{else}}
-            {{#data-table
-              data-test-create-agendaitem-data-table=true
-              content=model
-              sort=sortParam
-              page=pageParam
-              size=sizeParam
-              isLoading=findAll.isRunning
-              noDataMessage=(t "no-results-found")
-              onClickRow=(action "selectPostponed")
-            as |table|
-            }}
-              {{#table.content
-              as |c|
-              }}
-                {{#c.header}}
+            <DataTable
+              data-test-create-agendaitem-data-table={{true}}
+              @content={{this.model}}
+              @sort={{this.sortParam}}
+              @page={{this.pageParam}}
+              @size={{this.sizeParam}}
+              @isLoading={{this.findAll.isRunning}}
+              @noDataMessage={{t "no-results-found"}}
+              @onClickRow={{action "selectPostponed"}}
+            as |table|>
+              <table.content as |c|>
+                <c.header>
                   <th></th>
-                  {{th-sortable
-                    field="shortTitle"
-                    currentSorting=sortParam
-                    label=(t "short-title-case")
-                  }}
+                  <ThSortable @field="shortTitle" @currentSorting={{this.sortParam}} @label={{t "short-title-case"}} />
                   <th></th>
-                {{/c.header}}
-                {{#c.body as |subcase|}}
+                </c.header>
+                <c.body as |subcase|>
                   <td class="auk-table__col--1">
-                    {{web-components/vl-checkbox
-                      value=subcase.selected
-                      toggle=(action "selectAvailableSubcase" subcase)
-                    }}
+                    <WebComponents::VlCheckbox @value={{subcase.selected}} @toggle={{action "selectAvailableSubcase" subcase}} />
                   </td>
                   <td class="auk-table__col--11">
                     {{subcase.shortTitle}}
@@ -98,20 +86,20 @@
                       {{subcase.subcaseName}}
                     </p>
                   </td>
-                {{/c.body}}
-              {{/table.content}}
-            {{/data-table}}
+                </c.body>
+              </table.content>
+            </DataTable>
           {{/if}}
         </div>
       </div>
     </Auk::Modal::Body>
-    {{web-components/vl-modal-footer
-      isLoading=isLoading
-      disableSave=noItemsSelected
-      cancelButtonText=(t "cancel")
-      saveButtonText=(t "add-to-agenda")
-      cancelAction=(action "close")
-      saveAction=(action "addSubcasesToAgenda")
-    }}
+    <WebComponents::VlModalFooter
+      @isLoading={{this.isLoading}}
+      @disableSave={{this.noItemsSelected}}
+      @cancelButtonText={{t "cancel"}}
+      @saveButtonText={{t "add-to-agenda"}}
+      @cancelAction={{action "close"}}
+      @saveAction={{action "addSubcasesToAgenda"}}
+    />
   {{/if}}
-{{/web-components/vl-modal}}
+</WebComponents::VlModal>
