@@ -43,7 +43,7 @@
       {{if @isHierarchicalBack "auk-tabs__hierarchical-back"}}
       {{if @active "auk-tabs__tab--active"}}"
   >
-    <button type="button" {{on "click" @onClick}}>
+    <button type="button" ...attributes>
       <Auk::Tab::InnerLayout
         @layout={{@layout}}
         @icon={{this.icon}}

@@ -9,9 +9,9 @@
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
           <Auk::Tabs>
-            <Auk::Tab @onClick={{fn this.setActiveTab "details"}} @active={{eq this.activeTab "details"}}>{{t "detail"}}</Auk::Tab>
-            <Auk::Tab @onClick={{fn this.setActiveTab "signatures"}} @active={{eq this.activeTab "signatures"}}>{{t "signatures"}}</Auk::Tab>
-            <Auk::Tab @onClick={{fn this.setActiveTab "versions"}} @active={{eq this.activeTab "versions"}}>{{t "version"}}</Auk::Tab>
+            <Auk::Tab {{on "click" (fn this.setActiveTab "details")}} @active={{eq this.activeTab "details"}}>{{t "detail"}}</Auk::Tab>
+            <Auk::Tab {{on "click" (fn this.setActiveTab "signatures")}} @active={{eq this.activeTab "signatures"}}>{{t "signatures"}}</Auk::Tab>
+            <Auk::Tab {{on "click" (fn this.setActiveTab "versions")}} @active={{eq this.activeTab "versions"}}>{{t "version"}}</Auk::Tab>
           </Auk::Tabs>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
