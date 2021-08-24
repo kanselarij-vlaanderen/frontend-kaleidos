@@ -48,11 +48,11 @@
         <div class="auk-o-grid-col-4">
           <div class="auk-form-group">
             <Auk::Label>{{t "title-postponed-subcases"}}</Auk::Label>
-            {{web-components/vl-checkbox
-              data-test-create-agendaitem-postponed-checkbox=true
-              value=showPostponed
-              toggle=(action "checkShowPostponedValue")
-            }}
+            <Auk::Checkbox
+              @checked={{showPostponed}}
+              data-test-create-agendaitem-postponed-checkbox={{true}}
+              {{on "input" (action "checkShowPostponedValue")}}
+            />
           </div>
         </div>
         <div class="auk-o-grid-col-3">
@@ -86,10 +86,10 @@
                 {{/c.header}}
                 {{#c.body as |subcase|}}
                   <td class="auk-table__col--1">
-                    {{web-components/vl-checkbox
-                      value=subcase.selected
-                      toggle=(action "selectAvailableSubcase" subcase)
-                    }}
+                    <Auk::Checkbox
+                      @checked={{subcase.selected}}
+                      {{on "input" (action "selectAvailableSubcase" subcase)}}
+                    />
                   </td>
                   <td class="auk-table__col--11">
                     {{subcase.shortTitle}}

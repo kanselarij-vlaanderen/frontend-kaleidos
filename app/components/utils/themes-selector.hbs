@@ -5,10 +5,10 @@
     {{#each this.selectedThemesReload as |theme|}}
       <div class="auk-o-grid-col-4">
         <div class="auk-u-mb">
-          <WebComponents::VlCheckbox
-            @value={{theme.selected}}
+          <Auk::Checkbox
+            @checked={{theme.selected}}
             @label={{theme.label}}
-            @toggle={{action "selectModel" theme}}
+            {{on "input" (action "selectModel" theme)}}
           />
         </div>
       </div>

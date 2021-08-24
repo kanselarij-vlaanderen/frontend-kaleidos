@@ -6,23 +6,23 @@
     <div class="auk-box">
       <div class="auk-u-mb-2">
         <Auk::Label>{{t "type"}}</Auk::Label>
-        <WebComponents::VlCheckbox
-          @value={{this.includeNotas}}
-          @label="Nota"
-          @toggle={{this.toggleIncludeNotas}}
+        <Auk::Checkbox
+          @checked={{this.includeNotas}}
+          @label={{t "note"}}
+          {{on "input" this.toggleIncludeNotas}}
         />
-        <WebComponents::VlCheckbox
-          @value={{this.includeMededelingen}}
-          @label="Mededeling"
-          @toggle={{this.toggleIncludeMededelingen}}
+        <Auk::Checkbox
+          @checked={{this.includeMededelingen}}
+          @label={{capitalize (t "announcement")}}
+          {{on "input" this.toggleIncludeMededelingen}}
         />
       </div>
       <div>
         <Auk::Label>{{t "version"}}</Auk::Label>
-        <WebComponents::VlCheckbox
-          @value={{this.latestOnly}}
+        <Auk::Checkbox
+          @checked={{this.latestOnly}}
           @label={{t "only-on-final-agenda"}}
-          @toggle={{this.toggleLatestOnly}}
+          {{on "input" this.toggleLatestOnly}}
         />
       </div>
     </div>

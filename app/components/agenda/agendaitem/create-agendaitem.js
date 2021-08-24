@@ -8,7 +8,7 @@ import {
 } from 'ember-concurrency';
 export default Component.extend(DataTableRouteMixin, {
   availableSubcases: null,
-  showPostponed: null,
+  showPostponed: false,
   noItemsSelected: true,
 
   currentSession: alias('sessionService.currentSession'),
@@ -148,11 +148,9 @@ export default Component.extend(DataTableRouteMixin, {
       this.set('isAddingAgendaitems', false);
     },
 
-    checkShowPostponedValue() {
-      const {
-        showPostponed,
-      } = this;
-      if (showPostponed) {
+    checkShowPostponedValue(event) {
+      this.set('showPostponed', event.target.checked);
+      if (this.showPostponed) {
         this.findPostponed.perform();
       } else {
         this.findAll.perform();

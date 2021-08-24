@@ -34,10 +34,10 @@
                 {{await piece.typeLabel}}
               </td>
               <td>
-                {{web-components/vl-checkbox
-                  value=piece.selected
-                  toggle=(action "selectForPublication")
-                }}
+                <Auk::Checkbox
+                  @checked={{piece.selected}}
+                  {{on "input" (action "selectForPublication")}}
+                />
               </td>
             </tr>
           {{/if}}

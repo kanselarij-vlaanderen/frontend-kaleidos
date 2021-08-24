@@ -6,20 +6,20 @@
     <div class="auk-box">
       <div class="auk-u-mb-2">
         <Auk::Label>{{t "type"}}</Auk::Label>
-        <WebComponents::VlCheckbox
+        <Auk::Checkbox
+          @checked={{this.decisionsOnly}}
+          @label={{t "search-in-decisions-only"}}
           data-test-decisions-only-check
           data-test-route-search-cases-toggle-decisions={{true}}
-          @value={{this.decisionsOnly}}
-          @label={{t "search-in-decisions-only"}}
-          @toggle={{this.toggleDecisionsOnly}}
+          {{on "input" this.toggleDecisionsOnly}}
         />
       </div>
       <div>
         <Auk::Label>{{t "archive"}}</Auk::Label>
-        <WebComponents::VlCheckbox
-          @value={{this.includeArchived}}
+        <Auk::Checkbox
+          @checked={{this.includeArchived}}
           @label={{t "search-include-archived"}}
-          @toggle={{this.toggleIncludeArchived}}
+          {{on "input" this.toggleIncludeArchived}}
         />
       </div>
     </div>
