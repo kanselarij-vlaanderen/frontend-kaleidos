@@ -5,6 +5,7 @@ import dependency from '../../selectors/dependency.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
+import auk from '../../selectors/auk.selectors';
 
 context('newsletter tests, both in agenda detail view and newsletter route', () => {
   beforeEach(() => {
@@ -43,7 +44,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // define alias
     cy.get(newsletter.tableRow.newsletterRow).find(newsletter.tableRow.inNewsletterCheckbox)
       .as('checkboxContainer');
-    cy.get('@checkboxContainer').find(utils.vlCheckbox.checkbox)
+    cy.get('@checkboxContainer').find(auk.checkbox)
       .as('checkboxValue');
     // checkbox is unchecked, toggle it
     cy.get('@checkboxValue').should('not.be.checked');

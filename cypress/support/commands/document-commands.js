@@ -499,7 +499,7 @@ function addLinkedDocument(filenames) {
   filenames.forEach((name) => {
     cy.get(document.addExistingPiece.searchInput).type(name);
     cy.wait(1000);
-    cy.get('.auk-modal .data-table [data-test-vl-checkbox-label]').click({
+    cy.get('.auk-modal .data-table .auk-checkbox').click({
       force: true,
     });
     cy.get(document.addExistingPiece.searchInput).clear();
