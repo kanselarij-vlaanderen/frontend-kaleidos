@@ -18,7 +18,9 @@ export default class AgendaRoute extends Route {
     });
     this.set('sessionService.currentSession', meeting);
     const agendaId = params.agenda_id;
-    const agenda = await meeting.get('agendas').findBy('id', agendaId);
+    // TODO KAS-2452 this hasMany reload is an addition, do we always want this?
+    const agendas = await meeting.hasMany('agendas').reload();
+    const agenda = await agendas.findBy('id', agendaId);
     this.set('sessionService.currentAgenda', agenda);
 
     await this.updateSelectedAgenda(meeting, agenda);

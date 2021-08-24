@@ -1,6 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import { singularize } from 'ember-inflector';
-import { notifyPropertyChange } from '@ember/object';
+// import { notifyPropertyChange } from '@ember/object';
 import { bind } from '@ember/runloop';
 import { ajax } from 'frontend-kaleidos/utils/ajax';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -51,20 +51,22 @@ export default Service.extend({
 
   /* API: agenda-approve-service */
 
-  async rollbackAgendaitemsNotFormallyOk(agendaToRollback) {
-    if (!agendaToRollback) {
-      return agendaToRollback;
-    }
-    // Triggers the agendaApproveService to rollback the not formal ok agendaitems on the agenda.
-    await ajax({
-      method: 'POST',
-      url: '/agenda-approve/rollbackAgendaitemsNotFormallyOk',
-      data: {
-        oldAgendaId: agendaToRollback.id,
-      },
-    });
-  },
+  // TODO KAS-2452 DELETE
+  // async rollbackAgendaitemsNotFormallyOk(agendaToRollback) {
+  //   if (!agendaToRollback) {
+  //     return agendaToRollback;
+  //   }
+  //   // Triggers the agendaApproveService to rollback the not formal ok agendaitems on the agenda.
+  //   await ajax({
+  //     method: 'POST',
+  //     url: '/agenda-approve/rollbackAgendaitemsNotFormallyOk',
+  //     data: {
+  //       oldAgendaId: agendaToRollback.id,
+  //     },
+  //   });
+  // },
 
+  // TODO KAS-2452 rename this.
   async approveAgendaAndCopyToDesignAgenda(currentMeeting, oldAgenda) {
     if (!oldAgenda) {
       return oldAgenda;
@@ -74,14 +76,56 @@ export default Service.extend({
       method: 'POST',
       url: '/agenda-approve/approveAgenda',
       data: {
-        createdFor: currentMeeting.id,
+        meetingId: currentMeeting.id,
         oldAgendaId: oldAgenda.id,
       },
     });
-    notifyPropertyChange(oldAgenda, 'agendaitems');
+    // notifyPropertyChange(oldAgenda, 'agendaitems');
     const newAgenda = await this.store.find('agenda', result.body.newAgenda.id);
-    notifyPropertyChange(newAgenda, 'agendaitems');
+    // notifyPropertyChange(newAgenda, 'agendaitems');
     return newAgenda;
+  },
+
+  async approveAgendaAndCloseMeeting(currentMeeting, agendaToApprove) {
+    await ajax({
+      method: 'POST',
+      url: '/agenda-approve/approveAgendaAndCloseMeeting',
+      data: {
+        meetingId: currentMeeting.id,
+        agendaId: agendaToApprove.id,
+      },
+    });
+    // notifyPropertyChange(currentMeeting, 'isFinal');
+    // notifyPropertyChange(agendaToApprove, 'status');
+    return;
+  },
+
+  async closeMeeting(currentMeeting) {
+    const result = await ajax({
+      method: 'POST',
+      url: '/agenda-approve/closeMeeting',
+      data: {
+        meetingId: currentMeeting.id,
+      },
+    });
+    const lastApprovedAgenda = await this.store.find('agenda', result.body.lastApprovedAgenda.id);
+    // notifyPropertyChange(oldAgenda, 'agendaitems');
+    // notifyPropertyChange(currentMeeting, 'agendas');
+    return lastApprovedAgenda;
+  },
+
+  async reopenPreviousAgenda(currentMeeting) {
+    const result = await ajax({
+      method: 'POST',
+      url: '/agenda-approve/reopenPreviousAgenda',
+      data: {
+        meetingId: currentMeeting.id,
+      },
+    });
+    const reopenedAgenda = await this.store.find('agenda', result.body.reopenedAgenda.id);
+    // notifyPropertyChange(oldAgenda, 'agendaitems');
+    // notifyPropertyChange(currentMeeting, 'agendas');
+    return reopenedAgenda;
   },
 
   async deleteAgenda(agendaToDelete) {
