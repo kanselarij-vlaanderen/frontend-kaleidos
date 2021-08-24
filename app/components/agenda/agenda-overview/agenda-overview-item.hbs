@@ -1,7 +1,7 @@
 <div class={{if @agendaitem.retracted "vlc-u-opacity-lighter"}}
   {{in-viewport
     onEnter=(perform this.lazyLoadSideData)
-    onExit=(fn this.cancelLazyLoad)
+    onExit=this.cancelLazyLoad
   }}
 >
   <div data-test-agenda-overview-item-container class="vlc-agenda-items__body ">
@@ -18,7 +18,10 @@
         </div>
       {{/if}}
       <span class="vlc-agenda-items-sub-item__numbering">
-        {{@agendaitem.priority}}.
+        {{!-- For legacy data agenda-item number can be unexistent --}}
+        {{#if @agendaitem.number}}
+          {{@agendaitem.number}}.
+        {{/if}}
       </span>
     </h4>
     <div class="vlc-agenda-items__text">

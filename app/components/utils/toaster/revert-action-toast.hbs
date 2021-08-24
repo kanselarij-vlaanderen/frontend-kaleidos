@@ -13,7 +13,7 @@
       @skin="borderless"
       @layout="icon-only"
       @icon="redo"
-      {{action @options.onUndo}}
+      {{on "click" @options.onUndo}}
     >
       {{t "undo"}}
     </Auk::Button>

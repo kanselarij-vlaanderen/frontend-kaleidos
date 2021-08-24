@@ -1,7 +1,12 @@
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   formatter: inject(),
   dateObjectsToEnable: null,
@@ -17,7 +22,7 @@ export default Component.extend({
     return dateObjectsToEnable.map((object) => this.formatter.formatDate(object.get(datePropertyToUse)));
   }),
 
-  selectedDate: computed('date', function() {
+  selectedDate: computed('date', 'defaultHour', 'defaultMinute', function() {
     const date = this.get('date');
     if (date) {
       return this.formatter.formatDate(date.get('firstObject'));
@@ -32,6 +37,8 @@ export default Component.extend({
     return defaultDate;
   }),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     toggleCalendar() {
       this.flatpickrRef.toggle();

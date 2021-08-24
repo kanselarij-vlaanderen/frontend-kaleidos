@@ -1,24 +1,26 @@
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
 <Auk::Modal::Body>
-  {{utils/kind-selector kind=kind setAction=(action "setKind")}}
+  <Utils::KindSelector @kind={{this.kind}} @setAction={{action "setKind"}} />
   <div class="auk-u-mb-2">
     <div class="auk-form-group">
       <Auk::Label>{{t "start-date"}}</Auk::Label>
-      {{web-components/vl-datepicker
-        enableTime=true
-        date=date
-        dateChanged=(action "selectStartDate")
-      }}
+      <WebComponents::VlDatepicker
+        @enableTime={{true}}
+        @date={{this.date}}
+        @dateChanged={{action "selectStartDate"}}
+      />
     </div>
   </div>
   <div class="auk-u-mb-2">
     <div class="auk-form-group">
       <Auk::Label>{{t "meeting-number"}}</Auk::Label>
-      {{web-components/vl-form-input
-        data-test-edit-session-meeting-number=true
-        type="number"
-        value=meetingNumber
-        input=(action "meetingNumberChangedAction" meetingNumber)
-      }}
+      <WebComponents::VlFormInput
+        data-test-edit-session-meeting-number={{true}}
+        @type="number"
+        @value={{this.meetingNumber}}
+        {{on "input" (action "meetingNumberChangedAction" this.meeting)}}
+      />
     </div>
   </div>
   <div class="auk-u-mb-2">
@@ -26,10 +28,10 @@
       <Auk::Label>
         {{t "meeting-number-visual-representation"}}
       </Auk::Label>
-      {{web-components/vl-form-input
-        data-test-edit-session-number-representation=true
-        value=numberRepresentation
-      }}
+      <WebComponents::VlFormInput
+        data-test-edit-session-number-representation={{true}}
+        @value={{this.numberRepresentation}}
+      />
     </div>
   </div>
   <div class="auk-u-mb-2">
@@ -37,16 +39,14 @@
       <Auk::Label>
         {{t "meeting-location"}}
       </Auk::Label>
-      {{web-components/vl-form-input
-        value=extraInfo
-      }}
+      <WebComponents::VlFormInput @value={{this.extraInfo}} />
     </div>
   </div>
 </Auk::Modal::Body>
-{{web-components/vl-modal-footer
-  isLoading=isLoading
-  cancelButtonText=(t "cancel")
-  saveButtonText=(t "edit")
-  cancelAction=(action "cancelForm")
-  saveAction=(action "updateSession")
-}}
+<WebComponents::VlModalFooter
+  @isLoading={{this.isLoading}}
+  @cancelButtonText={{t "cancel"}}
+  @saveButtonText={{t "edit"}}
+  @cancelAction={{action "cancelForm"}}
+  @saveAction={{action "updateSession"}}
+/>

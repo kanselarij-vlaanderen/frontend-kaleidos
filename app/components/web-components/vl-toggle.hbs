@@ -1,7 +1,6 @@
-<input data-test-vl-toggle-input class="vl-toggle"
-       type="checkbox"
-       value="1"
-       checked={{value}}
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action require-input-label --}}
+<input data-test-vl-toggle-input class="vl-toggle" type="checkbox" value="1" checked={{this.value}}
 />
 
 <label class="vl-toggle__label" data-test-vl-toggle-label {{action "valueChanged"}}>

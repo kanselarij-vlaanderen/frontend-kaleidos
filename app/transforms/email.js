@@ -1,7 +1,7 @@
 /* eslint-disable */
 // Sourced from https://github.com/mu-semtech/ember-mu-transform-helpers/blob/master/addon/transforms/email.js
 import { warn } from '@ember/debug';
-import Transform from 'ember-data/transform';
+import Transform from '@ember-data/serializer/transform';
 
 export default Transform.extend({
   deserialize(serialized) {

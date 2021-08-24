@@ -1,30 +1,31 @@
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
 <div data-test-number-pagination-container class="vlc-pagination__container vlc-pagination__container-spacebetween">
   <div>
     <p class="vlc-pagination__fontsize">
-      {{startItem}}-{{endItem}}{{#if total}} {{t "table-of"}} {{total}}{{/if}}
-      {{#if hasMultiplePages}}
-        {{#if (not isFirstPage)}}
-          <a href="#" {{action "changePage" links.prev}}> {{t "table-previous-with-arrow"}}</a>
+      {{this.startItem}}-{{this.endItem}}{{#if this.total}} {{t "table-of"}} {{this.total}}{{/if}}
+      {{#if this.hasMultiplePages}}
+        {{#if (not this.isFirstPage)}}
+          <a href="#" {{action "changePage" this.links.prev}}> {{t "table-previous-with-arrow"}}</a>
         {{/if}}
-        {{#if (not isLastPage)}}
-          <a href="#" {{action "changePage" links.next}}>{{t "table-next-with-arrow"}}</a>
+        {{#if (not this.isLastPage)}}
+          <a href="#" {{action "changePage" this.links.next}}>{{t "table-next-with-arrow"}}</a>
         {{/if}}
       {{/if}}
     </p>
   </div>
-  {{#if sizeOptions}}
+  {{#if this.sizeOptions}}
     <div class="vlc-pagination__container">
       <p class="vlc-pagination__fontsize vlc-pagination-nowrap">{{t "amount-per-page"}}</p>
       <div>
-        {{#power-select
-          options=sizeOptions
-          selected=size
-          searchEnabled=false
-          onchange=(action "selectSize")
-        as |sizeValue|
-        }}
+        <PowerSelect
+          @options={{this.sizeOptions}}
+          @selected={{this.size}}
+          @searchEnabled={{false}}
+          @onchange={{action "selectSize"}}
+        as |sizeValue|>
           {{sizeValue}}
-        {{/power-select}}
+        </PowerSelect>
       </div>
     </div>
   {{/if}}

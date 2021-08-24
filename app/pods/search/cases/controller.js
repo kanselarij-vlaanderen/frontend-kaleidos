@@ -46,12 +46,12 @@ export default class CasesSearchController extends Controller {
 
   @action
   toggleDecisionsOnly() {
-    this.toggleProperty('decisionsOnly');
+    this.decisionsOnly = !this.decisionsOnly;
   }
 
   @action
   toggleIncludeArchived() {
-    this.toggleProperty('includeArchived');
+    this.includeArchived = !this.includeArchived;
   }
 
   @action

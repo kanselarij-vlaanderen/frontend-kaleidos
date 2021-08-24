@@ -1,12 +1,8 @@
-import DS from 'ember-data';
+import Model, { attr, belongsTo } from '@ember-data/model';
 import { alias } from '@ember/object/computed';
 
-const {
-  Model,
-  belongsTo,
-  attr,
-} = DS;
-
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
   user: belongsTo('person'),
   gebruiker: alias('user'),

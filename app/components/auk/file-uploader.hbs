@@ -17,6 +17,7 @@ as |dropzone|
         keep on using ember-file-upload's other features (queue) and facilitate a future migration once ember-file-upload
         becomes more flexible.
   --}}
+  {{!-- template-lint-disable require-input-label --}}
   <input
     type="file"
     accept={{@accept}}
@@ -24,6 +25,7 @@ as |dropzone|
     multiple={{@multiple}}
     onchange={{this.addFilesToQueue}}
   >
+  {{!-- template-lint-enable require-input-label --}}
   <div class="auk-file-upload__content">
     <div class="auk-u-mb-2">
       {{#if (and (not this.uploadIsRunning) (not this.uploadIsCompleted))}}
