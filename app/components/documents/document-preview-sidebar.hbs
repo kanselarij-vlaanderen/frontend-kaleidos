@@ -1,8 +1,8 @@
 <Auk::Sidebar
-        @size="xlarge"
-        @position="right"
-        @skin="white"
-        class="auk-u-pb-6"
+  @size="xlarge"
+  @position="right"
+  @skin="white"
+  class="auk-u-pb-6"
 >
   <Auk::Navbar>
     <Auk::Toolbar>
@@ -25,8 +25,8 @@
       {{#unless this.loadData.isRunning}}
         {{#if this.documentType}}
           <Auk::KeyValue
-                  @key={{t "document-type"}}
-                  @value={{this.documentType.label}}
+            @key={{t "document-type"}}
+            @value={{this.documentType.label}}
           />
         {{/if}}
         {{#if @piece.accessLevel}}
