@@ -10,7 +10,7 @@
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
-      {{#if currentSession.isEditor}}
+      {{#if this.currentSession.isEditor}}
         <Auk::Toolbar::Item>
           <Auk::Button
             @skin="primary"
@@ -27,14 +27,14 @@
 </Auk::Navbar>
 {{outlet}}
 {{#if this.isCreatingNewSession}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    title=(t "new-agenda")
-    closeModal=this.closeNewSessionModal
-  }}
-    {{sessions/forms/new-session
-      successfullyAdded=this.successfullyAdded
-      cancelForm=this.closeNewSessionModal
-    }}
-  {{/web-components/vl-modal}}
+  <WebComponents::VlModal
+    @isOverlay={{true}}
+    @title={{t "new-agenda"}}
+    @closeModal={{this.closeNewSessionModal}}
+  >
+    <Sessions::Forms::NewSession
+      @successfullyAdded={{this.successfullyAdded}}
+      @cancelForm={{this.closeNewSessionModal}}
+    />
+  </WebComponents::VlModal>
 {{/if}}

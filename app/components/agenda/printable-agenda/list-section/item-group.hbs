@@ -1,12 +1,12 @@
 <div class="auk-u-mt-4">
-  {{agenda/printable-agenda/list-section/item-group/item-group-header
-    mandatees=items.firstObject.sortedMandatees
-  }}
-  {{#each items as |agendaitem|}}
+  <Agenda::PrintableAgenda::ListSection::ItemGroup::ItemGroupHeader
+    @mandatees={{this.items.firstObject.sortedMandatees}}
+  />
+  {{#each this.items as |agendaitem|}}
     <div value={{agendaitem.number}}>
-      {{agenda/printable-agenda/list-section/item-group/item
-        item=agendaitem
-      }}
+      <Agenda::PrintableAgenda::ListSection::ItemGroup::Item
+        @item={{agendaitem}}
+      />
     </div>
   {{/each}}
 </div>

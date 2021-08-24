@@ -1,19 +1,18 @@
 import Service, { inject } from '@ember/service';
 import { computed } from '@ember/object';
 
-import DS from 'ember-data';
+import { PromiseArray } from '@ember-data/store/-private';
 import { all } from 'rsvp';
 
-const {
-  PromiseArray,
-} = DS;
-
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-classes
 export default Service.extend({
   store: inject(),
   router: inject(),
   currentSession: null,
 
-  agendas: computed('currentSession.agendas.@each', function() {
+  agendas: computed('currentSession.agendas.[]', function() {
     if (!this.get('currentSession')) {
       return [];
     }
@@ -25,7 +24,7 @@ export default Service.extend({
     });
   }),
 
-  currentAgendaitems: computed('currentAgenda.agendaitems.@each', function() {
+  currentAgendaitems: computed('currentAgenda.agendaitems.[]', function() {
     const currentAgenda = this.get('currentAgenda');
     if (currentAgenda) {
       return this.store.query('agendaitem', {
@@ -41,7 +40,7 @@ export default Service.extend({
     return [];
   }),
 
-  announcements: computed('currentAgenda.announcements.@each', function() {
+  announcements: computed('currentAgenda.announcements.[]', function() {
     const currentAgenda = this.get('currentAgenda');
     if (currentAgenda) {
       const announcements = this.store.query('announcement', {

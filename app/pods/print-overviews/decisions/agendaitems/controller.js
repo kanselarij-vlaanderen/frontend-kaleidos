@@ -2,6 +2,8 @@ import Controller from '@ember/controller';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Controller.extend({
   intl: inject(),
 
@@ -56,6 +58,8 @@ export default Controller.extend({
     }];
   }),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     async addTreatment(agendaitemRow) {
       const now = new Date();

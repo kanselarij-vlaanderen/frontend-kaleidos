@@ -1,8 +1,8 @@
+/* eslint-disable ember/no-empty-glimmer-component-classes */
 import Component from '@glimmer/component';
 
-export default class DocumentsDocumentBadgeList extends Component {
-  /**
-   * @argument pieces:
-   * @argument highlightedPieces:
-   */
-}
+/**
+ * @argument pieces:
+ * @argument highlightedPieces:
+ */
+export default class DocumentsDocumentBadgeList extends Component {}

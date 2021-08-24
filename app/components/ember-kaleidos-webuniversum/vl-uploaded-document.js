@@ -1,5 +1,9 @@
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   classNames: ['vl-uploaded-document'],
 
@@ -15,6 +19,8 @@ export default Component.extend({
   download: null, // overrides use of 'downloadLink' property
   delete: null,
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     view() {
       if (this.view) {

@@ -3,25 +3,25 @@
   " van "
   (moment-format this.model.meeting.plannedStart 'DD/MM/YYYY HH:mm')
 }}
-{{agenda/agenda-header
-  loading=(action "loadingAgendaitems")
-  onCreateAgendaitem=(action "refresh")
-  onApproveAllAgendaitems=(action "refresh")
-  onApproveAgenda=(action "navigateToAgenda")
-  navigateToPressAgenda=(action "navigateToPressAgenda")
-  navigateToDecisions=(action "navigateToDecisions")
-  navigateToNewsletter=(action "navigateToNewsletter")
-  showPrintButton=showPrintButton
-}}
-{{#if (not isLoading)}}
+<Agenda::AgendaHeader
+  @loading={{this.loadingAgendaitems}}
+  @onCreateAgendaitem={{this.refresh}}
+  @onApproveAllAgendaitems={{this.refresh}}
+  @onApproveAgenda={{this.navigateToAgenda}}
+  @navigateToPressAgenda={{this.navigateToPressAgenda}}
+  @navigateToDecisions={{this.navigateToDecisions}}
+  @navigateToNewsletter={{this.navigateToNewsletter}}
+  @showPrintButton={{this.showPrintButton}}
+/>
+{{#if (not this.isLoading)}}
   <div class="auk-panel-layout">
-    {{#unless shouldHideNav}}
+    {{#unless this.shouldHideNav}}
       <div class="auk-panel-layout__sidebar auk-panel-layout__agenda-history">
-        {{agenda/side-nav
-          agendas=this.model.meeting.sortedAgendas
-          currentAgenda=this.model.agenda
-          selectAgenda=(action "selectAgenda")
-        }}
+        <Agenda::SideNav
+          @agendas={{this.model.meeting.sortedAgendas}}
+          @currentAgenda={{this.model.agenda}}
+          @selectAgenda={{this.selectAgenda}}
+        />
       </div>
     {{/unless}}
     {{outlet}}

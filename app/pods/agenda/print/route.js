@@ -4,6 +4,8 @@ import {
   task, all
 } from 'ember-concurrency';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Route.extend({
   async model() {
     const {

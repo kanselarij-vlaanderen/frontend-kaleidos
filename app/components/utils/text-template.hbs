@@ -1,19 +1,21 @@
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
 <div class="auk-form-group">
   <Auk::Label>{{t "text-templates"}}</Auk::Label>
-  {{#power-select
-    options=items
-    selected=selectedItems
-    disabled=readOnly
-    searchField=searchField
-    placeholder=placeholder
-    searchMessage=searchMessage
-    loadingMessage=loadingMessage
-    noMatchesMessage=noMatchesMessage
-    search=(perform searchTask)
-    oninput=(action "resetValueIfEmpty")
-    onchange=(action "selectModel")
-  as |model|
-  }}
+  <PowerSelect
+    @options={{this.items}}
+    @selected={{this.selectedItems}}
+    @disabled={{this.readOnly}}
+    @searchField={{this.searchField}}
+    @placeholder={{this.placeholder}}
+    @searchMessage={{this.searchMessage}}
+    @loadingMessage={{this.loadingMessage}}
+    @noMatchesMessage={{this.noMatchesMessage}}
+    @search={{perform this.searchTask}}
+    @oninput={{action "resetValueIfEmpty"}}
+    @onchange={{action "selectModel"}}
+    as |model|
+  >
     {{model.label}}
-  {{/power-select}}
+  </PowerSelect>
 </div>

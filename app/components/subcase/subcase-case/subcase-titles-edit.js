@@ -1,3 +1,6 @@
+// TODO: octane-refactor
+/* eslint-disable ember/no-get, ember/classic-decorator-no-classic-methods */
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import {
@@ -8,6 +11,8 @@ import {
 } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/require-tagless-components
 export default class SubcaseTitlesEdit extends Component {
   @service store;
   classNames = ['auk-box', 'auk-u-mt-4'];

@@ -1,17 +1,16 @@
-import DS from 'ember-data';
+import Model, { hasMany, belongsTo, attr } from '@ember-data/model';
 import { computed } from '@ember/object';
 
-const {
-  Model, attr, belongsTo, hasMany,
-} = DS;
-
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
   startDate: attr('datetime'),
   subcase: belongsTo('subcase'),
   agendaitems: hasMany('agendaitems'), // TODO ember-data model name should be singular?
   submissionActivities: hasMany('submission-activity'),
 
-  latestAgendaitem: computed('agendaitems.@each', async function() {
+  latestAgendaitem: computed('agendaitems.[]', 'subcase', async function() {
     const subcase = await this.get('subcase');
     const meeting = await subcase.get('requestedForMeeting');
     const latestAgenda = await meeting.get('latestAgenda');

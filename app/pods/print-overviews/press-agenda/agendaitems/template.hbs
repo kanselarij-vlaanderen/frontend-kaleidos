@@ -1,15 +1,15 @@
 <div class="auk-u-m-8">
-  {{#utils/agendaitem-table
-    model=model
-    sort=sort
-    page=page
-    filter=filter
-    size=size
-    include=include
-    columns=columns
-  as |row|
-  }}
-    {{agendaitem-press-edit isTableRow=true agendaitem=row}}
-  {{/utils/agendaitem-table}}
+  <Utils::AgendaitemTable
+    @model={{this.model}}
+    @sort={{this.sort}}
+    @page={{this.page}}
+    @filter={{this.filter}}
+    @size={{this.size}}
+    @include={{this.include}}
+    @columns={{this.columns}}
+    as |row|
+  >
+    <AgendaitemPressEdit @isTableRow={{true}} @agendaitem={{row}} />
+  </Utils::AgendaitemTable>
 </div>
 {{outlet}}
