@@ -76,7 +76,6 @@ function addNewDocumentsInUploadModal(files, model) {
   cy.wait('@createNewPiece', {
     timeout: 24000,
   });
-  // TODO seperate command for subcase / split this command / do calls in higher commands
   // Pieces are loaded differently in the subcase/documents route
   if (model === 'subcase') {
     cy.wait('@createNewSubmissionActivity', {
@@ -144,7 +143,7 @@ function addNewPiece(oldFileName, file, modelToPatch) {
       //   timeout: 12000,
       // });
     } else if (modelToPatch === 'subcases') {
-      // TODO these 2 awaits don't happen for subcase not proposed for a meeting / no agenda-activity
+      // NOTE: these 2 awaits don't happen for subcase not proposed for a meeting / no agenda-activity
       // cy.wait('@putAgendaitemDocuments', {
       //   timeout: 12000,
       // }).wait('@patchAgendaitem', {
@@ -162,15 +161,15 @@ function addNewPiece(oldFileName, file, modelToPatch) {
 }
 
 /**
- * @description Add document to agenda.
- * @name addDocumentsToAgenda
+ * @description Add document to a meeting (notulen).
+ * @name addDocumentsToMeeting
  * @memberOf Cypress.Chainable#
  * @function
  * @param {string[]} files
  */
-// TODO KAS-2826 this is actually added to meeting, but you're on an agenda
-function addDocumentsToAgenda(files) {
-  cy.log('addDocumentsToAgenda');
+// NOTE: this is somewhat confusing because we are in the "agenda/documents" route with the model for "meeting"
+function addDocumentsToMeeting(files) {
+  cy.log('addDocumentsToMeeting');
   cy.clickReverseTab('Documenten');
   cy.get(route.agendaDocuments.addDocuments).click();
   return addNewDocumentsInUploadModal(files, 'meeting');
@@ -232,7 +231,6 @@ function addNewPieceToMeeting(oldFileName, file) {
  * @param {string} agendaitemTitle
  * @param {boolean} alreadyHasDocs
  */
-// TODO KAS-2826 wait for loader
 function openAgendaitemDocumentTab(agendaitemTitle, alreadyHasDocs = false) {
   cy.log('openAgendaitemDocumentTab');
   cy.openDetailOfAgendaitem(agendaitemTitle);
@@ -416,7 +414,7 @@ function addNewPieceToSignedDocumentContainer(oldFileName, file) {
  * @param {String[]} filenames - The relative path to the file in the cypress/fixtures folder excluding the fileName
  */
 function addLinkedDocument(filenames) {
-  // TODO, this works in subcase view, untested in agendaitem view
+  // NOTE: this works in subcase view, untested in agendaitem view
   cy.route('GET', 'pieces').as('createNewPiece');
   cy.log('addLinkedDocument');
   cy.get(document.linkedDocuments.add).click();
@@ -458,7 +456,7 @@ function deleteSinglePiece(fileName, indexToDelete) {
   cy.wait('@deletePiece', {
     timeout: 40000,
   }).wait('@putRestoreAgendaitems');
-  cy.wait(2000); // TODO KAS-2826 wait for loadpieces to happen
+  cy.wait(2000);
   cy.log('/deleteSinglePiece');
 }
 
@@ -493,9 +491,12 @@ function isPieceDeletable(fileName, indexToCheck, shouldBeDeletable) {
   cy.log('/isPieceDeletable');
 }
 
+// ***********************************************
+// Commands
+
 Cypress.Commands.add('addNewDocumentsInUploadModal', addNewDocumentsInUploadModal);
 Cypress.Commands.add('addDocumentsToSubcase', addDocumentsToSubcase); // same code, goes to reverse tab to add docs
-Cypress.Commands.add('addDocumentsToAgenda', addDocumentsToAgenda); // TODO rename to addDocumentsToMeeting
+Cypress.Commands.add('addDocumentsToMeeting', addDocumentsToMeeting);
 Cypress.Commands.add('addDocumentToTreatment', addDocumentToTreatment);
 Cypress.Commands.add('addDocumentsToAgendaitem', addDocumentsToAgendaitem);
 Cypress.Commands.add('addNewPiece', addNewPiece);

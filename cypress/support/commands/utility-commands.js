@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
 
-// Commands
 import auk from '../../selectors/auk.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import utils from '../../selectors/utils.selectors';
@@ -106,6 +105,9 @@ function closeSettingsModal() {
   cy.get(utils.vlModal.dialogWindow).should('not.be.visible');
   cy.log('/closeSettingsModal');
 }
+
+// ***********************************************
+// Commands
 
 Cypress.Commands.add('validateDropdownElements', validateDropdownElements);
 Cypress.Commands.add('clickReverseTab', clickReverseTab);

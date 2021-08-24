@@ -1,9 +1,6 @@
 /* global  cy, Cypress */
 // / <reference types="Cypress" />
 
-// ***********************************************
-// Commands
-
 import cases from '../../selectors/case.selectors';
 import utils from '../../selectors/utils.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
@@ -11,7 +8,6 @@ import dependency from '../../selectors/dependency.selectors';
 
 // ***********************************************
 // Functions
-// TODO needs setupping to be sure to succeed.
 
 /**
  * @description Translates a month number to a dutch month in lowercase.
@@ -121,48 +117,6 @@ function changeSubcaseAccessLevel(confidentialityChange, accessLevel, newShortTi
 }
 
 /**
- * Changes the themes of a sucase when used in the subcase view (/dossiers/..id../overzicht)
- * @name addSubcaseThemes
- * @memberOf Cypress.Chainable#
- * @function
- * @param {Array<Number|String>} themes - An array of theme names that must match exactly or an array of numbers that correspond to the checkboxes in themes
- */
-// TODO KAS-2826 part of newsletter, refactor if needed
-function addSubcaseThemes(themes) {
-  cy.log('addSubcaseThemes');
-  cy.route('GET', '/themes').as('getThemes');
-  cy.route('PATCH', '/subcases/*').as('patchSubcase');
-  cy.get('.auk-h3').contains('Thema\'s')
-    .parents('.auk-u-mb-8')
-    .as('subcaseTheme');
-
-  cy.get('@subcaseTheme').within(() => {
-    cy.get('a').click();
-    // cy.wait('@getThemes', { timeout: 12000 });
-    cy.get('.auk-checkbox', {
-      timeout: 12000,
-    }).should('exist')
-      .end();
-    themes.forEach((element) => {
-      if (Number.isNaN(element)) {
-        cy.get('.auk-checkbox').contains(element)
-          .click();
-      } else {
-        cy.get('.auk-checkbox').eq(element)
-          .click();
-      }
-    });
-    cy.get('.auk-toolbar-complex__item > .auk-button')
-      .contains('Opslaan')
-      .click();
-  });
-  cy.wait('@patchSubcase');
-  cy.log('/addSubcaseThemes');
-}
-
-// TODO use arrays of fields and domains, search on mandatee name
-
-/**
  * Adds a mandatees with field and domain to a sucase when used in the subcase view (/dossiers/..id../overzicht)
  * Pass the title of the mandatee to get a specific person
  * @name addSubcaseMandatee
@@ -191,15 +145,14 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
   cy.get(mandatee.mandateePanelEdit.actions.add).click();
   cy.get(utils.mandateesDomain.mandateeSelector).find(dependency.emberPowerSelect.trigger)
     .click();
-  // cy.get(dependency.emberPowerSelect.searchInput).type('g').clear(); // TODO added this because default data does not have active ministers
+  // cy.get(dependency.emberPowerSelect.searchInput).type('g').clear(); // only use this when default data does not have active ministers
   if (mandateeSearchText) {
     cy.get(dependency.emberPowerSelect.searchInput).type(mandateeSearchText);
     cy.wait('@getFilteredMandatees');
   } else {
     cy.wait('@getMandatees');
   }
-  cy.get(dependency.emberPowerSelect.optionSearchMessage).should('not.exist'); // TODO added this because default data does not have active ministers
-  // cy.get(dependency.emberPowerSelect.option).should('exist'); // TODO opkuisen voor merge
+  cy.get(dependency.emberPowerSelect.optionSearchMessage).should('not.exist');
   if (mandateeSearchText) {
     cy.get(dependency.emberPowerSelect.option).contains(mandateeSearchText)
       .click();
@@ -207,7 +160,7 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
     cy.get(dependency.emberPowerSelect.option).eq(mandateeNumber)
       .click();
   }
-  // TODO loading the isecodes and government fields takes time, are they not cacheable ?
+  // loading the isecodes and government fields takes some time
   cy.wait(`@getGovernmentFieldDomains${randomInt}`);
   if (fieldNumber >= 0) {
     cy.get(utils.domainsFieldsSelectorForm.container, {
@@ -300,9 +253,11 @@ function deleteSubcase() {
   cy.log('/deleteSubcase');
 }
 
+// ***********************************************
+// Commands
+
 Cypress.Commands.add('openSubcase', openSubcase);
 Cypress.Commands.add('changeSubcaseAccessLevel', changeSubcaseAccessLevel);
-Cypress.Commands.add('addSubcaseThemes', addSubcaseThemes);
 Cypress.Commands.add('addSubcaseMandatee', addSubcaseMandatee);
 Cypress.Commands.add('addAgendaitemMandatee', addAgendaitemMandatee);
 Cypress.Commands.add('proposeSubcaseForAgenda', proposeSubcaseForAgenda);
