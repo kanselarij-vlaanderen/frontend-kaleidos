@@ -1,5 +1,4 @@
 import Controller from '@ember/controller';
-import { alias } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
@@ -8,7 +7,9 @@ import { saveChanges } from 'frontend-kaleidos/utils/agendaitem-utils';
 export default class CasesCaseSubcasesSubcaseOverviewController extends Controller {
   @service currentSession;
 
-  @alias('model') subcase;
+  get subcase() {
+    return this.model;
+  }
   @tracked allSubcases;
   @tracked mandatees;
   @tracked submitter;

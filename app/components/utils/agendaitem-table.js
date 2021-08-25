@@ -1,5 +1,9 @@
 /* eslint-disable class-methods-use-this */
+// TODO: octane-refactor
+/* eslint-disable ember/no-get, ember/classic-decorator-no-classic-methods */
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
+/* eslint-disable ember/no-computed-properties-in-native-classes */
 import {
   action, computed
 } from '@ember/object';
@@ -10,6 +14,8 @@ import Table from 'ember-light-table';
 import { restartableTask } from 'ember-concurrency-decorators';
 import { timeout } from 'ember-concurrency';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/require-tagless-components
 export default class AgendaitemTable extends Component {
   @service store;
 
@@ -75,7 +81,7 @@ export default class AgendaitemTable extends Component {
     }
   }
 
-  @computed('model.[]')
+  @computed('columns', 'enableSync', 'model.[]', 'sort')
   get table() {
     const table = Table.create({
       columns: this.columns,

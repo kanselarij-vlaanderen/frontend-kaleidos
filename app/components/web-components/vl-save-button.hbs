@@ -1,7 +1,7 @@
 <span data-test-vl-save class="auk-button__content">
-  {{#if (not isLoading)}}
-    {{#if text}}
-      {{text}}
+  {{#if (not this.isLoading)}}
+    {{#if this.text}}
+      {{this.text}}
     {{else}}
       {{yield}}
     {{/if}}

@@ -1,6 +1,9 @@
 import Controller from '@ember/controller';
+// eslint-disable-next-line ember/no-computed-properties-in-native-classes
 import {
-  action, computed
+  action,
+  computed,
+  set
 } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
@@ -103,7 +106,8 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   @action
   changeSorting(sort) {
-    this.set('sort', sort);
+    // TODO: remove setter once "sort" is tracked
+    set(this, 'sort', sort);
   }
 
   @action

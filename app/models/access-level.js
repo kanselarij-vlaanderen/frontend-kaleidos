@@ -1,11 +1,8 @@
-import DS from 'ember-data';
+import Model, { hasMany, attr } from '@ember-data/model';
 
-const {
-  attr,
-  hasMany,
-} = DS;
-
-export default DS.Model.extend({
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
+export default Model.extend({
   uri: attr('string'),
   label: attr('string'),
   priority: attr('string'),

@@ -1,7 +1,11 @@
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   newsletterService: inject(),
   classNames: ['vl-toggle__wrapper'],
@@ -12,6 +16,8 @@ export default Component.extend({
     return this.column.get('valuePath');
   }),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     async valueChanged(row) {
       const {

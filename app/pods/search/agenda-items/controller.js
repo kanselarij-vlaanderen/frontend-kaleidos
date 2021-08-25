@@ -76,17 +76,17 @@ export default class AgendaitemsSearchController extends Controller {
 
   @action
   toggleIncludeNotas() {
-    this.toggleProperty('includeNotas');
+    this.includeNotas = !this.includeNotas;
   }
 
   @action
   toggleIncludeMededelingen() {
-    this.toggleProperty('includeMededelingen');
+    this.includeMededelingen = !this.includeMededelingen;
   }
 
   @action
   toggleLatestOnly() {
-    this.toggleProperty('latestOnly');
+    this.latestOnly = !this.latestOnly;
   }
 
   @action

@@ -4,6 +4,8 @@ import config from './config/environment';
 import ENV from 'frontend-kaleidos/config/environment';
 import { isEmpty } from '@ember/utils';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 const Router = EmberRouter.extend({
   location: config.locationType,
   rootURL: config.rootURL,
@@ -58,7 +60,6 @@ Router.map(function() {
     this.route('document-types', () => {});
     this.route('case-types', () => {});
     this.route('subcase-types', () => {});
-    this.route('signature', () => {});
   });
   this.route('loading', { path: '/laden', });
   // mock-login-route as name to avoid collision with mock-login component provided by addon
@@ -162,7 +163,6 @@ Router.map(function() {
           this.route('documents', { path: '/documenten', });
           this.route('requests', { path: '/aanvragen', });
         });
-        this.route('signatures', { path: '/handtekeningen', });
       });
     });
   }

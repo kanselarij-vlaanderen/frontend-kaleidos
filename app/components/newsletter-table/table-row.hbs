@@ -10,7 +10,7 @@
         </p>
       </div>
       <div class="auk-u-mb-2">
-        {{sanitize-html raw=true value=this.newsletterInfo.richtext}}
+        <SanitizeHtml @raw={{true}} @value={{this.newsletterInfo.richtext}} />
       </div>
       {{#if this.newsletterInfo.remark}}
         <p class="auk-u-muted auk-u-text-capitalize auk-u-text-small">

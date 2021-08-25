@@ -7,6 +7,8 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
 import { A } from '@ember/array';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Service.extend({
   store: service(),
   toaster: service(),
@@ -36,13 +38,6 @@ export default Service.extend({
       method: 'GET',
       url: `/session-service/activeAgendas?date=${date}`,
     }).then((result) => result.body.agendas);
-  },
-
-  async getPieceNames(model) {
-    return ajax({
-      method: 'GET',
-      url: `/lazy-loading/documentNames?uuid=${model.id}`,
-    }).then((result) => result.body.documentNames);
   },
 
   async rollbackAgendaitemsNotFormallyOk(agendaToRollback) {
