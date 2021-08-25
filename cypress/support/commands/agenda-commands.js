@@ -396,7 +396,7 @@ function addAgendaitemToAgenda(subcaseTitle, postponed = false) {
       timeout: 12000,
     }).eq(0)
       .click()
-      .get(auk.checkbox)
+      .get(auk.checkbox.checkbox)
       .should('be.checked');
     cy.get(utils.vlModalFooter.save).click();
   });

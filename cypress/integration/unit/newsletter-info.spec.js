@@ -44,7 +44,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // define alias
     cy.get(newsletter.tableRow.newsletterRow).find(newsletter.tableRow.inNewsletterCheckbox)
       .as('checkboxContainer');
-    cy.get('@checkboxContainer').find(auk.checkbox)
+    cy.get('@checkboxContainer').find(auk.checkbox.checkbox)
       .as('checkboxValue');
     // checkbox is unchecked, toggle it
     cy.get('@checkboxValue').should('not.be.checked');
