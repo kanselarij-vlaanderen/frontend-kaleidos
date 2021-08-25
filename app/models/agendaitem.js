@@ -5,7 +5,7 @@ import { inject } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import {
-  alias, deprecatingAlias, reads
+  alias, reads
 } from '@ember/object/computed';
 import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 import VRDocumentName, { compareFunction } from 'frontend-kaleidos/utils/vr-document-name';
@@ -23,7 +23,7 @@ export default ModelWithModifier.extend({
   addedPieces: alias('agendaService.addedPieces'),
 
   store: inject(),
-  priority: attr('number'),
+  number: attr('number'),
   created: attr('datetime'),
   record: attr('string'),
   retracted: attr('boolean'), // TODO 1420 TRUE = postponed, move to treatment
@@ -94,19 +94,7 @@ export default ModelWithModifier.extend({
     });
   }),
 
-
-  number: deprecatingAlias('priority', {
-    id: 'agendaitem-number-deprecated',
-    until: 'unknown',
-  }),
-
   isDesignAgenda: reads('agenda.isDesignAgenda'),
-
-  // get piece names to show on agendaview when not in the viewport to assist lazy loading
-  pieceNames: computed('pieces', async function() {
-    const names = await this.agendaService.getPieceNames(this);
-    return names;
-  }),
 
   nota: computed('id', function() {
     return PromiseObject.create({

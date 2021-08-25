@@ -38,6 +38,7 @@ const selectors = {
 
   // agenda/documents/template
   agendaDocuments: {
+    cardList: '[data-test-route-agenda-documents-card-list]',
     addDocuments: '[data-test-route-agenda-documents-add-documents]',
   },
 

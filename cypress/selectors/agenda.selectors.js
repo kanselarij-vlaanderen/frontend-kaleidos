@@ -104,7 +104,6 @@ const selectors = {
       // TODO-selector unused selectors
       navigateToAgendaView: ['data-test-agenda-header-navigate-to-agenda-view'],
       navigateToPressagenda: '[data-test-agenda-header-navigate-to-pressagenda]',
-      selectSignature: '[data-test-agenda-header-select-signature]',
       printAgenda: ['data-test-agenda-header-print-agenda'],
     },
     // TODO-selector unused selector
