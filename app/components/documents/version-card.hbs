@@ -46,7 +46,7 @@
           </Menu.Item>
           {{#if this.currentSession.isEditor}}
             <Menu.Item @skin="danger"
-              {{on "click" this.openVerify}}
+              {{on "click" @openVerify}}
             >
               {{t "delete"}}
             </Menu.Item>
@@ -57,11 +57,3 @@
   </div>
 </div>
 
-{{#if this.isVerifyingDelete}}
-  <WebComponents::VlModalVerify
-    @title={{t "document-delete"}}
-    @message={{t "delete-document-message"}}
-    @cancel={{this.cancelDelete}}
-    @verify={{this.confirmDelete}}
-  />
-{{/if}}

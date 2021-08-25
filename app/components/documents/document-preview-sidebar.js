@@ -3,7 +3,10 @@ import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-
+import moment from 'moment';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { isBlank } from '@ember/utils';
+import VRDocumentName from '../../utils/vr-document-name';
 
 /**
  *
@@ -14,6 +17,9 @@ import { inject as service } from '@ember/service';
  */
 export default class DocumentsDocumentPreviewSidebar extends Component {
   @service fileService;
+  @service router;
+  @service store;
+
 
   @tracked documentType;
   @tracked docContainer;
@@ -23,6 +29,8 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
 
   @tracked activeTab = 'details';
   @tracked isOpenUploadVersionModal = false;
+  @tracked isVerifyingDelete = false;
+  @tracked selectedToDelete;
 
   constructor() {
     super(...arguments);
@@ -48,31 +56,71 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
     this.activeTab = tabName;
   }
 
-
   @action
   openUploadVersionModal() {
     this.isOpenUploadVersionModal = true;
   }
 
-
-  resetTabs() {
-    this.showDetails = false;
-    this.showSignatures = false;
-    this.showVersions = false;
+  @action
+  closeUploadVersionModal() {
+    this.isOpenUploadVersionModal = false;
   }
 
   @action
-  async deleteVersion(versionPiece) {
-    await this.fileService.deletePiece(versionPiece);
+  async saveUploadVersionModal(newVersion) {
+    let accessLevel = await this.lastPiece.accessLevel;
+    if (isBlank(accessLevel)){
+      accessLevel = await this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
+    }
+    const now = moment().utc()
+      .toDate();
+    let newPiece = this.store.createRecord('piece', {
+      created: now,
+      modified: now,
+      name: newVersion.name,
+      file: newVersion.file,
+      previousPiece: this.lastPiece,
+      confidential: this.lastPiece.confidential,
+      accessLevel: accessLevel,
+      documentContainer: this.docContainer,
+    });
+    await newPiece.save();
+
+    this.isOpenUploadVersionModal = false;
+    this.loadVersionHistory.perform();
+    this.router.transitionTo('document', newPiece.id)
+  }
+
+  @action
+  async deleteVersion() {
+    await this.fileService.deletePiece(this.selectedToDelete);
     // delete orphan container if last piece is deleted
     if (this.versionPieces.size <= 1){
       await this.fileService.deleteDocumentContainer(this.docContainer)
       this.args.transitionBack();
     }
     //if you deleted current file also go back
-    if (versionPiece.id === this.args.piece.id){
+    if (this.selectedToDelete.id === this.args.piece.id){
       this.args.transitionBack();
     }
     this.loadVersionHistory.perform();
+    this.selectedToDelete = null;
+    this.isVerifyingDelete = false;
+  }
+
+  @action
+  openVerify(versionPiece) {
+    this.selectedToDelete = versionPiece;
+    this.isVerifyingDelete = true;
+  }
+
+  @action
+  cancelVerify() {
+    this.selectedToDelete = null;
+    this.isVerifyingDelete = false;
+  }
+
+  get newVersionName(){
+    return new VRDocumentName(this.lastPiece.name).withOtherVersionSuffix(this.versionPieces.length);
   }
 }

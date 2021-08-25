@@ -292,9 +292,9 @@ p {
 /* Document-viewer
    ========================================================================== */
 .version-card{
-  border-radius: 5px;
+  border: 0.1rem solid $border-color;
   padding: 5px;
 }
 .version-card-selected{
-  background: $au-blue-100;
+  background: $au-yellow-100;
 }
