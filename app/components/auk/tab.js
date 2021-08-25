@@ -11,7 +11,6 @@ import { isPresent } from '@ember/utils';
  * @argument {String} layout: can be (default, "icon-left") or "icon-right"
  * @argument {Boolean} isHierarchicalBack: Flag to apply custom styling for "hierarchical back button"-tab
  * @argument {Boolean} active: Helps achieve active state without route
- * @argument {action} onClick: Tells what button must do on click
  */
 export default class Tab extends Component {
   // Workaround for linkTo not accepting @model and @models parameter, regardless if one is null

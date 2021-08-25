@@ -1,17 +1,17 @@
 <Auk::Sidebar
-        @size="xlarge"
-        @position="right"
-        @skin="white"
-        class="auk-u-pb-6"
+  @size="xlarge"
+  @position="right"
+  @skin="white"
+  class="auk-u-pb-6"
 >
   <Auk::Navbar>
     <Auk::Toolbar>
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
           <Auk::Tabs>
-            <Auk::Tab @onClick={{this.openDetails}} @active={{this.showDetails}}>{{t "detail"}}</Auk::Tab>
-            <Auk::Tab @onClick={{this.openSignatures}} @active={{this.showSignatures}}>{{t "signatures"}}</Auk::Tab>
-            <Auk::Tab @onClick={{this.openVersions}} @active={{this.showVersions}}>{{t "version"}}</Auk::Tab>
+            <Auk::Tab {{on "click" (fn this.setActiveTab "details")}} @active={{eq this.activeTab "details"}}>{{t "detail"}}</Auk::Tab>
+            <Auk::Tab {{on "click" (fn this.setActiveTab "signatures")}} @active={{eq this.activeTab "signatures"}}>{{t "signatures"}}</Auk::Tab>
+            <Auk::Tab {{on "click" (fn this.setActiveTab "versions")}} @active={{eq this.activeTab "versions"}}>{{t "version"}}</Auk::Tab>
           </Auk::Tabs>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
@@ -19,14 +19,14 @@
   </Auk::Navbar>
 
   {{!-- DETAILS --}}
-  {{#if this.showDetails}}
+  {{#if (eq this.activeTab "details")}}
     <div class="auk-u-m-4">
       <Auk::KeyValue @key={{t "document-name"}} @value={{@piece.name}} />
       {{#unless this.loadData.isRunning}}
         {{#if this.documentType}}
           <Auk::KeyValue
-                  @key={{t "document-type"}}
-                  @value={{this.documentType.label}}
+            @key={{t "document-type"}}
+            @value={{this.documentType.label}}
           />
         {{/if}}
         {{#if @piece.accessLevel}}
@@ -44,14 +44,12 @@
         </Auk::KeyValue>
       </div>
     </div>
-  {{/if}}
 
   {{!-- SIGNATURES --}}
-  {{#if this.showSignatures}}
-  {{/if}}
+  {{else if (eq this.activeTab "signatures")}}
 
   {{!-- VERSIONS --}}
-  {{#if this.showVersions}}
+  {{else if (eq this.activeTab "versions")}}
     <div class="auk-u-m-4">
       {{#each this.docContainer.reverseSortedPieces as |versionPiece|}}
         <Documents::VersionCard @lastPiece={{this.lastPiece}} @piece={{versionPiece}} @currentPiece={{@piece}}/>
