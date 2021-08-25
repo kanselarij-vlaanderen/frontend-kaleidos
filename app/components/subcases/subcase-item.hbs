@@ -1,4 +1,4 @@
-<div class="vlc-procedure-step {{if @isMinimal "vlc-procedure-step--minimal"}}">
+<div data-test-subcase-item-container class="vlc-procedure-step">
   <div class="vlc-procedure-step__badge-wrapper">
     {{#if (is-pending @subcase.approved)}}
       <Auk::Badge
@@ -28,6 +28,7 @@
         <div class="auk-u-mb-2">
           {{#if (not (is-pending @subcase))}}
             <LinkTo
+              data-test-subcase-item-link
               @route="cases.case.subcases.subcase.overview"
               @models={{array
                 (await @subcase.case.id)

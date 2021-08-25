@@ -21,13 +21,16 @@
             <DropdownMenu
               @skin="primary"
               @label={{t "propose-for-agenda"}}
-              data-test-subcase-header-action-propose-for-agenda={{true}}
+              data-test-subcase-header-show-proposed-agendas={{true}}
             as |Menu|>
               {{#each
                 (await this.meetings)
               as |meeting|
               }}
-                <Menu.Item {{action "proposeForAgenda" this.subcase meeting}}>
+                <Menu.Item
+                  data-test-subcase-header-propose-for-agenda
+                  {{action "proposeForAgenda" this.subcase meeting}}
+                >
                   {{t "agenda-for"}}
                   {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
                   {{concat " - " meeting.numberRepresentation}}

@@ -285,7 +285,7 @@ export default Component.extend({
         } // TODO rolled back items also bottom of the list ?
         if (newAgendaitemsToReorder.length > 0) {
           newAgendaitemsToReorder.forEach((agendaitem) => {
-            agendaitem.set('priority', agendaitem.get('priority') + 9999);
+            agendaitem.set('number', agendaitem.get('number') + 9999);
           });
           await reorderAgendaitemsOnAgenda(newAgenda, isEditor);
         }

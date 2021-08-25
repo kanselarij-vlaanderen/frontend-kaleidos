@@ -1,9 +1,6 @@
 /* global  cy, Cypress */
 // / <reference types="Cypress" />
 
-// ***********************************************
-// Commands
-
 import cases from '../../selectors/case.selectors';
 import utils from '../../selectors/utils.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
@@ -11,7 +8,6 @@ import dependency from '../../selectors/dependency.selectors';
 
 // ***********************************************
 // Functions
-// TODO needs setupping to be sure to succeed.
 
 /**
  * @description Translates a month number to a dutch month in lowercase.
@@ -66,13 +62,9 @@ function openSubcase(index = 0) {
   // cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
   // cy.wait('@getSubcases', { timeout: 12000 });
   cy.wait(2000); // link does not always work (not visible or click does nothing unless we wait)
-  cy.get('.vlc-procedure-step').as('subcasesList');
-  cy.get('@subcasesList').eq(index)
-    .within(() => {
-      cy.wait(1000); // sorry, link is not loaded most of the time
-      cy.get('.auk-h4').eq(0)
-        .click();
-    });
+  cy.get(cases.subcaseItem.container).eq(index)
+    .find(cases.subcaseItem.link)
+    .click();
   // cy.wait('@getCaseSubcases', { timeout: 12000 });
   cy.log('/openSubcase');
 }
@@ -83,121 +75,51 @@ function openSubcase(index = 0) {
  * @name changeSubcaseAccessLevel
  * @memberOf Cypress.Chainable#
  * @function
- * @param {boolean} isRemark - Is this a subcase of type remark
  * @param {boolean} [confidentialityChange] -Will change the current confidentiality if true
  * @param {string} [accessLevel] -Access level to set, must match exactly with possible options in dropdown
  * @param {string} [newShortTitle] - new short title for the subcase
  * @param {string} [newLongTitle] - new long title for the subcase
  * @param {boolean} [inNewsletter] - Will toggle "in newsletter" if true
  */
-function changeSubcaseAccessLevel(isRemark, confidentialityChange, accessLevel, newShortTitle, newLongTitle) {
+function changeSubcaseAccessLevel(confidentialityChange, accessLevel, newShortTitle, newLongTitle) {
   cy.log('changeSubcaseAccessLevel');
   cy.route('PATCH', '/subcases/*').as('patchSubcase');
 
   cy.get(cases.subcaseTitlesView.edit).click();
 
-  cy.get('.auk-box').as('subcaseAccessLevel');
-
   if (accessLevel) {
-    cy.get('@subcaseAccessLevel').within(() => {
-      cy.get(dependency.emberPowerSelect.trigger).click();
-    });
-    cy.get(dependency.emberPowerSelect.option, {
-      timeout: 5000,
-    }).should('exist')
-      .then(() => {
-        cy.contains(accessLevel).click();
-      });
+    cy.get(cases.subcaseTitlesEdit.accessLevel).find(dependency.emberPowerSelect.trigger)
+      .click();
+    cy.get(dependency.emberPowerSelect.option).contains(accessLevel)
+      .click();
   }
 
-  cy.get('@subcaseAccessLevel').within(() => {
-    if (isRemark) {
-      // TODO why set longtitle twice for remark?
-      if (newLongTitle) {
-        cy.get(cases.subcaseTitlesEdit.title).click()
-          .clear()
-          .type(newLongTitle);
-      }
-    } else {
-      cy.get('.auk-form-group').as('editCaseForm')
-        .should('have.length', 3);
-    }
-
-    if (confidentialityChange) {
-      cy.get(cases.subcaseTitlesEdit.confidential)
-        .within(() => {
-          // TODO change with selector
-          cy.get('.vl-toggle__label').click();
-        });
-    }
-    if (newShortTitle) {
-      cy.get(cases.subcaseTitlesEdit.shorttitle).click()
-        .clear()
-        .type(newShortTitle);
-    }
-    if (newLongTitle) {
-      cy.get(cases.subcaseTitlesEdit.title).click()
-        .clear()
-        .type(newLongTitle);
-    }
-
-    cy.get(cases.subcaseTitlesEdit.actions.save)
-      .contains('Opslaan')
+  if (confidentialityChange) {
+    cy.get(cases.subcaseTitlesEdit.confidential)
+      .find(utils.vlToggle.label)
       .click();
-  });
-  cy.wait('@patchSubcase', {
-    timeout: 20000,
-  });
+  }
+  if (newShortTitle) {
+    cy.get(cases.subcaseTitlesEdit.shorttitle).click()
+      .clear()
+      .type(newShortTitle);
+  }
+  if (newLongTitle) {
+    cy.get(cases.subcaseTitlesEdit.title).click()
+      .clear()
+      .type(newLongTitle);
+  }
+
+  cy.get(cases.subcaseTitlesEdit.actions.save)
+    .click();
+  cy.wait('@patchSubcase');
   cy.log('/changeSubcaseAccessLevel');
 }
 
 /**
- * Changes the themes of a sucase when used in the subcase view (/dossiers/..id../overzicht)
- * @name addSubcaseThemes
- * @memberOf Cypress.Chainable#
- * @function
- * @param {Array<Number|String>} themes - An array of theme names that must match exactly or an array of numbers that correspond to the checkboxes in themes
- */
-function addSubcaseThemes(themes) {
-  cy.log('addSubcaseThemes');
-  cy.route('GET', '/themes').as('getThemes');
-  cy.route('PATCH', '/subcases/*').as('patchSubcase');
-  cy.get('.auk-h3').contains('Thema\'s')
-    .parents('.auk-u-mb-8')
-    .as('subcaseTheme');
-
-  cy.get('@subcaseTheme').within(() => {
-    cy.get('a').click();
-    // cy.wait('@getThemes', { timeout: 12000 });
-    cy.get('.auk-checkbox', {
-      timeout: 12000,
-    }).should('exist')
-      .end();
-    themes.forEach((element) => {
-      if (Number.isNaN(element)) {
-        cy.get('.auk-checkbox').contains(element)
-          .click();
-      } else {
-        cy.get('.auk-checkbox').eq(element)
-          .click();
-      }
-    });
-    cy.get('.auk-toolbar-complex__item > .auk-button')
-      .contains('Opslaan')
-      .click();
-  });
-  cy.wait('@patchSubcase', {
-    timeout: 20000,
-  });
-  cy.log('/addSubcaseThemes');
-}
-
-// TODO use arrays of fields and domains, search on mandatee name
-
-/**
  * Adds a mandatees with field and domain to a sucase when used in the subcase view (/dossiers/..id../overzicht)
  * Pass the title of the mandatee to get a specific person
- * @name addSubcaseThemes
+ * @name addSubcaseMandatee
  * @memberOf Cypress.Chainable#
  * @function
  * @param {Number} mandateeNumber - The list index of the mandatee
@@ -220,54 +142,36 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
 
   cy.get(mandatee.mandateePanelView.actions.edit).click();
 
-  cy.get(mandatee.mandateePanelEdit.actions.add).contains('Minister toevoegen')
+  cy.get(mandatee.mandateePanelEdit.actions.add).click();
+  cy.get(utils.mandateesDomain.mandateeSelector).find(dependency.emberPowerSelect.trigger)
     .click();
-  cy.get('.mandatee-selector-container').children(dependency.emberPowerSelect.trigger)
-    .click();
-  // cy.get(dependency.emberPowerSelect.searchInput).type('g').clear(); // TODO added this because default data does not have active ministers
+  // cy.get(dependency.emberPowerSelect.searchInput).type('g').clear(); // only use this when default data does not have active ministers
   if (mandateeSearchText) {
     cy.get(dependency.emberPowerSelect.searchInput).type(mandateeSearchText);
-    cy.wait('@getFilteredMandatees', {
-      timeout: 12000,
-    });
+    cy.wait('@getFilteredMandatees');
   } else {
-    cy.wait('@getMandatees', {
-      timeout: 12000,
-    });
+    cy.wait('@getMandatees');
   }
-  cy.get(dependency.emberPowerSelect.optionSearchMessage, {
-    timeout: 10000,
-  }).should('not.exist'); // TODO added this because default data does not have active ministers
-  cy.get(dependency.emberPowerSelect.option, {
-    timeout: 10000,
-  }).should('exist')
-    .then(() => {
-      if (mandateeSearchText) {
-        cy.get(dependency.emberPowerSelect.option).contains(mandateeSearchText)
-          .click();
-      } else {
-        cy.get(dependency.emberPowerSelect.option).eq(mandateeNumber)
-          .click();
-      }
-    });
-  // TODO loading the isecodes and government fields takes time, are they not cacheble ?
-  cy.wait(`@getGovernmentFieldDomains${randomInt}`, {
-    timeout: 20000,
-  });
+  cy.get(dependency.emberPowerSelect.optionSearchMessage).should('not.exist');
+  if (mandateeSearchText) {
+    cy.get(dependency.emberPowerSelect.option).contains(mandateeSearchText)
+      .click();
+  } else {
+    cy.get(dependency.emberPowerSelect.option).eq(mandateeNumber)
+      .click();
+  }
+  // loading the isecodes and government fields takes some time
+  cy.wait(`@getGovernmentFieldDomains${randomInt}`);
   if (fieldNumber >= 0) {
     cy.get(utils.domainsFieldsSelectorForm.container, {
       timeout: 30000,
-    }).should('exist')
-      .eq(fieldNumber)
-      .within(() => {
-        cy.get(utils.domainsFieldsSelectorForm.field).eq(domainNumber)
-          .click();
-      });
+    }).eq(fieldNumber)
+      .find(utils.domainsFieldsSelectorForm.field)
+      .eq(domainNumber)
+      .click();
   }
   cy.get(utils.vlModalFooter.save).click();
-  cy.get(mandatee.mandateePanelEdit.actions.save)
-    .contains('Opslaan')
-    .click();
+  cy.get(mandatee.mandateePanelEdit.actions.save).click();
   cy.wait('@patchSubcase', {
     timeout: 40000,
   });
@@ -315,22 +219,14 @@ function proposeSubcaseForAgenda(agendaDate) {
   const monthDutch = getTranslatedMonth(agendaDate.month());
   const formattedDate = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
 
-  cy.get(cases.subcaseHeader.actions.proposeForAgenda)
-    .contains('Indienen voor agendering')
-    .should('exist')
-    .click();
+  cy.get(cases.subcaseHeader.showProposedAgendas).click();
 
-  cy.get('.ember-attacher-show').within(() => {
-    cy.contains(formattedDate).click();
-  });
-  cy.get(cases.subcaseHeader.actions.proposeForAgenda)
+  cy.get(cases.subcaseHeader.actions.proposeForAgenda).contains(formattedDate)
+    .click();
+  cy.get(cases.subcaseHeader.showProposedAgendas)
     .should('not.exist');
-  cy.wait('@createAgendaActivity', {
-    timeout: 20000,
-  })
-    .wait('@createNewAgendaitem', {
-      timeout: 20000,
-    })
+  cy.wait('@createAgendaActivity')
+    .wait('@createNewAgendaitem')
     .wait('@patchSubcase', {
       timeout: 24000,
     })
@@ -349,27 +245,19 @@ function proposeSubcaseForAgenda(agendaDate) {
 function deleteSubcase() {
   cy.log('deleteSubcase');
   cy.route('DELETE', '/subcases/**').as('deleteSubcase');
-  cy.get(cases.subcaseHeader.actionsDropdown)
-    .contains('Acties')
-    .click();
-  cy.get(cases.subcaseHeader.actions.deleteSubcase)
-    .contains('Procedurestap verwijderen')
-    .click();
+  cy.get(cases.subcaseHeader.actionsDropdown).click();
+  cy.get(cases.subcaseHeader.actions.deleteSubcase).click();
 
-  cy.get('.auk-modal').as('dialog')
-    .within(() => {
-      cy.get('button').contains('Verwijderen')
-        .click();
-    });
-  cy.wait('@deleteSubcase', {
-    timeout: 20000,
-  });
+  cy.get(utils.vlModalVerify.save).click();
+  cy.wait('@deleteSubcase');
   cy.log('/deleteSubcase');
 }
 
+// ***********************************************
+// Commands
+
 Cypress.Commands.add('openSubcase', openSubcase);
 Cypress.Commands.add('changeSubcaseAccessLevel', changeSubcaseAccessLevel);
-Cypress.Commands.add('addSubcaseThemes', addSubcaseThemes);
 Cypress.Commands.add('addSubcaseMandatee', addSubcaseMandatee);
 Cypress.Commands.add('addAgendaitemMandatee', addAgendaitemMandatee);
 Cypress.Commands.add('proposeSubcaseForAgenda', proposeSubcaseForAgenda);
