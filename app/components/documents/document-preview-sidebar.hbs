@@ -70,18 +70,25 @@
     </div>
   {{/if}}
 
-  {{!-- FOOTER
+  {{!-- FOOTER --}}
   <div class="auk-u-mt-auto">
     <div class="auk-panel__footer">
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
+            <Auk::Button
+              @skin="tertiary"
+              @icon="delete"
+              {{on "click" (fn this.openVerify @piece)}}
+            >
+              {{t "document-delete"}}
+            </Auk::Button>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
     </div>
   </div>
-  --}}
+
 </Auk::Sidebar>
 
 {{#if this.isVerifyingDelete}}
@@ -89,7 +96,7 @@
     @title={{t "document-delete"}}
     @message={{t "delete-document-message"}}
     @cancel={{this.cancelVerify}}
-    @verify={{this.deleteVersion}}
+    @verify={{this.deletePiece}}
   />
 {{/if}}
 

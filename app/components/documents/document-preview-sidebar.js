@@ -92,7 +92,7 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
   }
 
   @action
-  async deleteVersion() {
+  async deletePiece() {
     await this.fileService.deletePiece(this.selectedToDelete);
     // delete orphan container if last piece is deleted
     if (this.versionPieces.size <= 1){
@@ -109,8 +109,8 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
   }
 
   @action
-  openVerify(versionPiece) {
-    this.selectedToDelete = versionPiece;
+  openVerify(piece) {
+    this.selectedToDelete = piece;
     this.isVerifyingDelete = true;
   }
 
