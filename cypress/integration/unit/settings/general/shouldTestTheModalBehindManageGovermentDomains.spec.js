@@ -106,8 +106,8 @@ context('Settings page tests', () => {
     cy.get(dependency.emberPowerSelect.option).eq(0)
       .click();
     cy.get(settings.modelManager.edit).click();
-    cy.get(auk.input).clear();
-    cy.get(auk.input).type('Test Input');
+    cy.get(auk.input).clear()
+      .type('Test Input');
     cy.get(utils.vlModalFooter.save).click();
     cy.wait('@patchDomains');
     cy.get(dependency.emberPowerSelect.trigger).click();

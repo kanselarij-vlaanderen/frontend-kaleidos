@@ -39,16 +39,13 @@ context('Full test for creating mandatees', () => {
     cy.get(settings.settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
     cy.route('GET', '/ise-codes?sort=name').as('getIseCodes');
-    cy.get(settings.ministers.add)
-      .click();
+    cy.get(settings.ministers.add).click();
     cy.wait('@getIseCodes', {
       timeout: 30000,
     });
     // We could use input fields directly (after au refactor)
-    cy.get(mandatee.createMandatee.titleContainer)
-      .type(ministerTitle);
-    cy.get(mandatee.createMandatee.nicknameContainer)
-      .type(ministerNickName);
+    cy.get(mandatee.createMandatee.titleContainer).type(ministerTitle);
+    cy.get(mandatee.createMandatee.nicknameContainer).type(ministerNickName);
     cy.get(mandatee.personSelector.personDropdown).find(dependency.emberPowerSelect.trigger)
       .scrollIntoView()
       .click();

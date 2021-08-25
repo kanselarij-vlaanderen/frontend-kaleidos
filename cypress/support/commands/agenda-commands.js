@@ -80,16 +80,14 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
 
   if (meetingNumberVisualRepresentation) {
     cy.get(agenda.newSession.numberRep.edit).click();
-    cy.get(agenda.newSession.numberRep.input)
-      .click()
+    cy.get(agenda.newSession.numberRep.input).click()
       .clear()
       .type(meetingNumberVisualRepresentation);
     cy.get(agenda.newSession.numberRep.save).click();
   }
   // Get the value from the meetingNumber representation
   cy.get(agenda.newSession.numberRep.edit).click();
-  cy.get(agenda.newSession.numberRep.input)
-    .click()
+  cy.get(agenda.newSession.numberRep.input).click()
     .invoke('val')
     .then((sometext) => {
       meetingNumberRep = sometext;
