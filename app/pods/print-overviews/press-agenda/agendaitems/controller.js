@@ -12,7 +12,7 @@ export default Controller.extend({
       label: '#',
       width: '50px',
       sortable: true,
-      valuePath: 'priority',
+      valuePath: 'number',
     }, {
       label: this.intl.t('title-and-content'),
       classNames: ['auk-table__col--7 auk-table__header-title'],

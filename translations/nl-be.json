@@ -493,7 +493,6 @@
   "decision-in-newsletter": "De beslissing in kort bestek",
   "title-and-content": "Titel en inhoud",
   "confidential": "Vertrouwelijk",
-  "text-templates": "Tekst templates",
   "archive-case-message": "Bent u zeker dat u dit dossier wilt verwijderen? Deze actie zal niet meer ongedaan gemaakt kunnen worden.",
   "import-users": "Gebruikers importeren",
   "import-users-text": "Gebruikers worden geïmporteerd..",
@@ -913,6 +912,6 @@
   "belgian-official-gazette": "Belgisch Staatsblad",
   "published-decisions": "Gepubliceerde besluiten",
   "no-decisions-published-yet": "Er zijn nog geen besluiten gepubliceerd.",
-  "search-error": "Er ging iets mis bij het zoeken"
-
+  "search-error": "Er ging iets mis bij het zoeken",
+  "signatures": "Handtekeningen"
 }
