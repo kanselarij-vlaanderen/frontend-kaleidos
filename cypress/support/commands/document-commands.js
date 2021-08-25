@@ -4,6 +4,7 @@
 import 'cypress-file-upload';
 
 import agenda from '../../selectors/agenda.selectors';
+import auk from '../../selectors/auk.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
@@ -23,56 +24,41 @@ import utils from '../../selectors/utils.selectors';
  */
 function addNewDocumentsInUploadModal(files, model) {
   cy.log('addNewDocumentsInUploadModal');
-  cy.get('.auk-modal').as('fileUploadDialog');
+  cy.get(auk.modal.container).as('fileUploadDialog');
 
   files.forEach((file, index) => {
     cy.get('@fileUploadDialog').within(() => {
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
 
-      cy.get('.vl-uploaded-document', {
-        timeout: 10000,
-      }).should('have.length', index + 1)
-        .eq(index)
-        .within(() => {
-          if (file.newFileName) {
-            cy.get('.auk-form-group').eq(0)
-              .within(() => {
-                cy.get('.auk-input').clear()
-                  .type(file.newFileName);
-              });
-          }
-        });
+      if (file.newFileName) {
+        cy.get(document.uploadedDocument.nameInput).eq(index)
+          .find(utils.vlFormInput)
+          .clear()
+          .type(file.newFileName);
+      }
     });
 
     if (file.fileType) {
-      cy.get('@fileUploadDialog').within(() => {
-        cy.get('.vl-uploaded-document').eq(index)
-          .within(() => {
-            cy.get('input[type="radio"]').should('exist'); // the radio buttons should be loaded before the within or the .length returns 0
-            cy.get('.auk-form-group')
-              .within(($t) => {
-                if ($t.find(`input[type="radio"][value="${file.fileType}"]`).length) {
-                  cy.get('input[type="radio"]').check(file.fileType, {
-                    force: true,
-                  }); // CSS has position:fixed, which cypress considers invisible
-                } else {
-                  cy.get('input[type="radio"][value="Andere"]').check({
-                    force: true,
-                  });
-                  cy.get(dependency.emberPowerSelect.trigger)
-                    .click()
-                    .parents('body')
-                    .within(() => {
-                      cy.get(dependency.emberPowerSelect.option, {
-                        timeout: 5000,
-                      }).should('exist')
-                        .then(() => {
-                          cy.contains(file.fileType).click(); // Match is not exact, ex. fileType "Advies" yields "Advies AgO" instead of "Advies"
-                        });
-                    });
-                }
-              });
+      cy.get('@fileUploadDialog').find(document.uploadedDocument.documentTypes)
+        .eq(index)
+        .as('radioOptions');
+      cy.get(utils.radioDropdown.input).should('exist'); // the radio buttons should be loaded before the within or the .length returns 0
+      cy.get('@radioOptions').within(($t) => {
+        if ($t.find(`input[type="radio"][value="${file.fileType}"]`).length) {
+          cy.get(utils.radioDropdown.input).check(file.fileType, {
+            force: true,
+          }); // CSS has position:fixed, which cypress considers invisible
+        } else {
+          cy.get('input[type="radio"][value="Andere"]').check({
+            force: true,
           });
+          cy.get(dependency.emberPowerSelect.trigger)
+            .click()
+            .parents('body') // we want to stay in the within, but have to search the options in the body
+            .find(dependency.emberPowerSelect.option)
+            .contains(file.fileType)
+            .click(); // Match is not exact, ex. fileType "Advies" yields "Advies AgO" instead of "Advies"
+        }
       });
     }
   });
@@ -83,17 +69,13 @@ function addNewDocumentsInUploadModal(files, model) {
   cy.route('POST', 'submission-activities').as('createNewSubmissionActivity');
   cy.route('GET', '/submission-activities?filter**').as(`getSubmissionActivity_${randomInt}`);
   cy.route('GET', `/pieces?filter\\[${model}\\]\\[:id:\\]=*`).as(`loadPieces${model}`);
-  cy.get('@fileUploadDialog').within(() => {
-    cy.get('.auk-button').contains('Documenten toevoegen')
-      .click();
-  });
+  cy.get(utils.vlModalFooter.save).click();
   cy.wait('@createNewDocumentContainer', {
     timeout: 24000,
   });
   cy.wait('@createNewPiece', {
     timeout: 24000,
   });
-  // TODO seperate command for subcase / split this command / do calls in higher commands
   // Pieces are loaded differently in the subcase/documents route
   if (model === 'subcase') {
     cy.wait('@createNewSubmissionActivity', {
@@ -134,88 +116,62 @@ function addNewPiece(oldFileName, file, modelToPatch) {
     }
   }
 
-  cy.get('.vlc-document-card__content .auk-h4', {
-    timeout: 12000,
-  })
-    .contains(oldFileName, {
-      timeout: 12000,
-    })
+  cy.get(document.documentCard.name.value).contains(oldFileName)
     .parents(document.documentCard.card)
-    .as('documentCard');
+    .within(() => {
+      cy.get(document.documentCard.actions).click();
+      cy.get(document.documentCard.uploadPiece).click();
+    });
 
-  cy.get('@documentCard').within(() => {
-    cy.get(document.documentCard.actions).click();
-    cy.get(document.documentCard.uploadPiece)
-      .should('be.visible')
-      .click();
-  });
-
-  cy.get(utils.vlModal.dialogWindow).as('fileUploadDialog');
-
-  cy.get('@fileUploadDialog').within(() => {
+  cy.get(utils.vlModal.dialogWindow).within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.get(document.vlUploadedDocument.filename).should('contain', file.fileName);
   });
   cy.wait(1000); // Cypress is too fast
 
-  cy.get('@fileUploadDialog').within(() => {
-    cy.get(utils.vlModalFooter.save).click()
-      .wait(`@createNewPiece_${randomInt}`, {
-        timeout: 12000,
-      });
-  });
+  cy.get(utils.vlModalFooter.save).click()
+    .wait(`@createNewPiece_${randomInt}`);
 
   // for agendaitems and subcases both are patched, not waiting causes flaky tests
   if (modelToPatch) {
     if (modelToPatch === 'agendaitems') {
       // we always POST submission activity here
-      cy.wait('@createNewSubmissionActivity', {
-        timeout: 12000,
-      })
-        .wait('@patchAgendaitem', {
-          timeout: 12000,
-        })
-        .wait('@putAgendaitemDocuments', {
-          timeout: 12000,
-        });
+      cy.wait('@createNewSubmissionActivity')
+        .wait('@patchAgendaitem')
+        .wait('@putAgendaitemDocuments');
       // .wait('@getSubmissionActivity', {
       //   timeout: 12000,
       // });
     } else if (modelToPatch === 'subcases') {
-      // TODO these 2 awaits don't happen for subcase not proposed for a meeting / no agenda-activity
+      // NOTE: these 2 awaits don't happen for subcase not proposed for a meeting / no agenda-activity
       // cy.wait('@putAgendaitemDocuments', {
       //   timeout: 12000,
       // }).wait('@patchAgendaitem', {
       //   timeout: 12000,
       // });
-      // TODO we POST OR PATCH submission activity
       // We always get the submission activities after post or patch
-      cy.wait('@getSubmissionActivity', {
-        timeout: 12000,
-      });
+      cy.wait('@getSubmissionActivity');
     } else {
-      cy.wait('@patchSpecificModel', {
-        timeout: 12000,
-      });
+      cy.wait('@patchSpecificModel');
     }
   }
   cy.wait(`@loadPieces_${randomInt}`); // This call does not happen when loading subcase/documents route, but when loading the documents in that route
   cy.wait(1000); // Cypress is too fast
-  // TODO Check if the modal is gone, had 1 flaky where the modal was still showing after the patches
   cy.log('/addNewPiece');
 }
 
 /**
- * @description Add document to agenda.
- * @name addDocumentsToAgenda
+ * @description Add document to a meeting (notulen).
+ * @name addDocumentsToMeeting
  * @memberOf Cypress.Chainable#
  * @function
  * @param {string[]} files
  */
-function addDocumentsToAgenda(files) {
-  cy.log('addDocumentsToAgenda');
+// NOTE: this is somewhat confusing because we are in the "agenda/documents" route with the model for "meeting"
+function addDocumentsToMeeting(files) {
+  cy.log('addDocumentsToMeeting');
   cy.clickReverseTab('Documenten');
-  cy.contains('Documenten toevoegen').click();
+  cy.get(route.agendaDocuments.addDocuments).click();
   return addNewDocumentsInUploadModal(files, 'meeting');
 }
 
@@ -230,7 +186,7 @@ function addDocumentsToSubcase(files) {
   cy.log('addDocumentsToSubcase');
   cy.clickReverseTab('Documenten');
   cy.wait(1000); // clicking adding documents sometimes does nothing, page not loaded?
-  cy.contains('Documenten toevoegen').click();
+  cy.get(route.subcaseDocuments.add).click();
   return addNewDocumentsInUploadModal(files, 'subcase');
 }
 
@@ -247,10 +203,8 @@ function addDocumentToTreatment(file) {
   // 1 default item treatment exists
   cy.get(agenda.agendaitemDecision.uploadFile).click();
 
-  cy.contains('Document opladen').click();
-  cy.get(utils.vlModal.dialogWindow).as('fileUploadDialog');
-
-  cy.get('@fileUploadDialog').within(() => {
+  cy.get(utils.fileUploader.upload).click();
+  cy.get(utils.vlModal.dialogWindow).within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
   });
 }
@@ -304,25 +258,6 @@ function addDocumentsToAgendaitem(agendaitemTitle, files) {
   // Open the modal, add files
   cy.get(route.agendaitemDocuments.add).click();
   addNewDocumentsInUploadModal(files, 'agendaitems');
-
-  // Click save
-  // Dont save here, save in the general cy.addNewDocumentsInUploadModal
-  // cy.route('POST', 'pieces').as('createNewPiece');
-  // cy.route('POST', 'document-containers').as('createNewDocumentContainer');
-  // cy.route('GET', '/pieces?filter\\[agendaitem\\]\\[:id:\\]=*').as('loadPieces');
-  // cy.get('@fileUploadDialog').within(() => {
-  //   cy.get('.auk-button').contains('Documenten toevoegen')
-  //     .click();
-  // });
-  // cy.wait('@createNewDocumentContainer', {
-  //   timeout: 24000,
-  // });
-  // cy.wait('@createNewPiece', {
-  //   timeout: 24000,
-  // });
-  // cy.wait('@loadPieces', {
-  //   timeout: 24000 + (6000 * files.length),
-  // });
 }
 
 /**
@@ -449,21 +384,12 @@ function addNewPieceToSignedDocumentContainer(oldFileName, file) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.route('POST', 'pieces').as(`createNewPiece_${randomInt}`);
 
-  cy.get('.vlc-document-card__content .auk-h4', {
-    timeout: 12000,
-  })
-    .contains(oldFileName, {
-      timeout: 12000,
-    })
+  cy.get(document.documentCard.name.value).contains(oldFileName)
     .parents(document.documentCard.card)
-    .as('documentCard');
-
-  cy.get('@documentCard').within(() => {
-    cy.get(document.documentCard.actions).click();
-    cy.get(document.documentCard.uploadPiece)
-      .should('be.visible')
-      .click();
-  });
+    .within(() => {
+      cy.get(document.documentCard.actions).click();
+      cy.get(document.documentCard.uploadPiece).click();
+    });
 
   cy.get(utils.vlModal.dialogWindow).as('fileUploadDialog');
 
@@ -476,9 +402,7 @@ function addNewPieceToSignedDocumentContainer(oldFileName, file) {
   cy.get('@fileUploadDialog').within(() => {
     cy.get(utils.vlModalFooter.save).click();
   });
-  cy.wait(`@createNewPiece_${randomInt}`, {
-    timeout: 12000,
-  });
+  cy.wait(`@createNewPiece_${randomInt}`);
   cy.log('/addNewPieceToSignedDocumentContainer');
 }
 
@@ -490,19 +414,17 @@ function addNewPieceToSignedDocumentContainer(oldFileName, file) {
  * @param {String[]} filenames - The relative path to the file in the cypress/fixtures folder excluding the fileName
  */
 function addLinkedDocument(filenames) {
-  // TODO, this works in subcase view, untested in agendaitem view
+  // NOTE: this works in subcase view, untested in agendaitem view
   cy.route('GET', 'pieces').as('createNewPiece');
   cy.log('addLinkedDocument');
   cy.get(document.linkedDocuments.add).click();
   cy.get(document.addExistingPiece.searchInput).click();
 
   filenames.forEach((name) => {
-    cy.get(document.addExistingPiece.searchInput).type(name);
+    cy.get(document.addExistingPiece.searchInput).clear()
+      .type(name);
     cy.wait(1000);
-    cy.get('.auk-modal .data-table [data-test-vl-checkbox-label]').click({
-      force: true,
-    });
-    cy.get(document.addExistingPiece.searchInput).clear();
+    cy.get(document.addExistingPiece.checkbox).click();
   });
   cy.get(utils.vlModalFooter.save).click();
   cy.log('/addLinkedDocument');
@@ -521,35 +443,20 @@ function deleteSinglePiece(fileName, indexToDelete) {
   cy.route('PUT', '/agendaitems/**/pieces/restore').as('putRestoreAgendaitems');
   cy.log('deleteSinglePiece');
 
-  cy.get('.vlc-document-card__content .auk-h4', {
-    timeout: 12000,
-  })
-    .contains(fileName, {
-      timeout: 12000,
-    })
+  cy.get(document.documentCard.name.value).contains(fileName)
     .parents(document.documentCard.card)
-    .as('documentCard');
+    .within(() => {
+      cy.get(document.documentCard.versionHistory).click();
+      cy.get(document.vlDocument.piece).eq(indexToDelete)
+        .find(document.vlDocument.delete)
+        .click();
+    });
 
-  cy.get('@documentCard').within(() => {
-    cy.get(document.documentCard.versionHistory).click();
-    cy.get(document.vlDocument.piece).eq(indexToDelete)
-      .within(() => {
-        cy.get(document.vlDocument.delete)
-          .should('be.visible')
-          .click();
-      });
-  });
-
-  cy.get(utils.vlModalVerify.container).within(() => {
-    cy.get('button').contains('Verwijderen')
-      .click();
-  });
+  cy.get(utils.vlModalVerify.save).click();
   cy.wait('@deletePiece', {
     timeout: 40000,
-  }).wait('@putRestoreAgendaitems', {
-    timeout: 20000,
-  });
-  cy.wait(2000); // TODO, wait for loadpieces to happen
+  }).wait('@putRestoreAgendaitems');
+  cy.wait(2000);
   cy.log('/deleteSinglePiece');
 }
 
@@ -562,36 +469,34 @@ function deleteSinglePiece(fileName, indexToDelete) {
  * @param Number indexToCheck - The index of the piece in the list
  * @param Boolean shouldBeDeletable - True if icon should be shown
  */
+// **NOTE: this is untested afer refactor!
 function isPieceDeletable(fileName, indexToCheck, shouldBeDeletable) {
   cy.log('isPieceDeletable');
 
-  cy.get('.vlc-document-card__content .auk-h4', {
-    timeout: 12000,
-  })
-    .contains(fileName, {
-      timeout: 12000,
-    })
+  cy.get(document.documentCard.name.value)
+    .contains(fileName)
     .parents(document.documentCard.card)
-    .as('documentCard');
-
-  cy.get('@documentCard').within(() => {
-    cy.get(document.documentCard.versionHistory).click();
-    cy.get(document.vlDocument.piece).eq(indexToCheck)
-      .within(() => {
-        if (shouldBeDeletable) {
-          cy.get(document.vlDocument.delete).should('be.visible');
-        } else {
-          cy.get(document.vlDocument.delete).should('not.exist');
-        }
-      });
-  });
+    .within(() => {
+      cy.get(document.documentCard.versionHistory).click();
+      cy.get(document.vlDocument.piece).eq(indexToCheck)
+        .within(() => {
+          if (shouldBeDeletable) {
+            cy.get(document.vlDocument.delete).should('be.visible');
+          } else {
+            cy.get(document.vlDocument.delete).should('not.exist');
+          }
+        });
+    });
 
   cy.log('/isPieceDeletable');
 }
 
+// ***********************************************
+// Commands
+
 Cypress.Commands.add('addNewDocumentsInUploadModal', addNewDocumentsInUploadModal);
 Cypress.Commands.add('addDocumentsToSubcase', addDocumentsToSubcase); // same code, goes to reverse tab to add docs
-Cypress.Commands.add('addDocumentsToAgenda', addDocumentsToAgenda); // TODO rename to addDocumentsToMeeting
+Cypress.Commands.add('addDocumentsToMeeting', addDocumentsToMeeting);
 Cypress.Commands.add('addDocumentToTreatment', addDocumentToTreatment);
 Cypress.Commands.add('addDocumentsToAgendaitem', addDocumentsToAgendaitem);
 Cypress.Commands.add('addNewPiece', addNewPiece);

@@ -10,12 +10,13 @@
       <div class="auk-form-group">
         <Auk::Label>{{t "document-name"}}</Auk::Label>
         <Auk::Input
+          data-test-uploaded-document-name-input={{true}}
           @block={{true}}
           @value={{mut @piece.name}}
         />
       </div>
       {{#unless this.loadData.isRunning}}
-        <div class="auk-form-group">
+        <div class="auk-form-group" data-test-uploaded-document-types>
           <Auk::Label>{{t "document-type"}}</Auk::Label>
           <Utils::RadioDropdownComboSelect
             @options={{this.sortedDocumentTypes}}
