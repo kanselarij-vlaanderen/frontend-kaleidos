@@ -7,6 +7,7 @@ import { gt } from '@ember/object/computed';
 // eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 
+// WARN: ** DO NOT DELETE ** This seems like an unused component to ember, but it overrides the ember-data-table NumberPagination component
 // TODO: octane-refactor
 // eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
