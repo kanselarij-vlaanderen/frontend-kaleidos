@@ -70,9 +70,6 @@ const selectors = {
     checkbox: '[data-test-vl-checkbox]',
   },
 
-  // vl-form-input
-  vlFormInput: '[data-test-vl-form-input]',
-
   // vl-modal-footer
   vlModalFooter: {
     save: '[data-test-vl-modal-footer-save]',
