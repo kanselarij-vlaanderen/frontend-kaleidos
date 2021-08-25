@@ -29,26 +29,39 @@
     <div class="auk-o-grid-col-static">
       <WebComponents::AuButtonToolbar>
         <Auk::Button
-                @layout="icon-only"
-                @icon="download"
-                @skin="borderless"
-                @href={{@piece.file.namedDownloadLink}}
-                download
+          @layout="icon-only"
+          @icon="download"
+          @skin="borderless"
+          @href={{@piece.file.namedDownloadLink}}
+          download
         />
         <DropdownMenu
-                @skin="borderless"
-                @icon="more"
-                as |Menu|>
+          @skin="borderless"
+          @icon="more"
+          as |Menu|>
           <Menu.Item
             @href={{@piece.viewDocumentURL}} target="_blank"
           >
             {{t "open-version"}}
           </Menu.Item>
-          <Menu.Item @skin="danger">
-            {{t "delete"}}
-          </Menu.Item>
+          {{#if this.currentSession.isEditor}}
+            <Menu.Item @skin="danger"
+              {{on "click" this.openVerify}}
+            >
+              {{t "delete"}}
+            </Menu.Item>
+          {{/if}}
         </DropdownMenu>
       </WebComponents::AuButtonToolbar>
     </div>
   </div>
 </div>
+
+{{#if this.isVerifyingDelete}}
+  <WebComponents::VlModalVerify
+    @title={{t "document-delete"}}
+    @message={{t "delete-document-message"}}
+    @cancel={{this.cancelDelete}}
+    @verify={{this.confirmDelete}}
+  />
+{{/if}}

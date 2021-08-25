@@ -51,8 +51,8 @@
   {{!-- VERSIONS --}}
   {{else if (eq this.activeTab "versions")}}
     <div class="auk-u-m-4">
-      {{#each this.docContainer.reverseSortedPieces as |versionPiece|}}
-        <Documents::VersionCard @lastPiece={{this.lastPiece}} @piece={{versionPiece}} @currentPiece={{@piece}}/>
+      {{#each this.versionPieces as |versionPiece|}}
+        <Documents::VersionCard @onDeletePiece={{fn this.deleteVersion versionPiece}} @lastPiece={{this.lastPiece}} @piece={{versionPiece}} @currentPiece={{@piece}}/>
       {{/each}}
       <div class="auk-u-mt-4">
         <Auk::Button
@@ -78,3 +78,4 @@
   </div>
   --}}
 </Auk::Sidebar>
+
