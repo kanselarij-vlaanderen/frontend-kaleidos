@@ -97,7 +97,7 @@ export default class CompareAgendaList extends Component {
         },
         'show-as-remark': false,
       },
-      sort: 'priority',
+      sort: 'number',
       include: 'agenda,agenda-activity,agenda-activity.subcase,mandatees',
     });
   }
@@ -110,7 +110,7 @@ export default class CompareAgendaList extends Component {
         },
         'show-as-remark': true,
       },
-      sort: 'priority',
+      sort: 'number',
       include: 'agenda,agenda-activity,agenda-activity.subcase,mandatees',
     });
   }

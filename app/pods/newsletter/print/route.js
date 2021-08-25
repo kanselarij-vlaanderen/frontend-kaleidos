@@ -3,9 +3,9 @@ import { hash } from 'rsvp';
 import { inject as service } from '@ember/service';
 import { A } from '@ember/array';
 import {
-  setCalculatedGroupPriorities,
+  setCalculatedGroupNumbers,
   groupAgendaitemsByGroupname,
-  sortByPriority
+  sortByNumber
 } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
@@ -27,24 +27,24 @@ export default class PrintNewsletterRoute extends Route {
       'filter[show-as-remark]': params.showDraft ? false : undefined,
       'filter[is-approval]': false,
       include: 'mandatees,treatments.newsletter-info',
-      sort: 'priority',
+      sort: 'number',
       'page[size]': PAGE_SIZE.AGENDAITEMS,
     });
     let notas = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark);
     let announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
 
     if (params.showDraft) {
-      notas = notas.sortBy('priority');
-      announcements = announcements.sortBy('priority');
+      notas = notas.sortBy('number');
+      announcements = announcements.sortBy('number');
     } else { // Items need to be ordered by minister protocol order
       const filteredNotas = await this.filterAgendaitems(notas);
 
       // TODO: Below is a hacky way of grouping agendaitems for protocol order. Refactor.
-      await setCalculatedGroupPriorities(notas);
+      await setCalculatedGroupNumbers(notas);
       await this.agendaService.groupAgendaitemsOnGroupName(filteredNotas);
       const groupedAgendaitems = Object.values(groupAgendaitemsByGroupname(notas));
 
-      const itemGroups = sortByPriority(groupedAgendaitems, true); // An array of groups
+      const itemGroups = sortByNumber(groupedAgendaitems, true); // An array of groups
       notas = A([]);
       for (const group of itemGroups) {
         notas.addObjects(group.agendaitems);

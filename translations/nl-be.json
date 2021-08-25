@@ -752,7 +752,6 @@
   "publication-date-after-translation-date":"De publicatiedatum moet altijd op of na de uiterste vertaaldatum liggen.",
   "version": "Versie",
   "versions": "Versies",
-  "signatures": "Handtekeningen",
   "only-on-final-agenda": "Enkel op definitieve agenda",
   "date-expired": "Datum verstreken",
   "publication-sidebar-tooltip": "Dit is een interne opmerking voor het OVRB-team.",
@@ -916,5 +915,6 @@
   "published-decisions": "Gepubliceerde besluiten",
   "no-decisions-published-yet": "Er zijn nog geen besluiten gepubliceerd.",
   "search-error": "Er ging iets mis bij het zoeken",
+  "signatures": "Handtekeningen",
   "open-version": "Open versie"
 }
