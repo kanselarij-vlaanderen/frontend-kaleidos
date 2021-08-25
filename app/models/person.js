@@ -7,7 +7,6 @@ export default class Person extends Model {
   @attr('string') lastName;
   @attr('string') alternativeName;
 
-  @belongsTo('signature') signature;
   @belongsTo('contact-person') contactPerson;
   @belongsTo('organization') organization;
   @hasMany('mandatee') mandatees;

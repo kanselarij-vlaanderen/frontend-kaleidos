@@ -60,7 +60,6 @@ Router.map(function() {
     this.route('document-types', () => {});
     this.route('case-types', () => {});
     this.route('subcase-types', () => {});
-    this.route('signature', () => {});
   });
   this.route('loading', { path: '/laden', });
   // mock-login-route as name to avoid collision with mock-login component provided by addon
@@ -164,7 +163,6 @@ Router.map(function() {
           this.route('documents', { path: '/documenten', });
           this.route('requests', { path: '/aanvragen', });
         });
-        this.route('signatures', { path: '/handtekeningen', });
       });
     });
   }

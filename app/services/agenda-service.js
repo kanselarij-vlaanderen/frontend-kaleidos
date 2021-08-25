@@ -40,13 +40,6 @@ export default Service.extend({
     }).then((result) => result.body.agendas);
   },
 
-  async getPieceNames(model) {
-    return ajax({
-      method: 'GET',
-      url: `/lazy-loading/documentNames?uuid=${model.id}`,
-    }).then((result) => result.body.documentNames);
-  },
-
   async rollbackAgendaitemsNotFormallyOk(agendaToRollback) {
     if (!agendaToRollback) {
       return agendaToRollback;

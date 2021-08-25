@@ -690,9 +690,6 @@ export default Component.extend({
     async createNewDesignAgendaAction() {
       await this.createDesignAgenda();
     },
-    selectSignature() {
-      this.toggleProperty('isAssigningSignature', false);
-    },
     releaseDecisions() {
       this.set('releasingDecisions', true);
     },

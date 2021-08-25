@@ -96,12 +96,6 @@ export default ModelWithModifier.extend({
 
   isDesignAgenda: reads('agenda.isDesignAgenda'),
 
-  // get piece names to show on agendaview when not in the viewport to assist lazy loading
-  pieceNames: computed('pieces', async function() {
-    const names = await this.agendaService.getPieceNames(this);
-    return names;
-  }),
-
   nota: computed('id', function() {
     return PromiseObject.create({
       promise: this.store.queryOne('document-container', {

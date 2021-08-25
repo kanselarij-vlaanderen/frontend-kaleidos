@@ -36,7 +36,6 @@ export default Model.extend({
     inverse: null,
   }),
   newsletter: belongsTo('newsletter-info'),
-  signature: belongsTo('signature'),
   mailCampaign: belongsTo('mail-campaign'),
   agenda: belongsTo('agenda', {
     inverse: null,
@@ -105,22 +104,6 @@ export default Model.extend({
       return this.intl.t('no-agenda');
     }
     return await agenda.get('agendaName');
-  }),
-
-  defaultSignature: computed('signature', 'store', async function() {
-    const signature = await this.get('signature');
-    if (!signature) {
-      return PromiseObject.create({
-        promise: this.store
-          .query('signature', {
-            filter: {
-              'is-active': true,
-            },
-          })
-          .then((signatures) => signatures.objectAt(0)),
-      });
-    }
-    return signature;
   }),
 
   kindToShow: computed('kind', function() {
