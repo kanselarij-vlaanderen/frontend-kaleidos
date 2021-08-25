@@ -47,7 +47,6 @@ export default Component.extend({
       this.set('meetingNumber', meetingNumber);
       this.set('formattedMeetingIdentifier', `VR PV ${meetingYear}/${meetingNumber}`);
       this.set('numberRepresentation', this.get('formattedMeetingIdentifier'));
-      this.set('meeting.numberRepresentation', this.get('formattedMeetingIdentifier'));
     },
 
     async updateSession() {
