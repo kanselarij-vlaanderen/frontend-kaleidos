@@ -20,8 +20,7 @@
         @block={{true}}
         @value={{this.meetingNumber}}
         data-test-edit-session-meeting-number={{true}}
-        {{on "change" (action "meetingNumberChangedAction" this.meeting)}}
-        {{on "keyup" (action "meetingNumberChangedAction" this.meeting)}}
+        {{on "input" (action "meetingNumberChangedAction")}}
       />
     </div>
   </div>

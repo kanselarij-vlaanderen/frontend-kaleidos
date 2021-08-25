@@ -41,7 +41,8 @@ export default Component.extend({
   // eslint-disable-next-line ember/no-actions-hash
   actions: {
 
-    meetingNumberChangedAction(meetingNumber) {
+    meetingNumberChangedAction(event) {
+      const meetingNumber = event.target.value;
       const meetingYear = moment(this.get('meeting.plannedStart')).year();
       this.set('meetingNumber', meetingNumber);
       this.set('formattedMeetingIdentifier', `VR PV ${meetingYear}/${meetingNumber}`);
