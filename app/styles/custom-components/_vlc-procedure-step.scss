@@ -46,39 +46,3 @@
   left: -4.5rem;
   top: calc(50% - 1.7rem);
 }
-
-/* Minimal proceduresteps version
-  ========================================================================== */
-
-.vlc-procedure-step--minimal {
-  margin: 0 4.2rem 0;
-  padding: 0 0 4rem;
-  border: none;
-
-  .vlc-procedure-step__badge-wrapper {
-    position: absolute;
-    left: -4.2rem;
-    top: 0;
-  }
-
-  &:before {
-    left: -2.7rem;
-  }
-
-  &:last-child {
-    padding: 0;
-    &:before {
-      height: 100%;
-    }
-  }
-
-  .vlc-status-timeline {
-    position: relative;
-    left: - 3.2rem;
-
-    .vlc-status-timeline__text {
-      margin-left: 1.6rem;
-    }
-  }
-}
-
