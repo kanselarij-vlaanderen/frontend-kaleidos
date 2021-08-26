@@ -5,7 +5,6 @@ import dependency from '../../selectors/dependency.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
-import auk from '../../selectors/auk.selectors';
 
 context('newsletter tests, both in agenda detail view and newsletter route', () => {
   beforeEach(() => {
