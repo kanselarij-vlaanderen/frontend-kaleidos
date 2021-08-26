@@ -3,7 +3,7 @@
     @block={{true}}
     @icon="search"
     placeholder={{t "search-placeholder"}}
-    @value={{this.searchText}}
+    value={{this.searchText}}
     {{on "input" (perform this.debouncedSearch)}}
     {{on "focusout" this.hideResults}}
     {{on "focusin" (if this.search.lastSuccessful this.showResults this.hideResults)}}

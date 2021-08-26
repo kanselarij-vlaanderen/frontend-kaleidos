@@ -27,13 +27,13 @@
           <Auk::Label>{{t "publications-number"}}</Auk::Label>
           <Auk::Input
             @type="number"
-            @value={{@publicationFlow.identification.structuredIdentifier.localIdentifier}}
+            value={{@publicationFlow.identification.structuredIdentifier.localIdentifier}}
             {{on "input" (perform this.setPublicationNumber)}}
           />
           {{!-- TODO KAS-2858 use @width instead of size, size=5 seems to correlate to 6.3rem --}}
           <Auk::Input
             size="5"
-            @value={{@publicationFlow.identification.structuredIdentifier.versionIdentifier}}
+            value={{@publicationFlow.identification.structuredIdentifier.versionIdentifier}}
             {{on "input" (perform this.setPublicationNumberSuffix)}}
           />
 
@@ -118,7 +118,7 @@
               {{t "proofprint-corrector"}}
             </Auk::Label>
             <Auk::Input
-              @value={{this.publicationSubcase.proofPrintCorrector}}
+              value={{this.publicationSubcase.proofPrintCorrector}}
               {{on "input" (perform this.setProofPrintCorrector)}}
             />
           </div>

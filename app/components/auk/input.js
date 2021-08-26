@@ -6,8 +6,11 @@ import Component from '@glimmer/component';
  * @argument {String} icon
  * @argument {String} type: Possible values are ("text", default), "number". Consider other components for "radio", "checkbox", etc..
  * @argument {Boolean} block
- * @argument {Boolean} width: Possible values are "small, "medium", "large"
+ * @argument {String} width: Possible values are "small, "medium", "large"
  * @argument {Boolean} error
+ * @argument {String} value: use "@value=" when you want to access the value directly (2-way binding, get and set)
+ * or use "value=" with {{on "input" ...}} when you want to do something with the value (1-way binding, get only)
+ * you can use "@value=" with {{on "input" ...}} if you want to update the value anyway, but do something extra (like validation)
  */
 export default class Input extends Component {
   get block() {
