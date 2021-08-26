@@ -43,9 +43,9 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.visit('/vergadering/5EBA9588751CF70008000012/kort-bestek');
     // define alias
     cy.get(newsletter.tableRow.newsletterRow).find(newsletter.tableRow.inNewsletterCheckbox)
-      .as('checkboxContainer');
-    cy.get('@checkboxContainer').find(auk.checkbox.checkbox)
       .as('checkboxValue');
+    cy.get('@checkboxValue').parent()
+      .as('checkboxContainer');
     // checkbox is unchecked, toggle it
     cy.get('@checkboxValue').should('not.be.checked');
     cy.get('@checkboxContainer').click();

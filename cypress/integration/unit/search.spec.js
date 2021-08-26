@@ -189,7 +189,7 @@ context('Search tests', () => {
     wordsFromPdf.forEach((searchTerm) => {
       cy.get(route.search.input).clear();
       cy.get(route.search.input).type(searchTerm);
-      cy.get(route.searchCases.toggleDecisions).find(auk.checkbox.container)
+      cy.get(route.searchCases.toggleDecisions).parent()
         .click();
 
       cy.route('GET', '/cases/search?**').as('decisionsSearchCall');
