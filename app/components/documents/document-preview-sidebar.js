@@ -17,9 +17,10 @@ import VRDocumentName from '../../utils/vr-document-name';
  */
 export default class DocumentsDocumentPreviewSidebar extends Component {
   @service fileService;
+  @service('current-session') currentSessionService;
+
   @service router;
   @service store;
-
 
   @tracked documentType;
   @tracked docContainer;
@@ -29,8 +30,12 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
 
   @tracked activeTab = 'details';
   @tracked isOpenUploadVersionModal = false;
+
   @tracked isVerifyingDelete = false;
   @tracked selectedToDelete;
+
+  @tracked isEditingDetails = false;
+  @tracked editPieceMemory;
 
   constructor() {
     super(...arguments);
@@ -118,6 +123,37 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
   cancelVerify() {
     this.selectedToDelete = null;
     this.isVerifyingDelete = false;
+  }
+
+  @action
+  async cancelEditDetails() {
+    this.args.piece.name = this.editPieceMemory.name;
+    this.args.piece.accessLevel = this.editPieceMemory.accessLevel;
+    this.args.piece.confidential = this.editPieceMemory.confidential;
+
+    this.editPieceMemory = null;
+    this.isEditingDetails = false;
+  }
+
+  @task
+  *saveEditDetails() {
+    yield this.args.piece.save();
+    yield this.docContainer.save();
+
+    yield this.loadData.perform();
+    this.editPieceMemory = null;
+    this.isEditingDetails = false;
+  }
+
+  @action
+  openEditDetails() {
+    this.isEditingDetails = true;
+    this.editPieceMemory = this.args.piece;
+  }
+
+  @action
+  changeAccessLevel(accessLevel) {
+    this.accessLevel = accessLevel;
   }
 
   get newVersionName(){

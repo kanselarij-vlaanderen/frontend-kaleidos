@@ -44,7 +44,7 @@
           >
             {{t "open-version"}}
           </Menu.Item>
-          {{#if this.currentSession.isEditor}}
+          {{#if this.currentSessionService.isEditor}}
             <Menu.Item @skin="danger"
               {{on "click" @openVerify}}
             >

@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { action } from '@ember/object';
 
 export default class AccessLevelColorBadge extends Component {
   get accessPillSkin() {
@@ -20,5 +21,10 @@ export default class AccessLevelColorBadge extends Component {
       modifier = 'default';
     }
     return modifier;
+  }
+
+  @action
+  changeAccessLevel(accessLevel) {
+    this.args.changeAccessLevel(accessLevel)
   }
 }

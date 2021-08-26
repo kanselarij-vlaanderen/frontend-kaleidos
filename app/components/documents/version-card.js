@@ -5,7 +5,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default class DocumentsVersionCardComponent extends Component {
-  @service currentSession;
+  @service('current-session') currentSessionService;
   @tracked accessLevel;
 
   @tracked isVerifyingDelete;
