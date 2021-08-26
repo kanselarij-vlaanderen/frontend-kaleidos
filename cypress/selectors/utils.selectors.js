@@ -44,6 +44,23 @@ const selectors = {
     container: '[data-test-number-pagination-container]',
   },
 
+  // radio-dropdown
+  radioDropdown: {
+    container: '[data-test-radio-dropdown-container]',
+    input: '[data-test-radio-dropdown-input]',
+    powerSelect: '[data-test-radio-dropdown-power-select]',
+  },
+
+  // file-uploader
+  fileUploader: {
+    upload: '[data-test-file-uploader-upload]',
+  },
+
+  // mandatees-domains-selector-modal
+  mandateesDomain: {
+    mandateeSelector: '[data-test-mandatees-domain-mandatee-selector]',
+  },
+
   /** Section VL-components **/
 
   // vl-checkbox

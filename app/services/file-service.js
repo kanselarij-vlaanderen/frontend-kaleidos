@@ -107,11 +107,4 @@ export default Service.extend({
       url: `/files/${id}`,
     });
   },
-
-  async getFileExtensions() {
-    return ajax({
-      method: 'GET',
-      url: '/lazy-loading/fileExtensions',
-    }).then((result) => result.body.fileExtensions);
-  },
 });

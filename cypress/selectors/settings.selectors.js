@@ -38,7 +38,6 @@ const selectors = {
     manageDocumentTypes: '[data-test-route-settings-overview-manage-document-types]',
     manageCaseTypes: '[data-test-route-settings-overview-manage-case-types]',
     manageSubcaseTypes: '[data-test-route-settings-overview-manage-subcase-types]',
-    manageSignatures: '[data-test-route-settings-overview-manage-signatures]',
   },
 
   // route settings/ministers
