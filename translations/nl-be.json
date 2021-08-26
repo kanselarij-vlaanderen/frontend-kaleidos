@@ -915,5 +915,6 @@
   "no-decisions-published-yet": "Er zijn nog geen besluiten gepubliceerd.",
   "search-error": "Er ging iets mis bij het zoeken",
   "signatures": "Handtekeningen",
-  "open-version": "Open versie"
+  "open-version": "Open versie",
+  "signature-folder": "Handtekenmap"
 }
