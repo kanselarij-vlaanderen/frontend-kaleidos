@@ -23,42 +23,33 @@ function createPublication(shortTitle, longTitle) {
   cy.route('POST', '/publication-flows').as('createNewPublicationFlow');
 
   cy.visit('publicaties');
-  cy.get(publication.newPublicationButton).click();
+  cy.get(publication.publicationsIndex.newPublication).click();
 
-  cy.get(auk.modal.container).as('publicationModal')
-    .within(() => {
-      cy.get(publication.newPublicationModal.publicationShortTitleTextarea).click()
-        .clear()
-        .type(shortTitle);
-      cy.get(publication.newPublicationModal.publicationLongTitleTextarea).click()
-        .clear()
-        .type(longTitle);
-    });
+  cy.get(publication.newPublication.shortTitle).click()
+    .clear()
+    .type(shortTitle);
+  cy.get(publication.newPublication.longTitle).click()
+    .clear()
+    .type(longTitle);
 
   let publicationFlowId;
 
-  cy.get('@publicationModal').within(() => {
-    cy.get(publication.newPublicationModal.createButton).click()
-      .wait('@createNewCase', {
-        timeout: 20000,
-      })
-      .wait('@createNewPublicationFlow', {
-        timeout: 20000,
-      })
-      .then((res) => {
-        publicationFlowId = res.responseBody.data.id;
-        // Check if we transitioned to dossier page of the publication-flow
-        cy.url().should('contain', `publicaties/${publicationFlowId}/dossiers`);
-      })
-      .then(() => new Cypress.Promise((resolve) => {
-        resolve({
-          publicationFlowId,
-        });
-      }));
-  });
+  cy.get(publication.newPublication.create).click()
+    .wait('@createNewCase')
+    .wait('@createNewPublicationFlow')
+    .then((res) => {
+      publicationFlowId = res.responseBody.data.id;
+      // Check if we transitioned to dossier page of the publication-flow
+      cy.url().should('contain', `publicaties/${publicationFlowId}/dossiers`);
+    })
+    .then(() => new Cypress.Promise((resolve) => {
+      resolve({
+        publicationFlowId,
+      });
+    }));
   // TODO-publication this cypress promise needs to be the last command executed, move cy.log higher
   // Check if we transitioned to dossier page of the publication-flow
-  cy.get(publication.publicationCase.casePanel);
+  cy.get(publication.inscriptionPanel.casePanel);
   cy.log('/createPublication');
 }
 
@@ -85,17 +76,14 @@ function addPublicationDocuments(files) {
       } else {
         cy.uploadFile(file.folder, file.fileName, file.fileExtension);
       }
-      cy.get('.vl-uploaded-document', {
-        timeout: 10000,
-      }).should('have.length', index + 1)
+      cy.get('.vl-uploaded-document').should('have.length', index + 1)
         .eq(index)
         .within(() => {
           if (file.newFileName) {
             cy.get('.auk-form-group').eq(0)
-              .within(() => {
-                cy.get('.auk-input').clear()
-                  .type(file.newFileName);
-              });
+              .find('.auk-input')
+              .clear()
+              .type(file.newFileName);
           }
         });
     });
@@ -119,25 +107,17 @@ function addPublicationDocuments(files) {
                   cy.get(dependency.emberPowerSelect.trigger)
                     .click()
                     .parents('body')
-                    .within(() => {
-                      cy.get(dependency.emberPowerSelect.option, {
-                        timeout: 5000,
-                      }).should('exist')
-                        .then(() => {
-                          cy.contains(file.fileType).click(); // Match is not exact, ex. fileType "Advies" yields "Advies AgO" instead of "Advies"
-                        });
-                    });
+                    .find(dependency.emberPowerSelect.option)
+                    .contains(file.fileType)
+                    .click(); // Match is not exact, ex. fileType "Advies" yields "Advies AgO" instead of "Advies"
                 }
               });
           });
       });
     }
   });
-  cy.get('@fileUploadDialog').within(() => {
-    cy.get(auk.modal.footer).within(() => {
-      // TODO Click the save button in your modal footer
-    });
-  });
+  cy.get(auk.modal.footer).find(publication.documentsUploadModal.save)
+    .click;
 
   cy.wait('@createNewPiece', {
     timeout: 24000,

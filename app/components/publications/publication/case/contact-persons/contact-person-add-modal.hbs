@@ -1,5 +1,5 @@
-<Auk::Modal @size="medium"
-  data-test-add-contactpersonmodal>
+<Auk::Modal
+  @size="medium">
   <Auk::Modal::Header
     @title={{t "add-contact"}}
     @onClose={{@onCancel}} />
@@ -11,7 +11,7 @@
             <Auk::Label for="firstNameInput" @required={{true}}>
               {{t "first-name"}}
             </Auk::Label>
-            <Auk::Input type="text" id="firstNameInput"
+            <Auk::Input data-test-contact-person-add-first-name={{true}} type="text" id="firstNameInput"
               @block={{true}}
               @value={{this.firstName}}
               {{on "input" this.validators.firstName.enableError}} />
@@ -20,7 +20,7 @@
             <Auk::Label for="lastNameInput" @required={{true}}>
               {{t "last-name"}}
             </Auk::Label>
-            <Auk::Input type="text" id="lastNameInput"
+            <Auk::Input data-test-contact-person-add-last-name={{true}} type="text" id="lastNameInput"
               @block={{true}}
               @value={{this.lastName}}
               {{on "input" this.validators.lastName.enableError}} />
@@ -28,7 +28,7 @@
         </div>
         <div class="auk-form-group">
           <Auk::Label for="emailInput">{{t "email"}}</Auk::Label>
-          <Auk::Input type="text" id="emailInput"
+          <Auk::Input data-test-contact-person-add-email={{true}} type="text" id="emailInput"
             @block={{true}}
             @value={{this.email}} />
         </div>
@@ -77,7 +77,7 @@
             {{on "click" (perform this.save)}}
             disabled={{not this.validators.areValid}}
             @loading={{this.save.isRunning}}
-            data-test-add-contactperson-submit-button>
+            data-test-contact-person-add-submit>
             {{t "add"}}
           </Auk::Button>
         </Auk::Toolbar::Item>

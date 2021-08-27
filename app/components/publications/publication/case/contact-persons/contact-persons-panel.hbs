@@ -1,4 +1,4 @@
-<div class="auk-u-mb-3" data-test-publication-case-panel-contactperson>
+<div class="auk-u-mb-3" data-test-contact-persons-panel-panel>
   <Auk::Panel>
     <Auk::Panel::Header>
       <Auk::Toolbar>
@@ -14,7 +14,7 @@
             <Auk::Button
               @skin="tertiary" @icon="add"
               {{on "click" this.openAddModal}}
-              data-test-add-contactperson>
+              data-test-contact-persons-panel-add>
               {{t "add-contact"}}
             </Auk::Button>
           </Auk::Toolbar::Item>
@@ -23,7 +23,7 @@
     </Auk::Panel::Header>
     {{#if this.contactPersons}}
       <Auk::Panel::Body @noPadding={{true}}>
-        <table class="auk-table" data-test-contact-persons>
+        <table class="auk-table" data-test-contact-persons-panel-table>
           <thead>
             <tr>
               <th>{{t "name"}}</th>
@@ -53,7 +53,7 @@
                 </td>
                 <td class="auk-u-text-align--right">
                   <Auk::Button
-                    data-test-delete-contactperson
+                    data-test-contact-persons-panel-delete
                     @layout="icon-only" @icon="delete" @skin="danger-borderless"
                     {{on "click" (fn this.delete contactPerson)}} />
                 </td>

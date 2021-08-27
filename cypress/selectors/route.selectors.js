@@ -133,7 +133,7 @@ const selectors = {
 
   // publications/template
   publications: {
-    title: '[data-test-route-publications-title]',
+    title: '[data-test-route-publications-index-title]',
     // TODO-selector: there are more selectors in this route
   },
 

@@ -1,49 +1,102 @@
 const selectors = {
-  newPublicationButton: '[data-test-publication-header-button-new]',
-  publicationDetailHeaderShortTitle: '[data-test-publication-detail-menu-short-title]',
-  publicationDetailHeaderPublicationNumber: '[data-test-publication-detail-menu-publication-number]',
-  goToPublication: '[data-test-publications-button-go-to-publication]',
-  editInscriptionButton: '[data-test-publication-edit-inscription-button]',
-  inscriptionShortTitleTextarea: '[data-test-publication-inscription-short-title-textarea]',
-  inscriptionLongTitleTextarea: '[data-test-publication-inscription-long-title-textarea]',
-  inscriptionSaveButton: '[data-test-publication-save-inscription]',
-  contactperson: {
-    addButton: '[data-test-add-contactperson]',
-    submitButton: '[data-test-add-contactperson-submit-button]',
-    firstNameInput: '#firstNameInput',
-    lastNameInput: '#lastNameInput',
-    emailInput: '#emailInput',
-    organisationInput: '#organizationNameInput',
-    deleteContactpersonButton: '[data-test-delete-contactperson]',
+
+  /**
+    ROUTES
+  */
+
+  // TODO this route is already in route.selectors file, remove from route.selectors
+  // publications\index\template
+  publicationsIndex: {
+    title: '[data-test-route-publications-index-title]',
+    newPublication: '[data-test-route-publications-index-new-publication]',
+    filter: '[data-test-route-publications-index-filter]',
   },
-  publicationCase: {
-    // panels
-    casePanel: '[data-test-publication-case-panel-case]',
-    casePanelEditing: '[data-test-publication-case-panel-case-editing]',
-    mandateePanel: '[data-test-publication-case-panel-mandatees]',
-    contantPersonPanel: '[data-test-publication-case-panel-contactperson]',
+
+  // publications\publication\template
+  publicationHeader: {
+    number: '[data-test-route-publications-publication-header-number]',
+    shortTitle: '[data-test-route-publications-publication-header-short-title]',
   },
-  nav: {
+
+  /**
+    COMPONENTS
+  */
+
+  // publication-navigation
+  publicationCaseNav: {
     goBack: '[data-test-publication-case-nav-go-back]',
     case: '[data-test-publication-case-nav-case]',
     documents: '[data-test-publication-case-nav-documents]',
     translations: '[data-test-publication-case-nav-translations]',
     publishpreview: '[data-test-publication-case-nav-publishpreview]',
   },
+
+  // publication-table-row
+  publicationTableRow: {
+    goToPublication: '[data-test-publication-table-row-go-to-publication]',
+  },
+
+  // new-publication-modal
+  newPublication: {
+    numberInput: '[data-test-new-publication-modal-number-input]',
+    shortTitle: '[data-test-new-publication-modal-short-title]',
+    longTitle: '[data-test-new-publication-modal-long-title]',
+    alertInfo: '[data-test-new-publication-modal-alert-info]',
+    alertError: '[data-test-new-publication-modal-alert-error]',
+    numberError: '[data-test-new-publication-modal-number-error]',
+    shortTitleError: '[data-test-new-publication-modal-short-title-error]',
+    create: '[data-test-new-publication-modal-create]',
+    suffixInput: '[data-test-new-publication-modal-suffix-input]',
+  },
+
+  // contact-persons-panel
+  contactPersonsPanel: {
+    panel: '[data-test-contact-persons-panel-panel]',
+    table: '[data-test-contact-persons-panel-table]',
+    add: '[data-test-contact-persons-panel-add]',
+    delete: '[data-test-contact-persons-panel-delete]',
+  },
+
+  // contact-person-add-modal
+  contactPersonAdd: {
+    firstName: '[data-test-contact-person-add-first-name]',
+    lastName: '[data-test-contact-person-add-last-name]',
+    email: '[data-test-contact-person-add-email]',
+    submit: '[data-test-contact-person-add-submit]',
+  },
+
+  // organization-add-modal
+  organizationAdd: {
+    submit: '[data-test-organization-add-submit]',
+  },
+
+  // TODO-KAS-2849 separate edit and view
+  // inscription-panel
+  inscriptionPanel: {
+    casePanel: '[data-test-inscription-panel-case-panel]',
+    shortTitle: '[data-test-inscription-panel-short-title]',
+    longTitle: '[data-test-inscription-panel-long-title]',
+    edit: '[data-test-inscription-panel-edit]',
+    save: '[data-test-inscription-panel-save]',
+  },
+
+  // mandatees-panel
+  mandateesPanel: {
+    // unused selectors:
+    panel: '[data-test-mandatees-panel-panel]',
+    table: '[data-test-mandatees-panel-table]',
+    add: '[data-test-mandatees-panel-add]',
+    unlink: '[data-test-mandatees-panel-unlink]',
+  },
+  // documents-upload-modal
+  documentsUploadModal: {
+    save: '[data-test-publication-documents-upload-modal-save]',
+  },
+
   // TODO-selector replace deze bij het maken van publication translation testen
   tableCell: '.auk-table__cell--accent',
   flowTitle: '[data-test-publication-flow-title]',
 
-  // new-publication-modal
-  newPublicationModal: {
-    createButton: '[data-test-publication-button-create-new]',
-    cancelButton: '[data-test-publication-button-cancel]', // 2x duplication
-    publicationNumberInput: '[data-test-create-publication-modal-number-input]',
-    publicationNumberSuffixInput: '[data-test-create-publication-modal-suffix-input]',
-    publicationShortTitleTextarea: '[data-test-create-publication-modal-short-title-textarea]',
-    publicationLongTitleTextarea: '[data-test-create-publication-modal-long-title-textarea]',
-    alertInfo: '[data-test-auk-alert-info]', // refactor either to publication specific or auk reuse
-    alertError: '[data-test-auk-alert-error]', // refactor either to publication specific or auk reuse
-  },
+
 };
 export default selectors;

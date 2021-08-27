@@ -1,6 +1,5 @@
 <Auk::Modal
-  @size="medium"
-  data-test-add-organisationModal>
+  @size="medium">
   <Auk::Modal::Header
     @title={{t "add-organization"}}
     @onClose={{@onCancel}} />
@@ -46,7 +45,7 @@
             disabled={{not this.validators.areValid}}
             @loading={{this.save.isRunning}}
             {{on "click" (perform this.save)}}
-            data-test-add-organization-submit-button>
+            data-test-organization-add-submit>
             {{t "add"}}
           </Auk::Button>
         </Auk::Toolbar::Item>
