@@ -17,7 +17,7 @@ import auk from '../../selectors/auk.selectors';
  * @param {string} longTitle The long title for the case
  * @returns {Promise<String>} the id of the created publication-flow
  */
-function createPublication(shortTitle, longTitle) {
+function createPublication(number, suffix, shortTitle, longTitle) {
   cy.log('createPublication');
   cy.route('POST', '/cases').as('createNewCase');
   cy.route('POST', '/publication-flows').as('createNewPublicationFlow');
@@ -25,13 +25,21 @@ function createPublication(shortTitle, longTitle) {
   cy.visit('publicaties');
   cy.get(publication.publicationsIndex.newPublication).click();
 
+  if (number) {
+    cy.get(publication.newPublication.number).click()
+      .clear()
+      .type(number);
+  }
+  if (suffix) {
+    cy.get(publication.newPublication.suffix).click()
+      .type(suffix);
+  }
   cy.get(publication.newPublication.shortTitle).click()
-    .clear()
     .type(shortTitle);
-  cy.get(publication.newPublication.longTitle).click()
-    .clear()
-    .type(longTitle);
-
+  if (longTitle) {
+    cy.get(publication.newPublication.longTitle).click()
+      .type(longTitle);
+  }
   let publicationFlowId;
 
   cy.get(publication.newPublication.create).click()
@@ -40,7 +48,7 @@ function createPublication(shortTitle, longTitle) {
     .then((res) => {
       publicationFlowId = res.responseBody.data.id;
       // Check if we transitioned to dossier page of the publication-flow
-      cy.url().should('contain', `publicaties/${publicationFlowId}/dossiers`);
+      cy.url().should('contain', `publicaties/${publicationFlowId}/dossier`);
     })
     .then(() => new Cypress.Promise((resolve) => {
       resolve({
@@ -48,8 +56,6 @@ function createPublication(shortTitle, longTitle) {
       });
     }));
   // TODO-publication this cypress promise needs to be the last command executed, move cy.log higher
-  // Check if we transitioned to dossier page of the publication-flow
-  cy.get(publication.inscriptionPanel.casePanel);
   cy.log('/createPublication');
 }
 

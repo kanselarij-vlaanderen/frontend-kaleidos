@@ -4,7 +4,6 @@ const selectors = {
     ROUTES
   */
 
-  // TODO this route is already in route.selectors file, remove from route.selectors
   // publications\index\template
   publicationsIndex: {
     title: '[data-test-route-publications-index-title]',
@@ -22,39 +21,55 @@ const selectors = {
     COMPONENTS
   */
 
+  // publications-filter-modal
+  publicationsFilter: {
+    // TODO-SELECTOR unused selectors
+    cancel: '[data-test-publications-filter-cancel]',
+    reset: '[data-test-publications-filter-reset]',
+    save: '[data-test-publications-filter-save]',
+  },
+
   // publication-navigation
-  publicationCaseNav: {
-    goBack: '[data-test-publication-case-nav-go-back]',
-    case: '[data-test-publication-case-nav-case]',
-    documents: '[data-test-publication-case-nav-documents]',
-    translations: '[data-test-publication-case-nav-translations]',
-    publishpreview: '[data-test-publication-case-nav-publishpreview]',
+  publicationNav: {
+    goBack: '[data-test-publication-nav-go-back]',
+    case: '[data-test-publication-nav-case]',
+    documents: '[data-test-publication-nav-documents]',
+    translations: '[data-test-publication-nav-translations]',
+    publishpreview: '[data-test-publication-nav-publishpreview]',
   },
 
   // publication-table-row
   publicationTableRow: {
-    goToPublication: '[data-test-publication-table-row-go-to-publication]',
+    rows: '[data-test-publication-table-row]',
+    row: {
+      shortTitle: '[data-test-publication-table-row-short-title]',
+      number: '[data-test-publication-table-row-number]',
+      goToPublication: '[data-test-publication-table-row-go-to-publication]',
+    },
   },
 
   // new-publication-modal
   newPublication: {
-    numberInput: '[data-test-new-publication-modal-number-input]',
-    shortTitle: '[data-test-new-publication-modal-short-title]',
-    longTitle: '[data-test-new-publication-modal-long-title]',
-    alertInfo: '[data-test-new-publication-modal-alert-info]',
-    alertError: '[data-test-new-publication-modal-alert-error]',
-    numberError: '[data-test-new-publication-modal-number-error]',
-    shortTitleError: '[data-test-new-publication-modal-short-title-error]',
-    create: '[data-test-new-publication-modal-create]',
-    suffixInput: '[data-test-new-publication-modal-suffix-input]',
+    number: '[data-test-new-publication-number]',
+    suffix: '[data-test-new-publication-suffix]',
+    shortTitle: '[data-test-new-publication-short-title]',
+    longTitle: '[data-test-new-publication-long-title]',
+    alertInfo: '[data-test-new-publication-alert-info]',
+    alertError: '[data-test-new-publication-alert-error]',
+    numberError: '[data-test-new-publication-number-error]',
+    shortTitleError: '[data-test-new-publication-short-title-error]',
+    create: '[data-test-new-publication-create]',
   },
 
   // contact-persons-panel
-  contactPersonsPanel: {
-    panel: '[data-test-contact-persons-panel-panel]',
-    table: '[data-test-contact-persons-panel-table]',
-    add: '[data-test-contact-persons-panel-add]',
-    delete: '[data-test-contact-persons-panel-delete]',
+  contactPersons: {
+    add: '[data-test-contact-persons-view-add]',
+    rows: '[data-test-contact-persons-row]',
+    row: {
+      delete: '[data-test-contact-persons-row-delete]',
+      fullName: '[data-test-contact-persons-row-full-name]',
+      email: '[data-test-contact-persons-row-email]',
+    },
   },
 
   // contact-person-add-modal
@@ -70,20 +85,23 @@ const selectors = {
     submit: '[data-test-organization-add-submit]',
   },
 
-  // TODO-KAS-2849 separate edit and view
   // inscription-panel
-  inscriptionPanel: {
-    casePanel: '[data-test-inscription-panel-case-panel]',
-    shortTitle: '[data-test-inscription-panel-short-title]',
-    longTitle: '[data-test-inscription-panel-long-title]',
-    edit: '[data-test-inscription-panel-edit]',
-    save: '[data-test-inscription-panel-save]',
+  inscription: {
+    view: {
+      shortTitle: '[data-test-inscription-view-short-title]',
+      longTitle: '[data-test-inscription-view-long-title]',
+      edit: '[data-test-inscription-view-edit]',
+    },
+    edit: {
+      shortTitle: '[data-test-inscription-edit-short-title]',
+      longTitle: '[data-test-inscription-edit-long-title]',
+      save: '[data-test-inscription-edit-save]',
+    },
   },
 
   // mandatees-panel
   mandateesPanel: {
-    // unused selectors:
-    panel: '[data-test-mandatees-panel-panel]',
+    // TODO-SELECTORS unused selectors
     table: '[data-test-mandatees-panel-table]',
     add: '[data-test-mandatees-panel-add]',
     unlink: '[data-test-mandatees-panel-unlink]',
@@ -92,11 +110,6 @@ const selectors = {
   documentsUploadModal: {
     save: '[data-test-publication-documents-upload-modal-save]',
   },
-
-  // TODO-selector replace deze bij het maken van publication translation testen
-  tableCell: '.auk-table__cell--accent',
-  flowTitle: '[data-test-publication-flow-title]',
-
 
 };
 export default selectors;

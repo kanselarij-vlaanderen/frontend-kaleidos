@@ -1,6 +1,6 @@
-<tr class="auk-table--interaction-cursor"  {{on "click" (fn this.navigateToPublication @publicationFlow)}}>
+<tr data-test-publication-table-row class="auk-table--interaction-cursor"  {{on "click" (fn this.navigateToPublication @publicationFlow)}}>
   {{#if @tableColumnDisplayOptions.shortTitle}}
-    <td class="auk-table__col--6">
+    <td data-test-publication-table-row-short-title class="auk-table__col--6">
       <Auk::AbbreviatedText @text={{@publicationFlow.shortTitle}} @maxLength={{150}}/>
     </td>
   {{/if}}
@@ -37,7 +37,7 @@
     </td>
   {{/if}}
   {{#if @tableColumnDisplayOptions.publicationNumber}}
-    <td>
+    <td data-test-publication-table-row-number>
       {{#if @publicationFlow.identification.idName}}
         {{@publicationFlow.identification.idName}}
       {{else}}

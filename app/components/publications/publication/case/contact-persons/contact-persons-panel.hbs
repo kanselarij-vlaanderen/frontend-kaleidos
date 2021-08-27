@@ -1,4 +1,4 @@
-<div class="auk-u-mb-3" data-test-contact-persons-panel-panel>
+<div class="auk-u-mb-3">
   <Auk::Panel>
     <Auk::Panel::Header>
       <Auk::Toolbar>
@@ -14,7 +14,7 @@
             <Auk::Button
               @skin="tertiary" @icon="add"
               {{on "click" this.openAddModal}}
-              data-test-contact-persons-panel-add>
+              data-test-contact-persons-view-add>
               {{t "add-contact"}}
             </Auk::Button>
           </Auk::Toolbar::Item>
@@ -23,7 +23,7 @@
     </Auk::Panel::Header>
     {{#if this.contactPersons}}
       <Auk::Panel::Body @noPadding={{true}}>
-        <table class="auk-table" data-test-contact-persons-panel-table>
+        <table class="auk-table">
           <thead>
             <tr>
               <th>{{t "name"}}</th>
@@ -33,10 +33,10 @@
           </thead>
           <tbody>
             {{#each this.contactPersons as |contactPerson|}}
-              <tr>
+              <tr data-test-contact-persons-row>
                 <td>
                   <Auk::Avatar @icon="user">
-                    <div>{{contactPerson.person.nameToDisplay}}</div>
+                    <div data-test-contact-persons-row-full-name>{{contactPerson.person.nameToDisplay}}</div>
                     {{#if contactPerson.person.organization}}
                       <div class="auk-u-muted auk-u-text-small">
                         {{contactPerson.person.organization.name}}
@@ -44,7 +44,7 @@
                     {{/if}}
                   </Auk::Avatar>
                 </td>
-                <td>
+                <td data-test-contact-persons-row-email>
                   {{#if contactPerson.email}}
                     <a href="mailto:{{contactPerson.email}}">{{contactPerson.email}}</a>
                   {{else}}
@@ -53,7 +53,7 @@
                 </td>
                 <td class="auk-u-text-align--right">
                   <Auk::Button
-                    data-test-contact-persons-panel-delete
+                    data-test-contact-persons-row-delete
                     @layout="icon-only" @icon="delete" @skin="danger-borderless"
                     {{on "click" (fn this.delete contactPerson)}} />
                 </td>

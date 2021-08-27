@@ -1,6 +1,6 @@
 <div class="auk-u-mb-3">
   {{#unless this.isInEditMode}}
-    <Auk::Panel data-test-inscription-panel-case-panel>
+    <Auk::Panel>
       <Auk::Panel::Header>
         <Auk::Toolbar>
           <Auk::Toolbar::Group @position="left">
@@ -27,15 +27,15 @@
               </Auk::Toolbar::Item>
             {{/if}}
             <Auk::Toolbar::Item>
-              <Auk::Button data-test-inscription-panel-edit @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInEditMode}}/>
+              <Auk::Button data-test-inscription-view-edit @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInEditMode}}/>
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
         </Auk::Toolbar>
       </Auk::Panel::Header>
       <Auk::Panel::Body>
         <div class="auk-content">
-          <h4>{{@publicationFlow.shortTitle}}</h4>
-          <p class="auk-u-text-prewrap">{{@publicationFlow.longTitle}}</p>
+          <h4 data-test-inscription-view-short-title>{{@publicationFlow.shortTitle}}</h4>
+          <p data-test-inscription-view-long-title class="auk-u-text-prewrap">{{@publicationFlow.longTitle}}</p>
         </div>
       </Auk::Panel::Body>
     </Auk::Panel>
@@ -54,7 +54,7 @@
         <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
           <div class="auk-form-group {{if this.showShortTitleError "auk-form-group--error"}}">
             <Auk::Label>{{t "short-title"}}</Auk::Label>
-            <Auk::Textarea data-test-inscription-panel-short-title @rows="2" @value={{this.shortTitle}}/>
+            <Auk::Textarea data-test-inscription-edit-short-title @rows="2" @value={{this.shortTitle}}/>
             {{#if this.showShortTitleError}}
               <Auk::Label @error={{true}}>
                 {{t "input-error-message"}}
@@ -63,7 +63,7 @@
           </div>
           <div class="auk-form-group">
             <Auk::Label>{{t "long-title"}}</Auk::Label>
-            <Auk::Textarea data-test-inscription-panel-long-title @rows="4" @value={{this.longTitle}}/>
+            <Auk::Textarea data-test-inscription-edit-long-title @rows="4" @value={{this.longTitle}}/>
           </div>
         </Utils::LoadableContent>
       </Auk::Panel::Body>
@@ -82,7 +82,7 @@
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <Auk::Button
-                data-test-inscription-panel-save
+                data-test-inscription-edit-save
                 @skin="primary"
                 @loading={{this.save.isRunning}}
                 {{on "click" (perform this.save)}}>
