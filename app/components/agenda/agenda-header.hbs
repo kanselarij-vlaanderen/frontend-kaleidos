@@ -153,12 +153,6 @@
               >
                 {{t "edit-session"}}
               </Menu.Item>
-              <Menu.Item
-                data-test-agenda-header-select-signature
-                {{action "selectSignature"}}
-              >
-                {{t "signature-edit"}}
-              </Menu.Item>
             {{/if}}
             <Menu.Item
               data-test-agenda-header-download-documents
@@ -229,11 +223,7 @@
       @isAddingAgendaitems={{this.isAddingAgendaitems}}
       @onCreate={{this.onCreateAgendaitem}} />
   {{/if}}
-  {{#if this.isAssigningSignature}}
-    <Sessions::SelectSignature
-      @meeting={{this.currentSession}}
-      @closeDialog={{action "selectSignature"}} />
-  {{/if}}
+
   {{#if this.releasingDocuments}}
     <WebComponents::VlModalVerify
       @title={{t "agenda-release-documents"}}

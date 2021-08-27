@@ -38,7 +38,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       'filter[document-container][type][:uri:]': CONSTANTS.DOCUMENT_TYPES.NOTA,
       'filter[:has:previous-piece]': 'yes', // "Enkel bissen, ter'en, etc" ...
       include: 'agendaitems',
-      'fields[agendaitems]': 'id,priority,short-title',
+      'fields[agendaitems]': 'id,number,short-title',
       'fields[piece]': 'id,name,modified',
       'page[size]': PAGE_SIZE.NOTAS,
       sort: params.sort,
@@ -59,7 +59,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
           }
         }
       }
-      const agendaitemPriority = agendaitemOnLatestAgenda.get('priority');
+      const agendaitemNumber = agendaitemOnLatestAgenda.get('number');
       const agendaitemId = agendaitemOnLatestAgenda.get('id');
       const agendaitemShortTitle = agendaitemOnLatestAgenda.get('shortTitle');
       const pieceData = await NewsletterNotaUpdatesRoute.getPieceData(nota);
@@ -67,7 +67,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
         meetingId,
         agendaId,
         agendaitemId,
-        agendaitemPriority,
+        agendaitemNumber,
         agendaitemShortTitle,
         ...pieceData,
       };

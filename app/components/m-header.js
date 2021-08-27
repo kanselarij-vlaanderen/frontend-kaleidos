@@ -32,6 +32,14 @@ export default class MHeader extends Component {
     return !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB);
   }
 
+  get isShownSignatureFolder() {
+    const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
+    const hasPermission = this.currentSession.isAdmin
+      || this.currentSession.isKabinet
+      || this.currentSession.isMinister;
+    return isEnabled && hasPermission;
+  }
+
   @action
   logout() {
     this.session.invalidate();

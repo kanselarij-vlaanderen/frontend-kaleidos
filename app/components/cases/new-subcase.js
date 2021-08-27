@@ -143,7 +143,8 @@ export default class CasesNewSubcase extends Component {
   }
 
   @action
-  typeChanged(id) {
+  typeChanged(event) {
+    const id = event.target.value;
     const type = this.store.peekRecord('case-type', id);
     this.showAsRemark = (type.get('uri') === CONSTANTS.CASE_TYPES.REMARK);
   }

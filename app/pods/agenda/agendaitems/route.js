@@ -35,7 +35,7 @@ export default class AgendaAgendaitemsRoute extends Route {
         'priority' // Sorting agendaitems on minister protocol order
       ].join(','),
       'page[size]': PAGE_SIZE.AGENDAITEMS,
-      sort: 'show-as-remark,priority',
+      sort: 'show-as-remark,number',
     });
 
     const previousAgenda = await agenda.previousVersion;

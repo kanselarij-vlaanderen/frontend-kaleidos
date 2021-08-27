@@ -106,6 +106,9 @@ function closeSettingsModal() {
   cy.log('/closeSettingsModal');
 }
 
+// ***********************************************
+// Commands
+
 Cypress.Commands.add('validateDropdownElements', validateDropdownElements);
 Cypress.Commands.add('clickReverseTab', clickReverseTab);
 Cypress.Commands.add('setDateAndTimeInFlatpickr', setDateAndTimeInFlatpickr);

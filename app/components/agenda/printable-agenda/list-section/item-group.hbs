@@ -3,7 +3,7 @@
     @mandatees={{this.items.firstObject.sortedMandatees}}
   />
   {{#each this.items as |agendaitem|}}
-    <div value={{agendaitem.priority}}>
+    <div value={{agendaitem.number}}>
       <Agenda::PrintableAgenda::ListSection::ItemGroup::Item
         @item={{agendaitem}}
       />

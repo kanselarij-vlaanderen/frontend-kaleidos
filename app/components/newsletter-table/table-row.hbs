@@ -1,6 +1,6 @@
 <tr data-test-table-row-newsletter-row class="lt-row">
   <td class="lt-cell align-left">
-    {{@agendaitem.priority}}
+    {{@agendaitem.number}}
   </td>
   <td data-test-table-row-newsletter-row-title class="lt-cell align-left auk-table__col--7">
     {{#if this.hasNewsletterInfo}}
@@ -33,12 +33,11 @@
     {{/each}}
   </td>
   <td class="lt-cell align-left">
-    <WebComponents::VlCheckbox
-      data-test-table-row-newsletter-row-checkbox-in-newsletter={{true}}
-      @value={{this.newsletterInfo.inNewsletter}}
-      @toggle={{this.setInNewsletter}}
+    <Auk::Checkbox
+      @checked={{this.newsletterInfo.inNewsletter}}
       @disabled={{or (not this.hasNewsletterInfo) this.saveNewsletterInfoTask.isRunning}}
-      @single={{true}}
+      data-test-table-row-newsletter-row-checkbox-in-newsletter={{true}}
+      {{on "input" this.setInNewsletter}}
     />
   </td>
   <td class="lt-cell align-left">

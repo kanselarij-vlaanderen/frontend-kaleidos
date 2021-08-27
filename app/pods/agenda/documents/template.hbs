@@ -23,6 +23,7 @@
           />
         {{else}}
           <Documents::DocumentCardList
+            data-test-route-agenda-documents-card-list
             @pieces={{this.model}}
             @onAddPiece={{perform this.addPiece}}
             @didDeletePiece={{this.refresh}}

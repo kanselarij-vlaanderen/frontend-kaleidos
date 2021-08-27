@@ -14,6 +14,14 @@
               {{t "publications"}}
             </Auk::Tab>
           {{/if}}
+          {{#if this.isShownSignatureFolder}}
+            <Auk::Tab
+              @route="signatures"
+              data-test-m-header-signatures
+            >
+              {{t "signature-folder"}}
+            </Auk::Tab>
+          {{/if}}
           <Auk::Tab
             @route="agendas.overview"
             @current-when="agendas agenda print-overviews.decisions print-overviews.press-agenda"

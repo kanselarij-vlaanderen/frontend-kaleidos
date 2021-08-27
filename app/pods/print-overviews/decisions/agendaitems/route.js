@@ -6,7 +6,7 @@ import { inject as service } from '@ember/service';
 // eslint-disable-next-line ember/no-classic-classes
 export default Route.extend({
   routeNamePrefix: 'decisions',
-  sort: 'priority',
+  sort: 'number',
   include: 'agenda-activity,agenda-activity.subcase',
   currentSession: service(),
   modelName: 'agendaitem',
