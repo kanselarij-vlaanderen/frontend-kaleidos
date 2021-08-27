@@ -19,7 +19,6 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
   async afterModel(model) {
     this.agendaActivity = await model.agendaActivity;
     this.subcase = await this.agendaActivity?.subcase;
-    this.iseCodes = undefined;
     this.governmentFields = undefined;
     this.submitter = undefined;
     if (this.subcase) {
@@ -30,12 +29,12 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
       // This however results in a request that once in mu-cache, doesn't get invalidated properly.
       // mu-cl-resources:1.20.0
       // Querying the ise-codes with fields included, is used as a workaround.
-      this.iseCodes = await this.store.query('ise-code', {
+      const iseCodes = await this.store.query('ise-code', {
         'filter[subcases][:id:]': this.subcase.id,
         include: 'field', // FIXME: singular naming of a n-relationship
       });
       let governmentFields = [];
-      for (const iseCode of this.iseCodes.toArray()) {
+      for (const iseCode of iseCodes.toArray()) {
         const fieldForCode = await iseCode.field;
         governmentFields.push(fieldForCode);
       }
@@ -61,7 +60,6 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.agendaActivity = this.agendaActivity;
     controller.subcase = this.subcase;
     controller.governmentFields = this.governmentFields;
-    controller.iseCodes = this.iseCodes;
     controller.newsletterInfo = this.newsletterInfo;
     controller.mandatees = this.mandatees;
     controller.submitter = this.submitter;
