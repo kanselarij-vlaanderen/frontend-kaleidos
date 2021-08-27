@@ -79,6 +79,11 @@ export default Model.extend({
     inverse: 'usedPieces',
   }),
 
+  // SIGN FLOW
+  signMarkActivity: belongsTo(),
+  signPreparedDocument: belongsTo(),
+  signedPiece: belongsTo(),
+
   cases: hasMany('case', {
     inverse: null, // TODO: figure out if and why this is required. Delete otherwise.
   }),
