@@ -1,44 +1,49 @@
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
 <div class="auk-box">
   <div class="auk-u-mb-4">
     {{#if @subcase}}
       <div class="auk-form-group">
         <Auk::Label>{{t "confidential"}}</Auk::Label>
-        {{web-components/vl-toggle
-          data-test-agendaitem-titles-edit-confidential=true
-          value=@subcase.confidential
-        }}
+        <WebComponents::VlToggle
+          data-test-agendaitem-titles-edit-confidential={{true}}
+          @value={{@subcase.confidential}}
+        />
       </div>
     {{/if}}
     <div class="auk-form-group">
-      <Auk::Label>{{t "name-subcase"}}</Auk::Label>
-      {{textarea
-        data-test-agendaitem-titles-edit-shorttitle=true
+      <Auk::Label id="name-subcase">{{t "name-subcase"}}</Auk::Label>
+      <Textarea
+        data-test-agendaitem-titles-edit-shorttitle={{true}}
         rows="2"
+        aria-labelledby="name-subcase"
         class="auk-textarea"
-        value=@agendaitem.shortTitle
-      }}
+        @value={{@agendaitem.shortTitle}}
+      />
     </div>
   </div>
   <div class="auk-u-mb-4">
     <div class="auk-form-group">
-      <Auk::Label>{{t "title-subcase"}}</Auk::Label>
-      {{textarea
-        data-test-agendaitem-titles-edit-title=true
+      <Auk::Label id="title-subcase">{{t "title-subcase"}}</Auk::Label>
+      <Textarea
+        data-test-agendaitem-titles-edit-title={{true}}
         rows="4"
+        aria-labelledby="title-subcase"
         class="auk-textarea"
-        value=@agendaitem.title
-      }}
+        @value={{@agendaitem.title}}
+      />
     </div>
   </div>
   <div class="auk-u-mb-4">
     <div class="auk-form-group">
-      <Auk::Label>{{t "remark-title"}}</Auk::Label>
-      {{textarea
-        data-test-agendaitem-titles-edit-explanation=true
+      <Auk::Label id="remark-title">{{t "remark-title"}}</Auk::Label>
+      <Textarea
+        data-test-agendaitem-titles-edit-explanation={{true}}
         rows="2"
+        aria-labelledby="remark-title"
         class="auk-textarea"
-        value=@agendaitem.explanation
-      }}
+        @value={{@agendaitem.explanation}}
+      />
     </div>
   </div>
   {{#if @agendaitem.showAsRemark}}
@@ -46,10 +51,10 @@
       <div class="auk-form-group">
         {{#if this.newsletterInfo}}
           <Auk::Label>{{t "show-in-newsletter"}}</Auk::Label>
-          {{web-components/vl-toggle
-            data-test-agendaitem-titles-edit-showInNewsletter=true
-            value=this.newsletterInfo.inNewsletter
-          }}
+          <WebComponents::VlToggle
+            data-test-agendaitem-titles-edit-showInNewsletter={{true}}
+            @value={{this.newsletterInfo.inNewsletter}}
+          />
         {{else}}
           <Auk::Label>{{t "show-in-newsletter"}}</Auk::Label>
           {{t "no-newsletter-info"}}
@@ -68,12 +73,12 @@
         </Auk::Button>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
-        {{web-components/vl-save-button
-          data-test-agendaitem-titles-edit-save=true
-          text=(t "save")
-          isLoading=this.isLoading
-          saveAction=(action this.saveChanges)
-        }}
+        <WebComponents::VlSaveButton
+          data-test-agendaitem-titles-edit-save={{true}}
+          @text={{t "save"}}
+          @isLoading={{this.isLoading}}
+          @saveAction={{action this.saveChanges}}
+        />
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>

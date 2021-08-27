@@ -4,6 +4,8 @@ import {
   task, timeout
 } from 'ember-concurrency';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Service.extend({
   jobs: null,
 

@@ -2,6 +2,8 @@ import Service, { inject } from '@ember/service';
 import { ajax } from 'frontend-kaleidos/utils/ajax';
 import moment from 'moment';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Service.extend({
   store: inject(),
   intl: inject(),

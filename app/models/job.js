@@ -1,20 +1,22 @@
-import DS from 'ember-data';
+import Model, { attr } from '@ember-data/model';
 import Evented from '@ember/object/evented';
 // eslint-disable-next-line ember/no-observers
 import {
   observer, computed
 } from '@ember/object';
 
-export default DS.Model.extend(Evented, {
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
+export default Model.extend(Evented, {
   RUNNING: Object.freeze('http://vocab.deri.ie/cogs#Running'),
   SUCCESS: Object.freeze('http://vocab.deri.ie/cogs#Success'),
   FAILED: Object.freeze('http://vocab.deri.ie/cogs#Fail'),
 
-  created: DS.attr(),
-  status: DS.attr(),
-  timeStarted: DS.attr(),
-  timeEnded: DS.attr(),
-  hasEnded: computed('status', function() {
+  created: attr(),
+  status: attr(),
+  timeStarted: attr(),
+  timeEnded: attr(),
+  hasEnded: computed('status', 'FAILED', 'SUCCESS', function() {
     return this.status === this.SUCCESS || this.status === this.FAILED;
   }),
 

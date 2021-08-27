@@ -1,9 +1,12 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-classes
 export default Route.extend({
   routeNamePrefix: 'press-agenda',
-  sort: 'priority',
+  sort: 'number',
   include: 'agenda-activity,agenda-activity.subcase',
   shouldFilterRemarks: true,
   currentSession: service(),
@@ -52,6 +55,8 @@ export default Route.extend({
     }
   },
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     refresh() {
       this._super(...arguments);

@@ -1,8 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import {
-  action, get
-} from '@ember/object';
+import { action } from '@ember/object';
 import {
   saveChanges as saveSubcaseTitles, cancelEdit
 } from 'frontend-kaleidos/utils/agendaitem-utils';
@@ -20,7 +18,7 @@ export default class AgendaitemTitlesEdit extends Component {
 
   @action
   async cancelEditing() {
-    cancelEdit(this.args.agendaitem, get(this, 'propertiesToSet'));
+    cancelEdit(this.args.agendaitem, this.propertiesToSet);
     if (this.newsletterInfo && this.newsletterInfo.get('hasDirtyAttributes')) {
       this.newsletterInfo.rollbackAttributes();
     }

@@ -2,6 +2,8 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+// TODO: determine if these default qp's are still needed here, otherwise refactor to mixin-less solution
+// eslint-disable-next-line ember/no-mixins
 import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
 
 export default class AgendasController extends Controller.extend(DefaultQueryParamsMixin) {
@@ -20,8 +22,8 @@ export default class AgendasController extends Controller.extend(DefaultQueryPar
   }
 
   @action
-  async successfullyAdded() {
-    this.set('isCreatingNewSession', false);
+  successfullyAdded() {
+    this.isCreatingNewSession = false;
     this.send('refreshRoute');
     this.transitionToRoute('agendas.overview');
   }

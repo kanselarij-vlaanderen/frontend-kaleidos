@@ -40,11 +40,17 @@ const selectors = {
     filename: '[data-test-vl-uploaded-document-filename]',
   },
 
+  uploadedDocument: {
+    nameInput: '[data-test-uploaded-document-name-input]',
+    documentTypes: '[data-test-uploaded-document-types]',
+  },
+
   // add-existing-piece
   addExistingPiece: {
     searchInput: '[data-test-add-existing-piece-search-input]',
     // TODO-selector unused selector
     searchButton: '[data-test-add-existing-piece-search-button]',
+    checkbox: '[data-test-add-existing-piece-checkbox]',
   },
 
   // access-level-pill (currently only used in 3 document related components)

@@ -1,12 +1,12 @@
-import DS from 'ember-data';
+import Model, { hasMany, attr } from '@ember-data/model';
+import { PromiseObject } from '@ember-data/store/-private';
 import { computed } from '@ember/object';
 import VRDocumentName, { compareFunction } from 'frontend-kaleidos/utils/vr-document-name';
 import { A } from '@ember/array';
 
-const {
-  Model, attr, hasMany, PromiseObject,
-} = DS;
-
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
   created: attr('datetime'),
   title: attr('string'),
@@ -23,7 +23,7 @@ export default Model.extend({
     return A(this.get('pieces').toArray()).sort((pieceA, pieceB) => compareFunction(new VRDocumentName(pieceA.get('name')), new VRDocumentName(pieceB.get('name'))));
   }),
 
-  latestSubcase: computed('subcases.@each', function() {
+  latestSubcase: computed('subcases.[]', 'id', 'store', function() {
     return PromiseObject.create({
       promise: this.store.queryOne('subcase', {
         filter: {

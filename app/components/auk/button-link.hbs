@@ -7,10 +7,7 @@
     @disabled={{@disabled}}
     @activeClass={{@activeClass}}
     @current-when={{@current-when}}
-    @preventDefault={{@preventDefault}}
-    @tagName={{@tagName}}
     @query={{@query}}
-    {{!-- TODO: should @tagName be specified to "button"? --}}
     ...attributes
   >
     <Auk::Button::InnerLayout @layout={{@layout}} @icon={{@icon}} @size={{@size}}>{{yield}}</Auk::Button::InnerLayout>

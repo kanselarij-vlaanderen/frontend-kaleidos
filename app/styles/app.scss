@@ -35,9 +35,6 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 /* Unofficial code
 ========================================================================== */
 
-// Additions to existing components
-@import 'govflanders/additions/_checkbox';
-
 // Custom components
 @import 'custom-components/vlc-agenda-detail-sidebar';
 @import 'custom-components/vlc-agenda-detail-sidebar-item';

@@ -1,6 +1,8 @@
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
 <form onsubmit={{action "createCaseAction"}}>
   <Auk::Modal::Body>
-    {{#if hasError}}
+    {{#if this.hasError}}
       <Auk::Alert
         data-test-new-case-shorttitle-error
         @skin="error"
@@ -13,15 +15,20 @@
     <div class="auk-u-mb-4">
       <div class="auk-form-group">
         <Auk::Label>{{t "confidential"}}</Auk::Label>
-        {{web-components/vl-toggle
-          data-test-new-case-toggle-confidential=true
-          value=confidential
-        }}
+        <WebComponents::VlToggle
+          data-test-new-case-toggle-confidential={{true}}
+          @value={{this.confidential}}
+        />
       </div>
     </div>
-    <div class="auk-form-group {{getClassForShortTitle}}" data-test-new-case-shorttitle>
-      <Auk::Label>{{t "short-title-case"}}</Auk::Label>
-      {{textarea class="auk-textarea" rows="2" value=shortTitle}}
+    <div class="auk-form-group {{this.getClassForShortTitle}}" data-test-new-case-shorttitle>
+      <Auk::Label id="case-short-title">{{t "short-title-case"}}</Auk::Label>
+      <Textarea
+        class="auk-textarea"
+        rows="2"
+        aria-labelledby="case-short-title"
+        @value={{this.shortTitle}}
+      />
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @custom={{true}}>
@@ -38,12 +45,12 @@
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          {{web-components/vl-save-button
-            data-test-new-case-save=true
-            text=(t "create-case")
-            type="submit"
-            isLoading=isLoading
-          }}
+          <WebComponents::VlSaveButton
+            data-test-new-case-save={{true}}
+            @text={{t "create-case"}}
+            @type="submit"
+            @isLoading={{this.isLoading}}
+          />
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>

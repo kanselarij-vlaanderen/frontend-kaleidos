@@ -13,13 +13,12 @@
 # misc
 /coverage/
 !.*
+.eslintcache
 
 # ember-try
 /.node_modules.ember-try/
 /bower.json.ember-try
 /package.json.ember-try
-.cache
-kaleidos-project/*
 
-# disable linting on ember tests while we don't accord to standard ember linting conventions
-/tests
+# Jenkins-setup
+.cache

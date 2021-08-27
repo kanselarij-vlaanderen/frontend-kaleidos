@@ -1,3 +1,6 @@
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import {
@@ -5,6 +8,8 @@ import {
 } from '@ember/object';
 import moment from 'moment';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   classNames: ['auk-u-mb-8'],
   store: inject(),
@@ -26,6 +31,8 @@ export default Component.extend({
 
   getApprovalForMandatee: (mandatee, approvals) => approvals.find((approval) => get(approval, 'mandatee.id') === get(mandatee, 'id')),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     async saveChanges() {
       this.set('isLoading', true);

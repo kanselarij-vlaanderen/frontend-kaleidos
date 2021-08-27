@@ -29,7 +29,6 @@ context('Settings overview page tests', () => {
     cy.get(settings.overview.manageDocumentTypes).should('be.visible');
     cy.get(settings.overview.manageCaseTypes).should('be.visible');
     cy.get(settings.overview.manageSubcaseTypes).should('be.visible');
-    cy.get(settings.overview.manageSignatures).should('be.visible');
   });
 
   it('Should open the model behind manage goverment domains and close it', () => {
@@ -71,12 +70,6 @@ context('Settings overview page tests', () => {
   it('Should open the model behind manage subcase types and close it', () => {
     cy.openSettingsModal(settings.overview.manageSubcaseTypes);
     cy.get(utils.vlModal.container).should('contain', 'Procedurestap types beheer');
-    cy.closeSettingsModal();
-  });
-
-  it('Should open the model behind manage signatures and close it', () => {
-    cy.openSettingsModal(settings.overview.manageSignatures);
-    cy.get(utils.vlModal.container).should('contain', 'Handtekeningen beheren');
     cy.closeSettingsModal();
   });
 
