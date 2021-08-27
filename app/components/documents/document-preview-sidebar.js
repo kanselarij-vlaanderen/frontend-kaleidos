@@ -131,6 +131,8 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
     this.args.piece.accessLevel = this.editPieceMemory.accessLevel;
     this.args.piece.confidential = this.editPieceMemory.confidential;
 
+    this.args.resetPiece(this.editPieceMemory);
+    await this.loadData.perform();
     this.editPieceMemory = null;
     this.isEditingDetails = false;
   }
@@ -138,6 +140,7 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
   @task
   *saveEditDetails() {
     yield this.args.piece.save();
+    this.docContainer.type = this.documentType;
     yield this.docContainer.save();
 
     yield this.loadData.perform();
@@ -154,6 +157,11 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
   @action
   changeAccessLevel(accessLevel) {
     this.accessLevel = accessLevel;
+  }
+
+  @action
+  changeDocumentType(docType) {
+    this.documentType= docType;
   }
 
   get newVersionName(){
