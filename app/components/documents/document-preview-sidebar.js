@@ -127,10 +127,6 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
 
   @action
   async cancelEditDetails() {
-    this.args.piece.name = this.editPieceMemory.name;
-    this.args.piece.accessLevel = this.editPieceMemory.accessLevel;
-    this.args.piece.confidential = this.editPieceMemory.confidential;
-
     this.args.resetPiece(this.editPieceMemory);
     await this.loadData.perform();
     this.editPieceMemory = null;
@@ -151,7 +147,13 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
   @action
   openEditDetails() {
     this.isEditingDetails = true;
-    this.editPieceMemory = this.args.piece;
+    this.editPieceMemory = {
+      name: this.args.piece.name,
+      docType: this.documentType,
+      accessLevel: this.accessLevel,
+      confidentiality: this.args.piece.confidential,
+    }
+    console.log(this.editPieceMemory)
   }
 
   @action

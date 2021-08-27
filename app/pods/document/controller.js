@@ -14,4 +14,12 @@ export default class DocumentController extends Controller {
       this.router.transitionTo('agendas');
     }
   }
+
+  @action
+  resetPiece(oldPiece) {
+    this.model.name = oldPiece.name;
+    this.model.documentContainer.type = oldPiece.docType;
+    this.model.accessLevel = oldPiece.accessLevel;
+    this.model.confidential = oldPiece.confidentiality;
+  }
 }

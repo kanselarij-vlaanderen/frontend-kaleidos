@@ -67,6 +67,40 @@
         <Auk::KeyValue @key={{t "file-type"}}>
           <Utils::Documents::FileTypePill @extension={{@piece.file.extension}} />
         </Auk::KeyValue>
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="right">
+            {{#if this.isEditingDetails}}
+              <Auk::Toolbar::Item>
+                <Auk::ButtonLink
+                  @disabled={{this.saveEditDetails.isRunning}}
+                  {{on "click" this.cancelEditDetails}}
+                >
+                  {{t "cancel"}}
+                </Auk::ButtonLink>
+              </Auk::Toolbar::Item>
+              <Auk::Toolbar::Item>
+
+                <Auk::Button
+                  @skin="primary"
+                  @loading={{this.saveEditDetails.isRunning}}
+                  {{on "click"  (perform this.saveEditDetails)}}
+                >
+                  {{t "save"}}
+                </Auk::Button>
+              </Auk::Toolbar::Item>
+            {{else}}
+              <Auk::Toolbar::Item>
+                <Auk::Button
+                  @skin="tertiary"
+                  @icon="pencil"
+                  {{on "click" this.openEditDetails}}
+                >
+                  {{t "document-edit"}}
+                </Auk::Button>
+              </Auk::Toolbar::Item>
+            {{/if}}
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
       {{!-- SIGNATURES --}}
       {{else if (eq this.activeTab "signatures")}}
 
@@ -84,47 +118,15 @@
     <div class="auk-panel__footer">
       <Auk::Toolbar>
         {{#if  (eq this.activeTab "details")}}
-          <Auk::Toolbar::Group @position="left">
-            <Auk::Toolbar::Item>
-              {{#if this.isEditingDetails}}
-                <Auk::Button
-                  @skin="tertiary"
-                  @disabled={{this.saveEditDetails.isRunning}}
-                  {{on "click" this.cancelEditDetails}}
-                >
-                  {{t "cancel"}}
-                </Auk::Button>
-              {{else}}
-                <Auk::Button
-                  @skin="tertiary"
-                  {{on "click" this.openEditDetails}}
-                >
-                  {{t "edit"}}
-                </Auk::Button>
-              {{/if}}
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
-              {{#if this.isEditingDetails}}
-                <Auk::Button
-                  @skin="primary"
-                  @loading={{this.saveEditDetails.isRunning}}
-                  {{on "click"  (perform this.saveEditDetails)}}
-                >
-                  {{t "save"}}
-                </Auk::Button>
-              {{else}}
-                <Auk::Button
-                  @skin="tertiary"
-                  @icon="delete"
-                  {{on "click" (fn this.openVerify @piece)}}
-                >
-                  {{t "document-delete"}}
-                </Auk::Button>
-              {{/if}}
-
+              <Auk::Button
+                @skin="tertiary"
+                @icon="delete"
+                {{on "click" (fn this.openVerify @piece)}}
+              >
+                {{t "document-delete"}}
+              </Auk::Button>
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
         {{else if (eq this.activeTab "versions")}}

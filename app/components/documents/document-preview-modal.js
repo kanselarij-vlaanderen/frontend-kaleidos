@@ -12,6 +12,6 @@ export default class DocumentsDocumentPreviewModal extends Component {
 
   @action
   resetPiece(oldPiece) {
-    this.piece = oldPiece;
+    this.args.resetPiece(oldPiece);
   }
 }
