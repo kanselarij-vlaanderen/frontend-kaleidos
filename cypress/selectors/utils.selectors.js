@@ -63,13 +63,6 @@ const selectors = {
 
   /** Section VL-components **/
 
-  // vl-checkbox
-  vlCheckbox: {
-    label: '[data-test-vl-checkbox-label]',
-    // unused selector
-    checkbox: '[data-test-vl-checkbox]',
-  },
-
   // vl-modal-footer
   vlModalFooter: {
     save: '[data-test-vl-modal-footer-save]',
