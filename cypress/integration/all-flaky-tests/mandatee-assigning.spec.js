@@ -407,21 +407,22 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     cy.get(agenda.agendaHeader.showActionOptions).click();
     cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
+    // Toggle all newsletters to show
     cy.get(newsletter.tableRow.newsletterRow).eq(0)
-      .within(() => {
-        cy.get(utils.vlCheckbox.label).click();
-        cy.wait(`@patchNewsletterInfo${randomInt}`);
-      });
+      .find(newsletter.tableRow.inNewsletterCheckbox)
+      .parent()
+      .click();
+    cy.wait(`@patchNewsletterInfo${randomInt}`);
     cy.get(newsletter.tableRow.newsletterRow).eq(1)
-      .within(() => {
-        cy.get(utils.vlCheckbox.label).click();
-        cy.wait(`@patchNewsletterInfo${randomInt}`);
-      });
+      .find(newsletter.tableRow.inNewsletterCheckbox)
+      .parent()
+      .click();
+    cy.wait(`@patchNewsletterInfo${randomInt}`);
     cy.get(newsletter.tableRow.newsletterRow).eq(2)
-      .within(() => {
-        cy.get(utils.vlCheckbox.label).click();
-        cy.wait(`@patchNewsletterInfo${randomInt}`);
-      });
+      .find(newsletter.tableRow.inNewsletterCheckbox)
+      .parent()
+      .click();
+    cy.wait(`@patchNewsletterInfo${randomInt}`);
 
     cy.clickReverseTab('Definitief');
     cy.get(newsletter.itemContent.printItemProposal).as('proposals');

@@ -424,7 +424,8 @@ function addLinkedDocument(filenames) {
     cy.get(document.addExistingPiece.searchInput).clear()
       .type(name);
     cy.wait(1000);
-    cy.get(document.addExistingPiece.checkbox).click();
+    cy.get(document.addExistingPiece.checkbox).parent()
+      .click();
   });
   cy.get(utils.vlModalFooter.save).click();
   cy.log('/addLinkedDocument');

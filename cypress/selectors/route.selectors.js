@@ -70,7 +70,7 @@ const selectors = {
 
   // cases/case/subcase/subcase/overview/template
   subcaseOverview: {
-    confidentialityCheckBox: '[data-test-cases---subcase-overview-confidentiality-checkbox] input',
+    confidentialityCheckBox: '[data-test-cases---subcase-overview-confidentiality-checkbox]',
   },
 
   subcaseDocuments: {
