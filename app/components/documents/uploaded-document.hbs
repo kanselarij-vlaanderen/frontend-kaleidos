@@ -3,7 +3,7 @@
   @extension={{@piece.file.extension}}
   @size={{@piece.file.size}}
   @downloadName={{@piece.file.filename}}
-  @downloadLink={{this.downloadLink}}
+  @downloadLink={{@piece.file.namedDownloadLink}}
   @delete={{@onDelete}}>
   {{#if @allowDocumentContainerEdit}}
     <div class="metadata-container">

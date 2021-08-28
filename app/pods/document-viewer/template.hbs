@@ -2,7 +2,7 @@
 <div class="vlc-u-box-model-maximize-height auk-scroll-wrapper">
   <div class="auk-scroll-wrapper__body full-height">
     {{#if this.fileFormatIsSupported}}
-      <PdfView @filePath={{await this.model.downloadFileLink}}/>
+      <PdfView @filePath={{await this.model.namedDownloadLinkPromise}}/>
     {{else}}
       <Auk::Alert
         @skin="warning"
