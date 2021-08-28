@@ -13,6 +13,8 @@ FROM semtech/ember-proxy-service:1.5.1
 
 ENV STATIC_FOLDERS_REGEX="^/(assets|fonts|files|ember-pdfjs-wrapper)/"
 ENV EMBER_ENABLE_PUBLICATIONS_TAB=""
+ENV EMBER_ENABLE_SIGNATURES=""
+ENV EMBER_ENABLE_DOCUMENT_VIEW=""
 
 COPY ./proxy/torii-authorization.conf /config/torii-authorization.conf
 COPY ./proxy/file-upload.conf /config/file-upload.conf
