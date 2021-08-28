@@ -42,8 +42,8 @@ export default class TableRowNewsletterTable extends Component {
   })) saveNewsletterInfoTask;
 
   @action
-  async setInNewsletter(value) {
-    this.newsletterInfo.inNewsletter = value;
+  async setInNewsletter(event) {
+    this.newsletterInfo.inNewsletter = event.target.checked;
     await this.saveNewsletterInfoTask.perform();
     this.toaster.success(this.intl.t('successfully-saved'));
   }

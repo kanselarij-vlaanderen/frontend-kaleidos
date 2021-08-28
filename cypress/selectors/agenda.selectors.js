@@ -188,6 +188,9 @@ const selectors = {
     input: '[data-test-create-agendaitem-input]',
     postponedCheckbox: '[data-test-create-agendaitem-postponed-checkbox]',
     dataTable: '[data-test-create-agendaitem-data-table]',
+    row: {
+      checkBox: '[data-test-create-agendaitem-row-subcase-checkbox]',
+    },
   },
 };
 export default selectors;
