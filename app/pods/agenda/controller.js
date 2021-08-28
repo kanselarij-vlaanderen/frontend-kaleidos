@@ -1,7 +1,6 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { alias } from '@ember/object/computed';
 import { action } from '@ember/object';
 
 export default class AgendaController extends Controller {
@@ -12,7 +11,9 @@ export default class AgendaController extends Controller {
 
   @tracked isLoading = false;
 
-  @alias('sessionService.currentAgendaitems') currentAgendaitems;
+  get currentAgendaitems() {
+    return this.sessionService.currentAgendaitems;
+  }
 
   get shouldHideNav() {
     return this.router.currentRouteName === 'agenda.compare';

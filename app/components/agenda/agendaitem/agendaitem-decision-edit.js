@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
+import { action, get } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 
@@ -12,7 +12,7 @@ export default class AgendaitemDecisionEditComponent extends Component {
     } = this;
     await Promise.all(
       propertiesToSet.map(async(property) => {
-        model.set(property, await this.get(property));
+        model.set(property, await get(this, property));
       })
     );
     return model.save().then((model) => model.reload());

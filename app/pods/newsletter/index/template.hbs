@@ -7,17 +7,17 @@
           <ThSortable
             @class="lt-column align-left"
             @currentSorting={{this.sort}}
-            @field="priority"
+            @field="number"
             @label="#"
           />
           <th class="lt-column align-left auk-table__col--7">{{t "title-and-content"}}</th>
           <th class="lt-column align-left">{{t "minister"}}</th>
           {{!-- Note: We are sorting on two keys below. In-newsletter property changes order,
-                      while we want priority to stay ordered ascending --}}
+                      while we want number to stay ordered ascending --}}
           <ThSortable
             @class="lt-column align-left"
             @currentSorting={{this.sort}}
-            @field="treatments.newsletterInfo.inNewsletter,priority"
+            @field="treatments.newsletterInfo.inNewsletter,number"
             @label={{t "show-in-newsletter"}}
           />
           <ThSortable
@@ -30,7 +30,7 @@
         </tr>
       </thead>
       <tbody>
-        {{#each model as |item|}}
+        {{#each this.model as |item|}}
           <NewsletterTable::TableRow
             @agendaitem={{item.agendaitem}}
             @newsletterInfo={{item.newsletterInfo}}

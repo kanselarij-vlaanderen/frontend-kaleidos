@@ -44,14 +44,24 @@ const selectors = {
     container: '[data-test-number-pagination-container]',
   },
 
-  /** Section VL-components **/
-
-  // vl-checkbox
-  vlCheckbox: {
-    label: '[data-test-vl-checkbox-label]',
-    // unused selector
-    checkbox: '[data-test-vl-checkbox]',
+  // radio-dropdown
+  radioDropdown: {
+    container: '[data-test-radio-dropdown-container]',
+    input: '[data-test-radio-dropdown-input]',
+    powerSelect: '[data-test-radio-dropdown-power-select]',
   },
+
+  // file-uploader
+  fileUploader: {
+    upload: '[data-test-file-uploader-upload]',
+  },
+
+  // mandatees-domains-selector-modal
+  mandateesDomain: {
+    mandateeSelector: '[data-test-mandatees-domain-mandatee-selector]',
+  },
+
+  /** Section VL-components **/
 
   // vl-form-input
   vlFormInput: '[data-test-vl-form-input]',

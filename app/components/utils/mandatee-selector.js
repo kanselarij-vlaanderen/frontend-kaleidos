@@ -58,7 +58,7 @@ export default class MandateeSelectorComponent extends Component {
   }
 
   @action
-  async chooseMandatee(mandatees) {
+  chooseMandatee(mandatees) {
     this.selectedMandatees = mandatees;
     this.args.chooseMandatee(mandatees);
   }

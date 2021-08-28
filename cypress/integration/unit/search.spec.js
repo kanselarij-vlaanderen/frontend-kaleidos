@@ -1,7 +1,6 @@
 /* global context, it, cy, beforeEach, afterEach, Cypress, it */
 // / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
-import auk from '../../selectors/auk.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
@@ -33,7 +32,8 @@ context('Search tests', () => {
       cy.get(route.search.trigger).click();
       cy.get(utils.numberPagination.container).find(dependency.emberPowerSelect.trigger)
         .click();
-      cy.selectOptionInSelectByText(option);
+      cy.get(dependency.emberPowerSelect.option).contains(option)
+        .click();
       cy.url().should('include', `aantal=${option}`);
       cy.get(route.search.input).clear();
     });
@@ -188,7 +188,7 @@ context('Search tests', () => {
     wordsFromPdf.forEach((searchTerm) => {
       cy.get(route.search.input).clear();
       cy.get(route.search.input).type(searchTerm);
-      cy.get(route.searchCases.toggleDecisions).find(auk.checkbox)
+      cy.get(route.searchCases.toggleDecisions).parent()
         .click();
 
       cy.route('GET', '/cases/search?**').as('decisionsSearchCall');

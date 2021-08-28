@@ -1,10 +1,11 @@
-import DS from 'ember-data';
+import { hasMany, belongsTo, attr } from '@ember-data/model';
+import { PromiseArray, PromiseObject } from '@ember-data/store/-private';
 import EmberObject, { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import {
-  alias, deprecatingAlias
+  alias, reads
 } from '@ember/object/computed';
 import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 import VRDocumentName, { compareFunction } from 'frontend-kaleidos/utils/vr-document-name';
@@ -13,10 +14,8 @@ import {
   sortDocumentContainers, getPropertyLength
 } from 'frontend-kaleidos/utils/documents';
 
-const {
-  attr, belongsTo, hasMany, PromiseArray, PromiseObject,
-} = DS;
-
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
 export default ModelWithModifier.extend({
   modelName: alias('constructor.modelName'),
   agendaService: inject(),
@@ -24,7 +23,7 @@ export default ModelWithModifier.extend({
   addedPieces: alias('agendaService.addedPieces'),
 
   store: inject(),
-  priority: attr('number'),
+  number: attr('number'),
   created: attr('datetime'),
   record: attr('string'),
   retracted: attr('boolean'), // TODO 1420 TRUE = postponed, move to treatment
@@ -73,7 +72,7 @@ export default ModelWithModifier.extend({
   }),
 
 
-  documentContainers: computed('pieces.@each.name', function() {
+  documentContainers: computed('pieces.@each.name', 'id', function() {
     return PromiseArray.create({
       promise: this.get('pieces').then((pieces) => {
         if (pieces && pieces.get('length') > 0) {
@@ -95,21 +94,7 @@ export default ModelWithModifier.extend({
     });
   }),
 
-
-  number: deprecatingAlias('priority', {
-    id: 'agendaitem-number-deprecated',
-    until: 'unknown',
-  }),
-
-  isDesignAgenda: computed('agenda.isDesignAgenda', function() {
-    return this.get('agenda.isDesignAgenda');
-  }),
-
-  // get piece names to show on agendaview when not in the viewport to assist lazy loading
-  pieceNames: computed('pieces', async function() {
-    const names = await this.agendaService.getPieceNames(this);
-    return names;
-  }),
+  isDesignAgenda: reads('agenda.isDesignAgenda'),
 
   nota: computed('id', function() {
     return PromiseObject.create({
@@ -152,7 +137,7 @@ export default ModelWithModifier.extend({
     });
   }),
 
-  sortedMandatees: computed('mandatees.@each', function() {
+  sortedMandatees: computed('mandatees.[]', function() {
     return this.get('mandatees').sortBy('priority');
   }),
 
@@ -162,7 +147,7 @@ export default ModelWithModifier.extend({
     return EmberObject.create(foundOption);
   }),
 
-  checkAdded: computed('id', 'addedAgendaitems.@each', 'agenda.createdFor.agendas.@each', async function() {
+  checkAdded: computed('id', 'addedAgendaitems.[]', 'agenda.createdFor.agendas.[]', async function() {
     const wasAdded = (this.addedAgendaitems && this.addedAgendaitems.includes(this.id));
     return wasAdded;
   }),
@@ -175,12 +160,12 @@ export default ModelWithModifier.extend({
     return checkAdded || hasAddedPieces;
   }),
 
-  hasAddedPieces: computed('documentContainers.@each', 'addedPieces.@each', async function() {
+  hasAddedPieces: computed('documentContainers.[]', 'addedPieces.[]', async function() {
     const documentContainers = await this.get('documentContainers');
     return documentContainers && documentContainers.some((documentContainers) => documentContainers.checkAdded);
   }),
 
-  sortedApprovals: computed('approvals.@each', async function() {
+  sortedApprovals: computed('approvals.[]', 'id', async function() {
     return PromiseArray.create({
       promise: this.store.query('approval', {
         filter: {
@@ -193,7 +178,7 @@ export default ModelWithModifier.extend({
     });
   }),
 
-  newsletterInfo: computed('treatments.@each.newsletterInfo', 'treatments', async function() {
+  newsletterInfo: computed('treatments.@each.newsletterInfo', 'treatments', 'id', async function() {
     const newsletterInfos = await this.store.query('newsletter-info', {
       'filter[agenda-item-treatment][agendaitem][:id:]': this.get('id'),
     });

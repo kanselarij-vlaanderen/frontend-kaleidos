@@ -1,17 +1,19 @@
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
 <Auk::Navbar @skin="gray-100" @auto={{true}}>
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
           <div class="auk-o-flex auk-o-flex--vertical-center">
-            <h4 class="auk-toolbar-complex__title" data-test-overviews-header-decision-title>{{await title}}</h4>
+            <h4 class="auk-toolbar-complex__title" data-test-overviews-header-decision-title>{{await this.title}}</h4>
           </div>
           <Auk::Tabs @reversed={{true}}>
-            <Auk::Tab @models={{modelsForHierarchicalBack}} @route={{"agenda.agendaitems"}} @isHierarchicalBack={{true}}/>
-            {{#if currentSession.isEditor}}
+            <Auk::Tab @models={{this.modelsForHierarchicalBack}} @route={{"agenda.agendaitems"}} @isHierarchicalBack={{true}} />
+            {{#if this.currentSession.isEditor}}
               <Auk::Tab
-                @route={{routeModelAgendaitems}}
-                @model={{await model.id}}
+                @route={{this.routeModelAgendaitems}}
+                @model={{await this.model.id}}
               >
                 {{t "overview"}}
               </Auk::Tab>
@@ -22,7 +24,7 @@
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
-        {{#if shouldShowPrintButton}}
+        {{#if this.shouldShowPrintButton}}
           <Auk::Button
             @skin="tertiary"
             @icon="printer-view"

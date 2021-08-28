@@ -47,12 +47,14 @@
                 {{#if (get this.tableColumnDisplayOptions column.keyName)}}
                   {{!-- first cases that need a special treament. The "else" clause treats the default case --}}
                   {{#if (eq column.keyName "shortTitle")}}
+                    {{!-- template-lint-disable no-inline-styles --}}
                     <Utils::ThSortable
                       style="min-width: 25rem;"
                       @currentSorting={{this.sort}}
                       @field={{column.sortKey}}
                       @onChange={{this.sortTable}}
                       @label={{t column.translationKeySmall}}/>
+                    {{!-- template-lint-enable no-inline-styles --}}
                   {{else}}
                     {{#if column.sortKey}}
                       <Utils::ThSortable

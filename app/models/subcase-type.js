@@ -1,9 +1,7 @@
-import DS from 'ember-data';
+import Model, { hasMany, attr } from '@ember-data/model';
 
-const {
-  Model, attr, hasMany,
-} = DS;
-
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
   label: attr('string'),
   altLabel: attr('string'),

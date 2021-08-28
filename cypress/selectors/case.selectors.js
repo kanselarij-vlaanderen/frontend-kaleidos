@@ -8,6 +8,7 @@ const selectors = {
   // new-case
   newCase: {
     shorttitle: '[data-test-new-case-shorttitle]',
+    form: '[data-test-new-case-form]',
     shorttitleError: '[data-test-new-case-shorttitle-error]',
     toggleConfidential: '[data-test-new-case-toggle-confidential]',
     cancel: '[data-test-new-case-cancel]',
@@ -23,6 +24,12 @@ const selectors = {
   // new-subcase
   newSubcase: {
     clonePreviousSubcase: '[data-test-new-subcase-clone-previous-subcase]',
+    type: '[data-test-new-subcase-type]',
+    shorttitle: '[data-test-new-subcase-shorttitle]',
+    longtitle: '[data-test-new-subcase-longtitle]',
+    procedureStep: '[data-test-new-subcase-procedure-step]',
+    procedureName: '[data-test-new-subcase-procedure-name]',
+    save: '[data-test-new-subcase-save]',
   },
 
   // subcase-description
@@ -42,6 +49,8 @@ const selectors = {
   // subcase-item
   // TODO-selector better names
   subcaseItem: {
+    container: '[data-test-subcase-item-container]',
+    link: '[data-test-subcase-item-link]',
     approved: '[data-test-subcase-item-approved]',
     // TODO-selector unused selector
     notApproved: '[data-test-subcase-item-not-approved]',
@@ -50,9 +59,9 @@ const selectors = {
   // subcase-header
   subcaseHeader: {
     actionsDropdown: '[data-test-subcase-header-actions-dropdown]',
+    showProposedAgendas: '[data-test-subcase-header-show-proposed-agendas]',
     actions: {
-      proposeForAgenda: '[data-test-subcase-header-action-propose-for-agenda]',
-      // only after opening dropdown
+      proposeForAgenda: '[data-test-subcase-header-propose-for-agenda]',
       deleteSubcase: '[data-test-subcase-header-action-delete-subcase]',
       moveSubcase: '[data-test-subcase-header-action-move-subcase]',
     },

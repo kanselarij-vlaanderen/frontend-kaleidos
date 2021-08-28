@@ -7,32 +7,31 @@
   @modifier="dropdown"
 >
   {{!-- BEGIN-SNIPPET dropdown-default --}}
-  <div class="auk-u-position-relative auk-u-inline-block">
-    <DropdownMenu
-      @skin="secondary"
-      @label="Button text"
-    as |Menu|>
-      <Menu.Item @route="styleguide.accordion">
-        Accordion
-      </Menu.Item>
-      <Menu.Item @route="styleguide.accordion-panel" @disabled={{true}}>
-        Accordion panel
-      </Menu.Item>
-      <Menu.Item @route="styleguide.avatar">
-        Avatar
-      </Menu.Item>
-      <Menu.Item @route="styleguide.badge">
-        Badge
-      </Menu.Item>
-      <Menu.Item @route="styleguide.brand">
-        Brand
-      </Menu.Item>
-      <Menu.Divider />
-      <Menu.Item @route="styleguide.checkboxes-radio-buttons" @skin="danger">
-        Checkboxes/radio buttons
-      </Menu.Item>
-    </DropdownMenu>
-  </div>
+  <DropdownMenu
+    @skin="secondary"
+    @label="Button text"
+    @placement="bottom-start"
+  as |Menu|>
+    <Menu.Item @route="styleguide.accordion">
+      Accordion
+    </Menu.Item>
+    <Menu.Item @route="styleguide.accordion-panel" @disabled={{true}}>
+      Accordion panel
+    </Menu.Item>
+    <Menu.Item @route="styleguide.avatar">
+      Avatar
+    </Menu.Item>
+    <Menu.Item @route="styleguide.badge">
+      Badge
+    </Menu.Item>
+    <Menu.Item @route="styleguide.brand">
+      Brand
+    </Menu.Item>
+    <Menu.Divider />
+    <Menu.Item @route="styleguide.checkboxes-radio-buttons" @skin="danger">
+      Checkboxes/radio buttons
+    </Menu.Item>
+  </DropdownMenu>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
@@ -43,40 +42,91 @@
   @align="end"
 >
   {{!-- BEGIN-SNIPPET dropdown-text-only-item --}}
-  <div class="auk-u-position-relative auk-u-inline-block">
-    <Auk::ButtonLink
-      @skin="muted"
-      @icon="chevron-down"
-      @layout="icon-right"
-    >
-      Button text
-    </Auk::ButtonLink>
-    <AttachPopover
-      @renderInPlace={{true}}
-      @class="ember-attacher-popper"
-      @hideOn="clickout click"
-      @showOn="click"
-      @animation="shift"
-      @placement="bottom-end"
-    >
-      <Auk::Menu>
-        <Auk::Menu::Item @textOnly={{true}}>
-          <Auk::Avatar @icon="user" @name="Admin">
-            <p>Admin</p>
-            <p class="auk-u-muted auk-u-text-small">Beheerdersgroep</p>
-          </Auk::Avatar>
-        </Auk::Menu::Item>
-        <Auk::Menu::Divider />
-        <Auk::Menu::Item @route="styleguide.checkboxes-radio-buttons">
-          Afmelden
-        </Auk::Menu::Item>
-      </Auk::Menu>
-    </AttachPopover>
-  </div>
+  <Auk::ButtonLink
+    @skin="muted"
+    @icon="chevron-down"
+    @layout="icon-right"
+  >
+    <:default>Button text</:default>
+    <:floater>
+      <AttachPopover
+        @renderInPlace={{true}}
+        @class="ember-attacher-popper"
+        @hideOn="clickout click"
+        @showOn="click"
+        @animation="shift"
+        @placement="bottom-end"
+      >
+        <Auk::Menu>
+          <Auk::Menu::Item @textOnly={{true}}>
+            <Auk::Avatar @icon="user" @name="Admin">
+              <p>Admin</p>
+              <p class="auk-u-muted auk-u-text-small">Beheerdersgroep</p>
+            </Auk::Avatar>
+          </Auk::Menu::Item>
+          <Auk::Menu::Divider />
+          <Auk::Menu::Item @route="styleguide.checkboxes-radio-buttons">
+            Afmelden
+          </Auk::Menu::Item>
+        </Auk::Menu>
+      </AttachPopover>
+    </:floater>
+  </Auk::ButtonLink>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
-<h3 class="auk-h3">Arguments (item)</h3>
+<h3 class="auk-h3">Arguments (DropdownMenu)</h3>
+
+<table class="auk-table">
+  <thead>
+    <tr>
+      <th>Argument</th>
+      <th>Type</th>
+      <th>Possible values</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>@skin</code></td>
+      <td>string</td>
+      <td class="auk-table__col--3"><code>primary</code> ,<code>secondary</code> (default), <code>tertiary</code>, <code>borderless</code>, <code>muted-borderless</code>, <code>danger-primary</code>, <code>danger-on-hover</code>, <code>danger-borderless</code></td>
+      <td>Determines the skin of the button.</td>
+    </tr>
+    <tr>
+      <td><code>@disabled</code></td>
+      <td>boolean</td>
+      <td class="auk-table__col--3"><code>false</code> (default) or <code>true</code></td>
+      <td>Determines if the button is disabled.</td>
+    </tr>
+    <tr>
+      <td><code>@layout</code></td>
+      <td>string</td>
+      <td class="auk-table__col--3"><code>icon-only</code>, <code>icon-right</code></td>
+      <td>Determines the layout of the button. The layout is automatically determined from the existence of @icon, unless <code>icon-only</code> is specified this will result in a button layout with icon on the left.</td>
+    </tr>
+    <tr>
+      <td><code>@icon</code></td>
+      <td>string</td>
+      <td class="auk-table__col--3"></td>
+      <td>Determines the icon used within the button.</td>
+    </tr>
+    <tr>
+      <td><code>@placement</code></td>
+      <td>string</td>
+      <td class="auk-table__col--3"><code>top</code>, <code>top-start</code>, <code>top-end</code>, <code>right</code>, <code>right-start</code>, <code>right-end</code>, <code>bottom</code>, <code>bottom-start</code>, <code>bottom-end</code> (default), <code>left</code>, <code>left-start</code>, <code>left-end</code></td>
+      <td>Determines position of the menu against the button.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class="auk-h3">Arguments (AttachPopover)</h3>
+
+<div class="auk-u-mb-6">
+  <p>Possible configurations and settings can be found at: <a href="https://github.com/kybishop/ember-attacher" target="_blank">https://github.com/kybishop/ember-attacher</a></p>
+</div>
+
+<h3 class="auk-h3">Arguments (Menu::Item)</h3>
 
 <table class="auk-table">
   <thead>
@@ -109,4 +159,4 @@
   </tbody>
 </table>
 
-<p>The item component also takes the same arguments as a native link-element (<code>@href</code>) or a LinkTo component (<code>@route</code>, <code>@model</code>, <code>@models</code>, etc.), but only if <code>@textOnly</code> is <code>false</code>.</p>
+<p>The Item component also takes the same arguments as a native link-element (<code>@href</code>) or a LinkTo component (<code>@route</code>, <code>@model</code>, <code>@models</code>, etc.), but only if <code>@textOnly</code> is <code>false</code>.</p>

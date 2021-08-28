@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+// eslint-disable-next-line ember/no-computed-properties-in-native-classes
 import { computed } from '@ember/object';
 import { assert } from '@ember/debug';
 
@@ -6,8 +7,9 @@ import { assert } from '@ember/debug';
  *
  * A button that looks like a link. Apart from arguments specified below, this component has the same arguments-interface as Ember's "LinkTo" (@route, @model, ...)
  *
- * @argument skin {String}: possible value: "muted"
+ * @argument skin {String}: possible value: "muted", "light"
  * @argument padded {String}: possible values: "padded", "padded-y"
+ * @argument size {String}: possible values: "small"
  * @argument icon {String}
  * @argument layout {String}: Determines the layout of the button.
  *   The layout is automatically determined from the existence of @icon, unless `icon-only` is specified this will result in a button layout with icon on the left.
@@ -43,7 +45,14 @@ export default class ButtonLink extends Component {
    */
   get skin() {
     if (this.args.skin) {
-      return `auk-button--${this.args.skin}`;
+      return `auk-button-link--${this.args.skin}`;
+    }
+    return null;
+  }
+
+  get size() {
+    if (this.args.size) {
+      return `auk-button-link--${this.args.size}`;
     }
     return null;
   }

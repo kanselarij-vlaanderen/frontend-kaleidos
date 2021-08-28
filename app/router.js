@@ -4,6 +4,8 @@ import config from './config/environment';
 import ENV from 'frontend-kaleidos/config/environment';
 import { isEmpty } from '@ember/utils';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 const Router = EmberRouter.extend({
   location: config.locationType,
   rootURL: config.rootURL,
@@ -58,7 +60,6 @@ Router.map(function() {
     this.route('document-types', () => {});
     this.route('case-types', () => {});
     this.route('subcase-types', () => {});
-    this.route('signature', () => {});
   });
   this.route('loading', { path: '/laden', });
   // mock-login-route as name to avoid collision with mock-login component provided by addon
@@ -93,6 +94,10 @@ Router.map(function() {
   });
   this.route('accountless-users', { path: '/onbevoegde-gebruiker', });
   this.route('document-viewer', { path: '/document/:piece_id', });
+  // When ready 'document' will replace 'document-viewer'.
+  // Both co-exist while 'document' is being developed
+  // TODO: replace 'document_2' in path by 'document'
+  this.route('document', { path: '/document_2/:piece_id', });
 
   this.route('not-supported');
   this.route('help');
@@ -158,7 +163,16 @@ Router.map(function() {
           this.route('documents', { path: '/documenten', });
           this.route('requests', { path: '/aanvragen', });
         });
-        this.route('signatures', { path: '/handtekeningen', });
+      });
+    });
+  }
+
+  if (!isEmpty(ENV.APP.ENABLE_SIGNATURES)) {
+    this.route('signatures', {
+      path: '/handtekenmap',
+    }, function() {
+      this.route('index', {
+        path: '/overzicht',
       });
     });
   }

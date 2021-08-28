@@ -104,7 +104,6 @@ const selectors = {
       // TODO-selector unused selectors
       navigateToAgendaView: ['data-test-agenda-header-navigate-to-agenda-view'],
       navigateToPressagenda: '[data-test-agenda-header-navigate-to-pressagenda]',
-      selectSignature: '[data-test-agenda-header-select-signature]',
       printAgenda: ['data-test-agenda-header-print-agenda'],
     },
     // TODO-selector unused selector
@@ -189,6 +188,9 @@ const selectors = {
     input: '[data-test-create-agendaitem-input]',
     postponedCheckbox: '[data-test-create-agendaitem-postponed-checkbox]',
     dataTable: '[data-test-create-agendaitem-data-table]',
+    row: {
+      checkBox: '[data-test-create-agendaitem-row-subcase-checkbox]',
+    },
   },
 };
 export default selectors;

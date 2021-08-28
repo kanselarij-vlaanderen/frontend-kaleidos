@@ -1,45 +1,56 @@
-{{!-- Outer LinkTo used merely for active-class (taking into account current-when etc), therefore disabled.
+{{#if @route}}
+  {{!-- Outer LinkTo used merely for active-class (taking into account current-when etc),
+      therefore disabled and in need of the deprecated @tagName.
       Inner LinkTo used for navigation --}}
-<LinkTo
-  @tagName="li"
-  class="auk-tabs__tab {{if @isHierarchicalBack "auk-tabs__hierarchical-back"}}"
-  @activeClass="auk-tabs__tab--active"
-  @loadingClass=""
-  @disabledClass=""
-  @disabled={{true}}
-  @route={{@route}}
-  @models={{this.models}}
-  @current-when={{@current-when}}
-  @preventDefault={{@preventDefault}}
-  @query={{@query}}
-  ...attributes 
->
+  {{!-- template-lint-disable no-unknown-arguments-for-builtin-components --}}
   <LinkTo
-    @activeClass=""
+    @tagName="li"
+    class="auk-tabs__tab
+      {{if @isHierarchicalBack "auk-tabs__hierarchical-back"}}"
+    @activeClass="auk-tabs__tab--active"
     @loadingClass=""
     @disabledClass=""
+    @disabled={{true}}
     @route={{@route}}
     @models={{this.models}}
-    @disabled={{@disabled}}
     @current-when={{@current-when}}
-    @preventDefault={{@preventDefault}}
     @query={{@query}}
+    ...attributes
   >
-    <span class="auk-tabs__tab-inner">
-      {{#if this.icon}}
-        {{#if (eq @layout "icon-right")}}
-          <div class="auk-tabs__label">{{yield}}</div>
-          <Auk::Icon @name={{this.icon}} />
-        {{else}}
-          <Auk::Icon @name={{this.icon}} />
-          <div class="auk-tabs__label">{{yield}}</div>
-        {{/if}}
-      {{else}}
-        <div class="auk-tabs__label">{{yield}}</div>
-        {{#if this.hasCounter}}
-          <div class="auk-tabs__tab-counter">({{@counter}})</div>
-        {{/if}}
-      {{/if}}
-    </span>
+    {{!-- template-lint-enable no-unknown-arguments-for-builtin-components --}}
+    <LinkTo
+      @activeClass=""
+      @loadingClass=""
+      @disabledClass=""
+      @route={{@route}}
+      @models={{this.models}}
+      @disabled={{@disabled}}
+      @current-when={{@current-when}}
+      @query={{@query}}
+    >
+      <Auk::Tab::InnerLayout
+        @layout={{@layout}}
+        @icon={{this.icon}}
+        @counter={{@counter}}
+      >
+        {{yield}}
+      </Auk::Tab::InnerLayout>
+    </LinkTo>
   </LinkTo>
-</LinkTo>
+{{else}}
+  <li
+    class="auk-tabs__tab
+      {{if @isHierarchicalBack "auk-tabs__hierarchical-back"}}
+      {{if @active "auk-tabs__tab--active"}}"
+  >
+    <button type="button" ...attributes>
+      <Auk::Tab::InnerLayout
+        @layout={{@layout}}
+        @icon={{this.icon}}
+        @counter={{@counter}}
+      >
+        {{yield}}
+      </Auk::Tab::InnerLayout>
+    </button>
+  </li>
+{{/if}}

@@ -1,3 +1,6 @@
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import {
@@ -5,7 +8,6 @@ import {
 } from '@ember/object/computed';
 import { computed } from '@ember/object';
 import { debug } from '@ember/debug';
-import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 import { all } from 'rsvp';
 import {
   setAgendaitemFormallyOk,
@@ -22,7 +24,9 @@ import { A } from '@ember/array';
 import { task } from 'ember-concurrency';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
-export default Component.extend(FileSaverMixin, {
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
+export default Component.extend({
   store: service(),
   // These 2 can be very confusing, session-service is for meetings, current-session is for checking admin etc.
   sessionService: service('session-service'),
@@ -59,7 +63,7 @@ export default Component.extend(FileSaverMixin, {
    * The session is closable when there are more than 1 agendas OR when there is only 1 agenda that is not a design agenda
    * @return {boolean}
    */
-  isSessionClosable: computed('agendas.@each', async function() {
+  isSessionClosable: computed('agendas.[]', async function() {
     const agendas = await this.get('agendas');
     if (agendas && agendas.length > 1) {
       return true;
@@ -76,7 +80,7 @@ export default Component.extend(FileSaverMixin, {
    *
    * From all agendas, get the last agenda that is not a design agenda
    */
-  lastApprovedAgenda: computed('agendas.@each', async function() {
+  lastApprovedAgenda: computed('agendas.[]', async function() {
     const agendas = await this.get('agendas');
     // this.agendas are already sorted on reverse serialNumbers
     const lastApprovedAgenda = agendas
@@ -97,8 +101,8 @@ export default Component.extend(FileSaverMixin, {
     return lastApprovedAgenda.agendaName;
   }),
 
-  currentAgendaIsLast: computed('currentSession', 'currentAgenda', 'currentSession.agendas.@each', async function() {
-    return await this.get('currentSession.sortedAgendas.firstObject.id') === await this.currentAgenda.get('id');
+  currentAgendaIsLast: computed('currentAgenda', 'currentSession.{agendas.[],sortedAgendas.firstObject.id}', async function() {
+    return (await this.get('currentSession.sortedAgendas.firstObject.id')) === (await this.currentAgenda.get('id'));
   }),
 
   designAgendaPresent: filter('currentSession.agendas.@each.isDesignAgenda', (agenda) => agenda.get('isDesignAgenda')),
@@ -114,9 +118,9 @@ export default Component.extend(FileSaverMixin, {
    * TODO check if we want to be able to reopen an approved agenda without a design agenda present
    * @returns boolean
    */
-  canReopenPreviousAgenda: computed('currentSession', 'currentAgenda', 'isSessionClosable', 'currentAgendaIsLast', async function() {
+  canReopenPreviousAgenda: computed('currentAgenda.isDesignAgenda', 'currentAgendaIsLast', 'currentSession.isFinal', 'currentSessionService.isAdmin', 'isSessionClosable', async function() {
     const isSessionClosable = await this.isSessionClosable;
-    const isAdminAndLastAgenda = this.currentSessionService.isAdmin && await this.currentAgendaIsLast; // TODO why are these together ?
+    const isAdminAndLastAgenda = this.currentSessionService.isAdmin && (await this.currentAgendaIsLast); // TODO why are these together ?
 
     if (!this.currentSession.isFinal && isSessionClosable && this.currentAgenda.isDesignAgenda && isAdminAndLastAgenda) {
       return true;
@@ -130,8 +134,8 @@ export default Component.extend(FileSaverMixin, {
    * - if the currentAgenda is approved, only admin can delete the agenda if it's the latest one
    * @returns boolean
    */
-  canDeleteSelectedAgenda: computed('currentAgenda', 'currentAgendaIsLast', async function() {
-    const isAdminAndLastAgenda = this.currentSessionService.isAdmin && await this.currentAgendaIsLast; // TODO why are these together ?
+  canDeleteSelectedAgenda: computed('currentAgenda.isDesignAgenda', 'currentAgendaIsLast', 'currentSessionService.isAdmin', async function() {
+    const isAdminAndLastAgenda = this.currentSessionService.isAdmin && (await this.currentAgendaIsLast); // TODO why are these together ?
     if (this.currentAgenda.isDesignAgenda || isAdminAndLastAgenda) {
       return true;
     }
@@ -281,7 +285,7 @@ export default Component.extend(FileSaverMixin, {
         } // TODO rolled back items also bottom of the list ?
         if (newAgendaitemsToReorder.length > 0) {
           newAgendaitemsToReorder.forEach((agendaitem) => {
-            agendaitem.set('priority', agendaitem.get('priority') + 9999);
+            agendaitem.set('number', agendaitem.get('number') + 9999);
           });
           await reorderAgendaitemsOnAgenda(newAgenda, isEditor);
         }
@@ -569,6 +573,8 @@ export default Component.extend(FileSaverMixin, {
     this.set('piecesToDeleteReopenPreviousAgenda', sortPieces(pieces));
   }),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     print() {
       window.print();
@@ -683,9 +689,6 @@ export default Component.extend(FileSaverMixin, {
 
     async createNewDesignAgendaAction() {
       await this.createDesignAgenda();
-    },
-    selectSignature() {
-      this.toggleProperty('isAssigningSignature', false);
     },
     releaseDecisions() {
       this.set('releasingDecisions', true);

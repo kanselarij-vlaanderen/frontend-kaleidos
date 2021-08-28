@@ -31,6 +31,7 @@
               {{!-- trigger fetch --}}
               {{#if this.piece.publicationFlow}}
                 {{!-- TODO: remove style attributes and replace classes with auk-status-pill --}}
+                {{!-- template-lint-disable no-inline-styles --}}
                 <LinkTo class="auk-pill auk-pill--default auk-u-mr-2"
                   @route="publications.publication"
                   @model={{this.piece.publicationFlow.id}}>
@@ -40,6 +41,7 @@
                     {{this.piece.publicationFlow.identification.idName}}
                   </span>
                 </LinkTo>
+                {{!-- template-lint-enable no-inline-styles --}}
               {{/if}}
             {{/if}}
             <Auk::Toolbar::Item class="auk-o-flex">
@@ -56,45 +58,29 @@
             </Auk::Toolbar::Item>
             <Auk::Toolbar::Item>
               {{#if this.currentSession.isEditor}}
-                <div class="auk-u-position-relative auk-u-inline-block">
-                  <DropdownMenu
-                    @skin="borderless"
-                    @icon="more"
-                    data-test-document-card-actions={{true}}
-                  as |Menu|>
-                    <Menu.Item>
-                      <button class="auk-button-link auk-button-link--block" type="button"
-                        data-test-document-upload-new-piece
-                        {{on "click" (fn this.openUploadModal)}}
-                      >
-                        <span class="auk-button__content">
-                          {{t "new-version"}}
-                        </span>
-                      </button>
-                    </Menu.Item>
-                    <Menu.Item>
-                      <button class="auk-button-link auk-button-link--block" type="button"
-                        {{on "click" this.enableEditPieceName}}
-                      >
-                        <span class="auk-button__content">
-                          {{t "document-title-edit"}}
-                        </span>
-                      </button>
-                    </Menu.Item>
-                    <Menu.Divider />
-                    <Menu.Item>
-                      <button
-                        class="auk-button-link auk-button-link--block auk-u-text-error"
-                        data-test-document-card-delete type="button"
-                        {{on "click" this.deleteDocumentContainer}}
-                      >
-                        <span class="auk-button__content">
-                          {{t "document-delete"}}
-                        </span>
-                      </button>
-                    </Menu.Item>
-                  </DropdownMenu>
-                </div>
+                <DropdownMenu
+                  @skin="borderless"
+                  @icon="more"
+                  data-test-document-card-actions={{true}}
+                as |Menu|>
+                  <Menu.Item
+                    data-test-document-upload-new-piece
+                    {{on "click" this.openUploadModal}}
+                  >
+                    {{t "new-version"}}
+                  </Menu.Item>
+                  <Menu.Item {{on "click" this.enableEditPieceName}}>
+                    {{t "document-title-edit"}}
+                  </Menu.Item>
+                  <Menu.Divider />
+                  <Menu.Item
+                    @skin="danger"
+                    data-test-document-card-delete
+                    {{on "click" this.deleteDocumentContainer}}
+                  >
+                    {{t "document-delete"}}
+                  </Menu.Item>
+                </DropdownMenu>
               {{/if}}
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
@@ -126,9 +112,11 @@
               </div>
             {{else}}
               <h6 class="auk-h4" data-test-document-card-name-value>
+                {{!-- template-lint-disable no-invalid-interactive --}}
                 <span {{on "click" this.enableEditPieceName}}>
                   {{this.piece.name}}
                 </span>
+                {{!-- template-lint-enable no-invalid-interactive --}}
               </h6>
             {{/if}}
             <div class="vlc-document-card-content__meta">

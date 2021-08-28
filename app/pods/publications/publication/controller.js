@@ -8,7 +8,7 @@ export default class PublicationController extends Controller {
   @service intl;
   @service toaster;
 
-  @tracked sidebarIsOpen = this.get('media.isBigScreen');
+  @tracked sidebarIsOpen = this.media.get('isBigScreen');
 
   @action
   toggleSidebar() {

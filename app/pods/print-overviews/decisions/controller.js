@@ -3,6 +3,9 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import { getPrintOverviewTitle } from 'frontend-kaleidos/utils/print-overview-util';
 
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-classes
 export default Controller.extend({
   titleTranslationKey: 'decisions-of-kind',
   titlePrintKey: 'decisions-pdf-name',
@@ -10,7 +13,7 @@ export default Controller.extend({
   meeting: null,
   intl: inject(),
 
-  title: computed('model.createdFor', 'titleTranslationKey', async function() {
+  title: computed('model.createdFor.plannedStart', 'titleTranslationKey', 'titleTranslationParams', async function() {
     const date = this.get('model.createdFor.plannedStart');
     if (this.titleTranslationParams) {
       const translatedTitleWithParams = this.intl.t(this.titleTranslationKey, this.titleTranslationParams);

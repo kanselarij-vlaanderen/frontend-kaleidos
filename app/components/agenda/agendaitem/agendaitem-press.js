@@ -1,10 +1,16 @@
+// TODO: octane-refactor
+/* eslint-disable ember/no-get, ember/classic-decorator-no-classic-methods */
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
+// eslint-disable-next-line ember/no-computed-properties-in-native-classes
 import {
   action, computed
 } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/require-tagless-components
 export default class AgendaitemPress extends Component {
   @service currentSession;
 

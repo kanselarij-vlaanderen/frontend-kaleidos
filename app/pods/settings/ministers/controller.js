@@ -3,6 +3,9 @@ import { inject as service } from '@ember/service';
 // import { task } from 'ember-concurrency';
 // import { isPresent } from '@ember/utils';
 
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-classes
 export default Controller.extend({
   currentSession: service(),
 
@@ -26,6 +29,8 @@ export default Controller.extend({
     });
   }).restartable(),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     async reorderItems(model, reOrderedModel) {
       if (this.currentSession.isEditor) {

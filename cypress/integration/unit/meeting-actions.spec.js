@@ -27,7 +27,7 @@ context('meeting actions tests', () => {
     cy.deleteAgenda('5EB287CDF359DD0009000008', true);
     // verify subcase can be proposed for different agenda
     cy.visit('/dossiers/5EB287A9F359DD0009000005/deeldossiers/5EB287BBF359DD0009000007/overzicht');
-    cy.get(cases.subcaseHeader.actions.proposeForAgenda);
+    cy.get(cases.subcaseHeader.showProposedAgendas);
   });
 
   it('should perform action close agenda with agendaitems on designagenda', () => {

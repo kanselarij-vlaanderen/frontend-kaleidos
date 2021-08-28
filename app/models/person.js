@@ -12,7 +12,6 @@ export default class Person extends Model {
   })
   alternativeName;
 
-  @belongsTo('signature') signature;
   @belongsTo('contact-person') contactPerson;
   @belongsTo('organization') organization;
   @hasMany('mandatee') mandatees;

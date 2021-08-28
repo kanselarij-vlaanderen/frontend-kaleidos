@@ -6,12 +6,24 @@
   <Auk::Modal::Body>
     <Utils::LoadableContent @isLoading={{or this.loadCaseTypes.isRunning this.loadTitleData.isRunning}} @reserveSpace={{true}}>
       <div class="auk-o-flex auk-o-flex--justify-between">
-
-        <WebComponents::VlRadioButtonList
-          @title={{t "subcase-type"}}
-          @optionList={{this.caseTypes}}
-          @modelChanged={{this.typeChanged}}
-        />
+        <div class="auk-u-mb-4">
+          <fieldset>
+            <legend class="auk-label">{{t "subcase-type"}}</legend>
+            <Auk::RadioList
+              @layout="inline"
+              data-test-new-subcase-type
+            as |List|>
+              {{#each this.caseTypes as |type index|}}
+                <List.Radio
+                  @label={{type.label}}
+                  @checked={{eq index 0}}
+                  value={{type.id}}
+                  {{on "change" this.typeChanged}}
+                />
+              {{/each}}
+            </Auk::RadioList>
+          </fieldset>
+        </div>
 
         <div class="auk-o-flex auk-o-flex--vertical-center">
           <Auk::Toolbar>
@@ -32,15 +44,16 @@
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "name-subcase"}}</Auk::Label>
-        <Auk::Textarea @rows="2" @value={{this.shortTitle}} />
+        <Auk::Textarea data-test-new-subcase-shorttitle @rows="2" @value={{this.shortTitle}} />
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "title-subcase"}}</Auk::Label>
-        <Auk::Textarea @rows="4" @value={{this.title}} />
+        <Auk::Textarea data-test-new-subcase-longtitle @rows="4" @value={{this.title}} />
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
         <Utils::ModelSelector
+          data-test-new-subcase-procedure-step
           @modelName="subcase-type"
           @searchField="label"
           @propertyToShow="label"
@@ -54,6 +67,7 @@
         <div class="auk-o-flex auk-o-flex--vertical-center">
           {{#if (not this.isEditing)}}
             <Utils::ModelSelector
+              data-test-new-subcase-procedure-name
               class="vlc-u-box-model-maximize-width"
               @modelName="shortcut"
               @searchField="label"
@@ -95,6 +109,7 @@
     @cancelDisabled={{this.save.isRunning}}
     @onCancel={{@onClose}}>
     <Auk::Button
+      data-test-new-subcase-save
       @skin="primary"
       @disabled={{this.save.isRunning}}
       @loading={{or this.saveSubcase.isRunning this.copyFullSubcase.isRunning}}

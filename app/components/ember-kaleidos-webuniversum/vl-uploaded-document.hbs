@@ -1,3 +1,5 @@
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
 <div class="vl-uploaded-document__title">
   <Auk::Badge
     @size="medium"
@@ -7,9 +9,9 @@
     <div class="title">
       <h6 class="auk-h4 auk-u-m-0"
         data-test-vl-uploaded-document-filename>
-        {{name}}
+        {{this.name}}
       </h6>
-      {{#if view}}
+      {{#if this.view}}
         <Auk::Button
           @skin="borderless"
           @layout="icon-only"
@@ -19,7 +21,7 @@
           {{t "show-piece"}}
         </Auk::Button>
       {{/if}}
-      {{#if download}}
+      {{#if this.download}}
         <Auk::Button
           @skin="borderless"
           @layout="icon-only"
@@ -28,18 +30,18 @@
         >
           {{t "download"}}
         </Auk::Button>
-      {{else if downloadLink}}
+      {{else if this.downloadLink}}
         <Auk::Button
           @skin="borderless"
           @layout="icon-only"
           @icon="download"
-          @href={{downloadLink}}
-          download={{if downloadName downloadName name}}
+          @href={{this.downloadLink}}
+          download={{if this.downloadName this.downloadName this.name}}
         >
           {{t "download"}}
         </Auk::Button>
       {{/if}}
-      {{#if delete}}
+      {{#if this.delete}}
         <Auk::Button
           @skin="danger-borderless"
           @layout="icon-only"
@@ -52,9 +54,9 @@
       {{/if}}
     </div>
     <div class="vl-document__metadata metadata">
-      {{extension}}
+      {{this.extension}}
       -
-      {{format-bytesize size}}
+      {{format-bytesize this.size}}
     </div>
   </div>
 </div>

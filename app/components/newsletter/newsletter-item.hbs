@@ -1,28 +1,30 @@
-{{#if (is-pending newsletterInfo)}}
-  {{web-components/vl-loader text=(t "newsletter-info-loading-text")}}
-{{else if (not isEditing)}}
-  {{#if (not allowEditing)}}
-    {{#if (await newsletterInfo.inNewsletter)}}
-      {{newsletter/newsletter-item/item-content
-        allowEditing=allowEditing
-        onStartEditing=(action "startEditing")
-        itemIndex=itemIndex
-        showIndex=showIndex
-        isEditing=isEditing
-        agendaitem=agendaitem
-        newsletterInfo=newsletterInfo
-      }}
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
+{{#if (is-pending this.newsletterInfo)}}
+  <WebComponents::VlLoader @text={{t "newsletter-info-loading-text"}} />
+{{else if (not this.isEditing)}}
+  {{#if (not this.allowEditing)}}
+    {{#if (await this.newsletterInfo.inNewsletter)}}
+      <Newsletter::NewsletterItem::ItemContent
+        @allowEditing={{this.allowEditing}}
+        @onStartEditing={{action "startEditing"}}
+        @itemIndex={{this.itemIndex}}
+        @showIndex={{this.showIndex}}
+        @isEditing={{this.isEditing}}
+        @agendaitem={{this.agendaitem}}
+        @newsletterInfo={{this.newsletterInfo}}
+      />
     {{/if}}
   {{else}}
-    {{newsletter/newsletter-item/item-content
-      allowEditing=allowEditing
-      onStartEditing=(action "startEditing")
-      itemIndex=itemIndex
-      showIndex=showIndex
-      isEditing=isEditing
-      agendaitem=agendaitem
-      newsletterInfo=newsletterInfo
-    }}
+    <Newsletter::NewsletterItem::ItemContent
+      @allowEditing={{this.allowEditing}}
+      @onStartEditing={{action "startEditing"}}
+      @itemIndex={{this.itemIndex}}
+      @showIndex={{this.showIndex}}
+      @isEditing={{this.isEditing}}
+      @agendaitem={{this.agendaitem}}
+      @newsletterInfo={{this.newsletterInfo}}
+    />
   {{/if}}
 {{else}}
   <NewsItem::EditItem

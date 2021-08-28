@@ -38,6 +38,7 @@ const selectors = {
 
   // agenda/documents/template
   agendaDocuments: {
+    cardList: '[data-test-route-agenda-documents-card-list]',
     addDocuments: '[data-test-route-agenda-documents-add-documents]',
   },
 
@@ -69,7 +70,7 @@ const selectors = {
 
   // cases/case/subcase/subcase/overview/template
   subcaseOverview: {
-    confidentialityCheckBox: '[data-test-cases---subcase-overview-confidentiality-checkbox] input',
+    confidentialityCheckBox: '[data-test-cases---subcase-overview-confidentiality-checkbox]',
   },
 
   subcaseDocuments: {
@@ -144,6 +145,15 @@ const selectors = {
   // login/template
   login: {
     acmidmButton: '[data-test-route-login-acmidm-container] button',
+  },
+
+  /**
+    ROUTE MOCK-LOGIN
+   */
+
+  // mock-login-route/template
+  mockLogin: {
+    list: '[data-test-mock-login-list]',
   },
 
 

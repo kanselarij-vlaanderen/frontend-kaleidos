@@ -1,16 +1,16 @@
-import DS from 'ember-data';
+import Model, { hasMany, belongsTo, attr } from '@ember-data/model';
+import { PromiseObject } from '@ember-data/store/-private';
 import { computed } from '@ember/object';
+import { reads } from '@ember/object/computed';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+// LoadableModel is still depended upon here and there. Should refactor out in the more general direction the codebase handles these load operations.
+// eslint-disable-next-line ember/no-mixins
 import LoadableModel from 'ember-data-storefront/mixins/loadable-model';
 import { A } from '@ember/array';
 
-const {
-  Model,
-  attr,
-  belongsTo,
-  hasMany,
-} = DS;
-
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-classes
 export default Model.extend(LoadableModel, {
   name: computed.alias('serialnumber'),
   title: attr('string'),
@@ -36,13 +36,9 @@ export default Model.extend(LoadableModel, {
     inverse: 'previousVersion',
     serialize: false,
   }),
-  isDesignAgenda: computed('status.isDesignAgenda', function() {
-    return this.get('status.isDesignAgenda');
-  }),
+  isDesignAgenda: reads('status.isDesignAgenda'),
 
-  isApproved: computed('status.isApproved', function() {
-    return this.get('status.isApproved');
-  }),
+  isApproved: reads('status.isApproved'),
 
   async asyncCheckIfDesignAgenda() {
     await this.get('status');
@@ -50,7 +46,7 @@ export default Model.extend(LoadableModel, {
     return this.get('isDesignAgenda');
   },
 
-  agendaName: computed('serialnumber', 'status', function() {
+  agendaName: computed('serialnumber', 'status.isDesignAgenda', function() {
     const isDesignAgenda = this.get('status.isDesignAgenda');
     const agendaName = this.serialnumber || '';
     let prefix;
@@ -64,29 +60,9 @@ export default Model.extend(LoadableModel, {
 
   isFinal: computed.alias('status.isFinal'),
 
-  lastAgendaitemPriority: computed('agendaitems.@each', function() {
-    return this.get('agendaitems').then((agendaitems) => {
-      const filteredAgendaitems = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark);
-      if (filteredAgendaitems.length === 0) {
-        return 0;
-      }
-      return Math.max(...filteredAgendaitems.map((agendaitem) => agendaitem.priority || 0));
-    });
-  }),
-
-  lastAnnouncementPriority: computed('agendaitems.@each', function() {
-    return this.get('agendaitems').then((agendaitems) => {
-      const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
-      if (announcements.length === 0) {
-        return 0;
-      }
-      return Math.max(...announcements.map((announcement) => announcement.priority || 0));
-    });
-  }),
-
-  firstAgendaitem: computed('agendaitems.@each', function() {
-    return DS.PromiseObject.create({
-      promise: this.get('agendaitems').then((agendaitems) => agendaitems.sortBy('priority').get('firstObject')),
+  firstAgendaitem: computed('agendaitems.[]', function() {
+    return PromiseObject.create({
+      promise: this.get('agendaitems').then((agendaitems) => agendaitems.sortBy('number').get('firstObject')),
     });
   }),
 

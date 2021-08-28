@@ -133,23 +133,23 @@ export const destroyApprovalsOfAgendaitem = async(agendaitem) => {
 };
 
 /**
- * For a given set of agenda items, will re-order them by their groupPriority
+ * For a given set of agenda items, will re-order them by their groupNumber
  * ⚠️ Word of caution, this mutates the original set!
  * @param {Array} agendaitems   Agenda items to mutate
  */
-export const setCalculatedGroupPriorities = (agendaitems) => Promise.all(
+export const setCalculatedGroupNumbers = (agendaitems) => Promise.all(
   agendaitems.map(async(agendaitem) => {
     const mandatees = await agendaitem.get('mandatees');
     if (agendaitem.isApproval) {
       return;
     }
     if (mandatees.length === 0) {
-      agendaitem.set('groupPriority', 'ZZZZZZZZ');
+      agendaitem.set('groupNumber', 'ZZZZZZZZ');
       return;
     }
     const mandateePriorities = mandatees.map((mandatee) => mandatee.priorityAlpha);
     mandateePriorities.sort(); // should sort on letters A - Z
-    agendaitem.set('groupPriority', mandateePriorities.join());
+    agendaitem.set('groupNumber', mandateePriorities.join());
   })
 );
 
@@ -168,7 +168,7 @@ export const groupAgendaitemsByGroupname = (agendaitems) => {
     if (!foundItem) {
       groups.push({
         groupName,
-        groupPriority: agendaitem.groupPriority,
+        groupNumber: agendaitem.groupNumber,
         agendaitems: [agendaitem],
       });
     } else {
@@ -182,7 +182,7 @@ export const groupAgendaitemsByGroupname = (agendaitems) => {
 };
 
 /**
- * For a set of agendaitems, will fetch the drafts, and will group them by priority
+ * For a set of agendaitems, will fetch the drafts, and will group them by number
  * @param  {Array}  agendaitems   Agenda items to parse from
  * @return {Object}               An object containing drafts and groups
  */
@@ -191,7 +191,7 @@ export const parseDraftsAndGroupsFromAgendaitems = async(agendaitems) => {
   const draftAgendaitems = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isApproval);
 
   // Calculate the priorities on the drafts
-  await setCalculatedGroupPriorities(draftAgendaitems);
+  await setCalculatedGroupNumbers(draftAgendaitems);
 
   const groupedAgendaitems = Object.values(groupAgendaitemsByGroupname(draftAgendaitems));
   return {
@@ -201,12 +201,12 @@ export const parseDraftsAndGroupsFromAgendaitems = async(agendaitems) => {
 };
 
 /**
- * Given a set of grouped agendaitems, sort them by priority
+ * Given a set of grouped agendaitems, sort them by number
  * @param  {Array}   groupedAgendaitems   A set containing all agendaitems grouped (see above functions)
  * @param  {Boolean} allowEmptyGroups     When true, empty groups are allowed
- * @return {Array}                        The input set, sorted by priority ASC
+ * @return {Array}                        The input set, sorted by number ASC
  */
-export const sortByPriority = (groupedAgendaitems, allowEmptyGroups) => {
+export const sortByNumber = (groupedAgendaitems, allowEmptyGroups) => {
   let groupsArray = groupedAgendaitems;
   if (!allowEmptyGroups) {
     groupsArray = groupsArray.filter((group) => group.groupName && group.groupname !== 'Geen toegekende ministers');
@@ -214,23 +214,23 @@ export const sortByPriority = (groupedAgendaitems, allowEmptyGroups) => {
     groupsArray = groupsArray.filter((group) => group.groupname !== 'Geen toegekende ministers');
   }
 
-  groupsArray = groupsArray.sortBy('groupPriority').map((group) => EmberObject.create(group));
+  groupsArray = groupsArray.sortBy('groupNumber').map((group) => EmberObject.create(group));
 
   return groupsArray;
 };
 
 /**
- * Given a set of agendaitems, set their priority
- * @name setAgendaitemsPriority
- * @param  {Array<agendaitem>}   agendaitems  Array of agendaitem objects to set priority on.
- * @param  {Boolean} isEditor     When true, the user is allowed to edit the trigger a recalculation of the priority.
+ * Given a set of agendaitems, set their number
+ * @name setAgendaitemsNumber
+ * @param  {Array<agendaitem>}   agendaitems  Array of agendaitem objects to set number on.
+ * @param  {Boolean} isEditor     When true, the user is allowed to edit the trigger a recalculation of the number.
  * @param {Boolean} isDesignAgenda  When true, the agenda is a designagenda.
  */
-export const setAgendaitemsPriority = async(agendaitems, isEditor, isDesignAgenda) => {
+export const setAgendaitemsNumber = async(agendaitems, isEditor, isDesignAgenda) => {
   if (isEditor && isDesignAgenda) {
     return await Promise.all(agendaitems.map(async(agendaitem, index) => {
-      if (agendaitem.priority !== index + 1) {
-        agendaitem.set('priority', index + 1);
+      if (agendaitem.number !== index + 1) {
+        agendaitem.set('number', index + 1);
         return agendaitem.save();
       }
     }));
@@ -241,11 +241,11 @@ export const reorderAgendaitemsOnAgenda = async(agenda, isEditor) => {
   await agenda.hasMany('agendaitems').reload();
   const agendaitems = await agenda.get('agendaitems');
   const actualAgendaitems = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isDeleted)
-    .sortBy('priority');
+    .sortBy('number');
   const actualAnnouncements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark && !agendaitem.isDeleted)
-    .sortBy('priority');
-  await setAgendaitemsPriority(actualAgendaitems, isEditor, true);
-  await setAgendaitemsPriority(actualAnnouncements, isEditor, true);
+    .sortBy('number');
+  await setAgendaitemsNumber(actualAgendaitems, isEditor, true);
+  await setAgendaitemsNumber(actualAnnouncements, isEditor, true);
 };
 
 /**

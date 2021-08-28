@@ -203,7 +203,7 @@ context('Tests for KAS-1076', () => {
     cy.addDocumentsToSubcase(files);
     cy.get(document.documentCard.card).should('have.length', files.length);
 
-    cy.get(auk.subcaseDetailNav.tabNavBack).click();
+    cy.get(auk.tab.hierarchicalBack).click();
     const subcaseTitleLong = 'Cypress test voor het tonen van meer dan 20 documenten in procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
