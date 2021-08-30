@@ -1,27 +1,28 @@
-<Auk::Sidebar
-  @size="xlarge"
-  @position="right"
-  @skin="white"
-  class="auk-u-pb-6"
->
+<Auk::Sidebar @size="xlarge" @position="right" @skin="white" class="auk-u-pb-6">
   <Auk::Navbar>
     <Auk::Toolbar>
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
           <Auk::Tabs>
-            <Auk::Tab {{on "click" (fn this.setActiveTab "details")}} @active={{eq this.activeTab "details"}}>{{t
-              "detail"}}</Auk::Tab>
-            <Auk::Tab {{on "click" (fn this.setActiveTab "signatures")}} @active={{eq this.activeTab "signatures"}}>{{t
-              "signatures"}}</Auk::Tab>
-            <Auk::Tab {{on "click" (fn this.setActiveTab "versions")}} @active={{eq this.activeTab "versions"}}>{{t
-              "version"}}</Auk::Tab>
+            <Auk::Tab
+              {{on "click" (fn this.setActiveTab "details")}}
+              @active={{eq this.activeTab "details"}}
+            >{{t "detail"}}</Auk::Tab>
+            <Auk::Tab
+              {{on "click" (fn this.setActiveTab "signatures")}}
+              @active={{eq this.activeTab "signatures"}}
+            >{{t "signatures"}}</Auk::Tab>
+            <Auk::Tab
+              {{on "click" (fn this.setActiveTab "versions")}}
+              @active={{eq this.activeTab "versions"}}
+            >{{t "version"}}</Auk::Tab>
           </Auk::Tabs>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
   </Auk::Navbar>
 
-  {{!-- DETAILS --}}
+  {{! DETAILS }}
   {{#if (eq this.activeTab "details")}}
     <div class="auk-u-m-4">
       <Auk::KeyValue @key={{t "document-name"}} @value={{@piece.name}} />
@@ -43,20 +44,26 @@
       </Auk::KeyValue>
       <div class="auk-key-value-item">
         <Auk::KeyValue @key={{t "file-type"}}>
-          <Utils::Documents::FileTypePill @extension={{@piece.file.extension}} />
+          <Utils::Documents::FileTypePill
+            @extension={{@piece.file.extension}}
+          />
         </Auk::KeyValue>
       </div>
     </div>
 
-  {{!-- SIGNATURES --}}
+    {{! SIGNATURES }}
   {{else if (eq this.activeTab "signatures")}}
 
-  {{!-- VERSIONS --}}
+    {{! VERSIONS }}
   {{else if (eq this.activeTab "versions")}}
     <div class="auk-u-m-4">
       {{#each this.versionPieces as |versionPiece|}}
-        <Documents::VersionCard @openVerify={{fn this.openVerify versionPiece}}  @lastPiece={{this.lastPiece}}
-                                @piece={{versionPiece}} @currentPiece={{@piece}}/>
+        <Documents::VersionCard
+          @openVerify={{fn this.openVerify versionPiece}}
+          @lastPiece={{this.lastPiece}}
+          @piece={{versionPiece}}
+          @currentPiece={{@piece}}
+        />
       {{/each}}
       <div class="auk-u-mt-4">
         <Auk::Button
@@ -70,7 +77,7 @@
     </div>
   {{/if}}
 
-  {{!-- FOOTER
+  {{! FOOTER
   <div class="auk-u-mt-auto">
     <div class="auk-panel__footer">
       <Auk::Toolbar>
@@ -81,7 +88,7 @@
       </Auk::Toolbar>
     </div>
   </div>
-  --}}
+  }}
 </Auk::Sidebar>
 
 {{#if this.isVerifyingDelete}}
@@ -94,7 +101,9 @@
 {{/if}}
 
 {{#if this.isOpenUploadVersionModal}}
-  <Documents::NewVersionModal @onClose={{this.closeUploadVersionModal}} @onSave={{this.saveUploadVersionModal}}
+  <Documents::NewVersionModal
+    @onClose={{this.closeUploadVersionModal}}
+    @onSave={{this.saveUploadVersionModal}}
     @newVersionName={{this.newVersionName}}
   />
 {{/if}}

@@ -20,7 +20,6 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
   @service router;
   @service store;
 
-
   @tracked documentType;
   @tracked docContainer;
   @tracked accessLevel;
@@ -69,11 +68,13 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
   @action
   async saveUploadVersionModal(newVersion) {
     let accessLevel = await this.lastPiece.accessLevel;
-    if (isBlank(accessLevel)){
-      accessLevel = await this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
+    if (isBlank(accessLevel)) {
+      accessLevel = await this.store.findRecordByUri(
+        'access-level',
+        CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
+      );
     }
-    const now = moment().utc()
-      .toDate();
+    const now = moment().utc().toDate();
     let newPiece = this.store.createRecord('piece', {
       created: now,
       modified: now,
@@ -88,19 +89,19 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
 
     this.isOpenUploadVersionModal = false;
     this.loadVersionHistory.perform();
-    this.router.transitionTo('document', newPiece.id)
+    this.router.transitionTo('document', newPiece.id);
   }
 
   @action
   async deleteVersion() {
     await this.fileService.deletePiece(this.selectedToDelete);
     // delete orphan container if last piece is deleted
-    if (this.versionPieces.size <= 1){
-      await this.fileService.deleteDocumentContainer(this.docContainer)
+    if (this.versionPieces.size <= 1) {
+      await this.fileService.deleteDocumentContainer(this.docContainer);
       this.args.transitionBack();
     }
     //if you deleted current file also go back
-    if (this.selectedToDelete.id === this.args.piece.id){
+    if (this.selectedToDelete.id === this.args.piece.id) {
       this.args.transitionBack();
     }
     this.loadVersionHistory.perform();
@@ -120,7 +121,9 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
     this.isVerifyingDelete = false;
   }
 
-  get newVersionName(){
-    return new VRDocumentName(this.lastPiece.name).withOtherVersionSuffix(this.versionPieces.length);
+  get newVersionName() {
+    return new VRDocumentName(this.lastPiece.name).withOtherVersionSuffix(
+      this.versionPieces.length
+    );
   }
 }
