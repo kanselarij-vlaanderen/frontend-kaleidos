@@ -33,7 +33,7 @@
             {{!-- TODO: fix inline style for side-by-side fields --}}
             {{!-- template-lint-disable no-inline-styles --}}
             <Auk::Input
-              type="number"
+              @type="number"
               id="publicationNumberInput"
               class="auk-u-mr"
               style="max-width: 10rem"
@@ -43,7 +43,6 @@
               {{on "change" this.isPublicationNumberAlreadyTaken}}
             />
             <Auk::Input
-              type="text"
               id="publicationSuffixInput"
               style="max-width: 6.5rem"
               @value={{mut this.suffix}}

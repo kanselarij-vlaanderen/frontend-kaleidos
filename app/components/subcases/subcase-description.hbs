@@ -188,7 +188,10 @@
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "subcase-name"}}</Auk::Label>
-        <WebComponents::VlFormInput @value={{this.subcaseName}} />
+        <Auk::Input
+          @block={{true}}
+          @value={{this.subcaseName}}
+        />
       </div>
     </div>
     <Auk::Toolbar @auto={{true}}>

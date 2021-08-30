@@ -91,7 +91,6 @@
               <div class="auk-o-flex auk-o-flex--vertical-center">
                 <Auk::Input
                   data-test-document-card-name-input={{true}}
-                  @type="text"
                   @block={{true}}
                   @value={{this.pieceNameBuffer}}
                 />
@@ -180,8 +179,10 @@
     <Auk::Modal::Body>
       {{#if this.newPiece}}
         <Auk::Label>{{t "name"}}</Auk::Label>
-        <WebComponents::VlFormInput
-          @value={{this.newPiece.name}}/>
+        <Auk::Input
+          @block={{true}}
+          @value={{this.newPiece.name}}
+        />
         <Documents::UploadedDocument
           @piece={{this.newPiece}}
           @onDelete={{perform this.deleteUploadedPiece}} />
