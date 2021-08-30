@@ -9,12 +9,18 @@
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
           <Auk::Tabs>
-            <Auk::Tab {{on "click" (fn this.setActiveTab "details")}} @active={{eq this.activeTab "details"}}>{{t
-              "detail"}}</Auk::Tab>
-            <Auk::Tab {{on "click" (fn this.setActiveTab "signatures")}} @active={{eq this.activeTab "signatures"}}>{{t
-              "signatures"}}</Auk::Tab>
-            <Auk::Tab {{on "click" (fn this.setActiveTab "versions")}} @active={{eq this.activeTab "versions"}}>{{t
-              "version"}}</Auk::Tab>
+            <Auk::Tab
+              {{on "click" (fn this.setActiveTab "details")}}
+              @active={{eq this.activeTab "details"}}
+            >{{t "detail"}}</Auk::Tab>
+            <Auk::Tab
+              {{on "click" (fn this.setActiveTab "signatures")}}
+              @active={{eq this.activeTab "signatures"}}
+            >{{t "signatures"}}</Auk::Tab>
+            <Auk::Tab
+              {{on "click" (fn this.setActiveTab "versions")}}
+              @active={{eq this.activeTab "versions"}}
+            >{{t "version"}}</Auk::Tab>
           </Auk::Tabs>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
@@ -89,7 +95,6 @@
       </Auk::Toolbar>
     </div>
   </div>
-
 </Auk::Sidebar>
 
 {{#if this.isVerifyingDelete}}
@@ -102,7 +107,9 @@
 {{/if}}
 
 {{#if this.isOpenUploadVersionModal}}
-  <Documents::NewVersionModal @onClose={{this.closeUploadVersionModal}} @onSave={{this.saveUploadVersionModal}}
-                              @newVersionName={{this.newVersionName}}
+  <Documents::NewVersionModal
+    @onClose={{this.closeUploadVersionModal}}
+    @onSave={{this.saveUploadVersionModal}}
+    @newVersionName={{this.newVersionName}}
   />
 {{/if}}

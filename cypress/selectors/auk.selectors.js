@@ -61,7 +61,11 @@ const selectors = {
 
   /** Section single selector AUK components **/
 
-  checkbox: '.auk-checkbox',
+  checkbox: {
+    // TODO-selector unused selectors
+    container: '.auk-checkbox',
+    checkbox: '.auk-checkbox__toggle',
+  },
   loader: '.auk-loader',
   pill: '.auk-pill',
   // TODO-selector unused selectors
