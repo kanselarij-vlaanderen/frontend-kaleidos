@@ -1,7 +1,10 @@
 {{page-title
   this.model.agenda.agendaName
   " van "
-  (moment-format this.model.meeting.plannedStart 'DD/MM/YYYY HH:mm')
+  (moment-format
+    this.model.meeting.plannedStart
+    (if this.model.meeting.isPreKaleidos "DD/MM/YYYY" "DD/MM/YYYY HH:mm")
+  )
 }}
 <Agenda::AgendaHeader
   @loading={{this.loadingAgendaitems}}
