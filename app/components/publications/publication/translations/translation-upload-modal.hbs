@@ -22,7 +22,7 @@
                   <Auk::Label for="translationUploadName" @required={{true}}>
                     {{t "name"}}
                   </Auk::Label>
-                  <Auk::Input type="text" id="translationUploadName"
+                  <Auk::Input id="translationUploadName"
                     @value={{mut this.name}}
                     {{on "input" this.validators.name.enableError}} />
                 </div>

@@ -24,7 +24,7 @@
                   <Auk::Label for="proofUploadName" @required={{true}}>
                     {{t "name"}}
                   </Auk::Label>
-                  <Auk::Input type="text" id="proofUploadName"
+                  <Auk::Input id="proofUploadName"
                     @value={{mut this.name}}
                     {{on "input" this.validators.name.enableError}} />
                 </div>

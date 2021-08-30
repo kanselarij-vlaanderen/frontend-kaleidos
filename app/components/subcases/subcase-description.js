@@ -76,7 +76,8 @@ export default Component.extend({
       this.set('subcaseName', subcaseName);
     },
 
-    selectRemarkType(id) {
+    selectRemarkType(event) {
+      const id = event.target.value;
       const type = this.store.peekRecord('case-type', id);
       this.set('showAsRemark', type.get('uri') ===  CONSTANTS.CASE_TYPES.REMARK);
     },

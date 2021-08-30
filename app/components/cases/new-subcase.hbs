@@ -6,13 +6,24 @@
   <Auk::Modal::Body>
     <Utils::LoadableContent @isLoading={{or this.loadCaseTypes.isRunning this.loadTitleData.isRunning}} @reserveSpace={{true}}>
       <div class="auk-o-flex auk-o-flex--justify-between">
-
-        <WebComponents::VlRadioButtonList
-          data-test-new-subcase-type
-          @title={{t "subcase-type"}}
-          @optionList={{this.caseTypes}}
-          @modelChanged={{this.typeChanged}}
-        />
+        <div class="auk-u-mb-4">
+          <fieldset>
+            <legend class="auk-label">{{t "subcase-type"}}</legend>
+            <Auk::RadioList
+              @layout="inline"
+              data-test-new-subcase-type
+            as |List|>
+              {{#each this.caseTypes as |type index|}}
+                <List.Radio
+                  @label={{type.label}}
+                  @checked={{eq index 0}}
+                  value={{type.id}}
+                  {{on "change" this.typeChanged}}
+                />
+              {{/each}}
+            </Auk::RadioList>
+          </fieldset>
+        </div>
 
         <div class="auk-o-flex auk-o-flex--vertical-center">
           <Auk::Toolbar>
@@ -76,7 +87,6 @@
             </Auk::Button>
           {{else}}
             <Auk::Input
-              @type="text"
               @block={{true}}
               @value={{this.subcaseName}}
               id="subcaseNameId"
