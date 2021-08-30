@@ -140,6 +140,13 @@
                 >
                   {{t "cases"}}
                 </Auk::Tab>
+                <Auk::Tab
+                  @route="search.newsletter"
+                  @current-when="search.newsletter"
+                  @query={{hash page=0}}
+                >
+                  {{t "newsletter"}}
+                </Auk::Tab>
               </Auk::Tabs>
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>

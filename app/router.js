@@ -148,6 +148,7 @@ Router.map(function() {
   this.route('search', { path: '/zoeken', }, function() {
     this.route('cases', { path: '/dossiers', });
     this.route('agenda-items', { path: '/agendapunten', });
+    this.route('newsletter', { path: '/kort-bestek', });
   });
 
   if (!isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB)) {
