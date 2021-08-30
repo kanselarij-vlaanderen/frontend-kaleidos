@@ -10,23 +10,6 @@ import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import { inject as service } from '@ember/service';
 
 export default class AgendaitemSearchRoute extends Route {
-  async model () {
-    return [
-      {
-        title: "Gemeenteraad Gent",
-        description: "Reglementen en verordeningen"
-      },
-      {
-        title: "Gemeenteraad Gent",
-        description: "Advies bij jaarrekening AGB"
-      },
-      {
-        title: "College van Burgemeester en Schepenen Gent",
-        description: "Besluitenlijst"
-      }
-    ]
-  }
-
   @service metrics;
   queryParams = {
     types: {
