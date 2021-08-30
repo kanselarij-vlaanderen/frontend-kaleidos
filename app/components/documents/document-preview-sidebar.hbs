@@ -29,7 +29,7 @@
 
   <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
     <div class="auk-u-m-4">
-      {{!-- DETAILS --}}
+      {{! DETAILS }}
       {{#if (eq this.activeTab "details")}}
         <Auk::KeyValue @key={{t "document-name"}} @value={{@piece.name}} />
         {{#unless this.loadData.isRunning}}
@@ -50,30 +50,36 @@
         </Auk::KeyValue>
         <div class="auk-key-value-item">
           <Auk::KeyValue @key={{t "file-type"}}>
-            <Utils::Documents::FileTypePill @extension={{@piece.file.extension}} />
+            <Utils::Documents::FileTypePill
+              @extension={{@piece.file.extension}}
+            />
           </Auk::KeyValue>
         </div>
 
-      {{!-- SIGNATURES --}}
+        {{! SIGNATURES }}
       {{else if (eq this.activeTab "signatures")}}
 
-      {{!-- VERSIONS --}}
+        {{! VERSIONS }}
       {{else if (eq this.activeTab "versions")}}
 
         {{#each this.versionPieces as |versionPiece|}}
-          <Documents::VersionCard @openVerify={{fn this.openVerify versionPiece}}  @lastPiece={{this.lastPiece}}
-                                  @piece={{versionPiece}} @currentPiece={{@piece}}/>
+          <Documents::VersionCard
+            @openVerify={{fn this.openVerify versionPiece}}
+            @lastPiece={{this.lastPiece}}
+            @piece={{versionPiece}}
+            @currentPiece={{@piece}}
+          />
         {{/each}}
       {{/if}}
     </div>
   </div>
-  {{!-- FOOTER --}}
+  {{! FOOTER }}
   <div class="auk-u-mt-auto">
     <div class="auk-panel__footer">
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            {{#if  (eq this.activeTab "details")}}
+            {{#if (eq this.activeTab "details")}}
               <Auk::Button
                 @skin="tertiary"
                 @icon="delete"
