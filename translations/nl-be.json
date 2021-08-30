@@ -586,6 +586,8 @@
   "amount-per-page": "Aantal resultaten per pagina",
   "file-type-unsupported": "Bestandstype niet ondersteund",
   "file-viewer-type-unsupported": "Bestanden van het bestandstype \"{fileType}\" worden momenteel niet ondersteund om in de applicatie te bekijken. Gelieve het bestand te downloaden.",
+  "document-unauthorized": "Geen toegang",
+  "document-unauthorized-message": "U hebt geen toegang tot dit document",
   "style-guide-basic": "Basics",
   "style-guide-typography": "Typography",
   "style-guide-components": "Components",

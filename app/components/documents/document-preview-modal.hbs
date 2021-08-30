@@ -3,7 +3,15 @@
   <Auk::Modal::Body @noPadding={{true}}>
     <div class="auk-panel-layout">
       <div class="auk-panel-layout__main-content">
-        {{#if this.fileFormatIsSupported}}
+        {{#if (not @piece.file)}}
+          <div class="auk-u-p-4">
+            <Auk::Alert
+              @skin="warning"
+              @title={{t "document-unauthorized"}}
+              @message={{t "document-unauthorized-message"}}
+            />
+          </div>
+        {{else if this.fileFormatIsSupported}}
           <PdfView @filePath={{@piece.file.downloadLink}} />
         {{else}}
           <div class="auk-u-p-4">
@@ -19,7 +27,11 @@
         {{/if}}
       </div>
       <div class="auk-panel-layout__sidebar">
-        <Documents::DocumentPreviewSidebar @piece={{@piece}} @transitionBack={{@onClose}} @resetPiece={{this.resetPiece}}/>
+        <Documents::DocumentPreviewSidebar
+          @piece={{@piece}}
+          @transitionBack={{@onClose}}
+          @resetPiece={{this.resetPiece}}
+        />
       </div>
     </div>
   </Auk::Modal::Body>
