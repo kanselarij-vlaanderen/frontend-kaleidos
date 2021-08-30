@@ -222,8 +222,9 @@ export default Component.extend({
     await currentDesignAgenda.reload();
     await currentDesignAgenda.belongsTo('status').reload();
     const agendaitems = await currentDesignAgenda.hasMany('agendaitems').reload();
-    await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
-    await currentMeeting.reload();
+    await this.reloadAgendaitemsOfAgendaActivities(agendaitems); // needed because the agendaitems are not correct
+    // await currentMeeting.reload();
+    // await currentMeeting.hasMany('agendas').reload();
     this.toggleLoadingOverlayWithMessage(null);
     this.onApproveAgenda(newAgenda.get('id'));
   },
@@ -243,16 +244,17 @@ export default Component.extend({
     this.toggleLoadingOverlayWithMessage(this.intl.t('agenda-approve-and-close-message'));
     // const isDesignAgenda = await this.currentAgenda.get('isDesignAgenda');
     const currentMeeting = this.currentSession;
-    const agendaToApproveAndClose = this.currentAgenda;
+    const currentDesignAgenda = this.currentAgenda;
     // if (isDesignAgenda) { // TODO KAS-2452 this check is already on the button, so this action should be unreachable without it
-    await this.agendaService.approveAgendaAndCloseMeeting(currentMeeting, agendaToApproveAndClose);
-    await agendaToApproveAndClose.reload();
-    await agendaToApproveAndClose.hasMany('agendaitems').reload();
-    await agendaToApproveAndClose.belongsTo('status').reload();
-    await currentMeeting.reload();
+    await this.agendaService.approveAgendaAndCloseMeeting(currentMeeting, currentDesignAgenda);
+    await currentDesignAgenda.reload(); // need changed attributes (modified)
+    await currentDesignAgenda.belongsTo('status').reload(); // need changed status
+    const agendaitems = await currentDesignAgenda.hasMany('agendaitems').reload();
+    await this.reloadAgendaitemsOfAgendaActivities(agendaitems); // needed because the agendaitems are not correct if any are deleted
+    await currentMeeting.reload(); // need changed attributes (isFinal) // TODO KAS-2452 reloading route should work ?
     this.toggleLoadingOverlayWithMessage(null);
     // TODO KAS-2452 this refresh doesn't do much ..., reloads are needed
-    this.refresh();
+    // this.refresh();
   },
 
   /**
@@ -264,18 +266,21 @@ export default Component.extend({
     this.toggleLoadingOverlayWithMessage(this.intl.t('agenda-close-message'));
     const currentMeeting = this.currentSession;
     const currentAgenda = this.currentAgenda;
+    const isDesignAgenda = await currentAgenda.isDesignAgenda;
     const lastApprovedAgenda = await this.agendaService.closeMeeting(currentMeeting);
     // TODO KAS-2452 design agenda still showing / activities have too many agendaitems after API call, cache issue ?
-    await lastApprovedAgenda.reload();
-    await lastApprovedAgenda.belongsTo('status').reload();
+    await lastApprovedAgenda.reload(); // need changed attributes (modified)
+    await lastApprovedAgenda.belongsTo('status').reload(); // need changed attributes (modified)
     const agendaitems = await lastApprovedAgenda.hasMany('agendaitems').reload();
     await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
-    await currentAgenda.reload(); // TODO KAS-2452, try to force cache to forget his agenda
-    await currentMeeting.reload();
+    await currentMeeting.reload(); // need changed attributes (isFinal) // TODO KAS-2452 reloading route should work ?
     await currentMeeting.hasMany('agendas').reload();
     this.toggleLoadingOverlayWithMessage(null);
-    // TODO KAS-2452 rename this action to navigateToAgenda or make new action
-    this.onApproveAgenda(lastApprovedAgenda.get('id'));
+    if (isDesignAgenda) {
+      return this.router.transitionTo('agenda.agendaitems', currentMeeting.id, lastApprovedAgenda.get('id'));
+    }
+    // TODO KAS-2452 this refresh doesn't do much ..., reloads are needed
+    // this.refresh();
   },
 
   /**
@@ -287,35 +292,21 @@ export default Component.extend({
   async deleteSelectedAgenda() {
     this.toggleLoadingOverlayWithMessage(this.intl.t('agenda-delete-message'));
     if (await this.canDeleteSelectedAgenda) {
-      const agendas = await this.get('agendas');
+      const currentMeeting = this.currentSession;
       const currentAgenda = this.currentAgenda;
-      const agendasLength = agendas.length;
-      const currentMeeting = await this.currentSession;
-
-      // this could be previousVersion of agenda, but is not implemented
       const previousAgenda = await this.get('sessionService').findPreviousAgendaOfSession(currentMeeting, currentAgenda);
-      currentMeeting.set('agenda', previousAgenda); // TODO setting this here might result in a one-to-many with multiple on the "one" side on future agenda versions
-      await currentMeeting.save();
-
-      await this.agendaService.deleteAgenda(currentAgenda);
-
-      // TODO The deleteAgenda will also make new agendaitems that were removed proposable again. Do we want to display this information in the confirmation screen ?
+      await this.agendaService.deleteAgenda(currentMeeting, currentAgenda);
       if (previousAgenda) {
-        // After the agenda has been deleted, we want to update the agendaitems of activity
-        const agendaitems = await previousAgenda.get('agendaitems');
+        console.log('********** FOUND LAST APPROVED AGENDA ************')
+        const agendaitems = await previousAgenda.hasMany('agendaitems').reload();
         await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
-
-        await this.set('sessionService.currentAgenda', previousAgenda);
-        this.router.transitionTo('agenda.agendaitems', currentMeeting.id, previousAgenda.get('id'));
-      } else if (agendasLength === 1) {
-        await this.get('sessionService').deleteSession(currentMeeting);
-        this.router.transitionTo('agendas');
-      } else { // dead code, this should not be reachable unless previousAgenda failed to resolve
-        throw new Error('Something went wrong when deleting the agenda, contact developers');
+        await currentMeeting.reload(); // need changed attributes (isFinal) // TODO KAS-2452 reloading route should work ?
+        await currentMeeting.hasMany('agendas').reload();
+        this.toggleLoadingOverlayWithMessage(null);
+        return this.router.transitionTo('agenda.agendaitems', currentMeeting.id, previousAgenda.get('id'));
       }
-    }
-    if (!this.isDestroyed) {
       this.toggleLoadingOverlayWithMessage(null);
+      this.router.transitionTo('agendas');
     }
   },
 
@@ -328,25 +319,10 @@ export default Component.extend({
    */
   async reopenPreviousAgenda() {
     this.toggleLoadingOverlayWithMessage(this.intl.t('agenda-reopen-previous-version-message'));
-    if (await this.canReopenPreviousAgenda) {
-      const agendas = await this.get('agendas');
-      const designAgenda = this.currentAgenda;
-
-      // this could be previousVersion of agenda, but is not implemented
-      const previousAgenda = agendas
-        .filter((agenda) => !agenda.get('isDesignAgenda'))
-        .sortBy('serialnumber')
-        .reverse()
-        .get('firstObject');
-
-      const currentMeeting = await this.currentSession;
-      currentMeeting.set('agenda', previousAgenda);
-      await currentMeeting.save();
-
-      const designAgendaStatus = await this.store.findRecordByUri('agendastatus', CONSTANTS.AGENDA_STATUSSES.DESIGN); // Async call
-      previousAgenda.set('status', designAgendaStatus);
-      await previousAgenda.save();
-
+    // if (await this.canReopenPreviousAgenda) { // TODO KAS-2452 should be unreachable without, do we need this
+      // const agendas = await this.get('agendas');
+      // const designAgenda = this.currentAgenda;
+      const currentMeeting = this.currentSession;
       // delete all the new documents from the designagenda
       if (this.piecesToDeleteReopenPreviousAgenda) {
         await all(this.piecesToDeleteReopenPreviousAgenda.map(async(piece) => {
@@ -354,18 +330,17 @@ export default Component.extend({
         }));
         this.set('piecesToDeleteReopenPreviousAgenda', null);
       }
-
-      await this.agendaService.deleteAgenda(designAgenda);
-      // After the agenda has been deleted, we want to update the agendaitems of activity
-      const agendaitems = await previousAgenda.get('agendaitems');
+      const lastApprovedAgenda = await this.agendaService.reopenPreviousAgenda(currentMeeting);
+      await lastApprovedAgenda.reload();
+      await lastApprovedAgenda.belongsTo('status').reload();
+      const agendaitems = await lastApprovedAgenda.hasMany('agendaitems').reload();
       await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
-
-      await this.set('sessionService.currentAgenda', previousAgenda);
-      this.router.transitionTo('agenda.agendaitems', currentMeeting.id, previousAgenda.get('id'));
-    }
-    if (!this.isDestroyed) {
+      // await currentAgenda.reload(); // TODO KAS-2452, try to force cache to forget his agenda
+      await currentMeeting.reload();
+      await currentMeeting.hasMany('agendas').reload();
       this.toggleLoadingOverlayWithMessage(null);
-    }
+      // TODO KAS-2452 rename this action to navigateToAgenda or make new action
+      this.onApproveAgenda(lastApprovedAgenda.get('id'));
   },
 
   /**

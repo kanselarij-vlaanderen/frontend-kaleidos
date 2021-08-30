@@ -193,33 +193,17 @@ function openAgendaitemKortBestekTab(agendaitemTitle) {
  * @name deleteAgenda
  * @memberOf Cypress.Chainable#
  * @function
- * @param {number} [meetingId] - The id of the meeting to delete to monitor if the DELETE call is made.
- * @param {boolean} [lastAgenda] - Wether the meeting will be deleted when this agenda is deleted.
+ * @param {boolean} [lastAgenda] - Wether the meeting will be deleted when this agenda will be deleted (automaticaly by service).
  */
-function deleteAgenda(meetingId, lastAgenda) {
+function deleteAgenda(lastAgenda) {
   cy.log('deleteAgenda');
-  if (meetingId) {
-    cy.route('DELETE', `/meetings/${meetingId}`).as('deleteMeeting');
-  } else {
-    cy.route('DELETE', '/meetings/**').as('deleteMeeting');
-  }
-  // cy.route('POST', '/agenda-approve/deleteAgenda').as('deleteAgenda');
   // Call is made but cypress doesn't see it
-  cy.route('DELETE', '/newsletter-infos/**').as('deleteNewsletter');
+  // cy.route('POST', '/agenda-approve/deleteAgenda').as('deleteAgendaCall');
   cy.route('GET', '/agendaitems?fields**').as('loadAgendaitems');
-
   cy.get(agenda.agendaHeader.showAgendaOptions).click();
   cy.get(agenda.agendaHeader.agendaActions.deleteAgenda).click();
   cy.get(auk.modal.container).find(agenda.agendaHeader.confirm.deleteAgenda)
     .click();
-  if (lastAgenda) {
-    cy.wait('@deleteNewsletter', {
-      timeout: 20000,
-    })
-      .wait('@deleteMeeting', {
-        timeout: 20000,
-      });
-  }
   cy.get(auk.modal.container, {
     timeout: 20000,
   }).should('not.exist');
@@ -230,7 +214,6 @@ function deleteAgenda(meetingId, lastAgenda) {
   cy.get(auk.loader, {
     timeout: 20000,
   }).should('not.exist');
-
   cy.log('/deleteAgenda');
 }
 
@@ -543,18 +526,11 @@ function changeSelectedAgenda(agendaName) {
  */
 function closeAgenda() {
   cy.log('closeAgenda');
-  cy.route('PATCH', '/meetings/**').as('patchMeetings');
-  cy.route('PATCH', '/agendas/**').as('patchAgenda');
-
+  // Call is made but cypress doesn't see it
+  // cy.route('POST', '/agenda-approve/closeAgenda').as('closeAgendaCall');
   cy.get(agenda.agendaHeader.showAgendaOptions).click();
   cy.get(agenda.agendaHeader.agendaActions.lockAgenda).click();
   cy.get(agenda.agendaHeader.confirm.lockAgenda).click();
-  cy.wait('@patchMeetings', {
-    timeout: 20000,
-  });
-  cy.wait('@patchAgenda', {
-    timeout: 20000,
-  });
   // as long as the modal exists, the action is not completed
   cy.get(auk.modal.container, {
     timeout: 60000,

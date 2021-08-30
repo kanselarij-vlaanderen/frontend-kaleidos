@@ -75,7 +75,7 @@ context('Agenda tests', () => {
       cy.get(agenda.agendaHeader.confirm.deleteAgenda);
       cy.get(auk.modal.footer.cancel).click();
       // instead of confirming the opened modal, we cancel and let the command handle it
-      cy.deleteAgenda(result.meetingId, true);
+      cy.deleteAgenda(true);
       cy.url().should('include', '/overzicht');
     });
   });
@@ -235,9 +235,10 @@ context('Agenda tests', () => {
       cy.get(agenda.agendaHeader.showAgendaOptions).click();
       cy.get(agenda.agendaHeader.agendaActions.lockAgenda).click();
       cy.get(auk.modal.body).find(auk.alert.message);
-      cy.route('PATCH', '/agendas/*').as('patchAgendas');
       cy.get(agenda.agendaHeader.confirm.lockAgenda).click();
-      cy.wait('@patchAgendas');
+      cy.get(auk.modal.container, {
+        timeout: 60000,
+      }).should('not.exist');
       cy.get(auk.loader).should('not.exist');
       cy.get(agenda.agendaOverview.showChanges);
       cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
@@ -265,9 +266,7 @@ context('Agenda tests', () => {
     cy.approveAndCloseDesignAgenda(false);
     cy.get(auk.modal.body).find(auk.alert.message);
     cy.get(auk.modal.body).contains(newSubcaseTitleShort);
-    cy.route('PATCH', '/subcases/*').as('patchSubcases');
     cy.get(agenda.agendaHeader.confirm.approveAndCloseAgenda).click();
-    cy.wait('@patchSubcases');
     cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');
