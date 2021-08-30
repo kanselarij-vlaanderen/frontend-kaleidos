@@ -131,6 +131,7 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
     return new VRDocumentName(this.lastPiece.name).withOtherVersionSuffix(
       this.versionPieces.length
     );
+  }
 
   @action
   async cancelEditDetails() {
@@ -159,8 +160,8 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
       docType: this.documentType,
       accessLevel: this.accessLevel,
       confidentiality: this.args.piece.confidential,
-    }
-    console.log(this.editPieceMemory)
+    };
+    console.log(this.editPieceMemory);
   }
 
   @action
@@ -170,10 +171,6 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
 
   @action
   changeDocumentType(docType) {
-    this.documentType= docType;
-  }
-
-  get newVersionName(){
-    return new VRDocumentName(this.lastPiece.name).withOtherVersionSuffix(this.versionPieces.length);
+    this.documentType = docType;
   }
 }

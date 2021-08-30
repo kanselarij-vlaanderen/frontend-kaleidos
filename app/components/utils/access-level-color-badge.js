@@ -25,6 +25,6 @@ export default class AccessLevelColorBadge extends Component {
 
   @action
   changeAccessLevel(accessLevel) {
-    this.args.changeAccessLevel(accessLevel)
+    this.args.changeAccessLevel(accessLevel);
   }
 }

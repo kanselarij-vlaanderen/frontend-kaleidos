@@ -6,9 +6,10 @@
     @propertyToShow="label"
     @sortField="priority"
     @selectedItems={{@accessLevel}}
-    @selectModel={{this.changeAccessLevel}} />
+    @selectModel={{this.changeAccessLevel}}
+  />
 {{else}}
-  <Auk::ColorBadge @skin={{this.accessPillSkin}}/>
+  <Auk::ColorBadge @skin={{this.accessPillSkin}} />
   <span>
     {{#if @accessLevel.label}}
       {{@accessLevel.label}}

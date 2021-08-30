@@ -1,8 +1,6 @@
 {{#if @editingEnabled}}
-  <WebComponents::VlToggle
-    @value={{mut @confidential}}
-  />
-  {{else}}
+  <WebComponents::VlToggle @value={{mut @confidential}} />
+{{else}}
   {{#if @confidential}}
     <Auk::Pill @skin="danger" @layout="icon-only" @icon="lock-closed" />
   {{else}}

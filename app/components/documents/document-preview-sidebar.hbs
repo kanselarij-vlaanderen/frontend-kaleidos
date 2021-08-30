@@ -37,7 +37,7 @@
     <div class="auk-u-m-4">
       {{! DETAILS }}
       {{#if (eq this.activeTab "details")}}
-        <Auk::KeyValue @key={{t "document-name"}} >
+        <Auk::KeyValue @key={{t "document-name"}}>
           {{#if this.isEditingDetails}}
             <Textarea
               aria-labelledby="piece-name"
@@ -50,8 +50,7 @@
         </Auk::KeyValue>
         {{#unless this.loadData.isRunning}}
           {{#if (or this.documentType this.isEditingDetails)}}
-            <Auk::KeyValue
-              @key={{t "document-type"}} >
+            <Auk::KeyValue @key={{t "document-type"}}>
               {{#if this.isEditingDetails}}
                 <Utils::ModelSelector
                   @modelName="document-type"
@@ -60,7 +59,8 @@
                   @propertyToShow="label"
                   @sortField="priority"
                   @selectedItems={{this.documentType}}
-                  @selectModel={{this.changeDocumentType}} />
+                  @selectModel={{this.changeDocumentType}}
+                />
               {{else}}
                 {{this.documentType.label}}
               {{/if}}
@@ -68,16 +68,24 @@
           {{/if}}
           {{#if (or @piece.accessLevel this.isEditingDetails)}}
             <Auk::KeyValue @key={{t "publicity"}}>
-              <Utils::AccessLevelColorBadge @accessLevel={{this.accessLevel}} @editingEnabled={{this.isEditingDetails}}
-                                            @changeAccessLevel={{this.changeAccessLevel}} />
+              <Utils::AccessLevelColorBadge
+                @accessLevel={{this.accessLevel}}
+                @editingEnabled={{this.isEditingDetails}}
+                @changeAccessLevel={{this.changeAccessLevel}}
+              />
             </Auk::KeyValue>
           {{/if}}
         {{/unless}}
         <Auk::KeyValue @key={{capitalize (t "confidentiality")}}>
-          <Utils::ConfidentialityPill @confidential={{@piece.confidential}} @editingEnabled={{this.isEditingDetails}}/>
+          <Utils::ConfidentialityPill
+            @confidential={{@piece.confidential}}
+            @editingEnabled={{this.isEditingDetails}}
+          />
         </Auk::KeyValue>
         <Auk::KeyValue @key={{t "file-type"}}>
-          <Utils::Documents::FileTypePill @extension={{@piece.file.extension}} />
+          <Utils::Documents::FileTypePill
+            @extension={{@piece.file.extension}}
+          />
         </Auk::KeyValue>
         <Auk::Toolbar>
           <Auk::Toolbar::Group @position="right">
@@ -95,7 +103,7 @@
                 <Auk::Button
                   @skin="primary"
                   @loading={{this.saveEditDetails.isRunning}}
-                  {{on "click"  (perform this.saveEditDetails)}}
+                  {{on "click" (perform this.saveEditDetails)}}
                 >
                   {{t "save"}}
                 </Auk::Button>
@@ -113,9 +121,9 @@
             {{/if}}
           </Auk::Toolbar::Group>
         </Auk::Toolbar>
-      {{! SIGNATURES }}
+        {{! SIGNATURES }}
       {{else if (eq this.activeTab "signatures")}}
-      {{! VERSIONS }}
+        {{! VERSIONS }}
       {{else if (eq this.activeTab "versions")}}
         {{#each this.versionPieces as |versionPiece|}}
           <Documents::VersionCard
@@ -132,7 +140,7 @@
   <div class="auk-u-mt-auto">
     <div class="auk-panel__footer">
       <Auk::Toolbar>
-        {{#if  (eq this.activeTab "details")}}
+        {{#if (eq this.activeTab "details")}}
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <Auk::Button
