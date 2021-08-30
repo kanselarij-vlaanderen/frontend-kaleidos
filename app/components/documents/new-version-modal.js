@@ -3,12 +3,8 @@ import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import {
-  ValidatorSet, Validator
-} from 'frontend-kaleidos/utils/validators';
-import {
-  isPresent
-} from '@ember/utils';
+import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
+import { isPresent } from '@ember/utils';
 
 export default class DocumentsNewVersionModalComponent extends Component {
   @service fileService;

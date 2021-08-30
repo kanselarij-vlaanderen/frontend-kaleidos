@@ -1,10 +1,13 @@
 <div class="auk-u-mb-4">
-  <div class="auk-o-grid version-card {{if this.isCurrentDocument 'version-card-selected'}}">
+  <div
+    class="auk-o-grid version-card
+      {{if this.isCurrentDocument "version-card-selected"}}"
+  >
     <div class="auk-o-grid-col-static">
       {{#if this.isLastPiece}}
-        <Auk::Badge @icon="document" @size="large"/>
+        <Auk::Badge @icon="document" @size="large" />
       {{else}}
-        <Auk::Badge @icon="timeline" @size="large"/>
+        <Auk::Badge @icon="timeline" @size="large" />
       {{/if}}
     </div>
     <div class="auk-o-grid-col-flex">
@@ -35,13 +38,8 @@
           @href={{@piece.file.namedDownloadLink}}
           download
         />
-        <DropdownMenu
-          @skin="borderless"
-          @icon="more"
-          as |Menu|>
-          <Menu.Item
-            @href={{@piece.viewDocumentURL}} target="_blank"
-          >
+        <DropdownMenu @skin="borderless" @icon="more" as |Menu|>
+          <Menu.Item @href={{@piece.viewDocumentURL}} target="_blank">
             {{t "open-version"}}
           </Menu.Item>
           {{#if this.currentSessionService.isEditor}}

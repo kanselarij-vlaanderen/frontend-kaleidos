@@ -9,12 +9,24 @@
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
           <Auk::Tabs>
-            <Auk::Tab {{on "click" (fn this.setActiveTab "details")}} @active={{eq this.activeTab "details"}}>{{t
-              "detail"}}</Auk::Tab>
-            <Auk::Tab {{on "click" (fn this.setActiveTab "signatures")}} @active={{eq this.activeTab "signatures"}}>{{t
-              "signatures"}}</Auk::Tab>
-            <Auk::Tab {{on "click" (fn this.setActiveTab "versions")}} @active={{eq this.activeTab "versions"}}>{{t
-              "version"}}</Auk::Tab>
+            <Auk::Tab
+              {{on "click" (fn this.setActiveTab "details")}}
+              @active={{eq this.activeTab "details"}}
+            >
+              {{t "detail"}}
+            </Auk::Tab>
+            <Auk::Tab
+              {{on "click" (fn this.setActiveTab "signatures")}}
+              @active={{eq this.activeTab "signatures"}}
+            >
+              {{t "signatures"}}
+            </Auk::Tab>
+            <Auk::Tab
+              {{on "click" (fn this.setActiveTab "versions")}}
+              @active={{eq this.activeTab "versions"}}
+            >
+              {{t "version"}}
+            </Auk::Tab>
           </Auk::Tabs>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
@@ -23,7 +35,7 @@
 
   <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
     <div class="auk-u-m-4">
-      {{!-- DETAILS --}}
+      {{! DETAILS }}
       {{#if (eq this.activeTab "details")}}
         <Auk::KeyValue @key={{t "document-name"}} >
           {{#if this.isEditingDetails}}
@@ -101,19 +113,22 @@
             {{/if}}
           </Auk::Toolbar::Group>
         </Auk::Toolbar>
-      {{!-- SIGNATURES --}}
+      {{! SIGNATURES }}
       {{else if (eq this.activeTab "signatures")}}
-
-      {{!-- VERSIONS --}}
+      {{! VERSIONS }}
       {{else if (eq this.activeTab "versions")}}
         {{#each this.versionPieces as |versionPiece|}}
-          <Documents::VersionCard @openVerify={{fn this.openVerify versionPiece}}  @lastPiece={{this.lastPiece}}
-                                  @piece={{versionPiece}} @currentPiece={{@piece}}/>
+          <Documents::VersionCard
+            @openVerify={{fn this.openVerify versionPiece}}
+            @lastPiece={{this.lastPiece}}
+            @piece={{versionPiece}}
+            @currentPiece={{@piece}}
+          />
         {{/each}}
       {{/if}}
     </div>
   </div>
-  {{!-- FOOTER --}}
+  {{! FOOTER }}
   <div class="auk-u-mt-auto">
     <div class="auk-panel__footer">
       <Auk::Toolbar>
@@ -146,7 +161,6 @@
       </Auk::Toolbar>
     </div>
   </div>
-
 </Auk::Sidebar>
 
 {{#if this.isVerifyingDelete}}
@@ -159,7 +173,9 @@
 {{/if}}
 
 {{#if this.isOpenUploadVersionModal}}
-  <Documents::NewVersionModal @onClose={{this.closeUploadVersionModal}} @onSave={{this.saveUploadVersionModal}}
-                              @newVersionName={{this.newVersionName}}
+  <Documents::NewVersionModal
+    @onClose={{this.closeUploadVersionModal}}
+    @onSave={{this.saveUploadVersionModal}}
+    @newVersionName={{this.newVersionName}}
   />
 {{/if}}

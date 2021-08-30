@@ -1,4 +1,4 @@
-<label class="auk-checkbox">
+<label class="auk-checkbox {{if (and (not (has-block)) (not @label)) "auk-checkbox--unattached"}}">
   <input
     class="auk-checkbox__toggle"
     ...attributes
@@ -6,12 +6,14 @@
     checked={{@checked}}
     disabled={{@disabled}}
   />
-  <span>
-    {{#if (has-block)}}
-      {{yield}}
-    {{else}}
-      {{@label}}
-    {{/if}}
-  </span>
+  {{#if (or (has-block) @label)}}
+    <span>
+      {{#if (has-block)}}
+        {{yield}}
+      {{else}}
+        {{@label}}
+      {{/if}}
+    </span>
+  {{/if}}
   <span class="auk-checkbox__box"></span>
 </label>

@@ -63,7 +63,6 @@
             {{t "email-to"}}
           </Auk::Label>
           <Auk::Input
-            type="text"
             @value={{ await email.to }}
             @block={{true}}
             {{on "change" (fn this.setMailTo email)}}
@@ -75,7 +74,6 @@
             {{t "subject"}}
           </Auk::Label>
           <Auk::Input
-            type="text"
             @value={{ await email.subject }}
             @block={{true}}
             {{on "change" (fn this.setMailSubject email)}}

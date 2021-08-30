@@ -1,19 +1,19 @@
 <Auk::Modal @size="full-screen">
-  <Auk::Modal::Header
-          @title={{@piece.name}}
-          @onClose={{@onClose}}
-  />
+  <Auk::Modal::Header @title={{@piece.name}} @onClose={{@onClose}} />
   <Auk::Modal::Body @noPadding={{true}}>
     <div class="auk-panel-layout">
       <div class="auk-panel-layout__main-content">
         {{#if this.fileFormatIsSupported}}
-          <PdfView @filePath={{@piece.file.downloadLink}}/>
+          <PdfView @filePath={{@piece.file.downloadLink}} />
         {{else}}
           <div class="auk-u-p-4">
             <Auk::Alert
-                    @skin="warning"
-                    @title={{t "file-type-unsupported"}}
-                    @message={{t "file-viewer-type-unsupported" fileType=@piece.file.extension}}
+              @skin="warning"
+              @title={{t "file-type-unsupported"}}
+              @message={{t
+                "file-viewer-type-unsupported"
+                fileType=@piece.file.extension
+              }}
             />
           </div>
         {{/if}}
