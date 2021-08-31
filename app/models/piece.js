@@ -80,8 +80,8 @@ export default Model.extend({
   }),
 
   // SIGN FLOW
-  signMarkActivity: belongsTo(),
-  signPreparedDocument: belongsTo(),
+  signMarkingActivity: belongsTo(),
+  signingHubDocument: belongsTo(),
   signedPiece: belongsTo(),
 
   cases: hasMany('case', {

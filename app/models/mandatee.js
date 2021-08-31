@@ -37,7 +37,7 @@ export default Model.extend({
   publicationFlows: hasMany('publication-flow', {
     serialize: false,
   }),
-  signActivities: hasMany(),
+  signSigningActivities: hasMany(),
 
   fullDisplayName: computed('person', 'title', 'person.nameToDisplay', function() {
     const nameToDisplay = this.get('person.nameToDisplay');

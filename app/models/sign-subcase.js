@@ -6,10 +6,10 @@ export default class SignSubcaseModel extends Model {
   @attr('datetime') endDate;
 
   @belongsTo signFlow;
-  @belongsTo signMarkActivity;
-  @belongsTo signPrepareActivity;
-  @hasMany signActivities;
-  @hasMany signRefuseActivities;
+  @belongsTo signMarkingActivity;
+  @belongsTo signPreparationActivity;
+  @hasMany signSigningActivities;
+  @hasMany signRefusalActivities;
   @belongsTo signCancellationActivity;
-  @belongsTo signCompleteActivity;
+  @belongsTo signCompletionActivity;
 }

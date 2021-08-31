@@ -6,5 +6,5 @@ export default class SignedPieceModel extends Model {
 
   @belongsTo('piece') unsignedPiece;
   @belongsTo('file') signedFile;
-  @belongsTo signCompleteActivity;
+  @belongsTo signCompletionActivity;
 }

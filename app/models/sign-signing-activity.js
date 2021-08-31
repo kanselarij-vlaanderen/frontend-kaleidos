@@ -1,13 +1,13 @@
 import Model, { attr, belongsTo } from '@ember-data/model';
 
-export default class SignActivityModel extends Model {
+export default class SignSigningActivityModel extends Model {
   @attr title;
   @attr('datetime') startDate;
   @attr('datetime') endDate;
 
   @belongsTo signSubcase;
-  @belongsTo signPrepareActivity;
-  @belongsTo signRefuseActivity;
-  @belongsTo signCompleteActivity;
+  @belongsTo signPreparationActivity;
+  @belongsTo signRefusalActivity;
+  @belongsTo signCompletionActivity;
   @belongsTo mandatee;
 }

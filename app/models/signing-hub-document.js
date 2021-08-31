@@ -1,9 +1,9 @@
 import Model, { attr, belongsTo } from '@ember-data/model';
 
-export default class SignPreparedDocumentModel extends Model {
+export default class SigningHubDocumentModel extends Model {
   @attr('string') documentId;
   @attr('string') packageId;
 
-  @belongsTo signPrepareActivity;
+  @belongsTo signPreparationActivity;
   @belongsTo piece;
 }
