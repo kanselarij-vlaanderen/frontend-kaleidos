@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 
-export default class DocumentsDocumentPreviewModal extends Component {
+export default class  DocumentsDocumentPreviewDocumentPreviewModal extends Component {
   get fileFormatIsSupported() {
     const pdfMime = 'application/pdf';
     const pdfExtension = 'pdf';

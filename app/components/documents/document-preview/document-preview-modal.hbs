@@ -19,7 +19,12 @@
         {{/if}}
       </div>
       <div class="auk-panel-layout__sidebar">
-        <Documents::DocumentPreviewSidebar @piece={{@piece}} @transitionBack={{@onClose}} @resetPiece={{this.resetPiece}}/>
+        <Documents::DocumentPreview::DocumentPreviewSidebar
+          @piece={{@piece}}
+          @transitionBack={{@onClose}}
+          @openNewPiece={{@openNewPiece}}
+          @resetPiece={{this.resetPiece}}
+        />
       </div>
     </div>
   </Auk::Modal::Body>
