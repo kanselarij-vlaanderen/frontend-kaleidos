@@ -182,17 +182,14 @@ context('Agenda tests', () => {
       // Check the values in edit session view
       cy.get(agenda.agendaHeader.showActionOptions).click();
       cy.get(agenda.agendaHeader.actions.toggleEditingSession).click();
-      cy.get(agenda.editSession.meetingNumber).find(auk.input)
-        .should('have.value', result.meetingNumber);
-      cy.get(agenda.editSession.numberRep).find(utils.vlFormInput)
-        .should('have.value', result.meetingNumberRep);
+      cy.get(agenda.editSession.meetingNumber).should('have.value', result.meetingNumber);
+      cy.get(agenda.editSession.numberRep).should('have.value', result.meetingNumberRep);
       cy.get(utils.vlModalFooter.cancel).click();
       // Check if the next automatic number is correct
       cy.get(utils.mHeader.agendas).click();
       cy.get(route.agendas.action.newMeeting).click();
       cy.wait(500); // await call not possible
-      cy.get(agenda.newSession.meetingNumber)
-        .should('have.value', (parseInt(result.meetingNumber, 10) + 1).toString());
+      cy.get(agenda.newSession.meetingNumber).should('have.value', (parseInt(result.meetingNumber, 10) + 1).toString());
     });
   });
 

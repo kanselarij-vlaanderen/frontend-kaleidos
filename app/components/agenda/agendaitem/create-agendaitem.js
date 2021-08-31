@@ -12,7 +12,7 @@ import {
 // eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   availableSubcases: null,
-  showPostponed: null,
+  showPostponed: false,
   noItemsSelected: true,
 
   currentSession: alias('sessionService.currentSession'),
@@ -155,11 +155,9 @@ export default Component.extend({
       this.set('isAddingAgendaitems', false);
     },
 
-    checkShowPostponedValue() {
-      const {
-        showPostponed,
-      } = this;
-      if (showPostponed) {
+    checkShowPostponedValue(event) {
+      this.set('showPostponed', event.target.checked);
+      if (this.showPostponed) {
         this.findPostponed.perform();
       } else {
         this.findAll.perform();

@@ -51,7 +51,10 @@
     <Auk::Modal::Body>
       <div class="auk-form-group">
         <Auk::Label>{{t "government-field"}}</Auk::Label>
-        <WebComponents::VlFormInput @value={{this.label}} />
+        <Auk::Input
+          @block={{true}}
+          @value={{this.label}}
+        />
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "government-domain"}}</Auk::Label>
@@ -88,7 +91,10 @@
     <Auk::Modal::Body>
       <div class="auk-form-group">
         <Auk::Label>{{t "government-field"}}</Auk::Label>
-        <WebComponents::VlFormInput @value={{this.label}} />
+        <Auk::Input
+          @block={{true}}
+          @value={{this.label}}
+        />
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "government-domain"}}</Auk::Label>

@@ -4,6 +4,7 @@
 import settings from '../../../../selectors/settings.selectors';
 import dependency from '../../../../selectors/dependency.selectors';
 import utils from '../../../../selectors/utils.selectors';
+import auk from '../../../../selectors/auk.selectors';
 
 context('Settings page tests', () => {
   let govermentDomains = [];
@@ -86,7 +87,7 @@ context('Settings page tests', () => {
 
     cy.get(settings.overview.manageGovermentDomains).click();
     cy.get(settings.modelManager.add).click();
-    cy.get(utils.vlFormInput).type('Andere zaken');
+    cy.get(auk.input).type('Andere zaken');
     cy.get(utils.vlModalFooter.save).click();
     cy.wait('@postDomains');
     cy.get(dependency.emberPowerSelect.trigger).click();
@@ -105,8 +106,8 @@ context('Settings page tests', () => {
     cy.get(dependency.emberPowerSelect.option).eq(0)
       .click();
     cy.get(settings.modelManager.edit).click();
-    cy.get(utils.vlFormInput).clear();
-    cy.get(utils.vlFormInput).type('Test Input');
+    cy.get(auk.input).clear()
+      .type('Test Input');
     cy.get(utils.vlModalFooter.save).click();
     cy.wait('@patchDomains');
     cy.get(dependency.emberPowerSelect.trigger).click();

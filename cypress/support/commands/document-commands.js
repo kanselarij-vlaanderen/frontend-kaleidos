@@ -32,7 +32,6 @@ function addNewDocumentsInUploadModal(files, model) {
 
       if (file.newFileName) {
         cy.get(document.uploadedDocument.nameInput).eq(index)
-          .find(utils.vlFormInput)
           .clear()
           .type(file.newFileName);
       }
@@ -424,7 +423,8 @@ function addLinkedDocument(filenames) {
     cy.get(document.addExistingPiece.searchInput).clear()
       .type(name);
     cy.wait(1000);
-    cy.get(document.addExistingPiece.checkbox).click();
+    cy.get(document.addExistingPiece.checkbox).parent()
+      .click();
   });
   cy.get(utils.vlModalFooter.save).click();
   cy.log('/addLinkedDocument');

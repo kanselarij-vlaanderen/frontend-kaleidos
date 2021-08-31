@@ -65,10 +65,11 @@
     </div>
     {{#if this.isEditingFormattedMeetingIdentifier}}
       <div class="auk-o-flex">
-        <WebComponents::VlFormInput
-          data-test-new-session-number-representation-input={{true}}
+        <Auk::Input
+          @width="medium"
           @value={{this.formattedMeetingIdentifier}}
-          @class="auk-input--w-medium auk-u-mr-2"
+          class="auk-u-mr-2"
+          data-test-new-session-number-representation-input={{true}}
         />
         <WebComponents::VlSaveButton
           data-test-new-session-number-representation-save={{true}}
@@ -82,9 +83,10 @@
     <div class="auk-u-mb-2">
       <div class="auk-form-group">
         <Auk::Label>{{t "meeting-location"}}</Auk::Label>
-        <WebComponents::VlFormInput
-          data-test-new-session-meeting-location={{true}}
+        <Auk::Input
+          @block={{true}}
           @value={{this.extraInfo}}
+          data-test-new-session-meeting-location={{true}}
         />
       </div>
     </div>
