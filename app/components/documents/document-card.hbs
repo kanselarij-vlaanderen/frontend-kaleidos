@@ -119,10 +119,16 @@
               </h6>
             {{/if}}
             <div class="vlc-document-card-content__meta">
-              {{t "uploaded-at"}}
-              {{moment-format this.piece.created}}
-              {{t "at"}}
-              {{moment-format this.piece.created "HH:mm"}}
+              <div>
+              {{#if this.piece.created}}
+                {{t "uploaded-at"}}
+                {{moment-format this.piece.created}}
+                {{t "at"}}
+                {{moment-format this.piece.created "HH:mm"}}
+              {{else}}
+                {{t "upload-time-unknown"}}
+              {{/if}}
+              </div>
               {{#if this.piece.accessLevelLastModified}}
                 <div>
                   {{t "access-level-last-modified"}}
