@@ -7,15 +7,21 @@
             <Auk::Tab
               {{on "click" (fn this.setActiveTab "details")}}
               @active={{eq this.activeTab "details"}}
-            >{{t "detail"}}</Auk::Tab>
+            >
+              {{t "detail"}}
+            </Auk::Tab>
             <Auk::Tab
               {{on "click" (fn this.setActiveTab "signatures")}}
               @active={{eq this.activeTab "signatures"}}
-            >{{t "signatures"}}</Auk::Tab>
+            >
+              {{t "signatures"}}
+            </Auk::Tab>
             <Auk::Tab
               {{on "click" (fn this.setActiveTab "versions")}}
               @active={{eq this.activeTab "versions"}}
-            >{{t "version"}}</Auk::Tab>
+            >
+              {{t "versions"}}
+            </Auk::Tab>
           </Auk::Tabs>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
@@ -26,7 +32,7 @@
   {{#if (eq this.activeTab "details")}}
     <div class="auk-u-m-4">
       <Auk::KeyValue @key={{t "document-name"}} @value={{@piece.name}} />
-      {{#unless this.loadData.isRunning}}
+      {{#unless this.loadDetailsData.isRunning}}
         {{#if this.documentType}}
           <Auk::KeyValue
             @key={{t "document-type"}}
@@ -57,14 +63,16 @@
     {{! VERSIONS }}
   {{else if (eq this.activeTab "versions")}}
     <div class="auk-u-m-4">
-      {{#each this.versionPieces as |versionPiece|}}
-        <Documents::VersionCard
-          @openVerify={{fn this.openVerify versionPiece}}
-          @lastPiece={{this.lastPiece}}
-          @piece={{versionPiece}}
-          @currentPiece={{@piece}}
-        />
-      {{/each}}
+      <Utils::LoadableContent @isLoading={{this.loadVersionHistory.isRunning}}>
+        {{#each this.versionPieces as |piece|}}
+          <Documents::VersionCard
+            @openVerify={{fn this.openDeletePiece piece}}
+            @lastPiece={{this.lastPiece}}
+            @piece={{piece}}
+            @currentPiece={{@piece}}
+          />
+        {{/each}}
+      </Utils::LoadableContent>
       <div class="auk-u-mt-4">
         <Auk::Button
           @skin="tertiary"
@@ -91,12 +99,12 @@
   }}
 </Auk::Sidebar>
 
-{{#if this.isVerifyingDelete}}
+{{#if this.isDeletingPiece}}
   <WebComponents::VlModalVerify
     @title={{t "document-delete"}}
     @message={{t "delete-document-message"}}
-    @cancel={{this.cancelVerify}}
-    @verify={{this.deleteVersion}}
+    @cancel={{this.cancelDeletePiece}}
+    @verify={{this.deletePiece}}
   />
 {{/if}}
 

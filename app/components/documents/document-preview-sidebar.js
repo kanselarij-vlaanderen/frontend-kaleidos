@@ -3,7 +3,6 @@ import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import moment from 'moment';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isBlank } from '@ember/utils';
 import VRDocumentName from '../../utils/vr-document-name';
@@ -21,38 +20,43 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
   @service store;
 
   @tracked documentType;
-  @tracked docContainer;
+  @tracked documentContainer;
   @tracked accessLevel;
   @tracked lastPiece;
   @tracked versionPieces;
 
   @tracked activeTab = 'details';
   @tracked isOpenUploadVersionModal = false;
-  @tracked isVerifyingDelete = false;
+  @tracked isDeletingPiece = false;
   @tracked selectedToDelete;
 
   constructor() {
     super(...arguments);
-    this.loadData.perform();
+    this.loadDetailsData.perform();
   }
 
   @task
-  *loadData() {
-    this.docContainer = yield this.args.piece.documentContainer;
-    this.loadVersionHistory.perform();
-    this.documentType = yield this.docContainer.type;
+  *loadDetailsData() {
+    this.documentContainer = yield this.args.piece.documentContainer;
+    this.documentType = yield this.documentContainer.type;
     this.accessLevel = yield this.args.piece.accessLevel;
   }
 
   @task
   *loadVersionHistory() {
-    this.versionPieces = yield this.docContainer.reverseSortedPieces;
-    this.lastPiece = yield this.docContainer.lastPiece;
+    this.versionPieces = yield this.documentContainer.reverseSortedPieces;
+    this.lastPiece = yield this.documentContainer.lastPiece;
   }
 
   @action
   setActiveTab(tabName) {
     this.activeTab = tabName;
+    if (tabName === 'details'){
+      this.loadDetailsData.perform();
+    }
+    if (tabName === 'versions'){
+      this.loadVersionHistory.perform();
+    }
   }
 
   @action
@@ -66,7 +70,7 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
   }
 
   @action
-  async saveUploadVersionModal(newVersion) {
+  async saveUploadVersionModal(piece) {
     let accessLevel = await this.lastPiece.accessLevel;
     if (isBlank(accessLevel)) {
       accessLevel = await this.store.findRecordByUri(
@@ -74,16 +78,16 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
         CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
       );
     }
-    const now = moment().utc().toDate();
+    const now = new Date();
     let newPiece = this.store.createRecord('piece', {
       created: now,
       modified: now,
-      name: newVersion.name,
-      file: newVersion.file,
+      name: piece.name,
+      file: piece.file,
       previousPiece: this.lastPiece,
       confidential: this.lastPiece.confidential,
       accessLevel: accessLevel,
-      documentContainer: this.docContainer,
+      documentContainer: this.documentContainer,
     });
     await newPiece.save();
 
@@ -93,11 +97,11 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
   }
 
   @action
-  async deleteVersion() {
+  async deletePiece() {
     await this.fileService.deletePiece(this.selectedToDelete);
     // delete orphan container if last piece is deleted
     if (this.versionPieces.size <= 1) {
-      await this.fileService.deleteDocumentContainer(this.docContainer);
+      await this.fileService.deleteDocumentContainer(this.documentContainer);
       this.args.transitionBack();
     }
     //if you deleted current file also go back
@@ -106,19 +110,19 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
     }
     this.loadVersionHistory.perform();
     this.selectedToDelete = null;
-    this.isVerifyingDelete = false;
+    this.isDeletingPiece = false;
   }
 
   @action
-  openVerify(versionPiece) {
-    this.selectedToDelete = versionPiece;
-    this.isVerifyingDelete = true;
+  openDeletePiece(piece) {
+    this.selectedToDelete = piece;
+    this.isDeletingPiece = true;
   }
 
   @action
-  cancelVerify() {
+  cancelDeletePiece() {
     this.selectedToDelete = null;
-    this.isVerifyingDelete = false;
+    this.isDeletingPiece = false;
   }
 
   get newVersionName() {

@@ -20,7 +20,7 @@ export default class DocumentsVersionCardComponent extends Component {
     this.accessLevel = yield this.args.piece.accessLevel;
   }
 
-  get isCurrentDocument() {
+  get isCurrentPiece() {
     return this.args.currentPiece.id === this.args.piece.id;
   }
 
