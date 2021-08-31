@@ -47,7 +47,7 @@ export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Comp
 
   @task
   *loadVersionsData() {
-    const pieces =  yield this.documentContainer.hasMany('pieces').reload();
+    const pieces = yield this.documentContainer.hasMany('pieces').reload();
     const sortedPieces = A(sortPieces(pieces.toArray()).reverse());
     this.versions = sortedPieces.slice(0).reverse();
     this.lastPiece = sortedPieces.lastObject;
