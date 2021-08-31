@@ -38,19 +38,21 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   // Set the kind
   // Added wait, mouseover, force clicking and checking for existance of the ember power select option because of flakyness
   // Sometimes, the dropdown stays after pressing an option
-  cy.get(agenda.newSession.kind).click();
-  cy.get(dependency.emberPowerSelect.option, {
-    timeout: 5000,
-  }).wait(500)
-    .contains(kind)
-    .scrollIntoView()
-    .trigger('mouseover')
-    .click({
-      force: true,
-    });
-  cy.get(dependency.emberPowerSelect.option, {
-    timeout: 15000,
-  }).should('not.be.visible');
+  if (kind) {
+    cy.get(agenda.newSession.kind).click();
+    cy.get(dependency.emberPowerSelect.option, {
+      timeout: 5000,
+    }).wait(500)
+      .contains(kind)
+      .scrollIntoView()
+      .trigger('mouseover')
+      .click({
+        force: true,
+      });
+    cy.get(dependency.emberPowerSelect.option, {
+      timeout: 15000,
+    }).should('not.be.visible');
+  }
 
   // Set the start date
   cy.get(agenda.newSession.datepicker).find(utils.vlDatepicker)
@@ -136,9 +138,12 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
  */
 function visitAgendaWithLink(link) {
   cy.log('visitAgendaWithLink');
-  cy.route('GET', '/agendaitems/*/agenda-activity').as('loadAgendaitems');
+  // cy.route('GET', '/agendaitems/*/agenda-activity').as('loadAgendaitems');
   cy.visit(link);
-  cy.wait('@loadAgendaitems');
+  // cy.wait('@loadAgendaitems');
+  cy.get(auk.loader, {
+    timeout: 40000,
+  }).should('not.exist');
   cy.log('/visitAgendaWithLink');
 }
 
@@ -518,7 +523,7 @@ function changeSelectedAgenda(agendaName) {
 }
 
 /**
- * @description closes an agenda
+ * @description closes an agenda (agenda-hader action is renamed to closeMeeting)
  * In all cases there will be 1 popup, an auModal, opened for confirmation during this command
  * @name closeAgenda
  * @memberOf Cypress.Chainable#
@@ -535,7 +540,46 @@ function closeAgenda() {
   cy.get(auk.modal.container, {
     timeout: 60000,
   }).should('not.exist');
+  cy.get(auk.loader).should('not.exist');
   cy.log('/closeAgenda');
+}
+
+/**
+ * @description reopens an agenda
+ * In all cases there will be 1 popup, an auModal, opened for confirmation during this command
+ * @name reopenAgenda
+ * @memberOf Cypress.Chainable#
+ * @function
+ */
+function reopenAgenda() {
+  cy.log('reopenAgenda');
+  cy.get(agenda.agendaHeader.showAgendaOptions).click();
+  cy.get(agenda.agendaHeader.agendaActions.unlockAgenda).click();
+  // Currently, this action has no confirmation popup
+  cy.get(auk.loader).should('not.exist');
+  cy.log('/reopenAgenda');
+}
+
+/**
+ * @description reopens the previous version of an agenda
+ * In all cases there will be 1 popup, an auModal, opened for confirmation during this command
+ * @name reopenPreviousAgenda
+ * @memberOf Cypress.Chainable#
+ * @function
+ */
+function reopenPreviousAgenda() {
+  cy.log('reopenPreviousAgenda');
+  // Call is made but cypress doesn't see it
+  // cy.route('POST', '/agenda-approve/reopenPreviousAgenda').as('reopenPreviousAgendaCall');
+  cy.get(agenda.agendaHeader.showAgendaOptions).click();
+  cy.get(agenda.agendaHeader.agendaActions.reopenPreviousVersion).click();
+  cy.get(agenda.agendaHeader.confirm.reopenPreviousVersion).click();
+  // as long as the modal exists, the action is not completed
+  cy.get(auk.modal.container, {
+    timeout: 60000,
+  }).should('not.exist');
+  cy.get(auk.loader).should('not.exist');
+  cy.log('/reopenPreviousAgenda');
 }
 
 /**
@@ -611,6 +655,8 @@ Cypress.Commands.add('agendaitemExists', agendaitemExists);
 Cypress.Commands.add('openDetailOfAgendaitem', openDetailOfAgendaitem);
 Cypress.Commands.add('changeSelectedAgenda', changeSelectedAgenda);
 Cypress.Commands.add('closeAgenda', closeAgenda);
+Cypress.Commands.add('reopenAgenda', reopenAgenda);
+Cypress.Commands.add('reopenPreviousAgenda', reopenPreviousAgenda);
 Cypress.Commands.add('releaseDecisions', releaseDecisions);
 Cypress.Commands.add('releaseDocuments', releaseDocuments);
 Cypress.Commands.add('openAgendaitemKortBestekTab', openAgendaitemKortBestekTab);

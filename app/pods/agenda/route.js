@@ -13,14 +13,23 @@ export default class AgendaRoute extends Route {
 
   async model(params) {
     const meetingId = params.meeting_id;
-    const meeting = await this.store.findRecord('meeting', meetingId, {
-      include: 'agendas,agendas.status', reload: true,
+    // TODO KAS-2452 this include and reload true does not pick up the agenda deletion change
+    const meeting = await this.store.queryOne('meeting', {
+      'filter[id]': meetingId,
+      include: 'agendas,agendas.status'
     });
+    // const meeting = await this.store.findRecord('meeting', meetingId, {
+    //   include: 'agendas,agendas.status', reload: true,
+    // });
     set(this.sessionService, 'currentSession', meeting);
-    const agendaId = params.agenda_id;
-    // TODO KAS-2452 this hasMany reload is an addition, do we always want this?
-    const agendas = await meeting.hasMany('agendas').reload();
-    const agenda = await agendas.findBy('id', agendaId);
+    // const agendaId = params.agenda_id;
+    const agenda = await this.store.queryOne('agenda', {
+      'filter[created-for][:id:]': meetingId,
+      'filter[id]': params.agenda_id,
+      include: 'status',
+    });
+    // const agendas = await meeting.get('agendas');
+    // const agenda = await agendas.findBy('id', agendaId);
     set(this.sessionService, 'currentAgenda', agenda);
 
     await this.updateSelectedAgenda(meeting, agenda);
