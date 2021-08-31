@@ -14,4 +14,9 @@ export default class DocumentController extends Controller {
       this.router.transitionTo('agendas');
     }
   }
+
+  @action
+  openNewPiece(piece) {
+    this.model = piece;
+  }
 }

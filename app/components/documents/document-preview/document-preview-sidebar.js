@@ -14,7 +14,7 @@ import VRDocumentName from '../../../utils/vr-document-name';
  * - "signatures"
  * - "versions"
  */
-export default class DocumentsDocumentPreviewSidebar extends Component {
+export default class  DocumentsDocumentPreviewDocumentPreviewSidebar extends Component {
   @service fileService;
   @service router;
   @service store;
@@ -22,8 +22,9 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
   @tracked documentType;
   @tracked documentContainer;
   @tracked accessLevel;
+
   @tracked lastPiece;
-  @tracked versionPieces;
+  @tracked versions;
 
   @tracked activeTab = 'details';
   @tracked isOpenUploadVersionModal = false;
@@ -43,8 +44,8 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
   }
 
   @task
-  *loadVersionHistory() {
-    this.versionPieces = yield this.documentContainer.reverseSortedPieces;
+  *loadVersionsData() {
+    this.versions = yield this.documentContainer.reverseSortedPieces;
     this.lastPiece = yield this.documentContainer.lastPiece;
   }
 
@@ -55,7 +56,7 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
       this.loadDetailsData.perform();
     }
     if (tabName === 'versions'){
-      this.loadVersionHistory.perform();
+      this.loadVersionsData.perform();
     }
   }
 
@@ -92,15 +93,15 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
     await newPiece.save();
 
     this.isOpenUploadVersionModal = false;
-    this.loadVersionHistory.perform();
-    this.router.transitionTo('document', newPiece.id);
+    this.args.openNewPiece(newPiece);
+    this.loadVersionsData.perform();
   }
 
   @action
   async deletePiece() {
     await this.fileService.deletePiece(this.selectedToDelete);
     // delete orphan container if last piece is deleted
-    if (this.versionPieces.size <= 1) {
+    if (this.versions.size <= 1) {
       await this.fileService.deleteDocumentContainer(this.documentContainer);
       this.args.transitionBack();
     }
@@ -108,7 +109,7 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
     if (this.selectedToDelete.id === this.args.piece.id) {
       this.args.transitionBack();
     }
-    this.loadVersionHistory.perform();
+    this.loadVersionsData.perform();
     this.selectedToDelete = null;
     this.isDeletingPiece = false;
   }
@@ -127,7 +128,7 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
 
   get newVersionName() {
     return new VRDocumentName(this.lastPiece.name).withOtherVersionSuffix(
-      this.versionPieces.length
+      this.versions.length
     );
   }
 }

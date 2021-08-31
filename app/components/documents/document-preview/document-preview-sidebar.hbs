@@ -62,27 +62,15 @@
 
     {{! VERSIONS }}
   {{else if (eq this.activeTab "versions")}}
-    <div class="auk-u-m-4">
-      <Utils::LoadableContent @isLoading={{this.loadVersionHistory.isRunning}}>
-        {{#each this.versionPieces as |piece|}}
-          <Documents::DocumentPreview::Versions::VersionCard
-            @openVerify={{fn this.openDeletePiece piece}}
-            @lastPiece={{this.lastPiece}}
-            @piece={{piece}}
-            @currentPiece={{@piece}}
-          />
-        {{/each}}
-      </Utils::LoadableContent>
-      <div class="auk-u-mt-4">
-        <Auk::Button
-          @skin="tertiary"
-          @icon="add"
-          {{on "click" this.openUploadVersionModal}}
-        >
-          {{t "new-version"}}
-        </Auk::Button>
-      </div>
-    </div>
+    <Utils::LoadableContent @isLoading={{this.loadVersionsData.isRunning}}>
+      <Documents::DocumentPreview::Versions::VersionsTab
+        @piece={{@piece}}
+        @lastPiece={{this.lastPiece}}
+        @versions={{this.versions}}
+        @openDeletePiece={{this.openDeletePiece}}
+        @openUploadVersionModal={{this.openUploadVersionModal}}
+      />
+    </Utils::LoadableContent>
   {{/if}}
 
   {{! FOOTER
