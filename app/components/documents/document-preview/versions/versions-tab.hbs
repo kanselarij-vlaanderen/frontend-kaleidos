@@ -1,19 +1,8 @@
-<div class="auk-u-m-4">
-  {{#each @versions as |piece|}}
-    <Documents::DocumentPreview::Versions::VersionCard
-      @openVerify={{fn this.openDeletePiece piece}}
-      @lastPiece={{@lastPiece}}
-      @piece={{piece}}
-      @currentPiece={{@piece}}
-    />
-  {{/each}}
-  <div class="auk-u-mt-4">
-    <Auk::Button
-      @skin="tertiary"
-      @icon="add"
-      {{on "click" this.openUploadVersionModal}}
-    >
-      {{t "new-version"}}
-    </Auk::Button>
-  </div>
-</div>
+{{#each @versions as |piece|}}
+  <Documents::DocumentPreview::Versions::VersionCard
+    @openVerify={{fn this.openDeletePiece piece}}
+    @lastPiece={{@lastPiece}}
+    @piece={{piece}}
+    @currentPiece={{@piece}}
+  />
+{{/each}}

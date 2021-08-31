@@ -6,10 +6,4 @@ export default class DocumentsDocumentPreviewVersionsVersionsTabComponent extend
   openDeletePiece(piece) {
     this.args.openDeletePiece(piece);
   }
-
-  @action
-  openUploadVersionModal() {
-    this.args.openUploadVersionModal();
-  }
-
 }

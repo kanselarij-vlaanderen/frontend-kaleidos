@@ -32,80 +32,56 @@
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
   </Auk::Navbar>
-
   <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
     <div class="auk-u-m-4">
       {{! DETAILS }}
       {{#if (eq this.activeTab "details")}}
-        <Auk::KeyValue @key={{t "document-name"}} @value={{@piece.name}} />
-        {{#unless this.loadData.isRunning}}
-          {{#if this.documentType}}
-            <Auk::KeyValue
-              @key={{t "document-type"}}
-              @value={{this.documentType.label}}
-            />
-          {{/if}}
-          {{#if @piece.accessLevel}}
-            <Auk::KeyValue @key={{t "publicity"}}>
-              <Utils::AccessLevelColorBadge @accessLevel={{this.accessLevel}} />
+        <div class="auk-u-m-4">
+          <Auk::KeyValue @key={{t "document-name"}} @value={{@piece.name}} />
+          {{#unless this.loadDetailsData.isRunning}}
+            {{#if this.documentType}}
+              <Auk::KeyValue
+                @key={{t "document-type"}}
+                @value={{this.documentType.label}}
+              />
+            {{/if}}
+            {{#if @piece.accessLevel}}
+              <Auk::KeyValue @key={{t "publicity"}}>
+                <Utils::AccessLevelColorBadge
+                  @accessLevel={{this.accessLevel}}
+                />
+              </Auk::KeyValue>
+            {{/if}}
+          {{/unless}}
+          <Auk::KeyValue @key={{capitalize (t "confidentiality")}}>
+            <Utils::ConfidentialityPill @confidential={{@piece.confidential}} />
+          </Auk::KeyValue>
+          <div class="auk-key-value-item">
+            <Auk::KeyValue @key={{t "file-type"}}>
+              <Utils::Documents::FileTypePill
+                @extension={{@piece.file.extension}}
+              />
             </Auk::KeyValue>
-          {{/if}}
-        {{/unless}}
-        <Auk::KeyValue @key={{capitalize (t "confidentiality")}}>
-          <Utils::ConfidentialityPill @confidential={{@piece.confidential}} />
-        </Auk::KeyValue>
-        <div class="auk-key-value-item">
-          <Auk::KeyValue @key={{t "file-type"}}>
-            <Utils::Documents::FileTypePill
-              @extension={{@piece.file.extension}}
-            />
-          </Auk::KeyValue>
+          </div>
         </div>
-  {{! DETAILS }}
-  {{#if (eq this.activeTab "details")}}
-    <div class="auk-u-m-4">
-      <Auk::KeyValue @key={{t "document-name"}} @value={{@piece.name}} />
-      {{#unless this.loadDetailsData.isRunning}}
-        {{#if this.documentType}}
-          <Auk::KeyValue
-            @key={{t "document-type"}}
-            @value={{this.documentType.label}}
-          />
-        {{/if}}
-        {{#if @piece.accessLevel}}
-          <Auk::KeyValue @key={{t "publicity"}}>
-            <Utils::AccessLevelColorBadge @accessLevel={{this.accessLevel}} />
-          </Auk::KeyValue>
-        {{/if}}
-      {{/unless}}
-      <Auk::KeyValue @key={{capitalize (t "confidentiality")}}>
-        <Utils::ConfidentialityPill @confidential={{@piece.confidential}} />
-      </Auk::KeyValue>
-      <div class="auk-key-value-item">
-        <Auk::KeyValue @key={{t "file-type"}}>
-          <Utils::Documents::FileTypePill
-            @extension={{@piece.file.extension}}
-          />
-        </Auk::KeyValue>
-      </div>
-    </div>
 
         {{! SIGNATURES }}
       {{else if (eq this.activeTab "signatures")}}
 
-    {{! VERSIONS }}
-  {{else if (eq this.activeTab "versions")}}
-    <Utils::LoadableContent @isLoading={{this.loadVersionsData.isRunning}}>
-      <Documents::DocumentPreview::Versions::VersionsTab
-        @piece={{@piece}}
-        @lastPiece={{this.lastPiece}}
-        @versions={{this.versions}}
-        @openDeletePiece={{this.openDeletePiece}}
-        @openUploadVersionModal={{this.openUploadVersionModal}}
-      />
-    </Utils::LoadableContent>
-  {{/if}}
-
+        {{! VERSIONS }}
+      {{else if (eq this.activeTab "versions")}}
+        <Utils::LoadableContent @isLoading={{this.loadVersionsData.isRunning}}>
+          <Documents::DocumentPreview::Versions::VersionsTab
+            @piece={{@piece}}
+            @lastPiece={{this.lastPiece}}
+            @versions={{this.versions}}
+            @openDeletePiece={{this.openDeletePiece}}
+            @openUploadVersionModal={{this.openUploadVersionModal}}
+          />
+        </Utils::LoadableContent>
+      {{/if}}
+    </div>
+  </div>
   {{! FOOTER }}
   <div class="auk-u-mt-auto">
     <div class="auk-panel__footer">
@@ -116,7 +92,7 @@
               <Auk::Button
                 @skin="tertiary"
                 @icon="delete"
-                {{on "click" (fn this.openVerify @piece)}}
+                {{on "click" (fn this.openDeletePiece @piece)}}
               >
                 {{t "document-delete"}}
               </Auk::Button>
@@ -134,6 +110,7 @@
       </Auk::Toolbar>
     </div>
   </div>
+
 </Auk::Sidebar>
 
 {{#if this.isDeletingPiece}}
