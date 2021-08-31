@@ -12,15 +12,21 @@
             <Auk::Tab
               {{on "click" (fn this.setActiveTab "details")}}
               @active={{eq this.activeTab "details"}}
-            >{{t "detail"}}</Auk::Tab>
+            >
+              {{t "detail"}}
+            </Auk::Tab>
             <Auk::Tab
               {{on "click" (fn this.setActiveTab "signatures")}}
               @active={{eq this.activeTab "signatures"}}
-            >{{t "signatures"}}</Auk::Tab>
+            >
+              {{t "signatures"}}
+            </Auk::Tab>
             <Auk::Tab
               {{on "click" (fn this.setActiveTab "versions")}}
               @active={{eq this.activeTab "versions"}}
-            >{{t "version"}}</Auk::Tab>
+            >
+              {{t "versions"}}
+            </Auk::Tab>
           </Auk::Tabs>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
@@ -55,24 +61,51 @@
             />
           </Auk::KeyValue>
         </div>
+  {{! DETAILS }}
+  {{#if (eq this.activeTab "details")}}
+    <div class="auk-u-m-4">
+      <Auk::KeyValue @key={{t "document-name"}} @value={{@piece.name}} />
+      {{#unless this.loadDetailsData.isRunning}}
+        {{#if this.documentType}}
+          <Auk::KeyValue
+            @key={{t "document-type"}}
+            @value={{this.documentType.label}}
+          />
+        {{/if}}
+        {{#if @piece.accessLevel}}
+          <Auk::KeyValue @key={{t "publicity"}}>
+            <Utils::AccessLevelColorBadge @accessLevel={{this.accessLevel}} />
+          </Auk::KeyValue>
+        {{/if}}
+      {{/unless}}
+      <Auk::KeyValue @key={{capitalize (t "confidentiality")}}>
+        <Utils::ConfidentialityPill @confidential={{@piece.confidential}} />
+      </Auk::KeyValue>
+      <div class="auk-key-value-item">
+        <Auk::KeyValue @key={{t "file-type"}}>
+          <Utils::Documents::FileTypePill
+            @extension={{@piece.file.extension}}
+          />
+        </Auk::KeyValue>
+      </div>
+    </div>
 
         {{! SIGNATURES }}
       {{else if (eq this.activeTab "signatures")}}
 
-        {{! VERSIONS }}
-      {{else if (eq this.activeTab "versions")}}
+    {{! VERSIONS }}
+  {{else if (eq this.activeTab "versions")}}
+    <Utils::LoadableContent @isLoading={{this.loadVersionsData.isRunning}}>
+      <Documents::DocumentPreview::Versions::VersionsTab
+        @piece={{@piece}}
+        @lastPiece={{this.lastPiece}}
+        @versions={{this.versions}}
+        @openDeletePiece={{this.openDeletePiece}}
+        @openUploadVersionModal={{this.openUploadVersionModal}}
+      />
+    </Utils::LoadableContent>
+  {{/if}}
 
-        {{#each this.versionPieces as |versionPiece|}}
-          <Documents::VersionCard
-            @openVerify={{fn this.openVerify versionPiece}}
-            @lastPiece={{this.lastPiece}}
-            @piece={{versionPiece}}
-            @currentPiece={{@piece}}
-          />
-        {{/each}}
-      {{/if}}
-    </div>
-  </div>
   {{! FOOTER }}
   <div class="auk-u-mt-auto">
     <div class="auk-panel__footer">
@@ -103,17 +136,17 @@
   </div>
 </Auk::Sidebar>
 
-{{#if this.isVerifyingDelete}}
+{{#if this.isDeletingPiece}}
   <WebComponents::VlModalVerify
     @title={{t "document-delete"}}
     @message={{t "delete-document-message"}}
-    @cancel={{this.cancelVerify}}
+    @cancel={{this.cancelDeletePiece}}
     @verify={{this.deletePiece}}
   />
 {{/if}}
 
 {{#if this.isOpenUploadVersionModal}}
-  <Documents::NewVersionModal
+  <Documents::DocumentPreview::Versions::NewVersionModal
     @onClose={{this.closeUploadVersionModal}}
     @onSave={{this.saveUploadVersionModal}}
     @newVersionName={{this.newVersionName}}
