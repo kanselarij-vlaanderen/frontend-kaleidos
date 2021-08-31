@@ -65,7 +65,7 @@
     <div class="auk-u-m-4">
       <Utils::LoadableContent @isLoading={{this.loadVersionHistory.isRunning}}>
         {{#each this.versionPieces as |piece|}}
-          <Documents::VersionCard
+          <Documents::DocumentPreview::Versions::VersionCard
             @openVerify={{fn this.openDeletePiece piece}}
             @lastPiece={{this.lastPiece}}
             @piece={{piece}}
@@ -109,7 +109,7 @@
 {{/if}}
 
 {{#if this.isOpenUploadVersionModal}}
-  <Documents::NewVersionModal
+  <Documents::DocumentPreview::Versions::NewVersionModal
     @onClose={{this.closeUploadVersionModal}}
     @onSave={{this.saveUploadVersionModal}}
     @newVersionName={{this.newVersionName}}

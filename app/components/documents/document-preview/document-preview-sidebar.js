@@ -5,7 +5,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isBlank } from '@ember/utils';
-import VRDocumentName from '../../utils/vr-document-name';
+import VRDocumentName from '../../../utils/vr-document-name';
 
 /**
  *
