@@ -6,7 +6,7 @@
   >
     {{t "overview"}}
   </Auk::Tab>
-  {{#if this.loadFirstAgendaitem.lastSuccessful}}
+  {{#if this.firstAgendaitem}}
     <Auk::Tab
       @route="agenda.agendaitems.agendaitem"
       @models={{this.modelsForDetailRoute}}
