@@ -24,10 +24,6 @@ export default class  DocumentsDocumentPreviewVersionsVersionCardComponent exten
     return this.args.currentPiece.id === this.args.piece.id;
   }
 
-  get isLastPiece() {
-    return this.args.lastPiece.id === this.args.piece.id;
-  }
-
   @action
   openVerify() {
     this.isVerifyingDelete = true;
