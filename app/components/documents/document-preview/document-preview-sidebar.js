@@ -20,7 +20,6 @@ export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Comp
   @service fileService;
   @service('current-session') currentSessionService;
 
-  @service router;
   @service store;
 
   @tracked documentType;
@@ -33,9 +32,6 @@ export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Comp
   @tracked isOpenUploadVersionModal = false;
   @tracked isDeletingPiece = false;
   @tracked selectedToDelete;
-
-  @tracked isEditingDetails = false;
-  @tracked editPieceMemory;
 
   constructor() {
     super(...arguments);
@@ -138,36 +134,6 @@ export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Comp
     return new VRDocumentName(this.lastPiece.name).withOtherVersionSuffix(
       this.versions.length
     );
-  }
-
-  @action
-  async cancelEditDetails() {
-    this.args.resetPiece(this.editPieceMemory);
-    await this.loadData.perform();
-    this.editPieceMemory = null;
-    this.isEditingDetails = false;
-  }
-
-  @task
-  *saveEditDetails() {
-    yield this.args.piece.save();
-    this.documentContainer.type = this.documentType;
-    yield this.documentContainer.save();
-
-    yield this.loadData.perform();
-    this.editPieceMemory = null;
-    this.isEditingDetails = false;
-  }
-
-  @action
-  openEditDetails() {
-    this.isEditingDetails = true;
-    this.editPieceMemory = {
-      name: this.args.piece.name,
-      docType: this.documentType,
-      accessLevel: this.accessLevel,
-      confidentiality: this.args.piece.confidential,
-    };
   }
 
   @action
