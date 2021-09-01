@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
-export default class DocumentsVersionCardComponent extends Component {
+export default class  DocumentsDocumentPreviewVersionsVersionCardComponent extends Component {
   @service currentSession;
   @tracked accessLevel;
 
@@ -20,12 +20,12 @@ export default class DocumentsVersionCardComponent extends Component {
     this.accessLevel = yield this.args.piece.accessLevel;
   }
 
-  get isCurrentDocument(){
-    return this.args.currentPiece.id === this.args.piece.id
+  get isCurrentPiece() {
+    return this.args.currentPiece.id === this.args.piece.id;
   }
 
-  get isLastPiece(){
-    return this.args.lastPiece.id === this.args.piece.id
+  get isLastPiece() {
+    return this.args.lastPiece.id === this.args.piece.id;
   }
 
   @action
@@ -43,5 +43,4 @@ export default class DocumentsVersionCardComponent extends Component {
   cancelDelete() {
     this.isVerifyingDelete = false;
   }
-
 }

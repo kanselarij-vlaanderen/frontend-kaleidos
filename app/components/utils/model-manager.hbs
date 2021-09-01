@@ -51,7 +51,10 @@
     <Auk::Modal::Body>
       <div class="auk-form-group">
         <Auk::Label>{{t "title"}}</Auk::Label>
-        <WebComponents::VlFormInput @value={{this.title}} />
+        <Auk::Input
+          @block={{true}}
+          @value={{this.title}}
+        />
       </div>
     </Auk::Modal::Body>
     <WebComponents::VlModalFooter
@@ -66,7 +69,10 @@
     <Auk::Modal::Body>
       <div class="auk-form-group">
         <Auk::Label>{{t "title"}}</Auk::Label>
-        <WebComponents::VlFormInput @value={{this.title}} />
+        <Auk::Input
+          @block={{true}}
+          @value={{this.title}}
+        />
       </div>
     </Auk::Modal::Body>
     <WebComponents::VlModalFooter
