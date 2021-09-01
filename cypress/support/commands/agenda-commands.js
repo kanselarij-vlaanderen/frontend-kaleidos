@@ -140,7 +140,7 @@ function visitAgendaWithLink(link) {
   cy.visit(link);
   // cy.wait('@loadAgendaitems');
   cy.get(auk.loader, {
-    timeout: 40000,
+    timeout: 60000,
   }).should('not.exist');
   cy.log('/visitAgendaWithLink');
 }
@@ -553,7 +553,10 @@ function reopenAgenda() {
   cy.log('reopenAgenda');
   cy.get(agenda.agendaHeader.showAgendaOptions).click();
   cy.get(agenda.agendaHeader.agendaActions.unlockAgenda).click();
-  // Currently, this action has no confirmation popup
+  // Currently, this action has no confirmation popup but a loading overlay is showing
+  cy.get(auk.modal.container, {
+    timeout: 60000,
+  }).should('not.exist');
   cy.get(auk.loader).should('not.exist');
   cy.log('/reopenAgenda');
 }
