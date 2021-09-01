@@ -6,7 +6,7 @@ import { inject as service } from '@ember/service';
 import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
 import { isPresent } from '@ember/utils';
 
-export default class DocumentsNewVersionModalComponent extends Component {
+export default class  DocumentsDocumentPreviewVersionsNewVersionModalComponent extends Component {
   @service fileService;
 
   @tracked file;

@@ -1,0 +1,116 @@
+<Auk::Sidebar
+  @size="xlarge"
+  @position="right"
+  @skin="white"
+  class="auk-u-pb-6 auk-o-flex auk-o-flex--vertical auk-scroll-wrapper"
+>
+  <Auk::Navbar>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <Auk::Tabs>
+            <Auk::Tab
+              {{on "click" (fn this.setActiveTab "details")}}
+              @active={{eq this.activeTab "details"}}
+            >
+              {{t "detail"}}
+            </Auk::Tab>
+            <Auk::Tab
+              {{on "click" (fn this.setActiveTab "signatures")}}
+              @active={{eq this.activeTab "signatures"}}
+            >
+              {{t "signatures"}}
+            </Auk::Tab>
+            <Auk::Tab
+              {{on "click" (fn this.setActiveTab "versions")}}
+              @active={{eq this.activeTab "versions"}}
+            >
+              {{t "versions"}}
+            </Auk::Tab>
+          </Auk::Tabs>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Navbar>
+  <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
+    <div class="auk-u-m-4">
+      {{! DETAILS }}
+      {{#if (eq this.activeTab "details")}}
+        <Documents::DocumentPreview::Details::DetailsTab
+          @piece={{@piece}}
+          @loading={{this.loadDetailsData.isRunning}}
+          @documentContainer={{this.documentContainer}}
+          @documentType={{this.documentType}}
+          @accessLevel={{this.accessLevel}}
+          @resetPiece={{@resetPiece}}
+          @changeAccessLevel={{this.changeAccessLevel}}
+          @changeDocumentType={{this.changeDocumentType}}
+        />
+        {{! SIGNATURES }}
+      {{else if (eq this.activeTab "signatures")}}
+
+        {{! VERSIONS }}
+      {{else if (eq this.activeTab "versions")}}
+        <Utils::LoadableContent @isLoading={{this.loadVersionsData.isRunning}}>
+          <Documents::DocumentPreview::Versions::VersionsTab
+            @piece={{@piece}}
+            @lastPiece={{this.lastPiece}}
+            @versions={{this.versions}}
+            @openDeletePiece={{this.openDeletePiece}}
+            @openUploadVersionModal={{this.openUploadVersionModal}}
+          />
+        </Utils::LoadableContent>
+      {{/if}}
+    </div>
+  </div>
+  {{! FOOTER }}
+  <div class="auk-u-mt-auto">
+    <div class="auk-panel__footer">
+      <Auk::Toolbar>
+        {{#if (eq this.activeTab "details")}}
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <Auk::Button
+                @skin="tertiary"
+                @icon="delete"
+                {{on "click" (fn this.openDeletePiece @piece)}}
+              >
+                {{t "document-delete"}}
+              </Auk::Button>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        {{else if (eq this.activeTab "versions")}}
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <Auk::Button
+                @skin="tertiary"
+                @icon="add"
+                {{on "click" this.openUploadVersionModal}}
+              >
+                {{t "new-version"}}
+              </Auk::Button>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        {{/if}}
+
+      </Auk::Toolbar>
+    </div>
+  </div>
+</Auk::Sidebar>
+
+{{#if this.isDeletingPiece}}
+  <WebComponents::VlModalVerify
+    @title={{t "document-delete"}}
+    @message={{t "delete-document-message"}}
+    @cancel={{this.cancelDeletePiece}}
+    @verify={{this.deletePiece}}
+  />
+{{/if}}
+
+{{#if this.isOpenUploadVersionModal}}
+  <Documents::DocumentPreview::Versions::NewVersionModal
+    @onClose={{this.closeUploadVersionModal}}
+    @onSave={{this.saveUploadVersionModal}}
+    @newVersionName={{this.newVersionName}}
+  />
+{{/if}}

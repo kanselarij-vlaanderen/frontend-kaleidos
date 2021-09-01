@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
-export default class DocumentsVersionCardComponent extends Component {
+export default class  DocumentsDocumentPreviewVersionsVersionCardComponent extends Component {
   @service('current-session') currentSessionService;
   @tracked accessLevel;
 
@@ -20,7 +20,7 @@ export default class DocumentsVersionCardComponent extends Component {
     this.accessLevel = yield this.args.piece.accessLevel;
   }
 
-  get isCurrentDocument() {
+  get isCurrentPiece() {
     return this.args.currentPiece.id === this.args.piece.id;
   }
 

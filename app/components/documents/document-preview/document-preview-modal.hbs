@@ -27,9 +27,10 @@
         {{/if}}
       </div>
       <div class="auk-panel-layout__sidebar">
-        <Documents::DocumentPreviewSidebar
+        <Documents::DocumentPreview::DocumentPreviewSidebar
           @piece={{@piece}}
           @transitionBack={{@onClose}}
+          @openNewPiece={{@openNewPiece}}
           @resetPiece={{this.resetPiece}}
         />
       </div>

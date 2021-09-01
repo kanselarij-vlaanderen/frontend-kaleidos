@@ -16,10 +16,15 @@ export default class DocumentController extends Controller {
   }
 
   @action
-  resetPiece(oldPiece) {
-    this.model.name = oldPiece.name;
-    this.model.documentContainer.type = oldPiece.docType;
-    this.model.accessLevel = oldPiece.accessLevel;
-    this.model.confidential = oldPiece.confidentiality;
+  resetPiece(piece) {
+    this.model.name = piece.name;
+    this.model.documentContainer.type = piece.docType;
+    this.model.accessLevel = piece.accessLevel;
+    this.model.confidential = piece.confidentiality;
+  }
+
+  @action
+  openNewPiece(piece) {
+    this.model = piece;
   }
 }
