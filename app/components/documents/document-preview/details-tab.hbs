@@ -43,10 +43,11 @@
     {{/if}}
   </Auk::KeyValue>
   <Auk::KeyValue @key={{capitalize (t "confidentiality")}}>
-    <Utils::ConfidentialityPill
-      @confidential={{@piece.confidential}}
-      @editingEnabled={{this.isEditingDetails}}
-    />
+    {{#if this.isEditingDetails}}
+      <WebComponents::VlToggle @value={{mut @piece.confidential}} />
+    {{else}}
+      <Utils::ConfidentialityPill @confidential={{@piece.confidential}} />
+    {{/if}}
   </Auk::KeyValue>
   <Auk::KeyValue @key={{t "file-type"}}>
     <Utils::Documents::FileTypePill @extension={{@piece.file.extension}} />
