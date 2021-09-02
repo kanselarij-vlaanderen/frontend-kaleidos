@@ -817,6 +817,8 @@
   "publications-table-opening-date-small" : "Ontv.",
   "publications-table-publication-date" : "Publicatiedatum",
   "publications-table-publication-date-small" : "Pub. BS",
+  "publications-table-publication-due-date" : "Uiterste publicatiedatum",
+  "publications-table-publication-due-date-small" : "Uit. Pub.",
   "publications-table-publication-number" : "Publicatienummer",
   "publications-table-publication-number-small" : "Pubnr.",
   "publications-table-publish-proofs" : "Drukproef status",

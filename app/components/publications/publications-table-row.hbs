@@ -97,6 +97,15 @@ request the whole row and not only the arrow at the end to be clickable --}}
       {{/if}}
     </td>
   {{/if}}
+  {{#if @tableColumnDisplayOptions.publicationDueDate}}
+    <td class="auk-u-text-nowrap">
+      {{#if @publicationFlow.publicationSubcase.dueDate}}
+        {{moment-format @publicationFlow.publicationSubcase.dueDate "DD-MM-YYYY"}}
+      {{else}}
+        {{t "dash"}}
+      {{/if}}
+    </td>
+  {{/if}}
   {{#if @tableColumnDisplayOptions.publicationDate}}
     <td class="auk-u-text-nowrap">
       {{#if this.loadDecision.isRunning}}
