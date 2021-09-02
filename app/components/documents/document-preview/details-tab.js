@@ -47,7 +47,7 @@ export default class DocumentsDocumentPreviewDetailsDetailsTabComponent extends 
   }
 
   @action
-  changeAccessLevel(accessLevel) {
+  setAccessLevel(accessLevel) {
     this.accessLevel = accessLevel;
   }
 

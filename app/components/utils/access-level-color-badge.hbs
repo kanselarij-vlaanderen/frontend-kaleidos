@@ -1,15 +1,4 @@
 <span ...attributes>
-  {{#if @editingEnabled}}
-    <Utils::ModelSelector
-      @modelName="access-level"
-      @allowClear={{true}}
-      @hideSearch={{true}}
-      @propertyToShow="label"
-      @sortField="priority"
-      @selectedItems={{@accessLevel}}
-      @selectModel={{this.changeAccessLevel}}
-    />
-  {{else}}
   <Auk::ColorBadge
     @skin={{this.accessPillSkin}}
     class="auk-u-mr"
@@ -21,5 +10,4 @@
       {{t "no-accessLevel"}}
     {{/if}}
   </span>
-  {{/if}}
 </span>

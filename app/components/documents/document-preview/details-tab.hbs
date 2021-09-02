@@ -28,11 +28,19 @@
     </Auk::KeyValue>
   {{/if}}
   <Auk::KeyValue @key={{t "publicity"}}>
-    <Utils::AccessLevelColorBadge
-      @accessLevel={{this.accessLevel}}
-      @editingEnabled={{this.isEditingDetails}}
-      @changeAccessLevel={{this.changeAccessLevel}}
-    />
+    {{#if this.isEditingDetails}}
+      <Utils::ModelSelector
+        @modelName="access-level"
+        @allowClear={{true}}
+        @hideSearch={{true}}
+        @propertyToShow="label"
+        @sortField="priority"
+        @selectedItems={{this.accessLevel}}
+        @selectModel={{this.setAccessLevel}}
+      />
+    {{else}}
+      <Utils::AccessLevelColorBadge @accessLevel={{this.accessLevel}} />
+    {{/if}}
   </Auk::KeyValue>
   <Auk::KeyValue @key={{capitalize (t "confidentiality")}}>
     <Utils::ConfidentialityPill
