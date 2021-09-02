@@ -1,10 +1,8 @@
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
 
 export default class DocumentsDocumentPreviewVersionCardComponent extends Component {
-  @service currentSession;
   @tracked accessLevel;
 
   constructor() {
