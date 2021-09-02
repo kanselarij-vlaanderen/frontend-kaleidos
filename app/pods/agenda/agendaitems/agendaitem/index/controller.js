@@ -16,7 +16,6 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @tracked agenda;
   @tracked subcase;
   @tracked governmentFields;
-  @tracked iseCodes;
   @tracked submitter;
   @tracked newsletterInfo;
   @tracked mandatees;
@@ -71,7 +70,6 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     };
     this.governmentFields = mandateeData.fields;
     this.mandatees = mandateeData.mandatees;
-    this.iseCodes = correspondingIseCodes;
     this.submitter = mandateeData.submitter;
     await saveChanges(this.model, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
     this.agendaitemController.groupNotasOnGroupName.perform(this.agendaitemController.notas);

@@ -5,9 +5,9 @@
   class="auk-u-pb-6 auk-o-flex auk-o-flex--vertical auk-scroll-wrapper"
 >
   <Auk::Navbar>
-    <Auk::Toolbar>
-      <Auk::Toolbar::Group @position="left">
-        <Auk::Toolbar::Item>
+    <Auk::Toolbar as |toolbar|>
+      <toolbar.Group @position="left" as |group|>
+        <group.Item>
           <Auk::Tabs>
             <Auk::Tab
               {{on "click" (fn this.setActiveTab "details")}}
@@ -28,8 +28,8 @@
               {{t "versions"}}
             </Auk::Tab>
           </Auk::Tabs>
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
+        </group.Item>
+      </toolbar.Group>
     </Auk::Toolbar>
   </Auk::Navbar>
   <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
@@ -48,8 +48,9 @@
           {{! VERSIONS }}
         {{else if (eq this.activeTab "versions")}}
           <Documents::DocumentPreview::VersionsTab
-            @piece={{@piece}}
             @documentContainer={{this.documentContainer}}
+            @currentVersion={{@piece}}
+            @onSelectVersion={{@onSelectVersion}}
           />
         {{/if}}
       </Utils::LoadableContent>
