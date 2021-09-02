@@ -12,7 +12,7 @@
             @required={{true}}>
             {{t "name"}}
           </Auk::Label>
-          <Auk::Input type="text" id="organizationNameInput"
+          <Auk::Input id="organizationNameInput"
             @block={{true}}
             @value={{this.name}}
             {{on "input" this.validators.name.enableError}} />
@@ -21,7 +21,7 @@
           <Auk::Label for="organizationIdentifierInput">
             {{t "identifier"}} ({{t "ovo-code"}})
           </Auk::Label>
-          <Auk::Input type="text" id="organizationIdentifierInput"
+          <Auk::Input id="organizationIdentifierInput"
             @block={{true}}
             @value={{this.identifier}} />
         </div>

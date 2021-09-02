@@ -3,6 +3,7 @@ import { PromiseArray, PromiseObject } from '@ember-data/store/-private';
 import EmberObject, { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONFIG from 'frontend-kaleidos/utils/config';
+import { KALEIDOS_START_DATE } from 'frontend-kaleidos/config/config';
 import { isAnnexMeetingKind } from 'frontend-kaleidos/utils/meeting-utils';
 import moment from 'moment';
 import {
@@ -119,5 +120,9 @@ export default Model.extend({
 
   isAnnex: computed('kind', function() {
     return isAnnexMeetingKind(this.kind);
+  }),
+
+  isPreKaleidos: computed('plannedStart', function () {
+    return this.plannedStart < KALEIDOS_START_DATE;
   }),
 });
