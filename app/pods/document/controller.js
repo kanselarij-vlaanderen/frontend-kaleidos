@@ -14,11 +14,4 @@ export default class DocumentController extends Controller {
       this.router.transitionTo('agendas');
     }
   }
-
-  @action
-  reloadPiece() {
-    // Added rollback as @piece.name & @piece.confidential did not reload after refresh
-    this.model.rollbackAttributes();
-    this.send('reloadModel');
-  }
 }

@@ -21,7 +21,7 @@ export default class DocumentsDocumentPreviewDetailsDetailsTabComponent extends 
 
   @action
   async cancelEditDetails() {
-    this.args.reloadPiece();
+    this.args.piece.rollbackAttributes();
     await this.loadDetailsData.perform();
     this.isEditingDetails = false;
   }
