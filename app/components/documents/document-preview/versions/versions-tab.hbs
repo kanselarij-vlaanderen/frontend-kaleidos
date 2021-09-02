@@ -1,8 +1,0 @@
-{{#each @versions as |piece|}}
-  <Documents::DocumentPreview::Versions::VersionCard
-    @openVerify={{fn this.openDeletePiece piece}}
-    @lastPiece={{@lastPiece}}
-    @piece={{piece}}
-    @currentPiece={{@piece}}
-  />
-{{/each}}

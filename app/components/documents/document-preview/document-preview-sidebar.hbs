@@ -49,68 +49,11 @@
         {{! SIGNATURES }}
       {{else if (eq this.activeTab "signatures")}}
 
-        {{! VERSIONS }}
-      {{else if (eq this.activeTab "versions")}}
-        <Utils::LoadableContent @isLoading={{this.loadVersionsData.isRunning}}>
-          <Documents::DocumentPreview::Versions::VersionsTab
-            @piece={{@piece}}
-            @lastPiece={{this.lastPiece}}
-            @versions={{this.versions}}
-            @openDeletePiece={{this.openDeletePiece}}
-            @openUploadVersionModal={{this.openUploadVersionModal}}
-          />
-        </Utils::LoadableContent>
-      {{/if}}
-    </div>
-  </div>
-  {{! FOOTER }}
-  <div class="auk-u-mt-auto">
-    <div class="auk-panel__footer">
-      <Auk::Toolbar>
-        {{#if (eq this.activeTab "details")}}
-          <Auk::Toolbar::Group @position="right">
-            <Auk::Toolbar::Item>
-              <Auk::Button
-                @skin="tertiary"
-                @icon="delete"
-                {{on "click" (fn this.openDeletePiece @piece)}}
-              >
-                {{t "document-delete"}}
-              </Auk::Button>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-        {{else if (eq this.activeTab "versions")}}
-          <Auk::Toolbar::Group @position="right">
-            <Auk::Toolbar::Item>
-              <Auk::Button
-                @skin="tertiary"
-                @icon="add"
-                {{on "click" this.openUploadVersionModal}}
-              >
-                {{t "new-version"}}
-              </Auk::Button>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-        {{/if}}
-
-      </Auk::Toolbar>
-    </div>
-  </div>
+    {{! VERSIONS }}
+  {{else if (eq this.activeTab "versions")}}
+    <Documents::DocumentPreview::VersionsTab
+      @piece={{@piece}}
+      @documentContainer={{this.documentContainer}}
+    />
+  {{/if}}
 </Auk::Sidebar>
-
-{{#if this.isDeletingPiece}}
-  <WebComponents::VlModalVerify
-    @title={{t "document-delete"}}
-    @message={{t "delete-document-message"}}
-    @cancel={{this.cancelDeletePiece}}
-    @verify={{this.deletePiece}}
-  />
-{{/if}}
-
-{{#if this.isOpenUploadVersionModal}}
-  <Documents::DocumentPreview::Versions::NewVersionModal
-    @onClose={{this.closeUploadVersionModal}}
-    @onSave={{this.saveUploadVersionModal}}
-    @newVersionName={{this.newVersionName}}
-  />
-{{/if}}
