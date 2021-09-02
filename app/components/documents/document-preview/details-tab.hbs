@@ -10,7 +10,7 @@
   {{/if}}
 </Auk::KeyValue>
 {{#unless @loading}}
-  {{#if (or @documentType this.isEditingDetails)}}
+  {{#if (or this.documentType this.isEditingDetails)}}
     <Auk::KeyValue @key={{t "document-type"}}>
       {{#if this.isEditingDetails}}
         <Utils::ModelSelector
@@ -19,23 +19,21 @@
           @hideSearch={{true}}
           @propertyToShow="label"
           @sortField="priority"
-          @selectedItems={{@documentType}}
+          @selectedItems={{this.documentType}}
           @selectModel={{this.changeDocumentType}}
         />
       {{else}}
-        {{@documentType.label}}
+        {{this.documentType.label}}
       {{/if}}
     </Auk::KeyValue>
   {{/if}}
-  {{#if (or @piece.accessLevel this.isEditingDetails)}}
-    <Auk::KeyValue @key={{t "publicity"}}>
-      <Utils::AccessLevelColorBadge
-        @accessLevel={{@accessLevel}}
-        @editingEnabled={{this.isEditingDetails}}
-        @changeAccessLevel={{@changeAccessLevel}}
-      />
-    </Auk::KeyValue>
-  {{/if}}
+  <Auk::KeyValue @key={{t "publicity"}}>
+    <Utils::AccessLevelColorBadge
+      @accessLevel={{this.accessLevel}}
+      @editingEnabled={{this.isEditingDetails}}
+      @changeAccessLevel={{this.changeAccessLevel}}
+    />
+  </Auk::KeyValue>
 {{/unless}}
 <Auk::KeyValue @key={{capitalize (t "confidentiality")}}>
   <Utils::ConfidentialityPill
