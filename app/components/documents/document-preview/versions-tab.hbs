@@ -1,6 +1,6 @@
 <div class="auk-u-m-2">
   {{#each @versions as |piece|}}
-    <Documents::DocumentPreview::Versions::VersionCard
+    <Documents::DocumentPreview::VersionCard
       @openVerify={{fn this.openDeletePiece piece}}
       @piece={{piece}}
       @currentPiece={{@piece}}

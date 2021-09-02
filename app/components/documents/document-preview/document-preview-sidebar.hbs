@@ -63,7 +63,7 @@
     {{! VERSIONS }}
   {{else if (eq this.activeTab "versions")}}
     <Utils::LoadableContent @isLoading={{this.loadVersionsData.isRunning}}>
-      <Documents::DocumentPreview::Versions::VersionsTab
+      <Documents::DocumentPreview::VersionsTab
         @piece={{@piece}}
         @versions={{this.versions}}
         @openDeletePiece={{this.openDeletePiece}}
@@ -96,7 +96,7 @@
 {{/if}}
 
 {{#if this.isOpenUploadVersionModal}}
-  <Documents::DocumentPreview::Versions::NewVersionModal
+  <Documents::DocumentPreview::NewVersionModal
     @onClose={{this.closeUploadVersionModal}}
     @onSave={{this.saveUploadVersionModal}}
     @newVersionName={{this.newVersionName}}
