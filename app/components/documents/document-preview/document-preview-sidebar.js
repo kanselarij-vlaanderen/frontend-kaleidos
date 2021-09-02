@@ -6,6 +6,8 @@ import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isBlank } from '@ember/utils';
 import VRDocumentName from '../../../utils/vr-document-name';
+import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import { A } from '@ember/array';
 
 /**
  *
@@ -45,8 +47,10 @@ export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Comp
 
   @task
   *loadVersionsData() {
-    this.versions = yield this.documentContainer.reverseSortedPieces;
-    this.lastPiece = yield this.documentContainer.lastPiece;
+    const pieces = yield this.documentContainer.hasMany('pieces').reload();
+    const sortedPieces = A(sortPieces(pieces.toArray()).reverse());
+    this.versions = sortedPieces.slice(0).reverse();
+    this.lastPiece = sortedPieces.lastObject;
   }
 
   @action
