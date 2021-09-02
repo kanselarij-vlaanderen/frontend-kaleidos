@@ -6,8 +6,6 @@ import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isBlank } from '@ember/utils';
 import VRDocumentName from '../../../utils/vr-document-name';
-import { A } from '@ember/array';
-import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
 /**
  *
@@ -16,7 +14,7 @@ import { sortPieces } from 'frontend-kaleidos/utils/documents';
  * - "signatures"
  * - "versions"
  */
-export default class  DocumentsDocumentPreviewDocumentPreviewSidebar extends Component {
+export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Component {
   @service fileService;
   @service router;
   @service store;
@@ -47,19 +45,17 @@ export default class  DocumentsDocumentPreviewDocumentPreviewSidebar extends Com
 
   @task
   *loadVersionsData() {
-    const pieces = yield this.documentContainer.hasMany('pieces').reload();
-    const sortedPieces = A(sortPieces(pieces.toArray()).reverse());
-    this.versions = sortedPieces.slice(0).reverse();
-    this.lastPiece = sortedPieces.lastObject;
+    this.versions = yield this.documentContainer.reverseSortedPieces;
+    this.lastPiece = yield this.documentContainer.lastPiece;
   }
 
   @action
   setActiveTab(tabName) {
     this.activeTab = tabName;
-    if (tabName === 'details'){
+    if (tabName === 'details') {
       this.loadDetailsData.perform();
     }
-    if (tabName === 'versions'){
+    if (tabName === 'versions') {
       this.loadVersionsData.perform();
     }
   }
@@ -98,7 +94,7 @@ export default class  DocumentsDocumentPreviewDocumentPreviewSidebar extends Com
 
     this.isOpenUploadVersionModal = false;
     this.args.openNewPiece(newPiece);
-    this.loadVersionsData.perform();
+    await this.loadVersionsData.perform();
   }
 
   @action
@@ -113,7 +109,7 @@ export default class  DocumentsDocumentPreviewDocumentPreviewSidebar extends Com
     if (this.selectedToDelete.id === this.args.piece.id) {
       this.args.transitionBack();
     }
-    this.loadVersionsData.perform();
+    await this.loadVersionsData.perform();
     this.selectedToDelete = null;
     this.isDeletingPiece = false;
   }
