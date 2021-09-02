@@ -91,7 +91,6 @@
               <div class="auk-o-flex auk-o-flex--vertical-center">
                 <Auk::Input
                   data-test-document-card-name-input={{true}}
-                  @type="text"
                   @block={{true}}
                   @value={{this.pieceNameBuffer}}
                 />
@@ -120,10 +119,16 @@
               </h6>
             {{/if}}
             <div class="vlc-document-card-content__meta">
-              {{t "uploaded-at"}}
-              {{moment-format this.piece.created}}
-              {{t "at"}}
-              {{moment-format this.piece.created "HH:mm"}}
+              <div>
+              {{#if this.piece.created}}
+                {{t "uploaded-at"}}
+                {{moment-format this.piece.created}}
+                {{t "at"}}
+                {{moment-format this.piece.created "HH:mm"}}
+              {{else}}
+                {{t "upload-time-unknown"}}
+              {{/if}}
+              </div>
               {{#if this.piece.accessLevelLastModified}}
                 <div>
                   {{t "access-level-last-modified"}}
@@ -180,8 +185,10 @@
     <Auk::Modal::Body>
       {{#if this.newPiece}}
         <Auk::Label>{{t "name"}}</Auk::Label>
-        <WebComponents::VlFormInput
-          @value={{this.newPiece.name}}/>
+        <Auk::Input
+          @block={{true}}
+          @value={{this.newPiece.name}}
+        />
         <Documents::UploadedDocument
           @piece={{this.newPiece}}
           @onDelete={{perform this.deleteUploadedPiece}} />

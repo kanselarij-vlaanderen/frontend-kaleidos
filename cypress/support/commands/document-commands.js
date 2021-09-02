@@ -32,7 +32,6 @@ function addNewDocumentsInUploadModal(files, model) {
 
       if (file.newFileName) {
         cy.get(document.uploadedDocument.nameInput).eq(index)
-          .find(utils.vlFormInput)
           .clear()
           .type(file.newFileName);
       }
