@@ -14,7 +14,7 @@ export default class DocumentsDocumentPreviewDetailsDetailsTabComponent extends 
   }
 
   get isProcessing() {
-    return this.saveEditDetails.isRunning || this.cancelEditDetails.isRunning;
+    return this.saveDetails.isRunning || this.cancelEditDetails.isRunning;
   }
 
   @task
@@ -31,13 +31,11 @@ export default class DocumentsDocumentPreviewDetailsDetailsTabComponent extends 
   }
 
   @task
-  *saveEditDetails() {
+  *saveDetails() {
     this.args.piece.accessLevel = this.accessLevel;
     yield this.args.piece.save();
     this.args.documentContainer.type = this.documentType;
     yield this.args.documentContainer.save();
-
-    yield this.loadDetailsData.perform();
     this.isEditingDetails = false;
   }
 
@@ -52,7 +50,7 @@ export default class DocumentsDocumentPreviewDetailsDetailsTabComponent extends 
   }
 
   @action
-  changeDocumentType(docType) {
+  setDocumentType(docType) {
     this.documentType = docType;
   }
 }

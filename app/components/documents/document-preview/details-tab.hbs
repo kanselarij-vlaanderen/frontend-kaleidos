@@ -20,7 +20,7 @@
           @propertyToShow="label"
           @sortField="priority"
           @selectedItems={{this.documentType}}
-          @selectModel={{this.changeDocumentType}}
+          @selectModel={{this.setDocumentType}}
         />
       {{else}}
         {{this.documentType.label}}
@@ -68,8 +68,8 @@
           <Auk::Button
             @skin="primary"
             @disabled={{this.isProcessing}}
-            @loading={{this.saveEditDetails.isRunning}}
-            {{on "click" (perform this.saveEditDetails)}}
+            @loading={{this.saveDetails.isRunning}}
+            {{on "click" (perform this.saveDetails)}}
           >
             {{t "save"}}
           </Auk::Button>
