@@ -19,10 +19,10 @@ export default class DocumentsDocumentPreviewDetailsDetailsTabComponent extends 
     this.accessLevel = yield this.args.piece.accessLevel;
   }
 
-  @action
-  async cancelEditDetails() {
+  @task
+  *cancelEditDetails() {
     this.args.piece.rollbackAttributes();
-    await this.loadDetailsData.perform();
+    yield this.loadDetailsData.perform();
     this.isEditingDetails = false;
   }
 

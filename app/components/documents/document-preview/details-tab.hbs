@@ -49,7 +49,7 @@
         <group.Item>
           <Auk::ButtonLink
             @disabled={{this.saveEditDetails.isRunning}}
-            {{on "click" this.cancelEditDetails}}
+            {{on "click" (perform this.cancelEditDetails)}}
           >
             {{t "cancel"}}
           </Auk::ButtonLink>
