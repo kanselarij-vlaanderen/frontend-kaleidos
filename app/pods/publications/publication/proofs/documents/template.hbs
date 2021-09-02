@@ -100,12 +100,15 @@
                   {{/if}}
                 </td>
                 <td>
-                  <p>
-                    {{moment-format piece.created}}
-                  </p>
-                  <p class="auk-u-muted auk-u-text-small">
-                    {{moment-format piece.created "HH:mm"}}
-                  </p>
+                  {{#if piece.created}}
+                    <p>{{moment-format piece.created}}</p>
+                    <p class="auk-u-muted auk-u-text-small">
+                      {{moment-format piece.created "HH:mm"}}
+                    </p>
+                  {{else}}
+                    {{!-- legacy data --}}
+                    {{t "dash"}}
+                  {{/if}}
                 </td>
                 <td class="auk-u-text-align--center">
                   {{#if piece.publicationSubcaseCorrectionFor}}
