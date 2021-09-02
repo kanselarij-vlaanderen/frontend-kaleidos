@@ -48,7 +48,8 @@
       {{#if this.isEditingDetails}}
         <group.Item>
           <Auk::ButtonLink
-            @disabled={{this.saveEditDetails.isRunning}}
+            @disabled={{this.isProcessing}}
+            @loading={{this.cancelEditDetails.isRunning}}
             {{on "click" (perform this.cancelEditDetails)}}
           >
             {{t "cancel"}}
@@ -57,6 +58,7 @@
         <group.Item>
           <Auk::Button
             @skin="primary"
+            @disabled={{this.isProcessing}}
             @loading={{this.saveEditDetails.isRunning}}
             {{on "click" (perform this.saveEditDetails)}}
           >

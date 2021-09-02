@@ -13,6 +13,10 @@ export default class DocumentsDocumentPreviewDetailsDetailsTabComponent extends 
     this.loadDetailsData.perform();
   }
 
+  get isProcessing() {
+    return this.saveEditDetails.isRunning || this.cancelEditDetails.isRunning;
+  }
+
   @task
   *loadDetailsData() {
     this.documentType = yield this.args.documentContainer.type;
