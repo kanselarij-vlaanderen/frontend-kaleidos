@@ -44,19 +44,18 @@
 <Auk::KeyValue @key={{t "file-type"}}>
   <Utils::Documents::FileTypePill @extension={{@piece.file.extension}} />
 </Auk::KeyValue>
-<Auk::Toolbar>
-  <Auk::Toolbar::Group @position="right">
+<Auk::Toolbar as |toolbar|>
+  <toolbar.Group @position="right" as |group|>
     {{#if this.isEditingDetails}}
-      <Auk::Toolbar::Item>
+      <group.Item>
         <Auk::ButtonLink
           @disabled={{this.saveEditDetails.isRunning}}
           {{on "click" this.cancelEditDetails}}
         >
           {{t "cancel"}}
         </Auk::ButtonLink>
-      </Auk::Toolbar::Item>
-      <Auk::Toolbar::Item>
-
+      </group.Item>
+      <group.Item>
         <Auk::Button
           @skin="primary"
           @loading={{this.saveEditDetails.isRunning}}
@@ -64,17 +63,17 @@
         >
           {{t "save"}}
         </Auk::Button>
-      </Auk::Toolbar::Item>
+      </group.Item>
     {{else}}
-      <Auk::Toolbar::Item>
+      <group.Item>
         <Auk::Button
           @skin="tertiary"
           @icon="pencil"
           {{on "click" this.openEditDetails}}
         >
-          {{t "document-edit"}}
+          {{t "edit-2"}}
         </Auk::Button>
-      </Auk::Toolbar::Item>
+      </group.Item>
     {{/if}}
-  </Auk::Toolbar::Group>
+  </toolbar.Group>
 </Auk::Toolbar>
