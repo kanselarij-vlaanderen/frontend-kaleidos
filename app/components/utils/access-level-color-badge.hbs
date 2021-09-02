@@ -1,15 +1,19 @@
-{{#if @editingEnabled}}
-  <Utils::ModelSelector
-    @modelName="access-level"
-    @allowClear={{true}}
-    @hideSearch={{true}}
-    @propertyToShow="label"
-    @sortField="priority"
-    @selectedItems={{@accessLevel}}
-    @selectModel={{this.changeAccessLevel}}
+<span ...attributes>
+  {{#if @editingEnabled}}
+    <Utils::ModelSelector
+      @modelName="access-level"
+      @allowClear={{true}}
+      @hideSearch={{true}}
+      @propertyToShow="label"
+      @sortField="priority"
+      @selectedItems={{@accessLevel}}
+      @selectModel={{this.changeAccessLevel}}
+    />
+  {{else}}
+  <Auk::ColorBadge
+    @skin={{this.accessPillSkin}}
+    class="auk-u-mr"
   />
-{{else}}
-  <Auk::ColorBadge @skin={{this.accessPillSkin}} />
   <span>
     {{#if @accessLevel.label}}
       {{@accessLevel.label}}
@@ -17,4 +21,5 @@
       {{t "no-accessLevel"}}
     {{/if}}
   </span>
-{{/if}}
+  {{/if}}
+</span>

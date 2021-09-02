@@ -1,0 +1,10 @@
+<Utils::LoadableContent @isLoading={{this.loadVersionsData.isRunning}}>
+  <div class="auk-u-m-2">
+    {{#each this.versions as |piece|}}
+      <Documents::DocumentPreview::VersionCard
+        @piece={{piece}}
+        @currentPiece={{@piece}}
+      />
+    {{/each}}
+  </div>
+</Utils::LoadableContent>
