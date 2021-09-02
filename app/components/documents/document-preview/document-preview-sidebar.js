@@ -16,7 +16,7 @@ import { sortPieces } from 'frontend-kaleidos/utils/documents';
  * - "signatures"
  * - "versions"
  */
-export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Component {
+export default class  DocumentsDocumentPreviewDocumentPreviewSidebar extends Component {
   @service fileService;
   @service router;
   @service store;
@@ -56,10 +56,10 @@ export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Comp
   @action
   setActiveTab(tabName) {
     this.activeTab = tabName;
-    if (tabName === 'details') {
+    if (tabName === 'details'){
       this.loadDetailsData.perform();
     }
-    if (tabName === 'versions') {
+    if (tabName === 'versions'){
       this.loadVersionsData.perform();
     }
   }
@@ -98,7 +98,7 @@ export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Comp
 
     this.isOpenUploadVersionModal = false;
     this.args.openNewPiece(newPiece);
-    await this.loadVersionsData.perform();
+    this.loadVersionsData.perform();
   }
 
   @action
@@ -113,7 +113,7 @@ export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Comp
     if (this.selectedToDelete.id === this.args.piece.id) {
       this.args.transitionBack();
     }
-    await this.loadVersionsData.perform();
+    this.loadVersionsData.perform();
     this.selectedToDelete = null;
     this.isDeletingPiece = false;
   }
