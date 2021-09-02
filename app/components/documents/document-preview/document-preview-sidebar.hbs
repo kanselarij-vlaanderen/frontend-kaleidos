@@ -39,7 +39,7 @@
             @value={{this.documentType.label}}
           />
         {{/if}}
-        {{#if @piece.accessLevel}}
+        {{#if this.accessLevel}}
           <Auk::KeyValue @key={{t "publicity"}}>
             <Utils::AccessLevelColorBadge @accessLevel={{this.accessLevel}} />
           </Auk::KeyValue>
@@ -65,6 +65,7 @@
     <Documents::DocumentPreview::VersionsTab
       @piece={{@piece}}
       @documentContainer={{this.documentContainer}}
+      @onSelectVersion={{@onSelectVersion}}
     />
   {{/if}}
 </Auk::Sidebar>

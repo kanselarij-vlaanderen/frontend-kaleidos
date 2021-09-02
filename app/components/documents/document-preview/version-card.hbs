@@ -45,7 +45,7 @@
           @layout="icon-only"
           @icon="book"
           @skin="borderless"
-          @href={{@piece.viewDocumentURL}}
+          {{on "click" (fn @onSelectVersion @piece)}}
         />
       </div>
     </div>
