@@ -1,8 +1,8 @@
 <Auk::Sidebar @size="xlarge" @position="right" @skin="white" class="auk-u-pb-6">
   <Auk::Navbar>
-    <Auk::Toolbar>
-      <Auk::Toolbar::Group @position="left">
-        <Auk::Toolbar::Item>
+    <Auk::Toolbar as |toolbar|>
+      <toolbar.Group @position="left" as |group|>
+        <group.Item>
           <Auk::Tabs>
             <Auk::Tab
               {{on "click" (fn this.setActiveTab "details")}}
@@ -23,8 +23,8 @@
               {{t "versions"}}
             </Auk::Tab>
           </Auk::Tabs>
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
+        </group.Item>
+      </toolbar.Group>
     </Auk::Toolbar>
   </Auk::Navbar>
 
