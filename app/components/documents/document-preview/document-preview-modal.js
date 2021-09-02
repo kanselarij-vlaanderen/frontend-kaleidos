@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
 
 export default class  DocumentsDocumentPreviewDocumentPreviewModal extends Component {
   get fileFormatIsSupported() {
@@ -10,10 +9,5 @@ export default class  DocumentsDocumentPreviewDocumentPreviewModal extends Compo
       file.get('format').toLowerCase().includes(pdfMime) || // eslint-disable-line
       file.get('extension').toLowerCase() === pdfExtension
     );
-  }
-
-  @action
-  resetPiece(oldPiece) {
-    this.args.resetPiece(oldPiece);
   }
 }

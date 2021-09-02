@@ -16,15 +16,9 @@ export default class DocumentController extends Controller {
   }
 
   @action
-  resetPiece(piece) {
-    this.model.name = piece.name;
-    this.model.documentContainer.type = piece.docType;
-    this.model.accessLevel = piece.accessLevel;
-    this.model.confidential = piece.confidentiality;
-  }
-
-  @action
-  openNewPiece(piece) {
-    this.model = piece;
+  reloadPiece() {
+    // Added rollback as @piece.name & @piece.confidential did not reload after refresh
+    this.model.rollbackAttributes();
+    this.send('reloadModel');
   }
 }

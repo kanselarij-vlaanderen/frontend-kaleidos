@@ -5,8 +5,6 @@ import { tracked } from '@glimmer/tracking';
 
 export default class DocumentsDocumentPreviewDetailsDetailsTabComponent extends Component {
   @tracked isEditingDetails = false;
-  @tracked editPieceMemory;
-
   @tracked documentType;
   @tracked accessLevel;
 
@@ -23,10 +21,8 @@ export default class DocumentsDocumentPreviewDetailsDetailsTabComponent extends 
 
   @action
   async cancelEditDetails() {
-    this.args.resetPiece(this.editPieceMemory);
+    this.args.reloadPiece();
     await this.loadDetailsData.perform();
-
-    this.editPieceMemory = null;
     this.isEditingDetails = false;
   }
 
@@ -38,19 +34,12 @@ export default class DocumentsDocumentPreviewDetailsDetailsTabComponent extends 
     yield this.args.documentContainer.save();
 
     yield this.loadDetailsData.perform();
-    this.editPieceMemory = null;
     this.isEditingDetails = false;
   }
 
   @action
   openEditDetails() {
     this.isEditingDetails = true;
-    this.editPieceMemory = {
-      name: this.args.piece.name,
-      docType: this.documentType,
-      accessLevel: this.accessLevel,
-      confidentiality: this.args.piece.confidential,
-    };
   }
 
   @action
