@@ -63,8 +63,8 @@
     {{! VERSIONS }}
   {{else if (eq this.activeTab "versions")}}
     <Documents::DocumentPreview::VersionsTab
-      @piece={{@piece}}
       @documentContainer={{this.documentContainer}}
+      @currentVersion={{@piece}}
       @onSelectVersion={{@onSelectVersion}}
     />
   {{/if}}

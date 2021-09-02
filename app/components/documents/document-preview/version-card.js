@@ -16,8 +16,4 @@ export default class DocumentsDocumentPreviewVersionCardComponent extends Compon
   *loadData() {
     this.accessLevel = yield this.args.piece.accessLevel;
   }
-
-  get isCurrentPiece() {
-    return this.args.currentPiece.id === this.args.piece.id;
-  }
 }
