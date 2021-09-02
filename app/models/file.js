@@ -35,11 +35,4 @@ export default class File extends Model {
     const regex = new RegExp(`.${this.extension}$`);
     return this.filename.replace(regex, '');
   }
-
-  get canPreview() {
-    const pdfMime =	'application/pdf';
-    const pdfExtension = 'pdf';
-    return this.format.toLowerCase().includes(pdfMime)
-      || this.extension.toLowerCase == pdfExtension;
-  }
 }
