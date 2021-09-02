@@ -22,7 +22,6 @@ export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Comp
 
   @tracked activeTab = 'details';
 
-
   constructor() {
     super(...arguments);
     this.loadDetailsData.perform();

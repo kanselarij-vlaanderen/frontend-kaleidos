@@ -3,7 +3,7 @@ import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 
-export default class  DocumentsDocumentPreviewVersionCardComponent extends Component {
+export default class DocumentsDocumentPreviewVersionCardComponent extends Component {
   @service currentSession;
   @tracked accessLevel;
 
@@ -20,5 +20,4 @@ export default class  DocumentsDocumentPreviewVersionCardComponent extends Compo
   get isCurrentPiece() {
     return this.args.currentPiece.id === this.args.piece.id;
   }
-
 }
