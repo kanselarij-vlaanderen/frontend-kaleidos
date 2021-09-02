@@ -5,9 +5,9 @@
   class="auk-u-pb-6 auk-o-flex auk-o-flex--vertical auk-scroll-wrapper"
 >
   <Auk::Navbar>
-    <Auk::Toolbar>
-      <Auk::Toolbar::Group @position="left">
-        <Auk::Toolbar::Item>
+    <Auk::Toolbar as |toolbar|>
+      <toolbar.Group @position="left" as |group|>
+        <group.Item>
           <Auk::Tabs>
             <Auk::Tab
               {{on "click" (fn this.setActiveTab "details")}}
@@ -28,31 +28,29 @@
               {{t "versions"}}
             </Auk::Tab>
           </Auk::Tabs>
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
+        </group.Item>
+      </toolbar.Group>
     </Auk::Toolbar>
   </Auk::Navbar>
   <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
-    <div class="auk-u-m-4">
-      <Utils::LoadableContent @isLoading={{this.loadPieceData.isRunning}}>
-        {{! DETAILS }}
-        {{#if (eq this.activeTab "details")}}
-          <Documents::DocumentPreview::DetailsTab
-            @piece={{@piece}}
-            @documentContainer={{this.documentContainer}}
-            @reloadPiece={{@reloadPiece}}
-          />
-          {{! SIGNATURES }}
-        {{else if (eq this.activeTab "signatures")}}
+    <Utils::LoadableContent @isLoading={{this.loadPieceData.isRunning}}>
+      {{! DETAILS }}
+      {{#if (eq this.activeTab "details")}}
+        <Documents::DocumentPreview::DetailsTab
+          @piece={{@piece}}
+          @documentContainer={{this.documentContainer}}
+        />
+        {{! SIGNATURES }}
+      {{else if (eq this.activeTab "signatures")}}
 
-          {{! VERSIONS }}
-        {{else if (eq this.activeTab "versions")}}
-          <Documents::DocumentPreview::VersionsTab
-            @piece={{@piece}}
-            @documentContainer={{this.documentContainer}}
-          />
-        {{/if}}
-      </Utils::LoadableContent>
-    </div>
+        {{! VERSIONS }}
+      {{else if (eq this.activeTab "versions")}}
+        <Documents::DocumentPreview::VersionsTab
+          @documentContainer={{this.documentContainer}}
+          @currentVersion={{@piece}}
+          @onSelectVersion={{@onSelectVersion}}
+        />
+      {{/if}}
+    </Utils::LoadableContent>
   </div>
 </Auk::Sidebar>

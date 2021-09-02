@@ -1,7 +1,7 @@
 <div class="auk-u-mb-4">
   <div
     class="auk-o-flex auk-u-p-2
-      {{if this.isCurrentPiece "version-card-selected"}}"
+      {{if @isHighlighted "version-card-selected"}}"
   >
     <div class="auk-o-grid-col-static auk-u-mt">
       <Auk::Badge @icon="clock" @size="large" />
@@ -45,7 +45,7 @@
           @layout="icon-only"
           @icon="book"
           @skin="borderless"
-          @href={{@piece.viewDocumentURL}}
+          {{on "click" (fn @onSelectVersion @piece)}}
         />
       </div>
     </div>

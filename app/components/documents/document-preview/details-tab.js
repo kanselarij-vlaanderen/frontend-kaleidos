@@ -13,27 +13,29 @@ export default class DocumentsDocumentPreviewDetailsDetailsTabComponent extends 
     this.loadDetailsData.perform();
   }
 
+  get isProcessing() {
+    return this.saveDetails.isRunning || this.cancelEditDetails.isRunning;
+  }
+
   @task
   *loadDetailsData() {
     this.documentType = yield this.args.documentContainer.type;
     this.accessLevel = yield this.args.piece.accessLevel;
   }
 
-  @action
-  async cancelEditDetails() {
-    this.args.reloadPiece();
-    await this.loadDetailsData.perform();
+  @task
+  *cancelEditDetails() {
+    this.args.piece.rollbackAttributes();
+    yield this.loadDetailsData.perform();
     this.isEditingDetails = false;
   }
 
   @task
-  *saveEditDetails() {
+  *saveDetails() {
     this.args.piece.accessLevel = this.accessLevel;
     yield this.args.piece.save();
     this.args.documentContainer.type = this.documentType;
     yield this.args.documentContainer.save();
-
-    yield this.loadDetailsData.perform();
     this.isEditingDetails = false;
   }
 
@@ -43,12 +45,12 @@ export default class DocumentsDocumentPreviewDetailsDetailsTabComponent extends 
   }
 
   @action
-  changeAccessLevel(accessLevel) {
+  setAccessLevel(accessLevel) {
     this.accessLevel = accessLevel;
   }
 
   @action
-  changeDocumentType(docType) {
+  setDocumentType(docType) {
     this.documentType = docType;
   }
 }
