@@ -62,43 +62,9 @@
 
     {{! VERSIONS }}
   {{else if (eq this.activeTab "versions")}}
-    <Utils::LoadableContent @isLoading={{this.loadVersionsData.isRunning}}>
-      <Documents::DocumentPreview::VersionsTab
-        @piece={{@piece}}
-        @versions={{this.versions}}
-        @openDeletePiece={{this.openDeletePiece}}
-        @openUploadVersionModal={{this.openUploadVersionModal}}
-      />
-    </Utils::LoadableContent>
+    <Documents::DocumentPreview::VersionsTab
+      @piece={{@piece}}
+      @documentContainer={{this.documentContainer}}
+    />
   {{/if}}
-
-  {{! FOOTER
-  <div class="auk-u-mt-auto">
-    <div class="auk-panel__footer">
-      <Auk::Toolbar>
-        <Auk::Toolbar::Group @position="right">
-          <Auk::Toolbar::Item>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-      </Auk::Toolbar>
-    </div>
-  </div>
-  }}
 </Auk::Sidebar>
-
-{{#if this.isDeletingPiece}}
-  <WebComponents::VlModalVerify
-    @title={{t "document-delete"}}
-    @message={{t "delete-document-message"}}
-    @cancel={{this.cancelDeletePiece}}
-    @verify={{this.deletePiece}}
-  />
-{{/if}}
-
-{{#if this.isOpenUploadVersionModal}}
-  <Documents::DocumentPreview::NewVersionModal
-    @onClose={{this.closeUploadVersionModal}}
-    @onSave={{this.saveUploadVersionModal}}
-    @newVersionName={{this.newVersionName}}
-  />
-{{/if}}
