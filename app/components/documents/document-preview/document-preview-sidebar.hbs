@@ -1,0 +1,71 @@
+<Auk::Sidebar @size="xlarge" @position="right" @skin="white" class="auk-u-pb-6">
+  <Auk::Navbar>
+    <Auk::Toolbar as |toolbar|>
+      <toolbar.Group @position="left" as |group|>
+        <group.Item>
+          <Auk::Tabs>
+            <Auk::Tab
+              {{on "click" (fn this.setActiveTab "details")}}
+              @active={{eq this.activeTab "details"}}
+            >
+              {{t "detail"}}
+            </Auk::Tab>
+            <Auk::Tab
+              {{on "click" (fn this.setActiveTab "signatures")}}
+              @active={{eq this.activeTab "signatures"}}
+            >
+              {{t "signatures"}}
+            </Auk::Tab>
+            <Auk::Tab
+              {{on "click" (fn this.setActiveTab "versions")}}
+              @active={{eq this.activeTab "versions"}}
+            >
+              {{t "versions"}}
+            </Auk::Tab>
+          </Auk::Tabs>
+        </group.Item>
+      </toolbar.Group>
+    </Auk::Toolbar>
+  </Auk::Navbar>
+
+  {{! DETAILS }}
+  {{#if (eq this.activeTab "details")}}
+    <div class="auk-u-m-4">
+      <Auk::KeyValue @key={{t "document-name"}} @value={{@piece.name}} />
+      {{#unless this.loadDetailsData.isRunning}}
+        {{#if this.documentType}}
+          <Auk::KeyValue
+            @key={{t "document-type"}}
+            @value={{this.documentType.label}}
+          />
+        {{/if}}
+        {{#if this.accessLevel}}
+          <Auk::KeyValue @key={{t "publicity"}}>
+            <Utils::AccessLevelColorBadge @accessLevel={{this.accessLevel}} />
+          </Auk::KeyValue>
+        {{/if}}
+      {{/unless}}
+      <Auk::KeyValue @key={{capitalize (t "confidentiality")}}>
+        <Utils::ConfidentialityPill @confidential={{@piece.confidential}} />
+      </Auk::KeyValue>
+      <div class="auk-key-value-item">
+        <Auk::KeyValue @key={{t "file-type"}}>
+          <Utils::Documents::FileTypePill
+            @extension={{@piece.file.extension}}
+          />
+        </Auk::KeyValue>
+      </div>
+    </div>
+
+    {{! SIGNATURES }}
+  {{else if (eq this.activeTab "signatures")}}
+
+    {{! VERSIONS }}
+  {{else if (eq this.activeTab "versions")}}
+    <Documents::DocumentPreview::VersionsTab
+      @documentContainer={{this.documentContainer}}
+      @currentVersion={{@piece}}
+      @onSelectVersion={{@onSelectVersion}}
+    />
+  {{/if}}
+</Auk::Sidebar>

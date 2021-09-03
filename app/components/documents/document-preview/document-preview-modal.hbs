@@ -1,0 +1,30 @@
+<Auk::Modal @size="full-screen">
+  <Auk::Modal::Header @title={{this.selectedVersion.name}} @onClose={{@onClose}} />
+  <Auk::Modal::Body @noPadding={{true}}>
+    <div class="auk-panel-layout">
+      <div class="auk-panel-layout__main-content">
+        {{#if this.fileFormatIsSupported}}
+          <PdfView @filePath={{this.selectedVersion.file.downloadLink}} />
+        {{else}}
+          <div class="auk-u-p-4">
+            <Auk::Alert
+              @skin="warning"
+              @title={{t "file-type-unsupported"}}
+              @message={{t
+                "file-viewer-type-unsupported"
+                fileType=this.selectedVersion.file.extension
+              }}
+            />
+          </div>
+        {{/if}}
+      </div>
+      <div class="auk-panel-layout__sidebar">
+        <Documents::DocumentPreview::DocumentPreviewSidebar
+          @piece={{this.selectedVersion}}
+          @transitionBack={{@onClose}}
+          @onSelectVersion={{this.setSelectedVersion}}
+        />
+      </div>
+    </div>
+  </Auk::Modal::Body>
+</Auk::Modal>
