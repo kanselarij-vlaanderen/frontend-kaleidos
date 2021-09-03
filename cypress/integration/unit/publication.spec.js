@@ -1,6 +1,7 @@
-/* global context, it, cy,beforeEach, afterEach */
+/* global context, it, cy,beforeEach, afterEach, Cypress */
 
 // / <reference types="Cypress" />
+import dependency from '../../selectors/dependency.selectors';
 import publication from '../../selectors/publication.selectors';
 import auk from '../../selectors/auk.selectors';
 
@@ -61,25 +62,87 @@ context('Publications tests', () => {
   });
 
   it('should clear input data when closing and reopening modal to create new publication', () => {
-    // TODO-publication also test if errors are correctly reset after cancel / new creation
     const number = 999;
+    const suffix = 'BIS';
     const someText = 'Some text';
+    const currentDate = Cypress.moment().format('DD-MM-YYYY');
+    const agendaDate = Cypress.moment().add(1, 'weeks')
+      .day(3);
+
+    // error validation (and rollback after cancel)
     cy.get(publication.publicationsIndex.newPublication).click();
-    cy.get(publication.newPublication.suffix).should('be.empty');
-    cy.get(publication.newPublication.longTitle).should('be.empty');
-    cy.get(publication.newPublication.number)
-      .click()
-      .clear()
-      .type(number);
-    cy.get(publication.newPublication.shortTitle)
-      .click()
-      .type(someText);
-    // TODO-publication also test close button
+    cy.get(publication.newPublication.number).click()
+      .clear();
+    cy.get(publication.newPublication.shortTitle).should('be.empty');
+    cy.get(publication.newPublication.create).click();
+    cy.get(publication.newPublication.alertError).should('exist');
+    cy.get(publication.newPublication.numberError).should('exist');
+    cy.get(publication.newPublication.shortTitleError).should('exist');
     cy.get(auk.modal.footer.cancel).click();
     cy.get(publication.publicationsIndex.newPublication).click();
-    // TODO-publication check the other fields
+    cy.get(publication.newPublication.alertError).should('not.exist');
+    cy.get(publication.newPublication.numberError).should('not.exist');
+    cy.get(publication.newPublication.shortTitleError).should('not.exist');
+
+    // check rollback after cancel
+    cy.get(publication.newPublication.number).click()
+      .clear()
+      .type(number);
+    cy.get(publication.newPublication.suffix).click()
+      .type(suffix);
+    cy.get(auk.datepicker).eq(0)
+      .click();
+    cy.setDateInFlatpickr(agendaDate);
+    cy.get(auk.datepicker).eq(1)
+      .click();
+    cy.setDateInFlatpickr(agendaDate);
+    cy.get(auk.datepicker).eq(2)
+      .click();
+    cy.setDateInFlatpickr(agendaDate);
+    cy.get(publication.newPublication.shortTitle).click()
+      .type(someText);
+    cy.get(publication.newPublication.longTitle).click()
+      .type(someText);
+    cy.get(auk.modal.footer.cancel).click();
+    cy.get(publication.publicationsIndex.newPublication).click();
     cy.get(publication.newPublication.number).should('not.contain', number);
-    cy.get(publication.newPublication.shortTitle).should('not.contain', someText);
+    cy.get(auk.datepicker).eq(0)
+      .should('be.empty');
+    cy.get(auk.datepicker).eq(1)
+      .should('have.value', currentDate);
+    cy.get(auk.datepicker).eq(2)
+      .should('be.empty');
+    cy.get(publication.newPublication.shortTitle).should('be.empty');
+    cy.get(publication.newPublication.longTitle).should('be.empty');
+
+    // check rollback after close
+    cy.get(publication.newPublication.number).click()
+      .clear()
+      .type(number);
+    cy.get(auk.datepicker).eq(0)
+      .click();
+    cy.setDateInFlatpickr(agendaDate);
+    cy.get(auk.datepicker).eq(1)
+      .click();
+    cy.setDateInFlatpickr(agendaDate);
+    cy.get(auk.datepicker).eq(2)
+      .click();
+    cy.setDateInFlatpickr(agendaDate);
+    cy.get(publication.newPublication.shortTitle).click()
+      .type(someText);
+    cy.get(publication.newPublication.longTitle).click()
+      .type(someText);
+    cy.get(auk.modal.header.close).click();
+    cy.get(publication.publicationsIndex.newPublication).click();
+    cy.get(publication.newPublication.number).should('not.contain', number);
+    cy.get(auk.datepicker).eq(0)
+      .should('be.empty');
+    cy.get(auk.datepicker).eq(1)
+      .should('have.value', currentDate);
+    cy.get(auk.datepicker).eq(2)
+      .should('be.empty');
+    cy.get(publication.newPublication.shortTitle).should('be.empty');
+    cy.get(publication.newPublication.longTitle).should('be.empty');
   });
 
   it('should edit inscription and this data must be visible in the overview', () => {
@@ -90,6 +153,27 @@ context('Publications tests', () => {
     const longTitleEdit = 'Lange titel voor de cypress test gewijzigd.';
     cy.route('GET', '/publication-flows/**').as('getNewPublicationDetail');
     cy.createPublication(pubNumber, null, shortTitle, longTitle);
+
+    // error validation and rollback after cancel
+    cy.get(publication.inscription.view.edit).click();
+    cy.get(publication.inscription.edit.shortTitle).click()
+      .clear();
+    cy.get(publication.inscription.edit.save).click();
+    cy.get(publication.inscription.edit.shortTitleError).should('exist');
+    cy.get(publication.inscription.edit.cancel).click();
+    cy.get(publication.inscription.view.edit).click();
+    cy.get(publication.inscription.edit.shortTitleError).should('not.exist');
+    cy.get(publication.inscription.edit.shortTitle).click()
+      .clear()
+      .type(shortTitleEdit);
+    cy.get(publication.inscription.edit.longTitle).click()
+      .clear()
+      .type(longTitleEdit);
+    cy.get(publication.inscription.edit.cancel).click();
+    cy.get(publication.inscription.view.shortTitle).should('contain', shortTitle);
+    cy.get(publication.inscription.view.longTitle).should('contain', longTitle);
+
+    // edit
     cy.get(publication.inscription.view.edit).click();
     cy.get(publication.inscription.edit.shortTitle).click()
       .clear()
@@ -97,7 +181,6 @@ context('Publications tests', () => {
     cy.get(publication.inscription.edit.longTitle).click()
       .clear()
       .type(longTitleEdit);
-
     cy.route('PATCH', '/publication-flows/**').as('patchPublicationFlow');
     cy.get(publication.inscription.edit.save).click();
     cy.wait('@patchPublicationFlow');
@@ -139,6 +222,21 @@ context('Publications tests', () => {
       .type(contactperson.lan);
     cy.get(publication.contactPersonAdd.email).clear()
       .type(contactperson.eml);
+
+    // Add organization, test rollback after cancel
+    cy.get(publication.contactPersonAdd.addOrganization).click();
+    cy.get(publication.organizationAdd.name).click()
+      .type(contactperson.org);
+    cy.get(publication.organizationAdd.cancel).click();
+    cy.get(publication.contactPersonAdd.selectOrganization).click();
+    cy.get(dependency.emberPowerSelect.option).contains(contactperson.org)
+      .should('not.exist');
+    cy.get(publication.contactPersonAdd.addOrganization).click();
+    cy.get(publication.organizationAdd.name).click()
+      .type(contactperson.org);
+    cy.route('POST', '/organizations').as('postOrganizations');
+    cy.get(publication.organizationAdd.submit).click();
+    cy.wait('@postOrganizations');
 
     // Click submit.
     cy.route('POST', '/persons').as('postPerson');

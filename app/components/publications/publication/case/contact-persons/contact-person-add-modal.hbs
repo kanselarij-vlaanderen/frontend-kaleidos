@@ -36,7 +36,7 @@
           <Auk::Label>
             {{t "organization"}}
           </Auk::Label>
-          <div class="auk-o-flex">
+          <div data-test-contact-person-select-organization class="auk-o-flex">
             <PowerSelect
               @options={{this.organizations}}
               @selected={{this.organization}}
@@ -49,6 +49,7 @@
               {{ organization.name }}
             </PowerSelect>
             <Auk::Button
+              data-test-contact-person-add-organization
               @layout="icon-only" @icon="add"
               class="auk-u-ml-2"
               {{on "click" this.openOrganizationAddModal}}>

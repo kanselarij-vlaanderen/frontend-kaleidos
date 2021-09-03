@@ -16,7 +16,7 @@
             <Auk::Label>{{t "short-title"}}</Auk::Label>
             <Auk::Textarea data-test-inscription-edit-short-title @rows="2" @value={{this.shortTitle}}/>
             {{#if this.showShortTitleError}}
-              <Auk::Label @error={{true}}>
+              <Auk::Label data-test-inscription-edit-short-title-error @error={{true}}>
                 {{t "input-error-message"}}
               </Auk::Label>
             {{/if}}
@@ -32,6 +32,7 @@
           <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
               <Auk::Button
+                data-test-inscription-edit-cancel
                 @skin="borderless"
                 @disabled={{this.save.isRunning}}
                 {{on "click" this.cancelEdit}}>

@@ -77,11 +77,15 @@ const selectors = {
     firstName: '[data-test-contact-person-add-first-name]',
     lastName: '[data-test-contact-person-add-last-name]',
     email: '[data-test-contact-person-add-email]',
+    selectOrganization: '[data-test-contact-person-select-organization]',
+    addOrganization: '[data-test-contact-person-add-organization]',
     submit: '[data-test-contact-person-add-submit]',
   },
 
   // organization-add-modal
   organizationAdd: {
+    name: '[data-test-organization-add-name]',
+    cancel: '[data-test-organization-add-cancel]',
     submit: '[data-test-organization-add-submit]',
   },
 
@@ -94,7 +98,9 @@ const selectors = {
     },
     edit: {
       shortTitle: '[data-test-inscription-edit-short-title]',
+      shortTitleError: '[data-test-inscription-edit-short-title-error]',
       longTitle: '[data-test-inscription-edit-long-title]',
+      cancel: '[data-test-inscription-edit-cancel]',
       save: '[data-test-inscription-edit-save]',
     },
   },
