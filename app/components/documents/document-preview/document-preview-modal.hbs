@@ -3,28 +3,7 @@
   <Auk::Modal::Body @noPadding={{true}}>
     <div class="auk-panel-layout">
       <div class="auk-panel-layout__main-content">
-        {{#if (not this.selectedVersion.file)}}
-          <div class="auk-u-p-4">
-            <Auk::Alert
-              @skin="warning"
-              @title={{t "document-unauthorized"}}
-              @message={{t "document-unauthorized-message"}}
-            />
-          </div>
-        {{else if this.fileFormatIsSupported}}
-          <PdfView @filePath={{this.selectedVersion.file.downloadLink}} />
-        {{else}}
-          <div class="auk-u-p-4">
-            <Auk::Alert
-              @skin="warning"
-              @title={{t "file-type-unsupported"}}
-              @message={{t
-                "file-viewer-type-unsupported"
-                fileType=this.selectedVersion.file.extension
-              }}
-            />
-          </div>
-        {{/if}}
+        <Documents::DocumentView @file={{await this.selectedVersion.file}} />
       </div>
       <div class="auk-panel-layout__sidebar">
         <Documents::DocumentPreview::DocumentPreviewSidebar

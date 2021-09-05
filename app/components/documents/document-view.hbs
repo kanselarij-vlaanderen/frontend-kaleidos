@@ -1,0 +1,24 @@
+{{#if @file}}
+  {{#if this.isPdfDocument}}
+    <PdfView @filePath={{@file.downloadLink}} />
+  {{else}}
+    <div class="auk-u-p-4">
+      <Auk::Alert
+        @skin="warning"
+        @title={{t "file-type-unsupported"}}
+        @message={{t
+                     "file-viewer-type-unsupported"
+                     fileType=@file.extension
+                 }}
+      />
+    </div>
+  {{/if}}
+{{else}}
+  <div class="auk-u-p-4">
+    <Auk::Alert
+      @skin="warning"
+      @title={{t "document-unauthorized"}}
+      @message={{t "document-unauthorized-message"}}
+    />
+  </div>
+{{/if}}

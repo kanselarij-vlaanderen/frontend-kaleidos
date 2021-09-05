@@ -35,10 +35,10 @@
           @skin="borderless"
           @layout="icon-only"
           @icon="download"
-          @href={{await this.piece.downloadFileLink}}
+          @href={{await this.piece.namedDownloadLinkPromise}}
           {{!-- download --}}
           {{! 'download' attribute doesn't specify a filename, as this gets overruled by
-          the filename received in the "Content-Disposition HTTP header" }}
+              the filename received in the "Content-Disposition HTTP header" }}
         >
           {{t "download"}}
         </Auk::Button>
