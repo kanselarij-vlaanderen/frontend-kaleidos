@@ -35,10 +35,10 @@
           @skin="borderless"
           @layout="icon-only"
           @icon="download"
-          @href={{await this.piece.downloadFileLink}}
+          @href={{await this.piece.namedDownloadLinkPromise}}
           {{!-- download --}}
           {{! 'download' attribute doesn't specify a filename, as this gets overruled by
-          the filename received in the "Content-Disposition HTTP header" }}
+              the filename received in the "Content-Disposition HTTP header" }}
         >
           {{t "download"}}
         </Auk::Button>
@@ -58,10 +58,14 @@
     </div>
     {{#if this.currentSession.isEditor}}
       <div class="vlc-document-card-item__meta">
-        {{t "uploaded-at"}}
-        {{moment-format this.piece.created "DD.MM.YYYY"}}
-        {{t "at"}}
-        {{moment-format this.piece.created "HH:mm"}}
+        {{#if this.piece.created}}
+          {{t "uploaded-at"}}
+          {{moment-format this.piece.created "DD.MM.YYYY"}}
+          {{t "at"}}
+          {{moment-format this.piece.created "HH:mm"}}
+        {{else}}
+          {{t "upload-time-unknown"}}
+        {{/if}}
       </div>
     {{/if}}
     <div class="vlc-document-card-item__icon">
