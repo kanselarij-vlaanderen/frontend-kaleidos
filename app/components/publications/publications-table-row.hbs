@@ -134,7 +134,19 @@ request the whole row and not only the arrow at the end to be clickable }}
       {{/if}}
     </td>
   {{/if}}
-  {{#if @tableColumnDisplayOptions.translationReceivedDate}}
+  {{#if @tableColumnDisplayOptions.publicationDateReceived}}
+    <td class="auk-u-text-nowrap">
+      {{#if @publicationFlow.publicationSubcase.dateReceived}}
+        {{moment-format
+          @publicationFlow.publicationSubcase.dateReceived
+          "DD-MM-YYYY"
+        }}
+      {{else}}
+        {{t "dash"}}
+      {{/if}}
+    </td>
+  {{/if}}
+  {{#if @tableColumnDisplayOptions.translationDateReceived}}
     <td class="auk-u-text-nowrap">
       {{#if @publicationFlow.translationSubcase.dateReceived}}
         {{moment-format

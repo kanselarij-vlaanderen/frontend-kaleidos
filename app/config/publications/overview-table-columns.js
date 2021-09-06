@@ -83,11 +83,18 @@ export default [
       'publication-subcase.publication-activities.decisions.publication-date',
   },
   {
-    keyName: 'translationReceivedDate',
+    keyName: 'publicationDateReceived',
+    translationKey: 'publications-table-publication-received-date',
+    translationKeySmall: 'publications-table-publication-received-date-small',
+    showByDefault: true,
+    sortKey: 'publication-subcase.date-received',
+  },
+  {
+    keyName: 'translationDateReceived',
     translationKey: 'publications-table-translation-received-date',
     translationKeySmall: 'publications-table-translation-received-date-small',
     showByDefault: true,
-    sortKey: 'translation-subcase.received-date',
+    sortKey: 'translation-subcase.date-received',
   },
   {
     keyName: 'translations',
