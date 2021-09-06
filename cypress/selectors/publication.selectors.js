@@ -68,6 +68,7 @@ const selectors = {
     row: {
       delete: '[data-test-contact-persons-row-delete]',
       fullName: '[data-test-contact-persons-row-full-name]',
+      organizationName: '[data-test-contact-persons-row-organization-name]',
       email: '[data-test-contact-persons-row-email]',
     },
   },
