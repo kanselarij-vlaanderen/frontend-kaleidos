@@ -69,12 +69,6 @@ const selectors = {
     cancel: '[data-test-vl-modal-footer-cancel]',
   },
 
-  // vl-toggle
-  vlToggle: {
-    label: '[data-test-vl-toggle-label]',
-    input: '[data-test-vl-toggle-input]',
-  },
-
   // vl-datepicker
   vlDatepicker: '[data-test-vl-datepicker]',
 
