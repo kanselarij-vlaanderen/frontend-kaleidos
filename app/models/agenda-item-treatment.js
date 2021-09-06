@@ -22,6 +22,6 @@ export default Model.extend({
       name: this.get('report.lastPiece.name'),
     });
   }),
-  publicationFlows: hasMany('publication-flows'),
+  publicationFlows: hasMany('publication-flow'),
   signFlows: hasMany(),
 });
