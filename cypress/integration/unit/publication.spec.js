@@ -1,4 +1,4 @@
-/* global context, it, cy,beforeEach, afterEach, Cypress */
+/* global context, it, cy, beforeEach, afterEach, Cypress */
 
 // / <reference types="Cypress" />
 import dependency from '../../selectors/dependency.selectors';
@@ -66,10 +66,10 @@ context('Publications tests', () => {
     const suffix = 'BIS';
     const someText = 'Some text';
     const currentDate = Cypress.moment().format('DD-MM-YYYY');
-    const agendaDate = Cypress.moment().add(1, 'weeks')
+    const futureDate = Cypress.moment().add(1, 'weeks')
       .day(3);
 
-    // error validation (and rollback after cancel)
+    // error validation (and reset after cancel)
     cy.get(publication.publicationsIndex.newPublication).click();
     cy.get(publication.newPublication.number).click()
       .clear();
@@ -80,25 +80,29 @@ context('Publications tests', () => {
     cy.get(publication.newPublication.shortTitleError).should('exist');
     cy.get(auk.modal.footer.cancel).click();
     cy.get(publication.publicationsIndex.newPublication).click();
+    cy.get(publication.newPublication.alertInfo).should('exist');
     cy.get(publication.newPublication.alertError).should('not.exist');
     cy.get(publication.newPublication.numberError).should('not.exist');
     cy.get(publication.newPublication.shortTitleError).should('not.exist');
 
-    // check rollback after cancel
+    // check reset after cancel
     cy.get(publication.newPublication.number).click()
       .clear()
       .type(number);
     cy.get(publication.newPublication.suffix).click()
       .type(suffix);
+    // "beslissingsdatum"
     cy.get(auk.datepicker).eq(0)
       .click();
-    cy.setDateInFlatpickr(agendaDate);
+    cy.setDateInFlatpickr(futureDate);
+    // "ontvangstdatum"
     cy.get(auk.datepicker).eq(1)
       .click();
-    cy.setDateInFlatpickr(agendaDate);
+    cy.setDateInFlatpickr(futureDate);
+    // "uiterste datum publicatie"
     cy.get(auk.datepicker).eq(2)
       .click();
-    cy.setDateInFlatpickr(agendaDate);
+    cy.setDateInFlatpickr(futureDate);
     cy.get(publication.newPublication.shortTitle).click()
       .type(someText);
     cy.get(publication.newPublication.longTitle).click()
@@ -106,28 +110,34 @@ context('Publications tests', () => {
     cy.get(auk.modal.footer.cancel).click();
     cy.get(publication.publicationsIndex.newPublication).click();
     cy.get(publication.newPublication.number).should('not.contain', number);
+    // "beslissingsdatum"
     cy.get(auk.datepicker).eq(0)
       .should('be.empty');
+    // "ontvangstdatum"
     cy.get(auk.datepicker).eq(1)
       .should('have.value', currentDate);
+    // "uiterste datum publicatie"
     cy.get(auk.datepicker).eq(2)
       .should('be.empty');
     cy.get(publication.newPublication.shortTitle).should('be.empty');
     cy.get(publication.newPublication.longTitle).should('be.empty');
 
-    // check rollback after close
+    // check reset after close
     cy.get(publication.newPublication.number).click()
       .clear()
       .type(number);
+    // "beslissingsdatum"
     cy.get(auk.datepicker).eq(0)
       .click();
-    cy.setDateInFlatpickr(agendaDate);
+    cy.setDateInFlatpickr(futureDate);
+    // "ontvangstdatum"
     cy.get(auk.datepicker).eq(1)
       .click();
-    cy.setDateInFlatpickr(agendaDate);
+    cy.setDateInFlatpickr(futureDate);
+    // "uiterste datum publicatie"
     cy.get(auk.datepicker).eq(2)
       .click();
-    cy.setDateInFlatpickr(agendaDate);
+    cy.setDateInFlatpickr(futureDate);
     cy.get(publication.newPublication.shortTitle).click()
       .type(someText);
     cy.get(publication.newPublication.longTitle).click()
@@ -154,7 +164,7 @@ context('Publications tests', () => {
     cy.route('GET', '/publication-flows/**').as('getNewPublicationDetail');
     cy.createPublication(pubNumber, null, shortTitle, longTitle);
 
-    // error validation and rollback after cancel
+    // error validation and reset after cancel
     cy.get(publication.inscription.view.edit).click();
     cy.get(publication.inscription.edit.shortTitle).click()
       .clear();
@@ -205,6 +215,7 @@ context('Publications tests', () => {
       org: 'US and A',
     };
 
+    // TODO open publication (with index)
     cy.route('GET', '/publication-flows/**').as('getNewPublicationDetail');
     cy.get(publication.publicationTableRow.row.goToPublication).first()
       .click();
@@ -213,7 +224,7 @@ context('Publications tests', () => {
     // Assert empty.
     cy.get(auk.emptyState.message).contains(noContactPersons);
 
-    // Add contactperson.
+    // Add contactperson data.
     cy.get(publication.contactPersons.add).click();
     cy.get(auk.modal.container).should('exist');
     cy.get(publication.contactPersonAdd.firstName).clear()
@@ -246,6 +257,7 @@ context('Publications tests', () => {
     cy.wait('@postContactPerson');
     cy.get(publication.contactPersons.rows).should('have.length', 1);
 
+    // TODO check organisation name
     cy.get(publication.contactPersons.row.fullName).contains(contactperson.fin)
       .contains(contactperson.lan);
     cy.get(publication.contactPersons.row.email).contains(contactperson.eml);
