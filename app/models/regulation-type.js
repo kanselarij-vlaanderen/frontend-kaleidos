@@ -1,6 +1,4 @@
-import Model, {
-  attr, hasMany
-} from '@ember-data/model';
+import Model, { attr, hasMany } from '@ember-data/model';
 
 export default class RegulationType extends Model {
   @attr('string') label;
