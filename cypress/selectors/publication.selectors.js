@@ -112,6 +112,14 @@ const selectors = {
     add: '[data-test-mandatees-panel-add]',
     unlink: '[data-test-mandatees-panel-unlink]',
   },
+
+  // link-mandatees-modal
+  linkMandatees: {
+    select: '[data-test-link-mandatees-select]',
+    cancel: '[data-test-link-mandatees-cancel]',
+    add: '[data-test-link-mandatees-add]',
+  },
+
   // documents-upload-modal
   documentsUploadModal: {
     save: '[data-test-publication-documents-upload-modal-save]',

@@ -196,6 +196,31 @@ context('Publications tests', () => {
     cy.get(publication.publicationTableRow.row.shortTitle).contains(shortTitleEdit);
   });
 
+  it('publications:dossier: Add and delete mandataris', () => {
+    const noMandatees = 'Er zijn nog geen mandatarissen toegevoegd.';
+    const mandateeName = 'Geert Bourgeois';
+
+    cy.route('GET', '/publication-flows/**').as('getNewPublicationDetail');
+    cy.get(publication.publicationTableRow.row.goToPublication).first()
+      .click();
+    cy.wait('@getNewPublicationDetail');
+
+    // Assert empty.
+    cy.get(auk.emptyState.message).contains(noMandatees);
+
+    // add mandatee
+    // TODO KAS-2861 select mandatee with command?
+    cy.get(publication.mandateesPanel.add).click();
+    cy.get(publication.linkMandatees.add).should('be.disabled');
+    cy.get(publication.linkMandatees.select).click();
+    cy.get(dependency.emberPowerSelect.optionSearchMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.option).contains(mandateeName)
+      .click();
+    cy.get(publication.linkMandatees.add).should('not.be.disabled')
+      .click();
+    // TODO wachten op patch call, bevestigen dat empty state weg is en should have length 1 op rows, klik delete, check of alles weg is
+  });
+
   it('publications:dossier:Add and delete contact person', () => {
     const noContactPersons = 'Er zijn nog geen contactpersonen toegevoegd';
     const contactperson = {
