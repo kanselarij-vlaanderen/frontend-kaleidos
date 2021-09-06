@@ -1,6 +1,6 @@
 <div class="auk-u-mb-3">
   {{#if this.isInEditMode}}
-    <Auk::Panel data-test-publication-case-panel-case-editing class="auk-panel--editing">
+    <Auk::Panel class="auk-panel--editing">
       <Auk::Panel::Header>
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
@@ -14,16 +14,16 @@
         <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
           <div class="auk-form-group {{if this.showShortTitleError "auk-form-group--error"}}">
             <Auk::Label>{{t "short-title"}}</Auk::Label>
-            <Auk::Textarea data-test-publication-inscription-short-title-textarea @rows="2" @value={{this.shortTitle}}/>
+            <Auk::Textarea data-test-inscription-edit-short-title @rows="2" @value={{this.shortTitle}}/>
             {{#if this.showShortTitleError}}
-              <Auk::Label data-test-au-label-error="true" @error={{true}}>
+              <Auk::Label @error={{true}}>
                 {{t "input-error-message"}}
               </Auk::Label>
             {{/if}}
           </div>
           <div class="auk-form-group">
             <Auk::Label>{{t "long-title"}}</Auk::Label>
-            <Auk::Textarea data-test-publication-inscription-long-title-textarea @rows="4" @value={{this.longTitle}}/>
+            <Auk::Textarea data-test-inscription-edit-long-title @rows="4" @value={{this.longTitle}}/>
           </div>
         </Utils::LoadableContent>
       </Auk::Panel::Body>
@@ -32,7 +32,6 @@
           <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
               <Auk::Button
-                data-test-publication-cancel-inscription
                 @skin="borderless"
                 @disabled={{this.save.isRunning}}
                 {{on "click" this.cancelEdit}}>
@@ -43,7 +42,7 @@
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <Auk::Button
-                data-test-publication-save-inscription
+                data-test-inscription-edit-save
                 @skin="primary"
                 @loading={{this.save.isRunning}}
                 {{on "click" (perform this.save)}}>
@@ -55,7 +54,7 @@
       </Auk::Panel::Footer>
     </Auk::Panel>
   {{else}}
-    <Auk::Panel data-test-publication-case-panel-case>
+    <Auk::Panel>
       <Auk::Panel::Header>
         <Auk::Toolbar>
           <Auk::Toolbar::Group @position="left">
@@ -82,15 +81,15 @@
               </Auk::Toolbar::Item>
             {{/if}}
             <Auk::Toolbar::Item>
-              <Auk::Button data-test-publication-edit-inscription-button @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInEditMode}}/>
+              <Auk::Button data-test-inscription-view-edit @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInEditMode}}/>
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
         </Auk::Toolbar>
       </Auk::Panel::Header>
       <Auk::Panel::Body>
-        <div class="auk-content" data-test-publication-flow-title>
-          <h4>{{@publicationFlow.shortTitle}}</h4>
-          <p class="auk-u-text-prewrap">{{@publicationFlow.longTitle}}</p>
+          <div class="auk-content">
+          <h4 data-test-inscription-view-short-title>{{@publicationFlow.shortTitle}}</h4>
+          <p data-test-inscription-view-long-title class="auk-u-text-prewrap">{{@publicationFlow.longTitle}}</p>
         </div>
       </Auk::Panel::Body>
     </Auk::Panel>

@@ -1,4 +1,4 @@
-<div class="auk-u-mb-3" data-test-publication-case-panel-mandatees>
+<div class="auk-u-mb-3">
   <Auk::Panel>
     <Auk::Panel::Header>
       <Auk::Toolbar>
@@ -10,7 +10,7 @@
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <Auk::Button
-              data-test-add-mandatee
+              data-test-mandatees-panel-add
               @skin="tertiary"
               @icon="add"
               {{on "click" this.openLinkModal}}>
@@ -22,7 +22,7 @@
     </Auk::Panel::Header>
     {{#if @publicationFlow.mandatees}}
       <Auk::Panel::Body @noPadding={{true}}>
-        <table class="auk-table" data-test-table-mandatees>
+        <table class="auk-table" data-test-mandatees-panel-table>
           <thead>
             <tr>
               <th>{{t "mandatee"}}</th>
@@ -40,7 +40,7 @@
                 </td>
                 <td class="auk-u-text-align--right">
                   <Auk::Button
-                    data-test-unlink-mandatee
+                    data-test-mandatees-panel-unlink
                     @layout="icon-only" @icon="delete" @skin="danger-borderless"
                     {{on "click" (fn this.unlink mandatee)}} />
                 </td>

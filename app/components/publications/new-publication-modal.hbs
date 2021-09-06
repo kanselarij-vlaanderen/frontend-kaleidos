@@ -11,7 +11,7 @@
     <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
       {{#if this.hasError}}
         <Auk::Alert
-          data-test-auk-alert-error
+          data-test-new-publication-alert-error
           @skin="error"
           @icon="alert-triangle"
           @title={{t "modal-error-alert-title" }}
@@ -19,7 +19,7 @@
         />
       {{else if (not this.isViaCouncilOfMinisters)}}
         <Auk::Alert
-          data-test-auk-alert-info
+          data-test-new-publication-alert-info
           @icon="circle-info"
           @message={{t "publications-new-warning-message"}}
         />
@@ -39,14 +39,14 @@
               style="max-width: 10rem"
               @value={{mut this.number}}
               disabled={{this.initPublicationNumber.isRunning}}
-              data-test-create-publication-modal-number-input
+              data-test-new-publication-number
               {{on "change" this.isPublicationNumberAlreadyTaken}}
             />
             <Auk::Input
               id="publicationSuffixInput"
               style="max-width: 6.5rem"
               @value={{mut this.suffix}}
-              data-test-create-publication-modal-suffix-input
+              data-test-new-publication-suffix
               {{on "change" this.isPublicationNumberAlreadyTaken}}
             />
             {{!-- template-lint-enable no-inline-styles --}}
@@ -59,11 +59,11 @@
             </Auk::Icon>
           </div>
           {{#if this.numberIsAlreadyUsed}}
-            <Auk::Label @error={{true}}>
+            <Auk::Label data-test-new-publication-number-error @error={{true}}>
               {{t "publication-number-already-taken"}}
             </Auk::Label>
           {{else if this.hasPublicationNumberError}}
-            <Auk::Label @error={{true}}>
+            <Auk::Label data-test-new-publication-number-error @error={{true}}>
               {{t "input-error-message"}}
             </Auk::Label>
           {{/if}}
@@ -111,16 +111,16 @@
           <Auk::Label for="shortTitleInput" @isRequired={{true}}>
             {{t "name-subcase"}}
           </Auk::Label>
-          <Auk::Textarea id="shortTitleInput" @rows="2" @value={{mut this.shortTitle}} data-test-create-publication-modal-short-title-textarea />
+          <Auk::Textarea id="shortTitleInput" @rows="2" @value={{mut this.shortTitle}} data-test-new-publication-short-title />
           {{#if this.hasShortTitleError}}
-            <Auk::Label @error={{true}}>
+            <Auk::Label data-test-new-publication-short-title-error @error={{true}}>
               {{t "input-error-message"}}
             </Auk::Label>
           {{/if}}
         </div>
         <div class="auk-form-group">
           <Auk::Label for="longTitleInput">{{t "title-subcase"}}</Auk::Label>
-          <Auk::Textarea id="longTitleInput" @rows="4" @value={{mut this.longTitle}} data-test-create-publication-modal-long-title-textarea />
+          <Auk::Textarea id="longTitleInput" @rows="4" @value={{mut this.longTitle}} data-test-new-publication-long-title />
         </div>
       </div>
     </Utils::LoadableContent>
@@ -131,7 +131,6 @@
         <Auk::Toolbar::Item>
           <Auk::ButtonLink
             disabled={{this.save.isRunning}}
-            data-test-publication-button-cancel
             {{on "click" @onCancel}}
           >
             {{t "cancel"}}
@@ -146,7 +145,7 @@
             <Auk::Button
               @skin="primary"
               disabled={{this.save.isRunning}}
-              data-test-publication-button-create-new
+              data-test-new-publication-create
               {{on "click" (perform this.save)}}
             >
               {{t "publications-new-button-text"}}
