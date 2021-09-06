@@ -6,7 +6,7 @@ export default class SignPreparationActivityModel extends Model {
   @attr('datetime') endDate;
 
   @belongsTo signSubcase;
-  @belongsTo signingHubDocument;
+  @belongsTo signinghubDocument;
   @belongsTo signMarkingActivity;
   @hasMany signSigningActivities;
 }

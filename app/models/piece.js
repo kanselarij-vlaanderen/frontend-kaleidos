@@ -81,7 +81,7 @@ export default Model.extend({
 
   // SIGN FLOW
   signMarkingActivity: belongsTo(),
-  signingHubDocument: belongsTo(),
+  signinghubDocument: belongsTo(),
   signedPiece: belongsTo(),
 
   cases: hasMany('case', {
