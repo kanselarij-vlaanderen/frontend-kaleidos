@@ -14,11 +14,13 @@
 
     <div class="auk-u-mb-4">
       <div class="auk-form-group">
-        <Auk::Label>{{t "confidential"}}</Auk::Label>
-        <WebComponents::VlToggle
+        <Auk::Label for="case-confidential">{{t "confidential"}}</Auk::Label>
+        <Auk::Toggle
+          id="case-confidential"
+          @checked={{this.confidential}}
           data-test-new-case-toggle-confidential={{true}}
-          @value={{this.confidential}}
         />
+        {{!-- {{on "input" this.toggleConfidential}} --}}
       </div>
     </div>
     <div class="auk-form-group {{this.getClassForShortTitle}}" data-test-new-case-shorttitle>

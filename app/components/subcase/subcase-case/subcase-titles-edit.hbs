@@ -2,11 +2,13 @@
 {{!-- template-lint-disable no-action --}}
 <div class="auk-u-mb-4">
   <div class="auk-form-group">
-    <Auk::Label>{{t "confidential"}}</Auk::Label>
-    <WebComponents::VlToggle
+    <Auk::Label for="subcase-confidential">{{t "confidential"}}</Auk::Label>
+    <Auk::Toggle
+      id="subcase-confidential"
+      @checked={{this.subcase.confidential}}
       data-test-subcase-titles-edit-confidential={{true}}
-      @value={{this.subcase.confidential}}
     />
+    {{!-- onchange={{action "toggleConfidential" value="target.checked"}} --}}
   </div>
 </div>
 <div class="auk-u-mb-2">

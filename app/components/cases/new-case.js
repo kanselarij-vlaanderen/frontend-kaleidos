@@ -7,8 +7,8 @@ import { action } from '@ember/object';
 export default class NewCase extends Component {
   title = null;
   shortTitle = null;
-  confidential = false;
   @service store;
+  @tracked confidential = false;
   @tracked hasError = false;
   @tracked isLoading = false;
 
@@ -36,6 +36,11 @@ export default class NewCase extends Component {
     }
     return null;
   }
+
+  // @action
+  // toggleConfidential(event) {
+  //   this.confidential = event.target.checked;
+  // }
 
   @action
   async createCaseAction($event) {

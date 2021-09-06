@@ -9,8 +9,12 @@
       <Auk::Toolbar::Group @position="right">
         {{#if this.currentSession.isEditor}}
           <Auk::Toolbar::Item class="auk-o-flex auk-o-flex--vertical-center">
-            <Auk::Label class="auk-u-text-nowrap auk-u-mr-2 auk-u-p-0" for="isArchived">{{t "show-archived"}}</Auk::Label>
-            <WebComponents::VlToggle @value={{this.showArchived}} />
+            <Auk::Label class="auk-u-text-nowrap auk-u-mr-2 auk-u-p-0" for="show-cases-archived">{{t "show-archived"}}</Auk::Label>
+            <Auk::Toggle
+              id="show-cases-archived"
+              @checked={{this.showArchived}}
+            />
+            {{!-- {{on "input" this.toggleShowArchived}} --}}
           </Auk::Toolbar::Item>
         {{/if}}
       </Auk::Toolbar::Group>
