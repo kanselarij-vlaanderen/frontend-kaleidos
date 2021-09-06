@@ -68,11 +68,19 @@ export default [
     sortKey: 'translation-subcase.due-date',
   },
   {
+    keyName: 'publicationDueDate',
+    translationKey: 'publications-table-publication-due-date',
+    translationKeySmall: 'publications-table-publication-due-date-small',
+    showByDefault: true,
+    sortKey: 'publication-subcase.due-date',
+  },
+  {
     keyName: 'publicationDate',
     translationKey: 'publications-table-publication-date',
     translationKeySmall: 'publications-table-publication-date-small',
     showByDefault: true,
-    sortKey: 'publication-subcase.publication-activities.decisions.publication-date',
+    sortKey:
+      'publication-subcase.publication-activities.decisions.publication-date',
   },
   {
     keyName: 'translations',
@@ -112,5 +120,5 @@ export default [
     translationKey: 'publications-table-source',
     translationKeySmall: 'publications-table-source-small',
     showByDefault: true,
-  }
+  },
 ];

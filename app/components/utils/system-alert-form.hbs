@@ -30,7 +30,10 @@
     class="auk-form-group"
   >
     <Auk::Label>{{t "title"}}</Auk::Label>
-    <WebComponents::VlFormInput @value={{this.alert.title}} />
+    <Auk::Input
+      @block={{true}}
+      @value={{this.alert.title}}
+    />
   </div>
   <div
     data-test-system-alert-form-message
