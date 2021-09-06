@@ -45,6 +45,12 @@ export default class PublicationsPublicationTranslationsRequestController extend
     translationActivity.endDate = translationUpload.receivedAtDate;
     const translationActivitySave = translationActivity.save();
 
+
+    if (!this.translationSubcase.dateReceived || translationUpload.receivedAtDate < this.translationSubcase.dateReceived){
+      this.translationSubcase.dateReceived = translationUpload.receivedAtDate;
+      yield this.translationSubcase.save();
+    }
+
     yield Promise.all([translationActivitySave, pieceSave]);
 
     this.showTranslationUploadModal = false;

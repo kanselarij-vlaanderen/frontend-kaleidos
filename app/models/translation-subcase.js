@@ -12,6 +12,8 @@ export default class TranslationSubcase extends Model {
   @attr('datetime') endDate;
   @attr('datetime') created;
   @attr('datetime') modified;
+  @attr('datetime') dateReceived;
+
 
   @belongsTo('publication-flow') publicationFlow;
 
