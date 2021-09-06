@@ -98,11 +98,13 @@ export default class PublicationsPublicationProofsRequestsController extends Con
     proofingActivity.endDate = now;
     const proofingActivitySave = proofingActivity.save();
 
-    if (!this.publicationSubcase.dateReceived || proofUpload.receivedAtDate < this.publicationSubcase.dateReceived){
+    if (
+      !this.publicationSubcase.dateReceived ||
+      proofUpload.receivedAtDate < this.publicationSubcase.dateReceived
+    ) {
       this.publicationSubcase.dateReceived = proofUpload.receivedAtDate;
       await this.publicationSubcase.save();
     }
-
 
     await Promise.all([pieceSave, proofingActivitySave]);
   }

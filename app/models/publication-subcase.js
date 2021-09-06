@@ -1,6 +1,4 @@
-import Model, {
-  attr, belongsTo, hasMany
-} from '@ember-data/model';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { isPresent } from '@ember/utils';
 
 export default class PublicationSubcase extends Model {
@@ -20,10 +18,12 @@ export default class PublicationSubcase extends Model {
   @hasMany('request-activity') requestActivities;
   @hasMany('piece', {
     inverse: 'publicationSubcaseSourceFor',
-  }) sourceDocuments;
+  })
+  sourceDocuments;
   @hasMany('piece', {
     inverse: 'publicationSubcaseCorrectionFor',
-  }) correctionDocuments;
+  })
+  correctionDocuments;
   @hasMany('proofing-activity') proofingActivities;
   @hasMany('publication-activity') publicationActivities;
 
