@@ -1,11 +1,18 @@
-{{!-- Although not recommended for accessibility-reasons, users explicitly
-request the whole row and not only the arrow at the end to be clickable --}}
-{{!-- template-lint-disable no-invalid-interactive --}}
-<tr class="auk-table--interaction-cursor" {{on "click" (fn this.navigateToPublication @publicationFlow)}}>
-{{!-- template-lint-enable no-invalid-interactive --}}
+{{! Although not recommended for accessibility-reasons, users explicitly
+request the whole row and not only the arrow at the end to be clickable }}
+{{! template-lint-disable no-invalid-interactive }}
+<tr
+  data-test-publication-table-row
+  class="auk-table--interaction-cursor"
+  {{on "click" (fn this.navigateToPublication @publicationFlow)}}
+>
+  {{! template-lint-enable no-invalid-interactive }}
   {{#if @tableColumnDisplayOptions.shortTitle}}
-    <td class="auk-table__col--6">
-      <Auk::AbbreviatedText @text={{@publicationFlow.shortTitle}} @maxLength={{150}}/>
+    <td data-test-publication-table-row-short-title class="auk-table__col--6">
+      <Auk::AbbreviatedText
+        @text={{@publicationFlow.shortTitle}}
+        @maxLength={{150}}
+      />
     </td>
   {{/if}}
   {{#if @tableColumnDisplayOptions.comment}}
@@ -25,7 +32,10 @@ request the whole row and not only the arrow at the end to be clickable --}}
   {{#if @tableColumnDisplayOptions.decisionDate}}
     <td class="auk-u-text-nowrap">
       {{#if @publicationFlow.agendaItemTreatment.startDate}}
-        {{moment-format @publicationFlow.agendaItemTreatment.startDate "DD-MM-YYYY"}}
+        {{moment-format
+          @publicationFlow.agendaItemTreatment.startDate
+          "DD-MM-YYYY"
+        }}
       {{else}}
         {{t "dash"}}
       {{/if}}
@@ -41,7 +51,7 @@ request the whole row and not only the arrow at the end to be clickable --}}
     </td>
   {{/if}}
   {{#if @tableColumnDisplayOptions.publicationNumber}}
-    <td>
+    <td data-test-publication-table-row-number>
       {{#if @publicationFlow.identification.idName}}
         {{@publicationFlow.identification.idName}}
       {{else}}
@@ -51,7 +61,9 @@ request the whole row and not only the arrow at the end to be clickable --}}
   {{/if}}
   {{#if @tableColumnDisplayOptions.regulationType}}
     <td class="auk-u-text-nowrap">
-      {{#if @publicationFlow.regulationType}}
+      {{#if @publicationFlow.regulationType.abbreviation}}
+        {{@publicationFlow.regulationType.abbreviation}}
+      {{else if @publicationFlow.regulationType}}
         {{@publicationFlow.regulationType.label}}
       {{else}}
         {{t "dash"}}
@@ -59,16 +71,13 @@ request the whole row and not only the arrow at the end to be clickable --}}
     </td>
   {{/if}}
   {{#if @tableColumnDisplayOptions.numacNumber}}
-    {{!-- TODO: fix inline style. What is this needed for --}}
-    {{!-- template-lint-disable no-inline-styles --}}
-    <td style="min-width: 180px">
+    <td>
       {{#if @publicationFlow.numacNumbers.length}}
-        {{join ', ' (map-by 'idName' @publicationFlow.numacNumbers)}}
+        {{join ", " (map-by "idName" @publicationFlow.numacNumbers)}}
       {{else}}
         {{t "dash"}}
       {{/if}}
     </td>
-    {{!-- template-lint-enable no-inline-styles --}}
   {{/if}}
   {{#if @tableColumnDisplayOptions.openingDate}}
     <td class="auk-u-text-nowrap">
@@ -82,7 +91,10 @@ request the whole row and not only the arrow at the end to be clickable --}}
   {{#if @tableColumnDisplayOptions.publicationTargetDate}}
     <td class="auk-u-text-nowrap">
       {{#if @publicationFlow.publicationSubcase.targetEndDate}}
-        {{moment-format @publicationFlow.publicationSubcase.targetEndDate "DD-MM-YYYY"}}
+        {{moment-format
+          @publicationFlow.publicationSubcase.targetEndDate
+          "DD-MM-YYYY"
+        }}
       {{else}}
         {{t "dash"}}
       {{/if}}
@@ -91,7 +103,22 @@ request the whole row and not only the arrow at the end to be clickable --}}
   {{#if @tableColumnDisplayOptions.translationDueDate}}
     <td class="auk-u-text-nowrap">
       {{#if @publicationFlow.translationSubcase.dueDate}}
-        {{moment-format @publicationFlow.translationSubcase.dueDate "DD-MM-YYYY"}}
+        {{moment-format
+          @publicationFlow.translationSubcase.dueDate
+          "DD-MM-YYYY"
+        }}
+      {{else}}
+        {{t "dash"}}
+      {{/if}}
+    </td>
+  {{/if}}
+  {{#if @tableColumnDisplayOptions.publicationDueDate}}
+    <td class="auk-u-text-nowrap">
+      {{#if @publicationFlow.publicationSubcase.dueDate}}
+        {{moment-format
+          @publicationFlow.publicationSubcase.dueDate
+          "DD-MM-YYYY"
+        }}
       {{else}}
         {{t "dash"}}
       {{/if}}
@@ -112,17 +139,21 @@ request the whole row and not only the arrow at the end to be clickable --}}
   {{/if}}
   {{#if @tableColumnDisplayOptions.translations}}
     <td class="auk-u-text-nowrap">
-      <Publications::Publication::Translations::TranslationProgressBadge @translationSubcase={{@publicationFlow.translationSubcase}}/>
+      <Publications::Publication::Translations::TranslationProgressBadge
+        @translationSubcase={{@publicationFlow.translationSubcase}}
+      />
     </td>
   {{/if}}
   {{#if @tableColumnDisplayOptions.proofs}}
     <td class="auk-u-text-nowrap">
-      <Publications::Publication::Proofs::ProofsProgressBadge @publicationSubcase={{@publicationFlow.publicationSubcase}}/>
+      <Publications::Publication::Proofs::ProofsProgressBadge
+        @publicationSubcase={{@publicationFlow.publicationSubcase}}
+      />
     </td>
   {{/if}}
   {{#if @tableColumnDisplayOptions.lastEdited}}
     <td>
-      {{moment-format @publicationFlow.modified "DD-MM-YYYY"}}<br/>
+      {{moment-format @publicationFlow.modified "DD-MM-YYYY"}}<br />
       <span class="auk-u-text-small auk-u-muted">
         {{moment-format @publicationFlow.modified "HH:mm"}}
       </span>
@@ -141,15 +172,18 @@ request the whole row and not only the arrow at the end to be clickable --}}
   {{/if}}
   {{#if @tableColumnDisplayOptions.status}}
     <td class="auk-u-text-nowrap">
-      {{#if @publicationFlow.status }}
-        <span class="{{if @publicationFlow.status.isPublished "auk-u-text-success"}}
-          {{if @publicationFlow.status.isWithdrawn "auk-u-text-error"}} " >
+      {{#if @publicationFlow.status}}
+        <span
+          class="{{if @publicationFlow.status.isPublished "auk-u-text-success"}}
+            {{if @publicationFlow.status.isWithdrawn "auk-u-text-error"}}
+            "
+        >
           {{@publicationFlow.status.label}}
         </span>
         {{#if
           (or
-            @publicationFlow.status.isWithdrawn
-            @publicationFlow.status.isPaused)
+            @publicationFlow.status.isWithdrawn @publicationFlow.status.isPaused
+          )
         }}
           <br />
           <span class="auk-u-text-small auk-u-muted">
@@ -166,7 +200,7 @@ request the whole row and not only the arrow at the end to be clickable --}}
   {{/if}}
   {{#if @tableColumnDisplayOptions.source}}
     <td class="auk-u-text-nowrap">
-      {{#if @publicationFlow.case.subcases }}
+      {{#if @publicationFlow.case.subcases}}
         {{t "via-cabinet"}}
       {{else}}
         {{t "not-via-cabinet"}}
@@ -180,7 +214,7 @@ request the whole row and not only the arrow at the end to be clickable --}}
       @icon="chevron-right"
       @route="publications.publication"
       @model={{@publicationFlow.id}}
-      data-test-publications-button-go-to-publication
+      data-test-publication-table-row-go-to-publication
     />
   </td>
 </tr>

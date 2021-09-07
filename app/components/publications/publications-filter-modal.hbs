@@ -70,7 +70,7 @@
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
           <Auk::ButtonLink
-            data-test-publication-button-cancel
+            data-test-publications-filter-cancel
             {{on "click" @onCancel}}
           >
             {{t "cancel"}}
@@ -81,7 +81,7 @@
         <Auk::Toolbar::Item>
           <Auk::Button
             @skin="secondary"
-            data-test-publication-button-reset-filters
+            data-test-publications-filter-reset
             {{on "click" this.reset}}
           >
             {{t "clear-filter-plural"}}
@@ -91,7 +91,7 @@
           <Auk::Button
             @icon="filter"
             @skin="primary"
-            data-test-publication-button-filter-content
+            data-test-publications-filter-save
             {{on "click" (fn @onSave this.filter)}}
           >
             {{t "filter-content"}}

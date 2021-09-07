@@ -1,0 +1,17 @@
+<Auk::Modal @size="full-screen">
+  <Auk::Modal::Header @title={{this.selectedVersion.name}} @onClose={{@onClose}} />
+  <Auk::Modal::Body @noPadding={{true}}>
+    <div class="auk-panel-layout">
+      <div class="auk-panel-layout__main-content">
+        <Documents::DocumentView @file={{await this.selectedVersion.file}} />
+      </div>
+      <div class="auk-panel-layout__sidebar">
+        <Documents::DocumentPreview::DocumentPreviewSidebar
+          @piece={{this.selectedVersion}}
+          @transitionBack={{@onClose}}
+          @onSelectVersion={{this.setSelectedVersion}}
+        />
+      </div>
+    </div>
+  </Auk::Modal::Body>
+</Auk::Modal>
