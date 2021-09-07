@@ -35,12 +35,12 @@ export default class CasesCaseSubcasesOverview extends Controller {
   size = 20;
 
   sort = '-created';
+  showArchived = false;
   @tracked selectedCase = null;
   @tracked caseToEdit = null;
   @tracked showEditCaseModal = false;
   @tracked isNotArchived = false;
   @tracked isArchivingCase = false;
-  @tracked showArchived = false;
 
   @action
   selectSize(size) {
@@ -117,9 +117,4 @@ export default class CasesCaseSubcasesOverview extends Controller {
   navigateToCase(_case) {
     this.router.transitionTo('cases.case.subcases', _case.id);
   }
-
-  // @action
-  // toggleShowArchived(event) {
-  //   this.showArchived = event.target.checked;
-  // }
 }

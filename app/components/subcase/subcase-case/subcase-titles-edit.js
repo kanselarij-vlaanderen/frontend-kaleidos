@@ -29,11 +29,6 @@ export default class SubcaseTitlesEdit extends Component {
     set(this, 'accessLevel', accessLevel);
   }
 
-  // @action
-  // toggleConfidential(value) {
-  //   console.log(value);
-  // }
-
   @action
   async saveChanges() {
     set(this, 'isLoading', true);
