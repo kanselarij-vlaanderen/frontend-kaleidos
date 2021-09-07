@@ -196,7 +196,7 @@ context('Publications tests', () => {
     cy.get(publication.publicationTableRow.row.shortTitle).contains(shortTitleEdit);
   });
 
-  it('publications:dossier: Add and delete mandataris', () => {
+  it.only('publications:dossier: Add and delete mandataris', () => {
     const noMandatees = 'Er zijn nog geen mandatarissen toegevoegd.';
     const mandateeName = 'Geert Bourgeois';
 
@@ -216,9 +216,21 @@ context('Publications tests', () => {
     cy.get(dependency.emberPowerSelect.optionSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(mandateeName)
       .click();
+    cy.route('PATCH', '/publication-flows/**').as('patchPublicationFlow');
     cy.get(publication.linkMandatees.add).should('not.be.disabled')
       .click();
-    // TODO wachten op patch call, bevestigen dat empty state weg is en should have length 1 op rows, klik delete, check of alles weg is
+    cy.wait('@patchPublicationFlow');
+    cy.get(auk.emptyState.message).should('not.contain', noMandatees);
+    cy.get(publication.mandateesPanel.rows).should('have.length', 1);
+    cy.get(publication.mandateesPanel.row.fullName).contains(mandateeName);
+
+    // Delete mandatee
+    cy.get(publication.mandateesPanel.row.unlink).click();
+    cy.wait('@patchPublicationFlow');
+
+    // assert deleted content
+    cy.get(publication.mandateesPanel.rows).should('not.exist');
+    cy.get(auk.emptyState.message).contains(noMandatees);
   });
 
   it('publications:dossier:Add and delete contact person', () => {

@@ -31,8 +31,8 @@
           </thead>
           <tbody>
             {{#each (sort-by "priority" @publicationFlow.mandatees) as |mandatee|}}
-              <tr>
-                <td>
+              <tr data-test-mandatees-panel-row>
+                <td data-test-mandatees-panel-row-full-name>
                   <Auk::Avatar @icon="user">
                     {{mandatee.person.nameToDisplay}}
                     {{!-- Beleidsdomeinen en beleidsvelden / worden momenteel niet gebruikt in productie / werkt met isecodes --}}
@@ -40,7 +40,7 @@
                 </td>
                 <td class="auk-u-text-align--right">
                   <Auk::Button
-                    data-test-mandatees-panel-unlink
+                    data-test-mandatees-panel-row-unlink
                     @layout="icon-only" @icon="delete" @skin="danger-borderless"
                     {{on "click" (fn this.unlink mandatee)}} />
                 </td>

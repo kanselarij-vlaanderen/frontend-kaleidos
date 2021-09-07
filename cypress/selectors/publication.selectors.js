@@ -110,7 +110,11 @@ const selectors = {
     // TODO-SELECTORS unused selectors
     table: '[data-test-mandatees-panel-table]',
     add: '[data-test-mandatees-panel-add]',
-    unlink: '[data-test-mandatees-panel-unlink]',
+    rows: '[data-test-mandatees-panel-row]',
+    row: {
+      fullName: '[data-test-mandatees-panel-row-full-name]',
+      unlink: '[data-test-mandatees-panel-row-unlink]',
+    },
   },
 
   // link-mandatees-modal
