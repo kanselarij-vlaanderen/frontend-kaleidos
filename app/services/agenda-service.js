@@ -43,8 +43,23 @@ export default Service.extend({
 
   /* API: agenda-approve-service */
 
+  async createNewDesignAgenda(currentMeeting) {
+    const result = await ajax({
+      method: 'POST',
+      url: '/agenda-approve/createDesignAgenda',
+      data: {
+        meetingId: currentMeeting.id,
+      },
+    });
+    if (result.error) {
+      // TODO KAS-2452 popup
+    }
+    const newAgenda = await this.store.find('agenda', result.body.newAgenda.id);
+    return newAgenda;
+  },
+
   // TODO KAS-2452 rename this.
-  async approveAgendaAndCopyToDesignAgenda(currentMeeting, oldAgenda) {
+  async approveDesignAgenda(currentMeeting, oldAgenda) {
     // TODO KAS-2452 do we need this if the api returns error
     if (!oldAgenda) {
       return oldAgenda;

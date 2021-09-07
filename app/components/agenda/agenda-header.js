@@ -18,7 +18,6 @@ import {
   fetchArchivingJobForAgenda,
   fileDownloadUrlFromJob
 } from 'frontend-kaleidos/utils/zip-agenda-files';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 import moment from 'moment';
 // import { A } from '@ember/array';
 import { task } from 'ember-concurrency';
@@ -144,7 +143,7 @@ export default Component.extend({
 
   /**
    * reloadAgendaitemsOfAgendaActivities
-   * After a new designagenda is created in the service (approveAgendaAndCopyToDesignAgenda) we need to update the agenda activities
+   * After a new designagenda is created or an agenda deleted in the service we need to update the agenda activities
    * The store only updates the agendaitems of agenda-activities if we do it outselves
    */
   async reloadAgendaitemsOfAgendaActivities(agendaitems) {
@@ -164,24 +163,14 @@ export default Component.extend({
    */
   async createDesignAgenda() {
     this.toggleLoadingOverlayWithMessage(this.intl.t('agenda-add-message'));
-    const session = this.get('currentSession');
-    session.set('isFinal', false);
-    session.set('agenda', null);
-    await session.save();
-    const lastApprovedAgenda = await this.get('lastApprovedAgenda');
-    const approved = await this.store.findRecordByUri('agendastatus', CONSTANTS.AGENDA_STATUSSES.APPROVED);
-    lastApprovedAgenda.set('status', approved); // will only have an effect in case of status "closed"
-    await lastApprovedAgenda.save();
-    // TODO KAS-2452 rename this api call ? last agenda is already approved and can contain "not formally ok" items because of edits
-    this.get('agendaService')
-      .approveAgendaAndCopyToDesignAgenda(session, lastApprovedAgenda)
-      .then(async(newAgenda) => {
-        // After the agenda has been approved, we want to update the agendaitems of activities
-        const agendaitems = await lastApprovedAgenda.get('agendaitems');
-        await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
-        this.toggleLoadingOverlayWithMessage(null);
-        this.onApproveAgenda(newAgenda.get('id'));
-      });
+    const currentMeeting = this.currentSession;
+    const newAgenda = await this.agendaService.createNewDesignAgenda(currentMeeting);
+
+    // After the agenda has been created, we want to update the agendaitems of activities
+    const agendaitems = await newAgenda.get('agendaitems');
+    await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
+    this.toggleLoadingOverlayWithMessage(null);
+    this.onApproveAgenda(newAgenda.id);
   },
 
   /**
@@ -217,14 +206,12 @@ export default Component.extend({
     const currentMeeting = this.currentSession;
     const currentDesignAgenda = this.currentAgenda;
     // TODO KAS-2452 what if this times out ? some reloads may not happen (put them in route ?)
-    const newAgenda = await this.agendaService.approveAgendaAndCopyToDesignAgenda(currentMeeting, currentDesignAgenda);
+    const newAgenda = await this.agendaService.approveDesignAgenda(currentMeeting, currentDesignAgenda);
     // Data reloading
     await currentDesignAgenda.reload();
     await currentDesignAgenda.belongsTo('status').reload();
     const agendaitems = await currentDesignAgenda.hasMany('agendaitems').reload();
     await this.reloadAgendaitemsOfAgendaActivities(agendaitems); // needed because the agendaitems are not correct
-    // await currentMeeting.reload();
-    // await currentMeeting.hasMany('agendas').reload();
     this.toggleLoadingOverlayWithMessage(null);
     this.onApproveAgenda(newAgenda.get('id'));
   },

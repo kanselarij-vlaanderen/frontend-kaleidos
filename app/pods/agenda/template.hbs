@@ -22,7 +22,7 @@
     {{#unless this.shouldHideNav}}
       <div class="auk-panel-layout__sidebar auk-panel-layout__agenda-history">
         <Agenda::SideNav
-          @agendas={{this.model.meeting.sortedAgendas}}
+          @agendas={{this.model.reverseSortedAgendas}}
           @currentAgenda={{this.model.agenda}}
           @selectAgenda={{this.selectAgenda}}
         />
