@@ -99,10 +99,10 @@ export default class PublicationsPublicationProofsRequestsController extends Con
     const proofingActivitySave = proofingActivity.save();
 
     if (
-      !this.publicationSubcase.dateReceived ||
-      proofUpload.receivedAtDate < this.publicationSubcase.dateReceived
+      proofUpload.receivedAtDate < this.publicationSubcase.receivedDate ||
+      !this.publicationSubcase.receivedDate
     ) {
-      this.publicationSubcase.dateReceived = proofUpload.receivedAtDate;
+      this.publicationSubcase.receivedDate = proofUpload.receivedAtDate;
       await this.publicationSubcase.save();
     }
 

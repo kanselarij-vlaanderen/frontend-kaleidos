@@ -134,11 +134,11 @@ request the whole row and not only the arrow at the end to be clickable }}
       {{/if}}
     </td>
   {{/if}}
-  {{#if @tableColumnDisplayOptions.publicationDateReceived}}
+  {{#if @tableColumnDisplayOptions.publicationReceivedDate}}
     <td class="auk-u-text-nowrap">
-      {{#if @publicationFlow.publicationSubcase.dateReceived}}
+      {{#if @publicationFlow.publicationSubcase.receivedDate}}
         {{moment-format
-          @publicationFlow.publicationSubcase.dateReceived
+          @publicationFlow.publicationSubcase.receivedDate
           "DD-MM-YYYY"
         }}
       {{else}}
@@ -146,11 +146,11 @@ request the whole row and not only the arrow at the end to be clickable }}
       {{/if}}
     </td>
   {{/if}}
-  {{#if @tableColumnDisplayOptions.translationDateReceived}}
+  {{#if @tableColumnDisplayOptions.translationReceivedDate}}
     <td class="auk-u-text-nowrap">
-      {{#if @publicationFlow.translationSubcase.dateReceived}}
+      {{#if @publicationFlow.translationSubcase.receivedDate}}
         {{moment-format
-          @publicationFlow.translationSubcase.dateReceived
+          @publicationFlow.translationSubcase.receivedDate
           "DD-MM-YYYY"
         }}
       {{else}}

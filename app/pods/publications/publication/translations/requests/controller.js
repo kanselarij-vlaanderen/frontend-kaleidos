@@ -47,10 +47,10 @@ export default class PublicationsPublicationTranslationsRequestController extend
     const translationActivitySave = translationActivity.save();
 
     if (
-      !this.translationSubcase.dateReceived ||
-      translationUpload.receivedAtDate < this.translationSubcase.dateReceived
+      translationUpload.receivedAtDate < this.translationSubcase.receivedDate ||
+      !this.translationSubcase.receivedDate
     ) {
-      this.translationSubcase.dateReceived = translationUpload.receivedAtDate;
+      this.translationSubcase.receivedDate = translationUpload.receivedAtDate;
       yield this.translationSubcase.save();
     }
 
