@@ -2,7 +2,6 @@
   <Auk::Input
     @block={{true}}
     @icon="search"
-    @type="text"
     placeholder={{t "search-placeholder"}}
     value={{this.searchText}}
     {{on "input" (perform this.debouncedSearch)}}

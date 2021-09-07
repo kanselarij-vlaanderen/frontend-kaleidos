@@ -10,22 +10,18 @@ import { action } from '@ember/object';
  * - "signatures"
  * - "versions"
  */
-export default class DocumentsDocumentPreviewSidebar extends Component {
-  @tracked documentType;
-  @tracked accessLevel;
-
+export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Component {
+  @tracked documentContainer;
   @tracked activeTab = 'details';
 
   constructor() {
     super(...arguments);
-    this.loadData.perform();
+    this.loadPieceData.perform();
   }
 
   @task
-  *loadData() {
-    const docContainer = yield this.args.piece.documentContainer;
-    this.documentType = yield docContainer.type;
-    this.accessLevel = yield this.args.piece.accessLevel;
+  *loadPieceData() {
+    this.documentContainer = yield this.args.piece.documentContainer;
   }
 
   @action

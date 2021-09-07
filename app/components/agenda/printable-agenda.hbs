@@ -2,7 +2,17 @@
   <div class="auk-container auk-container--center auk-printable-agenda-list" data-test-printable-agenda-container>
     <Utils::LogoHeader />
     <h2 class="auk-h2 auk-u-text-family-serif auk-u-text-align--center" data-test-printable-agenda-header-title>
-      {{t "agenda-of"}} {{moment-format this.meeting.plannedStart "dddd DD MMMM YYYY \o\m HH:mm"}} - {{this.meeting.kindToShow.altLabel}}
+      {{t "agenda-of"}}
+      {{moment-format
+        this.meeting.plannedStart
+        (if
+          this.meeting.isPreKaleidos
+          "dddd DD MMMM YYYY"
+          "dddd DD MMMM YYYY \o\m HH:mm"
+        )
+      }}
+      -
+      {{this.meeting.kindToShow.altLabel}}
     </h2>
 
     <div class="auk-content">

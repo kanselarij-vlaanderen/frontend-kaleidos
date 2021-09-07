@@ -15,11 +15,12 @@
   <div class="auk-u-mb-2">
     <div class="auk-form-group">
       <Auk::Label>{{t "meeting-number"}}</Auk::Label>
-      <WebComponents::VlFormInput
-        data-test-edit-session-meeting-number={{true}}
+      <Auk::Input
         @type="number"
+        @block={{true}}
         @value={{this.meetingNumber}}
-        {{on "input" (action "meetingNumberChangedAction" this.meeting)}}
+        data-test-edit-session-meeting-number={{true}}
+        {{on "input" (action "meetingNumberChangedAction")}}
       />
     </div>
   </div>
@@ -28,9 +29,10 @@
       <Auk::Label>
         {{t "meeting-number-visual-representation"}}
       </Auk::Label>
-      <WebComponents::VlFormInput
-        data-test-edit-session-number-representation={{true}}
+      <Auk::Input
+        @block={{true}}
         @value={{this.numberRepresentation}}
+        data-test-edit-session-number-representation={{true}}
       />
     </div>
   </div>
@@ -39,7 +41,10 @@
       <Auk::Label>
         {{t "meeting-location"}}
       </Auk::Label>
-      <WebComponents::VlFormInput @value={{this.extraInfo}} />
+      <Auk::Input
+        @block={{true}}
+        @value={{this.extraInfo}}
+      />
     </div>
   </div>
 </Auk::Modal::Body>
