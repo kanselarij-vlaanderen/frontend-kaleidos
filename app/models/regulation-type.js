@@ -10,5 +10,4 @@ export default class RegulationType extends Model {
 
   @hasMany publicationFlows;
   @hasMany signFlows;
-
 }
