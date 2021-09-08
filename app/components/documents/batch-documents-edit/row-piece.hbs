@@ -1,14 +1,20 @@
 <tr>
-  <td class="auk-table-checkbox-col" style={{if @row.isToBeDeleted "opacity: 0.5;"}}>
+  <td
+    class="auk-table-checkbox-col"
+    style={{if @row.isToBeDeleted "opacity: 0.5;"}}
+  >
     <Auk::Checkbox
       @checked={{@isSelected}}
-      {{on "input" (fn @onSelect @row)}} />
+      {{on "input" (fn @onSelect @row)}}
+    />
   </td>
   <td style={{if @row.isToBeDeleted "opacity: 0.5;"}}>
-    <Auk::Input type="text"
+    <Auk::Input
+      type="text"
       @block={{true}}
       @value={{mut @row.name}}
-      @onChange={{noop}} />
+      @onChange={{this.noop}}
+    />
   </td>
   <td style={{if @row.isToBeDeleted "opacity: 0.5;"}}>
     {{!-- <PowerSelect
@@ -30,7 +36,8 @@
     <Documents::BatchDocumentsModal::Edit::AccessLevelSelector
       @source={{@accessLevelSource}}
       @selected={{@row.accessLevel}}
-      @onChange={{@row.setAccessLevel}} />
+      @onChange={{@row.setAccessLevel}}
+    />
 
     {{!-- <PowerSelect
       @options={{this.accessLevels}}
@@ -46,22 +53,32 @@
       </div>
     </PowerSelect> --}}
   </td>
-  <td style={{if @row.isToBeDeleted "opacity: 0.5"}} class="auk-table-checkbox-col">
+  <td
+    style={{if @row.isToBeDeleted "opacity: 0.5"}}
+    class="auk-table-checkbox-col"
+  >
     <Auk::Checkbox
       @value={{@row.confidential}}
-      {{on "input" this.onInputConfidential}} />
+      {{on "input" this.onInputConfidential}}
+    />
   </td>
   <td>
     <WebComponents::AuButtonToolbar>
-      {{#unless @row.isToBeDeleted}}
+      {{#if @row.isToBeDeleted}}
         <Auk::Button
-          @icon="delete" @layout="icon-only" @skin="danger-borderless"
-          {{on "click" (fn @row.setToBeDeleted true)}} />
+          @icon="delete"
+          @layout="icon-only"
+          @skin="danger-borderless"
+          {{on "click" (fn @row.setToBeDeleted true)}}
+        />
       {{else}}
         <Auk::Button
-          @icon="redo" @layout="icon-only" @skin="borderless"
-          {{on "click" (fn @row.setToBeDeleted false)}} />
-      {{/unless}}
+          @icon="redo"
+          @layout="icon-only"
+          @skin="borderless"
+          {{on "click" (fn @row.setToBeDeleted false)}}
+        />
+      {{/if}}
     </WebComponents::AuButtonToolbar>
   </td>
 </tr>

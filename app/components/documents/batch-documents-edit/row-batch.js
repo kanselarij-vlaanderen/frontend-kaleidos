@@ -27,7 +27,9 @@ class BatchRow {
     const selectedRows = this.selectedRows;
     const [firstRow, ...otherRows] = selectedRows;
     const firstProperty = getProperty(firstRow);
-    const areRowsEqual = otherRows.every((row) => getProperty(row) === firstProperty);
+    const areRowsEqual = otherRows.every(
+      (row) => getProperty(row) === firstProperty
+    );
     if (!areRowsEqual) {
       return undefined;
     }
@@ -47,7 +49,6 @@ class BatchRow {
     // some-check: always indicate destructive action will be performed
     return selectedRows.some((row) => row.isToBeDeleted);
   }
-
 
   @action
   setDocumentType(documentType) {

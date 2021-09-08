@@ -15,9 +15,10 @@
       @noMatchesMessage={{t "no-result"}}
       @onchange={{fn this.setDocumentType this.selectedRows}}
       @allowClear={{true}}
-      as |documentType|>
-      {{!-- nowrap: don't let height of row depend on selected record --}}
-      <div style="white-space: nowrap;">
+      as |documentType|
+    >
+      {{! nowrap: don't let height of row depend on selected record }}
+      <div>
         {{documentType.label}}
       </div>
     </PowerSelect>
@@ -30,10 +31,11 @@
       @search={{perform this.searchAccessLevels}}
       @placeholder={{t "none"}}
       @noMatchesMessage={{t "no-result"}}
-      @onchange={{fn this.setAccessLevel}}
-      as |accessLevel|>
-      {{!-- nowrap: don't let height of row depend on selected record --}}
-      <div style="white-space: nowrap;">
+      @onchange={{this.setAccessLevel}}
+      as |accessLevel|
+    >
+      {{! nowrap: don't let height of row depend on selected record }}
+      <div>
         {{accessLevel.label}}
       </div>
     </PowerSelect>
@@ -42,21 +44,28 @@
     <Auk::Checkbox
       @checked={{this.batchConfidential}}
       @disabled={{not this.selectedRows}}
-      {{on "input" (fn this.onInputConfidential this.selectedRows)}} />
+      {{on "input" (fn this.onInputConfidential this.selectedRows)}}
+    />
   </td>
   <td>
     <WebComponents::AuButtonToolbar>
-      {{#unless this.batchIsToBeDeleted}}
+      {{#if this.batchIsToBeDeleted}}
         <Auk::Button
-          @icon="delete" @layout="icon-only" @skin="danger-borderless"
+          @icon="delete"
+          @layout="icon-only"
+          @skin="danger-borderless"
           @disabled={{not this.selectedRows}}
-          {{on "click" (fn this.setToBeDeleted this.selectedRows true)}} />
+          {{on "click" (fn this.setToBeDeleted this.selectedRows true)}}
+        />
       {{else}}
         <Auk::Button
-          @icon="redo" @layout="icon-only" @skin="borderless"
+          @icon="redo"
+          @layout="icon-only"
+          @skin="borderless"
           @disabled={{not this.selectedRows}}
-          {{on "click" (fn this.setToBeDeleted this.selectedRows false)}} />
-      {{/unless}}
+          {{on "click" (fn this.setToBeDeleted this.selectedRows false)}}
+        />
+      {{/if}}
     </WebComponents::AuButtonToolbar>
   </td>
 </tr>

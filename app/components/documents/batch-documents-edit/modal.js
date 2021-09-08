@@ -38,24 +38,30 @@ export default class BatchDocumentsModal extends Component {
 
   @task
   *initRows() {
-    this.rows = yield Promise.all(this.args.pieces.map(async(piece) => {
-      const row = new Row();
-      row.piece = piece;
+    this.rows = yield Promise.all(
+      this.args.pieces.map(async (piece) => {
+        const row = new Row();
+        row.piece = piece;
 
-      row.name = piece.name;
-      const docContainer = await piece.documentContainer;
-      row.documentType = docContainer.type;
-      row.accessLevel = piece.accessLevel;
-      row.confidential = piece.confidential;
-      return row;
-    }));
+        row.name = piece.name;
+        const docContainer = await piece.documentContainer;
+        row.documentType = docContainer.type;
+        row.accessLevel = piece.accessLevel;
+        row.confidential = piece.confidential;
+        return row;
+      })
+    );
   }
 
   @task
   *loadData() {
     yield Promise.all([
-      AccessLevelsDataSource.create(this.store).then((source) => this.accessLevelSource = source),
-      DocumentTypesDataSource.create(this.store).then((source) => this.documentTypes = source)
+      AccessLevelsDataSource.create(this.store).then(
+        (source) => (this.accessLevelSource = source)
+      ),
+      DocumentTypesDataSource.create(this.store).then(
+        (source) => (this.documentTypes = source)
+      ),
       // this.loadDocumentTypes.perform().then((documentTypes) => this.documentTypes = documentTypes),
 
       // this.loadAccessLevels.perform().then((accessLevels) => this.accessLevels = accessLevels)
@@ -182,7 +188,7 @@ export default class BatchDocumentsModal extends Component {
 
   @task
   *save() {
-    const saves = this.rows.map(async(row) => {
+    const saves = this.rows.map(async (row) => {
       const piece = row.piece;
       if (row.isToBeDeleted) {
         piece.destroyRecord();
