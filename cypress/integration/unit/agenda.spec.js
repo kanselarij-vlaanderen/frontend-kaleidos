@@ -229,16 +229,14 @@ context('Agenda tests', () => {
       cy.addAgendaitemToAgenda(newSubcaseTitleShort);
       cy.setAllItemsFormallyOk(2);
       cy.approveDesignAgenda();
-      cy.get(agenda.agendaHeader.showAgendaOptions).click();
-      cy.get(agenda.agendaHeader.agendaActions.lockAgenda).click();
-      cy.get(auk.modal.body).find(auk.alert.message);
-      cy.get(agenda.agendaHeader.confirm.lockAgenda).click();
-      cy.get(auk.modal.container, {
-        timeout: 60000,
-      }).should('not.exist');
-      cy.get(auk.loader).should('not.exist');
+      cy.closeAgenda();
       cy.get(agenda.agendaOverview.showChanges);
       cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
+      cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 2);
+      cy.get(agenda.agendaOverviewItem.subitem).contains('Goedkeuring van het verslag');
+      cy.get(agenda.agendaOverviewItem.subitem).contains(newSubcaseTitleShort);
+      cy.get(agenda.agendaSideNav.agenda).should('have.length', 1);
+      cy.agendaNameExists('A', false);
     });
   });
 
@@ -262,6 +260,7 @@ context('Agenda tests', () => {
     // Check the approve and close pop-up, the "not yet formally ok" agendaitem will be mentioned for removal
     cy.approveAndCloseDesignAgenda(false);
     cy.get(auk.modal.body).find(auk.alert.message);
+    cy.get(agenda.agendaHeader.messages.approveAndCloseAgenda.deleteItems);
     cy.get(auk.modal.body).contains(newSubcaseTitleShort);
     cy.get(agenda.agendaHeader.confirm.approveAndCloseAgenda).click();
     cy.get(auk.modal.container, {
@@ -298,6 +297,7 @@ context('Agenda tests', () => {
     cy.approveDesignAgenda(false);
 
     cy.get(auk.modal.body).find(auk.alert.message);
+    cy.get(agenda.agendaHeader.messages.approveAgenda.moveItems);
     cy.get(auk.modal.body).contains(newSubcaseTitleShort);
     cy.get(agenda.agendaHeader.confirm.approveAgenda)
       .click();
@@ -305,10 +305,15 @@ context('Agenda tests', () => {
     cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');
+    cy.get(auk.loader).should('not.exist');
+    cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 2);
+    cy.get(agenda.agendaOverviewItem.subitem).contains('Goedkeuring van het verslag');
+    cy.get(agenda.agendaOverviewItem.subitem).contains(newSubcaseTitleShort);
 
     cy.get(agenda.agendaHeader.showAgendaOptions).click();
     cy.get(agenda.agendaHeader.agendaActions.lockAgenda).click();
-
+    cy.get(auk.modal.body).find(auk.alert.message)
+      .contains('met alle wijzigingen wil verwijderen?');
     cy.get(agenda.agendaHeader.confirm.lockAgenda)
       .click();
 

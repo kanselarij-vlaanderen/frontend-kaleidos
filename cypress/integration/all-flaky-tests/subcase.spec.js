@@ -349,7 +349,7 @@ context('Subcase tests', () => {
 
     cy.openAgendaForDate(agendaDate);
     cy.setAllItemsFormallyOk(5);
-    cy.approveAndCloseDesignAgenda(true);
+    cy.approveAndCloseDesignAgenda();
 
     cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
     cy.get(cases.subcaseItem.approved).should('have.length', 3);

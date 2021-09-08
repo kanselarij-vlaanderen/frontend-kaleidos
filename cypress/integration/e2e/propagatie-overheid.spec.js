@@ -70,12 +70,12 @@ context('Propagation to other graphs', () => {
 
     // TODO-enable after KAS-1139 change formal ok status to test yggdrasil
     // Enable this to test editing on approved agendaitems (formal ok status changes)
-    // cy.route('PATCH', '/agendaitems/*').as('patchAgendaitem');
-    // cy.openDetailOfAgendaitem(subcaseTitle1);
-    // cy.get(agenda.agendaitemTitlesView.edit).click();
-    // cy.get(agenda.agendaitemTitlesEdit.shorttitle).type(' KAS-1139');
-    // cy.get(agenda.agendaitemTitlesEdit.actions.save).click();
-    // cy.wait('@patchAgendaitem');
+    cy.route('PATCH', '/agendaitems/*').as('patchAgendaitem');
+    cy.openDetailOfAgendaitem(subcaseTitle1);
+    cy.get(agenda.agendaitemTitlesView.edit).click();
+    cy.get(agenda.agendaitemTitlesEdit.shorttitle).type(' KAS-1139');
+    cy.get(agenda.agendaitemTitlesEdit.actions.save).click();
+    cy.wait('@patchAgendaitem');
 
     cy.releaseDecisions();
     cy.wait(60000);

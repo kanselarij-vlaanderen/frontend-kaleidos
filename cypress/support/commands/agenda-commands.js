@@ -96,9 +96,10 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
     });
 
   // Set the location
-  cy.get(agenda.newSession.meetingLocation).click()
-    .type(location);
-
+  if (location) {
+    cy.get(agenda.newSession.meetingLocation).click()
+      .type(location);
+  }
   cy.get(utils.vlModalFooter.save).click();
 
   let meetingId;

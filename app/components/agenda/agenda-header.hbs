@@ -292,12 +292,14 @@
         <div>{{t "approve-agenda-confirmation"}}</div>
         {{#if (await this.currentAgenda.approvedAgendaitemsNotOk)}}
           <br>
-          <div class="auk-u-mb-2">{{t "rollback-agendaitem-on-approving-agenda"}}</div>
+          <div data-test-agenda-header-approve-agenda-rollback-message class="auk-u-mb-2">
+            {{t "rollback-agendaitem-on-approving-agenda"}}
+          </div>
           <Agenda::AgendaHeader::AgendaActionPopupAgendaitems @agendaitems={{await this.currentAgenda.approvedAgendaitemsNotOk}}/>
         {{/if}}
         {{#if (await this.currentAgenda.newAgendaitemsNotOk)}}
           <br>
-          <div class="auk-u-mb-2">
+          <div data-test-agenda-header-approve-agenda-move-message class="auk-u-mb-2">
             {{t
               "move-agendaitem-on-approving-agenda"
               serialnumber=this.currentAgenda.serialnumber
@@ -333,12 +335,14 @@
         <div>{{t "approve-agenda-close-meeting-confirmation"}}</div>
         {{#if (await this.currentAgenda.approvedAgendaitemsNotOk)}}
           <br>
-          <div class="auk-u-mb-2">{{t "rollback-agendaitem-on-approving-agenda-close-meeting"}}</div>
+          <div data-test-agenda-header-approve-and-close-agenda-rollback-message class="auk-u-mb-2">
+            {{t "rollback-agendaitem-on-approving-agenda-close-meeting"}}
+          </div>
           <Agenda::AgendaHeader::AgendaActionPopupAgendaitems @agendaitems={{await this.currentAgenda.approvedAgendaitemsNotOk}}/>
         {{/if}}
         {{#if (await this.currentAgenda.newAgendaitemsNotOk)}}
           <br>
-          <div class="auk-u-mb-2">
+          <div data-test-agenda-header-approve-and-close-agenda-delete-message class="auk-u-mb-2">
             {{t
               "delete-agendaitem-on-closing-meeting"
               serialnumber=this.currentAgenda.serialnumber
