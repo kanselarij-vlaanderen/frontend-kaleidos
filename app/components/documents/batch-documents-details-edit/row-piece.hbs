@@ -17,41 +17,27 @@
     />
   </td>
   <td style={{if @row.isToBeDeleted "opacity: 0.5;"}}>
-    {{!-- <PowerSelect
-      @options={{this.documentTypes}}
-      @selected={{@row.documentType}}
-      @search={{perform this.searchDocumentTypes}}
-      @placeholder={{t "none"}}
-      @noMatchesMessage={{t "no-result"}}
-      @onchange={{fn this.setDocumentType (array @row)}}
-      @allowClear={{true}}
-      as |documentType|>
-      <!-- nowrap: don't let height depend on selected record -->
-      <div style="white-space: nowrap;">
-        {{documentType.label}}
-      </div>
-    </PowerSelect> --}}
+      <Utils::ModelSelector
+        @modelName="document-type"
+        @allowClear={{true}}
+        @hideSearch={{true}}
+        @propertyToShow="label"
+        @sortField="priority"
+        @selectedItems={{@row.documentType}}
+        @selectModel={{fn this.setDocumentType (array @row)}}
+      />
+
   </td>
   <td style={{if @row.isToBeDeleted "opacity: 0.5;"}}>
-    <Documents::BatchDocumentsModal::Edit::AccessLevelSelector
-      @source={{@accessLevelSource}}
-      @selected={{@row.accessLevel}}
-      @onChange={{@row.setAccessLevel}}
+    <Utils::ModelSelector
+      @modelName="access-level"
+      @allowClear={{true}}
+      @hideSearch={{true}}
+      @propertyToShow="label"
+      @sortField="priority"
+      @selectedItems={{@row.accessLevel}}
+      @selectModel={{@row.setAccessLevel}}
     />
-
-    {{!-- <PowerSelect
-      @options={{this.accessLevels}}
-      @selected={{@row.accessLevel}}
-      @search={{perform this.searchAccessLevels}}
-      @placeholder={{t "none"}}
-      @noMatchesMessage={{t "no-result"}}
-      @onchange={{fn this.setAccessLevel (array row)}}
-      as |accessLevel|>
-      <!-- nowrap: don't let height depend on selected record -->
-      <div style="white-space: nowrap;">
-        {{accessLevel.label}}
-      </div>
-    </PowerSelect> --}}
   </td>
   <td
     style={{if @row.isToBeDeleted "opacity: 0.5"}}

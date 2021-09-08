@@ -21,7 +21,7 @@
         </thead>
         <tbody>
           {{#each this.rows as |row|}}
-            <Documents::BatchDocumentsModal::Edit::RowPiece
+            <Documents::BatchDocumentsDetailsEdit::RowPiece
               @row={{row}}
               @isSelected={{includes row.piece this.selectedRows}}
               @accessLevelSource={{this.accessLevelSource}}

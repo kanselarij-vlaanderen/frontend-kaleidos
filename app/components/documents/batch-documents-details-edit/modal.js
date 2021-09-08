@@ -6,8 +6,7 @@ import { timeout } from 'ember-concurrency';
 import { task } from 'ember-concurrency-decorators';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { Row } from './row-piece';
-import { AccessLevelsDataSource } from './access-level-selector';
-import { DocumentTypesDataSource } from './document-type-selector';
+
 
 /**
  * @argument {Piece[]} pieces includes: documentContainer,accessLevel
@@ -55,17 +54,17 @@ export default class BatchDocumentsModal extends Component {
 
   @task
   *loadData() {
-    yield Promise.all([
-      AccessLevelsDataSource.create(this.store).then(
-        (source) => (this.accessLevelSource = source)
-      ),
-      DocumentTypesDataSource.create(this.store).then(
-        (source) => (this.documentTypes = source)
-      ),
-      // this.loadDocumentTypes.perform().then((documentTypes) => this.documentTypes = documentTypes),
-
-      // this.loadAccessLevels.perform().then((accessLevels) => this.accessLevels = accessLevels)
-    ]);
+    // yield Promise.all([
+    //   AccessLevelsDataSource.create(this.store).then(
+    //     (source) => (this.accessLevelSource = source)
+    //   ),
+    //   DocumentTypesDataSource.create(this.store).then(
+    //     (source) => (this.documentTypes = source)
+    //   ),
+    //   // this.loadDocumentTypes.perform().then((documentTypes) => this.documentTypes = documentTypes),
+    //
+    //   // this.loadAccessLevels.perform().then((accessLevels) => this.accessLevels = accessLevels)
+    // ]);
   }
 
   // TODO: delete
