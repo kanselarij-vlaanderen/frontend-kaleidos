@@ -57,6 +57,7 @@ const selectors = {
 
   // agenda-overview-item
   agendaOverviewItem: {
+    container: '[data-test-agenda-overview-item-container]',
     subitem: '[data-test-agenda-overview-item-sub-item]', // this contains short title
     title: '[data-test-agenda-overview-item-title]',
     formallyOk: '[data-test-agenda-overview-item-formally-ok]',
@@ -103,7 +104,6 @@ const selectors = {
       // TODO-selector unused selectors
       navigateToAgendaView: ['data-test-agenda-header-navigate-to-agenda-view'],
       navigateToPressagenda: '[data-test-agenda-header-navigate-to-pressagenda]',
-      selectSignature: '[data-test-agenda-header-select-signature]',
       printAgenda: ['data-test-agenda-header-print-agenda'],
     },
     // TODO-selector unused selector
@@ -166,7 +166,10 @@ const selectors = {
 
   // new-session
   newSession: {
+    kind: '[data-test-new-session-kind]',
     meetingNumber: '[data-test-new-session-meeting-number]',
+    meetingLocation: '[data-test-new-session-meeting-location]',
+    datepicker: '[data-test-new-session-datepicker]',
     numberRep: {
       edit: '[data-test-new-session-number-representation-edit]',
       input: '[data-test-new-session-number-representation-input]',
@@ -178,6 +181,16 @@ const selectors = {
   editSession: {
     meetingNumber: '[data-test-edit-session-meeting-number]',
     numberRep: '[data-test-edit-session-number-representation]',
+  },
+
+  // create-agendaitem
+  createAgendaitem: {
+    input: '[data-test-create-agendaitem-input]',
+    postponedCheckbox: '[data-test-create-agendaitem-postponed-checkbox]',
+    dataTable: '[data-test-create-agendaitem-data-table]',
+    row: {
+      checkBox: '[data-test-create-agendaitem-row-subcase-checkbox]',
+    },
   },
 };
 export default selectors;

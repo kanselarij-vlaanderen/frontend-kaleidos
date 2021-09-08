@@ -3,7 +3,7 @@
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical">
-          <h4 data-test-route-publications-title class="auk-toolbar-complex__title">{{t "publications"}}</h4>
+          <h4 data-test-route-publications-index-title class="auk-toolbar-complex__title">{{t "publications"}}</h4>
         </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
@@ -18,7 +18,7 @@
       </Auk::Toolbar::Item>
 
       <Auk::Toolbar::Item>
-        <Auk::Button data-test-publication-header-button-new @icon="add" @skin="primary" {{on "click" this.showPublicationModal}}>
+        <Auk::Button data-test-route-publications-index-new-publication @icon="add" @skin="primary" {{on "click" this.showPublicationModal}}>
           {{t "publications-new"}}
         </Auk::Button>
       </Auk::Toolbar::Item>
@@ -47,12 +47,14 @@
                 {{#if (get this.tableColumnDisplayOptions column.keyName)}}
                   {{!-- first cases that need a special treament. The "else" clause treats the default case --}}
                   {{#if (eq column.keyName "shortTitle")}}
+                    {{!-- template-lint-disable no-inline-styles --}}
                     <Utils::ThSortable
                       style="min-width: 25rem;"
                       @currentSorting={{this.sort}}
                       @field={{column.sortKey}}
                       @onChange={{this.sortTable}}
                       @label={{t column.translationKeySmall}}/>
+                    {{!-- template-lint-enable no-inline-styles --}}
                   {{else}}
                     {{#if column.sortKey}}
                       <Utils::ThSortable
@@ -125,7 +127,7 @@
         <Auk::Button
           @icon="settings"
           @skin="borderless"
-          data-test-publication-button-filter-tables
+          data-test-route-publications-index-filter
           {{on "click" this.toggleColumnDisplayOptions}}
         />
         <AttachPopover

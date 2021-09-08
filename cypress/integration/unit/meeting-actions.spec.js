@@ -27,7 +27,7 @@ context('meeting actions tests', () => {
     cy.deleteAgenda('5EB287CDF359DD0009000008', true);
     // verify subcase can be proposed for different agenda
     cy.visit('/dossiers/5EB287A9F359DD0009000005/deeldossiers/5EB287BBF359DD0009000007/overzicht');
-    cy.get(cases.subcaseHeader.actions.proposeForAgenda);
+    cy.get(cases.subcaseHeader.showProposedAgendas);
   });
 
   it('should perform action close agenda with agendaitems on designagenda', () => {
@@ -57,6 +57,7 @@ context('meeting actions tests', () => {
     cy.visitAgendaWithLink('/vergadering/5EB2CB8FF5E126000900000D/agenda/cd6b8ae7-0f00-451c-b4ad-fa236d5e6a20/agendapunten');
     cy.openDetailOfAgendaitem(subcaseTitleShort);
     // verify this profile does not have the option to delete approved agendaitems
+    cy.wait(1000); // controls buttons is not clickable yet (no calls are running, element detached from DOM)
     cy.get(agenda.agendaitemControls.actions).click();
     cy.get(agenda.agendaitemControls.action.delete).should('not.exist');
   });

@@ -1,29 +1,35 @@
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
 <Auk::Modal::Body>
-  {{utils/kind-selector kind=kind setAction=(action "setKind")}}
+  <Utils::KindSelector
+    data-test-new-session-kind={{true}}
+    @kind={{this.kind}}
+    @setAction={{action "setKind"}}
+  />
   {{#if this.isAnnexMeeting}}
     <div class="auk-u-mb-2">
       <div class="auk-form-group">
         <Auk::Label>{{t "related-main-meeting-field-label"}}</Auk::Label>
-        {{utils/model-selector
-          modelName="meeting"
-          searchField="numberRepresentation"
-          propertyToShow="label"
-          sortField="-planned-start"
-          selectedItems=selectedMainMeeting
-          selectModel=(action "selectMainMeeting")
-        }}
+        <Utils::ModelSelector
+          @modelName="meeting"
+          @searchField="numberRepresentation"
+          @propertyToShow="label"
+          @sortField="-planned-start"
+          @selectedItems={{this.selectedMainMeeting}}
+          @selectModel={{action "selectMainMeeting"}}
+        />
       </div>
     </div>
   {{else}}
     <div class="auk-u-mb-2">
-      <div class="auk-form-group">
+      <div class="auk-form-group" data-test-new-session-datepicker>
         <Auk::Label>{{t "start-date"}}</Auk::Label>
-        {{web-components/vl-datepicker
-          enableTime=true
-          defaultHour=10
-          defaultMinute=0
-          dateChanged=(action "selectStartDate")
-        }}
+        <WebComponents::VlDatepicker
+          @enableTime={{true}}
+          @defaultHour={{10}}
+          @defaultMinute={{0}}
+          @dateChanged={{action "selectStartDate"}}
+        />
       </div>
     </div>
   {{/if}}
@@ -35,18 +41,18 @@
           <Auk::Input
             data-test-new-session-meeting-number={{true}}
             @type="number"
-            @value={{meetingNumber}}
+            @value={{this.meetingNumber}}
             id="meetingNumberInput"
             class="auk-input--w-medium auk-u-mr-2"
-            {{on "change" (action "meetingNumberChangedAction" meetingNumber)}}
-            {{on "keyup" (action "meetingNumberChangedAction" meetingNumber)}}
+            {{on "change" (action "meetingNumberChangedAction" this.meetingNumber)}}
+            {{on "keyup" (action "meetingNumberChangedAction" this.meetingNumber)}}
           />
         {{/unless}}
         <div class="auk-o-flex__item">
           <div
             class="auk-u-text-condensed-line-height"
           >
-            {{formattedMeetingIdentifier}}
+            {{this.formattedMeetingIdentifier}}
           </div>
           <Auk::ButtonLink
             data-test-new-session-number-representation-edit
@@ -57,18 +63,19 @@
         </div>
       </div>
     </div>
-    {{#if isEditingFormattedMeetingIdentifier}}
+    {{#if this.isEditingFormattedMeetingIdentifier}}
       <div class="auk-o-flex">
-        {{web-components/vl-form-input
-          data-test-new-session-number-representation-input=true
-          value=formattedMeetingIdentifier
-          class="auk-input--w-medium auk-u-mr-2"
-        }}
-        {{web-components/vl-save-button
-          data-test-new-session-number-representation-save=true
-          text=(t "save")
-          saveAction=(action "saveAction")
-        }}
+        <Auk::Input
+          @width="medium"
+          @value={{this.formattedMeetingIdentifier}}
+          class="auk-u-mr-2"
+          data-test-new-session-number-representation-input={{true}}
+        />
+        <WebComponents::VlSaveButton
+          data-test-new-session-number-representation-save={{true}}
+          @text={{t "save"}}
+          @saveAction={{action "saveAction"}}
+        />
       </div>
     {{/if}}
   </div>
@@ -76,15 +83,19 @@
     <div class="auk-u-mb-2">
       <div class="auk-form-group">
         <Auk::Label>{{t "meeting-location"}}</Auk::Label>
-        {{web-components/vl-form-input value=extraInfo}}
+        <Auk::Input
+          @block={{true}}
+          @value={{this.extraInfo}}
+          data-test-new-session-meeting-location={{true}}
+        />
       </div>
     </div>
   {{/unless}}
 </Auk::Modal::Body>
-{{web-components/vl-modal-footer
-  isLoading=isLoading
-  cancelButtonText=(t "cancel")
-  saveButtonText=(t "add")
-  cancelAction=(action "cancelForm")
-  saveAction=(action "createNewSession")
-}}
+<WebComponents::VlModalFooter
+  @isLoading={{this.isLoading}}
+  @cancelButtonText={{t "cancel"}}
+  @saveButtonText={{t "add"}}
+  @cancelAction={{action "cancelForm"}}
+  @saveAction={{action "createNewSession"}}
+/>

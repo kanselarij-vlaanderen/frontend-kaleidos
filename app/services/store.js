@@ -1,4 +1,4 @@
-import Store from 'ember-data/store';
+import Store from '@ember-data/store';
 
 export default class ExtendedStoreService extends Store {
   /*

@@ -5,11 +5,11 @@
   <div class="vlc-document-card-item" data-test-vl-document-piece>
     <div class="vlc-document-card-item__title">
       <h6 data-test-vl-document-name class="auk-h4">
-        {{#if (not this.file)}}
+        {{#unless this.file}}
           <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
             {{t "document-not-consultable"}}
           </EmberTooltip>
-        {{/if}}
+        {{/unless}}
         {{this.piece.name}}
       </h6>
       {{#unless this.loadPieceRelatedData.isRunning}}
@@ -35,10 +35,10 @@
           @skin="borderless"
           @layout="icon-only"
           @icon="download"
-          @href={{await this.piece.downloadFileLink}}
+          @href={{await this.piece.namedDownloadLinkPromise}}
           {{!-- download --}}
           {{! 'download' attribute doesn't specify a filename, as this gets overruled by
-          the filename received in the "Content-Disposition HTTP header" }}
+              the filename received in the "Content-Disposition HTTP header" }}
         >
           {{t "download"}}
         </Auk::Button>
@@ -49,7 +49,7 @@
           @skin="danger-borderless"
           @layout="icon-only"
           @icon="delete"
-          {{on "click" (fn this.deletePiece piece)}}
+          {{on "click" (fn this.deletePiece this.piece)}}
           data-test-vl-document-delete-piece
         >
           {{t "delete"}}
@@ -58,10 +58,14 @@
     </div>
     {{#if this.currentSession.isEditor}}
       <div class="vlc-document-card-item__meta">
-        {{t "uploaded-at"}}
-        {{moment-format this.piece.created "DD.MM.YYYY"}}
-        {{t "at"}}
-        {{moment-format this.piece.created "HH:mm"}}
+        {{#if this.piece.created}}
+          {{t "uploaded-at"}}
+          {{moment-format this.piece.created "DD.MM.YYYY"}}
+          {{t "at"}}
+          {{moment-format this.piece.created "HH:mm"}}
+        {{else}}
+          {{t "upload-time-unknown"}}
+        {{/if}}
       </div>
     {{/if}}
     <div class="vlc-document-card-item__icon">

@@ -39,6 +39,8 @@ module.exports = function(environment) {
     APP: {
       // eslint-disable-next-line quotes
       ENABLE_PUBLICATIONS_TAB: '{{ENABLE_PUBLICATIONS_TAB}}',
+      ENABLE_DOCUMENT_VIEW: '{{ENABLE_DOCUMENT_VIEW}}',
+      ENABLE_SIGNATURES: '{{ENABLE_SIGNATURES}}',
       // Here you can pass flags/options to your application instance
       // when it is created
     },
@@ -64,6 +66,8 @@ module.exports = function(environment) {
 
   if (environment === 'development') {
     ENV.APP.ENABLE_PUBLICATIONS_TAB = true;
+    ENV.APP.ENABLE_SIGNATURES = true;
+    ENV.APP.ENABLE_DOCUMENT_VIEW = true;
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;
     // ENV.APP.LOG_TRANSITIONS = true;
@@ -78,6 +82,7 @@ module.exports = function(environment) {
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
     ENV.APP.ENABLE_PUBLICATIONS_TAB = true;
+    ENV.APP.ENABLE_SIGNATURES = true;
 
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
@@ -88,6 +93,7 @@ module.exports = function(environment) {
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
     ENV.APP.ENABLE_PUBLICATIONS_TAB = true;
+    ENV.APP.ENABLE_SIGNATURES = true;
   }
 
   return ENV;

@@ -2,14 +2,13 @@
   <Auk::Input
     @block={{true}}
     @icon="search"
-    @type="text"
-    @placeholder={{t "search-placeholder"}}
+    placeholder={{t "search-placeholder"}}
     value={{this.searchText}}
     {{on "input" (perform this.debouncedSearch)}}
     {{on "focusout" this.hideResults}}
     {{on "focusin" (if this.search.lastSuccessful this.showResults this.hideResults)}}
     @enter={{perform this.search}}
-    @autocomplete="off"
+    autocomplete="off"
   />
   <Auk::SearchResultsList @isVisible={{this.isShowingResults}} @hasNoResults={{eq this.searchResults.length 0}} id={{this.resultListId}}>
     {{#each this.searchResults as |result|}}

@@ -7,7 +7,7 @@
       <Auk::Toolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
           <span class="auk-overline auk-u-muted"
-            data-test-publication-detail-menu-publication-number>
+            data-test-route-publications-publication-header-number>
             {{uppercase (t "publication-flow")}}
             -
             {{#if this.model.case.subcases}}
@@ -26,7 +26,7 @@
             @maxLength={{150}}
           as |abbreviatedText|>
             <div
-              data-test-publication-detail-menu-short-title
+              data-test-route-publications-publication-header-short-title
               class="auk-toolbar-complex__title"
             >
               {{abbreviatedText}}

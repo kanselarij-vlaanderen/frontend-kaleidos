@@ -1,16 +1,15 @@
 <Auk::Modal::Body>
   <div class="auk-o-flex auk-o-flex--vertical-center">
     <Auk::Input
-      @type="text"
-      @value={{searchText}}
-      @placeholder={{t "search-placeholder"}}
+      @value={{this.searchText}}
+      placeholder={{t "search-placeholder"}}
       @block={{true}}
-      {{on "input" (action "updateSearchText")}}
+      {{on "input" this.updateSearchText}}
       class="auk-u-maximize-width"
     />
   </div>
 
-  {{#if isLoading}}
+  {{#if this.isLoading}}
     <WebComponents::VlLoader @text={{t "please-be-patient"}} />
   {{else}}
     <table class="auk-table auk-table--striped">
@@ -25,9 +24,11 @@
         </tr>
       </thead>
       <tbody class="auk-table--interaction-cursor">
-        {{#each (await results) as |row|}}
+        {{#each (await this.results) as |row|}}
+          {{!-- TODO: address accessibility concern, keeping in mind that users want the whole row to be clickable --}}
+          {{!-- template-lint-disable no-invalid-interactive --}}
           <tr>
-            <td onclick={{action "selectCase" row}}>
+            <td onclick={{fn this.selectCase row}}>
               <p>
                 {{#if row.shortTitle}}
                   {{row.shortTitle}}
@@ -36,21 +37,22 @@
                 {{/if}}
               </p>
             </td>
-            <td onclick={{action "selectCase" row}}>
+            <td onclick={{fn this.selectCase row}}>
               {{moment-format row.created "DD-MM-YYYY HH:mm"}}
             </td>
           </tr>
+          {{!-- template-lint-enable no-invalid-interactive --}}
         {{/each}}
       </tbody>
     </table>
     <div class="auk-u-mb-3"></div>
     <Auk::Pagination
-      @page={{page}}
-      @size={{size}}
-      @nbOfItems={{results.length}}
-      @total={{results.meta.count}}
-      @onNextPage={{action 'nextPage'}}
-      @onPreviousPage={{action 'prevPage'}}
+      @page={{this.page}}
+      @size={{this.size}}
+      @nbOfItems={{this.results.length}}
+      @total={{this.results.meta.count}}
+      @onNextPage={{this.nextPage}}
+      @onPreviousPage={{this.prevPage}}
     />
   {{/if}}
 </Auk::Modal::Body>

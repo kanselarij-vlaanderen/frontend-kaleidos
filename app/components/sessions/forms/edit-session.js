@@ -1,3 +1,6 @@
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import CONFIG from 'frontend-kaleidos/utils/config';
@@ -5,6 +8,8 @@ import EmberObject, { computed } from '@ember/object';
 import { A } from '@ember/array';
 import moment from 'moment';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   store: service(),
   agendaService: service(),
@@ -20,6 +25,8 @@ export default Component.extend({
     return A([this.startDate]);
   }),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-component-lifecycle-hooks
   didInsertElement() {
     this._super(...arguments);
     this.set('selectedKindUri', this.get('meeting.kind'));
@@ -30,14 +37,16 @@ export default Component.extend({
     this.set('numberRepresentation', this.get('meeting.numberRepresentation'));
   },
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
 
-    meetingNumberChangedAction(meetingNumber) {
+    meetingNumberChangedAction(event) {
+      const meetingNumber = event.target.value;
       const meetingYear = moment(this.get('meeting.plannedStart')).year();
       this.set('meetingNumber', meetingNumber);
       this.set('formattedMeetingIdentifier', `VR PV ${meetingYear}/${meetingNumber}`);
       this.set('numberRepresentation', this.get('formattedMeetingIdentifier'));
-      this.set('meeting.numberRepresentation', this.get('formattedMeetingIdentifier'));
     },
 
     async updateSession() {

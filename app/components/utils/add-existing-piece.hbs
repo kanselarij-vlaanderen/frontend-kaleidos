@@ -1,3 +1,5 @@
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
 <div class="auk-u-mb-2">
   <Auk::Toolbar @auto={{true}}>
     <Auk::Toolbar::Group @position="left">
@@ -5,11 +7,11 @@
         <div class="vl-input-field--inline">
           <Input
             data-test-add-existing-piece-search-input=""
+            id="searchId"
+            class="vl-input-field vl-input-field__input"
+            placeholder="Zoeken.."
             @value={{this.filter}}
-            @id="searchId"
-            @placeholder="Zoeken.."
-            @input={{perform this.searchTask}}
-            @class="vl-input-field vl-input-field__input"
+            {{on "input" (perform this.searchTask)}}
           />
           <Auk::Button
             @skin="primary"
@@ -29,40 +31,42 @@
         <Auk::Loader @message={{t "loading"}} />
       </div>
     {{else}}
-      {{#data-table
-        content=this.pieces
-        sort=this.sort
-        page=this.pageParam
-        size=size
-        noDataMessage=(t "no-results-found")
-        isLoading=this.findAll.isRunning
-        onClickRow=(action "select")
-      as |table|
-      }}
-        {{#table.content
-        as |c|
-        }}
-          {{#c.header}}
+      <DataTable
+        @content={{this.pieces}}
+        @sort={{this.sort}}
+        @page={{this.pageParam}}
+        @size={{this.size}}
+        @noDataMessage={{t "no-results-found"}}
+        @isLoading={{this.findAll.isRunning}}
+        @onClickRow={{action "select"}}
+      as |table|>
+        <table.content as |c|>
+          <c.header>
             <th></th>
             <th><span class="">{{t "title-document"}}</span></th>
             <th><span class="">{{t "created-on"}}</span></th>
-          {{/c.header}}
-          {{#c.body as |row|}}
+          </c.header>
+          <c.body as |row|>
             <td class="auk-table__col--1">
-              {{web-components/vl-checkbox
-                value=row.selected
-                toggle=(action "select" row)
-              }}
+              <Auk::Checkbox
+                data-test-add-existing-piece-checkbox={{true}}
+                @checked={{row.selected}}
+                {{on "input" (action "select" row)}}
+              />
             </td>
             <td class="auk-table__col--8">
               {{row.name}}
             </td>
             <td class="auk-table__col--3">
-              {{moment-format row.created "dd DD/MM/YYYY HH:mm"}}
+              {{#if row.created}}
+                {{moment-format row.created "dd DD/MM/YYYY HH:mm"}}
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
             </td>
-          {{/c.body}}
-        {{/table.content}}
-      {{/data-table}}
+          </c.body>
+        </table.content>
+      </DataTable>
     {{/if}}
   </div>
 </div>

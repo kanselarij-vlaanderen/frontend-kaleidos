@@ -1,4 +1,4 @@
-{{#if model}}
+{{#if this.model}}
   <Subcases::SubcaseDescription @subcase={{this.subcase}}/>
   <div class="auk-u-mb-8">
     <div class="auk-hr">
@@ -9,11 +9,11 @@
    {{!-- TODO these classes do not exist and do nothing --}}
     <div class="confidentialities">
       <div class="confidential">
-        <WebComponents::VlCheckbox
-          data-test-cases---subcase-overview-confidentiality-checkbox={{true}}
-          @value={{this.subcase.confidential}}
-          @disabled={{true}}
+        <Auk::Checkbox
+          @checked={{this.subcase.confidential}}
           @label={{t "confidential"}}
+          @disabled={{true}}
+          data-test-cases---subcase-overview-confidentiality-checkbox={{true}}
         />
       </div>
     </div>

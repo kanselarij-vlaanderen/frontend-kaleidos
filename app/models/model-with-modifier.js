@@ -1,14 +1,12 @@
-import DS from 'ember-data';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
-import Model from '@ember-data/model';
+import Model, { belongsTo, attr } from '@ember-data/model';
 import fetch from 'fetch';
 import ModifiedOldDataError from '../errors/modified-old-data-error';
 
-const {
-  attr, belongsTo,
-} = DS;
-
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
   currentSession: service(),
   intl: service(),
@@ -52,7 +50,7 @@ export default Model.extend({
   },
 
   async preEditOrSaveCheck() {
-    if (!await this.saveAllowed()) {
+    if (!(await this.saveAllowed())) {
       const {
         oldModelData, oldModelModifiedMoment,
       } = await this.getOldModelData();

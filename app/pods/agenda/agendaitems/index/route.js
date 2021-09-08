@@ -37,7 +37,7 @@ export default class AgendaItemsAgendaRoute extends Route {
       ].join(','),
       'fields[document-containers]': '',
       'page[size]': PAGE_SIZE.AGENDAITEMS,
-      sort: 'show-as-remark,priority',
+      sort: 'show-as-remark,number',
     });
 
     const parentModel = this.modelFor('agenda.agendaitems');

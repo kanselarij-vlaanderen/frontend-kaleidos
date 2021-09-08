@@ -15,11 +15,11 @@
         @newItems={{this.model.newItems}}
         @currentAgenda={{this.agenda}}
         @previousAgenda={{this.previousAgenda}}
-        @onReorderAgendaitems={{perform this.assignNewPriorities}}
+        @onReorderAgendaitems={{perform this.assignNewNumbers}}
         @showModifiedOnly={{this.agendaitemsController.showModifiedOnly}}
         @toggleShowModifiedOnly={{this.toggleShowModifiedOnly}}
       />
-      {{#if this.assignNewPriorities.isRunning}}
+      {{#if this.assignNewNumbers.isRunning}}
         <WebComponents::LoadingOverlay />
       {{/if}}
     </div>

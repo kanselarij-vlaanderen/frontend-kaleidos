@@ -24,6 +24,7 @@ const selectors = {
   // agendas/overview/template.hbs
   agendasOverview: {
     dataTable: '[data-test-route-agendas-overview-data-table]',
+    navigationButton: '[data-test-route-agendas-overview-navigation-button]',
     filter: {
       container: '[data-test-route-agendas-overview-filter-container]',
       input: '[data-test-route-agendas-overview-filter-input]',
@@ -37,6 +38,7 @@ const selectors = {
 
   // agenda/documents/template
   agendaDocuments: {
+    cardList: '[data-test-route-agenda-documents-card-list]',
     addDocuments: '[data-test-route-agenda-documents-add-documents]',
   },
 
@@ -68,7 +70,7 @@ const selectors = {
 
   // cases/case/subcase/subcase/overview/template
   subcaseOverview: {
-    confidentialityCheckBox: '[data-test-cases---subcase-overview-confidentiality-checkbox] input',
+    confidentialityCheckBox: '[data-test-cases---subcase-overview-confidentiality-checkbox]',
   },
 
   subcaseDocuments: {
@@ -130,12 +132,6 @@ const selectors = {
     ROUTE PUBLICATIONS
   */
 
-  // publications/template
-  publications: {
-    title: '[data-test-route-publications-title]',
-    // TODO-selector: there are more selectors in this route
-  },
-
   /**
     ROUTE LOGIN
   */
@@ -143,6 +139,15 @@ const selectors = {
   // login/template
   login: {
     acmidmButton: '[data-test-route-login-acmidm-container] button',
+  },
+
+  /**
+    ROUTE MOCK-LOGIN
+   */
+
+  // mock-login-route/template
+  mockLogin: {
+    list: '[data-test-mock-login-list]',
   },
 
 

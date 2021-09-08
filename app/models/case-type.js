@@ -1,12 +1,8 @@
-import DS from 'ember-data';
+import Model, { attr } from '@ember-data/model';
 
-const {
-  Model, attr,
-} = DS;
-
-export default Model.extend({
-  uri: attr('string'),
-  label: attr('string'),
-  scopeNote: attr('string'),
-  deprecated: attr('boolean'),
-});
+export default class CaseType extends Model {
+  @attr('string') uri;
+  @attr('string') label;
+  @attr('string') scopeNote;
+  @attr('boolean') deprecated;
+};

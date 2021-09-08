@@ -1,50 +1,38 @@
-import DS from 'ember-data';
-import { alias } from '@ember/object/computed';
-import { computed } from '@ember/object';
+import Model, { attr, belongsTo } from '@ember-data/model';
+import { deprecate } from '@ember/application/deprecations';
 import sanitize from 'sanitize-filename';
 
-const {
-  Model, attr, belongsTo,
-} = DS;
+export default class File extends Model {
+  @attr('string') filename;
+  @attr('string') format;
+  @attr('number') size;
+  @attr('string') extension;
+  @attr('datetime') created;
+  @attr('string') contentType;
 
-export default Model.extend({
-  piece: belongsTo('piece'),
-  signature: belongsTo('signature', {
-    inverse: null,
-  }),
+  @belongsTo('piece') piece;
 
-  filename: attr('string'),
-  filenameWithoutExtension: computed('filename', {
-    get() {
-      const ext = this.get('extension');
-      // eslint-disable-next-line no-useless-escape
-      const regex = new RegExp(`\.${ext}$`);
-      return this.get('filename').replace(regex, '');
-    },
-    // eslint-disable-next-line no-unused-vars
-    set(key, value) {
-      const filename = `${value}.${this.get('extension')}`;
-      this.set('filename', filename);
-      return value;
-    },
-  }),
+  get name() {
+    deprecate(`Attribute 'name' on 'file' model is deprecated. Use 'filename' instead.`);
+    return this.filename;
+  }
 
-  format: attr('string'),
-  size: attr('number'),
-  extension: attr('string'),
-  created: attr('datetime'),
-  contentType: attr('string'),
-
-  downloadFilename: computed('filename', function() {
-    return sanitize(this.get('filename'), { // file-system-safe
+  get downloadFilename() {
+    return sanitize(this.filename, {
       replacement: '_',
     });
-  }),
-  downloadLink: computed('id', function() {
-    return `/files/${this.get('id')}/download`;
-  }),
-  namedDownloadLink: computed('downloadFilename', 'downloadLink', function() {
-    return `${this.downloadLink}?name=${encodeURIComponent(this.downloadFilename)}`; // url-safe
-  }),
-  name: alias('filename'), // Compatibility. Use of 'name' should be refactored out.
-});
+  }
+
+  get downloadLink() {
+    return `/files/${this.id}/download`;
+  }
+
+  get namedDownloadLink() {
+    return `${this.downloadLink}?name=${encodeURIComponent(this.downloadFilename)}`;
+  }
+
+  get filenameWithoutExtension() {
+    const regex = new RegExp(`.${this.extension}$`);
+    return this.filename.replace(regex, '');
+  }
+}

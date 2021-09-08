@@ -1,9 +1,11 @@
-{{#if (not isEditing)}}
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
+{{#if (not this.isEditing)}}
   <div class="auk-o-flex auk-o-flex--align-baseline">
     <h3 class="auk-h2">
       {{t "subcase"}}
     </h3>
-    {{#if currentSession.isEditor}}
+    {{#if this.currentSession.isEditor}}
       <div class="auk-u-ml-2">
         <Auk::ButtonLink
           data-test-subcase-description-edit
@@ -16,10 +18,10 @@
   </div>
   <div class="auk-u-mb-4">
     <p class="auk-u-text-capitalize">
-      {{await subcase.subcaseName}}
+      {{await this.subcase.subcaseName}}
     </p>
     <ul class="vlc-status-timeline">
-      {{#each (await subcase.phases) as |phase|}}
+      {{#each (await this.subcase.phases) as |phase|}}
         <li class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
         data-test-subcase-description-timeline-item>
           <div class="vlc-status-timeline__dot"></div>
@@ -27,9 +29,7 @@
             <div class="skeletal-loader" role="alert" aria-busy="true"></div>
           {{else}}
             <div class="vlc-status-timeline__text">
-              {{subcase-timeline-item-text
-                phase=phase
-              }}
+              {{subcase-timeline-item-text phase=phase}}
             </div>
           {{/if}}
         </li>
@@ -45,8 +45,8 @@
           {{t "number-session"}}
         </div>
         <div data-test-subcase-description-meeting-number class="auk-key-value-item__value">
-          {{#if (await subcase.latestMeeting.number)}}
-            {{await subcase.latestMeeting.number}}
+          {{#if (await this.subcase.latestMeeting.number)}}
+            {{await this.subcase.latestMeeting.number}}
           {{else}}
             {{t "no-number-yet"}}
           {{/if}}
@@ -57,10 +57,10 @@
           {{t "requested-for-session"}}
         </div>
         <div data-test-subcase-description-meeting-planned-start class="auk-key-value-item__value">
-          {{#if (await subcase.requestedForMeeting.plannedStart)}}
+          {{#if (await this.subcase.requestedForMeeting.plannedStart)}}
             {{t "requested-for-agenda"}}
             {{moment-format
-              subcase.requestedForMeeting.plannedStart
+              this.subcase.requestedForMeeting.plannedStart
               "DD MMMM YYYY"
             }}
           {{else}}
@@ -77,15 +77,15 @@
         <div class="auk-key-value-item__value" data-test-subcase-description-agenda-link-container>
           {{#if
             (or
-               (is-pending isRetracted)
-               (is-pending subcase.onAgendaInfo)
+               (is-pending this.isRetracted)
+               (is-pending this.subcase.onAgendaInfo)
             )
           }}
             <div class="auk-loader" role="alert" aria-busy="true"></div>
           {{else}}
-            {{#if (await subcase.onAgendaInfo)}}
+            {{#if (await this.subcase.onAgendaInfo)}}
               {{#if
-                (await isRetracted)
+                (await this.isRetracted)
               }}
                 {{t "postponed-subcase"}}
               {{/if}}
@@ -93,12 +93,12 @@
                 data-test-subcase-description-agenda-link
                 @route="agenda.agendaitems.agendaitem"
                 @models={{array
-                  (await latestMeetingId)
-                  (await latestAgendaId)
-                  (await latestAgendaitemId)
+                  (await this.latestMeetingId)
+                  (await this.latestAgendaId)
+                  (await this.latestAgendaitemId)
                 }}
               >
-                {{moment-format (await subcase.onAgendaInfo)  "DD MMMM YYYY"}}
+                {{moment-format (await this.subcase.onAgendaInfo)  "DD MMMM YYYY"}}
               </Auk::ButtonLink>
             {{else}}
               {{t "not-yet-on-agenda"}}
@@ -111,7 +111,7 @@
           {{t "date-last-edited"}}
         </div>
         <div data-test-subcase-description-modified class="auk-key-value-item__value">
-          {{moment-format subcase.modified "DD MMMM YYYY"}}
+          {{moment-format this.subcase.modified "DD MMMM YYYY"}}
         </div>
       </div>
     </div>
@@ -121,10 +121,10 @@
           {{t "decided-on"}}
         </div>
         <div data-test-subcase-description-decided-on class="auk-key-value-item__value">
-          {{#if (is-pending subcase.approved)}}
+          {{#if (is-pending this.subcase.approved)}}
             <div class="skeletal-loader" role="alert" aria-busy="true"></div>
-          {{else if (await subcase.approved)}}
-            {{moment-format (await subcase.requestedForMeeting.plannedStart) "DD.MM.YYYY"}}
+          {{else if (await this.subcase.approved)}}
+            {{moment-format (await this.subcase.requestedForMeeting.plannedStart) "DD.MM.YYYY"}}
           {{else}}
             {{t "not-yet-decided"}}
           {{/if}}
@@ -137,13 +137,13 @@
         <div data-test-subcase-description-requested-by class="auk-key-value-item__value">
           {{#if
             (or
-                (is-pending subcase.requestedBy)
-                (is-pending subcase.requestedBy.person)
+                (is-pending this.subcase.requestedBy)
+                (is-pending this.subcase.requestedBy.person)
             )
           }}
             <div class="skeletal-loader" role="alert" aria-busy="true"></div>
-          {{else if subcase.requestedBy}}
-            {{subcase.requestedBy.person.nameToDisplay}}
+          {{else if this.subcase.requestedBy}}
+            {{this.subcase.requestedBy.person.nameToDisplay}}
           {{else}}
             {{t "not-yet-requested"}}
           {{/if}}
@@ -155,27 +155,43 @@
   <div class="auk-box">
     <div class="auk-u-mb-4">
       <div class="auk-form-group">
-        {{web-components/vl-radio-button-list
-          title=(t "subcase-type")
-          optionList=(await caseTypes)
-          selectedModel=(await remarkType)
-          modelChanged=(action "selectRemarkType")
-        }}
+        <div class="auk-u-mb-4">
+          <fieldset>
+            <legend class="auk-label">{{t "subcase-type"}}</legend>
+            <Auk::RadioList @layout="inline" as |List|>
+              {{#each (await this.caseTypes) as |type index|}}
+                <List.Radio
+                  @label={{type.label}}
+                  @checked={{if
+                    (await this.remarkType)
+                    (eq type.id (await this.remarkType.id))
+                    (eq index 0)
+                  }}
+                  value={{type.id}}
+                  {{on "change" (action "selectRemarkType")}}
+                />
+              {{/each}}
+            </Auk::RadioList>
+          </fieldset>
+        </div>
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
-        {{utils/model-selector
-          modelName="subcase-type"
-          searchField="label"
-          sortField="label"
-          propertyToShow="label"
-          selectedItems=type
-          selectModel=(action "selectType")
-        }}
+        <Utils::ModelSelector
+          @modelName="subcase-type"
+          @searchField="label"
+          @sortField="label"
+          @propertyToShow="label"
+          @selectedItems={{this.type}}
+          @selectModel={{action "selectType"}}
+        />
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "subcase-name"}}</Auk::Label>
-        {{web-components/vl-form-input value=subcaseName}}
+        <Auk::Input
+          @block={{true}}
+          @value={{this.subcaseName}}
+        />
       </div>
     </div>
     <Auk::Toolbar @auto={{true}}>
@@ -186,11 +202,11 @@
           </Auk::ButtonLink>
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
-          {{web-components/vl-save-button
-            text=(t "save")
-            isLoading=isLoading
-            saveAction=(action "saveChanges")
-          }}
+          <WebComponents::VlSaveButton
+            @text={{t "save"}}
+            @isLoading={{this.isLoading}}
+            @saveAction={{action "saveChanges"}}
+          />
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>

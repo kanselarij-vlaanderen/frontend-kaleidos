@@ -1,12 +1,12 @@
 <div class="ember-view">
   {{page-title (t "page-title")}}
-  {{head-layout}}
+  <HeadLayout />
   {{#each this.systemAlert.unconfirmedAlerts as |alert|}}
     <Utils::SystemAlert
       @type={{alert.type.label}}
       @title={{alert.title}}
       @message={{alert.message}}
-      @onClose={{action this.systemAlert.confirmAlert alert}}
+      @onClose={{fn this.systemAlert.confirmAlert alert}}
     />
   {{/each}}
   {{#if this.currentSession.group}}

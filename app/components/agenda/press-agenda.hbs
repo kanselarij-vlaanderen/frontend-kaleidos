@@ -1,8 +1,10 @@
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
 <div class="auk-container auk-container--center">
   <Utils::LogoHeader />
   <div class="auk-u-mb-8">
     <h1 class="auk-h1">
-      {{await title}}
+      {{await this.title}}
       <br/>
       <span class="auk-u-mt-2 auk-u-muted">
         {{t "agenda"}}
@@ -15,7 +17,7 @@
     </div>
   </div>
   <div class="auk-u-mb-4">
-    {{#each (await agendaitemGroups) as |agendaitemGroup|}}
+    {{#each (await this.agendaitemGroups) as |agendaitemGroup|}}
       {{#if agendaitemGroup.agendaitems.length}}
         <div class="auk-u-mb-4">
           {{#each (await agendaitemGroup.mandatees) as |mandatee|}}
@@ -34,8 +36,8 @@
                     .
                     {{agendaitem.titlePress}}
                   </h3>
-                  {{#if (eq definite "false")}}
-                    {{#if currentSession.isEditor}}
+                  {{#if (eq this.definite "false")}}
+                    {{#if this.currentSession.isEditor}}
                       <div class="auk-u-ml-2">
                         <Auk::ButtonLink {{action "toggleIsEditing" agendaitem}}>
                           {{t "edit"}}

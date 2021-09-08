@@ -3,6 +3,7 @@
 
 import cases from '../../selectors/case.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
+import publication from '../../selectors/publication.selectors';
 import route from '../../selectors/route.selectors';
 import settings from '../../selectors/settings.selectors';
 import utils from '../../selectors/utils.selectors';
@@ -27,7 +28,7 @@ context('Testing the application as Admin user', () => {
 
   it('Should switch to Publications tab when publications is clicked', () => {
     cy.get(utils.mHeader.publications).click();
-    cy.get(route.publications.title).should('exist');
+    cy.get(publication.publicationsIndex.title).should('exist');
     cy.url().should('include', 'publicaties');
   });
 

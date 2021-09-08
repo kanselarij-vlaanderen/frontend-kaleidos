@@ -19,7 +19,7 @@
               <Auk::Label for="proofUploadName" @required={{true}}>
                 {{t "name"}}
               </Auk::Label>
-              <Auk::Input type="text" id="proofUploadName"
+              <Auk::Input id="proofUploadName"
                 @value={{mut this.name}}
                 {{on "input" this.validators.name.enableError}} />
             </div>
@@ -35,12 +35,14 @@
                   @onChange={{this.setReceivedAtDate}} />
               </div>
             {{/if}}
-            <div class="auk-form-group">
-              <Auk::Label for="proofUploadIsCorrected">{{t "corrected"}}</Auk::Label>
-              <Auk::Checkbox id="proofUploadIsCorrected"
-                @checked={{this.isCorrected}}
-                @disabled={{true}} />
-            </div>
+            {{#if this.isCorrected}}
+              <div class="auk-form-group">
+                <Auk::Label for="proofUploadIsCorrected">{{t "corrected"}}</Auk::Label>
+                <Auk::Checkbox id="proofUploadIsCorrected"
+                  @checked={{true}}
+                  @disabled={{true}} />
+              </div>
+            {{/if}}
           </div>
         </div>
       </div>

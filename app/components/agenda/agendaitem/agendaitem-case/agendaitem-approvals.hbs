@@ -1,10 +1,12 @@
-{{#if (gt (await agendaitem.mandatees.length) 1)}}
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
+{{#if (gt (await this.agendaitem.mandatees.length) 1)}}
   <div class="auk-u-mb-2">
     <div class="auk-o-flex auk-o-flex--align-baseline">
       <h4 class="auk-h3">
         {{t "actions"}}
       </h4>
-      {{#if currentSession.isEditor}}
+      {{#if this.currentSession.isEditor}}
         <div class="auk-u-ml-2">
           <Auk::ButtonLink {{action "toggleIsEditing"}}>
             {{t "edit"}}
@@ -34,10 +36,10 @@
         </tr>
       </thead>
       <tbody>
-        {{#each (await mandateeApprovals) as |mandateeApproval|}}
+        {{#each (await this.mandateeApprovals) as |mandateeApproval|}}
           <tr>
             <td>
-              <h6 class="auk-h4">
+              <h6 class="auk-h4 auk-u-m-0">
                 {{await mandateeApproval.mandatee.person.nameToDisplay}}
               </h6>
             </td>
@@ -45,7 +47,7 @@
               {{await mandateeApproval.mandatee.title}}
             </td>
             <td>
-              {{#if (not isEditing)}}
+              {{#if (not this.isEditing)}}
                 {{#if (await mandateeApproval.approval)}}
                   <Auk::Icon @name="check" @skin="success" />
                   <span class="auk-u-text-success">
@@ -59,11 +61,11 @@
                 {{/if}}
               {{else}}
                 <div class="auk-form-group">
-                  {{web-components/vl-checkbox
-                    value=(not (is-empty mandateeApproval.approval))
-                    label=(t "approval-mandatee")
-                    toggle=(action "toggleApproved" mandateeApproval.mandatee mandateeApproval.approval)
-                  }}
+                  <Auk::Checkbox
+                    @label={{t "approval-mandatee"}}
+                    @checked={{not (is-empty mandateeApproval.approval)}}
+                    {{on "input" (action "toggleApproved" mandateeApproval.mandatee mandateeApproval.approval)}}
+                  />
                 </div>
               {{/if}}
             </td>
@@ -72,7 +74,7 @@
       </tbody>
     </table>
   </div>
-  {{#if isEditing}}
+  {{#if this.isEditing}}
     <Auk::Toolbar>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
@@ -84,11 +86,11 @@
           </Auk::Button>
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
-          {{web-components/vl-save-button
-            text=(t "save")
-            isLoading=isLoading
-            saveAction=(action "saveChanges" agendaitem.approvals)
-          }}
+          <WebComponents::VlSaveButton
+            @text={{t "save"}}
+            @isLoading={{this.isLoading}}
+            @saveAction={{action "saveChanges" this.agendaitem.approvals}}
+          />
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>

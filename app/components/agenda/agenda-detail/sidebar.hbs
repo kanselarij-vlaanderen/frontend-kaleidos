@@ -1,15 +1,16 @@
 <Auk::Toolbar class="vlc-agenda-detail-sidebar-section-header vlc-agenda-detail-sidebar-section-header--border-bottom">
   <Auk::Toolbar::Group @position="left">
     <Auk::Toolbar::Item>
-      <h3 class="auk-h3 auk-u-m-0 vlc-agenda-detail-sidebar-section-header__title">
+      <h4 class="auk-h4 auk-u-m-0 vlc-agenda-detail-sidebar-section-header__title">
         {{t "agendaitems-subtitle"}}
-      </h3>
+      </h4>
     </Auk::Toolbar::Item>
   </Auk::Toolbar::Group>
   <Auk::Toolbar::Group @position="right">
     <Auk::Toolbar::Item>
       <Auk::ButtonLink
-        class="vlc-agenda-items-section-header__link"
+        @skin="light"
+        @size="small"
         {{on "click" @toggleShowModifiedOnly}}
       >
         {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
@@ -20,9 +21,11 @@
 <div>
   {{#if (not @isLoadingNotaGroups)}}
     {{#each @notaGroups as |agendaitemGroup index|}}
+      {{!-- template-lint-disable simple-unless --}}
       {{#unless (and (eq index 0) (is-empty agendaitemGroup.sortedMandatees))}}
         <Agenda::AgendaOverview::AgendaitemGroupHeader @mandatees={{agendaitemGroup.sortedMandatees}}/>
       {{/unless}}
+      {{!-- template-lint-enable simple-unless --}}
       {{#each agendaitemGroup.agendaitems as |agendaitem|}}
         <div
           data-test-agenda-detail-sidebar-sub-item

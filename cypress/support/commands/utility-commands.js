@@ -1,55 +1,12 @@
 /* eslint-disable no-undef */
 
-// Commands
+import auk from '../../selectors/auk.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import utils from '../../selectors/utils.selectors';
 
 // ***********************************************
 
 // Functions
-/**
- * Select a date in the flatpickrCalendar
- * @memberOf Cypress.Chainable#
- * @name selectDate
- * @function
- * @param {String} year - The year that needs to be inserted in the datepicker
- * @param {String} month - the month that needs to be selected in the datepicker
- * @param {String} day - The day that needs to be selected in the datepicker
- * @param {int} index - The day that needs to be selected in the datepicker
- */
-function selectDate(year, month, day, index) {
-  cy.log('selectDate');
-  let element;
-
-  if (index !== undefined) {
-    element = cy.get(utils.vlDatepicker).eq(index)
-      .click();
-    element.get(dependency.flatpickrMonthDropdownMonths).eq(index)
-      .select(month);
-    element.get(dependency.numInputWrapper).get(dependency.inputNumInputCurYear)
-      .eq(index)
-      .clear()
-      .type(year, {
-        delay: 300,
-      });
-    element.get(dependency.flatpickrDay).should('be.visible')
-      .contains(day)
-      .click();
-  } else {
-    element = cy.get(utils.vlDatepicker).click();
-    element.get(dependency.flatpickrMonthDropdownMonths).select(month);
-    element.get(dependency.numInputWrapper)
-      .get(dependency.inputNumInputCurYear)
-      .clear()
-      .type(year, {
-        delay: 300,
-      });
-    element.get(dependency.flatpickrDay).contains(day)
-      .click();
-  }
-  cy.log('/selectDate');
-}
-
 /**
  * Validate the content of the dropdown
  * @memberOf Cypress.Chainable#
@@ -70,29 +27,91 @@ function validateDropdownElements(elementIndex, textContent) {
 }
 
 /**
- * @description Returns the current moment in Cypress
- * @name currentMoment
+ * @description Clicks on the specified reverse tab for navigating
+ * @name clickReverseTab
+ * @if class="auk-tabs auk-tabs--reversed"
  * @memberOf Cypress.Chainable#
  * @function
- * @returns {moment.Moment} The current moment
+ * @param {String} tabName The name of the tab to click on, case sensitive
  */
-function currentMoment() {
-  return Cypress.moment();
+function clickReverseTab(tabName) {
+  cy.log('clickReverseTab');
+  cy.get(auk.tabs.reversed).find(auk.tab.tab)
+    .contains(tabName)
+    .click();
+  cy.get(auk.loader).should('not.exist');
+  cy.log('/clickReverseTab');
 }
 
 /**
- * @description returns the current time in unix timestamp
- * @name currentTimestamp
+ * @description Sets the date in an **open vl-flatpickr**
+ * @name setDateInFlatpickr
  * @memberOf Cypress.Chainable#
  * @function
- * @returns {number} The current time in unix timestamp
+ * @param {Object} date the Cypress.moment with the date to set
  */
-function currentTimestamp() {
-  return Cypress.moment().unix();
+function setDateInFlatpickr(date) {
+  cy.log('setDateInFlatpickr');
+  cy.get(dependency.flatPickr.yearInput).type(date.year());
+  cy.get(dependency.flatPickr.monthSelect).select(date.month().toString());
+  cy.get(dependency.flatPickr.days).find(dependency.flatPickr.day)
+    .not(dependency.flatPickr.prevMonthDay)
+    .not(dependency.flatPickr.nextMonthDay)
+    .contains(date.date())
+    .click();
+  cy.log('/setDateInFlatpickr');
 }
 
-Cypress.Commands.add('selectDate', selectDate);
-Cypress.Commands.add('validateDropdownElements', validateDropdownElements);
+/**
+ * @description Sets the date and time in an **open vl-flatpickr**
+ * @name setDateAndTimeInFlatpickr
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {Object} date the Cypress.moment with the date to set
+ */
+function setDateAndTimeInFlatpickr(date) {
+  cy.log('setDateAndTimeInFlatpickr');
+  setDateInFlatpickr(date);
+  cy.get(dependency.flatPickr.time).within(() => {
+    cy.get(dependency.flatPickr.hour).type(date.hour());
+    cy.get(dependency.flatPickr.minute).type(date.minutes());
+  });
+  cy.log('/setDateAndTimeInFlatpickr');
+}
 
-Cypress.Commands.add('currentMoment', currentMoment);
-Cypress.Commands.add('currentTimestamp', currentTimestamp);
+/**
+ * Validate the content of the dropdown
+ * @memberOf Cypress.Chainable#
+ * @name openSettingsModal
+ * @function
+ * @param selector: selector that needs to be used.
+ */
+function openSettingsModal(selector) {
+  cy.log('openSettingsModal');
+  cy.get(selector).click();
+  cy.get(utils.vlModal.dialogWindow).should('be.visible');
+  cy.log('/openSettingsModal');
+}
+
+/**
+ * Validate the content of the dropdown
+ * @memberOf Cypress.Chainable#
+ * @name closeSettingsModal
+ * @function
+ */
+function closeSettingsModal() {
+  cy.log('closeSettingsModal');
+  cy.get(utils.vlModal.close).click();
+  cy.get(utils.vlModal.dialogWindow).should('not.be.visible');
+  cy.log('/closeSettingsModal');
+}
+
+// ***********************************************
+// Commands
+
+Cypress.Commands.add('validateDropdownElements', validateDropdownElements);
+Cypress.Commands.add('clickReverseTab', clickReverseTab);
+Cypress.Commands.add('setDateAndTimeInFlatpickr', setDateAndTimeInFlatpickr);
+Cypress.Commands.add('setDateInFlatpickr', setDateInFlatpickr);
+Cypress.Commands.add('openSettingsModal', openSettingsModal);
+Cypress.Commands.add('closeSettingsModal', closeSettingsModal);

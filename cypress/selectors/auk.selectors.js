@@ -10,12 +10,6 @@ const selectors = {
 
   /** Section for non AUK components (but have auk-like selectors) **/
 
-  // TODO-selector na refactoring naar auk::Tab herbekijken
-  // subcase-detail-nav
-  subcaseDetailNav: {
-    tabNavBack: '[data-test-auk-tab-hierarchical-back]',
-  },
-
   // TODO-selector this component is basically a link-to, refactor to au-component
   // back-button
   backButton: '[data-test-auk-back-button]',
@@ -55,13 +49,23 @@ const selectors = {
   },
 
   tab: {
+    tab: '.auk-tabs__tab',
     active: '.auk-tabs__tab--active',
     activeHref: '.auk-tabs__tab--active > *',
+    hierarchicalBack: '.auk-tabs__hierarchical-back',
+  },
+
+  tabs: {
+    reversed: '.auk-tabs--reversed',
   },
 
   /** Section single selector AUK components **/
 
-  checkbox: '.auk-checkbox',
+  checkbox: {
+    // TODO-selector unused selectors
+    container: '.auk-checkbox',
+    checkbox: '.auk-checkbox__toggle',
+  },
   loader: '.auk-loader',
   pill: '.auk-pill',
   // TODO-selector unused selectors

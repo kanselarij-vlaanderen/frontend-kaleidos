@@ -1,12 +1,11 @@
-import DS from 'ember-data';
+import Model, { belongsTo, hasMany, attr } from '@ember-data/model';
 import { computed } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { lower as lowerCaseAlphabet } from 'alphabet';
 
-const {
-  Model, attr, hasMany, belongsTo,
-} = DS;
-
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
+// eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
   toaster: service(),
   intl: service(),
@@ -51,7 +50,7 @@ export default Model.extend({
    * Using this to sort will map the priority number to the alphabet, giving a correct alphabetical sort with numbers higher than 9.
    * TODO: clean up hacky map-to-alphabet sorting
    */
-  priorityAlpha: computed('priority', function() {
+  priorityAlpha: computed('priority', 'fullDisplayName', function() {
     const priority = this.get('priority');
     if (typeof priority === 'number') {
       const alphaNumeric = lowerCaseAlphabet[priority - 1];

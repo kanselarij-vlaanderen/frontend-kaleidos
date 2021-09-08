@@ -1,8 +1,12 @@
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { cached } from 'frontend-kaleidos/decorators/cached';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   store: inject(),
   mandateeService: inject(),
@@ -36,6 +40,8 @@ export default Component.extend({
     });
   },
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     selectStartDate(val) {
       this.set('startDate', val);

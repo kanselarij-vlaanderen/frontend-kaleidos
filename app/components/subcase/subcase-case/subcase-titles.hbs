@@ -1,13 +1,15 @@
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
 <div class="auk-u-mb-2">
   <div class="auk-o-flex auk-o-flex--vertical-center">
     <h2 class="vlc-subline" data-test-subcase-titles-type>
-      {{#if (not subcase.showAsRemark)}}
+      {{#if (not this.subcase.showAsRemark)}}
         {{t "note"}}
       {{else}}
         {{t "text"}}
       {{/if}}
     </h2>
-    {{#if currentSession.isEditor}}
+    {{#if this.currentSession.isEditor}}
       <div class="auk-u-ml-2">
         <Auk::ButtonLink
           data-test-subcase-titles-edit
@@ -22,36 +24,28 @@
 
 <div class="auk-u-mb-2">
   <h4 class="auk-h3">
-    <pre class="auk-u-text-pre-line">
-      {{await subcase.shortTitle}}
-    </pre>
+    <pre class="auk-u-text-pre-line">      {{await this.subcase.shortTitle}}    </pre>
   </h4>
 </div>
 
 <div class="auk-u-mb-2">
-  <pre class="auk-o-flex--inline auk-u-text-pre-line">
-    {{await subcase.title}}
-  </pre>
+  <pre class="auk-o-flex--inline auk-u-text-pre-line">    {{await this.subcase.title}}  </pre>
 </div>
 
-{{#if (not subcase.showAsRemark)}}
+{{#if (not this.subcase.showAsRemark)}}
   <div class="auk-u-mb-2">
-    {{#if (await subcase.subcaseName)}}
+    {{#if (await this.subcase.subcaseName)}}
       <Auk::Pill
-        @skin={{await pillSkin}}
+        @skin={{await this.pillSkin}}
         class="auk-u-text-capitalize"
       >
-        {{await subcase.subcaseName}}
+        {{await this.subcase.subcaseName}}
       </Auk::Pill>
     {{/if}}
   </div>
 {{/if}}
 <div class="auk-u-mb-2">
   <div class="pill-container auk-o-flex">
-    {{#if (await subcase.confidential)}}
-      <Auk::Pill @skin="danger" @layout="icon-only" @icon="lock-closed" />
-    {{else}}
-      <Auk::Pill @skin="success" @layout="icon-only" @icon="lock-open" />
-    {{/if}}
+    <Utils::ConfidentialityPill @confidential={{await this.subcase.confidential}} />
   </div>
 </div>

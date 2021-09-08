@@ -1,3 +1,5 @@
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
 <div class="auk-u-m-8">
   {{page-title (t "manage-ministers")}}
   <div class="auk-o-flex auk-o-flex--justify-between">
@@ -11,7 +13,7 @@
       {{t "create-mandatee"}}
     </Auk::Button>
   </div>
-  {{#if (await model)}}
+  {{#if (await this.model)}}
   {{!-- "tbody" tagname in the "sortable-group"-helper --}}
   {{!-- template-lint-disable table-groups  --}}
     <table class="auk-table auk-table--striped">
@@ -59,8 +61,8 @@
       <SortableGroup
         data-test-route-settings-ministers-sortable-group
         @tagName="tbody"
-        @model={{model}}
-        @onChange={{action "reorderItems" model}}
+        @model={{this.model}}
+        @onChange={{action "reorderItems" this.model}}
       as |sortableGroup|
       >
         {{#each sortableGroup.model as |mandatee index|}}
@@ -101,18 +103,19 @@
                     </Auk::Button>
                   </Auk::Toolbar::Item>
                   <Auk::Toolbar::Item>
-                    <div class="auk-u-position-relative auk-u-inline-block">
-                      <Auk::Button
-                        @skin="borderless"
-                        @layout="icon-only"
-                        @icon="settings"
-                        {{action "toggleProperty" "isResigningMandatee" mandatee}}
-                        data-test-mandatee-route-settings-ministers-mandatee-resign={{index}}
-                      />
-                      <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
-                        {{t "resign"}}
-                      </EmberTooltip>
-                    </div>
+                    <Auk::Button
+                      @skin="borderless"
+                      @layout="icon-only"
+                      @icon="settings"
+                      {{action "toggleProperty" "isResigningMandatee" mandatee}}
+                      data-test-mandatee-route-settings-ministers-mandatee-resign={{index}}
+                    >
+                      <:floater>
+                        <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+                          {{t "resign"}}
+                        </EmberTooltip>
+                      </:floater>
+                    </Auk::Button>
                   </Auk::Toolbar::Item>
                   <Auk::Toolbar::Item>
                     <Auk::Button
@@ -132,56 +135,68 @@
     </table>
   {{!-- template-lint-enable table-groups --}}
   {{/if}}
-  {{#if isEditingMandatee}}
-    {{#web-components/vl-modal
-      isOverlay=true
-      title=(t "manage-ministers")
-      closeModal=(action "toggleProperty" "isEditingMandatee" mandateeToEdit)
-    }}
-      {{utils/manage-mandatees
-        mandateeToEdit=mandateeToEdit
-        mandateesUpdated=(action "mandateesUpdated")
-        isEditing=isEditingMandatee
-        closeModal=(action "toggleProperty" "isEditingMandatee" mandateeToEdit)
-      }}
-    {{/web-components/vl-modal}}
+  {{#if this.isEditingMandatee}}
+    <WebComponents::VlModal
+      @isOverlay={{true}}
+      @title={{t "manage-ministers"}}
+      @closeModal={{action "toggleProperty" "isEditingMandatee" this.mandateeToEdit}}
+    >
+      <Utils::ManageMandatees
+        @mandateeToEdit={{this.mandateeToEdit}}
+        @mandateesUpdated={{action "mandateesUpdated"}}
+        @isEditing={{this.isEditingMandatee}}
+        @closeModal={{action
+          "toggleProperty"
+          "isEditingMandatee"
+          this.mandateeToEdit
+        }}
+      />
+    </WebComponents::VlModal>
   {{/if}}
-  {{#if isResigningMandatee}}
-    {{#web-components/vl-modal
-      isOverlay=true
-      title=(t "manage-ministers")
-      closeModal=(action "toggleProperty" "isResigningMandatee" mandateeToEdit)
-    }}
-      {{utils/manage-mandatees
-        mandateeToEdit=mandateeToEdit
-        mandateesUpdated=(action "mandateesUpdated")
-        isResigning=isResigningMandatee
-        closeModal=(action "toggleProperty" "isResigningMandatee" mandateeToEdit)
+  {{#if this.isResigningMandatee}}
+    <WebComponents::VlModal
+      @isOverlay={{true}}
+      @title={{t "manage-ministers"}}
+      @closeModal={{action
+        "toggleProperty"
+        "isResigningMandatee"
+        this.mandateeToEdit
       }}
-    {{/web-components/vl-modal}}
+    >
+      <Utils::ManageMandatees
+        @mandateeToEdit={{this.mandateeToEdit}}
+        @mandateesUpdated={{action "mandateesUpdated"}}
+        @isResigning={{this.isResigningMandatee}}
+        @closeModal={{action
+          "toggleProperty"
+          "isResigningMandatee"
+          this.mandateeToEdit
+        }}
+      />
+    </WebComponents::VlModal>
   {{/if}}
-  {{#if isAddingMandatee}}
-    {{#web-components/vl-modal
-      isOverlay=true
-      title=(t "manage-ministers")
-      closeModal=(action "toggleIsAdding")
-    }}
-      {{utils/create-mandatee
-        model=model
-        closeModal=(action "toggleIsAdding")
-        mandateesUpdated=(action "mandateesUpdated")
-      }}
-    {{/web-components/vl-modal}}
+  {{#if this.isAddingMandatee}}
+    <WebComponents::VlModal
+      @isOverlay={{true}}
+      @title={{t "manage-ministers"}}
+      @closeModal={{action "toggleIsAdding"}}
+    >
+      <Utils::CreateMandatee
+        @model={{this.model}}
+        @closeModal={{action "toggleIsAdding"}}
+        @mandateesUpdated={{action "mandateesUpdated"}}
+      />
+    </WebComponents::VlModal>
   {{/if}}
-  {{#if isDeletingMandatee}}
-    {{web-components/vl-modal-verify
-      title=(t "warning-title")
-      verifyButtonText=(t "delete")
-      message=(t "delete-mandatee-message")
-      cancel=(action "cancel")
-      verify=(action "deleteMandatee")
-      mandateesUpdated=(action "mandateesUpdated")
-    }}
+  {{#if this.isDeletingMandatee}}
+    <WebComponents::VlModalVerify
+      @title={{t "warning-title"}}
+      @verifyButtonText={{t "delete"}}
+      @message={{t "delete-mandatee-message"}}
+      @cancel={{action "cancel"}}
+      @verify={{action "deleteMandatee"}}
+      @mandateesUpdated={{action "mandateesUpdated"}}
+    />
   {{/if}}
   {{outlet}}
 </div>

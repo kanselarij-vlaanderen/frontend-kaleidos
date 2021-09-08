@@ -31,7 +31,7 @@
           id="emailFooter"
           @rows="15"
           @value={{await this.footer}}
-          {{on "change" (fn this.setFooterContent)}}
+          {{on "change" this.setFooterContent}}
           data-test-email-content-textarea
         />
       </Auk::Panel::Body>
@@ -63,7 +63,6 @@
             {{t "email-to"}}
           </Auk::Label>
           <Auk::Input
-            type="text"
             @value={{ await email.to }}
             @block={{true}}
             {{on "change" (fn this.setMailTo email)}}
@@ -75,7 +74,6 @@
             {{t "subject"}}
           </Auk::Label>
           <Auk::Input
-            type="text"
             @value={{ await email.subject }}
             @block={{true}}
             {{on "change" (fn this.setMailSubject email)}}
