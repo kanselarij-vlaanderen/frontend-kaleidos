@@ -746,6 +746,7 @@
   "upload-docx": "Upload Word versie",
   "delete-folder": "Map verwijderen",
   "view-document-details": "Bekijk document",
+  "view-documents-details": "Bekijk documenten",
   "publication-number-already-taken": "Het gekozen publicatienummer is reeds in gebruik. Gelieve een andere te kiezen of een suffix te gebruiken.",
   "publication-number-already-taken-with-params": "Het publicatienummer {number} {suffix} is reeds in gebruik. Gebruik een andere nummer of suffix om door te gaan.",
   "without-suffix": "zonder suffix",

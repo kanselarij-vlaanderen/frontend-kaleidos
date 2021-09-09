@@ -5,14 +5,15 @@ import { tracked } from '@glimmer/tracking';
 import { timeout } from 'ember-concurrency';
 import { task } from 'ember-concurrency-decorators';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
-import { Row } from './row-piece';
+import { Row } from './document-details-row';
 
 
 /**
  * @argument {Piece[]} pieces includes: documentContainer,accessLevel
  */
-export default class BatchDocumentsModal extends Component {
+export default class BatchDocumentsDetailsModal extends Component {
   @service store;
+  @service currentSession;
 
   @tracked rows;
   @tracked selectedRows = [];
@@ -22,17 +23,19 @@ export default class BatchDocumentsModal extends Component {
 
   constructor() {
     super(...arguments);
-
     this.initRows.perform();
-    this.loadData.perform();
   }
 
   get isLoading() {
-    return this.initRows.isRunning || this.loadData.isRunning;
+    return this.initRows.isRunning
   }
 
   get isSaveDisabled() {
     return this.isLoading || this.save.isRunning;
+  }
+
+  get isEditingEnabled(){
+    return this.currentSession.isEditor;
   }
 
   @task
@@ -50,32 +53,6 @@ export default class BatchDocumentsModal extends Component {
         return row;
       })
     );
-  }
-
-  @task
-  *loadData() {
-    // yield Promise.all([
-    //   AccessLevelsDataSource.create(this.store).then(
-    //     (source) => (this.accessLevelSource = source)
-    //   ),
-    //   DocumentTypesDataSource.create(this.store).then(
-    //     (source) => (this.documentTypes = source)
-    //   ),
-    //   // this.loadDocumentTypes.perform().then((documentTypes) => this.documentTypes = documentTypes),
-    //
-    //   // this.loadAccessLevels.perform().then((accessLevels) => this.accessLevels = accessLevels)
-    // ]);
-  }
-
-  // TODO: delete
-  @task
-  *loadDocumentTypes() {
-    return yield this.queryDocumentTypes.perform();
-  }
-
-  @task
-  *loadAccessLevels() {
-    return yield this.queryAccessLevels.perform();
   }
 
   @task

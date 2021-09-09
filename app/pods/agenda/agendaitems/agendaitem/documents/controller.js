@@ -24,7 +24,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service intl;
   @service agendaService;
 
-  @tracked isEnabledPieceEdit = false;
+  @tracked showBatchDetails = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked defaultAccessLevel;
   @tracked newPieces = A([]);
@@ -57,17 +57,6 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
       this.newAgendaitemPieces = yield this.agendaService.changedPieces(this.currentAgenda.id,
         this.previousAgenda.id, this.agendaitem.id);
     }
-  }
-
-  @action
-  async enablePieceEdit() {
-    await this.ensureFreshData.perform();
-    this.isEnabledPieceEdit = true;
-  }
-
-  @action
-  disablePieceEdit() {
-    this.isEnabledPieceEdit = false;
   }
 
   @action
@@ -219,8 +208,14 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   }
 
   @action
-  cancelPieceEdit() {
-    this.isEnabledPieceEdit = false;
+  async openBatchDetails() {
+    await this.ensureFreshData.perform();
+    this.showBatchDetails = true;
+  }
+
+  @action
+  closeBatchDetails() {
+    this.showBatchDetails = false;
   }
 
   @action

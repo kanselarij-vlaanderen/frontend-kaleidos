@@ -32,7 +32,7 @@ export class Row {
   }
 }
 
-export default class RowPieceComponent extends Component {
+export default class DocumentDetailsRow extends Component {
   @action
   onInputConfidential(event) {
     const confidential = event.target.checked;

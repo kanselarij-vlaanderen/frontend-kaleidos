@@ -82,7 +82,7 @@ class BatchRow {
   }
 }
 
-export default class RowPieceComponent extends Component {
+export default class BatchEditingRow extends Component {
   constructor() {
     super(...arguments);
     this.batch = new BatchRow(this.args.selectedRows);
