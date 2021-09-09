@@ -10,7 +10,7 @@ export default class Person extends Model {
   @belongsTo('contact-person') contactPerson;
   @belongsTo('organization') organization;
   @hasMany('mandatee') mandatees;
-  @hasMany signFlows;
+  @hasMany('sign-flow') signFlows;
 
   get nameToDisplay() {
     const {

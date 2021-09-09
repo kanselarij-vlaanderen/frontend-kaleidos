@@ -23,5 +23,5 @@ export default Model.extend({
     });
   }),
   publicationFlows: hasMany('publication-flow'),
-  signFlows: hasMany(),
+  signFlows: hasMany('sign-flow'),
 });

@@ -6,9 +6,9 @@ export default class SignFlowModel extends Model {
   @attr('date') openingDate;
   @attr('date') closingDate;
 
-  @belongsTo regulationType;
-  @belongsTo case;
-  @belongsTo signSubcase;
+  @belongsTo('sign-subcase') signSubcase;
+  @belongsTo('regulation-type') regulationType;
+  @belongsTo('case') case;
   @belongsTo('agenda-item-treatment') decisionActivity; // TODO: split in decide-activity & agenda-item-treatment
   @belongsTo('person') creator;
 }

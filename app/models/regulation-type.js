@@ -8,6 +8,6 @@ export default class RegulationType extends Model {
   @attr('string') altLabel; // empty in data
   @attr('number') position;
 
-  @hasMany publicationFlows;
-  @hasMany signFlows;
+  @hasMany('publication-flow') publicationFlows;
+  @hasMany('sign-flow') signFlows;
 }

@@ -5,7 +5,7 @@ export default class SignCompletionActivityModel extends Model {
   @attr('datetime') startDate;
   @attr('datetime') endDate;
 
-  @belongsTo signSubcase;
-  @belongsTo signedPiece;
-  @hasMany signSigningActivities;
+  @belongsTo('sign-subcase') signSubcase;
+  @hasMany('sign-signing-activity') signSigningActivities;
+  @belongsTo('signed-piece') signedPiece;
 }
