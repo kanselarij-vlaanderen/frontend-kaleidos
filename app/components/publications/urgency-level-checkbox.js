@@ -10,8 +10,8 @@ export default class UrgencyLevelCheckboxComponent extends Component {
   @tracked urgencyLevels = this.store.peekAll('urgency-level').sortBy('position')
 
   @action
-  toggleUrgency(value) {
-    const uri = value ? CONSTANTS.URGENCY_LEVELS.SPEEDPROCEDURE : CONSTANTS.URGENCY_LEVELS.STANDARD;
+  toggleUrgency(event) {
+    const uri = event.target.checked ? CONSTANTS.URGENCY_LEVELS.SPEEDPROCEDURE : CONSTANTS.URGENCY_LEVELS.STANDARD;
     const urgencyLevel = this.urgencyLevels.find((level) => level.uri === uri);
     this.args.onChange(urgencyLevel);
   }
