@@ -13,6 +13,7 @@ import { sortPieces } from 'frontend-kaleidos/utils/documents';
 export default class BatchDocumentsDetailsModal extends Component {
   @service store;
   @service currentSession;
+  @service fileService;
 
   @tracked rows;
   @tracked selectedRows = [];
@@ -66,8 +67,9 @@ export default class BatchDocumentsDetailsModal extends Component {
         row.accessLevel = piece.accessLevel;
         row.confidential = piece.confidential;
 
-        const docContainer = await piece.documentContainer;
-        row.documentType = docContainer.type;
+        row.documentContainer = await piece.documentContainer;
+
+        row.documentType = row.documentContainer.type;
 
         return row;
       })
@@ -103,10 +105,14 @@ export default class BatchDocumentsDetailsModal extends Component {
     const saves = this.rows.map(async(row) => {
       const piece = row.piece;
       if (row.isToBeDeleted) {
-        piece.destroyRecord();
-        piece.file.destroyRecord();
-        // TODO: documentContainer destroy
-        // and use fileService
+        this.fileService.deletePiece(piece)
+
+        const piecesInContainer = await row.documentContainer.pieces;
+        if (piecesInContainer.length === 1){
+          this.fileService.deleteDocumentContainer(row.documentContainer);
+        }
+        //TODO delete from agenda item
+
       } else {
         piece.name = row.name;
         piece.confidential = row.confidential;
@@ -126,5 +132,6 @@ export default class BatchDocumentsDetailsModal extends Component {
       }
     });
     yield Promise.all(saves);
+    this.args.onClose();
   }
 }

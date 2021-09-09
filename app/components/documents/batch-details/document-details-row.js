@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 
 export class Row {
   piece;
+  documentContainer;
 
   @tracked name;
   @tracked documentType;
