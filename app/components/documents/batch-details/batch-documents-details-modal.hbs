@@ -38,7 +38,7 @@
     </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onClose}}>
-    {{#if this.hasEditingPermission}}
+    {{#if this.isEditingEnabled}}
       <Auk::Button
         @skin="primary"
         @disabled={{this.isSaveDisabled}}

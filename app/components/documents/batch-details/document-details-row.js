@@ -34,7 +34,7 @@ export class Row {
 
 export default class DocumentDetailsRow extends Component {
   @action
-  onInputConfidential(event) {
+  toggleConfidential(event) {
     const confidential = event.target.checked;
     this.args.row.setConfidential(confidential);
   }
