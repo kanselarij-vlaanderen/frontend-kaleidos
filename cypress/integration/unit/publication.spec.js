@@ -1,10 +1,26 @@
-/* global context, it, cy,beforeEach, afterEach */
+/* global context, it, cy, beforeEach, afterEach, Cypress */
 
 // / <reference types="Cypress" />
+import dependency from '../../selectors/dependency.selectors';
 import publication from '../../selectors/publication.selectors';
 import auk from '../../selectors/auk.selectors';
 
 context('Publications tests', () => {
+  function checkIfNewPublicationFieldsAreEmpty(number, currentDate) {
+    cy.get(publication.newPublication.number).should('not.contain', number);
+    // "beslissingsdatum"
+    cy.get(auk.datepicker).eq(0)
+      .should('be.empty');
+    // "ontvangstdatum"
+    cy.get(auk.datepicker).eq(1)
+      .should('have.value', currentDate);
+    // "uiterste datum publicatie"
+    cy.get(auk.datepicker).eq(2)
+      .should('be.empty');
+    cy.get(publication.newPublication.shortTitle).should('be.empty');
+    cy.get(publication.newPublication.longTitle).should('be.empty');
+  }
+
   beforeEach(() => {
     cy.server();
     cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
@@ -61,35 +77,80 @@ context('Publications tests', () => {
   });
 
   it('should clear input data when closing and reopening modal to create new publication', () => {
-    // TODO-publication also test if errors are correctly reset after cancel / new creation
-    const number = 999;
-    const someText = 'Some text';
+    const fields = {
+      number: 999,
+      suffix: 'BIS',
+      decisionDate: Cypress.moment().add(1, 'weeks')
+        .day(3),
+      receptionDate: Cypress.moment().add(1, 'weeks')
+        .day(3),
+      targetPublicationdate: Cypress.moment().add(1, 'weeks')
+        .day(3),
+      shortTitle: 'Some text',
+      longTitle: 'Some text',
+    };
+    const currentDate = Cypress.moment().format('DD-MM-YYYY');
+
+    // error validation (and reset after cancel)
     cy.get(publication.publicationsIndex.newPublication).click();
-    cy.get(publication.newPublication.suffix).should('be.empty');
-    cy.get(publication.newPublication.longTitle).should('be.empty');
-    cy.get(publication.newPublication.number)
-      .click()
-      .clear()
-      .type(number);
-    cy.get(publication.newPublication.shortTitle)
-      .click()
-      .type(someText);
-    // TODO-publication also test close button
+    cy.get(publication.newPublication.number).click()
+      .clear();
+    cy.get(publication.newPublication.shortTitle).should('be.empty');
+    cy.get(publication.newPublication.create).click();
+    cy.get(publication.newPublication.alertError).should('exist');
+    cy.get(publication.newPublication.numberError).should('exist');
+    cy.get(publication.newPublication.shortTitleError).should('exist');
     cy.get(auk.modal.footer.cancel).click();
     cy.get(publication.publicationsIndex.newPublication).click();
-    // TODO-publication check the other fields
-    cy.get(publication.newPublication.number).should('not.contain', number);
-    cy.get(publication.newPublication.shortTitle).should('not.contain', someText);
+    cy.get(publication.newPublication.alertInfo).should('exist');
+    cy.get(publication.newPublication.alertError).should('not.exist');
+    cy.get(publication.newPublication.numberError).should('not.exist');
+    cy.get(publication.newPublication.shortTitleError).should('not.exist');
+
+    // check reset after cancel
+    cy.fillInNewPublicationFields(fields);
+    cy.get(auk.modal.footer.cancel).click();
+    cy.get(publication.publicationsIndex.newPublication).click();
+    checkIfNewPublicationFieldsAreEmpty(fields.number, currentDate);
+
+    // check reset after close
+    cy.fillInNewPublicationFields(fields);
+    cy.get(auk.modal.header.close).click();
+    cy.get(publication.publicationsIndex.newPublication).click();
+    checkIfNewPublicationFieldsAreEmpty(fields.number, currentDate);
   });
 
   it('should edit inscription and this data must be visible in the overview', () => {
-    const pubNumber = 200;
-    const shortTitle = 'Korte titel cypress test';
+    const fields = {
+      number: 200,
+      shortTitle: 'Korte titel cypress test',
+      longTitle: 'Lange titel voor de cypress test.',
+    };
     const shortTitleEdit = 'Korte titel cypress test gewijzigd';
-    const longTitle = 'Lange titel voor de cypress test.';
     const longTitleEdit = 'Lange titel voor de cypress test gewijzigd.';
     cy.route('GET', '/publication-flows/**').as('getNewPublicationDetail');
-    cy.createPublication(pubNumber, null, shortTitle, longTitle);
+    cy.createPublication(fields);
+
+    // error validation and reset after cancel
+    cy.get(publication.inscription.view.edit).click();
+    cy.get(publication.inscription.edit.shortTitle).click()
+      .clear();
+    cy.get(publication.inscription.edit.save).click();
+    cy.get(publication.inscription.edit.shortTitleError).should('exist');
+    cy.get(publication.inscription.edit.cancel).click();
+    cy.get(publication.inscription.view.edit).click();
+    cy.get(publication.inscription.edit.shortTitleError).should('not.exist');
+    cy.get(publication.inscription.edit.shortTitle).click()
+      .clear()
+      .type(shortTitleEdit);
+    cy.get(publication.inscription.edit.longTitle).click()
+      .clear()
+      .type(longTitleEdit);
+    cy.get(publication.inscription.edit.cancel).click();
+    cy.get(publication.inscription.view.shortTitle).should('contain', fields.shortTitle);
+    cy.get(publication.inscription.view.longTitle).should('contain', fields.longTitle);
+
+    // edit
     cy.get(publication.inscription.view.edit).click();
     cy.get(publication.inscription.edit.shortTitle).click()
       .clear()
@@ -97,7 +158,6 @@ context('Publications tests', () => {
     cy.get(publication.inscription.edit.longTitle).click()
       .clear()
       .type(longTitleEdit);
-
     cy.route('PATCH', '/publication-flows/**').as('patchPublicationFlow');
     cy.get(publication.inscription.edit.save).click();
     cy.wait('@patchPublicationFlow');
@@ -122,6 +182,7 @@ context('Publications tests', () => {
       org: 'US and A',
     };
 
+    // TODO open publication (with index)
     cy.route('GET', '/publication-flows/**').as('getNewPublicationDetail');
     cy.get(publication.publicationTableRow.row.goToPublication).first()
       .click();
@@ -130,7 +191,7 @@ context('Publications tests', () => {
     // Assert empty.
     cy.get(auk.emptyState.message).contains(noContactPersons);
 
-    // Add contactperson.
+    // Add contactperson data.
     cy.get(publication.contactPersons.add).click();
     cy.get(auk.modal.container).should('exist');
     cy.get(publication.contactPersonAdd.firstName).clear()
@@ -139,6 +200,21 @@ context('Publications tests', () => {
       .type(contactperson.lan);
     cy.get(publication.contactPersonAdd.email).clear()
       .type(contactperson.eml);
+
+    // Add organization, test rollback after cancel
+    cy.get(publication.contactPersonAdd.addOrganization).click();
+    cy.get(publication.organizationAdd.name).click()
+      .type(contactperson.org);
+    cy.get(publication.organizationAdd.cancel).click();
+    cy.get(publication.contactPersonAdd.selectOrganization).click();
+    cy.get(dependency.emberPowerSelect.option).contains(contactperson.org)
+      .should('not.exist');
+    cy.get(publication.contactPersonAdd.addOrganization).click();
+    cy.get(publication.organizationAdd.name).click()
+      .type(contactperson.org);
+    cy.route('POST', '/organizations').as('postOrganizations');
+    cy.get(publication.organizationAdd.submit).click();
+    cy.wait('@postOrganizations');
 
     // Click submit.
     cy.route('POST', '/persons').as('postPerson');
@@ -150,6 +226,7 @@ context('Publications tests', () => {
 
     cy.get(publication.contactPersons.row.fullName).contains(contactperson.fin)
       .contains(contactperson.lan);
+    cy.get(publication.contactPersons.row.organizationName).contains(contactperson.org);
     cy.get(publication.contactPersons.row.email).contains(contactperson.eml);
 
     // Delete contact person
