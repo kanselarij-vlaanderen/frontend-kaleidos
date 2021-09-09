@@ -1,22 +1,28 @@
-<tr>
-  <td
-    class="auk-table-checkbox-col"
-    style={{if @row.isToBeDeleted "opacity: 0.5;"}}
-  >
-    <Auk::Checkbox
-      @checked={{@isSelected}}
-      {{on "input" (fn @onSelect @row)}}
-    />
+<tr style={{if @row.isToBeDeleted "opacity: 0.5;"}}>
+  {{#if @isEditingEnabled}}
+    <td
+      class="auk-table-checkbox-col"
+    >
+      <Auk::Checkbox
+        @checked={{@isSelected}}
+        {{on "input" (fn @onSelect @row)}}
+      />
+    </td>
+  {{/if}}
+  <td>
+    {{#if @isEditingEnabled}}
+      <Auk::Input
+        type="text"
+        @block={{true}}
+        @value={{mut @row.name}}
+      />
+      {{else}}
+      {{@row.name}}
+    {{/if}}
+
   </td>
-  <td style={{if @row.isToBeDeleted "opacity: 0.5;"}}>
-    <Auk::Input
-      type="text"
-      @block={{true}}
-      @value={{mut @row.name}}
-      @onChange={{this.noop}}
-    />
-  </td>
-  <td style={{if @row.isToBeDeleted "opacity: 0.5;"}}>
+  <td>
+    {{#if @isEditingEnabled}}
       <Utils::ModelSelector
         @modelName="document-type"
         @allowClear={{true}}
@@ -24,46 +30,61 @@
         @propertyToShow="label"
         @sortField="priority"
         @selectedItems={{@row.documentType}}
-        @selectModel={{fn this.setDocumentType (array @row)}}
+        @selectModel={{@row.setDocumentType}}
       />
-
+    {{else}}
+      {{@row.documentType.label}}
+    {{/if}}
   </td>
-  <td style={{if @row.isToBeDeleted "opacity: 0.5;"}}>
-    <Utils::ModelSelector
-      @modelName="access-level"
-      @allowClear={{true}}
-      @hideSearch={{true}}
-      @propertyToShow="label"
-      @sortField="priority"
-      @selectedItems={{@row.accessLevel}}
-      @selectModel={{@row.setAccessLevel}}
-    />
-  </td>
-  <td
-    style={{if @row.isToBeDeleted "opacity: 0.5"}}
-    class="auk-table-checkbox-col"
-  >
-    <Auk::Checkbox
-      @value={{@row.confidential}}
-      {{on "input" this.onInputConfidential}}
-    />
-  </td>
+  {{#if @isEditingEnabled}}
+    <td>
+      <Utils::ModelSelector
+        @modelName="access-level"
+        @allowClear={{true}}
+        @hideSearch={{true}}
+        @propertyToShow="label"
+        @sortField="priority"
+        @selectedItems={{@row.accessLevel}}
+        @selectModel={{@row.setAccessLevel}}
+      />
+    </td>
+    <td
+      class="auk-table-checkbox-col"
+    >
+      <Auk::Checkbox
+        @value={{@row.confidential}}
+        {{on "input" this.toggleConfidential}}
+      />
+    </td>
+  {{else}}
+    <td>
+      <Utils::Documents::FileTypePill @extension={{@row.piece.file.extension}} />
+    </td>
+  {{/if}}
   <td>
     <WebComponents::AuButtonToolbar>
-      {{#if @row.isToBeDeleted}}
+      {{#if (not @isEditingEnabled)}}
         <Auk::Button
-          @icon="delete"
           @layout="icon-only"
-          @skin="danger-borderless"
-          {{on "click" (fn @row.setToBeDeleted true)}}
+          @icon="book"
+          @skin="borderless"
+          @href={{@row.piece.viewDocumentURL}}
+          target="_blank"
         />
-      {{else}}
+      {{else if @row.isToBeDeleted}}
         <Auk::Button
           @icon="redo"
           @layout="icon-only"
           @skin="borderless"
           {{on "click" (fn @row.setToBeDeleted false)}}
         />
+      {{else}}
+        <Auk::Button
+        @icon="delete"
+        @layout="icon-only"
+        @skin="danger-borderless"
+        {{on "click" (fn @row.setToBeDeleted true)}}
+      />
       {{/if}}
     </WebComponents::AuButtonToolbar>
   </td>
