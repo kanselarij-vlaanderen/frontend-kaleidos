@@ -83,6 +83,7 @@
     @cancelDisabled={{this.isCancelDisabled}}
     @onCancel={{perform this.cancel}}>
     <Auk::Button
+      data-test-publication-documents-upload-modal-save
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
       @loading={{this.save.isRunning}}

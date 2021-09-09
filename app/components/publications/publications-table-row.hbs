@@ -2,12 +2,13 @@
 request the whole row and not only the arrow at the end to be clickable }}
 {{! template-lint-disable no-invalid-interactive }}
 <tr
+  data-test-publication-table-row
   class="auk-table--interaction-cursor"
   {{on "click" (fn this.navigateToPublication @publicationFlow)}}
 >
   {{! template-lint-enable no-invalid-interactive }}
   {{#if @tableColumnDisplayOptions.shortTitle}}
-    <td class="auk-table__col--6">
+    <td data-test-publication-table-row-short-title class="auk-table__col--6">
       <Auk::AbbreviatedText
         @text={{@publicationFlow.shortTitle}}
         @maxLength={{150}}
@@ -50,7 +51,7 @@ request the whole row and not only the arrow at the end to be clickable }}
     </td>
   {{/if}}
   {{#if @tableColumnDisplayOptions.publicationNumber}}
-    <td>
+    <td data-test-publication-table-row-number>
       {{#if @publicationFlow.identification.idName}}
         {{@publicationFlow.identification.idName}}
       {{else}}
@@ -60,7 +61,9 @@ request the whole row and not only the arrow at the end to be clickable }}
   {{/if}}
   {{#if @tableColumnDisplayOptions.regulationType}}
     <td class="auk-u-text-nowrap">
-      {{#if @publicationFlow.regulationType}}
+      {{#if @publicationFlow.regulationType.abbreviation}}
+        {{@publicationFlow.regulationType.abbreviation}}
+      {{else if @publicationFlow.regulationType}}
         {{@publicationFlow.regulationType.label}}
       {{else}}
         {{t "dash"}}
@@ -235,7 +238,7 @@ request the whole row and not only the arrow at the end to be clickable }}
       @icon="chevron-right"
       @route="publications.publication"
       @model={{@publicationFlow.id}}
-      data-test-publications-button-go-to-publication
+      data-test-publication-table-row-go-to-publication
     />
   </td>
 </tr>
