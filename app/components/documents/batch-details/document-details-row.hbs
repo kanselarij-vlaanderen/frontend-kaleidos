@@ -1,8 +1,6 @@
 <tr style={{if @row.isToBeDeleted "opacity: 0.5;"}}>
   {{#if @isEditingEnabled}}
-    <td
-      class="auk-table-checkbox-col"
-    >
+    <td class="auk-table-checkbox-col">
       <Auk::Checkbox
         @checked={{@isSelected}}
         {{on "input" (fn @onSelect @row)}}
@@ -11,15 +9,10 @@
   {{/if}}
   <td>
     {{#if @isEditingEnabled}}
-      <Auk::Input
-        type="text"
-        @block={{true}}
-        @value={{mut @row.name}}
-      />
-      {{else}}
+      <Auk::Input type="text" @block={{true}} @value={{mut @row.name}} />
+    {{else}}
       {{@row.name}}
     {{/if}}
-
   </td>
   <td>
     {{#if @isEditingEnabled}}
@@ -48,9 +41,7 @@
         @selectModel={{@row.setAccessLevel}}
       />
     </td>
-    <td
-      class="auk-table-checkbox-col"
-    >
+    <td class="auk-table-checkbox-col">
       <Auk::Checkbox
         @value={{@row.confidential}}
         {{on "input" this.toggleConfidential}}
@@ -58,7 +49,9 @@
     </td>
   {{else}}
     <td>
-      <Utils::Documents::FileTypePill @extension={{@row.piece.file.extension}} />
+      <Utils::Documents::FileTypePill
+        @extension={{@row.piece.file.extension}}
+      />
     </td>
   {{/if}}
   <td>
@@ -80,11 +73,11 @@
         />
       {{else}}
         <Auk::Button
-        @icon="delete"
-        @layout="icon-only"
-        @skin="danger-borderless"
-        {{on "click" (fn @row.setToBeDeleted true)}}
-      />
+          @icon="delete"
+          @layout="icon-only"
+          @skin="danger-borderless"
+          {{on "click" (fn @row.setToBeDeleted true)}}
+        />
       {{/if}}
     </WebComponents::AuButtonToolbar>
   </td>

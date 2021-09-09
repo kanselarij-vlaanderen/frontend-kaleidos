@@ -12,6 +12,7 @@
         <Auk::Toolbar::Item>
         {{#if this.currentSession.isEditor}}
           <Auk::Button
+            @icon="edit"
             {{on "click" this.openBatchDetails}}
           >
             {{t "edit"}}

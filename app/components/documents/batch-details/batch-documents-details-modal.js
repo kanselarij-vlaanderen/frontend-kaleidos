@@ -2,10 +2,9 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { timeout } from 'ember-concurrency';
 import { task } from 'ember-concurrency-decorators';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { Row } from './document-details-row';
+import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
 
 /**
@@ -17,9 +16,6 @@ export default class BatchDocumentsDetailsModal extends Component {
 
   @tracked rows;
   @tracked selectedRows = [];
-  @tracked documentTypes;
-  @tracked accessLevelSource;
-  @tracked accessLevels;
 
   constructor() {
     super(...arguments);
@@ -27,62 +23,55 @@ export default class BatchDocumentsDetailsModal extends Component {
   }
 
   get isLoading() {
-    return this.initRows.isRunning
+    return this.initRows.isRunning;
   }
 
   get isSaveDisabled() {
     return this.isLoading || this.save.isRunning;
   }
 
-  get isEditingEnabled(){
+  get isEditingEnabled() {
     return this.currentSession.isEditor;
   }
 
   @task
-  *initRows() {
+  * initRows() {
+    const documentsByContainer = new Map();
+    for (const piece of this.args.pieces) {
+      const container = yield piece.documentContainer;
+      if (documentsByContainer.has(container)) {
+        documentsByContainer.get(container)
+          .push(piece);
+      } else {
+        documentsByContainer.set(container, [piece]);
+      }
+    }
+
+    for (const key of documentsByContainer.keys()) {
+      const documents = documentsByContainer.get(key);
+      const sortedDocuments = sortPieces(documents);
+      documentsByContainer.set(key, sortedDocuments);
+    }
+
+    const latestDocs = [];
+    for (const docs of documentsByContainer.values()) {
+      latestDocs.push(docs[0]);
+    }
+
     this.rows = yield Promise.all(
-      this.args.pieces.map(async (piece) => {
+      latestDocs.map(async(piece) => {
         const row = new Row();
         row.piece = piece;
-
         row.name = piece.name;
-        const docContainer = await piece.documentContainer;
-        row.documentType = docContainer.type;
         row.accessLevel = piece.accessLevel;
         row.confidential = piece.confidential;
+
+        const docContainer = await piece.documentContainer;
+        row.documentType = docContainer.type;
+
         return row;
       })
     );
-  }
-
-  @task
-  *queryDocumentTypes(searchTerm) {
-    const query = {
-      page: {
-        size: PAGE_SIZE.SELECT,
-      },
-      sort: 'priority',
-    };
-    if (searchTerm) {
-      query['filter[label]'] = searchTerm;
-    }
-
-    return yield this.store.query('document-type', query);
-  }
-
-  @task
-  *queryAccessLevels(searchTerm) {
-    const query = {
-      page: {
-        size: PAGE_SIZE.SELECT,
-      },
-      sort: 'priority',
-    };
-    if (searchTerm) {
-      query['filter[label]'] = searchTerm;
-    }
-
-    return yield this.store.query('access-level', query);
   }
 
   get areAllSelected() {
@@ -108,63 +97,10 @@ export default class BatchDocumentsDetailsModal extends Component {
     }
   }
 
-  @task
-  *searchDocumentTypes(searchTerm) {
-    yield timeout(300);
-    return yield this.queryDocumentTypes.perform(searchTerm);
-  }
-
-  @action
-  setDocumentType(row, documentType) {
-    row.documentType = documentType;
-  }
 
   @task
-  *searchAccessLevels(searchTerm) {
-    yield timeout(300);
-    return yield this.queryAccessLevels.perform(searchTerm);
-  }
-
-  @action
-  setAccessLevel(rows, accessLevel) {
-    // // allow call with row as parameter
-    // if (!Array.isArray(rows)) {
-    //   rows = [rows];
-    // }
-
-    for (const row of rows) {
-      row.accessLevel = accessLevel;
-    }
-  }
-
-  @action
-  onInputConfidential(rows, event) {
-    // // allow call with row as parameter
-    // if (!Array.isArray(rows)) {
-    //   rows = [rows];
-    // }
-
-    const checked = event.target.checked;
-    for (const row of rows) {
-      row.confidential = checked;
-    }
-  }
-
-  @action
-  setToBeDeleted(rows, isToBeDeleted) {
-    // // allow call with row as parameter
-    // if (!Array.isArray(rows)) {
-    //   rows = [rows];
-    // }
-
-    for (const row of rows) {
-      row.isToBeDeleted = isToBeDeleted;
-    }
-  }
-
-  @task
-  *save() {
-    const saves = this.rows.map(async (row) => {
+  * save() {
+    const saves = this.rows.map(async(row) => {
       const piece = row.piece;
       if (row.isToBeDeleted) {
         piece.destroyRecord();
