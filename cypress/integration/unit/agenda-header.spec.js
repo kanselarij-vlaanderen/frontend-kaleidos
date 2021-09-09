@@ -54,8 +54,8 @@ context('Agenda-Header actions tests', () => {
 
   it('stress test action approveAndCloseAgenda / deleteAgenda / reopenAgenda', () => {
     // agenda with 2 agendaitems
-    cy.visitAgendaWithLink('/vergadering/5EB287CDF359DD0009000008/agenda/c7b045ce-3976-459c-aeaa-d0e8597b96d8/agendapunten');
-    cy.approveDesignAgenda();
+    cy.visitAgendaWithLink('/vergadering/5EB287CDF359DD0009000008/agenda/5EB287CFF359DD0009000009/agendapunten');
+    cy.changeSelectedAgenda('Ontwerpagenda');
     for (let int = 0; int < amountToRun; int++) {
       cy.get(agenda.agendaSideNav.agenda).should('have.length', 2);
       cy.agendaNameExists('B');
@@ -99,7 +99,7 @@ context('Agenda-Header actions tests', () => {
 
   it('stress test action closeAgenda / reopenAgenda', () => {
     // agenda with 2 agendaitems
-    cy.visitAgendaWithLink('/vergadering/5EB287CDF359DD0009000008/agenda/c7b045ce-3976-459c-aeaa-d0e8597b96d8/agendapunten');
+    cy.visitAgendaWithLink('/vergadering/5EB287CDF359DD0009000008/agenda/5EB287CFF359DD0009000009/agendapunten');
     cy.changeSelectedAgenda('Ontwerpagenda');
     for (let int = 0; int < amountToRun; int++) {
       cy.get(agenda.agendaSideNav.agenda).should('have.length', 2);
@@ -136,7 +136,8 @@ context('Agenda-Header actions tests', () => {
 
   it('should perform action delete agenda with agendaitems on designagenda', () => {
     cy.login('Admin');
-    cy.visitAgendaWithLink('/vergadering/5EB287CDF359DD0009000008/agenda/c7b045ce-3976-459c-aeaa-d0e8597b96d8/agendapunten');
+    cy.visitAgendaWithLink('/vergadering/5EB287CDF359DD0009000008/agenda/5EB287CFF359DD0009000009/agendapunten');
+    cy.changeSelectedAgenda('Ontwerpagenda');
     // verify agenda B has agendaitem
     cy.openDetailOfAgendaitem('Cypress test: delete agenda - 1588758436');
     cy.deleteAgenda();
