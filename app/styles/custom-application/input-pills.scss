@@ -3,11 +3,11 @@
 
 .emberTagInput {
   @extend .auk-input;
-  @extend .auk-input--block;
-
   @extend .auk-filter-pill-list;
 
-  .emberTagInput--readOnly {}
+  width: 100%;
+
+  // .emberTagInput--readOnly {}
 
   li.emberTagInput-tag {
     @extend .auk-filter-pill;
@@ -48,6 +48,11 @@
 
   input.emberTagInput-input {
     border: none;
+    padding: 0;
+
+    font-family: flanders-sans, sans-serif;
+    font-size: 1.5rem;
+    color: $au-gray-800;
   }
 
   input.emberTagInput-input:focus {

@@ -23,7 +23,6 @@
                   {{t "name"}}
                 </Auk::Label>
                 <Auk::Input
-                  type="text"
                   id="nameDocumentUpload"
                   @value={{mut this.name}}
                   {{on "input" this.validators.name.enableError}}
@@ -43,7 +42,7 @@
                           {{t "pages-amount"}}
                         </Auk::Label>
                         <Auk::Input
-                          type="number"
+                          @type="number"
                           id="translationLoadPages"
                           @value={{mut this.pagesAmount}}
                         />
@@ -55,7 +54,7 @@
                           {{t "words-amount"}}
                         </Auk::Label>
                         <Auk::Input
-                          type="number"
+                          @type="number"
                           id="translationLoadWords"
                           @value={{mut this.wordsAmount}}
                         />
@@ -84,6 +83,7 @@
     @cancelDisabled={{this.isCancelDisabled}}
     @onCancel={{perform this.cancel}}>
     <Auk::Button
+      data-test-publication-documents-upload-modal-save
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
       @loading={{this.save.isRunning}}

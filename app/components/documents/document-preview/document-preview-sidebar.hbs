@@ -1,0 +1,56 @@
+<Auk::Sidebar
+  @size="xlarge"
+  @position="right"
+  @skin="white"
+  class="auk-u-pb-6 auk-o-flex auk-o-flex--vertical auk-scroll-wrapper"
+>
+  <Auk::Navbar>
+    <Auk::Toolbar as |toolbar|>
+      <toolbar.Group @position="left" as |group|>
+        <group.Item>
+          <Auk::Tabs>
+            <Auk::Tab
+              {{on "click" (fn this.setActiveTab "details")}}
+              @active={{eq this.activeTab "details"}}
+            >
+              {{t "detail"}}
+            </Auk::Tab>
+            <Auk::Tab
+              {{on "click" (fn this.setActiveTab "signatures")}}
+              @active={{eq this.activeTab "signatures"}}
+            >
+              {{t "signatures"}}
+            </Auk::Tab>
+            <Auk::Tab
+              {{on "click" (fn this.setActiveTab "versions")}}
+              @active={{eq this.activeTab "versions"}}
+            >
+              {{t "versions"}}
+            </Auk::Tab>
+          </Auk::Tabs>
+        </group.Item>
+      </toolbar.Group>
+    </Auk::Toolbar>
+  </Auk::Navbar>
+  <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
+    <Utils::LoadableContent @isLoading={{this.loadPieceData.isRunning}}>
+      {{! DETAILS }}
+      {{#if (eq this.activeTab "details")}}
+        <Documents::DocumentPreview::DetailsTab
+          @piece={{@piece}}
+          @documentContainer={{this.documentContainer}}
+        />
+        {{! SIGNATURES }}
+      {{else if (eq this.activeTab "signatures")}}
+
+        {{! VERSIONS }}
+      {{else if (eq this.activeTab "versions")}}
+        <Documents::DocumentPreview::VersionsTab
+          @documentContainer={{this.documentContainer}}
+          @currentVersion={{@piece}}
+          @onSelectVersion={{@onSelectVersion}}
+        />
+      {{/if}}
+    </Utils::LoadableContent>
+  </div>
+</Auk::Sidebar>

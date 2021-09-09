@@ -41,10 +41,14 @@
         {{this.lastPiece.name}}
       </h6>
       <div class="vlc-document-card-content__meta">
-        {{t "uploaded-at"}}
-        {{moment-format this.lastPiece.created}}
-        {{t "at"}}
-        {{moment-format this.lastPiece.created "HH:mm"}}
+        {{#if this.lastPiece.created}}
+          {{t "uploaded-at"}}
+          {{moment-format this.lastPiece.created}}
+          {{t "at"}}
+          {{moment-format this.lastPiece.created "HH:mm"}}
+        {{else}}
+          {{t "upload-time-unknown"}}
+        {{/if}}
       </div>
     </div>
   </div>

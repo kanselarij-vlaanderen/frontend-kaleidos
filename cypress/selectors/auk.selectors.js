@@ -71,5 +71,7 @@ const selectors = {
   // TODO-selector unused selectors
   input: '.auk-input',
   textarea: '.auk-textarea',
+
+  datepicker: '[data-test-auk-datepickr]',
 };
 export default selectors;

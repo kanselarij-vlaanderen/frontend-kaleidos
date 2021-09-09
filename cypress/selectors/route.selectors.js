@@ -132,12 +132,6 @@ const selectors = {
     ROUTE PUBLICATIONS
   */
 
-  // publications/template
-  publications: {
-    title: '[data-test-route-publications-title]',
-    // TODO-selector: there are more selectors in this route
-  },
-
   /**
     ROUTE LOGIN
   */
