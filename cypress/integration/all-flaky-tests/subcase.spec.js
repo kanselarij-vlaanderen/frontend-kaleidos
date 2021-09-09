@@ -188,9 +188,7 @@ context('Subcase tests', () => {
 
     cy.get(route.subcaseOverview.confidentialityCheckBox).should('be.checked');
     // "Go to agendaitem
-    cy.route('GET', '/meetings').as('getMeetingsRequest');
     cy.get(cases.subcaseDescription.agendaLink).click();
-    cy.wait('@getMeetingsRequest');
     cy.get(agenda.agendaDetailSidebarItem.confidential).should('exist');
     // Index view
     cy.get(auk.pill).contains('Vertrouwelijk');
@@ -320,11 +318,9 @@ context('Subcase tests', () => {
       .wait('@newsletterInfosPatch');
 
     // go to agendaitem
-    cy.route('GET', '/meetings').as('getMeetingsRequest');
     cy.get(newsletter.buttonToolbar.linkToAgendaitem).eq(0)
       .invoke('removeAttr', 'target') // dont open links in new windows by removing target (breaks cypress test).
       .click();
-    cy.wait('@getMeetingsRequest');
 
     cy.openAgendaitemKortBestekTab(subcaseTitleShort);
 
