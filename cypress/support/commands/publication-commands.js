@@ -9,37 +9,63 @@ import auk from '../../selectors/auk.selectors';
 // Functions
 
 /**
+ * @description fills in all the desired fields in the new publication modal.
+ * @name fillInNewPublicationFields
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {number: Number, suffix: String, decisionDate: Object, receptionDate: Object, targetPublicationdate: Object, shortTitle: String, longTitle: String} fields The fields for the case
+ */
+function fillInNewPublicationFields(fields) {
+  cy.log('fillInNewPublicationFields');
+  if (fields.number) {
+    cy.get(publication.newPublication.number).click()
+      .clear()
+      .type(fields.number);
+  }
+  if (fields.suffix) {
+    cy.get(publication.newPublication.suffix).click()
+      .type(fields.suffix);
+  }
+  if (fields.decisionDate) {
+    cy.get(auk.datepicker).eq(0)
+      .click();
+    cy.setDateInFlatpickr(fields.decisionDate);
+  }
+  if (fields.receptionDate) {
+    cy.get(auk.datepicker).eq(1)
+      .click();
+    cy.setDateInFlatpickr(fields.receptionDate);
+  }
+  if (fields.targetPublicationDate) {
+    cy.get(auk.datepicker).eq(2)
+      .click();
+    cy.setDateInFlatpickr(fields.targetPublicationDate);
+  }
+  cy.get(publication.newPublication.shortTitle).click()
+    .type(fields.shortTitle);
+  if (fields.longTitle) {
+    cy.get(publication.newPublication.longTitle).click()
+      .type(fields.longTitle);
+  }
+  cy.log('/fillInNewPublicationFields');
+}
+
+/**
  * @description Goes to the publication overview and creates a new publication.
  * @name createPublication
  * @memberOf Cypress.Chainable#
  * @function
- * @param {string} shortTitle The short title for the case
- * @param {string} longTitle The long title for the case
+ * @param {Object} fields The field data for the case
  * @returns {Promise<String>} the id of the created publication-flow
  */
-function createPublication(number, suffix, shortTitle, longTitle) {
+function createPublication(fields) {
   cy.log('createPublication');
   cy.route('POST', '/cases').as('createNewCase');
   cy.route('POST', '/publication-flows').as('createNewPublicationFlow');
 
   cy.visit('publicaties');
   cy.get(publication.publicationsIndex.newPublication).click();
-
-  if (number) {
-    cy.get(publication.newPublication.number).click()
-      .clear()
-      .type(number);
-  }
-  if (suffix) {
-    cy.get(publication.newPublication.suffix).click()
-      .type(suffix);
-  }
-  cy.get(publication.newPublication.shortTitle).click()
-    .type(shortTitle);
-  if (longTitle) {
-    cy.get(publication.newPublication.longTitle).click()
-      .type(longTitle);
-  }
+  cy.fillInNewPublicationFields(fields);
   let publicationFlowId;
 
   cy.get(publication.newPublication.create).click()
@@ -138,5 +164,6 @@ function addPublicationDocuments(files) {
 
 // ***********************************************
 // Commands
+Cypress.Commands.add('fillInNewPublicationFields', fillInNewPublicationFields);
 Cypress.Commands.add('createPublication', createPublication);
 Cypress.Commands.add('addPublicationDocuments', addPublicationDocuments);

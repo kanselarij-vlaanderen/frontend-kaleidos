@@ -11,7 +11,7 @@
             @required={{true}}>
             {{t "name"}}
           </Auk::Label>
-          <Auk::Input id="organizationNameInput"
+          <Auk::Input data-test-organization-add-name id="organizationNameInput"
             @block={{true}}
             @value={{this.name}}
             {{on "input" this.validators.name.enableError}} />
@@ -32,6 +32,7 @@
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
           <Auk::ButtonLink
+            data-test-organization-add-cancel
             disabled={{this.save.isRunning}}
             {{on "click" @onCancel}}>
             {{t "cancel"}}
