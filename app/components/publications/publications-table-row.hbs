@@ -61,7 +61,9 @@ request the whole row and not only the arrow at the end to be clickable }}
   {{/if}}
   {{#if @tableColumnDisplayOptions.regulationType}}
     <td class="auk-u-text-nowrap">
-      {{#if @publicationFlow.regulationType}}
+      {{#if @publicationFlow.regulationType.abbreviation}}
+        {{@publicationFlow.regulationType.abbreviation}}
+      {{else if @publicationFlow.regulationType}}
         {{@publicationFlow.regulationType.label}}
       {{else}}
         {{t "dash"}}
