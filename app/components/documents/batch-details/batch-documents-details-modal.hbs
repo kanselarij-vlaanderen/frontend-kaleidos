@@ -25,6 +25,9 @@
           </tr>
         </thead>
         <tbody>
+        <Documents::BatchDetails::BatchEditingRow
+          @selectedRows={{this.selectedRows}}
+        />
           {{#each this.rows as |row|}}
             <Documents::BatchDetails::DocumentDetailsRow
               @row={{row}}

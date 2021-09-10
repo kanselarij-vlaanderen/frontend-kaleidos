@@ -5,7 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { Row } from './document-details-row';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-
+import { restorePiecesFromPreviousAgendaitem } from 'frontend-kaleidos/utils/documents';
 
 /**
  * @argument {Piece[]} pieces includes: documentContainer,accessLevel
@@ -36,13 +36,12 @@ export default class BatchDocumentsDetailsModal extends Component {
   }
 
   @task
-  * initRows() {
+  *initRows() {
     const documentsByContainer = new Map();
     for (const piece of this.args.pieces) {
       const container = yield piece.documentContainer;
       if (documentsByContainer.has(container)) {
-        documentsByContainer.get(container)
-          .push(piece);
+        documentsByContainer.get(container).push(piece);
       } else {
         documentsByContainer.set(container, [piece]);
       }
@@ -60,7 +59,7 @@ export default class BatchDocumentsDetailsModal extends Component {
     }
 
     this.rows = yield Promise.all(
-      latestDocs.map(async(piece) => {
+      latestDocs.map(async (piece) => {
         const row = new Row();
         row.piece = piece;
         row.name = piece.name;
@@ -99,19 +98,22 @@ export default class BatchDocumentsDetailsModal extends Component {
     }
   }
 
-
   @task
-  * save() {
-    const saves = this.rows.map(async(row) => {
+  *save() {
+    const saves = this.rows.map(async (row) => {
       const piece = row.piece;
       if (row.isToBeDeleted) {
-        this.fileService.deletePiece(piece)
+        this.fileService.deletePiece(piece);
+
+        await restorePiecesFromPreviousAgendaitem(
+          this.args.agendaItem,
+          row.documentContainer
+        );
 
         const piecesInContainer = await row.documentContainer.pieces;
-        if (piecesInContainer.length === 1){
+        if (piecesInContainer.length === 1) {
           this.fileService.deleteDocumentContainer(row.documentContainer);
         }
-        //TODO delete from agenda item
 
       } else {
         piece.name = row.name;
