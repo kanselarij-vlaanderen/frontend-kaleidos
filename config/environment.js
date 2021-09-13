@@ -83,6 +83,7 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = false;
     ENV.APP.ENABLE_PUBLICATIONS_TAB = true;
     ENV.APP.ENABLE_SIGNATURES = true;
+    ENV.APP.ENABLE_DOCUMENT_VIEW = true;
 
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
@@ -94,6 +95,7 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = false;
     ENV.APP.ENABLE_PUBLICATIONS_TAB = true;
     ENV.APP.ENABLE_SIGNATURES = true;
+    ENV.APP.ENABLE_DOCUMENT_VIEW = true;
   }
 
   return ENV;
