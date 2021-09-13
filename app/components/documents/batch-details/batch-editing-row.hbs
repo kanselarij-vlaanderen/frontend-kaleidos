@@ -33,19 +33,19 @@
     <Auk::Checkbox
       @checked={{this.confidential}}
       @disabled={{this.isDisabled}}
-      {{on "input" this.onInputConfidential }}
+      {{on "input" this.onInputConfidential}}
     />
   </td>
   <td>
     <WebComponents::AuButtonToolbar>
       {{#if this.isToBeDeleted}}
-         <Auk::Button
-        @icon="redo"
-        @layout="icon-only"
-        @skin="borderless"
-        @disabled={{this.isDisabled}}
-        {{on "click" (fn this.setToBeDeleted false)}}
-      />
+        <Auk::Button
+          @icon="redo"
+          @layout="icon-only"
+          @skin="borderless"
+          @disabled={{this.isDisabled}}
+          {{on "click" (fn this.setToBeDeleted false)}}
+        />
       {{else}}
         <Auk::Button
           @icon="delete"

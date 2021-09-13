@@ -115,7 +115,6 @@ export default class BatchDocumentsDetailsModal extends Component {
         if (piecesInContainer.length === 1) {
           await this.fileService.deleteDocumentContainer(row.documentContainer);
         }
-
       } else {
         piece.name = row.name;
         piece.confidential = row.confidential;

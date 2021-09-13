@@ -10,28 +10,20 @@
     <Auk::Toolbar::Group @position="right">
       {{#if this.model.pieces.length}}
         <Auk::Toolbar::Item>
-        {{#if this.currentSession.isEditor}}
-          <Auk::Button
-            @icon="edit"
-            {{on "click" this.openBatchDetails}}
-          >
-            {{t "edit"}}
-          </Auk::Button>
-        {{else}}
-          <Auk::Button
-            {{on "click" this.openBatchDetails}}
-          >
-            {{t "view-documents-details"}}
-          </Auk::Button>
-        {{/if}}
+          {{#if this.currentSession.isEditor}}
+            <Auk::Button @icon="edit" {{on "click" this.openBatchDetails}}>
+              {{t "edit"}}
+            </Auk::Button>
+          {{else}}
+            <Auk::Button {{on "click" this.openBatchDetails}}>
+              {{t "view-documents-details"}}
+            </Auk::Button>
+          {{/if}}
         </Auk::Toolbar::Item>
       {{/if}}
       {{#if this.isShownOpenPublicationModal}}
         <Auk::Toolbar::Item>
-          <Auk::Button
-            @icon="copy"
-            {{on "click" this.openPublicationModal}}
-          >
+          <Auk::Button @icon="copy" {{on "click" this.openPublicationModal}}>
             {{t "agendaitem-documents-documents-for-publication"}}
           </Auk::Button>
         </Auk::Toolbar::Item>
@@ -39,7 +31,6 @@
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </div>
-
 
 {{#if this.governmentCanViewDocuments}}
   {{#unless this.loadData.isRunning}}
@@ -75,7 +66,8 @@
     @pieces={{this.model.pieces}}
     @agendaitem={{this.agendaitem}}
     @onCancel={{this.cancelBatchDetails}}
-    @onSave={{this.saveBatchDetails}} />
+    @onSave={{this.saveBatchDetails}}
+  />
 {{/if}}
 
 {{#if this.isOpenPublicationModal}}
@@ -83,7 +75,7 @@
     @pieces={{this.model.pieces}}
     @agendaitem={{this.agendaitem}}
     @onClose={{this.closePublicationModal}}
-    />
+  />
 {{/if}}
 
 {{#if this.isOpenPieceUploadModal}}
@@ -91,20 +83,23 @@
     @closeModal={{perform this.cancelUploadPieces}}
     @isOverlay={{true}}
     @large={{true}}
-    @title={{t "document-add"}} >
+    @title={{t "document-add"}}
+  >
     <Auk::Modal::Body>
       {{#if this.savePieces.isRunning}}
         <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
       {{else}}
         <FileUploader
           @multipleFiles={{true}}
-          @uploadedFileAction={{this.uploadPiece}} />
+          @uploadedFileAction={{this.uploadPiece}}
+        />
         <div class="upload-container">
           {{#each this.newPieces as |piece|}}
             <Documents::UploadedDocument
               @piece={{piece}}
               @allowDocumentContainerEdit={{true}}
-              @onDelete={{perform this.deletePiece piece}} />
+              @onDelete={{perform this.deletePiece piece}}
+            />
           {{/each}}
         </div>
       {{/if}}
@@ -115,8 +110,9 @@
       @saveButtonText={{t "documents-add"}}
       @cancelAction={{perform this.cancelUploadPieces}}
       @saveAction={{perform this.savePieces}}
-      @disableSave={{eq this.newPieces.length 0}} />
+      @disableSave={{eq this.newPieces.length 0}}
+    />
   </WebComponents::VlModal>
 {{/if}}
 
-<Documents::LinkedDocuments @agendaitemOrSubcase={{this.agendaitem}}/>
+<Documents::LinkedDocuments @agendaitemOrSubcase={{this.agendaitem}} />

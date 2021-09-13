@@ -25,11 +25,11 @@
           </tr>
         </thead>
         <tbody>
-        {{#if this.isEditingEnabled}}
-          <Documents::BatchDetails::BatchEditingRow
-            @selectedRows={{this.selectedRows}}
-          />
-        {{/if}}
+          {{#if this.isEditingEnabled}}
+            <Documents::BatchDetails::BatchEditingRow
+              @selectedRows={{this.selectedRows}}
+            />
+          {{/if}}
           {{#each this.rows as |row|}}
             <Documents::BatchDetails::DocumentDetailsRow
               @row={{row}}

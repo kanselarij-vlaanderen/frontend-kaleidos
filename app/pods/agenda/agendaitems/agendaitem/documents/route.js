@@ -3,8 +3,9 @@ import { action } from '@ember/object';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import VrNotulenName,
-{ compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
+import VrNotulenName, {
+  compareFunction as compareNotulen,
+} from 'frontend-kaleidos/utils/vr-notulen-name';
 
 export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
   async model() {
@@ -29,7 +30,10 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
   }
 
   async afterModel() {
-    this.defaultAccessLevel = await this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
+    this.defaultAccessLevel = await this.store.findRecordByUri(
+      'access-level',
+      CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
+    );
     this.agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
     this.currentAgenda = await this.agendaitem.agenda;
     this.previousAgenda = await this.currentAgenda.previousVersion;
