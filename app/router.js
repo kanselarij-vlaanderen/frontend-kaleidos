@@ -97,7 +97,9 @@ Router.map(function() {
   // When ready 'document' will replace 'document-viewer'.
   // Both co-exist while 'document' is being developed
   // TODO: replace 'document_2' in path by 'document'
-  this.route('document', { path: '/document_2/:piece_id', });
+  if (!isEmpty(ENV.APP.ENABLE_DOCUMENT_VIEW)) {
+    this.route('document', { path: '/document_2/:piece_id', });
+  }
 
   this.route('not-supported');
   this.route('help');
