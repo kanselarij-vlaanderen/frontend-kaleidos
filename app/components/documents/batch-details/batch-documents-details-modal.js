@@ -104,16 +104,16 @@ export default class BatchDocumentsDetailsModal extends Component {
       const piece = row.piece;
       const documentContainer = row.documentContainer;
       if (row.isToBeDeleted) {
-        this.fileService.deletePiece(piece);
+        await this.fileService.deletePiece(piece);
 
         await restorePiecesFromPreviousAgendaitem(
-          this.args.agendaItem,
+          this.args.agendaitem,
           row.documentContainer
         );
 
         const piecesInContainer = await row.documentContainer.pieces;
         if (piecesInContainer.length === 1) {
-          this.fileService.deleteDocumentContainer(row.documentContainer);
+          await this.fileService.deleteDocumentContainer(row.documentContainer);
         }
 
       } else {
