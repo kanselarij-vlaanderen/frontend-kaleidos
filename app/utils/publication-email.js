@@ -1,11 +1,12 @@
 import moment from 'moment';
 
-const footer = 'Met vriendelijke groeten,\n'
-  + 'Team Ondersteuning Vlaamse Regering\n'
+const footer = 'Met vriendelijke groet,\n'
   + '\n'
+  + 'Vlaamse overheid\n'
   + 'DEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\n'
+  + 'Team Ondersteuning Vlaamse Regering\n'
   + 'publicatiesBS@vlaanderen.be\n'
-  + 'Koolstraat 35, 1000 Brussel';
+  + 'Koolstraat 35, 1000 Brussel\n';
 
 function translationRequestEmail(params) {
   const subject = `Vertaalaanvraag VO-dossier: ${params.identifier}`;
