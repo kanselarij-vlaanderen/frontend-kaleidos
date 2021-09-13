@@ -1,14 +1,9 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 
-// analogous to RowPieceComponent's Row
-class BatchRow {
-  constructor(selectedRows) {
-    this.selectedRows = selectedRows;
-  }
-
+export default class BatchEditingRow extends Component {
   get isDisabled() {
-    return this.selectedRows.length > 0;
+    return this.args.selectedRows.length === 0;
   }
 
   get documentType() {
@@ -20,11 +15,11 @@ class BatchRow {
   }
 
   getBatchSelectedValue(getProperty) {
-    if (this.selectedRows.length === 0) {
+    if (this.args.selectedRows.length === 0) {
       return undefined;
     }
 
-    const selectedRows = this.selectedRows;
+    const selectedRows = this.args.selectedRows;
     const [firstRow, ...otherRows] = selectedRows;
     const firstProperty = getProperty(firstRow);
     const areRowsEqual = otherRows.every(
@@ -37,60 +32,43 @@ class BatchRow {
   }
 
   get confidential() {
-    const selectedRows = this.selectedRows;
-    if (selectedRows.length === 0) {
+    if (this.args.selectedRows.length === 0) {
       return false;
     }
-    return selectedRows.every((row) => row.confidential);
+    return this.args.selectedRows.every((row) => row.confidential);
   }
 
   get isToBeDeleted() {
-    const selectedRows = this.selectedRows;
     // some-check: always indicate destructive action will be performed
-    return selectedRows.some((row) => row.isToBeDeleted);
+    return this.args.selectedRows.some((row) => row.isToBeDeleted);
   }
 
   @action
   setDocumentType(documentType) {
-    const selectedRows = this.selectedRows;
-    for (const row of selectedRows) {
+    for (const row of this.args.selectedRows) {
       row.documentType = documentType;
     }
   }
 
   @action
   setAccessLevel(accessLevel) {
-    const selectedRows = this.selectedRows;
-    for (const row of selectedRows) {
+    for (const row of this.args.selectedRows) {
       row.accessLevel = accessLevel;
     }
   }
 
   @action
-  setConfidential(checked) {
-    const selectedRows = this.selectedRows;
-    for (const row of selectedRows) {
-      row.confidential = checked;
-    }
-  }
-
-  @action
   setToBeDeleted(isToBeDeleted) {
-    for (const row of this.selectedRows) {
+    for (const row of this.args.selectedRows) {
       row.isToBeDeleted = isToBeDeleted;
     }
-  }
-}
-
-export default class BatchEditingRow extends Component {
-  constructor() {
-    super(...arguments);
-    this.batch = new BatchRow(this.args.selectedRows);
   }
 
   @action
   onInputConfidential(event) {
     const checked = event.target.checked;
-    this.batch.setConfidential(checked);
+    for (const row of this.args.selectedRows) {
+      row.confidential = checked;
+    }
   }
 }

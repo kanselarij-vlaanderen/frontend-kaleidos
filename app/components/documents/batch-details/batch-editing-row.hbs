@@ -1,69 +1,58 @@
 <tr class="auk-table--batch-edit">
   <td></td>
   <td>
-    {{#if this.selectedRows}}
-      {{t "x-documents-selected" count=this.selectedRows.length}}
+    {{#if @selectedRows}}
+      {{t "x-documents-selected" count=@selectedRows.length}}
     {{/if}}
   </td>
   <td>
-    <PowerSelect
-      @options={{this.documentTypes}}
-      @selected={{this.batchDocumentType}}
-      @disabled={{not this.selectedRows}}
-      @search={{perform this.searchDocumentTypes}}
-      @placeholder={{if this.batchDocumentType (t "different") (t "none")}}
-      @noMatchesMessage={{t "no-result"}}
-      @onchange={{fn this.setDocumentType this.selectedRows}}
+    <Utils::ModelSelector
+      @modelName="document-type"
       @allowClear={{true}}
-      as |documentType|
-    >
-      {{! nowrap: don't let height of row depend on selected record }}
-      <div>
-        {{documentType.label}}
-      </div>
-    </PowerSelect>
+      @hideSearch={{true}}
+      @propertyToShow="label"
+      @sortField="priority"
+      @readOnly={{this.isDisabled}}
+      @selectedItems={{this.documentType}}
+      @selectModel={{this.setDocumentType}}
+    />
   </td>
   <td>
-    <PowerSelect
-      @options={{this.accessLevels}}
-      @selected={{this.batchAccessLevel}}
-      @disabled={{not this.selectedRows}}
-      @search={{perform this.searchAccessLevels}}
-      @placeholder={{t "none"}}
-      @noMatchesMessage={{t "no-result"}}
-      @onchange={{this.setAccessLevel}}
-      as |accessLevel|
-    >
-      {{! nowrap: don't let height of row depend on selected record }}
-      <div>
-        {{accessLevel.label}}
-      </div>
-    </PowerSelect>
+    <Utils::ModelSelector
+      @modelName="access-level"
+      @allowClear={{true}}
+      @hideSearch={{true}}
+      @propertyToShow="label"
+      @sortField="priority"
+      @readOnly={{this.isDisabled}}
+      @selectedItems={{this.accessLevel}}
+      @selectModel={{this.setAccessLevel}}
+    />
   </td>
   <td class="auk-table-checkbox-col">
     <Auk::Checkbox
-      @checked={{this.batchConfidential}}
-      @disabled={{not this.selectedRows}}
-      {{on "input" (fn this.onInputConfidential this.selectedRows)}}
+      @checked={{this.confidential}}
+      @disabled={{this.isDisabled}}
+      {{on "input" this.onInputConfidential }}
     />
   </td>
   <td>
     <WebComponents::AuButtonToolbar>
-      {{#if this.batchIsToBeDeleted}}
+      {{#if this.isToBeDeleted}}
+         <Auk::Button
+        @icon="redo"
+        @layout="icon-only"
+        @skin="borderless"
+        @disabled={{this.isDisabled}}
+        {{on "click" (fn this.setToBeDeleted false)}}
+      />
+      {{else}}
         <Auk::Button
           @icon="delete"
           @layout="icon-only"
           @skin="danger-borderless"
-          @disabled={{not this.selectedRows}}
-          {{on "click" (fn this.setToBeDeleted this.selectedRows true)}}
-        />
-      {{else}}
-        <Auk::Button
-          @icon="redo"
-          @layout="icon-only"
-          @skin="borderless"
-          @disabled={{not this.selectedRows}}
-          {{on "click" (fn this.setToBeDeleted this.selectedRows false)}}
+          @disabled={{this.isDisabled}}
+          {{on "click" (fn this.setToBeDeleted true)}}
         />
       {{/if}}
     </WebComponents::AuButtonToolbar>
