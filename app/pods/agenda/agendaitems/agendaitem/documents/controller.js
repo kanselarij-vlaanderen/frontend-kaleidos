@@ -152,7 +152,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
         await restorePiecesFromPreviousAgendaitem(this.agendaitem, documentContainer);
         // TODO: make sure we're not loading stale cache
       }
-      this.send('reloadModel');
+      this.refresh();
     }
   }
 

@@ -102,6 +102,7 @@ export default class BatchDocumentsDetailsModal extends Component {
   *save() {
     const saves = this.rows.map(async (row) => {
       const piece = row.piece;
+      const documentContainer = row.documentContainer;
       if (row.isToBeDeleted) {
         this.fileService.deletePiece(piece);
 
@@ -120,9 +121,9 @@ export default class BatchDocumentsDetailsModal extends Component {
         piece.confidential = row.confidential;
         // does not check for relationship changes
         let hasChanged = piece.dirtyType === 'updated';
-        if (piece.documentType !== row.documentType) {
+        if (documentContainer.type !== row.documentType) {
           hasChanged = true;
-          piece.documentType = row.documentType;
+          documentContainer.type = row.documentType;
         }
         if (piece.accessLevel !== row.accessLevel) {
           hasChanged = true;
@@ -130,6 +131,7 @@ export default class BatchDocumentsDetailsModal extends Component {
         }
         if (hasChanged) {
           await piece.save();
+          await documentContainer.save();
         }
       }
     });
