@@ -134,6 +134,6 @@ export default class BatchDocumentsDetailsModal extends Component {
       }
     });
     yield Promise.all(saves);
-    this.args.onClose();
+    this.args.onSave();
   }
 }

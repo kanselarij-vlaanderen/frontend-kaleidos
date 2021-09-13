@@ -74,7 +74,8 @@
   <Documents::BatchDetails::BatchDocumentsDetailsModal
     @pieces={{this.model.pieces}}
     @agendaItem={{this.agendaItem}}
-    @onClose={{this.closeBatchDetails}} />
+    @onCancel={{this.cancelBatchDetails}}
+    @onSave={{this.saveBatchDetails}} />
 {{/if}}
 
 {{#if this.isOpenPublicationModal}}

@@ -214,7 +214,13 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   }
 
   @action
-  closeBatchDetails() {
+  cancelBatchDetails() {
+    this.showBatchDetails = false;
+  }
+
+  @action
+  saveBatchDetails() {
+    this.refresh();
     this.showBatchDetails = false;
   }
 
