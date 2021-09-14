@@ -4,6 +4,7 @@
 import dependency from '../../selectors/dependency.selectors';
 import publication from '../../selectors/publication.selectors';
 import auk from '../../selectors/auk.selectors';
+import utils from '../../selectors/utils.selectors';
 
 context('Publications tests', () => {
   function checkIfNewPublicationFieldsAreEmpty(number, currentDate) {
@@ -173,7 +174,7 @@ context('Publications tests', () => {
     cy.get(publication.publicationTableRow.row.shortTitle).contains(shortTitleEdit);
   });
 
-  it.only('publications:dossier: Add and delete mandataris', () => {
+  it('publications:dossier: Add and delete mandataris', () => {
     const noMandatees = 'Er zijn nog geen mandatarissen toegevoegd.';
     const mandateeName = 'Geert Bourgeois';
 
@@ -197,7 +198,6 @@ context('Publications tests', () => {
     cy.get(publication.linkMandatees.add).should('not.be.disabled')
       .click();
     cy.wait('@patchPublicationFlow');
-    cy.get(auk.emptyState.message).should('not.contain', noMandatees);
     cy.get(publication.mandateesPanel.rows).should('have.length', 1);
     cy.get(publication.mandateesPanel.row.fullName).contains(mandateeName);
 
@@ -208,6 +208,52 @@ context('Publications tests', () => {
     // assert deleted content
     cy.get(publication.mandateesPanel.rows).should('not.exist');
     cy.get(auk.emptyState.message).contains(noMandatees);
+  });
+
+  it('publications:dossier: Add and delete beleidsdomein', () => {
+    const noGovernmentFields = 'Er zijn nog geen beleidsvelden toegevoegd';
+    const labelName = 'Cultuur, jeugd, sport & media';
+    const fieldsName = 'Media';
+
+    cy.route('GET', '/publication-flows/**').as('getNewPublicationDetail');
+    cy.get(publication.publicationTableRow.row.goToPublication).first()
+      .click();
+    cy.wait('@getNewPublicationDetail');
+
+    // Assert empty.
+    cy.get(auk.emptyState.message).contains(noGovernmentFields);
+
+    // reset after cancel
+    cy.get(publication.governmentFieldsPanel.edit).click();
+    cy.get(utils.domainsFieldsSelectorForm.container).contains(labelName)
+      .find(utils.domainsFieldsSelectorForm.field)
+      .contains(fieldsName)
+      .click();
+    cy.get(auk.modal.footer.cancel).click();
+    cy.get(auk.emptyState.message).contains(noGovernmentFields);
+
+
+    // link government field
+    cy.route('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    cy.get(publication.governmentFieldsPanel.edit).click();
+    cy.get(utils.domainsFieldsSelectorForm.container).contains(labelName)
+      .find(utils.domainsFieldsSelectorForm.field)
+      .contains(fieldsName)
+      .click();
+    cy.get(publication.editGovernmentFieldsModal.save).click();
+    cy.wait('@patchPublicationFlow');
+    cy.get(publication.governmentFieldsPanel.rows).should('have.length', 1);
+    cy.get(publication.governmentFieldsPanel.row.label).contains(labelName);
+    cy.get(publication.governmentFieldsPanel.row.fields).contains(fieldsName);
+    // unlink government field
+    cy.get(publication.governmentFieldsPanel.edit).click();
+    cy.get(utils.domainsFieldsSelectorForm.container).contains(labelName)
+      .find(utils.domainsFieldsSelectorForm.field)
+      .contains(fieldsName)
+      .click();
+    cy.get(publication.editGovernmentFieldsModal.save).click();
+    cy.wait('@patchPublicationFlow');
+    cy.get(auk.emptyState.message).contains(noGovernmentFields);
   });
 
   it('publications:dossier:Add and delete contact person', () => {

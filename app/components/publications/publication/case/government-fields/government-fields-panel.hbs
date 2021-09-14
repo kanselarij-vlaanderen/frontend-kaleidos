@@ -12,6 +12,7 @@
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <Auk::Button
+              data-test-government-fields-panel-edit
               @skin="tertiary" @icon="edit"
               @layout="icon-only"
               {{on "click" this.showEditModal}} />
@@ -23,7 +24,7 @@
       <Auk::Panel::Body @noPadding={{true}}>
         <table class="auk-table">
           <thead>
-            <tr>
+            <tr data-test-government-fields-panel-row>
               <th>{{t "government-domain"}}</th>
               <th>{{t "government-fields"}}</th>
             </tr>
@@ -31,10 +32,10 @@
           <tbody>
             {{#each this.rows as |row|}}
               <tr>
-                <td>
+                <td data-test-government-fields-panel-row-label>
                   {{row.governmentDomain.label}}
                 </td>
-                <td>
+                <td data-test-government-fields-panel-row-fields>
                   {{join ", " (map-by "label" row.sortedGovernmentFields)}}
                 </td>
               </tr>
