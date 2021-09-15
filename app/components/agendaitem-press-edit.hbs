@@ -18,8 +18,11 @@
     />
   </div>
   <div class="auk-form-group">
-    <Auk::Label>{{t "for-press"}}</Auk::Label>
-    <WebComponents::VlToggle @value={{this.agendaitem.forPress}} />
+    <Auk::Label for="for-press">{{t "for-press"}}</Auk::Label>
+    <Auk::Toggle
+      id="for-press"
+      @checked={{this.agendaitem.forPress}}
+    />
   </div>
 </div>
 <Auk::Toolbar>

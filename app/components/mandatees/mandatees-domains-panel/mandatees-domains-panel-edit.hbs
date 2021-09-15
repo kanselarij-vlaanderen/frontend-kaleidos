@@ -53,9 +53,9 @@
                 </td>
               </Mandatees::DomainsFieldsForMandatee>
               <td data-test-mandatee-panel-edit-row-submitter>
-                <WebComponents::VlToggle
-                  @value={{eq mandatee this.submitterBuffer}}
-                  @valueChanged={{fn this.toggleIsSubmitter mandatee}}
+                <Auk::Toggle
+                  @checked={{eq mandatee this.submitterBuffer}}
+                  {{on "input" (fn this.toggleIsSubmitter mandatee)}}
                 />
               </td>
               <td class="auk-u-text-align--right auk-o-flex--vertical-center">

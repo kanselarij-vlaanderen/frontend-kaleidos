@@ -67,7 +67,8 @@ export default class MandateesMandateesDomainsPanelEditComponent extends Compone
   }
 
   @action
-  toggleIsSubmitter(mandatee, flag) {
+  toggleIsSubmitter(mandatee, event) {
+    const flag = event.target.checked;
     this.submitterBuffer = flag ? mandatee : null;
   }
 

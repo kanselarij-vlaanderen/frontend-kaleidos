@@ -1,19 +1,10 @@
 {{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action require-input-label --}}
+{{!-- template-lint-disable no-action --}}
 {{#if this.isLoading}}
-  <div class="auk-loader" role="alert" aria-busy="true"></div>
+  <Auk::Loader />
 {{else}}
-  <input
-    class="vl-toggle"
-    type="checkbox"
-    value="1"
+  <Auk::Toggle
     checked={{await this.value}}
-  >
-
-  <label class="vl-toggle__label"
-    {{action "valueChanged" this.row bubbles=false}}
-  >
-    <span aria-hidden="true"></span>
-    <span class="auk-u-sr-only"></span>
-  </label>
+    {{on "click" (action "valueChanged" this.row)}}
+  />
 {{/if}}

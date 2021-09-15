@@ -8,7 +8,6 @@ import { inject } from '@ember/service';
 // eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   newsletterService: inject(),
-  classNames: ['vl-toggle__wrapper'],
   value: null,
   isLoading: false,
 
@@ -19,7 +18,7 @@ export default Component.extend({
   // TODO: octane-refactor
   // eslint-disable-next-line ember/no-actions-hash
   actions: {
-    async valueChanged(row) {
+    async valueChanged(row, event) {
       const {
         key,
       } = this;
@@ -37,6 +36,7 @@ export default Component.extend({
         await row.content.reload();
       }
       this.toggleProperty('isLoading');
+      event.stopPropagation();
     },
   },
 });

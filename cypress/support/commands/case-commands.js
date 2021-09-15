@@ -7,7 +7,6 @@ import auk from '../../selectors/auk.selectors';
 import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
-import utils from '../../selectors/utils.selectors';
 
 
 /**
@@ -26,8 +25,7 @@ function createCase(confidential, shortTitle) {
 
   cy.get(cases.casesHeader.addCase).click();
   if (confidential) {
-    cy.get(cases.newCase.toggleConfidential).find(utils.vlToggle.label)
-      .click();
+    cy.get(cases.newCase.toggleConfidential).click();
   }
   cy.get(cases.newCase.shorttitle).type(shortTitle);
   cy.get(cases.newCase.save).click();
