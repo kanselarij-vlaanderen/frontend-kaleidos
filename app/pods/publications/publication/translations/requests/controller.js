@@ -23,7 +23,8 @@ export default class PublicationsPublicationTranslationsRequestController extend
     });
     yield documentContainer.save();
 
-    const translationActivity = yield this.selectedRequestActivity.translationActivity;
+    const translationActivity = yield this.selectedRequestActivity
+      .translationActivity;
     // triggers call
     const language = yield translationActivity.language;
     const piece = this.store.createRecord('piece', {
@@ -44,6 +45,14 @@ export default class PublicationsPublicationTranslationsRequestController extend
 
     translationActivity.endDate = translationUpload.receivedAtDate;
     const translationActivitySave = translationActivity.save();
+
+    if (
+      translationUpload.receivedAtDate < this.translationSubcase.receivedDate ||
+      !this.translationSubcase.receivedDate
+    ) {
+      this.translationSubcase.receivedDate = translationUpload.receivedAtDate;
+      yield this.translationSubcase.save();
+    }
 
     yield Promise.all([translationActivitySave, pieceSave]);
 

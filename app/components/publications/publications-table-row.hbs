@@ -137,6 +137,30 @@ request the whole row and not only the arrow at the end to be clickable }}
       {{/if}}
     </td>
   {{/if}}
+  {{#if @tableColumnDisplayOptions.publicationReceivedDate}}
+    <td class="auk-u-text-nowrap">
+      {{#if @publicationFlow.publicationSubcase.receivedDate}}
+        {{moment-format
+          @publicationFlow.publicationSubcase.receivedDate
+          "DD-MM-YYYY"
+        }}
+      {{else}}
+        {{t "dash"}}
+      {{/if}}
+    </td>
+  {{/if}}
+  {{#if @tableColumnDisplayOptions.translationReceivedDate}}
+    <td class="auk-u-text-nowrap">
+      {{#if @publicationFlow.translationSubcase.receivedDate}}
+        {{moment-format
+          @publicationFlow.translationSubcase.receivedDate
+          "DD-MM-YYYY"
+        }}
+      {{else}}
+        {{t "dash"}}
+      {{/if}}
+    </td>
+  {{/if}}
   {{#if @tableColumnDisplayOptions.translations}}
     <td class="auk-u-text-nowrap">
       <Publications::Publication::Translations::TranslationProgressBadge

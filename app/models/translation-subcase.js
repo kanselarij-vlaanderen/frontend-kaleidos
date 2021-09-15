@@ -1,6 +1,4 @@
-import Model, {
-  attr, belongsTo, hasMany
-} from '@ember-data/model';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { isPresent } from '@ember/utils';
 
 export default class TranslationSubcase extends Model {
@@ -12,6 +10,7 @@ export default class TranslationSubcase extends Model {
   @attr('datetime') endDate;
   @attr('datetime') created;
   @attr('datetime') modified;
+  @attr('datetime') receivedDate;
 
   @belongsTo('publication-flow') publicationFlow;
 
