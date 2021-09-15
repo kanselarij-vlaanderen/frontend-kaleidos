@@ -21,9 +21,9 @@
           >
             {{t "agendas"}}
           </Auk::Tab>
-          <Auk::Tab @route="cases" data-test-m-header-cases>{{t
-              "cases"
-            }}</Auk::Tab>
+          <Auk::Tab @route="cases" data-test-m-header-cases>
+            {{t "cases"}}
+          </Auk::Tab>
           {{#if this.currentSession.isViewer}}
             <Auk::Tab
               @route="newsletters"
@@ -78,9 +78,9 @@
             <Auk::Menu::Item @href="mailto:kaleidos.servicedesk@vlaanderen.be">
               <div>
                 <span>{{t "contact-us"}}</span>
-                <span class="auk-u-muted auk-u-text-small">{{t
-                    "email-servicedesk"
-                  }}</span>
+                <span class="auk-u-muted auk-u-text-small">
+                  {{t "email-servicedesk"}}
+                </span>
               </div>
             </Auk::Menu::Item>
           </Auk::Menu>
@@ -111,9 +111,9 @@
                   @name={{this.currentSession.user.fullName}}
                 >
                   <p>{{this.currentSession.user.fullName}}</p>
-                  <p
-                    class="auk-u-muted auk-u-text-small"
-                  >{{this.currentSession.group.name}}</p>
+                  <p class="auk-u-muted auk-u-text-small">
+                    {{this.currentSession.group.name}}
+                  </p>
                 </Auk::Avatar>
               </Auk::Menu::Item>
               <Auk::Menu::Divider />
