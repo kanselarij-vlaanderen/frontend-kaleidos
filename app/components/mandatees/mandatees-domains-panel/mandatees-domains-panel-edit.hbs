@@ -54,7 +54,6 @@
               </Mandatees::DomainsFieldsForMandatee>
               <td data-test-mandatee-panel-edit-row-submitter>
                 <Auk::Toggle
-                  id="item-show-in-newsletter"
                   @checked={{eq mandatee this.submitterBuffer}}
                   {{on "input" (fn this.toggleIsSubmitter mandatee)}}
                 />
