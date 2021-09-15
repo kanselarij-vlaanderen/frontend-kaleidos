@@ -187,7 +187,6 @@ context('Publications tests', () => {
     cy.get(auk.emptyState.message).contains(noMandatees);
 
     // add mandatee
-    // TODO KAS-2861 select mandatee with command?
     cy.get(publication.mandateesPanel.add).click();
     cy.get(publication.linkMandatees.add).should('be.disabled');
     cy.get(publication.linkMandatees.select).click();

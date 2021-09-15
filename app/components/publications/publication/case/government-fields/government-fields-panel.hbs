@@ -1,4 +1,4 @@
-<div class="auk-u-mb-3" >
+<div class="auk-u-mb-3">
   <Auk::Panel>
     <Auk::Panel::Header>
       <Auk::Toolbar>
@@ -13,9 +13,11 @@
           <Auk::Toolbar::Item>
             <Auk::Button
               data-test-government-fields-panel-edit
-              @skin="tertiary" @icon="edit"
+              @skin="tertiary"
+              @icon="edit"
               @layout="icon-only"
-              {{on "click" this.showEditModal}} />
+              {{on "click" this.showEditModal}}
+            />
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
@@ -53,7 +55,8 @@
 
 {{#if this.isOpenEditModal}}
   <Publications::Publication::Case::GovernmentFields::EditGovernmentFieldsModal
-      @governmentFields={{@publicationFlow.governmentFields}}
-      @onSave={{this.save}}
-      @onCancel={{this.closeEditModal}}/>
+    @governmentFields={{@publicationFlow.governmentFields}}
+    @onSave={{this.save}}
+    @onCancel={{this.closeEditModal}}
+  />
 {{/if}}

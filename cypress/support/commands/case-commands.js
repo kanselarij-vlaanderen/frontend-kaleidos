@@ -61,7 +61,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   cy.server();
   cy.log('addSubcase');
   cy.route('POST', '/subcases').as('addSubcase-createNewSubcase');
-  // TODO KAS-2813 is this wait needed?
+  // TODO-COMMAND is this wait needed?
   cy.wait(2000);
 
   cy.get(cases.subcaseOverviewHeader.createSubcase).click();
