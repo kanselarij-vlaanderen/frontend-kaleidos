@@ -65,11 +65,8 @@ export default class BatchDocumentsDetailsModal extends Component {
         row.name = piece.name;
         row.accessLevel = piece.accessLevel;
         row.confidential = piece.confidential;
-
         row.documentContainer = await piece.documentContainer;
-
         row.documentType = row.documentContainer.type;
-
         return row;
       })
     );
