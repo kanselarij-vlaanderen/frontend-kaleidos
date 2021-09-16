@@ -8,8 +8,8 @@ export default class SignSubcaseModel extends Model {
   @belongsTo('sign-flow') signFlow;
   @belongsTo('sign-marking-activity') signMarkingActivity;
   @belongsTo('sign-preparation-activity') signPreparationActivity;
-  @hasMany('sign-signing-activities') signSigningActivities;
-  @hasMany('sign-refusal-activities') signRefusalActivities;
+  @hasMany('sign-signing-activity') signSigningActivities;
+  @hasMany('sign-refusal-activity') signRefusalActivities;
   @belongsTo('sign-cancellation-activity') signCancellationActivity;
   @belongsTo('sign-completion-activity') signCompletionActivity;
 }
