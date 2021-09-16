@@ -11,7 +11,11 @@
       {{#if this.model.pieces.length}}
         <Auk::Toolbar::Item>
           {{#if this.currentSession.isEditor}}
-            <Auk::Button @icon="edit" {{on "click" this.openBatchDetails}}>
+            <Auk::Button
+              data-test-route-agenda---agendaitem-documents-batch-edit
+              @icon="edit"
+              {{on "click" this.openBatchDetails}}
+            >
               {{t "edit"}}
             </Auk::Button>
           {{else}}

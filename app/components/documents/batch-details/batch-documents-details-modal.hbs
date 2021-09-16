@@ -45,6 +45,7 @@
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
     {{#if this.isEditingEnabled}}
       <Auk::Button
+        data-test-batch-documents-details-save
         @skin="primary"
         @disabled={{this.isSaveDisabled}}
         @loading={{this.save.isRunning}}

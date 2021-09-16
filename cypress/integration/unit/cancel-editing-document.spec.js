@@ -1,9 +1,11 @@
 /* global context, it, cy, Cypress, beforeEach, afterEach */
 // / <reference types="Cypress" />
 
-import document from '../../selectors/document.selectors';
+
 import agenda from '../../selectors/agenda.selectors';
+import auk from '../../selectors/auk.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
@@ -75,27 +77,31 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get('@pieces').each(() => {
       cy.get(document.accessLevelPill.pill).contains('Intern Regering');
     });
+    cy.get(document.documentCard.versionHistory).click();
 
     // Cancel/save of document-type and access-level in editing view
     cy.get(route.agendaitemDocuments.batchEdit).click();
-    cy.get(document.editDocumentRow.row).as('documentRows');
+    cy.get(document.documentDetailsRow.row).as('documentRows');
     cy.get('@documentRows').eq(0)
-      .find(document.editDocumentRow.type)
+      .find(document.documentDetailsRow.type)
       .find(dependency.emberPowerSelect.trigger)
       .click();
     cy.get(dependency.emberPowerSelect.option).contains('Decreet')
       .click();
-    cy.get(document.editDocumentRow.type).contains('Decreet');
+    cy.get(document.documentDetailsRow.type).contains('Decreet');
 
     cy.get('@documentRows').eq(0)
-      .find(document.editDocumentRow.accessLevel)
+      .find(document.documentDetailsRow.accessLevel)
       .find(dependency.emberPowerSelect.trigger)
       .click();
     cy.get(dependency.emberPowerSelect.option).contains('Publiek')
       .scrollIntoView()
       .click();
-    cy.get(document.editDocumentRow.accessLevel).contains('Publiek');
-    cy.get(document.batchDocumentEdit.cancel).click();
+    cy.get(document.documentDetailsRow.accessLevel).contains('Publiek');
+    cy.get(auk.modal.footer.cancel).click();
+
+    // make sure modal is closed before continuing
+    cy.get(document.documentDetailsRow.row).should('not.exist');
 
     // Verify nothing changed after cancel
     cy.get(document.documentCard.versionHistory).click();
@@ -103,20 +109,24 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get('@pieces').each(() => {
       cy.get(document.accessLevelPill.pill).contains('Intern Regering');
     });
+    cy.get(document.documentCard.versionHistory).click();
 
     cy.get(route.agendaitemDocuments.batchEdit).click();
-    cy.get(document.editDocumentRow.row).as('documentRows');
+    cy.get(document.documentDetailsRow.row).as('documentRows');
     cy.get('@documentRows').eq(0)
-      .find(document.editDocumentRow.type)
+      .find(document.documentDetailsRow.type)
       .contains('Nota');
     cy.get('@documentRows').eq(0)
-      .find(document.editDocumentRow.accessLevel)
+      .find(document.documentDetailsRow.accessLevel)
       .find(dependency.emberPowerSelect.trigger)
       .click();
     cy.get(dependency.emberPowerSelect.option).contains('Intern Overheid')
       .scrollIntoView()
       .click();
-    cy.get(document.batchDocumentEdit.save).click();
+    cy.get(document.batchDocumentsDetails.save).click();
+
+    // make sure modal is closed before continuing
+    cy.get(document.documentDetailsRow.row).should('not.exist');
 
     // Verify only 1 piece is affected by change
     cy.get(document.documentCard.versionHistory).click();
