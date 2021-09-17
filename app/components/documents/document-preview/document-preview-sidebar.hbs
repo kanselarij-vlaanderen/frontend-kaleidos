@@ -2,80 +2,83 @@
   @size="xlarge"
   @position="right"
   @skin="white"
-  class="auk-u-pb-6 auk-o-flex auk-o-flex--vertical {{if @isOpen "auk-scroll-wrapper"}}"
+  class="auk-u-pb-6 auk-o-flex auk-o-flex--vertical
+    {{if @isOpen "auk-scroll-wrapper"}}"
   @isCollapsed={{not @isOpen}}
 >
   <Auk::Navbar>
     <Auk::Toolbar as |toolbar|>
-    {{#if @isOpen}}
-      <toolbar.Group @position="left" as |group|>
-        <group.Item>
-          <Auk::Tabs>
-            <Auk::Tab
-              {{on "click" (fn this.setActiveTab "details")}}
-              @active={{eq this.activeTab "details"}}
-            >
-              {{t "detail"}}
-            </Auk::Tab>
-            <Auk::Tab
-              {{on "click" (fn this.setActiveTab "signatures")}}
-              @active={{eq this.activeTab "signatures"}}
-            >
-              {{t "signatures"}}
-            </Auk::Tab>
-            <Auk::Tab
-              {{on "click" (fn this.setActiveTab "versions")}}
-              @active={{eq this.activeTab "versions"}}
-            >
-              {{t "versions"}}
-            </Auk::Tab>
-          </Auk::Tabs>
-        </group.Item>
-      </toolbar.Group>
-      <Auk::Toolbar::Group @position= "right">
-        <Auk::Toolbar::Item>
-          <Auk::Button
-            @skin="borderless"
-            @icon="chevron-right"
-            @layout="icon-only"
-            {{on "click" @onCollapse}}
-          />
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
-    {{else}}
-      <Auk::Toolbar::Group @position="center">
-      <Auk::Toolbar::Item class="auk-o-flex auk-o-flex--horizontal-center">
-        <Auk::Button
-          @skin="borderless"
-          @icon="chevron-left"
-          @layout="icon-only"
-          {{on "click" @onOpen}}
-        />
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-    {{/if}}
+      {{#if @isOpen}}
+        <toolbar.Group @position="left" as |group|>
+          <group.Item>
+            <Auk::Tabs>
+              <Auk::Tab
+                {{on "click" (fn this.setActiveTab "details")}}
+                @active={{eq this.activeTab "details"}}
+              >
+                {{t "detail"}}
+              </Auk::Tab>
+              <Auk::Tab
+                {{on "click" (fn this.setActiveTab "signatures")}}
+                @active={{eq this.activeTab "signatures"}}
+              >
+                {{t "signatures"}}
+              </Auk::Tab>
+              <Auk::Tab
+                {{on "click" (fn this.setActiveTab "versions")}}
+                @active={{eq this.activeTab "versions"}}
+              >
+                {{t "versions"}}
+              </Auk::Tab>
+            </Auk::Tabs>
+          </group.Item>
+        </toolbar.Group>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <Auk::Button
+              @skin="borderless"
+              @icon="chevron-right"
+              @layout="icon-only"
+              {{on "click" @onCollapse}}
+            />
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      {{else}}
+        <Auk::Toolbar::Group @position="center">
+          <Auk::Toolbar::Item class="auk-o-flex auk-o-flex--horizontal-center">
+            <Auk::Button
+              @skin="borderless"
+              @icon="chevron-left"
+              @layout="icon-only"
+              {{on "click" @onOpen}}
+            />
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      {{/if}}
 
     </Auk::Toolbar>
   </Auk::Navbar>
-  <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
-    <Utils::LoadableContent @isLoading={{this.loadPieceData.isRunning}}>
-      {{! DETAILS }}
-      {{#if (eq this.activeTab "details")}}
-        <Documents::DocumentPreview::DetailsTab
-          @piece={{@piece}}
-          @documentContainer={{this.documentContainer}}
-        />
-        {{! SIGNATURES }}
-      {{else if (eq this.activeTab "signatures")}}
+  {{#if @isOpen}}
+    <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
+      <Utils::LoadableContent @isLoading={{this.loadPieceData.isRunning}}>
+        {{! DETAILS }}
+        {{#if (eq this.activeTab "details")}}
+          <Documents::DocumentPreview::DetailsTab
+            @piece={{@piece}}
+            @documentContainer={{this.documentContainer}}
+          />
+          {{! SIGNATURES }}
+        {{else if (eq this.activeTab "signatures")}}
 
-        {{! VERSIONS }}
-      {{else if (eq this.activeTab "versions")}}
-        <Documents::DocumentPreview::VersionsTab
-          @documentContainer={{this.documentContainer}}
-          @currentVersion={{@piece}}
-          @onSelectVersion={{@onSelectVersion}}
-        />
-      {{/if}}
-    </Utils::LoadableContent>
-  </div>
+          {{! VERSIONS }}
+        {{else if (eq this.activeTab "versions")}}
+          <Documents::DocumentPreview::VersionsTab
+            @documentContainer={{this.documentContainer}}
+            @currentVersion={{@piece}}
+            @onSelectVersion={{@onSelectVersion}}
+          />
+        {{/if}}
+      </Utils::LoadableContent>
+    </div>
+  {{/if}}
 </Auk::Sidebar>
