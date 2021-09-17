@@ -1,53 +1,52 @@
-<div class="auk-u-mb-4">
-  <div
-    class="auk-o-flex auk-u-p-2
-      {{if @isHighlighted "version-card-selected"}}"
-  >
-    <div class="auk-o-grid-col-static auk-u-mt">
-      <Auk::Badge @icon="clock" @size="large" />
-    </div>
-    <div class="auk-o-flex auk-o-flex--vertical-center">
-      <div class="auk-o-grid-col-flex">
-        <p class="auk-u-text-bold">
-          {{@piece.name}}
-        </p>
-        <p class="auk-u-muted auk-u-text-small">
-          {{t "uploaded-at"}}
-          {{moment-format @piece.created}}
-          {{t "at"}}
-          {{moment-format @piece.created "HH:mm"}}
-        </p>
-        <p class="auk-u-muted auk-u-text-small">
-          {{t "access-level-last-modified"}}
-          {{moment-format @piece.accessLevelLastModified}}
-          {{t "at"}}
-          {{moment-format @piece.accessLevelLastModified "HH:mm"}}
-        </p>
-        <div class="auk-o-flex auk-o-flex--vertical-center auk-u-mt">
-          <Auk::Pill @skin="white" class="auk-u-mr">
+<li class="auk-document-card {{if @isHighlighted "active"}}">
+    <div class="auk-document-card__content">
+        <div class="auk-document-card__details">
             <Utils::AccessLevelColorBadge
               @accessLevel={{this.accessLevel}}
-              class="auk-u-muted auk-text-small"
+              class="auk-overline"
             />
-          </Auk::Pill>
-          <Utils::ConfidentialityPill @confidential={{@piece.confidential}} />
+            {{#if @documentContainer.type}}
+              <span class="auk-overline">-</span>
+              <span class="auk-overline">{{@documentContainer.type.label}}</span>
+            {{/if}}
         </div>
-      </div>
-      <div class="auk-o-grid-col-static">
-        <Auk::Button
-          @layout="icon-only"
-          @icon="download"
-          @skin="borderless"
-          @href={{@piece.file.namedDownloadLink}}
-          download
-        />
-        <Auk::Button
-          @layout="icon-only"
-          @icon="book"
-          @skin="borderless"
-          {{on "click" (fn @onSelectVersion @piece)}}
-        />
-      </div>
+        <h4 class="auk-document-card__title">{{@piece.name}}</h4>
+        <div class="auk-document-card__meta">
+            <Auk::PillList class="auk-u-mr-3">
+              <Utils::ConfidentialityPill @confidential={{@piece.confidential}} />
+              <Utils::Documents::FileTypePill @extension={{@piece.file.extension}} />
+            </Auk::PillList>
+            <div class="auk-u-mr-3">
+              <p>
+                {{t "uploaded-at"}}
+                {{moment-format @piece.created "DD-MM-YYYY"}}
+                -
+                {{moment-format @piece.created "HH:mm"}}
+              </p>
+              <p>
+                {{t "access-level-last-modified"}}
+                {{moment-format @piece.accessLevelLastModified "DD-MM-YYYY"}}
+                -
+                {{moment-format @piece.accessLevelLastModified "HH:mm"}}
+              </p>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
+    <div class="auk-document-card__actions">
+        <div class="auk-button-toolbar">
+            <Auk::Button
+              @layout="icon-only"
+              @icon="download"
+              @skin="borderless"
+              @href={{@piece.file.namedDownloadLink}}
+              download
+            />
+            <Auk::Button
+              @layout="icon-only"
+              @icon="book"
+              @skin="borderless"
+              {{on "click" (fn @onSelectVersion @piece)}}
+            />
+        </div>
+    </div>
+</li>
