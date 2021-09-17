@@ -130,8 +130,7 @@ context('Agenda tests', () => {
     cy.openDetailOfAgendaitem(subcaseTitleShort);
     // detail view
     cy.get(agenda.agendaitemTitlesView.edit).click();
-    cy.get(agenda.agendaitemTitlesEdit.confidential).find(utils.vlToggle.label)
-      .click();
+    cy.get(agenda.agendaitemTitlesEdit.confidential).click();
     // When typing, the name in de sidebar item also changes, showing the whitespaces before saving
 
     // short title

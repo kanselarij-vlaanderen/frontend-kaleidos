@@ -70,8 +70,11 @@
   </div>
 
   <div class="auk-form-group">
-    <Auk::Label>{{t "finished"}}</Auk::Label>
-    <WebComponents::VlToggle @value={{this.newsletterInfo.finished}} />
+    <Auk::Label for="item-finished">{{t "finished"}}</Auk::Label>
+    <Auk::Toggle
+      id="item-finished"
+      @checked={{this.newsletterInfo.finished}}
+    />
   </div>
   <div class="auk-form-group" data-test-newsletter-edit-item-themes-selector>
     <Auk::Label>{{t "themes"}}</Auk::Label>
