@@ -109,7 +109,7 @@ export default class BatchDocumentsDetailsModal extends Component {
         );
 
         const piecesInContainer = await row.documentContainer.pieces;
-        if (piecesInContainer.length === 1) {
+        if (piecesInContainer.length === 0) {
           await this.fileService.deleteDocumentContainer(row.documentContainer);
         }
       } else {
