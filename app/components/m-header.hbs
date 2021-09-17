@@ -6,22 +6,14 @@
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
         <Auk::Tabs>
-          {{#if this.hasPublicationsEnabled}}
-            <Auk::Tab
-              @route="publications"
-              data-test-m-header-publications
-            >
-              {{t "publications"}}
-            </Auk::Tab>
-          {{/if}}
-          {{#if this.isShownSignatureFolder}}
-            <Auk::Tab
-              @route="signatures"
-              data-test-m-header-signatures
-            >
-              {{t "signature-folder"}}
-            </Auk::Tab>
-          {{/if}}
+          <Auk::Tab
+            @route="search.index"
+            @current-when="search"
+            data-test-m-header-search
+          >
+            <Auk::Icon @name="search" />
+            {{capitalize (t "search")}}
+          </Auk::Tab>
           <Auk::Tab
             @route="agendas.overview"
             @current-when="agendas agenda print-overviews.decisions print-overviews.press-agenda"
@@ -29,7 +21,9 @@
           >
             {{t "agendas"}}
           </Auk::Tab>
-          <Auk::Tab @route="cases" data-test-m-header-cases>{{t "cases"}}</Auk::Tab>
+          <Auk::Tab @route="cases" data-test-m-header-cases>
+            {{t "cases"}}
+          </Auk::Tab>
           {{#if this.currentSession.isViewer}}
             <Auk::Tab
               @route="newsletters"
@@ -39,19 +33,18 @@
               {{t "newsletter"}}
             </Auk::Tab>
           {{/if}}
-          <Auk::Tab
-            @route="search.index"
-            @current-when="search"
-            data-test-m-header-search
-          >
-            <Auk::Icon @name="search" />
-            {{capitalize (t "search")}}
-          </Auk::Tab>
+          {{#if this.hasPublicationsEnabled}}
+            <Auk::Tab @route="publications" data-test-m-header-publications>
+              {{t "publications"}}
+            </Auk::Tab>
+          {{/if}}
+          {{#if this.isShownSignatureFolder}}
+            <Auk::Tab @route="signatures" data-test-m-header-signatures>
+              {{t "signature-folder"}}
+            </Auk::Tab>
+          {{/if}}
           {{#if this.currentSession.isEditor}}
-            <Auk::Tab
-              @route="settings.overview"
-              data-test-m-header-settings
-            >
+            <Auk::Tab @route="settings.overview" data-test-m-header-settings>
               {{t "settings"}}
             </Auk::Tab>
           {{/if}}
@@ -67,11 +60,7 @@
         </Auk::Toolbar::Item>
       {{/if}}
       <Auk::Toolbar::Item>
-        <Auk::ButtonLink
-          @skin="muted"
-          @padded="padded"
-          @icon="circle-question"
-        >
+        <Auk::ButtonLink @skin="muted" @padded="padded" @icon="circle-question">
           {{t "help"}}
         </Auk::ButtonLink>
         <AttachPopover
@@ -83,16 +72,15 @@
           @placement="bottom-end"
         >
           <Auk::Menu>
-            <Auk::Menu::Item
-              @route="manual"
-              target="_blank"
-            >
+            <Auk::Menu::Item @route="manual" target="_blank">
               {{t "look-at-documentation"}}
             </Auk::Menu::Item>
             <Auk::Menu::Item @href="mailto:kaleidos.servicedesk@vlaanderen.be">
               <div>
                 <span>{{t "contact-us"}}</span>
-                <span class="auk-u-muted auk-u-text-small">{{t "email-servicedesk"}}</span>
+                <span class="auk-u-muted auk-u-text-small">
+                  {{t "email-servicedesk"}}
+                </span>
               </div>
             </Auk::Menu::Item>
           </Auk::Menu>
@@ -109,22 +97,30 @@
             {{this.currentSession.user.firstName}}
           </Auk::ButtonLink>
           <AttachPopover
-                 @renderInPlace={{true}}
-                 @class="ember-attacher-popper"
-                 @hideOn="clickout click"
-                 @showOn="click"
-                 @animation="shift"
-                 @placement="bottom-end"
-               >
+            @renderInPlace={{true}}
+            @class="ember-attacher-popper"
+            @hideOn="clickout click"
+            @showOn="click"
+            @animation="shift"
+            @placement="bottom-end"
+          >
             <Auk::Menu>
               <Auk::Menu::Item @textOnly={{true}}>
-                <Auk::Avatar @icon="user" @name={{this.currentSession.user.fullName}}>
+                <Auk::Avatar
+                  @icon="user"
+                  @name={{this.currentSession.user.fullName}}
+                >
                   <p>{{this.currentSession.user.fullName}}</p>
-                  <p class="auk-u-muted auk-u-text-small">{{this.currentSession.group.name}}</p>
+                  <p class="auk-u-muted auk-u-text-small">
+                    {{this.currentSession.group.name}}
+                  </p>
                 </Auk::Avatar>
               </Auk::Menu::Item>
               <Auk::Menu::Divider />
-              <Auk::Menu::Item {{on "click" this.logout}} data-test-m-header-user-action-logout>
+              <Auk::Menu::Item
+                {{on "click" this.logout}}
+                data-test-m-header-user-action-logout
+              >
                 {{t "sign-out"}}
               </Auk::Menu::Item>
             </Auk::Menu>

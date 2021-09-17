@@ -200,9 +200,7 @@ context('Subcase tests', () => {
     cy.get(agenda.agendaitemTitlesView.edit).click();
 
     // Check the checkbox
-    cy.get(agenda.agendaitemTitlesEdit.showInNewsletter)
-      .find(utils.vlToggle.label)
-      .click();
+    cy.get(agenda.agendaitemTitlesEdit.showInNewsletter).click();
 
     // Save the changes setting
     cy.route('PATCH', '/agendas/**').as('patchAgenda');

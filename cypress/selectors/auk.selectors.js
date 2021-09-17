@@ -73,5 +73,6 @@ const selectors = {
   textarea: '.auk-textarea',
 
   datepicker: '[data-test-auk-datepickr]',
+  icon: '.auk-icon',
 };
 export default selectors;

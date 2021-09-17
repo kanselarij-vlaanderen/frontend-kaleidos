@@ -28,15 +28,16 @@ export default Model.extend({
   subcases: hasMany('subcase', {
     inverse: null,
   }),
-  publicationFlows: hasMany('publication-flow', {
-    serialize: false,
-  }),
   requestedSubcases: hasMany('subcase', {
     inverse: null,
   }),
   agendaitems: hasMany('agendaitem', {
     inverse: null,
   }),
+  publicationFlows: hasMany('publication-flow', {
+    serialize: false,
+  }),
+  signSigningActivities: hasMany('sign-signing-activity'),
 
   fullDisplayName: computed('person', 'title', 'person.nameToDisplay', function() {
     const nameToDisplay = this.get('person.nameToDisplay');

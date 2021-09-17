@@ -13,7 +13,8 @@
               data-test-mandatees-panel-add
               @skin="tertiary"
               @icon="add"
-              {{on "click" this.openLinkModal}}>
+              {{on "click" this.openLinkModal}}
+            >
               {{t "add-mandatee"}}
             </Auk::Button>
           </Auk::Toolbar::Item>
@@ -30,19 +31,25 @@
             </tr>
           </thead>
           <tbody>
-            {{#each (sort-by "priority" @publicationFlow.mandatees) as |mandatee|}}
-              <tr>
-                <td>
+            {{#each
+              (sort-by "priority" @publicationFlow.mandatees)
+              as |mandatee|
+            }}
+              <tr data-test-mandatees-panel-row>
+                <td data-test-mandatees-panel-row-full-name>
                   <Auk::Avatar @icon="user">
                     {{mandatee.person.nameToDisplay}}
-                    {{!-- Beleidsdomeinen en beleidsvelden / worden momenteel niet gebruikt in productie / werkt met isecodes --}}
+                    {{! Beleidsdomeinen en beleidsvelden / worden momenteel niet gebruikt in productie / werkt met isecodes }}
                   </Auk::Avatar>
                 </td>
                 <td class="auk-u-text-align--right">
                   <Auk::Button
-                    data-test-mandatees-panel-unlink
-                    @layout="icon-only" @icon="delete" @skin="danger-borderless"
-                    {{on "click" (fn this.unlink mandatee)}} />
+                    data-test-mandatees-panel-row-unlink
+                    @layout="icon-only"
+                    @icon="delete"
+                    @skin="danger-borderless"
+                    {{on "click" (fn this.unlink mandatee)}}
+                  />
                 </td>
               </tr>
             {{/each}}
@@ -60,5 +67,6 @@
 {{#if this.isOpenLinkModal}}
   <Publications::Publication::Case::Mandatees::LinkMandateeModal
     @onClose={{this.closeLinkModal}}
-    @onLink={{this.link}} />
+    @onLink={{this.link}}
+  />
 {{/if}}
