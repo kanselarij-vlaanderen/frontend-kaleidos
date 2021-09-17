@@ -196,6 +196,54 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .find(document.accessLevelPill.pill)
       .contains('Intern Regering');
     cy.get(document.documentCard.versionHistory).click();
+
+    // delete the BIS piece
+    cy.route('DELETE', '/files/**').as('deleteFile');
+    cy.route('DELETE', '/pieces/**').as('deletePiece');
+    // put call to restore pieces (won't do anything in this test, but should always be called)
+    cy.route('PUT', '/agendaitems/**/pieces/restore').as('restoreAgendaitemPiece');
+    cy.get(route.agendaitemDocuments.batchEdit).click();
+    cy.get(document.documentDetailsRow.row).as('documentRows');
+    cy.get('@documentRows').eq(0)
+      .find(document.documentDetailsRow.delete)
+      .click();
+    cy.get('@documentRows').eq(0)
+      .find(document.documentDetailsRow.undoDelete);
+    cy.get(document.batchDocumentsDetails.save).click();
+    cy.wait('@deleteFile').wait('@deletePiece')
+      .wait('@restoreAgendaitemPiece');
+
+    // make sure modal is closed before continuing
+    cy.get(document.documentDetailsRow.row).should('not.exist');
+
+    // check that BIS is now deleted, original piece is showing
+    cy.get(document.documentCard.name.value).as('documentName');
+    cy.get('@documentName').contains(savedName)
+      .should('not.exist');
+    cy.get('@documentName').contains(file.newFileName);
+    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.vlDocument.piece).should('have.length', 1);
+    cy.get(document.documentCard.versionHistory).click();
+
+    // delete the last piece, should delete container
+    cy.route('DELETE', '/document-containers/**').as('deleteContainer');
+    cy.get(route.agendaitemDocuments.batchEdit).click();
+    cy.get(document.documentDetailsRow.row).as('documentRows');
+    cy.get('@documentRows').eq(0)
+      .find(document.documentDetailsRow.delete)
+      .click();
+    cy.get(document.batchDocumentsDetails.save).click();
+    cy.wait('@deleteFile').wait('@deletePiece')
+      .wait('@restoreAgendaitemPiece')
+      .wait('@deleteContainer');
+
+    // make sure modal is closed before continuing
+    cy.get(document.documentDetailsRow.row).should('not.exist');
+
+    // both documents and linked documents show emptyState
+    cy.get(utils.vlAlert.message).should('have.length', 2)
+      .eq(0)
+      .contains('geen documenten');
   });
 
   it('Cancelling when adding new piece should not skip a piece the next time', () => {

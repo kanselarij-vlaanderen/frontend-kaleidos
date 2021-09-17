@@ -55,6 +55,8 @@ const selectors = {
     row: '[data-test-document-details-row]',
     type: '[data-test-document-details-row-type]',
     accessLevel: '[data-test-document-details-row-access-level]',
+    undoDelete: '[data-test-document-details-row-undo-delete]',
+    delete: '[data-test-document-details-row-delete]',
   },
 
   // vl-uploaded-document

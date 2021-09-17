@@ -71,6 +71,7 @@
         />
       {{else if @row.isToBeDeleted}}
         <Auk::Button
+          data-test-document-details-row-undo-delete
           @icon="redo"
           @layout="icon-only"
           @skin="borderless"
@@ -78,6 +79,7 @@
         />
       {{else}}
         <Auk::Button
+          data-test-document-details-row-delete
           @icon="delete"
           @layout="icon-only"
           @skin="danger-borderless"
