@@ -76,13 +76,18 @@ export default class Piece extends Model {
   @hasMany('case', {
     inverse: null
   }) cases;
-
   // serialize: false ensures the relation (which may contain stale data due to
   // custom service) is not send in patch calls
   @hasMany('agendaitem', {
     serialize: false,
     inverse: null,
   }) agendaitems;
+
+  // SIGN FLOW
+  @belongsTo('sign-marking-activity') signMarkingActivity;
+  @belongsTo('signinghub-document') signinghubDocument;
+  @belongsTo('signed-piece') signedPiece;
+
 
   get viewDocumentURL() {
     return `/document/${this.id}`;

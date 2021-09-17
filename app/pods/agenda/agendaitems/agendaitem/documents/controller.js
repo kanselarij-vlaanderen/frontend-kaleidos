@@ -3,17 +3,12 @@ import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import {
-  keepLatestTask,
-  task
-} from 'ember-concurrency-decorators';
-import {
-  all,
-  timeout
-} from 'ember-concurrency';
+import { keepLatestTask, task } from 'ember-concurrency-decorators';
+import { all, timeout } from 'ember-concurrency';
 import moment from 'moment';
 import {
-  addPieceToAgendaitem, restorePiecesFromPreviousAgendaitem
+  addPieceToAgendaitem,
+  restorePiecesFromPreviousAgendaitem,
 } from 'frontend-kaleidos/utils/documents';
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { isPresent } from '@ember/utils';
@@ -24,7 +19,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service intl;
   @service agendaService;
 
-  @tracked isEnabledPieceEdit = false;
+  @tracked showBatchDetails = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked defaultAccessLevel;
   @tracked newPieces = A([]);
@@ -39,7 +34,9 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   get governmentCanViewDocuments() {
     const isOverheid = this.currentSession.isOverheid;
 
-    const documentsAreReleased = this.agendaitem.get('agenda.createdFor.releasedDocuments'); // TODO async ...?
+    const documentsAreReleased = this.agendaitem.get(
+      'agenda.createdFor.releasedDocuments'
+    ); // TODO async ...?
     return !(isOverheid && !documentsAreReleased);
   }
 
@@ -54,20 +51,12 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @task
   *loadNewPieces() {
     if (this.previousAgenda) {
-      this.newAgendaitemPieces = yield this.agendaService.changedPieces(this.currentAgenda.id,
-        this.previousAgenda.id, this.agendaitem.id);
+      this.newAgendaitemPieces = yield this.agendaService.changedPieces(
+        this.currentAgenda.id,
+        this.previousAgenda.id,
+        this.agendaitem.id
+      );
     }
-  }
-
-  @action
-  async enablePieceEdit() {
-    await this.ensureFreshData.perform();
-    this.isEnabledPieceEdit = true;
-  }
-
-  @action
-  disablePieceEdit() {
-    this.isEnabledPieceEdit = false;
   }
 
   @action
@@ -78,8 +67,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
   @action
   uploadPiece(file) {
-    const now = moment().utc()
-      .toDate();
+    const now = moment().utc().toDate();
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
     });
@@ -97,7 +85,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
   @task
   *savePieces() {
-    const savePromises = this.newPieces.map(async(piece) => {
+    const savePromises = this.newPieces.map(async (piece) => {
       try {
         await this.savePiece.perform(piece);
       } catch (error) {
@@ -113,7 +101,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
   /**
    * Save a new document container and the piece it wraps
-  */
+   */
   @task
   *savePiece(piece) {
     const documentContainer = yield piece.documentContainer;
@@ -123,7 +111,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
   /**
    * Add new piece to an existing document container
-  */
+   */
   @task
   *addPiece(piece) {
     yield piece.save();
@@ -132,7 +120,9 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
   @task
   *cancelUploadPieces() {
-    const deletePromises = this.newPieces.map((piece) => this.deletePiece.perform(piece));
+    const deletePromises = this.newPieces.map((piece) =>
+      this.deletePiece.perform(piece)
+    );
     yield all(deletePromises);
     this.newPieces = A();
     this.isOpenPieceUploadModal = false;
@@ -160,10 +150,13 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     if (documentContainer) {
       const lastPiece = await documentContainer.get('lastPiece'); // TODO: what is the purpose of getting lastPiece here
       if (this.agendaitem && lastPiece) {
-        await restorePiecesFromPreviousAgendaitem(this.agendaitem, documentContainer);
+        await restorePiecesFromPreviousAgendaitem(
+          this.agendaitem,
+          documentContainer
+        );
         // TODO: make sure we're not loading stale cache
       }
-      this.send('reloadModel');
+      this.refresh();
     }
   }
 
@@ -179,12 +172,15 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
       // There is no agendaActivity/subcase on isApproval agendaitems
       const subcase = yield agendaActivity.subcase;
       // Create new submission activity for pieces added after initial submission
-      const submissionActivity = this.store.createRecord('submission-activity', {
-        startDate: new Date(),
-        subcase,
-        agendaActivity,
-        pieces,
-      });
+      const submissionActivity = this.store.createRecord(
+        'submission-activity',
+        {
+          startDate: new Date(),
+          subcase,
+          agendaActivity,
+          pieces,
+        }
+      );
       submissionActivity.save(); // submission-act isn't needed further here. No yield. Can run in background.
     }
 
@@ -207,15 +203,35 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
         break;
       } else {
         // list from cache is stale, wait with back-off strategy
-        yield timeout(500 + (index * 500));
+        yield timeout(500 + index * 500);
         if (index >= 9) {
-          this.toaster.error(this.intl.t('documents-may-not-be-saved-message'), this.intl.t('warning-title'),
+          this.toaster.error(
+            this.intl.t('documents-may-not-be-saved-message'),
+            this.intl.t('warning-title'),
             {
               timeOut: 60000,
-            });
+            }
+          );
         }
       }
     }
+  }
+
+  @action
+  async openBatchDetails() {
+    await this.ensureFreshData.perform();
+    this.showBatchDetails = true;
+  }
+
+  @action
+  cancelBatchDetails() {
+    this.showBatchDetails = false;
+  }
+
+  @action
+  saveBatchDetails() {
+    this.refresh();
+    this.showBatchDetails = false;
   }
 
   @action
