@@ -110,19 +110,22 @@
             {{/if}}
             <Menu.Item
               data-test-agenda-header-navigate-to-decisions
-              {{action "navigateToDecisions"}}
+              @route="print-overviews.decisions.agendaitems"
+              @models={{array this.currentSession.id this.currentAgenda.id}}
             >
               {{t "print-decisions"}}
             </Menu.Item>
             <Menu.Item
               data-test-agenda-header-navigate-to-newsletter
-              {{action "navigateToNewsletter"}}
+              @route="newsletter"
+              @model={{this.currentSession.id}}
             >
               {{t "print-newsletter"}}
             </Menu.Item>
             <Menu.Item
               data-test-agenda-header-navigate-to-pressagenda
-              {{action "navigateToPressAgenda"}}
+              @route="print-overviews.press-agenda.agendaitems"
+              @models={{array this.currentSession.id this.currentAgenda.id}}
             >
               {{t "printable-press-agenda"}}
             </Menu.Item>
@@ -224,7 +227,7 @@
 {{#if this.isAddingAgendaitems}}
   <Agenda::Agendaitem::CreateAgendaitem
     @isAddingAgendaitems={{this.isAddingAgendaitems}}
-    @onCreate={{this.onCreateAgendaitem}} />
+    @onCreate={{this.onRefreshNeeded}} />
 {{/if}}
 
 {{#if this.releasingDocuments}}

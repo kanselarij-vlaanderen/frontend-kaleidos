@@ -36,9 +36,7 @@ export default Component.extend({
   toaster: service(),
 
   isAddingAgendaitems: false,
-  onCreateAgendaitem: null, // argument. Function to execute after creating an agenda-item.
-  onApproveAgenda: null, // argument. Function to execute after approving an agenda.
-  onApproveAllAgendaitems: null, // argument. Function to execute after setting formal ok on all agendaitems.
+  onRefreshNeeded: null, // argument. Function to execute after creating an agenda-item.
   isApprovingAllAgendaitems: false,
   showLoadingOverlay: false,
   loadingOverlayMessage: null,
@@ -167,7 +165,7 @@ export default Component.extend({
     const agendaitems = await newAgenda.get('agendaitems');
     await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
     this.toggleLoadingOverlayWithMessage(null);
-    this.onApproveAgenda(newAgenda.id);
+    return this.router.transitionTo('agenda.agendaitems', currentMeeting.id, newAgenda.id);
   },
 
   /**
@@ -212,7 +210,7 @@ export default Component.extend({
     const agendaitems = await currentDesignAgenda.hasMany('agendaitems').reload();
     await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
     this.toggleLoadingOverlayWithMessage(null);
-    this.onApproveAgenda(newAgenda.get('id'));
+    return this.router.transitionTo('agenda.agendaitems', currentMeeting.id, newAgenda.id);
   },
 
   /**
@@ -243,7 +241,7 @@ export default Component.extend({
     await currentMeeting.hasMany('agendas').reload();
     this.toggleLoadingOverlayWithMessage(null);
     // TODO KAS-2452 this refresh doesn't do much ..., reloads are needed
-    // this.refresh();
+    // this.onRefreshNeeded();
   },
 
   /**
@@ -272,7 +270,7 @@ export default Component.extend({
       return this.router.transitionTo('agenda.agendaitems', currentMeeting.id, lastApprovedAgenda.get('id'));
     }
     // TODO KAS-2452 this refresh doesn't do much ..., reloads are needed
-    // this.refresh();
+    // this.onRefreshNeeded();
   },
 
   /**
@@ -302,7 +300,7 @@ export default Component.extend({
       }
       // if there is no previous agenda, the meeting should have been deleted
       this.toggleLoadingOverlayWithMessage(null);
-      this.router.transitionTo('agendas');
+      return this.router.transitionTo('agendas');
     }
   },
 
@@ -338,7 +336,7 @@ export default Component.extend({
       await currentMeeting.reload();
       await currentMeeting.hasMany('agendas').reload();
       this.toggleLoadingOverlayWithMessage(null);
-      this.onApproveAgenda(lastApprovedAgenda.get('id'));
+      return this.router.transitionTo('agenda.agendaitems', currentMeeting.id, lastApprovedAgenda.id);
   },
 
   /**
@@ -415,27 +413,6 @@ export default Component.extend({
       window.print();
     },
 
-    navigateToPressAgenda() {
-      const {
-        currentSession, currentAgenda,
-      } = this;
-      this.navigateToPressAgenda(currentSession.get('id'), currentAgenda.get('id'));
-    },
-
-    navigateToNewsletter() {
-      const {
-        currentSession, currentAgenda,
-      } = this;
-      this.navigateToNewsletter(currentSession.get('id'), currentAgenda.get('id'));
-    },
-
-    navigateToDecisions() {
-      const {
-        currentSession, currentAgenda,
-      } = this;
-      this.navigateToDecisions(currentSession.get('id'), currentAgenda.get('id'));
-    },
-
     cancel() {
       this.set('releasingDecisions', false);
       this.set('releasingDocuments', false);
@@ -459,7 +436,7 @@ export default Component.extend({
         }
       }
       this.toggleLoadingOverlayWithMessage(null);
-      this.onApproveAllAgendaitems();
+      this.onRefreshNeeded();
     },
 
     async unlockAgenda() {
