@@ -1,25 +1,34 @@
-<Auk::Modal
-    @size="small">
+<Auk::Modal @size="small">
   <Auk::Modal::Header
     @title={{t "add-government-domains-government-fields"}}
-    @onClose={{@onCancel}} />
+    @onClose={{@onCancel}}
+  />
   <Auk::Modal::Body>
-    <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
+    <Utils::LoadableContent
+      @isLoading={{this.save.isRunning}}
+      @reserveSpace={{true}}
+    >
       <Auk::Label>{{t "government-domains-government-fields"}}</Auk::Label>
       <DomainFieldIse::DomainsFieldsSelectorForm
+        data-test-edit-government-fields-modal-selector-form
         @availableFields={{this.governmentFields}}
         @selectedFields={{this.selectedGovernmentFields}}
         @onSelectFields={{this.select}}
-        @onUnSelectFields={{this.deselect}} />
+        @onUnSelectFields={{this.deselect}}
+      />
     </Utils::LoadableContent>
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @size="large"
+  <Auk::Modal::Footer
+    @size="large"
     @cancelDisabled={{this.save.isRunning}}
-    @onCancel={{@onCancel}}>
+    @onCancel={{@onCancel}}
+  >
     <Auk::Button
+      data-test-edit-government-fields-modal-save
       @skin="primary"
       @loading={{this.save.isRunning}}
-      {{on "click" (perform this.save)}}>
+      {{on "click" (perform this.save)}}
+    >
       {{t "save"}}
     </Auk::Button>
   </Auk::Modal::Footer>

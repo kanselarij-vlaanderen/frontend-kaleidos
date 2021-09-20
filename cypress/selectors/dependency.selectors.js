@@ -31,5 +31,12 @@ const selectors = {
   rdfa: {
     editorInner: '.say-editor__inner',
   },
+
+  // ember-tag-input
+  emberTagInput: {
+    tag: '.emberTagInput-tag',
+    input: '.emberTagInput-input',
+    remove: '.emberTagInput-remove',
+  },
 };
 export default selectors;
