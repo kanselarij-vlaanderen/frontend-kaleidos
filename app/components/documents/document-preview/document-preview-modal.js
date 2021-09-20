@@ -1,17 +1,16 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
 
 export default class DocumentsDocumentPreviewDocumentPreviewModal extends Component {
-  @service media;
   @tracked selectedVersion;
 
-  @tracked sidebarIsOpen = this.media.get('isBigScreen');
+  @tracked sidebarIsOpen = true;
 
   constructor() {
     super(...arguments);
     this.selectedVersion = this.args.piece;
+    this.sidebarIsOpen = JSON.parse(localStorage.getItem('documentViewerSidebar'))
   }
 
   @action
@@ -22,5 +21,6 @@ export default class DocumentsDocumentPreviewDocumentPreviewModal extends Compon
   @action
   toggleSidebar() {
     this.sidebarIsOpen = !this.sidebarIsOpen;
+    localStorage.setItem('documentViewerSidebar',JSON.stringify(this.sidebarIsOpen));
   }
 }
