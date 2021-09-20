@@ -14,7 +14,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
    * @argument isOpen
    * @argument onCollapse
    * @argument onOpen
-   * @argument {(model, changedKeys: string[] or string) => void} didChange
+   * @argument {(model, changedKeys: string[]|string) => void} didChange
    *  on create and delete no changedKeys are passed
    */
   @service store;
@@ -127,18 +127,47 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @action
   async setPublicationStatus(status) {
     const now = new Date();
+
+    const oldStatus = this.publicationStatus;
+    if (oldStatus.isPublished && !status.isPublished) {
+      // no staatsbladUri = record only kept for publication-date
+      //    not linked to staatsblad
+      if (this.decision && !this.decision.staatsbladUri) {
+        // persist in notifyChanges callback
+        this.decision.deleteRecord();
+        this.decision = undefined;
+        this.notifyChanges(this.decision);
+      }
+    }
+
     this.publicationFlow.status = status;
     this.loadPublicationStatus.perform();
     if (status.isPublished || status.isWithdrawn) {
       this.publicationFlow.closingDate = now;
 
+      if (!this.translationSubcase.endDate) {
+        this.translationSubcase.endDate = now;
+        this.notifyChanges(this.translationSubcase);
+      }
       if (!this.publicationSubcase.endDate) {
         this.publicationSubcase.endDate = now;
         this.notifyChanges(this.publicationSubcase);
       }
-      if (!this.translationSubcase.endDate) {
-        this.translationSubcase.endDate = now;
-        this.notifyChanges(this.translationSubcase);
+
+      if (status.isPublished) {
+        if (!this.decision) {
+          const publicationActivities = await this.publicationSubcase
+            .publicationActivities;
+
+          if (publicationActivities.length) {
+            const publicationActivity = publicationActivities.objectAt(0);
+            this.decision = this.store.createRecord('decision', {
+              publicationActivity: publicationActivity,
+              publicationDate: now,
+            });
+            this.notifyChanges(this.decision);
+          }
+        }
       }
     } else {
       this.publicationFlow.closingDate = null;
@@ -147,7 +176,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
       startedAt: now,
       publication: this.publicationFlow,
     });
-    this.notifyChanges(this.publicationFlow, ['status', 'closingDate']),
+    this.notifyChanges(this.publicationFlow, ['status', 'closingDate']);
     this.notifyChanges(statusChange);
     await this.loadPublicationStatusChange.perform();
   }

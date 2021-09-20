@@ -4,9 +4,9 @@ import Model, {
 
 
 export default class DecisionModel extends Model {
-  @attr('string') uri;
   @attr('string') title;
   @attr('date') publicationDate;
+  @attr('string') staatsbladUri;
 
   @belongsTo('publication-activity') publicationActivity;
 }

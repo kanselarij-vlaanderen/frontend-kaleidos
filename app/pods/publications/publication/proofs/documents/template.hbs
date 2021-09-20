@@ -179,11 +179,12 @@
               </td>
               <td>
                 <WebComponents::AuButtonToolbar>
-                  <Auk::ButtonLink
-                    @href={{decision.uri}}
-                    @layout="icon-only" @icon="external-link"
-                    @target="_blank">
-                  </Auk::ButtonLink>
+                  {{#if decision.staatsbladUri}}
+                    <Auk::ButtonLink
+                      @href={{decision.staatsbladUri}}
+                      @layout="icon-only" @icon="external-link"
+                      @target="_blank" />
+                  {{/if}}
                 </WebComponents::AuButtonToolbar>
               </td>
             </tr>
