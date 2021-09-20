@@ -1,7 +1,4 @@
-import Model, {
-  belongsTo, attr
-} from '@ember-data/model';
-
+import Model, { belongsTo, attr } from '@ember-data/model';
 
 export default class DecisionModel extends Model {
   @attr('string') title;
