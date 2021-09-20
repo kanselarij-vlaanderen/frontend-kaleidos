@@ -6,9 +6,9 @@
     {{if @isOpen "auk-scroll-wrapper"}}"
   @isCollapsed={{not @isOpen}}
 >
-  {{#if @isOpen}}
-    <Auk::Navbar>
-      <Auk::Toolbar as |toolbar|>
+  <Auk::Navbar>
+    <Auk::Toolbar as |toolbar|>
+      {{#if @isOpen}}
         <toolbar.Group @position="left" as |group|>
           <group.Item>
             <Auk::Tabs>
@@ -43,8 +43,22 @@
             />
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
-      </Auk::Toolbar>
-    </Auk::Navbar>
+      {{else}}
+        <Auk::Toolbar::Group @position="center">
+          <Auk::Toolbar::Item class="auk-o-flex auk-o-flex--horizontal-center">
+            <Auk::Button
+              @skin="borderless"
+              @icon="chevron-left"
+              @layout="icon-only"
+              {{on "click" @onOpen}}
+            />
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      {{/if}}
+
+    </Auk::Toolbar>
+  </Auk::Navbar>
+  {{#if @isOpen}}
     <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
       <Utils::LoadableContent @isLoading={{this.loadPieceData.isRunning}}>
         {{! DETAILS }}
@@ -66,20 +80,5 @@
         {{/if}}
       </Utils::LoadableContent>
     </div>
-  {{else}}
-    <Auk::Navbar>
-      <Auk::Toolbar>
-        <Auk::Toolbar::Group @position="center">
-          <Auk::Toolbar::Item class="auk-o-flex auk-o-flex--horizontal-center">
-            <Auk::Button
-              @skin="borderless"
-              @icon="chevron-left"
-              @layout="icon-only"
-              {{on "click" @onOpen}}
-            />
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-      </Auk::Toolbar>
-    </Auk::Navbar>
   {{/if}}
 </Auk::Sidebar>
