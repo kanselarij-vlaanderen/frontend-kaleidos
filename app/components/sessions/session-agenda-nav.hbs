@@ -1,12 +1,15 @@
 <Auk::Tabs @reversed={{true}}>
-  <Auk::Tab @route="agendas.overview" @isHierarchicalBack={{true}}/>
+  <Auk::Tab @route="agendas.overview" @isHierarchicalBack={{true}} />
   <Auk::Tab
     @route="agenda.agendaitems.index"
-    @query={{if this.currentAgendaItemId (hash anchor=this.currentAgendaItemId)}}
+    @query={{if
+      this.currentAgendaItemId
+      (hash anchor=this.currentAgendaItemId)
+    }}
   >
     {{t "overview"}}
   </Auk::Tab>
-  {{#if this.firstAgendaitemId}}
+  {{#if this.firstAgendaitem}}
     <Auk::Tab
       @route="agenda.agendaitems.agendaitem"
       @models={{this.modelsForDetailRoute}}

@@ -68,8 +68,7 @@ context('Propagation to other graphs', () => {
     // check of treatment status is approved
     cy.get(agenda.decisionResultPill.pill).contains('Goedgekeurd');
 
-    // TODO-enable after KAS-1139 change formal ok status to test yggdrasil
-    // Enable this to test editing on approved agendaitems (formal ok status changes)
+    // Enable this to test editing on approved agendaitems (formal ok status changes KAS-1139)
     cy.route('PATCH', '/agendaitems/*').as('patchAgendaitem');
     cy.openDetailOfAgendaitem(subcaseTitle1);
     cy.get(agenda.agendaitemTitlesView.edit).click();

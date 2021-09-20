@@ -14,6 +14,7 @@ export default class AgendaRoute extends Route {
   async model(params) {
     const meetingId = params.meeting_id;
     // TODO KAS-2452 this include and reload true does not pick up the agenda deletion change
+    // TODO KAS-2452 RETEST, its possible I tested this during cache issues
     const meeting = await this.store.queryOne('meeting', {
       'filter[id]': meetingId,
       include: 'agendas,agendas.status'
