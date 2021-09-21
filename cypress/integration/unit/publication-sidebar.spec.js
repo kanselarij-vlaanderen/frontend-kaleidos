@@ -225,4 +225,16 @@ context('Publications sidebar tests', () => {
     cy.get(publication.sidebar.publicationDate).contains('Niet gekend');
     cy.get(publication.sidebar.remark);
   });
+
+  it('should open a publication after clicking a row', () => {
+    // cy.route('GET', '/publications/**').as('getPublications');
+    // cy.visit('/publicaties');
+    // cy.wait('@getPublications');
+
+    cy.get(publication.publicationsIndex.dataTable).find(publication.publicationTableRow.rows)
+      .first()
+      .click();
+    cy.url().should('contain', 'publicaties')
+      .should('contain', '/dossier');
+  });
 });

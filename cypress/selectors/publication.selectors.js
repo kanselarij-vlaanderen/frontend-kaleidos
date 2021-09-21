@@ -7,8 +7,16 @@ const selectors = {
   // publications\index\template
   publicationsIndex: {
     title: '[data-test-route-publications-index-title]',
+    filterContent: '[data-test-route-publications-index-filter-content]',
     newPublication: '[data-test-route-publications-index-new-publication]',
-    filter: '[data-test-route-publications-index-filter]',
+    dataTable: '[data-test-route-publications-index-data-table]',
+    loading: '[data-test-route-publications-index-loading]',
+    columnHeader: 'data-test-route-publications-index-th=',
+    configIcon: '[data-test-publications-index-config-modal-icon]',
+    config: {
+      option: 'data-test-publications-index-config-modal-option-checkbox=',
+    },
+    numberSelector: '.auk-form-group',
   },
 
   // publications\publication\template
@@ -21,8 +29,21 @@ const selectors = {
     COMPONENTS
   */
 
+  // publication-case-search
+  publicationCaseSearch: {
+    input: '[data-test-publication-case-search-input]',
+    resultList: '[data-test-publication-case-search-result-list]',
+    result: '[data-test-publication-case-search-result]',
+  },
+
   // publications-filter-modal
   publicationsFilter: {
+    minister: '[data-test-publications-filter-minister]',
+    published: '[data-test-publications-filter-published]',
+    paused: '[data-test-publications-filter-paused]',
+    notMinister: '[data-test-publications-filter-not-minister]',
+    toPublish: '[data-test-publications-filter-to-publish]',
+    withdrawn: '[data-test-publications-filter-withdrawn]',
     // TODO-SELECTOR unused selectors
     cancel: '[data-test-publications-filter-cancel]',
     reset: '[data-test-publications-filter-reset]',
@@ -58,6 +79,8 @@ const selectors = {
       publicationDueDate: '[data-test-publication-table-row-publication-due-date]',
       publicationDate: '[data-test-publication-table-row-publication-date]',
       urgencyLevel: '[data-test-publication-table-row-urgency-level]',
+      status: '[data-test-publication-table-row-status]',
+      source: '[data-test-publication-table-row-source]',
       goToPublication: '[data-test-publication-table-row-go-to-publication]',
     },
   },

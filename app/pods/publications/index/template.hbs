@@ -12,7 +12,7 @@
         <Publications::PublicationCaseSearch/>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
-        <Auk::Button @skin="secondary" @icon="filter" {{on "click" this.showFilterModal}}>
+        <Auk::Button data-test-route-publications-index-filter-content @skin="secondary" @icon="filter" {{on "click" this.showFilterModal}}>
           {{t "filter-content"}}
         </Auk::Button>
       </Auk::Toolbar::Item>
@@ -40,7 +40,7 @@
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-m-4">
       {{#if this.model.length}}
-        <table class="auk-table">
+        <table data-test-route-publications-index-data-table class="auk-table">
           <thead>
             <tr>
               {{#each this.tableColumns as |column|}}
@@ -49,6 +49,7 @@
                   {{#if (eq column.keyName "shortTitle")}}
                     {{!-- template-lint-disable no-inline-styles --}}
                     <Utils::ThSortable
+                      data-test-route-publications-index-th={{column.keyName}}
                       style="min-width: 25rem;"
                       @currentSorting={{this.sort}}
                       @field={{column.sortKey}}
@@ -58,12 +59,13 @@
                   {{else}}
                     {{#if column.sortKey}}
                       <Utils::ThSortable
+                              data-test-route-publications-index-th={{column.keyName}}
                               @onChange={{this.sortTable}}
                               @currentSorting={{this.sort}}
                               @field={{column.sortKey}}
                               @label={{t column.translationKeySmall}}/>
                     {{else}}
-                      <th class="auk-u-text-nowrap">{{t column.translationKeySmall}}</th>
+                      <th data-test-route-publications-index-th={{column.keyName}} class="auk-u-text-nowrap">{{t column.translationKeySmall}}</th>
                     {{/if}}
                   {{/if}}
                 {{/if}}
@@ -73,7 +75,7 @@
           </thead>
           <tbody>
             {{#if this.isLoadingModel}}
-              <tr>
+              <tr data-test-route-publications-index-loading>
                 <td colspan={{add this.tableColumns.length 1}}>{{t "loading"}}</td>
               </tr>
             {{else}}
@@ -125,9 +127,9 @@
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
         <Auk::Button
+          data-test-publications-index-config-modal-icon
           @icon="settings"
           @skin="borderless"
-          data-test-route-publications-index-filter
           {{on "click" this.toggleColumnDisplayOptions}}
         />
         <AttachPopover

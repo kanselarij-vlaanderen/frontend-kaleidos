@@ -15,6 +15,7 @@
           <div class="auk-form-group">
             <Auk::CheckboxList>
               <Auk::Checkbox
+              data-test-publications-filter-minister
                 @label={{t "via-cabinet" }}
                 @checked={{this.filter.ministerFilterOption}}
                 {{on "input" (fn this.toggleFilterOption "ministerFilterOption")}}
@@ -24,11 +25,13 @@
           <div class="auk-form-group">
             <Auk::CheckboxList>
               <Auk::Checkbox
+                data-test-publications-filter-published
                 @label={{t "publications-published" }}
                 @checked={{this.filter.publishedFilterOption}}
                 {{on "input" (fn this.toggleFilterOption "publishedFilterOption")}}
               />
               <Auk::Checkbox
+                data-test-publications-filter-paused
                 @label={{t "publications-paused" }}
                 @checked={{this.filter.pausedFilterOption}}
                 {{on "input" (fn this.toggleFilterOption "pausedFilterOption")}}
@@ -40,6 +43,7 @@
           <div class="auk-form-group">
             <Auk::CheckboxList>
               <Auk::Checkbox
+                data-test-publications-filter-not-minister
                 @label={{t "not-via-cabinet" }}
                 @checked={{this.filter.notMinisterFilterOption}}
                 {{on "input" (fn this.toggleFilterOption "notMinisterFilterOption")}}
@@ -49,11 +53,13 @@
           <div class="auk-form-group">
             <Auk::CheckboxList>
               <Auk::Checkbox
+                data-test-publications-filter-to-publish
                 @label={{t "publications-to-publish" }}
                 @checked={{this.filter.toPublishFilterOption}}
                 {{on "input" (fn this.toggleFilterOption "toPublishFilterOption")}}
               />
               <Auk::Checkbox
+                data-test-publications-filter-withdrawn
                 @label={{t "discharged" }}
                 @checked={{this.filter.withdrawnFilterOption}}
                 {{on "input" (fn this.toggleFilterOption "withdrawnFilterOption")}}
