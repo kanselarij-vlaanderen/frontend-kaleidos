@@ -1,13 +1,14 @@
 {{!-- TODO: octane-refactor --}}
 {{!-- template-lint-disable no-action --}}
-<div class="auk-box">
+<div class="auk-box auk-u-mb-8">
   <div class="auk-u-mb-4">
     {{#if @subcase}}
       <div class="auk-form-group">
-        <Auk::Label>{{t "confidential"}}</Auk::Label>
-        <WebComponents::VlToggle
+        <Auk::Label for="subcase-confidential">{{t "confidential"}}</Auk::Label>
+        <Auk::Toggle
+          id="subcase-confidential"
+          @checked={{@subcase.confidential}}
           data-test-agendaitem-titles-edit-confidential={{true}}
-          @value={{@subcase.confidential}}
         />
       </div>
     {{/if}}
@@ -50,10 +51,11 @@
     <div class="auk-u-mb-4">
       <div class="auk-form-group">
         {{#if this.newsletterInfo}}
-          <Auk::Label>{{t "show-in-newsletter"}}</Auk::Label>
-          <WebComponents::VlToggle
+          <Auk::Label for="item-show-in-newsletter">{{t "show-in-newsletter"}}</Auk::Label>
+          <Auk::Toggle
+            id="item-show-in-newsletter"
+            @checked={{this.newsletterInfo.inNewsletter}}
             data-test-agendaitem-titles-edit-showInNewsletter={{true}}
-            @value={{this.newsletterInfo.inNewsletter}}
           />
         {{else}}
           <Auk::Label>{{t "show-in-newsletter"}}</Auk::Label>

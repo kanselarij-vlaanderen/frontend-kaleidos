@@ -35,12 +35,12 @@ export default class CasesCaseSubcasesOverview extends Controller {
   size = 20;
 
   sort = '-created';
+  showArchived = false;
   @tracked selectedCase = null;
   @tracked caseToEdit = null;
   @tracked showEditCaseModal = false;
   @tracked isNotArchived = false;
   @tracked isArchivingCase = false;
-  showArchived = false;
 
   @action
   selectSize(size) {

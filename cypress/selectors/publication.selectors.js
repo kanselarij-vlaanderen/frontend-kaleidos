@@ -43,7 +43,21 @@ const selectors = {
     rows: '[data-test-publication-table-row]',
     row: {
       shortTitle: '[data-test-publication-table-row-short-title]',
+      remark: {
+        column: '[data-test-publication-table-row-remark-column]',
+        tooltip: '[data-test-publication-table-row-remark-tooltip]',
+      },
       number: '[data-test-publication-table-row-number]',
+      regulationType: '[data-test-publication-table-row-regulation-type]',
+      proofPrintCorrector: '[data-test-publication-table-row-proof-print-corrector]',
+      numacNumber: '[data-test-publication-table-row-numac-number]',
+      openingDate: '[data-test-publication-table-row-opening-date]',
+      decisionDate: '[data-test-publication-table-row-decision-date]',
+      translationDueDate: '[data-test-publication-table-row-translation-due-date]',
+      targetEndDate: '[data-test-publication-table-row-target-end-date]',
+      publicationDueDate: '[data-test-publication-table-row-publication-due-date]',
+      publicationDate: '[data-test-publication-table-row-publication-date]',
+      urgencyLevel: '[data-test-publication-table-row-urgency-level]',
       goToPublication: '[data-test-publication-table-row-go-to-publication]',
     },
   },
@@ -111,8 +125,64 @@ const selectors = {
     // TODO-SELECTORS unused selectors
     table: '[data-test-mandatees-panel-table]',
     add: '[data-test-mandatees-panel-add]',
-    unlink: '[data-test-mandatees-panel-unlink]',
+    rows: '[data-test-mandatees-panel-row]',
+    row: {
+      fullName: '[data-test-mandatees-panel-row-full-name]',
+      unlink: '[data-test-mandatees-panel-row-unlink]',
+    },
   },
+
+  // link-mandatees-modal
+  linkMandatees: {
+    select: '[data-test-link-mandatees-select]',
+    cancel: '[data-test-link-mandatees-cancel]',
+    add: '[data-test-link-mandatees-add]',
+  },
+
+  // government-fields-panel
+  governmentFieldsPanel: {
+    edit: '[data-test-government-fields-panel-edit]',
+    rows: '[data-test-government-fields-panel-row]',
+    row: {
+      label: '[data-test-government-fields-panel-row-label]',
+      fields: '[data-test-government-fields-panel-row-fields]',
+    },
+  },
+
+  // edit-government-fields-modal
+  editGovernmentFieldsModal: {
+    selectorForm: '[data-test-edit-government-fields-modal-selector-form]',
+    save: '[data-test-edit-government-fields-modal-save]',
+  },
+
+  // sidebar
+  sidebar: {
+    container: '[data-test-publication-sidebar-container]',
+    open: '[data-test-publication-sidebar-open]',
+    publicationNumber: '[data-test-publication-sidebar-publication-number]',
+    publicationNumberError: '[data-test-publication-sidebar-publication-number-error]',
+    confirmWithdraw: '[data-test-publication-sidebar-confirm-withdraw]',
+    statusChangeDate: '[data-test-publication-sidebar-status-change-date]',
+    regulationType: '[data-test-publication-sidebar-regulation-type]',
+    publicationMode: '[data-test-publication-sidebar-publication-mode]',
+    proofPrintCorrector: '[data-test-publication-sidebar-proof-print-corrector]',
+    numacNumber: '[data-test-publication-sidebar-numac-number]',
+    openingDate: '[data-test-publication-sidebar-opening-date]',
+    decisionDate: '[data-test-publication-sidebar-decision-date]',
+    translationDueDate: '[data-test-publication-sidebar-translation-due-date]',
+    translationDate: '[data-test-publication-sidebar-translation-date]',
+    targetEndDate: '[data-test-publication-sidebar-target-end-date]',
+    publicationDueDate: '[data-test-publication-sidebar-publication-due-date]',
+    publicationDate: '[data-test-publication-sidebar-publication-date]',
+    remark: '[data-test-publication-sidebar-remark]',
+  },
+
+  // publication-status-selector
+  statusSelector: '[data-test-publication-status-selector]',
+
+  // urgency-level-checkbox
+  urgencyLevelCheckbox: '[data-test-urgency-level-checkbox]',
+
   // documents-upload-modal
   documentsUploadModal: {
     save: '[data-test-publication-documents-upload-modal-save]',

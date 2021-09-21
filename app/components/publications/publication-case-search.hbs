@@ -14,9 +14,9 @@
     {{#each this.searchResults as |result|}}
       <Auk::SearchResultsList::Item @route="publications.publication.documents" @model={{result.id}} @skin="multiline">
         <:default>
-          {{#if result.shortTile}}
-            {{result.shortTile}}
-          {{else if result.title}}
+          {{#if result.shortTitle}}
+            {{result.shortTitle}}
+          {{else if result.title}}  {{! search returns title but this is the longTitle from resources, misnamed in config}}
             {{result.title}}
           {{/if}}
         </:default>
