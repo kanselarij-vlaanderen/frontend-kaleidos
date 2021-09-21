@@ -255,7 +255,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
       shortTitle: this.case.shortTitle,
       longTitle: this.case.title,
       case: this.case,
-      decisionActivity: this.decisionActivity,
+      decisionActivity: this.agendaItemTreatment,
       creator: creator,
     });
     await signFlow.save();
