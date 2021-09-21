@@ -38,6 +38,10 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     this.currentAgenda = await this.agendaitem.agenda;
     this.previousAgenda = await this.currentAgenda.previousVersion;
     this.agendaActivity = await this.agendaitem.agendaActivity;
+
+    const subcase = await this.agendaActivity.subcase;
+    this.agendaItemTreatment = await this.agendaitem.agendaItemTreatment;
+    this.case = await subcase.case;
   }
 
   setupController(controller) {
@@ -50,6 +54,8 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.currentAgenda = this.currentAgenda;
     controller.previousAgenda = this.previousAgenda;
     controller.agendaActivity = this.agendaActivity;
+    controller.agendaItemTreatment = this.agendaItemTreatment;
+    controller.case = this.case;
     controller.loadNewPieces.perform();
   }
 

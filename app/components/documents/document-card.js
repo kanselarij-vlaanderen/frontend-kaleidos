@@ -39,6 +39,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked piece;
   @tracked accessLevel;
   @tracked documentContainer;
+  @tracked signMarkingActivity;
 
   @tracked uploadedFile;
   @tracked newPiece;
@@ -50,6 +51,7 @@ export default class DocumentsDocumentCardComponent extends Component {
     super(...arguments);
     this.loadCodelists.perform();
     this.loadPieceRelatedData.perform();
+    this.loadSignatureRelatedData.perform();
   }
 
   get shouldShowPublications() {
@@ -59,6 +61,11 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *loadCodelists() {
     this.defaultAccessLevel = yield this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
+  }
+
+  @task
+  *loadSignatureRelatedData() {
+    this.signMarkingActivity = yield this.piece.signMarkingActivity;
   }
 
   @task
@@ -264,5 +271,13 @@ export default class DocumentsDocumentCardComponent extends Component {
   @action
   async reloadAccessLevel() {
     await this.loadPieceRelatedData.perform();
+  }
+
+  @action
+  async markForSignature() {
+    if (!this.signMarkingActivity){
+      await this.args.markForSignature(this.args.piece);
+      this.loadSignatureRelatedData.perform();
+    }
   }
 }

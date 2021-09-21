@@ -28,6 +28,8 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @tracked currentAgenda;
   @tracked previousAgenda;
   @tracked agendaActivity;
+  @tracked case;
+  @tracked agendaItemTreatment;
 
   @tracked isOpenPublicationModal = false;
 
@@ -242,6 +244,34 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @action
   closePublicationModal() {
     this.isOpenPublicationModal = false;
+  }
+
+  @action
+  async markForSignature(piece) {
+    const now = new Date();
+    const creator = await this.currentSession.user.person
+    const signFlow = this.store.createRecord('sign-flow', {
+      openingDate: now,
+      shortTitle: this.case.shortTitle,
+      longTitle: this.case.title,
+      case: this.case,
+      decisionActivity: this.decisionActivity,
+      creator: creator,
+    });
+    await signFlow.save();
+    const signSubcase = this.store.createRecord('sign-subcase', {
+      startDate: now,
+      signFlow: signFlow,
+    });
+    await signSubcase.save();
+    const signMarkingActivity = this.store.createRecord('sign-marking-activity', {
+        startDate: now,
+        endDate: now,
+        signSubcase: signSubcase,
+        piece: piece,
+      }
+    );
+    await signMarkingActivity.save();
   }
 
   @action
