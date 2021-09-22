@@ -2,8 +2,10 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
 
 export default class DocumentsDocumentPreviewDetailsDetailsTabComponent extends Component {
+  @service currentSession;
   @tracked isEditingDetails = false;
   @tracked documentType;
   @tracked accessLevel;

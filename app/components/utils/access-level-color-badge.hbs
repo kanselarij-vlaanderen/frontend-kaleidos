@@ -1,13 +1,11 @@
+<Auk::ColorBadge
+  @skin={{this.accessPillSkin}}
+  class="auk-u-mr"
+/>
 <span ...attributes>
-  <Auk::ColorBadge
-    @skin={{this.accessPillSkin}}
-    class="auk-u-mr"
-  />
-  <span>
-    {{#if @accessLevel.label}}
-      {{@accessLevel.label}}
-    {{else}}
-      {{t "no-accessLevel"}}
-    {{/if}}
-  </span>
+  {{#if @accessLevel.label}}
+    {{@accessLevel.label}}
+  {{else}}
+    {{t "no-accessLevel"}}
+  {{/if}}
 </span>

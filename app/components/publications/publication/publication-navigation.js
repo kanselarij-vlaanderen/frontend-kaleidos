@@ -6,7 +6,7 @@ import { inject as service } from '@ember/service';
 export default class PublicationNavigation extends Component {
   @service store;
 
-  @tracked documentsCount = 0;
+  @tracked documentsCount = undefined;
 
   constructor() {
     super(...arguments);
