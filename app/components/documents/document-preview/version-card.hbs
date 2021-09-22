@@ -18,8 +18,8 @@
       </Auk::PillList>
       <div class="auk-u-mr-3">
         <p>
-          {{t "uploaded-at"}}
           {{#if @piece.created}}
+            {{t "uploaded-at"}}
             {{moment-format @piece.created "DD-MM-YYYY"}}
             -
             {{moment-format @piece.created "HH:mm"}}
