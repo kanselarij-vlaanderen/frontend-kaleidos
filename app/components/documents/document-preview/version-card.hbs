@@ -42,17 +42,17 @@
     <div class="auk-button-toolbar">
       <Auk::Button
         @layout="icon-only"
-        @icon="download"
-        @skin="borderless"
-        @href={{@piece.file.namedDownloadLink}}
-        download
-      />
-      <Auk::Button
-        @layout="icon-only"
         @icon="book"
         @skin="borderless"
         {{on "click" (fn @onSelectVersion @piece)}}
       />
+      <Auk::Button
+      @layout="icon-only"
+      @icon="download"
+      @skin="borderless"
+      @href={{@piece.file.namedDownloadLink}}
+      download
+    />
     </div>
   </div>
 </li>
