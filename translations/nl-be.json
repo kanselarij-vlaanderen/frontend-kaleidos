@@ -430,6 +430,7 @@
   "decision": "beslissing",
   "agenda-item-treatment": "Beslissing",
   "decision-result-code": "Beslissing resultaatcode",
+  "decision-result-unknown": "Resultaat beslissing onbekend",
   "successfully-deleted": "succesvol verwijderd.",
   "for-cabinet": "Voor kabinetten",
   "mandatee-proposal": "Voorstel tekst",
