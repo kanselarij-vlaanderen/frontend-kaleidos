@@ -73,8 +73,6 @@ const selectors = {
   // add-existing-piece
   addExistingPiece: {
     searchInput: '[data-test-add-existing-piece-search-input]',
-    // TODO-selector unused selector
-    searchButton: '[data-test-add-existing-piece-search-button]',
     checkbox: '[data-test-add-existing-piece-checkbox]',
   },
 
