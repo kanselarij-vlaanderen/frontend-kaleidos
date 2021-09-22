@@ -27,12 +27,14 @@
             {{t "upload-time-unknown"}}
           {{/if}}
         </p>
-        <p>
-          {{t "access-level-last-modified"}}
-          {{moment-format @piece.accessLevelLastModified "DD-MM-YYYY"}}
-          -
-          {{moment-format @piece.accessLevelLastModified "HH:mm"}}
-        </p>
+        {{#if @piece.accessLevelLastModified}}
+          <p>
+            {{t "access-level-last-modified"}}
+            {{moment-format @piece.accessLevelLastModified "DD-MM-YYYY"}}
+            -
+            {{moment-format @piece.accessLevelLastModified "HH:mm"}}
+          </p>
+        {{/if}}
       </div>
     </div>
   </div>
