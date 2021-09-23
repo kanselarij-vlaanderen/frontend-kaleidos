@@ -29,8 +29,6 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @tracked currentAgenda;
   @tracked previousAgenda;
   @tracked agendaActivity;
-  @tracked case;
-  @tracked agendaItemTreatment;
 
   @tracked isOpenPublicationModal = false;
 
@@ -249,14 +247,22 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
   @action
   async markForSignature(piece) {
+    // Placed the getting of these variables here to lessen loading time in router
+    const treatments = await this.agendaitem.treatments;
+    const agendaItemTreatment = treatments.firstObject;
+    const subcase = await agendaItemTreatment?.subcase;
+    const caze = await subcase.case;
+
+    const creator = await this.currentSession.user;
     const now = new Date();
-    const creator = await this.currentSession.user.person
+
+    //TODO: Shouldn't the short & long title be coming from the agendaitem. Also when would show or edit this data?
     const signFlow = this.store.createRecord('sign-flow', {
       openingDate: now,
-      shortTitle: this.case.shortTitle,
-      longTitle: this.case.title,
-      case: this.case,
-      decisionActivity: this.agendaItemTreatment,
+      shortTitle: caze.shortTitle,
+      longTitle: caze.title,
+      case: caze,
+      decisionActivity: agendaItemTreatment,
       creator: creator,
     });
     await signFlow.save();
@@ -265,7 +271,9 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
       signFlow: signFlow,
     });
     await signSubcase.save();
-    const signMarkingActivity = this.store.createRecord('sign-marking-activity', {
+    const signMarkingActivity = this.store.createRecord(
+      'sign-marking-activity',
+      {
         startDate: now,
         endDate: now,
         signSubcase: signSubcase,
@@ -282,9 +290,10 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
   get isShownSignatureMarker() {
     const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
-    const hasPermission = this.currentSession.isAdmin
-      || this.currentSession.isKabinet
-      || this.currentSession.isMinister;
+    const hasPermission =
+      this.currentSession.isAdmin ||
+      this.currentSession.isKabinet ||
+      this.currentSession.isMinister;
     return isEnabled && hasPermission;
   }
 }

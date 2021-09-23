@@ -6,8 +6,6 @@ import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import VrNotulenName, {
   compareFunction as compareNotulen,
 } from 'frontend-kaleidos/utils/vr-notulen-name';
-import ENV from 'frontend-kaleidos/config/environment';
-import { isEmpty } from '@ember/utils';
 
 export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
   async model() {
@@ -40,12 +38,6 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     this.currentAgenda = await this.agendaitem.agenda;
     this.previousAgenda = await this.currentAgenda.previousVersion;
     this.agendaActivity = await this.agendaitem.agendaActivity;
-    const isSignaturesEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
-    if (isSignaturesEnabled){
-      const subcase = await this.agendaActivity.subcase;
-      this.agendaItemTreatment = await this.agendaitem.agendaItemTreatment;
-      this.case = await subcase.case;
-    }
   }
 
   setupController(controller) {
@@ -58,8 +50,6 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.currentAgenda = this.currentAgenda;
     controller.previousAgenda = this.previousAgenda;
     controller.agendaActivity = this.agendaActivity;
-    controller.agendaItemTreatment = this.agendaItemTreatment;
-    controller.case = this.case;
     controller.loadNewPieces.perform();
   }
 

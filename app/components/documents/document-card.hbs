@@ -65,7 +65,6 @@
                 <Auk::Button
                   @skin={{if this.signMarkingActivity  "success-borderless" "muted-borderless"}}
                   @layout="icon-only"
-                  @disabled={{this.signMarkingActivity}}
                   @loading={{this.markForSignature.isRunning}}
                   @icon={{if this.signMarkingActivity  "sign" "no-sign"}}
                   {{on "click" (perform this.markForSignature)}}
