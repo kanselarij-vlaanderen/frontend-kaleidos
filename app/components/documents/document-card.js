@@ -70,7 +70,9 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *loadSignatureRelatedData() {
-    this.signMarkingActivity = yield this.piece.signMarkingActivity;
+    if (this.args.hasMarkForSignature) {
+      this.signMarkingActivity = yield this.piece.signMarkingActivity;
+    }
   }
 
   @task
