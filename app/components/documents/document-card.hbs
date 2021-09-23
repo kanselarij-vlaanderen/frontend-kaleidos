@@ -45,7 +45,7 @@
                     {{this.piece.publicationFlow.identification.idName}}
                   </span>
                 </LinkTo>
-                {{!-- template-lint-enable no-inline-styles --}}
+                {{! template-lint-enable no-inline-styles }}
               {{/if}}
             {{/if}}
             <Auk::Toolbar::Item class="auk-o-flex">
@@ -60,13 +60,22 @@
                 />
               {{/unless}}
             </Auk::Toolbar::Item>
-            {{#if (and @hasMarkForSignature (not this.loadSignatureRelatedData.isRunning))}}
-              <Auk::Toolbar::Item class="auk-o-flex">
+            {{#if
+              (and
+                @hasMarkForSignature
+                (not this.loadSignatureRelatedData.isRunning)
+              )
+            }}
+              <Auk::Toolbar::Item>
                 <Auk::Button
-                  @skin={{if this.signMarkingActivity  "success-borderless" "muted-borderless"}}
+                  @skin={{if
+                    this.signMarkingActivity
+                    "success-borderless"
+                    "muted-borderless"
+                  }}
                   @layout="icon-only"
                   @loading={{this.markForSignature.isRunning}}
-                  @icon={{if this.signMarkingActivity  "sign" "no-sign"}}
+                  @icon={{if this.signMarkingActivity "sign" "no-sign"}}
                   {{on "click" (perform this.markForSignature)}}
                 />
               </Auk::Toolbar::Item>
@@ -129,11 +138,11 @@
               </div>
             {{else}}
               <h6 class="auk-h4" data-test-document-card-name-value>
-                {{!-- template-lint-disable no-invalid-interactive --}}
+                {{! template-lint-disable no-invalid-interactive }}
                 <span {{on "click" this.enableEditPieceName}}>
                   {{this.piece.name}}
                 </span>
-                {{!-- template-lint-enable no-invalid-interactive --}}
+                {{! template-lint-enable no-invalid-interactive }}
               </h6>
             {{/if}}
             <div class="vlc-document-card-content__meta">
@@ -192,7 +201,7 @@
           <div class="vl-accordion__content js-vl-accordion__content">
             <div class="vl-accordion__panel">
               {{#each this.visiblePieces as |piece|}}
-                {{!-- TODO: also  disable delete when piece linked to other agenda-items while maintaining DDAU --}}
+                {{! TODO: also  disable delete when piece linked to other agenda-items while maintaining DDAU }}
                 <WebComponents::VlDocument
                   @piece={{piece}}
                   @enableDelete={{eq piece @piece}}

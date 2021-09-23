@@ -1,6 +1,4 @@
-<Documents::DocumentList
-  @pieces={{@pieces}}
-as |documents|>
+<Documents::DocumentList @pieces={{@pieces}} as |documents|>
   {{#each documents as |doc|}}
     <Documents::DocumentCard
       @piece={{doc}}
@@ -11,7 +9,8 @@ as |documents|>
       @onOpenUploadModal={{@onOpenUploadModal}}
       @hasMarkForSignature={{@hasMarkForSignature}}
       @markForSignature={{@markForSignature}}
-      @onAddPiece={{@onAddPiece}} />
+      @onAddPiece={{@onAddPiece}}
+    />
   {{else}}
     <div class="auk-u-mt-2">
       <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
