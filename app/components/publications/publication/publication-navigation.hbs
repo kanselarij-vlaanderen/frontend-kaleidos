@@ -5,20 +5,17 @@
     data-test-publication-nav-go-back />
   <Auk::Tab
     @route="publications.publication.case"
-    data-test-publication-nav-case>
+    data-test-publication-nav-case
+  >
     {{t "agendaitem-case"}}
   </Auk::Tab>
   {{#if @publicationFlow.case.subcases}}
     <Auk::Tab
       @route="publications.publication.documents"
+      @counter={{this.documentsCount}}
       data-test-publication-nav-documents
     >
-      <div class="auk-o-flex auk-o-flex--center">
-        <span class="auk-u-mr-2">{{t "documents"}}</span>
-        {{#unless this.loadData.isRunning}}
-          <p>({{this.documentsCount}})</p>
-        {{/unless}}
-      </div>
+      {{t "documents"}}
     </Auk::Tab>
   {{/if}}
   <Auk::Tab
