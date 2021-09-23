@@ -251,36 +251,37 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     const treatments = await this.agendaitem.treatments;
     const agendaItemTreatment = treatments.firstObject;
     const subcase = await agendaItemTreatment?.subcase;
-    const caze = await subcase.case;
+    if (subcase) {
+      const caze = await subcase.case;
+      const creator = await this.currentSession.user;
+      const now = new Date();
 
-    const creator = await this.currentSession.user;
-    const now = new Date();
-
-    //TODO: Shouldn't the short & long title be coming from the agendaitem. Also when would show or edit this data?
-    const signFlow = this.store.createRecord('sign-flow', {
-      openingDate: now,
-      shortTitle: caze.shortTitle,
-      longTitle: caze.title,
-      case: caze,
-      decisionActivity: agendaItemTreatment,
-      creator: creator,
-    });
-    await signFlow.save();
-    const signSubcase = this.store.createRecord('sign-subcase', {
-      startDate: now,
-      signFlow: signFlow,
-    });
-    await signSubcase.save();
-    const signMarkingActivity = this.store.createRecord(
-      'sign-marking-activity',
-      {
+      // TODO: Shouldn't the short & long title be coming from the agendaitem. Also when would show or edit this data?
+      const signFlow = this.store.createRecord('sign-flow', {
+        openingDate: now,
+        shortTitle: caze.shortTitle,
+        longTitle: caze.title,
+        case: caze,
+        decisionActivity: agendaItemTreatment,
+        creator: creator,
+      });
+      await signFlow.save();
+      const signSubcase = this.store.createRecord('sign-subcase', {
         startDate: now,
-        endDate: now,
-        signSubcase: signSubcase,
-        piece: piece,
-      }
-    );
-    await signMarkingActivity.save();
+        signFlow: signFlow,
+      });
+      await signSubcase.save();
+      const signMarkingActivity = this.store.createRecord(
+        'sign-marking-activity',
+        {
+          startDate: now,
+          endDate: now,
+          signSubcase: signSubcase,
+          piece: piece,
+        }
+      );
+      await signMarkingActivity.save();
+    }
   }
 
   @action
