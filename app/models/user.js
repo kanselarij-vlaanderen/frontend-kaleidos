@@ -1,4 +1,4 @@
-import Model, { belongsTo, hasMany, attr } from '@ember-data/model';
+import Model, { belongsTo, attr } from '@ember-data/model';
 import { computed } from '@ember/object';
 
 // TODO: octane-refactor
@@ -13,7 +13,6 @@ export default Model.extend({
     inverse: null,
   }),
   organization: belongsTo('organization'),
-  signFlows: hasMany('sign-flow'),
 
   email: computed('emailLink', {
     get() {
