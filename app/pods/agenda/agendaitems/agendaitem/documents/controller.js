@@ -13,6 +13,7 @@ import {
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { isPresent } from '@ember/utils';
 import ENV from 'frontend-kaleidos/config/environment';
+import { isEmpty } from '@ember/utils';
 
 export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service currentSession;
@@ -277,5 +278,13 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @action
   refresh() {
     this.send('reloadModel');
+  }
+
+  get isShownSignatureMarker() {
+    const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
+    const hasPermission = this.currentSession.isAdmin
+      || this.currentSession.isKabinet
+      || this.currentSession.isMinister;
+    return isEnabled && hasPermission;
   }
 }

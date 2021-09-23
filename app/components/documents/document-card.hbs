@@ -60,13 +60,15 @@
                 />
               {{/unless}}
             </Auk::Toolbar::Item>
-            {{#if (and @hasMarkForSignature (not this.loadSignatureRelatedData.isRunning) this.currentSession.isEditor)}}
+            {{#if (and @hasMarkForSignature (not this.loadSignatureRelatedData.isRunning))}}
               <Auk::Toolbar::Item class="auk-o-flex">
                 <Auk::Button
-                  @skin={{if this.signMarkingActivity  "borderless" "muted"}}
+                  @skin={{if this.signMarkingActivity  "success-borderless" "muted-borderless"}}
                   @layout="icon-only"
+                  @disabled={{this.signMarkingActivity}}
+                  @loading={{this.markForSignature.isRunning}}
                   @icon={{if this.signMarkingActivity  "sign" "no-sign"}}
-                  {{on "click" this.markForSignature}}
+                  {{on "click" (perform this.markForSignature)}}
                 />
               </Auk::Toolbar::Item>
             {{/if}}

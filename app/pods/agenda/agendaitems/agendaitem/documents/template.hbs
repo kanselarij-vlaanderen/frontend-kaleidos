@@ -45,7 +45,7 @@
       @onAddPiece={{perform this.addPiece}}
       @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
       @didDeleteContainer={{this.refresh}}
-      @hasMarkForSignature={{true}}
+      @hasMarkForSignature={{this.isShownSignatureMarker}}
       @markForSignature={{this.markForSignature}}
     />
   {{/unless}}

@@ -55,12 +55,17 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   get shouldShowPublications() {
-    return !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB) && this.currentSession.isOvrb;
+    return (
+      !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB) && this.currentSession.isOvrb
+    );
   }
 
   @task
   *loadCodelists() {
-    this.defaultAccessLevel = yield this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
+    this.defaultAccessLevel = yield this.store.findRecordByUri(
+      'access-level',
+      CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
+    );
   }
 
   @task
@@ -70,16 +75,19 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *loadPieceRelatedData() {
-    const includeBuilder = ['document-container,document-container.type,access-level'];
+    const includeBuilder = [
+      'document-container,document-container.type,access-level',
+    ];
     if (this.shouldShowPublications) {
       includeBuilder.push('publication-flow,publication-flow.identification');
     }
     const includeStr = includeBuilder.join(',');
 
-    const loadPiece = (id) => this.store.queryOne('piece', {
-      'filter[:id:]': id,
-      include: includeStr,
-    });
+    const loadPiece = (id) =>
+      this.store.queryOne('piece', {
+        'filter[:id:]': id,
+        include: includeStr,
+      });
 
     const piece = this.args.piece;
     if (piece) {
@@ -93,7 +101,9 @@ export default class DocumentsDocumentCardComponent extends Component {
       this.piece = yield loadPiece(this.piece.id);
       this.accessLevel = yield this.piece.accessLevel;
     } else {
-      throw new Error(`You should provide @piece or @documentContainer as an argument to ${this.constructor.name}`);
+      throw new Error(
+        `You should provide @piece or @documentContainer as an argument to ${this.constructor.name}`
+      );
     }
   }
 
@@ -131,8 +141,7 @@ export default class DocumentsDocumentCardComponent extends Component {
     yield this.loadVersionHistory.perform();
     const previousPiece = this.sortedPieces.lastObject;
     const previousAccessLevel = yield previousPiece.accessLevel;
-    const now = moment().utc()
-      .toDate();
+    const now = moment().utc().toDate();
     this.newPiece = this.store.createRecord('piece', {
       created: now,
       modified: now,
@@ -142,7 +151,9 @@ export default class DocumentsDocumentCardComponent extends Component {
       accessLevel: previousAccessLevel || this.defaultAccessLevel,
       documentContainer: this.documentContainer,
     });
-    this.newPiece.name = new VRDocumentName(previousPiece.name).withOtherVersionSuffix(this.sortedPieces.length + 1);
+    this.newPiece.name = new VRDocumentName(
+      previousPiece.name
+    ).withOtherVersionSuffix(this.sortedPieces.length + 1);
   }
 
   @task
@@ -204,6 +215,12 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.isExpandedVersionHistory = true;
   }
 
+  @task
+  *markForSignature() {
+    yield this.args.markForSignature(this.args.piece);
+    yield this.loadSignatureRelatedData.perform();
+  }
+
   @action
   collapseVersionHistory() {
     this.isExpandedVersionHistory = false;
@@ -241,7 +258,9 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *deleteDocumentContainerWithUndo() {
     // TODO remove yield once consuming component doesn't pass Proxy as @documentContainer
-    yield this.fileService.deleteDocumentContainerWithUndo.perform(this.documentContainer);
+    yield this.fileService.deleteDocumentContainerWithUndo.perform(
+      this.documentContainer
+    );
     if (this.args.didDeleteContainer) {
       this.args.didDeleteContainer(this.documentContainer);
     }
@@ -271,13 +290,5 @@ export default class DocumentsDocumentCardComponent extends Component {
   @action
   async reloadAccessLevel() {
     await this.loadPieceRelatedData.perform();
-  }
-
-  @action
-  async markForSignature() {
-    if (!this.signMarkingActivity){
-      await this.args.markForSignature(this.args.piece);
-      this.loadSignatureRelatedData.perform();
-    }
   }
 }
