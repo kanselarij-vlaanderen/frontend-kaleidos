@@ -10,6 +10,7 @@
     @selected={{this.selectedStatus}}
     @onchange={{perform this.onChange}}
     @disabled={{this.onChange.isRunning}}
+    @searchEnabled={{false}}
   as |option|>
     {{#if option.svg }}
       <Auk::Icon @name={{option.svg.icon}} @skin={{option.svg.color}} />
