@@ -1,24 +1,41 @@
-<Auk::Navbar class="auk-publication-overview-navbar" @skin="gray-100" @auto={{true}}>
+<Auk::Navbar
+  class="auk-publication-overview-navbar"
+  @skin="gray-100"
+  @auto={{true}}
+>
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical">
-          <h4 data-test-route-publications-index-title class="auk-toolbar-complex__title">{{t "publications"}}</h4>
+          <h4
+            data-test-route-publications-index-title
+            class="auk-toolbar-complex__title"
+          >{{t "publications"}}</h4>
         </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
-        <Publications::PublicationCaseSearch/>
+        <Publications::PublicationCaseSearch />
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
-        <Auk::Button data-test-route-publications-index-filter-content @skin="secondary" @icon="filter" {{on "click" this.showFilterModal}}>
+        <Auk::Button
+          data-test-route-publications-index-filter-content
+          @skin="secondary"
+          @icon="filter"
+          {{on "click" this.showFilterModal}}
+        >
           {{t "filter-content"}}
         </Auk::Button>
       </Auk::Toolbar::Item>
 
       <Auk::Toolbar::Item>
-        <Auk::Button data-test-route-publications-index-new-publication @icon="add" @skin="primary" {{on "click" this.showPublicationModal}}>
+        <Auk::Button
+          data-test-route-publications-index-new-publication
+          @icon="add"
+          @skin="primary"
+          {{on "click" this.showPublicationModal}}
+        >
           {{t "publications-new"}}
         </Auk::Button>
       </Auk::Toolbar::Item>
@@ -29,7 +46,10 @@
   <Auk::Navbar @skin="gray-100" @auto={{true}}>
     <Auk::Toolbar>
       <Auk::Toolbar::Group @position="right">
-        <Auk::Button @skin="tertiary"  {{on "click" this.resetPublicationsFilter}}>
+        <Auk::Button
+          @skin="tertiary"
+          {{on "click" this.resetPublicationsFilter}}
+        >
           {{t "clear-filter-plural"}}
         </Auk::Button>
       </Auk::Toolbar::Group>
@@ -45,27 +65,32 @@
             <tr>
               {{#each this.tableColumns as |column|}}
                 {{#if (get this.tableColumnDisplayOptions column.keyName)}}
-                  {{!-- first cases that need a special treament. The "else" clause treats the default case --}}
+                  {{! first cases that need a special treament. The "else" clause treats the default case }}
                   {{#if (eq column.keyName "shortTitle")}}
-                    {{!-- template-lint-disable no-inline-styles --}}
+                    {{! template-lint-disable no-inline-styles }}
                     <Utils::ThSortable
                       data-test-route-publications-index-th={{column.keyName}}
                       style="min-width: 25rem;"
                       @currentSorting={{this.sort}}
                       @field={{column.sortKey}}
                       @onChange={{this.sortTable}}
-                      @label={{t column.translationKeySmall}}/>
-                    {{!-- template-lint-enable no-inline-styles --}}
+                      @label={{t column.translationKeySmall}}
+                    />
+                    {{! template-lint-enable no-inline-styles }}
                   {{else}}
                     {{#if column.sortKey}}
                       <Utils::ThSortable
-                              data-test-route-publications-index-th={{column.keyName}}
-                              @onChange={{this.sortTable}}
-                              @currentSorting={{this.sort}}
-                              @field={{column.sortKey}}
-                              @label={{t column.translationKeySmall}}/>
+                        data-test-route-publications-index-th={{column.keyName}}
+                        @onChange={{this.sortTable}}
+                        @currentSorting={{this.sort}}
+                        @field={{column.sortKey}}
+                        @label={{t column.translationKeySmall}}
+                      />
                     {{else}}
-                      <th data-test-route-publications-index-th={{column.keyName}} class="auk-u-text-nowrap">{{t column.translationKeySmall}}</th>
+                      <th
+                        data-test-route-publications-index-th={{column.keyName}}
+                        class="auk-u-text-nowrap"
+                      >{{t column.translationKeySmall}}</th>
                     {{/if}}
                   {{/if}}
                 {{/if}}
@@ -76,13 +101,16 @@
           <tbody>
             {{#if this.isLoadingModel}}
               <tr data-test-route-publications-index-loading>
-                <td colspan={{add this.tableColumns.length 1}}>{{t "loading"}}</td>
+                <td colspan={{add this.tableColumns.length 1}}>
+                  {{t "loading"}}
+                </td>
               </tr>
             {{else}}
               {{#each this.model as |publicationFlow|}}
                 <Publications::PublicationsTableRow
                   @publicationFlow={{publicationFlow}}
-                  @tableColumnDisplayOptions={{this.tableColumnDisplayOptions}} />
+                  @tableColumnDisplayOptions={{this.tableColumnDisplayOptions}}
+                />
               {{/each}}
             {{/if}}
           </tbody>
@@ -98,7 +126,7 @@
   </div>
 </div>
 <div>
-  <hr>
+  <hr />
 </div>
 <div class="auk-u-mx-4">
   <Auk::Toolbar>
@@ -122,8 +150,7 @@
         <WebComponents::AuPageSize
           @selectedSize={{this.size}}
           @onChange={{this.setSizeOption}}
-        >
-        </WebComponents::AuPageSize>
+        />
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
         <Auk::Button
@@ -133,17 +160,17 @@
           {{on "click" this.toggleColumnDisplayOptions}}
         />
         <AttachPopover
-                @class="auk-popover"
-                @showOn="click"
-                @placement="top"
-                @hideOn="click"
-                @isShown={{this.showTableDisplayOptions}}
-                @renderInPlace={{false}}
+          @class="auk-popover"
+          @showOn="click"
+          @placement="top"
+          @hideOn="click"
+          @isShown={{this.showTableDisplayOptions}}
+          @renderInPlace={{false}}
         >
           <Publications::OverviewTableDisplayConfigModal
-                  @options={{this.tableColumnDisplayOptions}}
-                  @onChange={{this.changeColumnDisplayOptions}}
-                  @onClose={{this.toggleColumnDisplayOptions}}
+            @options={{this.tableColumnDisplayOptions}}
+            @onChange={{this.changeColumnDisplayOptions}}
+            @onClose={{this.toggleColumnDisplayOptions}}
           />
         </AttachPopover>
       </Auk::Toolbar::Item>
@@ -151,15 +178,16 @@
   </Auk::Toolbar>
 </div>
 
-
 {{#if this.isShowPublicationModal}}
   <Publications::NewPublicationModal
-          @onCancel={{this.closePublicationModal}}
-          @onSave={{this.saveNewPublication}} />
+    @onCancel={{this.closePublicationModal}}
+    @onSave={{this.saveNewPublication}}
+  />
 {{/if}}
 {{#if this.isShowPublicationFilterModal}}
   <Publications::PublicationsFilterModal
-          @filter={{this.publicationFilter}}
-          @onCancel={{this.cancelPublicationsFilter}}
-          @onSave={{this.savePublicationsFilter}} />
+    @filter={{this.publicationFilter}}
+    @onCancel={{this.cancelPublicationsFilter}}
+    @onSave={{this.savePublicationsFilter}}
+  />
 {{/if}}

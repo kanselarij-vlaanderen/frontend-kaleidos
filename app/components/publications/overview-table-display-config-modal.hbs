@@ -2,7 +2,9 @@
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
-        <h4 class="auk-toolbar__title">{{t "publications-setting-show-columns-modal-title"}}</h4>
+        <h4 class="auk-toolbar__title">
+          {{t "publications-setting-show-columns-modal-title"}}
+        </h4>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
@@ -33,8 +35,14 @@
                   {{on "input" (fn this.toggleOption option.keyName)}}
                 >
                   {{t option.translationKey}}
-                  {{#if  (not-eq (t option.translationKey) (t option.translationKeySmall)) }}
-                    <span class="auk-u-text-small auk-u-muted">({{t option.translationKeySmall}})</span>
+                  {{#if
+                    (not-eq
+                      (t option.translationKey) (t option.translationKeySmall)
+                    )
+                  }}
+                    <span class="auk-u-text-small auk-u-muted">({{t
+                        option.translationKeySmall
+                      }})</span>
                   {{/if}}
                 </Auk::Checkbox>
               {{/each}}
