@@ -13,6 +13,7 @@ import {
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { isPresent } from '@ember/utils';
 import ENV from 'frontend-kaleidos/config/environment';
+import { isEmpty } from '@ember/utils';
 
 export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service currentSession;
@@ -245,7 +246,55 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   }
 
   @action
+  async markForSignature(piece) {
+    // Placed the getting of these variables here to lessen loading time in router
+    const treatments = await this.agendaitem.treatments;
+    const agendaItemTreatment = treatments.firstObject;
+    const subcase = await agendaItemTreatment?.subcase;
+    if (subcase) {
+      const caze = await subcase.case;
+      const creator = await this.currentSession.user;
+      const now = new Date();
+
+      // TODO: Shouldn't the short & long title be coming from the agendaitem. Also when would show or edit this data?
+      const signFlow = this.store.createRecord('sign-flow', {
+        openingDate: now,
+        shortTitle: caze.shortTitle,
+        longTitle: caze.title,
+        case: caze,
+        decisionActivity: agendaItemTreatment,
+        creator: creator,
+      });
+      await signFlow.save();
+      const signSubcase = this.store.createRecord('sign-subcase', {
+        startDate: now,
+        signFlow: signFlow,
+      });
+      await signSubcase.save();
+      const signMarkingActivity = this.store.createRecord(
+        'sign-marking-activity',
+        {
+          startDate: now,
+          endDate: now,
+          signSubcase: signSubcase,
+          piece: piece,
+        }
+      );
+      await signMarkingActivity.save();
+    }
+  }
+
+  @action
   refresh() {
     this.send('reloadModel');
+  }
+
+  get isShownSignatureMarker() {
+    const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
+    const hasPermission =
+      this.currentSession.isAdmin ||
+      this.currentSession.isKabinet ||
+      this.currentSession.isMinister;
+    return isEnabled && hasPermission;
   }
 }
