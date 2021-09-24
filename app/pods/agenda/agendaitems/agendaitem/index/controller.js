@@ -32,7 +32,6 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
       'filter[show-as-remark]': agendaitem.showAsRemark,
       'filter[:lte:number]': `"${previousNumber}"`, // Needs quotes because of bug in mu-cl-resources
     });
-    console.log(this.meeting.id, "agenda", this.agenda.id, "agendaitem", neighbouringItem.id)
     if (neighbouringItem) {
       this.router.transitionTo('agenda.agendaitems.agendaitem', this.meeting.id, this.agenda.id, neighbouringItem.id);
     } else {
