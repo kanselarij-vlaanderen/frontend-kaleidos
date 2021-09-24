@@ -29,9 +29,15 @@ import './commands/subcase-commands'
 import './commands/utility-commands'
 import 'cypress-wait-until';
 
+// rdfa editor sometimes throws errors, but loads anyway
+Cypress.on('uncaught:exception', (err) => {
+  return !err.message.includes(`Cannot read property 'nodeType' of null`);
+});
+// when we try to set a variable like "isEditing" on a destroyed component
 Cypress.on('uncaught:exception', (err) => {
   return !err.message.includes('calling set on destroyed object');
 });
+// workaround we used works but throws this error (is this rule still needed?)
 Cypress.on('uncaught:exception', (err) => {
   return !err.message.includes('Cannot set property isSelected of #<DomainSelection> which has only a getter');s
 });
