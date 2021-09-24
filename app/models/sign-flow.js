@@ -10,5 +10,5 @@ export default class SignFlowModel extends Model {
   @belongsTo('regulation-type') regulationType;
   @belongsTo('case') case;
   @belongsTo('agenda-item-treatment') decisionActivity; // TODO: split in decide-activity & agenda-item-treatment
-  @belongsTo('person') creator;
+  @belongsTo('user') creator;
 }
