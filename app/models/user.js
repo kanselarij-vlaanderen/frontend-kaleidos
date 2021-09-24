@@ -35,7 +35,7 @@ export default Model.extend({
     },
   }),
 
-  fullName: computed('firstName', 'lastName', function() {
+  fullName: computed('firstName', 'lastName', function () {
     return `${this.firstName} ${this.lastName}`;
   }),
 });

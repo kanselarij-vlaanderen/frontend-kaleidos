@@ -7,6 +7,9 @@
       </div>
       <div class="auk-panel-layout__sidebar">
         <Documents::DocumentPreview::DocumentPreviewSidebar
+          @isOpen={{this.sidebarIsOpen}}
+          @onCollapse={{this.toggleSidebar}}
+          @onOpen={{this.toggleSidebar}}
           @piece={{this.selectedVersion}}
           @transitionBack={{@onClose}}
           @onSelectVersion={{this.setSelectedVersion}}

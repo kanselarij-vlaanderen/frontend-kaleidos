@@ -84,9 +84,11 @@ export default class AgendaitemsAgendaController extends Controller {
   scrollToAnchor() {
     if (this.anchor) {
       const itemCardLink = this.element.querySelector(`a[href*='anchor=${this.anchor}']`);
-      itemCardLink.scrollIntoView({
-        block: 'nearest',
-      });
+      if (itemCardLink) {
+        itemCardLink.scrollIntoView({
+          block: 'nearest',
+        });
+      }
     }
   }
 }
