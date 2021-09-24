@@ -33,7 +33,6 @@
             value={{@publicationFlow.identification.structuredIdentifier.localIdentifier}}
             {{on "input" (perform this.setPublicationNumber)}}
           />
-          {{!-- TODO KAS-2858 use @width instead of size, size=5 seems to correlate to 6.3rem --}}
           <Auk::Input
             @width="xsmall"
             value={{@publicationFlow.identification.structuredIdentifier.versionIdentifier}}
