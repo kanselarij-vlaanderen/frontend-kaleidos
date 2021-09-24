@@ -13,9 +13,6 @@ const selectors = {
     loading: '[data-test-route-publications-index-loading]',
     columnHeader: 'data-test-route-publications-index-th=',
     configIcon: '[data-test-publications-index-config-modal-icon]',
-    config: {
-      option: 'data-test-publications-index-config-modal-option-checkbox=',
-    },
     numberSelector: '.auk-form-group',
   },
 
@@ -28,6 +25,11 @@ const selectors = {
   /**
     COMPONENTS
   */
+
+  // overview-table-display-config-modal
+  tableDisplayConfig: {
+    option: 'data-test-overview-table-display-config-option-checkbox=',
+  },
 
   // publication-case-search
   publicationCaseSearch: {

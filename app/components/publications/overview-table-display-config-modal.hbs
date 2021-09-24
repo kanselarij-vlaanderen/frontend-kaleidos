@@ -28,7 +28,7 @@
             <Auk::CheckboxList>
               {{#each column as |option|}}
                 <Auk::Checkbox
-                  data-test-publications-index-config-modal-option-checkbox={{option.keyName}}
+                  data-test-overview-table-display-config-option-checkbox={{option.keyName}}
                   @checked={{get @options option.keyName}}
                   {{on "input" (fn this.toggleOption option.keyName)}}
                 >
