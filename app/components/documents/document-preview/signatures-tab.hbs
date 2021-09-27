@@ -1,0 +1,18 @@
+<div class="auk-u-m-4">
+  <Auk::KeyValue @key={{t "validation-signature"}}>
+    {{#if (not this.loadSignatureRelatedData.isRunning)}}
+      {{#if this.agendaitem}} {{! don't allow this action unless there is an agendaitem}}
+        <Auk::Checkbox
+          @checked={{this.signMarkingActivity}}
+          @disabled={{this.signMarkingActivity}} {{! unmarking not possible}}
+          {{on "input" (perform this.markForSignature)}}
+        >
+          {{! could use @label, but prototype shows a tooltip, so we need a block instead}}
+          <p>{{t "signature-needed"}}</p>
+        </Auk::Checkbox>
+      {{else}}
+        <p>{{t "signature-not-possible"}}</p>
+      {{/if}}
+    {{/if}}
+  </Auk::KeyValue>
+</div>

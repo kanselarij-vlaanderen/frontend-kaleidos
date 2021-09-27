@@ -18,12 +18,14 @@
               >
                 {{t "detail"}}
               </Auk::Tab>
-              <Auk::Tab
-                {{on "click" (fn this.setActiveTab "signatures")}}
-                @active={{eq this.activeTab "signatures"}}
-              >
-                {{t "signatures"}}
-              </Auk::Tab>
+              {{#if this.isShownSignatureTab}}
+                <Auk::Tab
+                  {{on "click" (fn this.setActiveTab "signatures")}}
+                  @active={{eq this.activeTab "signatures"}}
+                >
+                  {{t "signatures"}}
+                </Auk::Tab>
+              {{/if}}
               <Auk::Tab
                 {{on "click" (fn this.setActiveTab "versions")}}
                 @active={{eq this.activeTab "versions"}}
@@ -69,7 +71,11 @@
           />
           {{! SIGNATURES }}
         {{else if (eq this.activeTab "signatures")}}
-
+          <Documents::DocumentPreview::SignaturesTab
+            @piece={{@piece}}
+            @documentContainer={{this.documentContainer}}
+            @markForSignature={{@markForSignature}}
+          />
           {{! VERSIONS }}
         {{else if (eq this.activeTab "versions")}}
           <Documents::DocumentPreview::VersionsTab
