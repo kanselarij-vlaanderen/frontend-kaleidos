@@ -1,0 +1,87 @@
+{{ page-title
+  (t "newsletter-info")
+}}
+<div class="auk-o-grid auk-u-mb-2">
+  <div class="auk-o-grid-col-12">
+    <div>
+      {{#if this.model.length}}
+        <DataTable
+          data-test-route-search-agendaitems-data-table={{true}}
+          @content={{this.model}}
+          @page={{this.page}}
+          @noDataMessage={{t "no-results-found"}}
+          @size={{this.size}}
+          @sort={{this.sort}}
+          @class="auk-table auk-table--striped"
+          @isLoading={{this.isLoadingModel}}
+          @onClickRow={{this.navigateToAgendaitem}}
+        as |table|
+        >
+          <table.content as |c|>
+<!--            <c.header>-->
+<!--              <th class="auk-table__col--7 auk-table__header-title">-->
+<!--                {{t "agendaitem-table-header"}}-->
+<!--              </th>-->
+<!--              <th class="auk-table__col--1 auk-table__header-title">-->
+<!--                {{t "agendaitem-type"}}-->
+<!--              </th>-->
+<!--              <th class="auk-table__col--1 auk-table__header-title">-->
+<!--                {{t "agenda-version"}}-->
+<!--              </th>-->
+<!--              <ThSortable-->
+<!--                @class="auk-table__col--1 auk-table__header-title"-->
+<!--                @currentSorting={{this.sort}}-->
+<!--                @field="sessionDates"-->
+<!--                @label={{t "on-agenda-of"}}-->
+<!--              />-->
+<!--              <th class="auk-table__col--1"></th>-->
+<!--            </c.header>-->
+<!--            <c.body class="auk-table--interaction-cursor" as |row|>-->
+<!--              <td>-->
+<!--                <p>-->
+<!--                  {{#if row.shortTitle}}-->
+<!--                    {{row.shortTitle}}-->
+<!--                  {{else}}-->
+<!--                    {{row.title}}-->
+<!--                  {{/if}}-->
+<!--                </p>-->
+<!--              </td>-->
+<!--              <td>-->
+<!--                {{#if (eq row.showAsAnnouncement "true")}}-->
+<!--                  {{capitalize (t "announcement")}}-->
+<!--                {{else}}-->
+<!--                  {{t "note"}}-->
+<!--                {{/if}}-->
+<!--              </td>-->
+<!--              <td>-->
+<!--                {{#if (eq row.agendaSerialNumber.length 1)}}-->
+<!--                  {{t "agenda"}} {{row.agendaSerialNumber}}-->
+<!--                {{else}}-->
+<!--                  {{t "agenda"}}-->
+<!--                {{/if}}-->
+<!--              </td>-->
+<!--              <td>-->
+<!--                {{moment-format row.sessionDates "DD-MM-YYYY"}}-->
+<!--              </td>-->
+<!--              <td class="auk-u-text-align--right">-->
+<!--                <Auk::Button-->
+<!--                  @skin="borderless"-->
+<!--                  @layout="icon-only"-->
+<!--                  @icon="nav-right"-->
+<!--                  @route="agenda.agendaitems.agendaitem"-->
+<!--                  @models={{array row.meetingId row.agendaId row.id}}-->
+<!--                />-->
+<!--              </td>-->
+<!--            </c.body>-->
+          </table.content>
+        </DataTable>
+      {{else}}
+        {{#if this.emptySearch}}
+          <WebComponents::VlAlert @message={{t "fill-in-search-term"}}/>
+        {{else}}
+          <WebComponents::VlAlert @message={{t "no-results-found-modify-term"}}/>
+        {{/if}}
+      {{/if}}
+    </div>
+  </div>
+</div>
