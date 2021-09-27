@@ -28,12 +28,4 @@ export default Component.extend({
     }
     return false;
   }),
-
-  // TODO: octane-refactor
-  // eslint-disable-next-line ember/no-actions-hash
-  actions: {
-    selectAgenda(meeting) {
-      this.selectAgenda(meeting);
-    },
-  },
 });
