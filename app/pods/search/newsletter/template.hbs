@@ -19,7 +19,7 @@
         >
           <table.content as |c|>
             <c.header>
-              <th class="auk-table__col--7 auk-table__header-title">
+              <th class="auk-table__col--6 auk-table__header-title">
                 {{t "newletter-table-header"}}
               </th>
               <ThSortable
@@ -31,6 +31,12 @@
               <th class="auk-table__col--2 auk-table__header-title">
                 {{t "newsletter-minister"}}
               </th>
+              <ThSortable
+                @class="auk-table__col--1 auk-table__header-title"
+                @currentSorting={{this.sort}}
+                @field="sessionDates"
+                @label={{t "newsletter-status"}}
+              />
               <th class="auk-table__col--1"></th>
             </c.header>
             {{!-- MOCK DATA --}}
@@ -49,6 +55,9 @@
                 </td>
                 <td>
                   Lydia Peeters
+                </td>
+                <td>
+                  Goedgekeurd
                 </td>
                 <td class="auk-u-text-align--right">
                   <a class="auk-button auk-button--borderless  auk-button--icon  " href="/vergadering/612F43A554BBD70008000001/agenda/612F43A554BBD70008000002/agendapunten/612F459954BBD7000800002A/kort-bestek" type="button">
@@ -77,6 +86,9 @@
                 <td>
                   Zuhal Demir, Lydia Peeters
                 </td>
+                <td>
+                  Goedgekeurd
+                </td>
                 <td class="auk-u-text-align--right">
                   <a class="auk-button auk-button--borderless  auk-button--icon  " href="/vergadering/612F43A554BBD70008000001/agenda/612F43A554BBD70008000002/agendapunten/612F457F54BBD7000800001E/kort-bestek" type="button">
                     <span class="auk-button__content">
@@ -103,6 +115,9 @@
                 </td>
                 <td>
                   Zuhal Demir
+                </td>
+                <td>
+                  Goedgekeurd
                 </td>
                 <td class="auk-u-text-align--right">
                   <a class="auk-button auk-button--borderless  auk-button--icon  " href="/vergadering/612F43A554BBD70008000001/agenda/612F43A554BBD70008000002/agendapunten/612F459054BBD70008000026/kort-bestek" type="button">
@@ -131,6 +146,9 @@
                 <td>
                   Jan Jambon, Lydia Peeters
                 </td>
+                <td>
+                  Goedgekeurd
+                </td>
                 <td class="auk-u-text-align--right">
                   <a class="auk-button auk-button--borderless  auk-button--icon  " href="/vergadering/612F43A554BBD70008000001/agenda/612F43A554BBD70008000002/agendapunten/612F458754BBD70008000022/kort-bestek" type="button">
                     <span class="auk-button__content">
@@ -157,6 +175,9 @@
                 </td>
                 <td>
                   Zuhal Demir
+                </td>
+                <td>
+                  Goedgekeurd
                 </td>
                 <td class="auk-u-text-align--right">
                   <a class="auk-button auk-button--borderless  auk-button--icon  " href="/vergadering/612F43A554BBD70008000001/agenda/612F43A554BBD70008000002/agendapunten/612F45B354BBD70008000035/kort-bestek" type="button">
@@ -185,6 +206,9 @@
                 <td>
                   Zuhal Demir
                 </td>
+                <td>
+                  Goedgekeurd
+                </td>
                 <td class="auk-u-text-align--right">
                   <a class="auk-button auk-button--borderless  auk-button--icon  " href="/vergadering/612F43A554BBD70008000001/agenda/612F43A554BBD70008000002/agendapunten/612F459054BBD70008000026/kort-bestek" type="button">
                     <span class="auk-button__content">
@@ -212,6 +236,9 @@
                 <td>
                   Zuhal Demir
                 </td>
+                <td>
+                  Goedgekeurd
+                </td>
                 <td class="auk-u-text-align--right">
                   <a class="auk-button auk-button--borderless  auk-button--icon  " href="/vergadering/612F43A554BBD70008000001/agenda/612F43A554BBD70008000002/agendapunten/612F457654BBD7000800001A/kort-bestek" type="button">
                     <span class="auk-button__content">
@@ -228,8 +255,6 @@
                 <td>
                   <h3 class="auk-h4 auk-u-mb">
                     Visienota 'Luchtvaart in Vlaanderen'
-                    <i class="ki ki-not-visible vlc-agenda-detail-sidebar-item__icon--margin-right vlc-u-opacity-50"
-                    ></i>
                   </h3>
                   <p class="auk-u-mr-2">
                     In het regeerakkoord is voorzien dat de Vlaamse Regering een langetermijnvisie opmaakt over de ontwikkeling van de luchtvaart. In dat kader neemt de Vlaamse Regering nu kennis van de startnota 'Visie Luchtvaart in Vlaanderen'. Daarbij wordt aandacht besteed aan de knelpunten rond 'general aviation', vergunningen, de beheersvormen en rolverdeling van de regionale luchthavens, de samenwerking met de nationale luchthaven en de toekomstige ontwikkelingen en innovaties in de luchtvaartsector. De Vlaamse minister bevoegd voor mobiliteit zal deze visienota verder verdiepen tot een globale en gedragen visie, en een extern studiebureau aanduiden om de visienota vorm te geven. 
@@ -240,6 +265,9 @@
                 </td>
                 <td>
                   Lydia Peeters
+                </td>
+                <td>
+                  Uitgesteld
                 </td>
                 <td class="auk-u-text-align--right">
                   <a class="auk-button auk-button--borderless  auk-button--icon  " href="/vergadering/612F43A554BBD70008000001/agenda/612F43A554BBD70008000002/agendapunten/612F45BC54BBD70008000039/kort-bestek" type="button">
@@ -267,6 +295,9 @@
                 </td>
                 <td>
                   Zuhal Demir
+                </td>
+                <td>
+                  Goedgekeurd
                 </td>
                 <td class="auk-u-text-align--right">
                   <a class="auk-button auk-button--borderless  auk-button--icon  " href="/vergadering/612F43A554BBD70008000001/agenda/612F43A554BBD70008000002/agendapunten/612F46FC54BBD70008000049/kort-bestek" type="button">
@@ -298,6 +329,9 @@
               </td>
               <td>
                 Lydia Peeters
+              </td>
+              <td>
+                Goedgekeurd
               </td>
               <td class="auk-u-text-align--right">
                 <Auk::Button
