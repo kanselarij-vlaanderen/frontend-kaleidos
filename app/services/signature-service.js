@@ -2,6 +2,7 @@ import Service, { inject as service } from '@ember/service';
 
 export default class SignatureService extends Service {
   @service store;
+  @service currentSession;
 
   async markDocumentForSignature(piece, agendaItemTreatment) {
     const subcase = await agendaItemTreatment?.subcase;
