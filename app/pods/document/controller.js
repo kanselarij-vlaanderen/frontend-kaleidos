@@ -20,4 +20,9 @@ export default class DocumentController extends Controller {
   async markForSignature(piece, agendaItemTreatment) {
     await this.signatureService.markDocumentForSignature(piece, agendaItemTreatment);
   }
+
+  @action
+  async unmarkForSignature(piece) {
+    await this.signatureService.unmarkDocumentForSignature(piece);
+  }
 }

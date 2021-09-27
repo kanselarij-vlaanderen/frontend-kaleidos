@@ -4,7 +4,6 @@
       {{#if this.agendaitem}} {{! don't allow this action unless there is an agendaitem}}
         <Auk::Checkbox
           @checked={{this.signMarkingActivity}}
-          @disabled={{this.signMarkingActivity}} {{! unmarking not possible}}
           {{on "input" (perform this.markForSignature)}}
         >
           {{! could use @label, but prototype shows a tooltip, so we need a block instead}}
