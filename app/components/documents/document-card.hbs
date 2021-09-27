@@ -74,9 +74,9 @@
                     "muted-borderless"
                   }}
                   @layout="icon-only"
-                  @loading={{this.markForSignature.isRunning}}
+                  @loading={{this.markOrUnmarkForSignature.isRunning}}
                   @icon={{if this.signMarkingActivity "sign" "no-sign"}}
-                  {{on "click" (perform this.markForSignature)}}
+                  {{on "click" (perform this.markOrUnmarkForSignature)}}
                 />
               </Auk::Toolbar::Item>
             {{/if}}

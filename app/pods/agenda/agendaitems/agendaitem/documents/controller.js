@@ -255,6 +255,11 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   }
 
   @action
+  async unmarkForSignature(piece) {
+    await this.signatureService.unmarkDocumentForSignature(piece);
+  }
+
+  @action
   refresh() {
     this.send('reloadModel');
   }

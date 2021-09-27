@@ -31,7 +31,7 @@ export default class DocumentsDocumentPreviewDetailsDetailsTabComponent extends 
   }
 
   @task
-  *markForSignature() {
+  *markOrUnmarkForSignature() {
     if (!this.signMarkingActivity) {
       const treatments = yield this.agendaitem.treatments;
       const agendaItemTreatment = treatments.firstObject;

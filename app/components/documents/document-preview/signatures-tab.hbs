@@ -2,12 +2,12 @@
   <Auk::KeyValue @key={{t "validation-signature"}}>
     {{#if (not this.loadSignatureRelatedData.isRunning)}}
       {{#if this.agendaitem}} {{! don't allow this action unless there is an agendaitem ergo a treatment}}
-        {{#if this.markForSignature.isRunning}}
+        {{#if this.markOrUnmarkForSignature.isRunning}}
           <Auk::Loader/>
         {{else}}
           <Auk::Checkbox
             @checked={{this.signMarkingActivity}}
-            {{on "input" (perform this.markForSignature)}}
+            {{on "input" (perform this.markOrUnmarkForSignature)}}
           >
             {{! could use @label, but prototype shows a tooltip, so we need a block instead}}
             <p>{{t "signature-needed"}}</p>
