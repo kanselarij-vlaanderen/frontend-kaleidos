@@ -52,7 +52,8 @@ function clickReverseTab(tabName) {
  */
 function setDateInFlatpickr(date) {
   cy.log('setDateInFlatpickr');
-  cy.get(dependency.flatPickr.yearInput).type(date.year());
+  cy.get(dependency.flatPickr.yearInput).scrollIntoView()
+    .type(date.year());
   cy.get(dependency.flatPickr.monthSelect).select(date.month().toString());
   cy.get(dependency.flatPickr.days).find(dependency.flatPickr.day)
     .not(dependency.flatPickr.prevMonthDay)

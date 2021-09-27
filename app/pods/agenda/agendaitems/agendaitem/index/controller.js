@@ -10,6 +10,7 @@ import {
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
   @service store;
   @service currentSession;
+  @service router;
 
   @controller('agenda.agendaitems') agendaitemsController;
   @controller('agenda.agendaitems.agendaitem') agendaitemController;
@@ -25,16 +26,16 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   async navigateToNeighbouringItem(agendaitem) {
     // try transitioning to previous or next item
     // TODO: below query can be replaced once agenda-items have relations to previous and next items
-    const previousNumber = agendaitem.number - 1;
+    const previousNumber = agendaitem.number;
     const neighbouringItem = await this.store.queryOne('agendaitem', {
       'filter[agenda][:id:]': this.agenda.id,
       'filter[show-as-remark]': agendaitem.showAsRemark,
-      'filter[:gte:number]': `"${previousNumber}"`, // Needs quotes because of bug in mu-cl-resources
+      'filter[:lte:number]': `"${previousNumber}"`, // Needs quotes because of bug in mu-cl-resources
     });
     if (neighbouringItem) {
-      this.transitionToRoute('agenda.agendaitems.agendaitem', neighbouringItem.id);
+      this.router.transitionTo('agenda.agendaitems.agendaitem', this.meeting.id, this.agenda.id, neighbouringItem.id);
     } else {
-      this.transitionToRoute('agenda.agendaitems');
+      this.router.transitionTo('agenda.agendaitems', this.meeting.id, this.agenda.id,{ queryParams: { anchor: neighbouringItem.id }});
     }
   }
 

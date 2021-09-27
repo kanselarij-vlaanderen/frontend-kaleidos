@@ -31,9 +31,7 @@ context('Table Row Click tests', () => {
   it('should open a case after clicking a row', () => {
     cy.route('GET', '/cases**').as('getCases');
     cy.visit('/dossiers');
-    cy.wait('@getCases', {
-      timeout: 12000,
-    });
+    cy.wait('@getCases');
     cy.get(route.casesOverview.dataTable).find('tbody')
       .children('tr')
       .as('rows')
@@ -46,9 +44,7 @@ context('Table Row Click tests', () => {
     cy.route('GET', '/meetings?**').as('getMeetings');
     cy.route('GET', '/agendaitems**').as('getAgendaitems');
     cy.visit('/kort-bestek');
-    cy.wait('@getMeetings', {
-      timeout: 12000,
-    });
+    cy.wait('@getMeetings');
     cy.get(route.newsletters.dataTable).find('tbody')
       .children('tr')
       .as('rows')
