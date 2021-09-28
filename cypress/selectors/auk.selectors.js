@@ -59,6 +59,12 @@ const selectors = {
     reversed: '.auk-tabs--reversed',
   },
 
+  pagination: {
+    count: '.auk-pagination__element:nth-child(1) > p',
+    previous: '.auk-pagination__element:nth-child(2) > .auk-button-link',
+    next: '.auk-pagination__element:nth-child(3) > .auk-button-link',
+  },
+
   /** Section single selector AUK components **/
 
   checkbox: {
@@ -74,5 +80,6 @@ const selectors = {
 
   datepicker: '[data-test-auk-datepickr]',
   icon: '.auk-icon',
+  abbreviatedText: '.auk-tooltip',
 };
 export default selectors;

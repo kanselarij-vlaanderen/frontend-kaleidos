@@ -43,7 +43,7 @@ async function proofRequestEmail(params) {
     message = 'Beste,\n'
       + '\n'
       + 'In bijlage voor drukproef:\n'
-      + `Lange Titel: ${publicationFlow.longTitle}\n`
+      + `Titel: ${publicationFlow.longTitle}\n`
       + `VO-dossier: ${idName}\n`
       + '\n'
       + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\n';
@@ -53,7 +53,7 @@ async function proofRequestEmail(params) {
       + '\n'
       + 'Graag een nieuwe drukproef voor:\n'
       + `BS-werknummer: ${numacNumber}\n`
-      + `Lange Titel: ${publicationFlow.longTitle}\n`
+      + `Titel: ${publicationFlow.longTitle}\n`
       + `VO-dossier: ${idName}\n`
       + '\n'
       + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\n';
