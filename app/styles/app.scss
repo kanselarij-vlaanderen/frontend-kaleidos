@@ -78,7 +78,6 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 // Custom css added
 @import 'custom-application/toast';
 @import 'custom-application/compare';
-@import 'custom-application/power-select';
 @import 'custom-application/editor';
 @import 'custom-application/ember-attacher';
 @import 'custom-application/file-uploader';
@@ -90,6 +89,9 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 // Components
 @import 'auk-standalone'; // sourced from "au-kaleidos-css" npm package
 @import 'au-kaleidos-css/auk-additions'; // sourced locally
+
+// Custom css added (moved here from above auk-imports when refactored)
+@import 'custom-application/power-select';
 
 // (not sure about naming/location)
 @import 'custom-application/m-header';
