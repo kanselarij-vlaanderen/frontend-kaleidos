@@ -1,28 +1,9 @@
-// .auk-input {
-//   border: 0.1rem solid $au-gray-300;
-//   padding: .7rem;
-//   font-family: flanders-sans, sans-serif;
-//   font-size: 1.5rem;
-//   color: $au-gray-800;
-//   background: #fff;
-//   border-radius: .3rem;
-// }
-
-// .ember-basic-dropdown-trigger {
-//   max-height: 10rem;
-// }
-
-// .ember-power-select-trigger,
-// .ember-basic-dropdown-trigger {
-//   height: unset !important;
-// }
-
 .ember-power-select-trigger {
   position: relative;
   display: block;
   appearance: none;
   -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes, this one is needed
-  max-width: 100%;
+  width: 100%;
   min-height: 3.4rem;
   // overflow-y: hidden;
 
@@ -31,7 +12,7 @@
   background-color: #fff;
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3e%3cpath d='M0.42,9.77a3.27,3.27,0,0,1,.91-2.21,3.12,3.12,0,0,1,4.41,0L16,17.82,26.25,7.56A3.12,3.12,0,0,1,30.67,12L18.2,24.44a3.12,3.12,0,0,1-4.41,0L1.33,12A3.17,3.17,0,0,1,.42,9.77'/%3e%3ctext y='90'%3e' %26apos; %23 %25 %26amp; %c2%bf %f0%9f%94%a3%3c/text%3e%3c/svg%3e"); // sass-lint:disable-line max-line-length
   background-repeat: no-repeat;
-  background-size: 11px 11px; //should be in px rem doesn't work in ie 11
+  background-size: 1.1rem;
   background-position: calc(100% - 1.5rem) 50%;
   padding: .7rem 6rem .7rem .7rem;
 
@@ -73,15 +54,28 @@
   }
 }
 
+.ember-power-select-placeholder {
+  margin-left: 0;
+
+  color: $au-gray-500;
+}
+
 .ember-power-select-status-icon {
   display: none;
+}
+
+.ember-power-select-clear-btn {
+  margin-right: 0.3em;
+
+  font-size: 2.6rem;
+  line-height: 0.6em;
 }
 
 .ember-power-select-dropdown.ember-basic-dropdown-content {
   display: block;
   top: 100%;
   width: 100%;
-  transform: translateY(1rem);
+  transform: translateY(0.5rem);
 
   border: none;
   border-radius: 0.3rem;
@@ -102,10 +96,6 @@
 
   color: $au-gray-800;
   font-size: 1.5rem;
-  // font-weight: normal;
-  // text-align: left;
-  // text-decoration: none;
-  // cursor: pointer;
 
   &:hover,
   &[aria-selected=true],
@@ -126,6 +116,10 @@
   > .auk-icon {
     font-size: 1.5rem;
   }
+}
+
+.ember-power-select-search {
+  border-bottom: 0.1rem solid $au-gray-200;
 }
 
 .ember-power-select-search-input {
@@ -176,48 +170,53 @@
     max-width: 6rem;
     padding: 0 0.8rem;
   }
-  // line-height: 3.5rem !important;
 }
 
-.ember-power-select-multiple-option {
-  background: $porcelain;
-  font-weight: 400;
-  color: $text-color;
-  padding: 0 1rem;
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-  border: none;
-  border-radius: 0;
+.ember-power-select-multiple-trigger {
+  padding: .4rem 4rem .4rem .4rem;
 
-  .ember-power-select-multiple-remove-btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 0.4em;
-    font-size: 2rem;
-    border: none;
-    color: $gray-light;
+  .ember-power-select-placeholder {
+    margin: .3rem 0 .3rem .3rem;
   }
 }
 
-.ember-power-select-clear-btn {
-  margin-right:0.3em;
-
-  font-size: 2.6rem;
-  line-height: 0.6em;
+.ember-power-select-multiple-options {
+  @extend .auk-filter-pill-list;
 }
 
+.ember-power-select-multiple-option {
+  @extend .auk-filter-pill;
 
+  flex-direction: row-reverse;
 
-/* Custom overrides
-	 ========================================================================== */
+  margin: 0;
 
-.ember-power-select-trigger {
-  width: 100%;
-}
+  .ember-power-select-multiple-remove-btn {
+    @extend .auk-icon;
+    @extend .auk-icon--close;
 
-// Kaleidos specific css class name
-.ember-power-select--block-item .ember-power-select-selected-item {
-  display: block;
+    // hide text node & re-apply correct color + size in the `&:after` selector below
+    color: transparent;
+    font-size: 0;
+
+    &:not(:hover) {
+      opacity: 1;
+    }
+
+    &:after {
+      font-family: icons !important;
+      font-style: normal;
+      font-weight: normal !important;
+      font-variant: normal;
+      text-transform: none;
+      line-height: 1;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+
+      color: $au-gray-600;
+      font-size: 1.8rem;
+
+      content: "\f115";
+    }
+  }
 }
