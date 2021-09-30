@@ -1,7 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { A } from '@ember/array';
 import { warn } from '@ember/debug';
 
 export default class AgendaitemsSearchController extends Controller {
@@ -28,7 +27,7 @@ export default class AgendaitemsSearchController extends Controller {
     super(...arguments);
     this.page = 0;
     this.size = this.sizeOptions[2];
-    // this.sort = '-session-dates';
+    this.sort = '-publicationDate';
   }
 
   @action
@@ -38,15 +37,14 @@ export default class AgendaitemsSearchController extends Controller {
 
 
   @action
-  navigateToAgendaitem(searchEntry) {
-    searchEntry;
-    // if (searchEntry.meetingId) {
-    //   this.transitionToRoute('agenda.agendaitems.agendaitem',
-    //     searchEntry.meetingId, searchEntry.agendaId, searchEntry.id);
-    // } else {
-    //   warn(`Agendaitem ${searchEntry.id} is not related to a meeting. Cannot navigate to detail`, {
-    //     id: 'agendaitem.no-meeting',
-    //   });
-    // }
+  navigateToNewsletter(searchEntry) {
+    if (searchEntry.meetingId) {
+      this.transitionToRoute('agenda.agendaitems.agendaitem.news-item',
+        searchEntry.meetingId, searchEntry.agendaId, searchEntry.agendaitemId);
+    } else {
+      warn(`Newsletter ${searchEntry.id} is not related to a meeting. Cannot navigate to detail`, {
+        id: 'agendaitem.no-meeting',
+      });
+    }
   }
 }

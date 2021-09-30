@@ -12,67 +12,61 @@
           @noDataMessage={{t "no-results-found"}}
           @size={{this.size}}
           @sort={{this.sort}}
-          @class="auk-table auk-table--striped"
+          @class="auk-table auk-table--striped auk-table--vertical-align-top"
           @isLoading={{this.isLoadingModel}}
-          @onClickRow={{this.navigateToAgendaitem}}
-        as |table|
+          @onClickRow={{this.navigateToNewsletter}}
+          as |table|
         >
           <table.content as |c|>
-<!--            <c.header>-->
-<!--              <th class="auk-table__col--7 auk-table__header-title">-->
-<!--                {{t "agendaitem-table-header"}}-->
-<!--              </th>-->
-<!--              <th class="auk-table__col--1 auk-table__header-title">-->
-<!--                {{t "agendaitem-type"}}-->
-<!--              </th>-->
-<!--              <th class="auk-table__col--1 auk-table__header-title">-->
-<!--                {{t "agenda-version"}}-->
-<!--              </th>-->
-<!--              <ThSortable-->
-<!--                @class="auk-table__col--1 auk-table__header-title"-->
-<!--                @currentSorting={{this.sort}}-->
-<!--                @field="sessionDates"-->
-<!--                @label={{t "on-agenda-of"}}-->
-<!--              />-->
-<!--              <th class="auk-table__col--1"></th>-->
-<!--            </c.header>-->
-<!--            <c.body class="auk-table--interaction-cursor" as |row|>-->
-<!--              <td>-->
-<!--                <p>-->
-<!--                  {{#if row.shortTitle}}-->
-<!--                    {{row.shortTitle}}-->
-<!--                  {{else}}-->
-<!--                    {{row.title}}-->
-<!--                  {{/if}}-->
-<!--                </p>-->
-<!--              </td>-->
-<!--              <td>-->
-<!--                {{#if (eq row.showAsAnnouncement "true")}}-->
-<!--                  {{capitalize (t "announcement")}}-->
-<!--                {{else}}-->
-<!--                  {{t "note"}}-->
-<!--                {{/if}}-->
-<!--              </td>-->
-<!--              <td>-->
-<!--                {{#if (eq row.agendaSerialNumber.length 1)}}-->
-<!--                  {{t "agenda"}} {{row.agendaSerialNumber}}-->
-<!--                {{else}}-->
-<!--                  {{t "agenda"}}-->
-<!--                {{/if}}-->
-<!--              </td>-->
-<!--              <td>-->
-<!--                {{moment-format row.sessionDates "DD-MM-YYYY"}}-->
-<!--              </td>-->
-<!--              <td class="auk-u-text-align--right">-->
-<!--                <Auk::Button-->
-<!--                  @skin="borderless"-->
-<!--                  @layout="icon-only"-->
-<!--                  @icon="nav-right"-->
-<!--                  @route="agenda.agendaitems.agendaitem"-->
-<!--                  @models={{array row.meetingId row.agendaId row.id}}-->
-<!--                />-->
-<!--              </td>-->
-<!--            </c.body>-->
+            <c.header>
+              <th class="auk-table__col--6 auk-table__header-title">
+                {{t "title-and-content"}}
+              </th>
+              <ThSortable
+                @class="auk-table__col--2 auk-table__header-title"
+                @currentSorting={{this.sort}}
+                @field="publicationDate"
+                @label={{t "agenda-of"}}
+              />
+              <th class="auk-table__col--2 auk-table__header-title">
+                {{t "minister"}}
+              </th>
+              <ThSortable
+                @class="auk-table__col--1 auk-table__header-title"
+                @currentSorting={{this.sort}}
+                @field="decisionStatusId"
+                @label={{t "agendaitem-decision"}}
+              />
+              <th class="auk-table__col--1"></th>
+            </c.header>
+             <c.body class="auk-table--interaction-cursor" as |row|>
+              <td>
+                <h3 class="auk-h4 auk-u-mb">
+                  {{row.title}}
+                </h3>
+                <p class="auk-u-mr-2">
+                  <SanitizeHtml @raw={{true}} @value={{row.richtext}} />
+                </p>
+              </td>
+              <td>
+                {{moment-format row.publicationDate "DD-MM-YYYY"}}
+              </td>
+              <td>
+                {{row.mandatees}}
+              </td>
+              <td>
+                {{row.decisionStatusLabel}}
+              </td>
+              <td class="auk-u-text-align--right">
+                <Auk::Button
+                  @skin="borderless"
+                  @layout="icon-only"
+                  @icon="nav-right"
+                  @route="agenda.agendaitems.agendaitem.news-item"
+                  @models={{array row.meetingId row.agendaId row.agendaitemId}}
+                />
+              </td>
+            </c.body>
           </table.content>
         </DataTable>
       {{else}}

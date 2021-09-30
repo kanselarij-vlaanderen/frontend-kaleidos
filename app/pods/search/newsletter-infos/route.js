@@ -26,7 +26,7 @@ export default class AgendaitemSearchRoute extends Route {
     },
   };
 
-  textSearchFields = Object.freeze(['title', 'shortTitle', 'data.content', 'titlePress', 'textPress']);
+  textSearchFields = Object.freeze(['title', 'subTitle', 'data.content', 'richtext', 'themes','decisionStatusLabel']);
 
   constructor() {
     super(...arguments);
@@ -35,14 +35,14 @@ export default class AgendaitemSearchRoute extends Route {
 
   postProcessDates(_case) {
     const {
-      sessionDates,
+      publicationDate,
     } = _case.attributes;
-    if (sessionDates) {
-      if (Array.isArray(sessionDates)) {
-        const sorted = sessionDates.sort();
-        _case.attributes.sessionDates = sorted[sorted.length - 1];
+    if (publicationDate) {
+      if (Array.isArray(publicationDate)) {
+        const sorted = publicationDate.sort();
+        _case.attributes.publicationDate = sorted[sorted.length - 1];
       } else {
-        _case.attributes.sessionDates = moment(sessionDates);
+        _case.attributes.publicationDate = moment(publicationDate);
       }
     }
   }
@@ -84,17 +84,20 @@ export default class AgendaitemSearchRoute extends Route {
     if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
       const from = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
       const to = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
-      filter[':lte,gte:sessionDates'] = [to.utc().toISOString(), from.utc().toISOString()].join(',');
+      filter[':lte,gte:publicationDate'] = [to.utc().toISOString(), from.utc().toISOString()].join(',');
     } else if (!isEmpty(params.dateFrom)) {
       const date = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
-      filter[':gte:sessionDates'] = date.utc().toISOString();
+      filter[':gte:publicationDate'] = date.utc().toISOString();
     } else if (!isEmpty(params.dateTo)) {
       const date = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
-      filter[':lte:sessionDates'] = date.utc().toISOString();
+      filter[':lte:publicationDate'] = date.utc().toISOString();
     }
 
-    this.lastParams.commit();
+    // filter kort bestekken die enkel aan agenda's hangen
+    filter[':has-no:generalNewsletterMeetingId'] = 't';
 
+    this.lastParams.commit();
+    console.log(params.sort)
     if (isEmpty(params.searchText)) {
       return [];
     }
