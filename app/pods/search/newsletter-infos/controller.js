@@ -35,16 +35,22 @@ export default class AgendaitemsSearchController extends Controller {
     this.size = size;
   }
 
-
   @action
   navigateToNewsletter(searchEntry) {
     if (searchEntry.meetingId) {
-      this.transitionToRoute('agenda.agendaitems.agendaitem.news-item',
-        searchEntry.meetingId, searchEntry.agendaId, searchEntry.agendaitemId);
+      this.transitionToRoute(
+        'agenda.agendaitems.agendaitem.news-item',
+        searchEntry.meetingId,
+        searchEntry.agendaId,
+        searchEntry.agendaitemId
+      );
     } else {
-      warn(`Newsletter ${searchEntry.id} is not related to a meeting. Cannot navigate to detail`, {
-        id: 'agendaitem.no-meeting',
-      });
+      warn(
+        `Newsletter ${searchEntry.id} is not related to a meeting. Cannot navigate to detail`,
+        {
+          id: 'agendaitem.no-meeting',
+        }
+      );
     }
   }
 }

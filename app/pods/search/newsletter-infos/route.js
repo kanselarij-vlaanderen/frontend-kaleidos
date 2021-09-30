@@ -1,9 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import Route from '@ember/routing/route';
-import {
-  isEmpty,
-  isPresent
-} from '@ember/utils';
+import { isEmpty, isPresent } from '@ember/utils';
 import moment from 'moment';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
@@ -26,7 +23,14 @@ export default class AgendaitemSearchRoute extends Route {
     },
   };
 
-  textSearchFields = Object.freeze(['title', 'subTitle', 'data.content', 'richtext', 'themes','decisionStatusLabel']);
+  textSearchFields = Object.freeze([
+    'title',
+    'subTitle',
+    'data.content',
+    'richtext',
+    'themes',
+    'decisionStatusLabel',
+  ]);
 
   constructor() {
     super(...arguments);
@@ -34,9 +38,7 @@ export default class AgendaitemSearchRoute extends Route {
   }
 
   postProcessDates(_case) {
-    const {
-      publicationDate,
-    } = _case.attributes;
+    const { publicationDate } = _case.attributes;
     if (publicationDate) {
       if (Array.isArray(publicationDate)) {
         const sorted = publicationDate.sort();
@@ -49,7 +51,7 @@ export default class AgendaitemSearchRoute extends Route {
 
   model(filterParams) {
     const searchParams = this.paramsFor('search');
-    const params = {...searchParams, ...filterParams}; // eslint-disable-line
+    const params = { ...searchParams, ...filterParams }; // eslint-disable-line
     if (!params.dateFrom) {
       params.dateFrom = null;
     }
@@ -61,7 +63,11 @@ export default class AgendaitemSearchRoute extends Route {
     }
     this.lastParams.stageLive(params);
 
-    if (this.lastParams.anyFieldChanged(Object.keys(params).filter((key) => key !== 'page'))) {
+    if (
+      this.lastParams.anyFieldChanged(
+        Object.keys(params).filter((key) => key !== 'page')
+      )
+    ) {
       params.page = 0;
     }
 
@@ -74,7 +80,8 @@ export default class AgendaitemSearchRoute extends Route {
       filter[`${searchModifier}${textSearchKey}`] = params.searchText;
     }
     if (!isEmpty(params.mandatees)) {
-      filter['mandateeName,mandateeFirstNames,mandateeFamilyNames'] = params.mandatees;
+      filter['mandateeName,mandateeFirstNames,mandateeFamilyNames'] =
+        params.mandatees;
     }
 
     /* A closed range is treated as something different than 2 open ranges because
@@ -84,7 +91,10 @@ export default class AgendaitemSearchRoute extends Route {
     if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
       const from = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
       const to = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
-      filter[':lte,gte:publicationDate'] = [to.utc().toISOString(), from.utc().toISOString()].join(',');
+      filter[':lte,gte:publicationDate'] = [
+        to.utc().toISOString(),
+        from.utc().toISOString(),
+      ].join(',');
     } else if (!isEmpty(params.dateFrom)) {
       const date = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
       filter[':gte:publicationDate'] = date.utc().toISOString();
@@ -93,19 +103,26 @@ export default class AgendaitemSearchRoute extends Route {
       filter[':lte:publicationDate'] = date.utc().toISOString();
     }
 
-    // filter kort bestekken die enkel aan agenda's hangen
+    // filter out newsletters that are general newsletters
     filter[':has-no:generalNewsletterMeetingId'] = 't';
 
     this.lastParams.commit();
-    console.log(params.sort)
+    console.log(params.sort);
     if (isEmpty(params.searchText)) {
       return [];
     }
-    return search('newsletter-infos', params.page, params.size, params.sort, filter, (newsletters) => {
-      const entry = newsletters.attributes;
-      entry.id = newsletters.id;
-      return entry;
-    });
+    return search(
+      'newsletter-infos',
+      params.page,
+      params.size,
+      params.sort,
+      filter,
+      (newsletters) => {
+        const entry = newsletters.attributes;
+        entry.id = newsletters.id;
+        return entry;
+      }
+    );
   }
 
   afterModel(model) {

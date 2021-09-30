@@ -1,6 +1,4 @@
-{{ page-title
-  (t "newsletter-info")
-}}
+{{page-title (t "newsletter-info")}}
 <div class="auk-o-grid auk-u-mb-2">
   <div class="auk-o-grid-col-12">
     <div>
@@ -39,7 +37,7 @@
               />
               <th class="auk-table__col--1"></th>
             </c.header>
-             <c.body class="auk-table--interaction-cursor" as |row|>
+            <c.body class="auk-table--interaction-cursor" as |row|>
               <td>
                 <h3 class="auk-h4 auk-u-mb">
                   {{row.title}}
@@ -71,9 +69,11 @@
         </DataTable>
       {{else}}
         {{#if this.emptySearch}}
-          <WebComponents::VlAlert @message={{t "fill-in-search-term"}}/>
+          <WebComponents::VlAlert @message={{t "fill-in-search-term"}} />
         {{else}}
-          <WebComponents::VlAlert @message={{t "no-results-found-modify-term"}}/>
+          <WebComponents::VlAlert
+            @message={{t "no-results-found-modify-term"}}
+          />
         {{/if}}
       {{/if}}
     </div>
