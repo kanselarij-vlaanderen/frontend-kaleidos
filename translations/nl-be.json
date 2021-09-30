@@ -375,7 +375,6 @@
   "uploading-files": "{numFiles, plural, =1 {# bestand} other {# bestanden}} opladen",
   "uploaded-files": "{numFiles, plural, =1 {Bestand} other {Bestanden}} opgeladen",
   "uploaded-at": "Geüpload op",
-  "upload-time-unknown": "Uploadtijdstip onbekend",
   "sent-at": "verstuurd op",
   "uploading": "opgeladen",
   "loading": "Aan het laden",
