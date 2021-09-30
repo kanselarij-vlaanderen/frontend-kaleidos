@@ -1,12 +1,14 @@
 import moment from 'moment';
 
+// * NOTE * We use '\t\n' as newline to prevent outlook from removing extra line breaks with just '\n'
+ 
 const footer = 'Met vriendelijke groet,\n'
   + '\n'
-  + 'Vlaamse overheid\n'
-  + 'DEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\n'
-  + 'Team Ondersteuning Vlaamse Regering\n'
-  + 'publicatiesBS@vlaanderen.be\n'
-  + 'Koolstraat 35, 1000 Brussel\n';
+  + 'Vlaamse overheid\t\n'
+  + 'DEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\n'
+  + 'Team Ondersteuning Vlaamse Regering\t\n'
+  + 'publicatiesBS@vlaanderen.be\t\n'
+  + 'Koolstraat 35, 1000 Brussel\t\n';
 
 function translationRequestEmail(params) {
   const subject = `Vertaalaanvraag VO-dossier: ${params.identifier}`;
@@ -15,12 +17,12 @@ function translationRequestEmail(params) {
     + 'Hierbij ter vertaling:\n'
     + '\n'
     + `VO-dossier: ${params.identifier}\n`
-    + `Titel: ${params.title}\n`
+    + `Titel: ${params.title}\t\n`
     + `Uiterste vertaaldatum: ${moment(params.dueDate)
-      .format('DD-MM-YYYY')}\n`
-    + `Aantal pagina’s: ${params.totalPages}\n`
-    + `Aantal woorden: ${params.totalWords}\n`
-    + `Aantal documenten: ${params.totalDocuments}\n`;
+      .format('DD-MM-YYYY')}\t\n`
+    + `Aantal pagina’s: ${params.totalPages}\t\n`
+    + `Aantal woorden: ${params.totalWords}\t\n`
+    + `Aantal documenten: ${params.totalDocuments}\t\n`;
   return {
     subject: subject,
     message: [message, footer].join('\n'),
@@ -43,20 +45,20 @@ async function proofRequestEmail(params) {
     message = 'Beste,\n'
       + '\n'
       + 'In bijlage voor drukproef:\n'
-      + `Lange Titel: ${publicationFlow.longTitle}\n`
+      + `Lange Titel: ${publicationFlow.longTitle}\t\n`
       + `VO-dossier: ${idName}\n`
       + '\n'
-      + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\n';
+      + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\t\n';
   } else if (params.stage === 'extra') {
     subject = `BS-werknr: ${numacNumber} VO-dossier: ${idName} – Aanvraag nieuwe drukproef`;
     message = 'Geachte,\n'
       + '\n'
       + 'Graag een nieuwe drukproef voor:\n'
       + `BS-werknummer: ${numacNumber}\n`
-      + `Lange Titel: ${publicationFlow.longTitle}\n`
+      + `Lange Titel: ${publicationFlow.longTitle}\t\n`
       + `VO-dossier: ${idName}\n`
       + '\n'
-      + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\n';
+      + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\t\n';
   } else if (params.stage === 'final') {
     const publicationSubcase = await publicationFlow.publicationSubcase;
     const targetDate = publicationSubcase.targetEndDate;
@@ -70,9 +72,9 @@ async function proofRequestEmail(params) {
       + `BS-werknummer: ${numacNumber}\n`
       + `VO-dossier: ${idName}\n`
       + '\n'
-      + `De gewenste datum van publicatie is: ${targetDateString}\n`
+      + `De gewenste datum van publicatie is: ${targetDateString}\t\n`
       + '\n'
-      + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\n';
+      + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\t\n';
   }
   return {
     subject: subject,
