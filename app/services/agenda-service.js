@@ -58,18 +58,12 @@ export default Service.extend({
     return newAgenda;
   },
 
-  // TODO KAS-2452 rename this.
-  async approveDesignAgenda(currentMeeting, oldAgenda) {
-    // TODO KAS-2452 do we need this if the api returns error
-    if (!oldAgenda) {
-      return oldAgenda;
-    }
+  async approveDesignAgenda(currentMeeting) {
     const result = await ajax({
       method: 'POST',
       url: '/agenda-approve/approveAgenda',
       data: {
         meetingId: currentMeeting.id,
-        oldAgendaId: oldAgenda.id,
       },
     });
     if (result.error) {
@@ -79,13 +73,12 @@ export default Service.extend({
     return newAgenda;
   },
 
-  async approveAgendaAndCloseMeeting(currentMeeting, agendaToApprove) {
+  async approveAgendaAndCloseMeeting(currentMeeting) {
     await ajax({
       method: 'POST',
       url: '/agenda-approve/approveAgendaAndCloseMeeting',
       data: {
         meetingId: currentMeeting.id,
-        agendaId: agendaToApprove.id,
       },
     });
     return;
@@ -119,13 +112,12 @@ export default Service.extend({
     return reopenedAgenda;
   },
 
-  async deleteAgenda(currentMeeting, agendaToDelete) {
+  async deleteAgenda(currentMeeting) {
     try {
       const result = await ajax({
         method: 'POST',
         url: '/agenda-approve/deleteAgenda',
         data: {
-          agendaId: agendaToDelete.id,
           meetingId: currentMeeting.id,
         },
       });

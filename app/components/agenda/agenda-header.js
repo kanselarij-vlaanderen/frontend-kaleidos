@@ -201,7 +201,7 @@ export default Component.extend({
     const currentMeeting = this.currentSession;
     const currentDesignAgenda = this.currentAgenda;
     // TODO KAS-2452 what if this times out ? some reloads may not happen (put them in route ?)
-    const newAgenda = await this.agendaService.approveDesignAgenda(currentMeeting, currentDesignAgenda);
+    const newAgenda = await this.agendaService.approveDesignAgenda(currentMeeting);
     // Data reloading
     // currentAgenda does not get reloaded on route change, we do it manually
     await currentDesignAgenda.reload();
@@ -228,7 +228,7 @@ export default Component.extend({
     this.toggleLoadingOverlayWithMessage(this.intl.t('agenda-approve-and-close-message'));
     const currentMeeting = this.currentSession;
     const currentDesignAgenda = this.currentAgenda;
-    await this.agendaService.approveAgendaAndCloseMeeting(currentMeeting, currentDesignAgenda);
+    await this.agendaService.approveAgendaAndCloseMeeting(currentMeeting);
     // Data reloading, we do not change route, refresh not working because of sibling routes?
     // currentAgenda does not get reloaded, we do it manually
     await currentDesignAgenda.reload(); // need changed attributes (modified)
@@ -284,8 +284,8 @@ export default Component.extend({
     if (await this.canDeleteSelectedAgenda) {
       const currentMeeting = this.currentSession;
       const currentAgenda = this.currentAgenda;
-      const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(currentMeeting, currentAgenda);
-      await this.agendaService.deleteAgenda(currentMeeting, currentAgenda);
+      const previousAgenda = await currentAgenda.previousVersion;
+      await this.agendaService.deleteAgenda(currentMeeting);
       // Data reloading
       if (previousAgenda) {
         // amount of agendaitems of agendaActivity are not reloaded, we do it manually
