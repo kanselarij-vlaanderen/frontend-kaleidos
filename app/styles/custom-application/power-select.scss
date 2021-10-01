@@ -1,61 +1,143 @@
-.ember-basic-dropdown-content--left.ember-basic-dropdown-content--below.ember-basic-dropdown--transitioned-in {
-  display: block;
-  top: 100%;
-  width: 100%;
-  transform: translateY(-1px);
-  border: 1px $ghost solid;
-  border-radius: 0;
-  background-color: $white;
-}
-
-.ember-power-select-trigger,
-.ember-basic-dropdown-trigger {
-  height: unset !important;
-}
-
-// allow block content in span.ember-power-select-selected-item
-.ember-power-select-selected-item {
-  display: inline-block;
-}
-
-.ember-power-select-option {
-  border-top: 1px solid $ghost;
-  display: block;
+.ember-power-select-trigger {
   position: relative;
+  display: block;
+  appearance: none;
+  -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes, this one is needed
   width: 100%;
-  padding: 0.7rem 0 0.5rem 1rem;
-  color: $black;
-  font-size: 1.6rem;
-  font-weight: normal;
-  text-align: left;
-  text-decoration: none;
-  cursor: pointer;
+  min-height: 3.4rem;
+  // overflow-y: hidden;
 
-  &:hover {
-    position: relative;
-    background-color: $athens-gray;
-    color: $action-text-color;
+  border: 0.1rem solid $au-gray-300;
+  border-radius: .3rem;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3e%3cpath d='M0.42,9.77a3.27,3.27,0,0,1,.91-2.21,3.12,3.12,0,0,1,4.41,0L16,17.82,26.25,7.56A3.12,3.12,0,0,1,30.67,12L18.2,24.44a3.12,3.12,0,0,1-4.41,0L1.33,12A3.17,3.17,0,0,1,.42,9.77'/%3e%3ctext y='90'%3e' %26apos; %23 %25 %26amp; %c2%bf %f0%9f%94%a3%3c/text%3e%3c/svg%3e"); // sass-lint:disable-line max-line-length
+  background-repeat: no-repeat;
+  background-size: 1.1rem;
+  background-position: calc(100% - 1.5rem) 50%;
+  padding: .7rem 6rem .7rem .7rem;
+
+  color: $au-gray-800;
+  font-family: flanders-sans, sans-serif;
+  font-size: 1.5rem;
+  line-height: normal;
+  text-decoration: none;
+
+  &[aria-disabled=true] {
+    color: $au-gray-500;
+    background-color: $au-gray-100;
+  }
+
+  &:focus {
+    outline: 0;
+    border-color: $au-yellow-500;
+    box-shadow: inset 0 0 0 0.1rem $au-yellow-500;
+  }
+
+  &[multiple] {
+    height: auto;
   }
 }
 
-.ember-basic-dropdown-trigger {
-  max-height: 10rem;
+.ember-basic-dropdown-trigger.ember-power-select-trigger {
+  &[aria-expanded=true] {
+    border-radius: .3rem;
+  }
+}
+
+.ember-power-select-selected-item {
+  display: inline-block; // allow block content in span.ember-power-select-selected-item
+
+  margin-left: 0;
+
+  > .auk-icon {
+    font-size: 1.5rem;
+  }
+}
+
+.ember-power-select-placeholder {
+  margin-left: 0;
+
+  color: $au-gray-500;
+}
+
+.ember-power-select-status-icon {
+  display: none;
+}
+
+.ember-power-select-clear-btn {
+  margin-right: 0.3em;
+
+  font-size: 2.6rem;
+  line-height: 0.6em;
+}
+
+.ember-power-select-dropdown.ember-basic-dropdown-content {
+  display: block;
+  top: 100%;
+  width: 100%;
+  transform: translateY(0.5rem);
+
+  border: none;
+  border-radius: 0.3rem;
+  background-color: #FFF;
+  filter: drop-shadow(0px 0px 8px rgba(33, 33, 33, 0.25));
+}
+
+.ember-power-select-options {
+  padding: 1rem 0;
+}
+
+.ember-power-select-option {
+  display: block;
+  position: relative;
+  width: 100%;
+
+  padding: 0.7rem 0 0.5rem 1rem;
+
+  color: $au-gray-800;
+  font-size: 1.5rem;
+
+  &:hover,
+  &[aria-selected=true],
+  &[aria-current=true] {
+    color: $au-gray-800;
+  }
+
+  &[aria-current=true] {
+    position: relative;
+
+    background-color: $au-gray-100;
+  }
+
+  &[aria-selected=true] {
+    background-color: $au-gray-200;
+  }
+
+  > .auk-icon {
+    font-size: 1.5rem;
+  }
+}
+
+.ember-power-select-search {
+  border-bottom: 0.1rem solid $au-gray-200;
 }
 
 .ember-power-select-search-input {
-  width: 100%;
   display: inline-block;
-  background: $page-bg;
-  font-family: $base-font;
-  font-size: $form-font-size;
-  color: $text-color;
+  width: 100%;
   max-width: 100%;
   height: unset !important;
-  line-height: $form-input-height;
-  border-radius: 0;
-  border: 0.1rem solid $border-color;
   -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes
+
+  border: 0.1rem solid $au-gray-300;
+  border-radius: .3rem;
+  background: #fff;
   padding: 0 1rem;
+
+  color: $text-color;
+  font-family: $base-font;
+  font-size: $form-font-size;
+  line-height: $form-input-height;
 
   &:hover {
     box-shadow: none;
@@ -88,95 +170,53 @@
     max-width: 6rem;
     padding: 0 0.8rem;
   }
-  line-height: 3.5rem !important;
+}
+
+.ember-power-select-multiple-trigger {
+  padding: .4rem 4rem .4rem .4rem;
+
+  .ember-power-select-placeholder {
+    margin: .3rem 0 .3rem .3rem;
+  }
+}
+
+.ember-power-select-multiple-options {
+  @extend .auk-filter-pill-list;
 }
 
 .ember-power-select-multiple-option {
-  background: $porcelain;
-  font-weight: 400;
-  color: $text-color;
-  padding: 0 1rem;
-  display: flex;
+  @extend .auk-filter-pill;
+
   flex-direction: row-reverse;
-  align-items: center;
-  border: none;
-  border-radius: 0;
+
+  margin: 0;
 
   .ember-power-select-multiple-remove-btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 0.4em;
-    font-size: 2rem;
-    border: none;
-    color: $gray-light;
+    @extend .auk-icon;
+    @extend .auk-icon--close;
+
+    // hide text node & re-apply correct color + size in the `&:after` selector below
+    color: transparent;
+    font-size: 0;
+
+    &:not(:hover) {
+      opacity: 1;
+    }
+
+    &:after {
+      font-family: icons !important;
+      font-style: normal;
+      font-weight: normal !important;
+      font-variant: normal;
+      text-transform: none;
+      line-height: 1;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+
+      color: $au-gray-600;
+      font-size: 1.8rem;
+
+      content: "\f115";
+    }
   }
-}
-
-.ember-power-select-trigger,
-.ember-basic-dropdown-trigger {
-  background-color: $page-bg;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3e%3cpath d='M0.42,9.77a3.27,3.27,0,0,1,.91-2.21,3.12,3.12,0,0,1,4.41,0L16,17.82,26.25,7.56A3.12,3.12,0,0,1,30.67,12L18.2,24.44a3.12,3.12,0,0,1-4.41,0L1.33,12A3.17,3.17,0,0,1,.42,9.77'/%3e%3ctext y='90'%3e' %26apos; %23 %25 %26amp; %c2%bf %f0%9f%94%a3%3c/text%3e%3c/svg%3e"); // sass-lint:disable-line max-line-length
-  background-repeat: no-repeat;
-  background-size: 11px 11px; //should be in px rem doesn't work in ie 11
-  background-position: calc(100% - 1.5rem) 50%;
-  -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes, this one is needed
-  appearance: none;
-  position: relative;
-  padding: 0 6rem 0 1.5rem;
-  max-width: 100%;
-  height: $form-input-height;
-  line-height: $form-input-height;
-  border: 1px solid $border-color;
-  border-radius: 0;
-  text-decoration: none;
-  color: $text-color;
-  font-family: $base-font;
-  font-size: $form-font-size;
-  display: block;
-  //width: 100%;
-  min-height: 3.5rem;
-
-  &::-ms-expand {
-    display: none;
-  }
-
-  &[disabled] {
-    color: $disabled-color;
-    border-color: $disabled-color;
-    background-color: $disabled-bg-color;
-  }
-
-  &:focus,
-  &--focus {
-    outline: none;
-    border-color: $outline-color;
-    box-shadow: inset 0 0 0 0.1rem $outline-color;
-  }
-
-  &[multiple] {
-    height: auto;
-  }
-}
-
-.ember-power-select-clear-btn {
-  margin-right:0.2em;
-  line-height: 1.2em;
-  font-size:2.6rem;
-}
-
-.ember-power-select-status-icon {
-  display: none;
-}
-
-/* Custom overrides
-	 ========================================================================== */
-
-.ember-power-select-trigger {
-  width: 100%;
-}
-
-// Kaleidos specific css class name
-.ember-power-select--block-item .ember-power-select-selected-item {
-  display: block;
 }
