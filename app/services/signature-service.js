@@ -2,6 +2,8 @@ import Service, { inject as service } from '@ember/service';
 
 export default class SignatureService extends Service {
   @service store;
+  @service toaster;
+  @service intl;
   @service currentSession;
 
   async markDocumentForSignature(piece, agendaItemTreatment) {
@@ -44,7 +46,7 @@ export default class SignatureService extends Service {
     const signPreparationActivity = await signMarkingActivity.signPreparationActivity;
 
     if (signPreparationActivity) {
-      // toaster?
+      this.toaster.error(this.intl.t('unmarking-not-possible'));
       return;
     }
     const signSubcase = await signMarkingActivity.signSubcase;
