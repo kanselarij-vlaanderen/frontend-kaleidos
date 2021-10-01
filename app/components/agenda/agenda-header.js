@@ -154,18 +154,27 @@ export default Component.extend({
   /**
    * @method CreateDesignAgenda
    *
-   * Get the last approved agenda and change the status to approves (from final)
+   * Get the last approved agenda and change the status to approveD (from final)
    * Then approve that agenda using the agenda-approve service which yields a new design agenda
    */
   async createDesignAgenda() {
     this.toggleLoadingOverlayWithMessage(this.intl.t('agenda-add-message'));
     const currentMeeting = this.currentSession;
-    const newAgenda = await this.agendaService.createNewDesignAgenda(currentMeeting);
-    // After the agenda has been created, we want to update the agendaitems of activities
-    const agendaitems = await newAgenda.get('agendaitems');
-    await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
-    this.toggleLoadingOverlayWithMessage(null);
-    return this.router.transitionTo('agenda.agendaitems', currentMeeting.id, newAgenda.id);
+    try {
+      const newAgenda = await this.agendaService.createNewDesignAgenda(currentMeeting);
+      // After the agenda has been created, we want to update the agendaitems of activities
+      const agendaitems = await newAgenda.get('agendaitems');
+      await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
+      this.toggleLoadingOverlayWithMessage(null);
+      return this.router.transitionTo('agenda.agendaitems', currentMeeting.id, newAgenda.id);
+    } catch (error) {
+      if (currentMeeting.isFinal === true) {
+        this.toaster.error(this.intl.t('error-reopen-meeting', { message: error.message }), this.intl.t('warning-title'));
+      } else {
+        this.toaster.error(this.intl.t('error-create-design-agenda', { message: error.message }), this.intl.t('warning-title'));
+      }
+      this.toggleLoadingOverlayWithMessage(null);
+    }
   },
 
   /**
@@ -199,18 +208,26 @@ export default Component.extend({
   async approveCurrentAgenda() {
     this.toggleLoadingOverlayWithMessage(this.intl.t('agenda-approving-text'));
     const currentMeeting = this.currentSession;
-    const currentDesignAgenda = this.currentAgenda;
-    // TODO KAS-2452 what if this times out ? some reloads may not happen (put them in route ?)
-    const newAgenda = await this.agendaService.approveDesignAgenda(currentMeeting);
-    // Data reloading
-    // currentAgenda does not get reloaded on route change, we do it manually
-    await currentDesignAgenda.reload();
-    await currentDesignAgenda.belongsTo('status').reload();
-    // amount of agendaitems of agendaActivity are not reloaded on route change, we do it manually
-    const agendaitems = await currentDesignAgenda.hasMany('agendaitems').reload();
-    await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
-    this.toggleLoadingOverlayWithMessage(null);
-    return this.router.transitionTo('agenda.agendaitems', currentMeeting.id, newAgenda.id);
+    const agendaToApprove = this.currentAgenda;
+    if (!agendaToApprove.isDesignAgenda) {
+      this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
+      return;
+    }
+    try {
+      const newAgenda = await this.agendaService.approveDesignAgenda(currentMeeting);
+      // Data reloading
+      // agendaToApprove does not get reloaded on route change, we do it manually
+      await agendaToApprove.reload();
+      await agendaToApprove.belongsTo('status').reload();
+      // amount of agendaitems of agendaActivity are not reloaded on route change, we do it manually
+      const agendaitems = await agendaToApprove.hasMany('agendaitems').reload();
+      await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
+      this.toggleLoadingOverlayWithMessage(null);
+      return this.router.transitionTo('agenda.agendaitems', currentMeeting.id, newAgenda.id);
+    } catch (error) {
+      this.toaster.error(this.intl.t('error-approve-agenda', { message: error.message }), this.intl.t('warning-title'));
+      this.toggleLoadingOverlayWithMessage(null);
+    }
   },
 
   /**
@@ -227,21 +244,28 @@ export default Component.extend({
   async approveCurrentAgendaAndCloseMeeting() {
     this.toggleLoadingOverlayWithMessage(this.intl.t('agenda-approve-and-close-message'));
     const currentMeeting = this.currentSession;
-    const currentDesignAgenda = this.currentAgenda;
-    await this.agendaService.approveAgendaAndCloseMeeting(currentMeeting);
-    // Data reloading, we do not change route, refresh not working because of sibling routes?
-    // currentAgenda does not get reloaded, we do it manually
-    await currentDesignAgenda.reload(); // need changed attributes (modified)
-    await currentDesignAgenda.belongsTo('status').reload(); // need changed status
-    // amount of agendaitems of agendaActivity are not reloaded, we do it manually
-    const agendaitems = await currentDesignAgenda.hasMany('agendaitems').reload();
-    await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
-    // we don't change route, but the model has changes and needs a reload, we do it manually
-    await currentMeeting.reload(); // need changed attributes (isFinal)
-    await currentMeeting.hasMany('agendas').reload();
-    this.toggleLoadingOverlayWithMessage(null);
-    // TODO KAS-2452 this refresh doesn't do much ..., reloads are needed
-    // this.onRefreshNeeded();
+    const agendaToApprove = this.currentAgenda;
+    if (!agendaToApprove.isDesignAgenda) {
+      this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
+      return;
+    }
+    try {
+      await this.agendaService.approveAgendaAndCloseMeeting(currentMeeting);
+      // Data reloading, we do not change route, refresh not working because of sibling routes?
+      // agendaToApprove does not get reloaded, we do it manually
+      await agendaToApprove.reload(); // need changed attributes (modified)
+      await agendaToApprove.belongsTo('status').reload(); // need changed status
+      // amount of agendaitems of agendaActivity are not reloaded, we do it manually
+      const agendaitems = await agendaToApprove.hasMany('agendaitems').reload();
+      await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
+      // we don't change route, but the model has changes and needs a reload, we do it manually
+      await currentMeeting.reload(); // need changed attributes (isFinal)
+      await currentMeeting.hasMany('agendas').reload();
+    } catch (error) {
+      this.toaster.error(this.intl.t('error-approve-close-agenda', { message: error.message }), this.intl.t('warning-title'));
+    } finally {
+      this.toggleLoadingOverlayWithMessage(null);
+    }
   },
 
   /**
@@ -251,26 +275,33 @@ export default Component.extend({
    */
   async closeMeeting() {
     this.toggleLoadingOverlayWithMessage(this.intl.t('agenda-close-message'));
+    if (!this.isSessionClosable) {
+      this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
+      return;
+    }
     const currentMeeting = this.currentSession;
     const currentAgenda = this.currentAgenda;
     const isDesignAgenda = await currentAgenda.isDesignAgenda;
-    const lastApprovedAgenda = await this.agendaService.closeMeeting(currentMeeting);
-    // Data reloading
-    // lastApprovedAgenda does not get reloaded, we do it manually
-    await lastApprovedAgenda.reload(); // need changed attributes (modified)
-    await lastApprovedAgenda.belongsTo('status').reload(); // need changed status
-    // amount of agendaitems of agendaActivity are not reloaded, we do it manually
-    const agendaitems = await lastApprovedAgenda.hasMany('agendaitems').reload();
-    await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
-    // we don't always change route, but the model has changes and needs a reload, we do it manually
-    await currentMeeting.reload(); // need changed attributes (isFinal)
-    await currentMeeting.hasMany('agendas').reload();
-    this.toggleLoadingOverlayWithMessage(null);
-    if (isDesignAgenda) {
-      return this.router.transitionTo('agenda.agendaitems', currentMeeting.id, lastApprovedAgenda.get('id'));
+    try {
+      const lastApprovedAgenda = await this.agendaService.closeMeeting(currentMeeting);
+      // Data reloading
+      // lastApprovedAgenda does not get reloaded, we do it manually
+      await lastApprovedAgenda.reload(); // need changed attributes (modified)
+      await lastApprovedAgenda.belongsTo('status').reload(); // need changed status
+      // amount of agendaitems of agendaActivity are not reloaded, we do it manually
+      const agendaitems = await lastApprovedAgenda.hasMany('agendaitems').reload();
+      await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
+      // we don't always change route, but the model has changes and needs a reload, we do it manually
+      await currentMeeting.reload(); // need changed attributes (isFinal)
+      await currentMeeting.hasMany('agendas').reload();
+      this.toggleLoadingOverlayWithMessage(null);
+      if (isDesignAgenda) {
+        return this.router.transitionTo('agenda.agendaitems', currentMeeting.id, lastApprovedAgenda.get('id'));
+      }
+    } catch (error) {
+      this.toaster.error(this.intl.t('error-close-meeting', { message: error.message }), this.intl.t('warning-title'));
+      this.toggleLoadingOverlayWithMessage(null);
     }
-    // TODO KAS-2452 this refresh doesn't do much ..., reloads are needed
-    // this.onRefreshNeeded();
   },
 
   /**
@@ -281,18 +312,21 @@ export default Component.extend({
    */
   async deleteSelectedAgenda() {
     this.toggleLoadingOverlayWithMessage(this.intl.t('agenda-delete-message'));
-    if (await this.canDeleteSelectedAgenda) {
-      const currentMeeting = this.currentSession;
-      const currentAgenda = this.currentAgenda;
-      const previousAgenda = await currentAgenda.previousVersion;
-      await this.agendaService.deleteAgenda(currentMeeting);
+    if (!this.canDeleteSelectedAgenda) {
+      this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
+      return;
+    }
+    const currentMeeting = this.currentSession;
+    const currentAgenda = this.currentAgenda;
+    const previousAgenda = await currentAgenda.previousVersion;
+    try {
+      await this.agendaService.deleteAgenda(currentMeeting, currentAgenda);
       // Data reloading
       if (previousAgenda) {
         // amount of agendaitems of agendaActivity are not reloaded, we do it manually
         const agendaitems = await previousAgenda.hasMany('agendaitems').reload();
         await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
         // the model has changes and needs a reload, we do it manually
-        // TODO KAS-2452 route change should work?
         await currentMeeting.reload(); // need changed attributes (isFinal)
         await currentMeeting.hasMany('agendas').reload();
         this.toggleLoadingOverlayWithMessage(null);
@@ -301,6 +335,9 @@ export default Component.extend({
       // if there is no previous agenda, the meeting should have been deleted
       this.toggleLoadingOverlayWithMessage(null);
       return this.router.transitionTo('agendas');
+    } catch (error) {
+      this.toggleLoadingOverlayWithMessage(null);
+      this.toaster.error(this.intl.t('error-delete-agenda', { message: error.message }), this.intl.t('warning-title'));
     }
   },
 
@@ -313,8 +350,12 @@ export default Component.extend({
    */
   async reopenPreviousAgenda() {
     this.toggleLoadingOverlayWithMessage(this.intl.t('agenda-reopen-previous-version-message'));
-    // if (await this.canReopenPreviousAgenda) { // TODO KAS-2452 should be unreachable without, do we need this? (general question for all actions)
-      const currentMeeting = this.currentSession;
+    if (!this.canReopenPreviousAgenda) {
+      this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
+      return;
+    }
+    const currentMeeting = this.currentSession;
+    try {
       // delete all the new documents from the designagenda
       if (this.piecesToDeleteReopenPreviousAgenda) {
         await all(this.piecesToDeleteReopenPreviousAgenda.map(async(piece) => {
@@ -325,18 +366,20 @@ export default Component.extend({
       const lastApprovedAgenda = await this.agendaService.reopenPreviousAgenda(currentMeeting);
       // Data reloading
       // lastApprovedAgenda does not get reloaded, we do it manually
-      // TODO KAS-2452 test without, route change *should* reload last approved agenda
       await lastApprovedAgenda.reload();
       await lastApprovedAgenda.belongsTo('status').reload();
       // amount of agendaitems of agendaActivity are not reloaded, we do it manually
       const agendaitems = await lastApprovedAgenda.hasMany('agendaitems').reload();
       await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
       // the model has changes and needs a reload, we do it manually
-      // TODO KAS-2452 route change should work?
       await currentMeeting.reload();
       await currentMeeting.hasMany('agendas').reload();
       this.toggleLoadingOverlayWithMessage(null);
       return this.router.transitionTo('agenda.agendaitems', currentMeeting.id, lastApprovedAgenda.id);
+    } catch (error) {
+      this.toaster.error(this.intl.t('error-close-meeting', { message: error.message }), this.intl.t('warning-title'));
+      this.toggleLoadingOverlayWithMessage(null);
+    }
   },
 
   /**

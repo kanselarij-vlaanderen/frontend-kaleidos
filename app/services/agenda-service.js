@@ -52,7 +52,7 @@ export default Service.extend({
       },
     });
     if (result.error) {
-      // TODO KAS-2452 popup
+      throw new Error(result.error.detail);
     }
     const newAgenda = await this.store.find('agenda', result.body.newAgenda.id);
     return newAgenda;
@@ -67,20 +67,23 @@ export default Service.extend({
       },
     });
     if (result.error) {
-      // TODO KAS-2452 popup
+      throw new Error(result.error.detail);
     }
     const newAgenda = await this.store.find('agenda', result.body.newAgenda.id);
     return newAgenda;
   },
 
   async approveAgendaAndCloseMeeting(currentMeeting) {
-    await ajax({
+    const result = await ajax({
       method: 'POST',
       url: '/agenda-approve/approveAgendaAndCloseMeeting',
       data: {
         meetingId: currentMeeting.id,
       },
     });
+    if (result.error) {
+      throw new Error(result.error.detail);
+    }
     return;
   },
 
@@ -92,6 +95,9 @@ export default Service.extend({
         meetingId: currentMeeting.id,
       },
     });
+    if (result.error) {
+      throw new Error(result.error.detail);
+    }
     const lastApprovedAgenda = await this.store.queryOne('agenda', {
       'filter[:id:]': result.body.lastApprovedAgenda.id,
     });
@@ -106,30 +112,31 @@ export default Service.extend({
         meetingId: currentMeeting.id,
       },
     });
+    if (result.error) {
+      throw new Error(result.error.detail);
+    }
     const reopenedAgenda = await this.store.queryOne('agenda', {
       'filter[:id:]': result.body.reopenedAgenda.id,
     });
     return reopenedAgenda;
   },
 
-  async deleteAgenda(currentMeeting) {
-    try {
-      const result = await ajax({
-        method: 'POST',
-        url: '/agenda-approve/deleteAgenda',
-        data: {
-          meetingId: currentMeeting.id,
-        },
+  async deleteAgenda(currentMeeting, currentAgenda) {
+    const result = await ajax({
+      method: 'POST',
+      url: '/agenda-approve/deleteAgenda',
+      data: {
+        meetingId: currentMeeting.id,
+        agendaId: currentAgenda.id,
+      },
+    });
+    if (result.error) {
+      throw new Error(result.error.detail);
+    }
+    if (result.body?.lastApprovedAgenda) {
+      return await this.store.queryOne('agenda', {
+        'filter[:id:]': result.body.lastApprovedAgenda.id,
       });
-      if (result.body?.lastApprovedAgenda) {
-        return await this.store.queryOne('agenda', {
-          'filter[:id:]': result.body.lastApprovedAgenda.id,
-        });
-      }
-    } catch (error) {
-      // TODO KAS-2452 not hitting this anymore... 
-      console.warn('An error ocurred: ', error);
-      this.toaster.error(this.intl.t('error-delete-agenda'), this.intl.t('warning-title'));
     }
   },
 
