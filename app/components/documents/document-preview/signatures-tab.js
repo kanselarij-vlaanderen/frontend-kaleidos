@@ -31,12 +31,14 @@ export default class DocumentsDocumentPreviewDetailsDetailsTabComponent extends 
   }
 
   @task
-  *markForSignature() {
+  *markOrUnmarkForSignature() {
     if (!this.signMarkingActivity) {
       const treatments = yield this.agendaitem.treatments;
       const agendaItemTreatment = treatments.firstObject;
       yield this.args.markForSignature(this.args.piece, agendaItemTreatment);
-      yield this.loadSignatureRelatedData.perform();
+    } else {
+      yield this.args.unmarkForSignature(this.args.piece);
     }
+    yield this.loadSignatureRelatedData.perform();
   }
 }
