@@ -146,13 +146,16 @@
               </h6>
             {{/if}}
             <div class="vlc-document-card-content__meta">
+              {{! no piece.created in legacy data }}
+              {{! TODO: when created date is absent, the layout seems irregular
+                    this will be addressed with new document card styling }}
               <div>
-              {{#if this.piece.created}}
-                {{t "uploaded-at"}}
-                {{moment-format this.piece.created}}
-                {{t "at"}}
-                {{moment-format this.piece.created "HH:mm"}}
-              {{/if}}
+                {{#if this.piece.created}}
+                  {{t "uploaded-at"}}
+                  {{moment-format this.piece.created}}
+                  {{t "at"}}
+                  {{moment-format this.piece.created "HH:mm"}}
+                {{/if}}
               </div>
               {{#if this.piece.accessLevelLastModified}}
                 <div>
