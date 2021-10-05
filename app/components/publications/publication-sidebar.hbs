@@ -66,6 +66,7 @@
         <Publications::PublicationStatusSelector
             @publicationStatus={{this.publicationStatus}}
             @onChange={{this.selectPublicationStatus}}
+            @disabled={{and this.publicationStatus.isPublished this.decision.isStaatsbladResource}}
         />
 
         {{#if (or this.publicationStatus.isWithdrawn this.publicationStatus.isPaused)}}
