@@ -37,7 +37,7 @@
             <c.body class="auk-table--interaction-cursor" as |row|>
               {{! each row has been processed to have 1 decision (object), 1 latestAgendaitem (object), 1 mandatees (String)}}
               {{! see postProcess methods in route}}
-              {{#let row.latestAgendaitem as |latestAgendaitem| }}
+              {{#let row.latestAgendaitem as |latestAgendaitem|}}
                 <td>
                   <h3 class="auk-h4 auk-u-mb">
                     {{row.title}}
@@ -62,7 +62,11 @@
                       @layout="icon-only"
                       @icon="nav-right"
                       @route="agenda.agendaitems.agendaitem.news-item"
-                      @models={{array latestAgendaitem.meetingId latestAgendaitem.agendaId latestAgendaitem.id}}
+                      @models={{array
+                        latestAgendaitem.meetingId
+                        latestAgendaitem.agendaId
+                        latestAgendaitem.id
+                      }}
                     />
                   </td>
                 {{/if}}

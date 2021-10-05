@@ -42,9 +42,9 @@ export default class AgendaitemsSearchController extends Controller {
     if (latestAgendaitem) {
       this.router.transitionTo(
         'agenda.agendaitems.agendaitem.news-item',
-        latestAgendaitem["meetingId"],
-        latestAgendaitem["agendaId"],
-        latestAgendaitem["id"]
+        latestAgendaitem['meetingId'],
+        latestAgendaitem['agendaId'],
+        latestAgendaitem['id']
       );
     }
   }
