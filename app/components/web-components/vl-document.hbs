@@ -58,6 +58,9 @@
     </div>
     {{#if this.currentSession.isEditor}}
       <div class="vlc-document-card-item__meta">
+        {{!-- no piece.created in legacy data --}}
+        {{!-- TODO: when created date is absent, the layout seems irregular
+              this will be addressed with new document card styling --}}
         {{#if this.piece.created}}
           {{t "uploaded-at"}}
           {{moment-format this.piece.created "DD.MM.YYYY"}}
