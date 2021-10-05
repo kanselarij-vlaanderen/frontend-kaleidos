@@ -127,19 +127,37 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @action
   async setPublicationStatus(status) {
     const now = new Date();
-
-    // remove created decision when "published" status is reverted
     const oldStatus = this.publicationStatus;
-    if ((oldStatus.isPublished && !status.isPublished)
+
+    // create publication when status changed to "published"
+    if (status.isPublished && !this.decision) {
+      const publicationActivities = await this.publicationSubcase
+        .publicationActivities;
+
+      if (publicationActivities.length) {
+        const publicationActivity = publicationActivities.objectAt(0);
+        this.decision = this.store.createRecord('decision', {
+          publicationActivity: publicationActivity,
+          publicationDate: now,
+        });
+        this.notifyChanges(this.decision);
+      }
+    }
+    // remove created decision when "published" status is reverted
+    else if ((oldStatus.isPublished && !status.isPublished)
       && (this.decision && !this.decision.isStaatsbladResource)
-    ) { // only remove decision when it is not a staatsblad resource
+    ) {
+      // only remove decision when it is not a staatsblad resource
       this.decision.deleteRecord();
       this.decision = undefined;
       this.notifyChanges(this.decision);
     }
 
+    // update status
     this.publicationFlow.status = status;
     this.loadPublicationStatus.perform();
+
+    // update closing dates of auxiliary activities
     if (status.isPublished || status.isWithdrawn) {
       this.publicationFlow.closingDate = now;
 
@@ -151,25 +169,11 @@ export default class PublicationsPublicationSidebarComponent extends Component {
         this.publicationSubcase.endDate = now;
         this.notifyChanges(this.publicationSubcase);
       }
-
-      if (status.isPublished) {
-        if (!this.decision) {
-          const publicationActivities = await this.publicationSubcase
-            .publicationActivities;
-
-          if (publicationActivities.length) {
-            const publicationActivity = publicationActivities.objectAt(0);
-            this.decision = this.store.createRecord('decision', {
-              publicationActivity: publicationActivity,
-              publicationDate: now,
-            });
-            this.notifyChanges(this.decision);
-          }
-        }
-      }
     } else {
       this.publicationFlow.closingDate = null;
     }
+
+    // add a status-change
     const statusChange = this.store.createRecord('publication-status-change', {
       startedAt: now,
       publication: this.publicationFlow,
