@@ -172,6 +172,9 @@
           {{#each this.model.decisions as |decision|}}
             <tr>
               <td>
+                {{!-- TODO: this currently only shows for non-staatsblad decisions,
+                since eli uses an extra indirection carrying the title (the "legal expression",
+                whereas the decision is the "legal resource") --}}
                 {{decision.title}}
               </td>
               <td>
