@@ -128,16 +128,14 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   async setPublicationStatus(status) {
     const now = new Date();
 
+    // remove created decision when "published" status is reverted
     const oldStatus = this.publicationStatus;
-    if (oldStatus.isPublished && !status.isPublished) {
-      // no staatsbladUri = record only kept for publication-date
-      //    not linked to staatsblad
-      if (this.decision && !this.decision.staatsbladUri) {
-        // persist in notifyChanges callback
-        this.decision.deleteRecord();
-        this.decision = undefined;
-        this.notifyChanges(this.decision);
-      }
+    if ((oldStatus.isPublished && !status.isPublished)
+      && (this.decision && !this.decision.isStaatsbladResource)
+    ) { // only remove decision when it is not a staatsblad resource
+      this.decision.deleteRecord();
+      this.decision = undefined;
+      this.notifyChanges(this.decision);
     }
 
     this.publicationFlow.status = status;
