@@ -179,9 +179,9 @@
               </td>
               <td>
                 <WebComponents::AuButtonToolbar>
-                  {{#if decision.staatsbladUri}}
+                  {{#if decision.isStaatsbladResource}}
                     <Auk::ButtonLink
-                      @href={{decision.staatsbladUri}}
+                      @href={{decision.uri}}
                       @layout="icon-only" @icon="external-link"
                       @target="_blank" />
                   {{/if}}
