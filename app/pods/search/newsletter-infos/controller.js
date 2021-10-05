@@ -1,9 +1,10 @@
 import Controller from '@ember/controller';
+import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { warn } from '@ember/debug';
 
 export default class AgendaitemsSearchController extends Controller {
+  @service router;
   queryParams = {
     page: {
       type: 'number',
@@ -27,7 +28,7 @@ export default class AgendaitemsSearchController extends Controller {
     super(...arguments);
     this.page = 0;
     this.size = this.sizeOptions[2];
-    this.sort = '-publicationDate';
+    this.sort = '-agendaitems.meetingDate';
   }
 
   @action
@@ -37,19 +38,13 @@ export default class AgendaitemsSearchController extends Controller {
 
   @action
   navigateToNewsletter(searchEntry) {
-    if (searchEntry.meetingId) {
-      this.transitionToRoute(
+    const latestAgendaitem = searchEntry.latestAgendaitem;
+    if (latestAgendaitem) {
+      this.router.transitionTo(
         'agenda.agendaitems.agendaitem.news-item',
-        searchEntry.meetingId,
-        searchEntry.agendaId,
-        searchEntry.agendaitemId
-      );
-    } else {
-      warn(
-        `Newsletter ${searchEntry.id} is not related to a meeting. Cannot navigate to detail`,
-        {
-          id: 'agendaitem.no-meeting',
-        }
+        latestAgendaitem["meetingId"],
+        latestAgendaitem["agendaId"],
+        latestAgendaitem["id"]
       );
     }
   }

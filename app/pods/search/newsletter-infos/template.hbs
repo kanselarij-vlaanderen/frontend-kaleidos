@@ -4,7 +4,6 @@
     <div>
       {{#if this.model.length}}
         <DataTable
-          data-test-route-search-agendaitems-data-table={{true}}
           @content={{this.model}}
           @page={{this.page}}
           @noDataMessage={{t "no-results-found"}}
@@ -23,47 +22,51 @@
               <ThSortable
                 @class="auk-table__col--2 auk-table__header-title"
                 @currentSorting={{this.sort}}
-                @field="publicationDate"
+                @field="agendaitems.meetingDate"
                 @label={{t "agenda-of"}}
               />
               <th class="auk-table__col--2 auk-table__header-title">
                 {{t "minister"}}
               </th>
-              <ThSortable
-                @class="auk-table__col--1 auk-table__header-title"
-                @currentSorting={{this.sort}}
-                @field="decisionStatusId"
-                @label={{t "agendaitem-decision"}}
-              />
+              {{! sorting on this field won't work as-is, since you can have multiple decisions}}
+              <th class="auk-table__col--1 auk-table__header-title">
+                {{t "agendaitem-decision"}}
+              </th>
               <th class="auk-table__col--1"></th>
             </c.header>
             <c.body class="auk-table--interaction-cursor" as |row|>
-              <td>
-                <h3 class="auk-h4 auk-u-mb">
-                  {{row.title}}
-                </h3>
-                <p class="auk-u-mr-2">
-                  <SanitizeHtml @raw={{true}} @value={{row.richtext}} />
-                </p>
-              </td>
-              <td>
-                {{moment-format row.publicationDate "DD-MM-YYYY"}}
-              </td>
-              <td>
-                {{row.mandatees}}
-              </td>
-              <td>
-                {{row.decisionStatusLabel}}
-              </td>
-              <td class="auk-u-text-align--right">
-                <Auk::Button
-                  @skin="borderless"
-                  @layout="icon-only"
-                  @icon="nav-right"
-                  @route="agenda.agendaitems.agendaitem.news-item"
-                  @models={{array row.meetingId row.agendaId row.agendaitemId}}
-                />
-              </td>
+              {{! each row has been processed to have 1 decision (object), 1 latestAgendaitem (object), 1 mandatees (String)}}
+              {{! see postProcess methods in route}}
+              {{#let row.latestAgendaitem as |latestAgendaitem| }}
+                <td>
+                  <h3 class="auk-h4 auk-u-mb">
+                    {{row.title}}
+                  </h3>
+                  <p class="auk-u-mr-2">
+                    <SanitizeHtml @raw={{true}} @value={{row.richtext}} />
+                  </p>
+                </td>
+                <td>
+                  {{moment-format latestAgendaitem.meetingDate "DD-MM-YYYY"}}
+                </td>
+                <td>
+                  {{row.mandatees}}
+                </td>
+                <td>
+                  {{row.decision.decisionResultCodeLabel}}
+                </td>
+                {{#if latestAgendaitem}}
+                  <td class="auk-u-text-align--right">
+                    <Auk::Button
+                      @skin="borderless"
+                      @layout="icon-only"
+                      @icon="nav-right"
+                      @route="agenda.agendaitems.agendaitem.news-item"
+                      @models={{array latestAgendaitem.meetingId latestAgendaitem.agendaId latestAgendaitem.id}}
+                    />
+                  </td>
+                {{/if}}
+              {{/let}}
             </c.body>
           </table.content>
         </DataTable>

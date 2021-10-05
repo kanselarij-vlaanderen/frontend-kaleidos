@@ -26,10 +26,7 @@ export default class AgendaitemSearchRoute extends Route {
   textSearchFields = Object.freeze([
     'title',
     'subTitle',
-    'data.content',
     'richtext',
-    'themes',
-    'decisionStatusLabel',
   ]);
 
   constructor() {
@@ -37,15 +34,46 @@ export default class AgendaitemSearchRoute extends Route {
     this.lastParams = new Snapshot();
   }
 
-  postProcessDates(_case) {
-    const { publicationDate } = _case.attributes;
-    if (publicationDate) {
-      if (Array.isArray(publicationDate)) {
-        const sorted = publicationDate.sort();
-        _case.attributes.publicationDate = sorted[sorted.length - 1];
-      } else {
-        _case.attributes.publicationDate = moment(publicationDate);
+  postProcessAgendaitems(newsletter) {
+    const agendaitems = newsletter.attributes.agendaitems;
+    if (agendaitems) {
+      if (Array.isArray(agendaitems)) {
+        for (const agendaitem of agendaitems) {
+          if (agendaitem["nextVersionId"] == null) { // there is no next version = latest agendaitem
+            return newsletter.attributes.latestAgendaitem = agendaitem;
+          }
+        }
       }
+      return newsletter.attributes.latestAgendaitem = agendaitems
+    }
+  }
+
+  postProcessDecisions(newsletter) {
+    const decisions = newsletter.attributes.decisions;
+    if (decisions) {
+      if (Array.isArray(decisions)) {
+        // TODO for now, if there are multiple decisions, we just grab the first one
+        return newsletter.attributes.decision = decisions.firstObject;
+      }
+      return newsletter.attributes.decision = decisions
+    }
+  }
+
+  postProcessMandatees(newsletter) {
+    const mandatees = newsletter.attributes.latestAgendaitem.mandatees;
+    if (mandatees) {
+      if (Array.isArray(mandatees)) {
+        const sortedMandatees = mandatees.sortBy('priority');
+        const mandateeMap = [];
+        // For each mandatee, we have to combine the first and family name
+        for (const mandatee of sortedMandatees) {
+        const mandateeName = [mandatee.firstName, mandatee.familyName].filter((it) => it).join(' ');
+        mandateeMap.push(mandateeName);
+        }
+        // Combine all mandatee names to one string
+        return newsletter.attributes.mandatees = mandateeMap.join(', ');
+      }
+      return newsletter.attributes.mandatees = [mandatees.firstName, mandatees.familyName].filter((it) => it).join(' ');
     }
   }
 
@@ -80,7 +108,7 @@ export default class AgendaitemSearchRoute extends Route {
       filter[`${searchModifier}${textSearchKey}`] = params.searchText;
     }
     if (!isEmpty(params.mandatees)) {
-      filter['mandateeName,mandateeFirstNames,mandateeFamilyNames'] =
+      filter['agendaitems.mandatees.firstName,agendaitems.mandatees.familyName'] =
         params.mandatees;
     }
 
@@ -91,20 +119,22 @@ export default class AgendaitemSearchRoute extends Route {
     if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
       const from = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
       const to = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
-      filter[':lte,gte:publicationDate'] = [
+      filter[':lte,gte:agendaitems.meetingDate'] = [
         to.utc().toISOString(),
         from.utc().toISOString(),
       ].join(',');
     } else if (!isEmpty(params.dateFrom)) {
       const date = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
-      filter[':gte:publicationDate'] = date.utc().toISOString();
+      filter[':gte:agendaitems.meetingDate'] = date.utc().toISOString();
     } else if (!isEmpty(params.dateTo)) {
       const date = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
-      filter[':lte:publicationDate'] = date.utc().toISOString();
+      filter[':lte:agendaitems.meetingDate'] = date.utc().toISOString();
     }
 
     // filter out newsletters that are general newsletters
     filter[':has-no:generalNewsletterMeetingId'] = 't';
+    // filter out newsletters that are not linked to a meeting via treatment(s)/agendaitem(s)
+    filter[':has:agendaitems'] = 't';
 
     this.lastParams.commit();
     console.log(params.sort);
@@ -120,6 +150,9 @@ export default class AgendaitemSearchRoute extends Route {
       (newsletters) => {
         const entry = newsletters.attributes;
         entry.id = newsletters.id;
+        this.postProcessAgendaitems(newsletters);
+        this.postProcessDecisions(newsletters);
+        this.postProcessMandatees(newsletters);
         return entry;
       }
     );
