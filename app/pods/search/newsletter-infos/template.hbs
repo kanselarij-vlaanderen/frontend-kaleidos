@@ -4,6 +4,7 @@
     <div>
       {{#if this.model.length}}
         <DataTable
+          data-test-route-search-newsletter-infos-data-table={{true}}
           @content={{this.model}}
           @page={{this.page}}
           @noDataMessage={{t "no-results-found"}}
@@ -38,7 +39,7 @@
               {{! each row has been processed to have 1 decision (object), 1 latestAgendaitem (object), 1 mandatees (String)}}
               {{! see postProcess methods in route}}
               {{#let row.latestAgendaitem as |latestAgendaitem|}}
-                <td>
+                <td data-test-route-search-newsletter-infos-row-title>
                   <h3 class="auk-h4 auk-u-mb">
                     {{row.title}}
                   </h3>
@@ -49,14 +50,14 @@
                 <td>
                   {{moment-format latestAgendaitem.meetingDate "DD-MM-YYYY"}}
                 </td>
-                <td>
+                <td data-test-route-search-newsletter-infos-row-mandatees>
                   {{row.mandatees}}
                 </td>
-                <td>
+                <td data-test-route-search-newsletter-infos-row-decision-result>
                   {{row.decision.decisionResultCodeLabel}}
                 </td>
                 {{#if latestAgendaitem}}
-                  <td class="auk-u-text-align--right">
+                  <td data-test-route-search-newsletter-infos-row-go-to-agendaitem class="auk-u-text-align--right">
                     <Auk::Button
                       @skin="borderless"
                       @layout="icon-only"

@@ -11,7 +11,7 @@ function currentTimestamp() {
 
 context('Search tests', () => {
   // INFO: enable musearch, elasticsearch and tika for this spec
-  const options = [5, 10, 50, 100];
+  const options = [5, 10, 25, 50, 100];
 
   const dateToCreateAgenda = Cypress.moment().add(2, 'weeks')
     .day(1)
@@ -46,6 +46,11 @@ context('Search tests', () => {
 
   it('Should change the amount of elements to every value in selectbox in dossiers search view', () => {
     cy.visit('zoeken/dossiers');
+    searchFunction(options);
+  });
+
+  it('Should change the amount of elements to every value in selectbox in kort-bestek search view', () => {
+    cy.visit('zoeken/kort-bestek');
     searchFunction(options);
   });
 
@@ -136,7 +141,7 @@ context('Search tests', () => {
     cy.get(route.search.input).should('have.value', '');
   });
 
-  it('Searchfield should be empty after revisting search page', () => {
+  it('Searchfield should be empty after revisiting search page', () => {
     cy.visit('/zoeken/agendapunten');
     cy.get(route.search.input).clear();
     cy.get(route.search.input).type('TestSearchSet');
@@ -265,5 +270,63 @@ context('Search tests', () => {
       cy.wait(`@searchCallOverview-${searchTerm}`);
       cy.get(agenda.agendaOverviewItem.subitem).contains(newSubcase1TitleShort);
     });
+  });
+
+  it('Search for searchterms in kort-bestek and open the detail view', () => {
+    cy.visit('/zoeken/kort-bestek');
+    // TODO-setup this test searches for data from other tests (mandatee-assigning.spec) and could fail
+    const searchTerm = 'assign mandatee';
+    cy.get(route.search.input).clear();
+    cy.get(route.search.input).type(searchTerm);
+
+    cy.route('GET', '/newsletter-infos/search?**').as('newsletterSearchCall');
+    cy.get(route.search.trigger).click();
+    cy.wait('@newsletterSearchCall');
+
+    cy.get(route.searchNewsletterInfos.dataTable).find('tbody')
+      .children('tr')
+      .should('have.length', 3)
+      .as('mandateeAssigningRows');
+    cy.get('@mandateeAssigningRows').eq(0)
+      .within(() => {
+        cy.get(route.searchNewsletterInfos.row.title).contains(searchTerm);
+        cy.get(route.searchNewsletterInfos.row.mandatees).contains('Geert Bourgeois, Hilde Crevits');
+        cy.get(route.searchNewsletterInfos.row.decisionResult).contains('Goedgekeurd');
+      });
+    cy.get('@mandateeAssigningRows').eq(1)
+      .within(() => {
+        cy.get(route.searchNewsletterInfos.row.title).contains(searchTerm);
+        cy.get(route.searchNewsletterInfos.row.mandatees).contains('Geert Bourgeois, Hilde Crevits, Sven Gatz');
+        cy.get(route.searchNewsletterInfos.row.decisionResult).contains('Goedgekeurd');
+      });
+    cy.get('@mandateeAssigningRows').eq(2)
+      .within(() => {
+        cy.get(route.searchNewsletterInfos.row.title).contains(searchTerm);
+        cy.get(route.searchNewsletterInfos.row.mandatees).contains('Geert Bourgeois, Hilde Crevits, Liesbeth Homans, Ben Weyts, Phillipe Muyters');
+        cy.get(route.searchNewsletterInfos.row.decisionResult).contains('Goedgekeurd');
+        cy.get(route.searchNewsletterInfos.row.goToAgendaitem).click();
+        cy.url().should('contain', '/vergadering/');
+        cy.url().should('contain', '/agenda/');
+        cy.url().should('contain', '/agendapunten/');
+        cy.url().should('contain', '/kort-bestek');
+      });
+  });
+
+  it('Search for mandatee in kort-bestek', () => {
+    cy.visit('/zoeken/kort-bestek');
+    // TODO-setup this test searches for data from other tests (mandatee-assigning.spec) and could fail
+    const searchTerm = 'test';
+    const mandateeSearchTerm = 'Geert';
+    cy.get(route.search.input).clear();
+    cy.get(route.search.input).type(searchTerm);
+    cy.get(route.search.mandatee).type(mandateeSearchTerm);
+
+    cy.route('GET', '/newsletter-infos/search?**').as('newsletterSearchCall');
+    cy.get(route.search.trigger).click();
+    cy.wait('@newsletterSearchCall');
+
+    // amount of rows is too flaky (data from previous tests) and not tested. We expect at least 1 result
+    cy.get(utils.vlAlert.container).should('not.exist');
+    cy.get(route.searchNewsletterInfos.row.mandatees).contains('Geert Bourgeois');
   });
 });
