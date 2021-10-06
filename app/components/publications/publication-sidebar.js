@@ -295,6 +295,12 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.notifyChanges(this.treatment, 'startDate');
   }
 
+  @action
+  setPublicationDate(selectedDates) {
+    this.decision.publicationDate = selectedDates[0];
+    this.notifyChanges(this.decision, 'publicationDate');
+  }
+
   @restartableTask
   *setRemark(event) {
     const newValue = event.target.value;
