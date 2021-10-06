@@ -272,7 +272,7 @@ context('Search tests', () => {
     });
   });
 
-  it('Search for searchterms in kort-bestek and open the detail view', () => {
+  it('Search for title in kort-bestek and open the detail view by clicking icon', () => {
     cy.visit('/zoeken/kort-bestek');
     // TODO-setup this test searches for data from other tests (mandatee-assigning.spec) and could fail
     const searchTerm = 'assign mandatee';
@@ -285,31 +285,63 @@ context('Search tests', () => {
 
     cy.get(route.searchNewsletterInfos.dataTable).find('tbody')
       .children('tr')
-      .should('have.length', 3)
-      .as('mandateeAssigningRows');
-    cy.get('@mandateeAssigningRows').eq(0)
-      .within(() => {
-        cy.get(route.searchNewsletterInfos.row.title).contains(searchTerm);
-        cy.get(route.searchNewsletterInfos.row.mandatees).contains('Geert Bourgeois, Hilde Crevits');
-        cy.get(route.searchNewsletterInfos.row.decisionResult).contains('Goedgekeurd');
-      });
-    cy.get('@mandateeAssigningRows').eq(1)
-      .within(() => {
-        cy.get(route.searchNewsletterInfos.row.title).contains(searchTerm);
-        cy.get(route.searchNewsletterInfos.row.mandatees).contains('Geert Bourgeois, Hilde Crevits, Sven Gatz');
-        cy.get(route.searchNewsletterInfos.row.decisionResult).contains('Goedgekeurd');
-      });
-    cy.get('@mandateeAssigningRows').eq(2)
-      .within(() => {
-        cy.get(route.searchNewsletterInfos.row.title).contains(searchTerm);
-        cy.get(route.searchNewsletterInfos.row.mandatees).contains('Geert Bourgeois, Hilde Crevits, Liesbeth Homans, Ben Weyts, Phillipe Muyters');
-        cy.get(route.searchNewsletterInfos.row.decisionResult).contains('Goedgekeurd');
-        cy.get(route.searchNewsletterInfos.row.goToAgendaitem).click();
-        cy.url().should('contain', '/vergadering/');
-        cy.url().should('contain', '/agenda/');
-        cy.url().should('contain', '/agendapunten/');
-        cy.url().should('contain', '/kort-bestek');
-      });
+      .should('have.length', 3);
+    // The search results are randomly sorted between each test run (mainly because of bad test data)
+    // So we can't know what info is showing in each row, but we do know what should be showing in the 3 rows
+    // the title and decision result will be the same for all 3, contains() gets the first one
+    cy.get(route.searchNewsletterInfos.row.title).contains(searchTerm);
+    cy.get(route.searchNewsletterInfos.row.decisionResult).contains('Goedgekeurd');
+    cy.get(route.searchNewsletterInfos.row.mandatees).contains('Geert Bourgeois, Hilde Crevits');
+    cy.get(route.searchNewsletterInfos.row.mandatees).contains('Geert Bourgeois, Hilde Crevits, Sven Gatz');
+    cy.get(route.searchNewsletterInfos.row.mandatees).contains('Geert Bourgeois, Hilde Crevits, Liesbeth Homans, Ben Weyts, Phillipe Muyters');
+    cy.get(route.searchNewsletterInfos.row.goToAgendaitem).eq(0)
+      .click();
+    cy.url().should('contain', '/vergadering/');
+    cy.url().should('contain', '/agenda/');
+    cy.url().should('contain', '/agendapunten/');
+    cy.url().should('contain', '/kort-bestek');
+  });
+
+  it('Search for richText in kort-bestek and open the detail view by clicking row', () => {
+    cy.visit('/zoeken/kort-bestek');
+    // TODO-setup this test searches for data from other tests (newsletter-info.spec) and could fail
+    const searchTerm = 'Dit is een leuke beslissing';
+    cy.get(route.search.input).clear();
+    cy.get(route.search.input).type(searchTerm);
+
+    cy.route('GET', '/newsletter-infos/search?**').as('newsletterSearchCall');
+    cy.get(route.search.trigger).click();
+    cy.wait('@newsletterSearchCall');
+
+    cy.get(route.searchNewsletterInfos.dataTable).find('tbody')
+      .children('tr')
+      .should('have.length', 1);
+    cy.get(route.searchNewsletterInfos.row.title).contains(searchTerm);
+    cy.get(route.searchNewsletterInfos.row.decisionResult).contains('Uitgesteld');
+    cy.get(route.searchNewsletterInfos.dataTable).find('tbody')
+      .children('tr')
+      .should('have.length', 1)
+      .click();
+    cy.url().should('contain', '/vergadering/');
+    cy.url().should('contain', '/agenda/');
+    cy.url().should('contain', '/agendapunten/');
+    cy.url().should('contain', '/kort-bestek');
+  });
+
+  it('Search for kort-bestek items that have links to multiple agendaitem/agenda versions', () => {
+    cy.visit('/zoeken/kort-bestek');
+    // TODO-setup this test searches for data from other tests (agendaitem-changes.spec) and could fail
+    const searchTerm = 'testId=1589266576';
+    cy.get(route.search.input).clear();
+    cy.get(route.search.input).type(searchTerm);
+
+    cy.route('GET', '/newsletter-infos/search?**').as('newsletterSearchCall');
+    cy.get(route.search.trigger).click();
+    cy.wait('@newsletterSearchCall');
+
+    // amount of rows is too flaky (data from previous tests) and not tested. We expect at least 1 result
+    cy.get(utils.vlAlert.container).should('not.exist');
+    cy.get(route.searchNewsletterInfos.row.title).contains(searchTerm);
   });
 
   it('Search for mandatee in kort-bestek', () => {
