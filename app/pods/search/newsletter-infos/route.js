@@ -6,7 +6,7 @@ import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import { inject as service } from '@ember/service';
 
-export default class AgendaitemSearchRoute extends Route {
+export default class NewsletterInfosSearchRoute extends Route {
   @service metrics;
   queryParams = {
     page: {
@@ -37,11 +37,12 @@ export default class AgendaitemSearchRoute extends Route {
         for (const agendaitem of agendaitems) {
           if (agendaitem['nextVersionId'] == null) {
             // there is no next version = latest agendaitem
-            return (newsletter.attributes.latestAgendaitem = agendaitem);
+            newsletter.attributes.latestAgendaitem = agendaitem;
+            return;
           }
         }
       }
-      return (newsletter.attributes.latestAgendaitem = agendaitems);
+      newsletter.attributes.latestAgendaitem = agendaitems;
     }
   }
 
@@ -50,9 +51,10 @@ export default class AgendaitemSearchRoute extends Route {
     if (decisions) {
       if (Array.isArray(decisions)) {
         // TODO for now, if there are multiple decisions, we just grab the first one
-        return (newsletter.attributes.decision = decisions.firstObject);
+        newsletter.attributes.decision = decisions.firstObject;
+        return;
       }
-      return (newsletter.attributes.decision = decisions);
+      newsletter.attributes.decision = decisions;
     }
   }
 
@@ -61,23 +63,10 @@ export default class AgendaitemSearchRoute extends Route {
     if (mandatees) {
       if (Array.isArray(mandatees)) {
         const sortedMandatees = mandatees.sortBy('priority');
-        const mandateeMap = [];
-        // For each mandatee, we have to combine the first and family name
-        for (const mandatee of sortedMandatees) {
-          const mandateeName = [mandatee.firstName, mandatee.familyName]
-            .filter((it) => it)
-            .join(' ');
-          mandateeMap.push(mandateeName);
-        }
-        // Combine all mandatee names to one string
-        return (newsletter.attributes.mandatees = mandateeMap.join(', '));
+        newsletter.attributes.mandatees = sortedMandatees;
+        return;
       }
-      return (newsletter.attributes.mandatees = [
-        mandatees.firstName,
-        mandatees.familyName,
-      ]
-        .filter((it) => it)
-        .join(' '));
+      newsletter.attributes.mandatees = [mandatees];
     }
   }
 

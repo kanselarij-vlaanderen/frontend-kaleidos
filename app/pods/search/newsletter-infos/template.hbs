@@ -51,7 +51,11 @@
                   {{moment-format latestAgendaitem.meetingDate "DD-MM-YYYY"}}
                 </td>
                 <td data-test-route-search-newsletter-infos-row-mandatees>
-                  {{row.mandatees}}
+                  {{#each row.mandatees as |mandatee|}}
+                    {{#let (concat mandatee.firstName " " mandatee.familyName) as |fullName|}}
+                      {{fullName}}{{if (has-next mandatee row.mandatees) ", "}}
+                    {{/let}}
+                  {{/each}}
                 </td>
                 <td data-test-route-search-newsletter-infos-row-decision-result>
                   {{row.decision.decisionResultCodeLabel}}
