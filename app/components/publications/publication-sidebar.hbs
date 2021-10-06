@@ -248,9 +248,16 @@
             <Auk::Label>{{t "publication-date"}}</Auk::Label>
             {{#unless this.loadDecision.isRunning}}
               {{#if this.decision.publicationDate}}
-                <div class="auk-u-muted">
-                  {{moment-format this.decision.publicationDate "DD-MM-YYYY"}}
-                </div>
+                {{#if this.decision.isStaatsbladResource}}
+                  <div class="auk-u-muted">
+                    {{moment-format this.decision.publicationDate "DD-MM-YYYY"}}
+                  </div>
+                {{else}}
+                  <Auk::Datepicker
+                    @date={{this.decision.publicationDate}}
+                    @onChange={{this.setPublicationDate}}
+                  />
+                {{/if}}
               {{else}}
                 <div class="auk-u-muted auk-u-italic">
                   {{t "not-known"}}
