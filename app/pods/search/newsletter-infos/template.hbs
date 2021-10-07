@@ -60,11 +60,11 @@
                 <td data-test-route-search-newsletter-infos-row-decision-result>
                   {{row.decision.decisionResultCodeLabel}}
                 </td>
-                {{#if latestAgendaitem}}
-                  <td
-                    data-test-route-search-newsletter-infos-row-go-to-agendaitem
-                    class="auk-u-text-align--right"
-                  >
+                <td
+                  data-test-route-search-newsletter-infos-row-go-to-agendaitem
+                  class="auk-u-text-align--right"
+                >
+                  {{#if latestAgendaitem}}
                     <Auk::Button
                       @skin="borderless"
                       @layout="icon-only"
@@ -76,8 +76,8 @@
                         latestAgendaitem.id
                       }}
                     />
-                  </td>
-                {{/if}}
+                  {{/if}}
+                </td>
               {{/let}}
             </c.body>
           </table.content>
