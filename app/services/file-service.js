@@ -17,23 +17,6 @@ export default Service.extend({
     this.set('objectsToDelete', []);
   },
 
-  convertPiece(piece) {
-    try {
-      ajax({
-        headers: {
-          Accept: 'application/json',
-        },
-        method: 'GET',
-        url: `/pieces/${piece.get('id')}/convert`,
-      })
-        .then((result) => result)
-        .catch((err) => err);
-    } catch (exception) {
-      console.warn('An exception occurred: ', exception);
-      // warn(e, 'something went wrong with the conversion', { id: 'document-conversion' });
-    }
-  },
-
   deleteDocumentContainerWithUndo: task(function *(documentContainerToDelete) {
     this.objectsToDelete.push(documentContainerToDelete);
     documentContainerToDelete.set('aboutToDelete', true);
