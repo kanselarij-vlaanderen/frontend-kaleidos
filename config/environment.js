@@ -1,6 +1,7 @@
-/* eslint-disable object-curly-newline */
-module.exports = function(environment) {
-  const ENV = {
+'use strict';
+
+module.exports = function (environment) {
+  let ENV = {
     modulePrefix: 'frontend-kaleidos',
     podModulePrefix: 'frontend-kaleidos/pods',
     environment,
