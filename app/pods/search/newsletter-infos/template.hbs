@@ -36,7 +36,7 @@
               <th class="auk-table__col--1"></th>
             </c.header>
             <c.body class="auk-table--interaction-cursor" as |row|>
-              {{! each row has been processed to have 1 decision (object), 1 latestAgendaitem (object), 1 mandatees (String)}}
+              {{! each row has been processed to have 1 decision (object) as well as 1 latestAgendaitem (object)}}
               {{! see postProcess methods in route}}
               {{#let row.latestAgendaitem as |latestAgendaitem|}}
                 <td data-test-route-search-newsletter-infos-row-title>
