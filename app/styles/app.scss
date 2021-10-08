@@ -8,7 +8,11 @@
    ========================================================================== */
 
 @import '_colors';
-@import '_s-colors'; // sourced from "au-kaleidos-css" npm package
+
+// sourced from "au-kaleidos-css" npm package
+@import '_s-colors';
+@import '_s-shadows';
+
 $icon-font-location: '/fonts/'; // overrides the default location for flanders-icons font files
 
 // Components (loaded locally to easily read source)
