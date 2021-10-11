@@ -32,19 +32,23 @@
           <Auk::Label for="translationRequestMessage" @required={{true}}>
             {{t 'message'}}
           </Auk::Label>
-          <Auk::Textarea id="translationRequestMessage" @rows="6"
+          <Auk::Textarea data-test-publication-translation-request-message id="translationRequestMessage" @rows="6"
             @value={{mut this.message}} />
         </div>
         {{!-- Attachments --}}
         <div class="auk-form-group">
           <Auk::Label>{{t "attachments"}}</Auk::Label>
-          <Utils::Documents::List @pieces={{@attachments}} />
+          <Utils::Documents::List 
+            data-test-publication-translation-request-documents-list
+            @pieces={{@attachments}}
+          />
         </div>
       </div>
     </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
     <Auk::Button
+      data-test-publication-translation-request-save
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
       @loading={{this.saveRequest.isRunning}}

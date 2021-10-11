@@ -148,7 +148,7 @@ function addPublicationDocuments(files) {
       });
     }
   });
-  cy.get(auk.modal.footer).find(publication.documentsUploadModal.save)
+  cy.get(auk.modal.footer).find(publication.documentsUpload.save)
     .click;
 
   cy.wait('@createNewPiece', {

@@ -23,6 +23,7 @@
                   {{t "name"}}
                 </Auk::Label>
                 <Auk::Input
+                  data-test-publication-documents-upload-name
                   id="nameDocumentUpload"
                   @value={{mut this.name}}
                   {{on "input" this.validators.name.enableError}}
@@ -42,6 +43,7 @@
                           {{t "pages-amount"}}
                         </Auk::Label>
                         <Auk::Input
+                          data-test-publication-documents-upload-pages
                           @type="number"
                           id="translationLoadPages"
                           @value={{mut this.pagesAmount}}
@@ -54,6 +56,7 @@
                           {{t "words-amount"}}
                         </Auk::Label>
                         <Auk::Input
+                          data-test-publication-documents-upload-words
                           @type="number"
                           id="translationLoadWords"
                           @value={{mut this.wordsAmount}}
@@ -68,8 +71,11 @@
                   {{t "for-proof-print"}}
                 </Auk::Label>
                 <Auk::CheckboxList>
-                  <Auk::Checkbox @name="proofPrint" @checked={{this.isSourceForProofPrint}}
-                    {{on "input" this.toggleProofprint}} />
+                  <Auk::Checkbox
+                    data-test-publication-documents-upload-proof-print
+                    @name="proofPrint"
+                    @checked={{this.isSourceForProofPrint}}
+                  {{on "input" this.toggleProofprint}} />
                 </Auk::CheckboxList>
               </div>
             </div>
@@ -83,7 +89,7 @@
     @cancelDisabled={{this.isCancelDisabled}}
     @onCancel={{perform this.cancel}}>
     <Auk::Button
-      data-test-publication-documents-upload-modal-save
+      data-test-publication-documents-upload-save
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
       @loading={{this.save.isRunning}}

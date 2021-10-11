@@ -25,6 +25,43 @@ const selectors = {
     shortTitle: '[data-test-route-publications-publication-header-short-title]',
   },
 
+  // publications\publication\translations\template
+  publicationTranslations: {
+    documents: '[data-test-route-publications-publication-translations-documents]',
+    requests: '[data-test-route-publications-publication-translations-requests]',
+    finished: '[data-test-route-publications-publication-translations-finished]',
+  },
+
+  // publications\publication\translations\documents\template
+  translationsDocuments: {
+    add: '[data-test-route-publications-publication-translations-documents-add]',
+    requestTranslation: '[data-test-route-publications-publication-translations-documents-request-translation]',
+    tableRow: '[data-test-route-publications-publication-translations-documents-table-row]',
+    row: {
+      checkbox: '[data-test-route-publications-publication-translations-documents-table-checkbox]',
+      documentName: '[data-test-route-publications-publication-translations-documents-document-name]',
+      options: '[data-test-route-publications-publication-translations-options]',
+      edit: '[data-test-route-publications-publication-translations-edit]',
+      delete: '[data-test-route-publications-publication-translations-delete]',
+    },
+  },
+
+  // publications\publication\proofs\template
+  publicationProofs: {
+    documents: '[data-test-route-publications-publication-proofs-documents]',
+    requests: '[data-test-route-publications-publication-proofs-requests]',
+    finished: '[data-test-route-publications-publication-proofs-finished]',
+  },
+
+  // publications\publication\translations\requests
+  translationsRequests: {
+    request: {
+      title: '.auk-toolbar-complex__item > h4',
+      upload: '[data-test-publications---translations-requests-upload]',
+      dueDate: '[data-test-publications---translations-requests-due-date]',
+    },
+  },
+
   /**
     COMPONENTS
   */
@@ -207,9 +244,41 @@ const selectors = {
   urgencyLevelCheckbox: '[data-test-urgency-level-checkbox]',
 
   // documents-upload-modal
-  documentsUploadModal: {
-    save: '[data-test-publication-documents-upload-modal-save]',
+  // translation upload modal
+  documentsUpload: {
+    name: '[data-test-publication-documents-upload-name]',
+    pages: '[data-test-publication-documents-upload-pages]',
+    words: '[data-test-publication-documents-upload-words]',
+    proofPrint: '[data-test-publication-documents-upload-proof-print]',
+    save: '[data-test-publication-documents-upload-save]',
   },
 
+  // translation-request-modal
+  translationRequest: {
+    message: '[data-test-publication-translation-request-message]',
+    documentsList: '[data-test-publication-translation-request-documents-list]',
+    save: '[data-test-publication-translation-request-save]',
+  },
+
+  // document-edit-modal
+  documentEdit: {
+    pages: '[data-test-publication-document-edit-pages]',
+    words: '[data-test-publication-document-edit-words]',
+    proofprint: '[data-test-publication-document-edit-proofprint]',
+    documentName: '[data-test-publication-document-edit-document-name]',
+    save: '[data-test-publication-document-edit-save]',
+  },
+
+  // translation-statuspill
+  translationStatuspill: {
+    done: '[data-test-translation-statuspill-done]',
+    inProgress: '[data-test-translation-statuspill-in-progress]',
+    notStarted: '[data-test-translation-statuspill-not-started]',
+  },
+
+  //  translation-upload-modal
+  translationUpload: {
+    save: '[data-test-translation-upload-save]',
+  },
 };
 export default selectors;

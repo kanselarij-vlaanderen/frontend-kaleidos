@@ -4,6 +4,7 @@
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           <Auk::Button
+            data-test-route-publications-publication-translations-documents-request-translation
             @skin="secondary" @icon="mail"
             @disabled={{this.isRequestingDisabled}}
             {{on "click" this.openTranslationRequestModal}}>
@@ -12,6 +13,7 @@
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
           <Auk::Button
+            data-test-route-publications-publication-translations-documents-add
             @skin="secondary" @icon="add"
             @disabled={{this.isUploadDisabled}}
             {{on "click" this.openPieceUploadModal}}>
@@ -31,10 +33,10 @@
                 {{on "click" this.toggleAllPiecesSelection}} />
             </th>
             <Utils::ThSortable
-               @label={{t "name-document"}}
-               @field="naam"
-               @currentSorting={{this.sort}}
-               @onChange={{this.changeSorting}} />
+              @label={{t "name-document"}}
+              @field="naam"
+              @currentSorting={{this.sort}}
+              @onChange={{this.changeSorting}} />
             <th class="auk-u-text-nowrap">{{t "file-type"}}</th>
             <Utils::ThSortable
               @label={{t "received-at"}}
@@ -55,13 +57,14 @@
         <tbody>
           {{#each this.pieceRows as |pieceRow|}}
             {{#let pieceRow.piece as |piece|}}
-              <tr class="auk-table__row">
+              <tr data-test-route-publications-publication-translations-documents-table-row class="auk-table__row">
                 <td class="auk-table-checkbox-col">
                   <Auk::Checkbox
+                    data-test-route-publications-publication-translations-documents-table-checkbox
                     @checked={{includes pieceRow this.selectedPieceRows}}
                     {{on "click" (fn this.togglePieceSelection pieceRow)}} />
                 </td>
-                <td>
+                <td data-test-route-publications-publication-translations-documents-document-name>
                   {{piece.name}}
                 </td>
                 <td>
@@ -109,15 +112,18 @@
                       {{t "read"}}
                     </Auk::Button>
                     <DropdownMenu
+                      data-test-route-publications-publication-translations-options
                       @skin="borderless"
                       @icon="more"
                       as |Menu|>
                       <Menu.Item
+                        data-test-route-publications-publication-translations-edit
                         {{on "click" (fn this.openPieceEditModal pieceRow)}}>
                         {{t "edit-translation-details"}}
                       </Menu.Item>
                       {{#if (and this.canDeletePieces pieceRow.isPieceDeletable)}}
                         <Menu.Item @skin="danger"
+                          data-test-route-publications-publication-translations-delete
                           {{on "click" (perform this.deletePiece pieceRow)}}>
                           {{t "delete"}}
                         </Menu.Item>

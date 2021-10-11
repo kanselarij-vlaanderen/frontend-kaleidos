@@ -33,6 +33,14 @@ const selectors = {
     title: '[data-test-overviews-header-print-title]',
   },
 
+  // utils/document/list
+  documentList: {
+    item: '[data-test-utils-document-list-item]',
+    name: '[data-test-utils-document-list-name]',
+    fileExtension: '[data-test-utils-document-list-file-extension]',
+    viewDocument: '[data-test-utils-document-list-view-document]',
+  },
+
   // changes-alert
   changesAlert: {
     alert: '[data-test-changes-alert]',

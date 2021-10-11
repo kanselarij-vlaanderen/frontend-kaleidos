@@ -12,6 +12,7 @@
           <header.Actions as |actions|>
             <actions.Item>
               <Auk::Button
+                data-test-publications---translations-requests-upload
                 @disabled={{this.isUploadDisabled}}
                 @skin="primary"
                 {{on "click" (fn this.openTranslationUploadModal activity)}}>
@@ -26,7 +27,7 @@
               <div class="auk-u-mb-2">
                 <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "translation-due-date"}}</p>
                 {{#if this.translationSubcase.dueDate}}
-                  <p>{{moment-format this.translationSubcase.dueDate "DD-MM-YYYY"}}</p>
+                  <p data-test-publications---translations-requests-due-date>{{moment-format this.translationSubcase.dueDate "DD-MM-YYYY"}}</p>
                 {{else}}
                   <p class="auk-u-muted auk-u-italic">{{t "not-known"}}</p>
                 {{/if}}
