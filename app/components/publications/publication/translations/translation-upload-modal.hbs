@@ -23,6 +23,7 @@
                     {{t "name"}}
                   </Auk::Label>
                   <Auk::Input id="translationUploadName"
+                    data-test-translation-upload-name
                     @value={{mut this.name}}
                     {{on "input" this.validators.name.enableError}} />
                 </div>
