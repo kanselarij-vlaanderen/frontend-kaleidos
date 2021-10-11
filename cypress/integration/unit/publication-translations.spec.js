@@ -45,7 +45,7 @@ function getTranslatedMonth(month) {
       return '';
   }
 }
-context('Publications sidebar tests', () => {
+context('Publications translation tests', () => {
   function uploadDocument(file, newFileName, pages, words) {
     cy.get(publication.translationsDocuments.add).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
