@@ -40,20 +40,6 @@ export default class AgendaitemSearchRoute extends Route {
     this.lastParams = new Snapshot();
   }
 
-  postProcessDates(_case) {
-    const {
-      sessionDates,
-    } = _case.attributes;
-    if (sessionDates) {
-      if (Array.isArray(sessionDates)) {
-        const sorted = sessionDates.sort();
-        _case.attributes.sessionDates = sorted[sorted.length - 1];
-      } else {
-        _case.attributes.sessionDates = moment(sessionDates);
-      }
-    }
-  }
-
   model(filterParams) {
     const searchParams = this.paramsFor('search');
     const params = {...searchParams, ...filterParams}; // eslint-disable-line

@@ -14,7 +14,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
    * @argument isOpen
    * @argument onCollapse
    * @argument onOpen
-   * @argument {(model, changedKeys: string[] or string) => void} didChange
+   * @argument {(model, changedKeys: string[]|string) => void} didChange
    *  on create and delete no changedKeys are passed
    */
   @service store;
@@ -127,27 +127,58 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @action
   async setPublicationStatus(status) {
     const now = new Date();
+    const oldStatus = this.publicationStatus;
+
+    // create publication when status changed to "published"
+    if (status.isPublished && !this.decision) {
+      const publicationActivities = await this.publicationSubcase
+        .publicationActivities;
+
+      if (publicationActivities.length) {
+        const publicationActivity = publicationActivities.objectAt(0);
+        this.decision = this.store.createRecord('decision', {
+          publicationActivity: publicationActivity,
+          publicationDate: now,
+        });
+        this.notifyChanges(this.decision);
+      }
+    }
+    // remove created decision when "published" status is reverted
+    else if ((oldStatus.isPublished && !status.isPublished)
+      && (this.decision && !this.decision.isStaatsbladResource)
+    ) {
+      // only remove decision when it is not a staatsblad resource
+      this.decision.deleteRecord();
+      this.decision = undefined;
+      this.notifyChanges(this.decision);
+    }
+
+    // update status
     this.publicationFlow.status = status;
     this.loadPublicationStatus.perform();
+
+    // update closing dates of auxiliary activities
     if (status.isPublished || status.isWithdrawn) {
       this.publicationFlow.closingDate = now;
 
-      if (!this.publicationSubcase.endDate) {
-        this.publicationSubcase.endDate = now;
-        this.notifyChanges(this.publicationSubcase);
-      }
       if (!this.translationSubcase.endDate) {
         this.translationSubcase.endDate = now;
         this.notifyChanges(this.translationSubcase);
       }
+      if (!this.publicationSubcase.endDate) {
+        this.publicationSubcase.endDate = now;
+        this.notifyChanges(this.publicationSubcase);
+      }
     } else {
       this.publicationFlow.closingDate = null;
     }
+
+    // add a status-change
     const statusChange = this.store.createRecord('publication-status-change', {
       startedAt: now,
       publication: this.publicationFlow,
     });
-    this.notifyChanges(this.publicationFlow, ['status', 'closingDate']),
+    this.notifyChanges(this.publicationFlow, ['status', 'closingDate']);
     this.notifyChanges(statusChange);
     await this.loadPublicationStatusChange.perform();
   }
@@ -262,6 +293,12 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   setDecisionDate(selectedDates) {
     this.treatment.startDate = selectedDates[0];
     this.notifyChanges(this.treatment, 'startDate');
+  }
+
+  @action
+  setPublicationDate(selectedDates) {
+    this.decision.publicationDate = selectedDates[0];
+    this.notifyChanges(this.decision, 'publicationDate');
   }
 
   @restartableTask

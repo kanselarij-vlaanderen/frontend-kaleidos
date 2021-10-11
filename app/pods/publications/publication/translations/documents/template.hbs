@@ -33,10 +33,10 @@
                 {{on "click" this.toggleAllPiecesSelection}} />
             </th>
             <Utils::ThSortable
-              @label={{t "name-document"}}
-              @field="naam"
-              @currentSorting={{this.sort}}
-              @onChange={{this.changeSorting}} />
+               @label={{t "document-name"}}
+               @field="naam"
+               @currentSorting={{this.sort}}
+               @onChange={{this.changeSorting}} />
             <th class="auk-u-text-nowrap">{{t "file-type"}}</th>
             <Utils::ThSortable
               @label={{t "received-at"}}

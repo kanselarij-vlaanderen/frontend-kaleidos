@@ -11,12 +11,11 @@
           <Auk::Toolbar::Item>
             <Auk::Button
               @skin="tertiary"
-              @icon="settings"
+              @icon="edit"
+              @layout="icon-only"
               data-test-mandatee-panel-view-edit={{true}}
               {{on "click" @onClickEdit}}
-            >
-              {{t "edit-2"}}
-            </Auk::Button>
+            />
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       {{/if}}

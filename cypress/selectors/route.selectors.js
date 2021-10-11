@@ -87,6 +87,7 @@ const selectors = {
     title: '[data-test-route-search-title]',
     input: '[data-test-route-search-input]',
     trigger: '[data-test-route-search-trigger]',
+    mandatee: '[data-test-route-search-mandatee-input]',
     // TODO-selector unused selector:
     datepickerButton: '[data-test-route-search-datepicker-button]',
   },
@@ -100,6 +101,17 @@ const selectors = {
   searchCases: {
     toggleDecisions: '[data-test-route-search-cases-toggle-decisions]',
     dataTable: '[data-test-route-search-cases-data-table]',
+  },
+
+  // search/newsletterInfos
+  searchNewsletterInfos: {
+    dataTable: '[data-test-route-search-newsletter-infos-data-table]',
+    row: {
+      title: '[data-test-route-search-newsletter-infos-row-title]',
+      mandatees: '[data-test-route-search-newsletter-infos-row-mandatees]',
+      decisionResult: '[data-test-route-search-newsletter-infos-row-decision-result]',
+      goToAgendaitem: '[data-test-route-search-newsletter-infos-row-go-to-agendaitem]',
+    },
   },
 
   /**

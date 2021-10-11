@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 
 export default class DocumentController extends Controller {
   @service router;
+  @service signatureService;
 
   @action
   transitionBack() {
@@ -13,5 +14,15 @@ export default class DocumentController extends Controller {
     } else {
       this.router.transitionTo('agendas');
     }
+  }
+  
+  @action
+  async markForSignature(piece, agendaItemTreatment) {
+    await this.signatureService.markDocumentForSignature(piece, agendaItemTreatment);
+  }
+
+  @action
+  async unmarkForSignature(piece) {
+    await this.signatureService.unmarkDocumentForSignature(piece);
   }
 }
