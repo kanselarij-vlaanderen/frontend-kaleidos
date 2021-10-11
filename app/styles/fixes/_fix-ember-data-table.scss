@@ -4,3 +4,8 @@
 .data-table__actions--top {
   border-bottom: none;
 }
+
+td,
+th {
+  border-radius: 0;
+}
