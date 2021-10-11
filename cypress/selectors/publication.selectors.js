@@ -119,6 +119,7 @@ const selectors = {
       publicationDate: '[data-test-publication-table-row-publication-date]',
       urgencyLevel: '[data-test-publication-table-row-urgency-level]',
       status: '[data-test-publication-table-row-status]',
+      translationProgressBadge: '[data-test-publication-table-row-publication-translation-progress-badge]',
       source: '[data-test-publication-table-row-source]',
       goToPublication: '[data-test-publication-table-row-go-to-publication]',
     },
@@ -280,6 +281,7 @@ const selectors = {
 
   //  translation-upload-modal
   translationUpload: {
+    name: '[data-test-translation-upload-name]',
     save: '[data-test-translation-upload-save]',
   },
 };
