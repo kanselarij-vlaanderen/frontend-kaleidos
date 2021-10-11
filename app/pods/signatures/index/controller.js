@@ -1,7 +1,6 @@
 import Controller from '@ember/controller';
 import { action, set } from '@ember/object';
 import { inject as service } from '@ember/service';
-// import { tracked } from '@glimmer/tracking';
 
 export default class SignaturesIndexController extends Controller {
   @service router;
@@ -19,7 +18,6 @@ export default class SignaturesIndexController extends Controller {
   };
   page = 0;
   size = 10;
-  // sort = '-created';
 
   @action
   prevPage() {
@@ -30,7 +28,7 @@ export default class SignaturesIndexController extends Controller {
 
   @action
   nextPage() {
-    set(this, 'page', this.page + 1);  // TODO: setter instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
+    set(this, 'page', this.page + 1); // TODO: setter instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
   }
 
   @action
@@ -55,6 +53,11 @@ export default class SignaturesIndexController extends Controller {
     });
     const agenda = await agendaitem.get('agenda');
     const meeting = await agenda.get('createdFor');
-    this.router.transitionTo('agenda.agendaitems.agendaitem.decisions', meeting.id, agenda.id, agendaitem.id);
+    this.router.transitionTo(
+      'agenda.agendaitems.agendaitem.decisions',
+      meeting.id,
+      agenda.id,
+      agendaitem.id
+    );
   }
 }

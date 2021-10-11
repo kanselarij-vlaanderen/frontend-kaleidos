@@ -14,7 +14,7 @@ export default class SignaturesIndexRoute extends Route {
       refreshModel: true,
       as: 'sorteer',
     },
-  }
+  };
 
   model(params) {
     return this.store.query('sign-flow', {
@@ -27,7 +27,7 @@ export default class SignaturesIndexRoute extends Route {
         'creator',
         'sign-subcase.sign-marking-activity.piece',
         'sign-subcase.sign-marking-activity.piece.document-container.type',
-        'decision-activity'
+        'decision-activity',
       ].join(','),
     });
   }
