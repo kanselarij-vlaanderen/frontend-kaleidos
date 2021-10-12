@@ -318,19 +318,18 @@ export default Component.extend({
     }
     const currentMeeting = this.currentSession;
     const currentAgenda = this.currentAgenda;
-    const previousAgenda = await currentAgenda.previousVersion;
     try {
-      await this.agendaService.deleteAgenda(currentMeeting, currentAgenda);
+      const lastapprovedAgenda = await this.agendaService.deleteAgenda(currentMeeting, currentAgenda);
       // Data reloading
-      if (previousAgenda) {
+      if (lastapprovedAgenda) {
         // amount of agendaitems of agendaActivity are not reloaded, we do it manually
-        const agendaitems = await previousAgenda.hasMany('agendaitems').reload();
+        const agendaitems = await lastapprovedAgenda.hasMany('agendaitems').reload();
         await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
         // the model has changes and needs a reload, we do it manually
         await currentMeeting.reload(); // need changed attributes (isFinal)
         await currentMeeting.hasMany('agendas').reload();
         this.toggleLoadingOverlayWithMessage(null);
-        return this.router.transitionTo('agenda.agendaitems', currentMeeting.id, previousAgenda.get('id'));
+        return this.router.transitionTo('agenda.agendaitems', currentMeeting.id, lastapprovedAgenda.get('id'));
       }
       // if there is no previous agenda, the meeting should have been deleted
       this.toggleLoadingOverlayWithMessage(null);

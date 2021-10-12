@@ -54,7 +54,7 @@ export default Service.extend({
     if (result.error) {
       throw new Error(result.error.detail);
     }
-    const newAgenda = await this.store.find('agenda', result.body.newAgenda.id);
+    const newAgenda = await this.store.find('agenda', result.data.id);
     return newAgenda;
   },
 
@@ -69,7 +69,7 @@ export default Service.extend({
     if (result.error) {
       throw new Error(result.error.detail);
     }
-    const newAgenda = await this.store.find('agenda', result.body.newAgenda.id);
+    const newAgenda = await this.store.find('agenda', result.data.id);
     return newAgenda;
   },
 
@@ -99,7 +99,7 @@ export default Service.extend({
       throw new Error(result.error.detail);
     }
     const lastApprovedAgenda = await this.store.queryOne('agenda', {
-      'filter[:id:]': result.body.lastApprovedAgenda.id,
+      'filter[:id:]': result.data.id,
     });
     return lastApprovedAgenda;
   },
@@ -116,7 +116,7 @@ export default Service.extend({
       throw new Error(result.error.detail);
     }
     const reopenedAgenda = await this.store.queryOne('agenda', {
-      'filter[:id:]': result.body.reopenedAgenda.id,
+      'filter[:id:]': result.data.id,
     });
     return reopenedAgenda;
   },
@@ -133,9 +133,9 @@ export default Service.extend({
     if (result.error) {
       throw new Error(result.error.detail);
     }
-    if (result.body?.lastApprovedAgenda) {
+    if (result.data?.id) {
       return await this.store.queryOne('agenda', {
-        'filter[:id:]': result.body.lastApprovedAgenda.id,
+        'filter[:id:]': result.data.id,
       });
     }
   },
