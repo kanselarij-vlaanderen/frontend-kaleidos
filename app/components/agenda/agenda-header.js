@@ -36,7 +36,7 @@ export default Component.extend({
   toaster: service(),
 
   isAddingAgendaitems: false,
-  onRefreshNeeded: null, // argument. Function to execute after creating an agenda-item.
+  refreshRoute: null, // argument. Function to execute after creating an agenda-item.
   isApprovingAllAgendaitems: false,
   showLoadingOverlay: false,
   loadingOverlayMessage: null,
@@ -265,6 +265,7 @@ export default Component.extend({
       this.toaster.error(this.intl.t('error-approve-close-agenda', { message: error.message }), this.intl.t('warning-title'));
     } finally {
       this.toggleLoadingOverlayWithMessage(null);
+      this.refreshRoute();
     }
   },
 
@@ -298,6 +299,7 @@ export default Component.extend({
       if (isDesignAgenda) {
         return this.router.transitionTo('agenda.agendaitems', currentMeeting.id, lastApprovedAgenda.get('id'));
       }
+      this.refreshRoute();
     } catch (error) {
       this.toaster.error(this.intl.t('error-close-meeting', { message: error.message }), this.intl.t('warning-title'));
       this.toggleLoadingOverlayWithMessage(null);
@@ -376,7 +378,7 @@ export default Component.extend({
       this.toggleLoadingOverlayWithMessage(null);
       return this.router.transitionTo('agenda.agendaitems', currentMeeting.id, lastApprovedAgenda.id);
     } catch (error) {
-      this.toaster.error(this.intl.t('error-close-meeting', { message: error.message }), this.intl.t('warning-title'));
+      this.toaster.error(this.intl.t('error-reopen-previous-agenda', { message: error.message }), this.intl.t('warning-title'));
       this.toggleLoadingOverlayWithMessage(null);
     }
   },
@@ -478,7 +480,7 @@ export default Component.extend({
         }
       }
       this.toggleLoadingOverlayWithMessage(null);
-      this.onRefreshNeeded();
+      this.refreshRoute();
     },
 
     async unlockAgenda() {

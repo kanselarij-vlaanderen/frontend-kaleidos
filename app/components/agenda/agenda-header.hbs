@@ -227,7 +227,7 @@
 {{#if this.isAddingAgendaitems}}
   <Agenda::Agendaitem::CreateAgendaitem
     @isAddingAgendaitems={{this.isAddingAgendaitems}}
-    @onCreate={{this.onRefreshNeeded}} />
+    @onCreate={{this.refreshRoute}} />
 {{/if}}
 
 {{#if this.releasingDocuments}}

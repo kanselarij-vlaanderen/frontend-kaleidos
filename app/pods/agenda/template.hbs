@@ -8,7 +8,7 @@
 }}
 <Agenda::AgendaHeader
   @loading={{this.loadingAgendaitems}}
-  @onRefreshNeeded={{this.refresh}}
+  @refreshRoute={{this.refresh}}
   @showPrintButton={{this.showPrintButton}}
 />
 {{#if (not this.isLoading)}}
