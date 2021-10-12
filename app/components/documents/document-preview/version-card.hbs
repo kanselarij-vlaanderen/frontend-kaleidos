@@ -23,8 +23,6 @@
             {{moment-format @piece.created "DD-MM-YYYY"}}
             -
             {{moment-format @piece.created "HH:mm"}}
-          {{else}}
-            {{t "upload-time-unknown"}}
           {{/if}}
         </p>
         {{#if @piece.accessLevelLastModified}}

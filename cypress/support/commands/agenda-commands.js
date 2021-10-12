@@ -244,9 +244,12 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
     .click();
   const int = Math.floor(Math.random() * Math.floor(10000));
   cy.route('PATCH', '/agendaitems/**').as(`patchAgendaitem_${int}`);
+  // Force click the click not working in selective tests (agendaitem-changes.spec)
   cy.get(dependency.emberPowerSelect.option)
     .contains(formalityStatus)
-    .click();
+    .click({
+      force: true,
+    });
   cy.wait(`@patchAgendaitem_${int}`);
   cy.get(utils.changesAlert.close).click();
   cy.log('/setFormalOkOnItemWithIndex');
@@ -402,6 +405,9 @@ function addAgendaitemToAgenda(subcaseTitle, postponed = false) {
       timeout: 20000,
     });
   cy.wait(`@loadAgendaitemFields${randomInt}`);
+  cy.get(auk.loader, {
+    timeout: 12000,
+  }).should('not.exist');
   cy.log('/addAgendaitemToAgenda');
 }
 

@@ -375,7 +375,6 @@
   "uploading-files": "{numFiles, plural, =1 {# bestand} other {# bestanden}} opladen",
   "uploaded-files": "{numFiles, plural, =1 {Bestand} other {Bestanden}} opgeladen",
   "uploaded-at": "Geüpload op",
-  "upload-time-unknown": "Uploadtijdstip onbekend",
   "sent-at": "verstuurd op",
   "uploading": "opgeladen",
   "loading": "Aan het laden",
@@ -933,5 +932,9 @@
   "open-version": "Open versie",
   "signature-folder": "Handtekenmap",
   "different": "Verschillend",
-  "x-documents-selected": "{count, plural, =1 {# document} other {# documenten}} geselecteerd"
+  "x-documents-selected": "{count, plural, =1 {# document} other {# documenten}} geselecteerd",
+  "validation-signature": "Validatie handtekening",
+  "signature-needed": "Handtekening nodig?",
+  "signature-not-possible": "Het is niet mogelijk om dit document te laten handtekenen.",
+  "unmarking-not-possible": "Dit document is reeds voorbereid om te laten tekenen en kan niet ongedaan gemaakt worden."
 }
