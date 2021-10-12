@@ -54,7 +54,7 @@
                 {{on "input" this.toggleAllPiecesSelection}} />
             </th>
             <Utils::ThSortable
-               @label={{t "name-document"}}
+               @label={{t "document-name"}}
                @field="naam"
                @currentSorting={{this.sort}}
                @onChange={{this.changeSorting}} />
@@ -172,6 +172,9 @@
           {{#each this.model.decisions as |decision|}}
             <tr>
               <td>
+                {{!-- TODO: this currently only shows for non-staatsblad decisions,
+                since eli uses an extra indirection carrying the title (the "legal expression",
+                whereas the decision is the "legal resource") --}}
                 {{decision.title}}
               </td>
               <td>
@@ -179,11 +182,12 @@
               </td>
               <td>
                 <WebComponents::AuButtonToolbar>
-                  <Auk::ButtonLink
-                    @href={{decision.uri}}
-                    @layout="icon-only" @icon="external-link"
-                    @target="_blank">
-                  </Auk::ButtonLink>
+                  {{#if decision.isStaatsbladResource}}
+                    <Auk::ButtonLink
+                      @href={{decision.uri}}
+                      @layout="icon-only" @icon="external-link"
+                      target="_blank" />
+                  {{/if}}
                 </WebComponents::AuButtonToolbar>
               </td>
             </tr>

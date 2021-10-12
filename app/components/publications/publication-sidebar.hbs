@@ -33,9 +33,8 @@
             value={{@publicationFlow.identification.structuredIdentifier.localIdentifier}}
             {{on "input" (perform this.setPublicationNumber)}}
           />
-          {{!-- TODO KAS-2858 use @width instead of size, size=5 seems to correlate to 6.3rem --}}
           <Auk::Input
-            size="5"
+            @width="xsmall"
             value={{@publicationFlow.identification.structuredIdentifier.versionIdentifier}}
             {{on "input" (perform this.setPublicationNumberSuffix)}}
           />
@@ -67,6 +66,7 @@
         <Publications::PublicationStatusSelector
             @publicationStatus={{this.publicationStatus}}
             @onChange={{this.selectPublicationStatus}}
+            @disabled={{and this.publicationStatus.isPublished this.decision.isStaatsbladResource}}
         />
 
         {{#if (or this.publicationStatus.isWithdrawn this.publicationStatus.isPaused)}}
@@ -88,7 +88,7 @@
         {{#unless this.publicationStatus.isWithdrawn}}
           <div data-test-publication-sidebar-regulation-type class="auk-form-group">
             <Auk::Label for="blockInput">{{t "regulation-type"}}</Auk::Label>
-            <PowerSelect  
+            <PowerSelect
                     @options={{this.regulationTypes}}
                     @searchEnabled={{false}}
                     @onchange={{this.setRegulationType}}
@@ -131,6 +131,7 @@
         {{!-- Werknummer BS == numac nummer --}}
         <div data-test-publication-sidebar-numac-number class="auk-form-group">
           <Auk::Label>{{t "numac-number"}}</Auk::Label>
+          {{!-- TODO: disable modifying numac-number once (staatsblad-)decision exists? --}}
           <Auk::InputPills
             @items={{this.publicationFlow.numacNumbers}}
             @onCreate={{this.addNumacNumber}}
@@ -247,9 +248,16 @@
             <Auk::Label>{{t "publication-date"}}</Auk::Label>
             {{#unless this.loadDecision.isRunning}}
               {{#if this.decision.publicationDate}}
-                <div class="auk-u-muted">
-                  {{moment-format this.decision.publicationDate "DD-MM-YYYY"}}
-                </div>
+                {{#if this.decision.isStaatsbladResource}}
+                  <div class="auk-u-muted">
+                    {{moment-format this.decision.publicationDate "DD-MM-YYYY"}}
+                  </div>
+                {{else}}
+                  <Auk::Datepicker
+                    @date={{this.decision.publicationDate}}
+                    @onChange={{this.setPublicationDate}}
+                  />
+                {{/if}}
               {{else}}
                 <div class="auk-u-muted auk-u-italic">
                   {{t "not-known"}}
