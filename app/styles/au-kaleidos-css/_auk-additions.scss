@@ -124,6 +124,32 @@ p {
   }
 }
 
+/* Table with sticky header
+
+    Remark:
+    Fixing the border-related issue (as seen here: https://stackoverflow.com/questions/50361698/border-style-do-not-work-with-sticky-position-element) caused by putting `position: sticky` on th's is done here by switching border-collapse to `separate`.
+    We can use this switch without creating visual issues because there are no consecutive borders within the auk-table styling.
+
+    If this should change in the future, we could also rely on the following fix:
+
+    th {
+      border-bottom-width: 0;
+      padding-bottom: 1.4rem;
+      box-shadow: inset 0 -2px 0 $au-gray-300;
+    }
+
+   ========================================================================== */
+
+.auk-table--sticky-header {
+  border-collapse: separate;
+
+  th {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+  }
+}
+
 
 /* Block-link (to be removed in favor of list element)
    ========================================================================== */
@@ -286,4 +312,11 @@ p {
 
 .auk-case-name-header {
   min-width: 25rem;
+}
+
+/* Batch editing document details
+   ========================================================================== */
+
+.to-be-deleted-row {
+  opacity: 0.5;
 }

@@ -1,6 +1,4 @@
-{{ page-title
-  (t "search")
-}}
+{{page-title (t "search")}}
 <div class="vlc-u-box-model-maximize-height auk-scroll-wrapper">
   <Auk::Navbar @skin="gray-100">
     <Auk::Toolbar @auto={{true}}>
@@ -16,6 +14,8 @@
 
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-m-8 auk-u-mt-4">
+      {{!-- template-lint-disable no-redundant-fn --}}
+      {{!-- TODO: Using plain decorated action for Input's @enter doesn't work for some reason --}}
       <div class="auk-o-grid auk-o-flex--align-end auk-u-mb-2">
         <div class="auk-o-grid-col-4">
           <div class="auk-form-group">
@@ -38,17 +38,18 @@
                     @isShown={{this.popoverShown}}
                     @renderInPlace={{true}}
                   >
-                    <Utils::SearchLegend @userClickedClose={{this.closePopover}}/>
+                    <Utils::SearchLegend
+                      @userClickedClose={{this.closePopover}}
+                    />
                   </AttachPopover>
                 </Auk::Icon>
               </span>
             </div>
             <Auk::Input
-              @type="text"
               @block={{true}}
               placeholder={{t "search-placeholder"}}
               @value={{this.searchTextBuffer}}
-              @enter={{this.search}}
+              @enter={{fn this.search}}
               id="dossierId"
               data-test-route-search-input
             />
@@ -97,10 +98,10 @@
               {{t "minister"}}
             </Auk::Label>
             <Auk::Input
-              @type="text"
+              data-test-route-search-mandatee-input
               @block={{true}}
               @value={{this.mandateesBuffer}}
-              @enter={{this.search}}
+              @enter={{fn this.search}}
               id="ministerName"
             />
           </div>
@@ -117,15 +118,15 @@
           </Auk::Button>
         </div>
       </div>
-
+      {{!-- template-lint-enable no-redundant-fn --}}
       <Auk::Navbar class="auk-u-p-0 auk-u-mb-6">
         <Auk::Toolbar>
           <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
               <Auk::Tabs>
-                {{!-- Page-number reset when clicking a search type. It is assumed that users don't want
+                {{! Page-number reset when clicking a search type. It is assumed that users don't want
                       to go back and forth between search results for the different types while keeping the
-                      page-number. --}}
+                      page-number. }}
                 <Auk::Tab
                   @route="search.agenda-items"
                   @current-when="search.agenda-items"
@@ -139,6 +140,13 @@
                   @query={{hash page=0}}
                 >
                   {{t "cases"}}
+                </Auk::Tab>
+                <Auk::Tab
+                  @route="search.newsletter-infos"
+                  @current-when="search.newsletter-infos"
+                  @query={{hash page=0}}
+                >
+                  {{t "newsletter-info"}}
                 </Auk::Tab>
               </Auk::Tabs>
             </Auk::Toolbar::Item>

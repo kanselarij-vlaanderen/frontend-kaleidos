@@ -1,4 +1,6 @@
-<div class="auk-u-mb-2 {{if this.documentContainer.aboutToDelete "vlc-document--deleted-state" }}"
+<div
+  class="auk-u-mb-2
+    {{if this.documentContainer.aboutToDelete "vlc-document--deleted-state"}}"
   {{did-update (perform this.loadPieceRelatedData) @piece}}
   {{did-update (perform this.loadPieceRelatedData) @documentContainer}}
 >
@@ -6,9 +8,9 @@
     <div class="vlc-document-card__summary">
       <div class="auk-u-mr-3">
         {{#if @isHighlighted}}
-          <Auk::Badge @skin="success" @icon="document-added" @size="large"/>
+          <Auk::Badge @skin="success" @icon="document-added" @size="large" />
         {{else}}
-          <Auk::Badge @icon="document" @size="large"/>
+          <Auk::Badge @icon="document" @size="large" />
         {{/if}}
       </div>
       <div class="vlc-document-card__content">
@@ -26,22 +28,24 @@
             {{#if
               (and
                 this.shouldShowPublications
-                (not this.loadPieceRelatedData.isRunning))
+                (not this.loadPieceRelatedData.isRunning)
+              )
             }}
-              {{!-- trigger fetch --}}
+              {{! trigger fetch }}
               {{#if this.piece.publicationFlow}}
-                {{!-- TODO: remove style attributes and replace classes with auk-status-pill --}}
-                {{!-- template-lint-disable no-inline-styles --}}
-                <LinkTo class="auk-pill auk-pill--default auk-u-mr-2"
+                {{! TODO: remove style attributes and replace classes with auk-status-pill }}
+                {{! template-lint-disable no-inline-styles }}
+                <LinkTo
+                  class="auk-pill auk-pill--default auk-u-mr-2"
                   @route="publications.publication"
-                  @model={{this.piece.publicationFlow.id}}>
+                  @model={{this.piece.publicationFlow.id}}
+                >
                   <Auk::Icon @name="link" style="display: none;" />
-                  <span class="auk-status-pill__label"
-                    style="padding: 0;">
+                  <span class="auk-status-pill__label" style="padding: 0;">
                     {{this.piece.publicationFlow.identification.idName}}
                   </span>
                 </LinkTo>
-                {{!-- template-lint-enable no-inline-styles --}}
+                {{! template-lint-enable no-inline-styles }}
               {{/if}}
             {{/if}}
             <Auk::Toolbar::Item class="auk-o-flex">
@@ -56,13 +60,34 @@
                 />
               {{/unless}}
             </Auk::Toolbar::Item>
+            {{#if
+              (and
+                @hasMarkForSignature
+                (not this.loadSignatureRelatedData.isRunning)
+              )
+            }}
+              <Auk::Toolbar::Item>
+                <Auk::Button
+                  @skin={{if
+                    this.signMarkingActivity
+                    "success-borderless"
+                    "muted-borderless"
+                  }}
+                  @layout="icon-only"
+                  @loading={{this.markOrUnmarkForSignature.isRunning}}
+                  @icon={{if this.signMarkingActivity "sign" "no-sign"}}
+                  {{on "click" (perform this.markOrUnmarkForSignature)}}
+                />
+              </Auk::Toolbar::Item>
+            {{/if}}
             <Auk::Toolbar::Item>
               {{#if this.currentSession.isEditor}}
                 <DropdownMenu
                   @skin="borderless"
                   @icon="more"
                   data-test-document-card-actions={{true}}
-                as |Menu|>
+                  as |Menu|
+                >
                   <Menu.Item
                     data-test-document-upload-new-piece
                     {{on "click" this.openUploadModal}}
@@ -86,12 +111,13 @@
           </Auk::Toolbar::Group>
         </Auk::Toolbar>
         <div class="auk-o-flex">
-          <div class="auk-o-flex auk-o-flex--vertical vlc-u-box-model-maximize-width">
+          <div
+            class="auk-o-flex auk-o-flex--vertical vlc-u-box-model-maximize-width"
+          >
             {{#if this.isEditingPiece}}
               <div class="auk-o-flex auk-o-flex--vertical-center">
                 <Auk::Input
                   data-test-document-card-name-input={{true}}
-                  @type="text"
                   @block={{true}}
                   @value={{this.pieceNameBuffer}}
                 />
@@ -112,18 +138,25 @@
               </div>
             {{else}}
               <h6 class="auk-h4" data-test-document-card-name-value>
-                {{!-- template-lint-disable no-invalid-interactive --}}
+                {{! template-lint-disable no-invalid-interactive }}
                 <span {{on "click" this.enableEditPieceName}}>
                   {{this.piece.name}}
                 </span>
-                {{!-- template-lint-enable no-invalid-interactive --}}
+                {{! template-lint-enable no-invalid-interactive }}
               </h6>
             {{/if}}
             <div class="vlc-document-card-content__meta">
-              {{t "uploaded-at"}}
-              {{moment-format this.piece.created}}
-              {{t "at"}}
-              {{moment-format this.piece.created "HH:mm"}}
+              {{! no piece.created in legacy data }}
+              {{! TODO: when created date is absent, the layout seems irregular
+                    this will be addressed with new document card styling }}
+              <div>
+                {{#if this.piece.created}}
+                  {{t "uploaded-at"}}
+                  {{moment-format this.piece.created}}
+                  {{t "at"}}
+                  {{moment-format this.piece.created "HH:mm"}}
+                {{/if}}
+              </div>
               {{#if this.piece.accessLevelLastModified}}
                 <div>
                   {{t "access-level-last-modified"}}
@@ -138,13 +171,27 @@
       </div>
     </div>
     <div class="vlc-document-card__more">
-      <div class="js-vl-accordion {{if this.isExpandedVersionHistory "js-vl-accordion--open"}}">
+      <div
+        class="js-vl-accordion
+          {{if this.isExpandedVersionHistory "js-vl-accordion--open"}}"
+      >
         <Auk::Button
           data-test-document-card-version-history
           @skin="borderless"
-          @icon={{if this.isExpandedVersionHistory "chevron-down" "chevron-right"}}
+          @icon={{if
+            this.isExpandedVersionHistory
+            "chevron-down"
+            "chevron-right"
+          }}
           disabled={{this.loadPieceRelatedData.isRunning}}
-          {{on "click" (if this.isExpandedVersionHistory this.collapseVersionHistory (perform this.expandVersionHistory))}}
+          {{on
+            "click"
+            (if
+              this.isExpandedVersionHistory
+              this.collapseVersionHistory
+              (perform this.expandVersionHistory)
+            )
+          }}
         >
           {{t "show-pieces"}}
           {{#if this.expandVersionHistory.isRunning}}
@@ -155,7 +202,7 @@
           <div class="vl-accordion__content js-vl-accordion__content">
             <div class="vl-accordion__panel">
               {{#each this.visiblePieces as |piece|}}
-                {{!-- TODO: also  disable delete when piece linked to other agenda-items while maintaining DDAU --}}
+                {{! TODO: also  disable delete when piece linked to other agenda-items while maintaining DDAU }}
                 <WebComponents::VlDocument
                   @piece={{piece}}
                   @enableDelete={{eq piece @piece}}
@@ -180,13 +227,16 @@
     <Auk::Modal::Body>
       {{#if this.newPiece}}
         <Auk::Label>{{t "name"}}</Auk::Label>
-        <WebComponents::VlFormInput
-          @value={{this.newPiece.name}}/>
+        <Auk::Input @block={{true}} @value={{this.newPiece.name}} />
         <Documents::UploadedDocument
           @piece={{this.newPiece}}
-          @onDelete={{perform this.deleteUploadedPiece}} />
+          @onDelete={{perform this.deleteUploadedPiece}}
+        />
       {{else}}
-        <FileUploader @multipleFiles={{false}} @uploadedFileAction={{perform this.uploadPiece}}/>
+        <FileUploader
+          @multipleFiles={{false}}
+          @uploadedFileAction={{perform this.uploadPiece}}
+        />
       {{/if}}
     </Auk::Modal::Body>
     <WebComponents::VlModalFooter
@@ -195,7 +245,8 @@
       @isLoading={{this.addPiece.isRunning}}
       @cancelAction={{perform this.cancelUploadPiece}}
       @saveAction={{perform this.addPiece}}
-      @disableSave={{not this.newPiece}} />
+      @disableSave={{not this.newPiece}}
+    />
   </WebComponents::VlModal>
 {{/if}}
 {{#if this.isOpenVerifyDeleteModal}}
@@ -203,5 +254,6 @@
     @title={{t "document-delete"}}
     @message={{t "delete-document-message"}}
     @cancel={{this.cancelDeleteDocumentContainer}}
-    @verify={{this.verifyDeleteDocumentContainer}} />
+    @verify={{this.verifyDeleteDocumentContainer}}
+  />
 {{/if}}

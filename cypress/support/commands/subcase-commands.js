@@ -95,9 +95,7 @@ function changeSubcaseAccessLevel(confidentialityChange, accessLevel, newShortTi
   }
 
   if (confidentialityChange) {
-    cy.get(cases.subcaseTitlesEdit.confidential)
-      .find(utils.vlToggle.label)
-      .click();
+    cy.get(cases.subcaseTitlesEdit.confidential).click();
   }
   if (newShortTitle) {
     cy.get(cases.subcaseTitlesEdit.shorttitle).click()

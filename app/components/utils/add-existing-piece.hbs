@@ -4,24 +4,15 @@
   <Auk::Toolbar @auto={{true}}>
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item class="auk-u-maximize-width auk-u-overflow-hidden">
-        <div class="vl-input-field--inline">
-          <Input
-            data-test-add-existing-piece-search-input=""
-            id="searchId"
-            class="vl-input-field vl-input-field__input"
-            placeholder="Zoeken.."
-            @value={{this.filter}}
-            {{on "input" (perform this.searchTask)}}
-          />
-          <Auk::Button
-            @skin="primary"
-            @layout="icon-only"
-            @icon="search"
-            class="vl-input-field__submit"
-            onclick={{perform this.searchTask}}
-            data-test-add-existing-piece-search-button
-          />
-        </div>
+        <Auk::Input
+          @icon="search"
+          @block={{true}}
+          @value={{this.filter}}
+          id="searchId"
+          placeholder={{t "search-placeholder"}}
+          data-test-add-existing-piece-search-input={{true}}
+          {{on "input" (perform this.searchTask)}}
+        />
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
@@ -58,7 +49,11 @@
               {{row.name}}
             </td>
             <td class="auk-table__col--3">
-              {{moment-format row.created "dd DD/MM/YYYY HH:mm"}}
+              {{#if row.created}}
+                {{moment-format row.created "dd DD/MM/YYYY HH:mm"}}
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
             </td>
           </c.body>
         </table.content>

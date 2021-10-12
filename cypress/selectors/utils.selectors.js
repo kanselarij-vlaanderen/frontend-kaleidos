@@ -63,19 +63,10 @@ const selectors = {
 
   /** Section VL-components **/
 
-  // vl-form-input
-  vlFormInput: '[data-test-vl-form-input]',
-
   // vl-modal-footer
   vlModalFooter: {
     save: '[data-test-vl-modal-footer-save]',
     cancel: '[data-test-vl-modal-footer-cancel]',
-  },
-
-  // vl-toggle
-  vlToggle: {
-    label: '[data-test-vl-toggle-label]',
-    input: '[data-test-vl-toggle-input]',
   },
 
   // vl-datepicker

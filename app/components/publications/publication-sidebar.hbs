@@ -1,4 +1,5 @@
 <Auk::Sidebar
+  data-test-publication-sidebar-container
   @size="large"
   @position="right"
   @skin="gray-100"
@@ -10,6 +11,7 @@
       <Auk::Toolbar::Group @position={{if @isOpen "right" "center"}}>
         <Auk::Toolbar::Item class="{{if (not @isOpen) "auk-o-flex auk-o-flex--horizontal-center"}}">
           <Auk::Button
+            data-test-publication-sidebar-open
             @skin="borderless"
             @icon={{if @isOpen "chevron-right" "chevron-left"}}
             @layout="icon-only"
@@ -26,19 +28,19 @@
         <div class="auk-form-group {{if this.numberIsAlreadyUsed "auk-form-group--error"}}">
           <Auk::Label>{{t "publications-number"}}</Auk::Label>
           <Auk::Input
-            type="number"
+            data-test-publication-sidebar-publication-number
+            @type="number"
             value={{@publicationFlow.identification.structuredIdentifier.localIdentifier}}
             {{on "input" (perform this.setPublicationNumber)}}
           />
           <Auk::Input
-            size="5"
-            type="text"
+            @width="xsmall"
             value={{@publicationFlow.identification.structuredIdentifier.versionIdentifier}}
             {{on "input" (perform this.setPublicationNumberSuffix)}}
           />
 
           {{#if this.numberIsAlreadyUsed}}
-            <div class="auk-form-help-text auk-form-help-text--danger">
+            <div data-test-publication-sidebar-publication-number-error class="auk-form-help-text auk-form-help-text--danger">
               <Auk::Icon @name="alert-triangle" />
               {{t "publication-number-already-taken"}}
             </div>
@@ -64,10 +66,11 @@
         <Publications::PublicationStatusSelector
             @publicationStatus={{this.publicationStatus}}
             @onChange={{this.selectPublicationStatus}}
+            @disabled={{and this.publicationStatus.isPublished this.decision.isStaatsbladResource}}
         />
 
         {{#if (or this.publicationStatus.isWithdrawn this.publicationStatus.isPaused)}}
-          <div class="auk-form-group">
+          <div data-test-publication-sidebar-status-change-date class="auk-form-group">
             <Auk::Label>
               {{#if this.publicationStatus.isWithdrawn}}
                 {{t "withdrawn-on"}}
@@ -83,9 +86,9 @@
 
         {{!-- Type regelgeving --}}
         {{#unless this.publicationStatus.isWithdrawn}}
-          <div class="auk-form-group">
+          <div data-test-publication-sidebar-regulation-type class="auk-form-group">
             <Auk::Label for="blockInput">{{t "regulation-type"}}</Auk::Label>
-            <PowerSelect 
+            <PowerSelect
                     @options={{this.regulationTypes}}
                     @searchEnabled={{false}}
                     @onchange={{this.setRegulationType}}
@@ -98,7 +101,7 @@
 
         {{!-- Publicatiewijze --}}
         {{#unless this.publicationStatus.isWithdrawn}}
-          <div class="auk-form-group">
+          <div data-test-publication-sidebar-publication-mode class="auk-form-group">
             <Auk::Label for="blockInput">{{t "kind-of-publication"}}</Auk::Label>
             <PowerSelect
                     @options={{this.publicationModes}}
@@ -118,15 +121,17 @@
               {{t "proofprint-corrector"}}
             </Auk::Label>
             <Auk::Input
-                  value={{this.publicationSubcase.proofPrintCorrector}}
+              data-test-publication-sidebar-proof-print-corrector
+              value={{this.publicationSubcase.proofPrintCorrector}}
               {{on "input" (perform this.setProofPrintCorrector)}}
             />
           </div>
         {{/unless}}
 
         {{!-- Werknummer BS == numac nummer --}}
-        <div class="auk-form-group">
+        <div data-test-publication-sidebar-numac-number class="auk-form-group">
           <Auk::Label>{{t "numac-number"}}</Auk::Label>
+          {{!-- TODO: disable modifying numac-number once (staatsblad-)decision exists? --}}
           <Auk::InputPills
             @items={{this.publicationFlow.numacNumbers}}
             @onCreate={{this.addNumacNumber}}
@@ -136,7 +141,7 @@
         </div>
 
         {{!-- Datum ontvangst --}}
-        <div class="auk-form-group">
+        <div data-test-publication-sidebar-opening-date class="auk-form-group">
           <Auk::Label>{{t "publication-flow-opening-date"}}</Auk::Label>
           {{#if this.publicationFlow.case.subcases}}
             <div class="auk-u-muted">
@@ -150,7 +155,7 @@
         </div>
 
         {{!-- Datum beslissing --}}
-        <div class="auk-form-group">
+        <div data-test-publication-sidebar-decision-date class="auk-form-group">
           <Auk::Label>{{t "decision-date"}}</Auk::Label>
           {{#if this.publicationFlow.case.subcases}}
             <Auk::ButtonLink
@@ -179,7 +184,7 @@
 
         {{!-- Uiterste vertaaldatum --}}
         {{#if (or this.publicationStatus.isPending this.publicationStatus.isPaused)}}
-          <div class="auk-form-group">
+          <div data-test-publication-sidebar-translation-due-date class="auk-form-group">
             <Auk::Label>{{t "translation-due-date"}}</Auk::Label>
             <Auk::Datepicker
               @date={{this.translationSubcase.dueDate}}
@@ -196,7 +201,7 @@
         {{/if}}
 
         {{!-- Vertaaldatum --}}
-        <div class="auk-form-group">
+        <div data-test-publication-sidebar-translation-date class="auk-form-group">
           <Auk::Label>{{t "translation-date"}}</Auk::Label>
           <Auk::Datepicker
             @date={{this.translationSubcase.endDate}}
@@ -206,7 +211,7 @@
 
         {{!-- Gevraagde publicatiedatum --}}
         {{#if this.publicationStatus.isPending}}
-          <div class="auk-form-group">
+          <div data-test-publication-sidebar-target-end-date class="auk-form-group">
             <Auk::Label>{{t "publication-target-end-date"}}</Auk::Label>
             <Auk::Datepicker
               @date={{this.publicationSubcase.targetEndDate}}
@@ -217,7 +222,7 @@
 
         {{!-- Uiterste publicatiedatum --}}
         {{#unless this.publicationStatus.isWithdrawn}}
-          <div class="auk-form-group">
+          <div data-test-publication-sidebar-publication-due-date class="auk-form-group">
             <Auk::Label>{{t "publication-due-date"}}</Auk::Label>
             <Auk::Datepicker
               @date={{this.publicationSubcase.dueDate}}
@@ -239,13 +244,20 @@
 
         {{!-- Publicatiedatum --}}
         {{#if this.publicationStatus.isPublished}}
-          <div class="auk-form-group">
+          <div data-test-publication-sidebar-publication-date class="auk-form-group">
             <Auk::Label>{{t "publication-date"}}</Auk::Label>
             {{#unless this.loadDecision.isRunning}}
               {{#if this.decision.publicationDate}}
-                <div class="auk-u-muted">
-                  {{moment-format this.decision.publicationDate "DD-MM-YYYY"}}
-                </div>
+                {{#if this.decision.isStaatsbladResource}}
+                  <div class="auk-u-muted">
+                    {{moment-format this.decision.publicationDate "DD-MM-YYYY"}}
+                  </div>
+                {{else}}
+                  <Auk::Datepicker
+                    @date={{this.decision.publicationDate}}
+                    @onChange={{this.setPublicationDate}}
+                  />
+                {{/if}}
               {{else}}
                 <div class="auk-u-muted auk-u-italic">
                   {{t "not-known"}}
@@ -270,7 +282,7 @@
               </div>
             </div>
           </Auk::Label>
-          <Auk::Textarea rows="4" type="text" value={{@publicationFlow.remark}} {{on "input" (perform this.setRemark)}}></Auk::Textarea>
+          <Auk::Textarea data-test-publication-sidebar-remark rows="4" type="text" value={{@publicationFlow.remark}} {{on "input" (perform this.setRemark)}}></Auk::Textarea>
         </div>
       </div>
     </div>
@@ -297,7 +309,7 @@
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <Auk::Button @skin="danger-primary" {{on "click" this.withdrawPublicationFlow}}>
+            <Auk::Button data-test-publication-sidebar-confirm-withdraw @skin="danger-primary" {{on "click" this.withdrawPublicationFlow}}>
               {{t "discharge"}}
             </Auk::Button>
           </Auk::Toolbar::Item>

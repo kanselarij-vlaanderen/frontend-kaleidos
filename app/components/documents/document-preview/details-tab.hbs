@@ -1,0 +1,92 @@
+<div class="auk-u-m-4">
+  <Auk::KeyValue @key={{t "document-name"}}>
+    {{#if this.isEditingDetails}}
+      <Textarea
+        aria-labelledby="piece-name"
+        class="auk-textarea"
+        @value={{mut @piece.name}}
+      />
+    {{else}}
+      {{@piece.name}}
+    {{/if}}
+  </Auk::KeyValue>
+  {{#if (or this.documentType this.isEditingDetails)}}
+    <Auk::KeyValue @key={{t "document-type"}}>
+      {{#if this.isEditingDetails}}
+        <Utils::ModelSelector
+          @modelName="document-type"
+          @allowClear={{true}}
+          @hideSearch={{true}}
+          @propertyToShow="label"
+          @sortField="priority"
+          @selectedItems={{this.documentType}}
+          @selectModel={{this.setDocumentType}}
+        />
+      {{else}}
+        {{this.documentType.label}}
+      {{/if}}
+    </Auk::KeyValue>
+  {{/if}}
+  <Auk::KeyValue @key={{t "publicity"}}>
+    {{#if this.isEditingDetails}}
+      <Utils::ModelSelector
+        @modelName="access-level"
+        @allowClear={{true}}
+        @hideSearch={{true}}
+        @propertyToShow="label"
+        @sortField="priority"
+        @selectedItems={{this.accessLevel}}
+        @selectModel={{this.setAccessLevel}}
+      />
+    {{else}}
+      <Utils::AccessLevelColorBadge @accessLevel={{this.accessLevel}} />
+    {{/if}}
+  </Auk::KeyValue>
+  <Auk::KeyValue @key={{capitalize (t "confidentiality")}}>
+    {{#if this.isEditingDetails}}
+      <Auk::Toggle @checked={{mut @piece.confidential}} />
+    {{else}}
+      <Utils::ConfidentialityPill @confidential={{@piece.confidential}} />
+    {{/if}}
+  </Auk::KeyValue>
+  <Auk::KeyValue @key={{t "file-type"}}>
+    <Utils::Documents::FileTypePill @extension={{@piece.file.extension}} />
+  </Auk::KeyValue>
+  {{#if this.currentSession.isEditor}}
+    <Auk::Toolbar as |toolbar|>
+      <toolbar.Group @position="right" as |group|>
+        {{#if this.isEditingDetails}}
+          <group.Item>
+            <Auk::ButtonLink
+              @disabled={{this.isProcessing}}
+              @loading={{this.cancelEditDetails.isRunning}}
+              {{on "click" (perform this.cancelEditDetails)}}
+            >
+              {{t "cancel"}}
+            </Auk::ButtonLink>
+          </group.Item>
+          <group.Item>
+            <Auk::Button
+              @skin="primary"
+              @disabled={{this.isProcessing}}
+              @loading={{this.saveDetails.isRunning}}
+              {{on "click" (perform this.saveDetails)}}
+            >
+              {{t "save"}}
+            </Auk::Button>
+          </group.Item>
+        {{else}}
+          <group.Item>
+            <Auk::Button
+              @skin="tertiary"
+              @icon="pencil"
+              {{on "click" this.openEditDetails}}
+            >
+              {{t "edit-2"}}
+            </Auk::Button>
+          </group.Item>
+        {{/if}}
+      </toolbar.Group>
+    </Auk::Toolbar>
+  {{/if}}
+</div>
