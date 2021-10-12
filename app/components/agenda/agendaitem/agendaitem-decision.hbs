@@ -25,7 +25,6 @@
       {{/if}}
     </div>
     <div class="auk-u-mt-2">
-      {{! no decision result code in legacy data }}
       {{#if @treatment.decisionResultCode}}
         <Decision::DecisionResultPill
           @decisionResultCode={{@treatment.decisionResultCode}}
