@@ -66,4 +66,5 @@ export default {
     NUMAC: 'Belgisch Staatsblad',
     OVRB: 'ovrb',
   },
+  STAATSBLAD_ELI_DOMAIN: 'http://www.ejustice.just.fgov.be/eli/'
 };

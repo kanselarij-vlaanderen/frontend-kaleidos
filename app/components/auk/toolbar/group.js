@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 
 /**
  *
- * @argument {String} position: Position can be "left or "right"
+ * @argument {String} position: Position can be "left", "center" or "right"
  */
 export default class ToolbarGroup extends Component {
   get position() {

@@ -26,11 +26,9 @@
     </div>
     <div class="auk-u-mt-2">
       {{#if @treatment.decisionResultCode}}
-        <Decision::DecisionResultPill @decisionResultCode={{@treatment.decisionResultCode}}/>
-      {{else}}
-        <div class="auk-u-muted auk-u-italic">
-          {{t "decision-result-unknown"}}
-        </div>
+        <Decision::DecisionResultPill
+          @decisionResultCode={{@treatment.decisionResultCode}}
+        />
       {{/if}}
     </div>
   </div>

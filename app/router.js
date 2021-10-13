@@ -98,6 +98,7 @@ Router.map(function() {
   this.route('search', { path: '/zoeken', }, function() {
     this.route('cases', { path: '/dossiers', });
     this.route('agenda-items', { path: '/agendapunten', });
+    this.route('newsletter-infos', { path: '/kort-bestek', });
   });
 
   this.route('settings', { path: '/instellingen', }, function() {
