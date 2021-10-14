@@ -267,8 +267,8 @@ context('Agenda tests', () => {
     }).should('not.exist');
     // Check that the agendaitem was deleted because of confirming action with agendaitems to delete
     cy.get(auk.loader).should('not.exist');
-    // TODO-BUG after action "approve and close" the agendaitems are not refreshed and the deleted one is still showing (clicking = error)
-    cy.reload(); // TODO-BUG DELETE after bug fix
+    // // TODO-BUG after action "approve and close" the agendaitems are not refreshed and the deleted one is still showing (clicking = error)
+    // cy.reload(); // TODO-BUG DELETE after bug fix
     cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 1);
     cy.get(agenda.agendaOverviewItem.subitem).contains('Goedkeuring van het verslag');
     cy.get(agenda.agendaOverviewItem.subitem).contains(newSubcaseTitleShort)

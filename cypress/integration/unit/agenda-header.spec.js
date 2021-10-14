@@ -185,10 +185,12 @@ context('Agenda-Header actions tests', () => {
       cy.get(auk.modal.container, {
         timeout: 60000,
       }).should('not.exist');
-      cy.get(auk.loader).should('not.exist');
-      cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 3); // TODO-BUG This should fail, keep this in until fixed
-      // TODO-BUG after action "approve and close" the agendaitems are not refreshed and the deleted one is still showing (clicking = error)
-      cy.reload(); // TODO-BUG DELETE after bug fix
+      cy.get(auk.loader, {
+        timeout: 60000,
+      }).should('not.exist');
+      // cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 3); // TODO-BUG This should fail, keep this in until fixed
+      // // TODO-BUG after action "approve and close" the agendaitems are not refreshed and the deleted one is still showing (clicking = error)
+      // cy.reload(); // TODO-BUG DELETE after bug fix
       cy.get(agenda.agendaSideNav.agenda).should('have.length', 2);
       cy.agendaNameExists('B', false);
       cy.agendaNameExists('A', false);
@@ -249,7 +251,9 @@ context('Agenda-Header actions tests', () => {
       cy.get(auk.modal.container, {
         timeout: 60000,
       }).should('not.exist');
-      cy.get(auk.loader).should('not.exist');
+      cy.get(auk.loader, {
+        timeout: 60000,
+      }).should('not.exist');
       cy.get(agenda.agendaSideNav.agenda).should('have.length', 3);
       cy.agendaNameExists('C');
       cy.agendaNameExists('B', false);
