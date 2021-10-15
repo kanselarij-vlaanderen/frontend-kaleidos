@@ -154,7 +154,7 @@ export default Component.extend({
   /**
    * @method CreateDesignAgenda
    *
-   * Get the last approved agenda and change the status to approveD (from final)
+   * Get the last approved agenda and change the status to approved (from final)
    * Then approve that agenda using the agenda-approve service which yields a new design agenda
    */
   async createDesignAgenda() {
@@ -335,7 +335,7 @@ export default Component.extend({
       }
       // if there is no previous agenda, the meeting should have been deleted
       this.toggleLoadingOverlayWithMessage(null);
-      return this.router.transitionTo('agendas');
+      this.router.transitionTo('agendas.overview');
     } catch (error) {
       this.toggleLoadingOverlayWithMessage(null);
       this.toaster.error(this.intl.t('error-delete-agenda', { message: error.message }), this.intl.t('warning-title'));
