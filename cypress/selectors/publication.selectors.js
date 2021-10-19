@@ -119,7 +119,7 @@ const selectors = {
       publicationDate: '[data-test-publication-table-row-publication-date]',
       urgencyLevel: '[data-test-publication-table-row-urgency-level]',
       status: '[data-test-publication-table-row-status]',
-      translationProgressBadge: '[data-test-publication-table-row-publication-translation-progress-badge]',
+      translationProgressBadge: '[data-test-publication-table-row-translation-progress-badge]',
       source: '[data-test-publication-table-row-source]',
       goToPublication: '[data-test-publication-table-row-go-to-publication]',
     },
