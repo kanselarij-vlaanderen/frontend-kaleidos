@@ -29,13 +29,5 @@ export default Component.extend({
     collapseSideMenu() {
       this.toggleProperty('agendaMenuCollapsed');
     },
-
-    compareAgendas() {
-      this.compareAgendas();
-    },
-
-    setCurrentAgenda(agenda) {
-      this.selectAgenda(agenda);
-    },
   },
 });

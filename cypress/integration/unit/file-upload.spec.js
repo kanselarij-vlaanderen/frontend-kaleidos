@@ -190,6 +190,6 @@ context('Add files to an agenda', () => { // At the meeting-level
     // Nothing should be left
     cy.get(document.documentCard.card).should('have.length', 0);
 
-    cy.deleteAgenda(meetingId, true);
+    cy.deleteAgenda(true);
   });
 });
