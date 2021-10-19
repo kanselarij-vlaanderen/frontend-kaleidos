@@ -209,7 +209,7 @@ function deleteAgenda(lastAgenda) {
   cy.get(auk.modal.container).find(agenda.agendaHeader.confirm.deleteAgenda)
     .click();
   cy.get(auk.modal.container, {
-    timeout: 20000,
+    timeout: 60000,
   }).should('not.exist');
   if (!lastAgenda) {
     cy.wait('@loadAgendaitems');
