@@ -32,7 +32,16 @@ export default class AgendaitemAgendaitemsAgendaRoute extends Route {
     controller.meeting = meeting;
     controller.agenda = agenda;
     controller.notas = notas;
-    if (!(this.transition && this.transition.from && this.transition.from.name.startsWith('agenda.agendaitems.agendaitem'))) {
+    /* reasoning for this check:
+      Currently, the grouping on mandatees is done in agenda.agendaitems.index controller (overview)
+      Because of that, the nota groups don't update in the agenda.agendaitem.agendaitem controller (this sibling route) unless we manually trigger it
+      We don't want the nota groups to be rebuild everytime we select a different agendaitem (1st check in the IF)
+      However, when we refresh this route as part of parent model refresh, we get the same transition but we do want to rebuild the groups
+      In those cases, the 2d part of the IF (queryParamsOnly) will be true.
+      Switching between agendaitems in detail view has queryParamsOnly false
+      A better solution could be to build the nota groups in the agenda.agendaitems controller and pass the groups down to both child routes
+    */
+    if (!(this.transition?.from?.name.startsWith('agenda.agendaitems.agendaitem') && !(this.transition?.queryParamsOnly))) {
       controller.groupNotasOnGroupName.perform(notas);
     }
     controller.announcements = announcements;

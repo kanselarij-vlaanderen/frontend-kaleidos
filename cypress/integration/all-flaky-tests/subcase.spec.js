@@ -188,10 +188,7 @@ context('Subcase tests', () => {
 
     cy.get(route.subcaseOverview.confidentialityCheckBox).should('be.checked');
     // "Go to agendaitem
-    cy.route('GET', '/meetings/**').as('getMeetingsRequest');
-    cy.route('GET', '/agendas/**').as('getAgendas');
     cy.get(cases.subcaseDescription.agendaLink).click();
-    cy.wait('@getMeetingsRequest');
     cy.get(agenda.agendaDetailSidebarItem.confidential).should('exist');
     // Index view
     cy.get(auk.pill).contains('Vertrouwelijk');
@@ -319,11 +316,9 @@ context('Subcase tests', () => {
       .wait('@newsletterInfosPatch');
 
     // go to agendaitem
-    cy.route('GET', '/meetings/**').as('getMeetingsRequest');
     cy.get(newsletter.buttonToolbar.linkToAgendaitem).eq(0)
       .invoke('removeAttr', 'target') // dont open links in new windows by removing target (breaks cypress test).
       .click();
-    cy.wait('@getMeetingsRequest');
 
     cy.openAgendaitemKortBestekTab(subcaseTitleShort);
 
@@ -348,7 +343,7 @@ context('Subcase tests', () => {
 
     cy.openAgendaForDate(agendaDate);
     cy.setAllItemsFormallyOk(5);
-    cy.approveAndCloseDesignAgenda(true);
+    cy.approveAndCloseDesignAgenda();
 
     cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
     cy.get(cases.subcaseItem.approved).should('have.length', 3);

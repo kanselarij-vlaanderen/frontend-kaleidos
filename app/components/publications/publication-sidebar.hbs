@@ -247,21 +247,21 @@
           <div data-test-publication-sidebar-publication-date class="auk-form-group">
             <Auk::Label>{{t "publication-date"}}</Auk::Label>
             {{#unless this.loadDecision.isRunning}}
-              {{#if this.decision.publicationDate}}
-                {{#if this.decision.isStaatsbladResource}}
+              {{#if this.decision.isStaatsbladResource}}
+                {{#if this.decision.publicationDate}}
                   <div class="auk-u-muted">
                     {{moment-format this.decision.publicationDate "DD-MM-YYYY"}}
                   </div>
                 {{else}}
-                  <Auk::Datepicker
-                    @date={{this.decision.publicationDate}}
-                    @onChange={{this.setPublicationDate}}
-                  />
+                  <div class="auk-u-muted auk-u-italic">
+                    {{t "not-known"}}
+                  </div>
                 {{/if}}
               {{else}}
-                <div class="auk-u-muted auk-u-italic">
-                  {{t "not-known"}}
-                </div>
+                <Auk::Datepicker
+                  @date={{this.decision.publicationDate}}
+                  @onChange={{this.setPublicationDate}}
+                />
               {{/if}}
             {{/unless}}
           </div>

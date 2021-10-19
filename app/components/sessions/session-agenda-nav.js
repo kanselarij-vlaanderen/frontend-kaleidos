@@ -11,6 +11,7 @@ export default class SessionsSessionAgendaNavComponent extends Component {
    * @argument currentMeeting
    */
   @service router;
+  @service store;
   @service sessionService;
   @service currentSession;
 
@@ -24,14 +25,16 @@ export default class SessionsSessionAgendaNavComponent extends Component {
   @task
   *loadFirstAgendaitem() {
     if (this.args.currentAgenda) {
-      const firstAgendaitem = yield this.args.currentAgenda.firstAgendaitem;
-      return firstAgendaitem;
+      return yield this.store.queryOne('agendaitem', {
+        'filter[agenda][:id:]': this.args.currentAgenda.id,
+        sort: 'number',
+      });
     }
     return null;
   }
 
   get modelsForDetailRoute() {
-    return [this.args.currentMeeting.id, this.args.currentAgenda.id, this.currentAgendaItemId || this.firstAgendaitem.id];
+    return [this.args.currentMeeting.id, this.args.currentAgenda.id, this.currentAgendaItemId || this.firstAgendaitem];
   }
 
   get isInAgendaItemDetailRoute() {

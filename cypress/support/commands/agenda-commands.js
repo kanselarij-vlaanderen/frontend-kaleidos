@@ -38,19 +38,21 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   // Set the kind
   // Added wait, mouseover, force clicking and checking for existance of the ember power select option because of flakyness
   // Sometimes, the dropdown stays after pressing an option
-  cy.get(agenda.newSession.kind).click();
-  cy.get(dependency.emberPowerSelect.option, {
-    timeout: 5000,
-  }).wait(500)
-    .contains(kind)
-    .scrollIntoView()
-    .trigger('mouseover')
-    .click({
-      force: true,
-    });
-  cy.get(dependency.emberPowerSelect.option, {
-    timeout: 15000,
-  }).should('not.be.visible');
+  if (kind) {
+    cy.get(agenda.newSession.kind).click();
+    cy.get(dependency.emberPowerSelect.option, {
+      timeout: 5000,
+    }).wait(500)
+      .contains(kind)
+      .scrollIntoView()
+      .trigger('mouseover')
+      .click({
+        force: true,
+      });
+    cy.get(dependency.emberPowerSelect.option, {
+      timeout: 15000,
+    }).should('not.be.visible');
+  }
 
   // Set the start date
   cy.get(agenda.newSession.datepicker).find(utils.vlDatepicker)
@@ -94,9 +96,10 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
     });
 
   // Set the location
-  cy.get(agenda.newSession.meetingLocation).click()
-    .type(location);
-
+  if (location) {
+    cy.get(agenda.newSession.meetingLocation).click()
+      .type(location);
+  }
   cy.get(utils.vlModalFooter.save).click();
 
   let meetingId;
@@ -134,9 +137,12 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
  */
 function visitAgendaWithLink(link) {
   cy.log('visitAgendaWithLink');
-  cy.route('GET', '/agendaitems/*/agenda-activity').as('loadAgendaitems');
+  // cy.route('GET', '/agendaitems/*/agenda-activity').as('loadAgendaitems');
   cy.visit(link);
-  cy.wait('@loadAgendaitems');
+  // cy.wait('@loadAgendaitems');
+  cy.get(auk.loader, {
+    timeout: 60000,
+  }).should('not.exist');
   cy.log('/visitAgendaWithLink');
 }
 
@@ -191,35 +197,19 @@ function openAgendaitemKortBestekTab(agendaitemTitle) {
  * @name deleteAgenda
  * @memberOf Cypress.Chainable#
  * @function
- * @param {number} [meetingId] - The id of the meeting to delete to monitor if the DELETE call is made.
- * @param {boolean} [lastAgenda] - Wether the meeting will be deleted when this agenda is deleted.
+ * @param {boolean} [lastAgenda] - Wether the meeting will be deleted when this agenda will be deleted (automaticaly by service).
  */
-function deleteAgenda(meetingId, lastAgenda) {
+function deleteAgenda(lastAgenda) {
   cy.log('deleteAgenda');
-  if (meetingId) {
-    cy.route('DELETE', `/meetings/${meetingId}`).as('deleteMeeting');
-  } else {
-    cy.route('DELETE', '/meetings/**').as('deleteMeeting');
-  }
-  // cy.route('POST', '/agenda-approve/deleteAgenda').as('deleteAgenda');
   // Call is made but cypress doesn't see it
-  cy.route('DELETE', '/newsletter-infos/**').as('deleteNewsletter');
+  // cy.route('POST', '/agenda-approve/deleteAgenda').as('deleteAgendaCall');
   cy.route('GET', '/agendaitems?fields**').as('loadAgendaitems');
-
   cy.get(agenda.agendaHeader.showAgendaOptions).click();
   cy.get(agenda.agendaHeader.agendaActions.deleteAgenda).click();
   cy.get(auk.modal.container).find(agenda.agendaHeader.confirm.deleteAgenda)
     .click();
-  if (lastAgenda) {
-    cy.wait('@deleteNewsletter', {
-      timeout: 20000,
-    })
-      .wait('@deleteMeeting', {
-        timeout: 20000,
-      });
-  }
   cy.get(auk.modal.container, {
-    timeout: 20000,
+    timeout: 60000,
   }).should('not.exist');
   if (!lastAgenda) {
     cy.wait('@loadAgendaitems');
@@ -228,7 +218,6 @@ function deleteAgenda(meetingId, lastAgenda) {
   cy.get(auk.loader, {
     timeout: 20000,
   }).should('not.exist');
-
   cy.log('/deleteAgenda');
 }
 
@@ -539,7 +528,7 @@ function changeSelectedAgenda(agendaName) {
 }
 
 /**
- * @description closes an agenda
+ * @description closes an agenda (agenda-hader action is renamed to closeMeeting)
  * In all cases there will be 1 popup, an auModal, opened for confirmation during this command
  * @name closeAgenda
  * @memberOf Cypress.Chainable#
@@ -547,23 +536,58 @@ function changeSelectedAgenda(agendaName) {
  */
 function closeAgenda() {
   cy.log('closeAgenda');
-  cy.route('PATCH', '/meetings/**').as('patchMeetings');
-  cy.route('PATCH', '/agendas/**').as('patchAgenda');
-
+  // Call is made but cypress doesn't see it
+  // cy.route('POST', '/agenda-approve/closeAgenda').as('closeAgendaCall');
   cy.get(agenda.agendaHeader.showAgendaOptions).click();
   cy.get(agenda.agendaHeader.agendaActions.lockAgenda).click();
   cy.get(agenda.agendaHeader.confirm.lockAgenda).click();
-  cy.wait('@patchMeetings', {
-    timeout: 20000,
-  });
-  cy.wait('@patchAgenda', {
-    timeout: 20000,
-  });
   // as long as the modal exists, the action is not completed
   cy.get(auk.modal.container, {
     timeout: 60000,
   }).should('not.exist');
+  cy.get(auk.loader).should('not.exist');
   cy.log('/closeAgenda');
+}
+
+/**
+ * @description reopens an agenda
+ * In all cases there will be 1 popup, an auModal, opened for confirmation during this command
+ * @name reopenAgenda
+ * @memberOf Cypress.Chainable#
+ * @function
+ */
+function reopenAgenda() {
+  cy.log('reopenAgenda');
+  cy.get(agenda.agendaHeader.showAgendaOptions).click();
+  cy.get(agenda.agendaHeader.agendaActions.unlockAgenda).click();
+  // Currently, this action has no confirmation popup but a loading overlay is showing
+  cy.get(auk.modal.container, {
+    timeout: 60000,
+  }).should('not.exist');
+  cy.get(auk.loader).should('not.exist');
+  cy.log('/reopenAgenda');
+}
+
+/**
+ * @description reopens the previous version of an agenda
+ * In all cases there will be 1 popup, an auModal, opened for confirmation during this command
+ * @name reopenPreviousAgenda
+ * @memberOf Cypress.Chainable#
+ * @function
+ */
+function reopenPreviousAgenda() {
+  cy.log('reopenPreviousAgenda');
+  // Call is made but cypress doesn't see it
+  // cy.route('POST', '/agenda-approve/reopenPreviousAgenda').as('reopenPreviousAgendaCall');
+  cy.get(agenda.agendaHeader.showAgendaOptions).click();
+  cy.get(agenda.agendaHeader.agendaActions.reopenPreviousVersion).click();
+  cy.get(agenda.agendaHeader.confirm.reopenPreviousVersion).click();
+  // as long as the modal exists, the action is not completed
+  cy.get(auk.modal.container, {
+    timeout: 60000,
+  }).should('not.exist');
+  cy.get(auk.loader).should('not.exist');
+  cy.log('/reopenPreviousAgenda');
 }
 
 /**
@@ -639,6 +663,8 @@ Cypress.Commands.add('agendaitemExists', agendaitemExists);
 Cypress.Commands.add('openDetailOfAgendaitem', openDetailOfAgendaitem);
 Cypress.Commands.add('changeSelectedAgenda', changeSelectedAgenda);
 Cypress.Commands.add('closeAgenda', closeAgenda);
+Cypress.Commands.add('reopenAgenda', reopenAgenda);
+Cypress.Commands.add('reopenPreviousAgenda', reopenPreviousAgenda);
 Cypress.Commands.add('releaseDecisions', releaseDecisions);
 Cypress.Commands.add('releaseDocuments', releaseDocuments);
 Cypress.Commands.add('openAgendaitemKortBestekTab', openAgendaitemKortBestekTab);
