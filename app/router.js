@@ -120,13 +120,7 @@ Router.map(function() {
     this.route('subcase-types', () => {});
   });
 
-  this.route('document-viewer', { path: '/document/:piece_id', });
-  // When ready 'document' will replace 'document-viewer'.
-  // Both co-exist while 'document' is being developed
-  // TODO: replace 'document_2' in path by 'document'
-  if (!isEmpty(ENV.APP.ENABLE_DOCUMENT_VIEW)) {
-    this.route('document', { path: '/document_2/:piece_id', });
-  }
+  this.route('document', { path: '/document/:piece_id', });
 
   this.route('loading', { path: '/laden', });
   this.route('not-supported');
