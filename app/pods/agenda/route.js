@@ -14,26 +14,41 @@ export default class AgendaRoute extends Route {
   async model(params) {
     const meetingId = params.meeting_id;
     const meeting = await this.store.findRecord('meeting', meetingId, {
-      include: 'agendas,agendas.status', reload: true,
+      include: 'agendas,agendas.status',
+      reload: true,
     });
     set(this.sessionService, 'currentSession', meeting);
     const agendaId = params.agenda_id;
-    const agenda = await meeting.get('agendas').findBy('id', agendaId);
+    const agenda = await this.store.findRecord('agenda', agendaId, {
+      include: 'status',
+    });
+    const reverseSortedAgendas = await this.store.query('agenda', {
+      'filter[created-for][:id:]': meetingId,
+      sort: '-serialnumber',
+      include: 'status',
+    });
+    // const agendas = await meeting.get('agendas');
+    // const agenda = await agendas.findBy('id', agendaId);
     set(this.sessionService, 'currentAgenda', agenda);
 
     await this.updateSelectedAgenda(meeting, agenda);
     return {
       meeting,
       agenda,
+      reverseSortedAgendas,
     };
   }
 
   async updateSelectedAgenda(meeting, agenda) {
     set(this.agendaService, 'addedAgendaitems', []);
     set(this.agendaService, 'addedPieces', []);
-    const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(meeting, agenda);
+    const previousAgenda =
+      await this.sessionService.findPreviousAgendaOfSession(meeting, agenda);
     if (previousAgenda) {
-      await this.agendaService.agendaWithChanges(agenda.get('id'), previousAgenda.get('id'));
+      await this.agendaService.agendaWithChanges(
+        agenda.get('id'),
+        previousAgenda.get('id')
+      );
     }
   }
 

@@ -75,7 +75,7 @@ context('Agenda tests', () => {
       cy.get(agenda.agendaHeader.confirm.deleteAgenda);
       cy.get(auk.modal.footer.cancel).click();
       // instead of confirming the opened modal, we cancel and let the command handle it
-      cy.deleteAgenda(result.meetingId, true);
+      cy.deleteAgenda(true);
       cy.url().should('include', '/overzicht');
     });
   });
@@ -228,15 +228,14 @@ context('Agenda tests', () => {
       cy.addAgendaitemToAgenda(newSubcaseTitleShort);
       cy.setAllItemsFormallyOk(2);
       cy.approveDesignAgenda();
-      cy.get(agenda.agendaHeader.showAgendaOptions).click();
-      cy.get(agenda.agendaHeader.agendaActions.lockAgenda).click();
-      cy.get(auk.modal.body).find(auk.alert.message);
-      cy.route('PATCH', '/agendas/*').as('patchAgendas');
-      cy.get(agenda.agendaHeader.confirm.lockAgenda).click();
-      cy.wait('@patchAgendas');
-      cy.get(auk.loader).should('not.exist');
+      cy.closeAgenda();
       cy.get(agenda.agendaOverview.showChanges);
       cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
+      cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 2);
+      cy.get(agenda.agendaOverviewItem.subitem).contains('Goedkeuring van het verslag');
+      cy.get(agenda.agendaOverviewItem.subitem).contains(newSubcaseTitleShort);
+      cy.get(agenda.agendaSideNav.agenda).should('have.length', 1);
+      cy.agendaNameExists('A', false);
     });
   });
 
@@ -260,17 +259,16 @@ context('Agenda tests', () => {
     // Check the approve and close pop-up, the "not yet formally ok" agendaitem will be mentioned for removal
     cy.approveAndCloseDesignAgenda(false);
     cy.get(auk.modal.body).find(auk.alert.message);
+    cy.get(agenda.agendaHeader.messages.approveAndCloseAgenda.deleteItems);
     cy.get(auk.modal.body).contains(newSubcaseTitleShort);
-    cy.route('PATCH', '/subcases/*').as('patchSubcases');
     cy.get(agenda.agendaHeader.confirm.approveAndCloseAgenda).click();
-    cy.wait('@patchSubcases');
     cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');
     // Check that the agendaitem was deleted because of confirming action with agendaitems to delete
     cy.get(auk.loader).should('not.exist');
-    // TODO-BUG after action "approve and close" the agendaitems are not refreshed and the deleted one is still showing (clicking = error)
-    cy.reload(); // TODO-BUG DELETE after bug fix
+    // // TODO-BUG after action "approve and close" the agendaitems are not refreshed and the deleted one is still showing (clicking = error)
+    // cy.reload(); // TODO-BUG DELETE after bug fix
     cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 1);
     cy.get(agenda.agendaOverviewItem.subitem).contains('Goedkeuring van het verslag');
     cy.get(agenda.agendaOverviewItem.subitem).contains(newSubcaseTitleShort)
@@ -298,6 +296,7 @@ context('Agenda tests', () => {
     cy.approveDesignAgenda(false);
 
     cy.get(auk.modal.body).find(auk.alert.message);
+    cy.get(agenda.agendaHeader.messages.approveAgenda.moveItems);
     cy.get(auk.modal.body).contains(newSubcaseTitleShort);
     cy.get(agenda.agendaHeader.confirm.approveAgenda)
       .click();
@@ -305,10 +304,15 @@ context('Agenda tests', () => {
     cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');
+    cy.get(auk.loader).should('not.exist');
+    cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 2);
+    cy.get(agenda.agendaOverviewItem.subitem).contains('Goedkeuring van het verslag');
+    cy.get(agenda.agendaOverviewItem.subitem).contains(newSubcaseTitleShort);
 
     cy.get(agenda.agendaHeader.showAgendaOptions).click();
     cy.get(agenda.agendaHeader.agendaActions.lockAgenda).click();
-
+    cy.get(auk.modal.body).find(auk.alert.message)
+      .contains('met alle wijzigingen wil verwijderen?');
     cy.get(agenda.agendaHeader.confirm.lockAgenda)
       .click();
 

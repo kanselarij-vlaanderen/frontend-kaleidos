@@ -24,42 +24,6 @@ export default class AgendaController extends Controller {
   }
 
   @action
-  selectAgenda(agenda) {
-    this.transitionToRoute('agenda.agendaitems', this.model.meeting.id, agenda.get('id'));
-  }
-
-  @action
-  navigateToDecisions(currentSessionId, currentAgendaId) {
-    this.transitionToRoute(
-      'print-overviews.decisions.agendaitems',
-      currentSessionId,
-      currentAgendaId
-    );
-  }
-
-  @action
-  navigateToPressAgenda(currentSessionId, currentAgendaId) {
-    this.transitionToRoute(
-      'print-overviews.press-agenda.agendaitems',
-      currentSessionId,
-      currentAgendaId
-    );
-  }
-
-  @action
-  navigateToNewsletter(currentSessionId) {
-    this.transitionToRoute(
-      'newsletter',
-      currentSessionId
-    );
-  }
-
-  @action
-  navigateToAgenda(selectedAgendaId) {
-    this.transitionToRoute('agenda.agendaitems', this.model.meeting.id, selectedAgendaId);
-  }
-
-  @action
   loadingAgendaitems() {
     this.isLoading = !this.isLoading;
   }

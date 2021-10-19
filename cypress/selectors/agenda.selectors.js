@@ -106,6 +106,16 @@ const selectors = {
       navigateToPressagenda: '[data-test-agenda-header-navigate-to-pressagenda]',
       printAgenda: ['data-test-agenda-header-print-agenda'],
     },
+    messages: {
+      approveAgenda: {
+        rollbackItems: '[data-test-agenda-header-approve-agenda-rollback-message]',
+        moveItems: '[data-test-agenda-header-approve-agenda-move-message]',
+      },
+      approveAndCloseAgenda: {
+        rollbackItems: '[data-test-agenda-header-approve-and-close-agenda-rollback-message]',
+        deleteItems: '[data-test-agenda-header-approve-and-close-agenda-delete-message]',
+      },
+    },
     // TODO-selector unused selector
     title: ['data-test-agenda-header-title'],
   },

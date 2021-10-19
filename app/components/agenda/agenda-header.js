@@ -10,17 +10,14 @@ import { computed } from '@ember/object';
 import { debug } from '@ember/debug';
 import { all } from 'rsvp';
 import {
-  setAgendaitemFormallyOk,
-  reorderAgendaitemsOnAgenda
+  setAgendaitemFormallyOk
 } from 'frontend-kaleidos/utils/agendaitem-utils';
 import {
   constructArchiveName,
   fetchArchivingJobForAgenda,
   fileDownloadUrlFromJob
 } from 'frontend-kaleidos/utils/zip-agenda-files';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 import moment from 'moment';
-import { A } from '@ember/array';
 import { task } from 'ember-concurrency';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
@@ -39,9 +36,7 @@ export default Component.extend({
   toaster: service(),
 
   isAddingAgendaitems: false,
-  onCreateAgendaitem: null, // argument. Function to execute after creating an agenda-item.
-  onApproveAgenda: null, // argument. Function to execute after approving an agenda.
-  onApproveAllAgendaitems: null, // argument. Function to execute after setting formal ok on all agendaitems.
+  refreshRoute: null, // argument. Function to execute after creating an agenda-item.
   isApprovingAllAgendaitems: false,
   showLoadingOverlay: false,
   loadingOverlayMessage: null,
@@ -144,7 +139,7 @@ export default Component.extend({
 
   /**
    * reloadAgendaitemsOfAgendaActivities
-   * After a new designagenda is created in the service (approveAgendaAndCopyToDesignAgenda) we need to update the agenda activities
+   * After a new designagenda is created or an agenda deleted in the service we need to update the agenda activities
    * The store only updates the agendaitems of agenda-activities if we do it outselves
    */
   async reloadAgendaitemsOfAgendaActivities(agendaitems) {
@@ -159,28 +154,27 @@ export default Component.extend({
   /**
    * @method CreateDesignAgenda
    *
-   * Get the last approved agenda and change the status to approves (from final)
+   * Get the last approved agenda and change the status to approved (from final)
    * Then approve that agenda using the agenda-approve service which yields a new design agenda
    */
   async createDesignAgenda() {
     this.toggleLoadingOverlayWithMessage(this.intl.t('agenda-add-message'));
-    const session = this.get('currentSession');
-    session.set('isFinal', false);
-    session.set('agenda', null);
-    await session.save();
-    const lastApprovedAgenda = await this.get('lastApprovedAgenda');
-    const approved = await this.store.findRecordByUri('agendastatus', CONSTANTS.AGENDA_STATUSSES.APPROVED);
-    lastApprovedAgenda.set('status', approved); // will only have an effect in case of status "closed"
-    await lastApprovedAgenda.save();
-    this.get('agendaService')
-      .approveAgendaAndCopyToDesignAgenda(session, lastApprovedAgenda)
-      .then(async(newAgenda) => {
-        // After the agenda has been approved, we want to update the agendaitems of activities
-        const agendaitems = await lastApprovedAgenda.get('agendaitems');
-        await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
-        this.toggleLoadingOverlayWithMessage(null);
-        this.onApproveAgenda(newAgenda.get('id'));
-      });
+    const currentMeeting = this.currentSession;
+    try {
+      const newAgenda = await this.agendaService.createNewDesignAgenda(currentMeeting);
+      // After the agenda has been created, we want to update the agendaitems of activities
+      const agendaitems = await newAgenda.get('agendaitems');
+      await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
+      this.toggleLoadingOverlayWithMessage(null);
+      return this.router.transitionTo('agenda.agendaitems', currentMeeting.id, newAgenda.id);
+    } catch (error) {
+      if (currentMeeting.isFinal === true) {
+        this.toaster.error(this.intl.t('error-reopen-meeting', { message: error.message }), this.intl.t('warning-title'));
+      } else {
+        this.toaster.error(this.intl.t('error-create-design-agenda', { message: error.message }), this.intl.t('warning-title'));
+      }
+      this.toggleLoadingOverlayWithMessage(null);
+    }
   },
 
   /**
@@ -214,87 +208,25 @@ export default Component.extend({
   async approveCurrentAgenda() {
     this.toggleLoadingOverlayWithMessage(this.intl.t('agenda-approving-text'));
     const currentMeeting = this.currentSession;
-    const currentDesignAgenda = this.currentAgenda;
-    // We set the status of the agenda to approved (instead of in service)
-    const approvedStatus = await this.store.findRecordByUri('agendastatus', CONSTANTS.AGENDA_STATUSSES.APPROVED);
-    currentDesignAgenda.set(
-      'modified',
-      moment()
-        .utc()
-        .toDate()
-    );
-    currentDesignAgenda.set('status', approvedStatus);
-    currentDesignAgenda.save();
-    const newAgenda = await this.get('agendaService').approveAgendaAndCopyToDesignAgenda(currentMeeting, currentDesignAgenda);
-    // rename for clarity, agenda is now approved
-    const approvedAgenda = currentDesignAgenda;
-    // TODO What if service fails ?
-    if (newAgenda) {
-      // After the agenda has been approved, we want to update the agendaitems of activity
-      const agendaitems = await currentDesignAgenda.get('agendaitems');
-      await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
-
-      // proceed with only the specific agendaitems that were not ok before approving
-      const agendaitemsNotFormallyOk = await approvedAgenda.get('allAgendaitemsNotOk');
-      if (agendaitemsNotFormallyOk.length > 0) {
-        const isEditor = this.currentSessionService.isEditor;
-        const agendaitemsToMove = A([]);
-        const agendaitemsToRollback = A([]);
-        // CHECK IF FORMAL NOT OK NEEDS TO BE ROLLED BACK, FORMAL OK SHOULD NOT BE ON APPROVED AGENDA ACCORDING TO KENNY
-        for (const agendaitem of agendaitemsNotFormallyOk) {
-          const previousVersion = await agendaitem.get('previousVersion');
-          if (previousVersion) {
-            agendaitemsToRollback.pushObject(agendaitem);
-          } else {
-            agendaitemsToMove.pushObject(agendaitem);
-          }
-        }
-
-        // Old agenda: new agendaitems that have been moved to the new agenda must be removed from the old agenda, resort old agendaitems
-        if (agendaitemsToMove.length > 0) {
-          for (const agendaitem of agendaitemsToMove) {
-            // destroyRecord ensures only this agendaitem is deleted and does not do any cascading deletes
-            await agendaitem.destroyRecord();
-          }
-        }
-
-        // Old agenda: already approved agendaitems that were not formally ok will be rolled back to the previous version
-        if (agendaitemsToRollback.length > 0) {
-          await this.agendaService.rollbackAgendaitemsNotFormallyOk(approvedAgenda);
-          for (const agendaitem of agendaitemsToRollback) {
-            await agendaitem.reload();
-            // Do we need to reload everything, possible side effects? we could check if a value was present, and only reload those.
-            await agendaitem.hasMany('pieces').reload();
-            await agendaitem.hasMany('treatments').reload();
-            await agendaitem.hasMany('mandatees').reload();
-            await agendaitem.hasMany('approvals').reload();
-            await agendaitem.hasMany('linkedPieces').reload();
-          }
-        }
-        await reorderAgendaitemsOnAgenda(approvedAgenda, isEditor);
-
-        // New agenda: new agendaitems that have been moved must be resorted to the bottom of the lists (note && announcements) on new agenda
-        const agendaitemsFromNewAgenda = await newAgenda.get('agendaitems');
-        const newAgendaitemsToReorder = A([]);
-        const newAgendaitemsWithStatusDifferentFromFormallyOk = agendaitemsFromNewAgenda.filter((agendaitem) => (agendaitem.get('formallyOk') === CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK || agendaitem.get('formallyOk') === CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK));
-        for (const agendaitem of newAgendaitemsWithStatusDifferentFromFormallyOk) {
-          const previousVersion = await agendaitem.get('previousVersion');
-          if (!previousVersion) {
-            newAgendaitemsToReorder.pushObject(agendaitem);
-          }
-        } // TODO rolled back items also bottom of the list ?
-        if (newAgendaitemsToReorder.length > 0) {
-          newAgendaitemsToReorder.forEach((agendaitem) => {
-            agendaitem.set('number', agendaitem.get('number') + 9999);
-          });
-          await reorderAgendaitemsOnAgenda(newAgenda, isEditor);
-        }
-      }
+    const agendaToApprove = this.currentAgenda;
+    if (!agendaToApprove.isDesignAgenda) {
+      this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
+      return;
     }
-
-    if (this.onApproveAgenda) {
+    try {
+      const newAgenda = await this.agendaService.approveDesignAgenda(currentMeeting);
+      // Data reloading
+      // agendaToApprove does not get reloaded on route change, we do it manually
+      await agendaToApprove.reload();
+      await agendaToApprove.belongsTo('status').reload();
+      // amount of agendaitems of agendaActivity are not reloaded on route change, we do it manually
+      const agendaitems = await agendaToApprove.hasMany('agendaitems').reload();
+      await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
       this.toggleLoadingOverlayWithMessage(null);
-      this.onApproveAgenda(newAgenda.get('id'));
+      return this.router.transitionTo('agenda.agendaitems', currentMeeting.id, newAgenda.id);
+    } catch (error) {
+      this.toaster.error(this.intl.t('error-approve-agenda', { message: error.message }), this.intl.t('warning-title'));
+      this.toggleLoadingOverlayWithMessage(null);
     }
   },
 
@@ -311,65 +243,29 @@ export default Component.extend({
    */
   async approveCurrentAgendaAndCloseMeeting() {
     this.toggleLoadingOverlayWithMessage(this.intl.t('agenda-approve-and-close-message'));
-    const isDesignAgenda = await this.currentAgenda.get('isDesignAgenda');
-    if (isDesignAgenda) {
-      const currentMeeting = this.get('currentSession');
-      const agendaToApproveAndClose = this.currentAgenda;
-      // We have to change the current agenda from design to closed status, skipping the approval status
-      const closedStatus = await this.store.findRecordByUri('agendastatus', CONSTANTS.AGENDA_STATUSSES.CLOSED);
-      agendaToApproveAndClose.set(
-        'modified',
-        moment()
-          .utc()
-          .toDate()
-      );
-      agendaToApproveAndClose.set('status', closedStatus);
-      agendaToApproveAndClose.save();
-
-      // Als je deze reload niet doet dan refreshed de interface niet (Ember).
+    const currentMeeting = this.currentSession;
+    const agendaToApprove = this.currentAgenda;
+    if (!agendaToApprove.isDesignAgenda) {
+      this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
+      return;
+    }
+    try {
+      await this.agendaService.approveAgendaAndCloseMeeting(currentMeeting);
+      // Data reloading, we do not change route, refresh not working because of sibling routes?
+      // agendaToApprove does not get reloaded, we do it manually
+      await agendaToApprove.reload(); // need changed attributes (modified)
+      await agendaToApprove.belongsTo('status').reload(); // need changed status
+      // amount of agendaitems of agendaActivity are not reloaded, we do it manually
+      const agendaitems = await agendaToApprove.hasMany('agendaitems').reload();
+      await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
+      // we don't change route, but the model has changes and needs a reload, we do it manually
+      await currentMeeting.reload(); // need changed attributes (isFinal)
       await currentMeeting.hasMany('agendas').reload();
-      currentMeeting.set('isFinal', true);
-      currentMeeting.set('agenda', agendaToApproveAndClose);
-      await currentMeeting.save();
-
-      const agendaitemsFromApprovedAgenda = await agendaToApproveAndClose.get('agendaitems');
-      const agendaitemsWithStatusDifferentFromFormallyOk = agendaitemsFromApprovedAgenda.filter((agendaitem) => (agendaitem.get('formallyOk') === CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK || agendaitem.get('formallyOk') === CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK));
-      if (agendaitemsWithStatusDifferentFromFormallyOk.length > 0) {
-        const isEditor = this.currentSessionService.isEditor;
-        const agendaitemsToRemove = A([]);
-        const agendaitemsToRollback = A([]);
-        for (const agendaitem of agendaitemsWithStatusDifferentFromFormallyOk) {
-          const previousVersion = await agendaitem.get('previousVersion');
-          if (previousVersion) {
-            agendaitemsToRollback.pushObject(agendaitem);
-          } else {
-            agendaitemsToRemove.pushObject(agendaitem);
-          }
-        }
-
-        // Old agenda: new agendaitems that need te be removed from the agenda must be propoable again, resort old agendaitems
-        if (agendaitemsToRemove.length > 0) {
-          for (const agendaitem of agendaitemsToRemove) {
-            await this.agendaService.deleteAgendaitem(agendaitem);
-          }
-        }
-
-        // Old agenda: already approved agendaitems that were not formally ok will be rolled back to the previous version
-        if (agendaitemsToRollback.length > 0) {
-          await this.agendaService.rollbackAgendaitemsNotFormallyOk(agendaToApproveAndClose);
-          for (const agendaitem of agendaitemsToRollback) {
-            await agendaitem.reload();
-            // Do we need to reload everything, possible side effects? we could check if a value was present, and only reload those.
-            await agendaitem.hasMany('pieces').reload();
-            await agendaitem.hasMany('treatments').reload();
-            await agendaitem.hasMany('mandatees').reload();
-            await agendaitem.hasMany('approvals').reload();
-            await agendaitem.hasMany('linkedPieces').reload();
-          }
-        }
-        await reorderAgendaitemsOnAgenda(agendaToApproveAndClose, isEditor);
-      }
+    } catch (error) {
+      this.toaster.error(this.intl.t('error-approve-close-agenda', { message: error.message }), this.intl.t('warning-title'));
+    } finally {
       this.toggleLoadingOverlayWithMessage(null);
+      this.refreshRoute();
     }
   },
 
@@ -380,38 +276,32 @@ export default Component.extend({
    */
   async closeMeeting() {
     this.toggleLoadingOverlayWithMessage(this.intl.t('agenda-close-message'));
-    if (this.isSessionClosable) {
-      const currentMeeting = this.currentSession;
-      const agendas = await this.get('agendas');
-      const designAgenda = agendas
-        .filter((agenda) => agenda.get('isDesignAgenda'))
-        .sortBy('serialnumber')
-        .reverse()
-        .get('firstObject');
-      const lastApprovedAgenda = await this.get('lastApprovedAgenda');
-
-      if (lastApprovedAgenda) {
-        currentMeeting.set('isFinal', true);
-        currentMeeting.set('agenda', lastApprovedAgenda);
-        await currentMeeting.save();
-
-        const closed = await this.store.findRecordByUri('agendastatus', CONSTANTS.AGENDA_STATUSSES.CLOSED);
-        lastApprovedAgenda.set('status', closed);
-        await lastApprovedAgenda.save();
-      }
-
-      if (designAgenda) {
-        await this.agendaService.deleteAgenda(designAgenda);
-        // TODO is alle data uit de local store na deze actie ?
-        // After the agenda has been deleted, we want to update the agendaitems of activity
-        const agendaitems = await lastApprovedAgenda.get('agendaitems');
-        await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
-        await this.set('sessionService.currentAgenda', lastApprovedAgenda);
-        this.router.transitionTo('agenda.agendaitems', currentMeeting.id, lastApprovedAgenda.get('id'));
-      }
+    if (!this.isSessionClosable) {
+      this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
+      return;
     }
-
-    if (!this.isDestroyed) {
+    const currentMeeting = this.currentSession;
+    const currentAgenda = this.currentAgenda;
+    const isDesignAgenda = await currentAgenda.isDesignAgenda;
+    try {
+      const lastApprovedAgenda = await this.agendaService.closeMeeting(currentMeeting);
+      // Data reloading
+      // lastApprovedAgenda does not get reloaded, we do it manually
+      await lastApprovedAgenda.reload(); // need changed attributes (modified)
+      await lastApprovedAgenda.belongsTo('status').reload(); // need changed status
+      // amount of agendaitems of agendaActivity are not reloaded, we do it manually
+      const agendaitems = await lastApprovedAgenda.hasMany('agendaitems').reload();
+      await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
+      // we don't always change route, but the model has changes and needs a reload, we do it manually
+      await currentMeeting.reload(); // need changed attributes (isFinal)
+      await currentMeeting.hasMany('agendas').reload();
+      this.toggleLoadingOverlayWithMessage(null);
+      if (isDesignAgenda) {
+        return this.router.transitionTo('agenda.agendaitems', currentMeeting.id, lastApprovedAgenda.get('id'));
+      }
+      this.refreshRoute();
+    } catch (error) {
+      this.toaster.error(this.intl.t('error-close-meeting', { message: error.message }), this.intl.t('warning-title'));
       this.toggleLoadingOverlayWithMessage(null);
     }
   },
@@ -424,36 +314,31 @@ export default Component.extend({
    */
   async deleteSelectedAgenda() {
     this.toggleLoadingOverlayWithMessage(this.intl.t('agenda-delete-message'));
-    if (await this.canDeleteSelectedAgenda) {
-      const agendas = await this.get('agendas');
-      const currentAgenda = this.currentAgenda;
-      const agendasLength = agendas.length;
-      const currentMeeting = await this.currentSession;
-
-      // this could be previousVersion of agenda, but is not implemented
-      const previousAgenda = await this.get('sessionService').findPreviousAgendaOfSession(currentMeeting, currentAgenda);
-      currentMeeting.set('agenda', previousAgenda); // TODO setting this here might result in a one-to-many with multiple on the "one" side on future agenda versions
-      await currentMeeting.save();
-
-      await this.agendaService.deleteAgenda(currentAgenda);
-
-      // TODO The deleteAgenda will also make new agendaitems that were removed proposable again. Do we want to display this information in the confirmation screen ?
-      if (previousAgenda) {
-        // After the agenda has been deleted, we want to update the agendaitems of activity
-        const agendaitems = await previousAgenda.get('agendaitems');
-        await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
-
-        await this.set('sessionService.currentAgenda', previousAgenda);
-        this.router.transitionTo('agenda.agendaitems', currentMeeting.id, previousAgenda.get('id'));
-      } else if (agendasLength === 1) {
-        await this.get('sessionService').deleteSession(currentMeeting);
-        this.router.transitionTo('agendas');
-      } else { // dead code, this should not be reachable unless previousAgenda failed to resolve
-        throw new Error('Something went wrong when deleting the agenda, contact developers');
-      }
+    if (!this.canDeleteSelectedAgenda) {
+      this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
+      return;
     }
-    if (!this.isDestroyed) {
+    const currentMeeting = this.currentSession;
+    const currentAgenda = this.currentAgenda;
+    try {
+      const lastapprovedAgenda = await this.agendaService.deleteAgenda(currentMeeting, currentAgenda);
+      // Data reloading
+      if (lastapprovedAgenda) {
+        // amount of agendaitems of agendaActivity are not reloaded, we do it manually
+        const agendaitems = await lastapprovedAgenda.hasMany('agendaitems').reload();
+        await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
+        // the model has changes and needs a reload, we do it manually
+        await currentMeeting.reload(); // need changed attributes (isFinal)
+        await currentMeeting.hasMany('agendas').reload();
+        this.toggleLoadingOverlayWithMessage(null);
+        return this.router.transitionTo('agenda.agendaitems', currentMeeting.id, lastapprovedAgenda.get('id'));
+      }
+      // if there is no previous agenda, the meeting should have been deleted
       this.toggleLoadingOverlayWithMessage(null);
+      this.router.transitionTo('agendas.overview');
+    } catch (error) {
+      this.toggleLoadingOverlayWithMessage(null);
+      this.toaster.error(this.intl.t('error-delete-agenda', { message: error.message }), this.intl.t('warning-title'));
     }
   },
 
@@ -466,25 +351,12 @@ export default Component.extend({
    */
   async reopenPreviousAgenda() {
     this.toggleLoadingOverlayWithMessage(this.intl.t('agenda-reopen-previous-version-message'));
-    if (await this.canReopenPreviousAgenda) {
-      const agendas = await this.get('agendas');
-      const designAgenda = this.currentAgenda;
-
-      // this could be previousVersion of agenda, but is not implemented
-      const previousAgenda = agendas
-        .filter((agenda) => !agenda.get('isDesignAgenda'))
-        .sortBy('serialnumber')
-        .reverse()
-        .get('firstObject');
-
-      const currentMeeting = await this.currentSession;
-      currentMeeting.set('agenda', previousAgenda);
-      await currentMeeting.save();
-
-      const designAgendaStatus = await this.store.findRecordByUri('agendastatus', CONSTANTS.AGENDA_STATUSSES.DESIGN); // Async call
-      previousAgenda.set('status', designAgendaStatus);
-      await previousAgenda.save();
-
+    if (!this.canReopenPreviousAgenda) {
+      this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
+      return;
+    }
+    const currentMeeting = this.currentSession;
+    try {
       // delete all the new documents from the designagenda
       if (this.piecesToDeleteReopenPreviousAgenda) {
         await all(this.piecesToDeleteReopenPreviousAgenda.map(async(piece) => {
@@ -492,16 +364,21 @@ export default Component.extend({
         }));
         this.set('piecesToDeleteReopenPreviousAgenda', null);
       }
-
-      await this.agendaService.deleteAgenda(designAgenda);
-      // After the agenda has been deleted, we want to update the agendaitems of activity
-      const agendaitems = await previousAgenda.get('agendaitems');
+      const lastApprovedAgenda = await this.agendaService.reopenPreviousAgenda(currentMeeting);
+      // Data reloading
+      // lastApprovedAgenda does not get reloaded, we do it manually
+      await lastApprovedAgenda.reload();
+      await lastApprovedAgenda.belongsTo('status').reload();
+      // amount of agendaitems of agendaActivity are not reloaded, we do it manually
+      const agendaitems = await lastApprovedAgenda.hasMany('agendaitems').reload();
       await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
-
-      await this.set('sessionService.currentAgenda', previousAgenda);
-      this.router.transitionTo('agenda.agendaitems', currentMeeting.id, previousAgenda.get('id'));
-    }
-    if (!this.isDestroyed) {
+      // the model has changes and needs a reload, we do it manually
+      await currentMeeting.reload();
+      await currentMeeting.hasMany('agendas').reload();
+      this.toggleLoadingOverlayWithMessage(null);
+      return this.router.transitionTo('agenda.agendaitems', currentMeeting.id, lastApprovedAgenda.id);
+    } catch (error) {
+      this.toaster.error(this.intl.t('error-reopen-previous-agenda', { message: error.message }), this.intl.t('warning-title'));
       this.toggleLoadingOverlayWithMessage(null);
     }
   },
@@ -580,27 +457,6 @@ export default Component.extend({
       window.print();
     },
 
-    navigateToPressAgenda() {
-      const {
-        currentSession, currentAgenda,
-      } = this;
-      this.navigateToPressAgenda(currentSession.get('id'), currentAgenda.get('id'));
-    },
-
-    navigateToNewsletter() {
-      const {
-        currentSession, currentAgenda,
-      } = this;
-      this.navigateToNewsletter(currentSession.get('id'), currentAgenda.get('id'));
-    },
-
-    navigateToDecisions() {
-      const {
-        currentSession, currentAgenda,
-      } = this;
-      this.navigateToDecisions(currentSession.get('id'), currentAgenda.get('id'));
-    },
-
     cancel() {
       this.set('releasingDecisions', false);
       this.set('releasingDocuments', false);
@@ -624,7 +480,7 @@ export default Component.extend({
         }
       }
       this.toggleLoadingOverlayWithMessage(null);
-      this.onApproveAllAgendaitems();
+      this.refreshRoute();
     },
 
     async unlockAgenda() {

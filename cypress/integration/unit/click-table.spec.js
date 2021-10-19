@@ -17,7 +17,7 @@ context('Table Row Click tests', () => {
   // TODO-publication add publication table row click test, make sure to have at least 1 publication in default set
 
   it('should open an agenda after clicking a row', () => {
-    cy.route('GET', '/agendas/**/agendaitems').as('getAgendas');
+    cy.route('GET', '/agendas/**').as('getAgendas');
 
     cy.get(route.agendasOverview.dataTable).find('tbody')
       .children('tr')

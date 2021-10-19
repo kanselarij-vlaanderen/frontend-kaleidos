@@ -1,5 +1,4 @@
 import Model, { hasMany, belongsTo, attr } from '@ember-data/model';
-import { PromiseObject } from '@ember-data/store/-private';
 import { computed } from '@ember/object';
 import { reads } from '@ember/object/computed';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -59,12 +58,6 @@ export default Model.extend(LoadableModel, {
   }),
 
   isFinal: computed.alias('status.isFinal'),
-
-  firstAgendaitem: computed('agendaitems.[]', function() {
-    return PromiseObject.create({
-      promise: this.get('agendaitems').then((agendaitems) => agendaitems.sortBy('number').get('firstObject')),
-    });
-  }),
 
   canBeApproved: computed('agendaitems.@each.formallyOk', function() {
     return this.get('agendaitems').then((agendaitems) => {
