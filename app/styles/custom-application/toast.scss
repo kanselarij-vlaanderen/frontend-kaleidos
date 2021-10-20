@@ -1,7 +1,7 @@
 .vl-alert-relative {
   opacity: 0.85;
   position: fixed;
-  z-index: 100;
+  z-index: $z-index-alert-stack; // from au-kaleidos-css
   box-shadow: $au-shadow-small;
 
   animation: fpFadeInLeft 0.3s linear;
