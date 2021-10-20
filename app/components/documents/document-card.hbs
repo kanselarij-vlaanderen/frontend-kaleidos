@@ -47,25 +47,6 @@
                 </LinkTo>
                 {{! template-lint-enable no-inline-styles }}
               {{/if}}
-              {{#if this.case}}
-              {{! TODO: remove style attributes and replace classes with auk-status-pill }}
-              {{! template-lint-disable no-inline-styles }}
-                <LinkTo
-                  class="auk-pill auk-pill--default auk-u-mr-2"
-                  @route="cases.case.subcases"
-                  @model={{this.case.id}}
-                >
-                  <Auk::Icon @name="link" style="display: none;" />
-                  <span class="auk-status-pill__label" style="padding: 0;">
-                    {{#if this.case.number}}
-                      {{this.case.number}}
-                    {{else}}
-                      {{t "no-number-yet"}}
-                    {{/if}}
-                  </span>
-                </LinkTo>
-              {{! template-lint-enable no-inline-styles }}
-              {{/if}}
             {{/if}}
             <Auk::Toolbar::Item class="auk-o-flex">
               {{#unless this.loadPieceRelatedData.isRunning}}

@@ -40,7 +40,6 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked accessLevel;
   @tracked documentContainer;
   @tracked signMarkingActivity;
-  @tracked case;
 
   @tracked uploadedFile;
   @tracked newPiece;
@@ -53,7 +52,6 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.loadCodelists.perform();
     this.loadPieceRelatedData.perform();
     this.loadSignatureRelatedData.perform();
-    this.loadCaseRelatedData.perform();
   }
 
   get shouldShowPublications() {
@@ -74,15 +72,6 @@ export default class DocumentsDocumentCardComponent extends Component {
   *loadSignatureRelatedData() {
     if (this.args.hasMarkForSignature) {
       this.signMarkingActivity = yield this.piece.signMarkingActivity;
-    }
-  }
-
-  @task
-  *loadCaseRelatedData() {
-    const submissionActivity = yield this.piece.submissionActivity;
-    if (submissionActivity) {
-      const subcase = yield submissionActivity.subcase;
-      this.case = yield subcase.case;
     }
   }
 
