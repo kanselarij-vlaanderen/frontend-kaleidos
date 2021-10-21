@@ -11,20 +11,12 @@ export default class AgendaController extends Controller {
 
   @tracked isLoading = false;
 
-  get currentAgendaitems() {
-    return this.sessionService.currentAgendaitems;
-  }
-
   get shouldHideNav() {
     return this.router.currentRouteName === 'agenda.compare';
   }
 
-  get showPrintButton() {
-    return this.router.currentRouteName === 'agenda.print';
-  }
-
   @action
-  loadingAgendaitems() {
+  toggleIsLoading() {
     this.isLoading = !this.isLoading;
   }
 

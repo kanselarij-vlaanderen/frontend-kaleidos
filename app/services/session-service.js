@@ -4,14 +4,20 @@ import { computed } from '@ember/object';
 import { PromiseArray } from '@ember-data/store/-private';
 import { all } from 'rsvp';
 
-// TODO: octane-refactor
+// TODO: octane-refactor or refactor to stateless service (but not methods so empty service?)
 /* eslint-disable ember/no-get */
 // eslint-disable-next-line ember/no-classic-classes
 export default Service.extend({
+  /*
+    Stored states:
+    currentSession (actually currentMeeting)
+    currentAgenda
+  */
   store: inject(),
   router: inject(),
   currentSession: null,
 
+  // TODO KAS-2399 check if this is still used after agenda-header refactor
   agendas: computed('currentSession.agendas.[]', function() {
     if (!this.get('currentSession')) {
       return [];
@@ -23,59 +29,4 @@ export default Service.extend({
       }),
     });
   }),
-
-  currentAgendaitems: computed('currentAgenda.agendaitems.[]', function() {
-    const currentAgenda = this.get('currentAgenda');
-    if (currentAgenda) {
-      return this.store.query('agendaitem', {
-        filter: {
-          agenda: {
-            id: currentAgenda.id,
-          },
-        },
-        include: ['agenda-activity,agenda-activity.subcase,agenda-activity.subcase.case'],
-        sort: 'number',
-      });
-    }
-    return [];
-  }),
-
-  announcements: computed('currentAgenda.announcements.[]', function() {
-    const currentAgenda = this.get('currentAgenda');
-    if (currentAgenda) {
-      const announcements = this.store.query('announcement', {
-        filter: {
-          agenda: {
-            id: currentAgenda.id,
-          },
-        },
-      });
-      return announcements;
-    }
-    return [];
-  }),
-
-  async findPreviousAgendaOfSession(session, agenda) {
-    const agendas = await session.get('sortedAgendas');
-    if (agendas) {
-      const foundIndex = agendas.indexOf(agenda);
-      const agendasLength = agendas.get('length');
-      if (foundIndex + 1 !== agendasLength) {
-        const previousAgenda = agendas.objectAt(foundIndex + 1);
-        return previousAgenda;
-      }
-      return null;
-    }
-    return null;
-  },
-
-  async deleteSession(session) {
-    const newsletter = await session.get('newsletter');
-    if (newsletter) {
-      await newsletter.destroyRecord();
-    }
-
-    await session.destroyRecord();
-  },
-
 });
