@@ -204,9 +204,9 @@ function deleteAgenda(lastAgenda) {
   // Call is made but cypress doesn't see it
   // cy.route('POST', '/agenda-approve/deleteAgenda').as('deleteAgendaCall');
   cy.route('GET', '/agendaitems?fields**').as('loadAgendaitems');
-  cy.get(agenda.agendaHeader.showAgendaOptions).click();
-  cy.get(agenda.agendaHeader.agendaActions.deleteAgenda).click();
-  cy.get(auk.modal.container).find(agenda.agendaHeader.confirm.deleteAgenda)
+  cy.get(agenda.agendaActions.showOptions).click();
+  cy.get(agenda.agendaActions.actions.deleteAgenda).click();
+  cy.get(auk.modal.container).find(agenda.agendaActions.confirm.deleteAgenda)
     .click();
   cy.get(auk.modal.container, {
     timeout: 60000,
@@ -265,7 +265,7 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
   cy.log('setAllItemsFormallyOk');
   const verifyText = `Bent u zeker dat u ${amountOfFormallyOks} agendapunten formeel wil goedkeuren`;
   cy.route('GET', '/agendaitems/*/modified-by').as('getModifiedByOfAgendaitems');
-  cy.get(agenda.agendaHeader.showActionOptions).click();
+  cy.get(agenda.agendaHeader.showOptions).click();
   cy.route('PATCH', '/agendaitems/**').as('patchAgendaitems');
   cy.get(agenda.agendaHeader.actions.approveAllAgendaitems).click();
   cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
@@ -288,11 +288,11 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
 function approveDesignAgenda(shouldConfirm = true) {
   cy.log('approveDesignAgenda');
 
-  cy.get(agenda.agendaHeader.showAgendaOptions).click();
-  cy.get(agenda.agendaHeader.agendaActions.approveAgenda).click();
+  cy.get(agenda.agendaActions.showOptions).click();
+  cy.get(agenda.agendaActions.actions.approveAgenda).click();
   cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
   if (shouldConfirm) {
-    cy.get(auk.modal.container).find(agenda.agendaHeader.confirm.approveAgenda)
+    cy.get(auk.modal.container).find(agenda.agendaActions.confirm.approveAgenda)
       .click();
     // as long as the modal exists, the action is not completed
     cy.get(auk.modal.container, {
@@ -319,11 +319,11 @@ function approveDesignAgenda(shouldConfirm = true) {
 function approveAndCloseDesignAgenda(shouldConfirm = true) {
   cy.log('approveAndCloseDesignAgenda');
 
-  cy.get(agenda.agendaHeader.showAgendaOptions).click();
-  cy.get(agenda.agendaHeader.agendaActions.approveAndCloseAgenda).click();
+  cy.get(agenda.agendaActions.showOptions).click();
+  cy.get(agenda.agendaActions.actions.approveAndCloseAgenda).click();
   cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
   if (shouldConfirm) {
-    cy.get(auk.modal.container).find(agenda.agendaHeader.confirm.approveAndCloseAgenda)
+    cy.get(auk.modal.container).find(agenda.agendaActions.confirm.approveAndCloseAgenda)
       .click();
     // as long as the modal exists, the action is not completed
     cy.get(auk.modal.container, {
@@ -350,7 +350,7 @@ function addAgendaitemToAgenda(subcaseTitle, postponed = false) {
   cy.route('PATCH', '/agendas/**').as('patchAgenda');
 
   cy.get(auk.loader).should('not.exist');
-  cy.get(agenda.agendaHeader.showActionOptions).click();
+  cy.get(agenda.agendaHeader.showOptions).click();
   cy.get(agenda.agendaHeader.actions.addAgendaitems).click();
   cy.wait('@getSubcasesFiltered', {
     timeout: 20000,
@@ -538,9 +538,9 @@ function closeAgenda() {
   cy.log('closeAgenda');
   // Call is made but cypress doesn't see it
   // cy.route('POST', '/agenda-approve/closeAgenda').as('closeAgendaCall');
-  cy.get(agenda.agendaHeader.showAgendaOptions).click();
-  cy.get(agenda.agendaHeader.agendaActions.lockAgenda).click();
-  cy.get(agenda.agendaHeader.confirm.lockAgenda).click();
+  cy.get(agenda.agendaActions.showOptions).click();
+  cy.get(agenda.agendaActions.actions.lockAgenda).click();
+  cy.get(agenda.agendaActions.confirm.lockAgenda).click();
   // as long as the modal exists, the action is not completed
   cy.get(auk.modal.container, {
     timeout: 60000,
@@ -558,8 +558,8 @@ function closeAgenda() {
  */
 function reopenAgenda() {
   cy.log('reopenAgenda');
-  cy.get(agenda.agendaHeader.showAgendaOptions).click();
-  cy.get(agenda.agendaHeader.agendaActions.unlockAgenda).click();
+  cy.get(agenda.agendaActions.showOptions).click();
+  cy.get(agenda.agendaActions.actions.unlockAgenda).click();
   // Currently, this action has no confirmation popup but a loading overlay is showing
   cy.get(auk.modal.container, {
     timeout: 60000,
@@ -579,9 +579,9 @@ function reopenPreviousAgenda() {
   cy.log('reopenPreviousAgenda');
   // Call is made but cypress doesn't see it
   // cy.route('POST', '/agenda-approve/reopenPreviousAgenda').as('reopenPreviousAgendaCall');
-  cy.get(agenda.agendaHeader.showAgendaOptions).click();
-  cy.get(agenda.agendaHeader.agendaActions.reopenPreviousVersion).click();
-  cy.get(agenda.agendaHeader.confirm.reopenPreviousVersion).click();
+  cy.get(agenda.agendaActions.showOptions).click();
+  cy.get(agenda.agendaActions.actions.reopenPreviousVersion).click();
+  cy.get(agenda.agendaActions.confirm.reopenPreviousVersion).click();
   // as long as the modal exists, the action is not completed
   cy.get(auk.modal.container, {
     timeout: 60000,
@@ -600,7 +600,7 @@ function releaseDecisions() {
   cy.log('releaseDecisions');
   cy.route('PATCH', '/meetings/**').as('patchMeetings');
 
-  cy.get(agenda.agendaHeader.showActionOptions).click();
+  cy.get(agenda.agendaHeader.showOptions).click();
   cy.get(agenda.agendaHeader.actions.releaseDecisions).click({
     force: true,
   });
@@ -621,7 +621,7 @@ function releaseDocuments() {
   cy.log('releaseDocuments');
   cy.route('PATCH', '/meetings/**').as('patchMeetings');
 
-  cy.get(agenda.agendaHeader.showActionOptions).click();
+  cy.get(agenda.agendaHeader.showOptions).click();
   cy.get(agenda.agendaHeader.actions.releaseDocuments).click();
   cy.get(agenda.agendaHeader.confirm.releaseDocuments).click();
   cy.wait('@patchMeetings', {

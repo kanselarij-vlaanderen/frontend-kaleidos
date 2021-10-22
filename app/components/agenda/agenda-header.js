@@ -14,7 +14,7 @@ import {
   fileDownloadUrlFromJob,
 } from 'frontend-kaleidos/utils/zip-agenda-files';
 
-export default class MeetingHeader extends Component {
+export default class AgendaHeader extends Component {
   /**
    * The header component when viewing a meeting and it's agendas.
    *

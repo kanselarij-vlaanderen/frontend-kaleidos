@@ -31,7 +31,7 @@
     </Auk::Toolbar::Group>
     {{#if this.currentSession.isViewer}}
       <Auk::Toolbar::Group @position="right">
-        <Agenda::MeetingHeader::AgendaActions
+        <Agenda::AgendaHeader::AgendaActions
           @meeting={{@meeting}}
           @currentAgenda={{@currentAgenda}}
           @reversedAgendas={{@reversedAgendas}}
@@ -43,7 +43,7 @@
             @skin="secondary"
             @label={{t "actions"}}
             class="vlc-hide-on-print"
-            data-test-agenda-header-show-action-options={{true}}
+            data-test-agenda-header-show-options={{true}}
             as |Menu|
           >
             {{#if this.canEditDesignAgenda}}

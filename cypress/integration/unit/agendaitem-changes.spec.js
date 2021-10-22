@@ -123,7 +123,7 @@ context('Agendaitem changes tests', () => {
     cy.visit(agendaURL);
     cy.changeSelectedAgenda('Ontwerpagenda');
     // when navigating to print view, should contain all relevant info
-    cy.get(agenda.agendaHeader.showActionOptions).click();
+    cy.get(agenda.agendaHeader.showOptions).click();
     cy.get(agenda.agendaHeader.actions.navigateToPrintableAgenda).click();
     cy.wait(1000);
     cy.get(agenda.printableAgenda.headerTitle, {

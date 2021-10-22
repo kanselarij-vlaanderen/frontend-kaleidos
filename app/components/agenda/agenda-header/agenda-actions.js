@@ -7,10 +7,10 @@ import { all } from 'rsvp'; // TODO KAS-2399 better way then this ?
 
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
-export default class MeetingHeaderAgendaActions extends Component {
+export default class AgendaActions extends Component {
   /**
    * A component that contains most of the meeting/agenda actions that interact with a backend service.
-   * This contains all actions of the left button in the right toolbar of Agenda::MeetingHeader component
+   * This contains all actions of the left button in the right toolbar of Agenda::AgendaHeader component
    *
    * @argument meeting: the viewed meeting
    * @argument currentAgenda: the selected agenda
