@@ -1,96 +1,77 @@
-/* eslint-disable ember/no-arrow-function-computed-properties */
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-components
-import Component from '@ember/component';
-import { inject } from '@ember/service';
-import { computed } from '@ember/object';
-import {
-  task, timeout
-} from 'ember-concurrency';
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { task, timeout } from 'ember-concurrency';
 import moment from 'moment';
+import { inject as service } from '@ember/service';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
-export default Component.extend({
-  classNames: ['mandatee-selector-container'],
-  classNameBindings: ['classes'],
-  store: inject(),
-  selectedMandatees: null,
-  singleSelect: false,
-  modelName: 'mandatee',
-  sortField: 'priority',
-  searchField: 'title',
-  includeField: 'person',
+export default class MandateeSelector extends Component {
+  @tracked selectedMandatees = null;
+  @tracked mandatees;
+  @service store;
 
-  init() {
-    this._super(...arguments);
-    this.findAll.perform();
-  },
+  sortField = 'priority';
+  searchField = 'title';
+  includeField = 'person';
 
-  filter: computed(() => ({
-    ':gte:end': moment().utc()
-      .toDate()
-      .toISOString(),
-  })),
+  constructor() {
+    super(...arguments);
+    this.loadMandatees.perform();
+  }
 
-  queryOptions: computed('sortField', 'searchField', 'filter', 'modelName', 'includeField', function() {
+  get filter() {
+    return {
+      ':gte:end': moment()
+        .utc()
+        .toDate()
+        .toISOString(),
+    };
+  }
+
+  queryOptions() {
     const options = {};
-    const {
-      filter, sortField, includeField,
-    } = this;
-    if (sortField) {
-      options.sort = sortField;
+    if (this.sortField) {
+      options.sort = this.sortField;
     }
-    if (filter) {
-      options.filter = filter;
+    if (this.filter) {
+      options.filter = this.filter;
     }
-    if (includeField) {
-      options.include = includeField;
+    if (this.includeField) {
+      options.include = this.includeField;
     }
     return options;
-  }),
+  }
 
-  findAll: task(function *() {
-    const {
-      modelName, queryOptions,
-    } = this;
-    if (modelName) {
-      const items = yield this.store.query(modelName, queryOptions);
-      this.set('items', items);
-    }
-  }),
+  @task(function *() {
+    this.mandatees = yield this.store.query('mandatee', this.queryOptions());
+  })loadMandatees;
 
-  searchTask: task(function *(searchValue) {
+
+  @task(function *(searchValue) {
     yield timeout(300);
-    const {
-      queryOptions, searchField, modelName,
-    } = this;
-    if (queryOptions.filter) {
-      queryOptions.filter[searchField] = searchValue;
+    if (this.queryOptions().filter) {
+      this.queryOptions().filter[this.searchField] = searchValue;
     } else {
       const filter = {};
-      filter[searchField] = searchValue;
-      queryOptions.filter = filter;
+      filter[this.searchField] = searchValue;
+      this.queryOptions().filter = filter;
     }
+    return this.store.query('mandatee', this.queryOptions());
+  })searchTask;
 
-    return this.store.query(modelName, queryOptions);
-  }),
+  @action
+  chooseMandatee(mandatees) {
+    this.selectedMandatees = mandatees;
+  }
 
-  // TODO: octane-refactor
-  // eslint-disable-next-line ember/no-actions-hash
-  actions: {
-    async chooseMandatee(mandatees) {
-      this.set('selectedMandatees', mandatees);
-      this.chooseMandatee(mandatees);
-    },
-
-    resetValueIfEmpty(param) {
-      if (param === '') {
-        this.set('queryOptions', {
+  @action
+  resetValueIfEmpty(param) {
+    if (param === '') {
+      this.queryOptions =
+        {
           sort: this.sortField,
-        });
-        this.findAll.perform();
-      }
-    },
-  },
-});
+        };
+      this.loadMandatees.perform();
+    }
+  }
+}

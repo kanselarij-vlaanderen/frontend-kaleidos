@@ -1,25 +1,23 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
-{{#if (not this.singleSelect)}}
+{{#if (not @singleSelect)}}
   <PowerSelectMultiple
-    @options={{this.items}}
+    @options={{this.mandatees}}
     @selected={{await this.selectedMandatees}}
     @disabled={{this.readOnly}}
     @closeOnSelect={{false}}
     @search={{perform this.searchTask}}
-    @oninput={{action "resetValueIfEmpty"}}
-    @onchange={{action "chooseMandatee"}}
+    @oninput={{this.resetValueIfEmpty}}
+    @onchange={{this.chooseMandatee}}
   as |mandatee|>
     {{await mandatee.fullDisplayName}}
   </PowerSelectMultiple>
 {{else}}
   <PowerSelect
-    @options={{this.items}}
+    @options={{this.mandatees}}
     @selected={{await this.selectedMandatees}}
     @disabled={{this.readOnly}}
     @search={{perform this.searchTask}}
-    @oninput={{action "resetValueIfEmpty"}}
-    @onchange={{action "chooseMandatee"}}
+    @oninput={{this.resetValueIfEmpty}}
+    @onchange={{this.chooseMandatee}}
   as |mandatee|>
     {{await mandatee.fullDisplayName}}
   </PowerSelect>
