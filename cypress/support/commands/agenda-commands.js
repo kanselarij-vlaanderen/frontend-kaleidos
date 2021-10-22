@@ -269,8 +269,8 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
   cy.route('PATCH', '/agendaitems/**').as('patchAgendaitems');
   cy.get(agenda.agendaHeader.actions.approveAllAgendaitems).click();
   cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
-  cy.get(utils.vlModalVerify.container).should('contain', verifyText);
-  cy.get(utils.vlModalVerify.save).click();
+  cy.get(auk.modal.body).should('contain', verifyText);
+  cy.get(agenda.agendaHeader.confirm.approveAllAgendaitems).click();
   cy.wait('@patchAgendaitems');
   cy.wait('@getModifiedByOfAgendaitems');
   cy.log('/setAllItemsFormallyOk');
@@ -604,8 +604,7 @@ function releaseDecisions() {
   cy.get(agenda.agendaHeader.actions.releaseDecisions).click({
     force: true,
   });
-  cy.get(utils.vlModalVerify.save).contains('Vrijgeven')
-    .click();
+  cy.get(agenda.agendaHeader.confirm.releaseDecisions).click();
   cy.wait('@patchMeetings', {
     timeout: 20000,
   });
@@ -624,8 +623,7 @@ function releaseDocuments() {
 
   cy.get(agenda.agendaHeader.showActionOptions).click();
   cy.get(agenda.agendaHeader.actions.releaseDocuments).click();
-  cy.get(utils.vlModalVerify.save).contains('Vrijgeven')
-    .click();
+  cy.get(agenda.agendaHeader.confirm.releaseDocuments).click();
   cy.wait('@patchMeetings', {
     timeout: 20000,
   });

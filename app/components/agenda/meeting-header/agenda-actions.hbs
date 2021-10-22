@@ -273,8 +273,7 @@
         />
       {{/if}}
       <div>
-        {{t "delete-agenda-message" agenda=@meeting.latestAgenda.agendaName}}
-        {{! TODO KAS-2399 get from getters?}}
+        {{t "delete-agenda-message" agenda=@currentAgenda.agendaName}}
       </div>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelDeleteSelectedAgenda}}>
@@ -302,7 +301,6 @@
       >
         <Auk::Alert
           @skin="error"
-          {{! TODO KAS-2399 was the await needed for the name ?}}
           @message={{t
             "agenda-reopen-confirmation"
             designAgenda=@currentAgenda.agendaName

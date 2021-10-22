@@ -88,6 +88,9 @@ const selectors = {
       lockAgenda: '[data-test-agenda-header-lock-agenda-confirm]',
       reopenPreviousVersion: '[data-test-agenda-header-reopen-previous-version-confirm]',
       deleteAgenda: '[data-test-agenda-header-delete-agenda-confirm]',
+      releaseDocuments: '[data-test-agenda-header-release-documents-confirm]',
+      releaseDecisions: '[data-test-agenda-header-release-decisions-confirm]',
+      approveAllAgendaitems: '[data-test-agenda-header-approve-all-agendaitems-confirm]',
     },
     showActionOptions: '[data-test-agenda-header-show-action-options]',
     actions: {

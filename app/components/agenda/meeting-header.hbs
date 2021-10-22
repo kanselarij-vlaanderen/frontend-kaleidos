@@ -163,7 +163,11 @@
       <p>{{t "release-documents-message"}}</p>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelReleaseDocuments}}>
-      <Auk::Button @skin="danger-primary" {{on "click" this.releaseDocuments}}>
+      <Auk::Button
+        data-test-agenda-header-release-documents-confirm
+        @skin="danger-primary"
+        {{on "click" this.releaseDocuments}}
+      >
         {{t "releaseToPublic"}}
       </Auk::Button>
     </Auk::Modal::Footer>
@@ -180,7 +184,11 @@
       <p>{{t "release-decisions-message"}}</p>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelReleaseDecisions}}>
-      <Auk::Button @skin="danger-primary" {{on "click" this.releaseDecisions}}>
+      <Auk::Button
+        data-test-agenda-header-release-decisions-confirm
+        @skin="danger-primary"
+        {{on "click" this.releaseDecisions}}
+      >
         {{t "releaseToPublic"}}
       </Auk::Button>
     </Auk::Modal::Footer>
@@ -222,6 +230,7 @@
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelApproveAllAgendaitems}}>
       <Auk::Button
+        data-test-agenda-header-approve-all-agendaitems-confirm
         @skin="primary"
         @disabled={{this.reloadAgendaitemsData.isRunning}}
         {{on "click" this.approveAllAgendaitems}}
