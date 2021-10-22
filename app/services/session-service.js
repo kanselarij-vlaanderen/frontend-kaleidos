@@ -4,14 +4,15 @@ import { computed } from '@ember/object';
 import { PromiseArray } from '@ember-data/store/-private';
 import { all } from 'rsvp';
 
-// TODO: octane-refactor or refactor to stateless service (but not methods so empty service?)
+// TODO: octane-refactor or refactor to stateless service (but no methods so empty service?)
 /* eslint-disable ember/no-get */
 // eslint-disable-next-line ember/no-classic-classes
 export default Service.extend({
   /*
     Stored states:
-    currentSession (actually currentMeeting)
-    currentAgenda
+    currentSession (actually currentMeeting), set in pods/agenda/route
+    currentAgenda, set in pods/agenda/route
+    other?
   */
   store: inject(),
   router: inject(),

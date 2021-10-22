@@ -51,6 +51,10 @@ export default class AgendaActions extends Component {
     return lastApprovedAgenda;
   }
 
+  get lastestAgenda() {
+    return this.args.reversedAgendas.firstObject;
+  }
+
   get isSessionClosable() {
     // The session is closable when there are more than 1 agendas OR when there is only 1 agenda that is not a design agenda
     const agendas = this.args.reversedAgendas;
@@ -62,7 +66,7 @@ export default class AgendaActions extends Component {
 
   get currentAgendaIsLatest() {
     return (
-      this.args.reversedAgendas.firstObject.id === this.args.currentAgenda.id
+      this.lastestAgenda.id === this.args.currentAgenda.id
     );
   }
 

@@ -225,19 +225,19 @@
 
 {{#if this.showConfirmForClosingMeeting}}
   <Auk::Modal
-    @size={{if (await @meeting.latestAgenda.isDesignAgenda) "large" "small"}}
+    @size={{if (await this.latestAgenda.isDesignAgenda) "large" "small"}}
   >
     <Auk::Modal::Header
       @title={{t "agenda-close"}}
       @onClose={{this.cancelCloseMeeting}}
     />
     <Auk::Modal::Body>
-      {{#if (await @meeting.latestAgenda.isDesignAgenda)}}
+      {{#if (await this.latestAgenda.isDesignAgenda)}}
         <Auk::Alert
           @skin="error"
           @message={{t
             "agenda-design-delete-message"
-            agenda=@meeting.latestAgenda.agendaName
+            agenda=this.latestAgenda.agendaName
           }}
         />
       {{/if}}
@@ -247,7 +247,7 @@
       <Auk::Button
         data-test-agenda-actions-lock-agenda-confirm
         @skin={{if
-          (await @meeting.latestAgenda.isDesignAgenda)
+          (await this.latestAgenda.isDesignAgenda)
           "danger-primary"
           "primary"
         }}
