@@ -1,77 +1,47 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { task, timeout } from 'ember-concurrency';
+import { timeout } from 'ember-concurrency';
+import { task } from 'ember-concurrency-decorators';
 import moment from 'moment';
 import { inject as service } from '@ember/service';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class MandateeSelector extends Component {
-  @tracked selectedMandatees = null;
-  @tracked mandatees;
   @service store;
-
-  sortField = 'priority';
-  searchField = 'title';
-  includeField = 'person';
+  @tracked mandatees = [];
+  @tracked filter = '';
 
   constructor() {
     super(...arguments);
-    this.loadMandatees.perform();
+    this.mandatees = this.loadMandatees.perform('');
   }
 
-  get filter() {
-    return {
-      ':gte:end': moment()
-        .utc()
-        .toDate()
-        .toISOString(),
-    };
-  }
-
-  queryOptions() {
-    const options = {};
-    if (this.sortField) {
-      options.sort = this.sortField;
-    }
-    if (this.filter) {
-      options.filter = this.filter;
-    }
-    if (this.includeField) {
-      options.include = this.includeField;
-    }
-    return options;
-  }
-
-  @task(function *() {
-    this.mandatees = yield this.store.query('mandatee', this.queryOptions());
-  })loadMandatees;
-
-
-  @task(function *(searchValue) {
-    yield timeout(300);
-    if (this.queryOptions().filter) {
-      this.queryOptions().filter[this.searchField] = searchValue;
+  @task
+  *loadMandatees(searchTerm) {
+    const query = {};
+    if (searchTerm) {
+      query['filter[person][last-name]'] = searchTerm;
     } else {
-      const filter = {};
-      filter[this.searchField] = searchValue;
-      this.queryOptions().filter = filter;
+      query['filter[:gte:end]'] =  moment().utc().toDate().toISOString();
     }
-    return this.store.query('mandatee', this.queryOptions());
-  })searchTask;
-
-  @action
-  chooseMandatee(mandatees) {
-    this.selectedMandatees = mandatees;
+    return yield this.store.query('mandatee', {
+      ...query,
+      'page[size]': PAGE_SIZE.SELECT,
+      sort: 'priority',
+      include: 'person',
+    });
+  }
+  @task
+  *searchTask(searchTerm) {
+    yield timeout(300);
+    return this.loadMandatees.perform(searchTerm);
   }
 
   @action
   resetValueIfEmpty(param) {
     if (param === '') {
-      this.queryOptions =
-        {
-          sort: this.sortField,
-        };
-      this.loadMandatees.perform();
+      this.loadMandatees.perform('');
     }
   }
 }
