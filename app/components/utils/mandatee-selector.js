@@ -20,10 +20,9 @@ export default class MandateeSelector extends Component {
   @task
   *loadMandatees(searchTerm) {
     const query = {};
+    query['filter[:gte:end]'] = moment().utc().toDate().toISOString();
     if (searchTerm) {
       query['filter[person][last-name]'] = searchTerm;
-    } else {
-      query['filter[:gte:end]'] = moment().utc().toDate().toISOString();
     }
     return yield this.store.query('mandatee', {
       ...query,
