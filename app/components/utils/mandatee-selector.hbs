@@ -2,7 +2,7 @@
   <PowerSelectMultiple
     @options={{this.mandatees}}
     @selected={{await @selectedMandatees}}
-    @disabled={{this.readOnly}}
+    @disabled={{@readOnly}}
     @closeOnSelect={{false}}
     @search={{perform this.searchTask}}
     @oninput={{this.resetValueIfEmpty}}
@@ -15,7 +15,7 @@
   <PowerSelect
     @options={{this.mandatees}}
     @selected={{await @selectedMandatees}}
-    @disabled={{this.readOnly}}
+    @disabled={{@readOnly}}
     @search={{perform this.searchTask}}
     @oninput={{this.resetValueIfEmpty}}
     @onchange={{@chooseMandatee}}
