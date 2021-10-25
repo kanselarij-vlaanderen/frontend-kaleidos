@@ -51,7 +51,7 @@ export default class AgendaActions extends Component {
     return lastApprovedAgenda;
   }
 
-  get lastestAgenda() {
+  get latestAgenda() {
     return this.args.reversedAgendas.firstObject;
   }
 
