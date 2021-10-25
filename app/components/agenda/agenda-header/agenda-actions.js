@@ -66,7 +66,7 @@ export default class AgendaActions extends Component {
 
   get currentAgendaIsLatest() {
     return (
-      this.lastestAgenda.id === this.args.currentAgenda.id
+      this.latestAgenda.id === this.args.currentAgenda.id
     );
   }
 
