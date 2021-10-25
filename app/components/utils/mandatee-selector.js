@@ -23,7 +23,7 @@ export default class MandateeSelector extends Component {
     if (searchTerm) {
       query['filter[person][last-name]'] = searchTerm;
     } else {
-      query['filter[:gte:end]'] =  moment().utc().toDate().toISOString();
+      query['filter[:gte:end]'] = moment().utc().toDate().toISOString();
     }
     return yield this.store.query('mandatee', {
       ...query,
@@ -32,6 +32,7 @@ export default class MandateeSelector extends Component {
       include: 'person',
     });
   }
+
   @task
   *searchTask(searchTerm) {
     yield timeout(300);

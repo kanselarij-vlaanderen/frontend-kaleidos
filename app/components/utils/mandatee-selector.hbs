@@ -7,7 +7,8 @@
     @search={{perform this.searchTask}}
     @oninput={{this.resetValueIfEmpty}}
     @onchange={{@chooseMandatee}}
-  as |mandatee|>
+    as |mandatee|
+  >
     {{await mandatee.fullDisplayName}}
   </PowerSelectMultiple>
 {{else}}
@@ -18,7 +19,8 @@
     @search={{perform this.searchTask}}
     @oninput={{this.resetValueIfEmpty}}
     @onchange={{@chooseMandatee}}
-  as |mandatee|>
+    as |mandatee|
+  >
     {{await mandatee.fullDisplayName}}
   </PowerSelect>
 {{/if}}
