@@ -11,6 +11,9 @@
       as |mandatee|
     >
       {{await mandatee.fullDisplayName}}
+      <span class="auk-u-muted auk-u-text-small">
+      {{moment-format mandatee.start "YYYY"}}-{{moment-format mandatee.end "YYYY"}}
+    </span>
     </PowerSelectMultiple>
   {{else}}
     <PowerSelect
@@ -23,6 +26,9 @@
       as |mandatee|
     >
       {{await mandatee.fullDisplayName}}
+      <span class="auk-u-muted auk-u-text-small">
+      {{moment-format mandatee.start "YYYY"}}-{{moment-format mandatee.end "YYYY"}}
+    </span>
     </PowerSelect>
   {{/if}}
 </div>
