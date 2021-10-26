@@ -1,22 +1,30 @@
 <Auk::List @isBordered="true" class="auk-list--view">
   {{#each @pieces as |piece|}}
-    <Auk::List::Item @skin="gray-100">
+    <Auk::List::Item data-test-utils-document-list-item @skin="gray-100">
       <div class="auk-u-ml-2">
-        <Auk::Icon @name="document" @skin="muted-dark"/>
+        <Auk::Icon @name="document" @skin="muted-dark" />
       </div>
       <div class="auk-u-mx-2">
-        <span class="auk-u-text-bold">{{piece.name}}</span>
-        <div class="auk-u-muted auk-u-text-small">
+        <span data-test-utils-document-list-name class="auk-u-text-bold">
+          {{piece.name}}
+        </span>
+        <div
+          data-test-utils-document-list-file-extension
+          class="auk-u-muted auk-u-text-small"
+        >
           {{uppercase piece.file.extension}}, {{format-bytesize piece.file.size}}
         </div>
       </div>
       <Auk::Button
-        @skin="borderless" @layout="icon-only" @icon="book"
-        @href={{piece.viewDocumentURL}} target="_blank" />
+        data-test-utils-document-list-view-document
+        @skin="borderless"
+        @layout="icon-only"
+        @icon="book"
+        @href={{piece.viewDocumentURL}}
+        target="_blank"
+      />
     </Auk::List::Item>
   {{else}}
-    <Auk::EmptyState
-            @message={{this.emptyMessage}}
-    />
+    <Auk::EmptyState @message={{this.emptyMessage}} />
   {{/each}}
 </Auk::List>
