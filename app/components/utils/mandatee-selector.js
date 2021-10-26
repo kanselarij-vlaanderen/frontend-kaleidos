@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { isEmpty } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { timeout } from 'ember-concurrency';
 import { task } from 'ember-concurrency-decorators';
@@ -14,7 +15,7 @@ export default class MandateeSelector extends Component {
 
   constructor() {
     super(...arguments);
-    this.mandatees = this.loadMandatees.perform('');
+    this.mandatees = this.loadMandatees.perform();
   }
 
   @task
@@ -41,8 +42,8 @@ export default class MandateeSelector extends Component {
 
   @action
   resetValueIfEmpty(param) {
-    if (param === '') {
-      this.loadMandatees.perform('');
+    if (isEmpty(param)) {
+      this.loadMandatees.perform();
     }
   }
 }
