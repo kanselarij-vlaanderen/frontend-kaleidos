@@ -22,8 +22,12 @@ export default class MandateeSelector extends Component {
   *loadMandatees(searchTerm) {
     const query = {};
     if (searchTerm) {
+      // There is no time/government-filter here. This implies that once users
+      // start searching, they can find (and assign) any mandatee, also those of previous governments
       query['filter[person][last-name]'] = searchTerm;
     } else {
+      // TODO: switch to filtering on related government (the current one) once Themis-integration is merged.
+      // In Themis active mandatees don't have an end-date.
       query['filter[:gte:end]'] = moment().utc().toDate().toISOString();
     }
     return yield this.store.query('mandatee', {
