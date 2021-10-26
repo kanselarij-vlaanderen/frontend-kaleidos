@@ -21,6 +21,10 @@
         </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
+    {{!-- TODO: Below pills linking to publication-flows were introduced as a band-aid allowing
+    OVRB-people to navigate from a case (found by global search) to a publication-flow.
+    This functionality actually needs design-thought and CSS-work though.
+    --}}
     {{#if this.publicationFlows}}
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
