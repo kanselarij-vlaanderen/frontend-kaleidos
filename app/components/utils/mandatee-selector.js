@@ -10,12 +10,12 @@ import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class MandateeSelector extends Component {
   @service store;
-  @tracked mandatees = [];
+  @tracked mandateeOptions = [];
   @tracked filter = '';
 
   constructor() {
     super(...arguments);
-    this.mandatees = this.loadMandatees.perform();
+    this.mandateeOptions = this.loadMandatees.perform();
   }
 
   @task
@@ -41,7 +41,7 @@ export default class MandateeSelector extends Component {
   }
 
   @action
-  resetValueIfEmpty(param) {
+  resetMandateeOptionsIfEmpty(param) {
     if (isEmpty(param)) {
       this.loadMandatees.perform();
     }
