@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { timeout } from 'ember-concurrency';
-import { task } from 'ember-concurrency-decorators';
+import { task, restartableTask } from 'ember-concurrency-decorators';
 import moment from 'moment';
 import { inject as service } from '@ember/service';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
@@ -38,7 +38,7 @@ export default class MandateeSelector extends Component {
     });
   }
 
-  @task
+  @restartableTask
   *searchTask(searchTerm) {
     yield timeout(300);
     return this.loadMandatees.perform(searchTerm);
