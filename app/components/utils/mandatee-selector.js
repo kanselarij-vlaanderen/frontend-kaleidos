@@ -43,7 +43,7 @@ export default class MandateeSelector extends Component {
   @action
   resetMandateeOptionsIfEmpty(param) {
     if (isEmpty(param)) {
-      this.loadMandatees.perform();
+      this.mandateeOptions = this.loadMandatees.perform();
     }
   }
 }
