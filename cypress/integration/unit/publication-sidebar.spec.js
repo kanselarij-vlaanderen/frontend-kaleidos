@@ -222,7 +222,7 @@ context('Publications sidebar tests', () => {
     cy.get(publication.sidebar.translationDate).find(auk.datepicker);
     cy.get(publication.sidebar.targetEndDate).should('not.exist');
     cy.get(publication.sidebar.publicationDueDate).find(auk.datepicker);
-    cy.get(publication.sidebar.publicationDate).contains('Niet gekend');
+    // cy.get(publication.sidebar.publicationDate).contains('Niet gekend');
     cy.get(publication.sidebar.remark);
   });
 });

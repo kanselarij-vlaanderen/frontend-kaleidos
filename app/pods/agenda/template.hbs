@@ -8,12 +8,7 @@
 }}
 <Agenda::AgendaHeader
   @loading={{this.loadingAgendaitems}}
-  @onCreateAgendaitem={{this.refresh}}
-  @onApproveAllAgendaitems={{this.refresh}}
-  @onApproveAgenda={{this.navigateToAgenda}}
-  @navigateToPressAgenda={{this.navigateToPressAgenda}}
-  @navigateToDecisions={{this.navigateToDecisions}}
-  @navigateToNewsletter={{this.navigateToNewsletter}}
+  @refreshRoute={{this.refresh}}
   @showPrintButton={{this.showPrintButton}}
 />
 {{#if (not this.isLoading)}}
@@ -21,9 +16,9 @@
     {{#unless this.shouldHideNav}}
       <div class="auk-panel-layout__sidebar auk-panel-layout__agenda-history">
         <Agenda::SideNav
-          @agendas={{this.model.meeting.sortedAgendas}}
+          @agendas={{this.model.reverseSortedAgendas}}
+          @meeting={{this.model.meeting}}
           @currentAgenda={{this.model.agenda}}
-          @selectAgenda={{this.selectAgenda}}
         />
       </div>
     {{/unless}}

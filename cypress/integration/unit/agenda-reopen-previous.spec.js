@@ -22,7 +22,6 @@ context('Agenda reopen previous tests', () => {
   const reopenPreviousVersion = 'Vorige versie heropenen';
 
   it('should delete current design agenda and reopen previous accepted agenda', () => {
-    cy.route('GET', '/agendas/**').as('getAgendas');
     cy.createAgenda('Elektronische procedure', dateToCreateAgenda, 'Reopen previous test');
     cy.openAgendaForDate(dateToCreateAgenda);
     cy.setFormalOkOnItemWithIndex(0);
@@ -47,7 +46,10 @@ context('Agenda reopen previous tests', () => {
     cy.get(auk.loader).should('not.exist'); // data loading task might be running, disabling the next button
     cy.get(agenda.agendaHeader.confirm.reopenPreviousVersion).contains(reopenPreviousVersion)
       .click();
-    cy.wait('@getAgendas');
+    cy.get(auk.modal.container, {
+      timeout: 60000,
+    }).should('not.exist');
+    cy.get(auk.loader).should('not.exist');
     cy.get(agenda.agendaSideNav.agenda).should('have.length', 1);
     cy.agendaNameExists('A');
   });
