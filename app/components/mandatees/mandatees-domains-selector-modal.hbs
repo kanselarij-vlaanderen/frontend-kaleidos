@@ -16,8 +16,9 @@
     {{#unless this.isAddingMinister}}
       {{#if
         (or
-        (not this.loadAvailableFieldsForMandatee.lastSuccessful)
-        this.loadAvailableFieldsForMandatee.isRunnning)
+          (not this.loadAvailableFieldsForMandatee.lastSuccessful)
+          this.loadAvailableFieldsForMandatee.isRunnning
+        )
       }}
         {{t "loading"}}
       {{else}}
