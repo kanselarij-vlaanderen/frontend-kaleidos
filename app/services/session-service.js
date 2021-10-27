@@ -8,17 +8,11 @@ import { all } from 'rsvp';
 /* eslint-disable ember/no-get */
 // eslint-disable-next-line ember/no-classic-classes
 export default Service.extend({
-  /*
-    Stored states:
-    currentSession (actually currentMeeting), set in pods/agenda/route
-    currentAgenda, set in pods/agenda/route
-    other?
-  */
   store: inject(),
   router: inject(),
   currentSession: null,
+  currentAgenda: null,
 
-  // TODO KAS-2399 check if this is still used after agenda-header refactor
   agendas: computed('currentSession.agendas.[]', function() {
     if (!this.get('currentSession')) {
       return [];
