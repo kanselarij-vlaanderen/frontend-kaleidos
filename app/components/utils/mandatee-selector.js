@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import { timeout } from 'ember-concurrency';
 import { task, restartableTask } from 'ember-concurrency-decorators';
 import { inject as service } from '@ember/service';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { CURRENT_GOVERNMENT_BODY } from 'frontend-kaleidos/config/config';
 
 const VISIBLE_ROLES = [
@@ -42,12 +41,7 @@ export default class MandateeSelector extends Component {
     } else {
       queryOptions['filter[government-body][:uri:]'] = CURRENT_GOVERNMENT_BODY;
     }
-    return yield this.store.query('mandatee', {
-      ...queryOptions,
-      'page[size]': PAGE_SIZE.SELECT,
-      sort: 'priority',
-      include: 'person',
-    });
+    return yield this.store.query('mandatee', queryOptions);
   }
 
   @task
