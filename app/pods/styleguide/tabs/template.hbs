@@ -8,9 +8,9 @@
   {{!-- BEGIN-SNIPPET tabs --}}
   <Auk::Tabs as |Tabs|>
     <Tabs.Tab @route="styleguide.tabs">Nav Item</Tabs.Tab>
-    <Tabs.Tab @route="styleguide.tabs">Nav Item</Tabs.Tab>
-    <Tabs.Tab @route="styleguide.tabs">Nav Item</Tabs.Tab>
-    <Tabs.Tab @route="styleguide.tabs">Nav Item</Tabs.Tab>
+    <Tabs.Tab @route="styleguide.colors">Nav Item</Tabs.Tab>
+    <Tabs.Tab @route="styleguide.colors">Nav Item</Tabs.Tab>
+    <Tabs.Tab @route="styleguide.colors">Nav Item</Tabs.Tab>
   </Auk::Tabs>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
@@ -21,10 +21,10 @@
 >
   {{!-- BEGIN-SNIPPET tabs-reversed --}}
   <Auk::Tabs @reversed={{true}} as |Tabs|>
+    <Tabs.Tab @route="styleguide.colors">Nav Item</Tabs.Tab>
     <Tabs.Tab @route="styleguide.tabs">Nav Item</Tabs.Tab>
-    <Tabs.Tab @route="styleguide.tabs">Nav Item</Tabs.Tab>
-    <Tabs.Tab @route="styleguide.tabs">Nav Item</Tabs.Tab>
-    <Tabs.Tab @route="styleguide.tabs">Nav Item</Tabs.Tab>
+    <Tabs.Tab @route="styleguide.colors">Nav Item</Tabs.Tab>
+    <Tabs.Tab @route="styleguide.colors">Nav Item</Tabs.Tab>
   </Auk::Tabs>
   {{!-- END-SNIPPET tabs-reversed --}}
 </StyleguideSample>
@@ -35,7 +35,7 @@
 >
   {{!-- BEGIN-SNIPPET tabs-icon --}}
   <Auk::Tabs as |Tabs|>
-    <Tabs.Tab @route="styleguide.tabs" @icon="search">Nav Item</Tabs.Tab>
+    <Tabs.Tab @route="styleguide.colors" @icon="search">Nav Item</Tabs.Tab>
     <Tabs.Tab @route="styleguide.tabs" @icon="search">Nav Item</Tabs.Tab>
   </Auk::Tabs>
   {{!-- END-SNIPPET --}}
@@ -48,7 +48,7 @@
   {{!-- BEGIN-SNIPPET tabs-icon-right --}}
   <Auk::Tabs as |Tabs|>
     <Tabs.Tab @route="styleguide.tabs" @icon="search" @layout="icon-right">Nav Item</Tabs.Tab>
-    <Tabs.Tab @route="styleguide.tabs" @icon="search" @layout="icon-right">Nav Item</Tabs.Tab>
+    <Tabs.Tab @route="styleguide.colors" @icon="search" @layout="icon-right">Nav Item</Tabs.Tab>
   </Auk::Tabs>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
@@ -59,13 +59,36 @@
 >
   {{!-- BEGIN-SNIPPET tabs-counter --}}
   <Auk::Tabs as |Tabs|>
-    <Tabs.Tab @route="styleguide.tabs" @counter="3">Nav Item</Tabs.Tab>
+    <Tabs.Tab @route="styleguide.colors" @counter="3">Nav Item</Tabs.Tab>
     <Tabs.Tab @route="styleguide.tabs" @counter="12">Nav Item</Tabs.Tab>
-    <Tabs.Tab @route="styleguide.tabs">Nav Item</Tabs.Tab>
-    <Tabs.Tab @route="styleguide.tabs">Nav Item</Tabs.Tab>
+    <Tabs.Tab @route="styleguide.colors">Nav Item</Tabs.Tab>
+    <Tabs.Tab @route="styleguide.colors">Nav Item</Tabs.Tab>
   </Auk::Tabs>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
+
+<h3 class="auk-h3">Arguments (tabs)</h3>
+
+<table class="auk-table">
+  <thead>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Possible values</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>@reversed</td>
+    <td>boolean</td>
+    <td><code>false</code> (default) or <code>true</code></td>
+    <td>Displays the tabs in reverse (vertically).</td>
+  </tr>
+  </tbody>
+</table>
+
+<h3 class="auk-h3">Arguments (tab)</h3>
 
 <table class="auk-table">
   <thead>
@@ -81,19 +104,19 @@
     <td>@icon</td>
     <td>string</td>
     <td>name of the icon, see <LinkTo @route="styleguide.icons">list</LinkTo></td>
-    <td>Displays the tab with an icon</td>
+    <td>Displays the tab with an icon.</td>
   </tr>
   <tr>
     <td>@layout</td>
     <td>string</td>
     <td><code>icon-right</code></td>
-    <td>Positions the icon on the right</td>
+    <td>Determines the position of the icon.</td>
   </tr>
   <tr>
     <td>@counter</td>
     <td>string</td>
     <td></td>
-    <td>Displays the tab with a counter</td>
+    <td>Displays the tab with a counter.</td>
   </tr>
   </tbody>
 </table>
