@@ -7,7 +7,6 @@
     >
       <Auk::Label>{{t "mandatee"}}</Auk::Label>
       <Utils::MandateeSelector
-        data-test-link-mandatees-select
         @chooseMandatee={{fn (mut this.selection)}}
         @singleSelect={{true}}
         @selectedMandatees={{this.selection}}

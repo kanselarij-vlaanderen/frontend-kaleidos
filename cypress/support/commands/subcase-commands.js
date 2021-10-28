@@ -123,13 +123,14 @@ function changeSubcaseAccessLevel(confidentialityChange, accessLevel, newShortTi
  * @param {Number} mandateeNumber - The list index of the mandatee
  * @param {Number} fieldNumber - The list index of the field, -1 means no field/domain should be selected
  * @param {Number} domainNumber - The list index of the domain
- * @param {String} mandateeSearchText - Search on the minister title (name does not work)
+ * @param {String} mandateeSearchText - Search on the minister name (title no longer works)
+ * @param {String} mandateeTitle - Select the found mandatee by correct title (optional, use when 1 person has multiple mandatees)
  */
-function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeSearchText) {
+function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeSearchText, mandateeTitle) {
   cy.log('addSubcaseMandatee');
 
   if (mandateeSearchText) {
-    cy.route('GET', `/mandatees?filter**filter**${mandateeSearchText.split(' ', 1)}**`).as('getFilteredMandatees');
+    cy.route('GET', `/mandatees?filter**${mandateeSearchText.split(' ', 1)}**`).as('getFilteredMandatees');
   } else {
     cy.route('GET', '/mandatees?**').as('getMandatees');
   }
@@ -141,7 +142,7 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
   cy.get(mandatee.mandateePanelView.actions.edit).click();
 
   cy.get(mandatee.mandateePanelEdit.actions.add).click();
-  cy.get(utils.mandateesDomain.mandateeSelector).find(dependency.emberPowerSelect.trigger)
+  cy.get(utils.mandateeSelector.container).find(dependency.emberPowerSelect.trigger)
     .click();
   // cy.get(dependency.emberPowerSelect.searchInput).type('g').clear(); // only use this when default data does not have active ministers
   if (mandateeSearchText) {
@@ -151,9 +152,16 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
     cy.wait('@getMandatees');
   }
   cy.get(dependency.emberPowerSelect.optionSearchMessage).should('not.exist');
+  // we can search or select by number
+  // when searching we select the first option we get or the first option with a specific title
   if (mandateeSearchText) {
-    cy.get(dependency.emberPowerSelect.option).contains(mandateeSearchText)
-      .click();
+    if (mandateeTitle) {
+      cy.get(dependency.emberPowerSelect.option).contains(mandateeTitle)
+        .click();
+    } else {
+      cy.get(dependency.emberPowerSelect.option).contains(mandateeSearchText)
+        .click();
+    }
   } else {
     cy.get(dependency.emberPowerSelect.option).eq(mandateeNumber)
       .click();
@@ -185,15 +193,16 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
  * @param {Number} mandateeNumber - The list index of the mandatee
  * @param {Number} fieldNumber - The list index of the field, -1 means no field/domain should be selected
  * @param {Number} domainNumber - The list index of the domain
- * @param {String} mandateeSearchText - Search on the minister title (name does not work)
+ * @param {String} mandateeSearchText - Search on the minister name (title no longer works)
+ * @param {String} mandateeTitle - Select the found mandatee by correct title (optional, use when 1 person has multiple mandatees)
  */
-function addAgendaitemMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeSearchText) {
+function addAgendaitemMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeSearchText, mandateeTitle) {
   cy.log('addAgendaitemMandatee');
 
   cy.route('PATCH', '/agendaitems/*').as('patchAgendaitem');
   cy.route('PATCH', '/agendas/*').as('patchAgenda');
 
-  cy.addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeSearchText);
+  cy.addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeSearchText, mandateeTitle);
   cy.wait('@patchAgendaitem', {
     timeout: 40000,
   }).wait('@patchAgenda', {

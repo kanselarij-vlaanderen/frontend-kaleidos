@@ -197,7 +197,6 @@ const selectors = {
 
   // link-mandatees-modal
   linkMandatees: {
-    select: '[data-test-link-mandatees-select]',
     cancel: '[data-test-link-mandatees-cancel]',
     add: '[data-test-link-mandatees-add]',
   },

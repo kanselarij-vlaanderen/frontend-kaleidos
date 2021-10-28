@@ -1,96 +1,53 @@
-/* eslint-disable ember/no-arrow-function-computed-properties */
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-components
-import Component from '@ember/component';
-import { inject } from '@ember/service';
-import { computed } from '@ember/object';
-import {
-  task, timeout
-} from 'ember-concurrency';
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { isEmpty } from '@ember/utils';
+import { tracked } from '@glimmer/tracking';
+import { timeout } from 'ember-concurrency';
+import { task, restartableTask } from 'ember-concurrency-decorators';
 import moment from 'moment';
+import { inject as service } from '@ember/service';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
-export default Component.extend({
-  classNames: ['mandatee-selector-container'],
-  classNameBindings: ['classes'],
-  store: inject(),
-  selectedMandatees: null,
-  singleSelect: false,
-  modelName: 'mandatee',
-  sortField: 'priority',
-  searchField: 'title',
-  includeField: 'person',
+export default class MandateeSelector extends Component {
+  @service store;
+  @tracked mandateeOptions = [];
+  @tracked filter = '';
 
-  init() {
-    this._super(...arguments);
-    this.findAll.perform();
-  },
+  constructor() {
+    super(...arguments);
+    this.mandateeOptions = this.loadMandatees.perform();
+  }
 
-  filter: computed(() => ({
-    ':gte:end': moment().utc()
-      .toDate()
-      .toISOString(),
-  })),
-
-  queryOptions: computed('sortField', 'searchField', 'filter', 'modelName', 'includeField', function() {
-    const options = {};
-    const {
-      filter, sortField, includeField,
-    } = this;
-    if (sortField) {
-      options.sort = sortField;
-    }
-    if (filter) {
-      options.filter = filter;
-    }
-    if (includeField) {
-      options.include = includeField;
-    }
-    return options;
-  }),
-
-  findAll: task(function *() {
-    const {
-      modelName, queryOptions,
-    } = this;
-    if (modelName) {
-      const items = yield this.store.query(modelName, queryOptions);
-      this.set('items', items);
-    }
-  }),
-
-  searchTask: task(function *(searchValue) {
-    yield timeout(300);
-    const {
-      queryOptions, searchField, modelName,
-    } = this;
-    if (queryOptions.filter) {
-      queryOptions.filter[searchField] = searchValue;
+  @task
+  *loadMandatees(searchTerm) {
+    const query = {};
+    if (searchTerm) {
+      // There is no time/government-filter here. This implies that once users
+      // start searching, they can find (and assign) any mandatee, also those of previous governments
+      query['filter[person][last-name]'] = searchTerm;
     } else {
-      const filter = {};
-      filter[searchField] = searchValue;
-      queryOptions.filter = filter;
+      // TODO: switch to filtering on related government (the current one) once Themis-integration is merged.
+      // In Themis active mandatees don't have an end-date.
+      query['filter[:gte:end]'] = moment().utc().toDate().toISOString();
     }
+    return yield this.store.query('mandatee', {
+      ...query,
+      'page[size]': PAGE_SIZE.SELECT,
+      sort: 'priority',
+      include: 'person',
+    });
+  }
 
-    return this.store.query(modelName, queryOptions);
-  }),
+  @restartableTask
+  *searchTask(searchTerm) {
+    yield timeout(300);
+    return this.loadMandatees.perform(searchTerm);
+  }
 
-  // TODO: octane-refactor
-  // eslint-disable-next-line ember/no-actions-hash
-  actions: {
-    async chooseMandatee(mandatees) {
-      this.set('selectedMandatees', mandatees);
-      this.chooseMandatee(mandatees);
-    },
-
-    resetValueIfEmpty(param) {
-      if (param === '') {
-        this.set('queryOptions', {
-          sort: this.sortField,
-        });
-        this.findAll.perform();
-      }
-    },
-  },
-});
+  @action
+  resetMandateeOptionsIfEmpty(param) {
+    if (isEmpty(param)) {
+      this.mandateeOptions = this.loadMandatees.perform();
+    }
+  }
+}
