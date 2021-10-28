@@ -1,6 +1,4 @@
-import Model, {
-  attr, hasMany, belongsTo
-} from '@ember-data/model';
+import Model, { hasMany, belongsTo } from '@ember-data/model';
 
 export default class Mandate extends Model {
   @belongsTo('role') role;
