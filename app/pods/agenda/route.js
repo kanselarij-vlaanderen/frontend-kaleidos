@@ -27,11 +27,9 @@ export default class AgendaRoute extends Route {
       sort: '-serialnumber',
       include: 'status',
     });
-    // const agendas = await meeting.get('agendas');
-    // const agenda = await agendas.findBy('id', agendaId);
     set(this.sessionService, 'currentAgenda', agenda);
 
-    await this.updateSelectedAgenda(meeting, agenda);
+    await this.loadChangesToAgenda(agenda);
     return {
       meeting,
       agenda,
@@ -39,11 +37,10 @@ export default class AgendaRoute extends Route {
     };
   }
 
-  async updateSelectedAgenda(meeting, agenda) {
+  async loadChangesToAgenda(agenda) {
     set(this.agendaService, 'addedAgendaitems', []);
     set(this.agendaService, 'addedPieces', []);
-    const previousAgenda =
-      await this.sessionService.findPreviousAgendaOfSession(meeting, agenda);
+    const previousAgenda = await agenda.previousVersion;
     if (previousAgenda) {
       await this.agendaService.agendaWithChanges(
         agenda.get('id'),

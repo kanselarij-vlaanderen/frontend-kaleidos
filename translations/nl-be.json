@@ -499,7 +499,7 @@
   "import-users-success": "De gebruikers zijn succesvol opgeladen.",
   "release-decisions-message": "Bent u zeker dat u de belissingen wil vrijgeven? Deze actie kan niet meer ongedaan gemaakt worden.",
   "release-documents-message": "Bent u zeker dat u de publieke documenten van de beslissingen wil vrijgeven? Deze actie kan niet meer ongedaan gemaakt worden.",
-  "releaseToPublicButton": "Vrijgeven",
+  "releaseToPublic": "Vrijgeven",
   "no-accessLevel": "Nog geen openbaarheid",
   "faulty-agendaitems-message": "Er zijn agendapunten gevonden zonder procedurestap. Verwijder deze manueel om verder te gaan",
   "faulty-agendaitems": "Problemen in deze agenda",
