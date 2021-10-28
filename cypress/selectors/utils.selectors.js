@@ -64,9 +64,9 @@ const selectors = {
     upload: '[data-test-file-uploader-upload]',
   },
 
-  // mandatees-domains-selector-modal
-  mandateesDomain: {
-    mandateeSelector: '[data-test-mandatees-domain-mandatee-selector]',
+  // mandatee-selector
+  mandateeSelector: {
+    container: '[data-test-mandatee-selector-container]',
   },
 
   /** Section VL-components **/

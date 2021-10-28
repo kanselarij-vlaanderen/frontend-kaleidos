@@ -187,9 +187,11 @@ context('Publications tests', () => {
     cy.get(auk.emptyState.message).contains(noMandatees);
 
     // add mandatee
+    cy.route('GET', '/mandatees?**').as('getMandatees');
     cy.get(publication.mandateesPanel.add).click();
+    cy.wait('@getMandatees');
     cy.get(publication.linkMandatees.add).should('be.disabled');
-    cy.get(publication.linkMandatees.select).click();
+    cy.get(utils.mandateeSelector.container).click();
     cy.get(dependency.emberPowerSelect.optionSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(mandateeName)
       .click();

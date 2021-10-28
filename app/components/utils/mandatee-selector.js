@@ -1,9 +1,11 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { isEmpty } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
 import { timeout } from 'ember-concurrency';
-import { task } from 'ember-concurrency-decorators';
+import { task, restartableTask } from 'ember-concurrency-decorators';
+import { inject as service } from '@ember/service';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { CURRENT_GOVERNMENT_BODY } from 'frontend-kaleidos/config/config';
 
 const VISIBLE_ROLES = [
@@ -11,13 +13,12 @@ const VISIBLE_ROLES = [
   'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03e0' // Minister
 ];
 
-export default class MandateeSelectorComponent extends Component {
+export default class MandateeSelector extends Component {
   @service store;
-  @tracked mandatees;
-  @tracked selectedMandatees;
+  @tracked mandateeOptions = [];
+  @tracked filter = '';
 
   defaultQueryOptions = {
-    'filter[government-body][:uri:]': CURRENT_GOVERNMENT_BODY,
     include: 'person,mandate.role',
     sort: 'priority',
   };
@@ -25,11 +26,28 @@ export default class MandateeSelectorComponent extends Component {
   constructor() {
     super(...arguments);
     this.initialLoad = this.loadVisibleRoles.perform();
-    this.findAllMandatees.perform();
+    this.mandateeOptions = this.loadMandatees.perform();
   }
 
-  get readOnly() {
-    return !!this.args.readOnly;
+  @task
+  *loadMandatees(searchTerm) {
+    if (this.initialLoad.isRunning) {
+      yield this.initialLoad;
+    }
+    const queryOptions = {
+      ...this.defaultQueryOptions,  // clone
+    };
+    if (searchTerm) {
+      queryOptions['filter[person][last-name]'] = searchTerm;
+    } else {
+      queryOptions['filter[government-body][:uri:]'] = CURRENT_GOVERNMENT_BODY;
+    }
+    return yield this.store.query('mandatee', {
+      ...queryOptions,
+      'page[size]': PAGE_SIZE.SELECT,
+      sort: 'priority',
+      include: 'person',
+    });
   }
 
   @task
@@ -38,28 +56,16 @@ export default class MandateeSelectorComponent extends Component {
     this.defaultQueryOptions['filter[mandate][role][:id:]'] = visibleRoles.map((role) => role.id).join(',');
   }
 
-  @task
-  *findAllMandatees() {
-    if (this.initialLoad.isRunning) {
-      yield this.initialLoad;
-    }
-    this.mandatees = yield this.store.query('mandatee', this.defaultQueryOptions);
-  }
-
-  @task
-  *searchMandatees(title) {
+  @restartableTask
+  *searchTask(searchTerm) {
     yield timeout(300);
-    const queryOptions = {
-      ...this.defaultQueryOptions,  // clone
-    };
-    queryOptions['filter[title]'] = title;
-    const mandatees = yield this.store.query('mandatee', queryOptions);
-    return mandatees;
+    return this.loadMandatees.perform(searchTerm);
   }
 
   @action
-  chooseMandatee(mandatees) {
-    this.selectedMandatees = mandatees;
-    this.args.chooseMandatee(mandatees);
+  resetMandateeOptionsIfEmpty(param) {
+    if (isEmpty(param)) {
+      this.mandateeOptions = this.loadMandatees.perform();
+    }
   }
 }
