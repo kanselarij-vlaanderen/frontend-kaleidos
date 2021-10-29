@@ -19,6 +19,7 @@ export default Model.extend({
   subcases: hasMany('subcase'),
   pieces: hasMany('piece'),
   signFlows: hasMany('sign-flow'),
+  governmentFields: hasMany('government-field'),
 
   sortedPieces: computed('pieces.@each.name', function() {
     return A(this.get('pieces').toArray()).sort((pieceA, pieceB) => compareFunction(new VRDocumentName(pieceA.get('name')), new VRDocumentName(pieceB.get('name'))));

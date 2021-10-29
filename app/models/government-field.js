@@ -8,4 +8,5 @@ export default class GovernmentField extends Model {
   @belongsTo('government-domain') domain;
   @hasMany('ise-code') iseCodes;
   @hasMany('publication-flow') publicationFlows;
+  @hasMany('case') cases;
 }
