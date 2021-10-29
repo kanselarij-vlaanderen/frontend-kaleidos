@@ -15,21 +15,22 @@ export default Route.extend({
     },
   },
 
-  async model() {
+  model() {
+    // TODO KAS-2777 there were 2 agendas set here, but never used, default comparing current agenda vs previous ?
     this.set('agendaService.addedPieces', []);
     this.set('agendaService.addedAgendaitems', []);
-    const agenda = await this.get('sessionService.currentAgenda');
-    const session = this.modelFor('agenda').meeting;
-    const agendas = await session.get('agendas');
-    const index = agendas.lastIndexOf(agenda);
-    let agendaToCompare;
-    if (index >= 0) {
-      agendaToCompare = agendas.objectAt(index + 1);
-    } else {
-      agendaToCompare = agendas.objectAt(1);
-    }
+    // const agenda = this.modelFor('agenda').agenda;
+    const meeting = this.modelFor('agenda').meeting;
+    const reversedAgendas = this.modelFor('agenda').reverseSortedAgendas;
+    // const index = agendas.lastIndexOf(agenda);
+    // let agendaToCompare;
+    // if (index >= 0) {
+    //   agendaToCompare = agendas.objectAt(index + 1);
+    // } else {
+    //   agendaToCompare = agendas.objectAt(1);
+    // }
     return hash({
-      currentAgenda: agenda, agendaToCompare,
+      meeting, reversedAgendas,
     });
   },
 });

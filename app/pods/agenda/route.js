@@ -12,24 +12,21 @@ export default class AgendaRoute extends Route {
   }
 
   async model(params) {
+    console.log("model hook pods/agenda");
     const meetingId = params.meeting_id;
     const meeting = await this.store.findRecord('meeting', meetingId, {
-      include: 'agendas,agendas.status',
       reload: true,
     });
-    set(this.sessionService, 'currentSession', meeting);
     const agendaId = params.agenda_id;
     const agenda = await this.store.findRecord('agenda', agendaId, {
-      include: 'status',
+      reload: 'true',
     });
     const reverseSortedAgendas = await this.store.query('agenda', {
       'filter[created-for][:id:]': meetingId,
       sort: '-serialnumber',
       include: 'status',
     });
-    set(this.sessionService, 'currentAgenda', agenda);
 
-    await this.loadChangesToAgenda(agenda);
     return {
       meeting,
       agenda,
@@ -37,7 +34,14 @@ export default class AgendaRoute extends Route {
     };
   }
 
-  async loadChangesToAgenda(agenda) {
+  async afterModel(model) {
+    await this.loadChangesToAgenda(model.meeting, model.agenda);
+  }
+
+  async loadChangesToAgenda(meeting, agenda) {
+    // TODO KAS-2777 can we stop setting the session and agenda ?
+    set(this.sessionService, 'currentSession', meeting);
+    set(this.sessionService, 'currentAgenda', agenda);
     set(this.agendaService, 'addedAgendaitems', []);
     set(this.agendaService, 'addedPieces', []);
     const previousAgenda = await agenda.previousVersion;
