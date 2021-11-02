@@ -9,6 +9,7 @@ import {
 } from 'ember-concurrency-decorators';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import CONFIG from 'frontend-kaleidos/utils/config';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import VrNotulenName,
 { compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
 
@@ -70,7 +71,13 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
 
   @task
   *loadDocuments() {
-    let pieces = yield this.args.agendaitem.pieces;
+    // TODO KAS-2777 use /pieces cache
+    // let pieces = yield this.args.agendaitem.pieces;
+    let pieces = yield this.store.query('piece', {
+      'filter[agendaitems][:id:]': this.args.agendaitem.id,
+      'page[size]': PAGE_SIZE.PIECES, // TODO add pagination when sorting is done in the backend
+      include: 'document-container',
+    });
     pieces = pieces.toArray();
     let sortedPieces;
     if (this.args.agendaitem.isApproval) {

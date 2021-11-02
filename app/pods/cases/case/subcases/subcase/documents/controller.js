@@ -156,6 +156,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
           const latestAgendaitem = await latestActivity.get('latestAgendaitem');
           await restorePiecesFromPreviousAgendaitem(latestAgendaitem, documentContainer);
           // TODO: make sure we're not loading stale cache
+          // TODO KAS-2777 use /pieces cache ? makes pieces a read-only
           await latestAgendaitem.hasMany('pieces').reload();
         }
       }
@@ -240,6 +241,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
       }
       // ensure the cache does not hold stale data + refresh our local store for future saves of agendaitem
       for (let index = 0; index < 10; index++) {
+        // TODO KAS-2777 use /pieces cache ? makes pieces a read-only
         const agendaitemPieces = yield agendaitem.hasMany('pieces').reload();
         if (agendaitemPieces.includes(pieces[pieces.length - 1])) {
           // last added piece was found in the list from cache

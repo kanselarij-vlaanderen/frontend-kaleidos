@@ -51,7 +51,6 @@ export default class DocumentsDocumentCardComponent extends Component {
     super(...arguments);
     this.loadCodelists.perform();
     this.loadPieceRelatedData.perform();
-    this.loadSignatureRelatedData.perform();
   }
 
   get shouldShowPublications() {
@@ -76,19 +75,20 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   @task
-  *loadPieceRelatedData() {
-    const includeBuilder = [
-      'document-container,document-container.type,access-level',
-    ];
+  *loadPublicationFlowRelatedData() {
     if (this.shouldShowPublications) {
-      includeBuilder.push('publication-flow,publication-flow.identification');
+      const publicationFlow = yield this.piece.publicationFlow;
+      yield publicationFlow?.identification;
     }
-    const includeStr = includeBuilder.join(',');
+  }
 
+  @task
+  *loadPieceRelatedData() {
+    // TODO KAS-2777 document-container type and access level call seems slow
     const loadPiece = (id) =>
       this.store.queryOne('piece', {
         'filter[:id:]': id,
-        include: includeStr,
+        include: 'document-container,document-container.type,access-level',
       });
 
     const piece = this.args.piece;
@@ -98,8 +98,10 @@ export default class DocumentsDocumentCardComponent extends Component {
       this.documentContainer = yield this.piece.documentContainer;
       this.accessLevel = yield this.piece.accessLevel;
     } else if (this.args.documentContainer) {
+      // TODO This else does not seem used (no <Documents::DocumentCard> that passes this arg)
       this.documentContainer = this.args.documentContainer;
       yield this.loadVersionHistory.perform();
+      // TODO KAS-2777 does this work? Where is this.piece coming from?
       this.piece = yield loadPiece(this.piece.id);
       this.accessLevel = yield this.piece.accessLevel;
     } else {
@@ -107,6 +109,9 @@ export default class DocumentsDocumentCardComponent extends Component {
         `You should provide @piece or @documentContainer as an argument to ${this.constructor.name}`
       );
     }
+    // When this task is done, we can trigger the other less important tasks
+    this.loadPublicationFlowRelatedData.perform();
+    this.loadSignatureRelatedData.perform();
   }
 
   @task

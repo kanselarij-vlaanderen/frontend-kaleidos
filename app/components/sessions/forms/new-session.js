@@ -90,6 +90,7 @@ export default Component.extend({
     });
     await agendaItemTreatment.save();
 
+    // TODO KAS-2777 makes pieces a read-only
     const agendaitem = this.store.createRecord('agendaitem', {
       created: now,
       agenda,

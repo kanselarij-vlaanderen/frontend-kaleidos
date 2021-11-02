@@ -49,6 +49,7 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     // When routing here from agenda overview with stale data, we need to reload several relations
     // The reload in model refreshes only the attributes and includes relations, makes saves with stale relation data possible
     await model.hasMany('mandatees').reload();
+    // TODO KAS-2777 use /pieces cache ? makes pieces a read-only
     await model.hasMany('pieces').reload();
     this.mandatees = (await model.mandatees).sortBy('priority');
   }

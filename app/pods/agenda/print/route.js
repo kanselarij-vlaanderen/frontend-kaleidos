@@ -33,6 +33,7 @@ export default Route.extend({
 
   ensureDocuments: task(function *(agendaitems) {
     const tasks = [];
+    // TODO KAS-2777 use /pieces cache ? makes pieces a read-only
     for (const agendaitem of agendaitems) {
       if (!agendaitem.hasMany('pieces').value()) {
         tasks.push(this.loadDocuments.perform(agendaitem));
@@ -41,6 +42,7 @@ export default Route.extend({
     yield all(tasks);
   }),
 
+  // TODO KAS-2777 use /pieces cache ? makes pieces a read-only
   loadDocuments: task(function *(agendaitem) {
     yield agendaitem.hasMany('pieces').reload({
       adapterOptions: {

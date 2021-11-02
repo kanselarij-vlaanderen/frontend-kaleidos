@@ -87,6 +87,7 @@ export default class AgendaHeader extends Component {
     for (const agendaitem of agendaitemsNotOk) {
       // Reloading some relationships of agendaitem most likely to be changed by concurrency
       yield agendaitem.reload();
+      // TODO KAS-2777 use /pieces cache ? makes pieces a read-only
       yield agendaitem.hasMany('pieces').reload();
       yield agendaitem.hasMany('treatments').reload();
       yield agendaitem.hasMany('mandatees').reload();
