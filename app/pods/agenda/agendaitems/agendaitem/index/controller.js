@@ -61,13 +61,9 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     const propertiesToSetOnAgendaitem = {
       mandatees: mandateeData.mandatees,
     };
-    const correspondingIseCodes = await this.store.query('ise-code', {
-      'filter[field][:id:]': mandateeData.fields.map((field) => field.id).join(','),
-    });
     const propertiesToSetOnSubcase = {
       mandatees: mandateeData.mandatees,
       requestedBy: mandateeData.submitter,
-      iseCodes: correspondingIseCodes,
     };
     this.mandatees = mandateeData.mandatees;
     this.submitter = mandateeData.submitter;
