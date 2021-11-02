@@ -72,6 +72,6 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     this.mandatees = mandateeData.mandatees;
     this.submitter = mandateeData.submitter;
     await saveChanges(this.model, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
-    this.agendaitemsController.groupNotasOnGroupName.perform(this.agendaitemsController.notas);
+    this.agendaitemsController.groupNotasOnGroupName.perform();
   }
 }

@@ -92,7 +92,7 @@ export default class AgendaAgendaitemsRoute extends Route {
     this.transition = transition; // set on the route for use in setupController, since the provided "transition" argument there always comes back "undefined"
   }
 
-  async setupController(controller, model) {
+  async setupController(controller) {
     super.setupController(...arguments);
     console.log("setup controller hook pods/agenda/agendaitems");
     const isTransitionToIndex = this.transition.to.name === 'agenda.agendaitems.index';
@@ -105,7 +105,7 @@ export default class AgendaAgendaitemsRoute extends Route {
     controller.previousAgenda = this.previousAgenda;
 
     const promises = [
-      controller.groupNotasOnGroupName.perform(model.notas)
+      controller.groupNotasOnGroupName.perform()
     ];
     if (isTransitionToIndex) {
       // Documents are only shown in agendaitems overview and not in agendaitems sidebar

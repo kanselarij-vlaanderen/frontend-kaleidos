@@ -79,8 +79,8 @@ export default class AgendaAgendaitemsController extends Controller {
   }
 
   @task
-  *groupNotasOnGroupName(agendaitems) {
-    const agendaitemsArray = agendaitems.toArray();
+  *groupNotasOnGroupName() {
+    const agendaitemsArray = this.model.notas.toArray();
     const agendaitemGroups = [];
     let currentAgendaitemGroup;
     for (const agendaitem of agendaitemsArray) {
