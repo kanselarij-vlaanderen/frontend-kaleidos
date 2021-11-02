@@ -11,6 +11,7 @@ import {
   setAgendaitemsPriority,
   AgendaitemGroup
 } from 'frontend-kaleidos/utils/agendaitem-utils';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import {
   all,
   animationFrame
@@ -102,20 +103,26 @@ export default class AgendaAgendaitemsController extends Controller {
     this.documentLoadCount = 0;
     this.totalCount = agendaitems.length;
     yield all(agendaitems.map(async(agendaitem) => {
-      await this.store.findRecord('agendaitem', agendaitem.id, {
-        reload: true, // without reload the async operation will be resolved too early by ember-data's cache,
-        include: [
-          'pieces',
-          'pieces.document-container'
-        ].join(','),
-        'fields[pieces]': [
-          'name', // Display and sorting pieces per agendaitem
-          'document-container', // Deduplicating multiple pieces per container
-          'created', // Fallback sorting pieces per agendaitem
-          'confidential' // Display lock icon on document-badge
-        ].join(','),
-        'fields[document-containers]': '',
+      await this.store.query('piece', {
+        'filter[agendaitems][:id:]': agendaitem.id,
+        'page[size]': PAGE_SIZE.PIECES, // TODO add pagination when sorting is done in the backend
+        include: 'document-container',
       });
+      // TODO KAS-2777 this call does not match the documents route call, do we want this ?
+      // await this.store.findRecord('agendaitem', agendaitem.id, {
+      //   reload: true, // without reload the async operation will be resolved too early by ember-data's cache,
+      //   include: [
+      //     'pieces',
+      //     'pieces.document-container'
+      //   ].join(','),
+      //   'fields[pieces]': [
+      //     'name', // Display and sorting pieces per agendaitem
+      //     'document-container', // Deduplicating multiple pieces per container
+      //     'created', // Fallback sorting pieces per agendaitem
+      //     'confidential' // Display lock icon on document-badge
+      //   ].join(','),
+      //   'fields[document-containers]': '',
+      // });
       this.documentLoadCount++;
     }));
   }

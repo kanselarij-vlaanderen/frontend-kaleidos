@@ -20,14 +20,13 @@ export default class AgendaitemAgendaitemsAgendaRoute extends Route {
     this.transition = transition; // set on the route for use in setupController, since the provided "transition" argument there always comes back "undefined"
   }
 
-  setupController(controller) {
+  setupController(controller, model) {
     super.setupController(...arguments);
     console.log("setup controller hook pods/agenda/agendaitems/agendaitem");
     controller.meeting = this.modelFor('agenda').meeting;
 
-    // TODO KAS-2777 this is no longer allowed
-    // ember/no-controller-access-in-routes
-    // const parentController = this.controllerFor('agenda.agendaitems');
-    // parentController.selectedAgendaitem = model;
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const parentController = this.controllerFor('agenda.agendaitems');
+    parentController.selectedAgendaitem = model;
   }
 }
