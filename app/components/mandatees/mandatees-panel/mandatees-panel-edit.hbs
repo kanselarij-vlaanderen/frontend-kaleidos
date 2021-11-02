@@ -26,25 +26,6 @@
                 />
               </td>
               <td class="auk-u-text-align--right auk-o-flex--vertical-center">
-                {{!-- TODO: disable button on load
-                  Loading-state HTML should look like:
-                  <button type="button"
-                    class="auk-button-loading"
-                    disabled
-                  >
-                    <div class="auk-loader" role="alert" aria-busy="true"></div>
-                  </button>
-                 --}}
-                {{!-- TODO: modify mandatee domains picker --}}
-                <Auk::Button
-                  @skin="borderless"
-                  @layout="icon-only"
-                  @icon="pencil"
-                  {{on "click" (fn this.startEditingMandatee mandatee)}}
-                  data-test-mandatee-panel-edit-row-edit
-                >
-                  {{t "edit"}}
-                </Auk::Button>
                 <Auk::Button
                   @skin="danger-borderless"
                   @layout="icon-only"
@@ -67,7 +48,7 @@
         <Auk::Button
           @skin="tertiary"
           @icon="add"
-          {{on "click" this.startCreatingMandatee}}
+          {{on "click" this.openSelectMandatee}}
           data-test-mandatee-panel-edit-add-mandatee
         >
           {{t "add-minister"}}
@@ -95,10 +76,10 @@
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </div>
-{{#if this.isShowingEditMandateeModal}}
+{{#if this.showSelectMandateeModal}}
   <Mandatees::MandateesSelectorModal
-    @mandatee={{this.mandateeUnderEdit}}
-    @onSave={{this.modifyMandatee}}
-    @onCancel={{this.cancelEditingMandatee}}
+    @viaAgenda={{true}}
+    @onClose={{this.closeSelectMandatee}}
+    @onAdd={{this.addMandatee}}
   />
 {{/if}}

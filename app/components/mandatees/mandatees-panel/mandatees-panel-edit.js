@@ -16,8 +16,7 @@ export default class MandateesMandateesPanelEditComponent extends Component {
   @tracked mandateesBuffer;
   @tracked submitterBuffer;
 
-  @tracked isShowingEditMandateeModal = false;
-  @tracked mandateeUnderEdit;
+  @tracked showSelectMandateeModal = false;
 
   constructor() {
     super(...arguments);
@@ -30,20 +29,13 @@ export default class MandateesMandateesPanelEditComponent extends Component {
   }
 
   @action
-  startCreatingMandatee() {
-    this.isShowingEditMandateeModal = true;
+  openSelectMandatee() {
+    this.showSelectMandateeModal = true;
   }
 
   @action
-  startEditingMandatee(mandatee) {
-    this.isShowingEditMandateeModal = true;
-    this.mandateeUnderEdit = mandatee;
-  }
-
-  @action
-  cancelEditingMandatee() {
-    this.isShowingEditMandateeModal = false;
-    this.mandateeUnderEdit = null;
+  closeSelectMandatee() {
+    this.showSelectMandateeModal = false;
   }
 
   @action
@@ -65,19 +57,16 @@ export default class MandateesMandateesPanelEditComponent extends Component {
   }
 
   @action
-  async modifyMandatee(mandatee) {
-    // potential mandatee addition
-    if (!this.mandateeUnderEdit) { // if none was existant yet, we expect one to have been added
-      this.mandateesBuffer.push(mandatee.mandatee);
+  async addMandatee(mandatee) {
+      this.mandateesBuffer.push(mandatee);
       if (this.mandateesBuffer.length === 1) { // if this was the first mandatee added, make this one submitter by default
-        this.submitterBuffer = mandatee.mandatee;
+        this.submitterBuffer = mandatee;
       }
       // eslint-disable-next-line no-self-assign
       this.mandateesBuffer = this.mandateesBuffer; // Trigger plain-array tracking
-    }
+
     // Reset interface state
-    this.isShowingEditMandateeModal = false;
-    this.mandateeUnderEdit = null;
+    this.showSelectMandateeModal = false;
   }
 
   @task

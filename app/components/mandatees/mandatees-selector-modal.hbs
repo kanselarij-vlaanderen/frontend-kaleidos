@@ -1,25 +1,46 @@
-<WebComponents::VlModal
-  @closeModal={{this.cancel}}
-  @isOverlay={{true}}
-  @title={{if this.isAddingMinister (t "add-minister") (t "edit-minister")}}
->
+<Auk::Modal @size="small">
+  <Auk::Modal::Header @title={{if @viaAgenda (t "add-minister") (t "add-mandatee") }} @onClose={{@onClose}} />
   <Auk::Modal::Body>
-    <label>{{t "select-minister"}}</label>
-    <div class="auk-u-mb-8">
+    <Utils::LoadableContent
+      @isLoading={{this.onAdd.isRunning}}
+      @reserveSpace={{true}}
+    >
+      <Auk::Label>{{if @viaAgenda (t "minister") (t "mandatee")}}</Auk::Label>
       <Utils::MandateeSelector
+        @chooseMandatee={{fn (mut this.selectedMandatee)}}
         @singleSelect={{true}}
-        @readOnly={{not this.isAddingMinister}}
-        @selectedMandatees={{this.mandateeBuffer}}
-        @chooseMandatee={{this.selectMandatee}}
+        @selectedMandatees={{this.selectedMandatee}}
       />
-    </div>
+    </Utils::LoadableContent>
   </Auk::Modal::Body>
-  <WebComponents::VlModalFooter
-    @isLoading={{this.save.isRunning}}
-    @nonBordered={{true}}
-    @cancelButtonText={{t "cancel"}}
-    @saveButtonText={{t "add"}}
-    @cancelAction={{this.cancel}}
-    @saveAction={{perform this.save}}
-  />
-</WebComponents::VlModal>
+  <Auk::Modal::Footer @custom={{true}}>
+    <Auk::Toolbar @size="large">
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <Auk::ButtonLink
+            data-test-link-mandatees-cancel
+            {{on "click" @onClose}}
+            @disabled={{this.onAdd.isRunning}}
+          >
+            {{t "cancel"}}
+          </Auk::ButtonLink>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <Auk::Button
+            data-test-link-mandatees-add
+            @skin="primary"
+            @icon="add"
+            @size="small"
+            @disabled={{not this.canAdd}}
+            @loading={{this.onAdd.isRunning}}
+            {{on "click" (perform this.onAdd)}}
+          >
+            {{t "add"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Modal::Footer>
+</Auk::Modal>

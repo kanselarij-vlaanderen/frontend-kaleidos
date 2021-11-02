@@ -13,7 +13,7 @@
               data-test-mandatees-panel-add
               @skin="tertiary"
               @icon="add"
-              {{on "click" this.openLinkModal}}
+              {{on "click" this.openSelectMandateeModal}}
             >
               {{t "add-mandatee"}}
             </Auk::Button>
@@ -48,7 +48,7 @@
                     @layout="icon-only"
                     @icon="delete"
                     @skin="danger-borderless"
-                    {{on "click" (fn this.unlink mandatee)}}
+                    {{on "click" (fn this.removeMandatee mandatee)}}
                   />
                 </td>
               </tr>
@@ -64,9 +64,9 @@
   </Auk::Panel>
 </div>
 
-{{#if this.isOpenLinkModal}}
-  <Publications::Publication::Case::Mandatees::LinkMandateeModal
-    @onClose={{this.closeLinkModal}}
-    @onLink={{this.link}}
+{{#if this.showSelectMandateeModal}}
+  <Mandatees::MandateesSelectorModal
+    @onClose={{this.closeSelectMandateeModal}}
+    @onAdd={{this.addMandatee}}
   />
 {{/if}}
