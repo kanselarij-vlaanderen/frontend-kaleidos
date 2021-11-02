@@ -26,23 +26,8 @@ export default class MandateesMandateesDomainsSelectorModalComponent extends Com
   constructor() {
     super(...arguments);
     this.mandateeBuffer = this.args.mandatee;
-    if (this.args.fields) {
-      this.fieldsBuffer = [...this.args.fields]; // Shallow copy array
-    } else {
-      this.fieldsBuffer = [];
-    }
-    if (!this.isAddingMinister) {
-      this.loadAvailableFieldsForMandatee.perform();
-    }
   }
 
-  @task
-  *loadAvailableFieldsForMandatee() {
-    const fields = yield this.store.query('government-field', {
-      'filter[ise-code][mandatees][:id:]': this.mandateeBuffer.id,
-    });
-    this.availableFields = fields.toArray();
-  }
 
   @task
   *save() {
@@ -57,17 +42,6 @@ export default class MandateesMandateesDomainsSelectorModalComponent extends Com
   @action
   selectMandatee(mandatee) {
     this.mandateeBuffer = mandatee;
-    this.loadAvailableFieldsForMandatee.perform();
-  }
-
-  @action
-  selectFields(fields) {
-    this.fieldsBuffer = this.fieldsBuffer.concat(fields);
-  }
-
-  @action
-  unSelectFields(fields) {
-    this.fieldsBuffer = this.fieldsBuffer.filter((field) => !fields.includes(field));
   }
 
   @action

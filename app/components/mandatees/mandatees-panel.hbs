@@ -2,19 +2,17 @@
   class="auk-u-mb-8"
 >
   {{#if this.isEditing}}
-    <Mandatees::MandateesDomainsPanel::MandateesDomainsPanelEdit
+    <Mandatees::MandateesPanel::MandateesPanelEdit
       @mandatees={{@mandatees}}
       @submitter={{@submitter}}
-      @fields={{@fields}}
       @onCancel={{this.cancelEditing}}
       @onSave={{perform this.save}}
     />
   {{else}}
     <div class="auk-u-mb-3">
-      <Mandatees::MandateesDomainsPanel::MandateesDomainsPanelView
+      <Mandatees::MandateesPanel::MandateesPanelView
         @mandatees={{@mandatees}}
         @submitter={{@submitter}}
-        @fields={{@fields}}
         @showEditButton={{@allowEditing}}
         @onClickEdit={{this.startEditing}}
       />

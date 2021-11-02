@@ -44,17 +44,16 @@
   />
 {{/if}}
 {{#if this.model.showAsRemark}}
-  <Mandatees::MandateesDomainsPanel
+  <Mandatees::MandateesPanel
     @mandatees={{this.mandatees}}
     @submitter={{this.submitter}}
     @allowEditing={{false}}
   />
 {{else}}
   {{#if this.subcase}}
-    <Mandatees::MandateesDomainsPanel
+    <Mandatees::MandateesPanel
       @mandatees={{this.mandatees}}
       @submitter={{this.submitter}}
-      @fields={{this.governmentFields}}
       @allowEditing={{this.currentSession.isEditor}}
       @onSave={{this.saveMandateeData}}
     />

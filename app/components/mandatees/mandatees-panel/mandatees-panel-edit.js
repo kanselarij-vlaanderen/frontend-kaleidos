@@ -4,11 +4,10 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency-decorators';
 
-export default class MandateesMandateesDomainsPanelEditComponent extends Component {
+export default class MandateesMandateesPanelEditComponent extends Component {
   /**
    * @argument mandatees
    * @argument submitter
-   * @argument fields
    * @argument onCancel
    * @argument onSave
    */
@@ -16,7 +15,6 @@ export default class MandateesMandateesDomainsPanelEditComponent extends Compone
 
   @tracked mandateesBuffer;
   @tracked submitterBuffer;
-  @tracked fieldsBuffer;
 
   @tracked isShowingEditMandateeModal = false;
   @tracked mandateeUnderEdit;
@@ -29,7 +27,6 @@ export default class MandateesMandateesDomainsPanelEditComponent extends Compone
   initBuffers() {
     this.mandateesBuffer = this.args.mandatees ? this.args.mandatees.slice() : []; // Shallow copy
     this.submitterBuffer = this.args.submitter;
-    this.fieldsBuffer = this.args.fields ? this.args.fields.slice() : []; // Shallow copy
   }
 
   @action
@@ -58,12 +55,7 @@ export default class MandateesMandateesDomainsPanelEditComponent extends Compone
     if (this.submitterBuffer === mandatee) {
       this.submitterBuffer = null;
     }
-    // Fields modifications
-    let mandateeFields = await this.store.query('government-field', {
-      'filter[ise-code][mandatees][:id:]': mandatee.id,
-    });
-    mandateeFields = mandateeFields.toArray();
-    this.fieldsBuffer = this.fieldsBuffer.filter((field) => !mandateeFields.includes(field));
+
   }
 
   @action
@@ -73,25 +65,16 @@ export default class MandateesMandateesDomainsPanelEditComponent extends Compone
   }
 
   @action
-  async modifyMandateeAndFields(mandateeAndFields) {
+  async modifyMandatee(mandatee) {
     // potential mandatee addition
     if (!this.mandateeUnderEdit) { // if none was existant yet, we expect one to have been added
-      this.mandateesBuffer.push(mandateeAndFields.mandatee);
+      this.mandateesBuffer.push(mandatee.mandatee);
       if (this.mandateesBuffer.length === 1) { // if this was the first mandatee added, make this one submitter by default
-        this.submitterBuffer = mandateeAndFields.mandatee;
+        this.submitterBuffer = mandatee.mandatee;
       }
       // eslint-disable-next-line no-self-assign
       this.mandateesBuffer = this.mandateesBuffer; // Trigger plain-array tracking
     }
-    // Fields modifications
-    let mandateeFields = await this.store.query('government-field', {
-      'filter[ise-code][mandatees][:id:]': mandateeAndFields.mandatee.id,
-    });
-    mandateeFields = mandateeFields.toArray();
-    const fieldsToRemove = this.fieldsBuffer.filter((field) => !mandateeAndFields.fields.includes(field) && mandateeFields.includes(field));
-    const fieldsToAdd = mandateeAndFields.fields.filter((field) => !this.fieldsBuffer.includes(field));
-    this.fieldsBuffer = this.fieldsBuffer.filter((field) => !fieldsToRemove.includes(field));
-    this.fieldsBuffer = this.fieldsBuffer.concat(fieldsToAdd);
     // Reset interface state
     this.isShowingEditMandateeModal = false;
     this.mandateeUnderEdit = null;
@@ -103,7 +86,6 @@ export default class MandateesMandateesDomainsPanelEditComponent extends Compone
       yield this.args.onSave({
         mandatees: this.mandateesBuffer,
         submitter: this.submitterBuffer,
-        fields: this.fieldsBuffer,
       });
     }
     this.isEditing = false;

@@ -13,23 +13,6 @@
         @chooseMandatee={{this.selectMandatee}}
       />
     </div>
-    {{#unless this.isAddingMinister}}
-      {{#if
-        (or
-          (not this.loadAvailableFieldsForMandatee.lastSuccessful)
-          this.loadAvailableFieldsForMandatee.isRunnning
-        )
-      }}
-        {{t "loading"}}
-      {{else}}
-        <DomainFieldIse::DomainsFieldsSelectorForm
-          @availableFields={{this.availableFields}}
-          @selectedFields={{this.fieldsBuffer}}
-          @onSelectFields={{this.selectFields}}
-          @onUnSelectFields={{this.unSelectFields}}
-        />
-      {{/if}}
-    {{/unless}}
   </Auk::Modal::Body>
   <WebComponents::VlModalFooter
     @isLoading={{this.save.isRunning}}

@@ -4,14 +4,8 @@
       <table class="auk-table">
         <thead>
           <tr>
-            <th class="auk-table__col--2">
+            <th class="auk-table__col--10">
               {{t "minister"}}
-            </th>
-            <th class="auk-table__col--3">
-              {{t "government-domain"}}
-            </th>
-            <th class="auk-table__col--5">
-              {{t "government-field"}}
             </th>
             <th class="auk-table__col--1">
               {{t "submitter"}}
@@ -25,33 +19,6 @@
               <td data-test-mandatee-panel-edit-row-name>
                 {{mandatee.person.nameToDisplay}}
               </td>
-              <Mandatees::DomainsFieldsForMandatee
-                @mandatee={{mandatee}}
-                @fields={{this.fieldsBuffer}}
-              as |mandateeDomainsFields|>
-                <td>
-                  {{#if mandateeDomainsFields.domains.length}}
-                    <ul data-test-mandatee-panel-edit-row-domains>
-                      {{#each mandateeDomainsFields.domains as |domain|}}
-                        <li>{{domain.label}}</li>
-                      {{/each}}
-                    </ul>
-                  {{else}}
-                    {{t "dash"}}
-                  {{/if}}
-                </td>
-                <td>
-                  {{#if mandateeDomainsFields.fields.length}}
-                    <ul data-test-mandatee-panel-edit-row-fields>
-                      {{#each mandateeDomainsFields.fields as |field|}}
-                        <li>{{field.label}}</li>
-                      {{/each}}
-                    </ul>
-                  {{else}}
-                    {{t "dash"}}
-                  {{/if}}
-                </td>
-              </Mandatees::DomainsFieldsForMandatee>
               <td data-test-mandatee-panel-edit-row-submitter>
                 <Auk::Toggle
                   @checked={{eq mandatee this.submitterBuffer}}
@@ -129,10 +96,9 @@
   </Auk::Toolbar>
 </div>
 {{#if this.isShowingEditMandateeModal}}
-  <Mandatees::MandateesDomainsSelectorModal
+  <Mandatees::MandateesSelectorModal
     @mandatee={{this.mandateeUnderEdit}}
-    @fields={{this.fieldsBuffer}}
-    @onSave={{this.modifyMandateeAndFields}}
+    @onSave={{this.modifyMandatee}}
     @onCancel={{this.cancelEditingMandatee}}
   />
 {{/if}}
