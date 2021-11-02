@@ -123,7 +123,7 @@ context('Agendaitem changes tests', () => {
     cy.visit(agendaURL);
     cy.changeSelectedAgenda('Ontwerpagenda');
     // when navigating to print view, should contain all relevant info
-    cy.get(agenda.agendaHeader.showActionOptions).click();
+    cy.get(agenda.agendaHeader.showOptions).click();
     cy.get(agenda.agendaHeader.actions.navigateToPrintableAgenda).click();
     cy.wait(1000);
     cy.get(agenda.printableAgenda.headerTitle, {
@@ -219,7 +219,7 @@ context('Agendaitem changes tests', () => {
     // cy.get(agenda.agendaitemGroupHeader.section).eq(0)
     //   .should('contain.text', 'Geen toekenning');
     cy.openDetailOfAgendaitem('Cypress test dossier 1 test stap 1');
-    cy.addAgendaitemMandatee(0, -1, 0, 'Minister-president van de Vlaamse Regering');
+    cy.addAgendaitemMandatee(0, -1, 0, 'Bourgeois', 'Minister-president van de Vlaamse Regering');
     cy.clickReverseTab('Overzicht');
     cy.get(agenda.agendaitemGroupHeader.section).eq(0)
       .should('contain.text', 'Minister-president van de Vlaamse Regering');

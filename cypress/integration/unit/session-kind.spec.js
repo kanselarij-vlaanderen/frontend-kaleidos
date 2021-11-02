@@ -7,13 +7,13 @@ import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
 function checkDecisionPage(headerText) {
-  cy.get(agenda.agendaHeader.showActionOptions).click();
+  cy.get(agenda.agendaHeader.showOptions).click();
   cy.get(agenda.agendaHeader.actions.navigateToDecisions).click();
   cy.get(utils.overviewsHeaderDecision.title).contains(headerText);
 }
 
 function checkNewsletterPage(headerText, newsletterTitle) {
-  cy.get(agenda.agendaHeader.showActionOptions).click();
+  cy.get(agenda.agendaHeader.showOptions).click();
   cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
   cy.get(newsletter.newsletterHeaderOverview.title).contains(headerText);
   cy.clickReverseTab('Klad');

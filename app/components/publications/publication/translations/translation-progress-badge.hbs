@@ -1,12 +1,15 @@
 {{#unless this.loadData.isRunning}}
   <span class="auk-u-ml">
     {{#if @translationSubcase.endDate}}
-      <Auk::StatusPill data-test-translation-statuspill-done @status="done"/>
+      <Auk::StatusPill data-test-translation-statuspill-done @status="done" />
     {{else}}
       {{#if (gt this.requests.length 0)}}
-        <Auk::StatusPill data-test-translation-statuspill-in-progress/>
+        <Auk::StatusPill data-test-translation-statuspill-in-progress />
       {{else}}
-        <Auk::StatusPill data-test-translation-statuspill-not-started @status="not-started"/>
+        <Auk::StatusPill
+          data-test-translation-statuspill-not-started
+          @status="not-started"
+        />
       {{/if}}
     {{/if}}
   </span>

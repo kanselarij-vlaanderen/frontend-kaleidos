@@ -45,7 +45,7 @@ function getTranslatedMonth(month) {
       return '';
   }
 }
-context('Publications sidebar tests', () => {
+context('Publications translation tests', () => {
   function uploadDocument(file, newFileName, pages, words) {
     cy.get(publication.translationsDocuments.add).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
@@ -109,7 +109,10 @@ context('Publications sidebar tests', () => {
 
     // check rollback after cancel
     uploadDocument(file, newFileName1, pageCount, wordCount);
+    cy.route('DELETE', 'files/*').as('deleteFile');
     cy.get(auk.modal.footer.cancel).click();
+    cy.wait('@deleteFile');
+    cy.get(auk.modal.container).should('not.exist');
     cy.get(auk.emptyState.message).contains(emptyStateMessage);
     cy.get(publication.translationsDocuments.add).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
@@ -123,23 +126,24 @@ context('Publications sidebar tests', () => {
     cy.get(publication.documentsUpload.proofPrint).should('be.empty');
     cy.route('POST', 'document-containers').as('createNewDocumentContainer');
     cy.route('POST', 'pieces').as('createNewPiece');
-    cy.route('GET', '/pieces**').as('getPieces');
+    cy.route('GET', '/pieces?filter**').as('getPieces');
     cy.get(publication.documentsUpload.save).click();
     cy.wait('@createNewDocumentContainer')
       .wait('@createNewPiece')
       .wait('@getPieces');
 
     // add extra docs for testing CRUD
+    // waiting for getPieces should work, but waiting for it fails so general wait instead
     uploadDocument(file, newFileName2, pageCount, wordCount);
     cy.get(publication.documentsUpload.save).click();
     cy.wait('@createNewDocumentContainer')
       .wait('@createNewPiece')
-      .wait('@getPieces');
+      .wait(1000);
     uploadDocument(file, newFileName3, pageCount, wordCount);
     cy.get(publication.documentsUpload.save).click();
     cy.wait('@createNewDocumentContainer')
       .wait('@createNewPiece')
-      .wait('@getPieces');
+      .wait(1000);
 
     // check if request functions correctly with none, some and all rows checked
     cy.get(publication.translationsDocuments.tableRow).should('have.length', 3);
@@ -203,7 +207,6 @@ context('Publications sidebar tests', () => {
     cy.route('PATCH', 'pieces/**').as('patchPieces');
     cy.get(publication.documentEdit.save).click();
     cy.wait('@patchPieces');
-    cy.wait('@getPieces');
     cy.wait(2000);
     // verify changes made with edit
     cy.get(publication.translationsDocuments.row.documentName).contains(newFileName1)
@@ -221,7 +224,7 @@ context('Publications sidebar tests', () => {
     clickCheckbox(newFileName1);
     cy.get(publication.translationsDocuments.requestTranslation).click();
     cy.get(auk.datepicker).should('have.value', translationDueDate.format('DD-MM-YYYY'));
-    cy.get(publication.translationRequest.message).should('have.value', `Collega,\n\nHierbij ter vertaling:\n\nVO-dossier: ${fields.number}\nTitel: test vertalingsaanvraag\nUiterste vertaaldatum: ${translationDueDate.format('DD-MM-YYYY')}\nAantal pagina’s: ${editedPageCount}\nAantal woorden: ${editedWordcount}\nAantal documenten: 1\n\nMet vriendelijke groet,\n\nVlaamse overheid\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\nTeam Ondersteuning Vlaamse Regering\npublicatiesBS@vlaanderen.be\nKoolstraat 35, 1000 Brussel\n`);
+    cy.get(publication.translationRequest.message).should('have.value', `Collega,\n\nHierbij ter vertaling:\n\nVO-dossier: ${fields.number}\nTitel: test vertalingsaanvraag\t\nUiterste vertaaldatum: ${translationDueDate.format('DD-MM-YYYY')}\t\nAantal pagina’s: ${editedPageCount}\t\nAantal woorden: ${editedWordcount}\t\nAantal documenten: 1\t\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n`);
     cy.get(utils.documentList.item).should('have.length', 1);
     cy.get(auk.modal.footer.cancel).click();
     // check requestmodal with sidebar change and 2 documents selected
@@ -232,7 +235,7 @@ context('Publications sidebar tests', () => {
     cy.setDateInFlatpickr(editedTranslationDueDate);
     cy.get(publication.translationsDocuments.requestTranslation).click();
     cy.get(auk.datepicker).should('have.value', editedTranslationDueDate.format('DD-MM-YYYY'));
-    cy.get(publication.translationRequest.message).should('have.value', `Collega,\n\nHierbij ter vertaling:\n\nVO-dossier: ${fields.number}\nTitel: test vertalingsaanvraag\nUiterste vertaaldatum: ${editedTranslationDueDate.format('DD-MM-YYYY')}\nAantal pagina’s: ${pageCount + editedPageCount}\nAantal woorden: ${wordCount + editedWordcount}\nAantal documenten: 2\n\nMet vriendelijke groet,\n\nVlaamse overheid\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\nTeam Ondersteuning Vlaamse Regering\npublicatiesBS@vlaanderen.be\nKoolstraat 35, 1000 Brussel\n`);
+    cy.get(publication.translationRequest.message).should('have.value', `Collega,\n\nHierbij ter vertaling:\n\nVO-dossier: ${fields.number}\nTitel: test vertalingsaanvraag\t\nUiterste vertaaldatum: ${editedTranslationDueDate.format('DD-MM-YYYY')}\t\nAantal pagina’s: ${pageCount + editedPageCount}\t\nAantal woorden: ${wordCount + editedWordcount}\t\nAantal documenten: 2\t\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n`);
     // check annex list
     cy.get(utils.documentList.item).should('have.length', 2);
     cy.get(utils.documentList.name).contains(newFileName1)
