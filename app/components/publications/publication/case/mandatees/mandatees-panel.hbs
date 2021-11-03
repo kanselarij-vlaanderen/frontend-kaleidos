@@ -4,7 +4,7 @@
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
-            <h4 class="auk-panel__title">{{t "mandatees"}}</h4>
+            <h4 class="auk-panel__title">{{t "ministers"}}</h4>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
@@ -15,7 +15,7 @@
               @icon="add"
               {{on "click" this.openSelectMandateeModal}}
             >
-              {{t "add-mandatee"}}
+              {{t "add-minister"}}
             </Auk::Button>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
@@ -26,7 +26,7 @@
         <table class="auk-table" data-test-mandatees-panel-table>
           <thead>
             <tr>
-              <th>{{t "mandatee"}}</th>
+              <th>{{t "minister"}}</th>
               <th></th>
             </tr>
           </thead>
@@ -58,7 +58,7 @@
       </Auk::Panel::Body>
     {{else}}
       <Auk::Panel::Body>
-        <Auk::EmptyState @message={{t "no-mandatees-added"}} />
+        <Auk::EmptyState @message={{t "no-ministers-added"}} />
       </Auk::Panel::Body>
     {{/if}}
   </Auk::Panel>
