@@ -1,23 +1,26 @@
-{{!-- <Auk::Sidebar
+<Auk::Sidebar
   @size="small"
   @position="left"
   @skin="gray-200"
   class={{if @isOpen "auk-scroll-wrapper"}}
   @isCollapsed={{not @isOpen}}
-> --}}
-<div class="auk-sidebar auk-sidebar--gray-200 auk-sidebar--left auk-sidebar--small auk-sidebar--collapsible auk-scroll-wrapper" data-collapsed={{if this.isCollapsedSidebar "true" "false"}}>
+>
   <Auk::Navbar @skin="gray-200">
     <Auk::Toolbar>
-      <Auk::Toolbar::Group @position="left" data-sidebar-expanded-only="">
-        <h2 class="auk-toolbar-complex__title--small">{{t "nav-title"}}</h2>
-      </Auk::Toolbar::Group>
-      <Auk::Toolbar::Group @position={{if this.isCollapsedSidebar "center" "right"}}>
-        <Auk::Toolbar::Item class={{if this.isCollapsedSidebar "auk-o-flex auk-o-flex--horizontal-center"}}>
+      {{#if @isOpen}}
+        <Auk::Toolbar::Group @position="left">
+          <h2 class="auk-toolbar-complex__title--small">{{t "nav-title"}}</h2>
+        </Auk::Toolbar::Group>
+      {{/if}}
+      <Auk::Toolbar::Group @position={{if @isOpen "right" "center"}}>
+        <Auk::Toolbar::Item
+          class={{if (not @isOpen) "auk-o-flex auk-o-flex--horizontal-center"}}
+        >
           <Auk::Button
             @skin="borderless"
             @layout="icon-only"
-            @icon="chevron-{{if this.isCollapsedSidebar "right" "left"}}"
-            {{on "click" this.toggleSidebar}}
+            @icon={{if @isOpen "chevron-left" "chevron-right"}}
+            {{on "click" (if @isOpen @onCollapse @onOpen)}}
           >
             {{t "toggle"}}
           </Auk::Button>
@@ -27,35 +30,43 @@
   </Auk::Navbar>
   <ul class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
     {{#each @reversedAgendas as |agenda|}}
-      <li class="auk-sidebar__item auk-sidebar__item--styled {{if (eq @currentAgenda.id agenda.id) "auk-sidebar__item--active"}}">
+      <li
+        class="auk-sidebar__item auk-sidebar__item--styled
+          {{if (eq @currentAgenda.id agenda.id) "auk-sidebar__item--active"}}"
+      >
         <LinkTo
           data-test-agenda-side-nav-agenda
           @route="agenda.agendaitems"
           @models={{array @meeting.id agenda.id}}
         >
           <div class="auk-sidebar__label">
-            <span data-test-agenda-side-nav-agenda-name data-sidebar-expanded-only="">
-              {{agenda.agendaName}}
-            </span>
-            <span data-sidebar-collapsed-only="">
-              {{#if agenda.isDesignAgenda}}
-                *
-              {{else}}
-                {{agenda.name}}
-              {{/if}}
-            </span>
-          </div>
-          <div class="auk-sidebar__sublabel" data-sidebar-expanded-only="">
-            {{#if agenda.isDesignAgenda}}
-              {{t "latest-modified-on"}}
+            {{#if @isOpen}}
+              <span data-test-agenda-side-nav-agenda-name>
+                {{agenda.agendaName}}
+              </span>
             {{else}}
-              {{t "approved-on"}}
+              <span>
+                {{#if agenda.isDesignAgenda}}
+                  *
+                {{else}}
+                  {{agenda.name}}
+                {{/if}}
+              </span>
             {{/if}}
-            <br/>
-            {{moment-format agenda.modified "dd DD/MM/YYYY HH:mm"}}
           </div>
+          {{#if @isOpen}}
+            <div class="auk-sidebar__sublabel">
+              {{#if agenda.isDesignAgenda}}
+                {{t "latest-modified-on"}}
+              {{else}}
+                {{t "approved-on"}}
+              {{/if}}
+              <br />
+              {{moment-format agenda.modified "dd DD/MM/YYYY HH:mm"}}
+            </div>
+          {{/if}}
         </LinkTo>
       </li>
     {{/each}}
   </ul>
-</div>
+</Auk::Sidebar>
