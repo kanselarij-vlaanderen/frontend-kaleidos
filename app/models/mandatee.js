@@ -44,8 +44,6 @@ export default Model.extend({
   priority: attr('number'),
   start: attr('datetime'),
   end: attr('datetime'),
-  dateSwornIn: attr('datetime'),
-  dateDecree: attr('datetime'),
 
   person: belongsTo('person'),
   mandate: belongsTo('mandate'),
