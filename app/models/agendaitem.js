@@ -11,7 +11,6 @@ import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 import VRDocumentName, { compareFunction } from 'frontend-kaleidos/utils/vr-document-name';
 import { A } from '@ember/array';
 import { sortDocumentContainers } from 'frontend-kaleidos/utils/documents';
-import { deprecate } from '@ember/application/deprecations';
 
 // TODO: octane-refactor
 /* eslint-disable ember/no-get */
@@ -65,7 +64,6 @@ export default ModelWithModifier.extend({
 
   // TODO KAS-2777 use /pieces cache ? makes pieces a read-only
   sortedPieces: computed('pieces.@each.name', function() {
-    deprecate('This will call /agendaitem/id/pieces but we prefer to cache the call from /pieces with filter on agendaitem')
     return A(this.get('pieces').toArray()).sort((pieceA, pieceB) => compareFunction(new VRDocumentName(pieceA.get('name')), new VRDocumentName(pieceB.get('name'))));
   }),
 

@@ -258,6 +258,9 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
   it('should edit mandatees and show correct mandatees when switching agendaitems before, during and after edits', () => {
     cy.openAgendaForDate(agendaDate);
+    cy.get(auk.loader, {
+      timeout: 60000,
+    }).should('not.exist');
     cy.clickReverseTab('Detail');
 
     cy.log('in non-edit view, check if mandatees are correct');
@@ -377,6 +380,9 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.route('POST', '/newsletter-infos').as(`postNewsletterInfo${randomInt}`);
     cy.route('PATCH', '/newsletter-infos/*').as(`patchNewsletterInfo${randomInt}`);
     cy.openAgendaForDate(agendaDate);
+    cy.get(auk.loader, {
+      timeout: 60000,
+    }).should('not.exist');
     cy.clickReverseTab('Detail');
     cy.get(agenda.agendaDetailSidebar.subitem).as('agendaitems');
     cy.get('@agendaitems').eq(1)
