@@ -1,5 +1,4 @@
 import Model, { attr, belongsTo } from '@ember-data/model';
-import { deprecate } from '@ember/application/deprecations';
 import sanitize from 'sanitize-filename';
 
 export default class File extends Model {
@@ -12,8 +11,9 @@ export default class File extends Model {
 
   @belongsTo('piece') piece;
 
+  // *NOTE Don't use this getter, use filename instead
+  // Possible unused since it had an error throwing 'deprecate' method for 2 months but no support issued were ever logged
   get name() {
-    deprecate(`Attribute 'name' on 'file' model is deprecated. Use 'filename' instead.`);
     return this.filename;
   }
 
