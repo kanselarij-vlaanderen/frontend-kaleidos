@@ -38,7 +38,7 @@
             <a class="auk-table__header-title--sortable" href="#">
               <div class="auk-o-flex auk-o-flex--vertical-center">
                 <span>
-                  {{t "nick-name"}}
+                  {{t "newsletter-name"}}
                 </span>
               </div>
             </a>
@@ -82,11 +82,7 @@
               {{/if}}
             </td>
             <td data-test-route-settings-ministers-mandatee-nickname={{index}} class="mandatee-draggable-row">
-              {{#if (is-pending mandatee.nickName)}}
-                <div class="skeletal-loader" role="alert" aria-busy="true"></div>
-              {{else}}
-                {{await mandatee.nickName}}
-              {{/if}}
+              {{mandatee.newsletterTitle}}
             </td>
             <td data-test-route-settings-ministers-mandatee-priority={{index}} class="mandatee-draggable-row">
               {{await mandatee.priority}}

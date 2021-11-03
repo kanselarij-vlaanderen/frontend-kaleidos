@@ -2,10 +2,6 @@ import Model, { belongsTo, hasMany, attr } from '@ember-data/model';
 import { computed } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { lower as lowerCaseAlphabet } from 'alphabet';
-import { CURRENT_GOVERNMENT_BODY } from 'frontend-kaleidos/config/config';
-
-const MINISTER_ROLE = 'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03e0';
-const VICE_MINISTER_ROLE = 'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03df';
 
 // TODO: octane-refactor
 /* eslint-disable ember/no-get */
@@ -16,30 +12,7 @@ export default Model.extend({
   intl: service(),
 
   title: attr('string'),
-  nickName: computed('role.uri', 'mandate.role.label', 'person.fullName', async function() {
-    /* This property was changed from a regular attribute to an async computed
-    after the themis mandatary migration in order to keep the "nickName" functionality
-    how it was originally intended. The meaning and usage of this property however
-    probably should be reviewed*/
-    const mandate = await this.mandate;
-    let role = await mandate.get('role');
-    const person = await this.person;
-    if (role.uri === MINISTER_ROLE) {
-      const viceMp = await this.store.queryOne('mandatee', {
-        'filter[person][:id:]': person.id,
-        'filter[mandate][role][:uri:]': VICE_MINISTER_ROLE,
-        'filter[government-body][:uri:]': CURRENT_GOVERNMENT_BODY,
-        include: 'mandate.role',
-      });
-      if (viceMp) {
-        // Mostly the "plain minister"-mandatee is linked to agenda-items.
-        // In newsletter though we want to show their VMP-title if available.
-        const viceMpMandate = await viceMp.mandate;
-        role = await viceMpMandate.role;
-      }
-    }
-    return `${role.label} ${person.fullName}`;
-  }),
+  newsletterTitle: attr('string'),
 
   priority: attr('number'),
   start: attr('datetime'),
