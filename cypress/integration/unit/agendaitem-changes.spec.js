@@ -146,6 +146,7 @@ context('Agendaitem changes tests', () => {
     cy.route('GET', '/agendas/f66c6d79-6ad2-49e2-af55-702df3a936d8/status').as('loadAgendaBStatus');
     cy.visit('/vergadering/5EBA48CF95A2760008000006/agenda/f66c6d79-6ad2-49e2-af55-702df3a936d8/vergelijken');
     cy.wait('@loadAgendaBStatus');
+    cy.wait(2000); // Some data loading issues, there is no loader to wait on and most ID's in xhr calls are always new
     // compare Agenda B against Agenda C
     cy.get(agenda.compareAgenda.agendaLeft).click();
     cy.get(dependency.emberPowerSelect.option).contains('Agenda B')

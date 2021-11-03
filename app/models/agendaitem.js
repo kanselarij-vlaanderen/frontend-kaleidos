@@ -61,12 +61,12 @@ export default ModelWithModifier.extend({
   pieces: hasMany('piece'),
   linkedPieces: hasMany('piece'),
 
-  // TODO KAS-2777 only used in print agenda function ?
+  // TODO only used in print agenda function ?
   sortedPieces: computed('pieces.@each.name', function() {
     return A(this.get('pieces').toArray()).sort((pieceA, pieceB) => compareFunction(new VRDocumentName(pieceA.get('name')), new VRDocumentName(pieceB.get('name'))));
   }),
 
-  // TODO KAS-2777 only used for compare function ? 
+  // TODO KAS-2975 only used for compare function ? 
   documentContainers: computed('pieces.@each.name', 'id', function() {
     return PromiseArray.create({
       promise: this.get('pieces').then((pieces) => {

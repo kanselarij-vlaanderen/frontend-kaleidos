@@ -100,7 +100,7 @@ export default class DocumentsDocumentCardComponent extends Component {
       // TODO KAS-2777 This else does not seem used (no <Documents::DocumentCard> that passes this arg)
       this.documentContainer = this.args.documentContainer;
       yield this.loadVersionHistory.perform();
-      // TODO KAS-2777 does this work? Where is this.piece coming from?
+      // TODO KAS-2777 does this work? Where is this.piece coming from if args.piece was not given?
       this.piece = yield loadPiece(this.piece.id);
       this.accessLevel = yield this.piece.accessLevel;
     } else {

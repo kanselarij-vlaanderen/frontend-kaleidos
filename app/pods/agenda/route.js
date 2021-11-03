@@ -39,7 +39,7 @@ export default class AgendaRoute extends Route {
   }
 
   async loadChangesToAgenda(meeting, agenda) {
-    // TODO KAS-2777 can we stop setting the session and agenda ?
+    // TODO KAS-2448 KAS-2449 stop setting/using the session and agenda
     set(this.sessionService, 'currentSession', meeting);
     set(this.sessionService, 'currentAgenda', agenda);
     set(this.agendaService, 'addedAgendaitems', []);
