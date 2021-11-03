@@ -8,7 +8,7 @@ import {
   lastValue
 } from 'ember-concurrency-decorators';
 import {
-  setAgendaitemsPriority,
+  setAgendaitemsNumber,
   AgendaitemGroup
 } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
@@ -75,7 +75,7 @@ export default class AgendaAgendaitemsController extends Controller {
   *assignNewPriorities(reorderedAgendaitems, draggedAgendaItem) {
     // reorderedAgendaitems includes all items on the whole page. We only want to re-order within one category (nota/announcement/...)
     const reorderedAgendaitemsOfCategory = reorderedAgendaitems.filter((item) => item.showAsRemark === draggedAgendaItem.showAsRemark);
-    yield setAgendaitemsPriority(reorderedAgendaitemsOfCategory, true, true); // permissions guarded in template (and backend)
+    yield setAgendaitemsNumber(reorderedAgendaitemsOfCategory, true, true); // permissions guarded in template (and backend)
     this.send('reloadModel');
   }
 

@@ -1,16 +1,19 @@
-import AgendaSidebar from 'frontend-kaleidos/components/agenda/agenda-detail/sidebar';
+import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-export default class AgendaOverview extends AgendaSidebar {
+export default class AgendaOverview extends Component {
   /**
    * @argument notaGroups: Array of AgendaitemGroup-objects
    * @argument isLoadingNotaGroups: boolean indicating whether to show the loading state for nota's
-   * @argument announcements
+   * @argument announcements: Array of agendaitems with boolean 'showAsRemark' == true
    * @argument newItems: items to be marked as "new on this agenda"
-   * @argument currentAgenda
-   * @argument previousAgenda
+   * @argument currentAgenda: the agenda that is currently open
+   * @argument previousAgenda: the previous version of the currently open agenda
+   * @argument onReorderAgendaitems: trigger the parent's action when we reorder agendaitems (by dragging)
+   * @argument showModifiedOnly: if we should filter only on modified agendaitems
+   * @argument toggleShowModifiedOnly: toggle the parent to set the modified filter on or off
    */
 
   @service currentSession;
@@ -21,6 +24,10 @@ export default class AgendaOverview extends AgendaSidebar {
 
   get isDraggingEnabled() {
     return this.currentSession.isEditor && this.isDesignAgenda;
+  }
+
+  get isDesignAgenda() {
+    return this.args.currentAgenda.isDesignAgenda;
   }
 
   @action

@@ -15,10 +15,9 @@ import VrNotulenName,
 
 export default class AgendaOverviewItem extends AgendaSidebarItem {
   /**
-   *
    * @argument agendaitem
-   * @argument currentAgenda: both agenda's for determining changed documents
-   * @argument previousAgenda
+   * @argument currentAgenda: the agenda that is currently open
+   * @argument previousAgenda: the previous version of the currently open agenda
    * @argument isNew: boolean indicating if the item should be marked with the "new agenda-item"-icon
    * @argument isEditingFormallyOkStatus
    * @argument showDragHandle: whether to show the drag-handle for changing item order
@@ -45,6 +44,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
     this.loadDocuments.perform();
   }
 
+  // TODO KAS-2777 refactor to use args.meeting, remove sessionService
   get documentsAreReleased() {
     return this.sessionService.currentSession.releasedDocuments < new Date();
   }
