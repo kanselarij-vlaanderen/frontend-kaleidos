@@ -108,6 +108,7 @@ export default class AgendaAgendaitemsController extends Controller {
         'page[size]': PAGE_SIZE.PIECES, // TODO add pagination when sorting is done in the backend
         include: 'document-container',
       });
+      // TODO KAS-2777 this is the old call, remove when testing indicates the above call works
       // await this.store.findRecord('agendaitem', agendaitem.id, {
       //   reload: true, // without reload the async operation will be resolved too early by ember-data's cache,
       //   include: [

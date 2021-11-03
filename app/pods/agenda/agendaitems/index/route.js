@@ -3,7 +3,6 @@ import { animationFrame } from 'ember-concurrency';
 
 export default class AgendaAgendaitemsIndexRoute extends Route {
   async setupController() {
-    console.log("setup controller hook pods/agenda/agendaitems/index");
     super.setupController(...arguments);
     // eslint-disable-next-line ember/no-controller-access-in-routes
     const parentController = this.controllerFor('agenda.agendaitems');

@@ -23,7 +23,6 @@ export default class AgendaAgendaitemsRoute extends Route {
   @service agendaService;
 
   async model(params) {
-    console.log("model hook pods/agenda/agendaitems");
     const {
       agenda,
       meeting,
@@ -94,7 +93,6 @@ export default class AgendaAgendaitemsRoute extends Route {
 
   async setupController(controller) {
     super.setupController(...arguments);
-    console.log("setup controller hook pods/agenda/agendaitems");
     const isTransitionToIndex = this.transition.to.name === 'agenda.agendaitems.index';
     const {
       agenda,

@@ -12,7 +12,7 @@ export default class File extends Model {
   @belongsTo('piece') piece;
 
   // *NOTE Don't use this getter, use filename instead
-  // Possible unused since it had an error throwing 'deprecate' method for 2 months but no support issued were ever logged
+  // Possible unused getter since it had an error throwing 'deprecate' method for 2 months but no support issues were ever logged
   get name() {
     return this.filename;
   }

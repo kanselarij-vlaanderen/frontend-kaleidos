@@ -2,7 +2,6 @@ import Route from '@ember/routing/route';
 
 export default class AgendaitemAgendaitemsAgendaRoute extends Route {
   model(params) {
-    console.log("model hook pods/agenda/agendaitems/agendaitem");
     return this.store.findRecord('agendaitem', params.agendaitem_id, {
       include: [
         'agenda-activity',
@@ -22,7 +21,6 @@ export default class AgendaitemAgendaitemsAgendaRoute extends Route {
 
   setupController(controller, model) {
     super.setupController(...arguments);
-    console.log("setup controller hook pods/agenda/agendaitems/agendaitem");
     controller.meeting = this.modelFor('agenda').meeting;
 
     // eslint-disable-next-line ember/no-controller-access-in-routes

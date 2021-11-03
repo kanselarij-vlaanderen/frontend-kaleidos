@@ -12,7 +12,6 @@ export default class AgendaRoute extends Route {
   }
 
   async model(params) {
-    console.log("model hook pods/agenda");
     const meetingId = params.meeting_id;
     const meeting = await this.store.findRecord('meeting', meetingId, {
       reload: true,
