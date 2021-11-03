@@ -84,7 +84,6 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *loadPieceRelatedData() {
-    // TODO KAS-2777 document-container type and access level call seems slow
     const loadPiece = (id) =>
       this.store.queryOne('piece', {
         'filter[:id:]': id,
@@ -98,7 +97,7 @@ export default class DocumentsDocumentCardComponent extends Component {
       this.documentContainer = yield this.piece.documentContainer;
       this.accessLevel = yield this.piece.accessLevel;
     } else if (this.args.documentContainer) {
-      // TODO This else does not seem used (no <Documents::DocumentCard> that passes this arg)
+      // TODO KAS-2777 This else does not seem used (no <Documents::DocumentCard> that passes this arg)
       this.documentContainer = this.args.documentContainer;
       yield this.loadVersionHistory.perform();
       // TODO KAS-2777 does this work? Where is this.piece coming from?

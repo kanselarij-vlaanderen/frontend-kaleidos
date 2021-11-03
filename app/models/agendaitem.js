@@ -58,16 +58,14 @@ export default ModelWithModifier.extend({
 
   mandatees: hasMany('mandatee'),
   approvals: hasMany('approval'),
-  // TODO KAS-2777 use /pieces cache ? makes pieces a read-only
   pieces: hasMany('piece'),
   linkedPieces: hasMany('piece'),
 
-  // TODO KAS-2777 use /pieces cache ? makes pieces a read-only
+  // TODO KAS-2777 only used in print agenda function ?
   sortedPieces: computed('pieces.@each.name', function() {
     return A(this.get('pieces').toArray()).sort((pieceA, pieceB) => compareFunction(new VRDocumentName(pieceA.get('name')), new VRDocumentName(pieceB.get('name'))));
   }),
 
-  // TODO KAS-2777 use /pieces cache ? makes pieces a read-only
   // TODO KAS-2777 only used for compare function ? 
   documentContainers: computed('pieces.@each.name', 'id', function() {
     return PromiseArray.create({

@@ -274,7 +274,6 @@ export default Service.extend({
       });
       submittedPieces = submittedPieces.concat((await submissionActivity2.pieces).toArray());
     }
-    // TODO KAS-2777 makes pieces a read-only
     const agendaitem = await this.store.createRecord('agendaitem', {
       retracted: false,
       titlePress: subcase.shortTitle,

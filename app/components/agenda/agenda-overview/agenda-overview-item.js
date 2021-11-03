@@ -71,8 +71,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
 
   @task
   *loadDocuments() {
-    // TODO KAS-2777 use /pieces cache
-    // let pieces = yield this.args.agendaitem.pieces;
+    // This uses the same call as in agendaitem/documents route, ensuring we hit the same cache
     let pieces = yield this.store.query('piece', {
       'filter[agendaitems][:id:]': this.args.agendaitem.id,
       'page[size]': PAGE_SIZE.PIECES, // TODO add pagination when sorting is done in the backend
