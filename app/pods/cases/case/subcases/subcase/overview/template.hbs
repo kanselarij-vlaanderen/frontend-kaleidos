@@ -29,15 +29,11 @@
       @isEditing={{this.isEditingTitles}}
     />
   {{/if}}
-  <Mandatees::MandateesDomainsPanel
+  <Mandatees::MandateesPanel
     @mandatees={{this.mandatees}}
     @submitter={{this.submitter}}
-    @fields={{this.governmentFields}}
     @allowEditing={{this.currentSession.isEditor}}
     @onSave={{this.saveMandateeData}}
   />
-  {{#unless this.subcase.showAsRemark}}
-    <DomainFieldIse::IseCodesPanel @iseCodes={{this.iseCodes}}/>
-  {{/unless}}
   <Agenda::Agendaitem::AgendaitemCase::AllSubcases @subcases={{this.allSubcases}}/>
 {{/if}}
