@@ -1,12 +1,12 @@
 {{#if this.model}}
-  <Subcases::SubcaseDescription @subcase={{this.subcase}}/>
+  <Subcases::SubcaseDescription @subcase={{this.subcase}} />
   <div class="auk-u-mb-8">
     <div class="auk-hr">
-      <hr/>
+      <hr />
     </div>
   </div>
   {{#if this.currentSession.isEditor}}
-   {{!-- TODO these classes do not exist and do nothing --}}
+    {{! TODO these classes do not exist and do nothing }}
     <div class="confidentialities">
       <div class="confidential">
         <Auk::Checkbox
@@ -35,5 +35,7 @@
     @allowEditing={{this.currentSession.isEditor}}
     @onSave={{this.saveMandateeData}}
   />
-  <Agenda::Agendaitem::AgendaitemCase::AllSubcases @subcases={{this.allSubcases}}/>
+  <Agenda::Agendaitem::AgendaitemCase::AllSubcases
+    @subcases={{this.allSubcases}}
+  />
 {{/if}}
