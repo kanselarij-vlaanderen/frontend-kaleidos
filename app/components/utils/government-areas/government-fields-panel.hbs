@@ -22,7 +22,7 @@
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
     </Auk::Panel::Header>
-    {{#if @publicationFlow.governmentFields}}
+    {{#if @governmentFields}}
       <Auk::Panel::Body @noPadding={{true}}>
         <table class="auk-table">
           <thead>
@@ -54,8 +54,8 @@
 </div>
 
 {{#if this.isOpenEditModal}}
-  <Publications::Publication::Case::GovernmentFields::EditGovernmentFieldsModal
-    @governmentFields={{@publicationFlow.governmentFields}}
+  <Utils::GovernmentAreas::EditGovernmentFieldsModal
+    @governmentFields={{@governmentFields}}
     @onSave={{this.save}}
     @onCancel={{this.closeEditModal}}
   />

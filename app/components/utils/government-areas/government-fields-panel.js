@@ -28,7 +28,7 @@ export default class PublicationsPublicationCaseGovernmentDomainsPanelComponent 
 
   @keepLatestTask
   *groupGovernmentFieldsByDomain() {
-    const governmentFields = yield this.args.publicationFlow.governmentFields;
+    const governmentFields = yield this.args.governmentFields;
 
     const fieldsByDomain = yield groupBy(governmentFields.toArray(), 'domain');
     this.rows = [...fieldsByDomain.entries()]
@@ -41,12 +41,9 @@ export default class PublicationsPublicationCaseGovernmentDomainsPanelComponent 
 
   @action
   async save(newGovernmentFields) {
-    const publicationFlow = this.args.publicationFlow;
-    const governmentFields = await publicationFlow.governmentFields;
 
-    governmentFields.clear();
-    governmentFields.pushObjects(newGovernmentFields);
-    await publicationFlow.save();
+    await this.args.onSave(newGovernmentFields);
+
     this.groupGovernmentFieldsByDomain.perform();
 
     this.isOpenEditModal = false;
