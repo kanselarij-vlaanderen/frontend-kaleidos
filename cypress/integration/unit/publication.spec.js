@@ -190,13 +190,13 @@ context('Publications tests', () => {
     cy.route('GET', '/mandatees?**').as('getMandatees');
     cy.get(publication.mandateesPanel.add).click();
     cy.wait('@getMandatees');
-    cy.get(publication.linkMandatees.add).should('be.disabled');
+    cy.get(utils.mandateesSelector.add).should('be.disabled');
     cy.get(utils.mandateeSelector.container).click();
     cy.get(dependency.emberPowerSelect.optionSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(mandateeName)
       .click();
     cy.route('PATCH', '/publication-flows/**').as('patchPublicationFlow');
-    cy.get(publication.linkMandatees.add).should('not.be.disabled')
+    cy.get(utils.mandateesSelector.add).should('not.be.disabled')
       .click();
     cy.wait('@patchPublicationFlow');
     cy.get(publication.mandateesPanel.rows).should('have.length', 1);
