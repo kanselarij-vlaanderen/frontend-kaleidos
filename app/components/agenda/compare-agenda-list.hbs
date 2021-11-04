@@ -54,8 +54,6 @@
           {{#if combinedAgendaitem.left}}
             <div data-test-compare-agendaitem-left>
               <Agenda::AgendaOverview::AgendaOverviewItem
-                @isDocumentClickable={{true}}
-                @isComparing={{true}}
                 @agendaitem={{combinedAgendaitem.left}}
               />
             </div>
@@ -65,8 +63,6 @@
           {{#if combinedAgendaitem.right}}
             <div data-test-compare-agendaitem-right>
               <Agenda::AgendaOverview::AgendaOverviewItem
-                @isDocumentClickable={{true}}
-                @isComparing={{true}}
                 @agendaitem={{combinedAgendaitem.right}}
               />
             </div>
@@ -90,8 +86,6 @@
             {{#if combinedAnnouncement.left}}
               <div data-test-compare-announcement-left>
                 <Agenda::AgendaOverview::AgendaOverviewItem
-                  @isDocumentClickable={{true}}
-                  @isComparing={{true}}
                   @agendaitem={{combinedAnnouncement.left}}
                 />
               </div>
@@ -101,8 +95,6 @@
             {{#if combinedAnnouncement.right}}
               <div data-test-compare-announcement-right>
                 <Agenda::AgendaOverview::AgendaOverviewItem
-                  @isDocumentClickable={{true}}
-                  @isComparing={{true}}
                   @agendaitem={{combinedAnnouncement.right}}
                 />
               </div>
