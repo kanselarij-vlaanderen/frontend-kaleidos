@@ -10,7 +10,7 @@ import VrNotulenName, {
 export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
   async model() {
     const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
-    // This uses the same call as in agenda-overview-item component, ensuring we hit the same cache
+    // This uses the same call as in others routes/components, ensuring we hit the same cache
     let pieces = await this.store.query('piece', {
       'filter[agendaitems][:id:]': agendaitem.id,
       'page[size]': PAGE_SIZE.PIECES, // TODO add pagination when sorting is done in the backend

@@ -36,6 +36,7 @@ export default class AgendaAgendaitemsRoute extends Route {
     });
 
     // Ensure mandatee data for each agendaitem is loaded
+    // *NOTE* Do not change this findRecord, this call is pre-cached by cache-warmup-service
     await Promise.all(agendaitems.map((agendaitem) => {
       this.store.findRecord('agendaitem', agendaitem.id, {
         reload: true, // without reload the async operation will be resolved too early by ember-data's cache

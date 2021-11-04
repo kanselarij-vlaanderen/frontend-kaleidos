@@ -103,26 +103,12 @@ export default class AgendaAgendaitemsController extends Controller {
     this.documentLoadCount = 0;
     this.totalCount = agendaitems.length;
     yield all(agendaitems.map(async(agendaitem) => {
+      // This uses the same call as in others routes/components, ensuring we hit the same cache
       await this.store.query('piece', {
         'filter[agendaitems][:id:]': agendaitem.id,
-        'page[size]': PAGE_SIZE.PIECES, // TODO add pagination when sorting is done in the backend
+        'page[size]': PAGE_SIZE.PIECES,
         include: 'document-container',
       });
-      // TODO KAS-2777 this is the old call, remove when testing indicates the above call works
-      // await this.store.findRecord('agendaitem', agendaitem.id, {
-      //   reload: true, // without reload the async operation will be resolved too early by ember-data's cache,
-      //   include: [
-      //     'pieces',
-      //     'pieces.document-container'
-      //   ].join(','),
-      //   'fields[pieces]': [
-      //     'name', // Display and sorting pieces per agendaitem
-      //     'document-container', // Deduplicating multiple pieces per container
-      //     'created', // Fallback sorting pieces per agendaitem
-      //     'confidential' // Display lock icon on document-badge
-      //   ].join(','),
-      //   'fields[document-containers]': '',
-      // });
       this.documentLoadCount++;
     }));
   }

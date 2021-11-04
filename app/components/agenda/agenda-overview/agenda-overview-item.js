@@ -20,7 +20,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
    * @argument previousAgenda: the previous version of the currently open agenda
    * @argument isNew: boolean indicating if the item should be marked with the "new agenda-item"-icon
    * @argument isEditingFormallyOkStatus
-   * @argument showDragHandle: whether to show the drag-handle for changing item order
+   * @argument showDragHandle: boolean to show the drag-handle for changing item order
    * @argument showFormallyOkStatus: boolean indicating whether to show the formally ok status
    */
 
@@ -44,7 +44,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
     this.loadDocuments.perform();
   }
 
-  // TODO KAS-2777 refactor to use args.meeting, remove sessionService
+  // TODO KAS-2449 refactor to use args.meeting
   get documentsAreReleased() {
     return this.sessionService.currentSession.releasedDocuments < new Date();
   }
@@ -71,7 +71,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
 
   @task
   *loadDocuments() {
-    // This uses the same call as in agendaitem/documents route, ensuring we hit the same cache
+    // This uses the same call as in others routes/components, ensuring we hit the same cache
     let pieces = yield this.store.query('piece', {
       'filter[agendaitems][:id:]': this.args.agendaitem.id,
       'page[size]': PAGE_SIZE.PIECES, // TODO add pagination when sorting is done in the backend

@@ -61,12 +61,12 @@ export default ModelWithModifier.extend({
   pieces: hasMany('piece'),
   linkedPieces: hasMany('piece'),
 
-  // TODO only used in print agenda function ?
+  // TODO only used in print agenda function
   sortedPieces: computed('pieces.@each.name', function() {
     return A(this.get('pieces').toArray()).sort((pieceA, pieceB) => compareFunction(new VRDocumentName(pieceA.get('name')), new VRDocumentName(pieceB.get('name'))));
   }),
 
-  // TODO KAS-2975 only used for compare function ? 
+  // TODO KAS-2975 only used for compare function
   documentContainers: computed('pieces.@each.name', 'id', function() {
     return PromiseArray.create({
       promise: this.get('pieces').then((pieces) => {
@@ -147,30 +147,17 @@ export default ModelWithModifier.extend({
     return wasAdded;
   }),
 
-  isAdded: alias('checkAdded'),
-
+  // TODO KAS-2975 only used for compare function
   hasChanges: computed('checkAdded', 'hasAddedPieces', async function() {
     const hasAddedPieces = await this.hasAddedPieces;
     const checkAdded = await this.checkAdded;
     return checkAdded || hasAddedPieces;
   }),
 
+  // TODO KAS-2975 only used for compare function
   hasAddedPieces: computed('documentContainers.[]', 'addedPieces.[]', async function() {
     const documentContainers = await this.get('documentContainers');
     return documentContainers && documentContainers.some((documentContainers) => documentContainers.checkAdded);
-  }),
-
-  sortedApprovals: computed('approvals.[]', 'id', async function() {
-    return PromiseArray.create({
-      promise: this.store.query('approval', {
-        filter: {
-          agendaitem: {
-            id: this.get('id'),
-          },
-        },
-        sort: 'mandatee.priority',
-      }),
-    });
   }),
 
   newsletterInfo: computed('treatments.@each.newsletterInfo', 'treatments', 'id', async function() {
