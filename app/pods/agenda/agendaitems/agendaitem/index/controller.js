@@ -70,4 +70,9 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     await saveChanges(this.model, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
     this.agendaitemController.groupNotasOnGroupName.perform(this.agendaitemController.notas);
   }
+
+  @action
+  async saveGovernmentFields() {
+    await this.model.save();
+  }
 }

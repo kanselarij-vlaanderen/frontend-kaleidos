@@ -57,6 +57,10 @@
       @allowEditing={{this.currentSession.isEditor}}
       @onSave={{this.saveMandateeData}}
     />
+    <Utils::GovernmentAreas::GovernmentFieldsPanel
+      @governmentFields={{@model.governmentFields}}
+      @onSave={{this.saveGovernmentFields}}
+    />
     <Agenda::Agendaitem::AgendaitemCase::AgendaitemApprovals
       @agendaitem={{this.model}}
     />

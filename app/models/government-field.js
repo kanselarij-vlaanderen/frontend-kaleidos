@@ -1,11 +1,7 @@
-import Model, {
-  attr, hasMany, belongsTo
+import {
+  hasMany
 } from '@ember-data/model';
-export default class GovernmentField extends Model {
-  @attr('string') label;
-  @attr('string') scopeNote;
-  @attr('string') altLabel;
-  @belongsTo('government-domain') domain;
+import Narrower from './narrower';
+export default class GovernmentField extends Narrower {
   @hasMany('ise-code') iseCodes;
-  @hasMany('publication-flow') publicationFlows;
 }
