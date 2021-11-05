@@ -17,7 +17,7 @@ import { keepLatestTask } from 'ember-concurrency-decorators';
 //   }
 // }
 
-export default class PublicationsPublicationCaseGovernmentDomainsPanelComponent extends Component {
+export default class GovernmentAreasPanel extends Component {
   @tracked isOpenEditModal;
   @tracked rows = [];
   @tracked areas;

@@ -32,7 +32,7 @@
             </tr>
           </thead>
           <tbody>
-      {{!--    {{#each this.rows as |row|}}
+            {{!--    {{#each this.rows as |row|}}
             <tr>
               <td data-test-government-fields-panel-row-label>
                 {{row.governmentDomain.label}}
@@ -42,21 +42,21 @@
               </td>
             </tr>
           {{/each}} --}}
-        </tbody>
-      </table>
-    </Auk::Panel::Body>
-  {{else}}
-    <Auk::Panel::Body>
-      <Auk::EmptyState @message={{t "no-added-government-fields"}} />
-    </Auk::Panel::Body>
-  {{/if}}
-</Auk::Panel>
+          </tbody>
+        </table>
+      </Auk::Panel::Body>
+    {{else}}
+      <Auk::Panel::Body>
+        <Auk::EmptyState @message={{t "no-added-government-fields"}} />
+      </Auk::Panel::Body>
+    {{/if}}
+  </Auk::Panel>
 </div>
 
 {{#if this.isOpenEditModal}}
-<Utils::GovernmentAreas::EditGovernmentFieldsModal
-  @governmentAreas={{this.areas}}
-  @onSave={{this.save}}
-  @onCancel={{this.closeEditModal}}
-/>
+  <Utils::GovernmentAreas::EditGovernmentAreasModal
+    @governmentAreas={{this.areas}}
+    @onSave={{this.save}}
+    @onCancel={{this.closeEditModal}}
+  />
 {{/if}}

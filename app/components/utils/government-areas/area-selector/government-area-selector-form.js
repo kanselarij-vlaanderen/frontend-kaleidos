@@ -15,7 +15,7 @@ class DomainSelection {
   }
 }
 
-export default class DomainFieldIseDomainsFieldsSelectorFormComponent extends Component {
+export default class GovernmentAreaSelectorForm extends Component {
   /**
    * Since fields are children of domains, this component only takes fields as arguments, and calculates the required domains internally
    * @argument availableFields: All fields that will be listed as options to be checked
