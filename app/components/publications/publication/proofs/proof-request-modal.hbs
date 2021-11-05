@@ -15,7 +15,7 @@
             {{t "subject"}}
           </Auk::Label>
           <Auk::Input
-            data-test-publication-proof-request-subject
+            data-test-proof-request-subject
             id="proofRequestSubject" @block={{true}}
             @value={{mut this.subject}}
             {{on "input" this.validators.subject.enableError}} />
@@ -26,7 +26,7 @@
             {{t "message"}}
           </Auk::Label>
           <Auk::Textarea
-            data-test-publication-proof-request-message
+            data-test-proof-request-message
             id="proofRequestMessage" @rows="6"
             @value={{mut this.message}}
             {{on "input" this.validators.message.enableError}} />
@@ -34,7 +34,7 @@
         {{!-- Attachments --}}
         <div class="auk-form-group {{this.validators.attachments.errorClass}}">
           <Auk::Label @required={{true}}>{{t "attachments"}}</Auk::Label>
-          <Auk::CheckboxList data-test-publication-proof-request-attachments>
+          <Auk::CheckboxList data-test-proof-request-attachments>
             {{#each @attachments as |piece|}}
               <Auk::Checkbox
                 @label={{piece.name}}
@@ -48,7 +48,7 @@
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
     <Auk::Button
-      data-test-publication-proof-request-save
+      data-test-proof-request-save
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
       @loading={{this.saveRequest.isRunning}}

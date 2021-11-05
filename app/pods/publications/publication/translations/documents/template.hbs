@@ -4,7 +4,7 @@
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           <Auk::Button
-            data-test-route-publications-publication-translations-documents-request-translation
+            data-test-route-publications---translations-documents-request-translation
             @skin="secondary"
             @icon="mail"
             @disabled={{this.isRequestingDisabled}}
@@ -15,7 +15,7 @@
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
           <Auk::Button
-            data-test-route-publications-publication-translations-documents-add
+            data-test-route-publications---translations-documents-add
             @skin="secondary"
             @icon="add"
             @disabled={{this.isUploadDisabled}}
@@ -66,18 +66,18 @@
           {{#each this.pieceRows as |pieceRow|}}
             {{#let pieceRow.piece as |piece|}}
               <tr
-                data-test-route-publications-publication-translations-documents-table-row
+                data-test-route-publications---translations-documents-table-row
                 class="auk-table__row"
               >
                 <td class="auk-table-checkbox-col">
                   <Auk::Checkbox
-                    data-test-route-publications-publication-translations-documents-table-checkbox
+                    data-test-route-publications---translations-documents-row-checkbox
                     @checked={{includes pieceRow this.selectedPieceRows}}
                     {{on "click" (fn this.togglePieceSelection pieceRow)}}
                   />
                 </td>
                 <td
-                  data-test-route-publications-publication-translations-documents-document-name
+                  data-test-route-publications---translations-documents-row-document-name
                 >
                   {{piece.name}}
                 </td>
@@ -134,13 +134,13 @@
                       {{t "read"}}
                     </Auk::Button>
                     <DropdownMenu
-                      data-test-route-publications-publication-translations-options
+                      data-test-route-publications---translations-documents-row-options
                       @skin="borderless"
                       @icon="more"
                       as |Menu|
                     >
                       <Menu.Item
-                        data-test-route-publications-publication-translations-edit
+                        data-test-route-publications---translations-documents-row-edit
                         {{on "click" (fn this.openPieceEditModal pieceRow)}}
                       >
                         {{t "edit-translation-details"}}
@@ -150,7 +150,7 @@
                       }}
                         <Menu.Item
                           @skin="danger"
-                          data-test-route-publications-publication-translations-delete
+                          data-test-route-publications---translations-documents-row-delete
                           {{on "click" (perform this.deletePiece pieceRow)}}
                         >
                           {{t "delete"}}

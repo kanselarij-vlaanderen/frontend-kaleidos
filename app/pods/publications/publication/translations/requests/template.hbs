@@ -13,7 +13,7 @@
           <header.Actions as |actions|>
             <actions.Item>
               <Auk::Button
-                data-test-publications---translations-requests-upload
+                data-test-route-publications---translations-requests-upload
                 @disabled={{this.isUploadDisabled}}
                 @skin="primary"
                 {{on "click" (fn this.openTranslationUploadModal activity)}}
@@ -31,7 +31,7 @@
                   {{t "translation-due-date"}}
                 </p>
                 {{#if this.translationSubcase.dueDate}}
-                  <p data-test-publications---translations-requests-due-date>
+                  <p data-test-route-publications---translations-requests-due-date>
                     {{moment-format
                       this.translationSubcase.dueDate
                       "DD-MM-YYYY"

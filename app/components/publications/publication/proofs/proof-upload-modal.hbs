@@ -25,7 +25,7 @@
                     {{t "name"}}
                   </Auk::Label>
                   <Auk::Input
-                    data-test-upload-proof-name
+                    data-test-proof-upload-name
                     id="proofUploadName"
                     @value={{mut this.name}}
                     {{on "input" this.validators.name.enableError}} />
@@ -62,7 +62,7 @@
     @cancelDisabled={{this.isCancelDisabled}}
     @onCancel={{perform this.cancel}}>
     <Auk::Button
-      data-test-upload-proof-save
+      data-test-proof-upload-save
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
       @loading={{this.save.isRunning}}
