@@ -41,7 +41,15 @@ export default class MandateeSelector extends Component {
     } else {
       queryOptions['filter[government-body][:uri:]'] = CURRENT_GOVERNMENT_BODY;
     }
-    return yield this.store.query('mandatee', queryOptions);
+    const results = yield this.store.query('mandatee', queryOptions);
+    // Many versions of a mandatee exist within a government-body.
+    // We only want the mandatees with no end-date or an end-date in the future.
+    // mu-cl-resources doesn't have :has-no:-capability for properties.
+    return results.filter((mandatee) => {
+      if (mandatee.end) {
+        return mandatee.end && mandatee.end < new Date();
+      }
+    });
   }
 
   @task
