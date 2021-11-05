@@ -43,6 +43,26 @@ const selectors = {
     },
   },
 
+  // publications\publication\proofs\documents\template
+  proofsDocuments: {
+    newRequest: '[data-test-route-publications-publication-proofs-documents-new-request]',
+    initialRequest: '[data-test-route-publications-publication-proofs-documents-initial-request]',
+    extraRequest: '[data-test-route-publications-publication-proofs-documents-extra-request]',
+    finalRequest: '[data-test-route-publications-publication-proofs-documents-final-request]',
+    add: '[data-test-route-publications-publication-proofs-documents-add]',
+    addSourceProof: '[data-test-route-publications-publication-proofs-documents-add-source-proof]',
+    addCorrectedProof: '[data-test-route-publications-publication-proofs-documents-add-corrected-proof]',
+    tableRow: '[data-test-route-publications-publication-proofs-documents-table-row]',
+    row: {
+      checkbox: '[data-test-route-publications-publication-proofs-documents-table-checkbox]',
+      documentName: '[data-test-route-publications-publication-proofs-documents-document-name]',
+      proofsCorrected: '[data-test-route-publications-publication-proofs-corrected]',
+      options: '[data-test-route-publications-publication-proofs-options]',
+      edit: '[data-test-route-publications-publication-proofs-edit]',
+      delete: '[data-test-route-publications-publication-proofs-delete]',
+    },
+  },
+
   // publications\publication\proofs\template
   publicationProofs: {
     documents: '[data-test-route-publications-publication-proofs-documents]',
@@ -56,6 +76,16 @@ const selectors = {
       title: '.auk-toolbar-complex__item > h4',
       upload: '[data-test-publications---translations-requests-upload]',
       dueDate: '[data-test-publications---translations-requests-due-date]',
+    },
+  },
+
+  // publications\publication\translations\requests
+  proofsRequests: {
+    request: {
+      container: '[data-test-publications---proofs-requests-container]',
+      title: '.auk-toolbar-complex__item > h4',
+      upload: '[data-test-publications---proofs-requests-upload]',
+      emailSubject: '[data-test-publications---proofs-requests-email-subject]',
     },
   },
 
@@ -120,6 +150,7 @@ const selectors = {
       urgencyLevel: '[data-test-publication-table-row-urgency-level]',
       status: '[data-test-publication-table-row-status]',
       translationProgressBadge: '[data-test-publication-table-row-translation-progress-badge]',
+      proofsProgressBadge: '[data-test-publication-table-row-proofs-progress-badge]',
       source: '[data-test-publication-table-row-source]',
       goToPublication: '[data-test-publication-table-row-go-to-publication]',
     },
@@ -282,6 +313,33 @@ const selectors = {
   translationUpload: {
     name: '[data-test-translation-upload-name]',
     save: '[data-test-translation-upload-save]',
+  },
+
+  // upload-proof-modal
+  uploadProof: {
+    name: '[data-test-upload-proof-name]',
+    save: '[data-test-upload-proof-save]',
+  },
+
+  // proof-edit-modal
+  proofEdit: {
+    name: '[data-test-publication-proof-edit-name]',
+    save: '[data-test-publication-proof-edit-save]',
+  },
+
+  // proofs-statuspill
+  proofsStatuspill: {
+    done: '[data-test-proofs-statuspill-done]',
+    inProgress: '[data-test-proofs-statuspill-in-progress]',
+    notStarted: '[data-test-proofs-statuspill-not-started]',
+  },
+
+  // proof-request-modal
+  proofRequest: {
+    subject: '[data-test-publication-proof-request-subject]',
+    message: '[data-test-publication-proof-request-message]',
+    attachments: '[data-test-publication-proof-request-attachments]',
+    save: '[data-test-publication-proof-request-save]',
   },
 };
 export default selectors;

@@ -1,6 +1,6 @@
 <div class="auk-u-m-4">
   {{#each this.model as |row|}}
-    <div class="auk-u-mb-4">
+    <div data-test-publications---proofs-requests-container class="auk-u-mb-4">
       <Auk::AccordionPanel @isDefaultActive={{true}} as |accordionPanel|>
         <accordionPanel.Header
           @title={{t
@@ -14,6 +14,7 @@
             <actions.Item>
               {{#if row.canOpenProofUploadModal}}
                 <Auk::Button
+                  data-test-publications---proofs-requests-upload
                   @disabled={{this.isUploadDisabled}}
                   @skin="primary"
                   {{on "click" (fn this.openProofUploadModal row)}}>
@@ -29,7 +30,7 @@
               {{#if row.requestActivity.email}}
                 <div class="auk-u-mb-2">
                   <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "subject"}}</p>
-                  <p>{{row.requestActivity.email.subject}}</p>
+                  <p data-test-publications---proofs-requests-email-subject>{{row.requestActivity.email.subject}}</p>
                 </div>
                 <div class="auk-u-mb-2">
                   <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "message"}}</p>

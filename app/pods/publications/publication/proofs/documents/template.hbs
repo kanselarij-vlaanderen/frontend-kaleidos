@@ -4,20 +4,24 @@
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           <DropdownMenu
+            data-test-route-publications-publication-proofs-documents-new-request
             @skin="secondary"
             @label={{t "new-request"}}
             @position="bottom-start"
             @disabled={{this.isRequestingDisabled}}
           as |Menu|>
             <Menu.Item
+              data-test-route-publications-publication-proofs-documents-initial-request
               {{on "click" (fn this.openProofRequestModal "initial")}}>
               {{t "initial-request"}}
             </Menu.Item>
             <Menu.Item
+              data-test-route-publications-publication-proofs-documents-extra-request
               {{on "click" (fn this.openProofRequestModal "extra")}}>
               {{t "extra-request"}}
             </Menu.Item>
             <Menu.Item
+              data-test-route-publications-publication-proofs-documents-final-request
               {{on "click" (fn this.openProofRequestModal "final")}}>
               {{t "final-request"}}
             </Menu.Item>
@@ -26,16 +30,19 @@
 
         <Auk::Toolbar::Item>
           <DropdownMenu
+            data-test-route-publications-publication-proofs-documents-add
             @skin="secondary"
             @label={{t "upload-proof-document"}}
             @position="bottom-start"
             @disabled={{this.isUploadDisabled}}
             as |Menu|>
             <Menu.Item
+              data-test-route-publications-publication-proofs-documents-add-source-proof
               {{on "click" this.openSourceUploadModal}}>
               {{t "upload-source-proof-document"}}
             </Menu.Item>
             <Menu.Item
+              data-test-route-publications-publication-proofs-documents-add-corrected-proof
               {{on "click" this.openCorrectionUploadModal}}>
               {{t "upload-corrected-proof-document"}}
             </Menu.Item>
@@ -78,13 +85,14 @@
         <tbody>
           {{#each this.pieceRows as |pieceRow|}}
             {{#let pieceRow.piece as |piece|}}
-              <tr>
+              <tr data-test-route-publications-publication-proofs-documents-table-row>
                 <td class="auk-table-checkbox-col">
                   <Auk::Checkbox
+                    data-test-route-publications-publication-proofs-documents-table-checkbox
                     @checked={{includes pieceRow this.selectedPieceRows}}
                     {{on "input" (fn this.togglePieceSelection pieceRow)}} />
                 </td>
-                <td>
+                <td data-test-route-publications-publication-proofs-documents-document-name>
                   {{piece.name}}
                 </td>
                 <td>
@@ -110,7 +118,7 @@
                     {{t "dash"}}
                   {{/if}}
                 </td>
-                <td class="auk-u-text-align--center">
+                <td data-test-route-publications-publication-proofs-corrected class="auk-u-text-align--center">
                   {{#if piece.publicationSubcaseCorrectionFor}}
                     <Auk::Icon @name="check" @skin="success-dark" />
                   {{else}}
@@ -132,15 +140,18 @@
                       {{t "read"}}
                     </Auk::Button>
                     <DropdownMenu
+                      data-test-route-publications-publication-proofs-options
                       @skin="borderless"
                       @icon="more"
                     as |Menu|>
                       <Menu.Item
+                        data-test-route-publications-publication-proofs-edit
                         {{on "click" (fn this.openPieceEditModal pieceRow)}}>
                         {{t "edit-proof-details"}}
                       </Menu.Item>
                       {{#if (and this.canDeletePieces pieceRow.isPieceDeletable)}}
                         <Menu.Item @skin="danger"
+                          data-test-route-publications-publication-proofs-delete
                           {{on "click" (perform this.deletePiece pieceRow)}}>
                           {{t "delete"}}
                         </Menu.Item>
