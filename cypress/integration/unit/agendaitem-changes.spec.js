@@ -219,7 +219,7 @@ context('Agendaitem changes tests', () => {
     // cy.get(agenda.agendaitemGroupHeader.section).eq(0)
     //   .should('contain.text', 'Geen toekenning');
     cy.openDetailOfAgendaitem('Cypress test dossier 1 test stap 1');
-    cy.addAgendaitemMandatee(0, -1, 0, 'Bourgeois', 'Minister-president van de Vlaamse Regering');
+    cy.addAgendaitemMandatee(0, 'Bourgeois', 'Minister-president van de Vlaamse Regering');
     cy.clickReverseTab('Overzicht');
     cy.get(agenda.agendaitemGroupHeader.section).eq(0)
       .should('contain.text', 'Minister-president van de Vlaamse Regering');

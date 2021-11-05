@@ -195,12 +195,6 @@ const selectors = {
     },
   },
 
-  // link-mandatees-modal
-  linkMandatees: {
-    cancel: '[data-test-link-mandatees-cancel]',
-    add: '[data-test-link-mandatees-add]',
-  },
-
   // government-fields-panel
   governmentFieldsPanel: {
     edit: '[data-test-government-fields-panel-edit]',

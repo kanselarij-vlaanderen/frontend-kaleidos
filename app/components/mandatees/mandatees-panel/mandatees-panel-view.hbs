@@ -21,7 +21,7 @@
       {{/if}}
     </Auk::Toolbar>
   </Auk::Panel::Header>
-  {{#if @mandatees.length }}
+  {{#if @mandatees.length}}
     <Auk::Panel::Body @noPadding={{true}}>
       <table class="auk-table">
         <thead>
@@ -33,13 +33,21 @@
         <tbody>
           {{#each @mandatees as |mandatee|}}
             <tr data-test-mandatee-panel-view-mandatee-row>
-              <td class="auk-table__col--10" data-test-mandatee-panel-view-row-name>
+              <td
+                class="auk-table__col--10"
+                data-test-mandatee-panel-view-row-name
+              >
                 <div class="auk-o-flex auk-o-flex--vertical-center">
                   <Auk::Badge @icon="user" />
-                  <span class="auk-u-mx-2">{{mandatee.person.nameToDisplay}}</span>
+                  <span class="auk-u-mx-2">
+                    {{mandatee.person.nameToDisplay}}
+                  </span>
                 </div>
               </td>
-              <td class="auk-table__col--2" data-test-mandatee-panel-view-row-submitter>
+              <td
+                class="auk-table__col--2"
+                data-test-mandatee-panel-view-row-submitter
+              >
                 {{#if (eq mandatee @submitter)}}
                   <Auk::Icon @name="circle-check" @skin="success" />
                 {{else}}

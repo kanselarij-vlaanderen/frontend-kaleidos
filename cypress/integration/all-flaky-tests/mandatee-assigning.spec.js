@@ -6,7 +6,6 @@ import agenda from '../../selectors/agenda.selectors';
 import utils from '../../selectors/utils.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import auk from '../../selectors/auk.selectors';
-import cases from '../../selectors/case.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -41,28 +40,18 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
 
-    cy.addSubcaseMandatee(0, -1, -1); // -1 means select nothing
-    cy.addSubcaseMandatee(1, 0, 0);
+    cy.addSubcaseMandatee(0);
+    cy.addSubcaseMandatee(1);
 
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 2, {
       timeout: 5000,
     });
 
+    // Checking if name of first mandatee is present ensures data is loaded
     cy.get('@listItems').eq(0)
-      .within(() => {
-        // Checking if name of first mandatee is present ensures data is loaded
-        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck);
-        cy.get(mandatee.mandateePanelView.row.domains).should('contain', '-');
-      });
-    cy.get('@listItems').eq(1)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-
-    cy.get(cases.isecodes.list).should('exist');
-    cy.get(cases.isecodes.listItem).should('have.length.greaterThan', 0);
-
+      .find(mandatee.mandateePanelView.row.name)
+      .should('contain', nameToCheck);
     cy.proposeSubcaseForAgenda(agendaDate);
 
     // Check if agendaitem has the same amount of mandatees
@@ -75,15 +64,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     });
 
     cy.get('@listItems').eq(0)
-      .within(() => {
-        // Checking if name of first mandatee is present ensures data is loaded
-        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck);
-        cy.get(mandatee.mandateePanelView.row.domains).should('contain', '-');
-      });
-    cy.get('@listItems').eq(1)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
+      .find(mandatee.mandateePanelView.row.name)
+      .should('contain', nameToCheck);
   });
 
   it('should add mandatees to a subcase after assigning to agenda, agendaitem should have the same mandatees', () => {
@@ -99,7 +81,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     // Dependency: We should already have 2 mandatees that we inherit from previous subcase, now we add 1 more
 
-    cy.addSubcaseMandatee(2, 0, 0);
+    cy.addSubcaseMandatee(2);
 
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 3, {
@@ -107,23 +89,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     });
 
     cy.get('@listItems').eq(0)
-      .within(() => {
-        // Checking if name of first mandatee is present ensures data is loaded
-        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck);
-        // NOTE: even though we did not select fields for this mandatee, he shares ise-codes with another mandatee and now show fields
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(1)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(2)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-
-    cy.get(cases.isecodes.list).should('exist');
-    cy.get(cases.isecodes.listItem).should('have.length.greaterThan', 0);
+      .find(mandatee.mandateePanelView.row.name)
+      .should('contain', nameToCheck);
 
     // Check if agendaitem has the same amount of mandatees
     cy.openAgendaForDate(agendaDate);
@@ -135,19 +102,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     });
 
     cy.get('@listItems').eq(0)
-      .within(() => {
-        // Checking if name of first mandatee is present ensures data is loaded
-        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck);
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(1)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(2)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
+      .find(mandatee.mandateePanelView.row.name)
+      .should('contain', nameToCheck);
   });
 
   it('should add mandatees to an agendaitem on designagenda, subcase should have the same mandatees', () => {
@@ -165,62 +121,29 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     // Dependency: We should already have 3 mandatees that we inherit from previous subcase, now we add 1 more
 
-    cy.addSubcaseMandatee(3, 0, 0);
+    cy.addSubcaseMandatee(3);
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 4, {
       timeout: 5000,
     });
 
     cy.get('@listItems').eq(0)
-      .within(() => {
-        // Checking if name of first mandatee is present ensures data is loaded
-        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck);
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(1)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(2)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(3)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
+      .find(mandatee.mandateePanelView.row.name)
+      .should('contain', nameToCheck);
 
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
 
     // Add 1 more
-    cy.addSubcaseMandatee(5, -1, -1);
+    cy.addSubcaseMandatee(5);
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 5, {
       timeout: 5000,
     });
 
     cy.get('@listItems').eq(0)
-      .within(() => {
-        // Checking if name of first mandatee is present ensures data is loaded
-        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck);
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(1)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(2)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(3)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(4)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('contain', '-');
-      });
+      .find(mandatee.mandateePanelView.row.name)
+      .should('contain', nameToCheck);
+
     // Check if subcase has the same amount of mandatees
     cy.visit('/dossiers/5F02DD8A7DE3FC0008000001/deeldossiers');
     cy.openSubcase(0);
@@ -230,30 +153,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       timeout: 5000,
     });
     cy.get('@listItems').eq(0)
-      .within(() => {
-        // Checking if name of first mandatee is present ensures data is loaded
-        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck);
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(1)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(2)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(3)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(4)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('contain', '-');
-      });
-
-    cy.get(cases.isecodes.list).should('exist');
-    cy.get(cases.isecodes.listItem).should('have.length.greaterThan', 0);
+      .find(mandatee.mandateePanelView.row.name)
+      .should('contain', nameToCheck);
   });
 
   it('should edit mandatees and show correct mandatees when switching agendaitems before, during and after edits', () => {
@@ -334,7 +235,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.log('adding a mandatee and saving, check the non-edit view again');
     cy.get('@agendaitems').eq(2)
       .click();
-    cy.addAgendaitemMandatee(6, -1, -1);
+    cy.addAgendaitemMandatee(6);
     cy.get('@agendaitems').eq(1)
       .click();
     cy.get(mandatee.mandateePanelView.rows).should('have.length', 2);

@@ -16,7 +16,6 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @controller('agenda.agendaitems.agendaitem') agendaitemController;
   @tracked agenda;
   @tracked subcase;
-  @tracked governmentFields;
   @tracked submitter;
   @tracked newsletterInfo;
   @tracked mandatees;
