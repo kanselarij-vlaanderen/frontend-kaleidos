@@ -62,7 +62,7 @@
       @onSave={{this.saveMandateeData}}
     />
     <Utils::GovernmentAreas::GovernmentFieldsPanel
-      @governmentFields={{@model.governmentFields}}
+      @case={{this.subcase.case}}
       @onSave={{this.saveGovernmentFields}}
     />
     <Agenda::Agendaitem::AgendaitemCase::AgendaitemApprovals

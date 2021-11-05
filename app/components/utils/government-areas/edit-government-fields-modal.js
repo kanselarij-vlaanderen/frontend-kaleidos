@@ -4,31 +4,36 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 
-export default class EditGovernmentFieldsModal extends Component {
+export default class EditGovernmentAreasModal extends Component {
   @service store;
-  @tracked governmentFields;
-  @tracked selectedGovernmentFields;
+  @tracked governmentAreas;
+  @tracked selectedGovernmentAreas;
 
   constructor() {
     super(...arguments);
-    this.governmentFields = this.store.peekAll('government-field').sortBy('position');
-    this.selectedGovernmentFields = this.args.governmentFields.slice(0); // making a copy
+    // const fields = this.store.query('government-field', {
+    //   sort: 'priority',
+    // });
+    // const domains = this.store.query('government-domain', {
+    //   sort: 'priority',
+    // });
+    this.selectedGovernmentAreas = this.args.governmentAreas?this.args.governmentAreas.slice(0):[]; // making a copy
   }
 
   @task
   *save() {
     yield this.args.onSave(
-      this.selectedGovernmentFields
+      this.selectedGovernmentAreas
     );
   }
 
   @action
-  select(selectedFields) {
-    this.selectedGovernmentFields.pushObjects(selectedFields);
+  select(selectedAreas) {
+    this.selectedGovernmentAreas.pushObjects(selectedAreas);
   }
 
   @action
-  deselect(selectedFields) {
-    this.selectedGovernmentFields.removeObjects(selectedFields);
+  deselect(selectedAreas) {
+    this.selectedGovernmentAreas.removeObjects(selectedAreas);
   }
 }

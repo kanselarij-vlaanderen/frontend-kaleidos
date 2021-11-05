@@ -3,23 +3,24 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { keepLatestTask } from 'ember-concurrency-decorators';
 
-class Row {
-  @tracked governmentDomain;
-  @tracked governmentFields;
-
-  constructor(properties) {
-    this.governmentDomain = properties.governmentDomain;
-    this.governmentFields = properties.governmentFields;
-  }
-
-  get sortedGovernmentFields() {
-    return this.governmentFields.sortBy('label');
-  }
-}
+// class Row {
+//   @tracked governmentDomain;
+//   @tracked governmentFields;
+//
+//   constructor(properties) {
+//     this.governmentDomain = properties.governmentDomain;
+//     this.governmentFields = properties.governmentFields;
+//   }
+//
+//   get sortedGovernmentFields() {
+//     return this.governmentFields.sortBy('label');
+//   }
+// }
 
 export default class PublicationsPublicationCaseGovernmentDomainsPanelComponent extends Component {
   @tracked isOpenEditModal;
   @tracked rows = [];
+  @tracked areas;
 
   constructor() {
     super(...arguments);
@@ -28,15 +29,17 @@ export default class PublicationsPublicationCaseGovernmentDomainsPanelComponent 
 
   @keepLatestTask
   *groupGovernmentFieldsByDomain() {
-    const governmentFields = yield this.args.governmentFields;
+    const caze = yield this.args.case;
+    console.log(caze)
+    this.areas = yield caze.governmentAreas;
 
-    const fieldsByDomain = yield groupBy(governmentFields.toArray(), 'domain');
-    this.rows = [...fieldsByDomain.entries()]
-      .map(([domain, fields]) => new Row({
-        governmentDomain: domain,
-        governmentFields: fields,
-      }))
-      .sortBy('governmentDomain.label');
+    // const fieldsByDomain = yield groupBy(governmentFields.toArray(), 'domain');
+    // this.rows = [...fieldsByDomain.entries()]
+    //   .map(([domain, fields]) => new Row({
+    //     governmentDomain: domain,
+    //     governmentFields: fields,
+    //   }))
+    //   .sortBy('governmentDomain.label');
   }
 
   @action
@@ -60,18 +63,18 @@ export default class PublicationsPublicationCaseGovernmentDomainsPanelComponent 
   }
 }
 
-async function groupBy(array, property) {
-  const groups = new Map();
-
-  for (const element of array) {
-    const groupKey = await element.get(property);
-    const group = groups.get(groupKey);
-    if (!group) {
-      groups.set(groupKey, [element]);
-    } else {
-      group.push(element);
-    }
-  }
-
-  return groups;
-}
+// async function groupBy(array, property) {
+//   const groups = new Map();
+//
+//   for (const element of array) {
+//     const groupKey = await element.get(property);
+//     const group = groups.get(groupKey);
+//     if (!group) {
+//       groups.set(groupKey, [element]);
+//     } else {
+//       group.push(element);
+//     }
+//   }
+//
+//   return groups;
+// }

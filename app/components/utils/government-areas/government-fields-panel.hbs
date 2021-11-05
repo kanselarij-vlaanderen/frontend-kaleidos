@@ -22,7 +22,7 @@
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
     </Auk::Panel::Header>
-    {{#if @governmentFields}}
+    {{#if this.areas}}
       <Auk::Panel::Body @noPadding={{true}}>
         <table class="auk-table">
           <thead>
@@ -32,31 +32,31 @@
             </tr>
           </thead>
           <tbody>
-            {{#each this.rows as |row|}}
-              <tr>
-                <td data-test-government-fields-panel-row-label>
-                  {{row.governmentDomain.label}}
-                </td>
-                <td data-test-government-fields-panel-row-fields>
-                  {{join ", " (map-by "label" row.sortedGovernmentFields)}}
-                </td>
-              </tr>
-            {{/each}}
-          </tbody>
-        </table>
-      </Auk::Panel::Body>
-    {{else}}
-      <Auk::Panel::Body>
-        <Auk::EmptyState @message={{t "no-added-government-fields"}} />
-      </Auk::Panel::Body>
-    {{/if}}
-  </Auk::Panel>
+      {{!--    {{#each this.rows as |row|}}
+            <tr>
+              <td data-test-government-fields-panel-row-label>
+                {{row.governmentDomain.label}}
+              </td>
+              <td data-test-government-fields-panel-row-fields>
+                {{join ", " (map-by "label" row.sortedGovernmentFields)}}
+              </td>
+            </tr>
+          {{/each}} --}}
+        </tbody>
+      </table>
+    </Auk::Panel::Body>
+  {{else}}
+    <Auk::Panel::Body>
+      <Auk::EmptyState @message={{t "no-added-government-fields"}} />
+    </Auk::Panel::Body>
+  {{/if}}
+</Auk::Panel>
 </div>
 
 {{#if this.isOpenEditModal}}
-  <Utils::GovernmentAreas::EditGovernmentFieldsModal
-    @governmentFields={{@governmentFields}}
-    @onSave={{this.save}}
-    @onCancel={{this.closeEditModal}}
-  />
+<Utils::GovernmentAreas::EditGovernmentFieldsModal
+  @governmentAreas={{this.areas}}
+  @onSave={{this.save}}
+  @onCancel={{this.closeEditModal}}
+/>
 {{/if}}
