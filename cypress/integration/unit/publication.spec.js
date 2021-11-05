@@ -175,7 +175,7 @@ context('Publications tests', () => {
   });
 
   it('publications:dossier: Add and delete mandataris', () => {
-    const noMandatees = 'Er zijn nog geen mandatarissen toegevoegd.';
+    const noMandatees = 'Er zijn nog geen ministers toegevoegd.';
     const mandateeName = 'Geert Bourgeois';
 
     cy.route('GET', '/publication-flows/**').as('getNewPublicationDetail');
