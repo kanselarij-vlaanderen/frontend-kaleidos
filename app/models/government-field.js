@@ -1,7 +1,7 @@
 import {
   hasMany
 } from '@ember-data/model';
-import Narrower from './narrower';
-export default class GovernmentField extends Narrower {
+import Concept from './concept';
+export default class GovernmentField extends Concept {
   @hasMany('ise-code') iseCodes;
 }
