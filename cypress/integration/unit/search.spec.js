@@ -291,9 +291,9 @@ context('Search tests', () => {
     // the title and decision result will be the same for all 3, contains() gets the first one
     cy.get(route.searchNewsletterInfos.row.title).contains(searchTerm);
     cy.get(route.searchNewsletterInfos.row.decisionResult).contains('Goedgekeurd');
-    cy.get(route.searchNewsletterInfos.row.mandatees).contains('Geert Bourgeois, Hilde Crevits');
-    cy.get(route.searchNewsletterInfos.row.mandatees).contains('Geert Bourgeois, Hilde Crevits, Sven Gatz');
-    cy.get(route.searchNewsletterInfos.row.mandatees).contains('Geert Bourgeois, Hilde Crevits, Liesbeth Homans, Ben Weyts, Phillipe Muyters');
+    cy.get(route.searchNewsletterInfos.row.mandatees).contains('Jambon, Crevits');
+    cy.get(route.searchNewsletterInfos.row.mandatees).contains('Jambon, Crevits, Beke');
+    cy.get(route.searchNewsletterInfos.row.mandatees).contains('Jambon, Crevits, Somers, Weyts, Demir');
     cy.get(route.searchNewsletterInfos.row.goToAgendaitem).eq(0)
       .click();
     cy.url().should('contain', '/vergadering/');
@@ -348,7 +348,7 @@ context('Search tests', () => {
     cy.visit('/zoeken/kort-bestek');
     // TODO-setup this test searches for data from other tests (mandatee-assigning.spec) and could fail
     const searchTerm = 'test';
-    const mandateeSearchTerm = 'Geert';
+    const mandateeSearchTerm = 'Jambon';
     cy.get(route.search.input).clear();
     cy.get(route.search.input).type(searchTerm);
     cy.get(route.search.mandatee).type(mandateeSearchTerm);
@@ -359,6 +359,6 @@ context('Search tests', () => {
 
     // amount of rows is too flaky (data from previous tests) and not tested. We expect at least 1 result
     cy.get(utils.vlAlert.container).should('not.exist');
-    cy.get(route.searchNewsletterInfos.row.mandatees).contains('Geert Bourgeois');
+    cy.get(route.searchNewsletterInfos.row.mandatees).contains('Jambon');
   });
 });
