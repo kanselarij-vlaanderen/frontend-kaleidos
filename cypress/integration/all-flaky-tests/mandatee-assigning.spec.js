@@ -6,7 +6,6 @@ import agenda from '../../selectors/agenda.selectors';
 import utils from '../../selectors/utils.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import auk from '../../selectors/auk.selectors';
-import cases from '../../selectors/case.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -16,7 +15,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
   const agendaDate = Cypress.moment().add(1, 'weeks')
     .day(4); // Next friday
   // This variable is used multiple times to check if data is properly loaded
-  const nameToCheck = 'Geert';
+  const nameToCheck = 'Jambon';
   // const caseTitle = 'Cypress test: mandatee sync - 1594023300';  // The case is in the default data set with id 5F02DD8A7DE3FC0008000001
 
   before(() => {
@@ -41,8 +40,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
 
-    cy.addSubcaseMandatee(0, -1, -1); // -1 means select nothing
-    cy.addSubcaseMandatee(1, 0, 0);
+    cy.addSubcaseMandatee(1, -1, -1); // -1 means select nothing
+    cy.addSubcaseMandatee(2, 0, 0);
 
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 2, {
@@ -53,15 +52,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .within(() => {
         // Checking if name of first mandatee is present ensures data is loaded
         cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck);
-        cy.get(mandatee.mandateePanelView.row.domains).should('contain', '-');
       });
-    cy.get('@listItems').eq(1)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-
-    cy.get(cases.isecodes.list).should('exist');
-    cy.get(cases.isecodes.listItem).should('have.length.greaterThan', 0);
 
     cy.proposeSubcaseForAgenda(agendaDate);
 
@@ -78,11 +69,6 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .within(() => {
         // Checking if name of first mandatee is present ensures data is loaded
         cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck);
-        cy.get(mandatee.mandateePanelView.row.domains).should('contain', '-');
-      });
-    cy.get('@listItems').eq(1)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
   });
 
@@ -99,7 +85,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     // Dependency: We should already have 2 mandatees that we inherit from previous subcase, now we add 1 more
 
-    cy.addSubcaseMandatee(2, 0, 0);
+    cy.addSubcaseMandatee(3, 0, 0);
 
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 3, {
@@ -110,20 +96,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .within(() => {
         // Checking if name of first mandatee is present ensures data is loaded
         cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck);
-        // NOTE: even though we did not select fields for this mandatee, he shares ise-codes with another mandatee and now show fields
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
-    cy.get('@listItems').eq(1)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(2)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-
-    cy.get(cases.isecodes.list).should('exist');
-    cy.get(cases.isecodes.listItem).should('have.length.greaterThan', 0);
 
     // Check if agendaitem has the same amount of mandatees
     cy.openAgendaForDate(agendaDate);
@@ -138,15 +111,6 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .within(() => {
         // Checking if name of first mandatee is present ensures data is loaded
         cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck);
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(1)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(2)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
   });
 
@@ -165,7 +129,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     // Dependency: We should already have 3 mandatees that we inherit from previous subcase, now we add 1 more
 
-    cy.addSubcaseMandatee(3, 0, 0);
+    cy.addSubcaseMandatee(4, 0, 0);
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 4, {
       timeout: 5000,
@@ -175,19 +139,6 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .within(() => {
         // Checking if name of first mandatee is present ensures data is loaded
         cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck);
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(1)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(2)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(3)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
 
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
@@ -203,23 +154,6 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .within(() => {
         // Checking if name of first mandatee is present ensures data is loaded
         cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck);
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(1)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(2)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(3)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(4)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('contain', '-');
       });
     // Check if subcase has the same amount of mandatees
     cy.visit('/dossiers/5F02DD8A7DE3FC0008000001/deeldossiers');
@@ -233,27 +167,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .within(() => {
         // Checking if name of first mandatee is present ensures data is loaded
         cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck);
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
-    cy.get('@listItems').eq(1)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(2)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(3)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
-      });
-    cy.get('@listItems').eq(4)
-      .within(() => {
-        cy.get(mandatee.mandateePanelView.row.domains).should('contain', '-');
-      });
-
-    cy.get(cases.isecodes.list).should('exist');
-    cy.get(cases.isecodes.listItem).should('have.length.greaterThan', 0);
   });
 
   it('should edit mandatees and show correct mandatees when switching agendaitems before, during and after edits', () => {
@@ -286,13 +200,13 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@mandateeNames').eq(0)
       .should('contain', nameToCheck);
     cy.get('@mandateeNames').eq(1)
-      .should('contain', 'Hilde');
+      .should('contain', 'Hilde Crevits');
     cy.get('@mandateeNames').eq(2)
-      .should('contain', 'Liesbeth');
+      .should('contain', 'Bart Somers');
     cy.get('@mandateeNames').eq(3)
       .should('contain', 'Ben Weyts');
     cy.get('@mandateeNames').eq(4)
-      .should('contain', 'Phillipe');
+      .should('contain', 'Zuhal Demir');
 
     cy.log('when edit is open, check if mandatees are correct (in reverse order)');
     cy.get(mandatee.mandateePanelView.actions.edit).click();
@@ -427,10 +341,10 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.clickReverseTab('Definitief');
     cy.get(newsletter.itemContent.printItemProposal).as('proposals');
     cy.get('@proposals').eq(0)
-      .contains('Op voorstel van Minister-president Geert Bourgeois en Vlaams minister Hilde Crevits');
+      .contains('Op voorstel van minister-president Jan Jambon en viceminister-president Hilde Crevits');
     cy.get('@proposals').eq(1)
-      .contains('Op voorstel van Minister-president Geert Bourgeois, Vlaams minister Hilde Crevits, Vlaams minister Liesbeth Homans, Vlaams minister Ben Weyts en Vlaams minister Phillipe Muyters');
+      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits, viceminister-president Bart Somers, viceminister-president Ben Weyts en Vlaams minister Zuhal Demir');
     cy.get('@proposals').eq(2)
-      .contains('Op voorstel van Minister-president Geert Bourgeois, Vlaams minister Hilde Crevits en Vlaams minister Sven Gatz');
+      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits en Vlaams minister Wouter Beke');
   });
 });
