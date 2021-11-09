@@ -23,7 +23,9 @@ context('Full test for creating mandatees', () => {
     cy.login('Admin');
   });
 
-  it('should add new minister', () => {
+  // TODO-mandateeThemis After themis migration, creating of mandatee has been disabled
+  // TODO decide if we want to keep this test for future reenabling or just remove, many selectors no longer exist
+  xit('should add new minister', () => {
     cy.visit('/');
     const KIND = 'Ministerraad';
 

@@ -120,7 +120,7 @@ function changeSubcaseAccessLevel(confidentialityChange, accessLevel, newShortTi
  * @name addSubcaseMandatee
  * @memberOf Cypress.Chainable#
  * @function
- * @param {Number} mandateeNumber - The list index of the mandatee
+ * @param {Number} mandateeNumber - The list index of the mandatee from default list (this is ignored if mandateeSearchText is given)
  * @param {Number} fieldNumber - The list index of the field, -1 means no field/domain should be selected
  * @param {Number} domainNumber - The list index of the domain
  * @param {String} mandateeSearchText - Search on the minister name (title no longer works)
@@ -128,28 +128,26 @@ function changeSubcaseAccessLevel(confidentialityChange, accessLevel, newShortTi
  */
 function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeSearchText, mandateeTitle) {
   cy.log('addSubcaseMandatee');
+  // TODO KAS-2968 put the 2 unused fields in a route to avoid conflicts, remove later
+  cy.route('GET', `/nothing${fieldNumber}${domainNumber}`).as('getMandatees');
+  cy.route('GET', '/mandatees**http://themis.vlaanderen.be/id/bestuursorgaan/**').as('getMandatees');
 
   if (mandateeSearchText) {
-    cy.route('GET', `/mandatees?filter**${mandateeSearchText.split(' ', 1)}**`).as('getFilteredMandatees');
-  } else {
-    cy.route('GET', '/mandatees?**').as('getMandatees');
+    cy.route('GET', `/mandatees**?filter**${mandateeSearchText.split(' ', 1)}**`).as('getFilteredMandatees');
   }
 
-  const randomInt = Math.floor(Math.random() * Math.floor(10000));
-  cy.route('GET', '/government-fields/**/domain').as(`getGovernmentFieldDomains${randomInt}`);
   cy.route('PATCH', '/subcases/*').as('patchSubcase');
 
   cy.get(mandatee.mandateePanelView.actions.edit).click();
 
   cy.get(mandatee.mandateePanelEdit.actions.add).click();
+  cy.wait('@getMandatees');
   cy.get(utils.mandateeSelector.container).find(dependency.emberPowerSelect.trigger)
     .click();
   // cy.get(dependency.emberPowerSelect.searchInput).type('g').clear(); // only use this when default data does not have active ministers
   if (mandateeSearchText) {
-    cy.get(dependency.emberPowerSelect.searchInput).type(mandateeSearchText);
-    cy.wait('@getFilteredMandatees');
-  } else {
-    cy.wait('@getMandatees');
+    cy.get(dependency.emberPowerSelect.searchInput).type(mandateeSearchText)
+      .wait('@getFilteredMandatees');
   }
   cy.get(dependency.emberPowerSelect.optionSearchMessage).should('not.exist');
   // we can search or select by number
@@ -164,16 +162,6 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
     }
   } else {
     cy.get(dependency.emberPowerSelect.option).eq(mandateeNumber)
-      .click();
-  }
-  // loading the isecodes and government fields takes some time
-  cy.wait(`@getGovernmentFieldDomains${randomInt}`);
-  if (fieldNumber >= 0) {
-    cy.get(utils.domainsFieldsSelectorForm.container, {
-      timeout: 30000,
-    }).eq(fieldNumber)
-      .find(utils.domainsFieldsSelectorForm.field)
-      .eq(domainNumber)
       .click();
   }
   cy.get(utils.vlModalFooter.save).click();
