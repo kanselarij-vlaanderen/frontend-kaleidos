@@ -120,29 +120,27 @@ function changeSubcaseAccessLevel(confidentialityChange, accessLevel, newShortTi
  * @name addSubcaseMandatee
  * @memberOf Cypress.Chainable#
  * @function
- * @param {Number} mandateeNumber - The list index of the mandatee
+ * @param {Number} mandateeNumber - The list index of the mandatee from default list (this is ignored if mandateeSearchText is given)
  * @param {String} mandateeSearchText - Search on the minister name (title no longer works)
  * @param {String} mandateeTitle - Select the found mandatee by correct title (optional, use when 1 person has multiple mandatees)
  */
 function addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
   cy.log('addSubcaseMandatee');
+  cy.route('GET', '/mandatees**http://themis.vlaanderen.be/id/bestuursorgaan/**').as('getMandatees');
 
   if (mandateeSearchText) {
-    cy.route('GET', `/mandatees?filter**${mandateeSearchText.split(' ', 1)}**`).as('getFilteredMandatees');
-  } else {
-    cy.route('GET', '/mandatees?**').as('getMandatees');
+    cy.route('GET', `/mandatees**?filter**${mandateeSearchText.split(' ', 1)}**`).as('getFilteredMandatees');
   }
   cy.route('PATCH', '/subcases/*').as('patchSubcase');
   cy.get(mandatee.mandateePanelView.actions.edit).click();
   cy.get(mandatee.mandateePanelEdit.actions.add).click();
+  cy.wait('@getMandatees');
   cy.get(utils.mandateeSelector.container).find(dependency.emberPowerSelect.trigger)
     .click();
   // cy.get(dependency.emberPowerSelect.searchInput).type('g').clear(); // only use this when default data does not have active ministers
   if (mandateeSearchText) {
-    cy.get(dependency.emberPowerSelect.searchInput).type(mandateeSearchText);
-    cy.wait('@getFilteredMandatees');
-  } else {
-    cy.wait('@getMandatees');
+    cy.get(dependency.emberPowerSelect.searchInput).type(mandateeSearchText)
+      .wait('@getFilteredMandatees');
   }
   cy.get(dependency.emberPowerSelect.optionSearchMessage).should('not.exist');
   // we can search or select by number

@@ -176,7 +176,7 @@ context('Publications tests', () => {
 
   it('publications:dossier: Add and delete mandataris', () => {
     const noMandatees = 'Er zijn nog geen ministers toegevoegd.';
-    const mandateeName = 'Geert Bourgeois';
+    const mandateeName = 'Jan Jambon';
 
     cy.route('GET', '/publication-flows/**').as('getNewPublicationDetail');
     cy.get(publication.publicationTableRow.row.goToPublication).first()
@@ -187,7 +187,7 @@ context('Publications tests', () => {
     cy.get(auk.emptyState.message).contains(noMandatees);
 
     // add mandatee
-    cy.route('GET', '/mandatees?**').as('getMandatees');
+    cy.route('GET', '/mandatees**http://themis.vlaanderen.be/id/bestuursorgaan/**').as('getMandatees');
     cy.get(publication.mandateesPanel.add).click();
     cy.wait('@getMandatees');
     cy.get(utils.mandateesSelector.add).should('be.disabled');

@@ -15,7 +15,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
   const agendaDate = Cypress.moment().add(1, 'weeks')
     .day(4); // Next friday
   // This variable is used multiple times to check if data is properly loaded
-  const nameToCheck = 'Geert';
+  const nameToCheck = 'Jambon';
   // const caseTitle = 'Cypress test: mandatee sync - 1594023300';  // The case is in the default data set with id 5F02DD8A7DE3FC0008000001
 
   before(() => {
@@ -40,8 +40,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
 
-    cy.addSubcaseMandatee(0);
     cy.addSubcaseMandatee(1);
+    cy.addSubcaseMandatee(2);
 
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 2, {
@@ -81,7 +81,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     // Dependency: We should already have 2 mandatees that we inherit from previous subcase, now we add 1 more
 
-    cy.addSubcaseMandatee(2);
+    cy.addSubcaseMandatee(3);
 
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 3, {
@@ -121,7 +121,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     // Dependency: We should already have 3 mandatees that we inherit from previous subcase, now we add 1 more
 
-    cy.addSubcaseMandatee(3);
+    cy.addSubcaseMandatee(4);
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 4, {
       timeout: 5000,
@@ -187,13 +187,13 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@mandateeNames').eq(0)
       .should('contain', nameToCheck);
     cy.get('@mandateeNames').eq(1)
-      .should('contain', 'Hilde');
+      .should('contain', 'Hilde Crevits');
     cy.get('@mandateeNames').eq(2)
-      .should('contain', 'Liesbeth');
+      .should('contain', 'Bart Somers');
     cy.get('@mandateeNames').eq(3)
       .should('contain', 'Ben Weyts');
     cy.get('@mandateeNames').eq(4)
-      .should('contain', 'Phillipe');
+      .should('contain', 'Zuhal Demir');
 
     cy.log('when edit is open, check if mandatees are correct (in reverse order)');
     cy.get(mandatee.mandateePanelView.actions.edit).click();
@@ -328,10 +328,10 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.clickReverseTab('Definitief');
     cy.get(newsletter.itemContent.printItemProposal).as('proposals');
     cy.get('@proposals').eq(0)
-      .contains('Op voorstel van Minister-president Geert Bourgeois en Vlaams minister Hilde Crevits');
+      .contains('Op voorstel van minister-president Jan Jambon en viceminister-president Hilde Crevits');
     cy.get('@proposals').eq(1)
-      .contains('Op voorstel van Minister-president Geert Bourgeois, Vlaams minister Hilde Crevits, Vlaams minister Liesbeth Homans, Vlaams minister Ben Weyts en Vlaams minister Phillipe Muyters');
+      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits, viceminister-president Bart Somers, viceminister-president Ben Weyts en Vlaams minister Zuhal Demir');
     cy.get('@proposals').eq(2)
-      .contains('Op voorstel van Minister-president Geert Bourgeois, Vlaams minister Hilde Crevits en Vlaams minister Sven Gatz');
+      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits en Vlaams minister Wouter Beke');
   });
 });
