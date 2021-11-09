@@ -13,7 +13,6 @@ export default Model.extend({
   shortTitle: attr('string'),
   number: attr('string'),
   isArchived: attr('boolean'),
-  confidential: attr('boolean'),
 
   publicationFlows: hasMany('publication-flow'),
   subcases: hasMany('subcase'),

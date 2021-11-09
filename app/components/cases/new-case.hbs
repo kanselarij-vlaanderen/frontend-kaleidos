@@ -12,16 +12,6 @@
       />
     {{/if}}
 
-    <div class="auk-u-mb-4">
-      <div class="auk-form-group">
-        <Auk::Label for="case-confidential">{{t "confidential"}}</Auk::Label>
-        <Auk::Toggle
-          id="case-confidential"
-          @checked={{this.confidential}}
-          data-test-new-case-toggle-confidential={{true}}
-        />
-      </div>
-    </div>
     <div class="auk-form-group {{this.getClassForShortTitle}}" data-test-new-case-shorttitle>
       <Auk::Label id="case-short-title">{{t "short-title-case"}}</Auk::Label>
       <Textarea

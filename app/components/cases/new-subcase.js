@@ -80,7 +80,7 @@ export default class CasesNewSubcase extends Component {
       type: this.type,
       shortTitle: trimText(this.shortTitle),
       title: trimText(this.title),
-      confidential: this.args.case.confidential,
+      confidential: false,  // Set default to false as it isn't derived from case anymore
       showAsRemark: this.showAsRemark || false,
       case: this.args.case,
       created: date,

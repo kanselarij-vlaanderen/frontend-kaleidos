@@ -7,7 +7,6 @@ import { action } from '@ember/object';
 export default class NewCase extends Component {
   title = null;
   shortTitle = null;
-  confidential = false;
   @service store;
   @tracked hasError = false;
   @tracked isLoading = false;
@@ -16,12 +15,11 @@ export default class NewCase extends Component {
     const newDate = moment().utc()
       .toDate();
     const {
-      shortTitle, confidential,
+      shortTitle,
     } = this;
     const caze = this.store.createRecord('case',
       {
         shortTitle,
-        confidential,
         isArchived: false,
         created: newDate,
       });
