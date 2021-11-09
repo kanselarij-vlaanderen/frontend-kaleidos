@@ -4,15 +4,16 @@ import { action } from '@ember/object';
 import { task } from 'ember-concurrency-decorators';
 
 class DomainSelection {
-  constructor(domain, availableFields, selectedFields) {
+  constructor(domain, isSelected, availableFields, selectedFields) {
     this.domain = domain;
+    this.isSelected = isSelected;
     this.availableFields = availableFields;
     this.selectedFields = selectedFields;
   }
 
-  get isSelected() {
-    return this.availableFields.every((field) => this.selectedFields.includes(field));
-  }
+  // get isSelected() {
+  //   return this.availableFields.every((field) => this.selectedFields.includes(field));
+  // }
 }
 
 export default class GovernmentAreaSelectorForm extends Component {
@@ -32,6 +33,10 @@ export default class GovernmentAreaSelectorForm extends Component {
 
   get selectedFields() {
     return this.args.selectedFields || [];
+  }
+
+  get selectedDomains() {
+    return this.args.selectedDomains || [];
   }
 
   constructor() {
@@ -56,8 +61,9 @@ export default class GovernmentAreaSelectorForm extends Component {
       const availableFieldsDomains = yield Promise.all(this.availableFields.map((field) => field.domain));
       // eslint-disable-next-line no-unused-vars, id-length
       const availableFieldsForDomain = this.availableFields.filter((_, index) => availableFieldsDomains[index] === domain);
+      const isSelected = this.selectedDomains.includes(domain);
 
-      domainSelections.push(new DomainSelection(domain, availableFieldsForDomain, selectedFieldsForDomain));
+      domainSelections.push(new DomainSelection(domain, isSelected, availableFieldsForDomain, selectedFieldsForDomain));
     }
     this.domainSelections = domainSelections;
   }
@@ -65,13 +71,23 @@ export default class GovernmentAreaSelectorForm extends Component {
   @action
   toggleDomainSelection(domainSelection, event) {
     const flag = event.target.checked;
-    const domainFields = domainSelection.availableFields;
-    const fieldsToToggle = domainFields.filter((domainField) => domainSelection.selectedFields.includes(domainField) !== flag);
-    const handler = flag ? this.args.onSelectFields : this.args.onUnSelectFields;
+    const handler = flag ? this.args.onSelectDomains : this.args.onUnSelectDomains;
     if (handler) {
-      handler(fieldsToToggle);
+      handler([domainSelection.domain]);
     }
   }
+
+  // TODO Should domain selection be automatic when all available fields are selected or manual?
+  // @action
+  // toggleDomainSelection(domainSelection, event) {
+  //   const flag = event.target.checked;
+  //   const domainFields = domainSelection.availableFields;
+  //   const fieldsToToggle = domainFields.filter((domainField) => domainSelection.selectedFields.includes(domainField) !== flag);
+  //   const handler = flag ? this.args.onSelectFields : this.args.onUnSelectFields;
+  //   if (handler) {
+  //     handler(fieldsToToggle);
+  //   }
+  // }
 
   @action
   toggleFieldSelection(field, event) {

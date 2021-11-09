@@ -6,34 +6,44 @@ import { task } from 'ember-concurrency-decorators';
 
 export default class EditGovernmentAreasModal extends Component {
   @service store;
-  @tracked governmentAreas;
-  @tracked selectedGovernmentAreas;
+  @tracked governmentFields;
+  @tracked selectedGovernmentFields = [];
+  @tracked governmentDomains;
+  @tracked selectedGovernmentDomains = [];
 
   constructor() {
     super(...arguments);
-    // const fields = this.store.query('government-field', {
-    //   sort: 'priority',
-    // });
-    // const domains = this.store.query('government-domain', {
-    //   sort: 'priority',
-    // });
-    this.selectedGovernmentAreas = this.args.governmentAreas?this.args.governmentAreas.slice(0):[]; // making a copy
+    this.governmentFields = this.store.peekAll('government-field');
+    this.selectedGovernmentFields = this.args.governmentFields?.slice(0) || []; // making a copy
+    this.governmentDomains = this.store.peekAll('government-domain');
+    this.selectedGovernmentDomains = this.args.governmentDomains?.slice(0) || []; // making a copy
   }
 
   @task
   *save() {
     yield this.args.onSave(
-      this.selectedGovernmentAreas
+      this.selectedGovernmentDomains,
+      this.selectedGovernmentFields
     );
   }
 
   @action
-  select(selectedAreas) {
-    this.selectedGovernmentAreas.pushObjects(selectedAreas);
+  selectField(selectedField) {
+    this.selectedGovernmentFields.pushObjects(selectedField);
   }
 
   @action
-  deselect(selectedAreas) {
-    this.selectedGovernmentAreas.removeObjects(selectedAreas);
+  deselectField(selectedField) {
+    this.selectedGovernmentFields.removeObjects(selectedField);
+  }
+
+  @action
+  selectDomain(selectedDomain) {
+    this.selectedGovernmentDomains.pushObjects(selectedDomain);
+  }
+
+  @action
+  deselectDomain(selectedDomain) {
+    this.selectedGovernmentDomains.removeObjects(selectedDomain);
   }
 }

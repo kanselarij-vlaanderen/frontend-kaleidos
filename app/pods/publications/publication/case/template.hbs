@@ -10,8 +10,8 @@
       @publicationFlow={{@model}} />
 
     <Utils::GovernmentAreas::GovernmentAreasPanel
-      @case={{@model.case}}
-      @onSave={{this.saveGovernmentFields}}
+      @governmentAreas={{@model.case.governmentAreas}}
+      @onSave={{this.saveGovernmentAreas}}
     />
 
     <Publications::Publication::Case::ContactPersons::ContactPersonsPanel

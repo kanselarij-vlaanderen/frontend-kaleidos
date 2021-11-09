@@ -4,14 +4,14 @@ import { action } from '@ember/object';
 
 export default class CaseController extends Controller {
   @tracked isViaCouncilOfMinisters;
+  @tracked case_;
 
   @action
-  async saveGovernmentFields(newGovernmentFields) {
-    const governmentFields = await this.model.governmentFields;
+  async saveGovernmentAreas(newGovernmentAreas) {
+    const governmentAreas = await this.case_.governmentAreas;
 
-    governmentFields.clear();
-    governmentFields.pushObjects(newGovernmentFields);
-    await this.model.save();
+    governmentAreas.clear();
+    governmentAreas.pushObjects(newGovernmentAreas);
+    await this.case_.save();
   }
-
 }
