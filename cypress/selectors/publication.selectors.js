@@ -25,8 +25,9 @@ const selectors = {
   // publications\publication\translations\template
   publicationTranslations: {
     documents: '[data-test-route-publications---translations-tab-documents]',
-    requests: '[data-test-route-publications---translations-tab-requests]',
     finished: '[data-test-route-publications---translations-tab-finished]',
+    // TODO-SELECTOR unused selector
+    requests: '[data-test-route-publications---translations-tab-requests]',
   },
 
   // publications\publication\translations\documents\template
@@ -66,8 +67,9 @@ const selectors = {
   // publications\publication\proofs\template
   publicationProofs: {
     documents: '[data-test-route-publications---proofs-tab-documents]',
-    requests: '[data-test-route-publications---proofs-tab-requests]',
     finished: '[data-test-route-publications---proofs-tab-finished]',
+    // TODO-SELECTOR unused selectors
+    requests: '[data-test-route-publications---proofs-tab-requests]',
   },
 
   // publications\publication\translations\requests
@@ -99,8 +101,9 @@ const selectors = {
   // publication-case-search
   publicationCaseSearch: {
     input: '[data-test-publication-case-search-input]',
-    resultList: '[data-test-publication-case-search-result-list]',
     result: '[data-test-publication-case-search-result]',
+    // TODO-SELECTOR unused selectors
+    resultList: '[data-test-publication-case-search-result-list]',
   },
 
   // publications-filter-modal
@@ -111,19 +114,20 @@ const selectors = {
     notMinister: '[data-test-publications-filter-not-minister]',
     toPublish: '[data-test-publications-filter-to-publish]',
     withdrawn: '[data-test-publications-filter-withdrawn]',
+    save: '[data-test-publications-filter-save]',
     // TODO-SELECTOR unused selectors
     cancel: '[data-test-publications-filter-cancel]',
     reset: '[data-test-publications-filter-reset]',
-    save: '[data-test-publications-filter-save]',
   },
 
   // publication-navigation
   publicationNav: {
     goBack: '[data-test-publication-nav-go-back]',
-    case: '[data-test-publication-nav-case]',
     documents: '[data-test-publication-nav-documents]',
     translations: '[data-test-publication-nav-translations]',
     publishpreview: '[data-test-publication-nav-publishpreview]',
+    // TODO-SELECTOR unused selectors
+    case: '[data-test-publication-nav-case]',
   },
 
   // publication-table-row
@@ -144,13 +148,14 @@ const selectors = {
       translationDueDate: '[data-test-publication-table-row-translation-due-date]',
       targetEndDate: '[data-test-publication-table-row-target-end-date]',
       publicationDueDate: '[data-test-publication-table-row-publication-due-date]',
-      publicationDate: '[data-test-publication-table-row-publication-date]',
       urgencyLevel: '[data-test-publication-table-row-urgency-level]',
       status: '[data-test-publication-table-row-status]',
       translationProgressBadge: '[data-test-publication-table-row-translation-progress-badge]',
       proofsProgressBadge: '[data-test-publication-table-row-proofs-progress-badge]',
       source: '[data-test-publication-table-row-source]',
       goToPublication: '[data-test-publication-table-row-go-to-publication]',
+      // TODO-SELECTOR unused selectors
+      publicationDate: '[data-test-publication-table-row-publication-date]',
     },
   },
 
@@ -214,20 +219,21 @@ const selectors = {
 
   // mandatees-panel
   mandateesPanel: {
-    // TODO-SELECTORS unused selectors
-    table: '[data-test-mandatees-panel-table]',
     add: '[data-test-mandatees-panel-add]',
     rows: '[data-test-mandatees-panel-row]',
     row: {
       fullName: '[data-test-mandatees-panel-row-full-name]',
       unlink: '[data-test-mandatees-panel-row-unlink]',
     },
+    // TODO-SELECTORS unused selectors
+    table: '[data-test-mandatees-panel-table]',
   },
 
   // link-mandatees-modal
   linkMandatees: {
-    cancel: '[data-test-link-mandatees-cancel]',
     add: '[data-test-link-mandatees-add]',
+    // TODO-SELECTORS unused selectors
+    cancel: '[data-test-link-mandatees-cancel]',
   },
 
   // government-fields-panel
@@ -242,13 +248,13 @@ const selectors = {
 
   // edit-government-fields-modal
   editGovernmentFieldsModal: {
-    selectorForm: '[data-test-edit-government-fields-modal-selector-form]',
     save: '[data-test-edit-government-fields-modal-save]',
+    // TODO-SELECTORS unused selectors
+    selectorForm: '[data-test-edit-government-fields-modal-selector-form]',
   },
 
   // sidebar
   sidebar: {
-    container: '[data-test-publication-sidebar-container]',
     open: '[data-test-publication-sidebar-open]',
     publicationNumber: '[data-test-publication-sidebar-publication-number]',
     publicationNumberError: '[data-test-publication-sidebar-publication-number-error]',
@@ -266,6 +272,8 @@ const selectors = {
     publicationDueDate: '[data-test-publication-sidebar-publication-due-date]',
     publicationDate: '[data-test-publication-sidebar-publication-date]',
     remark: '[data-test-publication-sidebar-remark]',
+    // TODO-SELECTORS unused selectors
+    container: '[data-test-publication-sidebar-container]',
   },
 
   // publication-status-selector
@@ -287,17 +295,19 @@ const selectors = {
   // translation-request-modal
   translationRequest: {
     message: '[data-test-publication-translation-request-message]',
-    documentsList: '[data-test-publication-translation-request-documents-list]',
     save: '[data-test-publication-translation-request-save]',
+    // TODO-SELECTOR unused selectors
+    documentsList: '[data-test-publication-translation-request-documents-list]',
   },
 
   // document-edit-modal
   documentEdit: {
     pages: '[data-test-publication-document-edit-pages]',
     words: '[data-test-publication-document-edit-words]',
-    proofprint: '[data-test-publication-document-edit-proofprint]',
     documentName: '[data-test-publication-document-edit-document-name]',
     save: '[data-test-publication-document-edit-save]',
+    // TODO-SELECTOR unused selectors
+    proofprint: '[data-test-publication-document-edit-proofprint]',
   },
 
   // translation-statuspill
