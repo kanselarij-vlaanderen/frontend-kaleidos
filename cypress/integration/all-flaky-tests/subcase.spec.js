@@ -70,8 +70,8 @@ context('Subcase tests', () => {
     cy.openSubcase(0);
 
     cy.changeSubcaseAccessLevel(true, 'Intern Overheid', subcaseTitleShort, 'Cypress test nieuwere lange titel');
-    cy.addSubcaseMandatee(1, 'Crevits');
-    cy.addSubcaseMandatee(2);
+    cy.addSubcaseMandatee(2, 'Crevits');
+    cy.addSubcaseMandatee(3);
 
     cy.proposeSubcaseForAgenda(agendaDate);
 

@@ -4,38 +4,58 @@ import { isEmpty } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { timeout } from 'ember-concurrency';
 import { task, restartableTask } from 'ember-concurrency-decorators';
-import moment from 'moment';
 import { inject as service } from '@ember/service';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
+import { CURRENT_GOVERNMENT_BODY } from 'frontend-kaleidos/config/config';
+
+const VISIBLE_ROLES = [
+  'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03de', // Minister-president
+  'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03e0' // Minister
+];
 
 export default class MandateeSelector extends Component {
   @service store;
   @tracked mandateeOptions = [];
   @tracked filter = '';
 
+  defaultQueryOptions = {
+    include: 'person,mandate.role',
+    sort: 'priority',
+  };
+
   constructor() {
     super(...arguments);
+    this.initialLoad = this.loadVisibleRoles.perform();
     this.mandateeOptions = this.loadMandatees.perform();
   }
 
   @task
   *loadMandatees(searchTerm) {
-    const query = {};
-    if (searchTerm) {
-      // There is no time/government-filter here. This implies that once users
-      // start searching, they can find (and assign) any mandatee, also those of previous governments
-      query['filter[person][last-name]'] = searchTerm;
-    } else {
-      // TODO: switch to filtering on related government (the current one) once Themis-integration is merged.
-      // In Themis active mandatees don't have an end-date.
-      query['filter[:gte:end]'] = moment().utc().toDate().toISOString();
+    if (this.initialLoad.isRunning) {
+      yield this.initialLoad;
     }
-    return yield this.store.query('mandatee', {
-      ...query,
-      'page[size]': PAGE_SIZE.SELECT,
-      sort: 'priority',
-      include: 'person',
+    const queryOptions = {
+      ...this.defaultQueryOptions,  // clone
+    };
+    if (searchTerm) {
+      queryOptions['filter[person][last-name]'] = searchTerm;
+    } else {
+      queryOptions['filter[government-body][:uri:]'] = CURRENT_GOVERNMENT_BODY;
+    }
+    const results = yield this.store.query('mandatee', queryOptions);
+    // Many versions of a mandatee exist within a government-body.
+    // We only want the mandatees with no end-date or an end-date in the future.
+    // mu-cl-resources doesn't have :has-no:-capability for properties.
+    return results.filter((mandatee) => {
+      if (mandatee.end) {
+        return mandatee.end && mandatee.end < new Date();
+      }
     });
+  }
+
+  @task
+  *loadVisibleRoles() {
+    const visibleRoles = yield Promise.all(VISIBLE_ROLES.map((role) => this.store.findRecordByUri('role', role)));
+    this.defaultQueryOptions['filter[mandate][role][:id:]'] = visibleRoles.map((role) => role.id).join(',');
   }
 
   @restartableTask
