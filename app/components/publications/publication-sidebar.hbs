@@ -34,6 +34,7 @@
             {{on "input" (perform this.setPublicationNumber)}}
           />
           <Auk::Input
+            data-test-publication-sidebar-publication-number-suffix
             @width="xsmall"
             value={{@publicationFlow.identification.structuredIdentifier.versionIdentifier}}
             {{on "input" (perform this.setPublicationNumberSuffix)}}

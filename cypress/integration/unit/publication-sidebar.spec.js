@@ -225,4 +225,42 @@ context('Publications sidebar tests', () => {
     // cy.get(publication.sidebar.publicationDate).contains('Niet gekend');
     cy.get(publication.sidebar.remark);
   });
+
+  it.only('should check publication number', () => {
+    const fields1 = {
+      number: 1216,
+      shortTitle: 'test',
+    };
+    const fields2 = {
+      number: 1217,
+      shortTitle: 'test',
+    };
+    const usedPublicationNumber = 1250;
+
+    cy.createPublication(fields1);
+    cy.get(publication.sidebar.open).click();
+    cy.get(publication.sidebar.publicationNumber).click()
+      .clear()
+      .type(usedPublicationNumber);
+    cy.get(publication.sidebar.publicationNumberError).should('exist');
+    cy.get(publication.sidebar.publicationNumberSuffix).type('BIS');
+    cy.get(publication.sidebar.publicationNumberError).should('not.exist');
+    cy.get(publication.publicationNav.goBack).click();
+
+    cy.createPublication(fields2);
+    cy.get(publication.sidebar.open).click();
+    cy.get(publication.sidebar.publicationNumber).click()
+      .clear()
+      .type(usedPublicationNumber);
+    cy.get(publication.sidebar.publicationNumberSuffix).type('BIS');
+    cy.get(publication.sidebar.publicationNumberError).should('exist');
+    cy.get(publication.sidebar.publicationNumberSuffix).clear()
+      .type('TER');
+    cy.get(publication.sidebar.publicationNumberError).should('not.exist');
+    // changes not saved
+    cy.get(publication.sidebar.publicationNumberSuffix).clear()
+      .type('BIS');
+    cy.get(publication.sidebar.publicationNumberError).should('exist');
+    cy.get(publication.publicationHeader.number).contains(`${usedPublicationNumber} TER`);
+  });
 });
