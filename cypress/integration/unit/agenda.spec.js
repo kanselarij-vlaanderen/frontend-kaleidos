@@ -39,7 +39,7 @@ context('Agenda tests', () => {
     cy.openAgendaForDate(agendaDate); // 1 item with "not yet formally ok"
     cy.approveDesignAgenda(false);
     cy.get(auk.modal.body).find(auk.alert.message);
-    cy.get(agenda.agendaHeader.confirm.approveAgenda);
+    cy.get(agenda.agendaActions.confirm.approveAgenda);
     cy.get(auk.loader).should('not.exist');
     cy.get(auk.modal.footer.cancel).click();
     // instead of confirming the opened modal, we cancel and let the command handle it
@@ -69,10 +69,10 @@ context('Agenda tests', () => {
       .day(5); // Friday in two weeks
     cy.createAgenda(agendaKind, agendaDateSingleTest, agendaPlace).then((result) => {
       cy.visitAgendaWithLink(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
-      cy.get(agenda.agendaHeader.showAgendaOptions).click();
-      cy.get(agenda.agendaHeader.agendaActions.deleteAgenda).click();
+      cy.get(agenda.agendaActions.showOptions).click();
+      cy.get(agenda.agendaActions.actions.deleteAgenda).click();
       cy.get(auk.modal.body).find(auk.alert.message);
-      cy.get(agenda.agendaHeader.confirm.deleteAgenda);
+      cy.get(agenda.agendaActions.confirm.deleteAgenda);
       cy.get(auk.modal.footer.cancel).click();
       // instead of confirming the opened modal, we cancel and let the command handle it
       cy.deleteAgenda(true);
@@ -97,8 +97,8 @@ context('Agenda tests', () => {
       .day(5); // Friday in four weeks
     cy.createAgenda(agendaKind, dateToCreateAgenda, agendaPlace);
     cy.openAgendaForDate(dateToCreateAgenda);
-    cy.get(agenda.agendaHeader.showAgendaOptions).click();
-    cy.get(agenda.agendaHeader.agendaActions.lockAgenda).should('not.exist');
+    cy.get(agenda.agendaActions.showOptions).click();
+    cy.get(agenda.agendaActions.actions.lockAgenda).should('not.exist');
   });
 
   it('should edit nota on agendaitem and trim whitespaces', () => {
@@ -179,7 +179,7 @@ context('Agenda tests', () => {
     cy.createAgenda(agendaKind, agendaDateSingle, agendaPlace, null, 'VV AA 1999/2BIS').then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
       // Check the values in edit session view
-      cy.get(agenda.agendaHeader.showActionOptions).click();
+      cy.get(agenda.agendaHeader.showOptions).click();
       cy.get(agenda.agendaHeader.actions.toggleEditingSession).click();
       cy.get(agenda.editSession.meetingNumber).should('have.value', result.meetingNumber);
       cy.get(agenda.editSession.numberRep).should('have.value', result.meetingNumberRep);
@@ -259,9 +259,9 @@ context('Agenda tests', () => {
     // Check the approve and close pop-up, the "not yet formally ok" agendaitem will be mentioned for removal
     cy.approveAndCloseDesignAgenda(false);
     cy.get(auk.modal.body).find(auk.alert.message);
-    cy.get(agenda.agendaHeader.messages.approveAndCloseAgenda.deleteItems);
+    cy.get(agenda.agendaActions.messages.approveAndCloseAgenda.deleteItems);
     cy.get(auk.modal.body).contains(newSubcaseTitleShort);
-    cy.get(agenda.agendaHeader.confirm.approveAndCloseAgenda).click();
+    cy.get(agenda.agendaActions.confirm.approveAndCloseAgenda).click();
     cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');
@@ -296,10 +296,9 @@ context('Agenda tests', () => {
     cy.approveDesignAgenda(false);
 
     cy.get(auk.modal.body).find(auk.alert.message);
-    cy.get(agenda.agendaHeader.messages.approveAgenda.moveItems);
+    cy.get(agenda.agendaActions.messages.approveAgenda.moveItems);
     cy.get(auk.modal.body).contains(newSubcaseTitleShort);
-    cy.get(agenda.agendaHeader.confirm.approveAgenda)
-      .click();
+    cy.get(agenda.agendaActions.confirm.approveAgenda).click();
 
     cy.get(auk.modal.container, {
       timeout: 60000,
@@ -309,12 +308,11 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaOverviewItem.subitem).contains('Goedkeuring van het verslag');
     cy.get(agenda.agendaOverviewItem.subitem).contains(newSubcaseTitleShort);
 
-    cy.get(agenda.agendaHeader.showAgendaOptions).click();
-    cy.get(agenda.agendaHeader.agendaActions.lockAgenda).click();
+    cy.get(agenda.agendaActions.showOptions).click();
+    cy.get(agenda.agendaActions.actions.lockAgenda).click();
     cy.get(auk.modal.body).find(auk.alert.message)
       .contains('met alle wijzigingen wil verwijderen?');
-    cy.get(agenda.agendaHeader.confirm.lockAgenda)
-      .click();
+    cy.get(agenda.agendaActions.confirm.lockAgenda).click();
 
     cy.get(auk.modal.container, {
       timeout: 60000,

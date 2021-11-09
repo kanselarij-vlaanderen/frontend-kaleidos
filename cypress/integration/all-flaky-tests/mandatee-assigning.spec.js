@@ -319,7 +319,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(utils.vlModalVerify.save).click();
     cy.wait(`@postNewsletterInfo${randomInt}`);
 
-    cy.get(agenda.agendaHeader.showActionOptions).click();
+    cy.get(agenda.agendaHeader.showOptions).click();
     cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
     // Toggle all newsletters to show
     cy.get(newsletter.tableRow.newsletterRow).eq(0)

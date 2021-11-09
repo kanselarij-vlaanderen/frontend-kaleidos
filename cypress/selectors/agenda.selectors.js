@@ -73,25 +73,8 @@ const selectors = {
 
   // agenda-header
   agendaHeader: {
-    showAgendaOptions: '[data-test-agenda-header-show-agenda-options]',
-    agendaActions: {
-      approveAgenda: '[data-test-agenda-header-approve-agenda]',
-      approveAndCloseAgenda: '[data-test-agenda-header-approve-and-close-agenda]',
-      lockAgenda: '[data-test-agenda-header-lock-agenda]',
-      unlockAgenda: '[data-test-agenda-header-unlock-agenda]',
-      reopenPreviousVersion: '[data-test-agenda-header-reopen-previous-version]',
-      deleteAgenda: '[data-test-agenda-header-delete-agenda]',
-    },
-    confirm: {
-      approveAgenda: '[data-test-agenda-header-approve-agenda-confirm]',
-      approveAndCloseAgenda: '[data-test-agenda-header-approve-and-close-agenda-confirm]',
-      lockAgenda: '[data-test-agenda-header-lock-agenda-confirm]',
-      reopenPreviousVersion: '[data-test-agenda-header-reopen-previous-version-confirm]',
-      deleteAgenda: '[data-test-agenda-header-delete-agenda-confirm]',
-    },
-    showActionOptions: '[data-test-agenda-header-show-action-options]',
+    showOptions: '[data-test-agenda-header-show-options]',
     actions: {
-      createNewDesignAgenda: '[data-test-agenda-header-create-new-design]',
       navigateToPrintableAgenda: '[data-test-agenda-header-navigate-to-printable-agenda]',
       addAgendaitems: '[data-test-agenda-header-add-agendaitems]',
       navigateToDecisions: '[data-test-agenda-header-navigate-to-decisions]',
@@ -106,18 +89,44 @@ const selectors = {
       navigateToPressagenda: '[data-test-agenda-header-navigate-to-pressagenda]',
       printAgenda: ['data-test-agenda-header-print-agenda'],
     },
-    messages: {
-      approveAgenda: {
-        rollbackItems: '[data-test-agenda-header-approve-agenda-rollback-message]',
-        moveItems: '[data-test-agenda-header-approve-agenda-move-message]',
-      },
-      approveAndCloseAgenda: {
-        rollbackItems: '[data-test-agenda-header-approve-and-close-agenda-rollback-message]',
-        deleteItems: '[data-test-agenda-header-approve-and-close-agenda-delete-message]',
-      },
+    confirm: {
+      releaseDocuments: '[data-test-agenda-header-release-documents-confirm]',
+      releaseDecisions: '[data-test-agenda-header-release-decisions-confirm]',
+      approveAllAgendaitems: '[data-test-agenda-header-approve-all-agendaitems-confirm]',
     },
     // TODO-selector unused selector
     title: ['data-test-agenda-header-title'],
+  },
+
+  // agenda-actions
+  agendaActions: {
+    showOptions: '[data-test-agenda-actions-show-options]',
+    actions: {
+      approveAgenda: '[data-test-agenda-actions-approve-agenda]',
+      approveAndCloseAgenda: '[data-test-agenda-actions-approve-and-close-agenda]',
+      lockAgenda: '[data-test-agenda-actions-lock-agenda]',
+      unlockAgenda: '[data-test-agenda-actions-unlock-agenda]',
+      reopenPreviousVersion: '[data-test-agenda-actions-reopen-previous-version]',
+      deleteAgenda: '[data-test-agenda-actions-delete-agenda]',
+      createNewDesignAgenda: '[data-test-agenda-actions-create-new-design]',
+    },
+    confirm: {
+      approveAgenda: '[data-test-agenda-actions-approve-agenda-confirm]',
+      approveAndCloseAgenda: '[data-test-agenda-actions-approve-and-close-agenda-confirm]',
+      lockAgenda: '[data-test-agenda-actions-lock-agenda-confirm]',
+      reopenPreviousVersion: '[data-test-agenda-actions-reopen-previous-version-confirm]',
+      deleteAgenda: '[data-test-agenda-actions-delete-agenda-confirm]',
+    },
+    messages: {
+      approveAgenda: {
+        rollbackItems: '[data-test-agenda-actions-approve-agenda-rollback-message]',
+        moveItems: '[data-test-agenda-actions-approve-agenda-move-message]',
+      },
+      approveAndCloseAgenda: {
+        rollbackItems: '[data-test-agenda-actions-approve-and-close-agenda-rollback-message]',
+        deleteItems: '[data-test-agenda-actions-approve-and-close-agenda-delete-message]',
+      },
+    },
   },
 
   // agenda-side-nav
