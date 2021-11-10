@@ -114,6 +114,7 @@ export default class CasesNewSubcase extends Component {
       subcase.linkedPieces = pieces;
     }
     subcase.mandatees = await latestSubcase.mandatees;
+    // TODO KAS-2969 make sure to copy the list of concepts
     subcase.iseCodes = await latestSubcase.iseCodes;
     subcase.requestedBy = await latestSubcase.requestedBy;
     return subcase;

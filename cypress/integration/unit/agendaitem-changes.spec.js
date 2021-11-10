@@ -218,6 +218,7 @@ context('Agendaitem changes tests', () => {
 
   it('should assign an agenda-item to a minister and no longer under NO ASSIGNMENT', () => {
     cy.visit(agendaURL);
+    const ministerTitle = 'Minister-president van de Vlaamse Regering';
     cy.changeSelectedAgenda('Ontwerpagenda');
     // TODO-users CHECK WITH USERS, should there be a mandatee header between approval and first item without mandatee
     // check if only 'Geen toekenning' is a header
@@ -226,10 +227,10 @@ context('Agendaitem changes tests', () => {
     // cy.get(agenda.agendaitemGroupHeader.section).eq(0)
     //   .should('contain.text', 'Geen toekenning');
     cy.openDetailOfAgendaitem('Cypress test dossier 1 test stap 1');
-    cy.addAgendaitemMandatee(0, -1, 0, 'Bourgeois', 'Minister-president van de Vlaamse Regering');
+    cy.addAgendaitemMandatee(1, 'Jambon', ministerTitle);
     cy.clickReverseTab('Overzicht');
     cy.get(agenda.agendaitemGroupHeader.section).eq(0)
-      .should('contain.text', 'Minister-president van de Vlaamse Regering');
+      .should('contain.text', ministerTitle);
     cy.get(agenda.agendaitemGroupHeader.section).should('have.length', 2);
     cy.get(agenda.agendaitemGroupHeader.section).eq(1)
       .should('contain.text', 'Geen toekenning');

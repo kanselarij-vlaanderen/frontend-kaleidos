@@ -7,15 +7,15 @@ import { task } from 'ember-concurrency-decorators';
  * @callback {(mandatee: Mandatee) => Promise} onLink
  * @dependsOn {Mandatee[]} mandatees ('mandatee,mandatee.person')
  */
-export default class PublicationsPublicationCaseLinkMandateeModalComponent extends Component {
-  @tracked selection;
+export default class MandateesMandateesSelectorModalComponent extends Component {
+  @tracked selectedMandatee;
 
-  get canLink() {
-    return !!this.selection;
+  get canAdd() {
+    return !!this.selectedMandatee;
   }
 
   @task
-  *onLink() {
-    yield this.args.onLink(this.selection);
+  *onAdd() {
+    yield this.args.onAdd(this.selectedMandatee);
   }
 }
