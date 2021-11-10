@@ -85,11 +85,5 @@ const selectors = {
       cancel: '[data-test-subcase-titles-edit-cancel]',
     },
   },
-
-  // subcase ise-codes
-  isecodes: {
-    list: '[data-test-subcase-ise-codes-list]',
-    listItem: '[data-test-subcase-ise-codes-list-item]',
-  },
 };
 export default selectors;

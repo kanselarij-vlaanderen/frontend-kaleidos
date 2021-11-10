@@ -69,6 +69,12 @@ const selectors = {
     container: '[data-test-mandatee-selector-container]',
   },
 
+  // mandatees-selector-modal
+  mandateesSelector: {
+    cancel: '[data-test-mandatees-selector-cancel]',
+    add: '[data-test-mandatees-selector-add]',
+  },
+
   /** Section VL-components **/
 
   // vl-modal-footer

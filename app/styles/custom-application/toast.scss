@@ -2,7 +2,7 @@
   opacity: 0.85;
   position: fixed;
   z-index: $z-index-alert-stack; // from au-kaleidos-css
-  box-shadow: $au-shadow-small;
+  box-shadow: $auk-shadow-small;
 
   animation: fpFadeInLeft 0.3s linear;
   opacity: 1;

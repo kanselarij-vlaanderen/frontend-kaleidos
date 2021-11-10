@@ -175,7 +175,7 @@ context('Publications tests', () => {
   });
 
   it('publications:dossier: Add and delete mandataris', () => {
-    const noMandatees = 'Er zijn nog geen mandatarissen toegevoegd.';
+    const noMandatees = 'Er zijn nog geen ministers toegevoegd.';
     const mandateeName = 'Jan Jambon';
 
     cy.route('GET', '/publication-flows/**').as('getNewPublicationDetail');
@@ -190,13 +190,13 @@ context('Publications tests', () => {
     cy.route('GET', '/mandatees**http://themis.vlaanderen.be/id/bestuursorgaan/**').as('getMandatees');
     cy.get(publication.mandateesPanel.add).click();
     cy.wait('@getMandatees');
-    cy.get(publication.linkMandatees.add).should('be.disabled');
+    cy.get(utils.mandateesSelector.add).should('be.disabled');
     cy.get(utils.mandateeSelector.container).click();
     cy.get(dependency.emberPowerSelect.optionSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(mandateeName)
       .click();
     cy.route('PATCH', '/publication-flows/**').as('patchPublicationFlow');
-    cy.get(publication.linkMandatees.add).should('not.be.disabled')
+    cy.get(utils.mandateesSelector.add).should('not.be.disabled')
       .click();
     cy.wait('@patchPublicationFlow');
     cy.get(publication.mandateesPanel.rows).should('have.length', 1);

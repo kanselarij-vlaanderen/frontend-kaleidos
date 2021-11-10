@@ -229,13 +229,6 @@ const selectors = {
     table: '[data-test-mandatees-panel-table]',
   },
 
-  // link-mandatees-modal
-  linkMandatees: {
-    add: '[data-test-link-mandatees-add]',
-    // TODO-SELECTORS unused selectors
-    cancel: '[data-test-link-mandatees-cancel]',
-  },
-
   // government-fields-panel
   governmentFieldsPanel: {
     edit: '[data-test-government-fields-panel-edit]',

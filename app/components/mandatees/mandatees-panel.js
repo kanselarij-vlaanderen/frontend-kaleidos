@@ -3,11 +3,10 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency-decorators';
 
-export default class MandateesMandateesDomainsPanelComponent extends Component {
+export default class MandateesMandateesPanelComponent extends Component {
   /**
    * @argument mandatees
    * @argument submitter
-   * @argument fields
    * @argument allowEditing
    * @argument onSave
    */
