@@ -25,9 +25,10 @@ export default class SessionsSessionAgendaNavComponent extends Component {
   @task
   *loadFirstAgendaitem() {
     if (this.args.currentAgenda) {
+      // sorting on show-as-remark prevents defaulting to an announcement when there are notas
       return yield this.store.queryOne('agendaitem', {
         'filter[agenda][:id:]': this.args.currentAgenda.id,
-        sort: 'number',
+        sort: 'show-as-remark,number',
       });
     }
     return null;

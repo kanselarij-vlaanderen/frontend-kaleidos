@@ -2,6 +2,7 @@
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
+import auk from '../../selectors/auk.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
 
@@ -143,7 +144,10 @@ context('Agendaitem changes tests', () => {
   });
 
   it('should verify that you can compare agendas', () => {
+    cy.route('GET', '/agendas/f66c6d79-6ad2-49e2-af55-702df3a936d8/status').as('loadAgendaBStatus');
     cy.visit('/vergadering/5EBA48CF95A2760008000006/agenda/f66c6d79-6ad2-49e2-af55-702df3a936d8/vergelijken');
+    cy.wait('@loadAgendaBStatus');
+    cy.wait(2000); // Some data loading issues, there is no loader to wait on and most ID's in xhr calls are always new
     // compare Agenda B against Agenda C
     cy.get(agenda.compareAgenda.agendaLeft).click();
     cy.get(dependency.emberPowerSelect.option).contains('Agenda B')
@@ -151,6 +155,7 @@ context('Agendaitem changes tests', () => {
     cy.get(agenda.compareAgenda.agendaRight).click();
     cy.get(dependency.emberPowerSelect.option).contains('Agenda C')
       .click();
+    cy.get(auk.loader).should('not.exist');
     cy.get(agenda.compareAgenda.agendaitemLeft).should('have.length', 4);
     cy.get(agenda.compareAgenda.agendaitemRight).should('have.length', 4);
     cy.get(agenda.compareAgenda.announcementLeft).should('have.length', 0);
@@ -174,6 +179,7 @@ context('Agendaitem changes tests', () => {
     cy.get(agenda.compareAgenda.agendaRight).click();
     cy.get(dependency.emberPowerSelect.option).contains('Agenda D')
       .click();
+    cy.get(auk.loader).should('not.exist');
     cy.get(agenda.compareAgenda.agendaitemLeft).should('have.length', 4);
     cy.get(agenda.compareAgenda.agendaitemRight).should('have.length', 4);
     cy.get(agenda.compareAgenda.announcementLeft).should('have.length', 1);
@@ -198,6 +204,7 @@ context('Agendaitem changes tests', () => {
     cy.get(agenda.compareAgenda.agendaRight).click();
     cy.get(dependency.emberPowerSelect.option).contains('Ontwerpagenda E')
       .click();
+    cy.get(auk.loader).should('not.exist');
     cy.get(agenda.compareAgenda.agendaitemLeft).should('have.length', 4);
     cy.get(agenda.compareAgenda.agendaitemRight).should('have.length', 4);
     cy.get(agenda.compareAgenda.announcementLeft).should('have.length', 1);

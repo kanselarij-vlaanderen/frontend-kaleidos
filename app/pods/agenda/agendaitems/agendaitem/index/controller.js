@@ -13,7 +13,6 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @service router;
 
   @controller('agenda.agendaitems') agendaitemsController;
-  @controller('agenda.agendaitems.agendaitem') agendaitemController;
   @tracked agenda;
   @tracked subcase;
   @tracked submitter;
@@ -67,7 +66,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     this.mandatees = mandateeData.mandatees;
     this.submitter = mandateeData.submitter;
     await saveChanges(this.model, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
-    this.agendaitemController.groupNotasOnGroupName.perform(this.agendaitemController.notas);
+    this.agendaitemsController.groupNotasOnGroupName.perform();
   }
 
   @action
