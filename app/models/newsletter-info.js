@@ -46,7 +46,6 @@ export default ModelWithModifier.extend({
       if (sortedMandatees && sortedMandatees.length > 1) {
         for (let index = 0; index < sortedMandatees.length; index++) {
           const mandatee = sortedMandatees.objectAt(index);
-          const nickName = await mandatee.get('nickName');
           if (index > 0) {
             if (sortedMandatees.length - 1 === index) {
               proposalText = `${proposalText}${seperatorAnd}`;
@@ -54,8 +53,8 @@ export default ModelWithModifier.extend({
               proposalText = `${proposalText}${seperatorComma}`;
             }
           }
-          if (nickName) {
-            proposalText = `${proposalText}${nickName}`;
+          if (mandatee.newsletterTitle) {
+            proposalText = `${proposalText}${mandatee.newsletterTitle}`;
           } else {
             proposalText = `${proposalText}${mandatee.get('title')}`;
           }
@@ -64,9 +63,8 @@ export default ModelWithModifier.extend({
       }
       const requestedBy = await subcase.get('requestedBy');
       if (requestedBy) {
-        const nickName = await requestedBy.get('nickName');
-        if (nickName) {
-          proposalText = `${proposalText}${nickName}`;
+        if (requestedBy.newsletterTitle) {
+          proposalText = `${proposalText}${requestedBy.newsletterTitle}`;
         } else {
           proposalText = `${proposalText}${requestedBy.get('title')}`;
         }

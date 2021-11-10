@@ -2,7 +2,7 @@
 {{!-- template-lint-disable no-action --}}
 <div class="auk-u-m-8">
   {{page-title (t "manage-ministers")}}
-  <div class="auk-o-flex auk-o-flex--justify-between">
+  {{!--<div class="auk-o-flex auk-o-flex--justify-between">
     <h4 class="auk-h3"></h4>
     <Auk::Button
       @skin="primary"
@@ -12,7 +12,7 @@
     >
       {{t "create-mandatee"}}
     </Auk::Button>
-  </div>
+  </div>--}}
   {{#if (await this.model)}}
   {{!-- "tbody" tagname in the "sortable-group"-helper --}}
   {{!-- template-lint-disable table-groups  --}}
@@ -38,7 +38,7 @@
             <a class="auk-table__header-title--sortable" href="#">
               <div class="auk-o-flex auk-o-flex--vertical-center">
                 <span>
-                  {{t "nick-name"}}
+                  {{t "newsletter-name"}}
                 </span>
               </div>
             </a>
@@ -55,23 +55,25 @@
               </div>
             </a>
           </th>
-          <th class="auk-table__col--2"></th>
+          {{!--<th class="auk-table__col--2"></th>--}}
         </tr>
       </thead>
-      <SortableGroup
+      <tbody>
+      {{!--<SortableGroup
         data-test-route-settings-ministers-sortable-group
         @tagName="tbody"
         @model={{this.model}}
         @onChange={{action "reorderItems" this.model}}
       as |sortableGroup|
-      >
-        {{#each sortableGroup.model as |mandatee index|}}
-          <sortableGroup.item
+      >--}}
+        {{#each this.model as |mandatee index|}}
+          <tr>
+          {{!--<sortableGroup.item
             @tagName="tr"
             @model={{mandatee}}
             data-test-route-settings-ministers-sortable-group-row="index"
             @handle=".mandatee-draggable-row"
-          >
+          >--}}
             <td data-test-route-settings-ministers-mandatee-full-display-name={{index}} class="mandatee-draggable-row">
               {{#if (is-pending mandatee.fullDisplayName)}}
                 <div class="skeletal-loader" role="alert" aria-busy="true"></div>
@@ -80,16 +82,12 @@
               {{/if}}
             </td>
             <td data-test-route-settings-ministers-mandatee-nickname={{index}} class="mandatee-draggable-row">
-              {{#if (is-pending mandatee.nickName)}}
-                <div class="skeletal-loader" role="alert" aria-busy="true"></div>
-              {{else}}
-                {{await mandatee.nickName}}
-              {{/if}}
+              {{mandatee.newsletterTitle}}
             </td>
             <td data-test-route-settings-ministers-mandatee-priority={{index}} class="mandatee-draggable-row">
               {{await mandatee.priority}}
             </td>
-            <td class="auk-u-text-align--center">
+            {{!--<td class="auk-u-text-align--center">
               <Auk::Toolbar>
                 <Auk::Toolbar::Group @position="center">
                   <Auk::Toolbar::Item>
@@ -128,14 +126,16 @@
                   </Auk::Toolbar::Item>
                 </Auk::Toolbar::Group>
               </Auk::Toolbar>
-            </td>
-          </sortableGroup.item>
+            </td> --}}
+          </tr>
+          {{!--</sortableGroup.item>--}}
         {{/each}}
-      </SortableGroup>
+      {{!--</SortableGroup>--}}
+    </tbody>
     </table>
   {{!-- template-lint-enable table-groups --}}
   {{/if}}
-  {{#if this.isEditingMandatee}}
+  {{!-- {{#if this.isEditingMandatee}}
     <WebComponents::VlModal
       @isOverlay={{true}}
       @title={{t "manage-ministers"}}
@@ -197,6 +197,6 @@
       @verify={{action "deleteMandatee"}}
       @mandateesUpdated={{action "mandateesUpdated"}}
     />
-  {{/if}}
+  {{/if}} --}}
   {{outlet}}
 </div>
