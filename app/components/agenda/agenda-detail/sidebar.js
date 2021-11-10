@@ -1,26 +1,18 @@
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency-decorators';
 
 export default class AgendaSidebar extends Component {
   /**
    * @argument notaGroups: Array of AgendaitemGroup-objects
    * @argument isLoadingNotaGroups: boolean indicating whether to show the loading state for nota's
-   * @argument announcements
+   * @argument announcements: Array of agendaitems with boolean 'showAsRemark' == true
    * @argument newItems: items to be marked as "new on this agenda"
+   * @argument currentAgenda: the agenda that is currently open
+   * @argument showModifiedOnly: if we should filter only on modified agendaitems
+   * @argument toggleShowModifiedOnly: toggle the parent to set the modified filter on or off
+   * @argument activeItem: the currently selected agendaitem
    */
-  @tracked isShowingChanges = false;
-  @tracked groupedNotas;
-  @tracked isDesignAgenda;
 
-  constructor() {
-    super(...arguments);
-    this.determineIfDesignAgenda.perform();
-  }
-
-  @task
-  *determineIfDesignAgenda() {
-    const agendaStatus = yield this.args.currentAgenda.status;
-    this.isDesignAgenda = agendaStatus.isDesignAgenda;
+  get isDesignAgenda() {
+    return this.args.currentAgenda.isDesignAgenda;
   }
 }

@@ -1,33 +1,19 @@
-// TODO: octane-refactor
-/* eslint-disable ember/no-get */
-// eslint-disable-next-line ember/no-classic-components
-import Component from '@ember/component';
-import { inject } from '@ember/service';
-import { alias } from '@ember/object/computed';
-import { computed } from '@ember/object';
+import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
-export default Component.extend({
-  sessionService: inject(),
-  classNames: ['auk-sidebar', 'auk-sidebar--gray-200', 'auk-sidebar--left', 'auk-sidebar--small', 'auk-sidebar--collapsible', 'auk-scroll-wrapper'],
+export default class AgendaSideNavComponent extends Component {
+  /**
+   * @argument meeting
+   * @argument currentAgenda
+   * @argument reversedAgendas
+   */
+  @service store;
+  @tracked isCollapsedSidebar = false;
 
-  attributeBindings: ['getCollapsedAttribute:data-collapsed'],
-
-  getCollapsedAttribute: computed('agendaMenuCollapsed', function() {
-    return this.get('agendaMenuCollapsed').toString();
-  }),
-
-  agendaMenuCollapsed: false,
-
-  currentAgenda: alias('sessionService.currentAgenda'),
-  currentSession: alias('sessionService.currentSession'),
-
-  // TODO: octane-refactor
-  // eslint-disable-next-line ember/no-actions-hash
-  actions: {
-    collapseSideMenu() {
-      this.toggleProperty('agendaMenuCollapsed');
-    },
-  },
-});
+  @action
+  toggleSidebar() {
+    this.isCollapsedSidebar = !this.isCollapsedSidebar;
+  }
+}

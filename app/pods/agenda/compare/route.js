@@ -15,21 +15,13 @@ export default Route.extend({
     },
   },
 
-  async model() {
+  model() {
     this.set('agendaService.addedPieces', []);
     this.set('agendaService.addedAgendaitems', []);
-    const agenda = await this.get('sessionService.currentAgenda');
-    const session = this.modelFor('agenda').meeting;
-    const agendas = await session.get('agendas');
-    const index = agendas.lastIndexOf(agenda);
-    let agendaToCompare;
-    if (index >= 0) {
-      agendaToCompare = agendas.objectAt(index + 1);
-    } else {
-      agendaToCompare = agendas.objectAt(1);
-    }
+    const meeting = this.modelFor('agenda').meeting;
+    const reversedAgendas = this.modelFor('agenda').reverseSortedAgendas;
     return hash({
-      currentAgenda: agenda, agendaToCompare,
+      meeting, reversedAgendas,
     });
   },
 });
