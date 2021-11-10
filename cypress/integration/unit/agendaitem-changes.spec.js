@@ -220,7 +220,7 @@ context('Agendaitem changes tests', () => {
     // cy.get(agenda.agendaitemGroupHeader.section).eq(0)
     //   .should('contain.text', 'Geen toekenning');
     cy.openDetailOfAgendaitem('Cypress test dossier 1 test stap 1');
-    cy.addAgendaitemMandatee(1, -1, 0, 'Jambon', ministerTitle);
+    cy.addAgendaitemMandatee(1, 'Jambon', ministerTitle);
     cy.clickReverseTab('Overzicht');
     cy.get(agenda.agendaitemGroupHeader.section).eq(0)
       .should('contain.text', ministerTitle);

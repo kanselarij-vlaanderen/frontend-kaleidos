@@ -16,7 +16,6 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @controller('agenda.agendaitems.agendaitem') agendaitemController;
   @tracked agenda;
   @tracked subcase;
-  @tracked governmentFields;
   @tracked submitter;
   @tracked newsletterInfo;
   @tracked mandatees;
@@ -61,15 +60,10 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     const propertiesToSetOnAgendaitem = {
       mandatees: mandateeData.mandatees,
     };
-    const correspondingIseCodes = await this.store.query('ise-code', {
-      'filter[field][:id:]': mandateeData.fields.map((field) => field.id).join(','),
-    });
     const propertiesToSetOnSubcase = {
       mandatees: mandateeData.mandatees,
       requestedBy: mandateeData.submitter,
-      iseCodes: correspondingIseCodes,
     };
-    this.governmentFields = mandateeData.fields;
     this.mandatees = mandateeData.mandatees;
     this.submitter = mandateeData.submitter;
     await saveChanges(this.model, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);

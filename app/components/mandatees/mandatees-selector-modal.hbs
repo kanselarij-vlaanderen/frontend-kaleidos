@@ -1,15 +1,15 @@
-<Auk::Modal @size="small">
-  <Auk::Modal::Header @title={{t "add-mandatee"}} @onClose={{@onClose}} />
+<Auk::Modal @size="large">
+  <Auk::Modal::Header @title={{t "add-minister"}} @onClose={{@onClose}} />
   <Auk::Modal::Body>
     <Utils::LoadableContent
-      @isLoading={{this.onLink.isRunning}}
+      @isLoading={{this.onAdd.isRunning}}
       @reserveSpace={{true}}
     >
-      <Auk::Label>{{t "mandatee"}}</Auk::Label>
+      <Auk::Label>{{t "minister"}}</Auk::Label>
       <Utils::MandateeSelector
-        @chooseMandatee={{fn (mut this.selection)}}
+        @chooseMandatee={{fn (mut this.selectedMandatee)}}
         @singleSelect={{true}}
-        @selectedMandatees={{this.selection}}
+        @selectedMandatees={{this.selectedMandatee}}
       />
     </Utils::LoadableContent>
   </Auk::Modal::Body>
@@ -18,9 +18,9 @@
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
           <Auk::ButtonLink
-            data-test-link-mandatees-cancel
+            data-test-mandatees-selector-cancel
             {{on "click" @onClose}}
-            @disabled={{this.onLink.isRunning}}
+            @disabled={{this.onAdd.isRunning}}
           >
             {{t "cancel"}}
           </Auk::ButtonLink>
@@ -29,13 +29,13 @@
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           <Auk::Button
-            data-test-link-mandatees-add
+            data-test-mandatees-selector-add
             @skin="primary"
             @icon="add"
             @size="small"
-            @disabled={{not this.canLink}}
-            @loading={{this.onLink.isRunning}}
-            {{on "click" (perform this.onLink)}}
+            @disabled={{not this.canAdd}}
+            @loading={{this.onAdd.isRunning}}
+            {{on "click" (perform this.onAdd)}}
           >
             {{t "add"}}
           </Auk::Button>
