@@ -1,0 +1,9 @@
+<Auk::Modal @size="full-screen">
+  <Auk::Modal::Header @title={{this.signFlow.longTitle}} @onClose={{this.close}} />
+  <Auk::Modal::Body @noPadding={{true}}>
+    {{!this.model does not seem to work}}
+    <iframe class="auk-u-block auk-u-maximize-height auk-u-maximize-width"
+      src={{@model.url}}>
+    </iframe>
+  </Auk::Modal::Body>
+</Auk::Modal>

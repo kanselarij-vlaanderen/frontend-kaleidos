@@ -93,6 +93,9 @@
                       {{t "read"}}
                     </Auk::Button>
                     <DropdownMenu @skin="borderless" @icon="more" as |Menu|>
+                      <Menu.Item @route="signatures.sign-flow.documents" @model={{signFlow}}>
+                        {{t "view"}}
+                      </Menu.Item>
                       <Menu.Item
                         {{on
                           "click"

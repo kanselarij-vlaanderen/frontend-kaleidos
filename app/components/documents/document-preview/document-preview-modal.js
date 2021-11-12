@@ -21,6 +21,6 @@ export default class DocumentsDocumentPreviewDocumentPreviewModal extends Compon
   @action
   toggleSidebar() {
     this.sidebarIsOpen = !this.sidebarIsOpen;
-    localStorage.setItem('documentViewerSidebar',JSON.stringify(this.sidebarIsOpen));
+    localStorage.setItem('documentViewerSidebar', JSON.stringify(this.sidebarIsOpen));
   }
 }
