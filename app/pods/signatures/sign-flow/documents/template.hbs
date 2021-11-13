@@ -2,12 +2,15 @@
   <Auk::Modal::Header @title={{this.signFlow.longTitle}} @onClose={{this.close}} />
   <Auk::Modal::Body @noPadding={{true}}>
     {{#if this.isShown}}
+      {{! Known issue: sandbox mode is not possible, because the SigningHub page requires the documents cookie
+        Because of this the user requires to push back button multiple times to go the previous page }}
       <iframe class="auk-u-block auk-u-maximize-height auk-u-maximize-width"
         src={{this.signingHubUrl}}
         {{on "load" this.onLoad}}>
       </iframe>
     {{else}}
-      {{! prevent user from seeing "Pagina niet gevonden"-page in iFrame}}
+      {{! Goal: Prevent user from seeing "Pagina niet gevonden"-page in iFrame, when going back on the handtekenmap-page. }}
+      {{! @todo Verify whether this is necessary and works. }}
       <Auk::Loader />
     {{/if}}
   </Auk::Modal::Body>
