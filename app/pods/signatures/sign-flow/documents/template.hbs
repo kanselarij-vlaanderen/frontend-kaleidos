@@ -1,9 +1,14 @@
 <Auk::Modal @size="full-screen">
   <Auk::Modal::Header @title={{this.signFlow.longTitle}} @onClose={{this.close}} />
   <Auk::Modal::Body @noPadding={{true}}>
-    {{!this.model does not seem to work}}
-    <iframe class="auk-u-block auk-u-maximize-height auk-u-maximize-width"
-      src={{@model.url}}>
-    </iframe>
+    {{#if this.isShown}}
+      <iframe class="auk-u-block auk-u-maximize-height auk-u-maximize-width"
+        src={{this.signingHubUrl}}
+        {{on "load" this.onLoad}}>
+      </iframe>
+    {{else}}
+      {{! prevent user from seeing "Pagina niet gevonden"-page in iFrame}}
+      <Auk::Loader />
+    {{/if}}
   </Auk::Modal::Body>
 </Auk::Modal>
