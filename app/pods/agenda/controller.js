@@ -9,6 +9,7 @@ export default class AgendaController extends Controller {
   @service currentSession;
 
   @tracked isLoading = false;
+  @tracked sideNavIsOpen = true;
 
   get shouldHideNav() {
     return this.router.currentRouteName === 'agenda.compare';
@@ -22,5 +23,10 @@ export default class AgendaController extends Controller {
   @action
   refresh() {
     this.send('reloadModel');
+  }
+
+  @action
+  toggleSideNav() {
+    this.sideNavIsOpen = !this.sideNavIsOpen;
   }
 }

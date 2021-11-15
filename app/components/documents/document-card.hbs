@@ -29,6 +29,7 @@
               (and
                 this.shouldShowPublications
                 (not this.loadPieceRelatedData.isRunning)
+                (not this.loadPublicationFlowRelatedData.isRunning)
               )
             }}
               {{! trigger fetch }}
@@ -64,6 +65,7 @@
               (and
                 @hasMarkForSignature
                 (not this.loadSignatureRelatedData.isRunning)
+                (not this.loadPieceRelatedData.isRunning)
               )
             }}
               <Auk::Toolbar::Item>
