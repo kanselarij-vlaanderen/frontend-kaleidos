@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
-import { isEmpty} from '@ember/utils';
+import { isEmpty } from '@ember/utils';
 
 export default class IndexNewsletterRoute extends Route {
   @service currentSession;
@@ -21,29 +21,31 @@ export default class IndexNewsletterRoute extends Route {
     const agenda = this.modelFor('newsletter').agenda; // eslint-disable-line
 
     const filter = {
-      'show-as-remark' :false,
+      'show-as-remark': false,
       agenda: {
         id: agenda.id,
       },
-      ['is-approval']:false,
-    }
-    let agendaitems = await this.loadAgendaItems(params,filter)
+      ['is-approval']: false,
+    };
+    let agendaitems = await this.loadAgendaItems(params, filter);
 
     // KAS-2976 - Old Kaleidos items have undefined is-approval states and need to be queried for this view
     if (isEmpty(agendaitems)) {
       filter['is-approval'] = undefined;
-      agendaitems = await this.loadAgendaItems(params,filter)
+      agendaitems = await this.loadAgendaItems(params, filter);
     }
 
-    return Promise.all(agendaitems.map(async(agendaitem) => {
-      const agendaItemTreatments = await agendaitem.get('treatments');
-      const agendaItemTreatment = agendaItemTreatments.firstObject;
-      const newsletterInfo = await agendaItemTreatment.get('newsletterInfo');
-      return {
-        agendaitem,
-        newsletterInfo,
-      };
-    }));
+    return Promise.all(
+      agendaitems.map(async (agendaitem) => {
+        const agendaItemTreatments = await agendaitem.get('treatments');
+        const agendaItemTreatment = agendaItemTreatments.firstObject;
+        const newsletterInfo = await agendaItemTreatment.get('newsletterInfo');
+        return {
+          agendaitem,
+          newsletterInfo,
+        };
+      })
+    );
   }
 
   async afterModel() {
@@ -55,14 +57,13 @@ export default class IndexNewsletterRoute extends Route {
     controller.agenda = this.agenda;
   }
 
-  async loadAgendaItems(params,filter) {
-    return await this.store
-      .query('agendaitem', {
-        filter,
-        include: 'treatments.newsletter-info',
-        sort: params.sort,
-        'page[size]': PAGE_SIZE.AGENDAITEMS,
-      });
+  async loadAgendaItems(params, filter) {
+    return await this.store.query('agendaitem', {
+      filter,
+      include: 'treatments.newsletter-info',
+      sort: params.sort,
+      'page[size]': PAGE_SIZE.AGENDAITEMS,
+    });
   }
 
   @action
