@@ -1,5 +1,4 @@
 import Route from '@ember/routing/route';
-import { tracked } from '@glimmer/tracking'
 
 export default class SignaturesSignFlowRoute extends Route {
   model(params) {
@@ -10,6 +9,6 @@ export default class SignaturesSignFlowRoute extends Route {
         'sign-subcase.sign-marking-activity',
         'sign-subcase.sign-marking-activity.piece',
       ]
-    })
+    });
   }
 }

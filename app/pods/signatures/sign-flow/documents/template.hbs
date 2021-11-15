@@ -5,6 +5,7 @@
       {{! Known issue: sandbox mode is not possible, because the SigningHub page requires the documents cookie
         Because of this the user requires to push back button multiple times to go the previous page }}
       <iframe class="auk-u-block auk-u-maximize-height auk-u-maximize-width"
+        title={{this.signFlow.longTitle}}
         src={{this.signingHubUrl}}
         {{on "load" this.onLoad}}>
       </iframe>

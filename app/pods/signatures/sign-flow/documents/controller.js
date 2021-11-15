@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service'
+import { inject as service } from '@ember/service';
 
 export default class SignaturesSignFlowDocumentsController extends Controller {
   @service router;
@@ -34,11 +34,10 @@ export default class SignaturesSignFlowDocumentsController extends Controller {
     // The disadvantage of normal navigation is, that it is not possible to go back when a page is refreshed.
     // It might feel more natural anyway, since this modal has a separate URL.
     if (this.referringPath) {
-      this.router.transitionTo(this.referringPath)
+      this.router.transitionTo(this.referringPath);
     } else {
       // transition to default route
-      this.router.transitionTo('')
+      this.router.transitionTo('');
     }
   }
 }
-
