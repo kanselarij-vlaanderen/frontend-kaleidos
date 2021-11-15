@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
+import { isEmpty} from '@ember/utils';
 
 export default class IndexNewsletterRoute extends Route {
   @service currentSession;
@@ -18,15 +19,21 @@ export default class IndexNewsletterRoute extends Route {
    */
   async model(params) {
     const agenda = this.modelFor('newsletter').agenda; // eslint-disable-line
-    const agendaitems = await this.store
-      .query('agendaitem', {
-        'filter[agenda][:id:]': agenda.id,
-        'filter[show-as-remark]': false,
-        'filter[is-approval]': false,
-        include: 'treatments.newsletter-info',
-        sort: params.sort,
-        'page[size]': PAGE_SIZE.AGENDAITEMS,
-      });
+
+    const filter = {
+      'show-as-remark' :false,
+      agenda: {
+        id: agenda.id,
+      },
+      ['is-approval']:false,
+    }
+    let agendaitems = await this.loadAgendaItems(params,filter)
+
+    // KAS-2976 - Old Kaleidos items have undefined is-approval states and need to be queried for this view
+    if (isEmpty(agendaitems)) {
+      filter['is-approval'] = undefined;
+      agendaitems = await this.loadAgendaItems(params,filter)
+    }
 
     return Promise.all(agendaitems.map(async(agendaitem) => {
       const agendaItemTreatments = await agendaitem.get('treatments');
@@ -39,11 +46,23 @@ export default class IndexNewsletterRoute extends Route {
     }));
   }
 
-  async setupController(controller, model) {
+  async afterModel() {
+    this.agenda = this.modelFor('newsletter').agenda;
+  }
+
+  async setupController(controller) {
     super.setupController(...arguments);
-    const agenda = this.modelFor('newsletter').agenda; // eslint-disable-line
-    controller.set('agenda', agenda);
-    controller.set('model', model);
+    controller.agenda = this.agenda;
+  }
+
+  async loadAgendaItems(params,filter) {
+    return await this.store
+      .query('agendaitem', {
+        filter,
+        include: 'treatments.newsletter-info',
+        sort: params.sort,
+        'page[size]': PAGE_SIZE.AGENDAITEMS,
+      });
   }
 
   @action
