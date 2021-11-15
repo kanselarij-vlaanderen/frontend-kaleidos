@@ -17,6 +17,16 @@ export default class DropdownMenuComponent extends Component {
     return this.args.placement || 'bottom-end';
   }
 
+  get layout() {
+    if (this.args.layout) {
+      return this.args.layout;
+    }
+    if (this.args.label) {
+      return 'icon-right';
+    }
+    return 'icon-only';
+  }
+
   get icon() {
     if (this.args.icon) {
       return this.args.icon;
