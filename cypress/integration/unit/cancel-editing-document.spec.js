@@ -52,7 +52,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: fileName, fileType: 'Nota',
     };
     const files = [file];
-    cy.createCase(false, caseTitle);
+    cy.createCase(caseTitle);
     cy.addSubcase(typeNota, subcaseTitleShort, subcaseTitleLong);
     cy.openSubcase(0);
     cy.addDocumentsToSubcase(files);
@@ -257,7 +257,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
     };
     const files = [file];
-    cy.createCase(false, caseTitle);
+    cy.createCase(caseTitle);
     cy.addSubcase(typeNota, subcaseTitleShort, subcaseTitleLong);
     cy.openSubcase(0);
     cy.addDocumentsToSubcase(files);

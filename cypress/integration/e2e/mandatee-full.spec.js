@@ -73,7 +73,7 @@ context('Full test for creating mandatees', () => {
     cy.get(utils.vlModalFooter.save).click();
     cy.wait('@postMandateeData');
 
-    cy.createCase(false, caseTitle);
+    cy.createCase(caseTitle);
     cy.addSubcase('Nota',
       subcaseTitle1,
       'Cypress test voor het testen van toegevoegde documenten',

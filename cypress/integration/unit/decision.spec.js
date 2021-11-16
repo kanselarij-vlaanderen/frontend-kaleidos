@@ -38,7 +38,7 @@ context('Add files to an agenda', () => {
     const file = {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     };
-    cy.createCase(false, caseTitle);
+    cy.createCase(caseTitle);
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
 
@@ -145,7 +145,7 @@ context('Add files to an agenda', () => {
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
 
-    cy.createCase(false, caseTitle);
+    cy.createCase(caseTitle);
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
 
