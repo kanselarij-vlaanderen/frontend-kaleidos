@@ -187,6 +187,9 @@ context('Agendaitem changes tests', () => {
     cy.get(agenda.compareAgenda.announcementLeft).should('have.length', 1);
     cy.get(agenda.compareAgenda.announcementRight).should('have.length', 1);
     cy.get(agenda.compareAgenda.showChanges).click();
+    cy.get(agenda.compareAgenda.agendaitemLeft, {
+      timeout: 40000,
+    }).should('have.length', 1);
     cy.get(agenda.compareAgenda.agendaitemLeft).should('have.length', 1);
     cy.get(agenda.compareAgenda.agendaitemRight).should('have.length', 1);
     cy.get(agenda.compareAgenda.announcementLeft).should('have.length', 1);
