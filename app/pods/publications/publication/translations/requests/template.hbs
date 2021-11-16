@@ -31,7 +31,9 @@
                   {{t "translation-due-date"}}
                 </p>
                 {{#if this.translationSubcase.dueDate}}
-                  <p data-test-route-publications---translations-requests-due-date>
+                  <p
+                    data-test-route-publications---translations-requests-due-date
+                  >
                     {{moment-format
                       this.translationSubcase.dueDate
                       "DD-MM-YYYY"

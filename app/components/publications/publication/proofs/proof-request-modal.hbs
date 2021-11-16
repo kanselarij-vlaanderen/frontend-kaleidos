@@ -5,33 +5,41 @@
       stage=(t @stage)
       identification=@publicationFlow.identification.idName
     }}"
-    @onClose={{@onCancel}} />
+    @onClose={{@onCancel}}
+  />
   <Auk::Modal::Body>
-    <Utils::LoadableContent @isLoading={{this.saveRequest.isRunning}} @reserveSpace={{true}}>
+    <Utils::LoadableContent
+      @isLoading={{this.saveRequest.isRunning}}
+      @reserveSpace={{true}}
+    >
       <div class="auk-form-group-layout auk-form-group-layout--standard">
-        {{!-- Subject --}}
+        {{! Subject }}
         <div class="auk-form-group {{this.validators.subject.errorClass}}">
           <Auk::Label for="proofRequestSubject" @required={{true}}>
             {{t "subject"}}
           </Auk::Label>
           <Auk::Input
             data-test-proof-request-subject
-            id="proofRequestSubject" @block={{true}}
+            id="proofRequestSubject"
+            @block={{true}}
             @value={{mut this.subject}}
-            {{on "input" this.validators.subject.enableError}} />
+            {{on "input" this.validators.subject.enableError}}
+          />
         </div>
-        {{!-- Message --}}
+        {{! Message }}
         <div class="auk-form-group {{this.validators.message.errorClass}}">
           <Auk::Label for="proofRequestMessage" @required={{true}}>
             {{t "message"}}
           </Auk::Label>
           <Auk::Textarea
             data-test-proof-request-message
-            id="proofRequestMessage" @rows="6"
+            id="proofRequestMessage"
+            @rows="6"
             @value={{mut this.message}}
-            {{on "input" this.validators.message.enableError}} />
+            {{on "input" this.validators.message.enableError}}
+          />
         </div>
-        {{!-- Attachments --}}
+        {{! Attachments }}
         <div class="auk-form-group {{this.validators.attachments.errorClass}}">
           <Auk::Label @required={{true}}>{{t "attachments"}}</Auk::Label>
           <Auk::CheckboxList data-test-proof-request-attachments>
@@ -39,7 +47,8 @@
               <Auk::Checkbox
                 @label={{piece.name}}
                 @checked={{includes piece this.selectedAttachments}}
-                {{on "input" (fn this.toggleAttachmentSelection piece)}} />
+                {{on "input" (fn this.toggleAttachmentSelection piece)}}
+              />
             {{/each}}
           </Auk::CheckboxList>
         </div>
@@ -52,7 +61,8 @@
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
       @loading={{this.saveRequest.isRunning}}
-      {{on "click" (perform this.saveRequest)}}>
+      {{on "click" (perform this.saveRequest)}}
+    >
       {{t "request-action"}}
     </Auk::Button>
   </Auk::Modal::Footer>

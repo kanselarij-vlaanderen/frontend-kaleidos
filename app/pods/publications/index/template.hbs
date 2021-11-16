@@ -60,7 +60,10 @@
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-m-4">
       {{#if this.model.length}}
-        <table data-test-route-publications-index-data-table class="auk-table auk-table--sticky-header">
+        <table
+          data-test-route-publications-index-data-table
+          class="auk-table auk-table--sticky-header"
+        >
           <thead>
             <tr>
               {{#each this.tableColumns as |column|}}
