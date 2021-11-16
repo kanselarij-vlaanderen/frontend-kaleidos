@@ -47,10 +47,10 @@ export default class GovernmentAreasPanel extends Component {
       // In order to know which concept we are dealing with, we look up the models by id
       const narrower = yield governmentArea.narrower;
       if (narrower.length == 0) {
-        const field = yield this.store.peekRecord('government-field', governmentArea.id);
+        const field = yield this.store.findRecord('government-field', governmentArea.id);
         fields.pushObject(field);
       } else {
-        const domain = yield this.store.peekRecord('government-domain', governmentArea.id);
+        const domain = yield this.store.findRecord('government-domain', governmentArea.id);
         domains.pushObject(domain);
       }
     }
