@@ -12,17 +12,13 @@ export default class NewCase extends Component {
   @tracked isLoading = false;
 
   async createCase() {
-    const newDate = moment().utc()
-      .toDate();
-    const {
+    const newDate = moment().utc().toDate();
+    const { shortTitle } = this;
+    const caze = this.store.createRecord('case', {
       shortTitle,
-    } = this;
-    const caze = this.store.createRecord('case',
-      {
-        shortTitle,
-        isArchived: false,
-        created: newDate,
-      });
+      isArchived: false,
+      created: newDate,
+    });
     await caze.save();
     this.isLoading = false;
     return this.args.close(caze);
@@ -38,9 +34,7 @@ export default class NewCase extends Component {
   @action
   async createCaseAction($event) {
     $event.preventDefault();
-    const {
-      shortTitle,
-    } = this;
+    const { shortTitle } = this;
     if (shortTitle === null || shortTitle.trim().length === 0) {
       this.hasError = true;
     } else {

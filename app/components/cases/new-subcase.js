@@ -80,7 +80,7 @@ export default class CasesNewSubcase extends Component {
       type: this.type,
       shortTitle: trimText(this.shortTitle),
       title: trimText(this.title),
-      confidential: false,  // Set default to false as it isn't derived from case anymore
+      confidential: false, // Set default to false
       showAsRemark: this.showAsRemark || false,
       case: this.args.case,
       created: date,
@@ -90,8 +90,13 @@ export default class CasesNewSubcase extends Component {
     });
     subcase.subcaseName = this.subcaseName;
 
-    if (latestSubcase) { // Previous "versions" of this subcase exist
-      subcase = await this.copySubcaseProperties(subcase, latestSubcase, fullCopy);
+    if (latestSubcase) {
+      // Previous "versions" of this subcase exist
+      subcase = await this.copySubcaseProperties(
+        subcase,
+        latestSubcase,
+        fullCopy
+      );
     }
     return subcase;
   }
@@ -104,10 +109,13 @@ export default class CasesNewSubcase extends Component {
       subcase.subcaseName = latestSubcase.subcaseName;
       subcase.accessLevel = await latestSubcase.accessLevel;
       subcase.showAsRemark = latestSubcase.showAsRemark;
-      const submissionActivity = this.store.createRecord('submission-activity', {
-        startDate: new Date(),
-        pieces: pieces,
-      });
+      const submissionActivity = this.store.createRecord(
+        'submission-activity',
+        {
+          startDate: new Date(),
+          pieces: pieces,
+        }
+      );
       await submissionActivity.save();
       subcase.submissionActivities.pushObject(submissionActivity);
     } else {
@@ -146,7 +154,7 @@ export default class CasesNewSubcase extends Component {
   typeChanged(event) {
     const id = event.target.value;
     const type = this.store.peekRecord('case-type', id);
-    this.showAsRemark = (type.get('uri') === CONSTANTS.CASE_TYPES.REMARK);
+    this.showAsRemark = type.get('uri') === CONSTANTS.CASE_TYPES.REMARK;
   }
 
   @action
