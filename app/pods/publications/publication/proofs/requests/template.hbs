@@ -1,6 +1,9 @@
 <div class="auk-u-m-4">
   {{#each this.model as |row|}}
-    <div data-test-publications---proofs-requests-container class="auk-u-mb-4">
+    <div
+      data-test-route-publications---proofs-requests-container
+      class="auk-u-mb-4"
+    >
       <Auk::AccordionPanel @isDefaultActive={{true}} as |accordionPanel|>
         <accordionPanel.Header
           @title={{t
@@ -9,15 +12,17 @@
             date=(moment-format row.requestActivity.startDate "D MMMM")
             time=(moment-format row.requestActivity.startDate "H:mm")
           }}
-          as |header|>
+          as |header|
+        >
           <header.Actions as |actions|>
             <actions.Item>
               {{#if row.canOpenProofUploadModal}}
                 <Auk::Button
-                  data-test-publications---proofs-requests-upload
+                  data-test-route-publications---proofs-requests-upload
                   @disabled={{this.isUploadDisabled}}
                   @skin="primary"
-                  {{on "click" (fn this.openProofUploadModal row)}}>
+                  {{on "click" (fn this.openProofUploadModal row)}}
+                >
                   {{t "upload-received-proof-document"}}
                 </Auk::Button>
               {{/if}}
@@ -29,36 +34,51 @@
             <div class="auk-o-grid-col-6">
               {{#if row.requestActivity.email}}
                 <div class="auk-u-mb-2">
-                  <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "subject"}}</p>
-                  <p data-test-publications---proofs-requests-email-subject>{{row.requestActivity.email.subject}}</p>
+                  <p class="auk-u-text-bold auk-u-muted auk-u-mb">
+                    {{t "subject"}}
+                  </p>
+                  <p
+                    data-test-route-publications---proofs-requests-email-subject
+                  >{{row.requestActivity.email.subject}}</p>
                 </div>
                 <div class="auk-u-mb-2">
-                  <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "message"}}</p>
+                  <p class="auk-u-text-bold auk-u-muted auk-u-mb">
+                    {{t "message"}}
+                  </p>
                   <div class="auk-box">
-                    {{!-- TODO: Remove inline style --}}
-                    {{!-- template-lint-disable no-inline-styles --}}
-                    {{!-- p-tag opening and closing on 1 line to prevent whitespace to be rendered. --}}
-                    <p style="white-space:pre-line;">{{row.requestActivity.email.message}}</p>
-                    {{!-- template-lint-enable no-inline-styles --}}
+                    {{! TODO: Remove inline style }}
+                    {{! template-lint-disable no-inline-styles }}
+                    {{! p-tag opening and closing on 1 line to prevent whitespace to be rendered. }}
+                    <p style="white-space:pre-line;">
+                      {{row.requestActivity.email.message}}
+                    </p>
+                    {{! template-lint-enable no-inline-styles }}
                   </div>
                 </div>
               {{else}}
-                <Auk::EmptyState
-                        @message={{t "no-email-available"}}
-                />
+                <Auk::EmptyState @message={{t "no-email-available"}} />
               {{/if}}
             </div>
             <div class="auk-o-grid-col-6">
               <div class="auk-u-mb-2">
-                <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "attachments"}}</p>
-                <Utils::Documents::List @pieces={{sort-by "created" row.requestActivity.usedPieces}} />
+                <p class="auk-u-text-bold auk-u-muted auk-u-mb">
+                  {{t "attachments"}}
+                </p>
+                <Utils::Documents::List
+                  @pieces={{sort-by "created" row.requestActivity.usedPieces}}
+                />
               </div>
               {{#if row.proofingActivity.generatedPieces}}
                 <div class="auk-u-mb-2">
                   <p class="auk-u-text-bold auk-u-muted auk-u-mb">
                     {{t "received-documents"}}
                   </p>
-                  <Utils::Documents::List @pieces={{sort-by "created" row.proofingActivity.generatedPieces}} />
+                  <Utils::Documents::List
+                    @pieces={{sort-by
+                      "created"
+                      row.proofingActivity.generatedPieces
+                    }}
+                  />
                 </div>
               {{/if}}
             </div>
@@ -67,7 +87,10 @@
       </Auk::AccordionPanel>
     </div>
   {{else}}
-    <Auk::EmptyState @message={{t "no-proofing-activities-yet"}} @bordered={{true}} />
+    <Auk::EmptyState
+      @message={{t "no-proofing-activities-yet"}}
+      @bordered={{true}}
+    />
   {{/each}}
 </div>
 
@@ -76,5 +99,6 @@
     @publicationFlow={{this.publicationFlow}}
     @isReceived={{true}}
     @onSave={{this.saveProofUpload}}
-    @onCancel={{this.closeProofUploadModal}} />
+    @onCancel={{this.closeProofUploadModal}}
+  />
 {{/if}}

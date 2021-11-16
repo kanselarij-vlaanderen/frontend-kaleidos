@@ -2,7 +2,10 @@
   <td class="lt-cell align-left">
     {{@agendaitem.number}}
   </td>
-  <td data-test-table-row-newsletter-row-title class="lt-cell align-left auk-table__col--7">
+  <td
+    data-test-table-row-newsletter-row-title
+    class="lt-cell align-left auk-table__col--7"
+  >
     {{#if this.hasNewsletterInfo}}
       <div class="auk-u-mb-2">
         <p class="auk-u-text-bold">
@@ -25,17 +28,20 @@
   </td>
   <td class="lt-cell align-left">
     {{#each (await @agendaitem.mandatees) as |mandatee|}}
-      {{await mandatee.person.nameToDisplay}}<br>
+      {{await mandatee.person.nameToDisplay}}<br />
     {{else}}
       <p class="auk-u-muted auk-u-italic">
-        {{t "no-mandatees"}}
+        {{t "no-ministers"}}
       </p>
     {{/each}}
   </td>
   <td class="lt-cell align-left">
     <Auk::Checkbox
       @checked={{this.newsletterInfo.inNewsletter}}
-      @disabled={{or (not this.hasNewsletterInfo) this.saveNewsletterInfoTask.isRunning}}
+      @disabled={{or
+        (not this.hasNewsletterInfo)
+        this.saveNewsletterInfoTask.isRunning
+      }}
       data-test-table-row-newsletter-row-checkbox-in-newsletter={{true}}
       {{on "input" this.setInNewsletter}}
     />
