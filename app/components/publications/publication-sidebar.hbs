@@ -9,7 +9,12 @@
   <Auk::Navbar @skin="gray-100">
     <Auk::Toolbar>
       <Auk::Toolbar::Group @position={{if @isOpen "right" "center"}}>
-        <Auk::Toolbar::Item class="{{if (not @isOpen) "auk-o-flex auk-o-flex--horizontal-center"}}">
+        <Auk::Toolbar::Item
+          class="{{if
+              (not @isOpen)
+              "auk-o-flex auk-o-flex--horizontal-center"
+            }}"
+        >
           <Auk::Button
             data-test-publication-sidebar-open
             @skin="borderless"
@@ -23,9 +28,12 @@
   </Auk::Navbar>
   {{#if @isOpen}}
     <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
-      {{!--Publicatienummer --}}
+      {{!Publicatienummer }}
       <div class="auk-u-m-3">
-        <div class="auk-form-group {{if this.numberIsAlreadyUsed "auk-form-group--error"}}">
+        <div
+          class="auk-form-group
+            {{if this.numberIsAlreadyUsed "auk-form-group--error"}}"
+        >
           <Auk::Label>{{t "publications-number"}}</Auk::Label>
           <Auk::Input
             data-test-publication-sidebar-publication-number
@@ -41,7 +49,10 @@
           />
 
           {{#if this.numberIsAlreadyUsed}}
-            <div data-test-publication-sidebar-publication-number-error class="auk-form-help-text auk-form-help-text--danger">
+            <div
+              data-test-publication-sidebar-publication-number-error
+              class="auk-form-help-text auk-form-help-text--danger"
+            >
               <Auk::Icon @name="alert-triangle" />
               {{t "publication-number-already-taken"}}
             </div>
@@ -54,24 +65,35 @@
           {{/if}}
         </div>
 
-        {{!-- Spoedprocedure --}}
+        {{! Spoedprocedure }}
         {{#if this.publicationStatus.isPending}}
           <div class="auk-form-group">
             <Publications::UrgencyLevelCheckbox
-                    @urgencyLevel={{this.publicationFlow.urgencyLevel}}
-                    @onChange={{this.setUrgencyLevel}} />
+              @urgencyLevel={{this.publicationFlow.urgencyLevel}}
+              @onChange={{this.setUrgencyLevel}}
+            />
           </div>
         {{/if}}
 
-        {{!-- Status --}}
+        {{! Status }}
         <Publications::PublicationStatusSelector
-            @publicationStatus={{this.publicationStatus}}
-            @onChange={{this.selectPublicationStatus}}
-            @disabled={{and this.publicationStatus.isPublished this.decision.isStaatsbladResource}}
+          @publicationStatus={{this.publicationStatus}}
+          @onChange={{this.selectPublicationStatus}}
+          @disabled={{and
+            this.publicationStatus.isPublished
+            this.decision.isStaatsbladResource
+          }}
         />
 
-        {{#if (or this.publicationStatus.isWithdrawn this.publicationStatus.isPaused)}}
-          <div data-test-publication-sidebar-status-change-date class="auk-form-group">
+        {{#if
+          (or
+            this.publicationStatus.isWithdrawn this.publicationStatus.isPaused
+          )
+        }}
+          <div
+            data-test-publication-sidebar-status-change-date
+            class="auk-form-group"
+          >
             <Auk::Label>
               {{#if this.publicationStatus.isWithdrawn}}
                 {{t "withdrawn-on"}}
@@ -80,42 +102,55 @@
               {{/if}}
             </Auk::Label>
             <div class="auk-u-muted">
-              {{moment-format this.publicationStatusChange.startedAt "DD-MM-YYYY \o\m HH:mm"}}
+              {{moment-format
+                this.publicationStatusChange.startedAt
+                "DD-MM-YYYY \o\m HH:mm"
+              }}
             </div>
           </div>
         {{/if}}
 
-        {{!-- Type regelgeving --}}
+        {{! Type regelgeving }}
         {{#unless this.publicationStatus.isWithdrawn}}
-          <div data-test-publication-sidebar-regulation-type class="auk-form-group">
+          <div
+            data-test-publication-sidebar-regulation-type
+            class="auk-form-group"
+          >
             <Auk::Label for="blockInput">{{t "regulation-type"}}</Auk::Label>
             <PowerSelect
-                    @options={{this.regulationTypes}}
-                    @searchEnabled={{false}}
-                    @onchange={{this.setRegulationType}}
-                    @selected={{@publicationFlow.regulationType}}
-            as |regulationType|>
-            {{regulationType.label}}
+              @options={{this.regulationTypes}}
+              @searchEnabled={{false}}
+              @onchange={{this.setRegulationType}}
+              @selected={{@publicationFlow.regulationType}}
+              as |regulationType|
+            >
+              {{regulationType.label}}
             </PowerSelect>
           </div>
         {{/unless}}
 
-        {{!-- Publicatiewijze --}}
+        {{! Publicatiewijze }}
         {{#unless this.publicationStatus.isWithdrawn}}
-          <div data-test-publication-sidebar-publication-mode class="auk-form-group">
-            <Auk::Label for="blockInput">{{t "kind-of-publication"}}</Auk::Label>
+          <div
+            data-test-publication-sidebar-publication-mode
+            class="auk-form-group"
+          >
+            <Auk::Label for="blockInput">
+              {{t "kind-of-publication"}}
+            </Auk::Label>
             <PowerSelect
-                    @options={{this.publicationModes}}
-                    @searchEnabled={{false}}
-                    @onchange={{this.setPublicationMode}}
-                    @selected={{this.publicationFlow.mode}}
-            as |mode|>
-            {{mode.label}}
+              @options={{this.publicationModes}}
+              @searchEnabled={{false}}
+              @onchange={{this.setPublicationMode}}
+              @selected={{this.publicationFlow.mode}}
+              as |mode|
+            >
+              {{mode.label}}
             </PowerSelect>
           </div>
         {{/unless}}
 
-        {{!-- Drukproef verbeteraar --}}
+        {{! Drukproef verbeteraar }}
         {{#unless this.loadPublicationSubcase.isRunning}}
           <div class="auk-form-group">
             <Auk::Label>
@@ -129,19 +164,21 @@
           </div>
         {{/unless}}
 
-        {{!-- Werknummer BS == numac nummer --}}
+        {{! Werknummer BS == numac nummer }}
         <div data-test-publication-sidebar-numac-number class="auk-form-group">
           <Auk::Label>{{t "numac-number"}}</Auk::Label>
-          {{!-- TODO: disable modifying numac-number once (staatsblad-)decision exists? --}}
+          {{! TODO: disable modifying numac-number once (staatsblad-)decision exists? }}
           <Auk::InputPills
             @items={{this.publicationFlow.numacNumbers}}
             @onCreate={{this.addNumacNumber}}
-            @onRemove={{this.deleteNumacNumber}} as |numac|>
+            @onRemove={{this.deleteNumacNumber}}
+            as |numac|
+          >
             {{numac.idName}}
           </Auk::InputPills>
         </div>
 
-        {{!-- Datum ontvangst --}}
+        {{! Datum ontvangst }}
         <div data-test-publication-sidebar-opening-date class="auk-form-group">
           <Auk::Label>{{t "publication-flow-opening-date"}}</Auk::Label>
           {{#if this.publicationFlow.case.subcases}}
@@ -151,17 +188,19 @@
           {{else}}
             <Auk::Datepicker
               @date={{this.publicationFlow.openingDate}}
-              @onChange={{this.setOpeningDate}} />
+              @onChange={{this.setOpeningDate}}
+            />
           {{/if}}
         </div>
 
-        {{!-- Datum beslissing --}}
+        {{! Datum beslissing }}
         <div data-test-publication-sidebar-decision-date class="auk-form-group">
           <Auk::Label>{{t "decision-date"}}</Auk::Label>
           {{#if this.publicationFlow.case.subcases}}
             <Auk::ButtonLink
               target="_blank"
-              @layout="icon-right" @icon="nav-right"
+              @layout="icon-right"
+              @icon="nav-right"
               @route="agenda.agendaitems.agendaitem"
               @models={{array
                 this.treatment.agendaitem.agenda.createdFor.id
@@ -183,9 +222,14 @@
           {{/if}}
         </div>
 
-        {{!-- Uiterste vertaaldatum --}}
-        {{#if (or this.publicationStatus.isPending this.publicationStatus.isPaused)}}
-          <div data-test-publication-sidebar-translation-due-date class="auk-form-group">
+        {{! Uiterste vertaaldatum }}
+        {{#if
+          (or this.publicationStatus.isPending this.publicationStatus.isPaused)
+        }}
+          <div
+            data-test-publication-sidebar-translation-due-date
+            class="auk-form-group"
+          >
             <Auk::Label>{{t "translation-due-date"}}</Auk::Label>
             <Auk::Datepicker
               @date={{this.translationSubcase.dueDate}}
@@ -201,8 +245,11 @@
           </div>
         {{/if}}
 
-        {{!-- Vertaaldatum --}}
-        <div data-test-publication-sidebar-translation-date class="auk-form-group">
+        {{! Vertaaldatum }}
+        <div
+          data-test-publication-sidebar-translation-date
+          class="auk-form-group"
+        >
           <Auk::Label>{{t "translation-date"}}</Auk::Label>
           <Auk::Datepicker
             @date={{this.translationSubcase.endDate}}
@@ -210,9 +257,12 @@
           />
         </div>
 
-        {{!-- Gevraagde publicatiedatum --}}
+        {{! Gevraagde publicatiedatum }}
         {{#if this.publicationStatus.isPending}}
-          <div data-test-publication-sidebar-target-end-date class="auk-form-group">
+          <div
+            data-test-publication-sidebar-target-end-date
+            class="auk-form-group"
+          >
             <Auk::Label>{{t "publication-target-end-date"}}</Auk::Label>
             <Auk::Datepicker
               @date={{this.publicationSubcase.targetEndDate}}
@@ -221,9 +271,12 @@
           </div>
         {{/if}}
 
-        {{!-- Uiterste publicatiedatum --}}
+        {{! Uiterste publicatiedatum }}
         {{#unless this.publicationStatus.isWithdrawn}}
-          <div data-test-publication-sidebar-publication-due-date class="auk-form-group">
+          <div
+            data-test-publication-sidebar-publication-due-date
+            class="auk-form-group"
+          >
             <Auk::Label>{{t "publication-due-date"}}</Auk::Label>
             <Auk::Datepicker
               @date={{this.publicationSubcase.dueDate}}
@@ -232,7 +285,8 @@
             {{#if
               (and
                 (not this.publicationStatus.isPublished)
-                (is-after this.publicationSubcase.dueDate precision="days"))
+                (is-after this.publicationSubcase.dueDate precision="days")
+              )
             }}
               <Auk::FormHelpText
                 @text={{t "date-expired"}}
@@ -243,9 +297,12 @@
           </div>
         {{/unless}}
 
-        {{!-- Publicatiedatum --}}
+        {{! Publicatiedatum }}
         {{#if this.publicationStatus.isPublished}}
-          <div data-test-publication-sidebar-publication-date class="auk-form-group">
+          <div
+            data-test-publication-sidebar-publication-date
+            class="auk-form-group"
+          >
             <Auk::Label>{{t "publication-date"}}</Auk::Label>
             {{#unless this.loadDecision.isRunning}}
               {{#if this.decision.isStaatsbladResource}}
@@ -268,13 +325,17 @@
           </div>
         {{/if}}
 
-        {{!-- Opmerking --}}
+        {{! Opmerking }}
         <div class="auk-form-group">
           <Auk::Label>
             <div class="auk-o-flex auk-o-flex--vertical-center">
               <span class="auk-u-mr">{{t "remark-title"}}</span>
               <div>
-                <Auk::ButtonLink @icon="circle-info" @layout="icon-right" @skin="muted" />
+                <Auk::ButtonLink
+                  @icon="circle-info"
+                  @layout="icon-right"
+                  @skin="muted"
+                />
                 <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
                   <p>
                     {{t "publication-sidebar-tooltip"}}
@@ -283,7 +344,13 @@
               </div>
             </div>
           </Auk::Label>
-          <Auk::Textarea data-test-publication-sidebar-remark rows="4" type="text" value={{@publicationFlow.remark}} {{on "input" (perform this.setRemark)}}></Auk::Textarea>
+          <Auk::Textarea
+            data-test-publication-sidebar-remark
+            rows="4"
+            type="text"
+            value={{@publicationFlow.remark}}
+            {{on "input" (perform this.setRemark)}}
+          />
         </div>
       </div>
     </div>
@@ -310,7 +377,11 @@
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <Auk::Button data-test-publication-sidebar-confirm-withdraw @skin="danger-primary" {{on "click" this.withdrawPublicationFlow}}>
+            <Auk::Button
+              data-test-publication-sidebar-confirm-withdraw
+              @skin="danger-primary"
+              {{on "click" this.withdrawPublicationFlow}}
+            >
               {{t "discharge"}}
             </Auk::Button>
           </Auk::Toolbar::Item>
