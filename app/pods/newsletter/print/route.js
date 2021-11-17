@@ -17,7 +17,6 @@ export default class PrintNewsletterRoute extends Route {
     },
   }
 
-  @service sessionService;
   @service agendaService;
 
   async model(params) {

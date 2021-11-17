@@ -7,8 +7,9 @@ import { tracked } from '@glimmer/tracking';
 export default class CompareAgendaList extends Component {
   /**
    * INFO arguments from parent.
-   * @reversedAgendas all agendas from the meeting reverse sorted on serial number
-   * @isShowingChanges flag to show all agendaitems or just the ones with changes
+   * @argument meeting the current meeting
+   * @argument reversedAgendas all agendas from the meeting reverse sorted on serial number
+   * @argument isShowingChanges flag to show all agendaitems or just the ones with changes
    */
 
   @service store;

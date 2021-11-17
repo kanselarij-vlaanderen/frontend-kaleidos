@@ -10,7 +10,7 @@
   {{! data}}
   @meeting={{this.model.meeting}}
   @currentAgenda={{this.model.agenda}}
-  @reversedAgendas={{this.model.reverseSortedAgendas}}
+  @reversedAgendas={{this.model.reversedAgendas}}
   {{! actions}}
   @loading={{this.toggleIsLoading}}
   @refreshRoute={{this.refresh}}
@@ -22,7 +22,7 @@
         <Agenda::SideNav
           @meeting={{this.model.meeting}}
           @currentAgenda={{this.model.agenda}}
-          @reversedAgendas={{this.model.reverseSortedAgendas}}
+          @reversedAgendas={{this.model.reversedAgendas}}
           @isOpen={{this.sideNavIsOpen}}
           @onCollapse={{this.toggleSideNav}}
           @onOpen={{this.toggleSideNav}}

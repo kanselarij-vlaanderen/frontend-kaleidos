@@ -148,6 +148,7 @@
 
 {{#if this.isAddingAgendaitems}}
   <Agenda::Agendaitem::CreateAgendaitem
+    @meeting={{@meeting}}
     @isAddingAgendaitems={{this.isAddingAgendaitems}}
     @onCreate={{@refreshRoute}}
   />

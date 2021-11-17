@@ -13,7 +13,10 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @service router;
 
   @controller('agenda.agendaitems') agendaitemsController;
+  @tracked meeting;
   @tracked agenda;
+  @tracked agendaActivity;
+  @tracked reversedAgendas;
   @tracked subcase;
   @tracked submitter;
   @tracked newsletterInfo;

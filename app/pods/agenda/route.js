@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { action, set } from '@ember/object';
 
 export default class AgendaRoute extends Route {
-  @service sessionService;
   @service('session') simpleAuthSession;
   @service agendaService;
 
@@ -20,7 +19,7 @@ export default class AgendaRoute extends Route {
     const agenda = await this.store.findRecord('agenda', agendaId, {
       reload: 'true',
     });
-    const reverseSortedAgendas = await this.store.query('agenda', {
+    const reversedAgendas = await this.store.query('agenda', {
       'filter[created-for][:id:]': meetingId,
       sort: '-serialnumber',
       include: 'status',
@@ -29,17 +28,15 @@ export default class AgendaRoute extends Route {
     return {
       meeting,
       agenda,
-      reverseSortedAgendas,
+      reversedAgendas,
     };
   }
 
   async afterModel(model) {
-    await this.loadChangesToAgenda(model.meeting, model.agenda);
+    await this.loadChangesToAgenda(model.agenda);
   }
 
-  async loadChangesToAgenda(meeting, agenda) {
-    // TODO KAS-2449 stop setting/using the session and agenda
-    set(this.sessionService, 'currentSession', meeting);
+  async loadChangesToAgenda(agenda) {
     set(this.agendaService, 'addedAgendaitems', []);
     set(this.agendaService, 'addedPieces', []);
     const previousAgenda = await agenda.previousVersion;

@@ -21,7 +21,9 @@
         {{#if (not this.agenda.isFinal)}}
           <Agenda::Agendaitem::AgendaitemControls
             @agendaitem={{this.model}}
+            @agendaActivity={{this.agendaActivity}}
             @currentAgenda={{this.agenda}}
+            @reversedAgendas={{this.reversedAgendas}}
             @onDeleteAgendaitem={{this.reassignNumbersAndNavigateToNeighbouringAgendaitem}}
           />
         {{/if}}
