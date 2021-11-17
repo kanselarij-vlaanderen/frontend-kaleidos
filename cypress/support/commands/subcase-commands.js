@@ -129,7 +129,7 @@ function addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
   cy.route('GET', '/mandatees**http://themis.vlaanderen.be/id/bestuursorgaan/**').as('getMandatees');
 
   if (mandateeSearchText) {
-    cy.route('GET', `/mandatees**?filter**${mandateeSearchText.split(' ', 1)}**`).as('getFilteredMandatees');
+    cy.route('GET', `/mandatees**http://themis.vlaanderen.be/id/bestuursorgaan/**?filter**${mandateeSearchText.split(' ', 1)}**`).as('getFilteredMandatees');
   }
   cy.route('PATCH', '/subcases/*').as('patchSubcase');
   cy.get(mandatee.mandateePanelView.actions.edit).click();

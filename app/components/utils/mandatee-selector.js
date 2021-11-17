@@ -38,9 +38,9 @@ export default class MandateeSelector extends Component {
     };
     if (searchTerm) {
       queryOptions['filter[person][last-name]'] = searchTerm;
-    } else {
-      queryOptions['filter[government-body][:uri:]'] = CURRENT_GOVERNMENT_BODY;
     }
+    queryOptions['filter[government-body][:uri:]'] = CURRENT_GOVERNMENT_BODY;
+
     const results = yield this.store.query('mandatee', queryOptions);
     // Many versions of a mandatee exist within a government-body.
     // We only want the mandatees with no end-date or an end-date in the future.
