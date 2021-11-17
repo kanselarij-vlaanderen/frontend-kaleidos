@@ -16,8 +16,6 @@ export default Component.extend({
   noItemsSelected: true,
 
   currentSession: alias('sessionService.currentSession'),
-  selectedAgenda: alias('sessionService.currentAgenda'),
-  agendas: alias('sessionService.agendas'),
 
   store: inject(),
   subcasesService: inject(),
