@@ -1,12 +1,25 @@
-<div class="auk-u-mt-4">
-  <Agenda::PrintableAgenda::ListSection::ItemGroup::ItemGroupHeader
-    @mandatees={{this.items.firstObject.sortedMandatees}}
-  />
-  {{#each this.items as |agendaitem|}}
-    <div value={{agendaitem.number}}>
-      <Agenda::PrintableAgenda::ListSection::ItemGroup::Item
-        @item={{agendaitem}}
+<div class="l-printable-agenda__item-group">
+  <div class="l-printable-agenda__faux-item">
+    <div class="l-printable-agenda__non-breakable-group">
+      <Agenda::PrintableAgenda::ListSection::ItemGroup::ItemGroupHeader
+        @mandatees={{@items.firstObject.sortedMandatees}}
       />
+      <div value={{this.items.first.number}}>
+        <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
+          @item={{this.items.first}}
+        />
+      </div>
     </div>
+    {{#if this.items.first.sortedPieces}}
+      <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
+        @pieces={{this.items.first.sortedPieces}}
+      />
+    {{/if}}
+  </div>
+  {{#each this.items.remainder as |agendaitem index|}}
+    <Agenda::PrintableAgenda::ListSection::ItemGroup::Item
+      @item={{agendaitem}}
+      value={{agendaitem.number}}
+    />
   {{/each}}
 </div>

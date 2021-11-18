@@ -1,25 +1,12 @@
-<div class="auk-u-mb-2">
-  <div class="auk-o-flex auk-u-mb-2 auk-u-mt-4">
-    <div class="auk-printable-agenda-list__item-number">
-      {{this.item.number}}.
-    </div>
-    <h3 class="auk-u-m-0">
-    </h3>{{!-- Fallback for legacy data that doesn't have a short title --}}
-      <SanitizeHtml
-        @raw={{true}}
-        @value={{if this.item.shortTitle this.item.shortTitle this.item.title}}
-      />
+<div class="l-printable-agenda__item">
+  <div class="l-printable-agenda__non-breakable-group">
+    <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
+      @item={{@item}}
+    />
   </div>
-  <p class="auk-printable-agenda-list__description auk-printable-agenda-list__item-indented">
-    <SanitizeHtml @raw={{true}} @value={{this.item.title}} />
-  </p>
+  {{#if @item.sortedPieces}}
+    <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
+      @pieces={{@item.sortedPieces}}
+    />
+  {{/if}}
 </div>
-{{#if this.item.sortedPieces}}
-  <div class="auk-u-mb-2">
-    <ul class="auk-printable-agenda-list__document-list auk-printable-agenda-list__item-indented">
-      {{#each this.item.sortedPieces as |piece|}}
-        <li>({{piece.name}})</li>
-      {{/each}}
-    </ul>
-  </div>
-{{/if}}

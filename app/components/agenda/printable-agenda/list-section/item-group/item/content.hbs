@@ -1,0 +1,21 @@
+<div class="auk-o-flex l-printable-agenda__item-header">
+  <div class="l-printable-agenda__header-prefix">
+    {{@item.number}}.
+  </div>
+  <h4 class="auk-u-m-0">
+    {{!-- Fallback for legacy data that doesn't have a short title --}}
+    <SanitizeHtml
+      @raw={{true}}
+      @value={{if @item.shortTitle @item.shortTitle @item.title}}
+    />
+  </h4>
+</div>
+<div class="auk-u-mb-4 l-printable-agenda__item-indented">
+  <p class="auk-u-mb-2 l-printable-agenda__description">
+    <SanitizeHtml @raw={{true}} @value={{@item.title}} />
+  </p>
+  {{!-- <Auk::PillList>
+    <Auk::Pill @skin="danger" @layout="icon-left" @icon="lock-closed">{{t "confidential"}}</Auk::Pill>
+    <Auk::Pill>Uitgesteld</Auk::Pill>
+  </Auk::PillList> --}}
+</div>
