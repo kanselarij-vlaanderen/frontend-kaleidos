@@ -74,6 +74,7 @@ export default Component.extend({
       this.set('newsletterHTML', null);
       this.set('testCampaignIsLoading', false);
       location.reload();
+      // TODO 2368 create publicatie
     },
 
     async deleteCampaign() {
@@ -93,6 +94,8 @@ export default Component.extend({
       await reloadedMeeting.save();
       this.set('isLoading', false);
       location.reload();
+      // TODO 2368 delete publicatie
+
     },
 
     async sendCampaign() {

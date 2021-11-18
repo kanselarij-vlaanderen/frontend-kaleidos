@@ -141,10 +141,35 @@ export default class AgendaHeader extends Component {
   }
 
   @action
-  releaseDocuments() {
+  async releaseDocuments() {
     this.showConfirmReleaseDocuments = false;
     this.args.meeting.releasedDocuments = moment().utc().toDate();
     this.args.meeting.save();
+
+    // TODO 2368 public docs
+    //await this.publishDocuments.perform();
+  }
+
+  @task
+  *publishDocuments() {
+    const response = yield fetch(`/meetings/${this.args.meeting.id}/publication-activities`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/vnd.api+json'
+      },
+      body: JSON.stringify({
+        data: {
+          type: 'publication-activity',
+          attributes: {
+            scope: ["documents"]
+          }
+        }
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('Something went wrong while publishing the documents');
+    }
   }
 
   @action
