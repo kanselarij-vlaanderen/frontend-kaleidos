@@ -329,3 +329,15 @@ p {
 .to-be-deleted-row {
   opacity: 0.5;
 }
+
+/* Layout styling for logo-header utility
+   ========================================================================== */
+
+.l-logo-header {
+  height: 100px;
+  padding: 1.5rem 0;
+
+  > img {
+    max-height: 100%;
+  }
+}
