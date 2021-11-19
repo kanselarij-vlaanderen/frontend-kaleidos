@@ -20,9 +20,11 @@ export default class DocumentsDocumentPreviewDetailsDetailsTabComponent extends 
   }
 
   get isLoading() {
-    return this.loadAgendaitem.isRunning
-      || this.loadSignFlow.isRunning
-      || this.markOrUnmarkForSignature.isRunning;
+    return (
+      this.loadAgendaitem.isRunning ||
+      this.loadSignFlow.isRunning ||
+      this.markOrUnmarkForSignature.isRunning
+    );
   }
 
   get isShownFooter() {
@@ -47,7 +49,8 @@ export default class DocumentsDocumentPreviewDetailsDetailsTabComponent extends 
   @task
   *loadSignFlow() {
     const signFlow = yield this.store.queryOne('sign-flow', {
-      'filter[sign-subcase][sign-marking-activity][piece][:id:]': this.args.piece.id,
+      'filter[sign-subcase][sign-marking-activity][piece][:id:]':
+        this.args.piece.id,
       include: [
         'sign-subcase',
         'sign-subcase.sign-marking-activity',
@@ -56,7 +59,9 @@ export default class DocumentsDocumentPreviewDetailsDetailsTabComponent extends 
       ].join(','),
     });
     if (signFlow) {
-      this.signFlowContext = yield this.signatureService.createSignFlowContext(signFlow)
+      this.signFlowContext = yield this.signatureService.createSignFlowContext(
+        signFlow
+      );
     } else {
       this.signFlowContext = undefined;
     }

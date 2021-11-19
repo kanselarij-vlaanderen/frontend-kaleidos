@@ -35,7 +35,9 @@ export default class SignaturesIndexRoute extends Route {
         'decision-activity',
       ].join(','),
     });
-    const rowPromises = signFlows.map((signFlow) => this.signatureService.createSignFlowContext(signFlow));
+    const rowPromises = signFlows.map((signFlow) =>
+      this.signatureService.createSignFlowContext(signFlow)
+    );
     return Promise.all(rowPromises);
   }
 }

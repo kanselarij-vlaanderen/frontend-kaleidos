@@ -12,7 +12,7 @@ class SignFlowContext {
         signMarkingActivity: {},
         signPreparationActivity: {},
         signSigningActivities: [{}],
-      }
+      },
     });
     return Object.assign(new SignFlowContext(), {
       signatureService: signatureService,
@@ -23,27 +23,28 @@ class SignFlowContext {
 
   get canBeOffered() {
     /** @todo?: check whether signers and signature fields are assigned */
-    const canBeOffered = this.signatureService.canUserPrepare && this.status.isPreparing;
+    const canBeOffered =
+      this.signatureService.canUserPrepare && this.status.isPreparing;
     return canBeOffered;
   }
 
   get status() {
-    const statusString = SignFlowContext._getStatus(this._syncSignFlow)
+    const statusString = SignFlowContext._getStatus(this._syncSignFlow);
     return new SignFlowStatus(statusString);
   }
 
- /**
-  * @description determine status of a SignFlow (=multiple signatures/!= signature of a mandatee)
-  * TODO: other statusses
-  * @private
-  */
+  /**
+   * @description determine status of a SignFlow (=multiple signatures/!= signature of a mandatee)
+   * TODO: other statusses
+   * @private
+   */
   static _getStatus(syncSignFlow) {
     let status;
     const signSubcase = syncSignFlow.signSubcase;
     const signingActivities = signSubcase.signSigningActivities;
     if (signingActivities.length) {
       if (signingActivities[0].startDate) {
-        status = 'signing'
+        status = 'signing';
       } else {
         status = 'preparation';
       }
@@ -96,7 +97,7 @@ export default class SignatureService extends Service {
 
   /** @async */
   createSignFlowContext(signFlow) {
-    return SignFlowContext.create(this, signFlow)
+    return SignFlowContext.create(this, signFlow);
   }
 
   async markDocumentForSignature(piece, agendaItemTreatment) {
@@ -136,7 +137,8 @@ export default class SignatureService extends Service {
 
   async unmarkDocumentForSignature(piece) {
     const signMarkingActivity = await piece.signMarkingActivity;
-    const signPreparationActivity = await signMarkingActivity.signPreparationActivity;
+    const signPreparationActivity =
+      await signMarkingActivity.signPreparationActivity;
 
     if (signPreparationActivity) {
       this.toaster.error(this.intl.t('unmarking-not-possible'));

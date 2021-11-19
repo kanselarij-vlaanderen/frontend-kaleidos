@@ -12,14 +12,14 @@
  * @returns
  */
 export default async function wrap(model, relGraph) {
-  let wrappedModel = {}
+  let wrappedModel = {};
   for (let rel in relGraph) {
     let subRelGraph = relGraph[rel];
     const relModel = await model[rel];
     if (Array.isArray(subRelGraph)) {
-      subRelGraph = subRelGraph[0]
+      subRelGraph = subRelGraph[0];
       const relModels = await relModel;
-      const wrappedSubModels = {}
+      const wrappedSubModels = {};
       Reflect.setPrototypeOf(wrappedSubModels, relModels);
       for (let i = 0; i < relModels.length; ++i) {
         const relModel = relModels.objectAt(i);
@@ -31,10 +31,10 @@ export default async function wrap(model, relGraph) {
       const subRelGraph = relGraph[rel];
       if (relModel) {
         const wrappedSubModel = await wrap(relModel, subRelGraph);
-        wrappedModel = wrappedModel || {}
-        wrappedModel[rel] = wrappedSubModel
+        wrappedModel = wrappedModel || {};
+        wrappedModel[rel] = wrappedSubModel;
       } else {
-        wrappedModel[rel] = undefined
+        wrappedModel[rel] = undefined;
       }
     }
   }
