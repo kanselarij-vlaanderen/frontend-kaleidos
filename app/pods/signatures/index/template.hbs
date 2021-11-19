@@ -37,7 +37,7 @@
 <div class="auk-scroll-wrapper">
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-m-4">
-      {{#if this.model.length}}
+      {{#if this.model}}
         <table class="auk-table">
           <thead>
             <tr>
@@ -64,20 +64,20 @@
             </tr>
           </thead>
           <tbody>
-            {{#each this.model as |signFlow|}}
+            {{#each this.model as |row|}}
               <tr class="auk-table__row">
-                <td>{{signFlow.signSubcase.signMarkingActivity.piece.name}}</td>
+                <td>{{row.signFlow.signSubcase.signMarkingActivity.piece.name}}</td>
                 <td>
-                  {{signFlow.signSubcase.signMarkingActivity.piece.documentContainer.type.label}}
+                  {{row.signFlow.signSubcase.signMarkingActivity.piece.documentContainer.type.label}}
                 </td>
                 <td>
                   <Auk::Avatar @icon="user" @size="small">
-                    {{signFlow.creator.fullName}}
+                    {{row.signFlow.creator.fullName}}
                   </Auk::Avatar>
                 </td>
                 <td>
                   {{moment-format
-                    signFlow.decisionActivity.startDate
+                    row.signFlow.decisionActivity.startDate
                     "DD-MM-YYYY"
                   }}
                 </td>
@@ -87,23 +87,27 @@
                       @skin="borderless"
                       @layout="icon-only"
                       @icon="book"
-                      @href={{signFlow.signSubcase.signMarkingActivity.piece.viewDocumentURL}}
+                      @href={{row.signFlow.signSubcase.signMarkingActivity.piece.viewDocumentURL}}
                       target="_blank"
                     >
                       {{t "read"}}
                     </Auk::Button>
-                    <DropdownMenu @skin="borderless" @icon="more" as |Menu|>
-                      <Menu.Item @route="signatures.sign-flow.documents" @model={{signFlow}}>
-                        {{t "view"}}
-                      </Menu.Item>
-                      <Menu.Item
+                    <DropdownMenu @skin="borderless" @icon="more" as |menu|>
+                      {{#if this.signatureService.canUserPrepare}}
+                        <menu.Item
+                          @route="signatures.sign-flow.documents" @model={{row.signFlow.id}}
+                          @disabled={{row.canOffer}}>
+                          {{t "present-for-signature"}}
+                        </menu.Item>
+                      {{/if}}
+                      <menu.Item
                         {{on
                           "click"
-                          (fn this.navigateToDecision signFlow.decisionActivity)
+                          (fn this.navigateToDecision row)
                         }}
                       >
                         {{t "consult-agendaitem-decision"}}
-                      </Menu.Item>
+                      </menu.Item>
                     </DropdownMenu>
                   </WebComponents::AuButtonToolbar>
                 </td>

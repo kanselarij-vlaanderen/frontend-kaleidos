@@ -1,9 +1,23 @@
 import Controller from '@ember/controller';
 import { action, set } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { task } from 'ember-concurrency-decorators';
+import { tracked } from '@glimmer/tracking';
+
+export class SignFlowRow {
+  @tracked signFlow;
+
+  static async create(signatureService, signFlow) {
+    const row = new SignFlowRow()
+    row.signatureService = signatureService;
+    row.signFlow = signFlow;
+    await signatureService.loadSignFlowRelationships(signFlow);
+  }
+}
 
 export default class SignaturesIndexController extends Controller {
   @service router;
+  @service signatureService;
 
   queryParams = {
     page: {
@@ -44,15 +58,16 @@ export default class SignaturesIndexController extends Controller {
     set(this, 'sort', sort);
   }
 
-  @action
-  async navigateToDecision(treatment) {
-    const agendaitem = await this.store.queryOne('agendaitem', {
+  @task
+  *navigateToDecision(row) {
+    const treatment = yield row.signFlow.decisionActivity;
+    const agendaitem = yield this.store.queryOne('agendaitem', {
       'filter[treatments][:id:]': treatment.get('id'),
       'filter[:has-no:next-version]': 't',
       sort: '-created',
     });
-    const agenda = await agendaitem.get('agenda');
-    const meeting = await agenda.get('createdFor');
+    const agenda = yield agendaitem.get('agenda');
+    const meeting = yield agenda.get('createdFor');
     this.router.transitionTo(
       'agenda.agendaitems.agendaitem.decisions',
       meeting.id,

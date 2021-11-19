@@ -1,4 +1,4 @@
-<div class="auk-u-m-4">
+<Auk::Panel::Body class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
   <Auk::KeyValue @key={{t "document-name"}}>
     {{#if this.isEditingDetails}}
       <Textarea
@@ -52,7 +52,9 @@
   <Auk::KeyValue @key={{t "file-type"}}>
     <Utils::Documents::FileTypePill @extension={{@piece.file.extension}} />
   </Auk::KeyValue>
-  {{#if this.currentSession.isEditor}}
+</Auk::Panel::Body>
+{{#if this.currentSession.isEditor}}
+  <Auk::Panel::Footer>
     <Auk::Toolbar as |toolbar|>
       <toolbar.Group @position="right" as |group|>
         {{#if this.isEditingDetails}}
@@ -88,5 +90,5 @@
         {{/if}}
       </toolbar.Group>
     </Auk::Toolbar>
-  {{/if}}
-</div>
+  </Auk::Panel::Footer>
+{{/if}}
