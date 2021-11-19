@@ -4,7 +4,10 @@
       <Auk::Toolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
           <div class="auk-o-flex auk-o-flex--vertical-center">
-            <h4 class="auk-toolbar-complex__title auk-u-text-capitalize" data-test-newsletter-header-overview-title>
+            <h4
+              class="auk-toolbar-complex__title auk-u-text-capitalize"
+              data-test-newsletter-header-overview-title
+            >
               {{t "newsletter-overview-pdf-name"}}
               -
               {{await @agenda.createdFor.kindToShow.label}}
@@ -12,12 +15,9 @@
             </h4>
           </div>
           <Auk::Tabs @reversed={{true}}>
-            <Auk::Tab @route="newsletters" @isHierarchicalBack={{true}}/>
+            <Auk::Tab @route="newsletters" @isHierarchicalBack={{true}} />
             {{#if this.currentSession.isEditor}}
-              <Auk::Tab
-                @route="newsletter.index"
-                @model={{@meeting.id}}
-              >
+              <Auk::Tab @route="newsletter.index" @model={{@meeting.id}}>
                 {{t "overview"}}
               </Auk::Tab>
               <Auk::Tab
@@ -51,7 +51,8 @@
           @skin="secondary"
           @label={{t "actions"}}
           class="vlc-hide-on-print"
-        as |Menu|>
+          as |Menu|
+        >
           {{#if this.currentSession.isEditor}}
             {{#if
               (or (is-pending @agenda.createdFor.mailCampaign) this.isLoading)
@@ -70,24 +71,15 @@
                 <Menu.Divider />
               {{/if}}
               <Menu.Item
-                @href={{concat
-                  "/newsletter/xml-newsletter/"
-                  @agenda.id
-                }}
-                download={{concat
-                  "/newsletter/xml-newsletter/"
-                  @agenda.id
-                }}
+                @href={{concat "/newsletter/xml-newsletter/" @agenda.id}}
+                download={{concat "/newsletter/xml-newsletter/" @agenda.id}}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 {{t "generate-xml"}}
               </Menu.Item>
               <Menu.Divider />
-              <Menu.Item
-                @skin="danger"
-                {{on "click" this.deleteCampaign}}
-              >
+              <Menu.Item @skin="danger" {{on "click" this.deleteCampaign}}>
                 {{t "delete-campaign"}}
               </Menu.Item>
             {{else}}
@@ -115,7 +107,8 @@
     @verifyButtonText={{t "send-campaign"}}
     @message={{t "send-campaign-warning"}}
     @cancel={{on "click" this.toggleIsVerifying}}
-    @verify={{on "click" this.sendCampaign}} />
+    @verify={{on "click" this.sendCampaign}}
+  />
 {{/if}}
 {{#if (or this.testCampaignIsLoading this.newsletterHTML)}}
   <WebComponents::VlModal

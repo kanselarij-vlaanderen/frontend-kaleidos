@@ -87,13 +87,13 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       this.isLoading = false;
     });
     this.newsletterHTML = null;
-    this.testCampaignIsLoading= false;
+    this.testCampaignIsLoading = false;
     location.reload();
   }
 
   @action
   async deleteCampaign() {
-    this.isLoading= true;
+    this.isLoading = true;
     const agenda = await this.args.agenda;
     const meeting = await agenda.createdFor;
     const mailCampaign = await meeting.mailCampaign;
