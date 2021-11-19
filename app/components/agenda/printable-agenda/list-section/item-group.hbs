@@ -1,3 +1,5 @@
+{{!-- TODO: ADD COMMENT ON STRUCTURE --}}
+
 <div class="l-printable-agenda__item-group">
   <div class="l-printable-agenda__faux-item">
     <div class="l-printable-agenda__non-breakable-group">
@@ -16,7 +18,7 @@
       />
     {{/if}}
   </div>
-  {{#each this.items.remainder as |agendaitem index|}}
+  {{#each this.items.remainder as |agendaitem|}}
     <Agenda::PrintableAgenda::ListSection::ItemGroup::Item
       @item={{agendaitem}}
       value={{agendaitem.number}}
