@@ -10,12 +10,12 @@
         <div class="auk-u-ml-2">
           <Auk::ButtonLink
             data-test-compare-show-changes
-            {{action "toggleChangesOnly"}}
+            {{on "click" this.toggleChangesOnly}}
           >
-            {{#if (not this.isShowingChanges)}}
-              {{t "show-changes"}}
-            {{else}}
+            {{#if this.isShowingChanges}}
               {{t "show-all"}}
+            {{else}}
+              {{t "show-changes"}}
             {{/if}}
           </Auk::ButtonLink>
         </div>
@@ -23,8 +23,7 @@
     </div>
 
     <Agenda::CompareAgendaList
-      @currentAgenda={{await this.model.currentAgenda}}
-      @agendaToCompare={{await this.model.agendaToCompare}}
+      @reversedAgendas={{this.model.reversedAgendas}}
       @isShowingChanges={{this.isShowingChanges}}
     />
   </div>

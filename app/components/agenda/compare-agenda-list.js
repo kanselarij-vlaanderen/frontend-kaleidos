@@ -7,23 +7,15 @@ import { tracked } from '@glimmer/tracking';
 export default class CompareAgendaList extends Component {
   /**
    * INFO arguments from parent.
-   * @agendaToCompare=undefined
-   * @currentAgenda type agenda
-   * @isShowingChanges=undefined
+   * @reversedAgendas all agendas from the meeting reverse sorted on serial number
+   * @isShowingChanges flag to show all agendaitems or just the ones with changes
    */
 
   @service store;
-  @service sessionService;
   @service agendaService;
   get addedAgendaitems() {
     return this.agendaService.addedAgendaitems;
   }
-
-  agendaToCompare = null;
-  currentAgenda = null;
-  currentAgendaGroups = null;
-  agendaToCompareGroups = null;
-  @tracked isShowingChanges = false;
 
   @tracked agendaOne = null;
   @tracked agendaTwo = null;
@@ -43,14 +35,13 @@ export default class CompareAgendaList extends Component {
     if (this.agendaOne && this.agendaTwo) {
       this.isLoadingComparison = true;
 
-      const sortedAgendas = await this.sessionService.currentSession.sortedAgendas;
-      const agendaOneIndex = sortedAgendas.indexOf(this.agendaOne);
-      const agendaTwoIndex = sortedAgendas.indexOf(this.agendaTwo);
+      const agendaOneIndex = this.args.reversedAgendas.indexOf(this.agendaOne);
+      const agendaTwoIndex = this.args.reversedAgendas.indexOf(this.agendaTwo);
 
       if (agendaOneIndex < agendaTwoIndex) {
-        await this.agendaService.agendaWithChanges(this.agendaOne.get('id'), this.agendaTwo.get('id'));
+        await this.agendaService.agendaWithChanges(this.agendaOne.id, this.agendaTwo.id);
       } else {
-        await this.agendaService.agendaWithChanges(this.agendaTwo.get('id'), this.agendaOne.get('id'));
+        await this.agendaService.agendaWithChanges(this.agendaTwo.id, this.agendaOne.id);
       }
 
       this.combinedAgendaitems = await this.createComparisonList(this.agendaitemsLeft, this.agendaitemsRight);
@@ -63,8 +54,8 @@ export default class CompareAgendaList extends Component {
   @action
   async chooseAgendaOne(agenda) {
     this.isLoadingAgendaOne = true;
-    const agendaitems = await this.getAgendaitemsFromAgenda(agenda.get('id'));
-    const announcements = await this.getAnnouncementsFromAgenda(agenda.get('id'));
+    const agendaitems = await this.getAgendaitemsFromAgenda(agenda.id);
+    const announcements = await this.getAnnouncementsFromAgenda(agenda.id);
     await this.agendaService.groupAgendaitemsOnGroupName(agendaitems);
 
     this.agendaitemsLeft = agendaitems;
@@ -77,8 +68,8 @@ export default class CompareAgendaList extends Component {
   @action
   async chooseAgendaTwo(agenda) {
     this.isLoadingAgendaTwo = true;
-    const agendaitems = await this.getAgendaitemsFromAgenda(agenda.get('id'));
-    const announcements = await this.getAnnouncementsFromAgenda(agenda.get('id'));
+    const agendaitems = await this.getAgendaitemsFromAgenda(agenda.id);
+    const announcements = await this.getAnnouncementsFromAgenda(agenda.id);
     await this.agendaService.groupAgendaitemsOnGroupName(agendaitems);
 
     this.agendaitemsRight = agendaitems;

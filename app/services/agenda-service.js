@@ -1,6 +1,5 @@
 import Service, { inject as service } from '@ember/service';
 import { singularize } from 'ember-inflector';
-import { bind } from '@ember/runloop';
 import { ajax } from 'frontend-kaleidos/utils/ajax';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
@@ -142,19 +141,19 @@ export default Service.extend({
 
   /* API: agenda-sort-service */
 
-  agendaWithChanges(currentAgendaID, agendaToCompareID) {
-    return ajax({
-      method: 'GET',
-      url: `/agenda-sort/agenda-with-changes?agendaToCompare=${agendaToCompareID}&selectedAgenda=${currentAgendaID}`,
-    })
-      .then(bind(this, (result) => {
-        this.set('addedPieces', result.addedDocuments);
-        this.set('addedAgendaitems', result.addedAgendaitems);
-        return result;
-      }))
-      .catch(() => {
-
-      });
+  async agendaWithChanges(currentAgendaID, agendaToCompareID) {
+    const endpoint = new URL('/agenda-sort/agenda-with-changes', window.location.origin);
+    const queryParams = new URLSearchParams(Object.entries({
+      agendaToCompare: agendaToCompareID,
+      selectedAgenda: currentAgendaID,
+    }));
+    endpoint.search = queryParams.toString();
+    const response = await fetch(endpoint);
+    if (response.ok) {
+      const result = await response.json();
+      this.set('addedPieces', result.addedDocuments);
+      this.set('addedAgendaitems', result.addedAgendaitems);
+    }
   },
 
   async newAgendaItems(currentAgendaId, comparedAgendaId) {

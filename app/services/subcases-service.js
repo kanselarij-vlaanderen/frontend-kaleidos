@@ -32,24 +32,6 @@ export default Service.extend({
       });
   },
 
-  // eslint-disable-next-line camelcase
-  setNewMandateeToRelatedOpenSubcases(old_mandatee, new_mandatee) {
-    return ajax(
-      {
-        method: 'POST',
-        url: '/minister-jurisdiction-service/transfer/procedures',
-        data: {
-          // eslint-disable-next-line camelcase
-          old_mandatee,
-          // eslint-disable-next-line camelcase
-          new_mandatee,
-        },
-      }
-    ).then(({
-      data,
-    }) => data);
-  },
-
   async processSubcasePhases(activities) {
     // KAS-1425 sort activities? done in the micro service atm.
     if (typeof activities === 'string') {
