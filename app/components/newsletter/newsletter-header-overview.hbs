@@ -1,37 +1,35 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
 <Auk::Navbar @skin="gray-100" @auto={{true}}>
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
           <div class="auk-o-flex auk-o-flex--vertical-center">
-            <h4 class="auk-toolbar-complex__title auk-u-text-capitalize" data-test-newsletter-header-overview-title>
+            <h4
+              class="auk-toolbar-complex__title auk-u-text-capitalize"
+              data-test-newsletter-header-overview-title
+            >
               {{t "newsletter-overview-pdf-name"}}
               -
-              {{await this.agenda.createdFor.kindToShow.label}}
-              {{moment-format this.agenda.createdFor.plannedStart "DD MMMM YYYY"}}
+              {{await @agenda.createdFor.kindToShow.label}}
+              {{moment-format @agenda.createdFor.plannedStart "DD MMMM YYYY"}}
             </h4>
           </div>
           <Auk::Tabs @reversed={{true}}>
-            <Auk::Tab @route="newsletters" @isHierarchicalBack={{true}}/>
+            <Auk::Tab @route="newsletters" @isHierarchicalBack={{true}} />
             {{#if this.currentSession.isEditor}}
-              <Auk::Tab
-                @route="newsletter.index"
-                @model={{this.meeting.id}}
-              >
+              <Auk::Tab @route="newsletter.index" @model={{@meeting.id}}>
                 {{t "overview"}}
               </Auk::Tab>
               <Auk::Tab
                 @route="newsletter.print"
-                @model={{this.meeting.id}}
+                @model={{@meeting.id}}
                 @query={{hash showDraft=true}}
               >
                 {{t "design"}}
               </Auk::Tab>
               <Auk::Tab
                 @route="newsletter.print"
-                @model={{this.meeting.id}}
+                @model={{@meeting.id}}
                 @query={{hash showDraft=false}}
               >
                 {{t "definite"}}
@@ -49,59 +47,49 @@
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
-        {{#if this.currentSession.isEditor}}
-        {{/if}}
         <DropdownMenu
           @skin="secondary"
           @label={{t "actions"}}
           class="vlc-hide-on-print"
-        as |Menu|>
+          as |Menu|
+        >
           {{#if this.currentSession.isEditor}}
             {{#if
-              (or (is-pending this.agenda.createdFor.mailCampaign) this.isLoading)
+              (or (is-pending @agenda.createdFor.mailCampaign) this.isLoading)
             }}
               <Menu.Item @textOnly={{true}}>
                 <Auk::Loader @message={{t "newsletter-loading-text"}} />
               </Menu.Item>
             {{else if (await this.agenda.createdFor.mailCampaign)}}
               {{#if (not (await this.agenda.createdFor.mailCampaign.isSent))}}
-                <Menu.Item {{action "sendTestCampaign"}}>
+                <Menu.Item {{on "click" this.sendTestCampaign}}>
                   {{t "send-test-campaign"}}
                 </Menu.Item>
-                <Menu.Item {{action "toggleIsVerifying"}}>
+                <Menu.Item {{on "click" this.toggleIsVerifying}}>
                   {{t "send-campaign"}}
                 </Menu.Item>
                 <Menu.Divider />
               {{/if}}
               <Menu.Item
-                @href={{concat
-                  "/newsletter/xml-newsletter/"
-                  this.agenda.id
-                }}
-                download={{concat
-                  "/newsletter/xml-newsletter/"
-                  this.agenda.id
-                }}
+                @href={{concat "/newsletter/xml-newsletter/" @agenda.id}}
+                download={{concat "/newsletter/xml-newsletter/" @agenda.id}}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 {{t "generate-xml"}}
               </Menu.Item>
               <Menu.Divider />
-              <Menu.Item
-                @skin="danger"
-                {{action "deleteCampaign"}}
-              >
+              <Menu.Item @skin="danger" {{on "click" this.deleteCampaign}}>
                 {{t "delete-campaign"}}
               </Menu.Item>
             {{else}}
-              <Menu.Item {{action "createCampaign"}}>
+              <Menu.Item {{on "click" this.createCampaign}}>
                 {{t "create-campaign"}}
               </Menu.Item>
             {{/if}}
           {{/if}}
           {{#if this.shouldShowPrintButton}}
-            <Menu.Item {{action "print"}}>
+            <Menu.Item {{on "click" this.print}}>
               {{t "print"}}
             </Menu.Item>
           {{/if}}
@@ -118,14 +106,15 @@
     @isLoading={{this.isLoading}}
     @verifyButtonText={{t "send-campaign"}}
     @message={{t "send-campaign-warning"}}
-    @cancel={{action "toggleIsVerifying"}}
-    @verify={{action "sendCampaign"}} />
+    @cancel={{on "click" this.toggleIsVerifying}}
+    @verify={{on "click" this.sendCampaign}}
+  />
 {{/if}}
 {{#if (or this.testCampaignIsLoading this.newsletterHTML)}}
   <WebComponents::VlModal
     @isOverlay={{true}}
     @title={{t "send-test-campaign"}}
-    @closeModal={{action "clearNewsletterHTML"}}
+    @closeModal={{on "click" this.clearNewsletterHTML}}
   >
     <Auk::Modal::Body>
       {{#if this.testCampaignIsLoading}}
