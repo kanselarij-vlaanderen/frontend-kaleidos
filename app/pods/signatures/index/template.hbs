@@ -65,6 +65,7 @@
           </thead>
           <tbody>
             {{#each this.model as |row|}}
+              {{log row}}
               <tr class="auk-table__row">
                 <td>{{row.signFlow.signSubcase.signMarkingActivity.piece.name}}</td>
                 <td>
@@ -96,14 +97,14 @@
                       {{#if this.signatureService.canUserPrepare}}
                         <menu.Item
                           @route="signatures.sign-flow.documents" @model={{row.signFlow.id}}
-                          @disabled={{row.canOffer}}>
-                          {{t "present-for-signature"}}
+                          @disabled={{not row.canBeOffered}}>
+                          {{t "offer-for-signature"}}
                         </menu.Item>
                       {{/if}}
                       <menu.Item
                         {{on
                           "click"
-                          (fn this.navigateToDecision row)
+                          (perform this.navigateToDecision row)
                         }}
                       >
                         {{t "consult-agendaitem-decision"}}

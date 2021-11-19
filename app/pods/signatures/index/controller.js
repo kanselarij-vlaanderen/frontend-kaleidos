@@ -2,22 +2,9 @@ import Controller from '@ember/controller';
 import { action, set } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency-decorators';
-import { tracked } from '@glimmer/tracking';
-
-export class SignFlowRow {
-  @tracked signFlow;
-
-  static async create(signatureService, signFlow) {
-    const row = new SignFlowRow()
-    row.signatureService = signatureService;
-    row.signFlow = signFlow;
-    await signatureService.loadSignFlowRelationships(signFlow);
-  }
-}
 
 export default class SignaturesIndexController extends Controller {
   @service router;
-  @service signatureService;
 
   queryParams = {
     page: {

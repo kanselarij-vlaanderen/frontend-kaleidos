@@ -1,6 +1,5 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { SignFlowRow } from './controller';
 
 export default class SignaturesIndexRoute extends Route {
   queryParams = {
@@ -36,7 +35,7 @@ export default class SignaturesIndexRoute extends Route {
         'decision-activity',
       ].join(','),
     });
-    const rowPromises = signFlows.map((signFlow) => this.signatureService.createSignFlowWrapper(signFlow));
+    const rowPromises = signFlows.map((signFlow) => this.signatureService.createSignFlowContext(signFlow));
     return Promise.all(rowPromises);
   }
 }

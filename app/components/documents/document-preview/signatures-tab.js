@@ -8,7 +8,8 @@ export default class DocumentsDocumentPreviewDetailsDetailsTabComponent extends 
   @service store;
   @service signatureService;
 
-  @tracked signFlowWrapper;
+  /** @type {SignFlowContext|undefined} */
+  @tracked signFlowContext;
   @tracked status;
   @tracked agendaitem;
 
@@ -19,16 +20,15 @@ export default class DocumentsDocumentPreviewDetailsDetailsTabComponent extends 
   }
 
   get isLoading() {
-    return this.loadAgendaitem.isLoading
-      || this.loadSignFlow.isLoading
-      || this.markOrUnmarkForSignature.isLoading;
+    return this.loadAgendaitem.isRunning
+      || this.loadSignFlow.isRunning
+      || this.markOrUnmarkForSignature.isRunning;
   }
 
   get isShownFooter() {
-    // Currently "Aanbieden" is the only button, which requires "preparing" status
+    // Currently "Aanbieden" is the only button, which requires the right permissions
     //  showing empty footer would look weird.
-    return this.signatureService.canUserPrepare
-      && this.signFlowWrapper.signFlow.isPreparing
+    return this.signatureService.canUserPrepare;
   }
 
   @task
@@ -56,14 +56,14 @@ export default class DocumentsDocumentPreviewDetailsDetailsTabComponent extends 
       ].join(','),
     });
     if (signFlow) {
-      this.signFlowWrapper = yield this.signatureService.createSignFlowWrapper(signFlow)
+      this.signFlowContext = yield this.signatureService.createSignFlowContext(signFlow)
     } else {
-      this.signFlowWrapper = undefined;
+      this.signFlowContext = undefined;
     }
   }
 
   get isInSignFlow() {
-    return !!this.signFlowWrapper;
+    return !!this.signFlowContext;
   }
 
   @task
@@ -72,7 +72,7 @@ export default class DocumentsDocumentPreviewDetailsDetailsTabComponent extends 
       const treatments = yield this.agendaitem.treatments;
       const agendaItemTreatment = treatments.firstObject;
       yield this.args.markForSignature(this.args.piece, agendaItemTreatment);
-    } else if (this.signFlowWrapper.status.isMarked) {
+    } else if (this.signFlowContext.status.isMarked) {
       yield this.args.unmarkForSignature(this.args.piece);
     }
     yield this.loadSignFlow.perform();

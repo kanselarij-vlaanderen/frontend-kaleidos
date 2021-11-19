@@ -1,13 +1,17 @@
 <Auk::Panel::Body>
   {{#if this.isLoading}}
+    <div class="auk-loader-wrapper">
+      <Auk::Loader />
+    </div>
+  {{else}}
     {{#if this.agendaitem}}
-      {{#if (or this.isNotMarked this.signFlowWrapper.status.isMarked)}}
+      {{#if (or (not this.isInSignFlow) this.signFlowContext.status.isMarked)}}
       <Auk::KeyValue @key={{t "validation-signature"}}>
         {{#if this.markOrUnmarkForSignature.isRunning}}
           <Auk::Loader />
         {{else}}
           <Auk::Checkbox
-            @checked={{this.signFlowWrapper.status.isMarked}}
+            @checked={{this.signFlowContext.status.isMarked}}
             {{on "input" (perform this.markOrUnmarkForSignature)}}
           >
             {{! could use @label, but prototype shows a tooltip, so we need a block instead }}
@@ -21,10 +25,6 @@
     {{else}}
       <p>{{t "signature-not-possible"}}</p>
     {{/if}}
-  {{else}}
-    <div class="auk-loader-wrapper">
-      <Auk::Loader />
-    </div>
   {{/if}}
 </Auk::Panel::Body>
 
@@ -36,9 +36,9 @@
           <Auk::Button
             @icon="sign"
             @route="signatures.sign-flow.documents"
-            @model={{this.signFlowWrapper.signFlow.id}}
-            @disabled={{not this.signFlowWrapper.canOffer}}>
-            {{t "present-for-signature"}}
+            @model={{this.signFlowContext.signFlow.id}}
+            @disabled={{not this.signFlowContext.canBeOffered}}>
+            {{t "offer-for-signature"}}
           </Auk::Button>
         </group.Item>
       </toolbar.Group>

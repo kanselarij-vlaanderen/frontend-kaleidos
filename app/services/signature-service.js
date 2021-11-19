@@ -1,26 +1,45 @@
 import Service, { inject as service } from '@ember/service';
 import syncWrapper from 'frontend-kaleidos/utils/sync-wrapper';
 
-class SignFlowWrapper {
-  constructor(signatureService, signFlow) {
-    this.signatureService = signatureService;
-    this.signFlow = signFlow;
-    this.status = new SignFlowStatus(this._getStatus.bind(this));
+/**
+ * Goal: offer common computed properties
+ * To allow this, all relationships are resolved
+ */
+class SignFlowContext {
+  static async create(signatureService, signFlow) {
+    const syncSignFlow = await syncWrapper(signFlow, {
+      signSubcase: {
+        signMarkingActivity: {},
+        signPreparationActivity: {},
+        signSigningActivities: [{}],
+      }
+    });
+    return Object.assign(new SignFlowContext(), {
+      signatureService: signatureService,
+      signFlow: signFlow,
+      _syncSignFlow: syncSignFlow,
+    });
   }
 
-  get canOffer() {
+  get canBeOffered() {
     /** @todo?: check whether signers and signature fields are assigned */
-    const canOffer = this.signatureService.canUserPrepare && this.status.isPreparing;
-    return canOffer;
+    const canBeOffered = this.signatureService.canUserPrepare && this.status.isPreparing;
+    return canBeOffered;
+  }
+
+  get status() {
+    const statusString = SignFlowContext._getStatus(this._syncSignFlow)
+    return new SignFlowStatus(statusString);
   }
 
  /**
- * TODO: other statusses
- * @private
- */
-  _getStatus() {
+  * @description determine status of a SignFlow (=multiple signatures/!= signature of a mandatee)
+  * TODO: other statusses
+  * @private
+  */
+  static _getStatus(syncSignFlow) {
     let status;
-    const signSubcase = this.signFlow.signSubcase;
+    const signSubcase = syncSignFlow.signSubcase;
     const signingActivities = signSubcase.signSigningActivities;
     if (signingActivities.length) {
       if (signingActivities[0].startDate) {
@@ -38,7 +57,8 @@ class SignFlowWrapper {
 }
 
 /**
- * @todo Handle other status
+ * @description wrapper class to avoid use of @param type string
+ * @todo Handle other statusses
  */
 class SignFlowStatus {
   constructor(type) {
@@ -46,15 +66,15 @@ class SignFlowStatus {
   }
 
   get isMarked() {
-    return this._type() === 'marking';
+    return this._type === 'marking';
   }
 
   get isPreparing() {
-    return this._type() === 'preparation';
+    return this._type === 'preparation';
   }
 
   get isSigning() {
-    return this._type() === 'signing';
+    return this._type === 'signing';
   }
 }
 
@@ -65,22 +85,18 @@ export default class SignatureService extends Service {
   @service currentSession;
 
   get canUserPrepare() {
-    return this.currentSession.isAdmin || this.currentSession.isKabinet;
+    // TODO: allow this to kabinet role
+    // return this.currentSession.isAdmin || this.currentSession.isKabinet;
+    return this.currentSession.isAdmin || this.currentSession.isKanselarij;
   }
 
   get canUserSign() {
     return this.currentSession.isMinister;
   }
 
-  async createSignFlowWrapper(signFlow) {
-    const wrappedSignFlow = await syncWrapper(signFlow, {
-      signSubcase: {
-        signMarkingActivity: {},
-        signPreparationActivity: {},
-        signSigningActivities: [{}],
-      }
-    })
-    return new SignFlowWrapper(this, wrappedSignFlow)
+  /** @async */
+  createSignFlowContext(signFlow) {
+    return SignFlowContext.create(this, signFlow)
   }
 
   async markDocumentForSignature(piece, agendaItemTreatment) {
