@@ -5,6 +5,7 @@ import { task } from 'ember-concurrency-decorators';
 
 export default class SignaturesIndexController extends Controller {
   @service router;
+  @service signatureService;
 
   queryParams = {
     page: {
