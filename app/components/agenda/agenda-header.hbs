@@ -138,6 +138,13 @@
               >
                 {{t "agenda-release-documents"}}
               </Menu.Item>
+              <Menu.Divider />
+              <Menu.Item {{on "click" this.publishDocuments}}>
+                {{t "publish-documents"}}
+              </Menu.Item>
+              <Menu.Item @skin="danger" {{on "click" this.unpublishDocuments}}>
+                {{t "unpublish"}}
+              </Menu.Item>
             {{/if}}
           </DropdownMenu>
         </Auk::Toolbar::Item>

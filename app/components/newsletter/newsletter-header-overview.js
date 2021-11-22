@@ -15,6 +15,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @service router;
   @service toaster;
   @service newsletterService;
+  @service publishService;
   @service currentSession;
 
   @tracked isVerifying = false;
@@ -90,7 +91,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     this.testCampaignIsLoading = false;
     location.reload();
   }
-  // TODO 2368 create publicatie
 
   @action
   async deleteCampaign() {
@@ -112,7 +112,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     this.isLoading = false;
     location.reload();
   }
-  // TODO 2368 delete publicatie
 
   @action
   async sendCampaign() {
@@ -148,7 +147,13 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     mailCampaign.set('sentAt', moment().utc().toDate());
     await mailCampaign.save();
     await meeting.belongsTo('mailCampaign').reload();
+    // await this.publishNewsletter.perform()
     this.isVerifying = false;
+  }
+
+  @action
+  async publishToWeb() {
+    await this.publishService.publishNewsletter(this.args.meeting);
   }
 
   @action

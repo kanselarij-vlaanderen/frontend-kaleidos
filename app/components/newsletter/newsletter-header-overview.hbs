@@ -82,6 +82,10 @@
               <Menu.Item @skin="danger" {{on "click" this.deleteCampaign}}>
                 {{t "delete-campaign"}}
               </Menu.Item>
+              <Menu.Divider />
+              <Menu.Item {{on "click" this.publishToWeb}}>
+                {{t "publish-newsletter"}}
+              </Menu.Item>
             {{else}}
               <Menu.Item {{on "click" this.createCampaign}}>
                 {{t "create-campaign"}}
