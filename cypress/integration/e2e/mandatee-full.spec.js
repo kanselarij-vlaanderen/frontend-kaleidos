@@ -84,7 +84,7 @@ context('Full test for creating mandatees', () => {
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitle1, false);
     cy.openDetailOfAgendaitem(subcaseTitle1);
-    cy.addSubcaseMandatee(0, -1, -1, 'Homans', ministerTitle);
+    cy.addSubcaseMandatee(0, 'Homans', ministerTitle);
     cy.setFormalOkOnItemWithIndex(0);
     cy.setFormalOkOnItemWithIndex(1);
     cy.approveDesignAgenda();

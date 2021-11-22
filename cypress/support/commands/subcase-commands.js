@@ -115,31 +115,24 @@ function changeSubcaseAccessLevel(confidentialityChange, accessLevel, newShortTi
 }
 
 /**
- * Adds a mandatees with field and domain to a sucase when used in the subcase view (/dossiers/..id../overzicht)
+ * Adds a mandatees to a sucase when used in the subcase view (/dossiers/..id../overzicht)
  * Pass the title of the mandatee to get a specific person
  * @name addSubcaseMandatee
  * @memberOf Cypress.Chainable#
  * @function
  * @param {Number} mandateeNumber - The list index of the mandatee from default list (this is ignored if mandateeSearchText is given)
- * @param {Number} fieldNumber - The list index of the field, -1 means no field/domain should be selected
- * @param {Number} domainNumber - The list index of the domain
  * @param {String} mandateeSearchText - Search on the minister name (title no longer works)
  * @param {String} mandateeTitle - Select the found mandatee by correct title (optional, use when 1 person has multiple mandatees)
  */
-function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeSearchText, mandateeTitle) {
+function addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
   cy.log('addSubcaseMandatee');
-  // TODO KAS-2968 put the 2 unused fields in a route to avoid conflicts, remove later
-  cy.route('GET', `/nothing${fieldNumber}${domainNumber}`).as('getMandatees');
   cy.route('GET', '/mandatees**http://themis.vlaanderen.be/id/bestuursorgaan/**').as('getMandatees');
 
   if (mandateeSearchText) {
-    cy.route('GET', `/mandatees**?filter**${mandateeSearchText.split(' ', 1)}**`).as('getFilteredMandatees');
+    cy.route('GET', `/mandatees**http://themis.vlaanderen.be/id/bestuursorgaan/**?filter**${mandateeSearchText.split(' ', 1)}**`).as('getFilteredMandatees');
   }
-
   cy.route('PATCH', '/subcases/*').as('patchSubcase');
-
   cy.get(mandatee.mandateePanelView.actions.edit).click();
-
   cy.get(mandatee.mandateePanelEdit.actions.add).click();
   cy.wait('@getMandatees');
   cy.get(utils.mandateeSelector.container).find(dependency.emberPowerSelect.trigger)
@@ -164,7 +157,7 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
     cy.get(dependency.emberPowerSelect.option).eq(mandateeNumber)
       .click();
   }
-  cy.get(utils.vlModalFooter.save).click();
+  cy.get(utils.mandateesSelector.add).click();
   cy.get(mandatee.mandateePanelEdit.actions.save).click();
   cy.wait('@patchSubcase', {
     timeout: 40000,
@@ -173,24 +166,22 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
 }
 
 /**
- * Adds a mandatees with field and domain to a sucase when used in the agendaitem detail view (/vergadering/..id../agenda/..id../agendapunten/..id)
+ * Adds a mandatees to an agendaitem when used in the agendaitem detail view (/vergadering/..id../agenda/..id../agendapunten/..id)
  * Pass the title of the mandatee to get a specific person
  * @name addAgendaitemMandatee
  * @memberOf Cypress.Chainable#
  * @function
  * @param {Number} mandateeNumber - The list index of the mandatee
- * @param {Number} fieldNumber - The list index of the field, -1 means no field/domain should be selected
- * @param {Number} domainNumber - The list index of the domain
  * @param {String} mandateeSearchText - Search on the minister name (title no longer works)
  * @param {String} mandateeTitle - Select the found mandatee by correct title (optional, use when 1 person has multiple mandatees)
  */
-function addAgendaitemMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeSearchText, mandateeTitle) {
+function addAgendaitemMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
   cy.log('addAgendaitemMandatee');
 
   cy.route('PATCH', '/agendaitems/*').as('patchAgendaitem');
   cy.route('PATCH', '/agendas/*').as('patchAgenda');
 
-  cy.addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeSearchText, mandateeTitle);
+  cy.addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle);
   cy.wait('@patchAgendaitem', {
     timeout: 40000,
   }).wait('@patchAgenda', {

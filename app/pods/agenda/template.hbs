@@ -22,7 +22,10 @@
         <Agenda::SideNav
           @meeting={{this.model.meeting}}
           @currentAgenda={{this.model.agenda}}
-          @agendas={{this.model.reverseSortedAgendas}}
+          @reversedAgendas={{this.model.reverseSortedAgendas}}
+          @isOpen={{this.sideNavIsOpen}}
+          @onCollapse={{this.toggleSideNav}}
+          @onOpen={{this.toggleSideNav}}
         />
       </div>
     {{/unless}}

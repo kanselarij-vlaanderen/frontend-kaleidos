@@ -42,6 +42,12 @@ const selectors = {
     },
   },
 
+  accordion: {
+    header: {
+      title: '.auk-accordion-panel__header .auk-accordion__title',
+    },
+  },
+
   // TODO-selector unused selectors
   emptyState: {
     container: '.auk-empty-state',
