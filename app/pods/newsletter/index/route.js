@@ -31,7 +31,8 @@ export default class IndexNewsletterRoute extends Route {
       'page[size]': PAGE_SIZE.AGENDAITEMS,
     });
 
-    // KAS-2976 - Old Kaleidos items have undefined is-approval states and need to be queried for this view
+    // The approval items should not be shown on newsletter views
+    // Pre-Kaleidos items have undefined isApproval so can't be filtered in the query above
     agendaitems = agendaitems.filter((item) => item.isApproval !== true);
 
     return Promise.all(
