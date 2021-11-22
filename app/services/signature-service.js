@@ -24,7 +24,7 @@ class SignFlowContext {
   get canBeOffered() {
     /** @todo?: check whether signers and signature fields are assigned */
     const canBeOffered =
-      this.signatureService.canUserPrepare && this.status.isPreparing;
+      this.signatureService.canUserPrepare && this.status.isMarked;
     return canBeOffered;
   }
 
@@ -46,10 +46,8 @@ class SignFlowContext {
       if (signingActivities[0].startDate) {
         status = 'signing';
       } else {
-        status = 'preparation';
+        status = 'marking';
       }
-    } else if (signSubcase.signPreparationActivity) {
-      status = 'preparation';
     } else {
       status = 'marking';
     }
@@ -68,10 +66,6 @@ class SignFlowStatus {
 
   get isMarked() {
     return this._type === 'marking';
-  }
-
-  get isPreparing() {
-    return this._type === 'preparation';
   }
 
   get isSigning() {
