@@ -3,13 +3,13 @@
     <Auk::Toolbar::Group @position="left">
       <Auk::Tabs>
         <Auk::Tab
-          data-test-route-publications-publication-proofs-documents
+          data-test-route-publications---proofs-tab-documents
           @route="publications.publication.proofs.documents"
         >
           {{t "documents"}}
         </Auk::Tab>
         <Auk::Tab
-          data-test-route-publications-publication-proofs-requests
+          data-test-route-publications---proofs-tab-requests
           @route="publications.publication.proofs.requests"
         >
           {{t "requests"}}
@@ -19,7 +19,7 @@
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
         <Auk::Checkbox
-          data-test-route-publications-publication-proofs-finished
+          data-test-route-publications---proofs-tab-finished
           @label={{t "finished"}}
           @checked={{this.model.endDate}}
           {{on "input" this.toggleFinishProof}}

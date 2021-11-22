@@ -124,14 +124,14 @@
           <Auk::Button @skin="primary">Ontwerpagenda goedkeuren</Auk::Button>
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
-          <Auk::Button @icon="chevron-down" @layout="icon-right" id="toolbar-complex-dropdown" aria-haspopup="true" aria-controls="toolbar-complex-actions">Acties</Auk::Button>
-          <EmberPopover @side="bottom-start" @tooltipClass="auk-popover" @targetId="toolbar-complex-dropdown" as |popover|>
-            <Auk::Menu id="toolbar-complex-actions" aria-labelledby="toolbar-">
-              <Auk::Menu::Item>Action item</Auk::Menu::Item>
-              <Auk::Menu::Item>Action item</Auk::Menu::Item>
-              <Auk::Menu::Item>Action item</Auk::Menu::Item>
-            </Auk::Menu>
-          </EmberPopover>
+          <DropdownMenu
+            @label="Acties"
+            @placement="bottom-end"
+          as |Menu|>
+            <Menu.Item @route="styleguide.table">Actie</Menu.Item>
+            <Menu.Item @route="styleguide.table">Actie</Menu.Item>
+            <Menu.Item @route="styleguide.table">Actie</Menu.Item>
+          </DropdownMenu>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
