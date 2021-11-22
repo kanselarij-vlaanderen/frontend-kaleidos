@@ -1,13 +1,12 @@
 <ul class="l-printable-agenda__document-list l-printable-agenda__item-indented">
     {{#each @pieces as |piece|}}
-      <li>({{piece.name}})</li>
-      {{!-- <li>
+      <li>
         <span class="auk-o-flex--inline auk-o-flex--vertical-center">
           <span>({{piece.name}})</span>
           {{#if piece.confidential}}
             <Auk::Icon @name="lock-closed" @skin="danger" class="auk-u-ml" />
           {{/if}}
         </span>
-      </li> --}}
+      </li>
     {{/each}}
   </ul>

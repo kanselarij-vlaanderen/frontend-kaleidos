@@ -31,6 +31,7 @@
         <Agenda::PrintableAgenda::ListSection
           @letter="B"
           @title={{t "announcements-subtitle"}}
+          @onNewPage={{true}}
         >
           {{#each @announcements as |announcement|}}
             <Agenda::PrintableAgenda::ListSection::ItemGroup::Item @item={{announcement}} />

@@ -199,8 +199,6 @@ p {
    ========================================================================== */
 
 .l-printable-agenda {
-  // line-height: 1.5;
-
   p {
     color: $color-text;
     line-height: 1.5;
@@ -239,8 +237,16 @@ p {
   margin-top: 4rem;
 }
 
-.l-printable-agenda__non-breakable-group {
-  break-inside: avoid;
+@media print {
+  .l-printable-agenda__non-breakable-group {
+    break-inside: avoid;
+  }
+}
+
+@media print {
+  .l-printable-agenda__on-fresh-page {
+    page-break-before: always;
+  }
 }
 
 .l-printable-agenda__item-group-header {
