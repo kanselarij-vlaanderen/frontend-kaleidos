@@ -365,4 +365,148 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .contains(file.newFileName);
     cy.get(document.documentCard.versionHistory).click();
   });
+  it('should test batch document edit', () => {
+    const agendaDate = Cypress.moment().add(2, 'weeks')
+      .day(1);
+    const subcaseTitle1 = 'Cypress test: cancelling a new piece';
+    const fileName2 = 'test pdf 2';
+    const filename3 = 'test pdfQUATER';
+    const accesLevelOption1 = 'Intern Regering';
+    const accesLevelOption3 = 'Publiek';
+    const typeOption = 'IF';
+    const typeOption2 = 'BVR';
+    const typeSearchOption = 'Advies AgO';
+    const file = {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: fileName2, fileType: 'Nota',
+    };
+    const files = [file];
+    cy.route('PATCH', '/pieces/**').as('patchPieces');
+    cy.route('PATCH', '/document-containers/**').as('patchdocumentContainers');
+    cy.route('GET', '/pieces**').as('getPieces');
+
+    cy.openAgendaForDate(agendaDate);
+    cy.openAgendaitemDocumentTab(subcaseTitle1, true);
+
+    // add docs for test
+    cy.get(route.agendaitemDocuments.add).click();
+    cy.addNewDocumentsInUploadModal(files, 'agendaitems');
+
+    // change fields separately and save
+    cy.get(route.agendaitemDocuments.batchEdit).click();
+    cy.wait(1000);
+    cy.get(document.documentDetailsRow.row).eq(0)
+      .find(document.documentDetailsRow.accessLevel)
+      .click();
+    cy.get(dependency.emberPowerSelect.option).eq(2)
+      .click();
+    cy.get(document.batchDocumentsDetails.save).click();
+    cy.wait('@patchPieces');
+    cy.wait('@patchdocumentContainers');
+    cy.wait('@getPieces');
+    cy.get(document.documentCard.name.value).contains(fileName2)
+      .parents(document.documentCard.card)
+      .find(document.accessLevelPill.pill)
+      .contains(accesLevelOption3);
+
+    cy.get(route.agendaitemDocuments.batchEdit).click();
+    cy.wait(1000);
+    cy.get(document.documentDetailsRow.row).eq(1)
+      .find(document.documentDetailsRow.type)
+      .click();
+    cy.wait(1000);
+    cy.get(dependency.emberPowerSelect.option).eq(2)
+      .click();
+    cy.route('PATCH', '/pieces/**').as('patchPieces2');
+    cy.route('PATCH', '/document-containers/**').as('patchdocumentContainers2');
+    cy.route('GET', '/pieces**').as('getPieces2');
+    cy.get(document.batchDocumentsDetails.save).click();
+    cy.wait('@patchPieces2');
+    cy.wait('@patchdocumentContainers2');
+    cy.wait('@getPieces2');
+    cy.get(document.documentCard.name.value).contains(filename3)
+      .parents(document.documentCard.card)
+      .find(document.documentCard.type)
+      .contains(typeOption);
+
+    // change all rows
+    cy.get(route.agendaitemDocuments.batchEdit).click();
+    cy.wait(1000);
+    cy.get(document.documentDetailsRow.row).eq(0)
+      .find(document.documentDetailsRow.type)
+      .click();
+    cy.wait(1000);
+    cy.get(dependency.emberPowerSelect.option).eq(1)
+      .click();
+    cy.get(document.documentDetailsRow.row).eq(1)
+      .find(document.documentDetailsRow.type)
+      .click();
+    cy.wait(1000);
+    cy.get(dependency.emberPowerSelect.option).eq(1)
+      .click();
+    cy.route('PATCH', '/pieces/**').as('patchPieces3');
+    cy.route('PATCH', '/document-containers/**').as('patchdocumentContainers3');
+    cy.route('GET', '/pieces**').as('getPieces3');
+    cy.get(document.batchDocumentsDetails.save).click();
+    cy.wait('@patchPieces3');
+    cy.wait('@patchdocumentContainers3');
+    cy.wait('@getPieces3');
+    cy.get(document.documentCard.name.value).contains(fileName2)
+      .parents(document.documentCard.card)
+      .find(document.documentCard.type)
+      .contains(typeOption2);
+    cy.get(document.documentCard.name.value).contains(filename3)
+      .parents(document.documentCard.card)
+      .find(document.documentCard.type)
+      .contains(typeOption2);
+
+    // check if cancel doesn't save data
+    cy.get(route.agendaitemDocuments.batchEdit).click();
+    cy.wait(1000);
+    cy.get(document.documentDetailsRow.row).eq(0)
+      .find(document.documentDetailsRow.accessLevel)
+      .click();
+    cy.get(dependency.emberPowerSelect.option).eq(0)
+      .click();
+    cy.get(document.documentDetailsRow.row).eq(1)
+      .find(document.documentDetailsRow.type)
+      .click();
+    cy.wait(1000);
+    cy.get(dependency.emberPowerSelect.option).eq(2)
+      .click();
+    cy.get(auk.modal.footer.cancel).click();
+    cy.wait(1000);
+
+    cy.get(document.documentCard.name.value).contains(fileName2)
+      .parents(document.documentCard.card)
+      .find(document.accessLevelPill.pill)
+      .should('not.contain', accesLevelOption1);
+    cy.get(document.documentCard.name.value).contains(filename3)
+      .parents(document.documentCard.card)
+      .find(document.documentCard.type)
+      .should('not.contain', typeOption);
+
+    // search document type not in first 20 choices (in dropdown)
+    cy.get(route.agendaitemDocuments.batchEdit).click();
+    cy.wait(1000);
+    cy.get(document.documentDetailsRow.row).eq(0)
+      .find(document.documentDetailsRow.type)
+      .click();
+    cy.wait(1000);
+    cy.get(dependency.emberPowerSelect.searchInput).type(typeSearchOption);
+    cy.wait(2000);
+    cy.get(dependency.emberPowerSelect.option).eq(0)
+      .contains(typeSearchOption)
+      .click();
+    cy.route('PATCH', '/pieces/**').as('patchPieces4');
+    cy.route('PATCH', '/document-containers/**').as('patchdocumentContainers4');
+    cy.route('GET', '/pieces**').as('getPieces4');
+    cy.get(document.batchDocumentsDetails.save).click();
+    cy.wait('@patchPieces4');
+    cy.wait('@patchdocumentContainers4');
+    cy.wait('@getPieces4');
+    cy.get(document.documentCard.name.value).contains(fileName2)
+      .parents(document.documentCard.card)
+      .find(document.documentCard.type)
+      .contains(typeSearchOption);
+  });
 });
