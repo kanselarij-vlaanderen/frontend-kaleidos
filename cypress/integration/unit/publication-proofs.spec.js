@@ -189,21 +189,21 @@ context('Publications proofs tests', () => {
     cy.get(publication.proofsDocuments.add).click();
     cy.get(publication.proofsDocuments.addSourceProof).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-    cy.get(publication.uploadProof.name).should('have.value', file.fileName)
+    cy.get(publication.proofUpload.name).should('have.value', file.fileName)
       .clear();
-    cy.get(publication.uploadProof.save).should('be.disabled');
-    cy.get(publication.uploadProof.name).type(newFileName1);
-    cy.get(publication.uploadProof.save).click();
+    cy.get(publication.proofUpload.save).should('be.disabled');
+    cy.get(publication.proofUpload.name).type(newFileName1);
+    cy.get(publication.proofUpload.save).click();
     cy.wait('@createNewDocumentContainer')
       .wait('@createNewPiece')
       .wait('@getPieces');
     cy.get(publication.proofsDocuments.add).click();
     cy.get(publication.proofsDocuments.addSourceProof).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-    cy.get(publication.uploadProof.name).should('have.value', file.fileName)
+    cy.get(publication.proofUpload.name).should('have.value', file.fileName)
       .clear()
       .type(newFileName2);
-    cy.get(publication.uploadProof.save).click();
+    cy.get(publication.proofUpload.save).click();
     cy.wait('@createNewDocumentContainer')
       .wait('@createNewPiece')
       .wait('@getPieces');
@@ -211,17 +211,17 @@ context('Publications proofs tests', () => {
     cy.get(publication.proofsDocuments.add).click();
     cy.get(publication.proofsDocuments.addCorrectedProof).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-    cy.get(publication.uploadProof.name).should('have.value', file.fileName)
+    cy.get(publication.proofUpload.name).should('have.value', file.fileName)
       .clear()
       .type(newFileName3);
-    cy.get(publication.uploadProof.save).click();
+    cy.get(publication.proofUpload.save).click();
     cy.wait('@createNewDocumentContainer')
       .wait('@createNewPiece')
       .wait('@getPieces');
     cy.wait(2000);
     cy.get(publication.proofsDocuments.row.documentName).contains(newFileName3)
       .parent(publication.proofsDocuments.tableRow)
-      .find(publication.proofsDocuments.row.proofsCorrected)
+      .find(publication.proofsDocuments.row.corrected)
       .find(auk.icon);
     // delete proof
     cy.get(publication.proofsDocuments.row.documentName).contains(newFileName1)
@@ -290,16 +290,16 @@ context('Publications proofs tests', () => {
     cy.get(publication.proofsRequests.request.emailSubject).contains(extraRequestTitle)
       .parents(publication.proofsRequests.request.container)
       .within(() => {
-        cy.get(publication.proofsRequests.request.title).contains(monthDutch);
+        cy.get(auk.accordion.header.title).contains(monthDutch);
         cy.get(publication.proofsRequests.request.upload).should('not.be.disabled')
           .click();
       });
     cy.uploadFile(file.folder, file.fileName, file.fileExtension, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-    cy.get(publication.uploadProof.name).should('have.value', file.fileName)
+    cy.get(publication.proofUpload.name).should('have.value', file.fileName)
       .clear();
-    cy.get(publication.uploadProof.save).should('be.disabled');
-    cy.get(publication.uploadProof.name).type(newFileName2);
-    cy.get(publication.uploadProof.save).click();
+    cy.get(publication.proofUpload.save).should('be.disabled');
+    cy.get(publication.proofUpload.name).type(newFileName2);
+    cy.get(publication.proofUpload.save).click();
     cy.get(publication.proofsRequests.request.emailSubject).contains(extraRequestTitle)
       .parents(publication.proofsRequests.request.container)
       .within(() => {

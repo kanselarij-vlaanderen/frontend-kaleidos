@@ -38,7 +38,7 @@ context('Publications tests', () => {
   // TODO-publication publication numbers edit both during creation as in sidebar
   // Be careful when using fixed numbers in tests, with automatic numbering implemented, some of them were already used
 
-  it.only('should render error when required fields are not filled in to create new publication', () => {
+  it('should render error when required fields are not filled in to create new publication', () => {
     const shortTitle = 'new publication: required fields';
     cy.get(publication.publicationsIndex.newPublication).click();
     cy.route('POST', '/publication-flows').as('createNewPublicationFlow');
@@ -326,7 +326,7 @@ context('Publications tests', () => {
     cy.get(auk.emptyState.message).contains(noContactPersons);
   });
 
-  it.only('publications:dossier:check publication number uniqueness', () => {
+  it('publications:dossier:check publication number uniqueness', () => {
     const suffix = 'BIS';
     cy.route('POST', '/publication-flows').as('createNewPublicationFlow');
 

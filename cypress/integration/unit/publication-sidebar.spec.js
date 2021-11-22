@@ -226,7 +226,7 @@ context('Publications sidebar tests', () => {
     cy.get(publication.sidebar.remark);
   });
 
-  it.only('should check publication number', () => {
+  it('should check publication number', () => {
     const fields1 = {
       number: 1216,
       shortTitle: 'test',

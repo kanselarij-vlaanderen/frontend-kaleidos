@@ -12,7 +12,7 @@ const selectors = {
     dataTable: '[data-test-route-publications-index-data-table]',
     loading: '[data-test-route-publications-index-loading]',
     columnHeader: 'data-test-route-publications-index-th=',
-    configIcon: '[data-test-publications-index-config-modal-icon]',
+    configIcon: '[data-test-route-publications-index-config-modal-icon]',
     numberSelector: '.auk-form-group',
   },
 
@@ -24,68 +24,68 @@ const selectors = {
 
   // publications\publication\translations\template
   publicationTranslations: {
-    documents: '[data-test-route-publications-publication-translations-documents]',
-    requests: '[data-test-route-publications-publication-translations-requests]',
-    finished: '[data-test-route-publications-publication-translations-finished]',
+    documents: '[data-test-route-publications---translations-tab-documents]',
+    finished: '[data-test-route-publications---translations-tab-finished]',
+    // TODO-SELECTOR unused selector
+    requests: '[data-test-route-publications---translations-tab-requests]',
   },
 
   // publications\publication\translations\documents\template
   translationsDocuments: {
-    add: '[data-test-route-publications-publication-translations-documents-add]',
-    requestTranslation: '[data-test-route-publications-publication-translations-documents-request-translation]',
-    tableRow: '[data-test-route-publications-publication-translations-documents-table-row]',
+    add: '[data-test-route-publications---translations-documents-add]',
+    requestTranslation: '[data-test-route-publications---translations-documents-request-translation]',
+    tableRow: '[data-test-route-publications---translations-documents-table-row]',
     row: {
-      checkbox: '[data-test-route-publications-publication-translations-documents-table-checkbox]',
-      documentName: '[data-test-route-publications-publication-translations-documents-document-name]',
-      options: '[data-test-route-publications-publication-translations-options]',
-      edit: '[data-test-route-publications-publication-translations-edit]',
-      delete: '[data-test-route-publications-publication-translations-delete]',
+      checkbox: '[data-test-route-publications---translations-documents-row-checkbox]',
+      documentName: '[data-test-route-publications---translations-documents-row-document-name]',
+      options: '[data-test-route-publications---translations-documents-row-options]',
+      edit: '[data-test-route-publications---translations-documents-row-edit]',
+      delete: '[data-test-route-publications---translations-documents-row-delete]',
     },
   },
 
   // publications\publication\proofs\documents\template
   proofsDocuments: {
-    newRequest: '[data-test-route-publications-publication-proofs-documents-new-request]',
-    initialRequest: '[data-test-route-publications-publication-proofs-documents-initial-request]',
-    extraRequest: '[data-test-route-publications-publication-proofs-documents-extra-request]',
-    finalRequest: '[data-test-route-publications-publication-proofs-documents-final-request]',
-    add: '[data-test-route-publications-publication-proofs-documents-add]',
-    addSourceProof: '[data-test-route-publications-publication-proofs-documents-add-source-proof]',
-    addCorrectedProof: '[data-test-route-publications-publication-proofs-documents-add-corrected-proof]',
-    tableRow: '[data-test-route-publications-publication-proofs-documents-table-row]',
+    newRequest: '[data-test-route-publications---proofs-documents-new-request]',
+    initialRequest: '[data-test-route-publications---proofs-documents-initial-request]',
+    extraRequest: '[data-test-route-publications---proofs-documents-extra-request]',
+    finalRequest: '[data-test-route-publications---proofs-documents-final-request]',
+    add: '[data-test-route-publications---proofs-documents-add]',
+    addSourceProof: '[data-test-route-publications---proofs-documents-add-source-proof]',
+    addCorrectedProof: '[data-test-route-publications---proofs-documents-add-corrected-proof]',
+    tableRow: '[data-test-route-publications---proofs-documents-table-row]',
     row: {
-      checkbox: '[data-test-route-publications-publication-proofs-documents-table-checkbox]',
-      documentName: '[data-test-route-publications-publication-proofs-documents-document-name]',
-      proofsCorrected: '[data-test-route-publications-publication-proofs-corrected]',
-      options: '[data-test-route-publications-publication-proofs-options]',
-      edit: '[data-test-route-publications-publication-proofs-edit]',
-      delete: '[data-test-route-publications-publication-proofs-delete]',
+      checkbox: '[data-test-route-publications---proofs-documents-row-checkbox]',
+      documentName: '[data-test-route-publications---proofs-documents-row-document-name]',
+      corrected: '[data-test-route-publications---proofs-documents-row-corrected]',
+      options: '[data-test-route-publications---proofs-documents-row-options]',
+      edit: '[data-test-route-publications---proofs-documents-row-edit]',
+      delete: '[data-test-route-publications---proofs-documents-row-delete]',
     },
   },
 
   // publications\publication\proofs\template
   publicationProofs: {
-    documents: '[data-test-route-publications-publication-proofs-documents]',
-    requests: '[data-test-route-publications-publication-proofs-requests]',
-    finished: '[data-test-route-publications-publication-proofs-finished]',
+    documents: '[data-test-route-publications---proofs-tab-documents]',
+    finished: '[data-test-route-publications---proofs-tab-finished]',
+    // TODO-SELECTOR unused selectors
+    requests: '[data-test-route-publications---proofs-tab-requests]',
   },
 
   // publications\publication\translations\requests
   translationsRequests: {
     request: {
-      title: '.auk-toolbar-complex__item > h4',
-      upload: '[data-test-publications---translations-requests-upload]',
-      dueDate: '[data-test-publications---translations-requests-due-date]',
+      upload: '[data-test-route-publications---translations-requests-upload]',
+      dueDate: '[data-test-route-publications---translations-requests-due-date]',
     },
   },
 
-  // publications\publication\translations\requests
+  // publications\publication\proofs\requests
   proofsRequests: {
     request: {
-      container: '[data-test-publications---proofs-requests-container]',
-      title: '.auk-toolbar-complex__item > h4',
-      upload: '[data-test-publications---proofs-requests-upload]',
-      emailSubject: '[data-test-publications---proofs-requests-email-subject]',
+      container: '[data-test-route-publications---proofs-requests-container]',
+      upload: '[data-test-route-publications---proofs-requests-upload]',
+      emailSubject: '[data-test-route-publications---proofs-requests-email-subject]',
     },
   },
 
@@ -101,8 +101,9 @@ const selectors = {
   // publication-case-search
   publicationCaseSearch: {
     input: '[data-test-publication-case-search-input]',
-    resultList: '[data-test-publication-case-search-result-list]',
     result: '[data-test-publication-case-search-result]',
+    // TODO-SELECTOR unused selectors
+    resultList: '[data-test-publication-case-search-result-list]',
   },
 
   // publications-filter-modal
@@ -113,19 +114,20 @@ const selectors = {
     notMinister: '[data-test-publications-filter-not-minister]',
     toPublish: '[data-test-publications-filter-to-publish]',
     withdrawn: '[data-test-publications-filter-withdrawn]',
+    save: '[data-test-publications-filter-save]',
     // TODO-SELECTOR unused selectors
     cancel: '[data-test-publications-filter-cancel]',
     reset: '[data-test-publications-filter-reset]',
-    save: '[data-test-publications-filter-save]',
   },
 
   // publication-navigation
   publicationNav: {
     goBack: '[data-test-publication-nav-go-back]',
-    case: '[data-test-publication-nav-case]',
     documents: '[data-test-publication-nav-documents]',
     translations: '[data-test-publication-nav-translations]',
     publishpreview: '[data-test-publication-nav-publishpreview]',
+    // TODO-SELECTOR unused selectors
+    case: '[data-test-publication-nav-case]',
   },
 
   // publication-table-row
@@ -146,13 +148,14 @@ const selectors = {
       translationDueDate: '[data-test-publication-table-row-translation-due-date]',
       targetEndDate: '[data-test-publication-table-row-target-end-date]',
       publicationDueDate: '[data-test-publication-table-row-publication-due-date]',
-      publicationDate: '[data-test-publication-table-row-publication-date]',
       urgencyLevel: '[data-test-publication-table-row-urgency-level]',
       status: '[data-test-publication-table-row-status]',
       translationProgressBadge: '[data-test-publication-table-row-translation-progress-badge]',
       proofsProgressBadge: '[data-test-publication-table-row-proofs-progress-badge]',
       source: '[data-test-publication-table-row-source]',
       goToPublication: '[data-test-publication-table-row-go-to-publication]',
+      // TODO-SELECTOR unused selectors
+      publicationDate: '[data-test-publication-table-row-publication-date]',
     },
   },
 
@@ -216,14 +219,14 @@ const selectors = {
 
   // mandatees-panel
   mandateesPanel: {
-    // TODO-SELECTORS unused selectors
-    table: '[data-test-mandatees-panel-table]',
     add: '[data-test-mandatees-panel-add]',
     rows: '[data-test-mandatees-panel-row]',
     row: {
       fullName: '[data-test-mandatees-panel-row-full-name]',
       unlink: '[data-test-mandatees-panel-row-unlink]',
     },
+    // TODO-SELECTORS unused selectors
+    table: '[data-test-mandatees-panel-table]',
   },
 
   // government-fields-panel
@@ -238,13 +241,13 @@ const selectors = {
 
   // edit-government-fields-modal
   editGovernmentFieldsModal: {
-    selectorForm: '[data-test-edit-government-fields-modal-selector-form]',
     save: '[data-test-edit-government-fields-modal-save]',
+    // TODO-SELECTORS unused selectors
+    selectorForm: '[data-test-edit-government-fields-modal-selector-form]',
   },
 
   // sidebar
   sidebar: {
-    container: '[data-test-publication-sidebar-container]',
     open: '[data-test-publication-sidebar-open]',
     publicationNumber: '[data-test-publication-sidebar-publication-number]',
     publicationNumberSuffix: '[data-test-publication-sidebar-publication-number-suffix]',
@@ -263,6 +266,8 @@ const selectors = {
     publicationDueDate: '[data-test-publication-sidebar-publication-due-date]',
     publicationDate: '[data-test-publication-sidebar-publication-date]',
     remark: '[data-test-publication-sidebar-remark]',
+    // TODO-SELECTORS unused selectors
+    container: '[data-test-publication-sidebar-container]',
   },
 
   // publication-status-selector
@@ -284,17 +289,19 @@ const selectors = {
   // translation-request-modal
   translationRequest: {
     message: '[data-test-publication-translation-request-message]',
-    documentsList: '[data-test-publication-translation-request-documents-list]',
     save: '[data-test-publication-translation-request-save]',
+    // TODO-SELECTOR unused selectors
+    documentsList: '[data-test-publication-translation-request-documents-list]',
   },
 
   // document-edit-modal
   documentEdit: {
     pages: '[data-test-publication-document-edit-pages]',
     words: '[data-test-publication-document-edit-words]',
-    proofprint: '[data-test-publication-document-edit-proofprint]',
     documentName: '[data-test-publication-document-edit-document-name]',
     save: '[data-test-publication-document-edit-save]',
+    // TODO-SELECTOR unused selectors
+    proofprint: '[data-test-publication-document-edit-proofprint]',
   },
 
   // translation-statuspill
@@ -310,16 +317,16 @@ const selectors = {
     save: '[data-test-translation-upload-save]',
   },
 
-  // upload-proof-modal
-  uploadProof: {
-    name: '[data-test-upload-proof-name]',
-    save: '[data-test-upload-proof-save]',
+  // proof-upload-modal
+  proofUpload: {
+    name: '[data-test-proof-upload-name]',
+    save: '[data-test-proof-upload-save]',
   },
 
   // proof-edit-modal
   proofEdit: {
-    name: '[data-test-publication-proof-edit-name]',
-    save: '[data-test-publication-proof-edit-save]',
+    name: '[data-test-proof-edit-name]',
+    save: '[data-test-proof-edit-save]',
   },
 
   // proofs-statuspill
@@ -331,10 +338,10 @@ const selectors = {
 
   // proof-request-modal
   proofRequest: {
-    subject: '[data-test-publication-proof-request-subject]',
-    message: '[data-test-publication-proof-request-message]',
-    attachments: '[data-test-publication-proof-request-attachments]',
-    save: '[data-test-publication-proof-request-save]',
+    subject: '[data-test-proof-request-subject]',
+    message: '[data-test-proof-request-message]',
+    attachments: '[data-test-proof-request-attachments]',
+    save: '[data-test-proof-request-save]',
   },
 };
 export default selectors;
