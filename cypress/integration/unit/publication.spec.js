@@ -235,14 +235,14 @@ context('Publications tests', () => {
 
 
     // link government field
-    cy.route('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    cy.route('PATCH', '/cases/**').as('patchCase');
     cy.get(publication.governmentFieldsPanel.edit).click();
     cy.get(utils.domainsFieldsSelectorForm.container).contains(labelName)
       .find(utils.domainsFieldsSelectorForm.field)
       .contains(fieldsName)
       .click();
     cy.get(publication.editGovernmentFieldsModal.save).click();
-    cy.wait('@patchPublicationFlow');
+    cy.wait('@patchCase');
     cy.get(publication.governmentFieldsPanel.rows).should('have.length', 1);
     cy.get(publication.governmentFieldsPanel.row.label).contains(labelName);
     cy.get(publication.governmentFieldsPanel.row.fields).contains(fieldsName);
@@ -253,7 +253,7 @@ context('Publications tests', () => {
       .contains(fieldsName)
       .click();
     cy.get(publication.editGovernmentFieldsModal.save).click();
-    cy.wait('@patchPublicationFlow');
+    cy.wait('@patchCase');
     cy.get(auk.emptyState.message).contains(noGovernmentFields);
   });
 
