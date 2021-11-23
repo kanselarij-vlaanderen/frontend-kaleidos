@@ -79,7 +79,6 @@ function openSubcase(index = 0) {
  * @param {string} [accessLevel] -Access level to set, must match exactly with possible options in dropdown
  * @param {string} [newShortTitle] - new short title for the subcase
  * @param {string} [newLongTitle] - new long title for the subcase
- * @param {boolean} [inNewsletter] - Will toggle "in newsletter" if true
  */
 function changeSubcaseAccessLevel(confidentialityChange, accessLevel, newShortTitle, newLongTitle) {
   cy.log('changeSubcaseAccessLevel');

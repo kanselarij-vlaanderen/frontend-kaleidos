@@ -121,6 +121,8 @@ export default class CasesNewSubcase extends Component {
     } else {
       subcase.linkedPieces = pieces;
     }
+    // Everything to copy from latest subcase
+    subcase.confidential = latestSubcase.confidential;
     subcase.mandatees = await latestSubcase.mandatees;
     // TODO KAS-2969 make sure to copy the list of concepts
     subcase.iseCodes = await latestSubcase.iseCodes;

@@ -53,22 +53,27 @@ context('Create case as Admin user', () => {
     cy.get(cases.newCase.shorttitle).should('not.contain', shorttitle);
   });
 
-  it('Copy of remark subcase should not result in a new remark subcase', () => {
+  it('Copy of confidential remark subcase should result in a new confidential remark subcase', () => {
     const newShortTitle = 'Dit is de korte titel';
     cy.visit('/dossiers');
     cy.createCase(newShortTitle);
     cy.addSubcase('Mededeling', newShortTitle, '', null, null);
     cy.openSubcase(0);
+    cy.changeSubcaseAccessLevel(true);
+    cy.get(route.subcaseOverview.confidentialityCheckBox).should('be.checked');
+    // TODO-BUG, saving and then moving away too soon (going back, closing browser) could leave the editor open
     // ensure type is correct
     cy.get(cases.subcaseTitlesView.type).contains('Mededeling');
     cy.get(auk.tab.hierarchicalBack).click();
     // ensure type is the same after copy to new subcase
+    // ensure confidentialy is the same after copy to new subcase
     cy.route('POST', '/subcases').as('createNewSubcase');
     cy.get(cases.subcaseOverviewHeader.createSubcase).click();
     cy.get(cases.newSubcase.clonePreviousSubcase).click();
     cy.wait('@createNewSubcase');
     cy.openSubcase(0);
     cy.get(cases.subcaseTitlesView.type).contains('Mededeling');
+    cy.get(route.subcaseOverview.confidentialityCheckBox).should('be.checked');
   });
 
   it('Een dossier maken zonder korte titel geeft een error', () => {
