@@ -10,8 +10,8 @@
             >
               {{t "newsletter-overview-pdf-name"}}
               -
-              {{await @agenda.createdFor.kindToShow.label}}
-              {{moment-format @agenda.createdFor.plannedStart "DD MMMM YYYY"}}
+              {{@meeting.kindToShow.label}}
+              {{moment-format @meeting.plannedStart "DD MMMM YYYY"}}
             </h4>
           </div>
           <Auk::Tabs @reversed={{true}}>
@@ -55,13 +55,13 @@
         >
           {{#if this.currentSession.isEditor}}
             {{#if
-              (or (is-pending @agenda.createdFor.mailCampaign) this.isLoading)
+              (or (is-pending @meeting.mailCampaign) this.isLoading)
             }}
               <Menu.Item @textOnly={{true}}>
                 <Auk::Loader @message={{t "newsletter-loading-text"}} />
               </Menu.Item>
-            {{else if (await this.agenda.createdFor.mailCampaign)}}
-              {{#if (not (await this.agenda.createdFor.mailCampaign.isSent))}}
+            {{else if (await @meeting.mailCampaign)}}
+              {{#if (not (await @meeting.mailCampaign.isSent))}}
                 <Menu.Item {{on "click" this.sendTestCampaign}}>
                   {{t "send-test-campaign"}}
                 </Menu.Item>
