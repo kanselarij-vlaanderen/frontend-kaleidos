@@ -238,12 +238,16 @@ context('Publications sidebar tests', () => {
     const usedPublicationNumber = 1250;
 
     cy.createPublication(fields1);
+    cy.route('PATCH', '/identifications/**').as('patchIdentifications');
+    cy.route('PATCH', '/structured-identifiers/**').as('patchStructuredIdentifiers');
     cy.get(publication.sidebar.open).click();
     cy.get(publication.sidebar.publicationNumber).click()
       .clear()
       .type(usedPublicationNumber);
     cy.get(publication.sidebar.publicationNumberError).should('exist');
     cy.get(publication.sidebar.publicationNumberSuffix).type('BIS');
+    cy.wait('@patchIdentifications');
+    cy.wait('@patchStructuredIdentifiers');
     cy.get(publication.sidebar.publicationNumberError).should('not.exist');
     cy.get(publication.publicationNav.goBack).click();
 
@@ -256,6 +260,8 @@ context('Publications sidebar tests', () => {
     cy.get(publication.sidebar.publicationNumberError).should('exist');
     cy.get(publication.sidebar.publicationNumberSuffix).clear()
       .type('TER');
+    cy.wait('@patchIdentifications');
+    cy.wait('@patchStructuredIdentifiers');
     cy.get(publication.sidebar.publicationNumberError).should('not.exist');
     // changes not saved
     cy.get(publication.sidebar.publicationNumberSuffix).clear()

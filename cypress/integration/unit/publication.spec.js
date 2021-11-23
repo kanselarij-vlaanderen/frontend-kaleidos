@@ -7,7 +7,7 @@ import auk from '../../selectors/auk.selectors';
 import utils from '../../selectors/utils.selectors';
 
 context('Publications tests', () => {
-  const pubNumber = '101';
+  const pubNumber = '100';
 
   function checkIfNewPublicationFieldsAreEmpty(number, currentDate) {
     cy.get(publication.newPublication.number).should('not.contain', number);
