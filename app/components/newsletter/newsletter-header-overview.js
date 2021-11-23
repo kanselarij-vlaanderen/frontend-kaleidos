@@ -82,8 +82,8 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @action
   async createCampaign() {
     this.isLoading = true;
-    const agenda = await this.args.agenda;
-    const meeting = await agenda.createdFor;
+    const agenda = this.args.agenda;
+    const meeting = this.args.meeting;
     await this.newsletterService.createCampaign(agenda, meeting).then(() => {
       this.isLoading = false;
     });
@@ -95,8 +95,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @action
   async deleteCampaign() {
     this.isLoading = true;
-    const agenda = await this.args.agenda;
-    const meeting = await agenda.createdFor;
+    const meeting = this.args.meeting;
     const mailCampaign = await meeting.mailCampaign;
     if (mailCampaign && mailCampaign.campaignId) {
       await this.newsletterService.deleteCampaign(mailCampaign.campaignId);
@@ -116,8 +115,8 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @action
   async sendCampaign() {
     this.isLoading = true;
-    const agenda = await this.args.agenda;
-    const meeting = await agenda.createdFor;
+    const agenda = this.args.agenda;
+    const meeting = this.args.meeting;
     const mailCampaign = await meeting.mailCampaign;
 
     if (!mailCampaign || !mailCampaign.id || mailCampaign.isSent) {
@@ -159,8 +158,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @action
   async sendTestCampaign() {
     this.testCampaignIsLoading = true;
-    const agenda = await this.args.agenda;
-    const meeting = await agenda.createdFor;
+    const meeting = this.args.meeting;
     const mailCampaign = await meeting.get('mailCampaign');
 
     if (!mailCampaign || !mailCampaign.id || mailCampaign.isSent) {
