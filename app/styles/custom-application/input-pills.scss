@@ -19,7 +19,7 @@
 
   .emberTagInput-remove {
     @extend .auk-icon;
-    @extend .auk-icon--close;
+    @extend .auk-icon--x;
     // remove <a />-tag styling
     text-decoration: none;
     color: inherit;
@@ -39,7 +39,7 @@
     -moz-osx-font-smoothing: grayscale;
 
     // ki-close icon
-    content: "\f115";
+    content: "\f14b";
   }
 
   .emberTagInput-new {

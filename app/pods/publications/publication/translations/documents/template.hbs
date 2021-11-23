@@ -17,7 +17,7 @@
           <Auk::Button
             data-test-route-publications---translations-documents-add
             @skin="secondary"
-            @icon="add"
+            @icon="plus"
             @disabled={{this.isUploadDisabled}}
             {{on "click" this.openPieceUploadModal}}
           >
@@ -136,7 +136,7 @@
                     <DropdownMenu
                       data-test-route-publications---translations-documents-row-options
                       @skin="borderless"
-                      @icon="more"
+                      @icon="three-dots"
                       as |Menu|
                     >
                       <Menu.Item

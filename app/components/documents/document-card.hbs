@@ -86,7 +86,7 @@
               {{#if this.currentSession.isEditor}}
                 <DropdownMenu
                   @skin="borderless"
-                  @icon="more"
+                  @icon="three-dots"
                   data-test-document-card-actions={{true}}
                   as |Menu|
                 >
@@ -134,7 +134,7 @@
                   data-test-document-card-name-cancel={{true}}
                   @skin="borderless"
                   @layout="icon-only"
-                  @icon="cross"
+                  @icon="x"
                   {{on "click" this.cancelEditPieceName}}
                 />
               </div>
