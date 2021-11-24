@@ -8,7 +8,7 @@
 <div class="auk-scroll-wrapper__body vlc-hide-scrollbar-on-print">
   <div class="auk-u-m-8 auk-u-m-0@print">
     <div class="auk-container auk-container--center">
-      <Utils::LogoHeaderLegacy/>
+      <Utils::LogoHeaderLegacy />
       <Newsletter::NewsletterMeeting
         @allowEditing={{not this.showDraft}}
         @meeting={{this.meeting}}
@@ -23,7 +23,9 @@
             @allowEditing={{this.showDraft}}
             @itemIndex={{if this.showDraft agendaitem.number humanIndex}}
             @agendaitem={{agendaitem}}
-            @newsletterInfo={{await agendaitem.treatments.firstObject.newsletterInfo}}
+            @newsletterInfo={{await
+              agendaitem.treatments.firstObject.newsletterInfo
+            }}
           />
         {{/let}}
       {{/each}}
@@ -37,7 +39,9 @@
             @itemIndex={{agendaitem.number}}
             @allowEditing={{this.showDraft}}
             @agendaitem={{agendaitem}}
-            @newsletterInfo={{await agendaitem.treatments.firstObject.newsletterInfo}}
+            @newsletterInfo={{await
+              agendaitem.treatments.firstObject.newsletterInfo
+            }}
           />
         {{/each}}
       {{/if}}

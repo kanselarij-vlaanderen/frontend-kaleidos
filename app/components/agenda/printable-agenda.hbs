@@ -1,7 +1,13 @@
 <div class="auk-u-m-8 auk-u-m-0@print">
-  <div class="auk-container auk-container--center l-printable-agenda" data-test-printable-agenda-container>
+  <div
+    class="auk-container auk-container--center l-printable-agenda"
+    data-test-printable-agenda-container
+  >
     <Utils::LogoHeader />
-    <h2 class="auk-h2 auk-u-text-family-serif auk-u-text-align--center l-printable-agenda__header" data-test-printable-agenda-header-title>
+    <h2
+      class="auk-h2 auk-u-text-family-serif auk-u-text-align--center l-printable-agenda__header"
+      data-test-printable-agenda-header-title
+    >
       {{t "agenda-of"}}
       {{moment-format
         @meeting.plannedStart
@@ -22,7 +28,9 @@
           @title={{t "agendaitems"}}
         >
           {{#each @notas as |notaGroup|}}
-            <Agenda::PrintableAgenda::ListSection::ItemGroup @items={{notaGroup}} />
+            <Agenda::PrintableAgenda::ListSection::ItemGroup
+              @items={{notaGroup}}
+            />
           {{/each}}
         </Agenda::PrintableAgenda::ListSection>
       {{/if}}
@@ -34,7 +42,9 @@
           @onNewPage={{true}}
         >
           {{#each @announcements as |announcement|}}
-            <Agenda::PrintableAgenda::ListSection::ItemGroup::Item @item={{announcement}} />
+            <Agenda::PrintableAgenda::ListSection::ItemGroup::Item
+              @item={{announcement}}
+            />
           {{/each}}
         </Agenda::PrintableAgenda::ListSection>
       {{/if}}

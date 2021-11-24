@@ -2,17 +2,26 @@
   <div class="l-printable-agenda__header-prefix">
     {{@item.number}}.
   </div>
-  {{!-- The following line in formatted on a single line because of the way browsers treat whitspaces & breaks in combination with `white-space: pre-line` --}}
+  {{! The following line is formatted on a single line because of the way browsers treat whitespaces & breaks in combination with `white-space: pre-line` }}
+  {{! prettier-ignore }}
   <h4 class="auk-u-m-0 auk-u-text-pre-line"><SanitizeHtml @raw={{true}} @value={{if @item.shortTitle @item.shortTitle @item.title}}/></h4>
 </div>
 <div class="auk-u-mb-4 l-printable-agenda__item-indented">
   {{#if @item.title}}
-    {{!-- The following line in formatted on a single line because of the way browsers treat whitspaces & breaks in combination with `white-space: pre-line` --}}
+    {{! The following line is formatted on a single line because of the way browsers treat whitespaces & breaks in combination with `white-space: pre-line` }}
+    {{! prettier-ignore }}
     <p class="auk-u-m-0 l-printable-agenda__description auk-u-text-pre-line"><SanitizeHtml @raw={{true}} @value={{@item.title}} /></p>
   {{/if}}
-  <Auk::PillList class="{{if (or @item.retracted (await @item.agendaActivity.subcase.confidential)) "auk-u-mt-2"}}">
+  <Auk::PillList
+    class="{{if
+        (or @item.retracted (await @item.agendaActivity.subcase.confidential))
+        "auk-u-mt-2"
+      }}"
+  >
     {{#if (await @item.agendaActivity.subcase.confidential)}}
-      <Auk::Pill @skin="danger" @layout="icon-left" @icon="lock-closed">{{t "confidential"}}</Auk::Pill>
+      <Auk::Pill @skin="danger" @layout="icon-left" @icon="lock-closed">
+        {{t "confidential"}}
+      </Auk::Pill>
     {{/if}}
     {{#if @item.retracted}}
       <Auk::Pill>{{t "postponed"}}</Auk::Pill>
