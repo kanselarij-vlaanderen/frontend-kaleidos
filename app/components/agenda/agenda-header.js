@@ -30,6 +30,7 @@ export default class AgendaHeader extends Component {
   @service intl;
   @service jobMonitor;
   @service toaster;
+  @service publishService;
 
   @tracked isAddingAgendaitems = false;
   @tracked isEditingSession = false;
@@ -62,6 +63,14 @@ export default class AgendaHeader extends Component {
       this.currentSession.isEditor &&
       this.args.meeting.isFinal &&
       !this.args.meeting.releasedDocuments
+    );
+  }
+
+  get canPublishMeeting() {
+    return (
+      this.currentSession.isEditor &&
+      this.args.meeting.isFinal &&
+      this.args.meeting.releasedDocuments
     );
   }
 

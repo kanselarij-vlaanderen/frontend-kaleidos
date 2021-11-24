@@ -138,6 +138,9 @@
               >
                 {{t "agenda-release-documents"}}
               </Menu.Item>
+
+            {{/if}}
+            {{#if this.canPublishMeeting}}
               <Menu.Divider />
               <Menu.Item {{on "click" this.publishDocuments}}>
                 {{t "publish-documents"}}
