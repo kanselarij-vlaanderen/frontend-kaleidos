@@ -20,7 +20,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @tracked isVerifying = false;
   @tracked isLoading = false;
 
-  @tracked mailCampaign;
   @tracked newsletterHTML = null;
   @tracked testCampaignIsLoading = false;
 
@@ -105,7 +104,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     });
     reloadedMeeting.mailCampaign = null;
 
-    this.mailCampaign = null;
     await reloadedMeeting.save();
     this.isLoading = false;
     location.reload();
