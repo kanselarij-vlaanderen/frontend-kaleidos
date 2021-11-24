@@ -25,7 +25,7 @@
     color: inherit;
   }
 
-  // substitute <i class="ki-close" />
+  // substitute <i class="ki-x" />
   .emberTagInput-remove::after {
     // copied from:
     // @kanselarij-vlaanderen/au-kaleidos-icons/iconfont/icons
@@ -38,7 +38,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
-    // ki-close icon
+    // ki-x icon
     content: "\f14b";
   }
 
