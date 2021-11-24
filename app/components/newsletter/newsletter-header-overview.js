@@ -21,7 +21,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @tracked isLoading = false;
 
   @tracked mailCampaign;
-  @tracked newsletterHtml = null;
+  @tracked newsletterHTML = null;
   @tracked testCampaignIsLoading = false;
 
   async validatedCampaign(campaignId) {

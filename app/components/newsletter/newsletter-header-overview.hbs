@@ -106,15 +106,15 @@
     @isLoading={{this.isLoading}}
     @verifyButtonText={{t "send-campaign"}}
     @message={{t "send-campaign-warning"}}
-    @cancel={{on "click" this.toggleIsVerifying}}
-    @verify={{on "click" this.sendCampaign}}
+    @cancel={{this.toggleIsVerifying}}
+    @verify={{this.sendCampaign}}
   />
 {{/if}}
 {{#if (or this.testCampaignIsLoading this.newsletterHTML)}}
   <WebComponents::VlModal
     @isOverlay={{true}}
     @title={{t "send-test-campaign"}}
-    @closeModal={{on "click" this.clearNewsletterHTML}}
+    @closeModal={{this.clearNewsletterHTML}}
   >
     <Auk::Modal::Body>
       {{#if this.testCampaignIsLoading}}
