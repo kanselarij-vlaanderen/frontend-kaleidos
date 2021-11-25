@@ -9,7 +9,7 @@
     <Utils::ModelSelector
       @modelName="document-type"
       @allowClear={{true}}
-      @hideSearch={{true}}
+      @searchField="label"
       @propertyToShow="label"
       @sortField="priority"
       @readOnly={{this.isDisabled}}
@@ -48,7 +48,7 @@
         />
       {{else}}
         <Auk::Button
-          @icon="delete"
+          @icon="trash"
           @layout="icon-only"
           @skin="danger-borderless"
           @disabled={{this.isDisabled}}

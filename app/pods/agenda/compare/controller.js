@@ -1,15 +1,12 @@
 import Controller from '@ember/controller';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes
-export default Controller.extend({
+export default class AgendaCompare extends Controller {
+  @tracked isShowingChanges;
 
-  // TODO: octane-refactor
-  // eslint-disable-next-line ember/no-actions-hash
-  actions: {
+  @action
     toggleChangesOnly() {
-      this.toggleProperty('isShowingChanges');
-    },
-  },
-
-});
+      this.isShowingChanges = !this.isShowingChanges;
+  };
+}

@@ -1,12 +1,13 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
 
 export default class AgendaitemAgendaitemsAgendaRoute extends Route {
-  @service sessionService;
-
   model(params) {
     return this.store.findRecord('agendaitem', params.agendaitem_id, {
-      include: 'agenda-activity,agenda-activity.subcase,agenda-activity.subcase.requested-by',
+      include: [
+        'agenda-activity',
+        'agenda-activity.subcase',
+        'agenda-activity.subcase.requested-by'
+      ].join(','),
     });
   }
 
@@ -18,24 +19,12 @@ export default class AgendaitemAgendaitemsAgendaRoute extends Route {
     this.transition = transition; // set on the route for use in setupController, since the provided "transition" argument there always comes back "undefined"
   }
 
-  setupController(controller) {
+  setupController(controller, model) {
     super.setupController(...arguments);
-    const {
-      meeting,
-      agenda,
-    } = this.modelFor('agenda');
-    const {
-      notas,
-      announcements,
-      newItems,
-    } = this.modelFor('agenda.agendaitems');
-    controller.meeting = meeting;
-    controller.agenda = agenda;
-    controller.notas = notas;
-    if (!(this.transition && this.transition.from && this.transition.from.name.startsWith('agenda.agendaitems.agendaitem'))) {
-      controller.groupNotasOnGroupName.perform(notas);
-    }
-    controller.announcements = announcements;
-    controller.newItems = newItems;
+    controller.meeting = this.modelFor('agenda').meeting;
+
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const parentController = this.controllerFor('agenda.agendaitems');
+    parentController.selectedAgendaitem = model;
   }
 }

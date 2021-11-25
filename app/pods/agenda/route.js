@@ -14,26 +14,41 @@ export default class AgendaRoute extends Route {
   async model(params) {
     const meetingId = params.meeting_id;
     const meeting = await this.store.findRecord('meeting', meetingId, {
-      include: 'agendas,agendas.status', reload: true,
+      reload: true,
     });
-    set(this.sessionService, 'currentSession', meeting);
     const agendaId = params.agenda_id;
-    const agenda = await meeting.get('agendas').findBy('id', agendaId);
-    set(this.sessionService, 'currentAgenda', agenda);
+    const agenda = await this.store.findRecord('agenda', agendaId, {
+      reload: 'true',
+    });
+    const reverseSortedAgendas = await this.store.query('agenda', {
+      'filter[created-for][:id:]': meetingId,
+      sort: '-serialnumber',
+      include: 'status',
+    });
 
-    await this.updateSelectedAgenda(meeting, agenda);
     return {
       meeting,
       agenda,
+      reverseSortedAgendas,
     };
   }
 
-  async updateSelectedAgenda(meeting, agenda) {
+  async afterModel(model) {
+    await this.loadChangesToAgenda(model.meeting, model.agenda);
+  }
+
+  async loadChangesToAgenda(meeting, agenda) {
+    // TODO KAS-2448 KAS-2449 stop setting/using the session and agenda
+    set(this.sessionService, 'currentSession', meeting);
+    set(this.sessionService, 'currentAgenda', agenda);
     set(this.agendaService, 'addedAgendaitems', []);
     set(this.agendaService, 'addedPieces', []);
-    const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(meeting, agenda);
+    const previousAgenda = await agenda.previousVersion;
     if (previousAgenda) {
-      await this.agendaService.agendaWithChanges(agenda.get('id'), previousAgenda.get('id'));
+      await this.agendaService.agendaWithChanges(
+        agenda.get('id'),
+        previousAgenda.get('id')
+      );
     }
   }
 

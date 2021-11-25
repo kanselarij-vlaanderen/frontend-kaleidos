@@ -131,7 +131,6 @@ export default class NewsletterInfosSearchRoute extends Route {
     filter[':has:agendaitems'] = 't';
 
     this.lastParams.commit();
-    console.log(params.sort);
     if (isEmpty(params.searchText)) {
       return [];
     }

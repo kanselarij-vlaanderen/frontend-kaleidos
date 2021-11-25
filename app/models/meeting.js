@@ -7,7 +7,7 @@ import { KALEIDOS_START_DATE } from 'frontend-kaleidos/config/config';
 import { isAnnexMeetingKind } from 'frontend-kaleidos/utils/meeting-utils';
 import moment from 'moment';
 import {
-  sortDocumentContainers, getPropertyLength
+  sortDocumentContainers
 } from 'frontend-kaleidos/utils/documents';
 
 // TODO: octane-refactor
@@ -47,10 +47,6 @@ export default Model.extend({
     const kind = CONFIG.MINISTERRAAD_TYPES.TYPES.find((type) => type.uri === this.kind);
     const kindLabel = kind ? kind.altLabel : '';
     return `${kindLabel} ${this.intl.t('of')} ${date} (${this.numberRepresentation})`;
-  }),
-
-  documentContainersLength: computed('documentContainers', function() {
-    return getPropertyLength(this, 'documentContainers');
   }),
 
   // This computed does not seem to be used anywhere

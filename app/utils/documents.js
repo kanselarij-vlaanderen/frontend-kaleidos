@@ -1,6 +1,5 @@
 import { A } from '@ember/array';
 import VRDocumentName, { compareFunction } from 'frontend-kaleidos/utils/vr-document-name';
-import { PromiseObject } from '@ember-data/store/-private';
 import fetch from 'fetch';
 
 export const sortDocumentContainers = (pieces, containers) => {
@@ -51,10 +50,6 @@ export const sortPieces = (pieces, NameClass = VRDocumentName, sortingFunc = com
 
   return [...validNamedPieces, ...invalidNamedPieces];
 };
-
-export const getPropertyLength = (model, property) => PromiseObject.create({
-  promise: model.get(property).then((property) => (property ? property.get('length') : 0)),
-});
 
 export const addPieceToAgendaitem = async function(agendaitem, piece) {
   const endpoint = `/agendaitems/${agendaitem.get('id')}/pieces`;

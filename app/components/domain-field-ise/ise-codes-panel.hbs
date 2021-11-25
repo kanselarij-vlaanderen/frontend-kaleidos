@@ -1,3 +1,4 @@
+{{! unused template (since KAS-2968)}}
 <div class="auk-u-mb-3">
   <Auk::Panel>
     <Auk::Panel::Header>
@@ -13,9 +14,9 @@
     </Auk::Panel::Header>
     {{#if @iseCodes.length }}
       <Auk::Panel::Body>
-        <Auk::PillList data-test-subcase-ise-codes-list>
+        <Auk::PillList>
           {{#each @iseCodes as |iseCode|}}
-            <Auk::Pill data-test-subcase-ise-codes-list-item>
+            <Auk::Pill>
               {{iseCode.name}}
             </Auk::Pill>
           {{/each}}

@@ -1,96 +1,71 @@
-/* eslint-disable ember/no-arrow-function-computed-properties */
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-components
-import Component from '@ember/component';
-import { inject } from '@ember/service';
-import { computed } from '@ember/object';
-import {
-  task, timeout
-} from 'ember-concurrency';
-import moment from 'moment';
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { isEmpty } from '@ember/utils';
+import { tracked } from '@glimmer/tracking';
+import { timeout } from 'ember-concurrency';
+import { task, restartableTask } from 'ember-concurrency-decorators';
+import { inject as service } from '@ember/service';
+import { CURRENT_GOVERNMENT_BODY } from 'frontend-kaleidos/config/config';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
-export default Component.extend({
-  classNames: ['mandatee-selector-container'],
-  classNameBindings: ['classes'],
-  store: inject(),
-  selectedMandatees: null,
-  singleSelect: false,
-  modelName: 'mandatee',
-  sortField: 'priority',
-  searchField: 'title',
-  includeField: 'person',
+const VISIBLE_ROLES = [
+  'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03de', // Minister-president
+  'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03e0' // Minister
+];
 
-  init() {
-    this._super(...arguments);
-    this.findAll.perform();
-  },
+export default class MandateeSelector extends Component {
+  @service store;
+  @tracked mandateeOptions = [];
+  @tracked filter = '';
 
-  filter: computed(() => ({
-    ':gte:end': moment().utc()
-      .toDate()
-      .toISOString(),
-  })),
+  defaultQueryOptions = {
+    include: 'person,mandate.role',
+    sort: 'priority',
+  };
 
-  queryOptions: computed('sortField', 'searchField', 'filter', 'modelName', 'includeField', function() {
-    const options = {};
-    const {
-      filter, sortField, includeField,
-    } = this;
-    if (sortField) {
-      options.sort = sortField;
+  constructor() {
+    super(...arguments);
+    this.initialLoad = this.loadVisibleRoles.perform();
+    this.mandateeOptions = this.loadMandatees.perform();
+  }
+
+  @task
+  *loadMandatees(searchTerm) {
+    if (this.initialLoad.isRunning) {
+      yield this.initialLoad;
     }
-    if (filter) {
-      options.filter = filter;
+    const queryOptions = {
+      ...this.defaultQueryOptions,  // clone
+    };
+    if (searchTerm) {
+      queryOptions['filter[person][last-name]'] = searchTerm;
     }
-    if (includeField) {
-      options.include = includeField;
-    }
-    return options;
-  }),
+    queryOptions['filter[government-body][:uri:]'] = CURRENT_GOVERNMENT_BODY;
 
-  findAll: task(function *() {
-    const {
-      modelName, queryOptions,
-    } = this;
-    if (modelName) {
-      const items = yield this.store.query(modelName, queryOptions);
-      this.set('items', items);
-    }
-  }),
+    const results = yield this.store.query('mandatee', queryOptions);
+    // Many versions of a mandatee exist within a government-body.
+    // We only want the mandatees with no end-date or an end-date in the future.
+    // mu-cl-resources doesn't have :has-no:-capability for properties.
+    return results.filter((mandatee) => {
+      return !mandatee.end || (mandatee.end > new Date());
+    });
+  }
 
-  searchTask: task(function *(searchValue) {
+  @task
+  *loadVisibleRoles() {
+    const visibleRoles = yield Promise.all(VISIBLE_ROLES.map((role) => this.store.findRecordByUri('role', role)));
+    this.defaultQueryOptions['filter[mandate][role][:id:]'] = visibleRoles.map((role) => role.id).join(',');
+  }
+
+  @restartableTask
+  *searchTask(searchTerm) {
     yield timeout(300);
-    const {
-      queryOptions, searchField, modelName,
-    } = this;
-    if (queryOptions.filter) {
-      queryOptions.filter[searchField] = searchValue;
-    } else {
-      const filter = {};
-      filter[searchField] = searchValue;
-      queryOptions.filter = filter;
+    return this.loadMandatees.perform(searchTerm);
+  }
+
+  @action
+  resetMandateeOptionsIfEmpty(param) {
+    if (isEmpty(param)) {
+      this.mandateeOptions = this.loadMandatees.perform();
     }
-
-    return this.store.query(modelName, queryOptions);
-  }),
-
-  // TODO: octane-refactor
-  // eslint-disable-next-line ember/no-actions-hash
-  actions: {
-    async chooseMandatee(mandatees) {
-      this.set('selectedMandatees', mandatees);
-      this.chooseMandatee(mandatees);
-    },
-
-    resetValueIfEmpty(param) {
-      if (param === '') {
-        this.set('queryOptions', {
-          sort: this.sortField,
-        });
-        this.findAll.perform();
-      }
-    },
-  },
-});
+  }
+}

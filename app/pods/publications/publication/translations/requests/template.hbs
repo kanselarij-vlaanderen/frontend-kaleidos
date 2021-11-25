@@ -8,13 +8,16 @@
             date=(moment-format activity.startDate "D MMMM")
             time=(moment-format activity.startDate "H:mm")
           }}
-          as |header|>
+          as |header|
+        >
           <header.Actions as |actions|>
             <actions.Item>
               <Auk::Button
+                data-test-route-publications---translations-requests-upload
                 @disabled={{this.isUploadDisabled}}
                 @skin="primary"
-                {{on "click" (fn this.openTranslationUploadModal activity)}}>
+                {{on "click" (fn this.openTranslationUploadModal activity)}}
+              >
                 {{t "upload-translation"}}
               </Auk::Button>
             </actions.Item>
@@ -24,45 +27,67 @@
           <div class="auk-o-grid">
             <div class="auk-o-grid-col-6">
               <div class="auk-u-mb-2">
-                <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "translation-due-date"}}</p>
+                <p class="auk-u-text-bold auk-u-muted auk-u-mb">
+                  {{t "translation-due-date"}}
+                </p>
                 {{#if this.translationSubcase.dueDate}}
-                  <p>{{moment-format this.translationSubcase.dueDate "DD-MM-YYYY"}}</p>
+                  <p
+                    data-test-route-publications---translations-requests-due-date
+                  >
+                    {{moment-format
+                      this.translationSubcase.dueDate
+                      "DD-MM-YYYY"
+                    }}
+                  </p>
                 {{else}}
                   <p class="auk-u-muted auk-u-italic">{{t "not-known"}}</p>
                 {{/if}}
               </div>
               {{#if activity.email}}
                 <div class="auk-u-mb-2">
-                  <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "subject"}}</p>
+                  <p class="auk-u-text-bold auk-u-muted auk-u-mb">
+                    {{t "subject"}}
+                  </p>
                   <p>{{activity.email.subject}}</p>
                 </div>
                 <div class="auk-u-mb-2">
-                  <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "message"}}</p>
+                  <p class="auk-u-text-bold auk-u-muted auk-u-mb">
+                    {{t "message"}}
+                  </p>
                   <div class="auk-box">
-                    {{!-- TODO: Remove inline style --}}
-                    {{!-- template-lint-disable no-inline-styles --}}
-                    {{!-- p-tag opening and closing on 1 line to prevent whitespace to be rendered. --}}
-                    <p style="white-space:pre-line;">{{activity.email.message}}</p>
-                    {{!-- template-lint-enable no-inline-styles --}}
+                    {{! TODO: Remove inline style }}
+                    {{! template-lint-disable no-inline-styles }}
+                    {{! p-tag opening and closing on 1 line to prevent whitespace to be rendered. }}
+                    <p style="white-space:pre-line;">
+                      {{activity.email.message}}
+                    </p>
+                    {{! template-lint-enable no-inline-styles }}
                   </div>
                 </div>
               {{else}}
-                <Auk::EmptyState
-                        @message={{t "no-email-available"}}
-                />
+                <Auk::EmptyState @message={{t "no-email-available"}} />
               {{/if}}
             </div>
             <div class="auk-o-grid-col-6">
               <div class="auk-u-mb-6">
-                <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "attachments"}}</p>
-                <Utils::Documents::List @pieces={{sort-by 'created' activity.usedPieces}} />
+                <p class="auk-u-text-bold auk-u-muted auk-u-mb">
+                  {{t "attachments"}}
+                </p>
+                <Utils::Documents::List
+                  @pieces={{sort-by "created" activity.usedPieces}}
+                />
               </div>
               {{#if activity.translationActivity.generatedPieces}}
                 <div class="auk-u-mb-2">
                   <p class="auk-u-text-bold auk-u-muted auk-u-mb">
                     {{t "received-documents"}}
                   </p>
-                  <Utils::Documents::List @pieces={{sort-by 'created' activity.translationActivity.generatedPieces}} />
+                  <Utils::Documents::List
+                    @pieces={{sort-by
+                      "created"
+                      activity.translationActivity.generatedPieces
+                    }}
+                  />
                 </div>
               {{/if}}
             </div>
@@ -71,7 +96,10 @@
       </Auk::AccordionPanel>
     </div>
   {{else}}
-    <Auk::EmptyState @message={{t "no-translation-activities-yet"}} @bordered={{true}} />
+    <Auk::EmptyState
+      @message={{t "no-translation-activities-yet"}}
+      @bordered={{true}}
+    />
   {{/each}}
 </div>
 
@@ -79,5 +107,6 @@
   <Publications::Publication::Translations::TranslationUploadModal
     @publicationFlow={{this.publicationFlow}}
     @onSave={{perform this.saveTranslationUpload}}
-    @onCancel={{this.closeTranslationUploadModal}} />
+    @onCancel={{this.closeTranslationUploadModal}}
+  />
 {{/if}}

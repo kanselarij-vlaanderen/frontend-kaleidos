@@ -1,7 +1,5 @@
 import Service, { inject as service } from '@ember/service';
 import { singularize } from 'ember-inflector';
-import { notifyPropertyChange } from '@ember/object';
-import { bind } from '@ember/runloop';
 import { ajax } from 'frontend-kaleidos/utils/ajax';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
@@ -18,6 +16,8 @@ export default Service.extend({
 
   addedPieces: null,
   addedAgendaitems: null,
+
+  /* API: session-service */
 
   assignNewSessionNumbers() {
     return ajax({
@@ -40,71 +40,120 @@ export default Service.extend({
     }).then((result) => result.body.agendas);
   },
 
-  async rollbackAgendaitemsNotFormallyOk(agendaToRollback) {
-    if (!agendaToRollback) {
-      return agendaToRollback;
-    }
-    // Triggers the agendaApproveService to rollback the not formal ok agendaitems on the agenda.
-    await ajax({
+  /* API: agenda-approve-service */
+
+  async createNewDesignAgenda(currentMeeting) {
+    const result = await ajax({
       method: 'POST',
-      url: '/agenda-approve/rollbackAgendaitemsNotFormallyOk',
+      url: '/agenda-approve/createDesignAgenda',
       data: {
-        oldAgendaId: agendaToRollback.id,
+        meetingId: currentMeeting.id,
       },
     });
+    if (result.error) {
+      throw new Error(result.error.detail);
+    }
+    const newAgenda = await this.store.find('agenda', result.data.id);
+    return newAgenda;
   },
 
-  async approveAgendaAndCopyToDesignAgenda(currentMeeting, oldAgenda) {
-    if (!oldAgenda) {
-      return oldAgenda;
-    }
-    // Use approveagendaService to duoplicate Agendaitems into new agenda.
+  async approveDesignAgenda(currentMeeting) {
     const result = await ajax({
       method: 'POST',
       url: '/agenda-approve/approveAgenda',
       data: {
-        createdFor: currentMeeting.id,
-        oldAgendaId: oldAgenda.id,
+        meetingId: currentMeeting.id,
       },
     });
-    notifyPropertyChange(oldAgenda, 'agendaitems');
-    const newAgenda = await this.store.find('agenda', result.body.newAgenda.id);
-    notifyPropertyChange(newAgenda, 'agendaitems');
+    if (result.error) {
+      throw new Error(result.error.detail);
+    }
+    const newAgenda = await this.store.find('agenda', result.data.id);
     return newAgenda;
   },
 
-  async deleteAgenda(agendaToDelete) {
-    if (!agendaToDelete) {
-      return;
+  async approveAgendaAndCloseMeeting(currentMeeting) {
+    const result = await ajax({
+      method: 'POST',
+      url: '/agenda-approve/approveAgendaAndCloseMeeting',
+      data: {
+        meetingId: currentMeeting.id,
+      },
+    });
+    if (result.error) {
+      throw new Error(result.error.detail);
     }
-    try {
-      // Use approveagendaService to delete agendaitems and agenda.
-      await ajax({
-        method: 'POST',
-        url: '/agenda-approve/deleteAgenda',
-        data: {
-          agendaToDeleteId: agendaToDelete.id,
-        },
+    return;
+  },
+
+  async closeMeeting(currentMeeting) {
+    const result = await ajax({
+      method: 'POST',
+      url: '/agenda-approve/closeMeeting',
+      data: {
+        meetingId: currentMeeting.id,
+      },
+    });
+    if (result.error) {
+      throw new Error(result.error.detail);
+    }
+    const lastApprovedAgenda = await this.store.queryOne('agenda', {
+      'filter[:id:]': result.data.id,
+    });
+    return lastApprovedAgenda;
+  },
+
+  async reopenPreviousAgenda(currentMeeting) {
+    const result = await ajax({
+      method: 'POST',
+      url: '/agenda-approve/reopenPreviousAgenda',
+      data: {
+        meetingId: currentMeeting.id,
+      },
+    });
+    if (result.error) {
+      throw new Error(result.error.detail);
+    }
+    const reopenedAgenda = await this.store.queryOne('agenda', {
+      'filter[:id:]': result.data.id,
+    });
+    return reopenedAgenda;
+  },
+
+  async deleteAgenda(currentMeeting, currentAgenda) {
+    const result = await ajax({
+      method: 'POST',
+      url: '/agenda-approve/deleteAgenda',
+      data: {
+        meetingId: currentMeeting.id,
+        agendaId: currentAgenda.id,
+      },
+    });
+    if (result.error) {
+      throw new Error(result.error.detail);
+    }
+    if (result.data?.id) {
+      return await this.store.queryOne('agenda', {
+        'filter[:id:]': result.data.id,
       });
-    } catch (error) {
-      console.warn('An error ocurred: ', error);
-      this.toaster.error(this.intl.t('error-delete-agenda'), this.intl.t('warning-title'));
     }
   },
 
-  agendaWithChanges(currentAgendaID, agendaToCompareID) {
-    return ajax({
-      method: 'GET',
-      url: `/agenda-sort/agenda-with-changes?agendaToCompare=${agendaToCompareID}&selectedAgenda=${currentAgendaID}`,
-    })
-      .then(bind(this, (result) => {
-        this.set('addedPieces', result.addedDocuments);
-        this.set('addedAgendaitems', result.addedAgendaitems);
-        return result;
-      }))
-      .catch(() => {
+  /* API: agenda-sort-service */
 
-      });
+  async agendaWithChanges(currentAgendaID, agendaToCompareID) {
+    const endpoint = new URL('/agenda-sort/agenda-with-changes', window.location.origin);
+    const queryParams = new URLSearchParams(Object.entries({
+      agendaToCompare: agendaToCompareID,
+      selectedAgenda: currentAgendaID,
+    }));
+    endpoint.search = queryParams.toString();
+    const response = await fetch(endpoint);
+    if (response.ok) {
+      const result = await response.json();
+      this.set('addedPieces', result.addedDocuments);
+      this.set('addedAgendaitems', result.addedAgendaitems);
+    }
   },
 
   async newAgendaItems(currentAgendaId, comparedAgendaId) {
@@ -152,6 +201,8 @@ export default Service.extend({
     }
     return piecesFromStore;
   },
+
+  /* No API */
 
   async computeNextItemNumber(agenda, isAnnouncement) {
     const lastItem = await this.store.queryOne('agendaitem', {

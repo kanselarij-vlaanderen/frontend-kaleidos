@@ -4,17 +4,23 @@
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           <Auk::Button
-            @skin="secondary" @icon="mail"
+            data-test-route-publications---translations-documents-request-translation
+            @skin="secondary"
+            @icon="mail"
             @disabled={{this.isRequestingDisabled}}
-            {{on "click" this.openTranslationRequestModal}}>
+            {{on "click" this.openTranslationRequestModal}}
+          >
             {{t "request-translations"}}
           </Auk::Button>
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
           <Auk::Button
-            @skin="secondary" @icon="add"
+            data-test-route-publications---translations-documents-add
+            @skin="secondary"
+            @icon="plus"
             @disabled={{this.isUploadDisabled}}
-            {{on "click" this.openPieceUploadModal}}>
+            {{on "click" this.openPieceUploadModal}}
+          >
             {{t "upload-translation-file"}}
           </Auk::Button>
         </Auk::Toolbar::Item>
@@ -28,45 +34,58 @@
             <th class="auk-table-checkbox-col">
               <Auk::Checkbox
                 @checked={{this.areAllPiecesSelected}}
-                {{on "click" this.toggleAllPiecesSelection}} />
+                {{on "click" this.toggleAllPiecesSelection}}
+              />
             </th>
             <Utils::ThSortable
-               @label={{t "document-name"}}
-               @field="naam"
-               @currentSorting={{this.sort}}
-               @onChange={{this.changeSorting}} />
+              @label={{t "document-name"}}
+              @field="naam"
+              @currentSorting={{this.sort}}
+              @onChange={{this.changeSorting}}
+            />
             <th class="auk-u-text-nowrap">{{t "file-type"}}</th>
             <Utils::ThSortable
               @label={{t "received-at"}}
               @field="ontvangen-op"
               @currentSorting={{this.sort}}
-              @onChange={{this.changeSorting}} />
+              @onChange={{this.changeSorting}}
+            />
             <Utils::ThSortable
               @label={{t "uploaded-at"}}
               @field="geupload-op"
               @currentSorting={{this.sort}}
-              @onChange={{this.changeSorting}} />
+              @onChange={{this.changeSorting}}
+            />
             <th class="auk-u-text-nowrap auk-u-text-align--center">
               {{t "for-publishpreview"}}
             </th>
-            <th>{{!-- Actions--}}</th>
+            <th>{{! Actions}}</th>
           </tr>
         </thead>
         <tbody>
           {{#each this.pieceRows as |pieceRow|}}
             {{#let pieceRow.piece as |piece|}}
-              <tr class="auk-table__row">
+              <tr
+                data-test-route-publications---translations-documents-table-row
+                class="auk-table__row"
+              >
                 <td class="auk-table-checkbox-col">
                   <Auk::Checkbox
+                    data-test-route-publications---translations-documents-row-checkbox
                     @checked={{includes pieceRow this.selectedPieceRows}}
-                    {{on "click" (fn this.togglePieceSelection pieceRow)}} />
+                    {{on "click" (fn this.togglePieceSelection pieceRow)}}
+                  />
                 </td>
-                <td>
+                <td
+                  data-test-route-publications---translations-documents-row-document-name
+                >
                   {{piece.name}}
                 </td>
                 <td>
                   {{#if piece.file}}
-                    <Utils::Documents::FileTypePill @extension={{piece.file.extension}} />
+                    <Utils::Documents::FileTypePill
+                      @extension={{piece.file.extension}}
+                    />
                   {{/if}}
                 </td>
                 <td class="auk-u-text-nowrap">
@@ -83,7 +102,7 @@
                       {{moment-format piece.created "HH:mm"}}
                     </p>
                   {{else}}
-                    {{!-- legacy data --}}
+                    {{! legacy data }}
                     {{t "dash"}}
                   {{/if}}
                 </td>
@@ -97,28 +116,43 @@
                 <td>
                   <WebComponents::AuButtonToolbar>
                     <Auk::Button
-                      @skin="borderless" @layout="icon-only" @icon="download"
+                      @skin="borderless"
+                      @layout="icon-only"
+                      @icon="download"
                       @href={{piece.file.namedDownloadLink}}
-                      download={{piece.file.downloadFilename}}>
+                      download={{piece.file.downloadFilename}}
+                    >
                       {{t "download"}}
                     </Auk::Button>
                     <Auk::Button
-                      @skin="borderless" @layout="icon-only" @icon="book"
+                      @skin="borderless"
+                      @layout="icon-only"
+                      @icon="book"
                       @href={{piece.viewDocumentURL}}
-                      target="_blank">
+                      target="_blank"
+                    >
                       {{t "read"}}
                     </Auk::Button>
                     <DropdownMenu
+                      data-test-route-publications---translations-documents-row-options
                       @skin="borderless"
-                      @icon="more"
-                      as |Menu|>
+                      @icon="three-dots"
+                      as |Menu|
+                    >
                       <Menu.Item
-                        {{on "click" (fn this.openPieceEditModal pieceRow)}}>
+                        data-test-route-publications---translations-documents-row-edit
+                        {{on "click" (fn this.openPieceEditModal pieceRow)}}
+                      >
                         {{t "edit-translation-details"}}
                       </Menu.Item>
-                      {{#if (and this.canDeletePieces pieceRow.isPieceDeletable)}}
-                        <Menu.Item @skin="danger"
-                          {{on "click" (perform this.deletePiece pieceRow)}}>
+                      {{#if
+                        (and this.canDeletePieces pieceRow.isPieceDeletable)
+                      }}
+                        <Menu.Item
+                          @skin="danger"
+                          data-test-route-publications---translations-documents-row-delete
+                          {{on "click" (perform this.deletePiece pieceRow)}}
+                        >
                           {{t "delete"}}
                         </Menu.Item>
                       {{/if}}
@@ -131,7 +165,10 @@
         </tbody>
       </table>
     {{else}}
-      <Auk::EmptyState @bordered={{true}} @message={{t "no-translations-yet" }} />
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "no-translations-yet"}}
+      />
     {{/if}}
   </div>
 </div>
@@ -140,7 +177,8 @@
   <Publications::Publication::Translations::DocumentsUploadModal
     @translationSubcase={{this.translationSubcase}}
     @onSave={{perform this.saveSourceDocument}}
-    @onCancel={{this.closePieceUploadModal}} />
+    @onCancel={{this.closePieceUploadModal}}
+  />
 {{/if}}
 
 {{#if this.showPieceEditModal}}
@@ -148,7 +186,8 @@
     @translationSubcase={{this.translationSubcase}}
     @sourceDocument={{this.pieceRowToEdit.piece}}
     @onSave={{perform this.saveEditSourceDocument}}
-    @onCancel={{this.closePieceEditModal}} />
+    @onCancel={{this.closePieceEditModal}}
+  />
 {{/if}}
 
 {{#if this.isTranslationRequestModalOpen}}
@@ -157,5 +196,6 @@
     @publicationFlow={{this.publicationFlow}}
     @attachments={{this.selectedPieces}}
     @onSave={{perform this.saveTranslationRequest}}
-    @onCancel={{this.closeTranslationRequestModal}} />
+    @onCancel={{this.closeTranslationRequestModal}}
+  />
 {{/if}}

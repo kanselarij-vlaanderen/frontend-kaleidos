@@ -33,6 +33,14 @@ const selectors = {
     title: '[data-test-overviews-header-print-title]',
   },
 
+  // utils/document/list
+  documentList: {
+    item: '[data-test-utils-document-list-item]',
+    name: '[data-test-utils-document-list-name]',
+    fileExtension: '[data-test-utils-document-list-file-extension]',
+    viewDocument: '[data-test-utils-document-list-view-document]',
+  },
+
   // changes-alert
   changesAlert: {
     alert: '[data-test-changes-alert]',
@@ -56,9 +64,15 @@ const selectors = {
     upload: '[data-test-file-uploader-upload]',
   },
 
-  // mandatees-domains-selector-modal
-  mandateesDomain: {
-    mandateeSelector: '[data-test-mandatees-domain-mandatee-selector]',
+  // mandatee-selector
+  mandateeSelector: {
+    container: '[data-test-mandatee-selector-container]',
+  },
+
+  // mandatees-selector-modal
+  mandateesSelector: {
+    cancel: '[data-test-mandatees-selector-cancel]',
+    add: '[data-test-mandatees-selector-add]',
   },
 
   /** Section VL-components **/

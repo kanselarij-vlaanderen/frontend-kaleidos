@@ -7,18 +7,19 @@ import { lower as lowerCaseAlphabet } from 'alphabet';
 /* eslint-disable ember/no-get */
 // eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
+  store: service(),
   toaster: service(),
   intl: service(),
 
   title: attr('string'),
-  nickName: attr('string'),
+  newsletterTitle: attr('string'),
+
   priority: attr('number'),
   start: attr('datetime'),
   end: attr('datetime'),
-  dateSwornIn: attr('datetime'),
-  dateDecree: attr('datetime'),
 
   person: belongsTo('person'),
+  mandate: belongsTo('mandate'),
 
   iseCodes: hasMany('ise-code', {
     inverse: null,

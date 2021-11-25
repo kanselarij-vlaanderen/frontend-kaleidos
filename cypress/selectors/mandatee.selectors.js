@@ -1,23 +1,20 @@
 const selectors = {
-  // mandatees-domains-panel-view
+  // mandatees-panel-view
   mandateePanelView: {
     rows: '[data-test-mandatee-panel-view-mandatee-row]',
     row: {
       name: '[data-test-mandatee-panel-view-row-name]',
-      domains: '[data-test-mandatee-panel-view-row-domains]',
       submitter: '[data-test-mandatee-panel-view-row-submitter]',
     },
     actions: {
       edit: '[data-test-mandatee-panel-view-edit]',
     },
   },
-  // mandatees-domains-panel-edit
+  // mandateess-panel-edit
   mandateePanelEdit: {
     rows: '[data-test-mandatee-panel-edit-mandatee-row]',
     row: {
       name: '[data-test-mandatee-panel-edit-row-name]',
-      domains: '[data-test-mandatee-panel-edit-row-domains]',
-      fields: '[data-test-mandatee-panel-edit-row-fields]',
       submitter: '[data-test-mandatee-panel-edit-row-submitter]',
       edit: '[data-test-mandatee-panel-edit-row-edit]',
       delete: '[data-test-mandatee-panel-edit-row-delete]',

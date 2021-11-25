@@ -1,0 +1,67 @@
+<Auk::Panel>
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title">{{t "ministers"}}</h4>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      {{#if @showEditButton}}
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <Auk::Button
+              @skin="tertiary"
+              @icon="pencil"
+              @layout="icon-only"
+              data-test-mandatee-panel-view-edit={{true}}
+              {{on "click" @onClickEdit}}
+            />
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      {{/if}}
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  {{#if @mandatees.length}}
+    <Auk::Panel::Body @noPadding={{true}}>
+      <table class="auk-table">
+        <thead>
+          <tr>
+            <th>{{t "minister"}}</th>
+            <th>{{t "submitter"}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each @mandatees as |mandatee|}}
+            <tr data-test-mandatee-panel-view-mandatee-row>
+              <td
+                class="auk-table__col--10"
+                data-test-mandatee-panel-view-row-name
+              >
+                <div class="auk-o-flex auk-o-flex--vertical-center">
+                  <Auk::Badge @icon="user" />
+                  <span class="auk-u-mx-2">
+                    {{mandatee.person.nameToDisplay}}
+                  </span>
+                </div>
+              </td>
+              <td
+                class="auk-table__col--2"
+                data-test-mandatee-panel-view-row-submitter
+              >
+                {{#if (eq mandatee @submitter)}}
+                  <Auk::Icon @name="circle-check" @skin="success" />
+                {{else}}
+                  {{t "dash"}}
+                {{/if}}
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </Auk::Panel::Body>
+  {{else}}
+    <Auk::Panel::Body>
+      <Auk::EmptyState @message={{t "no-ministers-added"}} />
+    </Auk::Panel::Body>
+  {{/if}}
+</Auk::Panel>

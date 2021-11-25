@@ -6,27 +6,27 @@ import { tracked } from '@glimmer/tracking';
  * @argument {PublicationFlow} publicationFlow (publication-flow,publication-flow.mandatees,publication-flow.mandatees.person)
  */
 export default class PublicationsPublicationCaseMandateesPanelComponent extends Component {
-  @tracked isOpenLinkModal = false;
+  @tracked showSelectMandateeModal = false;
 
   @action
-  openLinkModal() {
-    this.isOpenLinkModal = true;
+  openSelectMandateeModal() {
+    this.showSelectMandateeModal = true;
   }
 
   @action
-  closeLinkModal() {
-    this.isOpenLinkModal = false;
+  closeSelectMandateeModal() {
+    this.showSelectMandateeModal = false;
   }
 
   @action
-  async link(selection) {
+  async addMandatee(selection) {
     this.args.publicationFlow.mandatees.addObject(selection);
     await this.args.publicationFlow.save();
-    this.isOpenLinkModal = false;
+    this.showSelectMandateeModal = false;
   }
 
   @action
-  async unlink(mandatee) {
+  async removeMandatee(mandatee) {
     this.args.publicationFlow.mandatees.removeObject(mandatee);
     await this.args.publicationFlow.save();
   }

@@ -8,8 +8,7 @@
 .flatpickr-calendar {
   $gray-shadow: rgba(0, 0, 0, .3);
   background: $white;
-  border-radius: 0;
-  box-shadow: 0 0 2.1rem 0 $gray-shadow;
+  box-shadow: $auk-shadow-medium !important;
 
   &.arrowTop,
   &.arrowTop,
@@ -53,6 +52,8 @@
 
 .flatpickr-innerContainer {
   border-bottom: 0;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
 }
 
 .flatpickr-days {
