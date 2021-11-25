@@ -193,7 +193,7 @@
 
   .ember-power-select-multiple-remove-btn {
     @extend .auk-icon;
-    @extend .auk-icon--close;
+    @extend .auk-icon--x;
 
     // hide text node & re-apply correct color + size in the `&:after` selector below
     color: transparent;
@@ -216,7 +216,7 @@
       color: $auk-gray-600;
       font-size: 1.8rem;
 
-      content: "\f115";
+      content: "\f14b";
     }
   }
 }

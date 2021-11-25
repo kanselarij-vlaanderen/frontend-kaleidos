@@ -7,6 +7,8 @@ import auk from '../../selectors/auk.selectors';
 import utils from '../../selectors/utils.selectors';
 
 context('Publications tests', () => {
+  const pubNumber = '100';
+
   function checkIfNewPublicationFieldsAreEmpty(number, currentDate) {
     cy.get(publication.newPublication.number).should('not.contain', number);
     // "beslissingsdatum"
@@ -37,7 +39,6 @@ context('Publications tests', () => {
   // Be careful when using fixed numbers in tests, with automatic numbering implemented, some of them were already used
 
   it('should render error when required fields are not filled in to create new publication', () => {
-    const pubNumber = '100';
     const shortTitle = 'new publication: required fields';
     cy.get(publication.publicationsIndex.newPublication).click();
     cy.route('POST', '/publication-flows').as('createNewPublicationFlow');
@@ -48,7 +49,7 @@ context('Publications tests', () => {
     cy.get(publication.newPublication.number).click()
       .clear();
     cy.get(publication.newPublication.create).click();
-    // The info alert is replaces by error alert
+    // The info alert is replaced by error alert
     cy.get(publication.newPublication.alertError).should('exist');
     cy.get(publication.newPublication.alertInfo).should('not.exist');
     // both number and shortTitle should show error when empty
@@ -323,6 +324,41 @@ context('Publications tests', () => {
     // assert deleted content
     cy.get(publication.contactPersons.rows).should('not.exist');
     cy.get(auk.emptyState.message).contains(noContactPersons);
+  });
+
+  it('publications:dossier:check publication number uniqueness', () => {
+    const suffix = 'BIS';
+    cy.route('POST', '/publication-flows').as('createNewPublicationFlow');
+
+    // try to create publication with existing number and check warnings
+    cy.get(publication.publicationsIndex.newPublication).click();
+    cy.get(publication.newPublication.number).click()
+      .clear()
+      .type(pubNumber);
+    cy.get(publication.newPublication.create).click();
+    cy.get(publication.newPublication.alertError).should('exist');
+    cy.get(publication.newPublication.numberError).should('exist');
+    // add BIS and create
+    cy.get(publication.newPublication.suffix).click()
+      .type(suffix);
+    cy.get(publication.newPublication.create).click();
+    cy.get(publication.newPublication.numberError).should('not.exist');
+    cy.get(publication.newPublication.shortTitle).click()
+      .type('test publication number uniqueness');
+    cy.get(publication.newPublication.create).click();
+    cy.wait('@createNewPublicationFlow');
+    cy.get(publication.publicationNav.goBack).click();
+
+    // check if existing number and suffix throw correct error
+    cy.get(publication.publicationsIndex.newPublication).click();
+    cy.get(publication.newPublication.number).click()
+      .clear()
+      .type(pubNumber);
+    cy.get(publication.newPublication.suffix).click()
+      .type(suffix);
+    cy.get(publication.newPublication.create).click();
+    cy.get(publication.newPublication.alertError).should('exist');
+    cy.get(publication.newPublication.numberError).should('exist');
   });
 
   // TODO-PUBLICATION code snipper for searching in overview table

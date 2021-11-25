@@ -41,9 +41,9 @@ export default EmberObject.create({
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/92705106-4A61-4C30-971A-55532633A9D6',
       classNames: 'vlc-agenda-items__status auk-u-text-error auk-u-text-bold auk-o-flex',
       pillClassNames: 'auk-pill auk-pill--danger',
-      iconClassNames: 'ki-cross formally-ok-icon',
+      iconClassNames: 'ki-x formally-ok-icon',
       svg: {
-        icon: 'cross',
+        icon: 'x',
         color: 'danger',
       },
     },
@@ -53,9 +53,9 @@ export default EmberObject.create({
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/B72D1561-8172-466B-B3B6-FCC372C287D0',
       classNames: 'vlc-agenda-items__status auk-u-text-bold auk-o-flex',
       pillClassNames: 'auk-pill',
-      iconClassNames: 'ki-question-mark formally-ok-icon',
+      iconClassNames: 'ki-circle-question formally-ok-icon',
       svg: {
-        icon: 'question-mark',
+        icon: 'circle-question',
         color: '',
       },
     }

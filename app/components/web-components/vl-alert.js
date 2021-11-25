@@ -16,7 +16,7 @@ export default class VlAlertComponent extends Component {
     } else if (currentType === 'success') {
       return 'check';
     }
-    return 'info-circle';
+    return 'circle-info';
   }
 
   close() {
