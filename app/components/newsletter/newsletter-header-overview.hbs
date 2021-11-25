@@ -68,8 +68,12 @@
                 <Menu.Item {{on "click" this.toggleIsVerifying}}>
                   {{t "send-campaign"}}
                 </Menu.Item>
-                <Menu.Divider />
+
               {{/if}}
+              <Menu.Item {{on "click" this.publishToWeb}}>
+                {{t "publish-newsitems"}}
+              </Menu.Item>
+              <Menu.Divider />
               <Menu.Item
                 @href={{concat "/newsletter/xml-newsletter/" @agenda.id}}
                 download={{concat "/newsletter/xml-newsletter/" @agenda.id}}
@@ -77,9 +81,6 @@
                 rel="noopener noreferrer"
               >
                 {{t "generate-xml"}}
-              </Menu.Item>
-              <Menu.Item {{on "click" this.publishToWeb}}>
-                {{t "publish-newsitems"}}
               </Menu.Item>
               <Menu.Divider />
               <Menu.Item @skin="danger" {{on "click" this.deleteCampaign}}>

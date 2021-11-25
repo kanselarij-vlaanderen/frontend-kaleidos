@@ -938,7 +938,7 @@
   "consult-agendaitem-decision": "Laatste agendering bekijken",
   "publish-themis-error": "Er ging iets fout bij het publiceren",
   "publish-themis-documents-error": "Er ging iets fout bij het publiceren van documenten",
-  "publish-themis-newsletter-error": "Er ging iets fout bij het publiceren naar web",
+  "publish-themis-newsitems-error": "Er ging iets fout bij het publiceren naar web",
   "unpublish-themis-documents-error": "Er ging iets fout bij het verwijderen van de publicatie",
   "publish-documents-success": "Publicatie zitting succesvol gestart",
   "publish-newsitems-success": "Publicatie nieuwsberichten succesvol gestart",
