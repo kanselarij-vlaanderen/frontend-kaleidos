@@ -28,7 +28,6 @@
           {{t "filter-content"}}
         </Auk::Button>
       </Auk::Toolbar::Item>
-
       <Auk::Toolbar::Item>
         <Auk::Button
           data-test-route-publications-index-new-publication
@@ -42,27 +41,61 @@
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </Auk::Navbar>
-{{#if this.publicationFilter.isFiltered}}
-  <Auk::Navbar @skin="gray-100" @auto={{true}}>
-    <Auk::Toolbar>
-      <Auk::Toolbar::Group @position="right">
-        <Auk::Button
-          @skin="tertiary"
-          {{on "click" this.resetPublicationsFilter}}
+<Auk::Navbar @skin="gray-100" @auto={{true}}>
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Tabs>
+        <Auk::Tab
+          @route="publications"
         >
-          {{t "clear-filter-plural"}}
-        </Auk::Button>
-      </Auk::Toolbar::Group>
-    </Auk::Toolbar>
-  </Auk::Navbar>
-{{/if}}
+          Alle dossiers
+        </Auk::Tab>
+        <Auk::Tab
+          @route="search"
+        >
+          Spoed dossiers
+        </Auk::Tab>
+        <Auk::Tab
+          @route="search"
+        >
+          Dossiers in vertaling
+        </Auk::Tab>
+        <Auk::Tab
+          @route="search"
+        >
+          Na te lezen dossiers
+        </Auk::Tab>
+        <Auk::Tab
+          @route="search"
+        >
+          Drukproeven te ontvangen
+        </Auk::Tab>
+        <Auk::Tab
+          @route="search"
+        >
+          Te laat gepubliceerd in BS
+        </Auk::Tab>
+      </Auk::Tabs>
+    </Auk::Toolbar::Group>
+    {{#if this.publicationFilter.isFiltered}}
+    <Auk::Toolbar::Group @position="right">
+      <Auk::Button
+        @skin="tertiary"
+        {{on "click" this.resetPublicationsFilter}}
+      >
+        {{t "clear-filter-plural"}}
+      </Auk::Button>
+    </Auk::Toolbar::Group>
+    {{/if}}
+  </Auk::Toolbar>
+</Auk::Navbar>
 <div class="auk-scroll-wrapper">
-  <div class="auk-scroll-wrapper__body">
-    <div class="auk-u-m-4">
+  <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--ovrb">
+    <div class="auk-u-ml-4 auk-table-wrapper-ovrb">
       {{#if this.model.length}}
         <table
           data-test-route-publications-index-data-table
-          class="auk-table auk-table--sticky-header"
+          class="auk-table auk-table--sticky-header auk-table--sticky-ovrb"
         >
           <thead>
             <tr>

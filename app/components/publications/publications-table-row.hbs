@@ -7,6 +7,27 @@ request the whole row and not only the arrow at the end to be clickable }}
   {{on "click" (fn this.navigateToPublication @publicationFlow)}}
 >
   {{! template-lint-enable no-invalid-interactive }}
+  {{#if @tableColumnDisplayOptions.translations}}
+    <td
+      data-test-publication-table-row-translation-progress-badge
+      class="auk-u-text-nowrap"
+    >
+      <Publications::Publication::Translations::TranslationProgressBadge
+        @translationSubcase={{@publicationFlow.translationSubcase}}
+      />
+    </td>
+  {{/if}}
+  {{#if @tableColumnDisplayOptions.proofs}}
+    <td
+      data-test-publication-table-row-proofs-progress-badge
+      class="auk-u-text-nowrap"
+    >
+      <Publications::Publication::Proofs::ProofsProgressBadge
+        @publicationSubcase={{@publicationFlow.publicationSubcase}}
+      />
+    </td>
+  {{/if}}
+
   {{#if @tableColumnDisplayOptions.shortTitle}}
     <td data-test-publication-table-row-short-title class="auk-table__col--6">
       <Auk::AbbreviatedText
@@ -182,26 +203,7 @@ request the whole row and not only the arrow at the end to be clickable }}
       {{/if}}
     </td>
   {{/if}}
-  {{#if @tableColumnDisplayOptions.translations}}
-    <td
-      data-test-publication-table-row-translation-progress-badge
-      class="auk-u-text-nowrap"
-    >
-      <Publications::Publication::Translations::TranslationProgressBadge
-        @translationSubcase={{@publicationFlow.translationSubcase}}
-      />
-    </td>
-  {{/if}}
-  {{#if @tableColumnDisplayOptions.proofs}}
-    <td
-      data-test-publication-table-row-proofs-progress-badge
-      class="auk-u-text-nowrap"
-    >
-      <Publications::Publication::Proofs::ProofsProgressBadge
-        @publicationSubcase={{@publicationFlow.publicationSubcase}}
-      />
-    </td>
-  {{/if}}
+
   {{#if @tableColumnDisplayOptions.lastEdited}}
     <td>
       {{moment-format @publicationFlow.modified "DD-MM-YYYY"}}<br />
@@ -224,16 +226,23 @@ request the whole row and not only the arrow at the end to be clickable }}
       {{/if}}
     </td>
   {{/if}}
+  {{#if @tableColumnDisplayOptions.source}}
+    <td data-test-publication-table-row-source class="auk-u-text-nowrap">
+      {{#if @publicationFlow.case.subcases}}
+        {{t "via-cabinet"}}
+      {{else}}
+        {{t "not-via-cabinet"}}
+      {{/if}}
+    </td>
+  {{/if}}
   {{#if @tableColumnDisplayOptions.status}}
-    <td data-test-publication-table-row-status class="auk-u-text-nowrap">
+    <td data-test-publication-table-row-status class="auk-u-text-nowrap auk-u-sticky-col auk-u-sticky-col--last">
       {{#if @publicationFlow.status}}
-        <span
-          class="{{if @publicationFlow.status.isPublished "auk-u-text-success"}}
-            {{if @publicationFlow.status.isWithdrawn "auk-u-text-error"}}
-            "
+        <Auk::Pill
+          @skin="{{if @publicationFlow.status.isPublished "success"}}{{if @publicationFlow.status.isWithdrawn "danger"}}"
         >
           {{@publicationFlow.status.label}}
-        </span>
+        </Auk::Pill>
         {{#if
           (or
             @publicationFlow.status.isWithdrawn @publicationFlow.status.isPaused
@@ -249,15 +258,6 @@ request the whole row and not only the arrow at the end to be clickable }}
         {{/if}}
       {{else}}
         {{t "dash"}}
-      {{/if}}
-    </td>
-  {{/if}}
-  {{#if @tableColumnDisplayOptions.source}}
-    <td data-test-publication-table-row-source class="auk-u-text-nowrap">
-      {{#if @publicationFlow.case.subcases}}
-        {{t "via-cabinet"}}
-      {{else}}
-        {{t "not-via-cabinet"}}
       {{/if}}
     </td>
   {{/if}}

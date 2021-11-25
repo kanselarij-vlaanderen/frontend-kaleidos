@@ -1,5 +1,17 @@
 export default [
   {
+    keyName: 'translations',
+    translationKey: 'publications-table-translations',
+    translationKeySmall: 'publications-table-translations-small',
+    showByDefault: true,
+  },
+  {
+    keyName: 'proofs',
+    translationKey: 'publications-table-publish-proofs',
+    translationKeySmall: 'publications-table-publish-proofs-small',
+    showByDefault: true,
+  },
+  {
     keyName: 'shortTitle',
     translationKey: 'publications-table-short-title',
     translationKeySmall: 'publications-table-short-title-small',
@@ -97,18 +109,6 @@ export default [
     sortKey: 'translation-subcase.received-date',
   },
   {
-    keyName: 'translations',
-    translationKey: 'publications-table-translations',
-    translationKeySmall: 'publications-table-translations-small',
-    showByDefault: true,
-  },
-  {
-    keyName: 'proofs',
-    translationKey: 'publications-table-publish-proofs',
-    translationKeySmall: 'publications-table-publish-proofs-small',
-    showByDefault: true,
-  },
-  {
     keyName: 'lastEdited',
     translationKey: 'publications-table-last-edited',
     translationKeySmall: 'publications-table-last-edited-small',
@@ -123,16 +123,17 @@ export default [
     sortKey: 'publication-subcase.proof-print-corrector',
   },
   {
-    keyName: 'status',
-    translationKey: 'publications-table-status',
-    translationKeySmall: 'publications-table-status-small',
-    showByDefault: true,
-    sortKey: 'status.position,publication-status-change.started-at',
-  },
-  {
     keyName: 'source',
     translationKey: 'publications-table-source',
     translationKeySmall: 'publications-table-source-small',
     showByDefault: true,
   },
+  {
+    keyName: 'status',
+    translationKey: 'publications-table-status',
+    translationKeySmall: 'publications-table-status-small',
+    showByDefault: true,
+    sortKey: 'status.position,publication-status-change.started-at',
+    sticky: true
+  }
 ];
