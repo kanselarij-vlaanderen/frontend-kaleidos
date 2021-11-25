@@ -30,7 +30,7 @@
         <Auk::Toolbar::Item>
           <Auk::Button
             @skin="tertiary"
-            @icon="add"
+            @icon="plus"
             @route="settings.system-alerts.new"
             data-test-route-settings-system-alerts-index-add
           >
@@ -48,7 +48,7 @@
             </Auk::Button>
             <Auk::Button
               @skin="tertiary"
-              @icon="delete"
+              @icon="trash"
               {{on "click" (perform this.remove this.selectedAlert)}}
               data-test-route-settings-system-alerts-index-remove
             >
