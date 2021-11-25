@@ -15,7 +15,7 @@
             <Auk::Toolbar::Group @position="right">
               <Auk::Toolbar::Item>
                 <Auk::Button
-                  @icon="close"
+                  @icon="x"
                   @skin="borderless"
                   @layout="icon-only"
                   {{action "cancel"}}
@@ -48,7 +48,7 @@
                 <Auk::Toolbar::Item>
                   <Auk::Button
                     @skin={{this.buttonSkin}}
-                    @icon={{if this.showIcon "delete"}}
+                    @icon={{if this.showIcon "trash"}}
                     {{action "verify"}}
                     {{!-- isLoading=isLoading --}}
                     data-test-vl-modal-verify-save
