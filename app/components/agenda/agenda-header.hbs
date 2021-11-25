@@ -138,15 +138,14 @@
               >
                 {{t "agenda-release-documents"}}
               </Menu.Item>
-
             {{/if}}
-            {{#if this.canPublishMeeting}}
+            {{#if this.canPublishDocumentsToThemis}}
               <Menu.Divider />
-              <Menu.Item {{on "click" this.publishDocuments}}>
+              <Menu.Item {{on "click" this.publishDocumentsToThemis}}>
                 {{t "publish-documents"}}
               </Menu.Item>
-              <Menu.Item @skin="danger" {{on "click" this.unpublishDocuments}}>
-                {{t "unpublish"}}
+              <Menu.Item @skin="danger" {{on "click" this.unpublishDocumentsFromThemis}}>
+                {{t "unpublish-documents"}}
               </Menu.Item>
             {{/if}}
           </DropdownMenu>

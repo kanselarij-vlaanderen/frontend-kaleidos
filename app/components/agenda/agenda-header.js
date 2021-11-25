@@ -13,6 +13,7 @@ import {
   fetchArchivingJobForAgenda,
   fileDownloadUrlFromJob,
 } from 'frontend-kaleidos/utils/zip-agenda-files';
+import ThemisPublisher from '../../utils/themis-publisher';
 
 export default class AgendaHeader extends Component {
   /**
@@ -30,7 +31,6 @@ export default class AgendaHeader extends Component {
   @service intl;
   @service jobMonitor;
   @service toaster;
-  @service publishService;
 
   @tracked isAddingAgendaitems = false;
   @tracked isEditingSession = false;
@@ -66,7 +66,7 @@ export default class AgendaHeader extends Component {
     );
   }
 
-  get canPublishMeeting() {
+  get canPublishDocumentsToThemis() {
     return (
       this.currentSession.isEditor &&
       this.args.meeting.isFinal &&
@@ -150,20 +150,38 @@ export default class AgendaHeader extends Component {
   }
 
   @action
-  async releaseDocuments() {
+  releaseDocuments() {
     this.showConfirmReleaseDocuments = false;
     this.args.meeting.releasedDocuments = moment().utc().toDate();
     this.args.meeting.save();
   }
 
   @action
-  async publishDocuments() {
-    await this.publishService.publishMeeting(this.args.meeting);
+  async publishDocumentsToThemis() {
+    const themishPublisher = new ThemisPublisher();
+    try {
+      await themishPublisher.publishDocuments(this.args.meeting).then(response => {
+        if (response.ok){
+          this.toaster.success(this.intl.t('publish-documents-success'))
+        }
+      });
+    } catch {
+      this.toaster.error(this.intl.t('publish-themis-documents-error'))
+    }
   }
 
   @action
-  async unpublishDocuments() {
-    await this.publishService.unpublish(this.args.meeting);
+  async unpublishDocumentsFromThemis() {
+    const themishPublisher = new ThemisPublisher();
+    try {
+      await themishPublisher.unpublish(this.args.meeting).then(response => {
+        if (response.ok){
+          this.toaster.success(this.intl.t('unpublish-documents-success'))
+        }
+      });
+    } catch {
+      this.toaster.error(this.intl.t('unpublish-themis-documents-error'))
+    }
   }
 
   @action

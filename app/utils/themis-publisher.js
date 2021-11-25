@@ -1,5 +1,5 @@
-import Service, { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import  { inject as service } from '@ember/service';
 
 class ExportScope {
   @tracked label;
@@ -13,35 +13,32 @@ class ExportScope {
   }
 }
 
-export default class PublishService extends Service {
+class ThemisPublisher {
+  @service intl;
+
   scopes = [
     new ExportScope({ label: 'documenten', value: 'documents', includeInExport: false }),
     new ExportScope({ label: 'nieuwsberichten', value: 'newsitems', includeInExport: true })
   ];
 
-  @service store;
-  @service toaster;
-  @service intl;
-
-
-  async publishMeeting(meeting) {
+  async publishDocuments(meeting) {
     this.scopes.forEach(scope => scope.includeInExport = true);
-    await this.postItems(meeting);
-    this.toaster.success(this.intl.t('publish-docs-success'));
+    await this.createPublicationActivity(meeting);
   }
 
-  async publishNewsletter(meeting) {
-    await this.postItems(meeting);
-    this.toaster.success(this.intl.t('publish-newsletter-success'));
+  async publishNewsitems(meeting) {
+    await this.createPublicationActivity(meeting);
   }
 
   async unpublish(meeting) {
     this.scopes.forEach(scope => scope.includeInExport = false);
-    await this.postItems(meeting);
-    this.toaster.success(this.intl.t('unpublish-success'));
+    await this.createPublicationActivity(meeting);
   }
 
-  async postItems(meeting) {
+  /**
+   * @private
+   */
+  async createPublicationActivity(meeting) {
     const response = await fetch(`/meetings/${meeting.id}/publication-activities`, {
       method: 'POST',
       headers: {
@@ -58,9 +55,8 @@ export default class PublishService extends Service {
     });
 
     if (!response.ok) {
-      throw new Error(this.intl.t('publish-error'));
+      throw new Error(this.intl.t('publish-themis-error'));
     }
   }
-
-
 }
+export default ThemisPublisher;

@@ -78,13 +78,12 @@
               >
                 {{t "generate-xml"}}
               </Menu.Item>
+              <Menu.Item {{on "click" this.publishToWeb}}>
+                {{t "publish-newsitems"}}
+              </Menu.Item>
               <Menu.Divider />
               <Menu.Item @skin="danger" {{on "click" this.deleteCampaign}}>
                 {{t "delete-campaign"}}
-              </Menu.Item>
-              <Menu.Divider />
-              <Menu.Item {{on "click" this.publishToWeb}}>
-                {{t "publish-newsletter"}}
               </Menu.Item>
             {{else}}
               <Menu.Item {{on "click" this.createCampaign}}>

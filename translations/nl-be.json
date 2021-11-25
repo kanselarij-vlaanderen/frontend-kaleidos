@@ -919,9 +919,9 @@
   "proofprint-corrector": "Drukproef verbeteraar",
   "belgian-official-gazette": "Belgisch Staatsblad",
   "published-decisions": "Gepubliceerde besluiten",
-  "publish-documents": "Publiceer zitting",
-  "publish-newsletter": "Publicatie web",
-  "unpublish": "Verwijder publicatie",
+  "publish-documents": "Publiceer documenten",
+  "publish-newsitems": "Publiceer op web",
+  "unpublish-documents": "Verwijder gepubliceerde documenten",
   "no-decisions-published-yet": "Er zijn nog geen besluiten gepubliceerd.",
   "search-error": "Er ging iets mis bij het zoeken",
   "signatures": "Handtekeningen",
@@ -936,9 +936,11 @@
   "counselor": "Raadgever",
   "date-approved": "Datum goedgekeurd",
   "consult-agendaitem-decision": "Laatste agendering bekijken",
-  "publish-error": "Er ging iets fout bij het publiceren",
-  "publish-docs-success": "Publicatie zitting succesvol gestart",
-  "publish-newsletter-success": "Publicatie nieuwsberichten succesvol gestart",
-  "unpublish-success": "Verwijderen publicatie zitting succesvol gestart "
-
+  "publish-themis-error": "Er ging iets fout bij het publiceren",
+  "publish-themis-documents-error": "Er ging iets fout bij het publiceren van documenten",
+  "publish-themis-newsletter-error": "Er ging iets fout bij het publiceren naar web",
+  "unpublish-themis-documents-error": "Er ging iets fout bij het verwijderen van de publicatie",
+  "publish-documents-success": "Publicatie zitting succesvol gestart",
+  "publish-newsitems-success": "Publicatie nieuwsberichten succesvol gestart",
+  "unpublish-documents-success": "Verwijderen publicatie zitting succesvol gestart "
 }

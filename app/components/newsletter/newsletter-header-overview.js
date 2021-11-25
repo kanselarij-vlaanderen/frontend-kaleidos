@@ -4,6 +4,7 @@ import moment from 'moment';
 import SendingOldCampaignError from 'frontend-kaleidos/errors/sending-old-campaign-error';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import ThemisPublisher from '../../utils/themis-publisher';
 
 /**
  * @argument {Meeting} meeting
@@ -15,7 +16,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @service router;
   @service toaster;
   @service newsletterService;
-  @service publishService;
   @service currentSession;
 
   @tracked isVerifying = false;
@@ -88,6 +88,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     });
     this.newsletterHTML = null;
     this.testCampaignIsLoading = false;
+    // TODO Check if this reload is still useful
     location.reload();
   }
 
@@ -107,6 +108,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
     await reloadedMeeting.save();
     this.isLoading = false;
+    // TODO Check if this reload is still useful
     location.reload();
   }
 
@@ -144,13 +146,21 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     mailCampaign.set('sentAt', moment().utc().toDate());
     await mailCampaign.save();
     await meeting.belongsTo('mailCampaign').reload();
-    // await this.publishNewsletter.perform()
     this.isVerifying = false;
   }
 
   @action
   async publishToWeb() {
-    await this.publishService.publishNewsletter(this.args.meeting);
+    const themishPublisher = new ThemisPublisher();
+    try {
+      await themishPublisher.publishNewsitems(this.args.meeting).then(response => {
+        if (response.ok){
+          this.toaster.success(this.intl.t('publish-newsitems-success'))
+        }
+      });
+    } catch {
+      this.toaster.error(this.intl.t('publish-themis-newsitems-error'))
+    }
   }
 
   @action
