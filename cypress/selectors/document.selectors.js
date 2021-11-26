@@ -2,6 +2,7 @@ const selectors = {
   // component document-card
   documentCard: {
     card: '[data-test-document-card]',
+    type: '[data-test-document-card-type]',
     name: {
       value: '[data-test-document-card-name-value]',
       input: '[data-test-document-card-name-input]',
@@ -53,6 +54,7 @@ const selectors = {
   // edit-document-row
   documentDetailsRow: {
     row: '[data-test-document-details-row]',
+    input: '[data-test-document-details-input]',
     type: '[data-test-document-details-row-type]',
     accessLevel: '[data-test-document-details-row-access-level]',
     undoDelete: '[data-test-document-details-row-undo-delete]',

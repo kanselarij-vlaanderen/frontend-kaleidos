@@ -4,13 +4,13 @@
       <Auk::Toolbar::Item>
         <Auk::Tabs>
           <Auk::Tab
-            data-test-route-publications-publication-translations-documents
+            data-test-route-publications---translations-tab-documents
             @route="publications.publication.translations.documents"
           >
             {{capitalize (t "documents")}}
           </Auk::Tab>
           <Auk::Tab
-            data-test-route-publications-publication-translations-requests
+            data-test-route-publications---translations-tab-requests
             @route="publications.publication.translations.requests"
           >
             {{capitalize (t "requests")}}
@@ -21,7 +21,7 @@
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
         <Auk::Checkbox
-          data-test-route-publications-publication-translations-finished
+          data-test-route-publications---translations-tab-finished
           @label={{t "finished"}}
           @checked={{this.model.endDate}}
           {{on "input" this.toggleFinishTranslation}}

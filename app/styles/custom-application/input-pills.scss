@@ -19,13 +19,13 @@
 
   .emberTagInput-remove {
     @extend .auk-icon;
-    @extend .auk-icon--close;
+    @extend .auk-icon--x;
     // remove <a />-tag styling
     text-decoration: none;
     color: inherit;
   }
 
-  // substitute <i class="ki-close" />
+  // substitute <i class="ki-x" />
   .emberTagInput-remove::after {
     // copied from:
     // @kanselarij-vlaanderen/au-kaleidos-icons/iconfont/icons
@@ -38,8 +38,8 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
-    // ki-close icon
-    content: "\f115";
+    // ki-x icon
+    content: "\f14b";
   }
 
   .emberTagInput-new {
