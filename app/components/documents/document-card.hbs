@@ -17,7 +17,7 @@
         <Auk::Toolbar @auto={{true}}>
           <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
-              <p class="vlc-subline">
+              <p data-test-document-card-type class="vlc-subline">
                 {{#unless this.loadPieceRelatedData.isRunning}}
                   {{this.documentContainer.type.label}}
                 {{/unless}}
@@ -86,7 +86,7 @@
               {{#if this.currentSession.isEditor}}
                 <DropdownMenu
                   @skin="borderless"
-                  @icon="more"
+                  @icon="three-dots"
                   data-test-document-card-actions={{true}}
                   as |Menu|
                 >
@@ -134,7 +134,7 @@
                   data-test-document-card-name-cancel={{true}}
                   @skin="borderless"
                   @layout="icon-only"
-                  @icon="cross"
+                  @icon="x"
                   {{on "click" this.cancelEditPieceName}}
                 />
               </div>
