@@ -77,18 +77,6 @@ export default class GovernmentAreaSelectorForm extends Component {
     }
   }
 
-  // TODO Should domain selection be automatic when all available fields are selected or manual?
-  // @action
-  // toggleDomainSelection(domainSelection, event) {
-  //   const flag = event.target.checked;
-  //   const domainFields = domainSelection.availableFields;
-  //   const fieldsToToggle = domainFields.filter((domainField) => domainSelection.selectedFields.includes(domainField) !== flag);
-  //   const handler = flag ? this.args.onSelectFields : this.args.onUnSelectFields;
-  //   if (handler) {
-  //     handler(fieldsToToggle);
-  //   }
-  // }
-
   @action
   toggleFieldSelection(field, event) {
     const checked = event.target.checked;
