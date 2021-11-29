@@ -7,7 +7,7 @@
       @closeOnSelect={{false}}
       @search={{perform this.searchTask}}
       @oninput={{this.resetMandateeOptionsIfEmpty}}
-      @onchange={{@chooseMandatee}}
+      @onChange={{@chooseMandatee}}
       as |mandatee|
     >
       {{await mandatee.fullDisplayName}}
@@ -25,7 +25,7 @@
       @disabled={{@readOnly}}
       @search={{perform this.searchTask}}
       @oninput={{this.resetMandateeOptionsIfEmpty}}
-      @onchange={{@chooseMandatee}}
+      @onChange={{@chooseMandatee}}
       as |mandatee|
     >
       {{await mandatee.fullDisplayName}}

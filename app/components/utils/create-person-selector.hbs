@@ -13,7 +13,7 @@
       @searchMessage={{this.searchMessage}}
       @search={{perform this.searchTask}}
       @oninput={{action "resetValueIfEmpty"}}
-      @onchange={{action "selectModel"}}
+      @onChange={{action "selectModel"}}
       as |model|
     >
       {{await (model-property-to-show model this.propertyToShow)}}

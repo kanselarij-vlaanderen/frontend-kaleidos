@@ -5,7 +5,7 @@
       @placeholder={{t "select-a-status"}}
       @options={{this.decisionResultCodes}}
       @selected={{@selected}}
-      @onchange={{@onChange}}
+      @onChange={{@onChange}}
     as |resultCode|>
       <Decision::DecisionResultSelect::SelectItem
         @decisionResultCode={{resultCode}}

@@ -7,7 +7,7 @@
     @disabled={{this.readOnly}}
     @searchEnabled={{false}}
     @placeholder={{this.placeholder}}
-    @onchange={{action "selectModel"}}
+    @onChange={{action "selectModel"}}
     as |model|
   >
     {{model-property-to-show model this.propertyToShow}}
@@ -19,7 +19,7 @@
     @selected={{this.selectedAgenda}}
     @disabled={{this.readOnly}}
     @placeholder={{this.placeholder}}
-    @onchange={{action "selectModel"}}
+    @onChange={{action "selectModel"}}
     as |model|
   >
     {{model-property-to-show model this.propertyToShow}}

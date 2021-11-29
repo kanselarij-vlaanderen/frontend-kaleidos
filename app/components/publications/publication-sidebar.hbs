@@ -120,7 +120,7 @@
             <PowerSelect
               @options={{this.regulationTypes}}
               @searchEnabled={{false}}
-              @onchange={{this.setRegulationType}}
+              @onChange={{this.setRegulationType}}
               @selected={{@publicationFlow.regulationType}}
               as |regulationType|
             >
@@ -141,7 +141,7 @@
             <PowerSelect
               @options={{this.publicationModes}}
               @searchEnabled={{false}}
-              @onchange={{this.setPublicationMode}}
+              @onChange={{this.setPublicationMode}}
               @selected={{this.publicationFlow.mode}}
               as |mode|
             >

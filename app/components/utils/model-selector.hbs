@@ -13,7 +13,7 @@
     @searchMessage={{null}}
     @search={{perform this.searchTask}}
     @oninput={{action "resetValueIfEmpty"}}
-    @onchange={{action "selectModel"}}
+    @onChange={{action "selectModel"}}
     @searchEnabled={{not this.hideSearch}}
   as |model|>
     {{await (model-property-to-show model this.propertyToShow)}}
@@ -31,7 +31,7 @@
     @closeOnSelect={{false}}
     @search={{perform this.searchTask}}
     @oninput={{action "resetValueIfEmpty"}}
-    @onchange={{action "selectModel"}}
+    @onChange={{action "selectModel"}}
   as |model|>
     {{await (model-property-to-show model this.propertyToShow)}}
   </PowerSelectMultiple>
