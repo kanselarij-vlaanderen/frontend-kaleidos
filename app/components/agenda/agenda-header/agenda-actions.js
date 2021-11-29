@@ -211,6 +211,7 @@ export default class AgendaActions extends Component {
       );
       // After the agenda has been created, we want to update the agendaitems of activities
       await this.reloadAgendaitemsOfAgenda(newAgenda);
+      await this.reloadMeeting();
       this.toggleLoadingMessage(null);
       return this.router.transitionTo(
         'agenda.agendaitems',
@@ -270,6 +271,7 @@ export default class AgendaActions extends Component {
       // Data reloading
       await this.reloadAgenda(this.args.currentAgenda);
       await this.reloadAgendaitemsOfAgenda(this.args.currentAgenda);
+      await this.reloadMeeting();
       this.toggleLoadingMessage(null);
       return this.router.transitionTo(
         'agenda.agendaitems',
