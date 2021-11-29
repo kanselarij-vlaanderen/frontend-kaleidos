@@ -46,19 +46,19 @@ export default class GovernmentAreaSelectorForm extends Component {
 
   @task
   *calculateDomainSelections() {
-    const domainsFromFields = yield Promise.all(this.availableFields.map((field) => field.domain));
+    const domainsFromFields = yield Promise.all(this.availableFields.map((field) => field.broader));
     const uniqueDomains = [...new Set(domainsFromFields)].sortBy('label');
     const domainSelections = [];
     for (const domain of uniqueDomains) {
       // Filter logic is applied in 2 steps, such that promises to fetch the domains can be executed using Promise.all
       // Step 1: create an array of domains, one for each selected field, using the same order as this.selectedFields
       // Step 2: use the array of step 1 to verify whether the domain fetched for the field is the current domain
-      const selectedFieldsDomains = yield Promise.all(this.selectedFields.map((field) => field.domain));
+      const selectedFieldsDomains = yield Promise.all(this.selectedFields.map((field) => field.broader));
       // eslint-disable-next-line no-unused-vars, id-length
       const selectedFieldsForDomain = this.selectedFields.filter((_, index) => selectedFieldsDomains[index] === domain);
 
       // Similar filter logic applied in 2 steps as above for the available fields
-      const availableFieldsDomains = yield Promise.all(this.availableFields.map((field) => field.domain));
+      const availableFieldsDomains = yield Promise.all(this.availableFields.map((field) => field.broader));
       // eslint-disable-next-line no-unused-vars, id-length
       const availableFieldsForDomain = this.availableFields.filter((_, index) => availableFieldsDomains[index] === domain);
       const isSelected = this.selectedDomains.includes(domain);

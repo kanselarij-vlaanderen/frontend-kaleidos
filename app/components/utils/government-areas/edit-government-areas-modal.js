@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class EditGovernmentAreasModal extends Component {
   @service store;
@@ -13,10 +14,21 @@ export default class EditGovernmentAreasModal extends Component {
 
   constructor() {
     super(...arguments);
-    this.governmentFields = this.store.peekAll('government-field');
+    this.loadGovernmentAreas.perform();
     this.selectedGovernmentFields = this.args.governmentFields?.slice(0) || []; // making a copy
-    this.governmentDomains = this.store.peekAll('government-domain');
     this.selectedGovernmentDomains = this.args.governmentDomains?.slice(0) || []; // making a copy
+  }
+
+  @task
+  *loadGovernmentAreas() {
+    this.governmentDomains = yield this.store.query('concept', {
+      'filter[top-concept-schemes][:uri:]': CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN,
+      include: 'broader,narrower',
+    });
+    this.governmentFields = yield this.store.query('concept', {
+      'filter[top-concept-schemes][:uri:]': CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD,
+      include: 'broader,narrower',
+    });
   }
 
   @task

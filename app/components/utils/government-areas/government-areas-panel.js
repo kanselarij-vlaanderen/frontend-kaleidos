@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { keepLatestTask } from 'ember-concurrency-decorators';
 import { inject as service } from '@ember/service';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 class Row {
   @tracked governmentDomain;
@@ -42,20 +43,16 @@ export default class GovernmentAreasPanel extends Component {
     }
     const domains = [];
     const fields = [];
-    // We can't work properly with a list of concepts, so we want to get the more precise model
     for (let governmentArea of governmentAreas) {
-      // In order to know which concept we are dealing with, we look up the models by id
-      const narrower = yield governmentArea.narrower;
-      if (narrower.length == 0) {
-        const field = yield this.store.findRecord('government-field', governmentArea.id);
-        fields.pushObject(field);
-      } else {
-        const domain = yield this.store.findRecord('government-domain', governmentArea.id);
-        domains.pushObject(domain);
+      const topConceptSchemes = yield governmentArea.topConceptSchemes;
+      if (topConceptSchemes.any(scheme => scheme.uri === CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN)) {
+        domains.pushObject(governmentArea);
+      } else if (topConceptSchemes.any(scheme => scheme.uri === CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD)) {
+        fields.pushObject(governmentArea);
       }
     }
 
-    const fieldsByDomain = yield groupBy(fields.toArray(), 'domain', domains.toArray());
+    const fieldsByDomain = yield groupBy(fields.toArray(), 'broader', domains.toArray());
     this.rows = [...fieldsByDomain.entries()]
       .map(([domain, fields]) => new Row({
         governmentDomain: domain,
@@ -68,11 +65,7 @@ export default class GovernmentAreasPanel extends Component {
 
   @action
   async save(governmentDomains, governmentFields) {
-    let newGovernmentAreas = [];
-    for (let area of governmentDomains.concat(governmentFields)) {
-      const concept = await this.store.findRecord('concept', area.id);
-      newGovernmentAreas.pushObject(concept);
-    }
+    let newGovernmentAreas = governmentDomains.concat(governmentFields);
     await this.args.onSave(newGovernmentAreas);
     this.groupGovernmentFieldsByDomain.perform();
     this.isOpenEditModal = false;
