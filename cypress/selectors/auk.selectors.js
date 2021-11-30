@@ -32,7 +32,7 @@ const selectors = {
     header: {
       title: '.auk-modal__header .auk-toolbar__title',
       // TODO-selector unused selectors
-      close: '.auk-modal__header .auk-button .auk-icon .ki-close',
+      close: '.auk-modal__header .auk-button .auk-icon .ki-x',
       minimize: '.auk-modal__header .auk-button .auk-icon .ki-minimize',
       expand: '.auk-modal__header .auk-button .auk-icon .ki-expand',
     },
