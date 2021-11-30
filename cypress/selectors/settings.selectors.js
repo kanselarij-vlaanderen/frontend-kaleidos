@@ -31,7 +31,6 @@ const selectors = {
   // route settings/overview
   overview: {
     manageEmails: '[data-test-route-settings-overview-manage-emails]',
-    manageGovermentDomains: '[data-test-route-settings-overview-manage-government-domains]',
     manageAlerts: '[data-test-route-settings-overview-manage-alerts]',
     manageDocumentTypes: '[data-test-route-settings-overview-manage-document-types]',
     manageCaseTypes: '[data-test-route-settings-overview-manage-case-types]',
