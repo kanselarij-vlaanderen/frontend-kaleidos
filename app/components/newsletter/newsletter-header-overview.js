@@ -17,11 +17,193 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @service newsletterService;
   @service currentSession;
 
-  @tracked isVerifying = false;
+  @tracked verifyingPublishAll = false;
+  @tracked verifyingPublishBelga = false;
+  @tracked verifyingPublishMail = false;
+
   @tracked isLoading = false;
 
   @tracked newsletterHTML = null;
-  @tracked testCampaignIsLoading = false;
+  @tracked loadingNewsletter = false;
+
+  shouldShowPrintButton() {
+    return this.router.currentRouteName.includes('newsletter.print');
+  }
+
+  @action
+  print() {
+    window.print();
+  }
+
+  @action
+  toggleVerifyingPublishAll() {
+    this.verifyingPublishAll = !this.verifyingPublishAll;
+  }
+
+  @action
+  toggleVerifyingPublishMail() {
+    this.verifyingPublishMail = !this.verifyingPublishMail;
+  }
+
+  @action
+  toggleVerifyingPublishBelga() {
+    this.verifyingPublishBelga = !this.verifyingPublishBelga;
+  }
+
+  @action
+  async deleteCampaign() {
+    this.isLoading = true;
+    const meeting = this.args.meeting;
+    const mailCampaign = await meeting.mailCampaign;
+
+    if (!mailCampaign.id) {
+      return;
+    }
+
+    if (mailCampaign && mailCampaign.campaignId) {
+      await this.newsletterService.deleteCampaign(mailCampaign.campaignId);
+    }
+    mailCampaign.destroyRecord();
+    const reloadedMeeting = await this.store.findRecord('meeting', meeting.id, {
+      reload: true,
+    });
+    reloadedMeeting.mailCampaign = null;
+
+    await reloadedMeeting.save();
+    this.isLoading = false;
+    location.reload();
+  }
+
+  @action
+  async publishToMail() {
+    this.isLoading = true;
+
+    const mailCampaign =  await this.createMailCampaign();
+    if (!mailCampaign.id || mailCampaign.isSent) {
+      return;
+    }
+
+    await this.validateMailCampaign(mailCampaign);
+    await this.publishToMailAndSaveCampaign(mailCampaign);
+
+    this.isLoading = false;
+    this.toggleVerifyingPublishMail();
+  }
+
+  @action
+  async publishToBelga() {
+    this.isLoading = true;
+    await this.publishNewsletterToBelga();
+    this.isLoading = false;
+    this.toggleVerifyingPublishBelga();
+  }
+
+  @action
+  async publishToAll() {
+    this.isLoading = true;
+
+    const mailCampaign = await this.createMailCampaign();
+    if (!mailCampaign.id || mailCampaign.isSent) {
+      return;
+    }
+
+    await this.validateMailCampaign(mailCampaign);
+    await this.publishToMailAndSaveCampaign(mailCampaign);
+
+    await this.publishNewsletterToBelga;
+
+    this.isLoading = false;
+    this.toggleVerifyingPublishAll();
+  }
+
+
+  @action
+  async showNewsletter() {
+    this.loadingNewsletter = true;
+
+    const mailCampaign = await this.createMailCampaign();
+
+    if (!mailCampaign || !mailCampaign.id || mailCampaign.isSent) {
+      this.newsletterHTML = html.body;
+      this.loadingNewsletter = false;
+      return;
+    }
+
+    const html = await this.newsletterService
+      .getMailCampaignContent(mailCampaign.campaignId)
+      .catch(() => {
+        this.toaster.error(
+          this.intl.t('error-send-newsletter'),
+          this.intl.t('warning-title')
+        );
+      });
+    this.newsletterHTML = html.body;
+    this.loadingNewsletter = false;
+  }
+
+  @action
+  async clearNewsletterHTML() {
+    this.newsletterHTML = null;
+    this.loadingNewsletter = false;
+  }
+
+  async validateMailCampaign(mailCampaign) {
+    let validCampaign = true;
+    await this.validatedCampaign(mailCampaign.campaignId)
+      .catch((ex) => {
+        console.error(ex);
+        this.isVerifying = false;
+        this.isLoading = false;
+        validCampaign = false;
+      });
+
+    if (validCampaign) {
+      return ;
+    }
+    return validCampaign;
+  }
+
+  async publishNewsletterToBelga() {
+    await this.newsletterService
+      .sendtoBelga(this.args.agenda.id)
+      .then(() => {
+        this.toaster.success(this.intl.t('success-publish-newsletter-to-belga'));
+      })
+      .catch(() => {
+        this.toaster.error(
+          this.intl.t('error-send-newsletter'),
+          this.intl.t('warning-title')
+        );
+      });
+  }
+
+  async publishToMailAndSaveCampaign(mailCampaign) {
+    await this.newsletterService
+      .sendMailCampaign(mailCampaign.campaignId)
+      .then(() => {
+        this.toaster.success(this.intl.t('success-publish-newsletter-to-mail'));
+      })
+      .catch(() => {
+        this.toaster.error(
+          this.intl.t('error-send-newsletter'),
+          this.intl.t('warning-title')
+        );
+      });
+
+    mailCampaign.set('sentAt', moment()
+      .utc()
+      .toDate());
+    await mailCampaign.save();
+
+    const meeting = this.args.meeting;
+    await meeting.belongsTo('mailCampaign')
+      .reload();
+  }
+
+  async createMailCampaign() {
+    await this.newsletterService.createCampaign(this.args.agenda, this.args.meeting);
+    return await this.args.meeting.mailCampaign;
+  }
 
   async validatedCampaign(campaignId) {
     const campaign = await this.newsletterService
@@ -37,7 +219,8 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     console.info(
       'campaign minutes old',
       Math.abs(
-        moment(campaign.body.create_time).diff(moment(Date.now()), 'minutes')
+        moment(campaign.body.create_time)
+          .diff(moment(Date.now()), 'minutes')
       )
     );
 
@@ -45,7 +228,8 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
     if (
       Math.abs(
-        moment(campaign.body.create_time).diff(moment(Date.now()), 'minutes')
+        moment(campaign.body.create_time)
+          .diff(moment(Date.now()), 'minutes')
       ) > threshold
     ) {
       const sendingOldCampaignError = new SendingOldCampaignError();
@@ -63,116 +247,4 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     }
   }
 
-  shouldShowPrintButton() {
-    return this.router.currentRouteName.includes('newsletter.print');
-  }
-
-  @action
-  print() {
-    window.print();
-  }
-
-  @action
-  toggleIsVerifying() {
-    this.isVerifying = !this.isVerifying;
-  }
-
-  @action
-  async createCampaign() {
-    this.isLoading = true;
-    const agenda = this.args.agenda;
-    const meeting = this.args.meeting;
-    await this.newsletterService.createCampaign(agenda, meeting).then(() => {
-      this.isLoading = false;
-    });
-    this.newsletterHTML = null;
-    this.testCampaignIsLoading = false;
-    location.reload();
-  }
-
-  @action
-  async deleteCampaign() {
-    this.isLoading = true;
-    const meeting = this.args.meeting;
-    const mailCampaign = await meeting.mailCampaign;
-    if (mailCampaign && mailCampaign.campaignId) {
-      await this.newsletterService.deleteCampaign(mailCampaign.campaignId);
-    }
-    mailCampaign.destroyRecord();
-    const reloadedMeeting = await this.store.findRecord('meeting', meeting.id, {
-      reload: true,
-    });
-    reloadedMeeting.mailCampaign = null;
-
-    await reloadedMeeting.save();
-    this.isLoading = false;
-    location.reload();
-  }
-
-  @action
-  async sendCampaign() {
-    this.isLoading = true;
-    const agenda = this.args.agenda;
-    const meeting = this.args.meeting;
-    const mailCampaign = await meeting.mailCampaign;
-
-    if (!mailCampaign || !mailCampaign.id || mailCampaign.isSent) {
-      return;
-    }
-
-    let validCampaign = true;
-    await this.validatedCampaign(mailCampaign.campaignId).catch((ex) => {
-      console.error(ex);
-      this.isVerifying = false;
-      this.isLoading = false;
-      validCampaign = false;
-    });
-    if (!validCampaign) {
-      return false;
-    }
-
-    await this.newsletterService
-      .sendCampaign(mailCampaign.campaignId, agenda.id)
-      .catch(() => {
-        this.toaster.error(
-          this.intl.t('error-send-newsletter'),
-          this.intl.t('warning-title')
-        );
-      });
-    this.isLoading = false;
-    mailCampaign.set('sentAt', moment().utc().toDate());
-    await mailCampaign.save();
-    await meeting.belongsTo('mailCampaign').reload();
-    this.isVerifying = false;
-  }
-
-  @action
-  async sendTestCampaign() {
-    this.testCampaignIsLoading = true;
-    const meeting = this.args.meeting;
-    const mailCampaign = await meeting.get('mailCampaign');
-
-    if (!mailCampaign || !mailCampaign.id || mailCampaign.isSent) {
-      this.newsletterHTML = html.body;
-      this.testCampaignIsLoading = false;
-      return;
-    }
-
-    const html = await this.newsletterService
-      .getMailCampaignContent(mailCampaign.campaignId)
-      .catch(() => {
-        this.toaster.error(
-          this.intl.t('error-send-newsletter'),
-          this.intl.t('warning-title')
-        );
-      });
-    this.newsletterHTML = html.body;
-    this.testCampaignIsLoading = false;
-  }
-
-  @action
-  async clearNewsletterHTML() {
-    this.newsletterHTML = null;
-    this.testCampaignIsLoading = false;
-  }
 }

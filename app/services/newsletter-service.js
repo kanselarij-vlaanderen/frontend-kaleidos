@@ -54,11 +54,24 @@ export default Service.extend({
     }
   },
 
-  sendCampaign(id, agendaId) { // TODO: this and below method are sync, while 2 methods above async?
+  sendMailCampaign(id) { // TODO: this and below method are sync, while 2 methods above async?
     try {
       return ajax({
         method: 'POST',
-        url: `/newsletter/sendCampaign/${id}?agendaId=${agendaId}`,
+        url: `/newsletter/sendMailCampaign/${id}`,
+      });
+    } catch (error) {
+      console.warn('An exception ocurred: ', error);
+      this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
+      return null;
+    }
+  },
+
+  sendtoBelga(agendaId) { // TODO: this and below method are sync, while 2 methods above async?
+    try {
+      return ajax({
+        method: 'POST',
+        url: `/newsletter/sendToBelga/${agendaId}`,
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);
