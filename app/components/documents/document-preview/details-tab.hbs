@@ -1,7 +1,11 @@
 <div class="auk-u-m-4">
-  <Auk::KeyValue @key={{t "document-name"}}>
+  <Auk::KeyValue
+    data-test-document-preview-details-name
+    @key={{t "document-name"}}
+  >
     {{#if this.isEditingDetails}}
       <Textarea
+        data-test-document-preview-details-editor-name
         aria-labelledby="piece-name"
         class="auk-textarea"
         @value={{mut @piece.name}}
@@ -11,9 +15,13 @@
     {{/if}}
   </Auk::KeyValue>
   {{#if (or this.documentType this.isEditingDetails)}}
-    <Auk::KeyValue @key={{t "document-type"}}>
+    <Auk::KeyValue
+      data-test-document-preview-details-document-type
+      @key={{t "document-type"}}
+    >
       {{#if this.isEditingDetails}}
         <Utils::ModelSelector
+          data-test-document-preview-details-editor-document-type
           @modelName="document-type"
           @allowClear={{true}}
           @searchField="label"
@@ -27,9 +35,13 @@
       {{/if}}
     </Auk::KeyValue>
   {{/if}}
-  <Auk::KeyValue @key={{t "publicity"}}>
+  <Auk::KeyValue 
+    data-test-document-preview-details-acces-level
+    @key={{t "publicity"}}
+  >
     {{#if this.isEditingDetails}}
       <Utils::ModelSelector
+        data-test-document-preview-details-editor-acces-level
         @modelName="access-level"
         @allowClear={{true}}
         @hideSearch={{true}}
@@ -42,15 +54,24 @@
       <Utils::AccessLevelColorBadge @accessLevel={{this.accessLevel}} />
     {{/if}}
   </Auk::KeyValue>
-  <Auk::KeyValue @key={{capitalize (t "confidentiality")}}>
+  <Auk::KeyValue
+    data-test-document-preview-details-confidentiality
+    @key={{capitalize (t "confidentiality")}}
+  >
     {{#if this.isEditingDetails}}
-      <Auk::Toggle @checked={{mut @piece.confidential}} />
+      <Auk::Toggle
+        data-test-document-preview-details-editor-confidentiality
+        @checked={{mut @piece.confidential}}
+      />
     {{else}}
       <Utils::ConfidentialityPill @confidential={{@piece.confidential}} />
     {{/if}}
   </Auk::KeyValue>
   <Auk::KeyValue @key={{t "file-type"}}>
-    <Utils::Documents::FileTypePill @extension={{@piece.file.extension}} />
+    <Utils::Documents::FileTypePill
+      data-test-document-preview-details-file-type
+      @extension={{@piece.file.extension}}
+    />
   </Auk::KeyValue>
   {{#if this.currentSession.isEditor}}
     <Auk::Toolbar as |toolbar|>
@@ -58,6 +79,7 @@
         {{#if this.isEditingDetails}}
           <group.Item>
             <Auk::ButtonLink
+              data-test-document-preview-details-cancel
               @disabled={{this.isProcessing}}
               @loading={{this.cancelEditDetails.isRunning}}
               {{on "click" (perform this.cancelEditDetails)}}
@@ -67,6 +89,7 @@
           </group.Item>
           <group.Item>
             <Auk::Button
+              data-test-document-preview-details-save
               @skin="primary"
               @disabled={{this.isProcessing}}
               @loading={{this.saveDetails.isRunning}}
@@ -78,6 +101,7 @@
         {{else}}
           <group.Item>
             <Auk::Button
+              data-test-document-preview-details-edit
               @skin="tertiary"
               @icon="pencil"
               {{on "click" this.openEditDetails}}

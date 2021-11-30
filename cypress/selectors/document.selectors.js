@@ -18,6 +18,7 @@ const selectors = {
   vlDocument: {
     piece: '[data-test-vl-document-piece]',
     name: '[data-test-vl-document-name]',
+    showPieceViewer: '[data-test-vl-document-showPieceViewer]',
     delete: '[data-test-vl-document-delete-piece]',
   },
 
@@ -96,5 +97,59 @@ const selectors = {
     // TODO-selector unused selector
     versionHistory: '[data-test-linked-document-link-version-history]',
   },
+
+  // document-preview-sidebar
+  documentPreviewSidebar: {
+    sidebar: '[data-test-document-preview-sidebar-sidebar]',
+    signatures: '[data-test-document-preview-sidebar-tabs-signatures]',
+    versions: '[data-test-document-preview-sidebar-tabs-versions]',
+    toggle: '[data-test-document-preview-sidebar-toggle]',
+    tabs: {
+      details: '[data-test-document-preview-sidebar-tabs-details]',
+    },
+  },
+
+  // document-preview-details
+  documentPreviewDetails: {
+    cancel: '[data-test-document-preview-details-cancel]',
+    save: '[data-test-document-preview-details-save]',
+    edit: '[data-test-document-preview-details-edit]',
+    name: '[data-test-document-preview-details-name]',
+    documentType: '[data-test-document-preview-details-document-type]',
+    accesLevel: '[data-test-document-preview-details-acces-level]',
+    confidentiality: '[data-test-document-preview-details-confidentiality]',
+    filetype: '[data-test-document-preview-details-filetype]',
+    editor: {
+      name: '[data-test-document-preview-details-editor-name]',
+      documentType: '[data-test-document-preview-details-editor-document-type]',
+      accesLevel: '[data-test-document-preview-details-editor-acces-level]',
+      confidentiality: '[data-test-document-preview-details-editor-confidentiality]',
+    },
+  },
+
+  // document-preview-versions-tab
+  documentPreviewVersionsTab: {
+    list: '[data-test-document-preview-versions-tab-list]',
+  },
+
+  // document-preview-version-card
+  documentPreviewVersionCard: {
+    container: '[data-test-document-preview-version-card-container]',
+    details: '[data-test-document-preview-version-card-details]',
+    name: '[data-test-document-preview-versions-card-name]',
+    open: '[data-test-document-preview-version-card-open]',
+  },
+
+  // document-view
+  documentView: {
+    pdfView: '[data-test-document-view-pdfview]',
+    text: '.textLayer > span',
+  },
+
+  // document-badge
+  documentBadge: {
+    link: '[data-test-document-badge-link]',
+  },
+
 };
 export default selectors;

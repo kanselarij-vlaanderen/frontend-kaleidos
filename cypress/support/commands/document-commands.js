@@ -99,7 +99,7 @@ function addNewDocumentsInUploadModal(files, model) {
  * @param {String} oldFileName - The relative path to the file in the cypress/fixtures folder excluding the fileName
  * @param {String} file - The name of the file without the extension
  */
-function addNewPiece(oldFileName, file, modelToPatch) {
+function addNewPiece(oldFileName, file, modelToPatch, hasSubcase = true) {
   cy.log('addNewPiece');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.route('POST', 'pieces').as(`createNewPiece_${randomInt}`);
@@ -135,9 +135,14 @@ function addNewPiece(oldFileName, file, modelToPatch) {
   if (modelToPatch) {
     if (modelToPatch === 'agendaitems') {
       // we always POST submission activity here
-      cy.wait('@createNewSubmissionActivity')
-        .wait('@patchAgendaitem')
-        .wait('@putAgendaitemDocuments');
+      if (hasSubcase) {
+        cy.wait('@createNewSubmissionActivity')
+          .wait('@patchAgendaitem')
+          .wait('@putAgendaitemDocuments');
+      } else {
+        cy.wait('@patchAgendaitem')
+          .wait('@putAgendaitemDocuments');
+      }
       // .wait('@getSubmissionActivity', {
       //   timeout: 12000,
       // });
@@ -230,9 +235,9 @@ function addNewPieceToMeeting(oldFileName, file) {
  * @param {string} agendaitemTitle
  * @param {boolean} alreadyHasDocs
  */
-function openAgendaitemDocumentTab(agendaitemTitle, alreadyHasDocs = false) {
+function openAgendaitemDocumentTab(agendaitemTitle, alreadyHasDocs = false, isAdmin = true) {
   cy.log('openAgendaitemDocumentTab');
-  cy.openDetailOfAgendaitem(agendaitemTitle);
+  cy.openDetailOfAgendaitem(agendaitemTitle, isAdmin);
   cy.get(agenda.agendaitemNav.documentsTab)
     .click()
     .wait(2000); // Access-levels GET occured earlier, general wait instead
@@ -272,6 +277,21 @@ function addNewPieceToAgendaitem(agendaitemTitle, oldFileName, file) {
   cy.log('addNewPieceToAgendaitem');
   openAgendaitemDocumentTab(agendaitemTitle, true);
   return addNewPiece(oldFileName, file, 'agendaitems');
+}
+
+/**
+ * @description Add a new piece to an agendaitem
+ * @name addNewPieceToApprovalItem
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {string} agendaitemTitle
+ * @param {string} oldFileName
+ * @param {string} file
+ */
+function addNewPieceToApprovalItem(agendaitemTitle, oldFileName, file) {
+  cy.log('addNewPieceToApprovalItem');
+  openAgendaitemDocumentTab(agendaitemTitle, true, false);
+  return addNewPiece(oldFileName, file, 'agendaitems', false);
 }
 
 /**
@@ -502,6 +522,7 @@ Cypress.Commands.add('addDocumentsToAgendaitem', addDocumentsToAgendaitem);
 Cypress.Commands.add('addNewPiece', addNewPiece);
 Cypress.Commands.add('addNewPieceToMeeting', addNewPieceToMeeting);
 Cypress.Commands.add('addNewPieceToAgendaitem', addNewPieceToAgendaitem);
+Cypress.Commands.add('addNewPieceToApprovalItem', addNewPieceToApprovalItem);
 Cypress.Commands.add('addNewPieceToSubcase', addNewPieceToSubcase);
 Cypress.Commands.add('addNewPieceToSignedDocumentContainer', addNewPieceToSignedDocumentContainer);
 Cypress.Commands.add('uploadFile', uploadFile);
