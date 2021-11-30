@@ -114,7 +114,6 @@ export default class CasesNewSubcase extends Component {
       subcase.linkedPieces = pieces;
     }
     subcase.mandatees = await latestSubcase.mandatees;
-    subcase.iseCodes = await latestSubcase.iseCodes;
     subcase.requestedBy = await latestSubcase.requestedBy;
     return subcase;
   }
