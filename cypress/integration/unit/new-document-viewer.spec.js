@@ -172,7 +172,7 @@ context('new document viewer tests', () => {
     cy.get(document.documentPreviewSidebar.tabs.details).click();
     cy.get(document.documentPreviewDetails.name).should('contain', file.fileName);
     cy.get(document.documentPreviewDetails.name).should('not.contain', newName);
-    cy.get(document.documentPreviewDetails.documentType).should('contain', file.fileType);
+    cy.get(document.documentPreviewDetails.documentType).should('contain', searchDocumentType);
     cy.get(document.documentPreviewDetails.accesLevel).should('contain', defaultAccessLevel);
     cy.get(auk.fileTypePill).contains('PDF');
   });
