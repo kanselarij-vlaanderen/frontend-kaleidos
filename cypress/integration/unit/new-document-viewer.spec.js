@@ -165,7 +165,7 @@ context('new document viewer tests', () => {
       .parents(document.documentPreviewVersionCard.container)
       .should('have.class', 'auk-document-card active')
       .within(() => {
-        cy.get(document.documentPreviewVersionCard.details).contains(`${defaultAccessLevel} - Nota`);
+        cy.get(document.documentPreviewVersionCard.details).contains(`${defaultAccessLevel} - ${searchDocumentType}`);
         cy.get(auk.confidentialityPill.unlocked);
         cy.get(auk.fileTypePill).contains('PDF');
       });
