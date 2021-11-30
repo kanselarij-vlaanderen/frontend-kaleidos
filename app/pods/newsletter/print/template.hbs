@@ -7,15 +7,15 @@
 }}
 <div class="auk-scroll-wrapper__body vlc-hide-scrollbar-on-print">
   <div class="auk-u-m-8 auk-u-m-0@print">
-    <div class="auk-container auk-container--center">
-      <Utils::LogoHeaderLegacy />
+    <div class="auk-container auk-container--center l-printable-newsletter">
+      <Utils::LogoHeader />
       <Newsletter::NewsletterMeeting
         @allowEditing={{not this.showDraft}}
         @meeting={{this.meeting}}
       />
-      <h2 class="auk-h1 auk-u-text-family-serif">
+      <h1 class="auk-h1 auk-u-text-family-serif">
         {{t "agendaitems-subtitle"}}
-      </h2>
+      </h1>
       {{#each (await this.model.notas) as |agendaitem index|}}
         {{#let (add index 1) as |humanIndex|}}
           <Newsletter::NewsletterItem
