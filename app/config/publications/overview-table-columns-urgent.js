@@ -43,7 +43,7 @@ export default [
     keyName: 'pages',
     translationKey: 'publications-table-pages',
     translationKeySmall: 'publications-table-pages-small',
-    showByDefault: false,
+    showByDefault: true,
   },
     {
     keyName: 'decisionDate',
@@ -87,6 +87,7 @@ export default [
     showByDefault: false,
     sortKey: 'publication-subcase.proof-print-corrector',
   },
+
   {
     keyName: 'publicationTargetDate',
     translationKey: 'publications-table-publication-target-date',
@@ -133,7 +134,7 @@ export default [
     keyName: 'status',
     translationKey: 'publications-table-status',
     translationKeySmall: 'publications-table-status-small',
-    showByDefault: true,
+    showByDefault: false,
     sortKey: 'status.position,publication-status-change.started-at'
   },
   {

@@ -4,7 +4,7 @@ export default [
     translationKey: 'publications-table-speed-procedure',
     translationKeySmall: 'publications-table-speed-procedure-small',
     sortKey: 'urgency-level.position',
-    showByDefault: false,
+    showByDefault: true,
   },
   {
     keyName: 'publicationNumber',
@@ -43,9 +43,9 @@ export default [
     keyName: 'pages',
     translationKey: 'publications-table-pages',
     translationKeySmall: 'publications-table-pages-small',
-    showByDefault: false,
+    showByDefault: true,
   },
-    {
+  {
     keyName: 'decisionDate',
     translationKey: 'publications-table-decision-date',
     translationKeySmall: 'publications-table-decision-date-small',
@@ -84,9 +84,10 @@ export default [
     keyName: 'proofPrintCorrector',
     translationKey: 'publications-table-preview-translator',
     translationKeySmall: 'publications-table-preview-translator-small',
-    showByDefault: false,
+    showByDefault: true,
     sortKey: 'publication-subcase.proof-print-corrector',
   },
+
   {
     keyName: 'publicationTargetDate',
     translationKey: 'publications-table-publication-target-date',
@@ -133,14 +134,14 @@ export default [
     keyName: 'status',
     translationKey: 'publications-table-status',
     translationKeySmall: 'publications-table-status-small',
-    showByDefault: true,
+    showByDefault: false,
     sortKey: 'status.position,publication-status-change.started-at'
   },
   {
     keyName: 'next',
     translationKey: 'publications-table-next',
     translationKeySmall: 'publications-table-next-small',
-    showByDefault: true,
+    showByDefault: false,
     sortKey: 'status.position,publication-next-change.started-at'
   }
 ];

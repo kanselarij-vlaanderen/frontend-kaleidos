@@ -17,7 +17,7 @@ export default [
     keyName: 'numacNumber',
     translationKey: 'publications-table-numacnummer-bs',
     translationKeySmall: 'publications-table-numacnummer-bs-small',
-    showByDefault: false,
+    showByDefault: true,
   },
   {
     keyName: 'keyword',
@@ -43,7 +43,7 @@ export default [
     keyName: 'pages',
     translationKey: 'publications-table-pages',
     translationKeySmall: 'publications-table-pages-small',
-    showByDefault: false,
+    showByDefault: true,
   },
     {
     keyName: 'decisionDate',
@@ -77,7 +77,7 @@ export default [
     keyName: 'proofRequestDate',
     translationKey: 'publications-table-preview-request-date',
     translationKeySmall: 'publications-table-preview-request-date-small',
-    showByDefault: false,
+    showByDefault: true,
     sortKey: 'publication-subcase.received-date',
   },
   {
@@ -133,14 +133,14 @@ export default [
     keyName: 'status',
     translationKey: 'publications-table-status',
     translationKeySmall: 'publications-table-status-small',
-    showByDefault: true,
+    showByDefault: false,
     sortKey: 'status.position,publication-status-change.started-at'
   },
   {
     keyName: 'next',
     translationKey: 'publications-table-next',
     translationKeySmall: 'publications-table-next-small',
-    showByDefault: true,
+    showByDefault: false,
     sortKey: 'status.position,publication-next-change.started-at'
   }
 ];
