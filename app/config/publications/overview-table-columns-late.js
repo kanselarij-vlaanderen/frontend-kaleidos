@@ -17,7 +17,7 @@ export default [
     keyName: 'numacNumber',
     translationKey: 'publications-table-numacnummer-bs',
     translationKeySmall: 'publications-table-numacnummer-bs-small',
-    showByDefault: false,
+    showByDefault: true,
   },
   {
     keyName: 'keyword',
@@ -87,6 +87,7 @@ export default [
     showByDefault: false,
     sortKey: 'publication-subcase.proof-print-corrector',
   },
+
   {
     keyName: 'publicationTargetDate',
     translationKey: 'publications-table-publication-target-date',
@@ -133,14 +134,14 @@ export default [
     keyName: 'status',
     translationKey: 'publications-table-status',
     translationKeySmall: 'publications-table-status-small',
-    showByDefault: true,
+    showByDefault: false,
     sortKey: 'status.position,publication-status-change.started-at'
   },
   {
     keyName: 'next',
     translationKey: 'publications-table-next',
     translationKeySmall: 'publications-table-next-small',
-    showByDefault: true,
+    showByDefault: false,
     sortKey: 'status.position,publication-next-change.started-at'
   }
 ];

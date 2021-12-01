@@ -43,7 +43,7 @@ export default [
     keyName: 'pages',
     translationKey: 'publications-table-pages',
     translationKeySmall: 'publications-table-pages-small',
-    showByDefault: false,
+    showByDefault: true,
   },
     {
     keyName: 'decisionDate',
@@ -63,14 +63,14 @@ export default [
     keyName: 'translationRequestDate',
     translationKey: 'publications-table-translation-request-date',
     translationKeySmall: 'publications-table-translation-request-date-small',
-    showByDefault: false,
+    showByDefault: true,
     sortKey: 'translation-subcase.request-date',
   },
   {
     keyName: 'translationDueDate',
     translationKey: 'publications-table-translation-due-date',
     translationKeySmall: 'publications-table-translation-due-date-small',
-    showByDefault: false,
+    showByDefault: true,
     sortKey: 'translation-subcase.due-date',
   },
   {
@@ -87,6 +87,7 @@ export default [
     showByDefault: false,
     sortKey: 'publication-subcase.proof-print-corrector',
   },
+
   {
     keyName: 'publicationTargetDate',
     translationKey: 'publications-table-publication-target-date',
@@ -133,14 +134,14 @@ export default [
     keyName: 'status',
     translationKey: 'publications-table-status',
     translationKeySmall: 'publications-table-status-small',
-    showByDefault: true,
+    showByDefault: false,
     sortKey: 'status.position,publication-status-change.started-at'
   },
   {
     keyName: 'next',
     translationKey: 'publications-table-next',
     translationKeySmall: 'publications-table-next-small',
-    showByDefault: true,
+    showByDefault: false,
     sortKey: 'status.position,publication-next-change.started-at'
   }
 ];
