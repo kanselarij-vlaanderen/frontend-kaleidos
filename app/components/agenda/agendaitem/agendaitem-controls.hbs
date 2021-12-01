@@ -47,13 +47,15 @@
     @showCloseButton={{false}}
     @title={{t "saving-retracted-agendaitem-title"}}
   >
-    <WebComponents::VlLoader
-      @text={{concat
-        (t "saving-retracted-agendaitem-message")
-        " "
-        (t "please-be-patient")
-      }}
-    />
+    <Auk::Modal::Body>
+      <WebComponents::VlLoader
+        @text={{concat
+          (t "saving-retracted-agendaitem-message")
+          " "
+          (t "please-be-patient")
+        }}
+      />
+    </Auk::Modal::Body>
   </WebComponents::VlModal>
 {{/if}}
 {{#if this.showLoader}}

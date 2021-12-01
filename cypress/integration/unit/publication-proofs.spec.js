@@ -47,7 +47,7 @@ function getTranslatedMonth(month) {
 }
 context('Publications proofs tests', () => {
   const fields = {
-    number: 1606,
+    number: 1600,
     shortTitle: 'test vertalingsaanvraag',
   };
   const file = {
@@ -61,7 +61,7 @@ context('Publications proofs tests', () => {
   const wordCount = 1000;
   const numacNumber = 123456;
   const targetEndDate = Cypress.moment().add(1, 'weeks');
-  const monthDutch = getTranslatedMonth(targetEndDate.month());
+  const monthDutch = getTranslatedMonth(Cypress.moment().month());
   const initialRequestTitle = `Publicatieaanvraag VO-dossier: ${fields.number} - ${fields.shortTitle}`;
   const initialRequestMessage = `Beste,\n\nIn bijlage voor drukproef:\nTitel: undefined\t\nVO-dossier: ${fields.number}\n\nVragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\t\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n`;
   const extraRequestTitle = `BS-werknr: ${numacNumber} VO-dossier: ${fields.number} – Aanvraag nieuwe drukproef`;
