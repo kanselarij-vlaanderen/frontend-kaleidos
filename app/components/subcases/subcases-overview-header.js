@@ -2,12 +2,24 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency-decorators';
 
 export default class SubCasesOverviewHeader extends Component {
   @service currentSession;
 
   @tracked showAddSubcaseModal = false;
   @tracked showEditCaseModal = false;
+  @tracked publicationFlows;
+
+  constructor() {
+    super(...arguments);
+    this.loadPublicationFlows.perform();
+  }
+
+  @task
+  *loadPublicationFlows() {
+    this.publicationFlows = yield this.args.case.publicationFlows;
+  }
 
   @action
   openAddSubcaseModal() {

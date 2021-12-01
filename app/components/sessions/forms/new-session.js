@@ -121,6 +121,7 @@ export default Component.extend({
       const newMeeting = this.store.createRecord('meeting', {
         isDigital,
         extraInfo,
+        isFinal: false,
         plannedStart: startDate,
         created: date,
         kind: kindUriToAdd,

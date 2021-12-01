@@ -53,9 +53,8 @@ export default class SidebarItem extends Component {
   @task
   *loadSubcase() {
     const agendaActivity = yield this.args.agendaitem.agendaActivity;
-    if (agendaActivity) { // the approval agenda-item doesn't have agenda activity
-      this.subcase = yield agendaActivity.subcase;
-    }
+    // the approval agenda-item doesn't have agenda activity
+    this.subcase = yield agendaActivity?.subcase;
   }
 
   @task

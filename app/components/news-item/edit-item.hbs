@@ -36,7 +36,10 @@
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "short-title"}}</Auk::Label>
-    <WebComponents::VlFormInput @value={{this.newsletterInfo.title}} />
+    <Auk::Input
+      @block={{true}}
+      @value={{this.newsletterInfo.title}}
+    />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "mandatee-proposal"}}</Auk::Label>
@@ -60,12 +63,18 @@
 
   <div class="auk-form-group auk-u-text-capitalize">
     <Auk::Label>{{t "remark"}}</Auk::Label>
-    <WebComponents::VlFormInput @value={{this.newsletterInfo.remark}} />
+    <Auk::Input
+      @block={{true}}
+      @value={{this.newsletterInfo.remark}}
+    />
   </div>
 
   <div class="auk-form-group">
-    <Auk::Label>{{t "finished"}}</Auk::Label>
-    <WebComponents::VlToggle @value={{this.newsletterInfo.finished}} />
+    <Auk::Label for="item-finished">{{t "finished"}}</Auk::Label>
+    <Auk::Toggle
+      id="item-finished"
+      @checked={{this.newsletterInfo.finished}}
+    />
   </div>
   <div class="auk-form-group" data-test-newsletter-edit-item-themes-selector>
     <Auk::Label>{{t "themes"}}</Auk::Label>

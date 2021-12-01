@@ -1,19 +1,19 @@
 {{#if this.model}}
-  <Subcases::SubcaseDescription @subcase={{this.subcase}}/>
+  <Subcases::SubcaseDescription @subcase={{this.subcase}} />
   <div class="auk-u-mb-8">
     <div class="auk-hr">
-      <hr/>
+      <hr />
     </div>
   </div>
   {{#if this.currentSession.isEditor}}
-   {{!-- TODO these classes do not exist and do nothing --}}
+    {{! TODO these classes do not exist and do nothing }}
     <div class="confidentialities">
       <div class="confidential">
-        <WebComponents::VlCheckbox
-          data-test-cases---subcase-overview-confidentiality-checkbox={{true}}
-          @value={{this.subcase.confidential}}
-          @disabled={{true}}
+        <Auk::Checkbox
+          @checked={{this.subcase.confidential}}
           @label={{t "confidential"}}
+          @disabled={{true}}
+          data-test-cases---subcase-overview-confidentiality-checkbox={{true}}
         />
       </div>
     </div>
@@ -29,15 +29,13 @@
       @isEditing={{this.isEditingTitles}}
     />
   {{/if}}
-  <Mandatees::MandateesDomainsPanel
+  <Mandatees::MandateesPanel
     @mandatees={{this.mandatees}}
     @submitter={{this.submitter}}
-    @fields={{this.governmentFields}}
     @allowEditing={{this.currentSession.isEditor}}
     @onSave={{this.saveMandateeData}}
   />
-  {{#unless this.subcase.showAsRemark}}
-    <DomainFieldIse::IseCodesPanel @iseCodes={{this.iseCodes}}/>
-  {{/unless}}
-  <Agenda::Agendaitem::AgendaitemCase::AllSubcases @subcases={{this.allSubcases}}/>
+  <Agenda::Agendaitem::AgendaitemCase::AllSubcases
+    @subcases={{this.allSubcases}}
+  />
 {{/if}}

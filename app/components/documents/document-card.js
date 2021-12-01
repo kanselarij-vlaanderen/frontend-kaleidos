@@ -39,6 +39,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked piece;
   @tracked accessLevel;
   @tracked documentContainer;
+  @tracked signMarkingActivity;
 
   @tracked uploadedFile;
   @tracked newPiece;
@@ -53,26 +54,41 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   get shouldShowPublications() {
-    return !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB) && this.currentSession.isOvrb;
+    return (
+      !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB) && this.currentSession.isOvrb
+    );
   }
 
   @task
   *loadCodelists() {
-    this.defaultAccessLevel = yield this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
+    this.defaultAccessLevel = yield this.store.findRecordByUri(
+      'access-level',
+      CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
+    );
+  }
+
+  @task
+  *loadSignatureRelatedData() {
+    if (this.args.hasMarkForSignature) {
+      this.signMarkingActivity = yield this.piece.signMarkingActivity;
+    }
+  }
+
+  @task
+  *loadPublicationFlowRelatedData() {
+    if (this.shouldShowPublications) {
+      const publicationFlow = yield this.piece.publicationFlow;
+      yield publicationFlow?.identification;
+    }
   }
 
   @task
   *loadPieceRelatedData() {
-    const includeBuilder = ['document-container,document-container.type,access-level'];
-    if (this.shouldShowPublications) {
-      includeBuilder.push('publication-flow,publication-flow.identification');
-    }
-    const includeStr = includeBuilder.join(',');
-
-    const loadPiece = (id) => this.store.queryOne('piece', {
-      'filter[:id:]': id,
-      include: includeStr,
-    });
+    const loadPiece = (id) =>
+      this.store.queryOne('piece', {
+        'filter[:id:]': id,
+        include: 'document-container,document-container.type,access-level',
+      });
 
     const piece = this.args.piece;
     if (piece) {
@@ -81,13 +97,20 @@ export default class DocumentsDocumentCardComponent extends Component {
       this.documentContainer = yield this.piece.documentContainer;
       this.accessLevel = yield this.piece.accessLevel;
     } else if (this.args.documentContainer) {
+      // TODO KAS-2777 This else does not seem used (no <Documents::DocumentCard> that passes this arg)
       this.documentContainer = this.args.documentContainer;
       yield this.loadVersionHistory.perform();
+      // TODO KAS-2777 does this work? Where is this.piece coming from if args.piece was not given?
       this.piece = yield loadPiece(this.piece.id);
       this.accessLevel = yield this.piece.accessLevel;
     } else {
-      throw new Error(`You should provide @piece or @documentContainer as an argument to ${this.constructor.name}`);
+      throw new Error(
+        `You should provide @piece or @documentContainer as an argument to ${this.constructor.name}`
+      );
     }
+    // When this task is done, we can trigger the other less important tasks
+    this.loadPublicationFlowRelatedData.perform();
+    this.loadSignatureRelatedData.perform();
   }
 
   @task
@@ -124,8 +147,7 @@ export default class DocumentsDocumentCardComponent extends Component {
     yield this.loadVersionHistory.perform();
     const previousPiece = this.sortedPieces.lastObject;
     const previousAccessLevel = yield previousPiece.accessLevel;
-    const now = moment().utc()
-      .toDate();
+    const now = moment().utc().toDate();
     this.newPiece = this.store.createRecord('piece', {
       created: now,
       modified: now,
@@ -135,7 +157,9 @@ export default class DocumentsDocumentCardComponent extends Component {
       accessLevel: previousAccessLevel || this.defaultAccessLevel,
       documentContainer: this.documentContainer,
     });
-    this.newPiece.name = new VRDocumentName(previousPiece.name).withOtherVersionSuffix(this.sortedPieces.length + 1);
+    this.newPiece.name = new VRDocumentName(
+      previousPiece.name
+    ).withOtherVersionSuffix(this.sortedPieces.length + 1);
   }
 
   @task
@@ -197,6 +221,16 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.isExpandedVersionHistory = true;
   }
 
+  @task
+  *markOrUnmarkForSignature() {
+    if (!this.signMarkingActivity) {
+      yield this.args.markForSignature(this.args.piece);
+    } else {
+      yield this.args.unmarkForSignature(this.args.piece);
+    }
+    yield this.loadSignatureRelatedData.perform();
+  }
+
   @action
   collapseVersionHistory() {
     this.isExpandedVersionHistory = false;
@@ -234,7 +268,9 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *deleteDocumentContainerWithUndo() {
     // TODO remove yield once consuming component doesn't pass Proxy as @documentContainer
-    yield this.fileService.deleteDocumentContainerWithUndo.perform(this.documentContainer);
+    yield this.fileService.deleteDocumentContainerWithUndo.perform(
+      this.documentContainer
+    );
     if (this.args.didDeleteContainer) {
       this.args.didDeleteContainer(this.documentContainer);
     }

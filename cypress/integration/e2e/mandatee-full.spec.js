@@ -23,7 +23,9 @@ context('Full test for creating mandatees', () => {
     cy.login('Admin');
   });
 
-  it('should add new minister', () => {
+  // TODO-mandateeThemis After themis migration, creating of mandatee has been disabled
+  // TODO decide if we want to keep this test for future reenabling or just remove, many selectors no longer exist
+  xit('should add new minister', () => {
     cy.visit('/');
     const KIND = 'Ministerraad';
 
@@ -39,16 +41,13 @@ context('Full test for creating mandatees', () => {
     cy.get(settings.settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
     cy.route('GET', '/ise-codes?sort=name').as('getIseCodes');
-    cy.get(settings.ministers.add)
-      .click();
+    cy.get(settings.ministers.add).click();
     cy.wait('@getIseCodes', {
       timeout: 30000,
     });
     // We could use input fields directly (after au refactor)
-    cy.get(mandatee.createMandatee.titleContainer).find(utils.vlFormInput)
-      .type(ministerTitle);
-    cy.get(mandatee.createMandatee.nicknameContainer).find(utils.vlFormInput)
-      .type(ministerNickName);
+    cy.get(mandatee.createMandatee.titleContainer).type(ministerTitle);
+    cy.get(mandatee.createMandatee.nicknameContainer).type(ministerNickName);
     cy.get(mandatee.personSelector.personDropdown).find(dependency.emberPowerSelect.trigger)
       .scrollIntoView()
       .click();
@@ -85,7 +84,7 @@ context('Full test for creating mandatees', () => {
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitle1, false);
     cy.openDetailOfAgendaitem(subcaseTitle1);
-    cy.addSubcaseMandatee(0, -1, -1, ministerTitle);
+    cy.addSubcaseMandatee(0, 'Homans', ministerTitle);
     cy.setFormalOkOnItemWithIndex(0);
     cy.setFormalOkOnItemWithIndex(1);
     cy.approveDesignAgenda();

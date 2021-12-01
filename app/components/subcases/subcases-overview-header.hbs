@@ -14,16 +14,45 @@
           <span class="auk-overline auk-u-block">
             {{t "case"}}
           </span>
-          <Auk::AbbreviatedText @text={{or @case.shortTitle @case.title}} @maxLength={{250}} />
+          <Auk::AbbreviatedText
+            @text={{or @case.shortTitle @case.title}}
+            @maxLength={{250}}
+          />
         </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
+    {{!-- TODO: Below pills linking to publication-flows were introduced as a band-aid allowing
+    OVRB-people to navigate from a case (found by global search) to a publication-flow.
+    This functionality actually needs design-thought and CSS-work though.
+    --}}
+    {{#if this.publicationFlows}}
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <div class="auk-u-my">
+            <span class="auk-u-block auk-overline">
+              {{t "publications"}}
+            </span>
+            <Auk::PillList>
+            {{#each this.publicationFlows as |publicationFlow|}}
+              <LinkTo
+                class="auk-u-mr-2"
+                @route="publications.publication"
+                @model={{publicationFlow.id}}
+              >
+                <Auk::Pill @skin="white">{{publicationFlow.identification.idName}}</Auk::Pill>
+              </LinkTo>
+            {{/each}}
+            </Auk::PillList>
+          </div>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    {{/if}}
     {{#if this.currentSession.isEditor}}
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           <Auk::Button
             @skin="primary"
-            @icon="edit"
+            @icon="pencil"
             {{on "click" this.openEditCaseModal}}
           >
             {{t "edit-case"}}
@@ -33,7 +62,7 @@
           <Auk::Button
             data-test-subcase-overview-header-create-subcase
             @skin="primary"
-            @icon="add"
+            @icon="plus"
             {{on "click" this.openAddSubcaseModal}}
           >
             {{t "create-subcase"}}
@@ -43,10 +72,7 @@
     {{/if}}
   </Auk::Toolbar>
 </Auk::Navbar>
-
-
 {{!-- MODAL --}}
-
 {{#if this.showAddSubcaseModal}}
   <Cases::NewSubcase
     @onClose={{this.closeAddSubcaseModal}}

@@ -1,4 +1,4 @@
-<div class="auk-u-mb-3" >
+<div class="auk-u-mb-3">
   <Auk::Panel>
     <Auk::Panel::Header>
       <Auk::Toolbar>
@@ -12,9 +12,12 @@
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <Auk::Button
-              @skin="tertiary" @icon="edit"
+              data-test-government-fields-panel-edit
+              @skin="tertiary"
+              @icon="pencil"
               @layout="icon-only"
-              {{on "click" this.showEditModal}} />
+              {{on "click" this.showEditModal}}
+            />
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
@@ -23,7 +26,7 @@
       <Auk::Panel::Body @noPadding={{true}}>
         <table class="auk-table">
           <thead>
-            <tr>
+            <tr data-test-government-fields-panel-row>
               <th>{{t "government-domain"}}</th>
               <th>{{t "government-fields"}}</th>
             </tr>
@@ -31,10 +34,10 @@
           <tbody>
             {{#each this.rows as |row|}}
               <tr>
-                <td>
+                <td data-test-government-fields-panel-row-label>
                   {{row.governmentDomain.label}}
                 </td>
-                <td>
+                <td data-test-government-fields-panel-row-fields>
                   {{join ", " (map-by "label" row.sortedGovernmentFields)}}
                 </td>
               </tr>
@@ -52,7 +55,8 @@
 
 {{#if this.isOpenEditModal}}
   <Publications::Publication::Case::GovernmentFields::EditGovernmentFieldsModal
-      @governmentFields={{@publicationFlow.governmentFields}}
-      @onSave={{this.save}}
-      @onCancel={{this.closeEditModal}}/>
+    @governmentFields={{@publicationFlow.governmentFields}}
+    @onSave={{this.save}}
+    @onCancel={{this.closeEditModal}}
+  />
 {{/if}}

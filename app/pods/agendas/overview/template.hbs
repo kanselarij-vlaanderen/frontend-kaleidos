@@ -40,7 +40,6 @@
             <Auk::Toolbar::Item data-test-route-agendas-overview-filter-container data-children-count="1">
               <Auk::Input
                 data-test-route-agendas-overview-filter-input={{true}}
-                @type="text"
                 @value={{this.dateFilter}}
                 placeholder="bv. 01/2020"
                 id={{this.id}}
@@ -134,7 +133,7 @@
                         data-test-route-agendas-overview-navigation-button={{true}}
                         @skin="borderless"
                         @layout="icon-only"
-                        @icon="nav-right"
+                        @icon="chevron-right"
                         @route="agenda.agendaitems"
                         @models={{array meeting.id (await meeting.latestAgenda.id)}}
                       />

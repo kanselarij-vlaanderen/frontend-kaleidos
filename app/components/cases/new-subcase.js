@@ -114,6 +114,7 @@ export default class CasesNewSubcase extends Component {
       subcase.linkedPieces = pieces;
     }
     subcase.mandatees = await latestSubcase.mandatees;
+    // TODO KAS-2969 make sure to copy the list of concepts
     subcase.iseCodes = await latestSubcase.iseCodes;
     subcase.requestedBy = await latestSubcase.requestedBy;
     return subcase;
@@ -143,7 +144,8 @@ export default class CasesNewSubcase extends Component {
   }
 
   @action
-  typeChanged(id) {
+  typeChanged(event) {
+    const id = event.target.value;
     const type = this.store.peekRecord('case-type', id);
     this.showAsRemark = (type.get('uri') === CONSTANTS.CASE_TYPES.REMARK);
   }

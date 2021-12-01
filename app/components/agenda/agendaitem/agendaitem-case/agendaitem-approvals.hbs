@@ -39,7 +39,7 @@
         {{#each (await this.mandateeApprovals) as |mandateeApproval|}}
           <tr>
             <td>
-              <h6 class="auk-h4">
+              <h6 class="auk-h4 auk-u-m-0">
                 {{await mandateeApproval.mandatee.person.nameToDisplay}}
               </h6>
             </td>
@@ -54,17 +54,17 @@
                     {{t "approval-mandatee"}}
                   </span>
                 {{else}}
-                  <Auk::Icon @name="remove" @skin="muted" />
+                  <Auk::Icon @name="dash" @skin="muted" />
                   <span class="auk-u-muted">
                     {{t "not-yet-approval-mandatee"}}
                   </span>
                 {{/if}}
               {{else}}
                 <div class="auk-form-group">
-                  <WebComponents::VlCheckbox
-                    @value={{not (is-empty mandateeApproval.approval)}}
+                  <Auk::Checkbox
                     @label={{t "approval-mandatee"}}
-                    @toggle={{action "toggleApproved" mandateeApproval.mandatee mandateeApproval.approval}}
+                    @checked={{not (is-empty mandateeApproval.approval)}}
+                    {{on "input" (action "toggleApproved" mandateeApproval.mandatee mandateeApproval.approval)}}
                   />
                 </div>
               {{/if}}

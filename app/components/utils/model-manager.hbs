@@ -21,7 +21,7 @@
     <Auk::Modal::Footer @onCancel={{action "close"}}>
       <Auk::Button
         @skin="tertiary"
-        @icon="add"
+        @icon="plus"
         {{action "toggleIsAdding"}}
         data-test-vl-model-manager-add
       >
@@ -38,7 +38,7 @@
         </Auk::Button>
         <Auk::Button
           @skin="tertiary"
-          @icon="delete"
+          @icon="trash"
           {{action "removeModel"}}
           data-test-vl-model-manager-delete
         >
@@ -51,7 +51,10 @@
     <Auk::Modal::Body>
       <div class="auk-form-group">
         <Auk::Label>{{t "title"}}</Auk::Label>
-        <WebComponents::VlFormInput @value={{this.title}} />
+        <Auk::Input
+          @block={{true}}
+          @value={{this.title}}
+        />
       </div>
     </Auk::Modal::Body>
     <WebComponents::VlModalFooter
@@ -66,7 +69,10 @@
     <Auk::Modal::Body>
       <div class="auk-form-group">
         <Auk::Label>{{t "title"}}</Auk::Label>
-        <WebComponents::VlFormInput @value={{this.title}} />
+        <Auk::Input
+          @block={{true}}
+          @value={{this.title}}
+        />
       </div>
     </Auk::Modal::Body>
     <WebComponents::VlModalFooter

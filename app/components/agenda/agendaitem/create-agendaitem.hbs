@@ -21,24 +21,16 @@
           <Auk::Toolbar @auto={{true}}>
             <Auk::Toolbar::Group @position="left">
               <Auk::Toolbar::Item class="auk-u-maximize-width">
-                <div class="vl-input-field--inline">
-                  <Input
-                    data-test-create-agendaitem-input={{true}}
-                    id="searchId"
-                    class="vl-input-field vl-input-field__input"
-                    placeholder="Zoeken.."
-                    disabled={{this.showPostponed}}
-                    @value={{this.filterParam}}
-                    {{on "keypress" (perform this.searchTask)}}
-                  />
-                  <Auk::Button
-                    @skin="primary"
-                    @layout="icon-only"
-                    @icon="search"
-                    class="vl-input-field__submit"
-                    onclick={{perform this.searchTask}}
-                  />
-                </div>
+                <Auk::Input
+                  @icon="search"
+                  @block={{true}}
+                  @value={{this.filterParam}}
+                  id="searchId"
+                  placeholder={{t "search-placeholder"}}
+                  disabled={{this.showPostponed}}
+                  data-test-create-agendaitem-input={{true}}
+                  {{on "input" (perform this.searchTask)}}
+                />
               </Auk::Toolbar::Item>
             </Auk::Toolbar::Group>
           </Auk::Toolbar>
@@ -46,10 +38,10 @@
         <div class="auk-o-grid-col-4">
           <div class="auk-form-group">
             <Auk::Label>{{t "title-postponed-subcases"}}</Auk::Label>
-            <WebComponents::VlCheckbox
+            <Auk::Checkbox
+              @checked={{this.showPostponed}}
               data-test-create-agendaitem-postponed-checkbox={{true}}
-              @value={{this.showPostponed}}
-              @toggle={{action "checkShowPostponedValue"}}
+              {{on "input" (action "checkShowPostponedValue")}}
             />
           </div>
         </div>
@@ -77,7 +69,11 @@
                 </c.header>
                 <c.body as |subcase|>
                   <td class="auk-table__col--1">
-                    <WebComponents::VlCheckbox @value={{subcase.selected}} @toggle={{action "selectAvailableSubcase" subcase}} />
+                    <Auk::Checkbox
+                      data-test-create-agendaitem-row-subcase-checkbox={{true}}
+                      @checked={{subcase.selected}}
+                      {{on "input" (action "selectAvailableSubcase" subcase)}}
+                    />
                   </td>
                   <td class="auk-table__col--11">
                     {{subcase.shortTitle}}

@@ -42,23 +42,19 @@ context('Create case as Admin user', () => {
     const shorttitle = 'Gibberish';
     cy.get(cases.casesHeader.addCase).click();
     cy.get(cases.newCase.shorttitle).type(shorttitle);
-    cy.get(cases.newCase.toggleConfidential).find(utils.vlToggle.label)
-      .click();
+    cy.get(cases.newCase.toggleConfidential).click();
     cy.get(cases.newCase.cancel).click();
     // check if data is cleared after cancel
     cy.get(cases.casesHeader.addCase).click();
     cy.get(cases.newCase.shorttitle).should('not.contain', shorttitle);
-    cy.get(cases.newCase.toggleConfidential).find(utils.vlToggle.input)
-      .should('not.be', 'checked');
+    cy.get(cases.newCase.toggleConfidential).should('not.be', 'checked');
     cy.get(cases.newCase.shorttitle).type(shorttitle);
-    cy.get(cases.newCase.toggleConfidential).find(utils.vlToggle.label)
-      .click();
+    cy.get(cases.newCase.toggleConfidential).click();
     cy.get(utils.vlModal.close).click();
     // check if data is cleared after close
     cy.get(cases.casesHeader.addCase).click();
     cy.get(cases.newCase.shorttitle).should('not.contain', shorttitle);
-    cy.get(cases.newCase.toggleConfidential).find(utils.vlToggle.input)
-      .should('not.be', 'checked');
+    cy.get(cases.newCase.toggleConfidential).should('not.be', 'checked');
   });
 
   it('Copy of remark subcase should not result in a new remark subcase', () => {

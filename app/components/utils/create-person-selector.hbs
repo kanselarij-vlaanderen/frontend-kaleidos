@@ -22,7 +22,7 @@
     <Auk::Button
       @skin="secondary"
       @layout="icon-only"
-      @icon="add"
+      @icon="plus"
       {{action "toggleIsCreatingPerson"}}
       data-test-person-selector-action-create-person
     >
@@ -32,16 +32,18 @@
 {{else}}
   <div class="auk-form-group">
     <Auk::Label>{{t "first-name"}}</Auk::Label>
-    <WebComponents::VlFormInput
-      data-test-person-selector-firstname={{true}}
+    <Auk::Input
+      @block={{true}}
       @value={{this.firstName}}
+      data-test-person-selector-firstname={{true}}
     />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "name"}}</Auk::Label>
-    <WebComponents::VlFormInput
-      data-test-person-selector-lastname={{true}}
+    <Auk::Input
+      @block={{true}}
       @value={{this.lastName}}
+      data-test-person-selector-lastname={{true}}
     />
   </div>
   <Auk::Toolbar>

@@ -1,0 +1,14 @@
+<Utils::LoadableContent @isLoading={{this.loadVersionsData.isRunning}}>
+  <div class="auk-u-m-2">
+    <ul class="auk-document-cards">
+      {{#each this.sortedVersions as |version|}}
+        <Documents::DocumentPreview::VersionCard
+          @piece={{version}}
+          @documentContainer={{@documentContainer}}
+          @isHighlighted={{eq @currentVersion version}}
+          @onSelectVersion={{@onSelectVersion}}
+        />
+      {{/each}}
+    </ul>
+  </div>
+</Utils::LoadableContent>

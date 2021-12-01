@@ -9,7 +9,7 @@
       <div class="auk-modal__push"></div>
       <div class="auk-modal__content">
         <div class="auk-modal__header auk-modal__header--bordered">
-          <Auk::Toolbar>
+          <Auk::Toolbar @size="large">
             <Auk::Toolbar::Group @position="left">
               <Auk::Toolbar::Item>
                 <h2 class="auk-toolbar__title">{{this.title}}</h2>
@@ -19,7 +19,7 @@
               <Auk::Toolbar::Item>
                 {{#if this.showCloseButton}}
                   <Auk::Button
-                    @icon="close"
+                    @icon="x"
                     @skin="borderless"
                     @layout="icon-only"
                     {{action "close"}}

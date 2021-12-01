@@ -3,11 +3,11 @@
 
 .emberTagInput {
   @extend .auk-input;
-  @extend .auk-input--block;
-
   @extend .auk-filter-pill-list;
 
-  .emberTagInput--readOnly {}
+  width: 100%;
+
+  // .emberTagInput--readOnly {}
 
   li.emberTagInput-tag {
     @extend .auk-filter-pill;
@@ -19,13 +19,13 @@
 
   .emberTagInput-remove {
     @extend .auk-icon;
-    @extend .auk-icon--close;
+    @extend .auk-icon--x;
     // remove <a />-tag styling
     text-decoration: none;
     color: inherit;
   }
 
-  // substitute <i class="ki-close" />
+  // substitute <i class="ki-x" />
   .emberTagInput-remove::after {
     // copied from:
     // @kanselarij-vlaanderen/au-kaleidos-icons/iconfont/icons
@@ -38,8 +38,8 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
-    // ki-close icon
-    content: "\f115";
+    // ki-x icon
+    content: "\f14b";
   }
 
   .emberTagInput-new {
@@ -48,6 +48,11 @@
 
   input.emberTagInput-input {
     border: none;
+    padding: 0;
+
+    font-family: flanders-sans, sans-serif;
+    font-size: 1.5rem;
+    color: $auk-gray-800;
   }
 
   input.emberTagInput-input:focus {

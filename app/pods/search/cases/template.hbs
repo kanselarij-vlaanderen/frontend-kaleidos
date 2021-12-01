@@ -6,20 +6,19 @@
     <div class="auk-box">
       <div class="auk-u-mb-2">
         <Auk::Label>{{t "type"}}</Auk::Label>
-        <WebComponents::VlCheckbox
-          data-test-decisions-only-check
-          data-test-route-search-cases-toggle-decisions={{true}}
-          @value={{this.decisionsOnly}}
+        <Auk::Checkbox
+          @checked={{this.decisionsOnly}}
           @label={{t "search-in-decisions-only"}}
-          @toggle={{this.toggleDecisionsOnly}}
+          data-test-route-search-cases-toggle-decisions={{true}}
+          {{on "input" this.toggleDecisionsOnly}}
         />
       </div>
       <div>
         <Auk::Label>{{t "archive"}}</Auk::Label>
-        <WebComponents::VlCheckbox
-          @value={{this.includeArchived}}
+        <Auk::Checkbox
+          @checked={{this.includeArchived}}
           @label={{t "search-include-archived"}}
-          @toggle={{this.toggleIncludeArchived}}
+          {{on "input" this.toggleIncludeArchived}}
         />
       </div>
     </div>
@@ -78,7 +77,7 @@
                 <Auk::Button
                   @skin="borderless"
                   @layout="icon-only"
-                  @icon="nav-right"
+                  @icon="chevron-right"
                   @route="cases.case.subcases"
                   @model={{row.id}}
                 />

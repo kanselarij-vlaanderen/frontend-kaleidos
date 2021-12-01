@@ -1,26 +1,40 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
-{{#if (not this.singleSelect)}}
-  <PowerSelectMultiple
-    @options={{this.items}}
-    @selected={{await this.selectedMandatees}}
-    @disabled={{this.readOnly}}
-    @closeOnSelect={{false}}
-    @search={{perform this.searchTask}}
-    @oninput={{action "resetValueIfEmpty"}}
-    @onchange={{action "chooseMandatee"}}
-  as |mandatee|>
-    {{await mandatee.fullDisplayName}}
-  </PowerSelectMultiple>
-{{else}}
-  <PowerSelect
-    @options={{this.items}}
-    @selected={{await this.selectedMandatees}}
-    @disabled={{this.readOnly}}
-    @search={{perform this.searchTask}}
-    @oninput={{action "resetValueIfEmpty"}}
-    @onchange={{action "chooseMandatee"}}
-  as |mandatee|>
-    {{await mandatee.fullDisplayName}}
-  </PowerSelect>
-{{/if}}
+<div data-test-mandatee-selector-container class="mandatee-selector-container">
+  {{#if (not @singleSelect)}}
+    <PowerSelectMultiple
+      @options={{this.mandateeOptions}}
+      @selected={{await @selectedMandatees}}
+      @disabled={{@readOnly}}
+      @closeOnSelect={{false}}
+      @search={{perform this.searchTask}}
+      @oninput={{this.resetMandateeOptionsIfEmpty}}
+      @onchange={{@chooseMandatee}}
+      as |mandatee|
+    >
+      {{await mandatee.fullDisplayName}}
+      <span class="auk-u-muted auk-u-text-small">
+        {{moment-format mandatee.start "YYYY"}}-{{moment-format
+          mandatee.end
+          "YYYY"
+        }}
+      </span>
+    </PowerSelectMultiple>
+  {{else}}
+    <PowerSelect
+      @options={{this.mandateeOptions}}
+      @selected={{await @selectedMandatees}}
+      @disabled={{@readOnly}}
+      @search={{perform this.searchTask}}
+      @oninput={{this.resetMandateeOptionsIfEmpty}}
+      @onchange={{@chooseMandatee}}
+      as |mandatee|
+    >
+      {{await mandatee.fullDisplayName}}
+      <span class="auk-u-muted auk-u-text-small">
+        {{moment-format mandatee.start "YYYY"}}-{{moment-format
+          mandatee.end
+          "YYYY"
+        }}
+      </span>
+    </PowerSelect>
+  {{/if}}
+</div>

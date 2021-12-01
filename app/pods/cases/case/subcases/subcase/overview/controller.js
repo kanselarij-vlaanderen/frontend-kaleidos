@@ -13,8 +13,6 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
   @tracked allSubcases;
   @tracked mandatees;
   @tracked submitter;
-  @tracked governmentFields;
-  @tracked iseCodes;
 
   @tracked isEditingTitles = false;
 
@@ -30,25 +28,15 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
 
   @action
   async saveMandateeData(mandateeData) {
-    // fields to ise
-    let correspondingIseCodes = [];
-    if (mandateeData.fields.length) {
-      correspondingIseCodes = await this.store.query('ise-code', {
-        'filter[field][:id:]': mandateeData.fields.map((field) => field.id).join(','),
-      });
-    }
     const propertiesToSetOnAgendaitem = {
       mandatees: mandateeData.mandatees,
     };
     const propertiesToSetOnSubcase = {
       mandatees: mandateeData.mandatees,
       requestedBy: mandateeData.submitter,
-      iseCodes: correspondingIseCodes,
     };
-    this.governmentFields = mandateeData.fields;
     this.mandatees = mandateeData.mandatees;
     this.submitter = mandateeData.submitter;
-    this.iseCodes = correspondingIseCodes;
     await saveChanges(this.subcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
   }
 }

@@ -32,13 +32,19 @@ const selectors = {
     header: {
       title: '.auk-modal__header .auk-toolbar__title',
       // TODO-selector unused selectors
-      close: '.auk-modal__header .auk-button .auk-icon .ki-close',
+      close: '.auk-modal__header .auk-button .auk-icon .ki-x',
       minimize: '.auk-modal__header .auk-button .auk-icon .ki-minimize',
       expand: '.auk-modal__header .auk-button .auk-icon .ki-expand',
     },
     footer: {
       cancel: '.auk-modal__footer .auk-toolbar-complex__left .auk-button-link',
       // there is no default footer-save available (yet), use a custom selector for your use case
+    },
+  },
+
+  accordion: {
+    header: {
+      title: '.auk-accordion-panel__header .auk-accordion__title',
     },
   },
 
@@ -59,13 +65,27 @@ const selectors = {
     reversed: '.auk-tabs--reversed',
   },
 
+  pagination: {
+    count: '.auk-pagination__element:nth-child(1) > p',
+    previous: '.auk-pagination__element:nth-child(2) > .auk-button-link',
+    next: '.auk-pagination__element:nth-child(3) > .auk-button-link',
+  },
+
   /** Section single selector AUK components **/
 
-  checkbox: '.auk-checkbox',
+  checkbox: {
+    // TODO-selector unused selectors
+    container: '.auk-checkbox',
+    checkbox: '.auk-checkbox__toggle',
+  },
   loader: '.auk-loader',
   pill: '.auk-pill',
   // TODO-selector unused selectors
   input: '.auk-input',
   textarea: '.auk-textarea',
+
+  datepicker: '[data-test-auk-datepickr]',
+  icon: '.auk-icon',
+  abbreviatedText: '.auk-tooltip',
 };
 export default selectors;

@@ -1,37 +1,31 @@
-import Model, { hasMany, belongsTo, attr } from '@ember-data/model';
-import { computed } from '@ember/object';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import sanitize from 'sanitize-filename';
-import moment from 'moment';
 
-// TODO: octane-refactor
-/* eslint-disable ember/no-get */
-// eslint-disable-next-line ember/no-classic-classes
-export default Model.extend({
-  name: attr('string'),
-  pages: attr('number'),
-  words: attr('number'),
-  created: attr('datetime'),
-  receivedDate: attr('datetime'),
-  modified: attr('datetime'),
-  confidential: attr('boolean'),
-  accessLevelLastModified: attr('datetime'),
-  accessLevel: belongsTo('access-level'),
-  language: belongsTo('language'),
+export default class Piece extends Model {
+  @attr('string') name;
+  @attr('number') pages;
+  @attr('number') words;
+  @attr('datetime') created;
+  @attr('datetime') receivedDate;
+  @attr('datetime') modified;
+  @attr('boolean') confidential;
+  @attr('datetime') accessLevelLastModified;
 
-  file: belongsTo('file'),
-  convertedFile: belongsTo('file', {
-    inverse: null,
-  }),
-
-  documentContainer: belongsTo('document-container', {
-    inverse: null,
-  }),
-  nextPiece: belongsTo('piece', {
-    inverse: 'previousPiece',
-  }),
-  previousPiece: belongsTo('piece', {
-    inverse: 'nextPiece',
-  }),
+  @belongsTo('access-level') accessLevel;
+  @belongsTo('language') language;
+  @belongsTo('file') file;
+  @belongsTo('file', {
+    inverse: null
+  }) convertedFile;
+  @belongsTo('document-container', {
+    inverse: null
+  }) documentContainer;
+  @belongsTo('piece', {
+    inverse: 'previousPiece'
+  }) nextPiece;
+  @belongsTo('piece', {
+    inverse: 'nextPiece'
+  }) previousPiece;
 
   // resources with pieces linked:
 
@@ -40,98 +34,88 @@ export default Model.extend({
   // so that when a piece gets deleted, the submissionActivity-piece relationships get updated.
   // The submission activity should never be sent to the backend from the piece-side
   // as long as the relationship is not defined in the backend.
-  submissionActivity: belongsTo('submission-activity', {
+  @belongsTo('submission-activity', {
+    serialize: false
+  }) submissionActivity;
+  @belongsTo('agenda-item-treatment', {
+    inverse: null
+  }) treatment;
+  @belongsTo('newsletter-info') newsletter;
+  @belongsTo('meeting', {
+    inverse: null
+  }) meeting;
+
+  @belongsTo('publication-flow') publicationFlow;
+  @belongsTo('translation-subcase') translationSubcaseSourceFor;
+  @belongsTo('publication-subcase', {
+    inverse: 'sourceDocuments'
+  }) publicationSubcaseSourceFor;
+  @belongsTo('publication-subcase', {
+    inverse: 'correctionDocuments'
+  }) publicationSubcaseCorrectionFor;
+  @hasMany('request-activity', {
+    inverse: 'usedPieces'
+  }) requestActivitiesUsedBy;
+  @hasMany('translation-activity', {
+    inverse: 'usedPieces'
+  }) translationActivitiesUsedBy;
+  @belongsTo('translation-activity', {
+    inverse: 'generatedPieces'
+  }) translationActivityGeneratedBy;
+  @hasMany('proofing-activity', {
+    inverse: 'usedPieces'
+  }) proofingActivitiesUsedBy;
+  @belongsTo('proofing-activity', {
+    inverse: 'generatedPieces'
+  }) proofingActivityGeneratedBy;
+  @hasMany('publication-activity', {
+    inverse: 'usedPieces'
+  }) publicationActivitiesUsedBy;
+
+  // TODO: figure out if and why this is required. Delete otherwise
+  @hasMany('case', {
+    inverse: null
+  }) cases;
+  // serialize: false ensures the relation (which may contain stale data due to
+  // custom service) is not send in patch calls
+  @hasMany('agendaitem', {
     serialize: false,
-  }),
-  treatment: belongsTo('agenda-item-treatment', {
     inverse: null,
-  }),
-  newsletter: belongsTo('newsletter-info'),
-  meeting: belongsTo('meeting', {
-    inverse: null,
-  }),
+  }) agendaitems;
 
-  // PUBLICATION FLOW
-  publicationFlow: belongsTo('publication-flow'),
-  translationSubcaseSourceFor: belongsTo('translation-subcase'),
-  publicationSubcaseSourceFor: belongsTo('publication-subcase', {
-    inverse: 'sourceDocuments',
-  }),
-  publicationSubcaseCorrectionFor: belongsTo('publication-subcase', {
-    inverse: 'correctionDocuments',
-  }),
-  requestActivitiesUsedBy: hasMany('request-activity', {
-    inverse: 'usedPieces',
-  }),
-  translationActivitiesUsedBy: hasMany('translation-activity', {
-    inverse: 'usedPieces',
-  }),
-  translationActivityGeneratedBy: belongsTo('translation-activity', {
-    inverse: 'generatedPieces',
-  }),
-  proofingActivitiesUsedBy: hasMany('proofing-activity', {
-    inverse: 'usedPieces',
-  }),
-  proofingActivityGeneratedBy: belongsTo('proofing-activity', {
-    inverse: 'generatedPieces',
-  }),
-  publicationActivitiesUsedBy: hasMany('publication-activity', {
-    inverse: 'usedPieces',
-  }),
+  // SIGN FLOW
+  @belongsTo('sign-marking-activity') signMarkingActivity;
+  @belongsTo('signinghub-document') signinghubDocument;
+  @belongsTo('signed-piece') signedPiece;
 
-  cases: hasMany('case', {
-    inverse: null, // TODO: figure out if and why this is required. Delete otherwise.
-  }),
-  // serialize: false ensures the relation (which may contain stale data due to custom service) is not send in patch calls
-  agendaitems: hasMany('agendaitem', {
-    serialize: false,
-    inverse: null,
-  }),
 
-  viewDocumentURL: computed('id', function() {
+  get viewDocumentURL() {
     return `/document/${this.id}`;
-  }),
+  }
 
-  downloadFilename: computed('name', 'file.extension', async function() {
-    const file = await this.get('file');
-    if (file) {
-      const filename = `${this.name}.${file.extension}`;
-      return sanitize(filename, { // file-system-safe
-        replacement: '_',
-      });
-    }
-    return undefined;
-  }),
-
-  downloadFileLink: computed('downloadFilename', 'file.downloadLink', async function() {
-    const file = await this.get('file');
-    if (file) {
-      return `${file.downloadLink}?name=${encodeURIComponent(await this.get('downloadFilename'))}`; // url-safe
-    }
-    return undefined;
-  }),
-
-  changeAccessLevelLastModified() {
-    if (!this.get('confidential')) {
-      this.set('accessLevelLastModified', moment().utc()
-        .toDate());
-    }
-  },
+  get namedDownloadLinkPromise() {
+    return this.file.then((file) => {
+      if (file) {
+        const filename = `${this.name}.${file.extension}`;
+        const downloadFilename = sanitize(filename, {
+          replacement: '_',
+        });
+        return `${file.downloadLink}?name=${encodeURIComponent(downloadFilename)}`;
+      } else {
+        return undefined;
+      }
+    });
+  }
 
   save() {
-    const parentSave = this._super;
-    const dirtyType = this.get('dirtyType');
-    switch (dirtyType) {
-      case 'deleted':
-        break;
-      default:
-        this.set('modified', moment().utc()
-          .toDate());
-        this.changeAccessLevelLastModified();
-        break;
+    const dirtyType = this.dirtyType;
+    if (dirtyType != 'deleted') {
+      const now = new Date();
+      this.modified = now;
+      if (!this.confidential) {
+        this.accessLevelLastModified = now;
+      }
     }
-
-    return parentSave.call(this, ...arguments);
-  },
-
-});
+    return super.save(...arguments);
+  }
+}

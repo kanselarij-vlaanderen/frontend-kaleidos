@@ -34,12 +34,12 @@
     />
   </td>
   <td>
-    <WebComponents::VlToggle @value={{mut @piece.confidential}} />
+    <Auk::Toggle @checked={{mut @piece.confidential}} />
   </td>
   <td class="auk-u-text-align--right">
     <Auk::Button
       @skin="borderless"
-      @icon="delete"
+      @icon="trash"
       {{on "click" this.softDelete}}
     >
       {{t "delete"}}

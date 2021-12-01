@@ -21,7 +21,7 @@
     <Auk::Modal::Footer @onCancel={{action "close"}}>
       <Auk::Button
         @skin="tertiary"
-        @icon="add"
+        @icon="plus"
         {{action "toggleIsAdding"}}
         data-test-manage-ise-code-add
       >
@@ -38,7 +38,7 @@
         </Auk::Button>
         <Auk::Button
           @skin="tertiary"
-          @icon="delete"
+          @icon="trash"
           {{action "removeModel"}}
           data-test-manage-ise-code-delete
         >
@@ -51,11 +51,17 @@
     <Auk::Modal::Body>
       <div class="auk-form-group">
         <Auk::Label>{{t "ise-code"}}</Auk::Label>
-        <WebComponents::VlFormInput @value={{this.name}} />
+        <Auk::Input
+          @block={{true}}
+          @value={{this.name}}
+        />
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "ISE-code"}}</Auk::Label>
-        <WebComponents::VlFormInput @value={{this.code}} />
+        <Auk::Input
+          @block={{true}}
+          @value={{this.code}}
+        />
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "government-field"}}</Auk::Label>
@@ -81,11 +87,17 @@
     <Auk::Modal::Body>
       <div class="auk-form-group">
         <Auk::Label>{{t "ise-code"}}</Auk::Label>
-        <WebComponents::VlFormInput @value={{this.name}} />
+        <Auk::Input
+          @block={{true}}
+          @value={{this.name}}
+        />
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "ISE-code"}}</Auk::Label>
-        <WebComponents::VlFormInput @value={{this.code}} />
+        <Auk::Input
+          @block={{true}}
+          @value={{this.code}}
+        />
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "government-field"}}</Auk::Label>

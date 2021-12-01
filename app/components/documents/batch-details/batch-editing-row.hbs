@@ -1,0 +1,60 @@
+<tr data-test-batch-editing-row class="auk-table--batch-edit">
+  <td></td>
+  <td>
+    {{#if @selectedRows}}
+      {{t "x-documents-selected" count=@selectedRows.length}}
+    {{/if}}
+  </td>
+  <td>
+    <Utils::ModelSelector
+      @modelName="document-type"
+      @allowClear={{true}}
+      @searchField="label"
+      @propertyToShow="label"
+      @sortField="priority"
+      @readOnly={{this.isDisabled}}
+      @selectedItems={{this.documentType}}
+      @selectModel={{this.setDocumentType}}
+    />
+  </td>
+  <td>
+    <Utils::ModelSelector
+      @modelName="access-level"
+      @allowClear={{true}}
+      @hideSearch={{true}}
+      @propertyToShow="label"
+      @sortField="priority"
+      @readOnly={{this.isDisabled}}
+      @selectedItems={{this.accessLevel}}
+      @selectModel={{this.setAccessLevel}}
+    />
+  </td>
+  <td class="auk-table-checkbox-col">
+    <Auk::Checkbox
+      @checked={{this.confidential}}
+      @disabled={{this.isDisabled}}
+      {{on "input" this.onInputConfidential}}
+    />
+  </td>
+  <td>
+    <WebComponents::AuButtonToolbar>
+      {{#if this.isToBeDeleted}}
+        <Auk::Button
+          @icon="redo"
+          @layout="icon-only"
+          @skin="borderless"
+          @disabled={{this.isDisabled}}
+          {{on "click" (fn this.setToBeDeleted false)}}
+        />
+      {{else}}
+        <Auk::Button
+          @icon="trash"
+          @layout="icon-only"
+          @skin="danger-borderless"
+          @disabled={{this.isDisabled}}
+          {{on "click" (fn this.setToBeDeleted true)}}
+        />
+      {{/if}}
+    </WebComponents::AuButtonToolbar>
+  </td>
+</tr>

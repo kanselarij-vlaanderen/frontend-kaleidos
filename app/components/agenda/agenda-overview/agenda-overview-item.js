@@ -9,18 +9,18 @@ import {
 } from 'ember-concurrency-decorators';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import CONFIG from 'frontend-kaleidos/utils/config';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import VrNotulenName,
 { compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
 
 export default class AgendaOverviewItem extends AgendaSidebarItem {
   /**
-   *
    * @argument agendaitem
-   * @argument currentAgenda: both agenda's for determining changed documents
-   * @argument previousAgenda
+   * @argument currentAgenda: the agenda that is currently open
+   * @argument previousAgenda: the previous version of the currently open agenda
    * @argument isNew: boolean indicating if the item should be marked with the "new agenda-item"-icon
    * @argument isEditingFormallyOkStatus
-   * @argument showDragHandle: whether to show the drag-handle for changing item order
+   * @argument showDragHandle: boolean to show the drag-handle for changing item order
    * @argument showFormallyOkStatus: boolean indicating whether to show the formally ok status
    */
 
@@ -44,6 +44,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
     this.loadDocuments.perform();
   }
 
+  // TODO KAS-2449 refactor to use args.meeting
   get documentsAreReleased() {
     return this.sessionService.currentSession.releasedDocuments < new Date();
   }
@@ -70,7 +71,12 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
 
   @task
   *loadDocuments() {
-    let pieces = yield this.args.agendaitem.pieces;
+    // This uses the same call as in others routes/components, ensuring we hit the same cache
+    let pieces = yield this.store.query('piece', {
+      'filter[agendaitems][:id:]': this.args.agendaitem.id,
+      'page[size]': PAGE_SIZE.PIECES, // TODO add pagination when sorting is done in the backend
+      include: 'document-container',
+    });
     pieces = pieces.toArray();
     let sortedPieces;
     if (this.args.agendaitem.isApproval) {

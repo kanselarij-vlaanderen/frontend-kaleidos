@@ -4,21 +4,29 @@
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           <DropdownMenu
+            data-test-route-publications---proofs-documents-new-request
             @skin="secondary"
             @label={{t "new-request"}}
             @position="bottom-start"
             @disabled={{this.isRequestingDisabled}}
-          as |Menu|>
+            as |Menu|
+          >
             <Menu.Item
-              {{on "click" (fn this.openProofRequestModal "initial")}}>
+              data-test-route-publications---proofs-documents-initial-request
+              {{on "click" (fn this.openProofRequestModal "initial")}}
+            >
               {{t "initial-request"}}
             </Menu.Item>
             <Menu.Item
-              {{on "click" (fn this.openProofRequestModal "extra")}}>
+              data-test-route-publications---proofs-documents-extra-request
+              {{on "click" (fn this.openProofRequestModal "extra")}}
+            >
               {{t "extra-request"}}
             </Menu.Item>
             <Menu.Item
-              {{on "click" (fn this.openProofRequestModal "final")}}>
+              data-test-route-publications---proofs-documents-final-request
+              {{on "click" (fn this.openProofRequestModal "final")}}
+            >
               {{t "final-request"}}
             </Menu.Item>
           </DropdownMenu>
@@ -26,17 +34,23 @@
 
         <Auk::Toolbar::Item>
           <DropdownMenu
+            data-test-route-publications---proofs-documents-add
             @skin="secondary"
             @label={{t "upload-proof-document"}}
             @position="bottom-start"
             @disabled={{this.isUploadDisabled}}
-            as |Menu|>
+            as |Menu|
+          >
             <Menu.Item
-              {{on "click" this.openSourceUploadModal}}>
+              data-test-route-publications---proofs-documents-add-source-proof
+              {{on "click" this.openSourceUploadModal}}
+            >
               {{t "upload-source-proof-document"}}
             </Menu.Item>
             <Menu.Item
-              {{on "click" this.openCorrectionUploadModal}}>
+              data-test-route-publications---proofs-documents-add-corrected-proof
+              {{on "click" this.openCorrectionUploadModal}}
+            >
               {{t "upload-corrected-proof-document"}}
             </Menu.Item>
           </DropdownMenu>
@@ -51,45 +65,55 @@
             <th class="auk-table-checkbox-col">
               <Auk::Checkbox
                 @checked={{this.areAllPiecesSelected}}
-                {{on "input" this.toggleAllPiecesSelection}} />
+                {{on "input" this.toggleAllPiecesSelection}}
+              />
             </th>
             <Utils::ThSortable
-               @label={{t "name-document"}}
-               @field="naam"
-               @currentSorting={{this.sort}}
-               @onChange={{this.changeSorting}} />
+              @label={{t "document-name"}}
+              @field="naam"
+              @currentSorting={{this.sort}}
+              @onChange={{this.changeSorting}}
+            />
             <th>{{t "file-type"}}</th>
             <Utils::ThSortable
               @label={{t "received-at"}}
               @field="ontvangen-op"
               @currentSorting={{this.sort}}
-              @onChange={{this.changeSorting}} />
+              @onChange={{this.changeSorting}}
+            />
             <Utils::ThSortable
               @label={{t "uploaded-at"}}
               @field="geupload-op"
               @currentSorting={{this.sort}}
-              @onChange={{this.changeSorting}} />
+              @onChange={{this.changeSorting}}
+            />
             <th class="auk-u-text-align--center">
               {{t "corrected"}}
             </th>
-            <th>{{!-- Actions--}}</th>
+            <th>{{! Actions}}</th>
           </tr>
         </thead>
         <tbody>
           {{#each this.pieceRows as |pieceRow|}}
             {{#let pieceRow.piece as |piece|}}
-              <tr>
+              <tr data-test-route-publications---proofs-documents-table-row>
                 <td class="auk-table-checkbox-col">
                   <Auk::Checkbox
+                    data-test-route-publications---proofs-documents-row-checkbox
                     @checked={{includes pieceRow this.selectedPieceRows}}
-                    {{on "input" (fn this.togglePieceSelection pieceRow)}} />
+                    {{on "input" (fn this.togglePieceSelection pieceRow)}}
+                  />
                 </td>
-                <td>
+                <td
+                  data-test-route-publications---proofs-documents-row-document-name
+                >
                   {{piece.name}}
                 </td>
                 <td>
                   {{#if piece.file}}
-                    <Utils::Documents::FileTypePill @extension={{piece.file.extension}} />
+                    <Utils::Documents::FileTypePill
+                      @extension={{piece.file.extension}}
+                    />
                   {{/if}}
                 </td>
                 <td>
@@ -100,14 +124,20 @@
                   {{/if}}
                 </td>
                 <td>
-                  <p>
-                    {{moment-format piece.created}}
-                  </p>
-                  <p class="auk-u-muted auk-u-text-small">
-                    {{moment-format piece.created "HH:mm"}}
-                  </p>
+                  {{#if piece.created}}
+                    <p>{{moment-format piece.created}}</p>
+                    <p class="auk-u-muted auk-u-text-small">
+                      {{moment-format piece.created "HH:mm"}}
+                    </p>
+                  {{else}}
+                    {{! legacy data }}
+                    {{t "dash"}}
+                  {{/if}}
                 </td>
-                <td class="auk-u-text-align--center">
+                <td
+                  data-test-route-publications---proofs-documents-row-corrected
+                  class="auk-u-text-align--center"
+                >
                   {{#if piece.publicationSubcaseCorrectionFor}}
                     <Auk::Icon @name="check" @skin="success-dark" />
                   {{else}}
@@ -117,28 +147,43 @@
                 <td>
                   <WebComponents::AuButtonToolbar>
                     <Auk::Button
-                      @skin="borderless" @layout="icon-only" @icon="download"
+                      @skin="borderless"
+                      @layout="icon-only"
+                      @icon="download"
                       @href={{piece.file.namedDownloadLink}}
-                      download={{piece.file.downloadFilename}}>
+                      download={{piece.file.downloadFilename}}
+                    >
                       {{t "download"}}
                     </Auk::Button>
                     <Auk::Button
-                      @skin="borderless" @layout="icon-only" @icon="book"
+                      @skin="borderless"
+                      @layout="icon-only"
+                      @icon="book"
                       @href={{piece.viewDocumentURL}}
-                      target="_blank">
+                      target="_blank"
+                    >
                       {{t "read"}}
                     </Auk::Button>
                     <DropdownMenu
+                      data-test-route-publications---proofs-documents-row-options
                       @skin="borderless"
-                      @icon="more"
-                    as |Menu|>
+                      @icon="three-dots"
+                      as |Menu|
+                    >
                       <Menu.Item
-                        {{on "click" (fn this.openPieceEditModal pieceRow)}}>
+                        data-test-route-publications---proofs-documents-row-edit
+                        {{on "click" (fn this.openPieceEditModal pieceRow)}}
+                      >
                         {{t "edit-proof-details"}}
                       </Menu.Item>
-                      {{#if (and this.canDeletePieces pieceRow.isPieceDeletable)}}
-                        <Menu.Item @skin="danger"
-                          {{on "click" (perform this.deletePiece pieceRow)}}>
+                      {{#if
+                        (and this.canDeletePieces pieceRow.isPieceDeletable)
+                      }}
+                        <Menu.Item
+                          @skin="danger"
+                          data-test-route-publications---proofs-documents-row-delete
+                          {{on "click" (perform this.deletePiece pieceRow)}}
+                        >
                           {{t "delete"}}
                         </Menu.Item>
                       {{/if}}
@@ -151,7 +196,7 @@
         </tbody>
       </table>
     {{else}}
-      <Auk::EmptyState @bordered={{true}} @message={{t "no-documents-yet" }} />
+      <Auk::EmptyState @bordered={{true}} @message={{t "no-documents-yet"}} />
     {{/if}}
   </div>
   <div class="auk-u-mb-4">
@@ -162,13 +207,16 @@
           <tr>
             <th>{{t "title"}}</th>
             <th>{{t "publication-date"}}</th>
-            <th>{{!-- actions --}}</th>
+            <th>{{! actions }}</th>
           </tr>
         </thead>
         <tbody>
           {{#each this.model.decisions as |decision|}}
             <tr>
               <td>
+                {{! TODO: this currently only shows for non-staatsblad decisions,
+                since eli uses an extra indirection carrying the title (the "legal expression",
+                whereas the decision is the "legal resource") }}
                 {{decision.title}}
               </td>
               <td>
@@ -176,11 +224,14 @@
               </td>
               <td>
                 <WebComponents::AuButtonToolbar>
-                  <Auk::ButtonLink
-                    @href={{decision.uri}}
-                    @layout="icon-only" @icon="external-link"
-                    @target="_blank">
-                  </Auk::ButtonLink>
+                  {{#if decision.isStaatsbladResource}}
+                    <Auk::ButtonLink
+                      @href={{decision.uri}}
+                      @layout="icon-only"
+                      @icon="external-link"
+                      target="_blank"
+                    />
+                  {{/if}}
                 </WebComponents::AuButtonToolbar>
               </td>
             </tr>
@@ -188,7 +239,10 @@
         </tbody>
       </table>
     {{else}}
-      <Auk::EmptyState @bordered={{true}} @message={{t "no-decisions-published-yet" }} />
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "no-decisions-published-yet"}}
+      />
     {{/if}}
   </div>
 </div>
@@ -198,7 +252,8 @@
     @publicationFlow={{this.publicationFlow}}
     @isCorrected={{this.isPieceUploadCorrected}}
     @onSave={{this.savePieceUpload}}
-    @onCancel={{this.closePieceUploadModal}} />
+    @onCancel={{this.closePieceUploadModal}}
+  />
 {{/if}}
 
 {{#if this.isPieceEditModalOpen}}
@@ -206,7 +261,8 @@
     @publicationFlow={{this.publicationFlow}}
     @piece={{this.pieceRowToEdit.piece}}
     @onSave={{this.savePieceEdit}}
-    @onCancel={{this.closePieceEditModal}} />
+    @onCancel={{this.closePieceEditModal}}
+  />
 {{/if}}
 
 {{#if this.isProofRequestModalOpen}}
@@ -215,5 +271,6 @@
     @publicationFlow={{this.publicationFlow}}
     @attachments={{this.selectedPieces}}
     @onSave={{this.saveProofRequest}}
-    @onCancel={{this.closeProofRequestModal}} />
+    @onCancel={{this.closeProofRequestModal}}
+  />
 {{/if}}

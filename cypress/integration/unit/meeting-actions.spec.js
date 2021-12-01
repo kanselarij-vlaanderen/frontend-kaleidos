@@ -15,21 +15,6 @@ context('meeting actions tests', () => {
     cy.logout();
   });
 
-  it('should perform action delete agenda with agendaitems on designagenda', () => {
-    cy.login('Admin');
-    cy.visitAgendaWithLink('/vergadering/5EB287CDF359DD0009000008/agenda/c7b045ce-3976-459c-aeaa-d0e8597b96d8/agendapunten');
-    // verify agenda B has agendaitem
-    cy.openDetailOfAgendaitem('Cypress test: delete agenda - 1588758436');
-    cy.deleteAgenda('5EB287CDF359DD0009000008');
-    // verify agendaitem is still ok on agenda A after delete designagenda
-    cy.openDetailOfAgendaitem('Cypress test: delete agenda - 1588758436');
-    // verify delete agenda A works
-    cy.deleteAgenda('5EB287CDF359DD0009000008', true);
-    // verify subcase can be proposed for different agenda
-    cy.visit('/dossiers/5EB287A9F359DD0009000005/deeldossiers/5EB287BBF359DD0009000007/overzicht');
-    cy.get(cases.subcaseHeader.showProposedAgendas);
-  });
-
   it('should perform action close agenda with agendaitems on designagenda', () => {
     cy.login('Admin');
     const subcaseTitleShort = 'Cypress test: close agenda - 1588775338';

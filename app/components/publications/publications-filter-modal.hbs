@@ -1,5 +1,5 @@
-<Auk::Modal>
-  <Auk::Modal::Header @size="medium" @title={{t "publications-filter" }} @onClose={{@onCancel}} />
+<Auk::Modal @size="medium">
+  <Auk::Modal::Header @title={{t "filter-content"}} @onClose={{@onCancel}} />
   <Auk::Modal::Body>
     <div class="auk-form-group-layout auk-form-group-layout--grid">
       <div class="auk-o-grid">
@@ -15,21 +15,30 @@
           <div class="auk-form-group">
             <Auk::CheckboxList>
               <Auk::Checkbox
-                @label={{t "via-cabinet" }}
+                data-test-publications-filter-minister
+                @label={{t "via-cabinet"}}
                 @checked={{this.filter.ministerFilterOption}}
-                {{on "input" (fn this.toggleFilterOption "ministerFilterOption")}}
+                {{on
+                  "input"
+                  (fn this.toggleFilterOption "ministerFilterOption")
+                }}
               />
             </Auk::CheckboxList>
           </div>
           <div class="auk-form-group">
             <Auk::CheckboxList>
               <Auk::Checkbox
-                @label={{t "publications-published" }}
+                data-test-publications-filter-published
+                @label={{t "publications-published"}}
                 @checked={{this.filter.publishedFilterOption}}
-                {{on "input" (fn this.toggleFilterOption "publishedFilterOption")}}
+                {{on
+                  "input"
+                  (fn this.toggleFilterOption "publishedFilterOption")
+                }}
               />
               <Auk::Checkbox
-                @label={{t "publications-paused" }}
+                data-test-publications-filter-paused
+                @label={{t "publications-paused"}}
                 @checked={{this.filter.pausedFilterOption}}
                 {{on "input" (fn this.toggleFilterOption "pausedFilterOption")}}
               />
@@ -40,23 +49,35 @@
           <div class="auk-form-group">
             <Auk::CheckboxList>
               <Auk::Checkbox
-                @label={{t "not-via-cabinet" }}
+                data-test-publications-filter-not-minister
+                @label={{t "not-via-cabinet"}}
                 @checked={{this.filter.notMinisterFilterOption}}
-                {{on "input" (fn this.toggleFilterOption "notMinisterFilterOption")}}
+                {{on
+                  "input"
+                  (fn this.toggleFilterOption "notMinisterFilterOption")
+                }}
               />
             </Auk::CheckboxList>
           </div>
           <div class="auk-form-group">
             <Auk::CheckboxList>
               <Auk::Checkbox
-                @label={{t "publications-to-publish" }}
+                data-test-publications-filter-to-publish
+                @label={{t "publications-to-publish"}}
                 @checked={{this.filter.toPublishFilterOption}}
-                {{on "input" (fn this.toggleFilterOption "toPublishFilterOption")}}
+                {{on
+                  "input"
+                  (fn this.toggleFilterOption "toPublishFilterOption")
+                }}
               />
               <Auk::Checkbox
-                @label={{t "discharged" }}
+                data-test-publications-filter-withdrawn
+                @label={{t "discharged"}}
                 @checked={{this.filter.withdrawnFilterOption}}
-                {{on "input" (fn this.toggleFilterOption "withdrawnFilterOption")}}
+                {{on
+                  "input"
+                  (fn this.toggleFilterOption "withdrawnFilterOption")
+                }}
               />
             </Auk::CheckboxList>
           </div>
@@ -64,13 +85,13 @@
       </div>
     </div>
   </Auk::Modal::Body>
-  {{!-- TODO, use the template, yield the buttons in the right toolbar--}}
+  {{! TODO, use the template, yield the buttons in the right toolbar}}
   <Auk::Modal::Footer @custom={{true}}>
     <Auk::Toolbar @size="large">
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
           <Auk::ButtonLink
-            data-test-publication-button-cancel
+            data-test-publications-filter-cancel
             {{on "click" @onCancel}}
           >
             {{t "cancel"}}
@@ -81,7 +102,7 @@
         <Auk::Toolbar::Item>
           <Auk::Button
             @skin="secondary"
-            data-test-publication-button-reset-filters
+            data-test-publications-filter-reset
             {{on "click" this.reset}}
           >
             {{t "clear-filter-plural"}}
@@ -91,7 +112,7 @@
           <Auk::Button
             @icon="filter"
             @skin="primary"
-            data-test-publication-button-filter-content
+            data-test-publications-filter-save
             {{on "click" (fn @onSave this.filter)}}
           >
             {{t "filter-content"}}

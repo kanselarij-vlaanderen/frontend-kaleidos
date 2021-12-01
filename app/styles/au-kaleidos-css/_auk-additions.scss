@@ -73,14 +73,14 @@ p {
 .auk-table--hover {
   tbody {
     tr:hover {
-      background: $au-gray-100;
+      background: $auk-gray-100;
     }
   }
 
   &.auk-table--striped {
     tbody {
       tr:hover {
-        background: $au-gray-200;
+        background: $auk-gray-200;
 
         td {
           background-color: transparent;
@@ -103,7 +103,7 @@ p {
   &.data-table {
     tbody {
       tr:hover {
-        background: $au-gray-100;
+        background: $auk-gray-100;
       }
     }
   }
@@ -114,7 +114,7 @@ p {
   &.data-table {
     tbody {
       tr:hover {
-        background: $au-gray-200;
+        background: $auk-gray-200;
 
         td {
           background-color: transparent;
@@ -124,27 +124,53 @@ p {
   }
 }
 
+/* Table with sticky header
+
+    Remark:
+    Fixing the border-related issue (as seen here: https://stackoverflow.com/questions/50361698/border-style-do-not-work-with-sticky-position-element) caused by putting `position: sticky` on th's is done here by switching border-collapse to `separate`.
+    We can use this switch without creating visual issues because there are no consecutive borders within the auk-table styling.
+
+    If this should change in the future, we could also rely on the following fix:
+
+    th {
+      border-bottom-width: 0;
+      padding-bottom: 1.4rem;
+      box-shadow: inset 0 -2px 0 $auk-gray-300;
+    }
+
+   ========================================================================== */
+
+.auk-table--sticky-header {
+  border-collapse: separate;
+
+  th {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+  }
+}
+
 
 /* Block-link (to be removed in favor of list element)
    ========================================================================== */
 
 .auk-block-link {
   padding: 1.5rem;
-  border: .1rem solid $au-gray-300;
+  border: .1rem solid $auk-gray-300;
   text-decoration: none;
-  color: $au-gray-800;
+  color: $auk-gray-800;
   margin: 0 0 1.5rem;
   display: block;
 
   &:hover {
-    background: $au-gray-100;
-    border-color: $au-gray-500;
+    background: $auk-gray-100;
+    border-color: $auk-gray-500;
   }
 
   &:focus {
     outline: 0;
-    border-color: $au-yellow-500;
-    box-shadow: inset 0 0 0 0.1rem $au-yellow-500;
+    border-color: $auk-yellow-500;
+    box-shadow: inset 0 0 0 0.1rem $auk-yellow-500;
   }
 }
 
@@ -216,12 +242,21 @@ p {
   }
 }
 
+/* Signature overview navbar (to be removed)
+   ========================================================================== */
+
+.auk-signature-overview-navbar {
+  ul.auk-menu {
+    background-color: transparent !important;
+  }
+}
+
 
 /* Color badge - default color (to be removed)
    ========================================================================== */
 
 .auk-color-badge--default {
-  background-color: $au-gray-500;
+  background-color: $auk-gray-500;
 }
 
 
@@ -251,19 +286,19 @@ p {
 }
 
 .auk-u-border-top {
-  border-top: .1rem solid $au-gray-300 !important;
+  border-top: .1rem solid $auk-gray-300 !important;
 }
 
 .auk-u-border-right {
-  border-right: .1rem solid $au-gray-300 !important;
+  border-right: .1rem solid $auk-gray-300 !important;
 }
 
 .auk-u-border-bottom {
-  border-bottom: .1rem solid $au-gray-300 !important;
+  border-bottom: .1rem solid $auk-gray-300 !important;
 }
 
 .auk-u-border-left {
-  border-left: .1rem solid $au-gray-300 !important;
+  border-left: .1rem solid $auk-gray-300 !important;
 }
 
 .auk-u-text-family-serif {
@@ -286,4 +321,11 @@ p {
 
 .auk-case-name-header {
   min-width: 25rem;
+}
+
+/* Batch editing document details
+   ========================================================================== */
+
+.to-be-deleted-row {
+  opacity: 0.5;
 }

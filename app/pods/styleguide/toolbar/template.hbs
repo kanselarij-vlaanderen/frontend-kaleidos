@@ -67,7 +67,7 @@
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          <Auk::Button @icon="add" @skin="primary">Toevoegen</Auk::Button>
+          <Auk::Button @icon="plus" @skin="primary">Toevoegen</Auk::Button>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
@@ -124,14 +124,14 @@
           <Auk::Button @skin="primary">Ontwerpagenda goedkeuren</Auk::Button>
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
-          <Auk::Button @icon="chevron-down" @layout="icon-right" id="toolbar-complex-dropdown" aria-haspopup="true" aria-controls="toolbar-complex-actions">Acties</Auk::Button>
-          <EmberPopover @side="bottom-start" @tooltipClass="auk-popover" @targetId="toolbar-complex-dropdown" as |popover|>
-            <Auk::Menu id="toolbar-complex-actions" aria-labelledby="toolbar-">
-              <Auk::Menu::Item>Action item</Auk::Menu::Item>
-              <Auk::Menu::Item>Action item</Auk::Menu::Item>
-              <Auk::Menu::Item>Action item</Auk::Menu::Item>
-            </Auk::Menu>
-          </EmberPopover>
+          <DropdownMenu
+            @label="Acties"
+            @placement="bottom-end"
+          as |Menu|>
+            <Menu.Item @route="styleguide.table">Actie</Menu.Item>
+            <Menu.Item @route="styleguide.table">Actie</Menu.Item>
+            <Menu.Item @route="styleguide.table">Actie</Menu.Item>
+          </DropdownMenu>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
@@ -156,7 +156,7 @@
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <Auk::Button @skin="tertiary" @icon="edit">Button label</Auk::Button>
+            <Auk::Button @skin="tertiary" @icon="pencil">Button label</Auk::Button>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
@@ -194,11 +194,59 @@
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
         <WebComponents::AuButtonToolbar>
-          <Auk::Button @icon="edit" @layout="icon-only">Bewerken</Auk::Button>
-          <Auk::Button @icon="delete" @skin="danger-hover" @layout="icon-only">Verwijderen</Auk::Button>
+          <Auk::Button @icon="pencil" @layout="icon-only">Bewerken</Auk::Button>
+          <Auk::Button @icon="trash" @skin="danger-hover" @layout="icon-only">Verwijderen</Auk::Button>
         </WebComponents::AuButtonToolbar>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
+
+<h3 class="auk-h3">Arguments</h3>
+
+<table class="auk-table">
+  <thead>
+    <tr>
+      <th>Argument</th>
+      <th>Type</th>
+      <th>Possible values</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>@auto</code></td>
+      <td>boolean</td>
+      <td class="auk-table__col--3"><code>false</code> (default) or <code>true</code></td>
+      <td>Determines if the toolbar has automatic height enabled.</td>
+    </tr>
+    <tr>
+      <td><code>@size</code></td>
+      <td>string</td>
+      <td class="auk-table__col--3"><code>large</code></td>
+      <td>Determines the size (min-height) of the toolbar.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class="auk-h3">Arguments (group)</h3>
+
+<table class="auk-table">
+  <thead>
+    <tr>
+      <th>Argument</th>
+      <th>Type</th>
+      <th>Possible values</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>@position</code></td>
+      <td>string</td>
+      <td class="auk-table__col--3"><code>left</code> (default), <code>center</code> or <code>right</code></td>
+      <td>Determines the position of the group inside the toolbar.</td>
+    </tr>
+  </tbody>
+</table>

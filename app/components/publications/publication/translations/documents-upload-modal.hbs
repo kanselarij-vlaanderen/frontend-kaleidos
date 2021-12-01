@@ -9,21 +9,26 @@
   />
   <Auk::Modal::Body>
     <Auk::FileUploader
-            @fileQueueName={{this.fileQueueName}}
-            @multiple={{false}}
-            @onUpload={{this.uploadPiece}}
+      @fileQueueName={{this.fileQueueName}}
+      @multiple={{false}}
+      @onUpload={{this.uploadPiece}}
     />
     {{#if this.translationDocument}}
       <div class="auk-u-mt-4">
         <div class="auk-o-grid">
           <div class="auk-o-grid-col-11">
-            <div class="auk-form-group-layout auk-form-group-layout--horizontal">
-              <div class="auk-form-group auk-o-flex--align-start {{this.validators.name.errorClass}}">
+            <div
+              class="auk-form-group-layout auk-form-group-layout--horizontal"
+            >
+              <div
+                class="auk-form-group auk-o-flex--align-start
+                  {{this.validators.name.errorClass}}"
+              >
                 <Auk::Label for="nameDocumentUpload" @required={{true}}>
                   {{t "name"}}
                 </Auk::Label>
                 <Auk::Input
-                  type="text"
+                  data-test-publication-documents-upload-name
                   id="nameDocumentUpload"
                   @value={{mut this.name}}
                   {{on "input" this.validators.name.enableError}}
@@ -31,19 +36,27 @@
               </div>
               <div class="auk-form-group">
                 <Auk::Label>{{t "document-type"}}</Auk::Label>
-                <Utils::Documents::FileTypePill @extension={{this.translationDocument.file.extension}} />
+                <Utils::Documents::FileTypePill
+                  @extension={{this.translationDocument.file.extension}}
+                />
               </div>
               <div class="auk-form-group auk-o-flex--align-start">
                 <Auk::Label>{{t "translation-burden"}}</Auk::Label>
-                <div class="auk-form-group-layout auk-form-group-layout--standard auk-form-group-layout--grid">
+                <div
+                  class="auk-form-group-layout auk-form-group-layout--standard auk-form-group-layout--grid"
+                >
                   <div class="auk-o-grid">
                     <div class="auk-o-grid-col-6">
                       <div class="auk-form-group">
-                        <Auk::Label for="translationLoadPages" class="auk-label--light">
+                        <Auk::Label
+                          for="translationLoadPages"
+                          class="auk-label--light"
+                        >
                           {{t "pages-amount"}}
                         </Auk::Label>
                         <Auk::Input
-                          type="number"
+                          data-test-publication-documents-upload-pages
+                          @type="number"
                           id="translationLoadPages"
                           @value={{mut this.pagesAmount}}
                         />
@@ -51,11 +64,15 @@
                     </div>
                     <div class="auk-o-grid-col-6">
                       <div class="auk-form-group">
-                        <Auk::Label for="translationLoadWords" class="auk-label--light">
+                        <Auk::Label
+                          for="translationLoadWords"
+                          class="auk-label--light"
+                        >
                           {{t "words-amount"}}
                         </Auk::Label>
                         <Auk::Input
-                          type="number"
+                          data-test-publication-documents-upload-words
+                          @type="number"
                           id="translationLoadWords"
                           @value={{mut this.wordsAmount}}
                         />
@@ -69,8 +86,12 @@
                   {{t "for-proof-print"}}
                 </Auk::Label>
                 <Auk::CheckboxList>
-                  <Auk::Checkbox @name="proofPrint" @checked={{this.isSourceForProofPrint}}
-                    {{on "input" this.toggleProofprint}} />
+                  <Auk::Checkbox
+                    data-test-publication-documents-upload-proof-print
+                    @name="proofPrint"
+                    @checked={{this.isSourceForProofPrint}}
+                    {{on "input" this.toggleProofprint}}
+                  />
                 </Auk::CheckboxList>
               </div>
             </div>
@@ -82,12 +103,15 @@
   </Auk::Modal::Body>
   <Auk::Modal::Footer
     @cancelDisabled={{this.isCancelDisabled}}
-    @onCancel={{perform this.cancel}}>
+    @onCancel={{perform this.cancel}}
+  >
     <Auk::Button
+      data-test-publication-documents-upload-save
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
       @loading={{this.save.isRunning}}
-      {{on "click" (perform this.save)}}>
+      {{on "click" (perform this.save)}}
+    >
       {{t "save"}}
     </Auk::Button>
   </Auk::Modal::Footer>

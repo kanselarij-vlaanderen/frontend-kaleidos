@@ -3,16 +3,18 @@
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item class="vlc-u-box-model-maximize-width">
         <div class="auk-form-group">
+          {{!-- template-lint-disable no-redundant-fn --}}
+          {{!-- TODO: Using plain decorated action for Input's @enter doesn't work for some reason --}}
           <Auk::Input
             @icon="search"
-            type="text"
             @block={{true}}
             data-test-agendaitem-search-input
             placeholder={{t "search-placeholder"}}
             value={{this.searchText}}
-            @enter={{this.search}}
+            @enter={{fn this.search}}
             {{on "input" this.debouncedSearch}}
           />
+          {{!-- template-lint-enable no-redundant-fn --}}
         </div>
       </Auk::Toolbar::Item>
       {{#if this.debouncedSearchTask.isRunning}}

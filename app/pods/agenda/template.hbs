@@ -1,32 +1,37 @@
 {{page-title
   this.model.agenda.agendaName
   " van "
-  (moment-format this.model.meeting.plannedStart 'DD/MM/YYYY HH:mm')
+  (moment-format
+    this.model.meeting.plannedStart
+    (if this.model.meeting.isPreKaleidos "DD/MM/YYYY" "DD/MM/YYYY HH:mm")
+  )
 }}
 <Agenda::AgendaHeader
-  @loading={{this.loadingAgendaitems}}
-  @onCreateAgendaitem={{this.refresh}}
-  @onApproveAllAgendaitems={{this.refresh}}
-  @onApproveAgenda={{this.navigateToAgenda}}
-  @navigateToPressAgenda={{this.navigateToPressAgenda}}
-  @navigateToDecisions={{this.navigateToDecisions}}
-  @navigateToNewsletter={{this.navigateToNewsletter}}
-  @showPrintButton={{this.showPrintButton}}
+  {{! data}}
+  @meeting={{this.model.meeting}}
+  @currentAgenda={{this.model.agenda}}
+  @reversedAgendas={{this.model.reverseSortedAgendas}}
+  {{! actions}}
+  @loading={{this.toggleIsLoading}}
+  @refreshRoute={{this.refresh}}
 />
 {{#if (not this.isLoading)}}
   <div class="auk-panel-layout">
     {{#unless this.shouldHideNav}}
       <div class="auk-panel-layout__sidebar auk-panel-layout__agenda-history">
         <Agenda::SideNav
-          @agendas={{this.model.meeting.sortedAgendas}}
+          @meeting={{this.model.meeting}}
           @currentAgenda={{this.model.agenda}}
-          @selectAgenda={{this.selectAgenda}}
+          @reversedAgendas={{this.model.reverseSortedAgendas}}
+          @isOpen={{this.sideNavIsOpen}}
+          @onCollapse={{this.toggleSideNav}}
+          @onOpen={{this.toggleSideNav}}
         />
       </div>
     {{/unless}}
     {{outlet}}
   </div>
 {{else}}
-  {{!-- TODO, with an auLoadingOverlay, this text was semi hidden so opted to remove this for now. Page just goes blank when loading (only triggered on header actions)--}}
-  {{!-- {{web-components/vl-loader}} --}}
+  {{! Page just goes blank when loading (only triggered on AgendaHeader actions and they provide a modal with loader)}}
+  {{! The reason for this is that we want to prevent any clicking on sideNav or content in sibling routes during actions}}
 {{/if}}

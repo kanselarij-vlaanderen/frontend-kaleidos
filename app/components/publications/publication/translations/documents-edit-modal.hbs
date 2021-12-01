@@ -16,9 +16,9 @@
               {{t "name"}}
             </Auk::Label>
             <Auk::Input
-                    type="text"
-                    id="nameDocumentUpload"
-                    @value={{mut this.name}}
+              data-test-publication-document-edit-document-name
+              id="nameDocumentUpload"
+              @value={{mut this.name}}
             />
           </div>
           <div class="auk-form-group">
@@ -29,29 +29,39 @@
           </div>
           <div class="auk-form-group auk-o-flex--align-start">
             <Auk::Label>{{t "translation-burden"}}</Auk::Label>
-            <div class="auk-form-group-layout auk-form-group-layout--standard auk-form-group-layout--grid">
+            <div
+              class="auk-form-group-layout auk-form-group-layout--standard auk-form-group-layout--grid"
+            >
               <div class="auk-o-grid">
                 <div class="auk-o-grid-col-6">
                   <div class="auk-form-group">
-                    <Auk::Label for="translationLoadPages" class="auk-label--light">
+                    <Auk::Label
+                      for="translationLoadPages"
+                      class="auk-label--light"
+                    >
                       {{t "pages-amount"}}
                     </Auk::Label>
                     <Auk::Input
-                            type="number"
-                            id="translationLoadPages"
-                            @value={{mut this.pagesAmount}}
+                      data-test-publication-document-edit-pages
+                      @type="number"
+                      id="translationLoadPages"
+                      @value={{mut this.pagesAmount}}
                     />
                   </div>
                 </div>
                 <div class="auk-o-grid-col-6">
                   <div class="auk-form-group">
-                    <Auk::Label for="translationLoadWords" class="auk-label--light">
+                    <Auk::Label
+                      for="translationLoadWords"
+                      class="auk-label--light"
+                    >
                       {{t "words-amount"}}
                     </Auk::Label>
                     <Auk::Input
-                            type="number"
-                            id="translationLoadWords"
-                            @value={{mut this.wordsAmount}}
+                      data-test-publication-document-edit-words
+                      @type="number"
+                      id="translationLoadWords"
+                      @value={{mut this.wordsAmount}}
                     />
                   </div>
                 </div>
@@ -66,8 +76,12 @@
               <Auk::Loader @message={{t "loading"}} />
             {{else}}
               <Auk::CheckboxList>
-                <Auk::Checkbox @name="proofPrint" @checked={{this.isSourceForProofPrint}}
-                  {{on "input" this.toggleProofprint}} />
+                <Auk::Checkbox
+                  data-test-publication-document-edit-proofprint
+                  @name="proofPrint"
+                  @checked={{this.isSourceForProofPrint}}
+                  {{on "input" this.toggleProofprint}}
+                />
               </Auk::CheckboxList>
             {{/if}}
           </div>
@@ -77,6 +91,7 @@
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
     <Auk::Button
+      data-test-publication-document-edit-save
       @skin="primary"
       @disabled={{this.saveIsDisabled}}
       @loading={{this.saveEditDocument.isRunning}}

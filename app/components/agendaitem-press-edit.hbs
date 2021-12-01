@@ -3,7 +3,10 @@
 <div class="auk-u-mb-4">
   <div class="auk-form-group">
     <Auk::Label>{{t "title"}}</Auk::Label>
-    <WebComponents::VlFormInput @value={{this.agendaitem.titlePress}} />
+    <Auk::Input
+      @block={{true}}
+      @value={{this.agendaitem.titlePress}}
+    />
   </div>
   <div class="auk-form-group">
     <Auk::Label id="content">{{t "content"}}</Auk::Label>
@@ -15,8 +18,11 @@
     />
   </div>
   <div class="auk-form-group">
-    <Auk::Label>{{t "for-press"}}</Auk::Label>
-    <WebComponents::VlToggle @value={{this.agendaitem.forPress}} />
+    <Auk::Label for="for-press">{{t "for-press"}}</Auk::Label>
+    <Auk::Toggle
+      id="for-press"
+      @checked={{this.agendaitem.forPress}}
+    />
   </div>
 </div>
 <Auk::Toolbar>
