@@ -1,5 +1,4 @@
 import Route from '@ember/routing/route';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
   model() {
