@@ -19,7 +19,7 @@ export default class AgendaRoute extends Route {
     const agenda = await this.store.findRecord('agenda', agendaId, {
       reload: 'true',
     });
-    const reversedAgendas = await this.store.query('agenda', {
+    const reverseSortedAgendas = await this.store.query('agenda', {
       'filter[created-for][:id:]': meetingId,
       sort: '-serialnumber',
       include: 'status',
@@ -28,7 +28,7 @@ export default class AgendaRoute extends Route {
     return {
       meeting,
       agenda,
-      reversedAgendas,
+      reverseSortedAgendas,
     };
   }
 

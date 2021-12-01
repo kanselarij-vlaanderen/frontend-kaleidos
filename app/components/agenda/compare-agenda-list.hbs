@@ -3,7 +3,7 @@
   <div class="compare-left-column">
     <Utils::AgendaSelector
       data-test-compare-agenda-left={{true}}
-      @agendas={{@reversedAgendas}}
+      @agendas={{@reverseSortedAgendas}}
       @searchField="name"
       @propertyToShow="agendaName"
       @placeholder={{t "select-agenda"}}
@@ -16,7 +16,7 @@
   <div class="compare-right-column">
     <Utils::AgendaSelector
       data-test-compare-agenda-right={{true}}
-      @agendas={{@reversedAgendas}}
+      @agendas={{@reverseSortedAgendas}}
       @searchField="name"
       @propertyToShow="agendaName"
       @placeholder={{t "select-agenda"}}

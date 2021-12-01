@@ -18,9 +18,9 @@ export default Route.extend({
     this.set('agendaService.addedPieces', []);
     this.set('agendaService.addedAgendaitems', []);
     const meeting = this.modelFor('agenda').meeting;
-    const reversedAgendas = this.modelFor('agenda').reversedAgendas;
+    const reverseSortedAgendas = this.modelFor('agenda').reverseSortedAgendas;
     return hash({
-      meeting, reversedAgendas,
+      meeting, reverseSortedAgendas,
     });
   },
 });

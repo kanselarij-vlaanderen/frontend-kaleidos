@@ -8,7 +8,7 @@ export default class CompareAgendaList extends Component {
   /**
    * INFO arguments from parent.
    * @argument meeting the current meeting
-   * @argument reversedAgendas all agendas from the meeting reverse sorted on serial number
+   * @argument reverseSortedAgendas all agendas from the meeting reverse sorted on serial number
    * @argument isShowingChanges flag to show all agendaitems or just the ones with changes
    */
 
@@ -36,8 +36,8 @@ export default class CompareAgendaList extends Component {
     if (this.agendaOne && this.agendaTwo) {
       this.isLoadingComparison = true;
 
-      const agendaOneIndex = this.args.reversedAgendas.indexOf(this.agendaOne);
-      const agendaTwoIndex = this.args.reversedAgendas.indexOf(this.agendaTwo);
+      const agendaOneIndex = this.args.reverseSortedAgendas.indexOf(this.agendaOne);
+      const agendaTwoIndex = this.args.reverseSortedAgendas.indexOf(this.agendaTwo);
 
       if (agendaOneIndex < agendaTwoIndex) {
         await this.agendaService.agendaWithChanges(this.agendaOne.id, this.agendaTwo.id);

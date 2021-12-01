@@ -8,7 +8,7 @@ export default class AgendaitemControls extends Component {
    * @argument agendaitem
    * @argument agendaActivity
    * @argument currentAgenda
-   * @argument reversedAgendas
+   * @argument reverseSortedAgendas
    * @argument onDeleteAgendaitem
    */
   @service store;
@@ -27,13 +27,16 @@ export default class AgendaitemControls extends Component {
       // Or in case of the agendaitem to approve minutes ("verslag vorige vergadering")
       return false;
     }
-    return !!(this.args.reversedAgendas && this.args.reversedAgendas.length > 1);
+    return !!(
+      this.args.reverseSortedAgendas &&
+      this.args.reverseSortedAgendas.length > 1
+    );
   }
 
   // TODO document this
   get isDeletable() {
-    const designAgenda =  this.args.currentAgenda.get('isDesignAgenda');
-    const agendaActivity =  this.args.agendaActivity;
+    const designAgenda = this.args.currentAgenda.get('isDesignAgenda');
+    const agendaActivity = this.args.agendaActivity;
     if (!designAgenda) {
       return false;
     }
@@ -47,7 +50,8 @@ export default class AgendaitemControls extends Component {
   get deleteWarningText() {
     if (this.isDeletable) {
       return this.intl.t('delete-agendaitem-message');
-    } if (this.currentSession.isAdmin) {
+    }
+    if (this.currentSession.isAdmin) {
       return this.intl.t('delete-agendaitem-from-meeting-message');
     }
     return null;
