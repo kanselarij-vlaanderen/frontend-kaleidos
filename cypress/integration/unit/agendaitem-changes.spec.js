@@ -161,7 +161,6 @@ context('Agendaitem changes tests', () => {
     cy.get(agenda.compareAgenda.announcementLeft).should('have.length', 0);
     cy.get(agenda.compareAgenda.announcementRight).should('have.length', 1);
     cy.get(agenda.compareAgenda.showChanges).click();
-    cy.wait(2000); // Some data loading issues, there is no loader to wait on
     cy.get(agenda.compareAgenda.agendaitemLeft, {
       timeout: 40000,
     }).should('have.length', 1);
@@ -188,7 +187,6 @@ context('Agendaitem changes tests', () => {
     cy.get(agenda.compareAgenda.announcementLeft).should('have.length', 1);
     cy.get(agenda.compareAgenda.announcementRight).should('have.length', 1);
     cy.get(agenda.compareAgenda.showChanges).click();
-    cy.wait(2000); // Some data loading issues, there is no loader to wait on
     cy.get(agenda.compareAgenda.agendaitemLeft, {
       timeout: 40000,
     }).should('have.length', 1);
