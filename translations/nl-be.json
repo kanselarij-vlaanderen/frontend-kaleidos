@@ -521,6 +521,7 @@
   "success-publish-newsletter-to-belga": "Nieuwsbriev succesvol gepubliceerd naar Belga.",
   "error-send-newsletter": "Er ging iets mis tijdens het versturen van de nieuwsbrief. Contacteer de administrator of probeer het opnieuw.",
   "error-old-newsletter": "De nieuwsbrief die u probeerde te verzenden was meer dan 10 minuten oud. Maak een nieuwe aan.",
+  "error-already-sent-newsletter": "De nieuwsbrief die u probeerde te verzenden was al verzonden.",
   "error-create-newsletter": "Er ging iets mis tijdens het aanmaken van de nieuwsbrief. Contacteer de administrator of probeer het opnieuw.",
   "error-delete-newsletter": "Er ging iets mis tijdens het verwijderen van de nieuwsbrief. Contacteer de administrator of probeer het opnieuw.",
   "error-fetch-newsletter": "Er ging iets mis tijdens het ophalen van de nieuwsbrief. Contacteer de administrator of probeer het opnieuw.",

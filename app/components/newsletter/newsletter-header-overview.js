@@ -78,10 +78,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   async publishToMail() {
     this.isLoading = true;
 
-    const mailCampaign =  await this.createMailCampaign();
-    if (!mailCampaign.id || mailCampaign.isSent) {
-      return;
-    }
+    const mailCampaign =  await this.getMailCampaign();
 
     await this.validateMailCampaign(mailCampaign);
     await this.publishToMailAndSaveCampaign(mailCampaign);
@@ -102,10 +99,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   async publishToAll() {
     this.isLoading = true;
 
-    const mailCampaign = await this.createMailCampaign();
-    if (!mailCampaign.id || mailCampaign.isSent) {
-      return;
-    }
+    const mailCampaign =  await this.getMailCampaign();
 
     await this.validateMailCampaign(mailCampaign);
     await this.publishToMailAndSaveCampaign(mailCampaign);
@@ -121,13 +115,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   async showNewsletter() {
     this.loadingNewsletter = true;
 
-    const mailCampaign = await this.createMailCampaign();
-
-    if (!mailCampaign || !mailCampaign.id || mailCampaign.isSent) {
-      this.newsletterHTML = html.body;
-      this.loadingNewsletter = false;
-      return;
-    }
+    const mailCampaign =  await this.getMailCampaign();
 
     const html = await this.newsletterService
       .getMailCampaignContent(mailCampaign.campaignId)
@@ -200,9 +188,17 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       .reload();
   }
 
-  async createMailCampaign() {
-    await this.newsletterService.createCampaign(this.args.agenda, this.args.meeting);
-    return await this.args.meeting.mailCampaign;
+  async getMailCampaign() {
+    let mailCampaign =  this.args.meeting.mailCampaign;
+    if (mailCampaign.isSent) {
+      this.toaster.error(
+        this.intl.t('error-already-sent-newsletter')
+      );
+      return;
+    } else {
+      mailCampaign = await this.newsletterService.createCampaign(this.args.agenda, this.args.meeting);
+    }
+    return  mailCampaign;
   }
 
   async validatedCampaign(campaignId) {
