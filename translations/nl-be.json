@@ -535,6 +535,7 @@
   "end-editing-overview": "Bewerken afsluiten",
   "clear-filter": "Reset filter",
   "clear-filter-plural": "Reset filters",
+  "clear-config": "Reset weergave",
   "agenda-delete-message": "De agenda wordt verwijderd. Dit kan even duren.",
   "agenda-close-message": "De agenda wordt afgesloten. Dit kan even duren.",
   "agenda-reopen-previous-version-message": "De vorige agenda versie wordt geopend. Dit kan even duren.",
