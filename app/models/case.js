@@ -1,5 +1,4 @@
 import Model, { hasMany, attr } from '@ember-data/model';
-import { PromiseObject } from '@ember-data/store/-private';
 import { computed } from '@ember/object';
 import VRDocumentName, {
   compareFunction,
@@ -28,18 +27,5 @@ export default Model.extend({
         new VRDocumentName(pieceB.get('name'))
       )
     );
-  }),
-
-  latestSubcase: computed('subcases.[]', 'id', 'store', function () {
-    return PromiseObject.create({
-      promise: this.store.queryOne('subcase', {
-        filter: {
-          case: {
-            ':id:': this.id,
-          },
-        },
-        sort: '-created',
-      }),
-    });
   }),
 });

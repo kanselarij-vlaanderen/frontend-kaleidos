@@ -2,10 +2,7 @@
   <Auk::Modal::Header @title={{t "create-subcase"}} @onClose={{@onClose}} />
   <Auk::Modal::Body>
     <Utils::LoadableContent
-      @isLoading={{or
-        this.loadCaseTypes.isRunning
-        this.loadTitleData.isRunning
-      }}
+      @isLoading={{this.areLoadingTasksRunning}}
       @reserveSpace={{true}}
     >
       <div class="auk-o-flex auk-o-flex--justify-between">
@@ -45,6 +42,14 @@
             </Auk::Toolbar::Group>
           </Auk::Toolbar>
         </div>
+      </div>
+      <div class="auk-form-group">
+        <Auk::Label for="new-subcase-confidential">{{t "confidential"}}</Auk::Label>
+        <Auk::Toggle
+          data-test-new-subcase-confidential
+          id="new-subcase-confidential"
+          @checked={{this.confidential}}
+        />
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "name-subcase"}}</Auk::Label>
@@ -117,14 +122,14 @@
     </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
-    @cancelDisabled={{this.save.isRunning}}
+    @cancelDisabled={{this.saveSubcase.isRunning}}
     @onCancel={{@onClose}}
   >
     <Auk::Button
       data-test-new-subcase-save
       @skin="primary"
-      @disabled={{this.save.isRunning}}
-      @loading={{or this.saveSubcase.isRunning this.copyFullSubcase.isRunning}}
+      @disabled={{this.areSavingTasksRunning}}
+      @loading={{or this.areSavingTasksRunning this.areLoadingTasksRunning}}
       {{on "click" (perform this.saveSubcase)}}
     >
       {{t "new-subcase"}}
