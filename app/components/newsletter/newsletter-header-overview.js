@@ -196,7 +196,8 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       );
       return;
     } else {
-      mailCampaign = await this.newsletterService.createCampaign(this.args.agenda, this.args.meeting);
+      const meeting = await this.newsletterService.createCampaign(this.args.agenda, this.args.meeting);
+      mailCampaign = meeting.mailCampaign;
     }
     return  mailCampaign;
   }
