@@ -9,7 +9,6 @@ import { computed } from '@ember/object';
 // eslint-disable-next-line ember/no-classic-classes
 export default Controller.extend(DefaultQueryParamsMixin, {
   store: inject(),
-  sessionService: inject(),
   intl: inject(),
   agendaService: inject(),
 
@@ -34,6 +33,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
         ':gte:planned-start': dateOfToday,
       },
       sort: 'planned-start,number-representation',
+      include: 'agendas,agendas.status',
     });
     const activeAgendas = await this.agendaService.getActiveAgendas(dateOfToday);
 

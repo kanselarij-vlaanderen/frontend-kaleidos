@@ -61,7 +61,7 @@
           </td>
           <td class="auk-u-text-align--right">
             {{#if this.currentSession.isEditor}}
-              <DropdownMenu @skin="borderless" @icon="more" as |Menu|>
+              <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
                 <Menu.Item {{on "click" (fn this.openEditCaseModal row)}}>
                   {{t "edit-case"}}
                 </Menu.Item>
@@ -85,7 +85,7 @@
             <Auk::Button
               @skin="borderless"
               @layout="icon-only"
-              @icon="nav-right"
+              @icon="chevron-right"
               @route="cases.case.subcases"
               @model={{row.id}}
             />

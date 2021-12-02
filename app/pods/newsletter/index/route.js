@@ -17,33 +17,35 @@ export default class IndexNewsletterRoute extends Route {
    * that don't have a newsletter-info yet.
    */
   async model(params) {
-    const agenda = this.modelFor('newsletter').agenda; // eslint-disable-line
-    const agendaitems = await this.store
-      .query('agendaitem', {
-        'filter[agenda][:id:]': agenda.id,
-        'filter[show-as-remark]': false,
-        'filter[is-approval]': false,
-        include: 'treatments.newsletter-info',
-        sort: params.sort,
-        'page[size]': PAGE_SIZE.AGENDAITEMS,
-      });
+    const agenda = await this.modelFor('newsletter').agenda;
+    const filter = {
+      'show-as-remark': false,
+      agenda: {
+        id: agenda.id,
+      },
+    };
+    let agendaitems = await this.store.query('agendaitem', {
+      filter,
+      include: 'treatments.newsletter-info',
+      sort: params.sort,
+      'page[size]': PAGE_SIZE.AGENDAITEMS,
+    });
 
-    return Promise.all(agendaitems.map(async(agendaitem) => {
-      const agendaItemTreatments = await agendaitem.get('treatments');
-      const agendaItemTreatment = agendaItemTreatments.firstObject;
-      const newsletterInfo = await agendaItemTreatment.get('newsletterInfo');
-      return {
-        agendaitem,
-        newsletterInfo,
-      };
-    }));
-  }
+    // The approval items should not be shown on newsletter views
+    // Pre-Kaleidos items have undefined isApproval so can't be filtered in the query above
+    agendaitems = agendaitems.filter((item) => item.isApproval !== true);
 
-  async setupController(controller, model) {
-    super.setupController(...arguments);
-    const agenda = this.modelFor('newsletter').agenda; // eslint-disable-line
-    controller.set('agenda', agenda);
-    controller.set('model', model);
+    return Promise.all(
+      agendaitems.map(async (agendaitem) => {
+        const agendaItemTreatments = await agendaitem.get('treatments');
+        const agendaItemTreatment = agendaItemTreatments.firstObject;
+        const newsletterInfo = await agendaItemTreatment.get('newsletterInfo');
+        return {
+          agendaitem,
+          newsletterInfo,
+        };
+      })
+    );
   }
 
   @action

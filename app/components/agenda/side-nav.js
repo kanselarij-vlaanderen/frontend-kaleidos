@@ -7,7 +7,7 @@ export default class AgendaSideNavComponent extends Component {
   /**
    * @argument meeting
    * @argument currentAgenda
-   * @argument reversedAgendas
+   * @argument reverseSortedAgendas
    */
   @service store;
   @tracked isCollapsedSidebar = false;

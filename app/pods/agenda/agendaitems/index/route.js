@@ -11,8 +11,8 @@ export default class AgendaAgendaitemsIndexRoute extends Route {
     // setupController of agenda.agendaitems route, hence documents will not be loaded yet.
     if (parentController.loadDocuments.performCount === 0) {
       await parentController.loadDocuments.perform();
-      await animationFrame(); // make sure rendering has happened before trying to scroll
-      parentController.scrollToAnchor();
     }
+    await animationFrame(); // make sure rendering has happened before trying to scroll
+    parentController.scrollToAnchor();
   }
 }

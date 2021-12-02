@@ -250,6 +250,7 @@ const selectors = {
   sidebar: {
     open: '[data-test-publication-sidebar-open]',
     publicationNumber: '[data-test-publication-sidebar-publication-number]',
+    publicationNumberSuffix: '[data-test-publication-sidebar-publication-number-suffix]',
     publicationNumberError: '[data-test-publication-sidebar-publication-number-error]',
     confirmWithdraw: '[data-test-publication-sidebar-confirm-withdraw]',
     statusChangeDate: '[data-test-publication-sidebar-status-change-date]',
