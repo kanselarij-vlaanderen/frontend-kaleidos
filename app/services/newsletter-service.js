@@ -33,7 +33,8 @@ export default Service.extend({
           reload: true,
         });
         reloadedMeeting.set('mailCampaign', savedCampaign);
-        return reloadedMeeting.save();
+        await reloadedMeeting.save();
+        return savedCampaign;
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);
