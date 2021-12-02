@@ -24,10 +24,12 @@ export default class EditGovernmentAreasModal extends Component {
     this.governmentDomains = yield this.store.query('concept', {
       'filter[top-concept-schemes][:uri:]': CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN,
       include: 'broader,narrower',
+      'page[size]': 100
     });
     this.governmentFields = yield this.store.query('concept', {
       'filter[top-concept-schemes][:uri:]': CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD,
       include: 'broader,narrower',
+      'page[size]': 100
     });
   }
 
