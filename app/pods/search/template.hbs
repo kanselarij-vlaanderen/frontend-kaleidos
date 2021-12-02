@@ -148,6 +148,13 @@
                 >
                   {{t "newsletter-info"}}
                 </Auk::Tab>
+                <Auk::Tab
+                  @route="search.publications"
+                  @current-when="search.publications"
+                  @query={{hash page=0}}
+                >
+                  {{t "publications"}}
+                </Auk::Tab>
               </Auk::Tabs>
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
