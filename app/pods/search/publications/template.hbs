@@ -1,0 +1,119 @@
+{{ page-title
+  (t "publications")
+}}
+<div class="auk-o-grid auk-u-mb-2">
+  <div class="auk-o-grid-col-2">
+    <div class="auk-box">
+      <div class="auk-u-mb-2">
+        <Auk::Label for="blockInput">{{t "regulation-type"}}</Auk::Label>
+        <Auk::Input
+          value=""
+        />
+      </div>
+      <div>
+        <Auk::Checkbox
+          @checked=""
+          @label="Heeft vertaalaanvragen"
+        />
+        <Auk::Checkbox
+          @checked=""
+          @label="Heeft drukproefaanvragen"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="auk-o-grid-col-10">
+    <div>
+      {{#if this.model.length}}
+        <DataTable
+          data-test-route-search-agendaitems-data-table={{true}}
+          @content={{this.model}}
+          @page={{this.page}}
+          @noDataMessage={{t "no-results-found"}}
+          @size={{this.size}}
+          @sort={{this.sort}}
+          @class="auk-table auk-table--striped auk-table--vertical-align-top"
+          @isLoading={{this.isLoadingModel}}
+          @onClickRow={{this.navigateToAgendaitem}}
+        as |table|
+        >
+          <table.content as |c|>
+            <c.header>
+              <ThSortable
+                @class="auk-table__col--1 auk-table__header-title"
+                @currentSorting={{this.sort}}
+                @field="meetingId"
+                @label={{t "publications-table-publication-number-small"}}
+              />
+              <ThSortable
+                @class="auk-table__col--6 auk-table__header-title"
+                @currentSorting={{this.sort}}
+                @field="sessionDates"
+                @label={{t "publications-table-keyword-small"}}
+              />
+              <ThSortable
+                @class="auk-table__col--1 auk-table__header-title"
+                @currentSorting={{this.sort}}
+                @field="meetingId"
+                @label={{t "publications-table-publication-due-date-small"}}
+              />
+              <ThSortable
+                @class="auk-table__col--2 auk-table__header-title"
+                @currentSorting={{this.sort}}
+                @field="meetingId"
+                @label={{t "publications-table-status"}}
+              />
+              <ThSortable
+                @class="auk-table__col--2 auk-table__header-title"
+                @currentSorting={{this.sort}}
+                @field="meetingId"
+                @label={{t "publications-table-next"}}
+              />
+              <th class="auk-table__col--1"></th>
+            </c.header>
+            {{!-- MOCK DATA --}}
+            <tbody class="auk-table--interaction-cursor">
+              <tr onClick="location.href='/vergadering/612F43A554BBD70008000001/agenda/612F43A554BBD70008000002/agendapunten/612F459954BBD7000800002A/kort-bestek'">
+                <td>
+                  510009
+                </td>
+                <td>
+                  <p>
+                    Bekrachtiging en afkondiging van het decreet houdende instemming met de overeenkomst tussen de regering van het Koninkrijk België en de regering van de Federale Republiek Brazilië betreffende luchtdiensten, gedaan te Brussel op 4 oktober 2009, aangenomen door het Vlaams Parlement op 11 maart 2020
+                  </p>
+                </td>
+                <td>
+                  13/02/2020
+                </td>
+                <td>
+                  <Auk::StatusPill>In behandeling</Auk::StatusPill>
+                </td>
+                <td>
+                  <Auk::StatusPill class="auk-next-step" @status="not-started">Te vertalen</Auk::StatusPill>
+                </td>
+                <td class="auk-u-text-align--right">
+                  <a class="auk-button auk-button--borderless  auk-button--icon  " href="/publicaties/61A89A09D5855D0008000086/dossier" type="button">
+                    <span class="auk-button__content">
+                      <div class="auk-icon auk-icon--default">
+                        <i class="ki ki-chevron-right "></i>
+                      </div>
+                      <span class="auk-u-sr-only">
+                      </span>
+                    </span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+            {{!-- END MOCK DATA --}}
+          </table.content>
+        </DataTable>
+      {{else}}
+        {{#if this.emptySearch}}
+          <WebComponents::VlAlert @message={{t "fill-in-search-term"}}/>
+        {{else}}
+          <WebComponents::VlAlert @message={{t "no-results-found-modify-term"}}/>
+        {{/if}}
+      {{/if}}
+    </div>
+  </div>
+</div>

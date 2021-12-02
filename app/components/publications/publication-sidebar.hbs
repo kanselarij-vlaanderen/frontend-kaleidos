@@ -85,6 +85,31 @@
           }}
         />
 
+        {{! Next step }}
+        <Publications::PublicationStepSelector
+          @publicationStatus={{this.publicationStatus}}
+          @onChange={{this.selectPublicationStatus}}
+          @disabled={{and
+            this.publicationStatus.isPublished
+            this.decision.isStaatsbladResource
+          }}
+        />
+
+        {{! Keyword }}
+        <div class="auk-form-group">
+          <Auk::Label>
+            <div class="auk-o-flex auk-o-flex--vertical-center">
+              <span class="auk-u-mr">{{t "keyword-title"}}</span>
+            </div>
+          </Auk::Label>
+          <Auk::Textarea
+            data-test-publication-sidebar-keyword
+            rows="4"
+            type="text"
+            value=""
+          />
+        </div>
+
         {{#if
           (or
             this.publicationStatus.isWithdrawn this.publicationStatus.isPaused
@@ -222,6 +247,18 @@
           {{/if}}
         </div>
 
+        {{! Aanvraag vertaling }}
+        <div
+          data-test-publication-sidebar-translation-request-date
+          class="auk-form-group"
+        >
+          <Auk::Label>{{t "translation-request-date"}}</Auk::Label>
+          <Auk::Datepicker
+            @date=""
+            @onChange=""
+          />
+        </div>
+
         {{! Uiterste vertaaldatum }}
         {{#if
           (or this.publicationStatus.isPending this.publicationStatus.isPaused)
@@ -254,6 +291,18 @@
           <Auk::Datepicker
             @date={{this.translationSubcase.endDate}}
             @onChange={{this.setTranslationDate}}
+          />
+        </div>
+
+        {{! Aanvraag proefdruk }}
+        <div
+          data-test-publication-sidebar-proof-date
+          class="auk-form-group"
+        >
+          <Auk::Label>{{t "proof-request-date"}}</Auk::Label>
+          <Auk::Datepicker
+            @date=""
+            @onChange=""
           />
         </div>
 
