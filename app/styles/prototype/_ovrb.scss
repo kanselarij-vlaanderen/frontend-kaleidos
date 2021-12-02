@@ -2,7 +2,7 @@
   padding-left: 2rem;
 
   thead th {
-    z-index: 3;
+    z-index: 1;
   }
 
   thead th:last-child,
@@ -14,10 +14,6 @@
     max-width: 57px;
     right: 0;
     border-left: .1rem solid $auk-gray-100;
-  }
-
-  thead th:last-child {
-    z-index: 3;
   }
 }
 
