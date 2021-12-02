@@ -38,6 +38,7 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     // modelFor('agenda') contains agenda and meeting object.
     controller.meeting = this.modelFor('agenda').meeting;
     controller.agenda = this.modelFor('agenda').agenda;
+    controller.reverseSortedAgendas = this.modelFor('agenda').reverseSortedAgendas;
     controller.agendaActivity = this.agendaActivity;
     controller.subcase = this.subcase;
     controller.newsletterInfo = this.newsletterInfo;

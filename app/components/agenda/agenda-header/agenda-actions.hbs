@@ -260,13 +260,13 @@
 {{/if}}
 
 {{#if this.showConfirmForDeletingSelectedAgenda}}
-  <Auk::Modal @size={{if (eq @reversedAgendas.length 1) "large" "small"}}>
+  <Auk::Modal @size={{if (eq @reverseSortedAgendas.length 1) "large" "small"}}>
     <Auk::Modal::Header
       @title={{t "agenda-delete"}}
       @onClose={{this.cancelDeleteSelectedAgenda}}
     />
     <Auk::Modal::Body>
-      {{#if (eq @reversedAgendas.length 1)}}
+      {{#if (eq @reverseSortedAgendas.length 1)}}
         <Auk::Alert
           @skin="error"
           @message={{t "delete-final-agenda-and-meeting"}}
