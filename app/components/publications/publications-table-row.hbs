@@ -131,10 +131,27 @@ request the whole row and not only the arrow at the end to be clickable }}
       class="auk-u-text-nowrap"
     >
       {{#if @publicationFlow.translationSubcase.dueDate}}
-        {{moment-format
-          @publicationFlow.translationSubcase.dueDate
-          "DD-MM-YYYY"
+        {{#if
+          (and
+            (not @publicationFlow.status.isPublished)
+            (is-after @publicationFlow.translationSubcase.dueDate precision="days")
+          )
         }}
+          <strong>{{moment-format
+            @publicationFlow.translationSubcase.dueDate
+            "DD-MM-YYYY"
+          }}</strong>
+          <Auk::FormHelpText
+            @text={{t "date-expired"}}
+            @skin="warning"
+            @icon="alert-triangle"
+          />
+        {{else}}
+          {{moment-format
+            @publicationFlow.translationSubcase.dueDate
+            "DD-MM-YYYY"
+          }}
+        {{/if}}
       {{else}}
         {{t "dash"}}
       {{/if}}
