@@ -1,73 +1,71 @@
-<div class="auk-scroll-wrapper auk-scroll-wrapper--ovrb">
-  <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--ovrb">
-    <div class="auk-table-wrapper-ovrb">
-      {{#if this.model.length}}
-        <table
-          data-test-route-publications-index-data-table
-          class="auk-table auk-table--sticky-header auk-table--sticky-ovrb"
-        >
-          <thead>
-            <tr>
-              {{#each this.tableColumns as |column|}}
-                {{#if (get this.tableColumnDisplayOptions column.keyName)}}
-                  {{! first cases that need a special treament. The "else" clause treats the default case }}
-                  {{#if (eq column.keyName "shortTitle")}}
-                    {{! template-lint-disable no-inline-styles }}
+<div class="auk-scroll-wrapper">
+  <div class="auk-scroll-wrapper__body">
+    {{#if this.model.length}}
+      <table
+        data-test-route-publications-index-data-table
+        class="auk-table auk-table--sticky-header auk-table--sticky-ovrb"
+      >
+        <thead>
+          <tr>
+            {{#each this.tableColumns as |column|}}
+              {{#if (get this.tableColumnDisplayOptions column.keyName)}}
+                {{! first cases that need a special treament. The "else" clause treats the default case }}
+                {{#if (eq column.keyName "shortTitle")}}
+                  {{! template-lint-disable no-inline-styles }}
+                  <Utils::ThSortable
+                    data-test-route-publications-index-th={{column.keyName}}
+                    style="min-width: 25rem;"
+                    @currentSorting={{this.sort}}
+                    @field={{column.sortKey}}
+                    @onChange={{this.sortTable}}
+                    @label={{t column.translationKeySmall}}
+                  />
+                  {{! template-lint-enable no-inline-styles }}
+                {{else}}
+                  {{#if column.sortKey}}
                     <Utils::ThSortable
                       data-test-route-publications-index-th={{column.keyName}}
-                      style="min-width: 25rem;"
+                      @onChange={{this.sortTable}}
                       @currentSorting={{this.sort}}
                       @field={{column.sortKey}}
-                      @onChange={{this.sortTable}}
                       @label={{t column.translationKeySmall}}
                     />
-                    {{! template-lint-enable no-inline-styles }}
                   {{else}}
-                    {{#if column.sortKey}}
-                      <Utils::ThSortable
-                        data-test-route-publications-index-th={{column.keyName}}
-                        @onChange={{this.sortTable}}
-                        @currentSorting={{this.sort}}
-                        @field={{column.sortKey}}
-                        @label={{t column.translationKeySmall}}
-                      />
-                    {{else}}
-                      <th
-                        data-test-route-publications-index-th={{column.keyName}}
-                        class="auk-u-text-nowrap"
-                      >{{t column.translationKeySmall}}</th>
-                    {{/if}}
+                    <th
+                      data-test-route-publications-index-th={{column.keyName}}
+                      class="auk-u-text-nowrap"
+                    >{{t column.translationKeySmall}}</th>
                   {{/if}}
                 {{/if}}
-              {{/each}}
-              <th>&nbsp;</th>
+              {{/if}}
+            {{/each}}
+            <th>&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#if this.isLoadingModel}}
+            <tr data-test-route-publications-index-loading>
+              <td colspan={{add this.tableColumns.length 1}}>
+                {{t "loading"}}
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {{#if this.isLoadingModel}}
-              <tr data-test-route-publications-index-loading>
-                <td colspan={{add this.tableColumns.length 1}}>
-                  {{t "loading"}}
-                </td>
-              </tr>
-            {{else}}
-              {{#each this.model as |publicationFlow|}}
-                <Publications::PublicationsTableRow
-                  @publicationFlow={{publicationFlow}}
-                  @tableColumnDisplayOptions={{this.tableColumnDisplayOptions}}
-                />
-              {{/each}}
-            {{/if}}
-          </tbody>
-        </table>
-      {{else}}
-        <Auk::Panel>
-          <Auk::Panel::Body>
-            <Auk::EmptyState @message={{t "no-results-found"}} />
-          </Auk::Panel::Body>
-        </Auk::Panel>
-      {{/if}}
-    </div>
+          {{else}}
+            {{#each this.model as |publicationFlow|}}
+              <Publications::PublicationsTableRow
+                @publicationFlow={{publicationFlow}}
+                @tableColumnDisplayOptions={{this.tableColumnDisplayOptions}}
+              />
+            {{/each}}
+          {{/if}}
+        </tbody>
+      </table>
+    {{else}}
+      <Auk::Panel>
+        <Auk::Panel::Body>
+          <Auk::EmptyState @message={{t "no-results-found"}} />
+        </Auk::Panel::Body>
+      </Auk::Panel>
+    {{/if}}
   </div>
 </div>
 <div>

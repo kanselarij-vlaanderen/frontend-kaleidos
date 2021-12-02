@@ -5,19 +5,83 @@
   <div class="auk-o-grid-col-2">
     <div class="auk-box">
       <div class="auk-u-mb-2">
-        <Auk::Label for="blockInput">{{t "regulation-type"}}</Auk::Label>
-        <Auk::Input
-          value=""
+        <Auk::Label for="blockInput">Status</Auk::Label>
+        <Auk::Checkbox
+          @checked={{true}}
+          @label="Gepubliceerd"
+        />
+        <Auk::Checkbox
+          @checked={{true}}
+          @label="Gepauzeerd"
+        />
+        <Auk::Checkbox
+          @checked={{true}}
+          @label="Afgevoerd"
+        />
+      </div>
+      <div class="auk-u-mb-2">
+        <Auk::Label for="blockInput">Type</Auk::Label>
+        <Auk::Checkbox
+          @checked={{true}}
+          @label="Decreet"
+        />
+        <Auk::Checkbox
+          @checked={{true}}
+          @label="BVR"
+        />
+        <Auk::Checkbox
+          @checked={{true}}
+          @label="Besluit leidend ambtenaar"
+        />
+        <Auk::Checkbox
+          @checked={{true}}
+          @label="Bericht"
+        />
+        <Auk::Checkbox
+          @checked={{true}}
+          @label="Omzendbrief"
+        />
+        <Auk::Checkbox
+          @checked={{true}}
+          @label="MB"
+        />
+        <Auk::Checkbox
+          @checked={{true}}
+          @label="KB"
+        />
+        <Auk::Checkbox
+          @checked={{true}}
+          @label="Erratum"
+        />
+        <Auk::Checkbox
+          @checked={{true}}
+          @label="Andere"
+        />
+      </div>
+      <div class="auk-u-mb-2">
+        <Auk::Label for="blockInput">Bron</Auk::Label>
+        <Auk::Checkbox
+          @checked={{true}}
+          @label="Via Ministerraad"
+        />
+        <Auk::Checkbox
+          @checked={{true}}
+          @label="Niet via Ministerraad"
         />
       </div>
       <div>
+        <Auk::Label for="blockInput">Aanvragen</Auk::Label>
         <Auk::Checkbox
-          @checked=""
-          @label="Heeft vertaalaanvragen"
+          @checked={{true}}
+          @label="Heeft vertaalaanvragend"
         />
         <Auk::Checkbox
-          @checked=""
+          @checked={{true}}
           @label="Heeft drukproefaanvragen"
+        />
+        <Auk::Checkbox
+          @checked={{true}}
+          @label="Heeft handtekenaanvragen"
         />
       </div>
     </div>
