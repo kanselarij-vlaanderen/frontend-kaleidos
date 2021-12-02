@@ -1,66 +1,23 @@
-.auk-scroll-wrapper__body--ovrb {
-  background-image:
-    linear-gradient(to right, white, white), linear-gradient(to right, white, white), linear-gradient(to right, rgba(0, 0, 20, 0), rgba(255, 255, 255, 0)), linear-gradient(to left, rgba(0, 0, 20, .7), rgba(255, 255, 255, 0));
-  /* Shadows */
-  /* Shadow covers */
-  background-position: left center, right center, left center, right center;
-  background-repeat: no-repeat;
-  background-color: white;
-  background-size: 20px 100%, 205px 100%, 20px 100%, 205px 100%;
-  background-attachment: local, local, scroll, scroll;
-}
-
-.auk-scroll-wrapper--ovrb {
-  position: relative;
-
-  &:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: calc(100% - 195px);
-    width: 195px;
-    height: calc(100% - 15px);
-    background-color: white;
-  }
-}
-
-.auk-table-wrapper-ovrb {
-  height: 100%;
-  width: 100%;
-  position: relative;
-  padding-left: 2rem;
-  padding-top: 2rem;
-}
-
 .auk-table--sticky-ovrb {
+  padding-left: 2rem;
+
   thead th {
-    background-color: transparent;
+    z-index: 3;
   }
 
   thead th:last-child,
   tbody td:last-child {
     position: sticky;
     background-color: white;
-    width: 45px;
-    min-width: 45px;
-    max-width: 45px;
+    width: 57px;
+    min-width: 57px;
+    max-width: 57px;
     right: 0;
-    padding-left: 0;
+    border-left: .1rem solid $auk-gray-100;
   }
 
   thead th:last-child {
     z-index: 3;
-  }
-
-  thead th:nth-last-child(2),
-  tbody td:nth-last-child(2) {
-    position: sticky;
-    background-color: white;
-    right: 45px;
-    min-width: 150px !important;
-    width: 150px !important;
-    max-width: 150px !important;
-    overflow: ellipsis;
   }
 }
 
