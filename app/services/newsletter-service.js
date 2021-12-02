@@ -2,14 +2,13 @@ import Service, { inject as service } from '@ember/service';
 import { ajax } from 'frontend-kaleidos/utils/ajax';
 import moment from 'moment';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes
-export default Service.extend({
-  store: service(),
-  toaster: service(),
-  intl: service(),
-  formatter: service(),
-  currentSession: service(),
+// TODO in KAS-2308 Refactor NewsletterService to better API
+export default class NewsletterService extends Service {
+  @service store;
+  @service toaster;
+  @service intl;
+  @service formatter;
+  @service currentSession;
 
   async createCampaign(agenda, meeting) {
     try {
@@ -18,29 +17,26 @@ export default Service.extend({
         url: `/newsletter/createCampaign?agendaId=${agenda.get('id')}`,
       });
 
-      const {
-        body,
-      } = result;
-
       const mailCampaign = this.store.createRecord('mail-campaign', {
-        campaignId: body.campaign_id,
-        campaignWebId: body.campaign_web_id,
-        archiveUrl: body.archive_url,
+        campaignId: result.body.campaign_id,
+        campaignWebId: result.body.campaign_web_id,
+        archiveUrl: result.body.archive_url,
       });
 
       await mailCampaign.save().then(async(savedCampaign) => {
         const reloadedMeeting = await this.store.findRecord('meeting', meeting.id, {
           reload: true,
         });
-        reloadedMeeting.set('mailCampaign', savedCampaign);
+        reloadedMeeting.mailCampaign = savedCampaign;
         await reloadedMeeting.save();
         return savedCampaign;
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);
       this.toaster.error(this.intl.t('error-create-newsletter'), this.intl.t('warning-title'));
+      return null;
     }
-  },
+  }
 
   async deleteCampaign(id) {
     try {
@@ -53,9 +49,9 @@ export default Service.extend({
       this.toaster.error(this.intl.t('error-delete-newsletter'), this.intl.t('warning-title'));
       return null;
     }
-  },
+  }
 
-  sendMailCampaign(id) { // TODO: this and below method are sync, while 2 methods above async?
+  async sendMailCampaign(id) {
     try {
       return ajax({
         method: 'POST',
@@ -66,9 +62,9 @@ export default Service.extend({
       this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
       return null;
     }
-  },
+  }
 
-  sendtoBelga(agendaId) { // TODO: this and below method are sync, while 2 methods above async?
+  async sendtoBelga(agendaId) {
     try {
       return ajax({
         method: 'POST',
@@ -79,9 +75,9 @@ export default Service.extend({
       this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
       return null;
     }
-  },
+  }
 
-  getMailCampaignContent(id) {
+  async getMailCampaignContent(id) {
     try {
       return ajax({
         method: 'GET',
@@ -92,9 +88,9 @@ export default Service.extend({
       this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
       return null;
     }
-  },
+  }
 
-  getMailCampaign(id) {
+  async getMailCampaign(id) {
     try {
       return ajax({
         method: 'GET',
@@ -105,7 +101,7 @@ export default Service.extend({
       this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
       return null;
     }
-  },
+  }
 
   // TODO title = shortTitle, inconsistenties fix/conversion needed if this is changed
   async createNewsItemForAgendaitem(agendaitem, inNewsletter = false) {
@@ -120,15 +116,15 @@ export default Service.extend({
       });
       if (agendaitem.showAsRemark) {
         const content = agendaitem.title;
-        news.set('title', agendaitem.shortTitle || content);
-        news.set('richtext', content);
-        news.set('finished', true);
-        news.set('inNewsletter', true);
+        news.title = agendaitem.shortTitle || content;
+        news.richtext =content;
+        news.finished =true;
+        news.inNewsletter =true;
       } else {
-        news.set('title', agendaitem.shortTitle);
-        news.set('subtitle', agendaitem.title);
-        news.set('finished', false);
-        news.set('inNewsletter', false);
+        news.title =agendaitem.shortTitle;
+        news.subtitle =agendaitem.title;
+        news.finished =false;
+        news.inNewsletter =false;
         // Use news item "of previous subcase" as a default
         try {
           const activity = await agendaitem.get('agendaActivity');
@@ -140,10 +136,9 @@ export default Service.extend({
             sort: '-agenda-item-treatment.agendaitem.agenda-activity.start-date',
           });
           if (previousNewsItem) {
-            news.set('richtext', previousNewsItem.richtext);
-            news.set('title', previousNewsItem.title);
-            const themes = await previousNewsItem.get('themes');
-            news.set('themes', themes);
+            news.richtext =previousNewsItem.richtext;
+            news.title =previousNewsItem.title;
+            news.themes = await previousNewsItem.get('themes');
           }
         } catch (error) {
           console.log(error);
@@ -151,7 +146,7 @@ export default Service.extend({
       }
       return news;
     }
-  },
+  }
 
   async createNewsItemForMeeting(meeting) {
     if (this.currentSession.isEditor) {
@@ -171,8 +166,8 @@ export default Service.extend({
         publicationDocDate: this.formatter.formatDate(pubDocDate),
       });
       await newsletter.save();
-      meeting.set('newsletter', newsletter);
+      meeting.newsletter = newsletter;
       return await meeting.save();
     }
-  },
-});
+  }
+}
