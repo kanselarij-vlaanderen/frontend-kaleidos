@@ -72,6 +72,15 @@
 
   .auk-icon {
     position: relative;
-    // bottom: .5ex;
+  }
+}
+
+.auk-next-step {
+  .auk-status-pill .auk-icon {
+    display: none;
+  }
+
+  .auk-status-pill__label {
+    padding-left: 0;
   }
 }
