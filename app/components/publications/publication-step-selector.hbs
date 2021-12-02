@@ -1,0 +1,21 @@
+<div data-test-publication-step-selector class="auk-form-group">
+  <Auk::Label for="blockInput">{{t "step"}}</Auk::Label>
+  <PowerSelect
+    @options={{this.publicationStatusses}}
+    @searchEnabled={{false}}
+    @selected={{@publicationStatus}}
+    @onchange={{@onChange}}
+    @disabled={{@disabled}}
+    as |status|
+  >
+    {{#if status.isPublished}}
+      Gepubliceerd
+    {{else if status.isPending}}
+      Te verzenden voor publicatie
+    {{else if status.isPaused}}
+      Te vertalen
+    {{else if status.isWithdrawn}}
+      Nalezen
+    {{/if}}
+  </PowerSelect>
+</div>
