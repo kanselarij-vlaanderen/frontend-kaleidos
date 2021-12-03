@@ -78,10 +78,10 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @action
   async publishToMail() {
     this.isLoading = true;
-    const mailCampaign =  await this.getMailCampaign();
+    const mailCampaign = await this.getMailCampaign();
 
-    if (mailCampaign){
-      if (await this.validateMailCampaign(mailCampaign)){
+    if (mailCampaign) {
+      if (await this.validateMailCampaign(mailCampaign)) {
         await this.publishToMailAndSaveCampaign(mailCampaign);
       }
     }
@@ -102,9 +102,9 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   async publishToAll() {
     this.isLoading = true;
 
-    const mailCampaign =  await this.getMailCampaign();
-    if (mailCampaign){
-      if (await this.validateMailCampaign(mailCampaign)){
+    const mailCampaign = await this.getMailCampaign();
+    if (mailCampaign) {
+      if (await this.validateMailCampaign(mailCampaign)) {
         await this.publishToMailAndSaveCampaign(mailCampaign);
       }
     }
@@ -118,9 +118,9 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   async showNewsletter() {
     this.loadingNewsletter = true;
 
-    const mailCampaign =  await this.getMailCampaign();
+    const mailCampaign = await this.getMailCampaign();
 
-    if (mailCampaign){
+    if (mailCampaign) {
       const html = await this.newsletterService
         .getMailCampaignContent(mailCampaign.campaignId)
         .catch(() => {
@@ -142,13 +142,12 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   async validateMailCampaign(mailCampaign) {
     let validCampaign = true;
-    await this.validatedCampaign(mailCampaign.campaignId)
-      .catch((ex) => {
-        console.error(ex);
-        this.isVerifying = false;
-        this.isLoading = false;
-        validCampaign = false;
-      });
+    await this.validatedCampaign(mailCampaign.campaignId).catch((ex) => {
+      console.error(ex);
+      this.isVerifying = false;
+      this.isLoading = false;
+      validCampaign = false;
+    });
 
     return validCampaign;
   }
@@ -157,7 +156,9 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     await this.newsletterService
       .sendtoBelga(this.args.agenda.id)
       .then(() => {
-        this.toaster.success(this.intl.t('success-publish-newsletter-to-belga'));
+        this.toaster.success(
+          this.intl.t('success-publish-newsletter-to-belga')
+        );
       })
       .catch(() => {
         this.toaster.error(
@@ -180,25 +181,23 @@ export default class NewsletterHeaderOverviewComponent extends Component {
         );
       });
 
-    mailCampaign.set('sentAt', moment()
-      .utc()
-      .toDate());
+    mailCampaign.set('sentAt', moment().utc().toDate());
     await mailCampaign.save();
 
     const meeting = this.args.meeting;
-    await meeting.belongsTo('mailCampaign')
-      .reload();
+    await meeting.belongsTo('mailCampaign').reload();
   }
 
   async getMailCampaign() {
     let mailCampaign = await this.args.meeting.mailCampaign;
     if (mailCampaign.isSent) {
-      this.toaster.error(
-        this.intl.t('error-already-sent-newsletter')
-      );
-      return false;
+      this.toaster.error(this.intl.t('error-already-sent-newsletter'));
+      return null;
     } else {
-      await this.newsletterService.createCampaign(this.args.agenda, this.args.meeting);
+      await this.newsletterService.createCampaign(
+        this.args.agenda,
+        this.args.meeting
+      );
       mailCampaign = await this.args.meeting.mailCampaign;
     }
     return mailCampaign;
@@ -218,8 +217,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     console.info(
       'campaign minutes old',
       Math.abs(
-        moment(campaign.body.create_time)
-          .diff(moment(Date.now()), 'minutes')
+        moment(campaign.body.create_time).diff(moment(Date.now()), 'minutes')
       )
     );
 
@@ -227,8 +225,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
     if (
       Math.abs(
-        moment(campaign.body.create_time)
-          .diff(moment(Date.now()), 'minutes')
+        moment(campaign.body.create_time).diff(moment(Date.now()), 'minutes')
       ) > threshold
     ) {
       const sendingOldCampaignError = new SendingOldCampaignError();
@@ -245,5 +242,4 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       return true;
     }
   }
-
 }

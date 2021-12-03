@@ -59,20 +59,20 @@
                 <Auk::Loader @message={{t "newsletter-loading-text"}} />
               </Menu.Item>
             {{else}}
-                <Menu.Item {{on "click" this.showNewsletter}}>
-                  {{t "show-newsletter"}}
-                </Menu.Item>
+              <Menu.Item {{on "click" this.showNewsletter}}>
+                {{t "show-newsletter"}}
+              </Menu.Item>
               <Menu.Divider />
-                <Menu.Item {{on "click" this.toggleVerifyingPublishAll}}>
-                  {{t "send-newsitem-to-all"}}
-                </Menu.Item>
-                <Menu.Item {{on "click" this.toggleVerifyingPublishMail}}>
-                  {{t "send-newsitem-to-mail"}}
-                </Menu.Item>
-                <Menu.Item {{on "click" this.toggleVerifyingPublishBelga}}>
-                  {{t "send-newsitem-to-belga"}}
-                </Menu.Item>
-                <Menu.Divider />
+              <Menu.Item {{on "click" this.toggleVerifyingPublishAll}}>
+                {{t "send-newsitem-to-all"}}
+              </Menu.Item>
+              <Menu.Item {{on "click" this.toggleVerifyingPublishMail}}>
+                {{t "send-newsitem-to-mail"}}
+              </Menu.Item>
+              <Menu.Item {{on "click" this.toggleVerifyingPublishBelga}}>
+                {{t "send-newsitem-to-belga"}}
+              </Menu.Item>
+              <Menu.Divider />
               <Menu.Item
                 @href={{concat "/newsletter/xml-newsletter/" @agenda.id}}
                 download={{concat "/newsletter/xml-newsletter/" @agenda.id}}
