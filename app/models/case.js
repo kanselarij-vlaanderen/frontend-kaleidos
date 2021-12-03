@@ -1,9 +1,4 @@
 import Model, { hasMany, attr } from '@ember-data/model';
-import { computed } from '@ember/object';
-import VRDocumentName, {
-  compareFunction,
-} from 'frontend-kaleidos/utils/vr-document-name';
-import { A } from '@ember/array';
 
 // TODO: octane-refactor
 /* eslint-disable ember/no-get */
@@ -19,13 +14,4 @@ export default Model.extend({
   subcases: hasMany('subcase'),
   pieces: hasMany('piece'),
   signFlows: hasMany('sign-flow'),
-
-  sortedPieces: computed('pieces.@each.name', function () {
-    return A(this.get('pieces').toArray()).sort((pieceA, pieceB) =>
-      compareFunction(
-        new VRDocumentName(pieceA.get('name')),
-        new VRDocumentName(pieceB.get('name'))
-      )
-    );
-  }),
 });
