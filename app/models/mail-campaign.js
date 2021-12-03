@@ -1,6 +1,4 @@
-import Model, {
-  attr, hasMany
-} from '@ember-data/model';
+import Model, { attr, hasMany } from '@ember-data/model';
 
 export default class MailCampaign extends Model {
   @attr('string') campaignId;
@@ -13,5 +11,4 @@ export default class MailCampaign extends Model {
   get isSent() {
     return !!this.sentAt;
   }
-
 }

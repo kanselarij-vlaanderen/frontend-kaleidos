@@ -23,17 +23,24 @@ export default class NewsletterService extends Service {
         archiveUrl: result.body.archive_url,
       });
 
-      await mailCampaign.save().then(async(savedCampaign) => {
-        const reloadedMeeting = await this.store.findRecord('meeting', meeting.id, {
-          reload: true,
-        });
+      await mailCampaign.save().then(async (savedCampaign) => {
+        const reloadedMeeting = await this.store.findRecord(
+          'meeting',
+          meeting.id,
+          {
+            reload: true,
+          }
+        );
         reloadedMeeting.mailCampaign = savedCampaign;
         await reloadedMeeting.save();
         return savedCampaign;
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);
-      this.toaster.error(this.intl.t('error-create-newsletter'), this.intl.t('warning-title'));
+      this.toaster.error(
+        this.intl.t('error-create-newsletter'),
+        this.intl.t('warning-title')
+      );
       return null;
     }
   }
@@ -46,7 +53,10 @@ export default class NewsletterService extends Service {
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);
-      this.toaster.error(this.intl.t('error-delete-newsletter'), this.intl.t('warning-title'));
+      this.toaster.error(
+        this.intl.t('error-delete-newsletter'),
+        this.intl.t('warning-title')
+      );
       return null;
     }
   }
@@ -59,7 +69,10 @@ export default class NewsletterService extends Service {
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);
-      this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
+      this.toaster.error(
+        this.intl.t('error-send-newsletter'),
+        this.intl.t('warning-title')
+      );
       return null;
     }
   }
@@ -72,7 +85,10 @@ export default class NewsletterService extends Service {
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);
-      this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
+      this.toaster.error(
+        this.intl.t('error-send-newsletter'),
+        this.intl.t('warning-title')
+      );
       return null;
     }
   }
@@ -85,7 +101,10 @@ export default class NewsletterService extends Service {
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);
-      this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
+      this.toaster.error(
+        this.intl.t('error-send-newsletter'),
+        this.intl.t('warning-title')
+      );
       return null;
     }
   }
@@ -98,7 +117,10 @@ export default class NewsletterService extends Service {
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);
-      this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
+      this.toaster.error(
+        this.intl.t('error-send-newsletter'),
+        this.intl.t('warning-title')
+      );
       return null;
     }
   }
@@ -109,7 +131,9 @@ export default class NewsletterService extends Service {
       // FIXME: The relationship 'agendaitem' to 'agenda-item-treatment' is "inverse: null",
       // hence the requirement for the "reload" here. Without it, adding a new
       // newsletterInfo immediately after adding a treatment can break data.
-      const agendaItemTreatments = await agendaitem.hasMany('treatments').reload();
+      const agendaItemTreatments = await agendaitem
+        .hasMany('treatments')
+        .reload();
       const news = this.store.createRecord('newsletter-info', {
         agendaItemTreatment: agendaItemTreatments,
         inNewsletter,
@@ -117,27 +141,30 @@ export default class NewsletterService extends Service {
       if (agendaitem.showAsRemark) {
         const content = agendaitem.title;
         news.title = agendaitem.shortTitle || content;
-        news.richtext =content;
-        news.finished =true;
-        news.inNewsletter =true;
+        news.richtext = content;
+        news.finished = true;
+        news.inNewsletter = true;
       } else {
-        news.title =agendaitem.shortTitle;
-        news.subtitle =agendaitem.title;
-        news.finished =false;
-        news.inNewsletter =false;
+        news.title = agendaitem.shortTitle;
+        news.subtitle = agendaitem.title;
+        news.finished = false;
+        news.inNewsletter = false;
         // Use news item "of previous subcase" as a default
         try {
           const activity = await agendaitem.get('agendaActivity');
           const subcase = await activity.get('subcase');
           const _case = await subcase.get('case');
-          const previousNewsItem = await this.store.queryOne('newsletter-info', {
-            'filter[agenda-item-treatment][subcase][case][:id:]': _case.id,
-            'filter[agenda-item-treatment][agendaitem][show-as-remark]': false, // Don't copy over news item from announcement
-            sort: '-agenda-item-treatment.agendaitem.agenda-activity.start-date',
-          });
+          const previousNewsItem = await this.store.queryOne(
+            'newsletter-info',
+            {
+              'filter[agenda-item-treatment][subcase][case][:id:]': _case.id,
+              'filter[agenda-item-treatment][agendaitem][show-as-remark]': false, // Don't copy over news item from announcement
+              sort: '-agenda-item-treatment.agendaitem.agenda-activity.start-date',
+            }
+          );
           if (previousNewsItem) {
-            news.richtext =previousNewsItem.richtext;
-            news.title =previousNewsItem.title;
+            news.richtext = previousNewsItem.richtext;
+            news.title = previousNewsItem.title;
             news.themes = await previousNewsItem.get('themes');
           }
         } catch (error) {
@@ -152,12 +179,13 @@ export default class NewsletterService extends Service {
     if (this.currentSession.isEditor) {
       const plannedStart = await meeting.get('plannedStart');
       const pubDate = moment(plannedStart).set({
-        hour: 14, minute: 0,
+        hour: 14,
+        minute: 0,
       });
-      const pubDocDate = moment(plannedStart).weekday(7)
-        .set({
-          hour: 14, minute: 0,
-        });
+      const pubDocDate = moment(plannedStart).weekday(7).set({
+        hour: 14,
+        minute: 0,
+      });
       const newsletter = this.store.createRecord('newsletter-info', {
         meeting,
         finished: false,
