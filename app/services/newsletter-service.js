@@ -42,7 +42,7 @@ export default class NewsletterService extends Service {
     try {
       return ajax({
         method: 'DELETE',
-        url: `/newsletter/deleteCampaign/${id}`,
+        url: `/newsletter/deleteMailCampaign/${id}`,
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);
@@ -81,7 +81,7 @@ export default class NewsletterService extends Service {
     try {
       return ajax({
         method: 'GET',
-        url: `/newsletter/fetchTestCampaign/${id}`,
+        url: `/newsletter/fetchTestMailCampaign/${id}`,
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);
@@ -94,7 +94,7 @@ export default class NewsletterService extends Service {
     try {
       return ajax({
         method: 'GET',
-        url: `/newsletter/fetchTestCampaignMetaData/${id}`,
+        url: `/newsletter/fetchTestMailCampaignMetaData/${id}`,
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);

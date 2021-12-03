@@ -34,7 +34,7 @@
         <Agenda::AgendaHeader::AgendaActions
           @meeting={{@meeting}}
           @currentAgenda={{@currentAgenda}}
-          @reversedAgendas={{@reversedAgendas}}
+          @reverseSortedAgendas={{@reverseSortedAgendas}}
           @refreshRoute={{@refreshRoute}}
           @loading={{@loading}}
         />
@@ -148,6 +148,7 @@
 
 {{#if this.isAddingAgendaitems}}
   <Agenda::Agendaitem::CreateAgendaitem
+    @meeting={{@meeting}}
     @isAddingAgendaitems={{this.isAddingAgendaitems}}
     @onCreate={{@refreshRoute}}
   />

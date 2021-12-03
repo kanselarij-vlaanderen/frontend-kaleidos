@@ -16,6 +16,7 @@ import VrNotulenName,
 export default class AgendaOverviewItem extends AgendaSidebarItem {
   /**
    * @argument agendaitem
+   * @argument meeting: the meeting that is currently open
    * @argument currentAgenda: the agenda that is currently open
    * @argument previousAgenda: the previous version of the currently open agenda
    * @argument isNew: boolean indicating if the item should be marked with the "new agenda-item"-icon
@@ -27,10 +28,9 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   @service store;
   @service intl;
   @service toaster;
-  @service sessionService;
   @service agendaService;
   @service router;
-  @service('current-session') currentSessionService;
+  @service currentSession;
 
   @tracked agendaitemDocuments;
   @tracked newAgendaitemDocuments;
@@ -44,9 +44,8 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
     this.loadDocuments.perform();
   }
 
-  // TODO KAS-2449 refactor to use args.meeting
   get documentsAreReleased() {
-    return this.sessionService.currentSession.releasedDocuments < new Date();
+    return this.args.meeting.releasedDocuments < new Date();
   }
 
   get documentListSize() {

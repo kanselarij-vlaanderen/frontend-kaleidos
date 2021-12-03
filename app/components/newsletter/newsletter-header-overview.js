@@ -57,6 +57,8 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     const mailCampaign = await meeting.mailCampaign;
 
     if (!mailCampaign.id) {
+      this.toaster.error(this.intl.t('error-delete-no-newsletter'));
+      this.isLoading = false;
       return;
     }
 
@@ -71,17 +73,18 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
     await reloadedMeeting.save();
     this.isLoading = false;
-    location.reload();
   }
 
   @action
   async publishToMail() {
     this.isLoading = true;
-
     const mailCampaign =  await this.getMailCampaign();
 
-    await this.validateMailCampaign(mailCampaign);
-    await this.publishToMailAndSaveCampaign(mailCampaign);
+    if (mailCampaign){
+      if (await this.validateMailCampaign(mailCampaign)){
+        await this.publishToMailAndSaveCampaign(mailCampaign);
+      }
+    }
 
     this.isLoading = false;
     this.toggleVerifyingPublishMail();
@@ -100,16 +103,16 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     this.isLoading = true;
 
     const mailCampaign =  await this.getMailCampaign();
-
-    await this.validateMailCampaign(mailCampaign);
-    await this.publishToMailAndSaveCampaign(mailCampaign);
-
+    if (mailCampaign){
+      if (await this.validateMailCampaign(mailCampaign)){
+        await this.publishToMailAndSaveCampaign(mailCampaign);
+      }
+    }
     await this.publishNewsletterToBelga;
 
     this.isLoading = false;
     this.toggleVerifyingPublishAll();
   }
-
 
   @action
   async showNewsletter() {
@@ -117,15 +120,17 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
     const mailCampaign =  await this.getMailCampaign();
 
-    const html = await this.newsletterService
-      .getMailCampaignContent(mailCampaign.campaignId)
-      .catch(() => {
-        this.toaster.error(
-          this.intl.t('error-send-newsletter'),
-          this.intl.t('warning-title')
-        );
-      });
-    this.newsletterHTML = html.body;
+    if (mailCampaign){
+      const html = await this.newsletterService
+        .getMailCampaignContent(mailCampaign.campaignId)
+        .catch(() => {
+          this.toaster.error(
+            this.intl.t('error-send-newsletter'),
+            this.intl.t('warning-title')
+          );
+        });
+      this.newsletterHTML = html.body;
+    }
     this.loadingNewsletter = false;
   }
 
@@ -145,9 +150,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
         validCampaign = false;
       });
 
-    if (validCampaign) {
-      return ;
-    }
     return validCampaign;
   }
 
@@ -189,17 +191,17 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   }
 
   async getMailCampaign() {
-    let mailCampaign =  this.args.meeting.mailCampaign;
+    let mailCampaign = await this.args.meeting.mailCampaign;
     if (mailCampaign.isSent) {
       this.toaster.error(
         this.intl.t('error-already-sent-newsletter')
       );
-      return;
+      return false;
     } else {
-      const meeting = await this.newsletterService.createCampaign(this.args.agenda, this.args.meeting);
-      mailCampaign = meeting.mailCampaign;
+      await this.newsletterService.createCampaign(this.args.agenda, this.args.meeting);
+      mailCampaign = await this.args.meeting.mailCampaign;
     }
-    return  mailCampaign;
+    return mailCampaign;
   }
 
   async validatedCampaign(campaignId) {

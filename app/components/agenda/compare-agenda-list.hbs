@@ -3,6 +3,7 @@
   <div class="compare-left-column">
     <Utils::AgendaSelector
       data-test-compare-agenda-left={{true}}
+      @agendas={{@reverseSortedAgendas}}
       @searchField="name"
       @propertyToShow="agendaName"
       @placeholder={{t "select-agenda"}}
@@ -15,6 +16,7 @@
   <div class="compare-right-column">
     <Utils::AgendaSelector
       data-test-compare-agenda-right={{true}}
+      @agendas={{@reverseSortedAgendas}}
       @searchField="name"
       @propertyToShow="agendaName"
       @placeholder={{t "select-agenda"}}
@@ -54,6 +56,7 @@
           {{#if combinedAgendaitem.left}}
             <div data-test-compare-agendaitem-left>
               <Agenda::AgendaOverview::AgendaOverviewItem
+                @meeting={{@meeting}}
                 @agendaitem={{combinedAgendaitem.left}}
               />
             </div>
@@ -63,6 +66,7 @@
           {{#if combinedAgendaitem.right}}
             <div data-test-compare-agendaitem-right>
               <Agenda::AgendaOverview::AgendaOverviewItem
+                @meeting={{@meeting}}
                 @agendaitem={{combinedAgendaitem.right}}
               />
             </div>
@@ -86,6 +90,7 @@
             {{#if combinedAnnouncement.left}}
               <div data-test-compare-announcement-left>
                 <Agenda::AgendaOverview::AgendaOverviewItem
+                  @meeting={{@meeting}}
                   @agendaitem={{combinedAnnouncement.left}}
                 />
               </div>
@@ -95,6 +100,7 @@
             {{#if combinedAnnouncement.right}}
               <div data-test-compare-announcement-right>
                 <Agenda::AgendaOverview::AgendaOverviewItem
+                  @meeting={{@meeting}}
                   @agendaitem={{combinedAnnouncement.right}}
                 />
               </div>
