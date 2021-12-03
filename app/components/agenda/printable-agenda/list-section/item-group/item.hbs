@@ -4,9 +4,7 @@
       @item={{@item}}
     />
   </div>
-  {{#if @item.sortedPieces}}
-    <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
-      @pieces={{@item.sortedPieces}}
-    />
-  {{/if}}
+  <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
+    @agendaitem={{@item}}
+  />
 </div>

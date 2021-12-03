@@ -15,11 +15,9 @@
         />
       </div>
     </div>
-    {{#if this.items.first.sortedPieces}}
-      <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
-        @pieces={{this.items.first.sortedPieces}}
-      />
-    {{/if}}
+    <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
+      @agendaitem={{this.items.first}}
+    />
   </div>
   {{#each this.items.remainder as |agendaitem|}}
     <Agenda::PrintableAgenda::ListSection::ItemGroup::Item

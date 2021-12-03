@@ -20,9 +20,9 @@ export default Route.extend({
       include: 'mandatees',
     });
     const notas = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark).sortBy('number');
-    await this.ensureDocuments.perform(notas);
+    // await this.ensureDocuments.perform(notas); // TODO KAS-1992 documents are loaded in component
     const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark).sortBy('number');
-    await this.ensureDocuments.perform(announcements);
+    // await this.ensureDocuments.perform(announcements); // TODO KAS-1992 documents are loaded in component
 
     return hash({
       meeting,
