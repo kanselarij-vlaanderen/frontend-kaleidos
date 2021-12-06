@@ -11,6 +11,16 @@
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
+<StyleguideSample @title="Disabled" @snippet="accordion-disabled.hbs">
+  {{!-- BEGIN-SNIPPET accordion-disabled --}}
+  <Auk::Accordion>
+    <Auk::Accordion::Item @title="Accordion" @disabled={{true}}>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam ipsam labore sequi. Eaque alias consequatur totam iste error, ipsam quis reprehenderit. Itaque consectetur ex est placeat tenetur, modi consequatur quibusdam.</p>
+    </Auk::Accordion::Item>
+  </Auk::Accordion>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
 <StyleguideSample @title="Controls right" @snippet="accordion-controls-right.hbs">
   {{!-- BEGIN-SNIPPET accordion-controls-right --}}
   <Auk::Accordion>
@@ -38,6 +48,12 @@
     <td>string</td>
     <td class="auk-table__col--3"></td>
     <td>Determines the title of the accordion item.</td>
+  </tr>
+  <tr>
+    <td><code>@disabled</code></td>
+    <td>boolean</td>
+    <td class="auk-table__col--3"><code>false</code> (default) or <code>true</code></td>
+    <td>Determines if the accordion item is disabled.</td>
   </tr>
   <tr>
     <td><code>@layout</code></td>
