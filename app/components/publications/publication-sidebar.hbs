@@ -28,8 +28,35 @@
   </Auk::Navbar>
   {{#if @isOpen}}
     <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
-      {{!Publicatienummer }}
       <div class="auk-u-m-3">
+        {{! Publicatiedatum }}
+        {{#if this.publicationStatus.isPublished}}
+          <div
+            data-test-publication-sidebar-publication-date
+            class="auk-form-group"
+          >
+            <Auk::Label>{{t "publication-date"}}</Auk::Label>
+            {{#unless this.loadDecision.isRunning}}
+              {{#if this.decision.isStaatsbladResource}}
+                {{#if this.decision.publicationDate}}
+                  <div class="auk-u-muted">
+                    {{moment-format this.decision.publicationDate "DD-MM-YYYY"}}
+                  </div>
+                {{else}}
+                  <div class="auk-u-muted auk-u-italic">
+                    {{t "not-known"}}
+                  </div>
+                {{/if}}
+              {{else}}
+                <Auk::Datepicker
+                  @date={{this.decision.publicationDate}}
+                  @onChange={{this.setPublicationDate}}
+                />
+              {{/if}}
+            {{/unless}}
+          </div>
+        {{/if}}
+        {{!Publicatienummer }}
         <div
           class="auk-form-group
             {{if this.numberIsAlreadyUsed "auk-form-group--error"}}"
@@ -258,18 +285,16 @@
         </div>
 
         {{! Gevraagde publicatiedatum }}
-        {{#if this.publicationStatus.isPending}}
-          <div
-            data-test-publication-sidebar-target-end-date
-            class="auk-form-group"
-          >
-            <Auk::Label>{{t "publication-target-end-date"}}</Auk::Label>
-            <Auk::Datepicker
-              @date={{this.publicationSubcase.targetEndDate}}
-              @onChange={{this.setPublicationTargetEndDate}}
-            />
-          </div>
-        {{/if}}
+        <div
+          data-test-publication-sidebar-target-end-date
+          class="auk-form-group"
+        >
+          <Auk::Label>{{t "publication-target-end-date"}}</Auk::Label>
+          <Auk::Datepicker
+            @date={{this.publicationSubcase.targetEndDate}}
+            @onChange={{this.setPublicationTargetEndDate}}
+          />
+        </div>
 
         {{! Uiterste publicatiedatum }}
         {{#unless this.publicationStatus.isWithdrawn}}
@@ -296,34 +321,6 @@
             {{/if}}
           </div>
         {{/unless}}
-
-        {{! Publicatiedatum }}
-        {{#if this.publicationStatus.isPublished}}
-          <div
-            data-test-publication-sidebar-publication-date
-            class="auk-form-group"
-          >
-            <Auk::Label>{{t "publication-date"}}</Auk::Label>
-            {{#unless this.loadDecision.isRunning}}
-              {{#if this.decision.isStaatsbladResource}}
-                {{#if this.decision.publicationDate}}
-                  <div class="auk-u-muted">
-                    {{moment-format this.decision.publicationDate "DD-MM-YYYY"}}
-                  </div>
-                {{else}}
-                  <div class="auk-u-muted auk-u-italic">
-                    {{t "not-known"}}
-                  </div>
-                {{/if}}
-              {{else}}
-                <Auk::Datepicker
-                  @date={{this.decision.publicationDate}}
-                  @onChange={{this.setPublicationDate}}
-                />
-              {{/if}}
-            {{/unless}}
-          </div>
-        {{/if}}
 
         {{! Opmerking }}
         <div class="auk-form-group">
