@@ -53,11 +53,8 @@
     </div>
   {{/if}}
   {{#if (await this.newsletterInfo.newsletterProposal)}}
-    <div class="auk-o-flex auk-o-flex--align-baseline auk-u-mb-3">
-      <Auk::Badge @icon="user" @size="small" />
-      <span class="l-printable-newsletter__proposal-label" data-test-newsletter-item-content-print-item-proposal>
-        {{await this.newsletterInfo.newsletterProposal}}
-        </span>
+    <div class="auk-u-mb-3 l-printable-newsletter__proposal-label" data-test-newsletter-item-content-print-item-proposal>
+      {{await this.newsletterInfo.newsletterProposal}}
     </div>
   {{/if}}
   {{#if (not this.agendaitem.showAsRemark)}}
@@ -85,7 +82,7 @@
 {{#if
   (gt (await this.newsletterInfo.themes.length) 0)
 }}
-  <div class="auk-u-mt-3">
+  <div class="auk-u-mt-3 l-printable-newsletter__non-breakable-group">
     <Auk::PillList>
       {{#each
         (await this.newsletterInfo.themes)
