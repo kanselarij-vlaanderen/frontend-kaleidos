@@ -1,5 +1,6 @@
 /* global context, before, it, cy, beforeEach */
 // / <reference types="Cypress" />
+import auk from '../../selectors/auk.selectors';
 import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
@@ -166,7 +167,9 @@ context('Add files to an agenda', () => { // At the meeting-level
     cy.get('@docCards').eq(0)
       .within(() => {
         cy.get(document.documentCard.name.value).contains(/2e/);
-        cy.get(document.documentCard.versionHistory).click();
+        cy.get(document.documentCard.versionHistory)
+          .find(auk.accordion.header.button)
+          .click();
         cy.get(document.vlDocument.piece).should('have.length', 1);
         cy.get(document.vlDocument.delete).click(); // no eq(0) needed when this is the only vl-document
       });

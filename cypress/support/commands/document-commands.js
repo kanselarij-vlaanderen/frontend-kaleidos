@@ -446,7 +446,9 @@ function deleteSinglePiece(fileName, indexToDelete) {
   cy.get(document.documentCard.name.value).contains(fileName)
     .parents(document.documentCard.card)
     .within(() => {
-      cy.get(document.documentCard.versionHistory).click();
+      cy.get(document.documentCard.versionHistory)
+        .find(auk.accordion.header.button)
+        .click();
       cy.get(document.vlDocument.piece).eq(indexToDelete)
         .find(document.vlDocument.delete)
         .click();
@@ -477,7 +479,9 @@ function isPieceDeletable(fileName, indexToCheck, shouldBeDeletable) {
     .contains(fileName)
     .parents(document.documentCard.card)
     .within(() => {
-      cy.get(document.documentCard.versionHistory).click();
+      cy.get(document.documentCard.versionHistory)
+        .find(auk.accordion.header.button)
+        .click();
       cy.get(document.vlDocument.piece).eq(indexToCheck)
         .within(() => {
           if (shouldBeDeletable) {
