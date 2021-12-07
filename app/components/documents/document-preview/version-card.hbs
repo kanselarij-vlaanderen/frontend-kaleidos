@@ -15,7 +15,11 @@
       <Auk::PillList class="auk-u-mr-3">
         <Utils::ConfidentialityPill @confidential={{@piece.confidential}} />
         <Utils::Documents::FileTypePill @extension={{@piece.file.extension}} />
-        {{#if @piece.signedPiece}}
+        {{#if (
+          and
+            this.isSignaturesEnabled
+            @piece.signedPiece
+        )}}
           <Auk::StatusPill @status="done">{{t "signing-status-signed"}}</Auk::StatusPill>
         {{/if}}
       </Auk::PillList>

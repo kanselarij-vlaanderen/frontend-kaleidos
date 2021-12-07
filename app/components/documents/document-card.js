@@ -9,7 +9,7 @@ import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import ENV from 'frontend-kaleidos/config/environment';
-import { isEmpty } from '@ember/utils';
+import { isEmpty, isPresent } from '@ember/utils';
 
 export default class DocumentsDocumentCardComponent extends Component {
   /**
@@ -221,6 +221,10 @@ export default class DocumentsDocumentCardComponent extends Component {
   *expandVersionHistory() {
     yield this.loadVersionHistory.perform();
     this.isExpandedVersionHistory = true;
+  }
+
+  get isSignaturesEnabled() {
+    return isPresent(ENV.APP.ENABLE_SIGNATURES);
   }
 
   @task

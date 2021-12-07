@@ -52,6 +52,7 @@
             {{/if}}
             {{#if
               (and
+                this.isSignaturesEnabled
                 (not this.loadPieceRelatedData.isRunning)
                 (not this.loadSignatureRelatedData.isRunning)
                 this.signedPiece
