@@ -12,7 +12,6 @@ export default class SessionsSessionAgendaNavComponent extends Component {
    */
   @service router;
   @service store;
-  @service sessionService;
   @service currentSession;
 
   @lastValue('loadFirstAgendaitem') firstAgendaitem;

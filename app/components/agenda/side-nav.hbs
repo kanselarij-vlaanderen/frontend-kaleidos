@@ -29,7 +29,7 @@
     </Auk::Toolbar>
   </Auk::Navbar>
   <ul class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
-    {{#each @reversedAgendas as |agenda|}}
+    {{#each @reverseSortedAgendas as |agenda|}}
       <li
         class="auk-sidebar__item auk-sidebar__item--styled
           {{if (eq @currentAgenda.id agenda.id) "auk-sidebar__item--active"}}"
