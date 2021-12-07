@@ -32,22 +32,24 @@
                 (not this.loadPublicationFlowRelatedData.isRunning)
               )
             }}
-              {{! trigger fetch }}
-              {{#if this.piece.publicationFlow}}
-                {{! TODO: remove style attributes and replace classes with auk-status-pill }}
-                {{! template-lint-disable no-inline-styles }}
-                <LinkTo
-                class="auk-pill auk-pill--default auk-u-mr-2"
-                  @route="publications.publication"
-                  @model={{this.piece.publicationFlow.id}}
-                >
-                  <Auk::Icon @name="link" style="display: none;" />
-                  <span class="auk-status-pill__label" style="padding: 0;">
-                    {{this.piece.publicationFlow.identification.idName}}
-                  </span>
-                </LinkTo>
-                {{! template-lint-enable no-inline-styles }}
-              {{/if}}
+              <Auk::Toolbar::Item>
+                {{! trigger fetch }}
+                {{#if this.piece.publicationFlow}}
+                  {{! TODO: remove style attributes and replace classes with auk-status-pill }}
+                  {{! template-lint-disable no-inline-styles }}
+                  <LinkTo
+                  class="auk-pill auk-pill--default auk-u-mr-2"
+                    @route="publications.publication"
+                    @model={{this.piece.publicationFlow.id}}
+                  >
+                    <Auk::Icon @name="link" style="display: none;" />
+                    <span class="auk-status-pill__label" style="padding: 0;">
+                      {{this.piece.publicationFlow.identification.idName}}
+                    </span>
+                  </LinkTo>
+                  {{! template-lint-enable no-inline-styles }}
+                {{/if}}
+              </Auk::Toolbar::Item>
             {{/if}}
             {{#if
               (and
