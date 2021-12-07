@@ -11,6 +11,7 @@
       <div class="auk-form-group">
         <Auk::Label>{{t "related-main-meeting-field-label"}}</Auk::Label>
         <Utils::ModelSelector
+          data-test-new-session-related-main-meeting
           @modelName="meeting"
           @searchField="numberRepresentation"
           @propertyToShow="label"

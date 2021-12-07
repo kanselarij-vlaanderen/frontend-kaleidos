@@ -94,8 +94,9 @@ const selectors = {
       releaseDecisions: '[data-test-agenda-header-release-decisions-confirm]',
       approveAllAgendaitems: '[data-test-agenda-header-approve-all-agendaitems-confirm]',
     },
+    kind: '[data-test-agenda-header-kind]',
     // TODO-selector unused selector
-    title: ['data-test-agenda-header-title'],
+    title: '[data-test-agenda-header-title]',
   },
 
   // agenda-actions
@@ -186,6 +187,7 @@ const selectors = {
   // new-session
   newSession: {
     kind: '[data-test-new-session-kind]',
+    relatedMainMeeting: '[data-test-new-session-related-main-meeting]',
     meetingNumber: '[data-test-new-session-meeting-number]',
     meetingLocation: '[data-test-new-session-meeting-location]',
     datepicker: '[data-test-new-session-datepicker]',

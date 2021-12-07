@@ -98,7 +98,7 @@
                 </c.header>
                 <c.body @class="auk-table--interaction-cursor" as |meeting|>
                   {{#if (not meeting.alreadyShown)}}
-                    <td>
+                    <td data-test-route-agendas-overview-data-table-row-title>
                       {{t "agenda-for"}}
                       {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
                     </td>
@@ -125,7 +125,7 @@
                         {{t "opened"}}
                       {{/if}}
                     </td>
-                    <td>
+                    <td data-test-route-agendas-overview-data-table-row-kind>
                       {{meeting.kindToShow.label}}
                     </td>
                     <td class="auk-u-text-align--center">
