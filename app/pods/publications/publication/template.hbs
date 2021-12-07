@@ -6,17 +6,24 @@
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
-          <span class="auk-overline auk-u-muted"
-            data-test-route-publications-publication-header-number>
-            {{uppercase (t "publication-flow")}}
-            -
-            {{#if this.model.case.subcases}}
-              {{uppercase (t "via-cabinet")}}
-            {{else}}
-              {{uppercase (t "not-via-cabinet")}}
-            {{/if}}
-            -
-            {{uppercase this.model.identification.idName}}
+          <span class="auk-o-flex auk-o-flex--horizontal auk-o-flex--align-baseline auk-o-flex--spaced">
+            <span class="auk-overline auk-u-muted"
+              data-test-route-publications-publication-header-number>
+              {{uppercase (t "publication-flow")}}
+              -
+              {{#if this.model.case.subcases}}
+                {{uppercase (t "via-cabinet")}}
+              {{else}}
+                {{uppercase (t "not-via-cabinet")}}
+              {{/if}}
+              -
+              {{uppercase this.model.identification.idName}}
+
+            </span>
+            <Auk::Pill @skin="white">
+              Proefdruk aanvragen
+            </Auk::Pill>
+            <Auk::ButtonLink @layout="icon-only" @skin="muted" @icon="pencil" @padding="padded-y" class="auk-u-text-small">Status aanpassen</Auk::ButtonLink>
           </span>
           <Auk::AbbreviatedText
             @text={{or
@@ -40,15 +47,13 @@
 </Auk::Navbar>
 
 {{!-- Auk css gebruiken, component ? --}}
-<div class="auk-panel-layout">
-  <div class="auk-panel-layout__main-content">
+
     <div class="auk-scroll-wrapper">
       <div class="auk-scroll-wrapper__body">
         {{outlet}}
       </div>
     </div>
-  </div>
-  <div class="auk-panel-layout__sidebar">
+  {{!-- <div class="auk-panel-layout__sidebar">
     <Publications::PublicationSidebar
       @isOpen={{this.sidebarIsOpen}}
       @onCollapse={{this.toggleSidebar}}
@@ -56,5 +61,4 @@
       @publicationFlow={{this.model}}
       @didChange={{this.saveSidebarProperty}}
     />
-  </div>
-</div>
+  </div> --}}

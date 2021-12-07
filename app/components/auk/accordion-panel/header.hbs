@@ -11,7 +11,14 @@
         />
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
+        {{#if @date}}
+        <div class="auk-content">
+          <h4 class="auk-u-m-0">{{@title}}</h4>
+          <p class="auk-u-text-small auk-u-m-0">{{@date}}</p>
+        </div>
+        {{else}}
         <h4 class="auk-accordion__title">{{@title}}</h4>
+        {{/if}}
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     {{yield
