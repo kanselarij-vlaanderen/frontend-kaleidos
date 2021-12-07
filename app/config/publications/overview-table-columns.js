@@ -18,6 +18,7 @@ export default [
     translationKey: 'publications-table-numacnummer-bs',
     translationKeySmall: 'publications-table-numacnummer-bs-small',
     showByDefault: false,
+    sortKey: 'identification.structured-identifier.local-identifier,-created', // Create sort key
   },
   {
     keyName: 'keyword',
@@ -44,6 +45,7 @@ export default [
     translationKey: 'publications-table-pages',
     translationKeySmall: 'publications-table-pages-small',
     showByDefault: false,
+    sortKey: 'identification.structured-identifier.local-identifier,-created', // Create sort key
   },
     {
     keyName: 'decisionDate',
@@ -77,6 +79,13 @@ export default [
     keyName: 'proofRequestDate',
     translationKey: 'publications-table-preview-request-date',
     translationKeySmall: 'publications-table-preview-request-date-small',
+    showByDefault: false,
+    sortKey: 'publication-subcase.received-date',
+  },
+  {
+    keyName: 'proofReceivedDate',
+    translationKey: 'publications-table-preview-received-date',
+    translationKeySmall: 'publications-table-preview-received-date-small',
     showByDefault: false,
     sortKey: 'publication-subcase.received-date',
   },

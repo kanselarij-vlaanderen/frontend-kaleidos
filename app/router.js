@@ -74,7 +74,7 @@ Router.map(function() {
 
   if (!isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB)) {
     this.route('publications', { path: '/publicaties', }, function() {
-      this.route('index', { path: '/overzicht', }, function() {
+      this.route('index', { path: '/', }, function() {
         this.route('index', { path: '/alle-dossiers', });
         this.route('urgent', { path: '/dringend', });
         this.route('translation', { path: '/in-vertaling', });
