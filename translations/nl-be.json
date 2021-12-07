@@ -851,6 +851,8 @@
   "publications-table-translation-request-date-small": "Aanv. Vert.",
   "publications-table-preview-request-date": "Aanvraag proefdruk",
   "publications-table-preview-request-date-small": "Aanv. Pr.",
+  "publications-table-preview-received-date": "Drukproef in",
+  "publications-table-preview-received-date-small": "Drukproef in",
   "publications-table-preview-translator": "Drukproef verbeteraar",
   "publications-table-preview-translator-small": "Verbeteraar",
   "publications-table-status": "Status",
