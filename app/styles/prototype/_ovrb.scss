@@ -28,10 +28,7 @@
   }
 }
 
-.auk-status-pill.auk-next-step .auk-icon {
-  display: none;
-}
-
-.auk-status-pill.auk-next-step.auk-status-pill__label {
-  padding-left: 0;
+.auk-status-pill--paused {
+  background-color: $auk-gray-200;
+  border-color: $auk-gray-200;
 }

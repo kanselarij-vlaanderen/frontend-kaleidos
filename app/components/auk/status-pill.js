@@ -10,6 +10,8 @@ export default class StatusPill extends Component {
   static statusIconMap = {
     'in-progress': 'clock',
     'not-started': 'circle',
+    'paused': 'circle-pause',
+    'neutral': '',
     done: 'circle-check',
     error: 'circle-x',
   };

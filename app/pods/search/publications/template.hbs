@@ -72,15 +72,15 @@
       <div>
         <Auk::Label for="blockInput">Aanvragen</Auk::Label>
         <Auk::Checkbox
-          @checked={{true}}
+          @checked={{false}}
           @label="Heeft vertaalaanvragend"
         />
         <Auk::Checkbox
-          @checked={{true}}
+          @checked={{false}}
           @label="Heeft drukproefaanvragen"
         />
         <Auk::Checkbox
-          @checked={{true}}
+          @checked={{false}}
           @label="Heeft handtekenaanvragen"
         />
       </div>
@@ -153,7 +153,7 @@
                   <Auk::StatusPill>In behandeling</Auk::StatusPill>
                 </td>
                 <td>
-                  <Auk::StatusPill class="auk-next-step" @status="not-started">Te vertalen</Auk::StatusPill>
+                  <Auk::StatusPill @status="neutral">Te vertalen</Auk::StatusPill>
                 </td>
                 <td class="auk-u-text-align--right">
                   <a class="auk-button auk-button--borderless  auk-button--icon  " href="/publicaties/61A89A09D5855D0008000086/dossier" type="button">
