@@ -37,7 +37,7 @@
                   {{! TODO: remove style attributes and replace classes with auk-status-pill }}
                   {{! template-lint-disable no-inline-styles }}
                   <LinkTo
-                  class="auk-pill auk-pill--default auk-u-mr-2"
+                    class="auk-pill auk-pill--default auk-u-mr-2"
                     @route="publications.publication"
                     @model={{this.piece.publicationFlow.id}}
                   >
@@ -58,7 +58,7 @@
               )
             }}
               <Auk::Toolbar::Item>
-                <Auk::StatusPill @status="done" >{{t "signing-status-signed"}}</Auk::StatusPill>
+                <Auk::StatusPill @status="done">{{t "signing-status-signed"}}</Auk::StatusPill>
               </Auk::Toolbar::Item>
             {{/if}}
             <Auk::Toolbar::Item class="auk-o-flex">
