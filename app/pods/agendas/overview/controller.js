@@ -9,7 +9,6 @@ import { computed } from '@ember/object';
 // eslint-disable-next-line ember/no-classic-classes
 export default Controller.extend(DefaultQueryParamsMixin, {
   store: inject(),
-  sessionService: inject(),
   intl: inject(),
   agendaService: inject(),
 
