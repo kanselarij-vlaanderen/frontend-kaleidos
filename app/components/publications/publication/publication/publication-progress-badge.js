@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 
-export default class PublicationsProofProgressBadgeComponent extends Component {
+export default class PublicationsPublicationProgressBadgeComponent extends Component {
   @tracked requests;
 
   constructor() {

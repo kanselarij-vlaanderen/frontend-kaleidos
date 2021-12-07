@@ -1,5 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 
 export default class PublicationsPublicationTranslationsController extends Controller {
   @action
@@ -11,5 +12,19 @@ export default class PublicationsPublicationTranslationsController extends Contr
       this.model.endDate = null;
     }
     this.model.save();
+  }
+
+  @tracked isInEditMode;
+  @tracked showError;
+
+  @action
+  putInEditMode() {
+    this.isInEditMode = true;
+  }
+
+  @action
+  cancelEdit() {
+    this.showError = false;
+    this.isInEditMode = false;
   }
 }
