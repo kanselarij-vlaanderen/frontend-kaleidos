@@ -40,6 +40,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked accessLevel;
   @tracked documentContainer;
   @tracked signMarkingActivity;
+  @tracked signedPiece;
 
   @tracked uploadedFile;
   @tracked newPiece;
@@ -71,6 +72,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   *loadSignatureRelatedData() {
     if (this.args.hasMarkForSignature) {
       this.signMarkingActivity = yield this.piece.signMarkingActivity;
+      this.signedPiece = yield this.piece.signedPiece;
     }
   }
 

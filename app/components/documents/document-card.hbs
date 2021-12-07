@@ -37,7 +37,7 @@
                 {{! TODO: remove style attributes and replace classes with auk-status-pill }}
                 {{! template-lint-disable no-inline-styles }}
                 <LinkTo
-                  class="auk-pill auk-pill--default auk-u-mr-2"
+                class="auk-pill auk-pill--default auk-u-mr-2"
                   @route="publications.publication"
                   @model={{this.piece.publicationFlow.id}}
                 >
@@ -48,6 +48,17 @@
                 </LinkTo>
                 {{! template-lint-enable no-inline-styles }}
               {{/if}}
+            {{/if}}
+            {{#if
+              (and
+                (not this.loadPieceRelatedData.isRunning)
+                (not this.loadSignatureRelatedData.isRunning)
+                this.signedPiece
+              )
+            }}
+              <Auk::Toolbar::Item>
+                <Auk::StatusPill @status="done" >{{t "signing-status-signed"}}</Auk::StatusPill>
+              </Auk::Toolbar::Item>
             {{/if}}
             <Auk::Toolbar::Item class="auk-o-flex">
               {{#unless this.loadPieceRelatedData.isRunning}}
@@ -66,6 +77,7 @@
                 @hasMarkForSignature
                 (not this.loadSignatureRelatedData.isRunning)
                 (not this.loadPieceRelatedData.isRunning)
+                (not this.signedPiece)
               )
             }}
               <Auk::Toolbar::Item>
