@@ -284,6 +284,58 @@ p {
 }
 
 
+/* Printable newsletter list
+   ========================================================================== */
+
+.l-printable-newsletter {
+  p {
+    color: $color-text;
+    line-height: 1.5;
+  }
+
+  .auk-pill,
+  .auk-icon,
+  .auk-badge,
+  .auk-u-muted {
+    -webkit-print-color-adjust: exact;
+  }
+
+  .auk-h1,
+  .auk-h2 {
+    line-height: 1.2;
+  }
+
+  .auk-h3 {
+    line-height: 1.3;
+  }
+
+  .auk-h4 {
+    line-height: 1.4;
+  }
+}
+
+@media print {
+  .l-printable-newsletter {
+    max-width: none;
+  }
+}
+
+@media print {
+  .l-printable-newsletter__non-breakable-group {
+    break-inside: avoid;
+  }
+}
+
+.l-printable-newsletter__title {
+  margin-left: 0.4rem;
+  padding-left: 1rem;
+}
+
+.l-printable-newsletter__proposal-label {
+  line-height: 1.4;
+}
+
+
 /* Preview container
    ========================================================================== */
 
