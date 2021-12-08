@@ -71,9 +71,7 @@ export default ModelWithModifier.extend({
       subcaseName, title, shortTitle,
     } = this;
     if (subcaseName) {
-      // keep capitalization except for first word (e.g. "Goedkeuring..." => "goedkeuring na adviesaanvraag aan de Raad van State")
-      let subcaseNameLC = subcaseName[0].toLowerCase() + subcaseName.substring(1);
-      return `${this.intl.t('in-function-of')} ${subcaseNameLC}`;
+      return `${this.intl.t('in-function-of')} ${subcaseName}`;
     } if (shortTitle) {
       return shortTitle;
     } if (title) {

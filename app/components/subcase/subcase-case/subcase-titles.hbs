@@ -39,7 +39,7 @@
         @skin={{await this.pillSkin}}
         class="auk-u-text-capitalize"
       >
-        {{await this.subcase.subcaseName}}
+        {{capitalize (await this.subcase.subcaseName)}}
       </Auk::Pill>
     {{/if}}
   </div>
