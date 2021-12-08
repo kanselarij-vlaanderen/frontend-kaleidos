@@ -23,7 +23,6 @@ export default ModelWithModifier.extend({
   isArchived: attr('boolean'),
   subcaseName: attr('string'),
 
-  iseCodes: hasMany('ise-code'),
   agendaActivities: hasMany('agenda-activity', {
     inverse: null,
   }),

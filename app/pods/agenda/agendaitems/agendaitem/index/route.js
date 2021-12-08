@@ -22,6 +22,8 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     this.submitter = undefined;
     if (this.subcase) {
       this.submitter = await this.subcase.requestedBy;
+      const case_ = await this.subcase.case;
+      await case_.governmentAreas;
     }
     const agendaItemTreatment = await model.hasMany('treatments').reload();
     const anyTreatment = agendaItemTreatment.firstObject;
