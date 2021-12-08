@@ -77,3 +77,9 @@
 .auk-u-text-small .auk-icon  {
   @extend .auk-u-text-small;
 }
+
+// Fix select
+.auk-select {
+  font-family: inherit;
+  background-color: #fff;
+}

@@ -31,7 +31,12 @@
       class="auk-form-group"
     >
       <Auk::Label>Wie leest na?</Auk::Label>
-      <Auk::Input />
+      <select name="user" id="user" class="auk-select">
+        <option value=""></option>
+        <option value="Daisy">Daisy</option>
+        <option value="Hilde">Hilde</option>
+        <option value="Liesbeth">Liesbeth</option>
+      </select>
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
