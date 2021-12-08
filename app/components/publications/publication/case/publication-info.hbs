@@ -15,14 +15,10 @@
     <div class="auk-o-grid">
       <div class="auk-o-grid-col-1 auk-content">
         <Auk::Label>Dringend</Auk::Label>
-        {{#if this.publicationStatus.isPending}}
         <Publications::UrgencyLevelCheckbox
           @urgencyLevel={{this.publicationFlow.urgencyLevel}}
           @onChange={{this.setUrgencyLevel}}
         />
-        {{else}}
-        {{t "dash"}}
-        {{/if}}
       </div>
 
       <div class="auk-o-grid-col-2">
