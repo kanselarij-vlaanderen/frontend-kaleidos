@@ -47,6 +47,7 @@
             <Auk::Button
               @skin="secondary"
               @icon="plus"
+              {{on "click" this.openProofUploadModal}}
             >
               Proefdruk toevoegen
             </Auk::Button>
@@ -162,3 +163,11 @@
 </div>
 
 {{!-- {{outlet}} --}}
+
+{{#if this.showProofUploadModal}}
+  <Publications::Publication::Proofs::ProofUploadModalMockup
+    @publicationFlow={{this.model}}
+    @onSave={{perform this.closeProofUploadModal}}
+    @onCancel={{this.closeProofUploadModal}}
+  />
+{{/if}}

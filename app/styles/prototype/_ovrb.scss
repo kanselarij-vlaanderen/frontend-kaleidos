@@ -64,6 +64,15 @@
   padding: 0;
 }
 
+// .auk-button-link.auk-u-text-small {
+//   display: flex;
+//   align-items: center;
+// }
+
+.auk-u-text-small .auk-icon {
+  height: 1.4rem;
+}
+
 .auk-u-text-small .auk-button__label,
 .auk-u-text-small .auk-icon  {
   @extend .auk-u-text-small;

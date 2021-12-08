@@ -1,0 +1,45 @@
+<Auk::Modal>
+  <Auk::Modal::Header
+    @title="Drukproef opladen"
+    @onClose={{@onCancel}}
+  />
+  <Auk::Modal::Body>
+     <Utils::LoadableContent
+      @reserveSpace={{true}}
+    >
+      <Auk::FileUploader />
+    </Utils::LoadableContent>
+    <div
+      class="auk-form-group auk-u-mt-4"
+    >
+      <Auk::Toolbar::Item>
+        <Auk::Checkbox
+          @label="Zet status naar 'Na te lezen'"
+        />
+      </Auk::Toolbar::Item>
+    </div>
+    <div
+      class="auk-form-group"
+    >
+      <Auk::Label>Datum</Auk::Label>
+      <Auk::Datepicker
+        @date=""
+        @onChange=""
+      />
+    </div>
+    <div
+      class="auk-form-group"
+    >
+      <Auk::Label>Wie leest na?</Auk::Label>
+      <Auk::Input />
+    </div>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @onCancel={{@onCancel}}>
+    <Auk::Button
+      @skin="primary"
+      {{on "click" @onCancel}}
+    >
+      {{t "save"}}
+    </Auk::Button>
+  </Auk::Modal::Footer>
+</Auk::Modal>

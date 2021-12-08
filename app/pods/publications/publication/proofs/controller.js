@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
 export default class PublicationsPublicationProofController extends Controller {
   @service intl;
@@ -21,5 +22,17 @@ export default class PublicationsPublicationProofController extends Controller {
   @action
   async saveSidebarProperty(modifiedObject) {
     await modifiedObject.save();
+  }
+
+  @tracked showProofUploadModal = false;
+
+  @action
+  openProofUploadModal() {
+    this.showProofUploadModal = true;
+  }
+
+  @action
+  closeProofUploadModal() {
+    this.showProofUploadModal = false;
   }
 }

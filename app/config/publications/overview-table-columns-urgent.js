@@ -145,12 +145,5 @@ export default [
     translationKeySmall: 'publications-table-status-small',
     showByDefault: false,
     sortKey: 'status.position,publication-status-change.started-at'
-  },
-  {
-    keyName: 'next',
-    translationKey: 'publications-table-next',
-    translationKeySmall: 'publications-table-next-small',
-    showByDefault: true,
-    sortKey: 'status.position,publication-next-change.started-at'
   }
 ];
