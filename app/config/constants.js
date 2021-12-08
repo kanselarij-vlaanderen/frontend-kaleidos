@@ -53,7 +53,7 @@ export default {
   },
   // PUBLICATIONS
   PUBLICATION_STATUSES: {
-    PENDING: 'http://themis.vlaanderen.be/id/concept/publicatie-status/fa62e050-3960-440d-bed9-1c3d3e9923a8',
+    PENDING: 'http://themis.vlaanderen.be/id/concept/publicatie-status/dc78e79f-7b9e-490c-aa73-d062ba1db30d',
     PUBLISHED: 'http://themis.vlaanderen.be/id/concept/publicatie-status/2f8dc814-bd91-4bcf-a823-baf1cdc42475',
     PAUSED: 'http://themis.vlaanderen.be/id/concept/publicatie-status/bc294fde-45c8-11eb-b378-0242ac130002',
     WITHDRAWN: 'http://themis.vlaanderen.be/id/concept/publicatie-status/9b9b0b5e-45c8-11eb-b378-0242ac130002',
