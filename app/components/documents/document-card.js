@@ -31,7 +31,6 @@ export default class DocumentsDocumentCardComponent extends Component {
   @service toaster;
   @service intl;
 
-  @tracked isExpandedVersionHistory = false;
   @tracked isOpenUploadModal = false;
   @tracked isOpenVerifyDeleteModal = false;
   @tracked isEditingPiece = false;
@@ -216,12 +215,6 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   @task
-  *expandVersionHistory() {
-    yield this.loadVersionHistory.perform();
-    this.isExpandedVersionHistory = true;
-  }
-
-  @task
   *markOrUnmarkForSignature() {
     if (!this.signMarkingActivity) {
       yield this.args.markForSignature(this.args.piece);
@@ -229,11 +222,6 @@ export default class DocumentsDocumentCardComponent extends Component {
       yield this.args.unmarkForSignature(this.args.piece);
     }
     yield this.loadSignatureRelatedData.perform();
-  }
-
-  @action
-  collapseVersionHistory() {
-    this.isExpandedVersionHistory = false;
   }
 
   @action

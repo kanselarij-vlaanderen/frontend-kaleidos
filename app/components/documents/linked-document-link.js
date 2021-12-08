@@ -9,7 +9,6 @@ export default class LinkedDocumentLink extends Component {
   @service store;
   @service currentSession;
 
-  @tracked isExpandedVersionHistory = false;
   @tracked isOpenVerifyDeleteModal = false;
 
   @tracked sortedPieces = [];
@@ -38,11 +37,6 @@ export default class LinkedDocumentLink extends Component {
 
   get reverseSortedPieces() {
     return this.sortedPieces.slice(0).reverse();
-  }
-
-  @action
-  toggleVersionHistory() {
-    this.isExpandedVersionHistory = !this.isExpandedVersionHistory;
   }
 
   @action
