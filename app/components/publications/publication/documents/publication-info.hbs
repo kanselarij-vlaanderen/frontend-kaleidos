@@ -1,0 +1,144 @@
+{{#if this.isInEditMode}}
+<Auk::Panel class="auk-panel--editing">
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title">
+            Publicatie info
+          </h4>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    <div class="auk-o-grid">
+      <div class="auk-o-grid-col-3 auk-content">
+        <div
+          class="auk-form-group"
+        >
+          <Auk::Label>{{t "publication-flow-opening-date"}}</Auk::Label>
+          {{#if this.publicationFlow.case.subcases}}
+            <div class="auk-u-muted">
+              {{moment-format this.publicationFlow.openingDate "DD-MM-YYYY"}}
+            </div>
+          {{else}}
+            <Auk::Datepicker
+              @date={{this.publicationFlow.openingDate}}
+              @onChange={{this.setOpeningDate}}
+            />
+          {{/if}}
+        </div>
+      </div>
+      <div class="auk-o-grid-col-3">
+        <div
+          class="auk-form-group"
+        >
+          <Auk::Label>{{t "decision-date"}}</Auk::Label>
+          {{#if this.publicationFlow.case.subcases}}
+            <Auk::ButtonLink
+              target="_blank"
+              @layout="icon-right"
+              @icon="chevron-right"
+              @route="agenda.agendaitems.agendaitem"
+              @models={{array
+                this.treatment.agendaitem.agenda.createdFor.id
+                this.treatment.agendaitem.agenda.id
+                this.treatment.agendaitem.id
+              }}
+            >
+              {{#if this.treatment.startDate}}
+                {{moment-format this.treatment.startDate "DD-MM-YYYY"}}
+              {{else}}
+                {{t "to-agenda"}}
+              {{/if}}
+            </Auk::ButtonLink>
+          {{else}}
+            <Auk::Datepicker
+              @date={{this.treatment.startDate}}
+              @onChange={{this.setDecisionDate}}
+            />
+          {{/if}}
+        </div>
+      </div>
+      <div class="auk-o-grid-col-3">
+        <div
+          class="auk-form-group"
+        >
+          <Auk::Label>Aantal bladzijden</Auk::Label>
+          <Auk::Input value="50" />
+        </div>
+      </div>
+    </div>
+  </Auk::Panel::Body>
+  <Auk::Panel::Footer>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <Auk::Button
+            @skin="borderless"
+            @disabled={{this.save.isRunning}}
+            {{on "click" this.cancelEdit}}>
+            {{t "cancel"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <Auk::Button
+            @skin="primary"
+            @loading={{this.save.isRunning}}
+            {{on "click" this.cancelEdit}}>
+            {{t "save"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Footer>
+</Auk::Panel>
+{{else}}
+<Auk::Panel>
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title">
+            Publicatie info
+          </h4>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <Auk::Button @skin="tertiary" @icon="pencil" @layout="icon-only" {{on "click" this.putInEditMode}} />
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    <div class="auk-o-grid">
+      <div class="auk-o-grid-col-3 auk-content">
+        <h4 class="auk-u-m-0">{{t "publication-flow-opening-date"}}</h4>
+        <p class="auk-u-m-0">
+          {{moment-format this.publicationFlow.openingDate "DD-MM-YYYY"}}
+        </p>
+      </div>
+      <div class="auk-o-grid-col-3 auk-content">
+        <h4 class="auk-u-m-0">{{t "decision-date"}}</h4>
+        <p class="auk-u-m-0">
+          {{#if this.treatment.startDate}}
+          {{moment-format this.treatment.startDate "DD-MM-YYYY"}}
+          {{else}}
+          -
+          {{/if}}
+        </p>
+      </div>
+      <div class="auk-o-grid-col-3 auk-content">
+        <h4 class="auk-u-m-0">Aantal bladzijden</h4>
+        <p class="auk-u-m-0">
+          50
+        </p>
+      </div>
+    </div>
+  </Auk::Panel::Body>
+</Auk::Panel>
+{{/if}}

@@ -25,6 +25,10 @@
             <Auk::Label>{{t "long-title"}}</Auk::Label>
             <Auk::Textarea data-test-inscription-edit-long-title @rows="4" @value={{this.longTitle}}/>
           </div>
+          <div class="auk-form-group">
+            <Auk::Label>Trefwoord</Auk::Label>
+            <Auk::Textarea data-test-inscription-edit-long-title @rows="4" @value={{this.shortTitle}}/>
+          </div>
         </Utils::LoadableContent>
       </Auk::Panel::Body>
       <Auk::Panel::Footer>
@@ -88,9 +92,11 @@
         </Auk::Toolbar>
       </Auk::Panel::Header>
       <Auk::Panel::Body>
-          <div class="auk-content">
+        <div class="auk-content">
           <h4 data-test-inscription-view-short-title>{{@publicationFlow.shortTitle}}</h4>
           <p data-test-inscription-view-long-title class="auk-u-text-prewrap">{{@publicationFlow.longTitle}}</p>
+          <h5 class="auk-u-m-0">Trefwoord</h5>
+          <p class="auk-u-muted auk-u-text-small auk-u-m-0">{{@publicationFlow.shortTitle}}</p>
         </div>
       </Auk::Panel::Body>
     </Auk::Panel>

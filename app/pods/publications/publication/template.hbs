@@ -47,18 +47,8 @@
 </Auk::Navbar>
 
 {{!-- Auk css gebruiken, component ? --}}
-
-    <div class="auk-scroll-wrapper">
-      <div class="auk-scroll-wrapper__body">
-        {{outlet}}
-      </div>
-    </div>
-  {{!-- <div class="auk-panel-layout__sidebar">
-    <Publications::PublicationSidebar
-      @isOpen={{this.sidebarIsOpen}}
-      @onCollapse={{this.toggleSidebar}}
-      @onOpen={{this.toggleSidebar}}
-      @publicationFlow={{this.model}}
-      @didChange={{this.saveSidebarProperty}}
-    />
-  </div> --}}
+<div class="auk-scroll-wrapper">
+  <div class="auk-scroll-wrapper__body">
+    {{outlet}}
+  </div>
+</div>
