@@ -941,5 +941,6 @@
   "unmarking-not-possible": "Dit document is reeds voorbereid om te laten tekenen en kan niet ongedaan gemaakt worden.",
   "counselor": "Raadgever",
   "date-approved": "Datum goedgekeurd",
-  "consult-agendaitem-decision": "Laatste agendering bekijken"
+  "consult-agendaitem-decision": "Laatste agendering bekijken",
+  "postponed": "Uitgesteld"
 }
