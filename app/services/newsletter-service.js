@@ -2,7 +2,6 @@ import Service, { inject as service } from '@ember/service';
 import { ajax } from 'frontend-kaleidos/utils/ajax';
 import moment from 'moment';
 
-// TODO in KAS-2308 Refactor NewsletterService to better API
 export default class NewsletterService extends Service {
   @service store;
   @service toaster;
@@ -14,13 +13,16 @@ export default class NewsletterService extends Service {
     try {
       const result = await ajax({
         method: 'POST',
-        url: `/newsletter/createCampaign?agendaId=${agenda.get('id')}`,
+        url: `/newsletter/mailCampaign`,
+        data: {
+          agendaId: agenda.id,
+        }
       });
 
       const mailCampaign = this.store.createRecord('mail-campaign', {
-        campaignId: result.body.campaign_id,
-        campaignWebId: result.body.campaign_web_id,
-        archiveUrl: result.body.archive_url,
+        campaignId: result.id,
+        campaignWebId: result.webcampaignId,
+        archiveUrl: result.archiveUrl,
       });
 
       await mailCampaign.save().then(async (savedCampaign) => {
@@ -47,9 +49,12 @@ export default class NewsletterService extends Service {
 
   async deleteCampaign(id) {
     try {
-      return ajax({
+      return  await ajax({
         method: 'DELETE',
-        url: `/newsletter/deleteMailCampaign/${id}`,
+        url: `/newsletter/mailCampaign`,
+        data: {
+          id: id,
+        }
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);
@@ -63,9 +68,12 @@ export default class NewsletterService extends Service {
 
   async sendMailCampaign(id) {
     try {
-      return ajax({
-        method: 'POST',
-        url: `/newsletter/sendMailCampaign/${id}`,
+      return  await ajax({
+        method: 'PUT',
+        url: `/newsletter/mailCampaign`,
+        data: {
+          id: id,
+        }
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);
@@ -79,9 +87,12 @@ export default class NewsletterService extends Service {
 
   async sendtoBelga(agendaId) {
     try {
-      return ajax({
+      return await ajax({
         method: 'POST',
-        url: `/newsletter/sendToBelga/${agendaId}`,
+        url: `/newsletter/belga`,
+        data: {
+          agendaId: agendaId,
+        }
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);
@@ -95,10 +106,14 @@ export default class NewsletterService extends Service {
 
   async getMailCampaignContent(id) {
     try {
-      return ajax({
+      const result = await ajax({
         method: 'GET',
-        url: `/newsletter/fetchTestMailCampaign/${id}`,
+        url: `/newsletter/mailCampaign`,
+        data: {
+          id: id,
+        }
       });
+      return result.html;
     } catch (error) {
       console.warn('An exception ocurred: ', error);
       this.toaster.error(
@@ -111,9 +126,12 @@ export default class NewsletterService extends Service {
 
   async getMailCampaign(id) {
     try {
-      return ajax({
+      return await ajax({
         method: 'GET',
-        url: `/newsletter/fetchTestMailCampaignMetaData/${id}`,
+        url: `/newsletter/mailCampaign`,
+        data: {
+          id: id,
+        }
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);
