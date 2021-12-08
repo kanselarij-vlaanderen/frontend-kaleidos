@@ -56,7 +56,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     const meeting = this.args.meeting;
     const mailCampaign = await meeting.mailCampaign;
 
-    if (!mailCampaign.id) {
+    if (!mailCampaign) {
       this.toaster.error(this.intl.t('error-delete-no-newsletter'));
       this.isLoading = false;
       return;
@@ -190,7 +190,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   async getMailCampaign() {
     let mailCampaign = await this.args.meeting.mailCampaign;
-    if (mailCampaign.isSent) {
+    if (mailCampaign && mailCampaign.isSent) {
       this.toaster.error(this.intl.t('error-already-sent-newsletter'));
       return null;
     } else {
