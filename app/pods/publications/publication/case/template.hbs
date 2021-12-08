@@ -9,8 +9,10 @@
     <Publications::Publication::Case::Mandatees::MandateesPanel
       @publicationFlow={{@model}} />
 
-    <Publications::Publication::Case::GovernmentFields::GovernmentFieldsPanel
-      @publicationFlow={{@model}} />
+    <Utils::GovernmentAreas::GovernmentAreasPanel
+      @governmentAreas={{@model.case.governmentAreas}}
+      @onSave={{this.saveGovernmentAreas}}
+    />
 
     <Publications::Publication::Case::ContactPersons::ContactPersonsPanel
       @publicationFlow={{@model}} />
