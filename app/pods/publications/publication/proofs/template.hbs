@@ -38,7 +38,7 @@
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
             <h4 class="auk-panel__title">
-              Vertalingen
+              Proefdrukken
             </h4>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
@@ -48,7 +48,7 @@
               @skin="secondary"
               @icon="plus"
             >
-              Vertaling toevoegen
+              Proefdruk toevoegen
             </Auk::Button>
           </Auk::Toolbar::Item>
           <Auk::Toolbar::Item>
@@ -56,7 +56,7 @@
               @skin="primary"
               @icon="plus"
             >
-              Vertaling aanvragen
+              Proefdruk aanvragen
             </Auk::Button>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
@@ -78,15 +78,14 @@
               <Auk::Toolbar::Group @position="left">
                 <Auk::Toolbar::Item>
                   <div class="auk-content">
-                    <h4 class="auk-u-m-0">Vertaling ontvangen</h4>
+                    <h4 class="auk-u-m-0">Proefdruk ontvangen</h4>
                     <p class="auk-u-text-small auk-u-m-0">
-                      22.11.2021
+                      30.11.2021
                     </p>
                   </div>
                 </Auk::Toolbar::Item>
               </Auk::Toolbar::Group>
               <Auk::Toolbar::Group @position="right">
-                {{!-- <Auk::Pill @skin="success">Klaar voor proefdruk</Auk::Pill> --}}
                 <DropdownMenu
                   @skin="borderless"
                   @icon="three-dots"
@@ -115,7 +114,7 @@
           />
         </div>
         <Auk::AccordionPanel @isDefaultActive={{true}} as |accordionPanel|>
-          <accordionPanel.Header @title="Aanvraag verzonden" @date="22.11.2021" as |header|>
+          <accordionPanel.Header @title="Aanvraag verzonden" @date="30.11.2021" as |header|>
             <header.Actions as |actions|>
               <actions.Item>
                 <DropdownMenu
@@ -135,11 +134,11 @@
             <div class="auk-hr"></div>
             <div class="auk-content">
               <h4 class="auk-u-m-0">Onderwerp</h4>
-              <p>Vertaalaanvraag VO-dossier: 3</p>
+              <p>Proefdrukaanvraag VO-dossier: 3</p>
               <h4 class="auk-u-m-0">Bericht</h4>
               <p>Collega,</p>
               <p>
-                Hierbij ter vertaling:  VO-dossier: 3<br/>
+                Hierbij voor proefdruk:  VO-dossier: 3<br/>
                 Titel: Omkadering leerlingondersteuning<br/>
                 Uiterste vertaaldatum: 12-08-2021<br/>
                 Aantal pagina’s: 0<br/>
