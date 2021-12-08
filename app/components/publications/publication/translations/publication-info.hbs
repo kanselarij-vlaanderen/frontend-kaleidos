@@ -1,0 +1,141 @@
+{{#if this.isInEditMode}}
+<Auk::Panel class="auk-panel--editing">
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title">
+            Publicatie info
+          </h4>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    <div class="auk-o-grid">
+      <div class="auk-o-grid-col-3">
+        <div
+          class="auk-form-group"
+        >
+          <Auk::Label>Vertaling ontvangen</Auk::Label>
+          <Auk::Datepicker
+            @date="29/11/2021"
+            @onChange=""
+          />
+        </div>
+      </div>
+      <div class="auk-o-grid-col-3">
+        <div
+          class="auk-form-group"
+        >
+          <Auk::Label>{{t "translation-due-date"}}</Auk::Label>
+          <Auk::Datepicker
+            @date={{this.translationSubcase.dueDate}}
+            @onChange={{this.setTranslationDueDate}}
+          />
+          {{#if (is-after this.translationSubcase.dueDate precision="days")}}
+            <Auk::FormHelpText
+              @text={{t "date-expired"}}
+              @skin="warning"
+              @icon="alert-triangle"
+            />
+          {{/if}}
+        </div>
+      </div>
+      <div class="auk-o-grid-col-3 auk-content">
+        <div
+          class="auk-form-group"
+        >
+          <Auk::Label>Klaar voor proefdruk</Auk::Label>
+          <Auk::Datepicker
+            @date="29/11/2021"
+            @onChange=""
+          />
+        </div>
+      </div>
+      {{!-- <div class="auk-o-grid-col-3 auk-content">
+        <div
+          class="auk-form-group"
+        >
+          <Auk::Label>Status</Auk::Label>
+          <Auk::Checkbox
+            data-test-route-publications---translations-tab-finished
+            @label={{t "finished"}}
+            @checked={{this.model.endDate}}
+            {{on "input" this.toggleFinishTranslation}}
+          />
+        </div>
+      </div> --}}
+    </div>
+  </Auk::Panel::Body>
+  <Auk::Panel::Footer>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <Auk::Button
+            @skin="borderless"
+            @disabled={{this.save.isRunning}}
+            {{on "click" this.cancelEdit}}>
+            {{t "cancel"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <Auk::Button
+            @skin="primary"
+            @loading={{this.save.isRunning}}
+            {{on "click" this.cancelEdit}}>
+            {{t "save"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Footer>
+</Auk::Panel>
+{{else}}
+<Auk::Panel>
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title">
+            Publicatie info
+          </h4>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <Auk::Button @skin="tertiary" @icon="pencil" @layout="icon-only" {{on "click" this.putInEditMode}} />
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    <div class="auk-o-grid">
+      <div class="auk-o-grid-col-3 auk-content">
+        <h4 class="auk-u-m-0">Vertaling ontvangen</h4>
+        <p class="auk-u-m-0">
+          29/11/2021
+        </p>
+      </div>
+      <div class="auk-o-grid-col-3 auk-content">
+        <h4 class="auk-u-m-0">Uiterste vertaaldatum</h4>
+        <p class="auk-u-m-0">
+          {{#if this.translationSubcase.dueDate}}
+          {{moment-format this.translationSubcase.dueDate "DD-MM-YYYY"}}
+          {{else}}
+          -
+          {{/if}}
+        </p>
+      </div>
+      <div class="auk-o-grid-col-3 auk-content">
+        <h4 class="auk-u-m-0">Klaar voor proefdruk</h4>
+        <p class="auk-u-m-0">
+          29/11/2021
+        </p>
+      </div>
+    </div>
+  </Auk::Panel::Body>
+</Auk::Panel>
+{{/if}}

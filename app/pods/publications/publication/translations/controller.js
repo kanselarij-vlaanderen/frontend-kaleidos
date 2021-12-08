@@ -27,4 +27,9 @@ export default class PublicationsPublicationTranslationsController extends Contr
     this.showError = false;
     this.isInEditMode = false;
   }
+
+  @action
+  async saveSidebarProperty(modifiedObject) {
+    await modifiedObject.save();
+  }
 }

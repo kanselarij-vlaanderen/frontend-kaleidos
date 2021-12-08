@@ -17,4 +17,9 @@ export default class PublicationsPublicationProofController extends Controller {
     await this.model.save();
     this.toaster.success(this.intl.t('successfully-saved'));
   }
+
+  @action
+  async saveSidebarProperty(modifiedObject) {
+    await modifiedObject.save();
+  }
 }

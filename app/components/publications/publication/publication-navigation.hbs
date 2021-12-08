@@ -25,7 +25,7 @@
     <div class="auk-o-flex auk-o-flex--center">
       {{!-- <span>{{t "translations"}}</span> --}}
       <span>Vertaling</span>
-      <Publications::Publication::Translations::TranslationProgressBadge @translationSubcase={{@publicationFlow.translationSubcase}}/>
+      {{!-- <Publications::Publication::Translations::TranslationProgressBadge @translationSubcase={{@publicationFlow.translationSubcase}}/> --}}
     </div>
   </Auk::Tab>
   <Auk::Tab
@@ -35,7 +35,7 @@
     <div class="auk-o-flex auk-o-flex--center">
       {{!-- <span>{{t "publishpreview-requests"}}</span> --}}
       <span>Proefdruk</span>
-      <Publications::Publication::Proofs::ProofsProgressBadge @publicationSubcase={{@publicationFlow.publicationSubcase}}/>
+      {{!-- <Publications::Publication::Proofs::ProofsProgressBadge @publicationSubcase={{@publicationFlow.publicationSubcase}}/> --}}
     </div>
   </Auk::Tab>
   <Auk::Tab
@@ -45,7 +45,6 @@
     <div class="auk-o-flex auk-o-flex--center">
       {{!-- <span>{{t "publishpreview-requests"}}</span> --}}
       <span>Publicatie</span>
-      <Publications::Publication::Publication::PublicationProgressBadge @publicationSubcase={{@publicationFlow.publicationSubcase}}/>
     </div>
   </Auk::Tab>
 </Auk::Tabs>

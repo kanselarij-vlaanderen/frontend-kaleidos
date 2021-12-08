@@ -1,4 +1,4 @@
-<Auk::Navbar>
+{{!-- <Auk::Navbar>
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="left">
       <Auk::Tabs>
@@ -27,6 +27,139 @@
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
-</Auk::Navbar>
+</Auk::Navbar> --}}
 
-{{outlet}}
+<div class="auk-u-m-4">
+  <Publications::Publication::Publication::PublicationInfo @publicationFlow={{this.model}} @didChange={{this.saveSidebarProperty}} />
+
+  <Auk::Panel class="auk-u-mt-4">
+    <Auk::Panel::Header>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <h4 class="auk-panel__title">
+              Vertalingen
+            </h4>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <Auk::Button
+              @skin="secondary"
+              @icon="plus"
+            >
+              Vertaling toevoegen
+            </Auk::Button>
+          </Auk::Toolbar::Item>
+          <Auk::Toolbar::Item>
+            <Auk::Button
+              @skin="primary"
+              @icon="plus"
+            >
+              Vertaling aanvragen
+            </Auk::Button>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body class="auk-u-bg-alt">
+      <div class="vlc-procedure-step vlc-procedure-step--nopadding">
+        <div class="vlc-procedure-step__badge-wrapper">
+          <Auk::Badge
+            @skin="success"
+            @size="medium"
+            @icon="check"
+            class="vlc-procedure-step__badge"
+          />
+        </div>
+        <Auk::Panel>
+          <Auk::Panel::Header>
+            <Auk::Toolbar>
+              <Auk::Toolbar::Group @position="left">
+                <Auk::Toolbar::Item>
+                  <div class="auk-content">
+                    <h4 class="auk-u-m-0">Vertaling ontvangen</h4>
+                    <p class="auk-u-text-small auk-u-m-0">
+                      22.11.2021
+                    </p>
+                  </div>
+                </Auk::Toolbar::Item>
+              </Auk::Toolbar::Group>
+              <Auk::Toolbar::Group @position="right">
+                {{!-- <Auk::Pill @skin="success">Klaar voor proefdruk</Auk::Pill> --}}
+                <DropdownMenu
+                  @skin="borderless"
+                  @icon="three-dots"
+                  @placement="bottom-end"
+                as |Menu|>
+                  <Menu.Item>
+                    Bewerken
+                  </Menu.Item>
+                </DropdownMenu>
+              </Auk::Toolbar::Group>
+            </Auk::Toolbar>
+          </Auk::Panel::Header>
+          <Auk::Panel::Body>
+            <Auk::ButtonLink @icon="paperclip">65489-fr.pdf</Auk::ButtonLink>
+          </Auk::Panel::Body>
+        </Auk::Panel>
+      </div>
+
+      <div class="vlc-procedure-step vlc-procedure-step--nopadding">
+        <div class="vlc-procedure-step__badge-wrapper">
+          <Auk::Badge
+            @skin="primary"
+            @size="medium"
+            @icon="mail"
+            class="vlc-procedure-step__badge"
+          />
+        </div>
+        <Auk::AccordionPanel @isDefaultActive={{true}} as |accordionPanel|>
+          <accordionPanel.Header @title="Aanvraag verzonden" @date="22.11.2021" as |header|>
+            <header.Actions as |actions|>
+              <actions.Item>
+                <DropdownMenu
+                  @skin="borderless"
+                  @icon="three-dots"
+                  @placement="bottom-end"
+                as |Menu|>
+                  <Menu.Item @skin="danger">
+                    Verwijderen
+                  </Menu.Item>
+                </DropdownMenu>
+              </actions.Item>
+            </header.Actions>
+          </accordionPanel.Header>
+          <accordionPanel.Body>
+            <Auk::ButtonLink @icon="paperclip">65489-fr.pdf</Auk::ButtonLink>
+            <div class="auk-hr"></div>
+            <div class="auk-content">
+              <h4 class="auk-u-m-0">Onderwerp</h4>
+              <p>Vertaalaanvraag VO-dossier: 3</p>
+              <h4 class="auk-u-m-0">Bericht</h4>
+              <p>Collega,</p>
+              <p>
+                Hierbij ter vertaling:  VO-dossier: 3<br/>
+                Titel: Omkadering leerlingondersteuning<br/>
+                Uiterste vertaaldatum: 12-08-2021<br/>
+                Aantal pagina’s: 0<br/>
+                Aantal woorden: 0<br/>
+                Aantal documenten: 1
+              </p>
+              <p>
+                Met vriendelijke groeten,<br/>
+                Team Ondersteuning Vlaamse Regering<br/>
+                DEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN<br/>
+                publicatiesBS@vlaanderen.be<br/>
+                Koolstraat 35, 1000 Brussel
+              </p>
+            </div>
+          </accordionPanel.Body>
+        </Auk::AccordionPanel>
+      </div>
+
+    </Auk::Panel::Body>
+  </Auk::Panel>
+</div>
+
+{{!-- {{outlet}} --}}

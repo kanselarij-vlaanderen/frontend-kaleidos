@@ -2,11 +2,13 @@
   {{ page-title
     (t "documents")
   }}
-  <div class="auk-u-mb-8">
+  <Publications::Publication::Documents::PublicationInfo @publicationFlow={{this.model}}  @didChange={{this.saveSidebarProperty}} />
+
+  <div class="auk-u-mb-8 auk-u-mt-4">
     <Auk::AccordionPanel @isDefaultActive={{true}} as |accordionPanel| >
       <accordionPanel.Header @title={{t "reference-documents-council-of-ministers"}}/>
       <accordionPanel.Body>
-        <Documents::DocumentCardList @pieces={{@model}} />
+        <Documents::DocumentCardList @pieces={{@modelDocument}} />
       </accordionPanel.Body>
     </Auk::AccordionPanel>
   </div>
