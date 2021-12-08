@@ -7,25 +7,10 @@
   border: 0.1rem solid $border-color;
   padding: 1.8rem;
 
-  .js-vl-accordion > .auk-button {
-    margin: 0.8rem 3.4rem 0;
-  }
-
   .auk-h4 {
     margin: 0.5rem 0;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  .vl-accordion__panel {
-    margin: -1.8rem;
-    padding: 1rem 1.8rem;
-    background: $porcelain;
-    border-top: 1px solid $border-color;
-  }
-
-  .js-vl-accordion--open > .auk-button {
-    margin-bottom: 4rem;
   }
 }
 
@@ -48,16 +33,21 @@
   margin-left: auto;
 }
 
-.vlc-document-card-item__icon {
-  position: absolute;
-  left: -4rem;
-  top: 0.6rem;
-  color: $primary-blue;
-}
 
 /* ==========================================================================
    Documents timeline
    ========================================================================== */
+
+.vlc-document-card-versions {
+  margin-top: 1rem;
+
+  .auk-accordion__item .auk-accordion__content {
+    margin: 1.8rem -1.8rem -1.8rem;
+    padding: 1rem 1.8rem;
+    background: $auk-gray-100;
+    border-top: 1px solid $color-border;
+  }
+}
 
 .vlc-document-card-item {
   display: block;
@@ -113,4 +103,11 @@
   display: flex;
   align-items: center;
   z-index: 2;
+}
+
+.vlc-document-card-item__icon {
+  position: absolute;
+  left: -4rem;
+  top: 0.6rem;
+  color: $primary-blue;
 }
