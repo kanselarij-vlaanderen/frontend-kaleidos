@@ -32,4 +32,16 @@ export default class PublicationsPublicationTranslationsController extends Contr
   async saveSidebarProperty(modifiedObject) {
     await modifiedObject.save();
   }
+
+  @tracked showTranslationUploadModal = false;
+
+  @action
+  openTranslationUploadModal() {
+    this.showTranslationUploadModal = true;
+  }
+
+  @action
+  closeTranslationUploadModal() {
+    this.showTranslationUploadModal = false;
+  }
 }

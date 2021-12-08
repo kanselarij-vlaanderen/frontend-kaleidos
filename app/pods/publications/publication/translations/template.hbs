@@ -49,6 +49,7 @@
             <Auk::Button
               @skin="secondary"
               @icon="plus"
+              {{on "click" this.openTranslationUploadModal}}
             >
               Vertaling toevoegen
             </Auk::Button>
@@ -165,3 +166,11 @@
 </div>
 
 {{!-- {{outlet}} --}}
+
+{{#if this.showTranslationUploadModal}}
+  <Publications::Publication::Translations::TranslationUploadModalMockup
+    @publicationFlow={{this.model}}
+    @onSave={{perform this.closeTranslationUploadModal}}
+    @onCancel={{this.closeTranslationUploadModal}}
+  />
+{{/if}}
