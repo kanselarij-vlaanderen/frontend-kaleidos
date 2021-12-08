@@ -10,10 +10,6 @@ class DomainSelection {
     this.availableFields = availableFields;
     this.selectedFields = selectedFields;
   }
-
-  // get isSelected() {
-  //   return this.availableFields.every((field) => this.selectedFields.includes(field));
-  // }
 }
 
 export default class GovernmentAreaSelectorForm extends Component {
