@@ -134,8 +134,8 @@ function addNewPiece(oldFileName, file, modelToPatch, hasSubcase = true) {
   // for agendaitems and subcases both are patched, not waiting causes flaky tests
   if (modelToPatch) {
     if (modelToPatch === 'agendaitems') {
-      // we always POST submission activity here
       if (hasSubcase) {
+        // we always POST submission activity here
         cy.wait('@createNewSubmissionActivity')
           .wait('@patchAgendaitem')
           .wait('@putAgendaitemDocuments');
@@ -258,6 +258,23 @@ function openAgendaitemDocumentTab(agendaitemTitle, alreadyHasDocs = false, isAd
 function addDocumentsToAgendaitem(agendaitemTitle, files) {
   cy.log('addDocumentsToAgendaitem');
   openAgendaitemDocumentTab(agendaitemTitle, false);
+
+  // Open the modal, add files
+  cy.get(route.agendaitemDocuments.add).click();
+  addNewDocumentsInUploadModal(files, 'agendaitems');
+}
+
+/**
+ * @description Add a new document to an agendaitem with isApproval = true.
+ * @name addDocumentsToApprovalItem
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {string} agendaitemTitle
+ * @param {string} files
+ */
+function addDocumentsToApprovalItem(agendaitemTitle, files) {
+  cy.log('addDocumentsToApprovalItem');
+  openAgendaitemDocumentTab(agendaitemTitle, false, false);
 
   // Open the modal, add files
   cy.get(route.agendaitemDocuments.add).click();
@@ -523,6 +540,7 @@ Cypress.Commands.add('addDocumentsToSubcase', addDocumentsToSubcase); // same co
 Cypress.Commands.add('addDocumentsToMeeting', addDocumentsToMeeting);
 Cypress.Commands.add('addDocumentToTreatment', addDocumentToTreatment);
 Cypress.Commands.add('addDocumentsToAgendaitem', addDocumentsToAgendaitem);
+Cypress.Commands.add('addDocumentsToApprovalItem', addDocumentsToApprovalItem);
 Cypress.Commands.add('addNewPiece', addNewPiece);
 Cypress.Commands.add('addNewPieceToMeeting', addNewPieceToMeeting);
 Cypress.Commands.add('addNewPieceToAgendaitem', addNewPieceToAgendaitem);

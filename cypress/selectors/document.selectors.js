@@ -102,44 +102,46 @@ const selectors = {
 
   // document-preview-sidebar
   documentPreviewSidebar: {
-    sidebar: '[data-test-document-preview-sidebar-sidebar]',
-    signatures: '[data-test-document-preview-sidebar-tabs-signatures]',
-    versions: '[data-test-document-preview-sidebar-tabs-versions]',
-    toggle: '[data-test-document-preview-sidebar-toggle]',
+    open: '[data-test-document-preview-sidebar-open]',
+    close: '[data-test-document-preview-sidebar-close]',
     tabs: {
-      details: '[data-test-document-preview-sidebar-tabs-details]',
+      details: '[data-test-document-preview-sidebar-tab-details]',
+      versions: '[data-test-document-preview-sidebar-tab-versions]',
+      // TODO-selector unused selector
+      signatures: '[data-test-document-preview-sidebar-tab-signatures]',
     },
   },
 
-  // document-preview-details
-  documentPreviewDetails: {
-    cancel: '[data-test-document-preview-details-cancel]',
-    save: '[data-test-document-preview-details-save]',
-    edit: '[data-test-document-preview-details-edit]',
-    name: '[data-test-document-preview-details-name]',
-    documentType: '[data-test-document-preview-details-document-type]',
-    accesLevel: '[data-test-document-preview-details-acces-level]',
-    confidentiality: '[data-test-document-preview-details-confidentiality]',
-    filetype: '[data-test-document-preview-details-filetype]',
-    editor: {
-      name: '[data-test-document-preview-details-editor-name]',
-      documentType: '[data-test-document-preview-details-editor-document-type]',
-      accesLevel: '[data-test-document-preview-details-editor-acces-level]',
-      confidentiality: '[data-test-document-preview-details-editor-confidentiality]',
+  // document-preview/details-tab
+  previewDetailsTab: {
+    cancel: '[data-test-details-tab-cancel]',
+    save: '[data-test-details-tab-save]',
+    edit: '[data-test-details-tab-edit]',
+    name: '[data-test-details-tab-name]',
+    documentType: '[data-test-details-tab-document-type]',
+    accessLevel: '[data-test-details-tab-access-level]',
+    confidentiality: '[data-test-details-tab-confidentiality]',
+    filetype: '[data-test-details-tab-filetype]',
+    editing: {
+      name: '[data-test-details-tab-edit-name]',
+      documentType: '[data-test-details-tab-edit-document-type]',
+      accessLevel: '[data-test-details-tab-edit-access-level]',
+      confidentiality: '[data-test-details-tab-edit-confidentiality]',
     },
   },
 
-  // document-preview-versions-tab
-  documentPreviewVersionsTab: {
-    list: '[data-test-document-preview-versions-tab-list]',
+  // document-preview/versions-tab
+  previewVersionsTab: {
+    // TODO-selector unused selector
+    list: '[data-test-versions-tab-list]',
   },
 
-  // document-preview-version-card
-  documentPreviewVersionCard: {
-    container: '[data-test-document-preview-version-card-container]',
-    details: '[data-test-document-preview-version-card-details]',
-    name: '[data-test-document-preview-versions-card-name]',
-    open: '[data-test-document-preview-version-card-open]',
+  // document-preview/version-card
+  previewVersionCard: {
+    container: '[data-test-version-card-container]',
+    details: '[data-test-version-card-details]',
+    name: '[data-test-version-card-name]',
+    open: '[data-test-version-card-open]',
   },
 
   // document-view

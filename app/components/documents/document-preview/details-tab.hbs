@@ -1,11 +1,11 @@
 <div class="auk-u-m-4">
   <Auk::KeyValue
-    data-test-document-preview-details-name
+    data-test-details-tab-name
     @key={{t "document-name"}}
   >
     {{#if this.isEditingDetails}}
       <Textarea
-        data-test-document-preview-details-editor-name
+        data-test-details-tab-edit-name
         aria-labelledby="piece-name"
         class="auk-textarea"
         @value={{mut @piece.name}}
@@ -16,12 +16,12 @@
   </Auk::KeyValue>
   {{#if (or this.documentType this.isEditingDetails)}}
     <Auk::KeyValue
-      data-test-document-preview-details-document-type
+      data-test-details-tab-document-type
       @key={{t "document-type"}}
     >
       {{#if this.isEditingDetails}}
         <Utils::ModelSelector
-          data-test-document-preview-details-editor-document-type
+          data-test-details-tab-edit-document-type
           @modelName="document-type"
           @allowClear={{true}}
           @searchField="label"
@@ -36,12 +36,12 @@
     </Auk::KeyValue>
   {{/if}}
   <Auk::KeyValue 
-    data-test-document-preview-details-acces-level
+    data-test-details-tab-access-level
     @key={{t "publicity"}}
   >
     {{#if this.isEditingDetails}}
       <Utils::ModelSelector
-        data-test-document-preview-details-editor-acces-level
+        data-test-details-tab-edit-access-level
         @modelName="access-level"
         @allowClear={{true}}
         @hideSearch={{true}}
@@ -55,12 +55,12 @@
     {{/if}}
   </Auk::KeyValue>
   <Auk::KeyValue
-    data-test-document-preview-details-confidentiality
+    data-test-details-tab-confidentiality
     @key={{capitalize (t "confidentiality")}}
   >
     {{#if this.isEditingDetails}}
       <Auk::Toggle
-        data-test-document-preview-details-editor-confidentiality
+        data-test-details-tab-edit-confidentiality
         @checked={{mut @piece.confidential}}
       />
     {{else}}
@@ -69,7 +69,7 @@
   </Auk::KeyValue>
   <Auk::KeyValue @key={{t "file-type"}}>
     <Utils::Documents::FileTypePill
-      data-test-document-preview-details-file-type
+      data-test-details-tab-file-type
       @extension={{@piece.file.extension}}
     />
   </Auk::KeyValue>
@@ -79,7 +79,7 @@
         {{#if this.isEditingDetails}}
           <group.Item>
             <Auk::ButtonLink
-              data-test-document-preview-details-cancel
+              data-test-details-tab-cancel
               @disabled={{this.isProcessing}}
               @loading={{this.cancelEditDetails.isRunning}}
               {{on "click" (perform this.cancelEditDetails)}}
@@ -89,7 +89,7 @@
           </group.Item>
           <group.Item>
             <Auk::Button
-              data-test-document-preview-details-save
+              data-test-details-tab-save
               @skin="primary"
               @disabled={{this.isProcessing}}
               @loading={{this.saveDetails.isRunning}}
@@ -101,7 +101,7 @@
         {{else}}
           <group.Item>
             <Auk::Button
-              data-test-document-preview-details-edit
+              data-test-details-tab-edit
               @skin="tertiary"
               @icon="pencil"
               {{on "click" this.openEditDetails}}
