@@ -31,9 +31,6 @@ const selectors = {
   // route settings/overview
   overview: {
     manageEmails: '[data-test-route-settings-overview-manage-emails]',
-    manageGovermentDomains: '[data-test-route-settings-overview-manage-government-domains]',
-    manageGovermentFields: '[data-test-route-settings-overview-manage-government-fields]',
-    manageIseCodes: '[data-test-route-settings-overview-manage-ise-codes]',
     manageAlerts: '[data-test-route-settings-overview-manage-alerts]',
     manageDocumentTypes: '[data-test-route-settings-overview-manage-document-types]',
     manageCaseTypes: '[data-test-route-settings-overview-manage-case-types]',
@@ -100,14 +97,6 @@ const selectors = {
     // TODO-selector unused selector
     edit: '[data-test-manage-government-fields-edit]',
     delete: '[data-test-manage-government-fields-delete]',
-  },
-
-  // component manage-ise-codes
-  manageIseCodes: {
-    add: '[data-test-manage-ise-code-add]',
-    // TODO-selector unused selector
-    edit: '[data-test-manage-ise-code-edit]',
-    delete: '[data-test-manage-ise-code-delete]',
   },
 };
 export default selectors;
