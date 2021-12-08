@@ -18,12 +18,30 @@
               {{/if}}
               -
               {{uppercase this.model.identification.idName}}
-
             </span>
-            <Auk::Pill @skin="white">
-              Proefdruk aanvragen
+
+            {{#if this.model.status.isPending}}
+              <Auk::Pill @skin="white">
+              {{this.model.status.label}} – 22.11.2021
             </Auk::Pill>
-            <Auk::ButtonLink @layout="icon-only" @skin="muted" @icon="pencil" @padding="padded-y" class="auk-u-text-small">Status aanpassen</Auk::ButtonLink>
+            {{else if this.model.status.isPublished}}
+              <Auk::Pill @skin="success">
+                {{this.model.status.label}} – 22.11.2021
+              </Auk::Pill>
+            {{else if this.model.status.isPaused}}
+              <Auk::Pill @skin="default">
+                {{this.model.status.label}} – 22.11.2021
+              </Auk::Pill>
+            {{else if this.model.status.isWithdrawn}}
+              <Auk::Pill @skin="danger">
+                {{this.model.status.label}} – 22.11.2021
+              </Auk::Pill>
+            {{else}}
+              <Auk::Pill @skin="white">
+                {{this.model.status.label}} – 22.11.2021
+              </Auk::Pill>
+            {{/if}}
+            <Auk::ButtonLink @skin="muted" @icon="pencil" @padding="padded-y" class="auk-u-text-small" {{on "click" (fn this.openStatusModal)}}>Status aanpassen</Auk::ButtonLink>
           </span>
           <Auk::AbbreviatedText
             @text={{or
@@ -52,3 +70,12 @@
     {{outlet}}
   </div>
 </div>
+
+{{#if this.showStatusModal}}
+<Publications::Publication::StatusModal
+  @publicationFlow={{this.model}}
+  @onSave={{perform this.closeStatusModal}}
+  @didChange={{this.saveSidebarProperty}}
+  @onCancel={{this.closeStatusModal}}
+/>
+{{/if}}

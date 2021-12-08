@@ -7,6 +7,7 @@ export default class PublicationController extends Controller {
   @service media;
   @service intl;
   @service toaster;
+  @tracked showStatusModal = false;
 
   @tracked sidebarIsOpen = this.media.get('isBigScreen');
 
@@ -18,6 +19,15 @@ export default class PublicationController extends Controller {
   @action
   async saveSidebarProperty(modifiedObject) {
     await modifiedObject.save();
-    this.toaster.success(this.intl.t('successfully-saved'));
+  }
+
+  @action
+  openStatusModal() {
+    this.showStatusModal = true;
+  }
+
+  @action
+  closeStatusModal() {
+    this.showStatusModal = false;
   }
 }

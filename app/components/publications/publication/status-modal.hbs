@@ -1,0 +1,33 @@
+<Auk::Modal>
+  <Auk::Modal::Header
+    @title="Status aanpassen"
+    @onClose={{@onCancel}}
+  />
+  <Auk::Modal::Body>
+    <Publications::PublicationStatusSelector
+      @publicationStatus={{this.publicationStatus}}
+      @onChange={{this.selectPublicationStatus}}
+      @disabled={{and
+        this.publicationStatus.isPublished
+        this.decision.isStaatsbladResource
+      }}
+    />
+    <div
+      class="auk-form-group"
+    >
+      <Auk::Label>Datum</Auk::Label>
+      <Auk::Datepicker
+        @date="22.11.2021"
+        @onChange=""
+      />
+    </div>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @onCancel={{@onCancel}}>
+    <Auk::Button
+      @skin="primary"
+      {{on "click" @onCancel}}
+    >
+      {{t "save"}}
+    </Auk::Button>
+  </Auk::Modal::Footer>
+</Auk::Modal>
