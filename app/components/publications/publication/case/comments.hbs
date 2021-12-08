@@ -1,0 +1,103 @@
+{{#if this.isInEditMode}}
+<Auk::Panel class="auk-panel--editing auk-u-mt-4">
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title">
+            Opmerkingen
+          </h4>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    <div class="auk-o-grid">
+      <div class="auk-o-grid-col-12">
+        <div class="auk-form-group">
+          <Auk::Label>
+            <div class="auk-o-flex auk-o-flex--vertical-center">
+              <span class="auk-u-mr">{{t "remark-title"}}</span>
+              <div>
+                <Auk::ButtonLink
+                  @icon="circle-info"
+                  @layout="icon-right"
+                  @skin="muted"
+                />
+                <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
+                  <p>
+                    {{t "publication-sidebar-tooltip"}}
+                  </p>
+                </EmberTooltip>
+              </div>
+            </div>
+          </Auk::Label>
+          <Auk::Textarea
+            data-test-publication-sidebar-remark
+            rows="4"
+            type="text"
+            value={{@publicationFlow.remark}}
+            {{on "input" (perform this.setRemark)}}
+          />
+        </div>
+      </div>
+    </div>
+  </Auk::Panel::Body>
+  <Auk::Panel::Footer>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <Auk::Button
+            @skin="borderless"
+            @disabled={{this.save.isRunning}}
+            {{on "click" this.cancelEdit}}>
+            {{t "cancel"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <Auk::Button
+            @skin="primary"
+            @loading={{this.save.isRunning}}
+            {{on "click" this.cancelEdit}}>
+            {{t "save"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Footer>
+</Auk::Panel>
+{{else}}
+<Auk::Panel class="auk-u-mt-4">
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title">
+            Opmerkingen
+          </h4>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <Auk::Button @skin="tertiary" @icon="pencil" @layout="icon-only" {{on "click" this.putInEditMode}} />
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    <div class="auk-o-grid">
+      {{#if this.publicationFlow.remark}}
+      <div class="auk-o-grid-col-12">
+        <p>{{this.publicationFlow.remark}}</p>
+      </div>
+      {{else}}
+      <div class="auk-o-grid-col-12">
+        <Auk::Alert @message="Er zijn nog geen opmerkingen" class="auk-u-m-0" />
+      </div>
+      {{/if}}
+    </div>
+  </Auk::Panel::Body>
+</Auk::Panel>
+{{/if}}
