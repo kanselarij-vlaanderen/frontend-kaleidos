@@ -1,11 +1,11 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
+{{! TODO: octane-refactor }}
+{{! template-lint-disable no-action }}
 <div class="auk-container auk-container--center">
-  <Utils::LogoHeader />
+  <Utils::LogoHeaderLegacy />
   <div class="auk-u-mb-8">
     <h1 class="auk-h1">
       {{await this.title}}
-      <br/>
+      <br />
       <span class="auk-u-mt-2 auk-u-muted">
         {{t "agenda"}}
       </span>
@@ -13,7 +13,7 @@
   </div>
   <div class="auk-u-mb-8">
     <div class="auk-hr">
-      <hr/>
+      <hr />
     </div>
   </div>
   <div class="auk-u-mb-4">
@@ -39,7 +39,9 @@
                   {{#if (eq this.definite "false")}}
                     {{#if this.currentSession.isEditor}}
                       <div class="auk-u-ml-2">
-                        <Auk::ButtonLink {{action "toggleIsEditing" agendaitem}}>
+                        <Auk::ButtonLink
+                          {{action "toggleIsEditing" agendaitem}}
+                        >
                           {{t "edit"}}
                         </Auk::ButtonLink>
                       </div>
@@ -58,12 +60,13 @@
             {{else}}
               <AgendaitemPressEdit
                 @agendaitem={{agendaitem}}
-                @isEditing={{agendaitem.isEditing}} />
+                @isEditing={{agendaitem.isEditing}}
+              />
             {{/if}}
           {{/each}}
           <div class="auk-u-mb-8">
             <div class="auk-hr">
-              <hr/>
+              <hr />
             </div>
           </div>
         </div>
