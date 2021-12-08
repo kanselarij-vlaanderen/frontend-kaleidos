@@ -44,6 +44,12 @@ const selectors = {
 
   accordion: {
     header: {
+      button: '.auk-accordion__header .auk-accordion__button',
+    },
+  },
+
+  accordionPanel: {
+    header: {
       title: '.auk-accordion-panel__header .auk-accordion__title',
     },
   },
