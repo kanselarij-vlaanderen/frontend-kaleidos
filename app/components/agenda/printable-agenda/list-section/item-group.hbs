@@ -1,12 +1,30 @@
-<div class="auk-u-mt-4">
-  <Agenda::PrintableAgenda::ListSection::ItemGroup::ItemGroupHeader
-    @mandatees={{this.items.firstObject.sortedMandatees}}
-  />
-  {{#each this.items as |agendaitem|}}
-    <div value={{agendaitem.number}}>
-      <Agenda::PrintableAgenda::ListSection::ItemGroup::Item
-        @item={{agendaitem}}
+{{!
+  To enable correct breaking of elements & content when printing the rendering of all items where divided as followed:
+    - The first item (without the document list) is grouped together with the header using `break-inside: avoid;`
+    - The remaining items are generated as default
+}}
+<div class="l-printable-agenda__item-group">
+  <div class="l-printable-agenda__faux-item">
+    <div class="l-printable-agenda__non-breakable-group">
+      <Agenda::PrintableAgenda::ListSection::ItemGroup::ItemGroupHeader
+        @mandatees={{@items.firstObject.sortedMandatees}}
       />
+      <div value={{this.items.first.number}}>
+        <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
+          @item={{this.items.first}}
+        />
+      </div>
     </div>
+    {{#if this.items.first.sortedPieces}}
+      <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
+        @pieces={{this.items.first.sortedPieces}}
+      />
+    {{/if}}
+  </div>
+  {{#each this.items.remainder as |agendaitem|}}
+    <Agenda::PrintableAgenda::ListSection::ItemGroup::Item
+      @item={{agendaitem}}
+      value={{agendaitem.number}}
+    />
   {{/each}}
 </div>

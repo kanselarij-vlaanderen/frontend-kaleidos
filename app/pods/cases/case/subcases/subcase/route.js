@@ -10,6 +10,10 @@ export default Route.extend({
       }).then((subcase) => subcase);
   },
 
+  async afterModel(model) {
+    await model.case.get('governmentAreas');
+  },
+
   // TODO: octane-refactor
   // eslint-disable-next-line ember/no-actions-hash
   actions: {
