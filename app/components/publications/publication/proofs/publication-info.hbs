@@ -53,7 +53,7 @@
           <Auk::Label>
             {{t "proofprint-corrector"}}
           </Auk::Label>
-          <select name="user" id="user" class="auk-select" selected={{this.publicationSubcase.proofPrintCorrector}} {{on "input" (perform this.setProofPrintCorrector)}}>
+          <select name="user" id="user" class="auk-select" {{on "input" (perform this.setProofPrintCorrector)}}>
             <option value=""></option>
             <option value="Daisy">Daisy</option>
             <option value="Hilde">Hilde</option>
