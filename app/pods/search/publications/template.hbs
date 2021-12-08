@@ -127,36 +127,135 @@
                 @field="meetingId"
                 @label={{t "publications-table-status"}}
               />
-              <ThSortable
-                @class="auk-table__col--2 auk-table__header-title"
-                @currentSorting={{this.sort}}
-                @field="meetingId"
-                @label={{t "publications-table-next"}}
-              />
               <th class="auk-table__col--1"></th>
             </c.header>
             {{!-- MOCK DATA --}}
             <tbody class="auk-table--interaction-cursor">
-              <tr onClick="location.href='/vergadering/612F43A554BBD70008000001/agenda/612F43A554BBD70008000002/agendapunten/612F459954BBD7000800002A/kort-bestek'">
+              <tr onClick="location.href='/publicaties/61A9E74DD5855D0008000156/dossier'">
                 <td>
-                  510009
+                  510017
                 </td>
                 <td>
                   <p>
-                    Bekrachtiging en afkondiging van het decreet houdende instemming met de overeenkomst tussen de regering van het Koninkrijk België en de regering van de Federale Republiek Brazilië betreffende luchtdiensten, gedaan te Brussel op 4 oktober 2009, aangenomen door het Vlaams Parlement op 11 maart 2020
+                    Besluit van de Vlaamse Regering tot wijziging van de aanvraagprocedures in het Onroerenderfgoedbesluit voor erfgoedpremies bijzondere procedure en voor meerjarenpremieovereenkomsten
                   </p>
                 </td>
                 <td>
-                  13/02/2020
+                  21/12/2020
                 </td>
                 <td>
-                  <Auk::StatusPill>In behandeling</Auk::StatusPill>
-                </td>
-                <td>
-                  <Auk::StatusPill @status="neutral">Te vertalen</Auk::StatusPill>
+                  <Auk::StatusPill @status="not-started">Te publiceren</Auk::StatusPill>
                 </td>
                 <td class="auk-u-text-align--right">
-                  <a class="auk-button auk-button--borderless  auk-button--icon  " href="/publicaties/61A89A09D5855D0008000086/dossier" type="button">
+                  <a class="auk-button auk-button--borderless  auk-button--icon  " href="/publicaties/61A9E74DD5855D0008000156/dossier" type="button">
+                    <span class="auk-button__content">
+                      <div class="auk-icon auk-icon--default">
+                        <i class="ki ki-chevron-right "></i>
+                      </div>
+                      <span class="auk-u-sr-only">
+                      </span>
+                    </span>
+                  </a>
+                </td>
+              </tr>
+              <tr onClick="location.href='/publicaties/61A8C8EAD5855D000800013C/dossier'">
+                <td>
+                  510016
+                </td>
+                <td>
+                  <p>
+                    Decreet noodleverancier energie
+                  </p>
+                </td>
+                <td>
+                  31-12-2021
+                </td>
+                <td>
+                  <Auk::StatusPill @status="not-started">Te publiceren</Auk::StatusPill>
+                </td>
+                <td class="auk-u-text-align--right">
+                  <a class="auk-button auk-button--borderless  auk-button--icon  " href="/publicaties/61A8C8EAD5855D000800013C/dossier" type="button">
+                    <span class="auk-button__content">
+                      <div class="auk-icon auk-icon--default">
+                        <i class="ki ki-chevron-right "></i>
+                      </div>
+                      <span class="auk-u-sr-only">
+                      </span>
+                    </span>
+                  </a>
+                </td>
+              </tr>
+              <tr onClick="location.href='/publicaties/61A8C4EAD5855D0008000124/dossier'">
+                <td>
+                  510015
+                </td>
+                <td>
+                  <p>
+                   COVID-19: tijdelijke maatregelen beleidsveld energie
+                  </p>
+                </td>
+                <td>
+                  24-12-2021
+                </td>
+                <td>
+                  <Auk::StatusPill @status="not-started">Te publiceren</Auk::StatusPill>
+                </td>
+                <td class="auk-u-text-align--right">
+                  <a class="auk-button auk-button--borderless  auk-button--icon  " href="/publicaties/61A8C4EAD5855D0008000124/dossier" type="button">
+                    <span class="auk-button__content">
+                      <div class="auk-icon auk-icon--default">
+                        <i class="ki ki-chevron-right "></i>
+                      </div>
+                      <span class="auk-u-sr-only">
+                      </span>
+                    </span>
+                  </a>
+                </td>
+              </tr>
+              <tr onClick="location.href='/publicaties/61A8BA33D5855D000800010C/dossier'">
+                <td>
+                  510014
+                </td>
+                <td>
+                  <p>
+                   Activerings-, loopbaan- en dataregie VDAB
+                  </p>
+                </td>
+                <td>
+                  26-12-2021
+                </td>
+                <td>
+                  <Auk::StatusPill @status="not-started">Te publiceren</Auk::StatusPill>
+                </td>
+                <td class="auk-u-text-align--right">
+                  <a class="auk-button auk-button--borderless  auk-button--icon  " href="/publicaties/61A8BA33D5855D000800010C/dossier" type="button">
+                    <span class="auk-button__content">
+                      <div class="auk-icon auk-icon--default">
+                        <i class="ki ki-chevron-right "></i>
+                      </div>
+                      <span class="auk-u-sr-only">
+                      </span>
+                    </span>
+                  </a>
+                </td>
+              </tr>
+              <tr onClick="location.href='/publicaties/61A8B623D5855D00080000F0/dossier'">
+                <td>
+                  510013
+                </td>
+                <td>
+                  <p>
+                   Opheffing Syntra Vlaanderen
+                  </p>
+                </td>
+                <td>
+                  28-12-2021
+                </td>
+                <td>
+                  <Auk::StatusPill @status="not-started">Te publiceren</Auk::StatusPill>
+                </td>
+                <td class="auk-u-text-align--right">
+                  <a class="auk-button auk-button--borderless  auk-button--icon  " href="/publicaties/61A8B623D5855D00080000F0/dossier" type="button">
                     <span class="auk-button__content">
                       <div class="auk-icon auk-icon--default">
                         <i class="ki ki-chevron-right "></i>
