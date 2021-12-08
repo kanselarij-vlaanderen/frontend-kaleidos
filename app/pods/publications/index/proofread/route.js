@@ -19,12 +19,12 @@ export default class PublicationsIndexRoute extends Route {
     },
   }
 
-  statusFilters = Object.freeze({ // map filter name to concept uri
-    publishedFilterOption: CONSTANTS.PUBLICATION_STATUSES.PUBLISHED,
-    pausedFilterOption: CONSTANTS.PUBLICATION_STATUSES.PAUSED,
-    withdrawnFilterOption: CONSTANTS.PUBLICATION_STATUSES.WITHDRAWN,
-    // toPublishFilterOption: CONSTANTS.PUBLICATION_STATUSES.PENDING,
-  });
+  // statusFilters = Object.freeze({ // map filter name to concept uri
+  //   publishedFilterOption: CONSTANTS.PUBLICATION_STATUSES.PUBLISHED,
+  //   pausedFilterOption: CONSTANTS.PUBLICATION_STATUSES.PAUSED,
+  //   withdrawnFilterOption: CONSTANTS.PUBLICATION_STATUSES.WITHDRAWN,
+  //   // toPublishFilterOption: CONSTANTS.PUBLICATION_STATUSES.PENDING,
+  // });
 
   beforeModel() {
     this.publicationFilter = new PublicationFilter(JSON.parse(localStorage.getItem('publicationFilter')) || {});
@@ -36,12 +36,12 @@ export default class PublicationsIndexRoute extends Route {
     const filter = {
       ':has:case': 'yes',
     };
-    for (const statusFilter of Object.keys(this.statusFilters)) {
-      if (this.publicationFilter[statusFilter]) {
-        const status = await this.store.findRecordByUri('publication-status', this.statusFilters[statusFilter]);
-        statusIds.push(status.id);
-      }
-    }
+    // for (const statusFilter of Object.keys(this.statusFilters)) {
+    //   if (this.publicationFilter[statusFilter]) {
+    //     const status = await this.store.findRecordByUri('publication-status', this.statusFilters[statusFilter]);
+    //     statusIds.push(status.id);
+    //   }
+    // }
 
     if (!(this.publicationFilter.ministerFilterOption && this.publicationFilter.notMinisterFilterOption)) {
       if (this.publicationFilter.ministerFilterOption) {

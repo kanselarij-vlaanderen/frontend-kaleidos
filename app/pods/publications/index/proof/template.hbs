@@ -120,11 +120,3 @@
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </div>
-
-{{#if this.isShowPublicationFilterModal}}
-  <Publications::PublicationsFilterModal
-    @filter={{this.publicationFilter}}
-    @onCancel={{this.cancelPublicationsFilter}}
-    @onSave={{this.savePublicationsFilter}}
-  />
-{{/if}}
