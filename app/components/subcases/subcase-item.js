@@ -9,7 +9,6 @@ import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 export default class SubcaseItemSubcasesComponent extends Component {
   @service store;
 
-  @tracked isShowingDocuments = false;
   @tracked isShowingAllDocuments = false;
   @tracked hasDocumentsToShow = false;
   @tracked subcaseDocuments;
@@ -61,12 +60,6 @@ export default class SubcaseItemSubcasesComponent extends Component {
     }
 
     this.subcaseDocuments = sortPieces(pieces);
-  }
-
-  @action
-  async toggleIsShowingDocuments() {
-    await this.loadSubcaseDocuments.perform();
-    this.isShowingDocuments = !this.isShowingDocuments;
   }
 
   @action

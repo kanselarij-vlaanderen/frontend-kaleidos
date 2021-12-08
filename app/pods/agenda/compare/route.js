@@ -6,7 +6,6 @@ import { hash } from 'rsvp';
 /* eslint-disable ember/no-get */
 // eslint-disable-next-line ember/no-classic-classes
 export default Route.extend({
-  sessionService: inject(),
   agendaService: inject(),
 
   queryParams: {
@@ -19,9 +18,9 @@ export default Route.extend({
     this.set('agendaService.addedPieces', []);
     this.set('agendaService.addedAgendaitems', []);
     const meeting = this.modelFor('agenda').meeting;
-    const reversedAgendas = this.modelFor('agenda').reverseSortedAgendas;
+    const reverseSortedAgendas = this.modelFor('agenda').reverseSortedAgendas;
     return hash({
-      meeting, reversedAgendas,
+      meeting, reverseSortedAgendas,
     });
   },
 });
