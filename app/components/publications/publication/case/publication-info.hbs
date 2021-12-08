@@ -13,7 +13,19 @@
   </Auk::Panel::Header>
   <Auk::Panel::Body>
     <div class="auk-o-grid">
-      <div class="auk-o-grid-col-3">
+      <div class="auk-o-grid-col-1 auk-content">
+        <Auk::Label>Dringend</Auk::Label>
+        {{#if this.publicationStatus.isPending}}
+        <Publications::UrgencyLevelCheckbox
+          @urgencyLevel={{this.publicationFlow.urgencyLevel}}
+          @onChange={{this.setUrgencyLevel}}
+        />
+        {{else}}
+        {{t "dash"}}
+        {{/if}}
+      </div>
+
+      <div class="auk-o-grid-col-2">
         <div
           class="auk-form-group"
         >
@@ -48,7 +60,7 @@
           </Auk::InputPills>
         </div>
       </div>
-      <div class="auk-o-grid-col-3 auk-content">
+      <div class="auk-o-grid-col-2 auk-content">
         <div
           class="auk-form-group"
         >
@@ -65,7 +77,7 @@
           {{/if}}
         </div>
       </div>
-      <div class="auk-o-grid-col-3 auk-content">
+      <div class="auk-o-grid-col-2 auk-content">
         <div
           class="auk-form-group"
         >
@@ -135,7 +147,17 @@
   </Auk::Panel::Header>
   <Auk::Panel::Body>
     <div class="auk-o-grid">
-      <div class="auk-o-grid-col-3 auk-content">
+      <div class="auk-o-grid-col-1 auk-content">
+        <h4 class="auk-u-m-0">Dringend</h4>
+        <p class="auk-u-m-0">
+        {{#if @publicationFlow.urgencyLevel.isUrgent}}
+          <Auk::Icon @skin="warning" @name="alert-triangle" />
+        {{else}}
+          {{t "dash"}}
+        {{/if}}
+        </p>
+      </div>
+      <div class="auk-o-grid-col-2 auk-content">
         <h4 class="auk-u-m-0">{{t "publications-number"}}</h4>
         <p class="auk-u-m-0">
           {{@publicationFlow.identification.structuredIdentifier.localIdentifier}} {{@publicationFlow.identification.structuredIdentifier.versionIdentifier}}
