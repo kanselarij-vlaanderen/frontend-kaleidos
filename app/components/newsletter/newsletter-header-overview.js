@@ -142,13 +142,31 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   async validateMailCampaign(mailCampaign) {
     let validCampaign = true;
-    await this.validatedCampaign(mailCampaign.campaignId).catch((ex) => {
-      console.error(ex);
-      this.isVerifying = false;
-      this.isLoading = false;
-      validCampaign = false;
-    });
 
+    const campaign = await this.newsletterService
+      .getMailCampaign(mailCampaign.campaignId)
+      .catch(() => {
+        this.toaster.error(
+          this.intl.t('error-fetch-newsletter'),
+          this.intl.t('warning-title')
+        );
+        validCampaign = false;
+      });
+
+    const threshold = 10;
+
+    if (Math.abs(moment(campaign.body.create_time).diff(moment(Date.now()), 'minutes')) > threshold) {
+      this.toaster.error(
+        this.intl.t('error-old-newsletter'),
+        this.intl.t('warning-title'),
+        {
+          timeOut: 600000,
+        }
+      );
+      validCampaign = false;
+    }
+    this.isVerifying = false;
+    this.isLoading = false;
     return validCampaign;
   }
 
@@ -201,45 +219,5 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       mailCampaign = await this.args.meeting.mailCampaign;
     }
     return mailCampaign;
-  }
-
-  async validatedCampaign(campaignId) {
-    const campaign = await this.newsletterService
-      .getMailCampaign(campaignId)
-      .catch(() => {
-        this.toaster.error(
-          this.intl.t('error-fetch-newsletter'),
-          this.intl.t('warning-title')
-        );
-        return false;
-      });
-
-    console.info(
-      'campaign minutes old',
-      Math.abs(
-        moment(campaign.body.create_time).diff(moment(Date.now()), 'minutes')
-      )
-    );
-
-    const threshold = 10;
-
-    if (
-      Math.abs(
-        moment(campaign.body.create_time).diff(moment(Date.now()), 'minutes')
-      ) > threshold
-    ) {
-      const sendingOldCampaignError = new SendingOldCampaignError();
-      sendingOldCampaignError.message = 'Sending an old campaign.';
-      this.toaster.error(
-        this.intl.t('error-old-newsletter'),
-        this.intl.t('warning-title'),
-        {
-          timeOut: 600000,
-        }
-      );
-      throw sendingOldCampaignError;
-    } else {
-      return true;
-    }
   }
 }
