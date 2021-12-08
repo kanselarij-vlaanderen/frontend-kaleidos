@@ -154,8 +154,6 @@ export default class CasesNewSubcase extends Component {
     }
     // Everything to copy from latest subcase
     subcase.mandatees = await latestSubcase.mandatees;
-    // TODO KAS-2969 make sure to copy the list of concepts
-    subcase.iseCodes = await latestSubcase.iseCodes;
     subcase.requestedBy = await latestSubcase.requestedBy;
     return subcase;
   }
