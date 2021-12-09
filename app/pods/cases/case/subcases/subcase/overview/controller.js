@@ -10,9 +10,11 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
   get subcase() {
     return this.model;
   }
+  @tracked case;
   @tracked allSubcases;
   @tracked mandatees;
   @tracked submitter;
+  @tracked governmentAreas;
 
   @tracked isEditingTitles = false;
 
@@ -42,10 +44,9 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
 
   @action
   async saveGovernmentAreas(newGovernmentAreas) {
-    const case_ = await this.subcase.case;
-    const governmentAreas = await case_.governmentAreas;
+    const governmentAreas = this.governmentAreas;
     governmentAreas.clear();
     governmentAreas.pushObjects(newGovernmentAreas);
-    await case_.save();
+    await this.case.save();
   }
 }
