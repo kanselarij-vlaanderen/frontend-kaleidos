@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import moment from 'moment';
-import SendingOldCampaignError from 'frontend-kaleidos/errors/sending-old-campaign-error';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
