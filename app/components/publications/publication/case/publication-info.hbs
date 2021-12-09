@@ -44,7 +44,7 @@
         <div
           class="auk-form-group"
         >
-          <Auk::Label>{{t "numac-number"}}</Auk::Label>
+          <Auk::Label>Numac</Auk::Label>
           {{! TODO: disable modifying numac-number once (staatsblad-)decision exists? }}
           <Auk::InputPills
             @items={{this.publicationFlow.numacNumbers}}
@@ -160,7 +160,7 @@
         </p>
       </div>
       <div class="auk-o-grid-col-3 auk-content">
-        <h4 class="auk-u-m-0">{{t "numac-number"}}</h4>
+        <h4 class="auk-u-m-0">Numac</h4>
         <p class="auk-u-m-0">
           {{#each this.publicationFlow.numacNumbers as |numac|}}
           {{numac.idName}}

@@ -84,13 +84,15 @@ Router.map(function() {
       });
       this.route('publication', { path: ':publication_id', }, function() {
         this.route('case', { path: '/dossier', });
-        this.route('documents', { path: '/documenten', });
+        this.route('documents', { path: '/documenten', }, function() {
+          this.route('index', { path: '/', });
+        });
         this.route('translations', { path: '/vertalingen', }, function() {
-          this.route('documents', { path: '/documenten', });
+          this.route('documents', { path: '/', });
           this.route('requests', { path: '/aanvragen', });
         });
         this.route('proofs', { path: '/drukproeven', }, function() {
-          this.route('documents', { path: '/documenten', });
+          this.route('documents', { path: '/', });
           this.route('requests', { path: '/aanvragen', });
         });
         this.route('publication', { path: '/publicatie', });

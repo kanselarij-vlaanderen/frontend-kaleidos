@@ -5,7 +5,7 @@
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
           <h4 class="auk-panel__title">
-            Publicatie info
+            Besluit info
           </h4>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
@@ -17,17 +17,16 @@
         <div
           class="auk-form-group"
         >
-          <Auk::Label>{{t "publication-flow-opening-date"}}</Auk::Label>
-          {{#if this.publicationFlow.case.subcases}}
-            <div class="auk-u-muted">
-              {{moment-format this.publicationFlow.openingDate "DD-MM-YYYY"}}
-            </div>
-          {{else}}
-            <Auk::Datepicker
-              @date={{this.publicationFlow.openingDate}}
-              @onChange={{this.setOpeningDate}}
-            />
-          {{/if}}
+          <Auk::Label for="blockInput">{{t "regulation-type"}}</Auk::Label>
+          <PowerSelect
+            @options={{this.regulationTypes}}
+            @searchEnabled={{false}}
+            @onchange={{this.setRegulationType}}
+            @selected={{@publicationFlow.regulationType}}
+            as |regulationType|
+          >
+            {{regulationType.label}}
+          </PowerSelect>
         </div>
       </div>
       <div class="auk-o-grid-col-3">
@@ -103,7 +102,7 @@
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
           <h4 class="auk-panel__title">
-            Publicatie info
+            Besluit info
           </h4>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
@@ -117,9 +116,9 @@
   <Auk::Panel::Body>
     <div class="auk-o-grid">
       <div class="auk-o-grid-col-3 auk-content">
-        <h4 class="auk-u-m-0">{{t "publication-flow-opening-date"}}</h4>
+        <h4 class="auk-u-m-0">{{t "regulation-type"}}</h4>
         <p class="auk-u-m-0">
-          {{moment-format this.publicationFlow.openingDate "DD-MM-YYYY"}}
+          {{this.publicationFlow.regulationType.label}}
         </p>
       </div>
       <div class="auk-o-grid-col-3 auk-content">

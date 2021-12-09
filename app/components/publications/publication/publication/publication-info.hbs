@@ -26,12 +26,21 @@
       </div>
       <div class="auk-o-grid-col-3">
         <div
+          data-test-publication-sidebar-publication-mode
           class="auk-form-group"
         >
-          <Auk::Label>Klaar voor publicatie</Auk::Label>
-          <p class="auk-u-m-0">
-            <Auk::ButtonLink @icon="paperclip">60098.docx</Auk::ButtonLink>
-          </p>
+          <Auk::Label for="blockInput">
+            {{t "kind-of-publication"}}
+          </Auk::Label>
+          <PowerSelect
+            @options={{this.publicationModes}}
+            @searchEnabled={{false}}
+            @onchange={{this.setPublicationMode}}
+            @selected={{this.publicationFlow.mode}}
+            as |mode|
+          >
+            {{mode.label}}
+          </PowerSelect>
         </div>
       </div>
     </div>
@@ -92,9 +101,9 @@
         </p>
       </div>
       <div class="auk-o-grid-col-3 auk-content">
-        <h4 class="auk-u-m-0">Klaar voor publicatie</h4>
+        <h4 class="auk-u-m-0">{{t "kind-of-publication"}}</h4>
         <p class="auk-u-m-0">
-          <Auk::ButtonLink @icon="paperclip">60098.docx</Auk::ButtonLink>
+          {{this.publicationFlow.mode.label}}
         </p>
       </div>
     </div>
