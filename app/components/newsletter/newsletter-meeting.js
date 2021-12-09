@@ -9,7 +9,7 @@ import moment from 'moment';
 // TODO: octane-refactor
 // eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
-  classNames: ['auk-u-mb-8'],
+  classNames: ['auk-u-mt-5', 'auk-u-mb-10'],
   isEditing: false,
   intl: inject(),
   currentSession: inject(),

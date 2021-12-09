@@ -1,7 +1,10 @@
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-components
-import Component from '@ember/component';
+import Component from '@glimmer/component';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
-export default Component.extend({});
+export default class ItemGroup extends Component {
+  get items() {
+    return {
+      first: this.args.items[0],
+      remainder: this.args.items.slice(1)
+    };
+  }
+}

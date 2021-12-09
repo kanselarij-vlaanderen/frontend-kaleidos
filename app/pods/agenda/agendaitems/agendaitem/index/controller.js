@@ -13,7 +13,10 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @service router;
 
   @controller('agenda.agendaitems') agendaitemsController;
+  @tracked meeting;
   @tracked agenda;
+  @tracked agendaActivity;
+  @tracked reverseSortedAgendas;
   @tracked subcase;
   @tracked submitter;
   @tracked newsletterInfo;
@@ -67,5 +70,14 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     this.submitter = mandateeData.submitter;
     await saveChanges(this.model, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
     this.agendaitemsController.groupNotasOnGroupName.perform();
+  }
+
+  @action
+  async saveGovernmentAreas(newGovernmentAreas) {
+    const case_ = await this.subcase.case;
+    const governmentAreas = await case_.governmentAreas;
+    governmentAreas.clear();
+    governmentAreas.pushObjects(newGovernmentAreas);
+    await case_.save();
   }
 }

@@ -2,6 +2,8 @@
   <div class="auk-accordion__header auk-accordion__header--{{this.layout}}">
     <button
       type="button"
+      class="auk-accordion__button"
+      disabled={{@disabled}}
       aria-expanded={{if this.isActive "true" "false"}}
       aria-controls={{this.accordionId}}
       {{on "click" this.toggleAccordion}}
@@ -15,13 +17,13 @@
           </Auk::Toolbar::Group>
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
-              <Auk::Icon @name="chevron-right" @skin="primary" />
+              <Auk::Icon @name="chevron-right" class="auk-accordion__toggle-icon" />
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
         {{else}}
           <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
-              <Auk::Icon @name="chevron-right" @skin="primary" />
+              <Auk::Icon @name="chevron-right" class="auk-accordion__toggle-icon" />
               <span class="auk-accordion__title">{{@title}}</span>
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
@@ -34,6 +36,8 @@
     id={{this.accordionId}}
     aria-hidden="{{not this.isActive}}"
   >
-    {{yield}}
+    {{#if this.isActive}}
+      {{yield}}
+    {{/if}}
   </div>
 </div>
