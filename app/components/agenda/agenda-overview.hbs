@@ -69,6 +69,7 @@
               >
                 <Agenda::AgendaOverview::AgendaOverviewItem
                   @agendaitem={{agendaitem}}
+                  @meeting={{@meeting}}
                   @currentAgenda={{@currentAgenda}}
                   @previousAgenda={{@previousAgenda}}
                   @isNew={{includes agendaitem @newItems}}
@@ -109,6 +110,7 @@
           >
             <Agenda::AgendaOverview::AgendaOverviewItem
               @agendaitem={{announcement}}
+              @meeting={{@meeting}}
               @currentAgenda={{@currentAgenda}}
               @previousAgenda={{@previousAgenda}}
               @isNew={{includes announcement @newItems}}

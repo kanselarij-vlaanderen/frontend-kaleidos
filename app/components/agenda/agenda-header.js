@@ -20,7 +20,7 @@ export default class AgendaHeader extends Component {
    *
    * @argument meeting: the viewed meeting
    * @argument currentAgenda: the selected agenda
-   * @argument reversedAgendas: the agendas of the meeting, reverse sorted on serial number
+   * @argument reverseSortedAgendas: the agendas of the meeting, reverse sorted on serial number
    * @argument refreshRoute: a callback to parent route to refresh the model
    */
   @service store;

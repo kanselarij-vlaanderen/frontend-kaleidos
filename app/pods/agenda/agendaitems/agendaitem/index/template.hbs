@@ -21,7 +21,9 @@
         {{#if (not this.agenda.isFinal)}}
           <Agenda::Agendaitem::AgendaitemControls
             @agendaitem={{this.model}}
+            @agendaActivity={{this.agendaActivity}}
             @currentAgenda={{this.agenda}}
+            @reverseSortedAgendas={{this.reverseSortedAgendas}}
             @onDeleteAgendaitem={{this.reassignNumbersAndNavigateToNeighbouringAgendaitem}}
           />
         {{/if}}
@@ -60,6 +62,10 @@
       @submitter={{this.submitter}}
       @allowEditing={{this.currentSession.isEditor}}
       @onSave={{this.saveMandateeData}}
+    />
+    <Utils::GovernmentAreas::GovernmentAreasPanel
+      @governmentAreas={{this.subcase.case.governmentAreas}}
+      @onSave={{this.saveGovernmentAreas}}
     />
     <Agenda::Agendaitem::AgendaitemCase::AgendaitemApprovals
       @agendaitem={{this.model}}

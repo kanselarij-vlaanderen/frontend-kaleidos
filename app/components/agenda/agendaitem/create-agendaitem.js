@@ -3,7 +3,6 @@
 // eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import { alias } from '@ember/object/computed';
 import { computed, set } from '@ember/object';
 import {
   task, timeout
@@ -11,18 +10,20 @@ import {
 // TODO: octane-refactor
 // eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
+  /**
+   * @argument meeting
+   * @argument isAddingAgendaitems
+   * @argument onCreate
+   */
+  meeting: null,
+  onCreate: null, // argument. Function that is triggered after agenda-item creation.
   availableSubcases: null,
   showPostponed: false,
   noItemsSelected: true,
 
-  currentSession: alias('sessionService.currentSession'),
-  selectedAgenda: alias('sessionService.currentAgenda'),
-  agendas: alias('sessionService.agendas'),
-
   store: inject(),
   subcasesService: inject(),
   agendaService: inject(),
-  sessionService: inject(),
 
   page: 0,
   size: 10,
@@ -49,7 +50,6 @@ export default Component.extend({
     }
     return options;
   }),
-  onCreate: null, // argument. Function that is triggered after agenda-item creation.
 
   get pageParam() {
     return this.page;
@@ -242,7 +242,7 @@ export default Component.extend({
           await submissionActivity.save();
           submissionActivities = [submissionActivity];
         }
-        const newItem = await this.agendaService.putSubmissionOnAgenda(this.currentSession, submissionActivities);
+        const newItem = await this.agendaService.putSubmissionOnAgenda(this.meeting, submissionActivities);
         agendaItems.push(newItem);
       }
 

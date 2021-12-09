@@ -16,6 +16,7 @@ export default Model.extend({
   confidential: attr('boolean'),
 
   publicationFlows: hasMany('publication-flow'),
+  governmentAreas: hasMany('concept'),
   subcases: hasMany('subcase'),
   pieces: hasMany('piece'),
   signFlows: hasMany('sign-flow'),

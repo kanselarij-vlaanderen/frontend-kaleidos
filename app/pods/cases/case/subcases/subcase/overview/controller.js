@@ -39,4 +39,13 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
     this.submitter = mandateeData.submitter;
     await saveChanges(this.subcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
   }
+
+  @action
+  async saveGovernmentAreas(newGovernmentAreas) {
+    const case_ = await this.subcase.case;
+    const governmentAreas = await case_.governmentAreas;
+    governmentAreas.clear();
+    governmentAreas.pushObjects(newGovernmentAreas);
+    await case_.save();
+  }
 }
