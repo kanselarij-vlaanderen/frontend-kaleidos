@@ -66,7 +66,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
       modified: now,
       file: file,
       accessLevel: this.defaultAccessLevel,
-      confidential: false,
+      confidential: this.subcase.confidential || false,
       name: file.filenameWithoutExtension,
       documentContainer: documentContainer,
       cases: [this.case],
