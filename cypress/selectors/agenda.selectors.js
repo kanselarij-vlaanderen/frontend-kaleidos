@@ -192,6 +192,7 @@ const selectors = {
     meetingLocation: '[data-test-new-session-meeting-location]',
     datepicker: '[data-test-new-session-datepicker]',
     numberRep: {
+      view: '[data-test-new-session-number-representation-view]',
       edit: '[data-test-new-session-number-representation-edit]',
       input: '[data-test-new-session-number-representation-input]',
       save: '[data-test-new-session-number-representation-save]',
