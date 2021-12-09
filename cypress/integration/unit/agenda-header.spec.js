@@ -163,7 +163,7 @@ context('Agenda-Header actions tests', () => {
 
 
     cy.createAgenda(null, dateToCreateAgenda, null).then((result) => {
-      cy.createCase(false, caseTitleShort);
+      cy.createCase(caseTitleShort);
       cy.addSubcase(typeNota, subcaseTitleShortNew, subcaseTitleLong);
       cy.addSubcase(typeNota, subcaseTitleShortApproved, subcaseTitleLong);
       cy.openSubcase(0);
@@ -224,7 +224,7 @@ context('Agenda-Header actions tests', () => {
     };
 
     cy.createAgenda(null, dateToCreateAgenda, null).then((result) => {
-      cy.createCase(false, caseTitleShort);
+      cy.createCase(caseTitleShort);
       cy.addSubcase(typeNota, subcaseTitleShortNew, subcaseTitleLong);
       cy.addSubcase(typeNota, subcaseTitleShortApproved, subcaseTitleLong);
       cy.openSubcase(0);

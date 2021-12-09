@@ -113,7 +113,7 @@ context('Agenda tests', () => {
     const whitespace = '\n';
 
     cy.createAgenda(agendaKind, dateToCreateAgenda, agendaPlace).then((result) => {
-      cy.createCase(false, caseTitleShort);
+      cy.createCase(caseTitleShort);
       cy.addSubcase(typeNota, subcaseTitleShort + whitespace, subcaseTitleLong + whitespace);
       cy.openSubcase(0);
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
@@ -202,7 +202,7 @@ context('Agenda tests', () => {
     const subcaseTitleLong = `Agenda spec formal ok: set formality - ${testId}`;
 
     cy.createAgenda(agendaKind, dateToCreateAgenda, agendaPlace).then((result) => {
-      cy.createCase(false, caseTitleShort);
+      cy.createCase(caseTitleShort);
       cy.addSubcase(typeNota, newSubcaseTitleShort, subcaseTitleLong);
       cy.openSubcase(0);
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
@@ -221,7 +221,7 @@ context('Agenda tests', () => {
     const subcaseTitleLong = `Agenda spec formal ok: close agenda lange titel - ${testId}`;
 
     cy.createAgenda(agendaKind, dateToCreateAgenda, agendaPlace).then((result) => {
-      cy.createCase(false, caseTitleShort);
+      cy.createCase(caseTitleShort);
       cy.addSubcase(typeNota, newSubcaseTitleShort, subcaseTitleLong);
       cy.openSubcase(0);
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
@@ -249,7 +249,7 @@ context('Agenda tests', () => {
     const subcaseTitleLong = `Agenda spec formal ok: approve & close agenda lange titel - ${testId}`;
 
     cy.createAgenda(agendaKind, dateToCreateAgenda, agendaPlace).then((result) => {
-      cy.createCase(false, caseTitleShort);
+      cy.createCase(caseTitleShort);
       cy.addSubcase(typeNota, newSubcaseTitleShort, subcaseTitleLong);
       cy.openSubcase(0);
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
@@ -285,7 +285,7 @@ context('Agenda tests', () => {
     const subcaseTitleLong = `Agenda spec formal ok: approve agenda lange titel - ${testId}`;
 
     cy.createAgenda(agendaKind, dateToCreateAgenda, agendaPlace).then((result) => {
-      cy.createCase(false, caseTitleShort);
+      cy.createCase(caseTitleShort);
       cy.addSubcase(typeNota, newSubcaseTitleShort, subcaseTitleLong);
       cy.openSubcase(0);
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
