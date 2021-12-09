@@ -240,4 +240,43 @@ context('Agendaitem changes tests', () => {
     cy.get(agenda.agendaitemGroupHeader.section).eq(1)
       .should('contain.text', 'Geen toekenning');
   });
+
+  it('should test the scroll anchor', () => {
+    const title = 'Cypress test dossier 1 test stap 3';
+    const visibleTitle = 'Cypress test dossier 1 test stap 2';
+    cy.visit(agendaURL);
+    cy.changeSelectedAgenda('Ontwerpagenda');
+    cy.get(agenda.agendaOverview.subtitle).should('be.visible');
+    cy.get(agenda.agendaOverviewItem.subitem).contains('verslag')
+      .should('be.visible');
+    cy.openDetailOfAgendaitem(title);
+    cy.clickReverseTab('Overzicht');
+    cy.get(agenda.agendaOverviewItem.subitem).contains(visibleTitle)
+      .should('be.visible');
+    cy.get(agenda.agendaOverview.subtitle).should('not.be.visible');
+    cy.get(agenda.agendaOverviewItem.subitem).contains('verslag')
+      .should('not.be.visible');
+    cy.reload();
+    cy.get(agenda.agendaOverview.subtitle);
+    cy.get(auk.loader).should('not.exist');
+    cy.get(agenda.agendaOverviewItem.subitem).contains(visibleTitle)
+      .should('be.visible');
+    cy.get(agenda.agendaOverview.subtitle).should('not.be.visible');
+    cy.contains('verslag').should('not.be.visible');
+    // TODO-bug clicking on detail with anchor always goes to first item instead of anchor
+    cy.clickReverseTab('Detail');
+    // our agendaitem should be highlighted but isn't due to bug
+    cy.clickReverseTab('Overzicht');
+    cy.get(agenda.agendaOverviewItem.subitem).contains(visibleTitle)
+      .should('be.visible');
+    cy.get(agenda.agendaOverview.subtitle).should('not.be.visible');
+    cy.get(agenda.agendaOverviewItem.subitem).contains('verslag')
+      .should('not.be.visible');
+    // different anchor after going to detail
+    cy.openDetailOfAgendaitem('verslag', false);
+    cy.clickReverseTab('Overzicht');
+    cy.get(agenda.agendaOverview.subtitle).should('be.visible');
+    cy.get(agenda.agendaOverviewItem.subitem).contains('verslag')
+      .should('be.visible');
+  });
 });
