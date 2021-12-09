@@ -76,12 +76,12 @@ context('Search tests', () => {
     const subcase2Type = 'In voorbereiding';
     const subcase2Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
 
-    cy.createCase(false, case1TitleShort);
+    cy.createCase(case1TitleShort);
     cy.addSubcase(type1, newSubcase1TitleShort, subcase1TitleLong, subcase1Type, subcase1Name);
     cy.openSubcase(0);
     cy.proposeSubcaseForAgenda(dateToCreateAgenda);
 
-    cy.createCase(false, case2TitleShort);
+    cy.createCase(case2TitleShort);
     cy.addSubcase(type2, newSubcase2TitleShort, subcase2TitleLong, subcase2Type, subcase2Name);
     cy.openSubcase(0);
     cy.proposeSubcaseForAgenda(dateToCreateAgenda);
