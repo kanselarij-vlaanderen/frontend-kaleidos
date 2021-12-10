@@ -36,7 +36,7 @@ context('Tests of pieces on agendaitems', () => {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     };
 
-    cy.createCase(false, caseTitle);
+    cy.createCase(caseTitle);
     cy.addSubcase(null, part1Title, part1TitleLong, null, null);
     cy.openSubcase(0);
 
