@@ -18,10 +18,10 @@ context('Create case as Admin user', () => {
 
   // TODO-abbreviated
 
-  it('Create a case with confidentiality and short title', () => {
+  it('Create a case with short title', () => {
     cy.visit('/dossiers');
-    const caseTitle = 'Dit is een dossier met confidentiality en een korte titel';
-    cy.createCase(true, caseTitle).then((result) => {
+    const caseTitle = 'Dit is een dossier met een korte titel';
+    cy.createCase(caseTitle).then((result) => {
       // automatic transition
       cy.url().should('contain', `dossiers/${result.caseId}/deeldossiers`);
     });
@@ -29,10 +29,10 @@ context('Create case as Admin user', () => {
     cy.get(cases.subcaseOverviewHeader.titleContainer).within(() => {
       cy.contains(caseTitle);
     });
-    // case confidentiality is passed on to subcase
+    // subcase confidentiality should be false by default
     cy.addSubcase('Nota', 'Check confidential', '', null, null).then((result) => {
       cy.openSubcase(0);
-      cy.get(route.subcaseOverview.confidentialityCheckBox).should('be.checked');
+      cy.get(route.subcaseOverview.confidentialityCheckBox).should('not.be.checked');
       cy.url().should('contain', `/deeldossiers/${result.subcaseId}`);
     });
   });
@@ -42,39 +42,38 @@ context('Create case as Admin user', () => {
     const shorttitle = 'Gibberish';
     cy.get(cases.casesHeader.addCase).click();
     cy.get(cases.newCase.shorttitle).type(shorttitle);
-    cy.get(cases.newCase.toggleConfidential).click();
     cy.get(cases.newCase.cancel).click();
     // check if data is cleared after cancel
     cy.get(cases.casesHeader.addCase).click();
     cy.get(cases.newCase.shorttitle).should('not.contain', shorttitle);
-    cy.get(cases.newCase.toggleConfidential).should('not.be', 'checked');
     cy.get(cases.newCase.shorttitle).type(shorttitle);
-    cy.get(cases.newCase.toggleConfidential).click();
     cy.get(utils.vlModal.close).click();
     // check if data is cleared after close
     cy.get(cases.casesHeader.addCase).click();
     cy.get(cases.newCase.shorttitle).should('not.contain', shorttitle);
-    cy.get(cases.newCase.toggleConfidential).should('not.be', 'checked');
   });
 
-  it('Copy of remark subcase should not result in a new remark subcase', () => {
+  it('Copy of confidential remark subcase should result in a new confidential remark subcase', () => {
     const newShortTitle = 'Dit is de korte titel';
     cy.visit('/dossiers');
-    cy.createCase(false, newShortTitle);
+    cy.createCase(newShortTitle);
     cy.addSubcase('Mededeling', newShortTitle, '', null, null);
     cy.openSubcase(0);
-    // check confidentiality is not already checked when case is not confidential
-    cy.get(route.subcaseOverview.confidentialityCheckBox).should('not.be.checked');
+    cy.changeSubcaseAccessLevel(true);
+    cy.get(route.subcaseOverview.confidentialityCheckBox).should('be.checked');
+    // TODO-BUG, saving and then moving away too soon (going back, closing browser) could leave the editor open
     // ensure type is correct
     cy.get(cases.subcaseTitlesView.type).contains('Mededeling');
     cy.get(auk.tab.hierarchicalBack).click();
     // ensure type is the same after copy to new subcase
+    // ensure confidentialy is the same after copy to new subcase
     cy.route('POST', '/subcases').as('createNewSubcase');
     cy.get(cases.subcaseOverviewHeader.createSubcase).click();
     cy.get(cases.newSubcase.clonePreviousSubcase).click();
     cy.wait('@createNewSubcase');
     cy.openSubcase(0);
     cy.get(cases.subcaseTitlesView.type).contains('Mededeling');
+    cy.get(route.subcaseOverview.confidentialityCheckBox).should('be.checked');
   });
 
   it('Een dossier maken zonder korte titel geeft een error', () => {
