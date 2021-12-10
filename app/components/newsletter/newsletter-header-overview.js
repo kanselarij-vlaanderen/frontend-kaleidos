@@ -98,6 +98,20 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   }
 
   @action
+  async downloadBelgaXML() {
+    this.isLoading = true;
+    await this.newsletterService
+      .downloadBelgaXML(this.args.agenda.id)
+      .catch(() => {
+        this.toaster.error(
+          this.intl.t('error-download-XML'),
+          this.intl.t('warning-title')
+        );
+      });
+    this.isLoading = false;
+  }
+
+  @action
   async publishToAll() {
     this.isLoading = true;
 
@@ -118,9 +132,9 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     this.loadingNewsletter = true;
 
     const mailCampaign = await this.getMailCampaign();
-
     if (mailCampaign) {
-      const html = await this.newsletterService
+      console.log('try get 1')
+      const campaignContent = await this.newsletterService
         .getMailCampaignContent(mailCampaign.campaignId)
         .catch(() => {
           this.toaster.error(
@@ -128,7 +142,8 @@ export default class NewsletterHeaderOverviewComponent extends Component {
             this.intl.t('warning-title')
           );
         });
-      this.newsletterHTML = html.body;
+      console.log(campaignContent)
+      this.newsletterHTML = campaignContent.html.body;
     }
     this.loadingNewsletter = false;
   }
@@ -143,7 +158,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     let validCampaign = true;
 
     const campaign = await this.newsletterService
-      .getMailCampaign(mailCampaign.campaignId)
+      .getMailCampaignContent(mailCampaign.campaignId)
       .catch(() => {
         this.toaster.error(
           this.intl.t('error-fetch-newsletter'),

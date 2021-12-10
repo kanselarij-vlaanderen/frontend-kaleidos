@@ -20,9 +20,9 @@ export default class NewsletterService extends Service {
       });
 
       const mailCampaign = this.store.createRecord('mail-campaign', {
-        campaignId: result.id,
-        campaignWebId: result.webcampaignId,
-        archiveUrl: result.archiveUrl,
+        campaignId: result.data.id,
+        campaignWebId: result.data.webId,
+        archiveUrl: result.data.archiveUrl,
       });
 
       await mailCampaign.save().then(async (savedCampaign) => {
@@ -104,27 +104,48 @@ export default class NewsletterService extends Service {
     }
   }
 
-  async getMailCampaignContent(id) {
+  async downloadBelgaXML(agendaId) {
     try {
-      const result = await ajax({
+      return await ajax({
         method: 'GET',
-        url: `/newsletter/mailCampaign`,
+        url: `/newsletter/belga`,
         data: {
-          id: id,
+          agendaId: agendaId,
         }
       });
-      return result.html;
     } catch (error) {
       console.warn('An exception ocurred: ', error);
       this.toaster.error(
-        this.intl.t('error-send-newsletter'),
+        this.intl.t('error-download-XML'),
         this.intl.t('warning-title')
       );
       return null;
     }
   }
 
-  async getMailCampaign(id) {
+  // async getMailCampaignContent(id) {
+  //   try {
+  //     const result = await ajax({
+  //       method: 'GET',
+  //       url: `/newsletter/mailCampaign`,
+  //       data: {
+  //         id: id,
+  //       }
+  //     });
+  //     console.log(result)
+  //     return result.html;
+  //   } catch (error) {
+  //     console.warn('An exception ocurred: ', error);
+  //     this.toaster.error(
+  //       this.intl.t('error-send-newsletter'),
+  //       this.intl.t('warning-title')
+  //     );
+  //     return null;
+  //   }
+  // }
+
+  async getMailCampaignContent(id) {
+    console.log('try get')
     try {
       return await ajax({
         method: 'GET',
