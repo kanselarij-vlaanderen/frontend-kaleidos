@@ -41,7 +41,6 @@ export default Component.extend({
       },
       filter: {
         ':has-no:agenda-activities': 'yes',
-        ':not:is-archived': 'true',
       },
     };
 
