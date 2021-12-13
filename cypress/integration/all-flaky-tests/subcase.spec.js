@@ -166,7 +166,7 @@ context('Subcase tests', () => {
 
     // Aanmaken Dossier
 
-    cy.createCase(false, 'Cypress mededeling test');
+    cy.createCase('Cypress mededeling test');
 
     // Aanmaken subcase.
     cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
