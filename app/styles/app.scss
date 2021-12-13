@@ -25,7 +25,6 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 // Components (loaded locally to easily read source)
 @import 'govflanders/components/_alert';
 @import 'govflanders/components/_datepicker';
-@import 'govflanders/components/_document';
 @import 'govflanders/components/_upload';
 
 // Interdependent components (loaded from node_modules)
