@@ -13,7 +13,7 @@ export default class NewsletterService extends Service {
     try {
       const result = await ajax({
         method: 'POST',
-        url: `/newsletter/mailCampaign`,
+        url: `/newsletter/createMailCampaign`,
         data: {
           agendaId: agenda.id,
         }
@@ -49,13 +49,14 @@ export default class NewsletterService extends Service {
 
   async deleteCampaign(id) {
     try {
-      return  await ajax({
+      const result = await ajax({
         method: 'DELETE',
-        url: `/newsletter/mailCampaign`,
+        url: `/newsletter/deleteMailCampaign`,
         data: {
           id: id,
         }
       });
+      return result;
     } catch (error) {
       console.warn('An exception ocurred: ', error);
       this.toaster.error(
@@ -68,13 +69,14 @@ export default class NewsletterService extends Service {
 
   async sendMailCampaign(id) {
     try {
-      return  await ajax({
-        method: 'PUT',
-        url: `/newsletter/mailCampaign`,
+      const result = await ajax({
+        method: 'POST',
+        url: `/newsletter/sendMailCampaign`,
         data: {
           id: id,
         }
       });
+      return result;
     } catch (error) {
       console.warn('An exception ocurred: ', error);
       this.toaster.error(
@@ -85,15 +87,16 @@ export default class NewsletterService extends Service {
     }
   }
 
-  async sendtoBelga(agendaId) {
+  async sendToBelga(agendaId) {
     try {
-      return await ajax({
+      const result = await ajax({
         method: 'POST',
-        url: `/newsletter/belga`,
+        url: `/newsletter/sendToBelga`,
         data: {
           agendaId: agendaId,
         }
       });
+      return result;
     } catch (error) {
       console.warn('An exception ocurred: ', error);
       this.toaster.error(
@@ -106,13 +109,14 @@ export default class NewsletterService extends Service {
 
   async downloadBelgaXML(agendaId) {
     try {
-      return await ajax({
+      const result = await ajax({
         method: 'GET',
-        url: `/newsletter/belga`,
+        url: `/newsletter/fetchXML`,
         data: {
           agendaId: agendaId,
         }
       });
+      return result;
     } catch (error) {
       console.warn('An exception ocurred: ', error);
       this.toaster.error(
@@ -123,37 +127,16 @@ export default class NewsletterService extends Service {
     }
   }
 
-  // async getMailCampaignContent(id) {
-  //   try {
-  //     const result = await ajax({
-  //       method: 'GET',
-  //       url: `/newsletter/mailCampaign`,
-  //       data: {
-  //         id: id,
-  //       }
-  //     });
-  //     console.log(result)
-  //     return result.html;
-  //   } catch (error) {
-  //     console.warn('An exception ocurred: ', error);
-  //     this.toaster.error(
-  //       this.intl.t('error-send-newsletter'),
-  //       this.intl.t('warning-title')
-  //     );
-  //     return null;
-  //   }
-  // }
-
   async getMailCampaignContent(id) {
-    console.log('try get')
     try {
-      return await ajax({
+      const result = await ajax({
         method: 'GET',
-        url: `/newsletter/mailCampaign`,
+        url: `/newsletter/fetchMailCampaign`,
         data: {
           id: id,
         }
       });
+      return result;
     } catch (error) {
       console.warn('An exception ocurred: ', error);
       this.toaster.error(

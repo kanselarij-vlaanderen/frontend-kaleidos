@@ -133,7 +133,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
     const mailCampaign = await this.getMailCampaign();
     if (mailCampaign) {
-      console.log('try get 1')
       const campaignContent = await this.newsletterService
         .getMailCampaignContent(mailCampaign.campaignId)
         .catch(() => {
@@ -142,7 +141,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
             this.intl.t('warning-title')
           );
         });
-      console.log(campaignContent)
       this.newsletterHTML = campaignContent.html.body;
     }
     this.loadingNewsletter = false;
@@ -186,7 +184,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   async publishNewsletterToBelga() {
     await this.newsletterService
-      .sendtoBelga(this.args.agenda.id)
+      .sendToBelga(this.args.agenda.id)
       .then(() => {
         this.toaster.success(
           this.intl.t('success-publish-newsletter-to-belga')
