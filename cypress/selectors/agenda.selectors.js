@@ -67,7 +67,7 @@ const selectors = {
 
   // agenda-overview
   agendaOverview: {
-    subtitle: '[data-test-agenda-overview-subtitle]',
+    notesSectionTitle: '[data-test-agenda-overview-section-title-notes]',
     showChanges: '[data-test-agenda-overview-show-changes]',
     formallyOkEdit: '[data-test-agenda-overview-formally-ok-edit]',
   },

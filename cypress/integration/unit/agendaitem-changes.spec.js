@@ -244,39 +244,43 @@ context('Agendaitem changes tests', () => {
   it('should test the scroll anchor', () => {
     const title = 'Cypress test dossier 1 test stap 3';
     const visibleTitle = 'Cypress test dossier 1 test stap 2';
+    const approvalTitle = 'verslag';
     cy.visit(agendaURL);
     cy.changeSelectedAgenda('Ontwerpagenda');
-    cy.get(agenda.agendaOverview.subtitle).should('be.visible');
-    cy.get(agenda.agendaOverviewItem.subitem).contains('verslag')
+    cy.get(agenda.agendaOverview.notesSectionTitle).should('be.visible');
+    cy.get(agenda.agendaOverviewItem.subitem).contains(approvalTitle)
       .should('be.visible');
     cy.openDetailOfAgendaitem(title);
     cy.clickReverseTab('Overzicht');
     cy.get(agenda.agendaOverviewItem.subitem).contains(visibleTitle)
       .should('be.visible');
-    cy.get(agenda.agendaOverview.subtitle).should('not.be.visible');
-    cy.get(agenda.agendaOverviewItem.subitem).contains('verslag')
+    cy.get(agenda.agendaOverview.notesSectionTitle).should('not.be.visible');
+    cy.get(agenda.agendaOverviewItem.subitem).contains(approvalTitle)
       .should('not.be.visible');
+    // After a page reload (or going to the address), the anchor still exists and is used for scrolling
     cy.reload();
-    cy.get(agenda.agendaOverview.subtitle);
+    cy.get(agenda.agendaOverview.notesSectionTitle);
     cy.get(auk.loader).should('not.exist');
     cy.get(agenda.agendaOverviewItem.subitem).contains(visibleTitle)
       .should('be.visible');
-    cy.get(agenda.agendaOverview.subtitle).should('not.be.visible');
-    cy.contains('verslag').should('not.be.visible');
+    cy.get(agenda.agendaOverview.notesSectionTitle).should('not.be.visible');
+    cy.get(agenda.agendaOverview.notesSectionTitle).contains(approvalTitle)
+      .should('not.be.visible');
+    // Switching between detail and overview with nav tabs should keep the anchor
     // TODO-bug clicking on detail with anchor always goes to first item instead of anchor
     cy.clickReverseTab('Detail');
     // our agendaitem should be highlighted but isn't due to bug
     cy.clickReverseTab('Overzicht');
     cy.get(agenda.agendaOverviewItem.subitem).contains(visibleTitle)
       .should('be.visible');
-    cy.get(agenda.agendaOverview.subtitle).should('not.be.visible');
-    cy.get(agenda.agendaOverviewItem.subitem).contains('verslag')
+    cy.get(agenda.agendaOverview.notesSectionTitle).should('not.be.visible');
+    cy.get(agenda.agendaOverviewItem.subitem).contains(approvalTitle)
       .should('not.be.visible');
     // different anchor after going to detail
-    cy.openDetailOfAgendaitem('verslag', false);
+    cy.openDetailOfAgendaitem(approvalTitle, false);
     cy.clickReverseTab('Overzicht');
-    cy.get(agenda.agendaOverview.subtitle).should('be.visible');
-    cy.get(agenda.agendaOverviewItem.subitem).contains('verslag')
+    cy.get(agenda.agendaOverview.notesSectionTitle).should('be.visible');
+    cy.get(agenda.agendaOverviewItem.subitem).contains(approvalTitle)
       .should('be.visible');
   });
 });
