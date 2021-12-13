@@ -9,10 +9,6 @@ import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
-// function currentTimestamp() {
-//   return Cypress.moment().unix();
-// }
-
 function checkDecisionPage(headerText) {
   cy.get(agenda.agendaHeader.showOptions).click();
   cy.get(agenda.agendaHeader.actions.navigateToDecisions).click();
@@ -132,6 +128,7 @@ context('Different session kinds should show different titles', () => {
     const fullmeetingNumber = `VR PV ${agendaDate.format('YYYY')}/${agendaNumber}`;
     const suffixVV = '-VV';
     const fullmeetingNumberVV = `${fullmeetingNumber}${suffixVV}`;
+    const newCaseTitle = 'Dossier voor PVV agenda';
 
     cy.createAgenda(null, agendaDate, null, agendaNumber);
     // set kind to PVV
@@ -164,6 +161,7 @@ context('Different session kinds should show different titles', () => {
     cy.visit('/kort-bestek?size=100');
     cy.get(route.newsletters.dataTable).find('tbody')
       .children('tr');
+    // first agenda should always be the normal kind, second PVV
     cy.get(route.newsletters.row.title).contains(`Kort bestek voor de ministerraad van ${formattedMeetingDateDots}`)
       .parents('tr')
       .next()
@@ -186,11 +184,12 @@ context('Different session kinds should show different titles', () => {
       .contains(vvKind);
 
     // check procedure step view
-    // TODO implement refactor KAS-2954
-    cy.createCase(false, 'PVV agenda');
+    cy.createCase(newCaseTitle);
+    // adding a subcase without a new shorttitle will use the shorttitle from case
     cy.addSubcase();
     cy.openSubcase(0);
     // TODO-bug multiple clicks on dropdown are flakey
+    // Check if both agendas are listed in dropdown
     // cy.get(cases.subcaseHeader.showProposedAgendas).click();
     // cy.get(cases.subcaseHeader.actions.proposeForAgenda).should('contain', fullmeetingNumberVV);
     // cy.get(cases.subcaseHeader.showProposedAgendas).click();
@@ -198,7 +197,7 @@ context('Different session kinds should show different titles', () => {
     cy.get(cases.subcaseDescription.agendaLink).click();
     cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 1);
     // PVV agenda doesn't have approval item by default
-    cy.get(agenda.agendaDetailSidebarItem.shortTitle).contains('PVV agenda');
+    cy.get(agenda.agendaDetailSidebarItem.shortTitle).contains(newCaseTitle);
     cy.get(agenda.agendaDetailSidebarItem.shortTitle).should('not.contain', 'verslag');
   });
 });

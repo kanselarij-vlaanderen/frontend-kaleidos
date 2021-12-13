@@ -25,10 +25,10 @@ const selectors = {
   agendasOverview: {
     dataTable: '[data-test-route-agendas-overview-data-table]',
     row: {
-      title: '[data-test-route-agendas-overview-data-table-row-title]',
-      kind: '[data-test-route-agendas-overview-data-table-row-kind]',
+      title: '[data-test-route-agendas-overview-row-title]',
+      kind: '[data-test-route-agendas-overview-row-kind]',
+      navButton: '[data-test-route-agendas-overview-row-nav-button]',
     },
-    navigationButton: '[data-test-route-agendas-overview-navigation-button]',
     filter: {
       container: '[data-test-route-agendas-overview-filter-container]',
       input: '[data-test-route-agendas-overview-filter-input]',

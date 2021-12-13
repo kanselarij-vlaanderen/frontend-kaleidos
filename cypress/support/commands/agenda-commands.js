@@ -170,7 +170,7 @@ function openAgendaForDate(agendaDate, index = 0) {
   cy.get(route.agendasOverview.dataTable).find('tbody')
     .children('tr')
     .eq(index)
-    .find(route.agendasOverview.navigationButton)
+    .find(route.agendasOverview.row.navButton)
     .click();
 
   cy.url().should('include', '/vergadering');
