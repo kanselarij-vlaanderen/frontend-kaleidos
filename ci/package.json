@@ -5,9 +5,8 @@
   "devDependencies": {},
   "dependencies": {
     "browser-sync": "^2.26.3",
-    "cypress": "^4.2.0",
-    "cypress-wait-until": "^1.7.1",
-    "cypress-file-upload": "^3.5.3"
+    "cypress": "^9.1.1",
+    "cypress-file-upload": "^5.0.8"
   },
   "repository": {
     "type": "git",
