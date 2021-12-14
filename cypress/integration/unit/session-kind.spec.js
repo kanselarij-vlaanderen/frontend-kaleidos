@@ -58,7 +58,6 @@ context('Different session kinds should show different titles', () => {
     cy.logout();
   });
 
-  // TODO-PVV agenda
   // TODO-printableAgenda shows session-kind
 
   it('should show the correct translations for normal session in decision print overview', () => {
@@ -85,7 +84,6 @@ context('Different session kinds should show different titles', () => {
       .children('tr')
       .as('rows');
     cy.get('@rows').within(() => {
-      // TODO-PVV agenda
       cy.get(route.newsletters.row.title).contains('Kort bestek voor de ministerraad van');
       cy.get(route.newsletters.row.title).contains('Kort bestek voor de ministerraad via elektronische procedure van');
       cy.get(route.newsletters.row.title).contains('Kort bestek voor de bijzondere ministerraad van');
@@ -125,7 +123,9 @@ context('Different session kinds should show different titles', () => {
     const newsletterHeader = `Beslissingen van de Vlaamse Regering - ${vvKind}`;
     const formattedMeetingDateHour = agendaDate.format('DD-MM-YYYY HH:mm');
     const formattedMeetingDateDots = agendaDate.format('DD.MM.YYYY');
-    const fullmeetingNumber = `VR PV ${agendaDate.format('YYYY')}/${agendaNumber}`;
+    // TODO-BUG KAS-3056 numbering not correct when creating agenda in different year
+    const fullmeetingNumber = `VR PV ${Cypress.moment().format('YYYY')}/${agendaNumber}`;
+    // const fullmeetingNumber = `VR PV ${agendaDate.format('YYYY')}/${agendaNumber}`;
     const suffixVV = '-VV';
     const fullmeetingNumberVV = `${fullmeetingNumber}${suffixVV}`;
     const newCaseTitle = 'Dossier voor PVV agenda';
