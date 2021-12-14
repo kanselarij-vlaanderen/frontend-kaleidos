@@ -54,7 +54,7 @@
           as |Menu|
         >
           {{#if this.currentSession.isEditor}}
-            {{#if this.isLoading}}
+            {{#if (or this.isLoading this.loadMailCampaign.isRunning)}}
               <Menu.Item @textOnly={{true}}>
                 <Auk::Loader @message={{t "newsletter-loading-text"}} />
               </Menu.Item>
