@@ -19,14 +19,12 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
   // const caseTitle = 'Cypress test: mandatee sync - 1594023300';  // The case is in the default data set with id 5F02DD8A7DE3FC0008000001
 
   before(() => {
-    cy.server();
     cy.login('Admin');
     cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logoutFlow();
   });
 
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 
@@ -259,7 +257,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       });
     // await saves subcase/agendaitem/agenda, awaiting only the last save for now, then wait a few seconds for data loading
     const randomInt = Math.floor(Math.random() * Math.floor(10000));
-    cy.route('PATCH', '/agendas/*').as(`patchAgenda${randomInt}`);
+    cy.intercept('PATCH', '/agendas/*').as(`patchAgenda${randomInt}`);
     cy.get(mandatee.mandateePanelEdit.actions.save).click();
     cy.wait(`@patchAgenda${randomInt}`);
     cy.wait(2000);
@@ -278,8 +276,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
   it('should create newsletter-info for the agendaitems to check the sorting', () => {
     const randomInt = Math.floor(Math.random() * Math.floor(10000));
-    cy.route('POST', '/newsletter-infos').as(`postNewsletterInfo${randomInt}`);
-    cy.route('PATCH', '/newsletter-infos/*').as(`patchNewsletterInfo${randomInt}`);
+    cy.intercept('POST', '/newsletter-infos').as(`postNewsletterInfo${randomInt}`);
+    cy.intercept('PATCH', '/newsletter-infos/*').as(`patchNewsletterInfo${randomInt}`);
     cy.openAgendaForDate(agendaDate);
     cy.get(auk.loader, {
       timeout: 60000,

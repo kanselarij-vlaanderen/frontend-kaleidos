@@ -27,7 +27,6 @@ import './commands/publication-commands'
 import './commands/reset-database.commands'
 import './commands/subcase-commands'
 import './commands/utility-commands'
-import 'cypress-wait-until';
 
 // rdfa editor sometimes throws errors, but loads anyway
 Cypress.on('uncaught:exception', (err) => {

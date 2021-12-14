@@ -17,7 +17,6 @@ context('Agenda-Header actions tests', () => {
   const typeNota = 'Nota';
 
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 

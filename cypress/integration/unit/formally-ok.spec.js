@@ -6,7 +6,6 @@ import auk from '../../selectors/auk.selectors';
 
 context('Formally ok/nok tests', () => {
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 

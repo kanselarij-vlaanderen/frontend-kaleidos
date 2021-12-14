@@ -11,7 +11,6 @@ function currentTimestamp() {
 
 context('Tests of pieces on agendaitems', () => {
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 

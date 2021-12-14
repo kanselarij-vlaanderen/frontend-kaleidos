@@ -38,7 +38,6 @@ context('new document viewer tests', () => {
   };
 
   before(() => {
-    cy.server();
     cy.login('Admin');
     cy.createAgenda(agendaKind, agendaDate, agendaPlace);
     cy.openAgendaForDate(agendaDate);
@@ -54,7 +53,6 @@ context('new document viewer tests', () => {
   const searchDocumentType = 'Advies AgO';
 
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
     cy.openAgendaForDate(agendaDate);
     cy.get(document.documentBadge.link).eq(0)
@@ -92,7 +90,7 @@ context('new document viewer tests', () => {
     cy.get(document.previewDetailsTab.editing.accessLevel).should('contain', defaultAccessLevel);
     // check save
     fillInEditDetails(newName, newDocumentType, newAccessLevel);
-    cy.route('PATCH', '/pieces/*').as('patchPieces');
+    cy.intercept('PATCH', '/pieces/*').as('patchPieces');
     cy.get(document.previewDetailsTab.save).click();
     cy.wait('@patchPieces');
     cy.get(document.previewDetailsTab.name).should('contain', newName);
@@ -107,7 +105,7 @@ context('new document viewer tests', () => {
     cy.wait(1000);
     cy.get(dependency.emberPowerSelect.option).contains(searchDocumentType)
       .click();
-    cy.route('PATCH', '/document-containers/*').as('patchDocumentContainers');
+    cy.intercept('PATCH', '/document-containers/*').as('patchDocumentContainers');
     cy.get(document.previewDetailsTab.save).click();
     cy.wait('@patchDocumentContainers');
     cy.get(document.previewDetailsTab.documentType).should('contain', searchDocumentType);

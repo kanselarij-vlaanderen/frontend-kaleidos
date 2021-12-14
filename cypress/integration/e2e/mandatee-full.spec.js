@@ -19,7 +19,6 @@ context('Full test for creating mandatees', () => {
   }
 
   before(() => {
-    cy.server();
     cy.login('Admin');
   });
 
@@ -40,7 +39,7 @@ context('Full test for creating mandatees', () => {
     cy.get(utils.mHeader.settings).click();
     cy.get(settings.settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
-    cy.route('GET', '/ise-codes?sort=name').as('getIseCodes');
+    cy.intercept('GET', '/ise-codes?sort=name').as('getIseCodes');
     cy.get(settings.ministers.add).click();
     cy.wait('@getIseCodes', {
       timeout: 30000,
@@ -69,7 +68,7 @@ context('Full test for creating mandatees', () => {
       .click();
     cy.setDateInFlatpickr(agendaDate);
 
-    cy.route('POST', '/mandatees').as('postMandateeData');
+    cy.intercept('POST', '/mandatees').as('postMandateeData');
     cy.get(utils.vlModalFooter.save).click();
     cy.wait('@postMandateeData');
 

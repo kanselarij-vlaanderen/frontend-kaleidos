@@ -49,14 +49,12 @@ context('Subcase tests', () => {
   const subcaseTitleShort = `Cypress test: add subcase - ${currentTimestamp()}`;
 
   before(() => {
-    cy.server();
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logoutFlow();
   });
 
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 
@@ -182,7 +180,7 @@ context('Subcase tests', () => {
 
     // Assert status also hidden
     cy.get(route.subcaseOverview.confidentialityCheckBox).should('not.be.checked');
-    cy.route('PATCH', '/agendaitems/*').as('patchAgendaitem');
+    cy.intercept('PATCH', '/agendaitems/*').as('patchAgendaitem');
     cy.changeSubcaseAccessLevel(true, 'Intern Overheid') // CHECK na save in agendaitem
       .wait('@patchAgendaitem');
 
@@ -200,8 +198,8 @@ context('Subcase tests', () => {
     cy.get(agenda.agendaitemTitlesEdit.showInNewsletter).click();
 
     // Save the changes setting
-    cy.route('PATCH', '/agendas/**').as('patchAgenda');
-    cy.route('PATCH', '/newsletter-infos/**').as('newsletterInfosPatch');
+    cy.intercept('PATCH', '/agendas/**').as('patchAgenda');
+    cy.intercept('PATCH', '/newsletter-infos/**').as('newsletterInfosPatch');
     cy.get(agenda.agendaitemTitlesEdit.actions.save).contains('Opslaan')
       .click();
     cy.wait('@patchAgenda');
@@ -221,19 +219,19 @@ context('Subcase tests', () => {
 
   it('Changes to agenda item Themas propagate properly', () => {
     // Open agenda
-    cy.route('GET', '/agendas/**').as('getAgenda');
+    cy.intercept('GET', '/agendas/**').as('getAgenda');
     cy.openAgendaForDate(agendaDate);
     cy.wait('@getAgenda');
 
     // Are there Themes in this agenda? Should be none
     cy.openAgendaitemKortBestekTab(subcaseTitleShort);
-    cy.route('GET', '**/themes').as('getAgendaitemThemes');
+    cy.intercept('GET', '**/themes').as('getAgendaitemThemes');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getAgendaitemThemes');
     cy.get(newsletter.editItem.cancel).click();
 
     // open themes ediging pane.
-    cy.route('GET', '**/themes').as('getAgendaitemThemes');
+    cy.intercept('GET', '**/themes').as('getAgendaitemThemes');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getAgendaitemThemes');
 
@@ -250,7 +248,7 @@ context('Subcase tests', () => {
       .click();
 
     // Save this stuff.
-    cy.route('POST', '/newsletter-infos').as('newsletterInfosPost');
+    cy.intercept('POST', '/newsletter-infos').as('newsletterInfosPost');
     cy.get(newsletter.editItem.save).click()
       .wait('@newsletterInfosPost');
 
@@ -262,14 +260,14 @@ context('Subcase tests', () => {
     cy.get(newsletter.agendaitemNewsItem.themes).contains('Innovatie');
 
     // Go via kort-bestek view
-    cy.route('GET', '/meetings/**/mail-campaign').as('getMeetingsMail');
-    cy.route('GET', '/meetings?**').as('getMeetingsfilter');
+    cy.intercept('GET', '/meetings/**/mail-campaign').as('getMeetingsMail');
+    cy.intercept('GET', '/meetings?**').as('getMeetingsfilter');
     cy.get(utils.mHeader.newsletters).click();
     cy.wait('@getMeetingsMail');
     cy.wait('@getMeetingsfilter');
 
-    cy.route('GET', '/meetings/**').as('getMeetingsDetail');
-    cy.route('GET', '/agendaitems**').as('getAgendaitems');
+    cy.intercept('GET', '/meetings/**').as('getMeetingsDetail');
+    cy.intercept('GET', '/agendaitems**').as('getAgendaitems');
     cy.get(route.newsletters.dataTable).find('tbody')
       .children('tr')
       .contains(`van ${Cypress.moment(agendaDate).format('DD.MM.YYYY')}`)
@@ -278,7 +276,7 @@ context('Subcase tests', () => {
     cy.wait('@getAgendaitems');
 
     // open the themes editor.
-    cy.route('GET', '**/themes').as('getKortBestekThemes');
+    cy.intercept('GET', '**/themes').as('getKortBestekThemes');
     cy.get(newsletter.tableRow.newsletterRow).eq(0)
       .find(newsletter.buttonToolbar.edit)
       .click();
@@ -311,7 +309,7 @@ context('Subcase tests', () => {
       .click();
 
     // Save this stuff.
-    cy.route('PATCH', '/newsletter-infos/**').as('newsletterInfosPatch');
+    cy.intercept('PATCH', '/newsletter-infos/**').as('newsletterInfosPatch');
     cy.get(newsletter.editItem.save).click()
       .wait('@newsletterInfosPatch');
 

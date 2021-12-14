@@ -9,7 +9,7 @@ context('Publications overview tests', () => {
   // TODO-COMMAND we probably want to change the status via a command in further testing
   function createPublicationChangeStatus(fields) {
     cy.createPublication(fields);
-    cy.route('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
     cy.get(publication.sidebar.open).click(); // TODO-COMMAND test if sidebar is already open
     cy.get(publication.statusSelector).find(dependency.emberPowerSelect.trigger)
       .click();
@@ -31,7 +31,6 @@ context('Publications overview tests', () => {
   };
 
   beforeEach(() => {
-    cy.server();
     cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
     cy.visit('/publicaties');
   });
@@ -44,8 +43,8 @@ context('Publications overview tests', () => {
     // needs 15 seconds for reindex in testsuite
     cy.createPublication(searchFields);
     cy.get(publication.sidebar.open).click();
-    cy.route('PATCH', '/publication-flows/**').as('patchPublicationFlow');
-    cy.route('POST', '/identifications').as('postNumacNumber');
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    cy.intercept('POST', '/identifications').as('postNumacNumber');
     cy.get(publication.sidebar.remark).type(searchFields.remark);
     cy.wait('@patchPublicationFlow');
     cy.get(publication.sidebar.numacNumber).find(dependency.emberTagInput.input)
@@ -146,7 +145,7 @@ context('Publications overview tests', () => {
     createPublicationChangeStatus(fields1);
     createPublicationChangeStatus(fields2);
     createPublicationChangeStatus(fields3);
-    cy.route('GET', '/decisions?filter**').as('getDecisionsFilter');
+    cy.intercept('GET', '/decisions?filter**').as('getDecisionsFilter');
     // TODO-publication we want to enable this when there is MR data (preferably in default set)
     // cy.get(publication.publicationsIndex.filterContent).click();
     // cy.get(publication.publicationsFilter.minister).parent(auk.checkbox)
@@ -254,7 +253,7 @@ context('Publications overview tests', () => {
   it('should test the search function', () => {
     // this is data from previous test
     for (const [key, value] of Object.entries(searchFields)) {
-      cy.route('GET', '/publication-flows/search**').as('searchPublicationFlows');
+      cy.intercept('GET', '/publication-flows/search**').as('searchPublicationFlows');
       cy.log(`searching for ${key}`);
       cy.get(publication.publicationCaseSearch.input).type(value);
       cy.wait('@searchPublicationFlows');

@@ -19,7 +19,7 @@ import route from '../../selectors/route.selectors';
  */
 function createCase(shortTitle) {
   cy.log('createCase');
-  cy.route('POST', '/cases').as('createNewCase');
+  cy.intercept('POST', '/cases').as('createNewCase');
   cy.visit('/dossiers');
 
   cy.get(cases.casesHeader.addCase).click();
@@ -29,8 +29,9 @@ function createCase(shortTitle) {
   let caseId;
   cy.log('/createCase');
   cy.wait('@createNewCase')
-    .then((res) => {
-      caseId = res.responseBody.data.id;
+    .its('response.body')
+    .then((responseBody) => {
+      caseId = responseBody.data.id;
     })
     .then(() => new Cypress.Promise((resolve) => {
       resolve({
@@ -52,9 +53,8 @@ function createCase(shortTitle) {
  * @returns {Promise<String>} the id of the created subcase
  */
 function addSubcase(type, newShortTitle, longTitle, step, stepName) {
-  cy.server();
   cy.log('addSubcase');
-  cy.route('POST', '/subcases').as('addSubcase-createNewSubcase');
+  cy.intercept('POST', '/subcases').as('addSubcase-createNewSubcase');
   // TODO-COMMAND is this wait needed?
   cy.wait(2000);
 
@@ -108,8 +108,9 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   let subcaseId;
   cy.log('/addSubcase');
   cy.wait('@addSubcase-createNewSubcase')
-    .then((res) => {
-      subcaseId = res.responseBody.data.id;
+    .its('response.body')
+    .then((responseBody) => {
+      subcaseId = responseBody.data.id;
     })
     .then(() => new Cypress.Promise((resolve) => {
       resolve({
@@ -148,7 +149,7 @@ function searchCase(caseTitle) {
   const splitCaseTitle =  `${caseTitle.split(' ', 1)}`;
   // this new part is required to translate 'testId=xxxx:' into its encoded form for url
   const encodedCaseTitle = splitCaseTitle.replace('=', '%3D').replace(':', '%3A');
-  cy.route('GET', `/cases/search?**${splitCaseTitle}**`).as('getCaseSearchResult');
+  cy.intercept('GET', `/cases/search?**${splitCaseTitle}**`).as('getCaseSearchResult');
   cy.get(route.search.trigger)
     .click()
     .wait('@getCaseSearchResult');

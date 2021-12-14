@@ -6,7 +6,6 @@ import utils from '../../../../selectors/utils.selectors';
 
 context('Manage Sub codes tests', () => {
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 

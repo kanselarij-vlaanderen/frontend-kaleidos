@@ -6,7 +6,6 @@ import utils from '../../../../selectors/utils.selectors';
 
 context('Manage alerts tests', () => {
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
     cy.get(utils.mHeader.settings).click();
     cy.url().should('include', 'instellingen/overzicht');

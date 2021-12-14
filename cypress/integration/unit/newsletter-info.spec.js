@@ -8,7 +8,6 @@ import utils from '../../selectors/utils.selectors';
 
 context('newsletter tests, both in agenda detail view and newsletter route', () => {
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 
@@ -28,7 +27,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       .type(decisionText);
     cy.get(newsletter.editItem.themesSelector).contains('Sport')
       .click();
-    cy.route('POST', '/newsletter-infos').as('newsletterInfosPost');
+    cy.intercept('POST', '/newsletter-infos').as('newsletterInfosPost');
     cy.get(newsletter.editItem.save).click()
       .wait('@newsletterInfosPost');
 
@@ -38,7 +37,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
   });
 
   it('Should toggle the box "in kort bestek" and patch the model', () => {
-    cy.route('PATCH', '/newsletter-infos/*').as('patchNewsletterInfo');
+    cy.intercept('PATCH', '/newsletter-infos/*').as('patchNewsletterInfo');
     cy.visit('/vergadering/5EBA9588751CF70008000012/kort-bestek');
     // define alias
     cy.get(newsletter.tableRow.newsletterRow).find(newsletter.tableRow.inNewsletterCheckbox)
@@ -67,7 +66,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
     };
     // TODO-newsletter this route does not work
-    // cy.route('GET', '/pieces?fields**').as('getPieces');
+    // cy.intercept('GET', '/pieces?fields**').as('getPieces');
     cy.visit('/vergadering/5EBA84900A655F0008000004/kort-bestek/nota-updates');
     // cy.wait('@getPieces');
     cy.get(route.notaUpdates.dataTable).find('tbody')
@@ -88,7 +87,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.newsItem.edit).should('be.visible')
       .click();
     cy.get(newsletter.editItem.rdfaEditor).type('Aanpassing');
-    cy.route('PATCH', '/newsletter-infos/*').as('patchNewsletterInfo');
+    cy.intercept('PATCH', '/newsletter-infos/*').as('patchNewsletterInfo');
     cy.get(newsletter.editItem.save).click();
     cy.get(utils.vlModalVerify.save).click();
     cy.wait('@patchNewsletterInfo');

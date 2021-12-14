@@ -18,14 +18,12 @@ context('Agenda tests', () => {
   const agendaPlace = 'Cypress Room';
 
   before(() => {
-    cy.server();
     cy.login('Admin');
     cy.createAgenda(agendaKind, agendaDate, agendaPlace);
     cy.logoutFlow();
   });
 
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 
@@ -154,7 +152,7 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaitemTitlesEdit.explanation).clear()
       .type(whitespace + explanation + whitespace);
     cy.get(agenda.agendaitemTitlesEdit.explanation).should('have.value', whitespace + explanation + whitespace);
-    cy.route('PATCH', '/agendas/*').as('patchAgendas');
+    cy.intercept('PATCH', '/agendas/*').as('patchAgendas');
     cy.get(agenda.agendaitemTitlesEdit.actions.save).click();
     cy.wait('@patchAgendas');
     // after saving, agendaitem-titles show trimmed values

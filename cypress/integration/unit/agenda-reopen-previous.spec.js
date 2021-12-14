@@ -9,7 +9,6 @@ context('Agenda reopen previous tests', () => {
     .day(3);
 
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 

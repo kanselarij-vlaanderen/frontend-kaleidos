@@ -1,4 +1,4 @@
-/* global context, before, it, cy, Cypress */
+/* global context, it, cy, Cypress */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -14,9 +14,6 @@ function currentTimestamp() {
 }
 
 context('Propagation to other graphs', () => {
-  before(() => {
-    cy.server();
-  });
   const agendaDate = Cypress.moment().add(1, 'weeks')
     .day(6); // Next friday
   const caseTitle = `testId=${currentTimestamp()}: Cypress test dossier 1`;
@@ -69,7 +66,7 @@ context('Propagation to other graphs', () => {
     cy.get(agenda.decisionResultPill.pill).contains('Goedgekeurd');
 
     // Enable this to test editing on approved agendaitems (formal ok status changes KAS-1139)
-    cy.route('PATCH', '/agendaitems/*').as('patchAgendaitem');
+    cy.intercept('PATCH', '/agendaitems/*').as('patchAgendaitem');
     cy.openDetailOfAgendaitem(subcaseTitle1);
     cy.get(agenda.agendaitemTitlesView.edit).click();
     cy.get(agenda.agendaitemTitlesEdit.shorttitle).type(' KAS-1139');
@@ -82,7 +79,6 @@ context('Propagation to other graphs', () => {
   });
 
   it('Test as Minister', () => {
-    cy.server();
     cy.login('Minister');
     cy.searchCase(caseTitle);
     cy.openSubcase(0);
@@ -99,7 +95,6 @@ context('Propagation to other graphs', () => {
   });
 
   it('Test as Overheid', () => {
-    cy.server();
     cy.login('Overheid');
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
@@ -112,7 +107,6 @@ context('Propagation to other graphs', () => {
   });
 
   it('Test as Admin', () => {
-    cy.server();
     cy.login('Admin');
     cy.openAgendaForDate(agendaDate);
     cy.releaseDocuments();
@@ -121,7 +115,6 @@ context('Propagation to other graphs', () => {
   });
 
   it('Test as Overheid', () => {
-    cy.server();
     cy.login('Overheid');
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);

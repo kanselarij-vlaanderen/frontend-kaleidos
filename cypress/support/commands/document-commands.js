@@ -63,11 +63,11 @@ function addNewDocumentsInUploadModal(files, model) {
   });
   // Click save
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
-  cy.route('POST', 'pieces').as('createNewPiece');
-  cy.route('POST', 'document-containers').as('createNewDocumentContainer');
-  cy.route('POST', 'submission-activities').as('createNewSubmissionActivity');
-  cy.route('GET', '/submission-activities?filter**').as(`getSubmissionActivity_${randomInt}`);
-  cy.route('GET', `/pieces?filter\\[${model}\\]\\[:id:\\]=*`).as(`loadPieces${model}`);
+  cy.intercept('POST', 'pieces').as('createNewPiece');
+  cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
+  cy.intercept('POST', 'submission-activities').as('createNewSubmissionActivity');
+  cy.intercept('GET', '/submission-activities?filter**').as(`getSubmissionActivity_${randomInt}`);
+  cy.intercept('GET', `/pieces?filter\\[${model}\\]\\[:id:\\]=*`).as(`loadPieces${model}`);
   cy.get(utils.vlModalFooter.save).click();
   cy.wait('@createNewDocumentContainer', {
     timeout: 24000,
@@ -102,16 +102,16 @@ function addNewDocumentsInUploadModal(files, model) {
 function addNewPiece(oldFileName, file, modelToPatch, hasSubcase = true) {
   cy.log('addNewPiece');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
-  cy.route('POST', 'pieces').as(`createNewPiece_${randomInt}`);
-  cy.route('GET', '/pieces?filter**').as(`loadPieces_${randomInt}`);
+  cy.intercept('POST', 'pieces').as(`createNewPiece_${randomInt}`);
+  cy.intercept('GET', '/pieces?filter**').as(`loadPieces_${randomInt}`);
   if (modelToPatch) {
     if (modelToPatch === 'agendaitems' || modelToPatch === 'subcases') {
-      cy.route('GET', '/submission-activities?filter**').as('getSubmissionActivity');
-      cy.route('POST', '/submission-activities').as('createNewSubmissionActivity');
-      cy.route('PATCH', '/agendaitems/**').as('patchAgendaitem');
-      cy.route('PUT', '/agendaitems/**/pieces').as('putAgendaitemDocuments');
+      cy.intercept('GET', '/submission-activities?filter**').as('getSubmissionActivity');
+      cy.intercept('POST', '/submission-activities').as('createNewSubmissionActivity');
+      cy.intercept('PATCH', '/agendaitems/**').as('patchAgendaitem');
+      cy.intercept('PUT', '/agendaitems/**/pieces').as('putAgendaitemDocuments');
     } else {
-      cy.route('PATCH', `/${modelToPatch}/**`).as('patchSpecificModel');
+      cy.intercept('PATCH', `/${modelToPatch}/**`).as('patchSpecificModel');
     }
   }
 
@@ -351,8 +351,8 @@ function openAgendaitemDossierTab(agendaitemTitle) {
  */
 function uploadFile(folder, fileName, extension, mimeType = 'application/pdf') {
   cy.log('uploadFile');
-  cy.route('POST', 'files').as('createNewFile');
-  cy.route('GET', 'files/**').as('getNewFile');
+  cy.intercept('POST', 'files').as('createNewFile');
+  cy.intercept('GET', 'files/**').as('getNewFile');
 
   const fileFullName = `${fileName}.${extension}`;
   const filePath = `${folder}/${fileFullName}`;
@@ -387,8 +387,8 @@ function uploadFile(folder, fileName, extension, mimeType = 'application/pdf') {
  */
 function uploadUsersFile(folder, fileName, extension) {
   cy.log('uploadUsersFile');
-  cy.route('POST', 'user-management-service/import-users').as('createNewFile');
-  cy.route('GET', 'users?include**').as('getNewFile');
+  cy.intercept('POST', 'user-management-service/import-users').as('createNewFile');
+  cy.intercept('GET', 'users?include**').as('getNewFile');
   const fileFullName = `${fileName}.${extension}`;
   const filePath = `${folder}/${fileFullName}`;
 
@@ -418,7 +418,7 @@ function uploadUsersFile(folder, fileName, extension) {
 function addNewPieceToSignedDocumentContainer(oldFileName, file) {
   cy.log('addNewPieceToSignedDocumentContainer');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
-  cy.route('POST', 'pieces').as(`createNewPiece_${randomInt}`);
+  cy.intercept('POST', 'pieces').as(`createNewPiece_${randomInt}`);
 
   cy.get(document.documentCard.name.value).contains(oldFileName)
     .parents(document.documentCard.card)
@@ -451,7 +451,7 @@ function addNewPieceToSignedDocumentContainer(oldFileName, file) {
  */
 function addLinkedDocument(filenames) {
   // NOTE: this works in subcase view, untested in agendaitem view
-  cy.route('GET', 'pieces').as('createNewPiece');
+  cy.intercept('GET', 'pieces').as('createNewPiece');
   cy.log('addLinkedDocument');
   cy.get(document.linkedDocuments.add).click();
   cy.get(document.addExistingPiece.searchInput).click();
@@ -476,8 +476,8 @@ function addLinkedDocument(filenames) {
  * @param Number indexToDelete - The index of the piece in the list
  */
 function deleteSinglePiece(fileName, indexToDelete) {
-  cy.route('DELETE', 'pieces/*').as('deletePiece');
-  cy.route('PUT', '/agendaitems/**/pieces/restore').as('putRestoreAgendaitems');
+  cy.intercept('DELETE', 'pieces/*').as('deletePiece');
+  cy.intercept('PUT', '/agendaitems/**/pieces/restore').as('putRestoreAgendaitems');
   cy.log('deleteSinglePiece');
 
   cy.get(document.documentCard.name.value).contains(fileName)

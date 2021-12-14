@@ -25,7 +25,6 @@ context('Publications tests', () => {
   }
 
   beforeEach(() => {
-    cy.server();
     cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
     cy.visit('/publicaties');
   });
@@ -41,7 +40,7 @@ context('Publications tests', () => {
   it('should render error when required fields are not filled in to create new publication', () => {
     const shortTitle = 'new publication: required fields';
     cy.get(publication.publicationsIndex.newPublication).click();
-    cy.route('POST', '/publication-flows').as('createNewPublicationFlow');
+    cy.intercept('POST', '/publication-flows').as('createNewPublicationFlow');
     // No errors on initial view, just info
     cy.get(publication.newPublication.alertInfo).should('exist');
     cy.get(publication.newPublication.alertError).should('not.exist');
@@ -130,7 +129,7 @@ context('Publications tests', () => {
     };
     const shortTitleEdit = 'Korte titel cypress test gewijzigd';
     const longTitleEdit = 'Lange titel voor de cypress test gewijzigd.';
-    cy.route('GET', '/publication-flows/**').as('getNewPublicationDetail');
+    cy.intercept('GET', '/publication-flows/**').as('getNewPublicationDetail');
     cy.createPublication(fields);
 
     // error validation and reset after cancel
@@ -160,14 +159,14 @@ context('Publications tests', () => {
     cy.get(publication.inscription.edit.longTitle).click()
       .clear()
       .type(longTitleEdit);
-    cy.route('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
     cy.get(publication.inscription.edit.save).click();
     cy.wait('@patchPublicationFlow');
     cy.get(publication.inscription.view.shortTitle).contains(shortTitleEdit);
     cy.get(publication.inscription.view.longTitle).contains(longTitleEdit);
 
     // go back in overview
-    cy.route('GET', '/publication-flows?**').as('goToPublicationOverview');
+    cy.intercept('GET', '/publication-flows?**').as('goToPublicationOverview');
     cy.get(publication.publicationNav.goBack).click();
     cy.wait('@goToPublicationOverview');
 
@@ -179,7 +178,7 @@ context('Publications tests', () => {
     const noMandatees = 'Er zijn nog geen ministers toegevoegd.';
     const mandateeName = 'Jan Jambon';
 
-    cy.route('GET', '/publication-flows/**').as('getNewPublicationDetail');
+    cy.intercept('GET', '/publication-flows/**').as('getNewPublicationDetail');
     cy.get(publication.publicationTableRow.row.goToPublication).first()
       .click();
     cy.wait('@getNewPublicationDetail');
@@ -188,7 +187,7 @@ context('Publications tests', () => {
     cy.get(auk.emptyState.message).contains(noMandatees);
 
     // add mandatee
-    cy.route('GET', '/mandatees**http://themis.vlaanderen.be/id/bestuursorgaan/**').as('getMandatees');
+    cy.intercept('GET', '/mandatees**http://themis.vlaanderen.be/id/bestuursorgaan/**').as('getMandatees');
     cy.get(publication.mandateesPanel.add).click();
     cy.wait('@getMandatees');
     cy.get(utils.mandateesSelector.add).should('be.disabled');
@@ -196,7 +195,7 @@ context('Publications tests', () => {
     cy.get(dependency.emberPowerSelect.optionSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(mandateeName)
       .click();
-    cy.route('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
     cy.get(utils.mandateesSelector.add).should('not.be.disabled')
       .click();
     cy.wait('@patchPublicationFlow');
@@ -217,7 +216,7 @@ context('Publications tests', () => {
     const labelName = 'Cultuur, jeugd, sport & media';
     const fieldsName = 'Media';
 
-    cy.route('GET', '/publication-flows/**').as('getNewPublicationDetail');
+    cy.intercept('GET', '/publication-flows/**').as('getNewPublicationDetail');
     cy.get(publication.publicationTableRow.row.goToPublication).first()
       .click();
     cy.wait('@getNewPublicationDetail');
@@ -236,7 +235,7 @@ context('Publications tests', () => {
 
 
     // link government field
-    cy.route('PATCH', '/cases/**').as('patchCase');
+    cy.intercept('PATCH', '/cases/**').as('patchCase');
     cy.get(publication.governmentFieldsPanel.edit).click();
     cy.get(utils.domainsFieldsSelectorForm.container).contains(labelName)
       .find(utils.domainsFieldsSelectorForm.field)
@@ -268,7 +267,7 @@ context('Publications tests', () => {
     };
 
     // TODO open publication (with index)
-    cy.route('GET', '/publication-flows/**').as('getNewPublicationDetail');
+    cy.intercept('GET', '/publication-flows/**').as('getNewPublicationDetail');
     cy.get(publication.publicationTableRow.row.goToPublication).first()
       .click();
     cy.wait('@getNewPublicationDetail');
@@ -297,13 +296,13 @@ context('Publications tests', () => {
     cy.get(publication.contactPersonAdd.addOrganization).click();
     cy.get(publication.organizationAdd.name).click()
       .type(contactperson.org);
-    cy.route('POST', '/organizations').as('postOrganizations');
+    cy.intercept('POST', '/organizations').as('postOrganizations');
     cy.get(publication.organizationAdd.submit).click();
     cy.wait('@postOrganizations');
 
     // Click submit.
-    cy.route('POST', '/persons').as('postPerson');
-    cy.route('POST', '/contact-persons').as('postContactPerson');
+    cy.intercept('POST', '/persons').as('postPerson');
+    cy.intercept('POST', '/contact-persons').as('postContactPerson');
     cy.get(publication.contactPersonAdd.submit).click();
     cy.wait('@postPerson');
     cy.wait('@postContactPerson');
@@ -315,8 +314,8 @@ context('Publications tests', () => {
     cy.get(publication.contactPersons.row.email).contains(contactperson.eml);
 
     // Delete contact person
-    cy.route('DELETE', '/contact-persons/**').as('deleteContactPerson');
-    cy.route('DELETE', '/persons/**').as('deletePerson');
+    cy.intercept('DELETE', '/contact-persons/**').as('deleteContactPerson');
+    cy.intercept('DELETE', '/persons/**').as('deletePerson');
     cy.get(publication.contactPersons.row.delete).click();
     cy.wait('@deleteContactPerson');
     cy.wait('@deletePerson');
@@ -328,7 +327,7 @@ context('Publications tests', () => {
 
   it('publications:dossier:check publication number uniqueness', () => {
     const suffix = 'BIS';
-    cy.route('POST', '/publication-flows').as('createNewPublicationFlow');
+    cy.intercept('POST', '/publication-flows').as('createNewPublicationFlow');
 
     // try to create publication with existing number and check warnings
     cy.get(publication.publicationsIndex.newPublication).click();

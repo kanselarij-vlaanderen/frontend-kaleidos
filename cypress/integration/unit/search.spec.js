@@ -18,7 +18,6 @@ context('Search tests', () => {
     .subtract(1, 'day');
 
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 
@@ -92,7 +91,7 @@ context('Search tests', () => {
       folder: 'files', fileName: 'searchwordsNoIcon', fileExtension: 'pdf', newFileName: 'searchwords pdf', fileType: 'Nota',
     };
     const files = [file];
-    cy.route('PATCH', 'agenda-item-treatments/**').as('patchTreatments');
+    cy.intercept('PATCH', 'agenda-item-treatments/**').as('patchTreatments');
     cy.addDocumentsToAgendaitem(newSubcase2TitleShort, files);
     cy.addDocumentToTreatment(file);
     cy.get(utils.vlModalFooter.save).click();
@@ -106,7 +105,7 @@ context('Search tests', () => {
     cy.get(route.search.input).clear();
     cy.get(route.search.input).type('nietstezienhier');
 
-    cy.route('GET', '/agendaitems/search?**').as('searchCall');
+    cy.intercept('GET', '/agendaitems/search?**').as('searchCall');
     cy.get(route.search.trigger).click();
     cy.wait('@searchCall');
 
@@ -127,7 +126,7 @@ context('Search tests', () => {
       cy.get(route.search.input).clear();
       cy.get(route.search.input).type(searchTerm);
 
-      cy.route('GET', '/agendaitems/search?**').as('searchCall');
+      cy.intercept('GET', '/agendaitems/search?**').as('searchCall');
       cy.get(route.search.trigger).click();
       cy.wait('@searchCall');
 
@@ -172,7 +171,7 @@ context('Search tests', () => {
       cy.get(route.search.input).clear();
       cy.get(route.search.input).type(searchTerm);
 
-      cy.route('GET', '/cases/search?**').as('casesSearchCall');
+      cy.intercept('GET', '/cases/search?**').as('casesSearchCall');
       cy.get(route.search.trigger).click();
       cy.wait('@casesSearchCall');
 
@@ -196,7 +195,7 @@ context('Search tests', () => {
       cy.get(route.searchCases.toggleDecisions).parent()
         .click();
 
-      cy.route('GET', '/cases/search?**').as('decisionsSearchCall');
+      cy.intercept('GET', '/cases/search?**').as('decisionsSearchCall');
       cy.get(route.search.trigger).click();
       cy.wait('@decisionsSearchCall');
 
@@ -219,7 +218,7 @@ context('Search tests', () => {
     cy.get(agenda.agendaOverviewItem.subitem).contains(title);
     cy.get(agenda.agendaOverviewItem.subitem).contains(searchTitle);
 
-    cy.route('GET', `/agendaitems/search?**${searchText}**`).as(`searchCallOverview-${searchText}`);
+    cy.intercept('GET', `/agendaitems/search?**${searchText}**`).as(`searchCallOverview-${searchText}`);
 
     cy.get(agenda.agendaitemSearch.input).clear();
     cy.get(agenda.agendaitemSearch.input).type(searchText);
@@ -255,7 +254,7 @@ context('Search tests', () => {
       'accénten'
     ];
     wordsToCheck1.forEach((searchTerm) => {
-      cy.route('GET', `/agendaitems/search?**${searchTerm}**`).as(`searchCallOverview-${searchTerm}`);
+      cy.intercept('GET', `/agendaitems/search?**${searchTerm}**`).as(`searchCallOverview-${searchTerm}`);
       cy.get(agenda.agendaitemSearch.input).clear();
       cy.get(agenda.agendaitemSearch.input).type(searchTerm);
       cy.wait(200);
@@ -263,7 +262,7 @@ context('Search tests', () => {
       cy.get(agenda.agendaOverviewItem.subitem).contains(newSubcase2TitleShort);
     });
     wordsToCheck2.forEach((searchTerm) => {
-      cy.route('GET', `/agendaitems/search?**${searchTerm}**`).as(`searchCallOverview-${searchTerm}`);
+      cy.intercept('GET', `/agendaitems/search?**${searchTerm}**`).as(`searchCallOverview-${searchTerm}`);
       cy.get(agenda.agendaitemSearch.input).clear();
       cy.get(agenda.agendaitemSearch.input).type(searchTerm);
       cy.wait(200);
@@ -279,7 +278,7 @@ context('Search tests', () => {
     cy.get(route.search.input).clear();
     cy.get(route.search.input).type(searchTerm);
 
-    cy.route('GET', '/newsletter-infos/search?**').as('newsletterSearchCall');
+    cy.intercept('GET', '/newsletter-infos/search?**').as('newsletterSearchCall');
     cy.get(route.search.trigger).click();
     cy.wait('@newsletterSearchCall');
 
@@ -309,7 +308,7 @@ context('Search tests', () => {
     cy.get(route.search.input).clear();
     cy.get(route.search.input).type(searchTerm);
 
-    cy.route('GET', '/newsletter-infos/search?**').as('newsletterSearchCall');
+    cy.intercept('GET', '/newsletter-infos/search?**').as('newsletterSearchCall');
     cy.get(route.search.trigger).click();
     cy.wait('@newsletterSearchCall');
 
@@ -335,7 +334,7 @@ context('Search tests', () => {
     cy.get(route.search.input).clear();
     cy.get(route.search.input).type(searchTerm);
 
-    cy.route('GET', '/newsletter-infos/search?**').as('newsletterSearchCall');
+    cy.intercept('GET', '/newsletter-infos/search?**').as('newsletterSearchCall');
     cy.get(route.search.trigger).click();
     cy.wait('@newsletterSearchCall');
 
@@ -353,7 +352,7 @@ context('Search tests', () => {
     cy.get(route.search.input).type(searchTerm);
     cy.get(route.search.mandatee).type(mandateeSearchTerm);
 
-    cy.route('GET', '/newsletter-infos/search?**').as('newsletterSearchCall');
+    cy.intercept('GET', '/newsletter-infos/search?**').as('newsletterSearchCall');
     cy.get(route.search.trigger).click();
     cy.wait('@newsletterSearchCall');
 

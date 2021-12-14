@@ -6,7 +6,6 @@ import utils from '../../../../selectors/utils.selectors';
 
 context('Manage case types tests', () => {
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 
