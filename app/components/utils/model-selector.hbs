@@ -19,7 +19,7 @@
     {{#if (has-block)}}
       {{yield model}}
     {{else}}
-      {{await (model-property-to-show model this.propertyToShow)}}
+      {{model-property-to-show model this.propertyToShow}}
     {{/if}}
   </PowerSelect>
 {{else}}
@@ -40,7 +40,7 @@
     {{#if (has-block)}}
       {{yield model}}
     {{else}}
-      {{await (model-property-to-show model this.propertyToShow)}}
+      {{model-property-to-show model this.propertyToShow}}
     {{/if}}
   </PowerSelectMultiple>
 {{/if}}
