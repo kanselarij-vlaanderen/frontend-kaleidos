@@ -16,9 +16,9 @@ trigger:
 ---
 kind: pipeline
 type: docker
-name: push-latest-build
+name: push-development-build
 steps:
-- name: push-latest-build
+- name: push-development-build
   image: plugins/docker
   settings:
     repo: ${DRONE_REPO_NAMESPACE/kanselarij-vlaanderen/kanselarij}/${DRONE_REPO_NAME}
@@ -29,7 +29,27 @@ steps:
     purge: true
 trigger:
   branch:
-    - master
+    - development
+  event:
+    exclude:
+      - pull_request
+---
+kind: pipeline
+type: docker
+name: push-usertest-build
+steps:
+- name: push-usertest-build
+  image: plugins/docker
+  settings:
+    repo: ${DRONE_REPO_NAMESPACE/kanselarij-vlaanderen/kanselarij}/${DRONE_REPO_NAME}
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    purge: true
+trigger:
+  branch:
+    - usertest
   event:
     exclude:
       - pull_request
@@ -75,6 +95,6 @@ trigger:
 
 ---
 kind: signature
-hmac: 99203dd48a1d70ca85c76ee503958ffe720487cbf69894a7d8d7a41ba1763f5f
+hmac: f055d624448bbbbaf860500f21bb3393fdb7bfc6e85690b4bfa11fbddf90f4a0
 
 ...
