@@ -16,11 +16,7 @@
     @onchange={{action "selectModel"}}
     @searchEnabled={{not this.hideSearch}}
   as |model|>
-    {{#if (has-block)}}
-      {{yield model}}
-    {{else}}
-      {{await (model-property-to-show model this.propertyToShow)}}
-    {{/if}}
+    {{capitalize (model-property-to-show model this.propertyToShow)}}
   </PowerSelect>
 {{else}}
   <PowerSelectMultiple
@@ -37,10 +33,6 @@
     @oninput={{action "resetValueIfEmpty"}}
     @onchange={{action "selectModel"}}
   as |model|>
-    {{#if (has-block)}}
-      {{yield model}}
-    {{else}}
-      {{await (model-property-to-show model this.propertyToShow)}}
-    {{/if}}
+    {{capitalize (model-property-to-show model this.propertyToShow)}}
   </PowerSelectMultiple>
 {{/if}}
