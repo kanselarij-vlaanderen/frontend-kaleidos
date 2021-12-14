@@ -53,7 +53,8 @@
   <Mandatees::MandateesPanel
     @mandatees={{this.mandatees}}
     @submitter={{this.submitter}}
-    @allowEditing={{false}}
+    @allowEditing={{this.currentSession.isEditor}}
+    @onSave={{this.saveMandateeData}}
   />
 {{else}}
   {{#if this.subcase}}
