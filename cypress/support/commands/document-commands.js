@@ -359,7 +359,7 @@ function uploadFile(folder, fileName, extension, mimeType = 'application/pdf') {
   // note: double encoding is needed or pdf will be blank (cy.fixture also needs encoding)
 
   cy.fixture(filePath, 'base64').then((fileContent) => {
-    cy.get('[type=file]').upload(
+    cy.get('[type=file]').attachFile(
       {
         fileContent,
         fileName: fileFullName,
@@ -393,7 +393,7 @@ function uploadUsersFile(folder, fileName, extension) {
   const filePath = `${folder}/${fileFullName}`;
 
   cy.fixture(filePath).then((fileContent) => {
-    cy.get('[type=file]').upload(
+    cy.get('[type=file]').attachFile(
       {
         fileContent, fileName: fileFullName, mimeType: 'application/pdf',
       },
