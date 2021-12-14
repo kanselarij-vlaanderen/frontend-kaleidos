@@ -942,5 +942,6 @@
   "counselor": "Raadgever",
   "date-approved": "Datum goedgekeurd",
   "consult-agendaitem-decision": "Laatste agendering bekijken",
-  "postponed": "Uitgesteld"
+  "postponed": "Uitgesteld",
+  "date-example": "bv. 01/2021"
 }

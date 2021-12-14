@@ -41,7 +41,8 @@
               <Auk::Input
                 data-test-route-agendas-overview-filter-input={{true}}
                 @value={{this.dateFilter}}
-                placeholder="bv. 01/2020"
+                @enter={{fn (action "setDateFilter") this.dateFilter}}
+                placeholder={{t "date-example"}}
                 id={{this.id}}
               />
               <Auk::Button

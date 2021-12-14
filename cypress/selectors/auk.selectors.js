@@ -93,5 +93,12 @@ const selectors = {
   datepicker: '[data-test-auk-datepickr]',
   icon: '.auk-icon',
   abbreviatedText: '.auk-tooltip',
+
+  confidentialityPill: {
+    locked: '[data-test-confidentiality-pill-icon-locked]',
+    unlocked: '[data-test-confidentiality-pill-icon-unlocked]',
+  },
+
+  fileTypePill: '[data-test-file-type-pill]',
 };
 export default selectors;
