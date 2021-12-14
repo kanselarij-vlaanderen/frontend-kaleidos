@@ -92,7 +92,10 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @action
   async publishToBelga() {
     this.isLoading = true;
-    await this.publishNewsletterToBelga();
+    const mailCampaign = await this.getMailCampaign();
+    if (mailCampaign) {
+      await this.publishNewsletterToBelga();
+    }
     this.isLoading = false;
     this.toggleVerifyingPublishBelga();
   }
@@ -106,8 +109,8 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       if (await this.validateMailCampaign(mailCampaign)) {
         await this.publishToMailAndSaveCampaign(mailCampaign);
       }
+      await this.publishNewsletterToBelga();
     }
-    await this.publishNewsletterToBelga;
 
     this.isLoading = false;
     this.toggleVerifyingPublishAll();
@@ -118,7 +121,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     this.loadingNewsletter = true;
 
     const mailCampaign = await this.getMailCampaign();
-
     if (mailCampaign) {
       const html = await this.newsletterService
         .getMailCampaignContent(mailCampaign.campaignId)
@@ -131,6 +133,23 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       this.newsletterHTML = html.body;
     }
     this.loadingNewsletter = false;
+  }
+
+  @action
+  async downloadBelgaXML() {
+    this.isLoading = true;
+    const mailCampaign = await this.getMailCampaign();
+    if (mailCampaign) {
+      await this.newsletterService
+        .downloadBelgaXML(this.args.agenda.id)
+        .catch(() => {
+          this.toaster.error(
+            this.intl.t('error-download-XML'),
+            this.intl.t('warning-title')
+          );
+        });
+    }
+    this.isLoading = false;
   }
 
   @action
@@ -154,7 +173,11 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
     const threshold = 10;
 
-    if (Math.abs(moment(campaign.body.create_time).diff(moment(Date.now()), 'minutes')) > threshold) {
+    if (
+      Math.abs(
+        moment(campaign.body.create_time).diff(moment(Date.now()), 'minutes')
+      ) > threshold
+    ) {
       this.toaster.error(
         this.intl.t('error-old-newsletter'),
         this.intl.t('warning-title'),

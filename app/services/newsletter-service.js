@@ -81,6 +81,19 @@ export default Service.extend({
     }
   },
 
+  downloadBelgaXML(agendaId) {
+    try {
+      return ajax({
+        method: 'GET',
+        url: `/newsletter/xml-newsletter/${agendaId}`,
+      });
+    } catch (error) {
+      console.warn('An exception ocurred: ', error);
+      this.toaster.error(this.intl.t('error-download-XML'), this.intl.t('warning-title'));
+      return null;
+    }
+  },
+
   getMailCampaignContent(id) {
     try {
       return ajax({

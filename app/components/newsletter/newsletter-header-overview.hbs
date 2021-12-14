@@ -74,20 +74,18 @@
               </Menu.Item>
               <Menu.Divider />
               <Menu.Item
-                @href={{concat "/newsletter/xml-newsletter/" @agenda.id}}
-                download={{concat "/newsletter/xml-newsletter/" @agenda.id}}
-                target="_blank"
-                rel="noopener noreferrer"
+                {{on "click" this.downloadBelgaXML}}
               >
                 {{t "generate-xml"}}
               </Menu.Item>
               <Menu.Item @skin="danger" {{on "click" this.deleteCampaign}}>
                 {{t "delete-campaign"}}
               </Menu.Item>
-              <Menu.Divider />
+
             {{/if}}
           {{/if}}
           {{#if this.shouldShowPrintButton}}
+            <Menu.Divider />
             <Menu.Item {{on "click" this.print}}>
               {{t "print"}}
             </Menu.Item>
