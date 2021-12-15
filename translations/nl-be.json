@@ -527,6 +527,7 @@
   "error-delete-newsletter": "Er ging iets mis tijdens het verwijderen van de nieuwsbrief. Contacteer de administrator of probeer het opnieuw.",
   "error-delete-no-newsletter": "Er is geen nieuwsbrief om te verwijderen.",
   "error-fetch-newsletter": "Er ging iets mis tijdens het ophalen van de nieuwsbrief. Contacteer de administrator of probeer het opnieuw.",
+  "error-download-XML": "Er ging iets mis bij het ophalen van de Belga XML",
   "newsletter-loading-text": "De nieuwsbrief wordt aangemaakt. Dit kan even duren..",
   "not-applicable": "Niet van toepassing",
   "active": "Actieve",
@@ -943,5 +944,6 @@
   "counselor": "Raadgever",
   "date-approved": "Datum goedgekeurd",
   "consult-agendaitem-decision": "Laatste agendering bekijken",
-  "postponed": "Uitgesteld"
+  "postponed": "Uitgesteld",
+  "date-example": "bv. 01/2021"
 }

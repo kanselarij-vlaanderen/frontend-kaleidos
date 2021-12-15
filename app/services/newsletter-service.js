@@ -35,32 +35,12 @@ export default class NewsletterService extends Service {
         );
         reloadedMeeting.mailCampaign = savedCampaign;
         await reloadedMeeting.save();
-        return savedCampaign;
+        return mailCampaign;
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);
       this.toaster.error(
         this.intl.t('error-create-newsletter'),
-        this.intl.t('warning-title')
-      );
-      return null;
-    }
-  }
-
-  async deleteCampaign(id) {
-    try {
-      const result = await ajax({
-        method: 'DELETE',
-        url: `/newsletter/deleteMailCampaign`,
-        data: {
-          id: id,
-        }
-      });
-      return result;
-    } catch (error) {
-      console.warn('An exception ocurred: ', error);
-      this.toaster.error(
-        this.intl.t('error-delete-newsletter'),
         this.intl.t('warning-title')
       );
       return null;
@@ -107,27 +87,7 @@ export default class NewsletterService extends Service {
     }
   }
 
-  async downloadBelgaXML(agendaId) {
-    try {
-      const result = await ajax({
-        method: 'GET',
-        url: `/newsletter/fetchXML`,
-        data: {
-          agendaId: agendaId,
-        }
-      });
-      return result;
-    } catch (error) {
-      console.warn('An exception ocurred: ', error);
-      this.toaster.error(
-        this.intl.t('error-download-XML'),
-        this.intl.t('warning-title')
-      );
-      return null;
-    }
-  }
-
-  async getMailCampaignContent(id) {
+  async getMailCampaign(id) {
     try {
       const result = await ajax({
         method: 'GET',
@@ -220,4 +180,54 @@ export default class NewsletterService extends Service {
       return await meeting.save();
     }
   }
+
+  // TODO These are for developers use - in comments for follow up
+  /*
+  downloadBelgaXML(agendaId) {
+    try {
+      return ajax({
+        method: 'GET',
+        url: `/newsletter/xml-newsletter/${agendaId}`,
+      });
+    } catch (error) {
+      console.warn('An exception ocurred: ', error);
+      this.toaster.error(this.intl.t('error-download-XML'), this.intl.t('warning-title'));
+      return null;
+    }
+
+ async deleteCampaign(id) {
+    try {
+      const result = await ajax({
+        method: 'DELETE',
+        url: `/newsletter/deleteMailCampaign`,
+        data: {
+          id: id,
+        }
+      });
+      return result;
+    } catch (error) {
+      console.warn('An exception ocurred: ', error);
+      this.toaster.error(
+        this.intl.t('error-delete-newsletter'),
+        this.intl.t('warning-title')
+      );
+      return null;
+    }
+  }
+   async getMailCampaignContent(id) {
+    try {
+      return ajax({
+        method: 'GET',
+        url: `/newsletter/fetchTestMailCampaign/${id}`,
+      });
+    } catch (error) {
+      console.warn('An exception ocurred: ', error);
+      this.toaster.error(
+        this.intl.t('error-send-newsletter'),
+        this.intl.t('warning-title')
+      );
+      return null;
+    }
+  }
+  */
 }
