@@ -1,5 +1,5 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
+{{! TODO: octane-refactor }}
+{{! template-lint-disable no-action }}
 <div class="vlc-u-box-model-maximize-height auk-scroll-wrapper">
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-m-8">
@@ -37,11 +37,15 @@
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
           <Auk::Toolbar::Group @position="right">
-            <Auk::Toolbar::Item data-test-route-agendas-overview-filter-container data-children-count="1">
+            <Auk::Toolbar::Item
+              data-test-route-agendas-overview-filter-container
+              data-children-count="1"
+            >
               <Auk::Input
                 data-test-route-agendas-overview-filter-input={{true}}
                 @value={{this.dateFilter}}
-                placeholder="bv. 01/2020"
+                @enter={{fn (action "setDateFilter") this.dateFilter}}
+                placeholder={{t "date-example"}}
                 id={{this.id}}
               />
               <Auk::Button
@@ -70,12 +74,14 @@
             >
               <table.content as |c|>
                 <c.header>
-                  <ThSortable @class="auk-table__col--3 auk-table__header-title"
+                  <ThSortable
+                    @class="auk-table__col--3 auk-table__header-title"
                     @currentSorting={{this.sort}}
                     @field="planned-start,number-representation"
                     @label={{t "agenda"}}
                   />
-                  <ThSortable @class="auk-table__col--2 auk-table__header-title"
+                  <ThSortable
+                    @class="auk-table__col--2 auk-table__header-title"
                     @field="agendas"
                     @label={{t "agenda-version"}}
                   />
@@ -84,12 +90,14 @@
                   >
                     {{t "latest-modified"}}
                   </th>
-                  <ThSortable @class="auk-table__col--2 auk-table__header-title"
+                  <ThSortable
+                    @class="auk-table__col--2 auk-table__header-title"
                     @currentSorting={{this.sort}}
                     @field="is-final"
                     @label={{t "status"}}
                   />
-                  <ThSortable @class="auk-table__col--2 auk-table__header-title"
+                  <ThSortable
+                    @class="auk-table__col--2 auk-table__header-title"
                     @currentSorting={{this.sort}}
                     @field="kind"
                     @label={{t "kind"}}
@@ -98,7 +106,7 @@
                 </c.header>
                 <c.body @class="auk-table--interaction-cursor" as |meeting|>
                   {{#if (not meeting.alreadyShown)}}
-                    <td>
+                    <td data-test-route-agendas-overview-row-title>
                       {{t "agenda-for"}}
                       {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
                     </td>
@@ -107,9 +115,10 @@
                     </td>
                     <td>
                       {{#if (is-pending meeting.latestAgenda)}}
-                        <div class="skeletal-loader"
-                              role="alert"
-                              aria-busy="true"
+                        <div
+                          class="skeletal-loader"
+                          role="alert"
+                          aria-busy="true"
                         ></div>
                       {{else}}
                         {{moment-format
@@ -125,17 +134,20 @@
                         {{t "opened"}}
                       {{/if}}
                     </td>
-                    <td>
+                    <td data-test-route-agendas-overview-row-kind>
                       {{meeting.kindToShow.label}}
                     </td>
                     <td class="auk-u-text-align--center">
                       <Auk::Button
-                        data-test-route-agendas-overview-navigation-button={{true}}
+                        data-test-route-agendas-overview-row-nav-button={{true}}
                         @skin="borderless"
                         @layout="icon-only"
                         @icon="chevron-right"
                         @route="agenda.agendaitems"
-                        @models={{array meeting.id (await meeting.latestAgenda.id)}}
+                        @models={{array
+                          meeting.id
+                          (await meeting.latestAgenda.id)
+                        }}
                       />
                     </td>
                   {{/if}}
