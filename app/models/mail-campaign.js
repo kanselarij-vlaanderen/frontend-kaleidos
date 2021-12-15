@@ -6,7 +6,7 @@ export default class MailCampaign extends Model {
   @attr('string') archiveUrl;
   @attr('datetime') sentAt;
 
-  @hasMany('meeting') meetings;
+  @hasMany('meeting', { inverse: null }) meetings;
 
   get isSent() {
     return !!this.sentAt;
