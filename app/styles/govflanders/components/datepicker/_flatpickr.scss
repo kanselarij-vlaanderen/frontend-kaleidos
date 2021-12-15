@@ -7,7 +7,7 @@
 
 .flatpickr-calendar {
   $gray-shadow: rgba(0, 0, 0, .3);
-  background: $white;
+  background: $auk-white;
   box-shadow: $auk-shadow-medium !important;
 
   &.arrowTop,
@@ -24,7 +24,7 @@
   &.arrowTop {
     &::before,
     &::after {
-      border-bottom-color: $white !important;
+      border-bottom-color: $auk-white !important;
     }
   }
 
@@ -32,7 +32,7 @@
   &.arrowBottom {
     &::before,
     &::after {
-      border-top-color: $white !important;
+      border-top-color: $auk-white !important;
     }
   }
 
@@ -74,7 +74,7 @@
     &.prevMonthDay,
     &.nextMonthDay {
       background: 0;
-      color: $black;
+      color: $auk-black;
       border-color: transparent;
       font-weight: 500;
 
@@ -116,9 +116,9 @@
   &.inRange,
   &.nextMonthDay.inRange,
   &.prevMonthDay.inRange {
-    background: $athens-gray;
-    box-shadow: -5px 0 0 $athens-gray, 5px 0 0 $athens-gray;
-    border-color: $athens-gray;
+    background: $auk-gray-200;
+    box-shadow: -5px 0 0 $auk-gray-200, 5px 0 0 $auk-gray-200;
+    border-color: $auk-gray-200;
   }
 
   &.startRange,
@@ -132,8 +132,8 @@
 
   &:hover,
   &:focus { // reset all styles for theme
-    color: $curious-blue !important;
-    background: $athens-gray !important;
+    color: $auk-color-primary !important;
+    background: $auk-gray-200 !important;
     border-color: transparent !important;
     font-weight: 500;
   }
@@ -141,7 +141,7 @@
   &.selected.startRange + .endRange:not(:nth-child(7n+1)),
   &.startRange.startRange + .endRange:not(:nth-child(7n+1)),
   &.endRange.startRange + .endRange:not(:nth-child(7n+1)) {
-    box-shadow: -10px 0 0 $athens-gray;
+    box-shadow: -10px 0 0 $auk-gray-200;
   }
 }
 
@@ -151,7 +151,7 @@
   .flatpickr-month {
     border-radius: 0;
     background: 0;
-    border-bottom: 1px solid $ghost;
+    border-bottom: 1px solid $auk-gray-300;
     height: 45px;
   }
 }
@@ -187,7 +187,7 @@
     }
 
     &.cur-year {
-      color: $science-blue;
+      color: $auk-color-primary;
       text-decoration: underline;
     }
   }
@@ -197,7 +197,7 @@
 .flatpickr-next-month {
   line-height: 0.5em;
   .flatpickr-months & {
-    background: $athens-gray;
+    background: $auk-gray-200;
     border-radius: 50%;
     width: 28px;
     height: 28px !important;
@@ -223,8 +223,8 @@
       background: $auk-color-primary;
 
       svg {
-        fill: $white;
-        stroke: $white;
+        fill: $auk-white;
+        stroke: $auk-white;
       }
     }
   }

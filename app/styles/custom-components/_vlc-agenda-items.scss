@@ -11,17 +11,17 @@
   position: relative;
   font-size: 1.3rem;
   text-decoration: none;
-  color: $black;
+  color: $auk-black;
 }
 
 .vlc-agenda-items__sub-item a {
   &:hover,
   &:focus {
-    background: $blue-gray-lighter;
-    color: $blue-dark;
+    background: $auk-gray-200;
+    color: $auk-blue-700;
 
     span {
-      color: $blue-dark;
+      color: $auk-blue-700;
     }
   }
 }
@@ -29,7 +29,7 @@
 a.vlc-agenda-items__sub-item--active,
 a.vlc-agenda-items__sub-item--active:hover,
 a.vlc-agenda-items__sub-item--active:active {
-  background: $science-blue;
+  background: $auk-color-primary;
   color: #fff;
 
   span {
@@ -46,7 +46,7 @@ a.vlc-agenda-items__sub-item--active:active {
 }
 
 a.vlc-agenda-items__sub-item--active:focus {
-  background: darken($science-blue, 5%);
+  background: darken($auk-color-primary, 5%);
 }
 
 .vlc-agenda-meta {
@@ -74,12 +74,12 @@ a.vlc-agenda-items__sub-item--active:focus {
 .vlc-agenda-items__sub-item--active a,
 .vlc-agenda-items__sub-item--active a:hover,
 .vlc-agenda-items__sub-item--active a:active {
-  background: $science-blue;
+  background: $auk-color-primary;
   color: #FFF;
 }
 
 .vlc-agenda-items__sub-item--active a:focus {
-  background: darken($science-blue, 5%);
+  background: darken($auk-color-primary, 5%);
 }
 
 .vlc-agenda-items-sub-item__numbering {
@@ -168,7 +168,7 @@ $i: 0;
 .vlc-agenda-items__status--positive {
   font-weight: 500;
   opacity: 1;
-  color: $napier-green;
+  color: $auk-green-700;
 }
 
 .vlc-agenda-items__body {

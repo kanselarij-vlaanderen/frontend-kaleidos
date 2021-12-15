@@ -25,13 +25,13 @@
 .vlc-status-timeline__text {
   font-size: 1.2rem;
   .vlc-status-timeline__item--positive & {
-    color: #8CAE2C; // Not $green
+    color: #8CAE2C; // Not $auk-green-500
   }
   .vlc-status-timeline__item--neutral & {
-    color: $dove-gray;
+    color: $auk-gray-600;
   }
   .vlc-status-timeline__item--in-progress & {
-    color: $curious-blue;
+    color: $auk-color-primary;
   }
 }
 
@@ -42,12 +42,12 @@
   border-radius: 100%;
   margin-right: 0.5rem;
   .vlc-status-timeline__item--positive & {
-    background: #8CAE2C;// Not $green
+    background: #8CAE2C;// Not $auk-green-500
   }
   .vlc-status-timeline__item--neutral & {
-    background: $dove-gray;
+    background: $auk-gray-600;
   }
   .vlc-status-timeline__item--in-progress & {
-    background: $curious-blue;
+    background: $auk-color-primary;
   }
 }

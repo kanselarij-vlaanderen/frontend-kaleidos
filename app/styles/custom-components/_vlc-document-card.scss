@@ -26,7 +26,7 @@
 
 .vlc-document-card-content__meta {
   font-size: 1.4rem;
-  color: $dove-gray;
+  color: $auk-gray-600;
 }
 
 .vlc-document-card__actions {
@@ -55,7 +55,7 @@
 
   &:before {
     content: "";
-    background: $blue-gray-light;
+    background: $auk-gray-300;
     height: calc(100% - 1.5rem);
     width: 1px;
     position: absolute;
@@ -109,5 +109,5 @@
   position: absolute;
   left: -4rem;
   top: 0.6rem;
-  color: $primary-blue;
+  color: $auk-blue-500;
 }
