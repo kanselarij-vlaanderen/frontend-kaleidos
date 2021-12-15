@@ -34,7 +34,7 @@ export default Service.extend({
         });
         reloadedMeeting.set('mailCampaign', savedCampaign);
         await reloadedMeeting.save();
-        return savedCampaign;
+        return mailCampaign;
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);
@@ -127,6 +127,19 @@ export default Service.extend({
     }
   },
 
+  getMailCampaignContent(id) {
+    try {
+      return ajax({
+        method: 'GET',
+        url: `/newsletter/fetchTestMailCampaign/${id}`,
+      });
+    } catch (error) {
+      console.warn('An exception ocurred: ', error);
+      this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
+      return null;
+    }
+  },
+
   async createNewsItemForMeeting(meeting) {
     if (this.currentSession.isEditor) {
       const plannedStart = await meeting.get('plannedStart');
@@ -177,17 +190,6 @@ export default Service.extend({
     }
   },
 
-  getMailCampaignContent(id) {
-    try {
-      return ajax({
-        method: 'GET',
-        url: `/newsletter/fetchTestMailCampaign/${id}`,
-      });
-    } catch (error) {
-      console.warn('An exception ocurred: ', error);
-      this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
-      return null;
-    }
-  },
+
  */
 });

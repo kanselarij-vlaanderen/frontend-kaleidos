@@ -29,12 +29,13 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   constructor() {
     super(...arguments);
-    this.mailCampaign = this.loadMailCampaign.perform();
+     this.loadMailCampaign.perform();
+     console.log(this.mailCampaign)
   }
 
   @task
   *loadMailCampaign() {
-    return yield this.args.meeting.mailCampaign;
+    this.mailCampaign = yield this.args.meeting.mailCampaign;
   }
 
   get shouldShowPrintButton() {
@@ -73,8 +74,8 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       this.toaster.error(this.intl.t('error-already-sent-newsletter'));
       return null;
     } else {
-      if (await this.validateMailCampaign(this.mailCampaign)) {
-        await this.publishToMailAndSaveCampaign(this.mailCampaign);
+      if (await this.validateMailCampaign()) {
+        await this.publishToMailAndSaveCampaign();
       }
     }
 
@@ -107,8 +108,8 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       this.toaster.error(this.intl.t('error-already-sent-newsletter'));
       return null;
     } else {
-      if (await this.validateMailCampaign(this.mailCampaign)) {
-        await this.publishToMailAndSaveCampaign(this.mailCampaign);
+      if (await this.validateMailCampaign()) {
+        await this.publishToMailAndSaveCampaign();
       }
       await this.publishNewsletterToBelga();
     }
