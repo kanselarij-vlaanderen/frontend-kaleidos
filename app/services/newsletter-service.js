@@ -127,19 +127,6 @@ export default Service.extend({
     }
   },
 
-  getMailCampaignContent(id) {
-    try {
-      return ajax({
-        method: 'GET',
-        url: `/newsletter/fetchTestMailCampaign/${id}`,
-      });
-    } catch (error) {
-      console.warn('An exception ocurred: ', error);
-      this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
-      return null;
-    }
-  },
-
   async createNewsItemForMeeting(meeting) {
     if (this.currentSession.isEditor) {
       const plannedStart = await meeting.get('plannedStart');
@@ -186,6 +173,18 @@ export default Service.extend({
     } catch (error) {
       console.warn('An exception ocurred: ', error);
       this.toaster.error(this.intl.t('error-download-XML'), this.intl.t('warning-title'));
+      return null;
+    }
+  },
+  getMailCampaignContent(id) {
+    try {
+      return ajax({
+        method: 'GET',
+        url: `/newsletter/fetchTestMailCampaign/${id}`,
+      });
+    } catch (error) {
+      console.warn('An exception ocurred: ', error);
+      this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
       return null;
     }
   },
