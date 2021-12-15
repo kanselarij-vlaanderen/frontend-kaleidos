@@ -80,35 +80,35 @@
 
       &:hover,
       &:focus {
-        background: $accent-color;
-        color: $text-color;
+        background: $auk-yellow-500;
+        color: $auk-color-text;
         border-color: transparent;
       }
     }
 
     &.startRange,
     &.endRange {
-      background: $accent-color;
-      border-color: $accent-color;
-      color: $text-color;
+      background: $auk-yellow-500;
+      border-color: $auk-yellow-500;
+      color: $auk-color-text;
     }
   }
 
   &.selected,
   &.startRange,
   &.endRange {
-    background-color: $accent-color;
-    border-color: $accent-color;
+    background-color: $auk-yellow-500;
+    border-color: $auk-yellow-500;
 
     &.prevMonthDay,
     &.nextMonthDay {
-      background-color: $accent-color;
-      border-color: $accent-color;
+      background-color: $auk-yellow-500;
+      border-color: $auk-yellow-500;
     }
 
     &.startRange {
       & + .endRange {
-        box-shadow: -10px 0 0 $accent-color;
+        box-shadow: -10px 0 0 $auk-yellow-500;
       }
     }
   }
@@ -124,9 +124,9 @@
   &.startRange,
   &.endRange {
     &.inRange {
-      background: $accent-color;
-      border-color: $accent-color;
-      color: $text-color;
+      background: $auk-yellow-500;
+      border-color: $auk-yellow-500;
+      color: $auk-color-text;
     }
   }
 
@@ -170,7 +170,7 @@
 
 .flatpickr-current-month {
   font-size: 120%;
-  color: $text-color;
+  color: $auk-color-text;
   padding-top: 12px;
 
   span,
@@ -211,8 +211,8 @@
       left: 0;
       right: 0;
       margin: auto;
-      fill: $text-color;
-      stroke: $text-color;
+      fill: $auk-color-text;
+      stroke: $auk-color-text;
       stroke-width: 2px;
       width: 10px;
       height: 10px;
@@ -220,7 +220,7 @@
 
     &:hover,
     &:focus {
-      background: $action-color;
+      background: $auk-color-primary;
 
       svg {
         fill: $white;

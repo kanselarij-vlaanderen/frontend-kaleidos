@@ -6,10 +6,10 @@ $alert-padding-small: 1.5rem;
 .vl-alert {
   display: flex;
   position: relative;
-  background-color: $alt-bg;
+  background-color: $auk-gray-200;
   font-size: 1.6rem;
   line-height: 1.4;
-  border: 0.1rem solid $alt-bg;
+  border: 0.1rem solid $auk-gray-200;
   padding: $alert-padding;
   margin-bottom: 1.5rem;
 
@@ -28,7 +28,7 @@ $alert-padding-small: 1.5rem;
 
     &:hover,
     &:focus {
-      color: $action-color;
+      color: $auk-color-primary;
       transform: rotate(90deg);
     }
   }
@@ -79,7 +79,7 @@ $alert-padding-small: 1.5rem;
 
   // Error modifier
   &--error {
-    background-color: $error-secondary-color;
+    background-color: $auk-red-100;
 
     .vl-alert__icon {
       @include vi-u-badge--color("negative");
@@ -88,7 +88,7 @@ $alert-padding-small: 1.5rem;
 
   // Warning modifier
   &--warning {
-    background-color: $warning-secondary-color;
+    background-color: $auk-yellow-100;
 
     .vl-alert__icon {
       @include vi-u-badge--color("warning");
@@ -97,7 +97,7 @@ $alert-padding-small: 1.5rem;
 
   // Success modifier
   &--success {
-    background-color: $success-secondary-color;
+    background-color: $auk-green-100;
 
     .vl-alert__icon {
       // @include vi-check;

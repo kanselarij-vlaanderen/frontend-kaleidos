@@ -110,7 +110,7 @@ a.vlc-agenda-items__sub-item--active:focus {
   }
 
   .vlc-agenda-items-compare__item--bordered {
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid $auk-color-border;
   }
 
   .vlc-document-list__item {
@@ -176,7 +176,7 @@ $i: 0;
   flex-direction: row;
   padding: 2rem;
   background-color: #FFF;
-  border-bottom: .1rem solid $border-color;
+  border-bottom: .1rem solid $auk-color-border;
 
   // Override HR spacing
   .auk-hr {

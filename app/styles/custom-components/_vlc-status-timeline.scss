@@ -12,7 +12,7 @@
 .vlc-status-timeline__item + .vlc-status-timeline__item {
   &:before {
     content: " ";
-    background: $border-color;
+    background: $auk-color-border;
     height: 100%;
     width: 1px;
     position: absolute;

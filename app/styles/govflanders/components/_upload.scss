@@ -1,27 +1,27 @@
 $upload-overlay-opacity: .9;
-$upload-overlay-border: 2px dashed $action-color;
+$upload-overlay-border: 2px dashed $auk-color-primary;
 $upload-overlay-color: #fff;
-$upload-overlay-icon-color: $action-color;
+$upload-overlay-icon-color: $auk-color-primary;
 $upload-overlay-icon-size: 2rem;
 
 $upload-file-padding: .5rem;
-$upload-file-border: 1px solid $border-color;
+$upload-file-border: 1px solid $auk-color-border;
 
 $upload-file-margin-bottom: 1rem;
-$upload-file-name-color: $text-color;
-$upload-file-size-color: $alt-text-color;
+$upload-file-name-color: $auk-color-text;
+$upload-file-size-color: $auk-gray-600;
 $upload-file-cross-position: .75rem;
-$upload-file-error-color: $error-color;
+$upload-file-error-color: $auk-red-500;
 $upload-file-error-font-size: 1.2rem;
-$upload-file-error-border: 0 solid $error-color;
+$upload-file-error-border: 0 solid $auk-red-500;
 $upload-file-error-bg-color: #e7d8db;
 $upload-element-padding: 1rem;
-$upload-element-border: 2px dashed $border-color;
+$upload-element-border: 2px dashed $auk-color-border;
 $upload-element-margin-bottom: 1rem;
-$upload-element-label-color: $action-color;
+$upload-element-label-color: $auk-color-primary;
 $upload-element-label-icon-size: 1.4rem;
 $upload-element-input-background-color: rgba(0, 0, 0, .05);
-$upload-element-input-border-color: rgba($border-color, 0.5);
+$upload-element-input-border-color: rgba($auk-color-border, 0.5);
 
 .vl-upload {
   position: relative;
@@ -223,7 +223,7 @@ $upload-element-input-border-color: rgba($border-color, 0.5);
 
       small {
         font-size: 1.2rem;
-        color: $text-color;
+        color: $auk-color-text;
         display: none;
         text-decoration: none;
         text-align: center;

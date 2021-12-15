@@ -200,7 +200,7 @@ p {
 
 .l-printable-agenda {
   p {
-    color: $color-text;
+    color: $auk-color-text;
     line-height: 1.5;
   }
 
@@ -289,7 +289,7 @@ p {
 
 .l-printable-newsletter {
   p {
-    color: $color-text;
+    color: $auk-color-text;
     line-height: 1.5;
   }
 
@@ -392,11 +392,11 @@ p {
 }
 
 .auk-u-text-success {
-  color: $success-text-color;
+  color: $auk-green-700;
 }
 
 .auk-u-text-error {
-  color: $error-text-color;
+  color: $auk-red-700;
 }
 
 .auk-u-border-top {

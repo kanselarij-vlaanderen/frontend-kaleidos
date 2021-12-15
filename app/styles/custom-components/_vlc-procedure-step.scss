@@ -5,7 +5,7 @@
 .vlc-procedure-step {
   &:before {
     content: " ";
-    background: $border-color;
+    background: $auk-color-border;
     height: calc(100% + 2.2rem);
     width: 1px;
     position: absolute;
@@ -28,7 +28,7 @@
   // Code from “info tile” (equivalent of a card)
   display: block;
   position: relative;
-  border: 1px solid $border-color;
+  border: 1px solid $auk-color-border;
   padding: 1.7rem;
 
   a.auk-h4 {

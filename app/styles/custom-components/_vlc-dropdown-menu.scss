@@ -2,7 +2,7 @@
   top: auto;
   bottom: -12px;
   border: 12px solid transparent;
-  border-top-color: $page-bg;
+  border-top-color: $auk-white;
   border-bottom-width: 0;
 }
 
@@ -17,7 +17,7 @@
 
 .vlc-dropdown-menu__separator {
   height: 1px;
-  background: $border-color;
+  background: $auk-color-border;
   margin-top: .5rem;
   margin-bottom: .5rem;
   margin-left: 1.5rem;

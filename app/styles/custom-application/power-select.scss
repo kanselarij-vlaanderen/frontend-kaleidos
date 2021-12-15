@@ -134,7 +134,7 @@
   background: #fff;
   padding: 0 1rem;
 
-  color: $text-color;
+  color: $auk-color-text;
   font-family: $flanders-family;
   font-size: 1.6rem;
   line-height: 3.5rem;
@@ -146,12 +146,12 @@
   &:focus,
   &--focus {
     outline: none;
-    border-color: $outline-color;
-    box-shadow: inset 0 0 0 0.1rem $outline-color;
+    border-color: $auk-yellow-500;
+    box-shadow: inset 0 0 0 0.1rem $auk-yellow-500;
   }
 
   &::placeholder {
-    color: $placeholder-color;
+    color: $auk-gray-500;
   }
 
   &::-webkit-search-cancel-button {
