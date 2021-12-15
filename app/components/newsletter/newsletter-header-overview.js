@@ -62,30 +62,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   }
 
   @action
-  async deleteCampaign() {
-    this.isLoading = true;
-    const meeting = this.args.meeting;
-
-    if (!this.mailCampaign) {
-      this.toaster.error(this.intl.t('error-delete-no-newsletter'));
-      this.isLoading = false;
-      return;
-    }
-
-    if (this.mailCampaign && this.mailCampaign.campaignId) {
-      await this.newsletterService.deleteCampaign(this.mailCampaign.campaignId);
-    }
-    this.mailCampaign.destroyRecord();
-    const reloadedMeeting = await this.store.findRecord('meeting', meeting.id, {
-      reload: true,
-    });
-    reloadedMeeting.mailCampaign = null;
-
-    await reloadedMeeting.save();
-    this.isLoading = false;
-  }
-
-  @action
   async publishToMail() {
     this.isLoading = true;
 
@@ -141,51 +117,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     this.toggleVerifyingPublishAll();
   }
 
-  @action
-  async showNewsletter() {
-    this.loadingNewsletter = true;
-
-    if (!this.mailCampaign) {
-      await this.createMailCampaign();
-    }
-
-    const html = await this.newsletterService
-          .getMailCampaignContent(this.mailCampaign.campaignId)
-          .catch(() => {
-            this.toaster.error(
-              this.intl.t('error-send-newsletter'),
-              this.intl.t('warning-title')
-            );
-          });
-        this.newsletterHTML = html.body;
-    this.loadingNewsletter = false;
-  }
-
-  @action
-  async downloadBelgaXML() {
-    this.isLoading = true;
-
-    if (!this.mailCampaign) {
-      await this.createMailCampaign();
-    }
-
-    await this.newsletterService
-        .downloadBelgaXML(this.args.agenda.id)
-        .catch(() => {
-          this.toaster.error(
-            this.intl.t('error-download-XML'),
-            this.intl.t('warning-title')
-          );
-        });
-    this.isLoading = false;
-  }
-
-  @action
-  async clearNewsletterHTML() {
-    this.newsletterHTML = null;
-    this.loadingNewsletter = false;
-  }
-
   async validateMailCampaign() {
     let validCampaign = true;
 
@@ -222,7 +153,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   async publishNewsletterToBelga() {
     await this.newsletterService
-      .sendtoBelga(this.args.agenda.id)
+      .sendToBelga(this.args.agenda.id)
       .then(() => {
         this.toaster.success(
           this.intl.t('success-publish-newsletter-to-belga')
@@ -262,4 +193,66 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       this.args.meeting
     );
   }
+
+  // TODO These are for developers use - in comments for follow up
+/*  @action
+  async deleteCampaign() {
+    this.isLoading = true;
+    const meeting = this.args.meeting;
+
+    if (this.mailCampaign && this.mailCampaign.campaignId) {
+      await this.newsletterService.deleteCampaign(this.mailCampaign.campaignId);
+    }
+    this.mailCampaign.destroyRecord();
+    const reloadedMeeting = await this.store.findRecord('meeting', meeting.id, {
+      reload: true,
+    });
+    reloadedMeeting.mailCampaign = null;
+
+    await reloadedMeeting.save();
+    this.isLoading = false;
+  }
+  @action
+  async downloadBelgaXML() {
+    this.isLoading = true;
+
+    if (!this.mailCampaign) {
+      await this.createMailCampaign();
+    }
+
+    await this.newsletterService
+      .downloadBelgaXML(this.args.agenda.id)
+      .catch(() => {
+        this.toaster.error(
+          this.intl.t('error-download-XML'),
+          this.intl.t('warning-title')
+        );
+      });
+    this.isLoading = false;
+  }
+  @action
+  async showNewsletter() {
+    this.loadingNewsletter = true;
+
+    if (!this.mailCampaign) {
+      await this.createMailCampaign();
+    }
+
+    const html = await this.newsletterService
+      .getMailCampaignContent(this.mailCampaign.campaignId)
+      .catch(() => {
+        this.toaster.error(
+          this.intl.t('error-send-newsletter'),
+          this.intl.t('warning-title')
+        );
+      });
+    this.newsletterHTML = html.body;
+    this.loadingNewsletter = false;
+  }
+  @action
+  async clearNewsletterHTML() {
+    this.newsletterHTML = null;
+    this.loadingNewsletter = false;
+  }
+ */
 }

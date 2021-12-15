@@ -59,10 +59,6 @@
                 <Auk::Loader @message={{t "newsletter-loading-text"}} />
               </Menu.Item>
             {{else}}
-              <Menu.Item {{on "click" this.showNewsletter}}>
-                {{t "show-newsletter"}}
-              </Menu.Item>
-              <Menu.Divider />
               <Menu.Item {{on "click" this.toggleVerifyingPublishAll}}>
                 {{t "send-newsitem-to-all"}}
               </Menu.Item>
@@ -72,15 +68,22 @@
               <Menu.Item {{on "click" this.toggleVerifyingPublishBelga}}>
                 {{t "send-newsitem-to-belga"}}
               </Menu.Item>
+
+              {{!-- TODO These are for developers use - in comments for follow up
               <Menu.Divider />
+              <Menu.Item {{on "click" this.showNewsletter}}>
+                {{t "show-newsletter"}}
+              </Menu.Item>
               <Menu.Item
                 {{on "click" this.downloadBelgaXML}}
               >
                 {{t "generate-xml"}}
               </Menu.Item>
-              <Menu.Item @skin="danger" {{on "click" this.deleteCampaign}}>
-                {{t "delete-campaign"}}
-              </Menu.Item>
+              {{#if this.mailCampaign}}
+                <Menu.Item @skin="danger" {{on "click" this.deleteCampaign}}>
+                  {{t "delete-campaign"}}
+                </Menu.Item>
+              {{/if}} --}}
 
             {{/if}}
           {{/if}}

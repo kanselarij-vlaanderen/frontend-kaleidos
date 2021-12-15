@@ -42,19 +42,6 @@ export default Service.extend({
     }
   },
 
-  async deleteCampaign(id) {
-    try {
-      return ajax({
-        method: 'DELETE',
-        url: `/newsletter/deleteMailCampaign/${id}`,
-      });
-    } catch (error) {
-      console.warn('An exception ocurred: ', error);
-      this.toaster.error(this.intl.t('error-delete-newsletter'), this.intl.t('warning-title'));
-      return null;
-    }
-  },
-
   sendMailCampaign(id) { // TODO: this and below method are sync, while 2 methods above async?
     try {
       return ajax({
@@ -68,37 +55,11 @@ export default Service.extend({
     }
   },
 
-  sendtoBelga(agendaId) { // TODO: this and below method are sync, while 2 methods above async?
+  sendToBelga(agendaId) { // TODO: this and below method are sync, while 2 methods above async?
     try {
       return ajax({
         method: 'POST',
         url: `/newsletter/sendToBelga/${agendaId}`,
-      });
-    } catch (error) {
-      console.warn('An exception ocurred: ', error);
-      this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
-      return null;
-    }
-  },
-
-  downloadBelgaXML(agendaId) {
-    try {
-      return ajax({
-        method: 'GET',
-        url: `/newsletter/xml-newsletter/${agendaId}`,
-      });
-    } catch (error) {
-      console.warn('An exception ocurred: ', error);
-      this.toaster.error(this.intl.t('error-download-XML'), this.intl.t('warning-title'));
-      return null;
-    }
-  },
-
-  getMailCampaignContent(id) {
-    try {
-      return ajax({
-        method: 'GET',
-        url: `/newsletter/fetchTestMailCampaign/${id}`,
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);
@@ -188,4 +149,45 @@ export default Service.extend({
       return await meeting.save();
     }
   },
+
+// TODO These are for developers use - in comments for follow up
+/*
+  async deleteCampaign(id) {
+    try {
+      return ajax({
+        method: 'DELETE',
+        url: `/newsletter/deleteMailCampaign/${id}`,
+      });
+    } catch (error) {
+      console.warn('An exception ocurred: ', error);
+      this.toaster.error(this.intl.t('error-delete-newsletter'), this.intl.t('warning-title'));
+      return null;
+    }
+  },
+  downloadBelgaXML(agendaId) {
+    try {
+      return ajax({
+        method: 'GET',
+        url: `/newsletter/xml-newsletter/${agendaId}`,
+      });
+    } catch (error) {
+      console.warn('An exception ocurred: ', error);
+      this.toaster.error(this.intl.t('error-download-XML'), this.intl.t('warning-title'));
+      return null;
+    }
+  },
+
+  getMailCampaignContent(id) {
+    try {
+      return ajax({
+        method: 'GET',
+        url: `/newsletter/fetchTestMailCampaign/${id}`,
+      });
+    } catch (error) {
+      console.warn('An exception ocurred: ', error);
+      this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
+      return null;
+    }
+  },
+ */
 });
