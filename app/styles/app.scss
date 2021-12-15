@@ -10,6 +10,7 @@
 @import '_colors';
 
 // sourced from "au-kaleidos-css" npm package
+@import '_reset';
 @import '_s-colors';
 @import '_s-shadows';
 @import '_s-z-index';
@@ -20,7 +21,6 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 @import 'govflanders/core/_setting.scss';
 @import 'govflanders/core/_tool.scss';
 @import 'govflanders/core/_generic.scss';
-@import 'govflanders/core/_object.scss';
 
 // Components (loaded locally to easily read source)
 @import 'govflanders/components/_alert';
