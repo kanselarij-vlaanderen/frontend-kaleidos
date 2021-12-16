@@ -193,16 +193,20 @@ function addAgendaitemMandatee(mandateeNumber, mandateeSearchText, mandateeTitle
  * @name proposeSubcaseForAgenda
  * @memberOf Cypress.Chainable#
  * @function
- * @param {date} agendaDate - The list index of the mandatee
+ * @param {date} agendaDate - The date of the agenda
+ * @param {String} numberRep - The specific numberRep for the agenda you want to use
  */
-function proposeSubcaseForAgenda(agendaDate) {
+function proposeSubcaseForAgenda(agendaDate, numberRep = '') {
   cy.log('proposeSubcaseForAgenda');
   cy.route('POST', '/agendaitems').as('createNewAgendaitem');
   cy.route('PATCH', '/agendas/*').as('patchAgenda');
   cy.route('PATCH', '/subcases/*').as('patchSubcase');
   cy.route('POST', '/agenda-activities').as('createAgendaActivity');
   const monthDutch = getTranslatedMonth(agendaDate.month());
-  const formattedDate = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
+  let formattedDate = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
+  if (numberRep) {
+    formattedDate = `${formattedDate} - ${numberRep}`;
+  }
 
   cy.get(cases.subcaseHeader.showProposedAgendas).click();
 
