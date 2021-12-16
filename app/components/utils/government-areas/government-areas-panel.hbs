@@ -22,7 +22,7 @@
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
     </Auk::Panel::Header>
-    {{#if @publicationFlow.governmentFields}}
+    {{#if @governmentAreas.length}}
       <Auk::Panel::Body @noPadding={{true}}>
         <table class="auk-table">
           <thead>
@@ -32,16 +32,20 @@
             </tr>
           </thead>
           <tbody>
-            {{#each this.rows as |row|}}
-              <tr>
-                <td data-test-government-fields-panel-row-label>
-                  {{row.governmentDomain.label}}
-                </td>
-                <td data-test-government-fields-panel-row-fields>
+          {{#each this.rows as |row|}}
+            <tr>
+              <td data-test-government-fields-panel-row-label>
+                {{row.governmentDomain.label}}
+              </td>
+              <td data-test-government-fields-panel-row-fields>
+                {{#if row.governmentFields}}
                   {{join ", " (map-by "label" row.sortedGovernmentFields)}}
-                </td>
-              </tr>
-            {{/each}}
+                {{else}}
+                  {{t "dash"}}
+                {{/if}}
+              </td>
+            </tr>
+          {{/each}}
           </tbody>
         </table>
       </Auk::Panel::Body>
@@ -54,8 +58,9 @@
 </div>
 
 {{#if this.isOpenEditModal}}
-  <Publications::Publication::Case::GovernmentFields::EditGovernmentFieldsModal
-    @governmentFields={{@publicationFlow.governmentFields}}
+  <Utils::GovernmentAreas::EditGovernmentAreasModal
+    @governmentFields={{this.governmentFields}}
+    @governmentDomains={{this.governmentDomains}}
     @onSave={{this.save}}
     @onCancel={{this.closeEditModal}}
   />

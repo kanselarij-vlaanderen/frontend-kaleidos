@@ -1,6 +1,9 @@
 <li class="vlc-document-list__item {{if @isHighlighted "vlc-document-list__item--active"}}">
   {{#if @isClickable}}
-    <a href={{@piece.viewDocumentURL}} target="_blank" rel="noreferrer noopener">
+    <a
+      data-test-document-badge-link
+      href={{@piece.viewDocumentURL}} target="_blank" rel="noreferrer noopener"
+    >
       <Auk::Icon @name={{this.documentIconName}} />
       {{@piece.name}}
     </a>

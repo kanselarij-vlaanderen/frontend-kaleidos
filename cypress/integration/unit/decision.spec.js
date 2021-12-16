@@ -2,6 +2,7 @@
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
+import auk from '../../selectors/auk.selectors';
 import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
@@ -38,7 +39,7 @@ context('Add files to an agenda', () => {
     const file = {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     };
-    cy.createCase(false, caseTitle);
+    cy.createCase(caseTitle);
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
 
@@ -96,7 +97,9 @@ context('Add files to an agenda', () => {
     cy.get('@docCards').eq(0)
       .within(() => {
         cy.get(document.documentCard.name.value).contains(/TER/);
-        cy.get(document.documentCard.versionHistory).click();
+        cy.get(document.documentCard.versionHistory)
+          .find(auk.accordion.header.button)
+          .click();
         cy.get(document.vlDocument.piece).should('have.length', 3);
         cy.get(document.vlDocument.delete).eq(0) // this is the TER piece
           .click();
@@ -145,7 +148,7 @@ context('Add files to an agenda', () => {
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
 
-    cy.createCase(false, caseTitle);
+    cy.createCase(caseTitle);
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
 

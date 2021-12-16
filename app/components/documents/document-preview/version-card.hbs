@@ -1,6 +1,9 @@
-<li class="auk-document-card {{if @isHighlighted "active"}}">
+<li data-test-version-card-container class="auk-document-card {{if @isHighlighted "active"}}">
   <div class="auk-document-card__content">
-    <div class="auk-document-card__details">
+    <div
+      data-test-version-card-details
+      class="auk-document-card__details"
+    >
       <Utils::AccessLevelColorBadge
         @accessLevel={{this.accessLevel}}
         class="auk-overline"
@@ -10,7 +13,10 @@
         <span class="auk-overline">{{@documentContainer.type.label}}</span>
       {{/if}}
     </div>
-    <h4 class="auk-document-card__title">{{@piece.name}}</h4>
+    <h4
+      data-test-version-card-name
+      class="auk-document-card__title">{{@piece.name}}
+    </h4>
     <div class="auk-document-card__meta">
       <Auk::PillList class="auk-u-mr-3">
         <Utils::ConfidentialityPill @confidential={{@piece.confidential}} />
@@ -48,6 +54,7 @@
   <div class="auk-document-card__actions">
     <div class="auk-button-toolbar">
       <Auk::Button
+        data-test-version-card-open
         @layout="icon-only"
         @icon="book"
         @skin="borderless"
