@@ -13,7 +13,7 @@ export default class NewsletterService extends Service {
     try {
       const result = await ajax({
         method: 'POST',
-        url: `/newsletter/createMailCampaign`,
+        url: `/newsletter/mailCampaign`,
         data: {
           agendaId: agenda.id,
         }
@@ -49,14 +49,13 @@ export default class NewsletterService extends Service {
 
   async sendMailCampaign(id) {
     try {
-      const result = await ajax({
+      return await ajax({
         method: 'POST',
         url: `/newsletter/sendMailCampaign`,
         data: {
           id: id,
         }
       });
-      return result;
     } catch (error) {
       console.warn('An exception ocurred: ', error);
       this.toaster.error(
@@ -69,14 +68,13 @@ export default class NewsletterService extends Service {
 
   async sendToBelga(agendaId) {
     try {
-      const result = await ajax({
+      return  await ajax({
         method: 'POST',
-        url: `/newsletter/sendToBelga`,
+        url: `/newsletter/belga`,
         data: {
           agendaId: agendaId,
         }
       });
-      return result;
     } catch (error) {
       console.warn('An exception ocurred: ', error);
       this.toaster.error(
@@ -89,14 +87,13 @@ export default class NewsletterService extends Service {
 
   async getMailCampaign(id) {
     try {
-      const result = await ajax({
+      return await ajax({
         method: 'GET',
-        url: `/newsletter/fetchMailCampaign`,
+        url: `/newsletter/mailCampaign`,
         data: {
           id: id,
         }
       });
-      return result;
     } catch (error) {
       console.warn('An exception ocurred: ', error);
       this.toaster.error(
@@ -185,9 +182,12 @@ export default class NewsletterService extends Service {
   /*
   downloadBelgaXML(agendaId) {
     try {
-      return ajax({
+      return await ajax({
         method: 'GET',
-        url: `/newsletter/xml-newsletter/${agendaId}`,
+        url: `/newsletter/belga`,
+        data: {
+          agendaId: agendaId,
+        }
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);
@@ -199,7 +199,7 @@ export default class NewsletterService extends Service {
     try {
       const result = await ajax({
         method: 'DELETE',
-        url: `/newsletter/deleteMailCampaign`,
+        url: `/newsletter/mailCampaign`,
         data: {
           id: id,
         }
