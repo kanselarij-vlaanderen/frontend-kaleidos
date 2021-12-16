@@ -30,7 +30,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   constructor() {
     super(...arguments);
      this.loadMailCampaign.perform();
-     console.log(this.mailCampaign)
   }
 
   @task
