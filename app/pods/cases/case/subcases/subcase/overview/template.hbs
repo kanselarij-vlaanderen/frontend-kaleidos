@@ -36,9 +36,9 @@
     @onSave={{this.saveMandateeData}}
   />
   <Utils::GovernmentAreas::GovernmentAreasPanel
-      @governmentAreas={{this.subcase.case.governmentAreas}}
-      @onSave={{this.saveGovernmentAreas}}
-    />
+    @governmentAreas={{this.governmentAreas}}
+    @onSave={{this.saveGovernmentAreas}}
+  />
   <Agenda::Agendaitem::AgendaitemCase::AllSubcases
     @subcases={{this.allSubcases}}
   />
