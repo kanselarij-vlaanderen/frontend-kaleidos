@@ -29,7 +29,7 @@
                 <Auk::Button
                   @skin="danger-borderless"
                   @layout="icon-only"
-                  @icon="delete"
+                  @icon="trash"
                   {{on "click" (fn this.removeMandatee mandatee)}}
                   data-test-mandatee-panel-edit-row-delete
                 >
@@ -47,7 +47,7 @@
       <Auk::Toolbar::Item>
         <Auk::Button
           @skin="tertiary"
-          @icon="add"
+          @icon="plus"
           {{on "click" this.openSelectMandatee}}
           data-test-mandatee-panel-edit-add-mandatee
         >

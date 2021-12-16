@@ -16,11 +16,13 @@ export default class CasesNewSubcase extends Component {
   @tracked caseTypes;
   @tracked title;
   @tracked shortTitle;
+  @tracked confidential;
 
   @tracked showAsRemark;
   @tracked selectedShortcut;
   @tracked subcaseName;
   @tracked type;
+  @tracked latestSubcase;
   @tracked isEditing = false;
 
   constructor() {
@@ -43,15 +45,44 @@ export default class CasesNewSubcase extends Component {
   }
 
   @task
+  *loadLatestSubcase() {
+    this.latestSubcase = yield this.store.queryOne('subcase', {
+      filter: {
+        case: {
+          ':id:': this.args.case.id,
+        },
+      },
+      sort: '-created',
+    });
+  }
+
+  @task
   *loadTitleData() {
-    const latestSubcase = yield this.args.case.latestSubcase;
-    if (latestSubcase) {
-      this.title = latestSubcase.title;
-      this.shortTitle = latestSubcase.shortTitle;
+    yield this.loadLatestSubcase.perform();
+    if (this.latestSubcase) {
+      this.title = this.latestSubcase.title;
+      this.shortTitle = this.latestSubcase.shortTitle;
+      this.confidential = this.latestSubcase.confidential;
     } else {
       this.title = this.args.case.title;
       this.shortTitle = this.args.case.shortTitle;
+      this.confidential = false;
     }
+  }
+
+  get areLoadingTasksRunning() {
+    return (
+      this.loadCaseTypes.isRunning ||
+      this.loadLatestSubcase.isRunning ||
+      this.loadTitleData.isRunning
+    );
+  }
+
+  get areSavingTasksRunning() {
+    return (
+      this.copyFullSubcase.isRunning ||
+      this.saveSubcase.isRunning
+    );
   }
 
   async loadSubcasePieces(subcase) {
@@ -73,14 +104,13 @@ export default class CasesNewSubcase extends Component {
 
   @action
   async createSubcase(fullCopy) {
-    const latestSubcase = await this.args.case.latestSubcase;
     const date = new Date();
 
     let subcase = await this.store.createRecord('subcase', {
       type: this.type,
       shortTitle: trimText(this.shortTitle),
       title: trimText(this.title),
-      confidential: this.args.case.confidential,
+      confidential: this.confidential,
       showAsRemark: this.showAsRemark || false,
       case: this.args.case,
       created: date,
@@ -90,8 +120,13 @@ export default class CasesNewSubcase extends Component {
     });
     subcase.subcaseName = this.subcaseName;
 
-    if (latestSubcase) { // Previous "versions" of this subcase exist
-      subcase = await this.copySubcaseProperties(subcase, latestSubcase, fullCopy);
+    if (this.latestSubcase) {
+      // Previous "versions" of this subcase exist
+      subcase = await this.copySubcaseProperties(
+        subcase,
+        this.latestSubcase,
+        fullCopy
+      );
     }
     return subcase;
   }
@@ -104,18 +139,21 @@ export default class CasesNewSubcase extends Component {
       subcase.subcaseName = latestSubcase.subcaseName;
       subcase.accessLevel = await latestSubcase.accessLevel;
       subcase.showAsRemark = latestSubcase.showAsRemark;
-      const submissionActivity = this.store.createRecord('submission-activity', {
-        startDate: new Date(),
-        pieces: pieces,
-      });
+      subcase.confidential = latestSubcase.confidential;
+      const submissionActivity = this.store.createRecord(
+        'submission-activity',
+        {
+          startDate: new Date(),
+          pieces: pieces,
+        }
+      );
       await submissionActivity.save();
       subcase.submissionActivities.pushObject(submissionActivity);
     } else {
       subcase.linkedPieces = pieces;
     }
+    // Everything to copy from latest subcase
     subcase.mandatees = await latestSubcase.mandatees;
-    // TODO KAS-2969 make sure to copy the list of concepts
-    subcase.iseCodes = await latestSubcase.iseCodes;
     subcase.requestedBy = await latestSubcase.requestedBy;
     return subcase;
   }
@@ -147,7 +185,7 @@ export default class CasesNewSubcase extends Component {
   typeChanged(event) {
     const id = event.target.value;
     const type = this.store.peekRecord('case-type', id);
-    this.showAsRemark = (type.get('uri') === CONSTANTS.CASE_TYPES.REMARK);
+    this.showAsRemark = type.get('uri') === CONSTANTS.CASE_TYPES.REMARK;
   }
 
   @action

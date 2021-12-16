@@ -1,5 +1,9 @@
 export default {
   // GENERAL
+  CONCEPT_SCHEMES: {
+    BELEIDSDOMEIN: 'http://themis.vlaanderen.be/id/concept-schema/f4981a92-8639-4da4-b1e3-0e1371feaa81',
+    BELEIDSVELD: 'http://themis.vlaanderen.be/id/concept-schema/0012aad8-d6e5-49e2-af94-b1bebd484d5b',
+  },
   ACCESS_LEVELS: {
     INTERN_REGERING: 'http://kanselarij.vo.data.gift/id/concept/toegangs-niveaus/d335f7e3-aefd-4f93-81a2-1629c2edafa3',
     INTERN_OVERHEID: 'http://kanselarij.vo.data.gift/id/concept/toegangs-niveaus/abe4c18d-13a9-45f0-8cdd-c493eabbbe29',

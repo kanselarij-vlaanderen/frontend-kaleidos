@@ -32,7 +32,7 @@
       <Auk::Toolbar::Item>
         <Auk::Button
           data-test-route-publications-index-new-publication
-          @icon="add"
+          @icon="plus"
           @skin="primary"
           {{on "click" this.showPublicationModal}}
         >
@@ -60,7 +60,10 @@
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-m-4">
       {{#if this.model.length}}
-        <table data-test-route-publications-index-data-table class="auk-table auk-table--sticky-header">
+        <table
+          data-test-route-publications-index-data-table
+          class="auk-table auk-table--sticky-header"
+        >
           <thead>
             <tr>
               {{#each this.tableColumns as |column|}}
@@ -154,8 +157,8 @@
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
         <Auk::Button
-          data-test-publications-index-config-modal-icon
-          @icon="settings"
+          data-test-route-publications-index-config-modal-icon
+          @icon="gear"
           @skin="borderless"
           {{on "click" this.toggleColumnDisplayOptions}}
         />

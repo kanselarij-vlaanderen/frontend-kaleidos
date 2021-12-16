@@ -1,10 +1,10 @@
 <Auk::Modal>
-  <Auk::Modal::Header
-    @title={{t "create-subcase"}}
-    @onClose={{@onClose}}
-  />
+  <Auk::Modal::Header @title={{t "create-subcase"}} @onClose={{@onClose}} />
   <Auk::Modal::Body>
-    <Utils::LoadableContent @isLoading={{or this.loadCaseTypes.isRunning this.loadTitleData.isRunning}} @reserveSpace={{true}}>
+    <Utils::LoadableContent
+      @isLoading={{this.areLoadingTasksRunning}}
+      @reserveSpace={{true}}
+    >
       <div class="auk-o-flex auk-o-flex--justify-between">
         <div class="auk-u-mb-4">
           <fieldset>
@@ -12,7 +12,8 @@
             <Auk::RadioList
               @layout="inline"
               data-test-new-subcase-type
-            as |List|>
+              as |List|
+            >
               {{#each this.caseTypes as |type index|}}
                 <List.Radio
                   @label={{type.label}}
@@ -43,12 +44,28 @@
         </div>
       </div>
       <div class="auk-form-group">
+        <Auk::Label for="new-subcase-confidential">{{t "confidential"}}</Auk::Label>
+        <Auk::Toggle
+          data-test-new-subcase-confidential
+          id="new-subcase-confidential"
+          @checked={{this.confidential}}
+        />
+      </div>
+      <div class="auk-form-group">
         <Auk::Label>{{t "name-subcase"}}</Auk::Label>
-        <Auk::Textarea data-test-new-subcase-shorttitle @rows="2" @value={{this.shortTitle}} />
+        <Auk::Textarea
+          data-test-new-subcase-shorttitle
+          @rows="2"
+          @value={{this.shortTitle}}
+        />
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "title-subcase"}}</Auk::Label>
-        <Auk::Textarea data-test-new-subcase-longtitle @rows="4" @value={{this.title}} />
+        <Auk::Textarea
+          data-test-new-subcase-longtitle
+          @rows="4"
+          @value={{this.title}}
+        />
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
@@ -94,7 +111,7 @@
             <Auk::Button
               @skin="secondary"
               @layout="icon-only"
-              @icon="cross"
+              @icon="x"
               {{on "click" this.toggleIsEditing}}
             >
               {{t "cancel"}}
@@ -105,14 +122,16 @@
     </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
-    @cancelDisabled={{this.save.isRunning}}
-    @onCancel={{@onClose}}>
+    @cancelDisabled={{this.saveSubcase.isRunning}}
+    @onCancel={{@onClose}}
+  >
     <Auk::Button
       data-test-new-subcase-save
       @skin="primary"
-      @disabled={{this.save.isRunning}}
-      @loading={{or this.saveSubcase.isRunning this.copyFullSubcase.isRunning}}
-      {{on "click" (perform this.saveSubcase)}}>
+      @disabled={{this.areSavingTasksRunning}}
+      @loading={{or this.areSavingTasksRunning this.areLoadingTasksRunning}}
+      {{on "click" (perform this.saveSubcase)}}
+    >
       {{t "new-subcase"}}
     </Auk::Button>
   </Auk::Modal::Footer>

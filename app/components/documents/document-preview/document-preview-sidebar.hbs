@@ -13,6 +13,7 @@
           <group.Item>
             <Auk::Tabs>
               <Auk::Tab
+                data-test-document-preview-sidebar-tab-details
                 {{on "click" (fn this.setActiveTab "details")}}
                 @active={{eq this.activeTab "details"}}
               >
@@ -20,6 +21,7 @@
               </Auk::Tab>
               {{#if this.isShownSignatureTab}}
                 <Auk::Tab
+                  data-test-document-preview-sidebar-tab-signatures
                   {{on "click" (fn this.setActiveTab "signatures")}}
                   @active={{eq this.activeTab "signatures"}}
                 >
@@ -27,6 +29,7 @@
                 </Auk::Tab>
               {{/if}}
               <Auk::Tab
+                data-test-document-preview-sidebar-tab-versions
                 {{on "click" (fn this.setActiveTab "versions")}}
                 @active={{eq this.activeTab "versions"}}
               >
@@ -38,6 +41,7 @@
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <Auk::Button
+              data-test-document-preview-sidebar-close
               @skin="borderless"
               @icon="chevron-right"
               @layout="icon-only"
@@ -49,6 +53,7 @@
         <Auk::Toolbar::Group @position="center">
           <Auk::Toolbar::Item class="auk-o-flex auk-o-flex--horizontal-center">
             <Auk::Button
+              data-test-document-preview-sidebar-open
               @skin="borderless"
               @icon="chevron-left"
               @layout="icon-only"

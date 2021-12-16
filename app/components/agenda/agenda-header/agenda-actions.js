@@ -14,7 +14,7 @@ export default class AgendaActions extends Component {
    *
    * @argument meeting: the viewed meeting
    * @argument currentAgenda: the selected agenda
-   * @argument reversedAgendas: the agendas of the meeting, reverse sorted on serial number
+   * @argument reverseSortedAgendas: the agendas of the meeting, reverse sorted on serial number
    */
   @service store;
   @service currentSession;
@@ -35,7 +35,7 @@ export default class AgendaActions extends Component {
 
   get designAgenda() {
     // From all agendas, get the design agenda (if any)
-    const agendas = this.args.reversedAgendas;
+    const agendas = this.args.reverseSortedAgendas;
     const designAgenda = agendas
       .filter((agenda) => agenda.get('isDesignAgenda'))
       .get('firstObject');
@@ -44,7 +44,7 @@ export default class AgendaActions extends Component {
 
   get lastApprovedAgenda() {
     // From all agendas, get the last agenda that is not a design agenda (if any)
-    const agendas = this.args.reversedAgendas;
+    const agendas = this.args.reverseSortedAgendas;
     const lastApprovedAgenda = agendas
       .filter((agenda) => !agenda.get('isDesignAgenda'))
       .get('firstObject');
@@ -52,12 +52,12 @@ export default class AgendaActions extends Component {
   }
 
   get latestAgenda() {
-    return this.args.reversedAgendas.firstObject;
+    return this.args.reverseSortedAgendas.firstObject;
   }
 
   get isSessionClosable() {
     // The session is closable when there are more than 1 agendas OR when there is only 1 agenda that is not a design agenda
-    const agendas = this.args.reversedAgendas;
+    const agendas = this.args.reverseSortedAgendas;
     if (agendas.length > 1 || this.lastApprovedAgenda) {
       return true;
     }
@@ -211,6 +211,7 @@ export default class AgendaActions extends Component {
       );
       // After the agenda has been created, we want to update the agendaitems of activities
       await this.reloadAgendaitemsOfAgenda(newAgenda);
+      await this.reloadMeeting();
       this.toggleLoadingMessage(null);
       return this.router.transitionTo(
         'agenda.agendaitems',
@@ -270,6 +271,7 @@ export default class AgendaActions extends Component {
       // Data reloading
       await this.reloadAgenda(this.args.currentAgenda);
       await this.reloadAgendaitemsOfAgenda(this.args.currentAgenda);
+      await this.reloadMeeting();
       this.toggleLoadingMessage(null);
       return this.router.transitionTo(
         'agenda.agendaitems',

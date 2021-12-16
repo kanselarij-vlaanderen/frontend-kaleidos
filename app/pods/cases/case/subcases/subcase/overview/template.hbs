@@ -35,6 +35,10 @@
     @allowEditing={{this.currentSession.isEditor}}
     @onSave={{this.saveMandateeData}}
   />
+  <Utils::GovernmentAreas::GovernmentAreasPanel
+    @governmentAreas={{this.governmentAreas}}
+    @onSave={{this.saveGovernmentAreas}}
+  />
   <Agenda::Agendaitem::AgendaitemCase::AllSubcases
     @subcases={{this.allSubcases}}
   />

@@ -12,7 +12,7 @@
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <Auk::Button
-              @skin="tertiary" @icon="add"
+              @skin="tertiary" @icon="plus"
               {{on "click" this.openAddModal}}
               data-test-contact-persons-view-add>
               {{t "add-contact"}}
@@ -54,7 +54,7 @@
                 <td class="auk-u-text-align--right">
                   <Auk::Button
                     data-test-contact-persons-row-delete
-                    @layout="icon-only" @icon="delete" @skin="danger-borderless"
+                    @layout="icon-only" @icon="trash" @skin="danger-borderless"
                     {{on "click" (fn this.delete contactPerson)}} />
                 </td>
               </tr>

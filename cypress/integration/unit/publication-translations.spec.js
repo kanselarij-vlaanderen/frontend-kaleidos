@@ -265,7 +265,7 @@ context('Publications translation tests', () => {
     cy.get(publication.translationStatuspill.inProgress);
 
     // check if request contains correct information and if upload works
-    cy.get(publication.translationsRequests.request.title).contains(monthDutch);
+    cy.get(auk.accordionPanel.header.title).contains(monthDutch);
     cy.get(publication.translationsRequests.request.upload).should('not.be.disabled')
       .click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');

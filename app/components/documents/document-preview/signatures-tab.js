@@ -3,7 +3,7 @@ import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 
-export default class DocumentsDocumentPreviewDetailsDetailsTabComponent extends Component {
+export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent extends Component {
   @service currentSession;
   @service store;
   @service signatureService;

@@ -1,20 +1,14 @@
-<Auk::Panel::Body @noPadding={{true}}>
-  {{#if this.loadVersionsData.isIdle}}
-    <div class="auk-u-m-2 auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
-      <ul class="auk-document-cards">
-        {{#each this.sortedVersions as |version|}}
-          <Documents::DocumentPreview::VersionCard
-            @piece={{version}}
-            @documentContainer={{@documentContainer}}
-            @isHighlighted={{eq @currentVersion version}}
-            @onSelectVersion={{@onSelectVersion}}
-          />
-        {{/each}}
-      </ul>
-    </div>
-  {{else}}
-    <div class="auk-loader-wrapper">
-      <Auk::Loader />
-    </div>
-  {{/if}}
-</Auk::Panel::Body>
+<Utils::LoadableContent @isLoading={{this.loadVersionsData.isRunning}}>
+  <div class="auk-u-m-2">
+    <ul data-test-versions-tab-list class="auk-document-cards">
+      {{#each this.sortedVersions as |version|}}
+        <Documents::DocumentPreview::VersionCard
+          @piece={{version}}
+          @documentContainer={{@documentContainer}}
+          @isHighlighted={{eq @currentVersion version}}
+          @onSelectVersion={{@onSelectVersion}}
+        />
+      {{/each}}
+    </ul>
+  </div>
+</Utils::LoadableContent>

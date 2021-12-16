@@ -92,7 +92,7 @@
                     >
                       {{t "read"}}
                     </Auk::Button>
-                    <DropdownMenu @skin="borderless" @icon="more" as |menu|>
+                    <DropdownMenu @skin="borderless" @icon="three-dots" as |menu|>
                       {{#if this.signatureService.canUserPrepare}}
                         <menu.Item
                           @route="signatures.sign-flow.documents" @model={{row.signFlow.id}}

@@ -1,6 +1,6 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
-<div class="auk-form-group">
+{{! TODO: octane-refactor }}
+{{! template-lint-disable no-action }}
+<div data-test-utils-kind-selector class="auk-form-group">
   {{#if (not this.hideLabel)}}
     <Auk::Label>{{t "kind"}}</Auk::Label>
   {{/if}}
@@ -14,7 +14,8 @@
       @options={{this.options}}
       @selected={{this.selectedkind}}
       @onchange={{action "setAction"}}
-    as |option|>
+      as |option|
+    >
       {{option.label}}
     </PowerSelect>
   {{/if}}

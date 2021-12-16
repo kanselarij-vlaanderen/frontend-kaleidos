@@ -52,7 +52,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: fileName, fileType: 'Nota',
     };
     const files = [file];
-    cy.createCase(false, caseTitle);
+    cy.createCase(caseTitle);
     cy.addSubcase(typeNota, subcaseTitleShort, subcaseTitleLong);
     cy.openSubcase(0);
     cy.addDocumentsToSubcase(files);
@@ -72,12 +72,16 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.documentCard.card).eq(0)
       .find(document.documentCard.name.value)
       .contains(`${file.newFileName}BIS`);
-    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.documentCard.versionHistory)
+      .find(auk.accordion.header.button)
+      .click();
     cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').each(() => {
       cy.get(document.accessLevelPill.pill).contains('Intern Regering');
     });
-    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.documentCard.versionHistory)
+      .find(auk.accordion.header.button)
+      .click();
 
     // Cancel/save of document-type and access-level in editing view
     cy.get(route.agendaitemDocuments.batchEdit).click();
@@ -104,12 +108,16 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.documentDetailsRow.row).should('not.exist');
 
     // Verify nothing changed after cancel
-    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.documentCard.versionHistory)
+      .find(auk.accordion.header.button)
+      .click();
     cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').each(() => {
       cy.get(document.accessLevelPill.pill).contains('Intern Regering');
     });
-    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.documentCard.versionHistory)
+      .find(auk.accordion.header.button)
+      .click();
 
     cy.get(route.agendaitemDocuments.batchEdit).click();
     cy.get(document.documentDetailsRow.row).as('documentRows');
@@ -129,7 +137,9 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.documentDetailsRow.row).should('not.exist');
 
     // Verify only 1 piece is affected by change
-    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.documentCard.versionHistory)
+      .find(auk.accordion.header.button)
+      .click();
     cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').eq(0)
       .find(document.accessLevelPill.pill)
@@ -137,7 +147,9 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get('@pieces').eq(1)
       .find(document.accessLevelPill.pill)
       .contains('Intern Regering');
-    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.documentCard.versionHistory)
+      .find(auk.accordion.header.button)
+      .click();
 
     // Cancel/save name in document card
     const extraName = (' - Nota');
@@ -159,7 +171,9 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .contains(savedName);
 
     // Verify only 1 piece is affected by change
-    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.documentCard.versionHistory)
+      .find(auk.accordion.header.button)
+      .click();
     cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').eq(0)
       .find(document.accessLevelPill.pill)
@@ -167,7 +181,9 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get('@pieces').eq(1)
       .find(document.accessLevelPill.pill)
       .contains('Intern Regering');
-    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.documentCard.versionHistory)
+      .find(auk.accordion.header.button)
+      .click();
 
     // Cancel/save access-level in document card
     cy.get(document.accessLevelPill.pill).contains('Intern Overheid')
@@ -187,7 +203,9 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .click();
 
     // Verify only 1 piece is affected by change
-    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.documentCard.versionHistory)
+      .find(auk.accordion.header.button)
+      .click();
     cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').eq(0)
       .find(document.accessLevelPill.pill)
@@ -195,7 +213,9 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get('@pieces').eq(1)
       .find(document.accessLevelPill.pill)
       .contains('Intern Regering');
-    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.documentCard.versionHistory)
+      .find(auk.accordion.header.button)
+      .click();
 
     // delete the BIS piece
     cy.route('DELETE', '/files/**').as('deleteFile');
@@ -221,9 +241,13 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get('@documentName').contains(savedName)
       .should('not.exist');
     cy.get('@documentName').contains(file.newFileName);
-    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.documentCard.versionHistory)
+      .find(auk.accordion.header.button)
+      .click();
     cy.get(document.vlDocument.piece).should('have.length', 1);
-    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.documentCard.versionHistory)
+      .find(auk.accordion.header.button)
+      .click();
 
     // delete the last piece, should delete container
     cy.route('DELETE', '/document-containers/**').as('deleteContainer');
@@ -257,7 +281,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
     };
     const files = [file];
-    cy.createCase(false, caseTitle);
+    cy.createCase(caseTitle);
     cy.addSubcase(typeNota, subcaseTitleShort, subcaseTitleLong);
     cy.openSubcase(0);
     cy.addDocumentsToSubcase(files);
@@ -330,7 +354,9 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .find(document.documentCard.name.value)
       .contains(`${file.newFileName}QUATER`);
 
-    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.documentCard.versionHistory)
+      .find(auk.accordion.header.button)
+      .click();
     cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').eq(0)
       .find(document.vlDocument.name)
@@ -344,12 +370,16 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get('@pieces').eq(3)
       .find(document.vlDocument.name)
       .contains(file.newFileName);
-    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.documentCard.versionHistory)
+      .find(auk.accordion.header.button)
+      .click();
 
     cy.openCase(caseTitle);
     cy.openSubcase(0);
     cy.clickReverseTab('Documenten');
-    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.documentCard.versionHistory)
+      .find(auk.accordion.header.button)
+      .click();
     cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').eq(0)
       .find(document.vlDocument.name)
@@ -363,6 +393,152 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get('@pieces').eq(3)
       .find(document.vlDocument.name)
       .contains(file.newFileName);
-    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.documentCard.versionHistory)
+      .find(auk.accordion.header.button)
+      .click();
+  });
+  it('should test batch document edit', () => {
+    const agendaDate = Cypress.moment().add(2, 'weeks')
+      .day(1);
+    const subcaseTitle1 = 'Cypress test: cancelling a new piece';
+    const fileName2 = 'test pdf 2';
+    const filename3 = 'test pdfQUATER';
+    const accesLevelOption1 = 'Intern Regering';
+    const accesLevelOption3 = 'Publiek';
+    const typeOption = 'IF';
+    const typeOption2 = 'BVR';
+    const typeSearchOption = 'Advies AgO';
+    const file = {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: fileName2, fileType: 'Nota',
+    };
+    const files = [file];
+    cy.route('PATCH', '/pieces/**').as('patchPieces');
+    cy.route('PATCH', '/document-containers/**').as('patchdocumentContainers');
+    cy.route('GET', '/pieces**').as('getPieces');
+
+    cy.openAgendaForDate(agendaDate);
+    cy.openAgendaitemDocumentTab(subcaseTitle1, true);
+
+    // add docs for test
+    cy.get(route.agendaitemDocuments.add).click();
+    cy.addNewDocumentsInUploadModal(files, 'agendaitems');
+
+    // change fields separately and save
+    cy.get(route.agendaitemDocuments.batchEdit).click();
+    cy.wait(1000);
+    cy.get(document.documentDetailsRow.row).eq(0)
+      .find(document.documentDetailsRow.accessLevel)
+      .click();
+    cy.get(dependency.emberPowerSelect.option).eq(2)
+      .click();
+    cy.get(document.batchDocumentsDetails.save).click();
+    cy.wait('@patchPieces');
+    cy.wait('@patchdocumentContainers');
+    cy.wait('@getPieces');
+    cy.get(document.documentCard.name.value).contains(fileName2)
+      .parents(document.documentCard.card)
+      .find(document.accessLevelPill.pill)
+      .contains(accesLevelOption3);
+
+    cy.get(route.agendaitemDocuments.batchEdit).click();
+    cy.wait(1000);
+    cy.get(document.documentDetailsRow.row).eq(1)
+      .find(document.documentDetailsRow.type)
+      .click();
+    cy.wait(1000);
+    cy.get(dependency.emberPowerSelect.option).eq(2)
+      .click();
+    cy.route('PATCH', '/pieces/**').as('patchPieces2');
+    cy.route('PATCH', '/document-containers/**').as('patchdocumentContainers2');
+    cy.route('GET', '/pieces**').as('getPieces2');
+    cy.get(document.batchDocumentsDetails.save).click();
+    cy.wait('@patchPieces2');
+    cy.wait('@patchdocumentContainers2');
+    cy.wait('@getPieces2');
+    cy.get(document.documentCard.name.value).contains(filename3)
+      .parents(document.documentCard.card)
+      .find(document.documentCard.type)
+      .contains(typeOption);
+
+    // change all rows
+    cy.get(route.agendaitemDocuments.batchEdit).click();
+    cy.wait(1000);
+    cy.get(document.documentDetailsRow.row).eq(0)
+      .find(document.documentDetailsRow.type)
+      .click();
+    cy.wait(1000);
+    cy.get(dependency.emberPowerSelect.option).eq(1)
+      .click();
+    cy.get(document.documentDetailsRow.row).eq(1)
+      .find(document.documentDetailsRow.type)
+      .click();
+    cy.wait(1000);
+    cy.get(dependency.emberPowerSelect.option).eq(1)
+      .click();
+    cy.route('PATCH', '/pieces/**').as('patchPieces3');
+    cy.route('PATCH', '/document-containers/**').as('patchdocumentContainers3');
+    cy.route('GET', '/pieces**').as('getPieces3');
+    cy.get(document.batchDocumentsDetails.save).click();
+    cy.wait('@patchPieces3');
+    cy.wait('@patchdocumentContainers3');
+    cy.wait('@getPieces3');
+    cy.get(document.documentCard.name.value).contains(fileName2)
+      .parents(document.documentCard.card)
+      .find(document.documentCard.type)
+      .contains(typeOption2);
+    cy.get(document.documentCard.name.value).contains(filename3)
+      .parents(document.documentCard.card)
+      .find(document.documentCard.type)
+      .contains(typeOption2);
+
+    // check if cancel doesn't save data
+    cy.get(route.agendaitemDocuments.batchEdit).click();
+    cy.wait(1000);
+    cy.get(document.documentDetailsRow.row).eq(0)
+      .find(document.documentDetailsRow.accessLevel)
+      .click();
+    cy.get(dependency.emberPowerSelect.option).eq(0)
+      .click();
+    cy.get(document.documentDetailsRow.row).eq(1)
+      .find(document.documentDetailsRow.type)
+      .click();
+    cy.wait(1000);
+    cy.get(dependency.emberPowerSelect.option).eq(2)
+      .click();
+    cy.get(auk.modal.footer.cancel).click();
+    cy.wait(1000);
+
+    cy.get(document.documentCard.name.value).contains(fileName2)
+      .parents(document.documentCard.card)
+      .find(document.accessLevelPill.pill)
+      .should('not.contain', accesLevelOption1);
+    cy.get(document.documentCard.name.value).contains(filename3)
+      .parents(document.documentCard.card)
+      .find(document.documentCard.type)
+      .should('not.contain', typeOption);
+
+    // search document type not in first 20 choices (in dropdown)
+    cy.get(route.agendaitemDocuments.batchEdit).click();
+    cy.wait(1000);
+    cy.get(document.documentDetailsRow.row).eq(0)
+      .find(document.documentDetailsRow.type)
+      .click();
+    cy.wait(1000);
+    cy.get(dependency.emberPowerSelect.searchInput).type(typeSearchOption);
+    cy.wait(2000);
+    cy.get(dependency.emberPowerSelect.option).eq(0)
+      .contains(typeSearchOption)
+      .click();
+    cy.route('PATCH', '/pieces/**').as('patchPieces4');
+    cy.route('PATCH', '/document-containers/**').as('patchdocumentContainers4');
+    cy.route('GET', '/pieces**').as('getPieces4');
+    cy.get(document.batchDocumentsDetails.save).click();
+    cy.wait('@patchPieces4');
+    cy.wait('@patchdocumentContainers4');
+    cy.wait('@getPieces4');
+    cy.get(document.documentCard.name.value).contains(fileName2)
+      .parents(document.documentCard.card)
+      .find(document.documentCard.type)
+      .contains(typeSearchOption);
   });
 });
