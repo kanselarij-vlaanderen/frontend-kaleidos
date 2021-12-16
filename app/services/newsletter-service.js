@@ -10,97 +10,112 @@ export default class NewsletterService extends Service {
   @service currentSession;
 
   async createCampaign(agenda, meeting) {
-    try {
-      const result = await ajax({
-        method: 'POST',
-        url: `/newsletter/mailCampaign`,
-        data: {
-          agendaId: agenda.id,
-        }
-      });
-
-      const mailCampaign = this.store.createRecord('mail-campaign', {
-        campaignId: result.data.id,
-        campaignWebId: result.data.webId,
-        archiveUrl: result.data.archiveUrl,
-      });
-
-      await mailCampaign.save().then(async (savedCampaign) => {
-        const reloadedMeeting = await this.store.findRecord(
-          'meeting',
-          meeting.id,
-          {
-            reload: true,
-          }
-        );
-        reloadedMeeting.mailCampaign = savedCampaign;
-        await reloadedMeeting.save();
-        return mailCampaign;
-      });
-    } catch (error) {
-      console.warn('An exception ocurred: ', error);
+    const endpoint = `/newsletter/mail-campaign`;
+    const body = {
+      data: {
+        agendaId: agenda.id,
+      },
+    };
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+      },
+      body: JSON.stringify(body),
+    });
+    if (!response.ok) {
+      console.warn('An exception ocurred: ', response.error);
       this.toaster.error(
         this.intl.t('error-create-newsletter'),
         this.intl.t('warning-title')
       );
-      return null;
     }
+    const mailCampaign = this.store.createRecord('mail-campaign', {
+      campaignId: response.data.id,
+      campaignWebId: response.data.attributes.webId,
+      archiveUrl: response.data.attributes.archiveUrl,
+    });
+
+    await mailCampaign.save().then(async (savedCampaign) => {
+      const reloadedMeeting = await this.store.findRecord(
+        'meeting',
+        meeting.id,
+        {
+          reload: true,
+        }
+      );
+      reloadedMeeting.mailCampaign = savedCampaign;
+      await reloadedMeeting.save();
+      return mailCampaign;
+    });
   }
 
   async sendMailCampaign(id) {
-    try {
-      return await ajax({
-        method: 'POST',
-        url: `/newsletter/sendMailCampaign`,
-        data: {
-          id: id,
-        }
-      });
-    } catch (error) {
-      console.warn('An exception ocurred: ', error);
+    const endpoint = `/newsletter/send-mail-campaign`;
+    const body = {
+      data: {
+        id: id,
+      },
+    };
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+      },
+      body: JSON.stringify(body),
+    });
+    if (!response.ok) {
+      console.warn('An exception ocurred: ', response.error);
       this.toaster.error(
         this.intl.t('error-send-newsletter'),
         this.intl.t('warning-title')
       );
-      return null;
+    } else {
+      return response
     }
   }
 
   async sendToBelga(agendaId) {
-    try {
-      return  await ajax({
-        method: 'POST',
-        url: `/newsletter/belga`,
-        data: {
-          agendaId: agendaId,
-        }
-      });
-    } catch (error) {
-      console.warn('An exception ocurred: ', error);
+    const endpoint = `/newsletter/belga`;
+    const body = {
+      data: {
+        agendaId: agendaId,
+      },
+    };
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+      },
+      body: JSON.stringify(body),
+    });
+    if (!response.ok) {
+      console.warn('An exception ocurred: ', response.error);
       this.toaster.error(
         this.intl.t('error-send-newsletter'),
         this.intl.t('warning-title')
       );
-      return null;
+    } else {
+      return response
     }
   }
 
   async getMailCampaign(id) {
-    try {
-      return await ajax({
-        method: 'GET',
-        url: `/newsletter/mailCampaign`,
-        data: {
-          id: id,
-        }
-      });
-    } catch (error) {
-      console.warn('An exception ocurred: ', error);
+    const endpoint = `/newsletter/mail-campaign/${id}`;
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+      },
+    });
+    if (!response.ok) {
+      console.warn('An exception ocurred: ', response.error);
       this.toaster.error(
         this.intl.t('error-send-newsletter'),
         this.intl.t('warning-title')
       );
-      return null;
+    } else {
+      return response.data;
     }
   }
 
@@ -184,10 +199,7 @@ export default class NewsletterService extends Service {
     try {
       return await ajax({
         method: 'GET',
-        url: `/newsletter/belga`,
-        data: {
-          agendaId: agendaId,
-        }
+        url: `/newsletter/belga/${agendaId}`,
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);
@@ -199,31 +211,13 @@ export default class NewsletterService extends Service {
     try {
       const result = await ajax({
         method: 'DELETE',
-        url: `/newsletter/mailCampaign`,
-        data: {
-          id: id,
-        }
+        url: `/newsletter/mailCampaign/${id}`,
       });
       return result;
     } catch (error) {
       console.warn('An exception ocurred: ', error);
       this.toaster.error(
         this.intl.t('error-delete-newsletter'),
-        this.intl.t('warning-title')
-      );
-      return null;
-    }
-  }
-   async getMailCampaignContent(id) {
-    try {
-      return ajax({
-        method: 'GET',
-        url: `/newsletter/fetchTestMailCampaign/${id}`,
-      });
-    } catch (error) {
-      console.warn('An exception ocurred: ', error);
-      this.toaster.error(
-        this.intl.t('error-send-newsletter'),
         this.intl.t('warning-title')
       );
       return null;

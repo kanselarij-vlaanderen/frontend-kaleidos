@@ -121,9 +121,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     let validCampaign = true;
     let campaign;
     try {
-      campaign = await this.newsletterService.getMailCampaign(
-        this.mailCampaign.campaignId
-      );
+      campaign = await this.newsletterService.getMailCampaign(this.mailCampaign.campaignId);
     } catch {
       this.toaster.error(
         this.intl.t('error-fetch-newsletter'),
@@ -135,7 +133,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     const threshold = 10;
     if (
       Math.abs(
-        moment(campaign.body.create_time).diff(moment(Date.now()), 'minutes')
+        moment(campaign.attributes.createTime).diff(moment(Date.now()), 'minutes')
       ) > threshold
     ) {
       this.toaster.error(
