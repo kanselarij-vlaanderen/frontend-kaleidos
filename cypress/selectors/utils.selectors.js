@@ -41,6 +41,9 @@ const selectors = {
     viewDocument: '[data-test-utils-document-list-view-document]',
   },
 
+  // utils/kind-selector
+  kindSelector: '[data-test-utils-kind-selector]',
+
   // changes-alert
   changesAlert: {
     alert: '[data-test-changes-alert]',

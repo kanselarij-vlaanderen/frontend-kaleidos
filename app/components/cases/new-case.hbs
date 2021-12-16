@@ -1,5 +1,5 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
+{{! TODO: octane-refactor }}
+{{! template-lint-disable no-action }}
 <form onsubmit={{action "createCaseAction"}}>
   <Auk::Modal::Body>
     {{#if this.hasError}}
@@ -12,17 +12,10 @@
       />
     {{/if}}
 
-    <div class="auk-u-mb-4">
-      <div class="auk-form-group">
-        <Auk::Label for="case-confidential">{{t "confidential"}}</Auk::Label>
-        <Auk::Toggle
-          id="case-confidential"
-          @checked={{this.confidential}}
-          data-test-new-case-toggle-confidential={{true}}
-        />
-      </div>
-    </div>
-    <div class="auk-form-group {{this.getClassForShortTitle}}" data-test-new-case-shorttitle>
+    <div
+      class="auk-form-group {{this.getClassForShortTitle}}"
+      data-test-new-case-shorttitle
+    >
       <Auk::Label id="case-short-title">{{t "short-title-case"}}</Auk::Label>
       <Textarea
         class="auk-textarea"
@@ -36,10 +29,7 @@
     <Auk::Toolbar @size="large">
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
-          <Auk::ButtonLink
-            {{action "closeAction"}}
-            data-test-new-case-cancel
-          >
+          <Auk::ButtonLink {{action "closeAction"}} data-test-new-case-cancel>
             {{t "cancel"}}
           </Auk::ButtonLink>
         </Auk::Toolbar::Item>

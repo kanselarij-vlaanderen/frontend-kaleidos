@@ -1,24 +1,22 @@
 {{!-- TODO: octane-refactor --}}
 {{!-- template-lint-disable no-action --}}
 <div class="auk-o-flex auk-o-flex--justify-between auk-o-flex--align-baseline">
-  <h4 class="auk-h2 auk-u-text-family-serif auk-u-text-capitalize" data-test-newsletter-meeting-title>
+  <h2 class="auk-h2 auk-u-text-family-serif auk-u-text-capitalize" data-test-newsletter-meeting-title>
     {{t "newsletter-overview-pdf-name"}} - {{this.meeting.kindToShow.altLabel}} {{t "of"}} {{moment-format this.meeting.plannedStart "dddd DD-MM-YYYY"}}
-  </h4>
-  {{#if this.allowEditing}}
-    {{#if this.currentSession.isEditor}}
-      <div class="auk-u-ml-2">
-        <Auk::ButtonLink {{action "toggleIsEditing"}}>
-          {{t "edit"}}
-        </Auk::ButtonLink>
-      </div>
-    {{/if}}
+  </h2>
+  {{#if (and this.allowEditing this.currentSession.isEditor)}}
+    <div class="auk-u-ml-4">
+      <Auk::ButtonLink {{action "toggleIsEditing"}}>
+        {{t "edit"}}
+      </Auk::ButtonLink>
+    </div>
   {{/if}}
 </div>
 <div class="auk-u-mb-4 auk-o-flex auk-o-flex--justify-between">
   <div>
-    <h3 class="auk-h4 auk-u-m-0">
+    <h4 class="auk-h4 auk-u-m-0">
       {{t "date-publication"}}
-    </h3>
+    </h4>
     <p class="auk-u-italic">
       {{moment-format
         (await this.meeting.newsletter.publicationDate)
@@ -27,9 +25,9 @@
     </p>
   </div>
   <div>
-    <h3 class="auk-h4 auk-u-m-0">
+    <h4 class="auk-h4 auk-u-m-0">
       {{t "newsletter-doc-date"}}
-    </h3>
+    </h4>
     <p class="auk-u-italic">
       {{moment-format
         (await this.meeting.newsletter.publicationDocDate)
