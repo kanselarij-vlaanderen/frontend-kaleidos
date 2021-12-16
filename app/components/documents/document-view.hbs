@@ -1,6 +1,6 @@
 {{#if @file}}
   {{#if this.isPdfDocument}}
-    <PdfView @filePath={{@file.downloadLink}} />
+    <PdfView data-test-document-view-pdfview @filePath={{@file.downloadLink}} />
   {{else}}
     <div class="auk-u-p-4">
       <Auk::Alert

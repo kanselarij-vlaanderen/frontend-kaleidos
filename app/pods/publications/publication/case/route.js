@@ -6,11 +6,12 @@ export default class CaseRoute extends Route {
   }
 
   async afterModel(model) {
-    const case_ = await model.case;
+    this._case = await model.case;
+    await this._case.governmentAreas;
     const subcase = await this.store.queryOne('subcase', {
       filter: {
         case: {
-          [':id:']: case_.id,
+          [':id:']: this._case.id,
         },
         ':has:agenda-activities': 'yes',
       },
@@ -20,6 +21,7 @@ export default class CaseRoute extends Route {
 
   setupController(controller) {
     super.setupController(...arguments);
+    controller._case = this._case;
     controller.isViaCouncilOfMinisters = this.isViaCouncilOfMinisters;
   }
 }

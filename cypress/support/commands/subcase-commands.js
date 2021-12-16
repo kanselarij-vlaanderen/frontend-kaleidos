@@ -79,7 +79,6 @@ function openSubcase(index = 0) {
  * @param {string} [accessLevel] -Access level to set, must match exactly with possible options in dropdown
  * @param {string} [newShortTitle] - new short title for the subcase
  * @param {string} [newLongTitle] - new long title for the subcase
- * @param {boolean} [inNewsletter] - Will toggle "in newsletter" if true
  */
 function changeSubcaseAccessLevel(confidentialityChange, accessLevel, newShortTitle, newLongTitle) {
   cy.log('changeSubcaseAccessLevel');
@@ -129,7 +128,7 @@ function addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
   cy.route('GET', '/mandatees**http://themis.vlaanderen.be/id/bestuursorgaan/**').as('getMandatees');
 
   if (mandateeSearchText) {
-    cy.route('GET', `/mandatees**?filter**${mandateeSearchText.split(' ', 1)}**`).as('getFilteredMandatees');
+    cy.route('GET', `/mandatees**http://themis.vlaanderen.be/id/bestuursorgaan/**?filter**${mandateeSearchText.split(' ', 1)}**`).as('getFilteredMandatees');
   }
   cy.route('PATCH', '/subcases/*').as('patchSubcase');
   cy.get(mandatee.mandateePanelView.actions.edit).click();
@@ -194,16 +193,20 @@ function addAgendaitemMandatee(mandateeNumber, mandateeSearchText, mandateeTitle
  * @name proposeSubcaseForAgenda
  * @memberOf Cypress.Chainable#
  * @function
- * @param {date} agendaDate - The list index of the mandatee
+ * @param {date} agendaDate - The date of the agenda
+ * @param {String} numberRep - The specific numberRep for the agenda you want to use
  */
-function proposeSubcaseForAgenda(agendaDate) {
+function proposeSubcaseForAgenda(agendaDate, numberRep = '') {
   cy.log('proposeSubcaseForAgenda');
   cy.route('POST', '/agendaitems').as('createNewAgendaitem');
   cy.route('PATCH', '/agendas/*').as('patchAgenda');
   cy.route('PATCH', '/subcases/*').as('patchSubcase');
   cy.route('POST', '/agenda-activities').as('createAgendaActivity');
   const monthDutch = getTranslatedMonth(agendaDate.month());
-  const formattedDate = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
+  let formattedDate = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
+  if (numberRep) {
+    formattedDate = `${formattedDate} - ${numberRep}`;
+  }
 
   cy.get(cases.subcaseHeader.showProposedAgendas).click();
 

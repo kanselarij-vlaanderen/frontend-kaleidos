@@ -22,6 +22,8 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     this.submitter = undefined;
     if (this.subcase) {
       this.submitter = await this.subcase.requestedBy;
+      const case_ = await this.subcase.case;
+      await case_.governmentAreas;
     }
     const agendaItemTreatment = await model.hasMany('treatments').reload();
     const anyTreatment = agendaItemTreatment.firstObject;
@@ -38,6 +40,7 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     // modelFor('agenda') contains agenda and meeting object.
     controller.meeting = this.modelFor('agenda').meeting;
     controller.agenda = this.modelFor('agenda').agenda;
+    controller.reverseSortedAgendas = this.modelFor('agenda').reverseSortedAgendas;
     controller.agendaActivity = this.agendaActivity;
     controller.subcase = this.subcase;
     controller.newsletterInfo = this.newsletterInfo;

@@ -12,7 +12,7 @@
             <Auk::Button
               data-test-mandatees-panel-add
               @skin="tertiary"
-              @icon="add"
+              @icon="plus"
               {{on "click" this.openSelectMandateeModal}}
             >
               {{t "add-minister"}}
@@ -45,7 +45,7 @@
                   <Auk::Button
                     data-test-mandatees-panel-row-unlink
                     @layout="icon-only"
-                    @icon="delete"
+                    @icon="trash"
                     @skin="danger-borderless"
                     {{on "click" (fn this.removeMandatee mandatee)}}
                   />

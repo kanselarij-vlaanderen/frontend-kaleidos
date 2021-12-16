@@ -2,6 +2,7 @@ const selectors = {
   // component document-card
   documentCard: {
     card: '[data-test-document-card]',
+    type: '[data-test-document-card-type]',
     name: {
       value: '[data-test-document-card-name-value]',
       input: '[data-test-document-card-name-input]',
@@ -18,6 +19,7 @@ const selectors = {
   vlDocument: {
     piece: '[data-test-vl-document-piece]',
     name: '[data-test-vl-document-name]',
+    showPieceViewer: '[data-test-vl-document-showPieceViewer]',
     delete: '[data-test-vl-document-delete-piece]',
   },
 
@@ -53,6 +55,7 @@ const selectors = {
   // edit-document-row
   documentDetailsRow: {
     row: '[data-test-document-details-row]',
+    input: '[data-test-document-details-input]',
     type: '[data-test-document-details-row-type]',
     accessLevel: '[data-test-document-details-row-access-level]',
     undoDelete: '[data-test-document-details-row-undo-delete]',
@@ -96,5 +99,61 @@ const selectors = {
     // TODO-selector unused selector
     versionHistory: '[data-test-linked-document-link-version-history]',
   },
+
+  // document-preview-sidebar
+  documentPreviewSidebar: {
+    open: '[data-test-document-preview-sidebar-open]',
+    close: '[data-test-document-preview-sidebar-close]',
+    tabs: {
+      details: '[data-test-document-preview-sidebar-tab-details]',
+      versions: '[data-test-document-preview-sidebar-tab-versions]',
+      // TODO-selector unused selector
+      signatures: '[data-test-document-preview-sidebar-tab-signatures]',
+    },
+  },
+
+  // document-preview/details-tab
+  previewDetailsTab: {
+    cancel: '[data-test-details-tab-cancel]',
+    save: '[data-test-details-tab-save]',
+    edit: '[data-test-details-tab-edit]',
+    name: '[data-test-details-tab-name]',
+    documentType: '[data-test-details-tab-document-type]',
+    accessLevel: '[data-test-details-tab-access-level]',
+    confidentiality: '[data-test-details-tab-confidentiality]',
+    filetype: '[data-test-details-tab-filetype]',
+    editing: {
+      name: '[data-test-details-tab-edit-name]',
+      documentType: '[data-test-details-tab-edit-document-type]',
+      accessLevel: '[data-test-details-tab-edit-access-level]',
+      confidentiality: '[data-test-details-tab-edit-confidentiality]',
+    },
+  },
+
+  // document-preview/versions-tab
+  previewVersionsTab: {
+    // TODO-selector unused selector
+    list: '[data-test-versions-tab-list]',
+  },
+
+  // document-preview/version-card
+  previewVersionCard: {
+    container: '[data-test-version-card-container]',
+    details: '[data-test-version-card-details]',
+    name: '[data-test-version-card-name]',
+    open: '[data-test-version-card-open]',
+  },
+
+  // document-view
+  documentView: {
+    pdfView: '[data-test-document-view-pdfview]',
+    text: '.textLayer > span',
+  },
+
+  // document-badge
+  documentBadge: {
+    link: '[data-test-document-badge-link]',
+  },
+
 };
 export default selectors;

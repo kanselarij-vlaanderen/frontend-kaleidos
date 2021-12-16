@@ -13,7 +13,7 @@
           {{#if this.currentSession.isEditor}}
             <Auk::Button
               data-test-route-agenda---agendaitem-documents-batch-edit
-              @icon="edit"
+              @icon="pencil"
               {{on "click" this.openBatchDetails}}
             >
               {{t "edit"}}
@@ -59,7 +59,7 @@
   <div class="auk-u-mb-4">
     <Auk::Button
       @skin="tertiary"
-      @icon="add"
+      @icon="plus"
       {{on "click" this.openPieceUploadModal}}
       data-test-route-agenda---agendaitem-documents-add
     >

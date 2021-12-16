@@ -22,31 +22,10 @@ context('Settings overview page tests', () => {
     cy.get(settings.settings.manageUsers).should('be.visible');
     // settings in this view
     cy.get(settings.overview.manageEmails).should('be.visible');
-    cy.get(settings.overview.manageGovermentDomains).should('be.visible');
-    cy.get(settings.overview.manageGovermentFields).should('be.visible');
-    cy.get(settings.overview.manageIseCodes).should('be.visible');
     cy.get(settings.overview.manageAlerts).should('be.visible');
     cy.get(settings.overview.manageDocumentTypes).should('be.visible');
     cy.get(settings.overview.manageCaseTypes).should('be.visible');
     cy.get(settings.overview.manageSubcaseTypes).should('be.visible');
-  });
-
-  it('Should open the model behind manage goverment domains and close it', () => {
-    cy.openSettingsModal(settings.overview.manageGovermentDomains);
-    cy.get(utils.vlModal.container).should('contain', 'Beleidsdomeinen beheren');
-    cy.closeSettingsModal();
-  });
-
-  it('Should open the model behind manage goverment fields and close it', () => {
-    cy.openSettingsModal(settings.overview.manageGovermentFields);
-    cy.get(utils.vlModal.container).should('contain', 'Beleidsvelden beheren');
-    cy.closeSettingsModal();
-  });
-
-  it('Should open the model behind manage ISE codes and close it', () => {
-    cy.openSettingsModal(settings.overview.manageIseCodes);
-    cy.get(utils.vlModal.container).should('contain', 'Beheer ISE-codes');
-    cy.closeSettingsModal();
   });
 
   it('Should open the model behind manage alerts and close it', () => {
