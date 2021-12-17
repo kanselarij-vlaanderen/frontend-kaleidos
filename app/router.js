@@ -78,7 +78,7 @@ Router.map(function() {
         this.route('index', { path: '/alle-dossiers', });
         this.route('urgent', { path: '/dringend', });
         this.route('translation', { path: '/in-vertaling', });
-        this.route('proof', { path: '/in-proefdruk', });
+        this.route('proof', { path: '/in-drukproef', });
         this.route('proofread', { path: '/nalezen', });
         this.route('late', { path: '/te-laat-in-bs', });
       });
