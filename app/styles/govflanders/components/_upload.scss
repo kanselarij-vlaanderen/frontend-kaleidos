@@ -54,7 +54,7 @@ $upload-element-input-border-color: rgba($auk-color-border, 0.5);
     border: $upload-overlay-border;
     z-index: 10;
     opacity: $upload-overlay-opacity;
-    font-family: $flanders-family;
+    font-family: $auk-font-sans-family;
 
     &__text {
       position: absolute;
@@ -93,7 +93,7 @@ $upload-element-input-border-color: rgba($auk-color-border, 0.5);
     position: relative;
     padding: $upload-file-margin-bottom;
     z-index: 5;
-    font-family: $flanders-family;
+    font-family: $auk-font-sans-family;
     border-bottom: 1px solid $upload-element-input-border-color;
 
     &:last-child {
@@ -170,7 +170,7 @@ $upload-element-input-border-color: rgba($auk-color-border, 0.5);
   }
 
   &__element {
-    font-family: $flanders-family;
+    font-family: $auk-font-sans-family;
     border:  $upload-element-border;
     text-align: center;
     position: relative;

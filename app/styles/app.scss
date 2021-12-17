@@ -12,22 +12,12 @@
 @import '_s-colors';
 @import '_s-shadows';
 @import '_s-z-index';
-
-$icon-font-location: '/fonts/'; // overrides the default location for flanders-icons font files
-
-// Components (loaded locally to easily read source)
-@import 'govflanders/core/_setting.scss';
-@import 'govflanders/core/_tool.scss';
-@import 'govflanders/core/_generic.scss';
+@import '_g-font';
 
 // Components (loaded locally to easily read source)
 @import 'govflanders/components/_alert';
 @import 'govflanders/components/_datepicker';
 @import 'govflanders/components/_upload';
-
-// Interdependent components (loaded from node_modules)
-// @import 'node_modules/@govflanders/vl-ui-select/src/scss/_select';
-// @import 'node_modules/@govflanders/vl-ui-select/src/scss/_js-select';
 
 /* Unofficial code
 ========================================================================== */
