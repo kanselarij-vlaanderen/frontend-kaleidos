@@ -8,11 +8,11 @@ export default class NewsletterService extends Service {
   @service formatter;
   @service currentSession;
 
-  async createCampaign(agenda, meeting) {
+  async createCampaign( meeting) {
     const endpoint = `/newsletter/mail-campaign`;
     const body = {
       data: {
-        agendaId: agenda.id,
+        meetingId: meeting.id,
       },
     };
     const response = await fetch(endpoint, {
@@ -23,16 +23,17 @@ export default class NewsletterService extends Service {
       body: JSON.stringify(body),
     });
     if (!response.ok) {
-      console.warn('An exception ocurred: ', response.error);
       this.toaster.error(
         this.intl.t('error-create-newsletter'),
         this.intl.t('warning-title')
       );
+      throw new Error('An exception ocurred: ' + response.error);
     }
+    const result = await response.json();
     const mailCampaign = this.store.createRecord('mail-campaign', {
-      campaignId: response.data.id,
-      campaignWebId: response.data.attributes.webId,
-      archiveUrl: response.data.attributes.archiveUrl,
+      campaignId: result.data.id,
+      campaignWebId: result.data.attributes.webId,
+      archiveUrl: result.data.attributes.archiveUrl,
     });
 
     await mailCampaign.save().then(async (savedCampaign) => {
@@ -64,21 +65,22 @@ export default class NewsletterService extends Service {
       body: JSON.stringify(body),
     });
     if (!response.ok) {
-      console.warn('An exception ocurred: ', response.error);
       this.toaster.error(
         this.intl.t('error-send-newsletter'),
         this.intl.t('warning-title')
       );
+      throw new Error('An exception ocurred: ' + response.error);
     } else {
-      return response;
+      const result = await response.json();
+      return result;
     }
   }
 
-  async sendToBelga(agendaId) {
+  async sendToBelga(meetingId) {
     const endpoint = `/newsletter/belga`;
     const body = {
       data: {
-        agendaId: agendaId,
+        meetingId: meetingId,
       },
     };
     const response = await fetch(endpoint, {
@@ -89,13 +91,14 @@ export default class NewsletterService extends Service {
       body: JSON.stringify(body),
     });
     if (!response.ok) {
-      console.warn('An exception ocurred: ', response.error);
       this.toaster.error(
         this.intl.t('error-send-newsletter'),
         this.intl.t('warning-title')
       );
+      throw new Error('An exception ocurred: ' + response.error);
     } else {
-      return response;
+      const result = await response.json();
+      return result;
     }
   }
 
@@ -108,13 +111,14 @@ export default class NewsletterService extends Service {
       },
     });
     if (!response.ok) {
-      console.warn('An exception ocurred: ', response.error);
       this.toaster.error(
         this.intl.t('error-send-newsletter'),
         this.intl.t('warning-title')
       );
+      throw new Error('An exception ocurred: ' + response.error);
     } else {
-      return response.data;
+      const result = await response.json();
+      return result.data;
     }
   }
 
@@ -194,11 +198,11 @@ export default class NewsletterService extends Service {
 
   // TODO These are for developers use - in comments for follow up
   /*
-  downloadBelgaXML(agendaId) {
+  downloadBelgaXML(meetingId) {
     try {
       return await ajax({
         method: 'GET',
-        url: `/newsletter/belga/${agendaId}`,
+        url: `/newsletter/belga/${meetingId}`,
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);

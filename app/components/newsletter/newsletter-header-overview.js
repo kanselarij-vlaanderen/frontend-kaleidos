@@ -6,7 +6,6 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 /**
  * @argument {Meeting} meeting
- * @argument {Agenda} agenda
  */
 export default class NewsletterHeaderOverviewComponent extends Component {
   @service intl;
@@ -71,6 +70,8 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
     if (this.mailCampaign && this.mailCampaign.isSent) {
       this.toaster.error(this.intl.t('error-already-sent-newsletter'));
+      this.isLoading = false;
+      this.toggleVerifyingPublishMail();
       return null;
     } else {
       if (await this.validateMailCampaign()) {
@@ -105,6 +106,8 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
     if (this.mailCampaign && this.mailCampaign.isSent) {
       this.toaster.error(this.intl.t('error-already-sent-newsletter'));
+      this.isLoading = false;
+      this.toggleVerifyingPublishAll();
       return null;
     } else {
       if (await this.validateMailCampaign()) {
@@ -155,7 +158,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   async publishNewsletterToBelga() {
     try {
-      await this.newsletterService.sendToBelga(this.args.agenda.id);
+      await this.newsletterService.sendToBelga(this.args.meeting.id);
       this.toaster.success(this.intl.t('success-publish-newsletter-to-belga'));
     } catch {
       this.toaster.error(
@@ -187,7 +190,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   async createMailCampaign() {
     try {
       this.mailCampaign = await this.newsletterService.createCampaign(
-        this.args.agenda,
         this.args.meeting
       );
     } catch {
@@ -225,7 +227,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     }
 
     await this.newsletterService
-      .downloadBelgaXML(this.args.agenda.id)
+      .downloadBelgaXML(this.args.mee.id)
       .catch(() => {
         this.toaster.error(
           this.intl.t('error-download-XML'),
