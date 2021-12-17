@@ -5,7 +5,6 @@
     @options={{this.agendas}}
     @selected={{this.selectedAgenda}}
     @disabled={{this.readOnly}}
-    @searchEnabled={{false}}
     @placeholder={{this.placeholder}}
     @onChange={{action "selectModel"}}
     as |model|
@@ -15,7 +14,6 @@
 {{else}}
   <PowerSelectMultiple
     @options={{this.agendas}}
-    @searchEnabled={{false}}
     @selected={{this.selectedAgenda}}
     @disabled={{this.readOnly}}
     @placeholder={{this.placeholder}}

@@ -10,11 +10,11 @@
     @placeholder={{this.placeholder}}
     @loadingMessage={{this.loadingMessage}}
     @noMatchesMessage={{this.noMatchesMessage}}
+    @searchEnabled={{this.searchEnabled}}
     @searchMessage={{null}}
     @search={{perform this.searchTask}}
     @oninput={{action "resetValueIfEmpty"}}
     @onChange={{action "selectModel"}}
-    @searchEnabled={{not this.hideSearch}}
   as |model|>
     {{await (model-property-to-show model this.propertyToShow)}}
   </PowerSelect>
@@ -26,6 +26,7 @@
     @searchField={{this.searchField}}
     @placeholder={{this.placeholder}}
     @loadingMessage={{this.loadingMessage}}
+    @searchEnabled={{this.searchEnabled}}
     @searchMessage={{null}}
     @noMatchesMessage={{this.noMatchesMessage}}
     @closeOnSelect={{false}}

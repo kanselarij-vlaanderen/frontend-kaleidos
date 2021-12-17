@@ -119,7 +119,6 @@
             <Auk::Label for="blockInput">{{t "regulation-type"}}</Auk::Label>
             <PowerSelect
               @options={{this.regulationTypes}}
-              @searchEnabled={{false}}
               @onChange={{this.setRegulationType}}
               @selected={{@publicationFlow.regulationType}}
               as |regulationType|
@@ -140,7 +139,6 @@
             </Auk::Label>
             <PowerSelect
               @options={{this.publicationModes}}
-              @searchEnabled={{false}}
               @onChange={{this.setPublicationMode}}
               @selected={{this.publicationFlow.mode}}
               as |mode|

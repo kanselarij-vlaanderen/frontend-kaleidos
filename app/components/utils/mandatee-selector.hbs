@@ -5,6 +5,7 @@
       @selected={{await @selectedMandatees}}
       @disabled={{@readOnly}}
       @closeOnSelect={{false}}
+      @searchEnabled={{true}}
       @search={{perform this.searchTask}}
       @oninput={{this.resetMandateeOptionsIfEmpty}}
       @onChange={{@chooseMandatee}}
@@ -23,6 +24,7 @@
       @options={{this.mandateeOptions}}
       @selected={{await @selectedMandatees}}
       @disabled={{@readOnly}}
+      @searchEnabled={{true}}
       @search={{perform this.searchTask}}
       @oninput={{this.resetMandateeOptionsIfEmpty}}
       @onChange={{@chooseMandatee}}

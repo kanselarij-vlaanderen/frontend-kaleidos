@@ -1,7 +1,6 @@
 {{#if this.loadDecisionResultCodes.isIdle}}
   <div class="decision-result-select">
     <PowerSelect
-      @searchEnabled={{false}}
       @placeholder={{t "select-a-status"}}
       @options={{this.decisionResultCodes}}
       @selected={{@selected}}
