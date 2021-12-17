@@ -21,18 +21,11 @@ export default [
     sortKey: 'identification.structured-identifier.local-identifier,-created', // Create sort key
   },
   {
-    keyName: 'keyword',
-    translationKey: 'publications-table-keyword',
-    translationKeySmall: 'publications-table-keyword-small',
-    sortKey: 'short-title',
-    showByDefault: true,
-  },
-  {
     keyName: 'shortTitle',
     translationKey: 'publications-table-short-title',
     translationKeySmall: 'publications-table-short-title-small',
     sortKey: 'short-title',
-    showByDefault: false,
+    showByDefault: true,
   },
   {
     keyName: 'comment',

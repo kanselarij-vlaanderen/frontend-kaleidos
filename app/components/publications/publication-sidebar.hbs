@@ -95,21 +95,6 @@
           }}
         />
 
-        {{! Keyword }}
-        <div class="auk-form-group">
-          <Auk::Label>
-            <div class="auk-o-flex auk-o-flex--vertical-center">
-              <span class="auk-u-mr">{{t "keyword-title"}}</span>
-            </div>
-          </Auk::Label>
-          <Auk::Textarea
-            data-test-publication-sidebar-keyword
-            rows="4"
-            type="text"
-            value=""
-          />
-        </div>
-
         {{#if
           (or
             this.publicationStatus.isWithdrawn this.publicationStatus.isPaused
