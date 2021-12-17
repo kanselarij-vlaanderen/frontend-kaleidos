@@ -1,5 +1,4 @@
 import Service, { inject as service } from '@ember/service';
-import { ajax } from 'frontend-kaleidos/utils/ajax';
 import moment from 'moment';
 
 export default class NewsletterService extends Service {
@@ -71,7 +70,7 @@ export default class NewsletterService extends Service {
         this.intl.t('warning-title')
       );
     } else {
-      return response
+      return response;
     }
   }
 
@@ -96,7 +95,7 @@ export default class NewsletterService extends Service {
         this.intl.t('warning-title')
       );
     } else {
-      return response
+      return response;
     }
   }
 
@@ -221,6 +220,24 @@ export default class NewsletterService extends Service {
         this.intl.t('warning-title')
       );
       return null;
+    }
+  }
+  async getMailCampaignContent(id) {
+    const endpoint = `/newsletter/mail-campaign-content/${id}`;
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+      },
+    });
+    if (!response.ok) {
+      console.warn('An exception ocurred: ', response.error);
+      this.toaster.error(
+        this.intl.t('error-send-newsletter'),
+        this.intl.t('warning-title')
+      );
+    } else {
+      return response.data.attributes;
     }
   }
   */

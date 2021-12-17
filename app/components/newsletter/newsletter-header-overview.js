@@ -118,7 +118,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   }
 
   async validateMailCampaign() {
-    let validCampaign = true;
     let campaign;
     try {
       campaign = await this.newsletterService.getMailCampaign(this.mailCampaign.campaignId);
@@ -127,7 +126,9 @@ export default class NewsletterHeaderOverviewComponent extends Component {
         this.intl.t('error-fetch-newsletter'),
         this.intl.t('warning-title')
       );
-      validCampaign = false;
+      this.isVerifying = false;
+      this.isLoading = false;
+      return false;
     }
 
     const threshold = 10;
@@ -143,11 +144,13 @@ export default class NewsletterHeaderOverviewComponent extends Component {
           timeOut: 600000,
         }
       );
-      validCampaign = false;
+      this.isVerifying = false;
+      this.isLoading = false;
+      return  false;
     }
     this.isVerifying = false;
     this.isLoading = false;
-    return validCampaign;
+    return true;
   }
 
   async publishNewsletterToBelga() {
@@ -239,7 +242,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       await this.createMailCampaign();
     }
 
-    const html = await this.newsletterService
+    const campaign = await this.newsletterService
       .getMailCampaignContent(this.mailCampaign.campaignId)
       .catch(() => {
         this.toaster.error(
@@ -247,7 +250,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
           this.intl.t('warning-title')
         );
       });
-    this.newsletterHTML = html.body;
+    this.newsletterHTML = campaign.html;
     this.loadingNewsletter = false;
   }
   @action
