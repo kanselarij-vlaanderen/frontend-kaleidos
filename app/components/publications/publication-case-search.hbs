@@ -3,7 +3,7 @@
     data-test-publication-case-search-input
     @block={{true}}
     @icon="search"
-    placeholder={{t "search-placeholder"}}
+    placeholder="Filter op Numac of Pubnr."
     value={{this.searchText}}
     {{on "input" (perform this.debouncedSearch)}}
     {{on "focusout" this.hideResults}}
@@ -14,7 +14,7 @@
     @enter={{perform this.search}}
     autocomplete="off"
   />
-  <Auk::SearchResultsList
+  {{!-- <Auk::SearchResultsList
     data-test-publication-case-search-result-list
     @isVisible={{this.isShowingResults}}
     @hasNoResults={{eq this.searchResults.length 0}}
@@ -40,5 +40,5 @@
     {{else}}
       {{t "no-results-found"}}
     {{/each}}
-  </Auk::SearchResultsList>
+  </Auk::SearchResultsList> --}}
 </div>
