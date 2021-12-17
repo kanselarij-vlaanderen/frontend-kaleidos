@@ -10,7 +10,6 @@ const selectors = {
     shorttitle: '[data-test-new-case-shorttitle]',
     form: '[data-test-new-case-form]',
     shorttitleError: '[data-test-new-case-shorttitle-error]',
-    toggleConfidential: '[data-test-new-case-toggle-confidential]',
     cancel: '[data-test-new-case-cancel]',
     save: '[data-test-new-case-save]',
   },

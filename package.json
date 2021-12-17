@@ -1,6 +1,6 @@
 {
   "name": "frontend-kaleidos",
-  "version": "5.21.3",
+  "version": "5.21.5",
   "private": true,
   "description": "Small description for frontend-kaleidos goes here",
   "repository": "",
@@ -44,7 +44,7 @@
     "@ember/test-helpers": "^2.6.0",
     "@glimmer/component": "^1.0.4",
     "@glimmer/tracking": "^1.0.4",
-    "@kanselarij-vlaanderen/au-kaleidos-css": "2.0.1",
+    "@kanselarij-vlaanderen/au-kaleidos-css": "2.0.3",
     "@kanselarij-vlaanderen/au-kaleidos-icons": "2.0.0",
     "@lblod/ember-acmidm-login": "~1.3.0",
     "@lblod/ember-mock-login": "^0.5.0-beta",
@@ -67,7 +67,7 @@
     "ember-cli": "~3.24.0",
     "ember-cli-app-version": "^4.0.0",
     "ember-cli-autoprefixer": "^1.0.0",
-    "ember-cli-babel": "^7.23.0",
+    "ember-cli-babel": "7.26.6",
     "ember-cli-cjs-transform": "^2.0.0",
     "ember-cli-dependency-checker": "^3.2.0",
     "ember-cli-dependency-lint": "^1.1.3",
@@ -144,7 +144,6 @@
     "sanitize-filename": "^1.6.3",
     "sass": "^1.23.7",
     "typescript": "^3.9.7",
-    "har-validator": "5.1.5",
     "webpack": "^5.64.3"
   },
   "engines": {

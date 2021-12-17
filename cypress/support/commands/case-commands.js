@@ -14,19 +14,15 @@ import route from '../../selectors/route.selectors';
  * @name createCase
  * @memberOf Cypress.Chainable#
  * @function
- * @param {boolean} confidential Weather confidential is to be set to true
  * @param {String} shortTitle The title of the case
  * @returns {Promise<String>} the id of the created case
  */
-function createCase(confidential, shortTitle) {
+function createCase(shortTitle) {
   cy.log('createCase');
   cy.route('POST', '/cases').as('createNewCase');
   cy.visit('/dossiers');
 
   cy.get(cases.casesHeader.addCase).click();
-  if (confidential) {
-    cy.get(cases.newCase.toggleConfidential).click();
-  }
   cy.get(cases.newCase.shorttitle).type(shortTitle);
   cy.get(cases.newCase.save).click();
 
@@ -106,7 +102,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
       .click();
     cy.get(dependency.emberPowerSelect.option).should('not.be.visible');
   }
-
+  cy.get(auk.loader).should('not.exist');
   cy.get(cases.newSubcase.save).click();
 
   let subcaseId;

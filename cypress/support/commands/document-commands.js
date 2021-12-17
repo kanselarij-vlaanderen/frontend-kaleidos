@@ -99,7 +99,7 @@ function addNewDocumentsInUploadModal(files, model) {
  * @param {String} oldFileName - The relative path to the file in the cypress/fixtures folder excluding the fileName
  * @param {String} file - The name of the file without the extension
  */
-function addNewPiece(oldFileName, file, modelToPatch) {
+function addNewPiece(oldFileName, file, modelToPatch, hasSubcase = true) {
   cy.log('addNewPiece');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.route('POST', 'pieces').as(`createNewPiece_${randomInt}`);
@@ -134,10 +134,15 @@ function addNewPiece(oldFileName, file, modelToPatch) {
   // for agendaitems and subcases both are patched, not waiting causes flaky tests
   if (modelToPatch) {
     if (modelToPatch === 'agendaitems') {
-      // we always POST submission activity here
-      cy.wait('@createNewSubmissionActivity')
-        .wait('@patchAgendaitem')
-        .wait('@putAgendaitemDocuments');
+      if (hasSubcase) {
+        // we always POST submission activity here
+        cy.wait('@createNewSubmissionActivity')
+          .wait('@patchAgendaitem')
+          .wait('@putAgendaitemDocuments');
+      } else {
+        cy.wait('@patchAgendaitem')
+          .wait('@putAgendaitemDocuments');
+      }
       // .wait('@getSubmissionActivity', {
       //   timeout: 12000,
       // });
@@ -230,9 +235,9 @@ function addNewPieceToMeeting(oldFileName, file) {
  * @param {string} agendaitemTitle
  * @param {boolean} alreadyHasDocs
  */
-function openAgendaitemDocumentTab(agendaitemTitle, alreadyHasDocs = false) {
+function openAgendaitemDocumentTab(agendaitemTitle, alreadyHasDocs = false, isAdmin = true) {
   cy.log('openAgendaitemDocumentTab');
-  cy.openDetailOfAgendaitem(agendaitemTitle);
+  cy.openDetailOfAgendaitem(agendaitemTitle, isAdmin);
   cy.get(agenda.agendaitemNav.documentsTab)
     .click()
     .wait(2000); // Access-levels GET occured earlier, general wait instead
@@ -260,6 +265,23 @@ function addDocumentsToAgendaitem(agendaitemTitle, files) {
 }
 
 /**
+ * @description Add a new document to an agendaitem with isApproval = true.
+ * @name addDocumentsToApprovalItem
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {string} agendaitemTitle
+ * @param {string} files
+ */
+function addDocumentsToApprovalItem(agendaitemTitle, files) {
+  cy.log('addDocumentsToApprovalItem');
+  openAgendaitemDocumentTab(agendaitemTitle, false, false);
+
+  // Open the modal, add files
+  cy.get(route.agendaitemDocuments.add).click();
+  addNewDocumentsInUploadModal(files, 'agendaitems');
+}
+
+/**
  * @description Add a new piece to an agendaitem
  * @name addNewPieceToAgendaitem
  * @memberOf Cypress.Chainable#
@@ -272,6 +294,21 @@ function addNewPieceToAgendaitem(agendaitemTitle, oldFileName, file) {
   cy.log('addNewPieceToAgendaitem');
   openAgendaitemDocumentTab(agendaitemTitle, true);
   return addNewPiece(oldFileName, file, 'agendaitems');
+}
+
+/**
+ * @description Add a new piece to an agendaitem
+ * @name addNewPieceToApprovalItem
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {string} agendaitemTitle
+ * @param {string} oldFileName
+ * @param {string} file
+ */
+function addNewPieceToApprovalItem(agendaitemTitle, oldFileName, file) {
+  cy.log('addNewPieceToApprovalItem');
+  openAgendaitemDocumentTab(agendaitemTitle, true, false);
+  return addNewPiece(oldFileName, file, 'agendaitems', false);
 }
 
 /**
@@ -446,7 +483,9 @@ function deleteSinglePiece(fileName, indexToDelete) {
   cy.get(document.documentCard.name.value).contains(fileName)
     .parents(document.documentCard.card)
     .within(() => {
-      cy.get(document.documentCard.versionHistory).click();
+      cy.get(document.documentCard.versionHistory)
+        .find(auk.accordion.header.button)
+        .click();
       cy.get(document.vlDocument.piece).eq(indexToDelete)
         .find(document.vlDocument.delete)
         .click();
@@ -477,7 +516,9 @@ function isPieceDeletable(fileName, indexToCheck, shouldBeDeletable) {
     .contains(fileName)
     .parents(document.documentCard.card)
     .within(() => {
-      cy.get(document.documentCard.versionHistory).click();
+      cy.get(document.documentCard.versionHistory)
+        .find(auk.accordion.header.button)
+        .click();
       cy.get(document.vlDocument.piece).eq(indexToCheck)
         .within(() => {
           if (shouldBeDeletable) {
@@ -499,9 +540,11 @@ Cypress.Commands.add('addDocumentsToSubcase', addDocumentsToSubcase); // same co
 Cypress.Commands.add('addDocumentsToMeeting', addDocumentsToMeeting);
 Cypress.Commands.add('addDocumentToTreatment', addDocumentToTreatment);
 Cypress.Commands.add('addDocumentsToAgendaitem', addDocumentsToAgendaitem);
+Cypress.Commands.add('addDocumentsToApprovalItem', addDocumentsToApprovalItem);
 Cypress.Commands.add('addNewPiece', addNewPiece);
 Cypress.Commands.add('addNewPieceToMeeting', addNewPieceToMeeting);
 Cypress.Commands.add('addNewPieceToAgendaitem', addNewPieceToAgendaitem);
+Cypress.Commands.add('addNewPieceToApprovalItem', addNewPieceToApprovalItem);
 Cypress.Commands.add('addNewPieceToSubcase', addNewPieceToSubcase);
 Cypress.Commands.add('addNewPieceToSignedDocumentContainer', addNewPieceToSignedDocumentContainer);
 Cypress.Commands.add('uploadFile', uploadFile);

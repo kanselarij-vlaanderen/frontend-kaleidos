@@ -4,18 +4,15 @@ import { action } from '@ember/object';
 import { task } from 'ember-concurrency-decorators';
 
 class DomainSelection {
-  constructor(domain, availableFields, selectedFields) {
+  constructor(domain, isSelected, availableFields, selectedFields) {
     this.domain = domain;
+    this.isSelected = isSelected;
     this.availableFields = availableFields;
     this.selectedFields = selectedFields;
   }
-
-  get isSelected() {
-    return this.availableFields.every((field) => this.selectedFields.includes(field));
-  }
 }
 
-export default class DomainFieldIseDomainsFieldsSelectorFormComponent extends Component {
+export default class GovernmentAreaSelectorForm extends Component {
   /**
    * Since fields are children of domains, this component only takes fields as arguments, and calculates the required domains internally
    * @argument availableFields: All fields that will be listed as options to be checked
@@ -34,6 +31,10 @@ export default class DomainFieldIseDomainsFieldsSelectorFormComponent extends Co
     return this.args.selectedFields || [];
   }
 
+  get selectedDomains() {
+    return this.args.selectedDomains || [];
+  }
+
   constructor() {
     super(...arguments);
     this.calculateDomainSelections.perform();
@@ -41,42 +42,41 @@ export default class DomainFieldIseDomainsFieldsSelectorFormComponent extends Co
 
   @task
   *calculateDomainSelections() {
-    const domainsFromFields = yield Promise.all(this.availableFields.map((field) => field.domain));
+    const domainsFromFields = yield Promise.all(this.availableFields.map((field) => field.broader));
     const uniqueDomains = [...new Set(domainsFromFields)].sortBy('label');
     const domainSelections = [];
     for (const domain of uniqueDomains) {
       // Filter logic is applied in 2 steps, such that promises to fetch the domains can be executed using Promise.all
       // Step 1: create an array of domains, one for each selected field, using the same order as this.selectedFields
       // Step 2: use the array of step 1 to verify whether the domain fetched for the field is the current domain
-      const selectedFieldsDomains = yield Promise.all(this.selectedFields.map((field) => field.domain));
+      const selectedFieldsDomains = yield Promise.all(this.selectedFields.map((field) => field.broader));
       // eslint-disable-next-line no-unused-vars, id-length
       const selectedFieldsForDomain = this.selectedFields.filter((_, index) => selectedFieldsDomains[index] === domain);
 
       // Similar filter logic applied in 2 steps as above for the available fields
-      const availableFieldsDomains = yield Promise.all(this.availableFields.map((field) => field.domain));
+      const availableFieldsDomains = yield Promise.all(this.availableFields.map((field) => field.broader));
       // eslint-disable-next-line no-unused-vars, id-length
       const availableFieldsForDomain = this.availableFields.filter((_, index) => availableFieldsDomains[index] === domain);
+      const isSelected = this.selectedDomains.includes(domain);
 
-      domainSelections.push(new DomainSelection(domain, availableFieldsForDomain, selectedFieldsForDomain));
+      domainSelections.push(new DomainSelection(domain, isSelected, availableFieldsForDomain, selectedFieldsForDomain));
     }
     this.domainSelections = domainSelections;
   }
 
   @action
   toggleDomainSelection(domainSelection, event) {
-    const flag = event.target.checked;
-    const domainFields = domainSelection.availableFields;
-    const fieldsToToggle = domainFields.filter((domainField) => domainSelection.selectedFields.includes(domainField) !== flag);
-    const handler = flag ? this.args.onSelectFields : this.args.onUnSelectFields;
+    const checked = event.target.checked;
+    const handler = checked ? this.args.onSelectDomains : this.args.onUnSelectDomains;
     if (handler) {
-      handler(fieldsToToggle);
+      handler([domainSelection.domain]);
     }
   }
 
   @action
   toggleFieldSelection(field, event) {
-    const flag = event.target.checked;
-    const handler = flag ? this.args.onSelectFields : this.args.onUnSelectFields;
+    const checked = event.target.checked;
+    const handler = checked ? this.args.onSelectFields : this.args.onUnSelectFields;
     if (handler) {
       handler([field]);
     }

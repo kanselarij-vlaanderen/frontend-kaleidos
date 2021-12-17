@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { action, set } from '@ember/object';
 
 export default class AgendaRoute extends Route {
-  @service sessionService;
   @service('session') simpleAuthSession;
   @service agendaService;
 
@@ -34,13 +33,10 @@ export default class AgendaRoute extends Route {
   }
 
   async afterModel(model) {
-    await this.loadChangesToAgenda(model.meeting, model.agenda);
+    await this.loadChangesToAgenda(model.agenda);
   }
 
-  async loadChangesToAgenda(meeting, agenda) {
-    // TODO KAS-2448 KAS-2449 stop setting/using the session and agenda
-    set(this.sessionService, 'currentSession', meeting);
-    set(this.sessionService, 'currentAgenda', agenda);
+  async loadChangesToAgenda(agenda) {
     set(this.agendaService, 'addedAgendaitems', []);
     set(this.agendaService, 'addedPieces', []);
     const previousAgenda = await agenda.previousVersion;
