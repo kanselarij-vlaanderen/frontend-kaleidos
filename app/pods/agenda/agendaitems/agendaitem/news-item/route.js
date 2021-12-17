@@ -6,6 +6,7 @@ import { warn } from '@ember/debug';
 
 export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
   @service agendaService;
+  @service store;
 
   async beforeModel() {
     // Because NewsletterInfo is connected via treatment:

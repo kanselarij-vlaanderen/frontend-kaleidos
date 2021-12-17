@@ -1,6 +1,7 @@
 /* eslint-disable no-dupe-class-members */
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 // row object in order to be able to call properties
@@ -40,6 +41,7 @@ export class Row {
 }
 
 export default class PublicationsPublicationProofsRequestsController extends Controller {
+  @service store;
   @tracked publicationFlow;
   @tracked publicationSubcase;
   @tracked isUploadModalOpen;

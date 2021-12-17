@@ -18,6 +18,7 @@ import { isEmpty } from '@ember/utils';
 export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service currentSession;
   @service intl;
+  @service store;
   @service agendaService;
   @service signatureService;
 
