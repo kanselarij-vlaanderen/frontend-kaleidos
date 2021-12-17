@@ -33,6 +33,7 @@ export default class AgendaAgendaitemsController extends Controller {
   @service sessionService;
   @service agendaService;
   @service router;
+  @service store;
   @service intl;
 
   @lastValue('groupNotasOnGroupName') notaGroups = [];
