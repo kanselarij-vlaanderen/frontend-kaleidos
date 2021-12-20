@@ -7,12 +7,7 @@
 /* Official code
    ========================================================================== */
 
-// sourced from "au-kaleidos-css" npm package
-@import '_reset';
-@import '_s-colors';
-@import '_s-shadows';
-@import '_s-z-index';
-@import '_g-font';
+@import 'auk-base'; // sourced from "au-kaleidos-css" npm package
 
 // Components (loaded locally to easily read source)
 @import 'govflanders/components/_alert';
@@ -44,12 +39,6 @@
 @import 'custom-components/vlc-decision-result-select';
 @import 'custom-components/vlc-numac-nummer-list';
 
-// Imports utilities (loaded from node_modules)
-// @import 'node_modules/@govflanders/vl-ui-util/src/scss/util';
-
-// Utilities (loaded locally to easily read source)
-@import 'govflanders/util/_util';
-
 // Fixes to the framework
 @import 'fixes/fix-auk-modal-ember-select';
 @import 'fixes/fix-full-height';
@@ -77,7 +66,7 @@
 @import 'custom-application/document-preview';
 
 // Components
-@import 'auk-standalone'; // sourced from "au-kaleidos-css" npm package
+@import 'auk-components'; // sourced from "au-kaleidos-css" npm package
 @import 'au-kaleidos-css/auk-additions'; // sourced locally
 
 // Custom css added (moved here from above auk-imports when refactored)
