@@ -1,23 +1,28 @@
+/* ==================================
+   KALEIDOS
+   ================================== */
+
+/**
+ * CSS styling for the Kaleidos application
+ */
+
+
+// EXTERNAL COMPONENTS
 @import 'ember-power-select';
 @import 'ember-vo-webuniversum-data-table';
-/* ==========================================================================
-   CSS file for Digikan
-   ========================================================================== */
 
-/* Official code
-   ========================================================================== */
 
+// AUK BASE
 @import 'auk-base'; // sourced from "au-kaleidos-css" npm package
 
-// Components (loaded locally to easily read source)
+
+// GOVFLANDERS COMPONENTS
 @import 'govflanders/components/_alert';
 @import 'govflanders/components/_datepicker';
 @import 'govflanders/components/_upload';
 
-/* Unofficial code
-========================================================================== */
 
-// Custom components
+// VLC COMPONENTS
 @import 'custom-components/vlc-agenda-detail-sidebar';
 @import 'custom-components/vlc-agenda-detail-sidebar-item';
 @import 'custom-components/vlc-agenda-detail-sidebar-section-header';
@@ -39,7 +44,8 @@
 @import 'custom-components/vlc-decision-result-select';
 @import 'custom-components/vlc-numac-nummer-list';
 
-// Fixes to the framework
+
+// FRAMEWORK FIXES
 @import 'fixes/fix-auk-modal-ember-select';
 @import 'fixes/fix-full-height';
 @import 'fixes/fix-light-table';
@@ -47,14 +53,16 @@
 @import 'fixes/fix-sortable-item';
 @import 'fixes/fix-ember-data-table';
 
-// Custom utilities
+
+// CUSTOM UTILITIES
 @import 'custom-utilities/_ember-tooltip';
 @import 'custom-utilities/_autocomplete';
 @import 'custom-utilities/_box-model';
 @import 'custom-utilities/_text';
 @import 'custom-utilities/_transparency';
 
-// Custom css added
+
+// CUSTOM STYLING
 @import 'custom-application/toast';
 @import 'custom-application/compare';
 @import 'custom-application/editor';
@@ -64,17 +72,21 @@
 @import 'custom-application/loader';
 @import 'custom-application/loadable-content';
 @import 'custom-application/document-preview';
-
-// Components
-@import 'auk-components'; // sourced from "au-kaleidos-css" npm package
-@import 'au-kaleidos-css/auk-additions'; // sourced locally
-
-// Custom css added (moved here from above auk-imports when refactored)
 @import 'custom-application/power-select';
 
-// (not sure about naming/location)
+
+// AUK COMPONENTS
+@import 'auk-components'; // sourced from "au-kaleidos-css" npm package
+
+
+// LOCAL AUK ADDITIONS
+@import 'au-kaleidos-css/auk-additions';
+
+
+// LAYOUT STYLING
 @import 'custom-application/m-header';
 
-// Print
+
+// PRINT STYLING
 @import 'print/print';
 @import 'print';
