@@ -46,7 +46,7 @@ export default class NewsletterService extends Service {
       );
       reloadedMeeting.mailCampaign = savedCampaign;
       await reloadedMeeting.save();
-      return mailCampaign;
+      return savedCampaign;
     });
   }
 
@@ -70,9 +70,6 @@ export default class NewsletterService extends Service {
         this.intl.t('warning-title')
       );
       throw new Error('An exception ocurred: ' + response.error);
-    } else {
-      const result = await response.json();
-      return result;
     }
   }
 
