@@ -30,6 +30,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @tracked currentAgenda;
   @tracked previousAgenda;
   @tracked agendaActivity;
+  @tracked isSubcaseConfidential;
 
   @tracked isOpenPublicationModal = false;
 
@@ -78,7 +79,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
       modified: now,
       file: file,
       accessLevel: this.defaultAccessLevel,
-      confidential: false,
+      confidential: this.isSubcaseConfidential || false,
       name: file.filenameWithoutExtension,
       documentContainer: documentContainer,
     });

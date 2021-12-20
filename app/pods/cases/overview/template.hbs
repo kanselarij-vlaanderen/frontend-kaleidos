@@ -1,15 +1,17 @@
 {{page-title (t "cases")}}
-<Cases::CasesHeader
-  @isAddingCase={{this.isAddingCase}}
-  @close={{this.close}}
-/>
+<Cases::CasesHeader @isAddingCase={{this.isAddingCase}} @close={{this.close}} />
 <div class="auk-scroll-wrapper__body">
   <div class="auk-u-m-8">
     <Auk::Toolbar>
       <Auk::Toolbar::Group @position="right">
         {{#if this.currentSession.isEditor}}
           <Auk::Toolbar::Item class="auk-o-flex auk-o-flex--vertical-center">
-            <Auk::Label class="auk-u-text-nowrap auk-u-mr-2 auk-u-p-0" for="show-cases-archived">{{t "show-archived"}}</Auk::Label>
+            <Auk::Label
+              class="auk-u-text-nowrap auk-u-mr-2 auk-u-p-0"
+              for="show-cases-archived"
+            >
+              {{t "show-archived"}}
+            </Auk::Label>
             <Auk::Toggle
               id="show-cases-archived"
               @checked={{this.showArchived}}
@@ -27,7 +29,8 @@
       @sort={{this.sort}}
       class="auk-table auk-table--striped"
       @isLoading={{this.isLoadingModel}}
-    as |table|>
+      as |table|
+    >
       <table.content as |c|>
         <c.header>
           <th class="auk-table__col--9 auk-table__header-title">
@@ -41,8 +44,8 @@
           />
           <th class="auk-table__col--1"></th>
         </c.header>
-        {{!-- Users explicitly want the whole row to be clickable instead of only the arrow at the end --}}
-        {{!-- template-lint-disable no-invalid-interactive --}}
+        {{! Users explicitly want the whole row to be clickable instead of only the arrow at the end }}
+        {{! template-lint-disable no-invalid-interactive }}
         <c.body class="auk-table--interaction-cursor" as |row|>
           <td {{on "click" (fn this.navigateToCase row)}}>
             <p>
@@ -58,14 +61,23 @@
           </td>
           <td class="auk-u-text-align--right">
             {{#if this.currentSession.isEditor}}
-              <DropdownMenu
-                @skin="borderless"
-                @icon="three-dots"
-              as |Menu|>
+              <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
                 <Menu.Item {{on "click" (fn this.openEditCaseModal row)}}>
                   {{t "edit-case"}}
                 </Menu.Item>
-                <Menu.Item {{on "click" (fn (if row.isArchived this.unarchiveCase this.requestArchiveCase) row)}}>
+                <Menu.Item
+                  {{on
+                    "click"
+                    (fn
+                      (if
+                        row.isArchived
+                        this.unarchiveCase
+                        this.requestArchiveCase
+                      )
+                      row
+                    )
+                  }}
+                >
                   {{t (if row.isArchived "unarchive-case" "archive-case")}}
                 </Menu.Item>
               </DropdownMenu>
@@ -79,7 +91,7 @@
             />
           </td>
         </c.body>
-        {{!-- template-lint-enable no-invalid-interactive --}}
+        {{! template-lint-enable no-invalid-interactive }}
       </table.content>
     </DataTable>
   </div>
@@ -88,7 +100,6 @@
   <Cases::EditCase
     @onClose={{this.closeEditCaseModal}}
     @onSave={{this.saveEditCase}}
-    @editConfidential={{false}}
     @case={{this.caseToEdit}}
   />
 {{/if}}
