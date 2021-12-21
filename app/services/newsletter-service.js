@@ -151,7 +151,6 @@ export default Service.extend({
   },
 
 // TODO These are for developers use - in comments for follow up
-/*
   async deleteCampaign(id) {
     try {
       return ajax({
@@ -161,9 +160,10 @@ export default Service.extend({
     } catch (error) {
       console.warn('An exception ocurred: ', error);
       this.toaster.error(this.intl.t('error-delete-newsletter'), this.intl.t('warning-title'));
-      return null;
+      return;
     }
   },
+  /*
   downloadBelgaXML(agendaId) {
     try {
       return ajax({

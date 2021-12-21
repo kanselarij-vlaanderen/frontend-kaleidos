@@ -195,12 +195,12 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   }
 
   // TODO These are for developers use - in comments for follow up
-/*  @action
+  @action
   async deleteCampaign() {
     this.isLoading = true;
     const meeting = this.args.meeting;
 
-    if (this.mailCampaign && this.mailCampaign.campaignId) {
+    if (this.mailCampaign?.campaignId) {
       await this.newsletterService.deleteCampaign(this.mailCampaign.campaignId);
     }
     this.mailCampaign.destroyRecord();
@@ -210,8 +210,10 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     reloadedMeeting.mailCampaign = null;
 
     await reloadedMeeting.save();
+    await this.loadMailCampaign.perform();
     this.isLoading = false;
   }
+  /*
   @action
   async downloadBelgaXML() {
     this.isLoading = true;
