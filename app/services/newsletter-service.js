@@ -28,14 +28,13 @@ export default Service.extend({
         archiveUrl: body.archive_url,
       });
 
-      await mailCampaign.save().then(async(savedCampaign) => {
-        const reloadedMeeting = await this.store.findRecord('meeting', meeting.id, {
-          reload: true,
-        });
-        reloadedMeeting.set('mailCampaign', savedCampaign);
-        await reloadedMeeting.save();
-        return mailCampaign;
+      await mailCampaign.save();
+      const reloadedMeeting = await this.store.findRecord('meeting', meeting.id, {
+        reload: true,
       });
+      reloadedMeeting.set('mailCampaign', mailCampaign);
+      await reloadedMeeting.save();
+      return mailCampaign;
     } catch (error) {
       console.warn('An exception ocurred: ', error);
       this.toaster.error(this.intl.t('error-create-newsletter'), this.intl.t('warning-title'));
