@@ -23,18 +23,17 @@ export default class NewsletterService extends Service {
         archiveUrl: result.body.archive_url,
       });
 
-      await mailCampaign.save().then(async (savedCampaign) => {
-        const reloadedMeeting = await this.store.findRecord(
-          'meeting',
-          meeting.id,
-          {
-            reload: true,
-          }
-        );
-        reloadedMeeting.mailCampaign = savedCampaign;
-        await reloadedMeeting.save();
-        return mailCampaign;
-      });
+      await mailCampaign.save();
+      const reloadedMeeting = await this.store.findRecord(
+        'meeting',
+        meeting.id,
+        {
+          reload: true,
+        }
+      );
+      reloadedMeeting.set('mailCampaign', mailCampaign);
+      await reloadedMeeting.save();
+      return mailCampaign;
     } catch (error) {
       console.warn('An exception ocurred: ', error);
       this.toaster.error(
@@ -180,8 +179,9 @@ export default class NewsletterService extends Service {
       this.toaster.error(this.intl.t('error-download-XML'), this.intl.t('warning-title'));
       return null;
     }
+    */
 
- async deleteCampaign(id) {
+  async deleteCampaign(id) {
     try {
       return ajax({
         method: 'DELETE',
@@ -196,7 +196,8 @@ export default class NewsletterService extends Service {
       return null;
     }
   }
-   async getMailCampaignContent(id) {
+  /*
+  async getMailCampaignContent(id) {
     try {
       return ajax({
         method: 'GET',

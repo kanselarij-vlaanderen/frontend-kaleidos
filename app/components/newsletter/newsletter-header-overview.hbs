@@ -68,23 +68,6 @@
               <Menu.Item {{on "click" this.toggleVerifyingPublishBelga}}>
                 {{t "send-newsitem-to-belga"}}
               </Menu.Item>
-
-              {{!-- TODO These are for developers use - in comments for follow up
-              <Menu.Divider />
-              <Menu.Item {{on "click" this.showNewsletter}}>
-                {{t "show-newsletter"}}
-              </Menu.Item>
-              <Menu.Item
-                {{on "click" this.downloadBelgaXML}}
-              >
-                {{t "generate-xml"}}
-              </Menu.Item>
-              {{#if this.mailCampaign}}
-                <Menu.Item @skin="danger" {{on "click" this.deleteCampaign}}>
-                  {{t "delete-campaign"}}
-                </Menu.Item>
-              {{/if}} --}}
-
             {{/if}}
           {{/if}}
           {{#if this.shouldShowPrintButton}}
@@ -92,6 +75,24 @@
             <Menu.Item {{on "click" this.print}}>
               {{t "print"}}
             </Menu.Item>
+          {{/if}}
+          {{#if this.currentSession.isEditor}}
+            {{! TODO These are for developers use - in comments for follow up }}
+            {{! <Menu.Divider /> }}
+            {{!-- <Menu.Item {{on "click" this.showNewsletter}}>
+              {{t "show-newsletter"}}
+            </Menu.Item>
+            <Menu.Item
+              {{on "click" this.downloadBelgaXML}}
+            >
+              {{t "generate-xml"}}
+            </Menu.Item> --}}
+            {{#if this.mailCampaign}}
+              <Menu.Divider />
+              <Menu.Item @skin="danger" {{on "click" this.deleteCampaign}}>
+                {{t "delete-campaign"}}
+              </Menu.Item>
+            {{/if}}
           {{/if}}
         </DropdownMenu>
       </Auk::Toolbar::Item>
