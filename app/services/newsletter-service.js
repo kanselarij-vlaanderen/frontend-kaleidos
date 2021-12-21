@@ -208,10 +208,13 @@ export default class NewsletterService extends Service {
     */
 
   async deleteCampaign(id) {
+    const endpoint = `/newsletter/mail-campaign/${id}`;
     try {
-      const result = await fetch({
+      const result = await fetch(endpoint,{
         method: 'DELETE',
-        url: `/newsletter/mailCampaign/${id}`,
+        headers: {
+          'Content-Type': 'application/vnd.api+json',
+        },
       });
       return result;
     } catch (error) {
