@@ -28,7 +28,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   constructor() {
     super(...arguments);
-     this.loadMailCampaign.perform();
+    this.loadMailCampaign.perform();
   }
 
   @task
@@ -68,11 +68,8 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       await this.createMailCampaign();
     }
 
-    if (this.mailCampaign && this.mailCampaign.isSent) {
+    if (this.mailCampaign?.isSent) {
       this.toaster.error(this.intl.t('error-already-sent-newsletter'));
-      this.isLoading = false;
-      this.toggleVerifyingPublishMail();
-      return null;
     } else {
       if (await this.validateMailCampaign()) {
         await this.publishToMailAndSaveCampaign();
@@ -104,16 +101,17 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       await this.createMailCampaign();
     }
 
-    if (this.mailCampaign && this.mailCampaign.isSent) {
+    if (this.mailCampaign?.isSent) {
       this.toaster.error(this.intl.t('error-already-sent-newsletter'));
-      this.isLoading = false;
-      this.toggleVerifyingPublishAll();
-      return null;
     } else {
       if (await this.validateMailCampaign()) {
         await this.publishToMailAndSaveCampaign();
+        // Although belga is independent of mailchimp, if there is no valid campaign we should maybe avoid sending belga
+        // Specific example: no newsletters (for notes) present! we need at least one note to avoid an empty mail/belga
+        // A different example is a note without themes, valid for belga but not for mailchimp (no recipients)
       }
       await this.publishNewsletterToBelga();
+      // For valvas, we should be able to send a valvas push as long as there is at least 1 note or announcement.
     }
 
     this.isLoading = false;
@@ -121,6 +119,9 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   }
 
   async validateMailCampaign() {
+    if (!this.mailCampaign?.campaignId) {
+      return false;
+    }
     let campaign;
     try {
       campaign = await this.newsletterService.getMailCampaign(this.mailCampaign.campaignId);
@@ -129,8 +130,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
         this.intl.t('error-fetch-newsletter'),
         this.intl.t('warning-title')
       );
-      this.isVerifying = false;
-      this.isLoading = false;
       return false;
     }
 
@@ -147,12 +146,9 @@ export default class NewsletterHeaderOverviewComponent extends Component {
           timeOut: 600000,
         }
       );
-      this.isVerifying = false;
-      this.isLoading = false;
       return  false;
     }
-    this.isVerifying = false;
-    this.isLoading = false;
+    // Campaign is valid
     return true;
   }
 
@@ -201,12 +197,12 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   }
 
   // TODO These are for developers use - in comments for follow up
-  /*  @action
+  @action
   async deleteCampaign() {
     this.isLoading = true;
     const meeting = this.args.meeting;
 
-    if (this.mailCampaign && this.mailCampaign.campaignId) {
+    if (this.mailCampaign?.campaignId) {
       await this.newsletterService.deleteCampaign(this.mailCampaign.campaignId);
     }
     this.mailCampaign.destroyRecord();
@@ -216,8 +212,10 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     reloadedMeeting.mailCampaign = null;
 
     await reloadedMeeting.save();
+    await this.loadMailCampaign.perform();
     this.isLoading = false;
   }
+  /*
   @action
   async downloadBelgaXML() {
     this.isLoading = true;

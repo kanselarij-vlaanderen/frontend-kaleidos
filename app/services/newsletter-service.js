@@ -36,18 +36,17 @@ export default class NewsletterService extends Service {
       archiveUrl: result.data.attributes.archiveUrl,
     });
 
-    await mailCampaign.save().then(async (savedCampaign) => {
-      const reloadedMeeting = await this.store.findRecord(
-        'meeting',
-        meeting.id,
-        {
-          reload: true,
-        }
-      );
-      reloadedMeeting.mailCampaign = savedCampaign;
-      await reloadedMeeting.save();
-      return savedCampaign;
-    });
+    await mailCampaign.save();
+    const reloadedMeeting = await this.store.findRecord(
+      'meeting',
+      meeting.id,
+      {
+        reload: true,
+      }
+    );
+    reloadedMeeting.mailCampaign = mailCampaign;
+    await reloadedMeeting.save();
+    return mailCampaign;
   }
 
   async sendMailCampaign(id) {
@@ -197,7 +196,7 @@ export default class NewsletterService extends Service {
   /*
   downloadBelgaXML(meetingId) {
     try {
-      return await ajax({
+      return await fetch({
         method: 'GET',
         url: `/newsletter/belga/${meetingId}`,
       });
@@ -206,10 +205,11 @@ export default class NewsletterService extends Service {
       this.toaster.error(this.intl.t('error-download-XML'), this.intl.t('warning-title'));
       return null;
     }
+    */
 
- async deleteCampaign(id) {
+  async deleteCampaign(id) {
     try {
-      const result = await ajax({
+      const result = await fetch({
         method: 'DELETE',
         url: `/newsletter/mailCampaign/${id}`,
       });
@@ -223,6 +223,7 @@ export default class NewsletterService extends Service {
       return null;
     }
   }
+  /*
   async getMailCampaignContent(id) {
     const endpoint = `/newsletter/mail-campaign-content/${id}`;
     const response = await fetch(endpoint, {
