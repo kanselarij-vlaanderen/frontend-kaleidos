@@ -1,22 +1,14 @@
-import Model, { hasMany, attr } from '@ember-data/model';
-import { computed } from '@ember/object';
+import Model, { attr, hasMany } from '@ember-data/model';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes
-export default Model.extend({
-  campaignId: attr('string'),
-  campaignWebId: attr('string'),
-  archiveUrl: attr('string'),
-  sentAt: attr('datetime'),
+export default class MailCampaign extends Model {
+  @attr('string') campaignId;
+  @attr('string') campaignWebId;
+  @attr('string') archiveUrl;
+  @attr('datetime') sentAt;
 
-  meetings: hasMany('meeting', {
-    inverse: null,
-  }),
+  @hasMany('meeting', { inverse: null }) meetings;
 
-  isSent: computed('sentAt', function() {
-    const {
-      sentAt,
-    } = this;
-    return !!sentAt;
-  }),
-});
+  get isSent() {
+    return !!this.sentAt;
+  }
+}
