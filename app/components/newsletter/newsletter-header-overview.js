@@ -29,7 +29,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   constructor() {
     super(...arguments);
-     this.loadMailCampaign.perform();
+    this.loadMailCampaign.perform();
   }
 
   @task
@@ -69,9 +69,8 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       await this.createMailCampaign();
     }
 
-    if (this.mailCampaign && this.mailCampaign.isSent) {
+    if (this.mailCampaign?.isSent) {
       this.toaster.error(this.intl.t('error-already-sent-newsletter'));
-      return null;
     } else {
       if (await this.validateMailCampaign()) {
         await this.publishToMailAndSaveCampaign();
@@ -103,14 +102,17 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       await this.createMailCampaign();
     }
 
-    if (this.mailCampaign && this.mailCampaign.isSent) {
+    if (this.mailCampaign?.isSent) {
       this.toaster.error(this.intl.t('error-already-sent-newsletter'));
-      return null;
     } else {
       if (await this.validateMailCampaign()) {
         await this.publishToMailAndSaveCampaign();
+        // Although belga is independent of mailchimp, if there is no valid campaign we should maybe avoid sending belga
+        // Specific example: no newsletters (for notes) present! we need at least one note to avoid an empty mail/belga
+        // A different example is a note without themes, valid for belga but not for mailchimp (no recipients)
       }
       await this.publishNewsletterToBelga();
+      // For valvas, we should be able to send a valvas push as long as there is at least 1 note or announcement.
     }
 
     this.isLoading = false;
@@ -118,8 +120,9 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   }
 
   async validateMailCampaign() {
-    let validCampaign = true;
-
+    if (!this.mailCampaign?.campaignId) {
+      return false;
+    }
     const campaign = await this.newsletterService
       .getMailCampaign(this.mailCampaign.campaignId)
       .catch(() => {
@@ -127,7 +130,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
           this.intl.t('error-fetch-newsletter'),
           this.intl.t('warning-title')
         );
-        validCampaign = false;
+        return false;
       });
 
     const threshold = 10;
@@ -144,11 +147,10 @@ export default class NewsletterHeaderOverviewComponent extends Component {
           timeOut: 600000,
         }
       );
-      validCampaign = false;
+      return false;
     }
-    this.isVerifying = false;
-    this.isLoading = false;
-    return validCampaign;
+    // campaign is valid
+    return true;
   }
 
   async publishNewsletterToBelga() {
@@ -182,9 +184,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
     this.mailCampaign.set('sentAt', moment().utc().toDate());
     await this.mailCampaign.save();
-
-    const meeting = this.args.meeting;
-    await meeting.belongsTo('mailCampaign').reload();
   }
 
   async createMailCampaign() {
