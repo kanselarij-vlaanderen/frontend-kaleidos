@@ -51,14 +51,12 @@ module.exports = function (defaults) {
     ],
   });
 
-  app.import('node_modules/@kanselarij-vlaanderen/au-kaleidos-icons/iconfont/icons.css', {
-    destDir: 'assets/iconfonts'
-  });
+  app.import('node_modules/@kanselarij-vlaanderen/au-kaleidos-icons/iconfont/icons.css');
 
   const iconAssets = new Funnel('node_modules/@kanselarij-vlaanderen/au-kaleidos-icons', {
     srcDir: '/iconfont',
     include: ['*.woff2', '*.woff', '*.ttf'],
-    destDir: '/assets/iconfonts'
+    destDir: '/assets'
   });
 
   const fontAssets = new Funnel('node_modules/@kanselarij-vlaanderen/au-kaleidos-css', {
