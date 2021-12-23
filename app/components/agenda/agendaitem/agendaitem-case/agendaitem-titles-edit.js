@@ -9,8 +9,10 @@ import { tracked } from '@glimmer/tracking';
 
 export default class AgendaitemTitlesEdit extends Component {
   @service store;
-  @tracked isLoading = false;
+  @service subcasesService;
+  @tracked isSaving = false;
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'explanation']);
+  initialSubcaseConfidentiality = this.args.subcase?.confidential;
 
   get newsletterInfo() {
     return this.args.newsletterInfo;
@@ -31,42 +33,41 @@ export default class AgendaitemTitlesEdit extends Component {
 
   @action
   async saveChanges() {
-    this.isLoading = true;
+    this.isSaving = true;
     const shouldResetFormallyOk = this.args.agendaitem.get('hasDirtyAttributes');
 
-    const title = trimText(this.args.agendaitem.title);
-    const shortTitle = trimText(this.args.agendaitem.shortTitle);
+    const trimmedTitle = trimText(this.args.agendaitem.title);
+    const trimmedShortTitle = trimText(this.args.agendaitem.shortTitle);
 
     const propertiesToSetOnAgendaitem = {
-      title: title,
-      shortTitle: shortTitle,
+      title: trimmedTitle,
+      shortTitle: trimmedShortTitle,
       // explanation and showInNewsletter are set directly on the agendaitem, no need to have them in here
     };
     const propertiesToSetOnSubcase = {
-      title: title,
-      shortTitle: shortTitle,
+      title: trimmedTitle,
+      shortTitle: trimmedShortTitle,
+      confidential: this.args.subcase?.confidential
     };
-
-    if (this.args.subcase) {
-      propertiesToSetOnSubcase.confidential = await this.args.subcase.get('confidential');
-    }
 
     try {
       await saveSubcaseTitles(this.args.agendaitem, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, shouldResetFormallyOk);
       if (this.newsletterInfo
         && (this.newsletterInfo.get('hasDirtyAttributes') || this.args.agendaitem.showAsRemark)) {
         if (this.args.agendaitem.showAsRemark) { // Keep generated newsletterInfo for announcement in sync
-          this.newsletterInfo.set('richtext', title);
-          this.newsletterInfo.set('title', shortTitle);
+          this.newsletterInfo.set('richtext', trimmedTitle);
+          this.newsletterInfo.set('title', trimmedShortTitle);
         }
         await this.newsletterInfo.save();
       }
+      if (this.initialSubcaseConfidentiality === false && this.args.subcase.confidential === true) {
+        // When the confididentialy was changed from false to true, we have to make all pieces confidential
+        await this.subcasesService.cascadeConfidentialityToPieces(this.args.subcase);
+      }
 
-      this.isLoading = false;
       this.args.toggleIsEditing();
-    } catch (exception) {
-      this.isLoading = false;
-      throw (exception);
+    } finally {
+      this.isSaving = false;
     }
   }
 }
