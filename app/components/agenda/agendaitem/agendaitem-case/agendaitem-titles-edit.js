@@ -19,6 +19,10 @@ export default class AgendaitemTitlesEdit extends Component {
   @action
   async cancelEditing() {
     cancelEdit(this.args.agendaitem, this.propertiesToSet);
+    // We change the value of confidental directly on subcase, so we should also roll it back
+    if (this.args.subcase) {
+      cancelEdit(this.args.subcase, ['confidential']);
+    }
     if (this.newsletterInfo && this.newsletterInfo.get('hasDirtyAttributes')) {
       this.newsletterInfo.rollbackAttributes();
     }
