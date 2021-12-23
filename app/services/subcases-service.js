@@ -1,12 +1,11 @@
-import Service, { inject } from '@ember/service';
+import Service, { inject as service } from '@ember/service';
 import { ajax } from 'frontend-kaleidos/utils/ajax';
 import moment from 'moment';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes
-export default Service.extend({
-  store: inject(),
-  intl: inject(),
+export default class SubcasesService extends Service {
+  @service store;
+  @service intl;
 
   getPostPonedSubcaseIds() {
     return ajax(
@@ -20,7 +19,7 @@ export default Service.extend({
     ).then(({
       data,
     }) => data.map((object) => object.id));
-  },
+  }
 
   async getSubcasePhases(subcase) {
     return ajax({
@@ -30,7 +29,7 @@ export default Service.extend({
       .catch((error) => {
         console.log('error', error);
       });
-  },
+  }
 
   async processSubcasePhases(activities) {
     // KAS-1425 sort activities? done in the micro service atm.
@@ -71,5 +70,30 @@ export default Service.extend({
       }
     }
     return phases;
-  },
-});
+  }
+
+  async cascadeConfidentialityToPieces(subcase) {
+    // 2-step procees (submission-activity -> pieces). Querying pieces directly doesn't
+    // work since the inverse isn't present in API config
+    const submissionActivities = await this.store.query('submission-activity', {
+      'filter[subcase][:id:]': subcase.id,
+      'page[size]': PAGE_SIZE.ACTIVITIES,
+      include: 'pieces', // Make sure we have all pieces, unpaginated
+    });
+
+    const pieces = [];
+    for (const submissionActivity of submissionActivities.toArray()) {
+      let submissionPieces = await submissionActivity.pieces;
+      submissionPieces = submissionPieces.toArray();
+      pieces.push(...submissionPieces);
+    }
+
+    for (const piece of pieces) {
+      // If the piece is already confidential we shouldn't do anything
+      if (!piece.confidential) {
+        piece.confidential = true;
+        await piece.save();
+      }
+    }
+  }
+}
