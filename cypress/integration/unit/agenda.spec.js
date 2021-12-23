@@ -167,7 +167,12 @@ context('Agenda tests', () => {
     cy.get('@longTitle').contains(subcaseTitleLong);
     // explanation is not trimmed
     cy.get(agenda.agendaitemTitlesView.explanation).contains(`Opmerking: ${whitespace + explanation + whitespace}`);
-    // TODO-BUG setting confidentiality and cancelling does not roll back
+    cy.get(route.agendaitemIndex.confidential).contains('Vertrouwelijk');
+    // rollback confidentiality should work
+    cy.get(agenda.agendaitemTitlesView.edit).click();
+    cy.get(agenda.agendaitemTitlesEdit.confidential).click();
+    cy.get(route.agendaitemIndex.confidential).should('not.exist');
+    cy.get(agenda.agendaitemTitlesEdit.actions.cancel).click();
     cy.get(route.agendaitemIndex.confidential).contains('Vertrouwelijk');
   });
 

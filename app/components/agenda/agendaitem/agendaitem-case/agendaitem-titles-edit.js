@@ -42,7 +42,7 @@ export default class AgendaitemTitlesEdit extends Component {
     const propertiesToSetOnAgendaitem = {
       title: trimmedTitle,
       shortTitle: trimmedShortTitle,
-      // explanation and showInNewsletter are set directly on the agendaitem, no need to have them in here
+      // explanation is set directly on the agendaitem, no need to have them in here
     };
     const propertiesToSetOnSubcase = {
       title: trimmedTitle,
