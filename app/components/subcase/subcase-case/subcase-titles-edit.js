@@ -3,7 +3,8 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import {
-  saveChanges as saveSubcaseTitles, cancelEdit
+  saveChanges as saveSubcaseTitles,
+  cancelEdit,
 } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { task } from 'ember-concurrency-decorators';
@@ -12,7 +13,12 @@ export default class SubcaseTitlesEdit extends Component {
   @service store;
   @service subcasesService;
   @tracked isSaving;
-  propertiesToSet = Object.freeze(['title', 'shortTitle', 'accessLevel', 'confidential']);
+  propertiesToSet = Object.freeze([
+    'title',
+    'shortTitle',
+    'accessLevel',
+    'confidential',
+  ]);
   initialSubcaseConfidentiality = this.args.subcase.confidential;
 
   constructor() {
@@ -46,20 +52,30 @@ export default class SubcaseTitlesEdit extends Component {
 
     const propertiesToSetOnAgendaitem = {
       title: trimmedTitle,
-      shortTitle: trimmedShortTitle
+      shortTitle: trimmedShortTitle,
     };
     const propertiesToSetOnSubcase = {
       title: trimmedTitle,
       shortTitle: trimmedShortTitle,
       accessLevel: this.args.subcase.accessLevel,
-      confidential: this.args.subcase.confidential
+      confidential: this.args.subcase.confidential,
     };
 
     try {
-      await saveSubcaseTitles(this.args.subcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
-      if (this.initialSubcaseConfidentiality === false && this.args.subcase.confidential === true) {
+      await saveSubcaseTitles(
+        this.args.subcase,
+        propertiesToSetOnAgendaitem,
+        propertiesToSetOnSubcase,
+        true
+      );
+      if (
+        this.initialSubcaseConfidentiality === false &&
+        this.args.subcase.confidential === true
+      ) {
         // When the confididentialy was changed from false to true, we have to make all pieces confidential
-        await this.subcasesService.cascadeConfidentialityToPieces(this.args.subcase);
+        await this.subcasesService.cascadeConfidentialityToPieces(
+          this.args.subcase
+        );
       }
       this.args.toggleIsEditing();
     } finally {

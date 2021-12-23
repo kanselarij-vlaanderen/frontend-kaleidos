@@ -49,7 +49,9 @@
     <div class="auk-u-mb-4">
       <div class="auk-form-group">
         {{#if this.newsletterInfo}}
-          <Auk::Label for="item-show-in-newsletter">{{t "show-in-newsletter"}}</Auk::Label>
+          <Auk::Label for="item-show-in-newsletter">
+            {{t "show-in-newsletter"}}
+          </Auk::Label>
           <Auk::Toggle
             id="item-show-in-newsletter"
             @checked={{this.newsletterInfo.inNewsletter}}
@@ -65,10 +67,7 @@
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
-        <Auk::Button
-          @skin="tertiary"
-          {{on "click" this.cancelEditing}}
-        >
+        <Auk::Button @skin="tertiary" {{on "click" this.cancelEditing}}>
           {{t "cancel"}}
         </Auk::Button>
       </Auk::Toolbar::Item>
