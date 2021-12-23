@@ -73,7 +73,7 @@ export default class AgendaitemTitlesEdit extends Component {
       }
       if (
         this.initialSubcaseConfidentiality === false &&
-        this.args.subcase.confidential === true
+        this.args.subcase?.confidential === true
       ) {
         // When the confididentialy was changed from false to true, we have to make all pieces confidential
         await this.subcasesService.cascadeConfidentialityToPieces(
