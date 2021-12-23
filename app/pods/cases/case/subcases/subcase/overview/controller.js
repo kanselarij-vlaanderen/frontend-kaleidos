@@ -19,11 +19,6 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
   @tracked isEditingTitles = false;
 
   @action
-  cancelEditing() {
-    this.isEditingTitles = false;
-  }
-
-  @action
   toggleIsEditing() {
     this.isEditingTitles = !this.isEditingTitles;
   }
