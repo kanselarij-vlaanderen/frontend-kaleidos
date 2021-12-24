@@ -59,8 +59,8 @@
         <Auk::PillList>
           {{#if (not @agendaitem.showAsRemark) }}
             {{#if @subcase.subcaseName}}
-              <Auk::Pill class="auk-u-text-capitalize">
-                {{@subcase.subcaseName}}
+              <Auk::Pill>
+                {{capitalize @subcase.subcaseName}}
               </Auk::Pill>
             {{/if}}
             {{#if @agendaitem.retracted}}
