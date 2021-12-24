@@ -67,7 +67,11 @@
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
-        <Auk::Button @skin="tertiary" {{on "click" this.cancelEditing}}>
+        <Auk::Button
+          data-test-agendaitem-titles-edit-cancel
+          @skin="tertiary"
+          {{on "click" this.cancelEditing}}
+        >
           {{t "cancel"}}
         </Auk::Button>
       </Auk::Toolbar::Item>
