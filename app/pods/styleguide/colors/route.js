@@ -51,7 +51,7 @@ export default class ColorsRoute extends Route {
             name: '$auk-blue-300 ', hex: '#C1DDFB',
           },
           {
-            name: '$auk-blue-600 ', hex: '#0F6FD7',
+            name: '$auk-blue-500 ', hex: '#0F6FD7',
           },
           {
             name: '$auk-blue-700 ', hex: '#0E5EB8',

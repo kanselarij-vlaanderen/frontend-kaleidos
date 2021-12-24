@@ -15,7 +15,7 @@
   a, span {
     display: flex;
     align-items: center;
-    color: $dove-gray;
+    color: $auk-gray-600;
     font-weight: 400;
     padding-right: 1rem;
   }
@@ -25,12 +25,12 @@
 
     &:hover,
     &:active {
-      background: $blue-gray-lightest;
+      background: $auk-gray-100;
       border-radius: 1.5rem;
     }
 
     &:focus {
-      color: $science-blue;
+      color: $auk-color-primary;
     }
   }
 
@@ -45,7 +45,7 @@
 
 .vlc-document-list__item--active {
   .auk-icon {
-    color: $green;
+    color: $auk-green-500;
   }
 }
 
@@ -61,7 +61,7 @@
 /* Document item list show more
    ========================================================================== */
 .vlc-document-show-more-button {
-  color: $primary-blue;
+  color: $auk-blue-500;
   border: none;
   padding: 0;
   font-size: 1.6rem;
