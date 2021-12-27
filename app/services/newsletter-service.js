@@ -22,6 +22,7 @@ export default class NewsletterService extends Service {
       },
       body: JSON.stringify(body),
     });
+    const result = await response.json();
     if (!response.ok) {
       this.toaster.error(
         this.intl.t('error-create-newsletter'),
@@ -29,7 +30,6 @@ export default class NewsletterService extends Service {
       );
       throw new Error('An exception ocurred: ' + response.error);
     }
-    const result = await response.json();
     const mailCampaign = this.store.createRecord('mail-campaign', {
       campaignId: result.data.id,
       campaignWebId: result.data.attributes.webId,
@@ -63,6 +63,7 @@ export default class NewsletterService extends Service {
       },
       body: JSON.stringify(body),
     });
+    await response.json();
     if (!response.ok) {
       this.toaster.error(
         this.intl.t('error-send-newsletter'),
@@ -86,6 +87,7 @@ export default class NewsletterService extends Service {
       },
       body: JSON.stringify(body),
     });
+    const result = await response.json();
     if (!response.ok) {
       this.toaster.error(
         this.intl.t('error-send-newsletter'),
@@ -93,7 +95,6 @@ export default class NewsletterService extends Service {
       );
       throw new Error('An exception ocurred: ' + response.error);
     } else {
-      const result = await response.json();
       return result;
     }
   }
@@ -106,6 +107,7 @@ export default class NewsletterService extends Service {
         'Content-Type': 'application/vnd.api+json',
       },
     });
+    const result = await response.json();
     if (!response.ok) {
       this.toaster.error(
         this.intl.t('error-send-newsletter'),
@@ -113,7 +115,6 @@ export default class NewsletterService extends Service {
       );
       throw new Error('An exception ocurred: ' + response.error);
     } else {
-      const result = await response.json();
       return result.data;
     }
   }
@@ -210,12 +211,13 @@ export default class NewsletterService extends Service {
   async deleteCampaign(id) {
     const endpoint = `/newsletter/mail-campaign/${id}`;
     try {
-      const result = await fetch(endpoint,{
+      const response = await fetch(endpoint,{
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/vnd.api+json',
         },
       });
+      const result = await response.json();
       return result;
     } catch (error) {
       console.warn('An exception ocurred: ', error);
