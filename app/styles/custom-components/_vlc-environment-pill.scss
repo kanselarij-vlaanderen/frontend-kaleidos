@@ -10,21 +10,21 @@
 }
 
 .vlc-environment-pill--local {
-  background-color: $environment-local-color;
-  border-color: darken($environment-local-color, 7%);
-  color: white;
+  background-color: $auk-pink;
+  border-color: darken($auk-pink, 5%);
+  color: $auk-white;
 }
 
 .vlc-environment-pill--dev {
-  background-color: $environment-dev-color;
-  border-color: darken($environment-dev-color, 7%);
-  color: white;
+  background-color: $auk-green-500;
+  border-color: darken($auk-green-500, 5%);
+  color: $auk-white;
 }
 
 .vlc-environment-pill--test {
-  background-color: $environment-test-color;
-  border-color: darken($environment-test-color, 30%);
-  color: black;
+  background-color: $auk-yellow-500;
+  border-color: darken($auk-yellow-500, 5%);
+  color: $auk-yellow-800;
 }
 
 @keyframes blink {
@@ -34,9 +34,9 @@
 }
 
 .vlc-environment-pill--prod {
-  background-color: $environment-prod-color;
-  border-color: darken($environment-prod-color, 7%);
-  color: white;
+  background-color: $auk-red-500;
+  border-color: darken($auk-red-500, 5%);
+  color: $auk-white;
 
   animation: blink 1s cubic-bezier(1,-0.09, 0, 0.99) infinite;
 }
