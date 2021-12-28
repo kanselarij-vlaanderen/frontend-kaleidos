@@ -24,8 +24,14 @@ export default class SigninghubIframeModalComponent extends Component {
    */
   @task
   *loadSigningHubUrl() {
+    // Currently only 1 piece per signingflow, so we can handle fetching of the piece
+    // within this component
+    const signSubcase = yield this.args.signingFlow.signSubcase;
+    const signMarkingActivity = yield signSubcase.signMarkingActivity;
+    const piece = yield signMarkingActivity.piece;
+
     const resp = yield fetch(
-      `/signing-flow/${this.args.signingFlow.id}/signinghub-url?collapse_panels=false`
+      `/signing-flows/${this.args.signingFlow.id}/pieces/${piece.id}/signinghub-url?collapse_panels=false`
     );
     // TODO: error handling
     // TODO: intercept redirect rather than passing the url in json payload
