@@ -9,7 +9,6 @@ import { action } from '@ember/object';
 
 export default class CasesNewSubcase extends Component {
   @service store;
-  @service newsletterService;
 
   @tracked filter = Object.freeze({
     type: 'subcase-name',
@@ -128,10 +127,6 @@ export default class CasesNewSubcase extends Component {
         this.latestSubcase,
         fullCopy
       );
-      if (subcase.showAsRemark !== this.latestSubcase.showAsRemark){
-        // If the showAsRemark changes we need to update the newsletter according to the type of subcase
-        await this.updateNewsletter(subcase, this.latestSubcase)
-      }
     }
     return subcase;
   }
@@ -196,33 +191,5 @@ export default class CasesNewSubcase extends Component {
   @action
   toggleIsEditing() {
     this.isEditing = !this.isEditing;
-  }
-
-  async updateNewsletter(subcase) {
-    const agendaItem = await subcase.latestAgendaitem;
-    // const agendaItem = await this.store.queryOne('agendaitem', {
-    //   'filter[agenda-activity][subcase][:id:]': this.latestSubcase.id,
-    //   'filter[:has-no:next-version]': 't',
-    //   sort: '-created',
-    // });
-    console.log(agendaItem)
-    // const newsletterInfo = await agendaItem.newsletterInfo;
-    if (agendaItem?.id){
-      const newsletterInfo = await this.store.queryOne('newsletter-info', {
-        'filter[agenda-item-treatment][agendaitem][:id:]': agendaItem.id,
-      });
-      if (newsletterInfo?.id){
-        await newsletterInfo.deleteRecord();
-        console.log('deleted : ' + newsletterInfo)
-      }
-      console.log(newsletterInfo)
-      agendaItem.showAsRemark = subcase.showAsRemark;
-      await agendaItem.save();
-    }
-    if (subcase.showAsRemark && agendaItem?.id ){
-      const newNewsletterInfo = await this.newsletterService.createNewsItemForAgendaitem(agendaItem,true)
-      await newNewsletterInfo.save();
-      console.log('created : ' + newNewsletterInfo)
-    }
   }
 }

@@ -6,6 +6,7 @@ import { saveChanges } from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default class CasesCaseSubcasesSubcaseOverviewController extends Controller {
   @service currentSession;
+  @service newsletterService;
 
   get subcase() {
     return this.model;
@@ -48,5 +49,39 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
     governmentAreas.clear();
     governmentAreas.pushObjects(newGovernmentAreas);
     await this.case.save();
+  }
+
+  @action
+  async updateNewsletterAfterRemarkChange(){
+    const agendaItem = await this.store.queryOne('agendaitem', {
+      'filter[agenda-activity][subcase][:id:]': this.subcase.id,
+      'filter[:has-no:next-version]': 't',
+      sort: '-created',
+    });
+    console.log(agendaItem)
+    if (agendaItem?.id){
+      const newsletterInfo = await this.store.queryOne('newsletter-info', {
+        'filter[agenda-item-treatment][agendaitem][:id:]': agendaItem.id,
+      });
+      if (newsletterInfo?.id){
+        await newsletterInfo.deleteRecord();
+        console.log('deleted : ' + newsletterInfo)
+      }
+      console.log(newsletterInfo)
+
+      if (this.subcase.showAsRemark){
+        const remarkAgenda = agendaItem.showAsRemark;
+        agendaItem.showAsRemark = true;
+        await agendaItem.save();
+
+        const newNewsletterInfo = await this.newsletterService.createNewsItemForAgendaitem(agendaItem,true)
+        await newNewsletterInfo.save();
+
+        agendaItem.showAsRemark = remarkAgenda;
+        await agendaItem.save();
+        console.log('created : ' + newNewsletterInfo)
+      }
+
+    }
   }
 }
