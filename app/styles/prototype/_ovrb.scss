@@ -1,3 +1,4 @@
+// Sticky last column in tables
 .auk-table--sticky-ovrb {
   padding-left: 2rem;
 
@@ -17,24 +18,17 @@
   }
 }
 
-// Fix status pill icon alignment
-.auk-status-pill {
-  display: inline-flex;
-  align-items: center;
-  max-width: auto;
-
-  .auk-icon {
-    position: relative;
-  }
+// Style status label button
+.auk-u-text-small .auk-icon {
+  height: 1.4rem;
 }
 
-.auk-status-pill--paused {
-  background-color: $auk-gray-200;
-  border-color: $auk-gray-200;
+.auk-u-text-small .auk-button__label,
+.auk-u-text-small .auk-icon  {
+  @extend .auk-u-text-small;
 }
 
-
-// Fix procedure step
+// Adjust procedure step to fit inside a panel
 .auk-panel .vlc-procedure-step {
   &:first-child:before {
     top: -2.2rem;
@@ -56,29 +50,28 @@
   height: 7.5rem;
 }
 
-.vlc-procedure-step .auk-accordion-panel__header {
-
-}
-
 .vlc-procedure-step--nopadding {
   padding: 0;
 }
 
-// .auk-button-link.auk-u-text-small {
-//   display: flex;
-//   align-items: center;
-// }
+// Fix status pill icon alignment
+.auk-status-pill {
+  display: inline-flex;
+  align-items: center;
+  max-width: auto;
 
-.auk-u-text-small .auk-icon {
-  height: 1.4rem;
+  .auk-icon {
+    position: relative;
+  }
 }
 
-.auk-u-text-small .auk-button__label,
-.auk-u-text-small .auk-icon  {
-  @extend .auk-u-text-small;
+// Add paused status pill skin
+.auk-status-pill--paused {
+  background-color: $auk-gray-200;
+  border-color: $auk-gray-200;
 }
 
-// Fix select
+// Fix custom select styling
 .auk-select {
   font-family: inherit;
   background-color: #fff;
