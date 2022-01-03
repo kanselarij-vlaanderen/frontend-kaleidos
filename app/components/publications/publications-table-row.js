@@ -65,13 +65,10 @@ export default class PublicationsPublicationsTableRowComponent extends Component
   async getProofRequestDate(publicationFlow) {
     const publicationSubcase = await publicationFlow.publicationSubcase;
     const requestActivities = await publicationSubcase.requestActivities;
-    console.log(requestActivities);
     const proofRequestActivities = requestActivities.filterBy('proofingActivity');
-    console.log(proofRequestActivities);
     const startDates = proofRequestActivities.mapBy('startDate');
     startDates.sort();
     const firstProofRequestDate = startDates[0];
-    console.log(firstProofRequestDate)
     return firstProofRequestDate;
   }
 
