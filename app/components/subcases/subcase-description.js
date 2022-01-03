@@ -1,103 +1,118 @@
-// TODO: octane-refactor
-/* eslint-disable ember/no-get */
-// eslint-disable-next-line ember/no-classic-components
-import Component from '@ember/component';
-import {
-  computed, set
-} from '@ember/object';
+import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { inject } from '@ember/service';
-import { cached } from 'frontend-kaleidos/decorators/cached';
+import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency-decorators';
+import { action } from '@ember/object';
 import {
-  saveChanges as saveSubcaseDescription, cancelEdit
+  saveChanges as saveSubcaseDescription,
 } from 'frontend-kaleidos/utils/agendaitem-utils';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
-export default Component.extend({
-  store: inject(),
-  currentSession: inject(),
-  classNames: ['auk-u-mb-8'],
-  subcase: null,
+export default class SubcaseDescription extends Component {
+  @service store;
+  @service currentSession;
 
-  subcaseName: cached('subcase.subcaseName'), // TODO in class syntax use as a decorator instead
-  type: cached('subcase.type'), // TODO in class syntax use as a decorator instead
-  showAsRemark: cached('subcase.showAsRemark'), // TODO in class syntax use as a decorator instead
+  @tracked subcaseName
+  @tracked caseTypes ;
+  @tracked showAsRemark ;
+  @tracked caseType ;
+  @tracked remarkType ;
 
-  remarkType: computed('subcase.remarkType', function() {
-    return this.subcase.get('remarkType');
-  }),
 
-  caseTypes: computed('store', async function() {
-    return await this.store.query('case-type', {
+  @tracked latestMeeting ;
+  @tracked latestAgenda ;
+  @tracked latestAgendaItem ;
+  @tracked isRetracted ;
+
+  @tracked isEditing = false;
+  @tracked isLoading = false;
+
+
+  constructor() {
+    super(...arguments);
+    this.subcaseName = this.args.subcase.subcaseName;
+    this.showAsRemark = this.args.subcase.showAsRemark;
+
+    this.loadSubcaseDetails.perform();
+    this.loadCaseTypes.perform();
+    this.loadRemarkType.perform();
+  }
+
+  @task
+  *loadSubcaseDetails() {
+    this.latestMeeting = yield this.args.subcase.requestedForMeeting;
+    this.latestAgenda = yield this.store.queryOne('agenda', {
+      'filter[created-for][:id:]': this.latestMeeting.id,
+      sort: '-created', // serialnumber
+    })
+    this.latestAgendaItem = yield  this.store.queryOne('agendaitem', {
+      'filter[agenda-activity][subcase][:id:]': this.subcase.id,
+      'filter[:has-no:next-version]': 't',
+      sort: '-created',
+    });
+    this.isRetracted = yield this.latestAgendaItem.retracted;
+  }
+
+  @task
+  *loadRemarkType() {
+    let uri = '';
+    if (this.showAsRemark) {
+      uri = CONSTANTS.CASE_TYPES.REMARK;
+    } else {
+      uri = CONSTANTS.CASE_TYPES.NOTA;
+    }
+    this.remarkType = yield this.store.findRecordByUri('case-type', uri);
+  }
+
+  @task
+  *loadCaseTypes() {
+    this.caseTypes =  yield this.store.query('case-type', {
       sort: '-label',
       filter: {
         deprecated: false,
       },
     });
-  }),
+  }
 
-  latestMeetingId: computed('subcase.latestMeeting', function() {
-    return this.subcase.get('latestMeeting').then((meeting) => meeting.id);
-  }),
+  @action
+  toggleIsEditing() {
+    this.isEditing = !this.isEditing;
+  }
 
-  latestAgendaId: computed('subcase.latestAgenda', function() {
-    return this.subcase.get('latestAgenda').then((agenda) => agenda.id);
-  }),
+  @action
+  async cancelEditing() {
+    this.isEditing = false;
+  }
 
-  latestAgendaitemId: computed('subcase.latestAgendaitem', function() {
-    return this.subcase.get('latestAgendaitem').then((agendaitem) => agendaitem?.id);
-  }),
+  @action
+  async selectCaseType(type) {
+    this.caseType =  type;
+  }
 
-  isRetracted: computed('subcase.latestAgendaitem', function() {
-    return this.subcase.get('latestAgendaitem').then((agendaitem) => agendaitem?.retracted);
-  }),
+  @action
+  selectRemarkType(event) {
+    const id = event.target.value;
+    const type = this.store.peekRecord('case-type', id);
+    this.showAsRemark =  type.get('uri') ===  CONSTANTS.CASE_TYPES.REMARK;
+  }
 
-  // TODO: octane-refactor
-  // eslint-disable-next-line ember/no-actions-hash
-  actions: {
-    toggleIsEditing() {
-      this.toggleProperty('isEditing');
-    },
+  @action
+  async saveChanges() {
+    const resetFormallyOk = true;
+    this.isLoading = true;
 
-    async cancelEditing() {
-      const propertiesToSetOnSubCase = {
-        subcaseName: this.get('subcaseName'),
-        type: this.get('type'),
-        showAsRemark: this.get('showAsRemark'),
-      };
-      cancelEdit(this.subcase, propertiesToSetOnSubCase);
-      set(this, 'isEditing', false);
-    },
+    const propertiesToSetOnAgendaitem = {
+      showAsRemark: this.showAsRemark,
+    };
 
-    async selectType(type) {
-      const subcaseName = type.get('label');
-      this.set('type', type);
-      this.set('subcaseName', subcaseName);
-    },
+    const propertiesToSetOnSubCase = {
+      subcaseName: this.subcaseName,
+      type: this.caseType,
+      showAsRemark: this.showAsRemark,
+    };
+    await saveSubcaseDescription(this.subcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubCase, resetFormallyOk);
+    this.isLoading = false;
+    this.isEditing = false;
+  }
 
-    selectRemarkType(event) {
-      const id = event.target.value;
-      const type = this.store.peekRecord('case-type', id);
-      this.set('showAsRemark', type.get('uri') ===  CONSTANTS.CASE_TYPES.REMARK);
-    },
-
-    async saveChanges() {
-      const resetFormallyOk = true;
-      set(this, 'isLoading', true);
-
-      const propertiesToSetOnAgendaitem = {
-        showAsRemark: this.get('showAsRemark'),
-      };
-
-      const propertiesToSetOnSubCase = {
-        subcaseName: this.get('subcaseName'),
-        type: this.get('type'),
-        showAsRemark: this.get('showAsRemark'),
-      };
-      await saveSubcaseDescription(this.subcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubCase, resetFormallyOk);
-      set(this, 'isLoading', false);
-      this.toggleProperty('isEditing');
-    },
-  },
-});
+}
