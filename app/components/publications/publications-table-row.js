@@ -16,18 +16,22 @@ export default class PublicationsPublicationsTableRowComponent extends Component
   constructor() {
     super(...arguments);
 
+    this.loadDecision.perform();
     this.loadData.perform();
   }
 
   @task
-  *loadData() {
+  *loadDecision() {
     const publicationSubcase = yield this.args.publicationFlow.publicationSubcase;
     this.decision = yield this.store.queryOne('decision', {
       'filter[publication-activity][subcase][:id:]': publicationSubcase.id,
       sort: 'publication-activity.start-date,publication-date',
     });
+  }
 
-    const publicationFlow = yield this.store.findRecord('publication-flow', this.args.publicationFlow.id, {
+  @task
+  *loadData() {
+    const publicationFlow = yield this.store.findRecord('publication-flow', {
       include: [
         'translation-subcase',
 
