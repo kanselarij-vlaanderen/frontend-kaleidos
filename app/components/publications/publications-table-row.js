@@ -35,16 +35,20 @@ export default class PublicationsPublicationsTableRowComponent extends Component
       ].join(',')
     });
 
-    const translationSubcase = yield publicationFlow.translationSubcase;
-    const requestActivities = yield translationSubcase.requestActivities;
-    const pieces = (yield Promise.all(requestActivities.mapBy('usedPieces')))
+    this.pages = yield this.getPageCount(publicationFlow);
+  }
+
+  async getPageCount(publicationFlow) {
+    const translationSubcase = await publicationFlow.translationSubcase;
+    const requestActivities = await translationSubcase.requestActivities;
+    const pieces = (await Promise.all(requestActivities.mapBy('usedPieces')))
       .map(pieces => pieces.toArray())
       .flat();
     const pageCounts = pieces.map(p => p.pages).compact();
     if (!pageCounts.length) {
-      this.pages = undefined;
+      return undefined;
     } else {
-      this.pages = add(pageCounts);
+      return add(pageCounts);
     }
   }
 
