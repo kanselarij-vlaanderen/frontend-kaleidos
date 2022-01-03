@@ -35,9 +35,7 @@ export default class PublicationsPublicationsTableRowComponent extends Component
         'translation-subcase.request-activities.used-pieces',
 
         'publication-subcase',
-        'publication-subcase.request-activities',
         'publication-subcase.proofing-activities',
-        'publication-subcase.publication-activities'
       ].join(',')
     });
 
@@ -64,9 +62,8 @@ export default class PublicationsPublicationsTableRowComponent extends Component
 
   async getProofRequestDate(publicationFlow) {
     const publicationSubcase = await publicationFlow.publicationSubcase;
-    const requestActivities = await publicationSubcase.requestActivities;
-    const proofRequestActivities = requestActivities.filterBy('proofingActivity');
-    const startDates = proofRequestActivities.mapBy('startDate');
+    const proofingActivities = await publicationSubcase.proofingActivities;
+    const startDates = proofingActivities.mapBy('startDate');
     startDates.sort();
     const firstProofRequestDate = startDates[0];
     return firstProofRequestDate;
