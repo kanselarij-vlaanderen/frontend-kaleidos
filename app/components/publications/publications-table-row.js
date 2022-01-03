@@ -31,7 +31,9 @@ export default class PublicationsPublicationsTableRowComponent extends Component
 
   @task
   *loadData() {
-    const publicationFlow = yield this.store.findRecord('publication-flow', {
+    // using queryOne instead of findRecord: findRecord causes included records to be fetched again
+    const publicationFlow = yield this.store.queryOne('publication-flow', {
+      'filter[:id:]': this.args.publicationFlow.id,
       include: [
         'translation-subcase',
 
