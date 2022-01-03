@@ -37,7 +37,7 @@ export default [
     translationKey: 'publications-table-pages',
     translationKeySmall: 'publications-table-pages-small',
     sortKey: 'translation-subcase.translation-activities.used-pieces.pages',
-    showByDefault: true,
+    showByDefault: false,
   },
   {
     keyName: 'decisionDate',
@@ -57,7 +57,7 @@ export default [
     keyName: 'translationRequestDate',
     translationKey: 'publications-table-translation-request-date',
     translationKeySmall: 'publications-table-translation-request-date-small',
-    showByDefault: true,
+    showByDefault: false,
     sortKey: 'translation-subcase.request-activities.start-date',
   },
   {
@@ -71,7 +71,7 @@ export default [
     keyName: 'proofRequestDate',
     translationKey: 'publications-table-proof-request-date',
     translationKeySmall: 'publications-table-proof-request-date-small',
-    showByDefault: true,
+    showByDefault: false,
     sortKey: 'publication-subcase.request-activities.start-date',
   },
   {
