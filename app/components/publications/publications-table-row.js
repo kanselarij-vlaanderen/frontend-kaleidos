@@ -42,6 +42,9 @@ export default class PublicationsPublicationsTableRowComponent extends Component
     const translationSubcase = await publicationFlow.translationSubcase;
     const requestActivities = await translationSubcase.requestActivities;
     const pieces = (await Promise.all(requestActivities.mapBy('usedPieces')))
+      // if not calling to array, Ember seems to skip mapBy
+      // flattening an array of request activities
+      // probably an Ember Data bug
       .map(pieces => pieces.toArray())
       .flat();
     const pageCounts = pieces.map(p => p.pages).compact();
