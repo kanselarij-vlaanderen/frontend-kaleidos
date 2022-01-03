@@ -1,9 +1,9 @@
 {{#if this.textTooLong}}
   <div class="auk-o-flex">
     {{#if (has-block)}}
-      {{yield this.abbreviatedText}}
+      {{yield this.abbreviatedText}}...
     {{else}}
-      {{this.abbreviatedText}}
+      {{this.abbreviatedText}}...
     {{/if}}
     <Auk::ButtonLink
       @icon="circle-three-dots"
