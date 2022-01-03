@@ -17,6 +17,7 @@ export default [
     keyName: 'numacNumber',
     translationKey: 'publications-table-numacnummer-bs',
     translationKeySmall: 'publications-table-numacnummer-bs-small',
+    sortKey: 'numac-numbers.id-name,-created',
     showByDefault: true,
   },
   {
