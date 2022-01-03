@@ -36,7 +36,7 @@ export default [
     keyName: 'pages',
     translationKey: 'publications-table-pages',
     translationKeySmall: 'publications-table-pages-small',
-    sortKey: 'translation-subcase.translation-activities.used-pieces.pages',
+    // no sort: is aggregated in frontend
     showByDefault: false,
   },
   {
