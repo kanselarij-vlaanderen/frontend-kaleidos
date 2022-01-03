@@ -11,6 +11,7 @@ export default class PublicationsPublicationsTableRowComponent extends Component
 
   @tracked decision;
   @tracked pages;
+  @tracked proofRequestDate;
 
   constructor() {
     super(...arguments);
@@ -32,10 +33,16 @@ export default class PublicationsPublicationsTableRowComponent extends Component
 
         'translation-subcase.request-activities',
         'translation-subcase.request-activities.used-pieces',
+
+        'publication-subcase',
+        'publication-subcase.request-activities',
+        'publication-subcase.proofing-activities',
+        'publication-subcase.publication-activities'
       ].join(',')
     });
 
     this.pages = yield this.getPageCount(publicationFlow);
+    this.proofRequestDate = yield this.getProofRequestDate(publicationFlow)
   }
 
   async getPageCount(publicationFlow) {
@@ -53,6 +60,19 @@ export default class PublicationsPublicationsTableRowComponent extends Component
     } else {
       return add(pageCounts);
     }
+  }
+
+  async getProofRequestDate(publicationFlow) {
+    const publicationSubcase = await publicationFlow.publicationSubcase;
+    const requestActivities = await publicationSubcase.requestActivities;
+    console.log(requestActivities);
+    const proofRequestActivities = requestActivities.filterBy('proofingActivity');
+    console.log(proofRequestActivities);
+    const startDates = proofRequestActivities.mapBy('startDate');
+    startDates.sort();
+    const firstProofRequestDate = startDates[0];
+    console.log(firstProofRequestDate)
+    return firstProofRequestDate;
   }
 
   @action
