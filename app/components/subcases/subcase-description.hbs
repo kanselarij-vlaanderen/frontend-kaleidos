@@ -1,217 +1,255 @@
 <div class="auk-u-mb-8">
-  {{#if (or this.loadSubcaseDetails.isRunning this.loadCaseTypes.isRunning this.loadRemarkType.isRunning)}}
+  {{#if
+    (or
+      this.loadSubcaseDetails.isRunning
+      this.loadCaseTypes.isRunning
+      this.loadRemarkType.isRunning
+    )
+  }}
     <div class="auk-o-flex auk-o-flex--center auk-u-mt-4">
       <Auk::Loader @message={{t "loading"}} />
     </div>
   {{else}}
     {{#if (not this.isEditing)}}
-    <div class="auk-o-flex auk-o-flex--align-baseline">
-      <h3 class="auk-h2">
-        {{t "subcase"}}
-      </h3>
-      {{#if this.currentSession.isEditor}}
-        <div class="auk-u-ml-2">
-          <Auk::ButtonLink
-            data-test-subcase-description-edit
-            {{on "click"  this.toggleIsEditing}}
-          >
-            {{t "edit"}}
-          </Auk::ButtonLink>
-        </div>
-      {{/if}}
-    </div>
-    <div class="auk-u-mb-4">
-      <p class="auk-u-text-capitalize">
-        {{this.subcaseName}}
-      </p>
-      <ul class="vlc-status-timeline">
-        {{#each (await @subcase.phases) as |phase|}}
-          <li class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
-              data-test-subcase-description-timeline-item>
-            <div class="vlc-status-timeline__dot"></div>
-            {{#if (is-pending phase)}}
-              <div class="skeletal-loader" role="alert" aria-busy="true"></div>
-            {{else}}
-              <div class="vlc-status-timeline__text">
-                {{subcase-timeline-item-text phase=phase}}
-              </div>
-            {{/if}}
-          </li>
-        {{/each}}
-      </ul>
-    </div>
-    <div class="auk-o-grid">
-      <div class="auk-o-grid-col-4 auk-u-mt">
-        {{!-- TODO: modify test-selector strategy to be able to use <Auk::KeyValue> --}}
-        <div class="auk-key-value-item">
-          <div class="auk-key-value-item__label">
-            {{t "number-session"}}
-          </div>
-          <div data-test-subcase-description-meeting-number class="auk-key-value-item__value">
-            {{#if this.latestMeeting.number}}
-              {{await this.latestMeeting.number}}
-            {{else}}
-              {{t "no-number-yet"}}
-            {{/if}}
-          </div>
-        </div>
-        <div class="auk-key-value-item">
-          <div class="auk-key-value-item__label">
-            {{t "requested-for-session"}}
-          </div>
-          <div data-test-subcase-description-meeting-planned-start class="auk-key-value-item__value">
-            {{#if this.latestMeeting.plannedStart}}
-              {{t "requested-for-agenda"}}
-              {{moment-format
-                this.latestMeeting.plannedStart
-                "DD MMMM YYYY"
-              }}
-            {{else}}
-              <p>{{t "not-yet-requested"}}</p>
-            {{/if}}
-          </div>
-        </div>
-      </div>
-      <div class="auk-o-grid-col-4 auk-u-mt">
-        <div class="auk-key-value-item">
-          <div class="auk-key-value-item__label">
-            {{t "is-on-agenda"}}
-          </div>
-          <div class="auk-key-value-item__value" data-test-subcase-description-agenda-link-container>
-            {{#if
-              (or
-                (is-pending this.isRetracted)
-                (is-pending @subcase.onAgendaInfo)
-              )
-            }}
-              <div class="auk-loader" role="alert" aria-busy="true"></div>
-            {{else}}
-              {{#if (await @subcase.onAgendaInfo)}}
-                {{#if
-                  (this.isRetracted)
-                }}
-                  {{t "postponed-subcase"}}
-                {{/if}}
-                <Auk::ButtonLink
-                  data-test-subcase-description-agenda-link
-                  @route="agenda.agendaitems.agendaitem"
-                  @models={{array
-                  (this.latestMeeting.id)
-                  (this.latestAgenda.id)
-                  (this.latestAgendaitem.id)
-                }}
-                >
-                  {{moment-format (await @subcase.onAgendaInfo)  "DD MMMM YYYY"}}
-                </Auk::ButtonLink>
-              {{else}}
-                {{t "not-yet-on-agenda"}}
-              {{/if}}
-            {{/if}}
-          </div>
-        </div>
-        <div class="auk-key-value-item">
-          <div class="auk-key-value-item__label">
-            {{t "date-last-edited"}}
-          </div>
-          <div data-test-subcase-description-modified class="auk-key-value-item__value">
-            {{moment-format @subcase.modified "DD MMMM YYYY"}}
-          </div>
-        </div>
-      </div>
-      <div class="auk-o-grid-col-4 auk-u-mt">
-        <div class="auk-key-value-item">
-          <div class="auk-key-value-item__label">
-            {{t "decided-on"}}
-          </div>
-          <div data-test-subcase-description-decided-on class="auk-key-value-item__value">
-            {{#if (is-pending @subcase.approved)}}
-              <div class="skeletal-loader" role="alert" aria-busy="true"></div>
-            {{else if (await @subcase.approved)}}
-              {{moment-format (await this.latestMeeting.plannedStart) "DD.MM.YYYY"}}
-            {{else}}
-              {{t "not-yet-decided"}}
-            {{/if}}
-          </div>
-        </div>
-        <div class="auk-key-value-item">
-          <div class="auk-key-value-item__label">
-            {{t "requested-by"}}
-          </div>
-          <div data-test-subcase-description-requested-by class="auk-key-value-item__value">
-            {{#if
-              (or
-                (is-pending @subcase.requestedBy)
-                (is-pending @subcase.requestedBy.person)
-              )
-            }}
-              <div class="skeletal-loader" role="alert" aria-busy="true"></div>
-            {{else if @subcase.requestedBy}}
-              {{@subcase.requestedBy.person.nameToDisplay}}
-            {{else}}
-              {{t "not-yet-requested"}}
-            {{/if}}
-          </div>
-        </div>
-      </div>
-    </div>
-  {{else}}
-    <div class="auk-box">
-      <div class="auk-u-mb-4">
-        <div class="auk-form-group">
-          <div class="auk-u-mb-4">
-            <fieldset>
-              <legend class="auk-label">{{t "subcase-type"}}</legend>
-              <Auk::RadioList @layout="inline" as |List|>
-                {{#each (await this.caseTypes) as |type index|}}
-                  <List.Radio
-                    @label={{type.label}}
-                    @checked={{if (this.remarkType)
-                                  (eq type.uri (this.remarkType.uri))
-                                  (eq index 0)}}
-                    value={{type.id}}
-                    {{on "change" this.selectRemarkType}}
-                  />
-                {{/each}}
-              </Auk::RadioList>
-            </fieldset>
-          </div>
-        </div>
-        <div class="auk-form-group">
-          <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
-          <Utils::ModelSelector
-            @modelName="subcase-type"
-            @searchField="label"
-            @sortField="label"
-            @propertyToShow="label"
-            @selectedItems={{this.caseType}}
-            @selectModel={{this.selectCaseType}}
-          />
-        </div>
-        <div class="auk-form-group">
-          <Auk::Label>{{t "subcase-name"}}</Auk::Label>
-          <Auk::Input
-            @block={{true}}
-            @value={{mut this.subcaseName}}
-          />
-        </div>
-      </div>
-      <Auk::Toolbar @auto={{true}}>
-        <Auk::Toolbar::Group @position="right">
-          <Auk::Toolbar::Item>
-            <Auk::ButtonLink {{on "click" this.cancelEditing}}>
-              {{t "cancel"}}
+      <div class="auk-o-flex auk-o-flex--align-baseline">
+        <h3 class="auk-h2">
+          {{t "subcase"}}
+        </h3>
+        {{#if this.currentSession.isEditor}}
+          <div class="auk-u-ml-2">
+            <Auk::ButtonLink
+              data-test-subcase-description-edit
+              {{on "click" this.toggleIsEditing}}
+            >
+              {{t "edit"}}
             </Auk::ButtonLink>
-          </Auk::Toolbar::Item>
-          <Auk::Toolbar::Item>
-            <WebComponents::VlSaveButton
-              @text={{t "save"}}
-              @isLoading={{this.isLoading}}
-              @saveAction={{this.saveChanges}}
+          </div>
+        {{/if}}
+      </div>
+      <div class="auk-u-mb-4">
+        <p class="auk-u-text-capitalize">
+          {{this.subcaseName}}
+        </p>
+        <ul class="vlc-status-timeline">
+          {{#each (await @subcase.phases) as |phase|}}
+            <li
+              class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+              data-test-subcase-description-timeline-item
+            >
+              <div class="vlc-status-timeline__dot"></div>
+              {{#if (is-pending phase)}}
+                <div
+                  class="skeletal-loader"
+                  role="alert"
+                  aria-busy="true"
+                ></div>
+              {{else}}
+                <div class="vlc-status-timeline__text">
+                  {{subcase-timeline-item-text phase=phase}}
+                </div>
+              {{/if}}
+            </li>
+          {{/each}}
+        </ul>
+      </div>
+      <div class="auk-o-grid">
+        <div class="auk-o-grid-col-4 auk-u-mt">
+          {{! TODO: modify test-selector strategy to be able to use <Auk::KeyValue> }}
+          <div class="auk-key-value-item">
+            <div class="auk-key-value-item__label">
+              {{t "number-session"}}
+            </div>
+            <div
+              data-test-subcase-description-meeting-number
+              class="auk-key-value-item__value"
+            >
+              {{#if this.latestMeeting.number}}
+                {{await this.latestMeeting.number}}
+              {{else}}
+                {{t "no-number-yet"}}
+              {{/if}}
+            </div>
+          </div>
+          <div class="auk-key-value-item">
+            <div class="auk-key-value-item__label">
+              {{t "requested-for-session"}}
+            </div>
+            <div
+              data-test-subcase-description-meeting-planned-start
+              class="auk-key-value-item__value"
+            >
+              {{#if this.latestMeeting.plannedStart}}
+                {{t "requested-for-agenda"}}
+                {{moment-format this.latestMeeting.plannedStart "DD MMMM YYYY"}}
+              {{else}}
+                <p>{{t "not-yet-requested"}}</p>
+              {{/if}}
+            </div>
+          </div>
+        </div>
+        <div class="auk-o-grid-col-4 auk-u-mt">
+          <div class="auk-key-value-item">
+            <div class="auk-key-value-item__label">
+              {{t "is-on-agenda"}}
+            </div>
+            <div
+              class="auk-key-value-item__value"
+              data-test-subcase-description-agenda-link-container
+            >
+              {{#if
+                (or
+                  (is-pending this.isRetracted)
+                  (is-pending @subcase.onAgendaInfo)
+                )
+              }}
+                <div class="auk-loader" role="alert" aria-busy="true"></div>
+              {{else}}
+                {{#if (await @subcase.onAgendaInfo)}}
+                  {{#if (this.isRetracted)}}
+                    {{t "postponed-subcase"}}
+                  {{/if}}
+                  <Auk::ButtonLink
+                    data-test-subcase-description-agenda-link
+                    @route="agenda.agendaitems.agendaitem"
+                    @models={{array
+                      (this.latestMeeting.id)
+                      (this.latestAgenda.id)
+                      (this.latestAgendaitem.id)
+                    }}
+                  >
+                    {{moment-format
+                      (await @subcase.onAgendaInfo)
+                      "DD MMMM YYYY"
+                    }}
+                  </Auk::ButtonLink>
+                {{else}}
+                  {{t "not-yet-on-agenda"}}
+                {{/if}}
+              {{/if}}
+            </div>
+          </div>
+          <div class="auk-key-value-item">
+            <div class="auk-key-value-item__label">
+              {{t "date-last-edited"}}
+            </div>
+            <div
+              data-test-subcase-description-modified
+              class="auk-key-value-item__value"
+            >
+              {{moment-format @subcase.modified "DD MMMM YYYY"}}
+            </div>
+          </div>
+        </div>
+        <div class="auk-o-grid-col-4 auk-u-mt">
+          <div class="auk-key-value-item">
+            <div class="auk-key-value-item__label">
+              {{t "decided-on"}}
+            </div>
+            <div
+              data-test-subcase-description-decided-on
+              class="auk-key-value-item__value"
+            >
+              {{#if (is-pending @subcase.approved)}}
+                <div
+                  class="skeletal-loader"
+                  role="alert"
+                  aria-busy="true"
+                ></div>
+              {{else if (await @subcase.approved)}}
+                {{moment-format
+                  (await this.latestMeeting.plannedStart)
+                  "DD.MM.YYYY"
+                }}
+              {{else}}
+                {{t "not-yet-decided"}}
+              {{/if}}
+            </div>
+          </div>
+          <div class="auk-key-value-item">
+            <div class="auk-key-value-item__label">
+              {{t "requested-by"}}
+            </div>
+            <div
+              data-test-subcase-description-requested-by
+              class="auk-key-value-item__value"
+            >
+              {{#if
+                (or
+                  (is-pending @subcase.requestedBy)
+                  (is-pending @subcase.requestedBy.person)
+                )
+              }}
+                <div
+                  class="skeletal-loader"
+                  role="alert"
+                  aria-busy="true"
+                ></div>
+              {{else if @subcase.requestedBy}}
+                {{@subcase.requestedBy.person.nameToDisplay}}
+              {{else}}
+                {{t "not-yet-requested"}}
+              {{/if}}
+            </div>
+          </div>
+        </div>
+      </div>
+    {{else}}
+      <div class="auk-box">
+        <div class="auk-u-mb-4">
+          <div class="auk-form-group">
+            <div class="auk-u-mb-4">
+              <fieldset>
+                <legend class="auk-label">{{t "subcase-type"}}</legend>
+                <Auk::RadioList @layout="inline" as |List|>
+                  {{#each (await this.caseTypes) as |type index|}}
+                    <List.Radio
+                      @label={{type.label}}
+                      @checked={{if
+                        (this.remarkType)
+                        (eq type.uri (this.remarkType.uri))
+                        (eq index 0)
+                      }}
+                      value={{type.id}}
+                      {{on "change" this.selectRemarkType}}
+                    />
+                  {{/each}}
+                </Auk::RadioList>
+              </fieldset>
+            </div>
+          </div>
+          <div class="auk-form-group">
+            <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
+            <Utils::ModelSelector
+              @modelName="subcase-type"
+              @searchField="label"
+              @sortField="label"
+              @propertyToShow="label"
+              @selectedItems={{this.caseType}}
+              @selectModel={{this.selectCaseType}}
             />
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-      </Auk::Toolbar>
-    </div>
-  {{/if}}
+          </div>
+          <div class="auk-form-group">
+            <Auk::Label>{{t "subcase-name"}}</Auk::Label>
+            <Auk::Input @block={{true}} @value={{mut this.subcaseName}} />
+          </div>
+        </div>
+        <Auk::Toolbar @auto={{true}}>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <Auk::ButtonLink {{on "click" this.cancelEditing}}>
+                {{t "cancel"}}
+              </Auk::ButtonLink>
+            </Auk::Toolbar::Item>
+            <Auk::Toolbar::Item>
+              <WebComponents::VlSaveButton
+                @text={{t "save"}}
+                @isLoading={{this.isLoading}}
+                @saveAction={{this.saveChanges}}
+              />
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </div>
+    {{/if}}
   {{/if}}
 </div>
