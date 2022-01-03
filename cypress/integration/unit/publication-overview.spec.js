@@ -104,7 +104,7 @@ context('Publications overview tests', () => {
       'translationDueDate',
       'publicationDueDate',
       'publicationDate',
-      'publicationReceivedDate',
+      'proofReceivedDate',
       'translationReceivedDate',
       'translations',
       'proofs',
