@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 
-export default class PublicationsIndexRoute extends Route {
+export default class PublicationsOverviewReportRoute extends Route {
   queryParams = {
     page: {
       refreshModel: true,
@@ -36,7 +36,7 @@ export default class PublicationsIndexRoute extends Route {
   loading(transition) {
     // see snippet in https://api.emberjs.com/ember/3.27/classes/Route/events/loading?anchor=loading
     // eslint-disable-next-line ember/no-controller-access-in-routes
-    const controller = this.controllerFor('publications.index');
+    const controller = this.controllerFor('publications.overview.report');
     controller.isLoadingModel = true;
     transition.promise.finally(() => {
       controller.isLoadingModel = false;
