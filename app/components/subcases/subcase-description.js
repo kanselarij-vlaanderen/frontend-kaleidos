@@ -27,7 +27,7 @@ export default class SubcaseDescription extends Component {
   constructor() {
     super(...arguments);
     this.showAsRemark = this.args.subcase.showAsRemark;
-    this.subcaseName = this.args.subcase.subcaseName ;
+    this.subcaseName = this.args.subcase.subcaseName;
     this.loadSubcaseDetails.perform();
     this.loadSubcaseType.perform();
     this.loadCaseTypes.perform();
@@ -57,7 +57,6 @@ export default class SubcaseDescription extends Component {
       uri = CONSTANTS.CASE_TYPES.NOTA;
     }
     this.caseType = yield this.store.findRecordByUri('case-type', uri);
-    console.log(this.caseType)
   }
 
   @task
@@ -95,7 +94,6 @@ export default class SubcaseDescription extends Component {
   selectCaseType(event) {
     const id = event.target.value;
     this.caseType = this.store.peekRecord('case-type', id);
-
     this.showAsRemark = this.caseType.get('uri') === CONSTANTS.CASE_TYPES.REMARK;
   }
 
@@ -136,6 +134,7 @@ export default class SubcaseDescription extends Component {
     });
     if (newsletterInfo?.id) {
       await newsletterInfo.deleteRecord();
+      await newsletterInfo.save();
     }
     if (this.showAsRemark) {
       const newNewsletterInfo =
