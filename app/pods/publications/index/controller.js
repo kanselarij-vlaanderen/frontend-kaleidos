@@ -40,12 +40,6 @@ export default class PublicationsIndexController extends Controller {
   }
 
   @action
-  closeFilterTableModal() {
-    localStorage.setItem('tableColumnDisplayOptions', JSON.stringify(this.tableColumnDisplayOptions));
-    this.showTableDisplayOptions = false;
-  }
-
-  @action
   changeColumnDisplayOptions(options) {
     this.tableColumnDisplayOptions = options;
     localStorage.setItem('tableColumnDisplayOptions', JSON.stringify(this.tableColumnDisplayOptions));
