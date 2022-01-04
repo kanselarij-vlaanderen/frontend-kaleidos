@@ -3,7 +3,8 @@
     (or
       this.loadSubcaseDetails.isRunning
       this.loadCaseTypes.isRunning
-      this.loadRemarkType.isRunning
+      this.loadSubcaseType.isRunning
+      this.loadCaseType.isRunning
     )
   }}
     <div class="auk-o-flex auk-o-flex--center auk-u-mt-4">
@@ -64,7 +65,7 @@
               class="auk-key-value-item__value"
             >
               {{#if this.latestMeeting.number}}
-                {{await this.latestMeeting.number}}
+                {{this.latestMeeting.number}}
               {{else}}
                 {{t "no-number-yet"}}
               {{/if}}
@@ -98,27 +99,27 @@
             >
               {{#if
                 (or
-                  (is-pending this.isRetracted)
+                  (is-pending this.latestAgendaItem.retracted)
                   (is-pending @subcase.onAgendaInfo)
                 )
               }}
                 <div class="auk-loader" role="alert" aria-busy="true"></div>
               {{else}}
-                {{#if (await @subcase.onAgendaInfo)}}
-                  {{#if (this.isRetracted)}}
+                {{#if this.latestMeeting.plannedStart}}
+                  {{#if this.latestAgendaItem.retracted}}
                     {{t "postponed-subcase"}}
                   {{/if}}
                   <Auk::ButtonLink
                     data-test-subcase-description-agenda-link
                     @route="agenda.agendaitems.agendaitem"
                     @models={{array
-                      (this.latestMeeting.id)
-                      (this.latestAgenda.id)
-                      (this.latestAgendaitem.id)
+                      this.latestMeeting.id
+                      this.latestAgenda.id
+                      this.latestAgendaItem.id
                     }}
                   >
                     {{moment-format
-                      (await @subcase.onAgendaInfo)
+                      this.latestMeeting.plannedStart
                       "DD MMMM YYYY"
                     }}
                   </Auk::ButtonLink>
@@ -156,10 +157,7 @@
                   aria-busy="true"
                 ></div>
               {{else if (await @subcase.approved)}}
-                {{moment-format
-                  (await this.latestMeeting.plannedStart)
-                  "DD.MM.YYYY"
-                }}
+                {{moment-format this.latestMeeting.plannedStart "DD.MM.YYYY"}}
               {{else}}
                 {{t "not-yet-decided"}}
               {{/if}}
@@ -201,16 +199,12 @@
               <fieldset>
                 <legend class="auk-label">{{t "subcase-type"}}</legend>
                 <Auk::RadioList @layout="inline" as |List|>
-                  {{#each (await this.caseTypes) as |type index|}}
+                  {{#each this.caseTypes as |type|}}
                     <List.Radio
                       @label={{type.label}}
-                      @checked={{if
-                        (this.remarkType)
-                        (eq type.uri (this.remarkType.uri))
-                        (eq index 0)
-                      }}
+                      @checked={{eq type.uri this.caseType.uri}}
                       value={{type.id}}
-                      {{on "change" this.selectRemarkType}}
+                      {{on "change" this.selectCaseType}}
                     />
                   {{/each}}
                 </Auk::RadioList>
@@ -224,8 +218,8 @@
               @searchField="label"
               @sortField="label"
               @propertyToShow="label"
-              @selectedItems={{this.caseType}}
-              @selectModel={{this.selectCaseType}}
+              @selectedItems={{this.subcaseType}}
+              @selectModel={{this.selectSubcaseType}}
             />
           </div>
           <div class="auk-form-group">

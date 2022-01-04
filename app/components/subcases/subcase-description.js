@@ -13,26 +13,25 @@ export default class SubcaseDescription extends Component {
 
   @tracked subcaseName;
   @tracked caseTypes;
-  @tracked showAsRemark;
+  @tracked subcaseType;
   @tracked caseType;
-  @tracked remarkType;
+  @tracked showAsRemark;
 
   @tracked latestMeeting;
   @tracked latestAgenda;
   @tracked latestAgendaItem;
-  @tracked isRetracted;
 
   @tracked isEditing = false;
   @tracked isLoading = false;
 
   constructor() {
     super(...arguments);
-    this.subcaseName = this.args.subcase.subcaseName;
     this.showAsRemark = this.args.subcase.showAsRemark;
-
+    this.subcaseName = this.args.subcase.subcaseName ;
     this.loadSubcaseDetails.perform();
+    this.loadSubcaseType.perform();
     this.loadCaseTypes.perform();
-    this.loadRemarkType.perform();
+    this.loadCaseType.perform();
   }
 
   @task
@@ -43,22 +42,27 @@ export default class SubcaseDescription extends Component {
       sort: '-created', // serialnumber
     });
     this.latestAgendaItem = yield this.store.queryOne('agendaitem', {
-      'filter[agenda-activity][subcase][:id:]': this.subcase.id,
+      'filter[agenda-activity][subcase][:id:]': this.args.subcase.id,
       'filter[:has-no:next-version]': 't',
       sort: '-created',
     });
-    this.isRetracted = yield this.latestAgendaItem.retracted;
   }
 
   @task
-  *loadRemarkType() {
+  *loadCaseType() {
     let uri = '';
     if (this.showAsRemark) {
       uri = CONSTANTS.CASE_TYPES.REMARK;
     } else {
       uri = CONSTANTS.CASE_TYPES.NOTA;
     }
-    this.remarkType = yield this.store.findRecordByUri('case-type', uri);
+    this.caseType = yield this.store.findRecordByUri('case-type', uri);
+    console.log(this.caseType)
+  }
+
+  @task
+  *loadSubcaseType() {
+    this.subcaseType = yield this.args.subcase.type;
   }
 
   @task
@@ -82,15 +86,17 @@ export default class SubcaseDescription extends Component {
   }
 
   @action
-  async selectCaseType(type) {
-    this.caseType = type;
+  async selectSubcaseType(type) {
+    this.subcaseType = type;
+    this.subcaseName = type.label;
   }
 
   @action
-  selectRemarkType(event) {
+  selectCaseType(event) {
     const id = event.target.value;
-    const type = this.store.peekRecord('case-type', id);
-    this.showAsRemark = type.get('uri') === CONSTANTS.CASE_TYPES.REMARK;
+    this.caseType = this.store.peekRecord('case-type', id);
+
+    this.showAsRemark = this.caseType.get('uri') === CONSTANTS.CASE_TYPES.REMARK;
   }
 
   @action
@@ -104,7 +110,7 @@ export default class SubcaseDescription extends Component {
 
     const propertiesToSetOnSubCase = {
       subcaseName: this.subcaseName,
-      type: this.caseType,
+      type: this.subcaseType,
       showAsRemark: this.showAsRemark,
     };
     const oldShowAsRemark = this.args.subcase.showAsRemark;
@@ -130,9 +136,7 @@ export default class SubcaseDescription extends Component {
     });
     if (newsletterInfo?.id) {
       await newsletterInfo.deleteRecord();
-      console.log('deleted : ' + newsletterInfo);
     }
-
     if (this.showAsRemark) {
       const newNewsletterInfo =
         await this.newsletterService.createNewsItemForAgendaitem(
