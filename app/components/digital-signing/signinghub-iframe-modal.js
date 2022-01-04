@@ -46,8 +46,8 @@ export default class SigninghubIframeModalComponent extends Component {
       // in turn means that the iframe redirected back to our domain, because it was done
       // with the required user-interaction
       /** @todo Verify whether this works when deployed */
-      if (event.target.contentWindow.location.origin) {
-        this.isShown = false;
+      const origin = event.target.contentWindow.location.origin;
+      if (origin && origin !== "null" ) {
         this.close();
       }
     } catch (err) {
