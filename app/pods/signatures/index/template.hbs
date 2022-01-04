@@ -94,18 +94,26 @@
                     </Auk::Button>
                     <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
                       <Menu.Item
-                        @route="signatures.signing-flow.documents"
-                        @model={{signFlow}}
-                      >
-                        {{t "view"}}
-                      </Menu.Item>
-                      <Menu.Item
                         {{on
                           "click"
                           (fn this.navigateToDecision signFlow.decisionActivity)
                         }}
                       >
                         {{t "consult-agendaitem-decision"}}
+                      </Menu.Item>
+                      <Menu.Item
+                        {{on
+                          "click"
+                          (fn this.uploadPiecesToSigninghub signFlow)
+                        }}
+                      >
+                        {{t "send-to-signinghub"}}
+                      </Menu.Item>
+                      <Menu.Item
+                        @route="signatures.signing-flow.documents"
+                        @model={{signFlow}}
+                      >
+                        {{t "view-in-signinghub"}}
                       </Menu.Item>
                     </DropdownMenu>
                   </WebComponents::AuButtonToolbar>

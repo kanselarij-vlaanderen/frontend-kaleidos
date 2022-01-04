@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 import { action, set } from '@ember/object';
 import { inject as service } from '@ember/service';
+import * as digitalSigning from 'frontend-kaleidos/utils/digital-signing';
 
 export default class SignaturesIndexController extends Controller {
   @service router;
@@ -59,5 +60,11 @@ export default class SignaturesIndexController extends Controller {
       agenda.id,
       agendaitem.id
     );
+  }
+
+  @action
+  async uploadPiecesToSigninghub(signingFlow) {
+    const pieces = [ await (await (await signingFlow.signSubcase).signMarkingActivity).piece ]
+    digitalSigning.uploadPiecesToSigninghub(signingFlow, pieces);
   }
 }
