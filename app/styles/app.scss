@@ -24,18 +24,16 @@
 
 // VLC COMPONENTS
 @import 'custom-components/vlc-agenda-detail-sidebar';
-@import 'custom-components/vlc-agenda-detail-sidebar-item';
-@import 'custom-components/vlc-agenda-detail-sidebar-section-header';
-@import 'custom-components/vlc-agenda-items-section-header';
+@import 'custom-components/vlc-agenda-detail-sidebar-item'; // todo
+@import 'custom-components/vlc-agenda-detail-sidebar-section-header'; // todo
+@import 'custom-components/vlc-agenda-items-section-header'; // todo
 @import 'custom-components/vlc-agenda-items';
 @import 'custom-components/vlc-agenda-meta';
 @import 'custom-components/vlc-document-card';
 @import 'custom-components/vlc-document-list';
 @import 'custom-components/vlc-environment-pill';
-@import 'custom-components/vlc-dropdown-menu';
-@import 'custom-components/vlc-list-section-header';
 @import 'custom-components/vlc-procedure-step';
-@import 'custom-components/vlc-rdfa-editor';
+@import 'custom-components/vlc-rdfa-editor'; // also (framework) fixes here!
 @import 'custom-components/vlc-status-timeline';
 
 
