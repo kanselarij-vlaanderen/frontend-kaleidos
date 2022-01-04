@@ -67,4 +67,9 @@ export default class SignaturesIndexController extends Controller {
     const pieces = [ await (await (await signingFlow.signSubcase).signMarkingActivity).piece ]
     digitalSigning.uploadPiecesToSigninghub(signingFlow, pieces);
   }
+
+  @action
+  async startSigning(signingFlow) {
+    digitalSigning.startSigning(signingFlow);
+  }
 }

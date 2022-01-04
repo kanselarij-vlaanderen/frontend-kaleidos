@@ -115,6 +115,14 @@
                       >
                         {{t "view-in-signinghub"}}
                       </Menu.Item>
+                      <Menu.Item
+                        {{on
+                          "click"
+                          (fn this.startSigning signFlow)
+                        }}
+                      >
+                        {{t "present-for-signing"}}
+                      </Menu.Item>
                     </DropdownMenu>
                   </WebComponents::AuButtonToolbar>
                 </td>

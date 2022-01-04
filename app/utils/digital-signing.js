@@ -22,6 +22,16 @@ async function uploadPiecesToSigninghub(signingFlow, pieces) {
   return res
 }
 
+async function startSigning(signingFlow) {
+  const endpoint = `/signing-flows/${signingFlow.id}/start`;
+  const options = {
+    method: 'POST',
+  };
+  const res = await fetch(endpoint, options);
+  return res;
+}
+
 export {
-  uploadPiecesToSigninghub
+  uploadPiecesToSigninghub,
+  startSigning
 };
