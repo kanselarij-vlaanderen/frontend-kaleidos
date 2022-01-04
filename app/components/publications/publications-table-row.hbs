@@ -230,26 +230,6 @@ request the whole row and not only the arrow at the end to be clickable }}
       {{/if}}
     </td>
   {{/if}}
-  {{#if @tableColumnDisplayOptions.translations}}
-    <td
-      data-test-publication-table-row-translation-progress-badge
-      class="auk-u-text-nowrap"
-    >
-      <Publications::Publication::Translations::TranslationProgressBadge
-        @translationSubcase={{@publicationFlow.translationSubcase}}
-      />
-    </td>
-  {{/if}}
-  {{#if @tableColumnDisplayOptions.proofs}}
-    <td
-      data-test-publication-table-row-proofs-progress-badge
-      class="auk-u-text-nowrap"
-    >
-      <Publications::Publication::Proofs::ProofsProgressBadge
-        @publicationSubcase={{@publicationFlow.publicationSubcase}}
-      />
-    </td>
-  {{/if}}
   {{#if @tableColumnDisplayOptions.source}}
     <td data-test-publication-table-row-source class="auk-u-text-nowrap">
       {{#if @publicationFlow.case.subcases}}
