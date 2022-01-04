@@ -128,7 +128,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   @task
   *saveTranslationRequest(translationRequest) {
     const now = new Date();
-    if (this.translationSubcase.startDate === null) {
+    if (!this.translationSubcase.startDate) {
       this.translationSubcase.startDate = now;
     }
     this.translationSubcase.dueDate = translationRequest.translationDueDate;

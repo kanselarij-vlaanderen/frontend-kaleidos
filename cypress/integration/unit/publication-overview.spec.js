@@ -92,26 +92,26 @@ context('Publications overview tests', () => {
 
   it('should check and uncheck all settings', () => {
     const columnKeyNames = [
-      'shortTitle',
-      'comment',
-      'decisionDate',
       'speedProcedure',
       'publicationNumber',
-      'regulationType',
       'numacNumber',
+      'shortTitle',
+      'comment',
+      // 'pages', // hidden by default
+      'decisionDate',
       'openingDate',
-      'publicationTargetDate',
+      // 'translationRequestDate', // hidden by default
       'translationDueDate',
-      'publicationDueDate',
-      'publicationDate',
-      'publicationReceivedDate',
-      'translationReceivedDate',
-      'translations',
-      'proofs',
-      'lastEdited',
+      // 'proofRequestDate', // hidden by default
+      'proofReceivedDate',
       'proofPrintCorrector',
-      'status',
-      'source'
+      'publicationTargetDate',
+      'publicationDate',
+      'publicationDueDate',
+      'regulationType',
+      'source',
+      'lastEdited',
+      'status'
     ];
 
     cy.get(publication.publicationsIndex.configIcon).click();
