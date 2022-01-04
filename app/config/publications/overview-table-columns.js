@@ -59,7 +59,7 @@ export default [
     translationKey: 'publications-table-translation-request-date',
     translationKeySmall: 'publications-table-translation-request-date-small',
     showByDefault: false,
-    sortKey: 'translation-subcase.request-activities.start-date',
+    sortKey: 'translation-subcase.start-date',
   },
   {
     keyName: 'translationDueDate',
@@ -73,14 +73,14 @@ export default [
     translationKey: 'publications-table-proof-request-date',
     translationKeySmall: 'publications-table-proof-request-date-small',
     showByDefault: false,
-    sortKey: 'publication-subcase.request-activities.start-date',
+    sortKey: 'publication-subcase.proofing-activities.start-date',
   },
   {
     keyName: 'proofReceivedDate',
     translationKey: 'publications-table-publication-received-date',
     translationKeySmall: 'publications-table-publication-received-date-small',
     showByDefault: true,
-    sortKey: 'publication-subcase.proofing-activities.generated-pieces.received-date',
+    sortKey: 'publication-subcase.received-date',
   },
   {
     keyName: 'proofPrintCorrector',
