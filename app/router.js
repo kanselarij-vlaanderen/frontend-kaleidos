@@ -81,6 +81,7 @@ Router.map(function() {
         this.route('proof', { path: '/in-drukproef', });
         this.route('proofread', { path: '/nalezen', });
         this.route('late', { path: '/te-laat-in-bs', });
+        this.route('reports', { path: '/meer-rapporten', });
       });
       this.route('publication', { path: ':publication_id', }, function() {
         this.route('case', { path: '/dossier', });

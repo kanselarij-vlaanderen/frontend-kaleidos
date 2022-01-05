@@ -1,0 +1,345 @@
+<div class="auk-scroll-wrapper auk-u-p-4">
+  <div class="auk-scroll-wrapper__body">
+    <Auk::Panel>
+      <Auk::Panel::Header>
+        <h4 class="auk-panel__title">Jaarlijkse rapporten</h4>
+      </Auk::Panel::Header>
+
+      <Auk::Panel::Body>
+        <div class="auk-o-grid auk-o-flex--vertical-center">
+          <div class="auk-o-grid-col-8">
+            <h4 class="auk-h4 auk-u-m-0">Publicaties op exacte datum</h4>
+            <p class="auk-u-muted">Laatst aangevraagd op 17/12/2021 om 11:12 door Inti Valderas Caro</p>
+          </div>
+          <div class="auk-o-grid-col-4 auk-u-text-align--right">
+            <Auk::Button @skin="secondary" {{on "click" this.openReportOneModal}}>Rapport maken</Auk::Button>
+          </div>
+        </div>
+        {{#if this.reportOneModal}}
+        <Auk::Modal>
+          <Auk::Modal::Header @title="Rapport: Publicaties op exacte datum" @onResize={{this.closeReportOneModal}} @onClose={{this.closeReportOneModal}} />
+          <Auk::Modal::Body>
+            <div class="auk-o-grid">
+              <div class="auk-o-grid-col-6">
+                <div class="auk-form-group">
+                  <Auk::Label @required={{true}}>Start datum</Auk::Label>
+                  <Auk::Datepicker
+                    @date=""
+                    @onChange=""
+                  />
+                </div>
+              </div>
+              <div class="auk-o-grid-col-6">
+                <div class="auk-form-group">
+                  <Auk::Label>Eind datum</Auk::Label>
+                  <Auk::Datepicker
+                    @date=""
+                    @onChange=""
+                  />
+                </div>
+              </div>
+            </div>
+          </Auk::Modal::Body>
+          <Auk::Modal::Footer @onCancel={{this.closeReportOneModal}}>
+            <Auk::Button @skin="primary" {{on "click" this.confirmReportOneModal}}>Bekijken</Auk::Button>
+          </Auk::Modal::Footer>
+        </Auk::Modal>
+        {{/if}}
+      </Auk::Panel::Body>
+
+      <Auk::Panel::Body>
+        <div class="auk-o-grid auk-o-flex--vertical-center">
+          <div class="auk-o-grid-col-8">
+            <h4 class="auk-h4 auk-u-m-0">Publicaties per beslissingsdatum</h4>
+            <p class="auk-u-muted">Laatst aangevraagd op 17/12/2021 om 11:12 door Inti Valderas Caro</p>
+          </div>
+          <div class="auk-o-grid-col-4 auk-u-text-align--right">
+            <Auk::Button @skin="secondary" {{on "click" this.openReportTwoModal}}>Rapport maken</Auk::Button>
+          </div>
+        </div>
+        {{#if this.reportTwoModal}}
+        <Auk::Modal>
+          <Auk::Modal::Header @title="Rapport: Publicaties per beslissingsdatum" @onResize={{this.closeReportTwoModal}} @onClose={{this.closeReportTwoModal}} />
+          <Auk::Modal::Body>
+            <div class="auk-o-grid">
+              <div class="auk-o-grid-col-6">
+                <div class="auk-form-group">
+                  <Auk::Label @required={{true}}>Start datum</Auk::Label>
+                  <Auk::Datepicker
+                    @date=""
+                    @onChange=""
+                  />
+                </div>
+              </div>
+              <div class="auk-o-grid-col-6">
+                <div class="auk-form-group">
+                  <Auk::Label>Eind datum</Auk::Label>
+                  <Auk::Datepicker
+                    @date=""
+                    @onChange=""
+                  />
+                </div>
+              </div>
+            </div>
+          </Auk::Modal::Body>
+          <Auk::Modal::Footer @onCancel={{this.closeReportTwoModal}}>
+            <Auk::Button @skin="primary" {{on "click" this.confirmReportTwoModal}}>Bekijken</Auk::Button>
+          </Auk::Modal::Footer>
+        </Auk::Modal>
+        {{/if}}
+      </Auk::Panel::Body>
+
+      <Auk::Panel::Body>
+        <div class="auk-o-grid auk-o-flex--vertical-center">
+          <div class="auk-o-grid-col-8">
+            <h4 class="auk-h4 auk-u-m-0">Publicaties per beleidsdomein</h4>
+          </div>
+          <div class="auk-o-grid-col-4 auk-u-text-align--right">
+            <Auk::Button @skin="secondary" {{on "click" this.openReportThreeModal}}>Rapport maken</Auk::Button>
+          </div>
+        </div>
+        {{#if this.reportThreeModal}}
+        <Auk::Modal>
+          <Auk::Modal::Header @title="Rapport: Publicaties per beleidsdomein" @onResize={{this.closeReportThreeModal}} @onClose={{this.closeReportThreeModal}} />
+          <Auk::Modal::Body>
+            <div class="auk-form-group">
+              <Auk::Label>Jaar</Auk::Label>
+              <select name="year5" id="year5" class="auk-select auk-select--block">
+                <option value=""></option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+                <option value="2020">2020</option>
+              </select>
+            </div>
+            <div class="auk-form-group auk-u-mt-2">
+              <Auk::Label>{{t "government-domains-government-fields"}}</Auk::Label>
+              <Auk::CheckboxList class="auk-u-mt">
+                <Auk::Checkbox
+                  @label="Cultuur, jeugd sport & media"
+                />
+                <Auk::Checkbox
+                  @label="Economie, Wetenschap & Innovatie"
+                />
+                <Auk::Checkbox
+                  @label="Financieën & begroting"
+                />
+                <Auk::Checkbox
+                  @label="Internationaal Vlaanderen"
+                />
+                <Auk::Checkbox
+                  @label="Kanselarij & bestuur"
+                />
+                <Auk::Checkbox
+                  @label="Landbouw & visserij"
+                />
+                <Auk::Checkbox
+                  @label="Mobiliteit & openbare werken"
+                />
+                <Auk::Checkbox
+                  @label="Omgeving"
+                />
+                <Auk::Checkbox
+                  @label="Onderwijs & vorming"
+                />
+                <Auk::Checkbox
+                  @label="Welzijn, volksgezondheid & gezin"
+                />
+                <Auk::Checkbox
+                  @label="Werk & sociale economie"
+                />
+              </Auk::CheckboxList>
+            </div>
+          </Auk::Modal::Body>
+          <Auk::Modal::Footer @onCancel={{this.closeReportThreeModal}}>
+            <Auk::Button @skin="primary" {{on "click" this.confirmReportThreeModal}}>Bekijken</Auk::Button>
+          </Auk::Modal::Footer>
+        </Auk::Modal>
+        {{/if}}
+      </Auk::Panel::Body>
+
+      <Auk::Panel::Body>
+        <div class="auk-o-grid auk-o-flex--vertical-center">
+          <div class="auk-o-grid-col-8">
+            <h4 class="auk-h4 auk-u-m-0">Publicaties per BVR per minister</h4>
+          </div>
+          <div class="auk-o-grid-col-4 auk-u-text-align--right">
+            <Auk::Button @skin="secondary" {{on "click" this.openReportFourModal}}>Rapport maken</Auk::Button>
+          </div>
+        </div>
+        {{#if this.reportFourModal}}
+        <Auk::Modal>
+          <Auk::Modal::Header @title="Rapport: Publicaties per BVR per minister" @onResize={{this.closeReportFourModal}} @onClose={{this.closeReportFourModal}} />
+          <Auk::Modal::Body>
+            <div class="auk-o-grid">
+              <div class="auk-o-grid-col-6">
+                <div class="auk-form-group">
+                  <Auk::Label>Jaar</Auk::Label>
+                  <select name="year" id="year" class="auk-select auk-select--block">
+                    <option value=""></option>
+                    <option value="2022">2022</option>
+                    <option value="2021">2021</option>
+                    <option value="2020">2020</option>
+                  </select>
+                </div>
+              </div>
+              <div class="auk-o-grid-col-6">
+                <div class="auk-form-group">
+                  <Auk::Label>Minister</Auk::Label>
+                  <select name="minister" id="minister" class="auk-select auk-select--block">
+                    <option value=""></option>
+                    <option value="Minister 1">Minister 1</option>
+                    <option value="Minister 2">Minister 2</option>
+                    <option value="Minister 3">Minister 3</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </Auk::Modal::Body>
+          <Auk::Modal::Footer @onCancel={{this.closeReportFourModal}}>
+            <Auk::Button @skin="primary" {{on "click" this.confirmReportFourModal}}>Bekijken</Auk::Button>
+          </Auk::Modal::Footer>
+        </Auk::Modal>
+        {{/if}}
+      </Auk::Panel::Body>
+
+      <Auk::Panel::Body>
+        <div class="auk-o-grid auk-o-flex--vertical-center">
+          <div class="auk-o-grid-col-8">
+            <h4 class="auk-h4 auk-u-m-0">Publicaties per gepubliceerde regelgeving buiten ministerraad</h4>
+          </div>
+          <div class="auk-o-grid-col-4 auk-u-text-align--right">
+            <Auk::Button @skin="secondary" {{on "click" this.openReportFiveModal}}>Rapport maken</Auk::Button>
+          </div>
+        </div>
+        {{#if this.reportFiveModal}}
+        <Auk::Modal>
+          <Auk::Modal::Header @title="Rapport: Publicaties per gepubliceerde regelgeving buiten ministerraad" @onResize={{this.closeReportFiveModal}} @onClose={{this.closeReportFiveModal}} />
+          <Auk::Modal::Body>
+            <div class="auk-o-grid">
+              <div class="auk-o-grid-col-6">
+                <div class="auk-form-group">
+                  <Auk::Label>Jaar</Auk::Label>
+                  <select name="year2" id="year2" class="auk-select auk-select--block">
+                    <option value=""></option>
+                    <option value="2022">2022</option>
+                    <option value="2021">2021</option>
+                    <option value="2020">2020</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </Auk::Modal::Body>
+          <Auk::Modal::Footer @onCancel={{this.closeReportFiveModal}}>
+            <Auk::Button @skin="primary" {{on "click" this.confirmReportFiveModal}}>Bekijken</Auk::Button>
+          </Auk::Modal::Footer>
+        </Auk::Modal>
+        {{/if}}
+      </Auk::Panel::Body>
+
+      <Auk::Panel::Body>
+        <div class="auk-o-grid auk-o-flex--vertical-center">
+          <div class="auk-o-grid-col-8">
+            <h4 class="auk-h4 auk-u-m-0">Publicaties per soort regelgeving</h4>
+            <p class="auk-u-muted">Laatst aangevraagd op 14/11/2020 om 11:12 door Hannes D’Hulster</p>
+          </div>
+          <div class="auk-o-grid-col-4 auk-u-text-align--right">
+            <Auk::Button @skin="secondary" {{on "click" this.openReportSixModal}}>Rapport maken</Auk::Button>
+          </div>
+        </div>
+        {{#if this.reportSixModal}}
+        <Auk::Modal>
+          <Auk::Modal::Header @title="Rapport: Publicaties per soort regelgeving" @onResize={{this.closeReportSixModal}} @onClose={{this.closeReportSixModal}} />
+          <Auk::Modal::Body>
+            <div class="auk-form-group">
+              <Auk::Label>Type regelgeving</Auk::Label>
+              <Auk::CheckboxList class="auk-u-mt">
+                <Auk::Checkbox
+                  @label="Decreet"
+                />
+                <Auk::Checkbox
+                  @label="Besluit van de Vlaamse Regering"
+                />
+                <Auk::Checkbox
+                  @label="Ministrieel besluit"
+                />
+                <Auk::Checkbox
+                  @label="Besluit leidend ambtenaar"
+                />
+                <Auk::Checkbox
+                  @label="Bericht"
+                />
+                <Auk::Checkbox
+                  @label="Omzendbrief"
+                />
+                <Auk::Checkbox
+                  @label="Koninklijk besluit"
+                />
+                <Auk::Checkbox
+                  @label="Andere"
+                />
+              </Auk::CheckboxList>
+            </div>
+            <div class="auk-form-group auk-u-mt-2">
+              <Auk::Label>Jaar</Auk::Label>
+              <select name="year3" id="year3" class="auk-select auk-select--block">
+                <option value=""></option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+                <option value="2020">2020</option>
+              </select>
+            </div>
+          </Auk::Modal::Body>
+          <Auk::Modal::Footer @onCancel={{this.closeReportSixModal}}>
+            <Auk::Button @skin="primary" {{on "click" this.confirmReportSixModal}}>Bekijken</Auk::Button>
+          </Auk::Modal::Footer>
+        </Auk::Modal>
+        {{/if}}
+      </Auk::Panel::Body>
+
+      <Auk::Panel::Body>
+        <div class="auk-o-grid auk-o-flex--vertical-center">
+          <div class="auk-o-grid-col-8">
+            <h4 class="auk-h4 auk-u-m-0">Publicaties per decreten per minister</h4>
+          </div>
+          <div class="auk-o-grid-col-4 auk-u-text-align--right">
+            <Auk::Button @skin="secondary" {{on "click" this.openReportSevenModal}}>Rapport maken</Auk::Button>
+          </div>
+        </div>
+        {{#if this.reportSevenModal}}
+        <Auk::Modal>
+          <Auk::Modal::Header @title="Rapport: Publicaties per decreten per minister" @onResize={{this.closeReportSevenModal}} @onClose={{this.closeReportSevenModal}} />
+          <Auk::Modal::Body>
+            <div class="auk-o-grid">
+              <div class="auk-o-grid-col-6">
+                <div class="auk-form-group">
+                  <Auk::Label>Jaar</Auk::Label>
+                  <select name="year" id="year" class="auk-select auk-select--block">
+                    <option value=""></option>
+                    <option value="2022">2022</option>
+                    <option value="2021">2021</option>
+                    <option value="2020">2020</option>
+                  </select>
+                </div>
+              </div>
+              <div class="auk-o-grid-col-6">
+                <div class="auk-form-group">
+                  <Auk::Label>Minister</Auk::Label>
+                  <select name="minister" id="minister" class="auk-select auk-select--block">
+                    <option value=""></option>
+                    <option value="Minister 1">Minister 1</option>
+                    <option value="Minister 2">Minister 2</option>
+                    <option value="Minister 3">Minister 3</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </Auk::Modal::Body>
+          <Auk::Modal::Footer @onCancel={{this.closeReportSevenModal}}>
+            <Auk::Button @skin="primary" {{on "click" this.confirmReportSevenModal}}>Bekijken</Auk::Button>
+          </Auk::Modal::Footer>
+        </Auk::Modal>
+        {{/if}}
+      </Auk::Panel::Body>
+    </Auk::Panel>
+  </div>
+</div>

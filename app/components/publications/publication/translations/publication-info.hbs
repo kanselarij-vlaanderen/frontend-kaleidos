@@ -13,17 +13,6 @@
   </Auk::Panel::Header>
   <Auk::Panel::Body>
     <div class="auk-o-grid">
-      {{!-- <div class="auk-o-grid-col-3">
-        <div
-          class="auk-form-group"
-        >
-          <Auk::Label>Vertaling ontvangen</Auk::Label>
-          <Auk::Datepicker
-            @date="29/11/2021"
-            @onChange=""
-          />
-        </div>
-      </div> --}}
       <div class="auk-o-grid-col-3">
         <div
           class="auk-form-group"
@@ -42,30 +31,6 @@
           {{/if}}
         </div>
       </div>
-      {{!-- <div class="auk-o-grid-col-3 auk-content">
-        <div
-          class="auk-form-group"
-        >
-          <Auk::Label>Klaar voor drukproef</Auk::Label>
-          <Auk::Datepicker
-            @date="29/11/2021"
-            @onChange=""
-          />
-        </div>
-      </div> --}}
-      {{!-- <div class="auk-o-grid-col-3 auk-content">
-        <div
-          class="auk-form-group"
-        >
-          <Auk::Label>Status</Auk::Label>
-          <Auk::Checkbox
-            data-test-route-publications---translations-tab-finished
-            @label={{t "finished"}}
-            @checked={{this.model.endDate}}
-            {{on "input" this.toggleFinishTranslation}}
-          />
-        </div>
-      </div> --}}
     </div>
   </Auk::Panel::Body>
   <Auk::Panel::Footer>

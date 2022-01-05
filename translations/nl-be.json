@@ -399,6 +399,7 @@
   "ise-codes-loading-text": "De inhoudelijke structuurelementen worden geladen..",
   "error-not-found": "Pagina kon niet worden gevonden.",
   "error-bad-request": "Foute aanvraag",
+  "successfully-created-report": "Je gevraagd rapport wordt aangemaakt. Wanneer deze klaar is ontvangt u het Excel bestand via mail.",
   "successfully-created-title": "Gelukt!",
   "successfully-saved": "De wijzigingen zijn opgeslagen.",
   "successfully-saved-type": "De wijzigingen in het {type} werden opgeslagen.",
