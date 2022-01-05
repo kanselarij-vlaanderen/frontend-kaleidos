@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 export default class PublicationsOverviewController extends Controller {
+  @service router;
   @service publicationService;
 
   @tracked isShowPublicationModal = false;
@@ -24,6 +25,6 @@ export default class PublicationsOverviewController extends Controller {
       decisionDate: publication.decisionDate,
     });
     this.closePublicationModal();
-    this.transitionToRoute('publications.publication', newPublication.get('id'));
+    this.router.transitionTo('publications.publication', newPublication.id);
   }
 }
