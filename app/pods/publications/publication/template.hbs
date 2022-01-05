@@ -6,7 +6,29 @@
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
-          <span class="auk-o-flex auk-o-flex--horizontal auk-o-flex--align-baseline auk-o-flex--spaced">
+          <span class="auk-o-flex auk-o-flex--horizontal auk-o-flex--align-baseline auk-o-flex--spaced  auk-u-mb-2">
+            {{#if this.model.status.isPending}}
+              <Auk::StatusPillAction @status="not-started" @actionIcon="pencil" @actionLabel="Status aanpassen" {{on "click" (fn this.openStatusModal)}}>
+                <strong>{{this.model.status.label}}</strong> – 22.11.2021
+              </Auk::StatusPillAction>
+            {{else if this.model.status.isPublished}}
+              <Auk::StatusPillAction @status="done" @actionIcon="pencil" @actionLabel="Status aanpassen" {{on "click" (fn this.openStatusModal)}}>
+                <strong>{{this.model.status.label}}</strong> – 22.11.2021
+              </Auk::StatusPillAction>
+            {{else if this.model.status.isPaused}}
+              <Auk::StatusPillAction @status="paused" @actionIcon="pencil" @actionLabel="Status aanpassen" {{on "click" (fn this.openStatusModal)}}>
+                <strong>{{this.model.status.label}}</strong> – 22.11.2021
+              </Auk::StatusPillAction>
+            {{else if this.model.status.isWithdrawn}}
+              <Auk::StatusPillAction @status="error" @actionIcon="pencil" @actionLabel="Status aanpassen" {{on "click" (fn this.openStatusModal)}}>
+                <strong>{{this.model.status.label}}</strong> – 22.11.2021
+              </Auk::StatusPillAction>
+            {{else}}
+              <Auk::StatusPillAction @status="not-started" @actionIcon="pencil" @actionLabel="Status aanpassen" {{on "click" (fn this.openStatusModal)}}>
+                <strong>{{this.model.status.label}}</strong> – 22.11.2021
+              </Auk::StatusPillAction>
+            {{/if}}
+
             <span class="auk-overline auk-u-muted"
               data-test-route-publications-publication-header-number>
               {{uppercase (t "publication-flow")}}
@@ -19,29 +41,6 @@
               -
               {{uppercase this.model.identification.idName}}
             </span>
-
-            {{#if this.model.status.isPending}}
-              <Auk::Pill @skin="white">
-              {{this.model.status.label}} – 22.11.2021
-            </Auk::Pill>
-            {{else if this.model.status.isPublished}}
-              <Auk::Pill @skin="success">
-                {{this.model.status.label}} – 22.11.2021
-              </Auk::Pill>
-            {{else if this.model.status.isPaused}}
-              <Auk::Pill @skin="default">
-                {{this.model.status.label}} – 22.11.2021
-              </Auk::Pill>
-            {{else if this.model.status.isWithdrawn}}
-              <Auk::Pill @skin="danger">
-                {{this.model.status.label}} – 22.11.2021
-              </Auk::Pill>
-            {{else}}
-              <Auk::Pill @skin="white">
-                {{this.model.status.label}} – 22.11.2021
-              </Auk::Pill>
-            {{/if}}
-            <Auk::ButtonLink @skin="muted" @icon="pencil" @padding="padded-y" class="auk-u-text-small" {{on "click" (fn this.openStatusModal)}}>Status aanpassen</Auk::ButtonLink>
           </span>
           <Auk::AbbreviatedText
             @text={{or

@@ -1,0 +1,12 @@
+<button type="button" class="{{this.baseClass}} auk-status-pill--action {{this.statusClass}}" ...attributes>
+  <Auk::Icon @name={{this.iconName}} @size="small" />
+  {{#if (has-block)}}
+    <span class="auk-status-pill__label">{{yield}}</span>
+    <span class="auk-status-pill__action" aria-hidden="true">
+      {{#if @actionIcon}}
+      <Auk::Icon @name={{@actionIcon}} @size="small" />
+      {{/if}}
+      {{@actionLabel}}
+    </span>
+  {{/if}}
+</button>
