@@ -27,16 +27,16 @@ export default class PublicationsOverviewAllController extends Controller {
   size = 10;
   sort = '-created';
 
-  @tracked tableColumnDisplayOptions;
+  @tracked columnsDisplayConfig;
   tableColumns = tableColumns;
 
   @tracked isLoadingModel = false;
-  @tracked showTableDisplayOptions = false;
+  @tracked isColumnsDisplayConfigPanelShown = false;
 
   constructor() {
     super(...arguments);
 
-    this.initColumnsConfig();
+    this.initColumnsDisplayConfig();
   }
 
   @action
@@ -44,46 +44,46 @@ export default class PublicationsOverviewAllController extends Controller {
     this.transitionToRoute('publications.publication', publicationFlowRow.get('id'));
   }
 
-  initColumnsConfig() {
-    let columnsConfig = this.loadColumnsConfig();
-    if (!columnsConfig) {
-      columnsConfig = this.getDefaultColumnsConfig();
+  initColumnsDisplayConfig() {
+    let columnsDisplayConfig = this.loadColumnsDisplayConfig();
+    if (!columnsDisplayConfig) {
+      columnsDisplayConfig = this.getDefaultColumnsDisplayConfig();
     }
-    this.tableColumnDisplayOptions = columnsConfig;
+    this.columnsDisplayConfig = columnsDisplayConfig;
   }
 
   @action
-  changeColumnDisplayOptions(options) {
-    this.tableColumnDisplayOptions = options;
-    this.saveColumnsConfig(this.tableColumnDisplayOptions);
+  changeColumnsDisplayConfig(config) {
+    this.columnsDisplayConfig = config;
+    this.saveColumnsDisplayConfig(this.columnsDisplayConfig);
   }
 
-  loadColumnsConfig() {
-    const serializedColumnsConfig = localStorage.getItem('publications.overview.all/columns');
-    if (serializedColumnsConfig) {
-      const columnsConfig = JSON.parse(serializedColumnsConfig);
-      return columnsConfig;
+  loadColumnsDisplayConfig() {
+    const serializedColumnsDisplayConfig = localStorage.getItem('publications.overview.all/columnsDisplayConfig');
+    if (serializedColumnsDisplayConfig) {
+      const columnsDisplayConfig = JSON.parse(serializedColumnsDisplayConfig);
+      return columnsDisplayConfig;
     }
   }
 
-  saveColumnsConfig(columnsConfig) {
-    const serializedColumnsConfig = JSON.stringify(columnsConfig);
-    localStorage.setItem('publications.overview.all/columns', serializedColumnsConfig);
+  saveColumnsDisplayConfig(columnsDisplayConfig) {
+    const serializedColumnsDisplayConfig = JSON.stringify(columnsDisplayConfig);
+    localStorage.setItem('publications.overview.all/columnsDisplayConfig', serializedColumnsDisplayConfig);
   }
 
-  getDefaultColumnsConfig() {
-    let columnsConfig = {};
+  getDefaultColumnsDisplayConfig() {
+    let columnsDisplayConfig = {};
     for (let column of tableColumns) {
       const columnKey = column.keyName;
       const isColumnShown = defaultColumns.includes(columnKey);
-      columnsConfig[column.keyName] = isColumnShown;
+      columnsDisplayConfig[column.keyName] = isColumnShown;
     }
-    return columnsConfig;
+    return columnsDisplayConfig;
   }
 
   @action
-  toggleColumnDisplayOptions() {
-    this.showTableDisplayOptions = !this.showTableDisplayOptions;
+  toggleColumnsDisplayConfigPanel() {
+    this.isColumnsDisplayConfigPanelShown = !this.isColumnsDisplayConfigPanelShown;
   }
 
   @action

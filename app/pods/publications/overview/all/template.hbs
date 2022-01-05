@@ -9,7 +9,7 @@
           <thead>
             <tr>
               {{#each this.tableColumns as |column|}}
-                {{#if (get this.tableColumnDisplayOptions column.keyName)}}
+                {{#if (get this.columnsDisplayConfig column.keyName)}}
                   {{! first cases that need a special treament. The "else" clause treats the default case }}
                   {{#if (eq column.keyName "shortTitle")}}
                     {{! template-lint-disable no-inline-styles }}
@@ -54,7 +54,7 @@
               {{#each this.model as |publicationFlow|}}
                 <Publications::PublicationsTableRow
                   @publicationFlow={{publicationFlow}}
-                  @tableColumnDisplayOptions={{this.tableColumnDisplayOptions}}
+                  @tableColumnDisplayOptions={{this.columnsDisplayConfig}}
                 />
               {{/each}}
             {{/if}}
@@ -102,20 +102,20 @@
           data-test-route-publications-index-config-modal-icon
           @icon="gear"
           @skin="borderless"
-          {{on "click" this.toggleColumnDisplayOptions}}
+          {{on "click" this.toggleColumnsDisplayConfigPanel}}
         />
         <AttachPopover
           @class="auk-popover"
           @showOn="click"
           @placement="top"
           @hideOn="click"
-          @isShown={{this.showTableDisplayOptions}}
+          @isShown={{this.isColumnsDisplayConfigPanelShown}}
           @renderInPlace={{false}}
         >
           <Publications::OverviewTableDisplayConfigModal
-            @options={{this.tableColumnDisplayOptions}}
-            @onChange={{this.changeColumnDisplayOptions}}
-            @onClose={{this.toggleColumnDisplayOptions}}
+            @options={{this.columnsDisplayConfig}}
+            @onChange={{this.changeColumnsDisplayConfig}}
+            @onClose={{this.toggleColumnsDisplayConfigPanel}}
           />
         </AttachPopover>
       </Auk::Toolbar::Item>
