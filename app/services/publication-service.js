@@ -58,7 +58,7 @@ export default class PublicationService extends Service {
       mandatees = [];
     }
 
-    const toPublishStatus = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.PENDING);
+    const toPublishStatus = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.STARTED);
 
     const structuredIdentifier = this.store.createRecord('structured-identifier', {
       localIdentifier: publicationProperties.number,

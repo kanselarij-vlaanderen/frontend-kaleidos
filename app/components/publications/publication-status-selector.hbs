@@ -8,7 +8,7 @@
     @disabled={{@disabled}}
     as |status|
   >
-    {{#if status.isPending}}
+    {{#if status.isStarted}}
       <Auk::Icon @name="clock" @skin="warning" />
     {{else if status.isPublished}}
       <Auk::Icon @name="circle-check" @skin="success" />

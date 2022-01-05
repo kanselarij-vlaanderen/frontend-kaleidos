@@ -6,25 +6,39 @@
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
-          <span class="auk-overline auk-u-muted"
-            data-test-route-publications-publication-header-number>
-            {{uppercase (t "publication-flow")}}
-            -
-            {{#if this.model.case.subcases}}
-              {{uppercase (t "via-cabinet")}}
-            {{else}}
-              {{uppercase (t "not-via-cabinet")}}
-            {{/if}}
-            -
-            {{uppercase this.model.identification.idName}}
+          <span class="auk-o-flex auk-o-flex--horizontal auk-o-flex--align-baseline auk-o-flex--spaced">
+             <span class="auk-overline auk-u-muted" data-test-route-publications-publication-header-number>
+                {{uppercase (t "publication-flow")}}
+                -
+               {{#if this.model.case.subcases}}
+                 {{uppercase (t "via-cabinet")}}
+               {{else}}
+                 {{uppercase (t "not-via-cabinet")}}
+               {{/if}}
+               -
+               {{uppercase this.model.identification.idName}}
+            </span>
+            <Auk::Pill @skin="white">
+              {{this.model.status.label}}
+              -
+              {{this.model.publicationStatusChange.startedAt  "DD/MM/YYYY"}}
+            </Auk::Pill>
+            <Auk::ButtonLink
+              @icon="pencil"
+              @skin="muted"
+              @size="small"
+              @disabled={{and this.model.publicationStatus.isPublished this.model.decision.isStaatsbladResource}}
+            >
+              {{t "edit-status"}}
+            </Auk::ButtonLink>
           </span>
           <Auk::AbbreviatedText
             @text={{or
-              this.model.shortTitle
-              this.model.longTitle
-            }}
+            this.model.shortTitle
+            this.model.longTitle
+          }}
             @maxLength={{150}}
-          as |abbreviatedText|>
+            as |abbreviatedText|>
             <div
               data-test-route-publications-publication-header-short-title
               class="auk-toolbar-complex__title"

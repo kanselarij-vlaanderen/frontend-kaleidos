@@ -23,7 +23,7 @@ export default class PublicationsIndexRoute extends Route {
     publishedFilterOption: CONSTANTS.PUBLICATION_STATUSES.PUBLISHED,
     pausedFilterOption: CONSTANTS.PUBLICATION_STATUSES.PAUSED,
     withdrawnFilterOption: CONSTANTS.PUBLICATION_STATUSES.WITHDRAWN,
-    toPublishFilterOption: CONSTANTS.PUBLICATION_STATUSES.PENDING,
+    toPublishFilterOption: CONSTANTS.PUBLICATION_STATUSES.STARTED,
   });
 
   beforeModel() {

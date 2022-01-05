@@ -9,8 +9,8 @@ export default class PublicationStatus extends Model {
   @attr('number') position;
   @hasMany('publication-flow') publicaties;
 
-  get isPending() {
-    return this.uri === CONSTANTS.PUBLICATION_STATUSES.PENDING;
+  get isStarted() {
+    return this.uri === CONSTANTS.PUBLICATION_STATUSES.STARTED;
   }
   get isPublished() {
     return this.uri === CONSTANTS.PUBLICATION_STATUSES.PUBLISHED;
@@ -21,4 +21,24 @@ export default class PublicationStatus extends Model {
   get isPaused() {
     return this.uri === CONSTANTS.PUBLICATION_STATUSES.PAUSED;
   }
+
+  get isToTranslations() {
+    return this.uri === CONSTANTS.PUBLICATION_STATUSES.TO_TRANSLATIONS;
+  }
+  get isTranslationIn() {
+    return this.uri === CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_IN;
+  }
+  get isProofRequested() {
+    return this.uri === CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED;
+  }
+  get isProofRecalled() {
+    return this.uri === CONSTANTS.PUBLICATION_STATUSES.PROOF_RECALLED;
+  }
+  get isProofCorrected() {
+    return this.uri === CONSTANTS.PUBLICATION_STATUSES.PROOF_CORRECTED;
+  }
+  get isPublicationRequested() {
+    return this.uri === CONSTANTS.PUBLICATION_STATUSES.PUBLICATION_REQUESTED;
+  }
+
 }
