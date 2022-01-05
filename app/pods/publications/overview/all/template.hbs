@@ -1,36 +1,3 @@
-<Auk::Navbar
-  class="auk-publication-overview-navbar"
-  @skin="gray-100"
-  @auto={{true}}
->
-  <Auk::Toolbar>
-    <Auk::Toolbar::Group @position="left">
-      <Auk::Toolbar::Item>
-        <div class="auk-o-flex auk-o-flex--vertical">
-          <h4
-            data-test-route-publications-index-title
-            class="auk-toolbar-complex__title"
-          >{{t "publications"}}</h4>
-        </div>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-    <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
-        <Publications::PublicationCaseSearch />
-      </Auk::Toolbar::Item>
-      <Auk::Toolbar::Item>
-        <Auk::Button
-          data-test-route-publications-index-new-publication
-          @icon="plus"
-          @skin="primary"
-          {{on "click" this.showPublicationModal}}
-        >
-          {{t "publications-new"}}
-        </Auk::Button>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-  </Auk::Toolbar>
-</Auk::Navbar>
 <div class="auk-scroll-wrapper">
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-m-4">
@@ -155,10 +122,3 @@
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </div>
-
-{{#if this.isShowPublicationModal}}
-  <Publications::NewPublicationModal
-    @onCancel={{this.closePublicationModal}}
-    @onSave={{this.saveNewPublication}}
-  />
-{{/if}}

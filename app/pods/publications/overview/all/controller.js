@@ -1,6 +1,5 @@
 import Controller from '@ember/controller';
 import { action, set } from '@ember/object';
-import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import tableColumns from 'frontend-kaleidos/config/publications/overview-table-columns';
 
@@ -17,8 +16,6 @@ export default class PublicationsOverviewAllController extends Controller {
     },
   };
 
-  @service publicationService;
-
   page = 0;
   size = 10;
   sort = '-created';
@@ -32,7 +29,6 @@ export default class PublicationsOverviewAllController extends Controller {
 
   @tracked isLoadingModel = false;
   @tracked showTableDisplayOptions = false;
-  @tracked isShowPublicationModal = false;
 
   @action
   navigateToPublication(publicationFlowRow) {
@@ -48,25 +44,6 @@ export default class PublicationsOverviewAllController extends Controller {
   @action
   toggleColumnDisplayOptions() {
     this.showTableDisplayOptions = !this.showTableDisplayOptions;
-  }
-
-  @action
-  showPublicationModal() {
-    this.isShowPublicationModal = true;
-  }
-
-  @action
-  closePublicationModal() {
-    this.isShowPublicationModal = false;
-  }
-
-  @action
-  async saveNewPublication(publication) {
-    const newPublication = await this.publicationService.createNewPublicationWithoutMinisterialCouncil(publication, {
-      decisionDate: publication.decisionDate,
-    });
-    this.closePublicationModal();
-    this.transitionToRoute('publications.publication', newPublication.get('id'));
   }
 
   @action
