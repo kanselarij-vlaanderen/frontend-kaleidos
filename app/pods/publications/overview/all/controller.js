@@ -53,6 +53,13 @@ export default class PublicationsOverviewAllController extends Controller {
     this.saveColumnsDisplayConfig(this.columnsDisplayConfig);
   }
 
+  @action
+  resetColumnsDisplayConfig() {
+    this.columnsDisplayConfig = this.getDefaultColumnsDisplayConfig();
+    this.isColumnsDisplayConfigPanelShown = false;
+    this.saveColumnsDisplayConfig(this.columnsDisplayConfig);
+  }
+
   loadColumnsDisplayConfig() {
     const serializedColumnsDisplayConfig = localStorage.getItem('publications.overview.all/columnsDisplayConfig');
     if (serializedColumnsDisplayConfig) {
