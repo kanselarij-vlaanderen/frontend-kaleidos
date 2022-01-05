@@ -19,6 +19,7 @@ export default class PublicationsIndexController extends Controller {
   };
 
   @service publicationService;
+  @service router;
 
   page = 0;
   size = 10;

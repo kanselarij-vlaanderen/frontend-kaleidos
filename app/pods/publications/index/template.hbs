@@ -54,22 +54,11 @@
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
-      {{!-- Hide search and filter --}}
+      {{#if (not-eq router.currentRouteName "publications.index.reports")}}
       <Auk::Toolbar::Item>
         <Publications::PublicationCaseSearch />
       </Auk::Toolbar::Item>
-      {{!-- <Auk::Toolbar::Item>
-        <Auk::Button
-          data-test-route-publications-index-filter-content
-          @skin="secondary"
-          @icon="filter"
-          {{on "click" this.showFilterModal}}
-        >
-          {{t "filter-content"}}
-        </Auk::Button>
-      </Auk::Toolbar::Item> --}}
-      {{!-- End: Hide search and filter --}}
-
+      {{/if}}
       <Auk::Toolbar::Item>
         <Auk::Button
           data-test-route-publications-index-new-publication
