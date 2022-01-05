@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import tableColumns from 'frontend-kaleidos/config/publications/overview-table-columns';
 
-export default class PublicationsOverviewReportController extends Controller {
+export default class PublicationsOverviewAllController extends Controller {
   queryParams = {
     page: {
       type: 'number',

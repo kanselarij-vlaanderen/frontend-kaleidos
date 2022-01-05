@@ -2,6 +2,6 @@ import Route from '@ember/routing/route';
 
 export default class PublicationsOverviewIndexRoute extends Route {
   beforeModel() {
-    this.transitionTo('publications.overview.report', 'alle-dossiers');
+    this.transitionTo('publications.overview.all');
   }
 }
