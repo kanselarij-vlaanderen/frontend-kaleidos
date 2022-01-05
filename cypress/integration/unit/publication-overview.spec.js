@@ -90,7 +90,8 @@ context('Publications overview tests', () => {
     });
   });
 
-  it('should check and uncheck all settings', () => {
+  // TODO: update when publications design v3 is implemented
+  it.skip('should check and uncheck all settings', () => {
     const columnKeyNames = [
       'speedProcedure',
       'publicationNumber',
