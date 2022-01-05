@@ -3,6 +3,13 @@ import { action, set } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import tableColumns from 'frontend-kaleidos/config/publications/overview-table-columns';
 
+const defaultColumns = [
+  'publicationNumber',
+  'shortTitle',
+  'publicationDueDate',
+  'status'
+]
+
 export default class PublicationsOverviewAllController extends Controller {
   queryParams = {
     page: {
@@ -20,25 +27,58 @@ export default class PublicationsOverviewAllController extends Controller {
   size = 10;
   sort = '-created';
 
-  @tracked tableColumnDisplayOptions = JSON.parse(localStorage.getItem('tableColumnDisplayOptions'))
-    || tableColumns.reduce((accumulator, currentValue) => {
-      accumulator[currentValue.keyName] = currentValue.showByDefault;
-      return accumulator;
-    }, {});
+  @tracked tableColumnDisplayOptions;
   tableColumns = tableColumns;
 
   @tracked isLoadingModel = false;
   @tracked showTableDisplayOptions = false;
+
+  constructor() {
+    super(...arguments);
+
+    this.initColumnsConfig();
+  }
 
   @action
   navigateToPublication(publicationFlowRow) {
     this.transitionToRoute('publications.publication', publicationFlowRow.get('id'));
   }
 
+  initColumnsConfig() {
+    let columnsConfig = this.loadColumnsConfig();
+    if (!columnsConfig) {
+      columnsConfig = this.getDefaultColumnsConfig();
+    }
+    this.tableColumnDisplayOptions = columnsConfig;
+  }
+
   @action
   changeColumnDisplayOptions(options) {
     this.tableColumnDisplayOptions = options;
-    localStorage.setItem('tableColumnDisplayOptions', JSON.stringify(this.tableColumnDisplayOptions));
+    this.saveColumnsConfig(this.tableColumnDisplayOptions);
+  }
+
+  loadColumnsConfig() {
+    const serializedColumnsConfig = localStorage.getItem('publications.overview.all/columns');
+    if (serializedColumnsConfig) {
+      const columnsConfig = JSON.parse(serializedColumnsConfig);
+      return columnsConfig;
+    }
+  }
+
+  saveColumnsConfig(columnsConfig) {
+    const serializedColumnsConfig = JSON.stringify(columnsConfig);
+    localStorage.setItem('publications.overview.all/columns', serializedColumnsConfig);
+  }
+
+  getDefaultColumnsConfig() {
+    let columnsConfig = {};
+    for (let column of tableColumns) {
+      const columnKey = column.keyName;
+      const isColumnShown = defaultColumns.includes(columnKey);
+      columnsConfig[column.keyName] = isColumnShown;
+    }
+    return columnsConfig;
   }
 
   @action
