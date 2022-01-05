@@ -39,11 +39,6 @@ export default class PublicationsOverviewAllController extends Controller {
     this.initColumnsDisplayConfig();
   }
 
-  @action
-  navigateToPublication(publicationFlowRow) {
-    this.transitionToRoute('publications.publication', publicationFlowRow.get('id'));
-  }
-
   initColumnsDisplayConfig() {
     let columnsDisplayConfig = this.loadColumnsDisplayConfig();
     if (!columnsDisplayConfig) {
