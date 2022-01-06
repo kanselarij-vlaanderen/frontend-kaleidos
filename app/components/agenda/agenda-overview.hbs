@@ -1,4 +1,4 @@
-<div class="vlc-agenda-items auk-u-m-8 vlc-agenda-items--spaced">
+<div class="vlc-agenda-items auk-u-m-8">
   {{#if this.isEditingOverview}}
     <ChangesAlert
       @message={{t "editing-agenda-overview"}}
@@ -6,12 +6,12 @@
       @clearAction={{this.toggleIsEditingOverview}}
     />
   {{/if}}
-  <Auk::Toolbar class="vlc-agenda-items-section-header">
+  <Auk::Toolbar @auto={{true}} class="auk-u-mb-3">
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
         <h3
           data-test-agenda-overview-section-title-notes
-          class="auk-h3 auk-u-m-0 vlc-agenda-items-section-header__title"
+          class="auk-h3 auk-u-m-0"
         >
           {{t "agendaitems-subtitle"}}
         </h3>
@@ -21,7 +21,6 @@
       <Auk::Toolbar::Item>
         <Auk::ButtonLink
           data-test-agenda-overview-show-changes={{true}}
-          class="vlc-agenda-items-section-header__link"
           {{on "click" @toggleShowModifiedOnly}}
         >
           {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
@@ -33,7 +32,6 @@
             <div class="auk-u-ml-2">
               <Auk::ButtonLink
                 data-test-agenda-overview-formally-ok-edit={{true}}
-                class="vlc-agenda-items-section-header__link"
                 {{on "click" this.toggleIsEditingOverview}}
               >
                 {{t "edit"}}
@@ -46,16 +44,18 @@
   </Auk::Toolbar>
   {{#if (not @isLoadingNotaGroups)}}
     {{#if @notaGroups.length}}
-      <div>
+      <div class="auk-u-mb-8">
         <ul {{sortable-group onChange=@onReorderAgendaitems}}>
           {{#each @notaGroups as |agendaitemGroup index|}}
             {{! template-lint-disable simple-unless }}
             {{#unless
               (and (eq index 0) (is-empty agendaitemGroup.sortedMandatees))
             }}
-              <Agenda::AgendaOverview::AgendaitemGroupHeader
-                @mandatees={{agendaitemGroup.sortedMandatees}}
-              />
+              <div class="auk-u-mt-3">
+                <Agenda::AgendaOverview::AgendaitemGroupHeader
+                  @mandatees={{agendaitemGroup.sortedMandatees}}
+                />
+              </div>
             {{/unless}}
             {{! template-lint-enable simple-unless }}
             {{#each agendaitemGroup.agendaitems as |agendaitem|}}
@@ -91,8 +91,8 @@
   {{else}}
     <Auk::Loader @message={{t "agendaitem-grouping-message"}} />
   {{/if}}
-  <div class="vlc-agenda-items-section-header">
-    <h3 class="auk-h3 auk-u-m-0 vlc-agenda-items-section-header__title">
+  <div class="auk-u-mb-3">
+    <h3 class="auk-h3 auk-u-m-0">
       {{t "announcements-subtitle"}}
     </h3>
   </div>
