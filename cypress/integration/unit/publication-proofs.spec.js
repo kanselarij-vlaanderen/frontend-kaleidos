@@ -290,7 +290,7 @@ context('Publications proofs tests', () => {
     cy.get(publication.proofsRequests.request.emailSubject).contains(extraRequestTitle)
       .parents(publication.proofsRequests.request.container)
       .within(() => {
-        cy.get(auk.accordion.header.title).contains(monthDutch);
+        cy.get(auk.accordionPanel.header.title).contains(monthDutch);
         cy.get(publication.proofsRequests.request.upload).should('not.be.disabled')
           .click();
       });

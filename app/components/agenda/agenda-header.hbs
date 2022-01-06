@@ -16,7 +16,7 @@
               {{/unless}}
             </h4>
             {{#if @meeting.kindToShow.label}}
-              <span class="auk-u-muted auk-body-1">
+              <span data-test-agenda-header-kind class="auk-u-muted auk-body-1">
                 -
                 {{await @meeting.kindToShow.label}}
               </span>
@@ -34,7 +34,7 @@
         <Agenda::AgendaHeader::AgendaActions
           @meeting={{@meeting}}
           @currentAgenda={{@currentAgenda}}
-          @reversedAgendas={{@reversedAgendas}}
+          @reverseSortedAgendas={{@reverseSortedAgendas}}
           @refreshRoute={{@refreshRoute}}
           @loading={{@loading}}
         />
@@ -157,6 +157,7 @@
 
 {{#if this.isAddingAgendaitems}}
   <Agenda::Agendaitem::CreateAgendaitem
+    @meeting={{@meeting}}
     @isAddingAgendaitems={{this.isAddingAgendaitems}}
     @onCreate={{@refreshRoute}}
   />

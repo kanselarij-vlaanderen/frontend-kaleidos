@@ -1,7 +1,10 @@
-/* global context, before, it, cy, beforeEach, afterEach */
+/* global context, before, it, cy, Cypress, beforeEach, afterEach */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
+import auk from '../../selectors/auk.selectors';
+import cases from '../../selectors/case.selectors';
+import dependency from '../../selectors/dependency.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
@@ -22,6 +25,21 @@ function checkNewsletterPage(headerText, newsletterTitle) {
   cy.get(newsletter.newsletterMeeting.title).contains(newsletterTitle);
 }
 
+function selectFromDropdown(item) {
+  cy.get(dependency.emberPowerSelect.option, {
+    timeout: 5000,
+  }).wait(500)
+    .contains(item)
+    .scrollIntoView()
+    .trigger('mouseover')
+    .click({
+      force: true,
+    });
+  cy.get(dependency.emberPowerSelect.option, {
+    timeout: 15000,
+  }).should('not.be.visible');
+}
+
 context('Different session kinds should show different titles', () => {
   const regular = '/vergadering/5EC5258C5B08050008000001/agenda/5EC5258D5B08050008000002/agendapunten';
   const special = '/vergadering/5EC525AC5B08050008000005/agenda/5EC525AD5B08050008000006/agendapunten';
@@ -40,7 +58,6 @@ context('Different session kinds should show different titles', () => {
     cy.logout();
   });
 
-  // TODO-PVV agenda
   // TODO-printableAgenda shows session-kind
 
   it('should show the correct translations for normal session in decision print overview', () => {
@@ -67,7 +84,6 @@ context('Different session kinds should show different titles', () => {
       .children('tr')
       .as('rows');
     cy.get('@rows').within(() => {
-      // TODO-PVV agenda
       cy.get(route.newsletters.row.title).contains('Kort bestek voor de ministerraad van');
       cy.get(route.newsletters.row.title).contains('Kort bestek voor de ministerraad via elektronische procedure van');
       cy.get(route.newsletters.row.title).contains('Kort bestek voor de bijzondere ministerraad van');
@@ -93,5 +109,95 @@ context('Different session kinds should show different titles', () => {
     const newsletterTitle = 'Beslissingen van de Vlaamse Regering - Ministerraad via elektronische procedure';
     cy.visit(electronic);
     checkNewsletterPage(headerText, newsletterTitle);
+  });
+
+  it('should test the PVV agenda', () => {
+    const agendaNumber = 100;
+    const agendaDate = Cypress.moment().add(3, 'weeks')
+      .day(3)
+      .hour(10)
+      .minutes(0);
+    const formattedAgendaDate = agendaDate.format('DD-MM-YYYY');
+    const vvKind = 'Ministerraad - Plan Vlaamse Veerkracht';
+    const decisionHeader = `Beslissingen van de Vlaamse Regering - ${vvKind}`;
+    const newsletterHeader = `Beslissingen van de Vlaamse Regering - ${vvKind}`;
+    const formattedMeetingDateHour = agendaDate.format('DD-MM-YYYY HH:mm');
+    const formattedMeetingDateDots = agendaDate.format('DD.MM.YYYY');
+    // TODO-BUG KAS-3056 numbering not correct when creating agenda in different year
+    const fullmeetingNumber = `VR PV ${Cypress.moment().format('YYYY')}/${agendaNumber}`;
+    // const fullmeetingNumber = `VR PV ${agendaDate.format('YYYY')}/${agendaNumber}`;
+    const suffixVV = '-VV';
+    const fullmeetingNumberVV = `${fullmeetingNumber}${suffixVV}`;
+    const newCaseTitle = 'Dossier voor PVV agenda';
+
+    cy.createAgenda(null, agendaDate, null, agendaNumber);
+    // set kind to PVV
+    cy.get(route.agendas.action.newMeeting).click();
+    cy.get(agenda.newSession.kind).click();
+    selectFromDropdown(vvKind);
+    // select related main meeting
+    cy.get(agenda.newSession.relatedMainMeeting).click();
+    selectFromDropdown(formattedAgendaDate);
+    cy.get(agenda.newSession.numberRep.view).should('contain', fullmeetingNumberVV);
+    cy.route('PATCH', '/meetings/**').as('patchMeetings');
+    cy.get(utils.vlModalFooter.save).click();
+    cy.wait('@patchMeetings');
+    // check if edit shows correct data
+    cy.openAgendaForDate(agendaDate, 1);
+    cy.get(agenda.agendaHeader.showOptions).click();
+    cy.get(agenda.agendaHeader.actions.toggleEditingSession).click();
+    cy.get(utils.kindSelector).contains(vvKind);
+    cy.get(utils.vlDatepicker).should('have.value', formattedMeetingDateHour);
+    cy.get(agenda.editSession.numberRep).should('have.value', fullmeetingNumberVV);
+    cy.get(utils.vlModalFooter.cancel).click();
+
+    // check if different views show correct header
+    cy.get(agenda.agendaHeader.kind).contains(vvKind);
+    checkDecisionPage(decisionHeader);
+    cy.get(auk.tab.hierarchicalBack).click();
+    checkNewsletterPage(vvKind, newsletterHeader);
+
+    // check kort bestek overview and order
+    cy.visit('/kort-bestek?size=100');
+    cy.get(route.newsletters.dataTable).find('tbody')
+      .children('tr');
+    // first agenda should always be the normal kind, second PVV
+    cy.get(route.newsletters.row.title).contains(`Kort bestek voor de ministerraad van ${formattedMeetingDateDots}`)
+      .parents('tr')
+      .next()
+      .find(route.newsletters.row.title)
+      .contains(`Kort bestek voor de ministerraad - plan vlaamse veerkracht van ${formattedMeetingDateDots}`);
+
+    // check agenda overview and order
+    cy.visit('/overzicht?size=100');
+    cy.get(route.agendasOverview.dataTable).find('tbody')
+      .children('tr');
+    // first agenda should always be the normal kind, second PVV
+    cy.get(route.agendasOverview.row.title).contains(formattedMeetingDateDots)
+      .eq(0)
+      .parents('tr')
+      .find(route.agendasOverview.row.kind)
+      .contains('Ministerraad')
+      .parents('tr')
+      .next()
+      .find(route.agendasOverview.row.kind)
+      .contains(vvKind);
+
+    // check procedure step view
+    cy.createCase(newCaseTitle);
+    // adding a subcase without a new shorttitle will use the shorttitle from case
+    cy.addSubcase();
+    cy.openSubcase(0);
+    // TODO-bug multiple clicks on dropdown are flakey
+    // Check if both agendas are listed in dropdown
+    // cy.get(cases.subcaseHeader.showProposedAgendas).click();
+    // cy.get(cases.subcaseHeader.actions.proposeForAgenda).should('contain', fullmeetingNumberVV);
+    // cy.get(cases.subcaseHeader.showProposedAgendas).click();
+    cy.proposeSubcaseForAgenda(agendaDate, fullmeetingNumberVV);
+    cy.get(cases.subcaseDescription.agendaLink).click();
+    cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 1);
+    // PVV agenda doesn't have approval item by default
+    cy.get(agenda.agendaDetailSidebarItem.shortTitle).contains(newCaseTitle);
+    cy.get(agenda.agendaDetailSidebarItem.shortTitle).should('not.contain', 'verslag');
   });
 });

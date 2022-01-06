@@ -113,7 +113,7 @@ context('Agenda tests', () => {
     const whitespace = '\n';
 
     cy.createAgenda(agendaKind, dateToCreateAgenda, agendaPlace).then((result) => {
-      cy.createCase(false, caseTitleShort);
+      cy.createCase(caseTitleShort);
       cy.addSubcase(typeNota, subcaseTitleShort + whitespace, subcaseTitleLong + whitespace);
       cy.openSubcase(0);
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
@@ -172,8 +172,7 @@ context('Agenda tests', () => {
   });
 
   it('It should be automatically get the next meetingID assigned in the UI', () => {
-    const agendaDateSingle = Cypress.moment().add(1, 'week')
-      .day(6);
+    const agendaDateSingle = Cypress.moment();
     // TODO-bug the existing agendas sometimes get NaN, why? We have to make this agenda with number 1 to ensure numbering works
     cy.createAgenda(agendaKind, agendaDateSingle, agendaPlace, 1);
     cy.createAgenda(agendaKind, agendaDateSingle, agendaPlace, null, 'VV AA 1999/2BIS').then((result) => {
@@ -202,7 +201,7 @@ context('Agenda tests', () => {
     const subcaseTitleLong = `Agenda spec formal ok: set formality - ${testId}`;
 
     cy.createAgenda(agendaKind, dateToCreateAgenda, agendaPlace).then((result) => {
-      cy.createCase(false, caseTitleShort);
+      cy.createCase(caseTitleShort);
       cy.addSubcase(typeNota, newSubcaseTitleShort, subcaseTitleLong);
       cy.openSubcase(0);
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
@@ -221,7 +220,7 @@ context('Agenda tests', () => {
     const subcaseTitleLong = `Agenda spec formal ok: close agenda lange titel - ${testId}`;
 
     cy.createAgenda(agendaKind, dateToCreateAgenda, agendaPlace).then((result) => {
-      cy.createCase(false, caseTitleShort);
+      cy.createCase(caseTitleShort);
       cy.addSubcase(typeNota, newSubcaseTitleShort, subcaseTitleLong);
       cy.openSubcase(0);
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
@@ -249,7 +248,7 @@ context('Agenda tests', () => {
     const subcaseTitleLong = `Agenda spec formal ok: approve & close agenda lange titel - ${testId}`;
 
     cy.createAgenda(agendaKind, dateToCreateAgenda, agendaPlace).then((result) => {
-      cy.createCase(false, caseTitleShort);
+      cy.createCase(caseTitleShort);
       cy.addSubcase(typeNota, newSubcaseTitleShort, subcaseTitleLong);
       cy.openSubcase(0);
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
@@ -285,7 +284,7 @@ context('Agenda tests', () => {
     const subcaseTitleLong = `Agenda spec formal ok: approve agenda lange titel - ${testId}`;
 
     cy.createAgenda(agendaKind, dateToCreateAgenda, agendaPlace).then((result) => {
-      cy.createCase(false, caseTitleShort);
+      cy.createCase(caseTitleShort);
       cy.addSubcase(typeNota, newSubcaseTitleShort, subcaseTitleLong);
       cy.openSubcase(0);
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);

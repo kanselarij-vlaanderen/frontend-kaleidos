@@ -35,7 +35,7 @@ context('Propagation to other graphs', () => {
         folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-2', fileType: 'Decreet',
       }
     ];
-    cy.createCase(false, caseTitle);
+    cy.createCase(caseTitle);
     cy.addSubcase('Nota',
       subcaseTitle1,
       'Cypress test voor het propageren naar overheid',

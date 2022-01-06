@@ -21,10 +21,6 @@ export default Model.extend({
   person: belongsTo('person'),
   mandate: belongsTo('mandate'),
 
-  iseCodes: hasMany('ise-code', {
-    inverse: null,
-  }),
-
   approvals: hasMany('approval'),
   subcases: hasMany('subcase', {
     inverse: null,
