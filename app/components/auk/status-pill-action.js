@@ -10,6 +10,13 @@ export default class StatusPillAction extends Component {
   static statusIconMap = {
     'in-progress': 'clock',
     'not-started': 'circle',
+    'step-1': 'circle-step-1',
+    'step-2': 'circle-step-2',
+    'step-3': 'circle-step-3',
+    'step-4': 'circle-step-4',
+    'step-5': 'circle-step-5',
+    'step-6': 'circle-step-6',
+    'step-7': 'circle-full',
     'paused': 'circle-pause',
     'neutral': '',
     done: 'circle-check',

@@ -23,6 +23,38 @@
               <Auk::StatusPillAction @status="error" @actionIcon="pencil" @actionLabel="Status aanpassen" {{on "click" this.openStatusModal}}>
                 <strong>{{this.model.status.label}}</strong> – 22.11.2021
               </Auk::StatusPillAction>
+            {{else if (eq this.model.status.label "Opgestart")}}
+              <Auk::StatusPillAction @status="not-started" @actionIcon="pencil" @actionLabel="Status aanpassen" {{on "click" this.openStatusModal}}>
+                <strong>{{this.model.status.label}}</strong> – 22.11.2021
+              </Auk::StatusPillAction>
+            {{else if (eq this.model.status.label "Naar vertaaldienst")}}
+              <Auk::StatusPillAction @status="step-1" @actionIcon="pencil" @actionLabel="Status aanpassen" {{on "click" this.openStatusModal}}>
+                <strong>{{this.model.status.label}}</strong> – 22.11.2021
+              </Auk::StatusPillAction>
+            {{else if (eq this.model.status.label "Vertaling in")}}
+              <Auk::StatusPillAction @status="step-2" @actionIcon="pencil" @actionLabel="Status aanpassen" {{on "click" this.openStatusModal}}>
+                <strong>{{this.model.status.label}}</strong> – 22.11.2021
+              </Auk::StatusPillAction>
+            {{else if (eq this.model.status.label "Proef gevraagd")}}
+              <Auk::StatusPillAction @status="step-3" @actionIcon="pencil" @actionLabel="Status aanpassen" {{on "click" this.openStatusModal}}>
+                <strong>{{this.model.status.label}}</strong> – 22.11.2021
+              </Auk::StatusPillAction>
+            {{else if (eq this.model.status.label "Proef in")}}
+              <Auk::StatusPillAction @status="step-4" @actionIcon="pencil" @actionLabel="Status aanpassen" {{on "click" this.openStatusModal}}>
+                <strong>{{this.model.status.label}}</strong> – 22.11.2021
+              </Auk::StatusPillAction>
+            {{else if (eq this.model.status.label "Rappel proef")}}
+              <Auk::StatusPillAction @status="step-5" @actionIcon="pencil" @actionLabel="Status aanpassen" {{on "click" this.openStatusModal}}>
+                <strong>{{this.model.status.label}}</strong> – 22.11.2021
+              </Auk::StatusPillAction>
+            {{else if (eq this.model.status.label "Proef verbeterd")}}
+              <Auk::StatusPillAction @status="step-6" @actionIcon="pencil" @actionLabel="Status aanpassen" {{on "click" this.openStatusModal}}>
+                <strong>{{this.model.status.label}}</strong> – 22.11.2021
+              </Auk::StatusPillAction>
+            {{else if (eq this.model.status.label "Publicatie gevraagd")}}
+              <Auk::StatusPillAction @status="step-7" @actionIcon="pencil" @actionLabel="Status aanpassen" {{on "click" this.openStatusModal}}>
+                <strong>{{this.model.status.label}}</strong> – 22.11.2021
+              </Auk::StatusPillAction>
             {{else}}
               <Auk::StatusPillAction @status="not-started" @actionIcon="pencil" @actionLabel="Status aanpassen" {{on "click" this.openStatusModal}}>
                 <strong>{{this.model.status.label}}</strong> – 22.11.2021

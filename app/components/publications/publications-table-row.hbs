@@ -331,6 +331,38 @@ request the whole row and not only the arrow at the end to be clickable }}
           >
             {{@publicationFlow.status.label}}
           </Auk::StatusPill>
+        {{else if (eq @publicationFlow.status.label "Opgestart")}}
+          <Auk::StatusPill @status="not-started">
+            {{@publicationFlow.status.label}}
+          </Auk::StatusPill>
+        {{else if (eq @publicationFlow.status.label "Naar vertaaldienst")}}
+          <Auk::StatusPill @status="step-1">
+            {{@publicationFlow.status.label}}
+          </Auk::StatusPill>
+        {{else if (eq @publicationFlow.status.label "Vertaling in")}}
+          <Auk::StatusPill @status="step-2">
+            {{@publicationFlow.status.label}}
+          </Auk::StatusPill>
+        {{else if (eq @publicationFlow.status.label "Proef gevraagd")}}
+          <Auk::StatusPill @status="step-3">
+            {{@publicationFlow.status.label}}
+          </Auk::StatusPill>
+        {{else if (eq @publicationFlow.status.label "Proef in")}}
+          <Auk::StatusPill @status="step-4">
+            {{@publicationFlow.status.label}}
+          </Auk::StatusPill>
+        {{else if (eq @publicationFlow.status.label "Rappel proef")}}
+          <Auk::StatusPill @status="step-5">
+            {{@publicationFlow.status.label}}
+          </Auk::StatusPill>
+        {{else if (eq @publicationFlow.status.label "Proef verbeterd")}}
+          <Auk::StatusPill @status="step-6">
+            {{@publicationFlow.status.label}}
+          </Auk::StatusPill>
+        {{else if (eq @publicationFlow.status.label "Publicatie gevraagd")}}
+          <Auk::StatusPill @status="step-7">
+            {{@publicationFlow.status.label}}
+          </Auk::StatusPill>
         {{else}}
           <Auk::StatusPill
             @status="not-started"

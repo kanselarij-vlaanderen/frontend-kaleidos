@@ -69,6 +69,16 @@
   border-color: $auk-gray-200;
 }
 
+.auk-status-pill--step-1,
+.auk-status-pill--step-2,
+.auk-status-pill--step-3,
+.auk-status-pill--step-4,
+.auk-status-pill--step-5,
+.auk-status-pill--step-6,
+.auk-status-pill--step-7 {
+  @extend .auk-status-pill--not-started;
+}
+
 .auk-status-pill--action {
   font-family: flanders-sans, sans-serif;
   font-size: 1.5rem;

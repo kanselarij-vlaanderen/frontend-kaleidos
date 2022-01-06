@@ -16,6 +16,22 @@
       <Auk::Icon @name="circle-pause" @skin="muted" />
     {{else if status.isWithdrawn}}
       <Auk::Icon @name="circle-x" @skin="danger" />
+    {{else if (eq status.label "Opgestart")}}
+      <Auk::Icon @name="circle" @skin="primary" />
+    {{else if (eq status.label "Naar vertaaldienst")}}
+      <Auk::Icon @name="circle-step-1" @skin="primary" />
+    {{else if (eq status.label "Vertaling in")}}
+      <Auk::Icon @name="circle-step-2" @skin="primary" />
+    {{else if (eq status.label "Proef gevraagd")}}
+      <Auk::Icon @name="circle-step-3" @skin="primary" />
+    {{else if (eq status.label "Proef in")}}
+      <Auk::Icon @name="circle-step-4" @skin="primary" />
+    {{else if (eq status.label "Rappel proef")}}
+      <Auk::Icon @name="circle-step-5" @skin="primary" />
+    {{else if (eq status.label "Proef verbeterd")}}
+      <Auk::Icon @name="circle-step-6" @skin="primary" />
+    {{else if (eq status.label "Publicatie gevraagd")}}
+      <Auk::Icon @name="circle-full" @skin="primary" />
     {{else}}
       <Auk::Icon @name="circle" @skin="primary" />
     {{/if}}
