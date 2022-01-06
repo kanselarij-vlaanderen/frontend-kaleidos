@@ -85,7 +85,6 @@ export default class Piece extends Model {
 
   // SIGN FLOW
   @belongsTo('sign-marking-activity') signMarkingActivity;
-  @belongsTo('signinghub-document') signinghubDocument;
   @belongsTo('signed-piece') signedPiece;
 
 
