@@ -13,6 +13,9 @@ export default class PublicationController extends Controller {
   @tracked sidebarIsOpen = this.media.get('isBigScreen');
 
   @tracked decision;
+  @tracked publicationStatus;
+  @tracked publicationStatusChange;
+
   @tracked showStatusSelector = false;
   @tracked showConfirmWithdraw = false;
 

@@ -21,13 +21,13 @@
             <Auk::Pill @skin="white">
               {{this.model.status.label}}
               -
-              {{moment-format this.model.publicationStatusChange.startedAt  "DD/MM/YYYY"}}
+              {{moment-format this.publicationStatusChange.startedAt  "DD/MM/YYYY"}}
             </Auk::Pill>
             <Auk::ButtonLink
               @icon="pencil"
               @skin="muted"
               @size="small"
-              @disabled={{and this.model.publicationStatus.isPublished this.model.decision.isStaatsbladResource}}
+              @disabled={{and this.publicationStatus.isPublished this.decision.isStaatsbladResource}}
               {{on "click" this.openStatusSelector}}
             >
               {{t "edit-status"}}
@@ -76,8 +76,8 @@
 
 {{#if this.showStatusSelector}}
   <Publications::PublicationStatusSelector
-    @publicationStatus={{this.model.publicationStatus}}
-    @publicationStatusChange={{this.model.publicationStatusChange}}
+    @publicationStatus={{this.publicationStatus}}
+    @publicationStatusChange={{this.publicationStatusChange}}
     @onSave={{this.savePublicationStatus}}
     @onCancel={{this.closeStatusSelector}}
   />

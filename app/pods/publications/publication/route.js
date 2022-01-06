@@ -1,6 +1,5 @@
 import Route from '@ember/routing/route';
 
-
 export default class PublicationRoute extends Route {
   model(params) {
     return this.store.findRecord('publication-flow', params.publication_id, {
@@ -30,10 +29,15 @@ export default class PublicationRoute extends Route {
       'filter[publication-activity][subcase][:id:]': publicationSubcase.id,
       sort: 'publication-activity.start-date,publication-date',
     });
+    this.publicationStatus = await model.status;
+    this.publicationStatusChange = await model.publicationStatusChange;
+
   }
 
   setupController(controller) {
     super.setupController(...arguments);
     controller.decision = this.decision;
+    controller.publicationStatus = this.publicationStatus;
+    controller.publicationStatusChange = this.publicationStatusChange;
   }
 }
