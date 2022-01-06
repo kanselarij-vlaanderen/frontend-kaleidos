@@ -34,6 +34,7 @@ export default class PublicationsPublicationTranslationsController extends Contr
   }
 
   @tracked showTranslationUploadModal = false;
+  @tracked isTranslationRequestModalOpen = false;
 
   @action
   openTranslationUploadModal() {
@@ -43,5 +44,15 @@ export default class PublicationsPublicationTranslationsController extends Contr
   @action
   closeTranslationUploadModal() {
     this.showTranslationUploadModal = false;
+  }
+
+  @action
+  openTranslationRequestModal() {
+    this.isTranslationRequestModalOpen = true;
+  }
+
+  @action
+  closeTranslationRequestModal() {
+    this.isTranslationRequestModalOpen = false;
   }
 }

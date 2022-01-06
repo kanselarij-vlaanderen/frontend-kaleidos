@@ -56,6 +56,7 @@
             <Auk::Button
               @skin="primary"
               @icon="plus"
+                {{on "click" this.openProofRequestModal}}
             >
               Drukproef aanvragen
             </Auk::Button>
@@ -180,5 +181,15 @@
     @publicationFlow={{this.model}}
     @onSave={{perform this.closeProofUploadModal}}
     @onCancel={{this.closeProofUploadModal}}
+  />
+{{/if}}
+
+{{#if this.isProofRequestModalOpen}}
+  <Publications::Publication::Proofs::ProofRequestModal
+    @stage={{this.proofRequestStage}}
+    @publicationFlow={{this.model}}
+    @attachments={{this.selectedPieces}}
+    @onSave={{this.closeProofRequestModal}}
+    @onCancel={{this.closeProofRequestModal}}
   />
 {{/if}}

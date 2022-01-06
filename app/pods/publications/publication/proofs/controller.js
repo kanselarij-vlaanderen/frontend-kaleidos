@@ -6,6 +6,12 @@ import { tracked } from '@glimmer/tracking';
 export default class PublicationsPublicationProofController extends Controller {
   @service intl;
   @service toaster;
+  @tracked proofRequestStage;
+  @tracked selectedPieceRows = [];
+
+  get selectedPieces() {
+    return this.selectedPieceRows.map((row) => row.piece);
+  }
 
   @action
   async toggleFinishProof(event) {
@@ -25,6 +31,8 @@ export default class PublicationsPublicationProofController extends Controller {
   }
 
   @tracked showProofUploadModal = false;
+  @tracked isProofRequestModalOpen = false;
+
 
   @action
   openProofUploadModal() {
@@ -34,5 +42,16 @@ export default class PublicationsPublicationProofController extends Controller {
   @action
   closeProofUploadModal() {
     this.showProofUploadModal = false;
+  }
+
+  @action
+  openProofRequestModal(stage) {
+    this.proofRequestStage = stage;
+    this.isProofRequestModalOpen = true;
+  }
+
+  @action
+  closeProofRequestModal() {
+    this.isProofRequestModalOpen = false;
   }
 }

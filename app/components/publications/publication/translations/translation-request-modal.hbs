@@ -52,10 +52,7 @@
         {{! Attachments }}
         <div class="auk-form-group">
           <Auk::Label>{{t "attachments"}}</Auk::Label>
-          <Utils::Documents::List
-            data-test-publication-translation-request-documents-list
-            @pieces={{@attachments}}
-          />
+          <Auk::FileUploader />
         </div>
       </div>
     </Utils::LoadableContent>

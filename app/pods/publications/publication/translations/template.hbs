@@ -1,36 +1,3 @@
-{{!-- <Auk::Navbar @border="bottom">
-  <Auk::Toolbar>
-    <Auk::Toolbar::Group @position="left">
-      <Auk::Toolbar::Item>
-        <Auk::Tabs>
-          <Auk::Tab
-            data-test-route-publications---translations-tab-documents
-            @route="publications.publication.translations.documents"
-          >
-            {{capitalize (t "documents")}}
-          </Auk::Tab>
-          <Auk::Tab
-            data-test-route-publications---translations-tab-requests
-            @route="publications.publication.translations.requests"
-          >
-            {{capitalize (t "requests")}}
-          </Auk::Tab>
-        </Auk::Tabs>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-    <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
-        <Auk::Checkbox
-          data-test-route-publications---translations-tab-finished
-          @label={{t "finished"}}
-          @checked={{this.model.endDate}}
-          {{on "input" this.toggleFinishTranslation}}
-        />
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-  </Auk::Toolbar>
-</Auk::Navbar> --}}
-
 <div class="auk-u-m-4">
   <Publications::Publication::Translations::PublicationInfo @publicationFlow={{this.model}}  @didChange={{this.saveSidebarProperty}} />
 
@@ -58,6 +25,7 @@
             <Auk::Button
               @skin="primary"
               @icon="plus"
+              {{on "click" this.openTranslationRequestModal}}
             >
               Vertaling aanvragen
             </Auk::Button>
@@ -176,12 +144,20 @@
   </Auk::Panel>
 </div>
 
-{{!-- {{outlet}} --}}
-
 {{#if this.showTranslationUploadModal}}
   <Publications::Publication::Translations::TranslationUploadModalMockup
     @publicationFlow={{this.model}}
     @onSave={{perform this.closeTranslationUploadModal}}
     @onCancel={{this.closeTranslationUploadModal}}
+  />
+{{/if}}
+
+{{#if this.isTranslationRequestModalOpen}}
+  <Publications::Publication::Translations::TranslationRequestModal
+    @translationSubcase={{this.model}}
+    @publicationFlow={{this.model}}
+    @attachments={{this.selectedPieces}}
+    @onSave={{perform this.closeTranslationUploadModal}}
+    @onCancel={{this.closeTranslationRequestModal}}
   />
 {{/if}}
