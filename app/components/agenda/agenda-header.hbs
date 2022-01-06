@@ -1,7 +1,7 @@
 <Auk::Navbar @skin="gray-100" @auto={{true}}>
-  <Auk::Toolbar>
-    <Auk::Toolbar::Group @position="left">
-      <Auk::Toolbar::Item>
+  <Auk::Toolbar as |Toolbar|>
+    <Toolbar.Group @position="left" as |Group|>
+      <Group.Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
           <div class="auk-o-flex auk-o-flex--vertical-center">
             <h4
@@ -27,10 +27,10 @@
             @currentMeeting={{@meeting}}
           />
         </div>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
+      </Group.Item>
+    </Toolbar.Group>
     {{#if this.currentSession.isViewer}}
-      <Auk::Toolbar::Group @position="right">
+      <Toolbar.Group @position="right" as |Group|>
         <Agenda::AgendaHeader::AgendaActions
           @meeting={{@meeting}}
           @currentAgenda={{@currentAgenda}}
@@ -38,7 +38,7 @@
           @refreshRoute={{@refreshRoute}}
           @loading={{@loading}}
         />
-        <Auk::Toolbar::Item>
+        <Group.Item>
           <DropdownMenu
             @skin="secondary"
             @label={{t "actions"}}
@@ -141,16 +141,18 @@
             {{/if}}
             {{#if this.canPublishDocumentsToThemis}}
               <Menu.Divider />
-              <Menu.Item {{on "click" this.publishDocumentsToThemis}}>
+              <Menu.Item {{on "click" this.openConfirmPublishDocuments}}>
                 {{t "publish-documents"}}
               </Menu.Item>
-              <Menu.Item @skin="danger" {{on "click" this.unpublishDocumentsFromThemis}}>
+              <Menu.Item
+                @skin="danger"
+                {{on "click" this.openConfirmUnpublishDocuments}}>
                 {{t "unpublish-documents"}}
               </Menu.Item>
             {{/if}}
           </DropdownMenu>
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
+        </Group.Item>
+      </Toolbar.Group>
     {{/if}}
   </Auk::Toolbar>
 </Auk::Navbar>
@@ -175,10 +177,10 @@
     <Auk::Modal::Footer @onCancel={{this.cancelReleaseDocuments}}>
       <Auk::Button
         data-test-agenda-header-release-documents-confirm
-        @skin="danger-primary"
+        @skin="primary"
         {{on "click" this.releaseDocuments}}
       >
-        {{t "releaseToPublic"}}
+        {{t "release-to-public"}}
       </Auk::Button>
     </Auk::Modal::Footer>
   </Auk::Modal>
@@ -196,10 +198,52 @@
     <Auk::Modal::Footer @onCancel={{this.cancelReleaseDecisions}}>
       <Auk::Button
         data-test-agenda-header-release-decisions-confirm
-        @skin="danger-primary"
+        @skin="primary"
         {{on "click" this.releaseDecisions}}
       >
-        {{t "releaseToPublic"}}
+        {{t "release-to-public"}}
+      </Auk::Button>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
+{{/if}}
+
+{{#if this.showConfirmPublishDocuments}}
+  <Auk::Modal @size="small">
+    <Auk::Modal::Header
+      @title={{t "agenda-publish-documents"}}
+      @onClose={{this.cancelPublishDocuments}}
+    />
+    <Auk::Modal::Body>
+      <p>{{t "publish-documents-message"}}</p>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.cancelPublishDocuments}}>
+      <Auk::Button
+        @skin="primary"
+        @loading={{this.publishDocumentsToThemis.isRunning}}
+        {{on "click" (perform this.publishDocumentsToThemis)}}
+      >
+        {{t "publish-to-public"}}
+      </Auk::Button>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
+{{/if}}
+
+{{#if this.showConfirmUnpublishDocuments}}
+  <Auk::Modal @size="small">
+    <Auk::Modal::Header
+      @title={{t "agenda-unpublish-documents"}}
+      @onClose={{this.cancelUnpublishDocuments}}
+    />
+    <Auk::Modal::Body>
+      <p>{{t "unpublish-documents-message"}}</p>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.cancelUnpublishDocuments}}>
+      <Auk::Button
+        @skin="danger-primary"
+        @loading={{this.unpublishDocumentsFromThemis.isRunning}}
+        {{on "click" (perform this.unpublishDocumentsFromThemis)}}
+      >
+        {{t "retract-from-public"}}
       </Auk::Button>
     </Auk::Modal::Footer>
   </Auk::Modal>

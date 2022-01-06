@@ -5,14 +5,13 @@ import { action } from '@ember/object';
 import { debug } from '@ember/debug';
 import { task } from 'ember-concurrency-decorators';
 import { all } from 'rsvp';
-
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { setAgendaitemFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import {
   constructArchiveName,
   fetchArchivingJobForAgenda,
   fileDownloadUrlFromJob,
 } from 'frontend-kaleidos/utils/zip-agenda-files';
-import ThemisPublisher from '../../utils/themis-publisher';
 
 export default class AgendaHeader extends Component {
   /**
@@ -36,6 +35,8 @@ export default class AgendaHeader extends Component {
   @tracked showConfimApprovingAllAgendaitems = false;
   @tracked showConfirmReleaseDecisions = false;
   @tracked showConfirmReleaseDocuments = false;
+  @tracked showConfirmPublishDocuments = false;
+  @tracked showConfirmUnpublishDocuments = false;
   @tracked showLoadingOverlay = false;
   @tracked loadingMessage = null;
 
@@ -134,7 +135,7 @@ export default class AgendaHeader extends Component {
   @action
   releaseDecisions() {
     this.showConfirmReleaseDecisions = false;
-    this.args.meeting.releasedDecisions = moment().utc().toDate();
+    this.args.meeting.releasedDecisions = new Date();
     this.args.meeting.save();
   }
 
@@ -155,6 +156,16 @@ export default class AgendaHeader extends Component {
     this.args.meeting.save();
   }
 
+  @action
+  openConfirmPublishDocuments() {
+    this.showConfirmPublishDocuments = true;
+  }
+
+  @action
+  cancelPublishDocuments() {
+    this.showConfirmPublishDocuments = false;
+  }
+
   @task
   *publishDocumentsToThemis() {
     try {
@@ -170,18 +181,28 @@ export default class AgendaHeader extends Component {
     }
   }
 
+  @action
+  openConfirmUnpublishDocuments() {
+    this.showConfirmUnpublishDocuments = true;
+  }
+
+  @action
+  cancelUnpublishDocuments() {
+    this.showConfirmUnpublishDocuments = false;
+  }
+
   @task
   *unpublishDocumentsFromThemis() {
     try {
       const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
         startDate: new Date(),
         meeting: this.args.meeting,
-        scope: [],
+        scope: [CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS], // only publish newsitems, without documents
       });
       yield themisPublicationActivity.save();
-      this.toaster.success(this.intl.t('success-publish-documents-to-web'));
+      this.toaster.success(this.intl.t('success-unpublish-documents-from-web'));
     } catch(e) {
-      this.toaster.error(this.intl.t('error-publish-documents-to-web'));
+      this.toaster.error(this.intl.t('error-unpublish-documents-from-web'));
     }
   }
 
