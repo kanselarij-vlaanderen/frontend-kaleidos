@@ -4,7 +4,6 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { debug } from '@ember/debug';
 import { task } from 'ember-concurrency-decorators';
-import moment from 'moment';
 import { all } from 'rsvp';
 
 import { setAgendaitemFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
@@ -152,35 +151,37 @@ export default class AgendaHeader extends Component {
   @action
   releaseDocuments() {
     this.showConfirmReleaseDocuments = false;
-    this.args.meeting.releasedDocuments = moment().utc().toDate();
+    this.args.meeting.releasedDocuments = new Date();
     this.args.meeting.save();
   }
 
-  @action
-  async publishDocumentsToThemis() {
-    const themishPublisher = new ThemisPublisher();
+  @task
+  *publishDocumentsToThemis() {
     try {
-      await themishPublisher.publishDocuments(this.args.meeting).then(response => {
-        if (response.ok){
-          this.toaster.success(this.intl.t('publish-documents-success'))
-        }
+      const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
+        startDate: new Date(),
+        meeting: this.args.meeting,
+        scope: [CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS, CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS],
       });
-    } catch {
-      this.toaster.error(this.intl.t('publish-themis-documents-error'))
+      yield themisPublicationActivity.save();
+      this.toaster.success(this.intl.t('success-publish-documents-to-web'));
+    } catch(e) {
+      this.toaster.error(this.intl.t('error-publish-documents-to-web'));
     }
   }
 
-  @action
-  async unpublishDocumentsFromThemis() {
-    const themishPublisher = new ThemisPublisher();
+  @task
+  *unpublishDocumentsFromThemis() {
     try {
-      await themishPublisher.unpublish(this.args.meeting).then(response => {
-        if (response.ok){
-          this.toaster.success(this.intl.t('unpublish-documents-success'))
-        }
+      const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
+        startDate: new Date(),
+        meeting: this.args.meeting,
+        scope: [],
       });
-    } catch {
-      this.toaster.error(this.intl.t('unpublish-themis-documents-error'))
+      yield themisPublicationActivity.save();
+      this.toaster.success(this.intl.t('success-publish-documents-to-web'));
+    } catch(e) {
+      this.toaster.error(this.intl.t('error-publish-documents-to-web'));
     }
   }
 
