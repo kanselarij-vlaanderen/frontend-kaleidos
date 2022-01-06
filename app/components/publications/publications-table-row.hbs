@@ -376,45 +376,6 @@ request the whole row and not only the arrow at the end to be clickable }}
     </td>
   {{/if}}
 
-  {{!-- {{#if @tableColumnDisplayOptions.next}}
-    <td data-test-publication-table-row-next class="auk-u-text-nowrap">
-      {{#if @publicationFlow.status}}
-        {{#if @publicationFlow.status.isPublished}}
-          {{t "dash"}}
-        {{else if @publicationFlow.status.isWithdrawn}}
-          {{t "dash"}}
-        {{else if @publicationFlow.status.isPaused}}
-          {{t "dash"}}
-        {{else}}
-          {{#if @publicationFlow.translationSubcase.endDate}}
-            <Auk::StatusPill
-              @status="neutral"
-            >
-              Nalezen
-            </Auk::StatusPill>
-          {{else}}
-            {{#if (gt this.requests.length 0)}}
-              <Auk::StatusPill
-                @status="neutral"
-              >
-                Verzenden voor drukproef
-              </Auk::StatusPill>
-            {{else}}
-              <Auk::StatusPill
-                @status="neutral"
-              >
-                Te vertalen
-              </Auk::StatusPill>
-            {{/if}}
-          {{/if}}
-
-        {{/if}}
-      {{else}}
-        {{t "dash"}}
-      {{/if}}
-    </td>
-  {{/if}} --}}
-
   <td>
     <Auk::Button
       @skin="borderless"
@@ -427,6 +388,7 @@ request the whole row and not only the arrow at the end to be clickable }}
   </td>
 
   {{!-- Deprecated columns --}}
+  {{!-- ------------------ --}}
   {{!-- {{#if @tableColumnDisplayOptions.translations}}
     <td
       data-test-publication-table-row-translation-progress-badge

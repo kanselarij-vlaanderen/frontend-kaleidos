@@ -14,7 +14,7 @@
   <Auk::Panel::Body>
     <div class="auk-o-grid">
       <div class="auk-o-grid-col-4">
-        <Auk::Label>Dringend</Auk::Label>
+        <Auk::Label>{{t "publicationSection.urgent"}}</Auk::Label>
         <Publications::UrgencyLevelCheckbox
           @urgencyLevel={{this.publicationFlow.urgencyLevel}}
           @onChange={{this.setUrgencyLevel}}
@@ -43,7 +43,7 @@
         <div
           class="auk-form-group"
         >
-          <Auk::Label>Numac</Auk::Label>
+          <Auk::Label>{{t "publicationSection.numac"}}</Auk::Label>
           {{! TODO: disable modifying numac-number once (staatsblad-)decision exists? }}
           <Auk::InputPills
             @items={{this.publicationFlow.numacNumbers}}
@@ -160,7 +160,7 @@
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
           <h4 class="auk-panel__title">
-            Publicatie dossier info
+            {{t "publicationSection.publication-case"}} {{t "util.info"}}
           </h4>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
@@ -174,7 +174,7 @@
   <Auk::Panel::Body>
     <div class="auk-o-grid">
       <div class="auk-o-grid-col-1 auk-content">
-        <h4 class="auk-u-m-0">Dringend</h4>
+        <h4 class="auk-u-m-0">{{t "publicationSection.urgent"}}</h4>
         <p class="auk-u-m-0">
         {{#if @publicationFlow.urgencyLevel.isUrgent}}
           <Auk::Icon @skin="warning" @name="alert-triangle" />
@@ -190,7 +190,7 @@
         </p>
       </div>
       <div class="auk-o-grid-col-2 auk-content">
-        <h4 class="auk-u-m-0">Numac</h4>
+        <h4 class="auk-u-m-0">{{t "publicationSection.numac"}}</h4>
         <p class="auk-u-m-0">
           {{#each this.publicationFlow.numacNumbers as |numac|}}
           {{numac.idName}}

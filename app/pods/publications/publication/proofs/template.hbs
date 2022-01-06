@@ -1,34 +1,3 @@
-{{!-- <Auk::Navbar>
-  <Auk::Toolbar>
-    <Auk::Toolbar::Group @position="left">
-      <Auk::Tabs>
-        <Auk::Tab
-          data-test-route-publications---proofs-tab-documents
-          @route="publications.publication.proofs.documents"
-        >
-          {{t "documents"}}
-        </Auk::Tab>
-        <Auk::Tab
-          data-test-route-publications---proofs-tab-requests
-          @route="publications.publication.proofs.requests"
-        >
-          {{t "requests"}}
-        </Auk::Tab>
-      </Auk::Tabs>
-    </Auk::Toolbar::Group>
-    <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
-        <Auk::Checkbox
-          data-test-route-publications---proofs-tab-finished
-          @label={{t "finished"}}
-          @checked={{this.model.endDate}}
-          {{on "input" this.toggleFinishProof}}
-        />
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-  </Auk::Toolbar>
-</Auk::Navbar> --}}
-
 <div class="auk-u-m-4">
   <Publications::Publication::Proofs::PublicationInfo @publicationFlow={{this.model}} @didChange={{this.saveSidebarProperty}} />
 
@@ -38,7 +7,7 @@
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
             <h4 class="auk-panel__title">
-              Drukproeven
+              {{t "publicationSection.proofs"}}
             </h4>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
@@ -49,7 +18,7 @@
               @icon="plus"
               {{on "click" this.openProofUploadModal}}
             >
-              Drukproef toevoegen
+              {{t "publicationSection.proof-add"}}
             </Auk::Button>
           </Auk::Toolbar::Item>
           <Auk::Toolbar::Item>
@@ -58,7 +27,7 @@
               @icon="plus"
                 {{on "click" this.openProofRequestModal}}
             >
-              Drukproef aanvragen
+              {{t "publicationSection.proof-request"}}
             </Auk::Button>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
@@ -80,7 +49,7 @@
               <Auk::Toolbar::Group @position="left">
                 <Auk::Toolbar::Item>
                   <div class="auk-content">
-                    <h4 class="auk-u-m-0">Drukproef ontvangen</h4>
+                    <h4 class="auk-u-m-0">{{t "publicationSection.proof-received"}}</h4>
                     <p class="auk-u-text-small auk-u-m-0">
                       30.11.2021
                     </p>
@@ -94,10 +63,10 @@
                   @placement="bottom-end"
                 as |Menu|>
                   <Menu.Item>
-                    Publicatie aanvragen
+                    {{t "publicationSection.publication-request"}}
                   </Menu.Item>
                   <Menu.Item>
-                    Bewerken
+                    {{t "util.edit"}}
                   </Menu.Item>
                 </DropdownMenu>
               </Auk::Toolbar::Group>
@@ -106,8 +75,8 @@
           <Auk::Panel::Body>
             <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
               <Auk::ButtonLink @icon="paperclip">65489-fr.pdf</Auk::ButtonLink>
-              <Auk::ButtonLink @layout="icon-only" @icon="book">View</Auk::ButtonLink>
-              <Auk::ButtonLink @layout="icon-only" @icon="download">Download</Auk::ButtonLink>
+              <Auk::ButtonLink @layout="icon-only" @icon="book">{{t "util.view"}}</Auk::ButtonLink>
+              <Auk::ButtonLink @layout="icon-only" @icon="download">{{t "util.download"}}</Auk::ButtonLink>
             </div>
           </Auk::Panel::Body>
         </Auk::Panel>
@@ -132,7 +101,7 @@
                   @placement="bottom-end"
                 as |Menu|>
                   <Menu.Item @skin="danger">
-                    Verwijderen
+                    {{t "util.delete"}}
                   </Menu.Item>
                 </DropdownMenu>
               </actions.Item>
@@ -141,8 +110,8 @@
           <accordionPanel.Body>
             <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
               <Auk::ButtonLink @icon="paperclip">65489-fr.pdf</Auk::ButtonLink>
-              <Auk::ButtonLink @layout="icon-only" @icon="book">View</Auk::ButtonLink>
-              <Auk::ButtonLink @layout="icon-only" @icon="download">Download</Auk::ButtonLink>
+              <Auk::ButtonLink @layout="icon-only" @icon="book">{{t "util.view"}}</Auk::ButtonLink>
+              <Auk::ButtonLink @layout="icon-only" @icon="download">{{t "util.download"}}</Auk::ButtonLink>
             </div>
             <div class="auk-hr"></div>
             <div class="auk-content">
@@ -169,12 +138,9 @@
           </accordionPanel.Body>
         </Auk::AccordionPanel>
       </div>
-
     </Auk::Panel::Body>
   </Auk::Panel>
 </div>
-
-{{!-- {{outlet}} --}}
 
 {{#if this.showProofUploadModal}}
   <Publications::Publication::Proofs::ProofUploadModalMockup

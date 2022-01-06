@@ -69,6 +69,7 @@
   border-color: $auk-gray-200;
 }
 
+// New status pill skins
 .auk-status-pill--step-1,
 .auk-status-pill--step-2,
 .auk-status-pill--step-3,
@@ -79,6 +80,7 @@
   @extend .auk-status-pill--not-started;
 }
 
+// Editable status pill
 .auk-status-pill--action {
   font-family: flanders-sans, sans-serif;
   font-size: 1.5rem;

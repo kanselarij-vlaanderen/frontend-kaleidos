@@ -7,44 +7,31 @@
     @route="publications.publication.case"
     data-test-publication-nav-case
   >
-    {{!-- {{t "agendaitem-case"}} --}}
-    Publicatie dossier
+    {{t "publicationSection.publication-case"}}
   </Auk::Tab>
   <Auk::Tab
     @route="publications.publication.documents"
     @counter={{this.documentsCount}}
     data-test-publication-nav-documents
   >
-    {{!-- {{t "documents"}} --}}
-    Besluit(en)
+    {{t "publicationSection.decisions"}}
   </Auk::Tab>
   <Auk::Tab
     @route="publications.publication.translations"
     data-test-publication-nav-translations
   >
-    <div class="auk-o-flex auk-o-flex--center">
-      {{!-- <span>{{t "translations"}}</span> --}}
-      <span>Vertaling</span>
-      {{!-- <Publications::Publication::Translations::TranslationProgressBadge @translationSubcase={{@publicationFlow.translationSubcase}}/> --}}
-    </div>
+    {{t "publicationSection.translation"}}
   </Auk::Tab>
   <Auk::Tab
     @route="publications.publication.proofs"
     data-test-publication-nav-publishpreview
   >
-    <div class="auk-o-flex auk-o-flex--center">
-      {{!-- <span>{{t "publishpreview-requests"}}</span> --}}
-      <span>Drukproef</span>
-      {{!-- <Publications::Publication::Proofs::ProofsProgressBadge @publicationSubcase={{@publicationFlow.publicationSubcase}}/> --}}
-    </div>
+    {{t "publicationSection.proof"}}
   </Auk::Tab>
   <Auk::Tab
     @route="publications.publication.publication"
     data-test-publication-nav-publication
   >
-    <div class="auk-o-flex auk-o-flex--center">
-      {{!-- <span>{{t "publishpreview-requests"}}</span> --}}
-      <span>Publicatie</span>
-    </div>
+    {{t "publicationSection.publication"}}
   </Auk::Tab>
 </Auk::Tabs>

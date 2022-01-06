@@ -7,7 +7,7 @@
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
             <h4 class="auk-panel__title">
-              Vertalingen
+              {{t "publicationSection.translations"}}
             </h4>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
@@ -18,7 +18,7 @@
               @icon="plus"
               {{on "click" this.openTranslationUploadModal}}
             >
-              Vertaling toevoegen
+              {{t "publicationSection.translation-add"}}
             </Auk::Button>
           </Auk::Toolbar::Item>
           <Auk::Toolbar::Item>
@@ -27,7 +27,7 @@
               @icon="plus"
               {{on "click" this.openTranslationRequestModal}}
             >
-              Vertaling aanvragen
+              {{t "publicationSection.translation-request"}}
             </Auk::Button>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
@@ -49,7 +49,7 @@
               <Auk::Toolbar::Group @position="left">
                 <Auk::Toolbar::Item>
                   <div class="auk-content">
-                    <h4 class="auk-u-m-0">Vertaling ontvangen</h4>
+                    <h4 class="auk-u-m-0">{{t "publicationSection.translation-received"}}</h4>
                     <p class="auk-u-text-small auk-u-m-0">
                       22.11.2021
                     </p>
@@ -57,17 +57,16 @@
                 </Auk::Toolbar::Item>
               </Auk::Toolbar::Group>
               <Auk::Toolbar::Group @position="right">
-                {{!-- <Auk::Pill @skin="success">Klaar voor drukproef</Auk::Pill> --}}
                 <DropdownMenu
                   @skin="borderless"
                   @icon="three-dots"
                   @placement="bottom-end"
                 as |Menu|>
                   <Menu.Item>
-                    Drukproef aanvragen
+                    {{t "publicationSection.proof-request"}}
                   </Menu.Item>
                   <Menu.Item>
-                    Bewerken
+                    {{t "util.edit"}}
                   </Menu.Item>
                 </DropdownMenu>
               </Auk::Toolbar::Group>
@@ -76,8 +75,8 @@
           <Auk::Panel::Body>
             <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
               <Auk::ButtonLink @icon="paperclip">65489-fr.pdf</Auk::ButtonLink>
-              <Auk::ButtonLink @layout="icon-only" @icon="book">View</Auk::ButtonLink>
-              <Auk::ButtonLink @layout="icon-only" @icon="download">Download</Auk::ButtonLink>
+              <Auk::ButtonLink @layout="icon-only" @icon="book">{{t "util.view"}}</Auk::ButtonLink>
+              <Auk::ButtonLink @layout="icon-only" @icon="download">{{t "util.download"}}</Auk::ButtonLink>
             </div>
           </Auk::Panel::Body>
         </Auk::Panel>
@@ -93,7 +92,7 @@
           />
         </div>
         <Auk::AccordionPanel @isDefaultActive={{true}} as |accordionPanel|>
-          <accordionPanel.Header @title="Aanvraag verzonden" @date="22.11.2021" as |header|>
+          <accordionPanel.Header @title="{{t "util.request-sent"}}" @date="22.11.2021" as |header|>
             <header.Actions as |actions|>
               <actions.Item>
                 <DropdownMenu
@@ -102,7 +101,7 @@
                   @placement="bottom-end"
                 as |Menu|>
                   <Menu.Item @skin="danger">
-                    Verwijderen
+                    {{t "util.delete"}}
                   </Menu.Item>
                 </DropdownMenu>
               </actions.Item>
@@ -111,8 +110,8 @@
           <accordionPanel.Body>
             <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
               <Auk::ButtonLink @icon="paperclip">65489-fr.pdf</Auk::ButtonLink>
-              <Auk::ButtonLink @layout="icon-only" @icon="book">View</Auk::ButtonLink>
-              <Auk::ButtonLink @layout="icon-only" @icon="download">Download</Auk::ButtonLink>
+              <Auk::ButtonLink @layout="icon-only" @icon="book">{{t "util.view"}}</Auk::ButtonLink>
+              <Auk::ButtonLink @layout="icon-only" @icon="download">{{t "util.download"}}</Auk::ButtonLink>
             </div>
             <div class="auk-hr"></div>
             <div class="auk-content">
@@ -139,7 +138,6 @@
           </accordionPanel.Body>
         </Auk::AccordionPanel>
       </div>
-
     </Auk::Panel::Body>
   </Auk::Panel>
 </div>

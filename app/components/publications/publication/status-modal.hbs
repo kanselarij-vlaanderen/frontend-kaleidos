@@ -1,6 +1,6 @@
 <Auk::Modal>
   <Auk::Modal::Header
-    @title="Status aanpassen"
+    @title="{{t "util.edit-status"}}"
     @onClose={{@onCancel}}
   />
   <Auk::Modal::Body>
@@ -15,7 +15,7 @@
     <div
       class="auk-form-group"
     >
-      <Auk::Label>Datum</Auk::Label>
+      <Auk::Label>{{t "util.date"}}</Auk::Label>
       <Auk::Datepicker
         @date="22.11.2021"
         @onChange=""

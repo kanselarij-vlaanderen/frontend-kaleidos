@@ -1,34 +1,3 @@
-{{!-- <Auk::Navbar>
-  <Auk::Toolbar>
-    <Auk::Toolbar::Group @position="left">
-      <Auk::Tabs>
-        <Auk::Tab
-          data-test-route-publications---proofs-tab-documents
-          @route="publications.publication.proofs.documents"
-        >
-          {{t "documents"}}
-        </Auk::Tab>
-        <Auk::Tab
-          data-test-route-publications---proofs-tab-requests
-          @route="publications.publication.proofs.requests"
-        >
-          {{t "requests"}}
-        </Auk::Tab>
-      </Auk::Tabs>
-    </Auk::Toolbar::Group>
-    <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
-        <Auk::Checkbox
-          data-test-route-publications---proofs-tab-finished
-          @label={{t "finished"}}
-          @checked={{this.model.endDate}}
-          {{on "input" this.toggleFinishProof}}
-        />
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-  </Auk::Toolbar>
-</Auk::Navbar> --}}
-
 <div class="auk-u-m-4">
   <Publications::Publication::Publication::PublicationInfo @publicationFlow={{this.model}} @didChange={{this.saveSidebarProperty}} />
 
@@ -38,7 +7,7 @@
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
             <h4 class="auk-panel__title">
-              Publicaties
+              {{t "publicationSection.publications"}}
             </h4>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
@@ -48,7 +17,7 @@
               @skin="secondary"
               @icon="plus"
             >
-              Publicatie toevoegen
+              {{t "publicationSection.publication-add"}}
             </Auk::Button>
           </Auk::Toolbar::Item>
           <Auk::Toolbar::Item>
@@ -56,7 +25,7 @@
               @skin="primary"
               @icon="plus"
             >
-              Publicatie aanvragen
+              {{t "publicationSection.publication-request"}}
             </Auk::Button>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
@@ -74,12 +43,10 @@
         </div>
         <div>
           <p class="auk-u-m-4">
-            Er zijn nog geen documenten toegevoegd.
+            {{t "util.no-documents-added"}}
           </p>
         </div>
       </div>
     </Auk::Panel::Body>
   </Auk::Panel>
 </div>
-
-{{!-- {{outlet}} --}}

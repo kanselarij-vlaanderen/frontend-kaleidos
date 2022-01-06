@@ -1,5 +1,6 @@
 <div class="auk-u-position-relative">
   <div class="auk-o-flex">
+    {{!-- Show reset button when filter is active --}}
     {{#if (not-eq this.searchText "")}}
     <Auk::Button @icon="redo" @layout="icon-only" @skin="muted-borderless" {{on "click" this.resetFilter}}>Verwijder filter</Auk::Button>
     {{/if}}
@@ -19,6 +20,9 @@
       autocomplete="off"
     />
   </div>
+
+  {{!-- Results should be updated in the table when filtered --}}
+  {{!-- ---------------------------------------------------- --}}
   {{!-- <Auk::SearchResultsList
     data-test-publication-case-search-result-list
     @isVisible={{this.isShowingResults}}

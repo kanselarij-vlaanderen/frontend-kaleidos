@@ -5,7 +5,7 @@
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
           <h4 class="auk-panel__title">
-            Vertaal info
+            {{t "publicationSection.translation"}} {{t "util.info"}}
           </h4>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
@@ -65,7 +65,7 @@
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
           <h4 class="auk-panel__title">
-            Vertaal info
+            {{t "publicationSection.translation"}} {{t "util.info"}}
           </h4>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
@@ -78,14 +78,8 @@
   </Auk::Panel::Header>
   <Auk::Panel::Body>
     <div class="auk-o-grid">
-      {{!-- <div class="auk-o-grid-col-3 auk-content">
-        <h4 class="auk-u-m-0">Vertaling ontvangen</h4>
-        <p class="auk-u-m-0">
-          29/11/2021
-        </p>
-      </div> --}}
       <div class="auk-o-grid-col-3 auk-content">
-        <h4 class="auk-u-m-0">Limiet vertaling</h4>
+        <h4 class="auk-u-m-0">{{t "translation-due-date"}}</h4>
         <p class="auk-u-m-0">
           {{#if this.translationSubcase.dueDate}}
           {{moment-format this.translationSubcase.dueDate "DD-MM-YYYY"}}
@@ -94,12 +88,6 @@
           {{/if}}
         </p>
       </div>
-      {{!-- <div class="auk-o-grid-col-3 auk-content">
-        <h4 class="auk-u-m-0">Klaar voor drukproef</h4>
-        <p class="auk-u-m-0">
-          29/11/2021
-        </p>
-      </div> --}}
     </div>
   </Auk::Panel::Body>
 </Auk::Panel>
