@@ -14,6 +14,12 @@
           @message={{toast.message}}
           @options={{toast.options}}
         />
+      {{else if (eq toast.type "download-report")}}
+        <Utils::Toaster::DownloadReportToast
+          @title={{toast.title}}
+          @message={{toast.message}}
+          @options={{toast.options}}
+        />
       {{else}}
         <Utils::Toaster::Toast
           @type={{toast.options.type}}

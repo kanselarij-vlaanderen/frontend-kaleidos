@@ -3,12 +3,14 @@
     class="vl-alert-relative vl-alert-relative--center-mid"
     aria-live="assertive"
     @type="success"
-    @title="Bestand downloaden"
+    @title={{@title}}
     @closeable={{true}}
     @onClose={{@options.onClose}}
   >
     <div class="vl-alert__message auk-u-text-capitalize">
-      <p>{{t "agenda-documents-download-ready"}}</p>
+      {{#if @message}}
+      <p>{{@message}}</p>
+      {{/if}}
       <Auk::ButtonLink
         @skin="borderless"
         @icon="download"
@@ -17,7 +19,7 @@
         class="vlc-toaster-button"
         {{on "click" @options.onClose}}
       >
-        {{t "download"}}
+        {{@options.fileName}}
       </Auk::ButtonLink>
     </div>
   </WebComponents::VlAlert>

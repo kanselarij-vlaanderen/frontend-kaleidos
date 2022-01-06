@@ -1,5 +1,7 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
+import { task } from 'ember-concurrency-decorators';
+import { timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 
@@ -14,6 +16,25 @@ export default class PublicationsReportsController extends Controller {
   @service toaster;
   @service intl;
 
+  @task
+  *success() {
+    const fileDownloadToast = {
+      title: this.intl.t('successfully-created-report-ready'),
+      type: 'download-report',
+      options: {
+        timeOut: 60 * 10 * 1000,
+      },
+    };
+
+    fileDownloadToast.options.downloadLink = "202112171112-publicatie-exacte-datum.csv";
+    fileDownloadToast.options.fileName = "202112171112-publicatie-exacte-datum.csv";
+
+    yield timeout(5000);
+    this.toaster.displayToast.perform(
+      fileDownloadToast
+    );
+  }
+
   @action
   openReportOneModal() {
     this.reportOneModal = true;
@@ -24,10 +45,16 @@ export default class PublicationsReportsController extends Controller {
     this.reportOneModal = false;
   }
 
-  @action
-  async confirmReportOneModal(event) {
+  @action confirmReportOneModal() {
     this.reportOneModal = false;
-    this.toaster.success(this.intl.t('successfully-created-report'));
+    this.toaster.loading(
+      this.intl.t('successfully-created-report'),
+      this.intl.t('successfully-created-report-title'),
+      {
+        timeOut: 5000,
+      }
+    );
+    this.success.perform();
   }
 
   @action
@@ -43,7 +70,14 @@ export default class PublicationsReportsController extends Controller {
   @action
   async confirmReportTwoModal(event) {
     this.reportTwoModal = false;
-    this.toaster.success(this.intl.t('successfully-created-report'));
+    this.toaster.loading(
+      this.intl.t('successfully-created-report'),
+      this.intl.t('successfully-created-report-title'),
+      {
+        timeOut: 5000,
+      }
+    );
+    this.success.perform();
   }
 
   @action
@@ -59,7 +93,14 @@ export default class PublicationsReportsController extends Controller {
   @action
   async confirmReportThreeModal(event) {
     this.reportThreeModal = false;
-    this.toaster.success(this.intl.t('successfully-created-report'));
+    this.toaster.loading(
+      this.intl.t('successfully-created-report'),
+      this.intl.t('successfully-created-report-title'),
+      {
+        timeOut: 5000,
+      }
+    );
+    this.success.perform();
   }
 
   @action
@@ -75,7 +116,14 @@ export default class PublicationsReportsController extends Controller {
   @action
   async confirmReportFourModal(event) {
     this.reportFourModal = false;
-    this.toaster.success(this.intl.t('successfully-created-report'));
+    this.toaster.loading(
+      this.intl.t('successfully-created-report'),
+      this.intl.t('successfully-created-report-title'),
+      {
+        timeOut: 5000,
+      }
+    );
+    this.success.perform();
   }
 
   @action
@@ -91,7 +139,14 @@ export default class PublicationsReportsController extends Controller {
   @action
   async confirmReportFiveModal(event) {
     this.reportFiveModal = false;
-    this.toaster.success(this.intl.t('successfully-created-report'));
+    this.toaster.loading(
+      this.intl.t('successfully-created-report'),
+      this.intl.t('successfully-created-report-title'),
+      {
+        timeOut: 5000,
+      }
+    );
+    this.success.perform();
   }
 
   @action
@@ -107,7 +162,14 @@ export default class PublicationsReportsController extends Controller {
   @action
   async confirmReportSixModal(event) {
     this.reportSixModal = false;
-    this.toaster.success(this.intl.t('successfully-created-report'));
+    this.toaster.loading(
+      this.intl.t('successfully-created-report'),
+      this.intl.t('successfully-created-report-title'),
+      {
+        timeOut: 5000,
+      }
+    );
+    this.success.perform();
   }
 
   @action
@@ -123,6 +185,13 @@ export default class PublicationsReportsController extends Controller {
   @action
   async confirmReportSevenModal(event) {
     this.reportSevenModal = false;
-    this.toaster.success(this.intl.t('successfully-created-report'));
+    this.toaster.loading(
+      this.intl.t('successfully-created-report'),
+      this.intl.t('successfully-created-report-title'),
+      {
+        timeOut: 5000,
+      }
+    );
+    this.success.perform();
   }
 }
