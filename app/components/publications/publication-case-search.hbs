@@ -1,5 +1,8 @@
 <div class="auk-u-position-relative">
   <div class="auk-o-flex">
+    {{#if (not-eq this.searchText "")}}
+    <Auk::Button @icon="redo" @layout="icon-only" @skin="muted-borderless" {{on "click" this.resetFilter}}>Verwijder filter</Auk::Button>
+    {{/if}}
     <Auk::Input
       data-test-publication-case-search-input
       @block={{true}}
@@ -15,9 +18,6 @@
       @enter={{perform this.search}}
       autocomplete="off"
     />
-    {{#if this.searchResults}}
-    <Auk::Button @icon="circle-x" @layout="icon-only" @skin="muted-borderless" {{on "click" this.resetFilter}}>Verwijder filter</Auk::Button>
-    {{/if}}
   </div>
   {{!-- <Auk::SearchResultsList
     data-test-publication-case-search-result-list

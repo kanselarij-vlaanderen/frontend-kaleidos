@@ -8,7 +8,7 @@ import { restartableTask } from 'ember-concurrency-decorators';
 import search from 'frontend-kaleidos/utils/mu-search';
 
 export default class PublicationsPublicationCaseSearchComponent extends Component {
-  @tracked searchText;
+  @tracked searchText = "";
   @tracked isShowingResults = false;
   @tracked searchResults;
 
