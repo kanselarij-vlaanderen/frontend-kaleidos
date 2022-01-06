@@ -54,7 +54,7 @@
           as |Menu|
         >
           {{#if this.currentSession.isEditor}}
-            {{#if (or this.isLoading this.loadMailCampaign.isRunning)}}
+            {{#if this.loadMailCampaign.isRunning}}
               <Menu.Item @textOnly={{true}}>
                 <Auk::Loader @message={{t "newsletter-loading-text"}} />
               </Menu.Item>
@@ -86,13 +86,13 @@
               {{t "show-newsletter"}}
             </Menu.Item>
             <Menu.Item
-              {{on "click" this.downloadBelgaXML}}
+              {{on "click" (perform this.downloadBelgaXML)}}
             >
               {{t "generate-xml"}}
             </Menu.Item> --}}
             {{#if this.mailCampaign}}
               <Menu.Divider />
-              <Menu.Item @skin="danger" {{on "click" this.deleteCampaign}}>
+              <Menu.Item @skin="danger" {{on "click" (perform this.deleteCampaign)}}>
                 {{t "delete-campaign"}}
               </Menu.Item>
             {{/if}}
@@ -107,44 +107,44 @@
   <WebComponents::VlModalVerify
     @title={{t "send-newsitem-to-mail"}}
     @buttonType="warning"
-    @isLoading={{this.isLoading}}
+    @isLoading={{this.publishToMail.isRunning}}
     @verifyButtonText={{t "send-newsitem-to-mail"}}
     @message={{t "send-newsitem-to-mail-verification"}}
     @cancel={{this.toggleVerifyingPublishMail}}
-    @verify={{this.publishToMail}}
+    @verify={{perform this.publishToMail}}
   />
 {{/if}}
 {{#if this.verifyingPublishBelga}}
   <WebComponents::VlModalVerify
     @title={{t "send-newsitem-to-belga"}}
     @buttonType="warning"
-    @isLoading={{this.isLoading}}
+    @isLoading={{this.publishToBelga.isRunning}}
     @verifyButtonText={{t "send-newsitem-to-belga"}}
     @message={{t "send-newsitem-to-belga-verification"}}
     @cancel={{this.toggleVerifyingPublishBelga}}
-    @verify={{this.publishToBelga}}
+    @verify={{perform this.publishToBelga}}
   />
 {{/if}}
 {{#if this.verifyingPublishWeb}}
   <WebComponents::VlModalVerify
     @title={{t "send-newsitem-to-web"}}
     @buttonType="warning"
-    @isLoading={{this.isLoading}}
+    @isLoading={{this.publishToWeb.isRunning}}
     @verifyButtonText={{t "send-newsitem-to-web"}}
     @message={{t "send-newsitem-to-web-verification"}}
     @cancel={{this.toggleVerifyingPublishWeb}}
-    @verify={{this.publishToWeb}}
+    @verify={{perform this.publishToWeb}}
   />
 {{/if}}
 {{#if this.verifyingPublishAll}}
   <WebComponents::VlModalVerify
     @title={{t "send-newsitem-to-all"}}
     @buttonType="warning"
-    @isLoading={{this.isLoading}}
+    @isLoading={{this.publishToAll.isRunning}}
     @verifyButtonText={{t "send-newsitem-to-all"}}
     @message={{t "send-newsitem-to-all-verification"}}
     @cancel={{this.toggleVerifyingPublishAll}}
-    @verify={{this.publishToAll}}
+    @verify={{perform this.publishToAll}}
   />
 {{/if}}
 
@@ -162,7 +162,4 @@
       {{/if}}
     </Auk::Modal::Body>
   </WebComponents::VlModal>
-{{/if}}
-{{#if this.isLoading}}
-  <WebComponents::LoadingOverlay />
 {{/if}}

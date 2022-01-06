@@ -25,8 +25,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @tracked verifyingPublishWeb = false;
   @tracked verifyingPublishMail = false;
 
-  @tracked isLoading = false;
-
   @tracked newsletterHTML = null;
   @tracked loadingNewsletter = false;
 
@@ -69,48 +67,41 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     this.verifyingPublishWeb = !this.verifyingPublishWeb;
   }
 
-  @action
-  async publishToMail() {
-    this.isLoading = true;
-
+  @task
+  *publishToMail() {
     if (!this.mailCampaign) {
-      await this.createMailCampaign();
+      yield this.createMailCampaign();
     }
 
     if (this.mailCampaign?.isSent) {
       this.toaster.error(this.intl.t('error-already-sent-newsletter'));
     } else {
-      if (await this.validateMailCampaign()) {
-        await this.publishToMailAndSaveCampaign();
+      if (yield this.validateMailCampaign()) {
+        yield this.publishToMailAndSaveCampaign();
       }
     }
 
-    this.isLoading = false;
     this.toggleVerifyingPublishMail();
   }
 
-  @action
-  async publishToBelga() {
-    this.isLoading = true;
-
+  @task
+  *publishToBelga() {
     if (!this.mailCampaign) {
-      await this.createMailCampaign();
+      yield this.createMailCampaign();
     }
-    await this.publishNewsletterToBelga();
-
-    this.isLoading = false;
+    yield this.publishNewsletterToBelga();
     this.toggleVerifyingPublishBelga();
   }
 
-  @action
-  async publishToWeb() {
+  @task
+  *publishToWeb() {
     try {
       const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
         startDate: new Date(),
         meeting: this.args.meeting,
         scope: [CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS]
       });
-      await themisPublicationActivity.save();
+      yield themisPublicationActivity.save();
       this.toaster.success(this.intl.t('success-publish-newsletter-to-web'));
       this.toggleVerifyingPublishWeb();
     } catch(e) {
@@ -118,28 +109,25 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     }
   }
 
-  @action
-  async publishToAll() {
-    this.isLoading = true;
-
+  @task
+  *publishToAll() {
     if (!this.mailCampaign) {
-      await this.createMailCampaign();
+      yield this.createMailCampaign();
     }
 
     if (this.mailCampaign?.isSent) {
       this.toaster.error(this.intl.t('error-already-sent-newsletter'));
     } else {
-      if (await this.validateMailCampaign()) {
-        await this.publishToMailAndSaveCampaign();
+      if (yield this.validateMailCampaign()) {
+        yield this.publishToMailAndSaveCampaign();
         // Although belga is independent of mailchimp, if there is no valid campaign we should maybe avoid sending belga
         // Specific example: no newsletters (for notes) present! we need at least one note to avoid an empty mail/belga
         // A different example is a note without themes, valid for belga but not for mailchimp (no recipients)
       }
-      await this.publishNewsletterToBelga();
+      yield this.publishNewsletterToBelga();
       // For valvas, we should be able to send a valvas push as long as there is at least 1 note or announcement.
     }
 
-    this.isLoading = false;
     this.toggleVerifyingPublishAll();
   }
 
@@ -208,36 +196,32 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     this.mailCampaign = await this.newsletterService.createCampaign(this.args.agenda, this.args.meeting);
   }
 
-  @action
-  async deleteCampaign() {
-    this.isLoading = true;
+  @task
+  *deleteCampaign() {
     const meeting = this.args.meeting;
 
     if (this.mailCampaign?.campaignId) {
-      await this.newsletterService.deleteCampaign(this.mailCampaign.campaignId);
+      yield this.newsletterService.deleteCampaign(this.mailCampaign.campaignId);
     }
     this.mailCampaign.destroyRecord();
-    const reloadedMeeting = await this.store.findRecord('meeting', meeting.id, {
+    const reloadedMeeting = yield this.store.findRecord('meeting', meeting.id, {
       reload: true,
     });
     reloadedMeeting.mailCampaign = null;
 
-    await reloadedMeeting.save();
-    await this.loadMailCampaign.perform();
-    this.isLoading = false;
+    yield reloadedMeeting.save();
+    yield this.loadMailCampaign.perform();
   }
 
   // TODO These are for developers use - in comments for follow up
   /*
-  @action
-  async downloadBelgaXML() {
-    this.isLoading = true;
-
+  @task
+  *downloadBelgaXML() {
     if (!this.mailCampaign) {
-      await this.createMailCampaign();
+      yield this.createMailCampaign();
     }
 
-    await this.newsletterService
+    yield this.newsletterService
       .downloadBelgaXML(this.args.agenda.id)
       .catch(() => {
         this.toaster.error(
@@ -245,7 +229,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
           this.intl.t('warning-title')
         );
       });
-    this.isLoading = false;
   }
 
   @action
