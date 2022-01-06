@@ -42,6 +42,8 @@ export default Model.extend({
     inverse: null,
   }),
 
+  themisPublicationActivities: hasMany('themis-publication-activity'),
+
   label: computed('plannedStart', 'kind', 'numberRepresentation', function() {
     const date = moment(this.plannedStart).format('DD-MM-YYYY');
     const kind = CONFIG.MINISTERRAAD_TYPES.TYPES.find((type) => type.uri === this.kind);

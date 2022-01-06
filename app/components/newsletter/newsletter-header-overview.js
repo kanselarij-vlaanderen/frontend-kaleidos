@@ -3,8 +3,8 @@ import { action } from '@ember/object';
 import moment from 'moment';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import ThemisPublisher from '../../utils/themis-publisher';
 import { task } from 'ember-concurrency-decorators';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /**
  * @argument {Meeting} meeting
@@ -22,6 +22,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   @tracked verifyingPublishAll = false;
   @tracked verifyingPublishBelga = false;
+  @tracked verifyingPublishWeb = false;
   @tracked verifyingPublishMail = false;
 
   @tracked isLoading = false;
@@ -64,6 +65,11 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   }
 
   @action
+  toggleVerifyingPublishWeb() {
+    this.verifyingPublishWeb = !this.verifyingPublishWeb;
+  }
+
+  @action
   async publishToMail() {
     this.isLoading = true;
 
@@ -94,6 +100,22 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
     this.isLoading = false;
     this.toggleVerifyingPublishBelga();
+  }
+
+  @action
+  async publishToWeb() {
+    try {
+      const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
+        startDate: new Date(),
+        meeting: this.args.meeting,
+        scope: [CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS]
+      });
+      await themisPublicationActivity.save();
+      this.toaster.success(this.intl.t('success-publish-newsletter-to-web'));
+      this.toggleVerifyingPublishWeb();
+    } catch(e) {
+      this.toaster.error(this.intl.t('error-publish-newsletter-to-web'));
+    }
   }
 
   @action
@@ -203,20 +225,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     await reloadedMeeting.save();
     await this.loadMailCampaign.perform();
     this.isLoading = false;
-  }
-
-  @action
-  async publishToWeb() {
-    const themishPublisher = new ThemisPublisher();
-    try {
-      await themishPublisher.publishNewsitems(this.args.meeting).then(response => {
-        if (response.ok){
-          this.toaster.success(this.intl.t('publish-newsitems-success'));
-        }
-      });
-    } catch(e) {
-      this.toaster.error(this.intl.t('publish-themis-newsitems-error'));
-    }
   }
 
   // TODO These are for developers use - in comments for follow up

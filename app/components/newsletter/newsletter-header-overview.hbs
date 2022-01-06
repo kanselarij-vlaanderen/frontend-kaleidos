@@ -68,8 +68,8 @@
               <Menu.Item {{on "click" this.toggleVerifyingPublishBelga}}>
                 {{t "send-newsitem-to-belga"}}
               </Menu.Item>
-              <Menu.Item {{on "click" this.publishToWeb}}>
-                {{t "publish-newsitems"}}
+              <Menu.Item {{on "click" this.toggleVerifyingPublishWeb}}>
+                {{t "send-newsitem-to-web"}}
               </Menu.Item>
             {{/if}}
           {{/if}}
@@ -123,6 +123,17 @@
     @message={{t "send-newsitem-to-belga-verification"}}
     @cancel={{this.toggleVerifyingPublishBelga}}
     @verify={{this.publishToBelga}}
+  />
+{{/if}}
+{{#if this.verifyingPublishWeb}}
+  <WebComponents::VlModalVerify
+    @title={{t "send-newsitem-to-web"}}
+    @buttonType="warning"
+    @isLoading={{this.isLoading}}
+    @verifyButtonText={{t "send-newsitem-to-web"}}
+    @message={{t "send-newsitem-to-web-verification"}}
+    @cancel={{this.toggleVerifyingPublishWeb}}
+    @verify={{this.publishToWeb}}
   />
 {{/if}}
 {{#if this.verifyingPublishAll}}
