@@ -1,19 +1,24 @@
 <div class="auk-u-position-relative">
-  <Auk::Input
-    data-test-publication-case-search-input
-    @block={{true}}
-    @icon="search"
-    placeholder="Filter op Numac of Pubnr."
-    value={{this.searchText}}
-    {{on "input" (perform this.debouncedSearch)}}
-    {{on "focusout" this.hideResults}}
-    {{on
-      "focusin"
-      (if this.search.lastSuccessful this.showResults this.hideResults)
-    }}
-    @enter={{perform this.search}}
-    autocomplete="off"
-  />
+  <div class="auk-o-flex">
+    <Auk::Input
+      data-test-publication-case-search-input
+      @block={{true}}
+      @icon="search"
+      placeholder="Filter op Numac of Pubnr."
+      value={{this.searchText}}
+      {{on "input" (perform this.debouncedSearch)}}
+      {{on "focusout" this.hideResults}}
+      {{on
+        "focusin"
+        (if this.search.lastSuccessful this.showResults this.hideResults)
+      }}
+      @enter={{perform this.search}}
+      autocomplete="off"
+    />
+    {{#if this.searchResults}}
+    <Auk::Button @icon="circle-x" @layout="icon-only" @skin="muted-borderless" {{on "click" this.resetFilter}}>Verwijder filter</Auk::Button>
+    {{/if}}
+  </div>
   {{!-- <Auk::SearchResultsList
     data-test-publication-case-search-result-list
     @isVisible={{this.isShowingResults}}

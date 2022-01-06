@@ -42,6 +42,12 @@ export default class PublicationsPublicationCaseSearchComponent extends Componen
   }
 
   @action
+  resetFilter() {
+    this.searchText = "";
+    this.searchResults = [];
+  }
+
+  @action
   showResults() {
     this.isShowingResults = true;
   }

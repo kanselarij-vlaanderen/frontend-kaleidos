@@ -54,7 +54,7 @@
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
-      {{#if (not-eq router.currentRouteName "publications.index.reports")}}
+      {{#if (not-eq this.router.currentRouteName "publications.index.reports")}}
       <Auk::Toolbar::Item>
         <Publications::PublicationCaseSearch />
       </Auk::Toolbar::Item>
