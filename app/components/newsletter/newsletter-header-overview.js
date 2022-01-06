@@ -47,31 +47,9 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     window.print();
   }
 
-  @action
-  toggleVerifyingPublishAll() {
-    this.verifyingPublishAll = !this.verifyingPublishAll;
-  }
-
-  @action
-  toggleVerifyingPublishMail() {
-    this.verifyingPublishMail = !this.verifyingPublishMail;
-  }
-
-  @action
-  toggleVerifyingPublishBelga() {
-    this.verifyingPublishBelga = !this.verifyingPublishBelga;
-  }
-
-  @action
-  toggleVerifyingPublishWeb() {
-    this.verifyingPublishWeb = !this.verifyingPublishWeb;
-  }
-
   @task
   *publishToMail() {
-    if (!this.mailCampaign) {
-      yield this.createMailCampaign();
-    }
+    yield this.ensureMailCampaign();
 
     if (this.mailCampaign?.isSent) {
       this.toaster.error(this.intl.t('error-already-sent-newsletter'));
@@ -86,9 +64,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   @task
   *publishToBelga() {
-    if (!this.mailCampaign) {
-      yield this.createMailCampaign();
-    }
+    yield this.ensureMailCampaign();
     yield this.publishNewsletterToBelga();
     this.toggleVerifyingPublishBelga();
   }
@@ -111,9 +87,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   @task
   *publishToAll() {
-    if (!this.mailCampaign) {
-      yield this.createMailCampaign();
-    }
+    yield this.ensureMailCampaign();
 
     if (this.mailCampaign?.isSent) {
       this.toaster.error(this.intl.t('error-already-sent-newsletter'));
@@ -192,8 +166,10 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     }
   }
 
-  async createMailCampaign() {
-    this.mailCampaign = await this.newsletterService.createCampaign(this.args.agenda, this.args.meeting);
+  async ensureMailCampaign() {
+    if (!this.mailCampaign) {
+      this.mailCampaign = await this.newsletterService.createCampaign(this.args.agenda, this.args.meeting);
+    }
   }
 
   @task
@@ -217,9 +193,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   /*
   @task
   *downloadBelgaXML() {
-    if (!this.mailCampaign) {
-      yield this.createMailCampaign();
-    }
+    yield this.ensureMailCampaign();
 
     yield this.newsletterService
       .downloadBelgaXML(this.args.agenda.id)
@@ -259,5 +233,25 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     this.newsletterHTML = null;
     this.loadingNewsletter = false;
   }
- */
+  */
+
+  @action
+  toggleVerifyingPublishAll() {
+    this.verifyingPublishAll = !this.verifyingPublishAll;
+  }
+
+  @action
+  toggleVerifyingPublishMail() {
+    this.verifyingPublishMail = !this.verifyingPublishMail;
+  }
+
+  @action
+  toggleVerifyingPublishBelga() {
+    this.verifyingPublishBelga = !this.verifyingPublishBelga;
+  }
+
+  @action
+  toggleVerifyingPublishWeb() {
+    this.verifyingPublishWeb = !this.verifyingPublishWeb;
+  }
 }
