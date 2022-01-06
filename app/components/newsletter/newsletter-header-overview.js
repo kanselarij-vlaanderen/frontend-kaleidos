@@ -19,14 +19,12 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @service currentSession;
 
   @tracked mailCampaign;
+  @tracked newsletterHTML = null;
 
   @tracked verifyingPublishAll = false;
   @tracked verifyingPublishBelga = false;
   @tracked verifyingPublishWeb = false;
   @tracked verifyingPublishMail = false;
-
-  @tracked newsletterHTML = null;
-  @tracked loadingNewsletter = false;
 
   constructor() {
     super(...arguments);
@@ -55,18 +53,36 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       this.toaster.error(this.intl.t('error-already-sent-newsletter'));
     } else {
       if (yield this.validateMailCampaign()) {
-        yield this.publishToMailAndSaveCampaign();
+        try {
+          yield this.newsletterService.sendMailCampaign(this.mailCampaign.campaignId);
+          this.mailCampaign.set('sentAt', new Date());
+          yield this.mailCampaign.save();
+          yield this.args.meeting.belongsTo('mailCampaign').reload(); // TODO Why?
+          this.toaster.success(this.intl.t('success-publish-newsletter-to-mail'));
+        } catch(e) {
+          this.toaster.error(
+            this.intl.t('error-send-newsletter'),
+            this.intl.t('warning-title')
+          );
+        }
       }
     }
-
-    this.toggleVerifyingPublishMail();
+    this.verifyingPublishMail = false;
   }
 
   @task
   *publishToBelga() {
-    yield this.ensureMailCampaign();
-    yield this.publishNewsletterToBelga();
-    this.toggleVerifyingPublishBelga();
+    try {
+      yield this.ensureMailCampaign();
+      yield this.newsletterService.sendToBelga(this.args.agenda.id);
+      this.toaster.success(this.intl.t('success-publish-newsletter-to-belga'));
+    } catch(e) {
+      this.toaster.error(
+        this.intl.t('error-send-newsletter'),
+        this.intl.t('warning-title')
+      );
+    }
+    this.verifyingPublishBelga = false;
   }
 
   @task
@@ -79,90 +95,58 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       });
       yield themisPublicationActivity.save();
       this.toaster.success(this.intl.t('success-publish-newsletter-to-web'));
-      this.toggleVerifyingPublishWeb();
     } catch(e) {
-      this.toaster.error(this.intl.t('error-publish-newsletter-to-web'));
+      this.toaster.error(
+        this.intl.t('error-publish-newsletter-to-web'),
+        this.intl.t('warning-title')
+      );
     }
+    this.verifyingPublishWeb = false;
   }
 
   @task
   *publishToAll() {
-    yield this.ensureMailCampaign();
+    yield this.publishToMail.perform();
+    // Although belga is independent of mailchimp, if there is no valid campaign we should maybe avoid sending belga
+    // Specific example: no newsletters (for notes) present! we need at least one note to avoid an empty mail/belga
+    // A different example is a note without themes, valid for belga but not for mailchimp (no recipients)
+    yield this.publishToBelga.perform();
+    yield this.publishToWeb.perform();
 
-    if (this.mailCampaign?.isSent) {
-      this.toaster.error(this.intl.t('error-already-sent-newsletter'));
-    } else {
-      if (yield this.validateMailCampaign()) {
-        yield this.publishToMailAndSaveCampaign();
-        // Although belga is independent of mailchimp, if there is no valid campaign we should maybe avoid sending belga
-        // Specific example: no newsletters (for notes) present! we need at least one note to avoid an empty mail/belga
-        // A different example is a note without themes, valid for belga but not for mailchimp (no recipients)
-      }
-      yield this.publishNewsletterToBelga();
-      // For valvas, we should be able to send a valvas push as long as there is at least 1 note or announcement.
-    }
-
-    this.toggleVerifyingPublishAll();
+    this.verifyingPublishAll = false;
   }
 
   async validateMailCampaign() {
-    if (!this.mailCampaign?.campaignId) {
-      return false;
-    }
+    if (this.mailCampaign && this.mailCampaign.campaignId) {
+      try {
+        const campaign = await this.newsletterService.getMailCampaign(this.mailCampaign.campaignId);
+        const threshold = 10;
 
-    try {
-      const campaign = await this.newsletterService.getMailCampaign(this.mailCampaign.campaignId);
-      const threshold = 10;
-
-      if (
-        Math.abs(
-          moment(campaign.body.create_time).diff(moment(Date.now()), 'minutes')
-        ) > threshold
-      ) {
+        if (
+          Math.abs(
+            moment(campaign.body.create_time).diff(moment(Date.now()), 'minutes')
+          ) > threshold
+        ) {
+          this.toaster.error(
+            this.intl.t('error-old-newsletter'),
+            this.intl.t('warning-title'),
+            {
+              timeOut: 600000,
+            }
+          );
+          return false;
+        } else {
+          return true;
+        }
+      } catch(e) {
         this.toaster.error(
-          this.intl.t('error-old-newsletter'),
-          this.intl.t('warning-title'),
-          {
-            timeOut: 600000,
-          }
+          this.intl.t('error-fetch-newsletter'),
+          this.intl.t('warning-title')
         );
         return false;
-      } else {
-        return true;
       }
-    } catch(e) {
-      this.toaster.error(
-        this.intl.t('error-fetch-newsletter'),
-        this.intl.t('warning-title')
-      );
+    } else {
       return false;
-    }
-  }
-
-  async publishNewsletterToBelga() {
-    try {
-      await this.newsletterService.sendToBelga(this.args.agenda.id);
-      this.toaster.success(this.intl.t('success-publish-newsletter-to-belga'));
-    } catch(e) {
-      this.toaster.error(
-        this.intl.t('error-send-newsletter'),
-        this.intl.t('warning-title')
-      );
-    }
-  }
-
-  async publishToMailAndSaveCampaign() {
-    try {
-      await this.newsletterService.sendMailCampaign(this.mailCampaign.campaignId);
-      this.mailCampaign.set('sentAt', new Date());
-      await this.mailCampaign.save();
-      await this.args.meeting.belongsTo('mailCampaign').reload();
-      this.toaster.success(this.intl.t('success-publish-newsletter-to-mail'));
-    } catch(e) {
-      this.toaster.error(
-        this.intl.t('error-send-newsletter'),
-        this.intl.t('warning-title')
-      );
     }
   }
 
@@ -190,50 +174,40 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   }
 
   // TODO These are for developers use - in comments for follow up
+
   /*
   @task
   *downloadBelgaXML() {
     yield this.ensureMailCampaign();
-
-    yield this.newsletterService
-      .downloadBelgaXML(this.args.agenda.id)
-      .catch(() => {
-        this.toaster.error(
-          this.intl.t('error-download-XML'),
-          this.intl.t('warning-title')
-        );
-      });
-  }
-
-  @action
-  async showNewsletter() {
-    this.loadingNewsletter = true;
-
-    const meeting = this.args.meeting;
-    const mailCampaign = await meeting.get('mailCampaign');
-
-    if (!this.mailCampaign) {
-      await this.createMailCampaign();
+    try {
+      yield this.newsletterService.downloadBelgaXML(this.args.agenda.id);
+    } catch (e) {
+      this.toaster.error(
+        this.intl.t('error-download-XML'),
+        this.intl.t('warning-title')
+      );
     }
-
-    const html = await this.newsletterService
-      .getMailCampaignContent(this.mailCampaign.campaignId)
-      .catch(() => {
-        this.toaster.error(
-          this.intl.t('error-send-newsletter'),
-          this.intl.t('warning-title')
-        );
-      });
-    this.newsletterHTML = html.body;
-    this.loadingNewsletter = false;
   }
 
-  @action
-  async clearNewsletterHTML() {
-    this.newsletterHTML = null;
-    this.loadingNewsletter = false;
+  @task
+  *loadNewsletterHTML() {
+    yield this.ensureMailCampaign();
+    try {
+      const html = yield this.newsletterService.getMailCampaignContent(this.mailCampaign.campaignId);
+      this.newsletterHTML = html.body;
+    } catch (e) {
+      this.toaster.error(
+        this.intl.t('error-send-newsletter'),
+        this.intl.t('warning-title')
+      );
+    }
   }
   */
+
+  @action
+  clearNewsletterHTML() {
+    this.newsletterHTML = null;
+  }
 
   @action
   toggleVerifyingPublishAll() {

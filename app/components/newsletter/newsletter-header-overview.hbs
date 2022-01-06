@@ -82,7 +82,7 @@
           {{#if this.currentSession.isEditor}}
             {{! TODO These are for developers use - in comments for follow up }}
             {{! <Menu.Divider /> }}
-            {{!-- <Menu.Item {{on "click" this.showNewsletter}}>
+            {{!-- <Menu.Item {{on "click" (peform this.loadNewsletterHTML)}}>
               {{t "show-newsletter"}}
             </Menu.Item>
             <Menu.Item
@@ -148,18 +148,15 @@
   />
 {{/if}}
 
-{{#if (or this.loadingNewsletter this.newsletterHTML)}}
-  <WebComponents::VlModal
-    @isOverlay={{true}}
-    @title={{t "show-newsletter"}}
-    @closeModal={{this.clearNewsletterHTML}}
-  >
+{{#if (or this.loadNewsletterHTML.isRunning this.newsletterHTML)}}
+  <Auk::Modal @size="full-screen-padded">
+    <Auk::Modal::Header @title={{ t "show-newsletter" }} @onClose={{this.clearNewsletterHTML}} />
     <Auk::Modal::Body>
-      {{#if this.loadingNewsletter}}
+      {{#if this.loadNewsletterHTML.isRunning}}
         <WebComponents::VlLoader @text={{t "preview-loading-text"}} />
       {{else}}
         <SanitizeHtml @raw={{true}} @value={{this.newsletterHTML}} />
       {{/if}}
     </Auk::Modal::Body>
-  </WebComponents::VlModal>
+  </Auk::Modal>
 {{/if}}
