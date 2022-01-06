@@ -1,22 +1,42 @@
-<div data-test-publication-status-selector class="auk-form-group">
-  <Auk::Label for="blockInput">{{t "status"}}</Auk::Label>
-  <PowerSelect
-    @options={{this.publicationStatusses}}
-    @searchEnabled={{false}}
-    @selected={{@publicationStatus}}
-    @onchange={{@onChange}}
-    @disabled={{@disabled}}
-    as |status|
-  >
-    {{#if status.isStarted}}
-      <Auk::Icon @name="clock" @skin="warning" />
-    {{else if status.isPublished}}
-      <Auk::Icon @name="circle-check" @skin="success" />
-    {{else if status.isPaused}}
-      <Auk::Icon @name="circle-pause" @skin="muted" />
-    {{else if status.isWithdrawn}}
-      <Auk::Icon @name="circle-x" @skin="danger" />
-    {{/if}}
-    {{status.label}}
-  </PowerSelect>
-</div>
+<Auk::Modal @size="medium">
+  <Auk::Modal::Header @title={{t "edit-status"}} @onClose={{@onCancel}} />
+  <Auk::Modal::Body>
+    <div class="auk-form-group">
+      <Auk::Label for="blockInput">{{t "status"}}</Auk::Label>
+      <PowerSelect
+        @options={{this.publicationStatusses}}
+        @searchEnabled={{false}}
+        @selected={{this.publicationStatus}}
+        @onchange={{this.selectPublicationStatus}}
+        as |status|
+      >
+        {{#if status.isPublished}}
+          <Auk::Icon @name="circle-check" @skin="success"/>
+        {{else if status.isPaused}}
+          <Auk::Icon @name="circle-pause" @skin="muted"/>
+        {{else if status.isWithdrawn}}
+          <Auk::Icon @name="circle-x" @skin="danger"/>
+        {{else}}
+          <Auk::Icon @name="circle"/>
+        {{/if}}
+        {{status.label}}
+      </PowerSelect>
+    </div>
+    <div class="auk-form-group">
+      <Auk::Label for="blockInput">{{t "date"}}</Auk::Label>
+      <Auk::Datepicker
+        @date={{this.publicationStatusChange}}
+        @onChange={{this.setStatusDate}}
+      />
+    </div>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @onCancel={{@onCancel}}>
+    <Auk::Button
+      @skin="primary"
+      @loading={{this.save.isRunning}}
+      {{on "click" (perform this.savePublicationStatus)}}
+    >
+      {{t "save"}}
+    </Auk::Button>
+  </Auk::Modal::Footer>
+</Auk::Modal>
