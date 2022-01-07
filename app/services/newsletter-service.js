@@ -156,21 +156,6 @@ export default class NewsletterService extends Service {
     }
   }
 
-  // TODO These are for developers use - in comments for follow up
-  /*
-  downloadBelgaXML(agendaId) {
-    try {
-      return ajax({
-        method: 'GET',
-        url: `/newsletter/xml-newsletter/${agendaId}`,
-      });
-    } catch (error) {
-      console.warn('An exception ocurred: ', error);
-      this.toaster.error(this.intl.t('error-download-XML'), this.intl.t('warning-title'));
-      return null;
-    }
-    */
-
   async deleteCampaign(id) {
     try {
       return ajax({
@@ -186,7 +171,22 @@ export default class NewsletterService extends Service {
       return null;
     }
   }
+
+  // TODO These are for developers use - in comments for follow up
   /*
+  downloadBelgaXML(agendaId) {
+    try {
+      return ajax({
+        method: 'GET',
+        url: `/newsletter/xml-newsletter/${agendaId}`,
+      });
+    } catch (error) {
+      console.warn('An exception ocurred: ', error);
+      this.toaster.error(this.intl.t('error-download-XML'), this.intl.t('warning-title'));
+      return null;
+    }
+  }
+
   async getMailCampaignContent(id) {
     try {
       return ajax({

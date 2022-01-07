@@ -208,7 +208,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   }
 
   // TODO These are for developers use - in comments for follow up
-
   /*
   @task
   *downloadBelgaXML() {

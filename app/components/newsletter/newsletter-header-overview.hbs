@@ -81,15 +81,15 @@
           {{/if}}
           {{#if this.currentSession.isEditor}}
             {{! TODO These are for developers use - in comments for follow up }}
-            {{! <Menu.Divider /> }}
-            {{!-- <Menu.Item {{on "click" (peform this.loadNewsletterHTML)}}>
+            {{!-- <Menu.Divider />  --}}
+            {{!--
+            <Menu.Item {{on "click" (perform this.loadNewsletterHTML)}}>
               {{t "show-newsletter"}}
             </Menu.Item>
-            <Menu.Item
-              {{on "click" (perform this.downloadBelgaXML)}}
-            >
+            <Menu.Item {{on "click" (perform this.downloadBelgaXML)}}>
               {{t "generate-xml"}}
-            </Menu.Item> --}}
+            </Menu.Item>
+            --}}
             {{#if this.mailCampaign}}
               <Menu.Divider />
               <Menu.Item @skin="danger" {{on "click" (perform this.deleteCampaign)}}>
