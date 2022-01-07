@@ -11,18 +11,6 @@ const defaultColumns = [
 ];
 
 export default class PublicationsOverviewAllController extends Controller {
-  queryParams = {
-    page: {
-      type: 'number',
-    },
-    size: {
-      type: 'number',
-    },
-    sort: {
-      type: 'string',
-    },
-  };
-
   page = 0;
   size = 10;
   sort = '-created';
