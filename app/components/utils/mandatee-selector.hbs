@@ -5,9 +5,10 @@
       @selected={{await @selectedMandatees}}
       @disabled={{@readOnly}}
       @closeOnSelect={{false}}
+      @searchEnabled={{true}}
       @search={{perform this.searchTask}}
       @oninput={{this.resetMandateeOptionsIfEmpty}}
-      @onchange={{@chooseMandatee}}
+      @onChange={{@chooseMandatee}}
       as |mandatee|
     >
       {{await mandatee.fullDisplayName}}
@@ -23,9 +24,10 @@
       @options={{this.mandateeOptions}}
       @selected={{await @selectedMandatees}}
       @disabled={{@readOnly}}
+      @searchEnabled={{true}}
       @search={{perform this.searchTask}}
       @oninput={{this.resetMandateeOptionsIfEmpty}}
-      @onchange={{@chooseMandatee}}
+      @onChange={{@chooseMandatee}}
       as |mandatee|
     >
       {{await mandatee.fullDisplayName}}

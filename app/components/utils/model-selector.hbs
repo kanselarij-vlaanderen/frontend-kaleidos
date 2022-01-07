@@ -10,11 +10,11 @@
     @placeholder={{this.placeholder}}
     @loadingMessage={{this.loadingMessage}}
     @noMatchesMessage={{this.noMatchesMessage}}
+    @searchEnabled={{this.searchEnabled}}
     @searchMessage={{null}}
     @search={{perform this.searchTask}}
     @oninput={{action "resetValueIfEmpty"}}
-    @onchange={{action "selectModel"}}
-    @searchEnabled={{not this.hideSearch}}
+    @onChange={{action "selectModel"}}
   as |model|>
     {{await (model-property-to-show model this.propertyToShow)}}
   </PowerSelect>
@@ -26,12 +26,13 @@
     @searchField={{this.searchField}}
     @placeholder={{this.placeholder}}
     @loadingMessage={{this.loadingMessage}}
+    @searchEnabled={{this.searchEnabled}}
     @searchMessage={{null}}
     @noMatchesMessage={{this.noMatchesMessage}}
     @closeOnSelect={{false}}
     @search={{perform this.searchTask}}
     @oninput={{action "resetValueIfEmpty"}}
-    @onchange={{action "selectModel"}}
+    @onChange={{action "selectModel"}}
   as |model|>
     {{await (model-property-to-show model this.propertyToShow)}}
   </PowerSelectMultiple>
