@@ -116,10 +116,20 @@ request the whole row and not only the arrow at the end to be clickable }}
       class="auk-u-text-nowrap"
     >
       {{#if @publicationFlow.translationSubcase.dueDate}}
-        {{moment-format
-          @publicationFlow.translationSubcase.dueDate
-          "DD-MM-YYYY"
-        }}
+        {{!Ember seems not to await async getter}}
+        <div class="{{if (await this.isTranslationToLate) "auk-u-text-bold"}}">
+          {{moment-format
+            @publicationFlow.translationSubcase.dueDate
+            "DD-MM-YYYY"
+          }}
+        </div>
+        {{#if (await this.isTranslationToLate)}}
+          <Auk::FormHelpText
+            @text={{t "date-expired"}}
+            @skin="warning"
+            @icon="alert-triangle"
+            />
+        {{/if}}
       {{else}}
         {{t "dash"}}
       {{/if}}
@@ -206,10 +216,20 @@ request the whole row and not only the arrow at the end to be clickable }}
       class="auk-u-text-nowrap"
     >
       {{#if @publicationFlow.publicationSubcase.dueDate}}
-        {{moment-format
-          @publicationFlow.publicationSubcase.dueDate
-          "DD-MM-YYYY"
-        }}
+        {{!Ember seems not to await async getter}}
+        <div class="{{if (await this.isPublicationToLate) "auk-u-text-bold"}}">
+          {{moment-format
+            @publicationFlow.publicationSubcase.dueDate
+            "DD-MM-YYYY"
+          }}
+        </div>
+        {{#if (await this.isPublicationToLate)}}
+          <Auk::FormHelpText
+            @text={{t "date-expired"}}
+            @skin="warning"
+            @icon="alert-triangle"
+            />
+        {{/if}}
       {{else}}
         {{t "dash"}}
       {{/if}}

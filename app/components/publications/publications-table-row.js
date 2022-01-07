@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { add } from 'ember-math-helpers/helpers/add';
+import * as PublicationUtils from 'frontend-kaleidos/utils/publication-utils';
 
 export default class PublicationsPublicationsTableRowComponent extends Component {
   @service router;
@@ -73,6 +74,18 @@ export default class PublicationsPublicationsTableRowComponent extends Component
     startDates.sort();
     const firstProofRequestDate = startDates[0];
     return firstProofRequestDate;
+  }
+
+  // getter to only trigger when column is shown
+  get isTranslationToLate() {
+    let publicationFlow = this.args.publicationFlow;
+    return PublicationUtils.getIsTranslationToLate(publicationFlow);
+  }
+
+  // getter to only trigger when column is shown
+  get isPublicationToLate() {
+    let publicationFlow = this.args.publicationFlow;
+    return PublicationUtils.getIsPublicationToLate(publicationFlow);
   }
 
   @action
