@@ -26,10 +26,7 @@ export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Comp
 
   get isShownSignatureTab() {
     const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
-    const hasPermission = this.currentSession.isAdmin
-      || this.currentSession.isOvrb
-      || this.currentSession.isKabinet
-      || this.currentSession.isMinister;
+    const hasPermission = this.currentSession.may('manage-signatures');
     return isEnabled && hasPermission;
   }
 

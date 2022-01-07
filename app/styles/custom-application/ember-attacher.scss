@@ -1,3 +1,11 @@
+@mixin arrow-bottom {
+  top: auto;
+  bottom: -12px;
+  border: 12px solid transparent;
+  border-top-color: $auk-white;
+  border-bottom-width: 0;
+}
+
 .mandatee-selector-container,
 .domains-selector-container,
 .people-selector-container {

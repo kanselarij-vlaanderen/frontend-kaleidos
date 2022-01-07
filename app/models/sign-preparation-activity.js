@@ -8,5 +8,4 @@ export default class SignPreparationActivityModel extends Model {
   @belongsTo('sign-subcase') signSubcase;
   @belongsTo('sign-marking-activity') signMarkingActivity;
   @hasMany('sign-signing-activity') signSigningActivities;
-  @belongsTo('signinghub-document') signinghubDocument;
 }
