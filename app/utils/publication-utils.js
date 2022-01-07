@@ -13,7 +13,7 @@ export async function getIsTranslationToLate(publicationFlow) {
 
   let translationSubcase = await publicationFlow.translationSubcase;
   let translationDueDate = translationSubcase.dueDate;
-  let isToLate = moment(translationDueDate).isBefore(Date.now(), 'day')
+  let isToLate = moment(translationDueDate).isBefore(Date.now(), 'day');
   return isToLate;
 }
 
@@ -25,6 +25,6 @@ export async function getIsPublicationToLate(publicationFlow) {
 
   let publicationSubcase = await publicationFlow.publicationSubcase;
   let publicationDueDate = publicationSubcase.dueDate;
-  let isToLate = moment(publicationDueDate).isBefore(Date.now(), 'day')
+  let isToLate = moment(publicationDueDate).isBefore(Date.now(), 'day');
   return isToLate;
 }

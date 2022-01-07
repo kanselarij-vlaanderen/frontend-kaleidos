@@ -23,7 +23,8 @@ export default class PublicationsPublicationsTableRowComponent extends Component
 
   @task
   *loadDecision() {
-    const publicationSubcase = yield this.args.publicationFlow.publicationSubcase;
+    const publicationSubcase = yield this.args.publicationFlow
+      .publicationSubcase;
     this.decision = yield this.store.queryOne('decision', {
       'filter[publication-activity][subcase][:id:]': publicationSubcase.id,
       sort: 'publication-activity.start-date,publication-date',
@@ -37,17 +38,16 @@ export default class PublicationsPublicationsTableRowComponent extends Component
       'filter[:id:]': this.args.publicationFlow.id,
       include: [
         'translation-subcase',
-
         'translation-subcase.request-activities',
         'translation-subcase.request-activities.used-pieces',
 
         'publication-subcase',
         'publication-subcase.proofing-activities',
-      ].join(',')
+      ].join(','),
     });
 
     this.pages = yield this.getPageCount(publicationFlow);
-    this.proofRequestDate = yield this.getProofRequestDate(publicationFlow)
+    this.proofRequestDate = yield this.getProofRequestDate(publicationFlow);
   }
 
   async getPageCount(publicationFlow) {
@@ -57,9 +57,9 @@ export default class PublicationsPublicationsTableRowComponent extends Component
       // if not calling to array, Ember seems to skip mapBy
       // flattening an array of request activities
       // probably an Ember Data bug
-      .map(pieces => pieces.toArray())
+      .map((pieces) => pieces.toArray())
       .flat();
-    const pageCounts = pieces.map(p => p.pages).compact();
+    const pageCounts = pieces.map((it) => it.pages).compact();
     if (!pageCounts.length) {
       return undefined;
     } else {
@@ -90,6 +90,9 @@ export default class PublicationsPublicationsTableRowComponent extends Component
 
   @action
   navigateToPublication() {
-    this.router.transitionTo('publications.publication', this.args.publicationFlow.id);
+    this.router.transitionTo(
+      'publications.publication',
+      this.args.publicationFlow.id
+    );
   }
 }
