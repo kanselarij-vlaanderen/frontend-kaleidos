@@ -4,7 +4,6 @@ import moment from 'moment';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /**
  * @argument {Meeting} meeting
@@ -21,10 +20,11 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @tracked mailCampaign;
   @tracked newsletterHTML = null;
 
-  @tracked verifyingPublishAll = false;
-  @tracked verifyingPublishBelga = false;
-  @tracked verifyingPublishWeb = false;
-  @tracked verifyingPublishMail = false;
+  @tracked showConfirmPublishAll = false;
+  @tracked showConfirmPublishBelga = false;
+  @tracked showConfirmPublishThemis = false;
+  @tracked showConfirmUnpublishThemis = false;
+  @tracked showConfirmPublishMail = false;
 
   constructor() {
     super(...arguments);
@@ -67,7 +67,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
         }
       }
     }
-    this.verifyingPublishMail = false;
+    this.showConfirmPublishMail = false;
   }
 
   @task
@@ -82,38 +82,57 @@ export default class NewsletterHeaderOverviewComponent extends Component {
         this.intl.t('warning-title')
       );
     }
-    this.verifyingPublishBelga = false;
+    this.showConfirmPublishBelga = false;
   }
 
   @task
-  *publishToWeb() {
+  *publishThemis(scope) {
     try {
       const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
         startDate: new Date(),
         meeting: this.args.meeting,
-        scope: [CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS]
+        scope
       });
       yield themisPublicationActivity.save();
       this.toaster.success(this.intl.t('success-publish-newsletter-to-web'));
     } catch(e) {
       this.toaster.error(
-        this.intl.t('error-publish-newsletter-to-web'),
+        this.intl.t('error-publish-to-web'),
         this.intl.t('warning-title')
       );
     }
-    this.verifyingPublishWeb = false;
+    this.showConfirmPublishThemis = false;
   }
 
   @task
-  *publishToAll() {
+  *unpublishThemis(scope) {
+    try {
+      const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
+        startDate: new Date(),
+        meeting: this.args.meeting,
+        scope
+      });
+      yield themisPublicationActivity.save();
+      this.toaster.success(this.intl.t('success-unpublish-from-web'));
+    } catch(e) {
+      this.toaster.error(
+        this.intl.t('error-unpublish-from-web'),
+        this.intl.t('warning-title')
+      );
+    }
+    this.showConfirmUnpublishThemis = false;
+  }
+
+  @task
+  *publishToAll(scope) {
     yield this.publishToMail.perform();
     // Although belga is independent of mailchimp, if there is no valid campaign we should maybe avoid sending belga
     // Specific example: no newsletters (for notes) present! we need at least one note to avoid an empty mail/belga
     // A different example is a note without themes, valid for belga but not for mailchimp (no recipients)
     yield this.publishToBelga.perform();
-    yield this.publishToWeb.perform();
+    yield this.publishThemis.perform(scope);
 
-    this.verifyingPublishAll = false;
+    this.showConfirmPublishAll = false;
   }
 
   async validateMailCampaign() {
@@ -210,22 +229,52 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   }
 
   @action
-  toggleVerifyingPublishAll() {
-    this.verifyingPublishAll = !this.verifyingPublishAll;
+  openConfirmPublishAll() {
+    this.showConfirmPublishAll = true;
   }
 
   @action
-  toggleVerifyingPublishMail() {
-    this.verifyingPublishMail = !this.verifyingPublishMail;
+  cancelPublishAll() {
+    this.showConfirmPublishAll = false;
   }
 
   @action
-  toggleVerifyingPublishBelga() {
-    this.verifyingPublishBelga = !this.verifyingPublishBelga;
+  openConfirmPublishMail() {
+    this.showConfirmPublishMail = true;
   }
 
   @action
-  toggleVerifyingPublishWeb() {
-    this.verifyingPublishWeb = !this.verifyingPublishWeb;
+  cancelPublishMail() {
+    this.showConfirmPublishMail = false;
+  }
+
+  @action
+  openConfirmPublishBelga() {
+    this.showConfirmPublishBelga = true;
+  }
+
+  @action
+  cancelPublishBelga() {
+    this.showConfirmPublishBelga = false;
+  }
+
+  @action
+  openConfirmPublishThemis() {
+    this.showConfirmPublishThemis = true;
+  }
+
+  @action
+  cancelPublishThemis() {
+    this.showConfirmPublishThemis = false;
+  }
+
+  @action
+  openConfirmUnpublishThemis() {
+    this.showConfirmUnpublishThemis = true;
+  }
+
+  @action
+  cancelUnpublishThemis() {
+    this.showConfirmUnpublishThemis = false;
   }
 }

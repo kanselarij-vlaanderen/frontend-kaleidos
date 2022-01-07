@@ -5,7 +5,6 @@ import { action } from '@ember/object';
 import { debug } from '@ember/debug';
 import { task } from 'ember-concurrency-decorators';
 import { all } from 'rsvp';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { setAgendaitemFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import {
   constructArchiveName,
@@ -35,8 +34,8 @@ export default class AgendaHeader extends Component {
   @tracked showConfimApprovingAllAgendaitems = false;
   @tracked showConfirmReleaseDecisions = false;
   @tracked showConfirmReleaseDocuments = false;
-  @tracked showConfirmPublishDocuments = false;
-  @tracked showConfirmUnpublishDocuments = false;
+  @tracked showConfirmPublishThemis = false;
+  @tracked showConfirmUnpublishThemis = false;
   @tracked showLoadingOverlay = false;
   @tracked loadingMessage = null;
 
@@ -66,7 +65,7 @@ export default class AgendaHeader extends Component {
     );
   }
 
-  get canPublishDocumentsToThemis() {
+  get canPublishThemis() {
     return (
       this.currentSession.isEditor &&
       this.args.meeting.isFinal &&
@@ -157,53 +156,61 @@ export default class AgendaHeader extends Component {
   }
 
   @action
-  openConfirmPublishDocuments() {
-    this.showConfirmPublishDocuments = true;
+  openConfirmPublishThemis() {
+    this.showConfirmPublishThemis = true;
   }
 
   @action
-  cancelPublishDocuments() {
-    this.showConfirmPublishDocuments = false;
+  cancelPublishThemis() {
+    this.showConfirmPublishThemis = false;
   }
 
   @task
-  *publishDocumentsToThemis() {
+  *publishThemis(scope) {
     try {
       const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
         startDate: new Date(),
         meeting: this.args.meeting,
-        scope: [CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS, CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS],
+        scope
       });
       yield themisPublicationActivity.save();
-      this.toaster.success(this.intl.t('success-publish-documents-to-web'));
+      this.toaster.success(this.intl.t('success-publish-to-web'));
     } catch(e) {
-      this.toaster.error(this.intl.t('error-publish-documents-to-web'));
+      this.toaster.error(
+        this.intl.t('error-publish-to-web'),
+        this.intl.t('warning-title')
+      );
     }
+    this.showConfirmPublishThemis = false;
   }
 
   @action
-  openConfirmUnpublishDocuments() {
-    this.showConfirmUnpublishDocuments = true;
+  openConfirmUnpublishThemis() {
+    this.showConfirmUnpublishThemis = true;
   }
 
   @action
-  cancelUnpublishDocuments() {
-    this.showConfirmUnpublishDocuments = false;
+  cancelUnpublishThemis() {
+    this.showConfirmUnpublishThemis = false;
   }
 
   @task
-  *unpublishDocumentsFromThemis() {
+  *unpublishThemis(scope) {
     try {
       const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
         startDate: new Date(),
         meeting: this.args.meeting,
-        scope: [CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS], // only publish newsitems, without documents
+        scope
       });
       yield themisPublicationActivity.save();
-      this.toaster.success(this.intl.t('success-unpublish-documents-from-web'));
+      this.toaster.success(this.intl.t('success-unpublish-from-web'));
     } catch(e) {
-      this.toaster.error(this.intl.t('error-unpublish-documents-from-web'));
+      this.toaster.error(
+        this.intl.t('error-unpublish-from-web'),
+        this.intl.t('warning-title')
+      );
     }
+    this.showConfirmUnpublishThemis = false;
   }
 
   @action

@@ -59,17 +59,20 @@
                 <Auk::Loader @message={{t "newsletter-loading-text"}} />
               </Menu.Item>
             {{else}}
-              <Menu.Item {{on "click" this.toggleVerifyingPublishAll}}>
+              <Menu.Item {{on "click" this.openConfirmPublishAll}}>
                 {{t "send-newsitem-to-all"}}
               </Menu.Item>
-              <Menu.Item {{on "click" this.toggleVerifyingPublishMail}}>
+              <Menu.Item {{on "click" this.openConfirmPublishMail}}>
                 {{t "send-newsitem-to-mail"}}
               </Menu.Item>
-              <Menu.Item {{on "click" this.toggleVerifyingPublishBelga}}>
+              <Menu.Item {{on "click" this.openConfirmPublishBelga}}>
                 {{t "send-newsitem-to-belga"}}
               </Menu.Item>
-              <Menu.Item {{on "click" this.toggleVerifyingPublishWeb}}>
+              <Menu.Item {{on "click" this.openConfirmPublishThemis}}>
                 {{t "send-newsitem-to-web"}}
+              </Menu.Item>
+              <Menu.Item @skin="danger" {{on "click" this.openConfirmUnpublishThemis}}>
+                {{t "retract-newsitem-from-web"}}
               </Menu.Item>
             {{/if}}
           {{/if}}
@@ -103,48 +106,45 @@
   </Auk::Toolbar>
 </Auk::Navbar>
 
-{{#if this.verifyingPublishMail}}
+{{#if this.showConfirmPublishMail}}
   <WebComponents::VlModalVerify
     @title={{t "send-newsitem-to-mail"}}
     @buttonType="warning"
     @isLoading={{this.publishToMail.isRunning}}
     @verifyButtonText={{t "send-newsitem-to-mail"}}
     @message={{t "send-newsitem-to-mail-verification"}}
-    @cancel={{this.toggleVerifyingPublishMail}}
+    @cancel={{this.cancelPublishMail}}
     @verify={{perform this.publishToMail}}
   />
 {{/if}}
-{{#if this.verifyingPublishBelga}}
+{{#if this.showConfirmPublishBelga}}
   <WebComponents::VlModalVerify
     @title={{t "send-newsitem-to-belga"}}
     @buttonType="warning"
     @isLoading={{this.publishToBelga.isRunning}}
     @verifyButtonText={{t "send-newsitem-to-belga"}}
     @message={{t "send-newsitem-to-belga-verification"}}
-    @cancel={{this.toggleVerifyingPublishBelga}}
+    @cancel={{this.cancelPublishBelga}}
     @verify={{perform this.publishToBelga}}
   />
 {{/if}}
-{{#if this.verifyingPublishWeb}}
-  <WebComponents::VlModalVerify
-    @title={{t "send-newsitem-to-web"}}
-    @buttonType="warning"
-    @isLoading={{this.publishToWeb.isRunning}}
-    @verifyButtonText={{t "send-newsitem-to-web"}}
-    @message={{t "send-newsitem-to-web-verification"}}
-    @cancel={{this.toggleVerifyingPublishWeb}}
-    @verify={{perform this.publishToWeb}}
+{{#if this.showConfirmPublishThemis}}
+  <ThemisPublications::PublishConfirmationModal
+    @onCancel={{this.cancelPublishThemis}}
+    @onConfirm={{perform this.publishThemis}}
   />
 {{/if}}
-{{#if this.verifyingPublishAll}}
-  <WebComponents::VlModalVerify
+{{#if this.showConfirmUnpublishThemis}}
+  <ThemisPublications::UnpublishConfirmationModal
+    @onCancel={{this.cancelUnpublishThemis}}
+    @onConfirm={{perform this.unpublishThemis}}
+  />
+{{/if}}
+{{#if this.showConfirmPublishAll}}
+  <ThemisPublications::PublishConfirmationModal
     @title={{t "send-newsitem-to-all"}}
-    @buttonType="warning"
-    @isLoading={{this.publishToAll.isRunning}}
-    @verifyButtonText={{t "send-newsitem-to-all"}}
-    @message={{t "send-newsitem-to-all-verification"}}
-    @cancel={{this.toggleVerifyingPublishAll}}
-    @verify={{perform this.publishToAll}}
+    @onCancel={{this.cancelPublishAll}}
+    @onConfirm={{perform this.publishToAll}}
   />
 {{/if}}
 

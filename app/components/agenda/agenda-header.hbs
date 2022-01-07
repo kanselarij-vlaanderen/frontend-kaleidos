@@ -139,15 +139,15 @@
                 {{t "agenda-release-documents"}}
               </Menu.Item>
             {{/if}}
-            {{#if this.canPublishDocumentsToThemis}}
+            {{#if this.canPublishThemis}}
               <Menu.Divider />
-              <Menu.Item {{on "click" this.openConfirmPublishDocuments}}>
-                {{t "publish-documents"}}
+              <Menu.Item {{on "click" this.openConfirmPublishThemis}}>
+                {{t "publish-to-web"}}
               </Menu.Item>
               <Menu.Item
                 @skin="danger"
-                {{on "click" this.openConfirmUnpublishDocuments}}>
-                {{t "unpublish-documents"}}
+                {{on "click" this.openConfirmUnpublishThemis}}>
+                {{t "unpublish-from-web"}}
               </Menu.Item>
             {{/if}}
           </DropdownMenu>
@@ -207,46 +207,18 @@
   </Auk::Modal>
 {{/if}}
 
-{{#if this.showConfirmPublishDocuments}}
-  <Auk::Modal @size="small">
-    <Auk::Modal::Header
-      @title={{t "agenda-publish-documents"}}
-      @onClose={{this.cancelPublishDocuments}}
-    />
-    <Auk::Modal::Body>
-      <p>{{t "publish-documents-message"}}</p>
-    </Auk::Modal::Body>
-    <Auk::Modal::Footer @onCancel={{this.cancelPublishDocuments}}>
-      <Auk::Button
-        @skin="primary"
-        @loading={{this.publishDocumentsToThemis.isRunning}}
-        {{on "click" (perform this.publishDocumentsToThemis)}}
-      >
-        {{t "publish-to-public"}}
-      </Auk::Button>
-    </Auk::Modal::Footer>
-  </Auk::Modal>
+{{#if this.showConfirmPublishThemis}}
+  <ThemisPublications::PublishConfirmationModal
+    @onCancel={{this.cancelPublishThemis}}
+    @onConfirm={{perform this.publishThemis}}
+  />
 {{/if}}
 
-{{#if this.showConfirmUnpublishDocuments}}
-  <Auk::Modal @size="small">
-    <Auk::Modal::Header
-      @title={{t "agenda-unpublish-documents"}}
-      @onClose={{this.cancelUnpublishDocuments}}
-    />
-    <Auk::Modal::Body>
-      <p>{{t "unpublish-documents-message"}}</p>
-    </Auk::Modal::Body>
-    <Auk::Modal::Footer @onCancel={{this.cancelUnpublishDocuments}}>
-      <Auk::Button
-        @skin="danger-primary"
-        @loading={{this.unpublishDocumentsFromThemis.isRunning}}
-        {{on "click" (perform this.unpublishDocumentsFromThemis)}}
-      >
-        {{t "retract-from-public"}}
-      </Auk::Button>
-    </Auk::Modal::Footer>
-  </Auk::Modal>
+{{#if this.showConfirmUnpublishThemis}}
+  <ThemisPublications::UnpublishConfirmationModal
+    @onCancel={{this.cancelUnpublishThemis}}
+    @onConfirm={{perform this.unpublishThemis}}
+  />
 {{/if}}
 
 {{#if this.isEditingSession}}
