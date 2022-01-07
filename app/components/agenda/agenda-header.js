@@ -38,6 +38,20 @@ export default class AgendaHeader extends Component {
   @tracked showConfirmUnpublishThemis = false;
   @tracked showLoadingOverlay = false;
   @tracked loadingMessage = null;
+  @tracked latestPublicationActivity;
+
+  constructor() {
+    super(...arguments);
+    this.loadLatestPublicationActivity.perform();
+  }
+
+  @task
+  *loadLatestPublicationActivity() {
+    this.latestPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
+      sort: '-start-date',
+      'filter[meeting][:uri:]': this.args.meeting.uri,
+    });
+  }
 
   get showPrintButton() {
     return this.router.currentRouteName === 'agenda.print';
@@ -71,6 +85,10 @@ export default class AgendaHeader extends Component {
       this.args.meeting.isFinal &&
       this.args.meeting.releasedDocuments
     );
+  }
+
+  get isAlreadyPublished() {
+    return this.latestPublicationActivity != null;
   }
 
   /**
@@ -174,6 +192,7 @@ export default class AgendaHeader extends Component {
         scope
       });
       yield themisPublicationActivity.save();
+      yield this.loadLatestPublicationActivity.perform();
       this.toaster.success(this.intl.t('success-publish-to-web'));
     } catch(e) {
       this.toaster.error(

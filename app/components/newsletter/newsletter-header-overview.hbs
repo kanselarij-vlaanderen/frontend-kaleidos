@@ -71,9 +71,6 @@
               <Menu.Item {{on "click" this.openConfirmPublishThemis}}>
                 {{t "send-newsitem-to-web"}}
               </Menu.Item>
-              <Menu.Item @skin="danger" {{on "click" this.openConfirmUnpublishThemis}}>
-                {{t "retract-newsitem-from-web"}}
-              </Menu.Item>
             {{/if}}
           {{/if}}
           {{#if this.shouldShowPrintButton}}
@@ -97,6 +94,12 @@
               <Menu.Divider />
               <Menu.Item @skin="danger" {{on "click" (perform this.deleteCampaign)}}>
                 {{t "delete-campaign"}}
+              </Menu.Item>
+            {{/if}}
+            {{#if this.isAlreadyPublished}}
+              <Menu.Divider />
+              <Menu.Item @skin="danger" {{on "click" this.openConfirmUnpublishThemis}}>
+                {{t "retract-newsitem-from-web"}}
               </Menu.Item>
             {{/if}}
           {{/if}}

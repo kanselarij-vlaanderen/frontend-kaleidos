@@ -15,6 +15,7 @@ import {
 // eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
   intl: inject(),
+  uri: attr('string'),
   plannedStart: attr('datetime'),
   startedOn: attr('datetime'),
   endedOn: attr('datetime'),

@@ -19,6 +19,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   @tracked mailCampaign;
   @tracked newsletterHTML = null;
+  @tracked latestPublicationActivity;
 
   @tracked showConfirmPublishAll = false;
   @tracked showConfirmPublishBelga = false;
@@ -29,6 +30,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   constructor() {
     super(...arguments);
     this.loadMailCampaign.perform();
+    this.loadLatestPublicationActivity.perform();
   }
 
   @task
@@ -36,8 +38,20 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     this.mailCampaign = yield this.args.meeting.mailCampaign;
   }
 
+  @task
+  *loadLatestPublicationActivity() {
+    this.latestPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
+      sort: '-start-date',
+      'filter[meeting][:uri:]': this.args.meeting.uri,
+    });
+  }
+
   get shouldShowPrintButton() {
     return this.router.currentRouteName.includes('newsletter.print');
+  }
+
+  get isAlreadyPublished() {
+    return this.latestPublicationActivity != null;
   }
 
   @action
@@ -55,7 +69,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       if (yield this.validateMailCampaign()) {
         try {
           yield this.newsletterService.sendMailCampaign(this.mailCampaign.campaignId);
-          this.mailCampaign.set('sentAt', new Date());
+          this.mailCampaign.sentAt = new Date();
           yield this.mailCampaign.save();
           yield this.args.meeting.belongsTo('mailCampaign').reload(); // TODO Why?
           this.toaster.success(this.intl.t('success-publish-newsletter-to-mail'));
@@ -94,6 +108,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
         scope
       });
       yield themisPublicationActivity.save();
+      yield this.loadLatestPublicationActivity.perform();
       this.toaster.success(this.intl.t('success-publish-newsletter-to-web'));
     } catch(e) {
       this.toaster.error(
