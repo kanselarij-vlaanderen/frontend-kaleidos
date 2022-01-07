@@ -18,6 +18,7 @@ import { isEmpty } from '@ember/utils';
 export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service currentSession;
   @service intl;
+  @service store;
   @service agendaService;
   @service signatureService;
 
@@ -266,10 +267,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
   get isShownSignatureMarker() {
     const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
-    const hasPermission =
-      this.currentSession.isAdmin ||
-      this.currentSession.isKabinet ||
-      this.currentSession.isMinister;
+    const hasPermission = this.currentSession.may('manage-signatures');
     return isEnabled && hasPermission;
   }
 }

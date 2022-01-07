@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import PublicationFilter from 'frontend-kaleidos/utils/publication-filter';
 
@@ -18,6 +19,8 @@ export default class PublicationsIndexRoute extends Route {
       as: 'sorteer',
     },
   }
+
+  @service store;
 
   statusFilters = Object.freeze({ // map filter name to concept uri
     publishedFilterOption: CONSTANTS.PUBLICATION_STATUSES.PUBLISHED,

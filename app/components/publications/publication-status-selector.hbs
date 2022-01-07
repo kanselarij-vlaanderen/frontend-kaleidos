@@ -5,9 +5,8 @@
       <Auk::Label for="blockInput">{{t "status"}}</Auk::Label>
       <PowerSelect
         @options={{this.publicationStatusses}}
-        @searchEnabled={{false}}
         @selected={{this.publicationStatus}}
-        @onchange={{this.selectPublicationStatus}}
+        @onChange={{this.selectPublicationStatus}}
         as |status|
       >
         {{#if status.isPublished}}
