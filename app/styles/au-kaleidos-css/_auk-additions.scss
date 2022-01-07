@@ -455,3 +455,40 @@ p {
     max-height: 100%;
   }
 }
+
+/* Framework & external component fixes
+   ========================================================================== */
+
+// When using auk-modal, the ember power select wormhole is behind the modal
+// auk-modal has z-index of 1600;
+
+.ember-power-select-dropdown {
+  z-index: $z-index-modal-additive + $z-index-dropdown;
+}
+
+// Ember data table
+
+.data-table__actions--top {
+  border-bottom: none;
+}
+
+table tr.lt-expanded-row {
+  &:hover {
+    background-color: $auk-white !important;
+  }
+}
+
+// Sortable
+
+.sortable-item {
+  transition: all 0.125s;
+
+  &.is-dragging {
+    transition-duration: 0s;
+  }
+
+  &.is-dragging,
+  &.is-dropping {
+    z-index: $z-index-drag;
+  }
+}
