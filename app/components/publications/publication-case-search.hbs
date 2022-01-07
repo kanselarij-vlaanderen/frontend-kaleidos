@@ -3,7 +3,7 @@
     data-test-publication-case-search-input
     @block={{true}}
     @icon="search"
-    placeholder={{t "search-placeholder"}}
+    placeholder={{t "publications-search-placeholder"}}
     value={{this.searchText}}
     {{on "input" (perform this.debouncedSearch)}}
     {{on "focusout" this.hideResults}}
