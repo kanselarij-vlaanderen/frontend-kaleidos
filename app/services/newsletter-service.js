@@ -16,23 +16,13 @@ export default class NewsletterService extends Service {
         method: 'POST',
         url: `/newsletter/createCampaign?agendaId=${agenda.get('id')}`,
       });
-
       const mailCampaign = this.store.createRecord('mail-campaign', {
         campaignId: result.body.campaign_id,
         campaignWebId: result.body.campaign_web_id,
         archiveUrl: result.body.archive_url,
+        meeting
       });
-
       await mailCampaign.save();
-      const reloadedMeeting = await this.store.findRecord(
-        'meeting',
-        meeting.id,
-        {
-          reload: true,
-        }
-      );
-      reloadedMeeting.set('mailCampaign', mailCampaign);
-      await reloadedMeeting.save();
       return mailCampaign;
     } catch (error) {
       console.warn('An exception ocurred: ', error);
