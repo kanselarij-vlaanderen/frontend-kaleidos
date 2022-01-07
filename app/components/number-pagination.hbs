@@ -1,23 +1,40 @@
+{{!-- REMARK: needs to be replaced with pagination component, but needs to be extended (with size options) first --}}
+
 {{!-- TODO: octane-refactor --}}
 {{!-- template-lint-disable no-action --}}
-<div data-test-number-pagination-container class="vlc-pagination__container vlc-pagination__container-spacebetween">
-  <div>
-    <p class="vlc-pagination__fontsize">
-      {{this.startItem}}-{{this.endItem}}{{#if this.total}} {{t "table-of"}} {{this.total}}{{/if}}
-      {{#if this.hasMultiplePages}}
-        {{#if (not this.isFirstPage)}}
-          <a href="#" {{action "changePage" this.links.prev}}> {{t "table-previous-with-arrow"}}</a>
-        {{/if}}
-        {{#if (not this.isLastPage)}}
-          <a href="#" {{action "changePage" this.links.next}}>{{t "table-next-with-arrow"}}</a>
-        {{/if}}
-      {{/if}}
-    </p>
-  </div>
+<div data-test-number-pagination-container class="auk-pagination auk-pagination--small">
+  <ul class="auk-pagination__list">
+    <li class="auk-pagination__element">
+      <p><strong>{{this.startItem}}-{{this.endItem}}</strong> {{#if this.total}} {{t "table-of"}} {{this.total}}{{/if}}</p>
+    </li>
+    {{#if this.hasMultiplePages}}
+      <li class="auk-pagination__element">
+        <Auk::ButtonLink
+          @icon="chevron-left"
+          @disabled={{this.isFirstPage}}
+          {{action "changePage" this.links.prev}}
+        >
+          {{t "previous"}}
+        </Auk::ButtonLink>
+      </li>
+      <li class="auk-pagination__element">
+        <Auk::ButtonLink
+          @icon="chevron-right"
+          @layout="icon-right"
+          @disabled={{this.isLastPage}}
+          {{action "changePage" this.links.next}}
+        >
+          {{t "next"}}
+        </Auk::ButtonLink>
+      </li>
+    {{/if}}
+  </ul>
   {{#if this.sizeOptions}}
-    <div class="vlc-pagination__container">
-      <p class="vlc-pagination__fontsize vlc-pagination-nowrap">{{t "amount-per-page"}}</p>
-      <div>
+    <ul class="auk-pagination__size-options">
+      <li class="auk-pagination__element">
+        <p class="auk-u-text-nowrap">{{t "amount-per-page"}}</p>
+      </li>
+      <li class="auk-pagination__element">
         <PowerSelect
           @options={{this.sizeOptions}}
           @selected={{this.size}}
@@ -25,7 +42,7 @@
         as |sizeValue|>
           {{sizeValue}}
         </PowerSelect>
-      </div>
-    </div>
+      </li>
+    </ul>
   {{/if}}
 </div>

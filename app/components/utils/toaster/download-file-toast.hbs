@@ -10,12 +10,10 @@
     <div class="vl-alert__message auk-u-text-capitalize">
       <p>{{t "agenda-documents-download-ready"}}</p>
       <Auk::Button
-        @skin="borderless"
-        @layout="icon-only"
-        @icon=""
+        @skin="secondary"
         @href={{@options.downloadLink}}
         download
-        class="vlc-toaster-button"
+        class="auk-u-mt-4"
         {{on "click" @options.onClose}}
       >
         {{t "download"}}

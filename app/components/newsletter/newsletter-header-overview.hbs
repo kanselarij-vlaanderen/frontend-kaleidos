@@ -54,44 +54,45 @@
           as |Menu|
         >
           {{#if this.currentSession.isEditor}}
-            {{#if
-              (or (is-pending @meeting.mailCampaign) this.isLoading)
-            }}
+            {{#if (or this.isLoading this.loadMailCampaign.isRunning)}}
               <Menu.Item @textOnly={{true}}>
                 <Auk::Loader @message={{t "newsletter-loading-text"}} />
               </Menu.Item>
-            {{else if (await @meeting.mailCampaign)}}
-              {{#if (not (await @meeting.mailCampaign.isSent))}}
-                <Menu.Item {{on "click" this.sendTestCampaign}}>
-                  {{t "send-test-campaign"}}
-                </Menu.Item>
-                <Menu.Item {{on "click" this.toggleIsVerifying}}>
-                  {{t "send-campaign"}}
-                </Menu.Item>
-                <Menu.Divider />
-              {{/if}}
-              <Menu.Item
-                @href={{concat "/newsletter/xml-newsletter/" @agenda.id}}
-                download={{concat "/newsletter/xml-newsletter/" @agenda.id}}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {{t "generate-xml"}}
-              </Menu.Item>
-              <Menu.Divider />
-              <Menu.Item @skin="danger" {{on "click" this.deleteCampaign}}>
-                {{t "delete-campaign"}}
-              </Menu.Item>
             {{else}}
-              <Menu.Item {{on "click" this.createCampaign}}>
-                {{t "create-campaign"}}
+              <Menu.Item {{on "click" this.toggleVerifyingPublishAll}}>
+                {{t "send-newsitem-to-all"}}
+              </Menu.Item>
+              <Menu.Item {{on "click" this.toggleVerifyingPublishMail}}>
+                {{t "send-newsitem-to-mail"}}
+              </Menu.Item>
+              <Menu.Item {{on "click" this.toggleVerifyingPublishBelga}}>
+                {{t "send-newsitem-to-belga"}}
               </Menu.Item>
             {{/if}}
           {{/if}}
           {{#if this.shouldShowPrintButton}}
+            <Menu.Divider />
             <Menu.Item {{on "click" this.print}}>
               {{t "print"}}
             </Menu.Item>
+          {{/if}}
+          {{#if this.currentSession.isEditor}}
+            {{! TODO These are for developers use - in comments for follow up }}
+            {{! <Menu.Divider /> }}
+            {{!-- <Menu.Item {{on "click" this.showNewsletter}}>
+              {{t "show-newsletter"}}
+            </Menu.Item>
+            <Menu.Item
+              {{on "click" this.downloadBelgaXML}}
+            >
+              {{t "generate-xml"}}
+            </Menu.Item> --}}
+            {{#if this.mailCampaign}}
+              <Menu.Divider />
+              <Menu.Item @skin="danger" {{on "click" this.deleteCampaign}}>
+                {{t "delete-campaign"}}
+              </Menu.Item>
+            {{/if}}
           {{/if}}
         </DropdownMenu>
       </Auk::Toolbar::Item>
@@ -99,25 +100,48 @@
   </Auk::Toolbar>
 </Auk::Navbar>
 
-{{#if this.isVerifying}}
+{{#if this.verifyingPublishMail}}
   <WebComponents::VlModalVerify
-    @title={{t "send-campaign"}}
+    @title={{t "send-newsitem-to-mail"}}
     @buttonType="warning"
     @isLoading={{this.isLoading}}
-    @verifyButtonText={{t "send-campaign"}}
-    @message={{t "send-campaign-warning"}}
-    @cancel={{this.toggleIsVerifying}}
-    @verify={{this.sendCampaign}}
+    @verifyButtonText={{t "send-newsitem-to-mail"}}
+    @message={{t "send-newsitem-to-mail-verification"}}
+    @cancel={{this.toggleVerifyingPublishMail}}
+    @verify={{this.publishToMail}}
   />
 {{/if}}
-{{#if (or this.testCampaignIsLoading this.newsletterHTML)}}
+{{#if this.verifyingPublishBelga}}
+  <WebComponents::VlModalVerify
+    @title={{t "send-newsitem-to-belga"}}
+    @buttonType="warning"
+    @isLoading={{this.isLoading}}
+    @verifyButtonText={{t "send-newsitem-to-belga"}}
+    @message={{t "send-newsitem-to-belga-verification"}}
+    @cancel={{this.toggleVerifyingPublishBelga}}
+    @verify={{this.publishToBelga}}
+  />
+{{/if}}
+{{#if this.verifyingPublishAll}}
+  <WebComponents::VlModalVerify
+    @title={{t "send-newsitem-to-all"}}
+    @buttonType="warning"
+    @isLoading={{this.isLoading}}
+    @verifyButtonText={{t "send-newsitem-to-all"}}
+    @message={{t "send-newsitem-to-all-verification"}}
+    @cancel={{this.toggleVerifyingPublishAll}}
+    @verify={{this.publishToAll}}
+  />
+{{/if}}
+
+{{#if (or this.loadingNewsletter this.newsletterHTML)}}
   <WebComponents::VlModal
     @isOverlay={{true}}
-    @title={{t "send-test-campaign"}}
+    @title={{t "show-newsletter"}}
     @closeModal={{this.clearNewsletterHTML}}
   >
     <Auk::Modal::Body>
-      {{#if this.testCampaignIsLoading}}
+      {{#if this.loadingNewsletter}}
         <WebComponents::VlLoader @text={{t "preview-loading-text"}} />
       {{else}}
         <SanitizeHtml @raw={{true}} @value={{this.newsletterHTML}} />

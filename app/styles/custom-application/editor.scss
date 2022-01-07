@@ -20,13 +20,13 @@
 
 .container-flex--contain {
   &.editor-container {
-    border: 0.1rem solid $ghost;
+    border: 0.1rem solid $auk-gray-300;
     border-top: none;
   }
 
   .toolbar {
-    border: 0.1rem solid $ghost;
-    background: $page-bg;
+    border: 0.1rem solid $auk-gray-300;
+    background: $auk-white;
   }
 
   .col--8-12 {
