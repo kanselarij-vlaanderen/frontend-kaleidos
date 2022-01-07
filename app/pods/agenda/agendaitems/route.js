@@ -21,6 +21,7 @@ export default class AgendaAgendaitemsRoute extends Route {
   };
 
   @service agendaService;
+  @service store;
 
   async model(params) {
     const {

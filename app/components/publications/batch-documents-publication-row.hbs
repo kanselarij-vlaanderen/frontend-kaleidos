@@ -7,10 +7,9 @@
   </td>
   <td>
     <PowerSelect
-      @searchEnabled={{false}}
       @selected={{this.selectedLinkModeOption}}
       @options={{this.linkModeOptions}}
-      @onchange={{this.selectLinkModeOption}}
+      @onChange={{this.selectLinkModeOption}}
       as |option|>
       {{option.label}}
     </PowerSelect>

@@ -95,6 +95,28 @@
                       >
                         {{t "consult-agendaitem-decision"}}
                       </Menu.Item>
+                      <Menu.Item
+                        {{on
+                          "click"
+                          (fn this.uploadPiecesToSigninghub signFlow)
+                        }}
+                      >
+                        {{t "send-to-signinghub"}}
+                      </Menu.Item>
+                      <Menu.Item
+                        @route="signatures.signing-flow.documents"
+                        @model={{signFlow}}
+                      >
+                        {{t "view-in-signinghub"}}
+                      </Menu.Item>
+                      <Menu.Item
+                        {{on
+                          "click"
+                          (fn this.startSigning signFlow)
+                        }}
+                      >
+                        {{t "present-for-signing"}}
+                      </Menu.Item>
                     </DropdownMenu>
                   </WebComponents::AuButtonToolbar>
                 </td>

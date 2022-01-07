@@ -2,8 +2,8 @@
 {{!-- template-lint-disable no-action --}}
 <div class="auk-modal-backdrop auk-modal-backdrop--visible" data-test-vl-modal-container>
   <ClickOutside
-    @action={{action "clickOutside"}}
-    @except-selector=".flatpickr-calendar"
+    @onClickOutside={{action "clickOutside"}}
+    @exceptSelector=".flatpickr-calendar"
   >
     <div class="auk-modal {{this.sizeClass}}" role="dialog" data-test-vl-modal-dialogwindow>
       <div class="auk-modal__push"></div>

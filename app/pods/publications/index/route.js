@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 
 export default class PublicationsIndexRoute extends Route {
   queryParams = {
@@ -16,6 +17,8 @@ export default class PublicationsIndexRoute extends Route {
       as: 'sorteer',
     },
   }
+
+  @service store;
 
   async model(params) {
     return this.store.query('publication-flow', {

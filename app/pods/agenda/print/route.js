@@ -3,10 +3,13 @@ import { hash } from 'rsvp';
 import {
   task, all
 } from 'ember-concurrency';
+import { inject as service } from '@ember/service';
 
 // TODO: octane-refactor
 // eslint-disable-next-line ember/no-classic-classes
 export default Route.extend({
+  store: service(),
+
   async model() {
     const {
       meeting, agenda,

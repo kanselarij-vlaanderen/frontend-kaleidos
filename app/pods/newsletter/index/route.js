@@ -5,6 +5,7 @@ import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class IndexNewsletterRoute extends Route {
   @service currentSession;
+  @service store;
 
   queryParams = {
     sort: {

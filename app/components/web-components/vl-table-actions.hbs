@@ -10,7 +10,8 @@
       @layout="icon-only"
       @icon="document"
       @disabled={{not (await this.row.nota)}}
-      {{on "click" (fn this.openDocument this.row bubbles=false)}}
+      {{! TODO: octane-refactor }}
+      {{on "click" (fn "openDocument" this.row bubbles=false)}}
     >
       <:floater>
         <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
