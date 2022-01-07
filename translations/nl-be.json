@@ -913,6 +913,7 @@
   "read": "Lees",
   "request-proof": "Drukproef aanvragen",
   "request-proof-x-stage-for-publication-x-identification": "Drukproef aanvragen ({stage}) voor publicatie {identification}",
+  "request-proof-for-publication-x-identification": "Drukproef aanvragen voor publicatie {identification}",
   "proofing-request": "Drukproefaanvraag",
   "publication-request": "Publicatieaanvraag",
   "initial": "initieel",

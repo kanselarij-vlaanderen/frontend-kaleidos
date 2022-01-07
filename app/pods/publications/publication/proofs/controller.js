@@ -6,7 +6,7 @@ import { tracked } from '@glimmer/tracking';
 export default class PublicationsPublicationProofController extends Controller {
   @service intl;
   @service toaster;
-  @tracked proofRequestStage;
+  @tracked proofRequestStage = "";
   @tracked selectedPieceRows = [];
 
   get selectedPieces() {

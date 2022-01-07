@@ -21,4 +21,11 @@ export default class PublicationsPublicationProofsRoute extends Route {
     });
     this.isViaCouncilOfMinisters = !!subcase;
   }
+
+  setupController(controller) {
+    super.setupController(...arguments);
+    controller.publicationFlow = this.publicationFlow;
+    controller.publicationSubcase = this.publicationSubcase;
+    controller.selectedPieceRows = [];
+  }
 }
