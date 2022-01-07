@@ -4,13 +4,13 @@ import { isPresent } from '@ember/utils';
 export default class TranslationSubcase extends Model {
   @attr shortTitle;
   @attr title;
-  @attr('datetime') dueDate; // uiterste/gevraagde vertaaldatum
+  @attr('datetime') dueDate; // Limiet vertaling === uiterste/gevraagde vertaaldatum
   @attr('datetime') targetEndDate; // not used ?
   @attr('datetime') startDate;
   @attr('datetime') endDate;
   @attr('datetime') created;
   @attr('datetime') modified;
-  @attr('datetime') receivedDate;
+  @attr('datetime') receivedDate; // earliest date of translation receival (as indicated on upload (not edit))
 
   @belongsTo('publication-flow') publicationFlow;
 
