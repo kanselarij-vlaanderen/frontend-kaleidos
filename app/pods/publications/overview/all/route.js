@@ -15,7 +15,7 @@ export default class PublicationsOverviewAllRoute extends Route {
       refreshModel: true,
       as: 'sorteer',
     },
-  }
+  };
 
   async model(params) {
     return this.store.query('publication-flow', {
@@ -24,10 +24,11 @@ export default class PublicationsOverviewAllRoute extends Route {
         number: params.page,
         size: params.size,
       },
+      // eslint-disable-next-line prettier/prettier
       include: [
         'publication-subcase',
         'translation-subcase',
-        'case'
+        'case',
       ].join(','),
     });
   }

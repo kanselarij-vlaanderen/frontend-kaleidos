@@ -7,8 +7,8 @@ const defaultColumns = [
   'publicationNumber',
   'shortTitle',
   'publicationDueDate',
-  'status'
-]
+  'status',
+];
 
 export default class PublicationsOverviewAllController extends Controller {
   queryParams = {
@@ -61,7 +61,9 @@ export default class PublicationsOverviewAllController extends Controller {
   }
 
   loadColumnsDisplayConfig() {
-    const serializedColumnsDisplayConfig = localStorage.getItem('publications.overview.all/columnsDisplayConfig');
+    const serializedColumnsDisplayConfig = localStorage.getItem(
+      'publications.overview.all/columnsDisplayConfig'
+    );
     if (serializedColumnsDisplayConfig) {
       const columnsDisplayConfig = JSON.parse(serializedColumnsDisplayConfig);
       return columnsDisplayConfig;
@@ -70,7 +72,10 @@ export default class PublicationsOverviewAllController extends Controller {
 
   saveColumnsDisplayConfig(columnsDisplayConfig) {
     const serializedColumnsDisplayConfig = JSON.stringify(columnsDisplayConfig);
-    localStorage.setItem('publications.overview.all/columnsDisplayConfig', serializedColumnsDisplayConfig);
+    localStorage.setItem(
+      'publications.overview.all/columnsDisplayConfig',
+      serializedColumnsDisplayConfig
+    );
   }
 
   getDefaultColumnsDisplayConfig() {
@@ -85,7 +90,8 @@ export default class PublicationsOverviewAllController extends Controller {
 
   @action
   toggleColumnsDisplayConfigPanel() {
-    this.isColumnsDisplayConfigPanelShown = !this.isColumnsDisplayConfigPanelShown;
+    this.isColumnsDisplayConfigPanelShown =
+      !this.isColumnsDisplayConfigPanelShown;
   }
 
   @action
@@ -97,7 +103,7 @@ export default class PublicationsOverviewAllController extends Controller {
 
   @action
   nextPage() {
-    set(this, 'page', this.page + 1);  // TODO: setter instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
+    set(this, 'page', this.page + 1); // TODO: setter instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
   }
 
   @action

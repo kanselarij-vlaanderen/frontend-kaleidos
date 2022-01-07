@@ -21,9 +21,13 @@ export default class PublicationsOverviewController extends Controller {
 
   @action
   async saveNewPublication(publication) {
-    const newPublication = await this.publicationService.createNewPublicationWithoutMinisterialCouncil(publication, {
-      decisionDate: publication.decisionDate,
-    });
+    const newPublication =
+      await this.publicationService.createNewPublicationWithoutMinisterialCouncil(
+        publication,
+        {
+          decisionDate: publication.decisionDate,
+        }
+      );
     this.closePublicationModal();
     this.router.transitionTo('publications.publication', newPublication.id);
   }
