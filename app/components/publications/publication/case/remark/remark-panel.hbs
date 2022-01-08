@@ -41,17 +41,11 @@
         <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
           <div class="auk-form-group">
             <Auk::Label>
-              <span class="auk-u-mr">{{t "publication-remark"}}</span>
+              <span>{{t "publication-remark"}}</span>
               {{!(i) inside label to maintain Auk:Label's layout}}
-              <Auk::ButtonLink
-                @layout="icon-only" @icon="circle-info" @skin="muted"
-                class="auk-u-inline">
-                <:floater>
-                  <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
-                    {{t "publication-remark-help"}}
-                  </EmberTooltip>
-                </:floater>
-              </Auk::ButtonLink>
+              <Utils::Generic::TooltipHelp>
+                {{t "publication-remark-help"}}
+              </Utils::Generic::TooltipHelp>
             </Auk::Label>
             <Auk::Textarea data-test-remark-edit @rows="12" @value={{this.remark}} />
           </div>
