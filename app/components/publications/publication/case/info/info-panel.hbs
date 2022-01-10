@@ -26,6 +26,12 @@
             </Auk::KeyValue>
           </div>
 
+          <div class="auk-o-grid-col-4 auk-content">
+            <Auk::KeyValue
+              @key={{t "publications-number"}}
+              @value={{@publicationFlow.identification.idName}} />
+          </div>
+
         </div>
       </Auk::Panel::Body>
     </Auk::Panel>
@@ -55,6 +61,47 @@
                     @checked={{this.isUrgent}}
                     {{on 'input' this.onChangeIsUrgent}} />
                 </div>
+              </div>
+
+              <div class="auk-o-grid-col-4">
+                <div class="auk-form-group
+                    {{if this.numberIsAlreadyUsed "auk-form-group--error"}}">
+                  <Auk::Label>{{t "publications-number"}}</Auk::Label>
+                  <div class="auk-o-flex">
+                    <Auk::Input
+                      data-test-publication-sidebar-publication-number
+                      @type="number"
+                      class="auk-u-mr"
+                      value={{@publicationFlow.identification.structuredIdentifier.localIdentifier}}
+                      {{on "input" (perform this.setPublicationNumber)}}
+                    />
+                    <Auk::Input
+                      data-test-publication-sidebar-publication-number-suffix
+                      @width="xsmall"
+                      value={{@publicationFlow.identification.structuredIdentifier.versionIdentifier}}
+                      {{on "input" (perform this.setPublicationNumberSuffix)}}
+                    />
+                  </div>
+                  {{#if this.numberIsAlreadyUsed}}
+                    <div
+                      data-test-publication-sidebar-publication-number-error
+                      class="auk-form-help-text auk-form-help-text--danger"
+                    >
+                      <Auk::Icon @name="alert-triangle" />
+                      {{t "publication-number-already-taken"}}
+                    </div>
+                  {{/if}}
+                  {{#if this.numberIsRequired}}
+                    <div class="auk-form-help-text auk-form-help-text--danger">
+                      <Auk::Icon @name="alert-triangle" />
+                      {{t "publication-number-required"}}
+                    </div>
+                  {{/if}}
+                </div>
+              </div>
+
+              <div class="auk-o-grid-col-4">
+
               </div>
 
             </div>
