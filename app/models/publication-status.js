@@ -9,10 +9,6 @@ export default class PublicationStatus extends Model {
   @attr('number') position;
   @hasMany('publication-flow') publications;
 
-  get isPending() {
-    return !(this.isPaused || this.isPublished ||this.isWithdrawn)
-  }
-
   get isStarted() {
     return this.uri === CONSTANTS.PUBLICATION_STATUSES.STARTED;
   }
@@ -51,5 +47,13 @@ export default class PublicationStatus extends Model {
 
   get isPublicationRequested() {
     return this.uri === CONSTANTS.PUBLICATION_STATUSES.PUBLICATION_REQUESTED;
+  }
+
+  get isPending() {
+    return !(this.isPaused || this.isPublished || this.isWithdrawn);
+  }
+
+  get isFinal() {
+    return this.isPublished || this.isWithdrawn;
   }
 }
