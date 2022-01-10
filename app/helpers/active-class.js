@@ -1,9 +1,7 @@
 import { helper } from '@ember/component/helper';
 
-export function activeClass(elements, objects) {
+export function activeClass([currentItem, selectedItem], objects) {
   const className = objects.class;
-  const currentItem = elements.get('firstObject');
-  const selectedItem = elements.get('lastObject');
 
   if (currentItem && selectedItem && currentItem.id && selectedItem.id) {
     if (currentItem.id === selectedItem.id) {

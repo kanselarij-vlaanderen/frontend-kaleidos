@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { hash } from 'rsvp';
 import { tracked } from '@glimmer/tracking';
@@ -31,6 +32,8 @@ export class PieceRow {
 }
 
 export default class PublicationsPublicationProofsDocumentsRoute extends Route {
+  @service store;
+
   async model() {
     this.publicationSubcase = this.modelFor('publications.publication.proofs');
 

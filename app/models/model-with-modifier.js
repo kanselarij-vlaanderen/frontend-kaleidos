@@ -10,6 +10,7 @@ import ModifiedOldDataError from '../errors/modified-old-data-error';
 export default Model.extend({
   currentSession: service(),
   intl: service(),
+  store: service(),
   toaster: service(),
   modified: attr('datetime'),
   modifiedBy: belongsTo('user'),
