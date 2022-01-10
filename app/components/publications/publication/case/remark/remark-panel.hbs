@@ -20,7 +20,7 @@
       <Auk::Panel::Body>
         {{#if @publicationFlow.remark}}
           {{! The following line is formatted on a single line because of the way browsers treat whitespaces & breaks in combination with `white-space: pre-wrap` }}
-          <div data-test-remark-view-long-title class="auk-u-text-prewrap">{{@publicationFlow.remark}}</div>
+          <div data-test-remark-view class="auk-u-text-prewrap">{{@publicationFlow.remark}}</div>
         {{else}}
           <Auk::EmptyState @message="{{t "publication-remark-empty"}}" />
         {{/if}}
