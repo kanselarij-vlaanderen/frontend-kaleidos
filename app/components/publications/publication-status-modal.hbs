@@ -24,8 +24,8 @@
     <div class="auk-form-group">
       <Auk::Label for="blockInput">{{t "date"}}</Auk::Label>
       <Auk::Datepicker
-        @date={{this.publicationStatusChange}}
-        @onChange={{this.setStatusDate}}
+        @date={{this.changeDate}}
+        @onChange={{this.setChangeDate}}
       />
     </div>
   </Auk::Modal::Body>

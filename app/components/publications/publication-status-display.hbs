@@ -32,37 +32,3 @@
     @onCancel={{this.closeStatusSelector}}
   />
 {{/if}}
-
-{{#if this.showConfirmWithdraw}}
-  <Auk::Modal @size="small">
-    <Auk::Modal::Header
-      @title={{t "discharge-publication"}}
-      @closeable={{false}}
-    />
-    <Auk::Modal::Body>
-      {{t "discharge-publication-flow-confirm"}}
-    </Auk::Modal::Body>
-    <Auk::Modal::Footer @custom={{true}}>
-      <Auk::Toolbar @size="large">
-        <Auk::Toolbar::Group @position="left">
-          <Auk::Toolbar::Item>
-            <Auk::ButtonLink {{on "click" this.cancelWithdraw}}>
-              {{t "cancel"}}
-            </Auk::ButtonLink>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-        <Auk::Toolbar::Group @position="right">
-          <Auk::Toolbar::Item>
-            <Auk::Button
-              data-test-publication-sidebar-confirm-withdraw
-              @skin="danger-primary"
-              {{on "click" this.withdrawPublicationFlow}}
-            >
-              {{t "discharge"}}
-            </Auk::Button>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-      </Auk::Toolbar>
-    </Auk::Modal::Footer>
-  </Auk::Modal>
-{{/if}}

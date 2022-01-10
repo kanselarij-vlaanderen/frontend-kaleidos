@@ -8,12 +8,12 @@ export default class PublicationStatusModal extends Component {
   @service store;
 
   @tracked publicationStatus;
-  @tracked publicationStatusChange;
+  @tracked changeDate;
 
   constructor() {
     super(...arguments);
     this.publicationStatus = this.args.publicationStatus;
-    this.publicationStatusChange = new Date();
+    this.changeDate = new Date();
   }
 
   get publicationStatusses() {
@@ -26,16 +26,12 @@ export default class PublicationStatusModal extends Component {
   }
 
   @action
-  setStatusDate(selectedDates) {
-    this.publicationStatusChange = selectedDates[0];
+  setChangeDate(selectedDates) {
+    this.changeDate = selectedDates[0];
   }
 
   @task
   *savePublicationStatus() {
-    const saveInformation = {
-      status: this.publicationStatus,
-      changeDate: this.publicationStatusChange
-    };
-    yield this.args.onSave(saveInformation);
+    yield this.args.onSave(this.publicationStatus, this.changeDate);
   }
 }

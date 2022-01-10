@@ -3,8 +3,8 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency-decorators';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { isEmpty} from '@ember/utils';
+import { isEmpty } from '@ember/utils';
+
 export default class PublicationStatusDisplay extends Component {
   @service store;
 
@@ -13,7 +13,6 @@ export default class PublicationStatusDisplay extends Component {
   @tracked publicationStatusChange;
 
   @tracked showStatusSelector = false;
-  @tracked showConfirmWithdraw = false;
 
   constructor() {
     super(...arguments);
@@ -36,27 +35,6 @@ export default class PublicationStatusDisplay extends Component {
   }
 
   @action
-  async savePublicationStatus(statusInformation) {
-    if (statusInformation.status.isWithdrawn) {
-      this.showConfirmWithdraw = true;
-    } else {
-      await this.setPublicationStatus(statusInformation.status,statusInformation.changeDate);
-    }
-  }
-
-  @action
-  async withdrawPublicationFlow() {
-    const withdrawn = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.WITHDRAWN);
-    await this.setPublicationStatus(withdrawn);
-    this.showConfirmWithdraw = false;
-  }
-
-  @action
-  cancelWithdraw() {
-    this.showConfirmWithdraw = false;
-  }
-
-  @action
   openStatusSelector() {
     this.showStatusSelector = true;
   }
@@ -66,7 +44,8 @@ export default class PublicationStatusDisplay extends Component {
     this.showStatusSelector = false;
   }
 
-  async setPublicationStatus(status, date) {
+  @action
+  async savePublicationStatus(status, date) {
     if (isEmpty(date)) {
       date = new Date();
     }
