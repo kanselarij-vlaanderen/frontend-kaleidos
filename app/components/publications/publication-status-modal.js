@@ -20,6 +20,10 @@ export default class PublicationStatusModal extends Component {
     return this.store.peekAll('publication-status').sortBy('position');
   }
 
+  get isDisabledSave() {
+    return this.publicationStatus == this.args.publicationStatus; // no new status selected
+  }
+
   @action
   selectPublicationStatus(status) {
     this.publicationStatus = status;

@@ -33,6 +33,7 @@
     <Auk::Button
       @skin="primary"
       @loading={{this.savePublicationStatus.isRunning}}
+      disabled={{this.isDisabledSave}}
       {{on "click" (perform this.savePublicationStatus)}}
     >
       {{t "save"}}
