@@ -28,7 +28,7 @@
 {{#if this.showStatusSelector}}
   <Publications::PublicationStatusModal
     @publicationStatus={{this.publicationStatus}}
-    @onSave={{this.savePublicationStatus}}
+    @onSave={{perform this.savePublicationStatus}}
     @onCancel={{this.closeStatusSelector}}
   />
 {{/if}}

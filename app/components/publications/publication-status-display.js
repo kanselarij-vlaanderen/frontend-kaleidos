@@ -44,8 +44,8 @@ export default class PublicationStatusDisplay extends Component {
     this.showStatusSelector = false;
   }
 
-  @action
-  async savePublicationStatus(status, date) {
+  @task
+  *savePublicationStatus(status, date) {
     if (isEmpty(date)) {
       date = new Date();
     }
@@ -57,21 +57,21 @@ export default class PublicationStatusDisplay extends Component {
     if (status.isFinal) {
       this.args.publicationFlow.closingDate = new Date();
 
-      const translationSubcase = await this.args.publicationFlow.translationSubcase;
+      const translationSubcase = yield this.args.publicationFlow.translationSubcase;
       if (!translationSubcase.endDate) {
         translationSubcase.endDate = new Date();
-        await translationSubcase.save();
+        yield translationSubcase.save();
       }
 
-      const publicationSubcase = await this.args.publicationFlow.publicationSubcase;
+      const publicationSubcase = yield this.args.publicationFlow.publicationSubcase;
       if (!publicationSubcase.endDate) {
         publicationSubcase.endDate = new Date();
-        await publicationSubcase.save();
+        yield publicationSubcase.save();
       }
 
       // create decision for publication activity when status changed to "published"
       if (status.isPublished && !this.decision) {
-        const publicationActivities = await publicationSubcase.publicationActivities;
+        const publicationActivities = yield publicationSubcase.publicationActivities;
 
         if (publicationActivities.length) {
           const publicationActivity = publicationActivities.objectAt(0);
@@ -90,21 +90,21 @@ export default class PublicationStatusDisplay extends Component {
     const previousStatus = this.publicationStatus;
     if ((previousStatus.isPublished && !status.isPublished)
              && (this.decision && !this.decision.isStaatsbladResource)) {
-      await this.decision.destroyRecord();
+      yield this.decision.destroyRecord();
     }
 
     // update status-change activity
-    const oldChangeActivity = await this.args.publicationFlow.publicationStatusChange;
+    const oldChangeActivity = yield this.args.publicationFlow.publicationStatusChange;
     if (oldChangeActivity) {
-      await oldChangeActivity.destroyRecord();
+      yield oldChangeActivity.destroyRecord();
     }
     const newChangeActivity = this.store.createRecord('publication-status-change', {
       startedAt: date,
       publication: this.args.publicationFlow,
     });
-    await newChangeActivity.save();
+    yield newChangeActivity.save();
 
-    await this.args.publicationFlow.save();
+    yield this.args.publicationFlow.save();
     this.loadStatus.perform();
     this.closeStatusSelector();
   }
