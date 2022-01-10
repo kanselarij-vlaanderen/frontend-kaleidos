@@ -55,17 +55,17 @@ export default class PublicationStatusDisplay extends Component {
 
     // update closing dates of auxiliary activities if status is "published"
     if (status.isFinal) {
-      this.args.publicationFlow.closingDate = new Date();
+      this.args.publicationFlow.closingDate = date;
 
       const translationSubcase = yield this.args.publicationFlow.translationSubcase;
       if (!translationSubcase.endDate) {
-        translationSubcase.endDate = new Date();
+        translationSubcase.endDate = date;
         yield translationSubcase.save();
       }
 
       const publicationSubcase = yield this.args.publicationFlow.publicationSubcase;
       if (!publicationSubcase.endDate) {
-        publicationSubcase.endDate = new Date();
+        publicationSubcase.endDate = date;
         yield publicationSubcase.save();
       }
 
