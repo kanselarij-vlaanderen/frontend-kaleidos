@@ -19,7 +19,6 @@ export default class PublicationStatusDisplay extends Component {
     super(...arguments);
     this.loadDecision.perform();
     this.loadStatus.perform();
-    this.loadStatusChange.perform();
   }
 
   @task
@@ -29,11 +28,6 @@ export default class PublicationStatusDisplay extends Component {
       'filter[publication-activity][subcase][:id:]': publicationSubcase.id,
       sort: 'publication-activity.start-date,publication-date',
     });
-  }
-
-  @task
-  *loadStatusChange() {
-    this.publicationStatusChange = yield this.args.publicationFlow.publicationStatusChange;
   }
 
   @task
@@ -77,58 +71,62 @@ export default class PublicationStatusDisplay extends Component {
       date = new Date();
     }
 
-    const oldStatus = this.publicationStatus;
-    const publicationSubcase = await this.args.publicationFlow.publicationSubcase;
-
-    // create publication when status changed to "published"
-    if (status.isPublished && !this.decision) {
-      const publicationActivities = await publicationSubcase.publicationActivities;
-
-      if (publicationActivities.length) {
-        const publicationActivity = publicationActivities.objectAt(0);
-        this.decision = this.store.createRecord('decision', {
-          publicationActivity: publicationActivity,
-          publicationDate: new Date(),
-        });
-        this.decision.save();
-      }
-    }
-
-    // remove created decision when "published" status is reverted
-    else if ((oldStatus.isPublished && !status.isPublished) && (this.decision && !this.decision.isStaatsbladResource)) {
-      // only remove decision when it is not a staatsblad resource
-      this.decision.deleteRecord();
-      this.decision.save();
-    }
-
     // update status
     this.args.publicationFlow.status = status;
 
-    // update closing dates of auxiliary activities
-    const translationSubcase = await this.args.publicationFlow.translationSubcase;
-
-    if (status.isPublished || status.isWithdrawn) {
+    // update closing dates of auxiliary activities if status is "published"
+    if (status.isFinal) {
       this.args.publicationFlow.closingDate = new Date();
 
+      const translationSubcase = await this.args.publicationFlow.translationSubcase;
       if (!translationSubcase.endDate) {
         translationSubcase.endDate = new Date();
         await translationSubcase.save();
       }
+
+      const publicationSubcase = await this.args.publicationFlow.publicationSubcase;
       if (!publicationSubcase.endDate) {
         publicationSubcase.endDate = new Date();
         await publicationSubcase.save();
+      }
+
+      // create decision for publication activity when status changed to "published"
+      if (status.isPublished && !this.decision) {
+        const publicationActivities = await publicationSubcase.publicationActivities;
+
+        if (publicationActivities.length) {
+          const publicationActivity = publicationActivities.objectAt(0);
+          this.decision = this.store.createRecord('decision', {
+            publicationActivity: publicationActivity,
+            publicationDate: date,
+          });
+          this.decision.save();
+        }
       }
     } else {
       this.args.publicationFlow.closingDate = null;
     }
 
-    // update status-change
-    this.publicationStatusChange.startedAt = date;
-    await this.publicationStatusChange.save();
+    // remove decision if "published" status is reverted and it's not a Staatsblad resource
+    const previousStatus = this.publicationStatus;
+    if ((previousStatus.isPublished && !status.isPublished)
+             && (this.decision && !this.decision.isStaatsbladResource)) {
+      await this.decision.destroyRecord();
+    }
+
+    // update status-change activity
+    const oldChangeActivity = await this.args.publicationFlow.publicationStatusChange;
+    if (oldChangeActivity) {
+      await oldChangeActivity.destroyRecord();
+    }
+    const newChangeActivity = this.store.createRecord('publication-status-change', {
+      startedAt: date,
+      publication: this.args.publicationFlow,
+    });
+    await newChangeActivity.save();
 
     await this.args.publicationFlow.save();
     this.loadStatus.perform();
-    this.loadStatusChange.perform();
     this.closeStatusSelector();
   }
 }

@@ -2,7 +2,6 @@
   (or
     this.loadDecision.isRunning
     this.loadStatus.isRunning
-    this.loadStatusChange.isRunning
   )
 }}
   <Auk::Loader />
@@ -10,7 +9,7 @@
   <Auk::Pill @skin="white">
     {{this.publicationStatus.label}}
     -
-    {{moment-format this.publicationStatusChange.startedAt "DD/MM/YYYY"}}
+    {{moment-format @publicationFlow.publicationStatusChange.startedAt "DD/MM/YYYY"}}
   </Auk::Pill>
   <Auk::ButtonLink
     @icon="pencil"
