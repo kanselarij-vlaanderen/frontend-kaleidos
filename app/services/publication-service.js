@@ -88,7 +88,7 @@ export default class PublicationService extends Service {
       agendaItemTreatment: agendaItemTreatment,
       mandatees: mandatees,
       status: toPublishStatus,
-      statusChange: statusChange,
+      publicationStatusChange: statusChange,
       shortTitle: publicationProperties.shortTitle,
       longTitle: publicationProperties.longTitle,
       created: now,
