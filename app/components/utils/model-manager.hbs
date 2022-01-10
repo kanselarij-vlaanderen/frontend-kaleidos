@@ -11,11 +11,12 @@
         <Utils::ModelSelector
           @modelName={{this.modelName}}
           @searchField="label"
-          @propertyToShow="label"
           @sortField="label"
           @selectedItems={{this.item}}
           @selectModel={{action "selectModel"}}
-        />
+        as |model|>
+          {{capitalize model.label}}
+        </Utils::ModelSelector>
       </div>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{action "close"}}>
