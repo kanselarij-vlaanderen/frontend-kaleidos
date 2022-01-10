@@ -6,28 +6,26 @@ import { task } from 'ember-concurrency-decorators';
 
 export default class PublicationStatusModal extends Component {
   @service store;
-  @tracked publicationStatusses;
 
+  @tracked publicationStatusses;
   @tracked publicationStatus;
   @tracked publicationStatusChange;
-
 
   constructor() {
     super(...arguments);
     this.publicationStatusses = this.store.peekAll('publication-status').sortBy('position');
     this.publicationStatus = this.args.publicationStatus;
-    this.publicationStatusChange = this.args.publicationStatusChange.startedAt;
+    this.publicationStatusChange = new Date();
   }
 
   @action
   selectPublicationStatus(status) {
     this.publicationStatus = status;
-    this.publicationStatusChange = new Date();
   }
 
   @action
   setStatusDate(selectedDates) {
-    this.publicationStatusChange  = selectedDates[0];
+    this.publicationStatusChange = selectedDates[0];
   }
 
   @task
