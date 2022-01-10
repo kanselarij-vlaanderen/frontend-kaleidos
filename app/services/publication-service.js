@@ -128,4 +128,23 @@ export default class PublicationService extends Service {
     // our own publication should not be considered as duplicate
     return duplicates.filter((publication) => publication.id !== publicationFlowId).length > 0;
   }
+
+  async getIsUrgent(publicationFlow) {
+    var urgencyLevel = await publicationFlow.urgencyLevel;
+    if (!urgencyLevel) {
+      return false;
+    }
+    return urgencyLevel.isUrgent;
+  }
+
+  async getUrgencyLevel(isUrgent) {
+    var urgencyLevels = this.store.peekAll('urgency-level');
+    var urgencyLevelUri = isUrgent
+      ? CONSTANTS.URGENCY_LEVELS.SPEEDPROCEDURE
+      : CONSTANTS.URGENCY_LEVELS.STANDARD;
+    var urgencyLevel = urgencyLevels.find(
+      (level) => level.uri === urgencyLevelUri
+    );
+    return urgencyLevel;
+  }
 }

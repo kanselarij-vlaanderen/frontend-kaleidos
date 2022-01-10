@@ -1,0 +1,92 @@
+<div class="auk-u-mb-3">
+  {{#if (not this.isInEditMode)}}
+    <Auk::Panel>
+      <Auk::Panel::Header>
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <h4 class="auk-panel__title">
+                {{t "publication-info"}}
+              </h4>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <Auk::Button data-test-info-view-edit @skin="tertiary" @icon="pencil" @layout="icon-only" {{on "click" this.putInEditMode}}/>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </Auk::Panel::Header>
+      <Auk::Panel::Body>
+        <div class="auk-o-grid">
+
+          <div class="auk-o-grid-col-4 auk-content">
+            <Auk::KeyValue @key={{t "publication-urgent"}}>
+              <Auk::Icon @name="alert-triangle" @skin="warning" />
+            </Auk::KeyValue>
+          </div>
+
+        </div>
+      </Auk::Panel::Body>
+    </Auk::Panel>
+  {{else}}
+      <Auk::Panel class="auk-panel--editing">
+      <Auk::Panel::Header>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <h4 class="auk-panel__title">
+              {{t "publication-info"}}
+            </h4>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Panel::Header>
+      <Auk::Panel::Body>
+        <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
+          <div class="auk-form-group-layout auk-form-group-layout--grid">
+            <div class="auk-o-grid">
+
+              <div class="auk-o-grid-col-4">
+                <div class="auk-form-group">
+                  <Auk::Label>
+                    {{t "publication-urgent"}}
+                  </Auk::Label>
+                  <Auk::Checkbox
+                    data-test-urgency-level-checkbox
+                    @checked={{this.isUrgent}}
+                    {{on 'input' this.onChangeIsUrgent}} />
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </Utils::LoadableContent>
+      </Auk::Panel::Body>
+      <Auk::Panel::Footer>
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <Auk::Button
+                data-test-info-edit-cancel
+                @skin="borderless"
+                @disabled={{this.save.isRunning}}
+                {{on "click" this.cancelEdit}}>
+                {{t "cancel"}}
+              </Auk::Button>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <Auk::Button
+                data-test-info-edit-save
+                @skin="primary"
+                @loading={{this.save.isRunning}}
+                {{on "click" (perform this.save)}}>
+                {{t "save"}}
+              </Auk::Button>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </Auk::Panel::Footer>
+    </Auk::Panel>
+  {{/if}}
+</div>
