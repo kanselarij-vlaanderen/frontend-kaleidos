@@ -35,19 +35,19 @@ export default class PublicationStatusDisplay extends Component {
   *loadStatusChange() {
     this.publicationStatusChange = yield this.args.publicationFlow.publicationStatusChange;
   }
+
   @task
   *loadStatus() {
     this.publicationStatus = yield this.args.publicationFlow.status;
   }
 
   @action
-  openStatusSelector() {
-    this.showStatusSelector = true;
-  }
-
-  @action
-  closeStatusSelector() {
-    this.showStatusSelector = false;
+  async savePublicationStatus(statusInformation) {
+    if (statusInformation.status.isWithdrawn) {
+      this.showConfirmWithdraw = true;
+    } else {
+      await this.setPublicationStatus(statusInformation.status,statusInformation.changeDate);
+    }
   }
 
   @action
@@ -63,11 +63,21 @@ export default class PublicationStatusDisplay extends Component {
   }
 
   @action
-  async setPublicationStatus(status,date) {
+  openStatusSelector() {
+    this.showStatusSelector = true;
+  }
+
+  @action
+  closeStatusSelector() {
+    this.showStatusSelector = false;
+  }
+
+  async setPublicationStatus(status, date) {
     if (isEmpty(date)) {
       date = new Date();
     }
-    const oldStatus = await this.args.publicationFlow.status;
+
+    const oldStatus = this.publicationStatus;
     const publicationSubcase = await this.args.publicationFlow.publicationSubcase;
 
     // create publication when status changed to "published"
@@ -83,6 +93,7 @@ export default class PublicationStatusDisplay extends Component {
         this.decision.save();
       }
     }
+
     // remove created decision when "published" status is reverted
     else if ((oldStatus.isPublished && !status.isPublished) && (this.decision && !this.decision.isStaatsbladResource)) {
       // only remove decision when it is not a staatsblad resource
@@ -119,14 +130,5 @@ export default class PublicationStatusDisplay extends Component {
     this.loadStatus.perform();
     this.loadStatusChange.perform();
     this.closeStatusSelector();
-  }
-
-  @action
-  async savePublicationStatus(statusInformation) {
-    if (statusInformation.status.isWithdrawn) {
-      this.showConfirmWithdraw = true;
-    } else {
-      await this.setPublicationStatus(statusInformation.status,statusInformation.changeDate);
-    }
   }
 }
