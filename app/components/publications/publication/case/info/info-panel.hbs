@@ -20,13 +20,13 @@
       <Auk::Panel::Body>
         <div class="auk-o-grid">
 
-          <div class="auk-o-grid-col-4 auk-content">
+          <div class="auk-o-grid-col-1 auk-content">
             <Auk::KeyValue @key={{t "publication-urgent"}}>
               <Auk::Icon @name="alert-triangle" @skin="warning" />
             </Auk::KeyValue>
           </div>
 
-          <div class="auk-o-grid-col-4 auk-content">
+          <div class="auk-o-grid-col-11 auk-content">
             <Auk::KeyValue
               @key={{t "publications-number"}}
               @value={{@publicationFlow.identification.idName}} />
@@ -51,7 +51,7 @@
           <div class="auk-form-group-layout auk-form-group-layout--grid">
             <div class="auk-o-grid">
 
-              <div class="auk-o-grid-col-4">
+              <div class="auk-o-grid-col-1">
                 <div class="auk-form-group">
                   <Auk::Label>
                     {{t "publication-urgent"}}
@@ -63,7 +63,7 @@
                 </div>
               </div>
 
-              <div class="auk-o-grid-col-4">
+              <div class="auk-o-grid-col-11">
                 <div class="auk-form-group
                     {{if this.numberIsAlreadyUsed "auk-form-group--error"}}">
                   <Auk::Label>{{t "publications-number"}}</Auk::Label>
