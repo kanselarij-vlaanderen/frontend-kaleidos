@@ -7,7 +7,7 @@ const {
   KABINET,
   OVERHEID,
   OVRB,
-  // USER,
+  USER,
 } = CONSTANTS.ACCOUNT_GROUPS;
 
 const groupRoles = new Map();
@@ -41,6 +41,9 @@ groupRoles.set(OVERHEID, [
 
 groupRoles.set(OVRB, [
   'manage-signatures',
+]);
+
+groupRoles.set(USER, [
 ]);
 
 export default groupRoles;
