@@ -64,24 +64,26 @@
               </div>
 
               <div class="auk-o-grid-col-11">
-                <div class="auk-form-group
-                    {{if this.numberIsAlreadyUsed "auk-form-group--error"}}">
-                  <Auk::Label>{{t "publications-number"}}</Auk::Label>
-                  <div class="auk-o-flex">
-                    <Auk::Input
-                      data-test-publication-sidebar-publication-number
-                      @type="number"
-                      class="auk-u-mr"
-                      value={{@publicationFlow.identification.structuredIdentifier.localIdentifier}}
-                      {{on "input" (perform this.setPublicationNumber)}}
-                    />
-                    <Auk::Input
-                      data-test-publication-sidebar-publication-number-suffix
-                      @width="xsmall"
-                      value={{@publicationFlow.identification.structuredIdentifier.versionIdentifier}}
-                      {{on "input" (perform this.setPublicationNumberSuffix)}}
-                    />
-                  </div>
+                <div class="auk-form-group">
+                  <Auk::Label
+                    @required={{true}}
+                    @error={{not this.isPublicationNumberValid}}>
+                    {{t "publications-number"}}
+                  </Auk::Label>
+                  <Auk::Input
+                    data-test-publication-sidebar-publication-number
+                    @type="number"
+                    value={{this.publicationNumber}}
+                    @error={{not this.isPublicationNumberValid}}
+                    {{on "input" (perform this.setPublicationNumber)}}
+                  />
+                  <Auk::Input
+                    data-test-publication-sidebar-publication-number-suffix
+                    @width="xsmall"
+                    value={{this.publicationNumberSuffix}}
+                    @error={{not this.isPublicationNumberValid}}
+                    {{on "input" (perform this.setPublicationNumberSuffix)}}
+                  />
                   {{#if this.numberIsAlreadyUsed}}
                     <div
                       data-test-publication-sidebar-publication-number-error
@@ -127,6 +129,7 @@
                 data-test-info-edit-save
                 @skin="primary"
                 @loading={{this.save.isRunning}}
+                @disabled={{not this.isValid}}
                 {{on "click" (perform this.save)}}>
                 {{t "save"}}
               </Auk::Button>

@@ -14,8 +14,8 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @tracked isUrgent;
 
-  @tracked numberIsAlreadyUsed = false;
-  @tracked numberIsRequired = false;
+  @tracked numberIsAlreadyUsed;
+  @tracked numberIsRequired;
   @tracked publicationNumber;
   @tracked publicationNumberSuffix;
 
@@ -32,7 +32,12 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   async putInEditMode() {
     var publicationFlow = this.args.publicationFlow;
     this.isInEditMode = true;
+
     this.isUrgent = await this.publicationService.getIsUrgent(publicationFlow);
+    var identification = await publicationFlow.identification;
+    var structuredIdentifier = await identification.structuredIdentifier;
+    this.publicationNumber = structuredIdentifier.localIdentifier;
+    this.publicationNumberSuffix = structuredIdentifier.versionIdentifier;
   }
 
   @action
@@ -41,23 +46,19 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.isUrgent = isUrgent;
   }
 
+  get isPublicationNumberValid() {
+    return this.publicationNumber && this.publicationNumber > 0 && !this.numberIsAlreadyUsed;
+  }
+
   @restartableTask
   *setPublicationNumber(event) {
     this.publicationNumber = event.target.value;
-    yield timeout(1000);
     this.numberIsRequired = false;
     this.numberIsAlreadyUsed = false;
     if (isBlank(this.publicationNumber)) {
       this.numberIsRequired = true;
-      this.toaster.error(
-        this.intl.t('publication-number-required'),
-        this.intl.t('warning-title'),
-        {
-          timeOut: 5000,
-        }
-      );
     } else {
-      this.setStructuredIdentifier();
+      yield this.checkIsPublicationNumberAlreadyTaken.perform();
     }
   }
 
@@ -66,51 +67,34 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.publicationNumberSuffix = isBlank(event.target.value)
       ? undefined
       : event.target.value;
-    yield timeout(1000);
-    this.numberIsRequired = false;
     this.numberIsAlreadyUsed = false;
-    this.setStructuredIdentifier();
+    yield this.checkIsPublicationNumberAlreadyTaken.perform();
+  }
+
+  @restartableTask
+  *checkIsPublicationNumberAlreadyTaken() {
+    yield timeout(1000);
+    this.numberIsAlreadyUsed = yield this.publicationService.publicationNumberAlreadyTaken(this.publicationNumber, this.publicationNumberSuffix);
   }
 
   async setStructuredIdentifier() {
     var publicationFlow = this.args.publicationFlow;
-    const isPublicationNumberTaken =
+    this.numberIsAlreadyUsed =
       await this.publicationService.publicationNumberAlreadyTaken(
         this.publicationNumber,
         this.publicationNumberSuffix,
         publicationFlow.id
       );
-    if (isPublicationNumberTaken) {
-      this.numberIsAlreadyUsed = true;
-      this.toaster.error(
-        this.intl.t('publication-number-already-taken-with-params', {
-          number: this.publicationNumber,
-          suffix: isBlank(this.publicationNumberSuffix)
-            ? this.intl.t('without-suffix')
-            : `${this.intl.t('with-suffix')} '${this.publicationNumberSuffix}'`,
-        }),
-        this.intl.t('warning-title'),
-        {
-          timeOut: 5000,
-        }
-      );
-    } else {
-      const identification = await publicationFlow.identification;
-      const structuredIdentifier = await identification.structuredIdentifier;
-      const number = parseInt(this.publicationNumber, 10);
-      structuredIdentifier.localIdentifier = number;
-      structuredIdentifier.versionIdentifier = this.publicationNumberSuffix;
-      identification.idName = this.publicationNumberSuffix
-        ? `${number} ${this.publicationNumberSuffix}`
-        : `${number}`;
-      this.numberIsAlreadyUsed = false;
-    }
   }
 
   @action
   cancelEdit() {
     this.showError = false;
     this.isInEditMode = false;
+  }
+
+  get isValid() {
+    return this.isPublicationNumberValid;
   }
 
   @task
@@ -120,10 +104,39 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.isInEditMode = false;
   }
 
-  // separate method to avoid ember-concurrency from saving only partially
+  // separate method to prevent ember-concurrency from saving only partially
   async performSave(publicationFlow) {
-    publicationFlow.urgencyLevel =
-      await this.publicationService.getUrgencyLevel(this.isUrgent);
-    await publicationFlow.save();
+    var saves = [];
+
+    var isDirty = false;
+    var wasUrgent = this.publicationService.getIsUrgent(publicationFlow);
+    if (this.isUrgent !== wasUrgent) {
+      var urgencyLevel = await this.publicationService.getUrgencyLevel(
+        this.isUrgent
+      );
+      publicationFlow.urgencyLevel = urgencyLevel;
+      isDirty = true;
+    }
+
+    const identification = await publicationFlow.identification;
+    const structuredIdentifier = await identification.structuredIdentifier;
+    const number = parseInt(this.publicationNumber, 10);
+    structuredIdentifier.localIdentifier = number;
+    structuredIdentifier.versionIdentifier = this.publicationNumberSuffix;
+    // if dirty type is a string ('updated'), it is dirty
+    if (structuredIdentifier.dirtyType) {
+      identification.idName = this.publicationNumberSuffix
+        ? `${number} ${this.publicationNumberSuffix}`
+        : `${number}`;
+
+      saves.push(structuredIdentifier.save());
+      saves.push(identification.save());
+    }
+
+    if (isDirty) {
+      saves.push(publicationFlow.save());
+    }
+
+    await Promise.all(saves);
   }
 }
