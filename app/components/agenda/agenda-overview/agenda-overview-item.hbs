@@ -121,7 +121,7 @@
           <div class="vlc-agenda-items__icons">
             <div
               class="auk-o-flex vlc-agenda-items__icons"
-            >auk-tooltip
+            >
               {{#if this.loadNewsletterVisibility.lastSuccessful}}
                 {{#if (not this.newsletterIsVisible)}}
                   <Auk::Icon @name="not-visible" @skin="muted" class="auk-u-ml-2">
@@ -136,7 +136,7 @@
                     This keeps element-height the same at all times in order to prevent "jumping" when data is being side-loaded.
                     This should be tackled differently through modified design --}}
                   <Auk::Icon @name="not-visible" @skin="invisible" class="auk-u-ml-2" />
-                {{/if}}auk-tooltip
+                {{/if}}
               {{else}}
                 {{!-- TODO: design loading state for newsletter visibility --}}
                 <Auk::Icon @name="circle-question" @skin="muted" class="auk-u-ml-2">
@@ -145,7 +145,7 @@
                       {{t "loading"}}
                     </p>
                   </EmberTooltip>
-                </Auk::Icon>auk-tooltip
+                </Auk::Icon>
               {{/if}}
               {{#if @isNew}}
                 <Auk::Icon @name="calendar-new" class="auk-u-ml-2">
