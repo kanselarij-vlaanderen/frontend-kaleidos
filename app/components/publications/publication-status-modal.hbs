@@ -32,7 +32,7 @@
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
     <Auk::Button
       @skin="primary"
-      @loading={{this.save.isRunning}}
+      @loading={{this.savePublicationStatus.isRunning}}
       {{on "click" (perform this.savePublicationStatus)}}
     >
       {{t "save"}}
