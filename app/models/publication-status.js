@@ -9,6 +9,10 @@ export default class PublicationStatus extends Model {
   @attr('number') position;
   @hasMany('publication-flow') publications;
 
+  get isPending() {
+    return !(this.isPaused || this.isPublished ||this.isWithdrawn)
+  }
+
   get isStarted() {
     return this.uri === CONSTANTS.PUBLICATION_STATUSES.STARTED;
   }

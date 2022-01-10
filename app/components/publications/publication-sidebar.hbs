@@ -93,7 +93,7 @@
         </div>
 
         {{! Spoedprocedure }}
-        {{#if this.publicationStatus.isStarted}}
+        {{#if this.publicationStatus.isPending}}
           <div class="auk-form-group">
             <Publications::UrgencyLevelCheckbox
               @urgencyLevel={{this.publicationFlow.urgencyLevel}}
@@ -214,7 +214,7 @@
 
         {{! Uiterste vertaaldatum }}
         {{#if
-          (or this.publicationStatus.isStarted this.publicationStatus.isPaused)
+          (or this.publicationStatus.isPending this.publicationStatus.isPaused)
         }}
           <div
             data-test-publication-sidebar-translation-due-date
