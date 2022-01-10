@@ -4,6 +4,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class MockLoginRoute extends Route {
   @service('session') simpleAuthSession;
+  @service store;
 
   beforeModel() {
     this.simpleAuthSession.prohibitAuthentication('agendas');

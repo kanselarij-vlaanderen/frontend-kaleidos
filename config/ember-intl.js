@@ -3,45 +3,22 @@
 module.exports = function(/* env */) {
   return {
     /**
-     * The locales that our application supports.
+     * Merges the fallback locale's translations into all other locales as a build-time fallback strategy
      *
-     * This is optional and is automatically set if project stores translations
-     * where ember-intl is able to look them up (<project root>/translations/).
+     * See: https://ember-intl.github.io/ember-intl/versions/master/docs/guide/addon-configs#fallback-locale
      *
-     * If the project relies on side-loading translations, then you must explicitly
-     * list out the locales. i.e: ['en-us', 'en-gb', 'fr-fr']
-     *
-     * @property locales
-     * @type {Array?}
-     * @default "null"
+     * @property fallbackLocale
+     * @type {String}
+     * @default "en-US" (not sure)
      */
-    locales: null,
-
-    /**
-     * autoPolyfill, when true will automatically inject the IntlJS polyfill
-     * into index.html
-     *
-     * @property autoPolyfill
-     * @type {Boolean}
-     * @default "false"
-     */
-    autoPolyfill: false,
-
-    /**
-     * disablePolyfill prevents the polyfill from being bundled in the asset folder of the build
-     *
-     * @property disablePolyfill
-     * @type {Boolean}
-     * @default "false"
-     */
-    disablePolyfill: false,
+    fallbackLocale: 'nl-be',
 
     /**
      * prevents the translations from being bundled with the application code.
      * This enables asynchronously loading the translations for the active locale
      * by fetching them from the asset folder of the build.
      *
-     * See: https://github.com/jasonmit/ember-intl/blob/master/docs/asynchronously-loading-translations.md
+     * See: https://ember-intl.github.io/ember-intl/docs/guide/asynchronously-loading-translations
      *
      * @property publicOnly
      * @type {Boolean}
@@ -63,24 +40,34 @@ module.exports = function(/* env */) {
     /**
      * cause a build error if missing translations are detected.
      *
-     * See https://github.com/jasonmit/ember-intl/blob/master/docs/missing-translations.md#throwing-a-build-error-on-missing-required-translation
+     * See https://ember-intl.github.io/ember-intl/docs/guide/missing-translations#throwing-a-build-error-on-missing-when-required-translations
      *
-     * @property throwMissingTranslations
+     * @property errorOnMissingTranslations
      * @type {Boolean}
      * @default "false"
      */
-    throwMissingTranslations: false,
+     errorOnMissingTranslations: false,
 
     /**
      * filter missing translations to ignore expected missing translations.
      *
-     * See https://github.com/jasonmit/ember-intl/blob/master/docs/missing-translations.md#requiring-translations
+     * See https://ember-intl.github.io/ember-intl/docs/guide/missing-translations#requiring-translations
      *
      * @property requiresTranslation
      * @type {Function?}
      * @default "function() { return true; }"
      */
-    // requiresTranslation: (key, locale) => true,
+    requiresTranslation(key, locale) {
+      // After an ember upgrade, ember-intl was throwing warnings on all keys: "xxx was not found in "en-us""
+      if (key.startsWith('en')) {
+        // ignore any missing translations for keys starting with 'en'.
+        return false;
+      }
+      if (locale === 'en') {
+        // ignore any missing english translations.
+        return false;
+      }
+    },
 
     /**
      * removes empty translations from the build output.
@@ -89,6 +76,6 @@ module.exports = function(/* env */) {
      * @type {Boolean}
      * @default false
      */
-    stripEmptyTranslations: false,
+    stripEmptyTranslations: true,
   };
 };

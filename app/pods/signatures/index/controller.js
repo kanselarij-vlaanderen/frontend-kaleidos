@@ -5,6 +5,7 @@ import * as digitalSigning from 'frontend-kaleidos/utils/digital-signing';
 
 export default class SignaturesIndexController extends Controller {
   @service router;
+  @service store;
 
   queryParams = {
     page: {

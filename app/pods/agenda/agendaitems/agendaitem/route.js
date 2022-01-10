@@ -1,6 +1,9 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
 export default class AgendaitemAgendaitemsAgendaRoute extends Route {
+  @service store;
+
   model(params) {
     return this.store.findRecord('agendaitem', params.agendaitem_id, {
       include: [

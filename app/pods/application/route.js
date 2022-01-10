@@ -21,7 +21,7 @@ export default class ApplicationRoute extends Route {
     this.moment.setLocale('nl');
     this.moment.defaultFormat = 'DD.MM.YYYY';
     this.moment.allowEmpty = true;
-    this.intl.setLocale('nl-be');
+    this.intl.setLocale(['nl-be']);
 
     if (!this.isSupportedBrowser) {
       this.transitionTo('not-supported');
