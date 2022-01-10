@@ -55,7 +55,10 @@
 </div>
 <div class="auk-u-mb-4">
   {{#each @announcements as |announcement|}}
-    <div class="vlc-agenda-detail-sidebar__sub-item">
+    <div
+      data-test-agenda-detail-sidebar-announcement-sub-item
+      class="vlc-agenda-detail-sidebar__sub-item"
+    >
       <Agenda::AgendaDetail::SidebarItem
         @agendaitem={{announcement}}
         @isNew={{includes announcement @newItems}}
