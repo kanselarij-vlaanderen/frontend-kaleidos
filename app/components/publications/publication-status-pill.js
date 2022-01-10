@@ -5,7 +5,7 @@ import { action } from '@ember/object';
 import { task } from 'ember-concurrency-decorators';
 import { isEmpty } from '@ember/utils';
 
-export default class PublicationStatusDisplay extends Component {
+export default class PublicationStatusPill extends Component {
   @service store;
 
   @tracked decision;
