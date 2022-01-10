@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency-decorators';
 
-export default class PublicationStatusSelector extends Component {
+export default class PublicationStatusModal extends Component {
   @service store;
   @tracked publicationStatusses;
 

@@ -25,22 +25,4 @@ export default class PublicationRoute extends Route {
       ].join(','),
     });
   }
-
-  async afterModel(model) {
-    const publicationSubcase = await model.publicationSubcase;
-    this.decision = await this.store.queryOne('decision', {
-      'filter[publication-activity][subcase][:id:]': publicationSubcase.id,
-      sort: 'publication-activity.start-date,publication-date',
-    });
-    this.publicationStatus = await model.status;
-    this.publicationStatusChange = await model.publicationStatusChange;
-
-  }
-
-  setupController(controller) {
-    super.setupController(...arguments);
-    controller.decision = this.decision;
-    controller.publicationStatus = this.publicationStatus;
-    controller.publicationStatusChange = this.publicationStatusChange;
-  }
 }
