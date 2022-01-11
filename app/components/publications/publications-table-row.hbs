@@ -8,18 +8,18 @@ request the whole row and not only the arrow at the end to be clickable }}
 >
   {{! template-lint-enable no-invalid-interactive }}
   {{#if @tableColumnDisplayOptions.speedProcedure}}
-  <td
-    data-test-publication-table-row-urgency-level
-    class="auk-u-text-align--center"
-  >
-    {{#if @publicationFlow.urgencyLevel.isUrgent}}
-      <Auk::Icon @skin="warning" @name="alert-triangle" />
-    {{else}}
-      {{t "dash"}}
-    {{/if}}
-  </td>
+    <td
+      data-test-publication-table-row-urgency-level
+      class="auk-u-text-align--center"
+    >
+      {{#if @publicationFlow.urgencyLevel.isUrgent}}
+        <Auk::Icon @skin="warning" @name="alert-triangle" />
+      {{else}}
+        {{t "dash"}}
+      {{/if}}
+    </td>
   {{/if}}
-    {{#if @tableColumnDisplayOptions.publicationNumber}}
+  {{#if @tableColumnDisplayOptions.publicationNumber}}
     <td data-test-publication-table-row-number>
       {{#if @publicationFlow.identification.idName}}
         {{@publicationFlow.identification.idName}}
@@ -63,9 +63,7 @@ request the whole row and not only the arrow at the end to be clickable }}
     </td>
   {{/if}}
   {{#if @tableColumnDisplayOptions.pages}}
-    <td
-      data-test-publication-table-row-pages-column
-    >
+    <td data-test-publication-table-row-pages-column>
       {{#if this.pages includeZero=true}}
         {{this.pages}}
       {{else}}
@@ -117,7 +115,7 @@ request the whole row and not only the arrow at the end to be clickable }}
     >
       {{#if @publicationFlow.translationSubcase.dueDate}}
         {{!Ember seems not to await async getter}}
-        <div class="{{if (await this.isTranslationToLate) "auk-u-text-bold"}}">
+        <div class="{{if (await this.isTranslationToLate) 'auk-u-text-bold'}}">
           {{moment-format
             @publicationFlow.translationSubcase.dueDate
             "DD-MM-YYYY"
@@ -128,7 +126,7 @@ request the whole row and not only the arrow at the end to be clickable }}
             @text={{t "date-expired"}}
             @skin="warning"
             @icon="alert-triangle"
-            />
+          />
         {{/if}}
       {{else}}
         {{t "dash"}}
@@ -141,10 +139,7 @@ request the whole row and not only the arrow at the end to be clickable }}
       class="auk-u-text-nowrap"
     >
       {{#if this.proofRequestDate}}
-        {{moment-format
-          this.proofRequestDate
-          "DD-MM-YYYY"
-        }}
+        {{moment-format this.proofRequestDate "DD-MM-YYYY"}}
       {{else}}
         {{t "dash"}}
       {{/if}}
@@ -217,7 +212,7 @@ request the whole row and not only the arrow at the end to be clickable }}
     >
       {{#if @publicationFlow.publicationSubcase.dueDate}}
         {{!Ember seems not to await async getter}}
-        <div class="{{if (await this.isPublicationToLate) "auk-u-text-bold"}}">
+        <div class="{{if (await this.isPublicationToLate) 'auk-u-text-bold'}}">
           {{moment-format
             @publicationFlow.publicationSubcase.dueDate
             "DD-MM-YYYY"
@@ -228,7 +223,7 @@ request the whole row and not only the arrow at the end to be clickable }}
             @text={{t "date-expired"}}
             @skin="warning"
             @icon="alert-triangle"
-            />
+          />
         {{/if}}
       {{else}}
         {{t "dash"}}
@@ -270,8 +265,8 @@ request the whole row and not only the arrow at the end to be clickable }}
     <td data-test-publication-table-row-status class="auk-u-text-nowrap">
       {{#if @publicationFlow.status}}
         <span
-          class="{{if @publicationFlow.status.isPublished "auk-u-text-success"}}
-            {{if @publicationFlow.status.isWithdrawn "auk-u-text-error"}}
+          class="{{if @publicationFlow.status.isPublished 'auk-u-text-success'}}
+            {{if @publicationFlow.status.isWithdrawn 'auk-u-text-error'}}
             "
         >
           {{@publicationFlow.status.label}}
