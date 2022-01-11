@@ -1,30 +1,23 @@
 {{!-- template-lint-disable  --}}
 <ComponentPageIntro @title="Status Pills" />
 
-<StyleguideSample
-        @title="Not started"
-        @snippet="status-pill-not-started.hbs"
->
-  {{!-- BEGIN-SNIPPET status-pill-not-started --}}
-  <Auk::StatusPill @status="not-started">0/4</Auk::StatusPill>
-  {{!-- END-SNIPPET --}}
-</StyleguideSample>
+<h3 class="auk-h2">Statuses</h3>
 
 <StyleguideSample
         @title="In Progress"
         @snippet="status-pill-in-progress.hbs"
 >
   {{!-- BEGIN-SNIPPET status-pill-in-progress --}}
-  <Auk::StatusPill>2/4</Auk::StatusPill>
+  <Auk::StatusPill @step={{6}}>Rappel proef</Auk::StatusPill>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
 <StyleguideSample
-        @title="Done"
-        @snippet="status-pill-done.hbs"
+        @title="Success"
+        @snippet="status-pill-success.hbs"
 >
-  {{!-- BEGIN-SNIPPET status-pill-done --}}
-  <Auk::StatusPill @status="done">4/4</Auk::StatusPill>
+  {{!-- BEGIN-SNIPPET status-pill-success --}}
+  <Auk::StatusPill @status="success">Gepubliceerd</Auk::StatusPill>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
@@ -32,10 +25,21 @@
         @title="Error"
         @snippet="status-pill-error.hbs"
 >
-  {{!-- BEGIN-SNIPPET status-pill-done --}}
-  <Auk::StatusPill @status="error">0/1</Auk::StatusPill>
+  {{!-- BEGIN-SNIPPET status-pill-error --}}
+  <Auk::StatusPill @status="error">Geannuleerd</Auk::StatusPill>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
+
+<StyleguideSample
+        @title="Paused"
+        @snippet="status-pill-paused.hbs"
+>
+  {{!-- BEGIN-SNIPPET status-pill-paused --}}
+  <Auk::StatusPill @status="paused">Gepauzeerd</Auk::StatusPill>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<h3 class="auk-h2">Actionable</h3>
 
 
 
@@ -53,8 +57,14 @@
   <tr>
     <td>@status</td>
     <td>string</td>
-    <td><code>not-started</code>, <code>in-progress</code>, <code>done</code>, <code>error</code></td>
-    <td>Determines the status of the pill. Unless specified, the default skin is set to in-progress.</td>
+    <td><code>in-progress</code> (default), <code>success</code>, <code>error</code>, <code>paused</code></td>
+    <td>Determines the status of the pill. Unless specified, the default skin is set to <code>in-progress</code>.</td>
+  </tr>
+  <tr>
+    <td>@step</td>
+    <td>number</td>
+    <td><code>0</code> (default) to <code>7</code></td>
+    <td>Determines the step number of the pill if the status is defined as <code>in-progress</code>.</td>
   </tr>
   </tbody>
 </table>
