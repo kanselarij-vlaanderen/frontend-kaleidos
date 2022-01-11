@@ -4,31 +4,20 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { add } from 'ember-math-helpers/helpers/add';
-import * as PublicationUtils from 'frontend-kaleidos/utils/publication-utils';
 
 export default class PublicationsPublicationsTableRowComponent extends Component {
   @service router;
   @service store;
+  @service publicationService;
 
-  @tracked decision;
+  @tracked publicationDate;
   @tracked pages;
   @tracked proofRequestDate;
 
   constructor() {
     super(...arguments);
 
-    this.loadDecision.perform();
     this.loadData.perform();
-  }
-
-  @task
-  *loadDecision() {
-    const publicationSubcase = yield this.args.publicationFlow
-      .publicationSubcase;
-    this.decision = yield this.store.queryOne('decision', {
-      'filter[publication-activity][subcase][:id:]': publicationSubcase.id,
-      sort: 'publication-activity.start-date,publication-date',
-    });
   }
 
   @task
@@ -38,16 +27,24 @@ export default class PublicationsPublicationsTableRowComponent extends Component
       'filter[:id:]': this.args.publicationFlow.id,
       include: [
         'translation-subcase',
+
         'translation-subcase.request-activities',
         'translation-subcase.request-activities.used-pieces',
 
         'publication-subcase',
+
         'publication-subcase.proofing-activities',
+
+        'publication-subcase.publication-activities',
+        'publication-subcase.publication-activities.decisions',
       ].join(','),
     });
 
     this.pages = yield this.getPageCount(publicationFlow);
     this.proofRequestDate = yield this.getProofRequestDate(publicationFlow);
+    this.publicationDate = yield this.publicationService.getPublicationDate(
+      publicationFlow
+    );
   }
 
   async getPageCount(publicationFlow) {
@@ -79,13 +76,13 @@ export default class PublicationsPublicationsTableRowComponent extends Component
   // getter to only trigger when column is shown
   get isTranslationToLate() {
     let publicationFlow = this.args.publicationFlow;
-    return PublicationUtils.getIsTranslationToLate(publicationFlow);
+    return this.publicationService.getIsTranslationToLate(publicationFlow);
   }
 
   // getter to only trigger when column is shown
   get isPublicationToLate() {
     let publicationFlow = this.args.publicationFlow;
-    return PublicationUtils.getIsPublicationToLate(publicationFlow);
+    return this.publicationService.getIsPublicationToLate(publicationFlow);
   }
 
   @action

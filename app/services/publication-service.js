@@ -1,4 +1,5 @@
 import Service, { inject as service } from '@ember/service';
+import moment from 'moment';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationService extends Service {
@@ -127,5 +128,71 @@ export default class PublicationService extends Service {
 
     // our own publication should not be considered as duplicate
     return duplicates.filter((publication) => publication.id !== publicationFlowId).length > 0;
+  }
+
+  // earliest publication date of a decision linked to first started publication activity
+  async getPublicationDate(publicationFlow) {
+    let publicationSubcase = await publicationFlow.publicationSubcase;
+    let publicationActivities = await publicationSubcase.publicationActivities;
+    if (!publicationActivities.length) {
+      return undefined;
+    }
+    publicationActivities = publicationActivities.sortBy('startDate');
+    for (let publicationActivity of publicationActivities) {
+      let publishedDecisions = await publicationActivity.decisions;
+      if (!publishedDecisions.length) {
+        continue;
+      }
+      publishedDecisions = publishedDecisions.sortBy('publicationDate');
+      let earliestPublishedDecision = publishedDecisions.firstObject;
+      let publicationDate = earliestPublishedDecision.publicationDate;
+      return publicationDate;
+    }
+    return undefined;
+  }
+
+  // centralized place for PublicationFlow business knowledge, depending on multiple models
+  /**
+   *
+   * @param {PublicationFlow} publicationFlow
+   * @returns {boolean}
+   */
+  async getIsClosed(publicationFlow) {
+    let publicationStatus = await publicationFlow.status;
+    return publicationStatus.isPublished || publicationStatus.isWithdrawn;
+  }
+
+  /**
+   *
+   * @param {PublicationFlow} publicationFlow
+   * @returns {boolean}
+   */
+  async getIsTranslationToLate(publicationFlow) {
+    let isClosed = await this.getIsClosed(publicationFlow);
+    if (isClosed) {
+      return false;
+    }
+
+    let translationSubcase = await publicationFlow.translationSubcase;
+    let translationDueDate = translationSubcase.dueDate;
+    let isToLate = moment(translationDueDate).isBefore(Date.now(), 'day');
+    return isToLate;
+  }
+
+  /**
+   *
+   * @param {PublicationFlow} publicationFlow
+   * @returns {boolean}
+   */
+  async getIsPublicationToLate(publicationFlow) {
+    let isClosed = await this.getIsClosed(publicationFlow);
+    if (isClosed) {
+      return false;
+    }
+
+    let publicationSubcase = await publicationFlow.publicationSubcase;
+    let publicationDueDate = publicationSubcase.dueDate;
+    let isToLate = moment(publicationDueDate).isBefore(Date.now(), 'day');
+    return isToLate;
   }
 }

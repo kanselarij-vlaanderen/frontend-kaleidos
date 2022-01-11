@@ -43,7 +43,7 @@ export default class PublicationsPublicationTranslationsRequestController extend
     }
     const pieceSave = piece.save();
 
-    translationActivity.endDate = translationUpload.receivedAtDate;
+    translationActivity.endDate = now;
     const translationActivitySave = translationActivity.save();
 
     if (

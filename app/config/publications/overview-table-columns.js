@@ -1,8 +1,8 @@
 export default [
   {
-    keyName: 'speedProcedure',
-    translationKey: 'publications-table-speed-procedure',
-    translationKeySmall: 'publications-table-speed-procedure-small',
+    keyName: 'isUrgent',
+    translationKey: 'publications-table-is-urgent',
+    translationKeySmall: 'publications-table-is-urgent-small',
     sortKey: 'urgency-level.position',
   },
   {
@@ -13,8 +13,8 @@ export default [
   },
   {
     keyName: 'numacNumber',
-    translationKey: 'publications-table-numacnummer-bs',
-    translationKeySmall: 'publications-table-numacnummer-bs-small',
+    translationKey: 'publications-table-numac-number',
+    translationKeySmall: 'publications-table-numac-number-small',
     sortKey: 'numac-numbers.id-name,-created',
   },
   {
@@ -24,14 +24,14 @@ export default [
     sortKey: 'short-title',
   },
   {
-    keyName: 'comment',
-    translationKey: 'publications-table-comment',
-    translationKeySmall: 'publications-table-comment-small',
+    keyName: 'remark',
+    translationKey: 'publications-table-remark',
+    translationKeySmall: 'publications-table-remark-small',
   },
   {
-    keyName: 'pages',
-    translationKey: 'publications-table-pages',
-    translationKeySmall: 'publications-table-pages-small',
+    keyName: 'pageCount',
+    translationKey: 'publications-table-page-count',
+    translationKeySmall: 'publications-table-page-count-small',
     // no sort: is aggregated in frontend
   },
   {
@@ -72,8 +72,8 @@ export default [
   },
   {
     keyName: 'proofPrintCorrector',
-    translationKey: 'publications-table-preview-translator',
-    translationKeySmall: 'publications-table-preview-translator-small',
+    translationKey: 'publications-table-proof-print-corrector',
+    translationKeySmall: 'publications-table-proof-print-corrector-small',
     sortKey: 'publication-subcase.proof-print-corrector',
   },
   {
