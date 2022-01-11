@@ -92,12 +92,12 @@ context('Publications overview tests', () => {
 
   it('should check and uncheck all settings', () => {
     const columnKeyNames = [
-      'speedProcedure',
+      'isUrgent',
       'publicationNumber',
       'numacNumber',
       'shortTitle',
-      'comment',
-      // 'pages', // hidden by default
+      'remark',
+      // 'pageCount', // hidden by default
       'decisionDate',
       'openingDate',
       // 'translationRequestDate', // hidden by default

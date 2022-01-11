@@ -7,9 +7,9 @@ request the whole row and not only the arrow at the end to be clickable }}
   {{on "click" (fn this.navigateToPublication @publicationFlow)}}
 >
   {{! template-lint-enable no-invalid-interactive }}
-  {{#if @tableColumnDisplayOptions.speedProcedure}}
+  {{#if @tableColumnDisplayOptions.isUrgent}}
     <td
-      data-test-publication-table-row-urgency-level
+      data-test-publication-table-row-is-urgent
       class="auk-u-text-align--center"
     >
       {{#if @publicationFlow.urgencyLevel.isUrgent}}
@@ -20,7 +20,7 @@ request the whole row and not only the arrow at the end to be clickable }}
     </td>
   {{/if}}
   {{#if @tableColumnDisplayOptions.publicationNumber}}
-    <td data-test-publication-table-row-number>
+    <td data-test-publication-table-row-publication-number>
       {{#if @publicationFlow.identification.idName}}
         {{@publicationFlow.identification.idName}}
       {{else}}
@@ -45,11 +45,8 @@ request the whole row and not only the arrow at the end to be clickable }}
       />
     </td>
   {{/if}}
-  {{#if @tableColumnDisplayOptions.comment}}
-    <td
-      data-test-publication-table-row-remark-column
-      class="auk-u-text-align--center"
-    >
+  {{#if @tableColumnDisplayOptions.remark}}
+    <td data-test-publication-table-row-remark class="auk-u-text-align--center">
       {{#if @publicationFlow.remark}}
         <Auk::Icon @skin="muted" @name="comment" />
         <EmberTooltip @tooltipClass="auk-tooltip" @side="left">
@@ -62,8 +59,8 @@ request the whole row and not only the arrow at the end to be clickable }}
       {{/if}}
     </td>
   {{/if}}
-  {{#if @tableColumnDisplayOptions.pages}}
-    <td data-test-publication-table-row-pages-column>
+  {{#if @tableColumnDisplayOptions.pageCount}}
+    <td data-test-publication-table-row-page-count>
       {{#if this.pages includeZero=true}}
         {{this.pages}}
       {{else}}

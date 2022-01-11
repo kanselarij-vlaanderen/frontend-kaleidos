@@ -166,7 +166,7 @@ context('Publications proofs tests', () => {
     cy.route('DELETE', '**/document-containers/**').as('deleteDocumentContainers');
 
     // go to publication, then proofs, then documents and make checks
-    cy.get(publication.publicationTableRow.row.number).contains(fields.number)
+    cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields.number)
       .parent(publication.publicationTableRow.rows)
       .click();
     cy.get(publication.publicationNav.publishpreview).click();
@@ -345,11 +345,11 @@ context('Publications proofs tests', () => {
     cy.get(publication.proofsDocuments.newRequest).should('be.disabled');
     cy.get(publication.proofsDocuments.add).should('be.disabled');
     cy.get(publication.publicationNav.goBack).click();
-    cy.get(publication.publicationTableRow.row.number).contains(fields.number)
+    cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields.number)
       .parent()
       .find(publication.publicationTableRow.row.proofsProgressBadge)
       .find(publication.proofsStatuspill.done);
-    cy.get(publication.publicationTableRow.row.number).contains(fields.number)
+    cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields.number)
       .parent()
       .click();
     cy.get(publication.publicationNav.publishpreview).click();

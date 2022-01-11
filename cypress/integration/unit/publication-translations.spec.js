@@ -306,11 +306,11 @@ context('Publications translation tests', () => {
     cy.get(publication.translationsDocuments.requestTranslation).should('be.disabled');
     cy.get(publication.translationsDocuments.add).should('be.disabled');
     cy.get(publication.publicationNav.goBack).click();
-    cy.get(publication.publicationTableRow.row.number).contains(fields.number)
+    cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields.number)
       .parent()
       .find(publication.publicationTableRow.row.translationProgressBadge)
       .find(publication.translationStatuspill.done);
-    cy.get(publication.publicationTableRow.row.number).contains(fields.number)
+    cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields.number)
       .parent()
       .click();
     cy.get(publication.publicationNav.translations).click();
