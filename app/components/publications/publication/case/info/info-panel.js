@@ -5,8 +5,10 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { timeout } from 'ember-concurrency';
 import { task, restartableTask } from 'ember-concurrency-decorators';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationCaseInfoPanelComponent extends Component {
+  @service store;
   @service intl;
   @service publicationService;
 
@@ -38,6 +40,8 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     var structuredIdentifier = await identification.structuredIdentifier;
     this.publicationNumber = structuredIdentifier.localIdentifier;
     this.publicationNumberSuffix = structuredIdentifier.versionIdentifier;
+
+    this.numacNumbers = publicationFlow.numacNumbers.toArray();
   }
 
   @action
@@ -88,6 +92,22 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   @action
+  addNumacNumber(newNumacNumber) {
+    const numacNumber = this.store.createRecord('identification', {
+      idName: newNumacNumber,
+      agency: CONSTANTS.SCHEMA_AGENCIES.NUMAC,
+      publicationFlowForNumac: this.publicationFlow,
+    });
+    this.numacNumbers.push(numacNumber);
+  }
+
+  @action
+  deleteNumacNumber(numacNumber) {
+    numacNumber.deleteRecord();
+    this.numacNumbers.removeObject(numacNumber);
+  }
+
+  @action
   cancelEdit() {
     this.showError = false;
     this.isInEditMode = false;
@@ -123,8 +143,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     const number = parseInt(this.publicationNumber, 10);
     structuredIdentifier.localIdentifier = number;
     structuredIdentifier.versionIdentifier = this.publicationNumberSuffix;
-    // if dirty type is a string ('updated'), it is dirty
-    if (structuredIdentifier.dirtyType) {
+    if (structuredIdentifier.dirtyType === 'updated') {
       identification.idName = this.publicationNumberSuffix
         ? `${number} ${this.publicationNumberSuffix}`
         : `${number}`;
@@ -132,6 +151,17 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
       saves.push(structuredIdentifier.save());
       saves.push(identification.save());
     }
+
+    var numacNumbers = await publicationFlow.numacNumbers;
+    var numacNumbersArray = (await publicationFlow.numacNumbers).toArray();
+    for (let numacNumber of numacNumbersArray) {
+      if (numacNumber.dirtyType === 'deleted') {
+        numacNumber.save();
+      }
+    }
+
+    numacNumbers.replace(0, numacNumbers.length, this.numacNumbers);
+    numacNumbers.save();
 
     if (isDirty) {
       saves.push(publicationFlow.save());

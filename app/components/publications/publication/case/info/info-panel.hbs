@@ -102,10 +102,23 @@
                 </div>
               </div>
 
-              <div class="auk-o-grid-col-4">
-
+            </div>
+            <div class="auk-o-grid-col-2">
+              {{! Werknummer BS == numac nummer }}
+              <div data-test-publication-sidebar-numac-number class="auk-form-group">
+                <Auk::Label>
+                  {{t "numac-number"}}
+                </Auk::Label>
+                {{! TODO: disable modifying numac-number once (staatsblad-)decision exists? }}
+                <Auk::InputPills
+                  @items={{this.numacNumbers}}
+                  @onCreate={{this.addNumacNumber}}
+                  @onRemove={{this.deleteNumacNumber}}
+                  as |numac|
+                >
+                  {{numac.idName}}
+                </Auk::InputPills>
               </div>
-
             </div>
           </div>
         </Utils::LoadableContent>
