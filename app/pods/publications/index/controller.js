@@ -3,7 +3,6 @@ import { action, set } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import tableColumns from 'frontend-kaleidos/config/publications/overview-table-columns';
-import PublicationFilter from 'frontend-kaleidos/utils/publication-filter';
 
 export default class PublicationsIndexController extends Controller {
   queryParams = {
@@ -34,19 +33,10 @@ export default class PublicationsIndexController extends Controller {
   @tracked isLoadingModel = false;
   @tracked showTableDisplayOptions = false;
   @tracked isShowPublicationModal = false;
-  @tracked isShowPublicationFilterModal = false;
-
-  @tracked publicationFilter = new PublicationFilter(JSON.parse(localStorage.getItem('publicationFilter')) || {});
 
   @action
   navigateToPublication(publicationFlowRow) {
     this.transitionToRoute('publications.publication', publicationFlowRow.get('id'));
-  }
-
-  @action
-  closeFilterTableModal() {
-    localStorage.setItem('tableColumnDisplayOptions', JSON.stringify(this.tableColumnDisplayOptions));
-    this.showTableDisplayOptions = false;
   }
 
   @action
@@ -77,32 +67,6 @@ export default class PublicationsIndexController extends Controller {
     });
     this.closePublicationModal();
     this.transitionToRoute('publications.publication', newPublication.get('id'));
-  }
-
-  @action
-  showFilterModal() {
-    this.isShowPublicationFilterModal = true;
-  }
-
-  @action
-  cancelPublicationsFilter() {
-    this.isShowPublicationFilterModal = false;
-  }
-
-  @action
-  savePublicationsFilter(publicationFilter) {
-    this.publicationFilter = publicationFilter;
-    localStorage.setItem('publicationFilter', this.publicationFilter.toString());
-    this.isShowPublicationFilterModal = false;
-    set(this, 'page', 0);
-    this.send('refreshModel');
-  }
-
-  @action
-  resetPublicationsFilter() {
-    this.publicationFilter.reset();
-    localStorage.setItem('publicationFilter', this.publicationFilter.toString());
-    this.send('refreshModel');
   }
 
   @action

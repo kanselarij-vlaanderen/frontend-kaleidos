@@ -5,9 +5,8 @@
     @options={{this.agendas}}
     @selected={{this.selectedAgenda}}
     @disabled={{this.readOnly}}
-    @searchEnabled={{false}}
     @placeholder={{this.placeholder}}
-    @onchange={{action "selectModel"}}
+    @onChange={{action "selectModel"}}
     as |model|
   >
     {{model-property-to-show model this.propertyToShow}}
@@ -15,11 +14,10 @@
 {{else}}
   <PowerSelectMultiple
     @options={{this.agendas}}
-    @searchEnabled={{false}}
     @selected={{this.selectedAgenda}}
     @disabled={{this.readOnly}}
     @placeholder={{this.placeholder}}
-    @onchange={{action "selectModel"}}
+    @onChange={{action "selectModel"}}
     as |model|
   >
     {{model-property-to-show model this.propertyToShow}}

@@ -11,9 +11,10 @@
       @loadingMessage={{this.loadingMessage}}
       @noMatchesMessage={{this.noMatchesMessage}}
       @searchMessage={{this.searchMessage}}
+      @searchEnabled={{true}}
       @search={{perform this.searchTask}}
       @oninput={{action "resetValueIfEmpty"}}
-      @onchange={{action "selectModel"}}
+      @onChange={{action "selectModel"}}
       as |model|
     >
       {{await (model-property-to-show model this.propertyToShow)}}

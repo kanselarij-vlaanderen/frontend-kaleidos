@@ -121,9 +121,9 @@ context('Publications sidebar tests', () => {
       });
   });
 
-  it('should check all fields of the sidebar on status "te publiceren"', () => {
+  it('should check all fields of the sidebar on status "opgestart"', () => {
     const publicationNumber = 1250;
-    const status = 'Te publiceren';
+    const status = 'Opgestart';
     cy.get(publication.publicationTableRow.row.number).contains(publicationNumber)
       .click();
     cy.get(publication.sidebar.open).click();
@@ -145,9 +145,9 @@ context('Publications sidebar tests', () => {
     cy.get(publication.sidebar.remark);
   });
 
-  it('should check all fields of the sidebar on status "afgevoerd"', () => {
+  it('should check all fields of the sidebar on status "geannuleerd"', () => {
     const publicationNumber = 1250;
-    const newStatus = 'Afgevoerd';
+    const newStatus = 'Geannuleerd';
     cy.get(publication.publicationTableRow.row.number).contains(publicationNumber)
       .click();
     cy.get(publication.sidebar.open).click();
@@ -158,7 +158,7 @@ context('Publications sidebar tests', () => {
     cy.get(publication.sidebar.confirmWithdraw).click();
     cy.get(publication.sidebar.publicationNumber);
     cy.get(publication.urgencyLevelCheckbox).should('not.exist');
-    cy.get(publication.sidebar.statusChangeDate).contains(newStatus);
+    cy.get(publication.sidebar.statusChangeDate).contains('Afgevoerd');
     cy.get(publication.sidebar.regulationType).should('not.exist');
     cy.get(publication.sidebar.publicationMode).should('not.exist');
     cy.get(publication.sidebar.proofPrintCorrector);

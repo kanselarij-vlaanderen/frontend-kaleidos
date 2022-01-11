@@ -5,6 +5,7 @@ import { action, set } from '@ember/object';
 export default class AgendaRoute extends Route {
   @service('session') simpleAuthSession;
   @service agendaService;
+  @service store;
 
   beforeModel(transition) {
     this.simpleAuthSession.requireAuthentication(transition, 'login');

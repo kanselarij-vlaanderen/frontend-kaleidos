@@ -30,6 +30,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }];
 
   @service currentSession;
+  @service store;
 
   // @tracked sort; // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
   /** @type {string} kebab-cased key name, prepended with minus if descending */

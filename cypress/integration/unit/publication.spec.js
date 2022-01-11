@@ -214,7 +214,7 @@ context('Publications tests', () => {
 
   it('publications:dossier: Add and delete beleidsdomein', () => {
     const noGovernmentFields = 'Er zijn nog geen beleidsvelden toegevoegd';
-    const labelName = 'Cultuur, jeugd, sport & media';
+    const labelName = 'Cultuur, Jeugd, Sport en Media';
     const fieldsName = 'Media';
 
     cy.route('GET', '/publication-flows/**').as('getNewPublicationDetail');
