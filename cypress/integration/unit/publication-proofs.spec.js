@@ -109,7 +109,7 @@ context('Publications proofs tests', () => {
     cy.logout();
   });
 
-  it('should create translation docs and request', () => {
+  it.skip('should create translation docs and request', () => {
     cy.route('GET', '/translation-subcases/**').as('getTranslationSubcases');
     cy.createPublication(fields);
     cy.wait('@getTranslationSubcases');
@@ -157,7 +157,7 @@ context('Publications proofs tests', () => {
     cy.wait('@getRequestActivities');
   });
 
-  it('should upload proofs docs and make request', () => {
+  it.skip('should upload proofs docs and make request', () => {
     cy.route('POST', 'document-containers').as('createNewDocumentContainer');
     cy.route('POST', 'pieces').as('createNewPiece');
     cy.route('GET', '/pieces**').as('getPieces');

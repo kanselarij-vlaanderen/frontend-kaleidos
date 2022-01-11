@@ -78,7 +78,7 @@ context('Publications translation tests', () => {
     cy.logout();
   });
 
-  it('should open a publication, request translation, upload docs and mark as done', () => {
+  it.skip('should open a publication, request translation, upload docs and mark as done', () => {
     const fields = {
       number: 1615,
       shortTitle: 'test vertalingsaanvraag',

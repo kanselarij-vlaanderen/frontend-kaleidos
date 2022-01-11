@@ -26,7 +26,7 @@ context('Publications sidebar tests', () => {
     cy.logout();
   });
 
-  it('should test all fields of the sidebar on status "te publiceren"', () => {
+  it.skip('should test all fields of the sidebar on status "te publiceren"', () => {
     const fields = {
       number: 1200,
       shortTitle: 'test',
@@ -121,7 +121,7 @@ context('Publications sidebar tests', () => {
       });
   });
 
-  it('should check all fields of the sidebar on status "te publiceren"', () => {
+  it.skip('should check all fields of the sidebar on status "te publiceren"', () => {
     const publicationNumber = 1250;
     const status = 'Te publiceren';
     cy.get(publication.publicationTableRow.row.publicationNumber).contains(publicationNumber)
@@ -145,7 +145,7 @@ context('Publications sidebar tests', () => {
     cy.get(publication.sidebar.remark);
   });
 
-  it('should check all fields of the sidebar on status "afgevoerd"', () => {
+  it.skip('should check all fields of the sidebar on status "afgevoerd"', () => {
     const publicationNumber = 1250;
     const newStatus = 'Afgevoerd';
     cy.get(publication.publicationTableRow.row.publicationNumber).contains(publicationNumber)
@@ -173,7 +173,7 @@ context('Publications sidebar tests', () => {
     cy.get(publication.sidebar.remark);
   });
 
-  it('should check all fields of the sidebar on status "gepauzeerd"', () => {
+  it.skip('should check all fields of the sidebar on status "gepauzeerd"', () => {
     const publicationNumber = 1250;
     const newStatus = 'Gepauzeerd';
     cy.get(publication.publicationTableRow.row.publicationNumber).contains(publicationNumber)
@@ -200,7 +200,7 @@ context('Publications sidebar tests', () => {
     cy.get(publication.sidebar.remark);
   });
 
-  it('should check all fields of the sidebar on status "gepubliceerd"', () => {
+  it.skip('should check all fields of the sidebar on status "gepubliceerd"', () => {
     const publicationNumber = 1250;
     const newStatus = 'Gepubliceerd';
     cy.get(publication.publicationTableRow.row.publicationNumber).contains(publicationNumber)
@@ -226,7 +226,7 @@ context('Publications sidebar tests', () => {
     cy.get(publication.sidebar.remark);
   });
 
-  it('should check publication number', () => {
+  it.skip('should check publication number', () => {
     const fields1 = {
       number: 1216,
       shortTitle: 'test',
