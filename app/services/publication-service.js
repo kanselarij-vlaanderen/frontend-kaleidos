@@ -58,7 +58,7 @@ export default class PublicationService extends Service {
       mandatees = [];
     }
 
-    const toPublishStatus = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.STARTED);
+    const initialStatus = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.STARTED);
 
     const structuredIdentifier = this.store.createRecord('structured-identifier', {
       localIdentifier: publicationProperties.number,
@@ -87,7 +87,7 @@ export default class PublicationService extends Service {
       case: case_,
       agendaItemTreatment: agendaItemTreatment,
       mandatees: mandatees,
-      status: toPublishStatus,
+      status: initialStatus,
       publicationStatusChange: statusChange,
       shortTitle: publicationProperties.shortTitle,
       longTitle: publicationProperties.longTitle,
