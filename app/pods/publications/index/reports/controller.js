@@ -36,28 +36,6 @@ export default class PublicationsReportsController extends Controller {
   }
 
   @action
-  openReportOneModal() {
-    this.reportOneModal = true;
-  }
-
-  @action
-  closeReportOneModal() {
-    this.reportOneModal = false;
-  }
-
-  @action confirmReportOneModal() {
-    this.reportOneModal = false;
-    this.toaster.loading(
-      this.intl.t('successfully-created-report'),
-      this.intl.t('successfully-created-report-title'),
-      {
-        timeOut: 5000,
-      }
-    );
-    this.success.perform();
-  }
-
-  @action
   openReportTwoModal() {
     this.reportTwoModal = true;
   }

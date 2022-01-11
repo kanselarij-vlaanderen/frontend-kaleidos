@@ -8,48 +8,6 @@
       <Auk::Panel::Body>
         <div class="auk-o-grid auk-o-flex--vertical-center">
           <div class="auk-o-grid-col-8">
-            <h4 class="auk-h4 auk-u-m-0">{{t "publicationSection.report-exact-date"}}</h4>
-            <p class="auk-u-muted">{{t "util.last-requested-on"}} 17/12/2021 {{t "util.on"}} 11:12 {{t "util.by"}} Inti Valderas Caro: <Auk::ButtonLink @icon="download" @block={{false}}>202112171112-publicatie-exacte-datum.csv</Auk::ButtonLink></p>
-          </div>
-          <div class="auk-o-grid-col-4 auk-u-text-align--right">
-            <Auk::Button @skin="secondary" {{on "click" this.openReportOneModal}}>{{t "util.create-report"}}</Auk::Button>
-          </div>
-        </div>
-        {{#if this.reportOneModal}}
-        <Auk::Modal>
-          <Auk::Modal::Header @title="{{t "publicationSection.report"}}: {{t "publicationSection.report-exact-date"}}" @onResize={{this.closeReportOneModal}} @onClose={{this.closeReportOneModal}} />
-          <Auk::Modal::Body>
-            <div class="auk-o-grid">
-              <div class="auk-o-grid-col-6">
-                <div class="auk-form-group">
-                  <Auk::Label @required={{true}}>{{t "start-date"}}</Auk::Label>
-                  <Auk::Datepicker
-                    @date=""
-                    @onChange=""
-                  />
-                </div>
-              </div>
-              <div class="auk-o-grid-col-6">
-                <div class="auk-form-group">
-                  <Auk::Label>{{t "end-date"}}</Auk::Label>
-                  <Auk::Datepicker
-                    @date=""
-                    @onChange=""
-                  />
-                </div>
-              </div>
-            </div>
-          </Auk::Modal::Body>
-          <Auk::Modal::Footer @onCancel={{this.closeReportOneModal}}>
-            <Auk::Button @skin="primary" {{on "click" this.confirmReportOneModal}}>{{t "util.view"}}</Auk::Button>
-          </Auk::Modal::Footer>
-        </Auk::Modal>
-        {{/if}}
-      </Auk::Panel::Body>
-
-      <Auk::Panel::Body>
-        <div class="auk-o-grid auk-o-flex--vertical-center">
-          <div class="auk-o-grid-col-8">
             <h4 class="auk-h4 auk-u-m-0">{{t "publicationSection.report-decision-date"}}</h4>
             <p class="auk-u-muted">{{t "util.last-requested-on"}} 17/12/2021 {{t "util.on"}} 11:12 {{t "util.by"}} Inti Valderas Caro: <Auk::ButtonLink @icon="download" @block={{false}}>202112171112-publicatie-per-beslissingsdatum.csv</Auk::ButtonLink></p>
           </div>
