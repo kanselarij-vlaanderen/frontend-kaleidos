@@ -6,7 +6,7 @@ import { task } from 'ember-concurrency-decorators';
 import { action } from '@ember/object';
 import { saveChanges } from 'frontend-kaleidos/utils/agendaitem-utils';
 
-export default class SubcaseDescription extends Component {
+export default class SubcaseDescriptionEdit extends Component {
   @service store;
   @service currentSession;
   @service newsletterService;
@@ -17,35 +17,15 @@ export default class SubcaseDescription extends Component {
   @tracked caseType;
   @tracked showAsRemark;
 
-  @tracked latestMeeting;
-  @tracked latestAgenda;
-  @tracked latestAgendaItem;
-
-  @tracked isEditing = false;
-  @tracked isLoading = false;
+  @tracked isSaving = false;
 
   constructor() {
     super(...arguments);
     this.showAsRemark = this.args.subcase.showAsRemark;
     this.subcaseName = this.args.subcase.subcaseName;
-    this.loadSubcaseDetails.perform();
     this.loadSubcaseType.perform();
     this.loadCaseTypes.perform();
     this.loadCaseType.perform();
-  }
-
-  @task
-  *loadSubcaseDetails() {
-    this.latestMeeting = yield this.args.subcase.requestedForMeeting;
-    this.latestAgenda = yield this.store.queryOne('agenda', {
-      'filter[created-for][:id:]': this.latestMeeting.id,
-      sort: '-created', // serialnumber
-    });
-    this.latestAgendaItem = yield this.store.queryOne('agendaitem', {
-      'filter[agenda-activity][subcase][:id:]': this.args.subcase.id,
-      'filter[:has-no:next-version]': 't',
-      sort: '-created',
-    });
   }
 
   @task
@@ -75,16 +55,6 @@ export default class SubcaseDescription extends Component {
   }
 
   @action
-  toggleIsEditing() {
-    this.isEditing = !this.isEditing;
-  }
-
-  @action
-  async cancelEditing() {
-    this.isEditing = false;
-  }
-
-  @action
   async selectSubcaseType(type) {
     this.subcaseType = type;
     this.subcaseName = type.label;
@@ -94,13 +64,14 @@ export default class SubcaseDescription extends Component {
   selectCaseType(event) {
     const id = event.target.value;
     this.caseType = this.store.peekRecord('case-type', id);
-    this.showAsRemark = this.caseType.get('uri') === CONSTANTS.CASE_TYPES.REMARK;
+    this.showAsRemark =
+      this.caseType.get('uri') === CONSTANTS.CASE_TYPES.REMARK;
   }
 
   @action
   async saveChanges() {
     const resetFormallyOk = true;
-    this.isLoading = true;
+    this.isSaving = true;
 
     const propertiesToSetOnAgendaitem = {
       showAsRemark: this.showAsRemark,
@@ -123,26 +94,32 @@ export default class SubcaseDescription extends Component {
       await this.updateNewsletterAfterRemarkChange();
     }
 
-    this.isLoading = false;
-    this.isEditing = false;
+    this.args.onSave();
+
+    this.isSaving = false;
   }
 
   async updateNewsletterAfterRemarkChange() {
-    const newsletterInfo = await this.store.queryOne('newsletter-info', {
-      'filter[agenda-item-treatment][agendaitem][:id:]':
-        this.latestAgendaItem.id,
+    const latestAgendaitem = await this.store.queryOne('agendaitem', {
+      'filter[agenda-activity][subcase][:id:]': this.args.subcase.id,
+      'filter[:has-no:next-version]': 't',
+      sort: '-created',
     });
-    if (newsletterInfo?.id) {
-      await newsletterInfo.deleteRecord();
-      await newsletterInfo.save();
-    }
-    if (this.showAsRemark) {
-      const newNewsletterInfo =
-        await this.newsletterService.createNewsItemForAgendaitem(
-          this.latestAgendaItem,
-          true
-        );
-      await newNewsletterInfo.save();
+    if (latestAgendaitem) {
+      const newsletterInfo = await this.store.queryOne('newsletter-info', {
+        'filter[agenda-item-treatment][agendaitem][:id:]': latestAgendaitem.id,
+      });
+      if (newsletterInfo?.id) {
+        await newsletterInfo.destroyRecord();
+      }
+      if (this.showAsRemark) {
+        const newNewsletterInfo =
+          await this.newsletterService.createNewsItemForAgendaitem(
+            latestAgendaitem,
+            true
+          );
+        await newNewsletterInfo.save();
+      }
     }
   }
 }
