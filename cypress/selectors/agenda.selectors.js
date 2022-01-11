@@ -47,6 +47,7 @@ const selectors = {
     confidential: '[data-test-agenda-detail-sidebar-item-confidential]',
     status: '[data-test-agenda-detail-sidebar-item-status]',
     // Test tag is not possible, CSS is added conditionally
+    /* eslint-disable no-useless-escape */
     retracted: '.auk-u-opacity--1\/3',
   },
 
