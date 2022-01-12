@@ -63,7 +63,7 @@ context('Subcase tests', () => {
   it('should open an existing case and add a subcase', () => {
     const type = 'Nota';
     const subcaseTitleLong = 'Cypress test voor het aanmaken van een procedurestap';
-    const subcaseType = 'in voorbereiding';
+    const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
     cy.addSubcase(type, subcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
@@ -102,7 +102,7 @@ context('Subcase tests', () => {
     const type = 'Nota';
     const shortSubcaseTitle = `Cypress test: delete subcase - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het aanmaken en verwijderen van een procedurestap';
-    const subcaseType = 'in voorbereiding';
+    const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
     cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
@@ -114,7 +114,7 @@ context('Subcase tests', () => {
     const type = 'Nota';
     const shortSubcaseTitle = `Cypress test: delete subcase not possible - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor niet kunnen verwijderen van een procedurestap';
-    const subcaseType = 'in voorbereiding';
+    const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
     cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
@@ -130,7 +130,7 @@ context('Subcase tests', () => {
     const type = 'Nota';
     const shortSubcaseTitle = `Cypress test: Link to agenda item ok - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor te klikken op de link naar agenda vanuit procedurestap';
-    const subcaseType = 'in voorbereiding';
+    const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
     cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
@@ -161,7 +161,7 @@ context('Subcase tests', () => {
     const type = 'Mededeling';
     const shortSubcaseTitle = `Cypress test: Mededeling - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test doorstromen changes agendaitem to subcase';
-    const subcaseType = 'in voorbereiding';
+    const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
 
     // Aanmaken Dossier
