@@ -34,7 +34,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     const type = 'Nota';
     const SubcaseTitleShort = `Cypress test: assign mandatee - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een minister voor agendering vanuit procedurestap';
-    const subcaseType = 'In voorbereiding';
+    const subcaseType = 'in voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/5F02DD8A7DE3FC0008000001/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
@@ -72,7 +72,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     const type = 'Nota';
     const SubcaseTitleShort = `Cypress test: assign mandatee - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een minister na agendering vanuit procedurestap';
-    const subcaseType = 'In voorbereiding';
+    const subcaseType = 'in voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/5F02DD8A7DE3FC0008000001/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
@@ -110,7 +110,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     const type = 'Nota';
     const SubcaseTitleShort = `Cypress test: assign mandatee - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een minister vanuit agendaitem op ontwerpagenda';
-    const subcaseType = 'In voorbereiding';
+    const subcaseType = 'in voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/5F02DD8A7DE3FC0008000001/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);

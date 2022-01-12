@@ -34,7 +34,7 @@ context('Add files to an agenda', () => {
     const type = 'Nota';
     const SubcaseTitleShort = `Cypress test: perform CRUD of documents on decision - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het toevoegen van een beslissingsfiche en algemene CRUD operaties van deze fiche';
-    const subcaseType = 'In voorbereiding';
+    const subcaseType = 'in voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     const file = {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
@@ -145,7 +145,7 @@ context('Add files to an agenda', () => {
     const type = 'Nota';
     const SubcaseTitleShort = `Cypress test: perform postpone action of agendaitem - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het uitstellen van een agendaitem / beslissing';
-    const subcaseType = 'In voorbereiding';
+    const subcaseType = 'in voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
 
     cy.createCase(caseTitle);
