@@ -7,8 +7,12 @@ import { action } from '@ember/object';
 import { saveChanges } from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default class SubcaseDescriptionEdit extends Component {
+  /**
+   * @argument subcase
+   * @argument onCancel
+   * @argument onSave
+   */
   @service store;
-  @service currentSession;
   @service newsletterService;
 
   @tracked subcaseName;
