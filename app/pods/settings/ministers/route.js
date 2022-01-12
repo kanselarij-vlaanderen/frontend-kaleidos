@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { CURRENT_GOVERNMENT_BODY } from 'frontend-kaleidos/config/config';
 
 const VISIBLE_ROLES = [
@@ -8,6 +9,8 @@ const VISIBLE_ROLES = [
 ];
 
 export default class SettingsMinistersRoute extends Route {
+  @service store;
+
   async beforeModel() {
     this.visibleRoles = await Promise.all(VISIBLE_ROLES.map((role) => this.store.findRecordByUri('role', role)));
   }

@@ -10,6 +10,7 @@ import {
 // eslint-disable-next-line ember/no-classic-classes
 export default Route.extend({
   agendaService: inject(),
+  store: inject(),
   type: 'press-agenda',
   allowEmptyGroups: true,
   queryParams: {

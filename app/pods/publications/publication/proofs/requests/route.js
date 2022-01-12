@@ -1,7 +1,10 @@
 import Route from '@ember/routing/route';
 import { Row } from './controller';
+import { inject as service } from '@ember/service';
 
 export default class PublicationsPublicationProofsRequestsRoute extends Route {
+  @service store;
+
   async model() {
     const publicationSubcase = this.modelFor('publications.publication.proofs');
     const requestActivities = await this.store.query('request-activity', {
