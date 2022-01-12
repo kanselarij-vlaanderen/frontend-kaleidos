@@ -39,7 +39,7 @@ context('Propagation to other graphs', () => {
     cy.addSubcase('Nota',
       subcaseTitle1,
       'Cypress test voor het propageren naar overheid',
-      'in voorbereiding',
+      'In voorbereiding',
       'Principiële goedkeuring m.h.o. op adviesaanvraag');
     cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
 

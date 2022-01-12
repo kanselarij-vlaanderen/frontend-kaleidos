@@ -73,7 +73,7 @@ context('Agendaitem changes tests', () => {
 
   it('should add an agendaitem of type remark and highlight it as added', () => {
     cy.openCase(caseTitle);
-    cy.addSubcase('Mededeling', subcaseTitle3, `${subcaseTitle3} lange titel`, 'in voorbereiding', 'Principiële goedkeuring m.h.o. op adviesaanvraag');
+    cy.addSubcase('Mededeling', subcaseTitle3, `${subcaseTitle3} lange titel`, 'In voorbereiding', 'Principiële goedkeuring m.h.o. op adviesaanvraag');
     cy.visit(agendaURL);
     cy.changeSelectedAgenda('Ontwerpagenda');
     // when toggling show changes  the agendaitem added since current agenda should show
