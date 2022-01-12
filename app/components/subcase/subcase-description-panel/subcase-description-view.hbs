@@ -80,13 +80,7 @@
           class="auk-key-value-item__value"
           data-test-subcase-description-agenda-link-container
         >
-          {{#if
-            (or
-              (is-pending this.latestAgendaitem.retracted)
-              (is-pending @subcase.onAgendaInfo)
-              this.loadAgendaData.isRunning
-            )
-          }}
+          {{#if this.loadAgendaData.isRunning}}
             <div class="auk-loader" role="alert" aria-busy="true"></div>
           {{else}}
             {{#if this.latestMeeting.plannedStart}}
