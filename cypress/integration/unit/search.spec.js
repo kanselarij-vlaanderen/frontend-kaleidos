@@ -66,14 +66,14 @@ context('Search tests', () => {
     const subcase1TitleShortNoIcon = 'dit is de korte titel for search'; // used for opening agendaitem
     const newSubcase1TitleShort = 'dit is de korte titel for search 🔍 Lāna Hawaï eiland';
     const subcase1TitleLong = 'dit is de lange titel for search and searching 🔎 Principiële accénten';
-    const subcase1Type = 'In voorbereiding';
+    const subcase1Type = 'in voorbereiding';
     const subcase1Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
 
     const case2TitleShort = `${testId}Cypress search dossier 2`;
     const type2 = 'Nota';
     const newSubcase2TitleShort = `${testId} korte titel for batterij`;
     const subcase2TitleLong = `${testId} lange titel for peerd`;
-    const subcase2Type = 'In voorbereiding';
+    const subcase2Type = 'in voorbereiding';
     const subcase2Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
 
     cy.createCase(case1TitleShort);
