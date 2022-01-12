@@ -4,6 +4,10 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 
 export default class SubcaseDescriptionView extends Component {
+  /**
+   * @argument subcase
+   * @argument onClickEdit
+   */
   @service store;
   @service currentSession;
 
