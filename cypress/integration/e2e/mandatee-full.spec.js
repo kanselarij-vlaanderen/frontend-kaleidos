@@ -77,7 +77,7 @@ context('Full test for creating mandatees', () => {
     cy.addSubcase('Nota',
       subcaseTitle1,
       'Cypress test voor het testen van toegevoegde documenten',
-      'In voorbereiding',
+      'in voorbereiding',
       'Principiële goedkeuring m.h.o. op adviesaanvraag');
     cy.createAgenda(KIND, agendaDate, 'locatie');
 
