@@ -39,7 +39,47 @@
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
+<h3 class="auk-h2">Sizes</h3>
+
+<StyleguideSample
+        @title="Small"
+        @snippet="status-pill-small.hbs"
+>
+  {{!-- BEGIN-SNIPPET status-pill-small --}}
+  <Auk::StatusPill @size="small">Naar vertaaldienst</Auk::StatusPill>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
 <h3 class="auk-h2">Actionable</h3>
+
+<StyleguideSample
+        @title="Actionable"
+        @snippet="status-pill-actionable.hbs"
+>
+  {{!-- BEGIN-SNIPPET status-pill-actionable --}}
+  <Auk::StatusPill
+    @actionable={{true}}
+    @actionLabel="Status aanpassen"
+  >
+    Naar vertaaldienst
+  </Auk::StatusPill>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Small actionable"
+        @snippet="status-pill-small-actionable.hbs"
+>
+  {{!-- BEGIN-SNIPPET status-pill-small-actionable --}}
+  <Auk::StatusPill
+    @size="small"
+    @actionable={{true}}
+    @actionLabel="Status aanpassen"
+  >
+    Naar vertaaldienst
+  </Auk::StatusPill>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
 
 
 
@@ -65,6 +105,12 @@
     <td>number</td>
     <td><code>0</code> (default) to <code>7</code></td>
     <td>Determines the step number of the pill if the status is defined as <code>in-progress</code>.</td>
+  </tr>
+  <tr>
+    <td>@size</td>
+    <td>string</td>
+    <td><code>small</code> (optional)</td>
+    <td>Determines the size of the pill.</td>
   </tr>
   </tbody>
 </table>

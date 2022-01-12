@@ -40,4 +40,15 @@ export default class StatusPill extends Component {
     }
     return statusIconMapItem;
   }
+
+  get sizeClass() {
+    if (this.args.size) {
+      return `${this.baseClass}--${this.args.size}`;
+    }
+    return null;
+  }
+
+  get actionIconName() {
+    return this.args.actionIcon ? this.args.actionIcon : 'pencil';
+  }
 }
