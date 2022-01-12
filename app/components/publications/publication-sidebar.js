@@ -24,7 +24,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @tracked numberIsAlreadyUsed = false;
   @tracked numberIsRequired = false;
-  @tracked showConfirmWithdraw = false;
   @tracked publicationModes;
   @tracked regulationTypes;
   @tracked publicationNumber;
@@ -32,7 +31,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @tracked decision;
 
   @lastValue('loadPublicationStatus') publicationStatus;
-  @lastValue('loadPublicationStatusChange') publicationStatusChange;
   @lastValue('loadPublicationSubcase') publicationSubcase;
   @lastValue('loadTranslationSubcase') translationSubcase;
   @lastValue('loadAgendaitemTreatment') treatment;
@@ -40,7 +38,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   constructor() {
     super(...arguments);
     this.loadPublicationStatus.perform();
-    this.loadPublicationStatusChange.perform();
     this.loadPublicationSubcase.perform();
     this.loadTranslationSubcase.perform();
     this.loadAgendaitemTreatment.perform();
@@ -57,11 +54,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @task
   *loadPublicationStatus() {
     return yield this.publicationFlow.status;
-  }
-
-  @task
-  *loadPublicationStatusChange() {
-    return yield this.publicationFlow.publicationStatusChange;
   }
 
   @task
@@ -113,86 +105,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   setUrgencyLevel(urgencyLevel) {
     this.publicationFlow.urgencyLevel = urgencyLevel;
     this.notifyChanges(this.publicationFlow, 'urgencyLevel');
-  }
-
-  @action
-  async selectPublicationStatus(status) {
-    if (status.isWithdrawn) {
-      this.showConfirmWithdraw = true;
-    } else {
-      this.setPublicationStatus(status);
-    }
-  }
-
-  @action
-  async setPublicationStatus(status) {
-    const now = new Date();
-    const oldStatus = this.publicationStatus;
-
-    // create publication when status changed to "published"
-    if (status.isPublished && !this.decision) {
-      const publicationActivities = await this.publicationSubcase
-        .publicationActivities;
-
-      if (publicationActivities.length) {
-        const publicationActivity = publicationActivities.objectAt(0);
-        this.decision = this.store.createRecord('decision', {
-          publicationActivity: publicationActivity,
-          publicationDate: now,
-        });
-        this.notifyChanges(this.decision);
-      }
-    }
-    // remove created decision when "published" status is reverted
-    else if ((oldStatus.isPublished && !status.isPublished)
-      && (this.decision && !this.decision.isStaatsbladResource)
-    ) {
-      // only remove decision when it is not a staatsblad resource
-      this.decision.deleteRecord();
-      this.decision = undefined;
-      this.notifyChanges(this.decision);
-    }
-
-    // update status
-    this.publicationFlow.status = status;
-    this.loadPublicationStatus.perform();
-
-    // update closing dates of auxiliary activities
-    if (status.isPublished || status.isWithdrawn) {
-      this.publicationFlow.closingDate = now;
-
-      if (!this.translationSubcase.endDate) {
-        this.translationSubcase.endDate = now;
-        this.notifyChanges(this.translationSubcase);
-      }
-      if (!this.publicationSubcase.endDate) {
-        this.publicationSubcase.endDate = now;
-        this.notifyChanges(this.publicationSubcase);
-      }
-    } else {
-      this.publicationFlow.closingDate = null;
-    }
-
-    // add a status-change
-    const statusChange = this.store.createRecord('publication-status-change', {
-      startedAt: now,
-      publication: this.publicationFlow,
-    });
-    this.notifyChanges(this.publicationFlow, ['status', 'closingDate']);
-    this.notifyChanges(statusChange);
-    await this.loadPublicationStatusChange.perform();
-  }
-
-  @action
-  cancelWithdraw() {
-    this.showConfirmWithdraw = false;
-  }
-
-  @action
-  async withdrawPublicationFlow() {
-    const withdrawn = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.WITHDRAWN);
-    await this.setPublicationStatus(withdrawn);
-    this.showConfirmWithdraw = false;
   }
 
   @restartableTask
