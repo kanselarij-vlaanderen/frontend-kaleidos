@@ -29,18 +29,16 @@ context('agenda notice test', () => {
     const type = 'Mededeling';
     const subcaseShortTitle = `test for adding minister - ${testId}`;
     const subcaseLongTitle  = `long title for test for adding minister - ${testId}`;
-    const subcaseStep = 'principiële goedkeuring';
-    const subcaseStepName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     const nameToCheck = 'Jambon';
-    const labelName1 = 'Cultuur, jeugd, sport & media';
+    const labelName1 = 'Cultuur, Jeugd, Sport en Media';
     const fieldsName1 = 'Media';
-    const labelName2 = 'Economie, wetenschap & innovatie';
+    const labelName2 = 'Economie, Wetenschap en Innovatie';
     const fieldsName2 = 'Wetenschapscommunicatie';
 
     // create agenda and notice
     cy.createAgenda(null, dateToCreateAgenda, 'add minister to notice');
     cy.createCase(caseShortTitle);
-    cy.addSubcase(type, subcaseShortTitle, subcaseLongTitle, subcaseStep, subcaseStepName);
+    cy.addSubcase(type, subcaseShortTitle, subcaseLongTitle, null, null);
     cy.openSubcase(0);
     // add mandatees to notice
     cy.addSubcaseMandatee(1);
@@ -48,6 +46,7 @@ context('agenda notice test', () => {
     // add fields
     // TODO-selector move governmentFieldsPanel from publication to utils?
     cy.get(publication.governmentFieldsPanel.edit).click();
+    cy.wait(10000); // TODO to fix with proper await for concepts
     cy.get(utils.domainsFieldsSelectorForm.container).contains(labelName1)
       .find(utils.domainsFieldsSelectorForm.field)
       .contains(fieldsName1)
@@ -83,9 +82,9 @@ context('agenda notice test', () => {
     // TODO-notice add check for fields?
 
     // add more mandatees and check if they are shown correctly
-    cy.addSubcaseMandatee(3);
-    cy.addSubcaseMandatee(4);
-    cy.addSubcaseMandatee(5);
+    cy.addAgendaitemMandatee(3);
+    cy.addAgendaitemMandatee(4);
+    cy.addAgendaitemMandatee(5);
     cy.get('@listItems').eq(1)
       .should('contain', 'Hilde Crevits');
     cy.get('@listItems').eq(2)
