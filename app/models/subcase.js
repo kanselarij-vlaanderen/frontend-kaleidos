@@ -27,7 +27,7 @@ export default ModelWithModifier.extend({
     inverse: null,
   }),
   submissionActivities: hasMany('submission-activity', {
-    serialize: true,
+    serialize: false,
   }),
   linkedPieces: hasMany('piece'),
   mandatees: hasMany('mandatee'),

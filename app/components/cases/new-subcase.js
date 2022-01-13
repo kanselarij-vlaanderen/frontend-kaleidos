@@ -106,7 +106,7 @@ export default class CasesNewSubcase extends Component {
   async createSubcase(fullCopy) {
     const date = new Date();
 
-    let subcase = await this.store.createRecord('subcase', {
+    const subcase = await this.store.createRecord('subcase', {
       type: this.type,
       shortTitle: trimText(this.shortTitle),
       title: trimText(this.title),
@@ -116,58 +116,72 @@ export default class CasesNewSubcase extends Component {
       created: date,
       modified: date,
       isArchived: false,
+      subcaseName: this.subcaseName,
       agendaActivities: [],
     });
-    subcase.subcaseName = this.subcaseName;
 
+    let piecesFromSubmissions;
     if (this.latestSubcase) {
       // Previous "versions" of this subcase exist
-      subcase = await this.copySubcaseProperties(
+      piecesFromSubmissions = await this.loadSubcasePieces(this.latestSubcase);
+      await this.copySubcaseProperties(
         subcase,
         this.latestSubcase,
-        fullCopy
+        fullCopy,
+        piecesFromSubmissions
       );
     }
-    return subcase;
+    // We save here in order to set the belongsTo relation between submission-activity and subcase
+    await subcase.save();
+
+    if (this.latestSubcase && fullCopy) {
+      await this.copySubcaseSubmissions(subcase, piecesFromSubmissions);
+    }
+    return;
   }
 
   @action
-  async copySubcaseProperties(subcase, latestSubcase, fullCopy) {
-    const pieces = await this.loadSubcasePieces(latestSubcase);
+  async copySubcaseProperties(subcase, latestSubcase, fullCopy, pieces) {
+    // Everything to copy from latest subcase
+    subcase.mandatees = await latestSubcase.mandatees;
+    subcase.requestedBy = await latestSubcase.requestedBy;
+
     if (fullCopy) {
       subcase.linkedPieces = await latestSubcase.linkedPieces;
       subcase.subcaseName = latestSubcase.subcaseName;
       subcase.accessLevel = await latestSubcase.accessLevel;
       subcase.showAsRemark = latestSubcase.showAsRemark;
       subcase.confidential = latestSubcase.confidential;
-      const submissionActivity = this.store.createRecord(
-        'submission-activity',
-        {
-          startDate: new Date(),
-          pieces: pieces,
-        }
-      );
-      await submissionActivity.save();
-      subcase.submissionActivities.pushObject(submissionActivity);
     } else {
       subcase.linkedPieces = pieces;
     }
-    // Everything to copy from latest subcase
-    subcase.mandatees = await latestSubcase.mandatees;
-    subcase.requestedBy = await latestSubcase.requestedBy;
     return subcase;
+  }
+
+  @action
+  async copySubcaseSubmissions(subcase, pieces) {
+    const submissionActivity = this.store.createRecord(
+      'submission-activity',
+      {
+        startDate: new Date(),
+        pieces: pieces,
+        subcase,
+      }
+    );
+    await submissionActivity.save();
+    return;
   }
 
   @task
   *copyFullSubcase() {
-    const subcase = yield this.createSubcase(true);
-    yield this.args.onSave(subcase);
+    yield this.createSubcase(true);
+    this.args.onCreate();
   }
 
   @task
   *saveSubcase() {
-    const subcase = yield this.createSubcase(false);
-    yield this.args.onSave(subcase);
+    yield this.createSubcase(false);
+    this.args.onCreate();
   }
 
   @action

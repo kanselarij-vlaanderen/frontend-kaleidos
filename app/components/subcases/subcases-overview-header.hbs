@@ -76,7 +76,7 @@
 {{#if this.showAddSubcaseModal}}
   <Cases::NewSubcase
     @onClose={{this.closeAddSubcaseModal}}
-    @onSave={{this.addSubcase}}
+    @onCreate={{this.onCreateSubcase}}
     @case={{@case}}
   />
 {{/if}}
