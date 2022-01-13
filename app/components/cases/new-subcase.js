@@ -79,10 +79,7 @@ export default class CasesNewSubcase extends Component {
   }
 
   get areSavingTasksRunning() {
-    return (
-      this.copyFullSubcase.isRunning ||
-      this.saveSubcase.isRunning
-    );
+    return this.copyFullSubcase.isRunning || this.saveSubcase.isRunning;
   }
 
   async loadSubcasePieces(subcase) {
@@ -160,14 +157,11 @@ export default class CasesNewSubcase extends Component {
 
   @action
   async copySubcaseSubmissions(subcase, pieces) {
-    const submissionActivity = this.store.createRecord(
-      'submission-activity',
-      {
-        startDate: new Date(),
-        pieces: pieces,
-        subcase,
-      }
-    );
+    const submissionActivity = this.store.createRecord('submission-activity', {
+      startDate: new Date(),
+      pieces: pieces,
+      subcase,
+    });
     await submissionActivity.save();
     return;
   }

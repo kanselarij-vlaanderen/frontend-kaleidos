@@ -21,10 +21,10 @@
         </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
-    {{!-- TODO: Below pills linking to publication-flows were introduced as a band-aid allowing
+    {{! TODO: Below pills linking to publication-flows were introduced as a band-aid allowing
     OVRB-people to navigate from a case (found by global search) to a publication-flow.
     This functionality actually needs design-thought and CSS-work though.
-    --}}
+    }}
     {{#if this.publicationFlows}}
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
@@ -33,15 +33,17 @@
               {{t "publications"}}
             </span>
             <Auk::PillList>
-            {{#each this.publicationFlows as |publicationFlow|}}
-              <LinkTo
-                class="auk-u-mr-2"
-                @route="publications.publication"
-                @model={{publicationFlow.id}}
-              >
-                <Auk::Pill @skin="white">{{publicationFlow.identification.idName}}</Auk::Pill>
-              </LinkTo>
-            {{/each}}
+              {{#each this.publicationFlows as |publicationFlow|}}
+                <LinkTo
+                  class="auk-u-mr-2"
+                  @route="publications.publication"
+                  @model={{publicationFlow.id}}
+                >
+                  <Auk::Pill @skin="white">
+                    {{publicationFlow.identification.idName}}
+                  </Auk::Pill>
+                </LinkTo>
+              {{/each}}
             </Auk::PillList>
           </div>
         </Auk::Toolbar::Item>
@@ -72,7 +74,7 @@
     {{/if}}
   </Auk::Toolbar>
 </Auk::Navbar>
-{{!-- MODAL --}}
+{{! MODAL }}
 {{#if this.showAddSubcaseModal}}
   <Cases::NewSubcase
     @onClose={{this.closeAddSubcaseModal}}
