@@ -116,7 +116,7 @@ export default class AgendaitemTable extends Component {
         (rowFromTable) => rowFromTable.content.get('id') === postponedItem.get('id')
       );
       if (postponedRowInTable) {
-        postponedRowInTable.set('classNames', 'postponed');
+        postponedRowInTable.set('classNames', 'auk-u-opacity--1/2');
       }
     });
   }
