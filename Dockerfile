@@ -1,11 +1,11 @@
-FROM madnificent/ember:3.26.1 as builder
+FROM madnificent/ember:3.28.5 as builder
 
 LABEL maintainer="info@redpencil.io"
 
 WORKDIR /app
 COPY package.json .
-COPY package-lock.json .
-RUN CYPRESS_INSTALL_BINARY=0 npm ci
+COPY .npmrc .
+RUN CYPRESS_INSTALL_BINARY=0 npm install
 COPY . .
 
 RUN ember build -prod
