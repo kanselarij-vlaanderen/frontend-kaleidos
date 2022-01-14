@@ -74,15 +74,47 @@ export default class PublicationsPublicationsTableRowComponent extends Component
   }
 
   // getter to only trigger when column is shown
-  get isTranslationToLate() {
+  get isTranslationOverdue() {
     let publicationFlow = this.args.publicationFlow;
-    return this.publicationService.getIsTranslationToLate(publicationFlow);
+    return this.getIsTranslationOverdue(publicationFlow);
   }
 
   // getter to only trigger when column is shown
-  get isPublicationToLate() {
+  get isPublicationOverdue() {
     let publicationFlow = this.args.publicationFlow;
-    return this.publicationService.getIsPublicationToLate(publicationFlow);
+    return this.getIsPublicationOverdue(publicationFlow);
+  }
+
+  /**
+   *
+   * @param {PublicationFlow} publicationFlow
+   * @returns {boolean}
+   */
+  async getIsTranslationOverdue(publicationFlow) {
+    let publicationStatus = await publicationFlow.status;
+    let isFinal = publicationStatus.isFinal;
+    if (isFinal) {
+      return false;
+    }
+
+    let translationSubcase = await publicationFlow.translationSubcase;
+    return translationSubcase.isOverdue;
+  }
+
+  /**
+   *
+   * @param {PublicationFlow} publicationFlow
+   * @returns {boolean}
+   */
+  async getIsPublicationOverdue(publicationFlow) {
+    let publicationStatus = await publicationFlow.status;
+    let isFinal = publicationStatus.isFinal;
+    if (isFinal) {
+      return false;
+    }
+
+    let publicationSubcase = await publicationFlow.publicationSubcase;
+    return publicationSubcase.isOverdue;
   }
 
   @action
