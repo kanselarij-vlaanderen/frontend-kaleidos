@@ -35,6 +35,22 @@ export default class SidebarItem extends Component {
     return classes.join(' ');
   }
 
+  /**
+   * This method will get the route name for rerouting from one agendaitem to another while keeping the selected subroute.
+   */
+  get currentRoute() {
+    // currentRoute can be undefined (during initial routing), but if it exists it will be the name of the current route
+    // We fall back the currentRouteName but avoid using it as the primary name because this could be x.x.loading route
+    // Routing to the loading route will result in the application getting "stuck" in /loading
+    const initialRouteName = this.router.currentRoute?.name;
+    // When coming from this route from different route, the currentRoute still shows the different route
+    // We only want to use the currentRouter if the name matches our own route
+    if (initialRouteName?.includes('agenda.agendaitems.agendaitem.')){
+      return this.router.currentRoute?.name;
+    }
+    return this.router.currentRouteName;
+  }
+
   @dropTask
   *lazyLoadSideData() {
     yield timeout(350);
