@@ -1,5 +1,6 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { isPresent } from '@ember/utils';
+import moment from 'moment';
 
 export default class PublicationSubcase extends Model {
   @attr shortTitle;
@@ -26,6 +27,10 @@ export default class PublicationSubcase extends Model {
   correctionDocuments;
   @hasMany('proofing-activity') proofingActivities;
   @hasMany('publication-activity') publicationActivities;
+
+  get isOverdue() {
+    return moment(this.dueDate).isBefore(Date.now(), 'day');
+  }
 
   get isFinished() {
     return isPresent(this.endDate);

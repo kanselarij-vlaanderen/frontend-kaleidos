@@ -37,8 +37,9 @@
   <PowerSelect
     @options={{this.otherOptions}}
     @selected={{this.selectedOption}}
+    @searchEnabled={{true}}
     @searchField={{this.labelKey}}
-    @onchange={{this.select}}
+    @onChange={{this.select}}
   as |opt|>
     {{get opt this.labelKey}}
   </PowerSelect>

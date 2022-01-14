@@ -18,6 +18,7 @@ export default class PrintNewsletterRoute extends Route {
   }
 
   @service agendaService;
+  @service store;
 
   async model(params) {
     const agenda = await this.modelFor('newsletter').agenda;

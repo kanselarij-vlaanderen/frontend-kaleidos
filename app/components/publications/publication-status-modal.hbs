@@ -1,0 +1,42 @@
+<Auk::Modal @size="medium">
+  <Auk::Modal::Header @title={{t "edit-status"}} @onClose={{@onCancel}} />
+  <Auk::Modal::Body>
+    <div class="auk-form-group">
+      <Auk::Label for="blockInput">{{t "status"}}</Auk::Label>
+      <PowerSelect
+        @options={{this.publicationStatusses}}
+        @selected={{this.publicationStatus}}
+        @onChange={{this.selectPublicationStatus}}
+        as |status|
+      >
+        {{#if status.isPublished}}
+          <Auk::Icon @name="circle-check" @skin="success"/>
+        {{else if status.isPaused}}
+          <Auk::Icon @name="circle-pause" @skin="muted"/>
+        {{else if status.isWithdrawn}}
+          <Auk::Icon @name="circle-x" @skin="danger"/>
+        {{else}}
+          <Auk::Icon @name="circle" @skin="primary"/>
+        {{/if}}
+        {{status.label}}
+      </PowerSelect>
+    </div>
+    <div class="auk-form-group">
+      <Auk::Label for="blockInput">{{t "date"}}</Auk::Label>
+      <Auk::Datepicker
+        @date={{this.changeDate}}
+        @onChange={{this.setChangeDate}}
+      />
+    </div>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @onCancel={{@onCancel}}>
+    <Auk::Button
+      @skin="primary"
+      @loading={{this.savePublicationStatus.isRunning}}
+      disabled={{this.isDisabledSave}}
+      {{on "click" (perform this.savePublicationStatus)}}
+    >
+      {{t "save"}}
+    </Auk::Button>
+  </Auk::Modal::Footer>
+</Auk::Modal>

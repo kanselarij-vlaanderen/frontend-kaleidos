@@ -95,6 +95,9 @@ Router.map(function() {
   if (!isEmpty(ENV.APP.ENABLE_SIGNATURES)) {
     this.route('signatures', { path: '/handtekenmap', }, function() {
       this.route('index', { path: '/overzicht', });
+      this.route('signing-flow', { path: '/:signingflow_id' }, function() {
+        this.route('documents', { path: '/documenten' });
+      });
     });
   }
 

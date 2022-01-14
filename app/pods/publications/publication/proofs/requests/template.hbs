@@ -8,7 +8,7 @@
         <accordionPanel.Header
           @title={{t
             "x-request-type-x-timestamp"
-            request-type=(t row.requestTypeTranslationKey)
+            requestType=(t row.requestTypeTranslationKey)
             date=(moment-format row.requestActivity.startDate "D MMMM")
             time=(moment-format row.requestActivity.startDate "H:mm")
           }}

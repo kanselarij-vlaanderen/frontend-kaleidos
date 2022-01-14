@@ -2,7 +2,7 @@
 {{!-- template-lint-disable no-action --}}
 <div class="auk-u-mb-2">
   <div class="auk-o-flex auk-o-flex--vertical-center">
-    <h2 class="vlc-subline" data-test-subcase-titles-type>
+    <h2 class="auk-overline" data-test-subcase-titles-type>
       {{#if (not this.subcase.showAsRemark)}}
         {{t "note"}}
       {{else}}
@@ -35,11 +35,12 @@
 {{#if (not this.subcase.showAsRemark)}}
   <div class="auk-u-mb-2">
     {{#if (await this.subcase.subcaseName)}}
-      <Auk::Pill
-        @skin={{await this.pillSkin}}
-        class="auk-u-text-capitalize"
-      >
-        {{await this.subcase.subcaseName}}
+      <Auk::Pill @skin={{await this.pillSkin}}>
+        {{!capitalization using helper instead of css class:
+            because of `display: inline-flex` property of Auk::Pill
+            it is not affected by the `::first-letter` selector
+            used in the auk-u-text-capitalize class }}
+        {{capitalize this.subcase.subcaseName}}
       </Auk::Pill>
     {{/if}}
   </div>
