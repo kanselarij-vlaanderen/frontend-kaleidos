@@ -11,7 +11,7 @@ export default class PublicationsPublicationsTableRowComponent extends Component
   @service publicationService;
 
   @tracked publicationDate;
-  @tracked pages;
+  @tracked pageCount;
   @tracked proofRequestDate;
 
   constructor() {
@@ -40,7 +40,7 @@ export default class PublicationsPublicationsTableRowComponent extends Component
       ].join(','),
     });
 
-    this.pages = yield this.getPageCount(publicationFlow);
+    this.pageCount = yield this.getPageCount(publicationFlow);
     this.proofRequestDate = yield this.getProofRequestDate(publicationFlow);
     this.publicationDate = yield this.publicationService.getPublicationDate(
       publicationFlow
