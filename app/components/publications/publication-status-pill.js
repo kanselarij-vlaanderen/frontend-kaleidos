@@ -34,6 +34,19 @@ export default class PublicationStatusPill extends Component {
     this.publicationStatus = yield this.args.publicationFlow.status;
   }
 
+  // TODO: updated new designs with steps
+  get statusPillKey() {
+    if (this.publicationStatus.isPaused) {
+      return 'paused';
+    } else if (this.publicationStatus.isPublished) {
+      return 'done';
+    } else if (this.publicationStatus.isWithdrawn) {
+      return 'error';
+    } else {
+      return 'in-progress';
+    }
+  }
+
   @action
   openStatusSelector() {
     this.showStatusSelector = true;

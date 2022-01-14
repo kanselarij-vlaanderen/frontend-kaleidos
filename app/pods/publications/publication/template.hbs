@@ -18,7 +18,10 @@
                -
                {{uppercase this.model.identification.idName}}
             </span>
-            <Publications::PublicationStatusPill @publicationFlow={{this.model}} />
+            <Publications::PublicationStatusPill
+              @isEditable={{true}}
+              @showStatusChangeDate={{true}}
+              @publicationFlow={{this.model}} />
           </span>
           <Auk::AbbreviatedText
             @text={{or
