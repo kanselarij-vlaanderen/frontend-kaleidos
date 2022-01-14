@@ -61,7 +61,7 @@ request the whole row and not only the arrow at the end to be clickable }}
   {{/if}}
   {{#if @tableColumnDisplayOptions.pageCount}}
     <td data-test-publication-table-row-page-count>
-      {{#if this.pages includeZero=true}}
+      {{#if (not (is-empty this.pages))}}
         {{this.pages}}
       {{else}}
         {{t "dash"}}
