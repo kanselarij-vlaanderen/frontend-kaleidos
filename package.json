@@ -146,7 +146,7 @@
     "webpack": "^5.64.3"
   },
   "engines": {
-    "node": "10.* || >= 12"
+    "node": ">= 16"
   },
   "overrides": {
     "@embroider/macros": "0.50.0",
