@@ -260,11 +260,26 @@ request the whole row and not only the arrow at the end to be clickable }}
   {{#if @tableColumnDisplayOptions.status}}
     <td data-test-publication-table-row-status class="auk-u-text-nowrap">
       {{#if @publicationFlow.status}}
-        <Publications::PublicationStatusPill
-          @isEditable={{false}}
-          @showStatusChangeDate={{false}}
-          @publicationFlow={{@publicationFlow}}
-          />
+        <span
+          class="{{if @publicationFlow.status.isPublished 'auk-u-text-success'}}
+            {{if @publicationFlow.status.isWithdrawn 'auk-u-text-error'}}
+            "
+        >
+          {{@publicationFlow.status.label}}
+        </span>
+        {{#if
+          (or
+            @publicationFlow.status.isWithdrawn @publicationFlow.status.isPaused
+          )
+        }}
+          <br />
+          <span class="auk-u-text-size--small auk-u-muted">
+            {{moment-format
+              @publicationFlow.publicationStatusChange.startedAt
+              "DD-MM-YYYY HH:mm"
+            }}
+          </span>
+        {{/if}}
       {{else}}
         {{t "dash"}}
       {{/if}}
