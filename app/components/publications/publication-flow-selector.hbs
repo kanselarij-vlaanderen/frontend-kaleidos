@@ -7,9 +7,10 @@
   @searchPlaceholder={{t "search-placeholder"}}
   @onopen={{this.onOpen}}
   @oninput={{this.onInput}}
+  @searchEnabled={{true}}
   @search={{perform this.debouncedSearch}}
   @allowClear={{true}}
-  @onchange={{@onChange}}
+  @onChange={{@onChange}}
   as |publicationFlow|>
   {{publicationFlow.identification.idName}}
 </PowerSelect>

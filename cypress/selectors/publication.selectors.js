@@ -271,7 +271,7 @@ const selectors = {
   },
 
   // publication-status-selector
-  statusSelector: '[data-test-publication-status-selector]',
+  // statusSelector: '[data-test-publication-status-selector]',
 
   // urgency-level-checkbox
   urgencyLevelCheckbox: '[data-test-urgency-level-checkbox]',

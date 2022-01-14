@@ -102,41 +102,6 @@
           </div>
         {{/if}}
 
-        {{! Status }}
-        <Publications::PublicationStatusSelector
-          @publicationStatus={{this.publicationStatus}}
-          @onChange={{this.selectPublicationStatus}}
-          @disabled={{and
-            this.publicationStatus.isPublished
-            this.decision.isStaatsbladResource
-          }}
-        />
-
-        {{#if
-          (or
-            this.publicationStatus.isWithdrawn this.publicationStatus.isPaused
-          )
-        }}
-          <div
-            data-test-publication-sidebar-status-change-date
-            class="auk-form-group"
-          >
-            <Auk::Label>
-              {{#if this.publicationStatus.isWithdrawn}}
-                {{t "withdrawn-on"}}
-              {{else if this.publicationStatus.isPaused}}
-                {{t "paused-on"}}
-              {{/if}}
-            </Auk::Label>
-            <div class="auk-u-muted">
-              {{moment-format
-                this.publicationStatusChange.startedAt
-                "DD-MM-YYYY \o\m HH:mm"
-              }}
-            </div>
-          </div>
-        {{/if}}
-
         {{! Type regelgeving }}
         {{#unless this.publicationStatus.isWithdrawn}}
           <div
@@ -146,8 +111,7 @@
             <Auk::Label for="blockInput">{{t "regulation-type"}}</Auk::Label>
             <PowerSelect
               @options={{this.regulationTypes}}
-              @searchEnabled={{false}}
-              @onchange={{this.setRegulationType}}
+              @onChange={{this.setRegulationType}}
               @selected={{@publicationFlow.regulationType}}
               as |regulationType|
             >
@@ -167,8 +131,7 @@
             </Auk::Label>
             <PowerSelect
               @options={{this.publicationModes}}
-              @searchEnabled={{false}}
-              @onchange={{this.setPublicationMode}}
+              @onChange={{this.setPublicationMode}}
               @selected={{this.publicationFlow.mode}}
               as |mode|
             >
@@ -353,37 +316,3 @@
     </div>
   {{/if}}
 </Auk::Sidebar>
-
-{{#if this.showConfirmWithdraw}}
-  <Auk::Modal @size="small">
-    <Auk::Modal::Header
-      @title={{t "discharge-publication"}}
-      @closeable={{false}}
-    />
-    <Auk::Modal::Body>
-      {{t "discharge-publication-flow-confirm"}}
-    </Auk::Modal::Body>
-    <Auk::Modal::Footer @custom={{true}}>
-      <Auk::Toolbar @size="large">
-        <Auk::Toolbar::Group @position="left">
-          <Auk::Toolbar::Item>
-            <Auk::ButtonLink {{on "click" this.cancelWithdraw}}>
-              {{t "cancel"}}
-            </Auk::ButtonLink>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-        <Auk::Toolbar::Group @position="right">
-          <Auk::Toolbar::Item>
-            <Auk::Button
-              data-test-publication-sidebar-confirm-withdraw
-              @skin="danger-primary"
-              {{on "click" this.withdrawPublicationFlow}}
-            >
-              {{t "discharge"}}
-            </Auk::Button>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-      </Auk::Toolbar>
-    </Auk::Modal::Footer>
-  </Auk::Modal>
-{{/if}}

@@ -7,6 +7,7 @@ export default class CasesCaseSubcasesOverview extends Controller {
   // Services
   @service currentSession;
   @service router;
+  @service store;
 
   queryParams = [
     {

@@ -1,7 +1,9 @@
 import Route from '@ember/routing/route';
-
+import { inject as service } from '@ember/service';
 
 export default class PublicationRoute extends Route {
+  @service store;
+
   model(params) {
     return this.store.findRecord('publication-flow', params.publication_id, {
       include: [

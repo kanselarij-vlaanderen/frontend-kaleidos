@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
@@ -8,6 +9,8 @@ import VrNotulenName, {
 } from 'frontend-kaleidos/utils/vr-notulen-name';
 
 export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
+  @service store;
+
   async model() {
     const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
     // This uses the same call as in others routes/components, ensuring we hit the same cache

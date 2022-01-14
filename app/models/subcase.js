@@ -70,7 +70,7 @@ export default ModelWithModifier.extend({
       subcaseName, title, shortTitle,
     } = this;
     if (subcaseName) {
-      return `${this.intl.t('in-function-of')} ${subcaseName.toLowerCase()}`;
+      return `${this.intl.t('in-function-of')} ${subcaseName}`;
     } if (shortTitle) {
       return shortTitle;
     } if (title) {

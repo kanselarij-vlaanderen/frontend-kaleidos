@@ -1,7 +1,10 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class PublicationsPublicationDocumentsRoute extends Route {
+  @service store;
+
   async model() {
     const parentParams = this.paramsFor('publications.publication');
     const pieces = await this.store.query('piece', {
