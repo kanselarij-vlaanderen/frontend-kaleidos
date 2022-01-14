@@ -39,6 +39,7 @@ const selectors = {
   agendaDetailSidebar: {
     // TODO-selector subItem only works for nota's, not announcement
     subitem: '[data-test-agenda-detail-sidebar-sub-item]',
+    announcementSubitem: '[data-test-agenda-detail-sidebar-announcement-sub-item]',
   },
 
   // agenda-detail/sidebar-item
