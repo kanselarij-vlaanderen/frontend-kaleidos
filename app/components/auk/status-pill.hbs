@@ -1,4 +1,4 @@
-{{#unless @actionable}}
+{{#if (not @isActionable)}}
   <span class="auk-status-pill {{this.statusClass}} {{this.sizeClass}}" ...attributes>
     <span class="auk-status-pill__content">
       <Auk::Icon @name={{this.iconName}} />
@@ -22,8 +22,8 @@
     <span class="auk-status-pill__action" aria-hidden="true">
       <Auk::Icon @size="small" @name={{this.actionIconName}} />
       {{#if @actionLabel}}
-        <span class="auk-status-pill__action-label">{{@actionLabel}}</span>
+        <span class="auk-status-pill__label">{{@actionLabel}}</span>
       {{/if}}
     </span>
   </button>
-{{/unless}}
+{{/if}}

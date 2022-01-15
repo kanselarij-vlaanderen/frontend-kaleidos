@@ -58,7 +58,7 @@
 >
   {{!-- BEGIN-SNIPPET status-pill-actionable --}}
   <Auk::StatusPill
-    @actionable={{true}}
+    @isActionable={{true}}
     @actionLabel="Status aanpassen"
   >
     Naar vertaaldienst
@@ -73,10 +73,11 @@
   {{!-- BEGIN-SNIPPET status-pill-small-actionable --}}
   <Auk::StatusPill
     @size="small"
-    @actionable={{true}}
+    @status="paused"
+    @isActionable={{true}}
     @actionLabel="Status aanpassen"
   >
-    Naar vertaaldienst
+    Gepauzeerd
   </Auk::StatusPill>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
