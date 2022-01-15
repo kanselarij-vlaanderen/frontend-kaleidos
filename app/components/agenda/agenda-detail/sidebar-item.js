@@ -30,7 +30,7 @@ export default class SidebarItem extends Component {
       classes.push('vlc-agenda-detail-sidebar__sub-item--active');
     }
     if (this.isRetracted) {
-      classes.push('vlc-u-opacity-lighter');
+      classes.push('auk-u-opacity--1/3');
     }
     return classes.join(' ');
   }
