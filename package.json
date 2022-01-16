@@ -141,13 +141,14 @@
     "sanitize-filename": "^1.6.3",
     "sass": "^1.23.7",
     "typescript": "^3.9.7",
-    "webpack": "^5.64.3"
+    "webpack": "^5.66.0"
   },
   "engines": {
     "node": ">= 16"
   },
   "overrides": {
-    "@embroider/macros": "0.50.0",
-    "@embroider/shared-internals": "0.50.0"
+    "@embroider/macros": "0.50.2",
+    "@embroider/core": "0.50.2",
+    "@embroider/util": "0.50.2"
   }
 }
