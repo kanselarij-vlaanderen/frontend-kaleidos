@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { add } from 'ember-math-helpers/helpers/add';
+import { getPublicationStatusPillKey } from 'frontend-kaleidos/utils/publication-auk';
 
 export default class PublicationsPublicationsTableRowComponent extends Component {
   @service router;
@@ -18,6 +19,7 @@ export default class PublicationsPublicationsTableRowComponent extends Component
     super(...arguments);
 
     this.loadData.perform();
+    this.loadPublicationStatus.perform();
   }
 
   @task
@@ -83,6 +85,19 @@ export default class PublicationsPublicationsTableRowComponent extends Component
   get isPublicationOverdue() {
     let publicationFlow = this.args.publicationFlow;
     return this.getIsPublicationOverdue(publicationFlow);
+  }
+
+  get publicationStatusPillKey() {
+    let publicationStatus = this.loadPublicationStatus.value;
+    if (!publicationStatus) {
+      return undefined;
+    }
+    return getPublicationStatusPillKey(publicationStatus);
+  }
+
+  @task
+  *loadPublicationStatus() {
+    return yield this.args.publicationFlow.status;
   }
 
   /**
