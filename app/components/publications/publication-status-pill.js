@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency-decorators';
 import { isEmpty } from '@ember/utils';
+import { getPublicationStatusPillKey } from 'frontend-kaleidos/utils/publication-auk';
 
 export default class PublicationStatusPill extends Component {
   @service store;
@@ -32,6 +33,14 @@ export default class PublicationStatusPill extends Component {
   @task
   *loadStatus() {
     this.publicationStatus = yield this.args.publicationFlow.status;
+  }
+
+  get publicationStatusPillKey() {
+    let publicationStatus = this.loadStatus.value;
+    if (!publicationStatus) {
+      return undefined;
+    }
+    return getPublicationStatusPillKey(publicationStatus);
   }
 
   @action
