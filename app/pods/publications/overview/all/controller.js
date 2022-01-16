@@ -44,7 +44,6 @@ export default class PublicationsOverviewAllController extends Controller {
   @action
   resetColumnsDisplayConfig() {
     this.columnsDisplayConfig = this.getDefaultColumnsDisplayConfig();
-    this.isColumnsDisplayConfigPanelShown = false;
     this.saveColumnsDisplayConfig(this.columnsDisplayConfig);
   }
 
