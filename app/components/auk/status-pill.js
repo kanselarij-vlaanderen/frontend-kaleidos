@@ -2,7 +2,12 @@ import Component from '@glimmer/component';
 
 /**
  *
- * @argument {String} status: Status can be "in-progress" (default), "success", "error", "paused"
+ * @argument {String} status: Can be "in-progress" (default), "success", "error", "paused"
+ * @argument {Number} step: Step number (from 0 to 7) if the status is defined as "in-progress"
+ * @argument {String} size: Can be "small"
+ * @argument {Boolean} isActionable: If an action can be coupled to the status-pill ("false" is the default)
+ * @argument {String} actionIcon: Name of the icon ("pencil" is the default)
+ * @argument {String} actionLabel
  */
 export default class StatusPill extends Component {
   baseClass = 'auk-status-pill';
