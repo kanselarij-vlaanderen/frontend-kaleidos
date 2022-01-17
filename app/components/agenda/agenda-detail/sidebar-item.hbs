@@ -1,6 +1,6 @@
 <LinkTo
   class={{this.class}}
-  @route={{this.router.currentRouteName}}
+  @route={{this.currentRoute}}
   @model={{@agendaitem.id}}
 >
   {{!-- Long term, I think we rather want this component to trigger an action when the "active" status toggles.
@@ -36,7 +36,7 @@
               {{#if @isNew}}
                 <span class="vlc-agenda-meta__recently-added">
                   <Auk::Icon @name="calendar-new" @size="small" />
-                  <EmberTooltip @side="top-start" @tooltipClass="tooltip-custom">
+                  <EmberTooltip @side="top-start" @tooltipClass="auk-tooltip">
                     <p>
                       {{t "added-agendaitem-text"}}
                     </p>
@@ -48,7 +48,7 @@
                 {{#if (not this.newsletterIsVisible)}}
                   <span class="vlc-agenda-meta__recently-added">
                     <Auk::Icon @name="not-visible" @size="small" />
-                    <EmberTooltip @side="top-start" @tooltipClass="tooltip-custom">
+                    <EmberTooltip @side="top-start" @tooltipClass="auk-tooltip">
                       <p>
                         {{t "not-visible-in-newsletter"}}
                       </p>
@@ -60,15 +60,15 @@
                     This should be tackled differently through modified design --}}
                   {{!-- template-lint-disable no-inline-styles --}}
                   <i
-                    class="ki ki-not-visible auk-u-mr-2 vlc-u-opacity-50"
+                    class="ki ki-not-visible auk-u-mr-2 auk-u-opacity--1/2"
                     style="visibility:hidden"
                   ></i>
                   {{!-- template-lint-enable no-inline-styles --}}
                 {{/if}}
               {{else}}
                 {{!-- TODO: design loading state for newsletter visibility --}}
-                <i class="ki-circle-question auk-u-mr-2 vlc-u-opacity-50">
-                  <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
+                <i class="ki-circle-question auk-u-mr-2 auk-u-opacity--1/2">
+                  <EmberTooltip @side="top" @tooltipClass="auk-tooltip">
                     <p>
                       {{t "loading"}}
                     </p>
