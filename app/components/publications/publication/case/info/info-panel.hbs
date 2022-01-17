@@ -43,6 +43,7 @@
             </Auk::KeyValue>
           </div>
 
+          {{!Datum beslissing}}
           <div class="auk-o-grid-col-4 auk-content">
             <Auk::KeyValue
               @key={{t "decision-date"}}>
@@ -74,16 +75,22 @@
             </Auk::KeyValue>
           </div>
 
+          {{!Datum ontvangst}}
           <div class="auk-o-grid-col-4 auk-content">
             <Auk::KeyValue
               @key={{t "publication-flow-opening-date"}}>
-              {{moment-format
-                @publicationFlow.openingDate
-                "DD-MM-YYYY"
-              }}
+              {{#if @publicationFlow.openingDate}}
+                {{moment-format
+                  @publicationFlow.openingDate
+                  "DD-MM-YYYY"
+                }}
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
             </Auk::KeyValue>
           </div>
 
+          {{!Limiet publicatie}}
           <div class="auk-o-grid-col-4 auk-content">
             <Auk::KeyValue
               @key={{t "publication-due-date"}}>
@@ -186,8 +193,8 @@
                 </div>
               </div>
 
+              {{! Datum beslissing }}
               <div class="auk-o-grid-col-4">
-                {{! Datum beslissing }}
                 <div data-test-publication-sidebar-decision-date class="auk-form-group">
                   <Auk::Label>{{t "decision-date"}}</Auk::Label>
                   <Auk::Datepicker
@@ -198,8 +205,8 @@
                 </div>
               </div>
 
+              {{! Datum ontvangst }}
               <div class="auk-o-grid-col-4">
-                {{! Datum ontvangst }}
                 <div data-test-publication-sidebar-opening-date class="auk-form-group">
                   <Auk::Label>{{t "publication-flow-opening-date"}}</Auk::Label>
                   <Auk::Datepicker
@@ -210,8 +217,8 @@
                 </div>
               </div>
 
+              {{! Limiet publicatie }}
               <div class="auk-o-grid-col-4 auk-form-group">
-                {{! Uiterste publicatiedatum }}
                 {{#unless @publicationFlow.status.isWithdrawn}}
                   <div
                     data-test-publication-sidebar-publication-due-date
@@ -222,12 +229,7 @@
                       @date={{@publicationFlow.publicationSubcase.dueDate}}
                       @onChange={{this.setPublicationDueDate}}
                     />
-                    {{#if
-                      (and
-                        (not this.publicationStatus.isPublished)
-                        (is-after this.publicationSubcase.dueDate precision="days")
-                      )
-                    }}
+                    {{#if (await this.isPublicationOverdue)}}
                       <Auk::FormHelpText
                         @text={{t "date-expired"}}
                         @skin="warning"

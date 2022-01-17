@@ -24,12 +24,16 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   @tracked numacNumbers;
   numacNumbersToDelete;
 
-  @tracked decisionDate;
-  @tracked openingDate;
-  @tracked publicationDueDate;
+  @tracked isPublicationOverdue;
 
   constructor() {
     super(...arguments);
+
+    this.initFields()
+  }
+
+  initFields() {
+    this.setIsPublicationOverdue();
   }
 
   @action
@@ -118,10 +122,34 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     let publicationFlow = this.args.publicationFlow;
     let publicationSubcase = await publicationFlow.publicationSubcase;
     publicationSubcase.dueDate = selectedDates[0];
+    this.setIsPublicationOverdue();
+  }
+
+  async setIsPublicationOverdue() {
+    let publicationFlow = this.args.publicationFlow;
+    this.isPublicationOverdue = await this.checkIsPublicationOverdue(publicationFlow);
+  }
+
+  async checkIsPublicationOverdue(publicationFlow) {
+    let publicationStatus = await publicationFlow.status;
+    let isFinal = publicationStatus.isFinal;
+    if (isFinal) {
+      return false;
+    }
+
+    let publicationSubcase = await publicationFlow.publicationSubcase;
+    return publicationSubcase.isOverdue;
   }
 
   @action
-  cancelEdit() {
+  async cancelEdit() {
+    let publicationFlow = this.args.publicationFlow;
+    publicationFlow.rollbackAttributes();
+    let agendaItemTreatment = await publicationFlow.agendaItemTreatment;
+    agendaItemTreatment.rollbackAttributes();
+    let publicationSubcase = await publicationFlow.publicationSubcase;
+    publicationSubcase.rollbackAttributes();
+
     this.showError = false;
     this.isInEditMode = false;
   }
@@ -141,14 +169,14 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   async performSave(publicationFlow) {
     var saves = [];
 
-    var isDirty = false;
+    var isPublicationFlowDirty = false;
     var wasUrgent = this.publicationService.getIsUrgent(publicationFlow);
     if (this.isUrgent !== wasUrgent) {
       var urgencyLevel = await this.publicationService.getUrgencyLevel(
         this.isUrgent
       );
       publicationFlow.urgencyLevel = urgencyLevel;
-      isDirty = true;
+      isPublicationFlowDirty = true;
     }
 
     const identification = await publicationFlow.identification;
@@ -174,12 +202,27 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     numacNumbers.replace(0, numacNumbers.length, this.numacNumbers);
     numacNumbers.save();
 
-    if (publicationFlow.dirtyType === 'updated') {
-      isDirty = true;
+    // Datum beslissing
+    let agendaItemTreatment = await publicationFlow.agendaItemTreatment;
+    if (agendaItemTreatment.dirtyType === 'updated') {
+      let agendaItemTreatmentSave = agendaItemTreatment.save();
+      saves.push(agendaItemTreatmentSave);
     }
 
-    if (isDirty) {
-      saves.push(publicationFlow.save());
+    // Datum ontvangst
+    if (publicationFlow.dirtyType === 'updated') {
+      isPublicationFlowDirty = true;
+    }
+    if (isPublicationFlowDirty) {
+      let publicationFlowSave = publicationFlow.save();
+      saves.push(publicationFlowSave);
+    }
+
+    // Limiet publicatie
+    let publicationSubcase = await publicationFlow.publicationSubcase;
+    if (publicationSubcase.dirtyType === 'updated') {
+      let publicationSubcaseSave = publicationSubcase.save();
+      saves.push(publicationSubcaseSave);
     }
 
     await Promise.all(saves);
