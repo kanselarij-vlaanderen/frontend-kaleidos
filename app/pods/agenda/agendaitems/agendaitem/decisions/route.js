@@ -1,7 +1,10 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 
 export default class DecisionsAgendaitemAgendaitemsAgendaRoute extends Route {
+  @service store;
+
   async model() {
     this.agendaitem = await this.modelFor('agenda.agendaitems.agendaitem');
     return await this.store.query('agenda-item-treatment', {

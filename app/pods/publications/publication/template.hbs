@@ -6,25 +6,27 @@
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
-          <span class="auk-overline auk-u-muted"
-            data-test-route-publications-publication-header-number>
-            {{uppercase (t "publication-flow")}}
-            -
-            {{#if this.model.case.subcases}}
-              {{uppercase (t "via-cabinet")}}
-            {{else}}
-              {{uppercase (t "not-via-cabinet")}}
-            {{/if}}
-            -
-            {{uppercase this.model.identification.idName}}
+          <span class="auk-o-flex auk-o-flex--horizontal auk-o-flex--align-baseline auk-o-flex--spaced">
+             <span class="auk-overline auk-u-muted" data-test-route-publications-publication-header-number>
+                {{uppercase (t "publication-flow")}}
+                -
+               {{#if this.model.case.subcases}}
+                 {{uppercase (t "via-cabinet")}}
+               {{else}}
+                 {{uppercase (t "not-via-cabinet")}}
+               {{/if}}
+               -
+               {{uppercase this.model.identification.idName}}
+            </span>
+            <Publications::PublicationStatusPill @publicationFlow={{this.model}} />
           </span>
           <Auk::AbbreviatedText
             @text={{or
-              this.model.shortTitle
-              this.model.longTitle
-            }}
+            this.model.shortTitle
+            this.model.longTitle
+          }}
             @maxLength={{150}}
-          as |abbreviatedText|>
+            as |abbreviatedText|>
             <div
               data-test-route-publications-publication-header-short-title
               class="auk-toolbar-complex__title"
@@ -39,7 +41,6 @@
   </Auk::Toolbar>
 </Auk::Navbar>
 
-{{!-- Auk css gebruiken, component ? --}}
 <div class="auk-panel-layout">
   <div class="auk-panel-layout__main-content">
     <div class="auk-scroll-wrapper">

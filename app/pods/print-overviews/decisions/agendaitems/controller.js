@@ -6,6 +6,7 @@ import { inject } from '@ember/service';
 // eslint-disable-next-line ember/no-classic-classes
 export default Controller.extend({
   intl: inject(),
+  store: inject(),
 
   columns: computed(function() {
     return [{

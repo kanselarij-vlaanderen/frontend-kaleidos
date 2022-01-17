@@ -1,6 +1,9 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
 export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
+  @service store;
+
   model() {
     const agendaItem = this.modelFor('agenda.agendaitems.agendaitem');
     return this.store.findRecord('agendaitem', agendaItem.id, {

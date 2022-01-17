@@ -1,23 +1,25 @@
-<Auk::Toolbar class="vlc-agenda-detail-sidebar-section-header vlc-agenda-detail-sidebar-section-header--border-bottom">
-  <Auk::Toolbar::Group @position="left">
-    <Auk::Toolbar::Item>
-      <h4 class="auk-h4 auk-u-m-0 vlc-agenda-detail-sidebar-section-header__title">
-        {{t "agendaitems-subtitle"}}
-      </h4>
-    </Auk::Toolbar::Item>
-  </Auk::Toolbar::Group>
-  <Auk::Toolbar::Group @position="right">
-    <Auk::Toolbar::Item>
-      <Auk::ButtonLink
-        @skin="light"
-        @size="small"
-        {{on "click" @toggleShowModifiedOnly}}
-      >
-        {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
-      </Auk::ButtonLink>
-    </Auk::Toolbar::Item>
-  </Auk::Toolbar::Group>
-</Auk::Toolbar>
+<Auk::Navbar @skin="gray-200">
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
+        <h4 class="auk-h4 auk-u-m-0">
+          {{t "agendaitems-subtitle"}}
+        </h4>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
+      <Auk::Toolbar::Item>
+        <Auk::ButtonLink
+          @skin="light"
+          @size="small"
+          {{on "click" @toggleShowModifiedOnly}}
+        >
+          {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
+        </Auk::ButtonLink>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
+</Auk::Navbar>
 <div>
   {{#if (not @isLoadingNotaGroups)}}
     {{#each @notaGroups as |agendaitemGroup index|}}
@@ -48,11 +50,17 @@
   {{/if}}
 </div>
 
-<div class="vlc-agenda-detail-sidebar-section-header vlc-agenda-detail-sidebar-section-header--border-bottom">
-  <h3 class="auk-h3 auk-u-m-0 vlc-agenda-detail-sidebar-section-header__title">
-    {{t "announcements-subtitle"}}
-  </h3>
-</div>
+<Auk::Navbar @skin="gray-200">
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
+        <h4 class="auk-h4 auk-u-m-0">
+          {{t "announcements-subtitle"}}
+        </h4>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
+</Auk::Navbar>
 <div class="auk-u-mb-4">
   {{#each @announcements as |announcement|}}
     <div class="vlc-agenda-detail-sidebar__sub-item">
