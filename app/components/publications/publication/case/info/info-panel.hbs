@@ -12,7 +12,13 @@
           </Auk::Toolbar::Group>
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
-              <Auk::Button data-test-info-view-edit @skin="tertiary" @icon="pencil" @layout="icon-only" {{on "click" this.putInEditMode}}/>
+              <Auk::Button
+                data-test-info-view-edit
+                @skin="tertiary"
+                @icon="pencil"
+                @layout="icon-only"
+                {{on "click" this.putInEditMode}}
+              />
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
         </Auk::Toolbar>
@@ -33,12 +39,12 @@
           <div class="auk-o-grid-col-4 auk-content">
             <Auk::KeyValue
               @key={{t "publications-number"}}
-              @value={{@publicationFlow.identification.idName}} />
+              @value={{@publicationFlow.identification.idName}}
+            />
           </div>
 
           <div class="auk-o-grid-col-4 auk-content">
-            <Auk::KeyValue
-              @key={{t "numac-number"}}>
+            <Auk::KeyValue @key={{t "numac-number"}}>
               {{#if @publicationFlow.numacNumbers}}
                 {{join ", " (map-by "idName" @publicationFlow.numacNumbers)}}
               {{else}}
@@ -49,8 +55,7 @@
 
           {{!Datum beslissing}}
           <div class="auk-o-grid-col-4 auk-content">
-            <Auk::KeyValue
-              @key={{t "decision-date"}}>
+            <Auk::KeyValue @key={{t "decision-date"}}>
               {{#if @isViaCouncilOfMinisters}}
                 <Auk::ButtonLink
                   target="_blank"
@@ -64,14 +69,20 @@
                   }}
                 >
                   {{#if @publicationFlow.agendaItemTreatment.startDate}}
-                    {{moment-format @publicationFlow.agendaItemTreatment.startDate "DD-MM-YYYY"}}
+                    {{moment-format
+                      @publicationFlow.agendaItemTreatment.startDate
+                      "DD-MM-YYYY"
+                    }}
                   {{else}}
                     {{t "to-agenda"}}
                   {{/if}}
                 </Auk::ButtonLink>
               {{else}}
                 {{#if @publicationFlow.agendaItemTreatment.startDate}}
-                  {{moment-format @publicationFlow.agendaItemTreatment.startDate "DD-MM-YYYY"}}
+                  {{moment-format
+                    @publicationFlow.agendaItemTreatment.startDate
+                    "DD-MM-YYYY"
+                  }}
                 {{else}}
                   {{t "dash"}}
                 {{/if}}
@@ -81,13 +92,9 @@
 
           {{!Datum ontvangst}}
           <div class="auk-o-grid-col-4 auk-content">
-            <Auk::KeyValue
-              @key={{t "publication-flow-opening-date"}}>
+            <Auk::KeyValue @key={{t "publication-flow-opening-date"}}>
               {{#if @publicationFlow.openingDate}}
-                {{moment-format
-                  @publicationFlow.openingDate
-                  "DD-MM-YYYY"
-                }}
+                {{moment-format @publicationFlow.openingDate "DD-MM-YYYY"}}
               {{else}}
                 {{t "dash"}}
               {{/if}}
@@ -96,8 +103,7 @@
 
           {{!Limiet publicatie}}
           <div class="auk-o-grid-col-4 auk-content">
-            <Auk::KeyValue
-              @key={{t "publication-due-date"}}>
+            <Auk::KeyValue @key={{t "publication-due-date"}}>
               {{#if @publicationFlow.publicationSubcase.dueDate}}
                 {{moment-format
                   @publicationFlow.publicationSubcase.dueDate
@@ -113,7 +119,7 @@
       </Auk::Panel::Body>
     </Auk::Panel>
   {{else}}
-      <Auk::Panel class="auk-panel--editing">
+    <Auk::Panel class="auk-panel--editing">
       <Auk::Panel::Header>
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
@@ -124,7 +130,10 @@
         </Auk::Toolbar::Group>
       </Auk::Panel::Header>
       <Auk::Panel::Body>
-        <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
+        <Utils::LoadableContent
+          @isLoading={{this.save.isRunning}}
+          @reserveSpace={{true}}
+        >
           <div class="auk-form-group-layout auk-form-group-layout--grid">
             <div class="auk-o-grid">
 
@@ -136,7 +145,8 @@
                   <Auk::Checkbox
                     data-test-urgency-level-checkbox
                     @checked={{this.isUrgent}}
-                    {{on 'input' this.onChangeIsUrgent}} />
+                    {{on "input" this.onChangeIsUrgent}}
+                  />
                 </div>
               </div>
 
@@ -144,7 +154,8 @@
                 <div class="auk-form-group">
                   <Auk::Label
                     @required={{true}}
-                    @error={{this.publicationNumberErrorKey}}>
+                    @error={{this.publicationNumberErrorKey}}
+                  >
                     {{t "publications-number"}}
                   </Auk::Label>
                   <Auk::Input
@@ -173,7 +184,10 @@
 
               <div class="auk-o-grid-col-4">
                 {{! Werknummer BS == numac nummer }}
-                <div data-test-publication-sidebar-numac-number class="auk-form-group">
+                <div
+                  data-test-publication-sidebar-numac-number
+                  class="auk-form-group"
+                >
                   <Auk::Label>
                     {{t "numac-number"}}
                   </Auk::Label>
@@ -191,11 +205,17 @@
 
               {{! Datum beslissing }}
               <div class="auk-o-grid-col-4">
-                <div data-test-publication-sidebar-decision-date class="auk-form-group">
+                <div
+                  data-test-publication-sidebar-decision-date
+                  class="auk-form-group"
+                >
                   <Auk::Label>{{t "decision-date"}}</Auk::Label>
                   {{#if @isViaCouncilOfMinisters}}
                     {{#if @publicationFlow.agendaItemTreatment.startDate}}
-                      {{moment-format @publicationFlow.agendaItemTreatment.startDate "DD-MM-YYYY"}}
+                      {{moment-format
+                        @publicationFlow.agendaItemTreatment.startDate
+                        "DD-MM-YYYY"
+                      }}
                     {{else}}
                       {{t "dash"}}
                     {{/if}}
@@ -210,11 +230,17 @@
 
               {{! Datum ontvangst }}
               <div class="auk-o-grid-col-4">
-                <div data-test-publication-sidebar-opening-date class="auk-form-group">
+                <div
+                  data-test-publication-sidebar-opening-date
+                  class="auk-form-group"
+                >
                   <Auk::Label>{{t "publication-flow-opening-date"}}</Auk::Label>
                   {{#if @isViaCouncilOfMinisters}}
                     {{#if @publicationFlow.openingDate}}
-                      {{moment-format @publicationFlow.openingDate "DD-MM-YYYY"}}
+                      {{moment-format
+                        @publicationFlow.openingDate
+                        "DD-MM-YYYY"
+                      }}
                     {{else}}
                       {{t "dash"}}
                     {{/if}}
@@ -252,7 +278,6 @@
                 </div>
               </div>
 
-
             </div>
           </div>
         </Utils::LoadableContent>
@@ -265,7 +290,8 @@
                 data-test-info-edit-cancel
                 @skin="borderless"
                 @disabled={{this.save.isRunning}}
-                {{on "click" this.cancelEdit}}>
+                {{on "click" this.cancelEdit}}
+              >
                 {{t "cancel"}}
               </Auk::Button>
             </Auk::Toolbar::Item>
@@ -277,7 +303,8 @@
                 @skin="primary"
                 @loading={{this.save.isRunning}}
                 @disabled={{not this.isValid}}
-                {{on "click" (perform this.save)}}>
+                {{on "click" (perform this.save)}}
+              >
                 {{t "save"}}
               </Auk::Button>
             </Auk::Toolbar::Item>

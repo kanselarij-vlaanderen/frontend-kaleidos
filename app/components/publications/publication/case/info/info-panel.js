@@ -7,7 +7,6 @@ import { timeout } from 'ember-concurrency';
 import { task, restartableTask } from 'ember-concurrency-decorators';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-
 export default class PublicationsPublicationCaseInfoPanelComponent extends Component {
   @service store;
   @service intl;
@@ -29,7 +28,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   constructor() {
     super(...arguments);
 
-    this.initFields()
+    this.initFields();
   }
 
   initFields() {
@@ -78,13 +77,17 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
       this.publicationNumberErrorKey = 'publication-number-error-required';
     } else {
       let publicationNumber = Number.parseFloat(this.publicationNumber);
-      let isNumeric = Number.isInteger(publicationNumber) && publicationNumber > 0;
-      console.log(isNumeric)
+      let isNumeric =
+        Number.isInteger(publicationNumber) && publicationNumber > 0;
       if (!isNumeric) {
         this.publicationNumberErrorKey = 'publication-number-error-numeric';
       } else {
         yield timeout(1000);
-        let isAlreadyTaken = yield this.publicationService.publicationNumberAlreadyTaken(this.publicationNumber, this.publicationNumberSuffix);
+        let isAlreadyTaken =
+          yield this.publicationService.publicationNumberAlreadyTaken(
+            this.publicationNumber,
+            this.publicationNumberSuffix
+          );
         if (isAlreadyTaken) {
           this.publicationNumberErrorKey = 'publication-number-error-taken';
         }
@@ -131,7 +134,9 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   async setIsPublicationOverdue() {
     let publicationFlow = this.args.publicationFlow;
-    this.isPublicationOverdue = await this.checkIsPublicationOverdue(publicationFlow);
+    this.isPublicationOverdue = await this.checkIsPublicationOverdue(
+      publicationFlow
+    );
   }
 
   async checkIsPublicationOverdue(publicationFlow) {
