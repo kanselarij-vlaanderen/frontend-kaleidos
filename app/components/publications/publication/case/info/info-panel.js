@@ -22,6 +22,8 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   @tracked publicationNumberSuffix;
 
   @tracked numacNumbers;
+  numacNumbersToDelete;
+
   @tracked decisionDate;
   @tracked openingDate;
   @tracked publicationDueDate;
@@ -42,6 +44,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.publicationNumberSuffix = structuredIdentifier.versionIdentifier;
 
     this.numacNumbers = publicationFlow.numacNumbers.toArray();
+    this.numacNumbersToDelete = [];
   }
 
   @action
@@ -81,16 +84,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.numberIsAlreadyUsed = yield this.publicationService.publicationNumberAlreadyTaken(this.publicationNumber, this.publicationNumberSuffix);
   }
 
-  async setStructuredIdentifier() {
-    var publicationFlow = this.args.publicationFlow;
-    this.numberIsAlreadyUsed =
-      await this.publicationService.publicationNumberAlreadyTaken(
-        this.publicationNumber,
-        this.publicationNumberSuffix,
-        publicationFlow.id
-      );
-  }
-
   @action
   addNumacNumber(newNumacNumber) {
     const numacNumber = this.store.createRecord('identification', {
@@ -98,13 +91,13 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
       agency: CONSTANTS.SCHEMA_AGENCIES.NUMAC,
       publicationFlowForNumac: this.publicationFlow,
     });
-    this.numacNumbers.push(numacNumber);
+    this.numacNumbers.pushObject(numacNumber);
   }
 
   @action
   deleteNumacNumber(numacNumber) {
-    numacNumber.deleteRecord();
     this.numacNumbers.removeObject(numacNumber);
+    this.numacNumbersToDelete.push(numacNumber);
   }
 
   @action
@@ -152,14 +145,12 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
       saves.push(identification.save());
     }
 
-    var numacNumbers = await publicationFlow.numacNumbers;
-    var numacNumbersArray = (await publicationFlow.numacNumbers).toArray();
-    for (let numacNumber of numacNumbersArray) {
-      if (numacNumber.dirtyType === 'deleted') {
-        numacNumber.save();
-      }
+    for (let numacNumber of this.numacNumbersToDelete) {
+      let destroy = numacNumber.destroyRecord();
+      saves.push(destroy);
     }
 
+    let numacNumbers = await publicationFlow.numacNumbers;
     numacNumbers.replace(0, numacNumbers.length, this.numacNumbers);
     numacNumbers.save();
 

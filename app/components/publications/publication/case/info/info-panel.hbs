@@ -32,6 +32,17 @@
               @value={{@publicationFlow.identification.idName}} />
           </div>
 
+          <div class="auk-o-grid-col-12 auk-content">
+            <Auk::KeyValue
+              @key={{t "numac-number"}}>
+              {{#if @publicationFlow.numacNumbers}}
+                {{join ", " (map-by "idName" @publicationFlow.numacNumbers)}}
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            </Auk::KeyValue>
+          </div>
+
         </div>
       </Auk::Panel::Body>
     </Auk::Panel>
@@ -102,23 +113,24 @@
                 </div>
               </div>
 
-            </div>
-            <div class="auk-o-grid-col-2">
-              {{! Werknummer BS == numac nummer }}
-              <div data-test-publication-sidebar-numac-number class="auk-form-group">
-                <Auk::Label>
-                  {{t "numac-number"}}
-                </Auk::Label>
-                {{! TODO: disable modifying numac-number once (staatsblad-)decision exists? }}
-                <Auk::InputPills
-                  @items={{this.numacNumbers}}
-                  @onCreate={{this.addNumacNumber}}
-                  @onRemove={{this.deleteNumacNumber}}
-                  as |numac|
-                >
-                  {{numac.idName}}
-                </Auk::InputPills>
+              <div class="auk-o-grid-col-12">
+                {{! Werknummer BS == numac nummer }}
+                <div data-test-publication-sidebar-numac-number class="auk-form-group">
+                  <Auk::Label>
+                    {{t "numac-number"}}
+                  </Auk::Label>
+                  {{! TODO: disable modifying numac-number once (staatsblad-)decision exists? }}
+                  <Auk::InputPills
+                    @items={{this.numacNumbers}}
+                    @onCreate={{this.addNumacNumber}}
+                    @onRemove={{this.deleteNumacNumber}}
+                    as |numac|
+                  >
+                    {{numac.idName}}
+                  </Auk::InputPills>
+                </div>
               </div>
+
             </div>
           </div>
         </Utils::LoadableContent>
