@@ -7,6 +7,7 @@ import { timeout } from 'ember-concurrency';
 import { task, restartableTask } from 'ember-concurrency-decorators';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
+
 export default class PublicationsPublicationCaseInfoPanelComponent extends Component {
   @service store;
   @service intl;
@@ -16,9 +17,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @tracked isUrgent;
 
-  @tracked error;
-  @tracked numberIsAlreadyUsed;
-  @tracked numberIsRequired;
+  @tracked publicationNumberErrorKey;
   @tracked publicationNumber;
   @tracked publicationNumberSuffix;
 
@@ -58,37 +57,39 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.isUrgent = isUrgent;
   }
 
-  get isPublicationNumberValid() {
-    return this.publicationNumber && this.publicationNumber > 0 && !this.numberIsAlreadyUsed;
-  }
-
   @restartableTask
   *setPublicationNumber(event) {
     this.publicationNumber = event.target.value;
-    this.numberIsRequired = false;
-    this.numberIsAlreadyUsed = false;
-    if (isBlank(this.publicationNumber)) {
-      this.numberIsRequired = true;
-    } else {
-      yield this.checkIsPublicationNumberAlreadyTaken.perform();
-    }
+    yield this.checkPublicationNumber.perform();
   }
-
-
 
   @restartableTask
   *setPublicationNumberSuffix(event) {
     this.publicationNumberSuffix = isBlank(event.target.value)
       ? undefined
       : event.target.value;
-    this.numberIsAlreadyUsed = false;
-    yield this.checkIsPublicationNumberAlreadyTaken.perform();
+    yield this.checkPublicationNumber.perform();
   }
 
   @restartableTask
-  *checkIsPublicationNumberAlreadyTaken() {
-    yield timeout(1000);
-    this.numberIsAlreadyUsed = yield this.publicationService.publicationNumberAlreadyTaken(this.publicationNumber, this.publicationNumberSuffix);
+  *checkPublicationNumber() {
+    this.publicationNumberErrorKey = undefined;
+    if (isBlank(this.publicationNumber)) {
+      this.publicationNumberErrorKey = 'publication-number-error-required';
+    } else {
+      let publicationNumber = Number.parseFloat(this.publicationNumber);
+      let isNumeric = Number.isInteger(publicationNumber) && publicationNumber > 0;
+      console.log(isNumeric)
+      if (!isNumeric) {
+        this.publicationNumberErrorKey = 'publication-number-error-numeric';
+      } else {
+        yield timeout(1000);
+        let isAlreadyTaken = yield this.publicationService.publicationNumberAlreadyTaken(this.publicationNumber, this.publicationNumberSuffix);
+        if (isAlreadyTaken) {
+          this.publicationNumberErrorKey = 'publication-number-error-taken';
+        }
+      }
+    }
   }
 
   @action
@@ -158,7 +159,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   get isValid() {
-    return this.isPublicationNumberValid;
+    return !this.publicationNumberErrorKey;
   }
 
   @task
