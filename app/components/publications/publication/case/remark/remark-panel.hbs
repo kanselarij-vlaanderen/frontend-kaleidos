@@ -12,7 +12,13 @@
           </Auk::Toolbar::Group>
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
-              <Auk::Button data-test-remark-view-edit @skin="tertiary" @icon="pencil" @layout="icon-only" {{on "click" this.putInEditMode}}/>
+              <Auk::Button
+                data-test-remark-view-edit
+                @skin="tertiary"
+                @icon="pencil"
+                @layout="icon-only"
+                {{on "click" this.putInEditMode}}
+              />
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
         </Auk::Toolbar>
@@ -20,14 +26,17 @@
       <Auk::Panel::Body>
         {{#if @publicationFlow.remark}}
           {{! The following line is formatted on a single line because of the way browsers treat whitespaces & breaks in combination with `white-space: pre-wrap` }}
-          <div data-test-remark-view class="auk-u-text-prewrap">{{@publicationFlow.remark}}</div>
+          <div
+            data-test-remark-view
+            class="auk-u-text-prewrap"
+          >{{@publicationFlow.remark}}</div>
         {{else}}
-          <Auk::EmptyState @message="{{t "publication-remark-empty"}}" />
+          <Auk::EmptyState @message={{t "publication-remark-empty"}} />
         {{/if}}
       </Auk::Panel::Body>
     </Auk::Panel>
   {{else}}
-      <Auk::Panel class="auk-panel--editing">
+    <Auk::Panel class="auk-panel--editing">
       <Auk::Panel::Header>
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
@@ -38,7 +47,10 @@
         </Auk::Toolbar::Group>
       </Auk::Panel::Header>
       <Auk::Panel::Body>
-        <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
+        <Utils::LoadableContent
+          @isLoading={{this.save.isRunning}}
+          @reserveSpace={{true}}
+        >
           <div class="auk-form-group">
             <Auk::Label>
               <span>{{t "publication-remark"}}</span>
@@ -47,7 +59,11 @@
                 {{t "publication-remark-help"}}
               </Utils::Generic::TooltipHelp>
             </Auk::Label>
-            <Auk::Textarea data-test-remark-edit @rows="12" @value={{this.remark}} />
+            <Auk::Textarea
+              data-test-remark-edit
+              @rows="12"
+              @value={{this.remark}}
+            />
           </div>
         </Utils::LoadableContent>
       </Auk::Panel::Body>
@@ -59,7 +75,8 @@
                 data-test-remark-edit-cancel
                 @skin="borderless"
                 @disabled={{this.save.isRunning}}
-                {{on "click" this.cancelEdit}}>
+                {{on "click" this.cancelEdit}}
+              >
                 {{t "cancel"}}
               </Auk::Button>
             </Auk::Toolbar::Item>
@@ -70,7 +87,8 @@
                 data-test-remark-edit-save
                 @skin="primary"
                 @loading={{this.save.isRunning}}
-                {{on "click" (perform this.save)}}>
+                {{on "click" (perform this.save)}}
+              >
                 {{t "save"}}
               </Auk::Button>
             </Auk::Toolbar::Item>
