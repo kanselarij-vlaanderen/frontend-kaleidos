@@ -110,6 +110,7 @@ request the whole row and not only the arrow at the end to be clickable }}
       data-test-publication-table-row-translation-due-date
       class="auk-u-text-nowrap"
     >
+      {{!Ember seems not to await async getter}}
       {{#if @publicationFlow.translationSubcase.dueDate}}
         <div class="{{if (await this.isTranslationOverdue) 'auk-u-text-bold'}}">
           {{moment-format
