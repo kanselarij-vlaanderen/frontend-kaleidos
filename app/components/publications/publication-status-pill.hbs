@@ -6,11 +6,11 @@
 }}
   <Auk::Loader />
 {{else}}
-  <Auk::Pill @skin="white">
+  <Auk::StatusPill @status={{this.publicationStatusPillKey}}>
     {{this.publicationStatus.label}}
     -
     {{moment-format @publicationFlow.publicationStatusChange.startedAt "DD/MM/YYYY"}}
-  </Auk::Pill>
+  </Auk::StatusPill>
   <Auk::ButtonLink
     @icon="pencil"
     @skin="muted"

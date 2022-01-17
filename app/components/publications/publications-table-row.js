@@ -4,31 +4,22 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { add } from 'ember-math-helpers/helpers/add';
-import * as PublicationUtils from 'frontend-kaleidos/utils/publication-utils';
+import { getPublicationStatusPillKey } from 'frontend-kaleidos/utils/publication-auk';
 
 export default class PublicationsPublicationsTableRowComponent extends Component {
   @service router;
   @service store;
+  @service publicationService;
 
-  @tracked decision;
-  @tracked pages;
+  @tracked publicationDate;
+  @tracked pageCount;
   @tracked proofRequestDate;
 
   constructor() {
     super(...arguments);
 
-    this.loadDecision.perform();
     this.loadData.perform();
-  }
-
-  @task
-  *loadDecision() {
-    const publicationSubcase = yield this.args.publicationFlow
-      .publicationSubcase;
-    this.decision = yield this.store.queryOne('decision', {
-      'filter[publication-activity][subcase][:id:]': publicationSubcase.id,
-      sort: 'publication-activity.start-date,publication-date',
-    });
+    this.loadPublicationStatus.perform();
   }
 
   @task
@@ -38,16 +29,24 @@ export default class PublicationsPublicationsTableRowComponent extends Component
       'filter[:id:]': this.args.publicationFlow.id,
       include: [
         'translation-subcase',
+
         'translation-subcase.request-activities',
         'translation-subcase.request-activities.used-pieces',
 
         'publication-subcase',
+
         'publication-subcase.proofing-activities',
+
+        'publication-subcase.publication-activities',
+        'publication-subcase.publication-activities.decisions',
       ].join(','),
     });
 
-    this.pages = yield this.getPageCount(publicationFlow);
+    this.pageCount = yield this.getPageCount(publicationFlow);
     this.proofRequestDate = yield this.getProofRequestDate(publicationFlow);
+    this.publicationDate = yield this.publicationService.getPublicationDate(
+      publicationFlow
+    );
   }
 
   async getPageCount(publicationFlow) {
@@ -77,15 +76,60 @@ export default class PublicationsPublicationsTableRowComponent extends Component
   }
 
   // getter to only trigger when column is shown
-  get isTranslationToLate() {
+  get isTranslationOverdue() {
     let publicationFlow = this.args.publicationFlow;
-    return PublicationUtils.getIsTranslationToLate(publicationFlow);
+    return this.getIsTranslationOverdue(publicationFlow);
   }
 
   // getter to only trigger when column is shown
-  get isPublicationToLate() {
+  get isPublicationOverdue() {
     let publicationFlow = this.args.publicationFlow;
-    return PublicationUtils.getIsPublicationToLate(publicationFlow);
+    return this.getIsPublicationOverdue(publicationFlow);
+  }
+
+  get publicationStatusPillKey() {
+    let publicationStatus = this.loadPublicationStatus.value;
+    if (!publicationStatus) {
+      return undefined;
+    }
+    return getPublicationStatusPillKey(publicationStatus);
+  }
+
+  @task
+  *loadPublicationStatus() {
+    return yield this.args.publicationFlow.status;
+  }
+
+  /**
+   *
+   * @param {PublicationFlow} publicationFlow
+   * @returns {boolean}
+   */
+  async getIsTranslationOverdue(publicationFlow) {
+    let publicationStatus = await publicationFlow.status;
+    let isFinal = publicationStatus.isFinal;
+    if (isFinal) {
+      return false;
+    }
+
+    let translationSubcase = await publicationFlow.translationSubcase;
+    return translationSubcase.isOverdue;
+  }
+
+  /**
+   *
+   * @param {PublicationFlow} publicationFlow
+   * @returns {boolean}
+   */
+  async getIsPublicationOverdue(publicationFlow) {
+    let publicationStatus = await publicationFlow.status;
+    let isFinal = publicationStatus.isFinal;
+    if (isFinal) {
+      return false;
+    }
+
+    let publicationSubcase = await publicationFlow.publicationSubcase;
+    return publicationSubcase.isOverdue;
   }
 
   @action
