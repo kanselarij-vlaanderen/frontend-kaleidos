@@ -59,8 +59,6 @@
               {{#if @isViaCouncilOfMinisters}}
                 <Auk::ButtonLink
                   target="_blank"
-                  @layout="icon-right"
-                  @icon="chevron-right"
                   @route="agenda.agendaitems.agendaitem"
                   @models={{array
                     @publicationFlow.agendaItemTreatment.agendaitem.agenda.createdFor.id
