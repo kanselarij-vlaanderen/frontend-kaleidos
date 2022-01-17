@@ -140,20 +140,6 @@
           </div>
         {{/unless}}
 
-        {{! Drukproef verbeteraar }}
-        {{#unless this.loadPublicationSubcase.isRunning}}
-          <div class="auk-form-group">
-            <Auk::Label>
-              {{t "proofprint-corrector"}}
-            </Auk::Label>
-            <Auk::Input
-              data-test-publication-sidebar-proof-print-corrector
-              value={{this.publicationSubcase.proofPrintCorrector}}
-              {{on "input" (perform this.setProofPrintCorrector)}}
-            />
-          </div>
-        {{/unless}}
-
         {{! Werknummer BS == numac nummer }}
         <div data-test-publication-sidebar-numac-number class="auk-form-group">
           <Auk::Label>{{t "numac-number"}}</Auk::Label>
@@ -258,32 +244,6 @@
             @onChange={{this.setPublicationTargetEndDate}}
           />
         </div>
-
-        {{! Uiterste publicatiedatum }}
-        {{#unless this.publicationStatus.isWithdrawn}}
-          <div
-            data-test-publication-sidebar-publication-due-date
-            class="auk-form-group"
-          >
-            <Auk::Label>{{t "publication-due-date"}}</Auk::Label>
-            <Auk::Datepicker
-              @date={{this.publicationSubcase.dueDate}}
-              @onChange={{this.setPublicationDueDate}}
-            />
-            {{#if
-              (and
-                (not this.publicationStatus.isPublished)
-                (is-after this.publicationSubcase.dueDate precision="days")
-              )
-            }}
-              <Auk::FormHelpText
-                @text={{t "date-expired"}}
-                @skin="warning"
-                @icon="alert-triangle"
-              />
-            {{/if}}
-          </div>
-        {{/unless}}
 
         {{! Opmerking }}
         <div class="auk-form-group">
