@@ -5,6 +5,7 @@ import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import {
   task, timeout
 } from 'ember-concurrency';
+import { inject as service } from '@ember/service';
 
 export default class NewsletterNotaUpdatesRoute extends Route {
   queryParams = {
@@ -12,6 +13,8 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       refreshModel: true,
     },
   };
+
+  @service store;
 
   @(task(function *() {
     while (true) {

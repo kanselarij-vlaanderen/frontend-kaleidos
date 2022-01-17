@@ -91,7 +91,7 @@ p {
 }
 
 .auk-table__header-title--unsortable {
-  color: $dove-gray;
+  color: $auk-gray-600;
 }
 
 .auk-table--interaction-cursor {
@@ -200,7 +200,7 @@ p {
 
 .l-printable-agenda {
   p {
-    color: $color-text;
+    color: $auk-color-text;
     line-height: 1.5;
   }
 
@@ -289,7 +289,7 @@ p {
 
 .l-printable-newsletter {
   p {
-    color: $color-text;
+    color: $auk-color-text;
     line-height: 1.5;
   }
 
@@ -392,11 +392,11 @@ p {
 }
 
 .auk-u-text-success {
-  color: $success-text-color;
+  color: $auk-green-700;
 }
 
 .auk-u-text-error {
-  color: $error-text-color;
+  color: $auk-red-700;
 }
 
 .auk-u-border-top {
@@ -430,19 +430,13 @@ p {
 }
 
 
-/* Publications table
-   ========================================================================== */
-
-.auk-case-name-header {
-  min-width: 25rem;
-}
-
 /* Batch editing document details
    ========================================================================== */
 
 .to-be-deleted-row {
   opacity: 0.5;
 }
+
 
 /* Layout styling for logo-header utility
    ========================================================================== */
@@ -454,4 +448,48 @@ p {
   > img {
     max-height: 100%;
   }
+}
+
+
+/* Framework & external component fixes
+   ========================================================================== */
+
+// When using auk-modal, the ember power select wormhole is behind the modal
+// auk-modal has z-index of 1600;
+
+.ember-power-select-dropdown {
+  z-index: $z-index-modal-additive + $z-index-dropdown;
+}
+
+// Ember data table
+
+.data-table__actions--top {
+  border-bottom: none;
+}
+
+table tr.lt-expanded-row {
+  &:hover {
+    background-color: $auk-white !important;
+  }
+}
+
+// Sortable
+
+.sortable-item {
+  transition: all 0.125s;
+
+  &.is-dragging {
+    transition-duration: 0s;
+  }
+
+  &.is-dragging,
+  &.is-dropping {
+    z-index: $z-index-drag;
+  }
+}
+
+// Ember tooltip
+
+.auk-tooltip {
+  z-index: $z-index-tooltip !important;
 }

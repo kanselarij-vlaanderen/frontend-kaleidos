@@ -1,6 +1,0 @@
-// When using auk-modal, the ember power select wormhole is behind the modal
-// auk-modal has z-index of 1600;
-
-.ember-basic-dropdown-content {
-  z-index: $z-index-modal-additive + $z-index-dropdown;
-}

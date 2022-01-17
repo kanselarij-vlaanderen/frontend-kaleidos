@@ -154,8 +154,9 @@ function visitAgendaWithLink(link) {
  * @memberOf Cypress.Chainable#
  * @function
  * @param {*} agendaDate A cypress.moment object with the date to search
+ * @param {integer} index Allows selecting specific agenda when multiple are found
  */
-function openAgendaForDate(agendaDate) {
+function openAgendaForDate(agendaDate, index = 0) {
   cy.log('openAgendaForDate');
   const searchDate = `${agendaDate.date()}/${agendaDate.month() + 1}/${agendaDate.year()}`;
   cy.intercept('GET', '/meetings?filter**').as('getFilteredMeetings');
@@ -170,8 +171,8 @@ function openAgendaForDate(agendaDate) {
   });
   cy.get(route.agendasOverview.dataTable).find('tbody')
     .children('tr')
-    .eq(0)
-    .find(route.agendasOverview.navigationButton)
+    .eq(index)
+    .find(route.agendasOverview.row.navButton)
     .click();
 
   cy.url().should('include', '/vergadering');

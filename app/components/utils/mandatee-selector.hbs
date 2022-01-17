@@ -5,13 +5,14 @@
       @selected={{await @selectedMandatees}}
       @disabled={{@readOnly}}
       @closeOnSelect={{false}}
+      @searchEnabled={{true}}
       @search={{perform this.searchTask}}
       @oninput={{this.resetMandateeOptionsIfEmpty}}
-      @onchange={{@chooseMandatee}}
+      @onChange={{@chooseMandatee}}
       as |mandatee|
     >
       {{await mandatee.fullDisplayName}}
-      <span class="auk-u-muted auk-u-text-small">
+      <span class="auk-u-muted auk-u-text-size--small">
         {{moment-format mandatee.start "YYYY"}}-{{moment-format
           mandatee.end
           "YYYY"
@@ -23,13 +24,14 @@
       @options={{this.mandateeOptions}}
       @selected={{await @selectedMandatees}}
       @disabled={{@readOnly}}
+      @searchEnabled={{true}}
       @search={{perform this.searchTask}}
       @oninput={{this.resetMandateeOptionsIfEmpty}}
-      @onchange={{@chooseMandatee}}
+      @onChange={{@chooseMandatee}}
       as |mandatee|
     >
       {{await mandatee.fullDisplayName}}
-      <span class="auk-u-muted auk-u-text-small">
+      <span class="auk-u-muted auk-u-text-size--small">
         {{moment-format mandatee.start "YYYY"}}-{{moment-format
           mandatee.end
           "YYYY"

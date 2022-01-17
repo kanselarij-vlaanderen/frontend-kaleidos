@@ -27,7 +27,7 @@ export default ModelWithModifier.extend({
     inverse: null,
   }),
   submissionActivities: hasMany('submission-activity', {
-    serialize: true,
+    serialize: false,
   }),
   linkedPieces: hasMany('piece'),
   mandatees: hasMany('mandatee'),
@@ -47,6 +47,7 @@ export default ModelWithModifier.extend({
   }),
   accessLevel: belongsTo('access-level'),
 
+  // TODO don't use this computed, used in 1 controller
   latestActivity: computed('agendaActivities', 'agendaActivities.[]', async function() {
     const activities = await this.get('agendaActivities').then((activities) => activities.sortBy('startDate'));
     if (activities && activities.length > 0) {
@@ -55,6 +56,7 @@ export default ModelWithModifier.extend({
     return null;
   }),
 
+  // TODO don't use this computed, refactor subcase-description-view.hbs && subcase-item.hbs
   // eslint-disable-next-line ember/use-brace-expansion
   phases: computed('agendaActivities.agendaitems', 'agendaActivities.agendaitems.[]', 'latestActivity.agendaitems.@each.retracted', 'approved', async function() {
     const activities = await this.get('agendaActivities');
@@ -65,12 +67,13 @@ export default ModelWithModifier.extend({
     return null;
   }),
 
+  // TODO don't use this computed, use getter instead, used in subcase-item.hbs
   nameToShow: computed('subcaseName', function() {
     const {
       subcaseName, title, shortTitle,
     } = this;
     if (subcaseName) {
-      return `${this.intl.t('in-function-of')} ${subcaseName.toLowerCase()}`;
+      return `${this.intl.t('in-function-of')} ${subcaseName}`;
     } if (shortTitle) {
       return shortTitle;
     } if (title) {
@@ -79,10 +82,12 @@ export default ModelWithModifier.extend({
     return 'No name found.';
   }),
 
+  // TODO don't use this computed, no more references currently?
   sortedMandatees: computed('mandatees.[]', function() {
     return this.get('mandatees').sortBy('priority');
   }),
 
+  // TODO don't use this computed, refactor subcase-header.js
   hasActivity: computed('agendaActivities', 'agendaActivities.[]', async function() {
     const activities = await this.get('agendaActivities');
     if (activities && activities.length > 0) {
@@ -91,6 +96,7 @@ export default ModelWithModifier.extend({
     return false;
   }),
 
+  // TODO don't use this computed, refactor agendaitem-utils.js
   agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaActivities', async function() {
     return await this.store.query('agendaitem', {
       'filter[agenda-activity][subcase][:id:]': this.get('id'),
@@ -98,13 +104,16 @@ export default ModelWithModifier.extend({
     });
   }),
 
+  // TODO don't use this alias, only used in this model
   latestMeeting: alias('requestedForMeeting'),
 
+  // TODO don't use this computed, no more references currently?
   latestAgenda: computed('latestMeeting', 'latestMeeting.latestAgenda', async function() {
     const lastMeeting = await this.get('latestMeeting');
     return await lastMeeting.get('latestAgenda');
   }),
 
+  // TODO don't use this computed, no more references currently?
   latestAgendaitem: computed('latestActivity.agendaitems.[]', 'agendaActivities.@each.agendaitems', async function() {
     const latestActivity = await this.get('latestActivity');
     if (latestActivity) {
@@ -115,6 +124,7 @@ export default ModelWithModifier.extend({
     return null;
   }),
 
+  // TODO don't use this computed, refactor subcase-item.hbs
   onAgendaInfo: computed('latestMeeting', async function() {
     const latestMeeting = await this.get('latestMeeting');
     if (latestMeeting) {
@@ -123,6 +133,7 @@ export default ModelWithModifier.extend({
     return null;
   }),
 
+  // TODO don't use this computed, used in 5 places, make util?
   approved: computed('treatments', 'treatments.@each.decisionResultCode', 'requestedForMeeting', async function() {
     const meeting = await this.get('requestedForMeeting');
     if (meeting.isFinal) {
@@ -143,6 +154,7 @@ export default ModelWithModifier.extend({
     return false;
   }),
 
+  // TODO don't use this computed, used in 1 route
   subcasesFromCase: computed('case.subcases.[]', 'id', function() {
     return PromiseArray.create({
       //  We want to sort descending on date the subcase was concluded.
@@ -152,13 +164,4 @@ export default ModelWithModifier.extend({
     });
   }),
 
-  remarkType: computed('showAsRemark', function() {
-    let uri = '';
-    if (this.showAsRemark) {
-      uri = CONSTANTS.CASE_TYPES.REMARK;
-    } else {
-      uri = CONSTANTS.CASE_TYPES.NOTA;
-    }
-    return this.store.findRecordByUri('case-type', uri);
-  }),
 });

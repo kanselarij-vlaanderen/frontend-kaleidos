@@ -2,6 +2,7 @@ import Service, { inject as service } from '@ember/service';
 import { get } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import groupRoles from 'frontend-kaleidos/config/roles';
 
 const {
   ADMIN,
@@ -38,6 +39,10 @@ export default class CurrentSessionService extends Service {
     }
   }
   /* eslint-enable ember/no-get */
+
+  may(roleName) {
+    return groupRoles.get(this.group.uri).includes(roleName);
+  }
 
   get groupUri() {
     return this.group && this.group.uri;

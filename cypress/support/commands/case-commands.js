@@ -102,7 +102,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
       .click();
     cy.get(dependency.emberPowerSelect.option).should('not.be.visible');
   }
-
+  cy.get(auk.loader).should('not.exist');
   cy.get(cases.newSubcase.save).click();
 
   let subcaseId;

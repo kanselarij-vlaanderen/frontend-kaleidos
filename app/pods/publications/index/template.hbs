@@ -20,17 +20,6 @@
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
         <Auk::Button
-          data-test-route-publications-index-filter-content
-          @skin="secondary"
-          @icon="filter"
-          {{on "click" this.showFilterModal}}
-        >
-          {{t "filter-content"}}
-        </Auk::Button>
-      </Auk::Toolbar::Item>
-
-      <Auk::Toolbar::Item>
-        <Auk::Button
           data-test-route-publications-index-new-publication
           @icon="plus"
           @skin="primary"
@@ -42,20 +31,6 @@
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </Auk::Navbar>
-{{#if this.publicationFilter.isFiltered}}
-  <Auk::Navbar @skin="gray-100" @auto={{true}}>
-    <Auk::Toolbar>
-      <Auk::Toolbar::Group @position="right">
-        <Auk::Button
-          @skin="tertiary"
-          {{on "click" this.resetPublicationsFilter}}
-        >
-          {{t "clear-filter-plural"}}
-        </Auk::Button>
-      </Auk::Toolbar::Group>
-    </Auk::Toolbar>
-  </Auk::Navbar>
-{{/if}}
 <div class="auk-scroll-wrapper">
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-m-4">
@@ -185,12 +160,5 @@
   <Publications::NewPublicationModal
     @onCancel={{this.closePublicationModal}}
     @onSave={{this.saveNewPublication}}
-  />
-{{/if}}
-{{#if this.isShowPublicationFilterModal}}
-  <Publications::PublicationsFilterModal
-    @filter={{this.publicationFilter}}
-    @onCancel={{this.cancelPublicationsFilter}}
-    @onSave={{this.savePublicationsFilter}}
   />
 {{/if}}

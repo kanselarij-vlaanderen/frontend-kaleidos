@@ -2,9 +2,12 @@ import Route from '@ember/routing/route';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
 export default class DocumentsSubcaseSubcasesRoute extends Route {
+  @service store;
+
   async model() {
     const subcase = this.modelFor('cases.case.subcases.subcase');
     // 2-step procees (submission-activity -> pieces). Querying pieces directly doesn't

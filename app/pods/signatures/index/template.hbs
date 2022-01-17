@@ -18,13 +18,7 @@
         {{! search here}}
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
-        {{!-- <Auk::Button
-          @skin="secondary"
-          @icon="filter"
-          {{on "click" this.showFilterModal}}
-        >
-          {{t "filter-content"}}
-        </Auk::Button> --}}
+        {{! filter here}}
       </Auk::Toolbar::Item>
 
       <Auk::Toolbar::Item>
@@ -100,6 +94,28 @@
                         }}
                       >
                         {{t "consult-agendaitem-decision"}}
+                      </Menu.Item>
+                      <Menu.Item
+                        {{on
+                          "click"
+                          (fn this.uploadPiecesToSigninghub signFlow)
+                        }}
+                      >
+                        {{t "send-to-signinghub"}}
+                      </Menu.Item>
+                      <Menu.Item
+                        @route="signatures.signing-flow.documents"
+                        @model={{signFlow}}
+                      >
+                        {{t "view-in-signinghub"}}
+                      </Menu.Item>
+                      <Menu.Item
+                        {{on
+                          "click"
+                          (fn this.startSigning signFlow)
+                        }}
+                      >
+                        {{t "present-for-signing"}}
                       </Menu.Item>
                     </DropdownMenu>
                   </WebComponents::AuButtonToolbar>

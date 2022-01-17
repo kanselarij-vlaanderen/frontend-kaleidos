@@ -60,7 +60,7 @@
           {{#if (not @agendaitem.showAsRemark) }}
             {{#if @subcase.subcaseName}}
               <Auk::Pill>
-                {{@subcase.subcaseName}}
+                {{capitalize @subcase.subcaseName}}
               </Auk::Pill>
             {{/if}}
             {{#if @agendaitem.retracted}}

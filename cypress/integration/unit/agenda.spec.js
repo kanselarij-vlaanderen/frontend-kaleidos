@@ -170,8 +170,7 @@ context('Agenda tests', () => {
   });
 
   it('It should be automatically get the next meetingID assigned in the UI', () => {
-    const agendaDateSingle = Cypress.moment().add(1, 'week')
-      .day(6);
+    const agendaDateSingle = Cypress.moment();
     // TODO-bug the existing agendas sometimes get NaN, why? We have to make this agenda with number 1 to ensure numbering works
     cy.createAgenda(agendaKind, agendaDateSingle, agendaPlace, 1);
     cy.createAgenda(agendaKind, agendaDateSingle, agendaPlace, null, 'VV AA 1999/2BIS').then((result) => {

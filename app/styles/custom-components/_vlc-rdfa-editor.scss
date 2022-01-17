@@ -1,5 +1,10 @@
-// Import custom config before 'ember-rdfa-editor' to overwrite !default's
-@import '../fixes/fix-ember-rdfa-editor';
+$say-paper: false;
+$say-paper-sidebar: false;
+$say-editor-background: white;
+$say-toolbar-background: white;
+$say-editor-padding: 1rem;
+// $say-font: $auk-font-sans-family; // Currently the default editor fonts. https://github.com/lblod/ember-rdfa-editor/blob/039156d2f4d4933551fbc31939bd8893a7d01211/app/styles/ember-rdfa-editor/_s-settings.scss#L26
+
 @import 'ember-rdfa-editor';
 
 .rdfa-editor {

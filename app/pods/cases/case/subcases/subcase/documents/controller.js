@@ -23,6 +23,7 @@ import {
 export default class CasesCaseSubcasesSubcaseDocumentsController extends Controller {
   @service currentSession;
   @service intl;
+  @service store;
 
   @tracked isEnabledPieceEdit = false;
   @tracked isOpenPieceUploadModal = false;

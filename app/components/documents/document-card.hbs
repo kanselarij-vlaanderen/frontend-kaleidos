@@ -17,7 +17,7 @@
         <Auk::Toolbar @auto={{true}}>
           <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
-              <p data-test-document-card-type class="vlc-subline">
+              <p data-test-document-card-type class="auk-overline">
                 {{#unless this.loadPieceRelatedData.isRunning}}
                   {{this.documentContainer.type.label}}
                 {{/unless}}
@@ -114,7 +114,7 @@
         </Auk::Toolbar>
         <div class="auk-o-flex">
           <div
-            class="auk-o-flex auk-o-flex--vertical vlc-u-box-model-maximize-width"
+            class="auk-o-flex auk-o-flex--vertical auk-u-maximize-width"
           >
             {{#if this.isEditingPiece}}
               <div class="auk-o-flex auk-o-flex--vertical-center">

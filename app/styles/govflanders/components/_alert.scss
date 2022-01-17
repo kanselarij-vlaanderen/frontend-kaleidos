@@ -1,15 +1,84 @@
 // Variables
+$badge-colors: (
+  positive: (
+    fg: $auk-white,
+    bg: $auk-green-500,
+    hoverfg: $auk-white,
+    hoverbg: $auk-green-700
+  ),
+  action: (
+    fg: $auk-white,
+    bg: $auk-color-primary,
+    hoverfg: $auk-white,
+    hoverbg: $auk-blue-700
+  ),
+  negative: (
+    fg: $auk-white,
+    bg: $auk-red-500,
+    hoverfg: $auk-white,
+    hoverbg: $auk-red-700
+  ),
+  warning: (
+    fg: $auk-color-text,
+    bg: $auk-yellow-500
+  ),
+  neutral: (
+    fg: $auk-color-text,
+    bg: $auk-gray-200,
+    hoverfg: $auk-white,
+    hoverbg: $auk-color-primary
+  ),
+  light: (
+    fg: $auk-color-text,
+    bg: $auk-white,
+    hoverfg: $auk-white,
+    hoverbg: $auk-color-primary
+  )
+);
+
+$badge-sizes: (
+  xxsmall: (size: 1.8rem, font: 0.8rem, respsize: 1.5rem, respfont: 0.7rem),
+  xsmall: (size: 1.8rem, font: 1.3rem, respsize: 1.5rem, respfont: 1.1rem),
+  small: (size: 2.6rem, font: 1.3rem, respsize: 2.2rem, respfont: 1.2rem),
+  medium: (size: 4rem, font: 2rem, respsize: 3rem, respfont: 1.5rem),
+  large: (size: 5rem, font: 2.5rem, respsize: 4rem, respfont: 2rem)
+);
+
 $alert-padding: 2rem;
 $alert-padding-small: 1.5rem;
+
+// Mixins
+@mixin vi-u-badge--color($colorname) {
+  @each $name, $colors in $badge-colors {
+    @if $colorname == $name {
+      background-color: map-get($colors, bg);
+      color: map-get($colors, fg);
+    }
+  }
+}
+
+@mixin vi-u-badge--size($sizename) {
+  @each $name, $sizes in $badge-sizes {
+    @if $sizename == $name {
+      width: map_get($sizes, size);
+      height: map_get($sizes, size);
+      line-height: map_get($sizes, size);
+
+      &::before {
+        font-size: map_get($sizes, font);
+      }
+    }
+  }
+}
 
 // Alert
 .vl-alert {
   display: flex;
   position: relative;
-  background-color: $alt-bg;
+  background-color: $auk-gray-200;
   font-size: 1.6rem;
   line-height: 1.4;
-  border: 0.1rem solid $alt-bg;
+  border: 0.1rem solid $auk-gray-200;
   padding: $alert-padding;
   margin-bottom: 1.5rem;
 
@@ -28,7 +97,7 @@ $alert-padding-small: 1.5rem;
 
     &:hover,
     &:focus {
-      color: $action-color;
+      color: $auk-color-primary;
       transform: rotate(90deg);
     }
   }
@@ -45,6 +114,7 @@ $alert-padding-small: 1.5rem;
     border-radius: 50%;
     text-align: center;
     vertical-align: middle;
+    line-height: 4.5rem;
 
     // place the icon in the middle
     &::before {
@@ -62,7 +132,7 @@ $alert-padding-small: 1.5rem;
 
     @include vi-u-badge--size("medium");
     flex: 0 0 auto;
-    background: $white;
+    background: $auk-white;
     margin-right: $alert-padding;
   }
 
@@ -79,7 +149,7 @@ $alert-padding-small: 1.5rem;
 
   // Error modifier
   &--error {
-    background-color: $error-secondary-color;
+    background-color: $auk-red-100;
 
     .vl-alert__icon {
       @include vi-u-badge--color("negative");
@@ -88,7 +158,7 @@ $alert-padding-small: 1.5rem;
 
   // Warning modifier
   &--warning {
-    background-color: $warning-secondary-color;
+    background-color: $auk-yellow-100;
 
     .vl-alert__icon {
       @include vi-u-badge--color("warning");
@@ -97,7 +167,7 @@ $alert-padding-small: 1.5rem;
 
   // Success modifier
   &--success {
-    background-color: $success-secondary-color;
+    background-color: $auk-green-100;
 
     .vl-alert__icon {
       // @include vi-check;

@@ -9,6 +9,7 @@ import moment from 'moment';
 
 export default class AgendaDocumentsController extends Controller {
   @service currentSession;
+  @service store;
 
   @tracked isEnabledPieceEdit = false;
   @tracked isOpenPieceUploadModal = false;

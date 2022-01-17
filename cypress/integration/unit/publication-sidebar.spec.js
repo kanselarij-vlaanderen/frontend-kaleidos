@@ -120,110 +120,115 @@ context('Publications sidebar tests', () => {
       });
   });
 
-  it('should check all fields of the sidebar on status "te publiceren"', () => {
-    const publicationNumber = 1250;
-    const status = 'Te publiceren';
-    cy.get(publication.publicationTableRow.row.number).contains(publicationNumber)
-      .click();
-    cy.get(publication.sidebar.open).click();
-    cy.get(publication.sidebar.publicationNumber);
-    cy.get(publication.urgencyLevelCheckbox).parent(auk.checkbox);
-    cy.get(publication.statusSelector).find(dependency.emberPowerSelect.trigger)
-      .contains(status);
-    cy.get(publication.sidebar.regulationType).find(dependency.emberPowerSelect.trigger);
-    cy.get(publication.sidebar.publicationMode).find(dependency.emberPowerSelect.trigger);
-    cy.get(publication.sidebar.proofPrintCorrector);
-    cy.get(publication.sidebar.numacNumber).find(dependency.emberTagInput.input);
-    cy.get(publication.sidebar.openingDate).find(auk.datepicker);
-    cy.get(publication.sidebar.decisionDate).find(auk.datepicker);
-    cy.get(publication.sidebar.translationDueDate).find(auk.datepicker);
-    cy.get(publication.sidebar.translationDate).find(auk.datepicker);
-    cy.get(publication.sidebar.targetEndDate).find(auk.datepicker);
-    cy.get(publication.sidebar.publicationDueDate).find(auk.datepicker);
-    cy.get(publication.sidebar.publicationDate).should('not.exist');
-    cy.get(publication.sidebar.remark);
-  });
+  // TODO rewrite tests on publication-status (not part of sidebar anymore)
+  // it('should check all fields of the sidebar on status "opgestart"', () => {
+  //   const publicationNumber = 1250;
+  //   const status = 'Opgestart';
+  //   cy.get(publication.publicationTableRow.row.number).contains(publicationNumber)
+  //     .click();
+  //   cy.get(publication.sidebar.open).click();
+  //   cy.get(publication.sidebar.publicationNumber);
+  //   cy.get(publication.urgencyLevelCheckbox).parent(auk.checkbox);
+  //   cy.get(publication.statusSelector).find(dependency.emberPowerSelect.trigger)
+  //     .contains(status);
+  //   cy.get(publication.sidebar.regulationType).find(dependency.emberPowerSelect.trigger);
+  //   cy.get(publication.sidebar.publicationMode).find(dependency.emberPowerSelect.trigger);
+  //   cy.get(publication.sidebar.proofPrintCorrector);
+  //   cy.get(publication.sidebar.numacNumber).find(dependency.emberTagInput.input);
+  //   cy.get(publication.sidebar.openingDate).find(auk.datepicker);
+  //   cy.get(publication.sidebar.decisionDate).find(auk.datepicker);
+  //   cy.get(publication.sidebar.translationDueDate).find(auk.datepicker);
+  //   cy.get(publication.sidebar.translationDate).find(auk.datepicker);
+  //   cy.get(publication.sidebar.targetEndDate).find(auk.datepicker);
+  //   cy.get(publication.sidebar.publicationDueDate).find(auk.datepicker);
+  //   cy.get(publication.sidebar.publicationDate).should('not.exist');
+  //   cy.get(publication.sidebar.remark);
+  // });
 
-  it('should check all fields of the sidebar on status "afgevoerd"', () => {
-    const publicationNumber = 1250;
-    const newStatus = 'Afgevoerd';
-    cy.get(publication.publicationTableRow.row.number).contains(publicationNumber)
-      .click();
-    cy.get(publication.sidebar.open).click();
-    cy.get(publication.statusSelector).find(dependency.emberPowerSelect.trigger)
-      .click();
-    cy.get(dependency.emberPowerSelect.option).contains(newStatus)
-      .click();
-    cy.get(publication.sidebar.confirmWithdraw).click();
-    cy.get(publication.sidebar.publicationNumber);
-    cy.get(publication.urgencyLevelCheckbox).should('not.exist');
-    cy.get(publication.sidebar.statusChangeDate).contains(newStatus);
-    cy.get(publication.sidebar.regulationType).should('not.exist');
-    cy.get(publication.sidebar.publicationMode).should('not.exist');
-    cy.get(publication.sidebar.proofPrintCorrector);
-    cy.get(publication.sidebar.numacNumber).find(dependency.emberTagInput.input);
-    cy.get(publication.sidebar.openingDate).find(auk.datepicker);
-    cy.get(publication.sidebar.decisionDate).find(auk.datepicker);
-    cy.get(publication.sidebar.translationDueDate).should('not.exist');
-    cy.get(publication.sidebar.translationDate).find(auk.datepicker);
-    cy.get(publication.sidebar.targetEndDate).should('not.exist');
-    cy.get(publication.sidebar.publicationDueDate).should('not.exist');
-    cy.get(publication.sidebar.publicationDate).should('not.exist');
-    cy.get(publication.sidebar.remark);
-  });
+  // TODO rewrite tests on publication-status (not part of sidebar anymore)
+  // it('should check all fields of the sidebar on status "geannuleerd"', () => {
+  //   const publicationNumber = 1250;
+  //   // TODO rewrite tests on publication-status (not part of sidebar anymore)
+  //   // const newStatus = 'Geannuleerd';
+  //   cy.get(publication.publicationTableRow.row.number).contains(publicationNumber)
+  //     .click();
+  //   cy.get(publication.sidebar.open).click();
+  //   cy.get(publication.statusSelector).find(dependency.emberPowerSelect.trigger)
+  //     .click();
+  //   cy.get(dependency.emberPowerSelect.option).contains(newStatus)
+  //     .click();
+  //   cy.get(publication.sidebar.confirmWithdraw).click();
+  //   cy.get(publication.sidebar.publicationNumber);
+  //   cy.get(publication.urgencyLevelCheckbox).should('not.exist');
+  //   cy.get(publication.sidebar.statusChangeDate).contains('Afgevoerd');
+  //   cy.get(publication.sidebar.regulationType).should('not.exist');
+  //   cy.get(publication.sidebar.publicationMode).should('not.exist');
+  //   cy.get(publication.sidebar.proofPrintCorrector);
+  //   cy.get(publication.sidebar.numacNumber).find(dependency.emberTagInput.input);
+  //   cy.get(publication.sidebar.openingDate).find(auk.datepicker);
+  //   cy.get(publication.sidebar.decisionDate).find(auk.datepicker);
+  //   cy.get(publication.sidebar.translationDueDate).should('not.exist');
+  //   cy.get(publication.sidebar.translationDate).find(auk.datepicker);
+  //   cy.get(publication.sidebar.targetEndDate).find(auk.datepicker);
+  //   cy.get(publication.sidebar.publicationDueDate).should('not.exist');
+  //   cy.get(publication.sidebar.publicationDate).should('not.exist');
+  //   cy.get(publication.sidebar.remark);
+  // });
 
-  it('should check all fields of the sidebar on status "gepauzeerd"', () => {
-    const publicationNumber = 1250;
-    const newStatus = 'Gepauzeerd';
-    cy.get(publication.publicationTableRow.row.number).contains(publicationNumber)
-      .click();
-    cy.get(publication.sidebar.open).click();
-    cy.get(publication.statusSelector).find(dependency.emberPowerSelect.trigger)
-      .click();
-    cy.get(dependency.emberPowerSelect.option).contains(newStatus)
-      .click();
-    cy.get(publication.sidebar.publicationNumber);
-    cy.get(publication.urgencyLevelCheckbox).should('not.exist');
-    cy.get(publication.sidebar.statusChangeDate).contains(newStatus);
-    cy.get(publication.sidebar.regulationType).find(dependency.emberPowerSelect.trigger);
-    cy.get(publication.sidebar.publicationMode).find(dependency.emberPowerSelect.trigger);
-    cy.get(publication.sidebar.proofPrintCorrector);
-    cy.get(publication.sidebar.numacNumber).find(dependency.emberTagInput.input);
-    cy.get(publication.sidebar.openingDate).find(auk.datepicker);
-    cy.get(publication.sidebar.decisionDate).find(auk.datepicker);
-    cy.get(publication.sidebar.translationDueDate).find(auk.datepicker);
-    cy.get(publication.sidebar.translationDate).find(auk.datepicker);
-    cy.get(publication.sidebar.targetEndDate).should('not.exist');
-    cy.get(publication.sidebar.publicationDueDate).find(auk.datepicker);
-    cy.get(publication.sidebar.publicationDate).should('not.exist');
-    cy.get(publication.sidebar.remark);
-  });
+  // TODO rewrite tests on publication-status (not part of sidebar anymore)
+  // it('should check all fields of the sidebar on status "gepauzeerd"', () => {
+  //   const publicationNumber = 1250;
+  //   const newStatus = 'Gepauzeerd';
+  //   cy.get(publication.publicationTableRow.row.number).contains(publicationNumber)
+  //     .click();
+  //   cy.get(publication.sidebar.open).click();
+  //   cy.get(publication.statusSelector).find(dependency.emberPowerSelect.trigger)
+  //     .click();
+  //   cy.get(dependency.emberPowerSelect.option).contains(newStatus)
+  //     .click();
+  //   cy.get(publication.sidebar.publicationNumber);
+  //   cy.get(publication.urgencyLevelCheckbox).should('not.exist');
+  //   cy.get(publication.sidebar.statusChangeDate).contains(newStatus);
+  //   cy.get(publication.sidebar.regulationType).find(dependency.emberPowerSelect.trigger);
+  //   cy.get(publication.sidebar.publicationMode).find(dependency.emberPowerSelect.trigger);
+  //   cy.get(publication.sidebar.proofPrintCorrector);
+  //   cy.get(publication.sidebar.numacNumber).find(dependency.emberTagInput.input);
+  //   cy.get(publication.sidebar.openingDate).find(auk.datepicker);
+  //   cy.get(publication.sidebar.decisionDate).find(auk.datepicker);
+  //   cy.get(publication.sidebar.translationDueDate).find(auk.datepicker);
+  //   cy.get(publication.sidebar.translationDate).find(auk.datepicker);
+  //   cy.get(publication.sidebar.targetEndDate).find(auk.datepicker);
+  //   cy.get(publication.sidebar.publicationDueDate).find(auk.datepicker);
+  //   cy.get(publication.sidebar.publicationDate).should('not.exist');
+  //   cy.get(publication.sidebar.remark);
+  // });
 
-  it('should check all fields of the sidebar on status "gepubliceerd"', () => {
-    const publicationNumber = 1250;
-    const newStatus = 'Gepubliceerd';
-    cy.get(publication.publicationTableRow.row.number).contains(publicationNumber)
-      .click();
-    cy.get(publication.sidebar.open).click();
-    cy.get(publication.statusSelector).find(dependency.emberPowerSelect.trigger)
-      .click();
-    cy.get(dependency.emberPowerSelect.option).contains(newStatus)
-      .click();
-    cy.get(publication.sidebar.publicationNumber);
-    cy.get(publication.urgencyLevelCheckbox).should('not.exist');
-    cy.get(publication.sidebar.regulationType).find(dependency.emberPowerSelect.trigger);
-    cy.get(publication.sidebar.publicationMode).find(dependency.emberPowerSelect.trigger);
-    cy.get(publication.sidebar.proofPrintCorrector);
-    cy.get(publication.sidebar.numacNumber).find(dependency.emberTagInput.input);
-    cy.get(publication.sidebar.openingDate).find(auk.datepicker);
-    cy.get(publication.sidebar.decisionDate).find(auk.datepicker);
-    cy.get(publication.sidebar.translationDueDate).should('not.exist');
-    cy.get(publication.sidebar.translationDate).find(auk.datepicker);
-    cy.get(publication.sidebar.targetEndDate).should('not.exist');
-    cy.get(publication.sidebar.publicationDueDate).find(auk.datepicker);
-    // cy.get(publication.sidebar.publicationDate).contains('Niet gekend');
-    cy.get(publication.sidebar.remark);
-  });
+  // TODO rewrite tests on publication-status (not part of sidebar anymore)
+  // it('should check all fields of the sidebar on status "gepubliceerd"', () => {
+  //   const publicationNumber = 1250;
+  //   const newStatus = 'Gepubliceerd';
+  //   cy.get(publication.publicationTableRow.row.number).contains(publicationNumber)
+  //     .click();
+  //   cy.get(publication.sidebar.open).click();
+  //   cy.get(publication.statusSelector).find(dependency.emberPowerSelect.trigger)
+  //     .click();
+  //   cy.get(dependency.emberPowerSelect.option).contains(newStatus)
+  //     .click();
+  //   cy.get(publication.sidebar.publicationNumber);
+  //   cy.get(publication.urgencyLevelCheckbox).should('not.exist');
+  //   cy.get(publication.sidebar.regulationType).find(dependency.emberPowerSelect.trigger);
+  //   cy.get(publication.sidebar.publicationMode).find(dependency.emberPowerSelect.trigger);
+  //   cy.get(publication.sidebar.proofPrintCorrector);
+  //   cy.get(publication.sidebar.numacNumber).find(dependency.emberTagInput.input);
+  //   cy.get(publication.sidebar.openingDate).find(auk.datepicker);
+  //   cy.get(publication.sidebar.decisionDate).find(auk.datepicker);
+  //   cy.get(publication.sidebar.translationDueDate).should('not.exist');
+  //   cy.get(publication.sidebar.translationDate).find(auk.datepicker);
+  //   cy.get(publication.sidebar.targetEndDate).find(auk.datepicker);
+  //   cy.get(publication.sidebar.publicationDueDate).find(auk.datepicker);
+  //   // cy.get(publication.sidebar.publicationDate).contains('Niet gekend');
+  //   cy.get(publication.sidebar.remark);
+  // });
 
   it('should check publication number', () => {
     const fields1 = {

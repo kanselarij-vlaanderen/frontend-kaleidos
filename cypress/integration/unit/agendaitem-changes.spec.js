@@ -160,6 +160,7 @@ context('Agendaitem changes tests', () => {
     cy.get(agenda.compareAgenda.announcementLeft).should('have.length', 0);
     cy.get(agenda.compareAgenda.announcementRight).should('have.length', 1);
     cy.get(agenda.compareAgenda.showChanges).click();
+    cy.wait(5000); // TODO-FLAKY there is no loading state when changing the agendaitems, so we have to wait a while for the list to change
     cy.get(agenda.compareAgenda.agendaitemLeft, {
       timeout: 40000,
     }).should('have.length', 1);
@@ -186,6 +187,7 @@ context('Agendaitem changes tests', () => {
     cy.get(agenda.compareAgenda.announcementLeft).should('have.length', 1);
     cy.get(agenda.compareAgenda.announcementRight).should('have.length', 1);
     cy.get(agenda.compareAgenda.showChanges).click();
+    cy.wait(5000); // TODO-FLAKY there is no loading state when changing the agendaitems, so we have to wait a while for the list to change
     cy.get(agenda.compareAgenda.agendaitemLeft, {
       timeout: 40000,
     }).should('have.length', 1);

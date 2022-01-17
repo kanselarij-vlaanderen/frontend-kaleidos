@@ -1,3 +1,11 @@
+@mixin arrow-bottom {
+  top: auto;
+  bottom: -12px;
+  border: 12px solid transparent;
+  border-top-color: $auk-white;
+  border-bottom-width: 0;
+}
+
 .mandatee-selector-container,
 .domains-selector-container,
 .people-selector-container {
@@ -9,19 +17,19 @@
 }
 
 .ember-attacher-popper {
-  background-color: $page-bg;
+  background-color: $auk-white;
   min-width: 23rem;
   max-width: 38rem;
   z-index: 11000;
 
   &.ember-attacher-tooltip {
-    background-color: $tooltip-dark-color;
+    background-color: $auk-gray-700;
     min-width: unset;
     width: unset;
 
     & > div[x-arrow] {
-      background-color: $tooltip-dark-color;
-      border-color: $tooltip-dark-color;
+      background-color: $auk-gray-700;
+      border-color: $auk-gray-700;
     }
   }
 
@@ -67,7 +75,7 @@
   &::before {
     display: none;
   }
-  background-color: $porcelain;
+  background-color: $auk-gray-100;
 
   ul {
     li {

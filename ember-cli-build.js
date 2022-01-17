@@ -1,5 +1,6 @@
 /* eslint-disable */
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+const Funnel = require('broccoli-funnel');
 
 module.exports = function (defaults) {
   const app = new EmberApp(defaults, {
@@ -50,16 +51,19 @@ module.exports = function (defaults) {
     ],
   });
 
-  app.import('node_modules/@kanselarij-vlaanderen/au-kaleidos-icons/iconfont/icons.css'); // imported to /assets by default
-  app.import('node_modules/@kanselarij-vlaanderen/au-kaleidos-icons/iconfont/icons.woff2', {
-    destDir: 'assets' // font files need to be next to their css file, because the css font-file references them hardcoded
-  });
-  app.import('node_modules/@kanselarij-vlaanderen/au-kaleidos-icons/iconfont/icons.woff', {
-    destDir: 'assets' // font files need to be next to their css file, because the css font-file references them hardcoded
-  });
-  app.import('node_modules/@kanselarij-vlaanderen/au-kaleidos-icons/iconfont/icons.ttf', {
-    destDir: 'assets' // font files need to be next to their css file, because the css font-file references them hardcoded
+  app.import('node_modules/@kanselarij-vlaanderen/au-kaleidos-icons/iconfont/icons.css');
+
+  const iconAssets = new Funnel('node_modules/@kanselarij-vlaanderen/au-kaleidos-icons', {
+    srcDir: '/iconfont',
+    include: ['*.woff2', '*.woff', '*.ttf'],
+    destDir: '/assets'
   });
 
-  return app.toTree();
+  const fontAssets = new Funnel('node_modules/@kanselarij-vlaanderen/au-kaleidos-css', {
+    srcDir: '/fonts',
+    include: ['*.woff2', '*.woff'],
+    destDir: '/assets/fonts'
+  });
+
+  return app.toTree([iconAssets, fontAssets]);
 };

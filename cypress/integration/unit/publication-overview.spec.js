@@ -125,7 +125,8 @@ context('Publications overview tests', () => {
     });
   });
 
-  it('should test the filters in overview', () => {
+  // TODO: update when publications design v3 is implemented
+  it.skip('should test the filters in overview', () => {
     const fields1 = {
       number: 1405,
       shortTitle: 'testfilters1',
