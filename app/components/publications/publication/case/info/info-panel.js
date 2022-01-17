@@ -37,12 +37,12 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @action
   async putInEditMode() {
-    var publicationFlow = this.args.publicationFlow;
+    let publicationFlow = this.args.publicationFlow;
     this.isInEditMode = true;
 
     this.isUrgent = await this.publicationService.getIsUrgent(publicationFlow);
-    var identification = await publicationFlow.identification;
-    var structuredIdentifier = await identification.structuredIdentifier;
+    let identification = await publicationFlow.identification;
+    let structuredIdentifier = await identification.structuredIdentifier;
     this.publicationNumber = structuredIdentifier.localIdentifier;
     this.publicationNumberSuffix = structuredIdentifier.versionIdentifier;
 
@@ -52,7 +52,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @action
   onChangeIsUrgent(ev) {
-    var isUrgent = ev.target.checked;
+    let isUrgent = ev.target.checked;
     this.isUrgent = isUrgent;
   }
 
@@ -169,19 +169,19 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @task
   *save() {
-    var publicationFlow = this.args.publicationFlow;
+    let publicationFlow = this.args.publicationFlow;
     yield this.performSave(publicationFlow);
     this.isInEditMode = false;
   }
 
   // separate method to prevent ember-concurrency from saving only partially
   async performSave(publicationFlow) {
-    var saves = [];
+    let saves = [];
 
-    var isPublicationFlowDirty = false;
-    var wasUrgent = this.publicationService.getIsUrgent(publicationFlow);
+    let isPublicationFlowDirty = false;
+    let wasUrgent = this.publicationService.getIsUrgent(publicationFlow);
     if (this.isUrgent !== wasUrgent) {
-      var urgencyLevel = await this.publicationService.getUrgencyLevel(
+      let urgencyLevel = await this.publicationService.getUrgencyLevel(
         this.isUrgent
       );
       publicationFlow.urgencyLevel = urgencyLevel;
