@@ -197,11 +197,18 @@
               <div class="auk-o-grid-col-4">
                 <div data-test-publication-sidebar-decision-date class="auk-form-group">
                   <Auk::Label>{{t "decision-date"}}</Auk::Label>
-                  <Auk::Datepicker
-                    @date={{@publicationFlow.agendaItemTreatment.startDate}}
-                    @enable={{@isViaCouncilOfMinisters}}
-                    @onChange={{this.setDecisionDate}}
-                  />
+                  {{#if @isViaCouncilOfMinisters}}
+                    {{#if @publicationFlow.agendaItemTreatment.startDate}}
+                      {{moment-format @publicationFlow.agendaItemTreatment.startDate "DD-MM-YYYY"}}
+                    {{else}}
+                      {{t "dash"}}
+                    {{/if}}
+                  {{else}}
+                    <Auk::Datepicker
+                      @date={{@publicationFlow.agendaItemTreatment.startDate}}
+                      @onChange={{this.setDecisionDate}}
+                    />
+                  {{/if}}
                 </div>
               </div>
 
@@ -209,35 +216,44 @@
               <div class="auk-o-grid-col-4">
                 <div data-test-publication-sidebar-opening-date class="auk-form-group">
                   <Auk::Label>{{t "publication-flow-opening-date"}}</Auk::Label>
-                  <Auk::Datepicker
-                    @date={{@publicationFlow.openingDate}}
-                    @enable={{@isViaCouncilOfMinisters}}
-                    @onChange={{this.setOpeningDate}}
-                  />
+                  {{#if @isViaCouncilOfMinisters}}
+                    {{#if @publicationFlow.openingDate}}
+                      {{moment-format @publicationFlow.openingDate "DD-MM-YYYY"}}
+                    {{else}}
+                      {{t "dash"}}
+                    {{/if}}
+                  {{else}}
+                    <Auk::Datepicker
+                      @date={{@publicationFlow.openingDate}}
+                      @onChange={{this.setOpeningDate}}
+                    />
+                  {{/if}}
                 </div>
               </div>
 
               {{! Limiet publicatie }}
-              <div class="auk-o-grid-col-4 auk-form-group">
-                {{#unless @publicationFlow.status.isWithdrawn}}
-                  <div
-                    data-test-publication-sidebar-publication-due-date
-                    class="auk-form-group"
-                  >
-                    <Auk::Label>{{t "publication-due-date"}}</Auk::Label>
+              <div class="auk-o-grid-col-4">
+                <div
+                  data-test-publication-sidebar-publication-due-date
+                  class="auk-form-group"
+                >
+                  <Auk::Label>{{t "publication-due-date"}}</Auk::Label>
+                  {{#if (not @publicationFlow.status.isWithdrawn)}}
                     <Auk::Datepicker
                       @date={{@publicationFlow.publicationSubcase.dueDate}}
                       @onChange={{this.setPublicationDueDate}}
                     />
-                    {{#if (await this.isPublicationOverdue)}}
-                      <Auk::FormHelpText
-                        @text={{t "date-expired"}}
-                        @skin="warning"
-                        @icon="alert-triangle"
-                      />
-                    {{/if}}
-                  </div>
-                {{/unless}}
+                  {{else}}
+                    {{t "dash"}}
+                  {{/if}}
+                  {{#if this.isPublicationOverdue}}
+                    <Auk::FormHelpText
+                      @text={{t "date-expired"}}
+                      @skin="warning"
+                      @icon="alert-triangle"
+                    />
+                  {{/if}}
+                </div>
               </div>
 
             </div>
