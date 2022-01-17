@@ -16,6 +16,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @tracked isUrgent;
 
+  @tracked error;
   @tracked numberIsAlreadyUsed;
   @tracked numberIsRequired;
   @tracked publicationNumber;
@@ -72,6 +73,8 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
       yield this.checkIsPublicationNumberAlreadyTaken.perform();
     }
   }
+
+
 
   @restartableTask
   *setPublicationNumberSuffix(event) {

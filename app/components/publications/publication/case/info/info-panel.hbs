@@ -20,19 +20,19 @@
       <Auk::Panel::Body>
         <div class="auk-o-grid">
 
-          <div class="auk-o-grid-col-1 auk-content">
+          <div class="auk-o-grid-col-4 auk-content">
             <Auk::KeyValue @key={{t "publication-urgent"}}>
               <Auk::Icon @name="alert-triangle" @skin="warning" />
             </Auk::KeyValue>
           </div>
 
-          <div class="auk-o-grid-col-11 auk-content">
+          <div class="auk-o-grid-col-4 auk-content">
             <Auk::KeyValue
               @key={{t "publications-number"}}
               @value={{@publicationFlow.identification.idName}} />
           </div>
 
-          <div class="auk-o-grid-col-12 auk-content">
+          <div class="auk-o-grid-col-4 auk-content">
             <Auk::KeyValue
               @key={{t "numac-number"}}>
               {{#if @publicationFlow.numacNumbers}}
@@ -124,7 +124,7 @@
           <div class="auk-form-group-layout auk-form-group-layout--grid">
             <div class="auk-o-grid">
 
-              <div class="auk-o-grid-col-1">
+              <div class="auk-o-grid-col-4">
                 <div class="auk-form-group">
                   <Auk::Label>
                     {{t "publication-urgent"}}
@@ -136,7 +136,7 @@
                 </div>
               </div>
 
-              <div class="auk-o-grid-col-11">
+              <div class="auk-o-grid-col-4">
                 <div class="auk-form-group">
                   <Auk::Label
                     @required={{true}}
@@ -157,25 +157,10 @@
                     @error={{not this.isPublicationNumberValid}}
                     {{on "input" (perform this.setPublicationNumberSuffix)}}
                   />
-                  {{#if this.numberIsAlreadyUsed}}
-                    <div
-                      data-test-publication-sidebar-publication-number-error
-                      class="auk-form-help-text auk-form-help-text--danger"
-                    >
-                      <Auk::Icon @name="alert-triangle" />
-                      {{t "publication-number-already-taken"}}
-                    </div>
-                  {{/if}}
-                  {{#if this.numberIsRequired}}
-                    <div class="auk-form-help-text auk-form-help-text--danger">
-                      <Auk::Icon @name="alert-triangle" />
-                      {{t "publication-number-required"}}
-                    </div>
-                  {{/if}}
                 </div>
               </div>
 
-              <div class="auk-o-grid-col-12">
+              <div class="auk-o-grid-col-4">
                 {{! Werknummer BS == numac nummer }}
                 <div data-test-publication-sidebar-numac-number class="auk-form-group">
                   <Auk::Label>
@@ -255,6 +240,26 @@
                   {{/if}}
                 </div>
               </div>
+
+              {{#if this.error}}
+                <div class="auk-o-grid-col-12 auk-u-mt-2 auk-u-text-align--right">
+                  {{#if this.numberIsAlreadyUsed}}
+                    <div
+                      data-test-publication-sidebar-publication-number-error
+                      class="auk-form-help-text auk-form-help-text--danger"
+                    >
+                      <Auk::Icon @name="alert-triangle" />
+                      {{t "publication-number-already-taken"}}
+                    </div>
+                  {{/if}}
+                  {{#if this.numberIsRequired}}
+                    <div class="auk-form-help-text auk-form-help-text--danger">
+                      <Auk::Icon @name="alert-triangle" />
+                      {{t "publication-number-required"}}
+                    </div>
+                  {{/if}}
+                </div>
+              {{/if}}
 
             </div>
           </div>
