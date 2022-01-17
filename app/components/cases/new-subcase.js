@@ -103,7 +103,7 @@ export default class CasesNewSubcase extends Component {
   async createSubcase(fullCopy) {
     const date = new Date();
 
-    const subcase = await this.store.createRecord('subcase', {
+    const subcase = this.store.createRecord('subcase', {
       type: this.type,
       shortTitle: trimText(this.shortTitle),
       title: trimText(this.title),
