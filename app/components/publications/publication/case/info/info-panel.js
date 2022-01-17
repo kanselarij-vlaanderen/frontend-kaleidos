@@ -204,13 +204,13 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
     // Datum beslissing
     let agendaItemTreatment = await publicationFlow.agendaItemTreatment;
-    if (agendaItemTreatment.dirtyType === 'updated') {
+    if (this.getHasDirtyAttributes(agendaItemTreatment)) {
       let agendaItemTreatmentSave = agendaItemTreatment.save();
       saves.push(agendaItemTreatmentSave);
     }
 
     // Datum ontvangst
-    if (publicationFlow.dirtyType === 'updated') {
+    if (this.getHasDirtyAttributes(publicationFlow)) {
       isPublicationFlowDirty = true;
     }
     if (isPublicationFlowDirty) {
@@ -220,11 +220,27 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
     // Limiet publicatie
     let publicationSubcase = await publicationFlow.publicationSubcase;
-    if (publicationSubcase.dirtyType === 'updated') {
+    if (this.getHasDirtyAttributes(publicationSubcase)) {
       let publicationSubcaseSave = publicationSubcase.save();
       saves.push(publicationSubcaseSave);
     }
 
     await Promise.all(saves);
+  }
+
+  /**
+   * WORKAROUND:
+   * When a property of a model is set to undefined, one would expect to be able to check by model.dirtyType === 'updated' or model.hasDirtyAttributes === true
+   * However these properties can not be used because they have the same values as when no change did occur: dirtyType === undefined and hadDirtyAttributes === false
+   * @param {*} model
+   * @returns
+   */
+  getHasDirtyAttributes(model) {
+    let changedAttributes = model.changedAttributes();
+    // eslint-disable-next-line no-unused-vars
+    for (let attribute of Object.keys(changedAttributes)) {
+      return true;
+    }
+    return false;
   }
 }
