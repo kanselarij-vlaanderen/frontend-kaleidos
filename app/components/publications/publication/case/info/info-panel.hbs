@@ -43,6 +43,61 @@
             </Auk::KeyValue>
           </div>
 
+          <div class="auk-o-grid-col-4 auk-content">
+            <Auk::KeyValue
+              @key={{t "decision-date"}}>
+              {{#if @isViaCouncilOfMinisters}}
+                <Auk::ButtonLink
+                  target="_blank"
+                  @layout="icon-right"
+                  @icon="chevron-right"
+                  @route="agenda.agendaitems.agendaitem"
+                  @models={{array
+                    @publicationFlow.agendaItemTreatment.agendaitem.agenda.createdFor.id
+                    @publicationFlow.agendaItemTreatment.agendaitem.agenda.id
+                    @publicationFlow.agendaItemTreatment.agendaitem.id
+                  }}
+                >
+                  {{#if @publicationFlow.agendaItemTreatment.startDate}}
+                    {{moment-format @publicationFlow.agendaItemTreatment.startDate "DD-MM-YYYY"}}
+                  {{else}}
+                    {{t "to-agenda"}}
+                  {{/if}}
+                </Auk::ButtonLink>
+              {{else}}
+                {{#if @publicationFlow.agendaItemTreatment.startDate}}
+                  {{moment-format @publicationFlow.agendaItemTreatment.startDate "DD-MM-YYYY"}}
+                {{else}}
+                  {{t "dash"}}
+                {{/if}}
+              {{/if}}
+            </Auk::KeyValue>
+          </div>
+
+          <div class="auk-o-grid-col-4 auk-content">
+            <Auk::KeyValue
+              @key={{t "publication-flow-opening-date"}}>
+              {{moment-format
+                @publicationFlow.openingDate
+                "DD-MM-YYYY"
+              }}
+            </Auk::KeyValue>
+          </div>
+
+          <div class="auk-o-grid-col-4 auk-content">
+            <Auk::KeyValue
+              @key={{t "publication-due-date"}}>
+              {{#if @publicationFlow.publicationSubcase.dueDate}}
+                {{moment-format
+                  @publicationFlow.publicationSubcase.dueDate
+                  "DD-MM-YYYY"
+                }}
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            </Auk::KeyValue>
+          </div>
+
         </div>
       </Auk::Panel::Body>
     </Auk::Panel>
@@ -129,6 +184,58 @@
                     {{numac.idName}}
                   </Auk::InputPills>
                 </div>
+              </div>
+
+              <div class="auk-o-grid-col-4">
+                {{! Datum beslissing }}
+                <div data-test-publication-sidebar-decision-date class="auk-form-group">
+                  <Auk::Label>{{t "decision-date"}}</Auk::Label>
+                  <Auk::Datepicker
+                    @date={{@publicationFlow.agendaItemTreatment.startDate}}
+                    @enable={{@isViaCouncilOfMinisters}}
+                    @onChange={{this.setDecisionDate}}
+                  />
+                </div>
+              </div>
+
+              <div class="auk-o-grid-col-4">
+                {{! Datum ontvangst }}
+                <div data-test-publication-sidebar-opening-date class="auk-form-group">
+                  <Auk::Label>{{t "publication-flow-opening-date"}}</Auk::Label>
+                  <Auk::Datepicker
+                    @date={{@publicationFlow.openingDate}}
+                    @enable={{@isViaCouncilOfMinisters}}
+                    @onChange={{this.setOpeningDate}}
+                  />
+                </div>
+              </div>
+
+              <div class="auk-o-grid-col-4 auk-form-group">
+                {{! Uiterste publicatiedatum }}
+                {{#unless @publicationFlow.status.isWithdrawn}}
+                  <div
+                    data-test-publication-sidebar-publication-due-date
+                    class="auk-form-group"
+                  >
+                    <Auk::Label>{{t "publication-due-date"}}</Auk::Label>
+                    <Auk::Datepicker
+                      @date={{@publicationFlow.publicationSubcase.dueDate}}
+                      @onChange={{this.setPublicationDueDate}}
+                    />
+                    {{#if
+                      (and
+                        (not this.publicationStatus.isPublished)
+                        (is-after this.publicationSubcase.dueDate precision="days")
+                      )
+                    }}
+                      <Auk::FormHelpText
+                        @text={{t "date-expired"}}
+                        @skin="warning"
+                        @icon="alert-triangle"
+                      />
+                    {{/if}}
+                  </div>
+                {{/unless}}
               </div>
 
             </div>

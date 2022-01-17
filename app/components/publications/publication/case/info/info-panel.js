@@ -101,6 +101,26 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   @action
+  async setDecisionDate(selectedDates) {
+    let publicationFlow = this.args.publicationFlow;
+    let agendaItemTreatment = await publicationFlow.agendaItemTreatment;
+    agendaItemTreatment.startDate = selectedDates[0];
+  }
+
+  @action
+  setOpeningDate(selectedDates) {
+    let publicationFlow = this.args.publicationFlow;
+    publicationFlow.openingDate = selectedDates[0];
+  }
+
+  @action
+  async setPublicationDueDate(selectedDates) {
+    let publicationFlow = this.args.publicationFlow;
+    let publicationSubcase = await publicationFlow.publicationSubcase;
+    publicationSubcase.dueDate = selectedDates[0];
+  }
+
+  @action
   cancelEdit() {
     this.showError = false;
     this.isInEditMode = false;
@@ -153,6 +173,10 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     let numacNumbers = await publicationFlow.numacNumbers;
     numacNumbers.replace(0, numacNumbers.length, this.numacNumbers);
     numacNumbers.save();
+
+    if (publicationFlow.dirtyType === 'updated') {
+      isDirty = true;
+    }
 
     if (isDirty) {
       saves.push(publicationFlow.save());
