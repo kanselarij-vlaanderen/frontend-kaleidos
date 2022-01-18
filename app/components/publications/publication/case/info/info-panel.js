@@ -3,8 +3,7 @@ import { action } from '@ember/object';
 import { isBlank } from '@ember/utils';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { timeout } from 'ember-concurrency';
-import { task, restartableTask } from 'ember-concurrency-decorators';
+import { timeout, task, restartableTask } from 'ember-concurrency';
 import moment from 'moment';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
