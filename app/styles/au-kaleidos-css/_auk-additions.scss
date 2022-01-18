@@ -420,6 +420,10 @@ p {
 }
 
 @media print {
+  .auk-u-hidden\@print {
+    display: none !important;
+  }
+
   .auk-u-m-0\@print {
     margin: 0 !important;
   }
