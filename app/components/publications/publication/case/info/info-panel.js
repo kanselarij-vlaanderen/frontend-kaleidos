@@ -175,7 +175,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     let publicationFlow = this.args.publicationFlow;
 
     let checkTask = this.checkPublicationNumber.last;
-    let isCheckPending = checkTask.last && !checkTask.isFinished;
+    let isCheckPending = checkTask && !checkTask.isFinished;
     if (isCheckPending) {
       yield checkTask;
       if (this.publicationNumberErrorKey) {
