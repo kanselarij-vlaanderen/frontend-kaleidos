@@ -104,7 +104,7 @@
 
           {{!Limiet publicatie}}
           <div class="auk-o-grid-col-4 auk-content">
-            <Auk::KeyValue @key={{t "publication-due-date"}}>
+            <Auk::KeyValue @key={{t "publication-flow-publication-due-date"}}>
               {{#if @publicationFlow.publicationSubcase.dueDate}}
                 {{moment-format
                   @publicationFlow.publicationSubcase.dueDate
@@ -262,7 +262,7 @@
                   data-test-publication-sidebar-publication-due-date
                   class="auk-form-group"
                 >
-                  <Auk::Label>{{t "publication-due-date"}}</Auk::Label>
+                  <Auk::Label>{{t "publication-flow-publication-due-date"}}</Auk::Label>
                   {{#if (not @publicationFlow.status.isWithdrawn)}}
                     <Auk::Datepicker
                       @date={{@publicationFlow.publicationSubcase.dueDate}}
