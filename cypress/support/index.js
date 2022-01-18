@@ -27,9 +27,9 @@ import './commands/publication-commands'
 import './commands/reset-database.commands'
 import './commands/subcase-commands'
 import './commands/utility-commands'
+import dayjs from 'dayjs'
 
 // support file
-const dayjs = require('dayjs')
 Cypress.dayjs = dayjs
 
 // rdfa editor sometimes throws errors, but loads anyway
