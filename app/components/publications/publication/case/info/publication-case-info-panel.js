@@ -14,6 +14,8 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @tracked isInEditMode;
 
+  @tracked isViaCouncilOfMinisters;
+
   @tracked isUrgent;
 
   @tracked publicationNumberErrorKey;
@@ -36,10 +38,17 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   async initFields() {
     let publicationFlow = this.args.publicationFlow;
+    this.isViaCouncilOfMinisters = await this.getIsViaCouncilOfMinisters(publicationFlow);
     this.decisionDate = await this.getDecisionDate(publicationFlow);
     this.openingDate = publicationFlow.openingDate;
     this.publicationDueDate = await this.getPublicationDueDate(publicationFlow);
     this.setIsPublicationOverdue();
+  }
+
+  async getIsViaCouncilOfMinisters(publicationFlow) {
+    let _case = await publicationFlow.case;
+    let subcases = await _case.subcases;
+    return !!subcases.length;
   }
 
   async getDecisionDate(publicationFlow) {
