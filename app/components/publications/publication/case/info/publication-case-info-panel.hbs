@@ -1,15 +1,15 @@
 <div class="auk-u-mb-3">
-  {{#if (not this.isInEditMode)}}
-    <Auk::Panel>
-      <Auk::Panel::Header>
-        <Auk::Toolbar>
-          <Auk::Toolbar::Group @position="left">
-            <Auk::Toolbar::Item>
-              <h4 class="auk-panel__title">
-                {{t "publication-case-info-panel-title"}}
-              </h4>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
+ <Auk::Panel class={{if this.isInEditMode "auk-panel--editing"}}>
+    <Auk::Panel::Header>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <h4 class="auk-panel__title">
+              {{t "publication-case-info-panel-title"}}
+            </h4>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        {{#if (not this.isInEditMode)}}
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <Auk::Button
@@ -21,9 +21,11 @@
               />
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
-        </Auk::Toolbar>
-      </Auk::Panel::Header>
-      <Auk::Panel::Body>
+        {{/if}}
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body>
+      {{#if (not this.isInEditMode)}}
         <div class="auk-o-grid">
 
           {{!Dringend}}
@@ -108,20 +110,7 @@
           </div>
 
         </div>
-      </Auk::Panel::Body>
-    </Auk::Panel>
-  {{else}}
-    <Auk::Panel class="auk-panel--editing">
-      <Auk::Panel::Header>
-        <Auk::Toolbar::Group @position="left">
-          <Auk::Toolbar::Item>
-            <h4 class="auk-panel__title">
-              {{t "publication-case-info-panel-title"}}
-            </h4>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-      </Auk::Panel::Header>
-      <Auk::Panel::Body>
+      {{else}}
         <Utils::LoadableContent
           @isLoading={{this.save.isRunning}}
           @reserveSpace={{true}}
@@ -276,7 +265,9 @@
             </div>
           </div>
         </Utils::LoadableContent>
-      </Auk::Panel::Body>
+      {{/if}}
+    </Auk::Panel::Body>
+    {{#if this.isInEditMode}}
       <Auk::Panel::Footer>
         <Auk::Toolbar>
           <Auk::Toolbar::Group @position="left">
@@ -306,6 +297,6 @@
           </Auk::Toolbar::Group>
         </Auk::Toolbar>
       </Auk::Panel::Footer>
-    </Auk::Panel>
-  {{/if}}
+    {{/if}}
+  </Auk::Panel>
 </div>
