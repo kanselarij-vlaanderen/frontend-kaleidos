@@ -162,7 +162,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   async cancelEdit() {
     await this.initFields();
 
-    this.showError = false;
     this.isInEditMode = false;
   }
 
