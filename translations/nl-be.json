@@ -758,6 +758,7 @@
   "publication-number-already-taken-with-params": "Het publicatienummer {number} {suffix} is reeds in gebruik. Gebruik een andere nummer of suffix om door te gaan.",
   "without-suffix": "zonder suffix",
   "with-suffix": "met suffix",
+  "publication-flow-publication-number-help": "Het publicatienummer bestaat uit een numerieke stam en een alfanumeriek achtervoegsel.",
   "publication-number-required": "Publicatienummer is numeriek en verplicht.",
   "publication-number-error-required": "Publicatienummer is verplicht.",
   "publication-number-error-numeric": "Publicatienummer is numeriek.",

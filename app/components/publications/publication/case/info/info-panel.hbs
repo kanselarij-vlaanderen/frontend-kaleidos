@@ -161,20 +161,27 @@
                   >
                     {{t "publications-number"}}
                   </Auk::Label>
-                  <Auk::Input
-                    data-test-publication-sidebar-publication-number
-                    @type="number"
-                    value={{this.publicationNumber}}
-                    @error={{this.publicationNumberErrorKey}}
-                    {{on "input" (perform this.setPublicationNumber)}}
-                  />
-                  <Auk::Input
-                    data-test-publication-sidebar-publication-number-suffix
-                    @width="xsmall"
-                    value={{this.publicationNumberSuffix}}
-                    @error={{this.publicationNumberErrorKey}}
-                    {{on "input" (perform this.setPublicationNumberSuffix)}}
-                  />
+                  <div class="auk-o-flex">
+                    <Auk::Input
+                      data-test-publication-sidebar-publication-number
+                      @type="number"
+                      class="auk-o-flex__item"
+                      value={{this.publicationNumber}}
+                      @error={{this.publicationNumberErrorKey}}
+                      {{on "input" (perform this.setPublicationNumber)}}
+                    />
+                    <Auk::Input
+                      data-test-publication-sidebar-publication-number-suffix
+                      @width="xsmall"
+                      class="auk-o-flex__item auk-u-ml"
+                      value={{this.publicationNumberSuffix}}
+                      @error={{this.publicationNumberErrorKey}}
+                      {{on "input" (perform this.setPublicationNumberSuffix)}}
+                    />
+                    <Utils::Generic::TooltipHelp class="auk-u-mx">
+                      {{t "publication-flow-publication-number-help"}}
+                    </Utils::Generic::TooltipHelp>
+                  </div>
                   {{#if this.publicationNumberErrorKey}}
                     <Auk::FormHelpText
                       @text={{t this.publicationNumberErrorKey}}
