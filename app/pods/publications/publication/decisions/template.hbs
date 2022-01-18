@@ -2,6 +2,9 @@
   {{ page-title
     (t "decisions")
   }}
+  <Publications::Publication::Decisions::DecisionsInfoPanel
+    @publicationFlow={{this.publicationFlow}} />
+
   <div class="auk-u-mb-8">
     <Auk::AccordionPanel @isDefaultActive={{true}} as |accordionPanel| >
       <accordionPanel.Header @title={{t "reference-documents-council-of-ministers"}}/>

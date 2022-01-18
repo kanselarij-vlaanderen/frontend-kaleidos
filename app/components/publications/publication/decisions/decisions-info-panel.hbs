@@ -1,0 +1,77 @@
+<div class="auk-u-mb-3">
+  <Auk::Panel class={{if this.isInEditMode "auk-panel--editing"}}>
+    <Auk::Panel::Header>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <h4 class="auk-panel__title">
+              {{t "publication-decisions-info-panel-title"}}
+            </h4>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        {{#if (not this.isInEditMode)}}
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <Auk::Button
+                data-test-info-view-edit
+                @skin="tertiary"
+                @icon="pencil"
+                @layout="icon-only"
+                {{on "click" this.putInEditMode}}
+              />
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        {{/if}}
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body>
+      {{#if (not this.isInEditMode)}}
+        <div class="auk-o-grid">
+
+        </div>
+      {{else}}
+        <Utils::LoadableContent
+          @isLoading={{this.save.isRunning}}
+          @reserveSpace={{true}}
+        >
+          <div class="auk-form-group-layout auk-form-group-layout--grid">
+            <div class="auk-o-grid">
+
+            </div>
+          </div>
+        </Utils::LoadableContent>
+      {{/if}}
+    </Auk::Panel::Body>
+    {{#if this.isInEditMode}}
+      <Auk::Panel::Footer>
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <Auk::Button
+                data-test-info-edit-cancel
+                @skin="borderless"
+                @disabled={{this.save.isRunning}}
+                {{on "click" this.cancelEdit}}
+              >
+                {{t "cancel"}}
+              </Auk::Button>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <Auk::Button
+                data-test-info-edit-save
+                @skin="primary"
+                @loading={{this.save.isRunning}}
+                @disabled={{not this.isValid}}
+                {{on "click" (perform this.save)}}
+              >
+                {{t "save"}}
+              </Auk::Button>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </Auk::Panel::Footer>
+    {{/if}}
+  </Auk::Panel>
+</div>

@@ -15,4 +15,12 @@ export default class PublicationsPublicationDecisionsRoute extends Route {
     });
     return pieces.toArray();
   }
+
+  afterModel() {
+    this.publicationFlow = this.modelFor('publications.publication');
+  }
+
+  setupController(ctrl) {
+    ctrl.publicationFlow = this.publicationFlow;
+  }
 }
