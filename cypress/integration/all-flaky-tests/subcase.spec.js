@@ -8,7 +8,7 @@ import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
-  return Cypress.moment().unix();
+  return Cypress.dayjs().unix();
 }
 
 function getTranslatedMonth(month) {
@@ -43,7 +43,7 @@ function getTranslatedMonth(month) {
 }
 
 context('Subcase tests', () => {
-  const agendaDate = Cypress.moment().add(2, 'weeks')
+  const agendaDate = Cypress.dayjs().add(2, 'weeks')
     .day(4); // Next friday
   // const caseTitle = 'Cypress test: subcases - 1594024946'; // The case is in the default data set with id 5F02E3F87DE3FC0008000002
   const subcaseTitleShort = `Cypress test: add subcase - ${currentTimestamp()}`;
@@ -75,7 +75,7 @@ context('Subcase tests', () => {
 
     const monthDutch = getTranslatedMonth(agendaDate.month());
     const dateFormat = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
-    const dateRegex = new RegExp(`.?${Cypress.moment(agendaDate).date()}.\\w+.${Cypress.moment(agendaDate).year()}`);
+    const dateRegex = new RegExp(`.?${Cypress.dayjs(agendaDate).date()}.\\w+.${Cypress.dayjs(agendaDate).year()}`);
 
     cy.get(cases.subcaseDescription.timelineItem).eq(0)
       .contains(/Ingediend voor agendering/);
@@ -137,7 +137,7 @@ context('Subcase tests', () => {
 
     const monthDutch = getTranslatedMonth(agendaDate.month());
     const dateFormat = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
-    const dateRegex = new RegExp(`.?${Cypress.moment(agendaDate).date()}.\\w+.${Cypress.moment(agendaDate).year()}`);
+    const dateRegex = new RegExp(`.?${Cypress.dayjs(agendaDate).date()}.\\w+.${Cypress.dayjs(agendaDate).year()}`);
 
     cy.get(cases.subcaseDescription.meetingNumber);
     cy.get(cases.subcaseDescription.meetingPlannedStart).contains(/Ingediend voor de agenda van/);
@@ -270,7 +270,7 @@ context('Subcase tests', () => {
     cy.intercept('GET', '/agendaitems**').as('getAgendaitems');
     cy.get(route.newsletters.dataTable).find('tbody')
       .children('tr')
-      .contains(`van ${Cypress.moment(agendaDate).format('DD.MM.YYYY')}`)
+      .contains(`van ${Cypress.dayjs(agendaDate).format('DD.MM.YYYY')}`)
       .click();
     cy.wait('@getMeetingsDetail');
     cy.wait('@getAgendaitems');

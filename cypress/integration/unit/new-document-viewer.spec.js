@@ -27,7 +27,7 @@ context('new document viewer tests', () => {
 
   const agendaKind = 'Ministerraad';
   const agendaPlace = 'Cypress Room';
-  const agendaDate = Cypress.moment().add(2, 'weeks')
+  const agendaDate = Cypress.dayjs().add(2, 'weeks')
     .day(2);
   const file = {
     folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',

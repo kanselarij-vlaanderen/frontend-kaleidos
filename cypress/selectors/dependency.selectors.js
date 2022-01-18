@@ -3,7 +3,7 @@ const selectors = {
   emberPowerSelect: {
     trigger: '.ember-power-select-trigger',
     option: '.ember-power-select-option',
-    optionSearchMessage: '.ember-power-select-option--search-message',
+    optionLoadingMessage: '.ember-power-select-option--loading-message',
     searchInput: '.ember-power-select-search-input',
     selectedItem: '.ember-power-select-selected-item',
   },

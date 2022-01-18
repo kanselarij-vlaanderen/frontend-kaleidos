@@ -89,7 +89,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
       .scrollIntoView()
       .trigger('mouseover')
       .click();
-    cy.get(dependency.emberPowerSelect.option).should('not.be.visible');
+    cy.get(dependency.emberPowerSelect.option).should('not.exist');
   }
 
   // Set the step name
@@ -100,7 +100,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
       .scrollIntoView()
       .trigger('mouseover')
       .click();
-    cy.get(dependency.emberPowerSelect.option).should('not.be.visible');
+    cy.get(dependency.emberPowerSelect.option).should('not.exist');
   }
   cy.get(auk.loader).should('not.exist');
   cy.get(cases.newSubcase.save).click();

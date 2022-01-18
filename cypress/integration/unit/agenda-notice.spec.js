@@ -7,11 +7,11 @@ import publication from '../../selectors/publication.selectors';
 import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
-  return Cypress.moment().unix();
+  return Cypress.dayjs().unix();
 }
 
 context('agenda notice test', () => {
-  const dateToCreateAgenda = Cypress.moment().add(11, 'weeks')
+  const dateToCreateAgenda = Cypress.dayjs().add(11, 'weeks')
     .day(1);
 
   beforeEach(() => {

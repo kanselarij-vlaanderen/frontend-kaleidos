@@ -15,7 +15,7 @@ context('Full test for creating mandatees', () => {
    * @returns {number} The current time in unix timestamp
    */
   function currentTimestamp() {
-    return Cypress.moment().unix();
+    return Cypress.dayjs().unix();
   }
 
   before(() => {
@@ -28,7 +28,7 @@ context('Full test for creating mandatees', () => {
     cy.visit('/');
     const KIND = 'Ministerraad';
 
-    const agendaDate = Cypress.moment().add(1, 'weeks')
+    const agendaDate = Cypress.dayjs().add(1, 'weeks')
       .day(3);
     const caseTitle = `testId=${currentTimestamp()}: Cypress test dossier 1`;
     const subcaseTitle1 = `${caseTitle} test stap 1`;
@@ -94,7 +94,7 @@ context('Full test for creating mandatees', () => {
     cy.contains(ministerNickName).parents(settings.ministers.sortableGroupRow)
       .find(settings.ministers.mandatee.edit)
       .click();
-    const enddateForMandatee = Cypress.moment().set({
+    const enddateForMandatee = Cypress.dayjs().set({
       hour: 10, minute: 10,
     });
 

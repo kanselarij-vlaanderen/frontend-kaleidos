@@ -36,17 +36,17 @@ context('Publications sidebar tests', () => {
     const publicationMode = 'Extenso';
     const proofPrintCorrector = 'Tester';
     const numacNumber = '12345';
-    const openingDate = Cypress.moment().add(1, 'weeks')
+    const openingDate = Cypress.dayjs().add(1, 'weeks')
       .day(1);
-    const decisionDate = Cypress.moment().add(1, 'weeks')
+    const decisionDate = Cypress.dayjs().add(1, 'weeks')
       .day(2);
-    const translationDueDate = Cypress.moment().add(1, 'weeks')
+    const translationDueDate = Cypress.dayjs().add(1, 'weeks')
       .day(3);
-    const translationDate = Cypress.moment().add(1, 'weeks')
+    const translationDate = Cypress.dayjs().add(1, 'weeks')
       .day(4);
-    const targetEndDate = Cypress.moment().add(1, 'weeks')
+    const targetEndDate = Cypress.dayjs().add(1, 'weeks')
       .day(5);
-    const publicationDueDate = Cypress.moment().add(1, 'weeks')
+    const publicationDueDate = Cypress.dayjs().add(1, 'weeks')
       .day(6);
 
     // check error validation publication number

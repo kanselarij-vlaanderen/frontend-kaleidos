@@ -10,7 +10,7 @@ import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
-  return Cypress.moment().unix();
+  return Cypress.dayjs().unix();
 }
 
 function uploadFileToCancel(file) {
@@ -41,7 +41,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
   });
 
   it('Editing of a document or piece but cancelling should show old data', () => {
-    const agendaDate = Cypress.moment().add(1, 'weeks')
+    const agendaDate = Cypress.dayjs().add(1, 'weeks')
       .day(1);
     const caseTitle = `Cypress test: cancel editing pieces - ${currentTimestamp()}`;
     const subcaseTitleShort = `Cypress test: cancel editing of documents on agendaitem - ${currentTimestamp()}`;
@@ -271,7 +271,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
 
   it('Cancelling when adding new piece should not skip a piece the next time', () => {
     cy.intercept('DELETE', '/files/**').as('deleteFile');
-    const agendaDate = Cypress.moment().add(2, 'weeks')
+    const agendaDate = Cypress.dayjs().add(2, 'weeks')
       .day(1); // friday in two weeks
     const caseTitle = `Cypress test: pieces - ${currentTimestamp()}`;
     const subcaseTitleShort = `Cypress test: cancelling a new piece - ${currentTimestamp()}`;
@@ -397,7 +397,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .click();
   });
   it('should test batch document edit', () => {
-    const agendaDate = Cypress.moment().add(2, 'weeks')
+    const agendaDate = Cypress.dayjs().add(2, 'weeks')
       .day(1);
     const subcaseTitle1 = 'Cypress test: cancelling a new piece';
     const fileName2 = 'test pdf 2';

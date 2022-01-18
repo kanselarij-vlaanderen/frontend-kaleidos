@@ -10,11 +10,11 @@ import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
-  return Cypress.moment().unix();
+  return Cypress.dayjs().unix();
 }
 
 context('Propagation to other graphs', () => {
-  const agendaDate = Cypress.moment().add(1, 'weeks')
+  const agendaDate = Cypress.dayjs().add(1, 'weeks')
     .day(6); // Next friday
   const caseTitle = `testId=${currentTimestamp()}: Cypress test dossier 1`;
   const subcaseTitle1 = `${caseTitle} test stap 1`;

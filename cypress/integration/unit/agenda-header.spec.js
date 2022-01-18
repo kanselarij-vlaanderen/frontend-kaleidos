@@ -7,11 +7,11 @@ import cases from '../../selectors/case.selectors';
 import document from '../../selectors/document.selectors';
 
 function currentTimestamp() {
-  return Cypress.moment().unix();
+  return Cypress.dayjs().unix();
 }
 
 context('Agenda-Header actions tests', () => {
-  const dateToCreateAgenda = Cypress.moment().add(9, 'weeks')
+  const dateToCreateAgenda = Cypress.dayjs().add(9, 'weeks')
     .day(1);
   const amountToRun = 1;
   const typeNota = 'Nota';
@@ -152,7 +152,7 @@ context('Agenda-Header actions tests', () => {
 
   it('Should add agendaitems to an agenda and approve&close with rollback/agendaitem', () => {
     const testId = `${currentTimestamp()}`;
-    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
+    const dateToCreateAgenda = Cypress.dayjs().add(3, 'weeks')
       .day(2);
 
     const caseTitleShort = `case: Approve agenda - formal not ok: new item - ${testId}`;
@@ -203,7 +203,7 @@ context('Agenda-Header actions tests', () => {
 
   it('Should add agendaitems to an agenda and approve with rollback/new agendaitem', () => {
     const testId = `${currentTimestamp()}`;
-    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
+    const dateToCreateAgenda = Cypress.dayjs().add(3, 'weeks')
       .day(2);
 
     const caseTitleShort = `case: Approve agenda - formal not ok: new item - ${testId}`;

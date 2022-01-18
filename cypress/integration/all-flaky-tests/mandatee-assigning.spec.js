@@ -8,11 +8,11 @@ import newsletter from '../../selectors/newsletter.selectors';
 import auk from '../../selectors/auk.selectors';
 
 function currentTimestamp() {
-  return Cypress.moment().unix();
+  return Cypress.dayjs().unix();
 }
 
 context('Assigning a mandatee to agendaitem or subcase should update linked subcase/agendaitems, KAS-1291', () => {
-  const agendaDate = Cypress.moment().add(1, 'weeks')
+  const agendaDate = Cypress.dayjs().add(1, 'weeks')
     .day(4); // Next friday
   // This variable is used multiple times to check if data is properly loaded
   const nameToCheck = 'Jambon';

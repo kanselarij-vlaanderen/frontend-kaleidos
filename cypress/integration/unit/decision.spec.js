@@ -9,11 +9,11 @@ import document from '../../selectors/document.selectors';
 import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
-  return Cypress.moment().unix();
+  return Cypress.dayjs().unix();
 }
 
 context('Add files to an agenda', () => {
-  const agendaDate = Cypress.moment().add(1, 'weeks')
+  const agendaDate = Cypress.dayjs().add(1, 'weeks')
     .day(2); // Next friday
 
   beforeEach(() => {

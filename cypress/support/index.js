@@ -28,6 +28,10 @@ import './commands/reset-database.commands'
 import './commands/subcase-commands'
 import './commands/utility-commands'
 
+// support file
+const dayjs = require('dayjs')
+Cypress.dayjs = dayjs
+
 // rdfa editor sometimes throws errors, but loads anyway
 Cypress.on('uncaught:exception', (err) => {
   return !err.message.includes(`Cannot read property 'nodeType' of null`);

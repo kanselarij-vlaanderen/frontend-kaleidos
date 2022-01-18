@@ -48,7 +48,7 @@ function clickReverseTab(tabName) {
  * @name setDateInFlatpickr
  * @memberOf Cypress.Chainable#
  * @function
- * @param {Object} date the Cypress.moment with the date to set
+ * @param {Object} date the Cypress.dayjs with the date to set
  */
 function setDateInFlatpickr(date) {
   cy.log('setDateInFlatpickr');
@@ -68,14 +68,14 @@ function setDateInFlatpickr(date) {
  * @name setDateAndTimeInFlatpickr
  * @memberOf Cypress.Chainable#
  * @function
- * @param {Object} date the Cypress.moment with the date to set
+ * @param {Object} date the Cypress.dayjs with the date to set
  */
 function setDateAndTimeInFlatpickr(date) {
   cy.log('setDateAndTimeInFlatpickr');
   setDateInFlatpickr(date);
   cy.get(dependency.flatPickr.time).within(() => {
     cy.get(dependency.flatPickr.hour).type(date.hour());
-    cy.get(dependency.flatPickr.minute).type(date.minutes());
+    cy.get(dependency.flatPickr.minute).type(date.minute());
   });
   cy.log('/setDateAndTimeInFlatpickr');
 }

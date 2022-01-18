@@ -19,7 +19,7 @@ import utils from '../../selectors/utils.selectors';
  * @memberOf Cypress.Chainable#
  * @function
  * @param {*} kind The kind of meeting to select, language and case sensitive
- * @param {*} date The cypress.moment object with the date and time to set
+ * @param {*} date The Cypress.dayjs object with the date and time to set
  * @param {string} location The location of the meeting to enter as input
  * @param {number} meetingNumber The number of the meeting to enter as input
  * @param {string} meetingNumberVisualRepresentation The visual representation of the meetingnumber to enter as input
@@ -51,7 +51,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
       });
     cy.get(dependency.emberPowerSelect.option, {
       timeout: 15000,
-    }).should('not.be.visible');
+    }).should('not.exist');
   }
 
   // Set the start date
@@ -153,7 +153,7 @@ function visitAgendaWithLink(link) {
  * @name openAgendaForDate
  * @memberOf Cypress.Chainable#
  * @function
- * @param {*} agendaDate A cypress.moment object with the date to search
+ * @param {*} agendaDate A Cypress.dayjs object with the date to search
  * @param {integer} index Allows selecting specific agenda when multiple are found
  */
 function openAgendaForDate(agendaDate, index = 0) {

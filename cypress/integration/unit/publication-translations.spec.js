@@ -93,8 +93,8 @@ context('Publications translation tests', () => {
     const editedPageCount = 6;
     const wordCount = 1000;
     const editedWordcount = 1001;
-    const translationDueDate = Cypress.moment();
-    const editedTranslationDueDate = Cypress.moment().add(1, 'weeks');
+    const translationDueDate = Cypress.dayjs();
+    const editedTranslationDueDate = Cypress.dayjs().add(1, 'weeks');
     const monthDutch = getTranslatedMonth(translationDueDate.month());
 
     cy.intercept('GET', '/translation-subcases/**').as('getTranslationSubcases');

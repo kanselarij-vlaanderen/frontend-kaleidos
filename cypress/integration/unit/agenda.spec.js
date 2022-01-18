@@ -7,11 +7,11 @@ import route from  '../../selectors/route.selectors';
 import utils from  '../../selectors/utils.selectors';
 
 function currentTimestamp() {
-  return Cypress.moment().unix();
+  return Cypress.dayjs().unix();
 }
 
 context('Agenda tests', () => {
-  const agendaDate = Cypress.moment().add(1, 'weeks')
+  const agendaDate = Cypress.dayjs().add(1, 'weeks')
     .day(5); // Next friday
   const typeNota = 'Nota';
   const agendaKind = 'Ministerraad';
@@ -63,7 +63,7 @@ context('Agenda tests', () => {
   // The next tests create their own agenda
 
   it('should create a new agenda and then delete the last agenda (and automatically the meeting)', () => {
-    const agendaDateSingleTest = Cypress.moment().add(2, 'weeks')
+    const agendaDateSingleTest = Cypress.dayjs().add(2, 'weeks')
       .day(5); // Friday in two weeks
     cy.createAgenda(agendaKind, agendaDateSingleTest, agendaPlace).then((result) => {
       cy.visitAgendaWithLink(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
@@ -79,7 +79,7 @@ context('Agenda tests', () => {
   });
 
   it('Should be able to close a session with only 1 approved agenda, cfr. KAS-1551', () => {
-    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
+    const dateToCreateAgenda = Cypress.dayjs().add(3, 'weeks')
       .day(5); // Friday in three weeks
     cy.createAgenda(agendaKind, dateToCreateAgenda, agendaPlace).then((result) => {
       cy.visitAgendaWithLink(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
@@ -91,7 +91,7 @@ context('Agenda tests', () => {
   });
 
   it('Should not be able to close a session with only a design agenda, cfr. KAS-1551', () => {
-    const dateToCreateAgenda = Cypress.moment().add(4, 'weeks')
+    const dateToCreateAgenda = Cypress.dayjs().add(4, 'weeks')
       .day(5); // Friday in four weeks
     cy.createAgenda(agendaKind, dateToCreateAgenda, agendaPlace);
     cy.openAgendaForDate(dateToCreateAgenda);
@@ -101,7 +101,7 @@ context('Agenda tests', () => {
 
   it('should edit nota on agendaitem and trim whitespaces', () => {
     const testId = `${currentTimestamp()}`;
-    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
+    const dateToCreateAgenda = Cypress.dayjs().add(3, 'weeks')
       .day(1);
 
     const caseTitleShort = `Cypress agenda spec edit & trim whitespace - ${testId}`;
@@ -170,7 +170,7 @@ context('Agenda tests', () => {
   });
 
   it('It should be automatically get the next meetingID assigned in the UI', () => {
-    const agendaDateSingle = Cypress.moment();
+    const agendaDateSingle = Cypress.dayjs();
     // TODO-bug the existing agendas sometimes get NaN, why? We have to make this agenda with number 1 to ensure numbering works
     cy.createAgenda(agendaKind, agendaDateSingle, agendaPlace, 1);
     cy.createAgenda(agendaKind, agendaDateSingle, agendaPlace, null, 'VV AA 1999/2BIS').then((result) => {
@@ -191,7 +191,7 @@ context('Agenda tests', () => {
 
   it('Should add agendaitems to an agenda and set all of them to formally OK', () => {
     const testId = `${currentTimestamp()}`;
-    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
+    const dateToCreateAgenda = Cypress.dayjs().add(3, 'weeks')
       .day(1);
 
     const caseTitleShort = `Cypress agenda spec formal ok: set formality - ${testId}`;
@@ -210,7 +210,7 @@ context('Agenda tests', () => {
 
   it('Should add agendaitems to an agenda and set all of them to formally OK and close the agenda', () => {
     const testId = `${currentTimestamp()}`;
-    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
+    const dateToCreateAgenda = Cypress.dayjs().add(3, 'weeks')
       .day(1);
 
     const caseTitleShort = `Cypress agenda spec formal ok: close agenda - ${testId}`;
@@ -238,7 +238,7 @@ context('Agenda tests', () => {
 
   it('Should add agendaitems to an agenda and set one of them to formally NOK and approve and close the agenda', () => {
     const testId = `${currentTimestamp()}`;
-    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
+    const dateToCreateAgenda = Cypress.dayjs().add(3, 'weeks')
       .day(1);
 
     const caseTitleShort = `Cypress agenda spec formal ok: approve & close agenda - ${testId}`;
@@ -274,7 +274,7 @@ context('Agenda tests', () => {
 
   it('Should add agendaitems to an agenda and set one of them to formally NOK and approve the agenda', () => {
     const testId = `${currentTimestamp()}`;
-    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
+    const dateToCreateAgenda = Cypress.dayjs().add(3, 'weeks')
       .day(1);
 
     const caseTitleShort = `Cypress agenda spec formal ok: approve agenda - ${testId}`;

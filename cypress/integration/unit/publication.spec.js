@@ -81,16 +81,16 @@ context('Publications tests', () => {
     const fields = {
       number: 999,
       suffix: 'BIS',
-      decisionDate: Cypress.moment().add(1, 'weeks')
+      decisionDate: Cypress.dayjs().add(1, 'weeks')
         .day(3),
-      receptionDate: Cypress.moment().add(1, 'weeks')
+      receptionDate: Cypress.dayjs().add(1, 'weeks')
         .day(3),
-      targetPublicationdate: Cypress.moment().add(1, 'weeks')
+      targetPublicationdate: Cypress.dayjs().add(1, 'weeks')
         .day(3),
       shortTitle: 'Some text',
       longTitle: 'Some text',
     };
-    const currentDate = Cypress.moment().format('DD-MM-YYYY');
+    const currentDate = Cypress.dayjs().format('DD-MM-YYYY');
 
     // error validation (and reset after cancel)
     cy.get(publication.publicationsIndex.newPublication).click();
@@ -187,12 +187,12 @@ context('Publications tests', () => {
     cy.get(auk.emptyState.message).contains(noMandatees);
 
     // add mandatee
-    cy.intercept('GET', '/mandatees**http://themis.vlaanderen.be/id/bestuursorgaan/**').as('getMandatees');
+    cy.intercept('GET', '/mandatees**').as('getMandatees');
     cy.get(publication.mandateesPanel.add).click();
     cy.wait('@getMandatees');
     cy.get(utils.mandateesSelector.add).should('be.disabled');
     cy.get(utils.mandateeSelector.container).click();
-    cy.get(dependency.emberPowerSelect.optionSearchMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(mandateeName)
       .click();
     cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');

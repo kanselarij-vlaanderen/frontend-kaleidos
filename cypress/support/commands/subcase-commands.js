@@ -125,10 +125,10 @@ function changeSubcaseAccessLevel(confidentialityChange, accessLevel, newShortTi
  */
 function addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
   cy.log('addSubcaseMandatee');
-  cy.intercept('GET', '/mandatees**http://themis.vlaanderen.be/id/bestuursorgaan/**').as('getMandatees');
+  cy.intercept('GET', '/mandatees**').as('getMandatees');
 
   if (mandateeSearchText) {
-    cy.intercept('GET', `/mandatees**http://themis.vlaanderen.be/id/bestuursorgaan/**?filter**${mandateeSearchText.split(' ', 1)}**`).as('getFilteredMandatees');
+    cy.intercept('GET', `/mandatees**?filter**${mandateeSearchText.split(' ', 1)}**`).as('getFilteredMandatees');
   }
   cy.intercept('PATCH', '/subcases/*').as('patchSubcase');
   cy.get(mandatee.mandateePanelView.actions.edit).click();
@@ -141,7 +141,7 @@ function addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
     cy.get(dependency.emberPowerSelect.searchInput).type(mandateeSearchText)
       .wait('@getFilteredMandatees');
   }
-  cy.get(dependency.emberPowerSelect.optionSearchMessage).should('not.exist');
+  cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
   // we can search or select by number
   // when searching we select the first option we get or the first option with a specific title
   if (mandateeSearchText) {

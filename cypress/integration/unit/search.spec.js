@@ -6,14 +6,14 @@ import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
-  return Cypress.moment().unix();
+  return Cypress.dayjs().unix();
 }
 
 context('Search tests', () => {
   // INFO: enable musearch, elasticsearch and tika for this spec
   const options = [5, 10, 25, 50, 100];
 
-  const dateToCreateAgenda = Cypress.moment().add(2, 'weeks')
+  const dateToCreateAgenda = Cypress.dayjs().add(2, 'weeks')
     .day(1)
     .subtract(1, 'day');
 
