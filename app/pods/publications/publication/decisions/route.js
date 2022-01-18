@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
-export default class PublicationsPublicationDocumentsRoute extends Route {
+export default class PublicationsPublicationDecisionsRoute extends Route {
   @service store;
 
   async model() {

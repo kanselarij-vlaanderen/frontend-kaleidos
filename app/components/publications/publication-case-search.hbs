@@ -23,7 +23,7 @@
     {{#each this.searchResults as |result|}}
       <Auk::SearchResultsList::Item
         data-test-publication-case-search-result
-        @route="publications.publication.documents"
+        @route="publications.publication.decisions"
         @model={{result.id}}
         @skin="multiline"
       >

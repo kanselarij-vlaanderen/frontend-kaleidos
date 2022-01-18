@@ -11,11 +11,11 @@
   </Auk::Tab>
   {{#if @publicationFlow.case.subcases}}
     <Auk::Tab
-      @route="publications.publication.documents"
+      @route="publications.publication.decisions"
       @counter={{this.documentsCount}}
       data-test-publication-nav-documents
     >
-      {{t "documents"}}
+      {{t "publication-details-tab-decisions"}}
     </Auk::Tab>
   {{/if}}
   <Auk::Tab
