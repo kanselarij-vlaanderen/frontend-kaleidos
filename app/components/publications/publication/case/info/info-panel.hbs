@@ -47,7 +47,7 @@
 
           {{!Numac-nummers}}
           <div class="auk-o-grid-col-4 auk-content">
-            <Auk::KeyValue @key={{t "numac-number"}}>
+            <Auk::KeyValue @key={{t "publication-flow-numac-number"}}>
               {{#if @publicationFlow.numacNumbers}}
                 {{join ", " (map-by "idName" @publicationFlow.numacNumbers)}}
               {{else}}
@@ -192,7 +192,7 @@
                   class="auk-form-group"
                 >
                   <Auk::Label>
-                    {{t "numac-number"}}
+                    {{t "publication-flow-numac-number"}}
                   </Auk::Label>
                   {{! TODO: disable modifying numac-number once (staatsblad-)decision exists? }}
                   <Auk::InputPills
