@@ -5,9 +5,12 @@ export default class PublicationRoute extends Route {
   @service store;
 
   model(params) {
-    return this.store.findRecord('publication-flow', params.publication_id, {
+    return this.store.queryOne('publication-flow', {
+      'filter[:id:]': params.publication_id,
       include: [
         'case',
+        'case.subcases',
+        'agenda-item-treatment',
         'status',
         'mode',
         'identification.structured-identifier',

@@ -11,15 +11,8 @@ export default class CaseRoute extends Route {
   async afterModel(model) {
     this._case = await model.case;
     await this._case.governmentAreas;
-    const subcase = await this.store.queryOne('subcase', {
-      filter: {
-        case: {
-          [':id:']: this._case.id,
-        },
-        ':has:agenda-activities': 'yes',
-      },
-    });
-    this.isViaCouncilOfMinisters = !!subcase;
+    let subcases = await this._case.subcases;
+    this.isViaCouncilOfMinisters = !!subcases.length;
   }
 
   setupController(controller) {
