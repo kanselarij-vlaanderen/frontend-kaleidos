@@ -179,6 +179,8 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     let saves = [];
 
     let isPublicationFlowDirty = false;
+
+    // Dringend
     let wasUrgent = this.publicationService.getIsUrgent(publicationFlow);
     if (this.isUrgent !== wasUrgent) {
       let urgencyLevel = await this.publicationService.getUrgencyLevel(
@@ -188,6 +190,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
       isPublicationFlowDirty = true;
     }
 
+    // Publicatienummer
     const identification = await publicationFlow.identification;
     const structuredIdentifier = await identification.structuredIdentifier;
     const number = parseInt(this.publicationNumber, 10);
@@ -202,6 +205,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
       saves.push(identification.save());
     }
 
+    // Numac-nummers
     for (let numacNumber of this.numacNumbersToDelete) {
       let destroy = numacNumber.destroyRecord();
       saves.push(destroy);

@@ -26,6 +26,7 @@
       <Auk::Panel::Body>
         <div class="auk-o-grid">
 
+          {{!Dringend}}
           <div class="auk-o-grid-col-4 auk-content">
             <Auk::KeyValue @key={{t "publication-urgent"}}>
               {{#if @publicationFlow.urgencyLevel.isUrgent}}
@@ -36,6 +37,7 @@
             </Auk::KeyValue>
           </div>
 
+          {{!Publicatienummer}}
           <div class="auk-o-grid-col-4 auk-content">
             <Auk::KeyValue
               @key={{t "publications-number"}}
@@ -43,6 +45,7 @@
             />
           </div>
 
+          {{!Numac-nummers}}
           <div class="auk-o-grid-col-4 auk-content">
             <Auk::KeyValue @key={{t "numac-number"}}>
               {{#if @publicationFlow.numacNumbers}}
@@ -135,6 +138,7 @@
           <div class="auk-form-group-layout auk-form-group-layout--grid">
             <div class="auk-o-grid">
 
+              {{!Dringend}}
               <div class="auk-o-grid-col-4">
                 <div class="auk-form-group">
                   <Auk::Label>
@@ -148,6 +152,7 @@
                 </div>
               </div>
 
+              {{!Publicatienummer}}
               <div class="auk-o-grid-col-4">
                 <div class="auk-form-group">
                   <Auk::Label
@@ -180,8 +185,8 @@
                 </div>
               </div>
 
+              {{!Numac-nummers}}
               <div class="auk-o-grid-col-4">
-                {{! Werknummer BS == numac nummer }}
                 <div
                   data-test-publication-sidebar-numac-number
                   class="auk-form-group"
