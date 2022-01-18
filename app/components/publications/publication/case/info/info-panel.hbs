@@ -69,21 +69,15 @@
                     @publicationFlow.agendaItemTreatment.agendaitem.id
                   }}
                 >
-                  {{#if @publicationFlow.agendaItemTreatment.startDate}}
-                    {{moment-format
-                      @publicationFlow.agendaItemTreatment.startDate
-                      "DD-MM-YYYY"
-                    }}
+                  {{#if this.decisionDate}}
+                    {{moment-format this.decisionDate "DD-MM-YYYY"}}
                   {{else}}
                     {{t "to-agenda"}}
                   {{/if}}
                 </Auk::ButtonLink>
               {{else}}
-                {{#if @publicationFlow.agendaItemTreatment.startDate}}
-                  {{moment-format
-                    @publicationFlow.agendaItemTreatment.startDate
-                    "DD-MM-YYYY"
-                  }}
+                {{#if this.decisionDate}}
+                  {{moment-format this.decisionDate "DD-MM-YYYY"}}
                 {{else}}
                   {{t "dash"}}
                 {{/if}}
@@ -94,8 +88,8 @@
           {{!Datum ontvangst}}
           <div class="auk-o-grid-col-4 auk-content">
             <Auk::KeyValue @key={{t "publication-flow-opening-date"}}>
-              {{#if @publicationFlow.openingDate}}
-                {{moment-format @publicationFlow.openingDate "DD-MM-YYYY"}}
+              {{#if this.openingDate}}
+                {{moment-format this.openingDate "DD-MM-YYYY"}}
               {{else}}
                 {{t "dash"}}
               {{/if}}
@@ -105,11 +99,8 @@
           {{!Limiet publicatie}}
           <div class="auk-o-grid-col-4 auk-content">
             <Auk::KeyValue @key={{t "publication-flow-publication-due-date"}}>
-              {{#if @publicationFlow.publicationSubcase.dueDate}}
-                {{moment-format
-                  @publicationFlow.publicationSubcase.dueDate
-                  "DD-MM-YYYY"
-                }}
+              {{#if this.publicationDueDate}}
+                {{moment-format this.publicationDueDate "DD-MM-YYYY"}}
               {{else}}
                 {{t "dash"}}
               {{/if}}
@@ -221,17 +212,14 @@
                 >
                   <Auk::Label>{{t "decision-date"}}</Auk::Label>
                   {{#if @isViaCouncilOfMinisters}}
-                    {{#if @publicationFlow.agendaItemTreatment.startDate}}
-                      {{moment-format
-                        @publicationFlow.agendaItemTreatment.startDate
-                        "DD-MM-YYYY"
-                      }}
+                    {{#if this.decisionDate}}
+                      {{moment-format this.decisionDate "DD-MM-YYYY"}}
                     {{else}}
                       {{t "dash"}}
                     {{/if}}
                   {{else}}
                     <Auk::Datepicker
-                      @date={{@publicationFlow.agendaItemTreatment.startDate}}
+                      @date={{this.decisionDate}}
                       @onChange={{this.setDecisionDate}}
                     />
                   {{/if}}
@@ -246,17 +234,14 @@
                 >
                   <Auk::Label>{{t "publication-flow-opening-date"}}</Auk::Label>
                   {{#if @isViaCouncilOfMinisters}}
-                    {{#if @publicationFlow.openingDate}}
-                      {{moment-format
-                        @publicationFlow.openingDate
-                        "DD-MM-YYYY"
-                      }}
+                    {{#if this.openingDate}}
+                      {{moment-format this.openingDate "DD-MM-YYYY"}}
                     {{else}}
                       {{t "dash"}}
                     {{/if}}
                   {{else}}
                     <Auk::Datepicker
-                      @date={{@publicationFlow.openingDate}}
+                      @date={{this.openingDate}}
                       @onChange={{this.setOpeningDate}}
                     />
                   {{/if}}
@@ -272,7 +257,7 @@
                   <Auk::Label>{{t "publication-flow-publication-due-date"}}</Auk::Label>
                   {{#if (not @publicationFlow.status.isWithdrawn)}}
                     <Auk::Datepicker
-                      @date={{@publicationFlow.publicationSubcase.dueDate}}
+                      @date={{this.publicationDueDate}}
                       @onChange={{this.setPublicationDueDate}}
                     />
                   {{else}}

@@ -5,6 +5,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { timeout } from 'ember-concurrency';
 import { task, restartableTask } from 'ember-concurrency-decorators';
+import moment from 'moment';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationCaseInfoPanelComponent extends Component {
@@ -23,6 +24,9 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   @tracked numacNumbers;
   numacNumbersToDelete;
 
+  @tracked decisionDate;
+  @tracked openingDate;
+  @tracked publicationDueDate;
   @tracked isPublicationOverdue;
 
   constructor() {
@@ -31,8 +35,22 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.initFields();
   }
 
-  initFields() {
+  async initFields() {
+    let publicationFlow = this.args.publicationFlow;
+    this.decisionDate = await this.getDecisionDate(publicationFlow);
+    this.openingDate = publicationFlow.openingDate;
+    this.publicationDueDate = await this.getPublicationDueDate(publicationFlow);
     this.setIsPublicationOverdue();
+  }
+
+  async getDecisionDate(publicationFlow) {
+    let agendaItemTreatment = await publicationFlow.agendaItemTreatment;
+    return agendaItemTreatment.startDate;
+  }
+
+  async getPublicationDueDate(publicationFlow) {
+    let publicationSubcase = await publicationFlow.publicationSubcase;
+    return publicationSubcase.dueDate;
   }
 
   @action
@@ -112,52 +130,36 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   @action
-  async setDecisionDate(selectedDates) {
-    let publicationFlow = this.args.publicationFlow;
-    let agendaItemTreatment = await publicationFlow.agendaItemTreatment;
-    agendaItemTreatment.startDate = selectedDates[0];
+  setDecisionDate(selectedDates) {
+    this.decisionDate = selectedDates[0];
   }
 
   @action
   setOpeningDate(selectedDates) {
-    let publicationFlow = this.args.publicationFlow;
-    publicationFlow.openingDate = selectedDates[0];
+    this.openingDate = selectedDates[0];
   }
 
   @action
-  async setPublicationDueDate(selectedDates) {
-    let publicationFlow = this.args.publicationFlow;
-    let publicationSubcase = await publicationFlow.publicationSubcase;
-    publicationSubcase.dueDate = selectedDates[0];
+  setPublicationDueDate(selectedDates) {
+    this.publicationDueDate = selectedDates[0];
     this.setIsPublicationOverdue();
   }
 
   async setIsPublicationOverdue() {
     let publicationFlow = this.args.publicationFlow;
-    this.isPublicationOverdue = await this.checkIsPublicationOverdue(
-      publicationFlow
-    );
-  }
-
-  async checkIsPublicationOverdue(publicationFlow) {
     let publicationStatus = await publicationFlow.status;
     let isFinal = publicationStatus.isFinal;
     if (isFinal) {
-      return false;
+      this.isPublicationOverdue = false;
+      return;
     }
 
-    let publicationSubcase = await publicationFlow.publicationSubcase;
-    return publicationSubcase.isOverdue;
+    this.isPublicationOverdue = moment(this.publicationDueDate).isBefore(Date.now(), 'day');
   }
 
   @action
   async cancelEdit() {
-    let publicationFlow = this.args.publicationFlow;
-    publicationFlow.rollbackAttributes();
-    let agendaItemTreatment = await publicationFlow.agendaItemTreatment;
-    agendaItemTreatment.rollbackAttributes();
-    let publicationSubcase = await publicationFlow.publicationSubcase;
-    publicationSubcase.rollbackAttributes();
+    await this.initFields();
 
     this.showError = false;
     this.isInEditMode = false;
@@ -217,15 +219,19 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
     // Datum beslissing
     let agendaItemTreatment = await publicationFlow.agendaItemTreatment;
-    if (this.getHasDirtyAttributes(agendaItemTreatment)) {
+    let oldDecisionDate = agendaItemTreatment.startDate;
+    if (this.decisionDate !== oldDecisionDate) {
+      agendaItemTreatment.startDate = this.decisionDate;
       let agendaItemTreatmentSave = agendaItemTreatment.save();
       saves.push(agendaItemTreatmentSave);
     }
 
     // Datum ontvangst
-    if (this.getHasDirtyAttributes(publicationFlow)) {
+    let oldOpeningDate = publicationFlow.openingDate;
+    if (this.openingDate !== oldOpeningDate) {
       isPublicationFlowDirty = true;
     }
+
     if (isPublicationFlowDirty) {
       let publicationFlowSave = publicationFlow.save();
       saves.push(publicationFlowSave);
@@ -233,27 +239,12 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
     // Limiet publicatie
     let publicationSubcase = await publicationFlow.publicationSubcase;
-    if (this.getHasDirtyAttributes(publicationSubcase)) {
+    let oldPublicationDueDate = publicationSubcase.dueDate;
+    if (oldPublicationDueDate !== this.publicationDueDate) {
       let publicationSubcaseSave = publicationSubcase.save();
       saves.push(publicationSubcaseSave);
     }
 
     await Promise.all(saves);
-  }
-
-  /**
-   * WORKAROUND:
-   * When a property of a model is set to undefined, one would expect to be able to check by model.dirtyType === 'updated' or model.hasDirtyAttributes === true
-   * However these properties can not be used because they have the same values as when no change did occur: dirtyType === undefined and hadDirtyAttributes === false
-   * @param {*} model
-   * @returns
-   */
-  getHasDirtyAttributes(model) {
-    let changedAttributes = model.changedAttributes();
-    // eslint-disable-next-line no-unused-vars
-    for (let attribute of Object.keys(changedAttributes)) {
-      return true;
-    }
-    return false;
   }
 }
