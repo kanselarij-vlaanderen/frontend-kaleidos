@@ -73,13 +73,13 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.isUrgent = isUrgent;
   }
 
-  @restartableTask
+  @task
   *setPublicationNumber(event) {
     this.publicationNumber = event.target.value;
     yield this.checkPublicationNumber.perform();
   }
 
-  @restartableTask
+  @task
   *setPublicationNumberSuffix(event) {
     this.publicationNumberSuffix = isBlank(event.target.value)
       ? undefined
@@ -92,23 +92,25 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.publicationNumberErrorKey = undefined;
     if (isBlank(this.publicationNumber)) {
       this.publicationNumberErrorKey = 'publication-number-error-required';
-    } else {
-      let publicationNumber = Number.parseFloat(this.publicationNumber);
-      let isNumeric =
-        Number.isInteger(publicationNumber) && publicationNumber > 0;
-      if (!isNumeric) {
-        this.publicationNumberErrorKey = 'publication-number-error-numeric';
-      } else {
-        yield timeout(1000);
-        let isAlreadyTaken =
-          yield this.publicationService.publicationNumberAlreadyTaken(
-            this.publicationNumber,
-            this.publicationNumberSuffix
-          );
-        if (isAlreadyTaken) {
-          this.publicationNumberErrorKey = 'publication-number-error-taken';
-        }
-      }
+      return;
+    }
+
+    let publicationNumber = Number.parseFloat(this.publicationNumber);
+    let isNumeric =
+      Number.isInteger(publicationNumber) && publicationNumber > 0;
+    if (!isNumeric) {
+      this.publicationNumberErrorKey = 'publication-number-error-numeric';
+      return
+    }
+
+    yield timeout(1000);
+    let isAlreadyTaken =
+      yield this.publicationService.publicationNumberAlreadyTaken(
+        this.publicationNumber,
+        this.publicationNumberSuffix
+      );
+    if (isAlreadyTaken) {
+      this.publicationNumberErrorKey = 'publication-number-error-taken';
     }
   }
 
@@ -171,6 +173,16 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   @task
   *save() {
     let publicationFlow = this.args.publicationFlow;
+
+    let checkTask = this.checkPublicationNumber.last;
+    let isCheckPending = checkTask.last && !checkTask.isFinished;
+    if (isCheckPending) {
+      yield checkTask;
+      if (this.publicationNumberErrorKey) {
+        return;
+      }
+    }
+
     yield this.performSave(publicationFlow);
     this.isInEditMode = false;
   }
