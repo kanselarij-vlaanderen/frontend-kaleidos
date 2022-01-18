@@ -152,11 +152,11 @@
                   >
                     {{t "publications-number"}}
                   </Auk::Label>
-                  <div class="auk-o-flex">
+                  <div class="auk-o-flex auk-u-mb">
                     <Auk::Input
                       data-test-publication-sidebar-publication-number
                       @type="number"
-                      class="auk-o-flex__item"
+                      class="auk-input--block auk-o-flex__item"
                       value={{this.publicationNumber}}
                       @error={{this.publicationNumberErrorKey}}
                       {{on "input" (perform this.setPublicationNumber)}}
@@ -164,7 +164,7 @@
                     <Auk::Input
                       data-test-publication-sidebar-publication-number-suffix
                       @width="xsmall"
-                      class="auk-o-flex__item auk-u-ml"
+                      class="auk-u-ml"
                       value={{this.publicationNumberSuffix}}
                       @error={{this.publicationNumberErrorKey}}
                       {{on "input" (perform this.setPublicationNumberSuffix)}}
