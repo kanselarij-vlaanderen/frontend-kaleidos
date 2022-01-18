@@ -10,13 +10,26 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @tracked isInEditMode;
 
+  @tracked decisionDate;
+
   constructor() {
     super(...arguments);
+  }
+
+  async initFields() {
+    let publicationFlow = this.args.publicationFlow;
+    let agendaItemTreatment = await publicationFlow.agendaItemTreatment;
+    this.decisionDate = agendaItemTreatment.startDate;
   }
 
   @action
   putInEditMode() {
     this.isInEditMode = true;
+  }
+
+  @action
+  setDecisionDate(selectedDates) {
+    this.decisionDate = selectedDates[0];
   }
 
   @action
