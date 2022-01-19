@@ -28,7 +28,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   @tracked decisionDate;
   @tracked openingDate;
   @tracked publicationDueDate;
-  @tracked isPublicationOverdue;
 
   constructor() {
     super(...arguments);
@@ -42,7 +41,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.decisionDate = await this.getDecisionDate(publicationFlow);
     this.openingDate = publicationFlow.openingDate;
     this.publicationDueDate = await this.getPublicationDueDate(publicationFlow);
-    this.setIsPublicationOverdue();
   }
 
   async getIsViaCouncilOfMinisters(publicationFlow) {
@@ -152,19 +150,17 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   @action
   setPublicationDueDate(selectedDates) {
     this.publicationDueDate = selectedDates[0];
-    this.setIsPublicationOverdue();
   }
 
-  async setIsPublicationOverdue() {
+  // TODO: review async getter once ember-resources can be used
+  get isPublicationOverdue() {
     let publicationFlow = this.args.publicationFlow;
-    let publicationStatus = await publicationFlow.status;
-    let isFinal = publicationStatus.isFinal;
+    let isFinal = publicationFlow.status.get('isFinal');
     if (isFinal) {
-      this.isPublicationOverdue = false;
-      return;
+      return false;
     }
-
-    this.isPublicationOverdue = moment(this.publicationDueDate).isBefore(Date.now(), 'day');
+    let isPublicationOverdue = moment(this.publicationDueDate).isBefore(Date.now(), 'day');
+    return isPublicationOverdue;
   }
 
   @action
