@@ -13,7 +13,7 @@
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <Auk::Button
-                data-test-info-view-edit
+                data-test-publication-case-info-panel-view-edit
                 @skin="tertiary"
                 @icon="pencil"
                 @layout="icon-only"
@@ -152,7 +152,7 @@
                   </Auk::Label>
                   <div class="auk-o-flex auk-u-mb">
                     <Auk::Input
-                      data-test-publication-sidebar-publication-number
+                      data-test-publication-case-info-panel-publication-number
                       @type="number"
                       class="auk-input--block auk-o-flex__item"
                       value={{this.publicationNumber}}
@@ -160,7 +160,7 @@
                       {{on "input" (perform this.setPublicationNumber)}}
                     />
                     <Auk::Input
-                      data-test-publication-sidebar-publication-number-suffix
+                      data-test-publication-case-info-panel-publication-number-suffix
                       @width="xsmall"
                       class="auk-u-ml"
                       value={{this.publicationNumberSuffix}}
@@ -184,7 +184,7 @@
               {{!Numac-nummers}}
               <div class="auk-o-grid-col-4">
                 <div
-                  data-test-publication-sidebar-numac-number
+                  data-test-publication-case-info-panel-numac-number
                   class="auk-form-group"
                 >
                   <Auk::Label>
@@ -205,7 +205,7 @@
               {{! Datum beslissing }}
               <div class="auk-o-grid-col-4 auk-u-mt-2">
                 <div
-                  data-test-publication-sidebar-decision-date
+                  data-test-publication-case-info-panel-decision-date
                   class="auk-form-group"
                 >
                   <Auk::Label>{{t "decision-date"}}</Auk::Label>
@@ -227,7 +227,7 @@
               {{! Datum ontvangst }}
               <div class="auk-o-grid-col-4 auk-u-mt-2">
                 <div
-                  data-test-publication-sidebar-opening-date
+                  data-test-publication-case-info-panel-opening-date
                   class="auk-form-group"
                 >
                   <Auk::Label>{{t "publication-flow-opening-date"}}</Auk::Label>
@@ -249,7 +249,7 @@
               {{! Limiet publicatie }}
               <div class="auk-o-grid-col-4 auk-u-mt-2">
                 <div
-                  data-test-publication-sidebar-publication-due-date
+                  data-test-publication-case-info-panel-publication-due-date
                   class="auk-form-group"
                 >
                   <Auk::Label>{{t "publication-flow-publication-due-date"}}</Auk::Label>
@@ -282,7 +282,7 @@
           <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
               <Auk::Button
-                data-test-info-edit-cancel
+                data-test-publication-case-info-panel-edit-cancel
                 @skin="borderless"
                 @disabled={{this.save.isRunning}}
                 {{on "click" this.cancelEdit}}
@@ -294,7 +294,7 @@
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <Auk::Button
-                data-test-info-edit-save
+                data-test-publication-case-info-panel-edit-save
                 @skin="primary"
                 @loading={{this.save.isRunning}}
                 @disabled={{not this.isValid}}
