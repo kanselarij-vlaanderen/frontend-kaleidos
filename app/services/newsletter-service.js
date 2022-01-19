@@ -8,8 +8,8 @@ export default class NewsletterService extends Service {
   @service formatter;
   @service currentSession;
 
-  async createCampaign( meeting) {
-    const endpoint = `/newsletter/mail-campaign`;
+  async createCampaign(meeting) {
+    const endpoint = `/newsletter/mail-campaigns`;
     const body = {
       data: {
         meetingId: meeting.id,
@@ -37,31 +37,21 @@ export default class NewsletterService extends Service {
     });
 
     await mailCampaign.save();
-    const reloadedMeeting = await this.store.findRecord(
-      'meeting',
-      meeting.id,
-      {
-        reload: true,
-      }
-    );
+    const reloadedMeeting = await this.store.findRecord('meeting', meeting.id, {
+      reload: true,
+    });
     reloadedMeeting.mailCampaign = mailCampaign;
     await reloadedMeeting.save();
     return mailCampaign;
   }
 
   async sendMailCampaign(id) {
-    const endpoint = `/newsletter/send-mail-campaign`;
-    const body = {
-      data: {
-        id: id,
-      },
-    };
+    const endpoint = `/newsletter/mail-campaigns/${id}/send`;
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/vnd.api+json',
       },
-      body: JSON.stringify(body),
     });
     await response.json();
     if (!response.ok) {
@@ -74,7 +64,7 @@ export default class NewsletterService extends Service {
   }
 
   async sendToBelga(meetingId) {
-    const endpoint = `/newsletter/belga`;
+    const endpoint = `/newsletter/belga-newsletters`;
     const body = {
       data: {
         meetingId: meetingId,
@@ -100,7 +90,7 @@ export default class NewsletterService extends Service {
   }
 
   async getMailCampaign(id) {
-    const endpoint = `/newsletter/mail-campaign/${id}`;
+    const endpoint = `/newsletter/mail-campaigns/${id}`;
     const response = await fetch(endpoint, {
       method: 'GET',
       headers: {
@@ -193,25 +183,10 @@ export default class NewsletterService extends Service {
     }
   }
 
-  // TODO These are for developers use - in comments for follow up
-  /*
-  downloadBelgaXML(meetingId) {
-    try {
-      return await fetch({
-        method: 'GET',
-        url: `/newsletter/belga/${meetingId}`,
-      });
-    } catch (error) {
-      console.warn('An exception ocurred: ', error);
-      this.toaster.error(this.intl.t('error-download-XML'), this.intl.t('warning-title'));
-      return null;
-    }
-    */
-
   async deleteCampaign(id) {
-    const endpoint = `/newsletter/mail-campaign/${id}`;
+    const endpoint = `/newsletter/mail-campaigns/${id}`;
     try {
-      const response = await fetch(endpoint,{
+      const response = await fetch(endpoint, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/vnd.api+json',
@@ -228,9 +203,23 @@ export default class NewsletterService extends Service {
       return null;
     }
   }
+
+  // TODO These are for developers use - in comments for follow up
   /*
+  downloadBelgaXML(meetingId) {
+    try {
+      return await fetch({
+        method: 'GET',
+        url: `/newsletter/belga-newsletters/${meetingId}`,
+      });
+    } catch (error) {
+      console.warn('An exception ocurred: ', error);
+      this.toaster.error(this.intl.t('error-download-XML'), this.intl.t('warning-title'));
+      return null;
+    }
+
   async getMailCampaignContent(id) {
-    const endpoint = `/newsletter/mail-campaign-content/${id}`;
+    const endpoint = `/newsletter/mail-campaigns/${id}/content`;
     const response = await fetch(endpoint, {
       method: 'GET',
       headers: {
