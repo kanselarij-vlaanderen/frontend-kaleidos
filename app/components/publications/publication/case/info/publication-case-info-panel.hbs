@@ -101,10 +101,19 @@
           {{!Limiet publicatie}}
           <div class="auk-o-grid-col-4 auk-content">
             <Auk::KeyValue @key={{t "publication-flow-publication-due-date"}}>
-              {{#if this.publicationDueDate}}
-                {{moment-format this.publicationDueDate "DD-MM-YYYY"}}
-              {{else}}
-                {{t "dash"}}
+              <div class={{if this.isPublicationOverdue "auk-u-text-bold"}}>
+                {{#if this.publicationDueDate}}
+                  {{moment-format this.publicationDueDate "DD-MM-YYYY"}}
+                {{else}}
+                  {{t "dash"}}
+                {{/if}}
+              </div>
+              {{#if this.isPublicationOverdue}}
+                <Auk::FormHelpText
+                  @text={{t "date-expired"}}
+                  @skin="warning"
+                  @icon="alert-triangle"
+                />
               {{/if}}
             </Auk::KeyValue>
           </div>
