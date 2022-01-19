@@ -10,6 +10,8 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @tracked isInEditMode;
 
+  @tracked isViaCouncilOfMinisters;
+
   @tracked regulationType;
   @tracked decisionDate;
 
@@ -22,6 +24,8 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   async initFields() {
     let publicationFlow = this.args.publicationFlow;
+
+    this.isViaCouncilOfMinisters = await this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
 
     this.regulationType = await publicationFlow.regulationType;
 

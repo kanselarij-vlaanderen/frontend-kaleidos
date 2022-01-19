@@ -143,4 +143,10 @@ export default class PublicationService extends Service {
     }
     return undefined;
   }
+
+  async getIsViaCouncilOfMinisters(publicationFlow) {
+    let _case = await publicationFlow.case;
+    let subcases = await _case.subcases;
+    return !!subcases.length;
+  }
 }
