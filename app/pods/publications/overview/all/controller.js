@@ -54,6 +54,8 @@ export default class PublicationsOverviewAllController extends Controller {
     if (serializedColumnsDisplayConfig) {
       const columnsDisplayConfig = JSON.parse(serializedColumnsDisplayConfig);
       return columnsDisplayConfig;
+    } else {
+      return null;
     }
   }
 
@@ -66,7 +68,7 @@ export default class PublicationsOverviewAllController extends Controller {
   }
 
   getDefaultColumnsDisplayConfig() {
-    let columnsDisplayConfig = {};
+    const columnsDisplayConfig = {};
     for (let column of tableColumns) {
       const columnKey = column.keyName;
       const isColumnShown = defaultColumns.includes(columnKey);
