@@ -10,14 +10,21 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @tracked isInEditMode;
 
+  @tracked regulationType;
   @tracked decisionDate;
 
   constructor() {
     super(...arguments);
+
+    this.regulationTypes =  this.store.peekAll('regulation-type').sortBy('position');
+    this.initFields();
   }
 
   async initFields() {
     let publicationFlow = this.args.publicationFlow;
+
+    this.regulationType = await publicationFlow.regulationType;
+
     let agendaItemTreatment = await publicationFlow.agendaItemTreatment;
     this.decisionDate = agendaItemTreatment.startDate;
   }
@@ -25,6 +32,11 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   @action
   putInEditMode() {
     this.isInEditMode = true;
+  }
+
+  @action
+  setRegulationType(regulationType) {
+    this.regulationType = regulationType;
   }
 
   @action
@@ -49,7 +61,25 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   // separate method to prevent ember-concurrency from saving only partially
-  async performSave() {
+  async performSave(publicationFlow) {
+    let saves = [];
 
+    // Type regelgeving
+    let oldRegulationType = await publicationFlow.regulationType;
+    if (oldRegulationType !== this.regulationType) {
+      publicationFlow.regulationType = this.regulationType;
+      saves.push(publicationFlow.save());
+    }
+
+    // Datum beslissing
+    let agendaItemTreatment = await publicationFlow.agendaItemTreatment;
+    let oldDecisionDate = agendaItemTreatment.startDate;
+    if (this.decisionDate !== oldDecisionDate) {
+      agendaItemTreatment.startDate = this.decisionDate;
+      let agendaItemTreatmentSave = agendaItemTreatment.save();
+      saves.push(agendaItemTreatmentSave);
+    }
+
+    await Promise.all(saves);
   }
 }
