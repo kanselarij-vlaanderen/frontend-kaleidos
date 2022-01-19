@@ -1,6 +1,4 @@
-import Model, {
-  attr, hasMany
-} from '@ember-data/model';
+import Model, { attr, hasMany } from '@ember-data/model';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationStatus extends Model {
@@ -37,6 +35,10 @@ export default class PublicationStatus extends Model {
     return this.uri === CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED;
   }
 
+  get isProofIn() {
+    return this.uri === CONSTANTS.PUBLICATION_STATUSES.PROOF_IN;
+  }
+
   get isProofRecalled() {
     return this.uri === CONSTANTS.PUBLICATION_STATUSES.PROOF_RECALLED;
   }
@@ -55,5 +57,25 @@ export default class PublicationStatus extends Model {
 
   get isFinal() {
     return this.isPublished || this.isWithdrawn;
+  }
+
+  get stepNumber() {
+    if (this.isPending) {
+      return this.position - 1;
+    } else {
+      return null;
+    }
+  }
+
+  get statusSkin() {
+    if (this.isWithdrawn) {
+      return "error";
+    } else if (this.isPublished) {
+      return "success";
+    } else if (this.isPaused) {
+      return "paused";
+    }else {
+      return null;
+    }
   }
 }
