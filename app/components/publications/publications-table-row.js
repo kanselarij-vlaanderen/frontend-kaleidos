@@ -14,6 +14,7 @@ export default class PublicationsPublicationsTableRowComponent extends Component
   @tracked publicationDate;
   @tracked pageCount;
   @tracked proofRequestDate;
+  @tracked publicationStatus;
 
   constructor() {
     super(...arguments);
@@ -47,6 +48,11 @@ export default class PublicationsPublicationsTableRowComponent extends Component
     this.publicationDate = yield this.publicationService.getPublicationDate(
       publicationFlow
     );
+  }
+
+  @task
+  *loadPublicationStatus() {
+    this.publicationStatus = yield this.args.publicationFlow.status;
   }
 
   async getPageCount(publicationFlow) {
@@ -88,16 +94,7 @@ export default class PublicationsPublicationsTableRowComponent extends Component
   }
 
   get publicationStatusPillKey() {
-    let publicationStatus = this.loadPublicationStatus.value;
-    if (!publicationStatus) {
-      return undefined;
-    }
-    return getPublicationStatusPillKey(publicationStatus);
-  }
-
-  @task
-  *loadPublicationStatus() {
-    return yield this.args.publicationFlow.status;
+    return this.publicationStatus && getPublicationStatusPillKey(this.publicationStatus);
   }
 
   /**
