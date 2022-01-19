@@ -81,11 +81,13 @@ export default class PublicationsPublicationsTableRowComponent extends Component
     return firstProofRequestDate;
   }
 
+  // TODO: review async getter once ember-resources can be used
   get isTranslationOverdue() {
     return !this.args.publicationFlow.status.get('isFinal')
       && this.args.publicationFlow.translationSubcase.get('isOverdue');
   }
 
+  // TODO: review async getter once ember-resources can be used
   get isPublicationOverdue() {
     return !this.args.publicationFlow.status.get('isFinal')
       && this.args.publicationFlow.publicationSubcase.get('isOverdue');
