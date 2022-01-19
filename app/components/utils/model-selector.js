@@ -6,6 +6,7 @@ import {
   task, timeout
 } from 'ember-concurrency';
 import { computed } from '@ember/object';
+import { isPresent } from '@ember/utils';
 
 // TODO: octane-refactor
 // eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
@@ -35,6 +36,12 @@ export default Component.extend({
       const items = yield this.store.query(modelName, queryOptions);
       this.set('items', items);
     }
+  }),
+
+  searchEnabled: computed('searchField', function() {
+    // default searchEnabled = false on powerSelect
+    // to avoid adding @searchEnabled={{true}} on all uses of this component, we assume search should be enabled when a searchField is given
+    return isPresent(this.searchField);
   }),
 
   queryOptions: computed('sortField', 'searchField', 'filter', 'modelName', 'includeField', function() {

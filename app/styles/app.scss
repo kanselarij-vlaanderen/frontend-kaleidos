@@ -24,42 +24,14 @@
 
 // VLC COMPONENTS
 @import 'custom-components/vlc-agenda-detail-sidebar';
-@import 'custom-components/vlc-agenda-detail-sidebar-item';
-@import 'custom-components/vlc-agenda-detail-sidebar-section-header';
-@import 'custom-components/vlc-agenda-items-section-header';
 @import 'custom-components/vlc-agenda-items';
 @import 'custom-components/vlc-agenda-meta';
 @import 'custom-components/vlc-document-card';
 @import 'custom-components/vlc-document-list';
 @import 'custom-components/vlc-environment-pill';
-@import 'custom-components/vlc-dropdown-menu';
-@import 'custom-components/vlc-list-section-header';
-@import 'custom-components/vlc-mock-login';
-@import 'custom-components/vlc-pagination';
 @import 'custom-components/vlc-procedure-step';
 @import 'custom-components/vlc-rdfa-editor';
 @import 'custom-components/vlc-status-timeline';
-@import 'custom-components/vlc-subline';
-@import 'custom-components/vlc-toaster-button';
-@import 'custom-components/vlc-decision-result-select';
-@import 'custom-components/vlc-numac-nummer-list';
-
-
-// FRAMEWORK FIXES
-@import 'fixes/fix-auk-modal-ember-select';
-@import 'fixes/fix-full-height';
-@import 'fixes/fix-light-table';
-@import 'fixes/fix-icon-positioning';
-@import 'fixes/fix-sortable-item';
-@import 'fixes/fix-ember-data-table';
-
-
-// CUSTOM UTILITIES
-@import 'custom-utilities/_ember-tooltip';
-@import 'custom-utilities/_autocomplete';
-@import 'custom-utilities/_box-model';
-@import 'custom-utilities/_text';
-@import 'custom-utilities/_transparency';
 
 
 // CUSTOM STYLING
@@ -88,5 +60,4 @@
 
 
 // PRINT STYLING
-@import 'print/print';
-@import 'print';
+@import 'print/general';

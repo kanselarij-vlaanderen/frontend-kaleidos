@@ -214,7 +214,7 @@ context('Publications tests', () => {
 
   it('publications:dossier: Add and delete beleidsdomein', () => {
     const noGovernmentFields = 'Er zijn nog geen beleidsvelden toegevoegd';
-    const labelName = 'Cultuur, jeugd, sport & media';
+    const labelName = 'Cultuur, Jeugd, Sport en Media';
     const fieldsName = 'Media';
 
     cy.route('GET', '/publication-flows/**').as('getNewPublicationDetail');
@@ -238,6 +238,7 @@ context('Publications tests', () => {
     // link government field
     cy.route('PATCH', '/cases/**').as('patchCase');
     cy.get(publication.governmentFieldsPanel.edit).click();
+    cy.wait(10000); // TODO to fix with proper await for concepts
     cy.get(utils.domainsFieldsSelectorForm.container).contains(labelName)
       .find(utils.domainsFieldsSelectorForm.field)
       .contains(fieldsName)

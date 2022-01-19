@@ -73,11 +73,12 @@
           data-test-new-subcase-procedure-step
           @modelName="subcase-type"
           @searchField="label"
-          @propertyToShow="label"
           @sortField="label"
           @selectedItems={{this.type}}
           @selectModel={{this.selectType}}
-        />
+        as |model|>
+          {{capitalize model.label}}
+        </Utils::ModelSelector>
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "subcase-name"}}</Auk::Label>
@@ -85,15 +86,16 @@
           {{#if (not this.isEditing)}}
             <Utils::ModelSelector
               data-test-new-subcase-procedure-name
-              class="vlc-u-box-model-maximize-width"
+              class="auk-u-maximize-width"
               @modelName="shortcut"
               @searchField="label"
-              @propertyToShow="label"
               @sortField="label"
               @filter={{this.filter}}
               @selectedItems={{this.selectedShortcut}}
               @selectModel={{this.selectSubcaseName}}
-            />
+            as |model|>
+              {{capitalize model.label}}
+            </Utils::ModelSelector>
             <Auk::Button
               @skin="secondary"
               @layout="icon-only"

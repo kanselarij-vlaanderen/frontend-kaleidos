@@ -16,6 +16,7 @@
   <a
     href={{@href}}
     class="auk-button-link {{this.skin}} {{this.size}} {{this.block}} {{this.padded}}"
+    disabled={{@disabled}}
     ...attributes
   >
     <Auk::Button::InnerLayout @layout={{@layout}} @icon={{@icon}} @size={{@size}}>{{yield}}</Auk::Button::InnerLayout>
@@ -25,9 +26,10 @@
   <button
     type="button"
     class="auk-button-link {{this.skin}} {{this.size}} {{this.block}} {{this.padded}}"
+    disabled={{@disabled}}
     ...attributes
   >
-    <Auk::Button::InnerLayout @layout={{@layout}} @icon={{@icon}}>{{yield}}</Auk::Button::InnerLayout>
+    <Auk::Button::InnerLayout @layout={{@layout}} @icon={{@icon}} @size={{@size}}>{{yield}}</Auk::Button::InnerLayout>
     {{#if (has-block "floater")}}
       {{yield to="floater"}}
     {{/if}}

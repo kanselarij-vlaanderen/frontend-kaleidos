@@ -40,10 +40,11 @@
             <PowerSelect
               @options={{this.organizations}}
               @selected={{this.organization}}
+              @searchEnabled={{true}}
               @search={{perform this.searchOrganizations}}
               @noMatchesMessage={{t "organizations-empty-result"}}
               @placeholder={{t "search-organization"}}
-              @onchange={{this.setOrganization}}
+              @onChange={{this.setOrganization}}
               @allowClear={{true}}
               as |organization|>
               {{ organization.name }}

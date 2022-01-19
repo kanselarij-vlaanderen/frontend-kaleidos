@@ -1,4 +1,4 @@
-<Auk::Navbar @skin="white" @noPadding={{true}} id="c-main-nav">
+<Auk::Navbar @skin="white" @noPadding={{true}} id="c-main-nav" class="l-main-header">
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
@@ -78,7 +78,7 @@
             <Auk::Menu::Item @href="mailto:kaleidos.servicedesk@vlaanderen.be">
               <div>
                 <span>{{t "contact-us"}}</span>
-                <span class="auk-u-muted auk-u-text-small">
+                <span class="auk-u-muted auk-u-text-size--small">
                   {{t "email-servicedesk"}}
                 </span>
               </div>
@@ -111,7 +111,7 @@
                   @name={{this.currentSession.user.fullName}}
                 >
                   <p>{{this.currentSession.user.fullName}}</p>
-                  <p class="auk-u-muted auk-u-text-small">
+                  <p class="auk-u-muted auk-u-text-size--small">
                     {{this.currentSession.group.name}}
                   </p>
                 </Auk::Avatar>

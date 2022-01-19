@@ -1,5 +1,5 @@
 {{!-- template-lint-disable no-bare-strings --}}
-<Auk::Navbar @skin="white" @noPadding={{true}} id="c-main-nav">
+<Auk::Navbar @skin="white" @noPadding={{true}} id="c-main-nav" class="l-main-header">
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
@@ -40,7 +40,7 @@
             <Auk::Menu::Item @href="mailto:kaleidos.servicedesk@vlaanderen.be">
               <div>
                 <span>{{t "contact-us"}}</span>
-                <span class="auk-u-muted auk-u-text-small">{{t "email-servicedesk"}}</span>
+                <span class="auk-u-muted auk-u-text-size--small">{{t "email-servicedesk"}}</span>
               </div>
             </Auk::Menu::Item>
           </Auk::Menu>
