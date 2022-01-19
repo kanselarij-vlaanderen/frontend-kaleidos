@@ -234,7 +234,11 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
     let numacNumbers = await publicationFlow.numacNumbers;
     numacNumbers.replace(0, numacNumbers.length, this.numacNumbers);
-    numacNumbers.save();
+    for (let numacNumber of this.numacNumbers) {
+      if (numacNumber.dirtyType === 'created') {
+        saves.push(numacNumber.save());
+      }
+    }
 
     // Datum beslissing
     let agendaItemTreatment = await publicationFlow.agendaItemTreatment;
@@ -248,6 +252,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     // Datum ontvangst
     let oldOpeningDate = publicationFlow.openingDate;
     if (this.openingDate !== oldOpeningDate) {
+      publicationFlow.openingDate = this.openingDate;
       isPublicationFlowDirty = true;
     }
 
@@ -260,6 +265,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     let publicationSubcase = await publicationFlow.publicationSubcase;
     let oldPublicationDueDate = publicationSubcase.dueDate;
     if (oldPublicationDueDate !== this.publicationDueDate) {
+      publicationSubcase.dueDate = this.publicationDueDate;
       let publicationSubcaseSave = publicationSubcase.save();
       saves.push(publicationSubcaseSave);
     }
