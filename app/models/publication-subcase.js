@@ -1,16 +1,17 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { isPresent } from '@ember/utils';
+import moment from 'moment';
 
 export default class PublicationSubcase extends Model {
   @attr shortTitle;
   @attr title;
-  @attr('datetime') dueDate; // uiterste publicatiedatum
+  @attr('datetime') dueDate; // "Limiet vertaling" === uiterste publicatiedatum
   @attr('datetime') targetEndDate; // gewenste/gevraagde publicatiedatum
   @attr('datetime') startDate;
   @attr('datetime') endDate; // publicatiedatum
   @attr('datetime') created;
   @attr('datetime') modified;
-  @attr('datetime') receivedDate;
+  @attr('datetime') receivedDate; // earliest date of proofing receival (as indicated on upload (not edit))
   @attr proofPrintCorrector;
 
   @belongsTo('publication-flow') publicationFlow;
@@ -26,6 +27,10 @@ export default class PublicationSubcase extends Model {
   correctionDocuments;
   @hasMany('proofing-activity') proofingActivities;
   @hasMany('publication-activity') publicationActivities;
+
+  get isOverdue() {
+    return moment(this.dueDate).isBefore(Date.now(), 'day');
+  }
 
   get isFinished() {
     return isPresent(this.endDate);
