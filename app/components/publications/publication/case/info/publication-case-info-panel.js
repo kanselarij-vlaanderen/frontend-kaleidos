@@ -38,6 +38,8 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   async initFields() {
     let publicationFlow = this.args.publicationFlow;
     this.isViaCouncilOfMinisters = await this.getIsViaCouncilOfMinisters(publicationFlow);
+    this.isUrgent = await this.publicationService.getIsUrgent(publicationFlow);
+    this.numacNumbers = publicationFlow.numacNumbers.toArray();
     this.decisionDate = await this.getDecisionDate(publicationFlow);
     this.openingDate = publicationFlow.openingDate;
     this.publicationDueDate = await this.getPublicationDueDate(publicationFlow);
@@ -64,13 +66,11 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     let publicationFlow = this.args.publicationFlow;
     this.isInEditMode = true;
 
-    this.isUrgent = await this.publicationService.getIsUrgent(publicationFlow);
     let identification = await publicationFlow.identification;
     let structuredIdentifier = await identification.structuredIdentifier;
     this.publicationNumber = structuredIdentifier.localIdentifier;
     this.publicationNumberSuffix = structuredIdentifier.versionIdentifier;
 
-    this.numacNumbers = publicationFlow.numacNumbers.toArray();
     this.numacNumbersToDelete = [];
   }
 
