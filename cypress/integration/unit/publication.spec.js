@@ -238,6 +238,7 @@ context('Publications tests', () => {
     // link government field
     cy.route('PATCH', '/cases/**').as('patchCase');
     cy.get(publication.governmentFieldsPanel.edit).click();
+    cy.wait(10000); // TODO to fix with proper await for concepts
     cy.get(utils.domainsFieldsSelectorForm.container).contains(labelName)
       .find(utils.domainsFieldsSelectorForm.field)
       .contains(fieldsName)
