@@ -36,11 +36,7 @@ export default class PublicationStatusPill extends Component {
   }
 
   get publicationStatusPillKey() {
-    let publicationStatus = this.loadStatus.value;
-    if (!publicationStatus) {
-      return undefined;
-    }
-    return getPublicationStatusPillKey(publicationStatus);
+    return this.publicationStatus && getPublicationStatusPillKey(this.publicationStatus);
   }
 
   @action
