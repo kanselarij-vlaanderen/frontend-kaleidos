@@ -13,7 +13,7 @@
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <Auk::Button
-                data-test-info-view-edit
+                data-test-decisions-info-panel-view-edit
                 @skin="tertiary"
                 @icon="pencil"
                 @layout="icon-only"
@@ -160,7 +160,7 @@
           <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
               <Auk::Button
-                data-test-info-edit-cancel
+                data-test-decisions-info-panel-edit-cancel
                 @skin="borderless"
                 @disabled={{this.save.isRunning}}
                 {{on "click" this.cancelEdit}}
@@ -172,7 +172,7 @@
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <Auk::Button
-                data-test-info-edit-save
+                data-test-decisions-info-panel-edit-save
                 @skin="primary"
                 @loading={{this.save.isRunning}}
                 @disabled={{not this.isValid}}
