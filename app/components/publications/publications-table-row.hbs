@@ -110,15 +110,14 @@ request the whole row and not only the arrow at the end to be clickable }}
       data-test-publication-table-row-translation-due-date
       class="auk-u-text-nowrap"
     >
-      {{!Ember seems not to await async getter}}
       {{#if @publicationFlow.translationSubcase.dueDate}}
-        <div class="{{if (await this.isTranslationOverdue) 'auk-u-text-bold'}}">
+        <div class="{{if this.isTranslationOverdue 'auk-u-text-bold'}}">
           {{moment-format
             @publicationFlow.translationSubcase.dueDate
             "DD-MM-YYYY"
           }}
         </div>
-        {{#if (await this.isTranslationOverdue)}}
+        {{#if this.isTranslationOverdue}}
           <Auk::FormHelpText
             @text={{t "date-expired"}}
             @skin="warning"
@@ -208,14 +207,13 @@ request the whole row and not only the arrow at the end to be clickable }}
       class="auk-u-text-nowrap"
     >
       {{#if @publicationFlow.publicationSubcase.dueDate}}
-        {{!Ember seems not to await async getter}}
-        <div class="{{if (await this.isPublicationOverdue) 'auk-u-text-bold'}}">
+        <div class="{{if this.isPublicationOverdue 'auk-u-text-bold'}}">
           {{moment-format
             @publicationFlow.publicationSubcase.dueDate
             "DD-MM-YYYY"
           }}
         </div>
-        {{#if (await this.isPublicationOverdue)}}
+        {{#if this.isPublicationOverdue}}
           <Auk::FormHelpText
             @text={{t "date-expired"}}
             @skin="warning"

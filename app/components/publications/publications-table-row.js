@@ -81,52 +81,18 @@ export default class PublicationsPublicationsTableRowComponent extends Component
     return firstProofRequestDate;
   }
 
-  // getter to only trigger when column is shown
   get isTranslationOverdue() {
-    let publicationFlow = this.args.publicationFlow;
-    return this.getIsTranslationOverdue(publicationFlow);
+    return !this.args.publicationFlow.status.get('isFinal')
+      && this.args.publicationFlow.translationSubcase.get('isOverdue');
   }
 
-  // getter to only trigger when column is shown
   get isPublicationOverdue() {
-    let publicationFlow = this.args.publicationFlow;
-    return this.getIsPublicationOverdue(publicationFlow);
+    return !this.args.publicationFlow.status.get('isFinal')
+      && this.args.publicationFlow.publicationSubcase.get('isOverdue');
   }
 
   get publicationStatusPillKey() {
     return this.publicationStatus && getPublicationStatusPillKey(this.publicationStatus);
-  }
-
-  /**
-   *
-   * @param {PublicationFlow} publicationFlow
-   * @returns {boolean}
-   */
-  async getIsTranslationOverdue(publicationFlow) {
-    let publicationStatus = await publicationFlow.status;
-    let isFinal = publicationStatus.isFinal;
-    if (isFinal) {
-      return false;
-    }
-
-    let translationSubcase = await publicationFlow.translationSubcase;
-    return translationSubcase.isOverdue;
-  }
-
-  /**
-   *
-   * @param {PublicationFlow} publicationFlow
-   * @returns {boolean}
-   */
-  async getIsPublicationOverdue(publicationFlow) {
-    let publicationStatus = await publicationFlow.status;
-    let isFinal = publicationStatus.isFinal;
-    if (isFinal) {
-      return false;
-    }
-
-    let publicationSubcase = await publicationFlow.publicationSubcase;
-    return publicationSubcase.isOverdue;
   }
 
   @action
