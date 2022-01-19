@@ -68,6 +68,13 @@
             </Auk::KeyValue>
           </div>
 
+          {{!Page count}}
+          {{!TODO}}
+          <div class="auk-o-grid-col-4 auk-content">
+            <Auk::KeyValue @key={{t "pages-amount"}}>
+
+            </Auk::KeyValue>
+          </div>
         </div>
       {{else}}
         <Utils::LoadableContent
@@ -113,6 +120,22 @@
                       @date={{this.decisionDate}}
                       @onChange={{this.setDecisionDate}}
                     />
+                  {{/if}}
+                </div>
+              </div>
+
+              {{! Datum beslissing }}
+              {{!TODO}}
+              <div class="auk-o-grid-col-4">
+                <div
+                  data-test-publication-sidebar-page-count
+                  class="auk-form-group"
+                >
+                  <Auk::Label>{{t "pages-amount"}}</Auk::Label>
+                  {{#if @isViaCouncilOfMinisters}}
+
+                  {{else}}
+
                   {{/if}}
                 </div>
               </div>
