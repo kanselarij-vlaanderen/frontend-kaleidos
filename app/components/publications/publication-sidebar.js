@@ -184,12 +184,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @action
-  setTranslationDueDate(selectedDates) {
-    this.translationSubcase.dueDate = selectedDates[0];
-    this.notifyChanges(this.translationSubcase, 'dueDate');
-  }
-
-  @action
   setTranslationDate(selectedDates) {
     this.translationSubcase.endDate = selectedDates[0];
     this.notifyChanges(this.translationSubcase, 'endDate');

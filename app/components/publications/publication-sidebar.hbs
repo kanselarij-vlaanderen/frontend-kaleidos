@@ -212,29 +212,6 @@
           {{/if}}
         </div>
 
-        {{! Uiterste vertaaldatum }}
-        {{#if
-          (or this.publicationStatus.isPending this.publicationStatus.isPaused)
-        }}
-          <div
-            data-test-publication-sidebar-translation-due-date
-            class="auk-form-group"
-          >
-            <Auk::Label>{{t "translation-due-date"}}</Auk::Label>
-            <Auk::Datepicker
-              @date={{this.translationSubcase.dueDate}}
-              @onChange={{this.setTranslationDueDate}}
-            />
-            {{#if (is-after this.translationSubcase.dueDate precision="days")}}
-              <Auk::FormHelpText
-                @text={{t "date-expired"}}
-                @skin="warning"
-                @icon="alert-triangle"
-              />
-            {{/if}}
-          </div>
-        {{/if}}
-
         {{! Vertaaldatum }}
         <div
           data-test-publication-sidebar-translation-date
