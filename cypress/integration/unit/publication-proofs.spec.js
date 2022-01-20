@@ -108,7 +108,7 @@ context('Publications proofs tests', () => {
     cy.logout();
   });
 
-  it('should create translation docs and request', () => {
+  it.skip('should create translation docs and request', () => {
     cy.intercept('GET', '/translation-subcases/**').as('getTranslationSubcases');
     cy.createPublication(fields);
     cy.wait('@getTranslationSubcases');
@@ -156,7 +156,7 @@ context('Publications proofs tests', () => {
     cy.wait('@getRequestActivities');
   });
 
-  it('should upload proofs docs and make request', () => {
+  it.skip('should upload proofs docs and make request', () => {
     cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
     cy.intercept('POST', 'pieces').as('createNewPiece');
     cy.intercept('GET', '/pieces**').as('getPieces');
@@ -165,7 +165,7 @@ context('Publications proofs tests', () => {
     cy.intercept('DELETE', '**/document-containers/**').as('deleteDocumentContainers');
 
     // go to publication, then proofs, then documents and make checks
-    cy.get(publication.publicationTableRow.row.number).contains(fields.number)
+    cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields.number)
       .parent(publication.publicationTableRow.rows)
       .click();
     cy.get(publication.publicationNav.publishpreview).click();
@@ -344,11 +344,11 @@ context('Publications proofs tests', () => {
     cy.get(publication.proofsDocuments.newRequest).should('be.disabled');
     cy.get(publication.proofsDocuments.add).should('be.disabled');
     cy.get(publication.publicationNav.goBack).click();
-    cy.get(publication.publicationTableRow.row.number).contains(fields.number)
+    cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields.number)
       .parent()
       .find(publication.publicationTableRow.row.proofsProgressBadge)
       .find(publication.proofsStatuspill.done);
-    cy.get(publication.publicationTableRow.row.number).contains(fields.number)
+    cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields.number)
       .parent()
       .click();
     cy.get(publication.publicationNav.publishpreview).click();

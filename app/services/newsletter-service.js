@@ -69,7 +69,7 @@ export default class NewsletterService extends Service {
     } catch (error) {
       console.warn('An exception ocurred: ', error);
       this.toaster.error(
-        this.intl.t('error-send-newsletter'),
+        this.intl.t('error-send-belga'),
         this.intl.t('warning-title')
       );
       return null;
