@@ -7,8 +7,8 @@
   <Auk::Loader />
 {{else}}
   <Auk::StatusPill
-    @step={{this.publicationStatus.stepNumber}}
-    @status={{this.publicationStatus.statusSkin}}
+    @step={{this.publicationStatusPillStep}}
+    @status={{this.publicationStatusPillKey}}
     @size="small"
     @icon="pencil"
     @isActionable={{not (and this.publicationStatus.isPublished this.decision.isStaatsbladResource)}}

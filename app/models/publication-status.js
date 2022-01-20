@@ -58,24 +58,4 @@ export default class PublicationStatus extends Model {
   get isFinal() {
     return this.isPublished || this.isWithdrawn;
   }
-
-  get stepNumber() {
-    if (this.isPending) {
-      return this.position - 1;
-    } else {
-      return null;
-    }
-  }
-
-  get statusSkin() {
-    if (this.isWithdrawn) {
-      return "error";
-    } else if (this.isPublished) {
-      return "success";
-    } else if (this.isPaused) {
-      return "paused";
-    }else {
-      return null;
-    }
-  }
 }

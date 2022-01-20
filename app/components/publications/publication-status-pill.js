@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency-decorators';
 import { isEmpty } from '@ember/utils';
-import { getPublicationStatusPillKey } from 'frontend-kaleidos/utils/publication-auk';
+import { getPublicationStatusPillKey,getPublicationStatusPillStep } from 'frontend-kaleidos/utils/publication-auk';
 
 export default class PublicationStatusPill extends Component {
   @service store;
@@ -36,13 +36,20 @@ export default class PublicationStatusPill extends Component {
   }
 
   get publicationStatusPillKey() {
-    return this.publicationStatus && getPublicationStatusPillKey(this.publicationStatus);
+    console.log(getPublicationStatusPillKey(this.publicationStatus))
+    return getPublicationStatusPillKey(this.publicationStatus);
+  }
+
+  get publicationStatusPillStep() {
+    console.log(getPublicationStatusPillStep(this.publicationStatus))
+
+    return getPublicationStatusPillStep(this.publicationStatus);
   }
 
   @action
   openStatusSelector() {
     //TODO Momenteel is er nog geen disabled voor status pill action. De if is om te voorkomen dat de modal ongewenst open gaat
-    if (!(this.publicationStatus.isPublished && this.decision.isStaatsbladResource)){
+    if (!(this.publicationStatus.isPublished && this.decision?.isStaatsbladResource)){
       this.showStatusSelector = true;
     }
   }
