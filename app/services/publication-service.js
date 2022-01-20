@@ -128,4 +128,19 @@ export default class PublicationService extends Service {
     // our own publication should not be considered as duplicate
     return duplicates.filter((publication) => publication.id !== publicationFlowId).length > 0;
   }
+
+  // earliest publication date of a decision linked to first started publication activity
+  async getPublicationDate(publicationFlow) {
+    const publicationSubcase = await publicationFlow.publicationSubcase;
+    const publicationActivities = (await publicationSubcase.publicationActivities).sortBy('startDate');
+    if (publicationActivities.length) {
+      for (let publicationActivity of publicationActivities) {
+        const publishedDecisions = (await publicationActivity.decisions).sortBy('publicationDate');
+        if (publishedDecisions.length) {
+          return publishedDecisions.firstObject.publicationDate;
+        }
+      }
+    }
+    return undefined;
+  }
 }
