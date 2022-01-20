@@ -8,7 +8,7 @@ import { task } from 'ember-concurrency-decorators';
  * @argument {PublicationFlow}
  * @argument {onSave}
  */
-export default class PublicationsPublicationCaseContactPersonsPanelComponent extends Component {
+export default class PublicationsPublicationTranslationsTranslationsInfoPanelComponent extends Component {
   @service store;
 
   @tracked isEditing = false;
