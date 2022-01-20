@@ -36,13 +36,10 @@ export default class PublicationStatusPill extends Component {
   }
 
   get publicationStatusPillKey() {
-    console.log(getPublicationStatusPillKey(this.publicationStatus))
     return getPublicationStatusPillKey(this.publicationStatus);
   }
 
   get publicationStatusPillStep() {
-    console.log(getPublicationStatusPillStep(this.publicationStatus))
-
     return getPublicationStatusPillStep(this.publicationStatus);
   }
 
