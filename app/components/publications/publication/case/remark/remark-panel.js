@@ -6,6 +6,9 @@ import { task } from 'ember-concurrency-decorators';
 export default class PublicationsPublicationCaseRemarkPanelComponent extends Component {
   @tracked isInEditMode;
 
+  // copied properties
+  // reason: prevent editing the publation-flow record directly,
+  // in order to prevent commiting changes when saving the publication-flow record in another panel
   @tracked remark;
 
   @action
