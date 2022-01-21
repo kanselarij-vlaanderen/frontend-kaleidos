@@ -11,7 +11,7 @@ export default class CaseRoute extends Route {
   async afterModel(model) {
     this._case = await model.case;
     await this._case.governmentAreas;
-    let subcases = await this._case.subcases;
+    const subcases = await this._case.subcases;
     this.isViaCouncilOfMinisters = !!subcases.length;
   }
 
