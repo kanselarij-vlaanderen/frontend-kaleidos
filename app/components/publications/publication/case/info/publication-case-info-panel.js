@@ -9,7 +9,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationCaseInfoPanelComponent extends Component {
   @service store;
-  @service intl;
   @service publicationService;
 
   @tracked isInEditMode;
