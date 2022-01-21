@@ -52,7 +52,7 @@
               </tr>
             {{else}}
               {{#each this.model as |publicationFlow|}}
-                <Publications::PublicationsTableRow
+                <Publications::Overview::PublicationsTableRow
                   @publicationFlow={{publicationFlow}}
                   @tableColumnDisplayOptions={{this.columnsDisplayConfig}}
                 />
@@ -112,7 +112,7 @@
           @isShown={{this.isColumnsDisplayConfigPanelShown}}
           @renderInPlace={{false}}
         >
-          <Publications::OverviewTableDisplayConfigModal
+          <Publications::Overview::PublicationsTableDisplayConfigModal
             @options={{this.columnsDisplayConfig}}
             @onChange={{this.changeColumnsDisplayConfig}}
             @onReset={{this.resetColumnsDisplayConfig}}

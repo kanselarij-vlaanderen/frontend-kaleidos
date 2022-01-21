@@ -5,7 +5,7 @@ import {
 } from '@ember/object';
 import configElements from 'frontend-kaleidos/config/publications/overview-table-columns';
 
-export default class OverviewTableDisplayConfigModalComponent extends Component {
+export default class PublicationsTableDisplayConfigModalComponent extends Component {
   /**
    * @argument onChange: action used to handle a new options config
    * @argument onClose: action, fired when the 'X' is clicked
