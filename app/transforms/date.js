@@ -1,16 +1,14 @@
-// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
+import { DateTransform as BaseDateTransform } from '@ember-data/serializer/-private';
 import moment from 'moment';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes
-export default DS.DateTransform.extend({
+export default class DateTransform extends BaseDateTransform {
   serialize(date) {
     if (date instanceof Date && !isNaN(date)) {
       return moment(date).format('YYYY-MM-DD');
     } if (moment.isMoment(date)) {
       return date.format('YYYY-MM-DD');
+    } else {
+      return null;
     }
-    return null;
-  },
-});
+  }
+}
