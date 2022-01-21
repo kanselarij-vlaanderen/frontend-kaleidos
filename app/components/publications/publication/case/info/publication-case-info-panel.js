@@ -73,7 +73,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   @action
-  onChangeIsUrgent(ev) {
+  changeIsUrgent(ev) {
     const isUrgent = ev.target.checked;
     this.isUrgent = isUrgent;
   }
