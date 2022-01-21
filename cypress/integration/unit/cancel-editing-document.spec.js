@@ -217,10 +217,10 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .click();
 
     // delete the BIS piece
-    cy.intercept('DELETE', '/files/**').as('deleteFile');
-    cy.intercept('DELETE', '/pieces/**').as('deletePiece');
+    cy.intercept('DELETE', '/files/**').as('deleteFileBis');
+    cy.intercept('DELETE', '/pieces/**').as('deletePieceBis');
     // put call to restore pieces (won't do anything in this test, but should always be called)
-    cy.intercept('PUT', '/agendaitems/**/pieces/restore').as('restoreAgendaitemPiece');
+    cy.intercept('PUT', '/agendaitems/**/pieces/restore').as('restoreAgendaitemPieceBis');
     cy.get(route.agendaitemDocuments.batchEdit).click();
     cy.get(document.documentDetailsRow.row).as('documentRows');
     cy.get('@documentRows').eq(0)
@@ -229,8 +229,8 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get('@documentRows').eq(0)
       .find(document.documentDetailsRow.undoDelete);
     cy.get(document.batchDocumentsDetails.save).click();
-    cy.wait('@deleteFile').wait('@deletePiece')
-      .wait('@restoreAgendaitemPiece');
+    cy.wait('@deleteFileBis').wait('@deletePieceBis')
+      .wait('@restoreAgendaitemPieceBis');
 
     // make sure modal is closed before continuing
     cy.get(document.documentDetailsRow.row).should('not.exist');
@@ -301,7 +301,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .wait('@deleteFile');
 
     cy.addNewPieceToAgendaitem(subcaseTitleShort, file.newFileName, file);
-    cy.get(utils.vlModal.dialogWindow).should('not.be.visible');
+    cy.get(utils.vlModal.dialogWindow).should('not.exist');
     cy.get(document.documentCard.card).eq(0)
       .find(document.documentCard.name.value)
       .contains(`${file.newFileName}BIS`);
@@ -311,7 +311,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(utils.vlModal.close).click()
       .wait('@deleteFile');
     cy.addNewPieceToAgendaitem(subcaseTitleShort, file.newFileName, file);
-    cy.get(utils.vlModal.dialogWindow).should('not.be.visible');
+    cy.get(utils.vlModal.dialogWindow).should('not.exist');
     cy.get(document.documentCard.card).eq(0)
       .find(document.documentCard.name.value)
       .contains(`${file.newFileName}TER`);
@@ -331,7 +331,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.intercept('POST', '/submission-activities').as('createNewSubmissionActivity');
       cy.intercept('PATCH', '/submission-activities').as('patchAgendaitem');
       cy.intercept('PUT', '/agendaitems/**/pieces').as('putAgendaitemDocuments');
-      cy.intercept('GET', '/pieces?filter\\[agendaitems\\]\\[:id:\\]=*').as('loadPiecesAgendaitemQuater');
+      cy.intercept('GET', '/pieces?filter**agendaitems**').as('loadPiecesAgendaitemQuater');
       cy.get(utils.vlModalFooter.save).should('not.be.disabled')
         .click();
       cy.wait('@createNewPiece', {
@@ -348,7 +348,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.wait('@loadPiecesAgendaitemQuater');
     });
 
-    cy.get(utils.vlModal.dialogWindow).should('not.be.visible');
+    cy.get(utils.vlModal.dialogWindow).should('not.exist');
     cy.get(document.documentCard.card).eq(0)
       .find(document.documentCard.name.value)
       .contains(`${file.newFileName}QUATER`);

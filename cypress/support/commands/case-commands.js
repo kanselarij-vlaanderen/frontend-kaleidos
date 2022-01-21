@@ -148,8 +148,8 @@ function searchCase(caseTitle) {
   cy.get(route.search.input).type(caseTitle);
   const splitCaseTitle =  `${caseTitle.split(' ', 1)}`;
   // this new part is required to translate 'testId=xxxx:' into its encoded form for url
-  const encodedCaseTitle = splitCaseTitle.replace('=', '%3D').replace(':', '%3A');
-  cy.intercept('GET', `/cases/search?**${splitCaseTitle}**`).as('getCaseSearchResult');
+  const encodedCaseTitle = encodeURIComponent(splitCaseTitle);
+  cy.intercept('GET', `/cases/search?**${encodedCaseTitle}**`).as('getCaseSearchResult');
   cy.get(route.search.trigger)
     .click()
     .wait('@getCaseSearchResult');

@@ -38,5 +38,10 @@ const selectors = {
     input: '.emberTagInput-input',
     remove: '.emberTagInput-remove',
   },
+
+  // ember-data table
+  emberDataTable: {
+    isLoading: '.is-loading-data',
+  },
 };
 export default selectors;

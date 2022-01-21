@@ -12,7 +12,7 @@ function formatmeetingDocumentsUrl(meetingId, agendaId) {
 context('Add files to an agenda', () => { // At the meeting-level
   beforeEach(() => {
     cy.login('Admin');
-    cy.intercept('GET', '/pieces?filter\\[meeting\\]\\[:id:\\]=*').as('loadPieces');
+    cy.intercept('GET', '/pieces?filter**meeting**').as('loadPieces');
   });
 
   it('should open an agenda and add documents to it', () => {
@@ -121,7 +121,7 @@ context('Add files to an agenda', () => { // At the meeting-level
   it('should delete documents, pieces and files', () => {
     const meetingId = '5EBA8CE1DAB6BB0009000009';
     const agendaId = '5EBA8CE3DAB6BB000900000A';
-    cy.intercept('GET', '/pieces?filter\\[:id:\\]=*').as('loadPieceData');
+    cy.intercept('GET', '/pieces?filter**id**').as('loadPieceData');
     cy.visit(formatmeetingDocumentsUrl(meetingId, agendaId));
     cy.wait('@loadPieces'); // general load
     cy.wait('@loadPieceData'); // specific load to ensure document-container is loaded

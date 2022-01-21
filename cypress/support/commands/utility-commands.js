@@ -103,7 +103,7 @@ function openSettingsModal(selector) {
 function closeSettingsModal() {
   cy.log('closeSettingsModal');
   cy.get(utils.vlModal.close).click();
-  cy.get(utils.vlModal.dialogWindow).should('not.be.visible');
+  cy.get(utils.vlModal.dialogWindow).should('not.exist');
   cy.log('/closeSettingsModal');
 }
 

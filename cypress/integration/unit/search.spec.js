@@ -254,7 +254,8 @@ context('Search tests', () => {
       'accénten'
     ];
     wordsToCheck1.forEach((searchTerm) => {
-      cy.intercept('GET', `/agendaitems/search?**${searchTerm}**`).as(`searchCallOverview-${searchTerm}`);
+      const encodedSearchTerm = encodeURIComponent(searchTerm);
+      cy.intercept('GET', `/agendaitems/search?**${encodedSearchTerm}**`).as(`searchCallOverview-${searchTerm}`);
       cy.get(agenda.agendaitemSearch.input).clear();
       cy.get(agenda.agendaitemSearch.input).type(searchTerm);
       cy.wait(200);
@@ -262,7 +263,8 @@ context('Search tests', () => {
       cy.get(agenda.agendaOverviewItem.subitem).contains(newSubcase2TitleShort);
     });
     wordsToCheck2.forEach((searchTerm) => {
-      cy.intercept('GET', `/agendaitems/search?**${searchTerm}**`).as(`searchCallOverview-${searchTerm}`);
+      const encodedSearchTerm = encodeURIComponent(searchTerm);
+      cy.intercept('GET', `/agendaitems/search?**${encodedSearchTerm}**`).as(`searchCallOverview-${searchTerm}`);
       cy.get(agenda.agendaitemSearch.input).clear();
       cy.get(agenda.agendaitemSearch.input).type(searchTerm);
       cy.wait(200);

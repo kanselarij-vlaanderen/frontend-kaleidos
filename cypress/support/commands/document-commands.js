@@ -67,7 +67,7 @@ function addNewDocumentsInUploadModal(files, model) {
   cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
   cy.intercept('POST', 'submission-activities').as('createNewSubmissionActivity');
   cy.intercept('GET', '/submission-activities?filter**').as(`getSubmissionActivity_${randomInt}`);
-  cy.intercept('GET', `/pieces?filter\\[${model}\\]\\[:id:\\]=*`).as(`loadPieces${model}`);
+  cy.intercept('GET', `/pieces?filter**${model}**`).as(`loadPieces${model}`);
   cy.get(utils.vlModalFooter.save).click();
   cy.wait('@createNewDocumentContainer', {
     timeout: 24000,
@@ -351,8 +351,9 @@ function openAgendaitemDossierTab(agendaitemTitle) {
  */
 function uploadFile(folder, fileName, extension, mimeType = 'application/pdf') {
   cy.log('uploadFile');
-  cy.intercept('POST', 'files').as('createNewFile');
-  cy.intercept('GET', 'files/**').as('getNewFile');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('POST', 'files').as(`createNewFile${randomInt}`);
+  cy.intercept('GET', 'files/**').as(`getNewFile${randomInt}`);
 
   const fileFullName = `${fileName}.${extension}`;
   const filePath = `${folder}/${fileFullName}`;
@@ -371,8 +372,9 @@ function uploadFile(folder, fileName, extension, mimeType = 'application/pdf') {
       }
     );
   });
-  cy.wait('@createNewFile');
-  cy.wait('@getNewFile');
+  cy.wait(`@createNewFile${randomInt}`);
+  cy.wait(`@getNewFile${randomInt}`);
+  cy.get(auk.loader).should('not.exist');
   cy.log('/uploadFile');
 }
 
@@ -476,8 +478,9 @@ function addLinkedDocument(filenames) {
  * @param Number indexToDelete - The index of the piece in the list
  */
 function deleteSinglePiece(fileName, indexToDelete) {
-  cy.intercept('DELETE', 'pieces/*').as('deletePiece');
-  cy.intercept('PUT', '/agendaitems/**/pieces/restore').as('putRestoreAgendaitems');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('DELETE', 'pieces/*').as(`deletePiece${randomInt}`);
+  cy.intercept('PUT', '/agendaitems/**/pieces/restore').as(`putRestoreAgendaitems${randomInt}`);
   cy.log('deleteSinglePiece');
 
   cy.get(document.documentCard.name.value).contains(fileName)
@@ -492,9 +495,9 @@ function deleteSinglePiece(fileName, indexToDelete) {
     });
 
   cy.get(utils.vlModalVerify.save).click();
-  cy.wait('@deletePiece', {
+  cy.wait(`@deletePiece${randomInt}`, {
     timeout: 40000,
-  }).wait('@putRestoreAgendaitems');
+  }).wait(`@putRestoreAgendaitems${randomInt}`);
   cy.wait(2000);
   cy.log('/deleteSinglePiece');
 }

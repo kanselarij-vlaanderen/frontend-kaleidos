@@ -143,7 +143,9 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .should('contain', nameToCheck);
 
     // Check if subcase has the same amount of mandatees
+    cy.intercept('GET', '/subcases?filter**').as('getSubcase');
     cy.visit('/dossiers/5F02DD8A7DE3FC0008000001/deeldossiers');
+    cy.wait('@getSubcase');
     cy.openSubcase(0);
 
     cy.get(mandatee.mandateePanelView.rows).as('listItems');

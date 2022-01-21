@@ -44,6 +44,10 @@ Cypress.on('uncaught:exception', (err) => {
 Cypress.on('uncaught:exception', (err) => {
   return !err.message.includes('Cannot set property isSelected of #<DomainSelection> which has only a getter');s
 });
+// Approving agenda after showChanges throws this error, latest cypress is picking it up
+Cypress.on('uncaught:exception', (err) => {
+  return !err.message.includes(`TransitionAborted`);
+});
 
 Cypress.Commands.overwrite("type", (originalFn, subject, text, options) => {
   if(!options){

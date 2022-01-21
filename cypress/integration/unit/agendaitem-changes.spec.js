@@ -265,7 +265,7 @@ context('Agendaitem changes tests', () => {
     cy.get(agenda.agendaOverviewItem.subitem).contains(visibleTitle)
       .should('be.visible');
     cy.get(agenda.agendaOverview.notesSectionTitle).should('not.be.visible');
-    cy.get(agenda.agendaOverview.notesSectionTitle).contains(approvalTitle)
+    cy.get(agenda.agendaOverviewItem.subitem).contains(approvalTitle)
       .should('not.be.visible');
     // Switching between detail and overview with nav tabs should keep the anchor
     // TODO-bug clicking on detail with anchor always goes to first item instead of anchor

@@ -368,6 +368,7 @@ function addAgendaitemToAgenda(subcaseTitle, postponed = false) {
     cy.get(auk.loader, {
       timeout: 12000,
     }).should('not.exist');
+    cy.get(dependency.emberDataTable.isLoading).should('not.exist');
     // type the subcase title from parameters to search
     cy.get(agenda.createAgendaitem.input).clear()
       .type(subcaseTitle, {
@@ -380,6 +381,7 @@ function addAgendaitemToAgenda(subcaseTitle, postponed = false) {
     cy.get(auk.loader, {
       timeout: 12000,
     }).should('not.exist');
+    cy.get(dependency.emberDataTable.isLoading).should('not.exist');
     // select the found row (title should always match only 1 result to avoid using the wrong subcase)
     cy.get(agenda.createAgendaitem.dataTable).find('tbody')
       .children('tr')
