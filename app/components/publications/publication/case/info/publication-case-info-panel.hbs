@@ -102,7 +102,7 @@
           <div class="auk-o-grid-col-4 auk-content">
             <Auk::KeyValue @key={{t "publication-flow-publication-due-date"}}>
               <div class={{if this.isPublicationOverdue "auk-u-text-bold"}}>
-                {{#if this.publicationDueDate}}
+                {{#if (and this.publicationDueDate (not @publicationFlow.status.isWithdrawn))}}
                   {{moment-format this.publicationDueDate "DD-MM-YYYY"}}
                 {{else}}
                   {{t "dash"}}
