@@ -1,6 +1,29 @@
-<span class="{{this.baseClass}} {{this.statusClass}}" ...attributes>
-  <Auk::Icon @name={{this.iconName}} />
-  {{#if (has-block)}}
-    <span class="auk-status-pill__label">{{yield}}</span>
-  {{/if}}
-</span>
+{{#if (not @isActionable)}}
+  <span class="auk-status-pill {{this.statusClass}} {{this.sizeClass}}" ...attributes>
+    <span class="auk-status-pill__content">
+      <Auk::Icon @name={{this.iconName}} />
+      {{#if (has-block)}}
+        <span class="auk-status-pill__label">{{yield}}</span>
+      {{/if}}
+    </span>
+  </span>
+{{else}}
+  <button
+    class="auk-status-pill auk-status-pill--actionable {{this.statusClass}} {{this.sizeClass}}"
+    type="button"
+    ...attributes
+  >
+    <span class="auk-status-pill__content">
+      <Auk::Icon @name={{this.iconName}} />
+      {{#if (has-block)}}
+        <span class="auk-status-pill__label">{{yield}}</span>
+      {{/if}}
+    </span>
+    <span class="auk-status-pill__action" aria-hidden="true">
+      <Auk::Icon @size="small" @name={{this.actionIconName}} />
+      {{#if @actionLabel}}
+        <span class="auk-status-pill__label">{{@actionLabel}}</span>
+      {{/if}}
+    </span>
+  </button>
+{{/if}}
