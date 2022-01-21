@@ -4,6 +4,7 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
+import { isNone } from '@ember/utils';
 
 // TODO: octane-refactor
 // eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
@@ -105,7 +106,11 @@ export default Component.extend({
 
     async handleRdfaEditorInit(editorInterface) {
       const newsletterInfo = await this.get('newsletterInfo');
-      const newsLetterInfoText = newsletterInfo.get('richtext');
+      let newsLetterInfoText = newsletterInfo.get('richtext');
+      if (isNone(newsLetterInfoText)) {
+        // editor stringifies non-string values (to "undefined" for example)
+        newsLetterInfoText = '';
+      }
       editorInterface.setHtmlContent(newsLetterInfoText);
       this.set('editorInstance', editorInterface);
     },

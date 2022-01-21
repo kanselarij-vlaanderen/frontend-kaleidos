@@ -92,7 +92,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       this.toaster.success(this.intl.t('success-publish-newsletter-to-belga'));
     } catch(e) {
       this.toaster.error(
-        this.intl.t('error-send-newsletter'),
+        this.intl.t('error-send-belga'),
         this.intl.t('warning-title')
       );
     }
