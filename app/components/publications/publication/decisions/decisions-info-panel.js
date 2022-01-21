@@ -23,13 +23,13 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   async initFields() {
-    let publicationFlow = this.args.publicationFlow;
+    const publicationFlow = this.args.publicationFlow;
 
     this.isViaCouncilOfMinisters = await this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
 
     this.regulationType = await publicationFlow.regulationType;
 
-    let agendaItemTreatment = await publicationFlow.agendaItemTreatment;
+    const agendaItemTreatment = await publicationFlow.agendaItemTreatment;
     this.decisionDate = agendaItemTreatment.startDate;
   }
 
@@ -60,28 +60,28 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @task
   *save() {
-    let publicationFlow = this.args.publicationFlow;
+    const publicationFlow = this.args.publicationFlow;
     yield this.performSave(publicationFlow);
     this.isInEditMode = false;
   }
 
   // separate method to prevent ember-concurrency from saving only partially
   async performSave(publicationFlow) {
-    let saves = [];
+    const saves = [];
 
     // Type regelgeving
-    let oldRegulationType = await publicationFlow.regulationType;
+    const oldRegulationType = await publicationFlow.regulationType;
     if (oldRegulationType !== this.regulationType) {
       publicationFlow.regulationType = this.regulationType;
       saves.push(publicationFlow.save());
     }
 
     // Datum beslissing
-    let agendaItemTreatment = await publicationFlow.agendaItemTreatment;
-    let oldDecisionDate = agendaItemTreatment.startDate;
+    const agendaItemTreatment = await publicationFlow.agendaItemTreatment;
+    const oldDecisionDate = agendaItemTreatment.startDate;
     if (this.decisionDate !== oldDecisionDate) {
       agendaItemTreatment.startDate = this.decisionDate;
-      let agendaItemTreatmentSave = agendaItemTreatment.save();
+      const agendaItemTreatmentSave = agendaItemTreatment.save();
       saves.push(agendaItemTreatmentSave);
     }
 
