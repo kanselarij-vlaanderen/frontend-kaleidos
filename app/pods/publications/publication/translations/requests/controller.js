@@ -3,6 +3,7 @@ import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationTranslationsRequestController extends Controller {
   @service store;
@@ -54,6 +55,14 @@ export default class PublicationsPublicationTranslationsRequestController extend
     ) {
       this.translationSubcase.receivedDate = translationUpload.receivedAtDate;
       yield this.translationSubcase.save();
+    }
+
+    if (translationUpload.isTranslationIn) {
+      this.publicationFlow.status =  yield this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_IN);
+      yield this.publicationFlow.save();
+      const statusChanged = yield this.publicationFlow.publicationStatusChange;
+      statusChanged.startedAt = now;
+      yield statusChanged.save();
     }
 
     yield Promise.all([translationActivitySave, pieceSave]);

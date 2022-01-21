@@ -66,6 +66,16 @@
                     {{on "input" this.toggleProofprint}}
                   />
                 </div>
+                <div class="auk-form-group auk-o-flex--align-start">
+                  <Auk::Label for="translationIn">
+                    {{t "set-status-translation-in"}}
+                  </Auk::Label>
+                  <Auk::Checkbox
+                    id="translationIn"
+                    @checked={{this.isTranslationIn}}
+                    {{on "input" this.toggleTranslationIn}}
+                  />
+                </div>
               </div>
             </div>
           </div>

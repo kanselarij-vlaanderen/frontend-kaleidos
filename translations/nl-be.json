@@ -944,5 +944,6 @@
   "edit-status": "Status aanpassen",
   "view-in-signinghub": "Bekijken in SigningHub",
   "send-to-signinghub": "Doorsturen naar SigningHub",
-  "present-for-signing": "Aanbieden voor handtekening"
+  "present-for-signing": "Aanbieden voor handtekening",
+  "set-status-translation-in": "Zet status naar 'Vertaling In'"
 }
