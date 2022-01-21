@@ -9,6 +9,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 const COLUMN_MAP = {
   naam: 'name',
@@ -252,6 +253,16 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     });
     const emailSave = mail.save();
     saves.push(emailSave);
+
+    // PUBLICATION-STATUS
+    this.publicationFlow.status =  await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED);
+    const statusSave = this.publicationFlow.save();
+    saves.push(statusSave);
+
+    const statusChanged = await this.publicationFlow.publicationStatusChange;
+    statusChanged.startedAt = now;
+    const statusChangedSave = statusChanged.save();
+    saves.push(statusChangedSave)
 
     await Promise.all(saves);
   }
