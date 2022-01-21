@@ -38,27 +38,20 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   async initFields() {
     const publicationFlow = this.args.publicationFlow;
     this.isViaCouncilOfMinisters = await this.getIsViaCouncilOfMinisters(publicationFlow);
+
     this.isUrgent = await this.publicationService.getIsUrgent(publicationFlow);
     this.numacNumbers = publicationFlow.numacNumbers.toArray();
-    this.decisionDate = await this.getDecisionDate(publicationFlow);
+    const agendaItemTreatment = await publicationFlow.agendaItemTreatment;
+    this.decisionDate = agendaItemTreatment.startDate;
     this.openingDate = publicationFlow.openingDate;
-    this.publicationDueDate = await this.getPublicationDueDate(publicationFlow);
+    const publicationSubcase = await publicationFlow.publicationSubcase;
+    this.publicationDueDate = publicationSubcase.dueDate;
   }
 
   async getIsViaCouncilOfMinisters(publicationFlow) {
     const _case = await publicationFlow.case;
     const subcases = await _case.subcases;
     return !!subcases.length;
-  }
-
-  async getDecisionDate(publicationFlow) {
-    const agendaItemTreatment = await publicationFlow.agendaItemTreatment;
-    return agendaItemTreatment.startDate;
-  }
-
-  async getPublicationDueDate(publicationFlow) {
-    const publicationSubcase = await publicationFlow.publicationSubcase;
-    return publicationSubcase.dueDate;
   }
 
   @action
