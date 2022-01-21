@@ -61,12 +61,11 @@ export default class PublicationsPublicationTranslationsRequestController extend
       this.publicationFlow.status =  yield this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_IN);
       yield this.publicationFlow.save();
       const statusChanged = yield this.publicationFlow.publicationStatusChange;
-      statusChanged.startedAt = now;
+      statusChanged.startedAt = translationUpload.receivedAtDate;
       yield statusChanged.save();
     }
 
     yield Promise.all([translationActivitySave, pieceSave]);
-
     this.showTranslationUploadModal = false;
   }
 
