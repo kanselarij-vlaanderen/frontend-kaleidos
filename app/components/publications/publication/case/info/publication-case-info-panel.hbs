@@ -29,7 +29,7 @@
         <div class="auk-o-grid">
 
           {{!Dringend}}
-          <div class="auk-o-grid-col-4 auk-content">
+          <div class="auk-o-grid-col-2 auk-content">
             <Auk::KeyValue @key={{t "publication-urgent"}}>
               {{#if this.isUrgent}}
                 <Auk::Icon @name="alert-triangle" @skin="warning" />
@@ -40,7 +40,7 @@
           </div>
 
           {{!Publicatienummer}}
-          <div class="auk-o-grid-col-4 auk-content">
+          <div class="auk-o-grid-col-2 auk-content">
             <Auk::KeyValue
               @key={{t "publications-number"}}
               @value={{@publicationFlow.identification.idName}}
@@ -48,7 +48,7 @@
           </div>
 
           {{!Numac-nummers}}
-          <div class="auk-o-grid-col-4 auk-content">
+          <div class="auk-o-grid-col-2 auk-content">
             <Auk::KeyValue @key={{t "publication-flow-numac-number"}}>
               {{#if this.numacNumbers}}
                 {{join ", " (map-by "idName" this.numacNumbers)}}
@@ -59,7 +59,7 @@
           </div>
 
           {{!Datum beslissing}}
-          <div class="auk-o-grid-col-4 auk-content">
+          <div class="auk-o-grid-col-2 auk-content">
             <Auk::KeyValue @key={{t "decision-date"}}>
               {{#if this.isViaCouncilOfMinisters}}
                 <Auk::ButtonLink
@@ -88,7 +88,7 @@
           </div>
 
           {{!Datum ontvangst}}
-          <div class="auk-o-grid-col-4 auk-content">
+          <div class="auk-o-grid-col-2 auk-content">
             <Auk::KeyValue @key={{t "publication-flow-opening-date"}}>
               {{#if this.openingDate}}
                 {{moment-format this.openingDate "DD-MM-YYYY"}}
@@ -99,7 +99,7 @@
           </div>
 
           {{!Limiet publicatie}}
-          <div class="auk-o-grid-col-4 auk-content">
+          <div class="auk-o-grid-col-2 auk-content">
             <Auk::KeyValue @key={{t "publication-flow-publication-due-date"}}>
               <div class={{if this.isPublicationOverdue "auk-u-text-bold"}}>
                 {{#if
