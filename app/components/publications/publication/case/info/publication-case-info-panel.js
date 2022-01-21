@@ -40,7 +40,9 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   async initFields() {
     const publicationFlow = this.args.publicationFlow;
-    this.isViaCouncilOfMinisters = await this.getIsViaCouncilOfMinisters(publicationFlow);
+    this.isViaCouncilOfMinisters = await this.getIsViaCouncilOfMinisters(
+      publicationFlow
+    );
 
     this.isUrgent = await this.publicationService.getIsUrgent(publicationFlow);
     this.numacNumbers = publicationFlow.numacNumbers.toArray();
@@ -103,7 +105,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
       Number.isInteger(publicationNumber) && publicationNumber > 0;
     if (!isNumeric) {
       this.publicationNumberErrorKey = 'publication-number-error-numeric';
-      return
+      return;
     }
 
     yield timeout(1000);
@@ -155,7 +157,10 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     if (isFinal) {
       return false;
     }
-    const isPublicationOverdue = moment(this.publicationDueDate).isBefore(Date.now(), 'day');
+    const isPublicationOverdue = moment(this.publicationDueDate).isBefore(
+      Date.now(),
+      'day'
+    );
     return isPublicationOverdue;
   }
 
