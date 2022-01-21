@@ -14,6 +14,7 @@ export default class PublicationsPublicationsTableRowComponent extends Component
   @tracked publicationDate;
   @tracked pageCount;
   @tracked proofRequestDate;
+  @tracked publicationStatus;
 
   constructor() {
     super(...arguments);
@@ -49,6 +50,11 @@ export default class PublicationsPublicationsTableRowComponent extends Component
     );
   }
 
+  @task
+  *loadPublicationStatus() {
+    this.publicationStatus = yield this.args.publicationFlow.status;
+  }
+
   async getPageCount(publicationFlow) {
     const translationSubcase = await publicationFlow.translationSubcase;
     const requestActivities = await translationSubcase.requestActivities;
@@ -75,61 +81,20 @@ export default class PublicationsPublicationsTableRowComponent extends Component
     return firstProofRequestDate;
   }
 
-  // getter to only trigger when column is shown
+  // TODO: review async getter once ember-resources can be used
   get isTranslationOverdue() {
-    let publicationFlow = this.args.publicationFlow;
-    return this.getIsTranslationOverdue(publicationFlow);
+    return !this.args.publicationFlow.status.get('isFinal')
+      && this.args.publicationFlow.translationSubcase.get('isOverdue');
   }
 
-  // getter to only trigger when column is shown
+  // TODO: review async getter once ember-resources can be used
   get isPublicationOverdue() {
-    let publicationFlow = this.args.publicationFlow;
-    return this.getIsPublicationOverdue(publicationFlow);
+    return !this.args.publicationFlow.status.get('isFinal')
+      && this.args.publicationFlow.publicationSubcase.get('isOverdue');
   }
 
   get publicationStatusPillKey() {
-    let publicationStatus = this.loadPublicationStatus.value;
-    if (!publicationStatus) {
-      return undefined;
-    }
-    return getPublicationStatusPillKey(publicationStatus);
-  }
-
-  @task
-  *loadPublicationStatus() {
-    return yield this.args.publicationFlow.status;
-  }
-
-  /**
-   *
-   * @param {PublicationFlow} publicationFlow
-   * @returns {boolean}
-   */
-  async getIsTranslationOverdue(publicationFlow) {
-    let publicationStatus = await publicationFlow.status;
-    let isFinal = publicationStatus.isFinal;
-    if (isFinal) {
-      return false;
-    }
-
-    let translationSubcase = await publicationFlow.translationSubcase;
-    return translationSubcase.isOverdue;
-  }
-
-  /**
-   *
-   * @param {PublicationFlow} publicationFlow
-   * @returns {boolean}
-   */
-  async getIsPublicationOverdue(publicationFlow) {
-    let publicationStatus = await publicationFlow.status;
-    let isFinal = publicationStatus.isFinal;
-    if (isFinal) {
-      return false;
-    }
-
-    let publicationSubcase = await publicationFlow.publicationSubcase;
-    return publicationSubcase.isOverdue;
+    return this.publicationStatus && getPublicationStatusPillKey(this.publicationStatus);
   }
 
   @action
