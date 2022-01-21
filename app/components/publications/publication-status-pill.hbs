@@ -6,23 +6,19 @@
 }}
   <Auk::Loader />
 {{else}}
-  <Auk::StatusPill @status={{this.publicationStatusPillKey}}>
-    {{this.publicationStatus.label}}
+  <Auk::StatusPill
+    @step={{this.publicationStatusPillStep}}
+    @status={{this.publicationStatusPillKey}}
+    @size="small"
+    @icon="pencil"
+    @isActionable={{not (and this.publicationStatus.isPublished this.decision.isStaatsbladResource)}}
+    @actionLabel={{t "edit-status"}}
+    {{on "click" this.openStatusSelector}}
+  >
+    <strong>{{this.publicationStatus.label}}</strong>
     -
     {{moment-format @publicationFlow.publicationStatusChange.startedAt "DD/MM/YYYY"}}
   </Auk::StatusPill>
-  <Auk::ButtonLink
-    @icon="pencil"
-    @skin="muted"
-    @size="small"
-    @disabled={{and
-      this.publicationStatus.isPublished
-      this.decision.isStaatsbladResource
-    }}
-    {{on "click" this.openStatusSelector}}
-  >
-    {{t "edit-status"}}
-  </Auk::ButtonLink>
 {{/if}}
 
 {{#if this.showStatusSelector}}
