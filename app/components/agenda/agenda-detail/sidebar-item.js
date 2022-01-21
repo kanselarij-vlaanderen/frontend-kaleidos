@@ -20,6 +20,7 @@ export default class SidebarItem extends Component {
 
   @tracked subcase;
   @tracked newsletterIsVisible;
+
   get isRetracted() {
       return this.args.agendaitem.retracted;
   }
@@ -35,20 +36,22 @@ export default class SidebarItem extends Component {
     return classes.join(' ');
   }
 
+  get defaultRoute() {
+    return 'agenda.agendaitems.agendaitem.index';
+  }
+
   /**
    * This method will get the route name for rerouting from one agendaitem to another while keeping the selected subroute.
    */
   get currentRoute() {
-    // currentRoute can be undefined (during initial routing), but if it exists it will be the name of the current route
-    // We fall back the currentRouteName but avoid using it as the primary name because this could be x.x.loading route
-    // Routing to the loading route will result in the application getting "stuck" in /loading
-    const initialRouteName = this.router.currentRoute?.name;
-    // When coming from this route from different route, the currentRoute still shows the different route
-    // We only want to use the currentRouter if the name matches our own route
-    if (initialRouteName?.includes('agenda.agendaitems.agendaitem.')){
-      return this.router.currentRoute?.name;
+    // There used to be a fix here to prevent the user from getting stuck in loading by using the currentRouter property from router.
+    // This fix broke after an ember update so now we default to index instead of creating a link to the /loading route.
+    // A better solution would be to remember the last correct route but that would mean keeping state somewhere..
+    const currentRouteName = this.router.currentRouteName;
+    if (currentRouteName.includes('.loading')){
+      return this.defaultRoute;
     }
-    return this.router.currentRouteName;
+    return currentRouteName;
   }
 
   @dropTask
