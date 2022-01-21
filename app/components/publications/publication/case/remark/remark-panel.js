@@ -8,10 +8,6 @@ export default class PublicationsPublicationCaseRemarkPanelComponent extends Com
 
   @tracked remark;
 
-  constructor() {
-    super(...arguments);
-  }
-
   @action
   putInEditMode() {
     const publicationFlow = this.args.publicationFlow;
