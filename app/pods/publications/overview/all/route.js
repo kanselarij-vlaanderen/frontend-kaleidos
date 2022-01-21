@@ -26,6 +26,8 @@ export default class PublicationsOverviewAllRoute extends Route {
       },
       // eslint-disable-next-line prettier/prettier
       include: [
+        'identification',
+        'status',
         'publication-subcase',
         'translation-subcase',
         'case',
