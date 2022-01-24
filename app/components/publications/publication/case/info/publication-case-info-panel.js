@@ -13,8 +13,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @tracked isInEditMode;
 
-  @tracked isViaCouncilOfMinisters;
-
   // copied properties
   // reason: prevent editing the publation-flow record directly,
   // in order to prevent commiting changes when saving the publication-flow record in another panel
@@ -39,10 +37,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   async initFields() {
     const publicationFlow = this.args.publicationFlow;
-
-    this.isViaCouncilOfMinisters = await this.publicationService.getIsViaCouncilOfMinisters(
-      publicationFlow
-    );
 
     // Dringend
     const urgencyLevel = await publicationFlow.urgencyLevel;

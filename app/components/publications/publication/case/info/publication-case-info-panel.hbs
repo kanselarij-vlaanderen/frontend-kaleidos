@@ -61,7 +61,7 @@
           {{!Datum beslissing}}
           <div class="auk-o-grid-col-2 auk-content">
             <Auk::KeyValue @key={{t "decision-date"}}>
-              {{#if this.isViaCouncilOfMinisters}}
+              {{#if @publicationFlow.isViaCouncilOfMinisters}}
                 <Auk::ButtonLink
                   target="_blank"
                   @route="agenda.agendaitems.agendaitem"
@@ -214,7 +214,7 @@
                   class="auk-form-group"
                 >
                   <Auk::Label>{{t "decision-date"}}</Auk::Label>
-                  {{#if this.isViaCouncilOfMinisters}}
+                  {{#if @publicationFlow.isViaCouncilOfMinisters}}
                     {{#if this.decisionDate}}
                       {{moment-format this.decisionDate "DD-MM-YYYY"}}
                     {{else}}
@@ -236,7 +236,7 @@
                   class="auk-form-group"
                 >
                   <Auk::Label>{{t "publication-flow-opening-date"}}</Auk::Label>
-                  {{#if this.isViaCouncilOfMinisters}}
+                  {{#if @publicationFlow.isViaCouncilOfMinisters}}
                     {{#if this.openingDate}}
                       {{moment-format this.openingDate "DD-MM-YYYY"}}
                     {{else}}

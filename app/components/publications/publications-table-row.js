@@ -29,6 +29,9 @@ export default class PublicationsPublicationsTableRowComponent extends Component
     const publicationFlow = yield this.store.queryOne('publication-flow', {
       'filter[:id:]': this.args.publicationFlow.id,
       include: [
+        'case',
+        'case.subcases',
+
         'translation-subcase',
 
         'translation-subcase.request-activities',
