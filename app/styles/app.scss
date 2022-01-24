@@ -36,7 +36,6 @@
 
 // CUSTOM STYLING
 @import 'custom-application/toast';
-@import 'custom-application/compare';
 @import 'custom-application/editor';
 @import 'custom-application/ember-attacher';
 @import 'custom-application/file-uploader';
@@ -57,7 +56,7 @@
 
 // LAYOUT STYLING
 @import 'custom-application/m-header';
-
+@import 'layout/compare-agenda-list';
 
 // PRINT STYLING
 @import 'print/general';
