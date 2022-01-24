@@ -6,11 +6,8 @@ import { task } from 'ember-concurrency';
 
 export default class PublicationsPublicationCaseInfoPanelComponent extends Component {
   @service store;
-  @service publicationService;
 
   @tracked isInEditMode;
-
-  @tracked isViaCouncilOfMinisters;
 
   @tracked regulationType;
   @tracked decisionDate;
@@ -24,8 +21,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   async initFields() {
     const publicationFlow = this.args.publicationFlow;
-
-    this.isViaCouncilOfMinisters = await this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
 
     this.regulationType = await publicationFlow.regulationType;
 
