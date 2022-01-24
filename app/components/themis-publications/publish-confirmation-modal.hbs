@@ -1,0 +1,32 @@
+<Auk::Modal @size="small">
+  <Auk::Modal::Header
+    @title={{or @title (t "publish-publication-modal-title")}}
+    @onClose={{@onCancel}}
+  />
+  <Auk::Modal::Body>
+    <fieldset>
+      <legend class="auk-label">
+        {{t "publish-publication-scope-selection"}}
+      </legend>
+      <Auk::RadioList as |List|>
+        {{#each this.options as |option|}}
+          <List.Radio
+            @label={{option.label}}
+            @checked={{eq this.selectedOption.value option.value}}
+            value={{option.value}}
+            {{on "change" this.selectOption}}
+          />
+        {{/each}}
+      </Auk::RadioList>
+    </fieldset>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @onCancel={{@onCancel}}>
+    <Auk::Button
+      @skin="primary"
+      @loading={{this.confirmPublish.isRunning}}
+      {{on "click" (perform this.confirmPublish)}}
+    >
+      {{t "publish-to-public"}}
+    </Auk::Button>
+  </Auk::Modal::Footer>
+</Auk::Modal>
