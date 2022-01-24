@@ -1,8 +1,9 @@
 <Auk::Tabs @reversed={{true}}>
   <Auk::Tab
     @isHierarchicalBack={{true}}
-    @route="publications.index"
-    data-test-publication-nav-go-back />
+    @route="publications.overview"
+    data-test-publication-nav-go-back
+  />
   <Auk::Tab
     @route="publications.publication.case"
     data-test-publication-nav-case
@@ -22,7 +23,9 @@
   >
     <div class="auk-o-flex auk-o-flex--center">
       <span>{{t "translations"}}</span>
-      <Publications::Publication::Translations::TranslationProgressBadge @translationSubcase={{@publicationFlow.translationSubcase}}/>
+      <Publications::Publication::Translations::TranslationProgressBadge
+        @translationSubcase={{@publicationFlow.translationSubcase}}
+      />
     </div>
   </Auk::Tab>
   <Auk::Tab
@@ -31,7 +34,9 @@
   >
     <div class="auk-o-flex auk-o-flex--center">
       <span>{{t "publishpreview-requests"}}</span>
-      <Publications::Publication::Proofs::ProofsProgressBadge @publicationSubcase={{@publicationFlow.publicationSubcase}}/>
+      <Publications::Publication::Proofs::ProofsProgressBadge
+        @publicationSubcase={{@publicationFlow.publicationSubcase}}
+      />
     </div>
   </Auk::Tab>
 </Auk::Tabs>
