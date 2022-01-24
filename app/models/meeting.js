@@ -16,6 +16,8 @@ import {
 export default Model.extend({
   intl: inject(),
   store: inject(),
+
+  uri: attr('string'),
   plannedStart: attr('datetime'),
   startedOn: attr('datetime'),
   endedOn: attr('datetime'),
@@ -42,6 +44,8 @@ export default Model.extend({
   agenda: belongsTo('agenda', {
     inverse: null,
   }),
+
+  themisPublicationActivities: hasMany('themis-publication-activity'),
 
   label: computed('plannedStart', 'kind', 'numberRepresentation', function() {
     const date = moment(this.plannedStart).format('DD-MM-YYYY');

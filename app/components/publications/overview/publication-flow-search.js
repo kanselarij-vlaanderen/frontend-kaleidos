@@ -7,7 +7,7 @@ import { timeout } from 'ember-concurrency';
 import { restartableTask } from 'ember-concurrency-decorators';
 import search from 'frontend-kaleidos/utils/mu-search';
 
-export default class PublicationsPublicationCaseSearchComponent extends Component {
+export default class PublicationFlowSearchComponent extends Component {
   @tracked searchText;
   @tracked isShowingResults = false;
   @tracked searchResults;
