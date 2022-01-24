@@ -40,7 +40,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   async initFields() {
     const publicationFlow = this.args.publicationFlow;
 
-    this.isViaCouncilOfMinisters = await this.getIsViaCouncilOfMinisters(
+    this.isViaCouncilOfMinisters = await this.publicationService.getIsViaCouncilOfMinisters(
       publicationFlow
     );
 
@@ -57,12 +57,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     // Limiet publicatie
     const publicationSubcase = await publicationFlow.publicationSubcase;
     this.publicationDueDate = publicationSubcase.dueDate;
-  }
-
-  async getIsViaCouncilOfMinisters(publicationFlow) {
-    const _case = await publicationFlow.case;
-    const subcases = await _case.subcases;
-    return !!subcases.length;
   }
 
   @action
