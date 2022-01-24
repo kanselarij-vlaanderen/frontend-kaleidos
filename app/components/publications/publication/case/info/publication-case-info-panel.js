@@ -190,16 +190,9 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   async performSave(publicationFlow) {
     const saves = [];
 
-    let isPublicationFlowDirty = false;
-
     // Dringend
-    const urgencyLevel = await publicationFlow.urgencyLevel;
-    const wasUrgent = urgencyLevel?.isUrgent || false;
-    if (this.isUrgent !== wasUrgent) {
-      const urgencyLevel = await this.getUrgencyLevel(this.isUrgent);
-      publicationFlow.urgencyLevel = urgencyLevel;
-      isPublicationFlowDirty = true;
-    }
+    const urgencyLevel = await this.getUrgencyLevel(this.isUrgent);
+    publicationFlow.urgencyLevel = urgencyLevel;
 
     // Publicatienummer
     const identification = await publicationFlow.identification;
@@ -207,14 +200,11 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     const number = parseInt(this.publicationNumber, 10);
     structuredIdentifier.localIdentifier = number;
     structuredIdentifier.versionIdentifier = this.publicationNumberSuffix;
-    if (structuredIdentifier.dirtyType === 'updated') {
-      identification.idName = this.publicationNumberSuffix
-        ? `${number} ${this.publicationNumberSuffix}`
-        : `${number}`;
-
-      saves.push(structuredIdentifier.save());
-      saves.push(identification.save());
-    }
+    identification.idName = this.publicationNumberSuffix
+    ? `${number} ${this.publicationNumberSuffix}`
+    : `${number}`;
+    saves.push(structuredIdentifier.save());
+    saves.push(identification.save());
 
     // Numac-nummers
     for (const numacNumber of this.numacNumbersToDelete) {
@@ -224,41 +214,23 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
     const numacNumbers = await publicationFlow.numacNumbers;
     numacNumbers.replace(0, numacNumbers.length, this.numacNumbers);
-    for (const numacNumber of this.numacNumbers) {
-      if (numacNumber.dirtyType === 'created') {
-        saves.push(numacNumber.save());
-      }
-    }
+    numacNumbers.save();
 
     // Datum beslissing
     const agendaItemTreatment = await publicationFlow.agendaItemTreatment;
-    const oldDecisionDate = agendaItemTreatment.startDate;
-    if (this.decisionDate !== oldDecisionDate) {
-      agendaItemTreatment.startDate = this.decisionDate;
-      const agendaItemTreatmentSave = agendaItemTreatment.save();
-      saves.push(agendaItemTreatmentSave);
-    }
+    agendaItemTreatment.startDate = this.decisionDate;
+    const agendaItemTreatmentSave = agendaItemTreatment.save();
+    saves.push(agendaItemTreatmentSave);
 
     // Datum ontvangst
-    const oldOpeningDate = publicationFlow.openingDate;
-    if (this.openingDate !== oldOpeningDate) {
-      publicationFlow.openingDate = this.openingDate;
-      isPublicationFlowDirty = true;
-    }
+    publicationFlow.openingDate = this.openingDate;
 
-    if (isPublicationFlowDirty) {
-      const publicationFlowSave = publicationFlow.save();
-      saves.push(publicationFlowSave);
-    }
+    saves.push(publicationFlow.save());
 
     // Limiet publicatie
     const publicationSubcase = await publicationFlow.publicationSubcase;
-    const oldPublicationDueDate = publicationSubcase.dueDate;
-    if (oldPublicationDueDate !== this.publicationDueDate) {
-      publicationSubcase.dueDate = this.publicationDueDate;
-      const publicationSubcaseSave = publicationSubcase.save();
-      saves.push(publicationSubcaseSave);
-    }
+    publicationSubcase.dueDate = this.publicationDueDate;
+    saves.push(publicationSubcase.save());
 
     await Promise.all(saves);
   }
