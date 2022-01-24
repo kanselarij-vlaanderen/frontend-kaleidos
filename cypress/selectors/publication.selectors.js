@@ -150,8 +150,8 @@ const selectors = {
       publicationDueDate: '[data-test-publication-table-row-publication-due-date]',
       isUrgent: '[data-test-publication-table-row-is-urgent]',
       status: '[data-test-publication-table-row-status]',
-      translationProgressBadge: '[data-test-publication-table-row-translation-progress-badge]',
-      proofsProgressBadge: '[data-test-publication-table-row-proofs-progress-badge]',
+      // translationProgressBadge: '[data-test-publication-table-row-translation-progress-badge]',
+      // proofsProgressBadge: '[data-test-publication-table-row-proofs-progress-badge]',
       source: '[data-test-publication-table-row-source]',
       goToPublication: '[data-test-publication-table-row-go-to-publication]',
       // TODO-SELECTOR unused selectors
@@ -305,11 +305,11 @@ const selectors = {
   },
 
   // translation-statuspill
-  translationStatuspill: {
-    done: '[data-test-translation-statuspill-done]',
-    inProgress: '[data-test-translation-statuspill-in-progress]',
-    notStarted: '[data-test-translation-statuspill-not-started]',
-  },
+  // translationStatuspill: {
+  //   done: '[data-test-translation-statuspill-done]',
+  //   inProgress: '[data-test-translation-statuspill-in-progress]',
+  //   notStarted: '[data-test-translation-statuspill-not-started]',
+  // },
 
   //  translation-upload-modal
   translationUpload: {
@@ -330,11 +330,11 @@ const selectors = {
   },
 
   // proofs-statuspill
-  proofsStatuspill: {
-    done: '[data-test-proofs-statuspill-done]',
-    inProgress: '[data-test-proofs-statuspill-in-progress]',
-    notStarted: '[data-test-proofs-statuspill-not-started]',
-  },
+  // proofsStatuspill: {
+  //   done: '[data-test-proofs-statuspill-done]',
+  //   inProgress: '[data-test-proofs-statuspill-in-progress]',
+  //   notStarted: '[data-test-proofs-statuspill-not-started]',
+  // },
 
   // proof-request-modal
   proofRequest: {

@@ -23,22 +23,12 @@
     @route="publications.publication.translations"
     data-test-publication-nav-translations
   >
-    <div class="auk-o-flex auk-o-flex--center">
-      <span>{{t "translations"}}</span>
-      <Publications::Publication::Translations::TranslationProgressBadge
-        @translationSubcase={{@publicationFlow.translationSubcase}}
-      />
-    </div>
+      {{t "translations"}}
   </Auk::Tab>
   <Auk::Tab
     @route="publications.publication.proofs"
     data-test-publication-nav-publishpreview
   >
-    <div class="auk-o-flex auk-o-flex--center">
-      <span>{{t "publishpreview-requests"}}</span>
-      <Publications::Publication::Proofs::ProofsProgressBadge
-        @publicationSubcase={{@publicationFlow.publicationSubcase}}
-      />
-    </div>
+      {{t "publishpreview-requests"}}
   </Auk::Tab>
 </Auk::Tabs>
