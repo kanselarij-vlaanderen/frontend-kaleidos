@@ -26,14 +26,14 @@
       <Auk::Panel::Body @noPadding={{true}}>
         <table class="auk-table">
           <thead>
-            <tr data-test-government-fields-panel-row>
+            <tr>
               <th>{{t "government-domain"}}</th>
               <th>{{t "government-fields"}}</th>
             </tr>
           </thead>
           <tbody>
           {{#each this.rows as |row|}}
-            <tr>
+            <tr data-test-government-fields-panel-row>
               <td data-test-government-fields-panel-row-label>
                 {{row.governmentDomain.label}}
               </td>

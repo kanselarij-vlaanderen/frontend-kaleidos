@@ -17,6 +17,7 @@ const selectors = {
 
   domainsFieldsSelectorForm: {
     container: '[data-test-domains-fields-selector-form]',
+    domain: '[data-test-domains-fields-selector-form-domain]~span',
     field: '[data-test-domains-fields-selector-form-field]~span',
   },
 
@@ -77,6 +78,24 @@ const selectors = {
     cancel: '[data-test-mandatees-selector-cancel]',
     add: '[data-test-mandatees-selector-add]',
   },
+
+  // government-fields-panel
+  governmentFieldsPanel: {
+    edit: '[data-test-government-fields-panel-edit]',
+    rows: '[data-test-government-fields-panel-row]',
+    row: {
+      label: '[data-test-government-fields-panel-row-label]',
+      fields: '[data-test-government-fields-panel-row-fields]',
+    },
+  },
+
+  // edit-government-fields-modal
+  editGovernmentFieldsModal: {
+    save: '[data-test-edit-government-fields-modal-save]',
+    // TODO-SELECTORS unused selectors
+    selectorForm: '[data-test-edit-government-fields-modal-selector-form]',
+  },
+
 
   /** Section VL-components **/
 

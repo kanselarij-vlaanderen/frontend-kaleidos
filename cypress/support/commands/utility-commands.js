@@ -107,6 +107,42 @@ function closeSettingsModal() {
   cy.log('/closeSettingsModal');
 }
 
+/**
+ * Validate the content of the dropdown
+ * @memberOf Cypress.Chainable#
+ * @name addFields
+ * @function
+ * @param {{name: string, selected: boolean, [fields]: string}[]} domains
+ */
+function addDomainsAndFields(domains) {
+  cy.log('addDomainsAndFields');
+  cy.route('GET', 'concepts**http://themis.vlaanderen.be/id/concept-schema/**').as('getConceptSchemes');
+  cy.get(utils.governmentFieldsPanel.edit).click();
+  cy.wait('@getConceptSchemes');
+  domains.forEach((domain) => {
+    cy.get(utils.domainsFieldsSelectorForm.domain).contains(domain.name)
+      .parent()
+      .as('container');
+    if (domain.selected) {
+      cy.get('@container').find(utils.domainsFieldsSelectorForm.domain)
+        .contains(domain.name)
+        .click();
+    }
+    if (domain.fields) {
+      domain.fields.forEach((field)  => {
+        cy.get('@container').find(utils.domainsFieldsSelectorForm.field)
+          .contains(field)
+          .click();
+      });
+    }
+  });
+  cy.route('PATCH', '/cases/*').as('saveCase');
+  cy.get(utils.editGovernmentFieldsModal.save).click();
+  cy.wait('@saveCase');
+
+  cy.log('/addDomainsAndFields');
+}
+
 // ***********************************************
 // Commands
 
@@ -116,3 +152,4 @@ Cypress.Commands.add('setDateAndTimeInFlatpickr', setDateAndTimeInFlatpickr);
 Cypress.Commands.add('setDateInFlatpickr', setDateInFlatpickr);
 Cypress.Commands.add('openSettingsModal', openSettingsModal);
 Cypress.Commands.add('closeSettingsModal', closeSettingsModal);
+Cypress.Commands.add('addDomainsAndFields', addDomainsAndFields);
