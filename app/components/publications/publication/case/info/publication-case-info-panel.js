@@ -39,11 +39,12 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   async initFields() {
     const publicationFlow = this.args.publicationFlow;
+
     this.isViaCouncilOfMinisters = await this.getIsViaCouncilOfMinisters(
       publicationFlow
     );
-
-    this.isUrgent = await this.publicationService.getIsUrgent(publicationFlow);
+    const urgencyLevel = await publicationFlow.urgencyLevel;
+    this.isUrgent = urgencyLevel?.isUrgent || false;
     this.numacNumbers = publicationFlow.numacNumbers.toArray();
     const agendaItemTreatment = await publicationFlow.agendaItemTreatment;
     this.decisionDate = agendaItemTreatment.startDate;
@@ -198,11 +199,10 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     let isPublicationFlowDirty = false;
 
     // Dringend
-    const wasUrgent = this.publicationService.getIsUrgent(publicationFlow);
+    const urgencyLevel = await publicationFlow.urgencyLevel;
+    const wasUrgent = urgencyLevel?.isUrgent || false;
     if (this.isUrgent !== wasUrgent) {
-      const urgencyLevel = await this.publicationService.getUrgencyLevel(
-        this.isUrgent
-      );
+      const urgencyLevel = await this.getUrgencyLevel(this.isUrgent);
       publicationFlow.urgencyLevel = urgencyLevel;
       isPublicationFlowDirty = true;
     }
@@ -267,5 +267,16 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     }
 
     await Promise.all(saves);
+  }
+
+  async getUrgencyLevel(isUrgent) {
+    const urgencyLevels = this.store.peekAll('urgency-level');
+    const urgencyLevelUri = isUrgent
+      ? CONSTANTS.URGENCY_LEVELS.SPEEDPROCEDURE
+      : CONSTANTS.URGENCY_LEVELS.STANDARD;
+    const urgencyLevel = urgencyLevels.find(
+      (level) => level.uri === urgencyLevelUri
+    );
+    return urgencyLevel;
   }
 }
