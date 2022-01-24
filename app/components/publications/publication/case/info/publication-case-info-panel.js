@@ -43,12 +43,18 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.isViaCouncilOfMinisters = await this.getIsViaCouncilOfMinisters(
       publicationFlow
     );
+
+    // Dringend
     const urgencyLevel = await publicationFlow.urgencyLevel;
     this.isUrgent = urgencyLevel?.isUrgent || false;
+    // Numac-nummers
     this.numacNumbers = publicationFlow.numacNumbers.toArray();
+    // Datum beslissing
     const agendaItemTreatment = await publicationFlow.agendaItemTreatment;
     this.decisionDate = agendaItemTreatment.startDate;
+    // Datum ontvangst
     this.openingDate = publicationFlow.openingDate;
+    // Limiet publicatie
     const publicationSubcase = await publicationFlow.publicationSubcase;
     this.publicationDueDate = publicationSubcase.dueDate;
   }
