@@ -22,6 +22,8 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
   @tracked file;
   @tracked name;
   @tracked receivedAtDate = new Date();
+  @tracked isProofIn  = false;
+
 
   constructor() {
     super(...arguments);
@@ -63,6 +65,7 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
       file: this.file,
       name: this.name,
       receivedAtDate: this.receivedAtDate,
+      isProofIn : this.isProofIn
     });
   }
 
@@ -81,6 +84,11 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
     } else { // this case occurs when users manually empty the date input-field
       this.receivedAtDate = undefined;
     }
+  }
+
+  @action
+  toggleProofIn() {
+    this.isProofIn = !this.isProofIn;
   }
 
   initValidation() {
