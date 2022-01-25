@@ -92,7 +92,10 @@
               -
             {{/if}}
           {{#if
-            (is-after @publicationSubcase.dueDate precision="days")
+            (and
+              (not this.publicationStatus.isPublished)
+              (is-after @publicationSubcase.dueDate precision="days")
+            )
           }}
             <Auk::FormHelpText
               @text={{t "date-expired"}}
