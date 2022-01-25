@@ -6,41 +6,39 @@ import { task } from 'ember-concurrency-decorators';
 /**
  * @argument {publicationSubcase}
  * @argument {PublicationFlow}
- * @argument {onSave}
+ * @argument {isFinal} if publication status is in final state
  */
-export default class PublicationsPublicationPublicationsPublicationInfoPanel extends Component {
+export default class PublicationsPublicationPublicationActivitiesPublicationInfoPanel extends Component {
   @service store;
 
   @tracked isEditing = false;
   @tracked publicationStatus;
   @tracked publicationModes;
 
-
-  @tracked mode;
+  @tracked publicationMode;
   @tracked targetEndDate;
 
 
   constructor() {
     super(...arguments);
-    this.loadStatus.perform();
     this.publicationModes = this.store.peekAll('publication-mode').sortBy('position');
+    this.initFields();
   }
 
-  @task
-  *loadStatus() {
-    this.publicationStatus = yield this.args.publicationFlow.status;
+  initFields() {
+    this.targetEndDate = this.args.publicationSubcase.targetEndDate;
+    this.publicationMode = this.args.publicationFlow.mode;
   }
 
   @action
   openEditingPanel() {
     this.isEditing = true;
-    this.targetEndDate = this.args.publicationSubcase.targetEndDate;
-    this.mode = this.args.publicationFlow.mode;
   }
 
   @action
   closeEditingPanel() {
     this.isEditing = false;
+    this.initFields();
   }
 
   @action
@@ -50,15 +48,22 @@ export default class PublicationsPublicationPublicationsPublicationInfoPanel ext
 
   @action
   setPublicationMode(publicationMode) {
-    this.mode = publicationMode;
+    this.publicationMode = publicationMode;
   }
 
   @task
   *save() {
-    yield this.args.onSave({
-      mode: this.mode,
-      targetEndDate: this.targetEndDate,
-    });
+    yield this.performSave();
     this.isEditing = false;
+  }
+
+  async performSave() {
+    const publicationSubcase = this.args.publicationSubcase;
+    publicationSubcase.targetEndDate = this.targetEndDate;
+    await publicationSubcase.save();
+
+    const publicationFlow = this.args.publicationFlow;
+    publicationFlow.mode = this.publicationMode;
+    await publicationFlow.save();
   }
 }

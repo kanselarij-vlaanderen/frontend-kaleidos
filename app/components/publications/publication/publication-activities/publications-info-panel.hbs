@@ -13,8 +13,7 @@
           <Auk::Button
             @skin="tertiary"
             @icon="pencil"
-            @disabled={{this.publicationStatus.isWithdrawn}}
-            @loading={{this.loadStatus.isRunning}}
+            @disabled={{@isFinal}}
             @layout="icon-only"
             {{on "click" this.openEditingPanel}}
           />
@@ -43,7 +42,7 @@
             <PowerSelect
               @options={{this.publicationModes}}
               @onChange={{this.setPublicationMode}}
-              @selected={{this.mode}}
+              @selected={{this.publicationMode}}
               as |mode|
             >
               {{mode.label}}
@@ -80,8 +79,8 @@
         <div class="auk-o-grid-col-3 auk-content">
           <h4 class="auk-u-m-0">{{t "publication-target-end-date"}}</h4>
           <p class="auk-u-m-0">
-            {{#if  @publicationSubcase.targetEndDate}}
-              {{moment-format @publicationSubcase.targetEndDate "DD-MM-YYYY"}}
+            {{#if  this.targetEndDate}}
+              {{moment-format this.targetEndDate "DD-MM-YYYY"}}
             {{else}}
               -
             {{/if}}
@@ -90,8 +89,8 @@
         <div class="auk-o-grid-col-3 auk-content">
           <h4 class="auk-u-m-0">{{t "kind-of-publication"}}</h4>
           <p class="auk-u-m-0">
-            {{#if @publicationFlow.mode}}
-              {{@publicationFlow.mode.label}}
+            {{#if this.publicationMode}}
+              {{this.publicationMode.label}}
             {{else}}
               -
             {{/if}}

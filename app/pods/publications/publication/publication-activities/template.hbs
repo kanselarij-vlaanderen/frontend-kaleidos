@@ -1,7 +1,7 @@
 <div class="auk-u-m-4">
-  <Publications::Publication::Publications::PublicationsInfoPanel
-    @publicationSubcase={{this.publicationSubcase}}
-    @publicationFlow={{this.model}}
-    @onSave={{this.savePublicationInfo}}
+  <Publications::Publication::PublicationActivities::PublicationsInfoPanel
+    @publicationFlow={{this.publicationFlow}}
+    @publicationSubcase={{this.model}}
+    @isFinal={{this.publicationFlow.status.isFinal}}
   />
 </div>
