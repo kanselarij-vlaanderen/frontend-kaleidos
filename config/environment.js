@@ -26,6 +26,7 @@ module.exports = function (environment) {
     ],
     featureFlags: {
       'editor-html-paste': false,
+      'editor-browser-delete': true,
     },
     EmberENV: {
       FEATURES: {

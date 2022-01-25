@@ -1,6 +1,4 @@
-import Model, {
-  attr, hasMany
-} from '@ember-data/model';
+import Model, { attr, hasMany } from '@ember-data/model';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationStatus extends Model {
@@ -35,6 +33,10 @@ export default class PublicationStatus extends Model {
 
   get isProofRequested() {
     return this.uri === CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED;
+  }
+
+  get isProofIn() {
+    return this.uri === CONSTANTS.PUBLICATION_STATUSES.PROOF_IN;
   }
 
   get isProofRecalled() {
