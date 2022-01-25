@@ -12,20 +12,30 @@ export default class PublicationsPublicationProofsProofInfoPanelComponent extend
   @service store;
 
   @tracked isEditing = false;
-  @tracked proofPrintCorrector;
 
+  @tracked proofPrintCorrector;
   @tracked dueDate;
+
+  constructor() {
+    super(...arguments);
+    this.initFields();
+  }
+
+  async initFields() {
+    this.proofPrintCorrector = this.args.publicationSubcase.proofPrintCorrector;
+    this.oldProofPrintCorrector = this.proofPrintCorrector;
+    this.dueDate = this.args.publicationSubcase.dueDate;
+  }
 
   @action
   openEditingPanel() {
     this.isEditing = true;
-    this.proofPrintCorrector = this.args.publicationSubcase.proofPrintCorrector;
-    this.dueDate = this.args.publicationSubcase.dueDate;
   }
 
   @action
   closeEditingPanel() {
     this.isEditing = false;
+    this.initFields();
   }
 
   @action
@@ -35,10 +45,15 @@ export default class PublicationsPublicationProofsProofInfoPanelComponent extend
 
   @task
   *save() {
-    yield this.args.onSave({
-      dueDate: this.dueDate,
-      corrector: this.proofPrintCorrector
-    });
+    yield this.performSave();
     this.isEditing = false;
+  }
+
+  async performSave() {
+    const publicationSubcase = this.args.publicationSubcase;
+    publicationSubcase.dueDate = this.dueDate;
+    publicationSubcase.proofPrintCorrector = this.corrector;
+
+    await publicationSubcase.save();
   }
 }

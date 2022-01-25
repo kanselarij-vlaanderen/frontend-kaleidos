@@ -178,14 +178,6 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     this.send('refresh');
   }
 
-  @action
-  async saveProofInfo(proofInfo){
-    this.publicationSubcase.dueDate = proofInfo.dueDate;
-    this.publicationSubcase.proofPrintCorrector = proofInfo.corrector;
-
-    await this.publicationSubcase.save();
-  }
-
   @task
   *deletePiece(pieceRow) {
     const piece = pieceRow.piece;
