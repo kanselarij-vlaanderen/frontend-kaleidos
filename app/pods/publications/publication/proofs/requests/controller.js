@@ -115,6 +115,8 @@ export default class PublicationsPublicationProofsRequestsController extends Con
       const statusChanged = await this.publicationFlow.publicationStatusChange;
       statusChanged.startedAt = proofUpload.receivedAtDate;
       await statusChanged.save();
+      this.publicationSubcase.endDate = proofUpload.receivedAtDate;
+      await this.publicationSubcase.save();
     }
 
     await Promise.all([pieceSave, proofingActivitySave]);

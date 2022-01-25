@@ -25,7 +25,7 @@ const selectors = {
   // publications\publication\translations\template
   publicationTranslations: {
     documents: '[data-test-route-publications---translations-tab-documents]',
-    finished: '[data-test-route-publications---translations-tab-finished]',
+    // finished: '[data-test-route-publications---translations-tab-finished]',
     // TODO-SELECTOR unused selector
     requests: '[data-test-route-publications---translations-tab-requests]',
   },
@@ -67,7 +67,7 @@ const selectors = {
   // publications\publication\proofs\template
   publicationProofs: {
     documents: '[data-test-route-publications---proofs-tab-documents]',
-    finished: '[data-test-route-publications---proofs-tab-finished]',
+    // finished: '[data-test-route-publications---proofs-tab-finished]',
     // TODO-SELECTOR unused selectors
     requests: '[data-test-route-publications---proofs-tab-requests]',
   },

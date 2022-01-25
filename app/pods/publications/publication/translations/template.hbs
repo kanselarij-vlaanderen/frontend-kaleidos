@@ -18,16 +18,7 @@
         </Auk::Tabs>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
-    <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
-        <Auk::Checkbox
-          data-test-route-publications---translations-tab-finished
-          @label={{t "finished"}}
-          @checked={{this.model.endDate}}
-          {{on "input" this.toggleFinishTranslation}}
-        />
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
+
   </Auk::Toolbar>
 </Auk::Navbar>
 {{outlet}}

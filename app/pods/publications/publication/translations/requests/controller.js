@@ -63,6 +63,8 @@ export default class PublicationsPublicationTranslationsRequestController extend
       const statusChanged = yield this.publicationFlow.publicationStatusChange;
       statusChanged.startedAt = translationUpload.receivedAtDate;
       yield statusChanged.save();
+      this.translationSubcase.endDate = translationUpload.receivedAtDate;
+      yield this.translationSubcase.save();
     }
 
     yield Promise.all([translationActivitySave, pieceSave]);
