@@ -5,36 +5,33 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 /**
  * @argument {TranslationSubcase}
- * @argument {PublicationFlow}
- * @argument {onSave}
+ * @argument {isFinal} if publication status is in final state
  */
 export default class PublicationsPublicationTranslationsTranslationsInfoPanelComponent extends Component {
   @service store;
 
   @tracked isEditing = false;
-  @tracked publicationStatus;
 
   @tracked dueDate;
 
   constructor() {
     super(...arguments);
-    this.loadStatus.perform();
+    this.initFields();
   }
 
-  @task
-  *loadStatus() {
-    this.publicationStatus = yield this.args.publicationFlow.status;
+  initFields() {
+    this.dueDate = this.args.translationSubcase.dueDate;
   }
 
   @action
   openEditingPanel() {
     this.isEditing = true;
-    this.dueDate = this.args.translationSubcase.dueDate;
   }
 
   @action
   closeEditingPanel() {
     this.isEditing = false;
+    this.initFields();
   }
 
   @action
@@ -44,9 +41,14 @@ export default class PublicationsPublicationTranslationsTranslationsInfoPanelCom
 
   @task
   *save() {
-    yield this.args.onSave({
-      dueDate: this.dueDate,
-    });
+    yield this.performSave();
     this.isEditing = false;
+  }
+
+  async performSave() {
+    const translationSubcase = this.args.translationSubcase;
+    translationSubcase.dueDate = this.dueDate;
+
+    await translationSubcase.save();
   }
 }

@@ -242,10 +242,4 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   closeTranslationRequestModal() {
     this.isTranslationRequestModalOpen = false;
   }
-
-  @action
-  async saveTranslationInfo(translationInfo){
-    this.translationSubcase.dueDate = translationInfo.dueDate;
-    await this.translationSubcase.save();
-  }
 }

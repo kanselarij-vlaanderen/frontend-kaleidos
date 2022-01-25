@@ -13,8 +13,7 @@
           <Auk::Button
             @skin="tertiary"
             @icon="pencil"
-            @disabled={{not (or this.publicationStatus.isPending this.publicationStatus.isPaused)}}
-            @loading={{this.loadStatus.isRunning}}
+            @disabled={{@isFinal}}
             @layout="icon-only"
             {{on "click" this.openEditingPanel}}
           />
@@ -34,7 +33,10 @@
               @onChange={{this.setTranslationDueDate}}
             />
             {{#if
+              (and
+                (not @isFinal)
                 (is-after this.dueDate precision="days")
+              )
             }}
               <Auk::FormHelpText
                 @text={{t "date-expired"}}
@@ -74,14 +76,17 @@
         <div class="auk-o-grid-col-3 auk-content">
           <h4 class="auk-u-m-0">{{t "translation-due-date"}}</h4>
           <p class="auk-u-m-0">
-            {{#if  @translationSubcase.dueDate}}
-              {{moment-format @translationSubcase.dueDate "DD-MM-YYYY"}}
+            {{#if  this.dueDate}}
+              {{moment-format this.dueDate "DD-MM-YYYY"}}
             {{else}}
               -
             {{/if}}
           </p>
           {{#if
-            (is-after @translationSubcase.dueDate precision="days")
+            (and
+              (not @isFinal)
+              (is-after this.dueDate precision="days")
+            )
           }}
             <Auk::FormHelpText
               @text={{t "date-expired"}}
