@@ -5,7 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 /**
  * @argument {PublicationSubcase}
- * @argument {onSave}
+ * @argument {isFinal} if publication status is in final state
  */
 export default class PublicationsPublicationProofsProofInfoPanelComponent extends Component {
   @service store;
