@@ -1,7 +1,7 @@
 <div class="auk-u-m-4">
   <Publications::Publication::Proofs::ProofInfoPanel
     @publicationSubcase={{this.publicationSubcase}}
-    @publicationFlow={{this.publicationFlow}}
+    @isFinal={{this.publicationFlow.status.isFinal}}
     @onSave={{this.saveProofInfo}}
   />
 

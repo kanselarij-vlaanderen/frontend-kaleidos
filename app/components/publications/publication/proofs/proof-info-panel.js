@@ -13,19 +13,8 @@ export default class PublicationsPublicationProofsProofInfoPanelComponent extend
 
   @tracked isEditing = false;
   @tracked proofPrintCorrector;
-  @tracked publicationStatus;
 
   @tracked dueDate;
-
-  constructor() {
-    super(...arguments);
-    this.loadStatus.perform();
-  }
-
-  @task
-  *loadStatus() {
-    this.publicationStatus = yield this.args.publicationFlow.status;
-  }
 
   @action
   openEditingPanel() {

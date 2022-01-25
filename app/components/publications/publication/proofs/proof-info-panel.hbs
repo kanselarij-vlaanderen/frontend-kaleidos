@@ -13,6 +13,7 @@
           <Auk::Button
             @skin="tertiary"
             @icon="pencil"
+            @disabled={{@isFinal}}
             @loading={{this.loadStatus.isRunning}}
             @layout="icon-only"
             {{on "click" this.openEditingPanel}}
@@ -34,7 +35,7 @@
             />
             {{#if
               (and
-                (not this.publicationStatus.isPublished)
+                (not @isFinal)
                 (is-after this.dueDate precision="days")
               )
             }}
@@ -93,7 +94,7 @@
             {{/if}}
           {{#if
             (and
-              (not this.publicationStatus.isPublished)
+              (not @isFinal)
               (is-after @publicationSubcase.dueDate precision="days")
             )
           }}
