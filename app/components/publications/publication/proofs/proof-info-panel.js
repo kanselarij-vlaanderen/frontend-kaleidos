@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 /**
  * @argument {PublicationSubcase}
- * @argument {PublicationFlow}
  * @argument {onSave}
  */
 export default class PublicationsPublicationProofsProofInfoPanelComponent extends Component {
@@ -23,7 +22,6 @@ export default class PublicationsPublicationProofsProofInfoPanelComponent extend
 
   async initFields() {
     this.proofPrintCorrector = this.args.publicationSubcase.proofPrintCorrector;
-    this.oldProofPrintCorrector = this.proofPrintCorrector;
     this.dueDate = this.args.publicationSubcase.dueDate;
   }
 
