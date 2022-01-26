@@ -12,46 +12,28 @@ export default class PublicationsPublicationProofsProofInfoPanelComponent extend
 
   @tracked isEditing = false;
 
-  @tracked proofPrintCorrector;
-  @tracked dueDate;
-
-  constructor() {
-    super(...arguments);
-    this.initFields();
-  }
-
-  async initFields() {
-    this.proofPrintCorrector = this.args.publicationSubcase.proofPrintCorrector;
-    this.dueDate = this.args.publicationSubcase.dueDate;
-  }
-
   @action
   openEditingPanel() {
     this.isEditing = true;
   }
 
   @action
-  closeEditingPanel() {
+  async closeEditingPanel() {
     this.isEditing = false;
-    this.initFields();
+    await this.args.publicationSubcase.rollbackAttributes();
   }
 
   @action
   setPublicationDueDate(selectedDates) {
-    this.dueDate = selectedDates[0];
+    this.args.publicationSubcase.dueDate = selectedDates[0];
   }
 
   @task
   *save() {
-    yield this.performSave();
+    const publicationSubcase = this.args.publicationSubcase;
+    yield publicationSubcase.save();
     this.isEditing = false;
   }
 
-  async performSave() {
-    const publicationSubcase = this.args.publicationSubcase;
-    publicationSubcase.dueDate = this.dueDate;
-    publicationSubcase.proofPrintCorrector = this.corrector;
 
-    await publicationSubcase.save();
-  }
 }

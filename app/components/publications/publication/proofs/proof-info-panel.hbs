@@ -29,13 +29,13 @@
           <div class="auk-form-group">
             <Auk::Label>{{t "publication-due-date"}}</Auk::Label>
             <Auk::Datepicker
-              @date={{this.dueDate}}
+              @date={{@publicationSubcase.dueDate}}
               @onChange={{this.setPublicationDueDate}}
             />
             {{#if
               (and
                 (not @isFinal)
-                (is-after this.dueDate precision="days")
+                (is-after @publicationSubcase.dueDate precision="days")
               )
             }}
               <Auk::FormHelpText
@@ -52,7 +52,7 @@
               {{t "proofprint-corrector"}}
             </Auk::Label>
             <Auk::Input
-              @value={{mut this.proofPrintCorrector}}
+              @value={{mut @publicationSubcase.proofPrintCorrector}}
             />
           </div>
         </div>
@@ -86,15 +86,15 @@
         <div class="auk-o-grid-col-3 auk-content">
           <h4 class="auk-u-m-0">{{t "publication-due-date"}}</h4>
           <p class="auk-u-m-0">
-            {{#if this.dueDate}}
-              {{moment-format this.dueDate "DD-MM-YYYY"}}
+            {{#if @publicationSubcase.dueDate}}
+              {{moment-format @publicationSubcase.dueDate "DD-MM-YYYY"}}
             {{else}}
               -
             {{/if}}
           {{#if
             (and
               (not @isFinal)
-              (is-after this.dueDate precision="days")
+              (is-after @publicationSubcase.dueDate precision="days")
             )
           }}
             <Auk::FormHelpText
@@ -108,8 +108,8 @@
         <div class="auk-o-grid-col-3 auk-content">
           <h4 class="auk-u-m-0">{{t "proofprint-corrector"}}</h4>
           <p class="auk-u-m-0">
-            {{#if this.proofPrintCorrector}}
-              {{this.proofPrintCorrector}}
+            {{#if @publicationSubcase.proofPrintCorrector}}
+              {{@publicationSubcase.proofPrintCorrector}}
             {{else}}
               -
             {{/if}}
