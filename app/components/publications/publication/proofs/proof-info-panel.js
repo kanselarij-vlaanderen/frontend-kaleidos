@@ -30,8 +30,7 @@ export default class PublicationsPublicationProofsProofInfoPanelComponent extend
 
   @task
   *save() {
-    const publicationSubcase = this.args.publicationSubcase;
-    yield publicationSubcase.save();
+    yield this.args.publicationSubcase.save();
     this.isEditing = false;
   }
 }

@@ -18,9 +18,9 @@ export default class PublicationsPublicationTranslationsTranslationsInfoPanelCom
   }
 
   @action
-  async closeEditingPanel() {
+  closeEditingPanel() {
     this.isEditing = false;
-    await this.args.translationSubcase.rollbackAttributes();
+    this.args.translationSubcase.rollbackAttributes();
   }
 
   @action
@@ -30,8 +30,7 @@ export default class PublicationsPublicationTranslationsTranslationsInfoPanelCom
 
   @task
   *save() {
-    const translationSubcase = this.args.translationSubcase;
-    yield translationSubcase.save();
+    yield this.args.translationSubcase.save();
     this.isEditing = false;
   }
 }
