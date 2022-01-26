@@ -12,7 +12,6 @@ export default class PublicationsPublicationPublicationActivitiesPublicationInfo
   @service store;
 
   @tracked isEditing = false;
-
   @tracked publicationModes;
 
   constructor() {
@@ -28,9 +27,8 @@ export default class PublicationsPublicationPublicationActivitiesPublicationInfo
   @action
   async closeEditingPanel() {
     this.isEditing = false;
-    await this.args.publicationSubcase.rollbackAttributes();
-    await this.args.publicationFlow.belongsTo('mode')
-      .reload();
+    this.args.publicationSubcase.rollbackAttributes();
+    await this.args.publicationFlow.belongsTo('mode').reload();
   }
 
   @action
