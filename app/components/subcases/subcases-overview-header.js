@@ -48,8 +48,8 @@ export default class SubCasesOverviewHeader extends Component {
   }
 
   @action
-  async addSubcase(subcase) {
-    await this.args.onAddSubcase(subcase);
+  async onCreateSubcase() {
+    this.args.onCreateSubcase();
     this.closeAddSubcaseModal();
   }
 }

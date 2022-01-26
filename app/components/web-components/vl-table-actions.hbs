@@ -14,7 +14,7 @@
       {{on "click" (fn "openDocument" this.row bubbles=false)}}
     >
       <:floater>
-        <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+        <EmberTooltip @side="bottom" @tooltipClass="auk-tooltip">
           {{#if (not (await this.row.nota))}}
             {{t "no-nota"}}
           {{else}}
@@ -25,7 +25,7 @@
     </Auk::Button>
   {{else}}
     <div class="auk-loader" role="alert" aria-busy="true">
-      <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+      <EmberTooltip @side="bottom" @tooltipClass="auk-tooltip">
         {{t "nota-loading-text"}}
       </EmberTooltip>
     </div>

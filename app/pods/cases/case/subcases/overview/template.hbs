@@ -2,17 +2,15 @@
 
 <Subcases::SubcasesOverviewHeader
   @case={{this.case}}
-  @onAddSubcase={{perform this.addSubcase}}
+  @onCreateSubcase={{this.refreshModel}}
   @onSaveCase={{perform this.saveCase}}
 />
 <div class="auk-scroll-wrapper__body">
   {{#if this.model}}
-    <Subcases::SubcasesProcess @subcases={{this.model}}/>
+    <Subcases::SubcasesProcess @subcases={{this.model}} />
   {{else}}
     <div class="auk-u-m-8">
-      <Auk::EmptyState
-        @message={{t "no-subcases"}}
-      />
+      <Auk::EmptyState @message={{t "no-subcases"}} />
     </div>
   {{/if}}
 </div>
