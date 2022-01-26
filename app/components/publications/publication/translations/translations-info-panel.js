@@ -12,43 +12,26 @@ export default class PublicationsPublicationTranslationsTranslationsInfoPanelCom
 
   @tracked isEditing = false;
 
-  @tracked dueDate;
-
-  constructor() {
-    super(...arguments);
-    this.initFields();
-  }
-
-  initFields() {
-    this.dueDate = this.args.translationSubcase.dueDate;
-  }
-
   @action
   openEditingPanel() {
     this.isEditing = true;
   }
 
   @action
-  closeEditingPanel() {
+  async closeEditingPanel() {
     this.isEditing = false;
-    this.initFields();
+    await this.args.translationSubcase.rollbackAttributes();
   }
 
   @action
   setTranslationDueDate(selectedDates) {
-    this.dueDate = selectedDates[0];
+    this.args.translationSubcase.dueDate = selectedDates[0];
   }
 
   @task
   *save() {
-    yield this.performSave();
-    this.isEditing = false;
-  }
-
-  async performSave() {
     const translationSubcase = this.args.translationSubcase;
-    translationSubcase.dueDate = this.dueDate;
-
-    await translationSubcase.save();
+    yield translationSubcase.save();
+    this.isEditing = false;
   }
 }
