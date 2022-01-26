@@ -164,18 +164,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @action
-  setPublicationDueDate(selectedDates) {
-    this.publicationSubcase.dueDate = selectedDates[0];
-    this.notifyChanges(this.publicationSubcase, 'dueDate');
-  }
-
-  @action
-  setTranslationDueDate(selectedDates) {
-    this.translationSubcase.dueDate = selectedDates[0];
-    this.notifyChanges(this.translationSubcase, 'dueDate');
-  }
-
-  @action
   setTranslationDate(selectedDates) {
     this.translationSubcase.endDate = selectedDates[0];
     this.notifyChanges(this.translationSubcase, 'endDate');
@@ -207,13 +195,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.notifyChanges(this.publicationFlow, 'remark');
   }
 
-  @restartableTask
-  *setProofPrintCorrector(event) {
-    const newValue = event.target.value;
-    this.publicationSubcase.proofPrintCorrector = newValue;
-    yield timeout(1000);
-    this.notifyChanges(this.publicationSubcase, 'proofPrintCorrector');
-  }
   /**
    *
    * @param {Model} model
