@@ -117,20 +117,20 @@ function closeSettingsModal() {
 function addDomainsAndFields(domains) {
   cy.log('addDomainsAndFields');
   cy.route('GET', 'concepts**http://themis.vlaanderen.be/id/concept-schema/**').as('getConceptSchemes');
-  cy.get(utils.governmentFieldsPanel.edit).click();
+  cy.get(utils.governmentAreasPanel.edit).click();
   cy.wait('@getConceptSchemes');
   domains.forEach((domain) => {
-    cy.get(utils.domainsFieldsSelectorForm.domain).contains(domain.name)
+    cy.get(utils.governmentAreaSelectorForm.domain).contains(domain.name)
       .parent()
       .as('container');
     if (domain.selected) {
-      cy.get('@container').find(utils.domainsFieldsSelectorForm.domain)
+      cy.get('@container').find(utils.governmentAreaSelectorForm.domain)
         .contains(domain.name)
         .click();
     }
     if (domain.fields) {
       domain.fields.forEach((field)  => {
-        cy.get('@container').find(utils.domainsFieldsSelectorForm.field)
+        cy.get('@container').find(utils.governmentAreaSelectorForm.field)
           .contains(field)
           .click();
       });

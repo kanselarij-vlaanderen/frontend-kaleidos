@@ -1,5 +1,5 @@
 <Auk::CheckboxList {{did-update (perform this.calculateDomainSelections) @selectedFields}}
-  data-test-domains-fields-selector-form>
+  data-test-government-area-selector-form>
   {{#each this.domainSelections as |domainSelection index|}}
     {{!-- template-lint-disable simple-unless --}}
     {{#unless (eq index 0)}}
@@ -7,14 +7,14 @@
     {{/unless}}
     {{!-- template-lint-enable simple-unless --}}
     <Auk::Checkbox
-      data-test-domains-fields-selector-form-domain
+      data-test-government-area-selector-form-domain
       @checked={{domainSelection.isSelected}}
       {{on "input" (fn this.toggleDomainSelection domainSelection)}}>
       {{domainSelection.domain.label}}
       <Auk::CheckboxList class="auk-u-mt">
         {{#each domainSelection.availableFields as |field|}}
           <Auk::Checkbox
-            data-test-domains-fields-selector-form-field 
+            data-test-government-area-selector-form-field 
             @checked={{includes field domainSelection.selectedFields}}
             @label={{field.label}}
             {{on "input" (fn this.toggleFieldSelection field)}}

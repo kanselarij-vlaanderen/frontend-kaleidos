@@ -15,10 +15,10 @@ const selectors = {
     },
   },
 
-  domainsFieldsSelectorForm: {
-    container: '[data-test-domains-fields-selector-form]',
-    domain: '[data-test-domains-fields-selector-form-domain]~span',
-    field: '[data-test-domains-fields-selector-form-field]~span',
+  governmentAreaSelectorForm: {
+    container: '[data-test-government-area-selector-form]',
+    domain: '[data-test-government-area-selector-form-domain]~span',
+    field: '[data-test-government-area-selector-form-field]~span',
   },
 
   // simple-file-uploader
@@ -80,12 +80,12 @@ const selectors = {
   },
 
   // government-fields-panel
-  governmentFieldsPanel: {
-    edit: '[data-test-government-fields-panel-edit]',
-    rows: '[data-test-government-fields-panel-row]',
+  governmentAreasPanel: {
+    edit: '[data-test-government-areas-panel-edit]',
+    rows: '[data-test-government-areas-panel-row]',
     row: {
-      label: '[data-test-government-fields-panel-row-label]',
-      fields: '[data-test-government-fields-panel-row-fields]',
+      label: '[data-test-government-areas-panel-row-label]',
+      fields: '[data-test-government-areas-panel-row-fields]',
     },
   },
 

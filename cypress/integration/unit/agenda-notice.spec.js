@@ -3,7 +3,6 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
-// import publication from '../../selectors/publication.selectors';
 import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
@@ -44,14 +43,15 @@ context('agenda notice test', () => {
     cy.addSubcaseMandatee(1);
     cy.addSubcaseMandatee(2);
     // add fields
-    cy.get(utils.governmentFieldsPanel.edit).click();
-    cy.wait(10000); // TODO to fix with proper await for concepts
-    cy.get(utils.domainsFieldsSelectorForm.container).contains(labelName1)
-      .find(utils.domainsFieldsSelectorForm.field)
+    cy.route('GET', 'concepts**http://themis.vlaanderen.be/id/concept-schema/**').as('getConceptSchemes');
+    cy.get(utils.governmentAreasPanel.edit).click();
+    cy.wait('@getConceptSchemes');
+    cy.get(utils.governmentAreaSelectorForm.container).contains(labelName1)
+      .find(utils.governmentAreaSelectorForm.field)
       .contains(fieldsName1)
       .click();
-    cy.get(utils.domainsFieldsSelectorForm.container).contains(labelName2)
-      .find(utils.domainsFieldsSelectorForm.field)
+    cy.get(utils.governmentAreaSelectorForm.container).contains(labelName2)
+      .find(utils.governmentAreaSelectorForm.field)
       .contains(fieldsName2)
       .click();
     cy.get(utils.editGovernmentFieldsModal.save).click();

@@ -51,30 +51,30 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
 
     // check rollback after cancel
     cy.route('GET', 'concepts**http://themis.vlaanderen.be/id/concept-schema/**').as('getConceptSchemes');
-    cy.get(utils.governmentFieldsPanel.edit).click();
+    cy.get(utils.governmentAreasPanel.edit).click();
     cy.wait('@getConceptSchemes');
-    cy.get(utils.domainsFieldsSelectorForm.container).contains('Cultuur, Jeugd, Sport en Media')
+    cy.get(utils.governmentAreaSelectorForm.container).contains('Cultuur, Jeugd, Sport en Media')
       .click();
-    cy.get(utils.domainsFieldsSelectorForm.container).contains('Cultuur, Jeugd, Sport en Media')
-      .find(utils.domainsFieldsSelectorForm.field)
+    cy.get(utils.governmentAreaSelectorForm.container).contains('Cultuur, Jeugd, Sport en Media')
+      .find(utils.governmentAreaSelectorForm.field)
       .contains('Media')
       .click();
     cy.get(auk.modal.footer.cancel).click();
-    cy.get(utils.governmentFieldsPanel.rows).should('not.exist');
+    cy.get(utils.governmentAreasPanel.rows).should('not.exist');
 
     cy.addDomainsAndFields(domains);
 
-    cy.get(utils.governmentFieldsPanel.rows).as('listItems');
+    cy.get(utils.governmentAreasPanel.rows).as('listItems');
     cy.get('@listItems').should('have.length', 2, {
       timeout: 5000,
     });
 
     // Checking if name of first domain is present ensures data is loaded
     cy.get('@listItems').eq(0)
-      .find(utils.governmentFieldsPanel.row.label)
+      .find(utils.governmentAreasPanel.row.label)
       .should('contain', nameToCheck);
     cy.get('@listItems').eq(0)
-      .find(utils.governmentFieldsPanel.row.fields)
+      .find(utils.governmentAreasPanel.row.fields)
       .should('contain', '-');
     cy.proposeSubcaseForAgenda(agendaDate);
 
@@ -82,7 +82,7 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
 
-    cy.get(utils.governmentFieldsPanel.rows).as('listItems');
+    cy.get(utils.governmentAreasPanel.rows).as('listItems');
     cy.get('@listItems').should('have.length', 2, {
       timeout: 5000,
     });
@@ -107,7 +107,7 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
 
     cy.addDomainsAndFields(domains);
 
-    cy.get(utils.governmentFieldsPanel.rows).as('listItems');
+    cy.get(utils.governmentAreasPanel.rows).as('listItems');
     cy.get('@listItems').should('have.length', 3, {
       timeout: 5000,
     });
@@ -116,7 +116,7 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
 
-    cy.get(utils.governmentFieldsPanel.rows).as('listItems');
+    cy.get(utils.governmentAreasPanel.rows).as('listItems');
     cy.get('@listItems').should('have.length', 3, {
       timeout: 5000,
     });
@@ -141,7 +141,7 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     cy.openCase(caseName);
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, null, null);
     cy.openSubcase(0);
-    cy.get(utils.governmentFieldsPanel.rows).as('listItems');
+    cy.get(utils.governmentAreasPanel.rows).as('listItems');
     cy.get('@listItems').should('have.length', 3, {
       timeout: 5000,
     });
@@ -154,7 +154,7 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     // Dependency: We should already have 3 domains that we inherit from previous subcase, now we add 1 more
 
     cy.addDomainsAndFields(domains1);
-    cy.get(utils.governmentFieldsPanel.rows).as('listItems');
+    cy.get(utils.governmentAreasPanel.rows).as('listItems');
     cy.get('@listItems').should('have.length', 4, {
       timeout: 5000,
     });
@@ -164,7 +164,7 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
 
     // Add 1 more
     cy.addDomainsAndFields(domains2);
-    cy.get(utils.governmentFieldsPanel.rows).as('listItems');
+    cy.get(utils.governmentAreasPanel.rows).as('listItems');
     cy.get('@listItems').should('have.length', 5, {
       timeout: 5000,
     });
@@ -173,7 +173,7 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     cy.openCase(caseName);
     cy.openSubcase(0);
 
-    cy.get(utils.governmentFieldsPanel.rows).as('listItems');
+    cy.get(utils.governmentAreasPanel.rows).as('listItems');
     cy.get('@listItems').should('have.length', 5, {
       timeout: 5000,
     });
@@ -209,26 +209,26 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     cy.get(auk.loader, {
       timeout: 60000,
     }).should('not.exist');
-    cy.get(utils.governmentFieldsPanel.rows).should('have.length', 5);
+    cy.get(utils.governmentAreasPanel.rows).should('have.length', 5);
     cy.get('@agendaitems').eq(2)
       .click();
     cy.get(auk.loader, {
       timeout: 40000,
     }).should('not.exist');
-    cy.get(utils.governmentFieldsPanel.rows).should('have.length', 5);
+    cy.get(utils.governmentAreasPanel.rows).should('have.length', 5);
     cy.get('@agendaitems').eq(3)
       .click();
     cy.get(auk.loader, {
       timeout: 40000,
     }).should('not.exist');
-    cy.get(utils.governmentFieldsPanel.rows).should('have.length', 5);
+    cy.get(utils.governmentAreasPanel.rows).should('have.length', 5);
     // check if subcase from different case doesn't retain domains and fields
     cy.get('@agendaitems').eq(4)
       .click();
     cy.get(auk.loader, {
       timeout: 40000,
     }).should('not.exist');
-    cy.get(utils.governmentFieldsPanel.rows).should('have.length', 1);
+    cy.get(utils.governmentAreasPanel.rows).should('have.length', 1);
 
     cy.log('in non-edit view, check if domains of last selected agendaitem are correctly ordered');
     cy.get(agenda.agendaDetailSidebar.subitem).as('agendaitems');
@@ -237,7 +237,7 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     cy.get(auk.loader, {
       timeout: 60000,
     }).should('not.exist');
-    cy.get(utils.governmentFieldsPanel.row.label).as('domainLabel');
+    cy.get(utils.governmentAreasPanel.row.label).as('domainLabel');
     cy.get('@domainLabel').eq(0)
       .should('contain', 'Cultuur, Jeugd, Sport en Media');
     cy.get('@domainLabel').eq(1)
@@ -258,12 +258,12 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     cy.get(agenda.agendaDetailSidebar.subitem).as('agendaitems');
     cy.get('@agendaitems').eq(1)
       .click();
-    cy.get(utils.governmentFieldsPanel.rows).should('have.length', 4);
+    cy.get(utils.governmentAreasPanel.rows).should('have.length', 4);
     cy.get('@agendaitems').eq(2)
       .click();
-    cy.get(utils.governmentFieldsPanel.rows).should('have.length', 4);
+    cy.get(utils.governmentAreasPanel.rows).should('have.length', 4);
     cy.get('@agendaitems').eq(3)
       .click();
-    cy.get(utils.governmentFieldsPanel.rows).should('have.length', 4);
+    cy.get(utils.governmentAreasPanel.rows).should('have.length', 4);
   });
 });
