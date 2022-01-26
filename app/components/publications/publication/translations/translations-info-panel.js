@@ -4,10 +4,10 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 /**
- * @argument {PublicationSubcase}
+ * @argument {TranslationSubcase}
  * @argument {isFinal} if publication status is in final state
  */
-export default class PublicationsPublicationProofsProofInfoPanelComponent extends Component {
+export default class PublicationsPublicationTranslationsTranslationsInfoPanelComponent extends Component {
   @service store;
 
   @tracked isEditing = false;
@@ -20,17 +20,17 @@ export default class PublicationsPublicationProofsProofInfoPanelComponent extend
   @action
   closeEditingPanel() {
     this.isEditing = false;
-    this.args.publicationSubcase.rollbackAttributes();
+    this.args.translationSubcase.rollbackAttributes();
   }
 
   @action
-  setPublicationDueDate(selectedDates) {
-    this.args.publicationSubcase.dueDate = selectedDates[0];
+  setTranslationDueDate(selectedDates) {
+    this.args.translationSubcase.dueDate = selectedDates[0];
   }
 
   @task
   *save() {
-    yield this.args.publicationSubcase.save();
+    yield this.args.translationSubcase.save();
     this.isEditing = false;
   }
 }

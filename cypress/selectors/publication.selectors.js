@@ -260,7 +260,7 @@ const selectors = {
     numacNumber: '[data-test-publication-sidebar-numac-number]',
     openingDate: '[data-test-publication-sidebar-opening-date]',
     decisionDate: '[data-test-publication-sidebar-decision-date]',
-    translationDueDate: '[data-test-publication-sidebar-translation-due-date]',
+    // translationDueDate: '[data-test-publication-sidebar-translation-due-date]',
     translationDate: '[data-test-publication-sidebar-translation-date]',
     targetEndDate: '[data-test-publication-sidebar-target-end-date]',
     // publicationDueDate: '[data-test-publication-sidebar-publication-due-date]',
