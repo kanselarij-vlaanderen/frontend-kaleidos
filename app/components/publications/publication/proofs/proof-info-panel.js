@@ -18,9 +18,9 @@ export default class PublicationsPublicationProofsProofInfoPanelComponent extend
   }
 
   @action
-  async closeEditingPanel() {
+  closeEditingPanel() {
     this.isEditing = false;
-    await this.args.publicationSubcase.rollbackAttributes();
+    this.args.publicationSubcase.rollbackAttributes();
   }
 
   @action
@@ -34,6 +34,4 @@ export default class PublicationsPublicationProofsProofInfoPanelComponent extend
     yield publicationSubcase.save();
     this.isEditing = false;
   }
-
-
 }
