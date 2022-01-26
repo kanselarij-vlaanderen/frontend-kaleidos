@@ -12,22 +12,12 @@ export default class PublicationsPublicationPublicationActivitiesPublicationInfo
   @service store;
 
   @tracked isEditing = false;
-  @tracked publicationStatus;
+
   @tracked publicationModes;
-
-  @tracked publicationMode;
-  @tracked targetEndDate;
-
 
   constructor() {
     super(...arguments);
     this.publicationModes = this.store.peekAll('publication-mode').sortBy('position');
-    this.initFields();
-  }
-
-  initFields() {
-    this.targetEndDate = this.args.publicationSubcase.targetEndDate;
-    this.publicationMode = this.args.publicationFlow.mode;
   }
 
   @action
@@ -36,34 +26,30 @@ export default class PublicationsPublicationPublicationActivitiesPublicationInfo
   }
 
   @action
-  closeEditingPanel() {
+  async closeEditingPanel() {
     this.isEditing = false;
-    this.initFields();
+    await this.args.publicationSubcase.rollbackAttributes();
+    await this.args.publicationFlow.belongsTo('mode')
+      .reload();
   }
 
   @action
   setTargetEndDate(selectedDates) {
-    this.targetEndDate = selectedDates[0];
+    this.args.publicationSubcase.targetEndDate = selectedDates[0];
   }
 
   @action
   setPublicationMode(publicationMode) {
-    this.publicationMode = publicationMode;
+    this.args.publicationFlow.mode = publicationMode;
   }
 
   @task
   *save() {
-    yield this.performSave();
-    this.isEditing = false;
-  }
-
-  async performSave() {
     const publicationSubcase = this.args.publicationSubcase;
-    publicationSubcase.targetEndDate = this.targetEndDate;
-    await publicationSubcase.save();
+    yield publicationSubcase.save();
 
     const publicationFlow = this.args.publicationFlow;
-    publicationFlow.mode = this.publicationMode;
-    await publicationFlow.save();
+    yield publicationFlow.save();
+    this.isEditing = false;
   }
 }

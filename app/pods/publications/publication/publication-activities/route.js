@@ -1,8 +1,8 @@
 import Route from '@ember/routing/route';
 
 export default class PublicationsPublicationPublicationActivitiesRoute extends Route {
-  async model() {
-    return await this.modelFor('publications.publication').publicationSubcase;
+  model() {
+    return this.modelFor('publications.publication').publicationSubcase;
   }
 
   async afterModel() {
