@@ -120,25 +120,7 @@
           </div>
         {{/unless}}
 
-        {{! Publicatiewijze }}
-        {{#unless this.publicationStatus.isWithdrawn}}
-          <div
-            data-test-publication-sidebar-publication-mode
-            class="auk-form-group"
-          >
-            <Auk::Label for="blockInput">
-              {{t "kind-of-publication"}}
-            </Auk::Label>
-            <PowerSelect
-              @options={{this.publicationModes}}
-              @onChange={{this.setPublicationMode}}
-              @selected={{this.publicationFlow.mode}}
-              as |mode|
-            >
-              {{mode.label}}
-            </PowerSelect>
-          </div>
-        {{/unless}}
+
 
         {{! Werknummer BS == numac nummer }}
         <div data-test-publication-sidebar-numac-number class="auk-form-group">
@@ -207,18 +189,6 @@
           <Auk::Datepicker
             @date={{this.translationSubcase.endDate}}
             @onChange={{this.setTranslationDate}}
-          />
-        </div>
-
-        {{! Gevraagde publicatiedatum }}
-        <div
-          data-test-publication-sidebar-target-end-date
-          class="auk-form-group"
-        >
-          <Auk::Label>{{t "publication-target-end-date"}}</Auk::Label>
-          <Auk::Datepicker
-            @date={{this.publicationSubcase.targetEndDate}}
-            @onChange={{this.setPublicationTargetEndDate}}
           />
         </div>
 
