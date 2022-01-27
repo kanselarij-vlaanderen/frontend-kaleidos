@@ -50,8 +50,8 @@
           {{!Numac-nummers}}
           <div class="auk-o-grid-col-2 auk-content">
             <Auk::KeyValue @key={{t "publication-flow-numac-number"}}>
-              {{#if this.numacNumbers}}
-                {{join ", " (map-by "idName" this.numacNumbers)}}
+              {{#if @publicationFlow.numacNumbers}}
+                {{join ", " (map-by "idName" @publicationFlow.numacNumbers)}}
               {{else}}
                 {{t "dash"}}
               {{/if}}
@@ -197,7 +197,7 @@
                   </Auk::Label>
                   {{! TODO: disable modifying numac-number once (staatsblad-)decision exists? }}
                   <Auk::InputPills
-                    @items={{this.numacNumbers}}
+                    @items={{this.numacNumbersEditing}}
                     @onCreate={{this.addNumacNumber}}
                     @onRemove={{this.deleteNumacNumber}}
                     as |numac|

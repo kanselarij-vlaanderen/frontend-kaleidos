@@ -15,7 +15,8 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @tracked publicationNumberErrorKey;
 
-  @tracked numacNumbers;
+  // use copy: reload() does not seem to work on hasMany relationships
+  @tracked numacNumbersEditing;
   numacNumbersToDelete;
 
   @tracked decisionDate;
@@ -35,20 +36,22 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.identification = await publicationFlow.identification;
     this.structuredIdentifier = await this.identification.structuredIdentifier;
     // Numac-nummers
-    this.numacNumbers = publicationFlow.numacNumbers.toArray();
+    this.numacNumbers = await publicationFlow.numacNumbers;
     // Datum beslissing
-    const agendaItemTreatment = await publicationFlow.agendaItemTreatment;
-    this.decisionDate = agendaItemTreatment.startDate;
+    this.agendaItemTreatment = await publicationFlow.agendaItemTreatment;
+    this.decisionDate = this.agendaItemTreatment.startDate;
     // Datum ontvangst
     this.openingDate = publicationFlow.openingDate;
     // Limiet publicatie
-    const publicationSubcase = await publicationFlow.publicationSubcase;
-    this.publicationDueDate = publicationSubcase.dueDate;
+    this.publicationSubcase = await publicationFlow.publicationSubcase;
+    this.publicationDueDate = this.publicationSubcase.dueDate;
   }
 
   @action
   async openEditingPanel() {
     this.isEditing = true;
+    // Numac-nummers
+    this.numacNumbersEditing = this.numacNumbers.toArray();
     this.numacNumbersToDelete = [];
   }
 
@@ -116,12 +119,12 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
       agency: CONSTANTS.SCHEMA_AGENCIES.NUMAC,
       publicationFlowForNumac: this.publicationFlow,
     });
-    this.numacNumbers.pushObject(numacNumber);
+    this.numacNumbersEditing.pushObject(numacNumber);
   }
 
   @action
   deleteNumacNumber(numacNumber) {
-    this.numacNumbers.removeObject(numacNumber);
+    this.numacNumbersEditing.removeObject(numacNumber);
     this.numacNumbersToDelete.push(numacNumber);
   }
 
@@ -159,10 +162,10 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     const publicationFlow = this.args.publicationFlow;
 
     const urgencyLevelReload = publicationFlow.belongsTo('urgencyLevel').reload();
-    const agendaItemTreatmentReload = publicationFlow.belongsTo('agendaItemTreatment').reload();
-    const publicationSubcaseReload = publicationFlow.belongsTo('publicationSubcase').reload();
+    yield Promise.all([urgencyLevelReload]);
 
-    yield Promise.all([urgencyLevelReload, agendaItemTreatmentReload, publicationSubcaseReload]);
+    this.agendaItemTreatment.rollbackAttributes();
+    this.publicationSubcase.rollbackAttributes();
 
     this.isEditing = false;
   }
@@ -183,7 +186,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
         return;
       }
     }
-
     yield this.performSave(publicationFlow);
     this.isEditing = false;
   }
@@ -207,9 +209,8 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
       saves.push(destroy);
     }
 
-    const numacNumbers = await publicationFlow.numacNumbers;
-    numacNumbers.replace(0, numacNumbers.length, this.numacNumbers);
-    numacNumbers.save();
+    this.numacNumbers.replace(0, this.numacNumbers.length, this.numacNumbersEditing);
+    saves.push(this.numacNumbers.save());
 
     // Datum beslissing
     const agendaItemTreatment = await publicationFlow.agendaItemTreatment;
