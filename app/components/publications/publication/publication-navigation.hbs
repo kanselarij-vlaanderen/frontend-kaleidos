@@ -23,12 +23,17 @@
     @route="publications.publication.translations"
     data-test-publication-nav-translations
   >
-      {{t "translations"}}
+      {{t "translation"}}
   </Auk::Tab>
   <Auk::Tab
     @route="publications.publication.proofs"
     data-test-publication-nav-publishpreview
   >
-      {{t "publishpreview-requests"}}
+   {{t "proof"}}
+  </Auk::Tab>
+  <Auk::Tab
+    @route="publications.publication.publication-activities"
+  >
+    {{t "publication-flow"}}
   </Auk::Tab>
 </Auk::Tabs>
