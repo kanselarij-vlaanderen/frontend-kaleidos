@@ -160,7 +160,7 @@
                       data-test-publication-case-info-panel-publication-number
                       @type="number"
                       class="auk-input--block auk-o-flex__item"
-                      value={{this.publicationNumber}}
+                      value={{@publicationFlow.identification.structuredIdentifier.localIdentifier}}
                       @error={{this.publicationNumberErrorKey}}
                       {{on "input" (perform this.setPublicationNumber)}}
                     />
@@ -168,7 +168,7 @@
                       data-test-publication-case-info-panel-publication-number-suffix
                       @width="xsmall"
                       class="auk-u-ml"
-                      value={{this.publicationNumberSuffix}}
+                      value={{@publicationFlow.identification.structuredIdentifier.versionIdentifier}}
                       @error={{this.publicationNumberErrorKey}}
                       {{on "input" (perform this.setPublicationNumberSuffix)}}
                     />

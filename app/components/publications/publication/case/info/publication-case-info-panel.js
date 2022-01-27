@@ -14,8 +14,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   @tracked isEditing;
 
   @tracked publicationNumberErrorKey;
-  @tracked publicationNumber;
-  @tracked publicationNumberSuffix;
 
   @tracked numacNumbers;
   numacNumbersToDelete;
@@ -33,6 +31,9 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   async initFields() {
     const publicationFlow = this.args.publicationFlow;
 
+    // Publication number
+    this.identification = await publicationFlow.identification;
+    this.structuredIdentifier = await this.identification.structuredIdentifier;
     // Numac-nummers
     this.numacNumbers = publicationFlow.numacNumbers.toArray();
     // Datum beslissing
@@ -47,14 +48,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @action
   async openEditingPanel() {
-    const publicationFlow = this.args.publicationFlow;
     this.isEditing = true;
-
-    const identification = await publicationFlow.identification;
-    const structuredIdentifier = await identification.structuredIdentifier;
-    this.publicationNumber = structuredIdentifier.localIdentifier;
-    this.publicationNumberSuffix = structuredIdentifier.versionIdentifier;
-
     this.numacNumbersToDelete = [];
   }
 
@@ -68,39 +62,46 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @task
   *setPublicationNumber(event) {
-    this.publicationNumber = event.target.value;
-    yield this.checkPublicationNumber.perform();
-  }
-
-  @task
-  *setPublicationNumberSuffix(event) {
-    this.publicationNumberSuffix = isBlank(event.target.value)
-      ? undefined
-      : event.target.value;
-    yield this.checkPublicationNumber.perform();
-  }
-
-  @restartableTask
-  *checkPublicationNumber() {
+    const publicationNumberStr = event.target.value;
     this.publicationNumberErrorKey = undefined;
-    if (isBlank(this.publicationNumber)) {
+
+    if (isBlank(publicationNumberStr)) {
       this.publicationNumberErrorKey = 'publication-number-error-required';
       return;
     }
 
-    const publicationNumber = Number.parseFloat(this.publicationNumber);
-    const isNumeric =
-      Number.isInteger(publicationNumber) && publicationNumber > 0;
+    const publicationNumber = Number.parseFloat(publicationNumberStr);
+    const isNumeric = Number.isInteger(publicationNumber) && publicationNumber > 0;
     if (!isNumeric) {
       this.publicationNumberErrorKey = 'publication-number-error-numeric';
       return;
     }
 
+    this.structuredIdentifier.localIdentifier = publicationNumber;
+
+    yield this.checkPublicationNumber.perform();
+  }
+
+  @task
+  *setPublicationNumberSuffix(event) {
+    this.publicationNumberErrorKey = undefined;
+    const publicationNumberSuffix = isBlank(event.target.value)
+      ? undefined
+      : event.target.value;
+    this.structuredIdentifier.versionIdentifier = publicationNumberSuffix;
+    yield this.checkPublicationNumber.perform();
+  }
+
+  @restartableTask
+  *checkPublicationNumber() {
+    const publicationNumber = this.structuredIdentifier.localIdentifier;
+    const publicationNumberSuffix = this.structuredIdentifier.versionIdentifier;
+    console.log(publicationNumber, publicationNumberSuffix)
     yield timeout(1000);
     const isAlreadyTaken =
       yield this.publicationService.publicationNumberAlreadyTaken(
-        this.publicationNumber,
-        this.publicationNumberSuffix
+        publicationNumber,
+        publicationNumberSuffix
       );
     if (isAlreadyTaken) {
       this.publicationNumberErrorKey = 'publication-number-error-taken';
@@ -191,16 +192,13 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     const saves = [];
 
     // Publicatienummer
-    const identification = await publicationFlow.identification;
-    const structuredIdentifier = await identification.structuredIdentifier;
-    const number = parseInt(this.publicationNumber, 10);
-    structuredIdentifier.localIdentifier = number;
-    structuredIdentifier.versionIdentifier = this.publicationNumberSuffix;
-    identification.idName = this.publicationNumberSuffix
-    ? `${number} ${this.publicationNumberSuffix}`
-    : `${number}`;
-    saves.push(structuredIdentifier.save());
-    saves.push(identification.save());
+    const publicationNumber = this.structuredIdentifier.localIdentifier;
+    const publicationNumberSuffix = this.structuredIdentifier.versionIdentifier;
+    this.identification.idName = publicationNumberSuffix
+      ? `${publicationNumber} ${publicationNumberSuffix}`
+      : `${publicationNumber}`;
+    saves.push(this.structuredIdentifier.save());
+    saves.push(this.identification.save());
 
     // Numac-nummers
     for (const numacNumber of this.numacNumbersToDelete) {
