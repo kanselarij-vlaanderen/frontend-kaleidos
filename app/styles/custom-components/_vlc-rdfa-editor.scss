@@ -5,16 +5,34 @@ $say-toolbar-background: white;
 $say-editor-padding: 1rem;
 // $say-font: $auk-font-sans-family; // Currently the default editor fonts. https://github.com/lblod/ember-rdfa-editor/blob/039156d2f4d4933551fbc31939bd8893a7d01211/app/styles/ember-rdfa-editor/_s-settings.scss#L26
 
-@import 'ember-rdfa-editor';
+// ---
+// Custom setup for ember-rdfa-editor css
+// ---
+@import "appuniversum/s-colors.scss";
+@import "appuniversum/s-global";
+@import "appuniversum/s-utilities";
+@import "appuniversum/s-root";
+@import "appuniversum/t-font-size";
+@import "appuniversum/t-sass-mq";
+@import "ember-rdfa-editor/custom-components";
+@import "appuniversum/u-hide";
 
-.rdfa-editor {
-  height: 30rem;
+// ---
+// Overrides
+// ---
+.say-container {
+  height: 40rem;
   border: .1rem solid #BFC8D1;
 }
 
 // This was not an option in the skinning, so hardcoded
 .say-toolbar {
   border-bottom: .1rem solid #BFC8D1;
+}
+
+// Fix spacing for lists
+.say-editor {
+  padding-left: 2rem;
 }
 
 // Disable display of toast hints
