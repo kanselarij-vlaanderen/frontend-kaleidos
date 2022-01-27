@@ -11,7 +11,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   @service store;
   @service publicationService;
 
-  @tracked isInEditMode;
+  @tracked isEditing;
 
   // copied properties
   // reason: prevent editing the publation-flow record directly,
@@ -54,9 +54,9 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   @action
-  async putInEditMode() {
+  async openEditingPanel() {
     const publicationFlow = this.args.publicationFlow;
-    this.isInEditMode = true;
+    this.isEditing = true;
 
     const identification = await publicationFlow.identification;
     const structuredIdentifier = await identification.structuredIdentifier;
@@ -159,10 +159,10 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   @action
-  async cancelEdit() {
+  async closeEditingPanel() {
     await this.initFields();
 
-    this.isInEditMode = false;
+    this.isEditing = false;
   }
 
   get isValid() {
@@ -183,7 +183,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     }
 
     yield this.performSave(publicationFlow);
-    this.isInEditMode = false;
+    this.isEditing = false;
   }
 
   // separate method to prevent ember-concurrency from saving only partially

@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 
 export default class PublicationsPublicationCaseRemarkPanelComponent extends Component {
-  @tracked isInEditMode;
+  @tracked isEditing;
 
   // copied properties
   // reason: prevent editing the publation-flow record directly,
@@ -12,16 +12,16 @@ export default class PublicationsPublicationCaseRemarkPanelComponent extends Com
   @tracked remark;
 
   @action
-  putInEditMode() {
+  openEditingPanel() {
     const publicationFlow = this.args.publicationFlow;
-    this.isInEditMode = true;
+    this.isEditing = true;
     this.remark = publicationFlow.remark;
   }
 
   @action
-  cancelEdit() {
+  closeEditingPanel() {
     this.showError = false;
-    this.isInEditMode = false;
+    this.isEditing = false;
   }
 
   @task
@@ -30,6 +30,6 @@ export default class PublicationsPublicationCaseRemarkPanelComponent extends Com
     publicationFlow.remark = this.remark;
     // no try-catch: don't exit if save didn't work
     yield publicationFlow.save();
-    this.isInEditMode = false;
+    this.isEditing = false;
   }
 }

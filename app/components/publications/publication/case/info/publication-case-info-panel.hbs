@@ -1,5 +1,5 @@
 <div class="auk-u-mb-3">
-  <Auk::Panel class={{if this.isInEditMode "auk-panel--editing"}}>
+  <Auk::Panel class={{if this.isEditing "auk-panel--editing"}}>
     <Auk::Panel::Header>
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="left">
@@ -9,7 +9,7 @@
             </h4>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
-        {{#if (not this.isInEditMode)}}
+        {{#if (not this.isEditing)}}
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <Auk::Button
@@ -17,7 +17,7 @@
                 @skin="tertiary"
                 @icon="pencil"
                 @layout="icon-only"
-                {{on "click" this.putInEditMode}}
+                {{on "click" this.openEditingPanel}}
               />
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
@@ -25,7 +25,7 @@
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body>
-      {{#if (not this.isInEditMode)}}
+      {{#if (not this.isEditing)}}
         <div class="auk-o-grid">
 
           {{!Dringend}}
@@ -283,7 +283,7 @@
         </Utils::LoadableContent>
       {{/if}}
     </Auk::Panel::Body>
-    {{#if this.isInEditMode}}
+    {{#if this.isEditing}}
       <Auk::Panel::Footer>
         <Auk::Toolbar>
           <Auk::Toolbar::Group @position="left">
@@ -292,7 +292,7 @@
                 data-test-publication-case-info-panel-edit-cancel
                 @skin="borderless"
                 @disabled={{this.save.isRunning}}
-                {{on "click" this.cancelEdit}}
+                {{on "click" this.closeEditingPanel}}
               >
                 {{t "cancel"}}
               </Auk::Button>
