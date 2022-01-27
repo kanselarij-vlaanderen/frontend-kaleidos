@@ -241,10 +241,14 @@ request the whole row and not only the arrow at the end to be clickable }}
   {{/if}}
   {{#if @tableColumnDisplayOptions.source}}
     <td data-test-publication-table-row-source class="auk-u-text-nowrap">
-      {{#if @publicationFlow.case.subcases}}
-        {{t "via-cabinet"}}
+      {{#if this.loadData.isRunning}}
+        ...
       {{else}}
-        {{t "not-via-cabinet"}}
+        {{#if @publicationFlow.isViaCouncilOfMinisters}}
+          {{t "via-cabinet"}}
+        {{else}}
+          {{t "not-via-cabinet"}}
+        {{/if}}
       {{/if}}
     </td>
   {{/if}}

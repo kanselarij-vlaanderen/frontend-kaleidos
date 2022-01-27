@@ -6,7 +6,6 @@ import { task } from 'ember-concurrency-decorators';
 
 /**
  * @argument {PublicationFlow} publicationFlow (publication-flow,publication-flow.case)
- * @argument {boolean} isViaCouncilOfMinisters
  */
 export default class PublicationsPublicationCaseInscriptionPanelComponent extends Component {
   @tracked isInEditMode;

@@ -9,13 +9,13 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationCaseInfoPanelComponent extends Component {
   @service store;
-  @service intl;
   @service publicationService;
 
   @tracked isInEditMode;
 
-  @tracked isViaCouncilOfMinisters;
-
+  // copied properties
+  // reason: prevent editing the publation-flow record directly,
+  // in order to prevent commiting changes when saving the publication-flow record in another panel
   @tracked isUrgent;
 
   @tracked publicationNumberErrorKey;
@@ -36,38 +36,30 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   async initFields() {
-    let publicationFlow = this.args.publicationFlow;
-    this.isViaCouncilOfMinisters = await this.getIsViaCouncilOfMinisters(publicationFlow);
-    this.isUrgent = await this.publicationService.getIsUrgent(publicationFlow);
+    const publicationFlow = this.args.publicationFlow;
+
+    // Dringend
+    const urgencyLevel = await publicationFlow.urgencyLevel;
+    this.isUrgent = urgencyLevel?.isUrgent || false;
+    // Numac-nummers
     this.numacNumbers = publicationFlow.numacNumbers.toArray();
-    this.decisionDate = await this.getDecisionDate(publicationFlow);
+    // Datum beslissing
+    const agendaItemTreatment = await publicationFlow.agendaItemTreatment;
+    this.decisionDate = agendaItemTreatment.startDate;
+    // Datum ontvangst
     this.openingDate = publicationFlow.openingDate;
-    this.publicationDueDate = await this.getPublicationDueDate(publicationFlow);
-  }
-
-  async getIsViaCouncilOfMinisters(publicationFlow) {
-    let _case = await publicationFlow.case;
-    let subcases = await _case.subcases;
-    return !!subcases.length;
-  }
-
-  async getDecisionDate(publicationFlow) {
-    let agendaItemTreatment = await publicationFlow.agendaItemTreatment;
-    return agendaItemTreatment.startDate;
-  }
-
-  async getPublicationDueDate(publicationFlow) {
-    let publicationSubcase = await publicationFlow.publicationSubcase;
-    return publicationSubcase.dueDate;
+    // Limiet publicatie
+    const publicationSubcase = await publicationFlow.publicationSubcase;
+    this.publicationDueDate = publicationSubcase.dueDate;
   }
 
   @action
   async putInEditMode() {
-    let publicationFlow = this.args.publicationFlow;
+    const publicationFlow = this.args.publicationFlow;
     this.isInEditMode = true;
 
-    let identification = await publicationFlow.identification;
-    let structuredIdentifier = await identification.structuredIdentifier;
+    const identification = await publicationFlow.identification;
+    const structuredIdentifier = await identification.structuredIdentifier;
     this.publicationNumber = structuredIdentifier.localIdentifier;
     this.publicationNumberSuffix = structuredIdentifier.versionIdentifier;
 
@@ -75,8 +67,8 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   @action
-  onChangeIsUrgent(ev) {
-    let isUrgent = ev.target.checked;
+  changeIsUrgent(ev) {
+    const isUrgent = ev.target.checked;
     this.isUrgent = isUrgent;
   }
 
@@ -102,16 +94,16 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
       return;
     }
 
-    let publicationNumber = Number.parseFloat(this.publicationNumber);
-    let isNumeric =
+    const publicationNumber = Number.parseFloat(this.publicationNumber);
+    const isNumeric =
       Number.isInteger(publicationNumber) && publicationNumber > 0;
     if (!isNumeric) {
       this.publicationNumberErrorKey = 'publication-number-error-numeric';
-      return
+      return;
     }
 
     yield timeout(1000);
-    let isAlreadyTaken =
+    const isAlreadyTaken =
       yield this.publicationService.publicationNumberAlreadyTaken(
         this.publicationNumber,
         this.publicationNumberSuffix
@@ -154,12 +146,15 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   // TODO: review async getter once ember-resources can be used
   get isPublicationOverdue() {
-    let publicationFlow = this.args.publicationFlow;
-    let isFinal = publicationFlow.status.get('isFinal');
+    const publicationFlow = this.args.publicationFlow;
+    const isFinal = publicationFlow.status.get('isFinal');
     if (isFinal) {
       return false;
     }
-    let isPublicationOverdue = moment(this.publicationDueDate).isBefore(Date.now(), 'day');
+    const isPublicationOverdue = moment(this.publicationDueDate).isBefore(
+      Date.now(),
+      'day'
+    );
     return isPublicationOverdue;
   }
 
@@ -176,10 +171,10 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @task
   *save() {
-    let publicationFlow = this.args.publicationFlow;
+    const publicationFlow = this.args.publicationFlow;
 
-    let checkTask = this.checkPublicationNumber.last;
-    let isCheckPending = checkTask && !checkTask.isFinished;
+    const checkTask = this.checkPublicationNumber.last;
+    const isCheckPending = checkTask && !checkTask.isFinished;
     if (isCheckPending) {
       yield checkTask;
       if (this.publicationNumberErrorKey) {
@@ -193,19 +188,11 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   // separate method to prevent ember-concurrency from saving only partially
   async performSave(publicationFlow) {
-    let saves = [];
-
-    let isPublicationFlowDirty = false;
+    const saves = [];
 
     // Dringend
-    let wasUrgent = this.publicationService.getIsUrgent(publicationFlow);
-    if (this.isUrgent !== wasUrgent) {
-      let urgencyLevel = await this.publicationService.getUrgencyLevel(
-        this.isUrgent
-      );
-      publicationFlow.urgencyLevel = urgencyLevel;
-      isPublicationFlowDirty = true;
-    }
+    const urgencyLevel = await this.getUrgencyLevel(this.isUrgent);
+    publicationFlow.urgencyLevel = urgencyLevel;
 
     // Publicatienummer
     const identification = await publicationFlow.identification;
@@ -213,59 +200,49 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     const number = parseInt(this.publicationNumber, 10);
     structuredIdentifier.localIdentifier = number;
     structuredIdentifier.versionIdentifier = this.publicationNumberSuffix;
-    if (structuredIdentifier.dirtyType === 'updated') {
-      identification.idName = this.publicationNumberSuffix
-        ? `${number} ${this.publicationNumberSuffix}`
-        : `${number}`;
-
-      saves.push(structuredIdentifier.save());
-      saves.push(identification.save());
-    }
+    identification.idName = this.publicationNumberSuffix
+    ? `${number} ${this.publicationNumberSuffix}`
+    : `${number}`;
+    saves.push(structuredIdentifier.save());
+    saves.push(identification.save());
 
     // Numac-nummers
-    for (let numacNumber of this.numacNumbersToDelete) {
-      let destroy = numacNumber.destroyRecord();
+    for (const numacNumber of this.numacNumbersToDelete) {
+      const destroy = numacNumber.destroyRecord();
       saves.push(destroy);
     }
 
-    let numacNumbers = await publicationFlow.numacNumbers;
+    const numacNumbers = await publicationFlow.numacNumbers;
     numacNumbers.replace(0, numacNumbers.length, this.numacNumbers);
-    for (let numacNumber of this.numacNumbers) {
-      if (numacNumber.dirtyType === 'created') {
-        saves.push(numacNumber.save());
-      }
-    }
+    numacNumbers.save();
 
     // Datum beslissing
-    let agendaItemTreatment = await publicationFlow.agendaItemTreatment;
-    let oldDecisionDate = agendaItemTreatment.startDate;
-    if (this.decisionDate !== oldDecisionDate) {
-      agendaItemTreatment.startDate = this.decisionDate;
-      let agendaItemTreatmentSave = agendaItemTreatment.save();
-      saves.push(agendaItemTreatmentSave);
-    }
+    const agendaItemTreatment = await publicationFlow.agendaItemTreatment;
+    agendaItemTreatment.startDate = this.decisionDate;
+    const agendaItemTreatmentSave = agendaItemTreatment.save();
+    saves.push(agendaItemTreatmentSave);
 
     // Datum ontvangst
-    let oldOpeningDate = publicationFlow.openingDate;
-    if (this.openingDate !== oldOpeningDate) {
-      publicationFlow.openingDate = this.openingDate;
-      isPublicationFlowDirty = true;
-    }
+    publicationFlow.openingDate = this.openingDate;
 
-    if (isPublicationFlowDirty) {
-      let publicationFlowSave = publicationFlow.save();
-      saves.push(publicationFlowSave);
-    }
+    saves.push(publicationFlow.save());
 
     // Limiet publicatie
-    let publicationSubcase = await publicationFlow.publicationSubcase;
-    let oldPublicationDueDate = publicationSubcase.dueDate;
-    if (oldPublicationDueDate !== this.publicationDueDate) {
-      publicationSubcase.dueDate = this.publicationDueDate;
-      let publicationSubcaseSave = publicationSubcase.save();
-      saves.push(publicationSubcaseSave);
-    }
+    const publicationSubcase = await publicationFlow.publicationSubcase;
+    publicationSubcase.dueDate = this.publicationDueDate;
+    saves.push(publicationSubcase.save());
 
     await Promise.all(saves);
+  }
+
+  async getUrgencyLevel(isUrgent) {
+    const urgencyLevels = this.store.peekAll('urgency-level');
+    const urgencyLevelUri = isUrgent
+      ? CONSTANTS.URGENCY_LEVELS.SPEEDPROCEDURE
+      : CONSTANTS.URGENCY_LEVELS.STANDARD;
+    const urgencyLevel = urgencyLevels.find(
+      (level) => level.uri === urgencyLevelUri
+    );
+    return urgencyLevel;
   }
 }

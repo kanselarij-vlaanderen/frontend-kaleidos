@@ -8,7 +8,7 @@ export default class PublicationFlow extends Model {
   @attr('string') longTitle;
   @attr('string') remark;
   @attr('date') closingDate;
-  @attr('date') openingDate;
+  @attr('date') openingDate; // displayed as: Datum ontvangst
   @attr('datetime') created;
   @attr('datetime') modified;
 
@@ -35,4 +35,12 @@ export default class PublicationFlow extends Model {
     serialize: true,
   }) mandatees;
   @hasMany('piece') referenceDocuments;
+
+  // TODO: review async getter once ember-resources can be used
+  get isViaCouncilOfMinisters() {
+    // eslint-disable-next-line ember/no-get, ember/classic-decorator-no-classic-methods
+    const case_ = this.get('case');
+    const subcases = case_.get('subcases');
+    return subcases.length;
+  }
 }

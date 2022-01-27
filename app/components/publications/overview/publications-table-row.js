@@ -6,7 +6,7 @@ import { task } from 'ember-concurrency-decorators';
 import { add } from 'ember-math-helpers/helpers/add';
 import { getPublicationStatusPillKey } from 'frontend-kaleidos/utils/publication-auk';
 
-export default class PublicationsPublicationsTableRowComponent extends Component {
+export default class PublicationsTableRowComponent extends Component {
   @service router;
   @service store;
   @service publicationService;
@@ -29,6 +29,9 @@ export default class PublicationsPublicationsTableRowComponent extends Component
     const publicationFlow = yield this.store.queryOne('publication-flow', {
       'filter[:id:]': this.args.publicationFlow.id,
       include: [
+        'case',
+        'case.subcases',
+
         'translation-subcase',
 
         'translation-subcase.request-activities',

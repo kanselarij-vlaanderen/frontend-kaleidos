@@ -15,6 +15,8 @@ module.exports = function (defaults) {
       includePaths: [
         'node_modules/@kanselarij-vlaanderen/au-kaleidos-css/',
         'node_modules/@lblod/ember-rdfa-editor/app/styles/', // as a workaround for https://github.com/ember-cli/ember-cli/issues/8026#issuecomment-420245390
+        'node_modules/@appuniversum/appuniversum',
+        'node_modules/@appuniversum/ember-appuniversum/app/styles',
       ],
     },
     flatpickr: {
