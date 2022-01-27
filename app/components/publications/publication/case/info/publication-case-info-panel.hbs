@@ -31,7 +31,7 @@
           {{!Dringend}}
           <div class="auk-o-grid-col-2 auk-content">
             <Auk::KeyValue @key={{t "publication-urgent"}}>
-              {{#if this.isUrgent}}
+              {{#if @publicationFlow.urgencyLevel.isUrgent}}
                 <Auk::Icon @name="alert-triangle" @skin="warning" />
               {{else}}
                 {{t "dash"}}
@@ -126,7 +126,7 @@
         </div>
       {{else}}
         <Utils::LoadableContent
-          @isLoading={{this.save.isRunning}}
+          @isLoading={{or this.closeEditingPanel.isRunning this.save.isRunning}}
           @reserveSpace={{true}}
         >
           <div class="auk-form-group-layout auk-form-group-layout--grid">
@@ -140,7 +140,7 @@
                   </Auk::Label>
                   <Auk::Checkbox
                     data-test-urgency-level-checkbox
-                    @checked={{this.isUrgent}}
+                    @checked={{@publicationFlow.urgencyLevel.isUrgent}}
                     {{on "input" this.changeIsUrgent}}
                   />
                 </div>
@@ -291,8 +291,9 @@
               <Auk::Button
                 data-test-publication-case-info-panel-edit-cancel
                 @skin="borderless"
-                @disabled={{this.save.isRunning}}
-                {{on "click" this.closeEditingPanel}}
+                @loading={{this.closeEditingPanel.isRunning}}
+                @disable={{this.save.isRunning}}
+                {{on "click" (perform this.closeEditingPanel)}}
               >
                 {{t "cancel"}}
               </Auk::Button>
@@ -304,7 +305,7 @@
                 data-test-publication-case-info-panel-edit-save
                 @skin="primary"
                 @loading={{this.save.isRunning}}
-                @disabled={{not this.isValid}}
+                @disabled={{or (not this.isValid) this.closeEditingPanel.isRunning}}
                 {{on "click" (perform this.save)}}
               >
                 {{t "save"}}

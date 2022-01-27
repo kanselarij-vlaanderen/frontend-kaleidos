@@ -13,11 +13,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @tracked isEditing;
 
-  // copied properties
-  // reason: prevent editing the publation-flow record directly,
-  // in order to prevent commiting changes when saving the publication-flow record in another panel
-  @tracked isUrgent;
-
   @tracked publicationNumberErrorKey;
   @tracked publicationNumber;
   @tracked publicationNumberSuffix;
@@ -38,9 +33,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   async initFields() {
     const publicationFlow = this.args.publicationFlow;
 
-    // Dringend
-    const urgencyLevel = await publicationFlow.urgencyLevel;
-    this.isUrgent = urgencyLevel?.isUrgent || false;
     // Numac-nummers
     this.numacNumbers = publicationFlow.numacNumbers.toArray();
     // Datum beslissing
@@ -67,9 +59,11 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   @action
-  changeIsUrgent(ev) {
+  async changeIsUrgent(ev) {
+    const publicationFlow = this.args.publicationFlow;
     const isUrgent = ev.target.checked;
-    this.isUrgent = isUrgent;
+    const urgencyLevel = await this.getUrgencyLevel(isUrgent);
+    publicationFlow.urgencyLevel = urgencyLevel;
   }
 
   @task
@@ -158,9 +152,15 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     return isPublicationOverdue;
   }
 
-  @action
-  async closeEditingPanel() {
-    await this.initFields();
+  @task
+  *closeEditingPanel() {
+    const publicationFlow = this.args.publicationFlow;
+
+    const urgencyLevelReload = publicationFlow.belongsTo('urgencyLevel').reload();
+    const agendaItemTreatmentReload = publicationFlow.belongsTo('agendaItemTreatment').reload();
+    const publicationSubcaseReload = publicationFlow.belongsTo('publicationSubcase').reload();
+
+    yield Promise.all([urgencyLevelReload, agendaItemTreatmentReload, publicationSubcaseReload]);
 
     this.isEditing = false;
   }
@@ -189,10 +189,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   // separate method to prevent ember-concurrency from saving only partially
   async performSave(publicationFlow) {
     const saves = [];
-
-    // Dringend
-    const urgencyLevel = await this.getUrgencyLevel(this.isUrgent);
-    publicationFlow.urgencyLevel = urgencyLevel;
 
     // Publicatienummer
     const identification = await publicationFlow.identification;
