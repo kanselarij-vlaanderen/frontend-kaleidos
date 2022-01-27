@@ -24,7 +24,7 @@
     data-test-publication-nav-translations
   >
     <div class="auk-o-flex auk-o-flex--center">
-      <span>{{t "translations"}}</span>
+      <span>{{t "translation"}}</span>
       <Publications::Publication::Translations::TranslationProgressBadge
         @translationSubcase={{@publicationFlow.translationSubcase}}
       />
@@ -35,10 +35,17 @@
     data-test-publication-nav-publishpreview
   >
     <div class="auk-o-flex auk-o-flex--center">
-      <span>{{t "publishpreview-requests"}}</span>
+      <span>{{t "proof"}}</span>
       <Publications::Publication::Proofs::ProofsProgressBadge
         @publicationSubcase={{@publicationFlow.publicationSubcase}}
       />
+    </div>
+  </Auk::Tab>
+  <Auk::Tab
+    @route="publications.publication.publication-activities"
+  >
+    <div class="auk-o-flex auk-o-flex--center">
+      <span>{{t "publication-flow"}}</span>
     </div>
   </Auk::Tab>
 </Auk::Tabs>
