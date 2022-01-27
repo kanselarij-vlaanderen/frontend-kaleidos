@@ -94,14 +94,15 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @restartableTask
   *checkPublicationNumber() {
+    const { publicationFlow } = this.args;
     const publicationNumber = this.structuredIdentifier.localIdentifier;
     const publicationNumberSuffix = this.structuredIdentifier.versionIdentifier;
-    console.log(publicationNumber, publicationNumberSuffix)
     yield timeout(1000);
     const isAlreadyTaken =
       yield this.publicationService.publicationNumberAlreadyTaken(
         publicationNumber,
-        publicationNumberSuffix
+        publicationNumberSuffix,
+        publicationFlow.id,
       );
     if (isAlreadyTaken) {
       this.publicationNumberErrorKey = 'publication-number-error-taken';
