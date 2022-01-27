@@ -4,7 +4,6 @@ import { isBlank } from '@ember/utils';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { timeout, task, restartableTask } from 'ember-concurrency';
-import moment from 'moment';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationCaseInfoPanelComponent extends Component {
@@ -19,10 +18,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   @tracked numacNumbersEditing;
   numacNumbersToDelete;
 
-  @tracked decisionDate;
-  @tracked openingDate;
-  @tracked publicationDueDate;
-
   constructor() {
     super(...arguments);
 
@@ -30,21 +25,17 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   async initFields() {
-    const publicationFlow = this.args.publicationFlow;
+    this.publicationFlow = this.args.publicationFlow;
 
     // Publication number
-    this.identification = await publicationFlow.identification;
+    this.identification = await this.publicationFlow.identification;
     this.structuredIdentifier = await this.identification.structuredIdentifier;
     // Numac-nummers
-    this.numacNumbers = await publicationFlow.numacNumbers;
+    this.numacNumbers = await this.publicationFlow.numacNumbers;
     // Datum beslissing
-    this.agendaItemTreatment = await publicationFlow.agendaItemTreatment;
-    this.decisionDate = this.agendaItemTreatment.startDate;
-    // Datum ontvangst
-    this.openingDate = publicationFlow.openingDate;
+    this.agendaItemTreatment = await this.publicationFlow.agendaItemTreatment;
     // Limiet publicatie
-    this.publicationSubcase = await publicationFlow.publicationSubcase;
-    this.publicationDueDate = this.publicationSubcase.dueDate;
+    this.publicationSubcase = await this.publicationFlow.publicationSubcase;
   }
 
   @action
@@ -130,17 +121,17 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @action
   setDecisionDate(selectedDates) {
-    this.decisionDate = selectedDates[0];
+    this.agendaItemTreatment.startDate = selectedDates[0];
   }
 
   @action
   setOpeningDate(selectedDates) {
-    this.openingDate = selectedDates[0];
+    this.publicationFlow.openingDate = selectedDates[0];
   }
 
   @action
   setPublicationDueDate(selectedDates) {
-    this.publicationDueDate = selectedDates[0];
+    this.publicationSubcase.dueDate = selectedDates[0];
   }
 
   // TODO: review async getter once ember-resources can be used
@@ -150,10 +141,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     if (isFinal) {
       return false;
     }
-    const isPublicationOverdue = moment(this.publicationDueDate).isBefore(
-      Date.now(),
-      'day'
-    );
+    const isPublicationOverdue = publicationFlow.publicationSubcase.get('isOverdue');
     return isPublicationOverdue;
   }
 
@@ -166,6 +154,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
     this.agendaItemTreatment.rollbackAttributes();
     this.publicationSubcase.rollbackAttributes();
+    publicationFlow.rollbackAttributes();
 
     this.isEditing = false;
   }
@@ -213,20 +202,13 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     saves.push(this.numacNumbers.save());
 
     // Datum beslissing
-    const agendaItemTreatment = await publicationFlow.agendaItemTreatment;
-    agendaItemTreatment.startDate = this.decisionDate;
-    const agendaItemTreatmentSave = agendaItemTreatment.save();
-    saves.push(agendaItemTreatmentSave);
+    saves.push(this.agendaItemTreatment.save());
 
-    // Datum ontvangst
-    publicationFlow.openingDate = this.openingDate;
-
+    // Dringend + Datum ontvangst
     saves.push(publicationFlow.save());
 
     // Limiet publicatie
-    const publicationSubcase = await publicationFlow.publicationSubcase;
-    publicationSubcase.dueDate = this.publicationDueDate;
-    saves.push(publicationSubcase.save());
+    saves.push(this.publicationSubcase.save());
 
     await Promise.all(saves);
   }

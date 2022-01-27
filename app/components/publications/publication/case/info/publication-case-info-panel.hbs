@@ -71,15 +71,15 @@
                     @publicationFlow.agendaItemTreatment.agendaitem.id
                   }}
                 >
-                  {{#if this.decisionDate}}
-                    {{moment-format this.decisionDate "DD-MM-YYYY"}}
+                  {{#if @publicationFlow.agendaItemTreatment.startDate}}
+                    {{moment-format @publicationFlow.agendaItemTreatment.startDate "DD-MM-YYYY"}}
                   {{else}}
                     {{t "to-agenda"}}
                   {{/if}}
                 </Auk::ButtonLink>
               {{else}}
-                {{#if this.decisionDate}}
-                  {{moment-format this.decisionDate "DD-MM-YYYY"}}
+                {{#if @publicationFlow.agendaItemTreatment.startDate}}
+                  {{moment-format @publicationFlow.agendaItemTreatment.startDate "DD-MM-YYYY"}}
                 {{else}}
                   {{t "dash"}}
                 {{/if}}
@@ -90,8 +90,8 @@
           {{!Datum ontvangst}}
           <div class="auk-o-grid-col-2 auk-content">
             <Auk::KeyValue @key={{t "publication-flow-opening-date"}}>
-              {{#if this.openingDate}}
-                {{moment-format this.openingDate "DD-MM-YYYY"}}
+              {{#if @publicationFlow.openingDate}}
+                {{moment-format @publicationFlow.openingDate "DD-MM-YYYY"}}
               {{else}}
                 {{t "dash"}}
               {{/if}}
@@ -104,11 +104,11 @@
               <div class={{if this.isPublicationOverdue "auk-u-text-bold"}}>
                 {{#if
                   (and
-                    this.publicationDueDate
+                    @publicationFlow.publicationSubcase.dueDate
                     (not @publicationFlow.status.isWithdrawn)
                   )
                 }}
-                  {{moment-format this.publicationDueDate "DD-MM-YYYY"}}
+                  {{moment-format @publicationFlow.publicationSubcase.dueDate "DD-MM-YYYY"}}
                 {{else}}
                   {{t "dash"}}
                 {{/if}}
@@ -215,14 +215,14 @@
                 >
                   <Auk::Label>{{t "decision-date"}}</Auk::Label>
                   {{#if @publicationFlow.isViaCouncilOfMinisters}}
-                    {{#if this.decisionDate}}
-                      {{moment-format this.decisionDate "DD-MM-YYYY"}}
+                    {{#if @publicationFlow.agendaItemTreatment.startDate}}
+                      {{moment-format @publicationFlow.agendaItemTreatment.startDate "DD-MM-YYYY"}}
                     {{else}}
                       {{t "dash"}}
                     {{/if}}
                   {{else}}
                     <Auk::Datepicker
-                      @date={{this.decisionDate}}
+                      @date={{@publicationFlow.agendaItemTreatment.startDate}}
                       @onChange={{this.setDecisionDate}}
                     />
                   {{/if}}
@@ -237,14 +237,14 @@
                 >
                   <Auk::Label>{{t "publication-flow-opening-date"}}</Auk::Label>
                   {{#if @publicationFlow.isViaCouncilOfMinisters}}
-                    {{#if this.openingDate}}
-                      {{moment-format this.openingDate "DD-MM-YYYY"}}
+                    {{#if @publicationFlow.openingDate}}
+                      {{moment-format @publicationFlow.openingDate "DD-MM-YYYY"}}
                     {{else}}
                       {{t "dash"}}
                     {{/if}}
                   {{else}}
                     <Auk::Datepicker
-                      @date={{this.openingDate}}
+                      @date={{@publicationFlow.openingDate}}
                       @onChange={{this.setOpeningDate}}
                     />
                   {{/if}}
@@ -262,7 +262,7 @@
                     }}</Auk::Label>
                   {{#if (not @publicationFlow.status.isWithdrawn)}}
                     <Auk::Datepicker
-                      @date={{this.publicationDueDate}}
+                      @date={{@publicationFlow.publicationSubcase.dueDate}}
                       @onChange={{this.setPublicationDueDate}}
                     />
                   {{else}}
