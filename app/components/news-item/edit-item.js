@@ -46,7 +46,16 @@ export default Component.extend({
     this.set('isLoading', true);
     const newsletterInfo = await this.get('newsletterInfo');
     try {
-      newsletterInfo.set('richtext', this.richtext);
+      // The editor introduces &nbsp; instead of normal spaces to work around
+      // certain browsers' behavior where normal spaces on outer ends of text nodes
+      // aren't rendered in the content-editable. In recent versions of the editor however,
+      // this &nbsp;-inserting seems to happen too often, which results in very long
+      // lines that don't break, which is undesired.
+      // Here we replace all &nbsp's that don't lean against html tags in an attempt
+      // to keep the editor's workaround behavior, while replacing unnecessary &nbsp;'s
+      //
+      const cleanedHtml = this.richtext.replace(/(?<!>)&nbsp;(?!<)/, ' ');
+      newsletterInfo.set('richtext', cleanedHtml);
     } catch {
       // pass
     }
