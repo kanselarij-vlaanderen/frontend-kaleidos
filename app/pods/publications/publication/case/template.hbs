@@ -3,18 +3,17 @@
 <div class="auk-u-m-4">
   <div class="auk-u-mb-4">
     <Publications::Publication::Case::Inscription::InscriptionPanel
-      @publicationFlow={{@model}}
       @isViaCouncilOfMinisters={{this.isViaCouncilOfMinisters}} />
 
     <Publications::Publication::Case::Mandatees::MandateesPanel
-      @publicationFlow={{@model}} />
+      @publicationFlow={{this.currentPublicationFlow}} />
 
     <Utils::GovernmentAreas::GovernmentAreasPanel
-      @governmentAreas={{@model.case.governmentAreas}}
+      @governmentAreas={{@model.governmentAreas}}
       @onSave={{this.saveGovernmentAreas}}
     />
 
     <Publications::Publication::Case::ContactPersons::ContactPersonsPanel
-      @publicationFlow={{@model}} />
+      @publicationFlow={{this.currentPublicationFlow}} />
   </div>
 </div>

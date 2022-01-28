@@ -8,6 +8,7 @@ import { getPublicationStatusPillKey,getPublicationStatusPillStep } from 'fronte
 
 export default class PublicationStatusPill extends Component {
   @service store;
+  @service currentPublicationFlow;
 
   @tracked decision;
   @tracked publicationStatus;
@@ -23,7 +24,7 @@ export default class PublicationStatusPill extends Component {
 
   @task
   *loadDecision() {
-    const publicationSubcase = yield this.args.publicationFlow.publicationSubcase;
+    const publicationSubcase = yield this.currentPublicationFlow.publicationSubcase;
     this.decision = yield this.store.queryOne('decision', {
       'filter[publication-activity][subcase][:id:]': publicationSubcase.id,
       sort: 'publication-activity.start-date,publication-date',
@@ -32,7 +33,7 @@ export default class PublicationStatusPill extends Component {
 
   @task
   *loadStatus() {
-    this.publicationStatus = yield this.args.publicationFlow.status;
+    this.publicationStatus = yield this.currentPublicationFlow.status;
   }
 
   get publicationStatusPillKey() {
@@ -63,19 +64,19 @@ export default class PublicationStatusPill extends Component {
     }
 
     // update status
-    this.args.publicationFlow.status = status;
+    this.currentPublicationFlow.status = status;
 
     // update closing dates of auxiliary activities if status is "published"
     if (status.isFinal) {
-      this.args.publicationFlow.closingDate = date;
+      this.currentPublicationFlow.publicationFlow.closingDate = date;
 
-      const translationSubcase = yield this.args.publicationFlow.translationSubcase;
+      const translationSubcase = yield this.currentPublicationFlow.translationSubcase;
       if (!translationSubcase.endDate) {
         translationSubcase.endDate = date;
         yield translationSubcase.save();
       }
 
-      const publicationSubcase = yield this.args.publicationFlow.publicationSubcase;
+      const publicationSubcase = yield this.currentPublicationFlow.publicationSubcase;
       if (!publicationSubcase.endDate) {
         publicationSubcase.endDate = date;
         yield publicationSubcase.save();
@@ -95,7 +96,7 @@ export default class PublicationStatusPill extends Component {
         }
       }
     } else {
-      this.args.publicationFlow.closingDate = null;
+      this.currentPublicationFlow.publicationFlow.closingDate = null;
     }
 
     // remove decision if "published" status is reverted and it's not a Staatsblad resource
@@ -106,17 +107,17 @@ export default class PublicationStatusPill extends Component {
     }
 
     // update status-change activity
-    const oldChangeActivity = yield this.args.publicationFlow.publicationStatusChange;
+    const oldChangeActivity = yield this.currentPublicationFlow.publicationStatusChange;
     if (oldChangeActivity) {
       yield oldChangeActivity.destroyRecord();
     }
     const newChangeActivity = this.store.createRecord('publication-status-change', {
       startedAt: date,
-      publication: this.args.publicationFlow,
+      publication: this.currentPublicationFlow.publicationFlow,
     });
     yield newChangeActivity.save();
 
-    yield this.args.publicationFlow.save();
+    yield this.currentPublicationFlow.save();
     this.loadStatus.perform();
     this.closeStatusSelector();
   }

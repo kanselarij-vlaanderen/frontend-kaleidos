@@ -7,7 +7,7 @@
       <Auk::Toolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
           <span class="auk-o-flex auk-o-flex--horizontal auk-o-flex--vertical-center auk-o-flex--spaced">
-             <Publications::PublicationStatusPill @publicationFlow={{this.model}} />
+             <Publications::PublicationStatusPill/>
              <span class="auk-overline auk-u-muted" data-test-route-publications-publication-header-number>
                 {{uppercase (t "publication-flow")}}
                 -
@@ -22,8 +22,8 @@
           </span>
           <Auk::AbbreviatedText
             @text={{or
-            this.model.shortTitle
-            this.model.longTitle
+            this.currentPublicationFlow.publicationFlow.shortTitle
+            this.currentPublicationFlow.publicationFlow.longTitle
           }}
             @maxLength={{150}}
             as |abbreviatedText|>
@@ -34,7 +34,7 @@
               {{abbreviatedText}}
             </div>
           </Auk::AbbreviatedText>
-          <Publications::Publication::PublicationNavigation @publicationFlow={{this.model}} />
+          <Publications::Publication::PublicationNavigation/>
         </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
@@ -54,7 +54,7 @@
       @isOpen={{this.sidebarIsOpen}}
       @onCollapse={{this.toggleSidebar}}
       @onOpen={{this.toggleSidebar}}
-      @publicationFlow={{this.model}}
+      @publicationFlow={{this.currentPublicationFlow.publicationFlow}}
       @didChange={{this.saveSidebarProperty}}
     />
   </div>

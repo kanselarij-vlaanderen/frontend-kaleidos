@@ -10,7 +10,7 @@
   >
     {{t "agendaitem-case"}}
   </Auk::Tab>
-  {{#if @publicationFlow.case.subcases}}
+  {{#if this.currentPublicationFlow.case.subcases}}
     <Auk::Tab
       @route="publications.publication.documents"
       @counter={{this.documentsCount}}

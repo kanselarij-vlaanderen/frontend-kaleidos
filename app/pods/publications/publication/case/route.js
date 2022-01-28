@@ -3,18 +3,18 @@ import { inject as service } from '@ember/service';
 
 export default class CaseRoute extends Route {
   @service store;
+  @service currentPublicationFlow;
 
   model() {
-    return this.modelFor('publications.publication');
+    return this.currentPublicationFlow.case;
   }
 
   async afterModel(model) {
-    this._case = await model.case;
-    await this._case.governmentAreas;
+    await model.governmentAreas;
     const subcase = await this.store.queryOne('subcase', {
       filter: {
         case: {
-          [':id:']: this._case.id,
+          [':id:']: model.id,
         },
         ':has:agenda-activities': 'yes',
       },
@@ -24,7 +24,6 @@ export default class CaseRoute extends Route {
 
   setupController(controller) {
     super.setupController(...arguments);
-    controller._case = this._case;
     controller.isViaCouncilOfMinisters = this.isViaCouncilOfMinisters;
   }
 }

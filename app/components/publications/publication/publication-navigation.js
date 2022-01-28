@@ -5,6 +5,7 @@ import { inject as service } from '@ember/service';
 
 export default class PublicationNavigation extends Component {
   @service store;
+  @service currentPublicationFlow;
 
   @tracked documentsCount = undefined;
 
@@ -16,7 +17,7 @@ export default class PublicationNavigation extends Component {
   @task
   *loadData() {
     const pieces = yield this.store.query('piece', {
-      'filter[publication-flow][:id:]': this.args.publicationFlow.id,
+      'filter[publication-flow][:id:]': this.currentPublicationFlow.publicationFlow.id,
       'page[size]': 1,
     });
     this.documentsCount = pieces.meta.count;
