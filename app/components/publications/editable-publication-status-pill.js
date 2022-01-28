@@ -6,7 +6,7 @@ import { task } from 'ember-concurrency-decorators';
 import { isEmpty } from '@ember/utils';
 import { getPublicationStatusPillKey,getPublicationStatusPillStep } from 'frontend-kaleidos/utils/publication-auk';
 
-export default class PublicationStatusPill extends Component {
+export default class EditablePublicationStatusPill extends Component {
   @service store;
   @service currentPublicationFlow;
 
