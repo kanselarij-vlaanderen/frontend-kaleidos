@@ -54,7 +54,7 @@ export default Component.extend({
       // Here we replace all &nbsp's that don't lean against html tags in an attempt
       // to keep the editor's workaround behavior, while replacing unnecessary &nbsp;'s
       //
-      const cleanedHtml = this.richtext.replace(/(?<!>)&nbsp;(?!<)/, ' ');
+      const cleanedHtml = this.richtext.replaceAll(/(?<!>)&nbsp;(?!<)/gm, ' ');
       newsletterInfo.set('richtext', cleanedHtml);
     } catch {
       // pass
