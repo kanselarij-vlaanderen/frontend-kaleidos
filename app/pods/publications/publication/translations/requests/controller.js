@@ -60,9 +60,17 @@ export default class PublicationsPublicationTranslationsRequestController extend
     if (translationUpload.isTranslationIn) {
       this.publicationFlow.status =  yield this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_IN);
       yield this.publicationFlow.save();
-      const statusChanged = yield this.publicationFlow.publicationStatusChange;
-      statusChanged.startedAt = translationUpload.receivedAtDate;
-      yield statusChanged.save();
+
+      const oldChangeActivity = yield this.publicationFlow.publicationStatusChange;
+      if (oldChangeActivity) {
+        yield oldChangeActivity.destroyRecord();
+      }
+      const newChangeActivity = this.store.createRecord('publication-status-change', {
+        startedAt: translationUpload.receivedAtDate,
+        publication: this.publicationFlow,
+      });
+      yield newChangeActivity.save();
+
       this.translationSubcase.endDate = translationUpload.receivedAtDate;
       yield this.translationSubcase.save();
     }

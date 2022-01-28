@@ -259,9 +259,15 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     const statusSave = this.publicationFlow.save();
     saves.push(statusSave);
 
-    const statusChanged = await this.publicationFlow.publicationStatusChange;
-    statusChanged.startedAt = now;
-    const statusChangedSave = statusChanged.save();
+    const oldChangeActivity = await this.publicationFlow.publicationStatusChange;
+    if (oldChangeActivity) {
+      await oldChangeActivity.destroyRecord();
+    }
+    const newChangeActivity = this.store.createRecord('publication-status-change', {
+      startedAt: now,
+      publication: this.publicationFlow,
+    });
+    const statusChangedSave = newChangeActivity.save();
     saves.push(statusChangedSave)
 
     await Promise.all(saves);

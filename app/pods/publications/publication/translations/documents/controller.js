@@ -175,9 +175,16 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     //Set status to 'to translation'
     this.publicationFlow.status =  yield this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.TO_TRANSLATIONS);
     yield this.publicationFlow.save();
-    const statusChanged = yield this.publicationFlow.publicationStatusChange;
-    statusChanged.startedAt = now;
-    yield statusChanged.save();
+
+    const oldChangeActivity = yield this.publicationFlow.publicationStatusChange;
+    if (oldChangeActivity) {
+      yield oldChangeActivity.destroyRecord();
+    }
+    const newChangeActivity = this.store.createRecord('publication-status-change', {
+      startedAt: now,
+      publication: this.publicationFlow,
+    });
+    yield newChangeActivity.save();
 
     this.selectedPieceRows = [];
     this.isTranslationRequestModalOpen = false;

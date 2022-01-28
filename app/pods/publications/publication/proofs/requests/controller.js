@@ -112,9 +112,17 @@ export default class PublicationsPublicationProofsRequestsController extends Con
     if (proofUpload.isProofIn) {
       this.publicationFlow.status =  await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.PROOF_IN);
       await this.publicationFlow.save();
-      const statusChanged = await this.publicationFlow.publicationStatusChange;
-      statusChanged.startedAt = proofUpload.receivedAtDate;
-      await statusChanged.save();
+
+      const oldChangeActivity = await this.publicationFlow.publicationStatusChange;
+      if (oldChangeActivity) {
+        await oldChangeActivity.destroyRecord();
+      }
+      const newChangeActivity = this.store.createRecord('publication-status-change', {
+        startedAt: proofUpload.receivedAtDate,
+        publication: this.publicationFlow,
+      });
+      await newChangeActivity.save();
+
       this.publicationSubcase.endDate = proofUpload.receivedAtDate;
       await this.publicationSubcase.save();
     }
