@@ -29,7 +29,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
       as: 'volgorde',
     },
   }];
-
+  @service currentPublicationFlow;
   @service currentSession;
   @service store;
 
@@ -37,7 +37,6 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   /** @type {string} kebab-cased key name, prepended with minus if descending */
   sort;
 
-  @tracked publicationFlow;
   @tracked publicationSubcase;
   @tracked selectedPieceRows = [];
   @tracked isProofRequestModalOpen = false;
@@ -255,22 +254,23 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     saves.push(emailSave);
 
     // PUBLICATION-STATUS
-    this.publicationFlow.status =  await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED);
-    const statusSave = this.publicationFlow.save();
+    this.currentPublicationFlow.publicationFlow.status =  await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED);
+    const statusSave = this.currentPublicationFlow.save();
     saves.push(statusSave);
 
-    const oldChangeActivity = await this.publicationFlow.publicationStatusChange;
+    const oldChangeActivity = await this.currentPublicationFlow.publicationFlow.publicationStatusChange;
     if (oldChangeActivity) {
       await oldChangeActivity.destroyRecord();
     }
     const newChangeActivity = this.store.createRecord('publication-status-change', {
       startedAt: now,
-      publication: this.publicationFlow,
+      publication: this.currentPublicationFlow.publicationFlow,
     });
     const statusChangedSave = newChangeActivity.save();
     saves.push(statusChangedSave)
 
     await Promise.all(saves);
+    this.currentPublicationFlow.reload();
   }
 
   async performSavePieceUpload(uploadProperties, isCorrection) {

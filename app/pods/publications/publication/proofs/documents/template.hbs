@@ -1,7 +1,7 @@
 <div class="auk-u-m-4">
   <Publications::Publication::Proofs::ProofInfoPanel
     @publicationSubcase={{this.publicationSubcase}}
-    @isFinal={{this.publicationFlow.status.isFinal}}
+    @isFinal={{this.currentPublicationFlow.publicationFlow.status.isFinal}}
   />
 
   <div class="auk-u-mb-4">
@@ -254,7 +254,7 @@
 
 {{#if this.isPieceUploadModalOpen}}
   <Publications::Publication::Proofs::ProofUploadModal
-    @publicationFlow={{this.publicationFlow}}
+    @publicationFlow={{this.currentPublicationFlow.publicationFlow}}
     @isCorrected={{this.isPieceUploadCorrected}}
     @onSave={{this.savePieceUpload}}
     @onCancel={{this.closePieceUploadModal}}
@@ -263,7 +263,7 @@
 
 {{#if this.isPieceEditModalOpen}}
   <Publications::Publication::Proofs::ProofEditModal
-    @publicationFlow={{this.publicationFlow}}
+    @publicationFlow={{this.currentPublicationFlow.publicationFlow}}
     @piece={{this.pieceRowToEdit.piece}}
     @onSave={{this.savePieceEdit}}
     @onCancel={{this.closePieceEditModal}}
@@ -273,7 +273,7 @@
 {{#if this.isProofRequestModalOpen}}
   <Publications::Publication::Proofs::ProofRequestModal
     @stage={{this.proofRequestStage}}
-    @publicationFlow={{this.publicationFlow}}
+    @publicationFlow={{this.currentPublicationFlow.publicationFlow}}
     @attachments={{this.selectedPieces}}
     @onSave={{this.saveProofRequest}}
     @onCancel={{this.closeProofRequestModal}}

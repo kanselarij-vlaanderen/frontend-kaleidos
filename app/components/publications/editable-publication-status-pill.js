@@ -24,7 +24,7 @@ export default class EditablePublicationStatusPill extends Component {
 
   @task
   *loadDecision() {
-    const publicationSubcase = yield this.currentPublicationFlow.publicationSubcase;
+    const publicationSubcase = yield this.currentPublicationFlow.publicationFlow.publicationSubcase;
     this.decision = yield this.store.queryOne('decision', {
       'filter[publication-activity][subcase][:id:]': publicationSubcase.id,
       sort: 'publication-activity.start-date,publication-date',
@@ -33,7 +33,7 @@ export default class EditablePublicationStatusPill extends Component {
 
   @task
   *loadStatus() {
-    this.publicationStatus = yield this.currentPublicationFlow.status;
+    this.publicationStatus = yield this.currentPublicationFlow.publicationFlow.status;
   }
 
   get publicationStatusPillKey() {
@@ -64,19 +64,19 @@ export default class EditablePublicationStatusPill extends Component {
     }
 
     // update status
-    this.currentPublicationFlow.status = status;
+    this.currentPublicationFlow.publicationFlow.status = status;
 
     // update closing dates of auxiliary activities if status is "published"
     if (status.isFinal) {
       this.currentPublicationFlow.publicationFlow.closingDate = date;
 
-      const translationSubcase = yield this.currentPublicationFlow.translationSubcase;
+      const translationSubcase = yield this.currentPublicationFlow.publicationFlow.translationSubcase;
       if (!translationSubcase.endDate) {
         translationSubcase.endDate = date;
         yield translationSubcase.save();
       }
 
-      const publicationSubcase = yield this.currentPublicationFlow.publicationSubcase;
+      const publicationSubcase = yield this.currentPublicationFlow.publicationFlow.publicationSubcase;
       if (!publicationSubcase.endDate) {
         publicationSubcase.endDate = date;
         yield publicationSubcase.save();
@@ -107,7 +107,7 @@ export default class EditablePublicationStatusPill extends Component {
     }
 
     // update status-change activity
-    const oldChangeActivity = yield this.currentPublicationFlow.publicationStatusChange;
+    const oldChangeActivity = yield this.currentPublicationFlow.publicationFlow.publicationStatusChange;
     if (oldChangeActivity) {
       yield oldChangeActivity.destroyRecord();
     }

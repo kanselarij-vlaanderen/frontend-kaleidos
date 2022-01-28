@@ -6,15 +6,17 @@ export default class CaseRoute extends Route {
   @service currentPublicationFlow;
 
   model() {
-    return this.currentPublicationFlow.publicationFlow.case;
+    console.log(this.currentPublicationFlow.publicationFlow)
+    return this.currentPublicationFlow.publicationFlow;
   }
 
   async afterModel(model) {
-    await model.governmentAreas;
+    this._case = await model.case;
+    await this._case.governmentAreas;
     const subcase = await this.store.queryOne('subcase', {
       filter: {
         case: {
-          [':id:']: model.id,
+          [':id:']: this._case.id,
         },
         ':has:agenda-activities': 'yes',
       },
@@ -24,6 +26,7 @@ export default class CaseRoute extends Route {
 
   setupController(controller) {
     super.setupController(...arguments);
+    controller._case = this._case;
     controller.isViaCouncilOfMinisters = this.isViaCouncilOfMinisters;
   }
 }

@@ -43,7 +43,7 @@ export class Row {
 
 export default class PublicationsPublicationProofsRequestsController extends Controller {
   @service store;
-  @tracked publicationFlow;
+  @service currentPublicationFlow;
   @tracked publicationSubcase;
   @tracked isUploadModalOpen;
 
@@ -110,21 +110,22 @@ export default class PublicationsPublicationProofsRequestsController extends Con
     }
 
     if (proofUpload.isProofIn) {
-      this.publicationFlow.status =  await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.PROOF_IN);
-      await this.publicationFlow.save();
+      this.currentPublicationFlow.publicationFlow.status =  await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.PROOF_IN);
+      await this.currentPublicationFlow.save();
 
-      const oldChangeActivity = await this.publicationFlow.publicationStatusChange;
+      const oldChangeActivity = await this.currentPublicationFlow.publicationFlow.publicationStatusChange;
       if (oldChangeActivity) {
         await oldChangeActivity.destroyRecord();
       }
       const newChangeActivity = this.store.createRecord('publication-status-change', {
         startedAt: proofUpload.receivedAtDate,
-        publication: this.publicationFlow,
+        publication: this.currentPublicationFlow.publicationFlow,
       });
       await newChangeActivity.save();
 
       this.publicationSubcase.endDate = proofUpload.receivedAtDate;
       await this.publicationSubcase.save();
+      this.currentPublicationFlow.reload();
     }
 
     await Promise.all([pieceSave, proofingActivitySave]);

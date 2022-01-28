@@ -6,13 +6,14 @@ import { inject as service } from '@ember/service';
 export default class CaseController extends Controller {
   @service currentPublicationFlow
   @tracked isViaCouncilOfMinisters;
+  @tracked _case;
 
   @action
   async saveGovernmentAreas(newGovernmentAreas) {
-    const governmentAreas = await this.model.governmentAreas;
+    const governmentAreas = await this._case.governmentAreas;
 
     governmentAreas.clear();
     governmentAreas.pushObjects(newGovernmentAreas);
-    await this.model.save();
+    await this._case.save();
   }
 }
