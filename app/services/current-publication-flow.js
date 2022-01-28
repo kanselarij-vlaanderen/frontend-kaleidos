@@ -5,31 +5,6 @@ export default class CurrentPublicationFlowService extends Service {
   @service store;
 
   @tracked publicationFlow;
-  @tracked status;
-
-  get status(){
-    return this.publicationFlow.status;
-  }
-
-  get publicationStatusChange(){
-    return this.publicationFlow.publicationStatusChange;
-  }
-
-  get publicationSubcase(){
-    return this.publicationFlow.publicationSubcase;
-  }
-
-  get translationSubcase(){
-    return this.publicationFlow.translationSubcase;
-  }
-
-  get case(){
-    return this.publicationFlow.case;
-  }
-
-  get publicationFlow(){
-    return this.publicationFlow;
-  }
 
   async load(id) {
     this.publicationFlow = await this.store.findRecord('publication-flow', id, {
@@ -59,5 +34,9 @@ export default class CurrentPublicationFlowService extends Service {
 
   async save() {
     await this.publicationFlow.save();
+  }
+
+  unload(){
+    this.publicationFlow = null;
   }
 }

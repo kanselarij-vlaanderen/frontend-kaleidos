@@ -6,7 +6,7 @@ export default class CaseRoute extends Route {
   @service currentPublicationFlow;
 
   model() {
-    return this.currentPublicationFlow.case;
+    return this.currentPublicationFlow.publicationFlow.case;
   }
 
   async afterModel(model) {

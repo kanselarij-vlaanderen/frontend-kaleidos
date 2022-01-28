@@ -7,4 +7,8 @@ export default class PublicationRoute extends Route {
   model(params) {
     this.currentPublicationFlow.load(params.publication_id);
   }
+
+  deactivate(){
+    this.currentPublicationFlow.unload();
+  }
 }

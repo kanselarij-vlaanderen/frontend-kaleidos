@@ -3,10 +3,11 @@
 <div class="auk-u-m-4">
   <div class="auk-u-mb-4">
     <Publications::Publication::Case::Inscription::InscriptionPanel
+      @publicationFlow={{this.currentPublicationFlow.publicationFlow}}
       @isViaCouncilOfMinisters={{this.isViaCouncilOfMinisters}} />
 
     <Publications::Publication::Case::Mandatees::MandateesPanel
-      @publicationFlow={{this.currentPublicationFlow}} />
+      @publicationFlow={{this.currentPublicationFlow.publicationFlow}} />
 
     <Utils::GovernmentAreas::GovernmentAreasPanel
       @governmentAreas={{@model.governmentAreas}}
@@ -14,6 +15,6 @@
     />
 
     <Publications::Publication::Case::ContactPersons::ContactPersonsPanel
-      @publicationFlow={{this.currentPublicationFlow}} />
+      @publicationFlow={{this.currentPublicationFlow.publicationFlow}} />
   </div>
 </div>
