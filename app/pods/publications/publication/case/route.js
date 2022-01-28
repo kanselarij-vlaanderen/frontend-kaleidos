@@ -6,7 +6,6 @@ export default class CaseRoute extends Route {
   @service currentPublicationFlow;
 
   model() {
-    console.log(this.currentPublicationFlow.publicationFlow)
     return this.currentPublicationFlow.publicationFlow;
   }
 
