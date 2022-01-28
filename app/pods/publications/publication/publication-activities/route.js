@@ -4,13 +4,4 @@ export default class PublicationsPublicationPublicationActivitiesRoute extends R
   model() {
     return this.modelFor('publications.publication').publicationSubcase;
   }
-
-  async afterModel() {
-    this.publicationFlow = await this.modelFor('publications.publication');
-  }
-
-  setupController(controller) {
-    super.setupController(...arguments);
-    controller.publicationFlow = this.publicationFlow;
-  }
 }
