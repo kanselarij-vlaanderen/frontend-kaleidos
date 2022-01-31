@@ -55,7 +55,6 @@
     <Auk::Label>{{t "decision-in-newsletter"}}</Auk::Label>
     <WebComponents::VlRdfaEditor
       data-test-newsletter-edit-item-rdfa-editor={{true}}
-      @isLarge={{this.isExpanded}}
       @richtext={{await this.newsletterInfo.richtext}}
       @handleRdfaEditorInit={{action "handleRdfaEditorInit"}}
     />
