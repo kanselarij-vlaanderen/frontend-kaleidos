@@ -6,8 +6,10 @@ import { task } from 'ember-concurrency';
 
 export default class PublicationsPublicationCaseInfoPanelComponent extends Component {
   @service store;
+  @service publicationService;
 
   @tracked isEditing;
+  @tracked isViaCouncilOfMinisters;
 
   constructor() {
     super(...arguments);
@@ -22,6 +24,8 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     const publicationFlow = this.args.publicationFlow;
     this.publicationFlow = publicationFlow;
 
+    this.isViaCouncilOfMinisters =
+      await this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
     this.agendaItemTreatment = await publicationFlow.agendaItemTreatment;
   }
 

@@ -42,7 +42,7 @@
           {{!Datum beslissing}}
           <div class="auk-o-grid-col-4 auk-content">
             <Auk::KeyValue @key={{t "decision-date"}}>
-              {{#if @publicationFlow.isViaCouncilOfMinisters}}
+              {{#if this.isViaCouncilOfMinisters}}
                 <Auk::ButtonLink
                   target="_blank"
                   @route="agenda.agendaitems.agendaitem"
@@ -99,7 +99,7 @@
                   <Auk::Label for="blockInput">
                     {{t "regulation-type"}}
                   </Auk::Label>
-                  {{#if @publicationFlow.isViaCouncilOfMinisters}}
+                  {{#if this.isViaCouncilOfMinisters}}
                     {{#if @publicationFlow.regulationType}}
                       {{@publicationFlow.regulationType.label}}
                     {{else}}
@@ -126,7 +126,7 @@
                   class="auk-form-group"
                 >
                   <Auk::Label>{{t "decision-date"}}</Auk::Label>
-                  {{#if @publicationFlow.isViaCouncilOfMinisters}}
+                  {{#if this.isViaCouncilOfMinisters}}
                     {{#if @publicationFlow.agendaItemTreatment.startDate}}
                       {{moment-format
                         @publicationFlow.agendaItemTreatment.startDate
@@ -152,7 +152,7 @@
                   class="auk-form-group"
                 >
                   <Auk::Label>{{t "pages-amount"}}</Auk::Label>
-                  {{#if @publicationFlow.isViaCouncilOfMinisters}}
+                  {{#if this.isViaCouncilOfMinisters}}
                     {{!TODO}}
                   {{else}}
 
