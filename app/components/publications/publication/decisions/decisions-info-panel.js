@@ -60,10 +60,9 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
       .belongsTo('regulationType')
       .reload();
     reloads.push(regulationTypeReload);
+    await Promise.all(reloads);
 
     this.agendaItemTreatment.rollbackAttributes();
-
-    await Promise.all(reloads);
   }
 
   @task
