@@ -12,7 +12,9 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   constructor() {
     super(...arguments);
 
-    this.regulationTypes =  this.store.peekAll('regulation-type').sortBy('position');
+    this.regulationTypes = this.store
+      .peekAll('regulation-type')
+      .sortBy('position');
     this.initFields();
   }
 
@@ -38,6 +40,10 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.agendaItemTreatment.startDate = selectedDates[0];
   }
 
+  get isValid() {
+    return true;
+  }
+
   @task
   *closeEditingPanel() {
     yield this.performCancel();
@@ -47,7 +53,9 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   async performCancel() {
     const rollbacks = [];
-    const regulationTypeReload = this.publicationFlow.belongsTo('regulationType').reload();
+    const regulationTypeReload = this.publicationFlow
+      .belongsTo('regulationType')
+      .reload();
     rollbacks.push(regulationTypeReload);
 
     this.agendaItemTreatment.rollbackAttributes();
@@ -55,19 +63,14 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     await Promise.all(rollbacks);
   }
 
-  get isValid() {
-    return true;
-  }
-
   @task
   *save() {
-    const publicationFlow = this.args.publicationFlow;
-    yield this.performSave(publicationFlow);
+    yield this.performSave();
     this.isEditing = false;
   }
 
   // separate method to prevent ember-concurrency from saving only partially
-  async performSave(publicationFlow) {
+  async performSave() {
     const saves = [];
 
     // Type regelgeving
