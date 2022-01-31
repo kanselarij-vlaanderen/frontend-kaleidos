@@ -14,18 +14,17 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   constructor() {
     super(...arguments);
 
-    this.regulationTypes = this.store
-      .peekAll('regulation-type')
-      .sortBy('position');
     this.initFields();
   }
 
   async initFields() {
     const publicationFlow = this.args.publicationFlow;
     this.publicationFlow = publicationFlow;
-
     this.isViaCouncilOfMinisters =
       await this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
+    this.regulationTypes = this.store
+      .peekAll('regulation-type')
+      .sortBy('position');
     this.agendaItemTreatment = await publicationFlow.agendaItemTreatment;
   }
 
@@ -51,20 +50,20 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   @task
   *closeEditingPanel() {
     yield this.performCancel();
-
     this.isEditing = false;
   }
 
   async performCancel() {
-    const rollbacks = [];
+    const reloads = [];
+
     const regulationTypeReload = this.publicationFlow
       .belongsTo('regulationType')
       .reload();
-    rollbacks.push(regulationTypeReload);
+    reloads.push(regulationTypeReload);
 
     this.agendaItemTreatment.rollbackAttributes();
 
-    await Promise.all(rollbacks);
+    await Promise.all(reloads);
   }
 
   @task
