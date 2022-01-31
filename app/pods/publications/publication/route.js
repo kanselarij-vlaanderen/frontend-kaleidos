@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 
 export default class PublicationRoute extends Route {
   @service store;
+  @service publicationService;
 
   model(params) {
     return this.store.queryOne('publication-flow', {
@@ -27,5 +28,13 @@ export default class PublicationRoute extends Route {
         'mandatees.person'
       ].join(','),
     });
+  }
+
+  async afterModel(model) {
+    this.isViaCouncilOfMinisters = this.publicationService.getIsViaCouncilOfMinisters(model);
+  }
+
+  setupController(ctrl) {
+    ctrl.isViaCouncilOfMinisters = this.isViaCouncilOfMinisters;
   }
 }

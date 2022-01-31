@@ -12,7 +12,7 @@
              <span class="auk-overline auk-u-muted" data-test-route-publications-publication-header-number>
                 {{uppercase (t "publication-flow")}}
                 -
-               {{#if @model.isViaCouncilOfMinisters}}
+               {{#if this.isViaCouncilOfMinisters}}
                  {{uppercase (t "via-cabinet")}}
                {{else}}
                  {{uppercase (t "not-via-cabinet")}}

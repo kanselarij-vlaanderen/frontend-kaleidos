@@ -35,12 +35,4 @@ export default class PublicationFlow extends Model {
     serialize: true,
   }) mandatees;
   @hasMany('piece') referenceDocuments;
-
-  // TODO: review async getter once ember-resources can be used
-  get isViaCouncilOfMinisters() {
-    // eslint-disable-next-line ember/no-get, ember/classic-decorator-no-classic-methods
-    const case_ = this.get('case');
-    const subcases = case_.get('subcases');
-    return subcases.length;
-  }
 }

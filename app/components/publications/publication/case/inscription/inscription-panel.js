@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { isBlank } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
@@ -8,12 +9,24 @@ import { task } from 'ember-concurrency-decorators';
  * @argument {PublicationFlow} publicationFlow (publication-flow,publication-flow.case)
  */
 export default class PublicationsPublicationCaseInscriptionPanelComponent extends Component {
+  @service publicationService;
   @tracked isInEditMode;
+  @tracked isViaCouncilOfMinisters;
 
   @tracked shortTitle;
   @tracked longTitle;
 
   @tracked showError;
+
+  constructor() {
+    super(...arguments);
+    this.initFields();
+  }
+
+  async initFields() {
+    const publicationFlow = this.args.publicationFlow;
+    this.isViaCouncilOfMinisters = this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
+  }
 
   get isShortTitleValid() {
     return !isBlank(this.shortTitle);

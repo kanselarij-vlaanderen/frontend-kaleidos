@@ -10,6 +10,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   @service store;
   @service publicationService;
 
+  @tracked isViaCouncilOfMinisters;
   @tracked isEditing;
 
   @tracked publicationNumberErrorKey;
@@ -28,6 +29,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.publicationFlow = this.args.publicationFlow;
 
     // Publication number
+    this.isViaCouncilOfMinisters = await this.publicationService.getIsViaCouncilOfMinisters(this.publicationFlow);
     this.identification = await this.publicationFlow.identification;
     this.structuredIdentifier = await this.identification.structuredIdentifier;
     // Numac-nummers

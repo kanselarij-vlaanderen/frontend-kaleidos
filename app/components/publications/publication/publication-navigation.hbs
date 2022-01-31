@@ -10,7 +10,7 @@
   >
     {{t "publication-details-tab-publication-case"}}
   </Auk::Tab>
-  {{#if @publicationFlow.case.subcases}}
+  {{#if this.isViaCouncilOfMinisters}}
     <Auk::Tab
       @route="publications.publication.documents"
       @counter={{this.documentsCount}}

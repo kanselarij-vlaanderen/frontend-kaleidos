@@ -244,7 +244,7 @@ request the whole row and not only the arrow at the end to be clickable }}
       {{#if this.loadData.isRunning}}
         ...
       {{else}}
-        {{#if @publicationFlow.isViaCouncilOfMinisters}}
+        {{#if this.isViaCouncilOfMinisters}}
           {{t "via-cabinet"}}
         {{else}}
           {{t "not-via-cabinet"}}
