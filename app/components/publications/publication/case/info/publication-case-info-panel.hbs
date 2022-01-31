@@ -106,7 +106,7 @@
 
           {{!Limiet publicatie}}
           <div class="auk-o-grid-col-2 auk-content">
-            <Auk::KeyValue @key={{t "publication-due-date"}}>
+            <Auk::KeyValue @key={{t "publication-flow-publication-due-date"}}>
               <div class={{if this.isPublicationOverdue "auk-u-text-bold"}}>
                 {{#if
                   (and
@@ -272,7 +272,7 @@
                   data-test-publication-case-info-panel-publication-due-date
                   class="auk-form-group"
                 >
-                  <Auk::Label>{{t "publication-due-date"}}</Auk::Label>
+                  <Auk::Label>{{t "publication-flow-publication-due-date"}}</Auk::Label>
                   {{#if (not @publicationFlow.status.isWithdrawn)}}
                     <Auk::Datepicker
                       @date={{@publicationFlow.publicationSubcase.dueDate}}

@@ -27,7 +27,7 @@
       <div class="auk-o-grid">
         <div class="auk-o-grid-col-3">
           <div class="auk-form-group">
-            <Auk::Label>{{t "publication-due-date"}}</Auk::Label>
+            <Auk::Label>{{t "publication-flow-publication-due-date"}}</Auk::Label>
             <Auk::Datepicker
               @date={{@publicationSubcase.dueDate}}
               @onChange={{this.setPublicationDueDate}}
@@ -84,7 +84,7 @@
     <Auk::Panel::Body>
       <div class="auk-o-grid">
         <div class="auk-o-grid-col-3 auk-content">
-          <h4 class="auk-u-m-0">{{t "publication-due-date"}}</h4>
+          <h4 class="auk-u-m-0">{{t "publication-flow-publication-due-date"}}</h4>
           <p class="auk-u-m-0">
             {{#if @publicationSubcase.dueDate}}
               {{moment-format @publicationSubcase.dueDate "DD-MM-YYYY"}}

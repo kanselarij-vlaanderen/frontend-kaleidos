@@ -75,6 +75,26 @@
           </div>
         {{/unless}}
 
+        {{! Publicatiewijze }}
+        {{#unless this.publicationStatus.isWithdrawn}}
+          <div
+            data-test-publication-sidebar-publication-mode
+            class="auk-form-group"
+          >
+            <Auk::Label for="blockInput">
+              {{t "kind-of-publication"}}
+            </Auk::Label>
+            <PowerSelect
+              @options={{this.publicationModes}}
+              @onChange={{this.setPublicationMode}}
+              @selected={{this.publicationFlow.mode}}
+              as |mode|
+            >
+              {{mode.label}}
+            </PowerSelect>
+          </div>
+        {{/unless}}
+
         {{! Vertaaldatum }}
         <div
           data-test-publication-sidebar-translation-date
