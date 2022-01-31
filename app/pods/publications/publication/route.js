@@ -25,13 +25,14 @@ export default class PublicationRoute extends Route {
         'contact-persons.person',
         'contact-persons.person.organization',
         'mandatees',
-        'mandatees.person'
+        'mandatees.person',
       ].join(','),
     });
   }
 
   async afterModel(model) {
-    this.isViaCouncilOfMinisters = this.publicationService.getIsViaCouncilOfMinisters(model);
+    this.isViaCouncilOfMinisters =
+      this.publicationService.getIsViaCouncilOfMinisters(model);
   }
 
   setupController(ctrl) {

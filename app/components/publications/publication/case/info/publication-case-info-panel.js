@@ -29,7 +29,10 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.publicationFlow = this.args.publicationFlow;
 
     // Publication number
-    this.isViaCouncilOfMinisters = await this.publicationService.getIsViaCouncilOfMinisters(this.publicationFlow);
+    this.isViaCouncilOfMinisters =
+      await this.publicationService.getIsViaCouncilOfMinisters(
+        this.publicationFlow
+      );
     this.identification = await this.publicationFlow.identification;
     this.structuredIdentifier = await this.identification.structuredIdentifier;
     // Numac-nummers
@@ -67,7 +70,8 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     }
 
     const publicationNumber = Number.parseFloat(publicationNumberStr);
-    const isNumeric = Number.isInteger(publicationNumber) && publicationNumber > 0;
+    const isNumeric =
+      Number.isInteger(publicationNumber) && publicationNumber > 0;
     if (!isNumeric) {
       this.publicationNumberErrorKey = 'publication-number-error-numeric';
       return;
@@ -98,7 +102,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
       yield this.publicationService.publicationNumberAlreadyTaken(
         publicationNumber,
         publicationNumberSuffix,
-        publicationFlow.id,
+        publicationFlow.id
       );
     if (isAlreadyTaken) {
       this.publicationNumberErrorKey = 'publication-number-error-taken';
@@ -143,7 +147,8 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     if (isFinal) {
       return false;
     }
-    const isPublicationOverdue = publicationFlow.publicationSubcase.get('isOverdue');
+    const isPublicationOverdue =
+      publicationFlow.publicationSubcase.get('isOverdue');
     return isPublicationOverdue;
   }
 
@@ -151,7 +156,9 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   *closeEditingPanel() {
     const publicationFlow = this.args.publicationFlow;
 
-    const urgencyLevelReload = publicationFlow.belongsTo('urgencyLevel').reload();
+    const urgencyLevelReload = publicationFlow
+      .belongsTo('urgencyLevel')
+      .reload();
     yield Promise.all([urgencyLevelReload]);
 
     this.agendaItemTreatment.rollbackAttributes();
@@ -200,7 +207,11 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
       saves.push(destroy);
     }
 
-    this.numacNumbers.replace(0, this.numacNumbers.length, this.numacNumbersEditing);
+    this.numacNumbers.replace(
+      0,
+      this.numacNumbers.length,
+      this.numacNumbersEditing
+    );
     saves.push(this.numacNumbers.save());
 
     // Datum beslissing
