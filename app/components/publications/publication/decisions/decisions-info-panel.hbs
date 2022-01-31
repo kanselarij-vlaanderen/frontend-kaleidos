@@ -52,15 +52,21 @@
                     @publicationFlow.agendaItemTreatment.agendaitem.id
                   }}
                 >
-                  {{#if this.decisionDate}}
-                    {{moment-format this.decisionDate "DD-MM-YYYY"}}
+                  {{#if @publicationFlow.agendaItemTreatment.startDate}}
+                    {{moment-format
+                      @publicationFlow.agendaItemTreatment.startDate
+                      "DD-MM-YYYY"
+                    }}
                   {{else}}
                     {{t "to-agenda"}}
                   {{/if}}
                 </Auk::ButtonLink>
               {{else}}
-                {{#if this.decisionDate}}
-                  {{moment-format this.decisionDate "DD-MM-YYYY"}}
+                {{#if @publicationFlow.agendaItemTreatment.startDate}}
+                  {{moment-format
+                    @publicationFlow.agendaItemTreatment.startDate
+                    "DD-MM-YYYY"
+                  }}
                 {{else}}
                   {{t "dash"}}
                 {{/if}}
@@ -121,14 +127,17 @@
                 >
                   <Auk::Label>{{t "decision-date"}}</Auk::Label>
                   {{#if @publicationFlow.isViaCouncilOfMinisters}}
-                    {{#if this.decisionDate}}
-                      {{moment-format this.decisionDate "DD-MM-YYYY"}}
+                    {{#if @publicationFlow.agendaItemTreatment.startDate}}
+                      {{moment-format
+                        @publicationFlow.agendaItemTreatment.startDate
+                        "DD-MM-YYYY"
+                      }}
                     {{else}}
                       {{t "dash"}}
                     {{/if}}
                   {{else}}
                     <Auk::Datepicker
-                      @date={{this.decisionDate}}
+                      @date={{@publicationFlow.agendaItemTreatment.startDate}}
                       @onChange={{this.setDecisionDate}}
                     />
                   {{/if}}

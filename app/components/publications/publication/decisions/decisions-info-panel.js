@@ -9,8 +9,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @tracked isEditing;
 
-  @tracked decisionDate;
-
   constructor() {
     super(...arguments);
 
@@ -22,8 +20,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     const publicationFlow = this.args.publicationFlow;
     this.publicationFlow = publicationFlow;
 
-    const agendaItemTreatment = await publicationFlow.agendaItemTreatment;
-    this.decisionDate = agendaItemTreatment.startDate;
+    this.agendaItemTreatment = await publicationFlow.agendaItemTreatment;
   }
 
   @action
@@ -38,12 +35,11 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @action
   setDecisionDate(selectedDates) {
-    this.decisionDate = selectedDates[0];
+    this.agendaItemTreatment.startDate = selectedDates[0];
   }
 
   @task
   *closeEditingPanel() {
-    yield this.initFields();
     yield this.performCancel();
 
     this.isEditing = false;
@@ -53,6 +49,8 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     const rollbacks = [];
     const regulationTypeReload = this.publicationFlow.belongsTo('regulationType').reload();
     rollbacks.push(regulationTypeReload);
+
+    this.agendaItemTreatment.rollbackAttributes();
 
     await Promise.all(rollbacks);
   }
@@ -76,13 +74,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     saves.push(this.publicationFlow.save());
 
     // Datum beslissing
-    const agendaItemTreatment = await publicationFlow.agendaItemTreatment;
-    const oldDecisionDate = agendaItemTreatment.startDate;
-    if (this.decisionDate !== oldDecisionDate) {
-      agendaItemTreatment.startDate = this.decisionDate;
-      const agendaItemTreatmentSave = agendaItemTreatment.save();
-      saves.push(agendaItemTreatmentSave);
-    }
+    saves.push(this.agendaItemTreatment.save());
 
     await Promise.all(saves);
   }
