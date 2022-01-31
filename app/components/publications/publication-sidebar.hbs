@@ -102,40 +102,6 @@
           </div>
         {{/if}}
 
-        {{! Publicatiewijze }}
-        {{#unless this.publicationStatus.isWithdrawn}}
-          <div
-            data-test-publication-sidebar-publication-mode
-            class="auk-form-group"
-          >
-            <Auk::Label for="blockInput">
-              {{t "kind-of-publication"}}
-            </Auk::Label>
-            <PowerSelect
-              @options={{this.publicationModes}}
-              @onChange={{this.setPublicationMode}}
-              @selected={{this.publicationFlow.mode}}
-              as |mode|
-            >
-              {{mode.label}}
-            </PowerSelect>
-          </div>
-        {{/unless}}
-
-        {{! Drukproef verbeteraar }}
-        {{#unless this.loadPublicationSubcase.isRunning}}
-          <div class="auk-form-group">
-            <Auk::Label>
-              {{t "proofprint-corrector"}}
-            </Auk::Label>
-            <Auk::Input
-              data-test-publication-sidebar-proof-print-corrector
-              value={{this.publicationSubcase.proofPrintCorrector}}
-              {{on "input" (perform this.setProofPrintCorrector)}}
-            />
-          </div>
-        {{/unless}}
-
         {{! Werknummer BS == numac nummer }}
         <div data-test-publication-sidebar-numac-number class="auk-form-group">
           <Auk::Label>{{t "numac-number"}}</Auk::Label>
@@ -165,29 +131,6 @@
           {{/if}}
         </div>
 
-        {{! Uiterste vertaaldatum }}
-        {{#if
-          (or this.publicationStatus.isPending this.publicationStatus.isPaused)
-        }}
-          <div
-            data-test-publication-sidebar-translation-due-date
-            class="auk-form-group"
-          >
-            <Auk::Label>{{t "translation-due-date"}}</Auk::Label>
-            <Auk::Datepicker
-              @date={{this.translationSubcase.dueDate}}
-              @onChange={{this.setTranslationDueDate}}
-            />
-            {{#if (is-after this.translationSubcase.dueDate precision="days")}}
-              <Auk::FormHelpText
-                @text={{t "date-expired"}}
-                @skin="warning"
-                @icon="alert-triangle"
-              />
-            {{/if}}
-          </div>
-        {{/if}}
-
         {{! Vertaaldatum }}
         <div
           data-test-publication-sidebar-translation-date
@@ -199,44 +142,6 @@
             @onChange={{this.setTranslationDate}}
           />
         </div>
-
-        {{! Gevraagde publicatiedatum }}
-        <div
-          data-test-publication-sidebar-target-end-date
-          class="auk-form-group"
-        >
-          <Auk::Label>{{t "publication-target-end-date"}}</Auk::Label>
-          <Auk::Datepicker
-            @date={{this.publicationSubcase.targetEndDate}}
-            @onChange={{this.setPublicationTargetEndDate}}
-          />
-        </div>
-
-        {{! Uiterste publicatiedatum }}
-        {{#unless this.publicationStatus.isWithdrawn}}
-          <div
-            data-test-publication-sidebar-publication-due-date
-            class="auk-form-group"
-          >
-            <Auk::Label>{{t "publication-due-date"}}</Auk::Label>
-            <Auk::Datepicker
-              @date={{this.publicationSubcase.dueDate}}
-              @onChange={{this.setPublicationDueDate}}
-            />
-            {{#if
-              (and
-                (not this.publicationStatus.isPublished)
-                (is-after this.publicationSubcase.dueDate precision="days")
-              )
-            }}
-              <Auk::FormHelpText
-                @text={{t "date-expired"}}
-                @skin="warning"
-                @icon="alert-triangle"
-              />
-            {{/if}}
-          </div>
-        {{/unless}}
 
         {{! Opmerking }}
         <div class="auk-form-group">

@@ -24,7 +24,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @tracked numberIsAlreadyUsed = false;
   @tracked numberIsRequired = false;
-  @tracked publicationModes;
   @tracked regulationTypes;
   @tracked publicationNumber;
   @tracked publicationNumberSuffix;
@@ -43,7 +42,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.loadAgendaitemTreatment.perform();
     this.loadStructuredIdentifier.perform();
     this.loadDecision.perform();
-    this.publicationModes = this.store.peekAll('publication-mode').sortBy('position');
     this.regulationTypes =  this.store.peekAll('regulation-type').sortBy('position');
   }
 
@@ -93,12 +91,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   setRegulationType(regulationType) {
     this.publicationFlow.regulationType = regulationType;
     this.notifyChanges(this.publicationFlow, 'regulationType');
-  }
-
-  @action
-  setPublicationMode(publicationMode) {
-    this.publicationFlow.mode = publicationMode;
-    this.notifyChanges(this.publicationFlow, 'mode');
   }
 
   @action
@@ -172,24 +164,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @action
-  setPublicationDueDate(selectedDates) {
-    this.publicationSubcase.dueDate = selectedDates[0];
-    this.notifyChanges(this.publicationSubcase, 'dueDate');
-  }
-
-  @action
-  setPublicationTargetEndDate(selectedDates) {
-    this.publicationSubcase.targetEndDate = selectedDates[0];
-    this.notifyChanges(this.publicationSubcase, 'targetEndDate');
-  }
-
-  @action
-  setTranslationDueDate(selectedDates) {
-    this.translationSubcase.dueDate = selectedDates[0];
-    this.notifyChanges(this.translationSubcase, 'dueDate');
-  }
-
-  @action
   setTranslationDate(selectedDates) {
     this.translationSubcase.endDate = selectedDates[0];
     this.notifyChanges(this.translationSubcase, 'endDate');
@@ -221,13 +195,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.notifyChanges(this.publicationFlow, 'remark');
   }
 
-  @restartableTask
-  *setProofPrintCorrector(event) {
-    const newValue = event.target.value;
-    this.publicationSubcase.proofPrintCorrector = newValue;
-    yield timeout(1000);
-    this.notifyChanges(this.publicationSubcase, 'proofPrintCorrector');
-  }
   /**
    *
    * @param {Model} model
