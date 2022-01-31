@@ -31,8 +31,8 @@
           {{! Type regelgeving }}
           <div class="auk-o-grid-col-4 auk-content">
             <Auk::KeyValue @key={{t "regulation-type"}}>
-              {{#if this.regulationType}}
-                {{this.regulationType.label}}
+              {{#if @publicationFlow.regulationType}}
+                {{@publicationFlow.regulationType.label}}
               {{else}}
                 {{t "dash"}}
               {{/if}}
@@ -94,8 +94,8 @@
                     {{t "regulation-type"}}
                   </Auk::Label>
                   {{#if @publicationFlow.isViaCouncilOfMinisters}}
-                    {{#if this.regulationType}}
-                      {{this.regulationType.label}}
+                    {{#if @publicationFlow.regulationType}}
+                      {{@publicationFlow.regulationType.label}}
                     {{else}}
                       {{t "dash"}}
                     {{/if}}
@@ -103,7 +103,7 @@
                     <PowerSelect
                       @options={{this.regulationTypes}}
                       @onChange={{this.setRegulationType}}
-                      @selected={{this.regulationType}}
+                      @selected={{@publicationFlow.regulationType}}
                       @allowClear={{true}}
                       as |regulationType|
                     >
@@ -164,8 +164,11 @@
               <Auk::Button
                 data-test-decisions-info-panel-edit-cancel
                 @skin="borderless"
-                @disabled={{this.save.isRunning}}
-                {{on "click" this.closeEditingPanel}}
+                @disabled={{or
+                  this.closeEditingPanel.isRunning
+                  this.save.isRunning
+                }}
+                {{on "click" (perform this.closeEditingPanel)}}
               >
                 {{t "cancel"}}
               </Auk::Button>
@@ -177,7 +180,10 @@
                 data-test-decisions-info-panel-edit-save
                 @skin="primary"
                 @loading={{this.save.isRunning}}
-                @disabled={{not this.isValid}}
+                @disabled={{or
+                  (not this.isValid)
+                  this.closeEditingPanel.isRunning
+                }}
                 {{on "click" (perform this.save)}}
               >
                 {{t "save"}}

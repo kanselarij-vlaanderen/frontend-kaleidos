@@ -9,7 +9,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @tracked isEditing;
 
-  @tracked regulationType;
   @tracked decisionDate;
 
   constructor() {
@@ -21,8 +20,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   async initFields() {
     const publicationFlow = this.args.publicationFlow;
-
-    this.regulationType = await publicationFlow.regulationType;
+    this.publicationFlow = publicationFlow;
 
     const agendaItemTreatment = await publicationFlow.agendaItemTreatment;
     this.decisionDate = agendaItemTreatment.startDate;
@@ -35,7 +33,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @action
   setRegulationType(regulationType) {
-    this.regulationType = regulationType;
+    this.publicationFlow.regulationType = regulationType;
   }
 
   @action
@@ -43,10 +41,20 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.decisionDate = selectedDates[0];
   }
 
-  @action
-  async closeEditingPanel() {
-    await this.initFields();
+  @task
+  *closeEditingPanel() {
+    yield this.initFields();
+    yield this.performCancel();
+
     this.isEditing = false;
+  }
+
+  async performCancel() {
+    const rollbacks = [];
+    const regulationTypeReload = this.publicationFlow.belongsTo('regulationType').reload();
+    rollbacks.push(regulationTypeReload);
+
+    await Promise.all(rollbacks);
   }
 
   get isValid() {
@@ -65,11 +73,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     const saves = [];
 
     // Type regelgeving
-    const oldRegulationType = await publicationFlow.regulationType;
-    if (oldRegulationType !== this.regulationType) {
-      publicationFlow.regulationType = this.regulationType;
-      saves.push(publicationFlow.save());
-    }
+    saves.push(this.publicationFlow.save());
 
     // Datum beslissing
     const agendaItemTreatment = await publicationFlow.agendaItemTreatment;
