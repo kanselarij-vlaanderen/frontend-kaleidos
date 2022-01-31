@@ -53,10 +53,9 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @action
   async changeIsUrgent(ev) {
-    const publicationFlow = this.args.publicationFlow;
     const isUrgent = ev.target.checked;
     const urgencyLevel = await this.getUrgencyLevel(isUrgent);
-    publicationFlow.urgencyLevel = urgencyLevel;
+    this.publicationFlow.urgencyLevel = urgencyLevel;
   }
 
   @task
@@ -94,7 +93,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @restartableTask
   *checkPublicationNumber() {
-    const { publicationFlow } = this.args;
     const publicationNumber = this.structuredIdentifier.localIdentifier;
     const publicationNumberSuffix = this.structuredIdentifier.versionIdentifier;
     yield timeout(1000);
@@ -102,7 +100,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
       yield this.publicationService.publicationNumberAlreadyTaken(
         publicationNumber,
         publicationNumberSuffix,
-        publicationFlow.id
+        this.publicationFlow.id
       );
     if (isAlreadyTaken) {
       this.publicationNumberErrorKey = 'publication-number-error-taken';
@@ -142,7 +140,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   // TODO: review async getter once ember-resources can be used
   get isPublicationOverdue() {
-    const publicationFlow = this.args.publicationFlow;
+    const { publicationFlow } = this.args;
     const isFinal = publicationFlow.status.get('isFinal');
     if (isFinal) {
       return false;
@@ -154,16 +152,18 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @task
   *closeEditingPanel() {
-    const publicationFlow = this.args.publicationFlow;
+    const reloads = [];
 
-    const urgencyLevelReload = publicationFlow
+    const urgencyLevelReload = this.publicationFlow
       .belongsTo('urgencyLevel')
       .reload();
-    yield Promise.all([urgencyLevelReload]);
+    reloads.push(urgencyLevelReload);
+
+    yield Promise.all(reloads);
 
     this.agendaItemTreatment.rollbackAttributes();
     this.publicationSubcase.rollbackAttributes();
-    publicationFlow.rollbackAttributes();
+    this.publicationFlow.rollbackAttributes();
 
     this.isEditing = false;
   }
@@ -174,22 +174,19 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @task
   *save() {
-    const publicationFlow = this.args.publicationFlow;
-
-    const checkTask = this.checkPublicationNumber.last;
-    const isCheckPending = checkTask && !checkTask.isFinished;
-    if (isCheckPending) {
-      yield checkTask;
-      if (this.publicationNumberErrorKey) {
-        return;
-      }
+    const isSuccess = yield this.performSave();
+    if (isSuccess) {
+      this.isEditing = false;
     }
-    yield this.performSave(publicationFlow);
-    this.isEditing = false;
   }
 
   // separate method to prevent ember-concurrency from saving only partially
-  async performSave(publicationFlow) {
+  async performSave() {
+    const isValid = await this.finishValidation();
+    if (!isValid) {
+      return false;
+    }
+
     const saves = [];
 
     // Publicatienummer
@@ -218,12 +215,23 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     saves.push(this.agendaItemTreatment.save());
 
     // Dringend + Datum ontvangst
-    saves.push(publicationFlow.save());
+    saves.push(this.publicationFlow.save());
 
     // Limiet publicatie
     saves.push(this.publicationSubcase.save());
 
     await Promise.all(saves);
+
+    return true;
+  }
+
+  async finishValidation() {
+    const checkTask = this.checkPublicationNumber.last;
+    const isCheckPending = checkTask && !checkTask.isFinished;
+    if (isCheckPending) {
+      await checkTask;
+    }
+    return this.isValid;
   }
 
   async getUrgencyLevel(isUrgent) {
