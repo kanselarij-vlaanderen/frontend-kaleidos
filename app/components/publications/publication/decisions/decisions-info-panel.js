@@ -7,7 +7,7 @@ import { task } from 'ember-concurrency';
 export default class PublicationsPublicationCaseInfoPanelComponent extends Component {
   @service store;
 
-  @tracked isInEditMode;
+  @tracked isEditing;
 
   @tracked regulationType;
   @tracked decisionDate;
@@ -29,8 +29,8 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   @action
-  putInEditMode() {
-    this.isInEditMode = true;
+  openEditingPanel() {
+    this.isEditing = true;
   }
 
   @action
@@ -44,9 +44,9 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   @action
-  async cancelEdit() {
+  async closeEditingPanel() {
     await this.initFields();
-    this.isInEditMode = false;
+    this.isEditing = false;
   }
 
   get isValid() {
@@ -57,7 +57,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   *save() {
     const publicationFlow = this.args.publicationFlow;
     yield this.performSave(publicationFlow);
-    this.isInEditMode = false;
+    this.isEditing = false;
   }
 
   // separate method to prevent ember-concurrency from saving only partially
