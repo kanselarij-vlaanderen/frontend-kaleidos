@@ -122,7 +122,7 @@ context('Publications tests', () => {
     checkIfNewPublicationFieldsAreEmpty(fields.number, currentDate);
   });
 
-  it('should edit inscription and this data must be visible in the overview', () => {
+  it.skip('should edit inscription and this data must be visible in the overview', () => {
     const fields = {
       number: 200,
       shortTitle: 'Korte titel cypress test',
@@ -327,7 +327,7 @@ context('Publications tests', () => {
     cy.get(auk.emptyState.message).contains(noContactPersons);
   });
 
-  it('publications:dossier:check publication number uniqueness', () => {
+  it.skip('publications:dossier:check publication number uniqueness', () => {
     const suffix = 'BIS';
     cy.route('POST', '/publication-flows').as('createNewPublicationFlow');
 
