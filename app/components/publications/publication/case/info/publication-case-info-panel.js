@@ -15,7 +15,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   @tracked publicationNumber;
   @tracked publicationNumberSuffix;
 
-  @tracked numberIsNonNumeric = false;
   @tracked numberIsAlreadyUsed = false;
   @tracked numberIsRequired = false;
 
@@ -48,7 +47,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   get publicationNumberErrorTranslationKey() {
-    if (this.numberIsNonNumeric || this.numberIsRequired) {
+    if (this.numberIsRequired) {
       return "publication-number-required-and-numeric";
     } else if (this.numberIsAlreadyUsed) {
       return "publication-number-already-taken";
@@ -80,17 +79,12 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   *setPublicationNumber(event) {
     this.publicationNumber = event.target.value;
     const number = parseInt(this.publicationNumber, 10);
-    if (Object.is(NaN, number)) {
-      this.numberIsNonNumeric = true;
+    if (isBlank(this.publicationNumber) || Object.is(NaN, number)) {
+      this.numberIsRequired = true;
     } else {
-      this.numberIsNonNumeric = false;
-      if (isBlank(this.publicationNumber)) {
-        this.numberIsRequired = true;
-      } else {
-        this.numberIsRequired = false;
-        yield timeout(1000);
-        this.setStructuredIdentifier.perform();
-      }
+      this.numberIsRequired = false;
+      yield timeout(1000);
+      this.setStructuredIdentifier.perform();
     }
   }
 
