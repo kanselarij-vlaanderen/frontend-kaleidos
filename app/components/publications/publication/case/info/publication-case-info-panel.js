@@ -8,8 +8,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationCaseInfoPanelComponent extends Component {
   @service store;
-  @service toaster;
-  @service intl;
   @service publicationService;
 
   @tracked isViaCouncilOfMinisters;
@@ -49,8 +47,18 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.publicationSubcase = await this.args.publicationFlow.publicationSubcase;
   }
 
+  get publicationNumberErrorTranslationKey() {
+    if (this.numberIsNonNumeric || this.numberIsRequired) {
+      return "publication-number-required-and-numeric";
+    } else if (this.numberIsAlreadyUsed) {
+      return "publication-number-already-taken";
+    } else {
+      return null;
+    }
+  }
+
   get isValid() {
-    return !this.numberIsNonNumeric && !this.numberIsAlreadyUsed && !this.numberIsRequired;
+    return this.publicationNumberErrorTranslationKey;
   }
 
   @action
@@ -71,29 +79,16 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   @restartableTask
   *setPublicationNumber(event) {
     this.publicationNumber = event.target.value;
-    yield timeout(1000);
     const number = parseInt(this.publicationNumber, 10);
     if (Object.is(NaN, number)) {
       this.numberIsNonNumeric = true;
-      this.toaster.error(
-        this.intl.t('publication-number-required-and-numeric'),
-        this.intl.t('warning-title'),
-        {
-          timeOut: 5000,
-        });
     } else {
       this.numberIsNonNumeric = false;
       if (isBlank(this.publicationNumber)) {
         this.numberIsRequired = true;
-        this.toaster.error(
-          this.intl.t('publication-number-required-and-numeric'),
-          this.intl.t('warning-title'),
-          {
-            timeOut: 5000,
-          });
       } else {
         this.numberIsRequired = false;
-        this.numberIsAlreadyUsed = false;
+        yield timeout(1000);
         this.setStructuredIdentifier.perform();
       }
     }
@@ -103,8 +98,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   *setPublicationNumberSuffix(event) {
     this.publicationNumberSuffix = isBlank(event.target.value) ? undefined : event.target.value;
     yield timeout(1000);
-    this.numberIsRequired = false;
-    this.numberIsAlreadyUsed = false;
     this.setStructuredIdentifier.perform();
   }
 
@@ -118,14 +111,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
           );
     if (isPublicationNumberTaken) {
       this.numberIsAlreadyUsed = true;
-      this.toaster.error(this.intl.t('publication-number-already-taken-with-params', {
-        number: this.publicationNumber,
-        suffix: isBlank(this.publicationNumberSuffix)
-          ? this.intl.t('without-suffix')
-          : `${this.intl.t('with-suffix')} '${this.publicationNumberSuffix}'`,
-      }), this.intl.t('warning-title'), {
-        timeOut: 5000,
-      });
     } else {
       this.structuredIdentifier.localIdentifier = this.publicationNumber;
       this.structuredIdentifier.versionIdentifier = this.publicationNumberSuffix;

@@ -51,7 +51,7 @@
               {{! Publicatienummer}}
               <div class="auk-o-grid-col-4">
                 <div class="auk-form-group">
-                  <Auk::Label @required={{true}}>
+                  <Auk::Label @required={{true}} @error={{this.publicationNumberErrorTranslationKey}}>
                     {{t "publication-number"}}
                   </Auk::Label>
                   <div class="auk-u-mb">
@@ -59,18 +59,27 @@
                       data-test-publication-case-info-panel-publication-number
                       @type="number"
                       value={{this.publicationNumber}}
+                      @error={{this.publicationNumberErrorTranslationKey}}
                       {{on "input" (perform this.setPublicationNumber)}}
                     />
                     <Auk::Input
                       data-test-publication-case-info-panel-publication-number-suffix
                       @width="xsmall"
                       value={{this.publicationNumberSuffix}}
+                      @error={{this.publicationNumberErrorTranslationKey}}
                       {{on "input" (perform this.setPublicationNumberSuffix)}}
                     />
                     <Utils::Generic::TooltipHelp class="auk-u-mx">
                       {{t "publication-flow-publication-number-help"}}
                     </Utils::Generic::TooltipHelp>
                   </div>
+                  {{#if this.publicationNumberErrorTranslationKey}}
+                    <Auk::FormHelpText
+                      @text={{t this.publicationNumberErrorTranslationKey}}
+                      @skin="danger"
+                      @icon="alert-triangle"
+                    />
+                  {{/if}}
                 </div>
               </div>
 
