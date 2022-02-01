@@ -270,7 +270,6 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     saves.push(statusChangedSave)
 
     await Promise.all(saves);
-    await this.currentPublicationFlow.reload();
   }
 
   async performSavePieceUpload(uploadProperties, isCorrection) {

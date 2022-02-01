@@ -74,8 +74,6 @@ export default class PublicationsPublicationTranslationsRequestController extend
 
       this.translationSubcase.endDate = translationUpload.receivedAtDate;
       yield this.translationSubcase.save();
-
-      yield this.currentPublicationFlow.reload();
     }
 
     yield Promise.all([translationActivitySave, pieceSave]);

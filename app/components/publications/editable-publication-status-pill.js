@@ -36,11 +36,11 @@ export default class EditablePublicationStatusPill extends Component {
   }
 
   get publicationStatusPillKey() {
-    return getPublicationStatusPillKey(this.currentPublicationFlow.publicationFlow.status);
+    return getPublicationStatusPillKey(this.publicationStatus);
   }
 
   get publicationStatusPillStep() {
-    return getPublicationStatusPillStep(this.currentPublicationFlow.publicationFlow.status);
+    return getPublicationStatusPillStep(this.publicationStatus);
   }
 
   @action

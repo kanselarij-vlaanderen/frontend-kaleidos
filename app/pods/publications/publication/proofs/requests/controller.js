@@ -125,7 +125,6 @@ export default class PublicationsPublicationProofsRequestsController extends Con
 
       this.publicationSubcase.endDate = proofUpload.receivedAtDate;
       await this.publicationSubcase.save();
-      await this.currentPublicationFlow.reload();
     }
 
     await Promise.all([pieceSave, proofingActivitySave]);

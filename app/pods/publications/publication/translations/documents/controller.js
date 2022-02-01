@@ -187,8 +187,6 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     });
     yield newChangeActivity.save();
 
-    yield this.currentPublicationFlow.reload();
-
     this.selectedPieceRows = [];
     this.isTranslationRequestModalOpen = false;
     this.transitionToRoute('publications.publication.translations.requests');
