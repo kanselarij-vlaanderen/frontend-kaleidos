@@ -89,7 +89,7 @@
             {{#if @publicationSubcase.dueDate}}
               {{moment-format @publicationSubcase.dueDate "DD-MM-YYYY"}}
             {{else}}
-              -
+              {{t "dash"}}
             {{/if}}
           {{#if
             (and

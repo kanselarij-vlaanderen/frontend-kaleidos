@@ -138,18 +138,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.publicationSubcase.dueDate = selectedDates[0];
   }
 
-  // TODO: review async getter once ember-resources can be used
-  get isPublicationOverdue() {
-    const { publicationFlow } = this.args;
-    const isFinal = publicationFlow.status.get('isFinal');
-    if (isFinal) {
-      return false;
-    }
-    const isPublicationOverdue =
-      publicationFlow.publicationSubcase.get('isOverdue');
-    return isPublicationOverdue;
-  }
-
   @task
   *closeEditingPanel() {
     const reloads = [];

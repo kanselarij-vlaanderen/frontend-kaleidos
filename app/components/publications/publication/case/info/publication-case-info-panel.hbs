@@ -35,12 +35,13 @@
 
               {{! Dringend}}
               <div class="auk-o-grid-col-4">
+                <Auk::Label>
+                  {{t "publication-urgent"}}
+                </Auk::Label>
                 <div class="auk-form-group">
-                  <Auk::Label>
-                    {{t "publication-urgent"}}
-                  </Auk::Label>
                   <Auk::Checkbox
                     data-test-urgency-level-checkbox
+                    @label={{t "priority-procedure"}}
                     @checked={{@publicationFlow.urgencyLevel.isUrgent}}
                     {{on "input" this.changeIsUrgent}}
                   />
@@ -50,17 +51,13 @@
               {{! Publicatienummer}}
               <div class="auk-o-grid-col-4">
                 <div class="auk-form-group">
-                  <Auk::Label
-                    @required={{true}}
-                    @error={{this.publicationNumberErrorKey}}
-                  >
-                    {{t "publications-number"}}
+                  <Auk::Label @error={{this.publicationNumberErrorKey}}>
+                    {{t "publication-number"}}
                   </Auk::Label>
-                  <div class="auk-o-flex auk-u-mb">
+                  <div class="auk-u-mb">
                     <Auk::Input
                       data-test-publication-case-info-panel-publication-number
                       @type="number"
-                      class="auk-input--block auk-o-flex__item"
                       value={{@publicationFlow.identification.structuredIdentifier.localIdentifier}}
                       @error={{this.publicationNumberErrorKey}}
                       {{on "input" (perform this.setPublicationNumber)}}
@@ -68,7 +65,6 @@
                     <Auk::Input
                       data-test-publication-case-info-panel-publication-number-suffix
                       @width="xsmall"
-                      class="auk-u-ml"
                       value={{@publicationFlow.identification.structuredIdentifier.versionIdentifier}}
                       @error={{this.publicationNumberErrorKey}}
                       {{on "input" (perform this.setPublicationNumberSuffix)}}
@@ -89,15 +85,13 @@
 
               {{! Numac-nummers}}
               <div class="auk-o-grid-col-4">
-                <div
-                  data-test-publication-case-info-panel-numac-number
-                  class="auk-form-group"
-                >
+                <div class="auk-form-group">
                   <Auk::Label>
                     {{t "publication-flow-numac-number"}}
                   </Auk::Label>
                   {{! TODO: disable modifying numac-number once (staatsblad-)decision exists? }}
                   <Auk::InputPills
+                    data-test-publication-case-info-panel-numac-number
                     @items={{this.numacNumbersEditing}}
                     @onCreate={{this.addNumacNumber}}
                     @onRemove={{this.deleteNumacNumber}}
@@ -116,14 +110,26 @@
                 >
                   <Auk::Label>{{t "decision-date"}}</Auk::Label>
                   {{#if this.isViaCouncilOfMinisters}}
-                    {{#if @publicationFlow.agendaItemTreatment.startDate}}
-                      {{moment-format
-                        @publicationFlow.agendaItemTreatment.startDate
-                        "DD-MM-YYYY"
-                      }}
-                    {{else}}
-                      {{t "dash"}}
-                    {{/if}}
+                    <Auk::ButtonLink
+                      target="_blank"
+                      @icon="chevron-right"
+                      @layout="icon-right"
+                      @route="agenda.agendaitems.agendaitem"
+                      @models={{array
+                                  @publicationFlow.agendaItemTreatment.agendaitem.agenda.createdFor.id
+                                  @publicationFlow.agendaItemTreatment.agendaitem.agenda.id
+                                  @publicationFlow.agendaItemTreatment.agendaitem.id
+                              }}
+                    >
+                      {{#if @publicationFlow.agendaItemTreatment.startDate}}
+                        {{moment-format
+                            @publicationFlow.agendaItemTreatment.startDate
+                            "DD-MM-YYYY"
+                        }}
+                      {{else}}
+                        {{t "to-agenda"}}
+                      {{/if}}
+                    </Auk::ButtonLink>
                   {{else}}
                     <Auk::Datepicker
                       @date={{@publicationFlow.agendaItemTreatment.startDate}}
@@ -167,15 +173,16 @@
                   <Auk::Label>
                     {{t "publication-flow-publication-due-date"}}
                   </Auk::Label>
-                  {{#if (not @publicationFlow.status.isWithdrawn)}}
-                    <Auk::Datepicker
-                      @date={{@publicationFlow.publicationSubcase.dueDate}}
-                      @onChange={{this.setPublicationDueDate}}
-                    />
-                  {{else}}
-                    {{t "dash"}}
-                  {{/if}}
-                  {{#if this.isPublicationOverdue}}
+                  <Auk::Datepicker
+                    @date={{@publicationFlow.publicationSubcase.dueDate}}
+                    @onChange={{this.setPublicationDueDate}}
+                  />
+                  {{#if
+                       (and
+                       (not @publicationFlow.status.isFinal)
+                       (is-after @publicationFlow.publicationSubcase.dueDate precision="days")
+                       )
+                  }}
                     <Auk::FormHelpText
                       @text={{t "date-expired"}}
                       @skin="warning"
@@ -190,54 +197,58 @@
         </Utils::LoadableContent>
       {{else}}
         <div class="auk-o-grid">
-
           {{! Dringend}}
-          <div class="auk-o-grid-col-2 auk-content">
-            <Auk::KeyValue @key={{t "publication-urgent"}}>
+          <div class="auk-o-grid-col-1 auk-content">
+            <h4 class="auk-u-m-0">{{t "publication-urgent"}}</h4>
+            <p class="auk-u-m-0">
               {{#if @publicationFlow.urgencyLevel.isUrgent}}
                 <Auk::Icon @name="alert-triangle" @skin="warning" />
               {{else}}
                 {{t "dash"}}
               {{/if}}
-            </Auk::KeyValue>
+            </p>
           </div>
 
           {{! Publicatienummer}}
           <div class="auk-o-grid-col-2 auk-content">
-            <Auk::KeyValue
-              @key={{t "publications-number"}}
-              @value={{@publicationFlow.identification.idName}}
-            />
+            <h4 class="auk-u-m-0">{{t "publication-number"}}</h4>
+            <p class="auk-u-m-0">
+              {{@publicationFlow.identification.idName}}
+            </p>
           </div>
 
           {{! Numac-nummers}}
           <div class="auk-o-grid-col-2 auk-content">
-            <Auk::KeyValue @key={{t "publication-flow-numac-number"}}>
+            <h4 class="auk-u-m-0">{{t "publication-flow-numac-number"}}</h4>
+            <p class="auk-u-m-0">
               {{#if @publicationFlow.numacNumbers}}
                 {{join ", " (map-by "idName" @publicationFlow.numacNumbers)}}
               {{else}}
                 {{t "dash"}}
               {{/if}}
-            </Auk::KeyValue>
+            </p>
           </div>
 
           {{! Datum beslissing}}
           <div class="auk-o-grid-col-2 auk-content">
-            <Auk::KeyValue @key={{t "decision-date"}}>
+            <h4 class="auk-u-m-0">{{t "decision-date"}}</h4>
+            <p class="auk-u-m-0">
               {{#if this.isViaCouncilOfMinisters}}
                 <Auk::ButtonLink
                   target="_blank"
+                  @icon="chevron-right"
+                  @layout="icon-right"
                   @route="agenda.agendaitems.agendaitem"
                   @models={{array
-                    @publicationFlow.agendaItemTreatment.agendaitem.agenda.createdFor.id
-                    @publicationFlow.agendaItemTreatment.agendaitem.agenda.id
-                    @publicationFlow.agendaItemTreatment.agendaitem.id
-                  }}
+                              @publicationFlow.agendaItemTreatment.agendaitem.agenda.createdFor.id
+                              @publicationFlow.agendaItemTreatment.agendaitem.agenda.id
+                              @publicationFlow.agendaItemTreatment.agendaitem.id
+                          }}
                 >
                   {{#if @publicationFlow.agendaItemTreatment.startDate}}
                     {{moment-format
-                      @publicationFlow.agendaItemTreatment.startDate
-                      "DD-MM-YYYY"
+                        @publicationFlow.agendaItemTreatment.startDate
+                        "DD-MM-YYYY"
                     }}
                   {{else}}
                     {{t "to-agenda"}}
@@ -246,55 +257,51 @@
               {{else}}
                 {{#if @publicationFlow.agendaItemTreatment.startDate}}
                   {{moment-format
-                    @publicationFlow.agendaItemTreatment.startDate
-                    "DD-MM-YYYY"
+                      @publicationFlow.agendaItemTreatment.startDate
+                      "DD-MM-YYYY"
                   }}
                 {{else}}
                   {{t "dash"}}
                 {{/if}}
               {{/if}}
-            </Auk::KeyValue>
+            </p>
           </div>
 
           {{! Datum ontvangst}}
           <div class="auk-o-grid-col-2 auk-content">
-            <Auk::KeyValue @key={{t "publication-flow-opening-date"}}>
+            <h4 class="auk-u-m-0">{{t "publication-flow-opening-date"}}</h4>
+            <p class="auk-u-m-0">
               {{#if @publicationFlow.openingDate}}
                 {{moment-format @publicationFlow.openingDate "DD-MM-YYYY"}}
               {{else}}
                 {{t "dash"}}
               {{/if}}
-            </Auk::KeyValue>
+            </p>
           </div>
 
           {{! Limiet publicatie}}
           <div class="auk-o-grid-col-2 auk-content">
-            <Auk::KeyValue @key={{t "publication-flow-publication-due-date"}}>
-              <div class={{if this.isPublicationOverdue "auk-u-text-bold"}}>
-                {{#if
-                  (and
-                    @publicationFlow.publicationSubcase.dueDate
-                    (not @publicationFlow.status.isWithdrawn)
-                  )
-                }}
-                  {{moment-format
-                    @publicationFlow.publicationSubcase.dueDate
-                    "DD-MM-YYYY"
-                  }}
-                {{else}}
-                  {{t "dash"}}
-                {{/if}}
-              </div>
-              {{#if this.isPublicationOverdue}}
+            <h4 class="auk-u-m-0">{{t "publication-flow-publication-due-date"}}</h4>
+            <p class="auk-u-m-0">
+              {{#if @publicationFlow.publicationSubcase.dueDate}}
+                {{moment-format @publicationFlow.publicationSubcase.dueDate "DD-MM-YYYY"}}
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+              {{#if
+                   (and
+                   (not @publicationFlow.status.isFinal)
+                   (is-after @publicationFlow.publicationSubcase.dueDate precision="days")
+                   )
+              }}
                 <Auk::FormHelpText
                   @text={{t "date-expired"}}
                   @skin="warning"
                   @icon="alert-triangle"
                 />
               {{/if}}
-            </Auk::KeyValue>
+            </p>
           </div>
-
         </div>
       {{/if}}
     </Auk::Panel::Body>
