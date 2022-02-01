@@ -78,7 +78,7 @@ context('Publications tests', () => {
     cy.get(publication.publicationHeader.number).contains(`PUBLICATIE - NIET VIA MINISTERRAAD - ${pubNumber}`);
   });
 
-  it('should clear input data when closing and reopening modal to create new publication', () => {
+  it.skip('should clear input data when closing and reopening modal to create new publication', () => {
     const fields = {
       number: 999,
       suffix: 'BIS',
