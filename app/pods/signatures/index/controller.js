@@ -63,6 +63,7 @@ export default class SignaturesIndexController extends Controller {
   }
 
   @tracked isShowFilterModal = false;
+  @tracked isShowSidebar = false;
 
   @action
   showFilterModal() {
@@ -72,5 +73,15 @@ export default class SignaturesIndexController extends Controller {
   @action
   closeFilterModal() {
     this.isShowFilterModal = false;
+  }
+
+  @action
+  showSidebar() {
+    this.isShowSidebar = true;
+  }
+
+  @action
+  closeSidebar() {
+    this.isShowSidebar = false;
   }
 }

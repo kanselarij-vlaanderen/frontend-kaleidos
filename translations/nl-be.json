@@ -993,7 +993,10 @@
   },
   "signaturesSection": {
     "filter-ministers": "Filter op ministers",
-    "signed-status": "Tekenstatus"
+    "add-minister": "Minister toevoegen",
+    "signed-status": "Tekenstatus",
+    "sidebar-title": "Handteken document",
+    "signature-needed-by": "Te handtekenen door"
   },
   "util": {
     "view": "Bekijken",
@@ -1013,6 +1016,7 @@
     "date": "Datum",
     "year": "Jaar",
     "reset-filter": "Filter wissen",
-    "date-approved": "Datum goedkeuring"
+    "date-approved": "Datum goedkeuring",
+    "preview": "Voorvertoning"
   }
 }

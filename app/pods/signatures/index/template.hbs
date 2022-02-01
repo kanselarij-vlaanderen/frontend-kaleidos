@@ -38,7 +38,7 @@
   </Auk::Toolbar>
 </Auk::Navbar>
 
-<div class="auk-scroll-wrapper auk-scroll-wrapper--ovrb">
+<div class="auk-scroll-wrapper auk-scroll-wrapper--ovrb {{if this.isShowSidebar "auk-scroll-wrapper--sidebar" ""}}">
   <div class="auk-scroll-wrapper__body">
     {{#if this.model.length}}
       <table class="auk-table auk-table--sticky-header auk-table--sticky-ovrb">
@@ -104,19 +104,12 @@
                   @skin="borderless"
                   @layout="icon-only"
                   @icon="chevron-right"
+                  {{on "click" this.showSidebar}}
                 >
                   {{t "read"}}
                 </Auk::Button>
                 {{!-- <WebComponents::AuButtonToolbar>
-                  <Auk::Button
-                    @skin="borderless"
-                    @layout="icon-only"
-                    @icon="book"
-                    @href={{signFlow.signSubcase.signMarkingActivity.piece.viewDocumentURL}}
-                    target="_blank"
-                  >
-                    {{t "read"}}
-                  </Auk::Button>
+
                   <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
                     <Menu.Item
                       {{on
@@ -141,6 +134,114 @@
       </Auk::Panel>
     {{/if}}
   </div>
+
+  {{#if this.isShowSidebar}}
+  <div class="auk-scroll-wrapper__sidebar">
+    <div class="auk-sidebar">
+      <div class="auk-sidebar__header">
+        <h4 class="auk-toolbar-complex__title">
+          {{t "signaturesSection.sidebar-title"}}
+        </h4>
+        <Auk::Button
+          @icon="x"
+          @skin="borderless"
+          @layout="icon-only"
+          {{on "click" this.closeSidebar}}
+        />
+      </div>
+      <div class="auk-sidebar__body">
+        <Auk::StatusPill @status="not-started">Gemarkeerd voor handtekenen</Auk::StatusPill>
+        <p class="auk-u-muted auk-u-mt-2">
+          Decreet -
+        </p>
+        <h5 class="auk-h4">60098</h5>
+        <div class="auk-o-flex auk-o-flex--spaced-wide auk-u-mt-1">
+          <Auk::ButtonLink
+            @skin="borderless"
+            @icon="external-link"
+            @href={{signFlow.signSubcase.signMarkingActivity.piece.viewDocumentURL}}
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            {{t "util.preview"}}
+          </Auk::ButtonLink>
+          <Auk::ButtonLink
+            @skin="borderless"
+            @icon="document"
+            {{on
+              "click"
+              (fn this.navigateToDecision signFlow.decisionActivity)
+            }}
+          >
+            {{t "consult-agendaitem-decision"}}
+          </Auk::ButtonLink>
+        </div>
+        <hr class="auk-hr" />
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <h5 class="auk-h4 auk-u-m-0"> {{t "signaturesSection.signature-needed-by"}}:</h5>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <Auk::Button
+                @skin="borderless"
+                @icon="plus"
+              >
+                {{t "signaturesSection.add-minister"}}
+              </Auk::Button>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+        <div class="auk-panel">
+          <Auk::List @bordered={{true}}>
+            <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
+              <span>Jan Jambon</span>
+              <Auk::Button
+                @skin="danger-borderless"
+                @layout="icon-only"
+                @icon="trash"
+              >
+                {{t "util.delete"}}
+              </Auk::Button>
+            </Auk::List::Item>
+            <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
+              <span>Lydia Peeters</span>
+              <Auk::Button
+                @skin="danger-borderless"
+                @layout="icon-only"
+                @icon="trash"
+              >
+                {{t "util.delete"}}
+              </Auk::Button>
+            </Auk::List::Item>
+          </Auk::List>
+        </div>
+      </div>
+      <div class="auk-sidebar__footer">
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <Auk::Button
+                @skin="primary"
+              >
+                Handtekenen voorbereiden
+              </Auk::Button>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <Auk::Button
+                @skin="danger-borderless"
+              >
+                Handtekenen annuleren
+              </Auk::Button>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </div>
+    </div>
+  </div>
+  {{/if}}
 </div>
 <div>
   <hr />
