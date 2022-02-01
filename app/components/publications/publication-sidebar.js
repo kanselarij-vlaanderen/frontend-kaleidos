@@ -6,7 +6,6 @@ import {
 } from 'ember-concurrency-decorators';
 import { timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationSidebarComponent extends Component {
   /**
@@ -17,7 +16,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
    *  on create and delete no changedKeys are passed
    */
   @service store;
-  @service publicationService;
 
   @tracked regulationTypes;
   @tracked decision;
