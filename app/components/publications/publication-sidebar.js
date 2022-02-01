@@ -78,22 +78,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @action
-  addNumacNumber(newNumacNumber) {
-    const numacNumber = this.store.createRecord('identification', {
-      idName: newNumacNumber,
-      agency: CONSTANTS.SCHEMA_AGENCIES.NUMAC,
-      publicationFlowForNumac: this.publicationFlow,
-    });
-    this.notifyChanges(numacNumber);
-  }
-
-  @action
-  deleteNumacNumber(numacNumber) {
-    numacNumber.deleteRecord();
-    this.notifyChanges(numacNumber);
-  }
-
-  @action
   setTranslationDate(selectedDates) {
     this.translationSubcase.endDate = selectedDates[0];
     this.notifyChanges(this.translationSubcase, 'endDate');
