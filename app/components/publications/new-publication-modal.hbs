@@ -9,118 +9,115 @@
   />
   <Auk::Modal::Body>
     <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
-      {{#if this.hasError}}
-        <Auk::Alert
-          data-test-new-publication-alert-error
-          @skin="error"
-          @icon="alert-triangle"
-          @title={{t "modal-error-alert-title" }}
-          @message={{t "modal-error-alert-message" }}
-        />
-      {{else if (not this.isViaCouncilOfMinisters)}}
+      {{#unless this.isViaCouncilOfMinisters}}
         <Auk::Alert
           data-test-new-publication-alert-info
           @icon="circle-info"
           @message={{t "publications-new-warning-message"}}
         />
-      {{/if}}
+      {{/unless}}
       <div class="auk-form-group-layout auk-form-group-layout--standard">
-        <div class='auk-form-group {{if this.hasPublicationNumberError 'auk-form-group--error' }}'>
-          <Auk::Label for="publicationNumberInput" @isRequired={{true}}>
-            {{t "publications-number"}}
+        <div class="auk-form-group">
+          <Auk::Label for="publicationNumberInput" @required={{true}} @error={{not this.isPublicationNumberValid}}>
+            {{t "publication-number"}}
           </Auk::Label>
-          <div class=" auk-o-flex auk-o-flex--vertical-center">
-            {{!-- TODO: fix inline style for side-by-side fields --}}
-            {{!-- template-lint-disable no-inline-styles --}}
+          <div class="auk-u-mb">
             <Auk::Input
+              data-test-new-publication-number
               @type="number"
               id="publicationNumberInput"
-              class="auk-u-mr"
-              style="max-width: 10rem"
-              @value={{mut this.number}}
+              value={{this.number}}
+              @error={{not this.isPublicationNumberValid}}
               disabled={{this.initPublicationNumber.isRunning}}
-              data-test-new-publication-number
-              {{on "change" this.isPublicationNumberAlreadyTaken}}
+              {{on "input" (perform this.setPublicationNumber)}}
             />
             <Auk::Input
-              id="publicationSuffixInput"
-              style="max-width: 6.5rem"
-              @value={{mut this.suffix}}
               data-test-new-publication-suffix
-              {{on "change" this.isPublicationNumberAlreadyTaken}}
+              id="publicationSuffixInput"
+              @width="xsmall"
+              value={{this.suffix}}
+              @error={{not this.isPublicationNumberValid}}
+              {{on "input" (perform this.setPublicationNumberSuffix)}}
             />
-            {{!-- template-lint-enable no-inline-styles --}}
-            <Auk::Icon @name="circle-info" @skin="muted" class="auk-u-mx">
-              <EmberTooltip @tooltipClass="auk-tooltip"  @side="top" >
-                <p>
-                  {{t "new-publication-tooltip"}}
-                </p>
-              </EmberTooltip>
-            </Auk::Icon>
+            <Utils::Generic::TooltipHelp class="auk-u-mx">
+              {{t "publication-flow-publication-number-help"}}
+            </Utils::Generic::TooltipHelp>
           </div>
-          {{#if this.numberIsAlreadyUsed}}
-            <Auk::Label data-test-new-publication-number-error @error={{true}}>
-              {{t "publication-number-already-taken"}}
-            </Auk::Label>
-          {{else if this.hasPublicationNumberError}}
-            <Auk::Label data-test-new-publication-number-error @error={{true}}>
-              {{t "input-error-message"}}
-            </Auk::Label>
-          {{/if}}
-        </div>
-        {{!-- TODO: fix inline style. What are these needed for? --}}
-        {{!-- template-lint-disable no-inline-styles --}}
-        <div class='auk-form-group' style="max-width: 30rem;">
-          <Auk::Label>
-            {{t "decision-date"}}
-          </Auk::Label>
-          {{#if this.isViaCouncilOfMinisters}}
-            <span class="auk-u-muted">
-              {{moment-format this.decisionDate "DD-MM-YYYY"}}
-            </span>
-          {{else}}
-            <Auk::Datepicker
-              @date={{this.decisionDate}}
-              @onChange={{this.setDecisionDate}} />
-          {{/if}}
-        </div>
-        <div class='auk-form-group' style="max-width: 30rem;">
-          <Auk::Label>
-            {{t "publication-flow-opening-date"}}
-          </Auk::Label>
-          {{#if this.isViaCouncilOfMinisters}}
-            <span class="auk-u-muted">
-              {{moment-format this.openingDate "DD-MM-YYYY"}}
-            </span>
-          {{else}}
-            <Auk::Datepicker
-              @date={{this.openingDate}}
-              @onChange={{this.setOpeningDate}} />
-          {{/if}}
-        </div>
-        <div class='auk-form-group' style="max-width: 30rem;">
-          <Auk::Label>
-            {{t "publication-due-date"}}
-          </Auk::Label>
-          <Auk::Datepicker
-            @date={{this.publicationDueDate}}
-            @onChange={{this.setPublicationDueDate}} />
-        </div>
-        {{!-- template-lint-enable no-inline-styles --}}
-        <div class="auk-form-group {{if this.hasShortTitleError "auk-form-group--error" }}">
-          <Auk::Label for="shortTitleInput" @isRequired={{true}}>
-            {{t "name-subcase"}}
-          </Auk::Label>
-          <Auk::Textarea id="shortTitleInput" @rows="2" @value={{mut this.shortTitle}} data-test-new-publication-short-title />
-          {{#if this.hasShortTitleError}}
-            <Auk::Label data-test-new-publication-short-title-error @error={{true}}>
-              {{t "input-error-message"}}
-            </Auk::Label>
+          {{#if this.publicationNumberErrorTranslationKey}}
+            <Auk::FormHelpText
+              @text={{t this.publicationNumberErrorTranslationKey}}
+              @skin="danger"
+              @icon="alert-triangle"
+            />
           {{/if}}
         </div>
         <div class="auk-form-group">
-          <Auk::Label for="longTitleInput">{{t "title-subcase"}}</Auk::Label>
-          <Auk::Textarea id="longTitleInput" @rows="4" @value={{mut this.longTitle}} data-test-new-publication-long-title />
+          <Auk::Label for="shortTitleInput" @required={{true}} @error={{not this.isShortTitleValid}}>
+            {{t "name-subcase"}}
+          </Auk::Label>
+          <Auk::Textarea
+            id="shortTitleInput"
+            @rows="2"
+            @value={{mut this.shortTitle}}
+            data-test-new-publication-short-title
+            {{on "focusout" this.enableErrorOnShortTitle}}
+          />
+          {{#unless this.isShortTitleValid}}
+            <Auk::FormHelpText
+              @text={{t "input-error-message"}}
+              @skin="danger"
+              @icon="alert-triangle"
+            />
+          {{/unless}}
+        </div>
+        <div class="auk-form-group">
+          <Auk::Label for="longTitleInput">
+            {{t "title-subcase"}}
+          </Auk::Label>
+          <Auk::Textarea
+            id="longTitleInput"
+            @rows="4"
+            @value={{mut this.longTitle}}
+            data-test-new-publication-long-title
+          />
+        </div>
+        <div class="auk-o-grid">
+          <div class="auk-o-grid-col-1 auk-form-group">
+            <Auk::Label>
+              {{t "decision-date"}}
+            </Auk::Label>
+            {{#if this.isViaCouncilOfMinisters}}
+              <span class="auk-u-muted">
+                {{moment-format this.decisionDate "DD-MM-YYYY"}}
+              </span>
+            {{else}}
+              <Auk::Datepicker
+                @date={{this.decisionDate}}
+                @onChange={{this.setDecisionDate}} />
+            {{/if}}
+          </div>
+          <div class="auk-o-grid-col-1 auk-form-group">
+            <Auk::Label>
+              {{t "publication-flow-opening-date"}}
+            </Auk::Label>
+            {{#if this.isViaCouncilOfMinisters}}
+              <span class="auk-u-muted">
+                {{moment-format this.openingDate "DD-MM-YYYY"}}
+              </span>
+            {{else}}
+              <Auk::Datepicker
+                @date={{this.openingDate}}
+                @onChange={{this.setOpeningDate}} />
+            {{/if}}
+          </div>
+          <div class="auk-o-grid-col-1 auk-form-group">
+            <Auk::Label>
+              {{t "publication-flow-publication-due-date"}}
+            </Auk::Label>
+            <Auk::Datepicker
+              @date={{this.publicationDueDate}}
+              @onChange={{this.setPublicationDueDate}} />
+          </div>
         </div>
       </div>
     </Utils::LoadableContent>
@@ -139,18 +136,15 @@
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          {{#if this.save.isRunning}}
-            <Utils::SimpleSpinner></Utils::SimpleSpinner>
-          {{else}}
-            <Auk::Button
-              @skin="primary"
-              disabled={{this.save.isRunning}}
-              data-test-new-publication-create
-              {{on "click" (perform this.save)}}
-            >
-              {{t "publications-new-button-text"}}
-            </Auk::Button>
-          {{/if}}
+          <Auk::Button
+            @skin="primary"
+            @loading={{this.save.isRunning}}
+            @disabled={{or (not this.isValid) this.save.isRunning}}
+            data-test-new-publication-create
+            {{on "click" (perform this.save)}}
+          >
+            {{t "publications-new-button-text"}}
+          </Auk::Button>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>

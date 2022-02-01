@@ -27,7 +27,7 @@
       <div class="auk-o-grid">
         <div class="auk-o-grid-col-3">
           <div class="auk-form-group">
-            <Auk::Label>{{t "translation-due-date"}}</Auk::Label>
+            <Auk::Label>{{t "publication-flow-translation-due-date"}}</Auk::Label>
             <Auk::Datepicker
               @date={{@translationSubcase.dueDate}}
               @onChange={{this.setTranslationDueDate}}
@@ -74,7 +74,7 @@
     <Auk::Panel::Body>
       <div class="auk-o-grid">
         <div class="auk-o-grid-col-3 auk-content">
-          <h4 class="auk-u-m-0">{{t "translation-due-date"}}</h4>
+          <h4 class="auk-u-m-0">{{t "publication-flow-translation-due-date"}}</h4>
           <p class="auk-u-m-0">
             {{#if @translationSubcase.dueDate}}
               {{moment-format @translationSubcase.dueDate "DD-MM-YYYY"}}

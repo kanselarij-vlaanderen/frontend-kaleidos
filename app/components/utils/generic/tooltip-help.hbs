@@ -1,0 +1,11 @@
+<Auk::ButtonLink
+  @layout="icon-only" @icon="circle-info" @skin="muted"
+   class="auk-u-inline auk-m-l"
+  ...attributes>
+  <:floater>
+    <EmberTooltip @tooltipClass="auk-tooltip"
+      @side="{{this.position}}">
+      {{yield}}
+    </EmberTooltip>
+  </:floater>
+</Auk::ButtonLink>

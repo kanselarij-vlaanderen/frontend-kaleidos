@@ -8,7 +8,7 @@ export default class PublicationFlow extends Model {
   @attr('string') longTitle;
   @attr('string') remark;
   @attr('date') closingDate;
-  @attr('date') openingDate;
+  @attr('date') openingDate; // displayed as: Datum ontvangst
   @attr('datetime') created;
   @attr('datetime') modified;
 
