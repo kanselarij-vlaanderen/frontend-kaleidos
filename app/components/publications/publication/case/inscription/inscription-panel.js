@@ -24,8 +24,10 @@ export default class PublicationsPublicationCaseInscriptionPanelComponent extend
   }
 
   async initFields() {
-    const publicationFlow = this.args.publicationFlow;
-    this.isViaCouncilOfMinisters = this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
+    this.isViaCouncilOfMinisters =
+      await this.publicationService.getIsViaCouncilOfMinisters(
+        this.args.publicationFlow
+      );
   }
 
   get isShortTitleValid() {
