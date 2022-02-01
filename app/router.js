@@ -102,7 +102,7 @@ Router.map(function() {
   }
 
   if (!isEmpty(ENV.APP.ENABLE_SIGNATURES)) {
-    this.route('signatures', { path: '/handtekenmap', }, function() {
+    this.route('signatures', { path: '/handtekeningen', }, function() {
       this.route('index', { path: '/overzicht', });
     });
   }

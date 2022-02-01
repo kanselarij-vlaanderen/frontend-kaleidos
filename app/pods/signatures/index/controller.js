@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 import { action, set } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
 export default class SignaturesIndexController extends Controller {
   @service router;
@@ -59,5 +60,17 @@ export default class SignaturesIndexController extends Controller {
       agenda.id,
       agendaitem.id
     );
+  }
+
+  @tracked isShowFilterModal = false;
+
+  @action
+  showFilterModal() {
+    this.isShowFilterModal = true;
+  }
+
+  @action
+  closeFilterModal() {
+    this.isShowFilterModal = false;
   }
 }

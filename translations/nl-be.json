@@ -944,7 +944,7 @@
   "search-error": "Er ging iets mis bij het zoeken",
   "signatures": "Handtekeningen",
   "open-version": "Open versie",
-  "signature-folder": "Handtekenmap",
+  "signature-folder": "Handtekeningen",
   "different": "Verschillend",
   "x-documents-selected": "{count, plural, =1 {# document} other {# documenten}} geselecteerd",
   "validation-signature": "Validatie handtekening",
@@ -991,6 +991,9 @@
     "numac": "Numac",
     "pages-amount": "Aantal bladzijden"
   },
+  "signaturesSection": {
+    "filter-ministers": "Filter op ministers"
+  },
   "util": {
     "view": "Bekijken",
     "edit": "Bewerken",
@@ -1007,6 +1010,7 @@
     "by": "door",
     "on": "om",
     "date": "Datum",
-    "year": "Jaar"
+    "year": "Jaar",
+    "reset-filter": "Filter wissen"
   }
 }

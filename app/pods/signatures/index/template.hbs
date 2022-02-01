@@ -15,16 +15,20 @@
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
-        {{! search here}}
+        <Auk::Button
+          @skin="borderless"
+        >
+          {{t "clear-filter-plural"}}
+        </Auk::Button>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
-        {{!-- <Auk::Button
+        <Auk::Button
           @skin="secondary"
           @icon="filter"
           {{on "click" this.showFilterModal}}
         >
-          {{t "filter-content"}}
-        </Auk::Button> --}}
+          {{t "signaturesSection.filter-ministers"}}
+        </Auk::Button>
       </Auk::Toolbar::Item>
 
       <Auk::Toolbar::Item>
@@ -148,3 +152,10 @@
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </div>
+
+{{#if this.isShowFilterModal}}
+  <Signatures::SignaturesFilterModal
+    @onCancel={{this.closeFilterModal}}
+    @onSave={{this.closeFilterModal}}
+  />
+{{/if}}
