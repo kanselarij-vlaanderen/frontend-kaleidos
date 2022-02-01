@@ -19,6 +19,8 @@ const COLUMN_MAP = {
 
 export default class PublicationsPublicationTranslationsDocumentController extends Controller {
   @service currentSession;
+  @service currentPublicationFlow;
+
   @service store;
 
   queryParams = [{
@@ -31,7 +33,6 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   /** @type {string} kebab-cased key name, prepended with minus if descending */
   sort;
 
-  @tracked publicationFlow;
   @tracked translationSubcase;
   @tracked publicationSubcase;
   @tracked showPieceEditModal = false;
@@ -173,18 +174,20 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     yield mail.save();
 
     //Set status to 'to translation'
-    this.publicationFlow.status =  yield this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.TO_TRANSLATIONS);
-    yield this.publicationFlow.save();
+    this.currentPublicationFlow.publicationFlow.status =  yield this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.TO_TRANSLATIONS);
+    yield this.currentPublicationFlow.save();
 
-    const oldChangeActivity = yield this.publicationFlow.publicationStatusChange;
+    const oldChangeActivity = yield this.currentPublicationFlow.publicationFlow.publicationStatusChange;
     if (oldChangeActivity) {
       yield oldChangeActivity.destroyRecord();
     }
     const newChangeActivity = this.store.createRecord('publication-status-change', {
       startedAt: now,
-      publication: this.publicationFlow,
+      publication: this.currentPublicationFlow.publicationFlow,
     });
     yield newChangeActivity.save();
+
+    yield this.currentPublicationFlow.reload();
 
     this.selectedPieceRows = [];
     this.isTranslationRequestModalOpen = false;

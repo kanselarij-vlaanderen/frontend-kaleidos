@@ -1,16 +1,9 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
 export default class PublicationsPublicationTranslationsRoute extends Route {
+  @service currentPublicationFlow;
   model() {
-    return this.modelFor('publications.publication').translationSubcase;
-  }
-
-  afterModel() {
-    this.publicationFlow = this.modelFor('publications.publication');
-  }
-
-  setupController(controller) {
-    super.setupController(...arguments);
-    controller.publicationFlow = this.publicationFlow;
+    return this.currentPublicationFlow.publicationFlow.translationSubcase;
   }
 }

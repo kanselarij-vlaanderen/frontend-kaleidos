@@ -32,9 +32,10 @@ export class PieceRow {
 
 export default class PublicationsPublicationTranslationsDocumentRoute extends Route {
   @service store;
+  @service currentPublicationFlow;
 
   async model() {
-    this.translationSubcase = this.modelFor('publications.publication.translations');
+    this.translationSubcase = await this.currentPublicationFlow.publicationFlow.translationSubcase;
 
     const queryProperties = {
       include: [
@@ -74,13 +75,11 @@ export default class PublicationsPublicationTranslationsDocumentRoute extends Ro
   }
 
   async afterModel() {
-    this.publicationFlow = this.modelFor('publications.publication');
-    this.publicationSubcase = await this.publicationFlow.publicationSubcase;
+    this.publicationSubcase = await this.currentPublicationFlow.publicationFlow.publicationSubcase;
   }
 
   setupController(controller) {
     super.setupController(...arguments);
-    controller.publicationFlow = this.publicationFlow;
     controller.translationSubcase = this.translationSubcase;
     controller.publicationSubcase = this.publicationSubcase;
     controller.selectedPieceRows = [];

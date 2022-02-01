@@ -105,7 +105,7 @@
 
 {{#if this.showTranslationUploadModal}}
   <Publications::Publication::Translations::TranslationUploadModal
-    @publicationFlow={{this.publicationFlow}}
+    @publicationFlow={{this.currentPublicationFlow.publicationFlow}}
     @onSave={{perform this.saveTranslationUpload}}
     @onCancel={{this.closeTranslationUploadModal}}
   />

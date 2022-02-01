@@ -12,7 +12,6 @@ export default class EditablePublicationStatusPill extends Component {
 
   @tracked decision;
   @tracked publicationStatus;
-  @tracked publicationStatusChange;
 
   @tracked showStatusSelector = false;
 
@@ -37,11 +36,11 @@ export default class EditablePublicationStatusPill extends Component {
   }
 
   get publicationStatusPillKey() {
-    return getPublicationStatusPillKey(this.publicationStatus);
+    return getPublicationStatusPillKey(this.currentPublicationFlow.publicationFlow.status);
   }
 
   get publicationStatusPillStep() {
-    return getPublicationStatusPillStep(this.publicationStatus);
+    return getPublicationStatusPillStep(this.currentPublicationFlow.publicationFlow.status);
   }
 
   @action

@@ -1,7 +1,7 @@
 <div class="auk-u-m-4">
   <Publications::Publication::Translations::TranslationsInfoPanel
     @translationSubcase={{this.translationSubcase}}
-    @isFinal={{this.publicationFlow.status.isFinal}}
+    @isFinal={{this.currentPublicationFlow.publicationFlow.status.isFinal}}
   />
   <div class="auk-u-mb-4">
     <Auk::Toolbar @size="large">
@@ -197,7 +197,7 @@
 {{#if this.isTranslationRequestModalOpen}}
   <Publications::Publication::Translations::TranslationRequestModal
     @translationSubcase={{this.translationSubcase}}
-    @publicationFlow={{this.publicationFlow}}
+    @publicationFlow={{this.currentPublicationFlow.publicationFlow}}
     @attachments={{this.selectedPieces}}
     @onSave={{perform this.saveTranslationRequest}}
     @onCancel={{this.closeTranslationRequestModal}}
