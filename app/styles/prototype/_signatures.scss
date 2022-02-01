@@ -1,0 +1,8 @@
+// Fix toggle text label alignment
+.auk-c-toggle-label {
+  line-height: 1;
+  padding-bottom: .2rem;
+  display: flex;
+  align-items: center;
+  min-width: 100px;
+}
