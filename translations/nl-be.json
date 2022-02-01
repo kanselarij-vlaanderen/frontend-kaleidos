@@ -992,7 +992,8 @@
     "pages-amount": "Aantal bladzijden"
   },
   "signaturesSection": {
-    "filter-ministers": "Filter op ministers"
+    "filter-ministers": "Filter op ministers",
+    "signed-status": "Tekenstatus"
   },
   "util": {
     "view": "Bekijken",
@@ -1011,6 +1012,7 @@
     "on": "om",
     "date": "Datum",
     "year": "Jaar",
-    "reset-filter": "Filter wissen"
+    "reset-filter": "Filter wissen",
+    "date-approved": "Datum goedkeuring"
   }
 }
