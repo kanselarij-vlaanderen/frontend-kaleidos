@@ -90,10 +90,12 @@
                   data-test-document-card-actions={{true}}
                   as |Menu|
                 >
+                  {{#if @uploadTranslation}}
                   <Menu.Item
                   >
                     Vertaling aanvragen
                   </Menu.Item>
+                  {{/if}}
                   <Menu.Item
                     data-test-document-upload-new-piece
                     {{on "click" this.openUploadModal}}
