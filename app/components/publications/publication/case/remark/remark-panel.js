@@ -13,23 +13,20 @@ export default class PublicationsPublicationCaseRemarkPanelComponent extends Com
 
   @action
   openEditingPanel() {
-    const publicationFlow = this.args.publicationFlow;
     this.isEditing = true;
-    this.remark = publicationFlow.remark;
+    this.remark = this.args.publicationFlow.remark;
   }
 
   @action
   closeEditingPanel() {
-    this.showError = false;
     this.isEditing = false;
   }
 
   @task
   *save() {
-    const publicationFlow = this.args.publicationFlow;
-    publicationFlow.remark = this.remark;
-    // no try-catch: don't exit if save didn't work
-    yield publicationFlow.save();
+    this.args.publicationFlow.remark = this.remark;
+    // no try-catch: don't exit edit-mode if save didn't work
+    yield this.args.publicationFlow.save();
     this.isEditing = false;
   }
 }

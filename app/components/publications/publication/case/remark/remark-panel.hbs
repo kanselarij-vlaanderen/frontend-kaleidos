@@ -9,7 +9,7 @@
             </h4>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
-        {{#if (not this.isEditing)}}
+        {{#unless this.isEditing}}
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <Auk::Button
@@ -21,21 +21,11 @@
               />
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
-        {{/if}}
+        {{/unless}}
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body>
-      {{#if (not this.isEditing)}}
-        {{#if @publicationFlow.remark}}
-          {{! The following line is formatted on a single line because of the way browsers treat whitespaces & breaks in combination with `white-space: pre-wrap` }}
-          <div
-            data-test-remark-panel-view
-            class="auk-u-text-prewrap"
-          >{{@publicationFlow.remark}}</div>
-        {{else}}
-          <Auk::EmptyState @message={{t "publication-remark-empty"}} />
-        {{/if}}
-      {{else}}
+      {{#if this.isEditing}}
         <Utils::LoadableContent
           @isLoading={{this.save.isRunning}}
           @reserveSpace={{true}}
@@ -55,6 +45,16 @@
             />
           </div>
         </Utils::LoadableContent>
+      {{else}}
+        {{#if @publicationFlow.remark}}
+          {{! The following line is formatted on a single line because of the way browsers treat whitespaces & breaks in combination with `white-space: pre-wrap` }}
+          <div
+            data-test-remark-panel-view
+            class="auk-u-text-prewrap"
+          >{{@publicationFlow.remark}}</div>
+        {{else}}
+          <Auk::EmptyState @message={{t "publication-remark-empty"}} />
+        {{/if}}
       {{/if}}
     </Auk::Panel::Body>
     {{#if this.isEditing}}
