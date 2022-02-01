@@ -16,7 +16,8 @@ export default class PublicationsPublicationCaseInscriptionPanelComponent extend
   @tracked shortTitle;
   @tracked longTitle;
 
-  @tracked showError;
+  // ensure errors are only shown after first focus-out
+  @tracked isEnabledErrorDisplay = false;
 
   constructor() {
     super(...arguments);
@@ -35,7 +36,7 @@ export default class PublicationsPublicationCaseInscriptionPanelComponent extend
   }
 
   get showShortTitleError() {
-    return this.showError && !this.isShortTitleValid;
+    return this.isEnabledErrorDisplay && !this.isShortTitleValid;
   }
 
   @action
@@ -47,22 +48,21 @@ export default class PublicationsPublicationCaseInscriptionPanelComponent extend
 
   @action
   closeEditingPanel() {
-    this.showError = false;
+    this.isEnabledErrorDisplay = false;
     this.isEditing = false;
+  }
+
+  @action
+  enableErrorDisplay() {
+    this.isEnabledErrorDisplay = true;
   }
 
   @task
   *save() {
-    this.showError = !this.isShortTitleValid;
-    if (this.showError) {
-      return;
-    }
-
     this.args.publicationFlow.shortTitle = this.shortTitle;
     this.args.publicationFlow.longTitle = this.longTitle;
-    // no try-catch: don't exit if save didn't work
+    // no try-catch: don't exit edit-mode if save didn't work
     yield this.args.publicationFlow.save();
-    this.showError = false;
     this.isEditing = false;
   }
 }
