@@ -30,25 +30,8 @@
 @import 'custom-components/vlc-document-list';
 @import 'custom-components/vlc-environment-pill';
 @import 'custom-components/vlc-procedure-step';
-@import 'custom-components/vlc-rdfa-editor'; // also (framework) fixes here!
+@import 'custom-components/vlc-rdfa-editor';
 @import 'custom-components/vlc-status-timeline';
-
-
-// FRAMEWORK FIXES
-@import 'fixes/fix-auk-modal-ember-select';
-@import 'fixes/fix-full-height';
-@import 'fixes/fix-light-table';
-@import 'fixes/fix-icon-positioning';
-@import 'fixes/fix-sortable-item';
-@import 'fixes/fix-ember-data-table';
-
-
-// CUSTOM UTILITIES
-@import 'custom-utilities/_ember-tooltip';
-@import 'custom-utilities/_autocomplete';
-@import 'custom-utilities/_box-model';
-@import 'custom-utilities/_text';
-@import 'custom-utilities/_transparency';
 
 
 // CUSTOM STYLING
@@ -77,5 +60,4 @@
 
 
 // PRINT STYLING
-@import 'print/print';
-@import 'print';
+@import 'print/general';

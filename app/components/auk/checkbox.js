@@ -4,7 +4,7 @@ import Component from '@glimmer/component';
  *
  * Example usage:
  * ```
- * <Auk:Checkbox @label="A checkbox" {{on "input" this.toggleCheckbox}}
+ * <Auk::Checkbox @label="A checkbox" {{on "input" this.toggleCheckbox}} />
  * ```
  * ```
  * @action

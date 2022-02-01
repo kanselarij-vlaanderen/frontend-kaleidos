@@ -74,6 +74,9 @@ Router.map(function() {
 
   if (!isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB)) {
     this.route('publications', { path: '/publicaties', }, function() {
+      this.route('overview', { path: '/overzicht' }, function () {
+        this.route('all', { path: '/alle-dossiers' })
+      });
       this.route('publication', { path: ':publication_id', }, function() {
         this.route('case', { path: '/dossier', });
         this.route('documents', { path: '/documenten', });
@@ -85,6 +88,7 @@ Router.map(function() {
           this.route('documents', { path: '/documenten', });
           this.route('requests', { path: '/aanvragen', });
         });
+        this.route('publication-activities', { path: '/publicatie-activiteiten', });
       });
     });
   }

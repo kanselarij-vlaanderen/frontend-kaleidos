@@ -58,7 +58,7 @@ export default class PublicationService extends Service {
       mandatees = [];
     }
 
-    const toPublishStatus = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.PENDING);
+    const initialStatus = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.STARTED);
 
     const structuredIdentifier = this.store.createRecord('structured-identifier', {
       localIdentifier: publicationProperties.number,
@@ -87,8 +87,8 @@ export default class PublicationService extends Service {
       case: case_,
       agendaItemTreatment: agendaItemTreatment,
       mandatees: mandatees,
-      status: toPublishStatus,
-      statusChange: statusChange,
+      status: initialStatus,
+      publicationStatusChange: statusChange,
       shortTitle: publicationProperties.shortTitle,
       longTitle: publicationProperties.longTitle,
       created: now,
@@ -127,5 +127,20 @@ export default class PublicationService extends Service {
 
     // our own publication should not be considered as duplicate
     return duplicates.filter((publication) => publication.id !== publicationFlowId).length > 0;
+  }
+
+  // earliest publication date of a decision linked to first started publication activity
+  async getPublicationDate(publicationFlow) {
+    const publicationSubcase = await publicationFlow.publicationSubcase;
+    const publicationActivities = (await publicationSubcase.publicationActivities).sortBy('startDate');
+    if (publicationActivities.length) {
+      for (let publicationActivity of publicationActivities) {
+        const publishedDecisions = (await publicationActivity.decisions).sortBy('publicationDate');
+        if (publishedDecisions.length) {
+          return publishedDecisions.firstObject.publicationDate;
+        }
+      }
+    }
+    return undefined;
   }
 }

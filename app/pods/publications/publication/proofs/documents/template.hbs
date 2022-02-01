@@ -1,4 +1,9 @@
 <div class="auk-u-m-4">
+  <Publications::Publication::Proofs::ProofInfoPanel
+    @publicationSubcase={{this.publicationSubcase}}
+    @isFinal={{this.publicationFlow.status.isFinal}}
+  />
+
   <div class="auk-u-mb-4">
     <Auk::Toolbar @size="large">
       <Auk::Toolbar::Group @position="right">

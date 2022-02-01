@@ -4,9 +4,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { debug } from '@ember/debug';
 import { task } from 'ember-concurrency-decorators';
-import moment from 'moment';
 import { all } from 'rsvp';
-
 import { setAgendaitemFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import {
   constructArchiveName,
@@ -36,8 +34,24 @@ export default class AgendaHeader extends Component {
   @tracked showConfimApprovingAllAgendaitems = false;
   @tracked showConfirmReleaseDecisions = false;
   @tracked showConfirmReleaseDocuments = false;
+  @tracked showConfirmPublishThemis = false;
+  @tracked showConfirmUnpublishThemis = false;
   @tracked showLoadingOverlay = false;
   @tracked loadingMessage = null;
+  @tracked latestPublicationActivity;
+
+  constructor() {
+    super(...arguments);
+    this.loadLatestPublicationActivity.perform();
+  }
+
+  @task
+  *loadLatestPublicationActivity() {
+    this.latestPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
+      sort: '-start-date',
+      'filter[meeting][:uri:]': this.args.meeting.uri,
+    });
+  }
 
   get showPrintButton() {
     return this.router.currentRouteName === 'agenda.print';
@@ -63,6 +77,18 @@ export default class AgendaHeader extends Component {
       this.args.meeting.isFinal &&
       !this.args.meeting.releasedDocuments
     );
+  }
+
+  get canPublishThemis() {
+    return (
+      this.currentSession.isEditor &&
+      this.args.meeting.isFinal &&
+      this.args.meeting.releasedDocuments
+    );
+  }
+
+  get isAlreadyPublished() {
+    return this.latestPublicationActivity != null;
   }
 
   /**
@@ -126,7 +152,7 @@ export default class AgendaHeader extends Component {
   @action
   releaseDecisions() {
     this.showConfirmReleaseDecisions = false;
-    this.args.meeting.releasedDecisions = moment().utc().toDate();
+    this.args.meeting.releasedDecisions = new Date();
     this.args.meeting.save();
   }
 
@@ -143,8 +169,67 @@ export default class AgendaHeader extends Component {
   @action
   releaseDocuments() {
     this.showConfirmReleaseDocuments = false;
-    this.args.meeting.releasedDocuments = moment().utc().toDate();
+    this.args.meeting.releasedDocuments = new Date();
     this.args.meeting.save();
+  }
+
+  @action
+  openConfirmPublishThemis() {
+    this.showConfirmPublishThemis = true;
+  }
+
+  @action
+  cancelPublishThemis() {
+    this.showConfirmPublishThemis = false;
+  }
+
+  @task
+  *publishThemis(scope) {
+    try {
+      const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
+        startDate: new Date(),
+        meeting: this.args.meeting,
+        scope
+      });
+      yield themisPublicationActivity.save();
+      yield this.loadLatestPublicationActivity.perform();
+      this.toaster.success(this.intl.t('success-publish-to-web'));
+    } catch(e) {
+      this.toaster.error(
+        this.intl.t('error-publish-to-web'),
+        this.intl.t('warning-title')
+      );
+    }
+    this.showConfirmPublishThemis = false;
+  }
+
+  @action
+  openConfirmUnpublishThemis() {
+    this.showConfirmUnpublishThemis = true;
+  }
+
+  @action
+  cancelUnpublishThemis() {
+    this.showConfirmUnpublishThemis = false;
+  }
+
+  @task
+  *unpublishThemis(scope) {
+    try {
+      const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
+        startDate: new Date(),
+        meeting: this.args.meeting,
+        scope
+      });
+      yield themisPublicationActivity.save();
+      this.toaster.success(this.intl.t('success-unpublish-from-web'));
+    } catch(e) {
+      this.toaster.error(
+        this.intl.t('error-unpublish-from-web'),
+        this.intl.t('warning-title')
+      );
+    }
+    this.showConfirmUnpublishThemis = false;
   }
 
   @action

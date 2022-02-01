@@ -136,10 +136,10 @@ const selectors = {
     row: {
       shortTitle: '[data-test-publication-table-row-short-title]',
       remark: {
-        column: '[data-test-publication-table-row-remark-column]',
+        column: '[data-test-publication-table-row-remark]',
         tooltip: '[data-test-publication-table-row-remark-tooltip]',
       },
-      number: '[data-test-publication-table-row-number]',
+      publicationNumber: '[data-test-publication-table-row-publication-number]',
       regulationType: '[data-test-publication-table-row-regulation-type]',
       proofPrintCorrector: '[data-test-publication-table-row-proof-print-corrector]',
       numacNumber: '[data-test-publication-table-row-numac-number]',
@@ -148,7 +148,7 @@ const selectors = {
       translationDueDate: '[data-test-publication-table-row-translation-due-date]',
       targetEndDate: '[data-test-publication-table-row-target-end-date]',
       publicationDueDate: '[data-test-publication-table-row-publication-due-date]',
-      urgencyLevel: '[data-test-publication-table-row-urgency-level]',
+      isUrgent: '[data-test-publication-table-row-is-urgent]',
       status: '[data-test-publication-table-row-status]',
       translationProgressBadge: '[data-test-publication-table-row-translation-progress-badge]',
       proofsProgressBadge: '[data-test-publication-table-row-proofs-progress-badge]',
@@ -255,15 +255,15 @@ const selectors = {
     confirmWithdraw: '[data-test-publication-sidebar-confirm-withdraw]',
     statusChangeDate: '[data-test-publication-sidebar-status-change-date]',
     regulationType: '[data-test-publication-sidebar-regulation-type]',
-    publicationMode: '[data-test-publication-sidebar-publication-mode]',
-    proofPrintCorrector: '[data-test-publication-sidebar-proof-print-corrector]',
+    // publicationMode: '[data-test-publication-sidebar-publication-mode]',
+    // proofPrintCorrector: '[data-test-publication-sidebar-proof-print-corrector]',
     numacNumber: '[data-test-publication-sidebar-numac-number]',
     openingDate: '[data-test-publication-sidebar-opening-date]',
     decisionDate: '[data-test-publication-sidebar-decision-date]',
-    translationDueDate: '[data-test-publication-sidebar-translation-due-date]',
+    // translationDueDate: '[data-test-publication-sidebar-translation-due-date]',
     translationDate: '[data-test-publication-sidebar-translation-date]',
-    targetEndDate: '[data-test-publication-sidebar-target-end-date]',
-    publicationDueDate: '[data-test-publication-sidebar-publication-due-date]',
+    // targetEndDate: '[data-test-publication-sidebar-target-end-date]',
+    // publicationDueDate: '[data-test-publication-sidebar-publication-due-date]',
     publicationDate: '[data-test-publication-sidebar-publication-date]',
     remark: '[data-test-publication-sidebar-remark]',
     // TODO-SELECTORS unused selectors
@@ -271,7 +271,7 @@ const selectors = {
   },
 
   // publication-status-selector
-  statusSelector: '[data-test-publication-status-selector]',
+  // statusSelector: '[data-test-publication-status-selector]',
 
   // urgency-level-checkbox
   urgencyLevelCheckbox: '[data-test-urgency-level-checkbox]',

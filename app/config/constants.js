@@ -33,7 +33,9 @@ export default {
     DECREET: 'http://kanselarij.vo.data.gift/id/concept/document-type-codes/e4f73ddc-1ed6-4878-b9ed-ace55c0a8d64',
     DECISION_VR: 'http://kanselarij.vo.data.gift/id/concept/document-type-codes/4c7cfaf9-1d5f-4fdf-b7e9-b7ce5167e31a',
   },
-  // TODO: despite the naming, these are actually agendaitem-types (nota, mededeling) that get converted to booleans like `showAsRemark` and get assigned to subcases as well.
+  // TODO: despite the naming, these are actually agendaitem-types (nota, mededeling)
+  // that get converted to booleans like `showAsRemark` and get assigned to subcases as a
+  // preset for future agenda-items resulting from that subcase too.
   CASE_TYPES: {
     NOTA: 'http://kanselarij.vo.data.gift/id/dossier-type-codes/1b6a6975-28e7-46b5-83fe-da37bb967db2',
     REMARK: 'http://kanselarij.vo.data.gift/id/dossier-type-codes/305E9678-8106-4C14-9BD6-60AE2032D794',
@@ -57,10 +59,17 @@ export default {
   },
   // PUBLICATIONS
   PUBLICATION_STATUSES: {
-    PENDING: 'http://themis.vlaanderen.be/id/concept/publicatie-status/fa62e050-3960-440d-bed9-1c3d3e9923a8',
+    STARTED: 'http://themis.vlaanderen.be/id/concept/publicatie-status/fa62e050-3960-440d-bed9-1c3d3e9923a8',
+    TO_TRANSLATIONS: 'http://themis.vlaanderen.be/id/concept/publicatie-status/3f0d3d3f-cde4-411f-a370-23a4a6d7743d',
+    TRANSLATION_IN: 'http://themis.vlaanderen.be/id/concept/publicatie-status/e34302e7-fcb2-47a4-a97e-10e39625fcfc',
+    PROOF_REQUESTED: 'http://themis.vlaanderen.be/id/concept/publicatie-status/f930c630-b568-4b92-b786-8a0e7363362a',
+    PROOF_IN: 'http://themis.vlaanderen.be/id/concept/publicatie-status/5350f28c-ff91-4a8c-94e1-699e92c73704',
+    PROOF_RECALLED: 'http://themis.vlaanderen.be/id/concept/publicatie-status/68b7d72e-38fd-4c0b-849b-cd4ae466e986',
+    PROOF_CORRECTED: 'http://themis.vlaanderen.be/id/concept/publicatie-status/9d01b336-be99-467f-ae2e-12f3841ae765',
+    PUBLICATION_REQUESTED: 'http://themis.vlaanderen.be/id/concept/publicatie-status/0b650ee2-3e5f-40f9-8c0d-0dc54a7a5f65',
     PUBLISHED: 'http://themis.vlaanderen.be/id/concept/publicatie-status/2f8dc814-bd91-4bcf-a823-baf1cdc42475',
-    PAUSED: 'http://themis.vlaanderen.be/id/concept/publicatie-status/bc294fde-45c8-11eb-b378-0242ac130002',
     WITHDRAWN: 'http://themis.vlaanderen.be/id/concept/publicatie-status/9b9b0b5e-45c8-11eb-b378-0242ac130002',
+    PAUSED: 'http://themis.vlaanderen.be/id/concept/publicatie-status/bc294fde-45c8-11eb-b378-0242ac130002',
   },
   URGENCY_LEVELS: {
     SPEEDPROCEDURE: 'http://themis.vlaanderen.be/id/concept/urgentieniveau/b2b9c588-e91d-4ce0-a1a1-11b522e8a9bf',
@@ -70,5 +79,9 @@ export default {
     NUMAC: 'Belgisch Staatsblad',
     OVRB: 'ovrb',
   },
-  STAATSBLAD_ELI_DOMAIN: 'http://www.ejustice.just.fgov.be/eli/'
+  STAATSBLAD_ELI_DOMAIN: 'http://www.ejustice.just.fgov.be/eli/',
+  THEMIS_PUBLICATION_SCOPES: {
+    NEWSITEMS: 'newsitems',
+    DOCUMENTS: 'documents'
+  }
 };
