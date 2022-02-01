@@ -10,7 +10,7 @@ import { task } from 'ember-concurrency-decorators';
  */
 export default class PublicationsPublicationCaseInscriptionPanelComponent extends Component {
   @service publicationService;
-  @tracked isInEditMode;
+  @tracked isEditing;
   @tracked isViaCouncilOfMinisters;
 
   @tracked shortTitle;
@@ -39,16 +39,16 @@ export default class PublicationsPublicationCaseInscriptionPanelComponent extend
   }
 
   @action
-  putInEditMode() {
-    this.isInEditMode = true;
+  openEditingPanel() {
+    this.isEditing = true;
     this.shortTitle = this.args.publicationFlow.shortTitle;
     this.longTitle = this.args.publicationFlow.longTitle;
   }
 
   @action
-  cancelEdit() {
+  closeEditingPanel() {
     this.showError = false;
-    this.isInEditMode = false;
+    this.isEditing = false;
   }
 
   @task
@@ -63,6 +63,6 @@ export default class PublicationsPublicationCaseInscriptionPanelComponent extend
     // no try-catch: don't exit if save didn't work
     yield this.args.publicationFlow.save();
     this.showError = false;
-    this.isInEditMode = false;
+    this.isEditing = false;
   }
 }
