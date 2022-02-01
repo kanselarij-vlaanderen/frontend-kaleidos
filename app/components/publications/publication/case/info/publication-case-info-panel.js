@@ -26,21 +26,19 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   async initFields() {
-    this.publicationFlow = this.args.publicationFlow;
-
     // Publication number
     this.isViaCouncilOfMinisters =
       await this.publicationService.getIsViaCouncilOfMinisters(
-        this.publicationFlow
+        this.args.publicationFlow
       );
-    this.identification = await this.publicationFlow.identification;
+    this.identification = await this.args.publicationFlow.identification;
     this.structuredIdentifier = await this.identification.structuredIdentifier;
     // Numac-nummers
-    this.numacNumbers = await this.publicationFlow.numacNumbers;
+    this.numacNumbers = await this.args.publicationFlow.numacNumbers;
     // Datum beslissing
-    this.agendaItemTreatment = await this.publicationFlow.agendaItemTreatment;
+    this.agendaItemTreatment = await this.args.publicationFlow.agendaItemTreatment;
     // Limiet publicatie
-    this.publicationSubcase = await this.publicationFlow.publicationSubcase;
+    this.publicationSubcase = await this.args.publicationFlow.publicationSubcase;
   }
 
   @action
@@ -55,7 +53,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   async changeIsUrgent(ev) {
     const isUrgent = ev.target.checked;
     const urgencyLevel = await this.getUrgencyLevel(isUrgent);
-    this.publicationFlow.urgencyLevel = urgencyLevel;
+    this.args.publicationFlow.urgencyLevel = urgencyLevel;
   }
 
   @task
@@ -100,7 +98,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
       yield this.publicationService.publicationNumberAlreadyTaken(
         publicationNumber,
         publicationNumberSuffix,
-        this.publicationFlow.id
+        this.args.publicationFlow.id
       );
     if (isAlreadyTaken) {
       this.publicationNumberErrorKey = 'publication-number-error-taken';
@@ -112,7 +110,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     const numacNumber = this.store.createRecord('identification', {
       idName: newNumacNumber,
       agency: CONSTANTS.SCHEMA_AGENCIES.NUMAC,
-      publicationFlowForNumac: this.publicationFlow,
+      publicationFlowForNumac: this.args.publicationFlow,
     });
     this.numacNumbersEditing.pushObject(numacNumber);
   }
@@ -130,7 +128,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @action
   setOpeningDate(selectedDates) {
-    this.publicationFlow.openingDate = selectedDates[0];
+    this.args.publicationFlow.openingDate = selectedDates[0];
   }
 
   @action
@@ -142,7 +140,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   *closeEditingPanel() {
     const reloads = [];
 
-    const urgencyLevelReload = this.publicationFlow
+    const urgencyLevelReload = this.args.publicationFlow
       .belongsTo('urgencyLevel')
       .reload();
     reloads.push(urgencyLevelReload);
@@ -151,7 +149,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
     this.agendaItemTreatment.rollbackAttributes();
     this.publicationSubcase.rollbackAttributes();
-    this.publicationFlow.rollbackAttributes();
+    this.args.publicationFlow.rollbackAttributes();
 
     this.isEditing = false;
   }
@@ -203,7 +201,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     saves.push(this.agendaItemTreatment.save());
 
     // Dringend + Datum ontvangst
-    saves.push(this.publicationFlow.save());
+    saves.push(this.args.publicationFlow.save());
 
     // Limiet publicatie
     saves.push(this.publicationSubcase.save());
