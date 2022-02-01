@@ -50,9 +50,9 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   @action
-  async changeIsUrgent(ev) {
+  changeIsUrgent(ev) {
     const isUrgent = ev.target.checked;
-    const urgencyLevel = await this.getUrgencyLevel(isUrgent);
+    const urgencyLevel = this.store.peekAll('urgency-level').find((level) => level.isUrgent === isUrgent);
     this.args.publicationFlow.urgencyLevel = urgencyLevel;
   }
 
@@ -218,16 +218,5 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
       await checkTask;
     }
     return this.isValid;
-  }
-
-  async getUrgencyLevel(isUrgent) {
-    const urgencyLevels = this.store.peekAll('urgency-level');
-    const urgencyLevelUri = isUrgent
-      ? CONSTANTS.URGENCY_LEVELS.SPEEDPROCEDURE
-      : CONSTANTS.URGENCY_LEVELS.STANDARD;
-    const urgencyLevel = urgencyLevels.find(
-      (level) => level.uri === urgencyLevelUri
-    );
-    return urgencyLevel;
   }
 }
