@@ -6,7 +6,6 @@ import {
 } from 'ember-concurrency-decorators';
 import { timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import { isBlank } from '@ember/utils';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationSidebarComponent extends Component {
@@ -18,15 +17,9 @@ export default class PublicationsPublicationSidebarComponent extends Component {
    *  on create and delete no changedKeys are passed
    */
   @service store;
-  @service intl;
-  @service toaster;
   @service publicationService;
 
-  @tracked numberIsAlreadyUsed = false;
-  @tracked numberIsRequired = false;
   @tracked regulationTypes;
-  @tracked publicationNumber;
-  @tracked publicationNumberSuffix;
   @tracked decision;
 
   @lastValue('loadPublicationStatus') publicationStatus;
@@ -40,7 +33,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.loadPublicationSubcase.perform();
     this.loadTranslationSubcase.perform();
     this.loadAgendaitemTreatment.perform();
-    this.loadStructuredIdentifier.perform();
     this.loadDecision.perform();
     this.regulationTypes =  this.store.peekAll('regulation-type').sortBy('position');
   }
@@ -79,72 +71,10 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     return yield this.publicationFlow.agendaItemTreatment;
   }
 
-  @task
-  *loadStructuredIdentifier() {
-    const identification = yield this.publicationFlow.identification;
-    const structuredIdentifier = yield identification.structuredIdentifier;
-    this.publicationNumber = structuredIdentifier.localIdentifier;
-    this.publicationNumberSuffix = structuredIdentifier.versionIdentifier;
-  }
-
   @action
   setRegulationType(regulationType) {
     this.publicationFlow.regulationType = regulationType;
     this.notifyChanges(this.publicationFlow, 'regulationType');
-  }
-
-  @action
-  setUrgencyLevel(urgencyLevel) {
-    this.publicationFlow.urgencyLevel = urgencyLevel;
-    this.notifyChanges(this.publicationFlow, 'urgencyLevel');
-  }
-
-  @restartableTask
-  *setPublicationNumber(event) {
-    this.publicationNumber = event.target.value;
-    yield timeout(1000);
-    this.numberIsRequired = false;
-    this.numberIsAlreadyUsed = false;
-    if (isBlank(this.publicationNumber)) {
-      this.numberIsRequired = true;
-      this.toaster.error(this.intl.t('publication-number-required'), this.intl.t('warning-title'), {
-        timeOut: 5000,
-      });
-    } else {
-      this.setStructuredIdentifier();
-    }
-  }
-
-  @restartableTask
-  *setPublicationNumberSuffix(event) {
-    this.publicationNumberSuffix = isBlank(event.target.value) ? undefined : event.target.value;
-    yield timeout(1000);
-    this.numberIsRequired = false;
-    this.numberIsAlreadyUsed = false;
-    this.setStructuredIdentifier();
-  }
-
-  async setStructuredIdentifier() {
-    const isPublicationNumberTaken = await this.publicationService.publicationNumberAlreadyTaken(this.publicationNumber, this.publicationNumberSuffix, this.publicationFlow.id);
-    if (isPublicationNumberTaken) {
-      this.numberIsAlreadyUsed = true;
-      this.toaster.error(this.intl.t('publication-number-already-taken-with-params', {
-        number: this.publicationNumber,
-        suffix: isBlank(this.publicationNumberSuffix) ? this.intl.t('without-suffix') : `${this.intl.t('with-suffix')} '${this.publicationNumberSuffix}'`,
-      }), this.intl.t('warning-title'), {
-        timeOut: 5000,
-      });
-    } else {
-      const identification = await this.publicationFlow.identification;
-      const structuredIdentifier = await identification.structuredIdentifier;
-      const number = parseInt(this.publicationNumber, 10);
-      structuredIdentifier.localIdentifier = number;
-      structuredIdentifier.versionIdentifier = this.publicationNumberSuffix;
-      identification.idName = this.publicationNumberSuffix ? `${number} ${this.publicationNumberSuffix}` : `${number}`;
-      this.numberIsAlreadyUsed = false;
-      this.notifyChanges(identification, ['idName']);
-      this.notifyChanges(structuredIdentifier, ['localIdentifier', 'versionIdentifier']);
-    }
   }
 
   @action

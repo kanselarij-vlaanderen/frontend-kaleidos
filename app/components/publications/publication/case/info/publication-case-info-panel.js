@@ -8,12 +8,18 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationCaseInfoPanelComponent extends Component {
   @service store;
+  @service toaster;
+  @service intl;
   @service publicationService;
 
   @tracked isViaCouncilOfMinisters;
   @tracked isEditing;
+  @tracked publicationNumber;
+  @tracked publicationNumberSuffix
 
-  @tracked publicationNumberErrorKey;
+  @tracked numberIsNonNumeric = false;
+  @tracked numberIsAlreadyUsed = false;
+  @tracked numberIsRequired = false;
 
   // use copy: reload() does not seem to work on hasMany relationships
   @tracked numacNumbersEditing;
@@ -26,19 +32,27 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   async initFields() {
-    // Publication number
     this.isViaCouncilOfMinisters =
       await this.publicationService.getIsViaCouncilOfMinisters(
         this.args.publicationFlow
       );
+    // Publication number
     this.identification = await this.args.publicationFlow.identification;
     this.structuredIdentifier = await this.identification.structuredIdentifier;
+    // using local tracked values because validation of these fields is delayed.
+    // identification and structured-identifier are only updated after validation succeeds
+    this.publicationNumber = this.structuredIdentifier.localIdentifier;
+    this.publicationNumberSuffix = this.structuredIdentifier.versionIdentifier;
     // Numac-nummers
     this.numacNumbers = await this.args.publicationFlow.numacNumbers;
     // Datum beslissing
     this.agendaItemTreatment = await this.args.publicationFlow.agendaItemTreatment;
     // Limiet publicatie
     this.publicationSubcase = await this.args.publicationFlow.publicationSubcase;
+  }
+
+  get isValid() {
+    return !this.numberIsNonNumeric && !this.numberIsAlreadyUsed && !this.numberIsRequired;
   }
 
   @action
@@ -56,52 +70,72 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.args.publicationFlow.urgencyLevel = urgencyLevel;
   }
 
-  @task
+  @restartableTask
   *setPublicationNumber(event) {
-    const publicationNumberStr = event.target.value;
-    this.publicationNumberErrorKey = undefined;
-
-    if (isBlank(publicationNumberStr)) {
-      this.publicationNumberErrorKey = 'publication-number-error-required';
-      return;
+    this.publicationNumber = event.target.value;
+    yield timeout(1000);
+    const number = parseInt(this.publicationNumber, 10);
+    if (Object.is(NaN, number)) {
+      this.numberIsNonNumeric = true;
+      this.toaster.error(
+        this.intl.t('publication-number-required-and-numeric'),
+        this.intl.t('warning-title'),
+        {
+          timeOut: 5000,
+        });
+    } else {
+      this.numberIsNonNumeric = false;
+      if (isBlank(this.publicationNumber)) {
+        this.numberIsRequired = true;
+        this.toaster.error(
+          this.intl.t('publication-number-required-and-numeric'),
+          this.intl.t('warning-title'),
+          {
+            timeOut: 5000,
+          });
+      } else {
+        this.numberIsRequired = false;
+        this.numberIsAlreadyUsed = false;
+        this.setStructuredIdentifier.perform();
+      }
     }
-
-    const publicationNumber = Number.parseFloat(publicationNumberStr);
-    const isNumeric =
-      Number.isInteger(publicationNumber) && publicationNumber > 0;
-    if (!isNumeric) {
-      this.publicationNumberErrorKey = 'publication-number-error-numeric';
-      return;
-    }
-
-    this.structuredIdentifier.localIdentifier = publicationNumber;
-
-    yield this.checkPublicationNumber.perform();
-  }
-
-  @task
-  *setPublicationNumberSuffix(event) {
-    this.publicationNumberErrorKey = undefined;
-    const publicationNumberSuffix = isBlank(event.target.value)
-      ? undefined
-      : event.target.value;
-    this.structuredIdentifier.versionIdentifier = publicationNumberSuffix;
-    yield this.checkPublicationNumber.perform();
   }
 
   @restartableTask
-  *checkPublicationNumber() {
-    const publicationNumber = this.structuredIdentifier.localIdentifier;
-    const publicationNumberSuffix = this.structuredIdentifier.versionIdentifier;
+  *setPublicationNumberSuffix(event) {
+    this.publicationNumberSuffix = isBlank(event.target.value) ? undefined : event.target.value;
     yield timeout(1000);
-    const isAlreadyTaken =
-      yield this.publicationService.publicationNumberAlreadyTaken(
-        publicationNumber,
-        publicationNumberSuffix,
-        this.args.publicationFlow.id
-      );
-    if (isAlreadyTaken) {
-      this.publicationNumberErrorKey = 'publication-number-error-taken';
+    this.numberIsRequired = false;
+    this.numberIsAlreadyUsed = false;
+    this.setStructuredIdentifier.perform();
+  }
+
+  @restartableTask
+  *setStructuredIdentifier() {
+    const isPublicationNumberTaken =
+          yield this.publicationService.publicationNumberAlreadyTaken(
+            this.publicationNumber,
+            this.publicationNumberSuffix,
+            this.args.publicationFlow.id
+          );
+    if (isPublicationNumberTaken) {
+      this.numberIsAlreadyUsed = true;
+      this.toaster.error(this.intl.t('publication-number-already-taken-with-params', {
+        number: this.publicationNumber,
+        suffix: isBlank(this.publicationNumberSuffix)
+          ? this.intl.t('without-suffix')
+          : `${this.intl.t('with-suffix')} '${this.publicationNumberSuffix}'`,
+      }), this.intl.t('warning-title'), {
+        timeOut: 5000,
+      });
+    } else {
+      this.structuredIdentifier.localIdentifier = this.publicationNumber;
+      this.structuredIdentifier.versionIdentifier = this.publicationNumberSuffix;
+      this.identification.idName =
+        this.publicationNumberSuffix
+        ? `${this.publicationNumber} ${this.publicationNumberSuffix}`
+        : `${this.publicationNumber}`;
+      this.numberIsAlreadyUsed = false;
     }
   }
 
@@ -147,6 +181,10 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
     yield Promise.all(reloads);
 
+    this.identification.rollbackAttributes();
+    this.structuredIdentifier.rollbackAttributes();
+    this.publicationNumber = this.structuredIdentifier.localIdentifier;
+    this.publicationNumberSuffix = this.structuredIdentifier.versionIdentifier;
     this.agendaItemTreatment.rollbackAttributes();
     this.publicationSubcase.rollbackAttributes();
     this.args.publicationFlow.rollbackAttributes();
@@ -154,33 +192,17 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.isEditing = false;
   }
 
-  get isValid() {
-    return !this.publicationNumberErrorKey;
-  }
-
   @task
   *save() {
-    const isSuccess = yield this.performSave();
-    if (isSuccess) {
-      this.isEditing = false;
-    }
+    yield this.performSave();
+    this.isEditing = false;
   }
 
   // separate method to prevent ember-concurrency from saving only partially
   async performSave() {
-    const isValid = await this.finishValidation();
-    if (!isValid) {
-      return false;
-    }
-
     const saves = [];
 
     // Publicatienummer
-    const publicationNumber = this.structuredIdentifier.localIdentifier;
-    const publicationNumberSuffix = this.structuredIdentifier.versionIdentifier;
-    this.identification.idName = publicationNumberSuffix
-      ? `${publicationNumber} ${publicationNumberSuffix}`
-      : `${publicationNumber}`;
     saves.push(this.structuredIdentifier.save());
     saves.push(this.identification.save());
 
@@ -207,16 +229,5 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     saves.push(this.publicationSubcase.save());
 
     await Promise.all(saves);
-
-    return true;
-  }
-
-  async finishValidation() {
-    const checkTask = this.checkPublicationNumber.last;
-    const isCheckPending = checkTask && !checkTask.isFinished;
-    if (isCheckPending) {
-      await checkTask;
-    }
-    return this.isValid;
   }
 }
