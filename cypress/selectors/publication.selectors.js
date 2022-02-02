@@ -23,26 +23,26 @@ const selectors = {
   },
 
   // publications\publication\translations\template
-  publicationTranslations: {
-    documents: '[data-test-route-publications---translations-tab-documents]',
-    finished: '[data-test-route-publications---translations-tab-finished]',
-    // TODO-SELECTOR unused selector
-    requests: '[data-test-route-publications---translations-tab-requests]',
-  },
+  // publicationTranslations: {
+  //   documents: '[data-test-route-publications---translations-tab-documents]',
+  //   finished: '[data-test-route-publications---translations-tab-finished]',
+  //   // TODO-SELECTOR unused selector
+  //   requests: '[data-test-route-publications---translations-tab-requests]',
+  // },
 
   // publications\publication\translations\documents\template
-  translationsDocuments: {
-    add: '[data-test-route-publications---translations-documents-add]',
-    requestTranslation: '[data-test-route-publications---translations-documents-request-translation]',
-    tableRow: '[data-test-route-publications---translations-documents-table-row]',
-    row: {
-      checkbox: '[data-test-route-publications---translations-documents-row-checkbox]',
-      documentName: '[data-test-route-publications---translations-documents-row-document-name]',
-      options: '[data-test-route-publications---translations-documents-row-options]',
-      edit: '[data-test-route-publications---translations-documents-row-edit]',
-      delete: '[data-test-route-publications---translations-documents-row-delete]',
-    },
-  },
+  // translationsDocuments: {
+  // add: '[data-test-route-publications---translations-documents-add]',
+  // requestTranslation: '[data-test-route-publications---translations-documents-request-translation]',
+  // tableRow: '[data-test-route-publications---translations-documents-table-row]',
+  // row: {
+  //   checkbox: '[data-test-route-publications---translations-documents-row-checkbox]',
+  //   documentName: '[data-test-route-publications---translations-documents-row-document-name]',
+  //   options: '[data-test-route-publications---translations-documents-row-options]',
+  //   edit: '[data-test-route-publications---translations-documents-row-edit]',
+  //   delete: '[data-test-route-publications---translations-documents-row-delete]',
+  //   },
+  // },
 
   // publications\publication\proofs\documents\template
   proofsDocuments: {

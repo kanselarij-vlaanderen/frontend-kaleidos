@@ -41,6 +41,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   @tracked isTranslationRequestModalOpen = false;
 
   @computed('sort', 'model') // TODO: remove @computed once this.sort is marked as @tracked
+
   get pieceRows() {
     let property = 'created';
     let isDescending = false;
