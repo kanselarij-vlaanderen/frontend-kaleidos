@@ -7,7 +7,6 @@ export default class File extends Model {
   @attr('number') size;
   @attr('string') extension;
   @attr('datetime') created;
-  @attr('string') contentType;
 
   @belongsTo('piece') piece;
 

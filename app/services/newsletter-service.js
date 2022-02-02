@@ -16,23 +16,13 @@ export default class NewsletterService extends Service {
         method: 'POST',
         url: `/newsletter/createCampaign?agendaId=${agenda.get('id')}`,
       });
-
       const mailCampaign = this.store.createRecord('mail-campaign', {
         campaignId: result.body.campaign_id,
         campaignWebId: result.body.campaign_web_id,
         archiveUrl: result.body.archive_url,
+        meeting
       });
-
       await mailCampaign.save();
-      const reloadedMeeting = await this.store.findRecord(
-        'meeting',
-        meeting.id,
-        {
-          reload: true,
-        }
-      );
-      reloadedMeeting.set('mailCampaign', mailCampaign);
-      await reloadedMeeting.save();
       return mailCampaign;
     } catch (error) {
       console.warn('An exception ocurred: ', error);
@@ -69,7 +59,7 @@ export default class NewsletterService extends Service {
     } catch (error) {
       console.warn('An exception ocurred: ', error);
       this.toaster.error(
-        this.intl.t('error-send-newsletter'),
+        this.intl.t('error-send-belga'),
         this.intl.t('warning-title')
       );
       return null;
@@ -166,21 +156,6 @@ export default class NewsletterService extends Service {
     }
   }
 
-  // TODO These are for developers use - in comments for follow up
-  /*
-  downloadBelgaXML(agendaId) {
-    try {
-      return ajax({
-        method: 'GET',
-        url: `/newsletter/xml-newsletter/${agendaId}`,
-      });
-    } catch (error) {
-      console.warn('An exception ocurred: ', error);
-      this.toaster.error(this.intl.t('error-download-XML'), this.intl.t('warning-title'));
-      return null;
-    }
-    */
-
   async deleteCampaign(id) {
     try {
       return ajax({
@@ -196,7 +171,22 @@ export default class NewsletterService extends Service {
       return null;
     }
   }
+
+  // TODO These are for developers use - in comments for follow up
   /*
+  downloadBelgaXML(agendaId) {
+    try {
+      return ajax({
+        method: 'GET',
+        url: `/newsletter/xml-newsletter/${agendaId}`,
+      });
+    } catch (error) {
+      console.warn('An exception ocurred: ', error);
+      this.toaster.error(this.intl.t('error-download-XML'), this.intl.t('warning-title'));
+      return null;
+    }
+  }
+
   async getMailCampaignContent(id) {
     try {
       return ajax({
