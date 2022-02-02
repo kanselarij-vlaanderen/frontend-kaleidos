@@ -17,6 +17,14 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.initFields();
   }
 
+  get sortedRegulationTypes() {
+    return this.store.peekAll('regulation-type').sortBy('position');
+  }
+
+  get isValid() {
+    return true;
+  }
+
   async initFields() {
     this.isViaCouncilOfMinisters =
       await this.publicationService.getIsViaCouncilOfMinisters(this.args.publicationFlow);
@@ -33,14 +41,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.agendaItemTreatment.startDate = selectedDates[0];
   }
 
-  get sortedRegulationTypes() {
-    return this.store.peekAll('regulation-type').sortBy('position');
-  }
-
-  get isValid() {
-    return true;
-  }
-
   @task
   *closeEditingPanel() {
     yield this.performCancel();
@@ -52,6 +52,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
       this.args.publicationFlow.belongsTo('regulationType').reload()
     ]);
 
+    this.args.publicationFlow.rollbackAttributes();
     this.agendaItemTreatment.rollbackAttributes();
   }
 

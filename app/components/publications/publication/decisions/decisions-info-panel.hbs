@@ -9,7 +9,7 @@
             </h4>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
-        {{#if (and (not this.isViaCouncilOfMinisters) (not this.isEditing))}}
+        {{#unless this.isEditing}}
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <Auk::Button
@@ -21,7 +21,7 @@
               />
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
-        {{/if}}
+        {{/unless}}
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body>
@@ -42,15 +42,23 @@
                   <Auk::Label>
                     {{t "regulation-type"}}
                   </Auk::Label>
-                  <PowerSelect
-                    @options={{this.sortedRegulationTypes}}
-                    @onChange={{fn (mut @publicationFlow.regulationType)}}
-                    @selected={{@publicationFlow.regulationType}}
-                    @allowClear={{true}}
-                    as |regulationType|
-                  >
-                    {{regulationType.label}}
-                  </PowerSelect>
+                  {{#if this.isViaCouncilOfMinisters}}
+                    {{#if @publicationFlow.regulationType}}
+                      {{@publicationFlow.regulationType.label}}
+                    {{else}}
+                      {{t "dash"}}
+                    {{/if}}
+                  {{else}}
+                    <PowerSelect
+                      @options={{this.sortedRegulationTypes}}
+                      @onChange={{fn (mut @publicationFlow.regulationType)}}
+                      @selected={{@publicationFlow.regulationType}}
+                      @allowClear={{true}}
+                      as |regulationType|
+                    >
+                      {{regulationType.label}}
+                    </PowerSelect>
+                  {{/if}}
                 </div>
               </div>
 
@@ -61,9 +69,46 @@
                   class="auk-form-group"
                 >
                   <Auk::Label>{{t "decision-date"}}</Auk::Label>
-                  <Auk::Datepicker
-                    @date={{@publicationFlow.agendaItemTreatment.startDate}}
-                    @onChange={{this.setDecisionDate}}
+                  {{#if this.isViaCouncilOfMinisters}}
+                    <Auk::ButtonLink
+                      target="_blank"
+                      @icon="chevron-right"
+                      @layout="icon-right"
+                      @route="agenda.agendaitems.agendaitem"
+                      @models={{array
+                                  @publicationFlow.agendaItemTreatment.agendaitem.agenda.createdFor.id
+                                  @publicationFlow.agendaItemTreatment.agendaitem.agenda.id
+                                  @publicationFlow.agendaItemTreatment.agendaitem.id
+                              }}
+                    >
+                      {{#if @publicationFlow.agendaItemTreatment.startDate}}
+                        {{moment-format
+                            @publicationFlow.agendaItemTreatment.startDate
+                            "DD-MM-YYYY"
+                        }}
+                      {{else}}
+                        {{t "to-agenda"}}
+                      {{/if}}
+                    </Auk::ButtonLink>
+                  {{else}}
+                    <Auk::Datepicker
+                      @date={{@publicationFlow.agendaItemTreatment.startDate}}
+                      @onChange={{this.setDecisionDate}}
+                    />
+                  {{/if}}
+                </div>
+              </div>
+
+              {{! Number of pages }}
+              <div class="auk-o-grid-col-4">
+                <div
+                  data-test-publication-decisions-info-panel-number-of-pages
+                  class="auk-form-group"
+                >
+                  <Auk::Label>{{t "pages-amount"}}</Auk::Label>
+                  <Auk::Input
+                    @type="number"
+                    @value={{@publicationFlow.numberOfPages}}
                   />
                 </div>
               </div>
@@ -118,6 +163,18 @@
                 {{else}}
                   {{t "dash"}}
                 {{/if}}
+              {{/if}}
+            </p>
+          </div>
+
+          {{! Number of pages }}
+          <div class="auk-o-grid-col-3 auk-content">
+            <h4 class="auk-u-m-0">{{t "pages-amount"}}</h4>
+            <p class="auk-u-m-0">
+              {{#if @publicationFlow.numberOfPages}}
+                {{@publicationFlow.numberOfPages}}
+              {{else}}
+                {{t "dash"}}
               {{/if}}
             </p>
           </div>
