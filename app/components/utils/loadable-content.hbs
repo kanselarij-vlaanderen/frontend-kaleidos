@@ -5,9 +5,9 @@
     !attention: rendering can trigger side effects like loading relationships
 --}}
 
-<div class="utils--loadable-content">
+<div class="auk-loadable-content {{if @isLoading "auk-loadable-content--is-loading"}}">
   {{#if (or (not @isLoading) @reserveSpace)}}
-    <div class="content {{if @isLoading "is-loading"}}">
+    <div class="auk-loadable-content__content">
       {{yield}}
     </div>
   {{/if}}
