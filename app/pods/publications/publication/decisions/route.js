@@ -4,6 +4,7 @@ import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class PublicationsPublicationDecisionsRoute extends Route {
   @service store;
+  @service publicationService;
 
   async model() {
     const parentParams = this.paramsFor('publications.publication');
@@ -20,7 +21,9 @@ export default class PublicationsPublicationDecisionsRoute extends Route {
     this.publicationFlow = this.modelFor('publications.publication');
   }
 
-  setupController(ctrl) {
+  async setupController(ctrl) {
     ctrl.publicationFlow = this.publicationFlow;
+    ctrl.isViaCouncilOfMinisters =
+      await this.publicationService.getIsViaCouncilOfMinisters(this.publicationFlow);
   }
 }
