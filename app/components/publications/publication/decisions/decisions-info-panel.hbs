@@ -39,7 +39,7 @@
                   data-test-publication-decisions-info-panel-regulation-type
                   class="auk-form-group"
                 >
-                  <Auk::Label for="blockInput">
+                  <Auk::Label>
                     {{t "regulation-type"}}
                   </Auk::Label>
                   {{#if this.isViaCouncilOfMinisters}}
@@ -50,8 +50,8 @@
                     {{/if}}
                   {{else}}
                     <PowerSelect
-                      @options={{this.regulationTypes}}
-                      @onChange={{this.setRegulationType}}
+                      @options={{this.sortedRegulationTypes}}
+                      @onChange={{fn (mut @publicationFlow.regulationType)}}
                       @selected={{@publicationFlow.regulationType}}
                       @allowClear={{true}}
                       as |regulationType|

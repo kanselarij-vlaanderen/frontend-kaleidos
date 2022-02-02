@@ -20,9 +20,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   async initFields() {
     this.isViaCouncilOfMinisters =
       await this.publicationService.getIsViaCouncilOfMinisters(this.args.publicationFlow);
-    this.regulationTypes = this.store
-      .peekAll('regulation-type')
-      .sortBy('position');
     this.agendaItemTreatment = await this.args.publicationFlow.agendaItemTreatment;
   }
 
@@ -32,13 +29,12 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   @action
-  setRegulationType(regulationType) {
-    this.args.publicationFlow.regulationType = regulationType;
-  }
-
-  @action
   setDecisionDate(selectedDates) {
     this.agendaItemTreatment.startDate = selectedDates[0];
+  }
+
+  get sortedRegulationTypes() {
+    return this.store.peekAll('regulation-type').sortBy('position');
   }
 
   get isValid() {
@@ -52,13 +48,9 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   async performCancel() {
-    const reloads = [];
-
-    const regulationTypeReload = this.args.publicationFlow
-      .belongsTo('regulationType')
-      .reload();
-    reloads.push(regulationTypeReload);
-    await Promise.all(reloads);
+    await Promise.all([
+      this.args.publicationFlow.belongsTo('regulationType').reload()
+    ]);
 
     this.agendaItemTreatment.rollbackAttributes();
   }
