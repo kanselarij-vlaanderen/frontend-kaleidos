@@ -9,7 +9,7 @@
             </h4>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
-        {{#if (not this.isEditing)}}
+        {{#unless this.isEditing}}
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <Auk::Button
@@ -21,68 +21,11 @@
               />
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
-        {{/if}}
+        {{/unless}}
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body>
-      {{#if (not this.isEditing)}}
-        <div class="auk-o-grid">
-
-          {{! Type regelgeving }}
-          <div class="auk-o-grid-col-4 auk-content">
-            <Auk::KeyValue @key={{t "regulation-type"}}>
-              {{#if @publicationFlow.regulationType}}
-                {{@publicationFlow.regulationType.label}}
-              {{else}}
-                {{t "dash"}}
-              {{/if}}
-            </Auk::KeyValue>
-          </div>
-
-          {{! Datum beslissing}}
-          <div class="auk-o-grid-col-4 auk-content">
-            <Auk::KeyValue @key={{t "decision-date"}}>
-              {{#if this.isViaCouncilOfMinisters}}
-                <Auk::ButtonLink
-                  target="_blank"
-                  @route="agenda.agendaitems.agendaitem"
-                  @models={{array
-                    @publicationFlow.agendaItemTreatment.agendaitem.agenda.createdFor.id
-                    @publicationFlow.agendaItemTreatment.agendaitem.agenda.id
-                    @publicationFlow.agendaItemTreatment.agendaitem.id
-                  }}
-                >
-                  {{#if @publicationFlow.agendaItemTreatment.startDate}}
-                    {{moment-format
-                      @publicationFlow.agendaItemTreatment.startDate
-                      "DD-MM-YYYY"
-                    }}
-                  {{else}}
-                    {{t "to-agenda"}}
-                  {{/if}}
-                </Auk::ButtonLink>
-              {{else}}
-                {{#if @publicationFlow.agendaItemTreatment.startDate}}
-                  {{moment-format
-                    @publicationFlow.agendaItemTreatment.startDate
-                    "DD-MM-YYYY"
-                  }}
-                {{else}}
-                  {{t "dash"}}
-                {{/if}}
-              {{/if}}
-            </Auk::KeyValue>
-          </div>
-
-          {{!Page count}}
-          {{!TODO}}
-          <div class="auk-o-grid-col-4 auk-content">
-            <Auk::KeyValue @key={{t "pages-amount"}}>
-              {{!TODO}}
-            </Auk::KeyValue>
-          </div>
-        </div>
-      {{else}}
+      {{#if this.isEditing}}
         <Utils::LoadableContent
           @isLoading={{this.save.isRunning}}
           @reserveSpace={{true}}
@@ -163,6 +106,62 @@
             </div>
           </div>
         </Utils::LoadableContent>
+      {{else}}
+        <div class="auk-o-grid">
+          {{! Type regelgeving }}
+          <div class="auk-o-grid-col-4 auk-content">
+            <Auk::KeyValue @key={{t "regulation-type"}}>
+              {{#if @publicationFlow.regulationType}}
+                {{@publicationFlow.regulationType.label}}
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            </Auk::KeyValue>
+          </div>
+
+          {{! Datum beslissing}}
+          <div class="auk-o-grid-col-4 auk-content">
+            <Auk::KeyValue @key={{t "decision-date"}}>
+              {{#if this.isViaCouncilOfMinisters}}
+                <Auk::ButtonLink
+                  target="_blank"
+                  @route="agenda.agendaitems.agendaitem"
+                  @models={{array
+                    @publicationFlow.agendaItemTreatment.agendaitem.agenda.createdFor.id
+                    @publicationFlow.agendaItemTreatment.agendaitem.agenda.id
+                    @publicationFlow.agendaItemTreatment.agendaitem.id
+                  }}
+                >
+                  {{#if @publicationFlow.agendaItemTreatment.startDate}}
+                    {{moment-format
+                      @publicationFlow.agendaItemTreatment.startDate
+                      "DD-MM-YYYY"
+                    }}
+                  {{else}}
+                    {{t "to-agenda"}}
+                  {{/if}}
+                </Auk::ButtonLink>
+              {{else}}
+                {{#if @publicationFlow.agendaItemTreatment.startDate}}
+                  {{moment-format
+                    @publicationFlow.agendaItemTreatment.startDate
+                    "DD-MM-YYYY"
+                  }}
+                {{else}}
+                  {{t "dash"}}
+                {{/if}}
+              {{/if}}
+            </Auk::KeyValue>
+          </div>
+
+          {{!Page count}}
+          {{!TODO}}
+          <div class="auk-o-grid-col-4 auk-content">
+            <Auk::KeyValue @key={{t "pages-amount"}}>
+              {{!TODO}}
+            </Auk::KeyValue>
+          </div>
+        </div>
       {{/if}}
     </Auk::Panel::Body>
     {{#if this.isEditing}}
