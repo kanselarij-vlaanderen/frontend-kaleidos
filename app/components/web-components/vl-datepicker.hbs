@@ -1,7 +1,8 @@
 {{!-- TODO: octane-refactor --}}
 {{!-- template-lint-disable no-action --}}
-{{#if (not this.await this.dateObjectsToEnable)}}
-  <div class="auk-input-with-icon">
+<div class="auk-input-with-icon {{if @enableClear "auk-input-with-clear-action"}}">
+  <Auk::Icon @name="calendar" />
+  {{#if (not this.await this.dateObjectsToEnable)}}
     <EmberFlatpickr
       data-test-vl-datepicker
       class="auk-input auk-input--block"
@@ -20,10 +21,7 @@
       @shorthandCurrentMonth={{true}}
       @disabled={{@disabled}}
     />
-    <Auk::Icon @name="calendar" />
-  </div>
-{{else}}
-  <div class="auk-input-with-icon">
+  {{else}}
     <EmberFlatpickr
       data-test-vl-datepicker
       class="auk-input auk-input--block"
@@ -43,6 +41,13 @@
       @shorthandCurrentMonth={{true}}
       @disabled={{@disabled}}
     />
-    <Auk::Icon @name="calendar" />
-  </div>
-{{/if}}
+  {{/if}}
+  {{#if @enableClear}}
+    <Auk::Button
+      @skin="muted-borderless"
+      @layout="icon-only"
+      @icon="x"
+      {{on "click" @onClear}}
+    />
+  {{/if}}
+</div>

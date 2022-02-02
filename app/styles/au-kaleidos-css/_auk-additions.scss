@@ -1,24 +1,13 @@
 /* General
    ========================================================================== */
 
-p {
-  word-break: break-word;
-  white-space: normal;
-   &::first-letter {
-    text-transform: uppercase;
-  }
-}
+// -----
 
 
 /* Button in input
    ========================================================================== */
 
-.auk-button-in-input {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  padding: 0.75rem 1.2rem;
-}
+// -----
 
 
 /* Modal
