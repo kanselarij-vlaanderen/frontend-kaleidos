@@ -73,19 +73,21 @@
       {{else}}
         <div class="auk-o-grid">
           {{! Type regelgeving }}
-          <div class="auk-o-grid-col-4 auk-content">
-            <Auk::KeyValue @key={{t "regulation-type"}}>
+          <div class="auk-o-grid-col-3 auk-content">
+            <h4 class="auk-u-m-0">{{t "regulation-type"}}</h4>
+            <p class="auk-u-m-0">
               {{#if @publicationFlow.regulationType}}
                 {{@publicationFlow.regulationType.label}}
               {{else}}
                 {{t "dash"}}
               {{/if}}
-            </Auk::KeyValue>
+            </p>
           </div>
 
           {{! Datum beslissing}}
-          <div class="auk-o-grid-col-4 auk-content">
-            <Auk::KeyValue @key={{t "decision-date"}}>
+          <div class="auk-o-grid-col-3 auk-content">
+            <h4 class="auk-u-m-0">{{t "decision-date"}}</h4>
+            <p class="auk-u-m-0">
               {{#if this.isViaCouncilOfMinisters}}
                 <Auk::ButtonLink
                   target="_blank"
@@ -117,7 +119,7 @@
                   {{t "dash"}}
                 {{/if}}
               {{/if}}
-            </Auk::KeyValue>
+            </p>
           </div>
         </div>
       {{/if}}
