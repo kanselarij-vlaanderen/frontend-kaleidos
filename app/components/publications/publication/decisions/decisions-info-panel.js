@@ -18,14 +18,12 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   async initFields() {
-    const publicationFlow = this.args.publicationFlow;
-    this.publicationFlow = publicationFlow;
     this.isViaCouncilOfMinisters =
-      await this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
+      await this.publicationService.getIsViaCouncilOfMinisters(this.args.publicationFlow);
     this.regulationTypes = this.store
       .peekAll('regulation-type')
       .sortBy('position');
-    this.agendaItemTreatment = await publicationFlow.agendaItemTreatment;
+    this.agendaItemTreatment = await this.args.publicationFlow.agendaItemTreatment;
   }
 
   @action
@@ -35,7 +33,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @action
   setRegulationType(regulationType) {
-    this.publicationFlow.regulationType = regulationType;
+    this.args.publicationFlow.regulationType = regulationType;
   }
 
   @action
@@ -56,7 +54,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   async performCancel() {
     const reloads = [];
 
-    const regulationTypeReload = this.publicationFlow
+    const regulationTypeReload = this.args.publicationFlow
       .belongsTo('regulationType')
       .reload();
     reloads.push(regulationTypeReload);
@@ -76,7 +74,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     const saves = [];
 
     // Type regelgeving
-    saves.push(this.publicationFlow.save());
+    saves.push(this.args.publicationFlow.save());
 
     // Datum beslissing
     saves.push(this.agendaItemTreatment.save());
