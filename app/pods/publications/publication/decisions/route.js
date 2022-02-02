@@ -17,13 +17,14 @@ export default class PublicationsPublicationDecisionsRoute extends Route {
     return pieces.toArray();
   }
 
-  afterModel() {
+  async afterModel() {
     this.publicationFlow = this.modelFor('publications.publication');
+    this.isViaCouncilOfMinisters =
+      await this.publicationService.getIsViaCouncilOfMinisters(this.publicationFlow);
   }
 
-  async setupController(ctrl) {
+  setupController(ctrl) {
     ctrl.publicationFlow = this.publicationFlow;
-    ctrl.isViaCouncilOfMinisters =
-      await this.publicationService.getIsViaCouncilOfMinisters(this.publicationFlow);
+    ctrl.isViaCouncilOfMinisters = this.isViaCouncilOfMinisters;
   }
 }
