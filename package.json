@@ -156,8 +156,5 @@
   "resolutions": {
     "@embroider/macros": "0.50.0",
     "@embroider/shared-internals": "0.50.0"
-  },
-  "dependencies": {
-    "kaleidos-cypress": "file:ci"
   }
 }
