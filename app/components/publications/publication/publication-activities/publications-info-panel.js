@@ -14,11 +14,23 @@ export default class PublicationsPublicationPublicationActivitiesPublicationInfo
   @service store;
 
   @tracked isEditing = false;
-  @tracked publicationModes;
+  @tracked decision;
 
   constructor() {
     super(...arguments);
-    this.publicationModes = this.store.peekAll('publication-mode').sortBy('position');
+    this.loadDecision.perform();
+  }
+
+  @task
+  *loadDecision() {
+    this.decision = yield this.store.queryOne('decision', {
+      'filter[publication-activity][subcase][:id:]': this.args.publicationSubcase.id,
+      sort: 'publication-activity.start-date,publication-date',
+    });
+  }
+
+  get publicationModes() {
+    return this.store.peekAll('publication-mode').sortBy('position');
   }
 
   @action
@@ -36,6 +48,11 @@ export default class PublicationsPublicationPublicationActivitiesPublicationInfo
   @action
   setTargetEndDate(selectedDates) {
     this.args.publicationSubcase.targetEndDate = selectedDates[0];
+  }
+
+  @action
+  setPublicationDate(selectedDates) {
+    this.decision.publicationDate = selectedDates[0];
   }
 
   @action

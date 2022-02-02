@@ -10,15 +10,13 @@
   >
     {{t "publication-details-tab-publication-case"}}
   </Auk::Tab>
-  {{#if this.isViaCouncilOfMinisters}}
-    <Auk::Tab
-      @route="publications.publication.documents"
-      @counter={{this.documentsCount}}
-      data-test-publication-nav-documents
-    >
-      {{t "documents"}}
-    </Auk::Tab>
-  {{/if}}
+  <Auk::Tab
+    @route="publications.publication.decisions"
+    @counter={{this.documentsCount}}
+    data-test-publication-nav-decisions
+  >
+    {{t "publication-details-tab-decisions"}}
+  </Auk::Tab>
   <Auk::Tab
     @route="publications.publication.translations"
     data-test-publication-nav-translations
