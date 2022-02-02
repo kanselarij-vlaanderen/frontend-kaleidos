@@ -11,6 +11,7 @@ export default class PublicationsTableRowComponent extends Component {
   @service store;
   @service publicationService;
 
+  @tracked isViaCouncilOfMinisters;
   @tracked publicationDate;
   @tracked pageCount;
   @tracked proofRequestDate;
@@ -29,6 +30,9 @@ export default class PublicationsTableRowComponent extends Component {
     const publicationFlow = yield this.store.queryOne('publication-flow', {
       'filter[:id:]': this.args.publicationFlow.id,
       include: [
+        'case',
+        'case.subcases',
+
         'translation-subcase',
 
         'translation-subcase.request-activities',
@@ -43,6 +47,7 @@ export default class PublicationsTableRowComponent extends Component {
       ].join(','),
     });
 
+    this.isViaCouncilOfMinisters = yield this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
     this.pageCount = yield this.getPageCount(publicationFlow);
     this.proofRequestDate = yield this.getProofRequestDate(publicationFlow);
     this.publicationDate = yield this.publicationService.getPublicationDate(

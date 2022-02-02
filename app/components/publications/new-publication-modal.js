@@ -1,7 +1,7 @@
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { task } from 'ember-concurrency-decorators';
+import { task, restartableTask, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { isBlank } from '@ember/utils';
 
@@ -30,8 +30,9 @@ export default class NewPublicationModal extends Component {
   @tracked shortTitle = null;
   @tracked longTitle = null;
 
-  @tracked hasError = false;
-  @tracked numberIsAlreadyUsed;
+  @tracked numberIsAlreadyUsed = false;
+  @tracked numberIsRequired = false;
+  @tracked isEnabledErrorOnShortTitle = false;
 
   constructor() {
     super(...arguments);
@@ -48,20 +49,30 @@ export default class NewPublicationModal extends Component {
     return !!this.args.agendaitem;
   }
 
+  get publicationNumberErrorTranslationKey() {
+    if (this.numberIsRequired) {
+      return "publication-number-required-and-numeric";
+    } else if (this.numberIsAlreadyUsed) {
+      return "publication-number-already-taken";
+    } else {
+      return null;
+    }
+  }
+
   get isPublicationNumberValid() {
-    return this.number && this.number > 0 && !this.numberIsAlreadyUsed;
+    return this.publicationNumberErrorTranslationKey == null;
   }
 
   get isShortTitleValid() {
-    return this.shortTitle && this.shortTitle.length > 0;
+    if (this.isEnabledErrorOnShortTitle) {
+      return this.shortTitle && this.shortTitle.length > 0;
+    } else {
+      return true;
+    }
   }
 
-  get hasPublicationNumberError() {
-    return this.hasError && !this.isPublicationNumberValid;
-  }
-
-  get hasShortTitleError() {
-    return this.hasError && !this.isShortTitleValid;
+  get isValid() {
+    return this.isPublicationNumberValid && this.isShortTitleValid;
   }
 
   @task
@@ -79,27 +90,47 @@ export default class NewPublicationModal extends Component {
     }
   }
 
-  @task
-  *save() {
-    this.hasError = !this.isPublicationNumberValid || !this.isShortTitleValid;
-
-    if (!this.hasError) {
-      yield this.args.onSave(
-        {
-          number: this.number,
-          suffix: isBlank(this.suffix) ? undefined : this.suffix,
-          shortTitle: this.shortTitle,
-          longTitle: this.longTitle,
-          decisionDate: this.decisionDate,
-          openingDate: this.openingDate,
-          publicationDueDate: this.publicationDueDate,
-        });
+  @restartableTask
+  *setPublicationNumber(event) {
+    this.number = event.target.value;
+    const number = parseInt(this.number, 10);
+    if (isBlank(this.number) || Object.is(NaN, number)) {
+      this.numberIsRequired = true;
+    } else {
+      this.numberIsRequired = false;
+      yield timeout(1000);
+      yield this.isPublicationNumberAlreadyTaken();
     }
   }
 
-  @action
+  @restartableTask
+  *setPublicationNumberSuffix(event) {
+    this.suffix = isBlank(event.target.value) ? undefined : event.target.value;
+    yield timeout(1000);
+    yield this.isPublicationNumberAlreadyTaken();
+  }
+
+  @task
+  *save() {
+    yield this.args.onSave(
+      {
+        number: this.number,
+        suffix: this.suffix,
+        shortTitle: this.shortTitle,
+        longTitle: this.longTitle,
+        decisionDate: this.decisionDate,
+        openingDate: this.openingDate,
+        publicationDueDate: this.publicationDueDate,
+      });
+  }
+
   async isPublicationNumberAlreadyTaken() {
     this.numberIsAlreadyUsed = await this.publicationService.publicationNumberAlreadyTaken(this.number, this.suffix);
+  }
+
+  @action
+  enableErrorOnShortTitle() {
+    this.isEnabledErrorOnShortTitle = true;
   }
 
   @action
