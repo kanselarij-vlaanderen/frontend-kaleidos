@@ -100,6 +100,8 @@
               {{#if this.isViaCouncilOfMinisters}}
                 <Auk::ButtonLink
                   target="_blank"
+                  @icon="chevron-right"
+                  @layout="icon-right"
                   @route="agenda.agendaitems.agendaitem"
                   @models={{array
                     @publicationFlow.agendaItemTreatment.agendaitem.agenda.createdFor.id
