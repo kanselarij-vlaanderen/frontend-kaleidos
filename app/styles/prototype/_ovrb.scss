@@ -55,11 +55,12 @@
 // Fix status pill icon alignment
 .auk-status-pill {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   max-width: auto;
 
   .auk-icon {
     position: relative;
+    bottom: -.15ex;
   }
 }
 

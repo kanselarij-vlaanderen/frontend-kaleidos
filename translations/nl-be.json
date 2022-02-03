@@ -993,10 +993,14 @@
   },
   "signaturesSection": {
     "filter-ministers": "Filter op ministers",
-    "add-minister": "Minister toevoegen",
     "signed-status": "Tekenstatus",
     "sidebar-title": "Handteken document",
-    "signature-needed-by": "Te handtekenen door"
+    "signature-needed-by": "Te handtekenen door",
+    "prepare-signatures": "Handtekenen voorbereiden",
+    "yes-cancel-signatures": "Ja, handtekenen annuleren",
+    "cancel-signatures": "Handtekenen annuleren",
+    "confirm-cancel-signatures": "Door het annuleren van handtekenen zal dit document uit de handtekenmap verwijderd worden.",
+    "signature-success": "Het document is succesvol verzonden ter ondertekening."
   },
   "util": {
     "view": "Bekijken",
@@ -1017,6 +1021,12 @@
     "year": "Jaar",
     "reset-filter": "Filter wissen",
     "date-approved": "Datum goedkeuring",
-    "preview": "Voorvertoning"
+    "preview": "Voorvertoning",
+    "add": "Toevoegen",
+    "apply": "Toepassen",
+    "edit-list": "Lijst bewerken",
+    "sure": "Bent u zeker?",
+    "no-go-back": "Nee, ga terug",
+    "close": "Sluiten"
   }
 }

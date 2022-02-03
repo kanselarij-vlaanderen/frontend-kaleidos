@@ -3,7 +3,7 @@ import { action, set } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-export default class SignaturesIndexController extends Controller {
+export default class SignaturesSuccessController extends Controller {
   @service router;
 
   queryParams = {
@@ -66,6 +66,7 @@ export default class SignaturesIndexController extends Controller {
   @tracked isShowSidebar = false;
   @tracked isShowAddMinister = false;
   @tracked isShowCancelSignatures = false;
+  @tracked isShowToast = true;
 
   @action
   showFilterModal() {
@@ -105,5 +106,10 @@ export default class SignaturesIndexController extends Controller {
   @action
   closeCancelSignatures() {
     this.isShowCancelSignatures = false;
+  }
+
+  @action
+  closeToast() {
+    this.isShowToast = false;
   }
 }
