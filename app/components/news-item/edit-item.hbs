@@ -5,6 +5,7 @@
     {{#if (not (is-pending this.agendaitem.notaOrVisienota))}}
       {{#if (not (await this.agendaitem.notaOrVisienota))}}
         <Auk::Button
+          data-test-newsletter-edit-item-no-nota
           @skin="secondary"
           @icon="document"
           @disabled={{true}}
@@ -30,13 +31,14 @@
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "title"}}</Auk::Label>
-    <p>
+    <p data-test-newsletter-edit-item-long-title>
       {{this.agendaitem.title}}
     </p>
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "short-title"}}</Auk::Label>
     <Auk::Input
+      data-test-newsletter-edit-item-short-title
       @block={{true}}
       @value={{this.newsletterInfo.title}}
     />
@@ -72,6 +74,7 @@
   <div class="auk-form-group">
     <Auk::Label for="item-finished">{{t "finished"}}</Auk::Label>
     <Auk::Toggle
+      data-test-newsletter-edit-item-toggle-finished
       id="item-finished"
       @checked={{this.newsletterInfo.finished}}
     />
