@@ -32,7 +32,7 @@ export default class PublicationRoute extends Route {
 
   async afterModel(model) {
     this.isViaCouncilOfMinisters =
-      this.publicationService.getIsViaCouncilOfMinisters(model);
+      await this.publicationService.getIsViaCouncilOfMinisters(model);
   }
 
   setupController(ctrl) {

@@ -29,52 +29,6 @@
   {{#if @isOpen}}
     <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
       <div class="auk-u-m-3">
-        {{! Publicatiedatum }}
-        {{#if this.publicationStatus.isPublished}}
-          <div
-            data-test-publication-sidebar-publication-date
-            class="auk-form-group"
-          >
-            <Auk::Label>{{t "publication-date"}}</Auk::Label>
-            {{#unless this.loadDecision.isRunning}}
-              {{#if this.decision.isStaatsbladResource}}
-                {{#if this.decision.publicationDate}}
-                  <div class="auk-u-muted">
-                    {{moment-format this.decision.publicationDate "DD-MM-YYYY"}}
-                  </div>
-                {{else}}
-                  <div class="auk-u-muted auk-u-italic">
-                    {{t "not-known"}}
-                  </div>
-                {{/if}}
-              {{else}}
-                <Auk::Datepicker
-                  @date={{this.decision.publicationDate}}
-                  @onChange={{this.setPublicationDate}}
-                />
-              {{/if}}
-            {{/unless}}
-          </div>
-        {{/if}}
-
-        {{! Type regelgeving }}
-        {{#unless this.publicationStatus.isWithdrawn}}
-          <div
-            data-test-publication-sidebar-regulation-type
-            class="auk-form-group"
-          >
-            <Auk::Label for="blockInput">{{t "regulation-type"}}</Auk::Label>
-            <PowerSelect
-              @options={{this.regulationTypes}}
-              @onChange={{this.setRegulationType}}
-              @selected={{@publicationFlow.regulationType}}
-              as |regulationType|
-            >
-              {{regulationType.label}}
-            </PowerSelect>
-          </div>
-        {{/unless}}
-
         {{! Vertaaldatum }}
         <div
           data-test-publication-sidebar-translation-date
@@ -87,33 +41,6 @@
           />
         </div>
 
-        {{! Opmerking }}
-        <div class="auk-form-group">
-          <Auk::Label>
-            <div class="auk-o-flex auk-o-flex--vertical-center">
-              <span class="auk-u-mr">{{t "remark-title"}}</span>
-              <div>
-                <Auk::ButtonLink
-                  @icon="circle-info"
-                  @layout="icon-right"
-                  @skin="muted"
-                />
-                <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
-                  <p>
-                    {{t "publication-sidebar-tooltip"}}
-                  </p>
-                </EmberTooltip>
-              </div>
-            </div>
-          </Auk::Label>
-          <Auk::Textarea
-            data-test-publication-sidebar-remark
-            rows="7"
-            type="text"
-            value={{@publicationFlow.remark}}
-            {{on "input" (perform this.setRemark)}}
-          />
-        </div>
       </div>
     </div>
   {{/if}}

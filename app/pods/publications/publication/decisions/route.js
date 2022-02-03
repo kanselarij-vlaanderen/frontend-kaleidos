@@ -2,8 +2,9 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
-export default class PublicationsPublicationDocumentsRoute extends Route {
+export default class PublicationsPublicationDecisionsRoute extends Route {
   @service store;
+  @service publicationService;
 
   async model() {
     const parentParams = this.paramsFor('publications.publication');
@@ -14,5 +15,16 @@ export default class PublicationsPublicationDocumentsRoute extends Route {
       include: 'document-container',
     });
     return pieces.toArray();
+  }
+
+  async afterModel() {
+    this.publicationFlow = this.modelFor('publications.publication');
+    this.isViaCouncilOfMinisters =
+      await this.publicationService.getIsViaCouncilOfMinisters(this.publicationFlow);
+  }
+
+  setupController(ctrl) {
+    ctrl.publicationFlow = this.publicationFlow;
+    ctrl.isViaCouncilOfMinisters = this.isViaCouncilOfMinisters;
   }
 }

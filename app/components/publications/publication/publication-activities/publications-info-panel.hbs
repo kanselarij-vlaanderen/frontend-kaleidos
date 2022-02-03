@@ -8,17 +8,19 @@
           </h4>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
-      <Auk::Toolbar::Group @position="right">
-        <Auk::Toolbar::Item>
-          <Auk::Button
-            @skin="tertiary"
-            @icon="pencil"
-            @disabled={{@isFinal}}
-            @layout="icon-only"
-            {{on "click" this.openEditingPanel}}
-          />
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
+      {{#unless this.isEditing}}
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <Auk::Button
+              @skin="tertiary"
+              @icon="pencil"
+              @disabled={{@isFinal}}
+              @layout="icon-only"
+              {{on "click" this.openEditingPanel}}
+            />
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      {{/unless}}
     </Auk::Toolbar>
   </Auk::Panel::Header>
 
@@ -36,7 +38,7 @@
         </div>
         <div class="auk-o-grid-col-3">
           <div class="auk-form-group">
-            <Auk::Label for="blockInput">
+            <Auk::Label>
               {{t "kind-of-publication"}}
             </Auk::Label>
             <PowerSelect
@@ -49,6 +51,28 @@
             </PowerSelect>
           </div>
         </div>
+        {{#if @publicationFlow.status.isPublished}}
+          <div class="auk-o-grid-col-3">
+            <div class="auk-form-group">
+              {{#unless this.loadDecision.isRunning}}
+                {{#if this.decision.isStaatsbladResource}}
+                  {{#if this.decision.publicationDate}}
+                    {{moment-format this.decision.publicationDate "DD-MM-YYYY"}}
+                  {{else}}
+                    <div class="auk-u-muted auk-u-italic">
+                      {{t "not-known"}}
+                    </div>
+                  {{/if}}
+                {{else}}
+                  <Auk::Datepicker
+                    @date={{this.decision.publicationDate}}
+                    @onChange={{this.setPublicationDate}}
+                  />
+                {{/if}}
+              {{/unless}}
+            </div>
+          </div>
+        {{/if}}
       </div>
     </Auk::Panel::Body>
     <Auk::Panel::Footer>
@@ -79,10 +103,10 @@
         <div class="auk-o-grid-col-3 auk-content">
           <h4 class="auk-u-m-0">{{t "publication-target-end-date"}}</h4>
           <p class="auk-u-m-0">
-            {{#if  @publicationSubcase.targetEndDate}}
+            {{#if @publicationSubcase.targetEndDate}}
               {{moment-format @publicationSubcase.targetEndDate "DD-MM-YYYY"}}
             {{else}}
-              -
+              {{t "dash"}}
             {{/if}}
           </p>
         </div>
@@ -92,10 +116,28 @@
             {{#if @publicationFlow.mode}}
               {{@publicationFlow.mode.label}}
             {{else}}
-              -
+              {{t "dash"}}
             {{/if}}
           </p>
         </div>
+        {{#if @publicationFlow.status.isPublished}}
+          <div class="auk-o-grid-col-3 auk-content">
+            <h4 class="auk-u-m-0">{{t "publication-date"}}</h4>
+            <p class="auk-u-m-0">
+              {{#unless this.loadDecision.isRunning}}
+                {{#if this.decision.isStaatsbladResource}}
+                  {{#if this.decision.publicationDate}}
+                    {{moment-format this.decision.publicationDate "DD-MM-YYYY"}}
+                  {{else}}
+                    <div class="auk-u-muted auk-u-italic">
+                      {{t "not-known"}}
+                    </div>
+                  {{/if}}
+                {{/if}}
+              {{/unless}}
+            </p>
+          </div>
+        {{/if}}
       </div>
     </Auk::Panel::Body>
   {{/if}}

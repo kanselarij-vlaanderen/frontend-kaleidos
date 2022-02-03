@@ -8,17 +8,19 @@
           </h4>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
-      <Auk::Toolbar::Group @position="right">
-        <Auk::Toolbar::Item>
-          <Auk::Button
-            @skin="tertiary"
-            @icon="pencil"
-            @disabled={{@isFinal}}
-            @layout="icon-only"
-            {{on "click" this.openEditingPanel}}
-          />
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
+      {{#unless this.isEditing}}
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <Auk::Button
+              @skin="tertiary"
+              @icon="pencil"
+              @disabled={{@isFinal}}
+              @layout="icon-only"
+              {{on "click" this.openEditingPanel}}
+            />
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      {{/unless}}
     </Auk::Toolbar>
   </Auk::Panel::Header>
 
@@ -63,7 +65,7 @@
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <Auk::Button @skin="primary"  @loading={{this.save.isRunning}} {{on "click" (perform this.save)}}>
+            <Auk::Button @skin="primary" @loading={{this.save.isRunning}} {{on "click" (perform this.save)}}>
               {{t "save"}}
             </Auk::Button>
           </Auk::Toolbar::Item>
