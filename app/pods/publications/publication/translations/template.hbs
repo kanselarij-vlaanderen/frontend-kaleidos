@@ -40,7 +40,13 @@
         </Auk::Toolbar>
       </Auk::Panel::Header>
       <Auk::Panel::Body class="auk-u-bg-alt">
-
+        {{#each this.model as |translationRow|}}
+          {{#if translationRow.requestActivity}}
+ -
+          {{else if translationRow.piece }}
+  +
+          {{/if}}
+        {{/each}}
       </Auk::Panel::Body>
     </Auk::Panel>
   </div>

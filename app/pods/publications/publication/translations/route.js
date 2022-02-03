@@ -15,12 +15,15 @@ export class TranslationRow {
   // no async constructor() in JS
   static async create(piece,requestActivity) {
     const row = new TranslationRow();
-
+    console.log(piece)
+    console.log(requestActivity)
     if (piece){
       row.piece = piece;
       row.date = piece.created;
       row.requestActivitiesUsedBy = await piece.requestActivitiesUsedBy;
-    } else {
+    }
+    if (requestActivity) {
+
       row.requestActivity = requestActivity;
       row.date = requestActivity.startDate;
     }
@@ -48,8 +51,9 @@ export default class PublicationsPublicationTranslationsRoute extends Route {
       }
     );
 
-    const requestRows = await Promise.all(requestActivities.map((request) => TranslationRow.create(null,request)));
 
+    const requestRows = await Promise.all(requestActivities.map((request) => TranslationRow.create(0,request)));
+    console.log(requestRows)
     const queryProperties = {
       include: [
         'file',
