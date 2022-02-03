@@ -1,0 +1,52 @@
+<div class="auk-box">
+  <div class="auk-u-mb-4">
+    <div class="auk-form-group">
+      <div class="auk-u-mb-4">
+        <fieldset>
+          <legend class="auk-label">{{t "subcase-type"}}</legend>
+          <Auk::RadioList @layout="inline" as |List|>
+            {{#each this.caseTypes as |type|}}
+              <List.Radio
+                @label={{type.label}}
+                @checked={{eq type.uri this.caseType.uri}}
+                value={{type.id}}
+                {{on "change" this.selectCaseType}}
+              />
+            {{/each}}
+          </Auk::RadioList>
+        </fieldset>
+      </div>
+    </div>
+    <div class="auk-form-group">
+      <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
+      <Utils::ModelSelector
+        @modelName="subcase-type"
+        @searchField="label"
+        @sortField="label"
+        @propertyToShow="label"
+        @selectedItems={{this.subcaseType}}
+        @selectModel={{this.selectSubcaseType}}
+      />
+    </div>
+    <div class="auk-form-group">
+      <Auk::Label>{{t "subcase-name"}}</Auk::Label>
+      <Auk::Input @block={{true}} @value={{mut this.subcaseName}} />
+    </div>
+  </div>
+  <Auk::Toolbar @auto={{true}}>
+    <Auk::Toolbar::Group @position="right">
+      <Auk::Toolbar::Item>
+        <Auk::ButtonLink {{on "click" @onCancel}}>
+          {{t "cancel"}}
+        </Auk::ButtonLink>
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
+        <WebComponents::VlSaveButton
+          @text={{t "save"}}
+          @isLoading={{this.isSaving}}
+          @saveAction={{this.saveChanges}}
+        />
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
+</div>

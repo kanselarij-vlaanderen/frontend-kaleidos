@@ -205,7 +205,7 @@ context('Tests for KAS-1076', () => {
 
     cy.get(auk.tab.hierarchicalBack).click();
     const subcaseTitleLong = 'Cypress test voor het tonen van meer dan 20 documenten in procedurestap';
-    const subcaseType = 'in voorbereiding';
+    const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
 
     cy.addSubcase('Nota', 'cypress test: 20+ documents subcase - 1589286177 part 2', subcaseTitleLong, subcaseType, subcaseName);

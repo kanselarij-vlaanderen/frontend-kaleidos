@@ -20,6 +20,7 @@ export default class SidebarItem extends Component {
 
   @tracked subcase;
   @tracked newsletterIsVisible;
+
   get isRetracted() {
       return this.args.agendaitem.retracted;
   }
@@ -30,9 +31,27 @@ export default class SidebarItem extends Component {
       classes.push('vlc-agenda-detail-sidebar__sub-item--active');
     }
     if (this.isRetracted) {
-      classes.push('vlc-u-opacity-lighter');
+      classes.push('auk-u-opacity--1/3');
     }
     return classes.join(' ');
+  }
+
+  get defaultRoute() {
+    return 'agenda.agendaitems.agendaitem.index';
+  }
+
+  /**
+   * This method will get the route name for rerouting from one agendaitem to another while keeping the selected subroute.
+   */
+  get currentRoute() {
+    // There used to be a fix here to prevent the user from getting stuck in loading by using the currentRouter property from router.
+    // This fix broke after an ember update so now we default to index instead of creating a link to the /loading route.
+    // A better solution would be to remember the last correct route but that would mean keeping state somewhere..
+    const currentRouteName = this.router.currentRouteName;
+    if (currentRouteName.includes('.loading')){
+      return this.defaultRoute;
+    }
+    return currentRouteName;
   }
 
   @dropTask

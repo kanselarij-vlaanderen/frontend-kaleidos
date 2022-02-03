@@ -22,7 +22,7 @@
       {{/if}}
     {{else}}
       <div class="auk-loader" role="alert" aria-busy="true">
-        <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+        <EmberTooltip @side="bottom" @tooltipClass="auk-tooltip">
           {{t "nota-loading-text"}}
         </EmberTooltip>
       </div>
@@ -55,7 +55,6 @@
     <Auk::Label>{{t "decision-in-newsletter"}}</Auk::Label>
     <WebComponents::VlRdfaEditor
       data-test-newsletter-edit-item-rdfa-editor={{true}}
-      @isLarge={{this.isExpanded}}
       @richtext={{await this.newsletterInfo.richtext}}
       @handleRdfaEditorInit={{action "handleRdfaEditorInit"}}
     />

@@ -4,6 +4,7 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
+import { isNone } from '@ember/utils';
 
 // TODO: octane-refactor
 // eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
@@ -45,7 +46,16 @@ export default Component.extend({
     this.set('isLoading', true);
     const newsletterInfo = await this.get('newsletterInfo');
     try {
-      newsletterInfo.set('richtext', this.richtext);
+      // The editor introduces &nbsp; instead of normal spaces to work around
+      // certain browsers' behavior where normal spaces on outer ends of text nodes
+      // aren't rendered in the content-editable. In recent versions of the editor however,
+      // this &nbsp;-inserting seems to happen too often, which results in very long
+      // lines that don't break, which is undesired.
+      // Here we replace all &nbsp's that don't lean against html tags in an attempt
+      // to keep the editor's workaround behavior, while replacing unnecessary &nbsp;'s
+      //
+      const cleanedHtml = this.richtext.replaceAll(/(?<!>)&nbsp;(?!<)/gm, ' ');
+      newsletterInfo.set('richtext', cleanedHtml);
     } catch {
       // pass
     }
@@ -105,7 +115,11 @@ export default Component.extend({
 
     async handleRdfaEditorInit(editorInterface) {
       const newsletterInfo = await this.get('newsletterInfo');
-      const newsLetterInfoText = newsletterInfo.get('richtext');
+      let newsLetterInfoText = newsletterInfo.get('richtext');
+      if (isNone(newsLetterInfoText)) {
+        // editor stringifies non-string values (to "undefined" for example)
+        newsLetterInfoText = '';
+      }
       editorInterface.setHtmlContent(newsLetterInfoText);
       this.set('editorInstance', editorInterface);
     },

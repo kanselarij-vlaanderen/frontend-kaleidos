@@ -6,7 +6,7 @@
           @searchText={{readonly this.filter}}
           @onSearch={{this.searchAgendaitems}}
         />
-        <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical vlc-hide-on-print">
+        <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical auk-u-hidden@print">
           <Agenda::AgendaDetail::Sidebar
             @notaGroups={{this.notaGroups}}
             @isLoadingNotaGroups={{this.groupNotasOnGroupName.isRunning}}
@@ -34,7 +34,7 @@
         @searchText={{readonly this.filter}}
         @onSearch={{this.searchAgendaitems}}
       />
-      <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical vlc-hide-on-print">
+      <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical auk-u-hidden@print">
         {{#if this.loadDocuments.isRunning}}
           <Auk::Loader @message={{this.documentLoadingMessage}} />
         {{else}}

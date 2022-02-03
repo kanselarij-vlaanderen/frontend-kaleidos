@@ -1,4 +1,4 @@
-import Model, { attr, hasMany } from '@ember-data/model';
+import Model, { attr, belongsTo } from '@ember-data/model';
 
 export default class MailCampaign extends Model {
   @attr('string') campaignId;
@@ -6,7 +6,7 @@ export default class MailCampaign extends Model {
   @attr('string') archiveUrl;
   @attr('datetime') sentAt;
 
-  @hasMany('meeting', { inverse: null }) meetings;
+  @belongsTo('meeting') meeting;
 
   get isSent() {
     return !!this.sentAt;

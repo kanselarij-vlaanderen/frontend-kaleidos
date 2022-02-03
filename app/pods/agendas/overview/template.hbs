@@ -1,6 +1,6 @@
 {{! TODO: octane-refactor }}
 {{! template-lint-disable no-action }}
-<div class="vlc-u-box-model-maximize-height auk-scroll-wrapper">
+<div class="auk-u-maximize-height auk-scroll-wrapper">
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-m-8">
       {{#if (not (or this.from this.to))}}
@@ -116,7 +116,7 @@
                     <td>
                       {{#if (is-pending meeting.latestAgenda)}}
                         <div
-                          class="skeletal-loader"
+                          class="auk-skeleton auk-skeleton--rectangle"
                           role="alert"
                           aria-busy="true"
                         ></div>

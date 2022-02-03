@@ -36,6 +36,7 @@
             <Auk::Toolbar::Group @position="left">
               <Auk::Toolbar::Item>
                 <Auk::ButtonLink
+                  disabled={{this.isLoading}}
                   {{action "cancel"}}
                   data-test-vl-modal-verify-cancel
                 >
@@ -49,8 +50,8 @@
                   <Auk::Button
                     @skin={{this.buttonSkin}}
                     @icon={{if this.showIcon "trash"}}
+                    @loading={{this.isLoading}}
                     {{action "verify"}}
-                    {{!-- isLoading=isLoading --}}
                     data-test-vl-modal-verify-save
                   >
                     {{this.verifyButtonText}}
