@@ -3,7 +3,7 @@
     (t "publication-details-tab-decisions")
   }}
   <Publications::Publication::Decisions::DecisionsInfoPanel
-    @publicationFlow={{this.publicationFlow}} />
+    @publicationFlow={{this.currentPublicationFlow.publicationFlow}} />
 
   {{#if this.isViaCouncilOfMinisters}}
     <div class="auk-u-mb-8">

@@ -10,6 +10,8 @@ export default class CurrentPublicationFlowService extends Service {
     this.publicationFlow = await this.store.findRecord('publication-flow', id, {
       include: [
         'case',
+        'case.subcases',
+        'agenda-item-treatment',
         'status',
         'mode',
         'identification.structured-identifier',
@@ -23,7 +25,7 @@ export default class CurrentPublicationFlowService extends Service {
         'contact-persons.person',
         'contact-persons.person.organization',
         'mandatees',
-        'mandatees.person'
+        'mandatees.person',
       ].join(','),
     });
   }

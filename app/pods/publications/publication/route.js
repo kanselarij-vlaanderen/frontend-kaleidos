@@ -13,7 +13,7 @@ export default class PublicationRoute extends Route {
     this.currentPublicationFlow.unload();
   }
 
-  async afterModel(model) {
+  async afterModel() {
     this.isViaCouncilOfMinisters =
       await this.publicationService.getIsViaCouncilOfMinisters(this.currentPublicationFlow.publicationFlow);
   }

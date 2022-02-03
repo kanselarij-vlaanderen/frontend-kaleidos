@@ -20,7 +20,7 @@ export default class PublicationsPublicationDecisionsRoute extends Route {
 
   async afterModel() {
     this.isViaCouncilOfMinisters =
-      await this.publicationService.getIsViaCouncilOfMinisters(this.publicationFlow);
+      await this.publicationService.getIsViaCouncilOfMinisters(this.currentPublicationFlow.publicationFlow);
   }
 
   setupController(ctrl) {
