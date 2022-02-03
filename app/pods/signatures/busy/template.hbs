@@ -73,7 +73,60 @@
           </tr>
         </thead>
         <tbody>
-          {{#each this.model as |signFlow|}}
+          {{#each this.model as |signFlow index|}}
+            {{#if (eq index 0)}}
+            <tr class="auk-table__row auk-table__row__clickable">
+              <td>
+                <p class="auk-u-muted">Decreet - {{moment-format
+                  signFlow.decisionActivity.startDate
+                  "DD-MM-YYYY"
+                }}</p>
+                <p>{{signFlow.signSubcase.signMarkingActivity.piece.name}}</p>
+              </td>
+              {{!-- <td>
+                {{signFlow.signSubcase.signMarkingActivity.piece.documentContainer.type.label}}
+              </td> --}}
+              {{!-- <td>
+                <Auk::Avatar @icon="user" @size="small">
+                  {{signFlow.creator.fullName}}
+                </Auk::Avatar>
+              </td> --}}
+              <td>
+                {{moment-format
+                  signFlow.decisionActivity.startDate
+                  "DD-MM-YYYY"
+                }}
+              </td>
+              <td>
+                <Auk::StatusPill @status="not-started">Voorbereiden</Auk::StatusPill>
+              </td>
+              <td>
+                <Auk::Button
+                  @skin="borderless"
+                  @layout="icon-only"
+                  @icon="chevron-right"
+                  class="auk-table__link"
+                  {{on "click" this.showSidebar}}
+                >
+                  {{t "read"}}
+                </Auk::Button>
+                {{!-- <WebComponents::AuButtonToolbar>
+
+                  <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
+                    <Menu.Item
+                      {{on
+                        "click"
+                        (fn this.navigateToDecision signFlow.decisionActivity)
+                      }}
+                    >
+                      {{t "consult-agendaitem-decision"}}
+                    </Menu.Item>
+                  </DropdownMenu>
+                </WebComponents::AuButtonToolbar> --}}
+              </td>
+            </tr>
+            {{/if}}
+            {{#if (not-eq index 0)}}
             <tr class="auk-table__row auk-table__row__clickable">
               <td>
                 <p class="auk-u-muted">Decreet - {{moment-format
@@ -124,6 +177,7 @@
                 </WebComponents::AuButtonToolbar> --}}
               </td>
             </tr>
+            {{/if}}
           {{/each}}
         </tbody>
       </table>
@@ -153,7 +207,7 @@
         />
       </div>
       <div class="auk-sidebar__body">
-        <Auk::StatusPill @status="neutral">Gemarkeerd voor handtekenen</Auk::StatusPill>
+        <Auk::StatusPill @status="not-started">Voorbereiden</Auk::StatusPill>
         <p class="auk-u-muted auk-u-mt-2">
           Decreet -
           {{moment-format

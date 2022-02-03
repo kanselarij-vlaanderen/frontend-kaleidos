@@ -1000,7 +1000,9 @@
     "yes-cancel-signatures": "Ja, handtekenen annuleren",
     "cancel-signatures": "Handtekenen annuleren",
     "confirm-cancel-signatures": "Door het annuleren van handtekenen zal dit document uit de handtekenmap verwijderd worden.",
-    "signature-success": "Het document is succesvol verzonden ter ondertekening."
+    "signature-success": "Het document is succesvol verzonden ter ondertekening.",
+    "signature-properties": "Handtekeneigenschappen",
+    "signature-required": "Handtekening vereist"
   },
   "util": {
     "view": "Bekijken",

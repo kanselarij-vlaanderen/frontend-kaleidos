@@ -113,3 +113,38 @@ $scroll-sidebar-width: 50rem;
   display: block;
   width: 100%;
 }
+
+// Document sidebar
+.auk-u-sidebar-min-width[data-collapsed="false"] {
+  min-width: 60rem;
+}
+
+.auk-u-px-1 {
+  padding: 0 .8rem !important ;
+}
+
+.auk-u-p-1 {
+  padding: .8rem !important ;
+}
+
+// Modal fix
+.auk-modal--full-screen .auk-modal__body,
+.auk-modal--full-screen .auk-modal__content {
+  flex: 0 1 auto;
+  overflow: auto;
+  height: auto;
+}
+
+.auk-modal--full-screen > .auk-modal__content > .auk-modal__body,
+.auk-modal--full-screen > .auk-modal__content {
+  height: 100%;
+  flex: 1 1 auto;
+}
+
+.auk-modal--full-screen .auk-modal__push {
+  display: block;
+}
+
+.auk-modal--full-screen > .auk-modal__push {
+  display: none;
+}

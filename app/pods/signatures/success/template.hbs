@@ -150,7 +150,7 @@
                 }}
               </td>
               <td>
-                <Auk::StatusPill @status="not-started">Gemarkeerd voor handtekenen</Auk::StatusPill>
+                <Auk::StatusPill @status="neutral">Gemarkeerd voor handtekenen</Auk::StatusPill>
               </td>
               <td>
                 <Auk::Button
@@ -219,10 +219,8 @@
         <div class="auk-o-flex auk-o-flex--spaced-wide auk-u-mt-1">
           <Auk::ButtonLink
             @skin="borderless"
-            @icon="external-link"
+            @icon="book"
             @href={{signFlow.signSubcase.signMarkingActivity.piece.viewDocumentURL}}
-            target="_blank"
-            rel="noreferrer noopener"
           >
             {{t "util.preview"}}
           </Auk::ButtonLink>
@@ -237,47 +235,43 @@
             {{t "consult-agendaitem-decision"}}
           </Auk::ButtonLink>
         </div>
-        <hr class="auk-hr" />
-        <Auk::Toolbar>
-          <Auk::Toolbar::Group @position="left">
-            <h5 class="auk-h4 auk-u-m-0"> {{t "signaturesSection.signature-needed-by"}}:</h5>
-          </Auk::Toolbar::Group>
-          <Auk::Toolbar::Group @position="right">
-            <Auk::Toolbar::Item>
-              <Auk::Button
-                @skin="borderless"
-                @icon="pencil"
-                {{on "click" this.showAddMinister}}
-              >
-                {{t "util.edit-list"}}
-              </Auk::Button>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-        </Auk::Toolbar>
-        <div class="auk-panel">
-          <Auk::List @bordered={{true}}>
-            <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
-              <span>Jan Jambon</span>
-              <Auk::Button
-                @skin="danger-borderless"
-                @layout="icon-only"
-                @icon="trash"
-              >
-                {{t "util.delete"}}
-              </Auk::Button>
-            </Auk::List::Item>
-            <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
-              <span>Lydia Peeters</span>
-              <Auk::Button
-                @skin="danger-borderless"
-                @layout="icon-only"
-                @icon="trash"
-              >
-                {{t "util.delete"}}
-              </Auk::Button>
-            </Auk::List::Item>
-          </Auk::List>
-        </div>
+        <Auk::Panel class="auk-u-mt-4">
+          <Auk::Panel::Header class="auk-u-px-1">
+            <Auk::Toolbar>
+              <Auk::Toolbar::Group @position="left">
+                <Auk::Toolbar::Item>
+                  <h4 class="auk-h4 auk-u-m-0">
+                    {{t "signaturesSection.signature-needed-by"}}
+                  </h4>
+                </Auk::Toolbar::Item>
+              </Auk::Toolbar::Group>
+              <Auk::Toolbar::Group @position="right">
+                <Auk::Toolbar::Item>
+                  <Auk::Button @skin="tertiary" @icon="pencil" {{on "click" this.showAddMinister}}>
+                    {{t "util.edit-list"}}
+                  </Auk::Button>
+                </Auk::Toolbar::Item>
+              </Auk::Toolbar::Group>
+            </Auk::Toolbar>
+          </Auk::Panel::Header>
+          <Auk::Panel::Body class="auk-u-p-0">
+            <Auk::List @bordered={{true}}>
+              <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
+                <span>Jan Jambon</span>
+              </Auk::List::Item>
+              <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
+                <span>Lydia Peeters</span>
+                <Auk::Button
+                  @skin="danger-borderless"
+                  @layout="icon-only"
+                  @icon="trash"
+                >
+                  {{t "util.delete"}}
+                </Auk::Button>
+              </Auk::List::Item>
+            </Auk::List>
+          </Auk::Panel::Body>
+        </Auk::Panel>
       </div>
       <div class="auk-sidebar__footer">
         <Auk::Toolbar>
