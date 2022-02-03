@@ -61,7 +61,7 @@
           {{!-- template-lint-enable no-unknown-arguments-for-builtin-components --}}
             <td>
               {{#if (is-pending meeting)}}
-                <div class="skeletal-loader" role="alert" aria-busy="true"></div>
+                <div class="auk-skeleton auk-skeleton--rectangle" role="alert" aria-busy="true"></div>
               {{else}}
                 {{t "agenda-for"}}
                 {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
@@ -69,7 +69,7 @@
             </td>
             <td>
               {{#if (is-pending meeting.latestAgendaName)}}
-                <div class="skeletal-loader" role="alert" aria-busy="true"></div>
+                <div class="auk-skeleton auk-skeleton--rectangle" role="alert" aria-busy="true"></div>
               {{else if (await meeting.latestAgendaName)}}
                 {{await meeting.latestAgendaName}}
               {{else}}
@@ -78,7 +78,7 @@
             </td>
             <td>
               {{#if (is-pending meeting.latestAgenda)}}
-                <div class="skeletal-loader" role="alert" aria-busy="true"></div>
+                <div class="auk-skeleton auk-skeleton--rectangle" role="alert" aria-busy="true"></div>
               {{else}}
                 {{moment-format
                   (await meeting.latestAgenda.modified)

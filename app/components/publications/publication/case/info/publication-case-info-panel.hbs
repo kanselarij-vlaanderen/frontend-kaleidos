@@ -1,0 +1,344 @@
+<div class="auk-u-mb-3">
+  <Auk::Panel class={{if this.isEditing "auk-panel--editing"}}>
+    <Auk::Panel::Header>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <h4 class="auk-panel__title">
+              {{t "publication-case-info-panel-title"}}
+            </h4>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        {{#unless this.isEditing}}
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <Auk::Button
+                data-test-publication-case-info-panel-view-edit
+                @skin="tertiary"
+                @icon="pencil"
+                @layout="icon-only"
+                {{on "click" this.openEditingPanel}}
+              />
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        {{/unless}}
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body>
+      {{#if this.isEditing}}
+        <Utils::LoadableContent
+          @isLoading={{or this.closeEditingPanel.isRunning this.save.isRunning}}
+          @reserveSpace={{true}}
+        >
+          <div class="auk-form-group-layout auk-form-group-layout--grid">
+            <div class="auk-o-grid">
+
+              {{! Dringend}}
+              <div class="auk-o-grid-col-4">
+                <Auk::Label>
+                  {{t "publication-urgent"}}
+                </Auk::Label>
+                <div class="auk-form-group">
+                  <Auk::Checkbox
+                    data-test-urgency-level-checkbox
+                    @label={{t "priority-procedure"}}
+                    @checked={{@publicationFlow.urgencyLevel.isUrgent}}
+                    {{on "input" this.changeIsUrgent}}
+                  />
+                </div>
+              </div>
+
+              {{! Publicatienummer}}
+              <div class="auk-o-grid-col-4">
+                <div class="auk-form-group">
+                  <Auk::Label @required={{true}} @error={{this.publicationNumberErrorTranslationKey}}>
+                    {{t "publication-number"}}
+                  </Auk::Label>
+                  <div class="auk-u-mb">
+                    <Auk::Input
+                      data-test-publication-case-info-panel-publication-number
+                      @type="number"
+                      value={{this.publicationNumber}}
+                      @error={{this.publicationNumberErrorTranslationKey}}
+                      {{on "input" (perform this.setPublicationNumber)}}
+                    />
+                    <Auk::Input
+                      data-test-publication-case-info-panel-publication-number-suffix
+                      @width="xsmall"
+                      value={{this.publicationNumberSuffix}}
+                      @error={{this.publicationNumberErrorTranslationKey}}
+                      {{on "input" (perform this.setPublicationNumberSuffix)}}
+                    />
+                    <Utils::Generic::TooltipHelp class="auk-u-mx">
+                      {{t "publication-flow-publication-number-help"}}
+                    </Utils::Generic::TooltipHelp>
+                  </div>
+                  {{#if this.publicationNumberErrorTranslationKey}}
+                    <Auk::FormHelpText
+                      @text={{t this.publicationNumberErrorTranslationKey}}
+                      @skin="danger"
+                      @icon="alert-triangle"
+                    />
+                  {{/if}}
+                </div>
+              </div>
+
+              {{! Numac-nummers}}
+              <div class="auk-o-grid-col-4">
+                <div class="auk-form-group">
+                  <Auk::Label>
+                    {{t "publication-flow-numac-number"}}
+                  </Auk::Label>
+                  {{! TODO: disable modifying numac-number once (staatsblad-)decision exists? }}
+                  <Auk::InputPills
+                    data-test-publication-case-info-panel-numac-number
+                    @items={{this.numacNumbers}}
+                    @onCreate={{this.addNumacNumber}}
+                    @onRemove={{this.deleteNumacNumber}}
+                    as |numac|
+                  >
+                    {{numac.idName}}
+                  </Auk::InputPills>
+                </div>
+              </div>
+
+              {{! Datum beslissing }}
+              <div class="auk-o-grid-col-4 auk-u-mt-2">
+                <div
+                  data-test-publication-case-info-panel-decision-date
+                  class="auk-form-group"
+                >
+                  <Auk::Label>{{t "decision-date"}}</Auk::Label>
+                  {{#if this.isViaCouncilOfMinisters}}
+                    <Auk::ButtonLink
+                      target="_blank"
+                      @icon="chevron-right"
+                      @layout="icon-right"
+                      @route="agenda.agendaitems.agendaitem"
+                      @models={{array
+                                  @publicationFlow.agendaItemTreatment.agendaitem.agenda.createdFor.id
+                                  @publicationFlow.agendaItemTreatment.agendaitem.agenda.id
+                                  @publicationFlow.agendaItemTreatment.agendaitem.id
+                              }}
+                    >
+                      {{#if @publicationFlow.agendaItemTreatment.startDate}}
+                        {{moment-format
+                            @publicationFlow.agendaItemTreatment.startDate
+                            "DD-MM-YYYY"
+                        }}
+                      {{else}}
+                        {{t "to-agenda"}}
+                      {{/if}}
+                    </Auk::ButtonLink>
+                  {{else}}
+                    <Auk::Datepicker
+                      @date={{@publicationFlow.agendaItemTreatment.startDate}}
+                      @onChange={{this.setDecisionDate}}
+                    />
+                  {{/if}}
+                </div>
+              </div>
+
+              {{! Datum ontvangst }}
+              <div class="auk-o-grid-col-4 auk-u-mt-2">
+                <div
+                  data-test-publication-case-info-panel-opening-date
+                  class="auk-form-group"
+                >
+                  <Auk::Label>{{t "publication-flow-opening-date"}}</Auk::Label>
+                  {{#if this.isViaCouncilOfMinisters}}
+                    {{#if @publicationFlow.openingDate}}
+                      {{moment-format
+                        @publicationFlow.openingDate
+                        "DD-MM-YYYY"
+                      }}
+                    {{else}}
+                      {{t "dash"}}
+                    {{/if}}
+                  {{else}}
+                    <Auk::Datepicker
+                      @date={{@publicationFlow.openingDate}}
+                      @onChange={{this.setOpeningDate}}
+                    />
+                  {{/if}}
+                </div>
+              </div>
+
+              {{! Limiet publicatie }}
+              <div class="auk-o-grid-col-4 auk-u-mt-2">
+                <div
+                  data-test-publication-case-info-panel-publication-due-date
+                  class="auk-form-group"
+                >
+                  <Auk::Label>
+                    {{t "publication-flow-publication-due-date"}}
+                  </Auk::Label>
+                  <Auk::Datepicker
+                    @date={{@publicationFlow.publicationSubcase.dueDate}}
+                    @onChange={{this.setPublicationDueDate}}
+                  />
+                  {{#if
+                       (and
+                       (not @publicationFlow.status.isFinal)
+                       (is-after @publicationFlow.publicationSubcase.dueDate precision="days")
+                       )
+                  }}
+                    <Auk::FormHelpText
+                      @text={{t "date-expired"}}
+                      @skin="warning"
+                      @icon="alert-triangle"
+                    />
+                  {{/if}}
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </Utils::LoadableContent>
+      {{else}}
+        <div class="auk-o-grid">
+          {{! Dringend}}
+          <div class="auk-o-grid-col-1 auk-content">
+            <h4 class="auk-u-m-0">{{t "publication-urgent"}}</h4>
+            <p class="auk-u-m-0">
+              {{#if @publicationFlow.urgencyLevel.isUrgent}}
+                <Auk::Icon @name="alert-triangle" @skin="warning" />
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            </p>
+          </div>
+
+          {{! Publicatienummer}}
+          <div class="auk-o-grid-col-2 auk-content">
+            <h4 class="auk-u-m-0">{{t "publication-number"}}</h4>
+            <p class="auk-u-m-0">
+              {{@publicationFlow.identification.idName}}
+            </p>
+          </div>
+
+          {{! Numac-nummers}}
+          <div class="auk-o-grid-col-2 auk-content">
+            <h4 class="auk-u-m-0">{{t "publication-flow-numac-number"}}</h4>
+            <p class="auk-u-m-0">
+              {{#if @publicationFlow.numacNumbers}}
+                {{join ", " (map-by "idName" @publicationFlow.numacNumbers)}}
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            </p>
+          </div>
+
+          {{! Datum beslissing}}
+          <div class="auk-o-grid-col-2 auk-content">
+            <h4 class="auk-u-m-0">{{t "decision-date"}}</h4>
+            <p class="auk-u-m-0">
+              {{#if this.isViaCouncilOfMinisters}}
+                <Auk::ButtonLink
+                  target="_blank"
+                  @icon="chevron-right"
+                  @layout="icon-right"
+                  @route="agenda.agendaitems.agendaitem"
+                  @models={{array
+                              @publicationFlow.agendaItemTreatment.agendaitem.agenda.createdFor.id
+                              @publicationFlow.agendaItemTreatment.agendaitem.agenda.id
+                              @publicationFlow.agendaItemTreatment.agendaitem.id
+                          }}
+                >
+                  {{#if @publicationFlow.agendaItemTreatment.startDate}}
+                    {{moment-format
+                        @publicationFlow.agendaItemTreatment.startDate
+                        "DD-MM-YYYY"
+                    }}
+                  {{else}}
+                    {{t "to-agenda"}}
+                  {{/if}}
+                </Auk::ButtonLink>
+              {{else}}
+                {{#if @publicationFlow.agendaItemTreatment.startDate}}
+                  {{moment-format
+                      @publicationFlow.agendaItemTreatment.startDate
+                      "DD-MM-YYYY"
+                  }}
+                {{else}}
+                  {{t "dash"}}
+                {{/if}}
+              {{/if}}
+            </p>
+          </div>
+
+          {{! Datum ontvangst}}
+          <div class="auk-o-grid-col-2 auk-content">
+            <h4 class="auk-u-m-0">{{t "publication-flow-opening-date"}}</h4>
+            <p class="auk-u-m-0">
+              {{#if @publicationFlow.openingDate}}
+                {{moment-format @publicationFlow.openingDate "DD-MM-YYYY"}}
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            </p>
+          </div>
+
+          {{! Limiet publicatie}}
+          <div class="auk-o-grid-col-2 auk-content">
+            <h4 class="auk-u-m-0">{{t "publication-flow-publication-due-date"}}</h4>
+            <p class="auk-u-m-0">
+              {{#if @publicationFlow.publicationSubcase.dueDate}}
+                {{moment-format @publicationFlow.publicationSubcase.dueDate "DD-MM-YYYY"}}
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+              {{#if
+                   (and
+                   (not @publicationFlow.status.isFinal)
+                   (is-after @publicationFlow.publicationSubcase.dueDate precision="days")
+                   )
+              }}
+                <Auk::FormHelpText
+                  @text={{t "date-expired"}}
+                  @skin="warning"
+                  @icon="alert-triangle"
+                />
+              {{/if}}
+            </p>
+          </div>
+        </div>
+      {{/if}}
+    </Auk::Panel::Body>
+    {{#if this.isEditing}}
+      <Auk::Panel::Footer>
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <Auk::Button
+                data-test-publication-case-info-panel-edit-cancel
+                @skin="borderless"
+                @loading={{this.closeEditingPanel.isRunning}}
+                @disable={{this.save.isRunning}}
+                {{on "click" (perform this.closeEditingPanel)}}
+              >
+                {{t "cancel"}}
+              </Auk::Button>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <Auk::Button
+                data-test-publication-case-info-panel-edit-save
+                @skin="primary"
+                @loading={{this.save.isRunning}}
+                @disabled={{or
+                  (not this.isValid)
+                  this.closeEditingPanel.isRunning
+                }}
+                {{on "click" (perform this.save)}}
+              >
+                {{t "save"}}
+              </Auk::Button>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </Auk::Panel::Footer>
+    {{/if}}
+  </Auk::Panel>
+</div>

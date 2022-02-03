@@ -9,6 +9,7 @@ export default class PublicationController extends Controller {
   @service intl;
   @service toaster;
 
+  @tracked isViaCouncilOfMinisters;
   @tracked sidebarIsOpen = this.media.get('isBigScreen');
 
   @action
