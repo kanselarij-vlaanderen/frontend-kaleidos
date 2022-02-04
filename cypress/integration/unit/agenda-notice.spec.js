@@ -42,7 +42,7 @@ context('agenda notice test', () => {
     cy.addSubcaseMandatee(1);
     cy.addSubcaseMandatee(2);
     // add fields
-    cy.intercept('GET', 'concepts**http://themis.vlaanderen.be/id/concept-schema/**').as('getConceptSchemes');
+    cy.intercept('GET', '/concepts**').as('getConceptSchemes');
     cy.get(utils.governmentAreasPanel.edit).click();
     cy.wait('@getConceptSchemes');
     cy.get(utils.governmentAreaSelectorForm.container).contains(labelName1)

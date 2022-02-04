@@ -236,7 +236,7 @@ context('Publications tests', () => {
 
     // link government field
     cy.intercept('PATCH', '/cases/**').as('patchCase');
-    cy.intercept('GET', 'concepts**http://themis.vlaanderen.be/id/concept-schema/**').as('getConceptSchemes');
+    cy.intercept('GET', '/concepts**').as('getConceptSchemes');
     cy.get(utils.governmentAreasPanel.edit).click();
     cy.wait('@getConceptSchemes');
     cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)

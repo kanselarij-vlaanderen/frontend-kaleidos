@@ -48,7 +48,7 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     cy.openSubcase(0);
 
     // check rollback after cancel
-    cy.intercept('GET', 'concepts**http://themis.vlaanderen.be/id/concept-schema/**').as('getConceptSchemes');
+    cy.intercept('GET', '/concepts**').as('getConceptSchemes');
     cy.get(utils.governmentAreasPanel.edit).click();
     cy.wait('@getConceptSchemes');
     cy.get(utils.governmentAreaSelectorForm.container).contains('Cultuur, Jeugd, Sport en Media')
