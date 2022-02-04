@@ -50,7 +50,7 @@ export default class PublicationsOverviewAllController extends Controller {
 
   loadColumnsDisplayConfig() {
     const serializedColumnsDisplayConfig = localStorage.getItem(
-      `${this.routeName}/columnsDisplayConfig`
+      'publications.overview.urgent/columnsDisplayConfig',
     );
     if (serializedColumnsDisplayConfig) {
       const columnsDisplayConfig = JSON.parse(serializedColumnsDisplayConfig);
@@ -63,7 +63,7 @@ export default class PublicationsOverviewAllController extends Controller {
   saveColumnsDisplayConfig(columnsDisplayConfig) {
     const serializedColumnsDisplayConfig = JSON.stringify(columnsDisplayConfig);
     localStorage.setItem(
-      `${this.routeName}/columnsDisplayConfig`,
+      'publications.overview.urgent/columnsDisplayConfig',
       serializedColumnsDisplayConfig
     );
   }

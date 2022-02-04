@@ -35,10 +35,6 @@ export default class PublicationsOverviewAllRoute extends Route {
     });
   }
 
-  setupController(ctrl) {
-    ctrl.routeName = this.routeName;
-  }
-
   @action
   loading(transition) {
     // see snippet in https://api.emberjs.com/ember/3.27/classes/Route/events/loading?anchor=loading
