@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 
-export default class PublicationsOverviewAllRoute extends Route {
+export default class PublicationsOverviewUrgentRoute extends Route {
   queryParams = {
     page: {
       refreshModel: true,

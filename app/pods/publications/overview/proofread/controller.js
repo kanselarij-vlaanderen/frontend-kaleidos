@@ -14,7 +14,7 @@ const defaultColumns = [
   'publicationDueDate',
 ];
 
-export default class PublicationsOverviewAllController extends Controller {
+export default class PublicationsOverviewProofreadController extends Controller {
   @tracked page = 0;
   @tracked size = 10;
   @tracked sort = '-created';
