@@ -57,7 +57,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   get isValid() {
-    return this.publicationNumberErrorTranslationKey;
+    return !this.publicationNumberErrorTranslationKey;
   }
 
   @action
