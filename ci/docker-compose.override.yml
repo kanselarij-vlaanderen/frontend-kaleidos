@@ -38,7 +38,6 @@ services:
     links:
       - resource:backend
     restart: always
-    user: ${HOST_UID_GID}
   resource:
     links:
       - database:database
