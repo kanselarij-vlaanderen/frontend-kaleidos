@@ -27,8 +27,8 @@ services:
     links:
       - frontend:frontend
     volumes:
-      - ../cypress:/cypress
-      - ../cypress.test.json:/cypress.json
+      - ../cypress:/app/cypress
+      - ../cypress.test.json:/app/cypress.json
   login:
     entrypoint: "echo 'service disabled'"
     restart: "no"
