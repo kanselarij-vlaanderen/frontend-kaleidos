@@ -977,5 +977,8 @@
   "view-in-signinghub": "Bekijken in SigningHub",
   "send-to-signinghub": "Doorsturen naar SigningHub",
   "present-for-signing": "Aanbieden voor handtekening",
-  "publication-info": "Publicatie info"
+  "publication-info": "Publicatie info",
+  "publication-info": "Publicatie info",
+  "set-status-translation-in": "Zet status naar 'Vertaling In'",
+  "set-status-proof-in": "Zet status naar 'Drukproef In'"
 }
