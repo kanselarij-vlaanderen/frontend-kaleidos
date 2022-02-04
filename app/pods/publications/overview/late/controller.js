@@ -5,9 +5,10 @@ import tableColumns from 'frontend-kaleidos/config/publications/overview-table-c
 
 const defaultColumns = [
   'publicationNumber',
+  'numacNumber',
   'shortTitle',
+  'publicationTargetDate',
   'publicationDueDate',
-  'status',
 ];
 
 export default class PublicationsOverviewAllController extends Controller {

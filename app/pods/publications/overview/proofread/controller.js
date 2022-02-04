@@ -4,10 +4,14 @@ import { tracked } from '@glimmer/tracking';
 import tableColumns from 'frontend-kaleidos/config/publications/overview-table-columns';
 
 const defaultColumns = [
+  'isUrgent',
   'publicationNumber',
+  'numacNumber',
   'shortTitle',
+  'pageCount',
+  'proofReceivedDate',
+  'proofPrintCorrector',
   'publicationDueDate',
-  'status',
 ];
 
 export default class PublicationsOverviewAllController extends Controller {
