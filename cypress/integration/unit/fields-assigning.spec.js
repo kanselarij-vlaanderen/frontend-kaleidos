@@ -6,25 +6,23 @@ import utils from '../../selectors/utils.selectors';
 import auk from '../../selectors/auk.selectors';
 
 function currentTimestamp() {
-  return Cypress.moment().unix();
+  return Cypress.dayjs().unix();
 }
 
 context('Assigning a field to agendaitem or subcase should update linked subcase/agendaitems', () => {
-  const agendaDate = Cypress.moment().add(12, 'weeks')
+  const agendaDate = Cypress.dayjs().add(12, 'weeks')
     .day(4); // Next friday
   const caseName = 'Cypress test for adding domains and fields';
   const caseName2 = 'Cypress test for adding domains and fields additional case';
   // This variable is used multiple times to check if data is properly loaded
   const nameToCheck = 'Cultuur, Jeugd, Sport en Media';
   before(() => {
-    cy.server();
     cy.login('Admin');
     cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logoutFlow();
   });
 
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 
@@ -50,7 +48,7 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     cy.openSubcase(0);
 
     // check rollback after cancel
-    cy.route('GET', 'concepts**http://themis.vlaanderen.be/id/concept-schema/**').as('getConceptSchemes');
+    cy.intercept('GET', 'concepts**http://themis.vlaanderen.be/id/concept-schema/**').as('getConceptSchemes');
     cy.get(utils.governmentAreasPanel.edit).click();
     cy.wait('@getConceptSchemes');
     cy.get(utils.governmentAreaSelectorForm.container).contains('Cultuur, Jeugd, Sport en Media')

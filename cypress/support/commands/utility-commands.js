@@ -116,7 +116,7 @@ function closeSettingsModal() {
  */
 function addDomainsAndFields(domains) {
   cy.log('addDomainsAndFields');
-  cy.route('GET', 'concepts**http://themis.vlaanderen.be/id/concept-schema/**').as('getConceptSchemes');
+  cy.intercept('GET', 'concepts**http://themis.vlaanderen.be/id/concept-schema/**').as('getConceptSchemes');
   cy.get(utils.governmentAreasPanel.edit).click();
   cy.wait('@getConceptSchemes');
   domains.forEach((domain) => {
@@ -136,7 +136,7 @@ function addDomainsAndFields(domains) {
       });
     }
   });
-  cy.route('PATCH', '/cases/*').as('saveCase');
+  cy.intercept('PATCH', '/cases/*').as('saveCase');
   cy.get(utils.editGovernmentFieldsModal.save).click();
   cy.wait('@saveCase');
 

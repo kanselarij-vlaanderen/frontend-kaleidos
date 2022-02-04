@@ -14,7 +14,6 @@ context('agenda notice test', () => {
     .day(1);
 
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 
@@ -43,7 +42,7 @@ context('agenda notice test', () => {
     cy.addSubcaseMandatee(1);
     cy.addSubcaseMandatee(2);
     // add fields
-    cy.route('GET', 'concepts**http://themis.vlaanderen.be/id/concept-schema/**').as('getConceptSchemes');
+    cy.intercept('GET', 'concepts**http://themis.vlaanderen.be/id/concept-schema/**').as('getConceptSchemes');
     cy.get(utils.governmentAreasPanel.edit).click();
     cy.wait('@getConceptSchemes');
     cy.get(utils.governmentAreaSelectorForm.container).contains(labelName1)
