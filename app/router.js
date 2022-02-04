@@ -79,7 +79,7 @@ Router.map(function() {
       });
       this.route('publication', { path: ':publication_id', }, function() {
         this.route('case', { path: '/dossier', });
-        this.route('documents', { path: '/documenten', });
+        this.route('decisions', { path: '/besluiten', });
         this.route('translations', { path: '/vertalingen', }, function() {
           this.route('documents', { path: '/documenten', });
           this.route('requests', { path: '/aanvragen', });
@@ -88,6 +88,7 @@ Router.map(function() {
           this.route('documents', { path: '/documenten', });
           this.route('requests', { path: '/aanvragen', });
         });
+        this.route('publication-activities', { path: '/publicatie-activiteiten', });
       });
     });
   }

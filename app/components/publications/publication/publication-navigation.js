@@ -5,7 +5,9 @@ import { inject as service } from '@ember/service';
 
 export default class PublicationNavigation extends Component {
   @service store;
+  @service publicationService;
 
+  @tracked isViaCouncilOfMinisters;
   @tracked documentsCount = undefined;
 
   constructor() {
@@ -15,10 +17,14 @@ export default class PublicationNavigation extends Component {
 
   @task
   *loadData() {
+    const { publicationFlow } = this.args;
+
     const pieces = yield this.store.query('piece', {
-      'filter[publication-flow][:id:]': this.args.publicationFlow.id,
+      'filter[publication-flow][:id:]': publicationFlow.id,
       'page[size]': 1,
     });
     this.documentsCount = pieces.meta.count;
+
+    this.isViaCouncilOfMinisters = this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
   }
 }

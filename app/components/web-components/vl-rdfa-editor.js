@@ -7,9 +7,6 @@ import { inject as service } from '@ember/service';
 // TODO: octane-refactor
 // eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
-  classNames: ['vl-editor'],
-  classNameBindings: ['isLarge:--large'],
-
   userAgent: service(),
 
   browserName: computed('userAgent.browser', function() {
