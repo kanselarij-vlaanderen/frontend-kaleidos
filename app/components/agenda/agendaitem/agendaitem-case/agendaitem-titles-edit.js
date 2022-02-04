@@ -26,7 +26,7 @@ export default class AgendaitemTitlesEdit extends Component {
     if (this.args.subcase) {
       cancelEdit(this.args.subcase, ['confidential']);
     }
-    if (this.newsletterInfo && this.newsletterInfo.get('hasDirtyAttributes')) {
+    if (this.newsletterInfo && this.newsletterInfo.hasDirtyAttributes) {
       this.newsletterInfo.rollbackAttributes();
     }
     this.args.toggleIsEditing();
@@ -36,7 +36,7 @@ export default class AgendaitemTitlesEdit extends Component {
   async saveChanges() {
     this.isSaving = true;
     const shouldResetFormallyOk =
-      this.args.agendaitem.get('hasDirtyAttributes');
+      this.args.agendaitem.hasDirtyAttributes;
 
     const trimmedTitle = trimText(this.args.agendaitem.title);
     const trimmedShortTitle = trimText(this.args.agendaitem.shortTitle);
@@ -61,13 +61,13 @@ export default class AgendaitemTitlesEdit extends Component {
       );
       if (
         this.newsletterInfo &&
-        (this.newsletterInfo.get('hasDirtyAttributes') ||
+        (this.newsletterInfo.hasDirtyAttributes ||
           this.args.agendaitem.showAsRemark)
       ) {
         if (this.args.agendaitem.showAsRemark) {
           // Keep generated newsletterInfo for announcement in sync
-          this.newsletterInfo.set('richtext', trimmedTitle);
-          this.newsletterInfo.set('title', trimmedShortTitle);
+          this.newsletterInfo.richtext = trimmedTitle;
+          this.newsletterInfo.title = trimmedShortTitle;
         }
         await this.newsletterInfo.save();
       }
