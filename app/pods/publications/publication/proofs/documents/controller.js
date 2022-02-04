@@ -259,8 +259,9 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
       'publication-status',
       CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED
     );
-    const statusSave = this.publicationFlow.save();
-    saves.push(statusSave);
+    // Continuing without awaiting here can cause saving while related status-change
+    // already is deleted (by step below)
+    await this.publicationFlow.save();
 
     const oldChangeActivity = await this.publicationFlow
       .publicationStatusChange;
