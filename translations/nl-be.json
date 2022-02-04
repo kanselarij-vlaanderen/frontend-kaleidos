@@ -762,6 +762,8 @@
   "not-known": "Niet gekend",
   "requests": "Aanvragen",
   "request-translations": "Vertaling aanvragen",
+  "requested-translation": "Aanvraag verzonden",
+  "received-translation": "Vertaling ontvangen",
   "upload-translation": "Vertaling uploaden",
   "request-translations-for-publication": "Vertaling(en) aanvragen voor publicatie {publicationNumber}",
   "request-translation-confirmation": "Bent u zeker dat u de vertaling voor volgende documenten met uiterste vertaaldatum wilt aanvragen?",

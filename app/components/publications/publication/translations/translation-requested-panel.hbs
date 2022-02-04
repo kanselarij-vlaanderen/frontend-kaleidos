@@ -1,0 +1,76 @@
+<div class="vlc-procedure-step vlc-procedure-step--nopadding">
+  <div class="vlc-procedure-step__badge-wrapper">
+    <Auk::Badge @icon="mail" @skin="primary" @size="medium" class="vlc-procedure-step__badge"/>
+  </div>
+  <Auk::AccordionPanel @isDefaultActive={{true}} as |accordionPanel|>
+    <accordionPanel.Header>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <h4 class="auk-u-m-0">
+              {{t "requested-translation"}}
+            </h4>
+            <p class="auk-u-text-small auk-u-m-0">
+              {{moment-format @requestActivity.startDate  "DD.MM.YYYY"}}
+            </p>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <Auk::Button
+              @skin="borderless"
+              @icon="three-dots"
+              @layout="icon-only"
+            />
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </accordionPanel.Header>
+    <accordionPanel.Body>
+      {{#each @requestActivity.usedPieces as |piece|}}
+        <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
+          <Auk::ButtonLink
+            @icon="paperclip"
+          >
+            {{piece.file.downloadFilename}}
+          </Auk::ButtonLink>
+          <WebComponents::AuButtonToolbar>
+            <Auk::Button
+              @skin="borderless"
+              @layout="icon-only"
+              @icon="download"
+              @href={{piece.file.namedDownloadLink}}
+              download={{piece.file.downloadFilename}}
+            >
+              {{t "download"}}
+            </Auk::Button>
+            <Auk::Button
+              @skin="borderless"
+              @layout="icon-only"
+              @icon="book"
+              @href={{piece.viewDocumentURL}}
+              target="_blank"
+            >
+              {{t "read"}}
+            </Auk::Button>
+          </WebComponents::AuButtonToolbar>
+        </div>
+      {{/each}}
+      {{#if @requestActivity.email}}
+        <div class="auk-hr"></div>
+        <div class="auk-content">
+          <h4 class="auk-u-m-0">{{t "subject"}}</h4>
+          <p>{{@requestActivity.email.subject}}</p>
+          <h4 class="auk-u-m-0">{{t "message"}}</h4>
+          {{! TODO: Remove inline style }}
+          {{! template-lint-disable no-inline-styles }}
+          {{! p-tag opening and closing on 1 line to prevent whitespace to be rendered. }}
+          <p style="white-space:pre-line;">
+            {{@requestActivity.email.message}}
+          </p>
+          {{! template-lint-enable no-inline-styles }}
+        </div>
+      {{/if}}
+    </accordionPanel.Body>
+  </Auk::AccordionPanel>
+</div>

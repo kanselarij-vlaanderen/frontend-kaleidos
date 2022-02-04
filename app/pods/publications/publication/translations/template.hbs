@@ -42,10 +42,21 @@
       <Auk::Panel::Body class="auk-u-bg-alt">
         {{#each this.model as |translationRow|}}
           {{#if translationRow.requestActivity}}
- -
-          {{else if translationRow.piece }}
-  +
+            <Publications::Publication::Translations::TranslationRequestedPanel
+              @translationSubcase={{this.translationSubcase}}
+              @requestActivity={{translationRow.requestActivity}}
+            />
+          {{else if translationRow.piece}}
+            <Publications::Publication::Translations::TranslationReceivedPanel
+              @translationSubcase={{this.translationSubcase}}
+              @piece={{translationRow.piece}}
+            />
           {{/if}}
+        {{else}}
+          <Auk::EmptyState
+            @bordered={{true}}
+            @message={{t "no-translations-yet"}}
+          />
         {{/each}}
       </Auk::Panel::Body>
     </Auk::Panel>

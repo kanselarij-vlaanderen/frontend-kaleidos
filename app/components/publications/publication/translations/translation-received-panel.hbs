@@ -1,0 +1,60 @@
+<div class="vlc-procedure-step vlc-procedure-step--nopadding">
+  <div class="vlc-procedure-step__badge-wrapper">
+    <Auk::Badge @icon="check" @skin="success" @size="medium" class="vlc-procedure-step__badge" />
+  </div>
+  <Auk::Panel >
+    <Auk::Panel::Header>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <h4 class="auk-panel__title">
+              {{t "received-translation"}}
+            </h4>
+            <p class="auk-u-text-small auk-u-m-0">
+              {{moment-format @piece.created  "DD.MM.YYYY"}}
+            </p>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <Auk::Button
+              @skin="borderless"
+              @icon="three-dots"
+              @layout="icon-only"
+            />
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+
+    <Auk::Panel::Body>
+      <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
+        <Auk::ButtonLink
+          @icon="paperclip"
+        >
+          {{@piece.file.downloadFilename}}
+        </Auk::ButtonLink>
+        <WebComponents::AuButtonToolbar>
+          <Auk::Button
+            @skin="borderless"
+            @layout="icon-only"
+            @icon="download"
+            @href={{@piece.file.namedDownloadLink}}
+            download={{@piece.file.downloadFilename}}
+          >
+            {{t "download"}}
+          </Auk::Button>
+          <Auk::Button
+            @skin="borderless"
+            @layout="icon-only"
+            @icon="book"
+            @href={{@piece.viewDocumentURL}}
+            target="_blank"
+          >
+            {{t "read"}}
+          </Auk::Button>
+        </WebComponents::AuButtonToolbar>
+      </div>
+    </Auk::Panel::Body>
+  </Auk::Panel>
+</div>
