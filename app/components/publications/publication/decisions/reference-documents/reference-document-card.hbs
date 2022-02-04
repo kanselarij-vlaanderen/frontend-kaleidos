@@ -22,33 +22,44 @@
                   {{this.documentContainer.type.label}}
                 {{/unless}}
               </p>
+              {{#if this.isEditingPiece}}
+                <div class="auk-o-flex auk-o-flex--vertical-center">
+                  <Auk::Input
+                    data-test-document-card-name-input={{true}}
+                    @block={{true}}
+                    @value={{this.pieceNameBuffer}}
+                  />
+                  <Auk::Button
+                    data-test-document-card-name-save={{true}}
+                    @skin="borderless"
+                    @layout="icon-only"
+                    @icon="check"
+                    {{on "click" (perform this.savePieceName)}}
+                  />
+                  <Auk::Button
+                    data-test-document-card-name-cancel={{true}}
+                    @skin="borderless"
+                    @layout="icon-only"
+                    @icon="x"
+                    {{on "click" this.cancelEditPieceName}}
+                  />
+                </div>
+              {{else}}
+                <h6 class="auk-h4" data-test-document-card-name-value>
+                  {{#if this.isViaCouncilOfMinisters}}
+                    {{this.piece.name}}
+                  {{else}}
+                    {{! template-lint-disable no-invalid-interactive }}
+                    <span {{on "click" this.enableEditPieceName}}>
+                      {{this.piece.name}}
+                    </span>
+                    {{! template-lint-enable no-invalid-interactive }}
+                  {{/if}}
+                </h6>
+              {{/if}}
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
           <Auk::Toolbar::Group @position="right">
-            {{#if
-              (and
-                this.shouldShowPublications
-                (not this.loadPieceRelatedData.isRunning)
-                (not this.loadPublicationFlowRelatedData.isRunning)
-              )
-            }}
-              {{! trigger fetch }}
-              {{#if this.piece.publicationFlow}}
-                {{! TODO: remove style attributes and replace classes with auk-status-pill }}
-                {{! template-lint-disable no-inline-styles }}
-                <LinkTo
-                  class="auk-pill auk-pill--default auk-u-mr-2"
-                  @route="publications.publication"
-                  @model={{this.piece.publicationFlow.id}}
-                >
-                  <Auk::Icon @name="link" style="display: none;" />
-                  <span class="auk-status-pill__label" style="padding: 0;">
-                    {{this.piece.publicationFlow.identification.idName}}
-                  </span>
-                </LinkTo>
-                {{! template-lint-enable no-inline-styles }}
-              {{/if}}
-            {{/if}}
             <Auk::Toolbar::Item class="auk-o-flex">
               {{#unless this.loadPieceRelatedData.isRunning}}
                 <AccessLevelPill
@@ -83,13 +94,16 @@
               </Auk::Toolbar::Item>
             {{/if}}
             <Auk::Toolbar::Item>
-              {{#if this.currentSession.isEditor}}
-                <DropdownMenu
-                  @skin="borderless"
-                  @icon="three-dots"
-                  data-test-document-card-actions={{true}}
-                  as |Menu|
-                >
+              <DropdownMenu
+                @skin="borderless"
+                @icon="three-dots"
+                data-test-document-card-actions={{true}}
+                as |Menu|
+              >
+                <Menu.Item {{on "click" (fn @onRequestTranslation @piece)}}>
+                  {{t "request-translations"}}
+                </Menu.Item>
+                {{#unless this.isViaCouncilOfMinisters}}
                   <Menu.Item
                     data-test-document-upload-new-piece
                     {{on "click" this.openUploadModal}}
@@ -107,46 +121,13 @@
                   >
                     {{t "document-delete"}}
                   </Menu.Item>
-                </DropdownMenu>
-              {{/if}}
+                {{/unless}}
+              </DropdownMenu>
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
         </Auk::Toolbar>
         <div class="auk-o-flex">
-          <div
-            class="auk-o-flex auk-o-flex--vertical auk-u-maximize-width"
-          >
-            {{#if this.isEditingPiece}}
-              <div class="auk-o-flex auk-o-flex--vertical-center">
-                <Auk::Input
-                  data-test-document-card-name-input={{true}}
-                  @block={{true}}
-                  @value={{this.pieceNameBuffer}}
-                />
-                <Auk::Button
-                  data-test-document-card-name-save={{true}}
-                  @skin="borderless"
-                  @layout="icon-only"
-                  @icon="check"
-                  {{on "click" (perform this.savePieceName)}}
-                />
-                <Auk::Button
-                  data-test-document-card-name-cancel={{true}}
-                  @skin="borderless"
-                  @layout="icon-only"
-                  @icon="x"
-                  {{on "click" this.cancelEditPieceName}}
-                />
-              </div>
-            {{else}}
-              <h6 class="auk-h4" data-test-document-card-name-value>
-                {{! template-lint-disable no-invalid-interactive }}
-                <span {{on "click" this.enableEditPieceName}}>
-                  {{this.piece.name}}
-                </span>
-                {{! template-lint-enable no-invalid-interactive }}
-              </h6>
-            {{/if}}
+          <div class="auk-o-flex auk-o-flex--vertical auk-u-maximize-width">
             <div class="vlc-document-card-content__meta">
               {{! no piece.created in legacy data }}
               {{! TODO: when created date is absent, the layout seems irregular
@@ -189,7 +170,7 @@
               {{! TODO: also disable delete when piece linked to other agenda-items while maintaining DDAU }}
               <WebComponents::VlDocument
                 @piece={{piece}}
-                @enableDelete={{eq piece @piece}}
+                @enableDelete={{and (not this.isViaCouncilOfMinisters) (eq piece @piece)}}
                 @didDeletePiece={{@didDeletePiece}}
                 @didUpdateAccessLevel={{perform this.loadPieceRelatedData}}
               />

@@ -1,0 +1,58 @@
+<Auk::Panel>
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="right">
+        {{#if (not this.isViaCouncilOfMinisters)}}
+          <Auk::Toolbar::Item>
+            <Auk::Button
+              @skin="primary"
+              @icon="plus"
+              {{on "click" this.openUploadRefDocModal}}
+            >
+              {{t "document-add"}}
+            </Auk::Button>
+          </Auk::Toolbar::Item>
+        {{/if}}
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    <Documents::DocumentList @pieces={{@referenceDocuments}} as |pieces|>
+      {{#each pieces as |piece|}}
+        <Publications::Publication::Decisions::ReferenceDocuments::ReferenceDocumentCard
+          @piece={{piece}}
+          @onAddPiece={{this.saveRefDocVersion}}
+          @didDeletePiece={{@refresh}}
+          @didDeleteContainer={{@refresh}}
+          @publicationFlow={{@publicationFlow}}
+          @hasMarkForSignature={{this.isShownSignatureMarker}}
+          @markForSignature={{this.markForSignature}}
+          @unmarkForSignature={{this.unmarkForSignature}}
+          @onRequestTranslation={{this.openTranslationRequestModal}}
+        />
+      {{else}}
+        <Auk::EmptyState @message={{t "no-decisions-published-yet"}} />
+      {{/each}}
+    </Documents::DocumentList>
+  </Auk::Panel::Body>
+</Auk::Panel>
+
+{{#if this.isOpenRefDocUploadModal}}
+  <Publications::Publication::Decisions::ReferenceDocuments::ReferenceDocumentUploadModal
+    @publicationFlow={{@publicationFlow}}
+    @referenceDocument={{this.selectedPiece}}
+    @isNewDocumentContainer={{this.isNewContainer}}
+    @onSave={{perform this.saveRefDoc}}
+    @onCancel={{this.closeRefDocUploadModal}}
+  />
+{{/if}}
+
+{{#if this.isOpenTranslationRequestModal}}
+  <Publications::Publication::Translations::TranslationRequestModal
+    @translationSubcase={{this.translationSubcase}}
+    @publicationFlow={{@publicationFlow}}
+    @attachments={{array this.selectedPiece}}
+    @onSave={{perform this.saveTranslationRequest}}
+    @onCancel={{this.closeTranlationRequestModal}}
+  />
+{{/if}}

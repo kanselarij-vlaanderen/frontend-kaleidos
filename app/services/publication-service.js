@@ -1,5 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 
 export default class PublicationService extends Service {
   @service store;
@@ -148,5 +149,62 @@ export default class PublicationService extends Service {
     const _case = await publicationFlow.case;
     const subcases = await _case.subcases;
     return !!subcases.length;
+  }
+
+  /**
+ *
+ * @param {PublicationFlow} publicationFlow
+ * @param {{
+   *  translationDueDate: Date,
+   *  attachments: Piece[],
+   *  subject: String,
+   *  message: String,
+   * }} translationRequestParams
+   */
+  async saveTranslationRequest(publicationFlow, translationRequestParams) {
+    const translationSubcase = await publicationFlow.translationSubcase;
+    const now = new Date();
+    if (!translationSubcase.startDate) {
+      translationSubcase.startDate = now;
+    }
+    translationSubcase.dueDate = translationRequestParams.translationDueDate;
+    await translationSubcase.save();
+
+    const pieces = translationRequestParams.attachments;
+    const requestActivity = this.store.createRecord('request-activity', {
+      startDate: now,
+      translationSubcase: translationSubcase,
+      usedPieces: pieces,
+    });
+    await requestActivity.save();
+    const french = await this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.FR);
+
+    const translationActivity = this.store.createRecord('translation-activity', {
+      startDate: now,
+      dueDate: translationRequestParams.translationDueDate,
+      title: translationRequestParams.subject,
+      subcase: translationSubcase,
+      requestActivity: requestActivity,
+      usedPieces: pieces,
+      language: french,
+    });
+    await translationActivity.save();
+
+    const filePromises = pieces.mapBy('file');
+    const filesPromise = Promise.all(filePromises);
+
+    const outboxPromise = this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);
+    const mailSettingsPromise = this.store.queryOne('email-notification-setting');
+    const [files, outbox, mailSettings] = await Promise.all([filesPromise, outboxPromise, mailSettingsPromise]);
+    const mail = await this.store.createRecord('email', {
+      to: mailSettings.translationRequestToEmail,
+      from: mailSettings.defaultFromEmail,
+      folder: outbox,
+      attachments: files,
+      requestActivity: requestActivity,
+      subject: translationRequestParams.subject,
+      message: translationRequestParams.message,
+    });
+    await mail.save();
   }
 }

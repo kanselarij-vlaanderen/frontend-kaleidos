@@ -30,12 +30,14 @@ export default class DocumentsDocumentCardComponent extends Component {
   @service fileService;
   @service toaster;
   @service intl;
+  @service publicationService;
 
   @tracked isOpenUploadModal = false;
   @tracked isOpenVerifyDeleteModal = false;
   @tracked isEditingPiece = false;
 
   @tracked piece;
+  @tracked isViaCouncilOfMinisters;
   @tracked accessLevel;
   @tracked documentContainer;
   @tracked signMarkingActivity;
@@ -75,10 +77,9 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *loadPublicationFlowRelatedData() {
-    if (this.shouldShowPublications) {
-      const publicationFlow = yield this.piece.publicationFlow;
-      yield publicationFlow?.identification;
-    }
+    const publicationFlow = yield this.piece.publicationFlow;
+    yield publicationFlow?.identification;
+    this.isViaCouncilOfMinisters = yield this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
   }
 
   @task
