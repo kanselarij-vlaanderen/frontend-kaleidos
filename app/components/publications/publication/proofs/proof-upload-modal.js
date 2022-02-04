@@ -87,7 +87,6 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
 
   @action
   setProofInStatus(event) {
-    debugger
     this.isProofIn = event.target.checked;
   }
 
