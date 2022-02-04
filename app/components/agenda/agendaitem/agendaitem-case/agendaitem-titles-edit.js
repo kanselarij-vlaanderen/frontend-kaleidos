@@ -6,12 +6,11 @@ import {
   cancelEdit,
 } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
-import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency-decorators';
 
 export default class AgendaitemTitlesEdit extends Component {
   @service store;
   @service subcasesService;
-  @tracked isSaving = false;
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'explanation']);
   initialSubcaseConfidentiality = this.args.subcase?.confidential;
 
@@ -32,9 +31,8 @@ export default class AgendaitemTitlesEdit extends Component {
     this.args.toggleIsEditing();
   }
 
-  @action
-  async saveChanges() {
-    this.isSaving = true;
+  @task
+  *saveChanges() {
     const shouldResetFormallyOk =
       this.args.agendaitem.hasDirtyAttributes;
 
@@ -52,38 +50,34 @@ export default class AgendaitemTitlesEdit extends Component {
       confidential: this.args.subcase?.confidential,
     };
 
-    try {
-      await saveSubcaseTitles(
-        this.args.agendaitem,
-        propertiesToSetOnAgendaitem,
-        propertiesToSetOnSubcase,
-        shouldResetFormallyOk
-      );
-      if (
-        this.newsletterInfo &&
-        (this.newsletterInfo.hasDirtyAttributes ||
-          this.args.agendaitem.showAsRemark)
-      ) {
-        if (this.args.agendaitem.showAsRemark) {
-          // Keep generated newsletterInfo for announcement in sync
-          this.newsletterInfo.richtext = trimmedTitle;
-          this.newsletterInfo.title = trimmedShortTitle;
-        }
-        await this.newsletterInfo.save();
+    yield saveSubcaseTitles(
+      this.args.agendaitem,
+      propertiesToSetOnAgendaitem,
+      propertiesToSetOnSubcase,
+      shouldResetFormallyOk
+    );
+    if (
+      this.newsletterInfo &&
+      (this.newsletterInfo.hasDirtyAttributes ||
+        this.args.agendaitem.showAsRemark)
+    ) {
+      if (this.args.agendaitem.showAsRemark) {
+        // Keep generated newsletterInfo for announcement in sync
+        this.newsletterInfo.richtext = trimmedTitle;
+        this.newsletterInfo.title = trimmedShortTitle;
       }
-      if (
-        this.initialSubcaseConfidentiality === false &&
-        this.args.subcase?.confidential === true
-      ) {
-        // When the confidentiality was changed from false to true, we have to make all pieces confidential
-        await this.subcasesService.cascadeConfidentialityToPieces(
-          this.args.subcase
-        );
-      }
-
-      this.args.toggleIsEditing();
-    } finally {
-      this.isSaving = false;
+      yield this.newsletterInfo.save();
     }
+    if (
+      this.initialSubcaseConfidentiality === false &&
+      this.args.subcase?.confidential === true
+    ) {
+      // When the confidentiality was changed from false to true, we have to make all pieces confidential
+      yield this.subcasesService.cascadeConfidentialityToPieces(
+        this.args.subcase
+      );
+    }
+
+    this.args.toggleIsEditing();
   }
 }

@@ -79,8 +79,8 @@
         <WebComponents::VlSaveButton
           data-test-agendaitem-titles-edit-save={{true}}
           @text={{t "save"}}
-          @isLoading={{this.isSaving}}
-          @saveAction={{this.saveChanges}}
+          @isLoading={{this.saveChanges.isRunning}}
+          @saveAction={{perform this.saveChanges}}
         />
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
