@@ -1,6 +1,6 @@
 <div class="auk-scroll-wrapper">
   <div class="auk-scroll-wrapper__body">
-    {{#if this.model.length}}
+    {{#if @model.length}}
       <table
         data-test-route-publications-index-data-table
         class="auk-table auk-table--sticky-header auk-u-mx-4"
@@ -50,7 +50,7 @@
               </td>
             </tr>
           {{else}}
-            {{#each this.model as |publicationFlow|}}
+            {{#each @model as |publicationFlow|}}
               <Publications::Overview::PublicationsTableRow
                 @publicationFlow={{publicationFlow}}
                 @tableColumnDisplayOptions={{this.columnsDisplayConfig}}
@@ -78,8 +78,8 @@
         <Auk::Pagination
           @page={{this.page}}
           @size={{this.size}}
-          @nbOfItems={{this.model.length}}
-          @total={{this.model.meta.count}}
+          @nbOfItems={{@model.length}}
+          @total={{@model.meta.count}}
           @onNextPage={{this.nextPage}}
           @onPreviousPage={{this.prevPage}}
         />
