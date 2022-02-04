@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsOverviewUrgentRoute extends Route {
   queryParams = {
@@ -19,6 +20,7 @@ export default class PublicationsOverviewUrgentRoute extends Route {
 
   async model(params) {
     return this.store.query('publication-flow', {
+      'filter[urgency-level][:uri:]': CONSTANTS.URGENCY_LEVELS.SPEEDPROCEDURE,
       sort: params.sort,
       page: {
         number: params.page,
