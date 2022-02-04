@@ -3,7 +3,6 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
-import publication from '../../selectors/publication.selectors';
 import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
@@ -44,18 +43,18 @@ context('agenda notice test', () => {
     cy.addSubcaseMandatee(1);
     cy.addSubcaseMandatee(2);
     // add fields
-    // TODO-selector move governmentFieldsPanel from publication to utils?
-    cy.get(publication.governmentFieldsPanel.edit).click();
-    cy.wait(10000); // TODO to fix with proper await for concepts
-    cy.get(utils.domainsFieldsSelectorForm.container).contains(labelName1)
-      .find(utils.domainsFieldsSelectorForm.field)
+    cy.route('GET', 'concepts**http://themis.vlaanderen.be/id/concept-schema/**').as('getConceptSchemes');
+    cy.get(utils.governmentAreasPanel.edit).click();
+    cy.wait('@getConceptSchemes');
+    cy.get(utils.governmentAreaSelectorForm.container).contains(labelName1)
+      .find(utils.governmentAreaSelectorForm.field)
       .contains(fieldsName1)
       .click();
-    cy.get(utils.domainsFieldsSelectorForm.container).contains(labelName2)
-      .find(utils.domainsFieldsSelectorForm.field)
+    cy.get(utils.governmentAreaSelectorForm.container).contains(labelName2)
+      .find(utils.governmentAreaSelectorForm.field)
       .contains(fieldsName2)
       .click();
-    cy.get(publication.editGovernmentFieldsModal.save).click();
+    cy.get(utils.editGovernmentFieldsModal.save).click();
     // check if mandatees were added to notice correctly and add notice to agenda
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 2, {

@@ -226,9 +226,9 @@ context('Publications tests', () => {
     cy.get(auk.emptyState.message).contains(noGovernmentFields);
 
     // reset after cancel
-    cy.get(publication.governmentFieldsPanel.edit).click();
-    cy.get(utils.domainsFieldsSelectorForm.container).contains(labelName)
-      .find(utils.domainsFieldsSelectorForm.field)
+    cy.get(utils.governmentAreasPanel.edit).click();
+    cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
+      .find(utils.governmentAreaSelectorForm.field)
       .contains(fieldsName)
       .click();
     cy.get(auk.modal.footer.cancel).click();
@@ -237,24 +237,25 @@ context('Publications tests', () => {
 
     // link government field
     cy.route('PATCH', '/cases/**').as('patchCase');
-    cy.get(publication.governmentFieldsPanel.edit).click();
-    cy.wait(10000); // TODO to fix with proper await for concepts
-    cy.get(utils.domainsFieldsSelectorForm.container).contains(labelName)
-      .find(utils.domainsFieldsSelectorForm.field)
+    cy.route('GET', 'concepts**http://themis.vlaanderen.be/id/concept-schema/**').as('getConceptSchemes');
+    cy.get(utils.governmentAreasPanel.edit).click();
+    cy.wait('@getConceptSchemes');
+    cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
+      .find(utils.governmentAreaSelectorForm.field)
       .contains(fieldsName)
       .click();
-    cy.get(publication.editGovernmentFieldsModal.save).click();
+    cy.get(utils.editGovernmentFieldsModal.save).click();
     cy.wait('@patchCase');
-    cy.get(publication.governmentFieldsPanel.rows).should('have.length', 1);
-    cy.get(publication.governmentFieldsPanel.row.label).contains(labelName);
-    cy.get(publication.governmentFieldsPanel.row.fields).contains(fieldsName);
+    cy.get(utils.governmentAreasPanel.rows).should('have.length', 1);
+    cy.get(utils.governmentAreasPanel.row.label).contains(labelName);
+    cy.get(utils.governmentAreasPanel.row.fields).contains(fieldsName);
     // unlink government field
-    cy.get(publication.governmentFieldsPanel.edit).click();
-    cy.get(utils.domainsFieldsSelectorForm.container).contains(labelName)
-      .find(utils.domainsFieldsSelectorForm.field)
+    cy.get(utils.governmentAreasPanel.edit).click();
+    cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
+      .find(utils.governmentAreaSelectorForm.field)
       .contains(fieldsName)
       .click();
-    cy.get(publication.editGovernmentFieldsModal.save).click();
+    cy.get(utils.editGovernmentFieldsModal.save).click();
     cy.wait('@patchCase');
     cy.get(auk.emptyState.message).contains(noGovernmentFields);
   });
