@@ -1,15 +1,3 @@
-/* General
-   ========================================================================== */
-
-// -----
-
-
-/* Button in input
-   ========================================================================== */
-
-// -----
-
-
 /* Modal
    ========================================================================== */
 
@@ -21,69 +9,13 @@
 /* Table
    ========================================================================== */
 
-.auk-table th {
-  white-space: nowrap;
-}
-
-// Data table header title
-.auk-table__header-title {
-  // Data table header title sortable modifier
-  &--sortable {
-    text-decoration: none;
-
-    .auk-table__header-title__sort-icon {
-      opacity: 0;
-    }
-
-    &:hover,
-    &:focus {
-      text-decoration: underline;
-
-      .auk-table__header-title__sort-icon {
-        opacity: 0.5;
-      }
-    }
-
-    // Data table header title sortable modifier active
-    &-active {
-      .auk-table__header-title__sort-icon {
-        opacity: 1;
-      }
-    }
-  }
-}
-
 .auk-table--no-scroll {
   .data-table-content {
     overflow: hidden;
   }
 }
 
-.auk-table--hover {
-  tbody {
-    tr:hover {
-      background: $auk-gray-100;
-    }
-  }
-
-  &.auk-table--striped {
-    tbody {
-      tr:hover {
-        background: $auk-gray-200;
-
-        td {
-          background-color: transparent;
-        }
-      }
-    }
-  }
-}
-
-.auk-table__header-title--unsortable {
-  color: $auk-gray-600;
-}
-
-.auk-table--interaction-cursor {
+.auk-table--clickable-rows {
   cursor: pointer;
 }
 
@@ -103,15 +35,23 @@
   &.data-table {
     tbody {
       tr:hover {
-        background: $auk-gray-200;
-
         td {
-          background-color: transparent;
+          background: $auk-gray-200;
         }
       }
     }
   }
+
+  tbody {
+    tr.lt-expanded-row {
+      td {
+        background: $auk-white;
+      }
+    }
+  }
 }
+
+
 
 /* Table with sticky header
 
