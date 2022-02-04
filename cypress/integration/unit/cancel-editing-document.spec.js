@@ -249,15 +249,18 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .click();
 
     // delete the last piece, should delete container
+    cy.intercept('DELETE', '/files/**').as('deleteLastFile');
+    cy.intercept('DELETE', '/pieces/**').as('deleteLastPiece');
     cy.intercept('DELETE', '/document-containers/**').as('deleteContainer');
+    cy.intercept('PUT', '/agendaitems/**/pieces/restore').as('restoreAgendaitemLastPiece');
     cy.get(route.agendaitemDocuments.batchEdit).click();
     cy.get(document.documentDetailsRow.row).as('documentRows');
     cy.get('@documentRows').eq(0)
       .find(document.documentDetailsRow.delete)
       .click();
     cy.get(document.batchDocumentsDetails.save).click();
-    cy.wait('@deleteFile').wait('@deletePiece')
-      .wait('@restoreAgendaitemPiece')
+    cy.wait('@deleteLastFile').wait('@deleteLastPiece')
+      .wait('@restoreAgendaitemLastPiece')
       .wait('@deleteContainer');
 
     // make sure modal is closed before continuing
