@@ -35,11 +35,15 @@ export default class PublicationsOverviewAllRoute extends Route {
     });
   }
 
+  setupController(ctrl) {
+    ctrl.routeName = this.routeName;
+  }
+
   @action
   loading(transition) {
     // see snippet in https://api.emberjs.com/ember/3.27/classes/Route/events/loading?anchor=loading
     // eslint-disable-next-line ember/no-controller-access-in-routes
-    const controller = this.controllerFor('publications.overview.all');
+    const controller = this.controllerFor(this.routeName);
     controller.isLoadingModel = true;
     transition.promise.finally(() => {
       controller.isLoadingModel = false;
