@@ -62,8 +62,8 @@
         <WebComponents::VlSaveButton
           data-test-subcase-titles-edit-save={{true}}
           @text={{t "save"}}
-          @isLoading={{this.isSaving}}
-          @saveAction={{this.saveChanges}}
+          @isLoading={{this.saveChanges.isRunning}}
+          @saveAction={{perform this.saveChanges}}
         />
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>

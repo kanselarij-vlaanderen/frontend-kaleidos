@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 import {
   saveChanges as saveSubcaseTitles,
   cancelEdit,
@@ -12,7 +11,6 @@ import { task } from 'ember-concurrency-decorators';
 export default class SubcaseTitlesEdit extends Component {
   @service store;
   @service subcasesService;
-  @tracked isSaving;
   propertiesToSet = Object.freeze([
     'title',
     'shortTitle',
@@ -43,10 +41,8 @@ export default class SubcaseTitlesEdit extends Component {
     this.accessLevel = accessLevel;
   }
 
-  @action
-  async saveChanges() {
-    this.isSaving = true;
-
+  @task
+  *saveChanges() {
     const trimmedTitle = trimText(this.args.subcase.title);
     const trimmedShortTitle = trimText(this.args.subcase.shortTitle);
 
@@ -61,25 +57,21 @@ export default class SubcaseTitlesEdit extends Component {
       confidential: this.args.subcase.confidential,
     };
 
-    try {
-      await saveSubcaseTitles(
-        this.args.subcase,
-        propertiesToSetOnAgendaitem,
-        propertiesToSetOnSubcase,
-        true
+    yield saveSubcaseTitles(
+      this.args.subcase,
+      propertiesToSetOnAgendaitem,
+      propertiesToSetOnSubcase,
+      true
+    );
+    if (
+      this.initialSubcaseConfidentiality === false &&
+      this.args.subcase.confidential === true
+    ) {
+      // When the confidentiality was changed from false to true, we have to make all pieces confidential
+      yield this.subcasesService.cascadeConfidentialityToPieces(
+        this.args.subcase
       );
-      if (
-        this.initialSubcaseConfidentiality === false &&
-        this.args.subcase.confidential === true
-      ) {
-        // When the confidentiality was changed from false to true, we have to make all pieces confidential
-        await this.subcasesService.cascadeConfidentialityToPieces(
-          this.args.subcase
-        );
-      }
-      this.args.toggleIsEditing();
-    } finally {
-      this.isSaving = false;
     }
+    this.args.toggleIsEditing();
   }
 }
