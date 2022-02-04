@@ -10,14 +10,12 @@ import { task } from 'ember-concurrency-decorators';
 
 export default class SubcaseTitlesEdit extends Component {
   @service store;
-  @service subcasesService;
   propertiesToSet = Object.freeze([
     'title',
     'shortTitle',
     'accessLevel',
     'confidential',
   ]);
-  initialSubcaseConfidentiality = this.args.subcase.confidential;
 
   constructor() {
     super(...arguments);
@@ -63,15 +61,6 @@ export default class SubcaseTitlesEdit extends Component {
       propertiesToSetOnSubcase,
       true
     );
-    if (
-      this.initialSubcaseConfidentiality === false &&
-      this.args.subcase.confidential === true
-    ) {
-      // When the confidentiality was changed from false to true, we have to make all pieces confidential
-      yield this.subcasesService.cascadeConfidentialityToPieces(
-        this.args.subcase
-      );
-    }
     this.args.toggleIsEditing();
   }
 }
