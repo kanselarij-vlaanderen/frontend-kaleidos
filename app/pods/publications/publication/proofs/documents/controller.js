@@ -259,7 +259,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
       'publication-status',
       CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED
     );
-    const statusSave = this.currentPublicationFlow.save();
+    const statusSave = this.publicationFlow.save();
     saves.push(statusSave);
 
     const oldChangeActivity = await this.publicationFlow
