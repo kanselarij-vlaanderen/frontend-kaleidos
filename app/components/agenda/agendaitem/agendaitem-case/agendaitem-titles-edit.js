@@ -31,8 +31,7 @@ export default class AgendaitemTitlesEdit extends Component {
 
   @task
   *saveChanges() {
-    const shouldResetFormallyOk =
-      this.args.agendaitem.hasDirtyAttributes;
+    const shouldResetFormallyOk = this.args.agendaitem.hasDirtyAttributes;
 
     const trimmedTitle = trimText(this.args.agendaitem.title);
     const trimmedShortTitle = trimText(this.args.agendaitem.shortTitle);
