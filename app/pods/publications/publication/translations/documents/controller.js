@@ -18,7 +18,6 @@ const COLUMN_MAP = {
 
 export default class PublicationsPublicationTranslationsDocumentController extends Controller {
   @service currentSession;
-  @service store;
   @service publicationService;
 
   queryParams = [{
