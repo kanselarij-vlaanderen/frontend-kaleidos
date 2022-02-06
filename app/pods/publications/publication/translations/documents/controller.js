@@ -18,6 +18,7 @@ const COLUMN_MAP = {
 
 export default class PublicationsPublicationTranslationsDocumentController extends Controller {
   @service currentSession;
+  @service router;
   @service publicationService;
 
   queryParams = [{
@@ -131,7 +132,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
 
     this.selectedPieceRows = [];
     this.isTranslationRequestModalOpen = false;
-    this.transitionToRoute('publications.publication.translations.requests');
+    this.router.transitionTo('publications.publication.translations.requests');
   }
 
   @task
