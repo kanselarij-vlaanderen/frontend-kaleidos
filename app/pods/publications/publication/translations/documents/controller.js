@@ -8,7 +8,6 @@ import {
   set,
 } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 const COLUMN_MAP = {
@@ -20,6 +19,7 @@ const COLUMN_MAP = {
 export default class PublicationsPublicationTranslationsDocumentController extends Controller {
   @service currentSession;
   @service store;
+  @service publicationService;
 
   queryParams = [{
     sort: {
@@ -128,49 +128,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
 
   @task
   *saveTranslationRequest(translationRequest) {
-    const now = new Date();
-    if (!this.translationSubcase.startDate) {
-      this.translationSubcase.startDate = now;
-    }
-    this.translationSubcase.dueDate = translationRequest.translationDueDate;
-    yield this.translationSubcase.save();
-
-    const requestActivity = yield this.store.createRecord('request-activity', {
-      startDate: now,
-      translationSubcase: this.translationSubcase,
-      usedPieces: translationRequest.attachments,
-    });
-    yield requestActivity.save();
-    const french = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.FR);
-
-    const pieces = translationRequest.attachments;
-    const translationActivity = yield this.store.createRecord('translation-activity', {
-      startDate: now,
-      dueDate: translationRequest.translationDueDate,
-      title: translationRequest.subject,
-      subcase: this.translationSubcase,
-      requestActivity: requestActivity,
-      usedPieces: pieces,
-      language: french,
-    });
-    yield translationActivity.save();
-
-    const filePromises = translationRequest.attachments.mapBy('file');
-    const filesPromise = Promise.all(filePromises);
-
-    const outboxPromise = this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);
-    const mailSettingsPromise = this.store.queryOne('email-notification-setting');
-    const [files, outbox, mailSettings] = yield Promise.all([filesPromise, outboxPromise, mailSettingsPromise]);
-    const mail = yield this.store.createRecord('email', {
-      to: mailSettings.translationRequestToEmail,
-      from: mailSettings.defaultFromEmail,
-      folder: outbox,
-      attachments: files,
-      requestActivity: requestActivity,
-      subject: translationRequest.subject,
-      message: translationRequest.message,
-    });
-    yield mail.save();
+    yield this.publicationService.saveTranslationRequest(this.publicationFlow, translationRequest);
 
     this.selectedPieceRows = [];
     this.isTranslationRequestModalOpen = false;
