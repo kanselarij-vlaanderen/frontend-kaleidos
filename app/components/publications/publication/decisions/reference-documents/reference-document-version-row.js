@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency-decorators';
 
-export default class VlDocument extends Component {
+export default class ReferenceDocumentVersionRow extends Component {
   /**
    * A document card with expandable document history .
    * By default uses the @piece argument, but can fall back to @documentContainer when

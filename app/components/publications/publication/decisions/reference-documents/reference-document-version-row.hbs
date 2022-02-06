@@ -45,7 +45,7 @@
         </Auk::Button>
       {{/if}}
 
-      {{#if (and this.currentSession.isEditor @enableDelete)}}
+      {{#if @enableDelete}}
         <Auk::Button
           @skin="danger-borderless"
           @layout="icon-only"
@@ -57,7 +57,7 @@
         </Auk::Button>
       {{/if}}
     </div>
-    {{#if this.currentSession.isEditor}}
+    {{#if @isEditor}}
       <div class="vlc-document-card-item__meta">
         {{!-- no piece.created in legacy data --}}
         {{!-- TODO: when created date is absent, the layout seems irregular

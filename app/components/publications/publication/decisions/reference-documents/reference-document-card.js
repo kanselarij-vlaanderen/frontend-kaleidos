@@ -11,7 +11,7 @@ import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import ENV from 'frontend-kaleidos/config/environment';
 import { isEmpty } from '@ember/utils';
 
-export default class DocumentsDocumentCardComponent extends Component {
+export default class ReferenceDocumentCardComponent extends Component {
   /**
    * A document card with expandable document history .
    * By default uses the @piece argument, but can fall back to @documentContainer when
@@ -116,6 +116,12 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *loadVersionHistory() {
     this.pieces = yield this.documentContainer.hasMany('pieces').reload();
+  }
+
+  get isEditor() {
+    const isAgendaEditor = this.isViaCouncilOfMinisters && this.currentSession.isEditor;
+    const isPublicationEditor = !this.isViaCouncilOfMinisters;
+    return isAgendaEditor || isPublicationEditor;
   }
 
   get sortedPieces() {

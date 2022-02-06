@@ -168,8 +168,9 @@
           {{else}}
             {{#each this.visiblePieces as |piece|}}
               {{! TODO: also disable delete when piece linked to other agenda-items while maintaining DDAU }}
-              <WebComponents::VlDocument
+              <Publications::Publication::Decisions::ReferenceDocuments::ReferenceDocumentVersionRow
                 @piece={{piece}}
+                @isEditor={{this.isEditor}}
                 @enableDelete={{and (not this.isViaCouncilOfMinisters) (eq piece @piece)}}
                 @didDeletePiece={{@didDeletePiece}}
                 @didUpdateAccessLevel={{perform this.loadPieceRelatedData}}
