@@ -199,7 +199,7 @@ export default class ReferenceDocumentCardComponent extends Component {
 
   @action
   enableEditPieceName() {
-    if (this.currentSession.isEditor) {
+    if (this.isEditor) {
       this.pieceNameBuffer = this.piece.name;
       this.isEditingPiece = true;
     }
