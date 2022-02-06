@@ -8,11 +8,8 @@ import ENV from 'frontend-kaleidos/config/environment';
 
 export default class PublicationsPublicationDecisionsDocumentsPanelComponent extends Component {
   @service store;
-  @service intl;
   @service router;
   @service currentSession;
-  @service fileService;
-  @service toaster;
   @service publicationService;
   @service signatureService;
 
@@ -21,9 +18,6 @@ export default class PublicationsPublicationDecisionsDocumentsPanelComponent ext
   @tracked isOpenRefDocUploadModal = false;
   @tracked isNewContainer;
   @tracked selectedPiece;
-
-  @tracked isOpenConfirmDeleteContainerModal = false;
-  @tracked isOpenConfirmDeleteVersionModal = false;
   @tracked isOpenTranslationRequestModal = false;
 
   // property: TranslationRequestModal requires resolved TranslationSubcase
