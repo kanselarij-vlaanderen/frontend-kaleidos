@@ -21,7 +21,9 @@ export default class PublicationsPublicationDecisionsRoute extends Route {
   async afterModel() {
     this.publicationFlow = this.modelFor('publications.publication');
     this.isViaCouncilOfMinisters =
-      await this.publicationService.getIsViaCouncilOfMinisters(this.publicationFlow);
+      await this.publicationService.getIsViaCouncilOfMinisters(
+        this.publicationFlow
+      );
   }
 
   setupController(ctrl) {

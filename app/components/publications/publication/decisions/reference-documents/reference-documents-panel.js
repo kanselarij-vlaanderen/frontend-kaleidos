@@ -102,12 +102,12 @@ export default class PublicationsPublicationDecisionsDocumentsPanelComponent ext
   @action
   async markForSignature(piece) {
     // TODO: check whether this is a correct approach
-    const agendaItemTreatment = await this.args.publicationFlow.agendaItemTreatment;
+    const agendaItemTreatment = await this.args.publicationFlow
+      .agendaItemTreatment;
     await this.signatureService.markDocumentForSignature(
       piece,
       agendaItemTreatment
     );
-    console.log('yo')
   }
 
   @action

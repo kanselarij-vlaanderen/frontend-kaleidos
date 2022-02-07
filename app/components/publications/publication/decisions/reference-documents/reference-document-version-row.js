@@ -46,7 +46,9 @@ export default class ReferenceDocumentVersionRow extends Component {
       this.documentContainer = yield this.piece.documentContainer;
       this.accessLevel = yield this.piece.accessLevel;
     } else {
-      throw new Error(`You should provide @piece or @documentContainer as an argument to ${this.constructor.name}`);
+      throw new Error(
+        `You should provide @piece or @documentContainer as an argument to ${this.constructor.name}`
+      );
     }
   }
 

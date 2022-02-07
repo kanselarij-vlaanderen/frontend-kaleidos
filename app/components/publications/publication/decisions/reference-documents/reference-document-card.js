@@ -71,7 +71,8 @@ export default class ReferenceDocumentCardComponent extends Component {
   *loadPublicationFlowRelatedData() {
     const publicationFlow = this.args.publicationFlow;
     yield publicationFlow?.identification;
-    this.isViaCouncilOfMinisters = yield this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
+    this.isViaCouncilOfMinisters =
+      yield this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
   }
 
   @task
@@ -111,7 +112,8 @@ export default class ReferenceDocumentCardComponent extends Component {
   }
 
   get isEditor() {
-    const isAgendaEditor = this.isViaCouncilOfMinisters && this.currentSession.isEditor;
+    const isAgendaEditor =
+      this.isViaCouncilOfMinisters && this.currentSession.isEditor;
     const isPublicationEditor = !this.isViaCouncilOfMinisters;
     return isAgendaEditor || isPublicationEditor;
   }

@@ -1,6 +1,6 @@
 <div
   class="auk-u-mb-2
-    {{if this.documentContainer.aboutToDelete "vlc-document--deleted-state"}}"
+    {{if this.documentContainer.aboutToDelete 'vlc-document--deleted-state'}}"
   {{did-update (perform this.loadPieceRelatedData) @piece}}
   {{did-update (perform this.loadPieceRelatedData) @documentContainer}}
 >
@@ -171,7 +171,10 @@
               <Publications::Publication::Decisions::ReferenceDocuments::ReferenceDocumentVersionRow
                 @piece={{piece}}
                 @isEditor={{this.isEditor}}
-                @enableDelete={{and (not this.isViaCouncilOfMinisters) (eq piece @piece)}}
+                @enableDelete={{and
+                  (not this.isViaCouncilOfMinisters)
+                  (eq piece @piece)
+                }}
                 @didDeletePiece={{@didDeletePiece}}
                 @didUpdateAccessLevel={{perform this.loadPieceRelatedData}}
               />

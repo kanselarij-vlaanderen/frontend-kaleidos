@@ -7,12 +7,26 @@ export default class PublicationService extends Service {
   @service toaster;
   @service intl;
 
-  async createNewPublicationFromMinisterialCouncil(publicationProperties, decisionOptions) {
-    return this.createNewPublication(publicationProperties, decisionOptions, undefined);
+  async createNewPublicationFromMinisterialCouncil(
+    publicationProperties,
+    decisionOptions
+  ) {
+    return this.createNewPublication(
+      publicationProperties,
+      decisionOptions,
+      undefined
+    );
   }
 
-  async createNewPublicationWithoutMinisterialCouncil(publicationProperties, decisionOptions) {
-    return this.createNewPublication(publicationProperties, undefined, decisionOptions);
+  async createNewPublicationWithoutMinisterialCouncil(
+    publicationProperties,
+    decisionOptions
+  ) {
+    return this.createNewPublication(
+      publicationProperties,
+      undefined,
+      decisionOptions
+    );
   }
 
   /**
@@ -34,7 +48,11 @@ export default class PublicationService extends Service {
    * @returns {PublicationFlow}
    * @private
    */
-  async createNewPublication(publicationProperties, viaCouncilOfMinisterOptions, notViaCouncilOfMinistersOptions) {
+  async createNewPublication(
+    publicationProperties,
+    viaCouncilOfMinisterOptions,
+    notViaCouncilOfMinistersOptions
+  ) {
     const now = new Date();
 
     let case_;
@@ -59,16 +77,25 @@ export default class PublicationService extends Service {
       mandatees = [];
     }
 
-    const initialStatus = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.STARTED);
+    const initialStatus = await this.store.findRecordByUri(
+      'publication-status',
+      CONSTANTS.PUBLICATION_STATUSES.STARTED
+    );
 
-    const structuredIdentifier = this.store.createRecord('structured-identifier', {
-      localIdentifier: publicationProperties.number,
-      versionIdentifier: publicationProperties.suffix,
-    });
+    const structuredIdentifier = this.store.createRecord(
+      'structured-identifier',
+      {
+        localIdentifier: publicationProperties.number,
+        versionIdentifier: publicationProperties.suffix,
+      }
+    );
     await structuredIdentifier.save();
 
     let identificationNumber = publicationProperties.number;
-    if (publicationProperties.suffix && publicationProperties.suffix.length > 0) {
+    if (
+      publicationProperties.suffix &&
+      publicationProperties.suffix.length > 0
+    ) {
       identificationNumber += ` ${publicationProperties.suffix}`;
     }
 
@@ -112,7 +139,11 @@ export default class PublicationService extends Service {
     return publicationFlow;
   }
 
-  async publicationNumberAlreadyTaken(publicationNumber, publicationSuffix, publicationFlowId) {
+  async publicationNumberAlreadyTaken(
+    publicationNumber,
+    publicationSuffix,
+    publicationFlowId
+  ) {
     let identificationNumber = publicationNumber;
     if (publicationSuffix && publicationSuffix.length > 0) {
       identificationNumber += ` ${publicationSuffix}`;
@@ -127,16 +158,23 @@ export default class PublicationService extends Service {
     });
 
     // our own publication should not be considered as duplicate
-    return duplicates.filter((publication) => publication.id !== publicationFlowId).length > 0;
+    return (
+      duplicates.filter((publication) => publication.id !== publicationFlowId)
+        .length > 0
+    );
   }
 
   // earliest publication date of a decision linked to first started publication activity
   async getPublicationDate(publicationFlow) {
     const publicationSubcase = await publicationFlow.publicationSubcase;
-    const publicationActivities = (await publicationSubcase.publicationActivities).sortBy('startDate');
+    const publicationActivities = (
+      await publicationSubcase.publicationActivities
+    ).sortBy('startDate');
     if (publicationActivities.length) {
       for (let publicationActivity of publicationActivities) {
-        const publishedDecisions = (await publicationActivity.decisions).sortBy('publicationDate');
+        const publishedDecisions = (await publicationActivity.decisions).sortBy(
+          'publicationDate'
+        );
         if (publishedDecisions.length) {
           return publishedDecisions.firstObject.publicationDate;
         }
@@ -152,9 +190,9 @@ export default class PublicationService extends Service {
   }
 
   /**
- *
- * @param {PublicationFlow} publicationFlow
- * @param {{
+   *
+   * @param {PublicationFlow} publicationFlow
+   * @param {{
    *  translationDueDate: Date,
    *  attachments: Piece[],
    *  subject: String,
@@ -177,25 +215,40 @@ export default class PublicationService extends Service {
       usedPieces: pieces,
     });
     await requestActivity.save();
-    const french = await this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.FR);
+    const french = await this.store.findRecordByUri(
+      'language',
+      CONSTANTS.LANGUAGES.FR
+    );
 
-    const translationActivity = this.store.createRecord('translation-activity', {
-      startDate: now,
-      dueDate: translationRequestParams.translationDueDate,
-      title: translationRequestParams.subject,
-      subcase: translationSubcase,
-      requestActivity: requestActivity,
-      usedPieces: pieces,
-      language: french,
-    });
+    const translationActivity = this.store.createRecord(
+      'translation-activity',
+      {
+        startDate: now,
+        dueDate: translationRequestParams.translationDueDate,
+        title: translationRequestParams.subject,
+        subcase: translationSubcase,
+        requestActivity: requestActivity,
+        usedPieces: pieces,
+        language: french,
+      }
+    );
     await translationActivity.save();
 
     const filePromises = pieces.mapBy('file');
     const filesPromise = Promise.all(filePromises);
 
-    const outboxPromise = this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);
-    const mailSettingsPromise = this.store.queryOne('email-notification-setting');
-    const [files, outbox, mailSettings] = await Promise.all([filesPromise, outboxPromise, mailSettingsPromise]);
+    const outboxPromise = this.store.findRecordByUri(
+      'mail-folder',
+      PUBLICATION_EMAIL.OUTBOX
+    );
+    const mailSettingsPromise = this.store.queryOne(
+      'email-notification-setting'
+    );
+    const [files, outbox, mailSettings] = await Promise.all([
+      filesPromise,
+      outboxPromise,
+      mailSettingsPromise,
+    ]);
     const mail = await this.store.createRecord('email', {
       to: mailSettings.translationRequestToEmail,
       from: mailSettings.defaultFromEmail,
