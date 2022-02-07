@@ -1,6 +1,13 @@
 <Auk::Panel>
   <Auk::Panel::Header>
     <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title">
+            {{t "documents"}}
+          </h4>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         {{#if (not this.isViaCouncilOfMinisters)}}
           <Auk::Toolbar::Item>
