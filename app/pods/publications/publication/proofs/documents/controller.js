@@ -32,6 +32,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   @service currentSession;
   @service store;
+  @service publicationService;
 
   // @tracked sort; // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
   /** @type {string} kebab-cased key name, prepended with minus if descending */
@@ -255,28 +256,11 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     saves.push(emailSave);
 
     // PUBLICATION-STATUS
-    this.publicationFlow.status = await this.store.findRecordByUri(
-      'publication-status',
+    const pubStatusChange = this.publicationService.updatePublicationStatus(
+      this.publicationFlow,
       CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED
     );
-    // Continuing without awaiting here can cause saving while related status-change
-    // already is deleted (by step below)
-    await this.publicationFlow.save();
-
-    const oldChangeActivity = await this.publicationFlow
-      .publicationStatusChange;
-    if (oldChangeActivity) {
-      await oldChangeActivity.destroyRecord();
-    }
-    const newChangeActivity = this.store.createRecord(
-      'publication-status-change',
-      {
-        startedAt: now,
-        publication: this.publicationFlow,
-      }
-    );
-    const statusChangedSave = newChangeActivity.save();
-    saves.push(statusChangedSave);
+    saves.push(pubStatusChange);
 
     await Promise.all(saves);
   }

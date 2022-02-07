@@ -20,6 +20,7 @@ const COLUMN_MAP = {
 export default class PublicationsPublicationTranslationsDocumentController extends Controller {
   @service currentSession;
   @service store;
+  @service publicationService;
 
   queryParams = [{
     sort: {
@@ -172,27 +173,10 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     });
     yield mail.save();
 
-    // Update publication status 'to translation'
-    this.publicationFlow.status =
-      yield this.store.findRecordByUri(
-        'publication-status',
-        CONSTANTS.PUBLICATION_STATUSES.TO_TRANSLATIONS
-      );
-    yield this.publicationFlow.save();
-
-    const oldChangeActivity = yield this.publicationFlow
-      .publicationStatusChange;
-    if (oldChangeActivity) {
-      yield oldChangeActivity.destroyRecord();
-    }
-    const newChangeActivity = this.store.createRecord(
-      'publication-status-change',
-      {
-        startedAt: now,
-        publication: this.publicationFlow,
-      }
+    yield this.publicationService.updatePublicationStatus(
+      this.publicationFlow,
+      CONSTANTS.PUBLICATION_STATUSES.TO_TRANSLATIONS
     );
-    yield newChangeActivity.save();
 
     this.selectedPieceRows = [];
     this.isTranslationRequestModalOpen = false;

@@ -7,6 +7,8 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationTranslationsRequestController extends Controller {
   @service store;
+  @service publicationService;
+
   @tracked publicationFlow;
   @tracked translationSubcase;
   @tracked publicationSubcase;
@@ -58,26 +60,11 @@ export default class PublicationsPublicationTranslationsRequestController extend
     }
 
     if (translationUpload.isTranslationIn) { // it was requested to update the publication status
-      this.publicationFlow.status =
-        yield this.store.findRecordByUri(
-          'publication-status',
-          CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_IN
-        );
-      yield this.publicationFlow.save();
-
-      const oldChangeActivity = yield this.publicationFlow
-        .publicationStatusChange;
-      if (oldChangeActivity) {
-        yield oldChangeActivity.destroyRecord();
-      }
-      const newChangeActivity = this.store.createRecord(
-        'publication-status-change',
-        {
-          startedAt: translationUpload.receivedAtDate,
-          publication: this.publicationFlow,
-        }
+      yield this.publicationService.updatePublicationStatus(
+        this.publicationFlow,
+        CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_IN,
+        translationUpload.receivedAtDate
       );
-      yield newChangeActivity.save();
 
       this.translationSubcase.endDate = translationUpload.receivedAtDate;
       yield this.translationSubcase.save();
