@@ -18,12 +18,10 @@ export default class PublicationsOverviewLateRoute extends Route {
   };
 
   async model(params) {
-    const publicationStatuses = this.store.peekAll('publication-status');
-    const pendingStatuses = publicationStatuses.rejectBy('isFinal');
-    const pendingFilter = pendingStatuses.mapBy('id').join(',');
+    const pendingStatuses = this.getPendingStatuses();
 
     return this.store.query('publication-flow', {
-      'filter[status][:id:]': pendingFilter,
+      'filter[status][:id:]': pendingStatuses.mapBy('id').join(','),
       // notice: due-date is datetime but appears as a date to the user
       // If a user enters '2022-02-07', it is saved as '2022-02-06 23:00 UTC'
       // This is interpreted as < 2022-02-08 00:00 Flemish time. => due-datetime + 1 day
@@ -46,6 +44,12 @@ export default class PublicationsOverviewLateRoute extends Route {
         'case',
       ].join(','),
     });
+  }
+
+  getPendingStatuses() {
+    const publicationStatuses = this.store.peekAll('publication-status');
+    const pendingStatuses = publicationStatuses.rejectBy('isFinal');
+    return pendingStatuses;
   }
 
   @action

@@ -24,11 +24,7 @@ export default class PublicationsOverviewProofRoute extends Route {
   };
 
   async model(params) {
-    const publicationStatuses = this.store.peekAll('publication-status');
-    const proofRequestedStatuses = publicationStatuses.filter((it) =>
-      PROOF_REQUESTED_STATUSES_URIS.includes(it.uri)
-    );
-
+    const proofRequestedStatuses = this.getProofRequestedStatuses();
     return this.store.query('publication-flow', {
       'filter[status][:id:]': proofRequestedStatuses.mapBy('id').join(','),
       sort: params.sort,
@@ -45,6 +41,14 @@ export default class PublicationsOverviewProofRoute extends Route {
         'case',
       ].join(','),
     });
+  }
+
+  getProofRequestedStatuses() {
+    const publicationStatuses = this.store.peekAll('publication-status');
+    const proofRequestedStatuses = publicationStatuses.filter((it) =>
+      PROOF_REQUESTED_STATUSES_URIS.includes(it.uri)
+    );
+    return proofRequestedStatuses;
   }
 
   @action
