@@ -45,13 +45,13 @@ export default class PublicationsPublicationDecisionsDocumentsPanelComponent ext
   }
 
   @task
-  *saveRefDoc(refDocProperties) {
-    yield this.performSaveRefDoc(refDocProperties);
+  *saveRefDoc(refDocParams) {
+    yield this.performSaveRefDoc(refDocParams);
     this.isOpenRefDocUploadModal = false;
     this.args.refresh();
   }
 
-  async performSaveRefDoc(refDocProperties) {
+  async performSaveRefDoc(refDocParams) {
     const now = new Date();
     let documentContainer;
     // upload new document
@@ -69,10 +69,10 @@ export default class PublicationsPublicationDecisionsDocumentsPanelComponent ext
     const piece = this.store.createRecord('piece', {
       created: now,
       modified: now,
-      name: refDocProperties.name,
+      name: refDocParams.name,
       confidential: false,
-      pages: refDocProperties.pageCount,
-      file: refDocProperties.file,
+      pages: refDocParams.pageCount,
+      file: refDocParams.file,
       documentContainer: documentContainer,
       publicationFlow: this.args.publicationFlow,
     });
