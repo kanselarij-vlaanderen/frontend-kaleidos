@@ -30,7 +30,8 @@ export default class PublicationsOverviewLateRoute extends Route {
       // We do a (due-date < startOfDay) check. This allows decisions published
       // in the course of the day not to be marked as overdue.
       // @see also: `get isOverdue` in publication-subcase
-      'filter[publication-subcase][:lt:due-date]': getStartOfToday().toISOString(),
+      'filter[publication-subcase][:lt:due-date]':
+        getStartOfToday().toISOString(),
       sort: params.sort,
       page: {
         number: params.page,
@@ -61,7 +62,7 @@ export default class PublicationsOverviewLateRoute extends Route {
 
 /** inspired by {@link https://date-fns.org/v2.28.0/docs/startOfToday} */
 function getStartOfToday() {
-  const date = new Date()
+  const date = new Date();
   date.setHours(0, 0, 0, 0);
   return date;
 }

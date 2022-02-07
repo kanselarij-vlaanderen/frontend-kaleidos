@@ -52,7 +52,7 @@ export default class PublicationsOverviewTranslationController extends Controlle
 
   loadColumnsDisplayConfig() {
     const serializedColumnsDisplayConfig = localStorage.getItem(
-      'publications.overview.translation/columnsDisplayConfig',
+      'publications.overview.translation/columnsDisplayConfig'
     );
     if (serializedColumnsDisplayConfig) {
       const columnsDisplayConfig = JSON.parse(serializedColumnsDisplayConfig);

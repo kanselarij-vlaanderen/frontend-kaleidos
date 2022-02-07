@@ -50,7 +50,7 @@ export default class PublicationsOverviewUrgentController extends Controller {
 
   loadColumnsDisplayConfig() {
     const serializedColumnsDisplayConfig = localStorage.getItem(
-      'publications.overview.urgent/columnsDisplayConfig',
+      'publications.overview.urgent/columnsDisplayConfig'
     );
     if (serializedColumnsDisplayConfig) {
       const columnsDisplayConfig = JSON.parse(serializedColumnsDisplayConfig);

@@ -53,7 +53,7 @@ export default class PublicationsOverviewProofreadController extends Controller 
 
   loadColumnsDisplayConfig() {
     const serializedColumnsDisplayConfig = localStorage.getItem(
-      'publications.overview.proofread/columnsDisplayConfig',
+      'publications.overview.proofread/columnsDisplayConfig'
     );
     if (serializedColumnsDisplayConfig) {
       const columnsDisplayConfig = JSON.parse(serializedColumnsDisplayConfig);

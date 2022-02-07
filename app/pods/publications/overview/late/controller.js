@@ -50,7 +50,7 @@ export default class PublicationsOverviewLateController extends Controller {
 
   loadColumnsDisplayConfig() {
     const serializedColumnsDisplayConfig = localStorage.getItem(
-      'publications.overview.late/columnsDisplayConfig',
+      'publications.overview.late/columnsDisplayConfig'
     );
     if (serializedColumnsDisplayConfig) {
       const columnsDisplayConfig = JSON.parse(serializedColumnsDisplayConfig);

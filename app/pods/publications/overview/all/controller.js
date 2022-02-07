@@ -49,7 +49,7 @@ export default class PublicationsOverviewAllController extends Controller {
 
   loadColumnsDisplayConfig() {
     const serializedColumnsDisplayConfig = localStorage.getItem(
-      'publications.overview.all/columnsDisplayConfig',
+      'publications.overview.all/columnsDisplayConfig'
     );
     if (serializedColumnsDisplayConfig) {
       const columnsDisplayConfig = JSON.parse(serializedColumnsDisplayConfig);
