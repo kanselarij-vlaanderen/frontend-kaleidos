@@ -8,8 +8,6 @@ import moment from 'moment';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import ENV from 'frontend-kaleidos/config/environment';
-import { isEmpty } from '@ember/utils';
 
 export default class ReferenceDocumentCardComponent extends Component {
   /**
@@ -54,12 +52,6 @@ export default class ReferenceDocumentCardComponent extends Component {
     this.loadPieceRelatedData.perform();
   }
 
-  get shouldShowPublications() {
-    return (
-      !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB) && this.currentSession.isOvrb
-    );
-  }
-
   @task
   *loadCodelists() {
     this.defaultAccessLevel = yield this.store.findRecordByUri(
@@ -77,7 +69,7 @@ export default class ReferenceDocumentCardComponent extends Component {
 
   @task
   *loadPublicationFlowRelatedData() {
-    const publicationFlow = yield this.piece.publicationFlow;
+    const publicationFlow = this.args.publicationFlow;
     yield publicationFlow?.identification;
     this.isViaCouncilOfMinisters = yield this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
   }
