@@ -94,16 +94,13 @@
               </Auk::Toolbar::Item>
             {{/if}}
             <Auk::Toolbar::Item>
-              <DropdownMenu
-                @skin="borderless"
-                @icon="three-dots"
-                data-test-document-card-actions={{true}}
-                as |Menu|
-              >
-                <Menu.Item {{on "click" (fn @onRequestTranslation @piece)}}>
-                  {{t "request-translations"}}
-                </Menu.Item>
-                {{#unless this.isViaCouncilOfMinisters}}
+              {{#unless this.isViaCouncilOfMinisters}}
+                <DropdownMenu
+                  @skin="borderless"
+                  @icon="three-dots"
+                  data-test-document-card-actions={{true}}
+                  as |Menu|
+                >
                   <Menu.Item
                     data-test-document-upload-new-piece
                     {{on "click" this.openUploadModal}}
@@ -121,8 +118,8 @@
                   >
                     {{t "document-delete"}}
                   </Menu.Item>
-                {{/unless}}
-              </DropdownMenu>
+                </DropdownMenu>
+              {{/unless}}
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
         </Auk::Toolbar>

@@ -18,10 +18,6 @@ export default class PublicationsPublicationDecisionsDocumentsPanelComponent ext
   @tracked isOpenRefDocUploadModal = false;
   @tracked isNewContainer;
   @tracked selectedPiece;
-  @tracked isOpenTranslationRequestModal = false;
-
-  // property: TranslationRequestModal requires resolved TranslationSubcase
-  @tracked translationSubcase;
 
   constructor() {
     super(...arguments);
@@ -33,8 +29,6 @@ export default class PublicationsPublicationDecisionsDocumentsPanelComponent ext
       await this.publicationService.getIsViaCouncilOfMinisters(
         this.args.publicationFlow
       );
-    this.translationSubcase = await this.args.publicationFlow
-      .translationSubcase;
   }
 
   @action
@@ -113,34 +107,5 @@ export default class PublicationsPublicationDecisionsDocumentsPanelComponent ext
   @action
   async unmarkForSignature(piece) {
     await this.signatureService.unmarkDocumentForSignature(piece);
-  }
-
-  @action
-  async openTranslationRequestModal(piece) {
-    const publicationFlow = this.args.publicationFlow;
-    this.translationSubcase = await publicationFlow.translationSubcase;
-    this.selectedPiece = piece;
-    this.isOpenTranslationRequestModal = true;
-  }
-
-  @action
-  closeTranlationRequestModal() {
-    this.isOpenTranslationRequestModal = false;
-  }
-
-  @task
-  *saveTranslationRequest(translationRequestParams) {
-    yield this.performSaveTranslationRequest(translationRequestParams);
-    this.isOpenTranslationRequestModal = false;
-    this.router.transitionTo('publications.publication.translations.requests');
-  }
-
-  @action
-  async performSaveTranslationRequest(translationRequestParams) {
-    const publicationFlow = this.args.publicationFlow;
-    await this.publicationService.saveTranslationRequest(
-      publicationFlow,
-      translationRequestParams
-    );
   }
 }

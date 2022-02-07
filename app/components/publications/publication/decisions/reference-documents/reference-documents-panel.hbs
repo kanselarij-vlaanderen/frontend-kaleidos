@@ -35,7 +35,6 @@
           @hasMarkForSignature={{this.isShownSignatureMarker}}
           @markForSignature={{this.markForSignature}}
           @unmarkForSignature={{this.unmarkForSignature}}
-          @onRequestTranslation={{this.openTranslationRequestModal}}
         />
       {{else}}
         <Auk::EmptyState @message={{t "reference-documents-empty"}} />
@@ -51,15 +50,5 @@
     @isNewDocumentContainer={{this.isNewContainer}}
     @onSave={{perform this.saveRefDoc}}
     @onCancel={{this.closeRefDocUploadModal}}
-  />
-{{/if}}
-
-{{#if this.isOpenTranslationRequestModal}}
-  <Publications::Publication::Translations::TranslationRequestModal
-    @translationSubcase={{this.translationSubcase}}
-    @publicationFlow={{@publicationFlow}}
-    @attachments={{array this.selectedPiece}}
-    @onSave={{perform this.saveTranslationRequest}}
-    @onCancel={{this.closeTranlationRequestModal}}
   />
 {{/if}}
