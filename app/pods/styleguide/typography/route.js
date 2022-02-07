@@ -33,7 +33,7 @@ export default class TypographyRoute extends Route {
       },
       {
         name: 'Muted text',
-        code: '<p class="auk-u-muted">This longer body text where we show a bit more content in a paragraph is set as <strong>muted text</strong>, and it contains <em>italic</em> text.</p>',
+        code: '<p class="auk-u-text-muted">This longer body text where we show a bit more content in a paragraph is set as <strong>muted text</strong>, and it contains <em>italic</em> text.</p>',
       },
       {
         name: 'Unordered list',
