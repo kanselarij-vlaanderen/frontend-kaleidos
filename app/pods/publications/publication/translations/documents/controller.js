@@ -2,11 +2,7 @@ import Controller from '@ember/controller';
 import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 // eslint-disable-next-line ember/no-computed-properties-in-native-classes
-import {
-  action,
-  computed,
-  set,
-} from '@ember/object';
+import { action, computed, set } from '@ember/object';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
@@ -21,11 +17,13 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   @service router;
   @service publicationService;
 
-  queryParams = [{
-    sort: {
-      as: 'volgorde',
+  queryParams = [
+    {
+      sort: {
+        as: 'volgorde',
+      },
     },
-  }];
+  ];
 
   // @tracked sort; // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
   /** @type {string} kebab-cased key name, prepended with minus if descending */
@@ -68,8 +66,10 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   }
 
   get isRequestingDisabled() {
-    return this.selectedPieceRows.length === 0 // no files are selected
-      || this.translationSubcase.isFinished;
+    return (
+      this.selectedPieceRows.length === 0 || // no files are selected
+      this.translationSubcase.isFinished
+    );
   }
 
   get isUploadDisabled() {
@@ -114,7 +114,10 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     piece.pages = translationDocument.pagesAmount;
     piece.words = translationDocument.wordsAmount;
     piece.name = translationDocument.name;
-    piece.language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
+    piece.language = yield this.store.findRecordByUri(
+      'language',
+      CONSTANTS.LANGUAGES.NL
+    );
 
     if (translationDocument.isSourceForProofPrint) {
       piece.publicationSubcaseSourceFor = this.publicationSubcase;
@@ -125,10 +128,12 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     this.send('refresh');
   }
 
-
   @task
   *saveTranslationRequest(translationRequest) {
-    yield this.publicationService.saveTranslationRequest(this.publicationFlow, translationRequest);
+    yield this.publicationService.saveTranslationRequest(
+      this.publicationFlow,
+      translationRequest
+    );
 
     this.selectedPieceRows = [];
     this.isTranslationRequestModalOpen = false;
@@ -158,7 +163,10 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     const piece = pieceRow.piece;
     const filePromise = piece.file;
     const documentContainerPromise = piece.documentContainer;
-    const [file, documentContainer] = yield Promise.all([filePromise, documentContainerPromise]);
+    const [file, documentContainer] = yield Promise.all([
+      filePromise,
+      documentContainerPromise,
+    ]);
 
     const destroyPiece = piece.destroyRecord();
     const destroyFile = file.destroyRecord();
