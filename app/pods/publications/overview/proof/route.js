@@ -2,6 +2,11 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
+const PROOF_REQUESTED_STATUSES_URIS = [
+  CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED,
+  CONSTANTS.PUBLICATION_STATUSES.PROOF_RECALLED,
+];
+
 export default class PublicationsOverviewProofRoute extends Route {
   queryParams = {
     page: {
@@ -19,8 +24,13 @@ export default class PublicationsOverviewProofRoute extends Route {
   };
 
   async model(params) {
+    const publicationStatuses = this.store.peekAll('publication-status');
+    const proofRequestedStatuses = publicationStatuses.filter((it) =>
+      PROOF_REQUESTED_STATUSES_URIS.includes(it.uri)
+    );
+
     return this.store.query('publication-flow', {
-      'filter[status][:uri:]': CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED,
+      'filter[status][:id:]': proofRequestedStatuses.mapBy('id').join(','),
       sort: params.sort,
       page: {
         number: params.page,
