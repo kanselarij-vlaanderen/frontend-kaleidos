@@ -80,7 +80,6 @@ export default class AbstractPublicationsOverviewBaseController extends Controll
   }
 
   saveColumnsDisplayConfig(columnsDisplayConfig) {
-    console.log(this.columnsDisplayConfigStorageKey);
     const serializedColumnsDisplayConfig = JSON.stringify(columnsDisplayConfig);
     localStorage.setItem(
       this.columnsDisplayConfigStorageKey,
