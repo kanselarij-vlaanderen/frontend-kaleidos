@@ -8,7 +8,6 @@ import utils from '../../selectors/utils.selectors';
 
 context('Create case as Admin user', () => {
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 
@@ -18,7 +17,7 @@ context('Create case as Admin user', () => {
 
   // TODO-abbreviated
 
-  it('Create a case with short title', () => {
+  it.only('Create a case with short title', () => {
     cy.visit('/dossiers');
     const caseTitle = 'Dit is een dossier met een korte titel';
     cy.createCase(caseTitle).then((result) => {
@@ -67,7 +66,7 @@ context('Create case as Admin user', () => {
     cy.get(auk.tab.hierarchicalBack).click();
     // ensure type is the same after copy to new subcase
     // ensure confidentiality is the same after copy to new subcase
-    cy.route('POST', '/subcases').as('createNewSubcase');
+    cy.intercept('POST', '/subcases').as('createNewSubcase');
     cy.get(cases.subcaseOverviewHeader.createSubcase).click();
     cy.get(cases.newSubcase.clonePreviousSubcase).click();
     cy.wait('@createNewSubcase');

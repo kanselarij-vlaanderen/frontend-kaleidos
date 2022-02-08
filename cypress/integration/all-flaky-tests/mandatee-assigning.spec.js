@@ -8,25 +8,23 @@ import newsletter from '../../selectors/newsletter.selectors';
 import auk from '../../selectors/auk.selectors';
 
 function currentTimestamp() {
-  return Cypress.moment().unix();
+  return Cypress.dayjs().unix();
 }
 
 context('Assigning a mandatee to agendaitem or subcase should update linked subcase/agendaitems, KAS-1291', () => {
-  const agendaDate = Cypress.moment().add(1, 'weeks')
+  const agendaDate = Cypress.dayjs().add(1, 'weeks')
     .day(4); // Next friday
   // This variable is used multiple times to check if data is properly loaded
   const nameToCheck = 'Jambon';
   // const caseTitle = 'Cypress test: mandatee sync - 1594023300';  // The case is in the default data set with id 5F02DD8A7DE3FC0008000001
 
   before(() => {
-    cy.server();
     cy.login('Admin');
     cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logoutFlow();
   });
 
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 
@@ -145,7 +143,9 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .should('contain', nameToCheck);
 
     // Check if subcase has the same amount of mandatees
+    cy.intercept('GET', '/subcases?filter**').as('getSubcase');
     cy.visit('/dossiers/5F02DD8A7DE3FC0008000001/deeldossiers');
+    cy.wait('@getSubcase');
     cy.openSubcase(0);
 
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
@@ -259,7 +259,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       });
     // await saves subcase/agendaitem/agenda, awaiting only the last save for now, then wait a few seconds for data loading
     const randomInt = Math.floor(Math.random() * Math.floor(10000));
-    cy.route('PATCH', '/agendas/*').as(`patchAgenda${randomInt}`);
+    cy.intercept('PATCH', '/agendas/*').as(`patchAgenda${randomInt}`);
     cy.get(mandatee.mandateePanelEdit.actions.save).click();
     cy.wait(`@patchAgenda${randomInt}`);
     cy.wait(2000);
@@ -278,8 +278,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
   it('should create newsletter-info for the agendaitems to check the sorting', () => {
     const randomInt = Math.floor(Math.random() * Math.floor(10000));
-    cy.route('POST', '/newsletter-infos').as(`postNewsletterInfo${randomInt}`);
-    cy.route('PATCH', '/newsletter-infos/*').as(`patchNewsletterInfo${randomInt}`);
+    cy.intercept('POST', '/newsletter-infos').as(`postNewsletterInfo${randomInt}`);
+    cy.intercept('PATCH', '/newsletter-infos/*').as(`patchNewsletterInfo${randomInt}`);
     cy.openAgendaForDate(agendaDate);
     cy.get(auk.loader, {
       timeout: 60000,
