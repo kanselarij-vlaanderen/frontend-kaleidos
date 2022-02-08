@@ -1,4 +1,5 @@
 import AbstractPublicationsOverviewBaseController from '../_base/controller';
+import { tracked } from '@glimmer/tracking';
 
 const DEFAULT_COLUMNS = [
   'publicationNumber',
@@ -11,4 +12,5 @@ const DEFAULT_COLUMNS = [
 export default class PublicationsOverviewLateController extends AbstractPublicationsOverviewBaseController {
   defaultColumns = DEFAULT_COLUMNS;
   routeName = 'late';
+  @tracked sort = 'publication-subcase.due-date';
 }
