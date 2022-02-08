@@ -1,9 +1,9 @@
 import AbstractPublicationsOverviewBaseRoute from '../_base/route';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
+// eslint-disable-next-line prettier/prettier
 const PROOFREAD_STATUSES_URIS = [
   CONSTANTS.PUBLICATION_STATUSES.PROOF_IN,
-  CONSTANTS.PUBLICATION_STATUSES.PROOF_CORRECTED,
 ];
 
 export default class PublicationsOverviewProofreadRoute extends AbstractPublicationsOverviewBaseRoute {
