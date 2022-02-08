@@ -8,7 +8,6 @@ import utils from '../../selectors/utils.selectors';
 
 context('Testing the application as Overheid user', () => {
   beforeEach(() => {
-    cy.server();
     cy.login('Overheid');
   });
 

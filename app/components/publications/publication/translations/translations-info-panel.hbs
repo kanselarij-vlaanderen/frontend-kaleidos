@@ -8,17 +8,19 @@
           </h4>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
-      <Auk::Toolbar::Group @position="right">
-        <Auk::Toolbar::Item>
-          <Auk::Button
-            @skin="tertiary"
-            @icon="pencil"
-            @disabled={{@isFinal}}
-            @layout="icon-only"
-            {{on "click" this.openEditingPanel}}
-          />
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
+      {{#unless this.isEditing}}
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <Auk::Button
+              @skin="tertiary"
+              @icon="pencil"
+              @disabled={{@isFinal}}
+              @layout="icon-only"
+              {{on "click" this.openEditingPanel}}
+            />
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      {{/unless}}
     </Auk::Toolbar>
   </Auk::Panel::Header>
 
@@ -27,7 +29,7 @@
       <div class="auk-o-grid">
         <div class="auk-o-grid-col-3">
           <div class="auk-form-group">
-            <Auk::Label>{{t "translation-due-date"}}</Auk::Label>
+            <Auk::Label>{{t "publication-flow-translation-due-date"}}</Auk::Label>
             <Auk::Datepicker
               @date={{@translationSubcase.dueDate}}
               @onChange={{this.setTranslationDueDate}}
@@ -63,7 +65,7 @@
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <Auk::Button @skin="primary"  @loading={{this.save.isRunning}} {{on "click" (perform this.save)}}>
+            <Auk::Button @skin="primary" @loading={{this.save.isRunning}} {{on "click" (perform this.save)}}>
               {{t "save"}}
             </Auk::Button>
           </Auk::Toolbar::Item>
@@ -74,7 +76,7 @@
     <Auk::Panel::Body>
       <div class="auk-o-grid">
         <div class="auk-o-grid-col-3 auk-content">
-          <h4 class="auk-u-m-0">{{t "translation-due-date"}}</h4>
+          <h4 class="auk-u-m-0">{{t "publication-flow-translation-due-date"}}</h4>
           <p class="auk-u-m-0">
             {{#if @translationSubcase.dueDate}}
               {{moment-format @translationSubcase.dueDate "DD-MM-YYYY"}}

@@ -36,7 +36,6 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
   const theme2 = 'Landbouw en Visserij';
 
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 
@@ -56,7 +55,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       .type(decisionText);
     cy.get(newsletter.editItem.themesSelector).contains('Sport')
       .click();
-    cy.route('POST', '/newsletter-infos').as('newsletterInfosPost');
+    cy.intercept('POST', '/newsletter-infos').as('newsletterInfosPost');
     cy.get(newsletter.editItem.save).click()
       .wait('@newsletterInfosPost');
 
@@ -66,7 +65,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
   });
 
   it('Should toggle the box "in kort bestek" and patch the model', () => {
-    cy.route('PATCH', '/newsletter-infos/*').as('patchNewsletterInfo');
+    cy.intercept('PATCH', '/newsletter-infos/*').as('patchNewsletterInfo');
     cy.visit('/vergadering/5EBA9588751CF70008000012/kort-bestek');
     // define alias
     cy.get(newsletter.tableRow.newsletterRow).find(newsletter.tableRow.inNewsletterCheckbox)
@@ -95,7 +94,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
     };
     // TODO-newsletter this route does not work
-    // cy.route('GET', '/pieces?fields**').as('getPieces');
+    // cy.intercept('GET', '/pieces?fields**').as('getPieces');
     cy.visit('/vergadering/5EBA84900A655F0008000004/kort-bestek/nota-updates');
     // cy.wait('@getPieces');
     cy.get(route.notaUpdates.dataTable).find('tbody')
@@ -105,24 +104,24 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten/5EBA84AE0A655F0008000008/kort-bestek');
     // there is no changes alert before we add the BIS
     cy.get(newsletter.agendaitemNewsItem.themes); // when themes component is loaded, we can check the changes Alert
-    cy.get(utils.changesAlert.alert).should('not.be.visible');
+    cy.get(utils.changesAlert.alert).should('not.exist');
 
     cy.addNewPieceToAgendaitem(subcaseTitle1, file.newFileName, file);
     cy.openAgendaitemKortBestekTab(subcaseTitle1);
     cy.get(utils.changesAlert.alert).should('be.visible');
     cy.get(utils.changesAlert.close).click();
-    cy.get(utils.changesAlert.alert).should('not.be.visible');
+    cy.get(utils.changesAlert.alert).should('not.exist');
     // Edit KB
     cy.get(newsletter.newsItem.edit).should('be.visible')
       .click();
     cy.get(newsletter.editItem.rdfaEditor).type('Aanpassing');
-    cy.route('PATCH', '/newsletter-infos/*').as('patchNewsletterInfo');
+    cy.intercept('PATCH', '/newsletter-infos/*').as('patchNewsletterInfo');
     cy.get(newsletter.editItem.save).click();
     cy.get(utils.vlModalVerify.save).click();
     cy.wait('@patchNewsletterInfo');
     cy.openAgendaitemDocumentTab(subcaseTitle1);
     cy.openAgendaitemKortBestekTab(subcaseTitle1);
-    cy.get(utils.changesAlert.alert).should('not.be.visible');
+    cy.get(utils.changesAlert.alert).should('not.exist');
     cy.visit('/vergadering/5EBA84900A655F0008000004/kort-bestek/nota-updates');
     // cy.wait('@getPieces');
     cy.get(route.notaUpdates.dataTable).find('tbody')

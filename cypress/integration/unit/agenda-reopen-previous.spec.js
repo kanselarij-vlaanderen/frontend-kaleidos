@@ -5,11 +5,10 @@ import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
 
 context('Agenda reopen previous tests', () => {
-  const dateToCreateAgenda = Cypress.moment().add(10, 'weeks')
+  const dateToCreateAgenda = Cypress.dayjs().add(10, 'weeks')
     .day(3);
 
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 

@@ -6,7 +6,7 @@ import { inject } from '@ember/service';
 // eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
   intl: inject(),
-  startDate: attr('date'),
+  startDate: attr('date'), // for publications: displayed as: Datum beslissing
   agendaitem: belongsTo('agendaitem'),
   subcase: belongsTo('subcase'),
   report: belongsTo('piece'),
