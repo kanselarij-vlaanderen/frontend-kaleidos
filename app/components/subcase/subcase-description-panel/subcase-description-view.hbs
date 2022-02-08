@@ -26,7 +26,7 @@
         >
           <div class="vlc-status-timeline__dot"></div>
           {{#if (is-pending phase)}}
-            <div class="skeletal-loader" role="alert" aria-busy="true"></div>
+            <div class="auk-skeleton auk-skeleton--rectangle" role="alert" aria-busy="true"></div>
           {{else}}
             <div class="vlc-status-timeline__text">
               {{subcase-timeline-item-text phase=phase}}
@@ -126,7 +126,7 @@
           class="auk-key-value-item__value"
         >
           {{#if (is-pending @subcase.approved)}}
-            <div class="skeletal-loader" role="alert" aria-busy="true"></div>
+            <div class="auk-skeleton auk-skeleton--rectangle" role="alert" aria-busy="true"></div>
           {{else if (await @subcase.approved)}}
             {{moment-format this.latestMeeting.plannedStart "DD.MM.YYYY"}}
           {{else}}
@@ -148,7 +148,7 @@
               (is-pending @subcase.requestedBy.person)
             )
           }}
-            <div class="skeletal-loader" role="alert" aria-busy="true"></div>
+            <div class="auk-skeleton auk-skeleton--rectangle" role="alert" aria-busy="true"></div>
           {{else if @subcase.requestedBy}}
             {{@subcase.requestedBy.person.nameToDisplay}}
           {{else}}

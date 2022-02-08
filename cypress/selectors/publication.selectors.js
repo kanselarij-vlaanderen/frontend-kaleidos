@@ -229,23 +229,6 @@ const selectors = {
     table: '[data-test-mandatees-panel-table]',
   },
 
-  // government-fields-panel
-  governmentFieldsPanel: {
-    edit: '[data-test-government-fields-panel-edit]',
-    rows: '[data-test-government-fields-panel-row]',
-    row: {
-      label: '[data-test-government-fields-panel-row-label]',
-      fields: '[data-test-government-fields-panel-row-fields]',
-    },
-  },
-
-  // edit-government-fields-modal
-  editGovernmentFieldsModal: {
-    save: '[data-test-edit-government-fields-modal-save]',
-    // TODO-SELECTORS unused selectors
-    selectorForm: '[data-test-edit-government-fields-modal-selector-form]',
-  },
-
   // sidebar
   sidebar: {
     open: '[data-test-publication-sidebar-open]',

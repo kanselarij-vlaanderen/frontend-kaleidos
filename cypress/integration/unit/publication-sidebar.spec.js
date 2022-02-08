@@ -8,7 +8,7 @@ import auk from '../../selectors/auk.selectors';
 
 context('Publications sidebar tests', () => {
   // function goToPublication(publicationShorttitle) {
-  //   cy.route('GET', '/publication-flows/**').as('getNewPublicationDetail');
+  //   cy.intercept('GET', '/publication-flows/**').as('getNewPublicationDetail');
   //   cy.get(publication.publicationTableRow.row.shortTitle).contains(publicationShorttitle)
   //     .parents(publication.publicationTableRow.rows)
   //     .find(publication.publicationTableRow.row.goToPublication)
@@ -17,7 +17,6 @@ context('Publications sidebar tests', () => {
   // }
 
   beforeEach(() => {
-    cy.server();
     cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
     cy.visit('/publicaties');
   });
@@ -37,24 +36,24 @@ context('Publications sidebar tests', () => {
     const publicationMode = 'Extenso';
     const proofPrintCorrector = 'Tester';
     const numacNumber = '12345';
-    const openingDate = Cypress.moment().add(1, 'weeks')
+    const openingDate = Cypress.dayjs().add(1, 'weeks')
       .day(1);
-    const decisionDate = Cypress.moment().add(1, 'weeks')
+    const decisionDate = Cypress.dayjs().add(1, 'weeks')
       .day(2);
-    const translationDueDate = Cypress.moment().add(1, 'weeks')
+    const translationDueDate = Cypress.dayjs().add(1, 'weeks')
       .day(3);
-    const translationDate = Cypress.moment().add(1, 'weeks')
+    const translationDate = Cypress.dayjs().add(1, 'weeks')
       .day(4);
-    const targetEndDate = Cypress.moment().add(1, 'weeks')
+    const targetEndDate = Cypress.dayjs().add(1, 'weeks')
       .day(5);
-    const publicationDueDate = Cypress.moment().add(1, 'weeks')
+    const publicationDueDate = Cypress.dayjs().add(1, 'weeks')
       .day(6);
 
     // check error validation publication number
     cy.createPublication(fields);
     cy.get(publication.sidebar.open).click();
-    cy.route('PATCH', '/identifications/**').as('patchIdentifications');
-    cy.route('PATCH', '/structured-identifiers/**').as('patchStructuredIdentifiers');
+    cy.intercept('PATCH', '/identifications/**').as('patchIdentifications');
+    cy.intercept('PATCH', '/structured-identifiers/**').as('patchStructuredIdentifiers');
     cy.get(publication.sidebar.publicationNumber).click()
       .clear()
       .type(newPublicationNumber);
@@ -238,8 +237,8 @@ context('Publications sidebar tests', () => {
     const usedPublicationNumber = 1250;
 
     cy.createPublication(fields1);
-    cy.route('PATCH', '/identifications/**').as('patchIdentifications');
-    cy.route('PATCH', '/structured-identifiers/**').as('patchStructuredIdentifiers');
+    cy.intercept('PATCH', '/identifications/**').as('patchIdentifications');
+    cy.intercept('PATCH', '/structured-identifiers/**').as('patchStructuredIdentifiers');
     cy.get(publication.sidebar.open).click();
     cy.get(publication.sidebar.publicationNumber).click()
       .clear()

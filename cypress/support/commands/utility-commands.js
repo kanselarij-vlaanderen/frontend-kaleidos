@@ -48,7 +48,7 @@ function clickReverseTab(tabName) {
  * @name setDateInFlatpickr
  * @memberOf Cypress.Chainable#
  * @function
- * @param {Object} date the Cypress.moment with the date to set
+ * @param {Object} date the Cypress.dayjs with the date to set
  */
 function setDateInFlatpickr(date) {
   cy.log('setDateInFlatpickr');
@@ -68,14 +68,14 @@ function setDateInFlatpickr(date) {
  * @name setDateAndTimeInFlatpickr
  * @memberOf Cypress.Chainable#
  * @function
- * @param {Object} date the Cypress.moment with the date to set
+ * @param {Object} date the Cypress.dayjs with the date to set
  */
 function setDateAndTimeInFlatpickr(date) {
   cy.log('setDateAndTimeInFlatpickr');
   setDateInFlatpickr(date);
   cy.get(dependency.flatPickr.time).within(() => {
     cy.get(dependency.flatPickr.hour).type(date.hour());
-    cy.get(dependency.flatPickr.minute).type(date.minutes());
+    cy.get(dependency.flatPickr.minute).type(date.minute());
   });
   cy.log('/setDateAndTimeInFlatpickr');
 }
@@ -103,8 +103,44 @@ function openSettingsModal(selector) {
 function closeSettingsModal() {
   cy.log('closeSettingsModal');
   cy.get(utils.vlModal.close).click();
-  cy.get(utils.vlModal.dialogWindow).should('not.be.visible');
+  cy.get(utils.vlModal.dialogWindow).should('not.exist');
   cy.log('/closeSettingsModal');
+}
+
+/**
+ * Validate the content of the dropdown
+ * @memberOf Cypress.Chainable#
+ * @name addFields
+ * @function
+ * @param {{name: string, selected: boolean, [fields]: string}[]} domains
+ */
+function addDomainsAndFields(domains) {
+  cy.log('addDomainsAndFields');
+  cy.intercept('GET', '/concepts**').as('getConceptSchemes');
+  cy.get(utils.governmentAreasPanel.edit).click();
+  cy.wait('@getConceptSchemes');
+  domains.forEach((domain) => {
+    cy.get(utils.governmentAreaSelectorForm.domain).contains(domain.name)
+      .parent()
+      .as('container');
+    if (domain.selected) {
+      cy.get('@container').find(utils.governmentAreaSelectorForm.domain)
+        .contains(domain.name)
+        .click();
+    }
+    if (domain.fields) {
+      domain.fields.forEach((field)  => {
+        cy.get('@container').find(utils.governmentAreaSelectorForm.field)
+          .contains(field)
+          .click();
+      });
+    }
+  });
+  cy.intercept('PATCH', '/cases/*').as('saveCase');
+  cy.get(utils.editGovernmentFieldsModal.save).click();
+  cy.wait('@saveCase');
+
+  cy.log('/addDomainsAndFields');
 }
 
 // ***********************************************
@@ -116,3 +152,4 @@ Cypress.Commands.add('setDateAndTimeInFlatpickr', setDateAndTimeInFlatpickr);
 Cypress.Commands.add('setDateInFlatpickr', setDateInFlatpickr);
 Cypress.Commands.add('openSettingsModal', openSettingsModal);
 Cypress.Commands.add('closeSettingsModal', closeSettingsModal);
+Cypress.Commands.add('addDomainsAndFields', addDomainsAndFields);

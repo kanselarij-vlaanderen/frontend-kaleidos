@@ -19,11 +19,6 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
   @tracked isEditingTitles = false;
 
   @action
-  cancelEditing() {
-    this.isEditingTitles = false;
-  }
-
-  @action
   toggleIsEditing() {
     this.isEditingTitles = !this.isEditingTitles;
   }
@@ -39,7 +34,12 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
     };
     this.mandatees = mandateeData.mandatees;
     this.submitter = mandateeData.submitter;
-    await saveChanges(this.subcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
+    await saveChanges(
+      this.subcase,
+      propertiesToSetOnAgendaitem,
+      propertiesToSetOnSubcase,
+      true
+    );
   }
 
   @action

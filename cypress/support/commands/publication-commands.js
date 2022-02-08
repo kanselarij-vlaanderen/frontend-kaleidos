@@ -60,8 +60,8 @@ function fillInNewPublicationFields(fields) {
  */
 function createPublication(fields) {
   cy.log('createPublication');
-  cy.route('POST', '/cases').as('createNewCase');
-  cy.route('POST', '/publication-flows').as('createNewPublicationFlow');
+  cy.intercept('POST', '/cases').as('createNewCase');
+  cy.intercept('POST', '/publication-flows').as('createNewPublicationFlow');
 
   cy.visit('publicaties');
   cy.get(publication.publicationsIndex.newPublication).click();
@@ -71,8 +71,9 @@ function createPublication(fields) {
   cy.get(publication.newPublication.create).click()
     .wait('@createNewCase')
     .wait('@createNewPublicationFlow')
-    .then((res) => {
-      publicationFlowId = res.responseBody.data.id;
+    .its('response.body')
+    .then((responseBody) => {
+      publicationFlowId = responseBody.data.id;
       // Check if we transitioned to dossier page of the publication-flow
       cy.url().should('contain', `publicaties/${publicationFlowId}/dossier`);
     })
@@ -94,8 +95,8 @@ function createPublication(fields) {
  */
 function addPublicationDocuments(files) {
   cy.log('addPublicationDocuments');
-  cy.route('POST', 'pieces').as('createNewPiece');
-  cy.route('POST', 'document-containers').as('createNewDocumentContainer');
+  cy.intercept('POST', 'pieces').as('createNewPiece');
+  cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
 
   // TODO This part can be reused in future tests
 

@@ -8,17 +8,19 @@
           </h4>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
-      <Auk::Toolbar::Group @position="right">
-        <Auk::Toolbar::Item>
-          <Auk::Button
-            @skin="tertiary"
-            @icon="pencil"
-            @disabled={{@isFinal}}
-            @layout="icon-only"
-            {{on "click" this.openEditingPanel}}
-          />
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
+      {{#unless this.isEditing}}
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <Auk::Button
+              @skin="tertiary"
+              @icon="pencil"
+              @disabled={{@isFinal}}
+              @layout="icon-only"
+              {{on "click" this.openEditingPanel}}
+            />
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      {{/unless}}
     </Auk::Toolbar>
   </Auk::Panel::Header>
 
@@ -27,7 +29,7 @@
       <div class="auk-o-grid">
         <div class="auk-o-grid-col-3">
           <div class="auk-form-group">
-            <Auk::Label>{{t "publication-due-date"}}</Auk::Label>
+            <Auk::Label>{{t "publication-flow-publication-due-date"}}</Auk::Label>
             <Auk::Datepicker
               @date={{@publicationSubcase.dueDate}}
               @onChange={{this.setPublicationDueDate}}
@@ -84,12 +86,12 @@
     <Auk::Panel::Body>
       <div class="auk-o-grid">
         <div class="auk-o-grid-col-3 auk-content">
-          <h4 class="auk-u-m-0">{{t "publication-due-date"}}</h4>
+          <h4 class="auk-u-m-0">{{t "publication-flow-publication-due-date"}}</h4>
           <p class="auk-u-m-0">
             {{#if @publicationSubcase.dueDate}}
               {{moment-format @publicationSubcase.dueDate "DD-MM-YYYY"}}
             {{else}}
-              -
+              {{t "dash"}}
             {{/if}}
           {{#if
             (and
