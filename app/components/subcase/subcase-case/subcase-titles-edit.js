@@ -1,57 +1,66 @@
-// TODO: octane-refactor
-/* eslint-disable ember/no-get, ember/classic-decorator-no-classic-methods */
-// eslint-disable-next-line ember/no-classic-components
-import Component from '@ember/component';
+import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 import {
-  action, get, set
-} from '@ember/object';
-import {
-  saveChanges as saveSubcaseTitles, cancelEdit
+  saveChanges as saveSubcaseTitles,
+  cancelEdit,
 } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
+import { task } from 'ember-concurrency-decorators';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/require-tagless-components
 export default class SubcaseTitlesEdit extends Component {
   @service store;
-  classNames = ['auk-box', 'auk-u-mt-4'];
-  propertiesToSet = Object.freeze(['title', 'shortTitle', 'accessLevel', 'confidential']);
+  propertiesToSet = Object.freeze([
+    'title',
+    'shortTitle',
+    'accessLevel',
+    'confidential',
+  ]);
+
+  constructor() {
+    super(...arguments);
+    this.loadSubcase.perform();
+  }
+
+  @task
+  *loadSubcase() {
+    yield this.args.subcase.accessLevel;
+  }
 
   @action
   async cancelEditing() {
-    cancelEdit(this.subcase, get(this, 'propertiesToSet'));
-    this.toggleProperty('isEditing');
+    cancelEdit(this.args.subcase, this.propertiesToSet);
+    this.args.toggleIsEditing();
   }
 
   @action
   setAccessLevel(accessLevel) {
-    set(this, 'accessLevel', accessLevel);
+    // TODO KAS-3085 not possible to save accessLevel on subcase
+    this.accessLevel = accessLevel;
   }
 
-  @action
-  async saveChanges() {
-    set(this, 'isLoading', true);
+  @task
+  *saveChanges() {
+    const trimmedTitle = trimText(this.args.subcase.title);
+    const trimmedShortTitle = trimText(this.args.subcase.shortTitle);
 
     const propertiesToSetOnAgendaitem = {
-      title: trimText(this.subcase.title),
-      shortTitle: trimText(this.subcase.shortTitle),
+      title: trimmedTitle,
+      shortTitle: trimmedShortTitle,
     };
     const propertiesToSetOnSubcase = {
-      title: trimText(this.subcase.title),
-      shortTitle: trimText(this.subcase.shortTitle),
+      title: trimmedTitle,
+      shortTitle: trimmedShortTitle,
+      accessLevel: this.args.subcase.accessLevel,
+      confidential: this.args.subcase.confidential,
     };
 
-    propertiesToSetOnSubcase.accessLevel = await this.subcase.get('accessLevel');
-    propertiesToSetOnSubcase.confidential = await this.subcase.get('confidential');
-
-    try {
-      await saveSubcaseTitles(this.subcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
-      set(this, 'isLoading', false);
-      this.toggleProperty('isEditing');
-    } catch (exception) {
-      set(this, 'isLoading', false);
-      throw (exception);
-    }
+    yield saveSubcaseTitles(
+      this.args.subcase,
+      propertiesToSetOnAgendaitem,
+      propertiesToSetOnSubcase,
+      true
+    );
+    this.args.toggleIsEditing();
   }
 }
