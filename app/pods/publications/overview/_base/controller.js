@@ -3,13 +3,6 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import tableColumns from 'frontend-kaleidos/config/publications/overview-table-columns';
 
-const defaultColumns = [
-  'publicationNumber',
-  'shortTitle',
-  'publicationDueDate',
-  'status',
-];
-
 export default class AbstractPublicationsOverviewBaseController extends Controller {
   // #region to implement:
   /* eslint-disable getter-return */
@@ -91,7 +84,7 @@ export default class AbstractPublicationsOverviewBaseController extends Controll
     const columnsDisplayConfig = {};
     for (let column of tableColumns) {
       const columnKey = column.keyName;
-      const isColumnShown = defaultColumns.includes(columnKey);
+      const isColumnShown = this.defaultColumns.includes(columnKey);
       columnsDisplayConfig[column.keyName] = isColumnShown;
     }
     return columnsDisplayConfig;
