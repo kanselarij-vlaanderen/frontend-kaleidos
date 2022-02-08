@@ -1,7 +1,14 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 
-export default class PublicationsOverviewAllRoute extends Route {
+/**
+ * @typedef {
+ *  { [relationship: string]: tQueryFilter }
+ * } tQueryFilter
+ */
+
+/** @abstract */
+export default class AbstractPublicationsOverviewBaseRoute extends Route {
   queryParams = {
     page: {
       refreshModel: true,
@@ -18,7 +25,9 @@ export default class PublicationsOverviewAllRoute extends Route {
   };
 
   async model(params) {
+    const filter = this.modelGetQueryFilter();
     return this.store.query('publication-flow', {
+      filter: filter,
       sort: params.sort,
       page: {
         number: params.page,
@@ -33,6 +42,14 @@ export default class PublicationsOverviewAllRoute extends Route {
         'case',
       ].join(','),
     });
+  }
+
+  /**
+   * @abstract
+   * @returns {tQueryFilter}
+   */
+  modelGetQueryFilter() {
+    console.log('not implemented');
   }
 
   @action
