@@ -1,6 +1,6 @@
 import AbstractPublicationsOverviewBaseController from '../_base/controller';
 
-const defaultColumns = [
+const DEFAULT_COLUMNS = [
   'publicationNumber',
   'shortTitle',
   'publicationDueDate',
@@ -8,6 +8,6 @@ const defaultColumns = [
 ];
 
 export default class PublicationsOverviewAllController extends AbstractPublicationsOverviewBaseController {
-  defaultColumns = defaultColumns;
+  defaultColumns = DEFAULT_COLUMNS;
   routeName = 'all';
 }

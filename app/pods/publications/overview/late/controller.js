@@ -1,6 +1,6 @@
 import AbstractPublicationsOverviewBaseController from '../_base/controller';
 
-const defaultColumns = [
+const DEFAULT_COLUMNS = [
   'publicationNumber',
   'numacNumber',
   'shortTitle',
@@ -9,6 +9,6 @@ const defaultColumns = [
 ];
 
 export default class PublicationsOverviewLateController extends AbstractPublicationsOverviewBaseController {
-  defaultColumns = defaultColumns;
+  defaultColumns = DEFAULT_COLUMNS;
   routeName = 'late';
 }
