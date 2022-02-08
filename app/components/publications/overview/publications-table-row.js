@@ -43,7 +43,8 @@ export default class PublicationsTableRowComponent extends Component {
       ].join(','),
     });
 
-    this.isViaCouncilOfMinisters = yield this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
+    this.isViaCouncilOfMinisters =
+      yield this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
     this.proofRequestDate = yield this.getProofRequestDate(publicationFlow);
     this.publicationDate = yield this.publicationService.getPublicationDate(
       publicationFlow
@@ -66,18 +67,25 @@ export default class PublicationsTableRowComponent extends Component {
 
   // TODO: review async getter once ember-resources can be used
   get isTranslationOverdue() {
-    return !this.args.publicationFlow.status.get('isFinal')
-      && this.args.publicationFlow.translationSubcase.get('isOverdue');
+    return (
+      !this.args.publicationFlow.status.get('isFinal') &&
+      this.args.publicationFlow.translationSubcase.get('isOverdue')
+    );
   }
 
   // TODO: review async getter once ember-resources can be used
   get isPublicationOverdue() {
-    return !this.args.publicationFlow.status.get('isFinal')
-      && this.args.publicationFlow.publicationSubcase.get('isOverdue');
+    return (
+      !this.args.publicationFlow.status.get('isFinal') &&
+      this.args.publicationFlow.publicationSubcase.get('isOverdue')
+    );
   }
 
   get publicationStatusPillKey() {
-    return this.publicationStatus && getPublicationStatusPillKey(this.publicationStatus);
+    return (
+      this.publicationStatus &&
+      getPublicationStatusPillKey(this.publicationStatus)
+    );
   }
 
   @action
