@@ -10,7 +10,21 @@ const defaultColumns = [
   'status',
 ];
 
-export default class PublicationsOverviewAllController extends Controller {
+export default class AbstractPublicationsOverviewBaseController extends Controller {
+  // #region to implement:
+  /* eslint-disable getter-return */
+  /** @abstract @type {string[]} */
+  get defaultColumns() {
+    console.log(`defaultColumns not implemented`);
+  }
+
+  /** @abstract @type {string} */
+  get routeName() {
+    console.log(`routeName not implemented`);
+  }
+  /* eslint-enable getter-return */
+  //#endregion
+
   @tracked page = 0;
   @tracked size = 10;
   @tracked sort = '-created';
@@ -21,9 +35,11 @@ export default class PublicationsOverviewAllController extends Controller {
   @tracked isLoadingModel = false;
   @tracked isColumnsDisplayConfigPanelShown = false;
 
-  constructor() {
-    super(...arguments);
-
+  // init hook is needed because the concrete controller fields
+  //  are set after base controller's constructor has run
+  // eslint-disable-next-line ember/classic-decorator-hooks
+  init() {
+    super.init(...arguments);
     this.initColumnsDisplayConfig();
   }
 
@@ -47,9 +63,13 @@ export default class PublicationsOverviewAllController extends Controller {
     this.saveColumnsDisplayConfig(this.columnsDisplayConfig);
   }
 
+  get columnsDisplayConfigStorageKey() {
+    return `publications.overview.${this.routeName}/columnsDisplayConfig`;
+  }
+
   loadColumnsDisplayConfig() {
     const serializedColumnsDisplayConfig = localStorage.getItem(
-      'publications.overview.all/columnsDisplayConfig'
+      this.columnsDisplayConfigStorageKey
     );
     if (serializedColumnsDisplayConfig) {
       const columnsDisplayConfig = JSON.parse(serializedColumnsDisplayConfig);
@@ -60,9 +80,10 @@ export default class PublicationsOverviewAllController extends Controller {
   }
 
   saveColumnsDisplayConfig(columnsDisplayConfig) {
+    console.log(this.columnsDisplayConfigStorageKey);
     const serializedColumnsDisplayConfig = JSON.stringify(columnsDisplayConfig);
     localStorage.setItem(
-      'publications.overview.all/columnsDisplayConfig',
+      this.columnsDisplayConfigStorageKey,
       serializedColumnsDisplayConfig
     );
   }
