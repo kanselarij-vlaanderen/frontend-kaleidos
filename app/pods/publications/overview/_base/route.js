@@ -9,6 +9,13 @@ import { action } from '@ember/object';
 
 /** @abstract */
 export default class AbstractPublicationsOverviewBaseRoute extends Route {
+  //#region to implement:
+  /** @abstract @returns {tQueryFilter} */
+  modelGetQueryFilter() {
+    console.log(`${this.modelGetQueryFilter.name} not implemented`);
+  }
+  //#endregion
+
   queryParams = {
     page: {
       refreshModel: true,
@@ -42,14 +49,6 @@ export default class AbstractPublicationsOverviewBaseRoute extends Route {
         'case',
       ].join(','),
     });
-  }
-
-  /**
-   * @abstract
-   * @returns {tQueryFilter}
-   */
-  modelGetQueryFilter() {
-    console.log('not implemented');
   }
 
   @action
