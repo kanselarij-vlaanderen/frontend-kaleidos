@@ -60,8 +60,8 @@ context('Publications proofs tests', () => {
   const pageCount = 5;
   const wordCount = 1000;
   const numacNumber = 123456;
-  const targetEndDate = Cypress.moment().add(1, 'weeks');
-  const monthDutch = getTranslatedMonth(Cypress.moment().month());
+  const targetEndDate = Cypress.dayjs().add(1, 'weeks');
+  const monthDutch = getTranslatedMonth(Cypress.dayjs().month());
   const initialRequestTitle = `Publicatieaanvraag VO-dossier: ${fields.number} - ${fields.shortTitle}`;
   const initialRequestMessage = `Beste,\n\nIn bijlage voor drukproef:\nTitel: undefined\t\nVO-dossier: ${fields.number}\n\nVragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\t\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n`;
   const extraRequestTitle = `BS-werknr: ${numacNumber} VO-dossier: ${fields.number} – Aanvraag nieuwe drukproef`;
@@ -100,7 +100,6 @@ context('Publications proofs tests', () => {
   }
 
   beforeEach(() => {
-    cy.server();
     cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
     cy.visit('/publicaties');
   });
@@ -110,7 +109,7 @@ context('Publications proofs tests', () => {
   });
 
   it.skip('should create translation docs and request', () => {
-    cy.route('GET', '/translation-subcases/**').as('getTranslationSubcases');
+    cy.intercept('GET', '/translation-subcases/**').as('getTranslationSubcases');
     cy.createPublication(fields);
     cy.wait('@getTranslationSubcases');
     cy.get(publication.publicationNav.translations).click();
@@ -120,21 +119,21 @@ context('Publications proofs tests', () => {
     uploadDocument(file, newFileName1, pageCount, wordCount);
     cy.get(publication.documentsUpload.proofPrint).parent()
       .click();
-    cy.route('POST', 'document-containers').as('createNewDocumentContainer');
-    cy.route('POST', 'pieces').as('createNewPiece');
-    cy.route('GET', '/pieces**').as('getPieces');
+    cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
+    cy.intercept('POST', 'pieces').as('createNewPiece');
+    cy.intercept('GET', '/pieces**').as('getPieces');
     cy.get(publication.documentsUpload.save).click();
     cy.wait('@createNewDocumentContainer');
     cy.wait('@createNewPiece');
     cy.wait('@getPieces');
     uploadDocument(file, newFileName2, pageCount, wordCount);
-    cy.route('GET', '/pieces**').as('getPieces2');
+    cy.intercept('GET', '/pieces**').as('getPieces2');
     cy.get(publication.documentsUpload.save).click();
     cy.wait('@createNewDocumentContainer');
     cy.wait('@createNewPiece');
     cy.wait('@getPieces2');
     uploadDocument(file, newFileName3, pageCount, wordCount);
-    cy.route('GET', '/pieces**').as('getPieces3');
+    cy.intercept('GET', '/pieces**').as('getPieces3');
     cy.get(publication.documentsUpload.save).click();
     cy.wait('@createNewDocumentContainer');
     cy.wait('@createNewPiece');
@@ -144,11 +143,11 @@ context('Publications proofs tests', () => {
     clickCheckboxTranslation(newFileName2);
     clickCheckboxTranslation(newFileName3);
     cy.get(publication.translationsDocuments.requestTranslation).click();
-    cy.route('PATCH', '/translation-subcases/**').as('patchTranslationSubcases');
-    cy.route('POST', '/request-activities').as('postRequestActivities');
-    cy.route('POST', '/translation-activities').as('postTranslationActivities');
-    cy.route('POST', '/emails').as('postEmails');
-    cy.route('GET', '/request-activities?filter**').as('getRequestActivities');
+    cy.intercept('PATCH', '/translation-subcases/**').as('patchTranslationSubcases');
+    cy.intercept('POST', '/request-activities').as('postRequestActivities');
+    cy.intercept('POST', '/translation-activities').as('postTranslationActivities');
+    cy.intercept('POST', '/emails').as('postEmails');
+    cy.intercept('GET', '/request-activities?filter**').as('getRequestActivities');
     cy.get(publication.translationRequest.save).click();
     cy.wait('@patchTranslationSubcases');
     cy.wait('@postRequestActivities');
@@ -158,12 +157,12 @@ context('Publications proofs tests', () => {
   });
 
   it.skip('should upload proofs docs and make request', () => {
-    cy.route('POST', 'document-containers').as('createNewDocumentContainer');
-    cy.route('POST', 'pieces').as('createNewPiece');
-    cy.route('GET', '/pieces**').as('getPieces');
-    cy.route('DELETE', '**/pieces/**').as('deletePieces');
-    cy.route('DELETE', '**/files/**').as('deleteFiles');
-    cy.route('DELETE', '**/document-containers/**').as('deleteDocumentContainers');
+    cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
+    cy.intercept('POST', 'pieces').as('createNewPiece');
+    cy.intercept('GET', '/pieces**').as('getPieces');
+    cy.intercept('DELETE', '**/pieces/**').as('deletePieces');
+    cy.intercept('DELETE', '**/files/**').as('deleteFiles');
+    cy.intercept('DELETE', '**/document-containers/**').as('deleteDocumentContainers');
 
     // go to publication, then proofs, then documents and make checks
     cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields.number)
@@ -242,7 +241,7 @@ context('Publications proofs tests', () => {
     cy.get(publication.proofEdit.name).clear();
     cy.get(publication.proofEdit.save).should('be.disabled');
     cy.get(publication.proofEdit.name).type(newFileName1);
-    cy.route('PATCH', '/pieces/**').as('patchPieces');
+    cy.intercept('PATCH', '/pieces/**').as('patchPieces');
     cy.get(publication.proofEdit.save).click();
     cy.wait('@patchPieces');
     cy.wait(1000);
@@ -256,7 +255,7 @@ context('Publications proofs tests', () => {
     cy.get(publication.proofRequest.message).should('have.value', initialRequestMessage);
     cy.get(publication.proofRequest.attachments).children()
       .should('have.length', 1);
-    cy.route('GET', '/request-activities**').as('getRequestActivities');
+    cy.intercept('GET', '/request-activities**').as('getRequestActivities');
     cy.get(publication.proofRequest.save).click();
     cy.wait('@getRequestActivities');
 
@@ -332,7 +331,7 @@ context('Publications proofs tests', () => {
     cy.get(publication.proofRequest.message).should('have.value', finalRequestMessage);
     cy.get(publication.proofRequest.attachments).children()
       .should('have.length', 1);
-    cy.route('GET', '/request-activities**').as('getRequestActivities');
+    cy.intercept('GET', '/request-activities**').as('getRequestActivities');
     cy.get(publication.proofRequest.save).click();
     cy.wait('@getRequestActivities');
 

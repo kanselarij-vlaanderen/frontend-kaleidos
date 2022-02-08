@@ -6,7 +6,6 @@ import utils from '../../../../selectors/utils.selectors';
 
 context('Manage Sub codes tests', () => {
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 
@@ -23,6 +22,6 @@ context('Manage Sub codes tests', () => {
     cy.get(settings.overview.manageSubcaseTypes).click();
     cy.get(utils.vlModal.dialogWindow).should('be.visible');
     cy.get(utils.vlModal.close).click();
-    cy.get(utils.vlModal.dialogWindow).should('not.be.visible');
+    cy.get(utils.vlModal.dialogWindow).should('not.exist');
   });
 });
