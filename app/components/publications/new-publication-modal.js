@@ -64,11 +64,11 @@ export default class NewPublicationModal extends Component {
   }
 
   get isShortTitleValid() {
-    if (this.isEnabledErrorOnShortTitle) {
-      return this.shortTitle && this.shortTitle.length > 0;
-    } else {
-      return true;
-    }
+    return this.shortTitle && this.shortTitle.length > 0;
+  }
+
+  get isShownShortTitleError() {
+    return this.isEnabledErrorOnShortTitle && !this.isShortTitleValid;
   }
 
   get isValid() {

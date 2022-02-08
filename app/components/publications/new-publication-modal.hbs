@@ -52,23 +52,24 @@
           {{/if}}
         </div>
         <div class="auk-form-group">
-          <Auk::Label for="shortTitleInput" @required={{true}} @error={{not this.isShortTitleValid}}>
+          <Auk::Label for="shortTitleInput" @required={{true}} @error={{this.isShownShortTitleError}}>
             {{t "name-subcase"}}
           </Auk::Label>
           <Auk::Textarea
             id="shortTitleInput"
             @rows="2"
             @value={{mut this.shortTitle}}
+            @error={{this.isShownShortTitleError}}
             data-test-new-publication-short-title
             {{on "focusout" this.enableErrorOnShortTitle}}
           />
-          {{#unless this.isShortTitleValid}}
+          {{#if this.isShownShortTitleError}}
             <Auk::FormHelpText
               @text={{t "input-error-message"}}
               @skin="danger"
               @icon="alert-triangle"
             />
-          {{/unless}}
+          {{/if}}
         </div>
         <div class="auk-form-group">
           <Auk::Label for="longTitleInput">
