@@ -38,8 +38,8 @@ function login(name, retries = 0) {
     });
   });
   cy.visit('').wait('@getCurrentSession')
-    .then((xhr) => {
-      if (xhr.status === 400) {
+    .then((responseBody) => {
+      if (responseBody.response.statusCode === 400) {
         if (retries < 5) {
           cy.log('login failed, trying again');
           cy.login(name, retries + 1);
