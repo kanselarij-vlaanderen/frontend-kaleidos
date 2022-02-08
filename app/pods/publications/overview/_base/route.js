@@ -12,7 +12,7 @@ export default class AbstractPublicationsOverviewBaseRoute extends Route {
   //#region to implement:
   /** @abstract @returns {tQueryFilter} */
   modelGetQueryFilter() {
-    console.log(`${this.modelGetQueryFilter.name} not implemented`);
+    console.warn(`${this.modelGetQueryFilter.name} not implemented`);
   }
   //#endregion
 

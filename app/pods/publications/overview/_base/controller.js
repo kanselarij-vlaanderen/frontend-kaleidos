@@ -15,12 +15,12 @@ export default class AbstractPublicationsOverviewBaseController extends Controll
   /* eslint-disable getter-return */
   /** @abstract @type {string[]} */
   get defaultColumns() {
-    console.log(`defaultColumns not implemented`);
+    console.warn(`defaultColumns not implemented`);
   }
 
   /** @abstract @type {string} */
   get routeName() {
-    console.log(`routeName not implemented`);
+    console.warn(`routeName not implemented`);
   }
   /* eslint-enable getter-return */
   //#endregion
