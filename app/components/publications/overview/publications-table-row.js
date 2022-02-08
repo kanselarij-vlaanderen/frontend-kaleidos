@@ -3,7 +3,6 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
-import { add } from 'ember-math-helpers/helpers/add';
 import { getPublicationStatusPillKey } from 'frontend-kaleidos/utils/publication-auk';
 
 export default class PublicationsTableRowComponent extends Component {
@@ -35,9 +34,6 @@ export default class PublicationsTableRowComponent extends Component {
 
         'translation-subcase',
 
-        'translation-subcase.request-activities',
-        'translation-subcase.request-activities.used-pieces',
-
         'publication-subcase',
 
         'publication-subcase.proofing-activities',
@@ -48,7 +44,6 @@ export default class PublicationsTableRowComponent extends Component {
     });
 
     this.isViaCouncilOfMinisters = yield this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
-    this.pageCount = yield this.getPageCount(publicationFlow);
     this.proofRequestDate = yield this.getProofRequestDate(publicationFlow);
     this.publicationDate = yield this.publicationService.getPublicationDate(
       publicationFlow
@@ -58,23 +53,6 @@ export default class PublicationsTableRowComponent extends Component {
   @task
   *loadPublicationStatus() {
     this.publicationStatus = yield this.args.publicationFlow.status;
-  }
-
-  async getPageCount(publicationFlow) {
-    const translationSubcase = await publicationFlow.translationSubcase;
-    const requestActivities = await translationSubcase.requestActivities;
-    const pieces = (await Promise.all(requestActivities.mapBy('usedPieces')))
-      // if not calling to array, Ember seems to skip mapBy
-      // flattening an array of request activities
-      // probably an Ember Data bug
-      .map((pieces) => pieces.toArray())
-      .flat();
-    const pageCounts = pieces.map((it) => it.pages).compact();
-    if (!pageCounts.length) {
-      return undefined;
-    } else {
-      return add(pageCounts);
-    }
   }
 
   async getProofRequestDate(publicationFlow) {
