@@ -9,7 +9,7 @@ import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
-  return Cypress.moment().unix();
+  return Cypress.dayjs().unix();
 }
 
 function changeSubcaseType(caseTitle, type) {
@@ -18,7 +18,7 @@ function changeSubcaseType(caseTitle, type) {
   cy.get(cases.subcaseDescription.edit).click();
   cy.get(cases.subcaseDescriptionEdit.type).contains(type)
     .click();
-  cy.route('PATCH', '/agendas/**').as('patchAgendas');
+  cy.intercept('PATCH', '/agendas/**').as('patchAgendas');
   // TODO add selector to which file?
   cy.get('[data-test-vl-save]').click();
   cy.wait('@patchAgendas');
@@ -155,13 +155,13 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.themesSelector).contains(theme)
       .click();
     cy.get(newsletter.editItem.toggleFinished).click();
-    cy.route('POST', '/newsletter-infos').as('postNewsItem');
+    cy.intercept('POST', '/newsletter-infos').as('postNewsItem');
     cy.get(newsletter.editItem.save).click();
     cy.wait('@postNewsItem');
     // check KB views for in-newsletter toggle
     cy.get(agenda.agendaHeader.showOptions).click();
     cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
-    cy.route('PATCH', '/newsletter-infos/**').as('patchNewsItem');
+    cy.intercept('PATCH', '/newsletter-infos/**').as('patchNewsItem');
     cy.get(newsletter.tableRow.newsletterTitle).contains(subcaseTitleShort)
       .parents(newsletter.tableRow.newsletterRow)
       .find(newsletter.tableRow.inNewsletterCheckbox)
@@ -199,7 +199,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.rdfaEditor).type(addedText);
     cy.get(newsletter.editItem.themesSelector).contains(theme2)
       .click();
-    cy.route('POST', '/newsletter-infos').as('postNewsItem');
+    cy.intercept('POST', '/newsletter-infos').as('postNewsItem');
     cy.get(newsletter.editItem.save).click();
     cy.wait('@postNewsItem');
   });
