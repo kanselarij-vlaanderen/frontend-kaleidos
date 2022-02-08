@@ -100,6 +100,6 @@ const selectors = {
   },
 
   fileTypePill: '[data-test-file-type-pill]',
-  formHelpText: '[data-test-auk-form-help-text]',
+  formHelpText: '.auk-form-help-text',
 };
 export default selectors;
