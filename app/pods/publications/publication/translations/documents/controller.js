@@ -2,8 +2,13 @@ import Controller from '@ember/controller';
 import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 // eslint-disable-next-line ember/no-computed-properties-in-native-classes
-import { action, computed, set } from '@ember/object';
+import {
+  action,
+  computed,
+  set,
+} from '@ember/object';
 import { inject as service } from '@ember/service';
+import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 const COLUMN_MAP = {
@@ -14,9 +19,7 @@ const COLUMN_MAP = {
 
 export default class PublicationsPublicationTranslationsDocumentController extends Controller {
   @service currentSession;
-  @service router;
   @service store;
-  @service publicationService;
 
   queryParams = [{
     sort: {
@@ -65,10 +68,8 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   }
 
   get isRequestingDisabled() {
-    return (
-      this.selectedPieceRows.length === 0 || // no files are selected
-      this.translationSubcase.isFinished
-    );
+    return this.selectedPieceRows.length === 0 // no files are selected
+      || this.translationSubcase.isFinished;
   }
 
   get isUploadDisabled() {
@@ -113,10 +114,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     piece.pages = translationDocument.pagesAmount;
     piece.words = translationDocument.wordsAmount;
     piece.name = translationDocument.name;
-    piece.language = yield this.store.findRecordByUri(
-      'language',
-      CONSTANTS.LANGUAGES.NL
-    );
+    piece.language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
 
     if (translationDocument.isSourceForProofPrint) {
       piece.publicationSubcaseSourceFor = this.publicationSubcase;
@@ -127,21 +125,56 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     this.send('refresh');
   }
 
+
   @task
   *saveTranslationRequest(translationRequest) {
-    yield this.publicationService.saveTranslationRequest(
-      this.publicationFlow,
-      translationRequest
-    );
+    const now = new Date();
+    if (!this.translationSubcase.startDate) {
+      this.translationSubcase.startDate = now;
+    }
+    this.translationSubcase.dueDate = translationRequest.translationDueDate;
+    yield this.translationSubcase.save();
 
-    yield this.publicationService.updatePublicationStatus(
-      this.publicationFlow,
-      CONSTANTS.PUBLICATION_STATUSES.TO_TRANSLATIONS
-    );
+    const requestActivity = yield this.store.createRecord('request-activity', {
+      startDate: now,
+      translationSubcase: this.translationSubcase,
+      usedPieces: translationRequest.attachments,
+    });
+    yield requestActivity.save();
+    const french = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.FR);
+
+    const pieces = translationRequest.attachments;
+    const translationActivity = yield this.store.createRecord('translation-activity', {
+      startDate: now,
+      dueDate: translationRequest.translationDueDate,
+      title: translationRequest.subject,
+      subcase: this.translationSubcase,
+      requestActivity: requestActivity,
+      usedPieces: pieces,
+      language: french,
+    });
+    yield translationActivity.save();
+
+    const filePromises = translationRequest.attachments.mapBy('file');
+    const filesPromise = Promise.all(filePromises);
+
+    const outboxPromise = this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);
+    const mailSettingsPromise = this.store.queryOne('email-notification-setting');
+    const [files, outbox, mailSettings] = yield Promise.all([filesPromise, outboxPromise, mailSettingsPromise]);
+    const mail = yield this.store.createRecord('email', {
+      to: mailSettings.translationRequestToEmail,
+      from: mailSettings.defaultFromEmail,
+      folder: outbox,
+      attachments: files,
+      requestActivity: requestActivity,
+      subject: translationRequest.subject,
+      message: translationRequest.message,
+    });
+    yield mail.save();
 
     this.selectedPieceRows = [];
     this.isTranslationRequestModalOpen = false;
-    this.router.transitionTo('publications.publication.translations.requests');
+    this.transitionToRoute('publications.publication.translations.requests');
   }
 
   @task
@@ -167,10 +200,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     const piece = pieceRow.piece;
     const filePromise = piece.file;
     const documentContainerPromise = piece.documentContainer;
-    const [file, documentContainer] = yield Promise.all([
-      filePromise,
-      documentContainerPromise,
-    ]);
+    const [file, documentContainer] = yield Promise.all([filePromise, documentContainerPromise]);
 
     const destroyPiece = piece.destroyRecord();
     const destroyFile = file.destroyRecord();
