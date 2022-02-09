@@ -67,11 +67,6 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
   }
 
   @action
-  toggleProofprint() {
-    this.isSourceForProofPrint = !this.isSourceForProofPrint;
-  }
-
-  @action
   setReceivedAtDate(selectedDates) {
     this.validators.receivedAtDate.enableError();
     if (selectedDates.length) {

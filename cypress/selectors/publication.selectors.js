@@ -257,21 +257,21 @@ const selectors = {
 
   // documents-upload-modal
   // translation upload modal
-  documentsUpload: {
-    name: '[data-test-publication-documents-upload-name]',
-    pages: '[data-test-publication-documents-upload-pages]',
-    words: '[data-test-publication-documents-upload-words]',
-    proofPrint: '[data-test-publication-documents-upload-proof-print]',
-    save: '[data-test-publication-documents-upload-save]',
-  },
+  // documentsUpload: {
+  //   name: '[data-test-publication-documents-upload-name]',
+  //   pages: '[data-test-publication-documents-upload-pages]',
+  //   words: '[data-test-publication-documents-upload-words]',
+  //   proofPrint: '[data-test-publication-documents-upload-proof-print]',
+  //   save: '[data-test-publication-documents-upload-save]',
+  // },
 
   // translation-request-modal
-  translationRequest: {
-    message: '[data-test-publication-translation-request-message]',
-    save: '[data-test-publication-translation-request-save]',
-    // TODO-SELECTOR unused selectors
-    documentsList: '[data-test-publication-translation-request-documents-list]',
-  },
+  // translationRequest: {
+  //   message: '[data-test-publication-translation-request-message]',
+  //   save: '[data-test-publication-translation-request-save]',
+  //   // TODO-SELECTOR unused selectors
+  //   documentsList: '[data-test-publication-translation-request-documents-list]',
+  // },
 
   // document-edit-modal
   documentEdit: {

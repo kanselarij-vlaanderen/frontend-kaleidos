@@ -6,70 +6,39 @@ import { inject as service } from '@ember/service';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-const COLUMN_MAP = {
-  naam: 'name',
-  'ontvangen-op': 'receivedDate',
-  'geupload-op': 'created',
-};
-
 export default class PublicationsPublicationTranslationsController extends Controller {
   @service store;
+  @service publicationService;
+
   @tracked publicationFlow;
   @tracked translationSubcase;
   @tracked publicationSubcase;
-  @tracked selectedRequestActivity;
-  @tracked showTranslationUploadModal = false;
 
-  get isUploadDisabled() {
+  @tracked showTranslationUploadModal = false;
+  @tracked showTranslationRequestModal = false;
+
+  get isRequestingDisabled() {
     return this.translationSubcase.isFinished;
   }
 
-  get pieceRows() {
-    let property = 'date';
-    let isDescending = false;
-    if (this.sort) {
-      isDescending = this.sort.startsWith('-');
-      const sortKey = this.sort.substr(isDescending);
-      property = COLUMN_MAP[sortKey] ?? property;
-    }
-
-    let pieceRows = this.model;
-    pieceRows = pieceRows.sortBy(`piece.${property}`);
-    if (isDescending) {
-      pieceRows = pieceRows.reverseObjects();
-    }
-
-    return pieceRows;
-  }
-
-  get areAllPiecesSelected() {
-    return this.model.length === this.selectedPieceRows.length;
-  }
-
-  get selectedPieces() {
-    return this.selectedPieceRows.map((row) => row.piece);
-  }
-
-  get isRequestingDisabled() {
-    return this.selectedPieceRows.length === 0 // no files are selected
-      || this.translationSubcase.isFinished;
-  }
-
-  get canDeletePieces() {
-    return !this.translationSubcase.isFinished;
+  get isTranslationUploadDisabled() {
+    return this.model.length === 0;
   }
 
   @task
   *saveTranslationUpload(translationUpload) {
     const now = new Date();
 
+    // get latest Req activity
+    const requestActivity = this.model.filter((row) =>row.requestActivity !== null).sortBy('date').reverseObjects()[0].requestActivity;
+
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
     });
     yield documentContainer.save();
 
-    const translationActivity = yield this.selectedRequestActivity
-      .translationActivity;
+    const translationActivity = yield requestActivity.translationActivity;
+
     // triggers call
     const language = yield translationActivity.language;
     const piece = this.store.createRecord('piece', {
@@ -99,46 +68,64 @@ export default class PublicationsPublicationTranslationsController extends Contr
       yield this.translationSubcase.save();
     }
 
+    if (translationUpload.isTranslationIn) {
+      yield this.publicationService.updatePublicationStatus(
+        this.publicationFlow,
+        CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_IN,
+        translationUpload.receivedAtDate
+      );
+
+      this.publicationSubcase.endDate = translationUpload.receivedAtDate;
+      yield this.publicationSubcase.save();
+    }
+
     yield Promise.all([translationActivitySave, pieceSave]);
 
+    this.send('refresh');
     this.showTranslationUploadModal = false;
   }
 
   @task
   *saveTranslationRequest(translationRequest) {
     const now = new Date();
-    if (!this.translationSubcase.startDate) {
-      this.translationSubcase.startDate = now;
-    }
-    this.translationSubcase.dueDate = translationRequest.translationDueDate;
-    yield this.translationSubcase.save();
+
+    const piece = translationRequest.piece;
+    piece.translationSubcaseSourceFor = this.translationSubcase;
+    const documentContainer = yield piece.documentContainer;
+    yield documentContainer.save();
+    piece.pages = translationRequest.pagesAmount;
+    piece.words = translationRequest.wordsAmount;
+    piece.name = translationRequest.name;
+    piece.language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
+
+    yield piece.save();
+    const usedPieces = [piece]
 
     const requestActivity = yield this.store.createRecord('request-activity', {
       startDate: now,
       translationSubcase: this.translationSubcase,
-      usedPieces: translationRequest.attachments,
+      usedPieces: usedPieces,
     });
     yield requestActivity.save();
     const french = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.FR);
 
-    const pieces = translationRequest.attachments;
     const translationActivity = yield this.store.createRecord('translation-activity', {
       startDate: now,
       dueDate: translationRequest.translationDueDate,
       title: translationRequest.subject,
       subcase: this.translationSubcase,
       requestActivity: requestActivity,
-      usedPieces: pieces,
+      usedPieces: usedPieces,
       language: french,
     });
     yield translationActivity.save();
 
-    const filePromises = translationRequest.attachments.mapBy('file');
+    const filePromises = usedPieces.mapBy('file');
     const filesPromise = Promise.all(filePromises);
 
     const outboxPromise = this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);
     const mailSettingsPromise = this.store.queryOne('email-notification-setting');
-    const [files, outbox, mailSettings] = yield Promise.all([filesPromise, outboxPromise, mailSettingsPromise]);
+    const [files,outbox, mailSettings] = yield Promise.all([filesPromise,outboxPromise, mailSettingsPromise]);
     const mail = yield this.store.createRecord('email', {
       to: mailSettings.translationRequestToEmail,
       from: mailSettings.defaultFromEmail,
@@ -150,124 +137,34 @@ export default class PublicationsPublicationTranslationsController extends Contr
     });
     yield mail.save();
 
-    this.selectedPieceRows = [];
-    this.isTranslationRequestModalOpen = false;
-  }
-
-  @task
-  *saveEditSourceDocument(translationDocument) {
-    const piece = this.pieceRowToEdit.piece;
-    piece.pages = translationDocument.pagesAmount;
-    piece.words = translationDocument.wordsAmount;
-    piece.name = translationDocument.name;
-
-    if (translationDocument.isSourceForProofPrint) {
-      piece.publicationSubcaseSourceFor = this.publicationSubcase;
-    } else {
-      piece.publicationSubcaseSourceFor = null;
-    }
-
-    yield piece.save();
-    this.closePieceEditModal();
-    this.send('refresh');
-  }
-
-  @task
-  *deletePiece(pieceRow) {
-    const piece = pieceRow.piece;
-    const filePromise = piece.file;
-    const documentContainerPromise = piece.documentContainer;
-    const [file, documentContainer] = yield Promise.all([filePromise, documentContainerPromise]);
-
-    const destroyPiece = piece.destroyRecord();
-    const destroyFile = file.destroyRecord();
-    const destroyDocumentContainer = documentContainer.destroyRecord();
-
-    yield Promise.all([destroyPiece, destroyFile, destroyDocumentContainer]);
+    // PUBLICATION-STATUS
+    const pubStatusChange = this.publicationService.updatePublicationStatus(
+      this.publicationFlow,
+      CONSTANTS.PUBLICATION_STATUSES.TO_TRANSLATIONS
+    );
+    yield pubStatusChange;
 
     this.send('refresh');
-  }
-
-  @task
-  *saveSourceDocument(translationDocument) {
-    const piece = translationDocument.piece;
-    piece.translationSubcaseSourceFor = this.translationSubcase;
-    const documentContainer = yield piece.documentContainer;
-    yield documentContainer.save();
-    piece.pages = translationDocument.pagesAmount;
-    piece.words = translationDocument.wordsAmount;
-    piece.name = translationDocument.name;
-    piece.language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
-
-    if (translationDocument.isSourceForProofPrint) {
-      piece.publicationSubcaseSourceFor = this.publicationSubcase;
-    }
-
-    yield piece.save();
-    this.isPieceUploadModalOpen = false;
-    this.send('refresh');
+    this.showTranslationRequestModal = false;
   }
 
   @action
-  openTranslationUploadModal(requestActivity) {
-    this.selectedRequestActivity = requestActivity;
+  openTranslationUploadModal() {
     this.showTranslationUploadModal = true;
   }
 
   @action
   closeTranslationUploadModal() {
-    this.selectedRequestActivity = null;
     this.showTranslationUploadModal = false;
   }
 
   @action
-  togglePieceSelection(selectedPieceRow) {
-    const isPieceSelected = this.selectedPieceRows.includes(selectedPieceRow);
-    if (isPieceSelected) {
-      this.selectedPieceRows.removeObject(selectedPieceRow);
-    } else {
-      this.selectedPieceRows.pushObject(selectedPieceRow);
-    }
-  }
-
-  @action
-  toggleAllPiecesSelection() {
-    if (this.areAllPiecesSelected) {
-      this.selectedPieceRows = [];
-    } else {
-      this.selectedPieceRows = [...this.model];
-    }
-  }
-
-  @action
-  openPieceUploadModal() {
-    this.isPieceUploadModalOpen = true;
-  }
-
-  @action
-  closePieceUploadModal() {
-    this.isPieceUploadModalOpen = false;
-  }
-
-  @action
-  openPieceEditModal(pieceRow) {
-    this.pieceRowToEdit = pieceRow;
-    this.showPieceEditModal = true;
-  }
-
-  @action
-  closePieceEditModal() {
-    this.pieceRowToEdit = null;
-    this.showPieceEditModal = false;
-  }
-
-  @action
   openTranslationRequestModal() {
-    this.isTranslationRequestModalOpen = true;
+    this.showTranslationRequestModal = true;
   }
 
   @action
   closeTranslationRequestModal() {
-    this.isTranslationRequestModalOpen = false;
+    this.showTranslationRequestModal = false;
   }
 }

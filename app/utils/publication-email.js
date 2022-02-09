@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 // * NOTE * We use '\t\n' as newline to prevent outlook from removing extra line breaks with just '\n'
- 
+
 const footer = 'Met vriendelijke groet,\n'
   + '\n'
   + 'Vlaamse overheid\t\n'
@@ -15,7 +15,6 @@ function translationRequestEmail(params) {
   const message = 'Collega,\n'
     + '\n'
     + 'Hierbij ter vertaling:\n'
-    + '\n'
     + `VO-dossier: ${params.identifier}\n`
     + `Titel: ${params.title}\t\n`
     + `Uiterste vertaaldatum: ${moment(params.dueDate)

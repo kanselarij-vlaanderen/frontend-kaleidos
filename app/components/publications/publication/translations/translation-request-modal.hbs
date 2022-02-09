@@ -1,74 +1,136 @@
 <Auk::Modal>
   <Auk::Modal::Header
+    @resizeable={{false}}
     @title={{t
-      "request-translations-for-publication"
-      publicationNumber=@publicationFlow.identification.idName
-    }}
-    @onClose={{@onCancel}}
+    "request-translations-for-publication"
+    publicationNumber=@publicationFlow.identification.idName
+  }}
+    @onClose={{perform this.cancel}}
   />
   <Auk::Modal::Body>
-    <Utils::LoadableContent
-      @isLoading={{this.saveRequest.isRunning}}
-      @reserveSpace={{true}}
-    >
-      <div class="auk-form-group-layout auk-form-group-layout--standard">
-        {{! Due date }}
-        {{! TODO: Remove inline style }}
-        {{! template-lint-disable no-inline-styles }}
-        <div class="auk-form-group" style="max-width: 30rem;">
-          <Auk::Label for="translationRequestDueDate">
-            {{t "publication-flow-translation-due-date"}}
-          </Auk::Label>
-          <Auk::Datepicker
-            id="translationRequestDueDate"
-            @date={{this.translationDueDate}}
-            @onChange={{this.setTranslationDueDate}}
-          />
-        </div>
-        {{! template-lint-enable no-inline-styles }}
-        {{! Subject }}
-        <div class="auk-form-group">
-          <Auk::Label for="translationRequestSubject">
-            {{t "subject"}}
-          </Auk::Label>
-          <Auk::Input
-            id="translationRequestSubject"
-            @block={{true}}
-            @value={{mut this.subject}}
-          />
-        </div>
-        {{! Message }}
-        <div class="auk-form-group">
-          <Auk::Label for="translationRequestMessage" @required={{true}}>
-            {{t "message"}}
-          </Auk::Label>
-          <Auk::Textarea
-            data-test-publication-translation-request-message
-            id="translationRequestMessage"
-            @rows="6"
-            @value={{mut this.message}}
-          />
-        </div>
-        {{! Attachments }}
-        <div class="auk-form-group">
-          <Auk::Label>{{t "attachments"}}</Auk::Label>
-          <Utils::Documents::List
-            data-test-publication-translation-request-documents-list
-            @pieces={{@attachments}}
-          />
+    <Auk::FileUploader
+      @fileQueueName={{this.fileQueueName}}
+      @multiple={{false}}
+      @onUpload={{this.uploadPiece}}
+    />
+    {{#if this.translationDocument}}
+      <div class="auk-u-mt-4">
+        <div class="auk-o-grid">
+          <div class="auk-o-grid-col-11">
+            <div
+              class="auk-form-group-layout auk-form-group-layout--horizontal"
+            >
+              <div
+                class="auk-form-group auk-o-flex--align-start
+                  {{this.validators.name.errorClass}}"
+              >
+                <Auk::Label for="nameDocumentUpload" @required={{true}}>
+                  {{t "name"}}
+                </Auk::Label>
+                <Auk::Input
+                  id="nameDocumentUpload"
+                  @value={{mut this.name}}
+                  {{on "input" this.validators.name.enableError}}
+                />
+              </div>
+              <div class="auk-form-group auk-o-flex--align-start">
+                <Auk::Label>{{t "translation-burden"}}</Auk::Label>
+                <div
+                  class="auk-form-group-layout auk-form-group-layout--standard auk-form-group-layout--grid"
+                >
+                  <div class="auk-o-grid">
+                    <div class="auk-o-grid-col-6">
+                      <div class="auk-form-group">
+                        <Auk::Label
+                          for="translationLoadPages"
+                          class="auk-label--light"
+                        >
+                          {{t "pages-amount"}}
+                        </Auk::Label>
+                        <Auk::Input
+                          data-test-publication-documents-upload-pages
+                          @type="number"
+                          id="translationLoadPages"
+                          @value={{mut this.pagesAmount}}
+                          {{on "input" (perform this.setEmailFields)}}
+                        />
+                      </div>
+                    </div>
+                    <div class="auk-o-grid-col-6">
+                      <div class="auk-form-group">
+                        <Auk::Label
+                          for="translationLoadWords"
+                          class="auk-label--light"
+                        >
+                          {{t "words-amount"}}
+                        </Auk::Label>
+                        <Auk::Input
+                          @type="number"
+                          id="translationLoadWords"
+                          @value={{mut this.wordsAmount}}
+                          {{on "input" (perform this.setEmailFields)}}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            {{! Due date }}
+            {{! TODO: Remove inline style }}
+            {{! template-lint-disable no-inline-styles }}
+            <div class="auk-form-group" style="max-width: 30rem;">
+              <Auk::Label for="translationRequestDueDate">
+                {{t "publication-flow-translation-due-date"}}
+              </Auk::Label>
+              <Auk::Datepicker
+                id="translationRequestDueDate"
+                @date={{this.translationDueDate}}
+                @onChange={{this.setTranslationDueDate}}
+              />
+            </div>
+            {{! template-lint-enable no-inline-styles }}
+            {{! Subject }}
+            <div class="auk-form-group">
+              <Auk::Label for="translationRequestSubject">
+                {{t "subject"}}
+              </Auk::Label>
+              <Auk::Input
+                id="translationRequestSubject"
+                @block={{true}}
+                @value={{mut this.subject}}
+              />
+            </div>
+            {{! Message }}
+            <div class="auk-form-group">
+              <Auk::Label for="translationRequestMessage" @required={{true}}>
+                {{t "message"}}
+              </Auk::Label>
+              <Auk::Textarea
+                data-test-publication-translation-request-message
+                id="translationRequestMessage"
+                @rows="6"
+                @value={{mut this.message}}
+              />
+            </div>
+          </div>
         </div>
       </div>
-    </Utils::LoadableContent>
+
+    {{/if}}
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @onCancel={{@onCancel}}>
+  <Auk::Modal::Footer
+    @cancelDisabled={{this.isCancelDisabled}}
+    @onCancel={{perform this.cancel}}
+  >
     <Auk::Button
-      data-test-publication-translation-request-save
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
       @loading={{this.saveRequest.isRunning}}
       {{on "click" (perform this.saveRequest)}}
     >
-      {{t "request-action"}}
+      {{t "save"}}
     </Auk::Button>
   </Auk::Modal::Footer>
 </Auk::Modal>

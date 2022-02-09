@@ -14,8 +14,7 @@ export class TranslationRow {
   // no async constructor() in JS
   static async create(piece,requestActivity) {
     const row = new TranslationRow();
-    console.log(piece)
-    console.log(requestActivity)
+
     if (piece){
       row.piece = piece;
       row.date = piece.created;

@@ -4,7 +4,11 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { translationRequestEmail } from 'frontend-kaleidos/utils/publication-email';
-import { add } from 'ember-math-helpers/helpers/add';
+import { guidFor } from '@ember/object/internals';
+import {
+  ValidatorSet, Validator
+} from 'frontend-kaleidos/utils/validators';
+import { isPresent } from '@ember/utils';
 
 export default class PublicationsTranslationRequestModalComponent extends Component {
   /**
@@ -12,34 +16,76 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
    * @argument onCancel
    */
   @service store;
+  @service('file-queue') fileQueueService;
 
+  @tracked translationDocument;
+  @tracked name;
+  @tracked pagesAmount;
+  @tracked wordsAmount;
   @tracked translationDueDate = this.args.translationSubcase.dueDate ? this.args.translationSubcase.dueDate : new Date();
   @tracked subject;
   @tracked message;
+  validators;
 
   constructor() {
     super(...arguments);
-    this.setEmailFields.perform();
+    if (this.fileQueueService.find(this.fileQueueName)) {
+      this.fileQueueService.create(this.fileQueueName);
+    }
+    this.initValidators();
   }
 
-  get totalPages() {
-    const pages = this.args.attachments.mapBy('pages').filter((page) => page >= 0);
-    return pages.length ? add(pages) : 0;
+  get fileQueueName() {
+    return `${guidFor(this)}-file-queue`;
   }
 
-  get totalWords() {
-    const words = this.args.attachments.mapBy('words').filter((word) => word >= 0);
-    return words.length ? add(words) : 0;
+  get fileQueue() {
+    return this.fileQueueService.find(this.fileQueueName);
   }
 
-  get totalDocuments() {
-    return this.args.attachments.length;
+  get isCancelDisabled() {
+    return this.cancel.isRunning || this.saveRequest.isRunning;
   }
 
   get isSaveDisabled() {
-    return this.translationDueDate === null
-      || this.subject === null
-      || this.message === null;
+    return !this.translationDocument || !this.validators.areValid || this.cancel.isRunning;
+  }
+
+  @task
+  *saveRequest() {
+    yield this.args.onSave({
+      piece: this.translationDocument,
+      name: this.name,
+      pagesAmount: this.pagesAmount,
+      wordsAmount: this.wordsAmount,
+      translationDueDate: this.translationDueDate,
+      subject: this.subject,
+      message: this.message,
+    });
+  }
+
+  @task({
+    drop: true,
+  })
+  *cancel() {
+    // necessary because close-button is not disabled when saving
+    if (this.saveRequest.isRunning) {
+      return;
+    }
+
+    if (this.translationDocument) {
+      yield this.deleteUploadedPiece.perform(this.translationDocument);
+    }
+    this.args.onCancel();
+  }
+
+  @task
+  *deleteUploadedPiece(piece) {
+    const file = yield piece.file;
+    yield file.destroyRecord();
+    const documentContainer = yield piece.documentContainer;
+    yield documentContainer.destroyRecord();
+    yield piece.destroyRecord();
   }
 
   @task
@@ -52,9 +98,9 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
       identifier: identification.idName,
       title: publicationFlow.shortTitle,
       dueDate: this.translationDueDate,
-      totalPages: this.totalPages,
-      totalWords: this.totalWords,
-      totalDocuments: this.totalDocuments,
+      totalPages: this.pagesAmount,
+      totalWords: this.wordsAmount,
+      totalDocuments: 1,
     };
 
     const mailTemplate = translationRequestEmail(mailParams);
@@ -68,13 +114,29 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
     this.setEmailFields.perform();
   }
 
-  @task
-  *saveRequest() {
-    yield this.args.onSave({
-      attachments: this.args.attachments,
-      translationDueDate: this.translationDueDate,
-      subject: this.subject,
-      message: this.message,
+  @action
+  uploadPiece(file) {
+    const now = new Date();
+    const documentContainer = this.store.createRecord('document-container', {
+      created: now,
+    });
+    this.translationDocument = this.store.createRecord('piece', {
+      created: now,
+      modified: now,
+      file: file,
+      confidential: false,
+      name: file.filenameWithoutExtension,
+      documentContainer: documentContainer,
+    });
+    this.name = file.filenameWithoutExtension;
+  }
+
+  initValidators() {
+    this.validators = new ValidatorSet({
+      name: new Validator(() => isPresent(this.name)),
+      translationDueDate: new Validator(() => isPresent(this.translationDueDate)),
+      subject: new Validator(() => isPresent(this.subject)),
+      message: new Validator(() => isPresent(this.message)),
     });
   }
 }

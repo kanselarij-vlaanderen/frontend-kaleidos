@@ -19,21 +19,21 @@
             <Auk::Toolbar::Item>
               <Auk::Button
                 @skin="secondary"
-                @icon="mail"
-                @disabled={{this.isRequestingDisabled}}
-                {{on "click" this.openTranslationRequestModal}}
+                @icon="plus"
+                @disabled={{this.isTranslationUploadDisabled}}
+                {{on "click" this.openTranslationUploadModal }}
               >
-                {{t "request-translations"}}
+                {{t "upload-translation"}}
               </Auk::Button>
             </Auk::Toolbar::Item>
             <Auk::Toolbar::Item>
               <Auk::Button
-                @skin="secondary"
+                @skin="primary"
                 @icon="plus"
-                @disabled={{this.isUploadDisabled}}
-                {{on "click" this.openPieceUploadModal}}
+                @disabled={{this.isRequestingDisabled}}
+                {{on "click" this.openTranslationRequestModal}}
               >
-                {{t "upload-translation-file"}}
+                {{t "request-translations"}}
               </Auk::Button>
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
@@ -63,28 +63,10 @@
   </div>
 </div>
 
-{{#if this.isPieceUploadModalOpen}}
-  <Publications::Publication::Translations::DocumentsUploadModal
-    @translationSubcase={{this.translationSubcase}}
-    @onSave={{perform this.saveSourceDocument}}
-    @onCancel={{this.closePieceUploadModal}}
-  />
-{{/if}}
-
-{{#if this.showPieceEditModal}}
-  <Publications::Publication::Translations::DocumentsEditModal
-    @translationSubcase={{this.translationSubcase}}
-    @sourceDocument={{this.pieceRowToEdit.piece}}
-    @onSave={{perform this.saveEditSourceDocument}}
-    @onCancel={{this.closePieceEditModal}}
-  />
-{{/if}}
-
-{{#if this.isTranslationRequestModalOpen}}
+{{#if this.showTranslationRequestModal}}
   <Publications::Publication::Translations::TranslationRequestModal
     @translationSubcase={{this.translationSubcase}}
     @publicationFlow={{this.publicationFlow}}
-    @attachments={{this.selectedPieces}}
     @onSave={{perform this.saveTranslationRequest}}
     @onCancel={{this.closeTranslationRequestModal}}
   />
