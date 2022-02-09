@@ -13,15 +13,32 @@ function currentTimestamp() {
 }
 
 function changeSubcaseType(caseTitle, type) {
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.openCase(caseTitle);
+  cy.intercept('GET', '/custom-subcases/**').as(`loadSubcasePhases${randomInt}`);
   cy.openSubcase(0);
+  cy.wait(`@loadSubcasePhases${randomInt}`);
   cy.get(cases.subcaseDescription.edit).click();
   cy.get(cases.subcaseDescriptionEdit.type).contains(type)
     .click();
-  cy.intercept('PATCH', '/agendas/**').as('patchAgendas');
+
+  cy.intercept('PATCH', '/subcases/**').as(`patchSubcase${randomInt}`);
+  cy.intercept('PATCH', '/agendaitems/**').as(`patchAgendaitem${randomInt}`);
+  cy.intercept('PATCH', '/agendas/**').as(`patchAgenda${randomInt}`);
+  cy.intercept('DELETE', '/newsletter-infos/**').as(`deleteNewsletterInfo${randomInt}`);
+  cy.intercept('POST', '/newsletter-infos').as(`postNewsletterInfo${randomInt}`);
   // TODO add selector to which file?
   cy.get('[data-test-vl-save]').click();
-  cy.wait('@patchAgendas');
+  cy.wait(`@patchSubcase${randomInt}`);
+  cy.wait(`@patchAgendaitem${randomInt}`);
+  cy.wait(`@patchAgenda${randomInt}`);
+  // When switching to type announcement, we delete (only if ony exists) and create a new one with defaults
+  if (type === 'Mededeling') {
+    cy.wait(`@postNewsletterInfo${randomInt}`);
+  } else {
+    // When switching to note, we delete the existing default one from announcement
+    cy.wait(`@deleteNewsletterInfo${randomInt}`);
+  }
 }
 
 context('newsletter tests, both in agenda detail view and newsletter route', () => {
@@ -141,7 +158,9 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // check if KB empty
     cy.get(utils.vlAlert.message).contains('Nog geen kort bestek voor dit agendapunt.');
     // create new KB
+    cy.intercept('GET', '/themes').as('getThemes');
     cy.get(newsletter.newsItem.create).click();
+    cy.wait('@getThemes');
     // check default values
     // TODO-Nota check if default in-newsletter is off
     cy.get(newsletter.editItem.longTitle).contains(subcaseTitleLong);
@@ -184,7 +203,9 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // check if KB empty
     cy.get(utils.vlAlert.message).contains('Nog geen kort bestek voor dit agendapunt.');
     // create new KB
+    cy.intercept('GET', '/themes').as('getThemes');
     cy.get(newsletter.newsItem.create).click();
+    cy.wait('@getThemes');
     // check default values
     // TODO-Nota check if default in-newsletter is off
     cy.get(newsletter.editItem.longTitle).contains(adaptedSubcaseTitleLong);
@@ -204,7 +225,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.wait('@postNewsItem');
   });
 
-  it('should test default newsletter values on mededeling', () => {
+  it('should test default newsletter values on announcement', () => {
     const type = 'Mededeling';
     const adaptedSubcaseTitleShort = `Cypress test: Mededeling met aangepaste korte titel - ${currentTimestamp()}`;
     const adaptedSubcaseTitleLong = `Cypress test: Mededeling met aangepaste lange titel- ${currentTimestamp()}`;
@@ -230,7 +251,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(agenda.agendaitemTitlesEdit.showInNewsletter).should('be.checked');
   });
 
-  it('should test default newsletter values and long title on mededeling without long title', () => {
+  it('should test default newsletter values and long title on announcement without long title', () => {
     const type = 'Mededeling';
     const adaptedSubcaseTitleShort = `Cypress test: Mededeling zonder lange titel - ${currentTimestamp()}`;
 
@@ -253,7 +274,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.checkedThemes).should('not.exist');
   });
 
-  it('should test default newsletter values on new nota after multiple mededeling', () => {
+  it('should test default newsletter values on new nota after multiple announcements', () => {
     const type = 'Nota';
 
     cy.openCase(caseTitle);
@@ -264,7 +285,9 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // check if KB empty
     cy.get(utils.vlAlert.message).contains('Nog geen kort bestek voor dit agendapunt.');
     // create new KB
+    cy.intercept('GET', '/themes').as('getThemes');
     cy.get(newsletter.newsItem.create).click();
+    cy.wait('@getThemes');
     // check default values
     cy.get(newsletter.editItem.longTitle).contains(finalAdaptedSubcaseTitleLong);
     cy.get(newsletter.editItem.toggleFinished).should('not.be.checked');
@@ -284,14 +307,13 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       .should('not.be.checked');
   });
 
-  it('should switch between nota and medeling and test default newsletter values', () => {
+  it('should switch between nota and announcement and test default newsletter values', () => {
     changeSubcaseType(caseTitle, 'Mededeling');
     cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten');
     cy.openAgendaitemKortBestekTab(finalAdaptedSubcaseTitleShort);
-    // check if KB empty
-    cy.get(utils.vlAlert.message).contains('Nog geen kort bestek voor dit agendapunt.');
+    // check if KB exists
     // check default values
-    cy.get(newsletter.newsItem.create).click();
+    cy.get(newsletter.newsItem.edit).click();
     cy.get(newsletter.editItem.shortTitle).should('have.value', finalAdaptedSubcaseTitleShort);
     cy.get(newsletter.editItem.toggleFinished).should('be.checked');
     // value of subtitle from newsletter info is empty, but we show agendaitem title in frontend
@@ -309,10 +331,9 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     changeSubcaseType(caseTitle, 'Mededeling');
     cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten');
     cy.openAgendaitemKortBestekTab(finalAdaptedSubcaseTitleShort);
-    // check if KB empty
-    cy.get(utils.vlAlert.message).contains('Nog geen kort bestek voor dit agendapunt.');
+    // check if KB exists
     // check default values
-    cy.get(newsletter.newsItem.create).click();
+    cy.get(newsletter.newsItem.edit).click();
     cy.get(newsletter.editItem.shortTitle).should('have.value', finalAdaptedSubcaseTitleShort);
     cy.get(newsletter.editItem.toggleFinished).should('be.checked');
     // value of subtitle from newsletter info is empty, but we show agendaitem title in frontend
@@ -327,7 +348,9 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // check if KB empty
     cy.get(utils.vlAlert.message).contains('Nog geen kort bestek voor dit agendapunt.');
     // create new KB
+    cy.intercept('GET', '/themes').as('getThemes');
     cy.get(newsletter.newsItem.create).click();
+    cy.wait('@getThemes');
     // check default values
     cy.get(newsletter.editItem.longTitle).contains(finalAdaptedSubcaseTitleLong);
     cy.get(newsletter.editItem.toggleFinished).should('not.be.checked');
