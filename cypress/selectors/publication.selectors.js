@@ -25,7 +25,6 @@ const selectors = {
   // publications\publication\translations\template
   publicationTranslations: {
     documents: '[data-test-route-publications---translations-tab-documents]',
-    finished: '[data-test-route-publications---translations-tab-finished]',
     // TODO-SELECTOR unused selector
     requests: '[data-test-route-publications---translations-tab-requests]',
   },
@@ -67,7 +66,6 @@ const selectors = {
   // publications\publication\proofs\template
   publicationProofs: {
     documents: '[data-test-route-publications---proofs-tab-documents]',
-    finished: '[data-test-route-publications---proofs-tab-finished]',
     // TODO-SELECTOR unused selectors
     requests: '[data-test-route-publications---proofs-tab-requests]',
   },
@@ -150,8 +148,6 @@ const selectors = {
       publicationDueDate: '[data-test-publication-table-row-publication-due-date]',
       isUrgent: '[data-test-publication-table-row-is-urgent]',
       status: '[data-test-publication-table-row-status]',
-      translationProgressBadge: '[data-test-publication-table-row-translation-progress-badge]',
-      proofsProgressBadge: '[data-test-publication-table-row-proofs-progress-badge]',
       source: '[data-test-publication-table-row-source]',
       goToPublication: '[data-test-publication-table-row-go-to-publication]',
       // TODO-SELECTOR unused selectors
@@ -229,23 +225,6 @@ const selectors = {
     table: '[data-test-mandatees-panel-table]',
   },
 
-  // government-fields-panel
-  governmentFieldsPanel: {
-    edit: '[data-test-government-fields-panel-edit]',
-    rows: '[data-test-government-fields-panel-row]',
-    row: {
-      label: '[data-test-government-fields-panel-row-label]',
-      fields: '[data-test-government-fields-panel-row-fields]',
-    },
-  },
-
-  // edit-government-fields-modal
-  editGovernmentFieldsModal: {
-    save: '[data-test-edit-government-fields-modal-save]',
-    // TODO-SELECTORS unused selectors
-    selectorForm: '[data-test-edit-government-fields-modal-selector-form]',
-  },
-
   // sidebar
   sidebar: {
     open: '[data-test-publication-sidebar-open]',
@@ -304,13 +283,6 @@ const selectors = {
     proofprint: '[data-test-publication-document-edit-proofprint]',
   },
 
-  // translation-statuspill
-  translationStatuspill: {
-    done: '[data-test-translation-statuspill-done]',
-    inProgress: '[data-test-translation-statuspill-in-progress]',
-    notStarted: '[data-test-translation-statuspill-not-started]',
-  },
-
   //  translation-upload-modal
   translationUpload: {
     name: '[data-test-translation-upload-name]',
@@ -327,13 +299,6 @@ const selectors = {
   proofEdit: {
     name: '[data-test-proof-edit-name]',
     save: '[data-test-proof-edit-save]',
-  },
-
-  // proofs-statuspill
-  proofsStatuspill: {
-    done: '[data-test-proofs-statuspill-done]',
-    inProgress: '[data-test-proofs-statuspill-in-progress]',
-    notStarted: '[data-test-proofs-statuspill-not-started]',
   },
 
   // proof-request-modal

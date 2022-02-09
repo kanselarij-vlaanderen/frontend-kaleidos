@@ -9,7 +9,6 @@ const ALERT_POLL_INTERVAL = 70000;
 
 context('Settings: Create a system-alert and verify if it gets shown and closes', () => {
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
     cy.visit('instellingen/systeemmeldingen');
   });
@@ -22,8 +21,8 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
     cy.get(settings.systemAlertForm.title).type('System alert title');
     cy.get(settings.systemAlertForm.message).type('System alert message');
 
-    cy.route('GET', '/alerts?**').as('getAlerts');
-    cy.route('POST', '/alerts').as('postAlerts');
+    cy.intercept('GET', '/alerts?**').as('getAlerts');
+    cy.intercept('POST', '/alerts').as('postAlerts');
     cy.get(utils.vlModalFooter.save).click()
       .wait('@postAlerts');
     cy.wait('@getAlerts', {
@@ -35,7 +34,7 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
   });
 
   it('Should close and stay closed', () => {
-    cy.route('GET', '/alerts?**').as('getAlerts');
+    cy.intercept('GET', '/alerts?**').as('getAlerts');
     cy.wait('@getAlerts', {
       timeout: ALERT_POLL_INTERVAL + 60000,
     }); // Wait for a polling-cycle to pass
@@ -52,7 +51,7 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
   });
 
   it('Should delete the alert created', () => {
-    cy.route('GET', '/alerts**').as('getAlerts');
+    cy.intercept('GET', '/alerts**').as('getAlerts');
     cy.wait('@getAlerts', {
       timeout: ALERT_POLL_INTERVAL + 60000,
     }); // Wait for a polling-cycle to pass
@@ -61,7 +60,7 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
     cy.get(settings.systemAlertsIndex.alerts).find(dependency.emberPowerSelect.trigger)
       .click();
     cy.get(dependency.emberPowerSelect.option).click();
-    cy.route('GET', '/alerts**').as('getAlerts');
+    cy.intercept('GET', '/alerts**').as('getAlerts');
     cy.get(settings.systemAlertsIndex.remove).click();
     cy.wait('@getAlerts', {
       timeout: ALERT_POLL_INTERVAL + 60000,
