@@ -61,17 +61,9 @@
             <WebComponents::VlDatepicker
               @selectedDate={{array this.dateFromBuffer}}
               @dateChanged={{fn (mut this.dateFromBuffer)}}
+              @enableClear={{this.dateFromBuffer}}
+              @onClear={{fn (mut this.dateFromBuffer) null}}
             />
-            {{#if this.dateFromBuffer}}
-              <Auk::Button
-                @skin="muted-borderless"
-                @layout="icon-only"
-                @icon="x"
-                class="auk-button-in-input"
-                {{on "click" (fn (mut this.dateFromBuffer) null)}}
-                data-test-route-search-datepicker-button
-              />
-            {{/if}}
           </div>
         </div>
         <div class="auk-o-grid-col-2">
@@ -80,16 +72,9 @@
             <WebComponents::VlDatepicker
               @selectedDate={{array this.dateToBuffer}}
               @dateChanged={{fn (mut this.dateToBuffer)}}
+              @enableClear={{this.dateToBuffer}}
+              @onClear={{fn (mut this.dateToBuffer) null}}
             />
-            {{#if this.dateToBuffer}}
-              <Auk::Button
-                @skin="muted-borderless"
-                @layout="icon-only"
-                @icon="x"
-                class="auk-button-in-input"
-                {{on "click" (fn (mut this.dateToBuffer) null)}}
-              />
-            {{/if}}
           </div>
         </div>
         <div class="auk-o-grid-col-2">
