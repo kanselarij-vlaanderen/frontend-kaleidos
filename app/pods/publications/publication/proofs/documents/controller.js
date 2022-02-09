@@ -9,6 +9,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 const COLUMN_MAP = {
   naam: 'name',
@@ -31,6 +32,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   @service currentSession;
   @service store;
+  @service publicationService;
 
   // @tracked sort; // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
   /** @type {string} kebab-cased key name, prepended with minus if descending */
@@ -252,6 +254,13 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     });
     const emailSave = mail.save();
     saves.push(emailSave);
+
+    // PUBLICATION-STATUS
+    const pubStatusChange = this.publicationService.updatePublicationStatus(
+      this.publicationFlow,
+      CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED
+    );
+    saves.push(pubStatusChange);
 
     await Promise.all(saves);
   }

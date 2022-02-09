@@ -981,5 +981,13 @@
   "view-in-signinghub": "Bekijken in SigningHub",
   "send-to-signinghub": "Doorsturen naar SigningHub",
   "present-for-signing": "Aanbieden voor handtekening",
-  "publication-info": "Publicatie info"
+  "signing-status": "Handtekenstatus",
+  "signing-status-to-be-presented": "Door te sturen voor tekenen",
+  "signing-status-wait-for-signature": "Wacht op handtekening",
+  "signing-status-to-be-signed": "Te tekenen",
+  "signing-status-signed-x-count": "Gehandtekend ({done}/{total})",
+  "signing-status-signed": "Gehandtekend",
+  "publication-info": "Publicatie info",
+  "set-status-translation-in": "Zet status naar 'Vertaling In'",
+  "set-status-proof-in": "Zet status naar 'Drukproef In'"
 }
