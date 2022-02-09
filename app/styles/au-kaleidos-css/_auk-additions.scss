@@ -88,3 +88,38 @@ table tr.lt-expanded-row {
 .auk-tooltip {
   z-index: $z-index-tooltip !important;
 }
+
+
+// Adjust procedure step to fit inside a panel
+.auk-panel .vlc-procedure-step {
+  &:first-child:before {
+    top: -2.2rem;
+    height: calc(100% + 4.4rem);
+  }
+
+  &:before {
+    z-index: 0;
+  }
+}
+
+.vlc-procedure-step .auk-panel,
+.vlc-procedure-step .auk-accordion-panel {
+  border: 0;
+}
+
+.vlc-procedure-step .auk-panel__header,
+.vlc-procedure-step .auk-accordion-panel__header {
+  height: 7.5rem;
+}
+
+.vlc-procedure-step .auk-accordion__button {
+  padding-left: .5rem !important;
+}
+
+.vlc-procedure-step .auk-accordion__title {
+  padding-left: .5rem;
+}
+
+.vlc-procedure-step--nopadding {
+  padding: 0;
+}
