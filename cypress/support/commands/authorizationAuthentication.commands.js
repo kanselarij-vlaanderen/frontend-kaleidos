@@ -16,7 +16,7 @@ import utils from '../../selectors/utils.selectors';
  */
 function login(name, retries = 0) {
   cy.log('login');
-  cy.route('GET', '/mock/sessions/current').as('getCurrentSession');
+  cy.intercept('GET', '/mock/sessions/current').as('getCurrentSession');
   const EMBER_SIMPLE_AUTH_LS_KEY = 'ember_simple_auth-session';
   cy.fixture('mock-login').then((loginUsers) => {
     cy.request({
@@ -38,8 +38,8 @@ function login(name, retries = 0) {
     });
   });
   cy.visit('').wait('@getCurrentSession')
-    .then((xhr) => {
-      if (xhr.status === 400) {
+    .then((responseBody) => {
+      if (responseBody.response.statusCode === 400) {
         if (retries < 5) {
           cy.log('login failed, trying again');
           cy.login(name, retries + 1);
@@ -77,8 +77,7 @@ function logout() {
  */
 function loginFlow(name) {
   cy.log('loginFlow');
-  cy.server();
-  cy.route('POST', '/mock/sessions').as('mockLogin');
+  cy.intercept('POST', '/mock/sessions').as('mockLogin');
   cy.visit('mock-login');
   cy.get(route.mockLogin.list).within(() => {
     cy.contains(name).click()
@@ -95,8 +94,7 @@ function loginFlow(name) {
  */
 function logoutFlow() {
   cy.log('logoutFlow');
-  cy.server();
-  cy.route('DELETE', '/mock/sessions/current').as('mockLogout');
+  cy.intercept('DELETE', '/mock/sessions/current').as('mockLogout');
   cy.visit('');
   cy.get(utils.mHeader.userActions).click();
   cy.get(utils.mHeader.userAction.logout)

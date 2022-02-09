@@ -15,13 +15,12 @@ const COLUMN_MAP = {
 export default class PublicationsPublicationTranslationsDocumentController extends Controller {
   @service currentSession;
   @service router;
+  @service store;
   @service publicationService;
 
-  queryParams = [
-    {
-      sort: {
-        as: 'volgorde',
-      },
+  queryParams = [{
+    sort: {
+      as: 'volgorde',
     },
   ];
 
@@ -133,6 +132,11 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     yield this.publicationService.saveTranslationRequest(
       this.publicationFlow,
       translationRequest
+    );
+
+    yield this.publicationService.updatePublicationStatus(
+      this.publicationFlow,
+      CONSTANTS.PUBLICATION_STATUSES.TO_TRANSLATIONS
     );
 
     this.selectedPieceRows = [];

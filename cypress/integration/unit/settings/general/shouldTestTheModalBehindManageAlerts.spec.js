@@ -6,7 +6,6 @@ import utils from '../../../../selectors/utils.selectors';
 
 context('Manage alerts tests', () => {
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
     cy.get(utils.mHeader.settings).click();
     cy.url().should('include', 'instellingen/overzicht');
@@ -23,6 +22,6 @@ context('Manage alerts tests', () => {
     cy.get(utils.vlModal.dialogWindow).should('be.visible')
       .should('contain', 'Systeemberichten beheer');
     cy.get(utils.vlModal.close).click();
-    cy.get(utils.vlModal.dialogWindow).should('not.be.visible');
+    cy.get(utils.vlModal.dialogWindow).should('not.exist');
   });
 });

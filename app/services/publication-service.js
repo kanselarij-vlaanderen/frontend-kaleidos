@@ -260,4 +260,33 @@ export default class PublicationService extends Service {
     });
     await mail.save();
   }
+
+  async updatePublicationStatus(
+    publicationFlow,
+    targetStatusUri,
+    changeDate = new Date()
+  ) {
+    publicationFlow.status = await this.store.findRecordByUri(
+      'publication-status',
+      targetStatusUri
+    );
+    // Continuing without awaiting here can cause saving while related status-change
+    // already is deleted (by step below)
+    await publicationFlow.save();
+
+    const oldChangeActivity = await publicationFlow
+      .publicationStatusChange;
+    if (oldChangeActivity) {
+      await oldChangeActivity.destroyRecord();
+    }
+    const newChangeActivity = this.store.createRecord(
+      'publication-status-change',
+      {
+        startedAt: changeDate,
+        publication: publicationFlow,
+      }
+    );
+    await newChangeActivity.save();
+    return publicationFlow;
+  }
 }

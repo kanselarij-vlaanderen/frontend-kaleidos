@@ -3,6 +3,7 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 // row object in order to be able to call properties
 // of proofingActivity and publicationActivity similarly in the template
@@ -42,6 +43,8 @@ export class Row {
 
 export default class PublicationsPublicationProofsRequestsController extends Controller {
   @service store;
+  @service publicationService;
+
   @tracked publicationFlow;
   @tracked publicationSubcase;
   @tracked isUploadModalOpen;
@@ -105,6 +108,17 @@ export default class PublicationsPublicationProofsRequestsController extends Con
       !this.publicationSubcase.receivedDate
     ) {
       this.publicationSubcase.receivedDate = proofUpload.receivedAtDate;
+      await this.publicationSubcase.save();
+    }
+
+    if (proofUpload.isProofIn) {
+      await this.publicationService.updatePublicationStatus(
+        this.publicationFlow,
+        CONSTANTS.PUBLICATION_STATUSES.PROOF_IN,
+        proofUpload.receivedAtDate
+      );
+
+      this.publicationSubcase.endDate = proofUpload.receivedAtDate;
       await this.publicationSubcase.save();
     }
 

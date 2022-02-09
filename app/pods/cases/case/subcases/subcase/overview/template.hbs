@@ -19,6 +19,7 @@
     </div>
   {{/if}}
   {{#if (not this.isEditingTitles)}}
+    {{! TODO: refactor titles-component into 1 with 2 sub-components: 1 for displaying, 1 for editing }}
     <Subcase::SubcaseCase::SubcaseTitles
       @subcase={{this.subcase}}
       @toggleIsEditing={{this.toggleIsEditing}}
@@ -26,7 +27,7 @@
   {{else}}
     <Subcase::SubcaseCase::SubcaseTitlesEdit
       @subcase={{this.subcase}}
-      @isEditing={{this.isEditingTitles}}
+      @toggleIsEditing={{this.toggleIsEditing}}
     />
   {{/if}}
   <Mandatees::MandateesPanel

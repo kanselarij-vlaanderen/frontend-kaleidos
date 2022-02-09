@@ -9,7 +9,6 @@ import utils from '../../selectors/utils.selectors';
 
 context('Testing the application as Kanselarij user', () => {
   beforeEach(() => {
-    cy.server();
     cy.login('Kanselarij');
   });
 

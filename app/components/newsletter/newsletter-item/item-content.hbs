@@ -59,7 +59,7 @@
   {{/if}}
   {{#if (not this.agendaitem.showAsRemark)}}
     {{#if (or (not this.newsletterInfo.richtext) (eq this.newsletterInfo.richtext "&nbsp;"))}}
-      <p class="auk-u-italic auk-u-muted auk-u-mb-2">
+      <p class="auk-u-italic auk-u-text-muted auk-u-mb-2">
         {{t "no-newsletter-info"}}
       </p>
     {{/if}}
@@ -74,7 +74,7 @@
 {{/if}}
 {{#if this.allowEditing}}
   {{#if (await this.newsletterInfo.remark)}}
-    <p class="auk-u-muted auk-u-text-capitalize">
+    <p class="auk-u-text-muted auk-u-text-capitalize">
       {{t "remark"}}: {{await this.newsletterInfo.remark}}
     </p>
   {{/if}}
@@ -94,7 +94,7 @@
   </div>
 {{!-- {{else if (and this.allowEditing this.newsletterInfo.richtext)}}
   <div class="auk-u-mb-2">
-    <p class="auk-u-muted auk-u-text-capitalize">
+    <p class="auk-u-text-muted auk-u-text-capitalize">
       {{t "no-themes-agendaitem"}}
     </p>
   </div> --}}

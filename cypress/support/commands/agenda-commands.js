@@ -19,7 +19,7 @@ import utils from '../../selectors/utils.selectors';
  * @memberOf Cypress.Chainable#
  * @function
  * @param {*} kind The kind of meeting to select, language and case sensitive
- * @param {*} date The cypress.moment object with the date and time to set
+ * @param {*} date The Cypress.dayjs object with the date and time to set
  * @param {string} location The location of the meeting to enter as input
  * @param {number} meetingNumber The number of the meeting to enter as input
  * @param {string} meetingNumberVisualRepresentation The visual representation of the meetingnumber to enter as input
@@ -27,10 +27,10 @@ import utils from '../../selectors/utils.selectors';
  */
 function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRepresentation) {
   cy.log('createAgenda');
-  cy.route('POST', '/meetings').as('createNewMeeting');
-  cy.route('POST', '/agendas').as('createNewAgenda');
-  cy.route('POST', '/newsletter-infos').as('createNewsletter');
-  cy.route('PATCH', '/meetings/**').as('patchMeetings');
+  cy.intercept('POST', '/meetings').as('createNewMeeting');
+  cy.intercept('POST', '/agendas').as('createNewAgenda');
+  cy.intercept('POST', '/newsletter-infos').as('createNewsletter');
+  cy.intercept('PATCH', '/meetings/**').as('patchMeetings');
 
   cy.visit('');
   cy.get(route.agendas.action.newMeeting).click();
@@ -51,7 +51,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
       });
     cy.get(dependency.emberPowerSelect.option, {
       timeout: 15000,
-    }).should('not.be.visible');
+    }).should('not.exist');
   }
 
   // Set the start date
@@ -108,14 +108,16 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   cy.wait('@createNewMeeting', {
     timeout: 20000,
   })
-    .then((res) => {
-      meetingId = res.responseBody.data.id;
+    .its('response.body')
+    .then((responseBody) => {
+      meetingId = responseBody.data.id;
     });
   cy.wait('@createNewAgenda', {
     timeout: 20000,
   })
-    .then((res) => {
-      agendaId = res.responseBody.data.id;
+    .its('response.body')
+    .then((responseBody) => {
+      agendaId = responseBody.data.id;
     });
   cy.log('/createAgenda');
   cy.wait('@patchMeetings', {
@@ -137,7 +139,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
  */
 function visitAgendaWithLink(link) {
   cy.log('visitAgendaWithLink');
-  // cy.route('GET', '/agendaitems/*/agenda-activity').as('loadAgendaitems');
+  // cy.intercept('GET', '/agendaitems/*/agenda-activity').as('loadAgendaitems');
   cy.visit(link);
   // cy.wait('@loadAgendaitems');
   cy.get(auk.loader, {
@@ -151,13 +153,13 @@ function visitAgendaWithLink(link) {
  * @name openAgendaForDate
  * @memberOf Cypress.Chainable#
  * @function
- * @param {*} agendaDate A cypress.moment object with the date to search
+ * @param {*} agendaDate A Cypress.dayjs object with the date to search
  * @param {integer} index Allows selecting specific agenda when multiple are found
  */
 function openAgendaForDate(agendaDate, index = 0) {
   cy.log('openAgendaForDate');
   const searchDate = `${agendaDate.date()}/${agendaDate.month() + 1}/${agendaDate.year()}`;
-  cy.route('GET', '/meetings?filter**').as('getFilteredMeetings');
+  cy.intercept('GET', '/meetings?filter**').as('getFilteredMeetings');
 
   cy.visit('');
   cy.get(route.agendasOverview.filter.container).within(() => {
@@ -203,8 +205,8 @@ function openAgendaitemKortBestekTab(agendaitemTitle) {
 function deleteAgenda(lastAgenda) {
   cy.log('deleteAgenda');
   // Call is made but cypress doesn't see it
-  // cy.route('POST', '/agenda-approve/deleteAgenda').as('deleteAgendaCall');
-  cy.route('GET', '/agendaitems?filter**').as('loadAgendaitems');
+  // cy.intercept('POST', '/agenda-approve/deleteAgenda').as('deleteAgendaCall');
+  cy.intercept('GET', '/agendaitems?filter**').as('loadAgendaitems');
   cy.get(agenda.agendaActions.showOptions).click();
   cy.get(agenda.agendaActions.actions.deleteAgenda).click();
   cy.get(auk.modal.container).find(agenda.agendaActions.confirm.deleteAgenda)
@@ -244,7 +246,7 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
     .find(agenda.agendaOverviewItem.formallyOk)
     .click();
   const int = Math.floor(Math.random() * Math.floor(10000));
-  cy.route('PATCH', '/agendaitems/**').as(`patchAgendaitem_${int}`);
+  cy.intercept('PATCH', '/agendaitems/**').as(`patchAgendaitem_${int}`);
   // Force click the click not working in selective tests (agendaitem-changes.spec)
   cy.get(dependency.emberPowerSelect.option)
     .contains(formalityStatus)
@@ -265,9 +267,9 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
 function setAllItemsFormallyOk(amountOfFormallyOks) {
   cy.log('setAllItemsFormallyOk');
   const verifyText = `Bent u zeker dat u ${amountOfFormallyOks} agendapunten formeel wil goedkeuren`;
-  cy.route('GET', '/agendaitems/*/modified-by').as('getModifiedByOfAgendaitems');
+  cy.intercept('GET', '/agendaitems/*/modified-by').as('getModifiedByOfAgendaitems');
   cy.get(agenda.agendaHeader.showOptions).click();
-  cy.route('PATCH', '/agendaitems/**').as('patchAgendaitems');
+  cy.intercept('PATCH', '/agendaitems/**').as('patchAgendaitems');
   cy.get(agenda.agendaHeader.actions.approveAllAgendaitems).click();
   cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
   cy.get(auk.modal.body).should('contain', verifyText);
@@ -344,11 +346,11 @@ function approveAndCloseDesignAgenda(shouldConfirm = true) {
  */
 function addAgendaitemToAgenda(subcaseTitle, postponed = false) {
   cy.log('addAgendaitemToAgenda');
-  cy.route('GET', '/subcases?**sort**').as('getSubcasesFiltered');
-  cy.route('POST', '/agendaitems').as('createNewAgendaitem');
-  cy.route('POST', '/agenda-activities').as('createAgendaActivity');
-  cy.route('PATCH', '/subcases/**').as('patchSubcase');
-  cy.route('PATCH', '/agendas/**').as('patchAgenda');
+  cy.intercept('GET', '/subcases?**sort**').as('getSubcasesFiltered');
+  cy.intercept('POST', '/agendaitems').as('createNewAgendaitem');
+  cy.intercept('POST', '/agenda-activities').as('createAgendaActivity');
+  cy.intercept('PATCH', '/subcases/**').as('patchSubcase');
+  cy.intercept('PATCH', '/agendas/**').as('patchAgenda');
 
   cy.get(auk.loader).should('not.exist');
   cy.get(agenda.agendaHeader.showOptions).click();
@@ -366,18 +368,20 @@ function addAgendaitemToAgenda(subcaseTitle, postponed = false) {
     cy.get(auk.loader, {
       timeout: 12000,
     }).should('not.exist');
+    cy.get(dependency.emberDataTable.isLoading).should('not.exist');
     // type the subcase title from parameters to search
     cy.get(agenda.createAgendaitem.input).clear()
       .type(subcaseTitle, {
         force: true,
       });
-    cy.route('GET', `/subcases?filter**filter[short-title]=${subcaseTitle}**`).as('getSubcasesFiltered');
+    cy.intercept('GET', `/subcases?filter**filter[short-title]=${subcaseTitle}**`).as('getSubcasesFiltered');
     cy.wait('@getSubcasesFiltered', {
       timeout: 12000,
     });
     cy.get(auk.loader, {
       timeout: 12000,
     }).should('not.exist');
+    cy.get(dependency.emberDataTable.isLoading).should('not.exist');
     // select the found row (title should always match only 1 result to avoid using the wrong subcase)
     cy.get(agenda.createAgendaitem.dataTable).find('tbody')
       .children('tr')
@@ -395,7 +399,7 @@ function addAgendaitemToAgenda(subcaseTitle, postponed = false) {
   cy.wait('@createAgendaActivity', {
     timeout: 20000,
   });
-  cy.route('GET', '/agendaitems?filter**').as(`loadAgendaitems${randomInt}`);
+  cy.intercept('GET', '/agendaitems?filter**').as(`loadAgendaitems${randomInt}`);
   cy.wait('@createNewAgendaitem', {
     timeout: 20000,
   })
@@ -538,7 +542,7 @@ function changeSelectedAgenda(agendaName) {
 function closeAgenda() {
   cy.log('closeAgenda');
   // Call is made but cypress doesn't see it
-  // cy.route('POST', '/agenda-approve/closeAgenda').as('closeAgendaCall');
+  // cy.intercept('POST', '/agenda-approve/closeAgenda').as('closeAgendaCall');
   cy.get(agenda.agendaActions.showOptions).click();
   cy.get(agenda.agendaActions.actions.lockAgenda).click();
   cy.get(agenda.agendaActions.confirm.lockAgenda).click();
@@ -579,7 +583,7 @@ function reopenAgenda() {
 function reopenPreviousAgenda() {
   cy.log('reopenPreviousAgenda');
   // Call is made but cypress doesn't see it
-  // cy.route('POST', '/agenda-approve/reopenPreviousAgenda').as('reopenPreviousAgendaCall');
+  // cy.intercept('POST', '/agenda-approve/reopenPreviousAgenda').as('reopenPreviousAgendaCall');
   cy.get(agenda.agendaActions.showOptions).click();
   cy.get(agenda.agendaActions.actions.reopenPreviousVersion).click();
   cy.get(agenda.agendaActions.confirm.reopenPreviousVersion).click();
@@ -599,7 +603,7 @@ function reopenPreviousAgenda() {
  */
 function releaseDecisions() {
   cy.log('releaseDecisions');
-  cy.route('PATCH', '/meetings/**').as('patchMeetings');
+  cy.intercept('PATCH', '/meetings/**').as('patchMeetings');
 
   cy.get(agenda.agendaHeader.showOptions).click();
   cy.get(agenda.agendaHeader.actions.releaseDecisions).click({
@@ -620,7 +624,7 @@ function releaseDecisions() {
  */
 function releaseDocuments() {
   cy.log('releaseDocuments');
-  cy.route('PATCH', '/meetings/**').as('patchMeetings');
+  cy.intercept('PATCH', '/meetings/**').as('patchMeetings');
 
   cy.get(agenda.agendaHeader.showOptions).click();
   cy.get(agenda.agendaHeader.actions.releaseDocuments).click();

@@ -1,10 +1,5 @@
 <div class="auk-input-with-icon {{@class}}" {{did-update this.updateEnable this.enable}}>
-  {{!-- template-lint-disable no-invalid-interactive --}}
-  {{!-- TODO: figure out a more accessible solution than a clickable div --}}
-  <div {{on "click" this.openDatepicker}}>
-    <Auk::Icon @name="calendar"/>
-  </div>
-  {{!-- template-lint-enable no-invalid-interactive --}}
+  <Auk::Icon @name="calendar"/>
   <EmberFlatpickr
     data-test-auk-datepickr
     class="auk-input auk-input--block"

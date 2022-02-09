@@ -58,8 +58,8 @@ function getTranslatedMonth(month) {
  */
 function openSubcase(index = 0) {
   cy.log('openSubcase');
-  // cy.route('GET', '/subcases?**').as('getSubcases');
-  // cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
+  // cy.intercept('GET', '/subcases?**').as('getSubcases');
+  // cy.intercept('GET', '/cases/**/subcases').as('getCaseSubcases');
   // cy.wait('@getSubcases', { timeout: 12000 });
   cy.wait(2000); // link does not always work (not visible or click does nothing unless we wait)
   cy.get(cases.subcaseItem.container).eq(index)
@@ -82,7 +82,7 @@ function openSubcase(index = 0) {
  */
 function changeSubcaseAccessLevel(confidentialityChange, accessLevel, newShortTitle, newLongTitle) {
   cy.log('changeSubcaseAccessLevel');
-  cy.route('PATCH', '/subcases/*').as('patchSubcase');
+  cy.intercept('PATCH', '/subcases/*').as('patchSubcase');
 
   cy.get(cases.subcaseTitlesView.edit).click();
 
@@ -125,12 +125,12 @@ function changeSubcaseAccessLevel(confidentialityChange, accessLevel, newShortTi
  */
 function addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
   cy.log('addSubcaseMandatee');
-  cy.route('GET', '/mandatees**http://themis.vlaanderen.be/id/bestuursorgaan/**').as('getMandatees');
+  cy.intercept('GET', '/mandatees**').as('getMandatees');
 
   if (mandateeSearchText) {
-    cy.route('GET', `/mandatees**http://themis.vlaanderen.be/id/bestuursorgaan/**?filter**${mandateeSearchText.split(' ', 1)}**`).as('getFilteredMandatees');
+    cy.intercept('GET', `/mandatees**?filter**${mandateeSearchText.split(' ', 1)}**`).as('getFilteredMandatees');
   }
-  cy.route('PATCH', '/subcases/*').as('patchSubcase');
+  cy.intercept('PATCH', '/subcases/*').as('patchSubcase');
   cy.get(mandatee.mandateePanelView.actions.edit).click();
   cy.get(mandatee.mandateePanelEdit.actions.add).click();
   cy.wait('@getMandatees');
@@ -141,7 +141,7 @@ function addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
     cy.get(dependency.emberPowerSelect.searchInput).type(mandateeSearchText)
       .wait('@getFilteredMandatees');
   }
-  cy.get(dependency.emberPowerSelect.optionSearchMessage).should('not.exist');
+  cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
   // we can search or select by number
   // when searching we select the first option we get or the first option with a specific title
   if (mandateeSearchText) {
@@ -177,8 +177,8 @@ function addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
 function addAgendaitemMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
   cy.log('addAgendaitemMandatee');
 
-  cy.route('PATCH', '/agendaitems/*').as('patchAgendaitem');
-  cy.route('PATCH', '/agendas/*').as('patchAgenda');
+  cy.intercept('PATCH', '/agendaitems/*').as('patchAgendaitem');
+  cy.intercept('PATCH', '/agendas/*').as('patchAgenda');
 
   cy.addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle);
   cy.wait('@patchAgendaitem', {
@@ -198,10 +198,10 @@ function addAgendaitemMandatee(mandateeNumber, mandateeSearchText, mandateeTitle
  */
 function proposeSubcaseForAgenda(agendaDate, numberRep = '') {
   cy.log('proposeSubcaseForAgenda');
-  cy.route('POST', '/agendaitems').as('createNewAgendaitem');
-  cy.route('PATCH', '/agendas/*').as('patchAgenda');
-  cy.route('PATCH', '/subcases/*').as('patchSubcase');
-  cy.route('POST', '/agenda-activities').as('createAgendaActivity');
+  cy.intercept('POST', '/agendaitems').as('createNewAgendaitem');
+  cy.intercept('PATCH', '/agendas/*').as('patchAgenda');
+  cy.intercept('PATCH', '/subcases/*').as('patchSubcase');
+  cy.intercept('POST', '/agenda-activities').as('createAgendaActivity');
   const monthDutch = getTranslatedMonth(agendaDate.month());
   let formattedDate = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
   if (numberRep) {
@@ -233,7 +233,7 @@ function proposeSubcaseForAgenda(agendaDate, numberRep = '') {
  */
 function deleteSubcase() {
   cy.log('deleteSubcase');
-  cy.route('DELETE', '/subcases/**').as('deleteSubcase');
+  cy.intercept('DELETE', '/subcases/**').as('deleteSubcase');
   cy.get(cases.subcaseHeader.actionsDropdown).click();
   cy.get(cases.subcaseHeader.actions.deleteSubcase).click();
 
