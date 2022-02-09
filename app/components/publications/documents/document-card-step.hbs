@@ -1,9 +1,9 @@
-<Auk::Panel>
+<Auk::Panel class={{if this.deletePiece.isRunning "vlc-document--deleted-state"}}>
   <Auk::Panel::Body>
     <Auk::Toolbar @auto={{true}} as |Toolbar|>
       <Toolbar.Group @position="left" as |Group|>
         <Group.Item class="vlc-u-box-model-maximize-width">
-          <p class="vlc-subline">
+          <p class="auk-overline">
             {{@piece.documentContainer.type.label}}
           </p>
           <div class="auk-o-flex auk-o-flex--vertical-center vlc-u-box-model-maximize-width">
@@ -18,17 +18,21 @@
                   @icon="book"
                   @href={{@piece.viewDocumentURL}}
                   target="_blank"
-                >
-                  {{t "view-document-details"}}
-                </Auk::Button>
+                />
                 <Auk::Button
                   @skin="borderless"
                   @layout="icon-only"
                   @icon="download"
                   @href={{@piece.file.namedDownloadLink}}
-                >
-                  {{t "download"}}
-                </Auk::Button>
+                />
+                {{#if @isEnabledDelete}}
+                  <Auk::Button
+                    @skin="danger-borderless"
+                    @layout="icon-only"
+                    @icon="trash"
+                    {{on "click" (perform this.deletePiece)}}
+                  />
+                {{/if}}
               {{/if}}
             </div>
           </div>

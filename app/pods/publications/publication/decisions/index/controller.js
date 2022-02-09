@@ -2,10 +2,11 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
+import { dropTask, task } from 'ember-concurrency';
 
 export default class PublicationsPublicationDecisionsIndexController extends Controller {
   @service store;
+  @service fileService;
 
   @tracked publicationFlow;
   @tracked isViaCouncilOfMinisters;
@@ -43,5 +44,12 @@ export default class PublicationsPublicationDecisionsIndexController extends Con
 
     this.send('refresh');
     this.closeReferenceDocumentUploadModal();
+  }
+
+  @dropTask
+  *deletePiece(piece) {
+    const documentContainer = yield piece.documentContainer;
+    yield this.fileService.deleteDocumentContainer(documentContainer);
+    this.send('refresh');
   }
 }

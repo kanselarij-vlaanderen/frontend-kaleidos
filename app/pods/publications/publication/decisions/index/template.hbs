@@ -24,7 +24,11 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
   <Auk::Panel::Body class="auk-u-bg-alt">
-    <Publications::Documents::DocumentListSteps @pieces={{@model}} />
+    <Publications::Documents::DocumentListSteps
+      @pieces={{@model}}
+      @isEnabledDeletePiece={{not this.isViaCouncilOfMinisters}}
+      @onDeletePiece={{perform this.deletePiece}}
+    />
   </Auk::Panel::Body>
 </Auk::Panel>
 

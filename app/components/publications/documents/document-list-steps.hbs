@@ -9,7 +9,11 @@
       />
     </div>
     <div>
-      <Publications::Documents::DocumentCardStep @piece={{piece}} />
+      <Publications::Documents::DocumentCardStep
+        @piece={{piece}}
+        @isEnabledDelete={{@isEnabledDeletePiece}}
+        @onDelete={{fn @onDeletePiece piece}}
+      />
     </div>
   </div>
 {{else}}
