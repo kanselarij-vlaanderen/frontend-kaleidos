@@ -1,4 +1,5 @@
 import PublicationsOverviewBaseController from '../_base/controller';
+import { tracked } from '@glimmer/tracking';
 
 const DEFAULT_COLUMNS = [
   'isUrgent',
@@ -12,6 +13,6 @@ const DEFAULT_COLUMNS = [
 ];
 
 export default class PublicationsOverviewProofreadController extends PublicationsOverviewBaseController {
-  defaultColumns = DEFAULT_COLUMNS;
-  routeName = 'proofread';
+  @tracked defaultColumns = DEFAULT_COLUMNS;
+  @tracked routeName = 'proofread';
 }

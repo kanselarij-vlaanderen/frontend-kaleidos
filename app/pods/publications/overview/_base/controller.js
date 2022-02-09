@@ -4,19 +4,11 @@ import { tracked } from '@glimmer/tracking';
 import tableColumns from 'frontend-kaleidos/config/publications/overview-table-columns';
 
 export default class PublicationsOverviewBaseController extends Controller {
-  // #region to implement:
-  /* eslint-disable getter-return */
   /** @abstract @type {string[]} */
-  get defaultColumns() {
-    console.warn(`defaultColumns not implemented`);
-  }
+  @tracked defaultColumns = [];
 
   /** @abstract @type {string} */
-  get routeName() {
-    console.warn(`routeName not implemented`);
-  }
-  /* eslint-enable getter-return */
-  //#endregion
+  @tracked routeName = 'base';
 
   @tracked page = 0;
   @tracked size = 10;
@@ -28,11 +20,8 @@ export default class PublicationsOverviewBaseController extends Controller {
   @tracked isLoadingModel = false;
   @tracked isColumnsDisplayConfigPanelShown = false;
 
-  // init hook is needed because the concrete controller fields
-  //  are set after base controller's constructor has run
-  // eslint-disable-next-line ember/classic-decorator-hooks
-  init() {
-    super.init(...arguments);
+  constructor() {
+    super(...arguments);
     this.initColumnsDisplayConfig();
   }
 
@@ -42,6 +31,10 @@ export default class PublicationsOverviewBaseController extends Controller {
       columnsDisplayConfig = this.getDefaultColumnsDisplayConfig();
     }
     this.columnsDisplayConfig = columnsDisplayConfig;
+  }
+
+  get columnsDisplayConfigStorageKey() {
+    return `publications.overview.${this.routeName}/columnsDisplayConfig`;
   }
 
   @action
@@ -54,10 +47,6 @@ export default class PublicationsOverviewBaseController extends Controller {
   resetColumnsDisplayConfig() {
     this.columnsDisplayConfig = this.getDefaultColumnsDisplayConfig();
     this.saveColumnsDisplayConfig(this.columnsDisplayConfig);
-  }
-
-  get columnsDisplayConfigStorageKey() {
-    return `publications.overview.${this.routeName}/columnsDisplayConfig`;
   }
 
   loadColumnsDisplayConfig() {

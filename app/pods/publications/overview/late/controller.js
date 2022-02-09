@@ -10,7 +10,7 @@ const DEFAULT_COLUMNS = [
 ];
 
 export default class PublicationsOverviewLateController extends PublicationsOverviewBaseController {
-  defaultColumns = DEFAULT_COLUMNS;
-  routeName = 'late';
+  @tracked defaultColumns = DEFAULT_COLUMNS;
+  @tracked routeName = 'late';
   @tracked sort = 'publication-subcase.due-date';
 }
