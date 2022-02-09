@@ -48,7 +48,7 @@ function clickReverseTab(tabName) {
  * @name setDateInFlatpickr
  * @memberOf Cypress.Chainable#
  * @function
- * @param {Object} date the Cypress.moment with the date to set
+ * @param {Object} date the Cypress.dayjs with the date to set
  */
 function setDateInFlatpickr(date) {
   cy.log('setDateInFlatpickr');
@@ -68,14 +68,14 @@ function setDateInFlatpickr(date) {
  * @name setDateAndTimeInFlatpickr
  * @memberOf Cypress.Chainable#
  * @function
- * @param {Object} date the Cypress.moment with the date to set
+ * @param {Object} date the Cypress.dayjs with the date to set
  */
 function setDateAndTimeInFlatpickr(date) {
   cy.log('setDateAndTimeInFlatpickr');
   setDateInFlatpickr(date);
   cy.get(dependency.flatPickr.time).within(() => {
     cy.get(dependency.flatPickr.hour).type(date.hour());
-    cy.get(dependency.flatPickr.minute).type(date.minutes());
+    cy.get(dependency.flatPickr.minute).type(date.minute());
   });
   cy.log('/setDateAndTimeInFlatpickr');
 }
@@ -103,7 +103,7 @@ function openSettingsModal(selector) {
 function closeSettingsModal() {
   cy.log('closeSettingsModal');
   cy.get(utils.vlModal.close).click();
-  cy.get(utils.vlModal.dialogWindow).should('not.be.visible');
+  cy.get(utils.vlModal.dialogWindow).should('not.exist');
   cy.log('/closeSettingsModal');
 }
 
@@ -116,7 +116,7 @@ function closeSettingsModal() {
  */
 function addDomainsAndFields(domains) {
   cy.log('addDomainsAndFields');
-  cy.route('GET', 'concepts**http://themis.vlaanderen.be/id/concept-schema/**').as('getConceptSchemes');
+  cy.intercept('GET', '/concepts**').as('getConceptSchemes');
   cy.get(utils.governmentAreasPanel.edit).click();
   cy.wait('@getConceptSchemes');
   domains.forEach((domain) => {
@@ -136,7 +136,7 @@ function addDomainsAndFields(domains) {
       });
     }
   });
-  cy.route('PATCH', '/cases/*').as('saveCase');
+  cy.intercept('PATCH', '/cases/*').as('saveCase');
   cy.get(utils.editGovernmentFieldsModal.save).click();
   cy.wait('@saveCase');
 

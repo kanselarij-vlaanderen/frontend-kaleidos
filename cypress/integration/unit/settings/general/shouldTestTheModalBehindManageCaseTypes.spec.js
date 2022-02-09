@@ -6,7 +6,6 @@ import utils from '../../../../selectors/utils.selectors';
 
 context('Manage case types tests', () => {
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 
@@ -24,6 +23,6 @@ context('Manage case types tests', () => {
     cy.get(settings.overview.manageCaseTypes).click();
     cy.get(utils.vlModal.dialogWindow).should('be.visible');
     cy.get(utils.vlModal.close).click();
-    cy.get(utils.vlModal.dialogWindow).should('not.be.visible');
+    cy.get(utils.vlModal.dialogWindow).should('not.exist');
   });
 });

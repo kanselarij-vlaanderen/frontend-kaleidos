@@ -167,6 +167,7 @@ const selectors = {
     showInNewsletter: '[data-test-agendaitem-titles-edit-showInNewsletter]',
     confidential: '[data-test-agendaitem-titles-edit-confidential]',
     actions: {
+      cancel: '[data-test-agendaitem-titles-edit-cancel]',
       save: '[data-test-agendaitem-titles-edit-save]',
     },
   },

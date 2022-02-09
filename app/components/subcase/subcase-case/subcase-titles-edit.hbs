@@ -1,72 +1,71 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
-<div class="auk-u-mb-4">
-  <div class="auk-form-group">
-    <Auk::Label for="subcase-confidential">{{t "confidential"}}</Auk::Label>
-    <Auk::Toggle
-      id="subcase-confidential"
-      @checked={{this.subcase.confidential}}
-      data-test-subcase-titles-edit-confidential={{true}}
-    />
-  </div>
-</div>
-<div class="auk-u-mb-2">
-  <Auk::Label>{{t "publicity"}}</Auk::Label>
-  <Utils::ModelSelector
-    data-test-subcase-titles-edit-access-level={{true}}
-    @modelName="access-level"
-    @allowClear={{true}}
-    @propertyToShow="label"
-    @readOnly={{this.subcase.confidential}}
-    @sortField="label"
-    @selectedItems={{await this.subcase.accessLevel}}
-    @selectModel={{action "setAccessLevel"}}
-  />
-</div>
-
-<div class="auk-u-mb-4">
-  <div class="auk-form-group">
-    <Auk::Label id="name-subcase">{{t "name-subcase"}}</Auk::Label>
-    <Textarea
-      data-test-subcase-titles-edit-shorttitle={{true}}
-      aria-labelledby="name-subcase"
-      rows="2"
-      class="auk-textarea"
-      @value={{this.subcase.shortTitle}}
-    />
-  </div>
-</div>
-<div class="auk-u-mb-4">
-  <div class="auk-form-group">
-    <Auk::Label id="title-subcase">{{t "title-subcase"}}</Auk::Label>
-    <Textarea
-      data-test-subcase-titles-edit-title={{true}}
-      aria-labelledby="name-subcase"
-      rows="4"
-      class="auk-textarea"
-      @value={{this.subcase.title}}
-    />
-  </div>
-</div>
-
-<Auk::Toolbar>
-  <Auk::Toolbar::Group @position="right">
-    <Auk::Toolbar::Item>
-      <Auk::Button
-        @skin="tertiary"
-        {{action "cancelEditing"}}
-        data-test-subcase-titles-edit-cancel
-      >
-        {{t "cancel"}}
-      </Auk::Button>
-    </Auk::Toolbar::Item>
-    <Auk::Toolbar::Item>
-      <WebComponents::VlSaveButton
-        data-test-subcase-titles-edit-save={{true}}
-        @text={{t "save"}}
-        @isLoading={{this.isLoading}}
-        @saveAction={{action "saveChanges"}}
+<div class="auk-box auk-u-mt-4 auk-u-mb-8">
+  <div class="auk-u-mb-4">
+    <div class="auk-form-group">
+      <Auk::Label for="subcase-confidential">{{t "confidential"}}</Auk::Label>
+      <Auk::Toggle
+        id="subcase-confidential"
+        @checked={{@subcase.confidential}}
+        data-test-subcase-titles-edit-confidential={{true}}
       />
-    </Auk::Toolbar::Item>
-  </Auk::Toolbar::Group>
-</Auk::Toolbar>
+    </div>
+  </div>
+  <div class="auk-u-mb-2">
+    <Auk::Label>{{t "publicity"}}</Auk::Label>
+    <Utils::ModelSelector
+      data-test-subcase-titles-edit-access-level={{true}}
+      @modelName="access-level"
+      @allowClear={{true}}
+      @propertyToShow="label"
+      @readOnly={{@subcase.confidential}}
+      @sortField="label"
+      @selectedItems={{@subcase.accessLevel}}
+      @selectModel={{this.setAccessLevel}}
+    />
+  </div>
+  <div class="auk-u-mb-4">
+    <div class="auk-form-group">
+      <Auk::Label id="name-subcase">{{t "name-subcase"}}</Auk::Label>
+      <Textarea
+        data-test-subcase-titles-edit-shorttitle={{true}}
+        aria-labelledby="name-subcase"
+        rows="2"
+        class="auk-textarea"
+        @value={{@subcase.shortTitle}}
+      />
+    </div>
+  </div>
+  <div class="auk-u-mb-4">
+    <div class="auk-form-group">
+      <Auk::Label id="title-subcase">{{t "title-subcase"}}</Auk::Label>
+      <Textarea
+        data-test-subcase-titles-edit-title={{true}}
+        aria-labelledby="name-subcase"
+        rows="4"
+        class="auk-textarea"
+        @value={{@subcase.title}}
+      />
+    </div>
+  </div>
+
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="right">
+      <Auk::Toolbar::Item>
+        <Auk::Button
+          @skin="tertiary"
+          {{on "click" this.cancelEditing}}
+          data-test-subcase-titles-edit-cancel
+        >
+          {{t "cancel"}}
+        </Auk::Button>
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
+        <WebComponents::VlSaveButton
+          data-test-subcase-titles-edit-save={{true}}
+          @text={{t "save"}}
+          @isLoading={{this.saveChanges.isRunning}}
+          @saveAction={{perform this.saveChanges}}
+        />
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
+</div>

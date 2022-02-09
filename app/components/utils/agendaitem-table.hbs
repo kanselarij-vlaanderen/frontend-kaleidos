@@ -2,14 +2,14 @@
 {{!-- template-lint-disable no-action --}}
 {{#light-table
   this.table
-  tableClassNames="auk-table auk-table auk-table--hover auk-table--striped"
+  tableClassNames="auk-table auk-table auk-table--striped auk-table--hoverable"
 as |tab|
 }}
   <tab.head
     @onColumnClick={{action "onColumnClick"}}
-    @iconSortable="auk-table__header-title__sort-icon ki ki-caret-up-down"
-    @iconAscending="auk-table__header-title__sort-icon ki ki-caret-down"
-    @iconDescending="auk-table__header-title__sort-icon ki ki-caret-up"
+    @iconSortable="ki ki-caret-up-down"
+    @iconAscending="ki ki-caret-down"
+    @iconDescending="ki ki-caret-up"
   />
   <tab.body
     @canExpand={{true}}
