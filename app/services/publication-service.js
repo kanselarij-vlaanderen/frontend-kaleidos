@@ -287,6 +287,5 @@ export default class PublicationService extends Service {
       }
     );
     await newChangeActivity.save();
-    return publicationFlow;
   }
 }
