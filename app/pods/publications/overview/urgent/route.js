@@ -1,7 +1,7 @@
-import AbstractPublicationsOverviewBaseRoute from '../_base/route';
+import PublicationsOverviewBaseRoute from '../_base/route';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-export default class PublicationsOverviewUrgentRoute extends AbstractPublicationsOverviewBaseRoute {
+export default class PublicationsOverviewUrgentRoute extends PublicationsOverviewBaseRoute {
   modelGetQueryFilter() {
     const filter = {
       'urgency-level': {

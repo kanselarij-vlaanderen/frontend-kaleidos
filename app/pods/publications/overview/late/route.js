@@ -1,6 +1,6 @@
-import AbstractPublicationsOverviewBaseRoute from '../_base/route';
+import PublicationsOverviewBaseRoute from '../_base/route';
 
-export default class PublicationsOverviewLateRoute extends AbstractPublicationsOverviewBaseRoute {
+export default class PublicationsOverviewLateRoute extends PublicationsOverviewBaseRoute {
   modelGetQueryFilter() {
     const pendingStatuses = this.getPendingStatuses();
     const filter = {

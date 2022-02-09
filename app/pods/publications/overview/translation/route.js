@@ -1,7 +1,7 @@
-import AbstractPublicationsOverviewBaseRoute from '../_base/route';
+import PublicationsOverviewBaseRoute from '../_base/route';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-export default class PublicationsOverviewTranslationRoute extends AbstractPublicationsOverviewBaseRoute {
+export default class PublicationsOverviewTranslationRoute extends PublicationsOverviewBaseRoute {
   modelGetQueryFilter() {
     const filter = {
       status: {

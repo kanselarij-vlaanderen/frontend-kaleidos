@@ -1,4 +1,4 @@
-import AbstractPublicationsOverviewBaseController from '../_base/controller';
+import PublicationsOverviewBaseController from '../_base/controller';
 
 const DEFAULT_COLUMNS = [
   'publicationNumber',
@@ -7,7 +7,7 @@ const DEFAULT_COLUMNS = [
   'status',
 ];
 
-export default class PublicationsOverviewAllController extends AbstractPublicationsOverviewBaseController {
+export default class PublicationsOverviewAllController extends PublicationsOverviewBaseController {
   defaultColumns = DEFAULT_COLUMNS;
   routeName = 'all';
 }

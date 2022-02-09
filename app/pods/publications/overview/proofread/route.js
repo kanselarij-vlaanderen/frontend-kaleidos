@@ -1,4 +1,4 @@
-import AbstractPublicationsOverviewBaseRoute from '../_base/route';
+import PublicationsOverviewBaseRoute from '../_base/route';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 // eslint-disable-next-line prettier/prettier
@@ -6,7 +6,7 @@ const PROOFREAD_STATUSES_URIS = [
   CONSTANTS.PUBLICATION_STATUSES.PROOF_IN,
 ];
 
-export default class PublicationsOverviewProofreadRoute extends AbstractPublicationsOverviewBaseRoute {
+export default class PublicationsOverviewProofreadRoute extends PublicationsOverviewBaseRoute {
   modelGetQueryFilter() {
     const proofreadStatuses = this.getProofreadStatuses();
     const filter = {

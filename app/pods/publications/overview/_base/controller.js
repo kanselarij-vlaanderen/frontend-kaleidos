@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import tableColumns from 'frontend-kaleidos/config/publications/overview-table-columns';
 
-export default class AbstractPublicationsOverviewBaseController extends Controller {
+export default class PublicationsOverviewBaseController extends Controller {
   // #region to implement:
   /* eslint-disable getter-return */
   /** @abstract @type {string[]} */

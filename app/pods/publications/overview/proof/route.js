@@ -1,4 +1,4 @@
-import AbstractPublicationsOverviewBaseRoute from '../_base/route';
+import PublicationsOverviewBaseRoute from '../_base/route';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 const PROOF_STATUSES_URIS = [
@@ -6,7 +6,7 @@ const PROOF_STATUSES_URIS = [
   CONSTANTS.PUBLICATION_STATUSES.PROOF_RECALLED,
 ];
 
-export default class PublicationsOverviewProofRoute extends AbstractPublicationsOverviewBaseRoute {
+export default class PublicationsOverviewProofRoute extends PublicationsOverviewBaseRoute {
   modelGetQueryFilter() {
     const proofStatuses = this.getProofStatuses();
     const filter = {

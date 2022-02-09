@@ -1,6 +1,6 @@
-import AbstractPublicationsOverviewBaseRoute from '../_base/route';
+import PublicationsOverviewBaseRoute from '../_base/route';
 
-export default class PublicationsOverviewAllRoute extends AbstractPublicationsOverviewBaseRoute {
+export default class PublicationsOverviewAllRoute extends PublicationsOverviewBaseRoute {
   modelGetQueryFilter() {
     return {};
   }

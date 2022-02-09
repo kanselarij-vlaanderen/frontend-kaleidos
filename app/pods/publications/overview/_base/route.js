@@ -8,7 +8,7 @@ import { action } from '@ember/object';
  */
 
 /** @abstract */
-export default class AbstractPublicationsOverviewBaseRoute extends Route {
+export default class PublicationsOverviewBaseRoute extends Route {
   //#region to implement:
   /** @abstract @returns {tQueryFilter} */
   modelGetQueryFilter() {
