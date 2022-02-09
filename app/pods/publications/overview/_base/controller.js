@@ -18,7 +18,6 @@ export default class PublicationsOverviewBaseController extends Controller {
   tableColumns = tableColumns;
 
   @tracked isLoadingModel = false;
-  @tracked isColumnsDisplayConfigPanelShown = false;
 
   constructor() {
     super(...arguments);
@@ -77,12 +76,6 @@ export default class PublicationsOverviewBaseController extends Controller {
       columnsDisplayConfig[column.keyName] = isColumnShown;
     }
     return columnsDisplayConfig;
-  }
-
-  @action
-  toggleColumnsDisplayConfigPanel() {
-    this.isColumnsDisplayConfigPanelShown =
-      !this.isColumnsDisplayConfigPanelShown;
   }
 
   @action
