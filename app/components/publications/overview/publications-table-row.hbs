@@ -265,7 +265,9 @@ request the whole row and not only the arrow at the end to be clickable }}
       {{#if this.loadPublicationStatus.isRunning}}
         ...
       {{else}}
-        <Auk::StatusPill @status={{this.publicationStatusPillKey}}>
+        <Auk::StatusPill
+          @step={{this.publicationStatusPillStep}}
+          @status={{this.publicationStatusPillKey}}>
           {{@publicationFlow.status.label}}
         </Auk::StatusPill>
       {{/if}}

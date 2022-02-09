@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
-import { getPublicationStatusPillKey } from 'frontend-kaleidos/utils/publication-auk';
+import { getPublicationStatusPillKey, getPublicationStatusPillStep } from 'frontend-kaleidos/utils/publication-auk';
 
 export default class PublicationsTableRowComponent extends Component {
   @service router;
@@ -56,6 +56,14 @@ export default class PublicationsTableRowComponent extends Component {
     this.publicationStatus = yield this.args.publicationFlow.status;
   }
 
+  get publicationStatusPillKey() {
+    return this.publicationStatus && getPublicationStatusPillKey(this.publicationStatus);
+  }
+
+  get publicationStatusPillStep() {
+    return this.publicationStatus && getPublicationStatusPillStep(this.publicationStatus);
+  }
+
   async getProofRequestDate(publicationFlow) {
     const publicationSubcase = await publicationFlow.publicationSubcase;
     const proofingActivities = await publicationSubcase.proofingActivities;
@@ -78,13 +86,6 @@ export default class PublicationsTableRowComponent extends Component {
     return (
       !this.args.publicationFlow.status.get('isFinal') &&
       this.args.publicationFlow.publicationSubcase.get('isOverdue')
-    );
-  }
-
-  get publicationStatusPillKey() {
-    return (
-      this.publicationStatus &&
-      getPublicationStatusPillKey(this.publicationStatus)
     );
   }
 
