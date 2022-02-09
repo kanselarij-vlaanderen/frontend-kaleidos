@@ -1,0 +1,49 @@
+<Auk::Panel>
+  <Auk::Panel::Body>
+    <Auk::Toolbar @auto={{true}} as |Toolbar|>
+      <Toolbar.Group @position="left" as |Group|>
+        <Group.Item class="vlc-u-box-model-maximize-width">
+          <p class="vlc-subline">
+            {{@piece.documentContainer.type.label}}
+          </p>
+          <div class="auk-o-flex auk-o-flex--vertical-center vlc-u-box-model-maximize-width">
+            <h6 class="auk-h4 auk-u-m-0 auk-u-mr-2">
+              {{@piece.name}}
+            </h6>
+            <div>
+              {{#if @piece.file}}
+                <Auk::Button
+                  @skin="borderless"
+                  @layout="icon-only"
+                  @icon="book"
+                  @href={{@piece.viewDocumentURL}}
+                  target="_blank"
+                >
+                  {{t "view-document-details"}}
+                </Auk::Button>
+                <Auk::Button
+                  @skin="borderless"
+                  @layout="icon-only"
+                  @icon="download"
+                  @href={{@piece.file.namedDownloadLink}}
+                >
+                  {{t "download"}}
+                </Auk::Button>
+              {{/if}}
+            </div>
+          </div>
+        </Group.Item>
+      </Toolbar.Group>
+      <Toolbar.Group @position="right" as |Group|>
+        <Group.Item class="auk-o-flex">
+          {{#if @piece.accessLevel}}
+            <AccessLevelPill
+              @accessLevel={{await @piece.accessLevel}}
+              @confidential={{@piece.confidential}}
+            />
+          {{/if}}
+        </Group.Item>
+      </Toolbar.Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Body>
+</Auk::Panel>
