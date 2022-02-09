@@ -8,20 +8,14 @@ const PROOFREAD_STATUSES_URIS = [
 
 export default class PublicationsOverviewProofreadRoute extends PublicationsOverviewBaseRoute {
   modelGetQueryFilter() {
-    const proofreadStatuses = this.getProofreadStatuses();
+    const proofreadStatuses = this.store.peekAll('publication-status').filter((it) => {
+      return PROOFREAD_STATUSES_URIS.includes(it.uri);
+    });
     const filter = {
       status: {
         ':id:': proofreadStatuses.mapBy('id').join(','),
       },
     };
     return filter;
-  }
-
-  getProofreadStatuses() {
-    const publicationStatuses = this.store.peekAll('publication-status');
-    const proofreadStatuses = publicationStatuses.filter((it) =>
-      PROOFREAD_STATUSES_URIS.includes(it.uri)
-    );
-    return proofreadStatuses;
   }
 }

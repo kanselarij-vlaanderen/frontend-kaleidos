@@ -2,7 +2,7 @@ import PublicationsOverviewBaseRoute from '../_base/route';
 
 export default class PublicationsOverviewLateRoute extends PublicationsOverviewBaseRoute {
   modelGetQueryFilter() {
-    const pendingStatuses = this.getPendingStatuses();
+    const pendingStatuses = this.store.peekAll('publication-status').rejectBy('isFinal');
     const filter = {
       status: {
         ':id:': pendingStatuses.mapBy('id').join(','),
@@ -18,12 +18,6 @@ export default class PublicationsOverviewLateRoute extends PublicationsOverviewB
       },
     };
     return filter;
-  }
-
-  getPendingStatuses() {
-    const publicationStatuses = this.store.peekAll('publication-status');
-    const pendingStatuses = publicationStatuses.rejectBy('isFinal');
-    return pendingStatuses;
   }
 }
 

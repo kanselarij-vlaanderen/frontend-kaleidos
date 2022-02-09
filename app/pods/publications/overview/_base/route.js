@@ -9,12 +9,10 @@ import { action } from '@ember/object';
 
 /** @abstract */
 export default class PublicationsOverviewBaseRoute extends Route {
-  //#region to implement:
   /** @abstract @returns {tQueryFilter} */
   modelGetQueryFilter() {
     console.warn(`${this.modelGetQueryFilter.name} not implemented`);
   }
-  //#endregion
 
   queryParams = {
     page: {
