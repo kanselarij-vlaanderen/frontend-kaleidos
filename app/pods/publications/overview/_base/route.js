@@ -58,5 +58,13 @@ export default class PublicationsOverviewBaseRoute extends Route {
     transition.promise.finally(() => {
       controller.isLoadingModel = false;
     });
+
+    // only bubble loading event when transitioning between tabs
+    // to enable loading template to be shown
+    if (transition.from && transition.to) {
+      return transition.from.name != transition.to.name;
+    } else {
+      return true;
+    }
   }
 }
