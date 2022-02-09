@@ -15,7 +15,7 @@ export default Controller.extend({
       valuePath: 'number',
     }, {
       label: this.intl.t('title-and-content'),
-      classNames: ['auk-table__col--7 auk-table__header-title'],
+      classNames: ['auk-table__col--7'],
       cellClassNames: ['auk-table__col--7'],
       sortable: false,
       width: '58.33%',
@@ -24,7 +24,7 @@ export default Controller.extend({
     },
     {
       label: this.intl.t('ministers'),
-      classNames: ['auk-table__col--2 auk-table__header-title'],
+      classNames: ['auk-table__col--2'],
       cellClassNames: ['auk-table__col--2'],
       sortable: false,
       width: '16.66%',
@@ -34,7 +34,7 @@ export default Controller.extend({
     },
     {
       label: this.intl.t('for-press'),
-      classNames: ['auk-table__col--1 auk-table__header-title'],
+      classNames: ['auk-table__col--1'],
       cellClassNames: ['auk-table__col--1'],
       breakpoints: ['mobile', 'tablet', 'desktop'],
       sortable: false,
@@ -44,7 +44,7 @@ export default Controller.extend({
     },
     {
       label: this.intl.t('latest-modified'),
-      classNames: ['auk-table__col--2 auk-table__header-title'],
+      classNames: ['auk-table__col--2'],
       cellClassNames: ['auk-table__col--2'],
       breakpoints: ['mobile', 'tablet', 'desktop'],
       valuePath: 'modified',
