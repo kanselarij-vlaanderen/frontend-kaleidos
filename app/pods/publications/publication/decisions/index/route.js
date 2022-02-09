@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
-export default class PublicationsPublicationDecisionsRoute extends Route {
+export default class PublicationsPublicationDecisionsIndexRoute extends Route {
   @service store;
   @service publicationService;
 
@@ -19,7 +19,7 @@ export default class PublicationsPublicationDecisionsRoute extends Route {
   }
 
   async afterModel() {
-    this.publicationFlow = this.modelFor('publications.publication');
+    this.publicationFlow = this.modelFor('publications.publication.decisions');
     this.isViaCouncilOfMinisters =
       await this.publicationService.getIsViaCouncilOfMinisters(
         this.publicationFlow

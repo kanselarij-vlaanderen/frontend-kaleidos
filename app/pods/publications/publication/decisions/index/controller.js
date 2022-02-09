@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 
-export default class PublicationsPublicationDecisionsController extends Controller {
+export default class PublicationsPublicationDecisionsIndexController extends Controller {
   @service store;
 
   @tracked publicationFlow;
