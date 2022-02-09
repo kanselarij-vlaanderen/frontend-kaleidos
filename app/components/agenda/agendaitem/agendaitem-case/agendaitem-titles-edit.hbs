@@ -1,5 +1,3 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
 <div class="auk-box auk-u-mb-8">
   <div class="auk-u-mb-4">
     {{#if @subcase}}
@@ -51,7 +49,9 @@
     <div class="auk-u-mb-4">
       <div class="auk-form-group">
         {{#if this.newsletterInfo}}
-          <Auk::Label for="item-show-in-newsletter">{{t "show-in-newsletter"}}</Auk::Label>
+          <Auk::Label for="item-show-in-newsletter">
+            {{t "show-in-newsletter"}}
+          </Auk::Label>
           <Auk::Toggle
             id="item-show-in-newsletter"
             @checked={{this.newsletterInfo.inNewsletter}}
@@ -68,8 +68,9 @@
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
         <Auk::Button
+          data-test-agendaitem-titles-edit-cancel
           @skin="tertiary"
-          {{action this.cancelEditing}}
+          {{on "click" this.cancelEditing}}
         >
           {{t "cancel"}}
         </Auk::Button>
@@ -78,8 +79,8 @@
         <WebComponents::VlSaveButton
           data-test-agendaitem-titles-edit-save={{true}}
           @text={{t "save"}}
-          @isLoading={{this.isLoading}}
-          @saveAction={{action this.saveChanges}}
+          @isLoading={{this.saveChanges.isRunning}}
+          @saveAction={{perform this.saveChanges}}
         />
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>

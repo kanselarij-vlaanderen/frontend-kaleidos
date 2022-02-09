@@ -33,11 +33,11 @@
     >
       <table.content as |c|>
         <c.header>
-          <th class="auk-table__col--9 auk-table__header-title">
+          <th class="auk-table__col--9">
             {{t "case-name"}}
           </th>
           <ThSortable
-            class="auk-table__col--1 auk-table__header-title"
+            class="auk-table__col--1"
             @currentSorting={{this.sort}}
             @field="created"
             @label={{t "created-on"}}
@@ -46,7 +46,7 @@
         </c.header>
         {{! Users explicitly want the whole row to be clickable instead of only the arrow at the end }}
         {{! template-lint-disable no-invalid-interactive }}
-        <c.body class="auk-table--interaction-cursor" as |row|>
+        <c.body class="auk-table--clickable-rows" as |row|>
           <td {{on "click" (fn this.navigateToCase row)}}>
             <p>
               {{#if row.shortTitle}}
