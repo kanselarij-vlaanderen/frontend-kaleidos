@@ -31,7 +31,7 @@ export default class PublicationsOverviewBaseRoute extends Route {
     },
   };
 
-  async model(params) {
+  model(params) {
     const filter = this.modelGetQueryFilter();
     return this.store.query('publication-flow', {
       filter: filter,
