@@ -15,7 +15,6 @@ export default class PublicationsDocumentsReferenceDocumentUploadModalComponent 
 
   @tracked file;
   @tracked name;
-  @tracked pageCount;
 
   constructor() {
     super(...arguments);
@@ -52,7 +51,6 @@ export default class PublicationsDocumentsReferenceDocumentUploadModalComponent 
     yield this.args.onSave({
       file: this.file,
       name: this.name,
-      pageCount: this.pageCount,
     });
   }
 

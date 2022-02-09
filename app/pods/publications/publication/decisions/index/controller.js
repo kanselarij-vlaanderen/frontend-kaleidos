@@ -34,7 +34,6 @@ export default class PublicationsPublicationDecisionsIndexController extends Con
       modified: now,
       name: document.name,
       confidential: false,
-      pages: document.pageCount,
       file: document.file,
       documentContainer: documentContainer,
       publicationFlow: this.publicationFlow,
