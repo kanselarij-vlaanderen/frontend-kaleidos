@@ -22,22 +22,22 @@
           <table.content as |c|>
             <c.header>
               <ThSortable
-                @class="auk-table__col--5 auk-table__header-title"
+                @class="auk-table__col--5"
                 @currentSorting={{this.sort}}
                 @field="planned-start,number-representation"
                 @label={{t "newsletter"}}
               />
-              <th class="auk-table__col--3 auk-table__header-title auk-table__header-title--unsortable">
+              <th class="auk-table__col--3">
                 {{!TODO: should sort on field agendas but does not return all 10 results }}
                 {{concat (t "newsletter") " " (t "sent-at")}}
               </th>
-              <th class="auk-table__col--3 auk-table__header-title auk-table__header-title--unsortable">
+              <th class="auk-table__col--3">
                 {{!TODO: should sort on latest modified agenda }}
                 {{t "latest-modified"}}
               </th>
               <th class="auk-table__col--1"></th>
             </c.header>
-            <c.body @class="auk-table--interaction-cursor" as |meeting|>
+            <c.body @class="auk-table--clickable-rows" as |meeting|>
               <td data-test-route-newsletters-data-table-row-title>
                 {{#if (is-pending meeting)}}
                   <div
