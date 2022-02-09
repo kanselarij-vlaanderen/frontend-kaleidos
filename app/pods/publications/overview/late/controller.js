@@ -3,12 +3,14 @@ import { tracked } from '@glimmer/tracking';
 
 const DEFAULT_COLUMNS = [
   'publicationNumber',
+  'numacNumber',
   'shortTitle',
+  'publicationTargetDate',
   'publicationDueDate',
-  'status',
 ];
 
-export default class PublicationsOverviewAllController extends PublicationsOverviewBaseController {
+export default class PublicationsOverviewLateController extends PublicationsOverviewBaseController {
   @tracked defaultColumns = DEFAULT_COLUMNS;
-  @tracked  routeName = 'all';
+  @tracked routeName = 'late';
+  @tracked sort = 'publication-subcase.due-date';
 }
