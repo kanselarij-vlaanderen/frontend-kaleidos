@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { A } from '@ember/array';
 
 export default class PublicationsPublicationTranslationsController extends Controller {
   @service store;
@@ -99,8 +100,8 @@ export default class PublicationsPublicationTranslationsController extends Contr
     piece.language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
 
     yield piece.save();
-    const usedPieces = [piece]
-
+    const usedPieces = [piece];
+    console.log(usedPieces)
     const requestActivity = yield this.store.createRecord('request-activity', {
       startDate: now,
       translationSubcase: this.translationSubcase,
@@ -146,6 +147,33 @@ export default class PublicationsPublicationTranslationsController extends Contr
 
     this.send('refresh');
     this.showTranslationRequestModal = false;
+  }
+
+  @task
+  *deleteRequest(requestActivity){
+    const saves = [];
+
+    const translationActivity = yield requestActivity.translationActivity;
+    saves.push(translationActivity.destroyRecord());
+
+    const mail = yield requestActivity.email;
+    saves.push(mail.destroyRecord());
+
+    saves.push(requestActivity.destroyRecord());
+
+    const pieces = yield requestActivity.usedPieces;
+
+    for (const piece of pieces.toArray()) {
+      const filePromise = piece.file;
+      const documentContainerPromise = piece.documentContainer;
+      const [file, documentContainer] = yield Promise.all([filePromise, documentContainerPromise]);
+
+      saves.push(piece.destroyRecord());
+      saves.push(file.destroyRecord());
+      saves.push(documentContainer.destroyRecord());
+    }
+    yield Promise.all(saves);
+    this.send('refresh');
   }
 
   @action

@@ -45,6 +45,7 @@
             <Publications::Publication::Translations::TranslationRequestedPanel
               @translationSubcase={{this.translationSubcase}}
               @requestActivity={{translationRow.requestActivity}}
+              @onDeleteRequest={{fn (perform this.deleteRequest) translationRow.requestActivity}}
             />
           {{else if translationRow.piece}}
             <Publications::Publication::Translations::TranslationReceivedPanel

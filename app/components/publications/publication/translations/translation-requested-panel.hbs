@@ -17,11 +17,17 @@
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <Auk::Button
+            <DropdownMenu
               @skin="borderless"
               @icon="three-dots"
-              @layout="icon-only"
-            />
+              as |Menu|>
+              <Menu.Item
+                @skin="danger"
+                {{on "click" this.promptDeleteRequest}}
+              >
+                {{t "delete-translation-request"}}
+              </Menu.Item>
+            </DropdownMenu>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
@@ -74,3 +80,12 @@
     </accordionPanel.Body>
   </Auk::AccordionPanel>
 </div>
+
+{{#if this.isVerifyingDelete}}
+  <WebComponents::VlModalVerify
+    @title={{t "delete-translation-request"}}
+    @message={{t "delete-translation-request-message"}}
+    @cancel={{this.cancelDeleteRequest}}
+    @verify={{this.deleteRequest}}
+  />
+{{/if}}
