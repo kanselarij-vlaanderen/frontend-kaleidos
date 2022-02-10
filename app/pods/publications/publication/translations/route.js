@@ -3,9 +3,6 @@ import { action } from '@ember/object';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { tracked } from '@glimmer/tracking';
 
-// use:
-// - isPieceDeletable property
-// - file property avoids error when piece (and file) are deleted
 export class TranslationRow {
   @tracked piece;
   @tracked date;
@@ -25,16 +22,8 @@ export class TranslationRow {
     }
     return row;
   }
-
-  get isPieceDeletable() {
-    // can be translation or publication related
-    const isUsedInRequest = this.requestActivitiesUsedBy.length > 0;
-    // receivedDate is set if and only if it is a received pieced
-    const isReceived = !!this.piece.receivedDate;
-    const isUsed = isUsedInRequest || isReceived;
-    return !isUsed;
-  }
 }
+
 export default class PublicationsPublicationTranslationsRoute extends Route {
   async model() {
     this.translationSubcase = await this.modelFor('publications.publication').translationSubcase;
