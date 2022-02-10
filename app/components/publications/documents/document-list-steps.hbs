@@ -1,0 +1,35 @@
+{{#each @pieces as |piece|}}
+  <div class="vlc-procedure-step vlc-procedure-step--nopadding">
+    <div class="vlc-procedure-step__badge-wrapper">
+      <Auk::Badge
+        @skin="primary"
+        @size="medium"
+        @icon="document"
+        class="vlc-procedure-step__badge"
+      />
+    </div>
+    <div>
+      <Publications::Documents::DocumentCardStep
+        @piece={{piece}}
+        @isEnabledDelete={{@isEnabledDeletePiece}}
+        @onDelete={{fn @onDeletePiece piece}}
+      />
+    </div>
+  </div>
+{{else}}
+  <div class="vlc-procedure-step vlc-procedure-step--nopadding">
+    <div class="vlc-procedure-step__badge-wrapper">
+      <Auk::Badge
+        @skin="default"
+        @size="medium"
+        @icon="circle-info"
+        class="vlc-procedure-step__badge"
+      />
+    </div>
+    <div>
+      <p class="auk-u-m-4">
+        {{t "no-documents-yet"}}
+      </p>
+    </div>
+  </div>
+{{/each}}
