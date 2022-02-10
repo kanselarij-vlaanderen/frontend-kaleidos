@@ -12,7 +12,6 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
 
   @tracked file;
   @tracked name;
-  @tracked isSourceForProofPrint = false;
   @tracked receivedAtDate = new Date();
   @tracked isTranslationIn = false;
 
@@ -61,7 +60,6 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
       file: this.file,
       name: this.name,
       receivedAtDate: this.receivedAtDate,
-      isSourceForProofPrint: this.isSourceForProofPrint,
       isTranslationIn: this.isTranslationIn,
     });
   }

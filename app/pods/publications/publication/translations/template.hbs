@@ -66,8 +66,8 @@
 
 {{#if this.showTranslationRequestModal}}
   <Publications::Publication::Translations::TranslationRequestModal
-    @translationSubcase={{this.translationSubcase}}
-    @publicationFlow={{this.publicationFlow}}
+    @dueDate={{this.translationSubcase.dueDate}}
+    @publicationNumber={{this.publicationFlow.identification.idName}}
     @onSave={{perform this.saveTranslationRequest}}
     @onCancel={{this.closeTranslationRequestModal}}
   />
@@ -75,7 +75,7 @@
 
 {{#if this.showTranslationUploadModal}}
   <Publications::Publication::Translations::TranslationUploadModal
-    @publicationFlow={{this.publicationFlow}}
+    @publicationNumber={{this.publicationFlow.identification.idName}}
     @onSave={{perform this.saveTranslationUpload}}
     @onCancel={{this.closeTranslationUploadModal}}
   />

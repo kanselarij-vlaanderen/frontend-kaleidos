@@ -22,7 +22,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   @tracked name;
   @tracked pagesAmount;
   @tracked wordsAmount;
-  @tracked translationDueDate = this.args.translationSubcase.dueDate ? this.args.translationSubcase.dueDate : new Date();
+  @tracked translationDueDate = this.args.dueDate ? this.args.dueDate : new Date();
   @tracked subject;
   @tracked message;
   validators;
