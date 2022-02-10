@@ -40,7 +40,6 @@ request the whole row and not only the arrow at the end to be clickable }}
   {{#if @tableColumnDisplayOptions.shortTitle}}
     <td data-test-publication-table-row-short-title class="auk-table__col--6">
       <Auk::AbbreviatedText
-        class="auk-o-flex"
         @text={{@publicationFlow.shortTitle}}
         @maxLength={{150}}
         as |text|
