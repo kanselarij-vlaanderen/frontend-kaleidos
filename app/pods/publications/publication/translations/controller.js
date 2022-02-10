@@ -100,7 +100,7 @@ export default class PublicationsPublicationTranslationsController extends Contr
 
     yield piece.save();
     const usedPieces = [piece];
-    console.log(usedPieces)
+
     const requestActivity = yield this.store.createRecord('request-activity', {
       startDate: now,
       translationSubcase: this.translationSubcase,
