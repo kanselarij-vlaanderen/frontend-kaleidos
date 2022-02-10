@@ -39,6 +39,7 @@ const selectors = {
   agendaDetailSidebar: {
     // TODO-selector subItem only works for nota's, not announcement
     subitem: '[data-test-agenda-detail-sidebar-sub-item]',
+    announcementSubitem: '[data-test-agenda-detail-sidebar-announcement-sub-item]',
   },
 
   // agenda-detail/sidebar-item
@@ -47,7 +48,7 @@ const selectors = {
     confidential: '[data-test-agenda-detail-sidebar-item-confidential]',
     status: '[data-test-agenda-detail-sidebar-item-status]',
     // Test tag is not possible, CSS is added conditionally
-    retracted: '.vlc-u-opacity-lighter',
+    retracted: '.auk-u-opacity--1\\/3',
   },
 
   // agendaitem-group-header
@@ -166,6 +167,7 @@ const selectors = {
     showInNewsletter: '[data-test-agendaitem-titles-edit-showInNewsletter]',
     confidential: '[data-test-agendaitem-titles-edit-confidential]',
     actions: {
+      cancel: '[data-test-agendaitem-titles-edit-cancel]',
       save: '[data-test-agendaitem-titles-edit-save]',
     },
   },

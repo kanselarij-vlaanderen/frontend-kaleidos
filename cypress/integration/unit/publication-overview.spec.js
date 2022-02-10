@@ -9,7 +9,7 @@ context('Publications overview tests', () => {
   // TODO-COMMAND we probably want to change the status via a command in further testing
   function createPublicationChangeStatus(fields) {
     cy.createPublication(fields);
-    cy.route('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
     cy.get(publication.sidebar.open).click(); // TODO-COMMAND test if sidebar is already open
     cy.get(publication.statusSelector).find(dependency.emberPowerSelect.trigger)
       .click();
@@ -31,7 +31,6 @@ context('Publications overview tests', () => {
   };
 
   beforeEach(() => {
-    cy.server();
     cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
     cy.visit('/publicaties');
   });
@@ -40,12 +39,12 @@ context('Publications overview tests', () => {
     cy.logout();
   });
 
-  it('should setup a publication for later search tests', () => {
+  it.skip('should setup a publication for later search tests', () => {
     // needs 15 seconds for reindex in testsuite
     cy.createPublication(searchFields);
     cy.get(publication.sidebar.open).click();
-    cy.route('PATCH', '/publication-flows/**').as('patchPublicationFlow');
-    cy.route('POST', '/identifications').as('postNumacNumber');
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    cy.intercept('POST', '/identifications').as('postNumacNumber');
     cy.get(publication.sidebar.remark).type(searchFields.remark);
     cy.wait('@patchPublicationFlow');
     cy.get(publication.sidebar.numacNumber).find(dependency.emberTagInput.input)
@@ -55,7 +54,7 @@ context('Publications overview tests', () => {
   });
 
   // TODO-SETUP once we have default data, this test could be moved to click-table.spec
-  it('should open a publication after clicking a row', () => {
+  it.skip('should open a publication after clicking a row', () => {
     cy.get(publication.publicationsIndex.loading).should('not.exist');
     cy.get(publication.publicationsIndex.dataTable).find(publication.publicationTableRow.rows)
       .first()
@@ -64,7 +63,7 @@ context('Publications overview tests', () => {
       .should('contain', '/dossier');
   });
 
-  it('should test all the result amount options shown options in overview', () => {
+  it.skip('should test all the result amount options shown options in overview', () => {
     // const fields = {
     //   number: 1404,
     //   shortTitle: 'test',
@@ -90,28 +89,28 @@ context('Publications overview tests', () => {
     });
   });
 
-  it('should check and uncheck all settings', () => {
+  it.skip('should check and uncheck all settings', () => {
     const columnKeyNames = [
-      'shortTitle',
-      'comment',
-      'decisionDate',
-      'speedProcedure',
+      'isUrgent',
       'publicationNumber',
-      'regulationType',
       'numacNumber',
+      'shortTitle',
+      'remark',
+      // 'pageCount', // hidden by default
+      'decisionDate',
       'openingDate',
-      'publicationTargetDate',
+      // 'translationRequestDate', // hidden by default
       'translationDueDate',
-      'publicationDueDate',
-      'publicationDate',
-      'publicationReceivedDate',
-      'translationReceivedDate',
-      'translations',
-      'proofs',
-      'lastEdited',
+      // 'proofRequestDate', // hidden by default
+      'proofReceivedDate',
       'proofPrintCorrector',
-      'status',
-      'source'
+      'publicationTargetDate',
+      'publicationDate',
+      'publicationDueDate',
+      'regulationType',
+      'source',
+      'lastEdited',
+      'status'
     ];
 
     cy.get(publication.publicationsIndex.configIcon).click();
@@ -126,7 +125,6 @@ context('Publications overview tests', () => {
     });
   });
 
-  // TODO: update when publications design v3 is implemented
   it.skip('should test the filters in overview', () => {
     const fields1 = {
       number: 1405,
@@ -147,7 +145,7 @@ context('Publications overview tests', () => {
     createPublicationChangeStatus(fields1);
     createPublicationChangeStatus(fields2);
     createPublicationChangeStatus(fields3);
-    cy.route('GET', '/decisions?filter**').as('getDecisionsFilter');
+    cy.intercept('GET', '/decisions?filter**').as('getDecisionsFilter');
     // TODO-publication we want to enable this when there is MR data (preferably in default set)
     // cy.get(publication.publicationsIndex.filterContent).click();
     // cy.get(publication.publicationsFilter.minister).parent(auk.checkbox)
@@ -202,7 +200,7 @@ context('Publications overview tests', () => {
     cy.get(publication.publicationTableRow.row.status).should('not.contain', fields1.newStatus);
   });
 
-  it('should test the short title tooltip', () => {
+  it.skip('should test the short title tooltip', () => {
     const fields = {
       number: 1409,
       shortTitle: 'test met extra lange korte titel, lets gooooooooooooooooooooooooooo oooooooooooooooooooooooo ooooooooooooooooooooooooooooooo oooooooooooooooooooooooo oooooooooooooooooooo end',
@@ -223,7 +221,7 @@ context('Publications overview tests', () => {
       .should('contain', 'end');
   });
 
-  it('should test the pagination by clicking previous and next', () => {
+  it.skip('should test the pagination by clicking previous and next', () => {
     cy.visit('/publicaties?aantal=1');
     cy.wait(1000);
     // This test should work regardless of the amount of publications, but may take longer and longer
@@ -252,10 +250,10 @@ context('Publications overview tests', () => {
       });
   });
 
-  it('should test the search function', () => {
+  it.skip('should test the search function', () => {
     // this is data from previous test
     for (const [key, value] of Object.entries(searchFields)) {
-      cy.route('GET', '/publication-flows/search**').as('searchPublicationFlows');
+      cy.intercept('GET', '/publication-flows/search**').as('searchPublicationFlows');
       cy.log(`searching for ${key}`);
       cy.get(publication.publicationCaseSearch.input).type(value);
       cy.wait('@searchPublicationFlows');

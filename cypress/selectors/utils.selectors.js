@@ -15,9 +15,10 @@ const selectors = {
     },
   },
 
-  domainsFieldsSelectorForm: {
-    container: '[data-test-domains-fields-selector-form]',
-    field: '[data-test-domains-fields-selector-form-field]~span',
+  governmentAreaSelectorForm: {
+    container: '[data-test-government-area-selector-form]',
+    domain: '[data-test-government-area-selector-form-domain]~span',
+    field: '[data-test-government-area-selector-form-field]~span',
   },
 
   // simple-file-uploader
@@ -77,6 +78,24 @@ const selectors = {
     cancel: '[data-test-mandatees-selector-cancel]',
     add: '[data-test-mandatees-selector-add]',
   },
+
+  // government-fields-panel
+  governmentAreasPanel: {
+    edit: '[data-test-government-areas-panel-edit]',
+    rows: '[data-test-government-areas-panel-row]',
+    row: {
+      label: '[data-test-government-areas-panel-row-label]',
+      fields: '[data-test-government-areas-panel-row-fields]',
+    },
+  },
+
+  // edit-government-fields-modal
+  editGovernmentFieldsModal: {
+    save: '[data-test-edit-government-fields-modal-save]',
+    // TODO-SELECTORS unused selectors
+    selectorForm: '[data-test-edit-government-fields-modal-selector-form]',
+  },
+
 
   /** Section VL-components **/
 

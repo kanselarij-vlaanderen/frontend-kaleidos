@@ -1,30 +1,31 @@
 <Auk::Tabs @reversed={{true}}>
   <Auk::Tab
     @isHierarchicalBack={{true}}
-    @route="publications.index"
-    data-test-publication-nav-go-back />
+    @route="publications.overview"
+    data-test-publication-nav-go-back
+  />
   <Auk::Tab
     @route="publications.publication.case"
     data-test-publication-nav-case
   >
-    {{t "agendaitem-case"}}
+    {{t "publication-details-tab-publication-case"}}
   </Auk::Tab>
-  {{#if @publicationFlow.case.subcases}}
-    <Auk::Tab
-      @route="publications.publication.documents"
-      @counter={{this.documentsCount}}
-      data-test-publication-nav-documents
-    >
-      {{t "documents"}}
-    </Auk::Tab>
-  {{/if}}
+  <Auk::Tab
+    @route="publications.publication.decisions"
+    @counter={{this.documentsCount}}
+    data-test-publication-nav-decisions
+  >
+    {{t "publication-details-tab-decisions"}}
+  </Auk::Tab>
   <Auk::Tab
     @route="publications.publication.translations"
     data-test-publication-nav-translations
   >
     <div class="auk-o-flex auk-o-flex--center">
-      <span>{{t "translations"}}</span>
-      <Publications::Publication::Translations::TranslationProgressBadge @translationSubcase={{@publicationFlow.translationSubcase}}/>
+      <span>{{t "translation"}}</span>
+      <Publications::Publication::Translations::TranslationProgressBadge
+        @translationSubcase={{@publicationFlow.translationSubcase}}
+      />
     </div>
   </Auk::Tab>
   <Auk::Tab
@@ -32,8 +33,17 @@
     data-test-publication-nav-publishpreview
   >
     <div class="auk-o-flex auk-o-flex--center">
-      <span>{{t "publishpreview-requests"}}</span>
-      <Publications::Publication::Proofs::ProofsProgressBadge @publicationSubcase={{@publicationFlow.publicationSubcase}}/>
+      <span>{{t "proof"}}</span>
+      <Publications::Publication::Proofs::ProofsProgressBadge
+        @publicationSubcase={{@publicationFlow.publicationSubcase}}
+      />
+    </div>
+  </Auk::Tab>
+  <Auk::Tab
+    @route="publications.publication.publication-activities"
+  >
+    <div class="auk-o-flex auk-o-flex--center">
+      <span>{{t "publication-flow"}}</span>
     </div>
   </Auk::Tab>
 </Auk::Tabs>

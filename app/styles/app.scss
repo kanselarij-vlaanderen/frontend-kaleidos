@@ -30,29 +30,13 @@
 @import 'custom-components/vlc-document-list';
 @import 'custom-components/vlc-environment-pill';
 @import 'custom-components/vlc-procedure-step';
-@import 'custom-components/vlc-rdfa-editor'; // also (framework) fixes here!
+@import 'custom-components/vlc-rdfa-editor';
 @import 'custom-components/vlc-status-timeline';
-
-
-// CUSTOM UTILITIES
-@import 'custom-utilities/_ember-tooltip';
-@import 'custom-utilities/_autocomplete';
-@import 'custom-utilities/_box-model';
-@import 'custom-utilities/_text';
-@import 'custom-utilities/_transparency';
 
 
 // CUSTOM STYLING
 @import 'custom-application/toast';
-@import 'custom-application/compare';
-@import 'custom-application/editor';
-@import 'custom-application/ember-attacher';
 @import 'custom-application/file-uploader';
-@import 'custom-application/input-pills';
-@import 'custom-application/loader';
-@import 'custom-application/loadable-content';
-@import 'custom-application/document-preview';
-@import 'custom-application/power-select';
 
 
 // AUK COMPONENTS
@@ -65,8 +49,7 @@
 
 // LAYOUT STYLING
 @import 'custom-application/m-header';
-
+@import 'layout/compare-agenda-list';
 
 // PRINT STYLING
-@import 'print/print';
-@import 'print';
+@import 'print/general';

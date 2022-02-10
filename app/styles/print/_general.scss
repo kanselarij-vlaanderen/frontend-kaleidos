@@ -1,0 +1,93 @@
+/* ==========================================================================
+   General print styling
+   ========================================================================== */
+
+@media print {
+  html {
+    font-size: 50%;
+  }
+
+  /* Govflanders (VL) overrides
+   ========================================================================== */
+
+  .vl-alert {
+    display: none;
+  }
+
+  /* VLC overrides
+   ========================================================================== */
+
+  .vlc-hide-scrollbar-on-print {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  /* Auk overrides
+   ========================================================================== */
+
+  .auk-button-link {
+    display: none;
+  }
+
+  .auk-sidebar {
+    display: none;
+  }
+
+  .auk-navbar {
+    display: none;
+  }
+
+  .auk-navbar--gray-100,
+  .auk-navbar--gray-200,
+  .auk-u-bg-alt {
+    background: none;
+  }
+
+  .auk-toolbar-complex__right {
+    display: none;
+  }
+
+  .auk-navbar--bordered-bottom {
+    border-bottom: none;
+  }
+
+  .auk-panel-layout__agenda-history {
+    display: none;
+  }
+
+  .auk-panel-layout {
+    display: block;
+  }
+
+  .auk-alert-stack {
+    display: none;
+  }
+
+  // Fix an issue which causes Firefox to only print a single page
+  .auk-scroll-wrapper {
+    display: block;
+  }
+
+  .auk-u-maximize-height {
+    height: auto !important;
+  }
+
+  /* Layout styling overrides
+   ========================================================================== */
+
+  .l-main-header {
+    display: none;
+  }
+}
+
+/* Print page defaults
+   ========================================================================== */
+
+@page {
+  size: auto;
+  margin: 20mm 15mm 22mm 15mm;
+}

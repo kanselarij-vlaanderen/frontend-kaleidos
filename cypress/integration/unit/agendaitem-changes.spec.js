@@ -8,7 +8,6 @@ import route from '../../selectors/route.selectors';
 
 context('Agendaitem changes tests', () => {
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 
@@ -144,7 +143,7 @@ context('Agendaitem changes tests', () => {
   });
 
   it('should verify that you can compare agendas', () => {
-    cy.route('GET', '/agendas**5EBA48CF95A2760008000006**&include=status**').as('loadAgendasWithStatus');
+    cy.intercept('GET', '/agendas**5EBA48CF95A2760008000006**&include=status**').as('loadAgendasWithStatus');
     cy.visit('/vergadering/5EBA48CF95A2760008000006/agenda/f66c6d79-6ad2-49e2-af55-702df3a936d8/vergelijken');
     cy.wait('@loadAgendasWithStatus');
     cy.wait(2000); // Some data loading issues, there is no loader to wait on and most ID's in xhr calls are always new
@@ -266,7 +265,7 @@ context('Agendaitem changes tests', () => {
     cy.get(agenda.agendaOverviewItem.subitem).contains(visibleTitle)
       .should('be.visible');
     cy.get(agenda.agendaOverview.notesSectionTitle).should('not.be.visible');
-    cy.get(agenda.agendaOverview.notesSectionTitle).contains(approvalTitle)
+    cy.get(agenda.agendaOverviewItem.subitem).contains(approvalTitle)
       .should('not.be.visible');
     // Switching between detail and overview with nav tabs should keep the anchor
     // TODO-bug clicking on detail with anchor always goes to first item instead of anchor

@@ -420,6 +420,10 @@ p {
 }
 
 @media print {
+  .auk-u-hidden\@print {
+    display: none !important;
+  }
+
   .auk-u-m-0\@print {
     margin: 0 !important;
   }
@@ -429,12 +433,14 @@ p {
   position: relative !important;
 }
 
+
 /* Batch editing document details
    ========================================================================== */
 
 .to-be-deleted-row {
   opacity: 0.5;
 }
+
 
 /* Layout styling for logo-header utility
    ========================================================================== */
@@ -447,6 +453,7 @@ p {
     max-height: 100%;
   }
 }
+
 
 /* Framework & external component fixes
    ========================================================================== */
@@ -483,4 +490,10 @@ table tr.lt-expanded-row {
   &.is-dropping {
     z-index: $z-index-drag;
   }
+}
+
+// Ember tooltip
+
+.auk-tooltip {
+  z-index: $z-index-tooltip !important;
 }
