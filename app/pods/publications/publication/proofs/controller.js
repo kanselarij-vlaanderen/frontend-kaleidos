@@ -17,7 +17,7 @@ export default class  PublicationsPublicationProofsController extends Controller
   @tracked showProofRequestModal = false;
 
   get isRequestingDisabled() {
-    return this.proofSubcase.isFinished;
+    return this.publicationSubcase.isFinished;
   }
 
   get isProofUploadDisabled() {
@@ -60,11 +60,11 @@ export default class  PublicationsPublicationProofsController extends Controller
     const proofActivitySave = proofActivity.save();
 
     if (
-      proofUpload.receivedAtDate < this.proofSubcase.receivedDate ||
-      !this.proofSubcase.receivedDate
+      proofUpload.receivedAtDate < this.publicationSubcase.receivedDate ||
+      !this.publicationSubcase.receivedDate
     ) {
-      this.proofSubcase.receivedDate = proofUpload.receivedAtDate;
-      yield this.proofSubcase.save();
+      this.publicationSubcase.receivedDate = proofUpload.receivedAtDate;
+      yield this.publicationSubcase.save();
     }
 
     if (proofUpload.isProofIn) {
@@ -89,7 +89,7 @@ export default class  PublicationsPublicationProofsController extends Controller
     const now = new Date();
 
     const piece = proofRequest.piece;
-    piece.proofSubcaseSourceFor = this.proofSubcase;
+    piece.publicationSubcaseSourceFor = this.publicationSubcase;
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.save();
     piece.pages = proofRequest.pagesAmount;
@@ -102,7 +102,7 @@ export default class  PublicationsPublicationProofsController extends Controller
     console.log(usedPieces)
     const requestActivity = yield this.store.createRecord('request-activity', {
       startDate: now,
-      proofSubcase: this.proofSubcase,
+      publicationSubcase: this.publicationSubcase,
       usedPieces: usedPieces,
     });
     yield requestActivity.save();
@@ -112,7 +112,7 @@ export default class  PublicationsPublicationProofsController extends Controller
       startDate: now,
       dueDate: proofRequest.proofDueDate,
       title: proofRequest.subject,
-      subcase: this.proofSubcase,
+      subcase: this.publicationSubcase,
       requestActivity: requestActivity,
       usedPieces: usedPieces,
       language: french,

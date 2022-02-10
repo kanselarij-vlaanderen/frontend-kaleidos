@@ -247,6 +247,7 @@
   "no-documents-yet": "Er zijn nog geen documenten toegevoegd.",
   "no-translation-activities-yet": "Er zijn nog geen vertalingen aangevraagd.",
   "no-translations-yet": "Er zijn nog geen vertalingen.",
+  "no-proofs-yet": "Er zijn nog geen drukproeven.",
   "no-linked-documents-yet": "Er zijn geen reeds bezorgde documenten gekoppeld.",
   "no-domains-yet": "Er zijn nog geen beleidsvelden toegevoegd.",
   "no-ise-codes-yet": "Er zijn nog geen geselecteerde inhoudelijke structuurelementen.",
@@ -764,6 +765,11 @@
   "request-translations": "Vertaling aanvragen",
   "requested-translation": "Aanvraag verzonden",
   "received-translation": "Vertaling ontvangen",
+  "received-proof": "Drukproef ontvangen",
+  "requested-proof": "Aanvraag verzonden",
+  "request-proof": "Drukproef aanvragen",
+  "upload-proof": "Drukproef uploaden",
+  "proofs": "Drukproeven",
   "upload-translation": "Vertalingen toevoegen",
   "request-translations-for-publication": "Vertaling(en) aanvragen voor publicatie {publicationNumber}",
   "request-translation-confirmation": "Bent u zeker dat u de vertaling voor volgende documenten met uiterste vertaaldatum wilt aanvragen?",
@@ -937,7 +943,6 @@
   "edit-proof-details": "Bewerk drukproef details",
   "view-more": "Bekijk meer",
   "read": "Lees",
-  "request-proof": "Drukproef aanvragen",
   "request-proof-x-stage-for-publication-x-identification": "Drukproef aanvragen ({stage}) voor publicatie {identification}",
   "proofing-request": "Drukproefaanvraag",
   "publication-request": "Publicatieaanvraag",
@@ -996,5 +1001,7 @@
   "set-status-proof-in": "Zet status naar 'Drukproef In'",
   "delete-translation-request-message": "Bent u zeker dat u de aanvraag wil verwijderen?",
   "delete-translation-request": "Aanvraag verwijderen",
-  "request-it": "Aanvragen"
+  "request-it": "Aanvragen",
+  "delete-request-message": "Bent u zeker dat u de aanvraag wil verwijderen?",
+  "delete-request": "Aanvraag verwijderen"
 }
