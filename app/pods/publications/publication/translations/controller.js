@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { A } from '@ember/array';
 
 export default class PublicationsPublicationTranslationsController extends Controller {
   @service store;
