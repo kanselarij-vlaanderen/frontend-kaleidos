@@ -162,9 +162,6 @@ const selectors = {
     shortTitle: '[data-test-new-publication-short-title]',
     longTitle: '[data-test-new-publication-long-title]',
     alertInfo: '[data-test-new-publication-alert-info]',
-    alertError: '[data-test-new-publication-alert-error]',
-    numberError: '[data-test-new-publication-number-error]',
-    shortTitleError: '[data-test-new-publication-short-title-error]',
     create: '[data-test-new-publication-create]',
   },
 
