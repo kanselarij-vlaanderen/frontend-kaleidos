@@ -7,9 +7,6 @@ export default class PublicationsOverviewBaseController extends Controller {
   /** @abstract @type {string[]} */
   @tracked defaultColumns = [];
 
-  /** @abstract @type {string} */
-  @tracked routeName = 'base';
-
   @tracked page = 0;
   @tracked size = 10;
   @tracked sort = '-created';

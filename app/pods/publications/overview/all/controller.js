@@ -10,5 +10,4 @@ const DEFAULT_COLUMNS = [
 
 export default class PublicationsOverviewAllController extends PublicationsOverviewBaseController {
   @tracked defaultColumns = DEFAULT_COLUMNS;
-  @tracked  routeName = 'all';
 }

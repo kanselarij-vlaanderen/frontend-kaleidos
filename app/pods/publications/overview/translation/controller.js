@@ -13,5 +13,4 @@ const DEFAULT_COLUMNS = [
 
 export default class PublicationsOverviewTranslationController extends PublicationsOverviewBaseController {
   @tracked defaultColumns = DEFAULT_COLUMNS;
-  @tracked routeName = 'translation';
 }

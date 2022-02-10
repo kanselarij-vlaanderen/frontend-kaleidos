@@ -11,5 +11,4 @@ const DEFAULT_COLUMNS = [
 
 export default class PublicationsOverviewUrgentController extends PublicationsOverviewBaseController {
   @tracked defaultColumns = DEFAULT_COLUMNS;
-  @tracked routeName = 'urgent';
 }

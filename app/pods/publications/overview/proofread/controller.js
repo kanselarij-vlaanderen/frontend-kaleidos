@@ -14,5 +14,4 @@ const DEFAULT_COLUMNS = [
 
 export default class PublicationsOverviewProofreadController extends PublicationsOverviewBaseController {
   @tracked defaultColumns = DEFAULT_COLUMNS;
-  @tracked routeName = 'proofread';
 }
