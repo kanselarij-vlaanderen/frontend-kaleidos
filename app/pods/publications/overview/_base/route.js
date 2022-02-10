@@ -82,7 +82,6 @@ export default class PublicationsOverviewBaseRoute extends Route {
   }
 
   loadColumnsDisplayConfig() {
-    console.log("loading display config for route in route", this.columnsDisplayConfigStorageKey);
     const serializedColumnsDisplayConfig = localStorage.getItem(
       this.columnsDisplayConfigStorageKey
     );
