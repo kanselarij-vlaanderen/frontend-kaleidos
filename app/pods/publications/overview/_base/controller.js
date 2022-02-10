@@ -19,53 +19,16 @@ export default class PublicationsOverviewBaseController extends Controller {
 
   @tracked isLoadingModel = false;
 
-  constructor() {
-    super(...arguments);
-    this.initColumnsDisplayConfig();
-  }
-
-  initColumnsDisplayConfig() {
-    let columnsDisplayConfig = this.loadColumnsDisplayConfig();
-    if (!columnsDisplayConfig) {
-      columnsDisplayConfig = this.getDefaultColumnsDisplayConfig();
-    }
-    this.columnsDisplayConfig = columnsDisplayConfig;
-  }
-
-  get columnsDisplayConfigStorageKey() {
-    return `publications.overview.${this.routeName}/columnsDisplayConfig`;
-  }
-
   @action
   changeColumnsDisplayConfig(config) {
-    this.columnsDisplayConfig = config;
     this.saveColumnsDisplayConfig(this.columnsDisplayConfig);
+    this.columnsDisplayConfig = config;
   }
 
   @action
   resetColumnsDisplayConfig() {
-    this.columnsDisplayConfig = this.getDefaultColumnsDisplayConfig();
     this.saveColumnsDisplayConfig(this.columnsDisplayConfig);
-  }
-
-  loadColumnsDisplayConfig() {
-    const serializedColumnsDisplayConfig = localStorage.getItem(
-      this.columnsDisplayConfigStorageKey
-    );
-    if (serializedColumnsDisplayConfig) {
-      const columnsDisplayConfig = JSON.parse(serializedColumnsDisplayConfig);
-      return columnsDisplayConfig;
-    } else {
-      return null;
-    }
-  }
-
-  saveColumnsDisplayConfig(columnsDisplayConfig) {
-    const serializedColumnsDisplayConfig = JSON.stringify(columnsDisplayConfig);
-    localStorage.setItem(
-      this.columnsDisplayConfigStorageKey,
-      serializedColumnsDisplayConfig
-    );
+    this.columnsDisplayConfig = this.getDefaultColumnsDisplayConfig();
   }
 
   getDefaultColumnsDisplayConfig() {
@@ -76,6 +39,14 @@ export default class PublicationsOverviewBaseController extends Controller {
       columnsDisplayConfig[column.keyName] = isColumnShown;
     }
     return columnsDisplayConfig;
+  }
+
+  saveColumnsDisplayConfig(columnsDisplayConfig) {
+    const serializedColumnsDisplayConfig = JSON.stringify(columnsDisplayConfig);
+    localStorage.setItem(
+      this.columnsDisplayConfigStorageKey,
+      serializedColumnsDisplayConfig
+    );
   }
 
   @action

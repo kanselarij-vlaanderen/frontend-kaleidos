@@ -67,4 +67,30 @@ export default class PublicationsOverviewBaseRoute extends Route {
       return true;
     }
   }
+
+  setupController(controller) {
+    controller.columnsDisplayConfigStorageKey = this.columnsDisplayConfigStorageKey;
+    let columnsDisplayConfig = this.loadColumnsDisplayConfig();
+    if (!columnsDisplayConfig) {
+      columnsDisplayConfig = controller.getDefaultColumnsDisplayConfig();
+    }
+    controller.columnsDisplayConfig = columnsDisplayConfig;
+  }
+
+  get columnsDisplayConfigStorageKey() {
+    return `${this.routeName}/columnsDisplayConfig`;
+  }
+
+  loadColumnsDisplayConfig() {
+    console.log("loading display config for route in route", this.columnsDisplayConfigStorageKey);
+    const serializedColumnsDisplayConfig = localStorage.getItem(
+      this.columnsDisplayConfigStorageKey
+    );
+    if (serializedColumnsDisplayConfig) {
+      const columnsDisplayConfig = JSON.parse(serializedColumnsDisplayConfig);
+      return columnsDisplayConfig;
+    } else {
+      return null;
+    }
+  }
 }
