@@ -20,7 +20,6 @@ const COLUMN_MAP = {
 export default class PublicationsPublicationTranslationsDocumentController extends Controller {
   @service currentSession;
   @service store;
-  @service publicationService;
 
   queryParams = [{
     sort: {
@@ -172,11 +171,6 @@ export default class PublicationsPublicationTranslationsDocumentController exten
       message: translationRequest.message,
     });
     yield mail.save();
-
-    yield this.publicationService.updatePublicationStatus(
-      this.publicationFlow,
-      CONSTANTS.PUBLICATION_STATUSES.TO_TRANSLATIONS
-    );
 
     this.selectedPieceRows = [];
     this.isTranslationRequestModalOpen = false;
