@@ -90,6 +90,13 @@ table tr.lt-expanded-row {
 }
 
 
+// Simplified document-card. Publication reference-documents.
+
+// Note that despite its name, "vlc-procedure-step" is used for displaying
+// *document* details. Both the CSS component itself and its name are suboptimal
+// in this context, but used since no alternative for a minimal document card
+// is currently available.
+
 // Adjust procedure step to fit inside a panel
 .auk-panel .vlc-procedure-step {
   &:first-child:before {
