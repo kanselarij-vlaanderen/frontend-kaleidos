@@ -24,8 +24,9 @@ export default class PublicationsOverviewBaseController extends Controller {
 
   @action
   resetColumnsDisplayConfig() {
-    this.saveColumnsDisplayConfig(this.columnsDisplayConfig);
-    this.columnsDisplayConfig = this.getDefaultColumnsDisplayConfig();
+    const defaultDisplayConfig = this.getDefaultColumnsDisplayConfig();
+    this.saveColumnsDisplayConfig(defaultDisplayConfig);
+    this.columnsDisplayConfig = defaultDisplayConfig;
   }
 
   getDefaultColumnsDisplayConfig() {
