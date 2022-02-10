@@ -2,13 +2,16 @@ import PublicationsOverviewBaseController from '../_base/controller';
 import { tracked } from '@glimmer/tracking';
 
 const DEFAULT_COLUMNS = [
+  'isUrgent',
   'publicationNumber',
   'shortTitle',
+  'pageCount',
+  'translationRequestDate',
+  'translationDueDate',
   'publicationDueDate',
-  'status',
 ];
 
-export default class PublicationsOverviewAllController extends PublicationsOverviewBaseController {
+export default class PublicationsOverviewTranslationController extends PublicationsOverviewBaseController {
   @tracked defaultColumns = DEFAULT_COLUMNS;
-  @tracked  routeName = 'all';
+  @tracked routeName = 'translation';
 }
