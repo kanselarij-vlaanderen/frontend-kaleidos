@@ -75,7 +75,12 @@ Router.map(function() {
   if (!isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB)) {
     this.route('publications', { path: '/publicaties', }, function() {
       this.route('overview', { path: '/overzicht' }, function () {
-        this.route('all', { path: '/alle-dossiers' })
+        this.route('all', { path: '/alle-dossiers' });
+        this.route('urgent', { path: '/dringend' });
+        this.route('translation', { path: '/in-vertaling' });
+        this.route('proof', { path: '/aanvraag-drukproef' });
+        this.route('proofread', { path: '/nalezen' });
+        this.route('late', { path: '/te-laat-in-bs' });
       });
       this.route('publication', { path: ':publication_id', }, function() {
         this.route('case', { path: '/dossier', });

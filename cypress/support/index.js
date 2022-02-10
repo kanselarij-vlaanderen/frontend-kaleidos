@@ -27,7 +27,10 @@ import './commands/publication-commands'
 import './commands/reset-database.commands'
 import './commands/subcase-commands'
 import './commands/utility-commands'
-import 'cypress-wait-until';
+import dayjs from 'dayjs'
+
+// support file
+Cypress.dayjs = dayjs
 
 // rdfa editor sometimes throws errors, but loads anyway
 Cypress.on('uncaught:exception', (err) => {
@@ -40,6 +43,10 @@ Cypress.on('uncaught:exception', (err) => {
 // workaround we used works but throws this error (is this rule still needed?)
 Cypress.on('uncaught:exception', (err) => {
   return !err.message.includes('Cannot set property isSelected of #<DomainSelection> which has only a getter');s
+});
+// Approving agenda after showChanges throws this error, latest cypress is picking it up
+Cypress.on('uncaught:exception', (err) => {
+  return !err.message.includes(`TransitionAborted`);
 });
 
 Cypress.Commands.overwrite("type", (originalFn, subject, text, options) => {

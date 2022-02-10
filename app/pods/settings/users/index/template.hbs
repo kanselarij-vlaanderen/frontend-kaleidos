@@ -42,30 +42,30 @@
       <table.content as |c|>
         <c.header>
           <ThSortable
-            @class="auk-table__col--3 auk-table__header-title"
+            @class="auk-table__col--3"
             @currentSorting={{this.sort}}
             @field="first-name"
             @label={{t "first-name"}}
           />
           <ThSortable
-            @class="auk-table__col--2 auk-table__header-title"
+            @class="auk-table__col--2"
             @currentSorting={{this.sort}}
             @field="last-name"
             @label={{t "last-name"}}
           />
           <th
-                  class="auk-table__col--2 auk-table__header-title auk-table__header-title--unsortable"
+                  class="auk-table__col--2"
           >
             {{t "email"}}
           </th>
           <ThSortable
-            @class="auk-table__col--2 auk-table__header-title"
+            @class="auk-table__col--2"
             @currentSorting={{this.sort}}
             @field="organization.identifier"
             @label={{t "ovo-code"}}
           />
           <ThSortable
-            @class="auk-table__col--2 auk-table__header-title"
+            @class="auk-table__col--2"
             @currentSorting={{this.sort}}
             @field="group.name"
             @label={{t "group"}}

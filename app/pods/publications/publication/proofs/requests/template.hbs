@@ -34,7 +34,7 @@
             <div class="auk-o-grid-col-6">
               {{#if row.requestActivity.email}}
                 <div class="auk-u-mb-2">
-                  <p class="auk-u-text-bold auk-u-muted auk-u-mb">
+                  <p class="auk-u-text-bold auk-u-text-muted auk-u-mb">
                     {{t "subject"}}
                   </p>
                   <p
@@ -42,7 +42,7 @@
                   >{{row.requestActivity.email.subject}}</p>
                 </div>
                 <div class="auk-u-mb-2">
-                  <p class="auk-u-text-bold auk-u-muted auk-u-mb">
+                  <p class="auk-u-text-bold auk-u-text-muted auk-u-mb">
                     {{t "message"}}
                   </p>
                   <div class="auk-box">
@@ -61,7 +61,7 @@
             </div>
             <div class="auk-o-grid-col-6">
               <div class="auk-u-mb-2">
-                <p class="auk-u-text-bold auk-u-muted auk-u-mb">
+                <p class="auk-u-text-bold auk-u-text-muted auk-u-mb">
                   {{t "attachments"}}
                 </p>
                 <Utils::Documents::List
@@ -70,7 +70,7 @@
               </div>
               {{#if row.proofingActivity.generatedPieces}}
                 <div class="auk-u-mb-2">
-                  <p class="auk-u-text-bold auk-u-muted auk-u-mb">
+                  <p class="auk-u-text-bold auk-u-text-muted auk-u-mb">
                     {{t "received-documents"}}
                   </p>
                   <Utils::Documents::List

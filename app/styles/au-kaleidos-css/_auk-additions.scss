@@ -1,101 +1,19 @@
-/* General
+/* Framework & external component fixes
    ========================================================================== */
 
-p {
-  word-break: break-word;
-  white-space: normal;
-   &::first-letter {
-    text-transform: uppercase;
-  }
-}
-
-
-/* Button in input
-   ========================================================================== */
-
-.auk-button-in-input {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  padding: 0.75rem 1.2rem;
-}
-
-
-/* Modal
-   ========================================================================== */
+// Modal
 
 .auk-modal-backdrop > .ember-view {
   height: 100%;
 }
 
 
-/* Table
-   ========================================================================== */
-
-.auk-table th {
-  white-space: nowrap;
-}
-
-// Data table header title
-.auk-table__header-title {
-  // Data table header title sortable modifier
-  &--sortable {
-    text-decoration: none;
-
-    .auk-table__header-title__sort-icon {
-      opacity: 0;
-    }
-
-    &:hover,
-    &:focus {
-      text-decoration: underline;
-
-      .auk-table__header-title__sort-icon {
-        opacity: 0.5;
-      }
-    }
-
-    // Data table header title sortable modifier active
-    &-active {
-      .auk-table__header-title__sort-icon {
-        opacity: 1;
-      }
-    }
-  }
-}
+// Ember data table
 
 .auk-table--no-scroll {
   .data-table-content {
     overflow: hidden;
   }
-}
-
-.auk-table--hover {
-  tbody {
-    tr:hover {
-      background: $auk-gray-100;
-    }
-  }
-
-  &.auk-table--striped {
-    tbody {
-      tr:hover {
-        background: $auk-gray-200;
-
-        td {
-          background-color: transparent;
-        }
-      }
-    }
-  }
-}
-
-.auk-table__header-title--unsortable {
-  color: $auk-gray-600;
-}
-
-.auk-table--interaction-cursor {
-  cursor: pointer;
 }
 
 .auk-table {
@@ -114,358 +32,21 @@ p {
   &.data-table {
     tbody {
       tr:hover {
-        background: $auk-gray-200;
-
         td {
-          background-color: transparent;
+          background: $auk-gray-200;
         }
       }
     }
   }
-}
 
-/* Table with sticky header
-
-    Remark:
-    Fixing the border-related issue (as seen here: https://stackoverflow.com/questions/50361698/border-style-do-not-work-with-sticky-position-element) caused by putting `position: sticky` on th's is done here by switching border-collapse to `separate`.
-    We can use this switch without creating visual issues because there are no consecutive borders within the auk-table styling.
-
-    If this should change in the future, we could also rely on the following fix:
-
-    th {
-      border-bottom-width: 0;
-      padding-bottom: 1.4rem;
-      box-shadow: inset 0 -2px 0 $auk-gray-300;
+  tbody {
+    tr.lt-expanded-row {
+      td {
+        background: $auk-white;
+      }
     }
-
-   ========================================================================== */
-
-.auk-table--sticky-header {
-  border-collapse: separate;
-
-  th {
-    position: sticky;
-    top: 0;
-    background-color: #fff;
   }
 }
-
-
-/* Block-link (to be removed in favor of list element)
-   ========================================================================== */
-
-.auk-block-link {
-  padding: 1.5rem;
-  border: .1rem solid $auk-gray-300;
-  text-decoration: none;
-  color: $auk-gray-800;
-  margin: 0 0 1.5rem;
-  display: block;
-
-  &:hover {
-    background: $auk-gray-100;
-    border-color: $auk-gray-500;
-  }
-
-  &:focus {
-    outline: 0;
-    border-color: $auk-yellow-500;
-    box-shadow: inset 0 0 0 0.1rem $auk-yellow-500;
-  }
-}
-
-
-/* Scroll wrapper
-   ========================================================================== */
-
-.auk-scroll-wrapper__body--horizontal {
-  overflow-y: hidden;
-}
-
-.auk-scroll-wrapper__body--vertical {
-  overflow-x: hidden;
-}
-
-
-/* Form-group: power-select alternative (to be removed)
-   ========================================================================== */
-
-.auk-form-group--power-select {
-  width: 23rem;
-}
-
-
-/* Printable agenda list
-   ========================================================================== */
-
-.l-printable-agenda {
-  p {
-    color: $auk-color-text;
-    line-height: 1.5;
-  }
-
-  .auk-pill,
-  .auk-icon {
-    -webkit-print-color-adjust: exact;
-  }
-}
-
-@media print {
-  .l-printable-agenda {
-    max-width: none;
-  }
-}
-
-.l-printable-agenda__header-prefix {
-  min-width: 3rem;
-}
-
-.l-printable-agenda__section-header {
-  font-size: 2rem;
-  font-weight: 500;
-}
-
-.l-printable-agenda__section-content {
-  margin-left: 3rem;
-}
-
-.l-printable-agenda__item-group {
-  margin-top: 4rem;
-}
-
-@media print {
-  .l-printable-agenda__non-breakable-group {
-    break-inside: avoid;
-  }
-}
-
-@media print {
-  .l-printable-agenda__on-fresh-page {
-    page-break-before: always;
-  }
-}
-
-.l-printable-agenda__item-group-header {
-  line-height: 1.2;
-}
-
-.l-printable-agenda__item-group-header--muted {
-  color: $auk-gray-500 !important;
-  -webkit-print-color-adjust: exact;
-}
-
-.l-printable-agenda__item,
-.l-printable-agenda__faux-item {
-  + .l-printable-agenda__item {
-    margin-top: 3rem;
-  }
-}
-
-.l-printable-agenda__item-header {
-  font-size: 1.6rem;
-  font-weight: 500;
-  line-height: 1.5;
-
-  .l-printable-agenda__header-prefix {
-    min-width: 2.5rem;
-  }
-}
-
-.l-printable-agenda__item-list {
-  break-inside: auto;
-}
-
-.l-printable-agenda__document-list {
-  list-style: none !important;
-}
-
-.l-printable-agenda__item-indented {
-  padding-left: 2.5rem;
-}
-
-
-/* Printable newsletter list
-   ========================================================================== */
-
-.l-printable-newsletter {
-  p {
-    color: $auk-color-text;
-    line-height: 1.5;
-  }
-
-  .auk-pill,
-  .auk-icon,
-  .auk-badge,
-  .auk-u-muted {
-    -webkit-print-color-adjust: exact;
-  }
-
-  .auk-h1,
-  .auk-h2 {
-    line-height: 1.2;
-  }
-
-  .auk-h3 {
-    line-height: 1.3;
-  }
-
-  .auk-h4 {
-    line-height: 1.4;
-  }
-}
-
-@media print {
-  .l-printable-newsletter {
-    max-width: none;
-  }
-}
-
-@media print {
-  .l-printable-newsletter__non-breakable-group {
-    break-inside: avoid;
-  }
-}
-
-.l-printable-newsletter__title {
-  margin-left: 0.4rem;
-  padding-left: 1rem;
-}
-
-.l-printable-newsletter__proposal-label {
-  line-height: 1.4;
-}
-
-
-/* Preview container
-   ========================================================================== */
-
-.auk-preview-container {
-  img {
-    max-width: 20rem;
-    max-height: 20rem;
-  }
-}
-
-
-/* Publication overview navbar (to be removed)
-   ========================================================================== */
-
-.auk-publication-overview-navbar {
-  ul.auk-menu {
-    background-color: transparent !important;
-  }
-}
-
-/* Signature overview navbar (to be removed)
-   ========================================================================== */
-
-.auk-signature-overview-navbar {
-  ul.auk-menu {
-    background-color: transparent !important;
-  }
-}
-
-
-/* Color badge - default color (to be removed)
-   ========================================================================== */
-
-.auk-color-badge--default {
-  background-color: $auk-gray-500;
-}
-
-
-/* Utilities
-   ========================================================================== */
-
-.auk-u-text-uppercase {
-  text-transform: uppercase;
-}
-
-.auk-u-text-capitalize {
-  &::first-letter {
-    text-transform: uppercase;
-  }
-}
-
-.auk-u-text-condensed-line-height { // (to be removed)
-  line-height: 1.2 !important;
-}
-
-.auk-u-text-success {
-  color: $auk-green-700;
-}
-
-.auk-u-text-error {
-  color: $auk-red-700;
-}
-
-.auk-u-border-top {
-  border-top: .1rem solid $auk-gray-300 !important;
-}
-
-.auk-u-border-right {
-  border-right: .1rem solid $auk-gray-300 !important;
-}
-
-.auk-u-border-bottom {
-  border-bottom: .1rem solid $auk-gray-300 !important;
-}
-
-.auk-u-border-left {
-  border-left: .1rem solid $auk-gray-300 !important;
-}
-
-.auk-u-text-family-serif {
-  font-family: flanders-serif, serif !important;
-}
-
-@media print {
-  .auk-u-hidden\@print {
-    display: none !important;
-  }
-
-  .auk-u-m-0\@print {
-    margin: 0 !important;
-  }
-}
-
-.auk-u-position-relative {
-  position: relative !important;
-}
-
-
-/* Batch editing document details
-   ========================================================================== */
-
-.to-be-deleted-row {
-  opacity: 0.5;
-}
-
-
-/* Layout styling for logo-header utility
-   ========================================================================== */
-
-.l-logo-header {
-  height: 100px;
-  padding: 1.5rem 0;
-
-  > img {
-    max-height: 100%;
-  }
-}
-
-
-/* Framework & external component fixes
-   ========================================================================== */
-
-// When using auk-modal, the ember power select wormhole is behind the modal
-// auk-modal has z-index of 1600;
-
-.ember-power-select-dropdown {
-  z-index: $z-index-modal-additive + $z-index-dropdown;
-}
-
-// Ember data table
 
 .data-table__actions--top {
   border-bottom: none;
@@ -476,6 +57,15 @@ table tr.lt-expanded-row {
     background-color: $auk-white !important;
   }
 }
+
+
+// When using auk-modal, the ember power select wormhole is behind the modal
+// auk-modal has z-index of 1600;
+
+.ember-power-select-dropdown {
+  z-index: $z-index-modal-additive + $z-index-dropdown;
+}
+
 
 // Sortable
 
@@ -491,6 +81,7 @@ table tr.lt-expanded-row {
     z-index: $z-index-drag;
   }
 }
+
 
 // Ember tooltip
 

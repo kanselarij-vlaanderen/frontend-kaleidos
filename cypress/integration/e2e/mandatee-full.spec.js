@@ -15,11 +15,10 @@ context('Full test for creating mandatees', () => {
    * @returns {number} The current time in unix timestamp
    */
   function currentTimestamp() {
-    return Cypress.moment().unix();
+    return Cypress.dayjs().unix();
   }
 
   before(() => {
-    cy.server();
     cy.login('Admin');
   });
 
@@ -29,7 +28,7 @@ context('Full test for creating mandatees', () => {
     cy.visit('/');
     const KIND = 'Ministerraad';
 
-    const agendaDate = Cypress.moment().add(1, 'weeks')
+    const agendaDate = Cypress.dayjs().add(1, 'weeks')
       .day(3);
     const caseTitle = `testId=${currentTimestamp()}: Cypress test dossier 1`;
     const subcaseTitle1 = `${caseTitle} test stap 1`;
@@ -40,7 +39,7 @@ context('Full test for creating mandatees', () => {
     cy.get(utils.mHeader.settings).click();
     cy.get(settings.settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
-    cy.route('GET', '/ise-codes?sort=name').as('getIseCodes');
+    cy.intercept('GET', '/ise-codes?sort=name').as('getIseCodes');
     cy.get(settings.ministers.add).click();
     cy.wait('@getIseCodes', {
       timeout: 30000,
@@ -69,7 +68,7 @@ context('Full test for creating mandatees', () => {
       .click();
     cy.setDateInFlatpickr(agendaDate);
 
-    cy.route('POST', '/mandatees').as('postMandateeData');
+    cy.intercept('POST', '/mandatees').as('postMandateeData');
     cy.get(utils.vlModalFooter.save).click();
     cy.wait('@postMandateeData');
 
@@ -95,7 +94,7 @@ context('Full test for creating mandatees', () => {
     cy.contains(ministerNickName).parents(settings.ministers.sortableGroupRow)
       .find(settings.ministers.mandatee.edit)
       .click();
-    const enddateForMandatee = Cypress.moment().set({
+    const enddateForMandatee = Cypress.dayjs().set({
       hour: 10, minute: 10,
     });
 

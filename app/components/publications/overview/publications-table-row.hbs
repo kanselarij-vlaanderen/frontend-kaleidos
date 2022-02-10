@@ -3,7 +3,7 @@ request the whole row and not only the arrow at the end to be clickable }}
 {{! template-lint-disable no-invalid-interactive }}
 <tr
   data-test-publication-table-row
-  class="auk-table--interaction-cursor"
+  class="auk-table--clickable-rows"
   {{on "click" (fn this.navigateToPublication @publicationFlow)}}
 >
   {{! template-lint-enable no-invalid-interactive }}
@@ -61,8 +61,8 @@ request the whole row and not only the arrow at the end to be clickable }}
   {{/if}}
   {{#if @tableColumnDisplayOptions.pageCount}}
     <td data-test-publication-table-row-page-count>
-      {{#if (not (is-empty this.pages))}}
-        {{this.pages}}
+      {{#if (not (is-empty @publicatioFlow.numberOfPages))}}
+        {{@publicationFlow.numberOfPages}}
       {{else}}
         {{t "dash"}}
       {{/if}}
@@ -255,7 +255,7 @@ request the whole row and not only the arrow at the end to be clickable }}
   {{#if @tableColumnDisplayOptions.lastEdited}}
     <td>
       {{moment-format @publicationFlow.modified "DD-MM-YYYY"}}<br />
-      <span class="auk-u-text-size--small auk-u-muted">
+      <span class="auk-u-text-size--small auk-u-text-muted">
         {{moment-format @publicationFlow.modified "HH:mm"}}
       </span>
     </td>

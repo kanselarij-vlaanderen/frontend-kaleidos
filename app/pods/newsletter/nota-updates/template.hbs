@@ -14,24 +14,24 @@
         >
           <table.content as |c|>
             <c.header>
-              <th class="auk-table__col--1 auk-table__header-title">
+              <th class="auk-table__col--1">
                 {{t "newsletter-update-notas-number"}}
               </th>
-              <th class="auk-table__col--2 auk-table__header-title">
+              <th class="auk-table__col--2">
                 {{t "newsletter-update-notas-agendaitem-short-title"}}
               </th>
-              <th class="auk-table__col--2 auk-table__header-title">
+              <th class="auk-table__col--2">
                 {{t "newsletter-update-notas-documentname"}}
               </th>
               <ThSortable
-                  @class="auk-table__col--2 auk-table__header-title"
+                  @class="auk-table__col--2"
                   @currentSorting={{this.sort}}
                   @field="modified"
                   @label={{t "newsletter-update-notas-edited-on"}}
               />
               <th class="auk-table__col--1"></th>
             </c.header>
-            <c.body class="auk-table--interaction-cursor" as |row|>
+            <c.body class="auk-table--clickable-rows" as |row|>
               <td>
                 <p>
                   {{row.agendaitemNumber}}
