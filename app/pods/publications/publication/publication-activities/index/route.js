@@ -19,7 +19,7 @@ export default class PublicationsPublicationDecisionsIndexRoute extends Route {
   }
 
   async afterModel() {
-    this.publicationFlow = this.modelFor('publications.publication.decisions');
+    this.publicationFlow = this.modelFor('publications.publication');
     this.isViaCouncilOfMinisters =
       await this.publicationService.getIsViaCouncilOfMinisters(
         this.publicationFlow
