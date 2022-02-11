@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
+import tableColumns from 'frontend-kaleidos/config/publications/overview-table-columns';
 
 /**
  * @typedef {
@@ -32,6 +33,31 @@ export default class PublicationsOverviewBaseRoute extends Route {
       as: 'sorteer',
     },
   };
+
+  beforeModel() {
+    // load which columns the user wants to be shown
+    this.columnsDisplayConfig = this.loadColumnsDisplayConfig();
+    if (!this.columnsDisplayConfig) {
+      this.columnsDisplayConfig = this.getDefaultColumnsDisplayConfig();
+    }
+
+    // determine which included data the visible columns require
+    let requiredFieldPaths = [];
+    for (const column of tableColumns) {
+      if (this.columnsDisplayConfig[column.keyName]) {
+        requiredFieldPaths = requiredFieldPaths.concat(column.apiFieldPaths);
+      }
+    }
+    // Filter for field-paths that are more than 1 hop away, thus requiring an include
+    const pathsRequiringInclude = requiredFieldPaths.filter((path) => {
+      return path.includes('.');
+    }).map((path) => {
+      return path.split('.').slice(0, -1).join('.');
+    });
+
+    const uniqueIncludes = [...new Set(pathsRequiringInclude)];
+    this.includes = uniqueIncludes;
+  }
 
   model(params) {
     const filter = this.modelGetQueryFilter();
