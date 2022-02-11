@@ -21,7 +21,30 @@
   {{!-- BEGIN-SNIPPET panel-with-header --}}
   <Auk::Panel>
     <Auk::Panel::Header>
-      <h4 class="auk-panel__title">Panel header</h4>
+      <h4 class="auk-panel__title">Panel title</h4>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus massa leo, consequat at tortor a, pretium efficitur diam. Praesent mollis euismod elit, quis consequat nulla lacinia a. Nulla facilisi. Vestibulum volutpat et urna in auctor. Pellentesque pulvinar volutpat quam at egestas. Maecenas mattis velit lacus, in gravida elit bibendum a. </p>
+    </Auk::Panel::Body>
+  </Auk::Panel>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Panel with subtitle"
+        @snippet="panel-with-subtitle.hbs"
+>
+  {{!-- BEGIN-SNIPPET panel-with-subtitle --}}
+  <Auk::Panel>
+    <Auk::Panel::Header @size="large">
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <h4 class="auk-panel__title auk-panel__title--small">Panel title</h4>
+            <span class="auk-u-text-small">And this is a panel subtitle</span>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus massa leo, consequat at tortor a, pretium efficitur diam. Praesent mollis euismod elit, quis consequat nulla lacinia a. Nulla facilisi. Vestibulum volutpat et urna in auctor. Pellentesque pulvinar volutpat quam at egestas. Maecenas mattis velit lacus, in gravida elit bibendum a. </p>
@@ -40,7 +63,7 @@
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
-            <h4 class="auk-panel__title">Panel header</h4>
+            <h4 class="auk-panel__title">Panel title</h4>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
@@ -67,7 +90,7 @@
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
-            <h4 class="auk-panel__title">Panel header</h4>
+            <h4 class="auk-panel__title">Panel title</h4>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
@@ -97,7 +120,7 @@
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
-            <h4 class="auk-panel__title">Panel header</h4>
+            <h4 class="auk-panel__title">Panel title</h4>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
@@ -122,7 +145,7 @@
   {{!-- BEGIN-SNIPPET panel-with-double-body --}}
   <Auk::Panel>
     <Auk::Panel::Header>
-      <h4 class="auk-panel__title">Panel header</h4>
+      <h4 class="auk-panel__title">Panel title</h4>
     </Auk::Panel::Header>
     <Auk::Panel::Body>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus massa leo, consequat at tortor a, pretium efficitur diam. Praesent mollis euismod elit, quis consequat nulla lacinia a. Nulla facilisi. Vestibulum volutpat et urna in auctor. Pellentesque pulvinar volutpat quam at egestas. Maecenas mattis velit lacus, in gravida elit bibendum a. </p>
@@ -141,7 +164,7 @@
   {{!-- BEGIN-SNIPPET panel-with-footer --}}
   <Auk::Panel>
     <Auk::Panel::Header>
-      <h4 class="auk-panel__title">Panel header</h4>
+      <h4 class="auk-panel__title">Panel title</h4>
     </Auk::Panel::Header>
     <Auk::Panel::Body>
       <div class="auk-form-group">
@@ -168,3 +191,30 @@
   </Auk::Panel>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
+
+<h3 class="auk-h3">Arguments (header)</h3>
+
+<table class="auk-table">
+  <thead>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Possible values</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>@size</code></td>
+      <td>string</td>
+      <td><code>regular</code>, <code>large</code> (regular is the default size)</td>
+      <td>Determines the sizes of the badge</td>
+    </tr>
+    <tr>
+      <td><code>@borderless</code></td>
+      <td>boolean</td>
+      <td><code>false</code> (default) or <code>true</code></td>
+      <td>Determines if the header has no border</td>
+    </tr>
+  </tbody>
+</table>
