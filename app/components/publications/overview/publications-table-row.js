@@ -25,29 +25,11 @@ export default class PublicationsTableRowComponent extends Component {
 
   @task
   *loadData() {
-    // using queryOne instead of findRecord: findRecord causes included records to be fetched again
-    const publicationFlow = yield this.store.queryOne('publication-flow', {
-      'filter[:id:]': this.args.publicationFlow.id,
-      include: [
-        'case',
-        'case.subcases',
-
-        'translation-subcase',
-
-        'publication-subcase',
-
-        'publication-subcase.proofing-activities',
-
-        'publication-subcase.publication-activities',
-        'publication-subcase.publication-activities.decisions',
-      ].join(','),
-    });
-
     this.isViaCouncilOfMinisters =
-      yield this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
-    this.proofRequestDate = yield this.getProofRequestDate(publicationFlow);
+      yield this.publicationService.getIsViaCouncilOfMinisters(this.args.publicationFlow);
+    this.proofRequestDate = yield this.getProofRequestDate(this.args.publicationFlow);
     this.publicationDate = yield this.publicationService.getPublicationDate(
-      publicationFlow
+      this.args.publicationFlow
     );
   }
 
