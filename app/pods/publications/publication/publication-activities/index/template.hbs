@@ -24,11 +24,9 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
   <Auk::Panel::Body class="auk-u-bg-alt">
-    <Publications::Documents::DocumentListSteps
-      @pieces={{@model}}
-      @isEnabledDeletePiece={{not this.isViaCouncilOfMinisters}}
-      @onDeletePiece={{perform this.deletePiece}}
-    />
+    {{#each @model as |event|}}
+      <div>{{moment-format event.date}} | {{event.title}}</div>
+    {{/each}}
   </Auk::Panel::Body>
 </Auk::Panel>
 
