@@ -118,7 +118,8 @@ function addNewPiece(oldFileName, file, modelToPatch, hasSubcase = true) {
   cy.get(document.documentCard.name.value).contains(oldFileName)
     .parents(document.documentCard.card)
     .within(() => {
-      cy.get(document.documentCard.actions).click();
+      cy.get(document.documentCard.actions).should('not.be.disabled')
+        .click();
       cy.get(document.documentCard.uploadPiece).click();
     });
 
@@ -425,7 +426,8 @@ function addNewPieceToSignedDocumentContainer(oldFileName, file) {
   cy.get(document.documentCard.name.value).contains(oldFileName)
     .parents(document.documentCard.card)
     .within(() => {
-      cy.get(document.documentCard.actions).click();
+      cy.get(document.documentCard.actions).should('not.be.disabled')
+        .click();
       cy.get(document.documentCard.uploadPiece).click();
     });
 
