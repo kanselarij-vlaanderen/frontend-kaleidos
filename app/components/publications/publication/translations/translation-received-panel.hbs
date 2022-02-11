@@ -2,17 +2,17 @@
   <div class="vlc-procedure-step__badge-wrapper">
     <Auk::Badge @icon="check" @skin="success" @size="medium" class="vlc-procedure-step__badge" />
   </div>
-  <Auk::Panel >
+  <Auk::Panel>
     <Auk::Panel::Header>
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
-            <h4 class="auk-panel__title">
+            <h4 class="auk-panel__title auk-panel__title--small">
               {{t "received-translation"}}
             </h4>
-            <p class="auk-u-text-small auk-u-m-0">
+            <span class="auk-u-text-small auk-u-m-0">
               {{moment-format @piece.created  "DD.MM.YYYY"}}
-            </p>
+            </span>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
@@ -25,26 +25,22 @@
         >
           {{@piece.file.downloadFilename}}
         </Auk::ButtonLink>
-        <WebComponents::AuButtonToolbar>
-          <Auk::Button
-            @skin="borderless"
-            @layout="icon-only"
-            @icon="download"
-            @href={{@piece.file.namedDownloadLink}}
-            download={{@piece.file.downloadFilename}}
-          >
-            {{t "download"}}
-          </Auk::Button>
-          <Auk::Button
-            @skin="borderless"
-            @layout="icon-only"
-            @icon="book"
-            @href={{@piece.viewDocumentURL}}
-            target="_blank"
-          >
-            {{t "read"}}
-          </Auk::Button>
-        </WebComponents::AuButtonToolbar>
+        <Auk::ButtonLink
+          @layout="icon-only"
+          @icon="download"
+          @href={{@piece.file.namedDownloadLink}}
+          download={{@piece.file.downloadFilename}}
+        >
+          {{t "download"}}
+        </Auk::ButtonLink>
+        <Auk::ButtonLink
+          @layout="icon-only"
+          @icon="book"
+          @href={{@piece.viewDocumentURL}}
+          target="_blank"
+        >
+          {{t "read"}}
+        </Auk::ButtonLink>
       </div>
     </Auk::Panel::Body>
   </Auk::Panel>
