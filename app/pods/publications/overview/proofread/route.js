@@ -7,6 +7,17 @@ const PROOFREAD_STATUSES_URIS = [
 ];
 
 export default class PublicationsOverviewProofreadRoute extends PublicationsOverviewBaseRoute {
+  defaultColumns = [
+    'isUrgent',
+    'publicationNumber',
+    'numacNumber',
+    'shortTitle',
+    'pageCount',
+    'proofReceivedDate',
+    'proofPrintCorrector',
+    'publicationDueDate'
+  ];
+
   modelGetQueryFilter() {
     const proofreadStatuses = this.store.peekAll('publication-status').filter((it) => {
       return PROOFREAD_STATUSES_URIS.includes(it.uri);

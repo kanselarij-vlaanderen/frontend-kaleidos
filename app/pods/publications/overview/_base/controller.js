@@ -29,14 +29,6 @@ export default class PublicationsOverviewBaseController extends Controller {
     this.columnsDisplayConfig = defaultDisplayConfig;
   }
 
-  getDefaultColumnsDisplayConfig() {
-    const columnsDisplayConfig = {};
-    for (let column of tableColumns) {
-      const columnKey = column.keyName;
-      const isColumnShown = this.defaultColumns.includes(columnKey);
-      columnsDisplayConfig[column.keyName] = isColumnShown;
-    }
-    return columnsDisplayConfig;
   }
 
   saveColumnsDisplayConfig(columnsDisplayConfig) {

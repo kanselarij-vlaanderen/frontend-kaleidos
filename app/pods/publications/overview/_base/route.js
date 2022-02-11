@@ -9,6 +9,10 @@ import { action } from '@ember/object';
 
 /** @abstract */
 export default class PublicationsOverviewBaseRoute extends Route {
+  defaultColumns;
+  columnsDisplayConfig;
+  includes;
+
   /** @abstract @returns {tQueryFilter} */
   modelGetQueryFilter() {
     console.warn(`${this.modelGetQueryFilter.name} not implemented`);
@@ -31,22 +35,18 @@ export default class PublicationsOverviewBaseRoute extends Route {
 
   model(params) {
     const filter = this.modelGetQueryFilter();
-    return this.store.query('publication-flow', {
+    const queryParams = {
       filter: filter,
       sort: params.sort,
       page: {
         number: params.page,
         size: params.size,
       },
-      // eslint-disable-next-line prettier/prettier
-      include: [
-        'identification',
-        'status',
-        'publication-subcase',
-        'translation-subcase',
-        'case',
-      ].join(','),
-    });
+    };
+    if (this.includes.length) {
+      queryParams.include = this.includes.join(',');
+    }
+    return this.store.query('publication-flow', queryParams);
   }
 
   @action
@@ -70,11 +70,8 @@ export default class PublicationsOverviewBaseRoute extends Route {
 
   setupController(controller) {
     controller.columnsDisplayConfigStorageKey = this.columnsDisplayConfigStorageKey;
-    let columnsDisplayConfig = this.loadColumnsDisplayConfig();
-    if (!columnsDisplayConfig) {
-      columnsDisplayConfig = controller.getDefaultColumnsDisplayConfig();
-    }
-    controller.columnsDisplayConfig = columnsDisplayConfig;
+    controller.columnsDisplayConfig = this.columnsDisplayConfig;
+    controller.getDefaultColumnsDisplayConfig = this.getDefaultColumnsDisplayConfig;
   }
 
   get columnsDisplayConfigStorageKey() {
@@ -91,5 +88,20 @@ export default class PublicationsOverviewBaseRoute extends Route {
     } else {
       return null;
     }
+  }
+
+  getDefaultColumnsDisplayConfig() {
+    const columnsDisplayConfig = {};
+    for (let column of tableColumns) {
+      const columnKey = column.keyName;
+      const isColumnShown = this.defaultColumns.includes(columnKey);
+      columnsDisplayConfig[column.keyName] = isColumnShown;
+    }
+    return columnsDisplayConfig;
+  }
+
+  @action
+  reloadModel() {
+    this.refresh();
   }
 }

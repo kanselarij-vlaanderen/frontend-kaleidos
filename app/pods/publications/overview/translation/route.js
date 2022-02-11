@@ -2,6 +2,16 @@ import PublicationsOverviewBaseRoute from '../_base/route';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsOverviewTranslationRoute extends PublicationsOverviewBaseRoute {
+  defaultColumns = [
+    'isUrgent',
+    'publicationNumber',
+    'shortTitle',
+    'pageCount',
+    'translationRequestDate',
+    'translationDueDate',
+    'publicationDueDate',
+  ];
+
   modelGetQueryFilter() {
     const filter = {
       status: {

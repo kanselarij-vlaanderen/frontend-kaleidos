@@ -1,6 +1,14 @@
 import PublicationsOverviewBaseRoute from '../_base/route';
 
 export default class PublicationsOverviewLateRoute extends PublicationsOverviewBaseRoute {
+  defaultColumns= [
+    'publicationNumber',
+    'numacNumber',
+    'shortTitle',
+    'publicationTargetDate',
+    'publicationDueDate',
+  ];
+
   modelGetQueryFilter() {
     const pendingStatuses = this.store.peekAll('publication-status').rejectBy('isFinal');
     const filter = {
