@@ -98,20 +98,23 @@ export default class NewPublicationModal extends Component {
       this.numberIsRequired = true;
     } else {
       this.numberIsRequired = false;
-      yield timeout(1000);
-      yield this.isPublicationNumberAlreadyTaken();
+      yield this.validateIsPublicationNumberAlreadyTaken.perform();
     }
   }
 
   @restartableTask
   *setPublicationNumberSuffix(event) {
     this.suffix = isBlank(event.target.value) ? undefined : event.target.value;
-    yield timeout(1000);
-    yield this.isPublicationNumberAlreadyTaken();
+    yield this.validateIsPublicationNumberAlreadyTaken.perform();
   }
 
   @task
   *save() {
+    const isValid = yield this.untilValidated();
+    if (!isValid) {
+      return;
+    }
+
     yield this.args.onSave({
       number: this.number,
       suffix: this.suffix,
@@ -123,12 +126,19 @@ export default class NewPublicationModal extends Component {
     });
   }
 
-  async isPublicationNumberAlreadyTaken() {
+  @restartableTask
+  *validateIsPublicationNumberAlreadyTaken() {
+    yield timeout(1000);
     this.numberIsAlreadyUsed =
-      await this.publicationService.publicationNumberAlreadyTaken(
+      yield this.publicationService.publicationNumberAlreadyTaken(
         this.number,
         this.suffix
       );
+  }
+
+  async untilValidated() {
+    await this.validateIsPublicationNumberAlreadyTaken.last;
+    return this.isValid;
   }
 
   @action
