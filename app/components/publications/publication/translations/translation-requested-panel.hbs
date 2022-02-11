@@ -3,7 +3,11 @@
     <Auk::Badge @icon="mail" @skin="primary" @size="medium" class="vlc-procedure-step__badge"/>
   </div>
   <Auk::AccordionPanel @isDefaultActive={{true}} as |accordionPanel|>
-    <accordionPanel.Header @title={{t "requested-translation"}} @subtitle={{moment-format @requestActivity.startDate  "DD.MM.YYYY"}} as |header|>
+    <accordionPanel.Header
+      @size="large"
+      @title={{t "requested-translation"}}
+      @subtitle={{moment-format @requestActivity.startDate  "DD.MM.YYYY"}}
+    as |header|>
       <header.Actions as |actions|>
         <actions.Item>
           <DropdownMenu
