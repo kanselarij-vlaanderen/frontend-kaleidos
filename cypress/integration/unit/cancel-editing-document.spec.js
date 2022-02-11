@@ -10,14 +10,15 @@ import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
-  return Cypress.moment().unix();
+  return Cypress.dayjs().unix();
 }
 
 function uploadFileToCancel(file) {
   cy.get(document.documentCard.name.value).contains(file.fileName)
     .parents(document.documentCard.card)
     .within(() => {
-      cy.get(document.documentCard.actions).click();
+      cy.get(document.documentCard.actions).should('not.be.disabled')
+        .click();
       cy.get(document.documentCard.uploadPiece).click();
     });
   cy.get(utils.vlModal.dialogWindow).within(() => {
@@ -33,7 +34,6 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
   const agendaPlace = 'Cypress Room';
 
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 
@@ -42,7 +42,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
   });
 
   it('Editing of a document or piece but cancelling should show old data', () => {
-    const agendaDate = Cypress.moment().add(1, 'weeks')
+    const agendaDate = Cypress.dayjs().add(1, 'weeks')
       .day(1);
     const caseTitle = `Cypress test: cancel editing pieces - ${currentTimestamp()}`;
     const subcaseTitleShort = `Cypress test: cancel editing of documents on agendaitem - ${currentTimestamp()}`;
@@ -154,7 +154,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     // Cancel/save name in document card
     const extraName = (' - Nota');
     const savedName = `${fileName}BIS${extraName}`;
-    cy.route('PATCH', '/pieces/**').as('patchPieces');
+    cy.intercept('PATCH', '/pieces/**').as('patchPieces');
 
     cy.get(document.documentCard.name.value).contains(fileName)
       .click();
@@ -218,10 +218,10 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .click();
 
     // delete the BIS piece
-    cy.route('DELETE', '/files/**').as('deleteFile');
-    cy.route('DELETE', '/pieces/**').as('deletePiece');
+    cy.intercept('DELETE', '/files/**').as('deleteFileBis');
+    cy.intercept('DELETE', '/pieces/**').as('deletePieceBis');
     // put call to restore pieces (won't do anything in this test, but should always be called)
-    cy.route('PUT', '/agendaitems/**/pieces/restore').as('restoreAgendaitemPiece');
+    cy.intercept('PUT', '/agendaitems/**/pieces/restore').as('restoreAgendaitemPieceBis');
     cy.get(route.agendaitemDocuments.batchEdit).click();
     cy.get(document.documentDetailsRow.row).as('documentRows');
     cy.get('@documentRows').eq(0)
@@ -230,8 +230,8 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get('@documentRows').eq(0)
       .find(document.documentDetailsRow.undoDelete);
     cy.get(document.batchDocumentsDetails.save).click();
-    cy.wait('@deleteFile').wait('@deletePiece')
-      .wait('@restoreAgendaitemPiece');
+    cy.wait('@deleteFileBis').wait('@deletePieceBis')
+      .wait('@restoreAgendaitemPieceBis');
 
     // make sure modal is closed before continuing
     cy.get(document.documentDetailsRow.row).should('not.exist');
@@ -250,15 +250,18 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .click();
 
     // delete the last piece, should delete container
-    cy.route('DELETE', '/document-containers/**').as('deleteContainer');
+    cy.intercept('DELETE', '/files/**').as('deleteLastFile');
+    cy.intercept('DELETE', '/pieces/**').as('deleteLastPiece');
+    cy.intercept('DELETE', '/document-containers/**').as('deleteContainer');
+    cy.intercept('PUT', '/agendaitems/**/pieces/restore').as('restoreAgendaitemLastPiece');
     cy.get(route.agendaitemDocuments.batchEdit).click();
     cy.get(document.documentDetailsRow.row).as('documentRows');
     cy.get('@documentRows').eq(0)
       .find(document.documentDetailsRow.delete)
       .click();
     cy.get(document.batchDocumentsDetails.save).click();
-    cy.wait('@deleteFile').wait('@deletePiece')
-      .wait('@restoreAgendaitemPiece')
+    cy.wait('@deleteLastFile').wait('@deleteLastPiece')
+      .wait('@restoreAgendaitemLastPiece')
       .wait('@deleteContainer');
 
     // make sure modal is closed before continuing
@@ -271,8 +274,8 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
   });
 
   it('Cancelling when adding new piece should not skip a piece the next time', () => {
-    cy.route('DELETE', '/files/**').as('deleteFile');
-    const agendaDate = Cypress.moment().add(2, 'weeks')
+    cy.intercept('DELETE', '/files/**').as('deleteFile');
+    const agendaDate = Cypress.dayjs().add(2, 'weeks')
       .day(1); // friday in two weeks
     const caseTitle = `Cypress test: pieces - ${currentTimestamp()}`;
     const subcaseTitleShort = `Cypress test: cancelling a new piece - ${currentTimestamp()}`;
@@ -302,7 +305,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .wait('@deleteFile');
 
     cy.addNewPieceToAgendaitem(subcaseTitleShort, file.newFileName, file);
-    cy.get(utils.vlModal.dialogWindow).should('not.be.visible');
+    cy.get(utils.vlModal.dialogWindow).should('not.exist');
     cy.get(document.documentCard.card).eq(0)
       .find(document.documentCard.name.value)
       .contains(`${file.newFileName}BIS`);
@@ -312,7 +315,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(utils.vlModal.close).click()
       .wait('@deleteFile');
     cy.addNewPieceToAgendaitem(subcaseTitleShort, file.newFileName, file);
-    cy.get(utils.vlModal.dialogWindow).should('not.be.visible');
+    cy.get(utils.vlModal.dialogWindow).should('not.exist');
     cy.get(document.documentCard.card).eq(0)
       .find(document.documentCard.name.value)
       .contains(`${file.newFileName}TER`);
@@ -328,11 +331,11 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.get(utils.vlModalFooter.save).should('be.disabled');
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
       cy.wait(1000);
-      cy.route('POST', '/pieces').as('createNewPiece');
-      cy.route('POST', '/submission-activities').as('createNewSubmissionActivity');
-      cy.route('PATCH', '/submission-activities').as('patchAgendaitem');
-      cy.route('PUT', '/agendaitems/**/pieces').as('putAgendaitemDocuments');
-      cy.route('GET', '/pieces?filter\\[agendaitems\\]\\[:id:\\]=*').as('loadPiecesAgendaitemQuater');
+      cy.intercept('POST', '/pieces').as('createNewPiece');
+      cy.intercept('POST', '/submission-activities').as('createNewSubmissionActivity');
+      cy.intercept('PATCH', '/submission-activities').as('patchAgendaitem');
+      cy.intercept('PUT', '/agendaitems/**/pieces').as('putAgendaitemDocuments');
+      cy.intercept('GET', '/pieces?filter**agendaitems**').as('loadPiecesAgendaitemQuater');
       cy.get(utils.vlModalFooter.save).should('not.be.disabled')
         .click();
       cy.wait('@createNewPiece', {
@@ -349,7 +352,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.wait('@loadPiecesAgendaitemQuater');
     });
 
-    cy.get(utils.vlModal.dialogWindow).should('not.be.visible');
+    cy.get(utils.vlModal.dialogWindow).should('not.exist');
     cy.get(document.documentCard.card).eq(0)
       .find(document.documentCard.name.value)
       .contains(`${file.newFileName}QUATER`);
@@ -398,7 +401,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .click();
   });
   it('should test batch document edit', () => {
-    const agendaDate = Cypress.moment().add(2, 'weeks')
+    const agendaDate = Cypress.dayjs().add(2, 'weeks')
       .day(1);
     const subcaseTitle1 = 'Cypress test: cancelling a new piece';
     const fileName2 = 'test pdf 2';
@@ -412,9 +415,9 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: fileName2, fileType: 'Nota',
     };
     const files = [file];
-    cy.route('PATCH', '/pieces/**').as('patchPieces');
-    cy.route('PATCH', '/document-containers/**').as('patchdocumentContainers');
-    cy.route('GET', '/pieces**').as('getPieces');
+    cy.intercept('PATCH', '/pieces/**').as('patchPieces');
+    cy.intercept('PATCH', '/document-containers/**').as('patchdocumentContainers');
+    cy.intercept('GET', '/pieces**').as('getPieces');
 
     cy.openAgendaForDate(agendaDate);
     cy.openAgendaitemDocumentTab(subcaseTitle1, true);
@@ -448,9 +451,9 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.wait(1000);
     cy.get(dependency.emberPowerSelect.option).eq(2)
       .click();
-    cy.route('PATCH', '/pieces/**').as('patchPieces2');
-    cy.route('PATCH', '/document-containers/**').as('patchdocumentContainers2');
-    cy.route('GET', '/pieces**').as('getPieces2');
+    cy.intercept('PATCH', '/pieces/**').as('patchPieces2');
+    cy.intercept('PATCH', '/document-containers/**').as('patchdocumentContainers2');
+    cy.intercept('GET', '/pieces**').as('getPieces2');
     cy.get(document.batchDocumentsDetails.save).click();
     cy.wait('@patchPieces2');
     cy.wait('@patchdocumentContainers2');
@@ -475,9 +478,9 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.wait(1000);
     cy.get(dependency.emberPowerSelect.option).eq(1)
       .click();
-    cy.route('PATCH', '/pieces/**').as('patchPieces3');
-    cy.route('PATCH', '/document-containers/**').as('patchdocumentContainers3');
-    cy.route('GET', '/pieces**').as('getPieces3');
+    cy.intercept('PATCH', '/pieces/**').as('patchPieces3');
+    cy.intercept('PATCH', '/document-containers/**').as('patchdocumentContainers3');
+    cy.intercept('GET', '/pieces**').as('getPieces3');
     cy.get(document.batchDocumentsDetails.save).click();
     cy.wait('@patchPieces3');
     cy.wait('@patchdocumentContainers3');
@@ -529,9 +532,9 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(dependency.emberPowerSelect.option).eq(0)
       .contains(typeSearchOption)
       .click();
-    cy.route('PATCH', '/pieces/**').as('patchPieces4');
-    cy.route('PATCH', '/document-containers/**').as('patchdocumentContainers4');
-    cy.route('GET', '/pieces**').as('getPieces4');
+    cy.intercept('PATCH', '/pieces/**').as('patchPieces4');
+    cy.intercept('PATCH', '/document-containers/**').as('patchdocumentContainers4');
+    cy.intercept('GET', '/pieces**').as('getPieces4');
     cy.get(document.batchDocumentsDetails.save).click();
     cy.wait('@patchPieces4');
     cy.wait('@patchdocumentContainers4');

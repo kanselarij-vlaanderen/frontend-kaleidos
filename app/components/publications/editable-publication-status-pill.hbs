@@ -15,7 +15,7 @@
     @actionLabel={{t "edit-status"}}
     {{on "click" this.openStatusSelector}}
   >
-    <strong>{{this.publicationStatus.label}}</strong>
+    <strong {{did-update (perform this.loadStatus) @publicationFlow.status}}>{{this.publicationStatus.label}}</strong>
     -
     {{moment-format @publicationFlow.publicationStatusChange.startedAt "DD/MM/YYYY"}}
   </Auk::StatusPill>

@@ -63,11 +63,11 @@ function addNewDocumentsInUploadModal(files, model) {
   });
   // Click save
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
-  cy.route('POST', 'pieces').as('createNewPiece');
-  cy.route('POST', 'document-containers').as('createNewDocumentContainer');
-  cy.route('POST', 'submission-activities').as('createNewSubmissionActivity');
-  cy.route('GET', '/submission-activities?filter**').as(`getSubmissionActivity_${randomInt}`);
-  cy.route('GET', `/pieces?filter\\[${model}\\]\\[:id:\\]=*`).as(`loadPieces${model}`);
+  cy.intercept('POST', 'pieces').as('createNewPiece');
+  cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
+  cy.intercept('POST', 'submission-activities').as('createNewSubmissionActivity');
+  cy.intercept('GET', '/submission-activities?filter**').as(`getSubmissionActivity_${randomInt}`);
+  cy.intercept('GET', `/pieces?filter**${model}**`).as(`loadPieces${model}`);
   cy.get(utils.vlModalFooter.save).click();
   cy.wait('@createNewDocumentContainer', {
     timeout: 24000,
@@ -102,23 +102,24 @@ function addNewDocumentsInUploadModal(files, model) {
 function addNewPiece(oldFileName, file, modelToPatch, hasSubcase = true) {
   cy.log('addNewPiece');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
-  cy.route('POST', 'pieces').as(`createNewPiece_${randomInt}`);
-  cy.route('GET', '/pieces?filter**').as(`loadPieces_${randomInt}`);
+  cy.intercept('POST', 'pieces').as(`createNewPiece_${randomInt}`);
+  cy.intercept('GET', '/pieces?filter**').as(`loadPieces_${randomInt}`);
   if (modelToPatch) {
     if (modelToPatch === 'agendaitems' || modelToPatch === 'subcases') {
-      cy.route('GET', '/submission-activities?filter**').as('getSubmissionActivity');
-      cy.route('POST', '/submission-activities').as('createNewSubmissionActivity');
-      cy.route('PATCH', '/agendaitems/**').as('patchAgendaitem');
-      cy.route('PUT', '/agendaitems/**/pieces').as('putAgendaitemDocuments');
+      cy.intercept('GET', '/submission-activities?filter**').as('getSubmissionActivity');
+      cy.intercept('POST', '/submission-activities').as('createNewSubmissionActivity');
+      cy.intercept('PATCH', '/agendaitems/**').as('patchAgendaitem');
+      cy.intercept('PUT', '/agendaitems/**/pieces').as('putAgendaitemDocuments');
     } else {
-      cy.route('PATCH', `/${modelToPatch}/**`).as('patchSpecificModel');
+      cy.intercept('PATCH', `/${modelToPatch}/**`).as('patchSpecificModel');
     }
   }
 
   cy.get(document.documentCard.name.value).contains(oldFileName)
     .parents(document.documentCard.card)
     .within(() => {
-      cy.get(document.documentCard.actions).click();
+      cy.get(document.documentCard.actions).should('not.be.disabled')
+        .click();
       cy.get(document.documentCard.uploadPiece).click();
     });
 
@@ -351,15 +352,16 @@ function openAgendaitemDossierTab(agendaitemTitle) {
  */
 function uploadFile(folder, fileName, extension, mimeType = 'application/pdf') {
   cy.log('uploadFile');
-  cy.route('POST', 'files').as('createNewFile');
-  cy.route('GET', 'files/**').as('getNewFile');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('POST', 'files').as(`createNewFile${randomInt}`);
+  cy.intercept('GET', 'files/**').as(`getNewFile${randomInt}`);
 
   const fileFullName = `${fileName}.${extension}`;
   const filePath = `${folder}/${fileFullName}`;
   // note: double encoding is needed or pdf will be blank (cy.fixture also needs encoding)
 
   cy.fixture(filePath, 'base64').then((fileContent) => {
-    cy.get('[type=file]').upload(
+    cy.get('[type=file]').attachFile(
       {
         fileContent,
         fileName: fileFullName,
@@ -371,8 +373,9 @@ function uploadFile(folder, fileName, extension, mimeType = 'application/pdf') {
       }
     );
   });
-  cy.wait('@createNewFile');
-  cy.wait('@getNewFile');
+  cy.wait(`@createNewFile${randomInt}`);
+  cy.wait(`@getNewFile${randomInt}`);
+  cy.get(auk.loader).should('not.exist');
   cy.log('/uploadFile');
 }
 
@@ -387,13 +390,13 @@ function uploadFile(folder, fileName, extension, mimeType = 'application/pdf') {
  */
 function uploadUsersFile(folder, fileName, extension) {
   cy.log('uploadUsersFile');
-  cy.route('POST', 'user-management-service/import-users').as('createNewFile');
-  cy.route('GET', 'users?include**').as('getNewFile');
+  cy.intercept('POST', 'user-management-service/import-users').as('createNewFile');
+  cy.intercept('GET', 'users?include**').as('getNewFile');
   const fileFullName = `${fileName}.${extension}`;
   const filePath = `${folder}/${fileFullName}`;
 
   cy.fixture(filePath).then((fileContent) => {
-    cy.get('[type=file]').upload(
+    cy.get('[type=file]').attachFile(
       {
         fileContent, fileName: fileFullName, mimeType: 'application/pdf',
       },
@@ -418,27 +421,27 @@ function uploadUsersFile(folder, fileName, extension) {
 function addNewPieceToSignedDocumentContainer(oldFileName, file) {
   cy.log('addNewPieceToSignedDocumentContainer');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
-  cy.route('POST', 'pieces').as(`createNewPiece_${randomInt}`);
+  cy.intercept('POST', 'pieces').as(`createNewPiece_${randomInt}`);
 
   cy.get(document.documentCard.name.value).contains(oldFileName)
     .parents(document.documentCard.card)
     .within(() => {
-      cy.get(document.documentCard.actions).click();
+      cy.get(document.documentCard.actions).should('not.be.disabled')
+        .click();
       cy.get(document.documentCard.uploadPiece).click();
     });
 
-  cy.get(utils.vlModal.dialogWindow).as('fileUploadDialog');
-
-  cy.get('@fileUploadDialog').within(() => {
+  cy.get(utils.vlModal.dialogWindow).within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.get(document.vlUploadedDocument.filename).should('contain', file.fileName);
-  });
-  cy.wait(1000); // Cypress is too fast
+    cy.wait(1000); // Cypress is too fast
 
-  cy.get('@fileUploadDialog').within(() => {
-    cy.get(utils.vlModalFooter.save).click();
+    // Forcing because sometimes the actions menu is still open and blocking the button, seems to happen more in headless mode
+    cy.get(utils.vlModalFooter.save).click({
+      force: true,
+    })
+      .wait(`@createNewPiece_${randomInt}`);
   });
-  cy.wait(`@createNewPiece_${randomInt}`);
   cy.log('/addNewPieceToSignedDocumentContainer');
 }
 
@@ -451,7 +454,7 @@ function addNewPieceToSignedDocumentContainer(oldFileName, file) {
  */
 function addLinkedDocument(filenames) {
   // NOTE: this works in subcase view, untested in agendaitem view
-  cy.route('GET', 'pieces').as('createNewPiece');
+  cy.intercept('GET', 'pieces').as('createNewPiece');
   cy.log('addLinkedDocument');
   cy.get(document.linkedDocuments.add).click();
   cy.get(document.addExistingPiece.searchInput).click();
@@ -476,8 +479,9 @@ function addLinkedDocument(filenames) {
  * @param Number indexToDelete - The index of the piece in the list
  */
 function deleteSinglePiece(fileName, indexToDelete) {
-  cy.route('DELETE', 'pieces/*').as('deletePiece');
-  cy.route('PUT', '/agendaitems/**/pieces/restore').as('putRestoreAgendaitems');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('DELETE', 'pieces/*').as(`deletePiece${randomInt}`);
+  cy.intercept('PUT', '/agendaitems/**/pieces/restore').as(`putRestoreAgendaitems${randomInt}`);
   cy.log('deleteSinglePiece');
 
   cy.get(document.documentCard.name.value).contains(fileName)
@@ -492,9 +496,9 @@ function deleteSinglePiece(fileName, indexToDelete) {
     });
 
   cy.get(utils.vlModalVerify.save).click();
-  cy.wait('@deletePiece', {
+  cy.wait(`@deletePiece${randomInt}`, {
     timeout: 40000,
-  }).wait('@putRestoreAgendaitems');
+  }).wait(`@putRestoreAgendaitems${randomInt}`);
   cy.wait(2000);
   cy.log('/deleteSinglePiece');
 }

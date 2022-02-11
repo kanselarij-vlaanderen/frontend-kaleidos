@@ -6,7 +6,6 @@ import utils from '../../selectors/utils.selectors';
 
 context('Table Row Click tests', () => {
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 
@@ -17,7 +16,7 @@ context('Table Row Click tests', () => {
   // TODO-publication add publication table row click test, make sure to have at least 1 publication in default set
 
   it('should open an agenda after clicking a row', () => {
-    cy.route('GET', '/agendas/**').as('getAgendas');
+    cy.intercept('GET', '/agendas/**').as('getAgendas');
 
     cy.get(route.agendasOverview.dataTable).find('tbody')
       .children('tr')
@@ -29,7 +28,7 @@ context('Table Row Click tests', () => {
   });
 
   it('should open a case after clicking a row', () => {
-    cy.route('GET', '/cases**').as('getCases');
+    cy.intercept('GET', '/cases**').as('getCases');
     cy.visit('/dossiers');
     cy.wait('@getCases');
     cy.get(route.casesOverview.dataTable).find('tbody')
@@ -41,8 +40,8 @@ context('Table Row Click tests', () => {
   });
 
   it('should open a newsletter-info after clicking a row', () => {
-    cy.route('GET', '/meetings?**').as('getMeetings');
-    cy.route('GET', '/agendaitems**').as('getAgendaitems');
+    cy.intercept('GET', '/meetings?**').as('getMeetings');
+    cy.intercept('GET', '/agendaitems**').as('getAgendaitems');
     cy.visit('/kort-bestek');
     cy.wait('@getMeetings');
     cy.get(route.newsletters.dataTable).find('tbody')
@@ -58,7 +57,7 @@ context('Table Row Click tests', () => {
   });
 
   it('should filter the agenda-page and remove the active filter afterwards', () => {
-    cy.route('GET', '/meetings?**').as('getMeetings');
+    cy.intercept('GET', '/meetings?**').as('getMeetings');
     cy.wait('@getMeetings', {
       timeout: 30000,
     });

@@ -1,0 +1,103 @@
+import Controller from '@ember/controller';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import tableColumns from 'frontend-kaleidos/config/publications/overview-table-columns';
+
+export default class PublicationsOverviewBaseController extends Controller {
+  /** @abstract @type {string[]} */
+  @tracked defaultColumns = [];
+
+  /** @abstract @type {string} */
+  @tracked routeName = 'base';
+
+  @tracked page = 0;
+  @tracked size = 10;
+  @tracked sort = '-created';
+
+  @tracked columnsDisplayConfig;
+  tableColumns = tableColumns;
+
+  @tracked isLoadingModel = false;
+
+  constructor() {
+    super(...arguments);
+    this.initColumnsDisplayConfig();
+  }
+
+  initColumnsDisplayConfig() {
+    let columnsDisplayConfig = this.loadColumnsDisplayConfig();
+    if (!columnsDisplayConfig) {
+      columnsDisplayConfig = this.getDefaultColumnsDisplayConfig();
+    }
+    this.columnsDisplayConfig = columnsDisplayConfig;
+  }
+
+  get columnsDisplayConfigStorageKey() {
+    return `publications.overview.${this.routeName}/columnsDisplayConfig`;
+  }
+
+  @action
+  changeColumnsDisplayConfig(config) {
+    this.columnsDisplayConfig = config;
+    this.saveColumnsDisplayConfig(this.columnsDisplayConfig);
+  }
+
+  @action
+  resetColumnsDisplayConfig() {
+    this.columnsDisplayConfig = this.getDefaultColumnsDisplayConfig();
+    this.saveColumnsDisplayConfig(this.columnsDisplayConfig);
+  }
+
+  loadColumnsDisplayConfig() {
+    const serializedColumnsDisplayConfig = localStorage.getItem(
+      this.columnsDisplayConfigStorageKey
+    );
+    if (serializedColumnsDisplayConfig) {
+      const columnsDisplayConfig = JSON.parse(serializedColumnsDisplayConfig);
+      return columnsDisplayConfig;
+    } else {
+      return null;
+    }
+  }
+
+  saveColumnsDisplayConfig(columnsDisplayConfig) {
+    const serializedColumnsDisplayConfig = JSON.stringify(columnsDisplayConfig);
+    localStorage.setItem(
+      this.columnsDisplayConfigStorageKey,
+      serializedColumnsDisplayConfig
+    );
+  }
+
+  getDefaultColumnsDisplayConfig() {
+    const columnsDisplayConfig = {};
+    for (let column of tableColumns) {
+      const columnKey = column.keyName;
+      const isColumnShown = this.defaultColumns.includes(columnKey);
+      columnsDisplayConfig[column.keyName] = isColumnShown;
+    }
+    return columnsDisplayConfig;
+  }
+
+  @action
+  prevPage() {
+    if (this.page > 0) {
+      this.page = this.page - 1;
+    }
+  }
+
+  @action
+  nextPage() {
+    this.page = this.page + 1;
+  }
+
+  @action
+  setSizeOption(size) {
+    this.size = size;
+    this.page = 0;
+  }
+
+  @action
+  sortTable(sortField) {
+    this.sort = sortField;
+  }
+}
