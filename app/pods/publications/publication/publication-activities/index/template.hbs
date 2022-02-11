@@ -24,9 +24,49 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
   <Auk::Panel::Body class="auk-u-bg-alt">
-    {{#each @model as |event|}}
-      <div>{{moment-format event.date}} | {{event.title}}</div>
-    {{/each}}
+    <Utils::Generic::Timeline::Timeline @model={{@model}} as |Timeline|>
+      <Timeline.Event @badgeIcon="check" @badgeSkin="success" as |event|>
+        {{#if event.isRequest}}
+          {{!Aanvraag}}
+          <Auk::Panel>
+            <Auk::Panel::Header>
+              <Auk::Toolbar as |Toolbar|>
+                <Toolbar.Group @position="left" as |Group|>
+                  <Group.Item>
+                    <h4 class="auk-u-m-0">
+                      {{t "publications-published"}}
+                    </h4>
+                    <p class="auk-u-text-small auk-u-m-0">
+                      {{moment-format event.date}}
+                    </p>
+                  </Group.Item>
+                </Toolbar.Group>
+                {{!TODO? menu button}}
+              </Auk::Toolbar>
+            </Auk::Panel::Header>
+          </Auk::Panel>
+        {{else}}
+          {{!Publicatie}}
+          <Auk::Panel>
+            <Auk::Panel::Header>
+              <Auk::Toolbar as |Toolbar|>
+                <Toolbar.Group @position="left" as |Group|>
+                  <Group.Item>
+                    <h4 class="auk-u-m-0">
+                      {{t "publications-published"}}
+                    </h4>
+                    <p class="auk-u-text-small auk-u-m-0">
+                      {{moment-format event.date}}
+                    </p>
+                  </Group.Item>
+                </Toolbar.Group>
+                {{!TODO? menu button}}
+              </Auk::Toolbar>
+            </Auk::Panel::Header>
+          </Auk::Panel>
+        {{/if}}
+      </Timeline.Event>
+    </Utils::Generic::Timeline::Timeline>
   </Auk::Panel::Body>
 </Auk::Panel>
 

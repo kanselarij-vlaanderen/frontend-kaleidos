@@ -939,6 +939,7 @@
   "request-proof-x-stage-for-publication-x-identification": "Drukproef aanvragen ({stage}) voor publicatie {identification}",
   "proofing-request": "Drukproefaanvraag",
   "publication-request": "Publicatieaanvraag",
+  "request-sent": "Aanvraag verzonden",
   "initial": "initieel",
   "extra": "extra",
   "final": "finaal",

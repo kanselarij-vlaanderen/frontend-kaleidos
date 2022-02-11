@@ -34,6 +34,7 @@ export class PublicationRequestEvent {
     });
   }
 
+  isRequest = true;
   /** @type {PublicationActivity} */
   @tracked publicationActivity;
 
@@ -53,6 +54,7 @@ export class PublicationEvent {
     });
   }
 
+  isPublication = true;
   /** @type {DecisionModel} */
   @tracked decision;
 
