@@ -51,9 +51,9 @@ export default class NewPublicationModal extends Component {
 
   get publicationNumberErrorTranslationKey() {
     if (this.numberIsRequired) {
-      return "publication-number-required-and-numeric";
+      return 'publication-number-required-and-numeric';
     } else if (this.numberIsAlreadyUsed) {
-      return "publication-number-already-taken";
+      return 'publication-number-already-taken';
     } else {
       return null;
     }
@@ -82,7 +82,7 @@ export default class NewPublicationModal extends Component {
       include: 'identification.structured-identifier',
     });
     if (latestPublication) {
-      const identification =  yield latestPublication.identification;
+      const identification = yield latestPublication.identification;
       const structuredIdentifier = yield identification.structuredIdentifier;
       this.number = structuredIdentifier.localIdentifier + 1;
     } else {
@@ -112,20 +112,23 @@ export default class NewPublicationModal extends Component {
 
   @task
   *save() {
-    yield this.args.onSave(
-      {
-        number: this.number,
-        suffix: this.suffix,
-        shortTitle: this.shortTitle,
-        longTitle: this.longTitle,
-        decisionDate: this.decisionDate,
-        openingDate: this.openingDate,
-        publicationDueDate: this.publicationDueDate,
-      });
+    yield this.args.onSave({
+      number: this.number,
+      suffix: this.suffix,
+      shortTitle: this.shortTitle,
+      longTitle: this.longTitle,
+      decisionDate: this.decisionDate,
+      openingDate: this.openingDate,
+      publicationDueDate: this.publicationDueDate,
+    });
   }
 
   async isPublicationNumberAlreadyTaken() {
-    this.numberIsAlreadyUsed = await this.publicationService.publicationNumberAlreadyTaken(this.number, this.suffix);
+    this.numberIsAlreadyUsed =
+      await this.publicationService.publicationNumberAlreadyTaken(
+        this.number,
+        this.suffix
+      );
   }
 
   @action
