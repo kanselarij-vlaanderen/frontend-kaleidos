@@ -18,17 +18,14 @@ export default class PublicationsOverviewBaseController extends Controller {
 
   @action
   changeColumnsDisplayConfig(config) {
-    this.saveColumnsDisplayConfig(this.columnsDisplayConfig);
-    this.columnsDisplayConfig = config;
+    this.saveColumnsDisplayConfig(config);
+    this.reload();
   }
 
   @action
   resetColumnsDisplayConfig() {
     const defaultDisplayConfig = this.getDefaultColumnsDisplayConfig();
-    this.saveColumnsDisplayConfig(defaultDisplayConfig);
-    this.columnsDisplayConfig = defaultDisplayConfig;
-  }
-
+    this.changeColumnsDisplayConfig(defaultDisplayConfig);
   }
 
   saveColumnsDisplayConfig(columnsDisplayConfig) {
@@ -60,5 +57,10 @@ export default class PublicationsOverviewBaseController extends Controller {
   @action
   sortTable(sortField) {
     this.sort = sortField;
+  }
+
+  @action
+  reload() {
+    this.send('reloadModel');
   }
 }
