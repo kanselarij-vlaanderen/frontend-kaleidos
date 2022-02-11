@@ -429,18 +429,17 @@ function addNewPieceToSignedDocumentContainer(oldFileName, file) {
       cy.get(document.documentCard.uploadPiece).click();
     });
 
-  cy.get(utils.vlModal.dialogWindow).as('fileUploadDialog');
-
-  cy.get('@fileUploadDialog').within(() => {
+  cy.get(utils.vlModal.dialogWindow).within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.get(document.vlUploadedDocument.filename).should('contain', file.fileName);
-  });
-  cy.wait(1000); // Cypress is too fast
+    cy.wait(1000); // Cypress is too fast
 
-  cy.get('@fileUploadDialog').within(() => {
-    cy.get(utils.vlModalFooter.save).click();
+    // Forcing because sometimes the actions menu is still open and blocking the button, seems to happen more in headless mode
+    cy.get(utils.vlModalFooter.save).click({
+      force: true,
+    })
+      .wait(`@createNewPiece_${randomInt}`);
   });
-  cy.wait(`@createNewPiece_${randomInt}`);
   cy.log('/addNewPieceToSignedDocumentContainer');
 }
 

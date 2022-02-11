@@ -12,7 +12,7 @@ function currentTimestamp() {
   return Cypress.dayjs().unix();
 }
 
-context('Add files to an agenda', () => {
+context('Decision tests', () => {
   const agendaDate = Cypress.dayjs().add(1, 'weeks')
     .day(2); // Next friday
 
