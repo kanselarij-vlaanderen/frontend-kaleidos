@@ -87,8 +87,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
       this.numberIsRequired = true;
     } else {
       this.numberIsRequired = false;
-      yield timeout(1000);
-      this.setStructuredIdentifier.perform();
+      yield this.setStructuredIdentifier.perform();
     }
   }
 
@@ -97,12 +96,12 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.publicationNumberSuffix = isBlank(event.target.value)
       ? undefined
       : event.target.value;
-    yield timeout(1000);
-    this.setStructuredIdentifier.perform();
+    yield this.setStructuredIdentifier.perform();
   }
 
   @restartableTask
   *setStructuredIdentifier() {
+    yield timeout(1000);
     const isPublicationNumberTaken =
       yield this.publicationService.publicationNumberAlreadyTaken(
         this.publicationNumber,
@@ -176,8 +175,18 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @task
   *save() {
+    const isValid = yield this.untilValidated();
+    if (!isValid) {
+      return;
+    }
     yield this.performSave();
     this.isEditing = false;
+  }
+
+  async untilValidated() {
+    await this.setStructuredIdentifier.last;
+    console.log(this.isValid);
+    return this.isValid;
   }
 
   // separate method to prevent ember-concurrency from saving only partially
