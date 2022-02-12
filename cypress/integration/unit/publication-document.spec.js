@@ -5,7 +5,6 @@
 
 context('Publications documents tests', () => {
   beforeEach(() => {
-    cy.server();
     cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
   });
 

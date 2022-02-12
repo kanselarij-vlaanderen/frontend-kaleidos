@@ -20,15 +20,15 @@ services:
     volumes:
       - /usr/share/elasticsearch/data
   e2e-electron:
-    image: "kanselarij/kaleidos-cypress:latest"
+    image: "kanselarij/kaleidos-cypress:2.0.0"
     ipc: host
     environment:
       NO_COLOR: 1
     links:
       - frontend:frontend
     volumes:
-      - ../cypress:/cypress
-      - ../cypress.test.json:/cypress.json
+      - ../cypress:/app/cypress
+      - ../cypress.test.json:/app/cypress.json
   login:
     entrypoint: "echo 'service disabled'"
     restart: "no"
@@ -38,7 +38,6 @@ services:
     links:
       - resource:backend
     restart: always
-    user: ${HOST_UID_GID}
   resource:
     links:
       - database:database

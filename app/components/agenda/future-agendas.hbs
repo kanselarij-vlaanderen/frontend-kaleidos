@@ -7,14 +7,14 @@
            data-test-future-agenda-table>
       <thead>
         <tr>
-          <th class="auk-table__col--3 auk-table__header-title auk-table__header-title--unsortable">
+          <th class="auk-table__col--3">
             <div class="auk-o-flex auk-o-flex--vertical-center">
               <span>
                 {{t "agenda"}}
               </span>
             </div>
           </th>
-          <th class="auk-table__col--2 auk-table__header-title auk-table__header-title--unsortable"
+          <th class="auk-table__col--2"
           >
             <div class="auk-o-flex auk-o-flex--vertical-center">
               <span>
@@ -22,7 +22,7 @@
               </span>
             </div>
           </th>
-          <th class="auk-table__col--2 auk-table__header-title auk-table__header-title--unsortable"
+          <th class="auk-table__col--2"
           >
             <div class="auk-o-flex auk-o-flex--vertical-center">
               <span>
@@ -30,7 +30,7 @@
               </span>
             </div>
           </th>
-          <th class="auk-table__col--2 auk-table__header-title auk-table__header-title--unsortable"
+          <th class="auk-table__col--2"
           >
             <div class="auk-o-flex auk-o-flex--vertical-center">
               <span>
@@ -38,7 +38,7 @@
               </span>
             </div>
           </th>
-          <th class="auk-table__col--2 auk-table__header-title auk-table__header-title--unsortable"
+          <th class="auk-table__col--2"
           >
             <div class="auk-o-flex auk-o-flex--vertical-center">
               <span>
@@ -49,7 +49,7 @@
           <th class="auk-table__col--1"></th>
         </tr>
       </thead>
-      <tbody class="auk-table--interaction-cursor" data-test-future-agenda-table-body>
+      <tbody class="auk-table--clickable-rows" data-test-future-agenda-table-body>
         {{#each (await this.items) as |meeting|}}
           {{!-- Users explicitly want the whole row and not just the arrow at the end to be clickable and link through --}}
           {{!-- template-lint-disable no-unknown-arguments-for-builtin-components --}}

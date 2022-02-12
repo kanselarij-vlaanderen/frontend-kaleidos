@@ -1,4 +1,4 @@
-/* global context, before, it, cy, beforeEach */
+/* global context, it, cy, beforeEach */
 // / <reference types="Cypress" />
 import auk from '../../selectors/auk.selectors';
 import document from '../../selectors/document.selectors';
@@ -10,14 +10,9 @@ function formatmeetingDocumentsUrl(meetingId, agendaId) {
 }
 
 context('Add files to an agenda', () => { // At the meeting-level
-  before(() => {
-    cy.server();
-  });
-
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
-    cy.route('GET', '/pieces?filter\\[meeting\\]\\[:id:\\]=*').as('loadPieces');
+    cy.intercept('GET', '/pieces?filter**meeting**').as('loadPieces');
   });
 
   it('should open an agenda and add documents to it', () => {
@@ -126,7 +121,7 @@ context('Add files to an agenda', () => { // At the meeting-level
   it('should delete documents, pieces and files', () => {
     const meetingId = '5EBA8CE1DAB6BB0009000009';
     const agendaId = '5EBA8CE3DAB6BB000900000A';
-    cy.route('GET', '/pieces?filter\\[:id:\\]=*').as('loadPieceData');
+    cy.intercept('GET', '/pieces?filter**id**').as('loadPieceData');
     cy.visit(formatmeetingDocumentsUrl(meetingId, agendaId));
     cy.wait('@loadPieces'); // general load
     cy.wait('@loadPieceData'); // specific load to ensure document-container is loaded
@@ -139,12 +134,13 @@ context('Add files to an agenda', () => { // At the meeting-level
     cy.get('@docCards').eq(0)
       .within(() => {
         cy.get(document.documentCard.name.value).contains(/1e/);
-        cy.get(document.documentCard.actions).click();
+        cy.get(document.documentCard.actions).should('not.be.disabled')
+          .click();
         cy.get(document.documentCard.delete).click();
       });
-    cy.route('DELETE', 'files/*').as('deleteFile');
-    cy.route('DELETE', 'pieces/*').as('deletePiece');
-    cy.route('DELETE', 'document-containers/*').as('deleteDocumentContainer');
+    cy.intercept('DELETE', 'files/*').as('deleteFile');
+    cy.intercept('DELETE', 'pieces/*').as('deletePiece');
+    cy.intercept('DELETE', 'document-containers/*').as('deleteDocumentContainer');
 
     cy.get(utils.vlModalVerify.save).contains('Verwijderen')
       .click();
@@ -174,9 +170,9 @@ context('Add files to an agenda', () => { // At the meeting-level
         cy.get(document.vlDocument.delete).click(); // no eq(0) needed when this is the only vl-document
       });
 
-    cy.route('DELETE', 'files/*').as('deleteFile');
-    cy.route('DELETE', 'pieces/*').as('deletePiece');
-    cy.route('DELETE', 'document-containers/*').as('deleteDocumentContainer');
+    cy.intercept('DELETE', 'files/*').as('deleteFile');
+    cy.intercept('DELETE', 'pieces/*').as('deletePiece');
+    cy.intercept('DELETE', 'document-containers/*').as('deleteDocumentContainer');
 
     cy.get(utils.vlModalVerify.save).contains('Verwijderen')
       .click();

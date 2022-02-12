@@ -1,4 +1,4 @@
-/* global context, it, cy,beforeEach, afterEach */
+/* global context, it, cy, afterEach */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -7,10 +7,6 @@ import cases from '../../selectors/case.selectors';
 import utils from '../../selectors/utils.selectors';
 
 context('meeting actions tests', () => {
-  beforeEach(() => {
-    cy.server();
-  });
-
   afterEach(() => {
     cy.logout();
   });
@@ -65,15 +61,15 @@ context('meeting actions tests', () => {
     cy.get(utils.vlModalVerify.save).contains('Verwijderen')
       .click();
 
-    cy.route('DELETE', 'agendaitems/**').as('deleteAgendaitem');
-    cy.route('DELETE', 'agenda-activities/**').as('deleteAgendaActivity');
-    cy.route('PATCH', 'subcases/**').as('patchSubcase');
+    cy.intercept('DELETE', 'agendaitems/**').as('deleteAgendaitem');
+    cy.intercept('DELETE', 'agenda-activities/**').as('deleteAgendaActivity');
+    cy.intercept('PATCH', 'subcases/**').as('patchSubcase');
     cy.wait('@deleteAgendaitem'); // 2 of these happen
     cy.wait('@deleteAgendaActivity');
     cy.wait('@patchSubcase');
     cy.get(auk.modal.container).should('not.exist');
     cy.get(auk.loader, {
-      timeout: 20000,
+      timeout: 60000,
     }).should('not.exist'); // route is loading data after this action
 
     // Verify subcase is no longer on designagenda after deleting the agendaitem

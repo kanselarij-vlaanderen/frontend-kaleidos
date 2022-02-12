@@ -15,15 +15,15 @@
     <table class="auk-table auk-table--striped">
       <thead>
         <tr>
-          <th class="auk-table__col--9 auk-table__header-title">
+          <th class="auk-table__col--9">
             {{t "case-name"}}
           </th>
-          <th class="auk-table__col--2 auk-table__header-title">
+          <th class="auk-table__col--2">
             {{t "created-on"}}
           </th>
         </tr>
       </thead>
-      <tbody class="auk-table--interaction-cursor">
+      <tbody class="auk-table--clickable-rows">
         {{#each (await this.results) as |row|}}
           {{!-- TODO: address accessibility concern, keeping in mind that users want the whole row to be clickable --}}
           {{!-- template-lint-disable no-invalid-interactive --}}

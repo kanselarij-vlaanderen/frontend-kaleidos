@@ -14,6 +14,7 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
   @tracked name;
   @tracked isSourceForProofPrint = false;
   @tracked receivedAtDate = new Date();
+  @tracked isTranslationIn = false;
 
   constructor() {
     super(...arguments);
@@ -61,6 +62,7 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
       name: this.name,
       receivedAtDate: this.receivedAtDate,
       isSourceForProofPrint: this.isSourceForProofPrint,
+      isTranslationIn: this.isTranslationIn,
     });
   }
 
@@ -77,6 +79,11 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
     } else { // this case occurs when users manually empty the date input-field
       this.receivedAtDate = undefined;
     }
+  }
+
+  @action
+  setTranslationInStatus(event) {
+    this.isTranslationIn = event.target.checked;
   }
 
   initValidation() {

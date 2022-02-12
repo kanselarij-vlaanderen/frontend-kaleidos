@@ -1,5 +1,4 @@
 <Auk::Navbar
-  class="auk-signature-overview-navbar"
   @skin="gray-100"
   @auto={{true}}
 >
@@ -54,6 +53,7 @@
                 @currentSorting={{this.sort}}
                 @onChange={{this.changeSorting}}
               />
+              <th>{{t "status"}}</th>
               <th>{{! Actions}}</th>
             </tr>
           </thead>
@@ -74,6 +74,9 @@
                     signFlow.decisionActivity.startDate
                     "DD-MM-YYYY"
                   }}
+                </td>
+                <td>
+                  <DigitalSigning::SigningFlowStatus @signingFlow={{signFlow}} />
                 </td>
                 <td>
                   <WebComponents::AuButtonToolbar>

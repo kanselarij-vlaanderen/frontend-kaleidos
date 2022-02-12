@@ -6,15 +6,14 @@ import mandatee from '../../selectors/mandatee.selectors';
 import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
-  return Cypress.moment().unix();
+  return Cypress.dayjs().unix();
 }
 
 context('agenda notice test', () => {
-  const dateToCreateAgenda = Cypress.moment().add(11, 'weeks')
+  const dateToCreateAgenda = Cypress.dayjs().add(11, 'weeks')
     .day(1);
 
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 
@@ -43,7 +42,7 @@ context('agenda notice test', () => {
     cy.addSubcaseMandatee(1);
     cy.addSubcaseMandatee(2);
     // add fields
-    cy.route('GET', 'concepts**http://themis.vlaanderen.be/id/concept-schema/**').as('getConceptSchemes');
+    cy.intercept('GET', '/concepts**').as('getConceptSchemes');
     cy.get(utils.governmentAreasPanel.edit).click();
     cy.wait('@getConceptSchemes');
     cy.get(utils.governmentAreaSelectorForm.container).contains(labelName1)

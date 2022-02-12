@@ -76,15 +76,15 @@
                       @layout="icon-right"
                       @route="agenda.agendaitems.agendaitem"
                       @models={{array
-                                  @publicationFlow.agendaItemTreatment.agendaitem.agenda.createdFor.id
-                                  @publicationFlow.agendaItemTreatment.agendaitem.agenda.id
-                                  @publicationFlow.agendaItemTreatment.agendaitem.id
-                              }}
+                        @publicationFlow.agendaItemTreatment.agendaitem.agenda.createdFor.id
+                        @publicationFlow.agendaItemTreatment.agendaitem.agenda.id
+                        @publicationFlow.agendaItemTreatment.agendaitem.id
+                      }}
                     >
                       {{#if @publicationFlow.agendaItemTreatment.startDate}}
                         {{moment-format
-                            @publicationFlow.agendaItemTreatment.startDate
-                            "DD-MM-YYYY"
+                          @publicationFlow.agendaItemTreatment.startDate
+                          "DD-MM-YYYY"
                         }}
                       {{else}}
                         {{t "to-agenda"}}

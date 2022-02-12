@@ -3,8 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
-import { add } from 'ember-math-helpers/helpers/add';
-import { getPublicationStatusPillKey } from 'frontend-kaleidos/utils/publication-auk';
+import { getPublicationStatusPillKey, getPublicationStatusPillStep } from 'frontend-kaleidos/utils/publication-auk';
 
 export default class PublicationsTableRowComponent extends Component {
   @service router;
@@ -35,9 +34,6 @@ export default class PublicationsTableRowComponent extends Component {
 
         'translation-subcase',
 
-        'translation-subcase.request-activities',
-        'translation-subcase.request-activities.used-pieces',
-
         'publication-subcase',
 
         'publication-subcase.proofing-activities',
@@ -47,8 +43,8 @@ export default class PublicationsTableRowComponent extends Component {
       ].join(','),
     });
 
-    this.isViaCouncilOfMinisters = yield this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
-    this.pageCount = yield this.getPageCount(publicationFlow);
+    this.isViaCouncilOfMinisters =
+      yield this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
     this.proofRequestDate = yield this.getProofRequestDate(publicationFlow);
     this.publicationDate = yield this.publicationService.getPublicationDate(
       publicationFlow
@@ -60,21 +56,12 @@ export default class PublicationsTableRowComponent extends Component {
     this.publicationStatus = yield this.args.publicationFlow.status;
   }
 
-  async getPageCount(publicationFlow) {
-    const translationSubcase = await publicationFlow.translationSubcase;
-    const requestActivities = await translationSubcase.requestActivities;
-    const pieces = (await Promise.all(requestActivities.mapBy('usedPieces')))
-      // if not calling to array, Ember seems to skip mapBy
-      // flattening an array of request activities
-      // probably an Ember Data bug
-      .map((pieces) => pieces.toArray())
-      .flat();
-    const pageCounts = pieces.map((it) => it.pages).compact();
-    if (!pageCounts.length) {
-      return undefined;
-    } else {
-      return add(pageCounts);
-    }
+  get publicationStatusPillKey() {
+    return this.publicationStatus && getPublicationStatusPillKey(this.publicationStatus);
+  }
+
+  get publicationStatusPillStep() {
+    return this.publicationStatus && getPublicationStatusPillStep(this.publicationStatus);
   }
 
   async getProofRequestDate(publicationFlow) {
@@ -88,18 +75,18 @@ export default class PublicationsTableRowComponent extends Component {
 
   // TODO: review async getter once ember-resources can be used
   get isTranslationOverdue() {
-    return !this.args.publicationFlow.status.get('isFinal')
-      && this.args.publicationFlow.translationSubcase.get('isOverdue');
+    return (
+      !this.args.publicationFlow.status.get('isFinal') &&
+      this.args.publicationFlow.translationSubcase.get('isOverdue')
+    );
   }
 
   // TODO: review async getter once ember-resources can be used
   get isPublicationOverdue() {
-    return !this.args.publicationFlow.status.get('isFinal')
-      && this.args.publicationFlow.publicationSubcase.get('isOverdue');
-  }
-
-  get publicationStatusPillKey() {
-    return this.publicationStatus && getPublicationStatusPillKey(this.publicationStatus);
+    return (
+      !this.args.publicationFlow.status.get('isFinal') &&
+      this.args.publicationFlow.publicationSubcase.get('isOverdue')
+    );
   }
 
   @action

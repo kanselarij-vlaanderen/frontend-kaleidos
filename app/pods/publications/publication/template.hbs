@@ -7,17 +7,17 @@
       <Auk::Toolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
           <span class="auk-o-flex auk-o-flex--horizontal auk-o-flex--vertical-center auk-o-flex--spaced">
-             <Publications::PublicationStatusPill @publicationFlow={{@model}} />
-             <span class="auk-overline auk-u-muted" data-test-route-publications-publication-header-number>
-                {{uppercase (t "publication-flow")}}
-                -
-               {{#if this.isViaCouncilOfMinisters}}
-                 {{uppercase (t "via-cabinet")}}
-               {{else}}
-                 {{uppercase (t "not-via-cabinet")}}
-               {{/if}}
-               -
-               {{uppercase @model.identification.idName}}
+            <Publications::EditablePublicationStatusPill @publicationFlow={{@model}} />
+            <span class="auk-overline auk-u-text-muted" data-test-route-publications-publication-header-number>
+              {{uppercase (t "publication-flow")}}
+              -
+              {{#if this.isViaCouncilOfMinisters}}
+                {{uppercase (t "via-cabinet")}}
+              {{else}}
+                {{uppercase (t "not-via-cabinet")}}
+              {{/if}}
+              -
+              {{uppercase @model.identification.idName}}
             </span>
           </span>
           <Auk::AbbreviatedText
@@ -48,14 +48,5 @@
         {{outlet}}
       </div>
     </div>
-  </div>
-  <div class="auk-panel-layout__sidebar">
-    <Publications::PublicationSidebar
-      @isOpen={{this.sidebarIsOpen}}
-      @onCollapse={{this.toggleSidebar}}
-      @onOpen={{this.toggleSidebar}}
-      @publicationFlow={{@model}}
-      @didChange={{this.saveSidebarProperty}}
-    />
   </div>
 </div>
