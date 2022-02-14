@@ -88,6 +88,38 @@ function createPublication(fields) {
 }
 
 /**
+ * @description Create a publication Changes the status from a publication and gos back to overview)
+ * @name createPublicationWithStatus
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {number: Number, suffix: String, decisionDate: Object, receptionDate: Object, targetPublicationdate: Object, shortTitle: String, longTitle: String, newStatus: String} fields The data for the new publication
+ */
+function createPublicationWithStatus(fields) {
+  // TODO-COMMAND unused command for now
+  cy.createPublication(fields);
+  cy.changePublicationStatus(fields.newStatus);
+  cy.get(publication.publicationNav.goBack).click();
+}
+
+/**
+ * @description Changes the status from a publication, used when in the view of an invididual publication (/publicaties/ID/...)
+ * @name changePublicationStatus
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {String} newStatus The new status to selected
+ */
+function changePublicationStatus(newStatus) {
+  // TODO-COMMAND unused command for now
+  cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+  cy.get(publication.statusPill.changeStatus).click();
+  cy.get(publication.publicationStatus.select).click();
+  cy.get(dependency.emberPowerSelect.option).contains(newStatus)
+    .click();
+  cy.get(publication.publicationStatus.save).click();
+  cy.wait('@patchPublicationFlow');
+}
+
+/**
  * @description Opens the document add dialog and adds each file in the files array
  * @name addPublicationDocuments
  * @memberOf Cypress.Chainable#
@@ -168,4 +200,6 @@ function addPublicationDocuments(files) {
 // Commands
 Cypress.Commands.add('fillInNewPublicationFields', fillInNewPublicationFields);
 Cypress.Commands.add('createPublication', createPublication);
+Cypress.Commands.add('createPublicationWithStatus', createPublicationWithStatus);
+Cypress.Commands.add('changePublicationStatus', changePublicationStatus);
 Cypress.Commands.add('addPublicationDocuments', addPublicationDocuments);

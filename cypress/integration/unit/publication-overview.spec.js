@@ -6,19 +6,6 @@ import publication from '../../selectors/publication.selectors';
 import auk from '../../selectors/auk.selectors';
 
 context('Publications overview tests', () => {
-  // TODO-COMMAND we probably want to change the status via a command in further testing
-  // function createPublicationChangeStatus(fields) {
-  //   cy.createPublication(fields);
-  //   cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
-  //   cy.get(publication.statusPill.changeStatus).click();
-  //   cy.get(publication.publicationStatus.select).click();
-  //   cy.get(dependency.emberPowerSelect.option).contains(fields.newStatus)
-  //     .click();
-  //   cy.get(publication.publicationStatus.save).click();
-  //   cy.wait('@patchPublicationFlow');
-  //   cy.get(publication.publicationNav.goBack).click();
-  // }
-
   const searchFields = {
     number: 1401,
     shortTitle: 'Besluitvorming Vlaamse Regering',
@@ -64,19 +51,12 @@ context('Publications overview tests', () => {
   });
 
   it('should test all the result amount options shown options in overview', () => {
-    // const fields = {
-    //   number: 1404,
-    //   shortTitle: 'test',
-    // };
     const elementsToCheck = [
       25,
       50,
       100,
       200
     ];
-
-    // cy.createPublication(fields);
-    // cy.get(publication.publicationNav.goBack).click();
     elementsToCheck.forEach((option) => {
       // In this loop, the options list should go away after url change but it doesn't always, creating a second option list that covers elements
       cy.get(dependency.emberPowerSelect.option).should('not.exist');
@@ -96,12 +76,12 @@ context('Publications overview tests', () => {
       'numacNumber',
       'shortTitle',
       'remark',
-      'pageCount', // hidden by default
+      'pageCount',
       'decisionDate',
       'openingDate',
-      'translationRequestDate', // hidden by default
+      'translationRequestDate',
       'translationDueDate',
-      'proofRequestDate', // hidden by default
+      'proofRequestDate',
       'proofReceivedDate',
       'proofPrintCorrector',
       'publicationTargetDate',
@@ -187,7 +167,7 @@ context('Publications overview tests', () => {
   });
 
   it('should test the search function', () => {
-    // this is data from previous test
+    // this is data from first test
     for (const [key, value] of Object.entries(searchFields)) {
       cy.intercept('GET', '/publication-flows/search**').as('searchPublicationFlows');
       cy.log(`searching for ${key}`);

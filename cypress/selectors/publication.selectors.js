@@ -309,7 +309,7 @@ const selectors = {
   publicationCaseInfo: {
     edit: '[data-test-publication-case-info-panel-edit]',
     numacNumber: '[data-test-publication-case-info-panel-numac-number]',
-    save: '[data-test-publication-case-info-pane-save]',
+    save: '[data-test-publication-case-info-panel-save]',
   },
 
   // remark-panel
