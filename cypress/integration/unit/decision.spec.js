@@ -12,7 +12,7 @@ function currentTimestamp() {
   return Cypress.dayjs().unix();
 }
 
-context('Add files to an agenda', () => {
+context('Decision tests', () => {
   const agendaDate = Cypress.dayjs().add(1, 'weeks')
     .day(2); // Next friday
 
@@ -116,7 +116,8 @@ context('Add files to an agenda', () => {
     cy.get('@docCards').eq(0)
       .within(() => {
         cy.get(document.documentCard.name.value).contains(/BIS/);
-        cy.get(document.documentCard.actions).click();
+        cy.get(document.documentCard.actions).should('not.be.disabled')
+          .click();
         cy.get(document.documentCard.delete).click();
       });
     cy.get(utils.vlModalVerify.save).contains('Verwijderen')

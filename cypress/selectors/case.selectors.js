@@ -45,6 +45,11 @@ const selectors = {
     edit: '[data-test-subcase-description-edit]',
   },
 
+  // subcase-description-edit
+  subcaseDescriptionEdit: {
+    type: '[data-test-subcase-description-edit-type]',
+  },
+
   // subcase-item
   // TODO-selector better names
   subcaseItem: {
