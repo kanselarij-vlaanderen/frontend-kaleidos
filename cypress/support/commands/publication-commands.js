@@ -60,8 +60,9 @@ function fillInNewPublicationFields(fields) {
  */
 function createPublication(fields) {
   cy.log('createPublication');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('POST', '/cases').as('createNewCase');
-  cy.intercept('POST', '/publication-flows').as('createNewPublicationFlow');
+  cy.intercept('POST', '/publication-flows').as(`createNewPublicationFlow${randomInt}`);
 
   cy.visit('publicaties');
   cy.get(publication.publicationsIndex.newPublication).click();
@@ -70,7 +71,7 @@ function createPublication(fields) {
 
   cy.get(publication.newPublication.create).click()
     .wait('@createNewCase')
-    .wait('@createNewPublicationFlow')
+    .wait(`@createNewPublicationFlow${randomInt}`)
     .its('response.body')
     .then((responseBody) => {
       publicationFlowId = responseBody.data.id;

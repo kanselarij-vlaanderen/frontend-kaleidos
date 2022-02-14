@@ -305,5 +305,30 @@ const selectors = {
     attachments: '[data-test-proof-request-attachments]',
     save: '[data-test-proof-request-save]',
   },
+
+  // publication-case-info-panel
+  publicationCaseInfo: {
+    edit: '[data-test-publication-case-info-panel-edit]',
+    numacNumber: '[data-test-publication-case-info-panel-numac-number]',
+    save: '[data-test-publication-case-info-pane-save]',
+  },
+
+  // remark-panel
+  remark: {
+    edit: '[data-test-remark-panel-edit]',
+    textarea: '[data-test-remark-panel-textarea]',
+    save: '[data-test-remark-panel-save]',
+  },
+
+  // status-pill
+  statusPill: {
+    changeStatus: '[data-test-status-pill-change-status]',
+  },
+  // publication-status-modal
+  publicationStatus: {
+    select: '[data-test-publication-status-select]',
+    save: '[data-test-publication-status-save]',
+  },
+
 };
 export default selectors;
