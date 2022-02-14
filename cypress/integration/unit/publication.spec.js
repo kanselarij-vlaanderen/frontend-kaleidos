@@ -122,7 +122,6 @@ context('Publications tests', () => {
     const shortTitleEdit = 'Korte titel cypress test gewijzigd';
     const longTitleEdit = 'Lange titel voor de cypress test gewijzigd.';
     const inscriptionErrorMessage = 'Dit veld dient ingevuld te worden.';
-
     cy.intercept('GET', '/publication-flows/**').as('getNewPublicationDetail');
     cy.createPublication(fields);
 
@@ -175,7 +174,7 @@ context('Publications tests', () => {
     const noMandatees = 'Er zijn nog geen ministers toegevoegd.';
     const mandateeName = 'Jan Jambon';
 
-    cy.intercept('GET', '/publication-flows/**').as('getNewPublicationDetail');
+    cy.intercept('GET', '/publication-flows**').as('getNewPublicationDetail');
     cy.get(publication.publicationTableRow.row.goToPublication).first()
       .click();
     cy.wait('@getNewPublicationDetail');
@@ -213,7 +212,7 @@ context('Publications tests', () => {
     const labelName = 'Cultuur, Jeugd, Sport en Media';
     const fieldsName = 'Media';
 
-    cy.intercept('GET', '/publication-flows/**').as('getNewPublicationDetail');
+    cy.intercept('GET', '/publication-flows**').as('getNewPublicationDetail');
     cy.get(publication.publicationTableRow.row.goToPublication).first()
       .click();
     cy.wait('@getNewPublicationDetail');
@@ -266,7 +265,7 @@ context('Publications tests', () => {
     };
 
     // TODO open publication (with index)
-    cy.intercept('GET', '/publication-flows/**').as('getNewPublicationDetail');
+    cy.intercept('GET', '/publication-flows**').as('getNewPublicationDetail');
     cy.get(publication.publicationTableRow.row.goToPublication).first()
       .click();
     cy.wait('@getNewPublicationDetail');
@@ -327,7 +326,6 @@ context('Publications tests', () => {
   it('publications:dossier:check publication number uniqueness', () => {
     const suffix = 'BIS';
     const duplicateError = 'Het gekozen publicatienummer is reeds in gebruik. Gelieve een ander nummer te kiezen of een suffix te gebruiken.';
-
     cy.intercept('POST', '/publication-flows').as('createNewPublicationFlow');
 
     // try to create publication with existing number and check warnings
