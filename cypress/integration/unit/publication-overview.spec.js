@@ -39,7 +39,6 @@ context('Publications overview tests', () => {
   it('should setup a publication for later search tests', () => {
     // needs 15 seconds for reindex in testsuite
     cy.createPublication(searchFields);
-    cy.get(publication.sidebar.open).click();
     cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
     cy.intercept('POST', '/identifications').as('postNumacNumber');
     cy.get(publication.remark.edit).click();
@@ -97,12 +96,12 @@ context('Publications overview tests', () => {
       'numacNumber',
       'shortTitle',
       'remark',
-      // 'pageCount', // hidden by default
+      'pageCount', // hidden by default
       'decisionDate',
       'openingDate',
-      // 'translationRequestDate', // hidden by default
+      'translationRequestDate', // hidden by default
       'translationDueDate',
-      // 'proofRequestDate', // hidden by default
+      'proofRequestDate', // hidden by default
       'proofReceivedDate',
       'proofPrintCorrector',
       'publicationTargetDate',
