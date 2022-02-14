@@ -50,10 +50,10 @@
             </PowerSelect>
           </div>
         </div>
-        {{#if @publicationFlow.status.isPublished}}
-          <div class="auk-o-grid-col-3">
-            <div class="auk-form-group">
-              {{#unless this.loadDecision.isRunning}}
+        <div class="auk-o-grid-col-3">
+          <div class="auk-form-group">
+            {{#unless this.loadDecision.isRunning}}
+              {{#if @publicationFlow.status.isPublished}}
                 {{#if this.decision.isStaatsbladResource}}
                   {{#if this.decision.publicationDate}}
                     {{moment-format this.decision.publicationDate "DD-MM-YYYY"}}
@@ -68,10 +68,12 @@
                     @onChange={{this.setPublicationDate}}
                   />
                 {{/if}}
-              {{/unless}}
-            </div>
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            {{/unless}}
           </div>
-        {{/if}}
+        </div>
       </div>
     </Auk::Panel::Body>
     <Auk::Panel::Footer>
@@ -119,11 +121,12 @@
             {{/if}}
           </p>
         </div>
-        {{#if @publicationFlow.status.isPublished}}
-          <div class="auk-o-grid-col-3 auk-content">
-            <h4 class="auk-u-m-0">{{t "publication-date"}}</h4>
-            <p class="auk-u-m-0">
-              {{#unless this.loadDecision.isRunning}}
+
+        <div class="auk-o-grid-col-3 auk-content">
+          <h4 class="auk-u-m-0">{{t "publication-date"}}</h4>
+          <p class="auk-u-m-0">
+            {{#unless this.loadDecision.isRunning}}
+              {{#if @publicationFlow.status.isPublished}}
                 {{#if this.decision.isStaatsbladResource}}
                   {{#if this.decision.publicationDate}}
                     {{moment-format this.decision.publicationDate "DD-MM-YYYY"}}
@@ -133,10 +136,12 @@
                     </div>
                   {{/if}}
                 {{/if}}
-              {{/unless}}
-            </p>
-          </div>
-        {{/if}}
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            {{/unless}}
+          </p>
+        </div>
       </div>
     </Auk::Panel::Body>
   {{/if}}
