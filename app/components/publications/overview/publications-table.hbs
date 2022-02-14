@@ -104,18 +104,22 @@
         />
         <AttachPopover
           @class="auk-popover"
-          @showOn="click"
+          @showOn=""
           @placement="top"
-          @hideOn="click"
+          @hideOn=""
           @isShown={{this.isColumnsDisplayConfigPanelShown}}
           @renderInPlace={{false}}
         >
-          <Publications::Overview::PublicationsTableDisplayConfigModal
-            @options={{@columnsDisplayConfig}}
-            @onChange={{@onChangeColumnsDisplayConfig}}
-            @onReset={{@onResetColumnsDisplayConfig}}
-            @onClose={{this.toggleColumnsDisplayConfigPanel}}
-          />
+          {{#if this.isColumnsDisplayConfigPanelShown}}
+            <ClickOutside @onClickOutside={{this.toggleColumnsDisplayConfigPanel}}>
+              <Publications::Overview::PublicationsTableDisplayConfigModal
+                @options={{@columnsDisplayConfig}}
+                @onChange={{@onChangeColumnsDisplayConfig}}
+                @onReset={{@onResetColumnsDisplayConfig}}
+                @onClose={{this.toggleColumnsDisplayConfigPanel}}
+              />
+            </ClickOutside>
+          {{/if}}
         </AttachPopover>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
