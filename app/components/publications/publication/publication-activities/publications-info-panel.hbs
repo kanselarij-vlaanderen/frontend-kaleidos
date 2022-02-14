@@ -52,6 +52,9 @@
         </div>
         <div class="auk-o-grid-col-3">
           <div class="auk-form-group">
+            <Auk::Label>
+              {{t "publication-date"}}
+            </Auk::Label>
             {{#unless this.loadDecision.isRunning}}
               {{#if @publicationFlow.status.isPublished}}
                 {{#if this.decision.isStaatsbladResource}}
