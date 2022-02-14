@@ -8,7 +8,6 @@ import { all } from 'ember-concurrency';
 /**
  * @argument {publicationSubcase}
  * @argument {PublicationFlow}
- * @argument {isFinal} if publication status is in final state
  */
 export default class PublicationsPublicationPublicationActivitiesPublicationInfoPanel extends Component {
   @service store;
