@@ -1,4 +1,4 @@
-<div class="auk-accordion-panel__header">
+<div class="auk-accordion-panel__header {{this.sizeClass}}">
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
@@ -11,7 +11,12 @@
         />
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
-        <h4 class="auk-accordion__title">{{@title}}</h4>
+        <div class="auk-accordion-panel__title-container">
+          <h4 class="auk-accordion-panel__title {{if @subtitle "auk-accordion-panel__title--small"}}">{{@title}}</h4>
+          {{#if @subtitle}}
+            <span class="auk-u-text-small">{{@subtitle}}</span>
+          {{/if}}
+        </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     {{yield
