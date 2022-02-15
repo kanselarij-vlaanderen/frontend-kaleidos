@@ -9,17 +9,15 @@
         </Group.Item>
       </Toolbar.Group>
       <Toolbar.Group @position="right" as |Group|>
-        {{#unless this.isViaCouncilOfMinisters}}
-          <Group.Item>
-            <Auk::Button
-              @skin="primary"
-              @icon="plus"
-              {{on "click" this.openReferenceDocumentUploadModal}}
-            >
-              {{t "document-add"}}
-            </Auk::Button>
-          </Group.Item>
-        {{/unless}}
+        <Group.Item>
+          <Auk::Button
+            @skin="primary"
+            @icon="plus"
+            {{on "click" this.openRequestModal}}
+          >
+            {{t "request-publication"}}
+          </Auk::Button>
+        </Group.Item>
       </Toolbar.Group>
     </Auk::Toolbar>
   </Auk::Panel::Header>
@@ -44,10 +42,10 @@
   </Auk::Panel::Body>
 </Auk::Panel>
 
-{{#if this.isOpenReferenceDocumentUploadModal}}
-  <Publications::Documents::ReferenceDocumentUploadModal
+{{#if this.isOpenRequestModal}}
+  <Publications::Publication::PublicationActivities::PublicationRequestModal
     @publicationFlow={{this.publicationFlow}}
-    @onSave={{perform this.saveReferenceDocument}}
-    @onCancel={{this.closeReferenceDocumentUploadModal}}
+    @onSave={{perform this.saveRequest}}
+    @onCancel={{this.closeRequestModal}}
   />
 {{/if}}

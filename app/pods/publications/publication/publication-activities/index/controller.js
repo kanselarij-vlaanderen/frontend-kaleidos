@@ -74,40 +74,24 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
 
   @tracked publicationFlow;
   @tracked isViaCouncilOfMinisters;
-  @tracked isOpenReferenceDocumentUploadModal;
+  @tracked isOpenRequestModal = true;
 
   @action
-  openReferenceDocumentUploadModal() {
-    this.isOpenReferenceDocumentUploadModal = true;
+  openRequestModal() {
+    this.isOpenRequestModal = true;
   }
 
   @action
-  closeReferenceDocumentUploadModal() {
-    this.isOpenReferenceDocumentUploadModal = false;
+  closeRequestModal() {
+    this.isOpenRequestModal = false;
   }
 
   @task
-  *saveReferenceDocument(document) {
-    const now = new Date();
-    const documentContainer = this.store.createRecord('document-container', {
-      created: now,
-    });
-    yield documentContainer.save();
-
-    const piece = this.store.createRecord('piece', {
-      created: now,
-      modified: now,
-      name: document.name,
-      confidential: false,
-      file: document.file,
-      documentContainer: documentContainer,
-      publicationFlow: this.publicationFlow,
-    });
-
-    yield piece.save();
+  *saveRequest(requestParams) {
+    yield console.log(requestParams)
 
     this.send('refresh');
-    this.closeReferenceDocumentUploadModal();
+    this.isOpenRequestModal = false;
   }
 
   @dropTask
