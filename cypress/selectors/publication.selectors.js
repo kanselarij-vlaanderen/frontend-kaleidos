@@ -321,6 +321,7 @@ const selectors = {
 
   // status-pill
   statusPill: {
+    contentLabel: '[data-test-status-pill-content-label]',
     changeStatus: '[data-test-status-pill-change-status]',
   },
   // publication-status-modal

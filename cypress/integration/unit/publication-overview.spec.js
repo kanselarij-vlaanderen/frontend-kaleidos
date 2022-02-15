@@ -180,4 +180,43 @@ context('Publications overview tests', () => {
       cy.get(publication.publicationNav.goBack).click();
     }
   });
+
+  it.only('should test the search function', () => {
+    const defaultStatus = 'Opgestart';
+    const statusList = [
+      'Opgestart',
+      'Naar vertaaldienst',
+      'Vertaling in',
+      'Drukproef aangevraagd',
+      'Proef in',
+      'Rappel proef',
+      'Proef verbeterd',
+      'Publicatie gevraagd',
+      'Gepubliceerd',
+      'Geannuleerd',
+      'Gepauzeerd'
+    ];
+    const fields1 = {
+      number: 1405,
+      shortTitle: 'test status change in overview',
+    };
+
+    // cy.createPublication(fields1);
+    statusList.forEach((status) => {
+      if (status !== defaultStatus) {
+        cy.changePublicationStatus(status);
+      }
+      cy.get(publication.statusPill.contentLabel).contains(status);
+      cy.get(publication.publicationNav.goBack).click();
+      cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields1.number)
+        .parent()
+        .as('row');
+      cy.get('@row')
+        .find(publication.publicationTableRow.row.status)
+        .contains(status);
+      cy.get('@row')
+        .find(publication.publicationTableRow.row.goToPublication)
+        .click();
+    });
+  });
 });
