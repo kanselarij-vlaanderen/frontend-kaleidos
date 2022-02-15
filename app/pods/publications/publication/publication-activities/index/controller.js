@@ -68,7 +68,7 @@ export class PublicationEvent {
   }
 }
 
-export default class PublicationsPublicationDecisionsIndexController extends Controller {
+export default class PublicationsPublicationPublicationActivitiesIndexController extends Controller {
   @service store;
   @service fileService;
 
