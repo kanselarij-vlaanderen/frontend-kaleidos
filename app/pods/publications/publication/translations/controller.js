@@ -52,9 +52,7 @@ export default class PublicationsPublicationTranslationsController extends Contr
       language: language,
       translationActivityGeneratedBy: translationActivity,
     });
-    if (translationUpload.isSourceForProofPrint) {
-      piece.publicationSubcaseSourceFor = this.publicationSubcase;
-    }
+
     const pieceSave = piece.save();
 
     translationActivity.endDate = now;
