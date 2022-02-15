@@ -28,14 +28,14 @@
       {{#if event.isRequest}}
         {{!Aanvraag}}
         <Component @badgeIcon="mail" @badgeSkin="primary">
-          <Publications::Publication::PublicationActivities::Index::PublicationRequestEventPanel
+          <Publications::Publication::PublicationActivities::Timeline::PublicationsRequestEventPanel
             @publicationActivity={{event.publicationActivity}}
           />
         </Component>
       {{else}}
         {{!Publicatie}}
         <Component @badgeIcon="check" @badgeSkin="success">
-          <Publications::Publication::PublicationActivities::Index::PublicationEventPanel
+          <Publications::Publication::PublicationActivities::Timeline::PublicationsPublicationEventPanel
             @decision={{event.decision}}
           />
         </Component>
