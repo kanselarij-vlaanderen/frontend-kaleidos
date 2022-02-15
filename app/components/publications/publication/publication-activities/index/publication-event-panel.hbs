@@ -1,0 +1,18 @@
+<Auk::Panel>
+  <Auk::Panel::Header>
+    <Auk::Toolbar as |Toolbar|>
+      <Toolbar.Group as |Group|>
+        <Group.Item>
+          <h4 class="auk-panel__title auk-panel__title--small">
+            {{@decision.title}}
+          </h4>
+          <span class="auk-u-text-small auk-u-m-0">
+            {{moment-format @decision.date}}
+          </span>
+        </Group.Item>
+      </Toolbar.Group>
+      {{!TODO? menu button}}
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  {{!TODO panel body}}
+</Auk::Panel>

@@ -28,72 +28,16 @@
       {{#if event.isRequest}}
         {{!Aanvraag}}
         <Component @badgeIcon="mail" @badgeSkin="primary">
-          <Auk::AccordionPanel
-            @isDefaultActive={{true}}
-            as |AccordionPanel|>
-            <AccordionPanel.Header
-              @title={{event.title}}
-              @subtitle={{moment-format event.date}}
-            />
-            <AccordionPanel.Body>
-              <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
-                <Auk::ButtonLink @icon="paperclip">
-                  {{event.publicationActivity.usedPieces.firstObject.file.filename}}
-                </Auk::ButtonLink>
-                <Auk::ButtonLink
-                  @layout="icon-only"
-                  @icon="download"
-                  @href={{event.publicationActivity.usedPieces.firstObject.file.namedDownloadLink}}
-                  download={{event.publicationActivity.usedPieces.firstObject.file.downloadFilename}}
-                >
-                  {{t "download"}}
-                </Auk::ButtonLink>
-                <Auk::ButtonLink
-                  @layout="icon-only"
-                  @icon="book"
-                  @href={{event.publicationActivity.usedPieces.firstObject.viewDocumentURL}}
-                  target="_blank"
-                >
-                  {{t "read"}}
-                </Auk::ButtonLink>
-              </div>
-              <div class="auk-hr"></div>
-              <div class="auk-content">
-                <h4 class="auk-u-m-0">{{t "subject"}}</h4>
-                <p>{{event.publicationActivity.requestActivity.email.subject}}</p>
-                <h4 class="auk-u-m-0">{{t "message"}}</h4>
-                {{! TODO: Remove inline style }}
-                {{! template-lint-disable no-inline-styles }}
-                {{! p-tag opening and closing on 1 line to prevent whitespace to be rendered. }}
-                <p style="white-space:pre-line;">
-                  {{event.publicationActivity.requestActivity.email.message}}
-                </p>
-                {{! template-lint-enable no-inline-styles }}
-              </div>
-            </AccordionPanel.Body>
-          </Auk::AccordionPanel>
+          <Publications::Publication::PublicationActivities::Index::PublicationRequestEventPanel
+            @publicationActivity={{event.publicationActivity}}
+          />
         </Component>
       {{else}}
         {{!Publicatie}}
         <Component @badgeIcon="check" @badgeSkin="success">
-          <Auk::Panel>
-            <Auk::Panel::Header>
-              <Auk::Toolbar as |Toolbar|>
-                <Toolbar.Group as |Group|>
-                  <Group.Item>
-                    <h4 class="auk-panel__title auk-panel__title--small">
-                      {{event.title}}
-                    </h4>
-                    <span class="auk-u-text-small auk-u-m-0">
-                      {{moment-format event.date}}
-                    </span>
-                  </Group.Item>
-                </Toolbar.Group>
-                {{!TODO? menu button}}
-              </Auk::Toolbar>
-            </Auk::Panel::Header>
-            {{!TODO panel body}}
-          </Auk::Panel>
+          <Publications::Publication::PublicationActivities::Index::PublicationEventPanel
+            @decision={{event.decision}}
+          />
         </Component>
       {{/if}}
     </Utils::Generic::Timeline::Timeline>
