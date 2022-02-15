@@ -1,39 +1,20 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import tableColumns from 'frontend-kaleidos/config/publications/overview-table-columns';
 
 export default class PublicationsOverviewBaseController extends Controller {
-  /** @abstract @type {string[]} */
-  @tracked defaultColumns = [];
-
   @tracked page = 0;
   @tracked size = 10;
   @tracked sort = '-created';
 
-  @tracked columnsDisplayConfig;
-  tableColumns = tableColumns;
+  @tracked tableConfig;
 
   @tracked isLoadingModel = false;
 
   @action
-  changeColumnsDisplayConfig(config) {
-    this.saveColumnsDisplayConfig(config);
+  saveTableConfig() {
+    this.tableConfig.saveToLocalStorage();
     this.reload();
-  }
-
-  @action
-  resetColumnsDisplayConfig() {
-    const defaultDisplayConfig = this.getDefaultColumnsDisplayConfig();
-    this.changeColumnsDisplayConfig(defaultDisplayConfig);
-  }
-
-  saveColumnsDisplayConfig(columnsDisplayConfig) {
-    const serializedColumnsDisplayConfig = JSON.stringify(columnsDisplayConfig);
-    localStorage.setItem(
-      this.columnsDisplayConfigStorageKey,
-      serializedColumnsDisplayConfig
-    );
   }
 
   @action
