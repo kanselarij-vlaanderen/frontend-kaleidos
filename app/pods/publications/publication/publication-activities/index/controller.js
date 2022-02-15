@@ -16,6 +16,7 @@ export async function createTimeline(publicationActivities) {
       publicationActivity
     );
     publicationTimeline.push(publicationRequestEvent);
+
     let decisions = await publicationActivity.decisions;
     decisions = decisions.toArray();
     for (const decision of decisions) {
