@@ -38,9 +38,7 @@
       {{! TODO: Remove inline style }}
       {{! template-lint-disable no-inline-styles }}
       {{! p-tag opening and closing on 1 line to prevent whitespace to be rendered. }}
-      <p style="white-space:pre-line;">
-        {{@publicationActivity.requestActivity.email.message}}
-      </p>
+      <p style="white-space:pre-line;">{{@publicationActivity.requestActivity.email.message}}</p>
       {{! template-lint-enable no-inline-styles }}
     </div>
   </AccordionPanel.Body>
