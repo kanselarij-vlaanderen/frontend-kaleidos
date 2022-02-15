@@ -21,10 +21,11 @@ export default class PublicationsPublicationTranslationsRoute extends Route {
       }
     );
 
-    let translationRows = await Promise.all([ requestActivities , translationActivities]);
-    translationRows = translationRows.flatMap((row) => row.toArray())
-    translationRows = translationRows.sortBy('startDate').reverseObjects();
-    return translationRows;
+    let activities = await Promise.all([ requestActivities , translationActivities]);
+    activities = activities.flatMap((activity) => activity.toArray());
+    activities = activities.sortBy('startDate').reverseObjects();
+    console.log(activities)
+    return activities;
   }
 
   async afterModel() {

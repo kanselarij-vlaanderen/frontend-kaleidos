@@ -34,15 +34,15 @@
         </Auk::Toolbar>
       </Auk::Panel::Header>
       <Auk::Panel::Body class="auk-u-bg-alt">
-        {{#each @model as |row|}}
-          {{#if row.requestActivity}}
+        {{#each @model as |activity|}}
+          {{#if (eq activity.constructor.modelName "request-activity")}}
             <Publications::Publication::Translations::TranslationRequestedPanel
-              @requestActivity={{row.requestActivity}}
-              @onDeleteRequest={{fn (perform this.deleteRequest) row.requestActivity}}
+              @requestActivity={{activity}}
+              @onDeleteRequest={{fn (perform this.deleteRequest) activity}}
             />
-          {{else if row.translationActivity}}
+          {{else if (eq activity.constructor.modelName "translation-activity")}}
             <Publications::Publication::Translations::TranslationReceivedPanel
-              @translationActivity={{row.translationActivity}}
+              @translationActivity={{activity}}
             />
           {{/if}}
         {{else}}
