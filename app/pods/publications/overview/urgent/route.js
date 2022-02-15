@@ -18,4 +18,10 @@ export default class PublicationsOverviewUrgentRoute extends PublicationsOvervie
     };
     return filter;
   }
+
+  renderTemplate(controller) {
+    this.render('publications.overview.all', {
+      controller: controller
+    });
+  }
 }

@@ -20,4 +20,10 @@ export default class PublicationsOverviewTranslationRoute extends PublicationsOv
     };
     return filter;
   }
+
+  renderTemplate(controller) {
+    this.render('publications.overview.all', {
+      controller: controller
+    });
+  }
 }

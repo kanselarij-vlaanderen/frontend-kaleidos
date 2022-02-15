@@ -27,6 +27,12 @@ export default class PublicationsOverviewLateRoute extends PublicationsOverviewB
     };
     return filter;
   }
+
+  renderTemplate(controller) {
+    this.render('publications.overview.all', {
+      controller: controller
+    });
+  }
 }
 
 /** inspired by {@link https://date-fns.org/v2.28.0/docs/startOfToday} */

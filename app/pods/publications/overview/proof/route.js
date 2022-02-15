@@ -28,4 +28,10 @@ export default class PublicationsOverviewProofRoute extends PublicationsOverview
     };
     return filter;
   }
+
+  renderTemplate(controller) {
+    this.render('publications.overview.all', {
+      controller: controller
+    });
+  }
 }
