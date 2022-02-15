@@ -11,10 +11,6 @@ export default class PublicationsPublicationTranslationTranslationRequestedPanel
 
   @tracked isVerifyingDelete = false;
 
-  constructor() {
-    super(...arguments);
-  }
-
   @action
   promptDeleteRequest() {
     this.isVerifyingDelete = true;

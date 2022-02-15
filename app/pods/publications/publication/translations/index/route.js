@@ -1,5 +1,25 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+
+export class Activity {
+  @tracked requestActivity;
+  @tracked translationActivity;
+  @tracked date;
+
+  static create(requestActivity,translationActivity) {
+    const activity = new Activity();
+    if (requestActivity){
+      activity.requestActivity = requestActivity;
+      activity.date = requestActivity.startDate;
+    }
+    if (translationActivity){
+      activity.translationActivity = translationActivity;
+      activity.date = translationActivity.endDate
+    }
+    return activity;
+  }
+}
 
 export default class PublicationsPublicationTranslationsRoute extends Route {
   async model() {
@@ -21,10 +41,9 @@ export default class PublicationsPublicationTranslationsRoute extends Route {
       }
     );
 
-    let activities = await Promise.all([ requestActivities , translationActivities]);
+    let activities = await Promise.all([ requestActivities.map((request) => Activity.create(request,null)) , translationActivities.map((translation) => Activity.create(null,translation))]);
     activities = activities.flatMap((activity) => activity.toArray());
-    activities = activities.sortBy('startDate').reverseObjects();
-    console.log(activities)
+    activities = activities.sortBy('date').reverseObjects();
     return activities;
   }
 

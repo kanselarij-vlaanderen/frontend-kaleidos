@@ -35,14 +35,14 @@
       </Auk::Panel::Header>
       <Auk::Panel::Body class="auk-u-bg-alt">
         {{#each @model as |activity|}}
-          {{#if (eq activity.constructor.modelName "request-activity")}}
+          {{#if activity.requestActivity}}
             <Publications::Publication::Translations::TranslationRequestedPanel
-              @requestActivity={{activity}}
-              @onDeleteRequest={{fn (perform this.deleteRequest) activity}}
+              @requestActivity={{activity.requestActivity}}
+              @onDeleteRequest={{fn (perform this.deleteRequest) activity.requestActivity}}
             />
-          {{else if (eq activity.constructor.modelName "translation-activity")}}
+          {{else if activity.translationActivity?.endDate}}
             <Publications::Publication::Translations::TranslationReceivedPanel
-              @translationActivity={{activity}}
+              @translationActivity={{activity.translationActivity}}
             />
           {{/if}}
         {{else}}
@@ -58,7 +58,7 @@
 {{#if this.showTranslationRequestModal}}
   <Publications::Publication::Translations::TranslationRequestModal
     @dueDate={{this.translationSubcase.dueDate}}
-    @publicationNumber={{this.publicationFlow.identification.idName}}
+    @publicationFlow={{this.publicationFlow}}
     @onSave={{perform this.saveTranslationRequest}}
     @onCancel={{this.closeTranslationRequestModal}}
   />
@@ -66,7 +66,6 @@
 
 {{#if this.showTranslationUploadModal}}
   <Publications::Publication::Translations::TranslationUploadModal
-    @publicationNumber={{this.publicationFlow.identification.idName}}
     @onSave={{perform this.saveTranslationUpload}}
     @onCancel={{this.closeTranslationUploadModal}}
   />
