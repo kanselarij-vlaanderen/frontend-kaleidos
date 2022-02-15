@@ -61,6 +61,7 @@
                   {{#if this.decision.publicationDate}}
                     {{moment-format this.decision.publicationDate "DD-MM-YYYY"}}
                   {{else}}
+                    {{!case: publication-date is not found in Staatsblad (does not seem to occur)}}
                     <div class="auk-u-text-muted auk-u-italic">
                       {{t "not-known"}}
                     </div>
@@ -137,9 +138,13 @@
                     {{moment-format this.decision.publicationDate "DD-MM-YYYY"}}
                   {{else}}
                     <div class="auk-u-text-muted auk-u-italic">
+                      {{!case: publication-date is not found in Staatsblad (does not seem to occur)}}
                       {{t "not-known"}}
                     </div>
                   {{/if}}
+                {{else}}
+                  {{!case: if `publication-flow` has no `publication-activity` while changing `publication-status` to "Gepubliceerd"}}
+                  {{t "dash"}}
                 {{/if}}
               {{else}}
                 <div class="auk-u-text-muted auk-u-italic">
