@@ -11,6 +11,7 @@ export default class PublicationsOverviewTranslationRoute extends PublicationsOv
     'translationDueDate',
     'publicationDueDate',
   ];
+  tableConfigStorageKey = "publication-table.translation";
 
   modelGetQueryFilter() {
     const filter = {

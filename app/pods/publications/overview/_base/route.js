@@ -11,6 +11,8 @@ import PublicationTableConfig from 'frontend-kaleidos/utils/publication-table-co
 /** @abstract */
 export default class PublicationsOverviewBaseRoute extends Route {
   defaultColumns;
+  tableConfigStorageKey;
+
   tableConfig;
   includes;
 
@@ -35,7 +37,7 @@ export default class PublicationsOverviewBaseRoute extends Route {
   };
 
   beforeModel() {
-    this.tableConfig = new PublicationTableConfig(this.columnsDisplayConfigStorageKey, this.defaultColumns);
+    this.tableConfig = new PublicationTableConfig(this.tableConfigStorageKey, this.defaultColumns);
     this.tableConfig.loadFromLocalStorage();
     if (!this.tableConfig.visibleColumns.length) {
       this.tableConfig.loadDefault();
@@ -94,10 +96,6 @@ export default class PublicationsOverviewBaseRoute extends Route {
 
   setupController(controller) {
     controller.tableConfig = this.tableConfig;
-  }
-
-  get columnsDisplayConfigStorageKey() {
-    return `${this.routeName}/columnsDisplayConfig`;
   }
 
   @action

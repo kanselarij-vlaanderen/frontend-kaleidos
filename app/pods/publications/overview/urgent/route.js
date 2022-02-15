@@ -9,6 +9,7 @@ export default class PublicationsOverviewUrgentRoute extends PublicationsOvervie
     'pageCount',
     'publicationDueDate',
   ];
+  tableConfigStorageKey = "publication-table.urgent";
 
   modelGetQueryFilter() {
     const filter = {

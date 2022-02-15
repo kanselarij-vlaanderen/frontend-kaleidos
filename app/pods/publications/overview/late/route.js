@@ -8,6 +8,7 @@ export default class PublicationsOverviewLateRoute extends PublicationsOverviewB
     'publicationTargetDate',
     'publicationDueDate',
   ];
+  tableConfigStorageKey = "publication-table.all";
 
   modelGetQueryFilter() {
     const pendingStatuses = this.store.peekAll('publication-status').rejectBy('isFinal');

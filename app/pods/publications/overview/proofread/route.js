@@ -17,6 +17,7 @@ export default class PublicationsOverviewProofreadRoute extends PublicationsOver
     'proofPrintCorrector',
     'publicationDueDate'
   ];
+  tableConfigStorageKey = "publication-table.proofread";
 
   modelGetQueryFilter() {
     const proofreadStatuses = this.store.peekAll('publication-status').filter((it) => {

@@ -16,6 +16,7 @@ export default class PublicationsOverviewProofRoute extends PublicationsOverview
     'proofRequestDate',
     'publicationDueDate',
   ];
+  tableConfigStorageKey = "publication-table.proof";
 
   modelGetQueryFilter() {
     const proofStatuses = this.store.peekAll('publication-status').filter((it) => {
