@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 
 // eslint-disable-next-line ember/no-empty-glimmer-component-classes
-export default class PublicationEventPanel extends Component {
+export default class PublicationTimelineEventPanel extends Component {
 
 }
