@@ -42,7 +42,12 @@ request the whole row and not only the arrow at the end to be clickable }}
       <Auk::AbbreviatedText
         @text={{@publicationFlow.shortTitle}}
         @maxLength={{150}}
-      />
+        as |text|
+      >
+        <div class="auk-o-flex__item">
+          {{text}}
+        </div>
+      </Auk::AbbreviatedText>
     </td>
   {{/if}}
   {{#if @tableColumnDisplayOptions.remark}}
