@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { isEmpty } from '@ember/utils';
 
 export default class PublicationsPublicationTranslationsController extends Controller {
   @service store;
@@ -28,13 +29,13 @@ export default class PublicationsPublicationTranslationsController extends Contr
   @task
   *saveTranslationUpload(translationUpload) {
     // get latest translation activity
-    const translationActivity = this.model.filter((activity) => (activity.translationActivity !== null))[0].translationActivity;
+    const translationActivity = this.model.filter((activity) => !isEmpty(activity.translationActivity))[0].translationActivity;
+
+    // triggers call
+    const language = yield translationActivity.language;
 
     const pieceSaves = [];
     for (let piece of translationUpload.generatedPieces){
-
-      // triggers call
-      const language = yield translationActivity.language;
 
       piece.receivedDate = translationUpload.receivedAtDate;
       piece.language = language;
@@ -94,6 +95,7 @@ export default class PublicationsPublicationTranslationsController extends Contr
       usedPieces: usedPieces,
     });
     yield requestActivity.save();
+
     const french = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.FR);
 
     const translationActivity = yield this.store.createRecord('translation-activity', {

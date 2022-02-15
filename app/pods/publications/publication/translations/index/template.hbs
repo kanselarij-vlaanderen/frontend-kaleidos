@@ -40,7 +40,7 @@
               @requestActivity={{activity.requestActivity}}
               @onDeleteRequest={{fn (perform this.deleteRequest) activity.requestActivity}}
             />
-          {{else if activity.translationActivity?.endDate}}
+          {{else if activity.translationActivity.endDate}}
             <Publications::Publication::Translations::TranslationReceivedPanel
               @translationActivity={{activity.translationActivity}}
             />
