@@ -1,44 +1,23 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
-import {
-  ValidatorSet, Validator
-} from 'frontend-kaleidos/utils/validators';
 import { inject as service } from '@ember/service';
-import { guidFor } from '@ember/object/internals';
+import { isEmpty } from '@ember/utils';
 
 export default class PublicationsTranslationTranslationUploadModalComponent extends Component {
-  @service('file-queue') fileQueueService;
+  @service store;
 
   @tracked generatedPieces = [];
   @tracked receivedAtDate = new Date();
   @tracked isTranslationIn = false;
-  validators;
-
-  constructor() {
-    super(...arguments);
-    if (this.fileQueue) {
-      this.fileQueueService.create(this.fileQueueName);
-    }
-    this.initValidators();
-  }
-
-  get fileQueueName() {
-    return `${guidFor(this)}-file-queue`;
-  }
-
-  get fileQueue() {
-    return this.fileQueueService.find(this.fileQueueName);
-  }
 
   get isCancelDisabled() {
     return this.cancel.isRunning || this.save.isRunning;
   }
 
   get isSaveDisabled() {
-    return this.generatedPieces.length === 0 || !this.validators.areValid;
+    return this.generatedPieces.length === 0 || isEmpty(this.receivedAtDate) || this.cancel.isRunning;
   }
 
   @action
@@ -55,11 +34,8 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
       name: file.filenameWithoutExtension,
       documentContainer: documentContainer,
     });
-console.log(piece)
 
-    this.generatedPieces.push(piece);
-console.log(this.generatedPieces)
-
+    this.generatedPieces.pushObject(piece);
   }
 
   @task({
@@ -90,7 +66,6 @@ console.log(this.generatedPieces)
 
   @action
   setReceivedAtDate(selectedDates) {
-    this.validators.receivedAtDate.enableError();
     if (selectedDates.length) {
       this.receivedAtDate = selectedDates[0];
     } else { // this case occurs when users manually empty the date input-field
@@ -110,11 +85,5 @@ console.log(this.generatedPieces)
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.destroyRecord();
     yield piece.destroyRecord();
-  }
-
-  initValidators() {
-    this.validators = new ValidatorSet({
-      receivedAtDate: new Validator(() => isPresent(this.receivedAtDate)),
-    });
   }
 }

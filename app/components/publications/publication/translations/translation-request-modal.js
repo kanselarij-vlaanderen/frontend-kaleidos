@@ -4,7 +4,6 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { translationRequestEmail } from 'frontend-kaleidos/utils/publication-email';
-import { guidFor } from '@ember/object/internals';
 import { Validator, ValidatorSet } from 'frontend-kaleidos/utils/validators';
 import { isPresent } from '@ember/utils';
 
@@ -14,7 +13,6 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
    * @argument onCancel
    */
   @service store;
-  @service('file-queue') fileQueueService;
 
   @tracked usedPieces = [];
   @tracked pagesAmount;
@@ -26,22 +24,11 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
 
   constructor() {
     super(...arguments);
-    if (this.fileQueue) {
-      this.fileQueueService.create(this.fileQueueName);
-    }
     this.initValidators();
   }
 
-  get fileQueueName() {
-    return `${guidFor(this)}-file-queue`;
-  }
-
-  get fileQueue() {
-    return this.fileQueueService.find(this.fileQueueName);
-  }
-
   get isCancelDisabled() {
-    return this.cancel.isRunning || this.saveRequest.isRunning;
+    return this.cancel.isRunning || this.save.isRunning;
   }
 
   get isSaveDisabled() {
@@ -49,7 +36,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   }
 
   @task
-  *saveRequest() {
+  *save() {
     yield this.args.onSave({
       usedPieces: this.usedPieces,
       pagesAmount: this.pagesAmount,
@@ -65,7 +52,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   })
   *cancel() {
     // necessary because close-button is not disabled when saving
-    if (this.saveRequest.isRunning) {
+    if (this.save.isRunning) {
       return;
     }
 
@@ -127,8 +114,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
       documentContainer: documentContainer,
     });
 
-    this.usedPieces.push(piece);
-
+    this.usedPieces.pushObject(piece);
     this.setEmailFields.perform();
   }
 

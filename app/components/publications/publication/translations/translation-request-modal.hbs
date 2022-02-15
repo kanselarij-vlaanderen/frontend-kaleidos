@@ -94,7 +94,6 @@
             {{t "attachments"}}
           </Auk::Label>
           <Auk::FileUploader
-            @fileQueueName={{this.fileQueueName}}
             @multiple={{true}}
             @onUpload={{this.uploadPiece}}
           />
@@ -109,8 +108,8 @@
     <Auk::Button
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
-      @loading={{this.saveRequest.isRunning}}
-      {{on "click" (perform this.saveRequest)}}
+      @loading={{this.save.isRunning}}
+      {{on "click" (perform this.save)}}
     >
       {{t "save"}}
     </Auk::Button>

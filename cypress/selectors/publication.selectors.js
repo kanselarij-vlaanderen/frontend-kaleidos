@@ -281,10 +281,10 @@ const selectors = {
   },
 
   //  translation-upload-modal
-  translationUpload: {
-    name: '[data-test-translation-upload-name]',
-    save: '[data-test-translation-upload-save]',
-  },
+  // translationUpload: {
+  //   name: '[data-test-translation-upload-name]',
+  //   save: '[data-test-translation-upload-save]',
+  // },
 
   // proof-upload-modal
   proofUpload: {

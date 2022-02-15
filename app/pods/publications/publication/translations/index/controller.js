@@ -28,9 +28,7 @@ export default class PublicationsPublicationTranslationsController extends Contr
   @task
   *saveTranslationUpload(translationUpload) {
     // get latest translation activity
-    const translationActivity = this.model.filter((activity) => (activity.translationActivity).sortBy('startDate').reverseObjects()[0]);
-
-    console.log(translationActivity)
+    const translationActivity = this.model.filter((activity) => (activity.translationActivity !== null))[0].translationActivity;
 
     const pieceSaves = [];
     for (let piece of translationUpload.generatedPieces){
@@ -76,7 +74,6 @@ export default class PublicationsPublicationTranslationsController extends Contr
   @task
   *saveTranslationRequest(translationRequest) {
     const now = new Date();
-
     const usedPieces = [];
 
     for (let piece of translationRequest.usedPieces){

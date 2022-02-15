@@ -20,11 +20,8 @@
     <Auk::Panel::Body>
       {{#each @translationActivity.generatedPieces as |piece|}}
         <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
-          <Auk::ButtonLink
-            @icon="paperclip"
-          >
-            {{piece.file.downloadFilename}}
-          </Auk::ButtonLink>
+          <Auk::Icon @name="paperclip" @skin="primary" />
+          {{piece.file.downloadFilename}}
           <Auk::ButtonLink
             @layout="icon-only"
             @icon="download"
