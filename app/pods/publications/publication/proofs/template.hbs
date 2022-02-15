@@ -73,11 +73,24 @@
             </Auk::Toolbar>
           </Auk::Panel::Header>
           <Auk::Panel::Body>
-            <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
-              <Auk::ButtonLink @icon="paperclip">65489-fr.pdf</Auk::ButtonLink>
-              <Auk::ButtonLink @layout="icon-only" @icon="book">{{t "util.view"}}</Auk::ButtonLink>
-              <Auk::ButtonLink @layout="icon-only" @icon="download">{{t "util.download"}}</Auk::ButtonLink>
-            </div>
+            <ul class="auk-list">
+              <li class="auk-list__item auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
+                <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced">
+                  <Auk::Badge @icon="paperclip" />
+                  <h5 class="auk-h4 auk-u-m-0">65489.pdf</h5>
+                </div>
+                <Auk::ButtonLink @layout="icon-only" @icon="book">{{t "util.view"}}</Auk::ButtonLink>
+                <Auk::ButtonLink @layout="icon-only" @icon="download">{{t "util.download"}}</Auk::ButtonLink>
+              </li>
+              <li class="auk-list__item auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
+                <div class=" auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced">
+                  <Auk::Badge @icon="paperclip" />
+                  <h5 class="auk-h4 auk-u-m-0">65489-fr.pdf</h5>
+                </div>
+                <Auk::ButtonLink @layout="icon-only" @icon="book">{{t "util.view"}}</Auk::ButtonLink>
+                <Auk::ButtonLink @layout="icon-only" @icon="download">{{t "util.download"}}</Auk::ButtonLink>
+              </li>
+            </ul>
           </Auk::Panel::Body>
         </Auk::Panel>
       </div>
@@ -108,11 +121,24 @@
             </header.Actions>
           </accordionPanel.Header>
           <accordionPanel.Body>
-            <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
-              <Auk::ButtonLink @icon="paperclip">65489-fr.pdf</Auk::ButtonLink>
-              <Auk::ButtonLink @layout="icon-only" @icon="book">{{t "util.view"}}</Auk::ButtonLink>
-              <Auk::ButtonLink @layout="icon-only" @icon="download">{{t "util.download"}}</Auk::ButtonLink>
-            </div>
+            <ul class="auk-list">
+              <li class="auk-list__item auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
+                <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced">
+                  <Auk::Badge @icon="paperclip" />
+                  <h5 class="auk-h4 auk-u-m-0">65489.pdf</h5>
+                </div>
+                <Auk::ButtonLink @layout="icon-only" @icon="book">{{t "util.view"}}</Auk::ButtonLink>
+                <Auk::ButtonLink @layout="icon-only" @icon="download">{{t "util.download"}}</Auk::ButtonLink>
+              </li>
+              <li class="auk-list__item auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
+                <div class=" auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced">
+                  <Auk::Badge @icon="paperclip" />
+                  <h5 class="auk-h4 auk-u-m-0">65489-fr.pdf</h5>
+                </div>
+                <Auk::ButtonLink @layout="icon-only" @icon="book">{{t "util.view"}}</Auk::ButtonLink>
+                <Auk::ButtonLink @layout="icon-only" @icon="download">{{t "util.download"}}</Auk::ButtonLink>
+              </li>
+            </ul>
             <div class="auk-hr"></div>
             <div class="auk-content">
               <h4 class="auk-u-m-0">Onderwerp</h4>
