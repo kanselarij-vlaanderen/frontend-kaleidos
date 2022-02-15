@@ -11,36 +11,38 @@
               {{t "received-translation"}}
             </h4>
             <span class="auk-u-text-small auk-u-m-0">
-              {{moment-format @piece.created  "DD.MM.YYYY"}}
+              {{moment-format @translationActivity.startDate  "DD.MM.YYYY"}}
             </span>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body>
-      <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
-        <Auk::ButtonLink
-          @icon="paperclip"
-        >
-          {{@piece.file.downloadFilename}}
-        </Auk::ButtonLink>
-        <Auk::ButtonLink
-          @layout="icon-only"
-          @icon="download"
-          @href={{@piece.file.namedDownloadLink}}
-          download={{@piece.file.downloadFilename}}
-        >
-          {{t "download"}}
-        </Auk::ButtonLink>
-        <Auk::ButtonLink
-          @layout="icon-only"
-          @icon="book"
-          @href={{@piece.viewDocumentURL}}
-          target="_blank"
-        >
-          {{t "read"}}
-        </Auk::ButtonLink>
-      </div>
+      {{#each @translationActivity.generatedPieces as |piece|}}
+        <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
+          <Auk::ButtonLink
+            @icon="paperclip"
+          >
+            {{piece.file.downloadFilename}}
+          </Auk::ButtonLink>
+          <Auk::ButtonLink
+            @layout="icon-only"
+            @icon="download"
+            @href={{piece.file.namedDownloadLink}}
+            download={{piece.file.downloadFilename}}
+          >
+            {{t "download"}}
+          </Auk::ButtonLink>
+          <Auk::ButtonLink
+            @layout="icon-only"
+            @icon="book"
+            @href={{piece.viewDocumentURL}}
+            target="_blank"
+          >
+            {{t "read"}}
+          </Auk::ButtonLink>
+        </div>
+      {{/each}}
     </Auk::Panel::Body>
   </Auk::Panel>
 </div>

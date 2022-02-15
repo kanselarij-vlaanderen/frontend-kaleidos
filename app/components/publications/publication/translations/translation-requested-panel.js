@@ -11,7 +11,6 @@ export default class PublicationsPublicationTranslationTranslationRequestedPanel
 
   @tracked isVerifyingDelete = false;
 
-
   constructor() {
     super(...arguments);
   }
