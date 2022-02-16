@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
+import { publicationRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 
 export default class PublicationTimelineEventPanel extends Component {
   @tracked subject;
@@ -13,7 +14,18 @@ export default class PublicationTimelineEventPanel extends Component {
   constructor() {
     super(...arguments);
 
+    // initialize validation before first render: to avoid this.validators === undefined
     this.initValidation();
+    this.initEmail();
+  }
+
+  async initEmail() {
+    // should resolve immediately (already fetched)
+    const email = await publicationRequestEmail({
+      publicationFlow: this.args.publicationFlow,
+    });
+    this.subject = email.subject;
+    this.message = email.message;
   }
 
   initValidation() {
