@@ -3,63 +3,52 @@
     <Auk::Badge @icon="mail" @skin="primary" @size="medium" class="vlc-procedure-step__badge"/>
   </div>
   <Auk::AccordionPanel @isDefaultActive={{true}} as |accordionPanel|>
-    <accordionPanel.Header>
-      <Auk::Toolbar>
-        <Auk::Toolbar::Group @position="left">
-          <Auk::Toolbar::Item>
-            <h4 class="auk-u-m-0">
-              {{t "requested-proof"}}
-            </h4>
-            <p class="auk-u-text-small auk-u-m-0">
-              {{moment-format @requestActivity.startDate  "DD.MM.YYYY"}}
-            </p>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-        <Auk::Toolbar::Group @position="right">
-          <Auk::Toolbar::Item>
-            <DropdownMenu
-              @skin="borderless"
-              @icon="three-dots"
-              as |Menu|>
-              <Menu.Item
-                @skin="danger"
-                {{on "click" this.promptDeleteRequest}}
-              >
-                {{t "delete-request"}}
-              </Menu.Item>
-            </DropdownMenu>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-      </Auk::Toolbar>
+    <accordionPanel.Header
+      @size="large"
+      @title={{t "requested-proof"}}
+      @subtitle={{moment-format @requestActivity.startDate  "DD.MM.YYYY"}}
+      as |header|>
+      <header.Actions as |actions|>
+        <actions.Item>
+          <DropdownMenu
+            @skin="borderless"
+            @icon="three-dots"
+            as |Menu|>
+            <Menu.Item
+              @skin="danger"
+              {{on "click" this.promptDeleteRequest}}
+            >
+              {{t "delete-request"}}
+            </Menu.Item>
+          </DropdownMenu>
+        </actions.Item>
+      </header.Actions>
     </accordionPanel.Header>
     <accordionPanel.Body>
       {{#each @requestActivity.usedPieces as |piece|}}
         <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
-          <Auk::ButtonLink
-            @icon="paperclip"
-          >
-            {{piece.file.downloadFilename}}
-          </Auk::ButtonLink>
-          <WebComponents::AuButtonToolbar>
-            <Auk::Button
-              @skin="borderless"
+          <Auk::List::Item class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
+            <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced">
+              <Auk::Badge @icon="paperclip" @size="regular" />
+              <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
+            </div>
+            <Auk::ButtonLink
               @layout="icon-only"
               @icon="download"
               @href={{piece.file.namedDownloadLink}}
               download={{piece.file.downloadFilename}}
             >
               {{t "download"}}
-            </Auk::Button>
-            <Auk::Button
-              @skin="borderless"
+            </Auk::ButtonLink>
+            <Auk::ButtonLink
               @layout="icon-only"
               @icon="book"
               @href={{piece.viewDocumentURL}}
               target="_blank"
             >
               {{t "read"}}
-            </Auk::Button>
-          </WebComponents::AuButtonToolbar>
+            </Auk::ButtonLink>
+          </Auk::List::Item>
         </div>
       {{/each}}
       {{#if @requestActivity.email}}

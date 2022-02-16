@@ -1,66 +1,58 @@
-<div class="auk-u-m-4">
-  <Publications::Publication::Proofs::ProofInfoPanel
-    @publicationSubcase={{this.publicationSubcase}}
-    @isFinal={{this.publicationFlow.status.isFinal}}
-  />
-  <div class="auk-u-mt-4">
-    <Auk::Panel>
-      <Auk::Panel::Header>
-        <Auk::Toolbar>
-          <Auk::Toolbar::Group @position="left">
-            <Auk::Toolbar::Item>
-              <h4 class="auk-panel__title">
-                {{t "proofs"}}
-              </h4>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-          <Auk::Toolbar::Group @position="right">
-            <Auk::Toolbar::Item>
-              <Auk::Button
-                @skin="secondary"
-                @icon="plus"
-                @disabled={{this.isProofUploadDisabled}}
-                {{on "click" this.openProofUploadModal }}
-              >
-                {{t "upload-proof"}}
-              </Auk::Button>
-            </Auk::Toolbar::Item>
-            <Auk::Toolbar::Item>
-              <Auk::Button
-                @skin="primary"
-                @icon="plus"
-                @disabled={{this.isRequestingDisabled}}
-                {{on "click" this.openProofRequestModal}}
-              >
-                {{t "request-proof"}}
-              </Auk::Button>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-        </Auk::Toolbar>
-      </Auk::Panel::Header>
-      <Auk::Panel::Body class="auk-u-bg-alt">
-        {{#each this.model as |proofRow|}}
-          {{#if proofRow.requestActivity}}
-            <Publications::Publication::Proofs::ProofRequestedPanel
-              @publicationSubcase={{this.publicationSubcase}}
-              @requestActivity={{proofRow.requestActivity}}
-              @onDeleteRequest={{fn (perform this.deleteRequest) proofRow.requestActivity}}
-            />
-          {{else if proofRow.piece}}
-            <Publications::Publication::Proofs::ProofReceivedPanel
-              @publicationSubcase={{this.publicationSubcase}}
-              @piece={{proofRow.piece}}
-            />
-          {{/if}}
-        {{else}}
-          <Auk::EmptyState
-            @bordered={{true}}
-            @message={{t "no-proofs-yet"}}
+<div class="auk-u-mt-4">
+  <Auk::Panel>
+    <Auk::Panel::Header>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <h4 class="auk-panel__title">
+              {{t "proofs"}}
+            </h4>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <Auk::Button
+              @skin="secondary"
+              @icon="plus"
+              @disabled={{this.isProofUploadDisabled}}
+              {{on "click" this.openProofUploadModal}}
+            >
+              {{t "upload-proof"}}
+            </Auk::Button>
+          </Auk::Toolbar::Item>
+          <Auk::Toolbar::Item>
+            <Auk::Button
+              @skin="primary"
+              @icon="plus"
+              @disabled={{this.isRequestingDisabled}}
+              {{on "click" this.openProofRequestModal}}
+            >
+              {{t "request-proof"}}
+            </Auk::Button>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body class="auk-u-bg-alt">
+      {{#each @model as |activity|}}
+        {{#if activity.requestActivity}}
+          <Publications::Publication::Proofs::ProofRequestedPanel
+            @requestActivity={{activity.requestActivity}}
+            @onDeleteRequest={{fn
+              (perform this.deleteRequest)
+              activity.requestActivity
+            }}
           />
-        {{/each}}
-      </Auk::Panel::Body>
-    </Auk::Panel>
-  </div>
+        {{else if activity.proofingActivity.endDate}}
+          <Publications::Publication::Proofs::ProofReceivedPanel
+            @proofingActivity={{activity.proofingActivity}}
+          />
+        {{/if}}
+      {{else}}
+        <Auk::EmptyState @bordered={{true}} @message={{t "no-proofs-yet"}} />
+      {{/each}}
+    </Auk::Panel::Body>
+  </Auk::Panel>
 </div>
 
 {{#if this.showProofRequestModal}}
