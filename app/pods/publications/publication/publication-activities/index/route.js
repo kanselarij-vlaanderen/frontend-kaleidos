@@ -8,10 +8,21 @@ export default class PublicationsPublicationDecisionsIndexRoute extends Route {
   @service publicationService;
 
   async model() {
-    const publicationSubcase = this.modelFor(
+    let publicationSubcase = this.modelFor(
       'publications.publication.publication-activities'
     );
-    let publicationActivities = await publicationSubcase.publicationActivities;
+    let publicationActivities = await this.store.query('publication-activity', {
+      'filter[subcase][:id:]': publicationSubcase.id,
+      include: [
+        'request-activity',
+        'request-activity.email',
+
+        'used-pieces',
+        'used-pieces.file',
+
+        'decisions',
+      ].join(','),
+    });
     publicationActivities = publicationActivities.toArray();
     const timeline = await createTimeline(publicationActivities);
     return timeline;
