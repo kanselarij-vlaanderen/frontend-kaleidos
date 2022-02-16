@@ -18,11 +18,11 @@ export default class AgendaitemNav extends Component {
 
   constructor() {
     super(...arguments);
-    this.checkExistance();
+    this.checkExistence();
   }
 
   @action
-  async checkExistance() {
+  async checkExistence() {
     const agendaActivity = await this.agendaitem.get('agendaActivity');
     if (!this.agendaitem.isApproval) {
       if (agendaActivity) {
