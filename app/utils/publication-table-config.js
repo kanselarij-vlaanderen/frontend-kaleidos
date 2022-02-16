@@ -28,10 +28,10 @@ export default class PublicationTableConfig {
       const columnsDisplayConfig = JSON.parse(serializedColumnVisibilityConfig);
       this.visibleColumnKeys = new TrackedSet(
         Object.entries(columnsDisplayConfig)
-          .filter(([_, value]) => {
+          .filter(([_, value]) => { //eslint-disable-line no-unused-vars
             return value;
           })
-          .map(([key, _]) => {
+          .map(([key, _]) => { //eslint-disable-line no-unused-vars
             return key;
           })
       );
