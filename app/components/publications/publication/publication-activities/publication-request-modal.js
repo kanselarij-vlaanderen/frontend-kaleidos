@@ -91,7 +91,6 @@ export default class PublicationTimelineEventPanel extends Component {
     yield this.args.onSave(requestParams);
   }
 
-  @action
   async performCleanup() {
     await Promise.all(this.files.map((file) => file.destroyRecord()));
   }
