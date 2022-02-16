@@ -11,7 +11,7 @@
               {{t "received-proof"}}
             </h4>
             <p class="auk-u-text-small auk-u-m-0">
-              {{moment-format @piece.created  "DD.MM.YYYY"}}
+              {{moment-format @proofingActivity.endDate  "DD.MM.YYYY"}}
             </p>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
@@ -19,33 +19,32 @@
     </Auk::Panel::Header>
 
     <Auk::Panel::Body>
-      <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
-        <Auk::ButtonLink
-          @icon="paperclip"
-        >
-          {{@piece.file.downloadFilename}}
-        </Auk::ButtonLink>
-        <WebComponents::AuButtonToolbar>
-          <Auk::Button
-            @skin="borderless"
-            @layout="icon-only"
-            @icon="download"
-            @href={{@piece.file.namedDownloadLink}}
-            download={{@piece.file.downloadFilename}}
-          >
-            {{t "download"}}
-          </Auk::Button>
-          <Auk::Button
-            @skin="borderless"
-            @layout="icon-only"
-            @icon="book"
-            @href={{@piece.viewDocumentURL}}
-            target="_blank"
-          >
-            {{t "read"}}
-          </Auk::Button>
-        </WebComponents::AuButtonToolbar>
-      </div>
+      <Auk::List>
+        {{#each @proofingActivity.generatedPieces as |piece|}}
+          <Auk::List::Item class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
+            <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced">
+              <Auk::Badge @icon="paperclip" @size="regular" />
+              <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
+            </div>
+            <Auk::ButtonLink
+              @layout="icon-only"
+              @icon="download"
+              @href={{piece.file.namedDownloadLink}}
+              download={{piece.file.downloadFilename}}
+            >
+              {{t "download"}}
+            </Auk::ButtonLink>
+            <Auk::ButtonLink
+              @layout="icon-only"
+              @icon="book"
+              @href={{piece.viewDocumentURL}}
+              target="_blank"
+            >
+              {{t "read"}}
+            </Auk::ButtonLink>
+          </Auk::List::Item>
+        {{/each}}
+      </Auk::List>
     </Auk::Panel::Body>
   </Auk::Panel>
 </div>

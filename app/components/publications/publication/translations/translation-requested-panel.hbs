@@ -18,7 +18,7 @@
               @skin="danger"
               {{on "click" this.promptDeleteRequest}}
             >
-              {{t "delete-translation-request"}}
+              {{t "delete-request"}}
             </Menu.Item>
           </DropdownMenu>
         </actions.Item>
@@ -72,8 +72,8 @@
 
 {{#if this.isVerifyingDelete}}
   <WebComponents::VlModalVerify
-    @title={{t "delete-translation-request"}}
-    @message={{t "delete-translation-request-message"}}
+    @title={{t "delete-request"}}
+    @message={{t "delete-request-message"}}
     @cancel={{this.cancelDeleteRequest}}
     @verify={{this.deleteRequest}}
   />
