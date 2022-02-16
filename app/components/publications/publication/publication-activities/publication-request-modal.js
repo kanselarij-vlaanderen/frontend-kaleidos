@@ -72,6 +72,8 @@ export default class PublicationTimelineEventPanel extends Component {
     drop: true,
   })
   *cancel() {
+    // this.canCancel does not work:
+    //     because this.cancel.isRunning === true, the cancel task is never performed
     // necessary because close-button is not disabled when saving
     if (this.save.isRunning) {
       return;
@@ -91,6 +93,7 @@ export default class PublicationTimelineEventPanel extends Component {
     yield this.args.onSave(requestParams);
   }
 
+  // separate method to prevent ember-concurrency from saving only partially
   async performCleanup() {
     await Promise.all(this.files.map((file) => file.destroyRecord()));
   }
