@@ -1,23 +1,40 @@
 <Auk::Modal>
   <Auk::Modal::Header
     @title="Publicatieaanvraag"
-    @onClose={{perform this.cancel}} />
+    @onClose={{perform this.cancel}}
+  />
   <Auk::Modal::Body>
-    <Utils::LoadableContent>
+    <Utils::LoadableContent
+      @isLoading={{this.isLoading}}
+      @reserveSpace={{true}}
+    >
       <div class="auk-form-group-layout auk-form-group-layout--standard">
         <div class="auk-form-group">
-          <Auk::Label for="publicationRequestModal.subject">{{t "subject"}}</Auk::Label>
-          <Auk::Input id="publicationRequestModal.subject" @block={{true}}
-            @value={{this.subject}} />
-        </div>
-        <div class="auk-form-group">
-          <Auk::Label for="publicationRequestModal.message">{{t "message"}}</Auk::Label>
-          <Auk::Textarea id="publicationRequestModal.message" @block={{true}}
-            @value={{this.message}}
+          <Auk::Label for="publicationRequestModal.subject">
+            {{t "subject"}}
+          </Auk::Label>
+          <Auk::Input
+            id="publicationRequestModal.subject"
+            @block={{true}}
+            @value={{this.subject}}
+            {{on "input" this.setSubject}}
           />
         </div>
         <div class="auk-form-group">
-          <Auk::Label for="publicationRequestModal.attachments">{{t "attachments"}}</Auk::Label>
+          <Auk::Label for="publicationRequestModal.message">
+            {{t "message"}}
+          </Auk::Label>
+          <Auk::Textarea
+            id="publicationRequestModal.message"
+            @block={{true}}
+            @value={{this.message}}
+            {{on "input" this.setMessage}}
+          />
+        </div>
+        <div class="auk-form-group">
+          <Auk::Label for="publicationRequestModal.attachments">
+            {{t "attachments"}}
+          </Auk::Label>
           <Auk::FileUploader
             id="publicationRequestModal.attachments"
             @multiple={{true}}
@@ -33,9 +50,14 @@
       </div>
     </Utils::LoadableContent>
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @onCancel={{perform this.cancel}}>
+  <Auk::Modal::Footer
+    @cancelDisabled={{not this.canCancel}}
+    @onCancel={{perform this.cancel}}
+  >
     <Auk::Button
       @skin="primary"
+      @disabled={{not this.canSave}}
+      @loading={{this.save.isRunning}}
       {{on "click" (perform this.save)}}
     >
       {{t "request-action"}}

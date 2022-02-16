@@ -3,6 +3,8 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { dropTask, task } from 'ember-concurrency';
+import { timeout } from 'ember-concurrency';
+
 /* eslint-disable no-unused-vars */
 import PublicationActivity from '../../../../../models/publication-activity';
 import DecisionModel from '../../../../../models/decision';
@@ -74,7 +76,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
 
   @tracked publicationFlow;
   @tracked isViaCouncilOfMinisters;
-  @tracked isOpenRequestModal = true;
+  @tracked isOpenRequestModal = false;
 
   @action
   openRequestModal() {
@@ -88,7 +90,8 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
 
   @task
   *saveRequest(requestParams) {
-    yield console.log(requestParams)
+    console.log(requestParams);
+    yield timeout(1000);
 
     this.send('refresh');
     this.isOpenRequestModal = false;
