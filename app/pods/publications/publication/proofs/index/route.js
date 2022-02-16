@@ -32,7 +32,7 @@ export default class PublicationsPublicationProofsRoute extends Route {
 
     let requestActivities = await this.store.query('request-activity', {
       'filter[publication-subcase][:id:]': this.publicationSubcase.id,
-      include: ['email', 'used-pieces', 'used-pieces.file'].join(','),
+      include: 'email,used-pieces,used-pieces.file',
       sort: '-start-date',
     });
 
@@ -42,12 +42,13 @@ export default class PublicationsPublicationProofsRoute extends Route {
       sort: '-start-date',
     });
 
-    let activities = await Promise.all([
+    let activities = [
       requestActivities.map((request) => Activity.create(request, null)),
       proofingActivities.map((proofing) => Activity.create(null, proofing)),
-    ]);
-    activities = activities.flatMap((activity) => activity.toArray());
+    ];
+    activities = await Promise.all(activities.flatMap((activity) => activity.toArray()));
     activities = activities.sortBy('date').reverseObjects();
+
     return activities;
   }
 
