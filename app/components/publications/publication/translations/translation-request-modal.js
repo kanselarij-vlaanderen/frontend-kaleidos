@@ -4,58 +4,41 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { translationRequestEmail } from 'frontend-kaleidos/utils/publication-email';
-import { guidFor } from '@ember/object/internals';
-import {
-  ValidatorSet, Validator
-} from 'frontend-kaleidos/utils/validators';
+import { Validator, ValidatorSet } from 'frontend-kaleidos/utils/validators';
 import { isPresent } from '@ember/utils';
 
 export default class PublicationsTranslationRequestModalComponent extends Component {
   /**
-   * @argument onSave: should take arguments (selectedPieces)
+   * @argument onSave
    * @argument onCancel
    */
   @service store;
-  @service('file-queue') fileQueueService;
 
-  @tracked translationDocument;
-  @tracked name;
+  @tracked usedPieces = [];
   @tracked pagesAmount;
   @tracked wordsAmount;
-  @tracked translationDueDate = this.args.translationSubcase.dueDate ? this.args.translationSubcase.dueDate : new Date();
+  @tracked translationDueDate = this.args.dueDate ? this.args.dueDate : new Date();
   @tracked subject;
   @tracked message;
   validators;
 
   constructor() {
     super(...arguments);
-    if (this.fileQueueService.find(this.fileQueueName)) {
-      this.fileQueueService.create(this.fileQueueName);
-    }
     this.initValidators();
   }
 
-  get fileQueueName() {
-    return `${guidFor(this)}-file-queue`;
-  }
-
-  get fileQueue() {
-    return this.fileQueueService.find(this.fileQueueName);
-  }
-
   get isCancelDisabled() {
-    return this.cancel.isRunning || this.saveRequest.isRunning;
+    return this.cancel.isRunning || this.save.isRunning;
   }
 
   get isSaveDisabled() {
-    return !this.translationDocument || !this.validators.areValid || this.cancel.isRunning;
+    return this.usedPieces.length === 0 || !this.validators.areValid || this.cancel.isRunning;
   }
 
   @task
-  *saveRequest() {
+  *save() {
     yield this.args.onSave({
-      piece: this.translationDocument,
-      name: this.name,
+      usedPieces: this.usedPieces,
       pagesAmount: this.pagesAmount,
       wordsAmount: this.wordsAmount,
       translationDueDate: this.translationDueDate,
@@ -69,12 +52,14 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   })
   *cancel() {
     // necessary because close-button is not disabled when saving
-    if (this.saveRequest.isRunning) {
+    if (this.save.isRunning) {
       return;
     }
 
-    if (this.translationDocument) {
-      yield this.deleteUploadedPiece.perform(this.translationDocument);
+    if (this.usedPieces.length > 0) {
+      for (let piece of this.usedPieces) {
+        yield this.deleteUploadedPiece.perform(piece);
+      }
     }
     this.args.onCancel();
   }
@@ -100,7 +85,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
       dueDate: this.translationDueDate,
       totalPages: this.pagesAmount,
       totalWords: this.wordsAmount,
-      totalDocuments: 1,
+      totalDocuments: this.usedPieces.length,
     };
 
     const mailTemplate = translationRequestEmail(mailParams);
@@ -120,7 +105,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
     });
-    this.translationDocument = this.store.createRecord('piece', {
+    const piece = this.store.createRecord('piece', {
       created: now,
       modified: now,
       file: file,
@@ -128,12 +113,13 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
       name: file.filenameWithoutExtension,
       documentContainer: documentContainer,
     });
-    this.name = file.filenameWithoutExtension;
+
+    this.usedPieces.pushObject(piece);
+    this.setEmailFields.perform();
   }
 
   initValidators() {
     this.validators = new ValidatorSet({
-      name: new Validator(() => isPresent(this.name)),
       translationDueDate: new Validator(() => isPresent(this.translationDueDate)),
       subject: new Validator(() => isPresent(this.subject)),
       message: new Validator(() => isPresent(this.message)),

@@ -69,7 +69,7 @@ context('meeting actions tests', () => {
     cy.wait('@patchSubcase');
     cy.get(auk.modal.container).should('not.exist');
     cy.get(auk.loader, {
-      timeout: 20000,
+      timeout: 60000,
     }).should('not.exist'); // route is loading data after this action
 
     // Verify subcase is no longer on designagenda after deleting the agendaitem

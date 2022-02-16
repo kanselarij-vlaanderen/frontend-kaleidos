@@ -1,43 +1,41 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
-import {
-  ValidatorSet, Validator
-} from 'frontend-kaleidos/utils/validators';
+import { inject as service } from '@ember/service';
+import { isEmpty } from '@ember/utils';
 
 export default class PublicationsTranslationTranslationUploadModalComponent extends Component {
-  validators;
+  @service store;
 
-  @tracked file;
-  @tracked name;
-  @tracked isSourceForProofPrint = false;
+  @tracked generatedPieces = [];
   @tracked receivedAtDate = new Date();
   @tracked isTranslationIn = false;
-
-  constructor() {
-    super(...arguments);
-
-    this.initValidation();
-  }
-
-  get isLoading() {
-    return this.save.isRunning || this.cancel.isRunning;
-  }
 
   get isCancelDisabled() {
     return this.cancel.isRunning || this.save.isRunning;
   }
 
   get isSaveDisabled() {
-    return !this.file || this.file.isDeleted || !this.validators.areValid;
+    return this.generatedPieces.length === 0 || isEmpty(this.receivedAtDate) || this.cancel.isRunning;
   }
 
   @action
-  onUploadFile(file) {
-    this.file = file;
-    this.name = file.filenameWithoutExtension;
+  uploadPiece(file) {
+    const now = new Date();
+    const documentContainer = this.store.createRecord('document-container', {
+      created: now,
+    });
+    const piece = this.store.createRecord('piece', {
+      created: now,
+      modified: now,
+      file: file,
+      confidential: false,
+      name: file.filenameWithoutExtension,
+      documentContainer: documentContainer,
+    });
+
+    this.generatedPieces.pushObject(piece);
   }
 
   @task({
@@ -49,8 +47,10 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
       return;
     }
 
-    if (this.file) {
-      yield this.file.destroyRecord();
+    if (this.generatedPieces.length > 0) {
+      for (let piece of this.generatedPieces) {
+        yield this.deleteUploadedPiece.perform(piece);
+      }
     }
     this.args.onCancel();
   }
@@ -58,17 +58,14 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
   @task
   *save() {
     yield this.args.onSave({
-      file: this.file,
-      name: this.name,
+      generatedPieces: this.generatedPieces,
       receivedAtDate: this.receivedAtDate,
-      isSourceForProofPrint: this.isSourceForProofPrint,
       isTranslationIn: this.isTranslationIn,
     });
   }
 
   @action
   setReceivedAtDate(selectedDates) {
-    this.validators.receivedAtDate.enableError();
     if (selectedDates.length) {
       this.receivedAtDate = selectedDates[0];
     } else { // this case occurs when users manually empty the date input-field
@@ -81,10 +78,12 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
     this.isTranslationIn = event.target.checked;
   }
 
-  initValidation() {
-    this.validators = new ValidatorSet({
-      name: new Validator(() => isPresent(this.name)),
-      receivedAtDate: new Validator(() => isPresent(this.receivedAtDate)),
-    });
+  @task
+  *deleteUploadedPiece(piece) {
+    const file = yield piece.file;
+    yield file.destroyRecord();
+    const documentContainer = yield piece.documentContainer;
+    yield documentContainer.destroyRecord();
+    yield piece.destroyRecord();
   }
 }

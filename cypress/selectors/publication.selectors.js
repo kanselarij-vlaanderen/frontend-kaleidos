@@ -162,10 +162,8 @@ const selectors = {
     shortTitle: '[data-test-new-publication-short-title]',
     longTitle: '[data-test-new-publication-long-title]',
     alertInfo: '[data-test-new-publication-alert-info]',
-    alertError: '[data-test-new-publication-alert-error]',
-    numberError: '[data-test-new-publication-number-error]',
-    shortTitleError: '[data-test-new-publication-short-title-error]',
     create: '[data-test-new-publication-create]',
+    cancel: '[data-test-new-publication-cancel]',
   },
 
   // contact-persons-panel
@@ -226,28 +224,27 @@ const selectors = {
   },
 
   // sidebar
-  sidebar: {
-    open: '[data-test-publication-sidebar-open]',
-    publicationNumber: '[data-test-publication-sidebar-publication-number]',
-    publicationNumberSuffix: '[data-test-publication-sidebar-publication-number-suffix]',
-    publicationNumberError: '[data-test-publication-sidebar-publication-number-error]',
-    confirmWithdraw: '[data-test-publication-sidebar-confirm-withdraw]',
-    statusChangeDate: '[data-test-publication-sidebar-status-change-date]',
-    regulationType: '[data-test-publication-sidebar-regulation-type]',
-    // publicationMode: '[data-test-publication-sidebar-publication-mode]',
-    // proofPrintCorrector: '[data-test-publication-sidebar-proof-print-corrector]',
-    numacNumber: '[data-test-publication-sidebar-numac-number]',
-    openingDate: '[data-test-publication-sidebar-opening-date]',
-    decisionDate: '[data-test-publication-sidebar-decision-date]',
-    // translationDueDate: '[data-test-publication-sidebar-translation-due-date]',
-    translationDate: '[data-test-publication-sidebar-translation-date]',
-    // targetEndDate: '[data-test-publication-sidebar-target-end-date]',
-    // publicationDueDate: '[data-test-publication-sidebar-publication-due-date]',
-    publicationDate: '[data-test-publication-sidebar-publication-date]',
-    remark: '[data-test-publication-sidebar-remark]',
-    // TODO-SELECTORS unused selectors
-    container: '[data-test-publication-sidebar-container]',
-  },
+  // sidebar: {
+  //   open: '[data-test-publication-sidebar-open]',
+  //   publicationNumber: '[data-test-publication-sidebar-publication-number]',
+  //   publicationNumberSuffix: '[data-test-publication-sidebar-publication-number-suffix]',
+  //   publicationNumberError: '[data-test-publication-sidebar-publication-number-error]',
+  //   confirmWithdraw: '[data-test-publication-sidebar-confirm-withdraw]',
+  //   statusChangeDate: '[data-test-publication-sidebar-status-change-date]',
+  //   regulationType: '[data-test-publication-sidebar-regulation-type]',
+  // publicationMode: '[data-test-publication-sidebar-publication-mode]',
+  // proofPrintCorrector: '[data-test-publication-sidebar-proof-print-corrector]',
+  // numacNumber: '[data-test-publication-sidebar-numac-number]',
+  // openingDate: '[data-test-publication-sidebar-opening-date]',
+  // decisionDate: '[data-test-publication-sidebar-decision-date]',
+  // translationDueDate: '[data-test-publication-sidebar-translation-due-date]',
+  // translationDate: '[data-test-publication-sidebar-translation-date]',
+  // targetEndDate: '[data-test-publication-sidebar-target-end-date]',
+  // publicationDueDate: '[data-test-publication-sidebar-publication-due-date]',
+  // publicationDate: '[data-test-publication-sidebar-publication-date]',
+  // remark: '[data-test-publication-sidebar-remark]',
+  //   container: '[data-test-publication-sidebar-container]',
+  // },
 
   // publication-status-selector
   // statusSelector: '[data-test-publication-status-selector]',
@@ -284,10 +281,10 @@ const selectors = {
   },
 
   //  translation-upload-modal
-  translationUpload: {
-    name: '[data-test-translation-upload-name]',
-    save: '[data-test-translation-upload-save]',
-  },
+  // translationUpload: {
+  //   name: '[data-test-translation-upload-name]',
+  //   save: '[data-test-translation-upload-save]',
+  // },
 
   // proof-upload-modal
   proofUpload: {

@@ -4,18 +4,12 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 /**
- * @argument {translationSubcase}
  * @argument {requestActivity}
  */
 export default class PublicationsPublicationTranslationTranslationRequestedPanel extends Component {
   @service store;
 
   @tracked isVerifyingDelete = false;
-
-
-  constructor() {
-    super(...arguments);
-  }
 
   @action
   promptDeleteRequest() {

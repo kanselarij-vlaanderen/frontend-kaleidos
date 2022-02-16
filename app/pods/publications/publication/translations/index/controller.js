@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { isEmpty } from '@ember/utils';
 
 export default class PublicationsPublicationTranslationsController extends Controller {
   @service store;
@@ -27,37 +28,23 @@ export default class PublicationsPublicationTranslationsController extends Contr
 
   @task
   *saveTranslationUpload(translationUpload) {
-    const now = new Date();
-
-    // get latest Req activity
-    const requestActivity = this.model.filter((row) =>row.requestActivity !== null).sortBy('date').reverseObjects()[0].requestActivity;
-
-    const documentContainer = this.store.createRecord('document-container', {
-      created: now,
-    });
-    yield documentContainer.save();
-
-    const translationActivity = yield requestActivity.translationActivity;
+    // get latest translation activity
+    const translationActivity = this.model.filter((activity) => !isEmpty(activity.translationActivity))[0].translationActivity;
 
     // triggers call
     const language = yield translationActivity.language;
-    const piece = this.store.createRecord('piece', {
-      created: now,
-      modified: now,
-      receivedDate: translationUpload.receivedAtDate,
-      confidential: false,
-      name: translationUpload.name,
-      file: translationUpload.file,
-      documentContainer: documentContainer,
-      language: language,
-      translationActivityGeneratedBy: translationActivity,
-    });
-    if (translationUpload.isSourceForProofPrint) {
-      piece.publicationSubcaseSourceFor = this.publicationSubcase;
-    }
-    const pieceSave = piece.save();
 
-    translationActivity.endDate = now;
+    const pieceSaves = [];
+    for (let piece of translationUpload.generatedPieces){
+
+      piece.receivedDate = translationUpload.receivedAtDate;
+      piece.language = language;
+      piece.translationActivityGeneratedBy= translationActivity;
+
+      pieceSaves.push(piece.save());
+    }
+
+    translationActivity.endDate = translationUpload.receivedAtDate;
     const translationActivitySave = translationActivity.save();
 
     if (
@@ -79,7 +66,7 @@ export default class PublicationsPublicationTranslationsController extends Contr
       yield this.publicationSubcase.save();
     }
 
-    yield Promise.all([translationActivitySave, pieceSave]);
+    yield Promise.all([translationActivitySave, pieceSaves]);
 
     this.send('refresh');
     this.showTranslationUploadModal = false;
@@ -88,25 +75,27 @@ export default class PublicationsPublicationTranslationsController extends Contr
   @task
   *saveTranslationRequest(translationRequest) {
     const now = new Date();
+    const usedPieces = [];
 
-    const piece = translationRequest.piece;
-    piece.translationSubcaseSourceFor = this.translationSubcase;
-    const documentContainer = yield piece.documentContainer;
-    yield documentContainer.save();
-    piece.pages = translationRequest.pagesAmount;
-    piece.words = translationRequest.wordsAmount;
-    piece.name = translationRequest.name;
-    piece.language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
+    for (let piece of translationRequest.usedPieces){
+      piece.translationSubcaseSourceFor = this.translationSubcase;
+      const documentContainer = yield piece.documentContainer;
+      yield documentContainer.save();
+      piece.pages = translationRequest.pagesAmount;
+      piece.words = translationRequest.wordsAmount;
+      piece.language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
 
-    yield piece.save();
-    const usedPieces = [piece];
-    console.log(usedPieces)
+      yield piece.save();
+      usedPieces.push(piece);
+    }
+
     const requestActivity = yield this.store.createRecord('request-activity', {
       startDate: now,
       translationSubcase: this.translationSubcase,
       usedPieces: usedPieces,
     });
     yield requestActivity.save();
+
     const french = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.FR);
 
     const translationActivity = yield this.store.createRecord('translation-activity', {

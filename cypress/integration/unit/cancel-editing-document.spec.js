@@ -17,7 +17,8 @@ function uploadFileToCancel(file) {
   cy.get(document.documentCard.name.value).contains(file.fileName)
     .parents(document.documentCard.card)
     .within(() => {
-      cy.get(document.documentCard.actions).click();
+      cy.get(document.documentCard.actions).should('not.be.disabled')
+        .click();
       cy.get(document.documentCard.uploadPiece).click();
     });
   cy.get(utils.vlModal.dialogWindow).within(() => {
