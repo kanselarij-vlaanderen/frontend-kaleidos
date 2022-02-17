@@ -107,11 +107,12 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   }
 
   @action
-  uploadPiece(file) {
+  async uploadPiece(file) {
     const now = new Date();
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
     });
+    await documentContainer.save();
     const piece = this.store.createRecord('piece', {
       created: now,
       modified: now,

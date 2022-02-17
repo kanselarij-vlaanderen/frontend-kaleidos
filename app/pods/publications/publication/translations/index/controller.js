@@ -23,17 +23,21 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   get isTranslationUploadDisabled() {
-    return this.model.length === 0;
+    return isEmpty(this.latestTranslationActivity);
   }
+
+  get latestTranslationActivity() {
+    return this.model.filter(
+      (activity) => !isEmpty(activity.translationActivity)
+    )[0].translationActivity;
+  }
+
 
   @task
   *saveTranslationUpload(translationUpload) {
     // get latest translation activity
-    const translationActivity = this.model.filter(
-      (activity) => !isEmpty(activity.translationActivity)
-    )[0].translationActivity;
+    const translationActivity = this.latestTranslationActivity;
 
-    // triggers call
     const language = yield translationActivity.language;
 
     const pieceSaves = [];
@@ -52,12 +56,13 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     translationActivity.endDate = translationUpload.receivedAtDate;
     const translationActivitySave = translationActivity.save();
 
+    let translationSubcaseSave;
     if (
       translationUpload.receivedAtDate < this.translationSubcase.receivedDate ||
       !this.translationSubcase.receivedDate
     ) {
       this.translationSubcase.receivedDate = translationUpload.receivedAtDate;
-      yield this.translationSubcase.save();
+      translationSubcaseSave = this.translationSubcase.save();
     }
 
     if (translationUpload.mustUpdatePublicationStatus) {
@@ -67,11 +72,11 @@ export default class PublicationsPublicationTranslationsIndexController extends 
         translationUpload.receivedAtDate
       );
 
-      this.publicationSubcase.endDate = translationUpload.receivedAtDate;
-      yield this.publicationSubcase.save();
+      this.translationSubcase.endDate = translationUpload.receivedAtDate;
+      translationSubcaseSave = this.translationSubcase.save();
     }
 
-    yield Promise.all([translationActivitySave, pieceSaves,containerSaves]);
+    yield Promise.all([translationActivitySave, pieceSaves,containerSaves,translationSubcaseSave]);
 
     this.send('refresh');
     this.showTranslationUploadModal = false;
@@ -80,25 +85,20 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   @task
   *saveTranslationRequest(translationRequest) {
     const now = new Date();
-    const usedPieces = [];
 
     for (let piece of translationRequest.uploadedPieces) {
       piece.translationSubcaseSourceFor = this.translationSubcase;
-      const documentContainer = yield piece.documentContainer;
-      yield documentContainer.save();
       piece.language = yield this.store.findRecordByUri(
         'language',
         CONSTANTS.LANGUAGES.NL
       );
-
       yield piece.save();
-      usedPieces.push(piece);
     }
 
     const requestActivity = yield this.store.createRecord('request-activity', {
       startDate: now,
       translationSubcase: this.translationSubcase,
-      usedPieces: usedPieces,
+      usedPieces: translationRequest.uploadedPieces,
     });
     yield requestActivity.save();
 
@@ -115,7 +115,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
         title: translationRequest.subject,
         subcase: this.translationSubcase,
         requestActivity: requestActivity,
-        usedPieces: usedPieces,
+        usedPieces: translationRequest.uploadedPieces,
         language: french,
       }
     );
@@ -148,11 +148,10 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     yield mail.save();
 
     // PUBLICATION-STATUS
-    const pubStatusChange = this.publicationService.updatePublicationStatus(
+    yield this.publicationService.updatePublicationStatus(
       this.publicationFlow,
       CONSTANTS.PUBLICATION_STATUSES.TO_TRANSLATIONS
     );
-    yield pubStatusChange;
 
     this.send('refresh');
     this.showTranslationRequestModal = false;
@@ -160,15 +159,15 @@ export default class PublicationsPublicationTranslationsIndexController extends 
 
   @dropTask
   *deleteRequest(requestActivity) {
-    const saves = [];
+    const deletePromises = [];
 
     const translationActivity = yield requestActivity.translationActivity;
-    saves.push(translationActivity.destroyRecord());
+    deletePromises.push(translationActivity.destroyRecord());
 
     const mail = yield requestActivity.email;
-    saves.push(mail.destroyRecord());
+    deletePromises.push(mail.destroyRecord());
 
-    saves.push(requestActivity.destroyRecord());
+    deletePromises.push(requestActivity.destroyRecord());
 
     const pieces = yield requestActivity.usedPieces;
 
@@ -180,11 +179,11 @@ export default class PublicationsPublicationTranslationsIndexController extends 
         documentContainerPromise,
       ]);
 
-      saves.push(piece.destroyRecord());
-      saves.push(file.destroyRecord());
-      saves.push(documentContainer.destroyRecord());
+      deletePromises.push(piece.destroyRecord());
+      deletePromises.push(file.destroyRecord());
+      deletePromises.push(documentContainer.destroyRecord());
     }
-    yield Promise.all(saves);
+    yield Promise.all(deletePromises);
     this.send('refresh');
   }
 
