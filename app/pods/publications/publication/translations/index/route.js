@@ -21,7 +21,7 @@ export class Activity {
   }
 }
 
-export default class PublicationsPublicationTranslationsRoute extends Route {
+export default class PublicationsPublicationTranslationsIndexRoute extends Route {
   async model() {
     this.translationSubcase = this.modelFor(
       'publications.publication.translations'

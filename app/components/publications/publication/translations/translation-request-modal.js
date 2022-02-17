@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency-decorators';
+import { task, dropTask } from 'ember-concurrency-decorators';
 import { translationRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 import { Validator, ValidatorSet } from 'frontend-kaleidos/utils/validators';
 import { isPresent } from '@ember/utils';
@@ -14,7 +14,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
    */
   @service store;
 
-  @tracked usedPieces = [];
+  @tracked uploadedPieces = [];
   @tracked pagesAmount;
   @tracked wordsAmount;
   @tracked translationDueDate = this.args.dueDate
@@ -27,6 +27,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   constructor() {
     super(...arguments);
     this.initValidators();
+    this.setEmailFields.perform();
   }
 
   get isCancelDisabled() {
@@ -35,7 +36,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
 
   get isSaveDisabled() {
     return (
-      this.usedPieces.length === 0 ||
+      this.uploadedPieces.length === 0 ||
       !this.validators.areValid ||
       this.cancel.isRunning
     );
@@ -44,7 +45,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   @task
   *save() {
     yield this.args.onSave({
-      usedPieces: this.usedPieces,
+      uploadedPieces: this.uploadedPieces,
       pagesAmount: this.pagesAmount,
       wordsAmount: this.wordsAmount,
       translationDueDate: this.translationDueDate,
@@ -53,24 +54,24 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
     });
   }
 
-  @task({
-    drop: true,
-  })
+  @dropTask
   *cancel() {
     // necessary because close-button is not disabled when saving
     if (this.save.isRunning) {
       return;
     }
 
-    if (this.usedPieces.length > 0) {
-      for (let piece of this.usedPieces) {
-        yield this.deleteUploadedPiece.perform(piece);
+    if (this.uploadedPieces.length > 0) {
+      const deletePromises = [];
+      for (let piece of this.uploadedPieces) {
+        deletePromises.push(this.deleteUploadedPiece.perform(piece));
       }
+      yield Promise.all(deletePromises);
     }
     this.args.onCancel();
   }
 
-  @task
+  @dropTask
   *deleteUploadedPiece(piece) {
     const file = yield piece.file;
     yield file.destroyRecord();
@@ -91,7 +92,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
       dueDate: this.translationDueDate,
       totalPages: this.pagesAmount,
       totalWords: this.wordsAmount,
-      totalDocuments: this.usedPieces.length,
+      totalDocuments: this.uploadedPieces.length,
     };
 
     const mailTemplate = translationRequestEmail(mailParams);
@@ -120,7 +121,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
       documentContainer: documentContainer,
     });
 
-    this.usedPieces.pushObject(piece);
+    this.uploadedPieces.pushObject(piece);
     this.setEmailFields.perform();
   }
 

@@ -994,5 +994,6 @@
   "set-status-translation-in": "Zet status naar 'Vertaling In'",
   "set-status-proof-in": "Zet status naar 'Drukproef In'",
   "delete-translation-request-message": "Bent u zeker dat u de aanvraag wil verwijderen?",
-  "delete-translation-request": "Aanvraag verwijderen"
+  "delete-translation-request": "Aanvraag verwijderen",
+  "request-it": "Aanvragen"
 }

@@ -1,13 +1,13 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { task } from 'ember-concurrency-decorators';
+import { task,dropTask } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isEmpty } from '@ember/utils';
 
-export default class PublicationsPublicationTranslationsController extends Controller {
+export default class PublicationsPublicationTranslationsIndexController extends Controller {
   @service store;
   @service publicationService;
 
@@ -37,12 +37,16 @@ export default class PublicationsPublicationTranslationsController extends Contr
     const language = yield translationActivity.language;
 
     const pieceSaves = [];
-    for (let piece of translationUpload.generatedPieces) {
+    const containerSaves = [];
+
+    for (let piece of translationUpload.uploadedPieces) {
       piece.receivedDate = translationUpload.receivedAtDate;
       piece.language = language;
       piece.translationActivityGeneratedBy = translationActivity;
-
       pieceSaves.push(piece.save());
+
+      const documentContainer = yield piece.documentContainer;
+      containerSaves.push(documentContainer.save());
     }
 
     translationActivity.endDate = translationUpload.receivedAtDate;
@@ -56,7 +60,7 @@ export default class PublicationsPublicationTranslationsController extends Contr
       yield this.translationSubcase.save();
     }
 
-    if (translationUpload.isTranslationIn) {
+    if (translationUpload.mustUpdatePublicationStatus) {
       yield this.publicationService.updatePublicationStatus(
         this.publicationFlow,
         CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_IN,
@@ -67,7 +71,7 @@ export default class PublicationsPublicationTranslationsController extends Contr
       yield this.publicationSubcase.save();
     }
 
-    yield Promise.all([translationActivitySave, pieceSaves]);
+    yield Promise.all([translationActivitySave, pieceSaves,containerSaves]);
 
     this.send('refresh');
     this.showTranslationUploadModal = false;
@@ -78,12 +82,10 @@ export default class PublicationsPublicationTranslationsController extends Contr
     const now = new Date();
     const usedPieces = [];
 
-    for (let piece of translationRequest.usedPieces) {
+    for (let piece of translationRequest.uploadedPieces) {
       piece.translationSubcaseSourceFor = this.translationSubcase;
       const documentContainer = yield piece.documentContainer;
       yield documentContainer.save();
-      piece.pages = translationRequest.pagesAmount;
-      piece.words = translationRequest.wordsAmount;
       piece.language = yield this.store.findRecordByUri(
         'language',
         CONSTANTS.LANGUAGES.NL
@@ -156,7 +158,7 @@ export default class PublicationsPublicationTranslationsController extends Contr
     this.showTranslationRequestModal = false;
   }
 
-  @task
+  @dropTask
   *deleteRequest(requestActivity) {
     const saves = [];
 
