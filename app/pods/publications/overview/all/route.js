@@ -7,8 +7,4 @@ export default class PublicationsOverviewAllRoute extends PublicationsOverviewBa
     'publicationDueDate',
     'status',
   ];
-
-  modelGetQueryFilter() {
-    return {};
-  }
 }
