@@ -17,7 +17,11 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
   }
 
   get isSaveDisabled() {
-    return this.generatedPieces.length === 0 || isEmpty(this.receivedAtDate) || this.cancel.isRunning;
+    return (
+      this.generatedPieces.length === 0 ||
+      isEmpty(this.receivedAtDate) ||
+      this.cancel.isRunning
+    );
   }
 
   @action
@@ -68,7 +72,8 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
   setReceivedAtDate(selectedDates) {
     if (selectedDates.length) {
       this.receivedAtDate = selectedDates[0];
-    } else { // this case occurs when users manually empty the date input-field
+    } else {
+      // this case occurs when users manually empty the date input-field
       this.receivedAtDate = undefined;
     }
   }

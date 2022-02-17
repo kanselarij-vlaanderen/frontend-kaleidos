@@ -1,6 +1,11 @@
 <div class="vlc-procedure-step vlc-procedure-step--nopadding">
   <div class="vlc-procedure-step__badge-wrapper">
-    <Auk::Badge @icon="check" @skin="success" @size="medium" class="vlc-procedure-step__badge" />
+    <Auk::Badge
+      @icon="check"
+      @skin="success"
+      @size="medium"
+      class="vlc-procedure-step__badge"
+    />
   </div>
   <Auk::Panel>
     <Auk::Panel::Header @size="large">
@@ -11,7 +16,7 @@
               {{t "received-translation"}}
             </h4>
             <span class="auk-u-text-small auk-u-m-0">
-              {{moment-format @translationActivity.endDate  "DD.MM.YYYY"}}
+              {{moment-format @translationActivity.endDate "DD.MM.YYYY"}}
             </span>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
@@ -19,30 +24,32 @@
     </Auk::Panel::Header>
     <Auk::Panel::Body>
       <Auk::List>
-      {{#each @translationActivity.generatedPieces as |piece|}}
-        <Auk::List::Item class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
-          <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced">
-            <Auk::Badge @icon="paperclip" @size="regular" />
-            <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
-          </div>
-          <Auk::ButtonLink
-            @layout="icon-only"
-            @icon="download"
-            @href={{piece.file.namedDownloadLink}}
-            download={{piece.file.downloadFilename}}
+        {{#each @translationActivity.generatedPieces as |piece|}}
+          <Auk::List::Item
+            class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide"
           >
-            {{t "download"}}
-          </Auk::ButtonLink>
-          <Auk::ButtonLink
-            @layout="icon-only"
-            @icon="book"
-            @href={{piece.viewDocumentURL}}
-            target="_blank"
-          >
-            {{t "read"}}
-          </Auk::ButtonLink>
-        </Auk::List::Item>
-      {{/each}}
+            <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced">
+              <Auk::Badge @icon="paperclip" @size="regular" />
+              <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
+            </div>
+            <Auk::ButtonLink
+              @layout="icon-only"
+              @icon="download"
+              @href={{piece.file.namedDownloadLink}}
+              download={{piece.file.downloadFilename}}
+            >
+              {{t "download"}}
+            </Auk::ButtonLink>
+            <Auk::ButtonLink
+              @layout="icon-only"
+              @icon="book"
+              @href={{piece.viewDocumentURL}}
+              target="_blank"
+            >
+              {{t "read"}}
+            </Auk::ButtonLink>
+          </Auk::List::Item>
+        {{/each}}
       </Auk::List>
     </Auk::Panel::Body>
   </Auk::Panel>

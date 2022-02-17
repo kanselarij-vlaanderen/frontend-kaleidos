@@ -4,10 +4,7 @@
     @onClose={{perform this.cancel}}
   />
   <Auk::Modal::Body>
-    <Auk::FileUploader
-        @multiple={{true}}
-        @onUpload={{this.uploadPiece}}
-      />
+    <Auk::FileUploader @multiple={{true}} @onUpload={{this.uploadPiece}} />
     <div class="auk-form-group auk-u-mt-4">
       <Auk::Checkbox
         @label={{t "set-status-translation-in"}}

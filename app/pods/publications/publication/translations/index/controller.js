@@ -29,17 +29,18 @@ export default class PublicationsPublicationTranslationsController extends Contr
   @task
   *saveTranslationUpload(translationUpload) {
     // get latest translation activity
-    const translationActivity = this.model.filter((activity) => !isEmpty(activity.translationActivity))[0].translationActivity;
+    const translationActivity = this.model.filter(
+      (activity) => !isEmpty(activity.translationActivity)
+    )[0].translationActivity;
 
     // triggers call
     const language = yield translationActivity.language;
 
     const pieceSaves = [];
-    for (let piece of translationUpload.generatedPieces){
-
+    for (let piece of translationUpload.generatedPieces) {
       piece.receivedDate = translationUpload.receivedAtDate;
       piece.language = language;
-      piece.translationActivityGeneratedBy= translationActivity;
+      piece.translationActivityGeneratedBy = translationActivity;
 
       pieceSaves.push(piece.save());
     }
@@ -77,13 +78,16 @@ export default class PublicationsPublicationTranslationsController extends Contr
     const now = new Date();
     const usedPieces = [];
 
-    for (let piece of translationRequest.usedPieces){
+    for (let piece of translationRequest.usedPieces) {
       piece.translationSubcaseSourceFor = this.translationSubcase;
       const documentContainer = yield piece.documentContainer;
       yield documentContainer.save();
       piece.pages = translationRequest.pagesAmount;
       piece.words = translationRequest.wordsAmount;
-      piece.language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
+      piece.language = yield this.store.findRecordByUri(
+        'language',
+        CONSTANTS.LANGUAGES.NL
+      );
 
       yield piece.save();
       usedPieces.push(piece);
@@ -96,25 +100,40 @@ export default class PublicationsPublicationTranslationsController extends Contr
     });
     yield requestActivity.save();
 
-    const french = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.FR);
+    const french = yield this.store.findRecordByUri(
+      'language',
+      CONSTANTS.LANGUAGES.FR
+    );
 
-    const translationActivity = yield this.store.createRecord('translation-activity', {
-      startDate: now,
-      dueDate: translationRequest.translationDueDate,
-      title: translationRequest.subject,
-      subcase: this.translationSubcase,
-      requestActivity: requestActivity,
-      usedPieces: usedPieces,
-      language: french,
-    });
+    const translationActivity = yield this.store.createRecord(
+      'translation-activity',
+      {
+        startDate: now,
+        dueDate: translationRequest.translationDueDate,
+        title: translationRequest.subject,
+        subcase: this.translationSubcase,
+        requestActivity: requestActivity,
+        usedPieces: usedPieces,
+        language: french,
+      }
+    );
     yield translationActivity.save();
 
     const filePromises = usedPieces.mapBy('file');
     const filesPromise = Promise.all(filePromises);
 
-    const outboxPromise = this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);
-    const mailSettingsPromise = this.store.queryOne('email-notification-setting');
-    const [files,outbox, mailSettings] = yield Promise.all([filesPromise,outboxPromise, mailSettingsPromise]);
+    const outboxPromise = this.store.findRecordByUri(
+      'mail-folder',
+      PUBLICATION_EMAIL.OUTBOX
+    );
+    const mailSettingsPromise = this.store.queryOne(
+      'email-notification-setting'
+    );
+    const [files, outbox, mailSettings] = yield Promise.all([
+      filesPromise,
+      outboxPromise,
+      mailSettingsPromise,
+    ]);
     const mail = yield this.store.createRecord('email', {
       to: mailSettings.translationRequestToEmail,
       from: mailSettings.defaultFromEmail,
@@ -138,7 +157,7 @@ export default class PublicationsPublicationTranslationsController extends Contr
   }
 
   @task
-  *deleteRequest(requestActivity){
+  *deleteRequest(requestActivity) {
     const saves = [];
 
     const translationActivity = yield requestActivity.translationActivity;
@@ -154,7 +173,10 @@ export default class PublicationsPublicationTranslationsController extends Contr
     for (const piece of pieces.toArray()) {
       const filePromise = piece.file;
       const documentContainerPromise = piece.documentContainer;
-      const [file, documentContainer] = yield Promise.all([filePromise, documentContainerPromise]);
+      const [file, documentContainer] = yield Promise.all([
+        filePromise,
+        documentContainerPromise,
+      ]);
 
       saves.push(piece.destroyRecord());
       saves.push(file.destroyRecord());

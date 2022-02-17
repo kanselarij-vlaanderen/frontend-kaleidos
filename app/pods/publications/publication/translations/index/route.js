@@ -7,15 +7,15 @@ export class Activity {
   @tracked translationActivity;
   @tracked date;
 
-  static create(requestActivity,translationActivity) {
+  static create(requestActivity, translationActivity) {
     const activity = new Activity();
-    if (requestActivity){
+    if (requestActivity) {
       activity.requestActivity = requestActivity;
       activity.date = requestActivity.startDate;
     }
-    if (translationActivity){
+    if (translationActivity) {
       activity.translationActivity = translationActivity;
-      activity.date = translationActivity.endDate
+      activity.date = translationActivity.endDate;
     }
     return activity;
   }
@@ -23,25 +23,28 @@ export class Activity {
 
 export default class PublicationsPublicationTranslationsRoute extends Route {
   async model() {
-    this.translationSubcase = await this.modelFor('publications.publication.translations');
-
-    let requestActivities = await this.store.query('request-activity',
-      {
-        'filter[translation-subcase][:id:]': this.translationSubcase.id,
-        include: 'email,used-pieces,used-pieces.file',
-        sort: '-start-date',
-      }
+    this.translationSubcase = this.modelFor(
+      'publications.publication.translations'
     );
 
-    let translationActivities = await this.store.query('translation-activity',
-      {
-        'filter[subcase][:id:]': this.translationSubcase.id,
-        include: 'generated-pieces,generated-pieces.file',
-        sort: '-start-date',
-      }
-    );
+    let requestActivities = await this.store.query('request-activity', {
+      'filter[translation-subcase][:id:]': this.translationSubcase.id,
+      include: 'email,used-pieces,used-pieces.file',
+      sort: '-start-date',
+    });
 
-    let activities = await Promise.all([ requestActivities.map((request) => Activity.create(request,null)) , translationActivities.map((translation) => Activity.create(null,translation))]);
+    let translationActivities = await this.store.query('translation-activity', {
+      'filter[subcase][:id:]': this.translationSubcase.id,
+      include: 'generated-pieces,generated-pieces.file',
+      sort: '-start-date',
+    });
+
+    let activities = await Promise.all([
+      requestActivities.map((request) => Activity.create(request, null)),
+      translationActivities.map((translation) =>
+        Activity.create(null, translation)
+      ),
+    ]);
     activities = activities.flatMap((activity) => activity.toArray());
     activities = activities.sortBy('date').reverseObjects();
     return activities;

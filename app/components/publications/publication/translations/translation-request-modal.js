@@ -17,7 +17,9 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   @tracked usedPieces = [];
   @tracked pagesAmount;
   @tracked wordsAmount;
-  @tracked translationDueDate = this.args.dueDate ? this.args.dueDate : new Date();
+  @tracked translationDueDate = this.args.dueDate
+    ? this.args.dueDate
+    : new Date();
   @tracked subject;
   @tracked message;
   validators;
@@ -32,7 +34,11 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   }
 
   get isSaveDisabled() {
-    return this.usedPieces.length === 0 || !this.validators.areValid || this.cancel.isRunning;
+    return (
+      this.usedPieces.length === 0 ||
+      !this.validators.areValid ||
+      this.cancel.isRunning
+    );
   }
 
   @task
@@ -120,7 +126,9 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
 
   initValidators() {
     this.validators = new ValidatorSet({
-      translationDueDate: new Validator(() => isPresent(this.translationDueDate)),
+      translationDueDate: new Validator(() =>
+        isPresent(this.translationDueDate)
+      ),
       subject: new Validator(() => isPresent(this.subject)),
       message: new Validator(() => isPresent(this.message)),
     });
