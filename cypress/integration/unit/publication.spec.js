@@ -9,6 +9,7 @@ import utils from '../../selectors/utils.selectors';
 context('Publications tests', () => {
   const pubNumber = '100';
   const numberError = 'Publicatienummer is numeriek en verplicht.';
+  const shortTitleError = 'Dit veld dient ingevuld te worden.';
 
   function checkIfNewPublicationFieldsAreEmpty(number, currentDate) {
     cy.get(publication.newPublication.number).should('not.contain', number);
@@ -27,8 +28,9 @@ context('Publications tests', () => {
 
   beforeEach(() => {
     cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
-    // TODO-command moet veel laden lokaal
+    cy.intercept('GET', '/regulation-types?**').as('getRegulationTypes');
     cy.visit('/publicaties');
+    cy.wait('@getRegulationTypes');
   });
 
   afterEach(() => {
@@ -44,13 +46,17 @@ context('Publications tests', () => {
     cy.intercept('POST', '/publication-flows').as('createNewPublicationFlow');
     // No errors on initial view, just info
     cy.get(publication.newPublication.alertInfo).should('exist');
+    // Saving is not allowed when first opening the modal
+    cy.get(publication.newPublication.create).should('be.disabled');
     // Clear the next number to validate that empty number is not allowed
     cy.get(publication.newPublication.number).click()
       .clear();
     cy.get(publication.newPublication.create).should('be.disabled');
-    // both number and shortTitle should show error when empty
+    // both number and shortTitle should show error when empty, only visible after entering/exiting the short title field
     cy.get(auk.formHelpText).contains(numberError);
-    // TODO-bug shorttitle is niet meer required?
+    cy.get(publication.newPublication.shortTitle).click();
+    cy.get(publication.newPublication.longTitle).click();
+    cy.get(auk.formHelpText).contains(shortTitleError);
     // Create publication with number and title
     // TODO-publication with automatic number suggestion, this test could fail if testdata already contains a publication with number 100
     cy.get(publication.newPublication.number).click()
@@ -60,7 +66,9 @@ context('Publications tests', () => {
       .click()
       .clear()
       .type(shortTitle);
-    cy.get(publication.newPublication.create).click();
+    // valid number and valid short title allows create action
+    cy.get(publication.newPublication.create).should('not.be.disabled')
+      .click();
     cy.get(publication.newPublication.alertInfo).should('exist');
     cy.wait('@createNewPublicationFlow');
     // TODO-publication new way of creating publication-number with structured identifier can be checked with routes
@@ -121,7 +129,6 @@ context('Publications tests', () => {
     };
     const shortTitleEdit = 'Korte titel cypress test gewijzigd';
     const longTitleEdit = 'Lange titel voor de cypress test gewijzigd.';
-    const inscriptionErrorMessage = 'Dit veld dient ingevuld te worden.';
     cy.intercept('GET', '/publication-flows/**').as('getNewPublicationDetail');
     cy.createPublication(fields);
 
@@ -133,7 +140,7 @@ context('Publications tests', () => {
     cy.get(publication.inscription.edit.save).should('be.disabled');
     // TODO-bug error message only shows after clicking something else
     cy.get(publication.inscription.edit.longTitle).click();
-    cy.get(auk.formHelpText).contains(inscriptionErrorMessage);
+    cy.get(auk.formHelpText).contains(shortTitleError);
     cy.get(publication.inscription.edit.cancel).click();
     cy.get(publication.inscription.view.edit).click();
     cy.get(publication.inscription.edit.shortTitle).should('have.value', fields.shortTitle);
@@ -221,7 +228,9 @@ context('Publications tests', () => {
     cy.get(auk.emptyState.message).contains(noGovernmentFields);
 
     // reset after cancel
+    cy.intercept('GET', '/concepts**').as('getConceptSchemes');
     cy.get(utils.governmentAreasPanel.edit).click();
+    cy.wait('@getConceptSchemes');
     cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
       .find(utils.governmentAreaSelectorForm.field)
       .contains(fieldsName)
@@ -232,9 +241,7 @@ context('Publications tests', () => {
 
     // link government field
     cy.intercept('PATCH', '/cases/**').as('patchCase');
-    cy.intercept('GET', '/concepts**').as('getConceptSchemes');
     cy.get(utils.governmentAreasPanel.edit).click();
-    cy.wait('@getConceptSchemes');
     cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
       .find(utils.governmentAreaSelectorForm.field)
       .contains(fieldsName)
@@ -347,15 +354,25 @@ context('Publications tests', () => {
 
     // check if existing number and suffix throw correct error
     cy.get(publication.publicationsIndex.newPublication).click();
+    // fill in something in shortTitle to test the duplicate error only
+    cy.get(publication.newPublication.shortTitle).click()
+      .clear()
+      .type(suffix);
     cy.get(publication.newPublication.number).click()
       .clear()
       .type(pubNumber);
     cy.get(publication.newPublication.suffix).click()
       .type(suffix);
-    // TODO-bug no validation on save button makes this next click work when it shouldn't
-    cy.get(publication.newPublication.create).click();
+    // force click here to simulate clicking the button before validation has happened instead of waiting for it.
+    cy.get(publication.newPublication.create).click({
+      force: true,
+    });
     cy.get(auk.formHelpText).contains(duplicateError);
     cy.get(publication.newPublication.create).should('be.disabled');
+    cy.get(publication.newPublication.cancel).click();
+    // check that only one publication has the number we wanted to duplicate
+    cy.get(publication.publicationTableRow.row.publicationNumber).contains(`${pubNumber} ${suffix}`)
+      .should('have.length', 1);
   });
 
   // TODO-PUBLICATION code snipper for searching in overview table
