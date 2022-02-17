@@ -10,9 +10,15 @@
       @skin="muted"
       @layout="icon-only"
       class="auk-o-flex--vertical-center"
-    />
-    {{!-- TODO: This tooltip should be within the button-link, but doesn't yield when inside --}}
-    <EmberTooltip @tooltipClass="auk-tooltip">{{@text}}</EmberTooltip>
+    >
+      <:floater>
+        <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
+          <p>
+            {{@text}}
+          </p>
+        </EmberTooltip>
+      </:floater>
+    </Auk::ButtonLink>
   </div>
 {{else}}
   {{#if (has-block)}}
