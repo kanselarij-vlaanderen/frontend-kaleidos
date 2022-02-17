@@ -125,15 +125,19 @@ context('Publications overview tests', () => {
     // test in detail view
     cy.get(publication.publicationHeader.shortTitle).contains('test met extra lange korte titel,')
       .should('not.contain', 'end')
+      .parent()
+      .find(dependency.emberTooltip.target)
       .trigger('mouseenter');
-    cy.get(auk.abbreviatedText).should('be.visible')
+    cy.get(dependency.emberTooltip.inner).should('be.visible')
       .should('contain', 'end');
     // test in overview table
     cy.get(publication.publicationNav.goBack).click();
     cy.get(publication.publicationTableRow.row.shortTitle).contains('test met extra lange korte titel,')
       .should('not.contain', 'end')
+      .parent()
+      .find(dependency.emberTooltip.target)
       .trigger('mouseenter');
-    cy.get(auk.abbreviatedText).should('be.visible')
+    cy.get(dependency.emberTooltip.inner).should('be.visible')
       .should('contain', 'end');
   });
 
@@ -181,7 +185,7 @@ context('Publications overview tests', () => {
     }
   });
 
-  it.only('should test the search function', () => {
+  it('should test changing to all statussen', () => {
     const defaultStatus = 'Opgestart';
     const statusList = [
       'Opgestart',
@@ -201,7 +205,7 @@ context('Publications overview tests', () => {
       shortTitle: 'test status change in overview',
     };
 
-    // cy.createPublication(fields1);
+    cy.createPublication(fields1);
     statusList.forEach((status) => {
       if (status !== defaultStatus) {
         cy.changePublicationStatus(status);
