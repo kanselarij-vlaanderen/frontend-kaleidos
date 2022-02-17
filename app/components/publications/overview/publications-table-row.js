@@ -18,19 +18,26 @@ export default class PublicationsTableRowComponent extends Component {
 
   constructor() {
     super(...arguments);
-
     this.loadData.perform();
-    this.loadPublicationStatus.perform();
+    if (this.args.tableColumnDisplayOptions.status) {
+      this.loadPublicationStatus.perform();
+    }
   }
 
   @task
   *loadData() {
-    this.isViaCouncilOfMinisters =
+    if (this.args.tableColumnDisplayOptions.source) {
+      this.isViaCouncilOfMinisters =
       yield this.publicationService.getIsViaCouncilOfMinisters(this.args.publicationFlow);
-    this.proofRequestDate = yield this.getProofRequestDate(this.args.publicationFlow);
-    this.publicationDate = yield this.publicationService.getPublicationDate(
-      this.args.publicationFlow
-    );
+    }
+    if (this.args.tableColumnDisplayOptions.proofRequestDate) {
+      this.proofRequestDate = yield this.getProofRequestDate(this.args.publicationFlow);
+    }
+    if (this.args.tableColumnDisplayOptions.publicationDate) {
+      this.publicationDate = yield this.publicationService.getPublicationDate(
+        this.args.publicationFlow
+      );
+    }
   }
 
   @task
