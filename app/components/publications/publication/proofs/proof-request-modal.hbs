@@ -1,17 +1,12 @@
 <Auk::Modal>
   <Auk::Modal::Header
     @title="{{t
-      "request-proof-x-stage-for-publication-x-identification"
-      stage=(t @stage)
+      "request-proof-for-publication"
       identification=@publicationFlow.identification.idName
     }}"
-    @onClose={{@onCancel}}
+    @onClose={{perform this.cancel}}
   />
   <Auk::Modal::Body>
-    <Utils::LoadableContent
-      @isLoading={{this.saveRequest.isRunning}}
-      @reserveSpace={{true}}
-    >
       <div class="auk-form-group-layout auk-form-group-layout--standard">
         {{! Subject }}
         <div class="auk-form-group {{this.validators.subject.errorClass}}">
@@ -42,18 +37,13 @@
         {{! Attachments }}
         <div class="auk-form-group {{this.validators.attachments.errorClass}}">
           <Auk::Label @required={{true}}>{{t "attachments"}}</Auk::Label>
-          <Auk::CheckboxList data-test-proof-request-attachments>
-            {{#each @attachments as |piece|}}
-              <Auk::Checkbox
-                @label={{piece.name}}
-                @checked={{includes piece this.selectedAttachments}}
-                {{on "input" (fn this.toggleAttachmentSelection piece)}}
-              />
-            {{/each}}
-          </Auk::CheckboxList>
+          <Auk::FileUploader
+            @multiple={{true}}
+            @onUpload={{this.uploadPiece}}
+          />
+
         </div>
       </div>
-    </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
     <Auk::Button

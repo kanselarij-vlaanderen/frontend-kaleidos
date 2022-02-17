@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { isEmpty } from '@ember/utils';
 
 export default class  PublicationsPublicationProofsController extends Controller {
   @service store;
@@ -26,38 +27,24 @@ export default class  PublicationsPublicationProofsController extends Controller
 
   @task
   *saveProofUpload(proofUpload) {
-    const now = new Date();
-
-    // get latest Req activity
-    const requestActivity = this.model.filter((row) =>row.requestActivity !== null).sortBy('date').reverseObjects()[0].requestActivity;
-
-    const documentContainer = this.store.createRecord('document-container', {
-      created: now,
-    });
-    yield documentContainer.save();
-
-    const proofActivity = yield requestActivity.proofActivity;
+    // get latest proofing activity
+    const proofingActivity = this.model.filter((activity) => !isEmpty(activity.proofingActivity))[0].proofingActivity;
 
     // triggers call
-    const language = yield proofActivity.language;
-    const piece = this.store.createRecord('piece', {
-      created: now,
-      modified: now,
-      receivedDate: proofUpload.receivedAtDate,
-      confidential: false,
-      name: proofUpload.name,
-      file: proofUpload.file,
-      documentContainer: documentContainer,
-      language: language,
-      proofActivityGeneratedBy: proofActivity,
-    });
-    if (proofUpload.isSourceForProofPrint) {
-      piece.publicationSubcaseSourceFor = this.publicationSubcase;
-    }
-    const pieceSave = piece.save();
+    const language = yield proofingActivity.language;
 
-    proofActivity.endDate = now;
-    const proofActivitySave = proofActivity.save();
+    const pieceSaves = [];
+    for (let piece of proofUpload.generatedPieces){
+
+      piece.receivedDate = proofUpload.receivedAtDate;
+      piece.language = language;
+      piece.proofingActivityGeneratedBy= proofingActivity;
+
+      pieceSaves.push(piece.save());
+    }
+
+    proofingActivity.endDate = proofUpload.receivedAtDate;
+    const proofingActivitySave = proofingActivity.save();
 
     if (
       proofUpload.receivedAtDate < this.publicationSubcase.receivedDate ||
@@ -78,7 +65,7 @@ export default class  PublicationsPublicationProofsController extends Controller
       yield this.publicationSubcase.save();
     }
 
-    yield Promise.all([proofActivitySave, pieceSave]);
+    yield Promise.all([proofingActivitySave, pieceSaves]);
 
     this.send('refresh');
     this.showProofUploadModal = false;
@@ -88,18 +75,20 @@ export default class  PublicationsPublicationProofsController extends Controller
   *saveProofRequest(proofRequest) {
     const now = new Date();
 
-    const piece = proofRequest.piece;
-    piece.publicationSubcaseSourceFor = this.publicationSubcase;
-    const documentContainer = yield piece.documentContainer;
-    yield documentContainer.save();
-    piece.pages = proofRequest.pagesAmount;
-    piece.words = proofRequest.wordsAmount;
-    piece.name = proofRequest.name;
-    piece.language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
+    const usedPieces = [];
 
-    yield piece.save();
-    const usedPieces = [piece];
-    console.log(usedPieces)
+    for (let piece of proofRequest.usedPieces){
+      piece.publicationSubcaseSourceFor = this.publicationSubcase;
+      const documentContainer = yield piece.documentContainer;
+      yield documentContainer.save();
+      piece.pages = proofRequest.pagesAmount;
+      piece.words = proofRequest.wordsAmount;
+      piece.language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
+
+      yield piece.save();
+      usedPieces.push(piece);
+    }
+
     const requestActivity = yield this.store.createRecord('request-activity', {
       startDate: now,
       publicationSubcase: this.publicationSubcase,
@@ -108,7 +97,7 @@ export default class  PublicationsPublicationProofsController extends Controller
     yield requestActivity.save();
     const french = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.FR);
 
-    const proofActivity = yield this.store.createRecord('proof-activity', {
+    const proofingActivity = yield this.store.createRecord('proofing-activity', {
       startDate: now,
       dueDate: proofRequest.proofDueDate,
       title: proofRequest.subject,
@@ -117,7 +106,7 @@ export default class  PublicationsPublicationProofsController extends Controller
       usedPieces: usedPieces,
       language: french,
     });
-    yield proofActivity.save();
+    yield proofingActivity.save();
 
     const filePromises = usedPieces.mapBy('file');
     const filesPromise = Promise.all(filePromises);
@@ -151,8 +140,8 @@ export default class  PublicationsPublicationProofsController extends Controller
   *deleteRequest(requestActivity){
     const saves = [];
 
-    const proofActivity = yield requestActivity.proofActivity;
-    saves.push(proofActivity.destroyRecord());
+    const proofingActivity = yield requestActivity.proofingActivity;
+    saves.push(proofingActivity.destroyRecord());
 
     const mail = yield requestActivity.email;
     saves.push(mail.destroyRecord());

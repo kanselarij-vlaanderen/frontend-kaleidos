@@ -942,7 +942,7 @@
   "edit-proof-details": "Bewerk drukproef details",
   "view-more": "Bekijk meer",
   "read": "Lees",
-  "request-proof-x-stage-for-publication-x-identification": "Drukproef aanvragen ({stage}) voor publicatie {identification}",
+  "request-proof-for-publication": "Drukproef aanvragen voor publicatie {identification}",
   "proofing-request": "Drukproefaanvraag",
   "publication-request": "Publicatieaanvraag",
   "initial": "initieel",
