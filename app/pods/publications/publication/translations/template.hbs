@@ -1,82 +1,8 @@
 <div class="auk-u-m-4">
+  {{page-title (t "translation")}}
   <Publications::Publication::Translations::TranslationsInfoPanel
-    @translationSubcase={{this.translationSubcase}}
+    @translationSubcase={{@model}}
     @isFinal={{this.publicationFlow.status.isFinal}}
   />
-
-  <div class="auk-u-mt-4">
-    <Auk::Panel>
-      <Auk::Panel::Header>
-        <Auk::Toolbar>
-          <Auk::Toolbar::Group @position="left">
-            <Auk::Toolbar::Item>
-              <h4 class="auk-panel__title">
-                {{t "translations"}}
-              </h4>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-          <Auk::Toolbar::Group @position="right">
-            <Auk::Toolbar::Item>
-              <Auk::Button
-                @skin="secondary"
-                @icon="plus"
-                @disabled={{this.isTranslationUploadDisabled}}
-                {{on "click" this.openTranslationUploadModal }}
-              >
-                {{t "upload-translation"}}
-              </Auk::Button>
-            </Auk::Toolbar::Item>
-            <Auk::Toolbar::Item>
-              <Auk::Button
-                @skin="primary"
-                @icon="plus"
-                @disabled={{this.isRequestingDisabled}}
-                {{on "click" this.openTranslationRequestModal}}
-              >
-                {{t "request-translations"}}
-              </Auk::Button>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-        </Auk::Toolbar>
-      </Auk::Panel::Header>
-      <Auk::Panel::Body class="auk-u-bg-alt">
-        {{#each this.model as |translationRow|}}
-          {{#if translationRow.requestActivity}}
-            <Publications::Publication::Translations::TranslationRequestedPanel
-              @translationSubcase={{this.translationSubcase}}
-              @requestActivity={{translationRow.requestActivity}}
-              @onDeleteRequest={{fn (perform this.deleteRequest) translationRow.requestActivity}}
-            />
-          {{else if translationRow.piece}}
-            <Publications::Publication::Translations::TranslationReceivedPanel
-              @translationSubcase={{this.translationSubcase}}
-              @piece={{translationRow.piece}}
-            />
-          {{/if}}
-        {{else}}
-          <Auk::EmptyState
-            @bordered={{true}}
-            @message={{t "no-translations-yet"}}
-          />
-        {{/each}}
-      </Auk::Panel::Body>
-    </Auk::Panel>
-  </div>
+  {{outlet}}
 </div>
-
-{{#if this.showTranslationRequestModal}}
-  <Publications::Publication::Translations::TranslationRequestModal
-    @translationSubcase={{this.translationSubcase}}
-    @publicationFlow={{this.publicationFlow}}
-    @onSave={{perform this.saveTranslationRequest}}
-    @onCancel={{this.closeTranslationRequestModal}}
-  />
-{{/if}}
-
-{{#if this.showTranslationUploadModal}}
-  <Publications::Publication::Translations::TranslationUploadModal
-    @publicationFlow={{this.publicationFlow}}
-    @onSave={{perform this.saveTranslationUpload}}
-    @onCancel={{this.closeTranslationUploadModal}}
-  />
-{{/if}}
