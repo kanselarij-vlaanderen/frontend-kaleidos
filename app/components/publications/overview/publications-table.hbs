@@ -7,35 +7,33 @@
       >
         <thead>
           <tr>
-            {{#each @tableColumns as |column|}}
-              {{#if (get @columnsDisplayConfig column.keyName)}}
-                {{! first cases that need a special treament. The "else" clause treats the default case }}
-                {{#if (eq column.keyName "shortTitle")}}
-                  {{! template-lint-disable no-inline-styles }}
+            {{#each @tableConfig.visibleColumns as |column|}}
+              {{! first cases that need a special treament. The "else" clause treats the default case }}
+              {{#if (eq column.keyName "shortTitle")}}
+                {{! template-lint-disable no-inline-styles }}
+                <Utils::ThSortable
+                  data-test-route-publications-index-th={{column.keyName}}
+                  style="min-width: 25rem;"
+                  @currentSorting={{@sort}}
+                  @field={{column.sortKey}}
+                  @onChange={{@onSortChange}}
+                  @label={{t column.translationKeySmall}}
+                />
+                {{! template-lint-enable no-inline-styles }}
+              {{else}}
+                {{#if column.sortKey}}
                   <Utils::ThSortable
                     data-test-route-publications-index-th={{column.keyName}}
-                    style="min-width: 25rem;"
+                    @onChange={{@onSortChange}}
                     @currentSorting={{@sort}}
                     @field={{column.sortKey}}
-                    @onChange={{@onSortChange}}
                     @label={{t column.translationKeySmall}}
                   />
-                  {{! template-lint-enable no-inline-styles }}
                 {{else}}
-                  {{#if column.sortKey}}
-                    <Utils::ThSortable
-                      data-test-route-publications-index-th={{column.keyName}}
-                      @onChange={{@onSortChange}}
-                      @currentSorting={{@sort}}
-                      @field={{column.sortKey}}
-                      @label={{t column.translationKeySmall}}
-                    />
-                  {{else}}
-                    <th
-                      data-test-route-publications-index-th={{column.keyName}}
-                      class="auk-u-text-nowrap"
-                    >{{t column.translationKeySmall}}</th>
-                  {{/if}}
+                  <th
+                    data-test-route-publications-index-th={{column.keyName}}
+                    class="auk-u-text-nowrap"
+                  >{{t column.translationKeySmall}}</th>
                 {{/if}}
               {{/if}}
             {{/each}}
@@ -53,7 +51,7 @@
             {{#each @publicationFlows as |publicationFlow|}}
               <Publications::Overview::PublicationsTableRow
                 @publicationFlow={{publicationFlow}}
-                @tableColumnDisplayOptions={{@columnsDisplayConfig}}
+                @tableColumnDisplayOptions={{this.tableColumnVisibilityMap}}
               />
             {{/each}}
           {{/if}}
@@ -110,12 +108,11 @@
           @isShown={{this.isColumnsDisplayConfigPanelShown}}
           @renderInPlace={{false}}
         >
-          <Publications::Overview::PublicationsTableDisplayConfigModal
-            @options={{@columnsDisplayConfig}}
-            @onChange={{@onChangeColumnsDisplayConfig}}
-            @onReset={{@onResetColumnsDisplayConfig}}
-            @onClose={{this.toggleColumnsDisplayConfigPanel}}
-          />
+        <Publications::Overview::PublicationsTableDisplayConfigModal
+          @tableConfig={{@tableConfig}}
+          @didChange={{@didChangeColumnsDisplayConfig}}
+          @onClose={{this.toggleColumnsDisplayConfigPanel}}
+        />
         </AttachPopover>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>

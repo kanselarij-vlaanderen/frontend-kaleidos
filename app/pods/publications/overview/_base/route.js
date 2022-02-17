@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
+import PublicationTableConfig from 'frontend-kaleidos/utils/publication-table-config';
 
 /**
  * @typedef {
@@ -9,6 +10,12 @@ import { action } from '@ember/object';
 
 /** @abstract */
 export default class PublicationsOverviewBaseRoute extends Route {
+  defaultColumns;
+  tableConfigStorageKey;
+
+  tableConfig;
+  includes;
+
   /** @abstract @returns {tQueryFilter} */
   modelGetQueryFilter() {
     console.warn(`${this.modelGetQueryFilter.name} not implemented`);
@@ -29,24 +36,43 @@ export default class PublicationsOverviewBaseRoute extends Route {
     },
   };
 
+  beforeModel() {
+    this.tableConfig = new PublicationTableConfig(this.tableConfigStorageKey, this.defaultColumns);
+    this.tableConfig.loadFromLocalStorage();
+    if (!this.tableConfig.visibleColumns.length) {
+      this.tableConfig.loadDefault();
+    }
+
+    // determine which included data the visible columns require
+    let requiredFieldPaths = [];
+    for (const column of Object.values(this.tableConfig.visibleColumns)) {
+      requiredFieldPaths = requiredFieldPaths.concat(column.apiFieldPaths);
+    }
+    // Filter for field-paths that are more than 1 hop away, thus requiring an include
+    const pathsRequiringInclude = requiredFieldPaths.filter((path) => {
+      return path.includes('.');
+    }).map((path) => {
+      return path.split('.').slice(0, -1).join('.');
+    });
+
+    const uniqueIncludes = [...new Set(pathsRequiringInclude)];
+    this.includes = uniqueIncludes;
+  }
+
   model(params) {
     const filter = this.modelGetQueryFilter();
-    return this.store.query('publication-flow', {
+    const queryParams = {
       filter: filter,
       sort: params.sort,
       page: {
         number: params.page,
         size: params.size,
       },
-      // eslint-disable-next-line prettier/prettier
-      include: [
-        'identification',
-        'status',
-        'publication-subcase',
-        'translation-subcase',
-        'case',
-      ].join(','),
-    });
+    };
+    if (this.includes.length) {
+      queryParams.include = this.includes.join(',');
+    }
+    return this.store.query('publication-flow', queryParams);
   }
 
   @action
@@ -66,5 +92,14 @@ export default class PublicationsOverviewBaseRoute extends Route {
     } else {
       return true;
     }
+  }
+
+  setupController(controller) {
+    controller.tableConfig = this.tableConfig;
+  }
+
+  @action
+  reloadModel() {
+    this.refresh();
   }
 }
