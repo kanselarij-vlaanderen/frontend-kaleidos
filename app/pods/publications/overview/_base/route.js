@@ -15,11 +15,7 @@ export default class PublicationsOverviewBaseRoute extends Route {
 
   tableConfig;
   includes;
-
-  /** @abstract @returns {tQueryFilter} */
-  modelGetQueryFilter() {
-    console.warn(`${this.modelGetQueryFilter.name} not implemented`);
-  }
+  filter;
 
   queryParams = {
     page: {
@@ -60,9 +56,8 @@ export default class PublicationsOverviewBaseRoute extends Route {
   }
 
   model(params) {
-    const filter = this.modelGetQueryFilter();
     const queryParams = {
-      filter: filter,
+      filter: this.filter,
       sort: params.sort,
       page: {
         number: params.page,

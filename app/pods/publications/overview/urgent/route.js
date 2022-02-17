@@ -11,13 +11,13 @@ export default class PublicationsOverviewUrgentRoute extends PublicationsOvervie
   ];
   tableConfigStorageKey = "publication-table.urgent";
 
-  modelGetQueryFilter() {
-    const filter = {
+  beforeModel() {
+    super.beforeModel(...arguments)
+    this.filter = {
       'urgency-level': {
         ':uri:': CONSTANTS.URGENCY_LEVELS.SPEEDPROCEDURE,
       },
     };
-    return filter;
   }
 
   renderTemplate(controller) {

@@ -19,16 +19,16 @@ export default class PublicationsOverviewProofreadRoute extends PublicationsOver
   ];
   tableConfigStorageKey = "publication-table.proofread";
 
-  modelGetQueryFilter() {
+  beforeModel() {
+    super.beforeModel(...arguments)
     const proofreadStatuses = this.store.peekAll('publication-status').filter((it) => {
       return PROOFREAD_STATUSES_URIS.includes(it.uri);
     });
-    const filter = {
+    this.filter = {
       status: {
         ':id:': proofreadStatuses.mapBy('id').join(','),
       },
     };
-    return filter;
   }
 
   renderTemplate(controller) {

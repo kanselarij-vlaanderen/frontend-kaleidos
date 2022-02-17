@@ -13,13 +13,13 @@ export default class PublicationsOverviewTranslationRoute extends PublicationsOv
   ];
   tableConfigStorageKey = "publication-table.translation";
 
-  modelGetQueryFilter() {
-    const filter = {
+  beforeModel() {
+    super.beforeModel(...arguments)
+    this.filter = {
       status: {
         ':uri:': CONSTANTS.PUBLICATION_STATUSES.TO_TRANSLATIONS,
       },
     };
-    return filter;
   }
 
   renderTemplate(controller) {

@@ -18,16 +18,16 @@ export default class PublicationsOverviewProofRoute extends PublicationsOverview
   ];
   tableConfigStorageKey = "publication-table.proof";
 
-  modelGetQueryFilter() {
+  beforeModel() {
+    super.beforeModel(...arguments)
     const proofStatuses = this.store.peekAll('publication-status').filter((it) => {
       return PROOF_STATUSES_URIS.includes(it.uri);
     });
-    const filter = {
+    this.filter = {
       status: {
         ':id:': proofStatuses.mapBy('id').join(','),
       },
     };
-    return filter;
   }
 
   renderTemplate(controller) {
