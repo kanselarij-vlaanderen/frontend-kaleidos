@@ -41,16 +41,18 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     // Numac-nummers
     this.numacNumbers = await this.args.publicationFlow.numacNumbers;
     // Datum beslissing
-    this.agendaItemTreatment = await this.args.publicationFlow.agendaItemTreatment;
+    this.agendaItemTreatment = await this.args.publicationFlow
+      .agendaItemTreatment;
     // Limiet publicatie
-    this.publicationSubcase = await this.args.publicationFlow.publicationSubcase;
+    this.publicationSubcase = await this.args.publicationFlow
+      .publicationSubcase;
   }
 
   get publicationNumberErrorTranslationKey() {
     if (this.numberIsRequired) {
-      return "publication-number-required-and-numeric";
+      return 'publication-number-required-and-numeric';
     } else if (this.numberIsAlreadyUsed) {
-      return "publication-number-already-taken";
+      return 'publication-number-already-taken';
     } else {
       return null;
     }
@@ -71,7 +73,9 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   @action
   changeIsUrgent(ev) {
     const isUrgent = ev.target.checked;
-    const urgencyLevel = this.store.peekAll('urgency-level').find((level) => level.isUrgent === isUrgent);
+    const urgencyLevel = this.store
+      .peekAll('urgency-level')
+      .find((level) => level.isUrgent === isUrgent);
     this.args.publicationFlow.urgencyLevel = urgencyLevel;
   }
 
@@ -83,33 +87,34 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
       this.numberIsRequired = true;
     } else {
       this.numberIsRequired = false;
-      yield timeout(1000);
-      this.setStructuredIdentifier.perform();
+      yield this.setStructuredIdentifier.perform();
     }
   }
 
   @restartableTask
   *setPublicationNumberSuffix(event) {
-    this.publicationNumberSuffix = isBlank(event.target.value) ? undefined : event.target.value;
-    yield timeout(1000);
-    this.setStructuredIdentifier.perform();
+    this.publicationNumberSuffix = isBlank(event.target.value)
+      ? undefined
+      : event.target.value;
+    yield this.setStructuredIdentifier.perform();
   }
 
   @restartableTask
   *setStructuredIdentifier() {
+    yield timeout(1000);
     const isPublicationNumberTaken =
-          yield this.publicationService.publicationNumberAlreadyTaken(
-            this.publicationNumber,
-            this.publicationNumberSuffix,
-            this.args.publicationFlow.id
-          );
+      yield this.publicationService.publicationNumberAlreadyTaken(
+        this.publicationNumber,
+        this.publicationNumberSuffix,
+        this.args.publicationFlow.id
+      );
     if (isPublicationNumberTaken) {
       this.numberIsAlreadyUsed = true;
     } else {
       this.structuredIdentifier.localIdentifier = this.publicationNumber;
-      this.structuredIdentifier.versionIdentifier = this.publicationNumberSuffix;
-      this.identification.idName =
-        this.publicationNumberSuffix
+      this.structuredIdentifier.versionIdentifier =
+        this.publicationNumberSuffix;
+      this.identification.idName = this.publicationNumberSuffix
         ? `${this.publicationNumber} ${this.publicationNumberSuffix}`
         : `${this.publicationNumber}`;
       this.numberIsAlreadyUsed = false;
@@ -170,8 +175,18 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @task
   *save() {
+    const isValid = yield this.untilValidated();
+    if (!isValid) {
+      return;
+    }
     yield this.performSave();
     this.isEditing = false;
+  }
+
+  async untilValidated() {
+    await this.setStructuredIdentifier.last;
+    console.log(this.isValid);
+    return this.isValid;
   }
 
   // separate method to prevent ember-concurrency from saving only partially
