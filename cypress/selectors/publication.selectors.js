@@ -299,12 +299,12 @@ const selectors = {
   },
 
   // proof-request-modal
-  proofRequest: {
-    subject: '[data-test-proof-request-subject]',
-    message: '[data-test-proof-request-message]',
-    attachments: '[data-test-proof-request-attachments]',
-    save: '[data-test-proof-request-save]',
-  },
+  // proofRequest: {
+  //   subject: '[data-test-proof-request-subject]',
+  //   message: '[data-test-proof-request-message]',
+  //   attachments: '[data-test-proof-request-attachments]',
+  //   save: '[data-test-proof-request-save]',
+  // },
 
   // publication-case-info-panel
   publicationCaseInfo: {
