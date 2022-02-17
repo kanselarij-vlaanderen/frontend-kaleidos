@@ -89,6 +89,9 @@ export default class AgendaitemTable extends Component {
       enableSync: this.enableSync,
     });
 
+    // Depending on where this component is used, conditional filtering on "isApproval"
+    // shouldn't happen. We dó want to show the approval item in decision overview.
+    // This component is very out of shape however. Take above in to account when rewriting.
     table.addRows(this.model.filter((agendaitem) => !agendaitem.isApproval));
     const sortColumn = table
       .get('allColumns')
