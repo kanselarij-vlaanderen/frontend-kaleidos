@@ -1,5 +1,12 @@
 import Service, { inject as service } from '@ember/service';
+import * as CONFIG from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+
+/* eslint-disable no-unused-vars */
+import File from '../models/file';
+import Piece from '../models/piece';
+import PublicationFlow from '../models/publication-flow';
+/* eslint-enable no-unused-vars */
 
 export default class PublicationService extends Service {
   @service store;
@@ -182,6 +189,128 @@ export default class PublicationService extends Service {
     return undefined;
   }
 
+  /**
+   *
+   * @param {{
+   *  publicationFlow: PublicationFlow,
+   *  subject: string,
+   *  message: string,
+   *  files: File[],
+   *  isProof: boolean,
+   * }} params
+   */
+  async requestPublication(params) {
+    const now = new Date();
+    const saves = [];
+
+    const pieces = await Promise.all(
+      params.files.map(async (file) => {
+        /** @type {Piece} piece */
+        const piece = this.store.createRecord('piece', {
+          created: now,
+          modified: now,
+          name: file.filename,
+          confidential: false,
+          file: file,
+        });
+        await piece.save();
+
+        const documentContainer = this.store.createRecord(
+          'document-container',
+          {
+            created: now,
+            pieces: [piece],
+          }
+        );
+        saves.push(documentContainer.save());
+
+        return piece;
+      })
+    );
+
+    // PUBLICATION SUBCASE
+    const publicationSubcase = await params.publicationFlow.publicationSubcase;
+    if (!publicationSubcase.startDate) {
+      publicationSubcase.startDate = now;
+      const publicationSubcaseSave = publicationSubcase.save();
+      saves.push(publicationSubcaseSave);
+    }
+
+    // REQUEST ACTIVITY
+    const requestActivity = this.store.createRecord('request-activity', {
+      startDate: now,
+      title: params.subject,
+      publicationSubcase: publicationSubcase,
+      usedPieces: pieces,
+    });
+    await requestActivity.save();
+
+    // RESULT ACTIVITY
+    const resultActivityProperties = {
+      startDate: now,
+      title: params.subject,
+      subcase: publicationSubcase,
+      requestActivity: requestActivity,
+      usedPieces: pieces,
+    };
+    let resultActivity;
+    if (params.isProof) {
+      resultActivity = this.store.createRecord(
+        'proofing-activity',
+        resultActivityProperties
+      );
+    } else {
+      resultActivity = this.store.createRecord(
+        'publication-activity',
+        resultActivityProperties
+      );
+    }
+    const resultActivitySave = resultActivity.save();
+    saves.push(resultActivitySave);
+
+    // EMAIL
+    const outboxPromise = this.store.findRecordByUri(
+      'mail-folder',
+      CONFIG.PUBLICATION_EMAIL.OUTBOX
+    );
+    const mailSettingsPromise = this.store.queryOne(
+      'email-notification-setting'
+    );
+    const [outbox, mailSettings] = await Promise.all([
+      outboxPromise,
+      mailSettingsPromise,
+    ]);
+    const mail = this.store.createRecord('email', {
+      to: mailSettings.proofRequestToEmail,
+      cc: mailSettings.proofRequestCcEmail,
+      from: mailSettings.defaultFromEmail,
+      folder: outbox,
+      subject: params.subject,
+      message: params.message,
+      attachments: params.files,
+      requestActivity: requestActivity,
+    });
+    const emailSave = mail.save();
+    saves.push(emailSave);
+
+    // PUBLICATION STATUS
+    let newPublicationStatus;
+    if (params.isProof) {
+      newPublicationStatus = CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED;
+    } else {
+      newPublicationStatus =
+        CONSTANTS.PUBLICATION_STATUSES.PUBLICATION_REQUESTED;
+    }
+    const pubStatusChange = this.updatePublicationStatus(
+      params.publicationFlow,
+      newPublicationStatus,
+      now
+    );
+    saves.push(pubStatusChange);
+
+    await Promise.all(saves);
+  }
+
   async getIsViaCouncilOfMinisters(publicationFlow) {
     const _case = await publicationFlow.case;
     const subcases = await _case.subcases;
@@ -201,8 +330,7 @@ export default class PublicationService extends Service {
     // already is deleted (by step below)
     await publicationFlow.save();
 
-    const oldChangeActivity = await publicationFlow
-      .publicationStatusChange;
+    const oldChangeActivity = await publicationFlow.publicationStatusChange;
     if (oldChangeActivity) {
       await oldChangeActivity.destroyRecord();
     }
