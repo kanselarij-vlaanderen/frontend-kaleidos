@@ -133,18 +133,18 @@
           <p class="auk-u-m-0">
             {{#unless this.loadDecision.isRunning}}
               {{#if @publicationFlow.status.isPublished}}
-                {{#if this.decision.isStaatsbladResource}}
-                  {{#if this.decision.publicationDate}}
-                    {{moment-format this.decision.publicationDate "DD-MM-YYYY"}}
-                  {{else}}
+                {{#if this.decision.publicationDate}}
+                  {{moment-format this.decision.publicationDate "DD-MM-YYYY"}}
+                {{else}}
+                  {{#if this.decision.isStaatsbladResource}}
                     <div class="auk-u-text-muted auk-u-italic">
                       {{!case: publication-date is not found in Staatsblad (does not seem to occur)}}
                       {{t "not-known"}}
                     </div>
+                  {{else}}
+                    {{!case: user cleared publication-date in this panel}}
+                    {{t "dash"}}
                   {{/if}}
-                {{else}}
-                  {{!case: if `publication-flow` has no `publication-activity` while changing `publication-status` to "Gepubliceerd"}}
-                  {{t "dash"}}
                 {{/if}}
               {{else}}
                 <div class="auk-u-text-muted auk-u-italic">
