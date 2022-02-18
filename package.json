@@ -2,8 +2,11 @@
   "name": "frontend-kaleidos",
   "version": "5.23.0",
   "private": true,
-  "description": "Small description for frontend-kaleidos goes here",
-  "repository": "",
+  "description": "Frontend of the Kaleidos application",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kanselarij-vlaanderen/frontend-kaleidos.git"
+  },
   "license": "MIT",
   "author": "",
   "directories": {
