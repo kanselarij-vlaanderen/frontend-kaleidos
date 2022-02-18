@@ -146,7 +146,7 @@
     "qunit-dom": "^1.6.0",
     "release-it": "^14.5.1",
     "sanitize-filename": "^1.6.3",
-    "sass": "^1.23.7",
+    "sass": "^1.49.7",
     "tracked-built-ins": "^2.0.1",
     "typescript": "^3.9.7",
     "webpack": "^5.64.3"
