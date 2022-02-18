@@ -111,6 +111,7 @@ export default class PublicationStatusPill extends Component {
     if ((previousStatus.isPublished && !status.isPublished)
              && (this.decision && !this.decision.isStaatsbladResource)) {
       yield this.decision.destroyRecord();
+      this.decision = undefined;
     }
 
     // update status-change activity
