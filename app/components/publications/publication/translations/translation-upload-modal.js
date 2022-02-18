@@ -25,11 +25,12 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
   }
 
   @action
-  uploadPiece(file) {
+  async uploadPiece(file) {
     const now = new Date();
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
     });
+    await documentContainer.save();
     const piece = this.store.createRecord('piece', {
       created: now,
       modified: now,
@@ -38,7 +39,6 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
       name: file.filenameWithoutExtension,
       documentContainer: documentContainer,
     });
-
     this.uploadedPieces.pushObject(piece);
   }
 
@@ -90,5 +90,6 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.destroyRecord();
     yield piece.destroyRecord();
+    this.uploadedPieces.removeObject(piece);
   }
 }

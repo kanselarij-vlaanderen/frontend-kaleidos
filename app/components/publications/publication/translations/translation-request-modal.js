@@ -78,6 +78,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.destroyRecord();
     yield piece.destroyRecord();
+    this.uploadedPieces.removeObject(piece);
   }
 
   @task

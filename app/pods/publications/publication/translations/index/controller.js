@@ -22,11 +22,15 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   get isTranslationUploadDisabled() {
-    return isEmpty(this.latestTranslationActivity);
+    return isEmpty(this.latestTranslationActivity) || this.translationSubcase.isFinished;
   }
 
   get latestTranslationActivity() {
-    return this.model.length !== 0 ? this.model.find((timeLineActivity) => timeLineActivity.isTranslationActivity).activity : null;
+    return this.model.length !== 0
+      ? this.model.find(
+          (timeLineActivity) => timeLineActivity.isTranslationActivity
+        ).activity
+      : null;
   }
 
   @task
@@ -41,9 +45,6 @@ export default class PublicationsPublicationTranslationsIndexController extends 
       piece.language = yield translationActivity.language;
       piece.translationActivityGeneratedBy = translationActivity;
       pieceSaves.push(piece.save());
-
-      const documentContainer = yield piece.documentContainer;
-      containerSaves.push(documentContainer.save());
     }
 
     translationActivity.endDate = translationUpload.receivedAtDate;
@@ -84,7 +85,8 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   *saveTranslationRequest(translationRequest) {
     const now = new Date();
 
-    for (let piece of translationRequest.uploadedPieces) {
+    const uploadedPieces = translationRequest.uploadedPieces;
+    for (let piece of uploadedPieces) {
       piece.translationSubcaseSourceFor = this.translationSubcase;
       piece.language = yield this.store.findRecordByUri(
         'language',
@@ -96,7 +98,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     const requestActivity = yield this.store.createRecord('request-activity', {
       startDate: now,
       translationSubcase: this.translationSubcase,
-      usedPieces: translationRequest.uploadedPieces,
+      usedPieces: uploadedPieces,
     });
     yield requestActivity.save();
 
@@ -108,7 +110,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
         title: translationRequest.subject,
         subcase: this.translationSubcase,
         requestActivity: requestActivity,
-        usedPieces: translationRequest.uploadedPieces,
+        usedPieces: uploadedPieces,
         language: yield this.store.findRecordByUri(
           'language',
           CONSTANTS.LANGUAGES.FR
@@ -116,16 +118,10 @@ export default class PublicationsPublicationTranslationsIndexController extends 
       }
     );
     yield translationActivity.save();
-
     const [files, outbox, mailSettings] = yield Promise.all([
-      translationRequest.uploadedPieces.mapBy('file'),
-      this.store.findRecordByUri(
-        'mail-folder',
-        PUBLICATION_EMAIL.OUTBOX
-      ),
-      this.store.queryOne(
-        'email-notification-setting'
-      ),
+      Promise.all(uploadedPieces.mapBy('file')),
+      this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
+      this.store.queryOne('email-notification-setting'),
     ]);
     const mail = yield this.store.createRecord('email', {
       to: mailSettings.translationRequestToEmail,
