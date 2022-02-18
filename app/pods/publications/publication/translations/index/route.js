@@ -7,19 +7,19 @@ export class TimeLineActivity {
   @tracked date;
 
   constructor(activity, date) {
-    this.requestActivity = activity;
+    this.activity = activity;
     this.date = date;
   }
 
-  get isRequestActivity(){
-    return this.activity.constructor.modelName === "request-activity";
+  get isRequestActivity() {
+    return this.activity.constructor.modelName === 'request-activity';
   }
 
-  get isTranslationActivity(){
-    return this.activity.constructor.modelName === "translation-activity";
+  get isTranslationActivity() {
+    return this.activity.constructor.modelName === 'translation-activity';
   }
 
-  get date(){
+  get date() {
     return this.date;
   }
 }
@@ -36,16 +36,21 @@ export default class PublicationsPublicationTranslationsIndexRoute extends Route
       sort: '-start-date',
     });
 
-    const translationActivities = await this.store.query('translation-activity', {
-      'filter[subcase][:id:]': this.translationSubcase.id,
-      include: 'generated-pieces,generated-pieces.file',
-      sort: '-start-date',
-    });
+    const translationActivities = await this.store.query(
+      'translation-activity',
+      {
+        'filter[subcase][:id:]': this.translationSubcase.id,
+        include: 'generated-pieces,generated-pieces.file',
+        sort: '-start-date',
+      }
+    );
 
-    let activities = Promise.all([
-      requestActivities.map((request) => new TimeLineActivity(request, request.startDate)),
-      translationActivities.map((translation) =>
-        new TimeLineActivity(translation, translation.endDate)
+    let activities = await Promise.all([
+      requestActivities.map(
+        (request) => new TimeLineActivity(request, request.startDate)
+      ),
+      translationActivities.map(
+        (translation) => new TimeLineActivity(translation, translation.endDate)
       ),
     ]);
     activities = activities.flatMap((activity) => activity.toArray());

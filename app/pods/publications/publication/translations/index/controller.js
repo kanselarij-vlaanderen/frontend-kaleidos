@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { task,dropTask } from 'ember-concurrency-decorators';
+import { task, dropTask } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
@@ -27,10 +27,9 @@ export default class PublicationsPublicationTranslationsIndexController extends 
 
   get latestTranslationActivity() {
     return this.model.find(
-      (timeLineActivity) => !isEmpty(timeLineActivity.translationActivity)
-    ).translationActivity;
+      (timeLineActivity) => timeLineActivity.isTranslationActivity
+    ).activity;
   }
-
 
   @task
   *saveTranslationUpload(translationUpload) {
@@ -72,7 +71,12 @@ export default class PublicationsPublicationTranslationsIndexController extends 
       translationSubcaseSave = this.translationSubcase.save();
     }
 
-    yield Promise.all([translationActivitySave, pieceSaves,containerSaves,translationSubcaseSave]);
+    yield Promise.all([
+      translationActivitySave,
+      pieceSaves,
+      containerSaves,
+      translationSubcaseSave,
+    ]);
 
     this.send('refresh');
     this.showTranslationUploadModal = false;
@@ -115,20 +119,15 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     );
     yield translationActivity.save();
 
-    const filePromises = translationRequest.uploadedPieces.mapBy('file');
-    const filesPromise = Promise.all(filePromises);
-
-    const outboxPromise = this.store.findRecordByUri(
-      'mail-folder',
-      PUBLICATION_EMAIL.OUTBOX
-    );
-    const mailSettingsPromise = this.store.queryOne(
-      'email-notification-setting'
-    );
     const [files, outbox, mailSettings] = yield Promise.all([
-      filesPromise,
-      outboxPromise,
-      mailSettingsPromise,
+      translationRequest.uploadedPieces.mapBy('file'),
+      this.store.findRecordByUri(
+        'mail-folder',
+        PUBLICATION_EMAIL.OUTBOX
+      ),
+      this.store.queryOne(
+        'email-notification-setting'
+      ),
     ]);
     const mail = yield this.store.createRecord('email', {
       to: mailSettings.translationRequestToEmail,
