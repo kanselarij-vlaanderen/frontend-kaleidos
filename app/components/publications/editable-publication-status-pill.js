@@ -83,16 +83,25 @@ export default class PublicationStatusPill extends Component {
 
       // create decision for publication activity when status changed to "published"
       if (status.isPublished && !this.decision) {
-        const publicationActivities = yield publicationSubcase.publicationActivities;
+        let publicationActivities = yield publicationSubcase.publicationActivities;
+        // (sortBy converts to array)
+        publicationActivities = publicationActivities.sortBy('startDate');
+        let publicationActivity = publicationActivities[0];
 
-        if (publicationActivities.length) {
-          const publicationActivity = publicationActivities.objectAt(0);
-          this.decision = this.store.createRecord('decision', {
-            publicationActivity: publicationActivity,
-            publicationDate: date,
-          });
-          this.decision.save();
+        if (!publicationActivity) {
+          publicationActivity = this.store.createRecord('publication-activity', {
+            subcase: publicationSubcase,
+            startDate: date,
+            endDate: date,
+          })
+          yield publicationActivity.save();
         }
+
+        this.decision = this.store.createRecord('decision', {
+          publicationActivity: publicationActivity,
+          publicationDate: date,
+        });
+        this.decision.save();
       }
     } else {
       this.args.publicationFlow.closingDate = null;
