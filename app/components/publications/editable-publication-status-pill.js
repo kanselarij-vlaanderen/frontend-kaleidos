@@ -4,7 +4,10 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency-decorators';
 import { isEmpty } from '@ember/utils';
-import { getPublicationStatusPillKey,getPublicationStatusPillStep } from 'frontend-kaleidos/utils/publication-auk';
+import {
+  getPublicationStatusPillKey,
+  getPublicationStatusPillStep,
+} from 'frontend-kaleidos/utils/publication-auk';
 
 export default class PublicationStatusPill extends Component {
   @service store;
@@ -23,7 +26,8 @@ export default class PublicationStatusPill extends Component {
 
   @task
   *loadDecision() {
-    const publicationSubcase = yield this.args.publicationFlow.publicationSubcase;
+    const publicationSubcase = yield this.args.publicationFlow
+      .publicationSubcase;
     this.decision = yield this.store.queryOne('decision', {
       'filter[publication-activity][subcase][:id:]': publicationSubcase.id,
       sort: 'publication-activity.start-date,publication-date',
@@ -46,7 +50,11 @@ export default class PublicationStatusPill extends Component {
   @action
   openStatusSelector() {
     //TODO Momenteel is er nog geen disabled voor status pill action. De if is om te voorkomen dat de modal ongewenst open gaat
-    if (!(this.publicationStatus.isPublished && this.decision.isStaatsbladResource)){
+    if (
+      !(
+        this.publicationStatus.isPublished && this.decision.isStaatsbladResource
+      )
+    ) {
       this.showStatusSelector = true;
     }
   }
@@ -69,13 +77,15 @@ export default class PublicationStatusPill extends Component {
     if (status.isFinal) {
       this.args.publicationFlow.closingDate = date;
 
-      const translationSubcase = yield this.args.publicationFlow.translationSubcase;
+      const translationSubcase = yield this.args.publicationFlow
+        .translationSubcase;
       if (!translationSubcase.endDate) {
         translationSubcase.endDate = date;
         yield translationSubcase.save();
       }
 
-      const publicationSubcase = yield this.args.publicationFlow.publicationSubcase;
+      const publicationSubcase = yield this.args.publicationFlow
+        .publicationSubcase;
       if (!publicationSubcase.endDate) {
         publicationSubcase.endDate = date;
         yield publicationSubcase.save();
@@ -83,16 +93,20 @@ export default class PublicationStatusPill extends Component {
 
       // create decision for publication activity when status changed to "published"
       if (status.isPublished && !this.decision) {
-        let publicationActivities = yield publicationSubcase.publicationActivities;
+        let publicationActivities =
+          yield publicationSubcase.publicationActivities;
         // (sortBy converts to array)
         publicationActivities = publicationActivities.sortBy('-startDate');
         let publicationActivity = publicationActivities[0];
 
         if (!publicationActivity) {
-          publicationActivity = this.store.createRecord('publication-activity', {
-            subcase: publicationSubcase,
-            endDate: date,
-          })
+          publicationActivity = this.store.createRecord(
+            'publication-activity',
+            {
+              subcase: publicationSubcase,
+              endDate: date,
+            }
+          );
           yield publicationActivity.save();
         }
 
@@ -108,21 +122,28 @@ export default class PublicationStatusPill extends Component {
 
     // remove decision if "published" status is reverted and it's not a Staatsblad resource
     const previousStatus = this.publicationStatus;
-    if ((previousStatus.isPublished && !status.isPublished)
-             && !this.decision.isStaatsbladResource) {
+    if (
+      previousStatus.isPublished &&
+      !status.isPublished &&
+      !this.decision.isStaatsbladResource
+    ) {
       yield this.decision.destroyRecord();
       this.decision = undefined;
     }
 
     // update status-change activity
-    const oldChangeActivity = yield this.args.publicationFlow.publicationStatusChange;
+    const oldChangeActivity = yield this.args.publicationFlow
+      .publicationStatusChange;
     if (oldChangeActivity) {
       yield oldChangeActivity.destroyRecord();
     }
-    const newChangeActivity = this.store.createRecord('publication-status-change', {
-      startedAt: date,
-      publication: this.args.publicationFlow,
-    });
+    const newChangeActivity = this.store.createRecord(
+      'publication-status-change',
+      {
+        startedAt: date,
+        publication: this.args.publicationFlow,
+      }
+    );
     yield newChangeActivity.save();
 
     yield this.args.publicationFlow.save();

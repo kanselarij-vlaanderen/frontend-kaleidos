@@ -97,7 +97,11 @@
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <Auk::Button @skin="primary"  @loading={{this.save.isRunning}} {{on "click" (perform this.save)}}>
+            <Auk::Button
+              @skin="primary"
+              @loading={{this.save.isRunning}}
+              {{on "click" (perform this.save)}}
+            >
               {{t "save"}}
             </Auk::Button>
           </Auk::Toolbar::Item>
