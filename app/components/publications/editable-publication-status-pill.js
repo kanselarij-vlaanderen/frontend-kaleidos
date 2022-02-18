@@ -85,7 +85,7 @@ export default class PublicationStatusPill extends Component {
       if (status.isPublished && !this.decision) {
         let publicationActivities = yield publicationSubcase.publicationActivities;
         // (sortBy converts to array)
-        publicationActivities = publicationActivities.sortBy('startDate');
+        publicationActivities = publicationActivities.sortBy('-startDate');
         let publicationActivity = publicationActivities[0];
 
         if (!publicationActivity) {
