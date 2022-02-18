@@ -124,6 +124,7 @@ const selectors = {
     documents: '[data-test-publication-nav-documents]',
     translations: '[data-test-publication-nav-translations]',
     publishpreview: '[data-test-publication-nav-publishpreview]',
+    activities: '[data-test-publication-nav-activities]',
     // TODO-SELECTOR unused selectors
     case: '[data-test-publication-nav-case]',
   },
@@ -324,10 +325,18 @@ const selectors = {
   statusPill: {
     changeStatus: '[data-test-status-pill-change-status]',
   },
+
   // publication-status-modal
   publicationStatus: {
     select: '[data-test-publication-status-select]',
     save: '[data-test-publication-status-save]',
+  },
+
+  // publication-info-panel
+  publicationsInfoPanel: {
+    edit: '[data-test-publications-info-panel-edit]',
+    targetEndDate: '[data-test-publications-info-panel-target-end-date]',
+    save: '[data-test-publications-info-panel-save]',
   },
 
 };
