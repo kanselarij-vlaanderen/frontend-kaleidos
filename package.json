@@ -115,7 +115,7 @@
     "ember-named-blocks-polyfill": "^0.2.4",
     "ember-page-title": "^6.2.1",
     "ember-pdfjs-wrapper": "git+https://github.com/MikiDi/ember-pdfjs-wrapper.git#8300c671d3293dad0c5ccf87defdec6d08f839b3",
-    "ember-power-select": "^4.0.0",
+    "ember-power-select": "https://github.com/cibernox/ember-power-select.git#c2f917e1b03aef0b85a0a09b12f9e05e9b04749d",
     "ember-prism": "^0.7.0",
     "ember-promise-helpers": "^1.0.9",
     "ember-qunit": "^5.1.2",
