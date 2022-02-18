@@ -87,6 +87,7 @@
                 <DropdownMenu
                   @skin="borderless"
                   @icon="three-dots"
+                  @disabled={{this.loadPieceRelatedData.isRunning}}
                   data-test-document-card-actions={{true}}
                   as |Menu|
                 >

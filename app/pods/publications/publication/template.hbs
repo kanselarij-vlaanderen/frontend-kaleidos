@@ -49,13 +49,4 @@
       </div>
     </div>
   </div>
-  <div class="auk-panel-layout__sidebar">
-    <Publications::PublicationSidebar
-      @isOpen={{this.sidebarIsOpen}}
-      @onCollapse={{this.toggleSidebar}}
-      @onOpen={{this.toggleSidebar}}
-      @publicationFlow={{@model}}
-      @didChange={{this.saveSidebarProperty}}
-    />
-  </div>
 </div>

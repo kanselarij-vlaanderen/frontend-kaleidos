@@ -13,7 +13,7 @@
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <Auk::Button
-                data-test-publication-case-info-panel-view-edit
+                data-test-publication-case-info-panel-edit
                 @skin="tertiary"
                 @icon="pencil"
                 @layout="icon-only"
@@ -85,13 +85,12 @@
 
               {{! Numac-nummers}}
               <div class="auk-o-grid-col-4">
-                <div class="auk-form-group">
+                <div data-test-publication-case-info-panel-numac-number class="auk-form-group">
                   <Auk::Label>
                     {{t "publication-flow-numac-number"}}
                   </Auk::Label>
                   {{! TODO: disable modifying numac-number once (staatsblad-)decision exists? }}
                   <Auk::InputPills
-                    data-test-publication-case-info-panel-numac-number
                     @items={{this.numacNumbers}}
                     @onCreate={{this.addNumacNumber}}
                     @onRemove={{this.deleteNumacNumber}}
@@ -324,7 +323,7 @@
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <Auk::Button
-                data-test-publication-case-info-panel-edit-save
+                data-test-publication-case-info-panel-save
                 @skin="primary"
                 @loading={{this.save.isRunning}}
                 @disabled={{or

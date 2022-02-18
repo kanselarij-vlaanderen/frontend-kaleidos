@@ -1,9 +1,19 @@
 import PublicationsOverviewBaseRoute from '../_base/route';
 
 export default class PublicationsOverviewLateRoute extends PublicationsOverviewBaseRoute {
-  modelGetQueryFilter() {
+  defaultColumns= [
+    'publicationNumber',
+    'numacNumber',
+    'shortTitle',
+    'publicationTargetDate',
+    'publicationDueDate',
+  ];
+  tableConfigStorageKey = "publication-table.all";
+
+  beforeModel() {
+    super.beforeModel(...arguments)
     const pendingStatuses = this.store.peekAll('publication-status').rejectBy('isFinal');
-    const filter = {
+    this.filter = {
       status: {
         ':id:': pendingStatuses.mapBy('id').join(','),
       },
@@ -17,7 +27,12 @@ export default class PublicationsOverviewLateRoute extends PublicationsOverviewB
         ':lt:due-date': getStartOfToday().toISOString(),
       },
     };
-    return filter;
+  }
+
+  renderTemplate(controller) {
+    this.render('publications.overview.all', {
+      controller: controller
+    });
   }
 }
 
