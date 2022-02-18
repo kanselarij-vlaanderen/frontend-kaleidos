@@ -46,7 +46,7 @@ export default class PublicationStatusPill extends Component {
   @action
   openStatusSelector() {
     //TODO Momenteel is er nog geen disabled voor status pill action. De if is om te voorkomen dat de modal ongewenst open gaat
-    if (!(this.publicationStatus.isPublished && this.decision?.isStaatsbladResource)){
+    if (!(this.publicationStatus.isPublished && this.decision.isStaatsbladResource)){
       this.showStatusSelector = true;
     }
   }
@@ -109,7 +109,7 @@ export default class PublicationStatusPill extends Component {
     // remove decision if "published" status is reverted and it's not a Staatsblad resource
     const previousStatus = this.publicationStatus;
     if ((previousStatus.isPublished && !status.isPublished)
-             && (this.decision && !this.decision.isStaatsbladResource)) {
+             && !this.decision.isStaatsbladResource) {
       yield this.decision.destroyRecord();
       this.decision = undefined;
     }
