@@ -101,7 +101,7 @@ export default class PublicationStatusPill extends Component {
           publicationActivity: publicationActivity,
           publicationDate: date,
         });
-        this.decision.save();
+        yield this.decision.save();
       }
     } else {
       this.args.publicationFlow.closingDate = null;
