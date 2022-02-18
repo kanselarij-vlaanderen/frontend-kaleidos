@@ -26,9 +26,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   get latestTranslationActivity() {
-    return this.model.find(
-      (timeLineActivity) => timeLineActivity.isTranslationActivity
-    ).activity;
+    return this.model.length !== 0 ? this.model.find((timeLineActivity) => timeLineActivity.isTranslationActivity).activity : null;
   }
 
   @task

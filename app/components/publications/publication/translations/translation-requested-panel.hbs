@@ -14,15 +14,20 @@
       @subtitle={{moment-format @requestActivity.startDate "DD.MM.YYYY"}}
       as |header|
     >
-      <header.Actions as |actions|>
-        <actions.Item>
-          <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
-            <Menu.Item @skin="danger" {{on "click" this.promptDeleteRequest}}>
-              {{t "delete-translation-request"}}
-            </Menu.Item>
-          </DropdownMenu>
-        </actions.Item>
-      </header.Actions>
+      {{#unless this.loadTranslationActivity.isRunning}}
+        <header.Actions as |actions|>
+          <actions.Item>
+            {{#if (not this.isTranslationActivityFinished)}}
+              <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
+                <Menu.Item @skin="danger" @disabled={{this.isTranslationActivityFinished}} {{on "click" this.promptDeleteRequest}}>
+                  {{t "delete-translation-request"}}
+                </Menu.Item>
+              </DropdownMenu>
+            {{/if}}
+          </actions.Item>
+        </header.Actions>
+      {{/unless}}
+
     </accordionPanel.Header>
     <accordionPanel.Body>
       {{#each @requestActivity.usedPieces as |piece|}}
@@ -64,6 +69,7 @@
           {{! template-lint-disable no-inline-styles }}
           {{! p-tag opening and closing on 1 line to prevent whitespace to be rendered. }}
           <p style="white-space:pre-line;">{{@requestActivity.email.message}}</p>
+          {{! template-lint-enable no-inline-styles }}
         </div>
       {{/if}}
     </accordionPanel.Body>
