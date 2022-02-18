@@ -45,14 +45,14 @@ export default class PublicationsPublicationTranslationsIndexRoute extends Route
       }
     );
 
-    let activities = await Promise.all([
+    let activities = [
       requestActivities.map(
         (request) => new TimeLineActivity(request, request.startDate)
       ),
       translationActivities.map(
         (translation) => new TimeLineActivity(translation, translation.endDate)
       ),
-    ]);
+    ];
     activities = activities.flatMap((activity) => activity.toArray());
     activities = activities.sortBy('date').reverseObjects();
     return activities;
