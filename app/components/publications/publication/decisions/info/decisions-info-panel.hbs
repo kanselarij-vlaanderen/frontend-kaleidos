@@ -42,23 +42,15 @@
                   <Auk::Label>
                     {{t "regulation-type"}}
                   </Auk::Label>
-                  {{#if this.isViaCouncilOfMinisters}}
-                    {{#if @publicationFlow.regulationType}}
-                      {{@publicationFlow.regulationType.label}}
-                    {{else}}
-                      {{t "dash"}}
-                    {{/if}}
-                  {{else}}
-                    <PowerSelect
-                      @options={{this.sortedRegulationTypes}}
-                      @onChange={{fn (mut @publicationFlow.regulationType)}}
-                      @selected={{@publicationFlow.regulationType}}
-                      @allowClear={{true}}
-                      as |regulationType|
-                    >
-                      {{regulationType.label}}
-                    </PowerSelect>
-                  {{/if}}
+                  <PowerSelect
+                    @options={{this.sortedRegulationTypes}}
+                    @onChange={{fn (mut @publicationFlow.regulationType)}}
+                    @selected={{@publicationFlow.regulationType}}
+                    @allowClear={{true}}
+                    as |regulationType|
+                  >
+                    {{regulationType.label}}
+                  </PowerSelect>
                 </div>
               </div>
 
