@@ -13,7 +13,7 @@
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <Auk::Button
-                data-test-remark-panel-view-edit
+                data-test-remark-panel-edit
                 @skin="tertiary"
                 @icon="pencil"
                 @layout="icon-only"
@@ -39,7 +39,7 @@
               </Utils::Generic::TooltipHelp>
             </Auk::Label>
             <Auk::Textarea
-              data-test-remark-panel-edit
+              data-test-remark-panel-textarea
               @rows="12"
               @value={{this.remark}}
             />
@@ -75,7 +75,7 @@
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <Auk::Button
-                data-test-remark-panel-edit-save
+                data-test-remark-panel-save
                 @skin="primary"
                 @loading={{this.save.isRunning}}
                 {{on "click" (perform this.save)}}
