@@ -7,15 +7,33 @@ const PROOFREAD_STATUSES_URIS = [
 ];
 
 export default class PublicationsOverviewProofreadRoute extends PublicationsOverviewBaseRoute {
-  modelGetQueryFilter() {
+  defaultColumns = [
+    'isUrgent',
+    'publicationNumber',
+    'numacNumber',
+    'shortTitle',
+    'pageCount',
+    'proofReceivedDate',
+    'proofPrintCorrector',
+    'publicationDueDate'
+  ];
+  tableConfigStorageKey = "publication-table.proofread";
+
+  beforeModel() {
+    super.beforeModel(...arguments)
     const proofreadStatuses = this.store.peekAll('publication-status').filter((it) => {
       return PROOFREAD_STATUSES_URIS.includes(it.uri);
     });
-    const filter = {
+    this.filter = {
       status: {
         ':id:': proofreadStatuses.mapBy('id').join(','),
       },
     };
-    return filter;
+  }
+
+  renderTemplate(controller) {
+    this.render('publications.overview.all', {
+      controller: controller
+    });
   }
 }

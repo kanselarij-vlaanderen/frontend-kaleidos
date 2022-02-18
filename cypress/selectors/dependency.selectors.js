@@ -43,5 +43,11 @@ const selectors = {
   emberDataTable: {
     isLoading: '.is-loading-data',
   },
+
+  // ember-tooltip
+  emberTooltip: {
+    target: '.ember-tooltip-target',
+    inner: '.ember-tooltip-inner',
+  },
 };
 export default selectors;

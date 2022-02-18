@@ -51,9 +51,9 @@ export default class NewPublicationModal extends Component {
 
   get publicationNumberErrorTranslationKey() {
     if (this.numberIsRequired) {
-      return "publication-number-required-and-numeric";
+      return 'publication-number-required-and-numeric';
     } else if (this.numberIsAlreadyUsed) {
-      return "publication-number-already-taken";
+      return 'publication-number-already-taken';
     } else {
       return null;
     }
@@ -64,11 +64,11 @@ export default class NewPublicationModal extends Component {
   }
 
   get isShortTitleValid() {
-    if (this.isEnabledErrorOnShortTitle) {
-      return this.shortTitle && this.shortTitle.length > 0;
-    } else {
-      return true;
-    }
+    return this.shortTitle && this.shortTitle.length > 0;
+  }
+
+  get isShownShortTitleError() {
+    return this.isEnabledErrorOnShortTitle && !this.isShortTitleValid;
   }
 
   get isValid() {
@@ -82,7 +82,7 @@ export default class NewPublicationModal extends Component {
       include: 'identification.structured-identifier',
     });
     if (latestPublication) {
-      const identification =  yield latestPublication.identification;
+      const identification = yield latestPublication.identification;
       const structuredIdentifier = yield identification.structuredIdentifier;
       this.number = structuredIdentifier.localIdentifier + 1;
     } else {
@@ -98,34 +98,47 @@ export default class NewPublicationModal extends Component {
       this.numberIsRequired = true;
     } else {
       this.numberIsRequired = false;
-      yield timeout(1000);
-      yield this.isPublicationNumberAlreadyTaken();
+      yield this.validateIsPublicationNumberAlreadyTaken.perform();
     }
   }
 
   @restartableTask
   *setPublicationNumberSuffix(event) {
     this.suffix = isBlank(event.target.value) ? undefined : event.target.value;
-    yield timeout(1000);
-    yield this.isPublicationNumberAlreadyTaken();
+    yield this.validateIsPublicationNumberAlreadyTaken.perform();
   }
 
   @task
   *save() {
-    yield this.args.onSave(
-      {
-        number: this.number,
-        suffix: this.suffix,
-        shortTitle: this.shortTitle,
-        longTitle: this.longTitle,
-        decisionDate: this.decisionDate,
-        openingDate: this.openingDate,
-        publicationDueDate: this.publicationDueDate,
-      });
+    const isValid = yield this.untilValidated();
+    if (!isValid) {
+      return;
+    }
+
+    yield this.args.onSave({
+      number: this.number,
+      suffix: this.suffix,
+      shortTitle: this.shortTitle,
+      longTitle: this.longTitle,
+      decisionDate: this.decisionDate,
+      openingDate: this.openingDate,
+      publicationDueDate: this.publicationDueDate,
+    });
   }
 
-  async isPublicationNumberAlreadyTaken() {
-    this.numberIsAlreadyUsed = await this.publicationService.publicationNumberAlreadyTaken(this.number, this.suffix);
+  @restartableTask
+  *validateIsPublicationNumberAlreadyTaken() {
+    yield timeout(1000);
+    this.numberIsAlreadyUsed =
+      yield this.publicationService.publicationNumberAlreadyTaken(
+        this.number,
+        this.suffix
+      );
+  }
+
+  async untilValidated() {
+    await this.validateIsPublicationNumberAlreadyTaken.last;
+    return this.isValid;
   }
 
   @action
