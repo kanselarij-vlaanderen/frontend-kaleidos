@@ -91,7 +91,6 @@ export default class PublicationStatusPill extends Component {
         if (!publicationActivity) {
           publicationActivity = this.store.createRecord('publication-activity', {
             subcase: publicationSubcase,
-            startDate: date,
             endDate: date,
           })
           yield publicationActivity.save();
