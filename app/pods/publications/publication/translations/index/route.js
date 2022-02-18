@@ -2,22 +2,20 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
-export class Activity {
+export class TimeLineActivity {
   @tracked requestActivity;
   @tracked translationActivity;
   @tracked date;
 
-  static create(requestActivity, translationActivity) {
-    const activity = new Activity();
+  constructor(requestActivity, translationActivity) {
     if (requestActivity) {
-      activity.requestActivity = requestActivity;
-      activity.date = requestActivity.startDate;
+      this.requestActivity = requestActivity;
+      this.date = requestActivity.startDate;
     }
     if (translationActivity) {
-      activity.translationActivity = translationActivity;
-      activity.date = translationActivity.endDate;
+      this.translationActivity = translationActivity;
+      this.date = translationActivity.endDate;
     }
-    return activity;
   }
 }
 
@@ -40,9 +38,9 @@ export default class PublicationsPublicationTranslationsIndexRoute extends Route
     });
 
     let activities = await Promise.all([
-      requestActivities.map((request) => Activity.create(request, null)),
+      requestActivities.map((request) => new TimeLineActivity(request, null)),
       translationActivities.map((translation) =>
-        Activity.create(null, translation)
+        new TimeLineActivity(null, translation)
       ),
     ]);
     activities = activities.flatMap((activity) => activity.toArray());
@@ -52,14 +50,12 @@ export default class PublicationsPublicationTranslationsIndexRoute extends Route
 
   async afterModel() {
     this.publicationFlow = this.modelFor('publications.publication');
-    this.publicationSubcase = await this.publicationFlow.publicationSubcase;
   }
 
   setupController(controller) {
     super.setupController(...arguments);
     controller.publicationFlow = this.publicationFlow;
     controller.translationSubcase = this.translationSubcase;
-    controller.publicationSubcase = this.publicationSubcase;
   }
 
   @action

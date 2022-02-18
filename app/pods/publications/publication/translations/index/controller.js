@@ -13,7 +13,6 @@ export default class PublicationsPublicationTranslationsIndexController extends 
 
   @tracked publicationFlow;
   @tracked translationSubcase;
-  @tracked publicationSubcase;
 
   @tracked showTranslationUploadModal = false;
   @tracked showTranslationRequestModal = false;
@@ -27,15 +26,14 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   get latestTranslationActivity() {
-    return this.model.filter(
-      (activity) => !isEmpty(activity.translationActivity)
-    )[0].translationActivity;
+    return this.model.find(
+      (timeLineActivity) => !isEmpty(timeLineActivity.translationActivity)
+    ).translationActivity;
   }
 
 
   @task
   *saveTranslationUpload(translationUpload) {
-    // get latest translation activity
     const translationActivity = this.latestTranslationActivity;
 
     const language = yield translationActivity.language;
