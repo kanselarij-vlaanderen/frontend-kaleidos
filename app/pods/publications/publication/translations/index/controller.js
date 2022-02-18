@@ -36,14 +36,12 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   *saveTranslationUpload(translationUpload) {
     const translationActivity = this.latestTranslationActivity;
 
-    const language = yield translationActivity.language;
-
     const pieceSaves = [];
     const containerSaves = [];
 
     for (let piece of translationUpload.uploadedPieces) {
       piece.receivedDate = translationUpload.receivedAtDate;
-      piece.language = language;
+      piece.language = yield translationActivity.language;
       piece.translationActivityGeneratedBy = translationActivity;
       pieceSaves.push(piece.save());
 
@@ -100,11 +98,6 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     });
     yield requestActivity.save();
 
-    const french = yield this.store.findRecordByUri(
-      'language',
-      CONSTANTS.LANGUAGES.FR
-    );
-
     const translationActivity = yield this.store.createRecord(
       'translation-activity',
       {
@@ -114,12 +107,15 @@ export default class PublicationsPublicationTranslationsIndexController extends 
         subcase: this.translationSubcase,
         requestActivity: requestActivity,
         usedPieces: translationRequest.uploadedPieces,
-        language: french,
+        language: yield this.store.findRecordByUri(
+          'language',
+          CONSTANTS.LANGUAGES.FR
+        ),
       }
     );
     yield translationActivity.save();
 
-    const filePromises = usedPieces.mapBy('file');
+    const filePromises = translationRequest.uploadedPieces.mapBy('file');
     const filesPromise = Promise.all(filePromises);
 
     const outboxPromise = this.store.findRecordByUri(

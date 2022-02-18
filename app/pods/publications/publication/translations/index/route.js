@@ -3,19 +3,24 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export class TimeLineActivity {
-  @tracked requestActivity;
-  @tracked translationActivity;
+  @tracked activity;
   @tracked date;
 
-  constructor(requestActivity, translationActivity) {
-    if (requestActivity) {
-      this.requestActivity = requestActivity;
-      this.date = requestActivity.startDate;
-    }
-    if (translationActivity) {
-      this.translationActivity = translationActivity;
-      this.date = translationActivity.endDate;
-    }
+  constructor(activity, date) {
+    this.requestActivity = activity;
+    this.date = date;
+  }
+
+  get isRequestActivity(){
+    return this.activity.constructor.modelName === "request-activity";
+  }
+
+  get isTranslationActivity(){
+    return this.activity.constructor.modelName === "translation-activity";
+  }
+
+  get date(){
+    return this.date;
   }
 }
 
@@ -25,22 +30,22 @@ export default class PublicationsPublicationTranslationsIndexRoute extends Route
       'publications.publication.translations'
     );
 
-    let requestActivities = await this.store.query('request-activity', {
+    const requestActivities = await this.store.query('request-activity', {
       'filter[translation-subcase][:id:]': this.translationSubcase.id,
       include: 'email,used-pieces,used-pieces.file',
       sort: '-start-date',
     });
 
-    let translationActivities = await this.store.query('translation-activity', {
+    const translationActivities = await this.store.query('translation-activity', {
       'filter[subcase][:id:]': this.translationSubcase.id,
       include: 'generated-pieces,generated-pieces.file',
       sort: '-start-date',
     });
 
-    let activities = await Promise.all([
-      requestActivities.map((request) => new TimeLineActivity(request, null)),
+    let activities = Promise.all([
+      requestActivities.map((request) => new TimeLineActivity(request, request.startDate)),
       translationActivities.map((translation) =>
-        new TimeLineActivity(null, translation)
+        new TimeLineActivity(translation, translation.endDate)
       ),
     ]);
     activities = activities.flatMap((activity) => activity.toArray());
