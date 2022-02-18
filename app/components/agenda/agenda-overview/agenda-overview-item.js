@@ -9,7 +9,6 @@ import {
 } from 'ember-concurrency-decorators';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import CONFIG from 'frontend-kaleidos/utils/config';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import VrNotulenName,
 { compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
 
@@ -31,6 +30,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   @service agendaService;
   @service router;
   @service currentSession;
+  @service loadingService;
 
   @tracked agendaitemDocuments;
   @tracked newAgendaitemDocuments;
@@ -70,12 +70,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
 
   @task
   *loadDocuments() {
-    // This uses the same call as in others routes/components, ensuring we hit the same cache
-    let pieces = yield this.store.query('piece', {
-      'filter[agendaitems][:id:]': this.args.agendaitem.id,
-      'page[size]': PAGE_SIZE.PIECES, // TODO add pagination when sorting is done in the backend
-      include: 'document-container',
-    });
+    let pieces = yield this.loadingService.loadPieces.perform(this.args.agendaitem);
     pieces = pieces.toArray();
     let sortedPieces;
     if (this.args.agendaitem.isApproval) {
