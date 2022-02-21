@@ -38,14 +38,9 @@
           <Auk::FileUploader
             id="publicationRequestModal.attachments"
             @multiple={{true}}
-            @onUpload={{this.didUpload}}
+            @onUpload={{perform this.savePiece}}
           />
-          {{!TODO decent display of uploaded files}}
-          {{#each this.files as |file|}}
-            <div>
-              {{file.filename}}
-            </div>
-          {{/each}}
+          <Utils::Documents::List @pieces={{this.pieces}} />
         </div>
       </div>
     </Utils::LoadableContent>
