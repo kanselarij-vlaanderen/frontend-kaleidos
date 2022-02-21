@@ -1,0 +1,48 @@
+/* ==========================================================================
+   ember-tag-input
+   ========================================================================== */
+
+.emberTagInput {
+  @extend .auk-input;
+  @extend .auk-filter-pill-list;
+
+  width: 100%;
+}
+
+.emberTagInput-tag {
+  @extend .auk-filter-pill;
+}
+
+.emberTagInput-tag--remove {
+  opacity: 0.75;
+}
+
+.emberTagInput-remove {
+  @extend .auk-icon;
+  @extend .auk-icon--x;
+
+  &:before {
+    @extend %auk-icons-font-style;
+    @extend .ki-x;
+  }
+
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+.emberTagInput-new {
+  display: inline-flex;
+}
+
+.emberTagInput-input {
+  border: none;
+  padding: 0;
+
+  font-family: $g-base-font-family;
+  font-size: 1.5rem;
+  color: $auk-gray-800;
+
+  &:focus {
+    outline: none;
+  }
+}
