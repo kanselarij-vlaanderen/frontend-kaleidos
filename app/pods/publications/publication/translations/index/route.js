@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { warn } from '@ember/debug';
+import { inject as service } from '@ember/service';
 
 export class TimeLineActivity {
   @tracked activity;
@@ -31,6 +32,8 @@ export class TimeLineActivity {
 }
 
 export default class PublicationsPublicationTranslationsIndexRoute extends Route {
+  @service store;
+
   async model() {
     this.translationSubcase = this.modelFor(
       'publications.publication.translations'
