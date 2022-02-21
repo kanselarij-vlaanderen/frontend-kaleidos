@@ -14,6 +14,11 @@ export class PublicationRequestEvent {
     this.requestActivity = requestActivity;
   }
 
+  // first: sort on a requestActivity's and publicationActivity's startDate:
+  //  => show linked request ane publicationActivities together
+  // next: sort on timeOrder:
+  //  => show the publicationActivity after the requestActivity in the timeline
+  timeOrder = 0;
   isRequest = true;
   /** @type {RequestActivity} */
   @tracked requestActivity;
@@ -28,6 +33,7 @@ export class PublicationPublicationEvent {
     this.publicationActivity = publicationActivity;
   }
 
+  timeOrder = 1;
   isPublication = true;
   /** @type {PublicationActivity} */
   @tracked publicationActivity;

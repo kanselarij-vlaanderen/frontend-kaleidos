@@ -53,10 +53,14 @@ export default class PublicationsPublicationPublicationActivitiesIndexRoute exte
    * @private
    */
   createTimeline(requestActivities, publicationActivities) {
+    const requestEvents = requestActivities.map((act) => new PublicationRequestEvent(act));
+    const publicationEvents = publicationActivities
+      .filter((act) => !act.endDate)
+      .map((act) => new PublicationPublicationEvent(act));
     return [
-      ...requestActivities.map((act) => new PublicationRequestEvent(act)),
-      ...publicationActivities.map((act) => new PublicationPublicationEvent(act)), // eslint-disable-line prettier/prettier
-    ].sortBy('date').reverse();
+      ...requestEvents,
+      ...publicationEvents,
+    ].sortBy('date', 'timeOrder').reverse();
   }
 
   afterModel() {
