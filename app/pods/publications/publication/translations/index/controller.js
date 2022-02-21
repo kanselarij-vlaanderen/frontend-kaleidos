@@ -110,6 +110,11 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     );
     yield translationActivity.save();
 
+    this.translationSubcase.dueDate = translationRequest.translationDueDate;
+    if (this.translationSubcase.hasDirtyAttributes) {
+      yield this.translationSubcase.save();
+    }
+
     const [files, outbox, mailSettings] = yield Promise.all([
       Promise.all(uploadedPieces.mapBy('file')),
       this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
