@@ -123,7 +123,7 @@
   "divider": ", ",
   "documents-add": "Documenten toevoegen",
   "documents-amount": "Aantal documenten",
-  "pages-amount": "Aantal bladzijden",
+  "pages-amount": "Aantal pagina's",
   "words-amount": "Aantal woorden",
   "document-add": "Document toevoegen",
   "document-link-old": "Reeds bezorgde documenten koppelen",
@@ -762,7 +762,9 @@
   "not-known": "Niet gekend",
   "requests": "Aanvragen",
   "request-translations": "Vertaling aanvragen",
-  "upload-translation": "Vertaling uploaden",
+  "requested-translation": "Aanvraag verzonden",
+  "received-translation": "Vertaling ontvangen",
+  "upload-translation": "Vertalingen toevoegen",
   "request-translations-for-publication": "Vertaling(en) aanvragen voor publicatie {publicationNumber}",
   "request-translation-confirmation": "Bent u zeker dat u de vertaling voor volgende documenten met uiterste vertaaldatum wilt aanvragen?",
   "request-publish-preview": "Drukproef aanvragen",
@@ -902,7 +904,7 @@
   "paused-on": "Gepauzeerd op",
   "help": "Help",
   "upload-reference-document": "Referentiedocument uploaden voor publicatie {identifier}",
-  "upload-translation-document": "Vertaaldocument uploaden voor publicatie {identifier}",
+  "upload-translation-document": "Vertaling opladen",
   "edit-translation-document": "Vertaaldocument {docname} bewerken voor publicatie {identifier}",
   "look-at-documentation": "Bekijk documentatie website",
   "contact-us": "Contacteer ons",
@@ -991,5 +993,8 @@
   "signing-status-signed": "Gehandtekend",
   "publication-info": "Publicatie info",
   "set-status-translation-in": "Zet status naar 'Vertaling In'",
-  "set-status-proof-in": "Zet status naar 'Drukproef In'"
+  "set-status-proof-in": "Zet status naar 'Drukproef In'",
+  "delete-translation-request-message": "Bent u zeker dat u de aanvraag wil verwijderen?",
+  "delete-translation-request": "Aanvraag verwijderen",
+  "request-it": "Aanvragen"
 }
