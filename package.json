@@ -42,7 +42,7 @@
     "edition": "octane"
   },
   "devDependencies": {
-    "@appuniversum/ember-appuniversum": "https://github.com/erikap/ember-appuniversum.git#ed1950f838cdce0be90e7347f5766694f8c0b87e",
+    "@appuniversum/ember-appuniversum": "https://github.com/appuniversum/ember-appuniversum.git#2c451bba503544000e3faa3797d7a9eb42b8e3c6",
     "@codemirror/basic-setup": "^0.19.0",
     "@codemirror/lang-html": "^0.19.4",
     "@codemirror/lang-xml": "^0.19.2",
