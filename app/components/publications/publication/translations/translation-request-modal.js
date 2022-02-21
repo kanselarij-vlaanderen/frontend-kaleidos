@@ -60,24 +60,18 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
     if (this.save.isRunning) {
       return;
     }
-
-    if (this.uploadedPieces.length > 0) {
-      const deletePromises = [];
-      for (let piece of this.uploadedPieces) {
-        deletePromises.push(this.deleteUploadedPiece.perform(piece));
-      }
-      yield Promise.all(deletePromises);
-    }
+    yield Promise.all(this.uploadedPieces.map((piece) => this.deleteUploadedPiece.perform(piece)));
     this.args.onCancel();
   }
 
   @dropTask
   *deleteUploadedPiece(piece) {
     const file = yield piece.file;
-    yield file.destroyRecord();
     const documentContainer = yield piece.documentContainer;
-    yield documentContainer.destroyRecord();
-    yield piece.destroyRecord();
+    yield Promise.all([
+      file.destroyRecord(),
+      documentContainer.destroyRecord(),
+    ]);
     this.uploadedPieces.removeObject(piece);
   }
 
