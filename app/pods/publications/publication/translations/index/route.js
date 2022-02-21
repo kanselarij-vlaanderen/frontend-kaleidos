@@ -1,14 +1,13 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { warn } from '@ember/debug';
 
 export class TimeLineActivity {
   @tracked activity;
-  @tracked date;
 
-  constructor(activity, date) {
+  constructor(activity) {
     this.activity = activity;
-    this.date = date;
   }
 
   get isRequestActivity() {
@@ -20,7 +19,14 @@ export class TimeLineActivity {
   }
 
   get date() {
-    return this.date;
+    if (this.isRequestActivity) {
+      return this.activity.startDate;
+    } else if (this.isTranslationActivity) {
+      return this.activity.endDate;
+    } else {
+      warn(`Getting date for unsupported activity type ${this.activity.constructor.modelName}`);
+      return null;
+    }
   }
 }
 
@@ -46,12 +52,8 @@ export default class PublicationsPublicationTranslationsIndexRoute extends Route
     );
 
     let activities = [
-      requestActivities.map(
-        (request) => new TimeLineActivity(request, request.startDate)
-      ),
-      translationActivities.map(
-        (translation) => new TimeLineActivity(translation, translation.endDate)
-      ),
+      requestActivities.map((request) => new TimeLineActivity(request)),
+      translationActivities.map((translation) => new TimeLineActivity(translation))
     ];
     activities = activities.flatMap((activity) => activity.toArray());
     activities = activities.sortBy('date').reverseObjects();
