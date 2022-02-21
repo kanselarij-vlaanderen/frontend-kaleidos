@@ -86,14 +86,14 @@ export default class PublicationsPublicationTranslationsIndexController extends 
       return piece.save();
     }));
 
-    const requestActivity = yield this.store.createRecord('request-activity', {
+    const requestActivity = this.store.createRecord('request-activity', {
       startDate: now,
       translationSubcase: this.translationSubcase,
       usedPieces: uploadedPieces,
     });
     yield requestActivity.save();
 
-    const translationActivity = yield this.store.createRecord(
+    const translationActivity = this.store.createRecord(
       'translation-activity',
       {
         startDate: now,
