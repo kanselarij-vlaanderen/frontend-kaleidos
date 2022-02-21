@@ -43,7 +43,7 @@
     "edition": "octane"
   },
   "devDependencies": {
-    "@appuniversum/ember-appuniversum": "https://github.com/erikap/ember-appuniversum.git#5bc034ff8b1c78ac52a47d41829765c251dcaf62",
+    "@appuniversum/ember-appuniversum": "https://github.com/erikap/ember-appuniversum.git#ed1950f838cdce0be90e7347f5766694f8c0b87e",
     "@ember/optional-features": "^2.0.0",
     "@ember/render-modifiers": "^2.0.0",
     "@ember/test-helpers": "^2.6.0",
@@ -114,7 +114,7 @@
     "ember-named-blocks-polyfill": "^0.2.4",
     "ember-page-title": "^6.2.1",
     "ember-pdfjs-wrapper": "git+https://github.com/MikiDi/ember-pdfjs-wrapper.git#8300c671d3293dad0c5ccf87defdec6d08f839b3",
-    "ember-power-select": "https://github.com/cibernox/ember-power-select.git#c2f917e1b03aef0b85a0a09b12f9e05e9b04749d",
+    "ember-power-select": "^5.0.4",
     "ember-prism": "^0.7.0",
     "ember-promise-helpers": "^1.0.9",
     "ember-qunit": "^5.1.2",
