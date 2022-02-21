@@ -9,6 +9,8 @@ import { isPresent } from '@ember/utils';
 
 export default class PublicationsTranslationRequestModalComponent extends Component {
   /**
+   * @argument dueDate
+   * @argument publicationFlow
    * @argument onSave
    * @argument onCancel
    */
