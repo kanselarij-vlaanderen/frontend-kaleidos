@@ -24,7 +24,6 @@
             <Auk::Button
               @skin="primary"
               @icon="plus"
-              @disabled={{this.isRequestingDisabled}}
               {{on "click" this.openTranslationRequestModal}}
             >
               {{t "request-translations"}}

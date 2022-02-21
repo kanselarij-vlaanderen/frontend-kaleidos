@@ -17,12 +17,8 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   @tracked showTranslationUploadModal = false;
   @tracked showTranslationRequestModal = false;
 
-  get isRequestingDisabled() {
-    return this.translationSubcase.isFinished;
-  }
-
   get isTranslationUploadDisabled() {
-    return isEmpty(this.latestTranslationActivity) || this.translationSubcase.isFinished;
+    return isEmpty(this.latestTranslationActivity);
   }
 
   get latestTranslationActivity() {
