@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { isEmpty } from '@ember/utils';
 
 export default class PublicationsPublicationTranslationsIndexController extends Controller {
   @service store;
@@ -18,7 +17,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   @tracked showTranslationRequestModal = false;
 
   get isTranslationUploadDisabled() {
-    return isEmpty(this.latestTranslationActivity);
+    return this.latestTranslationActivity == null;
   }
 
   get latestTranslationActivity() {
