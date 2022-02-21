@@ -4,31 +4,6 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { dropTask, task } from 'ember-concurrency';
 
-/* eslint-disable no-unused-vars */
-import PublicationActivity from '../../../../../models/publication-activity';
-import DecisionModel from '../../../../../models/decision';
-/* eslint-enable no-unused-vars */
-
-/** @param {PublicationActivity[]} publicationActivities */
-export async function createTimeline(publicationActivities) {
-  let publicationTimeline = [];
-  for (const publicationActivity of publicationActivities) {
-    const publicationRequestEvent = await PublicationRequestEvent.create(
-      publicationActivity
-    );
-    publicationTimeline.push(publicationRequestEvent);
-
-    let decisions = await publicationActivity.decisions;
-    decisions = decisions.toArray();
-    for (const decision of decisions) {
-      const publicationEvent = await PublicationEvent.create(decision);
-      publicationTimeline.push(publicationEvent);
-    }
-  }
-  publicationTimeline = publicationTimeline.sortBy('date').reverse();
-  return publicationTimeline;
-}
-
 export class PublicationRequestEvent {
   static async create(publicationActivity) {
     return Object.assign(new PublicationRequestEvent(), {
@@ -49,9 +24,9 @@ export class PublicationRequestEvent {
   }
 }
 
-export class PublicationEvent {
+export class PublicationPublicationEvent {
   static async create(decision) {
-    return Object.assign(new PublicationEvent(), {
+    return Object.assign(new PublicationPublicationEvent(), {
       decision,
     });
   }
