@@ -12,7 +12,7 @@
       {{! TODO: Remove inline style }}
       {{! template-lint-disable no-inline-styles }}
       <div class="auk-form-group" style="max-width: 30rem;">
-        <Auk::Label for="translationRequestDueDate">
+        <Auk::Label for="translationRequestDueDate" @required={{true}}>
           {{t "publication-flow-translation-due-date"}}
         </Auk::Label>
         <Auk::Datepicker
@@ -60,7 +60,7 @@
         </div>
       </div>
       <div class="auk-form-group">
-        <Auk::Label for="translationRequestSubject">
+        <Auk::Label for="translationRequestSubject" @required={{true}}>
           {{t "subject"}}
         </Auk::Label>
         <Auk::Input
@@ -82,7 +82,7 @@
       </div>
 
       <div class="auk-form-group">
-        <Auk::Label>
+        <Auk::Label @required={{true}}>
           {{t "attachments"}}
         </Auk::Label>
         <Auk::FileUploader @multiple={{false}} @onUpload={{this.uploadPiece}} />
