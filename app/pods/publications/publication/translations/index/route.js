@@ -51,13 +51,10 @@ export default class PublicationsPublicationTranslationsIndexRoute extends Route
       }
     );
 
-    let activities = [
-      requestActivities.map((request) => new TimeLineActivity(request)),
-      translationActivities.map((translation) => new TimeLineActivity(translation))
-    ];
-    activities = activities.flatMap((activity) => activity.toArray());
-    activities = activities.sortBy('date').reverseObjects();
-    return activities;
+    return [
+      ...requestActivities.map((request) => new TimeLineActivity(request)),
+      ...translationActivities.map((translation) => new TimeLineActivity(translation))
+    ].sortBy('date').reverseObjects();
   }
 
   async afterModel() {
