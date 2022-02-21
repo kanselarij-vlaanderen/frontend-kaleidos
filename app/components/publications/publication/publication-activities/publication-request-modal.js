@@ -1,15 +1,18 @@
 import Component from '@glimmer/component';
-import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
+import { task, taskGroup } from 'ember-concurrency';
 import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
 import { publicationRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 
 export default class PublicationTimelineEventPanel extends Component {
+  @service store;
+
   @tracked subject;
   @tracked message;
-  @tracked files = [];
+  @tracked pieces = [];
 
   constructor() {
     super(...arguments);
@@ -32,7 +35,7 @@ export default class PublicationTimelineEventPanel extends Component {
     this.validators = new ValidatorSet({
       subject: new Validator(() => isPresent(this.subject)),
       message: new Validator(() => isPresent(this.message)),
-      files: new Validator(() => this.files.length > 0),
+      pieces: new Validator(() => this.pieces.length > 0),
     });
   }
 
@@ -62,39 +65,64 @@ export default class PublicationTimelineEventPanel extends Component {
     this.validators.message.enableError();
   }
 
-  @action
-  didUpload(file) {
-    this.files.pushObject(file);
+  @taskGroup taskGroup;
+  @task({
+    group: 'taskGroup'
+  })
+  *savePiece(file) {
+    const piece = yield this.performSavePiece(file);
+    this.pieces.pushObject(piece);
   }
 
-  // prevent double cancel
+  async performSavePiece(file) {
+    const created = file.created;
+
+    const documentContainer = this.store.createRecord('document-container', {
+      created: created,
+    });
+    await documentContainer.save();
+
+    const piece = this.store.createRecord('piece', {
+      created: created,
+      modified: created,
+      file: file,
+      confidential: false,
+      name: file.filenameWithoutExtension,
+      documentContainer: documentContainer,
+    });
+    await piece.save();
+
+    return piece;
+  }
+
   @task({
-    drop: true,
+    group: 'taskGroup',
   })
   *cancel() {
-    // this.canCancel does not work:
-    //     because this.cancel.isRunning === true, the cancel task is never performed
-    // necessary because close-button is not disabled when saving
-    if (this.save.isRunning) {
-      return;
-    }
-
     yield this.performCleanup();
     yield this.args.onCancel();
   }
 
-  @task
+  @task({
+    group: 'taskGroup',
+  })
   *save() {
     const requestParams = {
       subject: this.subject,
       message: this.message,
-      files: this.files,
+      pieces: this.pieces,
     };
     yield this.args.onSave(requestParams);
   }
 
   // separate method to prevent ember-concurrency from saving only partially
   async performCleanup() {
-    await Promise.all(this.files.map((file) => file.destroyRecord()));
+    await Promise.all(this.pieces.map((piece) =>
+      Promise.all([
+        piece.file.destroyRecord(),
+        piece.documentContainer.destroyRecord(),
+        piece.destroyRecord(),
+      ])
+    ));
   }
 }
