@@ -75,7 +75,6 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
   @service fileService;
 
   @tracked publicationFlow;
-  @tracked isViaCouncilOfMinisters;
   @tracked isOpenRequestModal = false;
 
   @action
