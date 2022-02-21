@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { warn } from '@ember/debug';
 import { inject as service } from '@ember/service';
 
-export class TimeLineActivity {
+export class TimelineActivity {
   @tracked activity;
 
   constructor(activity) {
@@ -55,8 +55,8 @@ export default class PublicationsPublicationTranslationsIndexRoute extends Route
     );
 
     return [
-      ...requestActivities.map((request) => new TimeLineActivity(request)),
-      ...translationActivities.map((translation) => new TimeLineActivity(translation))
+      ...requestActivities.map((request) => new TimelineActivity(request)),
+      ...translationActivities.map((translation) => new TimelineActivity(translation))
     ].sortBy('date').reverseObjects();
   }
 

@@ -33,18 +33,18 @@
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body class="auk-u-bg-alt">
-      {{#each @model as |timeLineActivity|}}
-        {{#if timeLineActivity.isRequestActivity}}
+      {{#each @model as |timelineActivity|}}
+        {{#if timelineActivity.isRequestActivity}}
           <Publications::Publication::Translations::TranslationRequestedPanel
-            @requestActivity={{timeLineActivity.activity}}
+            @requestActivity={{timelineActivity.activity}}
             @onDeleteRequest={{fn
               (perform this.deleteRequest)
-              timeLineActivity.activity
+              timelineActivity.activity
             }}
           />
-        {{else if (and timeLineActivity.isTranslationActivity timeLineActivity.activity.endDate)}}
+        {{else if (and timelineActivity.isTranslationActivity timelineActivity.activity.endDate)}}
           <Publications::Publication::Translations::TranslationReceivedPanel
-            @translationActivity={{timeLineActivity.activity}}
+            @translationActivity={{timelineActivity.activity}}
           />
         {{/if}}
       {{else}}
