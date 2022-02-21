@@ -4,43 +4,36 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { dropTask, task } from 'ember-concurrency';
 
+/* eslint-disable no-unused-vars */
+import RequestActivity from '../../../../../models/request-activity';
+import PublicationActivity from '../../../../../models/publication-activity';
+/* eslint-enable no-unused-vars */
+
 export class PublicationRequestEvent {
-  static async create(publicationActivity) {
-    return Object.assign(new PublicationRequestEvent(), {
-      publicationActivity,
-    });
+  constructor(requestActivity) {
+    this.requestActivity = requestActivity;
   }
 
   isRequest = true;
-  /** @type {PublicationActivity} */
-  @tracked publicationActivity;
-
-  get title() {
-    return this.publicationActivity.title;
-  }
+  /** @type {RequestActivity} */
+  @tracked requestActivity;
 
   get date() {
-    return this.publicationActivity.startDate;
+    return this.requestActivity.startDate;
   }
 }
 
 export class PublicationPublicationEvent {
-  static async create(decision) {
-    return Object.assign(new PublicationPublicationEvent(), {
-      decision,
-    });
+  constructor(publicationActivity) {
+    this.publicationActivity = publicationActivity;
   }
 
   isPublication = true;
-  /** @type {DecisionModel} */
-  @tracked decision;
-
-  get title() {
-    return this.decision.title;
-  }
+  /** @type {PublicationActivity} */
+  @tracked publicationActivity;
 
   get date() {
-    return this.decision.publicationDate;
+    return this.publicationActivity.publicationDate;
   }
 }
 

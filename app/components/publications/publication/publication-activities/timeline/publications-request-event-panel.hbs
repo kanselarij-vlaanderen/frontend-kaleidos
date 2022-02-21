@@ -2,12 +2,12 @@
   @isDefaultActive={{true}}
   as |AccordionPanel|>
   <AccordionPanel.Header
-    @title={{@publicationActivity.title}}
-    @subtitle={{moment-format @publicationActivity.startDate}}
+    @title={{@requestActivity.title}}
+    @subtitle={{moment-format @requestActivity.startDate}}
   />
   <AccordionPanel.Body>
     <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
-      {{#each @publicationActivity.usedPieces as |piece|}}
+      {{#each @requestActivity.usedPieces as |piece|}}
         {{!TODO new design without ButtonLink}}
         <Auk::ButtonLink @icon="paperclip">
           {{piece.file.filename}}
@@ -33,12 +33,12 @@
     <div class="auk-hr"></div>
     <div class="auk-content">
       <h4 class="auk-u-m-0">{{t "subject"}}</h4>
-      <p>{{@publicationActivity.requestActivity.email.subject}}</p>
+      <p>{{@requestActivity.email.subject}}</p>
       <h4 class="auk-u-m-0">{{t "message"}}</h4>
       {{! TODO: Remove inline style }}
       {{! template-lint-disable no-inline-styles }}
       {{! p-tag opening and closing on 1 line to prevent whitespace to be rendered. }}
-      <p class="auk-u-text-pre-line">{{@publicationActivity.requestActivity.email.message}}</p>
+      <p class="auk-u-text-pre-line">{{@requestActivity.email.message}}</p>
       {{! template-lint-enable no-inline-styles }}
     </div>
   </AccordionPanel.Body>

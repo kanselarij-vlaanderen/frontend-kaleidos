@@ -21,7 +21,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexRoute exte
 
     const activities = await Promise.all([
       this.store.query('request-activity', {
-        'filter[subcase][:id:]': publicationSubcase.id,
+        'filter[publication-subcase][:id:]': publicationSubcase.id,
         // eslint-disable-next-line prettier/prettier
         include: [
           'email',
@@ -39,7 +39,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexRoute exte
       }),
     ]);
 
-    const [requestActivities, publicationActivities] = activities.map(Array.of);
+    const [requestActivities, publicationActivities] = activities.map(activities => activities.toArray());
     const timeline = this.createTimeline(
       requestActivities,
       publicationActivities
@@ -53,12 +53,10 @@ export default class PublicationsPublicationPublicationActivitiesIndexRoute exte
    * @private
    */
   createTimeline(requestActivities, publicationActivities) {
-    let publicationTimeline = [
+    return [
       ...requestActivities.map((act) => new PublicationRequestEvent(act)),
       ...publicationActivities.map((act) => new PublicationPublicationEvent(act)), // eslint-disable-line prettier/prettier
-    ];
-    publicationTimeline = publicationTimeline.sortBy('date').reverse();
-    return publicationTimeline;
+    ].sortBy('date').reverse();
   }
 
   afterModel() {
