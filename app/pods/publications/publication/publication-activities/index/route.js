@@ -8,7 +8,7 @@ export default class PublicationsPublicationDecisionsIndexRoute extends Route {
   @service publicationService;
 
   async model() {
-    let publicationSubcase = this.modelFor(
+    const publicationSubcase = this.modelFor(
       'publications.publication.publication-activities'
     );
     let publicationActivities = await this.store.query('publication-activity', {
