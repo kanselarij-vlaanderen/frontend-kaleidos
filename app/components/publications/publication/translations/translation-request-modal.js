@@ -46,8 +46,6 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   *save() {
     yield this.args.onSave({
       uploadedPieces: this.uploadedPieces,
-      pagesAmount: this.pagesAmount,
-      wordsAmount: this.wordsAmount,
       translationDueDate: this.translationDueDate,
       subject: this.subject,
       message: this.message,
