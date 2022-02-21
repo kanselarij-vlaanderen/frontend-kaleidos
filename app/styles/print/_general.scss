@@ -76,12 +76,30 @@
     height: auto !important;
   }
 
-  /* Layout styling overrides
+  .auk-pill,
+  .auk-icon,
+  .auk-badge,
+  .auk-u-text-muted {
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* Auk extensions
    ========================================================================== */
 
-  .l-main-header {
-    display: none;
+  .auk-u-non-breakable-group\@print {
+    break-inside: avoid;
   }
+
+  .auk-u-on-fresh-page\@print {
+    page-break-before: always;
+  }
+
+  .auk-u-keep-colors\@print {
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* Layout styling overrides
+   ========================================================================== */
 }
 
 /* Print page defaults
