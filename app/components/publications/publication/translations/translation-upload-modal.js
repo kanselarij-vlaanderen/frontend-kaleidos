@@ -76,7 +76,7 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
     this.mustUpdatePublicationStatus = event.target.checked;
   }
 
-  @dropTask
+  @task
   *deleteUploadedPiece(piece) {
     const file = yield piece.file;
     const documentContainer = yield piece.documentContainer;
