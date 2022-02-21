@@ -32,9 +32,10 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     const pieceSaves = [];
     const containerSaves = [];
 
+    const language = yield translationActivity.language;
     for (let piece of translationUpload.uploadedPieces) {
       piece.receivedDate = translationUpload.receivedAtDate;
-      piece.language = yield translationActivity.language;
+      piece.language = language;
       piece.translationActivityGeneratedBy = translationActivity;
       pieceSaves.push(piece.save());
     }
@@ -44,8 +45,8 @@ export default class PublicationsPublicationTranslationsIndexController extends 
 
     let translationSubcaseSave;
     if (
-      translationUpload.receivedAtDate < this.translationSubcase.receivedDate ||
-      !this.translationSubcase.receivedDate
+      !this.translationSubcase.receivedDate ||
+      translationUpload.receivedAtDate < this.translationSubcase.receivedDate
     ) {
       this.translationSubcase.receivedDate = translationUpload.receivedAtDate;
       translationSubcaseSave = this.translationSubcase.save();
