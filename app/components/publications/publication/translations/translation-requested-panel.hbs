@@ -17,13 +17,13 @@
       {{#unless this.loadTranslationActivity.isRunning}}
         <header.Actions as |actions|>
           <actions.Item>
-            {{#if (not this.isTranslationActivityFinished)}}
+            {{#unless this.isTranslationActivityFinished}}
               <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
                 <Menu.Item @skin="danger" @disabled={{this.isTranslationActivityFinished}} {{on "click" this.promptDeleteRequest}}>
                   {{t "delete-translation-request"}}
                 </Menu.Item>
               </DropdownMenu>
-            {{/if}}
+            {{/unless}}
           </actions.Item>
         </header.Actions>
       {{/unless}}
