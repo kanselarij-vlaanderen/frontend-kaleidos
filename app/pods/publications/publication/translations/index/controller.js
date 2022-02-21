@@ -21,10 +21,8 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   get latestTranslationActivity() {
-    return this.model.length !== 0
-      ? this.model.filter(
-        (timeLineActivity) => timeLineActivity.isTranslationActivity).sortBy('activity.startDate').lastObject.activity
-      : null;
+    const timelineActivity = this.model.find((timelineActivity) => timelineActivity.isTranslationActivity);
+    return timelineActivity ? timelineActivity.activity : null;
   }
 
   @task
