@@ -43,6 +43,9 @@
   },
   "devDependencies": {
     "@appuniversum/ember-appuniversum": "https://github.com/erikap/ember-appuniversum.git#ed1950f838cdce0be90e7347f5766694f8c0b87e",
+    "@codemirror/basic-setup": "^0.19.0",
+    "@codemirror/lang-html": "^0.19.4",
+    "@codemirror/lang-xml": "^0.19.2",
     "@ember/optional-features": "^2.0.0",
     "@ember/render-modifiers": "^2.0.0",
     "@ember/test-helpers": "^2.6.0",
@@ -52,7 +55,7 @@
     "@kanselarij-vlaanderen/au-kaleidos-icons": "3.0.0",
     "@lblod/ember-acmidm-login": "~1.3.0",
     "@lblod/ember-mock-login": "^0.5.0-beta",
-    "@lblod/ember-rdfa-editor": "git+https://github.com/erikap/ember-rdfa-editor.git#e87dab06b9a4f181e7a6c5740b44f0cf1584d754",
+    "@lblod/ember-rdfa-editor": "0.50.0-beta.9",
     "@lblod/ember-rdfa-editor-plugin-system-dispatcher": "^0.5.8",
     "@lblod/ember-vo-webuniversum": "^0.23.0",
     "@lblod/ember-vo-webuniversum-data-table": "^1.0.0",
@@ -149,7 +152,8 @@
     "sass": "^1.49.7",
     "tracked-built-ins": "^2.0.1",
     "typescript": "^3.9.7",
-    "webpack": "^5.64.3"
+    "webpack": "^5.64.3",
+    "xml-formatter": "^2.4.0"
   },
   "engines": {
     "node": "12 || 14 || >= 16"
