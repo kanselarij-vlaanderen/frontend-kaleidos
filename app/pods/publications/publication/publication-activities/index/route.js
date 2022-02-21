@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { createTimeline } from './controller';
 
-export default class PublicationsPublicationDecisionsIndexRoute extends Route {
+export default class PublicationsPublicationPublicationActivitiesIndexRoute extends Route {
   @service store;
 
   async model() {
