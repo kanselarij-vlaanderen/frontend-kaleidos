@@ -19,8 +19,8 @@ function translationRequestEmail(params) {
     + `Titel: ${params.title}\t\n`
     + `Uiterste vertaaldatum: ${moment(params.dueDate)
       .format('DD-MM-YYYY')}\t\n`
-    + `Aantal pagina’s: ${params.totalPages}\t\n`
-    + `Aantal woorden: ${params.totalWords}\t\n`
+    + `Aantal pagina’s: ${params.totalPages || ''}\t\n`
+    + `Aantal woorden: ${params.totalWords || ''}\t\n`
     + `Aantal documenten: ${params.totalDocuments}\t\n`;
   return {
     subject: subject,

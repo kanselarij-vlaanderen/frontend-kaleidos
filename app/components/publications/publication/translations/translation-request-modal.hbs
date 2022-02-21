@@ -38,7 +38,7 @@
                   id="translationLoadPages"
                   @block={{true}}
                   @value={{mut this.pagesAmount}}
-                  {{on "input" (perform this.setEmailFields)}}
+                  {{on "focusout" (perform this.setEmailFields)}}
                 />
               </div>
             </div>
@@ -52,7 +52,7 @@
                   id="translationLoadWords"
                   @block={{true}}
                   @value={{mut this.wordsAmount}}
-                  {{on "input" (perform this.setEmailFields)}}
+                  {{on "focusout" (perform this.setEmailFields)}}
                 />
               </div>
             </div>

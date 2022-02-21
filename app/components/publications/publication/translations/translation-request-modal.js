@@ -78,7 +78,6 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   @task
   *setEmailFields() {
     const publicationFlow = this.args.publicationFlow;
-    // should resolve immediately (already fetched)
     const identification = yield publicationFlow.identification;
 
     const mailParams = {
