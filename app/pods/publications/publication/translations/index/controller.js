@@ -79,10 +79,10 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     const now = new Date();
 
     const uploadedPieces = translationRequest.uploadedPieces;
-    const language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
+    const dutch = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
     yield Promise.all(uploadedPieces.map((piece) => {
       piece.translationSubcaseSourceFor = this.translationSubcase;
-      piece.language = language;
+      piece.language = dutch;
       return piece.save();
     }));
 
