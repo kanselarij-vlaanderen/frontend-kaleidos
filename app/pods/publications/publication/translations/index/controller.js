@@ -149,18 +149,18 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     deletePromises.push(translationActivity.destroyRecord());
 
     const mail = yield requestActivity.email;
-    deletePromises.push(mail.destroyRecord());
+    if (mail) {
+      deletePromises.push(mail.destroyRecord());
+    }
 
     deletePromises.push(requestActivity.destroyRecord());
 
     const pieces = yield requestActivity.usedPieces;
 
     for (const piece of pieces.toArray()) {
-      const filePromise = piece.file;
-      const documentContainerPromise = piece.documentContainer;
       const [file, documentContainer] = yield Promise.all([
-        filePromise,
-        documentContainerPromise,
+        piece.file,
+        piece.documentContainer,
       ]);
 
       deletePromises.push(piece.destroyRecord());
