@@ -57,7 +57,7 @@ export default class PublicationsPublicationTranslationsIndexRoute extends Route
     ].sortBy('date').reverseObjects();
   }
 
-  async afterModel() {
+  afterModel() {
     this.publicationFlow = this.modelFor('publications.publication');
   }
 
