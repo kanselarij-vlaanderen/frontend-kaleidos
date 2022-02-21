@@ -19,7 +19,6 @@
     "last 1 Safari versions"
   ],
   "scripts": {
-    "preinstall": "npx npm-force-resolutions",
     "prestart": "npm-run-all lint:hbs lint:js",
     "build": "ember build --environment=production",
     "design": "ember serve --proxy=https://kaleidos-dev.vlaanderen.be",
@@ -141,7 +140,6 @@
     "lodash.invert": "^4.3.0",
     "marked": "^2.0.0",
     "moment": "2.29.1",
-    "npm-force-resolutions": "0.0.10",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.3.2",
     "qunit": "^2.14.0",
@@ -155,9 +153,5 @@
   },
   "engines": {
     "node": "12 || 14 || >= 16"
-  },
-  "resolutions": {
-    "@embroider/macros": "0.50.0",
-    "@embroider/shared-internals": "0.50.0"
   }
 }
