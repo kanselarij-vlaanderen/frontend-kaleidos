@@ -4,7 +4,7 @@
     @onClose={{perform this.cancel}}
   />
   <Auk::Modal::Body>
-    <Auk::FileUploader @multiple={{true}} @onUpload={{this.uploadPiece}} />
+    <Auk::FileUploader @multiple={{false}} @onUpload={{this.uploadPiece}} />
     <Auk::List>
       {{#each this.uploadedPieces as |piece|}}
         <Auk::List::Item

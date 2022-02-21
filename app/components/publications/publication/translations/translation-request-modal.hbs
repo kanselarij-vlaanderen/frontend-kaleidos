@@ -85,7 +85,7 @@
         <Auk::Label>
           {{t "attachments"}}
         </Auk::Label>
-        <Auk::FileUploader @multiple={{true}} @onUpload={{this.uploadPiece}} />
+        <Auk::FileUploader @multiple={{false}} @onUpload={{this.uploadPiece}} />
         <Auk::List>
           {{#each this.uploadedPieces as |piece|}}
             <Auk::List::Item
