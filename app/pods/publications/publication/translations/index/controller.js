@@ -65,7 +65,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
 
     yield Promise.all([
       translationActivitySave,
-      pieceSaves,
+      ...pieceSaves,
       containerSaves,
       translationSubcaseSave,
     ]);
