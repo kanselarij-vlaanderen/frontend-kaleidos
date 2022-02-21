@@ -33,7 +33,7 @@ export class PublicationPublicationEvent {
   @tracked publicationActivity;
 
   get date() {
-    return this.publicationActivity.publicationDate;
+    return this.publicationActivity.startDate;
   }
 }
 
