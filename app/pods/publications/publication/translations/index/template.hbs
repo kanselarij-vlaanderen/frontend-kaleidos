@@ -42,7 +42,7 @@
               timeLineActivity.activity
             }}
           />
-        {{else if (and timeLineActivity.isTranslationActivity timeLineActivity.date)}}
+        {{else if (and timeLineActivity.isTranslationActivity timeLineActivity.activity.endDate)}}
           <Publications::Publication::Translations::TranslationReceivedPanel
             @translationActivity={{timeLineActivity.activity}}
           />

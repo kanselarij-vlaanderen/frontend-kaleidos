@@ -23,7 +23,7 @@ export class TimeLineActivity {
     if (this.isRequestActivity) {
       return this.activity.startDate;
     } else if (this.isTranslationActivity) {
-      return this.activity.endDate;
+      return this.activity.startDate;
     } else {
       warn(`Getting date for unsupported activity type ${this.activity.constructor.modelName}`);
       return null;
