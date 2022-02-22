@@ -26,7 +26,7 @@ export default class PublicationsPublicationTranslationTranslationRequestedPanel
   }
 
   @action
-  promptDeleteRequest() {
+  showDeleteRequest() {
     this.isVerifyingDelete = true;
   }
 

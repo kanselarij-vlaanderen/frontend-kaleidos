@@ -1,9 +1,14 @@
 <div class="vlc-procedure-step vlc-procedure-step--nopadding">
   <div class="vlc-procedure-step__badge-wrapper">
-    <Auk::Badge @icon="check" @skin="success" @size="medium" class="vlc-procedure-step__badge" />
+    <Auk::Badge
+      @icon="check"
+      @skin="success"
+      @size="medium"
+      class="vlc-procedure-step__badge"
+    />
   </div>
-  <Auk::Panel >
-    <Auk::Panel::Header>
+  <Auk::Panel>
+    <Auk::Panel::Header @size="large">
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
@@ -11,7 +16,7 @@
               {{t "received-proof"}}
             </h4>
             <p class="auk-u-text-small auk-u-m-0">
-              {{moment-format @proofingActivity.endDate  "DD.MM.YYYY"}}
+              {{moment-format @proofingActivity.endDate "DD.MM.YYYY"}}
             </p>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
@@ -21,8 +26,10 @@
     <Auk::Panel::Body>
       <Auk::List>
         {{#each @proofingActivity.generatedPieces as |piece|}}
-          <Auk::List::Item class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
-            <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced">
+          <Auk::List::Item
+            class="auk-o-flex auk-o-flex--spaced-wide"
+          >
+            <div class="auk-o-flex auk-o-flex--spaced">
               <Auk::Badge @icon="paperclip" @size="regular" />
               <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
             </div>

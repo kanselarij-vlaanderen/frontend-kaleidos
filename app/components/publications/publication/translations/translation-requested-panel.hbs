@@ -19,7 +19,7 @@
           <actions.Item>
             {{#unless this.isTranslationActivityFinished}}
               <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
-                <Menu.Item @skin="danger" @disabled={{this.isTranslationActivityFinished}} {{on "click" this.promptDeleteRequest}}>
+                <Menu.Item @skin="danger" @disabled={{this.isTranslationActivityFinished}} {{on "click" this.showDeleteRequest}}>
                   {{t "delete-translation-request"}}
                 </Menu.Item>
               </DropdownMenu>
@@ -77,10 +77,13 @@
 </div>
 
 {{#if this.isVerifyingDelete}}
-  <WebComponents::VlModalVerify
-    @title={{t "delete-translation-request"}}
-    @message={{t "delete-translation-request-message"}}
-    @cancel={{this.cancelDeleteRequest}}
-    @verify={{this.deleteRequest}}
-  />
+  <Auk::Modal>
+    <Auk::Modal::Header @title={{t "delete-translation-request"}} @onClose={{this.cancelDeleteRequest}} />
+    <Auk::Modal::Body>
+      <p>{{t "delete-translation-request-message"}}</p>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.deleteRequest}}>
+      <Auk::Button @skin="danger-primary" @icon="trash" {{on "click" this.deleteRequest}}>{{t "delete"}}</Auk::Button>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
 {{/if}}
