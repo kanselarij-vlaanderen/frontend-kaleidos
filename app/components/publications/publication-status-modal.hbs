@@ -4,6 +4,7 @@
     <div class="auk-form-group">
       <Auk::Label for="blockInput">{{t "status"}}</Auk::Label>
       <PowerSelect
+        data-test-publication-status-select
         @options={{this.publicationStatusses}}
         @selected={{this.publicationStatus}}
         @onChange={{this.selectPublicationStatus}}
@@ -45,6 +46,7 @@
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
     <Auk::Button
+      data-test-publication-status-save
       @skin="primary"
       @loading={{this.savePublicationStatus.isRunning}}
       disabled={{this.isDisabledSave}}

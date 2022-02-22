@@ -1,11 +1,11 @@
 import Route from '@ember/routing/route';
 
 export default class PublicationsPublicationTranslationsRoute extends Route {
-  async model() {
-    return await this.modelFor('publications.publication').translationSubcase;
+  model() {
+    return this.modelFor('publications.publication').translationSubcase;
   }
 
-  async afterModel() {
+  afterModel() {
     this.publicationFlow = this.modelFor('publications.publication');
   }
 

@@ -1,33 +1,40 @@
 <div class="vlc-procedure-step vlc-procedure-step--nopadding">
   <div class="vlc-procedure-step__badge-wrapper">
-    <Auk::Badge @icon="mail" @skin="primary" @size="medium" class="vlc-procedure-step__badge"/>
+    <Auk::Badge
+      @icon="mail"
+      @skin="primary"
+      @size="medium"
+      class="vlc-procedure-step__badge"
+    />
   </div>
   <Auk::AccordionPanel @isDefaultActive={{true}} as |accordionPanel|>
     <accordionPanel.Header
       @size="large"
       @title={{t "requested-translation"}}
-      @subtitle={{moment-format @requestActivity.startDate  "DD.MM.YYYY"}}
-    as |header|>
-      <header.Actions as |actions|>
-        <actions.Item>
-          <DropdownMenu
-            @skin="borderless"
-            @icon="three-dots"
-            as |Menu|>
-            <Menu.Item
-              @skin="danger"
-              {{on "click" this.promptDeleteRequest}}
-            >
-              {{t "delete-request"}}
-            </Menu.Item>
-          </DropdownMenu>
-        </actions.Item>
-      </header.Actions>
+      @subtitle={{moment-format @requestActivity.startDate "DD.MM.YYYY"}}
+      as |header|
+    >
+      {{#unless this.loadTranslationActivity.isRunning}}
+        <header.Actions as |actions|>
+          <actions.Item>
+            {{#unless this.isTranslationActivityFinished}}
+              <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
+                <Menu.Item @skin="danger" @disabled={{this.isTranslationActivityFinished}} {{on "click" this.promptDeleteRequest}}>
+                  {{t "delete-translation-request"}}
+                </Menu.Item>
+              </DropdownMenu>
+            {{/unless}}
+          </actions.Item>
+        </header.Actions>
+      {{/unless}}
+
     </accordionPanel.Header>
     <accordionPanel.Body>
       {{#each @requestActivity.usedPieces as |piece|}}
         <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
-          <Auk::List::Item class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
+          <Auk::List::Item
+            class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide"
+          >
             <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced">
               <Auk::Badge @icon="paperclip" @size="regular" />
               <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
@@ -60,9 +67,8 @@
           {{! TODO: Remove inline style }}
           {{! template-lint-disable no-inline-styles }}
           {{! p-tag opening and closing on 1 line to prevent whitespace to be rendered. }}
-          <p style="white-space:pre-line;">
-            {{@requestActivity.email.message}}
-          </p>
+          {{! prettier-ignore }}
+          <p style="white-space:pre-line;">{{@requestActivity.email.message}}</p>
           {{! template-lint-enable no-inline-styles }}
         </div>
       {{/if}}
@@ -72,8 +78,8 @@
 
 {{#if this.isVerifyingDelete}}
   <WebComponents::VlModalVerify
-    @title={{t "delete-request"}}
-    @message={{t "delete-request-message"}}
+    @title={{t "delete-translation-request"}}
+    @message={{t "delete-translation-request-message"}}
     @cancel={{this.cancelDeleteRequest}}
     @verify={{this.deleteRequest}}
   />

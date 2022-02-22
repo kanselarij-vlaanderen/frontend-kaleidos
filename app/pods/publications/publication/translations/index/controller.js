@@ -1,72 +1,74 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { task } from 'ember-concurrency-decorators';
+import { task, dropTask } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { isEmpty } from '@ember/utils';
 
-export default class PublicationsPublicationTranslationsController extends Controller {
+export default class PublicationsPublicationTranslationsIndexController extends Controller {
   @service store;
   @service publicationService;
 
   @tracked publicationFlow;
   @tracked translationSubcase;
-  @tracked publicationSubcase;
 
   @tracked showTranslationUploadModal = false;
   @tracked showTranslationRequestModal = false;
 
-  get isRequestingDisabled() {
-    return this.translationSubcase.isFinished;
+  get isTranslationUploadDisabled() {
+    return this.latestTranslationActivity == null;
   }
 
-  get isTranslationUploadDisabled() {
-    return this.model.length === 0;
+  get latestTranslationActivity() {
+    const timelineActivity = this.model.find((timelineActivity) => timelineActivity.isTranslationActivity);
+    return timelineActivity ? timelineActivity.activity : null;
   }
 
   @task
   *saveTranslationUpload(translationUpload) {
-    // get latest translation activity
-    const translationActivity = this.model.filter((activity) => !isEmpty(activity.translationActivity))[0].translationActivity;
-
-    // triggers call
-    const language = yield translationActivity.language;
+    const translationActivity = this.latestTranslationActivity;
 
     const pieceSaves = [];
-    for (let piece of translationUpload.generatedPieces){
+    const containerSaves = [];
 
+    const language = yield translationActivity.language;
+    for (let piece of translationUpload.uploadedPieces) {
       piece.receivedDate = translationUpload.receivedAtDate;
       piece.language = language;
-      piece.translationActivityGeneratedBy= translationActivity;
-
+      piece.translationActivityGeneratedBy = translationActivity;
       pieceSaves.push(piece.save());
     }
 
     translationActivity.endDate = translationUpload.receivedAtDate;
     const translationActivitySave = translationActivity.save();
 
+    let translationSubcaseSave;
     if (
-      translationUpload.receivedAtDate < this.translationSubcase.receivedDate ||
-      !this.translationSubcase.receivedDate
+      !this.translationSubcase.receivedDate ||
+      translationUpload.receivedAtDate < this.translationSubcase.receivedDate
     ) {
       this.translationSubcase.receivedDate = translationUpload.receivedAtDate;
-      yield this.translationSubcase.save();
+      translationSubcaseSave = this.translationSubcase.save();
     }
 
-    if (translationUpload.isTranslationIn) {
+    if (translationUpload.mustUpdatePublicationStatus) {
       yield this.publicationService.updatePublicationStatus(
         this.publicationFlow,
         CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_IN,
         translationUpload.receivedAtDate
       );
 
-      this.publicationSubcase.endDate = translationUpload.receivedAtDate;
-      yield this.publicationSubcase.save();
+      this.translationSubcase.endDate = translationUpload.receivedAtDate;
+      translationSubcaseSave = this.translationSubcase.save();
     }
 
-    yield Promise.all([translationActivitySave, pieceSaves]);
+    yield Promise.all([
+      translationActivitySave,
+      ...pieceSaves,
+      containerSaves,
+      translationSubcaseSave,
+    ]);
 
     this.send('refresh');
     this.showTranslationUploadModal = false;
@@ -75,47 +77,50 @@ export default class PublicationsPublicationTranslationsController extends Contr
   @task
   *saveTranslationRequest(translationRequest) {
     const now = new Date();
-    const usedPieces = [];
 
-    for (let piece of translationRequest.usedPieces){
+    const uploadedPieces = translationRequest.uploadedPieces;
+    const dutch = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
+    yield Promise.all(uploadedPieces.map((piece) => {
       piece.translationSubcaseSourceFor = this.translationSubcase;
-      const documentContainer = yield piece.documentContainer;
-      yield documentContainer.save();
-      piece.pages = translationRequest.pagesAmount;
-      piece.words = translationRequest.wordsAmount;
-      piece.language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
+      piece.language = dutch;
+      return piece.save();
+    }));
 
-      yield piece.save();
-      usedPieces.push(piece);
-    }
-
-    const requestActivity = yield this.store.createRecord('request-activity', {
+    const requestActivity = this.store.createRecord('request-activity', {
       startDate: now,
       translationSubcase: this.translationSubcase,
-      usedPieces: usedPieces,
+      usedPieces: uploadedPieces,
     });
     yield requestActivity.save();
 
-    const french = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.FR);
-
-    const translationActivity = yield this.store.createRecord('translation-activity', {
-      startDate: now,
-      dueDate: translationRequest.translationDueDate,
-      title: translationRequest.subject,
-      subcase: this.translationSubcase,
-      requestActivity: requestActivity,
-      usedPieces: usedPieces,
-      language: french,
-    });
+    const translationActivity = this.store.createRecord(
+      'translation-activity',
+      {
+        startDate: now,
+        dueDate: translationRequest.translationDueDate,
+        title: translationRequest.subject,
+        subcase: this.translationSubcase,
+        requestActivity: requestActivity,
+        usedPieces: uploadedPieces,
+        language: yield this.store.findRecordByUri(
+          'language',
+          CONSTANTS.LANGUAGES.FR
+        ),
+      }
+    );
     yield translationActivity.save();
 
-    const filePromises = usedPieces.mapBy('file');
-    const filesPromise = Promise.all(filePromises);
+    this.translationSubcase.dueDate = translationRequest.translationDueDate;
+    if (this.translationSubcase.hasDirtyAttributes) {
+      yield this.translationSubcase.save();
+    }
 
-    const outboxPromise = this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);
-    const mailSettingsPromise = this.store.queryOne('email-notification-setting');
-    const [files,outbox, mailSettings] = yield Promise.all([filesPromise,outboxPromise, mailSettingsPromise]);
-    const mail = yield this.store.createRecord('email', {
+    const [files, outbox, mailSettings] = yield Promise.all([
+      Promise.all(uploadedPieces.mapBy('file')),
+      this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
+      this.store.queryOne('email-notification-setting'),
+    ]);
+    const mail = this.store.createRecord('email', {
       to: mailSettings.translationRequestToEmail,
       from: mailSettings.defaultFromEmail,
       folder: outbox,
@@ -127,40 +132,42 @@ export default class PublicationsPublicationTranslationsController extends Contr
     yield mail.save();
 
     // PUBLICATION-STATUS
-    const pubStatusChange = this.publicationService.updatePublicationStatus(
+    yield this.publicationService.updatePublicationStatus(
       this.publicationFlow,
       CONSTANTS.PUBLICATION_STATUSES.TO_TRANSLATIONS
     );
-    yield pubStatusChange;
 
     this.send('refresh');
     this.showTranslationRequestModal = false;
   }
 
-  @task
-  *deleteRequest(requestActivity){
-    const saves = [];
+  @dropTask
+  *deleteRequest(requestActivity) {
+    const deletePromises = [];
 
     const translationActivity = yield requestActivity.translationActivity;
-    saves.push(translationActivity.destroyRecord());
+    deletePromises.push(translationActivity.destroyRecord());
 
     const mail = yield requestActivity.email;
-    saves.push(mail.destroyRecord());
+    if (mail) {
+      deletePromises.push(mail.destroyRecord());
+    }
 
-    saves.push(requestActivity.destroyRecord());
+    deletePromises.push(requestActivity.destroyRecord());
 
     const pieces = yield requestActivity.usedPieces;
 
     for (const piece of pieces.toArray()) {
-      const filePromise = piece.file;
-      const documentContainerPromise = piece.documentContainer;
-      const [file, documentContainer] = yield Promise.all([filePromise, documentContainerPromise]);
+      const [file, documentContainer] = yield Promise.all([
+        piece.file,
+        piece.documentContainer,
+      ]);
 
-      saves.push(piece.destroyRecord());
-      saves.push(file.destroyRecord());
-      saves.push(documentContainer.destroyRecord());
+      deletePromises.push(piece.destroyRecord());
+      deletePromises.push(file.destroyRecord());
+      deletePromises.push(documentContainer.destroyRecord());
     }
-    yield Promise.all(saves);
+    yield Promise.all(deletePromises);
     this.send('refresh');
   }
 

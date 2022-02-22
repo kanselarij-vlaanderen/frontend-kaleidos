@@ -16,6 +16,10 @@
 @import 'auk-base'; // sourced from "au-kaleidos-css" npm package
 
 
+// AUK ICONS STYLING
+@import 'auk-icons'; // sourced from "au-kaleidos-icons" npm package
+
+
 // GOVFLANDERS COMPONENTS
 @import 'govflanders/components/_alert';
 @import 'govflanders/components/_datepicker';
@@ -43,16 +47,22 @@
 @import 'auk-components'; // sourced from "au-kaleidos-css" npm package
 
 
-// LOCAL AUK ADDITIONS
-@import 'au-kaleidos-css/auk-additions';
+// LOCAL AUK EXTENSIONS & ADDITIONS
+@import 'auk/auk-additions';
+
+
+// EXTERNAL ADDON OVERRIDES
+@import 'addon-overrides/ember-power-select';
+@import 'addon-overrides/ember-tag-input';
+@import 'addon-overrides/ember-tooltip';
 
 
 // LAYOUT STYLING
-@import 'custom-application/m-header';
 @import 'layout/compare-agenda-list';
 @import 'layout/logo-header';
 @import 'layout/printable-agenda';
 @import 'layout/printable-newsletter';
+
 
 // PRINT STYLING
 @import 'print/general';

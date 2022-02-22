@@ -4,14 +4,25 @@
     @onClose={{perform this.cancel}}
   />
   <Auk::Modal::Body>
-    <Auk::FileUploader
-        @multiple={{true}}
-        @onUpload={{this.uploadPiece}}
-      />
+    <Auk::FileUploader @multiple={{false}} @onUpload={{this.uploadPiece}} />
+    <Auk::List>
+      {{#each this.uploadedPieces as |piece|}}
+        <Auk::List::Item
+          class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide"
+        >
+          <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced">
+            <Auk::Badge @icon="paperclip" @size="regular" />
+            <h5 class="auk-h4 auk-u-m-0">
+              {{piece.file.downloadFilename}}
+            </h5>
+          </div>
+        </Auk::List::Item>
+      {{/each}}
+    </Auk::List>
     <div class="auk-form-group auk-u-mt-4">
       <Auk::Checkbox
         @label={{t "set-status-translation-in"}}
-        @checked={{this.isTranslationIn}}
+        @checked={{this.mustUpdatePublicationStatus}}
         {{on "input" this.setTranslationInStatus}}
       />
     </div>

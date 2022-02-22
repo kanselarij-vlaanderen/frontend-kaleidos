@@ -1,31 +1,36 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency-decorators';
+import { task, dropTask } from 'ember-concurrency-decorators';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 
 export default class PublicationsTranslationTranslationUploadModalComponent extends Component {
   @service store;
 
-  @tracked generatedPieces = [];
+  @tracked uploadedPieces = [];
   @tracked receivedAtDate = new Date();
-  @tracked isTranslationIn = false;
+  @tracked mustUpdatePublicationStatus = false;
 
   get isCancelDisabled() {
     return this.cancel.isRunning || this.save.isRunning;
   }
 
   get isSaveDisabled() {
-    return this.generatedPieces.length === 0 || isEmpty(this.receivedAtDate) || this.cancel.isRunning;
+    return (
+      this.uploadedPieces.length === 0 ||
+      isEmpty(this.receivedAtDate) ||
+      this.cancel.isRunning
+    );
   }
 
   @action
-  uploadPiece(file) {
+  async uploadPiece(file) {
     const now = new Date();
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
     });
+    await documentContainer.save();
     const piece = this.store.createRecord('piece', {
       created: now,
       modified: now,
@@ -34,33 +39,25 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
       name: file.filenameWithoutExtension,
       documentContainer: documentContainer,
     });
-
-    this.generatedPieces.pushObject(piece);
+    this.uploadedPieces.pushObject(piece);
   }
 
-  @task({
-    drop: true,
-  })
+  @dropTask
   *cancel() {
     // necessary because close-button is not disabled when saving
     if (this.save.isRunning) {
       return;
     }
-
-    if (this.generatedPieces.length > 0) {
-      for (let piece of this.generatedPieces) {
-        yield this.deleteUploadedPiece.perform(piece);
-      }
-    }
+    yield Promise.all(this.uploadedPieces.map((piece) => this.deleteUploadedPiece.perform(piece)));
     this.args.onCancel();
   }
 
   @task
   *save() {
     yield this.args.onSave({
-      generatedPieces: this.generatedPieces,
+      uploadedPieces: this.uploadedPieces,
       receivedAtDate: this.receivedAtDate,
-      isTranslationIn: this.isTranslationIn,
+      mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
   }
 
@@ -68,22 +65,26 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
   setReceivedAtDate(selectedDates) {
     if (selectedDates.length) {
       this.receivedAtDate = selectedDates[0];
-    } else { // this case occurs when users manually empty the date input-field
+    } else {
+      // this case occurs when users manually empty the date input-field
       this.receivedAtDate = undefined;
     }
   }
 
   @action
   setTranslationInStatus(event) {
-    this.isTranslationIn = event.target.checked;
+    this.mustUpdatePublicationStatus = event.target.checked;
   }
 
   @task
   *deleteUploadedPiece(piece) {
     const file = yield piece.file;
-    yield file.destroyRecord();
     const documentContainer = yield piece.documentContainer;
-    yield documentContainer.destroyRecord();
+    yield Promise.all([
+      file.destroyRecord(),
+      documentContainer.destroyRecord(),
+    ]);
     yield piece.destroyRecord();
+    this.uploadedPieces.removeObject(piece);
   }
 }
