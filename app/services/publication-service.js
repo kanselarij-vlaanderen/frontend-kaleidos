@@ -213,7 +213,9 @@ export default class PublicationService extends Service {
       args.uploads.map(async (upload) => {
         await upload.piece.save();
 
-        const documentContainer = upload.documentContainer;
+        const documentContainer = await upload.documentContainer;
+        documentContainer.pieces.pushObject(upload.piece);
+        // save document container asynchronously
         saves.push(documentContainer.save());
 
         return upload.piece;
@@ -272,6 +274,7 @@ export default class PublicationService extends Service {
       outboxPromise,
       mailSettingsPromise,
     ]);
+    const files = args.uploads.mapBy('file');
     const mail = this.store.createRecord('email', {
       to: mailSettings.proofRequestToEmail,
       cc: mailSettings.proofRequestCcEmail,
@@ -279,7 +282,7 @@ export default class PublicationService extends Service {
       folder: outbox,
       subject: args.subject,
       message: args.message,
-      attachments: args.files,
+      attachments: files,
       requestActivity: requestActivity,
     });
     const emailSave = mail.save();
