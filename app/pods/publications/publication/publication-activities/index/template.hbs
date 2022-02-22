@@ -25,18 +25,14 @@
     <Utils::Generic::Timeline::Timeline @model={{@model}} as |event Component|>
       {{#if event.isRequest}}
         {{!Aanvraag}}
-        <Component @badgeIcon="mail" @badgeSkin="primary">
-          <Publications::Publication::PublicationActivities::Index::Timeline::PublicationsRequestEventPanel
-            @requestActivity={{event.requestActivity}}
-          />
-        </Component>
+        <Publications::Publication::PublicationActivities::Index::Timeline::PublicationsRequestEventPanel
+          @requestActivity={{event.requestActivity}}
+        />
       {{else}}
         {{!Publicatie}}
-        <Component @badgeIcon="check" @badgeSkin="success">
-          <Publications::Publication::PublicationActivities::Index::Timeline::PublicationsPublicationEventPanel
-            @publicationActivity={{event.publicationActivity}}
-          />
-        </Component>
+        <Publications::Publication::PublicationActivities::Index::Timeline::PublicationsPublicationEventPanel
+          @publicationActivity={{event.publicationActivity}}
+        />
       {{/if}}
     </Utils::Generic::Timeline::Timeline>
   </Auk::Panel::Body>

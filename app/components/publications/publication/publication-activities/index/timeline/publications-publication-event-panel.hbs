@@ -1,18 +1,23 @@
-<Auk::Panel>
-  <Auk::Panel::Header>
-    <Auk::Toolbar as |Toolbar|>
-      <Toolbar.Group as |Group|>
-        <Group.Item>
-          <h4 class="auk-panel__title auk-panel__title--small">
-            {{@publicationActivity.title}}
-          </h4>
-          <span class="auk-u-text-small auk-u-m-0">
-            {{moment-format @publicationActivity.startDate}}
-          </span>
-        </Group.Item>
-      </Toolbar.Group>
-      {{!TODO? menu button}}
-    </Auk::Toolbar>
-  </Auk::Panel::Header>
-  {{!TODO panel body or remove bottom border if no body}}
-</Auk::Panel>
+<Utils::Generic::Timeline::TimelineEvent
+  @badgeIcon="check"
+  @badgeSkin="success"
+>
+  <Auk::Panel>
+    <Auk::Panel::Header>
+      <Auk::Toolbar as |Toolbar|>
+        <Toolbar.Group as |Group|>
+          <Group.Item>
+            <h4 class="auk-panel__title auk-panel__title--small">
+              {{@publicationActivity.title}}
+            </h4>
+            <span class="auk-u-text-small auk-u-m-0">
+              {{moment-format @publicationActivity.startDate}}
+            </span>
+          </Group.Item>
+        </Toolbar.Group>
+        {{!TODO? menu button}}
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    {{!TODO panel body or remove bottom border if no body}}
+  </Auk::Panel>
+</Utils::Generic::Timeline::TimelineEvent>
