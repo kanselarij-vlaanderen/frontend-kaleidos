@@ -1,10 +1,17 @@
 import Component from '@glimmer/component';
 
 /**
- *
- * @argument {Boolean} borderless
+ * @argument size {String}: "regular", "large" ("regular" is the default size)
+ * @argument borderless {Boolean}
  */
-export default class PanelHeader extends Component {
+export default class Header extends Component {
+  get sizeClass() {
+    if (this.args.size) {
+      return `auk-panel__header--${this.args.size}`;
+    }
+    return 'auk-panel__header--regular';
+  }
+
   get borderless() {
     if (this.args.borderless) {
       return 'auk-panel__header--borderless';

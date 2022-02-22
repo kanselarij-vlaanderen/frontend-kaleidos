@@ -6,22 +6,6 @@ import publication from '../../selectors/publication.selectors';
 import auk from '../../selectors/auk.selectors';
 
 context('Publications overview tests', () => {
-  // TODO-COMMAND we probably want to change the status via a command in further testing
-  function createPublicationChangeStatus(fields) {
-    cy.createPublication(fields);
-    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
-    cy.get(publication.sidebar.open).click(); // TODO-COMMAND test if sidebar is already open
-    cy.get(publication.statusSelector).find(dependency.emberPowerSelect.trigger)
-      .click();
-    cy.get(dependency.emberPowerSelect.option).contains(fields.newStatus)
-      .click();
-    if (fields.newStatus === 'Afgevoerd') {
-      cy.get(publication.sidebar.confirmWithdraw).click();
-    }
-    cy.wait('@patchPublicationFlow');
-    cy.get(publication.publicationNav.goBack).click();
-  }
-
   const searchFields = {
     number: 1401,
     shortTitle: 'Besluitvorming Vlaamse Regering',
@@ -39,22 +23,25 @@ context('Publications overview tests', () => {
     cy.logout();
   });
 
-  it.skip('should setup a publication for later search tests', () => {
+  it('should setup a publication for later search tests', () => {
     // needs 15 seconds for reindex in testsuite
     cy.createPublication(searchFields);
-    cy.get(publication.sidebar.open).click();
     cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
     cy.intercept('POST', '/identifications').as('postNumacNumber');
-    cy.get(publication.sidebar.remark).type(searchFields.remark);
+    cy.get(publication.remark.edit).click();
+    cy.get(publication.remark.textarea).type(searchFields.remark);
+    cy.get(publication.remark.save).click();
     cy.wait('@patchPublicationFlow');
-    cy.get(publication.sidebar.numacNumber).find(dependency.emberTagInput.input)
+    cy.get(publication.publicationCaseInfo.edit).click();
+    cy.get(publication.publicationCaseInfo.numacNumber).find(dependency.emberTagInput.input)
       .click()
-      .type(`${searchFields.numacNumber}{enter}`)
-      .wait('@postNumacNumber');
+      .type(`${searchFields.numacNumber}{enter}`);
+    cy.get(publication.publicationCaseInfo.save).click();
+    cy.wait('@postNumacNumber');
   });
 
   // TODO-SETUP once we have default data, this test could be moved to click-table.spec
-  it.skip('should open a publication after clicking a row', () => {
+  it('should open a publication after clicking a row', () => {
     cy.get(publication.publicationsIndex.loading).should('not.exist');
     cy.get(publication.publicationsIndex.dataTable).find(publication.publicationTableRow.rows)
       .first()
@@ -63,20 +50,13 @@ context('Publications overview tests', () => {
       .should('contain', '/dossier');
   });
 
-  it.skip('should test all the result amount options shown options in overview', () => {
-    // const fields = {
-    //   number: 1404,
-    //   shortTitle: 'test',
-    // };
+  it('should test all the result amount options shown options in overview', () => {
     const elementsToCheck = [
       25,
       50,
       100,
       200
     ];
-
-    // cy.createPublication(fields);
-    // cy.get(publication.publicationNav.goBack).click();
     elementsToCheck.forEach((option) => {
       // In this loop, the options list should go away after url change but it doesn't always, creating a second option list that covers elements
       cy.get(dependency.emberPowerSelect.option).should('not.exist');
@@ -89,19 +69,19 @@ context('Publications overview tests', () => {
     });
   });
 
-  it.skip('should check and uncheck all settings', () => {
+  it('should check and uncheck all settings', () => {
     const columnKeyNames = [
       'isUrgent',
       'publicationNumber',
       'numacNumber',
       'shortTitle',
       'remark',
-      // 'pageCount', // hidden by default
+      'pageCount',
       'decisionDate',
       'openingDate',
-      // 'translationRequestDate', // hidden by default
+      'translationRequestDate',
       'translationDueDate',
-      // 'proofRequestDate', // hidden by default
+      'proofRequestDate',
       'proofReceivedDate',
       'proofPrintCorrector',
       'publicationTargetDate',
@@ -115,92 +95,28 @@ context('Publications overview tests', () => {
 
     cy.get(publication.publicationsIndex.configIcon).click();
     columnKeyNames.forEach((columnKeyName) => {
-      cy.get(`[${publication.publicationsIndex.columnHeader}${columnKeyName}]`);
-      cy.get(`[${publication.tableDisplayConfig.option}${columnKeyName}]`).parent(auk.checkbox)
-        .click();
-      cy.get(`[${publication.publicationsIndex.columnHeader}${columnKeyName}]`).should('not.exist');
-      cy.get(`[${publication.tableDisplayConfig.option}${columnKeyName}]`).parent(auk.checkbox)
-        .click();
-      cy.get(`[${publication.publicationsIndex.columnHeader}${columnKeyName}]`);
+      cy.get(`[${publication.tableDisplayConfig.option}${columnKeyName}]`).invoke('prop', 'checked')
+        .then((checked) => {
+          if (checked) {
+            cy.get(`[${publication.publicationsIndex.columnHeader}${columnKeyName}]`);
+            cy.get(`[${publication.tableDisplayConfig.option}${columnKeyName}]`).parent(auk.checkbox)
+              .click();
+            cy.get(`[${publication.publicationsIndex.columnHeader}${columnKeyName}]`).should('not.exist');
+            cy.get(`[${publication.tableDisplayConfig.option}${columnKeyName}]`).parent(auk.checkbox)
+              .click();
+          } else {
+            cy.get(`[${publication.publicationsIndex.columnHeader}${columnKeyName}]`).should('not.exist');
+            cy.get(`[${publication.tableDisplayConfig.option}${columnKeyName}]`).parent(auk.checkbox)
+              .click();
+            cy.get(`[${publication.publicationsIndex.columnHeader}${columnKeyName}]`);
+            cy.get(`[${publication.tableDisplayConfig.option}${columnKeyName}]`).parent(auk.checkbox)
+              .click();
+          }
+        });
     });
   });
 
-  it.skip('should test the filters in overview', () => {
-    const fields1 = {
-      number: 1405,
-      shortTitle: 'testfilters1',
-      newStatus: 'Afgevoerd',
-    };
-    const fields2 = {
-      number: 1406,
-      shortTitle: 'testfilters2',
-      newStatus: 'Gepauzeerd',
-    };
-    const fields3 = {
-      number: 1407,
-      shortTitle: 'testfilters3',
-      newStatus: 'Gepubliceerd',
-    };
-    // TODO-setup add default dataset to use (1 publication for each possible status)
-    createPublicationChangeStatus(fields1);
-    createPublicationChangeStatus(fields2);
-    createPublicationChangeStatus(fields3);
-    cy.intercept('GET', '/decisions?filter**').as('getDecisionsFilter');
-    // TODO-publication we want to enable this when there is MR data (preferably in default set)
-    // cy.get(publication.publicationsIndex.filterContent).click();
-    // cy.get(publication.publicationsFilter.minister).parent(auk.checkbox)
-    //   .click();
-    // cy.get(publication.publicationsFilter.save).click();
-    // cy.wait('@getDecisionsFilter');
-    // cy.get(publication.publicationTableRow.row.source).should('not.contain', 'via Ministerraad');
-
-    cy.get(publication.publicationsIndex.filterContent).click();
-    cy.get(publication.publicationsFilter.minister).parent(auk.checkbox)
-      .click();
-    cy.get(publication.publicationsFilter.notMinister).parent(auk.checkbox)
-      .click();
-    cy.get(publication.publicationsFilter.save).click();
-    cy.get(auk.emptyState);
-    // cy.get(publication.publicationTableRow.row.source).should('not.contain', 'Niet via Ministerraad');
-
-    cy.get(publication.publicationsIndex.filterContent).click();
-    cy.get(publication.publicationsFilter.notMinister).parent(auk.checkbox)
-      .click();
-    cy.get(publication.publicationsFilter.published).parent(auk.checkbox)
-      .click();
-    cy.get(publication.publicationsFilter.save).click();
-    cy.wait('@getDecisionsFilter');
-    cy.get(publication.publicationTableRow.row.status).should('not.contain', fields3.newStatus);
-
-    cy.get(publication.publicationsIndex.filterContent).click();
-    cy.get(publication.publicationsFilter.published).parent(auk.checkbox)
-      .click();
-    cy.get(publication.publicationsFilter.paused).parent(auk.checkbox)
-      .click();
-    cy.get(publication.publicationsFilter.save).click();
-    cy.wait('@getDecisionsFilter');
-    cy.get(publication.publicationTableRow.row.status).should('not.contain', fields2.newStatus);
-
-    cy.get(publication.publicationsIndex.filterContent).click();
-    cy.get(publication.publicationsFilter.paused).parent(auk.checkbox)
-      .click();
-    cy.get(publication.publicationsFilter.toPublish).parent(auk.checkbox)
-      .click();
-    cy.get(publication.publicationsFilter.save).click();
-    cy.wait('@getDecisionsFilter');
-    cy.get(publication.publicationTableRow.row.status).should('not.contain', 'Te publiceren');
-
-    cy.get(publication.publicationsIndex.filterContent).click();
-    cy.get(publication.publicationsFilter.toPublish).parent(auk.checkbox)
-      .click();
-    cy.get(publication.publicationsFilter.withdrawn).parent(auk.checkbox)
-      .click();
-    cy.get(publication.publicationsFilter.save).click();
-    cy.wait('@getDecisionsFilter');
-    cy.get(publication.publicationTableRow.row.status).should('not.contain', fields1.newStatus);
-  });
-
-  it.skip('should test the short title tooltip', () => {
+  it('should test the short title tooltip', () => {
     const fields = {
       number: 1409,
       shortTitle: 'test met extra lange korte titel, lets gooooooooooooooooooooooooooo oooooooooooooooooooooooo ooooooooooooooooooooooooooooooo oooooooooooooooooooooooo oooooooooooooooooooo end',
@@ -209,19 +125,23 @@ context('Publications overview tests', () => {
     // test in detail view
     cy.get(publication.publicationHeader.shortTitle).contains('test met extra lange korte titel,')
       .should('not.contain', 'end')
+      .parent()
+      .find(dependency.emberTooltip.target)
       .trigger('mouseenter');
-    cy.get(auk.abbreviatedText).should('be.visible')
+    cy.get(dependency.emberTooltip.inner).should('be.visible')
       .should('contain', 'end');
     // test in overview table
     cy.get(publication.publicationNav.goBack).click();
     cy.get(publication.publicationTableRow.row.shortTitle).contains('test met extra lange korte titel,')
       .should('not.contain', 'end')
+      .parent()
+      .find(dependency.emberTooltip.target)
       .trigger('mouseenter');
-    cy.get(auk.abbreviatedText).should('be.visible')
+    cy.get(dependency.emberTooltip.inner).should('be.visible')
       .should('contain', 'end');
   });
 
-  it.skip('should test the pagination by clicking previous and next', () => {
+  it('should test the pagination by clicking previous and next', () => {
     cy.visit('/publicaties?aantal=1');
     cy.wait(1000);
     // This test should work regardless of the amount of publications, but may take longer and longer
@@ -250,8 +170,8 @@ context('Publications overview tests', () => {
       });
   });
 
-  it.skip('should test the search function', () => {
-    // this is data from previous test
+  it('should test the search function', () => {
+    // this is data from first test
     for (const [key, value] of Object.entries(searchFields)) {
       cy.intercept('GET', '/publication-flows/search**').as('searchPublicationFlows');
       cy.log(`searching for ${key}`);
@@ -263,5 +183,44 @@ context('Publications overview tests', () => {
       cy.get(publication.publicationHeader.shortTitle).should('contain', searchFields.shortTitle);
       cy.get(publication.publicationNav.goBack).click();
     }
+  });
+
+  it('should test changing to all statussen', () => {
+    const defaultStatus = 'Opgestart';
+    const statusList = [
+      'Opgestart',
+      'Naar vertaaldienst',
+      'Vertaling in',
+      'Drukproef aangevraagd',
+      'Proef in',
+      'Rappel proef',
+      'Proef verbeterd',
+      'Publicatie gevraagd',
+      'Gepubliceerd',
+      'Geannuleerd',
+      'Gepauzeerd'
+    ];
+    const fields1 = {
+      number: 1405,
+      shortTitle: 'test status change in overview',
+    };
+
+    cy.createPublication(fields1);
+    statusList.forEach((status) => {
+      if (status !== defaultStatus) {
+        cy.changePublicationStatus(status);
+      }
+      cy.get(publication.statusPill.contentLabel).contains(status);
+      cy.get(publication.publicationNav.goBack).click();
+      cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields1.number)
+        .parent()
+        .as('row');
+      cy.get('@row')
+        .find(publication.publicationTableRow.row.status)
+        .contains(status);
+      cy.get('@row')
+        .find(publication.publicationTableRow.row.goToPublication)
+        .click();
+    });
   });
 });

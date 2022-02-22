@@ -1,95 +1,90 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency-decorators';
-import {
-  ValidatorSet, Validator
-} from 'frontend-kaleidos/utils/validators';
+import { task, dropTask } from 'ember-concurrency-decorators';
+import { inject as service } from '@ember/service';
+import { isEmpty } from '@ember/utils';
 
 export default class PublicationsTranslationTranslationUploadModalComponent extends Component {
-  validators;
+  @service store;
 
-  @tracked file;
-  @tracked name;
-  @tracked isSourceForProofPrint = false;
+  @tracked uploadedPieces = [];
   @tracked receivedAtDate = new Date();
-  @tracked isTranslationIn = false;
-
-  constructor() {
-    super(...arguments);
-
-    this.initValidation();
-  }
-
-  get isLoading() {
-    return this.save.isRunning || this.cancel.isRunning;
-  }
+  @tracked mustUpdatePublicationStatus = false;
 
   get isCancelDisabled() {
     return this.cancel.isRunning || this.save.isRunning;
   }
 
   get isSaveDisabled() {
-    return !this.file || this.file.isDeleted || !this.validators.areValid;
+    return (
+      this.uploadedPieces.length === 0 ||
+      isEmpty(this.receivedAtDate) ||
+      this.cancel.isRunning
+    );
   }
 
   @action
-  onUploadFile(file) {
-    this.file = file;
-    this.name = file.filenameWithoutExtension;
+  async uploadPiece(file) {
+    const now = new Date();
+    const documentContainer = this.store.createRecord('document-container', {
+      created: now,
+    });
+    await documentContainer.save();
+    const piece = this.store.createRecord('piece', {
+      created: now,
+      modified: now,
+      file: file,
+      confidential: false,
+      name: file.filenameWithoutExtension,
+      documentContainer: documentContainer,
+    });
+    this.uploadedPieces.pushObject(piece);
   }
 
-  @task({
-    drop: true,
-  })
+  @dropTask
   *cancel() {
     // necessary because close-button is not disabled when saving
     if (this.save.isRunning) {
       return;
     }
-
-    if (this.file) {
-      yield this.file.destroyRecord();
-    }
+    yield Promise.all(this.uploadedPieces.map((piece) => this.deleteUploadedPiece.perform(piece)));
     this.args.onCancel();
   }
 
   @task
   *save() {
     yield this.args.onSave({
-      file: this.file,
-      name: this.name,
+      uploadedPieces: this.uploadedPieces,
       receivedAtDate: this.receivedAtDate,
-      isSourceForProofPrint: this.isSourceForProofPrint,
-      isTranslationIn: this.isTranslationIn,
+      mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
   }
 
   @action
-  toggleProofprint() {
-    this.isSourceForProofPrint = !this.isSourceForProofPrint;
-  }
-
-  @action
   setReceivedAtDate(selectedDates) {
-    this.validators.receivedAtDate.enableError();
     if (selectedDates.length) {
       this.receivedAtDate = selectedDates[0];
-    } else { // this case occurs when users manually empty the date input-field
+    } else {
+      // this case occurs when users manually empty the date input-field
       this.receivedAtDate = undefined;
     }
   }
 
   @action
   setTranslationInStatus(event) {
-    this.isTranslationIn = event.target.checked;
+    this.mustUpdatePublicationStatus = event.target.checked;
   }
 
-  initValidation() {
-    this.validators = new ValidatorSet({
-      name: new Validator(() => isPresent(this.name)),
-      receivedAtDate: new Validator(() => isPresent(this.receivedAtDate)),
-    });
+  @task
+  *deleteUploadedPiece(piece) {
+    const file = yield piece.file;
+    const documentContainer = yield piece.documentContainer;
+    yield Promise.all([
+      file.destroyRecord(),
+      documentContainer.destroyRecord(),
+    ]);
+    yield piece.destroyRecord();
+    this.uploadedPieces.removeObject(piece);
   }
 }

@@ -14,6 +14,7 @@ module.exports = function (defaults) {
       sourceMapEmbed: process.env.DEPLOY_ENV !== 'production',
       includePaths: [
         'node_modules/@kanselarij-vlaanderen/au-kaleidos-css/',
+        'node_modules/@kanselarij-vlaanderen/au-kaleidos-icons/iconfont/',
         'node_modules/@lblod/ember-rdfa-editor/app/styles/', // as a workaround for https://github.com/ember-cli/ember-cli/issues/8026#issuecomment-420245390
         'node_modules/@appuniversum/appuniversum',
         'node_modules/@appuniversum/ember-appuniversum/app/styles',
@@ -52,8 +53,6 @@ module.exports = function (defaults) {
       },
     ],
   });
-
-  app.import('node_modules/@kanselarij-vlaanderen/au-kaleidos-icons/iconfont/icons.css');
 
   const iconAssets = new Funnel('node_modules/@kanselarij-vlaanderen/au-kaleidos-icons', {
     srcDir: '/iconfont',

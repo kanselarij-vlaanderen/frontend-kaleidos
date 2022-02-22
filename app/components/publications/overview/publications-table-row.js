@@ -18,37 +18,26 @@ export default class PublicationsTableRowComponent extends Component {
 
   constructor() {
     super(...arguments);
-
     this.loadData.perform();
-    this.loadPublicationStatus.perform();
+    if (this.args.tableColumnDisplayOptions.status) {
+      this.loadPublicationStatus.perform();
+    }
   }
 
   @task
   *loadData() {
-    // using queryOne instead of findRecord: findRecord causes included records to be fetched again
-    const publicationFlow = yield this.store.queryOne('publication-flow', {
-      'filter[:id:]': this.args.publicationFlow.id,
-      include: [
-        'case',
-        'case.subcases',
-
-        'translation-subcase',
-
-        'publication-subcase',
-
-        'publication-subcase.proofing-activities',
-
-        'publication-subcase.publication-activities',
-        'publication-subcase.publication-activities.decisions',
-      ].join(','),
-    });
-
-    this.isViaCouncilOfMinisters =
-      yield this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
-    this.proofRequestDate = yield this.getProofRequestDate(publicationFlow);
-    this.publicationDate = yield this.publicationService.getPublicationDate(
-      publicationFlow
-    );
+    if (this.args.tableColumnDisplayOptions.source) {
+      this.isViaCouncilOfMinisters =
+      yield this.publicationService.getIsViaCouncilOfMinisters(this.args.publicationFlow);
+    }
+    if (this.args.tableColumnDisplayOptions.proofRequestDate) {
+      this.proofRequestDate = yield this.getProofRequestDate(this.args.publicationFlow);
+    }
+    if (this.args.tableColumnDisplayOptions.publicationDate) {
+      this.publicationDate = yield this.publicationService.getPublicationDate(
+        this.args.publicationFlow
+      );
+    }
   }
 
   @task
