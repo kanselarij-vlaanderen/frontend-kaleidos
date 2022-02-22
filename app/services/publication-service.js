@@ -4,6 +4,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /* eslint-disable no-unused-vars */
 import File from '../models/file';
+import DocumentContainer from '../models/document-container';
 import Piece from '../models/piece';
 import PublicationFlow from '../models/publication-flow';
 /* eslint-enable no-unused-vars */
@@ -190,46 +191,37 @@ export default class PublicationService extends Service {
   }
 
   /**
+   * @typedef {{
+   *  piece: Piece,
+   *  file: File,
+   *  documentContainer: DocumentContainer,
+   * }} Upload container for unsaved pieces
    *
    * @param {{
    *  publicationFlow: PublicationFlow,
    *  subject: string,
    *  message: string,
-   *  files: File[],
+   *  uploads: Upload,
    *  isProof: boolean,
-   * }} params
+   * }} args
    */
-  async requestPublication(params) {
+  async requestPublication(args) {
     const now = new Date();
     const saves = [];
 
     const pieces = await Promise.all(
-      params.files.map(async (file) => {
-        /** @type {Piece} piece */
-        const piece = this.store.createRecord('piece', {
-          created: now,
-          modified: now,
-          name: file.filename,
-          confidential: false,
-          file: file,
-        });
-        await piece.save();
+      args.uploads.map(async (upload) => {
+        await upload.piece.save();
 
-        const documentContainer = this.store.createRecord(
-          'document-container',
-          {
-            created: now,
-            pieces: [piece],
-          }
-        );
+        const documentContainer = upload.documentContainer;
         saves.push(documentContainer.save());
 
-        return piece;
+        return upload.piece;
       })
     );
 
     // PUBLICATION SUBCASE
-    const publicationSubcase = await params.publicationFlow.publicationSubcase;
+    const publicationSubcase = await args.publicationFlow.publicationSubcase;
     if (!publicationSubcase.startDate) {
       publicationSubcase.startDate = now;
       const publicationSubcaseSave = publicationSubcase.save();
@@ -239,7 +231,7 @@ export default class PublicationService extends Service {
     // REQUEST ACTIVITY
     const requestActivity = this.store.createRecord('request-activity', {
       startDate: now,
-      title: params.subject,
+      title: args.subject,
       publicationSubcase: publicationSubcase,
       usedPieces: pieces,
     });
@@ -248,13 +240,13 @@ export default class PublicationService extends Service {
     // RESULT ACTIVITY
     const resultActivityProperties = {
       startDate: now,
-      title: params.subject,
+      title: args.subject,
       subcase: publicationSubcase,
       requestActivity: requestActivity,
       usedPieces: pieces,
     };
     let resultActivity;
-    if (params.isProof) {
+    if (args.isProof) {
       resultActivity = this.store.createRecord(
         'proofing-activity',
         resultActivityProperties
@@ -285,9 +277,9 @@ export default class PublicationService extends Service {
       cc: mailSettings.proofRequestCcEmail,
       from: mailSettings.defaultFromEmail,
       folder: outbox,
-      subject: params.subject,
-      message: params.message,
-      attachments: params.files,
+      subject: args.subject,
+      message: args.message,
+      attachments: args.files,
       requestActivity: requestActivity,
     });
     const emailSave = mail.save();
@@ -295,14 +287,14 @@ export default class PublicationService extends Service {
 
     // PUBLICATION STATUS
     let newPublicationStatus;
-    if (params.isProof) {
+    if (args.isProof) {
       newPublicationStatus = CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED;
     } else {
       newPublicationStatus =
         CONSTANTS.PUBLICATION_STATUSES.PUBLICATION_REQUESTED;
     }
     const pubStatusChange = this.updatePublicationStatus(
-      params.publicationFlow,
+      args.publicationFlow,
       newPublicationStatus,
       now
     );

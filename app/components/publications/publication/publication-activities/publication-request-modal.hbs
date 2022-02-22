@@ -38,10 +38,14 @@
           <Auk::FileUploader
             id="publicationRequestModal.attachments"
             @multiple={{true}}
-            @onUpload={{perform this.savePiece}}
+            @onUpload={{this.createPiece}}
           />
-          <Utils::Documents::List @pieces={{this.pieces}} />
         </div>
+        {{#if this.uploads}}
+          <div class="auk-u-m4">
+            <Utils::Documents::List @pieces={{this.pieces}} />
+          </div>
+        {{/if}}
       </div>
     </Utils::LoadableContent>
   </Auk::Modal::Body>

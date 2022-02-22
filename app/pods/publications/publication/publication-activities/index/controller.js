@@ -61,13 +61,12 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
   }
 
   @task
-  *saveRequest(params) {
-    // yield this.publicationService.requestPublication({
-    yield console.log({
+  *saveRequest(args) {
+    yield this.publicationService.requestPublication({
       publicationFlow: this.publicationFlow,
-      subject: params.subject,
-      message: params.message,
-      files: params.files,
+      subject: args.subject,
+      message: args.message,
+      uploads: args.uploads,
       isProof: false,
     });
 
