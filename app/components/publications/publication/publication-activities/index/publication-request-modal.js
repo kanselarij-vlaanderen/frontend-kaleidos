@@ -14,7 +14,7 @@ import Piece from '../../../../models/piece';
 import PublicationFlow from '../../../../models/publication-flow';
 /* eslint-enable no-unused-vars */
 
-export default class PublicationTimelineEventPanel extends Component {
+export default class PublicationRequestModal extends Component {
   @service store;
 
   @tracked subject;
