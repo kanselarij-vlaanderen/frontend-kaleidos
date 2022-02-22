@@ -1,8 +1,8 @@
 import moment from 'moment';
 
 // * NOTES *
-// 1. '\t\n' as newline:
-// => prevent outlook from removing extra line breaks with just '\n'
+// 1. single new line: '\t\n' (multiple just n x '\n')
+// => prevent Outlook from removing extra line breaks with just '\n'
 // @see {@link https://docs.microsoft.com/en-us/outlook/troubleshoot/message-body/line-breaks-are-removed-in-posts-made-in-plain-text}
 // "By default, the Auto Remove Line Breaks feature in Outlook is enabled.
 // This causes the line breaks to be removed. Any two or more successive
