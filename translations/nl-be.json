@@ -940,6 +940,7 @@
   "read": "Lees",
   "request-proof": "Drukproef aanvragen",
   "request-proof-x-stage-for-publication-x-identification": "Drukproef aanvragen ({stage}) voor publicatie {identification}",
+  "publication-request-modal-title": "Publicatie aanvragen voor publicatie {publication}",
   "proofing-request": "Drukproefaanvraag",
   "publication-request": "Publicatieaanvraag",
   "request-sent": "Aanvraag verzonden",

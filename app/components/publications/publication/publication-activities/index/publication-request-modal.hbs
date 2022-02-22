@@ -1,6 +1,10 @@
 <Auk::Modal>
   <Auk::Modal::Header
-    @title="Publicatieaanvraag"
+    @title={{
+      t
+        "publication-request-modal-title"
+        publication=@publicationFlow.identification.idName
+      }}
     @onClose={{perform this.cancel}}
   />
   <Auk::Modal::Body>
@@ -28,6 +32,7 @@
             id="publicationRequestModal.message"
             @block={{true}}
             @value={{this.message}}
+            rows="16"
             {{on "input" this.setMessage}}
           />
         </div>
