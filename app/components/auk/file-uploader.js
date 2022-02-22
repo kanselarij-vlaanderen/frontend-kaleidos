@@ -52,6 +52,10 @@ export default class FileUploader extends Component {
       || this.uploadFileTask.isRunning;
   }
 
+  get allowReUpload() {
+    return this.args.multiple;
+  }
+
   @enqueueTask({
     maxConcurrency: 3,
   }) *uploadFileTask(file) {
