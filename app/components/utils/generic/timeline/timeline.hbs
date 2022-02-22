@@ -1,5 +1,10 @@
 <div>
-  {{#each @model as |event|}}
-    {{yield event (component "utils/generic/timeline/timeline-event" event=event)}}
+  {{#each @events as |event|}}
+    {{yield
+      (hash
+        Event=(component "utils/generic/timeline/timeline-event" event=event)
+      )
+      event
+    }}
   {{/each}}
 </div>
