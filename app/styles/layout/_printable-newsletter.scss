@@ -7,13 +7,6 @@
     line-height: 1.5;
   }
 
-  // .auk-pill,
-  // .auk-icon,
-  // .auk-badge,
-  // .auk-u-text-muted {
-  //   -webkit-print-color-adjust: exact;
-  // }
-
   .auk-h1,
   .auk-h2 {
     line-height: 1.2;
@@ -31,12 +24,6 @@
 @media print {
   .l-printable-newsletter {
     max-width: none;
-  }
-}
-
-@media print { // !
-  .l-printable-newsletter__non-breakable-group {
-    break-inside: avoid;
   }
 }
 
