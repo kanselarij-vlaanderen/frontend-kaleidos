@@ -24,12 +24,10 @@
   <Auk::Panel::Body class="auk-u-bg-alt">
     <Utils::Generic::Timeline::Timeline @events={{@model}} as |Timeline event|>
       {{#if event.isRequest}}
-        {{!Aanvraag}}
         <Publications::Publication::PublicationActivities::Index::Timeline::PublicationsRequestTimelineEvent
           @requestActivity={{event.requestActivity}}
         />
       {{else}}
-        {{!Publicatie}}
         <Publications::Publication::PublicationActivities::Index::Timeline::PublicationsPublicationTimelineEvent
           @publicationActivity={{event.publicationActivity}}
         />
