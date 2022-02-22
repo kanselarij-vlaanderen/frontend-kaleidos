@@ -1,13 +1,12 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { task } from 'ember-concurrency-decorators';
+import { task, dropTask } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { isEmpty } from '@ember/utils';
 
-export default class  PublicationsPublicationProofsController extends Controller {
+export default class PublicationsPublicationProofsController extends Controller {
   @service store;
   @service publicationService;
 
@@ -17,44 +16,43 @@ export default class  PublicationsPublicationProofsController extends Controller
   @tracked showProofUploadModal = false;
   @tracked showProofRequestModal = false;
 
-  get isRequestingDisabled() {
-    return this.publicationSubcase.isFinished;
+  get isProofUploadDisabled() {
+    return this.latestProofingActivity == null;
   }
 
-  get isProofUploadDisabled() {
-    return this.model.length === 0;
+  get latestProofingActivity() {
+    const timelineActivity = this.model.find(
+      (timelineActivity) => timelineActivity.isProofingActivity
+    );
+    return timelineActivity ? timelineActivity.activity : null;
   }
 
   @task
   *saveProofUpload(proofUpload) {
-    // get latest proofing activity
-    const proofingActivity = this.model.filter((activity) => !isEmpty(activity.proofingActivity))[0].proofingActivity;
-
-    // triggers call
-    const language = yield proofingActivity.language;
+    const proofingActivity = this.latestProofingActivity;
 
     const pieceSaves = [];
-    for (let piece of proofUpload.generatedPieces){
-
+    const language = yield proofingActivity.language;
+    for (let piece of proofUpload.uploadedPieces) {
       piece.receivedDate = proofUpload.receivedAtDate;
       piece.language = language;
-      piece.proofingActivityGeneratedBy= proofingActivity;
-
+      piece.proofingActivityGeneratedBy = proofingActivity;
       pieceSaves.push(piece.save());
     }
 
     proofingActivity.endDate = proofUpload.receivedAtDate;
     const proofingActivitySave = proofingActivity.save();
 
+    let publicationSubcaseSave;
     if (
       proofUpload.receivedAtDate < this.publicationSubcase.receivedDate ||
       !this.publicationSubcase.receivedDate
     ) {
       this.publicationSubcase.receivedDate = proofUpload.receivedAtDate;
-      yield this.publicationSubcase.save();
+      publicationSubcaseSave = this.publicationSubcase.save();
     }
 
-    if (proofUpload.isProofIn) {
+    if (proofUpload.mustUpdatePublicationStatus) {
       yield this.publicationService.updatePublicationStatus(
         this.publicationFlow,
         CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_IN,
@@ -62,10 +60,14 @@ export default class  PublicationsPublicationProofsController extends Controller
       );
 
       this.publicationSubcase.endDate = proofUpload.receivedAtDate;
-      yield this.publicationSubcase.save();
+      publicationSubcaseSave = this.publicationSubcase.save();
     }
 
-    yield Promise.all([proofingActivitySave, pieceSaves]);
+    yield Promise.all([
+      proofingActivitySave,
+      ...pieceSaves,
+      publicationSubcaseSave,
+    ]);
 
     this.send('refresh');
     this.showProofUploadModal = false;
@@ -75,45 +77,46 @@ export default class  PublicationsPublicationProofsController extends Controller
   *saveProofRequest(proofRequest) {
     const now = new Date();
 
-    const usedPieces = [];
+    const uploadedPieces = proofRequest.uploadedPieces;
+    const dutch = yield this.store.findRecordByUri(
+      'language',
+      CONSTANTS.LANGUAGES.NL
+    );
 
-    for (let piece of proofRequest.usedPieces){
-      piece.publicationSubcaseSourceFor = this.publicationSubcase;
-      const documentContainer = yield piece.documentContainer;
-      yield documentContainer.save();
-      piece.pages = proofRequest.pagesAmount;
-      piece.words = proofRequest.wordsAmount;
-      piece.language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
+    yield Promise.all(
+      uploadedPieces.map((piece) => {
+        piece.publicationSubcaseSourceFor = this.publicationSubcase;
+        piece.language = dutch;
+        return piece.save();
+      })
+    );
 
-      yield piece.save();
-      usedPieces.push(piece);
-    }
-
-    const requestActivity = yield this.store.createRecord('request-activity', {
+    const requestActivity = this.store.createRecord('request-activity', {
       startDate: now,
       publicationSubcase: this.publicationSubcase,
-      usedPieces: usedPieces,
+      usedPieces: uploadedPieces,
     });
     yield requestActivity.save();
-    const french = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.FR);
 
-    const proofingActivity = yield this.store.createRecord('proofing-activity', {
+    const proofingActivity = this.store.createRecord('proofing-activity', {
       startDate: now,
       dueDate: proofRequest.proofDueDate,
       title: proofRequest.subject,
       subcase: this.publicationSubcase,
       requestActivity: requestActivity,
-      usedPieces: usedPieces,
-      language: french,
+      usedPieces: uploadedPieces,
+      language: yield this.store.findRecordByUri(
+        'language',
+        CONSTANTS.LANGUAGES.FR
+      ),
     });
     yield proofingActivity.save();
 
-    const filePromises = usedPieces.mapBy('file');
-    const filesPromise = Promise.all(filePromises);
-
-    const outboxPromise = this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);
-    const mailSettingsPromise = this.store.queryOne('email-notification-setting');
-    const [files,outbox, mailSettings] = yield Promise.all([filesPromise,outboxPromise, mailSettingsPromise]);
+    const [files, outbox, mailSettings] = yield Promise.all([
+      Promise.all(uploadedPieces.mapBy('file')),
+      this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
+      this.store.queryOne('email-notification-setting'),
+    ]);
     const mail = yield this.store.createRecord('email', {
       to: mailSettings.proofRequestToEmail,
       from: mailSettings.defaultFromEmail,
@@ -126,40 +129,42 @@ export default class  PublicationsPublicationProofsController extends Controller
     yield mail.save();
 
     // PUBLICATION-STATUS
-    const pubStatusChange = this.publicationService.updatePublicationStatus(
+    yield this.publicationService.updatePublicationStatus(
       this.publicationFlow,
-      CONSTANTS.PUBLICATION_STATUSES.TO_TRANSLATIONS
+      CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED
     );
-    yield pubStatusChange;
 
     this.send('refresh');
     this.showProofRequestModal = false;
   }
 
-  @task
-  *deleteRequest(requestActivity){
-    const saves = [];
+  @dropTask
+  *deleteRequest(requestActivity) {
+    const deletePromises = [];
 
     const proofingActivity = yield requestActivity.proofingActivity;
-    saves.push(proofingActivity.destroyRecord());
+    deletePromises.push(proofingActivity.destroyRecord());
 
     const mail = yield requestActivity.email;
-    saves.push(mail.destroyRecord());
+    if (mail) {
+      deletePromises.push(mail.destroyRecord());
+    }
 
-    saves.push(requestActivity.destroyRecord());
+    deletePromises.push(requestActivity.destroyRecord());
 
     const pieces = yield requestActivity.usedPieces;
 
     for (const piece of pieces.toArray()) {
-      const filePromise = piece.file;
-      const documentContainerPromise = piece.documentContainer;
-      const [file, documentContainer] = yield Promise.all([filePromise, documentContainerPromise]);
+      const [file, documentContainer] = yield Promise.all([
+        piece.file,
+        piece.documentContainer,
+      ]);
 
-      saves.push(piece.destroyRecord());
-      saves.push(file.destroyRecord());
-      saves.push(documentContainer.destroyRecord());
+      deletePromises.push(piece.destroyRecord());
+      deletePromises.push(file.destroyRecord());
+      deletePromises.push(documentContainer.destroyRecord());
     }
-    yield Promise.all(saves);
+    yield Promise.all(deletePromises);
     this.send('refresh');
   }
 

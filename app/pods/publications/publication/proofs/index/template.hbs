@@ -24,7 +24,6 @@
             <Auk::Button
               @skin="primary"
               @icon="plus"
-              @disabled={{this.isRequestingDisabled}}
               {{on "click" this.openProofRequestModal}}
             >
               {{t "request-proof"}}
@@ -34,18 +33,20 @@
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body class="auk-u-bg-alt">
-      {{#each @model as |activity|}}
-        {{#if activity.requestActivity}}
+      {{#each @model as |timelineActivity|}}
+        {{#if timelineActivity.isRequestActivity}}
           <Publications::Publication::Proofs::ProofRequestedPanel
-            @requestActivity={{activity.requestActivity}}
+            @requestActivity={{timelineActivity.activity}}
             @onDeleteRequest={{fn
               (perform this.deleteRequest)
-              activity.requestActivity
+              timelineActivity.activity
             }}
           />
-        {{else if activity.proofingActivity.endDate}}
+        {{else if (and
+          timelineActivity.isProofingActivity timelineActivity.activity.endDate
+        )}}
           <Publications::Publication::Proofs::ProofReceivedPanel
-            @proofingActivity={{activity.proofingActivity}}
+            @proofingActivity={{timelineActivity.activity}}
           />
         {{/if}}
       {{else}}
@@ -57,7 +58,7 @@
 
 {{#if this.showProofRequestModal}}
   <Publications::Publication::Proofs::ProofRequestModal
-    @publicationSubcase={{this.publicationSubcase}}
+    @dueDate={{this.publicationSubcase.dueDate}}
     @publicationFlow={{this.publicationFlow}}
     @onSave={{perform this.saveProofRequest}}
     @onCancel={{this.closeProofRequestModal}}
@@ -66,7 +67,6 @@
 
 {{#if this.showProofUploadModal}}
   <Publications::Publication::Proofs::ProofUploadModal
-    @publicationFlow={{this.publicationFlow}}
     @onSave={{perform this.saveProofUpload}}
     @onCancel={{this.closeProofUploadModal}}
   />

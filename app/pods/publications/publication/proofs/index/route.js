@@ -2,24 +2,30 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
+import { warn } from '@ember/debug';
 
-export class Activity {
-  @tracked date;
-  @tracked requestActivity;
-  @tracked proofingActivity;
+export class TimelineActivity {
+  @tracked activity;
 
-  // no async constructor() in JS
-  static async create(requestActivity, proofingActivity) {
-    const activity = new Activity();
-    if (requestActivity) {
-      activity.requestActivity = requestActivity;
-      activity.date = requestActivity.startDate;
+  get isRequestActivity() {
+    return this.activity.constructor.modelName === 'request-activity';
+  }
+
+  get isProofingActivity() {
+    return this.activity.constructor.modelName === 'proofing-activity';
+  }
+
+  get date() {
+    if (this.isRequestActivity) {
+      return this.activity.startDate;
+    } else if (this.isProofingActivity) {
+      return this.activity.startDate;
+    } else {
+      warn(
+        `Getting date for unsupported activity type ${this.activity.constructor.modelName}`
+      );
+      return null;
     }
-    if (proofingActivity) {
-      activity.proofingActivity = proofingActivity;
-      activity.date = activity.endDate;
-    }
-    return activity;
   }
 }
 export default class PublicationsPublicationProofsRoute extends Route {
@@ -42,17 +48,15 @@ export default class PublicationsPublicationProofsRoute extends Route {
       sort: '-start-date',
     });
 
-    let activities = [
-      requestActivities.map((request) => Activity.create(request, null)),
-      proofingActivities.map((proofing) => Activity.create(null, proofing)),
-    ];
-    activities = await Promise.all(activities.flatMap((activity) => activity.toArray()));
-    activities = activities.sortBy('date').reverseObjects();
-
-    return activities;
+    return [
+      ...requestActivities.map((request) => new TimelineActivity(request)),
+      ...proofingActivities.map((proofing) => new TimelineActivity(proofing)),
+    ]
+      .sortBy('date')
+      .reverseObjects();
   }
 
-  async afterModel() {
+  afterModel() {
     this.publicationFlow = this.modelFor('publications.publication');
   }
 
