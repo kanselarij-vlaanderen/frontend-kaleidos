@@ -39,7 +39,9 @@ export default class PublicationsPublicationPublicationActivitiesIndexRoute exte
       }),
     ]);
 
-    const [requestActivities, publicationActivities] = activities.map(activities => activities.toArray());
+    const [requestActivities, publicationActivities] = activities.map(
+      (activities) => activities.toArray()
+    );
     const timeline = this.createTimeline(
       requestActivities,
       publicationActivities
@@ -53,14 +55,16 @@ export default class PublicationsPublicationPublicationActivitiesIndexRoute exte
    * @private
    */
   createTimeline(requestActivities, publicationActivities) {
-    const requestEvents = requestActivities.map((act) => new PublicationRequestEvent(act));
+    const requestEvents = requestActivities.map(
+      (act) => new PublicationRequestEvent(act)
+    );
     const publicationEvents = publicationActivities
       .filter((act) => !act.endDate)
       .map((act) => new PublicationPublicationEvent(act));
-    return [
-      ...requestEvents,
-      ...publicationEvents,
-    ].sortBy('date', 'timeOrder').reverse();
+
+    return [...requestEvents, ...publicationEvents]
+      .sortBy('date', 'timeOrder')
+      .reverse();
   }
 
   afterModel() {

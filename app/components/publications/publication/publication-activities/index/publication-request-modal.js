@@ -137,6 +137,8 @@ export default class PublicationRequestModal extends Component {
 
   // separate method to prevent ember-concurrency from saving only partially
   performCleanup() {
-    return Promise.all(this.uploads.map((upload) => upload.file.destroyRecord()));
+    return Promise.all(
+      this.uploads.map((upload) => upload.file.destroyRecord())
+    );
   }
 }

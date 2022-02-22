@@ -45,19 +45,20 @@
             <div class="auk-u-mt-4">
               <Auk::List @isBordered="true" class="auk-list--view">
                 {{#each this.uploads as |upload|}}
-                  <Auk::List::Item data-test-utils-document-list-item @skin="gray-100">
+                  <Auk::List::Item @skin="gray-100">
                     <div class="auk-u-ml-2">
                       <Auk::Icon @name="document" @skin="muted-dark" />
                     </div>
                     <div class="auk-u-mx-2">
-                      <span data-test-utils-document-list-name class="auk-u-text-bold">
+                      <span class="auk-u-text-bold">
                         {{upload.piece.name}}
                       </span>
                       <div
                         data-test-utils-document-list-file-extension
                         class="auk-u-text-muted auk-u-text-size--small"
                       >
-                        {{uppercase upload.file.extension}}, {{format-bytesize upload.file.size}}
+                        {{uppercase upload.file.extension}},
+                        {{format-bytesize upload.file.size}}
                       </div>
                     </div>
                   </Auk::List::Item>
