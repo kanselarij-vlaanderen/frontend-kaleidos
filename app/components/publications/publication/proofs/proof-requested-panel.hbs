@@ -79,12 +79,21 @@
 
 {{#if this.isVerifyingDelete}}
   <Auk::Modal>
-    <Auk::Modal::Header @title={{t "delete-request"}} @onClose={{this.cancelDeleteRequest}} />
+    <Auk::Modal::Header
+      @title={{t "delete-request"}}
+      @onClose={{this.cancelDeleteRequest}}
+    />
     <Auk::Modal::Body>
       <p>{{t "delete-request-message"}}</p>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.deleteRequest}}>
-      <Auk::Button @skin="danger-primary" @icon="trash" {{on "click" this.deleteRequest}}>{{t "delete"}}</Auk::Button>
+      <Auk::Button
+        @skin="danger-primary"
+        @icon="trash"
+        {{on "click" this.deleteRequest}}
+      >
+        {{t "delete"}}
+      </Auk::Button>
     </Auk::Modal::Footer>
   </Auk::Modal>
 {{/if}}

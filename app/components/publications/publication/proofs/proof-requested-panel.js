@@ -16,12 +16,12 @@ export default class PublicationsPublicationProofProofRequestedPanel extends Com
     this.loadProofingActivity.perform();
   }
 
-  get isTranslationActivityFinished() {
+  get isProofingActivityFinished() {
     return !isEmpty(this.proofingActivity.endDate);
   }
 
   @task
-  *loadTranslationActivity() {
+  *loadProofingActivity() {
     this.proofingActivity = yield this.args.requestActivity.proofingActivity;
   }
 
