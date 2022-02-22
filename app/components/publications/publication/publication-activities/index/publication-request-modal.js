@@ -7,13 +7,6 @@ import { task } from 'ember-concurrency';
 import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
 import { publicationRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 
-/* eslint-disable no-unused-vars */
-import File from '../../../../models/file';
-import DocumentContainer from '../../../../models/document-container';
-import Piece from '../../../../models/piece';
-import PublicationFlow from '../../../../models/publication-flow';
-/* eslint-enable no-unused-vars */
-
 export default class PublicationRequestModal extends Component {
   @service store;
 
