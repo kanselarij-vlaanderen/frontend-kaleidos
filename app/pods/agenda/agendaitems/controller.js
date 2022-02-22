@@ -33,7 +33,7 @@ export default class AgendaAgendaitemsController extends Controller {
   @service router;
   @service store;
   @service intl;
-  @service loadingService;
+  @service throttledLoadingService;
 
   @lastValue('groupNotasOnGroupName') notaGroups = [];
   @tracked meeting;
@@ -103,7 +103,7 @@ export default class AgendaAgendaitemsController extends Controller {
     this.documentLoadCount = 0;
     this.totalCount = agendaitems.length;
     yield all(agendaitems.map(async(agendaitem) => {
-      await this.loadingService.loadPieces.perform(agendaitem);
+      await this.throttledLoadingService.loadPieces.perform(agendaitem);
       this.documentLoadCount++;
     }));
   }

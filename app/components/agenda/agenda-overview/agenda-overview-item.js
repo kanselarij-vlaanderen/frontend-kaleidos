@@ -30,7 +30,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   @service agendaService;
   @service router;
   @service currentSession;
-  @service loadingService;
+  @service throttledLoadingService;
 
   @tracked agendaitemDocuments;
   @tracked newAgendaitemDocuments;
@@ -70,7 +70,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
 
   @task
   *loadDocuments() {
-    let pieces = yield this.loadingService.loadPieces.perform(this.args.agendaitem);
+    let pieces = yield this.throttledLoadingService.loadPieces.perform(this.args.agendaitem);
     pieces = pieces.toArray();
     let sortedPieces;
     if (this.args.agendaitem.isApproval) {

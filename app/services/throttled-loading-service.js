@@ -2,7 +2,7 @@ import Service, { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency-decorators';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
-export default class LoadingService extends Service {
+export default class ThrottledLoadingService extends Service {
   @service store;
 
   /**
