@@ -26,14 +26,14 @@
       {{#if event.isRequest}}
         {{!Aanvraag}}
         <Component @badgeIcon="mail" @badgeSkin="primary">
-          <Publications::Publication::PublicationActivities::Timeline::PublicationsRequestEventPanel
+          <Publications::Publication::PublicationActivities::Index::Timeline::PublicationsRequestEventPanel
             @requestActivity={{event.requestActivity}}
           />
         </Component>
       {{else}}
         {{!Publicatie}}
         <Component @badgeIcon="check" @badgeSkin="success">
-          <Publications::Publication::PublicationActivities::Timeline::PublicationsPublicationEventPanel
+          <Publications::Publication::PublicationActivities::Index::Timeline::PublicationsPublicationEventPanel
             @publicationActivity={{event.publicationActivity}}
           />
         </Component>
@@ -43,7 +43,7 @@
 </Auk::Panel>
 
 {{#if this.isOpenRequestModal}}
-  <Publications::Publication::PublicationActivities::PublicationRequestModal
+  <Publications::Publication::PublicationActivities::Index::PublicationRequestModal
     @publicationFlow={{this.publicationFlow}}
     @onSave={{perform this.saveRequest}}
     @onCancel={{this.closeRequestModal}}
