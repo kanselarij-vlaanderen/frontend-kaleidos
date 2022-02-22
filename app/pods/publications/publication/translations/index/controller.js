@@ -30,7 +30,6 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     const translationActivity = this.latestTranslationActivity;
 
     const pieceSaves = [];
-    const containerSaves = [];
 
     const language = yield translationActivity.language;
     for (let piece of translationUpload.uploadedPieces) {
@@ -66,7 +65,6 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     yield Promise.all([
       translationActivitySave,
       ...pieceSaves,
-      containerSaves,
       translationSubcaseSave,
     ]);
 
