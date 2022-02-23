@@ -60,8 +60,9 @@ function fillInNewPublicationFields(fields) {
  */
 function createPublication(fields) {
   cy.log('createPublication');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('POST', '/cases').as('createNewCase');
-  cy.intercept('POST', '/publication-flows').as('createNewPublicationFlow');
+  cy.intercept('POST', '/publication-flows').as(`createNewPublicationFlow${randomInt}`);
 
   cy.visit('publicaties');
   cy.get(publication.publicationsIndex.newPublication).click();
@@ -70,7 +71,7 @@ function createPublication(fields) {
 
   cy.get(publication.newPublication.create).click()
     .wait('@createNewCase')
-    .wait('@createNewPublicationFlow')
+    .wait(`@createNewPublicationFlow${randomInt}`)
     .its('response.body')
     .then((responseBody) => {
       publicationFlowId = responseBody.data.id;
@@ -84,6 +85,38 @@ function createPublication(fields) {
     }));
   // TODO-publication this cypress promise needs to be the last command executed, move cy.log higher
   cy.log('/createPublication');
+}
+
+/**
+ * @description Create a publication Changes the status from a publication and gos back to overview)
+ * @name createPublicationWithStatus
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {number: Number, suffix: String, decisionDate: Object, receptionDate: Object, targetPublicationdate: Object, shortTitle: String, longTitle: String, newStatus: String} fields The data for the new publication
+ */
+function createPublicationWithStatus(fields) {
+  // TODO-COMMAND unused command for now
+  cy.createPublication(fields);
+  cy.changePublicationStatus(fields.newStatus);
+  cy.get(publication.publicationNav.goBack).click();
+}
+
+/**
+ * @description Changes the status from a publication, used when in the view of an invididual publication (/publicaties/ID/...)
+ * @name changePublicationStatus
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {String} newStatus The new status to selected
+ */
+function changePublicationStatus(newStatus) {
+  // TODO-COMMAND unused command for now
+  cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+  cy.get(publication.statusPill.changeStatus).click();
+  cy.get(publication.publicationStatus.select).click();
+  cy.get(dependency.emberPowerSelect.option).contains(newStatus)
+    .click();
+  cy.get(publication.publicationStatus.save).click();
+  cy.wait('@patchPublicationFlow');
 }
 
 /**
@@ -167,4 +200,6 @@ function addPublicationDocuments(files) {
 // Commands
 Cypress.Commands.add('fillInNewPublicationFields', fillInNewPublicationFields);
 Cypress.Commands.add('createPublication', createPublication);
+Cypress.Commands.add('createPublicationWithStatus', createPublicationWithStatus);
+Cypress.Commands.add('changePublicationStatus', changePublicationStatus);
 Cypress.Commands.add('addPublicationDocuments', addPublicationDocuments);

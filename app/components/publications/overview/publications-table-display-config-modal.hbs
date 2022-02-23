@@ -31,8 +31,8 @@
               {{#each column as |option|}}
                 <Auk::Checkbox
                   data-test-overview-table-display-config-option-checkbox={{option.keyName}}
-                  @checked={{get @options option.keyName}}
-                  {{on "input" (fn this.toggleOption option.keyName)}}
+                  @checked={{includes option @tableConfig.visibleColumns}}
+                  {{on "input" (fn this.toggleColumnVisibility option.keyName)}}
                 >
                   {{t option.translationKey}}
                   {{#if
@@ -52,7 +52,7 @@
       {{/each}}
     </div>
   </div>
-  <Auk::ButtonLink @skin="secondary" class="auk-u-mt-2" {{on "click" @onReset}}>
+  <Auk::ButtonLink @skin="secondary" class="auk-u-mt-2" {{on "click" this.reset}}>
     {{t "reset-display"}}
   </Auk::ButtonLink>
 </div>
