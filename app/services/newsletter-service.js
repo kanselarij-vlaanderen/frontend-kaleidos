@@ -198,7 +198,6 @@ export default class NewsletterService extends Service {
         this.intl.t('error-delete-newsletter'),
         this.intl.t('warning-title')
       );
-      return null;
     }
   }
 

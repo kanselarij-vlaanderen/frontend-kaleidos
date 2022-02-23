@@ -174,7 +174,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
         this.intl.t('error-old-newsletter'),
         this.intl.t('warning-title')
       );
-      return  false;
+      return false;
     }
     // Campaign is valid
     return true;
