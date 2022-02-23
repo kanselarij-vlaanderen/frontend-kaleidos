@@ -72,7 +72,7 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
   }
 
   @action
-  setreceivedDate(selectedDates) {
+  setReceivedDate(selectedDates) {
     if (selectedDates.length) {
       this.receivedDate = selectedDates[0];
     } else {
