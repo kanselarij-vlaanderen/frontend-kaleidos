@@ -87,7 +87,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   *publishToBelga() {
     try {
       yield this.ensureMailCampaign();
-      yield this.newsletterService.sendToBelga(this.args.agenda.id);
+      yield this.newsletterService.sendToBelga(this.args.meeting.id);
       this.toaster.success(this.intl.t('success-publish-newsletter-to-belga'));
     } catch(e) {
       this.toaster.error(
@@ -171,7 +171,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       ) > threshold
     ) {
       this.toaster.error(
-        this.intl.t('error-unpublish-from-web'),
+        this.intl.t('error-old-newsletter'),
         this.intl.t('warning-title')
       );
       return  false;
@@ -192,6 +192,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
     if (this.mailCampaign?.campaignId) {
       yield this.newsletterService.deleteCampaign(this.mailCampaign.campaignId);
+      this.toaster.success(this.intl.t('success-delete-newsletter'));
     }
     this.mailCampaign.destroyRecord();
     const reloadedMeeting = yield this.store.findRecord('meeting', meeting.id, {
