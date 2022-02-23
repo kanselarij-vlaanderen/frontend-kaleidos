@@ -7,6 +7,10 @@ export default class PublicationsTranslationTranslationReceivedPanelComponent ex
   @tracked isOpenTranslationEditModal = false;
   @tracked endDate = this.args.translationActivity.endDate;
 
+  get isSaveDisabled() {
+    return this.endDate == null;
+  }
+
   @action
   toggleTranslationEditModal(){
     this.isOpenTranslationEditModal = !this.isOpenTranslationEditModal;
@@ -24,8 +28,7 @@ export default class PublicationsTranslationTranslationReceivedPanelComponent ex
       this.endDate = selectedDates[0];
     } else {
       // this case occurs when users manually empty the date input-field
-      // using the old value to fallback on, clearing date should not be allowed
-      this.endDate = this.args.translationActivity.endDate;
+      this.endDate = null;
     }
   }
 }
