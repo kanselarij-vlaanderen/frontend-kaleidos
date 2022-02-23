@@ -8,8 +8,7 @@
   />
   <Auk::Modal::Body>
       <div class="auk-form-group-layout auk-form-group-layout--standard">
-        {{! Subject }}
-        <div class="auk-form-group {{this.validators.subject.errorClass}}">
+        <div class="auk-form-group">
           <Auk::Label for="proofRequestSubject" @required={{true}}>
             {{t "subject"}}
           </Auk::Label>
@@ -18,11 +17,9 @@
             id="proofRequestSubject"
             @block={{true}}
             @value={{mut this.subject}}
-            {{on "input" this.validators.subject.enableError}}
           />
         </div>
-        {{! Message }}
-        <div class="auk-form-group {{this.validators.message.errorClass}}">
+        <div class="auk-form-group">
           <Auk::Label for="proofRequestMessage" @required={{true}}>
             {{t "message"}}
           </Auk::Label>
@@ -31,29 +28,42 @@
             id="proofRequestMessage"
             @rows="6"
             @value={{mut this.message}}
-            {{on "input" this.validators.message.enableError}}
           />
         </div>
-        {{! Attachments }}
-        <div class="auk-form-group {{this.validators.attachments.errorClass}}">
-          <Auk::Label @required={{true}}>{{t "attachments"}}</Auk::Label>
-          <Auk::FileUploader
-            @multiple={{true}}
-            @onUpload={{this.uploadPiece}}
-          />
+        <div class="auk-form-group">
+          <Auk::Label @required={{true}}>
+            {{t "attachments"}}
+          </Auk::Label>
+          <Auk::FileUploader @multiple={{false}} @onUpload={{this.uploadPiece}} />
+          <Auk::List>
+            {{#each this.uploadedPieces as |piece|}}
+              <Auk::List::Item
+                class="auk-o-flex auk-o-flex--spaced-wide"
+              >
+                <div class="auk-o-flex auk-o-flex--spaced">
+                  <Auk::Badge @icon="paperclip" @size="regular" />
+                  <h5 class="auk-h4 auk-u-m-0">
+                    {{piece.file.downloadFilename}}
+                  </h5>
+                </div>
+              </Auk::List::Item>
+            {{/each}}
+          </Auk::List>
+        </div>
 
-        </div>
       </div>
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @onCancel={{@onCancel}}>
+  <Auk::Modal::Footer @cancelDisabled={{this.isCancelDisabled}}
+                      @onCancel={{perform this.cancel}}
+  >
     <Auk::Button
       data-test-proof-request-save
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
-      @loading={{this.saveRequest.isRunning}}
-      {{on "click" (perform this.saveRequest)}}
+      @loading={{this.save.isRunning}}
+      {{on "click" (perform this.save)}}
     >
-      {{t "request-action"}}
+      {{t "request-it"}}
     </Auk::Button>
   </Auk::Modal::Footer>
 </Auk::Modal>

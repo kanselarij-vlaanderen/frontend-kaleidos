@@ -58,7 +58,6 @@
 
 {{#if this.showProofRequestModal}}
   <Publications::Publication::Proofs::ProofRequestModal
-    @dueDate={{this.publicationSubcase.dueDate}}
     @publicationFlow={{this.publicationFlow}}
     @onSave={{perform this.saveProofRequest}}
     @onCancel={{this.closeProofRequestModal}}

@@ -52,6 +52,11 @@ export default class PublicationsPublicationProofsController extends Controller 
       publicationSubcaseSave = this.publicationSubcase.save();
     }
 
+    if (proofUpload.proofReader){
+      this.publicationSubcase.proofPrintCorrector = proofUpload.proofReader;
+      publicationSubcaseSave = this.publicationSubcase.save();
+    }
+
     if (proofUpload.mustUpdatePublicationStatus) {
       yield this.publicationService.updatePublicationStatus(
         this.publicationFlow,

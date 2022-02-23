@@ -7,6 +7,10 @@ import { warn } from '@ember/debug';
 export class TimelineActivity {
   @tracked activity;
 
+  constructor(activity) {
+    this.activity = activity;
+  }
+
   get isRequestActivity() {
     return this.activity.constructor.modelName === 'request-activity';
   }

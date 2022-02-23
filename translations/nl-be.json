@@ -953,8 +953,7 @@
   "no-proofing-activities-yet": "Er zijn nog geen drukproeven aangevraagd.",
   "no-email-available": "Geen e-mail beschikbaar.",
   "no-documents-available": "Geen documenten beschikbaar.",
-  "upload-proof-for-publication-x-identification": "Drukproef uploaden voor publicatie {identification}",
-  "upload-corrected-proof-for-publication-x-identification": "Verbeterde drukproef uploaden voor publicatie {identification}",
+  "upload-proofing-document": "Drukproef uploaden",
   "edit-proof-for-publication-x-identification": "Drukproef bewerken voor publicatie {identification}",
   "edit-corrected-proof-for-publication-x-identification": "Verbeterde drukproef bewerken voor publicatie {identification}",
   "successfully-modified-formally-ok-status": "Status aangepast naar \"{status}\"",
@@ -998,10 +997,11 @@
   "signing-status-signed": "Gehandtekend",
   "publication-info": "Publicatie info",
   "set-status-translation-in": "Zet status naar 'Vertaling In'",
-  "set-status-proof-in": "Zet status naar 'Drukproef In'",
+  "set-status-proof-received": "Zet status naar 'Drukproef In'",
   "delete-translation-request-message": "Bent u zeker dat u de aanvraag wil verwijderen?",
   "delete-translation-request": "Aanvraag verwijderen",
   "request-it": "Aanvragen",
   "delete-request-message": "Bent u zeker dat u de aanvraag wil verwijderen?",
-  "delete-request": "Aanvraag verwijderen"
+  "delete-request": "Aanvraag verwijderen",
+  "who-proof-reads": "Wie leest na?"
 }
