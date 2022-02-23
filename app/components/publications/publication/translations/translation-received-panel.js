@@ -19,7 +19,7 @@ export default class PublicationsTranslationTranslationReceivedPanelComponent ex
   }
 
   @action
-  toggleTranslationEditModal(){
+  toggleTranslationEditModal() {
     this.isOpenTranslationEditModal = !this.isOpenTranslationEditModal;
     // When opening modal, reset possibly stale newEndDate to current endDate
     if (this.isOpenTranslationEditModal) {

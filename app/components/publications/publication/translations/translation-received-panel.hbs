@@ -23,10 +23,13 @@
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
-                <Menu.Item @skin="primary" {{on "click" this.toggleTranslationEditModal}}>
-                  {{t "edit-2"}}
-                </Menu.Item>
-              </DropdownMenu>
+              <Menu.Item
+                @skin="primary"
+                {{on "click" this.toggleTranslationEditModal}}
+              >
+                {{t "edit-2"}}
+              </Menu.Item>
+            </DropdownMenu>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
@@ -64,7 +67,6 @@
   </Auk::Panel>
 </div>
 
-
 {{#if this.isOpenTranslationEditModal}}
   <Auk::Modal>
     <Auk::Modal::Header
@@ -83,9 +85,7 @@
         />
       </div>
     </Auk::Modal::Body>
-    <Auk::Modal::Footer
-      @onCancel={{this.toggleTranslationEditModal}}
-    >
+    <Auk::Modal::Footer @onCancel={{this.toggleTranslationEditModal}}>
       <Auk::Button
         @skin="primary"
         @disabled={{this.isSaveDisabled}}
