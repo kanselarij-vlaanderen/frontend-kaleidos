@@ -21,13 +21,13 @@ as |dropzone|
   <input
     type="file"
     accept={{@accept}}
-    disabled={{or this.uploadIsRunning (and this.uploadIsCompleted (not this.allowReUpload))}}
+    disabled={{or this.uploadIsRunning (and this.uploadIsCompleted (not @reusable))}}
     multiple={{@multiple}}
     onchange={{this.addFilesToQueue}}
   >
   {{!-- template-lint-enable require-input-label --}}
   <div class="auk-file-upload__content">
-    {{#if (and (not this.uploadIsRunning) (and this.uploadIsCompleted this.allowReUpload))}}
+    {{#if (and (not this.uploadIsRunning) (and this.uploadIsCompleted @reusable))}}
       <Auk::Button
         @skin="tertiary"
         @icon="redo"
