@@ -20,6 +20,13 @@
             </p>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
+          <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
+            <Menu.Item @skin="primary" {{on "click" this.openEditProofModal}}>
+              {{t "edit-2"}}
+            </Menu.Item>
+          </DropdownMenu>
+        </Auk::Toolbar::Group>
       </Auk::Toolbar>
     </Auk::Panel::Header>
 
@@ -53,3 +60,12 @@
     </Auk::Panel::Body>
   </Auk::Panel>
 </div>
+
+{{#if this.showEditProofModal}}
+  <Publications::Publication::Proofs::ProofEditModal
+    @proofPrintCorrector={{@publicationSubcase.proofPrintCorrector}}
+    @proofingActivity={{@proofingActivity}}
+    @onSave={{this.saveEdit}}
+    @onCancel={{this.closeEditProofModal}}
+  />
+{{/if}}

@@ -15,7 +15,7 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
   @tracked uploadedPieces = [];
   @tracked receivedAtDate = new Date();
   @tracked mustUpdatePublicationStatus = false;
-  @tracked proofReader;
+  @tracked proofPrintCorrector;
 
   get isCancelDisabled() {
     return this.cancel.isRunning || this.save.isRunning;
@@ -53,17 +53,21 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
     if (this.save.isRunning) {
       return;
     }
-    yield Promise.all(this.uploadedPieces.map((piece) => this.deleteUploadedPiece.perform(piece)));
+    yield Promise.all(
+      this.uploadedPieces.map((piece) =>
+        this.deleteUploadedPiece.perform(piece)
+      )
+    );
     this.args.onCancel();
   }
 
   @task
   *save() {
     yield this.args.onSave({
-      proofReader: this.proofReader,
+      proofPrintCorrector: this.proofPrintCorrector,
       receivedAtDate: this.receivedAtDate,
-      uploadedPieces:this.uploadedPieces,
-      mustUpdatePublicationStatus : this.mustUpdatePublicationStatus,
+      uploadedPieces: this.uploadedPieces,
+      mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
   }
 
@@ -71,7 +75,8 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
   setReceivedAtDate(selectedDates) {
     if (selectedDates.length) {
       this.receivedAtDate = selectedDates[0];
-    } else { // this case occurs when users manually empty the date input-field
+    } else {
+      // this case occurs when users manually empty the date input-field
       this.receivedAtDate = undefined;
     }
   }
@@ -90,7 +95,7 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
     yield Promise.all([
       file.destroyRecord(),
       documentContainer.destroyRecord(),
-      piece.destroyRecord()
+      piece.destroyRecord(),
     ]);
   }
 }

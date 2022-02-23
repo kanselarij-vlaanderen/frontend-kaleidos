@@ -293,10 +293,10 @@ const selectors = {
   },
 
   // proof-edit-modal
-  proofEdit: {
-    name: '[data-test-proof-edit-name]',
-    save: '[data-test-proof-edit-save]',
-  },
+  // proofEdit: {
+  //   name: '[data-test-proof-edit-name]',
+  //   save: '[data-test-proof-edit-save]',
+  // },
 
   // proof-request-modal
   // proofRequest: {

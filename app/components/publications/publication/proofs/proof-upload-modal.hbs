@@ -27,7 +27,7 @@
       />
     </div>
     <div class="auk-form-group">
-      <Auk::Label for="proofUploadReceivedAtDate">
+      <Auk::Label for="proofUploadReceivedAtDate" required={{true}}>
         {{t "date"}}
       </Auk::Label>
       <Auk::Datepicker
@@ -37,12 +37,12 @@
       />
     </div>
     <div class="auk-form-group">
-      <Auk::Label for="proofReader">
+      <Auk::Label for="proofPrintCorrector">
         {{t "who-proof-reads"}}
       </Auk::Label>
       <Auk::Input
-        id="proofReader"
-        @value={{mut this.proofReader}}
+        id="proofPrintCorrector"
+        @value={{mut this.proofPrintCorrector}}
       />
     </div>
   </Auk::Modal::Body>

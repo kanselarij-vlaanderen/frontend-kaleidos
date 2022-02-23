@@ -52,8 +52,8 @@ export default class PublicationsPublicationProofsController extends Controller 
       publicationSubcaseSave = this.publicationSubcase.save();
     }
 
-    if (proofUpload.proofReader){
-      this.publicationSubcase.proofPrintCorrector = proofUpload.proofReader;
+    if (proofUpload.proofPrintCorrector) {
+      this.publicationSubcase.proofPrintCorrector = proofUpload.proofPrintCorrector;
       publicationSubcaseSave = this.publicationSubcase.save();
     }
 
@@ -169,6 +169,27 @@ export default class PublicationsPublicationProofsController extends Controller 
       deletePromises.push(documentContainer.destroyRecord());
     }
     yield Promise.all(deletePromises);
+    this.send('refresh');
+  }
+
+  @task
+  *saveEditReceivedProof(proofEdit) {
+    const saves = [];
+
+    const proofingActivity = proofEdit.proofingActivity;
+    proofingActivity.endDate = proofEdit.receivedAtDate;
+    saves.push(proofingActivity.save());
+
+    if (
+      proofEdit.receivedAtDate < this.publicationSubcase.receivedDate ||
+      !this.publicationSubcase.receivedDate
+    ) {
+      this.publicationSubcase.receivedDate = proofEdit.receivedAtDate;
+    }
+    this.publicationSubcase.proofPrintCorrector = proofEdit.proofPrintCorrector;
+    saves.push(this.publicationSubcase.save());
+
+    yield Promise.all(saves);
     this.send('refresh');
   }
 
