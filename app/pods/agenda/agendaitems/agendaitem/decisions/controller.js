@@ -19,10 +19,7 @@ export default class DecisionAgendaitemAgendaitemsAgendaController extends Contr
     const startDate = this.meeting.plannedStart;
     const now = new Date();
     const agendaActivity = await this.agendaitem.agendaActivity;
-    let subcase;
-    if (agendaActivity) {
-      subcase = await agendaActivity.subcase;
-    }
+    const subcase = await agendaActivity?.subcase
     const newsletterInfo = await this.treatments.firstObject.newsletterInfo;
     const newTreatment = this.store.createRecord('agenda-item-treatment', {
       created: now,
