@@ -45,6 +45,7 @@
         {{else if (and timelineActivity.isTranslationActivity timelineActivity.activity.endDate)}}
           <Publications::Publication::Translations::TranslationReceivedPanel
             @translationActivity={{timelineActivity.activity}}
+            @onSave={{perform this.saveTranslationActivityEdit}}
           />
         {{/if}}
       {{else}}

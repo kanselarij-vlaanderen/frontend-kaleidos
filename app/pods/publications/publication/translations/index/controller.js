@@ -75,6 +75,12 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   @task
+  *saveTranslationActivityEdit(translationActivity, endDate) {
+    translationActivity.endDate = endDate;
+    yield translationActivity.save();
+  }
+
+  @task
   *saveTranslationRequest(translationRequest) {
     const now = new Date();
 

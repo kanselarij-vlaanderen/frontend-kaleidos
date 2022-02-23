@@ -905,7 +905,7 @@
   "help": "Help",
   "upload-reference-document": "Referentiedocument uploaden voor publicatie {identifier}",
   "upload-translation-document": "Vertaling opladen",
-  "edit-translation-document": "Vertaaldocument {docname} bewerken voor publicatie {identifier}",
+  "edit-translation-activity": "Vertaling bewerken",
   "look-at-documentation": "Bekijk documentatie website",
   "contact-us": "Contacteer ons",
   "email-servicedesk": "kaleidos.servicedesk@vlaanderen.be",
