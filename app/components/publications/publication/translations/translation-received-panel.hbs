@@ -20,6 +20,18 @@
             </span>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
+              <Menu.Item
+                @skin="primary"
+                {{on "click" this.toggleTranslationEditModal}}
+              >
+                {{t "edit-2"}}
+              </Menu.Item>
+            </DropdownMenu>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body>
@@ -54,3 +66,33 @@
     </Auk::Panel::Body>
   </Auk::Panel>
 </div>
+
+{{#if this.isOpenTranslationEditModal}}
+  <Auk::Modal>
+    <Auk::Modal::Header
+      @title={{t "edit-translation-activity"}}
+      @onClose={{this.toggleTranslationEditModal}}
+    />
+    <Auk::Modal::Body>
+      <div class="auk-form-group">
+        <Auk::Label for="translationActivityEditEndDate">
+          {{t "date"}}
+        </Auk::Label>
+        <Auk::Datepicker
+          id="translationActivityEditEndDate"
+          @date={{@translationActivity.endDate}}
+          @onChange={{this.setEndDate}}
+        />
+      </div>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.toggleTranslationEditModal}}>
+      <Auk::Button
+        @skin="primary"
+        @disabled={{this.isSaveDisabled}}
+        {{on "click" (perform this.saveEndDate)}}
+      >
+        {{t "save"}}
+      </Auk::Button>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
+{{/if}}

@@ -21,7 +21,9 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   get latestTranslationActivity() {
-    const timelineActivity = this.model.find((timelineActivity) => timelineActivity.isTranslationActivity);
+    const timelineActivity = this.model.find(
+      (timelineActivity) => timelineActivity.isTranslationActivity
+    );
     return timelineActivity ? timelineActivity.activity : null;
   }
 
@@ -73,16 +75,27 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   @task
+  *saveTranslationActivityEdit(translationActivity, endDate) {
+    translationActivity.endDate = endDate;
+    yield translationActivity.save();
+  }
+
+  @task
   *saveTranslationRequest(translationRequest) {
     const now = new Date();
 
     const uploadedPieces = translationRequest.uploadedPieces;
-    const dutch = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
-    yield Promise.all(uploadedPieces.map((piece) => {
-      piece.translationSubcaseSourceFor = this.translationSubcase;
-      piece.language = dutch;
-      return piece.save();
-    }));
+    const dutch = yield this.store.findRecordByUri(
+      'language',
+      CONSTANTS.LANGUAGES.NL
+    );
+    yield Promise.all(
+      uploadedPieces.map((piece) => {
+        piece.translationSubcaseSourceFor = this.translationSubcase;
+        piece.language = dutch;
+        return piece.save();
+      })
+    );
 
     const requestActivity = this.store.createRecord('request-activity', {
       startDate: now,
