@@ -12,7 +12,7 @@ import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
  * @argument onCancel
  */
 export default class PublicationsPublicationProofsProofEditModalComponent extends Component {
-  @tracked receivedAtDate = this.args.proofingActivity.endDate;
+  @tracked receivedDate = this.args.proofingActivity.endDate;
   @tracked proofPrintCorrector = this.args.proofPrintCorrector;
 
   validators;
@@ -34,26 +34,26 @@ export default class PublicationsPublicationProofsProofEditModalComponent extend
   *save() {
     yield this.args.onSave({
       proofingActivity: this.args.proofingActivity,
-      receivedAtDate: this.receivedAtDate,
+      receivedDate: this.receivedDate,
       proofPrintCorrector: this.proofPrintCorrector,
     });
   }
 
   @action
-  setReceivedAtDate(selectedDates) {
+  setreceivedDate(selectedDates) {
     if (selectedDates.length) {
-      this.receivedAtDate = selectedDates[0];
+      this.receivedDate = selectedDates[0];
     } else {
       // this case occurs when users manually empty the date input-field
       // trigger date-picker update
       // eslint-disable-next-line no-self-assign
-      this.receivedAtDate = this.receivedAtDate;
+      this.receivedDate = this.receivedDate;
     }
   }
 
   initValidation() {
     this.validators = new ValidatorSet({
-      receivedAtDate: new Validator(() => isPresent(this.receivedAtDate)),
+      receivedDate: new Validator(() => isPresent(this.receivedDate)),
     });
   }
 }

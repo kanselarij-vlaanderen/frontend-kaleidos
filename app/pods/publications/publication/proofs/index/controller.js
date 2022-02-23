@@ -34,21 +34,21 @@ export default class PublicationsPublicationProofsController extends Controller 
     const pieceSaves = [];
     const language = yield proofingActivity.language;
     for (let piece of proofUpload.uploadedPieces) {
-      piece.receivedDate = proofUpload.receivedAtDate;
+      piece.receivedDate = proofUpload.receivedDate;
       piece.language = language;
       piece.proofingActivityGeneratedBy = proofingActivity;
       pieceSaves.push(piece.save());
     }
 
-    proofingActivity.endDate = proofUpload.receivedAtDate;
+    proofingActivity.endDate = proofUpload.receivedDate;
     const proofingActivitySave = proofingActivity.save();
 
     let publicationSubcaseSave;
     if (
-      proofUpload.receivedAtDate < this.publicationSubcase.receivedDate ||
+      proofUpload.receivedDate < this.publicationSubcase.receivedDate ||
       !this.publicationSubcase.receivedDate
     ) {
-      this.publicationSubcase.receivedDate = proofUpload.receivedAtDate;
+      this.publicationSubcase.receivedDate = proofUpload.receivedDate;
       publicationSubcaseSave = this.publicationSubcase.save();
     }
 
@@ -61,10 +61,10 @@ export default class PublicationsPublicationProofsController extends Controller 
       yield this.publicationService.updatePublicationStatus(
         this.publicationFlow,
         CONSTANTS.PUBLICATION_STATUSES.PROOF_IN,
-        proofUpload.receivedAtDate
+        proofUpload.receivedDate
       );
 
-      this.publicationSubcase.endDate = proofUpload.receivedAtDate;
+      this.publicationSubcase.endDate = proofUpload.receivedDate;
       publicationSubcaseSave = this.publicationSubcase.save();
     }
 
@@ -177,14 +177,14 @@ export default class PublicationsPublicationProofsController extends Controller 
     const saves = [];
 
     const proofingActivity = proofEdit.proofingActivity;
-    proofingActivity.endDate = proofEdit.receivedAtDate;
+    proofingActivity.endDate = proofEdit.receivedDate;
     saves.push(proofingActivity.save());
 
     if (
-      proofEdit.receivedAtDate < this.publicationSubcase.receivedDate ||
+      proofEdit.receivedDate < this.publicationSubcase.receivedDate ||
       !this.publicationSubcase.receivedDate
     ) {
-      this.publicationSubcase.receivedDate = proofEdit.receivedAtDate;
+      this.publicationSubcase.receivedDate = proofEdit.receivedDate;
     }
     this.publicationSubcase.proofPrintCorrector = proofEdit.proofPrintCorrector;
     saves.push(this.publicationSubcase.save());

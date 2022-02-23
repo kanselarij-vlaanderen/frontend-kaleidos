@@ -13,7 +13,7 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
   @service store;
 
   @tracked uploadedPieces = [];
-  @tracked receivedAtDate = new Date();
+  @tracked receivedDate = new Date();
   @tracked mustUpdatePublicationStatus = false;
   @tracked proofPrintCorrector;
 
@@ -24,7 +24,7 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
   get isSaveDisabled() {
     return (
       this.uploadedPieces.length === 0 ||
-      isEmpty(this.receivedAtDate) ||
+      isEmpty(this.receivedDate) ||
       this.cancel.isRunning
     );
   }
@@ -65,19 +65,19 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
   *save() {
     yield this.args.onSave({
       proofPrintCorrector: this.proofPrintCorrector,
-      receivedAtDate: this.receivedAtDate,
+      receivedDate: this.receivedDate,
       uploadedPieces: this.uploadedPieces,
       mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
   }
 
   @action
-  setReceivedAtDate(selectedDates) {
+  setreceivedDate(selectedDates) {
     if (selectedDates.length) {
-      this.receivedAtDate = selectedDates[0];
+      this.receivedDate = selectedDates[0];
     } else {
       // this case occurs when users manually empty the date input-field
-      this.receivedAtDate = undefined;
+      this.receivedDate = undefined;
     }
   }
 
