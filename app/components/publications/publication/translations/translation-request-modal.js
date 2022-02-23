@@ -64,15 +64,17 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
     this.args.onCancel();
   }
 
-  @dropTask
+  @task
   *deleteUploadedPiece(piece) {
     const file = yield piece.file;
     const documentContainer = yield piece.documentContainer;
+    this.uploadedPieces.removeObject(piece);
+
     yield Promise.all([
       file.destroyRecord(),
       documentContainer.destroyRecord(),
+      piece.destroyRecord()
     ]);
-    this.uploadedPieces.removeObject(piece);
   }
 
   @task
