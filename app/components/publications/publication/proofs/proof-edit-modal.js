@@ -40,14 +40,12 @@ export default class PublicationsPublicationProofsProofEditModalComponent extend
   }
 
   @action
-  setreceivedDate(selectedDates) {
+  setReceivedDate(selectedDates) {
     if (selectedDates.length) {
       this.receivedDate = selectedDates[0];
     } else {
       // this case occurs when users manually empty the date input-field
-      // trigger date-picker update
-      // eslint-disable-next-line no-self-assign
-      this.receivedDate = this.receivedDate;
+      this.receivedDate = undefined;
     }
   }
 
