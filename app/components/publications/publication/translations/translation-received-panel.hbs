@@ -78,7 +78,7 @@
         </Auk::Label>
         <Auk::Datepicker
           id="translationActivityEditEndDate"
-          @date={{this.endDate}}
+          @date={{@translationActivity.endDate}}
           @onChange={{this.setEndDate}}
         />
       </div>
@@ -89,7 +89,7 @@
       <Auk::Button
         @skin="primary"
         @disabled={{this.isSaveDisabled}}
-        {{on "click" (perform this.save)}}
+        {{on "click" (perform this.saveEndDate)}}
       >
         {{t "save"}}
       </Auk::Button>
