@@ -23,25 +23,25 @@ const selectors = {
   },
 
   // publications\publication\translations\template
-  publicationTranslations: {
-    documents: '[data-test-route-publications---translations-tab-documents]',
-    // TODO-SELECTOR unused selector
-    requests: '[data-test-route-publications---translations-tab-requests]',
-  },
+  // publicationTranslations: {
+  //   documents: '[data-test-route-publications---translations-tab-documents]',
+  //   // TODO-SELECTOR unused selector
+  //   requests: '[data-test-route-publications---translations-tab-requests]',
+  // },
 
   // publications\publication\translations\documents\template
-  translationsDocuments: {
-    add: '[data-test-route-publications---translations-documents-add]',
-    requestTranslation: '[data-test-route-publications---translations-documents-request-translation]',
-    tableRow: '[data-test-route-publications---translations-documents-table-row]',
-    row: {
-      checkbox: '[data-test-route-publications---translations-documents-row-checkbox]',
-      documentName: '[data-test-route-publications---translations-documents-row-document-name]',
-      options: '[data-test-route-publications---translations-documents-row-options]',
-      edit: '[data-test-route-publications---translations-documents-row-edit]',
-      delete: '[data-test-route-publications---translations-documents-row-delete]',
-    },
-  },
+  // translationsDocuments: {
+  // add: '[data-test-route-publications---translations-documents-add]',
+  // requestTranslation: '[data-test-route-publications---translations-documents-request-translation]',
+  // tableRow: '[data-test-route-publications---translations-documents-table-row]',
+  // row: {
+  //   checkbox: '[data-test-route-publications---translations-documents-row-checkbox]',
+  //   documentName: '[data-test-route-publications---translations-documents-row-document-name]',
+  //   options: '[data-test-route-publications---translations-documents-row-options]',
+  //   edit: '[data-test-route-publications---translations-documents-row-edit]',
+  //   delete: '[data-test-route-publications---translations-documents-row-delete]',
+  //   },
+  // },
 
   // publications\publication\proofs\documents\template
   proofsDocuments: {
@@ -254,21 +254,21 @@ const selectors = {
 
   // documents-upload-modal
   // translation upload modal
-  documentsUpload: {
-    name: '[data-test-publication-documents-upload-name]',
-    pages: '[data-test-publication-documents-upload-pages]',
-    words: '[data-test-publication-documents-upload-words]',
-    proofPrint: '[data-test-publication-documents-upload-proof-print]',
-    save: '[data-test-publication-documents-upload-save]',
-  },
+  // documentsUpload: {
+  //   name: '[data-test-publication-documents-upload-name]',
+  //   pages: '[data-test-publication-documents-upload-pages]',
+  //   words: '[data-test-publication-documents-upload-words]',
+  //   proofPrint: '[data-test-publication-documents-upload-proof-print]',
+  //   save: '[data-test-publication-documents-upload-save]',
+  // },
 
   // translation-request-modal
-  translationRequest: {
-    message: '[data-test-publication-translation-request-message]',
-    save: '[data-test-publication-translation-request-save]',
-    // TODO-SELECTOR unused selectors
-    documentsList: '[data-test-publication-translation-request-documents-list]',
-  },
+  // translationRequest: {
+  //   message: '[data-test-publication-translation-request-message]',
+  //   save: '[data-test-publication-translation-request-save]',
+  //   // TODO-SELECTOR unused selectors
+  //   documentsList: '[data-test-publication-translation-request-documents-list]',
+  // },
 
   // document-edit-modal
   documentEdit: {
@@ -281,10 +281,10 @@ const selectors = {
   },
 
   //  translation-upload-modal
-  translationUpload: {
-    name: '[data-test-translation-upload-name]',
-    save: '[data-test-translation-upload-save]',
-  },
+  // translationUpload: {
+  //   name: '[data-test-translation-upload-name]',
+  //   save: '[data-test-translation-upload-save]',
+  // },
 
   // proof-upload-modal
   proofUpload: {
@@ -305,5 +305,31 @@ const selectors = {
     attachments: '[data-test-proof-request-attachments]',
     save: '[data-test-proof-request-save]',
   },
+
+  // publication-case-info-panel
+  publicationCaseInfo: {
+    edit: '[data-test-publication-case-info-panel-edit]',
+    numacNumber: '[data-test-publication-case-info-panel-numac-number]',
+    save: '[data-test-publication-case-info-panel-save]',
+  },
+
+  // remark-panel
+  remark: {
+    edit: '[data-test-remark-panel-edit]',
+    textarea: '[data-test-remark-panel-textarea]',
+    save: '[data-test-remark-panel-save]',
+  },
+
+  // status-pill
+  statusPill: {
+    contentLabel: '[data-test-status-pill-content-label]',
+    changeStatus: '[data-test-status-pill-change-status]',
+  },
+  // publication-status-modal
+  publicationStatus: {
+    select: '[data-test-publication-status-select]',
+    save: '[data-test-publication-status-save]',
+  },
+
 };
 export default selectors;
