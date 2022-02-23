@@ -1,0 +1,30 @@
+{{#if
+  (or
+    this.loadDecision.isRunning
+    this.loadStatus.isRunning
+  )
+}}
+  <Auk::Loader />
+{{else}}
+  <Auk::StatusPill
+    @step={{this.publicationStatusPillStep}}
+    @status={{this.publicationStatusPillKey}}
+    @size="small"
+    @icon="pencil"
+    @isActionable={{not (and this.publicationStatus.isPublished this.decision.isStaatsbladResource)}}
+    @actionLabel={{t "edit-status"}}
+    {{on "click" this.openStatusSelector}}
+  >
+    <strong {{did-update (perform this.loadStatus) @publicationFlow.status}}>{{this.publicationStatus.label}}</strong>
+    -
+    {{moment-format @publicationFlow.publicationStatusChange.startedAt "DD/MM/YYYY"}}
+  </Auk::StatusPill>
+{{/if}}
+
+{{#if this.showStatusSelector}}
+  <Publications::PublicationStatusModal
+    @publicationStatus={{this.publicationStatus}}
+    @onSave={{perform this.savePublicationStatus}}
+    @onCancel={{this.closeStatusSelector}}
+  />
+{{/if}}

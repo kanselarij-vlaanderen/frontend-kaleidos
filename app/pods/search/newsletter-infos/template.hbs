@@ -17,25 +17,25 @@
         >
           <table.content as |c|>
             <c.header>
-              <th class="auk-table__col--6 auk-table__header-title">
+              <th class="auk-table__col--6">
                 {{t "title-and-content"}}
               </th>
               <ThSortable
-                @class="auk-table__col--2 auk-table__header-title"
+                @class="auk-table__col--2"
                 @currentSorting={{this.sort}}
                 @field="agendaitems.meetingDate"
                 @label={{t "agenda-of"}}
               />
-              <th class="auk-table__col--2 auk-table__header-title">
+              <th class="auk-table__col--2">
                 {{t "minister"}}
               </th>
               {{! sorting on this field won't work as-is, since you can have multiple decisions}}
-              <th class="auk-table__col--1 auk-table__header-title">
+              <th class="auk-table__col--1">
                 {{t "agendaitem-decision"}}
               </th>
               <th class="auk-table__col--1"></th>
             </c.header>
-            <c.body class="auk-table--interaction-cursor" as |row|>
+            <c.body class="auk-table--clickable-rows" as |row|>
               {{! each row has been processed to have 1 decision (object) as well as 1 latestAgendaitem (object)}}
               {{! see postProcess methods in route}}
               {{#let row.latestAgendaitem as |latestAgendaitem|}}

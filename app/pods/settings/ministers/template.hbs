@@ -19,41 +19,14 @@
     <table class="auk-table auk-table--striped">
       <thead>
         <tr>
-          <th class="auk-table__col--6 auk-table__header-title">
-            <a class="auk-table__header-title--sortable auk-table__header-title--sortable-active"
-               href="#"
-            ></a>
-            <a class="auk-table__header-title--sortable" href="#">
-              <div class="auk-o-flex auk-o-flex--vertical-center">
-                <span>
-                  {{t "minister"}}
-                </span>
-              </div>
-            </a>
+          <th class="auk-table__col--6">
+            {{t "minister"}}
           </th>
-          <th class="auk-table__col--3 auk-table__header-title">
-            <a class="auk-table__header-title--sortable auk-table__header-title--sortable-active"
-               href="#"
-            ></a>
-            <a class="auk-table__header-title--sortable" href="#">
-              <div class="auk-o-flex auk-o-flex--vertical-center">
-                <span>
-                  {{t "newsletter-name"}}
-                </span>
-              </div>
-            </a>
+          <th class="auk-table__col--3">
+            {{t "newsletter-name"}}
           </th>
-          <th class="auk-table__col--1 auk-table__header-title">
-            <a class="auk-table__header-title--sortable auk-table__header-title--sortable-active"
-               href="#"
-            ></a>
-            <a class="auk-table__header-title--sortable" href="#">
-              <div class="auk-o-flex auk-o-flex--vertical-center">
-                <span>
-                  {{t "priority"}}
-                </span>
-              </div>
-            </a>
+          <th class="auk-table__col--1">
+            {{t "priority"}}
           </th>
           {{!--<th class="auk-table__col--2"></th>--}}
         </tr>
@@ -76,7 +49,7 @@
           >--}}
             <td data-test-route-settings-ministers-mandatee-full-display-name={{index}} class="mandatee-draggable-row">
               {{#if (is-pending mandatee.fullDisplayName)}}
-                <div class="skeletal-loader" role="alert" aria-busy="true"></div>
+                <div class="auk-skeleton auk-skeleton--rectangle" role="alert" aria-busy="true"></div>
               {{else}}
                 {{await mandatee.fullDisplayName}}
               {{/if}}

@@ -75,36 +75,36 @@
               <table.content as |c|>
                 <c.header>
                   <ThSortable
-                    @class="auk-table__col--3 auk-table__header-title"
+                    @class="auk-table__col--3"
                     @currentSorting={{this.sort}}
                     @field="planned-start,number-representation"
                     @label={{t "agenda"}}
                   />
                   <ThSortable
-                    @class="auk-table__col--2 auk-table__header-title"
+                    @class="auk-table__col--2"
                     @field="agendas"
                     @label={{t "agenda-version"}}
                   />
                   <th
-                    class="auk-table__col--2 auk-table__header-title auk-table__header-title--unsortable"
+                    class="auk-table__col--2"
                   >
                     {{t "latest-modified"}}
                   </th>
                   <ThSortable
-                    @class="auk-table__col--2 auk-table__header-title"
+                    @class="auk-table__col--2"
                     @currentSorting={{this.sort}}
                     @field="is-final"
                     @label={{t "status"}}
                   />
                   <ThSortable
-                    @class="auk-table__col--2 auk-table__header-title"
+                    @class="auk-table__col--2"
                     @currentSorting={{this.sort}}
                     @field="kind"
                     @label={{t "kind"}}
                   />
                   <th class="auk-table__col--1"></th>
                 </c.header>
-                <c.body @class="auk-table--interaction-cursor" as |meeting|>
+                <c.body @class="auk-table--clickable-rows" as |meeting|>
                   {{#if (not meeting.alreadyShown)}}
                     <td data-test-route-agendas-overview-row-title>
                       {{t "agenda-for"}}
@@ -116,7 +116,7 @@
                     <td>
                       {{#if (is-pending meeting.latestAgenda)}}
                         <div
-                          class="skeletal-loader"
+                          class="auk-skeleton auk-skeleton--rectangle"
                           role="alert"
                           aria-busy="true"
                         ></div>

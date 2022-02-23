@@ -51,7 +51,6 @@
     <:floater>
       <AttachPopover
         @renderInPlace={{true}}
-        @class="ember-attacher-popper"
         @hideOn="clickout click"
         @showOn="click"
         @animation="shift"
@@ -61,7 +60,7 @@
           <Auk::Menu::Item @textOnly={{true}}>
             <Auk::Avatar @icon="user" @name="Admin">
               <p>Admin</p>
-              <p class="auk-u-muted auk-u-text-size--small">Beheerdersgroep</p>
+              <p class="auk-u-text-muted auk-u-text-size--small">Beheerdersgroep</p>
             </Auk::Avatar>
           </Auk::Menu::Item>
           <Auk::Menu::Divider />

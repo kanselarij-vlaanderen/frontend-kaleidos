@@ -1,4 +1,4 @@
-/* global context, before, it, cy, beforeEach, afterEach, Cypress */
+/* global context, it, cy, beforeEach, afterEach, Cypress */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -9,19 +9,14 @@ import document from '../../selectors/document.selectors';
 import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
-  return Cypress.moment().unix();
+  return Cypress.dayjs().unix();
 }
 
-context('Add files to an agenda', () => {
-  const agendaDate = Cypress.moment().add(1, 'weeks')
+context('Decision tests', () => {
+  const agendaDate = Cypress.dayjs().add(1, 'weeks')
     .day(2); // Next friday
 
-  before(() => {
-    cy.server();
-  });
-
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 
@@ -49,7 +44,7 @@ context('Add files to an agenda', () => {
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.addDocumentToTreatment(file);
-    cy.route('DELETE', 'files/*').as('deleteFile');
+    cy.intercept('DELETE', 'files/*').as('deleteFile');
     cy.get(document.vlUploadedDocument.deletePiece).click();
     cy.wait('@deleteFile', {
       timeout: 12000,
@@ -61,11 +56,11 @@ context('Add files to an agenda', () => {
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     });
 
-    cy.route('POST', 'pieces').as('createNewPiece');
-    cy.route('POST', 'document-containers').as('createNewDocumentContainer');
-    cy.route('PATCH', 'agenda-item-treatments/**').as('patchTreatments');
-    cy.route('DELETE', 'pieces/*').as('deletePiece');
-    cy.route('DELETE', 'document-containers/*').as('deleteDocumentContainer');
+    cy.intercept('POST', 'pieces').as('createNewPiece');
+    cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
+    cy.intercept('PATCH', 'agenda-item-treatments/**').as('patchTreatments');
+    cy.intercept('DELETE', 'pieces/*').as('deletePiece');
+    cy.intercept('DELETE', 'document-containers/*').as('deleteDocumentContainer');
 
     cy.get(utils.vlModalFooter.save).click();
 
@@ -121,7 +116,8 @@ context('Add files to an agenda', () => {
     cy.get('@docCards').eq(0)
       .within(() => {
         cy.get(document.documentCard.name.value).contains(/BIS/);
-        cy.get(document.documentCard.actions).click();
+        cy.get(document.documentCard.actions).should('not.be.disabled')
+          .click();
         cy.get(document.documentCard.delete).click();
       });
     cy.get(utils.vlModalVerify.save).contains('Verwijderen')
@@ -180,7 +176,7 @@ context('Add files to an agenda', () => {
     cy.get(agenda.agendaitemNav.decisionTab).click();
     cy.url().should('contain', '/beslissingen');
 
-    cy.route('PATCH', 'agenda-item-treatments/**').as('patchTreatment');
+    cy.intercept('PATCH', 'agenda-item-treatments/**').as('patchTreatment');
     cy.get(agenda.agendaitemDecision.edit).click();
     cy.get(agenda.agendaitemDecisionEdit.resultContainer).within(() => {
       cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()

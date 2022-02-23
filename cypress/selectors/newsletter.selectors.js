@@ -12,12 +12,20 @@ const selectors = {
 
   // component agendaitem-news-item
   agendaitemNewsItem: {
+    title: '[data-test-agendaitem-news-item-title]',
     themes: '[data-test-agendaitem-news-item-themes]',
   },
 
   // component edit-item
   editItem: {
+    noNota: '[data-test-newsletter-edit-item-no-nota]',
+    // the property subtitle from newsletter info is actually the long title (confusing)
+    // we expect the subtitle from newletter info but we get the title from agendaitem
+    longTitle: '[data-test-newsletter-edit-item-long-title]',
+    // the property title from newsletter info is actually the short title (confusing)
+    shortTitle: '[data-test-newsletter-edit-item-short-title]',
     rdfaEditor: '[data-test-newsletter-edit-item-rdfa-editor]',
+    toggleFinished: '[data-test-newsletter-edit-item-toggle-finished]',
     save: '[data-test-newsletter-edit-item-save]',
     cancel: '[data-test-newsletter-edit-item-cancel]',
     checkedThemes: '[data-test-newsletter-edit-item-themes-selector] input:checked',

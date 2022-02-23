@@ -6,12 +6,26 @@ export default class PublicationService extends Service {
   @service toaster;
   @service intl;
 
-  async createNewPublicationFromMinisterialCouncil(publicationProperties, decisionOptions) {
-    return this.createNewPublication(publicationProperties, decisionOptions, undefined);
+  async createNewPublicationFromMinisterialCouncil(
+    publicationProperties,
+    decisionOptions
+  ) {
+    return this.createNewPublication(
+      publicationProperties,
+      decisionOptions,
+      undefined
+    );
   }
 
-  async createNewPublicationWithoutMinisterialCouncil(publicationProperties, decisionOptions) {
-    return this.createNewPublication(publicationProperties, undefined, decisionOptions);
+  async createNewPublicationWithoutMinisterialCouncil(
+    publicationProperties,
+    decisionOptions
+  ) {
+    return this.createNewPublication(
+      publicationProperties,
+      undefined,
+      decisionOptions
+    );
   }
 
   /**
@@ -33,7 +47,11 @@ export default class PublicationService extends Service {
    * @returns {PublicationFlow}
    * @private
    */
-  async createNewPublication(publicationProperties, viaCouncilOfMinisterOptions, notViaCouncilOfMinistersOptions) {
+  async createNewPublication(
+    publicationProperties,
+    viaCouncilOfMinisterOptions,
+    notViaCouncilOfMinistersOptions
+  ) {
     const now = new Date();
 
     let case_;
@@ -58,16 +76,25 @@ export default class PublicationService extends Service {
       mandatees = [];
     }
 
-    const initialStatus = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.STARTED);
+    const initialStatus = await this.store.findRecordByUri(
+      'publication-status',
+      CONSTANTS.PUBLICATION_STATUSES.STARTED
+    );
 
-    const structuredIdentifier = this.store.createRecord('structured-identifier', {
-      localIdentifier: publicationProperties.number,
-      versionIdentifier: publicationProperties.suffix,
-    });
+    const structuredIdentifier = this.store.createRecord(
+      'structured-identifier',
+      {
+        localIdentifier: publicationProperties.number,
+        versionIdentifier: publicationProperties.suffix,
+      }
+    );
     await structuredIdentifier.save();
 
     let identificationNumber = publicationProperties.number;
-    if (publicationProperties.suffix && publicationProperties.suffix.length > 0) {
+    if (
+      publicationProperties.suffix &&
+      publicationProperties.suffix.length > 0
+    ) {
       identificationNumber += ` ${publicationProperties.suffix}`;
     }
 
@@ -111,7 +138,11 @@ export default class PublicationService extends Service {
     return publicationFlow;
   }
 
-  async publicationNumberAlreadyTaken(publicationNumber, publicationSuffix, publicationFlowId) {
+  async publicationNumberAlreadyTaken(
+    publicationNumber,
+    publicationSuffix,
+    publicationFlowId
+  ) {
     let identificationNumber = publicationNumber;
     if (publicationSuffix && publicationSuffix.length > 0) {
       identificationNumber += ` ${publicationSuffix}`;
@@ -126,6 +157,62 @@ export default class PublicationService extends Service {
     });
 
     // our own publication should not be considered as duplicate
-    return duplicates.filter((publication) => publication.id !== publicationFlowId).length > 0;
+    return (
+      duplicates.filter((publication) => publication.id !== publicationFlowId)
+        .length > 0
+    );
+  }
+
+  // earliest publication date of a decision linked to first started publication activity
+  async getPublicationDate(publicationFlow) {
+    const publicationSubcase = await publicationFlow.publicationSubcase;
+    const publicationActivities = (
+      await publicationSubcase.publicationActivities
+    ).sortBy('startDate');
+    if (publicationActivities.length) {
+      for (let publicationActivity of publicationActivities) {
+        const publishedDecisions = (await publicationActivity.decisions).sortBy(
+          'publicationDate'
+        );
+        if (publishedDecisions.length) {
+          return publishedDecisions.firstObject.publicationDate;
+        }
+      }
+    }
+    return undefined;
+  }
+
+  async getIsViaCouncilOfMinisters(publicationFlow) {
+    const _case = await publicationFlow.case;
+    const subcases = await _case.subcases;
+    return !!subcases.length;
+  }
+
+  async updatePublicationStatus(
+    publicationFlow,
+    targetStatusUri,
+    changeDate = new Date()
+  ) {
+    publicationFlow.status = await this.store.findRecordByUri(
+      'publication-status',
+      targetStatusUri
+    );
+    // Continuing without awaiting here can cause saving while related status-change
+    // already is deleted (by step below)
+    await publicationFlow.save();
+
+    const oldChangeActivity = await publicationFlow
+      .publicationStatusChange;
+    if (oldChangeActivity) {
+      await oldChangeActivity.destroyRecord();
+    }
+    const newChangeActivity = this.store.createRecord(
+      'publication-status-change',
+      {
+        startedAt: changeDate,
+        publication: publicationFlow,
+      }
+    );
+    await newChangeActivity.save();
   }
 }

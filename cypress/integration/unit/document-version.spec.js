@@ -8,7 +8,6 @@ import document from '../../selectors/document.selectors';
 
 context('Tests for KAS-1076', () => {
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 

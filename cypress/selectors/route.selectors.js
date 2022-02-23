@@ -92,8 +92,6 @@ const selectors = {
     input: '[data-test-route-search-input]',
     trigger: '[data-test-route-search-trigger]',
     mandatee: '[data-test-route-search-mandatee-input]',
-    // TODO-selector unused selector:
-    datepickerButton: '[data-test-route-search-datepicker-button]',
   },
 
   // search/agendaitems

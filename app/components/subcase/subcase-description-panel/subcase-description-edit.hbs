@@ -4,7 +4,7 @@
       <div class="auk-u-mb-4">
         <fieldset>
           <legend class="auk-label">{{t "subcase-type"}}</legend>
-          <Auk::RadioList @layout="inline" as |List|>
+          <Auk::RadioList data-test-subcase-description-edit-type @layout="inline" as |List|>
             {{#each this.caseTypes as |type|}}
               <List.Radio
                 @label={{type.label}}

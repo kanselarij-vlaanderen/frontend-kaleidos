@@ -6,12 +6,11 @@ import cases from '../../selectors/case.selectors';
 import document from '../../selectors/document.selectors';
 
 function currentTimestamp() {
-  return Cypress.moment().unix();
+  return Cypress.dayjs().unix();
 }
 
 context('Tests of pieces on agendaitems', () => {
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 
@@ -25,7 +24,7 @@ context('Tests of pieces on agendaitems', () => {
     // Agenda B => add new Piece to existing container => BIS piece replaces the original piece in the list of pieces of agendaitem
     // Agenda B => delete the new BIS piece => We must restore the original piece and put it in the list of pieces of agendaitem
     const testId = `testId=${currentTimestamp()}: `;
-    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
+    const dateToCreateAgenda = Cypress.dayjs().add(3, 'weeks')
       .day(4); // thursday in three weeks;
 
     const caseTitle = `${testId} agendaitem-pieces case`;

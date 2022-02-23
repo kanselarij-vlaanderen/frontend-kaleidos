@@ -8,6 +8,8 @@ import utils from '../../selectors/utils.selectors';
 
 context('Publications tests', () => {
   const pubNumber = '100';
+  const numberError = 'Publicatienummer is numeriek en verplicht.';
+  const shortTitleError = 'Dit veld dient ingevuld te worden.';
 
   function checkIfNewPublicationFieldsAreEmpty(number, currentDate) {
     cy.get(publication.newPublication.number).should('not.contain', number);
@@ -25,36 +27,36 @@ context('Publications tests', () => {
   }
 
   beforeEach(() => {
-    cy.server();
     cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
+    cy.intercept('GET', '/regulation-types?**').as('getRegulationTypes');
     cy.visit('/publicaties');
+    cy.wait('@getRegulationTypes');
   });
 
   afterEach(() => {
     cy.logout();
   });
 
-  // TODO-publication tests that duplicate publication numbers are not possible unless a suffix is given, combination of number+suffix should be unique
-  // TODO-publication publication numbers edit both during creation as in sidebar
   // Be careful when using fixed numbers in tests, with automatic numbering implemented, some of them were already used
 
   it('should render error when required fields are not filled in to create new publication', () => {
     const shortTitle = 'new publication: required fields';
+
     cy.get(publication.publicationsIndex.newPublication).click();
-    cy.route('POST', '/publication-flows').as('createNewPublicationFlow');
+    cy.intercept('POST', '/publication-flows').as('createNewPublicationFlow');
     // No errors on initial view, just info
     cy.get(publication.newPublication.alertInfo).should('exist');
-    cy.get(publication.newPublication.alertError).should('not.exist');
+    // Saving is not allowed when first opening the modal
+    cy.get(publication.newPublication.create).should('be.disabled');
     // Clear the next number to validate that empty number is not allowed
     cy.get(publication.newPublication.number).click()
       .clear();
-    cy.get(publication.newPublication.create).click();
-    // The info alert is replaced by error alert
-    cy.get(publication.newPublication.alertError).should('exist');
-    cy.get(publication.newPublication.alertInfo).should('not.exist');
-    // both number and shortTitle should show error when empty
-    cy.get(publication.newPublication.numberError).should('exist');
-    cy.get(publication.newPublication.shortTitleError).should('exist');
+    cy.get(publication.newPublication.create).should('be.disabled');
+    // both number and shortTitle should show error when empty, only visible after entering/exiting the short title field
+    cy.get(auk.formHelpText).contains(numberError);
+    cy.get(publication.newPublication.shortTitle).click();
+    cy.get(publication.newPublication.longTitle).click();
+    cy.get(auk.formHelpText).contains(shortTitleError);
     // Create publication with number and title
     // TODO-publication with automatic number suggestion, this test could fail if testdata already contains a publication with number 100
     cy.get(publication.newPublication.number).click()
@@ -64,8 +66,9 @@ context('Publications tests', () => {
       .click()
       .clear()
       .type(shortTitle);
-    cy.get(publication.newPublication.create).click();
-    cy.get(publication.newPublication.alertError).should('not.exist');
+    // valid number and valid short title allows create action
+    cy.get(publication.newPublication.create).should('not.be.disabled')
+      .click();
     cy.get(publication.newPublication.alertInfo).should('exist');
     cy.wait('@createNewPublicationFlow');
     // TODO-publication new way of creating publication-number with structured identifier can be checked with routes
@@ -82,32 +85,28 @@ context('Publications tests', () => {
     const fields = {
       number: 999,
       suffix: 'BIS',
-      decisionDate: Cypress.moment().add(1, 'weeks')
+      decisionDate: Cypress.dayjs().add(1, 'weeks')
         .day(3),
-      receptionDate: Cypress.moment().add(1, 'weeks')
+      receptionDate: Cypress.dayjs().add(1, 'weeks')
         .day(3),
-      targetPublicationdate: Cypress.moment().add(1, 'weeks')
+      targetPublicationdate: Cypress.dayjs().add(1, 'weeks')
         .day(3),
       shortTitle: 'Some text',
       longTitle: 'Some text',
     };
-    const currentDate = Cypress.moment().format('DD-MM-YYYY');
+    const currentDate = Cypress.dayjs().format('DD-MM-YYYY');
 
     // error validation (and reset after cancel)
     cy.get(publication.publicationsIndex.newPublication).click();
     cy.get(publication.newPublication.number).click()
       .clear();
     cy.get(publication.newPublication.shortTitle).should('be.empty');
-    cy.get(publication.newPublication.create).click();
-    cy.get(publication.newPublication.alertError).should('exist');
-    cy.get(publication.newPublication.numberError).should('exist');
-    cy.get(publication.newPublication.shortTitleError).should('exist');
+    cy.get(publication.newPublication.create).should('be.disabled');
+    cy.get(auk.formHelpText).contains(numberError);
     cy.get(auk.modal.footer.cancel).click();
     cy.get(publication.publicationsIndex.newPublication).click();
     cy.get(publication.newPublication.alertInfo).should('exist');
-    cy.get(publication.newPublication.alertError).should('not.exist');
-    cy.get(publication.newPublication.numberError).should('not.exist');
-    cy.get(publication.newPublication.shortTitleError).should('not.exist');
+    cy.get(auk.formHelpText).should('not.exist');
 
     // check reset after cancel
     cy.fillInNewPublicationFields(fields);
@@ -130,18 +129,21 @@ context('Publications tests', () => {
     };
     const shortTitleEdit = 'Korte titel cypress test gewijzigd';
     const longTitleEdit = 'Lange titel voor de cypress test gewijzigd.';
-    cy.route('GET', '/publication-flows/**').as('getNewPublicationDetail');
+    cy.intercept('GET', '/publication-flows/**').as('getNewPublicationDetail');
     cy.createPublication(fields);
 
     // error validation and reset after cancel
     cy.get(publication.inscription.view.edit).click();
+    cy.get(publication.inscription.edit.save).should('not.be.disabled');
     cy.get(publication.inscription.edit.shortTitle).click()
       .clear();
-    cy.get(publication.inscription.edit.save).click();
-    cy.get(publication.inscription.edit.shortTitleError).should('exist');
+    cy.get(publication.inscription.edit.save).should('be.disabled');
+    // TODO-bug error message only shows after clicking something else
+    cy.get(publication.inscription.edit.longTitle).click();
+    cy.get(auk.formHelpText).contains(shortTitleError);
     cy.get(publication.inscription.edit.cancel).click();
     cy.get(publication.inscription.view.edit).click();
-    cy.get(publication.inscription.edit.shortTitleError).should('not.exist');
+    cy.get(publication.inscription.edit.shortTitle).should('have.value', fields.shortTitle);
     cy.get(publication.inscription.edit.shortTitle).click()
       .clear()
       .type(shortTitleEdit);
@@ -160,14 +162,14 @@ context('Publications tests', () => {
     cy.get(publication.inscription.edit.longTitle).click()
       .clear()
       .type(longTitleEdit);
-    cy.route('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
     cy.get(publication.inscription.edit.save).click();
     cy.wait('@patchPublicationFlow');
     cy.get(publication.inscription.view.shortTitle).contains(shortTitleEdit);
     cy.get(publication.inscription.view.longTitle).contains(longTitleEdit);
 
     // go back in overview
-    cy.route('GET', '/publication-flows?**').as('goToPublicationOverview');
+    cy.intercept('GET', '/publication-flows?**').as('goToPublicationOverview');
     cy.get(publication.publicationNav.goBack).click();
     cy.wait('@goToPublicationOverview');
 
@@ -179,7 +181,7 @@ context('Publications tests', () => {
     const noMandatees = 'Er zijn nog geen ministers toegevoegd.';
     const mandateeName = 'Jan Jambon';
 
-    cy.route('GET', '/publication-flows/**').as('getNewPublicationDetail');
+    cy.intercept('GET', '/publication-flows**').as('getNewPublicationDetail');
     cy.get(publication.publicationTableRow.row.goToPublication).first()
       .click();
     cy.wait('@getNewPublicationDetail');
@@ -188,15 +190,15 @@ context('Publications tests', () => {
     cy.get(auk.emptyState.message).contains(noMandatees);
 
     // add mandatee
-    cy.route('GET', '/mandatees**http://themis.vlaanderen.be/id/bestuursorgaan/**').as('getMandatees');
+    cy.intercept('GET', '/mandatees**').as('getMandatees');
     cy.get(publication.mandateesPanel.add).click();
     cy.wait('@getMandatees');
     cy.get(utils.mandateesSelector.add).should('be.disabled');
     cy.get(utils.mandateeSelector.container).click();
-    cy.get(dependency.emberPowerSelect.optionSearchMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(mandateeName)
       .click();
-    cy.route('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
     cy.get(utils.mandateesSelector.add).should('not.be.disabled')
       .click();
     cy.wait('@patchPublicationFlow');
@@ -217,7 +219,7 @@ context('Publications tests', () => {
     const labelName = 'Cultuur, Jeugd, Sport en Media';
     const fieldsName = 'Media';
 
-    cy.route('GET', '/publication-flows/**').as('getNewPublicationDetail');
+    cy.intercept('GET', '/publication-flows**').as('getNewPublicationDetail');
     cy.get(publication.publicationTableRow.row.goToPublication).first()
       .click();
     cy.wait('@getNewPublicationDetail');
@@ -226,9 +228,11 @@ context('Publications tests', () => {
     cy.get(auk.emptyState.message).contains(noGovernmentFields);
 
     // reset after cancel
-    cy.get(publication.governmentFieldsPanel.edit).click();
-    cy.get(utils.domainsFieldsSelectorForm.container).contains(labelName)
-      .find(utils.domainsFieldsSelectorForm.field)
+    cy.intercept('GET', '/concepts**').as('getConceptSchemes');
+    cy.get(utils.governmentAreasPanel.edit).click();
+    cy.wait('@getConceptSchemes');
+    cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
+      .find(utils.governmentAreaSelectorForm.field)
       .contains(fieldsName)
       .click();
     cy.get(auk.modal.footer.cancel).click();
@@ -236,25 +240,24 @@ context('Publications tests', () => {
 
 
     // link government field
-    cy.route('PATCH', '/cases/**').as('patchCase');
-    cy.get(publication.governmentFieldsPanel.edit).click();
-    cy.wait(10000); // TODO to fix with proper await for concepts
-    cy.get(utils.domainsFieldsSelectorForm.container).contains(labelName)
-      .find(utils.domainsFieldsSelectorForm.field)
+    cy.intercept('PATCH', '/cases/**').as('patchCase');
+    cy.get(utils.governmentAreasPanel.edit).click();
+    cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
+      .find(utils.governmentAreaSelectorForm.field)
       .contains(fieldsName)
       .click();
-    cy.get(publication.editGovernmentFieldsModal.save).click();
+    cy.get(utils.editGovernmentFieldsModal.save).click();
     cy.wait('@patchCase');
-    cy.get(publication.governmentFieldsPanel.rows).should('have.length', 1);
-    cy.get(publication.governmentFieldsPanel.row.label).contains(labelName);
-    cy.get(publication.governmentFieldsPanel.row.fields).contains(fieldsName);
+    cy.get(utils.governmentAreasPanel.rows).should('have.length', 1);
+    cy.get(utils.governmentAreasPanel.row.label).contains(labelName);
+    cy.get(utils.governmentAreasPanel.row.fields).contains(fieldsName);
     // unlink government field
-    cy.get(publication.governmentFieldsPanel.edit).click();
-    cy.get(utils.domainsFieldsSelectorForm.container).contains(labelName)
-      .find(utils.domainsFieldsSelectorForm.field)
+    cy.get(utils.governmentAreasPanel.edit).click();
+    cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
+      .find(utils.governmentAreaSelectorForm.field)
       .contains(fieldsName)
       .click();
-    cy.get(publication.editGovernmentFieldsModal.save).click();
+    cy.get(utils.editGovernmentFieldsModal.save).click();
     cy.wait('@patchCase');
     cy.get(auk.emptyState.message).contains(noGovernmentFields);
   });
@@ -269,7 +272,7 @@ context('Publications tests', () => {
     };
 
     // TODO open publication (with index)
-    cy.route('GET', '/publication-flows/**').as('getNewPublicationDetail');
+    cy.intercept('GET', '/publication-flows**').as('getNewPublicationDetail');
     cy.get(publication.publicationTableRow.row.goToPublication).first()
       .click();
     cy.wait('@getNewPublicationDetail');
@@ -298,13 +301,13 @@ context('Publications tests', () => {
     cy.get(publication.contactPersonAdd.addOrganization).click();
     cy.get(publication.organizationAdd.name).click()
       .type(contactperson.org);
-    cy.route('POST', '/organizations').as('postOrganizations');
+    cy.intercept('POST', '/organizations').as('postOrganizations');
     cy.get(publication.organizationAdd.submit).click();
     cy.wait('@postOrganizations');
 
     // Click submit.
-    cy.route('POST', '/persons').as('postPerson');
-    cy.route('POST', '/contact-persons').as('postContactPerson');
+    cy.intercept('POST', '/persons').as('postPerson');
+    cy.intercept('POST', '/contact-persons').as('postContactPerson');
     cy.get(publication.contactPersonAdd.submit).click();
     cy.wait('@postPerson');
     cy.wait('@postContactPerson');
@@ -316,8 +319,8 @@ context('Publications tests', () => {
     cy.get(publication.contactPersons.row.email).contains(contactperson.eml);
 
     // Delete contact person
-    cy.route('DELETE', '/contact-persons/**').as('deleteContactPerson');
-    cy.route('DELETE', '/persons/**').as('deletePerson');
+    cy.intercept('DELETE', '/contact-persons/**').as('deleteContactPerson');
+    cy.intercept('DELETE', '/persons/**').as('deletePerson');
     cy.get(publication.contactPersons.row.delete).click();
     cy.wait('@deleteContactPerson');
     cy.wait('@deletePerson');
@@ -329,21 +332,20 @@ context('Publications tests', () => {
 
   it('publications:dossier:check publication number uniqueness', () => {
     const suffix = 'BIS';
-    cy.route('POST', '/publication-flows').as('createNewPublicationFlow');
+    const duplicateError = 'Het gekozen publicatienummer is reeds in gebruik. Gelieve een ander nummer te kiezen of een suffix te gebruiken.';
+    cy.intercept('POST', '/publication-flows').as('createNewPublicationFlow');
 
     // try to create publication with existing number and check warnings
     cy.get(publication.publicationsIndex.newPublication).click();
     cy.get(publication.newPublication.number).click()
       .clear()
       .type(pubNumber);
-    cy.get(publication.newPublication.create).click();
-    cy.get(publication.newPublication.alertError).should('exist');
-    cy.get(publication.newPublication.numberError).should('exist');
+    cy.get(auk.formHelpText).contains(duplicateError);
+    cy.get(publication.newPublication.create).should('be.disabled');
     // add BIS and create
     cy.get(publication.newPublication.suffix).click()
       .type(suffix);
-    cy.get(publication.newPublication.create).click();
-    cy.get(publication.newPublication.numberError).should('not.exist');
+    cy.get(auk.formHelpText).should('not.exist');
     cy.get(publication.newPublication.shortTitle).click()
       .type('test publication number uniqueness');
     cy.get(publication.newPublication.create).click();
@@ -352,14 +354,25 @@ context('Publications tests', () => {
 
     // check if existing number and suffix throw correct error
     cy.get(publication.publicationsIndex.newPublication).click();
+    // fill in something in shortTitle to test the duplicate error only
+    cy.get(publication.newPublication.shortTitle).click()
+      .clear()
+      .type(suffix);
     cy.get(publication.newPublication.number).click()
       .clear()
       .type(pubNumber);
     cy.get(publication.newPublication.suffix).click()
       .type(suffix);
-    cy.get(publication.newPublication.create).click();
-    cy.get(publication.newPublication.alertError).should('exist');
-    cy.get(publication.newPublication.numberError).should('exist');
+    // force click here to simulate clicking the button before validation has happened instead of waiting for it.
+    cy.get(publication.newPublication.create).click({
+      force: true,
+    });
+    cy.get(auk.formHelpText).contains(duplicateError);
+    cy.get(publication.newPublication.create).should('be.disabled');
+    cy.get(publication.newPublication.cancel).click();
+    // check that only one publication has the number we wanted to duplicate
+    cy.get(publication.publicationTableRow.row.publicationNumber).contains(`${pubNumber} ${suffix}`)
+      .should('have.length', 1);
   });
 
   // TODO-PUBLICATION code snipper for searching in overview table

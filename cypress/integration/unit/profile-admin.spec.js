@@ -11,7 +11,6 @@ import utils from '../../selectors/utils.selectors';
 
 context('Testing the application as Admin user', () => {
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 

@@ -1,15 +1,15 @@
 {{#if (is-pending this.value)}}
-  <div class="skeletal-loader" role="alert" aria-busy="true"></div>
+  <div class="auk-skeleton auk-skeleton--rectangle" role="alert" aria-busy="true"></div>
 {{else if (gt (await this.value.length) 0)}}
   {{#each this.value as |mandatee|}}
     {{#if (is-pending mandatee.person)}}
-      <div class="skeletal-loader" role="alert" aria-busy="true"></div>
+      <div class="auk-skeleton auk-skeleton--rectangle" role="alert" aria-busy="true"></div>
     {{/if}}
     {{await mandatee.person.nameToDisplay}}
     <br />
   {{/each}}
 {{else}}
-  <p class="auk-u-muted auk-u-italic">
+  <p class="auk-u-text-muted auk-u-italic">
     {{t "no-ministers"}}
   </p>
 {{/if}}

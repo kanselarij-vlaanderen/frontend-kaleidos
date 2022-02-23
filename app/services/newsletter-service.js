@@ -56,7 +56,7 @@ export default class NewsletterService extends Service {
     await response.json();
     if (!response.ok) {
       this.toaster.error(
-        this.intl.t('error-send-newsletter'),
+        this.intl.t('error-send-belga'),
         this.intl.t('warning-title')
       );
       throw new Error('An exception ocurred: ' + response.error);
@@ -80,7 +80,7 @@ export default class NewsletterService extends Service {
     const result = await response.json();
     if (!response.ok) {
       this.toaster.error(
-        this.intl.t('error-send-newsletter'),
+        this.intl.t('error-send-belga'),
         this.intl.t('warning-title')
       );
       throw new Error('An exception ocurred: ' + response.error);
@@ -186,14 +186,12 @@ export default class NewsletterService extends Service {
   async deleteCampaign(id) {
     const endpoint = `/newsletter/mail-campaigns/${id}`;
     try {
-      const response = await fetch(endpoint, {
+      await fetch(endpoint, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/vnd.api+json',
         },
       });
-      const result = await response.json();
-      return result;
     } catch (error) {
       console.warn('An exception ocurred: ', error);
       this.toaster.error(

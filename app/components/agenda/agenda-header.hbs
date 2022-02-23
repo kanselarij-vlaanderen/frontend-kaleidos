@@ -1,7 +1,7 @@
 <Auk::Navbar @skin="gray-100" @auto={{true}}>
-  <Auk::Toolbar>
-    <Auk::Toolbar::Group @position="left">
-      <Auk::Toolbar::Item>
+  <Auk::Toolbar as |Toolbar|>
+    <Toolbar.Group @position="left" as |Group|>
+      <Group.Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
           <div class="auk-o-flex auk-o-flex--vertical-center">
             <h4
@@ -16,7 +16,7 @@
               {{/unless}}
             </h4>
             {{#if @meeting.kindToShow.label}}
-              <span data-test-agenda-header-kind class="auk-u-muted auk-body-1">
+              <span data-test-agenda-header-kind class="auk-u-text-muted auk-body-1">
                 -
                 {{await @meeting.kindToShow.label}}
               </span>
@@ -27,10 +27,10 @@
             @currentMeeting={{@meeting}}
           />
         </div>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
+      </Group.Item>
+    </Toolbar.Group>
     {{#if this.currentSession.isViewer}}
-      <Auk::Toolbar::Group @position="right">
+      <Toolbar.Group @position="right" as |Group|>
         <Agenda::AgendaHeader::AgendaActions
           @meeting={{@meeting}}
           @currentAgenda={{@currentAgenda}}
@@ -38,7 +38,7 @@
           @refreshRoute={{@refreshRoute}}
           @loading={{@loading}}
         />
-        <Auk::Toolbar::Item>
+        <Group.Item>
           <DropdownMenu
             @skin="secondary"
             @label={{t "actions"}}
@@ -139,9 +139,22 @@
                 {{t "agenda-release-documents"}}
               </Menu.Item>
             {{/if}}
+            {{#if this.canPublishThemis}}
+              <Menu.Divider />
+              <Menu.Item {{on "click" this.openConfirmPublishThemis}}>
+                {{t "publish-to-web"}}
+              </Menu.Item>
+              {{#if this.isAlreadyPublished}}
+                <Menu.Item
+                  @skin="danger"
+                  {{on "click" this.openConfirmUnpublishThemis}}>
+                  {{t "unpublish-from-web"}}
+                </Menu.Item>
+              {{/if}}
+            {{/if}}
           </DropdownMenu>
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
+        </Group.Item>
+      </Toolbar.Group>
     {{/if}}
   </Auk::Toolbar>
 </Auk::Navbar>
@@ -166,10 +179,10 @@
     <Auk::Modal::Footer @onCancel={{this.cancelReleaseDocuments}}>
       <Auk::Button
         data-test-agenda-header-release-documents-confirm
-        @skin="danger-primary"
+        @skin="primary"
         {{on "click" this.releaseDocuments}}
       >
-        {{t "releaseToPublic"}}
+        {{t "release-to-public"}}
       </Auk::Button>
     </Auk::Modal::Footer>
   </Auk::Modal>
@@ -187,13 +200,27 @@
     <Auk::Modal::Footer @onCancel={{this.cancelReleaseDecisions}}>
       <Auk::Button
         data-test-agenda-header-release-decisions-confirm
-        @skin="danger-primary"
+        @skin="primary"
         {{on "click" this.releaseDecisions}}
       >
-        {{t "releaseToPublic"}}
+        {{t "release-to-public"}}
       </Auk::Button>
     </Auk::Modal::Footer>
   </Auk::Modal>
+{{/if}}
+
+{{#if this.showConfirmPublishThemis}}
+  <ThemisPublications::PublishConfirmationModal
+    @onCancel={{this.cancelPublishThemis}}
+    @onConfirm={{perform this.publishThemis}}
+  />
+{{/if}}
+
+{{#if this.showConfirmUnpublishThemis}}
+  <ThemisPublications::UnpublishConfirmationModal
+    @onCancel={{this.cancelUnpublishThemis}}
+    @onConfirm={{perform this.unpublishThemis}}
+  />
 {{/if}}
 
 {{#if this.isEditingSession}}

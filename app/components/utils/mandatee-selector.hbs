@@ -1,4 +1,4 @@
-<div data-test-mandatee-selector-container class="mandatee-selector-container">
+<div data-test-mandatee-selector-container>
   {{#if (not @singleSelect)}}
     <PowerSelectMultiple
       @options={{this.mandateeOptions}}
@@ -12,7 +12,7 @@
       as |mandatee|
     >
       {{await mandatee.fullDisplayName}}
-      <span class="auk-u-muted auk-u-text-size--small">
+      <span class="auk-u-text-muted auk-u-text-size--small">
         {{moment-format mandatee.start "YYYY"}}-{{moment-format
           mandatee.end
           "YYYY"
@@ -31,7 +31,7 @@
       as |mandatee|
     >
       {{await mandatee.fullDisplayName}}
-      <span class="auk-u-muted auk-u-text-size--small">
+      <span class="auk-u-text-muted auk-u-text-size--small">
         {{moment-format mandatee.start "YYYY"}}-{{moment-format
           mandatee.end
           "YYYY"
