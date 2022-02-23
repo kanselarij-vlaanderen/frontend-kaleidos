@@ -60,7 +60,7 @@ export default class PublicationsPublicationProofsController extends Controller 
     if (proofUpload.mustUpdatePublicationStatus) {
       yield this.publicationService.updatePublicationStatus(
         this.publicationFlow,
-        CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_IN,
+        CONSTANTS.PUBLICATION_STATUSES.PROOF_IN,
         proofUpload.receivedAtDate
       );
 
@@ -154,7 +154,6 @@ export default class PublicationsPublicationProofsController extends Controller 
     if (mail) {
       deletePromises.push(mail.destroyRecord());
     }
-
     deletePromises.push(requestActivity.destroyRecord());
 
     const pieces = yield requestActivity.usedPieces;
