@@ -31,7 +31,7 @@ pipeline {
         stage('Linting') {
             steps {
                 sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
-                sh "npm ci"
+                sh "npm install"
                 sh "npm run lint"
             }
         }
