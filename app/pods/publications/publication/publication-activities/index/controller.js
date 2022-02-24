@@ -184,8 +184,6 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
       deletePromises.push(mail.destroyRecord());
     }
 
-    deletePromises.push(requestActivity.destroyRecord());
-
     const pieces = yield requestActivity.usedPieces;
 
     for (const piece of pieces.toArray()) {
@@ -198,7 +196,13 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
       deletePromises.push(file.destroyRecord());
       deletePromises.push(documentContainer.destroyRecord());
     }
+
     yield Promise.all(deletePromises);
+
+    // delete after previous records have been destroyed
+    // destroying in parallel throws occasional errors
+    yield requestActivity.destroyRecord();
+
     this.send('refresh');
   }
 }
