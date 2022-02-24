@@ -61,12 +61,11 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
   @service publicationService;
 
   /** @type {PublicationFlow} */
-   @tracked publicationFlow;
+  @tracked publicationFlow;
   /** @type {PublicationSubcase} */
   publicationSubcase;
   @tracked isOpenRequestModal = false;
   @tracked isOpenRegistrationModal = false;
-
 
   get isTranslationUploadDisabled() {
     return this.latestTranslationActivity == undefined;
@@ -171,5 +170,35 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     }
 
     await Promise.all(saves);
+  }
+
+  @task
+  *deleteRequest(requestActivity) {
+    const deletePromises = [];
+
+    const publicationActivity = yield requestActivity.publicationActivity;
+    deletePromises.push(publicationActivity.destroyRecord());
+
+    const mail = yield requestActivity.email;
+    if (mail) {
+      deletePromises.push(mail.destroyRecord());
+    }
+
+    deletePromises.push(requestActivity.destroyRecord());
+
+    const pieces = yield requestActivity.usedPieces;
+
+    for (const piece of pieces.toArray()) {
+      const [file, documentContainer] = yield Promise.all([
+        piece.file,
+        piece.documentContainer,
+      ]);
+
+      deletePromises.push(piece.destroyRecord());
+      deletePromises.push(file.destroyRecord());
+      deletePromises.push(documentContainer.destroyRecord());
+    }
+    yield Promise.all(deletePromises);
+    this.send('refresh');
   }
 }

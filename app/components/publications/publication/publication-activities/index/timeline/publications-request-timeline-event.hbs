@@ -3,7 +3,21 @@
     <AccordionPanel.Header
       @title={{@requestActivity.title}}
       @subtitle={{moment-format @requestActivity.startDate}}
-    />
+      as |Header|
+    >
+      <Header.Actions as |Actions|>
+        <Actions.Item>
+          <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
+            <Menu.Item
+              @skin="danger"
+              {{on "click" this.openConfirmDeleteAlert}}
+            >
+              {{t "delete"}}
+            </Menu.Item>
+          </DropdownMenu>
+        </Actions.Item>
+      </Header.Actions>
+    </AccordionPanel.Header>
     <AccordionPanel.Body>
       <div class="auk-o-flex auk-o-flex--horizontal auk-o-flex--spaced-wide">
         {{#each @requestActivity.usedPieces as |piece|}}
@@ -42,3 +56,13 @@
     </AccordionPanel.Body>
   </Auk::AccordionPanel>
 </Utils::Generic::Timeline::TimelineEvent>
+
+{{#if this.isOpenConfirmDeleteAlert}}
+  <Utils::Generic::AlertDialog
+    @use="delete"
+    @title={{t "delete-publication-request"}}
+    @message={{t "delete-publication-request-message"}}
+    @onCancel={{this.closeConfirmDeleteAlert}}
+    @onConfirm={{perform this.delete}}
+  />
+{{/if}}

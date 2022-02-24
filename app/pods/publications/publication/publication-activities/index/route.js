@@ -61,8 +61,9 @@ export default class PublicationsPublicationPublicationActivitiesIndexRoute exte
     // publication activities that are pending
     // are not displayed in the timeline
     // but are used for registering a publication
-    const publicationEvents = publicationActivities
-      .map((act) => new PublicationPublicationEvent(act));
+    const publicationEvents = publicationActivities.map(
+      (act) => new PublicationPublicationEvent(act)
+    );
 
     return [...requestEvents, ...publicationEvents]
       .sortBy('date', 'timeOrder')

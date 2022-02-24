@@ -33,12 +33,15 @@
       </Toolbar.Group>
     </Auk::Toolbar>
   </Auk::Panel::Header>
+
+  {{!Timeline}}
   <Auk::Panel::Body class="auk-u-bg-alt">
     <Utils::Generic::Timeline::Timeline @events={{@model}} as |Timeline event|>
       {{#if event.isShown}}
         {{#if event.isRequest}}
           <Publications::Publication::PublicationActivities::Index::Timeline::PublicationsRequestTimelineEvent
             @requestActivity={{event.requestActivity}}
+            @onDelete={{perform this.deleteRequest}}
           />
         {{else}}
           <Publications::Publication::PublicationActivities::Index::Timeline::PublicationsPublicationTimelineEvent
