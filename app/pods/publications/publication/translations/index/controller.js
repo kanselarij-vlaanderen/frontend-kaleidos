@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { task, dropTask } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
@@ -139,33 +139,23 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     this.showTranslationRequestModal = false;
   }
 
-  @dropTask
+  @task
   *deleteRequest(requestActivity) {
-    const deletePromises = [];
-
     const translationActivity = yield requestActivity.translationActivity;
-    deletePromises.push(translationActivity.destroyRecord());
+    yield translationActivity.destroyRecord();
 
     const mail = yield requestActivity.email;
-    if (mail) {
-      deletePromises.push(mail.destroyRecord());
-    }
-
-    deletePromises.push(requestActivity.destroyRecord());
+    yield mail?.destroyRecord();
 
     const pieces = yield requestActivity.usedPieces;
-
     for (const piece of pieces.toArray()) {
-      const [file, documentContainer] = yield Promise.all([
-        piece.file,
-        piece.documentContainer,
-      ]);
-
-      deletePromises.push(piece.destroyRecord());
-      deletePromises.push(file.destroyRecord());
-      deletePromises.push(documentContainer.destroyRecord());
+      const file = yield piece.file;
+      const documentContainer = yield piece.documentContainer;
+      yield file.destroyRecord();
+      yield documentContainer.destroyRecord();
+      yield piece.destroyRecord()
     }
-    yield Promise.all(deletePromises);
+    yield requestActivity.destroyRecord();
     this.send('refresh');
   }
 

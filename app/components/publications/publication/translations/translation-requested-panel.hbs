@@ -24,7 +24,7 @@
                   @disabled={{this.isTranslationActivityFinished}}
                   {{on "click" this.showDeleteRequest}}
                 >
-                  {{t "delete-translation-request"}}
+                  {{t "delete-request"}}
                 </Menu.Item>
               </DropdownMenu>
             {{/unless}}
@@ -83,16 +83,17 @@
 {{#if this.isVerifyingDelete}}
   <Auk::Modal>
     <Auk::Modal::Header
-      @title={{t "delete-translation-request"}}
+      @title={{t "delete-request"}}
       @onClose={{this.cancelDeleteRequest}}
     />
     <Auk::Modal::Body>
-      <p>{{t "delete-translation-request-message"}}</p>
+      <p>{{t "delete-request-message"}}</p>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelDeleteRequest}}>
       <Auk::Button
         @skin="danger-primary"
         @icon="trash"
+        @disabled={{this.isDeletingRequest}}
         {{on "click" this.deleteRequest}}
       >
         {{t "delete"}}

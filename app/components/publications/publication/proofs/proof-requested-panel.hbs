@@ -90,6 +90,7 @@
       <Auk::Button
         @skin="danger-primary"
         @icon="trash"
+        @disabled={{this.isDeletingRequest}}
         {{on "click" this.deleteRequest}}
       >
         {{t "delete"}}

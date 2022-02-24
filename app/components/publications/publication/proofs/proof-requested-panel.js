@@ -10,6 +10,7 @@ import { task } from 'ember-concurrency-decorators';
  */
 export default class PublicationsPublicationProofProofRequestedPanel extends Component {
   @tracked isVerifyingDelete = false;
+  @tracked isDeletingRequest = false;
   @tracked proofingActivity;
 
   constructor() {
@@ -38,7 +39,9 @@ export default class PublicationsPublicationProofProofRequestedPanel extends Com
 
   @action
   async deleteRequest() {
+    this.isDeletingRequest = true;
     await this.args.onDeleteRequest();
     this.isVerifyingDelete = false;
+    this.isDeletingRequest = false;
   }
 }
