@@ -47,7 +47,7 @@
         )}}
           <Publications::Publication::Proofs::ProofReceivedPanel
             @proofingActivity={{timelineActivity.activity}}
-            @publicationSubcase={{this.publicationSubcase}}
+            @proofPrintCorrector={{this.publicationSubcase.proofPrintCorrector}}
             @onSaveEditReceivedProof={{perform this.saveEditReceivedProof}}
           />
         {{/if}}

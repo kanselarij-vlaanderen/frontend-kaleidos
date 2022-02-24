@@ -9,6 +9,7 @@ import { task } from 'ember-concurrency-decorators';
  */
 export default class PublicationsPublicationTranslationTranslationRequestedPanel extends Component {
   @tracked isVerifyingDelete = false;
+  @tracked isDeletingRequest = false;
   @tracked translationActivity;
 
   constructor() {
@@ -37,7 +38,9 @@ export default class PublicationsPublicationTranslationTranslationRequestedPanel
 
   @action
   async deleteRequest() {
+    this.isDeletingRequest = true;
     await this.args.onDeleteRequest();
     this.isVerifyingDelete = false;
+    this.isDeletingRequest = false;
   }
 }

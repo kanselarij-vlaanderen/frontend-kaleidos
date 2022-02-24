@@ -17,11 +17,10 @@
       {{#unless this.loadProofingActivity.isRunning}}
         <header.Actions as |actions|>
           <actions.Item>
-            {{#unless this.isProofingActivityFinished}}
+            {{#unless @requestActivity.proofingActivity.isFinished}}
               <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
                 <Menu.Item
                   @skin="danger"
-                  @disabled={{this.isProofingActivityFinished}}
                   {{on "click" this.showDeleteRequest}}
                 >
                   {{t "delete"}}
@@ -90,6 +89,7 @@
       <Auk::Button
         @skin="danger-primary"
         @icon="trash"
+        @disabled={{this.isDeletingRequest}}
         {{on "click" this.deleteRequest}}
       >
         {{t "delete"}}

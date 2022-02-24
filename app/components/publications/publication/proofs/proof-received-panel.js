@@ -6,7 +6,7 @@ import { isEmpty } from '@ember/utils';
 
 /**
  * @argument {proofingActivity}
- * @argument {publicationSubcase}
+ * @argument {proofPrintCorrector} from publicationSubcase
  * @argument {onSaveEditReceivedProof}
  */
 export default class PublicationsPublicationProofProofReceivedPanel extends Component {
@@ -37,7 +37,7 @@ export default class PublicationsPublicationProofProofReceivedPanel extends Comp
   openEditProofModal() {
     this.showEditProofModal = true;
     this.newReceivedDate = this.args.proofingActivity.endDate;
-    this.newProofPrintCorrector = this.args.publicationSubcase.proofPrintCorrector;
+    this.newProofPrintCorrector = this.args.proofPrintCorrector;
   }
 
   @action

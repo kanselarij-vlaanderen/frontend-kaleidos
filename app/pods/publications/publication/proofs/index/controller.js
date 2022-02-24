@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { task, dropTask } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -85,41 +85,32 @@ export default class PublicationsPublicationProofsController extends Controller 
     this.showProofRequestModal = false;
   }
 
-  @dropTask
+  @task
   *deleteRequest(requestActivity) {
-    const promises = [];
-
     const proofingActivity = yield requestActivity.proofingActivity;
-    promises.push(proofingActivity.destroyRecord());
+    yield proofingActivity.destroyRecord();
 
     const mail = yield requestActivity.email;
-    if (mail) {
-      promises.push(mail.destroyRecord());
-    }
-    promises.push(requestActivity.destroyRecord());
+    yield mail?.destroyRecord();
 
     const pieces = yield requestActivity.usedPieces;
-
     for (const piece of pieces.toArray()) {
-      const [file, documentContainer, translationActivity] = yield Promise.all([
-        piece.file,
-        piece.documentContainer,
-        piece.translationActivityGeneratedBy
-      ]);
-
+      const file = yield piece.file;
+      const documentContainer = yield piece.documentContainer;
+      const translationActivity = yield piece.translationActivityGeneratedBy;
       //The pieces that are used in the translationActivity can not be deleted,but should be unlinked
       if (translationActivity) {
         piece.requestActivitiesUsedBy.removeObjects(requestActivity);
         piece.proofingActivitiesUsedBy.removeObjects(proofingActivity);
         piece.publicationSubcaseSourceFor = undefined;
-        promises.push(piece.save());
-      } else{
-        promises.push(piece.destroyRecord());
-        promises.push(file.destroyRecord());
-        promises.push(documentContainer.destroyRecord());
+        yield piece.save();
+      } else {
+        yield file.destroyRecord();
+        yield documentContainer.destroyRecord();
+        yield piece.destroyRecord();
       }
     }
-    yield Promise.all(promises);
+    yield requestActivity.destroyRecord();
     this.send('refresh');
   }
 
