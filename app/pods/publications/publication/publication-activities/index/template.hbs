@@ -35,14 +35,16 @@
   </Auk::Panel::Header>
   <Auk::Panel::Body class="auk-u-bg-alt">
     <Utils::Generic::Timeline::Timeline @events={{@model}} as |Timeline event|>
-      {{#if event.isRequest}}
-        <Publications::Publication::PublicationActivities::Index::Timeline::PublicationsRequestTimelineEvent
-          @requestActivity={{event.requestActivity}}
-        />
-      {{else}}
-        <Publications::Publication::PublicationActivities::Index::Timeline::PublicationsPublicationTimelineEvent
-          @publicationActivity={{event.publicationActivity}}
-        />
+      {{#if event.isShown}}
+        {{#if event.isRequest}}
+          <Publications::Publication::PublicationActivities::Index::Timeline::PublicationsRequestTimelineEvent
+            @requestActivity={{event.requestActivity}}
+          />
+        {{else}}
+          <Publications::Publication::PublicationActivities::Index::Timeline::PublicationsPublicationTimelineEvent
+            @publicationActivity={{event.publicationActivity}}
+          />
+        {{/if}}
       {{/if}}
     </Utils::Generic::Timeline::Timeline>
   </Auk::Panel::Body>

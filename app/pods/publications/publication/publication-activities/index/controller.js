@@ -25,6 +25,7 @@ export class PublicationRequestEvent {
   //  => show the publicationActivity after the requestActivity in the timeline
   timeOrder = 0;
   isRequest = true;
+  isShown = true;
   /** @type {RequestActivity} */
   @tracked requestActivity;
 
@@ -40,6 +41,9 @@ export class PublicationPublicationEvent {
 
   timeOrder = 1;
   isPublication = true;
+  get isShown() {
+    return this.publicationActivity.endDate;
+  }
   /** @type {PublicationActivity} */
   @tracked publicationActivity;
 
@@ -62,6 +66,11 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
   publicationSubcase;
   @tracked isOpenRequestModal = false;
   @tracked isOpenRegistrationModal = false;
+
+
+  get isTranslationUploadDisabled() {
+    return this.latestTranslationActivity == undefined;
+  }
 
   get latestPublicationActivity() {
     // model is sorted: first event === latest event
