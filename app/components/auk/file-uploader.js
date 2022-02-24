@@ -11,6 +11,7 @@ import { guidFor } from '@ember/object/internals';
 /**
  * @argument {Boolean} fullHeight Stretch the upload zone over the full height
  * @argument {Boolean} multiple (optional) allow uploading multiple files
+ * @argument {Boolean} reusable (optional, False by default) allow reusing the uploader to upload even more files, or add new files after previous uploads were deleted.
  * @argument {String} accept (optional)
  * @argument {String} fileQueueName (optional) Name of the file queue to use.
  *   Setting this name will allow you to access this queue from the file-queue service outside of this component.
@@ -50,10 +51,6 @@ export default class FileUploader extends Component {
   get uploadIsRunning() {
     return this.fileQueue.get('files.length') > 0 // getter since things internal to file-upload aren't tracked
       || this.uploadFileTask.isRunning;
-  }
-
-  get allowReUpload() {
-    return this.args.multiple;
   }
 
   @enqueueTask({
