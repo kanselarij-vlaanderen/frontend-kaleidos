@@ -8,7 +8,7 @@ export default class PublicationNavigation extends Component {
   @service publicationService;
 
   @tracked isViaCouncilOfMinisters;
-  @tracked documentsCount = undefined;
+  @tracked numberOfDocuments = undefined;
 
   constructor() {
     super(...arguments);
@@ -23,7 +23,7 @@ export default class PublicationNavigation extends Component {
       'filter[publication-flow][:id:]': publicationFlow.id,
       'page[size]': 1,
     });
-    this.documentsCount = pieces.meta.count;
+    this.numberOfDocuments = pieces.meta.count;
 
     this.isViaCouncilOfMinisters = this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
   }

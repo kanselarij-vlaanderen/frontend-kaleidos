@@ -86,7 +86,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
       dueDate: this.translationDueDate,
       numberOfPages: this.numberOfPages,
       numberOfWords: this.numberOfWords,
-      totalDocuments: this.uploadedPieces.length,
+      numberOfDocuments: this.uploadedPieces.length,
     };
 
     const mailTemplate = translationRequestEmail(mailParams);

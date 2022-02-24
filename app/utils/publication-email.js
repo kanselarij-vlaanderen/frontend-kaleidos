@@ -21,7 +21,7 @@ function translationRequestEmail(params) {
       .format('DD-MM-YYYY')}\t\n`
     + `Aantal pagina’s: ${params.numberOfPages|| ''}\t\n`
     + `Aantal woorden: ${params.numberOfWords || ''}\t\n`
-    + `Aantal documenten: ${params.totalDocuments}\t\n`;
+    + `Aantal documenten: ${params.numberOfDocuments}\t\n`;
   return {
     subject: subject,
     message: [message, footer].join('\n'),
