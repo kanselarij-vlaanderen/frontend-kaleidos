@@ -42,9 +42,9 @@ export default [
     apiFieldPaths: ['remark'],
   },
   {
-    keyName: 'pageCount',
-    translationKey: 'publications-table-page-count',
-    translationKeySmall: 'publications-table-page-count-small',
+    keyName: 'numberOfPages',
+    translationKey: 'publications-table-number-of-pages',
+    translationKeySmall: 'publications-table-number-of-pages-small',
     // no sort: is aggregated in frontend
     apiFieldPaths: ['number-of-pages'],
   },

@@ -29,15 +29,15 @@
           <div class="auk-o-grid">
             <div class="auk-o-grid-col-6">
               <div class="auk-form-group">
-                <Auk::Label for="translationLoadPages" class="auk-label--light">
-                  {{t "pages-amount"}}
+                <Auk::Label for="translationNumberOfPages" class="auk-label--light">
+                  {{t "number-of-pages"}}
                 </Auk::Label>
                 <Auk::Input
-                  data-test-publication-documents-upload-pages
+                  data-test-publication-documents-number-of-pages
                   @type="number"
-                  id="translationLoadPages"
+                  id="translationNumberOfPages"
                   @block={{true}}
-                  @value={{mut this.pagesAmount}}
+                  @value={{mut this.numberOfPages}}
                   {{on "focusout" (perform this.setEmailFields)}}
                 />
               </div>

@@ -12,7 +12,7 @@ export default class PublicationsOverviewProofRoute extends PublicationsOverview
     'publicationNumber',
     'numacNumber',
     'shortTitle',
-    'pageCount',
+    'numberOfPages',
     'proofRequestDate',
     'publicationDueDate',
   ];

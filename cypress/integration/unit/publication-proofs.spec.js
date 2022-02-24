@@ -57,7 +57,7 @@ context('Publications proofs tests', () => {
   const newFileName1 = 'test proof filename1';
   const newFileName2 = 'test proof new filename2';
   const newFileName3 = 'test proof extra filename3';
-  const pageCount = 5;
+  const numberOfPages = 5;
   const wordCount = 1000;
   const numacNumber = 123456;
   const targetEndDate = Cypress.dayjs().add(1, 'weeks');
@@ -69,14 +69,14 @@ context('Publications proofs tests', () => {
   const finalRequestTitle = `Verbeterde drukproef BS-werknr: ${numacNumber} VO-dossier: ${fields.number}`;
   const finalRequestMessage = `Beste,\n\nHierbij de verbeterde drukproef :\n\nBS-werknummer: ${numacNumber}\nVO-dossier: ${fields.number}\n\nDe gewenste datum van publicatie is: ${targetEndDate.format('DD/MM/YYYY')}\t\n\nVragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\t\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n`;
 
-  function uploadDocument(file, newFileName, pages, words) {
+  function uploadDocument(file, newFileName, numberOfPages, words) {
     cy.get(publication.translationsDocuments.add).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
     cy.get(publication.documentsUpload.name).should('have.value', file.fileName)
       .clear()
       .type(newFileName);
-    cy.get(publication.documentsUpload.pages)
-      .type(pages);
+    cy.get(publication.documentsUpload.numberOfPages)
+      .type(numberOfPages);
     cy.get(publication.documentsUpload.words)
       .type(words);
     // cy.get(publication.documentsUpload.proofPrint).parent()
@@ -116,7 +116,7 @@ context('Publications proofs tests', () => {
     cy.get(publication.publicationTranslations.documents).click();
 
     // create all necessary docs for proof
-    uploadDocument(file, newFileName1, pageCount, wordCount);
+    uploadDocument(file, newFileName1, numberOfPages, wordCount);
     cy.get(publication.documentsUpload.proofPrint).parent()
       .click();
     cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
@@ -126,13 +126,13 @@ context('Publications proofs tests', () => {
     cy.wait('@createNewDocumentContainer');
     cy.wait('@createNewPiece');
     cy.wait('@getPieces');
-    uploadDocument(file, newFileName2, pageCount, wordCount);
+    uploadDocument(file, newFileName2, numberOfPages, wordCount);
     cy.intercept('GET', '/pieces**').as('getPieces2');
     cy.get(publication.documentsUpload.save).click();
     cy.wait('@createNewDocumentContainer');
     cy.wait('@createNewPiece');
     cy.wait('@getPieces2');
-    uploadDocument(file, newFileName3, pageCount, wordCount);
+    uploadDocument(file, newFileName3, numberOfPages, wordCount);
     cy.intercept('GET', '/pieces**').as('getPieces3');
     cy.get(publication.documentsUpload.save).click();
     cy.wait('@createNewDocumentContainer');

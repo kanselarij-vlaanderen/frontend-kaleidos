@@ -256,7 +256,7 @@ const selectors = {
   // translation upload modal
   // documentsUpload: {
   //   name: '[data-test-publication-documents-upload-name]',
-  //   pages: '[data-test-publication-documents-upload-pages]',
+  //   pages: '[data-test-publication-documents-upload-number-of-pages]',
   //   words: '[data-test-publication-documents-upload-words]',
   //   proofPrint: '[data-test-publication-documents-upload-proof-print]',
   //   save: '[data-test-publication-documents-upload-save]',

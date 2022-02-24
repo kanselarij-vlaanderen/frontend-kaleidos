@@ -17,7 +17,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   @service store;
 
   @tracked uploadedPieces = [];
-  @tracked pagesAmount;
+  @tracked numberOfPages;
   @tracked wordsAmount;
   @tracked translationDueDate = this.args.dueDate
     ? this.args.dueDate
@@ -84,7 +84,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
       identifier: identification.idName,
       title: publicationFlow.shortTitle,
       dueDate: this.translationDueDate,
-      totalPages: this.pagesAmount,
+      numberOfPages: this.numberOfPages,
       totalWords: this.wordsAmount,
       totalDocuments: this.uploadedPieces.length,
     };

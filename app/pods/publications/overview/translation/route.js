@@ -6,7 +6,7 @@ export default class PublicationsOverviewTranslationRoute extends PublicationsOv
     'isUrgent',
     'publicationNumber',
     'shortTitle',
-    'pageCount',
+    'numberOfPages',
     'translationRequestDate',
     'translationDueDate',
     'publicationDueDate',
