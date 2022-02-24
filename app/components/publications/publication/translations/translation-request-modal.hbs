@@ -44,14 +44,14 @@
             </div>
             <div class="auk-o-grid-col-6">
               <div class="auk-form-group">
-                <Auk::Label for="translationLoadWords" class="auk-label--light">
-                  {{t "words-amount"}}
+                <Auk::Label for="translationNumberOfWords" class="auk-label--light">
+                  {{t "number-of-words"}}
                 </Auk::Label>
                 <Auk::Input
                   @type="number"
-                  id="translationLoadWords"
+                  id="translationNumberOfWords"
                   @block={{true}}
-                  @value={{mut this.wordsAmount}}
+                  @value={{mut this.numberOfWords}}
                   {{on "focusout" (perform this.setEmailFields)}}
                 />
               </div>

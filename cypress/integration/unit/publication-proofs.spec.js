@@ -58,7 +58,7 @@ context('Publications proofs tests', () => {
   const newFileName2 = 'test proof new filename2';
   const newFileName3 = 'test proof extra filename3';
   const numberOfPages = 5;
-  const wordCount = 1000;
+  const numberOfWords = 1000;
   const numacNumber = 123456;
   const targetEndDate = Cypress.dayjs().add(1, 'weeks');
   const monthDutch = getTranslatedMonth(Cypress.dayjs().month());
@@ -116,7 +116,7 @@ context('Publications proofs tests', () => {
     cy.get(publication.publicationTranslations.documents).click();
 
     // create all necessary docs for proof
-    uploadDocument(file, newFileName1, numberOfPages, wordCount);
+    uploadDocument(file, newFileName1, numberOfPages, numberOfWords);
     cy.get(publication.documentsUpload.proofPrint).parent()
       .click();
     cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
@@ -126,13 +126,13 @@ context('Publications proofs tests', () => {
     cy.wait('@createNewDocumentContainer');
     cy.wait('@createNewPiece');
     cy.wait('@getPieces');
-    uploadDocument(file, newFileName2, numberOfPages, wordCount);
+    uploadDocument(file, newFileName2, numberOfPages, numberOfWords);
     cy.intercept('GET', '/pieces**').as('getPieces2');
     cy.get(publication.documentsUpload.save).click();
     cy.wait('@createNewDocumentContainer');
     cy.wait('@createNewPiece');
     cy.wait('@getPieces2');
-    uploadDocument(file, newFileName3, numberOfPages, wordCount);
+    uploadDocument(file, newFileName3, numberOfPages, numberOfWords);
     cy.intercept('GET', '/pieces**').as('getPieces3');
     cy.get(publication.documentsUpload.save).click();
     cy.wait('@createNewDocumentContainer');
