@@ -115,7 +115,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     await this.performSaveRegistration(args);
 
     this.send('refresh');
-    this.isOpenRequestModal = false;
+    this.isOpenRegistrationModal = false;
   }
 
   /**
