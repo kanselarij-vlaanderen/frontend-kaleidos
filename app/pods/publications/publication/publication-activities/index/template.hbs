@@ -9,6 +9,18 @@
         </Group.Item>
       </Toolbar.Group>
       <Toolbar.Group @position="right" as |Group|>
+        {{!Registratie}}
+        <Group.Item>
+          <Auk::Button
+            @skin="secondary"
+            @icon="plus"
+            @disabled={{this.isRegistrationDisabled}}
+            {{on "click" this.openRegistrationModal}}
+          >
+            {{t "register-publication"}}
+          </Auk::Button>
+        </Group.Item>
+        {{!Aanvraag}}
         <Group.Item>
           <Auk::Button
             @skin="primary"
@@ -41,5 +53,13 @@
     @publicationFlow={{this.publicationFlow}}
     @onSave={{perform this.saveRequest}}
     @onCancel={{this.closeRequestModal}}
+  />
+{{/if}}
+
+{{#if this.isOpenRegistrationModal}}
+  <Publications::Publication::PublicationActivities::Index::PublicationRegistrationModal
+    @publicationFlow={{this.publicationFlow}}
+    @onSave={{this.saveRegistration}}
+    @onCancel={{this.closeRegistrationModal}}
   />
 {{/if}}

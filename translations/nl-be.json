@@ -947,6 +947,8 @@
   "initial": "initieel",
   "extra": "extra",
   "final": "finaal",
+  "update-publication-status-published": "Zet status op Gepubliceerd",
+  "register-publication": "Publicatie registreren",
   "x-request-type-x-timestamp": "{requestType} op {date} om {time}",
   "no-proofing-activities-yet": "Er zijn nog geen drukproeven aangevraagd.",
   "no-email-available": "Geen e-mail beschikbaar.",

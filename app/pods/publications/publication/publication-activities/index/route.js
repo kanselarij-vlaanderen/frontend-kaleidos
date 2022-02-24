@@ -69,10 +69,15 @@ export default class PublicationsPublicationPublicationActivitiesIndexRoute exte
 
   afterModel() {
     this.publicationFlow = this.modelFor('publications.publication');
+    this.publicationSubcase = this.modelFor(
+      'publications.publication.publication-activities'
+    );
   }
 
   setupController(ctrl) {
+    super.setupController(...arguments);
     ctrl.publicationFlow = this.publicationFlow;
+    ctrl.publicationSubcase = this.publicationSubcase;
   }
 
   @action

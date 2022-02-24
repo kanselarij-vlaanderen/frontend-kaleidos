@@ -3,10 +3,15 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /* eslint-disable no-unused-vars */
-import RequestActivity from '../../../../../models/request-activity';
-import PublicationActivity from '../../../../../models/publication-activity';
+import PublicationService from 'frontend-kaleidos/services/publication-service';
+
+import Piece from 'frontend-kaleidos/models/piece';
+import PublicationSubcase from 'frontend-kaleidos/models/publication-subcase';
+import RequestActivity from 'frontend-kaleidos/models/request-activity';
+import PublicationActivity from 'frontend-kaleidos/models/publication-activity';
 /* eslint-enable no-unused-vars */
 
 export class PublicationRequestEvent {
@@ -44,11 +49,25 @@ export class PublicationPublicationEvent {
 }
 
 export default class PublicationsPublicationPublicationActivitiesIndexController extends Controller {
+  /** @type {(PublicationRequestEvent|PublicationPublicationEvent)[]} */
+  model;
+
   @service store;
+  /** @type {PublicationService} */
   @service publicationService;
 
-  @tracked publicationFlow;
+  /** @type {PublicationFlow} */
+   @tracked publicationFlow;
+  /** @type {PublicationSubcase} */
+  publicationSubcase;
   @tracked isOpenRequestModal = false;
+  @tracked isOpenRegistrationModal = false;
+
+  get latestPublicationActivity() {
+    // model is sorted: first event === latest event
+    const latest = this.model.find((event) => event.isPublication);
+    return latest?.publicationActivity;
+  }
 
   @action
   openRequestModal() {
@@ -58,6 +77,16 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
   @action
   closeRequestModal() {
     this.isOpenRequestModal = false;
+  }
+
+  @action
+  openRegistrationModal() {
+    this.isOpenRegistrationModal = true;
+  }
+
+  @action
+  closeRegistrationModal() {
+    this.isOpenRegistrationModal = false;
   }
 
   @task
@@ -72,5 +101,66 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
 
     this.send('refresh');
     this.isOpenRequestModal = false;
+  }
+
+  @action async saveRegistration(args) {
+    await this.performSaveRegistration(args);
+
+    this.send('refresh');
+    this.isOpenRequestModal = false;
+  }
+
+  /**
+   * @param {{
+   *  title: string,
+   *  publicationDate: Date,
+   *  mustUpdatePublicationStatus: boolean,
+   * }} args
+   */
+  async performSaveRegistration(args) {
+    const saves = [];
+
+    const publicationActivity = this.latestPublicationActivity;
+    // TODO?: should publicationActivty be created when none exists?
+    //  like when updating the publication status?
+
+    const decision = this.store.createRecord('decision', {
+      title: args.title,
+      publicationDate: args.publicationDate,
+      publicationActivity: publicationActivity,
+    });
+    saves.push(decision.save());
+
+    publicationActivity.endDate = args.publicationDate;
+    saves.push(publicationActivity.save());
+
+    // publicationSubcase.receivedDate will probably not be updated
+    // this property is already set to an earlier when uploading the proof
+    if (
+      !this.publicationSubcase.receivedDate ||
+      args.publicationDate < this.publicationSubcase.receivedDate
+    ) {
+      this.publicationSubcase.receivedDate = args.publicationDate;
+    }
+
+    if (args.mustUpdatePublicationStatus) {
+      const statusSave = this.publicationService.updatePublicationStatus(
+        this.publicationFlow,
+        CONSTANTS.PUBLICATION_STATUSES.PUBLISHED,
+        args.publicationDate
+      );
+      saves.push(statusSave);
+
+      this.publicationSubcase.endDate = args.receivedAtDate;
+    }
+
+    // (this is a deceptive property:
+    // setting a field to undefined does not make the model to be marked as dirty
+    // the date is required in the modal, so this issue does not occur)
+    if (this.publicationSubcase.hadDirtyAttributes) {
+      saves.push(this.publicationSubcase.save());
+    }
+
+    await Promise.all(saves);
   }
 }

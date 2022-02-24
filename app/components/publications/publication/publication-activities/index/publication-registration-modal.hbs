@@ -1,0 +1,65 @@
+<Auk::Modal>
+  <Auk::Modal::Header
+    @title={{t
+      "publication-request-modal-title"
+      publication=@publicationFlow.identification.idName
+    }}
+    @onClose={{perform this.cancel}}
+  />
+  <Auk::Modal::Body>
+    <Utils::LoadableContent
+      @isLoading={{or this.save.isRunning this.cancel.isRunning}}
+    >
+      <div class="auk-form-group-layout auk-form-group-layout--standard">
+
+        {{!Titel}}
+        <div class="auk-form-group">
+          <Auk::Label for="publicationRegisterModal_title">
+            {{t "title"}}
+          </Auk::Label>
+          <Auk::Input
+            id="publicationRegisterModal_title"
+            @block={{true}}
+            @value={{this.title}}
+            {{on "input" this.setTitle}}
+          />
+        </div>
+
+        {{!Publicatiedatum}}
+        <div class="auk-form-group">
+          <Auk::Label for="publicationRegisterModal_publicationDate">
+            {{t "date"}}
+          </Auk::Label>
+          <Auk::Datepicker
+            id="publicationRegisterModal_publicationDate"
+            @date={{this.publicationDate}}
+            @onChange={{this.setPublicationDate}}
+          />
+        </div>
+
+        {{!Zet publicatiestatus}}
+        <div class="auk-form-group">
+          <Auk::Checkbox
+            @label={{t "update-publication-status-published"}}
+            @checked={{this.mustUpdatePublicationStatus}}
+            {{on "input" this.setMustUpdatePublicationStatus}}
+          />
+        </div>
+
+      </div>
+    </Utils::LoadableContent>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer
+    @cancelDisabled={{this.save.isRunning}}
+    @onCancel={{perform this.cancel}}
+  >
+    <Auk::Button
+      @skin="primary"
+      @disabled={{this.isSaveDisabled}}
+      @loading={{this.save.isRunning}}
+      {{on "click" (perform this.save)}}
+    >
+      {{t "save"}}
+    </Auk::Button>
+  </Auk::Modal::Footer>
+</Auk::Modal>
