@@ -1,8 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { isEmpty } from '@ember/utils';
-import { task } from 'ember-concurrency-decorators';
 
 /**
  * @argument {requestActivity}
@@ -12,20 +10,6 @@ export default class PublicationsPublicationProofProofRequestedPanel extends Com
   @tracked isVerifyingDelete = false;
   @tracked isDeletingRequest = false;
   @tracked proofingActivity;
-
-  constructor() {
-    super(...arguments);
-    this.loadProofingActivity.perform();
-  }
-
-  get isProofingActivityFinished() {
-    return !isEmpty(this.proofingActivity.endDate);
-  }
-
-  @task
-  *loadProofingActivity() {
-    this.proofingActivity = yield this.args.requestActivity.proofingActivity;
-  }
 
   @action
   showDeleteRequest() {
