@@ -62,10 +62,42 @@
 </div>
 
 {{#if this.showEditProofModal}}
-  <Publications::Publication::Proofs::ProofEditModal
-    @proofPrintCorrector={{@publicationSubcase.proofPrintCorrector}}
-    @proofingActivity={{@proofingActivity}}
-    @onSave={{this.saveEdit}}
-    @onCancel={{this.closeEditProofModal}}
-  />
+  <Auk::Modal>
+    <Auk::Modal::Header @title={{t "edit-proof"}} @onClose={{this.closeEditProofModal}} />
+    <Auk::Modal::Body>
+      <div class="auk-form-group">
+        <Auk::Label for="proofUploadReceivedDate" @required={{true}}>
+          {{t "date"}}
+        </Auk::Label>
+        <Auk::Datepicker
+          id="proofUploadReceivedDate"
+          @date={{this.newReceivedDate}}
+          @onChange={{this.setNewReceivedDate}}
+        />
+      </div>
+      <div class="auk-form-group">
+        <Auk::Label for="proofPrintCorrector">
+          {{t "who-proof-reads"}}
+        </Auk::Label>
+        <Auk::Input
+          id="proofPrintCorrector"
+          @value={{mut this.newProofPrintCorrector}}
+        />
+      </div>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer
+      @cancelDisabled={{this.isCancelDisabled}}
+      @onCancel={{this.closeEditProofModal}}
+    >
+      <Auk::Button
+        data-test-proof-edit-save
+        @skin="primary"
+        @disabled={{this.isSaveDisabled}}
+        @loading={{this.save.isRunning}}
+        {{on "click" (perform this.save)}}
+      >
+        {{t "save"}}
+      </Auk::Button>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
 {{/if}}
