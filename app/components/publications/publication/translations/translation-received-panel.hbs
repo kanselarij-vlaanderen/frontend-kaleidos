@@ -25,7 +25,7 @@
             <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
               <Menu.Item
                 @skin="primary"
-                {{on "click" this.toggleTranslationEditModal}}
+                {{on "click" this.openProofRequestModal}}
               >
                 {{t "request-proof"}}
               </Menu.Item>
@@ -101,4 +101,13 @@
       </Auk::Button>
     </Auk::Modal::Footer>
   </Auk::Modal>
+{{/if}}
+
+{{#if this.isOpenProofRequestModal}}
+  <Publications::Publication::Proofs::ProofRequestModal
+    @publicationFlow={{@publicationFlow}}
+    @usedPieces={{@translationActivity.generatedPieces}}
+    @onSave={{perform this.saveProofRequest}}
+    @onCancel={{this.closeProofRequestModal}}
+  />
 {{/if}}

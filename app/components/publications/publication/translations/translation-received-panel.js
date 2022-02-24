@@ -3,15 +3,23 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { isEmpty } from '@ember/utils';
+import { inject as service } from '@ember/service';
 
 export default class PublicationsTranslationTranslationReceivedPanelComponent extends Component {
   /**
    *
    * @argument translationActivity
+   * @argument publicationFlow
    * @argument onSave
    */
 
+  @service router;
+  @service publicationService;
+
+
   @tracked isOpenTranslationEditModal = false;
+  @tracked isOpenProofRequestModal = false;
+
   @tracked newEndDate;
 
   get isSaveDisabled() {
@@ -33,6 +41,15 @@ export default class PublicationsTranslationTranslationReceivedPanelComponent ex
     this.toggleTranslationEditModal();
   }
 
+  @task
+  *saveProofRequest(proofRequest) {
+    const publicationSubcase = yield this.args.publicationFlow.publicationSubcase;
+    yield this.publicationService.createProofRequestActivity(proofRequest,publicationSubcase,this.args.publicationFlow)
+
+    this.isOpenProofRequestModal = false;
+    this.router.transitionTo('publications.publication.proofs');
+  }
+
   @action
   setEndDate(selectedDates) {
     if (selectedDates.length) {
@@ -42,4 +59,15 @@ export default class PublicationsTranslationTranslationReceivedPanelComponent ex
       this.newEndDate = undefined;
     }
   }
+
+  @action
+  openProofRequestModal() {
+    this.isOpenProofRequestModal = true;
+  }
+
+  @action
+  closeProofRequestModal() {
+    this.isOpenProofRequestModal = false;
+  }
+
 }

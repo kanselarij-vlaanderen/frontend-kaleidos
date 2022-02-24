@@ -48,6 +48,7 @@
         )}}
           <Publications::Publication::Translations::TranslationReceivedPanel
             @translationActivity={{timelineActivity.activity}}
+            @publicationFlow={{this.publicationFlow}}
             @onSave={{perform this.saveTranslationActivityEdit}}
           />
         {{/if}}

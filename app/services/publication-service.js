@@ -1,5 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 
 export default class PublicationService extends Service {
   @service store;
@@ -214,5 +215,67 @@ export default class PublicationService extends Service {
       }
     );
     await newChangeActivity.save();
+  }
+
+  async createProofRequestActivity(proofRequestProperties,publicationSubcase,publicationFlow){
+    const now = new Date();
+
+    const uploadedPieces= proofRequestProperties.uploadedPieces;
+    const dutch = await this.store.findRecordByUri(
+      'language',
+      CONSTANTS.LANGUAGES.NL
+    );
+
+    await Promise.all(
+      uploadedPieces.map((piece) => {
+        piece.publicationSubcaseSourceFor = publicationSubcase;
+        piece.language = dutch;
+        return piece.save();
+      })
+    );
+
+    const requestActivity = this.store.createRecord('request-activity', {
+      startDate: now,
+      publicationSubcase: publicationSubcase,
+      usedPieces: uploadedPieces,
+    });
+    await requestActivity.save();
+
+    const proofingActivity = this.store.createRecord('proofing-activity', {
+      startDate: now,
+      dueDate: proofRequestProperties.dueDate,
+      title: proofRequestProperties.subject,
+      subcase: publicationSubcase,
+      requestActivity: requestActivity,
+      usedPieces: uploadedPieces,
+      language: await this.store.findRecordByUri(
+        'language',
+        CONSTANTS.LANGUAGES.FR
+      ),
+    });
+    await proofingActivity.save();
+
+    const [files, outbox, mailSettings] = await Promise.all([
+      Promise.all(uploadedPieces.mapBy('file')),
+      this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
+      this.store.queryOne('email-notification-setting'),
+    ]);
+    const mail = await this.store.createRecord('email', {
+      to: mailSettings.proofRequestToEmail,
+      from: mailSettings.defaultFromEmail,
+      folder: outbox,
+      attachments: files,
+      requestActivity: requestActivity,
+      subject: proofRequestProperties.subject,
+      message: proofRequestProperties.message,
+    });
+    await mail.save();
+
+    // PUBLICATION-STATUS
+    await this.updatePublicationStatus(
+      publicationFlow,
+      CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED
+    );
+
   }
 }

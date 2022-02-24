@@ -11,6 +11,7 @@ import { inject as service } from '@ember/service';
 
 /**
  * @argument {PublicationFlow} publicationFlow includes: identification
+ * @argument {usedPieces} UsedPieces from a TranslationActivity if proof is requested from a translation. These cannot be deleted
  * @argument onSave
  * @argument onCancel
  */
@@ -34,8 +35,9 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   }
 
   get isSaveDisabled() {
+    const totalPieces = this.uploadedPieces.length + (this.args.usedPieces ? this.args.usedPieces.length : 0)
     return (
-      this.uploadedPieces.length === 0 ||
+      totalPieces === 0 ||
       !this.validators.areValid ||
       this.cancel.isRunning
     );
@@ -43,6 +45,9 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
 
   @task
   *save() {
+    if (this.args.usedPieces) {
+      this.uploadedPieces.push(...this.args.usedPieces.toArray())
+    }
     yield this.args.onSave({
       subject: this.subject,
       message: this.message,
