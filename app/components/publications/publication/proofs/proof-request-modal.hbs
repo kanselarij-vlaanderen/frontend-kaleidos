@@ -48,7 +48,7 @@
                 </div>
               </Auk::List::Item>
             {{/each}}
-            {{#each @usedPieces as |piece|}}
+            {{#each this.usedPiecesByTranslation as |piece|}}
               <Auk::List::Item
                 class="auk-o-flex auk-o-flex--spaced-wide"
               >
@@ -58,6 +58,12 @@
                     {{piece.file.downloadFilename}}
                   </h5>
                 </div>
+                <Auk::Button
+                  @icon="trash"
+                  @layout="icon-only"
+                  @skin="danger-borderless"
+                  {{on "click" (fn this.unlinkUsedPiece piece)}}
+                />
               </Auk::List::Item>
             {{/each}}
           </Auk::List>

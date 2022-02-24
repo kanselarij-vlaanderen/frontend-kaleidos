@@ -11,7 +11,7 @@ import { inject as service } from '@ember/service';
 
 /**
  * @argument {PublicationFlow} publicationFlow includes: identification
- * @argument {usedPieces} UsedPieces from a TranslationActivity if proof is requested from a translation. These cannot be deleted
+ * @argument {usedPieces} UsedPieces from a TranslationActivity if proof is requested from a translation. These cannot be deleted, but  can be unlinked
  * @argument onSave
  * @argument onCancel
  */
@@ -21,6 +21,10 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   @tracked subject;
   @tracked message;
   @tracked uploadedPieces = [];
+
+  //used new instance otherwise it's removed from the generatedPieces in TranslationReceivedPanel
+  @tracked usedPiecesByTranslation = this.args.usedPieces? [...this.args.usedPieces.toArray()]: [];
+
 
   validators;
 
@@ -35,7 +39,7 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   }
 
   get isSaveDisabled() {
-    const totalPieces = this.uploadedPieces.length + (this.args.usedPieces ? this.args.usedPieces.length : 0)
+    const totalPieces = this.uploadedPieces.length + this.usedPiecesByTranslation.length;
     return (
       totalPieces === 0 ||
       !this.validators.areValid ||
@@ -45,8 +49,8 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
 
   @task
   *save() {
-    if (this.args.usedPieces) {
-      this.uploadedPieces.push(...this.args.usedPieces.toArray())
+    if (this.usedPiecesByTranslation) {
+      this.uploadedPieces.push(...this.usedPiecesByTranslation)
     }
     yield this.args.onSave({
       subject: this.subject,
@@ -113,6 +117,12 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
 
     this.uploadedPieces.pushObject(piece);
   }
+
+  @action
+  unlinkUsedPiece(piece) {
+    this.usedPiecesByTranslation.removeObject(piece);
+  }
+
 
   initValidators() {
     this.validators = new ValidatorSet({

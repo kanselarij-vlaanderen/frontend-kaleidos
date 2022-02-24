@@ -87,30 +87,39 @@ export default class PublicationsPublicationProofsController extends Controller 
 
   @dropTask
   *deleteRequest(requestActivity) {
-    const deletePromises = [];
+    const promises = [];
 
     const proofingActivity = yield requestActivity.proofingActivity;
-    deletePromises.push(proofingActivity.destroyRecord());
+    promises.push(proofingActivity.destroyRecord());
 
     const mail = yield requestActivity.email;
     if (mail) {
-      deletePromises.push(mail.destroyRecord());
+      promises.push(mail.destroyRecord());
     }
-    deletePromises.push(requestActivity.destroyRecord());
+    promises.push(requestActivity.destroyRecord());
 
     const pieces = yield requestActivity.usedPieces;
 
     for (const piece of pieces.toArray()) {
-      const [file, documentContainer] = yield Promise.all([
+      const [file, documentContainer, translationActivity] = yield Promise.all([
         piece.file,
         piece.documentContainer,
+        piece.translationActivityGeneratedBy
       ]);
 
-      deletePromises.push(piece.destroyRecord());
-      deletePromises.push(file.destroyRecord());
-      deletePromises.push(documentContainer.destroyRecord());
+      //The pieces that are used in the translationActivity can not be deleted,but should be unlinked
+      if (translationActivity) {
+        piece.requestActivitiesUsedBy.removeObjects(requestActivity);
+        piece.proofingActivitiesUsedBy.removeObjects(proofingActivity);
+        piece.publicationSubcaseSourceFor = undefined;
+        promises.push(piece.save());
+      } else{
+        promises.push(piece.destroyRecord());
+        promises.push(file.destroyRecord());
+        promises.push(documentContainer.destroyRecord());
+      }
     }
-    yield Promise.all(deletePromises);
+    yield Promise.all(promises);
     this.send('refresh');
   }
 
