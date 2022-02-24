@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 /**
  * @argument {proofingActivity}
  * @argument {publicationSubcase}
+ * @argument {onSaveEditProof}
  */
 export default class PublicationsPublicationProofProofReceivedPanel extends Component {
   @tracked showEditProofModal = false;

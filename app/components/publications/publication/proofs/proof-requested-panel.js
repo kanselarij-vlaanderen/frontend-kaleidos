@@ -6,6 +6,7 @@ import { task } from 'ember-concurrency-decorators';
 
 /**
  * @argument {requestActivity}
+ * @argument {onDeleteRequest}
  */
 export default class PublicationsPublicationProofProofRequestedPanel extends Component {
   @tracked isVerifyingDelete = false;
