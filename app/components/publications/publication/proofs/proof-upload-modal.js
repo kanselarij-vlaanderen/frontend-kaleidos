@@ -21,7 +21,7 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
 
   @tracked file;
   @tracked name;
-  @tracked receivedAtDate = new Date();
+  @tracked receivedDate = new Date();
   @tracked isProofIn = false;
 
   constructor() {
@@ -63,7 +63,7 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
     yield this.args.onSave({
       file: this.file,
       name: this.name,
-      receivedAtDate: this.receivedAtDate,
+      receivedDate: this.receivedDate,
       isProofIn : this.isProofIn,
     });
   }
@@ -76,12 +76,12 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
 
   @action
   setReceivedAtDate(selectedDates) {
-    this.validators.receivedAtDate.enableError();
+    this.validators.receivedDate.enableError();
 
     if (selectedDates.length) {
-      this.receivedAtDate = selectedDates[0];
+      this.receivedDate = selectedDates[0];
     } else { // this case occurs when users manually empty the date input-field
-      this.receivedAtDate = undefined;
+      this.receivedDate = undefined;
     }
   }
 
@@ -93,7 +93,7 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
   initValidation() {
     this.validators = new ValidatorSet({
       name: new Validator(() => isPresent(this.name)),
-      receivedAtDate: new Validator(() => isPresent(this.receivedAtDate)),
+      receivedDate: new Validator(() => isPresent(this.receivedDate)),
     });
   }
 }

@@ -46,14 +46,14 @@
                 {{#if @isReceived}}
                   <div
                     class="auk-form-group
-                      {{this.validators.receivedAtDate.errorClass}}"
+                      {{this.validators.receivedDate.errorClass}}"
                   >
                     <Auk::Label for="proofUploadReceivedAtDate">
                       {{t "received-at"}}
                     </Auk::Label>
                     <Auk::Datepicker
                       id="proofUploadReceivedAtDate"
-                      @date={{this.receivedAtDate}}
+                      @date={{this.receivedDate}}
                       @onChange={{this.setReceivedAtDate}}
                     />
                   </div>

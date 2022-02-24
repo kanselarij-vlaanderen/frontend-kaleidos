@@ -91,7 +91,7 @@ export default class PublicationsPublicationProofsRequestsController extends Con
     const piece = this.store.createRecord('piece', {
       created: now,
       modified: now,
-      receivedDate: proofUpload.receivedAtDate,
+      receivedDate: proofUpload.receivedDate,
       confidential: false,
       name: proofUpload.name,
       file: proofUpload.file,
@@ -104,10 +104,10 @@ export default class PublicationsPublicationProofsRequestsController extends Con
     const proofingActivitySave = proofingActivity.save();
 
     if (
-      proofUpload.receivedAtDate < this.publicationSubcase.receivedDate ||
+      proofUpload.receivedDate < this.publicationSubcase.receivedDate ||
       !this.publicationSubcase.receivedDate
     ) {
-      this.publicationSubcase.receivedDate = proofUpload.receivedAtDate;
+      this.publicationSubcase.receivedDate = proofUpload.receivedDate;
       await this.publicationSubcase.save();
     }
 
@@ -115,10 +115,10 @@ export default class PublicationsPublicationProofsRequestsController extends Con
       await this.publicationService.updatePublicationStatus(
         this.publicationFlow,
         CONSTANTS.PUBLICATION_STATUSES.PROOF_IN,
-        proofUpload.receivedAtDate
+        proofUpload.receivedDate
       );
 
-      this.publicationSubcase.endDate = proofUpload.receivedAtDate;
+      this.publicationSubcase.endDate = proofUpload.receivedDate;
       await this.publicationSubcase.save();
     }
 

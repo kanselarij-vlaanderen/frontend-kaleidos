@@ -173,7 +173,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   async savePieceEdit(modalResult) {
     const piece = this.pieceRowToEdit.piece;
     piece.name = modalResult.name;
-    piece.receivedDate = modalResult.receivedAtDate;
+    piece.receivedDate = modalResult.receivedDate;
     await piece.save();
 
     this.closePieceEditModal();

@@ -9,7 +9,7 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
   @service store;
 
   @tracked uploadedPieces = [];
-  @tracked receivedAtDate = new Date();
+  @tracked receivedDate = new Date();
   @tracked mustUpdatePublicationStatus = false;
 
   get isCancelDisabled() {
@@ -19,7 +19,7 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
   get isSaveDisabled() {
     return (
       this.uploadedPieces.length === 0 ||
-      isEmpty(this.receivedAtDate) ||
+      isEmpty(this.receivedDate) ||
       this.cancel.isRunning
     );
   }
@@ -56,7 +56,7 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
   *save() {
     yield this.args.onSave({
       uploadedPieces: this.uploadedPieces,
-      receivedAtDate: this.receivedAtDate,
+      receivedDate: this.receivedDate,
       mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
   }
@@ -64,10 +64,10 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
   @action
   setReceivedAtDate(selectedDates) {
     if (selectedDates.length) {
-      this.receivedAtDate = selectedDates[0];
+      this.receivedDate = selectedDates[0];
     } else {
       // this case occurs when users manually empty the date input-field
-      this.receivedAtDate = undefined;
+      this.receivedDate = undefined;
     }
   }
 

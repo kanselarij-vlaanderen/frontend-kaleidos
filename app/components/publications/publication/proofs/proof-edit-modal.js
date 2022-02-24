@@ -18,7 +18,7 @@ export default class PublicationsPublicationProofsProofEditModalComponent extend
   @service currentSession;
 
   @tracked name = this.args.piece.name;
-  @tracked receivedAtDate = this.args.piece.receivedDate;
+  @tracked receivedDate = this.args.piece.receivedDate;
   @tracked publicationSubcaseCorrectionFor;
 
   validators;
@@ -36,7 +36,7 @@ export default class PublicationsPublicationProofsProofEditModalComponent extend
 
   get isReceived() {
     // received at date is required for received pieces
-    return !!this.receivedAtDate;
+    return !!this.receivedDate;
   }
 
   get isCancelDisabled() {
@@ -62,20 +62,20 @@ export default class PublicationsPublicationProofsProofEditModalComponent extend
   *save() {
     yield this.args.onSave({
       name: this.name,
-      receivedAtDate: this.receivedAtDate,
+      receivedDate: this.receivedDate,
     });
   }
 
   @action
   setReceivedAtDate(selectedDates) {
-    this.validators.receivedAtDate.enableError();
+    this.validators.receivedDate.enableError();
 
     if (selectedDates.length) {
-      this.receivedAtDate = selectedDates[0];
+      this.receivedDate = selectedDates[0];
     } else { // this case occurs when users manually empty the date input-field
       // trigger date-picker update
       // eslint-disable-next-line no-self-assign
-      this.receivedAtDate = this.receivedAtDate;
+      this.receivedDate = this.receivedDate;
     }
   }
 
@@ -83,7 +83,7 @@ export default class PublicationsPublicationProofsProofEditModalComponent extend
     this.validators = new ValidatorSet({
       name: new Validator(() => isPresent(this.name)),
       // if loading: false, if isReceived: true, if isCorrected: check presence
-      receivedAtDate: new Validator(() => !this.loadData.isRunning && (!this.isReceived || isPresent(this.receivedAtDate))),
+      receivedDate: new Validator(() => !this.loadData.isRunning && (!this.isReceived || isPresent(this.receivedDate))),
     });
   }
 }
