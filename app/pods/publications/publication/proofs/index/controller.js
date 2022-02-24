@@ -52,7 +52,8 @@ export default class PublicationsPublicationProofsController extends Controller 
     }
 
     if (proofUpload.proofPrintCorrector) {
-      this.publicationSubcase.proofPrintCorrector = proofUpload.proofPrintCorrector;
+      this.publicationSubcase.proofPrintCorrector =
+        proofUpload.proofPrintCorrector;
       publicationSubcaseSave = this.publicationSubcase.save();
     }
 
@@ -79,7 +80,11 @@ export default class PublicationsPublicationProofsController extends Controller 
 
   @task
   *saveProofRequest(proofRequest) {
-    yield this.publicationService.createProofRequestActivity(proofRequest,this.publicationSubcase,this.publicationFlow)
+    yield this.publicationService.createProofRequestActivity(
+      proofRequest,
+      this.publicationSubcase,
+      this.publicationFlow
+    );
 
     this.send('refresh');
     this.showProofRequestModal = false;

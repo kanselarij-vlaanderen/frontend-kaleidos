@@ -4,9 +4,7 @@ import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task, dropTask } from 'ember-concurrency-decorators';
 import { proofRequestEmail } from 'frontend-kaleidos/utils/publication-email';
-import {
-  ValidatorSet, Validator
-} from 'frontend-kaleidos/utils/validators';
+import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
 import { inject as service } from '@ember/service';
 
 /**
@@ -23,8 +21,9 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   @tracked uploadedPieces = [];
 
   //used new instance otherwise it's removed from the generatedPieces in TranslationReceivedPanel
-  @tracked usedPiecesByTranslation = this.args.usedPieces? [...this.args.usedPieces.toArray()]: [];
-
+  @tracked usedPiecesByTranslation = this.args.usedPieces
+    ? [...this.args.usedPieces.toArray()]
+    : [];
 
   validators;
 
@@ -39,18 +38,17 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   }
 
   get isSaveDisabled() {
-    const totalPieces = this.uploadedPieces.length + this.usedPiecesByTranslation.length;
+    const totalPieces =
+      this.uploadedPieces.length + this.usedPiecesByTranslation.length;
     return (
-      totalPieces === 0 ||
-      !this.validators.areValid ||
-      this.cancel.isRunning
+      totalPieces === 0 || !this.validators.areValid || this.cancel.isRunning
     );
   }
 
   @task
   *save() {
     if (this.usedPiecesByTranslation) {
-      this.uploadedPieces.push(...this.usedPiecesByTranslation)
+      this.uploadedPieces.push(...this.usedPiecesByTranslation);
     }
     yield this.args.onSave({
       subject: this.subject,
@@ -65,7 +63,11 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
     if (this.save.isRunning) {
       return;
     }
-    yield Promise.all(this.uploadedPieces.map((piece) => this.deleteUploadedPiece.perform(piece)));
+    yield Promise.all(
+      this.uploadedPieces.map((piece) =>
+        this.deleteUploadedPiece.perform(piece)
+      )
+    );
     this.args.onCancel();
   }
 
@@ -78,7 +80,7 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
     yield Promise.all([
       file.destroyRecord(),
       documentContainer.destroyRecord(),
-      piece.destroyRecord()
+      piece.destroyRecord(),
     ]);
   }
 
@@ -90,7 +92,9 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
     const mailParams = {
       identifier: identification.idName,
       shortTitle: publicationFlow.shortTitle,
-      longTitle: publicationFlow.longTitle? publicationFlow.longTitle:publicationFlow.shortTitle,
+      longTitle: publicationFlow.longTitle
+        ? publicationFlow.longTitle
+        : publicationFlow.shortTitle,
     };
 
     const mailTemplate = proofRequestEmail(mailParams);
@@ -122,7 +126,6 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   unlinkUsedPiece(piece) {
     this.usedPiecesByTranslation.removeObject(piece);
   }
-
 
   initValidators() {
     this.validators = new ValidatorSet({

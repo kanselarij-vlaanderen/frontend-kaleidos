@@ -202,8 +202,7 @@ export default class PublicationService extends Service {
     // already is deleted (by step below)
     await publicationFlow.save();
 
-    const oldChangeActivity = await publicationFlow
-      .publicationStatusChange;
+    const oldChangeActivity = await publicationFlow.publicationStatusChange;
     if (oldChangeActivity) {
       await oldChangeActivity.destroyRecord();
     }
@@ -217,10 +216,14 @@ export default class PublicationService extends Service {
     await newChangeActivity.save();
   }
 
-  async createProofRequestActivity(proofRequestProperties,publicationSubcase,publicationFlow){
+  async createProofRequestActivity(
+    proofRequestProperties,
+    publicationSubcase,
+    publicationFlow
+  ) {
     const now = new Date();
 
-    const uploadedPieces= proofRequestProperties.uploadedPieces;
+    const uploadedPieces = proofRequestProperties.uploadedPieces;
     const dutch = await this.store.findRecordByUri(
       'language',
       CONSTANTS.LANGUAGES.NL
@@ -276,6 +279,5 @@ export default class PublicationService extends Service {
       publicationFlow,
       CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED
     );
-
   }
 }
