@@ -93,6 +93,7 @@ const selectors = {
 
   // overview-table-display-config-modal
   tableDisplayConfig: {
+    close: '[data-test-publications-table-display-config-close]',
     option: 'data-test-overview-table-display-config-option-checkbox=',
   },
 
@@ -121,7 +122,7 @@ const selectors = {
   // publication-navigation
   publicationNav: {
     goBack: '[data-test-publication-nav-go-back]',
-    documents: '[data-test-publication-nav-documents]',
+    decisions: '[data-test-publication-nav-decisions]',
     translations: '[data-test-publication-nav-translations]',
     publishpreview: '[data-test-publication-nav-publishpreview]',
     // TODO-SELECTOR unused selectors
@@ -309,8 +310,20 @@ const selectors = {
   // publication-case-info-panel
   publicationCaseInfo: {
     edit: '[data-test-publication-case-info-panel-edit]',
+    editView: {
+      publicationNumber: '[data-test-publication-case-info-panel-edit-publication-number]',
+      suffix: '[data-test-publication-case-info-panel-edit-publication-number-suffix]',
+      numacNumber: '[data-test-publication-case-info-panel-edit-numac-number]',
+      openingDate: '[data-test-publication-case-info-panel-edit-opening-date]',
+      dueDate: '[data-test-publication-case-info-panel-edit-publication-due-date]',
+      save: '[data-test-publication-case-info-panel-save]',
+      cancel: '[data-test-publication-case-info-panel-cancel]',
+    },
+    publicationNumber: '[data-test-publication-case-info-panel-publication-number]',
     numacNumber: '[data-test-publication-case-info-panel-numac-number]',
-    save: '[data-test-publication-case-info-panel-save]',
+    startDate: '[data-test-publication-case-info-panel-start-date]',
+    openingDate: '[data-test-publication-case-info-panel-opening-date]',
+    dueDate: '[data-test-publication-case-info-panel-due-date]',
   },
 
   // remark-panel
@@ -330,6 +343,16 @@ const selectors = {
     select: '[data-test-publication-status-select]',
     save: '[data-test-publication-status-save]',
   },
+
+  // batch-documents-publication-row
+  batchDocumentsPublicationRow: {
+    name: '[data-test-batch-documents-publication-row-name]',
+    linkOption: '[data-test-batch-documents-publication-row-link-option]',
+    new: '[data-test-batch-documents-publication-row-new]',
+  },
+
+  // publications-flow-selector
+  publicationsFlowSelector: '[data-test-publication-flow-selector]',
 
 };
 export default selectors;
