@@ -145,6 +145,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     yield translationActivity.destroyRecord();
 
     const mail = yield requestActivity.email;
+    // legacy activities may not have an email so only try to delete if one exists
     yield mail?.destroyRecord();
 
     const pieces = yield requestActivity.usedPieces;
