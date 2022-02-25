@@ -12,8 +12,13 @@ export default class NewsletterService extends Service {
     const endpoint = `/newsletter/mail-campaigns`;
     const body = {
       data: {
-        meetingId: meeting.id,
-      },
+        type: 'mail-campaigns',
+        relationships: {
+          meeting: {
+            data: { type: 'meetings', id: meeting.id }
+          }
+        }
+      }
     };
     const response = await fetch(endpoint, {
       method: 'POST',
@@ -67,8 +72,13 @@ export default class NewsletterService extends Service {
     const endpoint = `/newsletter/belga-newsletters`;
     const body = {
       data: {
-        meetingId: meetingId,
-      },
+        type: 'belga-newsletters',
+        relationships: {
+          meeting: {
+            data: { type: 'meetings', id: meetingId }
+          }
+        }
+      }
     };
     const response = await fetch(endpoint, {
       method: 'POST',
@@ -159,6 +169,25 @@ export default class NewsletterService extends Service {
     }
   }
 
+  async deleteCampaign(id) {
+    const endpoint = `/newsletter/mail-campaigns/${id}`;
+    try {
+      await fetch(endpoint, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/vnd.api+json',
+        },
+      });
+    } catch (error) {
+      console.warn('An exception ocurred: ', error);
+      this.toaster.error(
+        this.intl.t('error-delete-newsletter'),
+        this.intl.t('warning-title')
+      );
+    }
+  }
+
+
   async createNewsItemForMeeting(meeting) {
     if (this.currentSession.isEditor) {
       const plannedStart = await meeting.get('plannedStart');
@@ -183,31 +212,13 @@ export default class NewsletterService extends Service {
     }
   }
 
-  async deleteCampaign(id) {
-    const endpoint = `/newsletter/mail-campaigns/${id}`;
-    try {
-      await fetch(endpoint, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/vnd.api+json',
-        },
-      });
-    } catch (error) {
-      console.warn('An exception ocurred: ', error);
-      this.toaster.error(
-        this.intl.t('error-delete-newsletter'),
-        this.intl.t('warning-title')
-      );
-    }
-  }
-
   // TODO These are for developers use - in comments for follow up
   /*
   downloadBelgaXML(meetingId) {
     try {
       return await fetch({
         method: 'GET',
-        url: `/newsletter/belga-newsletters/${meetingId}`,
+        url: `/newsletter/belga-newsletters/${meetingId}/download`,
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);
@@ -216,7 +227,7 @@ export default class NewsletterService extends Service {
     }
 
   async getMailCampaignContent(id) {
-    const endpoint = `/newsletter/mail-campaigns/${id}/content`;
+    const endpoint = `/newsletter/mail-campaigns/${id}?fields[mail-campaigns]=html`;
     const response = await fetch(endpoint, {
       method: 'GET',
       headers: {
