@@ -25,6 +25,7 @@
           <Auk::Button
             @skin="primary"
             @icon="plus"
+            @disabled={{this.isRequestDisabled}}
             {{on "click" this.openRequestModal}}
           >
             {{t "request-publication"}}

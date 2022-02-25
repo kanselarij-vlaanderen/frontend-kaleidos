@@ -14,6 +14,9 @@ import RequestActivity from 'frontend-kaleidos/models/request-activity';
 import PublicationActivity from 'frontend-kaleidos/models/publication-activity';
 /* eslint-enable no-unused-vars */
 
+// TODO
+// For now, we limit the number of request- and publication-activities to 1
+// We will need to figure out whether multiple publication-activities are possible
 export class PublicationRequestEvent {
   constructor(requestActivity) {
     this.requestActivity = requestActivity;
@@ -72,14 +75,12 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
   @tracked isOpenRequestModal = false;
   @tracked isOpenRegistrationModal = false;
 
-  get isRegistrationDisabled() {
-    return this.latestPublicationActivity == undefined;
+  get isRequestDisabled() {
+    return this.requestActivities.length > 0;
   }
 
-  get latestPublicationActivity() {
-    // model is sorted: first event === latest event
-    const latest = this.model.find((event) => event.isPublication);
-    return latest?.publicationActivity;
+  get isRegistrationDisabled() {
+    return this.publicationActivities.some((it) => it.endDate);
   }
 
   @action
@@ -156,7 +157,8 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
   async performSaveRegistration(args) {
     const saves = [];
 
-    const publicationActivity = this.latestPublicationActivity;
+    const publicationActivity = this.publicationActivities.lastObject;
+
     // TODO?: should publicationActivty be created when none exists?
     //  like when updating the publication status?
 

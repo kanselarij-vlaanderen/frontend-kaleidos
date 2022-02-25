@@ -42,6 +42,9 @@ export default class PublicationsPublicationPublicationActivitiesIndexRoute exte
     const [requestActivities, publicationActivities] = activities.map(
       (activities) => activities.toArray()
     );
+    this.requestActivities = requestActivities.sortBy('startDate');
+    this.publicationActivities = publicationActivities.sortBy('startDate');
+
     const timeline = this.createTimeline(
       requestActivities,
       publicationActivities
@@ -81,6 +84,8 @@ export default class PublicationsPublicationPublicationActivitiesIndexRoute exte
     super.setupController(...arguments);
     ctrl.publicationFlow = this.publicationFlow;
     ctrl.publicationSubcase = this.publicationSubcase;
+    ctrl.requestActivities = this.requestActivities;
+    ctrl.publicationActivities = this.publicationActivities;
   }
 
   @action
