@@ -44,14 +44,11 @@
             </LinkTo>
           </h4>
 
-          {{#if (not @agendaitem.isApproval)}}
-            {{#if @agendaitem.shortTitle}} {{!-- Avoid rendering the same thing twice if no "shortTitle" exists --}}
-              <pre data-test-agenda-overview-item-title class="vlc-agenda-items__body-padding auk-u-text-pre-line">
-                {{@agendaitem.title}}
-              </pre>
-            {{/if}}
+          {{#if @agendaitem.shortTitle}} {{!-- Avoid rendering the same thing twice if no "shortTitle" exists --}}
+            <pre data-test-agenda-overview-item-title class="vlc-agenda-items__body-padding auk-u-text-pre-line">
+              {{@agendaitem.title}}
+            </pre>
           {{/if}}
-
         </div>
       </div>
 
