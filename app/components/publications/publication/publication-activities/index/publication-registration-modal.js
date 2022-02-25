@@ -22,7 +22,7 @@ export default class PublicationRegistrationModal extends Component {
 
   initValidation() {
     this.validators = new ValidatorSet({
-      publicationDate: new Validator(() => this.publicationDate),
+      publicationDate: new Validator(() => this.publicationDate !== undefined),
     });
   }
 
@@ -68,10 +68,10 @@ export default class PublicationRegistrationModal extends Component {
 
   @task
   *save() {
-    const registerArgs = {
+    const args = {
       publicationDate: this.publicationDate,
       shouldSetPublished: this.mustUpdatePublicationStatus,
     };
-    yield this.args.onSave(registerArgs);
+    yield this.args.onSave(args);
   }
 }
