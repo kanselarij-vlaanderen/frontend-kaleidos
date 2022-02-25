@@ -1,6 +1,6 @@
 {{!-- TODO: octane-refactor --}}
 {{!-- template-lint-disable no-action --}}
-<div class="l-printable-newsletter__non-breakable-group">
+<div class="auk-u-non-breakable-group@print">
   {{#if this.allowEditing}}
     <div class="auk-u-mb-2">
       <div class="auk-o-flex auk-o-flex--justify-between auk-o-flex--align-baseline">
@@ -82,7 +82,7 @@
 {{#if
   (gt (await this.newsletterInfo.themes.length) 0)
 }}
-  <div class="auk-u-mt-3 l-printable-newsletter__non-breakable-group">
+  <div class="auk-u-mt-3 auk-u-non-breakable-group@print">
     <Auk::PillList>
       {{#each
         (await this.newsletterInfo.themes)

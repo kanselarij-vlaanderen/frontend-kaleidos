@@ -1,6 +1,7 @@
 import Model, {
   attr, belongsTo, hasMany
 } from '@ember-data/model';
+import { isEmpty } from '@ember/utils';
 
 export default class ProofingActivity extends Model {
   // Attributes.
@@ -18,4 +19,8 @@ export default class ProofingActivity extends Model {
   @hasMany('piece', {
     inverse: 'proofingActivityGeneratedBy',
   }) generatedPieces;
+
+  get isFinished(){
+    return !isEmpty(this.endDate);
+  }
 }

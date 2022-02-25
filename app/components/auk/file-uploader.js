@@ -11,6 +11,7 @@ import { guidFor } from '@ember/object/internals';
 /**
  * @argument {Boolean} fullHeight Stretch the upload zone over the full height
  * @argument {Boolean} multiple (optional) allow uploading multiple files
+ * @argument {Boolean} reusable (optional, False by default) allow reusing the uploader to upload even more files, or add new files after previous uploads were deleted.
  * @argument {String} accept (optional)
  * @argument {String} fileQueueName (optional) Name of the file queue to use.
  *   Setting this name will allow you to access this queue from the file-queue service outside of this component.
