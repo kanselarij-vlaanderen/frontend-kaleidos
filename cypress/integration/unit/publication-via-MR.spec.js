@@ -32,12 +32,13 @@ context('Publications via MR tests', () => {
 
   before(() => {
     cy.login('Admin');
-    cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
     cy.addSubcase(type, subcaseTitleShort);
     cy.openSubcase(0);
     cy.addDocumentsToSubcase(files);
-    cy.proposeSubcaseForAgenda(agendaDate);
+    cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
+    cy.openAgendaForDate(agendaDate);
+    cy.addAgendaitemToAgenda(subcaseTitleShort, false);
     cy.logoutFlow();
   });
 
