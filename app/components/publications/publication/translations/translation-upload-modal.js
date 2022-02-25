@@ -80,11 +80,12 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
   *deleteUploadedPiece(piece) {
     const file = yield piece.file;
     const documentContainer = yield piece.documentContainer;
+    this.uploadedPieces.removeObject(piece);
+
     yield Promise.all([
       file.destroyRecord(),
       documentContainer.destroyRecord(),
+      piece.destroyRecord(),
     ]);
-    yield piece.destroyRecord();
-    this.uploadedPieces.removeObject(piece);
   }
 }
