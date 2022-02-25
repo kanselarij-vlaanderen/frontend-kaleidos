@@ -10,35 +10,31 @@
   <Auk::AccordionPanel @isDefaultActive={{true}} as |accordionPanel|>
     <accordionPanel.Header
       @size="large"
-      @title={{t "requested-translation"}}
+      @title={{t "requested-proof"}}
       @subtitle={{moment-format @requestActivity.startDate "DD.MM.YYYY"}}
       as |header|
     >
-      {{#unless this.loadTranslationActivity.isRunning}}
+      {{#unless this.loadProofingActivity.isRunning}}
         <header.Actions as |actions|>
           <actions.Item>
-            {{#unless this.isTranslationActivityFinished}}
+            {{#unless @requestActivity.proofingActivity.isFinished}}
               <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
                 <Menu.Item
                   @skin="danger"
-                  @disabled={{this.isTranslationActivityFinished}}
                   {{on "click" this.showDeleteRequest}}
                 >
-                  {{t "delete-request"}}
+                  {{t "delete"}}
                 </Menu.Item>
               </DropdownMenu>
             {{/unless}}
           </actions.Item>
         </header.Actions>
       {{/unless}}
-
     </accordionPanel.Header>
     <accordionPanel.Body>
       {{#each @requestActivity.usedPieces as |piece|}}
         <div class="auk-o-flex auk-o-flex--spaced-wide">
-          <Auk::List::Item
-            class="auk-o-flex auk-o-flex--spaced-wide"
-          >
+          <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
             <div class="auk-o-flex auk-o-flex--spaced">
               <Auk::Badge @icon="paperclip" @size="regular" />
               <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
