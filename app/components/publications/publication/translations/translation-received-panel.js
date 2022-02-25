@@ -16,7 +16,6 @@ export default class PublicationsTranslationTranslationReceivedPanelComponent ex
   @service router;
   @service publicationService;
 
-
   @tracked isOpenTranslationEditModal = false;
   @tracked isOpenProofRequestModal = false;
 
@@ -24,6 +23,13 @@ export default class PublicationsTranslationTranslationReceivedPanelComponent ex
 
   get isSaveDisabled() {
     return isEmpty(this.newEndDate);
+  }
+
+  get piecesOfTranslation() {
+    return [
+      ...this.args.translationActivity.usedPieces.toArray(),
+      ...this.args.translationActivity.generatedPieces.toArray(),
+    ];
   }
 
   @action
@@ -43,8 +49,13 @@ export default class PublicationsTranslationTranslationReceivedPanelComponent ex
 
   @task
   *saveProofRequest(proofRequest) {
-    const publicationSubcase = yield this.args.publicationFlow.publicationSubcase;
-    yield this.publicationService.createProofRequestActivity(proofRequest,publicationSubcase,this.args.publicationFlow)
+    const publicationSubcase = yield this.args.publicationFlow
+      .publicationSubcase;
+    yield this.publicationService.createProofRequestActivity(
+      proofRequest,
+      publicationSubcase,
+      this.args.publicationFlow
+    );
 
     this.isOpenProofRequestModal = false;
     this.router.transitionTo('publications.publication.proofs');
@@ -69,5 +80,4 @@ export default class PublicationsTranslationTranslationReceivedPanelComponent ex
   closeProofRequestModal() {
     this.isOpenProofRequestModal = false;
   }
-
 }

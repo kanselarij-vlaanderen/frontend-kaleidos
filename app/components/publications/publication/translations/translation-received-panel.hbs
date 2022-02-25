@@ -106,7 +106,7 @@
 {{#if this.isOpenProofRequestModal}}
   <Publications::Publication::Proofs::ProofRequestModal
     @publicationFlow={{@publicationFlow}}
-    @usedPieces={{@translationActivity.generatedPieces}}
+    @piecesOfTranslation={{this.piecesOfTranslation}}
     @onSave={{perform this.saveProofRequest}}
     @onCancel={{this.closeProofRequestModal}}
   />

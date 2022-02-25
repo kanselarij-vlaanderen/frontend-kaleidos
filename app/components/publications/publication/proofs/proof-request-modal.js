@@ -9,7 +9,7 @@ import { inject as service } from '@ember/service';
 
 /**
  * @argument {PublicationFlow} publicationFlow includes: identification
- * @argument {usedPieces} UsedPieces from a TranslationActivity if proof is requested from a translation. These cannot be deleted, but  can be unlinked
+ * @argument {piecesOfTranslation} UsedPieces and GeneratedPieces from a TranslationActivity if proof is requested from a translation. These cannot be deleted, but  can be unlinked
  * @argument onSave
  * @argument onCancel
  */
@@ -21,9 +21,10 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   @tracked uploadedPieces = [];
 
   //used new instance otherwise it's removed from the generatedPieces in TranslationReceivedPanel
-  @tracked usedPiecesByTranslation = this.args.usedPieces
-    ? [...this.args.usedPieces.toArray()]
+  @tracked piecesOfTranslation = this.args.piecesOfTranslation
+    ? [...this.args.piecesOfTranslation.toArray()]
     : [];
+
 
   validators;
 
@@ -39,7 +40,7 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
 
   get isSaveDisabled() {
     const totalPieces =
-      this.uploadedPieces.length + this.usedPiecesByTranslation.length;
+      this.uploadedPieces.length + this.piecesOfTranslation.length;
     return (
       totalPieces === 0 || !this.validators.areValid || this.cancel.isRunning
     );
@@ -47,8 +48,8 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
 
   @task
   *save() {
-    if (this.usedPiecesByTranslation) {
-      this.uploadedPieces.push(...this.usedPiecesByTranslation);
+    if (this.piecesOfTranslation) {
+      this.uploadedPieces.push(...this.piecesOfTranslation);
     }
     yield this.args.onSave({
       subject: this.subject,
@@ -124,7 +125,7 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
 
   @action
   unlinkUsedPiece(piece) {
-    this.usedPiecesByTranslation.removeObject(piece);
+    this.piecesOfTranslation.removeObject(piece);
   }
 
   initValidators() {
