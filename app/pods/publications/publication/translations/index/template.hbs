@@ -48,7 +48,9 @@
         )}}
           <Publications::Publication::Translations::TranslationReceivedPanel
             @translationActivity={{timelineActivity.activity}}
-            @onSaveEditReceivedTranslation={{perform this.saveEditReceivedTranslation}}
+            @onSaveEditReceivedTranslation={{perform
+              this.saveEditReceivedTranslation
+            }}
           />
         {{/if}}
       {{else}}

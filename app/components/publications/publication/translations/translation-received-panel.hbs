@@ -37,9 +37,7 @@
     <Auk::Panel::Body>
       <Auk::List>
         {{#each @translationActivity.generatedPieces as |piece|}}
-          <Auk::List::Item
-            class="auk-o-flex auk-o-flex--spaced-wide"
-          >
+          <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
             <div class="auk-o-flex auk-o-flex--spaced">
               <Auk::Badge @icon="paperclip" @size="regular" />
               <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>

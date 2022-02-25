@@ -185,7 +185,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
       const documentContainer = yield piece.documentContainer;
       yield file.destroyRecord();
       yield documentContainer.destroyRecord();
-      yield piece.destroyRecord()
+      yield piece.destroyRecord();
     }
     yield requestActivity.destroyRecord();
     this.send('refresh');
