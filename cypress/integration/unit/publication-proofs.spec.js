@@ -69,7 +69,7 @@ context('Publications proofs tests', () => {
   const finalRequestTitle = `Verbeterde drukproef BS-werknr: ${numacNumber} VO-dossier: ${fields.number}`;
   const finalRequestMessage = `Beste,\n\nHierbij de verbeterde drukproef :\n\nBS-werknummer: ${numacNumber}\nVO-dossier: ${fields.number}\n\nDe gewenste datum van publicatie is: ${targetEndDate.format('DD/MM/YYYY')}\t\n\nVragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\t\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n`;
 
-  function uploadDocument(file, newFileName, numberOfPages, words) {
+  function uploadDocument(file, newFileName, numberOfPages, numberOfWords) {
     cy.get(publication.translationsDocuments.add).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
     cy.get(publication.documentsUpload.name).should('have.value', file.fileName)
@@ -77,8 +77,8 @@ context('Publications proofs tests', () => {
       .type(newFileName);
     cy.get(publication.documentsUpload.numberOfPages)
       .type(numberOfPages);
-    cy.get(publication.documentsUpload.words)
-      .type(words);
+    cy.get(publication.documentsUpload.numberOfWords)
+      .type(numberOfWords);
     // cy.get(publication.documentsUpload.proofPrint).parent()
     //   .click();
   }

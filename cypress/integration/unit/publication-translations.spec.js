@@ -216,7 +216,7 @@ context('Publications translation tests', () => {
       });
     cy.get(publication.documentEdit.documentName).should('have.value', newFileName1);
     cy.get(publication.documentEdit.numberOfPages).should('have.value', editednumberOfPages);
-    cy.get(publication.documentEdit.words).should('have.value', editednumberOfWords);
+    cy.get(publication.documentEdit.numberOfWords).should('have.value', editednumberOfWords);
     cy.get(auk.modal.footer.cancel).click();
 
     // check requestmodal without sidebar change and 1 document selected
