@@ -26,13 +26,15 @@
         </div>
 
         {{!Zet publicatiestatus}}
-        <div class="auk-form-group">
-          <Auk::Checkbox
-            @label={{t "update-publication-status-published"}}
-            @checked={{this.mustUpdatePublicationStatus}}
-            {{on "input" this.setMustUpdatePublicationStatus}}
-          />
-        </div>
+        {{#if (not this.isEditing)}}
+          <div class="auk-form-group">
+            <Auk::Checkbox
+              @label={{t "update-publication-status-published"}}
+              @checked={{this.mustUpdatePublicationStatus}}
+              {{on "input" this.setMustUpdatePublicationStatus}}
+            />
+          </div>
+        {{/if}}
 
       </div>
     </Utils::LoadableContent>

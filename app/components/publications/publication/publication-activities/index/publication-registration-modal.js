@@ -10,6 +10,19 @@ import { tracked } from '@glimmer/tracking';
  * for publications that are not found in the Staatsblad (yet)
  */
 export default class PublicationRegistrationModal extends Component {
+  /**
+   * @type {{
+   *  publication?: {
+   *    publicationDate: Date
+   *  }, // omit for registration / pass for editing
+   *  onCancel(): Promise,
+   *  onSave(args: {
+   *    publicationDate: Date,
+   *    mustUpdatePublicationStatus: boolean,
+   *  }): Promise,
+   * }}
+   */
+  args = this.args;
   @service store;
 
   @tracked publicationDate = new Date();
@@ -17,7 +30,20 @@ export default class PublicationRegistrationModal extends Component {
 
   constructor() {
     super(...arguments);
+    this.initFields();
     this.initValidation();
+  }
+
+  get isEditing() {
+    return this.args.publication !== undefined;
+  }
+
+  initFields() {
+    if (this.args.publication) {
+      this.publicationDate = this.args.publication.publicationDate;
+    } else {
+      this.publicationDate = new Date();
+    }
   }
 
   initValidation() {
@@ -70,8 +96,10 @@ export default class PublicationRegistrationModal extends Component {
   *save() {
     const args = {
       publicationDate: this.publicationDate,
-      shouldSetPublished: this.mustUpdatePublicationStatus,
     };
+    if (!this.isEditing) {
+      args.mustUpdatePublicationStatus = this.mustUpdatePublicationStatus;
+    }
     yield this.args.onSave(args);
   }
 }

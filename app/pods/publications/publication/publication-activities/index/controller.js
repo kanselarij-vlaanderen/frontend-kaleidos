@@ -64,6 +64,11 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
   @tracked publicationFlow;
   /** @type {PublicationSubcase} */
   publicationSubcase;
+  // The model of the PublicationRegistrationModal
+  /** @type {{publicationDate: Date}} */
+  @tracked publication;
+  selectedPublicationActivity;
+
   @tracked isOpenRequestModal = false;
   @tracked isOpenRegistrationModal = false;
 
@@ -89,11 +94,29 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
 
   @action
   openRegistrationModal() {
+    this.publication = undefined;
     this.isOpenRegistrationModal = true;
   }
 
   @action
   closeRegistrationModal() {
+    this.isOpenRegistrationModal = false;
+  }
+
+  @action
+  async openPublicationModalEdit(publicationActivity) {
+    this.selectedPublicationActivity = publicationActivity;
+    const decisions = await publicationActivity.decisions;
+    // Data model differs from user interface: only 1 decision can be added (for publication-date) .firstObject === .onlyObject
+    const decision = decisions.firstObject;
+    this.publication = {
+      publicationDate: decision.publicationDate,
+    };
+    this.isOpenRegistrationModal = true;
+  }
+
+  @action
+  closePublicationModalEdit() {
     this.isOpenRegistrationModal = false;
   }
 
@@ -111,8 +134,14 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     this.isOpenRequestModal = false;
   }
 
-  @action async saveRegistration(args) {
-    await this.performSaveRegistration(args);
+  @action
+  async saveRegistration(args) {
+    if (this.publication) {
+      const publicationActivity = this.selectedPublicationActivity;
+      await this.performUpdatePublication(publicationActivity, args);
+    } else {
+      await this.performSaveRegistration(args);
+    }
 
     this.send('refresh');
     this.isOpenRegistrationModal = false;
@@ -168,6 +197,14 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     }
 
     await Promise.all(saves);
+  }
+
+  @action
+  async performUpdatePublication(publicationActivity, args) {
+    const decisions = await publicationActivity.decisions;
+    const decision = decisions.firstObject;
+    decision.publicationDate = args.publicationDate;
+    await decision.save();
   }
 
   @task

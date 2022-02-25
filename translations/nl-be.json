@@ -998,9 +998,9 @@
   "signing-status-signed-x-count": "Gehandtekend ({done}/{total})",
   "signing-status-signed": "Gehandtekend",
   "publication-info": "Publicatie info",
-  "set-status-translation-in": "Zet status op 'Vertaling In'",
-  "set-status-proof-in": "Zet status op 'Drukproef In'",
-  "set-status-published": "Zet status op 'Gepubliceerd'",
+  "update-publication-status-translation-in": "Zet status op 'Vertaling In'",
+  "update-publication-status-proof-in": "Zet status op 'Drukproef In'",
+  "update-publication-status-published": "Zet status op 'Gepubliceerd'",
   "delete-translation-request-message": "Bent u zeker dat u de aanvraag wil verwijderen?",
   "delete-translation-request": "Aanvraag verwijderen",
   "request-it": "Aanvragen"
