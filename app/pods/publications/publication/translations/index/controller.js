@@ -75,9 +75,27 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   @task
-  *saveTranslationActivityEdit(translationActivity, endDate) {
-    translationActivity.endDate = endDate;
-    yield translationActivity.save();
+  *saveEditReceivedTranslation(translationEdit) {
+    const saves = [];
+
+    const translationActivity = translationEdit.translationActivity;
+    translationActivity.endDate = translationEdit.receivedDate;
+    saves.push(translationActivity.save());
+
+    const pieces = yield translationActivity.generatedPieces;
+    for (let piece of pieces.toArray()) {
+      piece.receivedDate = translationEdit.receivedDate;
+      saves.push(piece.save());
+    }
+
+    // This check (copied from upload task) needs to be revised, user input errors can't be corrected with a more recent date
+    if (translationEdit.receivedDate < this.translationSubcase.receivedDate) {
+      this.translationSubcase.receivedDate = translationEdit.receivedDate;
+    }
+    saves.push(this.translationSubcase.save());
+
+    yield Promise.all(saves);
+    this.send('refresh');
   }
 
   @task

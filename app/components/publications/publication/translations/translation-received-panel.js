@@ -4,42 +4,47 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { isEmpty } from '@ember/utils';
 
+/**
+ *
+ * @argument translationActivity
+ * @argument onSaveEditReceivedTranslation
+ */
 export default class PublicationsTranslationTranslationReceivedPanelComponent extends Component {
-  /**
-   *
-   * @argument translationActivity
-   * @argument onSave
-   */
-
   @tracked isOpenTranslationEditModal = false;
-  @tracked newEndDate;
+  @tracked newReceivedDate;
 
   get isSaveDisabled() {
-    return isEmpty(this.newEndDate);
+    return isEmpty(this.newReceivedDate);
   }
 
   @action
-  toggleTranslationEditModal() {
-    this.isOpenTranslationEditModal = !this.isOpenTranslationEditModal;
-    // When opening modal, reset possibly stale newEndDate to current endDate
-    if (this.isOpenTranslationEditModal) {
-      this.newEndDate = this.args.translationActivity.endDate;
-    }
+  openTranslationEditModal() {
+    this.isOpenTranslationEditModal = true;
+    // When opening modal, reset possibly stale local variable
+    this.newReceivedDate = this.args.translationActivity.endDate;
+  }
+
+  @action
+  closeTranslationEditModal() {
+    this.isOpenTranslationEditModal = false;
   }
 
   @task
-  *saveEndDate() {
-    yield this.args.onSave(this.args.translationActivity, this.newEndDate);
-    this.toggleTranslationEditModal();
+  *saveReceivedDate() {
+    yield this.args.onSaveEditReceivedTranslation({
+      translationActivity: this.args.translationActivity,
+      receivedDate: this.newReceivedDate,
+    });
+    this.closeTranslationEditModal();
   }
 
   @action
-  setEndDate(selectedDates) {
+  setNewReceivedDate(selectedDates) {
     if (selectedDates.length) {
-      this.newEndDate = selectedDates[0];
+      this.newReceivedDate = selectedDates[0];
     } else {
       // this case occurs when users manually empty the date input-field
-      this.newEndDate = undefined;
+      this.newReceivedDate = undefined;
     }
   }
 }

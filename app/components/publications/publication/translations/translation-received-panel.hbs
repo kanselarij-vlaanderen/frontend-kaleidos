@@ -25,7 +25,7 @@
             <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
               <Menu.Item
                 @skin="primary"
-                {{on "click" this.toggleTranslationEditModal}}
+                {{on "click" this.openTranslationEditModal}}
               >
                 {{t "edit-2"}}
               </Menu.Item>
@@ -71,7 +71,7 @@
   <Auk::Modal>
     <Auk::Modal::Header
       @title={{t "edit-translation-activity"}}
-      @onClose={{this.toggleTranslationEditModal}}
+      @onClose={{this.closeTranslationEditModal}}
     />
     <Auk::Modal::Body>
       <div class="auk-form-group">
@@ -81,15 +81,15 @@
         <Auk::Datepicker
           id="translationActivityEditEndDate"
           @date={{@translationActivity.endDate}}
-          @onChange={{this.setEndDate}}
+          @onChange={{this.setNewReceivedDate}}
         />
       </div>
     </Auk::Modal::Body>
-    <Auk::Modal::Footer @onCancel={{this.toggleTranslationEditModal}}>
+    <Auk::Modal::Footer @onCancel={{this.closeTranslationEditModal}}>
       <Auk::Button
         @skin="primary"
         @disabled={{this.isSaveDisabled}}
-        {{on "click" (perform this.saveEndDate)}}
+        {{on "click" (perform this.saveReceivedDate)}}
       >
         {{t "save"}}
       </Auk::Button>
