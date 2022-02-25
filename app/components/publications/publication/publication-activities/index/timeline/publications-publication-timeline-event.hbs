@@ -3,7 +3,7 @@
   @badgeSkin="success"
 >
   <Auk::Panel>
-    <Auk::Panel::Header>
+    <Auk::Panel::Header @size="large">
       <Auk::Toolbar as |Toolbar|>
         <Toolbar.Group as |Group|>
           <Group.Item>
@@ -25,7 +25,6 @@
             {{!avoid render issues}}
             {{#if this.loadData.isIdle}}
               <Menu.Item
-                @skin="danger"
                 @disabled={{this.isEditDisabled}}
                 {{on "click" (fn @onEdit @publicationActivity)}}
               >
@@ -36,6 +35,7 @@
         </Toolbar.Group>
       </Auk::Toolbar>
     </Auk::Panel::Header>
-    {{!TODO panel body or remove bottom border if no body}}
+    {{!TODO: panel body or remove bottom border if no body}}
+    {{!SUGGESTION: show list of decisions with Staatsblad link and publication date}}
   </Auk::Panel>
 </Utils::Generic::Timeline::TimelineEvent>

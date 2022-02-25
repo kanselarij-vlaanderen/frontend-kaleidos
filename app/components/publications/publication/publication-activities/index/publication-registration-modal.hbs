@@ -1,8 +1,12 @@
 <Auk::Modal>
   <Auk::Modal::Header
     @title={{t
-      "publication-request-modal-title"
-      publication=@publicationFlow.identification.idName
+      (if
+        this.isEditing
+        "publication-edit-modal-title"
+        "publication-registration-modal-title"
+      )
+      publicationFlow=@publicationFlow.identification.idName
     }}
     @onClose={{perform this.cancel}}
   />

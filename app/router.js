@@ -90,7 +90,7 @@ Router.map(function() {
           this.route('documents', { path: '/documenten', });
           this.route('requests', { path: '/aanvragen', });
         });
-        this.route('publication-activities', { path: '/publicatie-activiteiten', }, function() { });
+        this.route('publication-activities', { path: '/publicatie', }, function() { });
       });
     });
   }

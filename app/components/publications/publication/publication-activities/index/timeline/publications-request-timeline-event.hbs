@@ -1,6 +1,7 @@
 <Utils::Generic::Timeline::TimelineEvent @badgeIcon="mail" @badgeSkin="primary">
   <Auk::AccordionPanel @isDefaultActive={{true}} as |AccordionPanel|>
     <AccordionPanel.Header
+      @size="large"
       @title={{@requestActivity.title}}
       @subtitle={{moment-format @requestActivity.startDate}}
       as |Header|
