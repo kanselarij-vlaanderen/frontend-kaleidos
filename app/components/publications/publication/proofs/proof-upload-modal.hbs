@@ -71,13 +71,13 @@
                   </div>
                 {{/if}}
                 <div class="auk-form-group">
-                  <Auk::Label for="proofIn">
-                    {{t "set-status-proof-in"}}
+                  <Auk::Label for="proofReceived">
+                    {{t "set-status-proof-received"}}
                   </Auk::Label>
                   <Auk::Checkbox
-                    id="proofIn"
-                    @checked={{this.isProofIn}}
-                    {{on "input" this.setProofInStatus}}
+                    id="proofReceived"
+                    @checked={{this.isProofReceived}}
+                    {{on "input" this.setProofReceivedStatus}}
                   />
                 </div>
               </div>

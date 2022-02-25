@@ -22,7 +22,7 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
   @tracked file;
   @tracked name;
   @tracked receivedDate = new Date();
-  @tracked isProofIn = false;
+  @tracked isProofReceived = false;
 
   constructor() {
     super(...arguments);
@@ -64,7 +64,7 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
       file: this.file,
       name: this.name,
       receivedDate: this.receivedDate,
-      isProofIn : this.isProofIn,
+      isProofReceived : this.isProofReceived,
     });
   }
 
@@ -86,8 +86,8 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
   }
 
   @action
-  setProofInStatus(event) {
-    this.isProofIn = event.target.checked;
+  setProofReceivedStatus(event) {
+    this.isProofReceived = event.target.checked;
   }
 
   initValidation() {

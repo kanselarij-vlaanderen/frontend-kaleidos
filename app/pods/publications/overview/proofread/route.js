@@ -3,7 +3,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 // eslint-disable-next-line prettier/prettier
 const PROOFREAD_STATUSES_URIS = [
-  CONSTANTS.PUBLICATION_STATUSES.PROOF_IN,
+  CONSTANTS.PUBLICATION_STATUSES.PROOF_RECEIVED,
 ];
 
 export default class PublicationsOverviewProofreadRoute extends PublicationsOverviewBaseRoute {

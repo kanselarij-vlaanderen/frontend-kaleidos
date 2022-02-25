@@ -55,7 +55,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     if (translationUpload.mustUpdatePublicationStatus) {
       yield this.publicationService.updatePublicationStatus(
         this.publicationFlow,
-        CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_IN,
+        CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_RECEIVED,
         translationUpload.receivedDate
       );
 
@@ -134,7 +134,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     // PUBLICATION-STATUS
     yield this.publicationService.updatePublicationStatus(
       this.publicationFlow,
-      CONSTANTS.PUBLICATION_STATUSES.TO_TRANSLATIONS
+      CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_REQUESTED
     );
 
     this.send('refresh');

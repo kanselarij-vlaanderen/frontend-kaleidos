@@ -111,10 +111,10 @@ export default class PublicationsPublicationProofsRequestsController extends Con
       await this.publicationSubcase.save();
     }
 
-    if (proofUpload.isProofIn) {
+    if (proofUpload.isProofReceived) {
       await this.publicationService.updatePublicationStatus(
         this.publicationFlow,
-        CONSTANTS.PUBLICATION_STATUSES.PROOF_IN,
+        CONSTANTS.PUBLICATION_STATUSES.PROOF_RECEIVED,
         proofUpload.receivedDate
       );
 
