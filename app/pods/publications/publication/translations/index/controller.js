@@ -21,7 +21,9 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   get latestTranslationActivity() {
-    const timelineActivity = this.model.find((timelineActivity) => timelineActivity.isTranslationActivity);
+    const timelineActivity = this.model.find(
+      (timelineActivity) => timelineActivity.isTranslationActivity
+    );
     return timelineActivity ? timelineActivity.activity : null;
   }
 
@@ -73,16 +75,45 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   @task
+  *saveEditReceivedTranslation(translationEdit) {
+    const saves = [];
+
+    const translationActivity = translationEdit.translationActivity;
+    translationActivity.endDate = translationEdit.receivedDate;
+    saves.push(translationActivity.save());
+
+    const pieces = yield translationActivity.generatedPieces;
+    for (let piece of pieces.toArray()) {
+      piece.receivedDate = translationEdit.receivedDate;
+      saves.push(piece.save());
+    }
+
+    // This check (copied from upload task) needs to be revised, user input errors can't be corrected with a more recent date
+    if (translationEdit.receivedDate < this.translationSubcase.receivedDate) {
+      this.translationSubcase.receivedDate = translationEdit.receivedDate;
+    }
+    saves.push(this.translationSubcase.save());
+
+    yield Promise.all(saves);
+    this.send('refresh');
+  }
+
+  @task
   *saveTranslationRequest(translationRequest) {
     const now = new Date();
 
     const uploadedPieces = translationRequest.uploadedPieces;
-    const dutch = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
-    yield Promise.all(uploadedPieces.map((piece) => {
-      piece.translationSubcaseSourceFor = this.translationSubcase;
-      piece.language = dutch;
-      return piece.save();
-    }));
+    const dutch = yield this.store.findRecordByUri(
+      'language',
+      CONSTANTS.LANGUAGES.NL
+    );
+    yield Promise.all(
+      uploadedPieces.map((piece) => {
+        piece.translationSubcaseSourceFor = this.translationSubcase;
+        piece.language = dutch;
+        return piece.save();
+      })
+    );
 
     const requestActivity = this.store.createRecord('request-activity', {
       startDate: now,
@@ -154,7 +185,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
       const documentContainer = yield piece.documentContainer;
       yield file.destroyRecord();
       yield documentContainer.destroyRecord();
-      yield piece.destroyRecord()
+      yield piece.destroyRecord();
     }
     yield requestActivity.destroyRecord();
     this.send('refresh');

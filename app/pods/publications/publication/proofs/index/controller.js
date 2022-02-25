@@ -53,7 +53,8 @@ export default class PublicationsPublicationProofsController extends Controller 
     }
 
     if (proofUpload.proofPrintCorrector) {
-      this.publicationSubcase.proofPrintCorrector = proofUpload.proofPrintCorrector;
+      this.publicationSubcase.proofPrintCorrector =
+        proofUpload.proofPrintCorrector;
       publicationSubcaseSave = this.publicationSubcase.save();
     }
 
@@ -158,7 +159,7 @@ export default class PublicationsPublicationProofsController extends Controller 
       const documentContainer = yield piece.documentContainer;
       yield file.destroyRecord();
       yield documentContainer.destroyRecord();
-      yield piece.destroyRecord()
+      yield piece.destroyRecord();
     }
     yield requestActivity.destroyRecord();
     this.send('refresh');
