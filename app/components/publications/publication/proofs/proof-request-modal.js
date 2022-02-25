@@ -32,6 +32,9 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
     super(...arguments);
     this.initValidators();
     this.setEmailFields.perform();
+    if (this.piecesOfTranslation.length === 0){
+      this.checkIfPiecesOfTranslation.perform();
+    }
   }
 
   get isCancelDisabled() {
@@ -42,7 +45,7 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
     const totalPieces =
       this.uploadedPieces.length + this.piecesOfTranslation.length;
     return (
-      totalPieces === 0 || !this.validators.areValid || this.cancel.isRunning
+      totalPieces === 0 || !this.validators.areValid || this.cancel.isRunning || this.checkIfPiecesOfTranslation.isRunning
     );
   }
 
@@ -70,6 +73,28 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
       )
     );
     this.args.onCancel();
+  }
+
+  @task
+  *checkIfPiecesOfTranslation() {
+    const translationSubcase = yield this.args.publicationFlow.translationSubcase;
+    const translationActivities = yield this.store.query(
+      'translation-activity',
+      {
+        'filter[subcase][:id:]': translationSubcase.id,
+        include: 'generated-pieces,used-pieces',
+        sort: '-start-date',
+      });
+
+    const finishedTranslationActivity = translationActivities.find(
+      (translation) => translation.isFinished
+    ) ;
+    if (finishedTranslationActivity){
+      this.piecesOfTranslation = [
+        ...finishedTranslationActivity.usedPieces.toArray(),
+        ...finishedTranslationActivity.generatedPieces.toArray(),
+      ];
+    }
   }
 
   @task
