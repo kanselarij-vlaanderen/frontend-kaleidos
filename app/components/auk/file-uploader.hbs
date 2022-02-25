@@ -3,7 +3,7 @@
   @disabled={{or this.uploadIsRunning this.uploadIsCompleted}}
   @multiple={{@multiple}}
   @name={{this.fileQueueName}}
-  @class="auk-file-upload {{if this.uploadIsRunning "auk-file-upload--gray-100"}} {{if this.this.uploadIsCompleted "auk-file-upload--success"}} {{if @fullHeight "auk-file-upload--full-height"}}"
+  @class="auk-file-upload {{if this.uploadIsRunning "auk-file-upload--gray-100"}} {{if this.uploadIsCompleted "auk-file-upload--success"}} {{if @fullHeight "auk-file-upload--full-height"}}"
   @tagName="div"
   @action={{perform this.uploadFileTask}}
 as |dropzone|
