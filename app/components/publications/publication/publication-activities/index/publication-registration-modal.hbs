@@ -12,19 +12,6 @@
     >
       <div class="auk-form-group-layout auk-form-group-layout--standard">
 
-        {{!Titel}}
-        <div class="auk-form-group">
-          <Auk::Label for="publicationRegisterModal_title">
-            {{t "title"}}
-          </Auk::Label>
-          <Auk::Input
-            id="publicationRegisterModal_title"
-            @block={{true}}
-            @value={{this.title}}
-            {{on "input" this.setTitle}}
-          />
-        </div>
-
         {{!Publicatiedatum}}
         <div class="auk-form-group">
           <Auk::Label for="publicationRegisterModal_publicationDate">

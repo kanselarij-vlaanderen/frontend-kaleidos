@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { isBlank } from '@ember/utils';
 import { task } from 'ember-concurrency';
 import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
 import { tracked } from '@glimmer/tracking';
@@ -13,7 +12,6 @@ import { tracked } from '@glimmer/tracking';
 export default class PublicationRegistrationModal extends Component {
   @service store;
 
-  @tracked title = '';
   @tracked publicationDate = new Date();
   @tracked mustUpdatePublicationStatus = false;
 
@@ -24,7 +22,6 @@ export default class PublicationRegistrationModal extends Component {
 
   initValidation() {
     this.validators = new ValidatorSet({
-      title: new Validator(() => !isBlank(this.title)),
       publicationDate: new Validator(() => this.publicationDate),
     });
   }
@@ -41,12 +38,6 @@ export default class PublicationRegistrationModal extends Component {
     return (
       !this.validators.areValid || this.cancel.isRunning || this.save.isRunning
     );
-  }
-
-  @action
-  setTitle(e) {
-    this.subject = e.target.value;
-    this.validators.title.enableError();
   }
 
   @action
@@ -78,7 +69,6 @@ export default class PublicationRegistrationModal extends Component {
   @task
   *save() {
     const registerArgs = {
-      title: this.title,
       publicationDate: this.publicationDate,
       shouldSetPublished: this.mustUpdatePublicationStatus,
     };

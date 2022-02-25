@@ -120,7 +120,6 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
 
   /**
    * @param {{
-   *  title: string,
    *  publicationDate: Date,
    *  mustUpdatePublicationStatus: boolean,
    * }} args
@@ -133,7 +132,6 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     //  like when updating the publication status?
 
     const decision = this.store.createRecord('decision', {
-      title: args.title,
       publicationDate: args.publicationDate,
       publicationActivity: publicationActivity,
     });
