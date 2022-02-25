@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 
-export default class PublicationsRequestTimelineEvent extends Component {
+export default class PublicationsPublicationTimelineEvent extends Component {
   @tracked isOpenConfirmDeleteAlert = false;
   @tracked publicationActivity;
 
@@ -14,12 +14,18 @@ export default class PublicationsRequestTimelineEvent extends Component {
 
   @task
   *loadData() {
-    this.publicationActivity = yield this.args.requestActivity
-      .publicationActivity;
+    let decisions = yield this.args.publicationActivity.decisions;
+    this.decisions = decisions.toArray();
   }
 
-  get isDeleteDisabled() {
-    return this.publicationActivity.endDate !== undefined;
+  get isEditDisabled() {
+    // Should only be displayed when publication activity has ended
+    // and it should not occur that decisions have a different value for isStaatsbladResource
+    // but extra checking does not hurt
+    return (
+      this.args.publicationActivity.endDate === undefined ||
+      this.decisions.some((it) => it.isStaatsbladResource)
+    );
   }
 
   @action

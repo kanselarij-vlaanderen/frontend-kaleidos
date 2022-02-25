@@ -7,13 +7,22 @@
     >
       <Header.Actions as |Actions|>
         <Actions.Item>
-          <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
-            <Menu.Item
-              @skin="danger"
-              {{on "click" this.openConfirmDeleteAlert}}
-            >
-              {{t "delete"}}
-            </Menu.Item>
+          <DropdownMenu
+            @skin="borderless"
+            @icon="three-dots"
+            @disabled={{and this.loadData.isIdle this.isDeleteDisabled}}
+            as |Menu|
+          >
+            {{!avoid render issues}}
+            {{#if this.loadData.isIdle}}
+              <Menu.Item
+                @skin="danger"
+                @disabled={{this.isDeleteDisabled}}
+                {{on "click" this.openConfirmDeleteAlert}}
+              >
+                {{t "delete"}}
+              </Menu.Item>
+            {{/if}}
           </DropdownMenu>
         </Actions.Item>
       </Header.Actions>

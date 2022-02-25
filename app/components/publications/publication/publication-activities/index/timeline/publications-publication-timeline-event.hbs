@@ -16,14 +16,22 @@
           </Group.Item>
         </Toolbar.Group>
         <Toolbar.Group @position="right">
-          <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
-            <Menu.Item
-              @skin="danger"
-              @disabled={{this.isEditDisabled}}
-              {{on "click" (fn @onEdit @publicationActivity)}}
-            >
-              {{t "edit"}}
-            </Menu.Item>
+          <DropdownMenu
+            @skin="borderless"
+            @icon="three-dots"
+            @disabled={{and this.loadData.isIdle this.isEditDisabled}}
+            as |Menu|
+          >
+            {{!avoid render issues}}
+            {{#if this.loadData.isIdle}}
+              <Menu.Item
+                @skin="danger"
+                @disabled={{this.isEditDisabled}}
+                {{on "click" (fn @onEdit @publicationActivity)}}
+              >
+                {{t "edit"}}
+              </Menu.Item>
+            {{/if}}
           </DropdownMenu>
         </Toolbar.Group>
       </Auk::Toolbar>
