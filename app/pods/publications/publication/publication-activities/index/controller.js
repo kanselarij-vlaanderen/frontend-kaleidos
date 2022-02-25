@@ -67,8 +67,8 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
   @tracked isOpenRequestModal = false;
   @tracked isOpenRegistrationModal = false;
 
-  get isTranslationUploadDisabled() {
-    return this.latestTranslationActivity == undefined;
+  get isRegistrationDisabled() {
+    return this.latestPublicationActivity == undefined;
   }
 
   get latestPublicationActivity() {
