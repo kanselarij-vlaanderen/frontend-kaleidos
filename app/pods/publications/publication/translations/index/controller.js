@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { task, dropTask } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
@@ -21,7 +21,9 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   get latestTranslationActivity() {
-    const timelineActivity = this.model.find((timelineActivity) => timelineActivity.isTranslationActivity);
+    const timelineActivity = this.model.find(
+      (timelineActivity) => timelineActivity.isTranslationActivity
+    );
     return timelineActivity ? timelineActivity.activity : null;
   }
 
@@ -30,7 +32,6 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     const translationActivity = this.latestTranslationActivity;
 
     const pieceSaves = [];
-    const containerSaves = [];
 
     const language = yield translationActivity.language;
     for (let piece of translationUpload.uploadedPieces) {
@@ -66,7 +67,6 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     yield Promise.all([
       translationActivitySave,
       ...pieceSaves,
-      containerSaves,
       translationSubcaseSave,
     ]);
 
@@ -75,16 +75,45 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   @task
+  *saveEditReceivedTranslation(translationEdit) {
+    const saves = [];
+
+    const translationActivity = translationEdit.translationActivity;
+    translationActivity.endDate = translationEdit.receivedDate;
+    saves.push(translationActivity.save());
+
+    const pieces = yield translationActivity.generatedPieces;
+    for (let piece of pieces.toArray()) {
+      piece.receivedDate = translationEdit.receivedDate;
+      saves.push(piece.save());
+    }
+
+    // This check (copied from upload task) needs to be revised, user input errors can't be corrected with a more recent date
+    if (translationEdit.receivedDate < this.translationSubcase.receivedDate) {
+      this.translationSubcase.receivedDate = translationEdit.receivedDate;
+    }
+    saves.push(this.translationSubcase.save());
+
+    yield Promise.all(saves);
+    this.send('refresh');
+  }
+
+  @task
   *saveTranslationRequest(translationRequest) {
     const now = new Date();
 
     const uploadedPieces = translationRequest.uploadedPieces;
-    const dutch = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
-    yield Promise.all(uploadedPieces.map((piece) => {
-      piece.translationSubcaseSourceFor = this.translationSubcase;
-      piece.language = dutch;
-      return piece.save();
-    }));
+    const dutch = yield this.store.findRecordByUri(
+      'language',
+      CONSTANTS.LANGUAGES.NL
+    );
+    yield Promise.all(
+      uploadedPieces.map((piece) => {
+        piece.translationSubcaseSourceFor = this.translationSubcase;
+        piece.language = dutch;
+        return piece.save();
+      })
+    );
 
     const requestActivity = this.store.createRecord('request-activity', {
       startDate: now,
@@ -141,33 +170,24 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     this.showTranslationRequestModal = false;
   }
 
-  @dropTask
+  @task
   *deleteRequest(requestActivity) {
-    const deletePromises = [];
-
     const translationActivity = yield requestActivity.translationActivity;
-    deletePromises.push(translationActivity.destroyRecord());
+    yield translationActivity.destroyRecord();
 
     const mail = yield requestActivity.email;
-    if (mail) {
-      deletePromises.push(mail.destroyRecord());
-    }
-
-    deletePromises.push(requestActivity.destroyRecord());
+    // legacy activities may not have an email so only try to delete if one exists
+    yield mail?.destroyRecord();
 
     const pieces = yield requestActivity.usedPieces;
-
     for (const piece of pieces.toArray()) {
-      const [file, documentContainer] = yield Promise.all([
-        piece.file,
-        piece.documentContainer,
-      ]);
-
-      deletePromises.push(piece.destroyRecord());
-      deletePromises.push(file.destroyRecord());
-      deletePromises.push(documentContainer.destroyRecord());
+      const file = yield piece.file;
+      const documentContainer = yield piece.documentContainer;
+      yield file.destroyRecord();
+      yield documentContainer.destroyRecord();
+      yield piece.destroyRecord();
     }
-    yield Promise.all(deletePromises);
+    yield requestActivity.destroyRecord();
     this.send('refresh');
   }
 

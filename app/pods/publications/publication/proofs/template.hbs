@@ -1,22 +1,8 @@
-<Auk::Navbar>
-  <Auk::Toolbar>
-    <Auk::Toolbar::Group @position="left">
-      <Auk::Tabs>
-        <Auk::Tab
-          data-test-route-publications---proofs-tab-documents
-          @route="publications.publication.proofs.documents"
-        >
-          {{t "documents"}}
-        </Auk::Tab>
-        <Auk::Tab
-          data-test-route-publications---proofs-tab-requests
-          @route="publications.publication.proofs.requests"
-        >
-          {{t "requests"}}
-        </Auk::Tab>
-      </Auk::Tabs>
-    </Auk::Toolbar::Group>
-  </Auk::Toolbar>
-</Auk::Navbar>
-
-{{outlet}}
+<div class="auk-u-m-4">
+  {{page-title (t "proof")}}
+  <Publications::Publication::Proofs::ProofInfoPanel
+    @publicationSubcase={{@model}}
+    @isFinal={{this.publicationFlow.status.isFinal}}
+  />
+  {{outlet}}
+</div>
