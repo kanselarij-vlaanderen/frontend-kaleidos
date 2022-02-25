@@ -45,6 +45,7 @@
           />
         {{else}}
           <Publications::Publication::PublicationActivities::Index::Timeline::PublicationsPublicationTimelineEvent
+            @onEdit={{this.openPublicationModalEdit}}
             @publicationActivity={{event.publicationActivity}}
           />
         {{/if}}
@@ -64,6 +65,7 @@
 {{#if this.isOpenRegistrationModal}}
   <Publications::Publication::PublicationActivities::Index::PublicationRegistrationModal
     @publicationFlow={{this.publicationFlow}}
+    @publication={{this.publication}}
     @onSave={{this.saveRegistration}}
     @onCancel={{this.closeRegistrationModal}}
   />

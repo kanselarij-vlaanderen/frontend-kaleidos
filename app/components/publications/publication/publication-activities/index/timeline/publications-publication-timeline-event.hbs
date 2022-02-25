@@ -15,7 +15,17 @@
             </span>
           </Group.Item>
         </Toolbar.Group>
-        {{!TODO? menu button}}
+        <Toolbar.Group @position="right">
+          <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
+            <Menu.Item
+              @skin="danger"
+              @disabled={{this.isEditDisabled}}
+              {{on "click" (fn @onEdit @publicationActivity)}}
+            >
+              {{t "edit"}}
+            </Menu.Item>
+          </DropdownMenu>
+        </Toolbar.Group>
       </Auk::Toolbar>
     </Auk::Panel::Header>
     {{!TODO panel body or remove bottom border if no body}}
