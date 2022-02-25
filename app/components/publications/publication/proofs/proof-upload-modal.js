@@ -1,99 +1,101 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency-decorators';
-import {
-  ValidatorSet, Validator
-} from 'frontend-kaleidos/utils/validators';
+import { task, dropTask } from 'ember-concurrency-decorators';
+import { inject as service } from '@ember/service';
+import { isEmpty } from '@ember/utils';
 
 /**
- * @argument {PublicationFlow} publicationFlow
- * only one of these has to be true
- * @argument {boolean} isReceived
- * @argument {boolean} isCorrected
- *
  * @argument onSave
  * @argument onCancel
  */
 export default class PublicationsPublicationProofsProofUploadModalComponent extends Component {
-  validators;
+  @service store;
 
-  @tracked file;
-  @tracked name;
+  @tracked uploadedPieces = [];
   @tracked receivedDate = new Date();
-  @tracked isProofReceived = false;
-
-  constructor() {
-    super(...arguments);
-
-    this.initValidation();
-  }
-
-  get isLoading() {
-    return this.cancel.isRunning || this.save.isRunning;
-  }
+  @tracked mustUpdatePublicationStatus = false;
+  @tracked proofPrintCorrector;
 
   get isCancelDisabled() {
     return this.cancel.isRunning || this.save.isRunning;
   }
 
   get isSaveDisabled() {
-    return !this.file || this.file.isDeleted || !this.validators.areValid;
+    return (
+      this.uploadedPieces.length === 0 ||
+      isEmpty(this.receivedDate) ||
+      this.cancel.isRunning
+    );
   }
 
-  // prevent double cancel
-  @task({
-    drop: true,
-  })
+  @action
+  async uploadPiece(file) {
+    const now = new Date();
+    const documentContainer = this.store.createRecord('document-container', {
+      created: now,
+    });
+    await documentContainer.save();
+    const piece = this.store.createRecord('piece', {
+      created: now,
+      modified: now,
+      file: file,
+      confidential: false,
+      name: file.filenameWithoutExtension,
+      documentContainer: documentContainer,
+    });
+    this.uploadedPieces.pushObject(piece);
+  }
+
+  @dropTask
   *cancel() {
     // necessary because close-button is not disabled when saving
     if (this.save.isRunning) {
       return;
     }
-
-    if (this.file) {
-      yield this.file.destroyRecord();
-    }
+    yield Promise.all(
+      this.uploadedPieces.map((piece) =>
+        this.deleteUploadedPiece.perform(piece)
+      )
+    );
     this.args.onCancel();
   }
 
   @task
   *save() {
     yield this.args.onSave({
-      file: this.file,
-      name: this.name,
+      proofPrintCorrector: this.proofPrintCorrector,
       receivedDate: this.receivedDate,
-      isProofReceived : this.isProofReceived,
+      uploadedPieces: this.uploadedPieces,
+      mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
   }
 
   @action
-  onUploadFile(file) {
-    this.file = file;
-    this.name = file.filenameWithoutExtension;
-  }
-
-  @action
-  setReceivedAtDate(selectedDates) {
-    this.validators.receivedDate.enableError();
-
+  setReceivedDate(selectedDates) {
     if (selectedDates.length) {
       this.receivedDate = selectedDates[0];
-    } else { // this case occurs when users manually empty the date input-field
+    } else {
+      // this case occurs when users manually empty the date input-field
       this.receivedDate = undefined;
     }
   }
 
   @action
   setProofReceivedStatus(event) {
-    this.isProofReceived = event.target.checked;
+    this.mustUpdatePublicationStatus = event.target.checked;
   }
 
-  initValidation() {
-    this.validators = new ValidatorSet({
-      name: new Validator(() => isPresent(this.name)),
-      receivedDate: new Validator(() => isPresent(this.receivedDate)),
-    });
+  @task
+  *deleteUploadedPiece(piece) {
+    const file = yield piece.file;
+    const documentContainer = yield piece.documentContainer;
+    this.uploadedPieces.removeObject(piece);
+
+    yield Promise.all([
+      file.destroyRecord(),
+      documentContainer.destroyRecord(),
+      piece.destroyRecord(),
+    ]);
   }
 }
