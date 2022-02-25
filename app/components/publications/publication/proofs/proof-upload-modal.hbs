@@ -4,7 +4,7 @@
     @onClose={{perform this.cancel}}
   />
   <Auk::Modal::Body>
-    <Auk::FileUploader @multiple={{false}} @onUpload={{this.uploadPiece}} />
+    <Auk::FileUploader @multiple={{true}} @reusable={{true}} @onUpload={{this.uploadPiece}} />
     <Auk::List>
       {{#each this.uploadedPieces as |piece|}}
         <Auk::List::Item
@@ -16,6 +16,12 @@
               {{piece.file.downloadFilename}}
             </h5>
           </div>
+          <Auk::Button
+            @icon="trash"
+            @layout="icon-only"
+            @skin="danger-borderless"
+            {{on "click" (perform this.deleteUploadedPiece piece)}}
+          />
         </Auk::List::Item>
       {{/each}}
     </Auk::List>
