@@ -34,7 +34,6 @@
 @import 'custom-components/vlc-document-list';
 @import 'custom-components/vlc-environment-pill';
 @import 'custom-components/vlc-procedure-step';
-@import 'custom-components/vlc-rdfa-editor';
 @import 'custom-components/vlc-status-timeline';
 
 
@@ -53,6 +52,7 @@
 
 // EXTERNAL ADDON OVERRIDES
 @import 'addon-overrides/ember-power-select';
+@import 'addon-overrides/ember-rdfa-editor';
 @import 'addon-overrides/ember-tag-input';
 @import 'addon-overrides/ember-tooltip';
 
