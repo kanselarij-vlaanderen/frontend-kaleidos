@@ -38,19 +38,19 @@
           <Publications::Publication::Translations::TranslationRequestedPanel
             @requestActivity={{timelineActivity.activity}}
             @onDeleteRequest={{fn
-              (perform this.deleteRequest)
-              timelineActivity.activity
-            }}
+                                 (perform this.deleteRequest)
+                                 timelineActivity.activity
+                             }}
           />
         {{else if (and
-          timelineActivity.isTranslationActivity
-          timelineActivity.activity.endDate
-        )}}
+            timelineActivity.isTranslationActivity
+            timelineActivity.activity.endDate
+            )}}
           <Publications::Publication::Translations::TranslationReceivedPanel
             @translationActivity={{timelineActivity.activity}}
-            @onSaveEditReceivedTranslation={{perform
-              this.saveEditReceivedTranslation
-            }}
+            @publicationFlow={{this.publicationFlow}}
+            @onUpdateTranslationActivity={{perform this.updateTranslationActivity}}
+            @onCreateProofRequest={{perform this.saveProofRequest}}
           />
         {{/if}}
       {{else}}
