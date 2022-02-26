@@ -185,10 +185,8 @@ export default class PublicationsPublicationTranslationsIndexController extends 
 
   @task
   *saveProofRequest(proofRequest) {
-    const publicationSubcase = yield this.publicationFlow.publicationSubcase;
     yield this.publicationService.createProofRequestActivity(
       proofRequest,
-      publicationSubcase,
       this.publicationFlow
     );
 
