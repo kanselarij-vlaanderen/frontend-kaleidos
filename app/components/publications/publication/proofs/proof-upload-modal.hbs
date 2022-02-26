@@ -1,92 +1,58 @@
 <Auk::Modal>
   <Auk::Modal::Header
-    @title={{t
-      (if
-        @isCorrected
-        "upload-corrected-proof-for-publication-x-identification"
-        "upload-proof-for-publication-x-identification"
-      )
-      identification=@publicationFlow.identification.idName
-    }}
+    @title={{t "upload-proofing-document"}}
     @onClose={{perform this.cancel}}
   />
   <Auk::Modal::Body>
-    <Utils::LoadableContent
-      @isLoading={{this.isLoading}}
-      @reserveSpace={{true}}
-    >
-
-      <Auk::FileUploader @onUpload={{this.onUploadFile}} />
-
-      {{! File details }}
-      {{#if this.file}}
-        <div class="auk-u-mt-4">
-          <div class="auk-o-grid">
-            <div class="auk-o-grid-col-11">
-              <div
-                class="auk-form-group-layout auk-form-group-layout--horizontal"
-              >
-                <div class="auk-form-group {{this.validators.name.errorClass}}">
-                  <Auk::Label for="proofUploadName" @required={{true}}>
-                    {{t "name"}}
-                  </Auk::Label>
-                  <Auk::Input
-                    data-test-proof-upload-name
-                    id="proofUploadName"
-                    @value={{mut this.name}}
-                    {{on "input" this.validators.name.enableError}}
-                  />
-                </div>
-                <div class="auk-form-group">
-                  <Auk::Label>{{t "file-type"}}</Auk::Label>
-                  <Utils::Documents::FileTypePill
-                    @extension={{this.file.extension}}
-                  />
-                </div>
-                {{#if @isReceived}}
-                  <div
-                    class="auk-form-group
-                      {{this.validators.receivedAtDate.errorClass}}"
-                  >
-                    <Auk::Label for="proofUploadReceivedAtDate">
-                      {{t "received-at"}}
-                    </Auk::Label>
-                    <Auk::Datepicker
-                      id="proofUploadReceivedAtDate"
-                      @date={{this.receivedAtDate}}
-                      @onChange={{this.setReceivedAtDate}}
-                    />
-                  </div>
-                {{/if}}
-                {{#if @isCorrected}}
-                  <div class="auk-form-group">
-                    <Auk::Label for="proofUploadIsCorrected">
-                      {{t "corrected"}}
-                    </Auk::Label>
-                    <Auk::Checkbox
-                      id="proofUploadIsCorrected"
-                      @checked={{@isCorrected}}
-                      @disabled={{true}}
-                    />
-                  </div>
-                {{/if}}
-                <div class="auk-form-group">
-                  <Auk::Label for="proofIn">
-                    {{t "update-publication-status-proof-in"}}
-                  </Auk::Label>
-                  <Auk::Checkbox
-                    id="proofIn"
-                    @checked={{this.isProofIn}}
-                    {{on "input" this.setProofInStatus}}
-                  />
-                </div>
-              </div>
-            </div>
+    <Auk::FileUploader
+      @multiple={{true}}
+      @reusable={{true}}
+      @onUpload={{this.uploadPiece}}
+    />
+    <Auk::List>
+      {{#each this.uploadedPieces as |piece|}}
+        <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
+          <div class="auk-o-flex auk-o-flex--spaced">
+            <Auk::Badge @icon="paperclip" @size="regular" />
+            <h5 class="auk-h4 auk-u-m-0">
+              {{piece.file.downloadFilename}}
+            </h5>
           </div>
-        </div>
-      {{/if}}
-
-    </Utils::LoadableContent>
+          <Auk::Button
+            @icon="trash"
+            @layout="icon-only"
+            @skin="danger-borderless"
+            {{on "click" (perform this.deleteUploadedPiece piece)}}
+          />
+        </Auk::List::Item>
+      {{/each}}
+    </Auk::List>
+    <div class="auk-form-group auk-u-mt-4">
+      <Auk::Checkbox
+        @label={{t "update-publication-status-proof-received"}}
+        @checked={{this.mustUpdatePublicationStatus}}
+        {{on "input" this.setReceivedProofStatus}}
+      />
+    </div>
+    <div class="auk-form-group">
+      <Auk::Label for="proofUploadReceivedDate" @required={{true}}>
+        {{t "date"}}
+      </Auk::Label>
+      <Auk::Datepicker
+        id="proofUploadReceivedDate"
+        @date={{this.receivedDate}}
+        @onChange={{this.setReceivedDate}}
+      />
+    </div>
+    <div class="auk-form-group">
+      <Auk::Label for="proofPrintCorrector">
+        {{t "who-proof-reads"}}
+      </Auk::Label>
+      <Auk::Input
+        id="proofPrintCorrector"
+        @value={{mut this.proofPrintCorrector}}
+      />
+    </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
     @cancelDisabled={{this.isCancelDisabled}}

@@ -17,7 +17,6 @@ const footer = 'Met vriendelijke groet,\n'
   + 'Team Ondersteuning Vlaamse Regering\t\n'
   + 'publicatiesBS@vlaanderen.be\t\n'
   + 'Koolstraat 35, 1000 Brussel\t\n';
-
 function translationRequestEmail(params) {
   const subject = `Vertaalaanvraag VO-dossier: ${params.identifier}`;
   const message = 'Collega,\n'
@@ -36,37 +35,15 @@ function translationRequestEmail(params) {
   };
 }
 
-async function proofRequestEmail(params) {
-  const identification = await params.publicationFlow.identification;
-  const idName = identification.idName;
-  const publicationFlow = params.publicationFlow;
-
-  const numacNumbers = await publicationFlow.numacNumbers;
-  const numacNumber = numacNumbers.map((number) => number.idName).join(', ') || '-';
-
-  let subject;
-  let message;
-
-  if (params.stage === 'initial') {
-    subject = `Publicatieaanvraag VO-dossier: ${idName} - ${publicationFlow.shortTitle}`;
-    message = 'Beste,\n'
+function proofRequestEmail(params) {
+   const subject = `Publicatieaanvraag VO-dossier: ${params.identifier} - ${params.shortTitle}`;
+   const message = 'Beste,\n'
       + '\n'
       + 'In bijlage voor drukproef:\n'
-      + `Titel: ${publicationFlow.longTitle}\t\n`
-      + `VO-dossier: ${idName}\n`
+      + `Titel: ${params.longTitle}\t\n`
+      + `VO-dossier: ${params.identifier}\n`
       + '\n'
       + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\t\n';
-  } else if (params.stage === 'extra') {
-    subject = `BS-werknr: ${numacNumber} VO-dossier: ${idName} – Aanvraag nieuwe drukproef`;
-    message = 'Geachte,\n'
-      + '\n'
-      + 'Graag een nieuwe drukproef voor:\n'
-      + `BS-werknummer: ${numacNumber}\n`
-      + `Titel: ${publicationFlow.longTitle}\t\n`
-      + `VO-dossier: ${idName}\n`
-      + '\n'
-      + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\t\n';
-  }
   return {
     subject: subject,
     message: [message, footer].join('\n'),

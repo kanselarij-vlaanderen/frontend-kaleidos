@@ -6,11 +6,6 @@
     color: $auk-color-text;
     line-height: 1.5;
   }
-
-  .auk-pill,
-  .auk-icon {
-    -webkit-print-color-adjust: exact;
-  }
 }
 
 @media print {
@@ -36,25 +31,12 @@
   margin-top: 4rem;
 }
 
-@media print {
-  .l-printable-agenda__non-breakable-group {
-    break-inside: avoid;
-  }
-}
-
-@media print {
-  .l-printable-agenda__on-fresh-page {
-    page-break-before: always;
-  }
-}
-
 .l-printable-agenda__item-group-header {
   line-height: 1.2;
 }
 
-.l-printable-agenda__item-group-header--muted {
+.l-printable-agenda__item-group-header--muted { // we can't use `auk-u-text-muted` class here because because the light gray is not really suited (not light enough) for headings
   color: $auk-gray-500 !important;
-  -webkit-print-color-adjust: exact;
 }
 
 .l-printable-agenda__item,
