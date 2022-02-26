@@ -9,7 +9,7 @@ import { inject as service } from '@ember/service';
 
 /**
  * @argument {PublicationFlow} publicationFlow includes: identification
- * @argument {piecesOfTranslation} UsedPieces and GeneratedPieces from a TranslationActivity if proof is requested from a translation. These cannot be deleted, but  can be unlinked
+ * @argument translationPieces Used and generated pieces from a TranslationActivity if a proof is requested from a translation. These pieces cannot be deleted, but only be unlinked
  * @argument onSave
  * @argument onCancel
  */
@@ -19,17 +19,13 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   @tracked subject;
   @tracked message;
   @tracked uploadedPieces = [];
-
-  //used new instance otherwise it's removed from the generatedPieces in TranslationReceivedPanel
-  @tracked piecesOfTranslation = this.args.piecesOfTranslation
-    ? [...this.args.piecesOfTranslation.toArray()]
-    : [];
-
+  @tracked translationPieces = [];
 
   validators;
 
   constructor() {
     super(...arguments);
+    this.translationPieces = this.args.translationPieces || [];
     this.initValidators();
     this.setEmailFields.perform();
   }
@@ -39,8 +35,7 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   }
 
   get isSaveDisabled() {
-    const totalPieces =
-      this.uploadedPieces.length + this.piecesOfTranslation.length;
+    const totalPieces = this.uploadedPieces.length + this.translationPieces.length;
     return (
       totalPieces === 0 || !this.validators.areValid || this.cancel.isRunning
     );
@@ -48,13 +43,11 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
 
   @task
   *save() {
-    if (this.piecesOfTranslation) {
-      this.uploadedPieces.push(...this.piecesOfTranslation);
-    }
+    const pieces = [...this.uploadedPieces, ...this.translationPieces];
     yield this.args.onSave({
       subject: this.subject,
       message: this.message,
-      uploadedPieces: this.uploadedPieces,
+      uploadedPieces: pieces,
     });
   }
 
@@ -74,9 +67,11 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
 
   @task
   *deleteUploadedPiece(piece) {
-    const file = yield piece.file;
-    const documentContainer = yield piece.documentContainer;
     this.uploadedPieces.removeObject(piece);
+    const [file, documentContainer] = yield Promise.all([
+      piece.file,
+      piece.documentContainer,
+    ]);
 
     yield Promise.all([
       file.destroyRecord(),
@@ -124,8 +119,8 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   }
 
   @action
-  unlinkUsedPiece(piece) {
-    this.piecesOfTranslation.removeObject(piece);
+  unlinkTranslationPiece(piece) {
+    this.translationPieces.removeObject(piece);
   }
 
   initValidators() {

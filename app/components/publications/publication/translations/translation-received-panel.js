@@ -16,12 +16,7 @@ export default class PublicationsTranslationTranslationReceivedPanelComponent ex
   @tracked isOpenTranslationEditModal = false;
   @tracked isOpenProofRequestModal = false;
 
-  get piecesOfTranslation() {
-    return [
-      ...this.args.translationActivity.usedPieces.toArray(),
-      ...this.args.translationActivity.generatedPieces.toArray(),
-    ];
-  }
+  @tracked translationPieces = [];
 
   @task
   *updateTranslationActivity(data) {
@@ -43,7 +38,12 @@ export default class PublicationsTranslationTranslationReceivedPanelComponent ex
   }
 
   @action
-  openProofRequestModal() {
+  async openProofRequestModal() {
+    const [usedPieces, generatedPieces] = await Promise.all([
+      this.args.translationActivity.usedPieces,
+      this.args.translationActivity.generatedPieces,
+    ]);
+    this.translationPieces = [...usedPieces.toArray(), ...generatedPieces.toArray()];
     this.isOpenProofRequestModal = true;
   }
 

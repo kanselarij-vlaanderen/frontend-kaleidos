@@ -82,8 +82,8 @@
 {{#if this.isOpenProofRequestModal}}
   <Publications::Publication::Proofs::ProofRequestModal
     @publicationFlow={{@publicationFlow}}
-    @piecesOfTranslation={{this.piecesOfTranslation}}
-    @onSave={{perform this.saveProofRequest}}
+    @translationPieces={{this.translationPieces}}
+    @onSave={{@onCreateProofRequest}}
     @onCancel={{this.closeProofRequestModal}}
   />
 {{/if}}

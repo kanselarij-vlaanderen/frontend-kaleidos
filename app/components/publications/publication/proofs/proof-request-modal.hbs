@@ -40,23 +40,7 @@
             @onUpload={{this.uploadPiece}}
           />
           <Auk::List>
-            {{#each this.uploadedPieces as |piece|}}
-              <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
-                <div class="auk-o-flex auk-o-flex--spaced">
-                  <Auk::Badge @icon="paperclip" @size="regular" />
-                  <h5 class="auk-h4 auk-u-m-0">
-                    {{piece.file.downloadFilename}}
-                  </h5>
-                </div>
-                <Auk::Button
-                  @icon="trash"
-                  @layout="icon-only"
-                  @skin="danger-borderless"
-                  {{on "click" (perform this.deleteUploadedPiece piece)}}
-                />
-              </Auk::List::Item>
-            {{/each}}
-            {{#each this.piecesOfTranslation as |piece|}}
+            {{#each @translationPieces as |piece|}}
               <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
                 <div class="auk-o-flex auk-o-flex--spaced">
                   <Auk::Badge @icon="paperclip" @size="regular" />
@@ -76,7 +60,31 @@
                   @icon="trash"
                   @layout="icon-only"
                   @skin="danger-borderless"
-                  {{on "click" (fn this.unlinkUsedPiece piece)}}
+                  {{on "click" (fn this.unlinkTranslationPiece piece)}}
+                />
+              </Auk::List::Item>
+            {{/each}}
+            {{#each this.uploadedPieces as |piece|}}
+              <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
+                <div class="auk-o-flex auk-o-flex--spaced">
+                  <Auk::Badge @icon="paperclip" @size="regular" />
+                  <h5 class="auk-h4 auk-u-m-0">
+                    {{piece.file.downloadFilename}}
+                  </h5>
+                </div>
+                <Auk::ButtonLink
+                  @layout="icon-only"
+                  @icon="book"
+                  @href={{piece.viewDocumentURL}}
+                  target="_blank"
+                >
+                  {{t "read"}}
+                </Auk::ButtonLink>
+                <Auk::Button
+                  @icon="trash"
+                  @layout="icon-only"
+                  @skin="danger-borderless"
+                  {{on "click" (perform this.deleteUploadedPiece piece)}}
                 />
               </Auk::List::Item>
             {{/each}}
