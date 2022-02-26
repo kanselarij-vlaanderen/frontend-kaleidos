@@ -31,7 +31,7 @@
               </Menu.Item>
               <Menu.Item
                 @skin="primary"
-                {{on "click" this.toggleTranslationEditModal}}
+                {{on "click" this.openTranslationEditModal}}
               >
                 {{t "edit-2"}}
               </Menu.Item>
@@ -43,9 +43,7 @@
     <Auk::Panel::Body>
       <Auk::List>
         {{#each @translationActivity.generatedPieces as |piece|}}
-          <Auk::List::Item
-            class="auk-o-flex auk-o-flex--spaced-wide"
-          >
+          <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
             <div class="auk-o-flex auk-o-flex--spaced">
               <Auk::Badge @icon="paperclip" @size="regular" />
               <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
@@ -77,7 +75,7 @@
   <Auk::Modal>
     <Auk::Modal::Header
       @title={{t "edit-translation-activity"}}
-      @onClose={{this.toggleTranslationEditModal}}
+      @onClose={{this.closeTranslationEditModal}}
     />
     <Auk::Modal::Body>
       <div class="auk-form-group">
@@ -87,15 +85,15 @@
         <Auk::Datepicker
           id="translationActivityEditEndDate"
           @date={{@translationActivity.endDate}}
-          @onChange={{this.setEndDate}}
+          @onChange={{this.setNewReceivedDate}}
         />
       </div>
     </Auk::Modal::Body>
-    <Auk::Modal::Footer @onCancel={{this.toggleTranslationEditModal}}>
+    <Auk::Modal::Footer @onCancel={{this.closeTranslationEditModal}}>
       <Auk::Button
         @skin="primary"
         @disabled={{this.isSaveDisabled}}
-        {{on "click" (perform this.saveEndDate)}}
+        {{on "click" (perform this.saveReceivedDate)}}
       >
         {{t "save"}}
       </Auk::Button>

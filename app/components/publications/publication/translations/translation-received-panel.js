@@ -5,13 +5,13 @@ import { task } from 'ember-concurrency-decorators';
 import { isEmpty } from '@ember/utils';
 import { inject as service } from '@ember/service';
 
+/**
+ *
+ * @argument translationActivity
+ * @argument publicationFlow
+ * @argument onSaveEditReceivedTranslation
+ */
 export default class PublicationsTranslationTranslationReceivedPanelComponent extends Component {
-  /**
-   *
-   * @argument translationActivity
-   * @argument publicationFlow
-   * @argument onSave
-   */
 
   @service router;
   @service publicationService;
@@ -20,9 +20,10 @@ export default class PublicationsTranslationTranslationReceivedPanelComponent ex
   @tracked isOpenProofRequestModal = false;
 
   @tracked newEndDate;
+  @tracked newReceivedDate;
 
   get isSaveDisabled() {
-    return isEmpty(this.newEndDate);
+    return isEmpty(this.newReceivedDate);
   }
 
   get piecesOfTranslation() {
@@ -33,18 +34,24 @@ export default class PublicationsTranslationTranslationReceivedPanelComponent ex
   }
 
   @action
-  toggleTranslationEditModal() {
-    this.isOpenTranslationEditModal = !this.isOpenTranslationEditModal;
-    // When opening modal, reset possibly stale newEndDate to current endDate
-    if (this.isOpenTranslationEditModal) {
-      this.newEndDate = this.args.translationActivity.endDate;
-    }
+  openTranslationEditModal() {
+    this.isOpenTranslationEditModal = true;
+    // When opening modal, reset possibly stale local variable
+    this.newReceivedDate = this.args.translationActivity.endDate;
+  }
+
+  @action
+  closeTranslationEditModal() {
+    this.isOpenTranslationEditModal = false;
   }
 
   @task
-  *saveEndDate() {
-    yield this.args.onSave(this.args.translationActivity, this.newEndDate);
-    this.toggleTranslationEditModal();
+  *saveReceivedDate() {
+    yield this.args.onSaveEditReceivedTranslation({
+      translationActivity: this.args.translationActivity,
+      receivedDate: this.newReceivedDate,
+    });
+    this.closeTranslationEditModal();
   }
 
   @task
@@ -62,12 +69,12 @@ export default class PublicationsTranslationTranslationReceivedPanelComponent ex
   }
 
   @action
-  setEndDate(selectedDates) {
+  setNewReceivedDate(selectedDates) {
     if (selectedDates.length) {
-      this.newEndDate = selectedDates[0];
+      this.newReceivedDate = selectedDates[0];
     } else {
       // this case occurs when users manually empty the date input-field
-      this.newEndDate = undefined;
+      this.newReceivedDate = undefined;
     }
   }
 
