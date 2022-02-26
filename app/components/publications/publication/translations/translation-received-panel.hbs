@@ -72,33 +72,11 @@
 </div>
 
 {{#if this.isOpenTranslationEditModal}}
-  <Auk::Modal>
-    <Auk::Modal::Header
-      @title={{t "edit-translation-activity"}}
-      @onClose={{this.closeTranslationEditModal}}
-    />
-    <Auk::Modal::Body>
-      <div class="auk-form-group">
-        <Auk::Label for="translationActivityEditEndDate">
-          {{t "date-received"}}
-        </Auk::Label>
-        <Auk::Datepicker
-          id="translationActivityEditEndDate"
-          @date={{@translationActivity.endDate}}
-          @onChange={{this.setNewReceivedDate}}
-        />
-      </div>
-    </Auk::Modal::Body>
-    <Auk::Modal::Footer @onCancel={{this.closeTranslationEditModal}}>
-      <Auk::Button
-        @skin="primary"
-        @disabled={{this.isSaveDisabled}}
-        {{on "click" (perform this.saveReceivedDate)}}
-      >
-        {{t "save"}}
-      </Auk::Button>
-    </Auk::Modal::Footer>
-  </Auk::Modal>
+  <Publications::Publication::Translations::TranslationActivityEditModal
+    @receivedDate={{@translationActivity.endDate}}
+    @onSave={{perform this.updateTranslationActivity}}
+    @onCancel={{this.closeTranslationEditModal}}
+  />
 {{/if}}
 
 {{#if this.isOpenProofRequestModal}}
