@@ -82,7 +82,6 @@ export default class PublicationsPublicationProofsController extends Controller 
   *saveProofRequest(proofRequest) {
     yield this.publicationService.createProofRequestActivity(
       proofRequest,
-      this.publicationSubcase,
       this.publicationFlow
     );
 

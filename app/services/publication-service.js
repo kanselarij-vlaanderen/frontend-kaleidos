@@ -216,23 +216,14 @@ export default class PublicationService extends Service {
     await newChangeActivity.save();
   }
 
-  async createProofRequestActivity(
-    proofRequestProperties,
-    publicationSubcase,
-    publicationFlow
-  ) {
+  async createProofRequestActivity(proofRequestProperties, publicationFlow) {
+    const publicationSubcase = await publicationFlow.publicationSubcase;
     const now = new Date();
 
     const uploadedPieces = proofRequestProperties.uploadedPieces;
-    const dutch = await this.store.findRecordByUri(
-      'language',
-      CONSTANTS.LANGUAGES.NL
-    );
-
     await Promise.all(
       uploadedPieces.map((piece) => {
         piece.publicationSubcaseSourceFor = publicationSubcase;
-        piece.language = dutch;
         return piece.save();
       })
     );
@@ -246,15 +237,10 @@ export default class PublicationService extends Service {
 
     const proofingActivity = this.store.createRecord('proofing-activity', {
       startDate: now,
-      dueDate: proofRequestProperties.dueDate,
       title: proofRequestProperties.subject,
       subcase: publicationSubcase,
       requestActivity: requestActivity,
       usedPieces: uploadedPieces,
-      language: await this.store.findRecordByUri(
-        'language',
-        CONSTANTS.LANGUAGES.FR
-      ),
     });
     await proofingActivity.save();
 
@@ -274,7 +260,6 @@ export default class PublicationService extends Service {
     });
     await mail.save();
 
-    // PUBLICATION-STATUS
     await this.updatePublicationStatus(
       publicationFlow,
       CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED

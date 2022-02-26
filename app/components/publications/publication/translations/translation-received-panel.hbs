@@ -31,7 +31,7 @@
               </Menu.Item>
               <Menu.Item
                 @skin="primary"
-                {{on "click" this.toggleTranslationEditModal}}
+                {{on "click" this.openTranslationEditModal}}
               >
                 {{t "edit-2"}}
               </Menu.Item>
@@ -43,9 +43,7 @@
     <Auk::Panel::Body>
       <Auk::List>
         {{#each @translationActivity.generatedPieces as |piece|}}
-          <Auk::List::Item
-            class="auk-o-flex auk-o-flex--spaced-wide"
-          >
+          <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
             <div class="auk-o-flex auk-o-flex--spaced">
               <Auk::Badge @icon="paperclip" @size="regular" />
               <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
@@ -74,40 +72,18 @@
 </div>
 
 {{#if this.isOpenTranslationEditModal}}
-  <Auk::Modal>
-    <Auk::Modal::Header
-      @title={{t "edit-translation-activity"}}
-      @onClose={{this.toggleTranslationEditModal}}
-    />
-    <Auk::Modal::Body>
-      <div class="auk-form-group">
-        <Auk::Label for="translationActivityEditEndDate">
-          {{t "date"}}
-        </Auk::Label>
-        <Auk::Datepicker
-          id="translationActivityEditEndDate"
-          @date={{@translationActivity.endDate}}
-          @onChange={{this.setEndDate}}
-        />
-      </div>
-    </Auk::Modal::Body>
-    <Auk::Modal::Footer @onCancel={{this.toggleTranslationEditModal}}>
-      <Auk::Button
-        @skin="primary"
-        @disabled={{this.isSaveDisabled}}
-        {{on "click" (perform this.saveEndDate)}}
-      >
-        {{t "save"}}
-      </Auk::Button>
-    </Auk::Modal::Footer>
-  </Auk::Modal>
+  <Publications::Publication::Translations::TranslationActivityEditModal
+    @receivedDate={{@translationActivity.endDate}}
+    @onSave={{perform this.updateTranslationActivity}}
+    @onCancel={{this.closeTranslationEditModal}}
+  />
 {{/if}}
 
 {{#if this.isOpenProofRequestModal}}
   <Publications::Publication::Proofs::ProofRequestModal
     @publicationFlow={{@publicationFlow}}
-    @piecesOfTranslation={{this.piecesOfTranslation}}
-    @onSave={{perform this.saveProofRequest}}
+    @translationPieces={{this.translationPieces}}
+    @onSave={{@onCreateProofRequest}}
     @onCancel={{this.closeProofRequestModal}}
   />
 {{/if}}
