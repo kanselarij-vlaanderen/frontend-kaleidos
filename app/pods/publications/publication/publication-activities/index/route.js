@@ -22,6 +22,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexRoute exte
     const activities = await Promise.all([
       this.store.query('request-activity', {
         'filter[publication-subcase][:id:]': publicationSubcase.id,
+        'filter[:has:publication-activity]': true,
         // eslint-disable-next-line prettier/prettier
         include: [
           'email',
