@@ -8,7 +8,7 @@ import { inject as service } from '@ember/service';
  *
  * @argument translationActivity
  * @argument publicationFlow
- * @argument onSaveEditReceivedTranslation
+ * @argument onUpdateTranslationActivity
  */
 export default class PublicationsTranslationTranslationReceivedPanelComponent extends Component {
   @service router;
@@ -25,10 +25,10 @@ export default class PublicationsTranslationTranslationReceivedPanelComponent ex
   }
 
   @task
-  *updateTranslationActivity() {
-    yield this.args.onSaveEditReceivedTranslation({
+  *updateTranslationActivity(data) {
+    yield this.args.onUpdateTranslationActivity({
       translationActivity: this.args.translationActivity,
-      receivedDate: this.newReceivedDate,
+      receivedDate: data.receivedDate,
     });
     this.closeTranslationEditModal();
   }

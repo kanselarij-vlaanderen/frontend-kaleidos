@@ -28,6 +28,8 @@ export default class PublicationsPublicationTranslationsTranslationActivityEditM
 
   @task
   *save() {
-    yield this.args.onSave();
+    yield this.args.onSave({
+      receivedDate: this.receivedDate
+    });
   }
 }
