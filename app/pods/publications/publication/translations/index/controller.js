@@ -8,6 +8,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationTranslationsIndexController extends Controller {
   @service store;
+  @service router;
   @service publicationService;
 
   @tracked publicationFlow;
@@ -180,6 +181,18 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     }
     yield requestActivity.destroyRecord();
     this.send('refresh');
+  }
+
+  @task
+  *saveProofRequest(proofRequest) {
+    const publicationSubcase = yield this.publicationFlow.publicationSubcase;
+    yield this.publicationService.createProofRequestActivity(
+      proofRequest,
+      publicationSubcase,
+      this.publicationFlow
+    );
+
+    this.router.transitionTo('publications.publication.proofs');
   }
 
   @action

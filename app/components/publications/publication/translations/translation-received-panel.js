@@ -11,7 +11,6 @@ import { inject as service } from '@ember/service';
  * @argument onUpdateTranslationActivity
  */
 export default class PublicationsTranslationTranslationReceivedPanelComponent extends Component {
-  @service router;
   @service publicationService;
 
   @tracked isOpenTranslationEditModal = false;
@@ -31,20 +30,6 @@ export default class PublicationsTranslationTranslationReceivedPanelComponent ex
       receivedDate: data.receivedDate,
     });
     this.closeTranslationEditModal();
-  }
-
-  @task
-  *saveProofRequest(proofRequest) {
-    const publicationSubcase = yield this.args.publicationFlow
-      .publicationSubcase;
-    yield this.publicationService.createProofRequestActivity(
-      proofRequest,
-      publicationSubcase,
-      this.args.publicationFlow
-    );
-
-    this.isOpenProofRequestModal = false;
-    this.router.transitionTo('publications.publication.proofs');
   }
 
   @action
