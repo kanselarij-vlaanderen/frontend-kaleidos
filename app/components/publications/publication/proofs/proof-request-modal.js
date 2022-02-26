@@ -9,7 +9,7 @@ import { inject as service } from '@ember/service';
 
 /**
  * @argument {PublicationFlow} publicationFlow includes: identification
- * @argument translationPieces Used and generated pieces from a TranslationActivity if a proof is requested from a translation. These pieces cannot be deleted, but only be unlinked
+ * @argument translationActivity Translation activity the proof is requested for (optional)
  * @argument onSave
  * @argument onCancel
  */
@@ -25,12 +25,9 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
 
   constructor() {
     super(...arguments);
-    this.translationPieces = this.args.translationPieces || [];
-    this.initValidators();
+    this.loadTranslationPieces.perform();
     this.setEmailFields.perform();
-    if (this.piecesOfTranslation.length === 0) {
-      this.checkIfPiecesOfTranslation.perform();
-    }
+    this.initValidators();
   }
 
   get isCancelDisabled() {
@@ -43,7 +40,7 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
       totalPieces === 0 ||
       !this.validators.areValid ||
       this.cancel.isRunning ||
-      this.checkIfPiecesOfTranslation.isRunning
+      this.loadTranslationPieces.isRunning
     );
   }
 
@@ -72,26 +69,29 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   }
 
   @task
-  *checkIfPiecesOfTranslation() {
-    const translationSubcase = yield this.args.publicationFlow
-      .translationSubcase;
-    const translationActivities = yield this.store.query(
-      'translation-activity',
-      {
-        'filter[subcase][:id:]': translationSubcase.id,
-        include: 'generated-pieces,used-pieces',
-        sort: '-start-date',
-      }
-    );
+  *loadTranslationPieces() {
+    let translationActivity = this.args.translationActivity;
 
-    const finishedTranslationActivity = translationActivities.find(
-      (translation) => translation.isFinished
-    );
-    if (finishedTranslationActivity) {
-      this.piecesOfTranslation = [
-        ...finishedTranslationActivity.usedPieces.toArray(),
-        ...finishedTranslationActivity.generatedPieces.toArray(),
-      ];
+    if (!translationActivity) {
+      const translationActivities = yield this.store.query(
+        'translation-activity',
+        {
+          'filter[subcase][publication-flow][:id:]': this.args.publicationFlow.id,
+          include: 'generated-pieces,used-pieces',
+          sort: '-start-date',
+        }
+      );
+      translationActivity = translationActivities.find((activity) => activity.isFinished);
+    }
+
+    if (translationActivity) {
+      const [usedPieces, generatedPieces] = yield Promise.all([
+        translationActivity.usedPieces,
+        translationActivity.generatedPieces,
+      ]);
+      this.translationPieces = [...usedPieces.toArray(), ...generatedPieces.toArray()];
+    } else {
+      this.translationPieces = [];
     }
   }
 

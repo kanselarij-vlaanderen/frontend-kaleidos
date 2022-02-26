@@ -41,10 +41,10 @@
         />
         <Auk::List>
           <Utils::LoadableContent
-            @isLoading={{this.checkIfPiecesOfTranslation.isRunning}}
+            @isLoading={{this.loadTranslationPieces.isRunning}}
             @reserveSpace={{true}}
           >
-            {{#each @translationPieces as |piece|}}
+            {{#each this.translationPieces as |piece|}}
               <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
                 <div class="auk-o-flex auk-o-flex--spaced">
                   <Auk::Badge @icon="paperclip" @size="regular" />
