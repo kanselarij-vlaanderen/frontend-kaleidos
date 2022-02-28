@@ -1,0 +1,84 @@
+/* ==========================================================================
+   ember-flatpickr
+   ========================================================================== */
+
+.flatpickr-calendar {
+  background: $auk-white;
+  border-radius: .3rem;
+  box-shadow: $auk-shadow-small;
+
+  font-family: flanders-sans, sans-serif;
+
+  &::before,
+  &::after {
+    content: normal;
+  }
+}
+
+.flatpickr-months {
+  .flatpickr-prev-month,
+  .flatpickr-next-month {
+    @extend .auk-icon;
+
+    top: 8px;
+    height: 28px;
+    padding: 7px;
+
+    border-radius: 50%;
+    background-color: $auk-gray-100;
+
+    color: $auk-gray-600;
+
+    &:before {
+      @extend %auk-icons-font-style;
+    }
+
+    &:hover {
+      background-color: $auk-gray-200;
+
+      color: $auk-gray-700;
+    }
+  }
+
+  .flatpickr-prev-month {
+    &:before {
+      @extend .ki-chevron-left;
+    }
+
+    &.flatpickr-prev-month {
+      left: 10px;
+    }
+  }
+
+  .flatpickr-next-month {
+    &:before {
+      @extend .ki-chevron-right;
+    }
+
+    &.flatpickr-next-month {
+      right: 10px;
+    }
+  }
+
+  .flatpickr-month {
+    height: 42px;
+  }
+}
+
+.flatpickr-current-month {
+  padding-top: 10px;
+
+  .flatpickr-monthDropdown-months {
+    font-size: 1.8rem;
+    font-weight: 500;
+
+    option {
+      font-size: 1.5rem;
+    }
+  }
+
+  input.cur-year {
+    font-size: 1.8rem;
+    font-weight: 500;
+  }
+}
