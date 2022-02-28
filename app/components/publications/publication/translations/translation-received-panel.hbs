@@ -25,6 +25,12 @@
             <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
               <Menu.Item
                 @skin="primary"
+                {{on "click" this.openProofRequestModal}}
+              >
+                {{t "request-proof"}}
+              </Menu.Item>
+              <Menu.Item
+                @skin="primary"
                 {{on "click" this.openTranslationEditModal}}
               >
                 {{t "edit-2"}}
@@ -66,31 +72,18 @@
 </div>
 
 {{#if this.isOpenTranslationEditModal}}
-  <Auk::Modal>
-    <Auk::Modal::Header
-      @title={{t "edit-translation-activity"}}
-      @onClose={{this.closeTranslationEditModal}}
-    />
-    <Auk::Modal::Body>
-      <div class="auk-form-group">
-        <Auk::Label for="translationActivityEditEndDate">
-          {{t "date"}}
-        </Auk::Label>
-        <Auk::Datepicker
-          id="translationActivityEditEndDate"
-          @date={{@translationActivity.endDate}}
-          @onChange={{this.setNewReceivedDate}}
-        />
-      </div>
-    </Auk::Modal::Body>
-    <Auk::Modal::Footer @onCancel={{this.closeTranslationEditModal}}>
-      <Auk::Button
-        @skin="primary"
-        @disabled={{this.isSaveDisabled}}
-        {{on "click" (perform this.saveReceivedDate)}}
-      >
-        {{t "save"}}
-      </Auk::Button>
-    </Auk::Modal::Footer>
-  </Auk::Modal>
+  <Publications::Publication::Translations::TranslationActivityEditModal
+    @receivedDate={{@translationActivity.endDate}}
+    @onSave={{perform this.updateTranslationActivity}}
+    @onCancel={{this.closeTranslationEditModal}}
+  />
+{{/if}}
+
+{{#if this.isOpenProofRequestModal}}
+  <Publications::Publication::Proofs::ProofRequestModal
+    @publicationFlow={{@publicationFlow}}
+    @translationActivity={{@translationActivity}}
+    @onSave={{@onCreateProofRequest}}
+    @onCancel={{this.closeProofRequestModal}}
+  />
 {{/if}}

@@ -1,0 +1,27 @@
+<Auk::Modal>
+  <Auk::Modal::Header
+    @title={{t "edit-translation-activity"}}
+    @onClose={{@onCancel}}
+  />
+  <Auk::Modal::Body>
+    <div class="auk-form-group">
+      <Auk::Label for="translationActivityEditEndDate">
+        {{t "date-received"}}
+      </Auk::Label>
+      <Auk::Datepicker
+        id="translationActivityEditEndDate"
+        @date={{this.receivedDate}}
+        @onChange={{this.setReceivedDate}}
+      />
+    </div>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @onCancel={{@onCancel}}>
+    <Auk::Button
+      @skin="primary"
+      @disabled={{this.isSaveDisabled}}
+      {{on "click" (perform this.save)}}
+    >
+      {{t "save"}}
+    </Auk::Button>
+  </Auk::Modal::Footer>
+</Auk::Modal>

@@ -3,7 +3,6 @@ import { action } from '@ember/object';
 import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationProofsController extends Controller {
@@ -81,63 +80,9 @@ export default class PublicationsPublicationProofsController extends Controller 
 
   @task
   *saveProofRequest(proofRequest) {
-    const now = new Date();
-
-    const uploadedPieces = proofRequest.uploadedPieces;
-    const dutch = yield this.store.findRecordByUri(
-      'language',
-      CONSTANTS.LANGUAGES.NL
-    );
-
-    yield Promise.all(
-      uploadedPieces.map((piece) => {
-        piece.publicationSubcaseSourceFor = this.publicationSubcase;
-        piece.language = dutch;
-        return piece.save();
-      })
-    );
-
-    const requestActivity = this.store.createRecord('request-activity', {
-      startDate: now,
-      publicationSubcase: this.publicationSubcase,
-      usedPieces: uploadedPieces,
-    });
-    yield requestActivity.save();
-
-    const proofingActivity = this.store.createRecord('proofing-activity', {
-      startDate: now,
-      dueDate: proofRequest.proofDueDate,
-      title: proofRequest.subject,
-      subcase: this.publicationSubcase,
-      requestActivity: requestActivity,
-      usedPieces: uploadedPieces,
-      language: yield this.store.findRecordByUri(
-        'language',
-        CONSTANTS.LANGUAGES.FR
-      ),
-    });
-    yield proofingActivity.save();
-
-    const [files, outbox, mailSettings] = yield Promise.all([
-      Promise.all(uploadedPieces.mapBy('file')),
-      this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
-      this.store.queryOne('email-notification-setting'),
-    ]);
-    const mail = yield this.store.createRecord('email', {
-      to: mailSettings.proofRequestToEmail,
-      from: mailSettings.defaultFromEmail,
-      folder: outbox,
-      attachments: files,
-      requestActivity: requestActivity,
-      subject: proofRequest.subject,
-      message: proofRequest.message,
-    });
-    yield mail.save();
-
-    // PUBLICATION-STATUS
-    yield this.publicationService.updatePublicationStatus(
-      this.publicationFlow,
-      CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED
+    yield this.publicationService.createProofRequestActivity(
+      proofRequest,
+      this.publicationFlow
     );
 
     this.send('refresh');
@@ -157,9 +102,18 @@ export default class PublicationsPublicationProofsController extends Controller 
     for (const piece of pieces.toArray()) {
       const file = yield piece.file;
       const documentContainer = yield piece.documentContainer;
-      yield file.destroyRecord();
-      yield documentContainer.destroyRecord();
-      yield piece.destroyRecord();
+      const translationActivity = yield piece.translationActivityGeneratedBy;
+      //The pieces that are used in the translationActivity can not be deleted,but should be unlinked
+      if (translationActivity) {
+        piece.requestActivitiesUsedBy.removeObjects(requestActivity);
+        piece.proofingActivitiesUsedBy.removeObjects(proofingActivity);
+        piece.publicationSubcaseSourceFor = undefined;
+        yield piece.save();
+      } else {
+        yield file.destroyRecord();
+        yield documentContainer.destroyRecord();
+        yield piece.destroyRecord();
+      }
     }
     yield requestActivity.destroyRecord();
     this.send('refresh');

@@ -8,6 +8,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationTranslationsIndexController extends Controller {
   @service store;
+  @service router;
   @service publicationService;
 
   @tracked publicationFlow;
@@ -21,9 +22,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   get latestTranslationActivity() {
-    const timelineActivity = this.model.find(
-      (timelineActivity) => timelineActivity.isTranslationActivity
-    );
+    const timelineActivity = this.model.find((activity) => activity.isTranslationActivity);
     return timelineActivity ? timelineActivity.activity : null;
   }
 
@@ -75,20 +74,13 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   @task
-  *saveEditReceivedTranslation(translationEdit) {
+  *updateTranslationActivity(translationEdit) {
     const saves = [];
 
     const translationActivity = translationEdit.translationActivity;
     translationActivity.endDate = translationEdit.receivedDate;
     saves.push(translationActivity.save());
 
-    const pieces = yield translationActivity.generatedPieces;
-    for (let piece of pieces.toArray()) {
-      piece.receivedDate = translationEdit.receivedDate;
-      saves.push(piece.save());
-    }
-
-    // This check (copied from upload task) needs to be revised, user input errors can't be corrected with a more recent date
     if (translationEdit.receivedDate < this.translationSubcase.receivedDate) {
       this.translationSubcase.receivedDate = translationEdit.receivedDate;
     }
@@ -189,6 +181,16 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     }
     yield requestActivity.destroyRecord();
     this.send('refresh');
+  }
+
+  @task
+  *saveProofRequest(proofRequest) {
+    yield this.publicationService.createProofRequestActivity(
+      proofRequest,
+      this.publicationFlow
+    );
+
+    this.router.transitionTo('publications.publication.proofs');
   }
 
   @action
