@@ -73,7 +73,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
     yield Promise.all([
       file.destroyRecord(),
       documentContainer.destroyRecord(),
-      piece.destroyRecord()
+      piece.destroyRecord(),
     ]);
   }
 

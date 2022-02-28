@@ -85,7 +85,7 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
     yield Promise.all([
       file.destroyRecord(),
       documentContainer.destroyRecord(),
-      piece.destroyRecord()
+      piece.destroyRecord(),
     ]);
   }
 }

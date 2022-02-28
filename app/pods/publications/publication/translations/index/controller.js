@@ -8,6 +8,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationTranslationsIndexController extends Controller {
   @service store;
+  @service router;
   @service publicationService;
 
   @tracked publicationFlow;
@@ -21,7 +22,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   get latestTranslationActivity() {
-    const timelineActivity = this.model.find((timelineActivity) => timelineActivity.isTranslationActivity);
+    const timelineActivity = this.model.find((activity) => activity.isTranslationActivity);
     return timelineActivity ? timelineActivity.activity : null;
   }
 
@@ -73,16 +74,38 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   @task
+  *updateTranslationActivity(translationEdit) {
+    const saves = [];
+
+    const translationActivity = translationEdit.translationActivity;
+    translationActivity.endDate = translationEdit.receivedDate;
+    saves.push(translationActivity.save());
+
+    if (translationEdit.receivedDate < this.translationSubcase.receivedDate) {
+      this.translationSubcase.receivedDate = translationEdit.receivedDate;
+    }
+    saves.push(this.translationSubcase.save());
+
+    yield Promise.all(saves);
+    this.send('refresh');
+  }
+
+  @task
   *saveTranslationRequest(translationRequest) {
     const now = new Date();
 
     const uploadedPieces = translationRequest.uploadedPieces;
-    const dutch = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
-    yield Promise.all(uploadedPieces.map((piece) => {
-      piece.translationSubcaseSourceFor = this.translationSubcase;
-      piece.language = dutch;
-      return piece.save();
-    }));
+    const dutch = yield this.store.findRecordByUri(
+      'language',
+      CONSTANTS.LANGUAGES.NL
+    );
+    yield Promise.all(
+      uploadedPieces.map((piece) => {
+        piece.translationSubcaseSourceFor = this.translationSubcase;
+        piece.language = dutch;
+        return piece.save();
+      })
+    );
 
     const requestActivity = this.store.createRecord('request-activity', {
       startDate: now,
@@ -154,10 +177,20 @@ export default class PublicationsPublicationTranslationsIndexController extends 
       const documentContainer = yield piece.documentContainer;
       yield file.destroyRecord();
       yield documentContainer.destroyRecord();
-      yield piece.destroyRecord()
+      yield piece.destroyRecord();
     }
     yield requestActivity.destroyRecord();
     this.send('refresh');
+  }
+
+  @task
+  *saveProofRequest(proofRequest) {
+    yield this.publicationService.createProofRequestActivity(
+      proofRequest,
+      this.publicationFlow
+    );
+
+    this.router.transitionTo('publications.publication.proofs');
   }
 
   @action
