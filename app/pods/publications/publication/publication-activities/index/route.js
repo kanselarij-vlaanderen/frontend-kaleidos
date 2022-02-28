@@ -19,30 +19,31 @@ export default class PublicationsPublicationPublicationActivitiesIndexRoute exte
       'publications.publication.publication-activities'
     );
 
-    const activities = await Promise.all([
-      this.store.query('request-activity', {
-        'filter[publication-subcase][:id:]': publicationSubcase.id,
-        'filter[:has:publication-activity]': true,
-        // eslint-disable-next-line prettier/prettier
-        include: [
-          'email',
+    let requestActivities = this.store.query('request-activity', {
+      'filter[publication-subcase][:id:]': publicationSubcase.id,
+      'filter[:has:publication-activity]': true,
+      // eslint-disable-next-line prettier/prettier
+      include: [
+        'email',
+        'used-pieces',
+        'used-pieces.file'
+      ].join(','),
+    });
+    let publicationActivities = this.store.query('publication-activity', {
+      'filter[subcase][:id:]': publicationSubcase.id,
+      // eslint-disable-next-line prettier/prettier
+      include: [
+        'decisions',
+      ].join(','),
+    });
 
-          'used-pieces',
-          'used-pieces.file'
-        ].join(','),
-      }),
-      this.store.query('publication-activity', {
-        'filter[subcase][:id:]': publicationSubcase.id,
-        // eslint-disable-next-line prettier/prettier
-        include: [
-          'decisions',
-        ].join(','),
-      }),
+    [requestActivities, publicationActivities] = await Promise.all([
+      requestActivities,
+      publicationActivities,
     ]);
+    requestActivities = requestActivities.toArray();
+    publicationActivities = publicationActivities.toArray();
 
-    const [requestActivities, publicationActivities] = activities.map(
-      (activities) => activities.toArray()
-    );
     this.requestActivities = requestActivities.sortBy('startDate');
     this.publicationActivities = publicationActivities.sortBy('startDate');
 
@@ -53,18 +54,12 @@ export default class PublicationsPublicationPublicationActivitiesIndexRoute exte
     return timeline;
   }
 
-  /**
-   * @param {RequestActivity[]} requestActivities
-   * @param {PublicationActivity[]} publicationActivities
-   * @private
-   */
   createTimeline(requestActivities, publicationActivities) {
     const requestEvents = requestActivities.map(
       (act) => new PublicationRequestEvent(act)
     );
     // publication activities that are pending
     // are not displayed in the timeline
-    // but are used for registering a publication
     const publicationEvents = publicationActivities.map(
       (act) => new PublicationPublicationEvent(act)
     );

@@ -15,7 +15,7 @@
             @skin="secondary"
             @icon="plus"
             @disabled={{this.isRegistrationDisabled}}
-            {{on "click" this.openRegistrationModal}}
+            {{on "click" this.openPublicationRegisterModal}}
           >
             {{t "publication-publication-register-action"}}
           </Auk::Button>
@@ -46,11 +46,11 @@
         {{#if event.isRequest}}
           <Publications::Publication::PublicationActivities::Index::Timeline::PublicationsRequestTimelineEvent
             @requestActivity={{event.requestActivity}}
-            @onDelete={{perform this.deleteRequest}}
+            @onDelete={{this.deleteRequest}}
           />
         {{else}}
           <Publications::Publication::PublicationActivities::Index::Timeline::PublicationsPublicationTimelineEvent
-            @onEdit={{this.openPublicationModalEdit}}
+            @onEdit={{this.openPublicationEditModal}}
             @publicationActivity={{event.publicationActivity}}
           />
         {{/if}}
@@ -67,11 +67,11 @@
   />
 {{/if}}
 
-{{#if this.isOpenRegistrationModal}}
+{{#if this.isOpenPublicationDetailsModal}}
   <Publications::Publication::PublicationActivities::Index::PublicationRegistrationModal
     @publicationFlow={{this.publicationFlow}}
-    @publication={{this.publication}}
-    @onSave={{this.saveRegistration}}
-    @onCancel={{this.closeRegistrationModal}}
+    @publicationDetails={{this.selectedPublicationDetails}}
+    @onSave={{this.savePublication}}
+    @onCancel={{this.closePublicationDetailsModal}}
   />
 {{/if}}

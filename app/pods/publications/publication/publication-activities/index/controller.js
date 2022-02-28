@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
-import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -18,6 +18,11 @@ import PublicationActivity from 'frontend-kaleidos/models/publication-activity';
 // TODO
 // For now, we limit the number of request- and publication-activities to 1
 // We will need to figure out whether multiple publication-activities are possible
+
+/**
+ * @typedef {{publicationDate: Date}} PublicationDetailsArgument
+ */
+
 export class PublicationRequestEvent {
   constructor(requestActivity) {
     this.requestActivity = requestActivity;
@@ -68,59 +73,35 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
   /** @type {PublicationFlow} */
   @tracked publicationFlow;
   /** @type {PublicationSubcase} */
-  publicationSubcase;
-  // The model of the PublicationRegistrationModal
-  /** @type {{publicationDate: Date}} */
-  @tracked publication;
+  @tracked publicationSubcase;
+  /** @type {RequestActivity[]} */
+  @tracked requestActivities;
+  /** @type {PublicationActivity[]} */
+  @tracked publicationActivities;
+
+  /** @type {PublicationDetailsArgument} */
+  @tracked selectedPublicationDetails;
+  /** @type {PublicationActivity} */
   selectedPublicationActivity;
 
   @tracked isOpenRequestModal = false;
-  @tracked isOpenRegistrationModal = false;
+  @tracked isOpenPublicationDetailsModal = false;
 
   get isRequestDisabled() {
     return this.requestActivities.length > 0;
   }
 
   get isRegistrationDisabled() {
-    return this.publicationActivities.some((it) => it.endDate);
+    return (
+      !this.publicationActivities.length ||
+      this.publicationActivities.some((it) => it.endDate)
+    );
   }
 
+  // REQUEST PUBLICATION
   @action
   openRequestModal() {
     this.isOpenRequestModal = true;
-  }
-
-  @action
-  closeRequestModal() {
-    this.isOpenRequestModal = false;
-  }
-
-  @action
-  openRegistrationModal() {
-    this.publication = undefined;
-    this.isOpenRegistrationModal = true;
-  }
-
-  @action
-  closeRegistrationModal() {
-    this.isOpenRegistrationModal = false;
-  }
-
-  @action
-  async openPublicationModalEdit(publicationActivity) {
-    this.selectedPublicationActivity = publicationActivity;
-    const decisions = await publicationActivity.decisions;
-    // Data model differs from user interface: only 1 decision can be added (for publication-date) .firstObject === .onlyObject
-    const decision = decisions.firstObject;
-    this.publication = {
-      publicationDate: decision.publicationDate,
-    };
-    this.isOpenRegistrationModal = true;
-  }
-
-  @action
-  closePublicationModalEdit() {
-    this.isOpenRegistrationModal = false;
   }
 
   @task
@@ -138,16 +119,55 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
   }
 
   @action
-  async saveRegistration(args) {
-    if (this.publication) {
+  closeRequestModal() {
+    this.isOpenRequestModal = false;
+  }
+
+  // REGISTER + EDIT PUBLICATION
+  @action
+  openPublicationRegisterModal() {
+    this.selectedPublicationActivity = undefined;
+    this.selectedPublicationDetails = undefined;
+    this.isOpenPublicationDetailsModal = true;
+  }
+
+  @action
+  async openPublicationEditModal(publicationActivity) {
+    this.selectedPublicationActivity = publicationActivity;
+    this.selectedPublicationDetails = await this.buildPublicationDetails(
+      publicationActivity
+    );
+    this.isOpenPublicationDetailsModal = true;
+  }
+
+  async buildPublicationDetails(publicationActivity) {
+    const decisions = await publicationActivity.decisions;
+    // Data model differs from user interface: only 1 decision can be added (for publication-date)
+    //  .firstObject === .onlyObject
+    const decision = decisions.firstObject;
+    const publicationDetails = {
+      publicationDate: decision.publicationDate,
+    };
+    return publicationDetails;
+  }
+
+  @action
+  closePublicationDetailsModal() {
+    this.isOpenPublicationDetailsModal = false;
+  }
+
+  @action
+  async savePublication(args) {
+    const isEditing = this.selectedPublicationDetails !== undefined;
+    if (isEditing) {
       const publicationActivity = this.selectedPublicationActivity;
-      await this.performUpdatePublication(publicationActivity, args);
+      await this.performEditPublication(publicationActivity, args);
     } else {
-      await this.performSaveRegistration(args);
+      await this.performRegisterPublication(args);
     }
 
     this.send('refresh');
-    this.isOpenRegistrationModal = false;
+    this.isOpenPublicationDetailsModal = false;
   }
 
   /**
@@ -156,7 +176,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
    *  mustUpdatePublicationStatus: boolean,
    * }} args
    */
-  async performSaveRegistration(args) {
+  async performRegisterPublication(args) {
     const saves = [];
 
     const publicationActivity = this.publicationActivities.lastObject;
@@ -190,7 +210,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
       );
       saves.push(statusSave);
 
-      this.publicationSubcase.endDate = args.receivedAtDate;
+      this.publicationSubcase.endDate = args.publicationDate;
     }
 
     // (this is a deceptive property:
@@ -204,43 +224,46 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
   }
 
   @action
-  async performUpdatePublication(publicationActivity, args) {
+  async performEditPublication(publicationActivity, args) {
+    // TODO check whether other dates have to be updated
     const decisions = await publicationActivity.decisions;
     const decision = decisions.firstObject;
     decision.publicationDate = args.publicationDate;
     await decision.save();
   }
 
-  @task
-  *deleteRequest(requestActivity) {
-    const deletePromises = [];
+  @action
+  async deleteRequest(requestActivity) {
+    const deletes = [];
 
-    const publicationActivity = yield requestActivity.publicationActivity;
-    deletePromises.push(publicationActivity.destroyRecord());
+    const publicationActivity = await requestActivity.publicationActivity;
+    deletes.push(publicationActivity.destroyRecord());
 
-    const mail = yield requestActivity.email;
+    const mail = await requestActivity.email;
+    // legacy activities may not have an email so only try to delete if one exists
     if (mail) {
-      deletePromises.push(mail.destroyRecord());
+      deletes.push(mail.destroyRecord());
     }
 
-    const pieces = yield requestActivity.usedPieces;
+    let pieces = await requestActivity.usedPieces;
+    pieces = pieces.toArray();
+    for (const piece of pieces) {
+      const file = await piece.file;
+      const documentContainer = await piece.documentContainer;
 
-    for (const piece of pieces.toArray()) {
-      const [file, documentContainer] = yield Promise.all([
-        piece.file,
-        piece.documentContainer,
-      ]);
-
-      deletePromises.push(piece.destroyRecord());
-      deletePromises.push(file.destroyRecord());
-      deletePromises.push(documentContainer.destroyRecord());
+      // TODO: when pieces will be added from Drukproeven
+      // it will be necessary to check the pieces are not linked
+      // to something else and may be deleted
+      deletes.push(piece.destroyRecord());
+      deletes.push(file.destroyRecord());
+      deletes.push(documentContainer.destroyRecord());
     }
 
-    yield Promise.all(deletePromises);
+    await Promise.all(deletes);
 
     // delete after previous records have been destroyed
     // destroying in parallel throws occasional errors
-    yield requestActivity.destroyRecord();
+    await requestActivity.destroyRecord();
 
     this.send('refresh');
   }

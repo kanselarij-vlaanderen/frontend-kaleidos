@@ -12,13 +12,13 @@ import { tracked } from '@glimmer/tracking';
 export default class PublicationRegistrationModal extends Component {
   /**
    * @type {{
-   *  publication?: {
+   *  publicationDetails?: {
    *    publicationDate: Date
    *  }, // omit for registration / pass for editing
    *  onCancel(): Promise,
    *  onSave(args: {
    *    publicationDate: Date,
-   *    mustUpdatePublicationStatus: boolean,
+   *    mustUpdatePublicationStatus?: boolean,
    *  }): Promise,
    * }}
    */
@@ -35,12 +35,12 @@ export default class PublicationRegistrationModal extends Component {
   }
 
   get isEditing() {
-    return this.args.publication !== undefined;
+    return this.args.publicationDetails !== undefined;
   }
 
   initFields() {
-    if (this.args.publication) {
-      this.publicationDate = this.args.publication.publicationDate;
+    if (this.args.publicationDetails) {
+      this.publicationDate = this.args.publicationDetails.publicationDate;
     } else {
       this.publicationDate = new Date();
     }
