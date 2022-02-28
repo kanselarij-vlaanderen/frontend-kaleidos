@@ -9,6 +9,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import PublicationService from 'frontend-kaleidos/services/publication-service';
 
 import Piece from 'frontend-kaleidos/models/piece';
+import PublicationFlow from 'frontend-kaleidos/models/publication-flow';
 import PublicationSubcase from 'frontend-kaleidos/models/publication-subcase';
 import RequestActivity from 'frontend-kaleidos/models/request-activity';
 import PublicationActivity from 'frontend-kaleidos/models/publication-activity';
@@ -44,11 +45,12 @@ export class PublicationPublicationEvent {
 
   timeOrder = 1;
   isPublication = true;
-  get isShown() {
-    return this.publicationActivity.endDate;
-  }
   /** @type {PublicationActivity} */
   @tracked publicationActivity;
+
+  get isShown() {
+    return this.publicationActivity.endDate !== undefined;
+  }
 
   get date() {
     return this.publicationActivity.startDate;
