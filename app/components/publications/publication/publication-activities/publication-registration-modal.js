@@ -23,15 +23,16 @@ export default class PublicationRegistrationModal extends Component {
    * }}
    */
   args = this.args;
+
   @service store;
 
-  @tracked publicationDate = new Date();
+  @tracked publicationDate;
   @tracked mustUpdatePublicationStatus = false;
 
   constructor() {
     super(...arguments);
     this.initFields();
-    this.initValidation();
+    this.initValidators();
   }
 
   get isEditing() {
@@ -46,7 +47,7 @@ export default class PublicationRegistrationModal extends Component {
     }
   }
 
-  initValidation() {
+  initValidators() {
     this.validators = new ValidatorSet({
       publicationDate: new Validator(() => this.publicationDate !== undefined),
     });
@@ -56,14 +57,14 @@ export default class PublicationRegistrationModal extends Component {
     return this.cancel.isRunning || this.save.isRunning;
   }
 
-  get isCancelDisabled() {
-    return this.cancel.isRunning || this.save.isRunning;
-  }
-
   get isSaveDisabled() {
     return (
       !this.validators.areValid || this.cancel.isRunning || this.save.isRunning
     );
+  }
+
+  get isCancelDisabled() {
+    return this.cancel.isRunning || this.save.isRunning;
   }
 
   @action
@@ -77,21 +78,6 @@ export default class PublicationRegistrationModal extends Component {
     this.mustUpdatePublicationStatus = e.target.checked;
   }
 
-  // prevent double cancel
-  @task({
-    drop: true,
-  })
-  *cancel() {
-    // this.canCancel does not work:
-    //     because this.cancel.isRunning === true, the cancel task is never performed
-    // necessary because close-button is not disabled when saving
-    if (this.save.isRunning) {
-      return;
-    }
-
-    yield this.args.onCancel();
-  }
-
   @task
   *save() {
     const args = {
@@ -100,6 +86,22 @@ export default class PublicationRegistrationModal extends Component {
     if (!this.isEditing) {
       args.mustUpdatePublicationStatus = this.mustUpdatePublicationStatus;
     }
+
     yield this.args.onSave(args);
+  }
+
+  // prevent double cancel
+  @task({
+    drop: true,
+  })
+  *cancel() {
+    // this.isCancelDisabled does not work:
+    //     because this.cancel.isRunning === true, the cancel task is never performed
+    // necessary because close-button is not disabled when saving
+    if (this.save.isRunning) {
+      return;
+    }
+
+    yield this.args.onCancel();
   }
 }

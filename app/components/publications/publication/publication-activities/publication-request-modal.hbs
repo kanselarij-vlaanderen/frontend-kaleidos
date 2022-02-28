@@ -13,22 +13,22 @@
     >
       <div class="auk-form-group-layout auk-form-group-layout--standard">
         <div class="auk-form-group">
-          <Auk::Label for="publicationRequestModal.subject">
+          <Auk::Label for="publicationRequestModal_subject">
             {{t "subject"}}
           </Auk::Label>
           <Auk::Input
-            id="publicationRequestModal.subject"
+            id="publicationRequestModal_subject"
             @block={{true}}
             @value={{this.subject}}
             {{on "input" this.setSubject}}
           />
         </div>
         <div class="auk-form-group">
-          <Auk::Label for="publicationRequestModal.message">
+          <Auk::Label for="publicationRequestModal_message">
             {{t "message"}}
           </Auk::Label>
           <Auk::Textarea
-            id="publicationRequestModal.message"
+            id="publicationRequestModal_message"
             @block={{true}}
             @value={{this.message}}
             rows="16"
@@ -36,11 +36,10 @@
           />
         </div>
         <div class="auk-form-group">
-          <Auk::Label for="publicationRequestModal.attachments">
+          <Auk::Label>
             {{t "attachments"}}
           </Auk::Label>
           <Auk::FileUploader
-            id="publicationRequestModal.attachments"
             @multiple={{true}}
             @onUpload={{this.createPiece}}
           />

@@ -27,7 +27,7 @@ export default class PublicationRequestModal extends Component {
     super(...arguments);
 
     // initialize validation before first render: to avoid this.validators === undefined
-    this.initValidation();
+    this.initValidators();
     this.initEmail();
   }
 
@@ -40,7 +40,7 @@ export default class PublicationRequestModal extends Component {
     this.message = email.message;
   }
 
-  initValidation() {
+  initValidators() {
     this.validators = new ValidatorSet({
       subject: new Validator(() => isPresent(this.subject)),
       message: new Validator(() => isPresent(this.message)),
@@ -52,14 +52,14 @@ export default class PublicationRequestModal extends Component {
     return this.cancel.isRunning || this.save.isRunning;
   }
 
-  get canCancel() {
-    return !this.cancel.isRunning && !this.save.isRunning;
-  }
-
   get canSave() {
     return (
       this.validators.areValid && !this.cancel.isRunning && !this.save.isRunning
     );
+  }
+
+  get canCancel() {
+    return !this.cancel.isRunning && !this.save.isRunning;
   }
 
   @action
@@ -102,6 +102,16 @@ export default class PublicationRequestModal extends Component {
     });
   }
 
+  @task
+  *save() {
+    const requestParams = {
+      subject: this.subject,
+      message: this.message,
+      uploads: this.uploads,
+    };
+    yield this.args.onSave(requestParams);
+  }
+
   // prevent double cancel
   @task({
     drop: true,
@@ -116,16 +126,6 @@ export default class PublicationRequestModal extends Component {
 
     yield this.performCleanup();
     yield this.args.onCancel();
-  }
-
-  @task
-  *save() {
-    const requestParams = {
-      subject: this.subject,
-      message: this.message,
-      uploads: this.uploads,
-    };
-    yield this.args.onSave(requestParams);
   }
 
   // separate method to prevent ember-concurrency from saving only partially
