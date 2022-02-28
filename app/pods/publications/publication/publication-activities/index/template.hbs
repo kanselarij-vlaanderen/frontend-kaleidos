@@ -44,12 +44,12 @@
     >
       {{#if event.isShown}}
         {{#if event.isRequest}}
-          <Publications::Publication::PublicationActivities::Index::Timeline::PublicationsRequestTimelineEvent
+          <Publications::Publication::PublicationActivities::Timeline::PublicationsRequestTimelineEvent
             @requestActivity={{event.requestActivity}}
             @onDelete={{this.deleteRequest}}
           />
         {{else}}
-          <Publications::Publication::PublicationActivities::Index::Timeline::PublicationsPublicationTimelineEvent
+          <Publications::Publication::PublicationActivities::Timeline::PublicationsPublicationTimelineEvent
             @onEdit={{this.openPublicationEditModal}}
             @publicationActivity={{event.publicationActivity}}
           />
@@ -60,7 +60,7 @@
 </Auk::Panel>
 
 {{#if this.isOpenRequestModal}}
-  <Publications::Publication::PublicationActivities::Index::PublicationRequestModal
+  <Publications::Publication::PublicationActivities::PublicationRequestModal
     @publicationFlow={{this.publicationFlow}}
     @onSave={{perform this.saveRequest}}
     @onCancel={{this.closeRequestModal}}
@@ -68,7 +68,7 @@
 {{/if}}
 
 {{#if this.isOpenPublicationDetailsModal}}
-  <Publications::Publication::PublicationActivities::Index::PublicationRegistrationModal
+  <Publications::Publication::PublicationActivities::PublicationRegistrationModal
     @publicationFlow={{this.publicationFlow}}
     @publicationDetails={{this.selectedPublicationDetails}}
     @onSave={{this.savePublication}}
