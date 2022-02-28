@@ -9,7 +9,7 @@ import { tracked } from '@glimmer/tracking';
  * Component for manually registered publications
  * for publications that are not found in the Staatsblad (yet)
  */
-export default class PublicationRegistrationModal extends Component {
+export default class PublicationDetailsModal extends Component {
   /**
    * @type {{
    *  publicationDetails?: {
