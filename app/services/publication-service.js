@@ -1,6 +1,7 @@
 import Service, { inject as service } from '@ember/service';
 import * as CONFIG from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 
 /* eslint-disable no-unused-vars */
 import File from '../models/file';
@@ -337,5 +338,55 @@ export default class PublicationService extends Service {
       }
     );
     await newChangeActivity.save();
+  }
+
+  async createProofRequestActivity(proofRequestProperties, publicationFlow) {
+    const publicationSubcase = await publicationFlow.publicationSubcase;
+    const now = new Date();
+
+    const uploadedPieces = proofRequestProperties.uploadedPieces;
+    await Promise.all(
+      uploadedPieces.map((piece) => {
+        piece.publicationSubcaseSourceFor = publicationSubcase;
+        return piece.save();
+      })
+    );
+
+    const requestActivity = this.store.createRecord('request-activity', {
+      startDate: now,
+      publicationSubcase: publicationSubcase,
+      usedPieces: uploadedPieces,
+    });
+    await requestActivity.save();
+
+    const proofingActivity = this.store.createRecord('proofing-activity', {
+      startDate: now,
+      title: proofRequestProperties.subject,
+      subcase: publicationSubcase,
+      requestActivity: requestActivity,
+      usedPieces: uploadedPieces,
+    });
+    await proofingActivity.save();
+
+    const [files, outbox, mailSettings] = await Promise.all([
+      Promise.all(uploadedPieces.mapBy('file')),
+      this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
+      this.store.queryOne('email-notification-setting'),
+    ]);
+    const mail = await this.store.createRecord('email', {
+      to: mailSettings.proofRequestToEmail,
+      from: mailSettings.defaultFromEmail,
+      folder: outbox,
+      attachments: files,
+      requestActivity: requestActivity,
+      subject: proofRequestProperties.subject,
+      message: proofRequestProperties.message,
+    });
+    await mail.save();
+
+    await this.updatePublicationStatus(
+      publicationFlow,
+      CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED
+    );
   }
 }
