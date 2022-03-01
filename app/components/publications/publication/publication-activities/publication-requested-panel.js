@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 
-export default class PublicationsRequestTimelineEvent extends Component {
+export default class PublicationsPublicationPublicationActivitiesPublicationRequestedPanel extends Component {
   @tracked isOpenConfirmDeleteAlert = false;
   @tracked publicationActivity;
 

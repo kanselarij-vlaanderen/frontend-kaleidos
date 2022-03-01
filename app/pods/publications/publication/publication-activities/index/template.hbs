@@ -44,7 +44,7 @@
             @badgeIcon="mail"
             @badgeSkin="primary"
             @event={{event}} as |event|>
-            <Publications::Publication::PublicationActivities::Timeline::PublicationsRequestTimelineEvent
+            <Publications::Publication::PublicationActivities::PublicationRequestedPanel
               @requestActivity={{event.activity}}
               @onDelete={{this.deleteRequest}}
             />
@@ -54,7 +54,7 @@
             @badgeIcon="check"
             @badgeSkin="success"
             @event={{event}} as |event|>
-            <Publications::Publication::PublicationActivities::Timeline::PublicationsPublicationTimelineEvent
+            <Publications::Publication::PublicationActivities::PublicationRegisteredPanel
               @onEdit={{this.openPublicationEditModal}}
               @publicationActivity={{event.activity}}
             />
