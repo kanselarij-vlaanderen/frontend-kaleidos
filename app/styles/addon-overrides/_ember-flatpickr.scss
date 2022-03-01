@@ -3,9 +3,9 @@
    ========================================================================== */
 
 .flatpickr-calendar {
-  background: $auk-white;
-  border-radius: .3rem;
   box-shadow: $auk-shadow-small;
+  border-radius: .3rem;
+  background: $auk-white;
 
   font-family: flanders-sans, sans-serif;
 
@@ -25,7 +25,6 @@
     padding: 7px;
 
     border-radius: 50%;
-    background-color: $auk-gray-100;
 
     color: $auk-gray-600;
 
@@ -34,9 +33,15 @@
     }
 
     &:hover {
-      background-color: $auk-gray-200;
+      background-color: $auk-gray-100;
 
       color: $auk-gray-700;
+    }
+
+    &:active {
+      background-color: $auk-gray-200;
+
+      color: $auk-gray-800;
     }
   }
 
@@ -68,17 +73,102 @@
 .flatpickr-current-month {
   padding-top: 10px;
 
-  .flatpickr-monthDropdown-months {
-    font-size: 1.8rem;
-    font-weight: 500;
-
-    option {
-      font-size: 1.5rem;
-    }
-  }
-
+  .flatpickr-monthDropdown-months,
   input.cur-year {
     font-size: 1.8rem;
     font-weight: 500;
+  }
+
+  .flatpickr-monthDropdown-months {
+    margin-right: 0.5rem;
+    border: 0.1rem solid transparent;
+    border-radius: .3rem;
+    padding: 0;
+
+    &:hover {
+      border-color: $auk-gray-300;
+      background-color: $auk-white;
+    }
+
+    &:focus {
+      outline: 0;
+      border-color: $auk-yellow-500;
+      box-shadow: inset 0 0 0 0.1rem $auk-yellow-500;
+    }
+
+    option {
+      font-size: 1.5rem !important;
+    }
+  }
+
+  .numInputWrapper {
+    border: 0.1rem solid transparent;
+    border-radius: .3rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+
+    &:hover {
+      border-color: $auk-gray-300;
+      background-color: $auk-white;
+    }
+
+    &:focus-within {
+      outline: 0;
+      border-color: $auk-yellow-500;
+      box-shadow: 0 0 0 0.1rem $auk-yellow-500;
+    }
+
+    input.cur-year {
+      padding: 1px 0 1px 0.5rem;
+    }
+  }
+}
+
+.numInputWrapper {
+  span {
+    @extend .auk-icon;
+
+    border: 0.1rem solid transparent;
+    border-left-color: $auk-gray-300;
+    padding: 0.1rem 0 0 0;
+
+    color: $auk-gray-600;
+    font-size: 1rem;
+
+    &:after {
+      content: normal;
+    }
+
+    &:before {
+      @extend %auk-icons-font-style;
+    }
+
+    &:hover {
+      background-color: $auk-gray-100;
+
+      color: $auk-gray-700;
+    }
+
+    &:active {
+      background-color: $auk-gray-200;
+
+      color: $auk-gray-800;
+    }
+
+    &.arrowUp {
+      border-top-right-radius: .3rem;
+
+      &:before {
+        @extend .ki-plus;
+      }
+    }
+
+    &.arrowDown {
+      border-top-color: $auk-gray-300;
+      border-bottom-right-radius: .3rem;
+
+      &:before {
+        @extend .ki-dash;
+      }
+    }
   }
 }
