@@ -13,78 +13,68 @@
     >
       <div class="auk-form-group-layout auk-form-group-layout--standard">
         <div class="auk-form-group">
-          <Auk::Label for="publicationRequestModal_subject">
+          <Auk::Label for="publicationRequestModal_subject" @required={{true}}>
             {{t "subject"}}
           </Auk::Label>
           <Auk::Input
             id="publicationRequestModal_subject"
             @block={{true}}
-            @value={{this.subject}}
-            {{on "input" this.setSubject}}
+            @value={{mut this.subject}}
           />
         </div>
         <div class="auk-form-group">
-          <Auk::Label for="publicationRequestModal_message">
+          <Auk::Label for="publicationRequestModal_message" @required={{true}}>
             {{t "message"}}
           </Auk::Label>
           <Auk::Textarea
             id="publicationRequestModal_message"
             @block={{true}}
-            @value={{this.message}}
             rows="16"
-            {{on "input" this.setMessage}}
+            @value={{mut this.message}}
           />
         </div>
         <div class="auk-form-group">
-          <Auk::Label>
+          <Auk::Label @required={{true}}>
             {{t "attachments"}}
           </Auk::Label>
           <Auk::FileUploader
             @multiple={{true}}
-            @onUpload={{this.createPiece}}
+            @reusable={{true}}
+            @onUpload={{this.uploadPiece}}
           />
-
-          {{#if this.uploads}}
-            <div class="auk-u-mt-4">
-              <Auk::List @isBordered="true" class="auk-list--view">
-                {{#each this.uploads as |upload|}}
-                  <Auk::List::Item @skin="gray-100">
-                    <div class="auk-u-ml-2">
-                      <Auk::Icon @name="document" @skin="muted-dark" />
-                    </div>
-                    <div class="auk-u-mx-2">
-                      <span class="auk-u-text-bold">
-                        {{upload.piece.name}}
-                      </span>
-                      <div
-                        data-test-utils-document-list-file-extension
-                        class="auk-u-text-muted auk-u-text-size--small"
-                      >
-                        {{uppercase upload.file.extension}},
-                        {{format-bytesize upload.file.size}}
-                      </div>
-                    </div>
-                  </Auk::List::Item>
-                {{/each}}
-              </Auk::List>
-
-            </div>
-          {{/if}}
+          <Auk::List>
+            {{#each this.uploadedPieces as |piece|}}
+              <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
+                <div class="auk-o-flex auk-o-flex--spaced">
+                  <Auk::Badge @icon="paperclip" @size="regular" />
+                  <h5 class="auk-h4 auk-u-m-0">
+                    {{piece.file.downloadFilename}}
+                  </h5>
+                </div>
+                <Auk::Button
+                  @icon="trash"
+                  @layout="icon-only"
+                  @skin="danger-borderless"
+                  {{on "click" (perform this.deleteUploadedPiece piece)}}
+                />
+              </Auk::List::Item>
+            {{/each}}
+          </Auk::List>
         </div>
       </div>
     </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
-    @cancelDisabled={{not this.canCancel}}
+    @cancelDisabled={{this.isCancelDisabled}}
     @onCancel={{perform this.cancel}}
   >
     <Auk::Button
       @skin="primary"
-      @disabled={{not this.canSave}}
+      @disabled={{this.isSaveDisabled}}
       @loading={{this.save.isRunning}}
       {{on "click" (perform this.save)}}
     >
-      {{t "request-action"}}
+      {{t "request-it"}}
     </Auk::Button>
   </Auk::Modal::Footer>
 </Auk::Modal>

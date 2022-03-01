@@ -36,17 +36,14 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
   }
 
   @task
-  *saveRequest(args) {
-    yield this.publicationService.requestPublication({
-      publicationFlow: this.publicationFlow,
-      subject: args.subject,
-      message: args.message,
-      uploads: args.uploads,
-      isProof: false,
-    });
+  *saveRequest(publicationRequest) {
+    yield this.publicationService.createPublicationRequestActivity(
+      publicationRequest,
+      this.publicationFlow,
+    );
 
     this.send('refresh');
-    this.isOpenRequestModal = false;
+    this.closeRequestModal();
   }
 
   @task

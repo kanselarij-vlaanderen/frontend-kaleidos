@@ -1,9 +1,9 @@
 <Auk::Modal>
   <Auk::Modal::Header
-    @title="{{t
-      'request-proof-for-publication'
+    @title={{t
+      "request-proof-for-publication"
       identification=@publicationFlow.identification.idName
-    }}"
+    }}
     @onClose={{perform this.cancel}}
   />
   <Auk::Modal::Body>
@@ -26,7 +26,7 @@
         <Auk::Textarea
           data-test-proof-request-message
           id="proofRequestMessage"
-          @rows="6"
+          rows="16"
           @value={{mut this.message}}
         />
       </div>

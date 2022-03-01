@@ -65,19 +65,6 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   }
 
   @task
-  *deleteUploadedPiece(piece) {
-    const file = yield piece.file;
-    const documentContainer = yield piece.documentContainer;
-    this.uploadedPieces.removeObject(piece);
-
-    yield Promise.all([
-      file.destroyRecord(),
-      documentContainer.destroyRecord(),
-      piece.destroyRecord(),
-    ]);
-  }
-
-  @task
   *setEmailFields() {
     const publicationFlow = this.args.publicationFlow;
     const identification = yield publicationFlow.identification;
@@ -104,14 +91,14 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
 
   @action
   async uploadPiece(file) {
-    const now = new Date();
+    const created = file.created;
     const documentContainer = this.store.createRecord('document-container', {
-      created: now,
+      created: created,
     });
     await documentContainer.save();
     const piece = this.store.createRecord('piece', {
-      created: now,
-      modified: now,
+      created: created,
+      modified: created,
       file: file,
       confidential: false,
       name: file.filenameWithoutExtension,
@@ -120,6 +107,21 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
 
     this.uploadedPieces.pushObject(piece);
     this.setEmailFields.perform();
+  }
+
+  @task
+  *deleteUploadedPiece(piece) {
+    this.uploadedPieces.removeObject(piece);
+    const [file, documentContainer] = yield Promise.all([
+      piece.file,
+      piece.documentContainer,
+    ]);
+
+    yield Promise.all([
+      file.destroyRecord(),
+      documentContainer.destroyRecord(),
+      piece.destroyRecord(),
+    ]);
   }
 
   initValidators() {

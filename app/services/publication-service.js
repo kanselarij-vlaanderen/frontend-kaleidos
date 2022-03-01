@@ -191,122 +191,6 @@ export default class PublicationService extends Service {
     return undefined;
   }
 
-  /**
-   * @typedef {{
-   *  piece: Piece,
-   *  file: File,
-   *  documentContainer: DocumentContainer,
-   * }} Upload container for unsaved pieces
-   *
-   * @param {{
-   *  publicationFlow: PublicationFlow,
-   *  subject: string,
-   *  message: string,
-   *  uploads: Upload,
-   *  isProof: boolean,
-   * }} args
-   */
-  async requestPublication(args) {
-    const now = new Date();
-    const saves = [];
-
-    const pieces = await Promise.all(
-      args.uploads.map(async (upload) => {
-        await upload.piece.save();
-
-        const documentContainer = await upload.documentContainer;
-        documentContainer.pieces.pushObject(upload.piece);
-        // save document container asynchronously
-        saves.push(documentContainer.save());
-
-        return upload.piece;
-      })
-    );
-
-    // PUBLICATION SUBCASE
-    const publicationSubcase = await args.publicationFlow.publicationSubcase;
-    if (!publicationSubcase.startDate) {
-      publicationSubcase.startDate = now;
-      const publicationSubcaseSave = publicationSubcase.save();
-      saves.push(publicationSubcaseSave);
-    }
-
-    // REQUEST ACTIVITY
-    const requestActivity = this.store.createRecord('request-activity', {
-      startDate: now,
-      title: args.subject,
-      publicationSubcase: publicationSubcase,
-      usedPieces: pieces,
-    });
-    await requestActivity.save();
-
-    // RESULT ACTIVITY
-    const resultActivityProperties = {
-      startDate: now,
-      title: args.subject,
-      subcase: publicationSubcase,
-      requestActivity: requestActivity,
-      usedPieces: pieces,
-    };
-    let resultActivity;
-    if (args.isProof) {
-      resultActivity = this.store.createRecord(
-        'proofing-activity',
-        resultActivityProperties
-      );
-    } else {
-      resultActivity = this.store.createRecord(
-        'publication-activity',
-        resultActivityProperties
-      );
-    }
-    const resultActivitySave = resultActivity.save();
-    saves.push(resultActivitySave);
-
-    // EMAIL
-    const outboxPromise = this.store.findRecordByUri(
-      'mail-folder',
-      CONFIG.PUBLICATION_EMAIL.OUTBOX
-    );
-    const mailSettingsPromise = this.store.queryOne(
-      'email-notification-setting'
-    );
-    const [outbox, mailSettings] = await Promise.all([
-      outboxPromise,
-      mailSettingsPromise,
-    ]);
-    const files = args.uploads.mapBy('file');
-    const mail = this.store.createRecord('email', {
-      to: mailSettings.proofRequestToEmail,
-      cc: mailSettings.proofRequestCcEmail,
-      from: mailSettings.defaultFromEmail,
-      folder: outbox,
-      subject: args.subject,
-      message: args.message,
-      attachments: files,
-      requestActivity: requestActivity,
-    });
-    const emailSave = mail.save();
-    saves.push(emailSave);
-
-    // PUBLICATION STATUS
-    let newPublicationStatus;
-    if (args.isProof) {
-      newPublicationStatus = CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED;
-    } else {
-      newPublicationStatus =
-        CONSTANTS.PUBLICATION_STATUSES.PUBLICATION_REQUESTED;
-    }
-    const pubStatusChange = this.updatePublicationStatus(
-      args.publicationFlow,
-      newPublicationStatus,
-      now
-    );
-    saves.push(pubStatusChange);
-
-    await Promise.all(saves);
-  }
-
   async getIsViaCouncilOfMinisters(publicationFlow) {
     const _case = await publicationFlow.case;
     const subcases = await _case.subcases;
@@ -387,6 +271,56 @@ export default class PublicationService extends Service {
     await this.updatePublicationStatus(
       publicationFlow,
       CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED
+    );
+  }
+
+  async createPublicationRequestActivity(publicationRequestProperties, publicationFlow) {
+    const publicationSubcase = await publicationFlow.publicationSubcase;
+    const now = new Date();
+
+    const uploadedPieces = publicationRequestProperties.uploadedPieces;
+    await Promise.all(
+      uploadedPieces.map((piece) => {
+        return piece.save();
+      })
+    );
+
+    const requestActivity = this.store.createRecord('request-activity', {
+      startDate: now,
+      publicationSubcase: publicationSubcase,
+      usedPieces: uploadedPieces,
+    });
+    await requestActivity.save();
+
+    const publicationActivity = this.store.createRecord('publication-activity', {
+      startDate: now,
+      title: publicationRequestProperties.subject,
+      subcase: publicationSubcase,
+      requestActivity: requestActivity,
+      usedPieces: uploadedPieces,
+    });
+    await publicationActivity.save();
+
+    const [files, outbox, mailSettings] = await Promise.all([
+      Promise.all(uploadedPieces.mapBy('file')),
+      this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
+      this.store.queryOne('email-notification-setting'),
+    ]);
+    const mail = this.store.createRecord('email', {
+      to: mailSettings.proofRequestToEmail,
+      cc: mailSettings.proofRequestCcEmail,
+      from: mailSettings.defaultFromEmail,
+      folder: outbox,
+      attachments: files,
+      requestActivity: requestActivity,
+      subject: publicationRequestProperties.subject,
+      message: publicationRequestProperties.message,
+    });
+    await mail.save();
+
+    await this.updatePublicationStatus(
+      publicationFlow,
+      CONSTANTS.PUBLICATION_STATUSES.PUBLICATION_REQUESTED
     );
   }
 }

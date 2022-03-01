@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
+import { task, dropTask } from 'ember-concurrency';
 import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
 import { publicationRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 
@@ -12,117 +12,105 @@ export default class PublicationRequestModal extends Component {
 
   @tracked subject;
   @tracked message;
-  @tracked uploads = [];
+  @tracked uploadedPieces = [];
 
   constructor() {
     super(...arguments);
-
-    // initialize validation before first render: to avoid this.validators === undefined
     this.initValidators();
-    this.initEmail();
-  }
-
-  async initEmail() {
-    // should resolve immediately (already fetched)
-    const email = await publicationRequestEmail({
-      publicationFlow: this.args.publicationFlow,
-    });
-    this.subject = email.subject;
-    this.message = email.message;
+    this.setEmailFields.perform();
   }
 
   initValidators() {
     this.validators = new ValidatorSet({
       subject: new Validator(() => isPresent(this.subject)),
       message: new Validator(() => isPresent(this.message)),
-      pieces: new Validator(() => this.uploads.length > 0),
+      uploadedPieces: new Validator(() => this.uploadedPieces.length > 0),
     });
   }
 
-  get isLoading() {
+  get isCancelDisabled() {
     return this.cancel.isRunning || this.save.isRunning;
   }
 
-  get canSave() {
+  get isSaveDisabled() {
     return (
-      this.validators.areValid && !this.cancel.isRunning && !this.save.isRunning
+      this.uploadedPieces.length === 0 ||
+      !this.validators.areValid ||
+      this.cancel.isRunning
     );
   }
 
-  get canCancel() {
-    return !this.cancel.isRunning && !this.save.isRunning;
+  @task
+  *save() {
+    yield this.args.onSave({
+      subject: this.subject,
+      message: this.message,
+      uploadedPieces: this.uploadedPieces,
+    });
+  }
+
+  @dropTask
+  *cancel() {
+    // necessary because close-button is not disabled when saving
+    if (this.save.isRunning) {
+      return;
+    }
+    yield Promise.all(this.uploadedPieces.map((piece) => this.deleteUploadedPiece.perform(piece)));
+    this.args.onCancel();
+  }
+
+  @task
+  *setEmailFields() {
+    const publicationFlow = this.args.publicationFlow;
+    const [identification, numacNumbers, publicationSubcase] = yield Promise.all([
+      publicationFlow.identification,
+      publicationFlow.numacNumbers,
+      publicationFlow.publicationSubcase,
+    ]);
+
+    const mailParams = {
+      identifier: identification.idName,
+      targetEndDate: publicationSubcase.targetEndDate,
+      numacNumbers: numacNumbers,
+    };
+
+    const mailTemplate = publicationRequestEmail(mailParams);
+    this.message = mailTemplate.message;
+    this.subject = mailTemplate.subject;
   }
 
   @action
-  setSubject(e) {
-    this.subject = e.target.value;
-    this.validators.subject.enableError();
-  }
-
-  @action
-  setMessage(e) {
-    this.message = e.target.value;
-    this.validators.message.enableError();
-  }
-
-  get pieces() {
-    return this.uploads.mapBy('piece');
-  }
-
-  @action
-  createPiece(file) {
+  async uploadPiece(file) {
     const created = file.created;
 
     const documentContainer = this.store.createRecord('document-container', {
       created: created,
     });
-
+    await documentContainer.save();
     const piece = this.store.createRecord('piece', {
       created: created,
       modified: created,
+      file: file,
       confidential: false,
       name: file.filenameWithoutExtension,
-      file: file,
       documentContainer: documentContainer,
     });
 
-    this.uploads.pushObject({
-      piece: piece,
-      file: file,
-      documentContainer: documentContainer,
-    });
+    this.uploadedPieces.pushObject(piece);
   }
 
   @task
-  *save() {
-    const requestParams = {
-      subject: this.subject,
-      message: this.message,
-      uploads: this.uploads,
-    };
-    yield this.args.onSave(requestParams);
-  }
+  *deleteUploadedPiece(piece) {
+    this.uploadedPieces.removeObject(piece);
+    const [file, documentContainer] = yield Promise.all([
+      piece.file,
+      piece.documentContainer,
+    ]);
 
-  // prevent double cancel
-  @task({
-    drop: true,
-  })
-  *cancel() {
-    // this.canCancel does not work:
-    //     because this.cancel.isRunning === true, the cancel task is never performed
-    // necessary because close-button is not disabled when saving
-    if (this.save.isRunning) {
-      return;
-    }
-
-    yield this.performCleanup();
-    yield this.args.onCancel();
-  }
-
-  // separate method to prevent ember-concurrency from saving only partially
-  performCleanup() {
-    return Promise.all(
-      this.uploads.map((upload) => upload.file.destroyRecord())
-    );
+    yield Promise.all([
+      file.destroyRecord(),
+      documentContainer.destroyRecord(),
+      piece.destroyRecord(),
+    ]);
   }
 }
