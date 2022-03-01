@@ -37,25 +37,34 @@
 
   {{!Timeline}}
   <Auk::Panel::Body class="auk-u-bg-alt">
-    <Utils::Generic::Timeline
-      @events={{@model}}
-      @emptyMessage={{t "publication-empty"}}
-      as |Timeline event|
-    >
+    {{#each @model as |event|}}
       {{#if event.isShown}}
         {{#if event.isRequestActivity}}
-          <Publications::Publication::PublicationActivities::Timeline::PublicationsRequestTimelineEvent
-            @requestActivity={{event.activity}}
-            @onDelete={{this.deleteRequest}}
-          />
+          <Utils::Timeline::Event
+            @badgeIcon="mail"
+            @badgeSkin="primary"
+            @event={{event}} as |event|>
+            <Publications::Publication::PublicationActivities::Timeline::PublicationsRequestTimelineEvent
+              @requestActivity={{event.activity}}
+              @onDelete={{this.deleteRequest}}
+            />
+          </Utils::Timeline::Event>
         {{else if event.isPublicationActivity}}
-          <Publications::Publication::PublicationActivities::Timeline::PublicationsPublicationTimelineEvent
-            @onEdit={{this.openPublicationEditModal}}
-            @publicationActivity={{event.activity}}
-          />
+          <Utils::Timeline::Event
+            @badgeIcon="check"
+            @badgeSkin="success"
+            @event={{event}} as |event|>
+            <Publications::Publication::PublicationActivities::Timeline::PublicationsPublicationTimelineEvent
+              @onEdit={{this.openPublicationEditModal}}
+              @publicationActivity={{event.activity}}
+            />
+          </Utils::Timeline::Event>
         {{/if}}
       {{/if}}
-    </Utils::Generic::Timeline>
+    {{else}}
+      <Auk::EmptyState @bordered={{true}} @message={{t "no-publications-yet"}} />
+    {{/each}}
+
   </Auk::Panel::Body>
 </Auk::Panel>
 

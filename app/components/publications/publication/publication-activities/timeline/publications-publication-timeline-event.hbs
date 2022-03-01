@@ -1,41 +1,36 @@
-<Utils::Generic::Timeline::Event
-  @badgeIcon="check"
-  @badgeSkin="success"
->
-  <Auk::Panel>
-    <Auk::Panel::Header @size="large">
-      <Auk::Toolbar as |Toolbar|>
-        <Toolbar.Group as |Group|>
-          <Group.Item>
-            <h4 class="auk-panel__title auk-panel__title--small">
-              {{t "publication-publication-timeline-publication-event-title"}}
-            </h4>
-            <span class="auk-u-text-small auk-u-m-0">
-              {{moment-format @publicationActivity.endDate}}
-            </span>
-          </Group.Item>
-        </Toolbar.Group>
-        <Toolbar.Group @position="right">
-          <DropdownMenu
-            @skin="borderless"
-            @icon="three-dots"
-            @disabled={{and this.loadData.isIdle this.isEditDisabled}}
-            as |Menu|
-          >
-            {{!avoid render issues}}
-            {{#if this.loadData.isIdle}}
-              <Menu.Item
-                @disabled={{this.isEditDisabled}}
-                {{on "click" (fn @onEdit @publicationActivity)}}
-              >
-                {{t "edit"}}
-              </Menu.Item>
-            {{/if}}
-          </DropdownMenu>
-        </Toolbar.Group>
-      </Auk::Toolbar>
-    </Auk::Panel::Header>
-    {{!TODO: panel body or remove bottom border if no body}}
-    {{!SUGGESTION: show list of decisions with Staatsblad link and publication date}}
-  </Auk::Panel>
-</Utils::Generic::Timeline::Event>
+<Auk::Panel>
+  <Auk::Panel::Header @size="large">
+    <Auk::Toolbar as |Toolbar|>
+      <Toolbar.Group as |Group|>
+        <Group.Item>
+          <h4 class="auk-panel__title auk-panel__title--small">
+            {{t "publication-publication-timeline-publication-event-title"}}
+          </h4>
+          <span class="auk-u-text-small auk-u-m-0">
+            {{moment-format @publicationActivity.endDate}}
+          </span>
+        </Group.Item>
+      </Toolbar.Group>
+      <Toolbar.Group @position="right">
+        <DropdownMenu
+          @skin="borderless"
+          @icon="three-dots"
+          @disabled={{and this.loadData.isIdle this.isEditDisabled}}
+          as |Menu|
+        >
+          {{!avoid render issues}}
+          {{#if this.loadData.isIdle}}
+            <Menu.Item
+              @disabled={{this.isEditDisabled}}
+              {{on "click" (fn @onEdit @publicationActivity)}}
+            >
+              {{t "edit"}}
+            </Menu.Item>
+          {{/if}}
+        </DropdownMenu>
+      </Toolbar.Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  {{!TODO: panel body or remove bottom border if no body}}
+  {{!SUGGESTION: show list of decisions with Staatsblad link and publication date}}
+</Auk::Panel>

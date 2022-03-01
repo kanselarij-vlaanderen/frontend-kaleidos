@@ -34,24 +34,33 @@
     </Auk::Panel::Header>
     <Auk::Panel::Body class="auk-u-bg-alt">
       {{#each @model as |timelineActivity|}}
-        {{#if timelineActivity.isRequestActivity}}
-          <Publications::Publication::Translations::TranslationRequestedPanel
-            @requestActivity={{timelineActivity.activity}}
-            @onDeleteRequest={{fn
-                                 (perform this.deleteRequest)
-                                 timelineActivity.activity
-                             }}
-          />
-        {{else if (and
-            timelineActivity.isTranslationActivity
-            timelineActivity.activity.endDate
-            )}}
-          <Publications::Publication::Translations::TranslationReceivedPanel
-            @translationActivity={{timelineActivity.activity}}
-            @publicationFlow={{this.publicationFlow}}
-            @onUpdateTranslationActivity={{perform this.updateTranslationActivity}}
-            @onCreateProofRequest={{perform this.saveProofRequest}}
-          />
+        {{#if timelineActivity.isShown}}
+          {{#if timelineActivity.isRequestActivity}}
+            <Utils::Timeline::Event
+              @badgeIcon="mail"
+              @badgeSkin="primary"
+              @event={{timelineActivity}} as |event|>
+              <Publications::Publication::Translations::TranslationRequestedPanel
+                @requestActivity={{event.activity}}
+                @onDeleteRequest={{fn
+                                     (perform this.deleteRequest)
+                                     event.activity
+                                 }}
+              />
+            </Utils::Timeline::Event>
+          {{else if timelineActivity.isTranslationActivity}}
+            <Utils::Timeline::Event
+              @badgeIcon="check"
+              @badgeSkin="success"
+              @event={{timelineActivity}} as |event|>
+              <Publications::Publication::Translations::TranslationReceivedPanel
+                @translationActivity={{event.activity}}
+                @publicationFlow={{this.publicationFlow}}
+                @onUpdateTranslationActivity={{perform this.updateTranslationActivity}}
+                @onCreateProofRequest={{perform this.saveProofRequest}}
+              />
+            </Utils::Timeline::Event>
+          {{/if}}
         {{/if}}
       {{else}}
         <Auk::EmptyState

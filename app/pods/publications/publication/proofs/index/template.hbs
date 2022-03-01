@@ -36,19 +36,29 @@
       {{#each @model as |timelineActivity|}}
         {{#if timelineActivity.isShown}}
           {{#if timelineActivity.isRequestActivity}}
-            <Publications::Publication::Proofs::ProofRequestedPanel
-              @requestActivity={{timelineActivity.activity}}
-              @onDeleteRequest={{fn
-                                   (perform this.deleteRequest)
-                                   timelineActivity.activity
-                               }}
-            />
+            <Utils::Timeline::Event
+              @badgeIcon="mail"
+              @badgeSkin="primary"
+              @event={{timelineActivity}} as |event|>
+              <Publications::Publication::Proofs::ProofRequestedPanel
+                @requestActivity={{event.activity}}
+                @onDeleteRequest={{fn
+                                     (perform this.deleteRequest)
+                                     event.activity
+                                 }}
+              />
+            </Utils::Timeline::Event>
           {{else if timelineActivity.isProofingActivity}}
-            <Publications::Publication::Proofs::ProofReceivedPanel
-              @proofingActivity={{timelineActivity.activity}}
-              @proofPrintCorrector={{this.publicationSubcase.proofPrintCorrector}}
-              @onSaveEditReceivedProof={{perform this.saveEditReceivedProof}}
-            />
+            <Utils::Timeline::Event
+              @badgeIcon="check"
+              @badgeSkin="success"
+              @event={{timelineActivity}} as |event|>
+              <Publications::Publication::Proofs::ProofReceivedPanel
+                @proofingActivity={{event.activity}}
+                @proofPrintCorrector={{this.publicationSubcase.proofPrintCorrector}}
+                @onSaveEditReceivedProof={{perform this.saveEditReceivedProof}}
+              />
+            </Utils::Timeline::Event>
           {{/if}}
         {{/if}}
       {{else}}
