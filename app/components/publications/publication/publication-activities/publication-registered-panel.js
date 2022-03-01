@@ -20,7 +20,7 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRegi
   }
 
   get latestDecision() {
-    return this.decisions.sortBy('publicationDate').reverseObjects().firstObject;
+    return this.decisions.sortBy('publicationDate').lastObject;
   }
 
   get isEditDisabled() {
