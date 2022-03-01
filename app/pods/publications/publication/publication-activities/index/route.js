@@ -1,21 +1,58 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import {
-  PublicationRequestEvent,
-  PublicationPublicationEvent,
-} from './controller';
+import { tracked } from '@glimmer/tracking';
+import { warn } from '@ember/debug';
+
+export class TimelineActivity {
+  @tracked activity;
+
+  constructor(activity) {
+    this.activity = activity;
+  }
+
+  get isRequestActivity() {
+    return this.activity.constructor.modelName === 'request-activity';
+  }
+
+  get isPublicationActivity() {
+    return this.activity.constructor.modelName === 'publication-activity';
+  }
+
+  get date() {
+    if (this.isRequestActivity) {
+      return this.activity.startDate;
+    } else if (this.isPublicationActivity) {
+      return this.activity.startDate;
+    } else {
+      warn(
+        `Getting date for unsupported activity type ${this.activity.constructor.modelName}`
+      );
+      return null;
+    }
+  }
+
+  get isShown() {
+    if (this.isPublicationActivity) {
+      // A publication activity without end-date is created together with request-activity,
+      // but should not be shown yet.
+      return this.activity.isFinished;
+    } else {
+      return true;
+    }
+  }
+}
 
 export default class PublicationsPublicationPublicationActivitiesIndexRoute extends Route {
   @service store;
 
   async model() {
-    const publicationSubcase = this.modelFor(
+    this.publicationSubcase = this.modelFor(
       'publications.publication.publication-activities'
     );
 
     let requestActivities = this.store.query('request-activity', {
-      'filter[publication-subcase][:id:]': publicationSubcase.id,
+      'filter[publication-subcase][:id:]': this.publicationSubcase.id,
       'filter[:has:publication-activity]': true,
       // eslint-disable-next-line prettier/prettier
       include: [
@@ -25,7 +62,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexRoute exte
       ].join(','),
     });
     let publicationActivities = this.store.query('publication-activity', {
-      'filter[subcase][:id:]': publicationSubcase.id,
+      'filter[subcase][:id:]': this.publicationSubcase.id,
       // eslint-disable-next-line prettier/prettier
       include: [
         'decisions',
@@ -36,47 +73,23 @@ export default class PublicationsPublicationPublicationActivitiesIndexRoute exte
       requestActivities,
       publicationActivities,
     ]);
-    requestActivities = requestActivities.toArray();
-    publicationActivities = publicationActivities.toArray();
 
-    this.requestActivities = requestActivities.sortBy('startDate');
-    this.publicationActivities = publicationActivities.sortBy('startDate');
-
-    const timeline = this.createTimeline(
-      requestActivities,
-      publicationActivities
-    );
-    return timeline;
-  }
-
-  createTimeline(requestActivities, publicationActivities) {
-    const requestEvents = requestActivities.map(
-      (act) => new PublicationRequestEvent(act)
-    );
-    // publication activities that are pending
-    // are not displayed in the timeline
-    const publicationEvents = publicationActivities.map(
-      (act) => new PublicationPublicationEvent(act)
-    );
-
-    return [...requestEvents, ...publicationEvents]
-      .sortBy('date', 'timeOrder')
-      .reverse();
+    return [
+      ...requestActivities.map((request) => new TimelineActivity(request)),
+      ...publicationActivities.map((publication) => new TimelineActivity(publication)),
+    ]
+      .sortBy('date')
+      .reverseObjects();
   }
 
   afterModel() {
     this.publicationFlow = this.modelFor('publications.publication');
-    this.publicationSubcase = this.modelFor(
-      'publications.publication.publication-activities'
-    );
   }
 
-  setupController(ctrl) {
+  setupController(controller) {
     super.setupController(...arguments);
-    ctrl.publicationFlow = this.publicationFlow;
-    ctrl.publicationSubcase = this.publicationSubcase;
-    ctrl.requestActivities = this.requestActivities;
-    ctrl.publicationActivities = this.publicationActivities;
+    controller.publicationFlow = this.publicationFlow;
+    controller.publicationSubcase = this.publicationSubcase;
   }
 
   @action

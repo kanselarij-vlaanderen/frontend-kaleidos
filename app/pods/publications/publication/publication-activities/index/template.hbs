@@ -43,15 +43,15 @@
       as |Timeline event|
     >
       {{#if event.isShown}}
-        {{#if event.isRequest}}
+        {{#if event.isRequestActivity}}
           <Publications::Publication::PublicationActivities::Timeline::PublicationsRequestTimelineEvent
-            @requestActivity={{event.requestActivity}}
+            @requestActivity={{event.activity}}
             @onDelete={{this.deleteRequest}}
           />
-        {{else}}
+        {{else if event.isPublicationActivity}}
           <Publications::Publication::PublicationActivities::Timeline::PublicationsPublicationTimelineEvent
             @onEdit={{this.openPublicationEditModal}}
-            @publicationActivity={{event.publicationActivity}}
+            @publicationActivity={{event.activity}}
           />
         {{/if}}
       {{/if}}

@@ -1,6 +1,7 @@
 import Model, {
   attr, belongsTo, hasMany
 } from '@ember-data/model';
+import { isEmpty } from '@ember/utils';
 
 export default class PublicationActivity extends Model {
   // Attributes.
@@ -16,4 +17,8 @@ export default class PublicationActivity extends Model {
     inverse: 'publicationActivitiesUsedBy',
   }) usedPieces;
   @hasMany('decision') decisions;
+
+  get isFinished(){
+    return !isEmpty(this.endDate);
+  }
 }

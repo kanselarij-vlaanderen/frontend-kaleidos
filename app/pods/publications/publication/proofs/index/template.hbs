@@ -34,22 +34,22 @@
     </Auk::Panel::Header>
     <Auk::Panel::Body class="auk-u-bg-alt">
       {{#each @model as |timelineActivity|}}
-        {{#if timelineActivity.isRequestActivity}}
-          <Publications::Publication::Proofs::ProofRequestedPanel
-            @requestActivity={{timelineActivity.activity}}
-            @onDeleteRequest={{fn
-              (perform this.deleteRequest)
-              timelineActivity.activity
-            }}
-          />
-        {{else if (and
-          timelineActivity.isProofingActivity timelineActivity.activity.endDate
-        )}}
-          <Publications::Publication::Proofs::ProofReceivedPanel
-            @proofingActivity={{timelineActivity.activity}}
-            @proofPrintCorrector={{this.publicationSubcase.proofPrintCorrector}}
-            @onSaveEditReceivedProof={{perform this.saveEditReceivedProof}}
-          />
+        {{#if timelineActivity.isShown}}
+          {{#if timelineActivity.isRequestActivity}}
+            <Publications::Publication::Proofs::ProofRequestedPanel
+              @requestActivity={{timelineActivity.activity}}
+              @onDeleteRequest={{fn
+                                   (perform this.deleteRequest)
+                                   timelineActivity.activity
+                               }}
+            />
+          {{else if timelineActivity.isProofingActivity}}
+            <Publications::Publication::Proofs::ProofReceivedPanel
+              @proofingActivity={{timelineActivity.activity}}
+              @proofPrintCorrector={{this.publicationSubcase.proofPrintCorrector}}
+              @onSaveEditReceivedProof={{perform this.saveEditReceivedProof}}
+            />
+          {{/if}}
         {{/if}}
       {{else}}
         <Auk::EmptyState @bordered={{true}} @message={{t "no-proofs-yet"}} />

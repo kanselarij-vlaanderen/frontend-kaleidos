@@ -9,51 +9,12 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 // For now, we limit the number of request- and publication-activities to 1
 // We will need to figure out whether multiple publication-activities are possible
 
-export class PublicationRequestEvent {
-  constructor(requestActivity) {
-    this.requestActivity = requestActivity;
-  }
-
-  // first: sort on a requestActivity's and publicationActivity's startDate:
-  //  => show linked request ane publicationActivities together
-  // next: sort on timeOrder:
-  //  => show the publicationActivity after the requestActivity in the timeline
-  timeOrder = 0;
-  isRequest = true;
-  isShown = true;
-  @tracked requestActivity;
-
-  get date() {
-    return this.requestActivity.startDate;
-  }
-}
-
-export class PublicationPublicationEvent {
-  constructor(publicationActivity) {
-    this.publicationActivity = publicationActivity;
-  }
-
-  timeOrder = 1;
-  isPublication = true;
-  @tracked publicationActivity;
-
-  get isShown() {
-    return this.publicationActivity.endDate !== undefined;
-  }
-
-  get date() {
-    return this.publicationActivity.startDate;
-  }
-}
-
 export default class PublicationsPublicationPublicationActivitiesIndexController extends Controller {
   @service store;
   @service publicationService;
 
   @tracked publicationFlow;
   @tracked publicationSubcase;
-  @tracked requestActivities;
-  @tracked publicationActivities;
 
   @tracked selectedPublicationDetails;
   selectedPublicationActivity;
@@ -61,15 +22,20 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
   @tracked isOpenRequestModal = false;
   @tracked isOpenPublicationDetailsModal = false;
 
+  get latestPublicationActivity() {
+    const timelineActivity = this.model.find(
+      (timelineActivity) => timelineActivity.isPublicationActivity
+    );
+    return timelineActivity?.activity;
+  }
+
+  // Currently only one publication request is allowed
   get isRequestDisabled() {
-    return this.requestActivities.length > 0;
+    return this.model.some((activity) => activity.isRequestActivity);
   }
 
   get isRegistrationDisabled() {
-    return (
-      !this.publicationActivities.length ||
-      this.publicationActivities.some((it) => it.endDate)
-    );
+    return !this.latestPublicationActivity || this.latestPublicationActivity.isFinished;
   }
 
   // REQUEST PUBLICATION
@@ -153,7 +119,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
   async performRegisterPublication(args) {
     const saves = [];
 
-    const publicationActivity = this.publicationActivities.lastObject;
+    const publicationActivity = this.latestPublicationActivity;
 
     // TODO?: should publicationActivty be created when none exists?
     //  like when updating the publication status?
