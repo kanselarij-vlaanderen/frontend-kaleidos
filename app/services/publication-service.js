@@ -1,5 +1,4 @@
 import Service, { inject as service } from '@ember/service';
-import * as CONFIG from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 
