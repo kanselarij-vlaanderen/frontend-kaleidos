@@ -4,10 +4,12 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 
 /**
+ * @argument {title}
  * @argument {requestActivity}
+ * @argument {isDisabledDelete}
  * @argument {onDeleteRequest}
  */
-export default class PublicationsPublicationProofProofRequestedPanel extends Component {
+export default class PublicationsPublicationRequestActivityPanel extends Component {
   @tracked isOpenConfirmDeleteAlert = false;
 
   @action

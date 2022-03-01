@@ -1,13 +1,13 @@
 <Auk::AccordionPanel @isDefaultActive={{true}} as |AccordionPanel|>
   <AccordionPanel.Header
     @size="large"
-    @title={{t "requested-proof"}}
+    @title={{@title}}
     @subtitle={{moment-format @requestActivity.startDate}}
     as |Header|
   >
     <Header.Actions as |Actions|>
       <Actions.Item>
-        {{#unless @requestActivity.proofingActivity.isFinished}}
+        {{#unless @isDeleteDisabled}}
           <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
             <Menu.Item
               @skin="danger"

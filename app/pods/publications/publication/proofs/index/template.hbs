@@ -40,12 +40,11 @@
               @badgeIcon="mail"
               @badgeSkin="primary"
               @event={{timelineActivity}} as |event|>
-              <Publications::Publication::Proofs::ProofRequestedPanel
+              <Publications::Publication::RequestActivityPanel
+                @title={{t "requested-proof"}}
                 @requestActivity={{event.activity}}
-                @onDeleteRequest={{fn
-                                     (perform this.deleteRequest)
-                                     event.activity
-                                 }}
+                @isDisabledDelete={{event.activity.proofingActivity.isFinished}}
+                @onDeleteRequest={{perform this.deleteRequest event.activity}}
               />
             </Utils::Timeline::Event>
           {{else if timelineActivity.isProofingActivity}}
