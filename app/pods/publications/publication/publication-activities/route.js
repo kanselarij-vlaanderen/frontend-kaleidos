@@ -2,9 +2,7 @@ import Route from '@ember/routing/route';
 
 export default class PublicationsPublicationPublicationActivitiesRoute extends Route {
   model() {
-    const publicationFlow = this.modelFor('publications.publication');
-    const publicationSubcase = publicationFlow.publicationSubcase;
-    return publicationSubcase;
+    return this.modelFor('publications.publication').publicationSubcase;
   }
 
   afterModel() {
