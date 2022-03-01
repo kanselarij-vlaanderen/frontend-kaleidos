@@ -6,11 +6,6 @@ import {
   PublicationPublicationEvent,
 } from './controller';
 
-/* eslint-disable no-unused-vars */
-import RequestActivity from '../../../../../models/request-activity';
-import PublicationActivity from '../../../../../models/publication-activity';
-/* eslint-enable no-unused-vars */
-
 export default class PublicationsPublicationPublicationActivitiesIndexRoute extends Route {
   @service store;
 

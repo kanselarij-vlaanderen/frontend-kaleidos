@@ -5,23 +5,9 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-/* eslint-disable no-unused-vars */
-import PublicationService from 'frontend-kaleidos/services/publication-service';
-
-import Piece from 'frontend-kaleidos/models/piece';
-import PublicationFlow from 'frontend-kaleidos/models/publication-flow';
-import PublicationSubcase from 'frontend-kaleidos/models/publication-subcase';
-import RequestActivity from 'frontend-kaleidos/models/request-activity';
-import PublicationActivity from 'frontend-kaleidos/models/publication-activity';
-/* eslint-enable no-unused-vars */
-
 // TODO
 // For now, we limit the number of request- and publication-activities to 1
 // We will need to figure out whether multiple publication-activities are possible
-
-/**
- * @typedef {{publicationDate: Date}} PublicationDetailsArgument
- */
 
 export class PublicationRequestEvent {
   constructor(requestActivity) {
@@ -35,7 +21,6 @@ export class PublicationRequestEvent {
   timeOrder = 0;
   isRequest = true;
   isShown = true;
-  /** @type {RequestActivity} */
   @tracked requestActivity;
 
   get date() {
@@ -50,7 +35,6 @@ export class PublicationPublicationEvent {
 
   timeOrder = 1;
   isPublication = true;
-  /** @type {PublicationActivity} */
   @tracked publicationActivity;
 
   get isShown() {
@@ -63,25 +47,15 @@ export class PublicationPublicationEvent {
 }
 
 export default class PublicationsPublicationPublicationActivitiesIndexController extends Controller {
-  /** @type {(PublicationRequestEvent|PublicationPublicationEvent)[]} */
-  model;
-
   @service store;
-  /** @type {PublicationService} */
   @service publicationService;
 
-  /** @type {PublicationFlow} */
   @tracked publicationFlow;
-  /** @type {PublicationSubcase} */
   @tracked publicationSubcase;
-  /** @type {RequestActivity[]} */
   @tracked requestActivities;
-  /** @type {PublicationActivity[]} */
   @tracked publicationActivities;
 
-  /** @type {PublicationDetailsArgument} */
   @tracked selectedPublicationDetails;
-  /** @type {PublicationActivity} */
   selectedPublicationActivity;
 
   @tracked isOpenRequestModal = false;

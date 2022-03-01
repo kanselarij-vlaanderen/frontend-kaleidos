@@ -10,20 +10,6 @@ import { tracked } from '@glimmer/tracking';
  * for publications that are not found in the Staatsblad (yet)
  */
 export default class PublicationDetailsModal extends Component {
-  /**
-   * @type {{
-   *  publicationDetails?: {
-   *    publicationDate: Date
-   *  }, // omit for registration / pass for editing
-   *  onCancel(): Promise,
-   *  onSave(args: {
-   *    publicationDate: Date,
-   *    mustUpdatePublicationStatus?: boolean,
-   *  }): Promise,
-   * }}
-   */
-  args = this.args;
-
   @service store;
 
   @tracked publicationDate;

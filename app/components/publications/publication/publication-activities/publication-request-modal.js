@@ -12,15 +12,6 @@ export default class PublicationRequestModal extends Component {
 
   @tracked subject;
   @tracked message;
-  /**
-   * @typedef {{
-   *  piece: Piece,
-   *  file: File,
-   *  documentContainer: DocumentContainer,
-   * }} Upload container for unsaved pieces
-   *
-   * @type {Upload[]} uploads
-   */
   @tracked uploads = [];
 
   constructor() {

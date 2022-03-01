@@ -32,6 +32,7 @@ export class TimelineActivity {
     }
   }
 }
+
 export default class PublicationsPublicationProofsRoute extends Route {
   @service store;
 
