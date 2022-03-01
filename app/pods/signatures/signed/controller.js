@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 
 export default class SignaturesSuccessController extends Controller {
   @service router;
+  @service currentSession;
 
   queryParams = {
     page: {

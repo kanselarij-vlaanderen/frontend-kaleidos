@@ -13,7 +13,8 @@
         </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
-    {{#if this.currentSession.isEditor}}
+    {{#if this.currentSession.isMinister}}
+    {{else}}
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
         <Auk::Button

@@ -13,7 +13,8 @@
         </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
-    {{#if this.currentSession.isEditor}}
+    {{#if this.currentSession.isMinister}}
+    {{else}}
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
         <Auk::Button
@@ -42,7 +43,43 @@
 
 <div class="auk-scroll-wrapper auk-scroll-wrapper--ovrb {{if this.isShowSidebar "auk-scroll-wrapper--sidebar" ""}}">
   <div class="auk-scroll-wrapper__body">
-    {{#if this.currentSession.isEditor}}
+    {{#if this.currentSession.isMinister}}
+       <table class="auk-table auk-table--sticky-header auk-table--action">
+        <thead>
+          <tr>
+            <th class="auk-u-text-nowrap">{{t "keyword"}}</th>
+            <Utils::ThSortable
+              @label={{t "util.date-approved"}}
+              @field="decision-activity.start-date"
+              @currentSorting={{this.sort}}
+              @onChange={{this.changeSorting}}
+            />
+            <th>{{! Actions}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="auk-table__row auk-table__row__clickable">
+            <td>
+              <p class="auk-u-muted">Decreet - 01-09-2021</p>
+              <p>VR 2020 1812 DOC.1322-2 Eindtermen tweede en derde graad SO - decreetTER</p>
+            </td>
+            <td>
+              01-09-2021
+            </td>
+            <td>
+              <Auk::Button
+                @skin="borderless"
+                @icon="pencil"
+                class="auk-table__link"
+                {{on "click" this.showSidebar}}
+              >
+                {{t "util.sign"}}
+              </Auk::Button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    {{else}}
       {{#if this.model.length}}
         <table class="auk-table auk-table--sticky-header auk-table--signatures">
           <thead>
@@ -137,49 +174,107 @@
           </Auk::Panel::Body>
         </Auk::Panel>
       {{/if}}
-    {{else}}
-      <table class="auk-table auk-table--sticky-header auk-table--action">
-        <thead>
-          <tr>
-            <th class="auk-u-text-nowrap">{{t "keyword"}}</th>
-            <Utils::ThSortable
-              @label={{t "util.date-approved"}}
-              @field="decision-activity.start-date"
-              @currentSorting={{this.sort}}
-              @onChange={{this.changeSorting}}
-            />
-            <th>{{! Actions}}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="auk-table__row auk-table__row__clickable">
-            <td>
-              <p class="auk-u-muted">Decreet - 01-09-2021</p>
-              <p>VR 2020 1812 DOC.1322-2 Eindtermen tweede en derde graad SO - decreetTER</p>
-            </td>
-            <td>
-              01-09-2021
-            </td>
-            <td>
-              <Auk::Button
-                @skin="borderless"
-                @icon="pencil"
-                class="auk-table__link"
-                {{on "click" this.showSidebar}}
-              >
-                {{t "util.sign"}}
-              </Auk::Button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     {{/if}}
   </div>
 
   {{#if this.isShowSidebar}}
   <div class="auk-scroll-wrapper__sidebar">
     <div class="auk-sidebar">
-      {{#if this.currentSession.isEditor}}
+      {{#if this.currentSession.isMinister}}
+        <div class="auk-sidebar__header">
+          <h4 class="auk-toolbar-complex__title">
+            {{t "signaturesSection.sidebar-title"}}
+          </h4>
+          <Auk::Button
+            @icon="x"
+            @skin="borderless"
+            @layout="icon-only"
+            {{on "click" this.closeSidebar}}
+          />
+        </div>
+        <div class="auk-sidebar__body">
+          <p class="auk-u-muted auk-u-mt-2">
+            Decreet -
+            01-09-2021
+          </p>
+          <h5 class="auk-h4">VR 2020 1812 DOC.1322-2 Eindtermen tweede en derde graad SO - decreetTER</h5>
+          <div class="auk-o-flex auk-o-flex--spaced-wide auk-u-mt-1">
+            <Auk::ButtonLink
+              @skin="borderless"
+              @icon="document"
+              {{on
+                "click"
+                (fn this.navigateToDecision signFlow.decisionActivity)
+              }}
+            >
+              {{t "consult-agendaitem-decision"}}
+            </Auk::ButtonLink>
+          </div>
+          <Auk::Panel class="auk-u-mt-4">
+            <Auk::Panel::Header class="auk-u-px-1">
+              <Auk::Toolbar>
+                <Auk::Toolbar::Group @position="left">
+                  <Auk::Toolbar::Item>
+                    <h4 class="auk-h4 auk-u-m-0">
+                      {{t "signaturesSection.decision-fiche"}}
+                    </h4>
+                  </Auk::Toolbar::Item>
+                </Auk::Toolbar::Group>
+              </Auk::Toolbar>
+            </Auk::Panel::Header>
+            <Auk::Panel::Body class="auk-u-p-1 auk-content">
+              <h5>Betreft</h5>
+              <p>Goedkeuring van het verslag van de vergadering van vrijdag 10 december 2021 (VR PV 2021/66)</p>
+              <h5>Beslissing</h5>
+              <p class="auk-u-m-0">De Vlaamse Regering hecht haar goedkeuring aan het verslag van de vergadering van vrijdag 10 december 2021 (VR PV 2021/66).</p>
+            </Auk::Panel::Body>
+          </Auk::Panel>
+          <Auk::Panel class="auk-u-mt-4">
+            <Auk::Panel::Header class="auk-u-px-1">
+              <Auk::Toolbar>
+                <Auk::Toolbar::Group @position="left">
+                  <Auk::Toolbar::Item>
+                    <h4 class="auk-h4 auk-u-m-0">
+                      {{t "signaturesSection.signed-by"}}
+                    </h4>
+                  </Auk::Toolbar::Item>
+                </Auk::Toolbar::Group>
+              </Auk::Toolbar>
+            </Auk::Panel::Header>
+            <Auk::Panel::Body class="auk-u-p-0">
+              <Auk::List @bordered={{true}}>
+                <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
+                  <span>Jan Jambon</span>
+                  <Auk::Pill  @skin="white" @icon="clock">
+                    Nog niet ondertekend
+                  </Auk::Pill>
+                </Auk::List::Item>
+                <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
+                  <span>Lydia Peeters</span>
+                  <Auk::Pill @skin="success" @icon="check">
+                    Ondertekend
+                  </Auk::Pill>
+                </Auk::List::Item>
+              </Auk::List>
+            </Auk::Panel::Body>
+          </Auk::Panel>
+        </div>
+        <div class="auk-sidebar__footer">
+          <Auk::Toolbar>
+            <LinkTo
+              class="auk-button auk-button--primary auk-button--block"
+              @route="signatures.signature"
+            >
+              <span class="auk-button__content">
+                <Auk::Icon @name="pencil" />
+                <span class="auk-button__label">
+                  {{t "util.sign"}}
+                </span>
+              </span>
+            </LinkTo>
+          </Auk::Toolbar>
+        </div>
+      {{else}}
         {{#each this.model as |signFlow index|}}
         {{#if (eq index 0)}}
         <div class="auk-sidebar__header">
@@ -286,100 +381,6 @@
         </div>
         {{/if}}
         {{/each}}
-      {{else}}
-      <div class="auk-sidebar__header">
-        <h4 class="auk-toolbar-complex__title">
-          {{t "signaturesSection.sidebar-title"}}
-        </h4>
-        <Auk::Button
-          @icon="x"
-          @skin="borderless"
-          @layout="icon-only"
-          {{on "click" this.closeSidebar}}
-        />
-      </div>
-      <div class="auk-sidebar__body">
-        <p class="auk-u-muted auk-u-mt-2">
-          Decreet -
-          01-09-2021
-        </p>
-        <h5 class="auk-h4">VR 2020 1812 DOC.1322-2 Eindtermen tweede en derde graad SO - decreetTER</h5>
-        <div class="auk-o-flex auk-o-flex--spaced-wide auk-u-mt-1">
-          <Auk::ButtonLink
-            @skin="borderless"
-            @icon="document"
-            {{on
-              "click"
-              (fn this.navigateToDecision signFlow.decisionActivity)
-            }}
-          >
-            {{t "consult-agendaitem-decision"}}
-          </Auk::ButtonLink>
-        </div>
-        <Auk::Panel class="auk-u-mt-4">
-          <Auk::Panel::Header class="auk-u-px-1">
-            <Auk::Toolbar>
-              <Auk::Toolbar::Group @position="left">
-                <Auk::Toolbar::Item>
-                  <h4 class="auk-h4 auk-u-m-0">
-                    {{t "signaturesSection.decision-fiche"}}
-                  </h4>
-                </Auk::Toolbar::Item>
-              </Auk::Toolbar::Group>
-            </Auk::Toolbar>
-          </Auk::Panel::Header>
-          <Auk::Panel::Body class="auk-u-p-1 auk-content">
-            <h5>Betreft</h5>
-            <p>Goedkeuring van het verslag van de vergadering van vrijdag 10 december 2021 (VR PV 2021/66)</p>
-            <h5>Beslissing</h5>
-            <p class="auk-u-m-0">De Vlaamse Regering hecht haar goedkeuring aan het verslag van de vergadering van vrijdag 10 december 2021 (VR PV 2021/66).</p>
-          </Auk::Panel::Body>
-        </Auk::Panel>
-        <Auk::Panel class="auk-u-mt-4">
-          <Auk::Panel::Header class="auk-u-px-1">
-            <Auk::Toolbar>
-              <Auk::Toolbar::Group @position="left">
-                <Auk::Toolbar::Item>
-                  <h4 class="auk-h4 auk-u-m-0">
-                    {{t "signaturesSection.signed-by"}}
-                  </h4>
-                </Auk::Toolbar::Item>
-              </Auk::Toolbar::Group>
-            </Auk::Toolbar>
-          </Auk::Panel::Header>
-          <Auk::Panel::Body class="auk-u-p-0">
-            <Auk::List @bordered={{true}}>
-              <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
-                <span>Jan Jambon</span>
-                <Auk::Pill  @skin="white" @icon="clock">
-                  Nog niet ondertekend
-                </Auk::Pill>
-              </Auk::List::Item>
-              <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
-                <span>Lydia Peeters</span>
-                <Auk::Pill @skin="success" @icon="check">
-                  Ondertekend
-                </Auk::Pill>
-              </Auk::List::Item>
-            </Auk::List>
-          </Auk::Panel::Body>
-        </Auk::Panel>
-      </div>
-      <div class="auk-sidebar__footer">
-        <Auk::Toolbar>
-          <LinkTo
-            class="auk-button auk-button--primary auk-button--block"
-            @route="signatures.signature"
-          >
-            <span class="auk-button__content">
-              <Auk::Icon @name="pencil" />
-              <span class="auk-button__label">
-                {{t "util.sign"}}
-              </span>
-            </span>
-          </LinkTo>
-        </Auk::Toolbar>
-      </div>
       {{/if}}
     </div>
   </div>
@@ -392,21 +393,21 @@
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
-        {{#if this.currentSession.isEditor}}
-        <Auk::Pagination
-          @page={{this.page}}
-          @size={{this.size}}
-          @nbOfItems={{this.model.length}}
-          @total={{this.model.meta.count}}
-          @onNextPage={{this.nextPage}}
-          @onPreviousPage={{this.prevPage}}
-        />
-        {{else}}
+        {{#if this.currentSession.isMinister}}
         <Auk::Pagination
           @page="0"
           @size="1"
           @nbOfItems="1"
           @total="1"
+          @onNextPage={{this.nextPage}}
+          @onPreviousPage={{this.prevPage}}
+        />
+        {{else}}
+        <Auk::Pagination
+          @page={{this.page}}
+          @size={{this.size}}
+          @nbOfItems={{this.model.length}}
+          @total={{this.model.meta.count}}
           @onNextPage={{this.nextPage}}
           @onPreviousPage={{this.prevPage}}
         />
