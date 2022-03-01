@@ -1,31 +1,28 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
 
 /**
  * @argument {requestActivity}
  * @argument {onDeleteRequest}
  */
 export default class PublicationsPublicationProofProofRequestedPanel extends Component {
-  @tracked isVerifyingDelete = false;
-  @tracked isDeletingRequest = false;
-  @tracked proofingActivity;
+  @tracked isOpenConfirmDeleteAlert = false;
 
   @action
-  showDeleteRequest() {
-    this.isVerifyingDelete = true;
+  openConfirmDeleteAlert() {
+    this.isOpenConfirmDeleteAlert = true;
   }
 
   @action
-  cancelDeleteRequest() {
-    this.isVerifyingDelete = false;
+  closeConfirmDeleteAlert() {
+    this.isOpenConfirmDeleteAlert = false;
   }
 
-  @action
-  async deleteRequest() {
-    this.isDeletingRequest = true;
-    await this.args.onDeleteRequest();
-    this.isVerifyingDelete = false;
-    this.isDeletingRequest = false;
+  @task
+  *delete() {
+    yield this.args.onDeleteRequest();
+    this.closeConfirmDeleteAlert();
   }
 }

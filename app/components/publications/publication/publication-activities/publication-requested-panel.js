@@ -3,24 +3,12 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 
+/**
+ * @argument {requestActivity}
+ * @argument {onDeleteRequest}
+ */
 export default class PublicationsPublicationPublicationActivitiesPublicationRequestedPanel extends Component {
   @tracked isOpenConfirmDeleteAlert = false;
-  @tracked publicationActivity;
-
-  constructor() {
-    super(...arguments);
-    this.loadData.perform();
-  }
-
-  @task
-  *loadData() {
-    this.publicationActivity = yield this.args.requestActivity
-      .publicationActivity;
-  }
-
-  get isDeleteDisabled() {
-    return this.publicationActivity.endDate !== undefined;
-  }
 
   @action
   openConfirmDeleteAlert() {
@@ -34,7 +22,7 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
 
   @task
   *delete() {
-    yield this.args.onDelete(this.args.requestActivity);
-    this.isOpenConfirmDeleteAlert = false;
+    yield this.args.onDeleteRequest();
+    this.closeConfirmDeleteAlert();
   }
 }

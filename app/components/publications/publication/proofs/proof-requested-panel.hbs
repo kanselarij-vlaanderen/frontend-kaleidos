@@ -1,28 +1,26 @@
-<Auk::AccordionPanel @isDefaultActive={{true}} as |accordionPanel|>
-  <accordionPanel.Header
+<Auk::AccordionPanel @isDefaultActive={{true}} as |AccordionPanel|>
+  <AccordionPanel.Header
     @size="large"
     @title={{t "requested-proof"}}
-    @subtitle={{moment-format @requestActivity.startDate "DD.MM.YYYY"}}
-    as |header|
+    @subtitle={{moment-format @requestActivity.startDate}}
+    as |Header|
   >
-    {{#unless this.loadProofingActivity.isRunning}}
-      <header.Actions as |actions|>
-        <actions.Item>
-          {{#unless @requestActivity.proofingActivity.isFinished}}
-            <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
-              <Menu.Item
-                @skin="danger"
-                {{on "click" this.showDeleteRequest}}
-              >
-                {{t "delete"}}
-              </Menu.Item>
-            </DropdownMenu>
-          {{/unless}}
-        </actions.Item>
-      </header.Actions>
-    {{/unless}}
-  </accordionPanel.Header>
-  <accordionPanel.Body>
+    <Header.Actions as |Actions|>
+      <Actions.Item>
+        {{#unless @requestActivity.proofingActivity.isFinished}}
+          <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
+            <Menu.Item
+              @skin="danger"
+              {{on "click" this.openConfirmDeleteAlert}}
+            >
+              {{t "delete"}}
+            </Menu.Item>
+          </DropdownMenu>
+        {{/unless}}
+      </Actions.Item>
+    </Header.Actions>
+  </AccordionPanel.Header>
+  <AccordionPanel.Body>
     {{#each @requestActivity.usedPieces as |piece|}}
       <div class="auk-o-flex auk-o-flex--spaced-wide">
         <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
@@ -63,28 +61,15 @@
         {{! template-lint-enable no-inline-styles }}
       </div>
     {{/if}}
-  </accordionPanel.Body>
+  </AccordionPanel.Body>
 </Auk::AccordionPanel>
 
-
-{{#if this.isVerifyingDelete}}
-  <Auk::Modal>
-    <Auk::Modal::Header
-      @title={{t "delete-request"}}
-      @onClose={{this.cancelDeleteRequest}}
-    />
-    <Auk::Modal::Body>
-      <p>{{t "delete-request-message"}}</p>
-    </Auk::Modal::Body>
-    <Auk::Modal::Footer @onCancel={{this.cancelDeleteRequest}}>
-      <Auk::Button
-        @skin="danger-primary"
-        @icon="trash"
-        @disabled={{this.isDeletingRequest}}
-        {{on "click" this.deleteRequest}}
-      >
-        {{t "delete"}}
-      </Auk::Button>
-    </Auk::Modal::Footer>
-  </Auk::Modal>
+{{#if this.isOpenConfirmDeleteAlert}}
+  <Utils::Generic::AlertDialog
+    @use="delete"
+    @title={{t "delete-request"}}
+    @message={{t "delete-request-message"}}
+    @onCancel={{this.closeConfirmDeleteAlert}}
+    @onConfirm={{perform this.delete}}
+  />
 {{/if}}

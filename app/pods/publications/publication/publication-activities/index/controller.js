@@ -100,13 +100,10 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
 
     const mail = await requestActivity.email;
     // legacy activities may not have an email so only try to delete if one exists
-    if (mail) {
-      deletes.push(mail.destroyRecord());
-    }
+    deletes.push(mail?.destroyRecord());
 
-    let pieces = await requestActivity.usedPieces;
-    pieces = pieces.toArray();
-    for (const piece of pieces) {
+    const pieces = await requestActivity.usedPieces;
+    for (const piece of pieces.toArray()) {
       const file = await piece.file;
       const documentContainer = await piece.documentContainer;
 
@@ -123,7 +120,6 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     // delete after previous records have been destroyed
     // destroying in parallel throws occasional errors
     await requestActivity.destroyRecord();
-
     this.send('refresh');
   }
 

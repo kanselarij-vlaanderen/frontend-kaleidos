@@ -103,7 +103,8 @@ export default class PublicationsPublicationProofsController extends Controller 
       const file = yield piece.file;
       const documentContainer = yield piece.documentContainer;
       const translationActivity = yield piece.translationActivityGeneratedBy;
-      //The pieces that are used in the translationActivity can not be deleted,but should be unlinked
+      // The pieces that are used in the translationActivity can not be deleted,
+      // but should be unlinked
       if (translationActivity) {
         piece.requestActivitiesUsedBy.removeObjects(requestActivity);
         piece.proofingActivitiesUsedBy.removeObjects(proofingActivity);

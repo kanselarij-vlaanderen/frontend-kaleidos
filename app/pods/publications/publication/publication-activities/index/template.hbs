@@ -9,7 +9,6 @@
         </Group.Item>
       </Toolbar.Group>
       <Toolbar.Group @position="right" as |Group|>
-        {{!Registratie}}
         <Group.Item>
           <Auk::Button
             @skin="secondary"
@@ -20,7 +19,6 @@
             {{t "publication-publication-register-action"}}
           </Auk::Button>
         </Group.Item>
-        {{!Aanvraag}}
         <Group.Item>
           <Auk::Button
             @skin="primary"
@@ -35,7 +33,6 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
 
-  {{!Timeline}}
   <Auk::Panel::Body class="auk-u-bg-alt">
     {{#each @model as |event|}}
       {{#if event.isShown}}
@@ -46,7 +43,7 @@
             @event={{event}} as |event|>
             <Publications::Publication::PublicationActivities::PublicationRequestedPanel
               @requestActivity={{event.activity}}
-              @onDelete={{this.deleteRequest}}
+              @onDeleteRequest={{fn this.deleteRequest event.activity}}
             />
           </Utils::Timeline::Event>
         {{else if event.isPublicationActivity}}
