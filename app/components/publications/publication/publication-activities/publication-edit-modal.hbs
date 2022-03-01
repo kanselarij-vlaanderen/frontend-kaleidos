@@ -1,13 +1,6 @@
 <Auk::Modal>
   <Auk::Modal::Header
-    @title={{t
-      (if
-        this.isEditing
-        "publication-edit-modal-title"
-        "publication-registration-modal-title"
-      )
-      publicationFlow=@publicationFlow.identification.idName
-    }}
+    @title={{t "publication-edit-modal-title"}}
     @onClose={{perform this.cancel}}
   />
   <Auk::Modal::Body>
@@ -16,11 +9,9 @@
       @reserveSpace={{true}}
     >
       <div class="auk-form-group-layout auk-form-group-layout--standard">
-
-        {{!Publicatiedatum}}
         <div class="auk-form-group">
           <Auk::Label for="publicationRegisterModal_publicationDate">
-            {{t "date"}}
+            {{t "publication-date"}}
           </Auk::Label>
           <Auk::Datepicker
             id="publicationRegisterModal_publicationDate"
@@ -28,18 +19,6 @@
             @onChange={{this.setPublicationDate}}
           />
         </div>
-
-        {{!Zet publicatiestatus}}
-        {{#if (not this.isEditing)}}
-          <div class="auk-form-group">
-            <Auk::Checkbox
-              @label={{t "update-publication-status-published"}}
-              @checked={{this.mustUpdatePublicationStatus}}
-              {{on "input" this.setMustUpdatePublicationStatus}}
-            />
-          </div>
-        {{/if}}
-
       </div>
     </Utils::LoadableContent>
   </Auk::Modal::Body>

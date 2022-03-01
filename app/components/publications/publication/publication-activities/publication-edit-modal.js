@@ -1,36 +1,20 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { task } from 'ember-concurrency';
+import { task, dropTask } from 'ember-concurrency';
 import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
 import { tracked } from '@glimmer/tracking';
 
 /**
- * Component for manually registered publications
+ * Component for manually updating a publication date
  * for publications that are not found in the Staatsblad (yet)
  */
-export default class PublicationDetailsModal extends Component {
-  @service store;
-
+export default class PublicationEditModal extends Component {
   @tracked publicationDate;
-  @tracked mustUpdatePublicationStatus = false;
 
   constructor() {
     super(...arguments);
-    this.initFields();
+    this.publicationDate = this.args.publicationDate;
     this.initValidators();
-  }
-
-  get isEditing() {
-    return this.args.publicationDetails !== undefined;
-  }
-
-  initFields() {
-    if (this.args.publicationDetails) {
-      this.publicationDate = this.args.publicationDetails.publicationDate;
-    } else {
-      this.publicationDate = new Date();
-    }
   }
 
   initValidators() {
@@ -59,30 +43,15 @@ export default class PublicationDetailsModal extends Component {
     this.validators.publicationDate.enableError();
   }
 
-  @action
-  setMustUpdatePublicationStatus(e) {
-    this.mustUpdatePublicationStatus = e.target.checked;
-  }
-
   @task
   *save() {
-    const args = {
+    yield this.args.onSave({
       publicationDate: this.publicationDate,
-    };
-    if (!this.isEditing) {
-      args.mustUpdatePublicationStatus = this.mustUpdatePublicationStatus;
-    }
-
-    yield this.args.onSave(args);
+    });
   }
 
-  // prevent double cancel
-  @task({
-    drop: true,
-  })
+  @dropTask
   *cancel() {
-    // this.isCancelDisabled does not work:
-    //     because this.cancel.isRunning === true, the cancel task is never performed
     // necessary because close-button is not disabled when saving
     if (this.save.isRunning) {
       return;

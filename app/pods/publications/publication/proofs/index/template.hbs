@@ -56,7 +56,7 @@
               <Publications::Publication::Proofs::ProofReceivedPanel
                 @proofingActivity={{event.activity}}
                 @proofPrintCorrector={{this.publicationSubcase.proofPrintCorrector}}
-                @onSaveEditReceivedProof={{perform this.saveEditReceivedProof}}
+                @onUpdateProofingActivity={{perform this.updateProofingActivity}}
               />
             </Utils::Timeline::Event>
           {{/if}}

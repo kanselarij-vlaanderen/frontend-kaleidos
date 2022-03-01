@@ -15,7 +15,7 @@
             @skin="secondary"
             @icon="plus"
             @disabled={{this.isRegistrationDisabled}}
-            {{on "click" this.openPublicationRegisterModal}}
+            {{on "click" this.openRegistrationModal}}
           >
             {{t "publication-publication-register-action"}}
           </Auk::Button>
@@ -55,14 +55,14 @@
             @badgeSkin="success"
             @event={{event}} as |event|>
             <Publications::Publication::PublicationActivities::PublicationRegisteredPanel
-              @onEdit={{this.openPublicationEditModal}}
               @publicationActivity={{event.activity}}
+              @onUpdatePublicationActivity={{this.updatePublication}}
             />
           </Utils::Timeline::Event>
         {{/if}}
       {{/if}}
     {{else}}
-      <Auk::EmptyState @bordered={{true}} @message={{t "no-publications-yet"}} />
+      <Auk::EmptyState @bordered={{true}} @message={{t "publication-empty"}} />
     {{/each}}
 
   </Auk::Panel::Body>
@@ -76,11 +76,9 @@
   />
 {{/if}}
 
-{{#if this.isOpenPublicationDetailsModal}}
-  <Publications::Publication::PublicationActivities::PublicationDetailsModal
-    @publicationFlow={{this.publicationFlow}}
-    @publicationDetails={{this.selectedPublicationDetails}}
-    @onSave={{this.savePublication}}
-    @onCancel={{this.closePublicationDetailsModal}}
+{{#if this.isOpenRegistrationModal}}
+  <Publications::Publication::PublicationActivities::PublicationRegistrationModal
+    @onSave={{perform this.registerPublication}}
+    @onCancel={{this.closeRegistrationModal}}
   />
 {{/if}}

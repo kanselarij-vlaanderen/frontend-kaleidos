@@ -16,11 +16,8 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
   @tracked publicationFlow;
   @tracked publicationSubcase;
 
-  @tracked selectedPublicationDetails;
-  selectedPublicationActivity;
-
   @tracked isOpenRequestModal = false;
-  @tracked isOpenPublicationDetailsModal = false;
+  @tracked isOpenRegistrationModal = false;
 
   get latestPublicationActivity() {
     const timelineActivity = this.model.find(
@@ -38,12 +35,6 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     return !this.latestPublicationActivity || this.latestPublicationActivity.isFinished;
   }
 
-  // REQUEST PUBLICATION
-  @action
-  openRequestModal() {
-    this.isOpenRequestModal = true;
-  }
-
   @task
   *saveRequest(args) {
     yield this.publicationService.requestPublication({
@@ -58,118 +49,49 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     this.isOpenRequestModal = false;
   }
 
-  @action
-  closeRequestModal() {
-    this.isOpenRequestModal = false;
-  }
-
-  // REGISTER + EDIT PUBLICATION
-  @action
-  openPublicationRegisterModal() {
-    this.selectedPublicationActivity = undefined;
-    this.selectedPublicationDetails = undefined;
-    this.isOpenPublicationDetailsModal = true;
-  }
-
-  @action
-  async openPublicationEditModal(publicationActivity) {
-    this.selectedPublicationActivity = publicationActivity;
-    this.selectedPublicationDetails = await this.buildPublicationDetails(
-      publicationActivity
-    );
-    this.isOpenPublicationDetailsModal = true;
-  }
-
-  async buildPublicationDetails(publicationActivity) {
-    const decisions = await publicationActivity.decisions;
-    // Data model differs from user interface: only 1 decision can be added (for publication-date)
-    //  .firstObject === .onlyObject
-    const decision = decisions.firstObject;
-    const publicationDetails = {
-      publicationDate: decision.publicationDate,
-    };
-    return publicationDetails;
-  }
-
-  @action
-  closePublicationDetailsModal() {
-    this.isOpenPublicationDetailsModal = false;
-  }
-
-  @action
-  async savePublication(args) {
-    const isEditing = this.selectedPublicationDetails !== undefined;
-    if (isEditing) {
-      const publicationActivity = this.selectedPublicationActivity;
-      await this.performEditPublication(publicationActivity, args);
-    } else {
-      await this.performRegisterPublication(args);
-    }
-
-    this.send('refresh');
-    this.isOpenPublicationDetailsModal = false;
-  }
-
-  /**
-   * @param {{
-   *  publicationDate: Date,
-   *  mustUpdatePublicationStatus: boolean,
-   * }} args
-   */
-  async performRegisterPublication(args) {
+  @task
+  *registerPublication(publication) {
+    const publicationActivity = this.latestPublicationActivity;
+    const publicationDate = publication.publicationDate;
     const saves = [];
 
-    const publicationActivity = this.latestPublicationActivity;
-
-    // TODO?: should publicationActivty be created when none exists?
-    //  like when updating the publication status?
-
     const decision = this.store.createRecord('decision', {
-      publicationDate: args.publicationDate,
+      publicationDate: publicationDate,
       publicationActivity: publicationActivity,
     });
     saves.push(decision.save());
 
-    publicationActivity.endDate = args.publicationDate;
+    publicationActivity.endDate = publicationDate;
     saves.push(publicationActivity.save());
 
-    // publicationSubcase.receivedDate will probably not be updated
-    // this property is already set to an earlier when uploading the proof
-    if (
-      !this.publicationSubcase.receivedDate ||
-      args.publicationDate < this.publicationSubcase.receivedDate
-    ) {
-      this.publicationSubcase.receivedDate = args.publicationDate;
-    }
-
-    if (args.mustUpdatePublicationStatus) {
-      const statusSave = this.publicationService.updatePublicationStatus(
+    if (publication.mustUpdatePublicationStatus) {
+      const statusUpdate = this.publicationService.updatePublicationStatus(
         this.publicationFlow,
         CONSTANTS.PUBLICATION_STATUSES.PUBLISHED,
-        args.publicationDate
+        publication.publicationDate
       );
-      saves.push(statusSave);
+      saves.push(statusUpdate);
 
-      this.publicationSubcase.endDate = args.publicationDate;
-    }
-
-    // (this is a deceptive property:
-    // setting a field to undefined does not make the model to be marked as dirty
-    // the date is required in the modal, so this issue does not occur)
-    if (this.publicationSubcase.hadDirtyAttributes) {
+      this.publicationSubcase.endDate = publication.publicationDate;
       saves.push(this.publicationSubcase.save());
     }
 
-    await Promise.all(saves);
+    yield Promise.all(saves);
+    this.closeRegistrationModal();
+    // model refresh is not required since publication-activity is already loaded
+    // from backend, but just hidden on timeline until now because it didn't have
+    // an end-date.
   }
 
   @action
-  async performEditPublication(publicationActivity, args) {
-    // TODO check whether other dates have to be updated
-    const decisions = await publicationActivity.decisions;
-    const decision = decisions.firstObject;
-    decision.publicationDate = args.publicationDate;
-    await decision.save();
+  async updatePublication(publication) {
+    const decision = publication.decision;
+    decision.publicationDate = publication.publicationDate;
+
+    const publicationActivity = await decision.publicationActivity;
+    publicationActivity.endDate = publication.publicationDate;
+
+    await Promise.all([decision.save(), publicationActivity.save()]);
   }
 
   @action
@@ -206,5 +128,25 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     await requestActivity.destroyRecord();
 
     this.send('refresh');
+  }
+
+  @action
+  openRequestModal() {
+    this.isOpenRequestModal = true;
+  }
+
+  @action
+  closeRequestModal() {
+    this.isOpenRequestModal = false;
+  }
+
+  @action
+  openRegistrationModal() {
+    this.isOpenRegistrationModal = true;
+  }
+
+  @action
+  closeRegistrationModal() {
+    this.isOpenRegistrationModal = false;
   }
 }

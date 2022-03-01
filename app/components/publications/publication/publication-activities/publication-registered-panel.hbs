@@ -7,7 +7,7 @@
             {{t "publication-publication-timeline-publication-event-title"}}
           </h4>
           <span class="auk-u-text-small auk-u-m-0">
-            {{moment-format @publicationActivity.endDate}}
+            {{moment-format this.latestDecision.publicationDate}}
           </span>
         </Group.Item>
       </Toolbar.Group>
@@ -22,9 +22,9 @@
           {{#if this.loadData.isIdle}}
             <Menu.Item
               @disabled={{this.isEditDisabled}}
-              {{on "click" (fn @onEdit @publicationActivity)}}
+              {{on "click" this.openPublicationEditModal}}
             >
-              {{t "edit"}}
+              {{t "edit-2"}}
             </Menu.Item>
           {{/if}}
         </DropdownMenu>
@@ -34,3 +34,11 @@
   {{!TODO: panel body or remove bottom border if no body}}
   {{!SUGGESTION: show list of decisions with Staatsblad link and publication date}}
 </Auk::Panel>
+
+{{#if this.isOpenPublicationEditModal}}
+  <Publications::Publication::PublicationActivities::PublicationEditModal
+    @publicationDate={{this.latestDecision.publicationDate}}
+    @onSave={{perform this.updatePublication}}
+    @onCancel={{this.closePublicationEditModal}}
+  />
+{{/if}}

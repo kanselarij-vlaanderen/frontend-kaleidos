@@ -120,7 +120,7 @@ export default class PublicationsPublicationProofsController extends Controller 
   }
 
   @task
-  *saveEditReceivedProof(proofEdit) {
+  *updateProofingActivity(proofEdit) {
     const saves = [];
 
     const proofingActivity = proofEdit.proofingActivity;
