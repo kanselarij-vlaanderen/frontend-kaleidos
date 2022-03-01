@@ -2,7 +2,15 @@
    ember-flatpickr
    ========================================================================== */
 
+$daySize: 35px;
+$padding: $daySize/16;
+$dayMargin: 2px;
+$daysWidth: ($daySize * 7) + ($dayMargin * 14) + ($padding * 2) + 2;
+$calendarWidth: $daysWidth;
+
 .flatpickr-calendar {
+  width: $calendarWidth;
+
   box-shadow: $auk-shadow-small;
   border-radius: .3rem;
   background: $auk-white;
@@ -104,7 +112,7 @@
   .numInputWrapper {
     border: 0.1rem solid transparent;
     border-radius: .3rem;
-    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    // transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 
     &:hover {
       border-color: $auk-gray-300;
@@ -169,6 +177,130 @@
       &:before {
         @extend .ki-dash;
       }
+    }
+  }
+}
+
+.flatpickr-weekdays {
+  height: 32px;
+}
+
+span.flatpickr-weekday {
+  color: $auk-gray-600;
+  font-size: 1.3rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.flatpickr-days {
+  width: $daysWidth;
+}
+
+.dayContainer {
+  width: $daysWidth;
+  min-width: $daysWidth;
+  max-width: $daysWidth;
+}
+
+.flatpickr-day {
+  margin-bottom: 3px;
+  max-width: $daySize;
+  height: $daySize;
+
+  color: $auk-gray-800;
+  font-size: 1.5rem;
+  line-height: $daySize - 2px; // offset for better vertical center
+
+  &:hover {
+    border-color: $auk-blue-100;
+    background-color: $auk-blue-100;
+  }
+
+  &:focus {
+    outline: 0;
+    border-color: $auk-yellow-500;
+    box-shadow: inset 0 0 0 0.1rem $auk-yellow-500;
+  }
+
+  &.flatpickr-disabled,
+  &.flatpickr-disabled:hover,
+  &.prevMonthDay,
+  &.nextMonthDay,
+  &.notAllowed,
+  &.notAllowed.prevMonthDay,
+  &.notAllowed.nextMonthDay {
+    color: $auk-gray-400;
+  }
+
+  &.prevMonthDay,
+  &.nextMonthDay {
+    &:hover {
+      border-color: $auk-gray-100;
+      background-color: $auk-gray-100;
+    }
+
+    &:active {
+      border-color: $auk-gray-200;
+      background-color: $auk-gray-200;
+    }
+  }
+
+  &.today {
+    border-color: $auk-blue-500;
+
+    &:hover {
+      border-color: $auk-blue-500;
+      background-color: $auk-blue-100;
+
+      color: $auk-gray-800;
+    }
+
+    &.prevMonthDay,
+    &.nextMonthDay {
+      border-color: $auk-gray-500;
+
+      &:hover {
+        border-color: $auk-gray-500;
+        background-color: $auk-gray-100;
+
+        color: $auk-gray-400;
+      }
+    }
+  }
+
+  &.selected {
+    background: $auk-blue-500;
+    border-color: $auk-blue-500;
+
+    &:hover {
+      background: $auk-blue-700;
+      border-color: $auk-blue-700;
+    }
+
+    &.prevMonthDay,
+    &.nextMonthDay {
+      background: $auk-blue-500;
+      border-color: $auk-blue-500;
+
+      &:hover {
+        background: $auk-blue-700;
+        border-color: $auk-blue-700;
+      }
+    }
+  }
+
+  &.prevMonthDay,
+  &.nextMonthDay,
+  &.today,
+  &.today.prevMonthDay,
+  &.today.nextMonthDay,
+  &.selected,
+  &.selected.prevMonthDay,
+  &.selected.nextMonthDay {
+    &:focus {
+      outline: 0;
+      border-color: $auk-yellow-500;
+      box-shadow: inset 0 0 0 0.1rem $auk-yellow-500;
     }
   }
 }
