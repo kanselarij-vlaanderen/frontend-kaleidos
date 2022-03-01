@@ -74,6 +74,19 @@ $scroll-sidebar-width: 50rem;
   }
 }
 
+.auk-table--action {
+  padding-left: 2rem;
+
+  thead th {
+    z-index: 1;
+  }
+
+  thead th:last-child,
+  tbody td:last-child {
+    text-align: right;
+  }
+}
+
 .auk-table__row__clickable {
   position: relative;
 
@@ -147,4 +160,20 @@ $scroll-sidebar-width: 50rem;
 
 .auk-modal--full-screen > .auk-modal__push {
   display: none;
+}
+
+
+// E-mail
+.auk-c-email-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: #F4F5F6;
+
+  table table {
+    margin-left: auto;
+    margin-right: auto;
+  }
 }

@@ -107,6 +107,9 @@ Router.map(function() {
       this.route('busy', { path: '/overzicht-bezig', });
       this.route('success', { path: '/overzicht-notificatie', });
       this.route('sign', { path: '/tekenen', });
+      this.route('signature', { path: '/handtekenen', });
+      this.route('signed', { path: '/overzicht-gehandtekend', });
+      this.route('email', { path: '/email', });
     });
   }
 

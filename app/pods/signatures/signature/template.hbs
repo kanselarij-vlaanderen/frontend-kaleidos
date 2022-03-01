@@ -1,0 +1,36 @@
+<div class="auk-modal-backdrop auk-modal-backdrop--visible">
+  <div class="auk-modal auk-modal--full-screen">
+    <div class="auk-modal__push"></div>
+    <div class="auk-modal__content">
+      <div class="auk-modal__header auk-modal__header--bordered auk-modal__header--dark">
+        <Auk::Toolbar @size="large">
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <h2 class="auk-toolbar__title">{{t "util.sign"}}</h2>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <Auk::ButtonLink
+                @icon="x"
+                @skin="borderless"
+                @route="signatures.busy"
+              >
+                {{t "util.close"}}
+              </Auk::ButtonLink>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </div>
+      <div class="auk-modal__body">
+        <LinkTo
+          class="auk-mockup"
+          @route="signatures.signed"
+        >
+          <img src="/assets/signinghub-preview2.jpg" alt="">
+        </LinkTo>
+      </div>
+    </div>
+    <div class="auk-modal__push"></div>
+  </div>
+</div>

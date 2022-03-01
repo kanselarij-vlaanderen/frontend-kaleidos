@@ -1002,10 +1002,14 @@
     "confirm-cancel-signatures": "Door het annuleren van handtekenen zal dit document uit de handtekenmap verwijderd worden.",
     "signature-success": "Het document is succesvol verzonden ter ondertekening.",
     "signature-properties": "Handtekeneigenschappen",
-    "signature-required": "Handtekening vereist"
+    "signature-required": "Handtekening vereist",
+    "signed-by": "Ondertekend door",
+    "decision-fiche": "Beslissingsfiche",
+    "no-documents": "Er zijn geen documenten om te ondertekenen."
   },
   "util": {
     "view": "Bekijken",
+    "sign": "Handtekenen",
     "edit": "Bewerken",
     "edit-status": "Status aanpassen",
     "download": "Download",
