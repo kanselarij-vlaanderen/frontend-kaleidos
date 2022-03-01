@@ -2,7 +2,7 @@
   {{#each @events as |event|}}
     {{yield
       (hash
-        Event=(component "utils/generic/timeline/timeline-event" event=event)
+        Event=(component "utils/generic/timeline/event" event=event)
       )
       event
     }}

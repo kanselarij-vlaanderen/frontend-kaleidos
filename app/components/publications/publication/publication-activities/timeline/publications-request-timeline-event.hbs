@@ -1,4 +1,4 @@
-<Utils::Generic::Timeline::TimelineEvent @badgeIcon="mail" @badgeSkin="primary">
+<Utils::Generic::Timeline::Event @badgeIcon="mail" @badgeSkin="primary">
   <Auk::AccordionPanel @isDefaultActive={{true}} as |AccordionPanel|>
     <AccordionPanel.Header
       @size="large"
@@ -67,7 +67,7 @@
       {{/if}}
     </AccordionPanel.Body>
   </Auk::AccordionPanel>
-</Utils::Generic::Timeline::TimelineEvent>
+</Utils::Generic::Timeline::Event>
 
 {{#if this.isOpenConfirmDeleteAlert}}
   <Utils::Generic::AlertDialog

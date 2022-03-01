@@ -37,7 +37,7 @@
 
   {{!Timeline}}
   <Auk::Panel::Body class="auk-u-bg-alt">
-    <Utils::Generic::Timeline::Timeline
+    <Utils::Generic::Timeline
       @events={{@model}}
       @emptyMessage={{t "publication-empty"}}
       as |Timeline event|
@@ -55,7 +55,7 @@
           />
         {{/if}}
       {{/if}}
-    </Utils::Generic::Timeline::Timeline>
+    </Utils::Generic::Timeline>
   </Auk::Panel::Body>
 </Auk::Panel>
 
