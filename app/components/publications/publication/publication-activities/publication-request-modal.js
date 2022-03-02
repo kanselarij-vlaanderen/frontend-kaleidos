@@ -1,35 +1,31 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { tracked } from '@glimmer/tracking';
-import { task, dropTask } from 'ember-concurrency-decorators';
-import { translationRequestEmail } from 'frontend-kaleidos/utils/publication-email';
-import { Validator, ValidatorSet } from 'frontend-kaleidos/utils/validators';
 import { isPresent } from '@ember/utils';
+import { tracked } from '@glimmer/tracking';
+import { task, dropTask } from 'ember-concurrency';
+import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
+import { publicationRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 
-export default class PublicationsTranslationRequestModalComponent extends Component {
-  /**
-   * @argument dueDate
-   * @argument publicationFlow
-   * @argument onSave
-   * @argument onCancel
-   */
+export default class PublicationRequestModal extends Component {
   @service store;
 
-  @tracked uploadedPieces = [];
-  @tracked numberOfPages;
-  @tracked numberOfWords;
-  @tracked translationDueDate = this.args.dueDate
-    ? this.args.dueDate
-    : new Date();
   @tracked subject;
   @tracked message;
-  validators;
+  @tracked uploadedPieces = [];
 
   constructor() {
     super(...arguments);
     this.initValidators();
     this.setEmailFields.perform();
+  }
+
+  initValidators() {
+    this.validators = new ValidatorSet({
+      subject: new Validator(() => isPresent(this.subject)),
+      message: new Validator(() => isPresent(this.message)),
+      uploadedPieces: new Validator(() => this.uploadedPieces.length > 0),
+    });
   }
 
   get isCancelDisabled() {
@@ -47,10 +43,9 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   @task
   *save() {
     yield this.args.onSave({
-      uploadedPieces: this.uploadedPieces,
-      translationDueDate: this.translationDueDate,
       subject: this.subject,
       message: this.message,
+      uploadedPieces: this.uploadedPieces,
     });
   }
 
@@ -67,31 +62,27 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   @task
   *setEmailFields() {
     const publicationFlow = this.args.publicationFlow;
-    const identification = yield publicationFlow.identification;
+    const [identification, numacNumbers, publicationSubcase] = yield Promise.all([
+      publicationFlow.identification,
+      publicationFlow.numacNumbers,
+      publicationFlow.publicationSubcase,
+    ]);
 
     const mailParams = {
       identifier: identification.idName,
-      title: publicationFlow.shortTitle,
-      dueDate: this.translationDueDate,
-      numberOfPages: this.numberOfPages,
-      numberOfWords: this.numberOfWords,
-      numberOfDocuments: this.uploadedPieces.length,
+      targetEndDate: publicationSubcase.targetEndDate,
+      numacNumbers: numacNumbers,
     };
 
-    const mailTemplate = translationRequestEmail(mailParams);
+    const mailTemplate = publicationRequestEmail(mailParams);
     this.message = mailTemplate.message;
     this.subject = mailTemplate.subject;
   }
 
   @action
-  setTranslationDueDate(selectedDates) {
-    this.translationDueDate = selectedDates[0];
-    this.setEmailFields.perform();
-  }
-
-  @action
   async uploadPiece(file) {
     const created = file.created;
+
     const documentContainer = this.store.createRecord('document-container', {
       created: created,
     });
@@ -106,7 +97,6 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
     });
 
     this.uploadedPieces.pushObject(piece);
-    this.setEmailFields.perform();
   }
 
   @task
@@ -122,15 +112,5 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
       documentContainer.destroyRecord(),
       piece.destroyRecord(),
     ]);
-  }
-
-  initValidators() {
-    this.validators = new ValidatorSet({
-      translationDueDate: new Validator(() =>
-        isPresent(this.translationDueDate)
-      ),
-      subject: new Validator(() => isPresent(this.subject)),
-      message: new Validator(() => isPresent(this.message)),
-    });
   }
 }

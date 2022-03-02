@@ -1,0 +1,38 @@
+<Auk::Modal>
+  <Auk::Modal::Header
+    @title={{t "publication-edit-modal-title"}}
+    @onClose={{perform this.cancel}}
+  />
+  <Auk::Modal::Body>
+    <Utils::LoadableContent
+      @isLoading={{this.isLoading}}
+      @reserveSpace={{true}}
+    >
+      <div class="auk-form-group-layout auk-form-group-layout--standard">
+        <div class="auk-form-group">
+          <Auk::Label for="publicationRegisterModal_publicationDate">
+            {{t "publication-date"}}
+          </Auk::Label>
+          <Auk::Datepicker
+            id="publicationRegisterModal_publicationDate"
+            @date={{this.publicationDate}}
+            @onChange={{this.setPublicationDate}}
+          />
+        </div>
+      </div>
+    </Utils::LoadableContent>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer
+    @cancelDisabled={{this.save.isRunning}}
+    @onCancel={{perform this.cancel}}
+  >
+    <Auk::Button
+      @skin="primary"
+      @disabled={{this.isSaveDisabled}}
+      @loading={{this.save.isRunning}}
+      {{on "click" (perform this.save)}}
+    >
+      {{t "save"}}
+    </Auk::Button>
+  </Auk::Modal::Footer>
+</Auk::Modal>
