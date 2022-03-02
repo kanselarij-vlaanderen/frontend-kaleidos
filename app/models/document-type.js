@@ -1,23 +1,11 @@
-import Model, { belongsTo, hasMany, attr } from '@ember-data/model';
+import Model, { hasMany, attr } from '@ember-data/model';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes
-export default Model.extend({
-  label: attr('string'),
-  scopeNote: attr('string'),
-  priority: attr('number'),
-  altLabel: attr('string'),
+export default class DocumentType extends Model {
+  @attr('string') labe;
+  @attr('string') scopeNote;
+  @attr('number') priority;
+  @attr('string') altLabel;
 
-  documentContainers: hasMany('document-container', {
-    inverse: null,
-  }),
-  publicationFlows: hasMany('publication-flow', {
-    inverse: null,
-  }),
-  subtypes: hasMany('document-type', {
-    inverse: null,
-  }),
-  superType: belongsTo('document-type', {
-    inverse: null,
-  }),
-});
+  @hasMany('document-container', { inverse: null }) documentContainers;
+  @hasMany('publication-flow', { inverse: null }) publicationFlows;
+}

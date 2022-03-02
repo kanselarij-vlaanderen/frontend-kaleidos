@@ -1,10 +1,11 @@
 import Model, { attr, belongsTo } from '@ember-data/model';
-import { alias } from '@ember/object/computed';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes
-export default Model.extend({
-  user: belongsTo('person'),
-  gebruiker: alias('user'),
-  voId: attr('string'),
-});
+export default class Account extends Model {
+  @attr('string') voId;
+
+  @belongsTo('person') user;
+
+  get gebruiker() {
+    return this.user;
+  }
+}

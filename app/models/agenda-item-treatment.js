@@ -1,27 +1,18 @@
 import Model, { hasMany, belongsTo, attr } from '@ember-data/model';
-import { computed } from '@ember/object';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes
-export default Model.extend({
-  intl: inject(),
-  startDate: attr('date'), // for publications: displayed as: Datum beslissing
-  agendaitem: belongsTo('agendaitem'),
-  subcase: belongsTo('subcase'),
-  report: belongsTo('piece'),
-  newsletterInfo: belongsTo('newsletter-info'),
-  decisionResultCode: belongsTo('decision-result-code', {
-    inverse: null,
-  }),
-  modified: attr('datetime'),
-  created: attr('datetime'),
-  treatmentApproval: computed('report.lastPiece.name', function() {
-    return this.intl.t('signed-document-decision', {
-      // eslint-disable-next-line ember/no-get
-      name: this.get('report.lastPiece.name'),
-    });
-  }),
-  publicationFlows: hasMany('publication-flow'),
-  signFlows: hasMany('sign-flow'),
-});
+export default class AgendaItemTreatment extends Model {
+  @service intl;
+
+  @attr('date') startDate; // for publications: displayed as: Datum beslissing
+  @attr('datetime') modified;
+  @attr('datetime') created;
+
+  @belongsTo('agendaitem') agendaitem;
+  @belongsTo('subcase') subcase;
+  @belongsTo('piece') report;
+  @belongsTo('newsletter-info') newsletterInfo;
+  @belongsTo('decision-result-code', { inverse: null }) decisionResultCode;
+  @hasMany('publication-flow') publicationFlows;
+  @hasMany('sign-flow') signFlows;
+}

@@ -13,6 +13,9 @@ export default class File extends Model {
   // *NOTE Don't use this getter, use filename instead
   // Possible unused getter since it had an error throwing 'deprecate' method for 2 months but no support issues were ever logged
   get name() {
+    console.warn(
+      `Attribute 'name' on 'file' model is deprecated. Use 'filename' instead.`
+    );
     return this.filename;
   }
 
@@ -27,7 +30,9 @@ export default class File extends Model {
   }
 
   get namedDownloadLink() {
-    return `${this.downloadLink}?name=${encodeURIComponent(this.downloadFilename)}`;
+    return `${this.downloadLink}?name=${encodeURIComponent(
+      this.downloadFilename
+    )}`;
   }
 
   get filenameWithoutExtension() {
