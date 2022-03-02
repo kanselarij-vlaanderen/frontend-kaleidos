@@ -108,7 +108,6 @@ export default class PublicationsPublicationProofsController extends Controller 
       if (translationActivity) {
         piece.requestActivitiesUsedBy.removeObjects(requestActivity);
         piece.proofingActivitiesUsedBy.removeObjects(proofingActivity);
-        piece.publicationSubcaseSourceFor = undefined;
         yield piece.save();
       } else {
         yield file.destroyRecord();

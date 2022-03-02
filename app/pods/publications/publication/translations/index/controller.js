@@ -101,7 +101,6 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     );
     yield Promise.all(
       uploadedPieces.map((piece) => {
-        piece.translationSubcaseSourceFor = this.translationSubcase;
         piece.language = dutch;
         return piece.save();
       })
