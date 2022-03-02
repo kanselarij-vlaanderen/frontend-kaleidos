@@ -53,6 +53,7 @@ export default class PublicationsPublicationProofsRoute extends Route {
 
     let requestActivities = this.store.query('request-activity', {
       'filter[publication-subcase][:id:]': this.publicationSubcase.id,
+      'filter[:has:proofing-activity]': true,
       include: 'email,used-pieces,used-pieces.file',
       sort: '-start-date',
     });
