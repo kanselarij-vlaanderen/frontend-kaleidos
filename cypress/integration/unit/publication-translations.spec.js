@@ -46,16 +46,16 @@ function getTranslatedMonth(month) {
   }
 }
 context('Publications translation tests', () => {
-  function uploadDocument(file, newFileName, pages, words) {
+  function uploadDocument(file, newFileName, numberOfPages, numberOfWords) {
     cy.get(publication.translationsDocuments.add).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
     cy.get(publication.documentsUpload.name).should('have.value', file.fileName)
       .clear()
       .type(newFileName);
-    cy.get(publication.documentsUpload.pages)
-      .type(pages);
-    cy.get(publication.documentsUpload.words)
-      .type(words);
+    cy.get(publication.documentsUpload.numberOfPages)
+      .type(numberOfPages);
+    cy.get(publication.documentsUpload.numberOfWords)
+      .type(numberOfWords);
     // cy.get(publication.documentsUpload.proofPrint).parent()
     //   .click();
   }
@@ -89,10 +89,10 @@ context('Publications translation tests', () => {
     const newFileName1 = 'test filename1';
     const newFileName2 = 'test new filename2';
     const newFileName3 = 'test for new filename3';
-    const pageCount = 5;
-    const editedPageCount = 6;
-    const wordCount = 1000;
-    const editedWordcount = 1001;
+    const numberOfPages = 5;
+    const editednumberOfPages = 6;
+    const numberOfWords = 1000;
+    const editednumberOfWords = 1001;
     const translationDueDate = Cypress.dayjs();
     const editedTranslationDueDate = Cypress.dayjs().add(1, 'weeks');
     const monthDutch = getTranslatedMonth(translationDueDate.month());
@@ -107,7 +107,7 @@ context('Publications translation tests', () => {
     cy.get(publication.translationsDocuments.requestTranslation).should('be.disabled');
 
     // check rollback after cancel
-    uploadDocument(file, newFileName1, pageCount, wordCount);
+    uploadDocument(file, newFileName1, numberOfPages, numberOfWords);
     cy.intercept('DELETE', 'files/*').as('deleteFile');
     cy.get(auk.modal.footer.cancel).click();
     cy.wait('@deleteFile');
@@ -118,9 +118,9 @@ context('Publications translation tests', () => {
     cy.get(publication.documentsUpload.name).should('have.value', file.fileName)
       .clear()
       .type(newFileName1);
-    cy.get(publication.documentsUpload.pages).should('be.empty')
+    cy.get(publication.documentsUpload.numberOfPages).should('be.empty')
       .type(5);
-    cy.get(publication.documentsUpload.words).should('be.empty')
+    cy.get(publication.documentsUpload.numberOfWords).should('be.empty')
       .type(1000);
     cy.get(publication.documentsUpload.proofPrint).should('be.empty');
     cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
@@ -133,12 +133,12 @@ context('Publications translation tests', () => {
 
     // add extra docs for testing CRUD
     // waiting for getPieces should work, but waiting for it fails so general wait instead
-    uploadDocument(file, newFileName2, pageCount, wordCount);
+    uploadDocument(file, newFileName2, numberOfPages, numberOfWords);
     cy.get(publication.documentsUpload.save).click();
     cy.wait('@createNewDocumentContainer')
       .wait('@createNewPiece')
       .wait(1000);
-    uploadDocument(file, newFileName3, pageCount, wordCount);
+    uploadDocument(file, newFileName3, numberOfPages, numberOfWords);
     cy.get(publication.documentsUpload.save).click();
     cy.wait('@createNewDocumentContainer')
       .wait('@createNewPiece')
@@ -179,14 +179,14 @@ context('Publications translation tests', () => {
       .click()
       .clear()
       .type(newFileName1);
-    cy.get(publication.documentEdit.pages).should('have.value', pageCount)
+    cy.get(publication.documentEdit.numberOfPages).should('have.value', numberOfPages)
       .click()
       .clear()
-      .type(editedPageCount);
-    cy.get(publication.documentEdit.words).should('have.value', wordCount)
+      .type(editednumberOfPages);
+    cy.get(publication.documentEdit.words).should('have.value', numberOfWords)
       .click()
       .clear()
-      .type(editedWordcount);
+      .type(editednumberOfWords);
     cy.get(auk.modal.footer.cancel).click();
     cy.get(publication.translationsDocuments.row.documentName).contains(newFileName2)
       .parent(publication.translationsDocuments.tableRow)
@@ -197,12 +197,12 @@ context('Publications translation tests', () => {
     cy.get(publication.documentEdit.documentName).should('have.value', newFileName2)
       .clear()
       .type(newFileName1);
-    cy.get(publication.documentEdit.pages).should('have.value', pageCount)
+    cy.get(publication.documentEdit.numberOfPages).should('have.value', numberOfPages)
       .clear()
-      .type(editedPageCount);
-    cy.get(publication.documentEdit.words).should('have.value', wordCount)
+      .type(editednumberOfPages);
+    cy.get(publication.documentEdit.words).should('have.value', numberOfWords)
       .clear()
-      .type(editedWordcount);
+      .type(editednumberOfWords);
     cy.intercept('PATCH', 'pieces/**').as('patchPieces');
     cy.get(publication.documentEdit.save).click();
     cy.wait('@patchPieces');
@@ -215,15 +215,15 @@ context('Publications translation tests', () => {
         cy.get(publication.translationsDocuments.row.edit).click();
       });
     cy.get(publication.documentEdit.documentName).should('have.value', newFileName1);
-    cy.get(publication.documentEdit.pages).should('have.value', editedPageCount);
-    cy.get(publication.documentEdit.words).should('have.value', editedWordcount);
+    cy.get(publication.documentEdit.numberOfPages).should('have.value', editednumberOfPages);
+    cy.get(publication.documentEdit.numberOfWords).should('have.value', editednumberOfWords);
     cy.get(auk.modal.footer.cancel).click();
 
     // check requestmodal without sidebar change and 1 document selected
     clickCheckbox(newFileName1);
     cy.get(publication.translationsDocuments.requestTranslation).click();
     cy.get(auk.datepicker).should('have.value', translationDueDate.format('DD-MM-YYYY'));
-    cy.get(publication.translationRequest.message).should('have.value', `Collega,\n\nHierbij ter vertaling:\n\nVO-dossier: ${fields.number}\nTitel: test vertalingsaanvraag\t\nUiterste vertaaldatum: ${translationDueDate.format('DD-MM-YYYY')}\t\nAantal pagina’s: ${editedPageCount}\t\nAantal woorden: ${editedWordcount}\t\nAantal documenten: 1\t\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n`);
+    cy.get(publication.translationRequest.message).should('have.value', `Collega,\n\nHierbij ter vertaling:\n\nVO-dossier: ${fields.number}\nTitel: test vertalingsaanvraag\t\nUiterste vertaaldatum: ${translationDueDate.format('DD-MM-YYYY')}\t\nAantal pagina’s: ${editednumberOfPages}\t\nAantal woorden: ${editednumberOfWords}\t\nAantal documenten: 1\t\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n`);
     cy.get(utils.documentList.item).should('have.length', 1);
     cy.get(auk.modal.footer.cancel).click();
     // check requestmodal with sidebar change and 2 documents selected
@@ -234,7 +234,7 @@ context('Publications translation tests', () => {
     cy.setDateInFlatpickr(editedTranslationDueDate);
     cy.get(publication.translationsDocuments.requestTranslation).click();
     cy.get(auk.datepicker).should('have.value', editedTranslationDueDate.format('DD-MM-YYYY'));
-    cy.get(publication.translationRequest.message).should('have.value', `Collega,\n\nHierbij ter vertaling:\n\nVO-dossier: ${fields.number}\nTitel: test vertalingsaanvraag\t\nUiterste vertaaldatum: ${editedTranslationDueDate.format('DD-MM-YYYY')}\t\nAantal pagina’s: ${pageCount + editedPageCount}\t\nAantal woorden: ${wordCount + editedWordcount}\t\nAantal documenten: 2\t\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n`);
+    cy.get(publication.translationRequest.message).should('have.value', `Collega,\n\nHierbij ter vertaling:\n\nVO-dossier: ${fields.number}\nTitel: test vertalingsaanvraag\t\nUiterste vertaaldatum: ${editedTranslationDueDate.format('DD-MM-YYYY')}\t\nAantal pagina’s: ${numberOfPages + editednumberOfPages}\t\nAantal woorden: ${numberOfWords + editednumberOfWords}\t\nAantal documenten: 2\t\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n`);
     // check annex list
     cy.get(utils.documentList.item).should('have.length', 2);
     cy.get(utils.documentList.name).contains(newFileName1)
