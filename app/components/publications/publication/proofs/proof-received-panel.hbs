@@ -1,103 +1,94 @@
-<div class="vlc-procedure-step vlc-procedure-step--nopadding">
-  <div class="vlc-procedure-step__badge-wrapper">
-    <Auk::Badge
-      @icon="check"
-      @skin="success"
-      @size="medium"
-      class="vlc-procedure-step__badge"
-    />
-  </div>
-  <Auk::Panel>
-    <Auk::Panel::Header @size="large">
-      <Auk::Toolbar>
-        <Auk::Toolbar::Group @position="left">
-          <Auk::Toolbar::Item>
-            <h4 class="auk-panel__title">
-              {{t "received-proof"}}
-            </h4>
-            <p class="auk-u-text-small auk-u-m-0">
-              {{moment-format @proofingActivity.endDate "DD.MM.YYYY"}}
-            </p>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-        <Auk::Toolbar::Group @position="right">
-          <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
-            <Menu.Item @skin="primary" {{on "click" this.openEditProofModal}}>
-              {{t "edit-2"}}
-            </Menu.Item>
-          </DropdownMenu>
-        </Auk::Toolbar::Group>
-      </Auk::Toolbar>
-    </Auk::Panel::Header>
+<Auk::Panel>
+  <Auk::Panel::Header @size="large">
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title">
+            {{t "received-proof"}}
+          </h4>
+          <p class="auk-u-text-small auk-u-m-0">
+            {{moment-format @proofingActivity.endDate "DD.MM.YYYY"}}
+          </p>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
+          <Menu.Item @skin="primary" {{on "click" this.openEditProofModal}}>
+            {{t "edit-2"}}
+          </Menu.Item>
+        </DropdownMenu>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
 
-    <Auk::Panel::Body>
-      <Auk::List>
-        {{#each @proofingActivity.generatedPieces as |piece|}}
-          <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
-            <div class="auk-o-flex auk-o-flex--spaced">
-              <Auk::Badge @icon="paperclip" @size="regular" />
-              <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
-            </div>
-            <Auk::ButtonLink
-              @layout="icon-only"
-              @icon="download"
-              @href={{piece.file.namedDownloadLink}}
-              download={{piece.file.downloadFilename}}
-            >
-              {{t "download"}}
-            </Auk::ButtonLink>
-            <Auk::ButtonLink
-              @layout="icon-only"
-              @icon="book"
-              @href={{piece.viewDocumentURL}}
-              target="_blank"
-            >
-              {{t "read"}}
-            </Auk::ButtonLink>
-          </Auk::List::Item>
-        {{/each}}
-      </Auk::List>
-    </Auk::Panel::Body>
-  </Auk::Panel>
-</div>
+  <Auk::Panel::Body>
+    <Auk::List>
+      {{#each @proofingActivity.generatedPieces as |piece|}}
+        <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
+          <div class="auk-o-flex auk-o-flex--spaced">
+            <Auk::Badge @icon="paperclip" @size="regular" />
+            <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
+          </div>
+          <Auk::ButtonLink
+            @layout="icon-only"
+            @icon="download"
+            @href={{piece.file.namedDownloadLink}}
+            download={{piece.file.downloadFilename}}
+          >
+            {{t "download"}}
+          </Auk::ButtonLink>
+          <Auk::ButtonLink
+            @layout="icon-only"
+            @icon="book"
+            @href={{piece.viewDocumentURL}}
+            target="_blank"
+          >
+            {{t "read"}}
+          </Auk::ButtonLink>
+        </Auk::List::Item>
+      {{/each}}
+    </Auk::List>
+  </Auk::Panel::Body>
+</Auk::Panel>
 
-{{#if this.showEditProofModal}}
-  <Auk::Modal>
-    <Auk::Modal::Header @title={{t "edit-proof"}} @onClose={{this.closeEditProofModal}} />
-    <Auk::Modal::Body>
-      <div class="auk-form-group">
-        <Auk::Label for="proofUploadReceivedDate" @required={{true}}>
-          {{t "date"}}
-        </Auk::Label>
-        <Auk::Datepicker
-          id="proofUploadReceivedDate"
-          @date={{this.newReceivedDate}}
-          @onChange={{this.setNewReceivedDate}}
-        />
-      </div>
-      <div class="auk-form-group">
-        <Auk::Label for="proofPrintCorrector">
-          {{t "who-proof-reads"}}
-        </Auk::Label>
-        <Auk::Input
-          id="proofPrintCorrector"
-          @value={{mut this.newProofPrintCorrector}}
-        />
-      </div>
-    </Auk::Modal::Body>
-    <Auk::Modal::Footer
-      @cancelDisabled={{this.isCancelDisabled}}
-      @onCancel={{this.closeEditProofModal}}
-    >
-      <Auk::Button
-        data-test-proof-edit-save
-        @skin="primary"
-        @disabled={{this.isSaveDisabled}}
-        @loading={{this.save.isRunning}}
-        {{on "click" (perform this.save)}}
-      >
-        {{t "save"}}
-      </Auk::Button>
-    </Auk::Modal::Footer>
-  </Auk::Modal>
-{{/if}}
+
+          {{#if this.showEditProofModal}}
+            <Auk::Modal>
+              <Auk::Modal::Header @title={{t "edit-proof"}} @onClose={{this.closeEditProofModal}} />
+              <Auk::Modal::Body>
+                <div class="auk-form-group">
+                  <Auk::Label for="proofUploadReceivedDate" @required={{true}}>
+                    {{t "date"}}
+                  </Auk::Label>
+                  <Auk::Datepicker
+                    id="proofUploadReceivedDate"
+                    @date={{this.newReceivedDate}}
+                    @onChange={{this.setNewReceivedDate}}
+                  />
+                </div>
+                <div class="auk-form-group">
+                  <Auk::Label for="proofPrintCorrector">
+                    {{t "who-proof-reads"}}
+                  </Auk::Label>
+                  <Auk::Input
+                    id="proofPrintCorrector"
+                    @value={{mut this.newProofPrintCorrector}}
+                  />
+                </div>
+              </Auk::Modal::Body>
+              <Auk::Modal::Footer
+                @cancelDisabled={{this.isCancelDisabled}}
+                @onCancel={{this.closeEditProofModal}}
+              >
+                <Auk::Button
+                  data-test-proof-edit-save
+                  @skin="primary"
+                  @disabled={{this.isSaveDisabled}}
+                  @loading={{this.save.isRunning}}
+                  {{on "click" (perform this.save)}}
+                >
+                  {{t "save"}}
+                </Auk::Button>
+              </Auk::Modal::Footer>
+            </Auk::Modal>
+          {{/if}}

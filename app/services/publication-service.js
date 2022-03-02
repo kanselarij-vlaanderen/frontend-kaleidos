@@ -2,6 +2,13 @@ import Service, { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 
+/* eslint-disable no-unused-vars */
+import File from '../models/file';
+import DocumentContainer from '../models/document-container';
+import Piece from '../models/piece';
+import PublicationFlow from '../models/publication-flow';
+/* eslint-enable no-unused-vars */
+
 export default class PublicationService extends Service {
   @service store;
   @service toaster;
@@ -263,6 +270,56 @@ export default class PublicationService extends Service {
     await this.updatePublicationStatus(
       publicationFlow,
       CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED
+    );
+  }
+
+  async createPublicationRequestActivity(publicationRequestProperties, publicationFlow) {
+    const publicationSubcase = await publicationFlow.publicationSubcase;
+    const now = new Date();
+
+    const uploadedPieces = publicationRequestProperties.uploadedPieces;
+    await Promise.all(
+      uploadedPieces.map((piece) => {
+        return piece.save();
+      })
+    );
+
+    const requestActivity = this.store.createRecord('request-activity', {
+      startDate: now,
+      publicationSubcase: publicationSubcase,
+      usedPieces: uploadedPieces,
+    });
+    await requestActivity.save();
+
+    const publicationActivity = this.store.createRecord('publication-activity', {
+      startDate: now,
+      title: publicationRequestProperties.subject,
+      subcase: publicationSubcase,
+      requestActivity: requestActivity,
+      usedPieces: uploadedPieces,
+    });
+    await publicationActivity.save();
+
+    const [files, outbox, mailSettings] = await Promise.all([
+      Promise.all(uploadedPieces.mapBy('file')),
+      this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
+      this.store.queryOne('email-notification-setting'),
+    ]);
+    const mail = this.store.createRecord('email', {
+      to: mailSettings.proofRequestToEmail,
+      cc: mailSettings.proofRequestCcEmail,
+      from: mailSettings.defaultFromEmail,
+      folder: outbox,
+      attachments: files,
+      requestActivity: requestActivity,
+      subject: publicationRequestProperties.subject,
+      message: publicationRequestProperties.message,
+    });
+    await mail.save();
+
+    await this.updatePublicationStatus(
+      publicationFlow,
+      CONSTANTS.PUBLICATION_STATUSES.PUBLICATION_REQUESTED
     );
   }
 }

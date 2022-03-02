@@ -82,7 +82,7 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
   }
 
   @action
-  setReceivedProofStatus(event) {
+  setMustUpdatePublicationStatus(event) {
     this.mustUpdatePublicationStatus = event.target.checked;
   }
 

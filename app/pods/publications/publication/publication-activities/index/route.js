@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 import { warn } from '@ember/debug';
 
 export class TimelineActivity {
@@ -15,14 +15,14 @@ export class TimelineActivity {
     return this.activity.constructor.modelName === 'request-activity';
   }
 
-  get isProofingActivity() {
-    return this.activity.constructor.modelName === 'proofing-activity';
+  get isPublicationActivity() {
+    return this.activity.constructor.modelName === 'publication-activity';
   }
 
   get date() {
     if (this.isRequestActivity) {
       return this.activity.startDate;
-    } else if (this.isProofingActivity) {
+    } else if (this.isPublicationActivity) {
       return this.activity.startDate;
     } else {
       warn(
@@ -33,8 +33,8 @@ export class TimelineActivity {
   }
 
   get isShown() {
-    if (this.isProofingActivity) {
-      // A proof activity without end-date is created together with request-activity,
+    if (this.isPublicationActivity) {
+      // A publication activity without end-date is created together with request-activity,
       // but should not be shown yet.
       return this.activity.isFinished;
     } else {
@@ -43,35 +43,40 @@ export class TimelineActivity {
   }
 }
 
-export default class PublicationsPublicationProofsRoute extends Route {
+export default class PublicationsPublicationPublicationActivitiesIndexRoute extends Route {
   @service store;
 
   async model() {
     this.publicationSubcase = this.modelFor(
-      'publications.publication.proofs'
+      'publications.publication.publication-activities'
     );
 
     let requestActivities = this.store.query('request-activity', {
       'filter[publication-subcase][:id:]': this.publicationSubcase.id,
-      'filter[:has:proofing-activity]': true,
-      include: 'email,used-pieces,used-pieces.file',
-      sort: '-start-date',
+      'filter[:has:publication-activity]': true,
+      // eslint-disable-next-line prettier/prettier
+      include: [
+        'email',
+        'used-pieces',
+        'used-pieces.file'
+      ].join(','),
     });
-
-    let proofingActivities = this.store.query('proofing-activity', {
+    let publicationActivities = this.store.query('publication-activity', {
       'filter[subcase][:id:]': this.publicationSubcase.id,
-      include: 'generated-pieces,generated-pieces.file',
-      sort: '-start-date',
+      // eslint-disable-next-line prettier/prettier
+      include: [
+        'decisions',
+      ].join(','),
     });
 
-    [requestActivities, proofingActivities] = await Promise.all([
+    [requestActivities, publicationActivities] = await Promise.all([
       requestActivities,
-      proofingActivities,
+      publicationActivities,
     ]);
 
     return [
       ...requestActivities.map((request) => new TimelineActivity(request)),
-      ...proofingActivities.map((proofing) => new TimelineActivity(proofing)),
+      ...publicationActivities.map((publication) => new TimelineActivity(publication)),
     ]
       .sortBy('date')
       .reverseObjects();

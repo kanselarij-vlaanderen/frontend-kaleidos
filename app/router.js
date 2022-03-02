@@ -87,7 +87,7 @@ Router.map(function() {
         this.route('decisions', { path: '/besluiten', }, function() { });
         this.route('translations', { path: '/vertalingen',}, function() { });
         this.route('proofs', { path: '/drukproeven',}, function() { });
-        this.route('publication-activities', { path: '/publicatie-activiteiten', });
+        this.route('publication-activities', { path: '/publicatie', }, function() { });
       });
     });
   }

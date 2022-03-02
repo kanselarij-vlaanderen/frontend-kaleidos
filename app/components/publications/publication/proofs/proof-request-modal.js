@@ -96,21 +96,6 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   }
 
   @task
-  *deleteUploadedPiece(piece) {
-    this.uploadedPieces.removeObject(piece);
-    const [file, documentContainer] = yield Promise.all([
-      piece.file,
-      piece.documentContainer,
-    ]);
-
-    yield Promise.all([
-      file.destroyRecord(),
-      documentContainer.destroyRecord(),
-      piece.destroyRecord(),
-    ]);
-  }
-
-  @task
   *setEmailFields() {
     const publicationFlow = this.args.publicationFlow;
     const identification = yield publicationFlow.identification;
@@ -131,14 +116,14 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
 
   @action
   async uploadPiece(file) {
-    const now = new Date();
+    const created = file.created;
     const documentContainer = this.store.createRecord('document-container', {
-      created: now,
+      created: created,
     });
     await documentContainer.save();
     const piece = this.store.createRecord('piece', {
-      created: now,
-      modified: now,
+      created: created,
+      modified: created,
       file: file,
       confidential: false,
       name: file.filenameWithoutExtension,
@@ -146,6 +131,21 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
     });
 
     this.uploadedPieces.pushObject(piece);
+  }
+
+  @task
+  *deleteUploadedPiece(piece) {
+    this.uploadedPieces.removeObject(piece);
+    const [file, documentContainer] = yield Promise.all([
+      piece.file,
+      piece.documentContainer,
+    ]);
+
+    yield Promise.all([
+      file.destroyRecord(),
+      documentContainer.destroyRecord(),
+      piece.destroyRecord(),
+    ]);
   }
 
   @action
