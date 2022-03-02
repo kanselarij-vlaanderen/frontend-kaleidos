@@ -112,6 +112,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   @task
   *deleteUploadedPiece(piece) {
     this.uploadedPieces.removeObject(piece);
+    this.setEmailFields.perform();
     const [file, documentContainer] = yield Promise.all([
       piece.file,
       piece.documentContainer,
