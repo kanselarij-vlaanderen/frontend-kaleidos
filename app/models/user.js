@@ -3,18 +3,18 @@ import Model, { belongsTo, attr } from '@ember-data/model';
 export default class User extends Model {
   @attr('string') firstName;
   @attr('string') lastName;
-  @attr emailLink;
-  @attr phoneLink;
+  @attr('email') emailLink;
+  @attr('phone') phoneLink;
 
   @belongsTo('account') account;
   @belongsTo('account-group', { inverse: null }) group;
   @belongsTo('organization') organization;
 
   get email() {
-    return this.emailLink && this.emailLink.replace(/^mailto:/, '');
+    return this.emailLink;
   }
   get phone() {
-    return this.phoneLink && this.phoneLink.replace(/^tel:/, '');
+    return this.phoneLink;
   }
   get fullName() {
     return `${this.firstName} ${this.lastName}`;
