@@ -1,0 +1,58 @@
+<Auk::Modal @size="large">
+  <Auk::Modal::Header @title={{t "edit-session"}} @onClose={{@onCancel}} />
+  <Auk::Modal::Body>
+    <Utils::KindSelector @kind={{this.kind}} @setAction={{this.setKind}} />
+    <div class="auk-u-mb-2">
+      <div class="auk-form-group">
+        <Auk::Label>{{t "start-date"}}</Auk::Label>
+        <WebComponents::VlDatepicker
+          @enableTime={{true}}
+          @date={{this.date}}
+          @dateChanged={{this.selectStartDate}}
+        />
+      </div>
+    </div>
+    <div class="auk-u-mb-2">
+      <div class="auk-form-group">
+        <Auk::Label>{{t "meeting-number"}}</Auk::Label>
+        <Auk::Input
+          @type="number"
+          @block={{true}}
+          @value={{this.meetingNumber}}
+          data-test-edit-session-meeting-number
+          {{on "input" this.meetingNumberChangedAction}}
+        />
+      </div>
+    </div>
+    <div class="auk-u-mb-2">
+      <div class="auk-form-group">
+        <Auk::Label>
+          {{t "meeting-number-visual-representation"}}
+        </Auk::Label>
+        <Auk::Input
+          @block={{true}}
+          @value={{this.numberRepresentation}}
+          data-test-edit-session-number-representation
+        />
+      </div>
+    </div>
+    <div class="auk-u-mb-2">
+      <div class="auk-form-group">
+        <Auk::Label>
+          {{t "meeting-location"}}
+        </Auk::Label>
+        <Auk::Input @block={{true}} @value={{this.extraInfo}} />
+      </div>
+    </div>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @onCancel={{@onCancel}}>
+    <Auk::Button
+      @skin="primary"
+      {{on "click" (perform this.updateSession)}}
+      disabled={{this.updateSession.isRunning}}
+      data-test-edit-session-save
+    >
+      {{t "edit"}}
+    </Auk::Button>
+  </Auk::Modal::Footer>
+</Auk::Modal>

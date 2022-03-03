@@ -206,6 +206,7 @@ const selectors = {
   editSession: {
     meetingNumber: '[data-test-edit-session-meeting-number]',
     numberRep: '[data-test-edit-session-number-representation]',
+    save: '[data-test-edit-session-save]',
   },
 
   // create-agendaitem
