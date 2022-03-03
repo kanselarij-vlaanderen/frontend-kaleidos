@@ -6,7 +6,6 @@
         <Auk::Badge @icon="paperclip" @size="regular" />
         <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
       </div>
-      {{#if @viewable}}
         <Auk::ButtonLink
           @layout="icon-only"
           @icon="download"
@@ -15,6 +14,7 @@
         >
           {{t "download"}}
         </Auk::ButtonLink>
+      {{#if @viewable}}
         <Auk::ButtonLink
           @layout="icon-only"
           @icon="book"
