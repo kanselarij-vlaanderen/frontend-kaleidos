@@ -82,13 +82,13 @@ export default class MeetingEditMeetingComponent extends Component {
     const date = this.formatter.formatDate(null);
     const startDate = this.startDate || date;
 
-    yield meeting.set('isDigital', isDigital);
-    yield meeting.set('extraInfo', extraInfo);
-    yield meeting.set('plannedStart', startDate);
-    yield meeting.set('created', date);
-    yield meeting.set('kind', kindUriToAdd);
-    yield meeting.set('number', meetingNumber);
-    yield meeting.set('numberRepresentation', numberRepresentation);
+    meeting.isDigital = isDigital;
+    meeting.extraInfo = extraInfo;
+    meeting.plannedStart = startDate;
+    meeting.created = date;
+    meeting.kind = kindUriToAdd;
+    meeting.number = meetingNumber;
+    meeting.numberRepresentation = numberRepresentation;
 
     try {
       yield meeting.save();
