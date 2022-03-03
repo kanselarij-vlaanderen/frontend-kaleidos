@@ -39,20 +39,20 @@
           @reusable={{true}}
           @onUpload={{this.uploadPiece}}
         />
-          <Utils::LoadableContent
-            @isLoading={{this.loadTranslationPieces.isRunning}}
-            @reserveSpace={{true}}
-          >
-            <Publications::Publication::PublicationDocumentsList
-              @pieces={{this.translationPieces}}
-              @viewable={{true}}
-              @onDeletePiece={{this.unlinkTranslationPiece}}
-            />
-            <Publications::Publication::PublicationDocumentsList
-                @pieces={{this.uploadedPieces}}
-                @onDeletePiece={{perform this.deleteUploadedPiece}}
-              />
-          </Utils::LoadableContent>
+        <Utils::LoadableContent
+          @isLoading={{this.loadTranslationPieces.isRunning}}
+          @reserveSpace={{true}}
+        >
+          <Publications::Publication::PublicationDocumentsList
+            @pieces={{this.translationPieces}}
+            @viewable={{true}}
+            @onDeletePiece={{this.unlinkTranslationPiece}}
+          />
+          <Publications::Publication::PublicationDocumentsList
+            @pieces={{this.uploadedPieces}}
+            @onDeletePiece={{perform this.deleteUploadedPiece}}
+          />
+        </Utils::LoadableContent>
       </div>
     </div>
   </Auk::Modal::Body>
