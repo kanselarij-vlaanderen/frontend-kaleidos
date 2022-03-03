@@ -8,9 +8,11 @@ export default class AgendaStatus extends Model {
   get isDesignAgenda() {
     return this.uri === CONSTANTS.AGENDA_STATUSSES.DESIGN;
   }
+
   get isFinal() {
     return this.uri === CONSTANTS.AGENDA_STATUSSES.CLOSED;
   }
+
   get isApproved() {
     return this.uri === CONSTANTS.AGENDA_STATUSSES.APPROVED;
   }

@@ -1,9 +1,6 @@
 import Model, { hasMany, belongsTo, attr } from '@ember-data/model';
-import { inject as service } from '@ember/service';
 
 export default class AgendaItemTreatment extends Model {
-  @service intl;
-
   @attr('date') startDate; // for publications: displayed as: Datum beslissing
   @attr('datetime') modified;
   @attr('datetime') created;
