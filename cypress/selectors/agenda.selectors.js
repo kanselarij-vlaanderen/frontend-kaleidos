@@ -200,6 +200,7 @@ const selectors = {
       input: '[data-test-new-session-number-representation-input]',
       save: '[data-test-new-session-number-representation-save]',
     },
+    save: '[data-test-new-session-save]',
   },
 
   // edit-session

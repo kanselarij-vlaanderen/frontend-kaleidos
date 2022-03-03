@@ -112,6 +112,7 @@
       @skin="primary"
       {{on "click" (perform this.createNewSession)}}
       disabled={{this.createNewSession.isRunning}}
+      data-test-new-session-save
     >
       {{t "add"}}
     </Auk::Button>
