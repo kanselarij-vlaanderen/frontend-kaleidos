@@ -3,8 +3,7 @@
   <Auk::Toolbar @auto={{true}}>
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
-        <h2 class="auk-toolbar__title"
-            data-test-route-agendas-title>
+        <h2 class="auk-toolbar__title" data-test-route-agendas-title>
           {{t "agenda-title"}}
         </h2>
       </Auk::Toolbar::Item>
@@ -27,14 +26,8 @@
 </Auk::Navbar>
 {{outlet}}
 {{#if this.isCreatingNewSession}}
-  <WebComponents::VlModal
-    @isOverlay={{true}}
-    @title={{t "new-agenda"}}
-    @closeModal={{this.closeNewSessionModal}}
-  >
-    <Sessions::Forms::NewSession
-      @successfullyAdded={{this.successfullyAdded}}
-      @cancelForm={{this.closeNewSessionModal}}
-    />
-  </WebComponents::VlModal>
+  <Meeting::NewMeetingModal
+    @didSave={{this.successfullyAdded}}
+    @onCancel={{this.closeNewSessionModal}}
+  />
 {{/if}}
