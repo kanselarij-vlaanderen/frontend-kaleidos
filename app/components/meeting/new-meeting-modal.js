@@ -47,9 +47,11 @@ export default class MeetingNewMeetingModal extends Component {
   }
 
   async generateNewNumber() {
-    // TODO: Improve samen met Michael of Sven
     const meetings = await this.store.query('meeting', {
-      sort: '-planned-start',
+      filter: {
+        ':gte:planned-start': new Date(this.currentYear, 0, 1).toISOString(),
+      },
+      sort: '-number',
     });
 
     if (meetings.length) {
