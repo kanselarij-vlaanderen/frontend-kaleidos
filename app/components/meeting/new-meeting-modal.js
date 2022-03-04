@@ -1,75 +1,122 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { assert } from '@ember/debug';
 import { action } from '@ember/object';
-import { task } from 'ember-concurrency';
+import { dropTask } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { A } from '@ember/array';
 import moment from 'moment';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import CONFIG from 'frontend-kaleidos/utils/config';
-import { isAnnexMeetingKind } from 'frontend-kaleidos/utils/meeting-utils';
+import {
+  isAnnexMeetingKind,
+  fetchClosestMeetingAndAgendaId,
+} from 'frontend-kaleidos/utils/meeting-utils';
 
+/**
+ * @argument {didSave}
+ * @argument {onCancel}
+ */
 export default class MeetingNewMeetingModal extends Component {
   @service store;
-  @service agendaService;
   @service newsletterService;
   @service toaster;
-  @service formatter;
 
-  @tracked kind = null;
   @tracked selectedMainMeeting = null;
   @tracked selectedKindUri = null;
-  @tracked meetingNumber = null;
   @tracked isEditingFormattedMeetingIdentifier = false;
-  @tracked formattedMeetingIdentifier = null;
+  @tracked _meetingNumber = null;
+  @tracked _formattedMeetingIdentifier = null;
 
   currentYear = new Date().getFullYear();
 
   constructor() {
     super(...arguments);
 
-    assert(
-      `'didSave' argument is required and must be a function`,
-      this.args.didSave !== undefined && typeof this.args.didSave === 'function'
-    );
-    assert(
-      `'onCancel' is required and must be a function`,
-      this.args.onCancel !== undefined &&
-        typeof this.args.onCancel === 'function'
-    );
-
-    this.generateNewNumber();
+    this.initializeMeetingNumber.perform();
   }
 
   get isAnnexMeeting() {
     return isAnnexMeetingKind(this.selectedKindUri);
   }
 
-  async generateNewNumber() {
-    const meetings = await this.store.query('meeting', {
+  get formattedMeetingIdentifier() {
+    if (!this._formattedMeetingIdentifier) {
+      return `VR PV ${this.currentYear}/${this.meetingNumber}`;
+    }
+    return this._formattedMeetingIdentifier;
+  }
+
+  set formattedMeetingIdentifier(formattedMeetingIdentifier) {
+    this._formattedMeetingIdentifier = formattedMeetingIdentifier;
+  }
+
+  get meetingNumber() {
+    return this._meetingNumber;
+  }
+
+  set meetingNumber(meetingNumber) {
+    this._meetingNumber = meetingNumber;
+    this._formattedMeetingIdentifier = null;
+  }
+
+  @dropTask
+  *initializeMeetingNumber() {
+    const meeting = yield this.store.queryOne('meeting', {
       filter: {
-        ':gte:planned-start': new Date(this.currentYear, 0, 1).toISOString(),
+        ':gte:planned-start': new Date(
+          Date.UTC(this.currentYear, 0, 1)
+        ).toISOString(),
+        ':lt:planned-start': new Date(
+          Date.UTC(this.currentYear + 1, 0, 1)
+        ).toISOString(),
       },
       sort: '-number',
     });
 
-    if (meetings.length) {
-      const meetingsFromThisYear = meetings.filter(
-        (meeting) =>
-          meeting.plannedStart &&
-          meeting.plannedStart.getFullYear() === this.currentYear
-      );
-      const meetingIds = meetingsFromThisYear
-        .map((meeting) => meeting.number)
-        .filter((meetingId) => meetingId !== undefined);
-      let id = 0;
-      // FIX voor de eerste agenda van het jaar -> Anders math.max infinity
-      if (meetingIds.length !== 0) {
-        id = Math.max(...meetingIds);
+    const id = meeting?.number ?? 0;
+    this.meetingNumber = id + 1;
+  }
+
+  @dropTask
+  *createMeeting() {
+    const {
+      extraInfo,
+      meetingNumber,
+      formattedMeetingIdentifier,
+    } = this;
+    const date = new Date();
+    const startDate = this.startDate || date;
+    const meeting = this.store.createRecord('meeting', {
+      extraInfo,
+      isFinal: false,
+      plannedStart: startDate,
+      created: date,
+      kind: this.selectedKindUri,
+      mainMeeting: this.selectedMainMeeting,
+      number: meetingNumber,
+      numberRepresentation: formattedMeetingIdentifier,
+    });
+
+    const closestMeeting = yield fetchClosestMeetingAndAgendaId(startDate);
+
+    try {
+      yield meeting.save();
+      const agenda = yield this.createAgenda(meeting, date);
+      if (!meeting.isAnnex && closestMeeting) {
+        yield this.createAgendaitemToApproveMinutes(
+          agenda,
+          meeting,
+          closestMeeting
+        );
       }
-      this.meetingNumber = id + 1;
-      this.formattedMeetingIdentifier = `VR PV ${this.currentYear}/${this.meetingNumber}`;
+      yield this.newsletterService.createNewsItemForMeeting(meeting);
+      // TODO: Should fix sessionNrBug
+      // Import from meeting-utils.js
+      // yield assignNewSessionNumbers();
+    } catch (err) {
+      this.toaster.error();
+    } finally {
+      this.args.didSave();
     }
   }
 
@@ -78,7 +125,6 @@ export default class MeetingNewMeetingModal extends Component {
       'agendastatus',
       CONSTANTS.AGENDA_STATUSSES.DESIGN
     );
-    const fallBackDate = this.formatter.formatDate(null);
     const agenda = this.store.createRecord('agenda', {
       serialnumber: 'A',
       title: `Agenda A voor zitting ${moment(meeting.plannedStart).format(
@@ -86,24 +132,22 @@ export default class MeetingNewMeetingModal extends Component {
       )}`,
       createdFor: meeting,
       status,
-      created: date || fallBackDate,
-      modified: date || fallBackDate,
+      created: date,
+      modified: date,
     });
-    const savedAgenda = await agenda.save();
-    return savedAgenda;
+    await agenda.save();
+    return agenda;
   }
 
   // new meeting parameter prevents extra request of agenda.createdFor
   async createAgendaitemToApproveMinutes(agenda, newMeeting, closestMeeting) {
     const now = new Date();
 
-    // load code-list item
     const decisionResultCode = await this.store.findRecordByUri(
       'decision-result-code',
       CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
     );
 
-    // Treatment of agenda-item / decision activity
     const startDate = newMeeting.plannedStart;
     const agendaItemTreatment = this.store.createRecord(
       'agenda-item-treatment',
@@ -124,60 +168,11 @@ export default class MeetingNewMeetingModal extends Component {
         closestMeeting.plannedstart
       ).format('dddd DD-MM-YYYY')}.`,
       formallyOk: CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK,
-      mandatees: [],
-      pieces: [],
-      approvals: [],
       isApproval: true,
       treatments: A([agendaItemTreatment]),
     });
-    return await agendaitem.save();
-  }
-
-  @task({ drop: true })
-  *createNewSession() {
-    const {
-      isDigital,
-      extraInfo,
-      selectedKindUri,
-      meetingNumber,
-      formattedMeetingIdentifier,
-    } = this;
-    const kindUriToAdd = selectedKindUri || CONFIG.MINISTERRAAD_TYPES.DEFAULT;
-    const date = this.formatter.formatDate(null);
-    const startDate = this.startDate || date;
-    const newMeeting = this.store.createRecord('meeting', {
-      isDigital,
-      extraInfo,
-      isFinal: false,
-      plannedStart: startDate,
-      created: date,
-      kind: kindUriToAdd,
-      mainMeeting: this.selectedMainMeeting,
-      number: meetingNumber,
-      numberRepresentation: formattedMeetingIdentifier,
-    });
-
-    const closestMeeting =
-      yield this.agendaService.getClosestMeetingAndAgendaId(startDate);
-
-    try {
-      yield newMeeting.save();
-      const agenda = yield this.createAgenda(newMeeting, date);
-      if (!newMeeting.isAnnex && closestMeeting) {
-        yield this.createAgendaitemToApproveMinutes(
-          agenda,
-          newMeeting,
-          closestMeeting
-        );
-      }
-      yield this.newsletterService.createNewsItemForMeeting(newMeeting);
-      // TODO: Should fix sessionNrBug
-      // await this.agendaService.assignNewSessionNumbers();
-    } catch (err) {
-      this.toaster.error();
-    } finally {
-      this.args.didSave(newMeeting);
-    }
+    await agendaitem.save();
+    return agendaitem;
   }
 
   @action
@@ -195,7 +190,7 @@ export default class MeetingNewMeetingModal extends Component {
 
   @action
   selectStartDate(val) {
-    this.startDate = this.formatter.formatDate(val);
+    this.startDate = val;
   }
 
   @action
@@ -203,24 +198,18 @@ export default class MeetingNewMeetingModal extends Component {
     this.selectedKindUri = kind;
     if (!this.isAnnexMeeting) {
       this.selectedMainMeeting = null;
-      this.generateNewNumber();
+      this.initializeMeetingNumber.perform();
     }
   }
 
   @action
-  meetingNumberChangedAction(meetingNumber) {
+  updateMeetingNumber(meetingNumber) {
     this.meetingNumber = meetingNumber;
-    this.formattedMeetingIdentifier = `VR PV ${this.currentYear}/${meetingNumber}`;
   }
 
   @action
-  editFormattedMeetingIdentifier() {
-    this.isEditingFormattedMeetingIdentifier = true;
-  }
-
-  @action
-  saveAction() {
-    this.formattedMeetingIdentifier = `${this.formattedMeetingIdentifier}`;
-    this.isEditingFormattedMeetingIdentifier = false;
+  toggleEditingFormattedMeetingIdentifier() {
+    this.isEditingFormattedMeetingIdentifier =
+      !this.isEditingFormattedMeetingIdentifier;
   }
 }
