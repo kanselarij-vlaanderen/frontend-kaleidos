@@ -1,0 +1,225 @@
+/* ==========================================================================
+   ember-tag-input
+   ========================================================================== */
+
+@use "sass:math";
+
+.ember-power-select-trigger {
+  position: relative;
+  display: block;
+  appearance: none;
+  -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes, this one is needed
+  width: 100%;
+  min-height: 3.4rem;
+  // overflow-y: hidden;
+
+  border: 0.1rem solid $auk-gray-300;
+  border-radius: .3rem;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3e%3cpath d='M0.42,9.77a3.27,3.27,0,0,1,.91-2.21,3.12,3.12,0,0,1,4.41,0L16,17.82,26.25,7.56A3.12,3.12,0,0,1,30.67,12L18.2,24.44a3.12,3.12,0,0,1-4.41,0L1.33,12A3.17,3.17,0,0,1,.42,9.77'/%3e%3ctext y='90'%3e' %26apos; %23 %25 %26amp; %c2%bf %f0%9f%94%a3%3c/text%3e%3c/svg%3e"); // sass-lint:disable-line max-line-length
+  background-repeat: no-repeat;
+  background-size: 1.1rem;
+  background-position: calc(100% - 1.5rem) 50%;
+  padding: .7rem 6rem .7rem .7rem;
+
+  color: $auk-gray-800;
+  font-family: flanders-sans, sans-serif;
+  font-size: 1.5rem;
+  line-height: normal;
+  text-decoration: none;
+
+  &[aria-disabled=true] {
+    color: $auk-gray-500;
+    background-color: $auk-gray-100;
+  }
+
+  &:focus {
+    outline: 0;
+    border-color: $auk-yellow-500;
+    box-shadow: inset 0 0 0 0.1rem $auk-yellow-500;
+  }
+
+  &[multiple] {
+    height: auto;
+  }
+}
+
+.ember-basic-dropdown-trigger.ember-power-select-trigger {
+  &[aria-expanded=true] {
+    border-radius: .3rem;
+  }
+}
+
+.ember-power-select-selected-item {
+  display: inline-block; // allow block content in span.ember-power-select-selected-item
+
+  margin-left: 0;
+
+  > .auk-icon {
+    font-size: 1.5rem;
+  }
+}
+
+.ember-power-select-placeholder {
+  margin-left: 0;
+
+  color: $auk-gray-500;
+}
+
+.ember-power-select-status-icon {
+  display: none;
+}
+
+.ember-power-select-clear-btn {
+  $icon-font-size: 2.6rem;
+
+  top: calc(50% - #{math.div($icon-font-size, 2) * 1.1});
+  margin-right: 0.3em;
+
+  font-size: $icon-font-size;
+  line-height: 1;
+}
+
+.ember-power-select-dropdown.ember-basic-dropdown-content {
+  display: block;
+  top: 100%;
+  width: 100%;
+  transform: translateY(0.5rem);
+
+  border: none;
+  border-radius: 0.3rem;
+  background-color: #FFF;
+  box-shadow: $auk-shadow-medium;
+}
+
+.ember-power-select-options {
+  padding: 1rem 0;
+}
+
+.ember-power-select-option {
+  display: block;
+  position: relative;
+  width: 100%;
+
+  padding: 0.7rem 0 0.5rem 1rem;
+
+  color: $auk-gray-800;
+  font-size: 1.5rem;
+
+  &:hover,
+  &[aria-selected=true],
+  &[aria-current=true] {
+    color: $auk-gray-800;
+  }
+
+  &[aria-current=true] {
+    position: relative;
+
+    background-color: $auk-gray-100;
+  }
+
+  &[aria-selected=true] {
+    background-color: $auk-gray-200;
+  }
+
+  > .auk-icon {
+    font-size: 1.5rem;
+  }
+}
+
+.ember-power-select-search {
+  border-bottom: 0.1rem solid $auk-gray-200;
+}
+
+.ember-power-select-search-input {
+  display: inline-block;
+  width: 100%;
+  max-width: 100%;
+  height: unset !important;
+  -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes
+
+  border: 0.1rem solid $auk-gray-300;
+  border-radius: .3rem;
+  background: #fff;
+  padding: 0 1rem;
+
+  color: $auk-color-text;
+  font-family: $auk-font-sans-family;
+  font-size: 1.6rem;
+  line-height: 3.5rem;
+
+  &:hover {
+    box-shadow: none;
+  }
+
+  &:focus,
+  &--focus {
+    outline: none;
+    border-color: $auk-yellow-500;
+    box-shadow: inset 0 0 0 0.1rem $auk-yellow-500;
+  }
+
+  &::placeholder {
+    color: $auk-gray-500;
+  }
+
+  &::-webkit-search-cancel-button {
+    // sass-lint:disable-line no-vendor-prefixes
+    -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes
+  }
+
+  // Input field block modifier
+  &--block {
+    display: block;
+    width: 100%;
+  }
+
+  // Input field small modifier
+  &--small {
+    max-width: 6rem;
+    padding: 0 0.8rem;
+  }
+}
+
+.ember-power-select-multiple-trigger {
+  padding: .4rem 4rem .4rem .4rem;
+
+  .ember-power-select-placeholder {
+    margin: .3rem 0 .3rem .3rem;
+  }
+}
+
+.ember-power-select-multiple-options {
+  @extend .auk-filter-pill-list;
+}
+
+.ember-power-select-multiple-option {
+  @extend .auk-filter-pill;
+
+  flex-direction: row-reverse;
+
+  margin: 0;
+
+  .ember-power-select-multiple-remove-btn {
+    @extend .auk-icon;
+    @extend .auk-icon--x;
+
+    &:before {
+      @extend %auk-icons-font-style;
+      @extend .ki-x;
+    }
+
+    // hide text node & re-apply correct color + size in the `&:after` selector below
+    color: transparent;
+    font-size: 0;
+
+    &:not(:hover) {
+      opacity: 1;
+    }
+
+    &:before {
+      color: $auk-gray-600;
+      font-size: 1.8rem;
+    }
+  }
+}

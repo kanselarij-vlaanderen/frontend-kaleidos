@@ -17,7 +17,10 @@
     <span class="auk-status-pill__content">
       <Auk::Icon @name={{this.iconName}} />
       {{#if (has-block)}}
-        <span class="auk-status-pill__label">{{yield}}</span>
+        <span
+          data-test-status-pill-content-label
+          class="auk-status-pill__label"
+        >{{yield}}</span>
       {{/if}}
     </span>
     <span class="auk-status-pill__action" aria-hidden="true">

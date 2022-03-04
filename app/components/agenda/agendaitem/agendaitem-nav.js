@@ -18,12 +18,13 @@ export default class AgendaitemNav extends Component {
 
   constructor() {
     super(...arguments);
-    this.checkExistance();
+    this.checkExistence();
   }
 
   @action
-  async checkExistance() {
+  async checkExistence() {
     const agendaActivity = await this.agendaitem.get('agendaActivity');
+    this.decisionsExist = isPresent(await this.agendaitem.get('treatments'));
     if (!this.agendaitem.isApproval) {
       if (agendaActivity) {
         const subcase = await agendaActivity.get('subcase');
@@ -31,7 +32,6 @@ export default class AgendaitemNav extends Component {
       } else {
         this.subcaseExists = false;
       }
-      this.decisionsExist = isPresent(await this.agendaitem.get('treatments'));
       if (this.decisionsExist) { // Treatment and decision activity are currently one entity in implementation
         const treatment = (await this.agendaitem.get('treatments')).firstObject;
         const nli = await treatment.get('newsletterInfo');

@@ -23,20 +23,20 @@ export default class PublicationStatus extends Model {
     return this.uri === CONSTANTS.PUBLICATION_STATUSES.PAUSED;
   }
 
-  get isToTranslations() {
-    return this.uri === CONSTANTS.PUBLICATION_STATUSES.TO_TRANSLATIONS;
+  get isTranslationRequested() {
+    return this.uri === CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_REQUESTED;
   }
 
-  get isTranslationIn() {
-    return this.uri === CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_IN;
+  get isTranslationReceived() {
+    return this.uri === CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_RECEIVED;
   }
 
   get isProofRequested() {
     return this.uri === CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED;
   }
 
-  get isProofIn() {
-    return this.uri === CONSTANTS.PUBLICATION_STATUSES.PROOF_IN;
+  get isProofReceived() {
+    return this.uri === CONSTANTS.PUBLICATION_STATUSES.PROOF_RECEIVED;
   }
 
   get isProofRecalled() {

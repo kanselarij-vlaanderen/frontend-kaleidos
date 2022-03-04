@@ -60,10 +60,10 @@ export default {
   // PUBLICATIONS
   PUBLICATION_STATUSES: {
     STARTED: 'http://themis.vlaanderen.be/id/concept/publicatie-status/fa62e050-3960-440d-bed9-1c3d3e9923a8',
-    TO_TRANSLATIONS: 'http://themis.vlaanderen.be/id/concept/publicatie-status/3f0d3d3f-cde4-411f-a370-23a4a6d7743d',
-    TRANSLATION_IN: 'http://themis.vlaanderen.be/id/concept/publicatie-status/e34302e7-fcb2-47a4-a97e-10e39625fcfc',
+    TRANSLATION_REQUESTED: 'http://themis.vlaanderen.be/id/concept/publicatie-status/3f0d3d3f-cde4-411f-a370-23a4a6d7743d',
+    TRANSLATION_RECEIVED: 'http://themis.vlaanderen.be/id/concept/publicatie-status/e34302e7-fcb2-47a4-a97e-10e39625fcfc',
     PROOF_REQUESTED: 'http://themis.vlaanderen.be/id/concept/publicatie-status/f930c630-b568-4b92-b786-8a0e7363362a',
-    PROOF_IN: 'http://themis.vlaanderen.be/id/concept/publicatie-status/5350f28c-ff91-4a8c-94e1-699e92c73704',
+    PROOF_RECEIVED: 'http://themis.vlaanderen.be/id/concept/publicatie-status/5350f28c-ff91-4a8c-94e1-699e92c73704',
     PROOF_RECALLED: 'http://themis.vlaanderen.be/id/concept/publicatie-status/68b7d72e-38fd-4c0b-849b-cd4ae466e986',
     PROOF_CORRECTED: 'http://themis.vlaanderen.be/id/concept/publicatie-status/9d01b336-be99-467f-ae2e-12f3841ae765',
     PUBLICATION_REQUESTED: 'http://themis.vlaanderen.be/id/concept/publicatie-status/0b650ee2-3e5f-40f9-8c0d-0dc54a7a5f65',

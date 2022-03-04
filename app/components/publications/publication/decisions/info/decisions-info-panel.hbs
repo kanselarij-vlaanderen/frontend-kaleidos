@@ -42,23 +42,15 @@
                   <Auk::Label>
                     {{t "regulation-type"}}
                   </Auk::Label>
-                  {{#if this.isViaCouncilOfMinisters}}
-                    {{#if @publicationFlow.regulationType}}
-                      {{@publicationFlow.regulationType.label}}
-                    {{else}}
-                      {{t "dash"}}
-                    {{/if}}
-                  {{else}}
-                    <PowerSelect
-                      @options={{this.sortedRegulationTypes}}
-                      @onChange={{fn (mut @publicationFlow.regulationType)}}
-                      @selected={{@publicationFlow.regulationType}}
-                      @allowClear={{true}}
-                      as |regulationType|
-                    >
-                      {{regulationType.label}}
-                    </PowerSelect>
-                  {{/if}}
+                  <PowerSelect
+                    @options={{this.sortedRegulationTypes}}
+                    @onChange={{fn (mut @publicationFlow.regulationType)}}
+                    @selected={{@publicationFlow.regulationType}}
+                    @allowClear={{true}}
+                    as |regulationType|
+                  >
+                    {{regulationType.label}}
+                  </PowerSelect>
                 </div>
               </div>
 
@@ -105,7 +97,7 @@
                   data-test-publication-decisions-info-panel-number-of-pages
                   class="auk-form-group"
                 >
-                  <Auk::Label>{{t "pages-amount"}}</Auk::Label>
+                  <Auk::Label>{{t "number-of-pages"}}</Auk::Label>
                   <Auk::Input
                     @type="number"
                     @value={{@publicationFlow.numberOfPages}}
@@ -169,7 +161,7 @@
 
           {{! Number of pages }}
           <div class="auk-o-grid-col-3 auk-content">
-            <h4 class="auk-u-m-0">{{t "pages-amount"}}</h4>
+            <h4 class="auk-u-m-0">{{t "number-of-pages"}}</h4>
             <p class="auk-u-m-0">
               {{#if @publicationFlow.numberOfPages}}
                 {{@publicationFlow.numberOfPages}}

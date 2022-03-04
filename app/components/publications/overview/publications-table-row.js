@@ -12,7 +12,7 @@ export default class PublicationsTableRowComponent extends Component {
 
   @tracked isViaCouncilOfMinisters;
   @tracked publicationDate;
-  @tracked pageCount;
+  @tracked numberOfPages;
   @tracked proofRequestDate;
   @tracked publicationStatus;
 
