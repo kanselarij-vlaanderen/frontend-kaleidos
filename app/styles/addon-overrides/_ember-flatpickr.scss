@@ -99,9 +99,9 @@ $calendarWidth: $daysWidth;
     }
 
     &:focus {
+      box-shadow: inset 0 0 0 0.1rem $auk-yellow-500;
       outline: 0;
       border-color: $auk-yellow-500;
-      box-shadow: inset 0 0 0 0.1rem $auk-yellow-500;
     }
 
     option {
@@ -119,9 +119,9 @@ $calendarWidth: $daysWidth;
     }
 
     &:focus-within {
+      box-shadow: inset 0 0 0 0.1rem $auk-yellow-500;
       outline: 0;
       border-color: $auk-yellow-500;
-      box-shadow: 0 0 0 0.1rem $auk-yellow-500;
     }
 
     input.cur-year {
@@ -136,7 +136,7 @@ $calendarWidth: $daysWidth;
 
     border: 0.1rem solid transparent;
     border-left-color: $auk-gray-300;
-    padding: 0.1rem 0 0 0;
+    padding: 0.1rem 0 0 0.1rem;
 
     color: $auk-gray-600;
     font-size: 1rem;
@@ -216,9 +216,10 @@ span.flatpickr-weekday {
   }
 
   &:focus {
+    box-shadow: inset 0 0 0 0.1rem $auk-yellow-500;
     outline: 0;
     border-color: $auk-yellow-500;
-    box-shadow: inset 0 0 0 0.1rem $auk-yellow-500;
+    background-color: $auk-blue-100;
   }
 
   &.flatpickr-disabled,
@@ -235,6 +236,10 @@ span.flatpickr-weekday {
   &.nextMonthDay {
     &:hover {
       border-color: $auk-gray-100;
+      background-color: $auk-gray-100;
+    }
+
+    &:focus {
       background-color: $auk-gray-100;
     }
 
@@ -280,6 +285,10 @@ span.flatpickr-weekday {
       color: $auk-white;
     }
 
+    &:focus {
+      background-color: $auk-blue-700;
+    }
+
     &.prevMonthDay,
     &.nextMonthDay {
       background: $auk-gray-500;
@@ -288,6 +297,10 @@ span.flatpickr-weekday {
       &:hover {
         background: $auk-gray-600;
         border-color: $auk-gray-600;
+      }
+
+      &:focus {
+        background-color: $auk-gray-600;
       }
     }
   }
@@ -301,9 +314,9 @@ span.flatpickr-weekday {
   &.selected.prevMonthDay,
   &.selected.nextMonthDay {
     &:focus {
+      box-shadow: inset 0 0 0 0.1rem $auk-yellow-500;
       outline: 0;
       border-color: $auk-yellow-500;
-      box-shadow: inset 0 0 0 0.1rem $auk-yellow-500;
     }
   }
 }
@@ -312,7 +325,7 @@ span.flatpickr-weekday {
   justify-content: center;
 
   max-height: none;
-  padding: 0.5rem;
+  padding: 1rem;
 
   line-height: normal;
 
@@ -328,8 +341,16 @@ span.flatpickr-weekday {
       background-color: transparent;
     }
 
+    &:focus-within {
+      box-shadow: inset 0 0 0 0.1rem $auk-yellow-500;
+      outline: 0;
+      border-color: $auk-yellow-500;
+    }
+
     span {
       opacity: 1;
+
+      padding-top: 0.2rem;
     }
   }
 
@@ -342,6 +363,10 @@ span.flatpickr-weekday {
     text-align: left;
 
     &:hover {
+      background-color: transparent;
+    }
+
+    &:focus {
       background-color: transparent;
     }
 
@@ -359,7 +384,7 @@ span.flatpickr-weekday {
 
 .flatpickr-time.time24hr {
   .numInputWrapper {
-    width: 6ch;
+    width: 7ch;
   }
 }
 
