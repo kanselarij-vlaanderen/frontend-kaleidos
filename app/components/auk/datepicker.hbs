@@ -7,7 +7,7 @@
     @allowInput={{true}}
     @clickOpens={{true}}
     @date={{this.date}} {{!-- Required Option --}}
-    @dateFormat="d-m-Y"
+    @dateFormat={{if @enableTime "d-m-Y H:i" "d-m-Y"}}
     @mode="single"
     @enable={{this.enable}}
     @nextArrow=""
