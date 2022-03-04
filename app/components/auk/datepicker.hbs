@@ -7,7 +7,8 @@
     @allowInput={{true}}
     @clickOpens={{true}}
     @date={{this.date}} {{!-- Required Option --}}
-    @dateFormat={{if @enableTime "d-m-Y H:i" "d-m-Y"}}
+    {{!-- @dateFormat={{if @enableTime "d-m-Y H:i" "d-m-Y"}} --}}
+    @dateFormat="d-m-Y"
     @mode="single"
     @enable={{this.enable}}
     @nextArrow=""
@@ -17,7 +18,7 @@
     @onReady={{this.onReady}}
     @shorthandCurrentMonth={{true}}
     @disabled={{@disabled}}
-    @enableTime={{@enableTime}}
-    @time_24hr={{true}}
+    {{!-- @enableTime={{@enableTime}} --}}
+    {{!-- @time_24hr={{true}} --}}
   />
 </div>
