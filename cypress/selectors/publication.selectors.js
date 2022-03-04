@@ -256,8 +256,8 @@ const selectors = {
   // translation upload modal
   // documentsUpload: {
   //   name: '[data-test-publication-documents-upload-name]',
-  //   pages: '[data-test-publication-documents-upload-pages]',
-  //   words: '[data-test-publication-documents-upload-words]',
+  //   numberOfPages: '[data-test-publication-documents-upload-number-of-pages]',
+  //   numberOfWords: '[data-test-publication-documents-upload-number-of-words]',
   //   proofPrint: '[data-test-publication-documents-upload-proof-print]',
   //   save: '[data-test-publication-documents-upload-save]',
   // },
@@ -293,18 +293,18 @@ const selectors = {
   },
 
   // proof-edit-modal
-  proofEdit: {
-    name: '[data-test-proof-edit-name]',
-    save: '[data-test-proof-edit-save]',
-  },
+  // proofEdit: {
+  //   name: '[data-test-proof-edit-name]',
+  //   save: '[data-test-proof-edit-save]',
+  // },
 
   // proof-request-modal
-  proofRequest: {
-    subject: '[data-test-proof-request-subject]',
-    message: '[data-test-proof-request-message]',
-    attachments: '[data-test-proof-request-attachments]',
-    save: '[data-test-proof-request-save]',
-  },
+  // proofRequest: {
+  //   subject: '[data-test-proof-request-subject]',
+  //   message: '[data-test-proof-request-message]',
+  //   attachments: '[data-test-proof-request-attachments]',
+  //   save: '[data-test-proof-request-save]',
+  // },
 
   // publication-case-info-panel
   publicationCaseInfo: {

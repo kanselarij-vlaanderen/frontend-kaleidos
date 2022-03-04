@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { task, dropTask } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
@@ -8,6 +8,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationTranslationsIndexController extends Controller {
   @service store;
+  @service router;
   @service publicationService;
 
   @tracked publicationFlow;
@@ -21,7 +22,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   get latestTranslationActivity() {
-    const timelineActivity = this.model.find((timelineActivity) => timelineActivity.isTranslationActivity);
+    const timelineActivity = this.model.find((activity) => activity.isTranslationActivity);
     return timelineActivity ? timelineActivity.activity : null;
   }
 
@@ -30,43 +31,41 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     const translationActivity = this.latestTranslationActivity;
 
     const pieceSaves = [];
-    const containerSaves = [];
 
     const language = yield translationActivity.language;
     for (let piece of translationUpload.uploadedPieces) {
-      piece.receivedDate = translationUpload.receivedAtDate;
+      piece.receivedDate = translationUpload.receivedDate;
       piece.language = language;
       piece.translationActivityGeneratedBy = translationActivity;
       pieceSaves.push(piece.save());
     }
 
-    translationActivity.endDate = translationUpload.receivedAtDate;
+    translationActivity.endDate = translationUpload.receivedDate;
     const translationActivitySave = translationActivity.save();
 
     let translationSubcaseSave;
     if (
       !this.translationSubcase.receivedDate ||
-      translationUpload.receivedAtDate < this.translationSubcase.receivedDate
+      translationUpload.receivedDate < this.translationSubcase.receivedDate
     ) {
-      this.translationSubcase.receivedDate = translationUpload.receivedAtDate;
+      this.translationSubcase.receivedDate = translationUpload.receivedDate;
       translationSubcaseSave = this.translationSubcase.save();
     }
 
     if (translationUpload.mustUpdatePublicationStatus) {
       yield this.publicationService.updatePublicationStatus(
         this.publicationFlow,
-        CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_IN,
-        translationUpload.receivedAtDate
+        CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_RECEIVED,
+        translationUpload.receivedDate
       );
 
-      this.translationSubcase.endDate = translationUpload.receivedAtDate;
+      this.translationSubcase.endDate = translationUpload.receivedDate;
       translationSubcaseSave = this.translationSubcase.save();
     }
 
     yield Promise.all([
       translationActivitySave,
       ...pieceSaves,
-      containerSaves,
       translationSubcaseSave,
     ]);
 
@@ -75,16 +74,38 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   @task
+  *updateTranslationActivity(translationEdit) {
+    const saves = [];
+
+    const translationActivity = translationEdit.translationActivity;
+    translationActivity.endDate = translationEdit.receivedDate;
+    saves.push(translationActivity.save());
+
+    if (translationEdit.receivedDate < this.translationSubcase.receivedDate) {
+      this.translationSubcase.receivedDate = translationEdit.receivedDate;
+    }
+    saves.push(this.translationSubcase.save());
+
+    yield Promise.all(saves);
+    this.send('refresh');
+  }
+
+  @task
   *saveTranslationRequest(translationRequest) {
     const now = new Date();
 
     const uploadedPieces = translationRequest.uploadedPieces;
-    const dutch = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
-    yield Promise.all(uploadedPieces.map((piece) => {
-      piece.translationSubcaseSourceFor = this.translationSubcase;
-      piece.language = dutch;
-      return piece.save();
-    }));
+    const dutch = yield this.store.findRecordByUri(
+      'language',
+      CONSTANTS.LANGUAGES.NL
+    );
+    yield Promise.all(
+      uploadedPieces.map((piece) => {
+        piece.translationSubcaseSourceFor = this.translationSubcase;
+        piece.language = dutch;
+        return piece.save();
+      })
+    );
 
     const requestActivity = this.store.createRecord('request-activity', {
       startDate: now,
@@ -134,41 +155,42 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     // PUBLICATION-STATUS
     yield this.publicationService.updatePublicationStatus(
       this.publicationFlow,
-      CONSTANTS.PUBLICATION_STATUSES.TO_TRANSLATIONS
+      CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_REQUESTED
     );
 
     this.send('refresh');
     this.showTranslationRequestModal = false;
   }
 
-  @dropTask
+  @task
   *deleteRequest(requestActivity) {
-    const deletePromises = [];
-
     const translationActivity = yield requestActivity.translationActivity;
-    deletePromises.push(translationActivity.destroyRecord());
+    yield translationActivity.destroyRecord();
 
     const mail = yield requestActivity.email;
-    if (mail) {
-      deletePromises.push(mail.destroyRecord());
-    }
-
-    deletePromises.push(requestActivity.destroyRecord());
+    // legacy activities may not have an email so only try to delete if one exists
+    yield mail?.destroyRecord();
 
     const pieces = yield requestActivity.usedPieces;
-
     for (const piece of pieces.toArray()) {
-      const [file, documentContainer] = yield Promise.all([
-        piece.file,
-        piece.documentContainer,
-      ]);
-
-      deletePromises.push(piece.destroyRecord());
-      deletePromises.push(file.destroyRecord());
-      deletePromises.push(documentContainer.destroyRecord());
+      const file = yield piece.file;
+      const documentContainer = yield piece.documentContainer;
+      yield file.destroyRecord();
+      yield documentContainer.destroyRecord();
+      yield piece.destroyRecord();
     }
-    yield Promise.all(deletePromises);
+    yield requestActivity.destroyRecord();
     this.send('refresh');
+  }
+
+  @task
+  *saveProofRequest(proofRequest) {
+    yield this.publicationService.createProofRequestActivity(
+      proofRequest,
+      this.publicationFlow
+    );
+
+    this.router.transitionTo('publications.publication.proofs');
   }
 
   @action

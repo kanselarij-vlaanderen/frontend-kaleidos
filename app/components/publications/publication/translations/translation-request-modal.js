@@ -17,8 +17,8 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   @service store;
 
   @tracked uploadedPieces = [];
-  @tracked pagesAmount;
-  @tracked wordsAmount;
+  @tracked numberOfPages;
+  @tracked numberOfWords;
   @tracked translationDueDate = this.args.dueDate
     ? this.args.dueDate
     : new Date();
@@ -64,17 +64,6 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
     this.args.onCancel();
   }
 
-  @dropTask
-  *deleteUploadedPiece(piece) {
-    const file = yield piece.file;
-    const documentContainer = yield piece.documentContainer;
-    yield Promise.all([
-      file.destroyRecord(),
-      documentContainer.destroyRecord(),
-    ]);
-    this.uploadedPieces.removeObject(piece);
-  }
-
   @task
   *setEmailFields() {
     const publicationFlow = this.args.publicationFlow;
@@ -84,9 +73,9 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
       identifier: identification.idName,
       title: publicationFlow.shortTitle,
       dueDate: this.translationDueDate,
-      totalPages: this.pagesAmount,
-      totalWords: this.wordsAmount,
-      totalDocuments: this.uploadedPieces.length,
+      numberOfPages: this.numberOfPages,
+      numberOfWords: this.numberOfWords,
+      numberOfDocuments: this.uploadedPieces.length,
     };
 
     const mailTemplate = translationRequestEmail(mailParams);
@@ -102,14 +91,14 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
 
   @action
   async uploadPiece(file) {
-    const now = new Date();
+    const created = file.created;
     const documentContainer = this.store.createRecord('document-container', {
-      created: now,
+      created: created,
     });
     await documentContainer.save();
     const piece = this.store.createRecord('piece', {
-      created: now,
-      modified: now,
+      created: created,
+      modified: created,
       file: file,
       confidential: false,
       name: file.filenameWithoutExtension,
@@ -118,6 +107,22 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
 
     this.uploadedPieces.pushObject(piece);
     this.setEmailFields.perform();
+  }
+
+  @task
+  *deleteUploadedPiece(piece) {
+    this.uploadedPieces.removeObject(piece);
+    this.setEmailFields.perform();
+    const [file, documentContainer] = yield Promise.all([
+      piece.file,
+      piece.documentContainer,
+    ]);
+
+    yield Promise.all([
+      file.destroyRecord(),
+      documentContainer.destroyRecord(),
+      piece.destroyRecord(),
+    ]);
   }
 
   initValidators() {
