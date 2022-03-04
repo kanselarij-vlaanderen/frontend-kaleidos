@@ -43,14 +43,6 @@ export default class PublicationsPublicationProofsController extends Controller 
     const proofingActivitySave = proofingActivity.save();
 
     let publicationSubcaseSave;
-    if (
-      proofUpload.receivedDate < this.publicationSubcase.receivedDate ||
-      !this.publicationSubcase.receivedDate
-    ) {
-      this.publicationSubcase.receivedDate = proofUpload.receivedDate;
-      publicationSubcaseSave = this.publicationSubcase.save();
-    }
-
     if (proofUpload.proofPrintCorrector) {
       this.publicationSubcase.proofPrintCorrector =
         proofUpload.proofPrintCorrector;
@@ -127,12 +119,6 @@ export default class PublicationsPublicationProofsController extends Controller 
     proofingActivity.endDate = proofEdit.receivedDate;
     saves.push(proofingActivity.save());
 
-    if (
-      proofEdit.receivedDate < this.publicationSubcase.receivedDate ||
-      !this.publicationSubcase.receivedDate
-    ) {
-      this.publicationSubcase.receivedDate = proofEdit.receivedDate;
-    }
     this.publicationSubcase.proofPrintCorrector = proofEdit.proofPrintCorrector;
     saves.push(this.publicationSubcase.save());
 

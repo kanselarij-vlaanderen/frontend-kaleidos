@@ -151,6 +151,7 @@ request the whole row and not only the arrow at the end to be clickable }}
       data-test-publication-table-row-proof-received-date
       class="auk-u-text-nowrap"
     >
+      {{!TODO in KAS-3186}}
       {{#if @publicationFlow.publicationSubcase.receivedDate}}
         {{moment-format
           @publicationFlow.publicationSubcase.receivedDate

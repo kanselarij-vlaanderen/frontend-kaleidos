@@ -87,6 +87,7 @@ export default [
     keyName: 'proofReceivedDate',
     translationKey: 'publications-table-publication-received-date',
     translationKeySmall: 'publications-table-publication-received-date-small',
+    // TODO in KAS-3186:
     sortKey: 'publication-subcase.received-date',
     apiFieldPaths: ['publication-subcase.received-date'],
   },

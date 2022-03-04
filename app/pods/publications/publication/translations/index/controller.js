@@ -44,14 +44,6 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     const translationActivitySave = translationActivity.save();
 
     let translationSubcaseSave;
-    if (
-      !this.translationSubcase.receivedDate ||
-      translationUpload.receivedDate < this.translationSubcase.receivedDate
-    ) {
-      this.translationSubcase.receivedDate = translationUpload.receivedDate;
-      translationSubcaseSave = this.translationSubcase.save();
-    }
-
     if (translationUpload.mustUpdatePublicationStatus) {
       yield this.publicationService.updatePublicationStatus(
         this.publicationFlow,
@@ -80,11 +72,6 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     const translationActivity = translationEdit.translationActivity;
     translationActivity.endDate = translationEdit.receivedDate;
     saves.push(translationActivity.save());
-
-    if (translationEdit.receivedDate < this.translationSubcase.receivedDate) {
-      this.translationSubcase.receivedDate = translationEdit.receivedDate;
-    }
-    saves.push(this.translationSubcase.save());
 
     yield Promise.all(saves);
     this.send('refresh');

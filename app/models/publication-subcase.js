@@ -11,7 +11,6 @@ export default class PublicationSubcase extends Model {
   @attr('datetime') endDate; // publicatiedatum
   @attr('datetime') created;
   @attr('datetime') modified;
-  @attr('datetime') receivedDate; // earliest date of proofing receival (as indicated on upload (not edit))
   @attr proofPrintCorrector;
 
   @belongsTo('publication-flow') publicationFlow;
