@@ -45,7 +45,6 @@ export default ModelWithModifier.extend({
   requestedBy: belongsTo('mandatee', {
     inverse: null,
   }),
-  accessLevel: belongsTo('access-level'),
 
   // TODO don't use this computed, used in 1 controller
   latestActivity: computed('agendaActivities', 'agendaActivities.[]', async function() {
