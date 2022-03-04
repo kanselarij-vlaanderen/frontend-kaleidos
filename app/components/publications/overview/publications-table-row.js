@@ -13,7 +13,9 @@ export default class PublicationsTableRowComponent extends Component {
   @tracked isViaCouncilOfMinisters;
   @tracked publicationDate;
   @tracked numberOfPages;
+  @tracked translationRequestDate;
   @tracked proofRequestDate;
+  @tracked proofReceivedDate;
   @tracked publicationStatus;
 
   constructor() {
@@ -30,8 +32,14 @@ export default class PublicationsTableRowComponent extends Component {
       this.isViaCouncilOfMinisters =
       yield this.publicationService.getIsViaCouncilOfMinisters(this.args.publicationFlow);
     }
+    if (this.args.tableColumnDisplayOptions.translationRequestDate) {
+      this.translationRequestDate = yield this.getTranslationRequestDate(this.args.publicationFlow);
+    }
     if (this.args.tableColumnDisplayOptions.proofRequestDate) {
       this.proofRequestDate = yield this.getProofRequestDate(this.args.publicationFlow);
+    }
+    if (this.args.tableColumnDisplayOptions.proofReceivedDate) {
+      this.proofReceivedDate = yield this.getProofReceivedDate(this.args.publicationFlow);
     }
     if (this.args.tableColumnDisplayOptions.publicationDate) {
       this.publicationDate = yield this.publicationService.getPublicationDate(
@@ -53,13 +61,44 @@ export default class PublicationsTableRowComponent extends Component {
     return this.publicationStatus && getPublicationStatusPillStep(this.publicationStatus);
   }
 
+  /** @returns {Date?} undefined if no translation-activities */
+  async getTranslationRequestDate(publicationFlow) {
+    const publicationSubcase = await publicationFlow.translationSubcase;
+    const translationActivities = await publicationSubcase.translationActivities;
+    const requestDates = translationActivities.mapBy('startDate');
+    const mostRecentDate = this.getMaxDate(requestDates);
+    return mostRecentDate;
+  }
+
+  /** @returns {Date?} undefined if no ProofingActivities */
   async getProofRequestDate(publicationFlow) {
     const publicationSubcase = await publicationFlow.publicationSubcase;
     const proofingActivities = await publicationSubcase.proofingActivities;
-    const startDates = proofingActivities.mapBy('startDate');
-    startDates.sort();
-    const firstProofRequestDate = startDates[0];
-    return firstProofRequestDate;
+    const requestDates = proofingActivities.mapBy('startDate');
+    const mostRecentDate = this.getMaxDate(requestDates);
+    return mostRecentDate;
+  }
+
+  getMaxDate(dates) {
+    // default .sort() of Date objects does not give expected results
+    dates = dates.sortBy();
+    const max = dates.lastObject;
+    return max;
+  }
+
+  /** @returns {Date?} undefined if no ProofingActivities or a ProofingActivity is not finished */
+  async getProofReceivedDate(publicationFlow) {
+    const publicationSubcase = await publicationFlow.publicationSubcase;
+    const proofingActivities = await publicationSubcase.proofingActivities;
+    let receivedDates = proofingActivities.mapBy('endDate');
+    // default .sort() of Date objects does not give expected results
+    // JS sorts `undefined` after Date objects
+    // if there is a ProofingActivity which is not finished (endDate === undefined)
+    // undefined will be the .lastObject
+    // not using Embers .sortBy() to avoid sort algorithm changes
+    receivedDates = receivedDates.sort((a, b) => a - b);
+    const mostRecentDate = receivedDates.lastObject;
+    return mostRecentDate;
   }
 
   // TODO: review async getter once ember-resources can be used
