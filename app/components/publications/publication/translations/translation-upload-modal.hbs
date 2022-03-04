@@ -31,7 +31,7 @@
       <Auk::Checkbox
         @label={{t "update-publication-status-translation-received"}}
         @checked={{this.mustUpdatePublicationStatus}}
-        {{on "input" this.setTranslationInStatus}}
+        {{on "input" this.setTranslationReceivedStatus}}
       />
     </div>
     <div class="auk-form-group">
@@ -40,7 +40,7 @@
       </Auk::Label>
       <Auk::Datepicker
         id="translationUploadReceivedAtDate"
-        @date={{this.receivedAtDate}}
+        @date={{this.receivedDate}}
         @onChange={{this.setReceivedAtDate}}
       />
     </div>

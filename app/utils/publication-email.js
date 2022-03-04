@@ -27,9 +27,9 @@ function translationRequestEmail(params) {
     + `VO-dossier: ${params.identifier}\n`
     + `Titel: ${params.title}\t\n`
     + `Uiterste vertaaldatum: ${dueDate}\t\n`
-    + `Aantal pagina’s: ${params.totalPages || ''}\t\n`
-    + `Aantal woorden: ${params.totalWords || ''}\t\n`
-    + `Aantal documenten: ${params.totalDocuments}\t\n`;
+    + `Aantal pagina’s: ${params.numberOfPages || ''}\t\n`
+    + `Aantal woorden: ${params.numberOfWords || ''}\t\n`
+    + `Aantal documenten: ${params.numberOfDocuments}\t\n`;
   return {
     subject: subject,
     message: [message, footer].join('\n\n'),

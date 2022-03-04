@@ -17,8 +17,8 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   @service store;
 
   @tracked uploadedPieces = [];
-  @tracked pagesAmount;
-  @tracked wordsAmount;
+  @tracked numberOfPages;
+  @tracked numberOfWords;
   @tracked translationDueDate = this.args.dueDate
     ? this.args.dueDate
     : new Date();
@@ -73,9 +73,9 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
       identifier: identification.idName,
       title: publicationFlow.shortTitle,
       dueDate: this.translationDueDate,
-      totalPages: this.pagesAmount,
-      totalWords: this.wordsAmount,
-      totalDocuments: this.uploadedPieces.length,
+      numberOfPages: this.numberOfPages,
+      numberOfWords: this.numberOfWords,
+      numberOfDocuments: this.uploadedPieces.length,
     };
 
     const mailTemplate = translationRequestEmail(mailParams);
@@ -112,6 +112,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   @task
   *deleteUploadedPiece(piece) {
     this.uploadedPieces.removeObject(piece);
+    this.setEmailFields.perform();
     const [file, documentContainer] = yield Promise.all([
       piece.file,
       piece.documentContainer,

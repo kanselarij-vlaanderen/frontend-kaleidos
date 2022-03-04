@@ -34,32 +34,32 @@ export default class PublicationsPublicationTranslationsIndexController extends 
 
     const language = yield translationActivity.language;
     for (let piece of translationUpload.uploadedPieces) {
-      piece.receivedDate = translationUpload.receivedAtDate;
+      piece.receivedDate = translationUpload.receivedDate;
       piece.language = language;
       piece.translationActivityGeneratedBy = translationActivity;
       pieceSaves.push(piece.save());
     }
 
-    translationActivity.endDate = translationUpload.receivedAtDate;
+    translationActivity.endDate = translationUpload.receivedDate;
     const translationActivitySave = translationActivity.save();
 
     let translationSubcaseSave;
     if (
       !this.translationSubcase.receivedDate ||
-      translationUpload.receivedAtDate < this.translationSubcase.receivedDate
+      translationUpload.receivedDate < this.translationSubcase.receivedDate
     ) {
-      this.translationSubcase.receivedDate = translationUpload.receivedAtDate;
+      this.translationSubcase.receivedDate = translationUpload.receivedDate;
       translationSubcaseSave = this.translationSubcase.save();
     }
 
     if (translationUpload.mustUpdatePublicationStatus) {
       yield this.publicationService.updatePublicationStatus(
         this.publicationFlow,
-        CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_IN,
-        translationUpload.receivedAtDate
+        CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_RECEIVED,
+        translationUpload.receivedDate
       );
 
-      this.translationSubcase.endDate = translationUpload.receivedAtDate;
+      this.translationSubcase.endDate = translationUpload.receivedDate;
       translationSubcaseSave = this.translationSubcase.save();
     }
 
@@ -155,7 +155,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     // PUBLICATION-STATUS
     yield this.publicationService.updatePublicationStatus(
       this.publicationFlow,
-      CONSTANTS.PUBLICATION_STATUSES.TO_TRANSLATIONS
+      CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_REQUESTED
     );
 
     this.send('refresh');
