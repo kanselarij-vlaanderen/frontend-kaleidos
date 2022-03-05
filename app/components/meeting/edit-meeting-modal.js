@@ -1,43 +1,31 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { assert } from '@ember/debug';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import EmberObject from '@ember/object';
 import { A } from '@ember/array';
-import moment from 'moment';
 import CONFIG from 'frontend-kaleidos/utils/config';
 
+/**
+ * @argument {meeting}
+ * @argument {didSave}
+ * @argument {onCancel}
+ */
 export default class MeetingEditMeetingComponent extends Component {
-  @service store;
-  @service agendaService;
   @service toaster;
-  @service formatter;
 
   @tracked kind;
   @tracked selectedKindUri;
   @tracked startDate;
   @tracked extraInfo;
-  @tracked meetingNumber;
-  @tracked numberRepresentation;
+  @tracked _meetingNumber;
+  @tracked _numberRepresentation;
+
+  meetingYear = this.meeting.plannedStart.getFullYear();
 
   constructor() {
     super(...arguments);
-
-    assert(
-      `'didSave' argument is required and must be a function`,
-      this.args.didSave !== undefined && typeof this.args.didSave === 'function'
-    );
-    assert(
-      `'onCancel' is required and must be a function`,
-      this.args.onCancel !== undefined &&
-        typeof this.args.onCancel === 'function'
-    );
-    assert(
-      `'meeting' is required and must be an object`,
-      this.args.meeting !== undefined && typeof this.args.meeting === 'object'
-    );
 
     this.selectedKindUri = this.meeting.kind;
     this.kind = EmberObject.create(
@@ -59,39 +47,39 @@ export default class MeetingEditMeetingComponent extends Component {
     return this.args.meeting;
   }
 
-  @action
-  meetingNumberChangedAction(event) {
-    const meetingNumber = event.target.value;
-    const meetingYear = moment(this.meeting.plannedStart).year();
-    this.meetingNumber = meetingNumber;
-    this.formattedMeetingIdentifier = `VR PV ${meetingYear}/${meetingNumber}`;
-    this.numberRepresentation = this.formattedMeetingIdentifier;
+  get numberRepresentation() {
+    if (!this._numberRepresentation) {
+      return `VR PV ${this.meetingYear}/${this.meetingNumber}`;
+    }
+    return this._numberRepresentation;
+  }
+
+  set numberRepresentation(numberRepresentation) {
+    this._numberRepresentation = numberRepresentation;
+  }
+
+  get meetingNumber() {
+    return this._meetingNumber;
+  }
+
+  set meetingNumber(meetingNumber) {
+    this._meetingNumber = meetingNumber;
+    this._numberRepresentation = null;
   }
 
   @task({ drop: true })
-  *updateSession() {
-    const {
-      isDigital,
-      extraInfo,
-      selectedKindUri,
-      meeting,
-      meetingNumber,
-      numberRepresentation,
-    } = this;
-    const kindUriToAdd = selectedKindUri || CONFIG.MINISTERRAAD_TYPES.DEFAULT;
-    const date = this.formatter.formatDate(null);
-    const startDate = this.startDate || date;
+  *updateMeeting() {
+    const now = new Date();
 
-    meeting.isDigital = isDigital;
-    meeting.extraInfo = extraInfo;
-    meeting.plannedStart = startDate;
-    meeting.created = date;
-    meeting.kind = kindUriToAdd;
-    meeting.number = meetingNumber;
-    meeting.numberRepresentation = numberRepresentation;
+    this.meeting.extraInfo = this.extraInfo;
+    this.meeting.plannedStart = this.startDate || now;
+    this.meeting.created = now;
+    this.meeting.kind = this.selectedKindUri;
+    this.meeting.number = this.meetingNumber;
+    this.meeting.numberRepresentation = this.numberRepresentation;
 
     try {
-      yield meeting.save();
+      yield this.meeting.save();
     } catch {
       this.toaster.error();
     } finally {
@@ -101,7 +89,7 @@ export default class MeetingEditMeetingComponent extends Component {
 
   @action
   selectStartDate(val) {
-    this.startDate = this.formatter.formatDate(val);
+    this.startDate = val;
   }
 
   @action

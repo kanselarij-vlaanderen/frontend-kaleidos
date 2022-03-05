@@ -20,7 +20,6 @@
           @block={{true}}
           @value={{this.meetingNumber}}
           data-test-edit-session-meeting-number
-          {{on "input" this.meetingNumberChangedAction}}
         />
       </div>
     </div>
@@ -48,8 +47,8 @@
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
     <Auk::Button
       @skin="primary"
-      {{on "click" (perform this.updateSession)}}
-      disabled={{this.updateSession.isRunning}}
+      {{on "click" (perform this.updateMeeting)}}
+      disabled={{this.updateMeeting.isRunning}}
       data-test-edit-session-save
     >
       {{t "edit"}}
