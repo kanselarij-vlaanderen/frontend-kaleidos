@@ -49,9 +49,8 @@
               @value={{this.meetingNumber}}
               id="meetingNumberInput"
               disabled={{this.initializeMeetingNumber.isRunning}}
-              class="auk-input--w-medium auk-u-mr-2"
-              {{on "change" (fn this.updateMeetingNumber this.meetingNumber)}}
-              {{on "keyup" (fn this.updateMeetingNumber this.meetingNumber)}}
+              @width="medium"
+              class="auk-u-mr-2"
             />
           {{/unless}}
           <div class="auk-o-flex__item">

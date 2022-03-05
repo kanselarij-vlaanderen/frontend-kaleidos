@@ -198,11 +198,6 @@ export default class MeetingNewMeetingModal extends Component {
   }
 
   @action
-  updateMeetingNumber(meetingNumber) {
-    this.meetingNumber = meetingNumber;
-  }
-
-  @action
   toggleEditingFormattedMeetingIdentifier() {
     this.isEditingFormattedMeetingIdentifier =
       !this.isEditingFormattedMeetingIdentifier;
