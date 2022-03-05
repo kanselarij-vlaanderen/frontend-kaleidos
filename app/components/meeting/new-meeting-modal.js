@@ -79,29 +79,24 @@ export default class MeetingNewMeetingModal extends Component {
 
   @dropTask
   *createMeeting() {
-    const {
-      extraInfo,
-      meetingNumber,
-      formattedMeetingIdentifier,
-    } = this;
-    const date = new Date();
-    const startDate = this.startDate || date;
+    const now = new Date();
+    const startDate = this.startDate || now;
     const meeting = this.store.createRecord('meeting', {
-      extraInfo,
+      extraInfo: this.extraInfo,
       isFinal: false,
       plannedStart: startDate,
-      created: date,
+      created: now,
       kind: this.selectedKindUri,
       mainMeeting: this.selectedMainMeeting,
-      number: meetingNumber,
-      numberRepresentation: formattedMeetingIdentifier,
+      number: this.meetingNumber,
+      numberRepresentation: this.formattedMeetingIdentifier,
     });
 
     const closestMeeting = yield fetchClosestMeetingAndAgendaId(startDate);
 
     try {
       yield meeting.save();
-      const agenda = yield this.createAgenda(meeting, date);
+      const agenda = yield this.createAgenda(meeting, now);
       if (!meeting.isAnnex && closestMeeting) {
         yield this.createAgendaitemToApproveMinutes(
           agenda,
