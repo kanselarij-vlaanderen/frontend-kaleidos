@@ -1,166 +1,144 @@
 {{! TODO: octane-refactor }}
 {{! template-lint-disable no-action }}
-<div class="vlc-u-box-model-maximize-height auk-scroll-wrapper">
-  <div class="auk-scroll-wrapper__body">
-    <div class="auk-u-m-8">
-      {{#if (not (or this.from this.to))}}
-        <div class="auk-u-mb-8">
-          <Agenda::FutureAgendas
-            @meetings={{this.activeAgendas}}
-            @type="active"
-            @emptyText={{t "no-active-agenda"}}
-            @title={{t "active-agenda"}}
-          />
-        </div>
-      {{else}}
-        <ChangesAlert
-          @message={{t "filtered-agendas"}}
-          @buttonText={{t "clear-filter"}}
-          @clearAction={{action "clearFilter"}}
-        />
-      {{/if}}
 
-      <div class="auk-u-mb-8">
-        <Auk::Toolbar>
-          <Auk::Toolbar::Group @position="left">
-            <Auk::Toolbar::Item>
-              <h2 class="auk-h3">
-                {{t "history"}}
-                {{#if (or this.from this.to)}}
-                  (
-                  {{moment-format this.from "DD-MM-YYYY"}}
-                  -
-                  {{moment-format this.to "DD-MM-YYYY"}}
-                  )
-                {{/if}}
-              </h2>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-          <Auk::Toolbar::Group @position="right">
-            <Auk::Toolbar::Item
-              data-test-route-agendas-overview-filter-container
-              data-children-count="1"
-            >
-              <Auk::Input
-                data-test-route-agendas-overview-filter-input={{true}}
-                @value={{this.dateFilter}}
-                @enter={{fn (action "setDateFilter") this.dateFilter}}
-                placeholder={{t "date-example"}}
-                id={{this.id}}
-              />
-              <Auk::Button
-                @skin="secondary"
-                @layout="icon-only"
-                @icon="search"
-                data-test-route-agendas-overview-filter-button
-                {{on "click" (fn (action "setDateFilter") this.dateFilter)}}
-              />
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-        </Auk::Toolbar>
-        <div class="auk-u-mb-8">
-          {{#if (await this.model)}}
-            <DataTable
-              data-test-route-agendas-overview-data-table={{true}}
-              @content={{await this.model}}
-              @class="auk-table auk-table--striped auk-table--no-scroll"
-              @page={{this.page}}
-              @size={{this.size}}
-              @sort={{this.sort}}
-              @isLoading={{this.isLoadingModel}}
-              @noDataMessage={{t "no-results-found"}}
-              @onClickRow={{action "onClickRow"}}
-              as |table|
-            >
-              <table.content as |c|>
-                <c.header>
-                  <ThSortable
-                    @class="auk-table__col--3 auk-table__header-title"
-                    @currentSorting={{this.sort}}
-                    @field="planned-start,number-representation"
-                    @label={{t "agenda"}}
-                  />
-                  <ThSortable
-                    @class="auk-table__col--2 auk-table__header-title"
-                    @field="agendas"
-                    @label={{t "agenda-version"}}
-                  />
-                  <th
-                    class="auk-table__col--2 auk-table__header-title auk-table__header-title--unsortable"
-                  >
-                    {{t "latest-modified"}}
-                  </th>
-                  <ThSortable
-                    @class="auk-table__col--2 auk-table__header-title"
-                    @currentSorting={{this.sort}}
-                    @field="is-final"
-                    @label={{t "status"}}
-                  />
-                  <ThSortable
-                    @class="auk-table__col--2 auk-table__header-title"
-                    @currentSorting={{this.sort}}
-                    @field="kind"
-                    @label={{t "kind"}}
-                  />
-                  <th class="auk-table__col--1"></th>
-                </c.header>
-                <c.body @class="auk-table--interaction-cursor" as |meeting|>
-                  {{#if (not meeting.alreadyShown)}}
-                    <td data-test-route-agendas-overview-row-title>
-                      {{t "agenda-for"}}
-                      {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
-                    </td>
-                    <td>
-                      {{await meeting.latestAgendaName}}
-                    </td>
-                    <td>
-                      {{#if (is-pending meeting.latestAgenda)}}
-                        <div
-                          class="skeletal-loader"
-                          role="alert"
-                          aria-busy="true"
-                        ></div>
-                      {{else}}
-                        {{moment-format
-                          (await meeting.latestAgenda.modified)
-                          "DD-MM-YYYY HH:mm"
-                        }}
-                      {{/if}}
-                    </td>
-                    <td>
-                      {{#if meeting.isFinal}}
-                        {{t "closed"}}
-                      {{else}}
-                        {{t "opened"}}
-                      {{/if}}
-                    </td>
-                    <td data-test-route-agendas-overview-row-kind>
-                      {{meeting.kindToShow.label}}
-                    </td>
-                    <td class="auk-u-text-align--center">
-                      <Auk::Button
-                        data-test-route-agendas-overview-row-nav-button={{true}}
-                        @skin="borderless"
-                        @layout="icon-only"
-                        @icon="chevron-right"
-                        @route="agenda.agendaitems"
-                        @models={{array
-                          meeting.id
-                          (await meeting.latestAgenda.id)
-                        }}
-                      />
-                    </td>
-                  {{/if}}
-                </c.body>
-              </table.content>
-            </DataTable>
-          {{else}}
-            <div>
-              <WebComponents::VlAlert @message={{t "no-historical-agenda"}} />
-            </div>
-          {{/if}}
-        </div>
-      </div>
-    </div>
+{{#if (await this.model)}}
+  <DataTable
+    data-test-route-agendas-overview-data-table={{true}}
+    @content={{await this.model}}
+    @class="auk-table auk-table--agenda auk-table--sticky-header"
+    @page={{this.page}}
+    @size={{this.size}}
+    @sort={{this.sort}}
+    @isLoading={{this.isLoadingModel}}
+    @noDataMessage={{t "no-results-found"}}
+    as |table|
+  >
+    <table.content as |c|>
+      <c.header>
+        <ThSortable
+          @class="auk-table__col--3 auk-table__header-title"
+          @currentSorting={{this.sort}}
+          @field="planned-start,number-representation"
+          @label={{t "agenda"}}
+        />
+        <ThSortable
+          @class="auk-table__header-title"
+          @currentSorting={{this.sort}}
+          @field="is-final"
+          @label={{t "status"}}
+        />
+        <ThSortable
+          @class="auk-table__header-title"
+          @currentSorting={{this.sort}}
+          @field="kind"
+          @label={{t "kind"}}
+        />
+        <th
+          class="auk-table__header-title auk-table__header-title--unsortable"
+        >
+          {{t "latest-modified"}}
+        </th>
+        <th></th>
+      </c.header>
+      <c.body @class="auk-table--interaction-cursor" as |meeting|>
+        {{#if (not meeting.alreadyShown)}}
+          <td data-test-route-agendas-overview-row-title>
+            <span class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
+            {{#if (eq (await meeting.latestAgendaName) "Ontwerpagenda A")}}
+              <strong>Ontwerpagenda</strong> <Auk::Pill @skin="active-future">A</Auk::Pill>
+              <span>–</span>
+              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
+            {{else if (eq (await meeting.latestAgendaName) "Ontwerpagenda B")}}
+              <strong>Ontwerpagenda</strong> <Auk::Pill @skin="active-future">B</Auk::Pill>
+              <span>–</span>
+              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
+            {{else if (eq (await meeting.latestAgendaName) "Ontwerpagenda C")}}
+              <strong>Ontwerpagenda</strong> <Auk::Pill @skin="active-future">C</Auk::Pill>
+              <span>–</span>
+              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
+            {{else if (eq (await meeting.latestAgendaName) "Ontwerpagenda D")}}
+              <strong>Ontwerpagenda</strong> <Auk::Pill @skin="active-future">D</Auk::Pill>
+              <span>–</span>
+              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
+            {{else if (eq (await meeting.latestAgendaName) "Ontwerpagenda E")}}
+              <strong>Ontwerpagenda</strong> <Auk::Pill @skin="active-future">E</Auk::Pill>
+              <span>–</span>
+              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
+            {{else if (eq (await meeting.latestAgendaName) "Ontwerpagenda F")}}
+              <strong>Ontwerpagenda</strong> <Auk::Pill @skin="active-future">F</Auk::Pill>
+              <span>–</span>
+              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
+            {{else if (eq (await meeting.latestAgendaName) "Agenda A")}}
+              <strong>Agenda</strong> <Auk::Pill>A</Auk::Pill>
+              <span>–</span>
+              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
+            {{else if (eq (await meeting.latestAgendaName) "Agenda B")}}
+              <strong>Agenda</strong> <Auk::Pill>B</Auk::Pill>
+              <span>–</span>
+              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
+            {{else if (eq (await meeting.latestAgendaName) "Agenda C")}}
+              <strong>Agenda</strong> <Auk::Pill>C</Auk::Pill>
+              <span>–</span>
+              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
+            {{else if (eq (await meeting.latestAgendaName) "Agenda D")}}
+              <strong>Agenda</strong> <Auk::Pill>D</Auk::Pill>
+              <span>–</span>
+              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
+            {{else if (eq (await meeting.latestAgendaName) "Agenda E")}}
+              <strong>Agenda</strong> <Auk::Pill>E</Auk::Pill>
+              <span>–</span>
+              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
+            {{else if (eq (await meeting.latestAgendaName) "Agenda F")}}
+              <strong>Agenda</strong> <Auk::Pill>F</Auk::Pill>
+              <span>–</span>
+              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
+            {{/if}}
+            </span>
+          </td>
+          <td>
+            {{#if meeting.isFinal}}
+              <Auk::Pill>{{t "closed"}}</Auk::Pill>
+            {{else}}
+              <Auk::Pill @skin="active">{{t "opened"}}</Auk::Pill>
+            {{/if}}
+          </td>
+          <td data-test-route-agendas-overview-row-kind>
+            {{meeting.kindToShow.label}}
+          </td>
+          <td>
+            {{#if (is-pending meeting.latestAgenda)}}
+              <div
+                class="skeletal-loader"
+                role="alert"
+                aria-busy="true"
+              ></div>
+            {{else}}
+              {{moment-format
+                (await meeting.latestAgenda.modified)
+                "DD.MM.YYYY – HH:mm"
+              }}
+            {{/if}}
+          </td>
+          <td class="auk-u-text-align--center">
+            <Auk::Button
+              data-test-route-agendas-overview-row-nav-button={{true}}
+              class="auk-table__link"
+              @skin="borderless"
+              @layout="icon-only"
+              @icon="chevron-right"
+              @route="agenda.agendaitems"
+              @models={{array
+                meeting.id
+                (await meeting.latestAgenda.id)
+              }}
+            />
+          </td>
+        {{/if}}
+      </c.body>
+    </table.content>
+  </DataTable>
+{{else}}
+  <div>
+    <WebComponents::VlAlert @message={{t "no-historical-agenda"}} />
   </div>
-</div>
+{{/if}}

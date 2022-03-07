@@ -17,7 +17,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 
   dateRegex: /^(?:(\d{1,2})-)?(?:(\d{1,2})-)?(\d{4})$/,
 
-  sort: '-planned-start,number-representation',
+  sort: 'is-final',
   size: 10,
 
   activeAgendas: computed('model', async function() {

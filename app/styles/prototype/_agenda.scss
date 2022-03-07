@@ -1,0 +1,53 @@
+// Agenda
+.auk-table--agenda {
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+
+  tr {
+    position: relative;
+  }
+
+  table {
+    border-collapse: separate;
+  }
+
+  thead th {
+    z-index: 1;
+  }
+
+  thead th:last-child,
+  tbody td:last-child {
+    width: 57px !important;
+    min-width: 57px !important;
+    max-width: 57px !important;
+  }
+
+  thead th:first-child,
+  tbody td:first-child {
+    padding-left: 2rem;
+  }
+
+  .data-table__actions--top {
+    display: none;
+  }
+
+  .vlc-pagination__container {
+    align-items: center;
+  }
+}
+
+// Pills
+$vl-picton-blue: #16465B;
+
+.auk-pill--active {
+  border: .1rem solid $vl-picton-blue;
+  color: $vl-picton-blue;
+}
+
+.auk-pill--active-future {
+  border: .1rem dashed $vl-picton-blue;
+  color: $vl-picton-blue;
+  border-radius: .2rem;
+}
