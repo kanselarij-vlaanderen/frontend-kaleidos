@@ -44,55 +44,15 @@
         {{#if (not meeting.alreadyShown)}}
           <td data-test-route-agendas-overview-row-title>
             <span class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
-            {{#if (eq (await meeting.latestAgendaName) "Ontwerpagenda A")}}
-              <strong>Ontwerpagenda</strong> <Auk::Pill @skin="active-future">A</Auk::Pill>
-              <span>–</span>
-              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
-            {{else if (eq (await meeting.latestAgendaName) "Ontwerpagenda B")}}
-              <strong>Ontwerpagenda</strong> <Auk::Pill @skin="active-future">B</Auk::Pill>
-              <span>–</span>
-              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
-            {{else if (eq (await meeting.latestAgendaName) "Ontwerpagenda C")}}
-              <strong>Ontwerpagenda</strong> <Auk::Pill @skin="active-future">C</Auk::Pill>
-              <span>–</span>
-              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
-            {{else if (eq (await meeting.latestAgendaName) "Ontwerpagenda D")}}
-              <strong>Ontwerpagenda</strong> <Auk::Pill @skin="active-future">D</Auk::Pill>
-              <span>–</span>
-              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
-            {{else if (eq (await meeting.latestAgendaName) "Ontwerpagenda E")}}
-              <strong>Ontwerpagenda</strong> <Auk::Pill @skin="active-future">E</Auk::Pill>
-              <span>–</span>
-              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
-            {{else if (eq (await meeting.latestAgendaName) "Ontwerpagenda F")}}
-              <strong>Ontwerpagenda</strong> <Auk::Pill @skin="active-future">F</Auk::Pill>
-              <span>–</span>
-              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
-            {{else if (eq (await meeting.latestAgendaName) "Agenda A")}}
-              <strong>Agenda</strong> <Auk::Pill>A</Auk::Pill>
-              <span>–</span>
-              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
-            {{else if (eq (await meeting.latestAgendaName) "Agenda B")}}
-              <strong>Agenda</strong> <Auk::Pill>B</Auk::Pill>
-              <span>–</span>
-              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
-            {{else if (eq (await meeting.latestAgendaName) "Agenda C")}}
-              <strong>Agenda</strong> <Auk::Pill>C</Auk::Pill>
-              <span>–</span>
-              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
-            {{else if (eq (await meeting.latestAgendaName) "Agenda D")}}
-              <strong>Agenda</strong> <Auk::Pill>D</Auk::Pill>
-              <span>–</span>
-              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
-            {{else if (eq (await meeting.latestAgendaName) "Agenda E")}}
-              <strong>Agenda</strong> <Auk::Pill>E</Auk::Pill>
-              <span>–</span>
-              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
-            {{else if (eq (await meeting.latestAgendaName) "Agenda F")}}
-              <strong>Agenda</strong> <Auk::Pill>F</Auk::Pill>
-              <span>–</span>
-              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
+            {{#if (eq (await meeting.latestAgenda.isDesignAgenda) true)}}
+              <strong>Ontwerpagenda</strong>
+              <Auk::Pill @skin="active-future">{{await meeting.latestAgenda.name}}</Auk::Pill>
+            {{else}}
+              <strong>Agenda</strong>
+              <Auk::Pill>{{await meeting.latestAgenda.name}}</Auk::Pill>
             {{/if}}
+              <span>–</span>
+              <span>{{moment-format meeting.plannedStart "DD.MM.YYYY"}}</span>
             </span>
           </td>
           <td>
