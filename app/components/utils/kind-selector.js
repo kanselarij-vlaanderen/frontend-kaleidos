@@ -1,50 +1,29 @@
-import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
-import EmberObject from '@ember/object';
+/* eslint-disable ember/no-arrow-function-computed-properties */
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
+import Component from '@ember/component';
 import CONFIG from 'frontend-kaleidos/utils/config';
+import EmberObject, { computed } from '@ember/object';
 
-/**
- * @argument {selectedKind}
- * @argument {setAction}
- */
-export default class UtilsKindSelectorComponent extends Component {
-  classNames = ['auk-u-mb-2'];
-  options = CONFIG.MINISTERRAAD_TYPES.TYPES.map((meetingType) =>
-    EmberObject.create(meetingType)
-  );
-  defaultKind = this.options[0];
-  @tracked isLoading = null;
-  @tracked hideLabel = null;
-  @tracked _selectedKind = null;
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
+export default Component.extend({
+  classNames: ['auk-u-mb-2'],
+  isLoading: null,
+  hideLabel: null,
 
-  constructor() {
-    super(...arguments);
+  options: computed(() => CONFIG.MINISTERRAAD_TYPES.TYPES.map((meetingType) => EmberObject.create(meetingType))),
 
-    if (!this.args.selectedKind) {
-      this.setAction(this.selectedKind);
-    }
-  }
+  selectedkind: computed('kind.uri', 'options', function() {
+    return this.options.find((kind) => this.kind && kind.uri === this.kind.uri) || this.options.get('firstObject');
+  }),
 
-  get selectedKind() {
-    if (this._selectedKind) {
-      return this._selectedKind;
-    } else if (this.args.selectedKind) {
-      return this.options.find(
-        (kind) => kind.uri === this.args.selectedKind.uri || this.defaultKind
-      );
-    } else {
-      return this.defaultKind;
-    }
-  }
-
-  set selectedKind(kind) {
-    this._selectedKind = kind;
-  }
-
-  @action
-  setAction(meetingType) {
-    this.selectedKind = meetingType;
-    this.args.setAction(meetingType.uri);
-  }
-}
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
+  actions: {
+    setAction(meetingType) {
+      this.set('selectedkind', meetingType);
+      this.setAction(meetingType.get('uri'));
+    },
+  },
+});
