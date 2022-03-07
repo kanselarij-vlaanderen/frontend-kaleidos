@@ -281,7 +281,10 @@ export default class PublicationService extends Service {
    * }} publicationRequestProperties
    * @param {PublicationFlow} publicationFlow
    */
-  async createPublicationRequestActivity(publicationRequestProperties, publicationFlow) {
+  async createPublicationRequestActivity(
+    publicationRequestProperties,
+    publicationFlow
+  ) {
     const publicationSubcase = await publicationFlow.publicationSubcase;
     const now = new Date();
 
@@ -299,13 +302,16 @@ export default class PublicationService extends Service {
     });
     await requestActivity.save();
 
-    const publicationActivity = this.store.createRecord('publication-activity', {
-      startDate: now,
-      title: publicationRequestProperties.subject,
-      subcase: publicationSubcase,
-      requestActivity: requestActivity,
-      usedPieces: uploadedPieces,
-    });
+    const publicationActivity = this.store.createRecord(
+      'publication-activity',
+      {
+        startDate: now,
+        title: publicationRequestProperties.subject,
+        subcase: publicationSubcase,
+        requestActivity: requestActivity,
+        usedPieces: uploadedPieces,
+      }
+    );
     await publicationActivity.save();
 
     const [files, outbox, mailSettings] = await Promise.all([
