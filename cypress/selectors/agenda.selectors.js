@@ -189,7 +189,7 @@ const selectors = {
 
   // new-session
   newSession: {
-    kind: '[data-test-new-session-kind]',
+    kind: '[data-test-utils-kind-selector]',
     relatedMainMeeting: '[data-test-new-session-related-main-meeting]',
     meetingNumber: '[data-test-new-session-meeting-number]',
     meetingLocation: '[data-test-new-session-meeting-location]',
