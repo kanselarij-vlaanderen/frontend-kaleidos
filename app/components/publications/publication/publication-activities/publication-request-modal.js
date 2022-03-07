@@ -12,12 +12,51 @@ export default class PublicationRequestModal extends Component {
 
   @tracked subject;
   @tracked message;
+  @tracked transferredPieces = [];
   @tracked uploadedPieces = [];
 
   constructor() {
     super(...arguments);
+
     this.initValidators();
+    this.loadTransferredPieces.perform();
     this.setEmailFields.perform();
+  }
+
+  @task
+  *loadTransferredPieces() {
+    let proofingActivity = this.args.proofingActivty;
+    if (!proofingActivity) {
+      proofingActivity = yield this.loadDefaultProofingActivity();
+    }
+
+    if (proofingActivity) {
+      let usedPieces = yield proofingActivity.usedPieces;
+      usedPieces = usedPieces.toArray();
+      let generatedPieces = yield proofingActivity.generatedPieces;
+      generatedPieces = generatedPieces.toArray();
+      this.transferredPieces = [
+        ...usedPieces,
+        ...generatedPieces,
+      ];
+    } else {
+      this.transferredPieces = [];
+    }
+  }
+
+  loadDefaultProofingActivity() {
+    return this.store.queryOne('proofing-activity', {
+      'filter[subcase][publication-flow][:id:]': this.args.publicationFlow.id,
+      // WORKAROUND: has any end date => isFinished
+      'filter[:gte:end-date]': '1302-07-11',
+      include: [
+        'used-pieces',
+        'used-pieces.file',
+        'generated-pieces',
+        'generated-pieces.file',
+      ].join(','),
+      sort: '-start-date',
+    });
   }
 
   initValidators() {

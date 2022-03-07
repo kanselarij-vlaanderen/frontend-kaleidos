@@ -55,6 +55,7 @@
               @event={{event}} as |event|>
               <Publications::Publication::Proofs::ProofReceivedPanel
                 @proofingActivity={{event.activity}}
+                @publicationFlow={{this.publicationFlow}}
                 @proofPrintCorrector={{this.publicationSubcase.proofPrintCorrector}}
                 @onUpdateProofingActivity={{perform this.updateProofingActivity}}
               />
