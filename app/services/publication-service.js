@@ -273,6 +273,14 @@ export default class PublicationService extends Service {
     );
   }
 
+  /**
+   * @param {{
+   *  uploadedPieces: Piece[],
+   *  subject: string,
+   *  message: string
+   * }} publicationRequestProperties
+   * @param {PublicationFlow} publicationFlow
+   */
   async createPublicationRequestActivity(publicationRequestProperties, publicationFlow) {
     const publicationSubcase = await publicationFlow.publicationSubcase;
     const now = new Date();
