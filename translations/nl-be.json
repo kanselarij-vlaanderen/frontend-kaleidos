@@ -1033,6 +1033,8 @@
     "edit-list": "Lijst bewerken",
     "sure": "Bent u zeker?",
     "no-go-back": "Nee, ga terug",
-    "close": "Sluiten"
+    "close": "Sluiten",
+    "show-documents": "Toon documenten",
+    "hide-documents": "Verberg documenten"
   }
 }

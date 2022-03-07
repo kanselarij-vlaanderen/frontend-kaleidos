@@ -38,8 +38,36 @@
   }
 }
 
+// Section header overrides
+.vlc-list-section-header {
+  display: flex;
+  justify-content: flex-start;
+  gap: .5rem;
+  align-items: center;
+}
+
+// Fix left_side {
+.left_side {
+  width: 100%;
+}
+
+// Fix small button
+.auk-u-text-small > .auk-button__content > .auk-button__label {
+  font-size: 1.5rem;
+}
+
 // Pills
 $vl-picton-blue: #16465B;
+$vl-orange-130: #9F5804;
+$vl-orange-100: #FFA10A;
+$vl-orange-10: #FFF9E8;
+$vl-gray-70: #687483;
+$vl-gray-50: #8695A8;
+
+.auk-pill--future {
+  border: .1rem dashed $vl-gray-50;
+  color: $vl-gray-70;
+}
 
 .auk-pill--active {
   border: .1rem solid $vl-picton-blue;
@@ -50,6 +78,24 @@ $vl-picton-blue: #16465B;
   border: .1rem dashed $vl-picton-blue;
   color: $vl-picton-blue;
   border-radius: .2rem;
+}
+
+.auk-pill--warning {
+  border: .1rem solid $vl-orange-100;
+  color: $vl-orange-130;
+  background-color: $vl-orange-10;
+}
+
+.auk-pill--warning-future {
+  border: .1rem dashed $vl-orange-100;
+  color: $vl-orange-130;
+  border-radius: .2rem;
+}
+
+.auk-pill--invisible {
+  height: 24px;
+  width: 1px;
+  display: block;
 }
 
 // Sidebar nav

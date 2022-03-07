@@ -17,7 +17,8 @@
         </h3>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
-    <Auk::Toolbar::Group @position="right">
+    {{!-- Disable edit functions on overview --}}
+    {{!-- <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
         <Auk::ButtonLink
           data-test-agenda-overview-show-changes={{true}}
@@ -42,7 +43,7 @@
           {{/unless}}
         {{/if}}
       </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
+    </Auk::Toolbar::Group> --}}
   </Auk::Toolbar>
   {{#if (not @isLoadingNotaGroups)}}
     {{#if @notaGroups.length}}
