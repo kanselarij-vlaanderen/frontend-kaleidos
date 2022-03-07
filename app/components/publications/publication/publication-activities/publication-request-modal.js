@@ -73,7 +73,7 @@ export default class PublicationRequestModal extends Component {
   }
 
   get pieces() {
-    return [...this.transferredPieces, this.uploadedPieces];
+    return [...this.transferredPieces, ...this.uploadedPieces];
   }
 
   @task
@@ -81,7 +81,7 @@ export default class PublicationRequestModal extends Component {
     yield this.args.onSave({
       subject: this.subject,
       message: this.message,
-      pieces: this.pieces,
+      uploadedPieces: this.pieces,
     });
   }
 

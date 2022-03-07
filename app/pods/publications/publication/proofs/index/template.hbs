@@ -64,6 +64,9 @@
                 @onUpdateProofingActivity={{perform
                   this.updateProofingActivity
                 }}
+                @onCreatePublicationRequest={{perform
+                  this.savePublicationRequest
+                }}
               />
             </Utils::Timeline::Event>
           {{/if}}

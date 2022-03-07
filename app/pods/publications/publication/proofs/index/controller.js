@@ -6,6 +6,7 @@ import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationProofsController extends Controller {
+  @service router;
   @service store;
   @service publicationService;
 
@@ -139,6 +140,16 @@ export default class PublicationsPublicationProofsController extends Controller 
 
     yield Promise.all(saves);
     this.send('refresh');
+  }
+
+  @task
+  *savePublicationRequest(publicationRequest) {
+    yield this.publicationService.createPublicationRequestActivity(
+      publicationRequest,
+      this.publicationFlow
+    );
+
+    this.router.transitionTo('publications.publication.publication-activities');
   }
 
   @action
