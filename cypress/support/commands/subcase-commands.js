@@ -76,22 +76,14 @@ function openSubcase(index = 0) {
  * @memberOf Cypress.Chainable#
  * @function
  * @param {boolean} [confidentialityChange] -Will change the current confidentiality if true
- * @param {string} [accessLevel] -Access level to set, must match exactly with possible options in dropdown
  * @param {string} [newShortTitle] - new short title for the subcase
  * @param {string} [newLongTitle] - new long title for the subcase
  */
-function changeSubcaseAccessLevel(confidentialityChange, accessLevel, newShortTitle, newLongTitle) {
+function changeSubcaseAccessLevel(confidentialityChange, newShortTitle, newLongTitle) {
   cy.log('changeSubcaseAccessLevel');
   cy.intercept('PATCH', '/subcases/*').as('patchSubcase');
 
   cy.get(cases.subcaseTitlesView.edit).click();
-
-  if (accessLevel) {
-    cy.get(cases.subcaseTitlesEdit.accessLevel).find(dependency.emberPowerSelect.trigger)
-      .click();
-    cy.get(dependency.emberPowerSelect.option).contains(accessLevel)
-      .click();
-  }
 
   if (confidentialityChange) {
     cy.get(cases.subcaseTitlesEdit.confidential).click();
