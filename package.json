@@ -54,7 +54,6 @@
     "@lblod/ember-mock-login": "^0.5.0-beta",
     "@lblod/ember-rdfa-editor": "0.50.0-beta.4",
     "@lblod/ember-rdfa-editor-plugin-system-dispatcher": "^0.5.8",
-    "@lblod/ember-vo-webuniversum": "^0.23.0",
     "@lblod/ember-vo-webuniversum-data-table": "^1.0.0",
     "@ljharb/eslint-config": "^17.1.0",
     "@typescript-eslint/parser": "^3.8.0",
