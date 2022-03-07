@@ -35,10 +35,7 @@ export default class PublicationRequestModal extends Component {
       usedPieces = usedPieces.toArray();
       let generatedPieces = yield proofingActivity.generatedPieces;
       generatedPieces = generatedPieces.toArray();
-      this.transferredPieces = [
-        ...usedPieces,
-        ...generatedPieces,
-      ];
+      this.transferredPieces = [...usedPieces, ...generatedPieces];
     } else {
       this.transferredPieces = [];
     }
@@ -63,7 +60,7 @@ export default class PublicationRequestModal extends Component {
     this.validators = new ValidatorSet({
       subject: new Validator(() => isPresent(this.subject)),
       message: new Validator(() => isPresent(this.message)),
-      uploadedPieces: new Validator(() => this.uploadedPieces.length > 0),
+      pieces: new Validator(() => this.pieces.length > 0),
     });
   }
 
@@ -72,11 +69,11 @@ export default class PublicationRequestModal extends Component {
   }
 
   get isSaveDisabled() {
-    return (
-      this.uploadedPieces.length === 0 ||
-      !this.validators.areValid ||
-      this.cancel.isRunning
-    );
+    return !this.validators.areValid || this.cancel.isRunning;
+  }
+
+  get pieces() {
+    return [...this.transferredPieces, this.uploadedPieces];
   }
 
   @task
@@ -84,7 +81,7 @@ export default class PublicationRequestModal extends Component {
     yield this.args.onSave({
       subject: this.subject,
       message: this.message,
-      uploadedPieces: this.uploadedPieces,
+      pieces: this.pieces,
     });
   }
 
@@ -136,6 +133,11 @@ export default class PublicationRequestModal extends Component {
     });
 
     this.uploadedPieces.pushObject(piece);
+  }
+
+  @action
+  unlinkTransferredPiece(piece) {
+    this.transferredPieces.removeObject(piece);
   }
 
   @task
