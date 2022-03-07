@@ -1,0 +1,26 @@
+{{!TODO: styling as in Figma (less borders/less margin)}}
+<Auk::Modal @size="small">
+  <Auk::Modal::Header @title={{@title}} @closeable={{false}} />
+  <Auk::Modal::Body>
+    <Utils::LoadableContent
+      @isLoading={{this.isLoading}}
+      @reserveSpace={{true}}
+    >
+      {{@message}}
+    </Utils::LoadableContent>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer
+    @cancelDisabled={{this.isLoading}}
+    @onCancel={{perform this.cancel}}
+  >
+    <Auk::Button
+      @skin={{this.confirmSkin}}
+      @icon={{this.confirmIcon}}
+      @disabled={{this.isLoading}}
+      @loading={{this.confirm.isRunning}}
+      {{on "click" (perform this.confirm)}}
+    >
+      {{this.confirmText}}
+    </Auk::Button>
+  </Auk::Modal::Footer>
+</Auk::Modal>

@@ -22,6 +22,8 @@ export default class PublicationsPublicationPublicationActivitiesPublicationInfo
 
   @task
   *loadDecision() {
+    // Currently only 1 publication-activity and decision are assumed
+    // per publication-subcase
     this.decision = yield this.store.queryOne('decision', {
       'filter[publication-activity][subcase][:id:]': this.args.publicationSubcase.id,
       sort: 'publication-activity.start-date,publication-date',

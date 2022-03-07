@@ -16,13 +16,13 @@
           <Auk::Icon @name="circle-pause" @skin="muted"/>
         {{else if status.isWithdrawn}}
           <Auk::Icon @name="circle-x" @skin="danger"/>
-        {{else if status.isToTranslations}}
+        {{else if status.isTranslationRequested}}
           <Auk::Icon @name="circle-step-1" @skin="primary"/>
-        {{else if status.isTranslationIn}}
+        {{else if status.isTranslationReceived}}
           <Auk::Icon @name="circle-step-2" @skin="primary"/>
         {{else if status.isProofRequested}}
           <Auk::Icon @name="circle-step-3" @skin="primary"/>
-        {{else if status.isProofIn}}
+        {{else if status.isProofReceived}}
           <Auk::Icon @name="circle-step-4" @skin="primary"/>
         {{else if status.isProofRecalled}}
           <Auk::Icon @name="circle-step-5" @skin="primary"/>

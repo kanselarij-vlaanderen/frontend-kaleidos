@@ -1,16 +1,16 @@
 <div class="auk-u-mt-4">
   <Auk::Panel>
     <Auk::Panel::Header>
-      <Auk::Toolbar>
-        <Auk::Toolbar::Group @position="left">
-          <Auk::Toolbar::Item>
+      <Auk::Toolbar as |Toolbar|>
+        <Toolbar.Group @position="left" as |Group|>
+          <Group.Item>
             <h4 class="auk-panel__title">
               {{t "proofs"}}
             </h4>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-        <Auk::Toolbar::Group @position="right">
-          <Auk::Toolbar::Item>
+          </Group.Item>
+        </Toolbar.Group>
+        <Toolbar.Group @position="right" as |Group|>
+          <Group.Item>
             <Auk::Button
               @skin="secondary"
               @icon="plus"
@@ -19,8 +19,8 @@
             >
               {{t "upload-proof"}}
             </Auk::Button>
-          </Auk::Toolbar::Item>
-          <Auk::Toolbar::Item>
+          </Group.Item>
+          <Group.Item>
             <Auk::Button
               @skin="primary"
               @icon="plus"
@@ -28,28 +28,38 @@
             >
               {{t "request-proof"}}
             </Auk::Button>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
+          </Group.Item>
+        </Toolbar.Group>
       </Auk::Toolbar>
     </Auk::Panel::Header>
+
     <Auk::Panel::Body class="auk-u-bg-alt">
-      {{#each @model as |timelineActivity|}}
-        {{#if timelineActivity.isRequestActivity}}
-          <Publications::Publication::Proofs::ProofRequestedPanel
-            @requestActivity={{timelineActivity.activity}}
-            @onDeleteRequest={{fn
-              (perform this.deleteRequest)
-              timelineActivity.activity
-            }}
-          />
-        {{else if (and
-          timelineActivity.isProofingActivity timelineActivity.activity.endDate
-        )}}
-          <Publications::Publication::Proofs::ProofReceivedPanel
-            @proofingActivity={{timelineActivity.activity}}
-            @proofPrintCorrector={{this.publicationSubcase.proofPrintCorrector}}
-            @onSaveEditReceivedProof={{perform this.saveEditReceivedProof}}
-          />
+      {{#each @model as |event|}}
+        {{#if event.isShown}}
+          {{#if event.isRequestActivity}}
+            <Utils::Timeline::Event
+              @badgeIcon="mail"
+              @badgeSkin="primary"
+              @event={{event}} as |event|>
+              <Publications::Publication::RequestActivityPanel
+                @title={{t "requested-proof"}}
+                @requestActivity={{event.activity}}
+                @isDisabledDelete={{event.activity.proofingActivity.isFinished}}
+                @onDeleteRequest={{perform this.deleteRequest event.activity}}
+              />
+            </Utils::Timeline::Event>
+          {{else if event.isProofingActivity}}
+            <Utils::Timeline::Event
+              @badgeIcon="check"
+              @badgeSkin="success"
+              @event={{event}} as |event|>
+              <Publications::Publication::Proofs::ProofReceivedPanel
+                @proofingActivity={{event.activity}}
+                @proofPrintCorrector={{this.publicationSubcase.proofPrintCorrector}}
+                @onUpdateProofingActivity={{perform this.updateProofingActivity}}
+              />
+            </Utils::Timeline::Event>
+          {{/if}}
         {{/if}}
       {{else}}
         <Auk::EmptyState @bordered={{true}} @message={{t "no-proofs-yet"}} />

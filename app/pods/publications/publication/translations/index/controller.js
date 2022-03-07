@@ -8,6 +8,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationTranslationsIndexController extends Controller {
   @service store;
+  @service router;
   @service publicationService;
 
   @tracked publicationFlow;
@@ -21,9 +22,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   get latestTranslationActivity() {
-    const timelineActivity = this.model.find(
-      (timelineActivity) => timelineActivity.isTranslationActivity
-    );
+    const timelineActivity = this.model.find((activity) => activity.isTranslationActivity);
     return timelineActivity ? timelineActivity.activity : null;
   }
 
@@ -35,32 +34,32 @@ export default class PublicationsPublicationTranslationsIndexController extends 
 
     const language = yield translationActivity.language;
     for (let piece of translationUpload.uploadedPieces) {
-      piece.receivedDate = translationUpload.receivedAtDate;
+      piece.receivedDate = translationUpload.receivedDate;
       piece.language = language;
       piece.translationActivityGeneratedBy = translationActivity;
       pieceSaves.push(piece.save());
     }
 
-    translationActivity.endDate = translationUpload.receivedAtDate;
+    translationActivity.endDate = translationUpload.receivedDate;
     const translationActivitySave = translationActivity.save();
 
     let translationSubcaseSave;
     if (
       !this.translationSubcase.receivedDate ||
-      translationUpload.receivedAtDate < this.translationSubcase.receivedDate
+      translationUpload.receivedDate < this.translationSubcase.receivedDate
     ) {
-      this.translationSubcase.receivedDate = translationUpload.receivedAtDate;
+      this.translationSubcase.receivedDate = translationUpload.receivedDate;
       translationSubcaseSave = this.translationSubcase.save();
     }
 
     if (translationUpload.mustUpdatePublicationStatus) {
       yield this.publicationService.updatePublicationStatus(
         this.publicationFlow,
-        CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_IN,
-        translationUpload.receivedAtDate
+        CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_RECEIVED,
+        translationUpload.receivedDate
       );
 
-      this.translationSubcase.endDate = translationUpload.receivedAtDate;
+      this.translationSubcase.endDate = translationUpload.receivedDate;
       translationSubcaseSave = this.translationSubcase.save();
     }
 
@@ -75,20 +74,13 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   @task
-  *saveEditReceivedTranslation(translationEdit) {
+  *updateTranslationActivity(translationEdit) {
     const saves = [];
 
     const translationActivity = translationEdit.translationActivity;
     translationActivity.endDate = translationEdit.receivedDate;
     saves.push(translationActivity.save());
 
-    const pieces = yield translationActivity.generatedPieces;
-    for (let piece of pieces.toArray()) {
-      piece.receivedDate = translationEdit.receivedDate;
-      saves.push(piece.save());
-    }
-
-    // This check (copied from upload task) needs to be revised, user input errors can't be corrected with a more recent date
     if (translationEdit.receivedDate < this.translationSubcase.receivedDate) {
       this.translationSubcase.receivedDate = translationEdit.receivedDate;
     }
@@ -163,7 +155,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     // PUBLICATION-STATUS
     yield this.publicationService.updatePublicationStatus(
       this.publicationFlow,
-      CONSTANTS.PUBLICATION_STATUSES.TO_TRANSLATIONS
+      CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_REQUESTED
     );
 
     this.send('refresh');
@@ -189,6 +181,16 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     }
     yield requestActivity.destroyRecord();
     this.send('refresh');
+  }
+
+  @task
+  *saveProofRequest(proofRequest) {
+    yield this.publicationService.createProofRequestActivity(
+      proofRequest,
+      this.publicationFlow
+    );
+
+    this.router.transitionTo('publications.publication.proofs');
   }
 
   @action

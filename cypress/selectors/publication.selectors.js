@@ -257,8 +257,8 @@ const selectors = {
   // translation upload modal
   // documentsUpload: {
   //   name: '[data-test-publication-documents-upload-name]',
-  //   pages: '[data-test-publication-documents-upload-pages]',
-  //   words: '[data-test-publication-documents-upload-words]',
+  //   numberOfPages: '[data-test-publication-documents-upload-number-of-pages]',
+  //   numberOfWords: '[data-test-publication-documents-upload-number-of-words]',
   //   proofPrint: '[data-test-publication-documents-upload-proof-print]',
   //   save: '[data-test-publication-documents-upload-save]',
   // },

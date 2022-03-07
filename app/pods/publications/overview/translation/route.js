@@ -6,7 +6,7 @@ export default class PublicationsOverviewTranslationRoute extends PublicationsOv
     'isUrgent',
     'publicationNumber',
     'shortTitle',
-    'pageCount',
+    'numberOfPages',
     'translationRequestDate',
     'translationDueDate',
     'publicationDueDate',
@@ -17,7 +17,7 @@ export default class PublicationsOverviewTranslationRoute extends PublicationsOv
     super.beforeModel(...arguments)
     this.filter = {
       status: {
-        ':uri:': CONSTANTS.PUBLICATION_STATUSES.TO_TRANSLATIONS,
+        ':uri:': CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_REQUESTED,
       },
     };
   }

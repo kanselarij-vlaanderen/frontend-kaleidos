@@ -76,7 +76,7 @@ context('Publications overview tests', () => {
       'numacNumber',
       'shortTitle',
       'remark',
-      'pageCount',
+      'numberOfPages',
       'decisionDate',
       'openingDate',
       'translationRequestDate',

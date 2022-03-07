@@ -1,96 +1,79 @@
-<div class="vlc-procedure-step vlc-procedure-step--nopadding">
-  <div class="vlc-procedure-step__badge-wrapper">
-    <Auk::Badge
-      @icon="check"
-      @skin="success"
-      @size="medium"
-      class="vlc-procedure-step__badge"
-    />
-  </div>
-  <Auk::Panel>
-    <Auk::Panel::Header @size="large">
-      <Auk::Toolbar>
-        <Auk::Toolbar::Group @position="left">
-          <Auk::Toolbar::Item>
-            <h4 class="auk-panel__title auk-panel__title--small">
-              {{t "received-translation"}}
-            </h4>
-            <span class="auk-u-text-small auk-u-m-0">
-              {{moment-format @translationActivity.endDate "DD.MM.YYYY"}}
-            </span>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-        <Auk::Toolbar::Group @position="right">
-          <Auk::Toolbar::Item>
-            <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
-              <Menu.Item
-                @skin="primary"
-                {{on "click" this.openTranslationEditModal}}
-              >
-                {{t "edit-2"}}
-              </Menu.Item>
-            </DropdownMenu>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-      </Auk::Toolbar>
-    </Auk::Panel::Header>
-    <Auk::Panel::Body>
-      <Auk::List>
-        {{#each @translationActivity.generatedPieces as |piece|}}
-          <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
-            <div class="auk-o-flex auk-o-flex--spaced">
-              <Auk::Badge @icon="paperclip" @size="regular" />
-              <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
-            </div>
-            <Auk::ButtonLink
-              @layout="icon-only"
-              @icon="download"
-              @href={{piece.file.namedDownloadLink}}
-              download={{piece.file.downloadFilename}}
+<Auk::Panel>
+  <Auk::Panel::Header @size="large">
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title auk-panel__title--small">
+            {{t "received-translation"}}
+          </h4>
+          <span class="auk-u-text-small auk-u-m-0">
+            {{moment-format @translationActivity.endDate "DD.MM.YYYY"}}
+          </span>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
+            <Menu.Item
+              @skin="primary"
+              {{on "click" this.openProofRequestModal}}
             >
-              {{t "download"}}
-            </Auk::ButtonLink>
-            <Auk::ButtonLink
-              @layout="icon-only"
-              @icon="book"
-              @href={{piece.viewDocumentURL}}
-              target="_blank"
+              {{t "request-proof"}}
+            </Menu.Item>
+            <Menu.Item
+              @skin="primary"
+              {{on "click" this.openTranslationEditModal}}
             >
-              {{t "read"}}
-            </Auk::ButtonLink>
-          </Auk::List::Item>
-        {{/each}}
-      </Auk::List>
-    </Auk::Panel::Body>
-  </Auk::Panel>
-</div>
+              {{t "edit-2"}}
+            </Menu.Item>
+          </DropdownMenu>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    <Auk::List>
+      {{#each @translationActivity.generatedPieces as |piece|}}
+        <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
+          <div class="auk-o-flex auk-o-flex--spaced">
+            <Auk::Badge @icon="paperclip" @size="regular" />
+            <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
+          </div>
+          <Auk::ButtonLink
+            @layout="icon-only"
+            @icon="download"
+            @href={{piece.file.namedDownloadLink}}
+            download={{piece.file.downloadFilename}}
+          >
+            {{t "download"}}
+          </Auk::ButtonLink>
+          <Auk::ButtonLink
+            @layout="icon-only"
+            @icon="book"
+            @href={{piece.viewDocumentURL}}
+            target="_blank"
+          >
+            {{t "read"}}
+          </Auk::ButtonLink>
+        </Auk::List::Item>
+      {{/each}}
+    </Auk::List>
+  </Auk::Panel::Body>
+</Auk::Panel>
 
 {{#if this.isOpenTranslationEditModal}}
-  <Auk::Modal>
-    <Auk::Modal::Header
-      @title={{t "edit-translation-activity"}}
-      @onClose={{this.closeTranslationEditModal}}
-    />
-    <Auk::Modal::Body>
-      <div class="auk-form-group">
-        <Auk::Label for="translationActivityEditEndDate">
-          {{t "date"}}
-        </Auk::Label>
-        <Auk::Datepicker
-          id="translationActivityEditEndDate"
-          @date={{@translationActivity.endDate}}
-          @onChange={{this.setNewReceivedDate}}
-        />
-      </div>
-    </Auk::Modal::Body>
-    <Auk::Modal::Footer @onCancel={{this.closeTranslationEditModal}}>
-      <Auk::Button
-        @skin="primary"
-        @disabled={{this.isSaveDisabled}}
-        {{on "click" (perform this.saveReceivedDate)}}
-      >
-        {{t "save"}}
-      </Auk::Button>
-    </Auk::Modal::Footer>
-  </Auk::Modal>
+  <Publications::Publication::Translations::TranslationActivityEditModal
+    @receivedDate={{@translationActivity.endDate}}
+    @onSave={{perform this.updateTranslationActivity}}
+    @onCancel={{this.closeTranslationEditModal}}
+  />
+{{/if}}
+
+{{#if this.isOpenProofRequestModal}}
+  <Publications::Publication::Proofs::ProofRequestModal
+    @publicationFlow={{@publicationFlow}}
+    @translationActivity={{@translationActivity}}
+    @onSave={{@onCreateProofRequest}}
+    @onCancel={{this.closeProofRequestModal}}
+  />
 {{/if}}

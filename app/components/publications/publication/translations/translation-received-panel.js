@@ -2,26 +2,29 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
-import { isEmpty } from '@ember/utils';
 
 /**
  *
  * @argument translationActivity
- * @argument onSaveEditReceivedTranslation
+ * @argument publicationFlow
+ * @argument onUpdateTranslationActivity
  */
 export default class PublicationsTranslationTranslationReceivedPanelComponent extends Component {
   @tracked isOpenTranslationEditModal = false;
-  @tracked newReceivedDate;
+  @tracked isOpenProofRequestModal = false;
 
-  get isSaveDisabled() {
-    return isEmpty(this.newReceivedDate);
+  @task
+  *updateTranslationActivity(data) {
+    yield this.args.onUpdateTranslationActivity({
+      translationActivity: this.args.translationActivity,
+      receivedDate: data.receivedDate,
+    });
+    this.closeTranslationEditModal();
   }
 
   @action
   openTranslationEditModal() {
     this.isOpenTranslationEditModal = true;
-    // When opening modal, reset possibly stale local variable
-    this.newReceivedDate = this.args.translationActivity.endDate;
   }
 
   @action
@@ -29,22 +32,13 @@ export default class PublicationsTranslationTranslationReceivedPanelComponent ex
     this.isOpenTranslationEditModal = false;
   }
 
-  @task
-  *saveReceivedDate() {
-    yield this.args.onSaveEditReceivedTranslation({
-      translationActivity: this.args.translationActivity,
-      receivedDate: this.newReceivedDate,
-    });
-    this.closeTranslationEditModal();
+  @action
+  openProofRequestModal() {
+    this.isOpenProofRequestModal = true;
   }
 
   @action
-  setNewReceivedDate(selectedDates) {
-    if (selectedDates.length) {
-      this.newReceivedDate = selectedDates[0];
-    } else {
-      // this case occurs when users manually empty the date input-field
-      this.newReceivedDate = undefined;
-    }
+  closeProofRequestModal() {
+    this.isOpenProofRequestModal = false;
   }
 }
