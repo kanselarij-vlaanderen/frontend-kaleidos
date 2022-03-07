@@ -31,10 +31,8 @@ export default class PublicationsPublicationProofsController extends Controller 
     const proofingActivity = this.latestProofingActivity;
 
     const pieceSaves = [];
-    const language = yield proofingActivity.language;
     for (let piece of proofUpload.uploadedPieces) {
       piece.receivedDate = proofUpload.receivedDate;
-      piece.language = language;
       piece.proofingActivityGeneratedBy = proofingActivity;
       pieceSaves.push(piece.save());
     }
