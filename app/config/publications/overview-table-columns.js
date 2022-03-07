@@ -45,7 +45,7 @@ export default [
     keyName: 'numberOfPages',
     translationKey: 'publications-table-number-of-pages',
     translationKeySmall: 'publications-table-number-of-pages-small',
-    // no sort: is aggregated in frontend
+    sortKey: 'number-of-pages',
     apiFieldPaths: ['number-of-pages'],
   },
   {
