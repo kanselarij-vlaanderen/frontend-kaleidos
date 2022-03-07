@@ -90,16 +90,20 @@ export default class PublicationsPublicationProofsController extends Controller 
 
     const pieces = yield requestActivity.usedPieces;
     for (const piece of pieces.toArray()) {
-      const file = yield piece.file;
-      const documentContainer = yield piece.documentContainer;
-      const translationActivity = yield piece.translationActivityGeneratedBy;
       // The pieces that are used in the translationActivity can not be deleted,
       // but should be unlinked
-      if (translationActivity) {
-        piece.requestActivitiesUsedBy.removeObjects(requestActivity);
-        piece.proofingActivitiesUsedBy.removeObjects(proofingActivity);
-        yield piece.save();
-      } else {
+      const [translationActivitiesUsedBy, translationActivityGeneratedBy] =
+        yield Promise.all([
+          piece.translationActivitiesUsedBy,
+          piece.translationActivityGeneratedBy,
+        ]);
+      const isLinkedToTranslation =
+        translationActivitiesUsedBy.length > 0 ||
+        // non-existent model relationships resolve to null
+        !!translationActivityGeneratedBy;
+      if (!isLinkedToTranslation) {
+        const file = yield piece.file;
+        const documentContainer = yield piece.documentContainer;
         yield file.destroyRecord();
         yield documentContainer.destroyRecord();
         yield piece.destroyRecord();
