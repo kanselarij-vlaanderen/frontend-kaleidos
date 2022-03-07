@@ -86,7 +86,7 @@ export default class MeetingNewMeetingModal extends Component {
       isFinal: false,
       plannedStart: startDate,
       created: now,
-      kind: this.selectedKindUri,
+      kind: this.selectedKindUri ?? CONFIG.MINISTERRAAD_TYPES.DEFAULT,
       mainMeeting: this.selectedMainMeeting,
       number: this.meetingNumber,
       numberRepresentation: this.formattedMeetingIdentifier,
