@@ -211,10 +211,11 @@ context('Decision tests', () => {
     cy.get(agenda.agendaOverviewItem.subitem).eq(0)
       .click();
     cy.get(agenda.agendaitemNav.decisionTab).click();
+    // check the default of an approval agendaitem, different code then note/anouncement
     cy.get(agenda.decisionResultPill.pill).contains('Goedgekeurd');
   });
 
-  it.only('should check if there is a decision on the report of previous agenda with status Approved', () => {
+  it('should test the decision CRUD', () => {
     const file = {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     };
@@ -224,10 +225,12 @@ context('Decision tests', () => {
       'Uitgesteld',
       'Ingetrokken'
     ];
+
     cy.openAgendaForDate(agendaDate);
     cy.get(agenda.agendaOverviewItem.subitem).eq(0)
       .click();
     cy.get(agenda.agendaitemNav.decisionTab).click();
+    // CRUD of decisions
     cy.get(agenda.agendaitemDecision.container).as('decision');
     cy.get('@decision').should('have.length', 1);
     // check if no delete when only one decision
