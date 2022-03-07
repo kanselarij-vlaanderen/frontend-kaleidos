@@ -13,6 +13,12 @@
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
+          <Menu.Item
+            @skin="primary"
+            {{on "click" this.openPublicationRequestModal}}
+          >
+            {{t "request-publication"}}
+          </Menu.Item>
           <Menu.Item @skin="primary" {{on "click" this.openEditProofModal}}>
             {{t "edit-2"}}
           </Menu.Item>
@@ -51,6 +57,14 @@
   </Auk::Panel::Body>
 </Auk::Panel>
 
+{{#if this.showPublicationRequestModal}}
+  <Publications::Publication::PublicationActivities::PublicationRequestModal
+    @publicationFlow={{@publicationFlow}}
+    @proofingActivity={{@proofingActivity}}
+    @onSave={{@onCreatePublicationRequest}}
+    @onCancel={{this.closePublicationRequestModal}}
+  />
+{{/if}}
 
           {{#if this.showEditProofModal}}
             <Auk::Modal>

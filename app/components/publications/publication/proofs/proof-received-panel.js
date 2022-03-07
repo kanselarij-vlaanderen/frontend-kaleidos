@@ -11,6 +11,7 @@ import { isEmpty } from '@ember/utils';
  */
 export default class PublicationsPublicationProofProofReceivedPanel extends Component {
   @tracked showEditProofModal = false;
+  @tracked showPublicationRequestModal = false;
 
   @tracked newReceivedDate;
   @tracked newProofPrintCorrector;
@@ -43,6 +44,16 @@ export default class PublicationsPublicationProofProofReceivedPanel extends Comp
   @action
   closeEditProofModal() {
     this.showEditProofModal = false;
+  }
+
+  @action
+  openPublicationRequestModal() {
+    this.showPublicationRequestModal = true;
+  }
+
+  @action
+  closePublicationRequestModal() {
+    this.showPublicationRequestModal = false;
   }
 
   @action
