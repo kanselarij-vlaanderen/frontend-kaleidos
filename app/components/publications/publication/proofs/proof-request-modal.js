@@ -20,6 +20,7 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   @tracked message;
   @tracked uploadedPieces = [];
   @tracked translationPieces = [];
+  @tracked mustUpdatePublicationStatus = false;
 
   validators;
 
@@ -51,6 +52,7 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
       subject: this.subject,
       message: this.message,
       uploadedPieces: pieces,
+      mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
   }
 
@@ -151,6 +153,11 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   @action
   unlinkTranslationPiece(piece) {
     this.translationPieces.removeObject(piece);
+  }
+
+  @action
+  setProofRequestedStatus(event) {
+    this.mustUpdatePublicationStatus = event.target.checked;
   }
 
   initValidators() {

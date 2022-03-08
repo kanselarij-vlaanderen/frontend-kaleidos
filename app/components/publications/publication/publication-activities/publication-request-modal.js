@@ -13,6 +13,8 @@ export default class PublicationRequestModal extends Component {
   @tracked subject;
   @tracked message;
   @tracked uploadedPieces = [];
+  @tracked mustUpdatePublicationStatus = false;
+
 
   constructor() {
     super(...arguments);
@@ -46,6 +48,7 @@ export default class PublicationRequestModal extends Component {
       subject: this.subject,
       message: this.message,
       uploadedPieces: this.uploadedPieces,
+      mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
   }
 
@@ -97,6 +100,11 @@ export default class PublicationRequestModal extends Component {
     });
 
     this.uploadedPieces.pushObject(piece);
+  }
+
+  @action
+  setPublicationRequestedStatus(event) {
+    this.mustUpdatePublicationStatus = event.target.checked;
   }
 
   @task

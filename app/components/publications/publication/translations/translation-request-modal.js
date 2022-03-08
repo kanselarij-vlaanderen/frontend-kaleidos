@@ -24,6 +24,8 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
     : new Date();
   @tracked subject;
   @tracked message;
+  @tracked mustUpdatePublicationStatus = false;
+
   validators;
 
   constructor() {
@@ -51,6 +53,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
       translationDueDate: this.translationDueDate,
       subject: this.subject,
       message: this.message,
+      mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
   }
 
@@ -109,6 +112,11 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
     this.setEmailFields.perform();
   }
 
+  @action
+  setTranslationRequestedStatus(event) {
+    this.mustUpdatePublicationStatus = event.target.checked;
+  }
+
   @task
   *deleteUploadedPiece(piece) {
     this.uploadedPieces.removeObject(piece);
@@ -124,6 +132,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
       piece.destroyRecord(),
     ]);
   }
+
 
   initValidators() {
     this.validators = new ValidatorSet({
