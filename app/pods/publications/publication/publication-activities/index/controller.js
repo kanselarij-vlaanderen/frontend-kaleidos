@@ -95,7 +95,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
   *deleteRequest(requestActivityArgs) {
     yield this.performDeleteRequest(requestActivityArgs);
     // separate from this.performDeleteRequest(...):
-    //    is acceptable to be aborted
+    //    refresh is OK to be aborted
     this.send('refresh');
   }
 
@@ -114,8 +114,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     for (const piece of pieces.toArray()) {
       const proofingActivity = await piece.proofingActivityGeneratedBy;
 
-      // The pieces that are used in a proofingActivity can not be deleted,
-      //    but should be unlinked
+      // The pieces that are used in a proofingActivity should not be deleted
       // Only proof (result/generated) pieces are uploaded, so they
       //    so no check whether they are linked to a translationActivity is required
       if (!proofingActivity) {
