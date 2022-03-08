@@ -59,6 +59,13 @@
           </div>
         </div>
       </div>
+      <div class="auk-form-group auk-u-mt-4">
+        <Auk::Checkbox
+          @label={{t "update-publication-status-translation-requested"}}
+          @checked={{this.mustUpdatePublicationStatus}}
+          {{on "input" this.setTranslationRequestedStatus}}
+        />
+      </div>
       <div class="auk-form-group">
         <Auk::Label for="translationRequestSubject" @required={{true}}>
           {{t "subject"}}
@@ -77,13 +84,6 @@
           id="translationRequestMessage"
           rows="16"
           @value={{mut this.message}}
-        />
-      </div>
-      <div class="auk-form-group auk-u-mt-4">
-        <Auk::Checkbox
-          @label={{t "update-publication-status-translation-requested"}}
-          @checked={{this.mustUpdatePublicationStatus}}
-          {{on "input" this.setTranslationRequestedStatus}}
         />
       </div>
       <div class="auk-form-group">
