@@ -52,52 +52,26 @@
               {{/if}}
             </div>
             <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
-              {{#if @agendaitem.isDesignAgenda}}
-                {{#if this.loadNewsletterVisibility.lastSuccessful}}
-                  {{#if (not this.newsletterIsVisible)}}
-                    <Auk::Pill
-                      @skin="future"
-                      @icon="not-visible"
-                      data-test-agenda-overview-item-confidentiality-locked
-                    >
-                    {{t "not-visible-in-newsletter"}}
-                  </Auk::Pill>
-                  {{/if}}
+              {{#if this.subcase.confidential}}
+                {{#if (and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow)}}
+                <Auk::Pill
+                  @skin="warning-future"
+                  @icon="lock-closed"
+                  data-test-agenda-overview-item-confidentiality-locked
+                >
+                  {{t "confidential"}}
+                </Auk::Pill>
                 {{else}}
-                  <Auk::Pill @skin="invisible"></Auk::Pill>
-                {{/if}}
-                {{#if this.subcase.confidential}}
-                  <Auk::Pill
-                    @skin="warning-future"
-                    @icon="lock-closed"
-                    data-test-agenda-overview-item-confidentiality-locked
-                  >
-                    {{t "confidential"}}
-                  </Auk::Pill>
+                <Auk::Pill
+                  @skin="warning"
+                  @icon="lock-closed"
+                  data-test-agenda-overview-item-confidentiality-locked
+                >
+                  {{t "confidential"}}
+                </Auk::Pill>
                 {{/if}}
               {{else}}
-                {{#if this.loadNewsletterVisibility.lastSuccessful}}
-                  {{#if (not this.newsletterIsVisible)}}
-                    <Auk::Pill
-                      @skin=""
-                      @icon="not-visible"
-                      data-test-agenda-overview-item-confidentiality-locked
-                    >
-                    {{t "not-visible-in-newsletter"}}
-                  </Auk::Pill>
-                  {{/if}}
-                {{else}}
-                  <Auk::Pill @skin="invisible"></Auk::Pill>
-                {{/if}}
-                {{#if this.subcase.confidential}}
-                  <Auk::Pill
-                    @skin="warning"
-                    @icon="lock-closed"
-                    data-test-agenda-overview-item-confidentiality-locked
-                  >
-                    {{t "confidential"}}
-                  </Auk::Pill>
-                {{/if}}
+                <Auk::Pill @skin="invisible"></Auk::Pill>
               {{/if}}
             </div>
           </div>

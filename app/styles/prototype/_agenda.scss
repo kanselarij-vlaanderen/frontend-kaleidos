@@ -107,6 +107,16 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
   margin-bottom: 0;
   padding-top: .2rem;
   padding-bottom: .3rem;
+
+  a.vlc-agenda-detail-sidebar__sub-item--active &,
+  a:hover &,
+  a:focus & {
+    text-decoration: none;
+  }
+
+  a.vlc-agenda-detail-sidebar__sub-item--active & {
+    color: #2A2D31;
+  }
 }
 
 .vlc-agenda-detail-sidebar-item__icon {
@@ -134,9 +144,68 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
   color: #16465B;
 }
 
+// Document card
+.vlc-document-card__content .auk-h4 {
+  margin: 0;
+  color: #0055CC;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    color: #004099;
+  }
+}
+
+.vlc-document-card {
+  padding: 0;
+}
+
+.vlc-document-card__summary {
+  padding: 1.8rem;
+}
+
+.vlc-document-card-versions {
+  border-top: .1rem solid #CCD1D9;
+  margin-top: 0;
+}
+
+.vlc-document-card-versions .auk-accordion__item .auk-accordion__content {
+  margin: 0;
+}
+
+.auk-model-selector {
+  width: 100%;
+
+  .ember-power-select-trigger.ember-basic-dropdown-trigger {
+    background-position: calc(100% - 1rem) 50%;
+    width: 100%;
+  }
+
+  .ember-power-select-clear-btn {
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    background-color: #E6E8EB;
+    color: #545961;
+    height: 2rem;
+    width: 2rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding-bottom: .5rem;
+  }
+}
+
 // Pills
 .auk-pill {
   white-space: nowrap;
+  font-weight: 500 !important;
+  text-decoration: none;
 }
 
 .auk-pill--future {
@@ -149,6 +218,17 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
   color: $vl-picton-blue;
 }
 
+.auk-pill--action {
+  border: .1rem solid #D4E3F7;
+  color: #0055CC;
+  margin-left: .3rem;
+
+  &:hover,
+  &:focus {
+    color: #004099;
+  }
+}
+
 .auk-pill--active-future {
   border: .1rem dashed $vl-picton-blue;
   color: $vl-picton-blue;
@@ -157,7 +237,7 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
 
 .auk-pill--warning {
   border: .1rem solid $vl-orange-100;
-  color: $vl-orange-130;
+  color: $vl-orange-130 !important;
   background-color: $vl-orange-10;
 
   .auk-icon {
@@ -167,11 +247,11 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
 
 .auk-pill--warning-future {
   border: .1rem dashed $vl-orange-100;
-  color: $vl-orange-130;
+  color: $vl-orange-130 !important;
   border-radius: .2rem;
 
   .auk-icon {
-    color: $vl-orange-130;
+    color: $vl-orange-130 !important;
   }
 }
 

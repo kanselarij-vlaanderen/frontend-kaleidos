@@ -1035,6 +1035,7 @@
     "no-go-back": "Nee, ga terug",
     "close": "Sluiten",
     "show-documents": "Toon documenten",
-    "hide-documents": "Verberg documenten"
+    "hide-documents": "Verberg documenten",
+    "new-document": "Nieuw document"
   }
 }

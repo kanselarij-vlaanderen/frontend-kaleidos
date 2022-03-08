@@ -61,7 +61,7 @@
               </p>
             {{/if}}
             {{#if (await @subcase.confidential)}}
-              {{#if @agendaitem.isDesignAgenda}}
+              {{#if (and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow)}}
               <Auk::Pill
                 @skin="warning-future"
                 @icon="lock-closed"

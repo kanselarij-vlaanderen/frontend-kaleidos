@@ -1,7 +1,7 @@
 <Documents::DocumentList
   @pieces={{@pieces}}
 as |documents|>
-  <div class="grid-container">
+  <ul class="list-container">
     {{#each documents as |doc|}}
       <Documents::DocumentBadge
         @piece={{doc}}
@@ -9,5 +9,5 @@ as |documents|>
         @isClickable={{true}}
       />
     {{/each}}
-  </div>
+  </ul>
 </Documents::DocumentList>

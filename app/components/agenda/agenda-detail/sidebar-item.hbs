@@ -31,7 +31,7 @@
           </pre>
         </h4>
         <div class="vlc-agenda-detail-sidebar__formally-ok-label auk-o-flex--align-end">
-          {{#if @agendaitem.isDesignAgenda}}
+          {{#if (and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow)}}
             {{#if this.subcase.confidential}}
               <Auk::Pill
                 data-test-agenda-detail-sidebar-item-confidential={{true}}

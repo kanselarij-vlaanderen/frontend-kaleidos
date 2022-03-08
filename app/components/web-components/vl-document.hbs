@@ -13,14 +13,14 @@
         {{this.piece.name}}
       </h6>
       {{#unless this.loadPieceRelatedData.isRunning}}
-        <AccessLevelPill
+        {{!-- <AccessLevelPill
           @accessLevel={{this.accessLevel}}
           @confidential={{this.piece.confidential}}
           @onChangeAccessLevel={{this.changeAccessLevel}}
           @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
           @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
           @onChangeConfidentiality={{this.changeConfidentiality}}
-        />
+        /> --}}
       {{/unless}}
       {{#if this.file}}
         <Auk::Button

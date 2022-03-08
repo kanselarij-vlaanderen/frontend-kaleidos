@@ -6,22 +6,62 @@
 >
   <div class="vlc-document-card" data-test-document-card>
     <div class="vlc-document-card__summary">
-      <div class="auk-u-mr-3">
-        {{#if @isHighlighted}}
-          <Auk::Badge @skin="success" @icon="document-added" @size="large" />
-        {{else}}
-          <Auk::Badge @icon="document" @size="large" />
-        {{/if}}
-      </div>
       <div class="vlc-document-card__content">
         <Auk::Toolbar @auto={{true}}>
           <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
-              <p data-test-document-card-type class="vlc-subline">
-                {{#unless this.loadPieceRelatedData.isRunning}}
-                  {{this.documentContainer.type.label}}
-                {{/unless}}
-              </p>
+              {{#if @isHighlighted}}
+              <Auk::Badge @icon="document-added" @size="large" />
+              {{else if @piece.confidential }}
+              <Auk::Badge @icon="lock-closed" @size="large" />
+              {{ else }}
+              <Auk::Badge @icon="document" @size="large" />
+              {{/if}}
+            </Auk::Toolbar::Item>
+            <Auk::Toolbar::Item class="auk-u-maximize-width">
+              <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
+                <p data-test-document-card-type class="vlc-subline">
+                  {{#unless this.loadPieceRelatedData.isRunning}}
+                    {{this.documentContainer.type.label}}
+                  {{/unless}}
+                </p>
+                {{#if @isHighlighted}}
+                  <p class="auk-u-text-small auk-u-muted auk-u-text-nowrap auk-u-mr-2">
+                    <Auk::ColorBadge @skin="success" /> {{t "util.new-document"}}
+                  </p>
+                {{/if}}
+              </div>
+              {{#if this.isEditingPiece}}
+              <div class="auk-o-flex auk-o-flex--vertical-center auk-u-maximize-width">
+                <Auk::Input
+                  data-test-document-card-name-input={{true}}
+                  @block={{true}}
+                  @value={{this.pieceNameBuffer}}
+                />
+                <Auk::Button
+                  data-test-document-card-name-save={{true}}
+                  @skin="borderless"
+                  @layout="icon-only"
+                  @icon="check"
+                  {{on "click" (perform this.savePieceName)}}
+                />
+                <Auk::Button
+                  data-test-document-card-name-cancel={{true}}
+                  @skin="borderless"
+                  @layout="icon-only"
+                  @icon="x"
+                  {{on "click" this.cancelEditPieceName}}
+                />
+              </div>
+              {{else}}
+                <h6 class="auk-h4" data-test-document-card-name-value>
+                  {{! template-lint-disable no-invalid-interactive }}
+                  <span {{on "click" this.enableEditPieceName}}>
+                    {{this.piece.name}}
+                  </span>
+                  {{! template-lint-enable no-invalid-interactive }}
+                </h6>
+              {{/if}}
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
           <Auk::Toolbar::Group @position="right">
@@ -37,7 +77,7 @@
                 {{! TODO: remove style attributes and replace classes with auk-status-pill }}
                 {{! template-lint-disable no-inline-styles }}
                 <LinkTo
-                  class="auk-pill auk-pill--default auk-u-mr-2"
+                  class="auk-pill auk-pill--action"
                   @route="publications.publication"
                   @model={{this.piece.publicationFlow.id}}
                 >
@@ -125,38 +165,7 @@
           <div
             class="auk-o-flex auk-o-flex--vertical vlc-u-box-model-maximize-width"
           >
-            {{#if this.isEditingPiece}}
-              <div class="auk-o-flex auk-o-flex--vertical-center">
-                <Auk::Input
-                  data-test-document-card-name-input={{true}}
-                  @block={{true}}
-                  @value={{this.pieceNameBuffer}}
-                />
-                <Auk::Button
-                  data-test-document-card-name-save={{true}}
-                  @skin="borderless"
-                  @layout="icon-only"
-                  @icon="check"
-                  {{on "click" (perform this.savePieceName)}}
-                />
-                <Auk::Button
-                  data-test-document-card-name-cancel={{true}}
-                  @skin="borderless"
-                  @layout="icon-only"
-                  @icon="x"
-                  {{on "click" this.cancelEditPieceName}}
-                />
-              </div>
-            {{else}}
-              <h6 class="auk-h4" data-test-document-card-name-value>
-                {{! template-lint-disable no-invalid-interactive }}
-                <span {{on "click" this.enableEditPieceName}}>
-                  {{this.piece.name}}
-                </span>
-                {{! template-lint-enable no-invalid-interactive }}
-              </h6>
-            {{/if}}
-            <div class="vlc-document-card-content__meta">
+            <div class="vlc-document-card-content__meta auk-u-mt-2">
               {{! no piece.created in legacy data }}
               {{! TODO: when created date is absent, the layout seems irregular
                     this will be addressed with new document card styling }}
