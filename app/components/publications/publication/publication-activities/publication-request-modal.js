@@ -25,7 +25,7 @@ export default class PublicationRequestModal extends Component {
 
   @task
   *loadData() {
-    let proofingActivity = this.args.proofingActivty;
+    let proofingActivity = this.args.proofingActivity;
     if (!proofingActivity) {
       proofingActivity = yield this.loadDefaultProofingActivity();
     }
