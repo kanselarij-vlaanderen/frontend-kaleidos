@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { getPublicationStatusPillKey, getPublicationStatusPillStep } from 'frontend-kaleidos/utils/publication-auk';
+import { getLatestDate } from 'frontend-kaleidos/utils/date-util';
 
 export default class PublicationsTableRowComponent extends Component {
   @service router;
@@ -65,8 +66,7 @@ export default class PublicationsTableRowComponent extends Component {
     const publicationSubcase = await publicationFlow.translationSubcase;
     const translationActivities = await publicationSubcase.translationActivities;
     const requestDates = translationActivities.mapBy('startDate');
-    const mostRecentDate = this.getMaxDate(requestDates);
-    return mostRecentDate;
+    return getLatestDate(requestDates);
   }
 
   /** @returns {Date?} undefined if no ProofingActivities */
@@ -74,30 +74,15 @@ export default class PublicationsTableRowComponent extends Component {
     const publicationSubcase = await publicationFlow.publicationSubcase;
     const proofingActivities = await publicationSubcase.proofingActivities;
     const requestDates = proofingActivities.mapBy('startDate');
-    const mostRecentDate = this.getMaxDate(requestDates);
-    return mostRecentDate;
-  }
-
-  getMaxDate(dates) {
-    // default .sort() of Date objects does not give expected results
-    dates = dates.sortBy();
-    const max = dates.lastObject;
-    return max;
+    return getLatestDate(requestDates);
   }
 
   /** @returns {Date?} undefined if no ProofingActivities or a ProofingActivity is not finished */
   async getProofReceivedDate(publicationFlow) {
     const publicationSubcase = await publicationFlow.publicationSubcase;
     const proofingActivities = await publicationSubcase.proofingActivities;
-    let receivedDates = proofingActivities.mapBy('endDate');
-    // default .sort() of Date objects does not give expected results
-    // JS sorts `undefined` after Date objects
-    // if there is a ProofingActivity which is not finished (endDate === undefined)
-    // undefined will be the .lastObject
-    // not using Embers .sortBy() to avoid sort algorithm changes
-    receivedDates = receivedDates.sort((a, b) => a - b);
-    const mostRecentDate = receivedDates.lastObject;
-    return mostRecentDate;
+    const receivedDates = proofingActivities.mapBy('endDate');
+    return getLatestDate(receivedDates);
   }
 
   // TODO: review async getter once ember-resources can be used
