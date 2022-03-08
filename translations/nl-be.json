@@ -949,7 +949,7 @@
   "view-more": "Bekijk meer",
   "read": "Lees",
   "request-proof-for-publication": "Drukproef aanvragen voor publicatie {identification}",
-  "publication-request-modal-title": "Publicatie aanvragen voor publicatieproces {publication}",
+  "publication-request-modal-title": "Publicatie aanvragen voor {publication}",
   "proofing-request": "Drukproefaanvraag",
   "publication-request": "Publicatieaanvraag",
   "request-sent": "Aanvraag verzonden",
