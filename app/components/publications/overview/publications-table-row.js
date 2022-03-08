@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { getPublicationStatusPillKey, getPublicationStatusPillStep } from 'frontend-kaleidos/utils/publication-auk';
+import { getLatestDate } from 'frontend-kaleidos/utils/date-util';
 
 export default class PublicationsTableRowComponent extends Component {
   @service router;
@@ -12,8 +13,9 @@ export default class PublicationsTableRowComponent extends Component {
 
   @tracked isViaCouncilOfMinisters;
   @tracked publicationDate;
-  @tracked numberOfPages;
+  @tracked translationRequestDate;
   @tracked proofRequestDate;
+  @tracked proofReceivedDate;
   @tracked publicationStatus;
 
   constructor() {
@@ -30,8 +32,14 @@ export default class PublicationsTableRowComponent extends Component {
       this.isViaCouncilOfMinisters =
       yield this.publicationService.getIsViaCouncilOfMinisters(this.args.publicationFlow);
     }
+    if (this.args.tableColumnDisplayOptions.translationRequestDate) {
+      this.translationRequestDate = yield this.getTranslationRequestDate(this.args.publicationFlow);
+    }
     if (this.args.tableColumnDisplayOptions.proofRequestDate) {
       this.proofRequestDate = yield this.getProofRequestDate(this.args.publicationFlow);
+    }
+    if (this.args.tableColumnDisplayOptions.proofReceivedDate) {
+      this.proofReceivedDate = yield this.getProofReceivedDate(this.args.publicationFlow);
     }
     if (this.args.tableColumnDisplayOptions.publicationDate) {
       this.publicationDate = yield this.publicationService.getPublicationDate(
@@ -53,13 +61,28 @@ export default class PublicationsTableRowComponent extends Component {
     return this.publicationStatus && getPublicationStatusPillStep(this.publicationStatus);
   }
 
+  /** @returns {Date?} undefined if no translation-activities */
+  async getTranslationRequestDate(publicationFlow) {
+    const publicationSubcase = await publicationFlow.translationSubcase;
+    const translationActivities = await publicationSubcase.translationActivities;
+    const requestDates = translationActivities.mapBy('startDate');
+    return getLatestDate(requestDates);
+  }
+
+  /** @returns {Date?} undefined if no ProofingActivities */
   async getProofRequestDate(publicationFlow) {
     const publicationSubcase = await publicationFlow.publicationSubcase;
     const proofingActivities = await publicationSubcase.proofingActivities;
-    const startDates = proofingActivities.mapBy('startDate');
-    startDates.sort();
-    const firstProofRequestDate = startDates[0];
-    return firstProofRequestDate;
+    const requestDates = proofingActivities.mapBy('startDate');
+    return getLatestDate(requestDates);
+  }
+
+  /** @returns {Date?} undefined if no ProofingActivities or a ProofingActivity is not finished */
+  async getProofReceivedDate(publicationFlow) {
+    const publicationSubcase = await publicationFlow.publicationSubcase;
+    const proofingActivities = await publicationSubcase.proofingActivities;
+    const receivedDates = proofingActivities.mapBy('endDate');
+    return getLatestDate(receivedDates);
   }
 
   // TODO: review async getter once ember-resources can be used
