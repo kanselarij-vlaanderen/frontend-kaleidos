@@ -15,6 +15,7 @@
         <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
           <Menu.Item
             @skin="primary"
+            @disabled={{@isCreatePublicationRequestDisabled}}
             {{on "click" this.openPublicationRequestModal}}
           >
             {{t "request-publication"}}

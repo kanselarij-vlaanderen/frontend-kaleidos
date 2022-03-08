@@ -12,12 +12,17 @@ export default class PublicationsPublicationProofsController extends Controller 
 
   @tracked publicationFlow;
   @tracked publicationSubcase;
+  @tracked publicationActivitiesCount;
 
   @tracked showProofUploadModal = false;
   @tracked showProofRequestModal = false;
 
   get isProofUploadDisabled() {
     return this.latestProofingActivity == null;
+  }
+
+  get isCreatePublicationRequestDisabled() {
+    return this.publicationActivitiesCount > 0;
   }
 
   get latestProofingActivity() {

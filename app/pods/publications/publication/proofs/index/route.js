@@ -75,14 +75,23 @@ export default class PublicationsPublicationProofsRoute extends Route {
       .reverseObjects();
   }
 
-  afterModel() {
+  async afterModel() {
     this.publicationFlow = this.modelFor('publications.publication');
+    // query on 'publication-activity' and not 'request-activity':
+    // 'publication-activity' can be present without 'request-activity'
+    //    when it comes from legacy data or is created in a publication-status change to "Gepubliceerd"
+    const response = await this.store.query('publication-activity', {
+      'filter[subcase][publication-flow][:id:]': this.publicationFlow.id,
+      'page[size]': 1,
+    });
+    this.publicationActivitiesCount = response.meta.count;
   }
 
   setupController(controller) {
     super.setupController(...arguments);
     controller.publicationFlow = this.publicationFlow;
     controller.publicationSubcase = this.publicationSubcase;
+    controller.publicationActivitiesCount = this.publicationActivitiesCount;
   }
 
   @action
