@@ -34,7 +34,7 @@
   </Auk::Panel::Header>
 
   <Auk::Panel::Body class="auk-u-bg-alt">
-    {{#each @model as |event|}}
+    {{#each this.model as |event|}}
       {{#if event.isShown}}
         {{#if event.isRequestActivity}}
           <Utils::Timeline::Event
@@ -45,7 +45,7 @@
               @title={{t "requested-publication"}}
               @requestActivity={{event.activity}}
               @isDisabledDelete={{event.activity.publicationActivity.isFinished}}
-              @onDeleteRequest={{fn this.deleteRequest event.activity}}
+              @onDeleteRequest={{perform this.deleteRequest event.activity}}
             />
           </Utils::Timeline::Event>
         {{else if event.isPublicationActivity}}

@@ -96,7 +96,7 @@ export default class PublicationsPublicationProofsController extends Controller 
 
     const pieces = yield requestActivity.usedPieces;
     for (const piece of pieces.toArray()) {
-      // The pieces that are used in the translationActivity can not be deleted,
+      // The pieces that are used in a translationActivity can not be deleted,
       // but should be unlinked
       const [translationActivitiesUsedBy, translationActivityGeneratedBy] =
         yield Promise.all([

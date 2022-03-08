@@ -91,8 +91,16 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     await Promise.all([decision.save(), publicationActivity.save()]);
   }
 
-  @action
-  async deleteRequest(requestActivity) {
+  @task
+  *deleteRequest(requestActivityArgs) {
+    yield this.performDeleteRequest(requestActivityArgs);
+    // separate from this.performDeleteRequest(...):
+    //    is acceptable to be aborted
+    this.send('refresh');
+  }
+
+  // separate method to prevent ember-concurrency from saving only partially
+  async performDeleteRequest(requestActivity) {
     const deletes = [];
 
     const publicationActivity = await requestActivity.publicationActivity;
@@ -104,15 +112,20 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
 
     const pieces = await requestActivity.usedPieces;
     for (const piece of pieces.toArray()) {
-      const file = await piece.file;
-      const documentContainer = await piece.documentContainer;
+      const proofingActivity = await piece.proofingActivityGeneratedBy;
 
-      // TODO: when pieces will be added from Drukproeven
-      // it will be necessary to check the pieces are not linked
-      // to something else and may be deleted
-      deletes.push(piece.destroyRecord());
-      deletes.push(file.destroyRecord());
-      deletes.push(documentContainer.destroyRecord());
+      // The pieces that are used in a proofingActivity can not be deleted,
+      //    but should be unlinked
+      // Only proof (result/generated) pieces are uploaded, so they
+      //    so no check whether they are linked to a translationActivity is required
+      if (!proofingActivity) {
+        const file = await piece.file;
+        const documentContainer = await piece.documentContainer;
+
+        deletes.push(piece.destroyRecord());
+        deletes.push(file.destroyRecord());
+        deletes.push(documentContainer.destroyRecord());
+      }
     }
 
     await Promise.all(deletes);
@@ -120,7 +133,6 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     // delete after previous records have been destroyed
     // destroying in parallel throws occasional errors
     await requestActivity.destroyRecord();
-    this.send('refresh');
   }
 
   @action
