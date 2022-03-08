@@ -4,7 +4,6 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import EmberObject from '@ember/object';
-import { A } from '@ember/array';
 import CONFIG from 'frontend-kaleidos/utils/config';
 
 /**
