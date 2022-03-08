@@ -47,9 +47,7 @@ export default class PublicationsPublicationProofsRoute extends Route {
   @service store;
 
   async model() {
-    this.publicationSubcase = this.modelFor(
-      'publications.publication.proofs'
-    );
+    this.publicationSubcase = this.modelFor('publications.publication.proofs');
 
     let requestActivities = this.store.query('request-activity', {
       'filter[publication-subcase][:id:]': this.publicationSubcase.id,
