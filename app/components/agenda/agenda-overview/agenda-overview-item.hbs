@@ -52,52 +52,52 @@
               {{/if}}
             </div>
             <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
-              {{#if (and (eq @agendaitem.formallyOkToShow.label "Formeel OK") (not-eq @isNew true))}}
-              {{#if this.loadNewsletterVisibility.lastSuccessful}}
-                {{#if (not this.newsletterIsVisible)}}
+              {{#if @agendaitem.isDesignAgenda}}
+                {{#if this.loadNewsletterVisibility.lastSuccessful}}
+                  {{#if (not this.newsletterIsVisible)}}
+                    <Auk::Pill
+                      @skin="future"
+                      @icon="not-visible"
+                      data-test-agenda-overview-item-confidentiality-locked
+                    >
+                    {{t "not-visible-in-newsletter"}}
+                  </Auk::Pill>
+                  {{/if}}
+                {{else}}
+                  <Auk::Pill @skin="invisible"></Auk::Pill>
+                {{/if}}
+                {{#if this.subcase.confidential}}
                   <Auk::Pill
-                    @skin=""
-                    @icon="not-visible"
+                    @skin="warning-future"
+                    @icon="lock-closed"
                     data-test-agenda-overview-item-confidentiality-locked
                   >
-                  {{t "not-visible-in-newsletter"}}
-                </Auk::Pill>
+                    {{t "confidential"}}
+                  </Auk::Pill>
                 {{/if}}
               {{else}}
-                <Auk::Pill @skin="invisible"></Auk::Pill>
-              {{/if}}
-              {{#if this.subcase.confidential}}
-                <Auk::Pill
-                  @skin="warning"
-                  @icon="lock-closed"
-                  data-test-agenda-overview-item-confidentiality-locked
-                >
-                  {{t "confidential"}}
-                </Auk::Pill>
-              {{/if}}
-              {{else}}
-              {{#if this.loadNewsletterVisibility.lastSuccessful}}
-                {{#if (not this.newsletterIsVisible)}}
+                {{#if this.loadNewsletterVisibility.lastSuccessful}}
+                  {{#if (not this.newsletterIsVisible)}}
+                    <Auk::Pill
+                      @skin=""
+                      @icon="not-visible"
+                      data-test-agenda-overview-item-confidentiality-locked
+                    >
+                    {{t "not-visible-in-newsletter"}}
+                  </Auk::Pill>
+                  {{/if}}
+                {{else}}
+                  <Auk::Pill @skin="invisible"></Auk::Pill>
+                {{/if}}
+                {{#if this.subcase.confidential}}
                   <Auk::Pill
-                    @skin="future"
-                    @icon="not-visible"
+                    @skin="warning"
+                    @icon="lock-closed"
                     data-test-agenda-overview-item-confidentiality-locked
                   >
-                  {{t "not-visible-in-newsletter"}}
-                </Auk::Pill>
+                    {{t "confidential"}}
+                  </Auk::Pill>
                 {{/if}}
-              {{else}}
-                <Auk::Pill @skin="invisible"></Auk::Pill>
-              {{/if}}
-              {{#if this.subcase.confidential}}
-                <Auk::Pill
-                  @skin="warning-future"
-                  @icon="lock-closed"
-                  data-test-agenda-overview-item-confidentiality-locked
-                >
-                  {{t "confidential"}}
-                </Auk::Pill>
-              {{/if}}
               {{/if}}
             </div>
           </div>
@@ -125,8 +125,7 @@
       {{#if (or this.currentSession.isEditor this.documentsAreReleased)}}
         {{#if this.limitedAgendaitemDocuments}}
         <Auk::ButtonLink
-          @icon={{if this.isShowingAllDocuments "chevron-up" "chevron-down"}}
-          @skin="muted"
+          @icon={{if this.isShowingAllDocuments "chevron-down" "chevron-right"}}
           {{on "click" this.toggleShowingAllDocuments}}
           class="auk-u-text-small auk-u-mt-4"
         >

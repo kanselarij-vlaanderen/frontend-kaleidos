@@ -31,22 +31,7 @@
           </pre>
         </h4>
         <div class="vlc-agenda-detail-sidebar__formally-ok-label auk-o-flex--align-end">
-          {{#if (and (eq @agendaitem.formallyOkToShow.label "Formeel OK") (not-eq @isNew true))}}
-            {{#if this.subcase.confidential}}
-              <Auk::Pill
-                data-test-agenda-detail-sidebar-item-confidential={{true}}
-                @skin="warning"
-                @layout="icon-only"
-              >
-                <Auk::Icon @name="lock-closed" />
-                <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
-                  <p>
-                    {{t "confidential"}}
-                  </p>
-                </EmberTooltip>
-              </Auk::Pill>
-            {{/if}}
-            {{else}}
+          {{#if @agendaitem.isDesignAgenda}}
             {{#if this.subcase.confidential}}
               <Auk::Pill
                 data-test-agenda-detail-sidebar-item-confidential={{true}}
@@ -61,10 +46,22 @@
                 </EmberTooltip>
               </Auk::Pill>
             {{/if}}
+          {{else}}
+            {{#if this.subcase.confidential}}
+              <Auk::Pill
+                data-test-agenda-detail-sidebar-item-confidential={{true}}
+                @skin="warning"
+                @layout="icon-only"
+              >
+                <Auk::Icon @name="lock-closed" />
+                <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
+                  <p>
+                    {{t "confidential"}}
+                  </p>
+                </EmberTooltip>
+              </Auk::Pill>
+            {{/if}}
           {{/if}}
-
-
-
 
           {{#if @showFormallyOkStatus}}
             <Auk::Pill @skin="blank" @layout="icon-only" class="{{@agendaitem.formallyOkToShow.classNames}}">
