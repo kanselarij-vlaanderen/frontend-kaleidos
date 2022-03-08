@@ -10,7 +10,10 @@ export default class CaseModel extends Model {
 
   @hasMany('publication-flow') publicationFlows;
   @hasMany('concept') governmentAreas;
-  @hasMany('subcase') subcases;
+  // This relation is saved on subcase and should be read-only here
+  @hasMany('subcase', {
+    serialize: false,
+  }) subcases;
   @hasMany('piece') pieces;
   @hasMany('sign-flow') signFlows;
 }
