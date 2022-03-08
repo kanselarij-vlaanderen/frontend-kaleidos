@@ -190,7 +190,7 @@ context('Agenda tests', () => {
       cy.get(utils.mHeader.agendas).click();
       cy.get(route.agendas.action.newMeeting).click();
       cy.wait(500); // await call not possible
-      cy.get(agenda.newSession.meetingNumber).should('have.value', (parseInt(result.meetingNumber, 10) + 1).toString());
+      cy.get(agenda.newMeeting.meetingNumber).should('have.value', (parseInt(result.meetingNumber, 10) + 1).toString());
     });
   });
 

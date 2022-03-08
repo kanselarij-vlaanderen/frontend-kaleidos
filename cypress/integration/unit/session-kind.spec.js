@@ -128,14 +128,14 @@ context('Different session kinds should show different titles', () => {
     cy.createAgenda(null, agendaDate, null, agendaNumber);
     // set kind to PVV
     cy.get(route.agendas.action.newMeeting).click();
-    cy.get(agenda.newSession.kind).click();
+    cy.get(agenda.newMeeting.kind).click();
     selectFromDropdown(vvKind);
     // select related main meeting
-    cy.get(agenda.newSession.relatedMainMeeting).click();
+    cy.get(agenda.newMeeting.relatedMainMeeting).click();
     selectFromDropdown(formattedAgendaDate);
-    cy.get(agenda.newSession.numberRep.view).should('contain', fullmeetingNumberVV);
+    cy.get(agenda.newMeeting.numberRep.view).should('contain', fullmeetingNumberVV);
     cy.intercept('PATCH', '/meetings/**').as('patchMeetings');
-    cy.get(agenda.newSession.save).click();
+    cy.get(agenda.newMeeting.save).click();
     cy.wait('@patchMeetings');
     // check if edit shows correct data
     cy.openAgendaForDate(agendaDate, 1);
