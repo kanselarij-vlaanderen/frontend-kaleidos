@@ -80,11 +80,12 @@ export default class PublicationsPublicationProofsRoute extends Route {
     // query on 'publication-activity' and not 'request-activity':
     // 'publication-activity' can be present without 'request-activity'
     //    when it comes from legacy data or is created in a publication-status change to "Gepubliceerd"
-    const response = await this.store.query('publication-activity', {
-      'filter[subcase][publication-flow][:id:]': this.publicationFlow.id,
-      'page[size]': 1,
-    });
-    this.publicationActivitiesCount = response.meta.count;
+    this.publicationActivitiesCount = await this.store.count(
+      'publication-activity',
+      {
+        'filter[subcase][publication-flow][:id:]': this.publicationFlow.id,
+      }
+    );
   }
 
   setupController(controller) {
