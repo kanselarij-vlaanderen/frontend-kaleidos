@@ -31,11 +31,9 @@ export default class PublicationRequestModal extends Component {
     }
 
     if (proofingActivity) {
-      let usedPieces = yield proofingActivity.usedPieces;
-      usedPieces = usedPieces.toArray();
       let generatedPieces = yield proofingActivity.generatedPieces;
       generatedPieces = generatedPieces.toArray();
-      this.transferredPieces = [...usedPieces, ...generatedPieces];
+      this.transferredPieces = generatedPieces;
     } else {
       this.transferredPieces = [];
     }
