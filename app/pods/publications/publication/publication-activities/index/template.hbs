@@ -40,7 +40,9 @@
           <Utils::Timeline::Event
             @badgeIcon="mail"
             @badgeSkin="primary"
-            @event={{event}} as |event|>
+            @event={{event}}
+            as |event|
+          >
             <Publications::Publication::RequestActivityPanel
               @title={{t "requested-publication"}}
               @requestActivity={{event.activity}}
@@ -52,7 +54,9 @@
           <Utils::Timeline::Event
             @badgeIcon="check"
             @badgeSkin="success"
-            @event={{event}} as |event|>
+            @event={{event}}
+            as |event|
+          >
             <Publications::Publication::PublicationActivities::PublicationRegisteredPanel
               @publicationActivity={{event.activity}}
               @onUpdatePublicationActivity={{this.updatePublication}}

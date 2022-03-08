@@ -32,14 +32,17 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
   }
 
   get isRegistrationDisabled() {
-    return !this.latestPublicationActivity || this.latestPublicationActivity.isFinished;
+    return (
+      !this.latestPublicationActivity ||
+      this.latestPublicationActivity.isFinished
+    );
   }
 
   @task
   *saveRequest(publicationRequest) {
     yield this.publicationService.createPublicationRequestActivity(
       publicationRequest,
-      this.publicationFlow,
+      this.publicationFlow
     );
 
     this.send('refresh');
