@@ -44,9 +44,8 @@ export default class PublicationRequestModal extends Component {
       'filter[subcase][publication-flow][:id:]': this.args.publicationFlow.id,
       // WORKAROUND: has any end date => isFinished
       'filter[:gte:end-date]': '1302-07-11',
+      // eslint-disable-next-line prettier/prettier
       include: [
-        'used-pieces',
-        'used-pieces.file',
         'generated-pieces',
         'generated-pieces.file',
       ].join(','),
