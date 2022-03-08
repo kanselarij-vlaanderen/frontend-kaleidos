@@ -62,7 +62,7 @@
   <Publications::Publication::PublicationActivities::PublicationRequestModal
     @publicationFlow={{@publicationFlow}}
     @proofingActivity={{@proofingActivity}}
-    @onSave={{@onCreatePublicationRequest}}
+    @onSave={{perform this.createPublicationRequest}}
     @onCancel={{this.closePublicationRequestModal}}
   />
 {{/if}}

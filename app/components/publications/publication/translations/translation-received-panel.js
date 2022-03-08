@@ -22,6 +22,12 @@ export default class PublicationsTranslationTranslationReceivedPanelComponent ex
     this.closeTranslationEditModal();
   }
 
+  @task
+  *createProofRequest(proofRequestArgs) {
+    yield this.args.onCreateProofRequest(proofRequestArgs);
+    this.isOpenProofRequestModal = false;
+  }
+
   @action
   openTranslationEditModal() {
     this.isOpenTranslationEditModal = true;

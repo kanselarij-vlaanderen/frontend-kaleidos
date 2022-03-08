@@ -34,6 +34,12 @@ export default class PublicationsPublicationProofProofReceivedPanel extends Comp
     this.showEditProofModal = false;
   }
 
+  @task
+  *createPublicationRequest(publicationRequestArgs) {
+    yield this.args.onCreatePublicationRequest(publicationRequestArgs);
+    this.showPublicationRequestModal = false;
+  }
+
   @action
   openEditProofModal() {
     this.showEditProofModal = true;

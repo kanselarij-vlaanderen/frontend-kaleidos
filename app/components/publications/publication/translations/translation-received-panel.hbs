@@ -73,7 +73,7 @@
   <Publications::Publication::Proofs::ProofRequestModal
     @publicationFlow={{@publicationFlow}}
     @translationActivity={{@translationActivity}}
-    @onSave={{@onCreateProofRequest}}
+    @onSave={{perform this.createProofRequest}}
     @onCancel={{this.closeProofRequestModal}}
   />
 {{/if}}
