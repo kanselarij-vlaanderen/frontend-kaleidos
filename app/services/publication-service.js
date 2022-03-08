@@ -230,7 +230,6 @@ export default class PublicationService extends Service {
     const uploadedPieces = proofRequestProperties.uploadedPieces;
     await Promise.all(
       uploadedPieces.map((piece) => {
-        piece.publicationSubcaseSourceFor = publicationSubcase;
         return piece.save();
       })
     );

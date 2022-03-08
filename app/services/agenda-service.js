@@ -19,20 +19,6 @@ export default Service.extend({
 
   /* API: session-service */
 
-  assignNewSessionNumbers() {
-    return ajax({
-      method: 'GET',
-      url: '/session-service/assignNewSessionNumbers',
-    });
-  },
-
-  getClosestMeetingAndAgendaId(date) {
-    return ajax({
-      method: 'GET',
-      url: `/session-service/closestMeeting?date=${date}`,
-    }).then((result) => result.body.closestMeeting);
-  },
-
   getActiveAgendas(date) {
     return ajax({
       method: 'GET',

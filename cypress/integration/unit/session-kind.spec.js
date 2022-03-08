@@ -135,7 +135,7 @@ context('Different session kinds should show different titles', () => {
     selectFromDropdown(formattedAgendaDate);
     cy.get(agenda.newSession.numberRep.view).should('contain', fullmeetingNumberVV);
     cy.intercept('PATCH', '/meetings/**').as('patchMeetings');
-    cy.get(utils.vlModalFooter.save).click();
+    cy.get(agenda.newSession.save).click();
     cy.wait('@patchMeetings');
     // check if edit shows correct data
     cy.openAgendaForDate(agendaDate, 1);
