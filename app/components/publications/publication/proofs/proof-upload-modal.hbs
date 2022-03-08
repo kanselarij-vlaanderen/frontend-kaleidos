@@ -9,12 +9,10 @@
       @reusable={{true}}
       @onUpload={{this.uploadPiece}}
     />
-    <Auk::List>
-      <Publications::Publication::PublicationDocumentsList
-        @pieces={{this.uploadedPieces}}
-        @onDeletePiece={{perform this.deleteUploadedPiece}}
-      />
-    </Auk::List>
+    <Publications::Publication::PublicationDocumentsList
+      @pieces={{this.uploadedPieces}}
+      @onDeletePiece={{perform this.deleteUploadedPiece}}
+    />
     <div class="auk-form-group auk-u-mt-4">
       <Auk::Checkbox
         @label={{t "update-publication-status-proof-received"}}
