@@ -9,20 +9,6 @@
   />
   <Auk::Modal::Body>
     <div class="auk-form-group-layout auk-form-group-layout--standard">
-      <div class="auk-form-group">
-        <Auk::Label @required={{true}}>
-          {{t "attachments"}}
-        </Auk::Label>
-        <Auk::FileUploader
-          @multiple={{true}}
-          @reusable={{true}}
-          @onUpload={{this.uploadPiece}}
-        />
-        <Publications::Publication::PublicationDocumentsList
-          @pieces={{this.uploadedPieces}}
-          @onDeletePiece={{perform this.deleteUploadedPiece}}
-        />
-      </div>
       {{! TODO: Remove inline style }}
       {{! template-lint-disable no-inline-styles }}
       <div class="auk-form-group" style="max-width: 30rem;">
@@ -78,6 +64,20 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="auk-form-group">
+        <Auk::Label @required={{true}}>
+          {{t "attachments"}}
+        </Auk::Label>
+        <Auk::FileUploader
+          @multiple={{true}}
+          @reusable={{true}}
+          @onUpload={{this.uploadPiece}}
+        />
+        <Publications::Publication::PublicationDocumentsList
+          @pieces={{this.uploadedPieces}}
+          @onDeletePiece={{perform this.deleteUploadedPiece}}
+        />
       </div>
       <div class="auk-form-group">
         <Auk::Label for="translationRequestSubject" @required={{true}}>
