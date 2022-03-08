@@ -63,7 +63,11 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
     if (this.save.isRunning) {
       return;
     }
-    yield Promise.all(this.uploadedPieces.map((piece) => this.deleteUploadedPiece.perform(piece)));
+    yield Promise.all(
+      this.uploadedPieces.map((piece) =>
+        this.deleteUploadedPiece.perform(piece)
+      )
+    );
     this.args.onCancel();
   }
 
@@ -132,7 +136,6 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
       piece.destroyRecord(),
     ]);
   }
-
 
   initValidators() {
     this.validators = new ValidatorSet({
