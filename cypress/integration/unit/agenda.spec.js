@@ -182,9 +182,9 @@ context('Agenda tests', () => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
       // Check the values in edit session view
       cy.get(agenda.agendaHeader.showOptions).click();
-      cy.get(agenda.agendaHeader.actions.toggleEditingSession).click();
-      cy.get(agenda.editSession.meetingNumber).should('have.value', result.meetingNumber);
-      cy.get(agenda.editSession.numberRep).should('have.value', result.meetingNumberRep);
+      cy.get(agenda.agendaHeader.actions.toggleEditingMeeting).click();
+      cy.get(agenda.editMeeting.meetingNumber).should('have.value', result.meetingNumber);
+      cy.get(agenda.editMeeting.numberRep).should('have.value', result.meetingNumberRep);
       cy.get(auk.modal.footer.cancel).click();
       // Check if the next automatic number is correct
       cy.get(utils.mHeader.agendas).click();

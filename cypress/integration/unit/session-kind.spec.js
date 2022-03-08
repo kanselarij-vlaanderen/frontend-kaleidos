@@ -140,10 +140,10 @@ context('Different session kinds should show different titles', () => {
     // check if edit shows correct data
     cy.openAgendaForDate(agendaDate, 1);
     cy.get(agenda.agendaHeader.showOptions).click();
-    cy.get(agenda.agendaHeader.actions.toggleEditingSession).click();
+    cy.get(agenda.agendaHeader.actions.toggleEditingMeeting).click();
     cy.get(utils.kindSelector).contains(vvKind);
     cy.get(utils.vlDatepicker).should('have.value', formattedMeetingDateHour);
-    cy.get(agenda.editSession.numberRep).should('have.value', fullmeetingNumberVV);
+    cy.get(agenda.editMeeting.numberRep).should('have.value', fullmeetingNumberVV);
     cy.get(auk.modal.footer.cancel).click();
 
     // check if different views show correct header

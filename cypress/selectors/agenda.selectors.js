@@ -81,7 +81,7 @@ const selectors = {
       addAgendaitems: '[data-test-agenda-header-add-agendaitems]',
       navigateToDecisions: '[data-test-agenda-header-navigate-to-decisions]',
       navigateToNewsletter: '[data-test-agenda-header-navigate-to-newsletter]',
-      toggleEditingSession: '[data-test-agenda-header-toggle-editing-session]',
+      toggleEditingMeeting: '[data-test-agenda-header-toggle-editing-meeting]',
       downloadDocuments: '[data-test-agenda-header-download-documents]',
       releaseDecisions: '[data-test-agenda-header-release-decisions]',
       releaseDocuments: '[data-test-agenda-header-release-documents]',
@@ -204,10 +204,10 @@ const selectors = {
   },
 
   // edit-session
-  editSession: {
-    meetingNumber: '[data-test-edit-session-meeting-number]',
-    numberRep: '[data-test-edit-session-number-representation]',
-    save: '[data-test-edit-session-save]',
+  editMeeting: {
+    meetingNumber: '[data-test-edit-meeting-meeting-number]',
+    numberRep: '[data-test-edit-meeting-number-representation]',
+    save: '[data-test-edit-meeting-save]',
   },
 
   // create-agendaitem

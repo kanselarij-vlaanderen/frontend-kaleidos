@@ -1,5 +1,5 @@
 <Auk::Modal @size="large">
-  <Auk::Modal::Header @title={{t "edit-session"}} @onClose={{@onCancel}} />
+  <Auk::Modal::Header @title={{t "edit-meeting"}} @onClose={{@onCancel}} />
   <Auk::Modal::Body>
     <Utils::KindSelector @kind={{this.kind}} @setAction={{this.setKind}} />
     <div class="auk-u-mb-2">
@@ -7,7 +7,7 @@
         <Auk::Label>{{t "start-date"}}</Auk::Label>
         <WebComponents::VlDatepicker
           @enableTime={{true}}
-          @date={{this.date}}
+          @date={{array this.startDate}}
           @dateChanged={{this.selectStartDate}}
         />
       </div>
@@ -19,7 +19,7 @@
           @type="number"
           @block={{true}}
           @value={{this.meetingNumber}}
-          data-test-edit-session-meeting-number
+          data-test-edit-meeting-meeting-number
         />
       </div>
     </div>
@@ -31,7 +31,7 @@
         <Auk::Input
           @block={{true}}
           @value={{this.numberRepresentation}}
-          data-test-edit-session-number-representation
+          data-test-edit-meeting-number-representation
         />
       </div>
     </div>
@@ -49,7 +49,7 @@
       @skin="primary"
       {{on "click" (perform this.updateMeeting)}}
       disabled={{this.updateMeeting.isRunning}}
-      data-test-edit-session-save
+      data-test-edit-meeting-save
     >
       {{t "edit"}}
     </Auk::Button>

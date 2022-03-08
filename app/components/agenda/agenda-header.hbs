@@ -109,10 +109,10 @@
             {{#if this.currentSession.isEditor}}
               <Menu.Divider />
               <Menu.Item
-                data-test-agenda-header-toggle-editing-session
-                {{on "click" this.toggleEditingSession}}
+                data-test-agenda-header-toggle-editing-meeting
+                {{on "click" this.toggleEditingMeeting}}
               >
-                {{t "edit-session"}}
+                {{t "edit-meeting"}}
               </Menu.Item>
             {{/if}}
             {{#if this.canEditDesignAgenda}}
@@ -227,11 +227,11 @@
   />
 {{/if}}
 
-{{#if this.isEditingSession}}
+{{#if this.isEditingMeeting}}
   <Meeting::EditMeetingModal
     @meeting={{@meeting}}
-    @didSave={{this.toggleEditingSession}}
-    @onCancel={{this.toggleEditingSession}}
+    @didSave={{this.toggleEditingMeeting}}
+    @onCancel={{this.toggleEditingMeeting}}
   />
 {{/if}}
 
