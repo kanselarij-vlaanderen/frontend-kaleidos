@@ -29,32 +29,10 @@
   </Auk::Panel::Header>
 
   <Auk::Panel::Body>
-    <Auk::List>
-      {{#each @proofingActivity.generatedPieces as |piece|}}
-        <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
-          <div class="auk-o-flex auk-o-flex--spaced">
-            <Auk::Badge @icon="paperclip" @size="regular" />
-            <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
-          </div>
-          <Auk::ButtonLink
-            @layout="icon-only"
-            @icon="download"
-            @href={{piece.file.namedDownloadLink}}
-            download={{piece.file.downloadFilename}}
-          >
-            {{t "download"}}
-          </Auk::ButtonLink>
-          <Auk::ButtonLink
-            @layout="icon-only"
-            @icon="book"
-            @href={{piece.viewDocumentURL}}
-            target="_blank"
-          >
-            {{t "read"}}
-          </Auk::ButtonLink>
-        </Auk::List::Item>
-      {{/each}}
-    </Auk::List>
+    <Publications::Publication::PublicationDocumentsList
+      @pieces={{@proofingActivity.generatedPieces}}
+      @viewable={{true}}
+    />
   </Auk::Panel::Body>
 </Auk::Panel>
 
