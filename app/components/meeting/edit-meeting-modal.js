@@ -22,29 +22,20 @@ export default class MeetingEditMeetingComponent extends Component {
   @tracked _meetingNumber;
   @tracked _numberRepresentation;
 
-  meetingYear = this.meeting.plannedStart.getFullYear();
-
   constructor() {
     super(...arguments);
 
-    this.selectedKindUri = this.meeting.kind;
+    this.meetingYear = this.args.meeting.plannedStart.getFullYear();
+    this.selectedKindUri = this.args.meeting.kind;
     this.kind = EmberObject.create(
       CONFIG.MINISTERRAAD_TYPES.TYPES.find(
         (minsterraad) => minsterraad.uri === this.selectedKindUri
       )
     );
-    this.startDate = this.meeting.plannedStart;
-    this.extraInfo = this.meeting.extraInfo;
-    this.meetingNumber = this.meeting.number;
-    this.numberRepresentation = this.meeting.numberRepresentation;
-  }
-
-  get date() {
-    return A([this.startDate]);
-  }
-
-  get meeting() {
-    return this.args.meeting;
+    this.startDate = this.args.meeting.plannedStart;
+    this.extraInfo = this.args.meeting.extraInfo;
+    this.meetingNumber = this.args.meeting.number;
+    this.numberRepresentation = this.args.meeting.numberRepresentation;
   }
 
   get numberRepresentation() {
@@ -71,15 +62,14 @@ export default class MeetingEditMeetingComponent extends Component {
   *updateMeeting() {
     const now = new Date();
 
-    this.meeting.extraInfo = this.extraInfo;
-    this.meeting.plannedStart = this.startDate || now;
-    this.meeting.created = now;
-    this.meeting.kind = this.selectedKindUri;
-    this.meeting.number = this.meetingNumber;
-    this.meeting.numberRepresentation = this.numberRepresentation;
+    this.args.meeting.extraInfo = this.extraInfo;
+    this.args.meeting.plannedStart = this.startDate || now;
+    this.args.meeting.kind = this.selectedKindUri;
+    this.args.meeting.number = this.meetingNumber;
+    this.args.meeting.numberRepresentation = this.numberRepresentation;
 
     try {
-      yield this.meeting.save();
+      yield this.args.meeting.save();
     } catch {
       this.toaster.error();
     } finally {
