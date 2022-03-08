@@ -19,12 +19,12 @@ export default class PublicationRequestModal extends Component {
     super(...arguments);
 
     this.initValidators();
-    this.loadTransferredPieces.perform();
+    this.loadData.perform();
     this.setEmailFields.perform();
   }
 
   @task
-  *loadTransferredPieces() {
+  *loadData() {
     let proofingActivity = this.args.proofingActivty;
     if (!proofingActivity) {
       proofingActivity = yield this.loadDefaultProofingActivity();
@@ -61,12 +61,22 @@ export default class PublicationRequestModal extends Component {
     });
   }
 
+  get isLoading() {
+    return (
+      this.loadData.isRunning || this.cancel.isRunning || this.save.isRunning
+    );
+  }
+
   get isCancelDisabled() {
-    return this.cancel.isRunning || this.save.isRunning;
+    return (
+      this.loadData.isRunning || this.cancel.isRunning || this.save.isRunning
+    );
   }
 
   get isSaveDisabled() {
-    return !this.validators.areValid || this.cancel.isRunning;
+    return (
+      !this.validators.areValid || this.cancel.isRunning || this.save.isRunning
+    );
   }
 
   get pieces() {
