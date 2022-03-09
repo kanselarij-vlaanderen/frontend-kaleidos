@@ -66,7 +66,7 @@ request the whole row and not only the arrow at the end to be clickable }}
   {{/if}}
   {{#if @tableColumnDisplayOptions.numberOfPages}}
     <td data-test-publication-table-row-number-of-pages>
-      {{#if (not (is-empty @publicatioFlow.numberOfPages))}}
+      {{#if (not (is-empty @publicationFlow.numberOfPages))}}
         {{@publicationFlow.numberOfPages}}
       {{else}}
         {{t "dash"}}
@@ -99,10 +99,9 @@ request the whole row and not only the arrow at the end to be clickable }}
       data-test-publication-table-row-translation-request-date
       class="auk-u-text-nowrap"
     >
-      {{!translation-subcase start-date === start-date of first request-activity}}
-      {{#if @publicationFlow.translationSubcase.startDate}}
+      {{#if this.translationRequestDate}}
         {{moment-format
-          @publicationFlow.translationSubcase.startDate
+          this.translationRequestDate
           "DD-MM-YYYY"
         }}
       {{else}}
@@ -151,9 +150,9 @@ request the whole row and not only the arrow at the end to be clickable }}
       data-test-publication-table-row-proof-received-date
       class="auk-u-text-nowrap"
     >
-      {{#if @publicationFlow.publicationSubcase.receivedDate}}
+      {{#if this.proofReceivedDate}}
         {{moment-format
-          @publicationFlow.publicationSubcase.receivedDate
+          this.proofReceivedDate
           "DD-MM-YYYY"
         }}
       {{else}}

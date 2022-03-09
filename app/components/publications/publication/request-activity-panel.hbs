@@ -7,7 +7,7 @@
   >
     <Header.Actions as |Actions|>
       <Actions.Item>
-        {{#unless @isDeleteDisabled}}
+        {{#unless @isDisabledDelete}}
           <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
             <Menu.Item
               @skin="danger"
@@ -21,32 +21,10 @@
     </Header.Actions>
   </AccordionPanel.Header>
   <AccordionPanel.Body>
-    {{#each @requestActivity.usedPieces as |piece|}}
-      <div class="auk-o-flex auk-o-flex--spaced-wide">
-        <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
-          <div class="auk-o-flex auk-o-flex--spaced">
-            <Auk::Badge @icon="paperclip" @size="regular" />
-            <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
-          </div>
-          <Auk::ButtonLink
-            @layout="icon-only"
-            @icon="download"
-            @href={{piece.file.namedDownloadLink}}
-            download={{piece.file.downloadFilename}}
-          >
-            {{t "download"}}
-          </Auk::ButtonLink>
-          <Auk::ButtonLink
-            @layout="icon-only"
-            @icon="book"
-            @href={{piece.viewDocumentURL}}
-            target="_blank"
-          >
-            {{t "read"}}
-          </Auk::ButtonLink>
-        </Auk::List::Item>
-      </div>
-    {{/each}}
+    <Publications::Publication::PublicationDocumentsList
+      @pieces={{@requestActivity.usedPieces}}
+      @viewable={{true}}
+    />
     {{#if @requestActivity.email}}
       <div class="auk-hr"></div>
       <div class="auk-content">
