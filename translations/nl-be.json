@@ -518,7 +518,7 @@
   "faulty-agendaitems-message": "Er zijn agendapunten gevonden zonder procedurestap. Verwijder deze manueel om verder te gaan",
   "faulty-agendaitems": "Problemen in deze agenda",
   "document-being-deleted": "Document wordt verwijderd.",
-  "edit-session": "Vergadering wijzigen",
+  "edit-meeting": "Vergadering wijzigen",
   "users-loading-text": "De gebruikers worden geladen..",
   "generate-xml": "Genereer XML voor Belga",
   "delete-agendaitem": "Agendapunt verwijderen",
