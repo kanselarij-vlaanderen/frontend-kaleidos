@@ -16,6 +16,7 @@
 
     <Utils::GovernmentAreas::GovernmentAreasPanel
       @governmentAreas={{@model.case.governmentAreas}}
+      @allowEditing={{not this.isViaCouncilOfMinisters}}
       @onSave={{this.saveGovernmentAreas}}
     />
 

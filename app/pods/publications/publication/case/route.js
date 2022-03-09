@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
 export default class CaseRoute extends Route {
-  @service store;
+  @service publicationService;
 
   model() {
     return this.modelFor('publications.publication');
@@ -11,10 +11,13 @@ export default class CaseRoute extends Route {
   async afterModel(model) {
     this._case = await model.case;
     await this._case.governmentAreas;
+    this.isViaCouncilOfMinisters =
+      await this.publicationService.getIsViaCouncilOfMinisters(model);
   }
 
   setupController(controller) {
     super.setupController(...arguments);
     controller._case = this._case;
+    controller.isViaCouncilOfMinisters = this.isViaCouncilOfMinisters;
   }
 }
