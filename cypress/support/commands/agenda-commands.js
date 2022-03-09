@@ -100,7 +100,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
     cy.get(agenda.newSession.meetingLocation).click()
       .type(location);
   }
-  cy.get(utils.vlModalFooter.save).click();
+  cy.get(agenda.newSession.save).click();
 
   let meetingId;
   let agendaId;
