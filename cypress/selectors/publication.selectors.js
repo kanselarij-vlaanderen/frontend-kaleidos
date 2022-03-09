@@ -354,5 +354,10 @@ const selectors = {
   // publications-flow-selector
   publicationsFlowSelector: '[data-test-publication-flow-selector]',
 
+  // document-card-step
+  documentCardStep: {
+    card: '[data-test-document-card-step]',
+  },
+
 };
 export default selectors;

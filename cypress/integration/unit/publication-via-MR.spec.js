@@ -26,7 +26,7 @@ context('Publications via MR tests', () => {
     folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: fileName1, fileType: 'Nota',
   };
   const file2 = {
-    folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: fileName2, fileType: 'Nota',
+    folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: fileName2, fileType: 'BVR',
   };
   const files = [file1, file2];
 
@@ -71,9 +71,12 @@ context('Publications via MR tests', () => {
     cy.get(publication.newPublication.number).click()
       .clear()
       .type(publicationNumber);
-    cy.intercept('GET', '/publication-flows**').as('createNewPublicationFlow');
+    cy.intercept('POST', '/publication-flows').as('createNewPublicationFlow');
+    // more posts happen, but the patch is the final part of the create action
+    cy.intercept('PATCH', '/pieces/**').as('patchPieceForPublication');
     cy.get(publication.newPublication.create).click();
     cy.wait('@createNewPublicationFlow');
+    cy.wait('@patchPieceForPublication');
     cy.get(publication.batchDocumentsPublicationRow.name).contains(fileName1)
       .parent()
       .find(publication.batchDocumentsPublicationRow.linkOption)
@@ -130,23 +133,32 @@ context('Publications via MR tests', () => {
     cy.get(publication.publicationCaseInfo.editView.dueDate).find(auk.datepicker)
       .click();
     cy.setDateInFlatpickr(dueDate);
-    // TODO correct Patch
-    cy.intercept('PATCH', '/publication-flows**').as('patchPublicationFlow');
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    cy.intercept('PATCH', '/publication-subcases/**').as('patchPublicationSubcase');
     cy.get(publication.publicationCaseInfo.editView.save).click();
-    // // cy.wait('@patchPublicationFlow');
+    cy.wait('@patchPublicationFlow');
+    cy.wait('@patchPublicationSubcase');
     cy.get(publication.publicationCaseInfo.publicationNumber).contains(newPublicationNumber);
     cy.get(publication.publicationCaseInfo.numacNumber).contains(numacNumber);
     cy.get(publication.publicationCaseInfo.dueDate).contains(formattedDueDate);
 
-    // check document acces not changeable
+    // check document access not changeable
     cy.get(publication.publicationNav.decisions).click();
-    cy.get(document.accessLevelPill.pill).contains('Intern Regering')
+    // data loading happens
+    cy.get(publication.documentCardStep.card).as('documentOnMR')
+      .should('have.length', 1);
+    cy.get('@documentOnMR')
+      .find(document.accessLevelPill.pill)
+      .as('documentOnMRPill')
+      .contains('Intern Regering')
       .click();
-    cy.get(dependency.emberPowerSelect.trigger).click();
+    cy.get('@documentOnMR').find(dependency.emberPowerSelect.trigger)
+      .click();
     cy.get(dependency.emberPowerSelect.option).contains('Intern Overheid')
       .click();
-    cy.get(document.accessLevelPill.save).click();
-    cy.get(document.accessLevelPill.pill).contains('Intern Regering');
+    cy.get('@documentOnMR').find(document.accessLevelPill.save)
+      .click();
+    cy.get('@documentOnMRPill').contains('Intern Regering');
     cy.get(publication.publicationNav.case).click();
 
     // check link
@@ -160,7 +172,7 @@ context('Publications via MR tests', () => {
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.wait('@getPiecesPubFlow');
     cy.wait('@getPiecesSignMarking');
-    cy.get(auk.pill).contains(newPublicationNumber)
+    cy.get(document.documentCard.pubLink).contains(newPublicationNumber)
       .click();
     cy.url().should('contain', '/publicaties/');
     cy.url().should('contain', '/dossier');
