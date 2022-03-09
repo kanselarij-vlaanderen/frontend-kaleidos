@@ -19,9 +19,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   @tracked uploadedPieces = [];
   @tracked numberOfPages;
   @tracked numberOfWords;
-  @tracked translationDueDate = this.args.dueDate
-    ? this.args.dueDate
-    : new Date();
+  @tracked translationDueDate = this.args.dueDate;
   @tracked subject;
   @tracked message;
   @tracked mustUpdatePublicationStatus = false;
