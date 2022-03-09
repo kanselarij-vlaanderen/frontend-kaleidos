@@ -292,6 +292,43 @@ a.vi {
   }
 }
 
+.input-field {
+  border: 1px solid #cbd2da;
+  color: #333;
+  background: #fff;
+}
+
+.input-field--focus,
+.input-field--focus:hover,
+.input-field:focus {
+  border-color: #ffc515;
+  box-shadow: inset 0 0 0 1px #ffc515;
+}
+
+.input-field::placeholder {
+  color: #b2b2b2;
+}
+
+.input-field--error {
+  background-color: #fbe6e6;
+  border-color: #db3434;
+  box-shadow: inset 0 0 0 1px #db3434;
+}
+
+.input-field--error:focus {
+  background-color: #fff;
+}
+
+.input-field--success {
+  background-color: #f7fae5;
+  border-color: #8bae00;
+  box-shadow: inset 0 0 0 1px #8bae00;
+}
+
+.input-field--disabled {
+  background-color: #f4f5f7;
+}
+
 .data-table tbody tr[data-table-selectable]:hover,.data-table.data-table--hover tbody tr:hover,.scheduler-option__info table tbody tr[data-table-selectable]:hover,.scheduler-option__info table.data-table--hover tbody tr:hover,.scheduler-slot__text__info table tbody tr[data-table-selectable]:hover,.scheduler-slot__text__info table.data-table--hover tbody tr:hover,.typography table tbody tr[data-table-selectable]:hover,.typography table.data-table--hover tbody tr:hover {
   background: #f3f5f6
 }
