@@ -3,8 +3,8 @@ import sanitize from 'sanitize-filename';
 
 export default class Piece extends Model {
   @attr('string') name;
-  @attr('number') pages;
-  @attr('number') words;
+  @attr('number') numberOfPages;
+  @attr('number') numberOfWords;
   @attr('datetime') created;
   @attr('datetime') receivedDate;
   @attr('datetime') modified;
@@ -46,13 +46,6 @@ export default class Piece extends Model {
   }) meeting;
 
   @belongsTo('publication-flow') publicationFlow;
-  @belongsTo('translation-subcase') translationSubcaseSourceFor;
-  @belongsTo('publication-subcase', {
-    inverse: 'sourceDocuments'
-  }) publicationSubcaseSourceFor;
-  @belongsTo('publication-subcase', {
-    inverse: 'correctionDocuments'
-  }) publicationSubcaseCorrectionFor;
   @hasMany('request-activity', {
     inverse: 'usedPieces'
   }) requestActivitiesUsedBy;

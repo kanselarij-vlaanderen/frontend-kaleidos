@@ -6,7 +6,7 @@ export default class PublicationsOverviewUrgentRoute extends PublicationsOvervie
     'publicationNumber',
     'numacNumber',
     'shortTitle',
-    'pageCount',
+    'numberOfPages',
     'publicationDueDate',
   ];
   tableConfigStorageKey = "publication-table.urgent";

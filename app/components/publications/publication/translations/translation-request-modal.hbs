@@ -29,29 +29,35 @@
           <div class="auk-o-grid">
             <div class="auk-o-grid-col-6">
               <div class="auk-form-group">
-                <Auk::Label for="translationLoadPages" class="auk-label--light">
-                  {{t "pages-amount"}}
+                <Auk::Label
+                  for="translationNumberOfPages"
+                  class="auk-label--light"
+                >
+                  {{t "number-of-pages"}}
                 </Auk::Label>
                 <Auk::Input
-                  data-test-publication-documents-upload-pages
+                  data-test-publication-documents-number-of-pages
                   @type="number"
-                  id="translationLoadPages"
+                  id="translationNumberOfPages"
                   @block={{true}}
-                  @value={{mut this.pagesAmount}}
+                  @value={{mut this.numberOfPages}}
                   {{on "focusout" (perform this.setEmailFields)}}
                 />
               </div>
             </div>
             <div class="auk-o-grid-col-6">
               <div class="auk-form-group">
-                <Auk::Label for="translationLoadWords" class="auk-label--light">
-                  {{t "words-amount"}}
+                <Auk::Label
+                  for="translationNumberOfWords"
+                  class="auk-label--light"
+                >
+                  {{t "number-of-words"}}
                 </Auk::Label>
                 <Auk::Input
                   @type="number"
-                  id="translationLoadWords"
+                  id="translationNumberOfWords"
                   @block={{true}}
-                  @value={{mut this.wordsAmount}}
+                  @value={{mut this.numberOfWords}}
                   {{on "focusout" (perform this.setEmailFields)}}
                 />
               </div>
@@ -76,7 +82,7 @@
         <Auk::Textarea
           data-test-publication-translation-request-message
           id="translationRequestMessage"
-          @rows="6"
+          rows="16"
           @value={{mut this.message}}
         />
       </div>
@@ -90,24 +96,10 @@
           @reusable={{true}}
           @onUpload={{this.uploadPiece}}
         />
-        <Auk::List>
-          {{#each this.uploadedPieces as |piece|}}
-            <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
-              <div class="auk-o-flex auk-o-flex--spaced">
-                <Auk::Badge @icon="paperclip" @size="regular" />
-                <h5 class="auk-h4 auk-u-m-0">
-                  {{piece.file.downloadFilename}}
-                </h5>
-              </div>
-              <Auk::Button
-                @icon="trash"
-                @layout="icon-only"
-                @skin="danger-borderless"
-                {{on "click" (perform this.deleteUploadedPiece piece)}}
-              />
-            </Auk::List::Item>
-          {{/each}}
-        </Auk::List>
+        <Publications::Publication::PublicationDocumentsList
+          @pieces={{this.uploadedPieces}}
+          @onDeletePiece={{perform this.deleteUploadedPiece}}
+        />
       </div>
 
     </div>

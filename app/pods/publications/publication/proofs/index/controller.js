@@ -31,10 +31,8 @@ export default class PublicationsPublicationProofsController extends Controller 
     const proofingActivity = this.latestProofingActivity;
 
     const pieceSaves = [];
-    const language = yield proofingActivity.language;
     for (let piece of proofUpload.uploadedPieces) {
       piece.receivedDate = proofUpload.receivedDate;
-      piece.language = language;
       piece.proofingActivityGeneratedBy = proofingActivity;
       pieceSaves.push(piece.save());
     }
@@ -43,14 +41,6 @@ export default class PublicationsPublicationProofsController extends Controller 
     const proofingActivitySave = proofingActivity.save();
 
     let publicationSubcaseSave;
-    if (
-      proofUpload.receivedDate < this.publicationSubcase.receivedDate ||
-      !this.publicationSubcase.receivedDate
-    ) {
-      this.publicationSubcase.receivedDate = proofUpload.receivedDate;
-      publicationSubcaseSave = this.publicationSubcase.save();
-    }
-
     if (proofUpload.proofPrintCorrector) {
       this.publicationSubcase.proofPrintCorrector =
         proofUpload.proofPrintCorrector;
@@ -60,7 +50,7 @@ export default class PublicationsPublicationProofsController extends Controller 
     if (proofUpload.mustUpdatePublicationStatus) {
       yield this.publicationService.updatePublicationStatus(
         this.publicationFlow,
-        CONSTANTS.PUBLICATION_STATUSES.PROOF_IN,
+        CONSTANTS.PUBLICATION_STATUSES.PROOF_RECEIVED,
         proofUpload.receivedDate
       );
 
@@ -100,16 +90,20 @@ export default class PublicationsPublicationProofsController extends Controller 
 
     const pieces = yield requestActivity.usedPieces;
     for (const piece of pieces.toArray()) {
-      const file = yield piece.file;
-      const documentContainer = yield piece.documentContainer;
-      const translationActivity = yield piece.translationActivityGeneratedBy;
-      //The pieces that are used in the translationActivity can not be deleted,but should be unlinked
-      if (translationActivity) {
-        piece.requestActivitiesUsedBy.removeObjects(requestActivity);
-        piece.proofingActivitiesUsedBy.removeObjects(proofingActivity);
-        piece.publicationSubcaseSourceFor = undefined;
-        yield piece.save();
-      } else {
+      // The pieces that are used in the translationActivity can not be deleted,
+      // but should be unlinked
+      const [translationActivitiesUsedBy, translationActivityGeneratedBy] =
+        yield Promise.all([
+          piece.translationActivitiesUsedBy,
+          piece.translationActivityGeneratedBy,
+        ]);
+      const isLinkedToTranslation =
+        translationActivitiesUsedBy.length > 0 ||
+        // non-existent model relationships resolve to null
+        !!translationActivityGeneratedBy;
+      if (!isLinkedToTranslation) {
+        const file = yield piece.file;
+        const documentContainer = yield piece.documentContainer;
         yield file.destroyRecord();
         yield documentContainer.destroyRecord();
         yield piece.destroyRecord();
@@ -120,19 +114,13 @@ export default class PublicationsPublicationProofsController extends Controller 
   }
 
   @task
-  *saveEditReceivedProof(proofEdit) {
+  *updateProofingActivity(proofEdit) {
     const saves = [];
 
     const proofingActivity = proofEdit.proofingActivity;
     proofingActivity.endDate = proofEdit.receivedDate;
     saves.push(proofingActivity.save());
 
-    if (
-      proofEdit.receivedDate < this.publicationSubcase.receivedDate ||
-      !this.publicationSubcase.receivedDate
-    ) {
-      this.publicationSubcase.receivedDate = proofEdit.receivedDate;
-    }
     this.publicationSubcase.proofPrintCorrector = proofEdit.proofPrintCorrector;
     saves.push(this.publicationSubcase.save());
 

@@ -42,10 +42,10 @@ export default [
     apiFieldPaths: ['remark'],
   },
   {
-    keyName: 'pageCount',
-    translationKey: 'publications-table-page-count',
-    translationKeySmall: 'publications-table-page-count-small',
-    // no sort: is aggregated in frontend
+    keyName: 'numberOfPages',
+    translationKey: 'publications-table-number-of-pages',
+    translationKeySmall: 'publications-table-number-of-pages-small',
+    sortKey: 'number-of-pages',
     apiFieldPaths: ['number-of-pages'],
   },
   {
@@ -66,8 +66,8 @@ export default [
     keyName: 'translationRequestDate',
     translationKey: 'publications-table-translation-request-date',
     translationKeySmall: 'publications-table-translation-request-date-small',
-    sortKey: 'translation-subcase.start-date',
-    apiFieldPaths: ['translation-subcase.start-date'],
+    sortKey: 'translation-subcase.translation-activities.start-date',
+    apiFieldPaths: ['translation-subcase.translation-activities.start-date'],
   },
   {
     keyName: 'translationDueDate',
@@ -87,8 +87,8 @@ export default [
     keyName: 'proofReceivedDate',
     translationKey: 'publications-table-publication-received-date',
     translationKeySmall: 'publications-table-publication-received-date-small',
-    sortKey: 'publication-subcase.received-date',
-    apiFieldPaths: ['publication-subcase.received-date'],
+    sortKey: 'publication-subcase.proofing-activities.end-date',
+    apiFieldPaths: ['publication-subcase.proofing-activities.end-date'],
   },
   {
     keyName: 'proofPrintCorrector',

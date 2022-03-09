@@ -11,12 +11,10 @@ export default class TranslationSubcase extends Model {
   @attr('datetime') endDate;
   @attr('datetime') created;
   @attr('datetime') modified;
-  @attr('datetime') receivedDate; // earliest date of translation receival (as indicated on upload (not edit))
 
   @belongsTo('publication-flow') publicationFlow;
 
   @hasMany('request-activity') requestActivities;
-  @hasMany('piece') sourceDocuments;
   @hasMany('translation-activity') translationActivities;
   @hasMany('cancellation-activity') cancellationActivities;
 

@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
-import { inject as service } from '@ember/service';
 
 /**
  *
@@ -11,8 +10,6 @@ import { inject as service } from '@ember/service';
  * @argument onUpdateTranslationActivity
  */
 export default class PublicationsTranslationTranslationReceivedPanelComponent extends Component {
-  @service publicationService;
-
   @tracked isOpenTranslationEditModal = false;
   @tracked isOpenProofRequestModal = false;
 
