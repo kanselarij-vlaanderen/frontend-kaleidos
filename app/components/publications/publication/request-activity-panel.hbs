@@ -8,14 +8,14 @@
     <Header.Actions as |Actions|>
       <Actions.Item>
         {{#unless @isDisabledDelete}}
-          <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
+          <Auk::DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
             <Menu.Item
               @skin="danger"
               {{on "click" this.openConfirmDeleteAlert}}
             >
               {{t "delete"}}
             </Menu.Item>
-          </DropdownMenu>
+          </Auk::DropdownMenu>
         {{/unless}}
       </Actions.Item>
     </Header.Actions>

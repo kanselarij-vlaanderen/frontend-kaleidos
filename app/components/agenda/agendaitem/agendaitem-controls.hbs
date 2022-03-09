@@ -3,7 +3,7 @@
     (and (not (is-pending this.isDeletable)) (not (is-pending this.isPostPonable)))
   }}
     <WebComponents::AuButtonToolbar>
-      <DropdownMenu
+      <Auk::DropdownMenu
         @label={{t "actions"}}
         class="auk-u-hidden@print"
         data-test-agendaitem-controls-actions={{true}}
@@ -28,7 +28,7 @@
             {{t "delete"}}
           </Menu.Item>
         {{/if}}
-      </DropdownMenu>
+      </Auk::DropdownMenu>
     </WebComponents::AuButtonToolbar>
   {{else}}
     <div class="auk-loader" role="alert" aria-busy="true"></div>
