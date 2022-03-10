@@ -19,7 +19,6 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   @tracked agendaItemTreatment;
   @tracked mandatees;
 
-
   constructor() {
     super(...arguments);
     this.loadPieces.perform();
@@ -34,14 +33,16 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     yield this.store.query('piece', {
       'filter[agendaitems][:id:]': this.args.agendaitem.id,
       'page[size]': this.args.pieces.length,
-      include: 'document-container,document-container.type,file,publication-flow,publication-flow.identification',
+      include:
+        'document-container,document-container.type,file,publication-flow,publication-flow.identification',
     });
   }
 
   @task
   *loadCase() {
     this.case = yield this.store.queryOne('case', {
-      'filter[subcases][agenda-activities][agendaitems][:id:]': this.args.agendaitem.id,
+      'filter[subcases][agenda-activities][agendaitems][:id:]':
+        this.args.agendaitem.id,
     });
   }
 
@@ -52,10 +53,13 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
   @task
   *loadAgendaItemTreatment() {
-    this.agendaItemTreatment = yield this.store.queryOne('agenda-item-treatment', {
-      'filter[agendaitem][:id:]': this.args.agendaitem.id,
-      sort: '-start-date',
-    });
+    this.agendaItemTreatment = yield this.store.queryOne(
+      'agenda-item-treatment',
+      {
+        'filter[agendaitem][:id:]': this.args.agendaitem.id,
+        sort: '-start-date',
+      }
+    );
   }
 
   @action
@@ -72,15 +76,22 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
   @task
   *saveNewPublication(publicationProperties) {
-    const publicationFlow = yield this.publicationService.createNewPublicationFromMinisterialCouncil(publicationProperties, {
-      case: this.case,
-      agendaItemTreatment: this.agendaItemTreatment,
-      mandatees: this.mandatees,
-    });
+    const publicationFlow =
+      yield this.publicationService.createNewPublicationFromMinisterialCouncil(
+        publicationProperties,
+        {
+          case: this.case,
+          agendaItemTreatment: this.agendaItemTreatment,
+          mandatees: this.mandatees,
+        }
+      );
     this.referenceDocument.publicationFlow = publicationFlow;
     yield this.referenceDocument.save();
 
-    yield this.publicationService.setRegulationTypeThroughReferenceDocument(publicationFlow,this.referenceDocument);
+    yield this.publicationService.setRegulationTypeThroughReferenceDocument(
+      publicationFlow,
+      this.referenceDocument
+    );
     this.referenceDocument = null;
     this.isOpenNewPublicationModal = false;
   }
@@ -88,7 +99,10 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   @action
   async linkPublicationFlow(piece, publicationFlow) {
     piece.publicationFlow = publicationFlow;
-    await this.publicationService.setRegulationTypeThroughReferenceDocument(publicationFlow, piece);
+    await this.publicationService.setRegulationTypeThroughReferenceDocument(
+      publicationFlow,
+      piece
+    );
     await piece.save();
   }
 

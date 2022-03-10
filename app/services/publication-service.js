@@ -272,7 +272,10 @@ export default class PublicationService extends Service {
     );
   }
 
-  async createPublicationRequestActivity(publicationRequestProperties, publicationFlow) {
+  async createPublicationRequestActivity(
+    publicationRequestProperties,
+    publicationFlow
+  ) {
     const publicationSubcase = await publicationFlow.publicationSubcase;
     const now = new Date();
 
@@ -290,13 +293,16 @@ export default class PublicationService extends Service {
     });
     await requestActivity.save();
 
-    const publicationActivity = this.store.createRecord('publication-activity', {
-      startDate: now,
-      title: publicationRequestProperties.subject,
-      subcase: publicationSubcase,
-      requestActivity: requestActivity,
-      usedPieces: uploadedPieces,
-    });
+    const publicationActivity = this.store.createRecord(
+      'publication-activity',
+      {
+        startDate: now,
+        title: publicationRequestProperties.subject,
+        subcase: publicationSubcase,
+        requestActivity: requestActivity,
+        usedPieces: uploadedPieces,
+      }
+    );
     await publicationActivity.save();
 
     const [files, outbox, mailSettings] = await Promise.all([
@@ -322,13 +328,16 @@ export default class PublicationService extends Service {
     );
   }
 
-  async setRegulationTypeThroughReferenceDocument(publicationFlow, referenceDocument) {
+  async setRegulationTypeThroughReferenceDocument(
+    publicationFlow,
+    referenceDocument
+  ) {
     let regulationType = await publicationFlow.regulationType;
     if (!regulationType) {
-      const documentContainer = await referenceDocument.documentContainer
+      const documentContainer = await referenceDocument.documentContainer;
       const documentType = await documentContainer.type;
 
-      switch (documentType.uri){
+      switch (documentType.uri) {
         case CONSTANTS.DOCUMENT_TYPES.DECREET:
           regulationType = await this.store.findRecordByUri(
             'regulation-type',
