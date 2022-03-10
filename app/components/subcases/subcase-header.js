@@ -79,7 +79,8 @@ export default Component.extend({
     if (newsletterInfo) {
       await newsletterInfo.destroyRecord();
     }
-    await itemToDelete.destroyRecord();
+    itemToDelete.deleteRecord();
+    await itemToDelete.save();
   },
 
   triggerDeleteCaseDialog() {
