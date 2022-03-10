@@ -13,34 +13,80 @@
         </Auk::Toolbar>
       </Auk::Panel::Header>
       <Auk::Panel::Body>
-        <Auk::Label class="auk-u-mb-1">
-          {{t "email-to-translationrequest"}}
-        </Auk::Label>
-        <Auk::Input
-          @value={{mut this.emailToTranslationRequest}}
-          @block={{true}}
-        />
+        <div class="auk-content">
+          <h4>Vertaalaanvragen</h4>
+          <div class="auk-form-group">
+            <Auk::Label class="auk-u-mb-1">
+              {{t "email-to"}}
+            </Auk::Label>
+            <Auk::Input
+              @value={{mut this.model.translationRequestToEmail}}
+              @block={{true}}
+            />
 
-        <Auk::Label class="auk-u-mt-2 auk-u-mb-1">
-          {{t "email-to-proofrequest"}}
-        </Auk::Label>
-        <Auk::Input @value={{mut this.emailToProofRequest}} @block={{true}} />
+            <Auk::Label class="auk-u-mb-1">
+              {{t "email-cc"}}
+            </Auk::Label>
+            <Auk::Input
+              @value={{mut this.model.translationRequestCcEmail}}
+              @block={{true}}
+            />
+          </div>
+        </div>
+      </Auk::Panel::Body>
+      <Auk::Panel::Body>
+        <div class="auk-content">
+          <h4>Drukproefaanvragen</h4>
+          <div class="auk-form-group">
+            <Auk::Label class="auk-u-mt-2 auk-u-mb-1">
+              {{t "email-to"}}
+            </Auk::Label>
+            <Auk::Input
+              @value={{mut this.model.proofRequestToEmail}}
+              @block={{true}}
+            />
 
-        <Auk::Label class="auk-u-mt-2 auk-u-mb-1">
-          {{t "email-cc-proofrequest"}}
-        </Auk::Label>
-        <Auk::Input @value={{mut this.emailCcProofRequest}} @block={{true}} />
+            <Auk::Label class="auk-u-mt-2 auk-u-mb-1">
+              {{t "email-cc"}}
+            </Auk::Label>
+            <Auk::Input
+              @value={{mut this.model.proofRequestCcEmail}}
+              @block={{true}}
+            />
+          </div>
+        </div>
+      </Auk::Panel::Body>
+      <Auk::Panel::Body>
+        <div class="auk-content">
+          <h4>Publicatieaanvragen</h4>
+          <div>
+            <Auk::Label class="auk-u-mt-2 auk-u-mb-1">
+              {{t "email-to"}}
+            </Auk::Label>
+            <Auk::Input
+              @value={{mut this.model.publicationRequestToEmail}}
+              @block={{true}}
+            />
 
-        <Auk::Button
-          class="auk-u-mt-2 auk-u-mb-1"
-          @skin="primary"
-          @disabled={{this.isDisabled}}
-          @loading={{this.saveSettings.isRunning}}
-          {{on "click" (perform this.saveSettings)}}
-        >
-          {{t "save"}}
-        </Auk::Button>
+            <Auk::Label class="auk-u-mt-2 auk-u-mb-1">
+              {{t "email-cc"}}
+            </Auk::Label>
+            <Auk::Input
+              @value={{mut this.model.publicationRequestCcEmail}}
+              @block={{true}}
+            />
 
+            <Auk::Button
+              class="auk-u-mt-2 auk-u-mb-1"
+              @skin="primary"
+              @disabled={{this.isDisabled}}
+              @loading={{this.saveSettings.isRunning}}
+              {{on "click" (perform this.saveSettings)}}
+            >
+              {{t "save"}}
+            </Auk::Button>
+          </div>
+        </div>
       </Auk::Panel::Body>
     </Auk::Panel>
   </div>
