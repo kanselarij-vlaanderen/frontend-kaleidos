@@ -19,7 +19,7 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   @tracked subject;
   @tracked message;
   @tracked uploadedPieces = [];
-  @tracked translationPieces = [];
+  @tracked transferredPieces = [];
   @tracked mustUpdatePublicationStatus = false;
 
   validators;
@@ -31,28 +31,77 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
     this.initValidators();
   }
 
+  get isLoading() {
+    return (
+      this.loadTranslationPieces.isRunning || this.cancel.isRunning || this.save.isRunning
+    );
+  }
+
   get isCancelDisabled() {
-    return this.cancel.isRunning || this.save.isRunning;
+    return (
+      this.loadTranslationPieces.isRunning || this.cancel.isRunning || this.save.isRunning
+    );
   }
 
   get isSaveDisabled() {
-    const totalPieces =
-      this.uploadedPieces.length + this.translationPieces.length;
     return (
-      totalPieces === 0 ||
-      !this.validators.areValid ||
-      this.cancel.isRunning ||
-      this.loadTranslationPieces.isRunning
+      !this.validators.areValid || this.cancel.isRunning || this.save.isRunning
     );
+  }
+
+  get pieces() {
+    return [...this.transferredPieces, ...this.uploadedPieces];
+  }
+
+  @task
+  *loadTranslationPieces() {
+    let translationActivity = this.args.translationActivity;
+
+    if (!translationActivity) {
+      // Fetch latest finished translation-activity
+      translationActivity = yield this.store.queryOne('translation-activity', {
+        'filter[subcase][publication-flow][:id:]': this.args.publicationFlow.id,
+        // Filter on end-date is a workaround to ensure end date exists
+        'filter[:gte:end-date]': '1302-07-11',
+        // eslint-disable-next-line prettier/prettier
+        include: [
+          'generated-pieces',
+          'generated-pieces.file',
+          'used-pieces',
+          'used-pieces.file',
+        ].join(','),
+        sort: '-start-date',
+      });
+    }
+
+    if (translationActivity) {
+      const [usedPieces, generatedPieces] = yield Promise.all([
+        translationActivity.usedPieces,
+        translationActivity.generatedPieces,
+      ]);
+      this.transferredPieces = [
+        ...usedPieces.toArray(),
+        ...generatedPieces.toArray(),
+      ].sortBy('name', 'created');
+    } else {
+      this.transferredPieces = [];
+    }
+  }
+
+  initValidators() {
+    this.validators = new ValidatorSet({
+      subject: new Validator(() => isPresent(this.subject)),
+      message: new Validator(() => isPresent(this.message)),
+      pieces: new Validator(() => this.pieces.length > 0),
+    });
   }
 
   @task
   *save() {
-    const pieces = [...this.uploadedPieces, ...this.translationPieces];
     yield this.args.onSave({
       subject: this.subject,
       message: this.message,
-      uploadedPieces: pieces,
+      uploadedPieces: [...this.pieces],
       mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
   }
@@ -69,39 +118,6 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
       )
     );
     this.args.onCancel();
-  }
-
-  @task
-  *loadTranslationPieces() {
-    let translationActivity = this.args.translationActivity;
-
-    if (!translationActivity) {
-      const translationActivities = yield this.store.query(
-        'translation-activity',
-        {
-          'filter[subcase][publication-flow][:id:]':
-            this.args.publicationFlow.id,
-          include: 'generated-pieces,used-pieces',
-          sort: '-start-date',
-        }
-      );
-      translationActivity = translationActivities.find(
-        (activity) => activity.isFinished
-      );
-    }
-
-    if (translationActivity) {
-      const [usedPieces, generatedPieces] = yield Promise.all([
-        translationActivity.usedPieces,
-        translationActivity.generatedPieces,
-      ]);
-      this.translationPieces = [
-        ...usedPieces.toArray(),
-        ...generatedPieces.toArray(),
-      ];
-    } else {
-      this.translationPieces = [];
-    }
   }
 
   @task
@@ -158,19 +174,12 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   }
 
   @action
-  unlinkTranslationPiece(piece) {
-    this.translationPieces.removeObject(piece);
+  unlinkTransferredPiece(piece) {
+    this.transferredPieces.removeObject(piece);
   }
 
   @action
   setProofRequestedStatus(event) {
     this.mustUpdatePublicationStatus = event.target.checked;
-  }
-
-  initValidators() {
-    this.validators = new ValidatorSet({
-      subject: new Validator(() => isPresent(this.subject)),
-      message: new Validator(() => isPresent(this.message)),
-    });
   }
 }
