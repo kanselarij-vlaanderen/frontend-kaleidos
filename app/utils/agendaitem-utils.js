@@ -59,18 +59,12 @@ export const setNewPropertiesToModel = async(model, propertiesToSet, resetFormal
   }
 
   const keys = Object.keys(propertiesToSet);
-  keys.forEach(async(key) => {
-    await model.get(key);
+  for (const key of keys) {
     model.set(key, propertiesToSet[key]);
-  });
+  }
 
-  return model.save().then((item) => {
-    item.reload();
-    return true;
-  })
-    .catch((exception) => {
-      throw (exception);
-    });
+  await model.save();
+  return model.reload();
 };
 
 /**
