@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency-decorators';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /**
  * @argument {Agendaitem} agedaitem
@@ -88,10 +89,10 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     this.referenceDocument.publicationFlow = publicationFlow;
     yield this.referenceDocument.save();
 
-    yield this.publicationService.setRegulationTypeThroughReferenceDocument(
-      publicationFlow,
+    yield this.setRegulationTypeThroughReferenceDocument(
       this.referenceDocument
     );
+
     this.referenceDocument = null;
     this.isOpenNewPublicationModal = false;
   }
@@ -99,10 +100,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   @action
   async linkPublicationFlow(piece, publicationFlow) {
     piece.publicationFlow = publicationFlow;
-    await this.publicationService.setRegulationTypeThroughReferenceDocument(
-      publicationFlow,
-      piece
-    );
+    await this.setRegulationTypeThroughReferenceDocument(piece);
     await piece.save();
   }
 
@@ -110,5 +108,37 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   async unlinkPublicationFlow(piece) {
     piece.publicationFlow = null;
     await piece.save();
+  }
+
+  async setRegulationTypeThroughReferenceDocument(referenceDocument) {
+    const publicationFlow = await referenceDocument.publicationFlow;
+    let regulationType = await publicationFlow.regulationType;
+    if (!regulationType) {
+      const documentContainer = await referenceDocument.documentContainer;
+      const documentType = await documentContainer.type;
+
+      switch (documentType.uri) {
+        case CONSTANTS.DOCUMENT_TYPES.DECREET:
+          regulationType = await this.store.findRecordByUri(
+            'regulation-type',
+            CONSTANTS.REGULATION_TYPES.DECREET
+          );
+          break;
+        case CONSTANTS.DOCUMENT_TYPES.BVR:
+          regulationType = await this.store.findRecordByUri(
+            'regulation-type',
+            CONSTANTS.REGULATION_TYPES.BVR
+          );
+          break;
+        case CONSTANTS.DOCUMENT_TYPES.MB:
+          regulationType = await this.store.findRecordByUri(
+            'regulation-type',
+            CONSTANTS.REGULATION_TYPES.MB
+          );
+          break;
+      }
+      publicationFlow.regulationType = regulationType;
+      await publicationFlow.save();
+    }
   }
 }

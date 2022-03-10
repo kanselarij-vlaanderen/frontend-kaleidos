@@ -331,38 +331,4 @@ export default class PublicationService extends Service {
       );
     }
   }
-
-  async setRegulationTypeThroughReferenceDocument(
-    publicationFlow,
-    referenceDocument
-  ) {
-    let regulationType = await publicationFlow.regulationType;
-    if (!regulationType) {
-      const documentContainer = await referenceDocument.documentContainer;
-      const documentType = await documentContainer.type;
-
-      switch (documentType.uri) {
-        case CONSTANTS.DOCUMENT_TYPES.DECREET:
-          regulationType = await this.store.findRecordByUri(
-            'regulation-type',
-            CONSTANTS.REGULATION_TYPES.DECREET
-          );
-          break;
-        case CONSTANTS.DOCUMENT_TYPES.BVR:
-          regulationType = await this.store.findRecordByUri(
-            'regulation-type',
-            CONSTANTS.REGULATION_TYPES.BVR
-          );
-          break;
-        case CONSTANTS.DOCUMENT_TYPES.MB:
-          regulationType = await this.store.findRecordByUri(
-            'regulation-type',
-            CONSTANTS.REGULATION_TYPES.MB
-          );
-          break;
-      }
-      publicationFlow.regulationType = regulationType;
-      await publicationFlow.save();
-    }
-  }
 }
