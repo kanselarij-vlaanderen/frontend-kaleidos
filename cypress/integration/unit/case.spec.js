@@ -17,7 +17,7 @@ context('Create case as Admin user', () => {
 
   // TODO-abbreviated
 
-  it.only('Create a case with short title', () => {
+  it('Create a case with short title', () => {
     cy.visit('/dossiers');
     const caseTitle = 'Dit is een dossier met een korte titel';
     cy.createCase(caseTitle).then((result) => {

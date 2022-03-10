@@ -19,9 +19,8 @@ const selectors = {
   agendaitemDecision: {
     uploadFile: '[data-test-agendaitem-decision-upload-file]',
     edit: '[data-test-agendaitem-decision-edit]',
-    // TODO-selector unused selectors
-    container: '[data-test-agendaitem-decision-container]',
     delete: '[data-test-agendaitem-decision-delete]',
+    container: '[data-test-agendaitem-decision-container]',
   },
 
   // agendaitem-decision-edit
