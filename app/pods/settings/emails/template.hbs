@@ -1,4 +1,4 @@
-{{ page-title (t "manage-emails")}}
+{{page-title (t "manage-emails")}}
 
 <div class="auk-u-m-8">
   <div class="auk-u-mb-3">
@@ -24,18 +24,12 @@
         <Auk::Label class="auk-u-mt-2 auk-u-mb-1">
           {{t "email-to-proofrequest"}}
         </Auk::Label>
-        <Auk::Input
-          @value={{mut this.emailToProofRequest}}
-          @block={{true}}
-        />
+        <Auk::Input @value={{mut this.emailToProofRequest}} @block={{true}} />
 
         <Auk::Label class="auk-u-mt-2 auk-u-mb-1">
           {{t "email-cc-proofrequest"}}
         </Auk::Label>
-        <Auk::Input
-          @value={{mut this.emailCcProofRequest}}
-          @block={{true}}
-        />
+        <Auk::Input @value={{mut this.emailCcProofRequest}} @block={{true}} />
 
         <Auk::Button
           class="auk-u-mt-2 auk-u-mb-1"

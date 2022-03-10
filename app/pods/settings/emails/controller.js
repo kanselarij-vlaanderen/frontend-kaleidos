@@ -1,9 +1,9 @@
 import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
+import { isPresent, isBlank } from '@ember/utils';
 import { task } from 'ember-concurrency-decorators';
 
-import { isPresent, isBlank } from '@ember/utils';
 export default class SettingsEmailController extends Controller {
   @service store;
 
