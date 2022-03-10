@@ -2,14 +2,14 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import {
-  saveChanges as saveSubcaseTitles, cancelEdit
+  saveChanges as saveSubcaseTitles,
+  cancelEdit,
 } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
-import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency-decorators';
 
 export default class AgendaitemTitlesEdit extends Component {
   @service store;
-  @tracked isLoading = false;
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'explanation']);
 
   get newsletterInfo() {
@@ -19,50 +19,53 @@ export default class AgendaitemTitlesEdit extends Component {
   @action
   async cancelEditing() {
     cancelEdit(this.args.agendaitem, this.propertiesToSet);
-    if (this.newsletterInfo && this.newsletterInfo.get('hasDirtyAttributes')) {
+    // We change the value of confidental directly on subcase, so we should also roll it back
+    if (this.args.subcase) {
+      cancelEdit(this.args.subcase, ['confidential']);
+    }
+    if (this.newsletterInfo && this.newsletterInfo.hasDirtyAttributes) {
       this.newsletterInfo.rollbackAttributes();
     }
     this.args.toggleIsEditing();
   }
 
-  @action
-  async saveChanges() {
-    this.isLoading = true;
-    const shouldResetFormallyOk = this.args.agendaitem.get('hasDirtyAttributes');
+  @task
+  *saveChanges() {
+    const shouldResetFormallyOk = this.args.agendaitem.hasDirtyAttributes;
 
-    const title = trimText(this.args.agendaitem.title);
-    const shortTitle = trimText(this.args.agendaitem.shortTitle);
+    const trimmedTitle = trimText(this.args.agendaitem.title);
+    const trimmedShortTitle = trimText(this.args.agendaitem.shortTitle);
 
     const propertiesToSetOnAgendaitem = {
-      title: title,
-      shortTitle: shortTitle,
-      // explanation and showInNewsletter are set directly on the agendaitem, no need to have them in here
+      title: trimmedTitle,
+      shortTitle: trimmedShortTitle,
+      // explanation is set directly on the agendaitem, no need to have it in here
     };
     const propertiesToSetOnSubcase = {
-      title: title,
-      shortTitle: shortTitle,
+      title: trimmedTitle,
+      shortTitle: trimmedShortTitle,
+      confidential: this.args.subcase?.confidential,
     };
 
-    if (this.args.subcase) {
-      propertiesToSetOnSubcase.confidential = await this.args.subcase.get('confidential');
-    }
-
-    try {
-      await saveSubcaseTitles(this.args.agendaitem, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, shouldResetFormallyOk);
-      if (this.newsletterInfo
-        && (this.newsletterInfo.get('hasDirtyAttributes') || this.args.agendaitem.showAsRemark)) {
-        if (this.args.agendaitem.showAsRemark) { // Keep generated newsletterInfo for announcement in sync
-          this.newsletterInfo.set('richtext', title);
-          this.newsletterInfo.set('title', shortTitle);
-        }
-        await this.newsletterInfo.save();
+    yield saveSubcaseTitles(
+      this.args.agendaitem,
+      propertiesToSetOnAgendaitem,
+      propertiesToSetOnSubcase,
+      shouldResetFormallyOk
+    );
+    if (
+      this.newsletterInfo &&
+      (this.newsletterInfo.hasDirtyAttributes ||
+        this.args.agendaitem.showAsRemark)
+    ) {
+      if (this.args.agendaitem.showAsRemark) {
+        // Keep generated newsletterInfo for announcement in sync
+        this.newsletterInfo.richtext = trimmedTitle;
+        this.newsletterInfo.title = trimmedShortTitle;
       }
-
-      this.isLoading = false;
-      this.args.toggleIsEditing();
-    } catch (exception) {
-      this.isLoading = false;
-      throw (exception);
+      yield this.newsletterInfo.save();
     }
+
+    this.args.toggleIsEditing();
   }
 }

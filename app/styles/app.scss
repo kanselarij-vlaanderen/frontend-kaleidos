@@ -36,15 +36,7 @@
 
 // CUSTOM STYLING
 @import 'custom-application/toast';
-@import 'custom-application/compare';
-@import 'custom-application/editor';
-@import 'custom-application/ember-attacher';
 @import 'custom-application/file-uploader';
-@import 'custom-application/input-pills';
-@import 'custom-application/loader';
-@import 'custom-application/loadable-content';
-@import 'custom-application/document-preview';
-@import 'custom-application/power-select';
 
 
 // AUK COMPONENTS
@@ -57,8 +49,7 @@
 
 // LAYOUT STYLING
 @import 'custom-application/m-header';
-
+@import 'layout/compare-agenda-list';
 
 // PRINT STYLING
-@import 'print/print';
-@import 'print';
+@import 'print/general';

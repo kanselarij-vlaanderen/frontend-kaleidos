@@ -1,4 +1,4 @@
-/* global context, before, it, cy, Cypress, beforeEach, afterEach */
+/* global context, it, cy, Cypress, beforeEach, afterEach */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -37,7 +37,7 @@ function selectFromDropdown(item) {
     });
   cy.get(dependency.emberPowerSelect.option, {
     timeout: 15000,
-  }).should('not.be.visible');
+  }).should('not.exist');
 }
 
 context('Different session kinds should show different titles', () => {
@@ -45,12 +45,7 @@ context('Different session kinds should show different titles', () => {
   const special = '/vergadering/5EC525AC5B08050008000005/agenda/5EC525AD5B08050008000006/agendapunten';
   const electronic = '/vergadering/5EC525CB5B08050008000009/agenda/5EC525CC5B0805000800000A/agendapunten';
 
-  before(() => {
-    cy.server();
-  });
-
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 
@@ -113,10 +108,10 @@ context('Different session kinds should show different titles', () => {
 
   it('should test the PVV agenda', () => {
     const agendaNumber = 100;
-    const agendaDate = Cypress.moment().add(3, 'weeks')
+    const agendaDate = Cypress.dayjs().add(3, 'weeks')
       .day(3)
       .hour(10)
-      .minutes(0);
+      .minute(0);
     const formattedAgendaDate = agendaDate.format('DD-MM-YYYY');
     const vvKind = 'Ministerraad - Plan Vlaamse Veerkracht';
     const decisionHeader = `Beslissingen van de Vlaamse Regering - ${vvKind}`;
@@ -124,7 +119,7 @@ context('Different session kinds should show different titles', () => {
     const formattedMeetingDateHour = agendaDate.format('DD-MM-YYYY HH:mm');
     const formattedMeetingDateDots = agendaDate.format('DD.MM.YYYY');
     // TODO-BUG KAS-3056 numbering not correct when creating agenda in different year
-    const fullmeetingNumber = `VR PV ${Cypress.moment().format('YYYY')}/${agendaNumber}`;
+    const fullmeetingNumber = `VR PV ${Cypress.dayjs().format('YYYY')}/${agendaNumber}`;
     // const fullmeetingNumber = `VR PV ${agendaDate.format('YYYY')}/${agendaNumber}`;
     const suffixVV = '-VV';
     const fullmeetingNumberVV = `${fullmeetingNumber}${suffixVV}`;
@@ -139,7 +134,7 @@ context('Different session kinds should show different titles', () => {
     cy.get(agenda.newSession.relatedMainMeeting).click();
     selectFromDropdown(formattedAgendaDate);
     cy.get(agenda.newSession.numberRep.view).should('contain', fullmeetingNumberVV);
-    cy.route('PATCH', '/meetings/**').as('patchMeetings');
+    cy.intercept('PATCH', '/meetings/**').as('patchMeetings');
     cy.get(utils.vlModalFooter.save).click();
     cy.wait('@patchMeetings');
     // check if edit shows correct data

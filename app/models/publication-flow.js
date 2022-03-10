@@ -3,16 +3,15 @@ import Model, {
 } from '@ember-data/model';
 
 export default class PublicationFlow extends Model {
-  // Attributes.
   @attr('string') shortTitle;
   @attr('string') longTitle;
   @attr('string') remark;
   @attr('date') closingDate;
-  @attr('date') openingDate;
+  @attr('date') openingDate; // displayed as: Datum ontvangst
   @attr('datetime') created;
   @attr('datetime') modified;
+  @attr('number') numberOfPages;
 
-  // Belongs To.
   @belongsTo('case') case;
   @belongsTo('identification', {
     inverse: 'publicationFlow',
@@ -26,7 +25,6 @@ export default class PublicationFlow extends Model {
   @belongsTo('translation-subcase') translationSubcase;
   @belongsTo('agenda-item-treatment') agendaItemTreatment;
 
-  // Has many .
   @hasMany('identification', {
     inverse: 'publicationFlowForNumac',
   }) numacNumbers;

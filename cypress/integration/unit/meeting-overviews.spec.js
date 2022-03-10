@@ -8,7 +8,6 @@ context('Test print overviews', () => {
   const persAgenda = '/overzicht/5DD7CDA58C70A70008000001/persagenda/5DD7CDA58C70A70008000002/agendapunten';
 
   beforeEach(() => {
-    cy.server();
     cy.login('Admin');
   });
 

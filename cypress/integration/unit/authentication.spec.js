@@ -1,13 +1,9 @@
-/* global context, it, cy, beforeEach */
+/* global context, it, cy */
 // / <reference types="Cypress" />
 
 import route from '../../selectors/route.selectors';
 
 context('Authentication tests', () => {
-  beforeEach(() => {
-    cy.server();
-  });
-
   const acmidmButtonText = 'Meld u aan';
   it('should login/logout using xhr request (api call)', () => {
     cy.login('Admin');
