@@ -66,6 +66,7 @@
     />
     <Utils::GovernmentAreas::GovernmentAreasPanel
       @governmentAreas={{this.subcase.case.governmentAreas}}
+      @allowEditing={{this.currentSession.isEditor}}
       @onSave={{this.saveGovernmentAreas}}
     />
     <Agenda::Agendaitem::AgendaitemCase::AgendaitemApprovals

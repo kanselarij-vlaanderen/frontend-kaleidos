@@ -81,7 +81,7 @@ const selectors = {
       addAgendaitems: '[data-test-agenda-header-add-agendaitems]',
       navigateToDecisions: '[data-test-agenda-header-navigate-to-decisions]',
       navigateToNewsletter: '[data-test-agenda-header-navigate-to-newsletter]',
-      toggleEditingSession: '[data-test-agenda-header-toggle-editing-session]',
+      toggleEditingMeeting: '[data-test-agenda-header-toggle-editing-meeting]',
       downloadDocuments: '[data-test-agenda-header-download-documents]',
       releaseDecisions: '[data-test-agenda-header-release-decisions]',
       releaseDocuments: '[data-test-agenda-header-release-documents]',
@@ -187,26 +187,27 @@ const selectors = {
     input: '[data-test-agendaitem-search-input]',
   },
 
-  // new-session
-  newSession: {
+  // new-meeting
+  newMeeting: {
     kind: '[data-test-utils-kind-selector]',
-    relatedMainMeeting: '[data-test-new-session-related-main-meeting]',
-    meetingNumber: '[data-test-new-session-meeting-number]',
-    meetingLocation: '[data-test-new-session-meeting-location]',
-    datepicker: '[data-test-new-session-datepicker]',
+    relatedMainMeeting: '[data-test-new-meeting-related-main-meeting]',
+    meetingNumber: '[data-test-new-meeting-meeting-number]',
+    meetingLocation: '[data-test-new-meeting-meeting-location]',
+    datepicker: '[data-test-new-meeting-datepicker]',
     numberRep: {
-      view: '[data-test-new-session-number-representation-view]',
-      edit: '[data-test-new-session-number-representation-edit]',
-      input: '[data-test-new-session-number-representation-input]',
-      save: '[data-test-new-session-number-representation-save]',
+      view: '[data-test-new-meeting-number-representation-view]',
+      edit: '[data-test-new-meeting-number-representation-edit]',
+      input: '[data-test-new-meeting-number-representation-input]',
+      save: '[data-test-new-meeting-number-representation-save]',
     },
-    save: '[data-test-new-session-save]',
+    save: '[data-test-new-meeting-save]',
   },
 
-  // edit-session
-  editSession: {
-    meetingNumber: '[data-test-edit-session-meeting-number]',
-    numberRep: '[data-test-edit-session-number-representation]',
+  // edit-meeting
+  editMeeting: {
+    meetingNumber: '[data-test-edit-meeting-meeting-number]',
+    numberRep: '[data-test-edit-meeting-number-representation]',
+    save: '[data-test-edit-meeting-save]',
   },
 
   // create-agendaitem

@@ -22,7 +22,9 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   get latestTranslationActivity() {
-    const timelineActivity = this.model.find((activity) => activity.isTranslationActivity);
+    const timelineActivity = this.model.find(
+      (activity) => activity.isTranslationActivity
+    );
     return timelineActivity ? timelineActivity.activity : null;
   }
 
@@ -138,11 +140,12 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     });
     yield mail.save();
 
-    // PUBLICATION-STATUS
-    yield this.publicationService.updatePublicationStatus(
-      this.publicationFlow,
-      CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_REQUESTED
-    );
+    if (translationRequest.mustUpdatePublicationStatus) {
+      yield this.publicationService.updatePublicationStatus(
+        this.publicationFlow,
+        CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_REQUESTED
+      );
+    }
 
     this.send('refresh');
     this.showTranslationRequestModal = false;
