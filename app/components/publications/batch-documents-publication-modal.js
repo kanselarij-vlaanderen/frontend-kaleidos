@@ -79,6 +79,8 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     });
     this.referenceDocument.publicationFlow = publicationFlow;
     yield this.referenceDocument.save();
+
+    yield this.publicationService.setRegulationTypeThroughReferenceDocument(publicationFlow,this.referenceDocument);
     this.referenceDocument = null;
     this.isOpenNewPublicationModal = false;
   }
@@ -86,6 +88,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   @action
   async linkPublicationFlow(piece, publicationFlow) {
     piece.publicationFlow = publicationFlow;
+    await this.publicationService.setRegulationTypeThroughReferenceDocument(publicationFlow, piece);
     await piece.save();
   }
 
