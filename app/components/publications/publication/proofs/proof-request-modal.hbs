@@ -8,26 +8,11 @@
   />
   <Auk::Modal::Body>
     <div class="auk-form-group-layout auk-form-group-layout--standard">
-      <div class="auk-form-group">
-        <Auk::Label for="proofRequestSubject" @required={{true}}>
-          {{t "subject"}}
-        </Auk::Label>
-        <Auk::Input
-          data-test-proof-request-subject
-          id="proofRequestSubject"
-          @block={{true}}
-          @value={{mut this.subject}}
-        />
-      </div>
-      <div class="auk-form-group">
-        <Auk::Label for="proofRequestMessage" @required={{true}}>
-          {{t "message"}}
-        </Auk::Label>
-        <Auk::Textarea
-          data-test-proof-request-message
-          id="proofRequestMessage"
-          rows="16"
-          @value={{mut this.message}}
+      <div class="auk-form-group auk-u-mt-4">
+        <Auk::Checkbox
+          @label={{t "update-publication-status-proof-requested"}}
+          @checked={{this.mustUpdatePublicationStatus}}
+          {{on "input" this.setProofRequestedStatus}}
         />
       </div>
       <div class="auk-form-group">
@@ -53,6 +38,28 @@
             @onDeletePiece={{perform this.deleteUploadedPiece}}
           />
         </Utils::LoadableContent>
+      </div>
+      <div class="auk-form-group">
+        <Auk::Label for="proofRequestSubject" @required={{true}}>
+          {{t "subject"}}
+        </Auk::Label>
+        <Auk::Input
+          data-test-proof-request-subject
+          id="proofRequestSubject"
+          @block={{true}}
+          @value={{mut this.subject}}
+        />
+      </div>
+      <div class="auk-form-group">
+        <Auk::Label for="proofRequestMessage" @required={{true}}>
+          {{t "message"}}
+        </Auk::Label>
+        <Auk::Textarea
+          data-test-proof-request-message
+          id="proofRequestMessage"
+          rows="16"
+          @value={{mut this.message}}
+        />
       </div>
     </div>
   </Auk::Modal::Body>
