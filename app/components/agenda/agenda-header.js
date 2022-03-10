@@ -23,14 +23,13 @@ export default class AgendaHeader extends Component {
    */
   @service store;
   @service router;
-  // This can be confusing, currentSession is for checking user profile here and not to reference the meeting
   @service currentSession;
   @service intl;
   @service jobMonitor;
   @service toaster;
 
   @tracked isAddingAgendaitems = false;
-  @tracked isEditingSession = false;
+  @tracked isEditingMeeting = false;
   @tracked showConfimApprovingAllAgendaitems = false;
   @tracked showConfirmReleaseDecisions = false;
   @tracked showConfirmReleaseDocuments = false;
@@ -233,8 +232,8 @@ export default class AgendaHeader extends Component {
   }
 
   @action
-  toggleEditingSession() {
-    this.isEditingSession = !this.isEditingSession;
+  toggleEditingMeeting() {
+    this.isEditingMeeting = !this.isEditingMeeting;
   }
 
   @action

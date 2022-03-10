@@ -130,6 +130,8 @@ export default class CasesNewSubcase extends Component {
     }
     // We save here in order to set the belongsTo relation between submission-activity and subcase
     await subcase.save();
+    // reload the list of subcases on case, list is not updated automatically
+    await this.args.case.hasMany('subcases').reload();
 
     if (this.latestSubcase && fullCopy) {
       await this.copySubcaseSubmissions(subcase, piecesFromSubmissions);

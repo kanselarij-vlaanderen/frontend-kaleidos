@@ -39,7 +39,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   // Added wait, mouseover, force clicking and checking for existance of the ember power select option because of flakyness
   // Sometimes, the dropdown stays after pressing an option
   if (kind) {
-    cy.get(agenda.newSession.kind).click();
+    cy.get(agenda.newMeeting.kind).click();
     cy.get(dependency.emberPowerSelect.option, {
       timeout: 5000,
     }).wait(500)
@@ -55,23 +55,23 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   }
 
   // Set the start date
-  cy.get(agenda.newSession.datepicker).find(utils.vlDatepicker)
+  cy.get(agenda.newMeeting.datepicker).find(utils.vlDatepicker)
     .click();
   cy.setDateAndTimeInFlatpickr(date);
   // At this point, the flatpickr is still open and covers the other fields
   // To negate this, we click once with force:true on the next input field to close it
-  cy.get(agenda.newSession.meetingNumber).click({
+  cy.get(agenda.newMeeting.meetingNumber).click({
     force: true,
   });
 
   // Set the meetingNumber
   if (meetingNumber) {
-    cy.get(agenda.newSession.meetingNumber).click()
+    cy.get(agenda.newMeeting.meetingNumber).click()
       .clear()
       .type(meetingNumber);
   } else {
     // 1 test in agenda.spec uses this value
-    cy.get(agenda.newSession.meetingNumber).click()
+    cy.get(agenda.newMeeting.meetingNumber).click()
       .invoke('val')
       // eslint-disable-next-line
       .then((sometext) => meetingNumber = sometext);
@@ -81,15 +81,15 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   let meetingNumberRep;
 
   if (meetingNumberVisualRepresentation) {
-    cy.get(agenda.newSession.numberRep.edit).click();
-    cy.get(agenda.newSession.numberRep.input).click()
+    cy.get(agenda.newMeeting.numberRep.edit).click();
+    cy.get(agenda.newMeeting.numberRep.input).click()
       .clear()
       .type(meetingNumberVisualRepresentation);
-    cy.get(agenda.newSession.numberRep.save).click();
+    cy.get(agenda.newMeeting.numberRep.save).click();
   }
   // Get the value from the meetingNumber representation
-  cy.get(agenda.newSession.numberRep.edit).click();
-  cy.get(agenda.newSession.numberRep.input).click()
+  cy.get(agenda.newMeeting.numberRep.edit).click();
+  cy.get(agenda.newMeeting.numberRep.input).click()
     .invoke('val')
     .then((sometext) => {
       meetingNumberRep = sometext;
@@ -97,10 +97,10 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
 
   // Set the location
   if (location) {
-    cy.get(agenda.newSession.meetingLocation).click()
+    cy.get(agenda.newMeeting.meetingLocation).click()
       .type(location);
   }
-  cy.get(agenda.newSession.save).click();
+  cy.get(agenda.newMeeting.save).click();
 
   let meetingId;
   let agendaId;

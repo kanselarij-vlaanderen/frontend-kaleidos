@@ -266,10 +266,12 @@ export default class PublicationService extends Service {
     });
     await mail.save();
 
-    await this.updatePublicationStatus(
-      publicationFlow,
-      CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED
-    );
+    if (proofRequestProperties.mustUpdatePublicationStatus) {
+      await this.updatePublicationStatus(
+        publicationFlow,
+        CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED
+      );
+    }
   }
 
   /**
@@ -330,9 +332,11 @@ export default class PublicationService extends Service {
     });
     await mail.save();
 
-    await this.updatePublicationStatus(
-      publicationFlow,
-      CONSTANTS.PUBLICATION_STATUSES.PUBLICATION_REQUESTED
-    );
+    if (publicationRequestProperties.mustUpdatePublicationStatus) {
+      await this.updatePublicationStatus(
+        publicationFlow,
+        CONSTANTS.PUBLICATION_STATUSES.PUBLICATION_REQUESTED
+      );
+    }
   }
 }

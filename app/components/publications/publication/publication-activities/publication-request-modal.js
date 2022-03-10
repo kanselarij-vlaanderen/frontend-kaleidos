@@ -14,6 +14,7 @@ export default class PublicationRequestModal extends Component {
   @tracked message;
   @tracked transferredPieces = [];
   @tracked uploadedPieces = [];
+  @tracked mustUpdatePublicationStatus = false;
 
   constructor() {
     super(...arguments);
@@ -89,6 +90,7 @@ export default class PublicationRequestModal extends Component {
       subject: this.subject,
       message: this.message,
       uploadedPieces: this.pieces,
+      mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
   }
 
@@ -150,6 +152,11 @@ export default class PublicationRequestModal extends Component {
   @action
   unlinkTransferredPiece(piece) {
     this.transferredPieces.removeObject(piece);
+  }
+
+  @action
+  setPublicationRequestedStatus(event) {
+    this.mustUpdatePublicationStatus = event.target.checked;
   }
 
   @task
