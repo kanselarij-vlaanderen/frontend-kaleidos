@@ -84,14 +84,13 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
           case: this.case,
           agendaItemTreatment: this.agendaItemTreatment,
           mandatees: this.mandatees,
+          regulationType: yield this.getRegulationTypeThroughReferenceDocument(
+            this.referenceDocument
+          ),
         }
       );
     this.referenceDocument.publicationFlow = publicationFlow;
     yield this.referenceDocument.save();
-
-    yield this.setRegulationTypeThroughReferenceDocument(
-      this.referenceDocument
-    );
 
     this.referenceDocument = null;
     this.isOpenNewPublicationModal = false;
@@ -99,8 +98,13 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
   @action
   async linkPublicationFlow(piece, publicationFlow) {
+    const regulationType = await publicationFlow.regulationType;
+    if (!regulationType) {
+      publicationFlow.regulationType =
+        await this.getRegulationTypeThroughReferenceDocument(piece);
+      await publicationFlow.save();
+    }
     piece.publicationFlow = publicationFlow;
-    await this.setRegulationTypeThroughReferenceDocument(piece);
     await piece.save();
   }
 
@@ -110,35 +114,30 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     await piece.save();
   }
 
-  async setRegulationTypeThroughReferenceDocument(referenceDocument) {
-    const publicationFlow = await referenceDocument.publicationFlow;
-    let regulationType = await publicationFlow.regulationType;
-    if (!regulationType) {
-      const documentContainer = await referenceDocument.documentContainer;
-      const documentType = await documentContainer.type;
-
-      switch (documentType.uri) {
-        case CONSTANTS.DOCUMENT_TYPES.DECREET:
-          regulationType = await this.store.findRecordByUri(
-            'regulation-type',
-            CONSTANTS.REGULATION_TYPES.DECREET
-          );
-          break;
-        case CONSTANTS.DOCUMENT_TYPES.BVR:
-          regulationType = await this.store.findRecordByUri(
-            'regulation-type',
-            CONSTANTS.REGULATION_TYPES.BVR
-          );
-          break;
-        case CONSTANTS.DOCUMENT_TYPES.MB:
-          regulationType = await this.store.findRecordByUri(
-            'regulation-type',
-            CONSTANTS.REGULATION_TYPES.MB
-          );
-          break;
-      }
-      publicationFlow.regulationType = regulationType;
-      await publicationFlow.save();
+  async getRegulationTypeThroughReferenceDocument(referenceDocument) {
+    let regulationType;
+    const documentContainer = await referenceDocument.documentContainer;
+    const documentType = await documentContainer.type;
+    switch (documentType.uri) {
+      case CONSTANTS.DOCUMENT_TYPES.DECREET:
+        regulationType = await this.store.findRecordByUri(
+          'regulation-type',
+          CONSTANTS.REGULATION_TYPES.DECREET
+        );
+        break;
+      case CONSTANTS.DOCUMENT_TYPES.BVR:
+        regulationType = await this.store.findRecordByUri(
+          'regulation-type',
+          CONSTANTS.REGULATION_TYPES.BVR
+        );
+        break;
+      case CONSTANTS.DOCUMENT_TYPES.MB:
+        regulationType = await this.store.findRecordByUri(
+          'regulation-type',
+          CONSTANTS.REGULATION_TYPES.MB
+        );
+        break;
     }
+    return regulationType;
   }
 }

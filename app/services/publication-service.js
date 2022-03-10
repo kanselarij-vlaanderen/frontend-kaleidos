@@ -65,11 +65,13 @@ export default class PublicationService extends Service {
     let case_;
     let agendaItemTreatment;
     let mandatees;
+    let regulationType;
     const isViaCouncilOfMinisters = !!viaCouncilOfMinisterOptions;
     if (isViaCouncilOfMinisters) {
       case_ = viaCouncilOfMinisterOptions.case;
       agendaItemTreatment = viaCouncilOfMinisterOptions.agendaItemTreatment;
       mandatees = viaCouncilOfMinisterOptions.mandatees;
+      regulationType = viaCouncilOfMinisterOptions.regulationType;
     } else {
       case_ = this.store.createRecord('case', {
         shortTitle: publicationProperties.shortTitle,
@@ -129,6 +131,7 @@ export default class PublicationService extends Service {
       created: now,
       openingDate: publicationProperties.openingDate,
       modified: now,
+      regulationType: regulationType
     });
     await publicationFlow.save();
     const translationSubcase = this.store.createRecord('translation-subcase', {
