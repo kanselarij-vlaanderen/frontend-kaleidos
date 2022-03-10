@@ -20,6 +20,7 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   @tracked message;
   @tracked uploadedPieces = [];
   @tracked translationPieces = [];
+  @tracked mustUpdatePublicationStatus = false;
 
   validators;
 
@@ -35,7 +36,8 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   }
 
   get isSaveDisabled() {
-    const totalPieces = this.uploadedPieces.length + this.translationPieces.length;
+    const totalPieces =
+      this.uploadedPieces.length + this.translationPieces.length;
     return (
       totalPieces === 0 ||
       !this.validators.areValid ||
@@ -51,6 +53,7 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
       subject: this.subject,
       message: this.message,
       uploadedPieces: pieces,
+      mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
   }
 
@@ -76,12 +79,15 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
       const translationActivities = yield this.store.query(
         'translation-activity',
         {
-          'filter[subcase][publication-flow][:id:]': this.args.publicationFlow.id,
+          'filter[subcase][publication-flow][:id:]':
+            this.args.publicationFlow.id,
           include: 'generated-pieces,used-pieces',
           sort: '-start-date',
         }
       );
-      translationActivity = translationActivities.find((activity) => activity.isFinished);
+      translationActivity = translationActivities.find(
+        (activity) => activity.isFinished
+      );
     }
 
     if (translationActivity) {
@@ -89,7 +95,10 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
         translationActivity.usedPieces,
         translationActivity.generatedPieces,
       ]);
-      this.translationPieces = [...usedPieces.toArray(), ...generatedPieces.toArray()];
+      this.translationPieces = [
+        ...usedPieces.toArray(),
+        ...generatedPieces.toArray(),
+      ];
     } else {
       this.translationPieces = [];
     }
@@ -151,6 +160,11 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   @action
   unlinkTranslationPiece(piece) {
     this.translationPieces.removeObject(piece);
+  }
+
+  @action
+  setProofRequestedStatus(event) {
+    this.mustUpdatePublicationStatus = event.target.checked;
   }
 
   initValidators() {
