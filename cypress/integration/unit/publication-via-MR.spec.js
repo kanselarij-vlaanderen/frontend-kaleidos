@@ -19,6 +19,7 @@ context('Publications via MR tests', () => {
     .day(3);
   const testId = `${currentTimestamp()}`;
   const type = 'Nota';
+  const caseTitleShort = 'Cypress test: Dossier publications via MR';
   const subcaseTitleShort = `Cypress test: Publications via MR - ${testId}`;
   const fileName1 = 'nieuwePublicatie';
   const fileName2 = 'bestaandePublicatie';
@@ -32,7 +33,7 @@ context('Publications via MR tests', () => {
 
   before(() => {
     cy.login('Admin');
-    cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
+    cy.createCase(caseTitleShort);
     cy.addSubcase(type, subcaseTitleShort);
     cy.openSubcase(0);
     cy.addDocumentsToSubcase(files);
