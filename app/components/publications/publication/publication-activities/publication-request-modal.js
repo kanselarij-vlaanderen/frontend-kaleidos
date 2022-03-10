@@ -34,12 +34,18 @@ export default class PublicationRequestModal extends Component {
     if (proofingActivity) {
       let generatedPieces = yield proofingActivity.generatedPieces;
       generatedPieces = generatedPieces.toArray();
+      // sorting by name, then receivedDate:
+      //    - easiest to understand
+      //    - piece dates are not necessarily unique
+      // generatedPieces have receivedDate set
+      generatedPieces = generatedPieces.sortBy('name', 'receivedDate');
       this.transferredPieces = generatedPieces;
     } else {
       this.transferredPieces = [];
     }
   }
 
+  /** load last finished proofing activity */
   loadDefaultProofingActivity() {
     return this.store.queryOne('proofing-activity', {
       'filter[subcase][publication-flow][:id:]': this.args.publicationFlow.id,
@@ -89,7 +95,7 @@ export default class PublicationRequestModal extends Component {
     yield this.args.onSave({
       subject: this.subject,
       message: this.message,
-      uploadedPieces: this.pieces,
+      uploadedPieces: [...this.pieces],
       mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
   }
