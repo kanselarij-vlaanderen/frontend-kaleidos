@@ -100,9 +100,12 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   async linkPublicationFlow(piece, publicationFlow) {
     const regulationType = await publicationFlow.regulationType;
     if (!regulationType) {
-      publicationFlow.regulationType =
+      const regulationTypefromDocument =
         await this.getRegulationTypeThroughReferenceDocument(piece);
-      await publicationFlow.save();
+      if (regulationTypefromDocument) {
+        publicationFlow.regulationType = regulationTypefromDocument;
+        await publicationFlow.save();
+      }
     }
     piece.publicationFlow = publicationFlow;
     await piece.save();
