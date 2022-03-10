@@ -19,11 +19,11 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   @tracked uploadedPieces = [];
   @tracked numberOfPages;
   @tracked numberOfWords;
-  @tracked translationDueDate = this.args.dueDate
-    ? this.args.dueDate
-    : new Date();
+  @tracked translationDueDate = this.args.dueDate;
   @tracked subject;
   @tracked message;
+  @tracked mustUpdatePublicationStatus = false;
+
   validators;
 
   constructor() {
@@ -51,6 +51,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
       translationDueDate: this.translationDueDate,
       subject: this.subject,
       message: this.message,
+      mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
   }
 
@@ -60,7 +61,11 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
     if (this.save.isRunning) {
       return;
     }
-    yield Promise.all(this.uploadedPieces.map((piece) => this.deleteUploadedPiece.perform(piece)));
+    yield Promise.all(
+      this.uploadedPieces.map((piece) =>
+        this.deleteUploadedPiece.perform(piece)
+      )
+    );
     this.args.onCancel();
   }
 
@@ -107,6 +112,11 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
 
     this.uploadedPieces.pushObject(piece);
     this.setEmailFields.perform();
+  }
+
+  @action
+  setTranslationRequestedStatus(event) {
+    this.mustUpdatePublicationStatus = event.target.checked;
   }
 
   @task
