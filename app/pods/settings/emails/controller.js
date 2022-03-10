@@ -13,6 +13,7 @@ const EMAIL_ADDRESS_KEYS = [
 ];
 
 export default class SettingsEmailController extends Controller {
+  @service router;
   @service store;
 
   @task
@@ -25,7 +26,7 @@ export default class SettingsEmailController extends Controller {
 
     yield this.model.save();
 
-    this.transitionToRoute('settings.overview');
+    this.router.transitionTo('settings.overview');
   }
 
   get isDisabled() {
