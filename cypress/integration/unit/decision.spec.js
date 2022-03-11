@@ -259,18 +259,17 @@ context('Decision tests', () => {
       .click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
     cy.get(utils.vlModalFooter.save).click();
+    // TODO better waits, flakys
+    cy.wait(2000);
     // remove decision with file
     cy.get('@decision').eq(0)
       .within(() => {
         cy.get(utils.dropdownMenu.options).click();
         cy.get(agenda.agendaitemDecision.delete).click();
       });
-    cy.intercept('GET', '/document-types?**').as('getDocumentTypes');
     cy.intercept('GET', '/agenda-item-treatments?filter**').as('filterDecision');
     cy.get(utils.vlModalVerify.save).click();
-    // TODO better waits?
     cy.wait('@deleteDecision');
-    cy.wait('@getDocumentTypes');
     cy.wait('@filterDecision');
     cy.get('@decision').should('have.length', 1);
     // switch between all decision results
