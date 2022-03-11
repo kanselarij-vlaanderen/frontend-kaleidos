@@ -38,6 +38,7 @@
   />
   <Utils::GovernmentAreas::GovernmentAreasPanel
     @governmentAreas={{this.governmentAreas}}
+    @allowEditing={{this.currentSession.isEditor}}
     @onSave={{this.saveGovernmentAreas}}
   />
   <Agenda::Agendaitem::AgendaitemCase::AllSubcases

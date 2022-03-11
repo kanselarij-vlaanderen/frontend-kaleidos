@@ -230,7 +230,6 @@ export default class PublicationService extends Service {
     const uploadedPieces = proofRequestProperties.uploadedPieces;
     await Promise.all(
       uploadedPieces.map((piece) => {
-        piece.publicationSubcaseSourceFor = publicationSubcase;
         return piece.save();
       })
     );
@@ -267,10 +266,12 @@ export default class PublicationService extends Service {
     });
     await mail.save();
 
-    await this.updatePublicationStatus(
-      publicationFlow,
-      CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED
-    );
+    if (proofRequestProperties.mustUpdatePublicationStatus) {
+      await this.updatePublicationStatus(
+        publicationFlow,
+        CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED
+      );
+    }
   }
 
   async createPublicationRequestActivity(publicationRequestProperties, publicationFlow) {
@@ -317,9 +318,11 @@ export default class PublicationService extends Service {
     });
     await mail.save();
 
-    await this.updatePublicationStatus(
-      publicationFlow,
-      CONSTANTS.PUBLICATION_STATUSES.PUBLICATION_REQUESTED
-    );
+    if (publicationRequestProperties.mustUpdatePublicationStatus) {
+      await this.updatePublicationStatus(
+        publicationFlow,
+        CONSTANTS.PUBLICATION_STATUSES.PUBLICATION_REQUESTED
+      );
+    }
   }
 }

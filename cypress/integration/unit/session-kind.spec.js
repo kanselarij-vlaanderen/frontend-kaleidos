@@ -128,23 +128,23 @@ context('Different session kinds should show different titles', () => {
     cy.createAgenda(null, agendaDate, null, agendaNumber);
     // set kind to PVV
     cy.get(route.agendas.action.newMeeting).click();
-    cy.get(agenda.newSession.kind).click();
+    cy.get(agenda.newMeeting.kind).click();
     selectFromDropdown(vvKind);
     // select related main meeting
-    cy.get(agenda.newSession.relatedMainMeeting).click();
+    cy.get(agenda.newMeeting.relatedMainMeeting).click();
     selectFromDropdown(formattedAgendaDate);
-    cy.get(agenda.newSession.numberRep.view).should('contain', fullmeetingNumberVV);
+    cy.get(agenda.newMeeting.numberRep.view).should('contain', fullmeetingNumberVV);
     cy.intercept('PATCH', '/meetings/**').as('patchMeetings');
-    cy.get(utils.vlModalFooter.save).click();
+    cy.get(agenda.newMeeting.save).click();
     cy.wait('@patchMeetings');
     // check if edit shows correct data
     cy.openAgendaForDate(agendaDate, 1);
     cy.get(agenda.agendaHeader.showOptions).click();
-    cy.get(agenda.agendaHeader.actions.toggleEditingSession).click();
+    cy.get(agenda.agendaHeader.actions.toggleEditingMeeting).click();
     cy.get(utils.kindSelector).contains(vvKind);
     cy.get(utils.vlDatepicker).should('have.value', formattedMeetingDateHour);
-    cy.get(agenda.editSession.numberRep).should('have.value', fullmeetingNumberVV);
-    cy.get(utils.vlModalFooter.cancel).click();
+    cy.get(agenda.editMeeting.numberRep).should('have.value', fullmeetingNumberVV);
+    cy.get(auk.modal.footer.cancel).click();
 
     // check if different views show correct header
     cy.get(agenda.agendaHeader.kind).contains(vvKind);

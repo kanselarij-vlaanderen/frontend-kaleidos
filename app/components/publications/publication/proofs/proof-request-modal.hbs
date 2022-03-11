@@ -9,6 +9,37 @@
   <Auk::Modal::Body>
     <div class="auk-form-group-layout auk-form-group-layout--standard">
       <div class="auk-form-group">
+        <Auk::Label @required={{true}}>
+          {{t "attachments"}}
+        </Auk::Label>
+        <Auk::FileUploader
+          @multiple={{true}}
+          @reusable={{true}}
+          @onUpload={{this.uploadPiece}}
+        />
+        <Utils::LoadableContent
+          @isLoading={{this.loadTranslationPieces.isRunning}}
+          @reserveSpace={{true}}
+        >
+          <Publications::Publication::PublicationDocumentsList
+            @pieces={{this.translationPieces}}
+            @viewable={{true}}
+            @onDeletePiece={{this.unlinkTranslationPiece}}
+          />
+          <Publications::Publication::PublicationDocumentsList
+            @pieces={{this.uploadedPieces}}
+            @onDeletePiece={{perform this.deleteUploadedPiece}}
+          />
+        </Utils::LoadableContent>
+      </div>
+      <div class="auk-form-group auk-u-mt-4">
+        <Auk::Checkbox
+          @label={{t "update-publication-status-proof-requested"}}
+          @checked={{this.mustUpdatePublicationStatus}}
+          {{on "input" this.setProofRequestedStatus}}
+        />
+      </div>
+      <div class="auk-form-group">
         <Auk::Label for="proofRequestSubject" @required={{true}}>
           {{t "subject"}}
         </Auk::Label>
@@ -29,71 +60,6 @@
           rows="16"
           @value={{mut this.message}}
         />
-      </div>
-      <div class="auk-form-group">
-        <Auk::Label @required={{true}}>
-          {{t "attachments"}}
-        </Auk::Label>
-        <Auk::FileUploader
-          @multiple={{true}}
-          @reusable={{true}}
-          @onUpload={{this.uploadPiece}}
-        />
-        <Auk::List>
-          <Utils::LoadableContent
-            @isLoading={{this.loadTranslationPieces.isRunning}}
-            @reserveSpace={{true}}
-          >
-            {{#each this.translationPieces as |piece|}}
-              <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
-                <div class="auk-o-flex auk-o-flex--spaced">
-                  <Auk::Badge @icon="paperclip" @size="regular" />
-                  <h5 class="auk-h4 auk-u-m-0">
-                    {{piece.file.downloadFilename}}
-                  </h5>
-                </div>
-                <Auk::ButtonLink
-                  @layout="icon-only"
-                  @icon="book"
-                  @href={{piece.viewDocumentURL}}
-                  target="_blank"
-                >
-                  {{t "read"}}
-                </Auk::ButtonLink>
-                <Auk::Button
-                  @icon="trash"
-                  @layout="icon-only"
-                  @skin="danger-borderless"
-                  {{on "click" (fn this.unlinkTranslationPiece piece)}}
-                />
-              </Auk::List::Item>
-            {{/each}}
-            {{#each this.uploadedPieces as |piece|}}
-              <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
-                <div class="auk-o-flex auk-o-flex--spaced">
-                  <Auk::Badge @icon="paperclip" @size="regular" />
-                  <h5 class="auk-h4 auk-u-m-0">
-                    {{piece.file.downloadFilename}}
-                  </h5>
-                </div>
-                <Auk::ButtonLink
-                  @layout="icon-only"
-                  @icon="book"
-                  @href={{piece.viewDocumentURL}}
-                  target="_blank"
-                >
-                  {{t "read"}}
-                </Auk::ButtonLink>
-                <Auk::Button
-                  @icon="trash"
-                  @layout="icon-only"
-                  @skin="danger-borderless"
-                  {{on "click" (perform this.deleteUploadedPiece piece)}}
-                />
-              </Auk::List::Item>
-            {{/each}}
-          </Utils::LoadableContent>
-        </Auk::List>
       </div>
     </div>
   </Auk::Modal::Body>

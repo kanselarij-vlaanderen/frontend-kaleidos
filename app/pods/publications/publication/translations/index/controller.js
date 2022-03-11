@@ -22,7 +22,9 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   get latestTranslationActivity() {
-    const timelineActivity = this.model.find((activity) => activity.isTranslationActivity);
+    const timelineActivity = this.model.find(
+      (activity) => activity.isTranslationActivity
+    );
     return timelineActivity ? timelineActivity.activity : null;
   }
 
@@ -44,14 +46,6 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     const translationActivitySave = translationActivity.save();
 
     let translationSubcaseSave;
-    if (
-      !this.translationSubcase.receivedDate ||
-      translationUpload.receivedDate < this.translationSubcase.receivedDate
-    ) {
-      this.translationSubcase.receivedDate = translationUpload.receivedDate;
-      translationSubcaseSave = this.translationSubcase.save();
-    }
-
     if (translationUpload.mustUpdatePublicationStatus) {
       yield this.publicationService.updatePublicationStatus(
         this.publicationFlow,
@@ -81,11 +75,6 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     translationActivity.endDate = translationEdit.receivedDate;
     saves.push(translationActivity.save());
 
-    if (translationEdit.receivedDate < this.translationSubcase.receivedDate) {
-      this.translationSubcase.receivedDate = translationEdit.receivedDate;
-    }
-    saves.push(this.translationSubcase.save());
-
     yield Promise.all(saves);
     this.send('refresh');
   }
@@ -101,7 +90,6 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     );
     yield Promise.all(
       uploadedPieces.map((piece) => {
-        piece.translationSubcaseSourceFor = this.translationSubcase;
         piece.language = dutch;
         return piece.save();
       })
@@ -152,11 +140,12 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     });
     yield mail.save();
 
-    // PUBLICATION-STATUS
-    yield this.publicationService.updatePublicationStatus(
-      this.publicationFlow,
-      CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_REQUESTED
-    );
+    if (translationRequest.mustUpdatePublicationStatus) {
+      yield this.publicationService.updatePublicationStatus(
+        this.publicationFlow,
+        CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_REQUESTED
+      );
+    }
 
     this.send('refresh');
     this.showTranslationRequestModal = false;

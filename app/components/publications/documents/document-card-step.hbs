@@ -1,4 +1,7 @@
-<Auk::Panel class={{if this.deletePiece.isRunning "vlc-document--deleted-state"}}>
+<Auk::Panel
+  data-test-document-card-step
+  class={{if this.deletePiece.isRunning "vlc-document--deleted-state"}}
+>
   <Auk::Panel::Body>
     <Auk::Toolbar @auto={{true}} as |Toolbar|>
       <Toolbar.Group @position="left" as |Group|>
@@ -8,7 +11,7 @@
           </p>
           <div class="auk-o-flex auk-o-flex--vertical-center vlc-u-box-model-maximize-width">
             <h6 class="auk-h4 auk-u-m-0 auk-u-mr-2">
-              {{@piece.name}}
+              {{@piece.file.downloadFilename}}
             </h6>
             <div>
               {{#if @piece.file}}

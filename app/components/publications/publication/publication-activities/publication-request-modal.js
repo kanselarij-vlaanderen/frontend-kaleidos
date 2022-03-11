@@ -13,6 +13,7 @@ export default class PublicationRequestModal extends Component {
   @tracked subject;
   @tracked message;
   @tracked uploadedPieces = [];
+  @tracked mustUpdatePublicationStatus = false;
 
   constructor() {
     super(...arguments);
@@ -46,6 +47,7 @@ export default class PublicationRequestModal extends Component {
       subject: this.subject,
       message: this.message,
       uploadedPieces: this.uploadedPieces,
+      mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
   }
 
@@ -55,18 +57,23 @@ export default class PublicationRequestModal extends Component {
     if (this.save.isRunning) {
       return;
     }
-    yield Promise.all(this.uploadedPieces.map((piece) => this.deleteUploadedPiece.perform(piece)));
+    yield Promise.all(
+      this.uploadedPieces.map((piece) =>
+        this.deleteUploadedPiece.perform(piece)
+      )
+    );
     this.args.onCancel();
   }
 
   @task
   *setEmailFields() {
     const publicationFlow = this.args.publicationFlow;
-    const [identification, numacNumbers, publicationSubcase] = yield Promise.all([
-      publicationFlow.identification,
-      publicationFlow.numacNumbers,
-      publicationFlow.publicationSubcase,
-    ]);
+    const [identification, numacNumbers, publicationSubcase] =
+      yield Promise.all([
+        publicationFlow.identification,
+        publicationFlow.numacNumbers,
+        publicationFlow.publicationSubcase,
+      ]);
 
     const mailParams = {
       identifier: identification.idName,
@@ -97,6 +104,11 @@ export default class PublicationRequestModal extends Component {
     });
 
     this.uploadedPieces.pushObject(piece);
+  }
+
+  @action
+  setPublicationRequestedStatus(event) {
+    this.mustUpdatePublicationStatus = event.target.checked;
   }
 
   @task
