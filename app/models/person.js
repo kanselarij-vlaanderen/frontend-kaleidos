@@ -1,6 +1,4 @@
-import Model, {
-  attr, hasMany, belongsTo
-} from '@ember-data/model';
+import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 import { deprecatingAlias } from '@ember/object/computed'; // eslint-disable-line
 
 export default class Person extends Model {

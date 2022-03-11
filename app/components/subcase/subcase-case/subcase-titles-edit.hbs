@@ -9,19 +9,6 @@
       />
     </div>
   </div>
-  <div class="auk-u-mb-2">
-    <Auk::Label>{{t "publicity"}}</Auk::Label>
-    <Utils::ModelSelector
-      data-test-subcase-titles-edit-access-level={{true}}
-      @modelName="access-level"
-      @allowClear={{true}}
-      @propertyToShow="label"
-      @readOnly={{@subcase.confidential}}
-      @sortField="label"
-      @selectedItems={{@subcase.accessLevel}}
-      @selectModel={{this.setAccessLevel}}
-    />
-  </div>
   <div class="auk-u-mb-4">
     <div class="auk-form-group">
       <Auk::Label id="name-subcase">{{t "name-subcase"}}</Auk::Label>

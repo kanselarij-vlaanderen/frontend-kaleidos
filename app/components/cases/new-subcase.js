@@ -148,7 +148,6 @@ export default class CasesNewSubcase extends Component {
     if (fullCopy) {
       subcase.linkedPieces = await latestSubcase.linkedPieces;
       subcase.subcaseName = latestSubcase.subcaseName;
-      subcase.accessLevel = await latestSubcase.accessLevel;
       subcase.showAsRemark = latestSubcase.showAsRemark;
       subcase.confidential = latestSubcase.confidential;
     } else {
