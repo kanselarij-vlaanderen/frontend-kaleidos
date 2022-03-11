@@ -76,7 +76,7 @@ export default class PublicationsPublicationProofsController extends Controller 
 
   @task
   *saveProofRequest(proofRequest) {
-    yield this.publicationService.createProofRequestActivity(
+    yield this.publicationService.createProofRequest(
       proofRequest,
       this.publicationFlow
     );
@@ -135,7 +135,7 @@ export default class PublicationsPublicationProofsController extends Controller 
 
   @task
   *savePublicationRequest(publicationRequest) {
-    yield this.publicationService.createPublicationRequestActivity(
+    yield this.publicationService.createPublicationRequest(
       publicationRequest,
       this.publicationFlow
     );

@@ -40,7 +40,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
 
   @task
   *saveRequest(publicationRequest) {
-    yield this.publicationService.createPublicationRequestActivity(
+    yield this.publicationService.createPublicationRequest(
       publicationRequest,
       this.publicationFlow
     );

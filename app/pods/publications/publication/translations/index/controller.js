@@ -174,7 +174,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
 
   @task
   *saveProofRequest(proofRequest) {
-    yield this.publicationService.createProofRequestActivity(
+    yield this.publicationService.createProofRequest(
       proofRequest,
       this.publicationFlow
     );
