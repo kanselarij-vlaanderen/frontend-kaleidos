@@ -7,70 +7,33 @@ import { task, dropTask } from 'ember-concurrency';
 import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
 import { publicationRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 
-export default class PublicationRequestModal extends Component {
+export default class PublicationsPublicationPublicationActivitiesPublicationRequestModal extends Component {
   @service store;
 
   @tracked subject;
   @tracked message;
-  @tracked transferredPieces = [];
   @tracked uploadedPieces = [];
+  @tracked transferredPieces = [];
   @tracked mustUpdatePublicationStatus = false;
+
+  validators;
 
   constructor() {
     super(...arguments);
-
-    this.initValidators();
-    this.loadData.perform();
+    this.loadProofPieces.perform();
     this.setEmailFields.perform();
-  }
-
-  @task
-  *loadData() {
-    let proofingActivity = this.args.proofingActivity;
-    if (!proofingActivity) {
-      proofingActivity = yield this.loadDefaultProofingActivity();
-    }
-
-    if (proofingActivity) {
-      let generatedPieces = yield proofingActivity.generatedPieces;
-      generatedPieces = generatedPieces.toArray();
-      this.transferredPieces = generatedPieces;
-    } else {
-      this.transferredPieces = [];
-    }
-  }
-
-  loadDefaultProofingActivity() {
-    return this.store.queryOne('proofing-activity', {
-      'filter[subcase][publication-flow][:id:]': this.args.publicationFlow.id,
-      // WORKAROUND: has any end date => isFinished
-      'filter[:gte:end-date]': '1302-07-11',
-      // eslint-disable-next-line prettier/prettier
-      include: [
-        'generated-pieces',
-        'generated-pieces.file',
-      ].join(','),
-      sort: '-start-date',
-    });
-  }
-
-  initValidators() {
-    this.validators = new ValidatorSet({
-      subject: new Validator(() => isPresent(this.subject)),
-      message: new Validator(() => isPresent(this.message)),
-      pieces: new Validator(() => this.pieces.length > 0),
-    });
+    this.initValidators();
   }
 
   get isLoading() {
     return (
-      this.loadData.isRunning || this.cancel.isRunning || this.save.isRunning
+      this.loadProofPieces.isRunning || this.cancel.isRunning || this.save.isRunning
     );
   }
 
   get isCancelDisabled() {
     return (
-      this.loadData.isRunning || this.cancel.isRunning || this.save.isRunning
+      this.loadProofPieces.isRunning || this.cancel.isRunning || this.save.isRunning
     );
   }
 
@@ -85,11 +48,47 @@ export default class PublicationRequestModal extends Component {
   }
 
   @task
+  *loadProofPieces() {
+    let proofingActivity = this.args.proofingActivity;
+    if (!proofingActivity) {
+      // Fetch latest finished proofing-activity
+      proofingActivity = yield this.store.queryOne('proofing-activity', {
+        'filter[subcase][publication-flow][:id:]': this.args.publicationFlow.id,
+        // Filter on end-date is a workaround to ensure end date exists
+        'filter[:gte:end-date]': '1302-07-11',
+        // eslint-disable-next-line prettier/prettier
+        include: [
+          'generated-pieces',
+          'generated-pieces.file',
+        ].join(','),
+        sort: '-start-date',
+      });
+    }
+
+    if (proofingActivity) {
+      let generatedPieces = yield proofingActivity.generatedPieces;
+      generatedPieces = generatedPieces.toArray();
+      generatedPieces = generatedPieces.sortBy('name', 'receivedDate');
+      this.transferredPieces = generatedPieces;
+    } else {
+      this.transferredPieces = [];
+    }
+  }
+
+  initValidators() {
+    this.validators = new ValidatorSet({
+      subject: new Validator(() => isPresent(this.subject)),
+      message: new Validator(() => isPresent(this.message)),
+      pieces: new Validator(() => this.pieces.length > 0),
+    });
+  }
+
+  @task
   *save() {
     yield this.args.onSave({
       subject: this.subject,
       message: this.message,
-      uploadedPieces: this.pieces,
+      uploadedPieces: [...this.pieces],
       mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
   }
@@ -149,16 +148,6 @@ export default class PublicationRequestModal extends Component {
     this.uploadedPieces.pushObject(piece);
   }
 
-  @action
-  unlinkTransferredPiece(piece) {
-    this.transferredPieces.removeObject(piece);
-  }
-
-  @action
-  setPublicationRequestedStatus(event) {
-    this.mustUpdatePublicationStatus = event.target.checked;
-  }
-
   @task
   *deleteUploadedPiece(piece) {
     this.uploadedPieces.removeObject(piece);
@@ -172,5 +161,15 @@ export default class PublicationRequestModal extends Component {
       documentContainer.destroyRecord(),
       piece.destroyRecord(),
     ]);
+  }
+
+  @action
+  unlinkTransferredPiece(piece) {
+    this.transferredPieces.removeObject(piece);
+  }
+
+  @action
+  setPublicationRequestedStatus(event) {
+    this.mustUpdatePublicationStatus = event.target.checked;
   }
 }
