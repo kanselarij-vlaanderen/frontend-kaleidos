@@ -77,6 +77,10 @@ const selectors = {
     next: '.auk-pagination__element:nth-child(3) > .auk-button-link',
   },
 
+  alertDialog: {
+    confirm: '[data-test-alert-dialog-confirm]',
+  },
+
   /** Section single selector AUK components **/
 
   checkbox: {

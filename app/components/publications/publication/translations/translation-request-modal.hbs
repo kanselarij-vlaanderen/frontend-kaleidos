@@ -48,6 +48,7 @@
                   {{t "number-of-words"}}
                 </Auk::Label>
                 <Auk::Input
+                  data-test-publication-documents-number-of-words
                   @type="number"
                   id="translationNumberOfWords"
                   @block={{true}}
@@ -117,6 +118,7 @@
     @onCancel={{perform this.cancel}}
   >
     <Auk::Button
+      data-test-publication-translation-request-save
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
       @loading={{this.save.isRunning}}

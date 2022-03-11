@@ -11,7 +11,7 @@
     />
     <Auk::List>
       {{#each this.uploadedPieces as |piece|}}
-        <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
+        <Auk::List::Item data-test-translation-upload-piece class="auk-o-flex auk-o-flex--spaced-wide">
           <div class="auk-o-flex auk-o-flex--spaced">
             <Auk::Badge @icon="paperclip" @size="regular" />
             <h5 class="auk-h4 auk-u-m-0">
@@ -29,6 +29,7 @@
     </Auk::List>
     <div class="auk-form-group auk-u-mt-4">
       <Auk::Checkbox
+        data-test-translation-upload-update-status
         @label={{t "update-publication-status-translation-received"}}
         @checked={{this.mustUpdatePublicationStatus}}
         {{on "input" this.setTranslationReceivedStatus}}
