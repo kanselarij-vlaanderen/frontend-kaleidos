@@ -7,15 +7,15 @@ import { task } from 'ember-concurrency-decorators';
  *
  * @argument translationActivity
  * @argument publicationFlow
- * @argument onUpdateTranslationActivity
+ * @argument onEditTranslationActivity
  */
 export default class PublicationsTranslationTranslationReceivedPanelComponent extends Component {
   @tracked isOpenTranslationEditModal = false;
   @tracked isOpenProofRequestModal = false;
 
   @task
-  *updateTranslationActivity(data) {
-    yield this.args.onUpdateTranslationActivity({
+  *editTranslationActivity(data) {
+    yield this.args.onEditTranslationActivity({
       translationActivity: this.args.translationActivity,
       receivedDate: data.receivedDate,
     });

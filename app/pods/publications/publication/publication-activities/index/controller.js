@@ -84,7 +84,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
   }
 
   @action
-  async updatePublication(publication) {
+  async editPublication(publication) {
     const decision = publication.decision;
     decision.publicationDate = publication.publicationDate;
 

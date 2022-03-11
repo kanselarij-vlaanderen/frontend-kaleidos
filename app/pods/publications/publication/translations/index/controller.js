@@ -68,7 +68,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   @task
-  *updateTranslationActivity(translationEdit) {
+  *editTranslationActivity(translationEdit) {
     const saves = [];
 
     const translationActivity = translationEdit.translationActivity;

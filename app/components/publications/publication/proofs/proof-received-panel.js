@@ -7,7 +7,7 @@ import { isEmpty } from '@ember/utils';
 /**
  * @argument {proofingActivity}
  * @argument {proofPrintCorrector} from publicationSubcase
- * @argument {onUpdateProofingActivity}
+ * @argument {onEditProofingActivity}
  */
 export default class PublicationsPublicationProofProofReceivedPanel extends Component {
   @tracked showEditProofModal = false;
@@ -26,7 +26,7 @@ export default class PublicationsPublicationProofProofReceivedPanel extends Comp
 
   @task
   *save() {
-    yield this.args.onUpdateProofingActivity({
+    yield this.args.onEditProofingActivity({
       proofingActivity: this.args.proofingActivity,
       receivedDate: this.newReceivedDate,
       proofPrintCorrector: this.newProofPrintCorrector,

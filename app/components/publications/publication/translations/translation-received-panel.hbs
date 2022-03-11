@@ -42,7 +42,7 @@
 {{#if this.isOpenTranslationEditModal}}
   <Publications::Publication::Translations::TranslationActivityEditModal
     @receivedDate={{@translationActivity.endDate}}
-    @onSave={{perform this.updateTranslationActivity}}
+    @onSave={{perform this.editTranslationActivity}}
     @onCancel={{this.closeTranslationEditModal}}
   />
 {{/if}}
