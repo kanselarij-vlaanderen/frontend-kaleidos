@@ -10,14 +10,7 @@ export default class CasesCaseSubcasesOverviewRoute extends Route {
   }
 
   model() {
-    return this.store.query('subcase', {
-      filter: {
-        case: {
-          id: this.case.id,
-        },
-      },
-      sort: '-created',
-    });
+    return this.modelFor('cases.case.subcases');
   }
 
   setupController(controller) {

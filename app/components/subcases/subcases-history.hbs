@@ -6,7 +6,7 @@
   </div>
 </div>
 {{#if (is-pending @subcases)}}
-  <WebComponents::VlLoader @text={{t "all-subcases-loading-text"}} />
+  <WebComponents::VlLoader @text={{t "subcases-loading"}} />
 {{else if @subcases.length}}
   {{#each @subcases as |subcase|}}
     <Subcases::SubcaseItem @subcase={{await subcase}} as |subcase|>

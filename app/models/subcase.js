@@ -1,5 +1,4 @@
 import { belongsTo, hasMany, attr } from '@ember-data/model';
-import { PromiseArray } from '@ember-data/store/-private';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -107,7 +106,8 @@ export default ModelWithModifier.extend({
   // TODO don't use this alias, only used in this model
   latestMeeting: alias('requestedForMeeting'),
 
-  // TODO don't use this computed, no more references currently?
+  // TODO don't use this computed, seems to be used somewhere, got error here in a very specific chain of events
+  // error hit when creating a subcase with no proposable agenda, making an agenda in other tab and then using the propose datepicker feature, no refreshes in between
   latestAgenda: computed('latestMeeting', 'latestMeeting.latestAgenda', async function() {
     const lastMeeting = await this.get('latestMeeting');
     return await lastMeeting.get('latestAgenda');
@@ -152,16 +152,6 @@ export default ModelWithModifier.extend({
       }
     }
     return false;
-  }),
-
-  // TODO don't use this computed, used in 1 route
-  subcasesFromCase: computed('case.subcases.[]', 'id', function() {
-    return PromiseArray.create({
-      //  We want to sort descending on date the subcase was concluded.
-      //  In practice, sorting on created will be close
-      promise: this.get('case').then((caze) => caze.get('subcases')
-        .then((subcases) => subcases.filter((subcase) => subcase.get('id') !== this.id).sort((subcaseA, subcaseB) => subcaseB.created - subcaseA.created))),
-    });
   }),
 
 });
