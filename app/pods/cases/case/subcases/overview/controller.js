@@ -16,7 +16,7 @@ export default class CasesCaseSubcasesOverviewController extends Controller {
   }
 
   @action
-  refreshModel() {
-    this.send('reloadModel');
+  refreshSubcases() {
+    this.send('refreshParentModel');
   }
 }

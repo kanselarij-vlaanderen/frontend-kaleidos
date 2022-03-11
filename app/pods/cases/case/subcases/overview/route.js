@@ -19,7 +19,7 @@ export default class CasesCaseSubcasesOverviewRoute extends Route {
   }
 
   @action
-  reloadModel() {
-    this.refresh();
+  refreshParentModel() {
+    this.send('refreshSubcasesRoute');
   }
 }
