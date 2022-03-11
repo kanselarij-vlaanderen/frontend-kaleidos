@@ -13,30 +13,13 @@ export default class SubcaseTitlesEdit extends Component {
   propertiesToSet = Object.freeze([
     'title',
     'shortTitle',
-    'accessLevel',
     'confidential',
   ]);
-
-  constructor() {
-    super(...arguments);
-    this.loadSubcase.perform();
-  }
-
-  @task
-  *loadSubcase() {
-    yield this.args.subcase.accessLevel;
-  }
 
   @action
   async cancelEditing() {
     cancelEdit(this.args.subcase, this.propertiesToSet);
     this.args.toggleIsEditing();
-  }
-
-  @action
-  setAccessLevel(accessLevel) {
-    // TODO KAS-3085 not possible to save accessLevel on subcase
-    this.accessLevel = accessLevel;
   }
 
   @task
@@ -51,7 +34,6 @@ export default class SubcaseTitlesEdit extends Component {
     const propertiesToSetOnSubcase = {
       title: trimmedTitle,
       shortTitle: trimmedShortTitle,
-      accessLevel: this.args.subcase.accessLevel,
       confidential: this.args.subcase.confidential,
     };
 
