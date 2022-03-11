@@ -29,6 +29,12 @@ export default class SettingsEmailController extends Controller {
     this.router.transitionTo('settings.overview');
   }
 
+  @task
+  cancel() {
+    this.model.rollbackAttributes();
+    this.router.transitionTo('settings.overview');
+  }
+
   get isDisabled() {
     return (
       isBlank(this.model.translationRequestToEmail) ||

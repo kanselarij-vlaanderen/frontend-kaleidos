@@ -86,17 +86,35 @@
             </div>
           </div>
         </div>
-
-        <Auk::Button
-          class="auk-u-mt-2 auk-u-mb-1"
-          @skin="primary"
-          @disabled={{this.isDisabled}}
-          @loading={{this.saveSettings.isRunning}}
-          {{on "click" (perform this.saveSettings)}}
-        >
-          {{t "save"}}
-        </Auk::Button>
       </Auk::Panel::Body>
+      <Auk::Panel::Footer>
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <Auk::ButtonLink
+                @skin="borderless"
+                @loading={{this.cancel.isRunning}}
+                @disable={{this.saveSettings.isRunning}}
+                {{on "click" (perform this.cancel)}}
+              >
+                {{t "cancel"}}
+              </Auk::ButtonLink>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <Auk::Button
+                @skin="primary"
+                @disabled={{this.isDisabled}}
+                @loading={{this.saveSettings.isRunning}}
+                {{on "click" (perform this.saveSettings)}}
+              >
+                {{t "save"}}
+              </Auk::Button>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </Auk::Panel::Footer>
     </Auk::Panel>
   </div>
 </div>
