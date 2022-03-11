@@ -226,6 +226,14 @@ export default class PublicationService extends Service {
     await newChangeActivity.save();
   }
 
+  /**
+   * @param {{
+   *  pieces: Piece[],
+   *  subject: string,
+   *  message: string
+   * }} proofRequestProperties
+   * @param {PublicationFlow} publicationFlow
+   */
   async createProofRequest(proofRequestProperties, publicationFlow) {
     const publicationSubcase = await publicationFlow.publicationSubcase;
     const now = new Date();
