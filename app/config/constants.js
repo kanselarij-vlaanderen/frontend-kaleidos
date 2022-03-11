@@ -30,8 +30,10 @@ export default {
     NOTA: 'http://kanselarij.vo.data.gift/id/concept/document-type-codes/9e5b1230-f3ad-438f-9c68-9d7b1b2d875d',
     VISIENOTA: 'http://kanselarij.vo.data.gift/id/concept/document-type-codes/52d8ce45-1954-48e7-9402-ac5ee3edbbc4',
     DECISION: 'http://kanselarij.vo.data.gift/id/concept/document-type-codes/2b73f8e2-b1f8-4cbd-927f-30c91759f08b',
-    DECREET: 'http://kanselarij.vo.data.gift/id/concept/document-type-codes/e4f73ddc-1ed6-4878-b9ed-ace55c0a8d64',
     DECISION_VR: 'http://kanselarij.vo.data.gift/id/concept/document-type-codes/4c7cfaf9-1d5f-4fdf-b7e9-b7ce5167e31a',
+    MB: 'https://data.vlaanderen.be/id/concept/AardWetgeving/MinisterieelBesluit',
+    DECREET: 'https://data.vlaanderen.be/id/concept/AardWetgeving/Decreet',
+    BVR: 'https://data.vlaanderen.be/id/concept/AardWetgeving/BesluitVanDeVlaamseRegering',
   },
   // TODO: despite the naming, these are actually agendaitem-types (nota, mededeling)
   // that get converted to booleans like `showAsRemark` and get assigned to subcases as a
@@ -83,5 +85,10 @@ export default {
   THEMIS_PUBLICATION_SCOPES: {
     NEWSITEMS: 'newsitems',
     DOCUMENTS: 'documents'
+  },
+  REGULATION_TYPES:{
+    MB: 'http://themis.vlaanderen.be/id/concept/regelgeving-type/49bad4d9-745b-4a71-b6c6-0eac34e6bdd4',
+    DECREET: 'http://themis.vlaanderen.be/id/concept/regelgeving-type/bf6101a9-d06b-44d4-b629-13965654c8c2',
+    BVR: 'http://themis.vlaanderen.be/id/concept/regelgeving-type/ea7f5f79-f81c-459b-a0f7-d8e90e2d9b88',
   }
 };

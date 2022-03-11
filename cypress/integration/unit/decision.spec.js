@@ -1,6 +1,7 @@
 /* global context, it, cy, beforeEach, afterEach, Cypress */
 // / <reference types="Cypress" />
 
+import route from '../../selectors/route.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
 import cases from '../../selectors/case.selectors';
@@ -203,5 +204,84 @@ context('Decision tests', () => {
       .contains(/Uitgesteld op de agenda van/);
     cy.get(cases.subcaseDescription.timelineItem).eq(3)
       .contains(/Er is beslist om dit agendapunt uit te stellen/);
+  });
+
+  it('should check if there is a decision on the report of previous agenda with status Approved', () => {
+    cy.openAgendaForDate(agendaDate);
+    cy.get(agenda.agendaOverviewItem.subitem).eq(0)
+      .click();
+    cy.get(agenda.agendaitemNav.decisionTab).click();
+    // check the default of an approval agendaitem, different code then note/anouncement
+    cy.get(agenda.decisionResultPill.pill).contains('Goedgekeurd');
+  });
+
+  it('should test the decision CRUD', () => {
+    const file = {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf',
+    };
+    const decicionTypes = [
+      'Akte genomen',
+      'Goedgekeurd',
+      'Uitgesteld',
+      'Ingetrokken'
+    ];
+
+    cy.openAgendaForDate(agendaDate);
+    cy.get(agenda.agendaOverviewItem.subitem).eq(0)
+      .click();
+    cy.get(agenda.agendaitemNav.decisionTab).click();
+    // CRUD of decisions
+    cy.get(agenda.agendaitemDecision.container).as('decision');
+    cy.get('@decision').should('have.length', 1);
+    // check if no delete when only one decision
+    cy.get('@decision').eq(0)
+      .within(() => {
+        cy.get(utils.dropdownMenu.options).should('not.exist');
+      });
+    // add decision without file
+    cy.get(route.agendaitemDecisions.addTreatment).click();
+    cy.get('@decision').should('have.length', 2);
+    // remove decision without file
+    cy.get('@decision').eq(0)
+      .within(() => {
+        cy.get(utils.dropdownMenu.options).click();
+        cy.get(agenda.agendaitemDecision.delete).click();
+      });
+    cy.intercept('DELETE', '/agenda-item-treatments/*').as('deleteDecision');
+    cy.get(utils.vlModalVerify.save).click();
+    cy.wait('@deleteDecision');
+    cy.get(agenda.agendaitemDecision.uploadFile).as('decisionList');
+    cy.get('@decision').should('have.length', 1);
+    // add decision with file
+    cy.get(route.agendaitemDecisions.addTreatment).click();
+    cy.get('@decision').should('have.length', 2);
+    cy.get(agenda.agendaitemDecision.uploadFile).eq(0)
+      .click();
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+    cy.get(utils.vlModalFooter.save).click();
+    // TODO better waits, flakys
+    cy.wait(2000);
+    // remove decision with file
+    cy.get('@decision').eq(0)
+      .within(() => {
+        cy.get(utils.dropdownMenu.options).click();
+        cy.get(agenda.agendaitemDecision.delete).click();
+      });
+    cy.intercept('GET', '/agenda-item-treatments?filter**').as('filterDecision');
+    cy.get(utils.vlModalVerify.save).click();
+    cy.wait('@deleteDecision');
+    cy.wait('@filterDecision');
+    cy.get('@decision').should('have.length', 1);
+    // switch between all decision results
+    decicionTypes.forEach((type) => {
+      cy.get('@decision').eq(0)
+        .find(agenda.agendaitemDecision.edit)
+        .click();
+      cy.get(dependency.emberPowerSelect.trigger).click();
+      cy.get(dependency.emberPowerSelect.option).contains(type)
+        .click();
+      cy.get(agenda.agendaitemDecisionEdit.save).click();
+      cy.get(agenda.decisionResultPill.pill).contains(type);
+    });
   });
 });

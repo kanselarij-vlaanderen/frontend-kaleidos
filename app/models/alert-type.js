@@ -1,8 +1,6 @@
 import Model, { attr } from '@ember-data/model';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes
-export default Model.extend({
-  label: attr('string'),
-  scopeNote: attr('string'),
-});
+export default class AlertType extends Model {
+  @attr('string') label;
+  @attr('string') scopeNote;
+}

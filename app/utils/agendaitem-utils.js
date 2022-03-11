@@ -15,7 +15,6 @@ export const cancelEdit = (agendaitemOrSubcase, propertiesToSet) => {
   }
   if (isSubcase) {
     agendaitemOrSubcase.belongsTo('type').reload();
-    agendaitemOrSubcase.belongsTo('accessLevel').reload();
   }
   agendaitemOrSubcase.reload();
   const keys = Object.keys(propertiesToSet);

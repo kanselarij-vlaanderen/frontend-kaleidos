@@ -9,6 +9,7 @@ const selectors = {
       save: '[data-test-document-card-name-save]',
       cancel: '[data-test-document-card-name-cancel]',
     },
+    pubLink: '[data-test-document-card-publication-link]',
     versionHistory: '[data-test-document-card-version-history]',
     actions: '[data-test-document-card-actions]',
     delete: '[data-test-document-card-delete]',
@@ -83,6 +84,7 @@ const selectors = {
   accessLevelPill: {
     // Clicking the pill in this component toggles edit mode
     pill: '[data-test-access-level-pill]',
+    selector: '[data-test-access-level-selector]',
     save: '[data-test-access-level-pill-save]',
     cancel: '[data-test-access-level-pill-cancel]',
   },
