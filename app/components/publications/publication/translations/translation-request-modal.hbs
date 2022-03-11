@@ -82,6 +82,7 @@
       </div>
       <div class="auk-form-group auk-u-mt-4">
         <Auk::Checkbox
+          data-test-publication-documents-update-status
           @label={{t "update-publication-status-translation-requested"}}
           @checked={{this.mustUpdatePublicationStatus}}
           {{on "input" this.setTranslationRequestedStatus}}
@@ -102,6 +103,7 @@
           {{t "message"}}
         </Auk::Label>
         <Auk::Textarea
+          data-test-publication-translation-request-message
           id="translationRequestMessage"
           rows="16"
           @value={{mut this.message}}

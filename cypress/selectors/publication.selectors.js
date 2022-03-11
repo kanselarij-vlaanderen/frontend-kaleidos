@@ -268,6 +268,7 @@ const selectors = {
   translationRequest: {
     numberOfPages: '[data-test-publication-documents-number-of-pages]',
     numberOfWords: '[data-test-publication-documents-number-of-words]',
+    updateStatus: '[data-test-publication-documents-update-status]',
     message: '[data-test-publication-translation-request-message]',
     save: '[data-test-publication-translation-request-save]',
     // TODO-SELECTOR unused selectors
@@ -365,6 +366,7 @@ const selectors = {
 
   // translation-received-panel
   translationReceivedPanel: {
+    panel: '[data-test-translation-received-panel]',
     endDate: '[data-test-translation-received-panel-end-date]',
     document: '[data-test-translation-received-panel-document]',
     dropdown: '[data-test-translation-received-panel-dropdown]',
@@ -389,6 +391,11 @@ const selectors = {
   // document-card-step
   documentCardStep: {
     card: '[data-test-document-card-step]',
+  },
+
+  // document-list
+  documentList: {
+    piece: '[data-test-document-list-piece]',
   },
 
 };
