@@ -196,6 +196,27 @@ function addPublicationDocuments(files) {
   cy.log('/addPublicationDocuments');
 }
 
+/**
+ * @description Opens the publicationsIndex config and checks each unchecked columnKey in the columnKeyNames array
+ * @name checkColumnsIfUnchecked
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {{columnKeyName: String}[]} columnKeyNames
+ */
+function checkColumnsIfUnchecked(columnKeyNames) {
+  cy.get(publication.publicationsIndex.configIcon).click();
+  columnKeyNames.forEach((columnKeyName) => {
+    cy.get(`[${publication.tableDisplayConfig.option}${columnKeyName}]`).invoke('prop', 'checked')
+      .then((checked) => {
+        if (!checked) {
+          cy.get(`[${publication.tableDisplayConfig.option}${columnKeyName}]`).parent(auk.checkbox)
+            .click();
+        }
+      });
+  });
+  cy.get(publication.tableDisplayConfig.close).click();
+}
+
 // ***********************************************
 // Commands
 Cypress.Commands.add('fillInNewPublicationFields', fillInNewPublicationFields);
@@ -203,3 +224,4 @@ Cypress.Commands.add('createPublication', createPublication);
 Cypress.Commands.add('createPublicationWithStatus', createPublicationWithStatus);
 Cypress.Commands.add('changePublicationStatus', changePublicationStatus);
 Cypress.Commands.add('addPublicationDocuments', addPublicationDocuments);
+Cypress.Commands.add('checkColumnsIfUnchecked', checkColumnsIfUnchecked);
