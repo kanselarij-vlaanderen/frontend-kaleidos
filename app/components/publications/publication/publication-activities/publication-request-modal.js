@@ -88,7 +88,7 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
     yield this.args.onSave({
       subject: this.subject,
       message: this.message,
-      uploadedPieces: [...this.pieces],
+      pieces: this.pieces,
       mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
   }

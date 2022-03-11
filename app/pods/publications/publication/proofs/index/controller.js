@@ -37,7 +37,7 @@ export default class PublicationsPublicationProofsController extends Controller 
     const proofingActivity = this.latestProofingActivity;
 
     const pieceSaves = [];
-    for (let piece of proofUpload.uploadedPieces) {
+    for (let piece of proofUpload.pieces) {
       piece.receivedDate = proofUpload.receivedDate;
       piece.proofingActivityGeneratedBy = proofingActivity;
       pieceSaves.push(piece.save());
