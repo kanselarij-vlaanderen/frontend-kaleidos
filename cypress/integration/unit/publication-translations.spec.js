@@ -33,8 +33,9 @@ context('Publications translation tests', () => {
     cy.get(publication.publicationNav.translations).click()
       .wait('@getTranslationsModel');
     cy.get(publication.statusPill.contentLabel).should('contain', 'Opgestart');
-    cy.get(auk.emptyState.message).contains(emptyStateMessage);
+    // page may not have transitioned yet
     cy.get(publication.translationsDocuments.upload).should('be.disabled');
+    cy.get(auk.emptyState.message).contains(emptyStateMessage);
 
     // check rollback after cancel request
     cy.get(publication.translationsDocuments.requestTranslation).click();
