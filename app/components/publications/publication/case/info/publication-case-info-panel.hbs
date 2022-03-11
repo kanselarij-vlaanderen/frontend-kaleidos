@@ -56,14 +56,14 @@
                   </Auk::Label>
                   <div class="auk-u-mb">
                     <Auk::Input
-                      data-test-publication-case-info-panel-publication-number
+                      data-test-publication-case-info-panel-edit-publication-number
                       @type="number"
                       value={{this.publicationNumber}}
                       @error={{this.publicationNumberErrorTranslationKey}}
                       {{on "input" (perform this.setPublicationNumber)}}
                     />
                     <Auk::Input
-                      data-test-publication-case-info-panel-publication-number-suffix
+                      data-test-publication-case-info-panel-edit-publication-number-suffix
                       @width="xsmall"
                       value={{this.publicationNumberSuffix}}
                       @error={{this.publicationNumberErrorTranslationKey}}
@@ -85,7 +85,7 @@
 
               {{! Numac-nummers}}
               <div class="auk-o-grid-col-4">
-                <div data-test-publication-case-info-panel-numac-number class="auk-form-group">
+                <div data-test-publication-case-info-panel-edit-numac-number class="auk-form-group">
                   <Auk::Label>
                     {{t "publication-flow-numac-number"}}
                   </Auk::Label>
@@ -104,7 +104,7 @@
               {{! Datum beslissing }}
               <div class="auk-o-grid-col-4 auk-u-mt-2">
                 <div
-                  data-test-publication-case-info-panel-decision-date
+                  data-test-publication-case-info-panel-edit-decision-date
                   class="auk-form-group"
                 >
                   <Auk::Label>{{t "decision-date"}}</Auk::Label>
@@ -141,7 +141,7 @@
               {{! Datum ontvangst }}
               <div class="auk-o-grid-col-4 auk-u-mt-2">
                 <div
-                  data-test-publication-case-info-panel-opening-date
+                  data-test-publication-case-info-panel-edit-opening-date
                   class="auk-form-group"
                 >
                   <Auk::Label>{{t "publication-flow-opening-date"}}</Auk::Label>
@@ -166,7 +166,7 @@
               {{! Limiet publicatie }}
               <div class="auk-o-grid-col-4 auk-u-mt-2">
                 <div
-                  data-test-publication-case-info-panel-publication-due-date
+                  data-test-publication-case-info-panel-edit-publication-due-date
                   class="auk-form-group"
                 >
                   <Auk::Label>
@@ -211,7 +211,7 @@
           {{! Publicatienummer}}
           <div class="auk-o-grid-col-2 auk-content">
             <h4 class="auk-u-m-0">{{t "publication-number"}}</h4>
-            <p class="auk-u-m-0">
+            <p data-test-publication-case-info-panel-publication-number class="auk-u-m-0">
               {{@publicationFlow.identification.idName}}
             </p>
           </div>
@@ -219,7 +219,7 @@
           {{! Numac-nummers}}
           <div class="auk-o-grid-col-2 auk-content">
             <h4 class="auk-u-m-0">{{t "publication-flow-numac-number"}}</h4>
-            <p class="auk-u-m-0">
+            <p data-test-publication-case-info-panel-numac-number class="auk-u-m-0">
               {{#if @publicationFlow.numacNumbers}}
                 {{join ", " (map-by "idName" @publicationFlow.numacNumbers)}}
               {{else}}
@@ -234,6 +234,7 @@
             <p class="auk-u-m-0">
               {{#if this.isViaCouncilOfMinisters}}
                 <Auk::ButtonLink
+                  data-test-publication-case-info-panel-start-date
                   target="_blank"
                   @icon="chevron-right"
                   @layout="icon-right"
@@ -269,7 +270,7 @@
           {{! Datum ontvangst}}
           <div class="auk-o-grid-col-2 auk-content">
             <h4 class="auk-u-m-0">{{t "publication-flow-opening-date"}}</h4>
-            <p class="auk-u-m-0">
+            <p data-test-publication-case-info-panel-opening-date class="auk-u-m-0">
               {{#if @publicationFlow.openingDate}}
                 {{moment-format @publicationFlow.openingDate "DD-MM-YYYY"}}
               {{else}}
@@ -281,7 +282,7 @@
           {{! Limiet publicatie}}
           <div class="auk-o-grid-col-2 auk-content">
             <h4 class="auk-u-m-0">{{t "publication-flow-publication-due-date"}}</h4>
-            <p class="auk-u-m-0">
+            <p data-test-publication-case-info-panel-due-date class="auk-u-m-0">
               {{#if @publicationFlow.publicationSubcase.dueDate}}
                 {{moment-format @publicationFlow.publicationSubcase.dueDate "DD-MM-YYYY"}}
               {{else}}
@@ -310,7 +311,7 @@
           <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
               <Auk::Button
-                data-test-publication-case-info-panel-edit-cancel
+                data-test-publication-case-info-panel-cancel
                 @skin="borderless"
                 @loading={{this.closeEditingPanel.isRunning}}
                 @disable={{this.save.isRunning}}

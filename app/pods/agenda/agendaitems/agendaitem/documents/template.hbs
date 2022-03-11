@@ -27,7 +27,11 @@
       {{/if}}
       {{#if this.isShownOpenPublicationModal}}
         <Auk::Toolbar::Item>
-          <Auk::Button @icon="copy" {{on "click" this.openPublicationModal}}>
+          <Auk::Button
+            data-test-route-agenda---agendaitem-documents-open-publication
+            @icon="copy"
+            {{on "click" this.openPublicationModal}}
+          >
             {{t "agendaitem-documents-documents-for-publication"}}
           </Auk::Button>
         </Auk::Toolbar::Item>

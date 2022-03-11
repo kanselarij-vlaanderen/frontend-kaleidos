@@ -33,10 +33,10 @@ context('Publications overview tests', () => {
     cy.get(publication.remark.save).click();
     cy.wait('@patchPublicationFlow');
     cy.get(publication.publicationCaseInfo.edit).click();
-    cy.get(publication.publicationCaseInfo.numacNumber).find(dependency.emberTagInput.input)
+    cy.get(publication.publicationCaseInfo.editView.numacNumber).find(dependency.emberTagInput.input)
       .click()
       .type(`${searchFields.numacNumber}{enter}`);
-    cy.get(publication.publicationCaseInfo.save).click();
+    cy.get(publication.publicationCaseInfo.editView.save).click();
     cy.wait('@postNumacNumber');
   });
 

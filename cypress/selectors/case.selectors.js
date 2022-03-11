@@ -81,7 +81,6 @@ const selectors = {
   subcaseTitlesEdit: {
     title: '[data-test-subcase-titles-edit-title]',
     shorttitle: '[data-test-subcase-titles-edit-shorttitle]',
-    accessLevel: '[data-test-subcase-titles-edit-access-level]',
     confidential: '[data-test-subcase-titles-edit-confidential]',
     actions: {
       save: '[data-test-subcase-titles-edit-save]',
