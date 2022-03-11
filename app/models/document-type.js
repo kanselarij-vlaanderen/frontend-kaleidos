@@ -1,6 +1,7 @@
 import Model, { hasMany, attr } from '@ember-data/model';
 
 export default class DocumentType extends Model {
+  @attr('string') uri;
   @attr('string') label;
   @attr('string') scopeNote;
   @attr('number') priority;
