@@ -93,9 +93,8 @@
             <Auk::Toolbar::Item>
               <Auk::ButtonLink
                 @skin="borderless"
-                @loading={{this.cancel.isRunning}}
-                @disable={{this.saveSettings.isRunning}}
-                {{on "click" (perform this.cancel)}}
+                @disable={{this.save.isRunning}}
+                {{on "click" this.cancel}}
               >
                 {{t "cancel"}}
               </Auk::ButtonLink>
@@ -106,8 +105,8 @@
               <Auk::Button
                 @skin="primary"
                 @disabled={{this.isDisabled}}
-                @loading={{this.saveSettings.isRunning}}
-                {{on "click" (perform this.saveSettings)}}
+                @loading={{this.save.isRunning}}
+                {{on "click" (perform this.save)}}
               >
                 {{t "save"}}
               </Auk::Button>
