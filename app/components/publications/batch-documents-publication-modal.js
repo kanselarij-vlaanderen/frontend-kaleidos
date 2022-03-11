@@ -118,10 +118,10 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   }
 
   async getRegulationTypeThroughReferenceDocument(referenceDocument) {
-    let regulationType;
     const documentContainer = await referenceDocument.documentContainer;
     const documentType = await documentContainer.type;
-    switch (documentType.uri) {
+    let regulationType;
+    switch (documentType?.uri) {
       case CONSTANTS.DOCUMENT_TYPES.DECREET:
         regulationType = await this.store.findRecordByUri(
           'regulation-type',
@@ -139,6 +139,9 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
           'regulation-type',
           CONSTANTS.REGULATION_TYPES.MB
         );
+        break;
+      default:
+        regulationType = undefined;
         break;
     }
     return regulationType;
