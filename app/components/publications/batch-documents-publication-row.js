@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { task } from 'ember-concurrency';
 
 /**
  * @argument {Piece} piece
@@ -41,21 +42,28 @@ export default class PublicationsBatchDocumentsPublicationRowComponent extends C
     );
   }
 
-  @action
-  selectLinkModeOption(option) {
+  get isLinkingRunning() {
+    return (
+      this.selectLinkModeOption.isRunning ||
+      this.selectPublicationFlow.isRunning
+    );
+  }
+
+  @task
+  *selectLinkModeOption(option) {
     this.selectedLinkModeOption = option;
 
     if (!option.isEnabledLink) {
-      this.args.onUnlinkPublicationFlow(this.args.piece);
+      yield this.args.onUnlinkPublicationFlow(this.args.piece);
     }
   }
 
-  @action
-  selectPublicationFlow(publicationFlow) {
+  @task
+  *selectPublicationFlow(publicationFlow) {
     if (publicationFlow) {
-      this.args.onLinkPublicationFlow(this.args.piece, publicationFlow);
+      yield this.args.onLinkPublicationFlow(this.args.piece, publicationFlow);
     } else {
-      this.args.onUnlinkPublicationFlow(this.args.piece);
+      yield this.args.onUnlinkPublicationFlow(this.args.piece);
     }
   }
 }

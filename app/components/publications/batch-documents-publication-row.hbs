@@ -5,34 +5,40 @@
   <td>
     {{@piece.documentContainer.type.label}}
   </td>
-  <td>
-    <PowerSelect
-      data-test-batch-documents-publication-row-link-option
-      @selected={{this.selectedLinkModeOption}}
-      @options={{this.linkModeOptions}}
-      @onChange={{this.selectLinkModeOption}}
-      as |option|
-    >
-      {{option.label}}
-    </PowerSelect>
-  </td>
-  <td>
-    {{#if this.selectedLinkModeOption.isEnabledLink}}
-      <Publications::PublicationFlowSelector
-        @selected={{this.selectedPublicationFlow}}
-        @case={{@case}}
-        @onChange={{this.selectPublicationFlow}}
-      />
-    {{else}}
-      <Auk::Button
-        data-test-batch-documents-publication-row-new
-        @icon="plus"
-        {{on "click" (fn @onOpenNewPublicationModal @piece)}}
+  {{#if this.isLinkingRunning}}
+    <td colspan="2" class="auk-u-text-align--center">
+      <Auk::Loader />
+    </td>
+  {{else}}
+    <td>
+      <PowerSelect
+        data-test-batch-documents-publication-row-link-option
+        @selected={{this.selectedLinkModeOption}}
+        @options={{this.linkModeOptions}}
+        @onChange={{perform this.selectLinkModeOption}}
+        as |option|
       >
-        {{t "publications-new"}}
-      </Auk::Button>
-    {{/if}}
-  </td>
+        {{option.label}}
+      </PowerSelect>
+    </td>
+    <td>
+      {{#if this.selectedLinkModeOption.isEnabledLink}}
+        <Publications::PublicationFlowSelector
+          @selected={{this.selectedPublicationFlow}}
+          @case={{@case}}
+          @onChange={{perform this.selectPublicationFlow}}
+        />
+      {{else}}
+        <Auk::Button
+          data-test-batch-documents-publication-row-new
+          @icon="plus"
+          {{on "click" (fn @onOpenNewPublicationModal @piece)}}
+        >
+          {{t "publications-new"}}
+        </Auk::Button>
+      {{/if}}
+    </td>
+  {{/if}}
   <td>
     <WebComponents::AuButtonToolbar>
       <Auk::Button
