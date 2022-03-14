@@ -1,9 +1,7 @@
 <div data-test-subcase-item-container class="vlc-procedure-step">
   <div class="vlc-procedure-step__badge-wrapper">
     {{#if (is-pending @subcase.approved)}}
-      <Auk::Badge
-        @size="medium"
-      />
+      <Auk::Badge @size="medium" />
     {{else if (await @subcase.approved)}}
       <Auk::Badge
         @skin="success"
@@ -43,14 +41,18 @@
           {{#if this.requestedForMeeting.plannedStart}}
             <p>
               {{t "on-agenda"}}
-              {{moment-format this.requestedForMeeting.plannedStart "DD.MM.YYYY"}}
+              {{moment-format
+                this.requestedForMeeting.plannedStart
+                "DD.MM.YYYY"
+              }}
             </p>
           {{/if}}
         </div>
         <ul class="vlc-status-timeline">
           {{#each (await @subcase.phases) as |phase|}}
             {{#if (await phase.label)}}
-              <li class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+              <li
+                class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
               >
                 <div class="vlc-status-timeline__dot"></div>
                 <div class="vlc-status-timeline__text">
@@ -77,7 +79,9 @@
             <Auk::Loader />
           </div>
         {{else}}
-          <Documents::DocumentBadgeList @pieces={{this.limitedSubcaseDocuments}}/>
+          <Documents::DocumentBadgeList
+            @pieces={{this.limitedSubcaseDocuments}}
+          />
           {{#if this.enableShowMore}}
             <Auk::ButtonLink
               @icon={{if this.isShowingAllDocuments "dash" "plus"}}

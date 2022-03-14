@@ -43,10 +43,14 @@ export default class SubcaseItemSubcasesComponent extends Component {
 
   get nameToShow() {
     if (this.args.subcase.subcaseName) {
-      return `${this.intl.t('in-function-of')} ${this.args.subcase.subcaseName}`;
-    } if (this.args.subcase.shortTitle) {
+      return `${this.intl.t('in-function-of')} ${
+        this.args.subcase.subcaseName
+      }`;
+    }
+    if (this.args.subcase.shortTitle) {
       return this.args.subcase.shortTitle;
-    } if (this.args.subcase.title) {
+    }
+    if (this.args.subcase.title) {
       return this.args.subcase.title;
     }
     return this.intl.t('subcase-without-title');

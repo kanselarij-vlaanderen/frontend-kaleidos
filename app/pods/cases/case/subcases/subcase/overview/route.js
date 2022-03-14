@@ -10,7 +10,9 @@ export default class CasesCaseSubcasesSubcaseOverviewRoute extends Route {
   async afterModel(model) {
     // For showing the history of subcases within this route, we need a list of subcases without the current model
     const allSubcases = this.modelFor('cases.case.subcases');
-    this.siblingSubcases = allSubcases.filter((subcase) => subcase.id !== model.id);
+    this.siblingSubcases = allSubcases.filter(
+      (subcase) => subcase.id !== model.id
+    );
     this.mandatees = (await model.mandatees).sortBy('priority');
     this.submitter = await model.requestedBy;
     this.governmentAreas = await this.case.governmentAreas;
