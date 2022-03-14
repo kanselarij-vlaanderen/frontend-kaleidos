@@ -268,6 +268,7 @@ export default class PublicationService extends Service {
     ]);
     const mail = await this.store.createRecord('email', {
       to: mailSettings.proofRequestToEmail,
+      cc: mailSettings.proofRequestCcEmail,
       from: mailSettings.defaultFromEmail,
       folder: outbox,
       attachments: files,
@@ -332,8 +333,8 @@ export default class PublicationService extends Service {
       this.store.queryOne('email-notification-setting'),
     ]);
     const mail = this.store.createRecord('email', {
-      to: mailSettings.proofRequestToEmail,
-      cc: mailSettings.proofRequestCcEmail,
+      to: mailSettings.publicationRequestToEmail,
+      cc: mailSettings.publicationRequestCcEmail,
       from: mailSettings.defaultFromEmail,
       folder: outbox,
       attachments: files,
