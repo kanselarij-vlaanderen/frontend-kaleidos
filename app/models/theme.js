@@ -1,15 +1,7 @@
-import Model, { hasMany, attr } from '@ember-data/model';
+import Model, { attr } from '@ember-data/model';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes
-export default Model.extend({
-  label: attr('string'),
-  scopeNote: attr('string'),
-  subcase: hasMany('subcase', {
-    inverse: null,
-  }),
-  agendaitem: hasMany('subcase', {
-    inverse: null,
-  }),
-  deprecated: attr('boolean'),
-});
+export default class Theme extends Model {
+  @attr('string') label;
+  @attr('string') scopeNote;
+  @attr('boolean') deprecated;
+}
