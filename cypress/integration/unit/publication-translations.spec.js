@@ -1,8 +1,9 @@
 /* global context, it, cy, Cypress, beforeEach, afterEach */
 
 // / <reference types="Cypress" />
-import publication from '../../selectors/publication.selectors';
 import auk from '../../selectors/auk.selectors';
+import publication from '../../selectors/publication.selectors';
+import utils from '../../selectors/utils.selectors';
 
 context('Publications translation tests', () => {
   beforeEach(() => {
@@ -67,8 +68,16 @@ context('Publications translation tests', () => {
     // after updating pages and words, the text of the message updates, but cypress is faster then the update
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.intercept('POST', 'pieces').as('createNewPiece');
+    cy.intercept('POST', 'request-activities').as('createRequestActivity');
+    cy.intercept('PATCH', 'translation-subcases/**').as('patchTranslationSubcase');
+    cy.intercept('POST', 'emails').as('createEmail');
+    cy.intercept('GET', 'request-activities/**/translation-activity').as('getTranslationsActivity');
     cy.get(publication.translationRequest.save).click();
-    cy.wait('@createNewPiece');
+    cy.wait('@createNewPiece')
+      .wait('@createRequestActivity')
+      .wait('@patchTranslationSubcase')
+      .wait('@createEmail')
+      .wait('@getTranslationsActivity');
     cy.get(publication.statusPill.contentLabel).should('contain', 'Opgestart');
     cy.get(publication.requestActivityPanel.message)
       .contains(`VO-dossier: ${fields.number}`)
@@ -83,7 +92,7 @@ context('Publications translation tests', () => {
     cy.intercept('DELETE', '/files/*').as('deleteFiles');
     cy.intercept('DELETE', '/document-containers/*').as('deleteDocumentContainers');
     cy.intercept('DELETE', '/request-activities/*').as('deleteRequestActivities');
-    cy.get(auk.alertDialog.confirm).click()
+    cy.get(utils.alertDialog.confirm).click()
       .wait('@deleteTranslation')
       .wait('@deleteEmails')
       .wait('@deleteFiles')
@@ -104,8 +113,18 @@ context('Publications translation tests', () => {
     cy.get(publication.translationRequest.updateStatus).parent('label')
       .click();
     cy.intercept('POST', 'pieces').as('createNewPiece');
+    cy.intercept('POST', 'request-activities').as('createRequestActivity');
+    cy.intercept('PATCH', 'translation-subcases/**').as('patchTranslationSubcase');
+    cy.intercept('POST', 'emails').as('createEmail');
+    cy.intercept('GET', 'request-activities/**/translation-activity').as('getTranslationsActivity');
+    cy.intercept('PATCH', '/publication-flows/*').as('patchPublicationFlows');
     cy.get(publication.translationRequest.save).click();
-    cy.wait('@createNewPiece');
+    cy.wait('@createNewPiece')
+      .wait('@createRequestActivity')
+      .wait('@patchTranslationSubcase')
+      .wait('@createEmail')
+      .wait('@patchPublicationFlows')
+      .wait('@getTranslationsActivity');
     cy.get(publication.statusPill.contentLabel).should('contain', 'Naar vertaaldienst');
     // check upload translation
     cy.get(publication.translationsDocuments.upload).click();
@@ -113,7 +132,7 @@ context('Publications translation tests', () => {
     cy.intercept('PATCH', '/translation-activities/*').as('patchTranslationActivities');
     cy.intercept('GET', '/pieces/**').as('getPieces');
     cy.intercept('GET', '/translation-activities?filter**subcase**').as('reloadTranslationModel');
-    cy.get(auk.modal.container).find(publication.documentList.piece)
+    cy.get(auk.modal.container).find(publication.documentsList.piece)
       .should('have.length', 1);
     cy.get(publication.translationUpload.save).click()
       .wait('@patchTranslationActivities')
@@ -140,7 +159,7 @@ context('Publications translation tests', () => {
     //  upload second translation
     cy.get(publication.translationsDocuments.upload).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(auk.modal.container).find(publication.documentList.piece)
+    cy.get(auk.modal.container).find(publication.documentsList.piece)
       .should('have.length', 1);
     cy.get(publication.translationUpload.updateStatus).parent('label')
       .click();
@@ -157,7 +176,7 @@ context('Publications translation tests', () => {
       .wait('@patchPublicationFlows')
       .wait('@postPublicationStatusChanges');
     cy.get(publication.statusPill.contentLabel).should('contain', 'Vertaling in');
-    cy.get(publication.translationReceivedPanel.panel).find(publication.documentList.piece)
+    cy.get(publication.translationReceivedPanel.panel).find(publication.documentsList.piece)
       .should('have.length', 2);
   });
 });

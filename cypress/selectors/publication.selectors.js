@@ -29,18 +29,11 @@ const selectors = {
   //   requests: '[data-test-route-publications---translations-tab-requests]',
   // },
 
-  // publications\publication\translations\index\documents\template
+  // publications\publication\translations\index\template
+  // TODO KAS-3248 Rename to translationsIndex
   translationsDocuments: {
-    upload: '[data-test-route-publications---upload-translation]',
-    requestTranslation: '[data-test-route-publications---translations-documents-request-translation]',
-  // tableRow: '[data-test-route-publications---translations-documents-table-row]',
-  // row: {
-  //   checkbox: '[data-test-route-publications---translations-documents-row-checkbox]',
-  //   documentName: '[data-test-route-publications---translations-documents-row-document-name]',
-  //   options: '[data-test-route-publications---translations-documents-row-options]',
-  //   edit: '[data-test-route-publications---translations-documents-row-edit]',
-  //   delete: '[data-test-route-publications---translations-documents-row-delete]',
-  //   },
+    upload: '[data-test-route-publications---translations-upload-translation]',
+    requestTranslation: '[data-test-route-publications---translations-request-translation]',
   },
 
   // publications\publication\proofs\documents\template
@@ -124,10 +117,11 @@ const selectors = {
     goBack: '[data-test-publication-nav-go-back]',
     decisions: '[data-test-publication-nav-decisions]',
     translations: '[data-test-publication-nav-translations]',
+    // TODO KAS-2348 rename to proofs
     publishpreview: '[data-test-publication-nav-publishpreview]',
-    activities: '[data-test-publication-nav-activities]',
     // TODO-SELECTOR unused selectors
     case: '[data-test-publication-nav-case]',
+    publications: '[data-test-publication-nav-publications]',
   },
 
   // publication-table-row
@@ -266,13 +260,11 @@ const selectors = {
 
   // translation-request-modal
   translationRequest: {
-    numberOfPages: '[data-test-publication-documents-number-of-pages]',
-    numberOfWords: '[data-test-publication-documents-number-of-words]',
-    updateStatus: '[data-test-publication-documents-update-status]',
+    numberOfPages: '[data-test-publication-translation-request-number-of-pages]',
+    numberOfWords: '[data-test-publication-translation-request-number-of-words]',
+    updateStatus: '[data-test-publication-translation-request-update-status]',
     message: '[data-test-publication-translation-request-message]',
     save: '[data-test-publication-translation-request-save]',
-    // TODO-SELECTOR unused selectors
-    documentsList: '[data-test-publication-translation-request-documents-list]',
   },
 
   // document-edit-modal
@@ -352,6 +344,7 @@ const selectors = {
 
   // publication-info-panel
   publicationsInfoPanel: {
+    // TODO-SELECTOR unused selectors
     edit: '[data-test-publications-info-panel-edit]',
     targetEndDate: '[data-test-publications-info-panel-target-end-date]',
     save: '[data-test-publications-info-panel-save]',
@@ -368,7 +361,6 @@ const selectors = {
   translationReceivedPanel: {
     panel: '[data-test-translation-received-panel]',
     endDate: '[data-test-translation-received-panel-end-date]',
-    document: '[data-test-translation-received-panel-document]',
     dropdown: '[data-test-translation-received-panel-dropdown]',
     edit: '[data-test-translation-received-panel-edit]',
   },
@@ -393,8 +385,8 @@ const selectors = {
     card: '[data-test-document-card-step]',
   },
 
-  // document-list
-  documentList: {
+  // publication-documents-list
+  documentsList: {
     piece: '[data-test-document-list-piece]',
   },
 

@@ -12,7 +12,7 @@
         <Toolbar.Group @position="right" as |Group|>
           <Group.Item>
             <Auk::Button
-              data-test-route-publications---upload-translation
+              data-test-route-publications---translations-upload-translation
               @skin="secondary"
               @icon="plus"
               @disabled={{this.isTranslationUploadDisabled}}
@@ -23,7 +23,7 @@
           </Group.Item>
           <Group.Item>
             <Auk::Button
-              data-test-route-publications---translations-documents-request-translation
+              data-test-route-publications---translations-request-translation
               @skin="primary"
               @icon="plus"
               {{on "click" this.openTranslationRequestModal}}
@@ -44,7 +44,6 @@
               @badgeSkin="primary"
               @event={{event}} as |event|>
               <Publications::Publication::RequestActivityPanel
-                data-test-route-publications---translations-documents-delete-request
                 @title={{t "requested-translation"}}
                 @requestActivity={{event.activity}}
                 @isDisabledDelete={{event.activity.translationActivity.isFinished}}

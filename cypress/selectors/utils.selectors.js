@@ -101,6 +101,9 @@ const selectors = {
     options: '[data-test-dropdown-menu-options]',
   },
 
+  alertDialog: {
+    confirm: '[data-test-alert-dialog-confirm]',
+  },
 
   /** Section VL-components **/
 
