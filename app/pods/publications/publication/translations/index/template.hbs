@@ -56,7 +56,9 @@
               <Publications::Publication::Translations::TranslationReceivedPanel
                 @translationActivity={{event.activity}}
                 @publicationFlow={{this.publicationFlow}}
-                @onUpdateTranslationActivity={{perform this.updateTranslationActivity}}
+                @onEditTranslationActivity={{perform
+                  this.editTranslationActivity
+                }}
                 @onCreateProofRequest={{perform this.saveProofRequest}}
               />
             </Utils::Timeline::Event>

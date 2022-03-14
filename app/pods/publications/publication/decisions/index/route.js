@@ -27,6 +27,7 @@ export default class PublicationsPublicationDecisionsIndexRoute extends Route {
   }
 
   setupController(ctrl) {
+    super.setupController(...arguments);
     ctrl.publicationFlow = this.publicationFlow;
     ctrl.isViaCouncilOfMinisters = this.isViaCouncilOfMinisters;
   }
