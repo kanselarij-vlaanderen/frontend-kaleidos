@@ -78,11 +78,6 @@ export default ModelWithModifier.extend({
     return 'No name found.';
   }),
 
-  // TODO don't use this computed, no more references currently?
-  sortedMandatees: computed('mandatees.[]', function() {
-    return this.get('mandatees').sortBy('priority');
-  }),
-
   // TODO don't use this computed, refactor subcase-header.js
   hasActivity: computed('agendaActivities', 'agendaActivities.[]', async function() {
     const activities = await this.get('agendaActivities');
@@ -100,32 +95,11 @@ export default ModelWithModifier.extend({
     });
   }),
 
-  // TODO don't use this alias, only used in this model
-  latestMeeting: alias('requestedForMeeting'),
-
-  // TODO don't use this computed, seems to be used somewhere, got error here in a very specific chain of events
-  // error hit when creating a subcase with no proposable agenda, making an agenda in other tab and then using the propose datepicker feature, no refreshes in between
-  latestAgenda: computed('latestMeeting', 'latestMeeting.latestAgenda', async function() {
-    const lastMeeting = await this.get('latestMeeting');
-    return await lastMeeting.get('latestAgenda');
-  }),
-
-  // TODO don't use this computed, no more references currently?
-  latestAgendaitem: computed('latestActivity.agendaitems.[]', 'agendaActivities.@each.agendaitems', async function() {
-    const latestActivity = await this.get('latestActivity');
-    if (latestActivity) {
-      await latestActivity.hasMany('agendaitems').reload();
-      const latestAgendaitem = await latestActivity.get('latestAgendaitem');
-      return latestAgendaitem;
-    }
-    return null;
-  }),
-
   // TODO don't use this computed, refactor subcase-item.hbs
-  onAgendaInfo: computed('latestMeeting', async function() {
-    const latestMeeting = await this.get('latestMeeting');
-    if (latestMeeting) {
-      return latestMeeting.plannedStart;
+  onAgendaInfo: computed('requestedForMeeting', async function() {
+    const requestedForMeeting = await this.get('requestedForMeeting');
+    if (requestedForMeeting) {
+      return requestedForMeeting.plannedStart;
     }
     return null;
   }),
