@@ -35,9 +35,7 @@ export default ModelWithModifier.extend({
   }),
 
   type: belongsTo('subcase-type'),
-  case: belongsTo('case', {
-    inverse: null,
-  }),
+  case: belongsTo('case'),
   requestedForMeeting: belongsTo('meeting', {
     inverse: null,
   }),
