@@ -41,7 +41,6 @@ export default class SubcaseItemSubcasesComponent extends Component {
     return this.subcaseDocuments.length > this.documentListSize;
   }
 
-  // only used here, could be moved to subcase model
   get nameToShow() {
     if (this.args.subcase.subcaseName) {
       return `${this.intl.t('in-function-of')} ${this.args.subcase.subcaseName}`;
