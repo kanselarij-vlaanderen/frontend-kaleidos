@@ -4,12 +4,12 @@
   <div class="auk-u-mb-3">
     <Auk::Panel>
       <Auk::Panel::Header>
-        <Auk::Toolbar>
-          <Auk::Toolbar::Group @position="left">
-            <Auk::Toolbar::Item>
+        <Auk::Toolbar as |Toolbar|>
+          <Toolbar.Group @position="left" as |Group|>
+            <Group.Item>
               <h4 class="auk-panel__title">{{t "manage-emails"}}</h4>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
+            </Group.Item>
+          </Toolbar.Group>
         </Auk::Toolbar>
       </Auk::Panel::Header>
       <Auk::Panel::Body>
@@ -88,9 +88,9 @@
         </div>
       </Auk::Panel::Body>
       <Auk::Panel::Footer>
-        <Auk::Toolbar>
-          <Auk::Toolbar::Group @position="left">
-            <Auk::Toolbar::Item>
+        <Auk::Toolbar as |Toolbar|>
+          <Toolbar.Group @position="left" as |Group|>
+            <Group.Item>
               <Auk::ButtonLink
                 @skin="borderless"
                 @disable={{this.save.isRunning}}
@@ -98,10 +98,10 @@
               >
                 {{t "cancel"}}
               </Auk::ButtonLink>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-          <Auk::Toolbar::Group @position="right">
-            <Auk::Toolbar::Item>
+            </Group.Item>
+          </Toolbar.Group>
+          <Toolbar.Group @position="right" as |Group|>
+            <Group.Item>
               <Auk::Button
                 @skin="primary"
                 @disabled={{this.isDisabled}}
@@ -110,8 +110,8 @@
               >
                 {{t "save"}}
               </Auk::Button>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
+            </Group.Item>
+          </Toolbar.Group>
         </Auk::Toolbar>
       </Auk::Panel::Footer>
     </Auk::Panel>
