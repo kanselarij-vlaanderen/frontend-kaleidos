@@ -19,6 +19,11 @@ export default class Datepicker extends Component {
     return this.args.date || null;
   }
 
+  get onChange() {
+    // Return 'null' as a default since <EmberFlatpickr> doesn't handle 'undefined'.
+    return this.args.onChange || null;
+  }
+
   get placeholder() {
     return this.args.placeholder || 'Kies een datum';
   }

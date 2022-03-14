@@ -65,11 +65,13 @@ export default class PublicationService extends Service {
     let case_;
     let agendaItemTreatment;
     let mandatees;
+    let regulationType;
     const isViaCouncilOfMinisters = !!viaCouncilOfMinisterOptions;
     if (isViaCouncilOfMinisters) {
       case_ = viaCouncilOfMinisterOptions.case;
       agendaItemTreatment = viaCouncilOfMinisterOptions.agendaItemTreatment;
       mandatees = viaCouncilOfMinisterOptions.mandatees;
+      regulationType = viaCouncilOfMinisterOptions.regulationType;
     } else {
       case_ = this.store.createRecord('case', {
         shortTitle: publicationProperties.shortTitle,
@@ -129,6 +131,7 @@ export default class PublicationService extends Service {
       created: now,
       openingDate: publicationProperties.openingDate,
       modified: now,
+      regulationType: regulationType
     });
     await publicationFlow.save();
     const translationSubcase = this.store.createRecord('translation-subcase', {
@@ -274,7 +277,10 @@ export default class PublicationService extends Service {
     }
   }
 
-  async createPublicationRequestActivity(publicationRequestProperties, publicationFlow) {
+  async createPublicationRequestActivity(
+    publicationRequestProperties,
+    publicationFlow
+  ) {
     const publicationSubcase = await publicationFlow.publicationSubcase;
     const now = new Date();
 
@@ -292,13 +298,16 @@ export default class PublicationService extends Service {
     });
     await requestActivity.save();
 
-    const publicationActivity = this.store.createRecord('publication-activity', {
-      startDate: now,
-      title: publicationRequestProperties.subject,
-      subcase: publicationSubcase,
-      requestActivity: requestActivity,
-      usedPieces: uploadedPieces,
-    });
+    const publicationActivity = this.store.createRecord(
+      'publication-activity',
+      {
+        startDate: now,
+        title: publicationRequestProperties.subject,
+        subcase: publicationSubcase,
+        requestActivity: requestActivity,
+        usedPieces: uploadedPieces,
+      }
+    );
     await publicationActivity.save();
 
     const [files, outbox, mailSettings] = await Promise.all([

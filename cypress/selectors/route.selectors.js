@@ -55,6 +55,7 @@ const selectors = {
   // agenda/agendaitems/agendaitem/documents/template
   agendaitemDocuments: {
     batchEdit: '[data-test-route-agenda---agendaitem-documents-batch-edit]',
+    openPublication: '[data-test-route-agenda---agendaitem-documents-open-publication]',
     add: '[data-test-route-agenda---agendaitem-documents-add]',
   },
 

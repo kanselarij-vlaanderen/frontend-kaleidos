@@ -20,9 +20,13 @@
 @import 'auk-icons'; // sourced from "au-kaleidos-icons" npm package
 
 
+// WEBUNIVERSUM 2 LEGACY STYLING
+@import 'wu/wu-legacy'; // partly copied from "lblod/ember-vo-webuniversum" npm package (needed for "lblod/ember-vo-webuniversum-data-table")
+
+
 // GOVFLANDERS COMPONENTS
 @import 'govflanders/components/_alert';
-@import 'govflanders/components/_datepicker';
+// @import 'govflanders/components/_datepicker';
 @import 'govflanders/components/_upload';
 
 
@@ -34,7 +38,6 @@
 @import 'custom-components/vlc-document-list';
 @import 'custom-components/vlc-environment-pill';
 @import 'custom-components/vlc-procedure-step';
-@import 'custom-components/vlc-rdfa-editor';
 @import 'custom-components/vlc-status-timeline';
 
 
@@ -53,7 +56,9 @@
 
 // EXTERNAL ADDON OVERRIDES
 @import 'addon-overrides/ember-data-table';
+@import 'addon-overrides/ember-flatpickr';
 @import 'addon-overrides/ember-power-select';
+@import 'addon-overrides/ember-rdfa-editor';
 @import 'addon-overrides/ember-tag-input';
 @import 'addon-overrides/ember-tooltip';
 

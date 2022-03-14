@@ -67,7 +67,7 @@ context('Subcase tests', () => {
     cy.addSubcase(type, subcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
 
-    cy.changeSubcaseAccessLevel(true, 'Intern Overheid', subcaseTitleShort, 'Cypress test nieuwere lange titel');
+    cy.changeSubcaseAccessLevel(true, subcaseTitleShort, 'Cypress test nieuwere lange titel');
     cy.addSubcaseMandatee(2, 'Crevits');
     cy.addSubcaseMandatee(3);
 
@@ -181,7 +181,7 @@ context('Subcase tests', () => {
     // Assert status also hidden
     cy.get(route.subcaseOverview.confidentialityCheckBox).should('not.be.checked');
     cy.intercept('PATCH', '/agendaitems/*').as('patchAgendaitem');
-    cy.changeSubcaseAccessLevel(true, 'Intern Overheid') // CHECK na save in agendaitem
+    cy.changeSubcaseAccessLevel(true) // CHECK na save in agendaitem
       .wait('@patchAgendaitem');
 
     cy.get(route.subcaseOverview.confidentialityCheckBox).should('be.checked');
