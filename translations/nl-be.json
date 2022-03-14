@@ -387,7 +387,7 @@
   "continue": "Doorgaan",
   "warning-title": "Opgelet!",
   "show-minutes": "Verslag openen",
-  "subcases-loading": "De procedurestappen worden geladen..",
+  "subcase-without-title": "Deze procedurestap heeft geen geldige titel",
   "documents-loading-text": "De documenten worden geladen..",
   "documents-uploading-text": "De documenten worden opgeladen..",
   "document-uploading-text": "Het document wordt opgeladen..",

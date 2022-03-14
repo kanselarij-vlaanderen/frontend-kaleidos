@@ -26,29 +26,24 @@
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
         <div class="auk-u-mb-2">
-          {{#if (not (is-pending @subcase))}}
-            <LinkTo
-              data-test-subcase-item-link
-              @route="cases.case.subcases.subcase.overview"
-              @models={{array
-                (await @subcase.case.id)
-                (await @subcase.id)
-              }}
-              class="auk-h4"
-            >
-              {{await @subcase.nameToShow}}
-            </LinkTo>
-          {{/if}}
+          <LinkTo
+            data-test-subcase-item-link
+            @route="cases.case.subcases.subcase.overview"
+            @models={{array @case.id @subcase.id}}
+            class="auk-h4"
+          >
+            {{this.nameToShow}}
+          </LinkTo>
         </div>
         <div class="vlc-procedure-step__meta">
           <p>
             {{t "latest-modified"}}
-            {{moment-format (await @subcase.modified) "DD.MM.YYYY"}}
+            {{moment-format @subcase.modified "DD.MM.YYYY"}}
           </p>
-          {{#if (await @subcase.onAgendaInfo)}}
+          {{#if this.requestedForMeeting.plannedStart}}
             <p>
               {{t "on-agenda"}}
-              {{moment-format (await @subcase.onAgendaInfo) "DD.MM.YYYY"}}
+              {{moment-format this.requestedForMeeting.plannedStart "DD.MM.YYYY"}}
             </p>
           {{/if}}
         </div>
@@ -68,7 +63,9 @@
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
-  {{yield @subcase}}
+
+  {{yield}}
+
   {{#if this.hasDocumentsToShow}}
     <Auk::Accordion>
       <Auk::Accordion::Item

@@ -5,11 +5,9 @@
     </h4>
   </div>
 </div>
-{{#if (is-pending @subcases)}}
-  <WebComponents::VlLoader @text={{t "subcases-loading"}} />
-{{else if @subcases.length}}
+{{#if @subcases.length}}
   {{#each @subcases as |subcase|}}
-    <Subcases::SubcaseItem @subcase={{await subcase}} as |subcase|>
+    <Subcases::SubcaseItem @case={{@case}} @subcase={{subcase}}>
       <div class="auk-hr">
         <hr/>
       </div>

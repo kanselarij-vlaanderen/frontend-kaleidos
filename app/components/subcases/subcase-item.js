@@ -7,15 +7,23 @@ import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class SubcaseItemSubcasesComponent extends Component {
+  /**
+   * @argument case
+   * @argument subcase
+   */
+
   @service store;
+  @service intl;
 
   @tracked isShowingAllDocuments = false;
   @tracked hasDocumentsToShow = false;
   @tracked subcaseDocuments;
+  @tracked requestedForMeeting;
 
   constructor() {
     super(...arguments);
     this.updateHasDocumentsToShow.perform();
+    this.loadRelatedMeeting.perform();
   }
 
   get documentListSize() {
@@ -33,6 +41,18 @@ export default class SubcaseItemSubcasesComponent extends Component {
     return this.subcaseDocuments.length > this.documentListSize;
   }
 
+  // only used here, could be moved to subcase model
+  get nameToShow() {
+    if (this.args.subcase.subcaseName) {
+      return `${this.intl.t('in-function-of')} ${this.args.subcase.subcaseName}`;
+    } if (this.args.subcase.shortTitle) {
+      return this.args.subcase.shortTitle;
+    } if (this.args.subcase.title) {
+      return this.args.subcase.title;
+    }
+    return this.intl.t('subcase-without-title');
+  }
+
   @task
   *updateHasDocumentsToShow() {
     const doc = yield this.store.queryOne('submission-activity', {
@@ -40,6 +60,11 @@ export default class SubcaseItemSubcasesComponent extends Component {
       'filter[:has:pieces]': 'true',
     });
     this.hasDocumentsToShow = doc !== null;
+  }
+
+  @task
+  *loadRelatedMeeting() {
+    this.requestedForMeeting = yield this.args.subcase.requestedForMeeting;
   }
 
   @task

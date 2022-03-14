@@ -7,7 +7,7 @@
 />
 <div class="auk-scroll-wrapper__body">
   {{#if this.model}}
-    <Subcases::SubcasesProcess @subcases={{this.model}} />
+    <Subcases::SubcasesProcess @case={{this.case}} @subcases={{this.model}} />
   {{else}}
     <div class="auk-u-m-8">
       <Auk::EmptyState @message={{t "no-subcases"}} />

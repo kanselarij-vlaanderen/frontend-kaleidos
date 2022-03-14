@@ -63,21 +63,6 @@ export default ModelWithModifier.extend({
     return null;
   }),
 
-  // TODO don't use this computed, use getter instead, used in subcase-item.hbs
-  nameToShow: computed('subcaseName', function() {
-    const {
-      subcaseName, title, shortTitle,
-    } = this;
-    if (subcaseName) {
-      return `${this.intl.t('in-function-of')} ${subcaseName}`;
-    } if (shortTitle) {
-      return shortTitle;
-    } if (title) {
-      return title;
-    }
-    return 'No name found.';
-  }),
-
   // TODO don't use this computed, refactor subcase-header.js
   hasActivity: computed('agendaActivities', 'agendaActivities.[]', async function() {
     const activities = await this.get('agendaActivities');
@@ -93,15 +78,6 @@ export default ModelWithModifier.extend({
       'filter[agenda-activity][subcase][:id:]': this.get('id'),
       'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
     });
-  }),
-
-  // TODO don't use this computed, refactor subcase-item.hbs
-  onAgendaInfo: computed('requestedForMeeting', async function() {
-    const requestedForMeeting = await this.get('requestedForMeeting');
-    if (requestedForMeeting) {
-      return requestedForMeeting.plannedStart;
-    }
-    return null;
   }),
 
   // TODO don't use this computed, used in 5 places, make util?
