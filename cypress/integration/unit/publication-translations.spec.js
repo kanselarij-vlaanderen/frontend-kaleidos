@@ -118,7 +118,8 @@ context('Publications translation tests', () => {
     cy.get(publication.translationUpload.save).click()
       .wait('@patchTranslationActivities')
       .wait('@getPieces')
-      .wait('@reloadTranslationModel');
+      .wait('@reloadTranslationModel')
+      .wait(500); // the model reloaded but not fully processed, making DOM elements reload.
     cy.get(publication.statusPill.contentLabel).should('contain', 'Naar vertaaldienst');
     // check edit and rollback
     cy.get(publication.translationReceivedPanel.endDate).contains(translationEndDate.format('DD.MM.YYYY'));
