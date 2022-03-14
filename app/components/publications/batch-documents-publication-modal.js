@@ -77,23 +77,29 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
   @task
   *saveNewPublication(publicationProperties) {
+    yield this.performSaveNewPublication(publicationProperties);
+
+    this.referenceDocument = null;
+    this.isOpenNewPublicationModal = false;
+  }
+
+  // separate method: prevent incomplete save
+  async performSaveNewPublication(publicationProperties) {
+    const regulationType = await this.getRegulationTypeThroughReferenceDocument(
+      this.referenceDocument
+    );
     const publicationFlow =
-      yield this.publicationService.createNewPublicationFromMinisterialCouncil(
+      await this.publicationService.createNewPublicationFromMinisterialCouncil(
         publicationProperties,
         {
           case: this.case,
           agendaItemTreatment: this.agendaItemTreatment,
           mandatees: this.mandatees,
-          regulationType: yield this.getRegulationTypeThroughReferenceDocument(
-            this.referenceDocument
-          ),
+          regulationType: regulationType,
         }
       );
     this.referenceDocument.publicationFlow = publicationFlow;
-    yield this.referenceDocument.save();
-
-    this.referenceDocument = null;
-    this.isOpenNewPublicationModal = false;
+    await this.referenceDocument.save();
   }
 
   @action
