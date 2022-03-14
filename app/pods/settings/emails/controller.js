@@ -6,7 +6,6 @@ import { task } from 'ember-concurrency-decorators';
 
 export default class SettingsEmailController extends Controller {
   @service router;
-  @service store;
 
   @task
   *save() {
