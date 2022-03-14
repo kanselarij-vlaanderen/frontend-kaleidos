@@ -55,7 +55,7 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
   @task
   *save() {
     yield this.args.onSave({
-      uploadedPieces: this.uploadedPieces,
+      pieces: this.uploadedPieces,
       receivedDate: this.receivedDate,
       mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });

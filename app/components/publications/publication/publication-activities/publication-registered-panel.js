@@ -34,8 +34,8 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRegi
   }
 
   @task
-  *updatePublication(data) {
-    yield this.args.onUpdatePublicationActivity({
+  *editPublication(data) {
+    yield this.args.onEditPublicationActivity({
       decision: this.latestDecision,
       publicationDate: data.publicationDate,
     });

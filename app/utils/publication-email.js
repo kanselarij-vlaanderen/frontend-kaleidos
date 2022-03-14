@@ -37,14 +37,14 @@ function translationRequestEmail(params) {
 }
 
 function proofRequestEmail(params) {
-   const subject = `Publicatieaanvraag VO-dossier: ${params.identifier} - ${params.shortTitle}`;
+   const subject = `Drukproefaanvraag VO-dossier: ${params.identifier} - ${params.shortTitle}`;
    const message = 'Beste,\n'
       + '\n'
       + 'In bijlage voor drukproef:\n'
       + `Titel: ${params.longTitle}\t\n`
       + `VO-dossier: ${params.identifier}\n`
       + '\n'
-      + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\t\n';
+      + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand emailadres.\t\n';
   return {
     subject: subject,
     message: [message, footer].join('\n\n'),
@@ -58,7 +58,7 @@ function publicationRequestEmail(params) {
   const numacNumbers = params.numacNumbers
         ? params.numacNumbers.mapBy('idName').join(', ')
         : '-';
-  const subject = `Verbeterde drukproef BS-werknr: ${numacNumbers} VO-dossier: ${params.identifier}`;
+  const subject = `Publicatieaanvraag BS-werknr: ${numacNumbers} VO-dossier: ${params.identifier}`;
   const message = 'Beste,\n'
     + '\n'
     + 'Hierbij de verbeterde drukproef :\n'
@@ -68,7 +68,7 @@ function publicationRequestEmail(params) {
     + '\n'
     + `De gewenste datum van publicatie is: ${targetEndDate}\t\n`
     + '\t\n'
-    + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\t\n';
+    + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand emailadres.\t\n';
   return {
     subject,
     message: [message, footer].join('\n\n'),
