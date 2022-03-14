@@ -9,7 +9,7 @@ import { action } from '@ember/object';
  * @argument {function(Piece, PublicationFlow)} onLinkPublicationFlow
  * @argument {function(Piece)} onUnlinkPublicationFlow
  * @argument {function(Piece)} onOpenNewPublicationModal
-*/
+ */
 export default class PublicationsBatchDocumentsPublicationRowComponent extends Component {
   @service intl;
 
@@ -21,7 +21,7 @@ export default class PublicationsBatchDocumentsPublicationRowComponent extends C
     {
       isEnabledLink: false,
       label: this.intl.t('none'),
-    }
+    },
   ];
 
   @tracked selectedLinkModeOption;
@@ -36,7 +36,9 @@ export default class PublicationsBatchDocumentsPublicationRowComponent extends C
   async initSelectedOptions() {
     this.selectedPublicationFlow = await this.args.piece.publicationFlow;
     const isEnabledLink = !!this.selectedPublicationFlow;
-    this.selectedLinkModeOption = this.linkModeOptions.find((opt) => opt.isEnabledLink === isEnabledLink);
+    this.selectedLinkModeOption = this.linkModeOptions.find(
+      (opt) => opt.isEnabledLink === isEnabledLink
+    );
   }
 
   @action

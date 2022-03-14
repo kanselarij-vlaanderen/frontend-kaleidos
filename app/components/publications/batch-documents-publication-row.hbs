@@ -11,7 +11,8 @@
       @selected={{this.selectedLinkModeOption}}
       @options={{this.linkModeOptions}}
       @onChange={{this.selectLinkModeOption}}
-      as |option|>
+      as |option|
+    >
       {{option.label}}
     </PowerSelect>
   </td>
@@ -21,12 +22,13 @@
         @selected={{this.selectedPublicationFlow}}
         @case={{@case}}
         @onChange={{this.selectPublicationFlow}}
-        />
+      />
     {{else}}
       <Auk::Button
         data-test-batch-documents-publication-row-new
         @icon="plus"
-        {{on 'click' (fn @onOpenNewPublicationModal @piece)}}>
+        {{on "click" (fn @onOpenNewPublicationModal @piece)}}
+      >
         {{t "publications-new"}}
       </Auk::Button>
     {{/if}}
