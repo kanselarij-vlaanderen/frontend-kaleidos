@@ -1,7 +1,7 @@
 <div class="auk-u-m-4">
   {{page-title (t "translation")}}
   <Publications::Publication::Translations::TranslationsInfoPanel
-    @translationSubcase={{@model}}
+    @translationSubcase={{this.model}}
     @isFinal={{this.publicationFlow.status.isFinal}}
   />
   {{outlet}}

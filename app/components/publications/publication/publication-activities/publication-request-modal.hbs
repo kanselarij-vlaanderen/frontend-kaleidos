@@ -22,6 +22,11 @@
             @onUpload={{this.uploadPiece}}
           />
           <Publications::Publication::PublicationDocumentsList
+            @pieces={{this.transferredPieces}}
+            @viewable={{true}}
+            @onDeletePiece={{this.unlinkTransferredPiece}}
+          />
+          <Publications::Publication::PublicationDocumentsList
             @pieces={{this.uploadedPieces}}
             @onDeletePiece={{perform this.deleteUploadedPiece}}
           />

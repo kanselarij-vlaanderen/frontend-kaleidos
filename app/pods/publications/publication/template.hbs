@@ -1,5 +1,5 @@
 {{page-title
-  (concat (t "publication-flow") " " @model.identification.idName)
+  (concat (t "publication-flow") " " this.model.identification.idName)
 }}
 <Auk::Navbar @skin="gray-100" @auto={{true}}>
   <Auk::Toolbar>
@@ -7,7 +7,7 @@
       <Auk::Toolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
           <span class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
-            <Publications::EditablePublicationStatusPill @publicationFlow={{@model}} />
+            <Publications::EditablePublicationStatusPill @publicationFlow={{this.model}} />
             <span class="auk-overline auk-u-text-muted" data-test-route-publications-publication-header-number>
               {{uppercase (t "publication-flow")}}
               -
@@ -17,13 +17,13 @@
                 {{uppercase (t "not-via-cabinet")}}
               {{/if}}
               -
-              {{uppercase @model.identification.idName}}
+              {{uppercase this.model.identification.idName}}
             </span>
           </span>
           <Auk::AbbreviatedText
             @text={{or
-            @model.shortTitle
-            @model.longTitle
+            this.model.shortTitle
+            this.model.longTitle
           }}
             @maxLength={{150}}
             as |abbreviatedText|>
@@ -34,7 +34,7 @@
               {{abbreviatedText}}
             </div>
           </Auk::AbbreviatedText>
-          <Publications::Publication::PublicationNavigation @publicationFlow={{@model}} />
+          <Publications::Publication::PublicationNavigation @publicationFlow={{this.model}} />
         </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>

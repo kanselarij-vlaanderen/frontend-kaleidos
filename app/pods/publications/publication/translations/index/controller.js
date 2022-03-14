@@ -35,7 +35,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     const pieceSaves = [];
 
     const language = yield translationActivity.language;
-    for (let piece of translationUpload.uploadedPieces) {
+    for (let piece of translationUpload.pieces) {
       piece.receivedDate = translationUpload.receivedDate;
       piece.language = language;
       piece.translationActivityGeneratedBy = translationActivity;
@@ -68,7 +68,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   @task
-  *updateTranslationActivity(translationEdit) {
+  *editTranslationActivity(translationEdit) {
     const saves = [];
 
     const translationActivity = translationEdit.translationActivity;
@@ -83,13 +83,13 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   *saveTranslationRequest(translationRequest) {
     const now = new Date();
 
-    const uploadedPieces = translationRequest.uploadedPieces;
+    const pieces = translationRequest.pieces;
     const dutch = yield this.store.findRecordByUri(
       'language',
       CONSTANTS.LANGUAGES.NL
     );
     yield Promise.all(
-      uploadedPieces.map((piece) => {
+      pieces.map((piece) => {
         piece.language = dutch;
         return piece.save();
       })
@@ -98,7 +98,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     const requestActivity = this.store.createRecord('request-activity', {
       startDate: now,
       translationSubcase: this.translationSubcase,
-      usedPieces: uploadedPieces,
+      usedPieces: pieces,
     });
     yield requestActivity.save();
 
@@ -110,7 +110,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
         title: translationRequest.subject,
         subcase: this.translationSubcase,
         requestActivity: requestActivity,
-        usedPieces: uploadedPieces,
+        usedPieces: pieces,
         language: yield this.store.findRecordByUri(
           'language',
           CONSTANTS.LANGUAGES.FR
@@ -125,7 +125,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     }
 
     const [files, outbox, mailSettings] = yield Promise.all([
-      Promise.all(uploadedPieces.mapBy('file')),
+      Promise.all(pieces.mapBy('file')),
       this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
       this.store.queryOne('email-notification-setting'),
     ]);
@@ -174,7 +174,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
 
   @task
   *saveProofRequest(proofRequest) {
-    yield this.publicationService.createProofRequestActivity(
+    yield this.publicationService.createProofRequest(
       proofRequest,
       this.publicationFlow
     );

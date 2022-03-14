@@ -6,17 +6,23 @@ import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationProofsController extends Controller {
+  @service router;
   @service store;
   @service publicationService;
 
   @tracked publicationFlow;
   @tracked publicationSubcase;
+  @tracked publicationActivitiesCount;
 
   @tracked showProofUploadModal = false;
   @tracked showProofRequestModal = false;
 
   get isProofUploadDisabled() {
     return this.latestProofingActivity == null;
+  }
+
+  get isCreatePublicationRequestDisabled() {
+    return this.publicationActivitiesCount > 0;
   }
 
   get latestProofingActivity() {
@@ -31,7 +37,7 @@ export default class PublicationsPublicationProofsController extends Controller 
     const proofingActivity = this.latestProofingActivity;
 
     const pieceSaves = [];
-    for (let piece of proofUpload.uploadedPieces) {
+    for (let piece of proofUpload.pieces) {
       piece.receivedDate = proofUpload.receivedDate;
       piece.proofingActivityGeneratedBy = proofingActivity;
       pieceSaves.push(piece.save());
@@ -70,7 +76,7 @@ export default class PublicationsPublicationProofsController extends Controller 
 
   @task
   *saveProofRequest(proofRequest) {
-    yield this.publicationService.createProofRequestActivity(
+    yield this.publicationService.createProofRequest(
       proofRequest,
       this.publicationFlow
     );
@@ -90,8 +96,7 @@ export default class PublicationsPublicationProofsController extends Controller 
 
     const pieces = yield requestActivity.usedPieces;
     for (const piece of pieces.toArray()) {
-      // The pieces that are used in the translationActivity can not be deleted,
-      // but should be unlinked
+      // The pieces that are used in a translationActivity can not be deleted
       const [translationActivitiesUsedBy, translationActivityGeneratedBy] =
         yield Promise.all([
           piece.translationActivitiesUsedBy,
@@ -114,7 +119,7 @@ export default class PublicationsPublicationProofsController extends Controller 
   }
 
   @task
-  *updateProofingActivity(proofEdit) {
+  *editProofingActivity(proofEdit) {
     const saves = [];
 
     const proofingActivity = proofEdit.proofingActivity;
@@ -126,6 +131,16 @@ export default class PublicationsPublicationProofsController extends Controller 
 
     yield Promise.all(saves);
     this.send('refresh');
+  }
+
+  @task
+  *savePublicationRequest(publicationRequest) {
+    yield this.publicationService.createPublicationRequest(
+      publicationRequest,
+      this.publicationFlow
+    );
+
+    this.router.transitionTo('publications.publication.publication-activities');
   }
 
   @action

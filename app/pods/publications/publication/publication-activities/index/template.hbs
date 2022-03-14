@@ -34,28 +34,32 @@
   </Auk::Panel::Header>
 
   <Auk::Panel::Body class="auk-u-bg-alt">
-    {{#each @model as |event|}}
+    {{#each this.model as |event|}}
       {{#if event.isShown}}
         {{#if event.isRequestActivity}}
           <Utils::Timeline::Event
             @badgeIcon="mail"
             @badgeSkin="primary"
-            @event={{event}} as |event|>
+            @event={{event}}
+            as |event|
+          >
             <Publications::Publication::RequestActivityPanel
               @title={{t "requested-publication"}}
               @requestActivity={{event.activity}}
               @isDisabledDelete={{event.activity.publicationActivity.isFinished}}
-              @onDeleteRequest={{fn this.deleteRequest event.activity}}
+              @onDeleteRequest={{perform this.deleteRequest event.activity}}
             />
           </Utils::Timeline::Event>
         {{else if event.isPublicationActivity}}
           <Utils::Timeline::Event
             @badgeIcon="check"
             @badgeSkin="success"
-            @event={{event}} as |event|>
+            @event={{event}}
+            as |event|
+          >
             <Publications::Publication::PublicationActivities::PublicationRegisteredPanel
               @publicationActivity={{event.activity}}
-              @onUpdatePublicationActivity={{this.updatePublication}}
+              @onEditPublicationActivity={{this.editPublication}}
             />
           </Utils::Timeline::Event>
         {{/if}}

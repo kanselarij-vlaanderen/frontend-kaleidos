@@ -38,7 +38,7 @@
 {{#if this.isOpenPublicationEditModal}}
   <Publications::Publication::PublicationActivities::PublicationEditModal
     @publicationDate={{this.latestDecision.publicationDate}}
-    @onSave={{perform this.updatePublication}}
+    @onSave={{perform this.editPublication}}
     @onCancel={{this.closePublicationEditModal}}
   />
 {{/if}}
