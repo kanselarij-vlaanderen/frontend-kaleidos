@@ -8,7 +8,10 @@
     @onClose={{@onCancel}}
   />
   <Auk::Modal::Body>
-    <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
+    <Utils::LoadableContent
+      @isLoading={{this.save.isRunning}}
+      @reserveSpace={{true}}
+    >
       {{#unless this.isViaCouncilOfMinisters}}
         <Auk::Alert
           data-test-new-publication-alert-info
@@ -18,7 +21,11 @@
       {{/unless}}
       <div class="auk-form-group-layout auk-form-group-layout--standard">
         <div class="auk-form-group">
-          <Auk::Label for="publicationNumberInput" @required={{true}} @error={{not this.isPublicationNumberValid}}>
+          <Auk::Label
+            for="publicationNumberInput"
+            @required={{true}}
+            @error={{not this.isPublicationNumberValid}}
+          >
             {{t "publication-number"}}
           </Auk::Label>
           <div class="auk-u-mb">
@@ -52,7 +59,11 @@
           {{/if}}
         </div>
         <div class="auk-form-group">
-          <Auk::Label for="shortTitleInput" @required={{true}} @error={{this.isShownShortTitleError}}>
+          <Auk::Label
+            for="shortTitleInput"
+            @required={{true}}
+            @error={{this.isShownShortTitleError}}
+          >
             {{t "name-subcase"}}
           </Auk::Label>
           <Auk::Textarea
@@ -94,7 +105,8 @@
             {{else}}
               <Auk::Datepicker
                 @date={{this.decisionDate}}
-                @onChange={{this.setDecisionDate}} />
+                @onChange={{this.setDecisionDate}}
+              />
             {{/if}}
           </div>
           <div class="auk-o-grid-col-1 auk-form-group">
@@ -108,7 +120,8 @@
             {{else}}
               <Auk::Datepicker
                 @date={{this.openingDate}}
-                @onChange={{this.setOpeningDate}} />
+                @onChange={{this.setOpeningDate}}
+              />
             {{/if}}
           </div>
           <div class="auk-o-grid-col-1 auk-form-group">
@@ -117,7 +130,8 @@
             </Auk::Label>
             <Auk::Datepicker
               @date={{this.publicationDueDate}}
-              @onChange={{this.setPublicationDueDate}} />
+              @onChange={{this.setPublicationDueDate}}
+            />
           </div>
         </div>
       </div>
