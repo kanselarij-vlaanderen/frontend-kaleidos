@@ -1,29 +1,31 @@
-<div class="auk-box">
-  {{!-- Editor with annotated decision  text will come somwhere around here in the future --}}
-  <div class="auk-form-group auk-u-mb-4"
-      data-test-agendaitem-decision-edit-result-container
+{{!-- Editor with annotated decision  text will come somwhere around here in the future --}}
+<div class="auk-o-flex auk-o-flex--vertical-center"
+    data-test-agendaitem-decision-edit-result-container
+>
+  <Auk::Label class="auk-u-sr-only">{{t "result-decision"}}</Auk::Label>
+  <Decision::DecisionResultSelect
+    @selected={{this.treatment.decisionResultCode}}
+    @onChange={{this.changeDecisionResultCode}}
+  />
+  <Auk::Button
+    @skin="tertiary"
+    @layout="icon-only"
+    @icon="check"
+    class="auk-button--tiny"
+    @loading={{this.saveTreatment.isRunning}}
+    {{on "click" (perform this.saveTreatment)}}
+    data-test-access-level-pill-cancel
   >
-    <Auk::Label>{{t "result-decision"}}</Auk::Label>
-    <Decision::DecisionResultSelect
-      @selected={{this.treatment.decisionResultCode}}
-      @onChange={{this.changeDecisionResultCode}}
-    />
-  </div>
-  <Auk::Toolbar>
-    <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
-        <Auk::ButtonLink {{on "click" this.cancelEdit}}>
-          {{t "cancel"}}
-        </Auk::ButtonLink>
-      </Auk::Toolbar::Item>
-      <Auk::Toolbar::Item>
-        <WebComponents::VlSaveButton
-          data-test-agendaitem-decision-edit-save={{true}}
-          @text={{t "save"}}
-          @isLoading={{this.saveTreatment.isRunning}}
-          @saveAction={{perform this.saveTreatment}}
-        />
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-  </Auk::Toolbar>
+    {{t "save"}}
+  </Auk::Button>
+  <Auk::Button
+    @skin="tertiary"
+    @layout="icon-only"
+    @icon="x"
+    class="auk-button--tiny"
+    {{on "click" this.cancelEdit}}
+    data-test-access-level-pill-save
+  >
+    {{t "cancel"}}
+  </Auk::Button>
 </div>

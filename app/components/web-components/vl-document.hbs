@@ -13,14 +13,14 @@
         {{this.piece.name}}
       </h6>
       {{#unless this.loadPieceRelatedData.isRunning}}
-        {{!-- <AccessLevelPill
+        <AccessLevelPill
           @accessLevel={{this.accessLevel}}
           @confidential={{this.piece.confidential}}
           @onChangeAccessLevel={{this.changeAccessLevel}}
           @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
           @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
           @onChangeConfidentiality={{this.changeConfidentiality}}
-        /> --}}
+        />
       {{/unless}}
       {{#if this.file}}
         <Auk::Button
@@ -38,7 +38,7 @@
           @icon="download"
           @href={{await this.piece.namedDownloadLinkPromise}}
           {{!-- download --}}
-          {{! 'download' attribute doesn't specify a filename, as this gets overruled by
+          {{! 'download' attribute doesnt specify a filename, as this gets overruled by
               the filename received in the "Content-Disposition HTTP header" }}
         >
           {{t "download"}}

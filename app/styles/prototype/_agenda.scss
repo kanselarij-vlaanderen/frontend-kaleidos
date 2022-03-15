@@ -5,6 +5,9 @@ $vl-orange-100: #FFA10A;
 $vl-orange-10: #FFF9E8;
 $vl-gray-70: #687483;
 $vl-gray-50: #8695A8;
+$vl-green-130: #007A37;
+$vl-green-100: #009E47;
+$vl-green-10: #ECF6EE;
 
 
 
@@ -226,6 +229,7 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
   &:hover,
   &:focus {
     color: #004099;
+    background-color: #D4E3F7;
   }
 }
 
@@ -242,6 +246,16 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
 
   .auk-icon {
     color: $vl-orange-130;
+  }
+}
+
+.auk-pill--success {
+  border: .1rem solid $vl-green-100;
+  color: $vl-green-130 !important;
+  background-color: $vl-green-10;
+
+  .auk-icon {
+    color: $vl-green-130;
   }
 }
 
@@ -266,4 +280,15 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
   .auk-sidebar__item a {
     padding: 1rem 1rem 1rem 1.35rem;
   }
+}
+
+// Document card
+.vlc-document-card--header {
+  border-bottom: 0;
+}
+
+// Tiny button
+.auk-button--tiny {
+  padding: .25rem !important;
+  margin-left: .3rem;
 }

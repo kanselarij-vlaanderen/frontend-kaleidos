@@ -20,16 +20,14 @@
         {{t "confidential"}}
       </Auk::Pill>
       {{/if}}
-      <Auk::Pill
-        @skin="action"
-        @icon="pencil"
+      <Auk::Button
+        @skin="tertiary"
         @layout="icon-only"
-        class="auk-u-cursor-pointer"
-        data-test-access-level-pill
+        @icon="pencil"
+        class="auk-button--tiny"
         {{on "click" this.toggleEdit}}
-      >
-        {{this.accessLevelLabel}}
-      </Auk::Pill>
+        data-test-access-level-pill-cancel
+      />
     {{else}}
       {{!-- TODO: fix inline style (consider implementing new auk-generation document card) --}}
       {{!-- template-lint-disable no-inline-styles  --}}
@@ -66,7 +64,7 @@
         @skin="tertiary"
         @layout="icon-only"
         @icon="check"
-        class="auk-u-p-0"
+        class="auk-button--tiny"
         {{on "click" (perform this.confirmChangeAccessLevel @accessLevel)}}
         data-test-access-level-pill-save
       >
@@ -76,7 +74,7 @@
         @skin="tertiary"
         @layout="icon-only"
         @icon="x"
-        class="auk-u-p-0 auk-u-ml-2"
+        class="auk-button--tiny"
         {{on "click" (perform this.cancelChangeAccessLevel)}}
         data-test-access-level-pill-cancel
       />

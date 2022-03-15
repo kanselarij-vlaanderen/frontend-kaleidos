@@ -1036,6 +1036,8 @@
     "close": "Sluiten",
     "show-documents": "Toon documenten",
     "hide-documents": "Verberg documenten",
-    "new-document": "Nieuw document"
+    "new-document": "Nieuw document",
+    "decision-result": "Resultaat beslissing",
+    "no-decision-set": "Nog geen beslissing ingesteld"
   }
 }
