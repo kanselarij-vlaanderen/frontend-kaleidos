@@ -27,6 +27,7 @@
                   @layout="icon-only"
                   @icon="download"
                   @href={{@piece.file.namedDownloadLink}}
+                  download={{@piece.file.downloadFilename}}
                 />
                 {{#if @isEnabledDelete}}
                   <Auk::Button
