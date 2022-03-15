@@ -9,6 +9,7 @@ import { publicationRequestEmail } from 'frontend-kaleidos/utils/publication-ema
 
 export default class PublicationsPublicationPublicationActivitiesPublicationRequestModal extends Component {
   @service store;
+  @service publicationService;
 
   @tracked subject;
   @tracked message;
@@ -27,13 +28,17 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
 
   get isLoading() {
     return (
-      this.loadProofPieces.isRunning || this.cancel.isRunning || this.save.isRunning
+      this.loadProofPieces.isRunning ||
+      this.cancel.isRunning ||
+      this.save.isRunning
     );
   }
 
   get isCancelDisabled() {
     return (
-      this.loadProofPieces.isRunning || this.cancel.isRunning || this.save.isRunning
+      this.loadProofPieces.isRunning ||
+      this.cancel.isRunning ||
+      this.save.isRunning
     );
   }
 
@@ -130,37 +135,14 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
 
   @action
   async uploadPiece(file) {
-    const created = file.created;
-
-    const documentContainer = this.store.createRecord('document-container', {
-      created: created,
-    });
-    await documentContainer.save();
-    const piece = this.store.createRecord('piece', {
-      created: created,
-      modified: created,
-      file: file,
-      confidential: false,
-      name: file.filenameWithoutExtension,
-      documentContainer: documentContainer,
-    });
-
+    const piece = await this.publicationService.createPiece(file);
     this.uploadedPieces.pushObject(piece);
   }
 
   @task
   *deleteUploadedPiece(piece) {
     this.uploadedPieces.removeObject(piece);
-    const [file, documentContainer] = yield Promise.all([
-      piece.file,
-      piece.documentContainer,
-    ]);
-
-    yield Promise.all([
-      file.destroyRecord(),
-      documentContainer.destroyRecord(),
-      piece.destroyRecord(),
-    ]);
+    yield this.publicationService.deletePiece(piece);
   }
 
   @action

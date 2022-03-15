@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -107,11 +107,7 @@ export default class PublicationsPublicationProofsController extends Controller 
         // non-existent model relationships resolve to null
         !!translationActivityGeneratedBy;
       if (!isLinkedToTranslation) {
-        const file = yield piece.file;
-        const documentContainer = yield piece.documentContainer;
-        yield file.destroyRecord();
-        yield documentContainer.destroyRecord();
-        yield piece.destroyRecord();
+        yield this.publicationService.deletePiece(piece);
       }
     }
     yield requestActivity.destroyRecord();
