@@ -1,6 +1,6 @@
 {{!-- TODO: octane-refactor --}}
 {{!-- template-lint-disable no-action --}}
-<div class="auk-box auk-u-mb-8">
+<div class="auk-box auk-u-mb-4">
   <div class="auk-u-mb-4">
     {{#if @subcase}}
       <div class="auk-form-group">
@@ -37,7 +37,7 @@
   </div>
   <div class="auk-u-mb-4">
     <div class="auk-form-group">
-      <Auk::Label id="remark-title">{{t "remark-title"}}</Auk::Label>
+      <Auk::Label id="remark-title" class="auk-u-icon-left"><Auk::Icon @name="lock-closed" @size="small" /> {{t "util.internal-remark-title"}}</Auk::Label>
       <Textarea
         data-test-agendaitem-titles-edit-explanation={{true}}
         rows="2"
@@ -64,6 +64,33 @@
       </div>
     </div>
   {{/if}}
+  <div class="auk-u-mb-4">
+    <div class="auk-form-group">
+      <Auk::Label for="subcase-formallity">{{t "util.approval"}}</Auk::Label>
+      <Utils::FormallyOkSelector
+        data-test-agenda-overview-item-formally-ok={{true}}
+        @formallyOkStatusUri={{@agendaitem.formallyOk}}
+        @onChange={{this.setAndSaveFormallyOkStatus}}
+      />
+    </div>
+  </div>
+  <div class="auk-u-mb-4">
+    <div class="auk-form-group">
+      <Auk::Label for="subcase-website">{{t "util.website"}}</Auk::Label>
+      {{#if @subcase.confidential}}
+      <Auk::Toggle
+        id="subcase-website"
+        @disabled={{true}}
+        @checked={{false}}
+      />
+      {{else}}
+      <Auk::Toggle
+        id="subcase-website"
+        @checked={{false}}
+      />
+      {{/if}}
+    </div>
+  </div>
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>

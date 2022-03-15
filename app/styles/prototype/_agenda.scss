@@ -292,3 +292,36 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
   padding: .25rem !important;
   margin-left: .3rem;
 }
+
+// Auto height for panel title
+.auk-panel__header {
+  height: auto;
+  min-height: 5.5rem;
+}
+
+.auk-panel {
+  .vlc-document-card {
+    border: 0;
+  }
+}
+
+.auk-panel__body--no-pad {
+  .auk-u-mb-2 {
+    margin-bottom: 0 !important;
+  }
+}
+
+// Content
+.auk-content {
+  > *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Icons
+.auk-u-icon-left {
+  .auk-icon {
+    vertical-align: baseline;
+    margin-right: .15rem;
+  }
+}

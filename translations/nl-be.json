@@ -1038,6 +1038,9 @@
     "hide-documents": "Verberg documenten",
     "new-document": "Nieuw document",
     "decision-result": "Resultaat beslissing",
-    "no-decision-set": "Nog geen beslissing ingesteld"
+    "no-decision-set": "Nog geen beslissing ingesteld",
+    "website": "Op de website",
+    "internal-remark-title": "Interne opmerking",
+    "approval": "Goedkeuring"
   }
 }

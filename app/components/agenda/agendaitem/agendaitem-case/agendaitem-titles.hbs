@@ -1,4 +1,4 @@
-<div class="auk-u-mb-8">
+<div class="auk-u-mb-4">
   <Auk::Panel>
     <Auk::Panel::Header>
       <Auk::Toolbar>
@@ -101,7 +101,7 @@
               </Auk::Pill>
             {{/if}}
           {{else}}
-            {{#if @newsletterInfo}}
+            {{!-- {{#if @newsletterInfo}}
               {{#if @newsletterInfo.inNewsletter}}
                 <Auk::Pill @skin="success" @icon="visible">
                   {{t "visible-in-newsletter"}}
@@ -115,23 +115,20 @@
               <Auk::Pill>
                 {{t "no-newsletter-info"}}
               </Auk::Pill>
-            {{/if}}
+            {{/if}} --}}
           {{/if}}
         </Auk::PillList>
       </div>
     </Auk::Panel::Body>
     {{#if @agendaitem.explanation }}
-      <Auk::Modal::Footer @custom={{true}}>
-        <Auk::Toolbar>
-          <Auk::Toolbar::Group @position="left">
-            <Auk::Toolbar::Item>
-              <pre data-test-agendaitem-titles-explanation class="auk-o-flex--inline auk-u-text-pre-line auk-u-italic">
-               {{t "remark-title"}}: {{@agendaitem.explanation}}
-              </pre>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-        </Auk::Toolbar>
-      </Auk::Modal::Footer>
+      <Auk::Panel::Footer class="auk-u-bg-alt">
+        <p class="auk-u-muted ">
+          <strong class="auk-u-icon-left auk-u-text-bold">
+            <Auk::Icon @name="lock-closed" @size="small" />
+            {{t "util.internal-remark-title"}}:
+          </strong>{{@agendaitem.explanation}}
+        </p>
+      </Auk::Panel::Footer>
     {{/if}}
   </Auk::Panel>
 </div>

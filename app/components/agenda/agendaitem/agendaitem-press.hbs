@@ -1,42 +1,60 @@
 {{!-- TODO: octane-refactor --}}
 {{!-- template-lint-disable no-action --}}
-{{#if (not this.currentSession.isEditing)}}
-  <div class="auk-u-mb-2">
-    <div class="auk-o-flex auk-o-flex--align-baseline">
-      <h3 class="auk-h2">
-        {{t "preparation-text"}}
-      </h3>
-      {{#if this.isEditor}}
-        <div class="auk-u-ml-2">
-          <Auk::ButtonLink {{action "toggleIsEditing"}}>
-            {{t "edit"}}
-          </Auk::ButtonLink>
-        </div>
+<div class="auk-u-mb-4">
+  <Auk::Toolbar class="auk-u-mb-4">
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
+        <h4 class="auk-toolbar__title">
+          {{t "preparation-text"}}
+        </h4>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
+      {{#if (not this.currentSession.isEditing)}}
+        {{#if this.isEditor}}
+          <Auk::Toolbar::Item>
+            <Auk::Button
+              @skin="secondary"
+              @icon="pencil"
+              {{action "toggleIsEditing"}}>
+              {{t "edit"}}
+            </Auk::Button>
+          </Auk::Toolbar::Item>
+        {{/if}}
       {{/if}}
-    </div>
-  </div>
-  <div class="auk-u-mb-2">
-    <h3 class="auk-h4 auk-u-m-0">
-      {{this.agendaitem.titlePress}}
-    </h3>
-  </div>
-  <div class="auk-content">
-    <p>
-      {{this.agendaitem.textPress}}
-    </p>
-  </div>
-  <hr/>
-  <div class="auk-u-mt-2">
-    {{#if this.agendaitem.forPress}}
-      <Auk::Pill @skin="success">
-        {{t "for-press"}}
-      </Auk::Pill>
-    {{else}}
-      <Auk::Pill @skin="warning">
-        {{t "not-public-press"}}
-      </Auk::Pill>
-    {{/if}}
-  </div>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
+</div>
+{{#if (not this.currentSession.isEditing)}}
+  <Auk::Panel>
+    <Auk::Panel::Header>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <h4 class="auk-h4 auk-u-my-2">{{this.agendaitem.titlePress}}</h4>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            {{#if this.agendaitem.forPress}}
+              <Auk::Pill @skin="success-future" @icon="users">
+                {{t "for-press"}}
+              </Auk::Pill>
+            {{else}}
+              <Auk::Pill @skin="warning-future" @icon="users">
+                {{t "not-public-press"}}
+              </Auk::Pill>
+            {{/if}}
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body>
+      <div class="auk-content">
+        {{this.agendaitem.textPress}}
+      </div>
+    </Auk::Panel::Body>
+  </Auk::Panel>
 {{else}}
   <AgendaitemPressEdit
     @agendaitem={{this.agendaitem}}
