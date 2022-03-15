@@ -1,29 +1,18 @@
 <FileDropzone
   @accept={{@accept}}
-  @disabled={{or this.uploadIsRunning this.uploadIsCompleted}}
+  @queue={{this.fileQueue}}
   @multiple={{@multiple}}
-  @name={{this.fileQueueName}}
-  @class="auk-file-upload {{if this.uploadIsRunning "auk-file-upload--gray-100"}} {{if this.uploadIsCompleted "auk-file-upload--success"}} {{if @fullHeight "auk-file-upload--full-height"}}"
-  @tagName="div"
-  @action={{perform this.uploadFileTask}}
-as |dropzone|
+  class="auk-file-upload {{if this.uploadIsRunning "auk-file-upload--gray-100"}} {{if this.uploadIsCompleted "auk-file-upload--success"}} {{if @fullHeight "auk-file-upload--full-height"}}"
+  as |dropzone|
 >
-  {{!-- Note that we use a regular <input> here instead of of <FileUpload>.
-        This is because at the time of writing, ember-file-upload wrap the input in a <label>-tag
-        and our design doesn't allow for this.
-        https://github.com/adopted-ember-addons/ember-file-upload/blob/master/addon/components/file-upload/component.js#L80
-        https://github.com/adopted-ember-addons/ember-file-upload/issues/388#issuecomment-679868412
-        Nonetheless we hook in to the internals of ember-file-uploader in this component's js-file to be able to
-        keep on using ember-file-upload's other features (queue) and facilitate a future migration once ember-file-upload
-        becomes more flexible.
-  --}}
+  {{!-- Note that "@multiple" has been deprecated, but still works in v 5.x.x beta --}}
   {{!-- template-lint-disable require-input-label --}}
   <input
     type="file"
     accept={{@accept}}
     disabled={{or this.uploadIsRunning (and this.uploadIsCompleted (not @reusable))}}
     multiple={{@multiple}}
-    onchange={{this.addFilesToQueue}}
+    {{this.fileQueue.selectFile}}
   >
   {{!-- template-lint-enable require-input-label --}}
   <div class="auk-file-upload__content">

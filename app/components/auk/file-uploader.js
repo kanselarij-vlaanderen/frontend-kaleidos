@@ -29,9 +29,10 @@ export default class FileUploader extends Component {
     const queue = this.fileQueue || this.fileQueueService.create(this.fileQueueName);
     setProperties(queue, { // https://github.com/adopted-ember-addons/ember-file-upload/blob/888273b997d0336841daa1fb24287b5f5c5c9d62/addon/components/base-component.js#L13
       accept: this.args.accept,
-      multiple: this.args.multiple,
       // disabled,
-      onfileadd: this.uploadFileTaskAction,
+    });
+    queue.addListener({
+      onFileAdded: this.uploadFileTaskAction,
     });
   }
 
@@ -49,7 +50,7 @@ export default class FileUploader extends Component {
   }
 
   get uploadIsRunning() {
-    return this.fileQueue.get('files.length') > 0 // getter since things internal to file-upload aren't tracked
+    return this.fileQueue.files.length > 0
       || this.uploadFileTask.isRunning;
   }
 
@@ -72,15 +73,6 @@ export default class FileUploader extends Component {
   @action
   uploadFileTaskAction() {
     return this.uploadFileTask.perform(...arguments);
-  }
-
-  // Replacement for https://github.com/adopted-ember-addons/ember-file-upload/blob/888273b997d0336841daa1fb24287b5f5c5c9d62/addon/components/file-upload/component.js#L149
-  // beware that this taps into a private `ember-file-upload`-method, which makes this susceptible to breaking when version-bumping `ember-file-upload`
-  @action
-  addFilesToQueue(event) {
-    const files = event.target.files;
-    this.fileQueue._addFiles(files, 'browse');
-    event.target.value = null;
   }
 
   @action
