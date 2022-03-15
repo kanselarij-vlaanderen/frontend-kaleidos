@@ -387,7 +387,7 @@ export default class PublicationService extends Service {
    * - document-container without versioning
    * @param {Piece} piece
    */
-  async destroyPiece(piece) {
+  async deletePiece(piece) {
     const file = await piece.file;
     const documentContainer = await piece.documentContainer;
     await Promise.all([

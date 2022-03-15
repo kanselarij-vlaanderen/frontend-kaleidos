@@ -40,7 +40,7 @@ export default class PublicationsDocumentsReferenceDocumentUploadModalComponent 
   *cancel() {
     if (!this.save.isRunning) {
       if (this.piece) {
-        yield this.publicationService.destroyPiece(this.piece);
+        yield this.publicationService.deletePiece(this.piece);
       }
       this.args.onCancel();
     } else {

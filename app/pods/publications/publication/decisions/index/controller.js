@@ -34,7 +34,7 @@ export default class PublicationsPublicationDecisionsIndexController extends Con
 
   @dropTask
   *deletePiece(piece) {
-    yield this.publicationService.destroyPiece(piece);
+    yield this.publicationService.deletePiece(piece);
     this.send('refresh');
   }
 }
