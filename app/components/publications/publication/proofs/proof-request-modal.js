@@ -33,13 +33,17 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
 
   get isLoading() {
     return (
-      this.loadTranslationPieces.isRunning || this.cancel.isRunning || this.save.isRunning
+      this.loadTranslationPieces.isRunning ||
+      this.cancel.isRunning ||
+      this.save.isRunning
     );
   }
 
   get isCancelDisabled() {
     return (
-      this.loadTranslationPieces.isRunning || this.cancel.isRunning || this.save.isRunning
+      this.loadTranslationPieces.isRunning ||
+      this.cancel.isRunning ||
+      this.save.isRunning
     );
   }
 

@@ -27,13 +27,17 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
 
   get isLoading() {
     return (
-      this.loadProofPieces.isRunning || this.cancel.isRunning || this.save.isRunning
+      this.loadProofPieces.isRunning ||
+      this.cancel.isRunning ||
+      this.save.isRunning
     );
   }
 
   get isCancelDisabled() {
     return (
-      this.loadProofPieces.isRunning || this.cancel.isRunning || this.save.isRunning
+      this.loadProofPieces.isRunning ||
+      this.cancel.isRunning ||
+      this.save.isRunning
     );
   }
 
