@@ -19,12 +19,12 @@
                 class="auk-form-group-layout auk-form-group-layout--horizontal"
               >
                 <div class="auk-form-group {{this.validators.name.errorClass}}">
-                  <Auk::Label for="proofUploadName" @required={{true}}>
+                  <Auk::Label for="referenceDocumentUpload_name" @required={{true}}>
                     {{t "name"}}
                   </Auk::Label>
                   <Auk::Input
-                    data-test-proof-upload-name
-                    id="proofUploadName"
+                    data-test-reference-document-upload-name
+                    id="referenceDocumentUpload_name"
                     @value={{mut this.piece.name}}
                     {{on "input" this.validators.name.enableError}}
                   />
