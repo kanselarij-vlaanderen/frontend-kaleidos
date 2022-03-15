@@ -8,7 +8,7 @@
       @isLoading={{this.isLoading}}
       @reserveSpace={{true}}
     >
-      <Auk::FileUploader @onUpload={{this.setFileProperties}} />
+      <Auk::FileUploader @onUpload={{this.createPiece}} />
 
       {{! File details }}
       {{#if this.piece}}

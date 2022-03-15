@@ -54,7 +54,7 @@ export default class PublicationsDocumentsReferenceDocumentUploadModalComponent 
   }
 
   @action
-  async setFileProperties(file) {
+  async createPiece(file) {
     this.piece = await this.publicationService.createPiece(file);
   }
 
