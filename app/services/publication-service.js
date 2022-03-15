@@ -351,4 +351,50 @@ export default class PublicationService extends Service {
       );
     }
   }
+
+  /**
+   * Create and save:
+   * - piece
+   * - document-container without versioning
+   * @param {File} file
+   * @param {{
+   *  name: string,
+   * }}
+   * @returns {Piece}
+   */
+  async createPiece(file) {
+    const documentContainer = this.store.createRecord('document-container', {
+      created: file.created,
+    });
+    await documentContainer.save();
+
+    const piece = this.store.createRecord('piece', {
+      created: file.created,
+      modified: file.created,
+      name: file.filenameWithoutExtension,
+      file: file,
+      documentContainer: documentContainer,
+    });
+    await piece.save();
+
+    return piece;
+  }
+
+  /**
+   * Delete and save:
+   * - piece
+   * - file
+   * - document-container without versioning
+   * @param {Piece} piece
+   */
+  async destroyPiece(piece) {
+    const file = await piece.file;
+    const documentContainer = await piece.documentContainer;
+    console.log(file, documentContainer, piece);
+    await Promise.all([
+      piece.destroyRecord(),
+      file.destroyRecord(),
+      documentContainer.destroyRecord(),
+    ]);
+  }
 }
