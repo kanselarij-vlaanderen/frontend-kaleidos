@@ -390,7 +390,6 @@ export default class PublicationService extends Service {
   async destroyPiece(piece) {
     const file = await piece.file;
     const documentContainer = await piece.documentContainer;
-    console.log(file, documentContainer, piece);
     await Promise.all([
       piece.destroyRecord(),
       file.destroyRecord(),
