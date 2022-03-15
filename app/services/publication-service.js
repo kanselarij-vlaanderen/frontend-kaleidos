@@ -131,7 +131,7 @@ export default class PublicationService extends Service {
       created: now,
       openingDate: publicationProperties.openingDate,
       modified: now,
-      regulationType: regulationType
+      regulationType: regulationType,
     });
     await publicationFlow.save();
     const translationSubcase = this.store.createRecord('translation-subcase', {
