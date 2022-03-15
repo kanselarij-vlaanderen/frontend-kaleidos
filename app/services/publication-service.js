@@ -294,13 +294,7 @@ export default class PublicationService extends Service {
   ) {
     const publicationSubcase = await publicationFlow.publicationSubcase;
     const now = new Date();
-
     const pieces = publicationRequestProperties.pieces;
-    await Promise.all(
-      pieces.map((piece) => {
-        return piece.save();
-      })
-    );
 
     const requestActivity = this.store.createRecord('request-activity', {
       startDate: now,

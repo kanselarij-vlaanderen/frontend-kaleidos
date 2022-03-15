@@ -121,12 +121,8 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
       // Only proof (result/generated) pieces are uploaded, so they
       //    so no check whether they are linked to a translationActivity is required
       if (!proofingActivity) {
-        const file = await piece.file;
-        const documentContainer = await piece.documentContainer;
-
-        deletes.push(piece.destroyRecord());
-        deletes.push(file.destroyRecord());
-        deletes.push(documentContainer.destroyRecord());
+        const pieceDelete = this.publicationService.deletePiece(piece);
+        deletes.push(pieceDelete)
       }
     }
 
