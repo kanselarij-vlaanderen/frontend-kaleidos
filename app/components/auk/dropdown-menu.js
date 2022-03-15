@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { isPresent } from '@ember/utils';
 
 import Button from './button';
 import ButtonLink from './button-link';
@@ -26,13 +27,19 @@ export default class DropdownMenuComponent extends Component {
   }
 
   get layout() {
+    // if @layout is defined as `icon-left` pass null to initiator component (because it is the default value of @layout within Button/ButtonLink component)
+    // else just pass the layout argument
     if (this.args.layout) {
-      return this.args.layout;
+      return this.args.layout === 'icon-left' ? null : this.args.layout;
     }
-    if (this.args.label) {
-      return 'icon-right';
+
+    // if no @label argument is present just pass `icon-only`
+    if (!isPresent(this.args.label)) {
+      return 'icon-only';
     }
-    return 'icon-only';
+
+    // default value to pass
+    return 'icon-right';
   }
 
   get icon() {
@@ -43,6 +50,10 @@ export default class DropdownMenuComponent extends Component {
       return 'chevron-up';
     }
     return 'chevron-down';
+  }
+
+  get block() {
+    return this.args.block || false;
   }
 
   @action
