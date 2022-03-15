@@ -60,36 +60,42 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   @task
   *publishToMail() {
-    yield this.ensureMailCampaign();
+    try {
+      yield this.ensureMailCampaign();
 
-    if (this.mailCampaign?.isSent) {
-      this.toaster.error(this.intl.t('error-already-sent-newsletter'));
-    } else {
-      if (yield this.validateMailCampaign()) {
-        try {
-          yield this.newsletterService.sendMailCampaign(this.mailCampaign.campaignId);
-          this.mailCampaign.sentAt = new Date();
-          yield this.mailCampaign.save();
-          yield this.args.meeting.belongsTo('mailCampaign').reload(); // TODO Why?
-          this.toaster.success(this.intl.t('success-publish-newsletter-to-mail'));
-        } catch(e) {
-          this.toaster.error(
-            this.intl.t('error-send-newsletter'),
-            this.intl.t('warning-title')
-          );
+      if (this.mailCampaign?.isSent) {
+        this.toaster.error(this.intl.t('error-already-sent-newsletter'));
+      } else {
+        if (yield this.validateMailCampaign()) {
+          try {
+            yield this.newsletterService.sendMailCampaign(this.mailCampaign.campaignId);
+            this.mailCampaign.sentAt = new Date();
+            yield this.mailCampaign.save();
+            yield this.args.meeting.belongsTo('mailCampaign').reload(); // TODO Why?
+            this.toaster.success(this.intl.t('success-publish-newsletter-to-mail'));
+          } catch(e) {
+            console.log("error sending newsletter", e);
+            this.toaster.error(
+              this.intl.t('error-send-newsletter'),
+              this.intl.t('warning-title')
+            );
+          }
         }
       }
+      this.showConfirmPublishMail = false;
+    } catch (error) {
+      console.log(error);
     }
-    this.showConfirmPublishMail = false;
   }
 
   @task
   *publishToBelga() {
     try {
-      yield this.ensureMailCampaign();
+      yield this.ensureMailCampaign(true);
       yield this.newsletterService.sendToBelga(this.args.meeting.id);
       this.toaster.success(this.intl.t('success-publish-newsletter-to-belga'));
     } catch(e) {
+      console.log(e);
       this.toaster.error(
         this.intl.t('error-send-belga'),
         this.intl.t('warning-title')
@@ -180,9 +186,9 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     return true;
   }
 
-  async ensureMailCampaign() {
+  async ensureMailCampaign(silent) {
     if (!this.mailCampaign) {
-      this.mailCampaign = await this.newsletterService.createCampaign(this.args.meeting);
+      this.mailCampaign = await this.newsletterService.createCampaign(this.args.meeting, silent);
     }
   }
 
@@ -208,7 +214,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   /*
   @task
   *downloadBelgaXML() {
-    yield this.ensureMailCampaign();
+    yield this.ensureMailCampaign(true);
     try {
       yield this.newsletterService.downloadBelgaXML(this.args.agenda.id);
     } catch (e) {
@@ -221,7 +227,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   @task
   *loadNewsletterHTML() {
-    yield this.ensureMailCampaign();
+    yield this.ensureMailCampaign(true);
     try {
       const html = yield this.newsletterService.getMailCampaignContent(this.mailCampaign.campaignId);
       this.newsletterHTML = html.body;

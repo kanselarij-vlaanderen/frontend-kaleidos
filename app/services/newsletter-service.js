@@ -8,7 +8,7 @@ export default class NewsletterService extends Service {
   @service formatter;
   @service currentSession;
 
-  async createCampaign(meeting) {
+  async createCampaign(meeting, silent = false) {
     const endpoint = `/newsletter/mail-campaigns`;
     const body = {
       data: {
@@ -29,11 +29,13 @@ export default class NewsletterService extends Service {
     });
     const result = await response.json();
     if (!response.ok) {
-      this.toaster.error(
-        this.intl.t('error-create-newsletter'),
-        this.intl.t('warning-title')
-      );
-      throw new Error('An exception ocurred: ' + response.error);
+      if (!silent) {
+        this.toaster.error(
+          this.intl.t('error-create-newsletter'),
+          this.intl.t('warning-title')
+        );
+      }
+     throw new Error('An exception ocurred: ' + JSON.stringify(result.errors));
     }
     const mailCampaign = this.store.createRecord('mail-campaign', {
       campaignId: result.data.id,
@@ -58,13 +60,13 @@ export default class NewsletterService extends Service {
         'Content-Type': 'application/vnd.api+json',
       },
     });
-    await response.json();
     if (!response.ok) {
       this.toaster.error(
         this.intl.t('error-send-belga'),
         this.intl.t('warning-title')
       );
-      throw new Error('An exception ocurred: ' + response.error);
+      const result = await response.json();
+      throw new Error('An exception ocurred: ' + JSON.stringify(result.errors));
     }
   }
 
@@ -93,7 +95,7 @@ export default class NewsletterService extends Service {
         this.intl.t('error-send-belga'),
         this.intl.t('warning-title')
       );
-      throw new Error('An exception ocurred: ' + response.error);
+      throw new Error('An exception ocurred: ' + JSON.stringify(result.errors));
     } else {
       return result;
     }
@@ -113,7 +115,7 @@ export default class NewsletterService extends Service {
         this.intl.t('error-send-newsletter'),
         this.intl.t('warning-title')
       );
-      throw new Error('An exception ocurred: ' + response.error);
+      throw new Error('An exception ocurred: ' + JSON.stringify(result.errors));
     } else {
       return result.data;
     }
