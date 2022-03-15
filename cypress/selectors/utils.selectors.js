@@ -64,6 +64,7 @@ const selectors = {
   },
 
   // file-uploader
+  // TODO: below selector no longer exists. Needs adapting to auk uploader.
   fileUploader: {
     upload: '[data-test-file-uploader-upload]',
   },
