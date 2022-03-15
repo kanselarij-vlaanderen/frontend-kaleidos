@@ -66,7 +66,7 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
     yield this.args.onSave({
       proofPrintCorrector: this.proofPrintCorrector,
       receivedDate: this.receivedDate,
-      uploadedPieces: this.uploadedPieces,
+      pieces: this.uploadedPieces,
       mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
   }

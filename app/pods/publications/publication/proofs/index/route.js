@@ -47,9 +47,7 @@ export default class PublicationsPublicationProofsRoute extends Route {
   @service store;
 
   async model() {
-    this.publicationSubcase = this.modelFor(
-      'publications.publication.proofs'
-    );
+    this.publicationSubcase = this.modelFor('publications.publication.proofs');
 
     let requestActivities = this.store.query('request-activity', {
       'filter[publication-subcase][:id:]': this.publicationSubcase.id,
@@ -77,14 +75,24 @@ export default class PublicationsPublicationProofsRoute extends Route {
       .reverseObjects();
   }
 
-  afterModel() {
+  async afterModel() {
     this.publicationFlow = this.modelFor('publications.publication');
+    // query on 'publication-activity' and not 'request-activity':
+    // 'publication-activity' can be present without 'request-activity'
+    //    when it comes from legacy data or is created in a publication-status change to "Gepubliceerd"
+    this.publicationActivitiesCount = await this.store.count(
+      'publication-activity',
+      {
+        'filter[subcase][publication-flow][:id:]': this.publicationFlow.id,
+      }
+    );
   }
 
   setupController(controller) {
     super.setupController(...arguments);
     controller.publicationFlow = this.publicationFlow;
     controller.publicationSubcase = this.publicationSubcase;
+    controller.publicationActivitiesCount = this.publicationActivitiesCount;
   }
 
   @action

@@ -1,4 +1,4 @@
-<Auk::Panel>
+<Auk::Panel data-test-translation-received-panel>
   <Auk::Panel::Header @size="large">
     <Auk::Toolbar>
       <Auk::Toolbar::Group @position="left">
@@ -6,14 +6,14 @@
           <h4 class="auk-panel__title auk-panel__title--small">
             {{t "received-translation"}}
           </h4>
-          <span class="auk-u-text-small auk-u-m-0">
+          <span data-test-translation-received-panel-end-date class="auk-u-text-small auk-u-m-0">
             {{moment-format @translationActivity.endDate "DD.MM.YYYY"}}
           </span>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          <Auk::DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
+          <Auk::DropdownMenu data-test-translation-received-panel-dropdown @skin="borderless" @icon="three-dots" as |Menu|>
             <Menu.Item
               @skin="primary"
               {{on "click" this.openProofRequestModal}}
@@ -21,6 +21,7 @@
               {{t "request-proof"}}
             </Menu.Item>
             <Menu.Item
+              data-test-translation-received-panel-edit
               @skin="primary"
               {{on "click" this.openTranslationEditModal}}
             >
@@ -42,7 +43,7 @@
 {{#if this.isOpenTranslationEditModal}}
   <Publications::Publication::Translations::TranslationActivityEditModal
     @receivedDate={{@translationActivity.endDate}}
-    @onSave={{perform this.updateTranslationActivity}}
+    @onSave={{perform this.editTranslationActivity}}
     @onCancel={{this.closeTranslationEditModal}}
   />
 {{/if}}
@@ -51,7 +52,7 @@
   <Publications::Publication::Proofs::ProofRequestModal
     @publicationFlow={{@publicationFlow}}
     @translationActivity={{@translationActivity}}
-    @onSave={{@onCreateProofRequest}}
+    @onSave={{perform this.createProofRequest}}
     @onCancel={{this.closeProofRequestModal}}
   />
 {{/if}}

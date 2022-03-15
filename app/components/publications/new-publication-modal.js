@@ -126,6 +126,16 @@ export default class NewPublicationModal extends Component {
     });
   }
 
+  @action
+  cancel() {
+    // necessary because close-button is not disabled when saving
+    if (this.save.isRunning) {
+      return;
+    }
+
+    this.args.onCancel()
+  }
+
   @restartableTask
   *validateIsPublicationNumberAlreadyTaken() {
     yield timeout(1000);

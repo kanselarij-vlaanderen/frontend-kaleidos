@@ -90,6 +90,7 @@ export default class PublicationsOverviewBaseRoute extends Route {
   }
 
   setupController(controller) {
+    super.setupController(...arguments);
     controller.tableConfig = this.tableConfig;
   }
 

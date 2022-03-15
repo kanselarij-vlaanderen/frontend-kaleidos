@@ -8,8 +8,9 @@
     <Header.Actions as |Actions|>
       <Actions.Item>
         {{#unless @isDisabledDelete}}
-          <Auk::DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
+          <Auk::DropdownMenu data-test-request-activity-panel-dropdown @skin="borderless" @icon="three-dots" as |Menu|>
             <Menu.Item
+              data-test-request-activity-panel-delete
               @skin="danger"
               {{on "click" this.openConfirmDeleteAlert}}
             >
@@ -35,7 +36,7 @@
         {{! template-lint-disable no-inline-styles }}
         {{! p-tag opening and closing on 1 line to prevent whitespace to be rendered. }}
         {{! prettier-ignore }}
-        <p style="white-space:pre-line;">{{@requestActivity.email.message}}</p>
+        <p data-test-request-activity-panel-message style="white-space:pre-line;">{{@requestActivity.email.message}}</p>
         {{! template-lint-enable no-inline-styles }}
       </div>
     {{/if}}
