@@ -163,11 +163,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
 
     const pieces = yield requestActivity.usedPieces;
     for (const piece of pieces.toArray()) {
-      const file = yield piece.file;
-      const documentContainer = yield piece.documentContainer;
-      yield file.destroyRecord();
-      yield documentContainer.destroyRecord();
-      yield piece.destroyRecord();
+      yield this.publicationService.destroyPiece(piece);
     }
     yield requestActivity.destroyRecord();
     this.send('refresh');
