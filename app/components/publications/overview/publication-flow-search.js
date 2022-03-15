@@ -4,7 +4,7 @@ import { isEmpty } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { guidFor } from '@ember/object/internals';
 import { timeout } from 'ember-concurrency';
-import { restartableTask } from 'ember-concurrency-decorators';
+import { restartableTask } from 'ember-concurrency';
 import search from 'frontend-kaleidos/utils/mu-search';
 
 export default class PublicationFlowSearchComponent extends Component {
