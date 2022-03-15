@@ -15,6 +15,7 @@
     />
     <div class="auk-form-group auk-u-mt-4">
       <Auk::Checkbox
+        data-test-translation-upload-update-status
         @label={{t "update-publication-status-translation-received"}}
         @checked={{this.mustUpdatePublicationStatus}}
         {{on "input" this.setTranslationReceivedStatus}}
