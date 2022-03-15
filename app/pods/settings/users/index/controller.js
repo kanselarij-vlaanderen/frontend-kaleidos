@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { task } from 'ember-concurrency';
 
 export default class UsersSettingsController extends Controller {
   queryParams = ['filter'];
@@ -40,12 +41,15 @@ export default class UsersSettingsController extends Controller {
     this.isUploadingFile = !this.isUploadingFile;
   }
 
-  @action
-  uploaded(response) {
-    if (response && response.status === 200) {
-      this.toaster.success(this.intl.t('import-users-success'), this.intl.t('successfully-created-title'));
-      this.send('refresh');
-    } else {
+  @task
+  *uploadUserFile(file) {
+    try {
+      const response = yield file.upload('/user-management-service/import-users');
+      if (response && response.status === 200) {
+        this.toaster.success(this.intl.t('import-users-success'), this.intl.t('successfully-created-title'));
+        this.send('refresh');
+      }
+    } catch {
       this.toaster.error(this.intl.t('error'), this.intl.t('warning-title'));
     }
   }
