@@ -24,7 +24,7 @@ export default class FileUploader extends Component {
     this.uploadedFileLength = 0;
     const queue = this.fileQueue || this.fileQueueService.create(this.fileQueueName);
     queue.addListener({
-      onFileAdded: this.uploadFileTaskAction,
+      onFileAdded: this.uploadFileTask.perform,
     });
   }
 
@@ -59,12 +59,6 @@ export default class FileUploader extends Component {
     } catch (exception) {
       console.warn('An exception occurred', exception);
     }
-  }
-
-  // Wrapper for task invocation, since direct task perform doesn't work because of ember-file-upload internals
-  @action
-  uploadFileTaskAction() {
-    return this.uploadFileTask.perform(...arguments);
   }
 
   @action
