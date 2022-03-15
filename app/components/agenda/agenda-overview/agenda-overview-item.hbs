@@ -53,7 +53,7 @@
             </div>
             <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
               {{#if this.subcase.confidential}}
-                {{#if (and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow)}}
+                {{#if (and (and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow) @isNew)}}
                 <Auk::Pill
                   @skin="warning-future"
                   @icon="lock-closed"
@@ -115,6 +115,7 @@
           <Documents::DocumentBadgeList
             @pieces={{this.limitedAgendaitemDocuments}}
             @highlightedPieces={{this.newAgendaitemDocuments}}
+            @isFuture={{if (and (and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow) @isNew) true}}
           />
         </div>
         {{/if}}

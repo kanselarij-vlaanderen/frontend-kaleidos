@@ -259,6 +259,16 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
   }
 }
 
+.auk-pill--success-future {
+  border: .1rem dashed $vl-green-100;
+  color: $vl-green-130 !important;
+  border-radius: .2rem;
+
+  .auk-icon {
+    color: $vl-green-130 !important;
+  }
+}
+
 .auk-pill--warning-future {
   border: .1rem dashed $vl-orange-100;
   color: $vl-orange-130 !important;

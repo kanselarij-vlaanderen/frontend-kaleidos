@@ -13,7 +13,7 @@
         </span>
       {{/if}}
       {{#if (and @piece.confidential)}}
-        {{#if @piece.isNew}}
+        {{#if @isFuture}}
         <Auk::Pill
           @skin="warning-future"
           @icon="lock-closed"

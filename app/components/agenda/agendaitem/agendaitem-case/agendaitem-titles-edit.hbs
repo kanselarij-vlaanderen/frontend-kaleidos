@@ -47,11 +47,21 @@
       />
     </div>
   </div>
+  <div class="auk-u-mb-4">
+    <div class="auk-form-group">
+      <Auk::Label for="subcase-formallity">{{t "util.approval"}}</Auk::Label>
+      <Utils::FormallyOkSelector
+        data-test-agenda-overview-item-formally-ok={{true}}
+        @formallyOkStatusUri={{@agendaitem.formallyOk}}
+        @onChange={{this.setAndSaveFormallyOkStatus}}
+      />
+    </div>
+  </div>
   {{#if @agendaitem.showAsRemark}}
     <div class="auk-u-mb-4">
       <div class="auk-form-group">
         {{#if this.newsletterInfo}}
-          <Auk::Label for="item-show-in-newsletter">{{t "show-in-newsletter"}}</Auk::Label>
+          <Auk::Label for="item-show-in-newsletter">{{t "util.website"}}</Auk::Label>
           <Auk::Toggle
             id="item-show-in-newsletter"
             @checked={{this.newsletterInfo.inNewsletter}}
@@ -64,33 +74,6 @@
       </div>
     </div>
   {{/if}}
-  <div class="auk-u-mb-4">
-    <div class="auk-form-group">
-      <Auk::Label for="subcase-formallity">{{t "util.approval"}}</Auk::Label>
-      <Utils::FormallyOkSelector
-        data-test-agenda-overview-item-formally-ok={{true}}
-        @formallyOkStatusUri={{@agendaitem.formallyOk}}
-        @onChange={{this.setAndSaveFormallyOkStatus}}
-      />
-    </div>
-  </div>
-  <div class="auk-u-mb-4">
-    <div class="auk-form-group">
-      <Auk::Label for="subcase-website">{{t "util.website"}}</Auk::Label>
-      {{#if @subcase.confidential}}
-      <Auk::Toggle
-        id="subcase-website"
-        @disabled={{true}}
-        @checked={{false}}
-      />
-      {{else}}
-      <Auk::Toggle
-        id="subcase-website"
-        @checked={{false}}
-      />
-      {{/if}}
-    </div>
-  </div>
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>

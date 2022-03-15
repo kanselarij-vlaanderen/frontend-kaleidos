@@ -5,7 +5,6 @@
         {{t "agendaitem-case"}}
       </h3>
     </Auk::Toolbar::Item>
-
   </Auk::Toolbar::Group>
   <Auk::Toolbar::Group @position="right">
     <Auk::Toolbar::Item>
@@ -39,6 +38,7 @@
     @shouldShowDetails={{or @agendaitem.showAsRemark this.subcase}}
     @newsletterInfo={{this.newsletterInfo}}
     @toggleIsEditing={{this.toggleIsEditingAgendaItemTitles}}
+    @isNew={{true}}
   />
 {{/if}}
 {{#if this.model.showAsRemark}}
