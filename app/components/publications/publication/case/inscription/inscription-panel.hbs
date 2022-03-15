@@ -107,13 +107,13 @@
         </Auk::Toolbar>
       </Auk::Panel::Header>
       <Auk::Panel::Body>
-          <div class="auk-content">
-            <h4 data-test-inscription-view-short-title>
-              {{@publicationFlow.shortTitle}}
-            </h4>
-            <p data-test-inscription-view-long-title class="auk-u-text-prewrap">
-              {{@publicationFlow.longTitle}}
-            </p>
+        <div class="auk-content">
+          <h4 data-test-inscription-view-short-title>
+            {{@publicationFlow.shortTitle}}
+          </h4>
+          {{! The following line is formatted on a single line because of the way browsers treat whitespaces & breaks in combination with `white-space: pre-line` }}
+          {{! prettier-ignore }}
+          <p data-test-inscription-view-long-title class="auk-u-text-prewrap">{{@publicationFlow.longTitle}}</p>
         </div>
       </Auk::Panel::Body>
     </Auk::Panel>

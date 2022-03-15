@@ -12,6 +12,7 @@
         <Toolbar.Group @position="right" as |Group|>
           <Group.Item>
             <Auk::Button
+              data-test-route-publications---translations-upload-translation
               @skin="secondary"
               @icon="plus"
               @disabled={{this.isTranslationUploadDisabled}}
@@ -22,6 +23,7 @@
           </Group.Item>
           <Group.Item>
             <Auk::Button
+              data-test-route-publications---translations-request-translation
               @skin="primary"
               @icon="plus"
               {{on "click" this.openTranslationRequestModal}}
