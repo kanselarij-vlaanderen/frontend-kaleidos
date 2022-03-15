@@ -11,6 +11,7 @@ import { isEmpty } from '@ember/utils';
  */
 export default class PublicationsPublicationProofsProofUploadModalComponent extends Component {
   @service store;
+  @service publicationService;
 
   @tracked uploadedPieces = [];
   @tracked receivedDate = new Date();
@@ -31,19 +32,7 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
 
   @action
   async uploadPiece(file) {
-    const now = new Date();
-    const documentContainer = this.store.createRecord('document-container', {
-      created: now,
-    });
-    await documentContainer.save();
-    const piece = this.store.createRecord('piece', {
-      created: now,
-      modified: now,
-      file: file,
-      confidential: false,
-      name: file.filenameWithoutExtension,
-      documentContainer: documentContainer,
-    });
+    const piece = await this.publicationService.createPiece(file);
     this.uploadedPieces.pushObject(piece);
   }
 
@@ -88,14 +77,7 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
 
   @task
   *deleteUploadedPiece(piece) {
-    const file = yield piece.file;
-    const documentContainer = yield piece.documentContainer;
     this.uploadedPieces.removeObject(piece);
-
-    yield Promise.all([
-      file.destroyRecord(),
-      documentContainer.destroyRecord(),
-      piece.destroyRecord(),
-    ]);
+    yield this.publicationService.deletePiece(piece);
   }
 }

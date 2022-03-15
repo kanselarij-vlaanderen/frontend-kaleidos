@@ -237,13 +237,7 @@ export default class PublicationService extends Service {
   async createProofRequest(proofRequestProperties, publicationFlow) {
     const publicationSubcase = await publicationFlow.publicationSubcase;
     const now = new Date();
-
     const pieces = proofRequestProperties.pieces;
-    await Promise.all(
-      pieces.map((piece) => {
-        return piece.save();
-      })
-    );
 
     const requestActivity = this.store.createRecord('request-activity', {
       startDate: now,

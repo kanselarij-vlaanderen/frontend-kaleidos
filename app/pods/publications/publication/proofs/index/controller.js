@@ -107,11 +107,7 @@ export default class PublicationsPublicationProofsController extends Controller 
         // non-existent model relationships resolve to null
         !!translationActivityGeneratedBy;
       if (!isLinkedToTranslation) {
-        const file = yield piece.file;
-        const documentContainer = yield piece.documentContainer;
-        yield file.destroyRecord();
-        yield documentContainer.destroyRecord();
-        yield piece.destroyRecord();
+        yield this.publicationService.deletePiece(piece);
       }
     }
     yield requestActivity.destroyRecord();
