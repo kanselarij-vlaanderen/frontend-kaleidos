@@ -1,5 +1,13 @@
 import Service, { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
+
+/* eslint-disable no-unused-vars */
+import File from '../models/file';
+import DocumentContainer from '../models/document-container';
+import Piece from '../models/piece';
+import PublicationFlow from '../models/publication-flow';
+/* eslint-enable no-unused-vars */
 
 export default class PublicationService extends Service {
   @service store;
@@ -57,11 +65,13 @@ export default class PublicationService extends Service {
     let case_;
     let agendaItemTreatment;
     let mandatees;
+    let regulationType;
     const isViaCouncilOfMinisters = !!viaCouncilOfMinisterOptions;
     if (isViaCouncilOfMinisters) {
       case_ = viaCouncilOfMinisterOptions.case;
       agendaItemTreatment = viaCouncilOfMinisterOptions.agendaItemTreatment;
       mandatees = viaCouncilOfMinisterOptions.mandatees;
+      regulationType = viaCouncilOfMinisterOptions.regulationType;
     } else {
       case_ = this.store.createRecord('case', {
         shortTitle: publicationProperties.shortTitle,
@@ -121,6 +131,7 @@ export default class PublicationService extends Service {
       created: now,
       openingDate: publicationProperties.openingDate,
       modified: now,
+      regulationType: regulationType
     });
     await publicationFlow.save();
     const translationSubcase = this.store.createRecord('translation-subcase', {
@@ -201,8 +212,7 @@ export default class PublicationService extends Service {
     // already is deleted (by step below)
     await publicationFlow.save();
 
-    const oldChangeActivity = await publicationFlow
-      .publicationStatusChange;
+    const oldChangeActivity = await publicationFlow.publicationStatusChange;
     if (oldChangeActivity) {
       await oldChangeActivity.destroyRecord();
     }
@@ -214,5 +224,131 @@ export default class PublicationService extends Service {
       }
     );
     await newChangeActivity.save();
+  }
+
+  /**
+   * @param {{
+   *  pieces: Piece[],
+   *  subject: string,
+   *  message: string
+   * }} proofRequestProperties
+   * @param {PublicationFlow} publicationFlow
+   */
+  async createProofRequest(proofRequestProperties, publicationFlow) {
+    const publicationSubcase = await publicationFlow.publicationSubcase;
+    const now = new Date();
+
+    const pieces = proofRequestProperties.pieces;
+    await Promise.all(
+      pieces.map((piece) => {
+        return piece.save();
+      })
+    );
+
+    const requestActivity = this.store.createRecord('request-activity', {
+      startDate: now,
+      publicationSubcase: publicationSubcase,
+      usedPieces: pieces,
+    });
+    await requestActivity.save();
+
+    const proofingActivity = this.store.createRecord('proofing-activity', {
+      startDate: now,
+      title: proofRequestProperties.subject,
+      subcase: publicationSubcase,
+      requestActivity: requestActivity,
+      usedPieces: pieces,
+    });
+    await proofingActivity.save();
+
+    const [files, outbox, mailSettings] = await Promise.all([
+      Promise.all(pieces.mapBy('file')),
+      this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
+      this.store.queryOne('email-notification-setting'),
+    ]);
+    const mail = await this.store.createRecord('email', {
+      to: mailSettings.proofRequestToEmail,
+      cc: mailSettings.proofRequestCcEmail,
+      from: mailSettings.defaultFromEmail,
+      folder: outbox,
+      attachments: files,
+      requestActivity: requestActivity,
+      subject: proofRequestProperties.subject,
+      message: proofRequestProperties.message,
+    });
+    await mail.save();
+
+    if (proofRequestProperties.mustUpdatePublicationStatus) {
+      await this.updatePublicationStatus(
+        publicationFlow,
+        CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED
+      );
+    }
+  }
+
+  /**
+   * @param {{
+   *  pieces: Piece[],
+   *  subject: string,
+   *  message: string
+   * }} publicationRequestProperties
+   * @param {PublicationFlow} publicationFlow
+   */
+  async createPublicationRequest(
+    publicationRequestProperties,
+    publicationFlow
+  ) {
+    const publicationSubcase = await publicationFlow.publicationSubcase;
+    const now = new Date();
+
+    const pieces = publicationRequestProperties.pieces;
+    await Promise.all(
+      pieces.map((piece) => {
+        return piece.save();
+      })
+    );
+
+    const requestActivity = this.store.createRecord('request-activity', {
+      startDate: now,
+      publicationSubcase: publicationSubcase,
+      usedPieces: pieces,
+    });
+    await requestActivity.save();
+
+    const publicationActivity = this.store.createRecord(
+      'publication-activity',
+      {
+        startDate: now,
+        title: publicationRequestProperties.subject,
+        subcase: publicationSubcase,
+        requestActivity: requestActivity,
+        usedPieces: pieces,
+      }
+    );
+    await publicationActivity.save();
+
+    const [files, outbox, mailSettings] = await Promise.all([
+      Promise.all(pieces.mapBy('file')),
+      this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
+      this.store.queryOne('email-notification-setting'),
+    ]);
+    const mail = this.store.createRecord('email', {
+      to: mailSettings.publicationRequestToEmail,
+      cc: mailSettings.publicationRequestCcEmail,
+      from: mailSettings.defaultFromEmail,
+      folder: outbox,
+      attachments: files,
+      requestActivity: requestActivity,
+      subject: publicationRequestProperties.subject,
+      message: publicationRequestProperties.message,
+    });
+    await mail.save();
+
+    if (publicationRequestProperties.mustUpdatePublicationStatus) {
+      await this.updatePublicationStatus(
+        publicationFlow,
+        CONSTANTS.PUBLICATION_STATUSES.PUBLICATION_REQUESTED
+      );
+    }
   }
 }

@@ -22,6 +22,8 @@ class Row {
 export default class GovernmentAreasPanel extends Component {
   /**
    * @argument governmentAreas: the list of concepts from the model
+   * @argument allowEditing
+   * @argument onSave
    */
   @service store;
 

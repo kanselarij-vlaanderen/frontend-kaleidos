@@ -86,11 +86,8 @@ Router.map(function() {
         this.route('case', { path: '/dossier', });
         this.route('decisions', { path: '/besluiten', }, function() { });
         this.route('translations', { path: '/vertalingen',}, function() { });
-        this.route('proofs', { path: '/drukproeven', }, function() {
-          this.route('documents', { path: '/documenten', });
-          this.route('requests', { path: '/aanvragen', });
-        });
-        this.route('publication-activities', { path: '/publicatie-activiteiten', });
+        this.route('proofs', { path: '/drukproeven',}, function() { });
+        this.route('publication-activities', { path: '/publicatie', }, function() { });
       });
     });
   }
@@ -153,6 +150,7 @@ Router.map(function() {
     this.route('colors');
     this.route('color-badge');
     this.route('dropdown');
+    this.route('datepicker');
     this.route('empty-state');
     this.route('form-group');
     this.route('layout-grid');

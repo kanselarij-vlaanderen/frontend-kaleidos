@@ -16,13 +16,16 @@
               {{/unless}}
             </h4>
             {{#if @meeting.kindToShow.label}}
-              <span data-test-agenda-header-kind class="auk-u-text-muted auk-body-1">
+              <span
+                data-test-agenda-header-kind
+                class="auk-u-text-muted auk-body-1"
+              >
                 -
                 {{await @meeting.kindToShow.label}}
               </span>
             {{/if}}
           </div>
-          <Sessions::SessionAgendaNav
+          <Meeting::AgendaTabs
             @currentAgenda={{@currentAgenda}}
             @currentMeeting={{@meeting}}
           />
@@ -106,10 +109,10 @@
             {{#if this.currentSession.isEditor}}
               <Menu.Divider />
               <Menu.Item
-                data-test-agenda-header-toggle-editing-session
-                {{on "click" this.toggleEditingSession}}
+                data-test-agenda-header-toggle-editing-meeting
+                {{on "click" this.toggleEditingMeeting}}
               >
-                {{t "edit-session"}}
+                {{t "edit-meeting"}}
               </Menu.Item>
             {{/if}}
             {{#if this.canEditDesignAgenda}}
@@ -147,7 +150,8 @@
               {{#if this.isAlreadyPublished}}
                 <Menu.Item
                   @skin="danger"
-                  {{on "click" this.openConfirmUnpublishThemis}}>
+                  {{on "click" this.openConfirmUnpublishThemis}}
+                >
                   {{t "unpublish-from-web"}}
                 </Menu.Item>
               {{/if}}
@@ -223,18 +227,12 @@
   />
 {{/if}}
 
-{{#if this.isEditingSession}}
-  <Auk::Modal @size="large">
-    <Auk::Modal::Header
-      @title={{t "edit-session"}}
-      @onClose={{this.toggleEditingSession}}
-    />
-    <Sessions::Forms::EditSession
-      @meeting={{@meeting}}
-      @successfullyEdited={{this.toggleEditingSession}}
-      @cancelForm={{this.toggleEditingSession}}
-    />
-  </Auk::Modal>
+{{#if this.isEditingMeeting}}
+  <Meeting::EditMeetingModal
+    @meeting={{@meeting}}
+    @didSave={{this.toggleEditingMeeting}}
+    @onCancel={{this.toggleEditingMeeting}}
+  />
 {{/if}}
 
 {{#if this.showConfimApprovingAllAgendaitems}}

@@ -36,6 +36,7 @@ export default class PublicationRoute extends Route {
   }
 
   setupController(ctrl) {
+    super.setupController(...arguments);
     ctrl.isViaCouncilOfMinisters = this.isViaCouncilOfMinisters;
   }
 }

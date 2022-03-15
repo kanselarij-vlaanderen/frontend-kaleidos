@@ -12,7 +12,7 @@
   </Auk::Tab>
   <Auk::Tab
     @route="publications.publication.decisions"
-    @counter={{this.documentsCount}}
+    @counter={{this.numberOfDocuments}}
     data-test-publication-nav-decisions
   >
     {{t "publication-details-tab-decisions"}}
@@ -34,6 +34,7 @@
     </div>
   </Auk::Tab>
   <Auk::Tab
+    data-test-publication-nav-publications
     @route="publications.publication.publication-activities"
   >
     <div class="auk-o-flex auk-o-flex--center">

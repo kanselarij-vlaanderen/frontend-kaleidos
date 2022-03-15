@@ -1,6 +1,7 @@
 import Model, {
   attr, belongsTo, hasMany
 } from '@ember-data/model';
+import { isPresent } from '@ember/utils';
 
 export default class TranslationActivity extends Model {
   // Attributes.
@@ -21,4 +22,8 @@ export default class TranslationActivity extends Model {
   @hasMany('piece', {
     inverse: 'translationActivityGeneratedBy',
   }) generatedPieces;
+
+  get isFinished() {
+    return isPresent(this.endDate);
+  }
 }

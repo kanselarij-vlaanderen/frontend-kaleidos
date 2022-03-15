@@ -29,6 +29,16 @@ export class TimelineActivity {
       return null;
     }
   }
+
+  get isShown() {
+    if (this.isTranslationActivity) {
+      // A translation activity without end-date is created together with request-activity,
+      // but should not be shown yet.
+      return this.activity.isFinished;
+    } else {
+      return true;
+    }
+  }
 }
 
 export default class PublicationsPublicationTranslationsIndexRoute extends Route {

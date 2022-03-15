@@ -1,16 +1,15 @@
 <PowerSelect
+  data-test-publication-flow-selector
   @selected={{@selected}}
-  @options={{this.options}}
   @noMatchesMessage={{t "no-results-found"}}
   @loadingMessage={{t "search-loading-text"}}
   @searchMessage={{t "publication-search-message"}}
   @searchPlaceholder={{t "search-placeholder"}}
-  @onopen={{this.onOpen}}
-  @oninput={{this.onInput}}
   @searchEnabled={{true}}
   @search={{perform this.debouncedSearch}}
   @allowClear={{true}}
   @onChange={{@onChange}}
-  as |publicationFlow|>
+  as |publicationFlow|
+>
   {{publicationFlow.identification.idName}}
 </PowerSelect>

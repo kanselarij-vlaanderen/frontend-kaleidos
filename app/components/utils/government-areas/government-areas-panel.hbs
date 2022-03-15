@@ -10,15 +10,17 @@
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
-          <Auk::Toolbar::Item>
-            <Auk::Button
-              data-test-government-areas-panel-edit
-              @skin="tertiary"
-              @icon="pencil"
-              @layout="icon-only"
-              {{on "click" this.showEditModal}}
-            />
-          </Auk::Toolbar::Item>
+          {{#if @allowEditing}}
+            <Auk::Toolbar::Item>
+              <Auk::Button
+                data-test-government-areas-panel-edit
+                @skin="tertiary"
+                @icon="pencil"
+                @layout="icon-only"
+                {{on "click" this.showEditModal}}
+              />
+            </Auk::Toolbar::Item>
+          {{/if}}
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
     </Auk::Panel::Header>

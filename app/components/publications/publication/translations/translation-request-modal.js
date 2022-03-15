@@ -17,13 +17,13 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   @service store;
 
   @tracked uploadedPieces = [];
-  @tracked pagesAmount;
-  @tracked wordsAmount;
-  @tracked translationDueDate = this.args.dueDate
-    ? this.args.dueDate
-    : new Date();
+  @tracked numberOfPages;
+  @tracked numberOfWords;
+  @tracked translationDueDate = this.args.dueDate;
   @tracked subject;
   @tracked message;
+  @tracked mustUpdatePublicationStatus = false;
+
   validators;
 
   constructor() {
@@ -47,10 +47,11 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   @task
   *save() {
     yield this.args.onSave({
-      uploadedPieces: this.uploadedPieces,
+      pieces: this.uploadedPieces,
       translationDueDate: this.translationDueDate,
       subject: this.subject,
       message: this.message,
+      mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
   }
 
@@ -60,19 +61,12 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
     if (this.save.isRunning) {
       return;
     }
-    yield Promise.all(this.uploadedPieces.map((piece) => this.deleteUploadedPiece.perform(piece)));
+    yield Promise.all(
+      this.uploadedPieces.map((piece) =>
+        this.deleteUploadedPiece.perform(piece)
+      )
+    );
     this.args.onCancel();
-  }
-
-  @dropTask
-  *deleteUploadedPiece(piece) {
-    const file = yield piece.file;
-    const documentContainer = yield piece.documentContainer;
-    yield Promise.all([
-      file.destroyRecord(),
-      documentContainer.destroyRecord(),
-    ]);
-    this.uploadedPieces.removeObject(piece);
   }
 
   @task
@@ -84,9 +78,9 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
       identifier: identification.idName,
       title: publicationFlow.shortTitle,
       dueDate: this.translationDueDate,
-      totalPages: this.pagesAmount,
-      totalWords: this.wordsAmount,
-      totalDocuments: this.uploadedPieces.length,
+      numberOfPages: this.numberOfPages,
+      numberOfWords: this.numberOfWords,
+      numberOfDocuments: this.uploadedPieces.length,
     };
 
     const mailTemplate = translationRequestEmail(mailParams);
@@ -102,14 +96,14 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
 
   @action
   async uploadPiece(file) {
-    const now = new Date();
+    const created = file.created;
     const documentContainer = this.store.createRecord('document-container', {
-      created: now,
+      created: created,
     });
     await documentContainer.save();
     const piece = this.store.createRecord('piece', {
-      created: now,
-      modified: now,
+      created: created,
+      modified: created,
       file: file,
       confidential: false,
       name: file.filenameWithoutExtension,
@@ -118,6 +112,27 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
 
     this.uploadedPieces.pushObject(piece);
     this.setEmailFields.perform();
+  }
+
+  @action
+  setTranslationRequestedStatus(event) {
+    this.mustUpdatePublicationStatus = event.target.checked;
+  }
+
+  @task
+  *deleteUploadedPiece(piece) {
+    this.uploadedPieces.removeObject(piece);
+    this.setEmailFields.perform();
+    const [file, documentContainer] = yield Promise.all([
+      piece.file,
+      piece.documentContainer,
+    ]);
+
+    yield Promise.all([
+      file.destroyRecord(),
+      documentContainer.destroyRecord(),
+      piece.destroyRecord(),
+    ]);
   }
 
   initValidators() {

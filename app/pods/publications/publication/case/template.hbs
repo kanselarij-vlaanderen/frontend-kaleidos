@@ -3,23 +3,24 @@
 <div class="auk-u-m-4">
   <div class="auk-u-mb-4">
     <Publications::Publication::Case::Info::PublicationCaseInfoPanel
-      @publicationFlow={{@model}} />
+      @publicationFlow={{this.model}} />
 
     <Publications::Publication::Case::Remark::RemarkPanel
-      @publicationFlow={{@model}} />
+      @publicationFlow={{this.model}} />
 
     <Publications::Publication::Case::Inscription::InscriptionPanel
-      @publicationFlow={{@model}} />
+      @publicationFlow={{this.model}} />
 
     <Publications::Publication::Case::Mandatees::MandateesPanel
-      @publicationFlow={{@model}} />
+      @publicationFlow={{this.model}} />
 
     <Utils::GovernmentAreas::GovernmentAreasPanel
-      @governmentAreas={{@model.case.governmentAreas}}
+      @governmentAreas={{this.model.case.governmentAreas}}
+      @allowEditing={{not this.isViaCouncilOfMinisters}}
       @onSave={{this.saveGovernmentAreas}}
     />
 
     <Publications::Publication::Case::ContactPersons::ContactPersonsPanel
-      @publicationFlow={{@model}} />
+      @publicationFlow={{this.model}} />
   </div>
 </div>

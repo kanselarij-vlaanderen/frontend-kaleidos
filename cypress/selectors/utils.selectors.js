@@ -96,6 +96,14 @@ const selectors = {
     selectorForm: '[data-test-edit-government-fields-modal-selector-form]',
   },
 
+  // dropdown-menu
+  dropdownMenu: {
+    options: '[data-test-dropdown-menu-options]',
+  },
+
+  alertDialog: {
+    confirm: '[data-test-alert-dialog-confirm]',
+  },
 
   /** Section VL-components **/
 

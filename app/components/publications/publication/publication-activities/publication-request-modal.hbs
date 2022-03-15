@@ -1,0 +1,78 @@
+<Auk::Modal>
+  <Auk::Modal::Header
+    @title={{t
+      "publication-request-modal-title"
+      publication=@publicationFlow.identification.idName
+    }}
+    @onClose={{perform this.cancel}}
+  />
+  <Auk::Modal::Body>
+    <Utils::LoadableContent
+      @isLoading={{this.isLoading}}
+      @reserveSpace={{true}}
+    >
+      <div class="auk-form-group-layout auk-form-group-layout--standard">
+        <div class="auk-form-group">
+          <Auk::Label @required={{true}}>
+            {{t "attachments"}}
+          </Auk::Label>
+          <Auk::FileUploader
+            @multiple={{true}}
+            @reusable={{true}}
+            @onUpload={{this.uploadPiece}}
+          />
+          <Publications::Publication::PublicationDocumentsList
+            @pieces={{this.transferredPieces}}
+            @viewable={{true}}
+            @onDeletePiece={{this.unlinkTransferredPiece}}
+          />
+          <Publications::Publication::PublicationDocumentsList
+            @pieces={{this.uploadedPieces}}
+            @onDeletePiece={{perform this.deleteUploadedPiece}}
+          />
+        </div>
+        <div class="auk-form-group auk-u-mt-4">
+          <Auk::Checkbox
+            @label={{t "update-publication-status-publication-requested"}}
+            @checked={{this.mustUpdatePublicationStatus}}
+            {{on "input" this.setPublicationRequestedStatus}}
+          />
+        </div>
+        <div class="auk-form-group">
+          <Auk::Label for="publicationRequestModal_subject" @required={{true}}>
+            {{t "subject"}}
+          </Auk::Label>
+          <Auk::Input
+            id="publicationRequestModal_subject"
+            @block={{true}}
+            @value={{mut this.subject}}
+          />
+        </div>
+        <div class="auk-form-group">
+          <Auk::Label for="publicationRequestModal_message" @required={{true}}>
+            {{t "message"}}
+          </Auk::Label>
+          <Auk::Textarea
+            id="publicationRequestModal_message"
+            @block={{true}}
+            rows="16"
+            @value={{mut this.message}}
+          />
+        </div>
+      </div>
+    </Utils::LoadableContent>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer
+    @cancelDisabled={{this.isCancelDisabled}}
+    @onCancel={{perform this.cancel}}
+  >
+    <Auk::Button
+      @skin="primary"
+      @disabled={{this.isSaveDisabled}}
+      @loading={{this.save.isRunning}}
+      {{on "click" (perform this.save)}}
+    >
+      {{t "request-it"}}
+    </Auk::Button>
+  </Auk::Modal::Footer>
+</Auk::Modal>

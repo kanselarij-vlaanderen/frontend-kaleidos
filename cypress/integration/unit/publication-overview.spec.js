@@ -33,10 +33,10 @@ context('Publications overview tests', () => {
     cy.get(publication.remark.save).click();
     cy.wait('@patchPublicationFlow');
     cy.get(publication.publicationCaseInfo.edit).click();
-    cy.get(publication.publicationCaseInfo.numacNumber).find(dependency.emberTagInput.input)
+    cy.get(publication.publicationCaseInfo.editView.numacNumber).find(dependency.emberTagInput.input)
       .click()
       .type(`${searchFields.numacNumber}{enter}`);
-    cy.get(publication.publicationCaseInfo.save).click();
+    cy.get(publication.publicationCaseInfo.editView.save).click();
     cy.wait('@postNumacNumber');
   });
 
@@ -52,8 +52,8 @@ context('Publications overview tests', () => {
 
   it('should test all the result amount options shown options in overview', () => {
     const elementsToCheck = [
+      10,
       25,
-      50,
       100,
       200
     ];
@@ -76,7 +76,7 @@ context('Publications overview tests', () => {
       'numacNumber',
       'shortTitle',
       'remark',
-      'pageCount',
+      'numberOfPages',
       'decisionDate',
       'openingDate',
       'translationRequestDate',
