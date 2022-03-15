@@ -185,7 +185,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   async untilValidated() {
     await this.setStructuredIdentifier.last;
-    console.log(this.isValid);
     return this.isValid;
   }
 
