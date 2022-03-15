@@ -1,10 +1,7 @@
 import Component from '@glimmer/component';
 import { enqueueTask } from 'ember-concurrency-decorators';
 import { inject as service } from '@ember/service';
-import {
-  action,
-  setProperties
-} from '@ember/object';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { guidFor } from '@ember/object/internals';
 
@@ -12,7 +9,6 @@ import { guidFor } from '@ember/object/internals';
  * @argument {Boolean} fullHeight Stretch the upload zone over the full height
  * @argument {Boolean} multiple (optional) allow uploading multiple files
  * @argument {Boolean} reusable (optional, False by default) allow reusing the uploader to upload even more files, or add new files after previous uploads were deleted.
- * @argument {String} accept (optional)
  * @argument {String} fileQueueName (optional) Name of the file queue to use.
  *   Setting this name will allow you to access this queue from the file-queue service outside of this component.
  * @argument {Function} onUpload: action fired for each file that gets uploaded. Passes a semantic.works File as an argument,
@@ -27,10 +23,6 @@ export default class FileUploader extends Component {
     super(...arguments);
     this.uploadedFileLength = 0;
     const queue = this.fileQueue || this.fileQueueService.create(this.fileQueueName);
-    setProperties(queue, { // https://github.com/adopted-ember-addons/ember-file-upload/blob/888273b997d0336841daa1fb24287b5f5c5c9d62/addon/components/base-component.js#L13
-      accept: this.args.accept,
-      // disabled,
-    });
     queue.addListener({
       onFileAdded: this.uploadFileTaskAction,
     });
