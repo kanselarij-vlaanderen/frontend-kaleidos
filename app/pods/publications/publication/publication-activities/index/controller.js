@@ -32,10 +32,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
   }
 
   get isRegistrationDisabled() {
-    return (
-      !this.latestPublicationActivity ||
-      this.latestPublicationActivity.isFinished
-    );
+    return this.latestPublicationActivity?.isFinished;
   }
 
   @task
@@ -51,18 +48,28 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
 
   @task
   *registerPublication(publication) {
-    const publicationActivity = this.latestPublicationActivity;
+    let publicationActivity = this.latestPublicationActivity;
     const publicationDate = publication.publicationDate;
     const saves = [];
+
+    if (!publicationActivity) {
+      // Publication registration without a request
+      publicationActivity = this.store.createRecord(
+        'publication-activity',
+        {
+          startDate: new Date(),
+          subcase: this.publicationSubcase,
+        }
+      );
+    }
+    publicationActivity.endDate = publicationDate;
+    yield publicationActivity.save();
 
     const decision = this.store.createRecord('decision', {
       publicationDate: publicationDate,
       publicationActivity: publicationActivity,
     });
     saves.push(decision.save());
-
-    publicationActivity.endDate = publicationDate;
-    saves.push(publicationActivity.save());
 
     if (publication.mustUpdatePublicationStatus) {
       const statusUpdate = this.publicationService.updatePublicationStatus(
@@ -77,10 +84,8 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     }
 
     yield Promise.all(saves);
+    this.send('refresh');
     this.closeRegistrationModal();
-    // model refresh is not required since publication-activity is already loaded
-    // from backend, but just hidden on timeline until now because it didn't have
-    // an end-date.
   }
 
   @action
