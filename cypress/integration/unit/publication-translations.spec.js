@@ -23,7 +23,6 @@ context('Publications translation tests', () => {
     const file = {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     };
-    const emptyStateMessage = 'Er zijn nog geen vertalingen.';
     const numberOfPages = 5;
     const numberOfWords = 1000;
     const translationEndDate = Cypress.dayjs();
@@ -33,9 +32,11 @@ context('Publications translation tests', () => {
     cy.createPublication(fields);
     cy.get(publication.publicationNav.translations).click()
       .wait('@getTranslationsModel');
+    // Make sure the page transitioned
+    cy.url().should('contain', '/vertalingen');
     cy.get(publication.statusPill.contentLabel).should('contain', 'Opgestart');
-    // page may not have transitioned yet
-    cy.get(auk.emptyState.message).contains(emptyStateMessage);
+    // Check empty state message
+    cy.get(publication.translationsDocuments.panelBody).find(auk.emptyState.message);
 
     // check rollback after cancel request
     cy.get(publication.translationsDocuments.requestTranslation).click();
@@ -53,7 +54,7 @@ context('Publications translation tests', () => {
     cy.get(auk.modal.footer.cancel).click();
     cy.wait('@deleteFile');
     cy.get(auk.modal.container).should('not.exist');
-    cy.get(auk.emptyState.message).contains(emptyStateMessage);
+    cy.get(publication.translationsDocuments.panelBody).find(auk.emptyState.message);
 
     // new request
     cy.get(publication.translationsDocuments.requestTranslation).click();
@@ -97,7 +98,7 @@ context('Publications translation tests', () => {
       .wait('@deleteFiles')
       .wait('@deleteDocumentContainers')
       .wait('@deleteRequestActivities');
-    cy.get(auk.emptyState.message).contains(emptyStateMessage);
+    cy.get(publication.translationsDocuments.panelBody).find(auk.emptyState.message);
 
     // new request
     cy.get(publication.translationsDocuments.requestTranslation).click();

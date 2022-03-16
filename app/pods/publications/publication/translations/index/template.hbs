@@ -34,7 +34,10 @@
       </Auk::Toolbar>
     </Auk::Panel::Header>
 
-    <Auk::Panel::Body class="auk-u-bg-alt">
+    <Auk::Panel::Body
+      data-test-route-publications---translations-panel-body
+      class="auk-u-bg-alt"
+    >
       {{#each @model as |event|}}
         {{#if event.isShown}}
           {{#if event.isRequestActivity}}
