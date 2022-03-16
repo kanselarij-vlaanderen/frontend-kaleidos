@@ -8,6 +8,7 @@ const selectors = {
 
   // route settings/users/index
   usersIndex: {
+    importCSV: '[data-test-route-settings-users-import-csv]',
     searchInput: '[data-test-route-settings-users-search-input]',
     searchButton: '[data-test-route-settings-users-search-button]',
     table: '[data-test-route-settings-users-table]',

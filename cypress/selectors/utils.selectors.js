@@ -21,9 +21,6 @@ const selectors = {
     field: '[data-test-government-area-selector-form-field]~span',
   },
 
-  // simple-file-uploader
-  simpleFileUploader: '[data-test-simple-file-uploader]',
-
   // utils/overviews-header-decision
   overviewsHeaderDecision: {
     title: '[data-test-overviews-header-decision-title]',
