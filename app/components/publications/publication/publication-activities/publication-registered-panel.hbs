@@ -45,12 +45,14 @@
                 {{moment-format decision.publicationDate "DD-MM-YYYY"}}
               </div>
             </div>
-            <Auk::ButtonLink
-              @href={{decision.uri}}
-              @layout="icon-only"
-              @icon="external-link"
-              @target="_blank"
-            />
+            {{#if decision.isStaatsbladResource}}
+              <Auk::ButtonLink
+                @href={{decision.uri}}
+                @layout="icon-only"
+                @icon="external-link"
+                @target="_blank"
+              />
+            {{/if}}
           </Auk::List::Item>
         </div>
       {{/each}}
