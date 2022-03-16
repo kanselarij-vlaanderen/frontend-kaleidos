@@ -10,25 +10,9 @@
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
-       <Auk::Toolbar::Item
-          data-test-route-agendas-overview-filter-container
-          data-children-count="1"
-        >
-          <Auk::Input
-            data-test-route-agendas-overview-filter-input={{true}}
-            @value={{this.dateFilter}}
-            @enter={{fn (action "setDateFilter") this.dateFilter}}
-            placeholder={{t "date-example"}}
-            id={{this.id}}
-          />
-          <Auk::Button
-            @skin="secondary"
-            @layout="icon-only"
-            @icon="search"
-            data-test-route-agendas-overview-filter-button
-            {{on "click" (fn (action "setDateFilter") this.dateFilter)}}
-          />
-        </Auk::Toolbar::Item>
+       <Auk::Toolbar::Item>
+        <Agenda::AgendaOverview::AgendaSearch />
+      </Auk::Toolbar::Item>
       {{#if this.currentSession.isEditor}}
         <Auk::Toolbar::Item>
           <Auk::Button

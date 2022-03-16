@@ -37,13 +37,24 @@
   </div>
   <div class="auk-u-mb-4">
     <div class="auk-form-group">
-      <Auk::Label id="remark-title" class="auk-u-icon-left"><Auk::Icon @name="lock-closed" @size="small" /> {{t "util.internal-remark-title"}}</Auk::Label>
+      <Auk::Label id="remark-title">{{t "remark-title"}}</Auk::Label>
       <Textarea
         data-test-agendaitem-titles-edit-explanation={{true}}
         rows="2"
         aria-labelledby="remark-title"
         class="auk-textarea"
         @value={{@agendaitem.explanation}}
+      />
+    </div>
+  </div>
+  <div class="auk-u-mb-4">
+    <div class="auk-form-group">
+      <Auk::Label id="internal-remark-title" class="auk-u-icon-left"><Auk::Icon @name="lock-closed" @size="small" /> {{t "util.internal-remark-title"}}</Auk::Label>
+      <Textarea
+        rows="2"
+        aria-labelledby="internal-remark-title"
+        class="auk-textarea"
+        @value="Test"
       />
     </div>
   </div>

@@ -83,6 +83,16 @@
               </pre>
             {{/if}}
           {{/if}}
+
+          {{#if @agendaitem.explanation}}
+          <div class="auk-u-mb-2">
+            <p>
+              <strong class="auk-u-text-bold">
+                {{t "remark-title"}}:
+              </strong>{{@agendaitem.explanation}}
+            </p>
+          </div>
+        {{/if}}
         </div>
       </div>
 
@@ -132,7 +142,7 @@
                   <strong class="auk-u-icon-left auk-u-text-bold">
                     <Auk::Icon @name="lock-closed" @size="small" />
                     {{t "util.internal-remark-title"}}:
-                  </strong>{{@agendaitem.explanation}}
+                  </strong>Test
                 </p>
               {{/if}}
             </div>

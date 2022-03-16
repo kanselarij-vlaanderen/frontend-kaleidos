@@ -3,6 +3,7 @@
     {{if this.documentContainer.aboutToDelete "vlc-document--deleted-state"}}"
   {{did-update (perform this.loadPieceRelatedData) @piece}}
   {{did-update (perform this.loadPieceRelatedData) @documentContainer}}
+  {{did-update (perform this.loadVersionHistory) this.documentContainer}}
 >
   <div class="vlc-document-card" data-test-document-card>
     <div class="vlc-document-card__summary">
@@ -13,7 +14,7 @@
               {{#if @isHighlighted}}
               <Auk::Badge @icon="document-added" @size="large" />
               {{else if @piece.confidential }}
-              <Auk::Badge @icon="lock-closed" @size="large" />
+              <Auk::Badge @icon="document" @size="large" />
               {{ else }}
               <Auk::Badge @icon="document" @size="large" />
               {{/if}}
@@ -40,24 +41,26 @@
                 />
                 <Auk::Button
                   data-test-document-card-name-save={{true}}
-                  @skin="borderless"
+                  @skin="tertiary"
                   @layout="icon-only"
                   @icon="check"
+                  class="auk-button--tiny"
                   {{on "click" (perform this.savePieceName)}}
                 />
                 <Auk::Button
                   data-test-document-card-name-cancel={{true}}
-                  @skin="borderless"
+                  @skin="tertiary"
                   @layout="icon-only"
                   @icon="x"
+                  class="auk-button--tiny"
                   {{on "click" this.cancelEditPieceName}}
                 />
               </div>
               {{else}}
                 <h6 class="auk-h4" data-test-document-card-name-value>
                   {{! template-lint-disable no-invalid-interactive }}
-                  <span {{on "click" this.enableEditPieceName}}>
-                    {{this.piece.name}}
+                  <span {{on "click" this.showPieceViewer}}>
+                    {{this.piece.name}}.{{this.piece.file.extension}}
                   </span>
                   {{! template-lint-enable no-invalid-interactive }}
                 </h6>
@@ -98,9 +101,13 @@
                   @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
                   @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
                   @onChangeConfidentiality={{this.changeConfidentiality}}
+                  @isDesignAgenda={{@isDesignAgenda}}
+                  @isNew={{@isNew}}
+                  @isFinal={{@isFinal}}
                 />
               {{/unless}}
             </Auk::Toolbar::Item>
+            {{#if (eq @isFinal false)}}
             {{#if
               (and
                 @hasMarkForSignature
@@ -159,6 +166,7 @@
                 </DropdownMenu>
               {{/if}}
             </Auk::Toolbar::Item>
+            {{/if}}
           </Auk::Toolbar::Group>
         </Auk::Toolbar>
         <div class="auk-o-flex">
@@ -190,6 +198,7 @@
         </div>
       </div>
     </div>
+    {{#if (await this.showPieces)}}
     <div class="vlc-document-card-versions">
       <Auk::Accordion>
         <Auk::Accordion::Item
@@ -205,17 +214,24 @@
           {{else}}
             {{#each this.visiblePieces as |piece|}}
               {{! TODO: also disable delete when piece linked to other agenda-items while maintaining DDAU }}
+              {{#if (eq piece.name this.piece.name)}}
+              {{else}}
               <WebComponents::VlDocument
                 @piece={{piece}}
                 @enableDelete={{eq piece @piece}}
                 @didDeletePiece={{@didDeletePiece}}
                 @didUpdateAccessLevel={{perform this.loadPieceRelatedData}}
+                @isDesignAgenda={{@isDesignAgenda}}
+                @isNew={{@isNew}}
+                @isFinal={{@isFinal}}
               />
+              {{/if}}
             {{/each}}
           {{/if}}
         </Auk::Accordion::Item>
       </Auk::Accordion>
     </div>
+    {{/if}}
   </div>
 </div>
 

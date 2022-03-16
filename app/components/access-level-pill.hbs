@@ -4,22 +4,41 @@
   {{else}}
     {{#if (not this.isEditing)}}
       {{#if (not @confidential)}}
-      <Auk::Pill
-        @skin="active-future"
-        @icon="users"
-        data-test-access-level-pill
-      >
-        {{this.accessLevelLabel}}
-      </Auk::Pill>
+        {{#if (and (and (eq this.accessLevelLabel "Intern Regering")(eq @isDesignAgenda false)) (eq @isNew false))}}
+        <Auk::Pill
+          @skin="active"
+          @icon="users"
+          data-test-access-level-pill
+        >
+          {{this.accessLevelLabel}}
+        </Auk::Pill>
+        {{else if (and (and (eq this.accessLevelLabel "Intern Overheid")(eq @isFinal true)) (eq @isNew false))}}
+        <Auk::Pill
+          @skin="active"
+          @icon="users"
+          data-test-access-level-pill
+        >
+          {{this.accessLevelLabel}}
+        </Auk::Pill>
+        {{else}}
+        <Auk::Pill
+          @skin="active-future"
+          @icon="users"
+          data-test-access-level-pill
+        >
+          {{this.accessLevelLabel}}
+        </Auk::Pill>
+        {{/if}}
       {{else}}
       <Auk::Pill
-        @skin="warning-future"
+        @skin="active"
         @icon="users"
         data-test-access-level-pill
       >
-        {{t "confidential"}}
+        Intern Secretarie
       </Auk::Pill>
       {{/if}}
+      {{#if (eq @isFinal false)}}
       <Auk::Button
         @skin="tertiary"
         @layout="icon-only"
@@ -28,13 +47,14 @@
         {{on "click" this.toggleEdit}}
         data-test-access-level-pill-cancel
       />
+      {{/if}}
     {{else}}
       {{!-- TODO: fix inline style (consider implementing new auk-generation document card) --}}
       {{!-- template-lint-disable no-inline-styles  --}}
       <div style="width:100%">
         <Utils::ModelSelector
           @modelName="access-level"
-          @allowClear={{true}}
+          @allowClear={{false}}
           @hideSearch={{true}}
           @propertyToShow="label"
           @sortField="priority"

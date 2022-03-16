@@ -15,19 +15,19 @@
       {{#if (and @piece.confidential)}}
         {{#if @isFuture}}
         <Auk::Pill
-          @skin="warning-future"
-          @icon="lock-closed"
+          @skin="active-future"
+          @icon="users"
           data-test-agenda-overview-item-confidentiality-locked
         >
-          {{t "confidential"}}
+          Intern secretarie
         </Auk::Pill>
         {{else}}
         <Auk::Pill
-          @skin="warning"
-          @icon="lock-closed"
+          @skin="active"
+          @icon="users"
           data-test-agenda-overview-item-confidentiality-locked
         >
-          {{t "confidential"}}
+          Intern secretarie
         </Auk::Pill>
         {{/if}}
       {{/if}}

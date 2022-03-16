@@ -38,6 +38,10 @@ $vl-green-10: #ECF6EE;
 
   thead th:first-child,
   tbody td:first-child {
+    padding-left: 1rem;
+  }
+
+  > .container-flex--scroll {
     padding-left: 2rem;
   }
 
@@ -45,8 +49,43 @@ $vl-green-10: #ECF6EE;
     display: none;
   }
 
+  .data-table__actions--bottom {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
   .vlc-pagination__container {
     align-items: center;
+
+  }
+
+  .data-table__header-title--sortable {
+    color: #69717C;
+    font-size: 1.5rem;
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+      color: #0055CC;
+    }
+  }
+
+  .data-table__header-title__sort-icon {
+    position: relative;
+    top: .2rem;
+
+    .data-table__header-title--sortable:hover & {
+      opacity: 1 !important;
+    }
+  }
+
+  .data-table__header-title__sort-icon:before {
+    color: #A1ABBA !important;
+    margin-left: .3rem !important;
+  }
+
+  .data-table__header-title--sortable:hover .data-table__header-title__sort-icon:before {
+    color: #A1ABBA !important;
   }
 }
 
@@ -217,8 +256,8 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
 }
 
 .auk-pill--active {
-  border: .1rem solid $vl-picton-blue;
-  color: $vl-picton-blue;
+  border: .1rem solid $vl-picton-blue !important;
+  color: $vl-picton-blue !important;
 }
 
 .auk-pill--action {
@@ -234,8 +273,8 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
 }
 
 .auk-pill--active-future {
-  border: .1rem dashed $vl-picton-blue;
-  color: $vl-picton-blue;
+  border: .1rem dashed $vl-picton-blue !important;
+  color: $vl-picton-blue !important;
   border-radius: .2rem;
 }
 
@@ -292,9 +331,74 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
   }
 }
 
+// Agenda items
+.vlc-agenda-items__subject {
+  a:hover,
+  a:focus {
+    background: transparent;
+  }
+}
+
 // Document card
 .vlc-document-card--header {
   border-bottom: 0;
+}
+
+.vlc-document-card-item {
+  margin-left: 2.4rem;
+}
+
+.vlc-document-card-item__icon {
+  color: #545961;
+  left: -2.4rem;
+  top: 0;
+}
+
+.vlc-document-holder {
+  & + & {
+    margin-top: 1rem;
+  }
+}
+
+.vlc-document-card-item__title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.vlc-document-card-item__title-link {
+  color: #545961;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    color: #69717C;
+  }
+}
+
+// Document list
+.vlc-document-list__item > a {
+  > span:not([class]),
+  > .auk-icon {
+    color: #545961;
+  }
+
+  > span:not([class]) {
+    text-decoration: underline;
+  }
+
+  &:hover,
+  &:focus {
+    background: none;
+    border-radius: 0;
+
+    span,
+    > .auk-icon {
+      color: #69717C;
+      text-decoration: none;
+    }
+  }
 }
 
 // Tiny button
@@ -334,4 +438,9 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
     vertical-align: baseline;
     margin-right: .15rem;
   }
+}
+
+// Accordion
+.auk-accordion__item .auk-accordion__title {
+  padding-left: .5rem;
 }

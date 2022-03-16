@@ -48,6 +48,9 @@
       @hasMarkForSignature={{this.isShownSignatureMarker}}
       @markForSignature={{this.markForSignature}}
       @unmarkForSignature={{this.unmarkForSignature}}
+      @isDesignAgenda={{this.currentAgenda.isDesignAgenda}}
+      @isNew={{await this.agendaitem.checkAdded}}
+      @isFinal={{this.currentAgenda.isFinal}}
     />
   {{/unless}}
 {{else}}
