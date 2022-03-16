@@ -210,7 +210,6 @@ function addDocumentToTreatment(file) {
   // 1 default item treatment exists
   cy.get(agenda.agendaitemDecision.uploadFile).click();
 
-  cy.get(utils.fileUploader.upload).click();
   cy.get(utils.vlModal.dialogWindow).within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
   });

@@ -60,12 +60,6 @@ const selectors = {
     powerSelect: '[data-test-radio-dropdown-power-select]',
   },
 
-  // file-uploader
-  // TODO: below selector no longer exists. Needs adapting to auk uploader.
-  fileUploader: {
-    upload: '[data-test-file-uploader-upload]',
-  },
-
   // mandatee-selector
   mandateeSelector: {
     container: '[data-test-mandatee-selector-container]',
