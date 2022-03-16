@@ -32,6 +32,7 @@ const selectors = {
   // publications\publication\translations\index\template
   // TODO KAS-3248 Rename to translationsIndex
   translationsDocuments: {
+    panelBody: '[data-test-route-publications---translations-panel-body]',
     upload: '[data-test-route-publications---translations-upload-translation]',
     requestTranslation: '[data-test-route-publications---translations-request-translation]',
   },

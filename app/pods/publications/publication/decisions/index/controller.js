@@ -7,6 +7,7 @@ import { dropTask, task } from 'ember-concurrency';
 export default class PublicationsPublicationDecisionsIndexController extends Controller {
   @service store;
   @service fileService;
+  @service publicationService;
 
   @tracked publicationFlow;
   @tracked isViaCouncilOfMinisters;
@@ -23,23 +24,8 @@ export default class PublicationsPublicationDecisionsIndexController extends Con
   }
 
   @task
-  *saveReferenceDocument(document) {
-    const now = new Date();
-    const documentContainer = this.store.createRecord('document-container', {
-      created: now,
-    });
-    yield documentContainer.save();
-
-    const piece = this.store.createRecord('piece', {
-      created: now,
-      modified: now,
-      name: document.name,
-      confidential: false,
-      file: document.file,
-      documentContainer: documentContainer,
-      publicationFlow: this.publicationFlow,
-    });
-
+  *saveReferenceDocument(piece) {
+    piece.publicationFlow = this.publicationFlow;
     yield piece.save();
 
     this.send('refresh');
@@ -48,8 +34,7 @@ export default class PublicationsPublicationDecisionsIndexController extends Con
 
   @dropTask
   *deletePiece(piece) {
-    const documentContainer = yield piece.documentContainer;
-    yield this.fileService.deleteDocumentContainer(documentContainer);
+    yield this.publicationService.deletePiece(piece);
     this.send('refresh');
   }
 }

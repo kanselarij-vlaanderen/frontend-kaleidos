@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -17,10 +17,6 @@ export default class PublicationsPublicationProofsController extends Controller 
   @tracked showProofUploadModal = false;
   @tracked showProofRequestModal = false;
 
-  get isProofUploadDisabled() {
-    return this.latestProofingActivity == null;
-  }
-
   get isCreatePublicationRequestDisabled() {
     return this.publicationActivitiesCount > 0;
   }
@@ -34,7 +30,18 @@ export default class PublicationsPublicationProofsController extends Controller 
 
   @task
   *saveProofUpload(proofUpload) {
-    const proofingActivity = this.latestProofingActivity;
+    let proofingActivity = this.latestProofingActivity;
+
+    if (!proofingActivity) {
+      // Uploading proof documents without a request
+      proofingActivity = this.store.createRecord('proofing-activity', {
+        startDate: new Date(),
+        subcase: this.publicationSubcase,
+      });
+    }
+
+    proofingActivity.endDate = proofUpload.receivedDate;
+    yield proofingActivity.save();
 
     const pieceSaves = [];
     for (let piece of proofUpload.pieces) {
@@ -42,9 +49,6 @@ export default class PublicationsPublicationProofsController extends Controller 
       piece.proofingActivityGeneratedBy = proofingActivity;
       pieceSaves.push(piece.save());
     }
-
-    proofingActivity.endDate = proofUpload.receivedDate;
-    const proofingActivitySave = proofingActivity.save();
 
     let publicationSubcaseSave;
     if (proofUpload.proofPrintCorrector) {
@@ -65,7 +69,6 @@ export default class PublicationsPublicationProofsController extends Controller 
     }
 
     yield Promise.all([
-      proofingActivitySave,
       ...pieceSaves,
       publicationSubcaseSave,
     ]);
@@ -107,11 +110,7 @@ export default class PublicationsPublicationProofsController extends Controller 
         // non-existent model relationships resolve to null
         !!translationActivityGeneratedBy;
       if (!isLinkedToTranslation) {
-        const file = yield piece.file;
-        const documentContainer = yield piece.documentContainer;
-        yield file.destroyRecord();
-        yield documentContainer.destroyRecord();
-        yield piece.destroyRecord();
+        yield this.publicationService.deletePiece(piece);
       }
     }
     yield requestActivity.destroyRecord();

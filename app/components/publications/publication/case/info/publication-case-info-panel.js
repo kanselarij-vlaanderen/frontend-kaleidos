@@ -175,18 +175,12 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @task
   *save() {
-    const isValid = yield this.untilValidated();
-    if (!isValid) {
+    yield this.setStructuredIdentifier.last;
+    if (!this.isValid) {
       return;
     }
     yield this.performSave();
     this.isEditing = false;
-  }
-
-  async untilValidated() {
-    await this.setStructuredIdentifier.last;
-    console.log(this.isValid);
-    return this.isValid;
   }
 
   // separate method to prevent ember-concurrency from saving only partially
