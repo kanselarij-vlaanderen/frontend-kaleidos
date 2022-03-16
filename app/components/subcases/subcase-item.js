@@ -18,7 +18,6 @@ export default class SubcaseItemSubcasesComponent extends Component {
   @tracked isShowingAllDocuments = false;
   @tracked hasDocumentsToShow = false;
   @tracked subcaseDocuments;
-  @tracked requestedForMeeting;
 
   constructor() {
     super(...arguments);
@@ -67,7 +66,7 @@ export default class SubcaseItemSubcasesComponent extends Component {
 
   @task
   *loadRelatedMeeting() {
-    this.requestedForMeeting = yield this.args.subcase.requestedForMeeting;
+    yield this.args.subcase.requestedForMeeting;
   }
 
   @task
