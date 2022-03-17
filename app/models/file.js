@@ -40,7 +40,7 @@ export default class File extends Model {
     return this.filename.replace(regex, '');
   }
 
-  get isWordExtension(){
-    return this.extension === 'docx'
+  get isWordExtension() {
+    return this.extension === 'docx';
   }
 }
