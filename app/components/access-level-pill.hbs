@@ -12,6 +12,14 @@
         >
           {{this.accessLevelLabel}}
         </Auk::Pill>
+        {{else if (and (eq this.accessLevelLabel "Intern Regering")(eq @isVersion true))}}
+        <Auk::Pill
+          @skin="active"
+          @icon="users"
+          data-test-access-level-pill
+        >
+          {{this.accessLevelLabel}}
+        </Auk::Pill>
         {{else if (and (and (eq this.accessLevelLabel "Intern Overheid")(eq @isFinal true)) (eq @isNew false))}}
         <Auk::Pill
           @skin="active"

@@ -205,7 +205,7 @@
     <div class="vlc-document-card-versions">
       <Auk::Accordion>
         <Auk::Accordion::Item
-          @title={{t "show-pieces"}}
+          @title="Vorige versies"
           @disabled={{this.loadPieceRelatedData.isRunning}}
           @expandTask={{this.loadVersionHistory}}
           data-test-document-card-version-history
@@ -225,8 +225,9 @@
                 @didDeletePiece={{@didDeletePiece}}
                 @didUpdateAccessLevel={{perform this.loadPieceRelatedData}}
                 @isDesignAgenda={{@isDesignAgenda}}
-                @isNew={{@isNew}}
+                @isNew={{false}}
                 @isFinal={{@isFinal}}
+                @isVersion={{true}}
               />
               {{/if}}
             {{/each}}
