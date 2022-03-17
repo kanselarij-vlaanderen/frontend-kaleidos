@@ -31,14 +31,39 @@
       </Toolbar.Group>
     </Auk::Toolbar>
   </Auk::Panel::Header>
-  {{!TODO: panel body or remove bottom border if no body}}
-  {{!SUGGESTION: show list of decisions with Staatsblad link and publication date}}
+  <Auk::Panel::Body>
+    <Auk::List>
+      {{#each this.decisions as |decision|}}
+        <div class="auk-o-flex auk-o-flex--spaced-wide">
+          <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
+            <div class="auk-o-flex auk-o-flex--spaced">
+              <Auk::Badge @icon="document" @size="regular" />
+              {{#if decision.title}}
+                <h5 class="auk-h4 auk-u-m-0">{{decision.title}}</h5>
+              {{/if}}
+              <div class="auk-u-text-muted auk-u-italic">
+                {{moment-format decision.publicationDate "DD-MM-YYYY"}}
+              </div>
+            </div>
+            {{#if decision.isStaatsbladResource}}
+              <Auk::ButtonLink
+                @href={{decision.uri}}
+                @layout="icon-only"
+                @icon="external-link"
+                @target="_blank"
+              />
+            {{/if}}
+          </Auk::List::Item>
+        </div>
+      {{/each}}
+    </Auk::List>
+  </Auk::Panel::Body>
 </Auk::Panel>
 
 {{#if this.isOpenPublicationEditModal}}
   <Publications::Publication::PublicationActivities::PublicationEditModal
     @publicationDate={{this.latestDecision.publicationDate}}
-    @onSave={{perform this.updatePublication}}
+    @onSave={{perform this.editPublication}}
     @onCancel={{this.closePublicationEditModal}}
   />
 {{/if}}

@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
@@ -17,10 +17,6 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   @tracked showTranslationUploadModal = false;
   @tracked showTranslationRequestModal = false;
 
-  get isTranslationUploadDisabled() {
-    return this.latestTranslationActivity == null;
-  }
-
   get latestTranslationActivity() {
     const timelineActivity = this.model.find(
       (activity) => activity.isTranslationActivity
@@ -30,22 +26,34 @@ export default class PublicationsPublicationTranslationsIndexController extends 
 
   @task
   *saveTranslationUpload(translationUpload) {
-    const translationActivity = this.latestTranslationActivity;
+    let translationActivity = this.latestTranslationActivity;
+
+    if (!translationActivity) {
+      // Uploading translated documents without a request
+      const french = yield this.store.findRecordByUri(
+        'language',
+        CONSTANTS.LANGUAGES.FR
+      );
+      translationActivity = this.store.createRecord('translation-activity', {
+        startDate: new Date(),
+        subcase: this.translationSubcase,
+        language: french,
+      });
+    }
+
+    translationActivity.endDate = translationUpload.receivedDate;
+    yield translationActivity.save();
 
     const pieceSaves = [];
 
     const language = yield translationActivity.language;
-    for (let piece of translationUpload.uploadedPieces) {
+    for (let piece of translationUpload.pieces) {
       piece.receivedDate = translationUpload.receivedDate;
       piece.language = language;
       piece.translationActivityGeneratedBy = translationActivity;
       pieceSaves.push(piece.save());
     }
 
-    translationActivity.endDate = translationUpload.receivedDate;
-    const translationActivitySave = translationActivity.save();
-
-    let translationSubcaseSave;
     if (translationUpload.mustUpdatePublicationStatus) {
       yield this.publicationService.updatePublicationStatus(
         this.publicationFlow,
@@ -54,21 +62,17 @@ export default class PublicationsPublicationTranslationsIndexController extends 
       );
 
       this.translationSubcase.endDate = translationUpload.receivedDate;
-      translationSubcaseSave = this.translationSubcase.save();
+      yield this.translationSubcase.save();
     }
 
-    yield Promise.all([
-      translationActivitySave,
-      ...pieceSaves,
-      translationSubcaseSave,
-    ]);
+    yield Promise.all([...pieceSaves]);
 
     this.send('refresh');
     this.showTranslationUploadModal = false;
   }
 
   @task
-  *updateTranslationActivity(translationEdit) {
+  *editTranslationActivity(translationEdit) {
     const saves = [];
 
     const translationActivity = translationEdit.translationActivity;
@@ -83,13 +87,13 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   *saveTranslationRequest(translationRequest) {
     const now = new Date();
 
-    const uploadedPieces = translationRequest.uploadedPieces;
+    const pieces = translationRequest.pieces;
     const dutch = yield this.store.findRecordByUri(
       'language',
       CONSTANTS.LANGUAGES.NL
     );
     yield Promise.all(
-      uploadedPieces.map((piece) => {
+      pieces.map((piece) => {
         piece.language = dutch;
         return piece.save();
       })
@@ -98,7 +102,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     const requestActivity = this.store.createRecord('request-activity', {
       startDate: now,
       translationSubcase: this.translationSubcase,
-      usedPieces: uploadedPieces,
+      usedPieces: pieces,
     });
     yield requestActivity.save();
 
@@ -110,7 +114,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
         title: translationRequest.subject,
         subcase: this.translationSubcase,
         requestActivity: requestActivity,
-        usedPieces: uploadedPieces,
+        usedPieces: pieces,
         language: yield this.store.findRecordByUri(
           'language',
           CONSTANTS.LANGUAGES.FR
@@ -125,12 +129,13 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     }
 
     const [files, outbox, mailSettings] = yield Promise.all([
-      Promise.all(uploadedPieces.mapBy('file')),
+      Promise.all(pieces.mapBy('file')),
       this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
       this.store.queryOne('email-notification-setting'),
     ]);
     const mail = this.store.createRecord('email', {
       to: mailSettings.translationRequestToEmail,
+      cc: mailSettings.translationRequestCcEmail,
       from: mailSettings.defaultFromEmail,
       folder: outbox,
       attachments: files,
@@ -162,11 +167,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
 
     const pieces = yield requestActivity.usedPieces;
     for (const piece of pieces.toArray()) {
-      const file = yield piece.file;
-      const documentContainer = yield piece.documentContainer;
-      yield file.destroyRecord();
-      yield documentContainer.destroyRecord();
-      yield piece.destroyRecord();
+      yield this.publicationService.deletePiece(piece);
     }
     yield requestActivity.destroyRecord();
     this.send('refresh');
@@ -174,7 +175,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
 
   @task
   *saveProofRequest(proofRequest) {
-    yield this.publicationService.createProofRequestActivity(
+    yield this.publicationService.createProofRequest(
       proofRequest,
       this.publicationFlow
     );

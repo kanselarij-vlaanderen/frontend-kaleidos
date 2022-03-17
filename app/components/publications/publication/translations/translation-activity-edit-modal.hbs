@@ -17,6 +17,7 @@
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
     <Auk::Button
+      data-test-translation-activity-edit-save
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
       {{on "click" (perform this.save)}}

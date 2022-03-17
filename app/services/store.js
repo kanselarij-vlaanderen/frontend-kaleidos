@@ -16,6 +16,16 @@ export default class ExtendedStoreService extends Store {
     return null;
   }
 
+  async count(modelName, query, options) {
+    query = query || {}; // eslint-disable-line no-param-reassign
+    if (!(query['page[size]'] || (query.page && query.page.size))) {
+      query['page[size]'] = 1;
+    }
+    const results = await this.query(modelName, query, options);
+    const count = results.meta.count;
+    return count;
+  }
+
   findRecordByUri(modelName, uri) {
     const cachedRecord = this.peekAll(modelName).findBy('uri', uri);
     if (cachedRecord) {

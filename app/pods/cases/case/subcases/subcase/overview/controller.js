@@ -11,7 +11,7 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
     return this.model;
   }
   @tracked case;
-  @tracked allSubcases;
+  @tracked siblingSubcases;
   @tracked mandatees;
   @tracked submitter;
   @tracked governmentAreas;

@@ -1,29 +1,29 @@
 import Controller from '@ember/controller';
-import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { isBlank } from '@ember/utils';
 import { task } from 'ember-concurrency-decorators';
 
-import {
-  isPresent, isBlank
-} from '@ember/utils';
 export default class SettingsEmailController extends Controller {
-  @service store;
-
-  @tracked emailToTranslationRequest = this.model.translationRequestToEmail;
-  @tracked emailToProofRequest = this.model.proofRequestToEmail;
-  @tracked emailCcProofRequest = this.model.proofRequestCcEmail;
+  @service router;
 
   @task
-  *saveSettings() {
-    this.model.translationRequestToEmail = this.emailToTranslationRequest;
-    this.model.proofRequestToEmail = this.emailToProofRequest;
-    this.model.proofRequestCcEmail = isPresent(this.emailCcProofRequest) ? this.emailCcProofRequest : undefined;
+  *save() {
     yield this.model.save();
+    this.router.transitionTo('settings.overview');
+  }
 
-    this.transitionToRoute('settings.overview');
+  @action
+  cancel() {
+    this.model.rollbackAttributes();
+    this.router.transitionTo('settings.overview');
   }
 
   get isDisabled() {
-    return isBlank(this.emailToProofRequest) || isBlank(this.emailToTranslationRequest) ;
+    return (
+      isBlank(this.model.translationRequestToEmail) ||
+      isBlank(this.model.proofRequestToEmail) ||
+      isBlank(this.model.publicationRequestToEmail)
+    );
   }
 }

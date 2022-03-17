@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
-import { task, dropTask } from 'ember-concurrency-decorators';
+import { task, dropTask } from 'ember-concurrency';
 import { proofRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
 import { inject as service } from '@ember/service';
@@ -15,11 +15,12 @@ import { inject as service } from '@ember/service';
  */
 export default class PublicationsPublicationProofsProofRequestModalComponent extends Component {
   @service store;
+  @service publicationService;
 
   @tracked subject;
   @tracked message;
   @tracked uploadedPieces = [];
-  @tracked translationPieces = [];
+  @tracked transferredPieces = [];
   @tracked mustUpdatePublicationStatus = false;
 
   validators;
@@ -31,28 +32,81 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
     this.initValidators();
   }
 
+  get isLoading() {
+    return (
+      this.loadTranslationPieces.isRunning ||
+      this.cancel.isRunning ||
+      this.save.isRunning
+    );
+  }
+
   get isCancelDisabled() {
-    return this.cancel.isRunning || this.save.isRunning;
+    return (
+      this.loadTranslationPieces.isRunning ||
+      this.cancel.isRunning ||
+      this.save.isRunning
+    );
   }
 
   get isSaveDisabled() {
-    const totalPieces =
-      this.uploadedPieces.length + this.translationPieces.length;
     return (
-      totalPieces === 0 ||
-      !this.validators.areValid ||
-      this.cancel.isRunning ||
-      this.loadTranslationPieces.isRunning
+      !this.validators.areValid || this.cancel.isRunning || this.save.isRunning
     );
+  }
+
+  get pieces() {
+    return [...this.transferredPieces, ...this.uploadedPieces];
+  }
+
+  @task
+  *loadTranslationPieces() {
+    let translationActivity = this.args.translationActivity;
+
+    if (!translationActivity) {
+      // Fetch latest finished translation-activity
+      translationActivity = yield this.store.queryOne('translation-activity', {
+        'filter[subcase][publication-flow][:id:]': this.args.publicationFlow.id,
+        // Filter on end-date is a workaround to ensure end date exists
+        'filter[:gte:end-date]': '1302-07-11',
+        // eslint-disable-next-line prettier/prettier
+        include: [
+          'generated-pieces',
+          'generated-pieces.file',
+          'used-pieces',
+          'used-pieces.file',
+        ].join(','),
+        sort: '-start-date',
+      });
+    }
+
+    if (translationActivity) {
+      const [usedPieces, generatedPieces] = yield Promise.all([
+        translationActivity.usedPieces,
+        translationActivity.generatedPieces,
+      ]);
+      this.transferredPieces = [
+        ...usedPieces.toArray(),
+        ...generatedPieces.toArray(),
+      ].sortBy('name', 'created');
+    } else {
+      this.transferredPieces = [];
+    }
+  }
+
+  initValidators() {
+    this.validators = new ValidatorSet({
+      subject: new Validator(() => isPresent(this.subject)),
+      message: new Validator(() => isPresent(this.message)),
+      pieces: new Validator(() => this.pieces.length > 0),
+    });
   }
 
   @task
   *save() {
-    const pieces = [...this.uploadedPieces, ...this.translationPieces];
     yield this.args.onSave({
       subject: this.subject,
       message: this.message,
-      uploadedPieces: pieces,
+      pieces: this.pieces,
       mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
   }
@@ -69,39 +123,6 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
       )
     );
     this.args.onCancel();
-  }
-
-  @task
-  *loadTranslationPieces() {
-    let translationActivity = this.args.translationActivity;
-
-    if (!translationActivity) {
-      const translationActivities = yield this.store.query(
-        'translation-activity',
-        {
-          'filter[subcase][publication-flow][:id:]':
-            this.args.publicationFlow.id,
-          include: 'generated-pieces,used-pieces',
-          sort: '-start-date',
-        }
-      );
-      translationActivity = translationActivities.find(
-        (activity) => activity.isFinished
-      );
-    }
-
-    if (translationActivity) {
-      const [usedPieces, generatedPieces] = yield Promise.all([
-        translationActivity.usedPieces,
-        translationActivity.generatedPieces,
-      ]);
-      this.translationPieces = [
-        ...usedPieces.toArray(),
-        ...generatedPieces.toArray(),
-      ];
-    } else {
-      this.translationPieces = [];
-    }
   }
 
   @task
@@ -125,52 +146,23 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
 
   @action
   async uploadPiece(file) {
-    const created = file.created;
-    const documentContainer = this.store.createRecord('document-container', {
-      created: created,
-    });
-    await documentContainer.save();
-    const piece = this.store.createRecord('piece', {
-      created: created,
-      modified: created,
-      file: file,
-      confidential: false,
-      name: file.filenameWithoutExtension,
-      documentContainer: documentContainer,
-    });
-
+    const piece = await this.publicationService.createPiece(file);
     this.uploadedPieces.pushObject(piece);
   }
 
   @task
   *deleteUploadedPiece(piece) {
     this.uploadedPieces.removeObject(piece);
-    const [file, documentContainer] = yield Promise.all([
-      piece.file,
-      piece.documentContainer,
-    ]);
-
-    yield Promise.all([
-      file.destroyRecord(),
-      documentContainer.destroyRecord(),
-      piece.destroyRecord(),
-    ]);
+    yield this.publicationService.deletePiece(piece);
   }
 
   @action
-  unlinkTranslationPiece(piece) {
-    this.translationPieces.removeObject(piece);
+  unlinkTransferredPiece(piece) {
+    this.transferredPieces.removeObject(piece);
   }
 
   @action
   setProofRequestedStatus(event) {
     this.mustUpdatePublicationStatus = event.target.checked;
-  }
-
-  initValidators() {
-    this.validators = new ValidatorSet({
-      subject: new Validator(() => isPresent(this.subject)),
-      message: new Validator(() => isPresent(this.message)),
-    });
   }
 }

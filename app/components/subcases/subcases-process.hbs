@@ -1,12 +1,12 @@
 <div class="auk-u-m-8">
   {{#each @subcases as |subcase|}}
-    <Subcases::SubcaseItem @subcase={{subcase}} as |subcase|>
+    <Subcases::SubcaseItem @case={{@case}} @subcase={{subcase}}>
       <div class="auk-hr">
-        <hr/>
+        <hr />
       </div>
       <div class="auk-u-mb-2">
         <p class="auk-overline">
-          {{await subcase.case.type.label}}
+          {{if subcase.showAsRemark (t "announcement") (t "note")}}
         </p>
       </div>
       <div class="auk-u-mb-2">

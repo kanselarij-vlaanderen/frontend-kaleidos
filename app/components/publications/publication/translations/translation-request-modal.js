@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task, dropTask } from 'ember-concurrency-decorators';
+import { task, dropTask } from 'ember-concurrency';
 import { translationRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 import { Validator, ValidatorSet } from 'frontend-kaleidos/utils/validators';
 import { isPresent } from '@ember/utils';
@@ -15,6 +15,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
    * @argument onCancel
    */
   @service store;
+  @service publicationService;
 
   @tracked uploadedPieces = [];
   @tracked numberOfPages;
@@ -47,7 +48,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   @task
   *save() {
     yield this.args.onSave({
-      uploadedPieces: this.uploadedPieces,
+      pieces: this.uploadedPieces,
       translationDueDate: this.translationDueDate,
       subject: this.subject,
       message: this.message,
@@ -96,20 +97,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
 
   @action
   async uploadPiece(file) {
-    const created = file.created;
-    const documentContainer = this.store.createRecord('document-container', {
-      created: created,
-    });
-    await documentContainer.save();
-    const piece = this.store.createRecord('piece', {
-      created: created,
-      modified: created,
-      file: file,
-      confidential: false,
-      name: file.filenameWithoutExtension,
-      documentContainer: documentContainer,
-    });
-
+    const piece = await this.publicationService.createPiece(file);
     this.uploadedPieces.pushObject(piece);
     this.setEmailFields.perform();
   }
@@ -123,16 +111,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   *deleteUploadedPiece(piece) {
     this.uploadedPieces.removeObject(piece);
     this.setEmailFields.perform();
-    const [file, documentContainer] = yield Promise.all([
-      piece.file,
-      piece.documentContainer,
-    ]);
-
-    yield Promise.all([
-      file.destroyRecord(),
-      documentContainer.destroyRecord(),
-      piece.destroyRecord(),
-    ]);
+    yield this.publicationService.deletePiece(piece);
   }
 
   initValidators() {

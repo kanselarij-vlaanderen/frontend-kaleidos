@@ -12,9 +12,9 @@
         <Toolbar.Group @position="right" as |Group|>
           <Group.Item>
             <Auk::Button
+              data-test-route-publications---translations-upload-translation
               @skin="secondary"
               @icon="plus"
-              @disabled={{this.isTranslationUploadDisabled}}
               {{on "click" this.openTranslationUploadModal}}
             >
               {{t "upload-translation"}}
@@ -22,6 +22,7 @@
           </Group.Item>
           <Group.Item>
             <Auk::Button
+              data-test-route-publications---translations-request-translation
               @skin="primary"
               @icon="plus"
               {{on "click" this.openTranslationRequestModal}}
@@ -33,7 +34,10 @@
       </Auk::Toolbar>
     </Auk::Panel::Header>
 
-    <Auk::Panel::Body class="auk-u-bg-alt">
+    <Auk::Panel::Body
+      data-test-route-publications---translations-panel-body
+      class="auk-u-bg-alt"
+    >
       {{#each @model as |event|}}
         {{#if event.isShown}}
           {{#if event.isRequestActivity}}
@@ -56,7 +60,9 @@
               <Publications::Publication::Translations::TranslationReceivedPanel
                 @translationActivity={{event.activity}}
                 @publicationFlow={{this.publicationFlow}}
-                @onUpdateTranslationActivity={{perform this.updateTranslationActivity}}
+                @onEditTranslationActivity={{perform
+                  this.editTranslationActivity
+                }}
                 @onCreateProofRequest={{perform this.saveProofRequest}}
               />
             </Utils::Timeline::Event>

@@ -29,19 +29,13 @@ const selectors = {
   //   requests: '[data-test-route-publications---translations-tab-requests]',
   // },
 
-  // publications\publication\translations\documents\template
-  // translationsDocuments: {
-  // add: '[data-test-route-publications---translations-documents-add]',
-  // requestTranslation: '[data-test-route-publications---translations-documents-request-translation]',
-  // tableRow: '[data-test-route-publications---translations-documents-table-row]',
-  // row: {
-  //   checkbox: '[data-test-route-publications---translations-documents-row-checkbox]',
-  //   documentName: '[data-test-route-publications---translations-documents-row-document-name]',
-  //   options: '[data-test-route-publications---translations-documents-row-options]',
-  //   edit: '[data-test-route-publications---translations-documents-row-edit]',
-  //   delete: '[data-test-route-publications---translations-documents-row-delete]',
-  //   },
-  // },
+  // publications\publication\translations\index\template
+  // TODO KAS-3248 Rename to translationsIndex
+  translationsDocuments: {
+    panelBody: '[data-test-route-publications---translations-panel-body]',
+    upload: '[data-test-route-publications---translations-upload-translation]',
+    requestTranslation: '[data-test-route-publications---translations-request-translation]',
+  },
 
   // publications\publication\proofs\documents\template
   proofsDocuments: {
@@ -124,9 +118,11 @@ const selectors = {
     goBack: '[data-test-publication-nav-go-back]',
     decisions: '[data-test-publication-nav-decisions]',
     translations: '[data-test-publication-nav-translations]',
+    // TODO KAS-2348 rename to proofs
     publishpreview: '[data-test-publication-nav-publishpreview]',
     // TODO-SELECTOR unused selectors
     case: '[data-test-publication-nav-case]',
+    publications: '[data-test-publication-nav-publications]',
   },
 
   // publication-table-row
@@ -264,12 +260,13 @@ const selectors = {
   // },
 
   // translation-request-modal
-  // translationRequest: {
-  //   message: '[data-test-publication-translation-request-message]',
-  //   save: '[data-test-publication-translation-request-save]',
-  //   // TODO-SELECTOR unused selectors
-  //   documentsList: '[data-test-publication-translation-request-documents-list]',
-  // },
+  translationRequest: {
+    numberOfPages: '[data-test-publication-translation-request-number-of-pages]',
+    numberOfWords: '[data-test-publication-translation-request-number-of-words]',
+    updateStatus: '[data-test-publication-translation-request-update-status]',
+    message: '[data-test-publication-translation-request-message]',
+    save: '[data-test-publication-translation-request-save]',
+  },
 
   // document-edit-modal
   documentEdit: {
@@ -282,10 +279,11 @@ const selectors = {
   },
 
   //  translation-upload-modal
-  // translationUpload: {
-  //   name: '[data-test-translation-upload-name]',
-  //   save: '[data-test-translation-upload-save]',
-  // },
+  translationUpload: {
+    piece: '[data-test-translation-upload-piece]',
+    updateStatus: '[data-test-translation-upload-update-status]',
+    save: '[data-test-translation-upload-save]',
+  },
 
   // proof-upload-modal
   proofUpload: {
@@ -338,10 +336,39 @@ const selectors = {
     contentLabel: '[data-test-status-pill-content-label]',
     changeStatus: '[data-test-status-pill-change-status]',
   },
+
   // publication-status-modal
   publicationStatus: {
     select: '[data-test-publication-status-select]',
     save: '[data-test-publication-status-save]',
+  },
+
+  // publication-info-panel
+  publicationsInfoPanel: {
+    // TODO-SELECTOR unused selectors
+    edit: '[data-test-publications-info-panel-edit]',
+    targetEndDate: '[data-test-publications-info-panel-target-end-date]',
+    save: '[data-test-publications-info-panel-save]',
+  },
+
+  // request-activity-panel
+  requestActivityPanel: {
+    dropdown: '[data-test-request-activity-panel-dropdown]',
+    delete: '[data-test-request-activity-panel-delete]',
+    message: '[data-test-request-activity-panel-message]',
+  },
+
+  // translation-received-panel
+  translationReceivedPanel: {
+    panel: '[data-test-translation-received-panel]',
+    endDate: '[data-test-translation-received-panel-end-date]',
+    dropdown: '[data-test-translation-received-panel-dropdown]',
+    edit: '[data-test-translation-received-panel-edit]',
+  },
+
+  // translation-activity-edit
+  translationActivityEdit: {
+    save: '[data-test-translation-activity-edit-save]',
   },
 
   // batch-documents-publication-row
@@ -357,6 +384,11 @@ const selectors = {
   // document-card-step
   documentCardStep: {
     card: '[data-test-document-card-step]',
+  },
+
+  // publication-documents-list
+  documentsList: {
+    piece: '[data-test-document-list-piece]',
   },
 
 };

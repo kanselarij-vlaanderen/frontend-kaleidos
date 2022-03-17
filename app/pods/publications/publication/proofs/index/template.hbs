@@ -14,7 +14,6 @@
             <Auk::Button
               @skin="secondary"
               @icon="plus"
-              @disabled={{this.isProofUploadDisabled}}
               {{on "click" this.openProofUploadModal}}
             >
               {{t "upload-proof"}}
@@ -40,7 +39,9 @@
             <Utils::Timeline::Event
               @badgeIcon="mail"
               @badgeSkin="primary"
-              @event={{event}} as |event|>
+              @event={{event}}
+              as |event|
+            >
               <Publications::Publication::RequestActivityPanel
                 @title={{t "requested-proof"}}
                 @requestActivity={{event.activity}}
@@ -52,11 +53,18 @@
             <Utils::Timeline::Event
               @badgeIcon="check"
               @badgeSkin="success"
-              @event={{event}} as |event|>
+              @event={{event}}
+              as |event|
+            >
               <Publications::Publication::Proofs::ProofReceivedPanel
                 @proofingActivity={{event.activity}}
+                @publicationFlow={{this.publicationFlow}}
                 @proofPrintCorrector={{this.publicationSubcase.proofPrintCorrector}}
-                @onUpdateProofingActivity={{perform this.updateProofingActivity}}
+                @onEditProofingActivity={{perform this.editProofingActivity}}
+                @onCreatePublicationRequest={{perform
+                  this.savePublicationRequest
+                }}
+                @isCreatePublicationRequestDisabled={{this.isCreatePublicationRequestDisabled}}
               />
             </Utils::Timeline::Event>
           {{/if}}

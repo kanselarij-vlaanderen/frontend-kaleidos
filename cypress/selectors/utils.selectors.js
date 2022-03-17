@@ -21,9 +21,6 @@ const selectors = {
     field: '[data-test-government-area-selector-form-field]~span',
   },
 
-  // simple-file-uploader
-  simpleFileUploader: '[data-test-simple-file-uploader]',
-
   // utils/overviews-header-decision
   overviewsHeaderDecision: {
     title: '[data-test-overviews-header-decision-title]',
@@ -63,11 +60,6 @@ const selectors = {
     powerSelect: '[data-test-radio-dropdown-power-select]',
   },
 
-  // file-uploader
-  fileUploader: {
-    upload: '[data-test-file-uploader-upload]',
-  },
-
   // mandatee-selector
   mandateeSelector: {
     container: '[data-test-mandatee-selector-container]',
@@ -101,6 +93,9 @@ const selectors = {
     options: '[data-test-dropdown-menu-options]',
   },
 
+  alertDialog: {
+    confirm: '[data-test-alert-dialog-confirm]',
+  },
 
   /** Section VL-components **/
 

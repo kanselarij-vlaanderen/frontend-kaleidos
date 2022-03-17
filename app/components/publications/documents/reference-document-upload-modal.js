@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task, dropTask } from 'ember-concurrency-decorators';
@@ -11,10 +12,11 @@ import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
  * @argument onCancel
  */
 export default class PublicationsDocumentsReferenceDocumentUploadModalComponent extends Component {
+  @service publicationService;
+
   validators;
 
-  @tracked file;
-  @tracked name;
+  @tracked piece;
 
   constructor() {
     super(...arguments);
@@ -31,14 +33,14 @@ export default class PublicationsDocumentsReferenceDocumentUploadModalComponent 
   }
 
   get isSaveDisabled() {
-    return !this.file || this.file.isDeleted || !this.validators.areValid;
+    return !this.piece || !this.validators.areValid;
   }
 
   @dropTask
   *cancel() {
     if (!this.save.isRunning) {
-      if (this.file) {
-        yield this.file.destroyRecord();
+      if (this.piece) {
+        yield this.publicationService.deletePiece(this.piece);
       }
       this.args.onCancel();
     } else {
@@ -48,21 +50,17 @@ export default class PublicationsDocumentsReferenceDocumentUploadModalComponent 
 
   @task
   *save() {
-    yield this.args.onSave({
-      file: this.file,
-      name: this.name,
-    });
+    yield this.args.onSave(this.piece);
   }
 
   @action
-  setFileProperties(file) {
-    this.file = file;
-    this.name = file.filenameWithoutExtension;
+  async createPiece(file) {
+    this.piece = await this.publicationService.createPiece(file);
   }
 
   initValidation() {
     this.validators = new ValidatorSet({
-      name: new Validator(() => isPresent(this.name)),
+      name: new Validator(() => isPresent(this.piece.name)),
     });
   }
 }

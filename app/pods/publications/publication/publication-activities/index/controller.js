@@ -32,14 +32,14 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
   }
 
   get isRegistrationDisabled() {
-    return !this.latestPublicationActivity || this.latestPublicationActivity.isFinished;
+    return this.latestPublicationActivity?.isFinished;
   }
 
   @task
   *saveRequest(publicationRequest) {
-    yield this.publicationService.createPublicationRequestActivity(
+    yield this.publicationService.createPublicationRequest(
       publicationRequest,
-      this.publicationFlow,
+      this.publicationFlow
     );
 
     this.send('refresh');
@@ -48,18 +48,28 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
 
   @task
   *registerPublication(publication) {
-    const publicationActivity = this.latestPublicationActivity;
+    let publicationActivity = this.latestPublicationActivity;
     const publicationDate = publication.publicationDate;
     const saves = [];
+
+    if (!publicationActivity) {
+      // Publication registration without a request
+      publicationActivity = this.store.createRecord(
+        'publication-activity',
+        {
+          startDate: new Date(),
+          subcase: this.publicationSubcase,
+        }
+      );
+    }
+    publicationActivity.endDate = publicationDate;
+    yield publicationActivity.save();
 
     const decision = this.store.createRecord('decision', {
       publicationDate: publicationDate,
       publicationActivity: publicationActivity,
     });
     saves.push(decision.save());
-
-    publicationActivity.endDate = publicationDate;
-    saves.push(publicationActivity.save());
 
     if (publication.mustUpdatePublicationStatus) {
       const statusUpdate = this.publicationService.updatePublicationStatus(
@@ -74,14 +84,12 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     }
 
     yield Promise.all(saves);
+    this.send('refresh');
     this.closeRegistrationModal();
-    // model refresh is not required since publication-activity is already loaded
-    // from backend, but just hidden on timeline until now because it didn't have
-    // an end-date.
   }
 
   @action
-  async updatePublication(publication) {
+  async editPublication(publication) {
     const decision = publication.decision;
     decision.publicationDate = publication.publicationDate;
 
@@ -91,8 +99,16 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     await Promise.all([decision.save(), publicationActivity.save()]);
   }
 
-  @action
-  async deleteRequest(requestActivity) {
+  @task
+  *deleteRequest(requestActivityArgs) {
+    yield this.performDeleteRequest(requestActivityArgs);
+    // separate from this.performDeleteRequest(...):
+    //    refresh is OK to be aborted
+    this.send('refresh');
+  }
+
+  // separate method to prevent ember-concurrency from saving only partially
+  async performDeleteRequest(requestActivity) {
     const deletes = [];
 
     const publicationActivity = await requestActivity.publicationActivity;
@@ -104,15 +120,15 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
 
     const pieces = await requestActivity.usedPieces;
     for (const piece of pieces.toArray()) {
-      const file = await piece.file;
-      const documentContainer = await piece.documentContainer;
+      const proofingActivity = await piece.proofingActivityGeneratedBy;
 
-      // TODO: when pieces will be added from Drukproeven
-      // it will be necessary to check the pieces are not linked
-      // to something else and may be deleted
-      deletes.push(piece.destroyRecord());
-      deletes.push(file.destroyRecord());
-      deletes.push(documentContainer.destroyRecord());
+      // The pieces that are used in a proofingActivity should not be deleted
+      // Only proof (result/generated) pieces are uploaded, so they
+      //    so no check whether they are linked to a translationActivity is required
+      if (!proofingActivity) {
+        const pieceDelete = this.publicationService.deletePiece(piece);
+        deletes.push(pieceDelete)
+      }
     }
 
     await Promise.all(deletes);
@@ -120,7 +136,6 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     // delete after previous records have been destroyed
     // destroying in parallel throws occasional errors
     await requestActivity.destroyRecord();
-    this.send('refresh');
   }
 
   @action

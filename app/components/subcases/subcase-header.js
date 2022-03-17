@@ -22,6 +22,7 @@ export default Component.extend({
   isAssigning: false,
   subcase: null,
   caseToDelete: null,
+  onMoveSubcase: null, // from args, the parent route subcases needs to be refreshed after subcase is moved/deleted
 
   canPropose: computed('subcase.{requestedForMeeting,hasActivity}', 'isAssigningToOtherAgenda', async function() {
     const {
@@ -107,6 +108,7 @@ export default Component.extend({
     this.set('isAssigningToOtherCase', false);
   },
 
+  // TODO KAS-3256 We should take another look of the deleting case feature in light of publications also using cases.
   deleteCase: task(function *(_case) {
     yield _case.destroyRecord();
     this.set('promptDeleteCase', false);
@@ -167,8 +169,8 @@ export default Component.extend({
         return;
       }
       await this.deleteSubcase(subcaseToDelete);
-
       this.navigateToSubcaseOverview(caze);
+      this.onMoveSubcase();
     },
     cancelDeleteSubcase() {
       this.set('isDeletingSubcase', false);
@@ -187,7 +189,8 @@ export default Component.extend({
 
       const subCases = await oldCase.hasMany('subcases').reload();
       if (subCases.length > 0) {
-        this.get('router').transitionTo('cases.case.subcases');
+        this.router.transitionTo('cases.case.subcases');
+        this.onMoveSubcase();
       } else {
         this.set('caseToDelete', oldCase);
         this.triggerDeleteCaseDialog();

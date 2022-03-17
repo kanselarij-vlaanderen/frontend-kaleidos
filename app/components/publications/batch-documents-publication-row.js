@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { task } from 'ember-concurrency';
 
 /**
  * @argument {Piece} piece
@@ -9,7 +10,7 @@ import { action } from '@ember/object';
  * @argument {function(Piece, PublicationFlow)} onLinkPublicationFlow
  * @argument {function(Piece)} onUnlinkPublicationFlow
  * @argument {function(Piece)} onOpenNewPublicationModal
-*/
+ */
 export default class PublicationsBatchDocumentsPublicationRowComponent extends Component {
   @service intl;
 
@@ -21,7 +22,7 @@ export default class PublicationsBatchDocumentsPublicationRowComponent extends C
     {
       isEnabledLink: false,
       label: this.intl.t('none'),
-    }
+    },
   ];
 
   @tracked selectedLinkModeOption;
@@ -36,24 +37,33 @@ export default class PublicationsBatchDocumentsPublicationRowComponent extends C
   async initSelectedOptions() {
     this.selectedPublicationFlow = await this.args.piece.publicationFlow;
     const isEnabledLink = !!this.selectedPublicationFlow;
-    this.selectedLinkModeOption = this.linkModeOptions.find((opt) => opt.isEnabledLink === isEnabledLink);
+    this.selectedLinkModeOption = this.linkModeOptions.find(
+      (opt) => opt.isEnabledLink === isEnabledLink
+    );
   }
 
-  @action
-  selectLinkModeOption(option) {
+  get isLinkingRunning() {
+    return (
+      this.selectLinkModeOption.isRunning ||
+      this.selectPublicationFlow.isRunning
+    );
+  }
+
+  @task
+  *selectLinkModeOption(option) {
     this.selectedLinkModeOption = option;
 
     if (!option.isEnabledLink) {
-      this.args.onUnlinkPublicationFlow(this.args.piece);
+      yield this.args.onUnlinkPublicationFlow(this.args.piece);
     }
   }
 
-  @action
-  selectPublicationFlow(publicationFlow) {
+  @task
+  *selectPublicationFlow(publicationFlow) {
     if (publicationFlow) {
-      this.args.onLinkPublicationFlow(this.args.piece, publicationFlow);
+      yield this.args.onLinkPublicationFlow(this.args.piece, publicationFlow);
     } else {
-      this.args.onUnlinkPublicationFlow(this.args.piece);
+      yield this.args.onUnlinkPublicationFlow(this.args.piece);
     }
   }
 }

@@ -1,16 +1,17 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import { isEmpty } from '@ember/utils';
 
 /**
  * @argument {proofingActivity}
  * @argument {proofPrintCorrector} from publicationSubcase
- * @argument {onUpdateProofingActivity}
+ * @argument {onEditProofingActivity}
  */
 export default class PublicationsPublicationProofProofReceivedPanel extends Component {
   @tracked showEditProofModal = false;
+  @tracked showPublicationRequestModal = false;
 
   @tracked newReceivedDate;
   @tracked newProofPrintCorrector;
@@ -25,12 +26,18 @@ export default class PublicationsPublicationProofProofReceivedPanel extends Comp
 
   @task
   *save() {
-    yield this.args.onUpdateProofingActivity({
+    yield this.args.onEditProofingActivity({
       proofingActivity: this.args.proofingActivity,
       receivedDate: this.newReceivedDate,
       proofPrintCorrector: this.newProofPrintCorrector,
     });
     this.showEditProofModal = false;
+  }
+
+  @task
+  *createPublicationRequest(publicationRequestArgs) {
+    yield this.args.onCreatePublicationRequest(publicationRequestArgs);
+    this.showPublicationRequestModal = false;
   }
 
   @action
@@ -43,6 +50,16 @@ export default class PublicationsPublicationProofProofReceivedPanel extends Comp
   @action
   closeEditProofModal() {
     this.showEditProofModal = false;
+  }
+
+  @action
+  openPublicationRequestModal() {
+    this.showPublicationRequestModal = true;
+  }
+
+  @action
+  closePublicationRequestModal() {
+    this.showPublicationRequestModal = false;
   }
 
   @action

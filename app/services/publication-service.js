@@ -131,7 +131,7 @@ export default class PublicationService extends Service {
       created: now,
       openingDate: publicationProperties.openingDate,
       modified: now,
-      regulationType: regulationType
+      regulationType: regulationType,
     });
     await publicationFlow.save();
     const translationSubcase = this.store.createRecord('translation-subcase', {
@@ -226,21 +226,23 @@ export default class PublicationService extends Service {
     await newChangeActivity.save();
   }
 
-  async createProofRequestActivity(proofRequestProperties, publicationFlow) {
+  /**
+   * @param {{
+   *  pieces: Piece[],
+   *  subject: string,
+   *  message: string
+   * }} proofRequestProperties
+   * @param {PublicationFlow} publicationFlow
+   */
+  async createProofRequest(proofRequestProperties, publicationFlow) {
     const publicationSubcase = await publicationFlow.publicationSubcase;
     const now = new Date();
-
-    const uploadedPieces = proofRequestProperties.uploadedPieces;
-    await Promise.all(
-      uploadedPieces.map((piece) => {
-        return piece.save();
-      })
-    );
+    const pieces = proofRequestProperties.pieces;
 
     const requestActivity = this.store.createRecord('request-activity', {
       startDate: now,
       publicationSubcase: publicationSubcase,
-      usedPieces: uploadedPieces,
+      usedPieces: pieces,
     });
     await requestActivity.save();
 
@@ -249,17 +251,18 @@ export default class PublicationService extends Service {
       title: proofRequestProperties.subject,
       subcase: publicationSubcase,
       requestActivity: requestActivity,
-      usedPieces: uploadedPieces,
+      usedPieces: pieces,
     });
     await proofingActivity.save();
 
     const [files, outbox, mailSettings] = await Promise.all([
-      Promise.all(uploadedPieces.mapBy('file')),
+      Promise.all(pieces.mapBy('file')),
       this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
       this.store.queryOne('email-notification-setting'),
     ]);
     const mail = await this.store.createRecord('email', {
       to: mailSettings.proofRequestToEmail,
+      cc: mailSettings.proofRequestCcEmail,
       from: mailSettings.defaultFromEmail,
       folder: outbox,
       attachments: files,
@@ -277,24 +280,26 @@ export default class PublicationService extends Service {
     }
   }
 
-  async createPublicationRequestActivity(
+  /**
+   * @param {{
+   *  pieces: Piece[],
+   *  subject: string,
+   *  message: string
+   * }} publicationRequestProperties
+   * @param {PublicationFlow} publicationFlow
+   */
+  async createPublicationRequest(
     publicationRequestProperties,
     publicationFlow
   ) {
     const publicationSubcase = await publicationFlow.publicationSubcase;
     const now = new Date();
-
-    const uploadedPieces = publicationRequestProperties.uploadedPieces;
-    await Promise.all(
-      uploadedPieces.map((piece) => {
-        return piece.save();
-      })
-    );
+    const pieces = publicationRequestProperties.pieces;
 
     const requestActivity = this.store.createRecord('request-activity', {
       startDate: now,
       publicationSubcase: publicationSubcase,
-      usedPieces: uploadedPieces,
+      usedPieces: pieces,
     });
     await requestActivity.save();
 
@@ -305,19 +310,19 @@ export default class PublicationService extends Service {
         title: publicationRequestProperties.subject,
         subcase: publicationSubcase,
         requestActivity: requestActivity,
-        usedPieces: uploadedPieces,
+        usedPieces: pieces,
       }
     );
     await publicationActivity.save();
 
     const [files, outbox, mailSettings] = await Promise.all([
-      Promise.all(uploadedPieces.mapBy('file')),
+      Promise.all(pieces.mapBy('file')),
       this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
       this.store.queryOne('email-notification-setting'),
     ]);
     const mail = this.store.createRecord('email', {
-      to: mailSettings.proofRequestToEmail,
-      cc: mailSettings.proofRequestCcEmail,
+      to: mailSettings.publicationRequestToEmail,
+      cc: mailSettings.publicationRequestCcEmail,
       from: mailSettings.defaultFromEmail,
       folder: outbox,
       attachments: files,
@@ -333,5 +338,50 @@ export default class PublicationService extends Service {
         CONSTANTS.PUBLICATION_STATUSES.PUBLICATION_REQUESTED
       );
     }
+  }
+
+  /**
+   * Create and save:
+   * - piece
+   * - document-container without versioning
+   * @param {File} file
+   * @param {{
+   *  name: string,
+   * }}
+   * @returns {Piece}
+   */
+  async createPiece(file) {
+    const documentContainer = this.store.createRecord('document-container', {
+      created: file.created,
+    });
+    await documentContainer.save();
+
+    const piece = this.store.createRecord('piece', {
+      created: file.created,
+      modified: file.created,
+      name: file.filenameWithoutExtension,
+      file: file,
+      documentContainer: documentContainer,
+    });
+    await piece.save();
+
+    return piece;
+  }
+
+  /**
+   * Delete and save:
+   * - piece
+   * - file
+   * - document-container without versioning
+   * @param {Piece} piece
+   */
+  async deletePiece(piece) {
+    const file = await piece.file;
+    const documentContainer = await piece.documentContainer;
+    await Promise.all([
+      piece.destroyRecord(),
+      file.destroyRecord(),
+      documentContainer.destroyRecord(),
+    ]);
   }
 }
