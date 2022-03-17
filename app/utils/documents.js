@@ -121,3 +121,8 @@ export const restorePiecesFromPreviousAgendaitem = async function (
     );
   }
 };
+
+export async function getPieceDisplayName(piece) {
+  const file = await piece.file;
+  return `${piece.name}.${file.extension}`;
+}
