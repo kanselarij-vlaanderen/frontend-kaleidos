@@ -62,7 +62,7 @@ export default class NewsletterService extends Service {
     });
     if (!response.ok) {
       this.toaster.error(
-        this.intl.t('error-send-belga'),
+        this.intl.t('error-send-newsletter'),
         this.intl.t('warning-title')
       );
       const result = await response.json();
