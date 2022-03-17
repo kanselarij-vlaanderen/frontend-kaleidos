@@ -19,6 +19,9 @@
             </Menu.Item>
           {{/if}}
         {{/if}}
+        <Menu.Item>
+          Intrekken
+        </Menu.Item>
         {{#if (or this.currentSession.isAdmin (await this.isDeletable))}}
           <Menu.Item
             @skin="danger"

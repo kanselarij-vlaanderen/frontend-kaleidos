@@ -60,7 +60,7 @@
                 <h6 class="auk-h4" data-test-document-card-name-value>
                   {{! template-lint-disable no-invalid-interactive }}
                   <span {{on "click" this.showPieceViewer}}>
-                    {{this.piece.name}}.{{this.piece.file.extension}}
+                    {{this.piece.name}}.{{#if (eq this.piece.file.extension "docx")}}pdf{{else}}{{this.piece.file.extension}}{{/if}}
                   </span>
                   {{! template-lint-enable no-invalid-interactive }}
                 </h6>
@@ -183,6 +183,9 @@
                   {{moment-format this.piece.created}}
                   {{t "at"}}
                   {{moment-format this.piece.created "HH:mm"}}
+                  {{#if (eq this.piece.file.extension "docx")}}
+                    als <a href="#!">Word document</a>
+                  {{/if}}
                 {{/if}}
               </div>
               {{#if this.piece.accessLevelLastModified}}
@@ -254,6 +257,8 @@
           @multipleFiles={{false}}
           @uploadedFileAction={{perform this.uploadPiece}}
         />
+        <br/>
+        <Auk::Alert @message="Indien beschikbaar, gelieve het originele Word bestand op te laden." />
       {{/if}}
     </Auk::Modal::Body>
     <WebComponents::VlModalFooter

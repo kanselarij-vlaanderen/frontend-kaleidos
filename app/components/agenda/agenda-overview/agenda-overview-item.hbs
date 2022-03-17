@@ -73,6 +73,23 @@
               {{else}}
                 <Auk::Pill @skin="invisible"></Auk::Pill>
               {{/if}}
+              {{#if this.newsletterIsVisible}}
+                {{#if (and (and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow) @isNew)}}
+                <Auk::Pill
+                  @skin="future"
+                  @icon="circle-info"
+                >
+                  Op de website
+                </Auk::Pill>
+                {{else}}
+                <Auk::Pill
+                  @skin="blank"
+                  @icon="circle-info"
+                >
+                  Op de website
+                </Auk::Pill>
+                {{/if}}
+              {{/if}}
             </div>
           </div>
 

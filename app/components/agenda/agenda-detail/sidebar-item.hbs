@@ -32,6 +32,19 @@
         </h4>
         <div class="vlc-agenda-detail-sidebar__formally-ok-label auk-o-flex--align-end">
           {{#if (and (and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow) @isNew)}}
+            {{#if this.newsletterIsVisible}}
+              <Auk::Pill
+                @skin="future"
+                @layout="icon-only"
+              >
+                <Auk::Icon @name="circle-info" />
+                <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
+                  <p>
+                    Op de website
+                  </p>
+                </EmberTooltip>
+              </Auk::Pill>
+            {{/if}}
             {{#if this.subcase.confidential}}
               <Auk::Pill
                 data-test-agenda-detail-sidebar-item-confidential={{true}}
@@ -47,6 +60,19 @@
               </Auk::Pill>
             {{/if}}
           {{else}}
+            {{#if this.newsletterIsVisible}}
+              <Auk::Pill
+                @skin="blank"
+                @layout="icon-only"
+              >
+                <Auk::Icon @name="circle-info" />
+                <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
+                  <p>
+                    Op de website
+                  </p>
+                </EmberTooltip>
+              </Auk::Pill>
+            {{/if}}
             {{#if this.subcase.confidential}}
               <Auk::Pill
                 data-test-agenda-detail-sidebar-item-confidential={{true}}

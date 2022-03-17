@@ -105,6 +105,13 @@ $vl-green-10: #ECF6EE;
 // Fix small button
 .auk-u-text-small > .auk-button__content > .auk-button__label {
   font-size: 1.5rem;
+  margin-left: .3rem;
+}
+
+.auk-u-text-small > .auk-button__content > .auk-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 1.5rem;
 }
 
 // Agenda detail side nav
@@ -144,7 +151,6 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
 
 .vlc-agenda-detail-sidebar__subject {
   color: #0055CC;
-  text-decoration: underline;
   font-weight: 500;
   margin-bottom: 0;
   padding-top: .2rem;
@@ -154,6 +160,7 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
   a:hover &,
   a:focus & {
     text-decoration: none;
+    color: #004099;
   }
 
   a.vlc-agenda-detail-sidebar__sub-item--active & {
@@ -190,12 +197,10 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
 .vlc-document-card__content .auk-h4 {
   margin: 0;
   color: #0055CC;
-  text-decoration: underline;
   cursor: pointer;
 
   &:hover,
   &:focus {
-    text-decoration: none;
     color: #004099;
   }
 }
@@ -258,6 +263,10 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
 .auk-pill--active {
   border: .1rem solid $vl-picton-blue !important;
   color: $vl-picton-blue !important;
+}
+
+.auk-pill--blank {
+  color: #69717C;
 }
 
 .auk-pill--action {
@@ -333,6 +342,12 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
 
 // Agenda items
 .vlc-agenda-items__subject {
+  font-size: 1.5rem;
+
+  a {
+    text-decoration: none;
+  }
+
   a:hover,
   a:focus {
     background: transparent;
@@ -366,14 +381,14 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
 }
 
 .vlc-document-card-item__title-link {
-  color: #545961;
+  color: #69717C;
   text-decoration: underline;
   cursor: pointer;
 
   &:hover,
   &:focus {
     text-decoration: none;
-    color: #69717C;
+    color: #545961;
   }
 }
 
@@ -443,4 +458,18 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
 // Accordion
 .auk-accordion__item .auk-accordion__title {
   padding-left: .5rem;
+}
+
+
+// Upload
+.vl-uploaded-document__title-container {
+  width: 100%;
+}
+
+.auk-modal__body {
+  .vl-uploaded-document {
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+  }
 }
