@@ -22,6 +22,7 @@
             @onUpload={{this.uploadPiece}}
           />
           <Publications::Publication::PublicationDocumentsList
+            data-test-proof-request-translation-pieces
             @pieces={{this.transferredPieces}}
             @viewable={{true}}
             @onDeletePiece={{this.unlinkTransferredPiece}}
@@ -33,6 +34,7 @@
         </div>
         <div class="auk-form-group auk-u-mt-4">
           <Auk::Checkbox
+            data-test-proof-request-update-status
             @label={{t "update-publication-status-proof-requested"}}
             @checked={{this.mustUpdatePublicationStatus}}
             {{on "input" this.setProofRequestedStatus}}

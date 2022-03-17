@@ -15,6 +15,7 @@
     />
     <div class="auk-form-group auk-u-mt-4">
       <Auk::Checkbox
+        data-test-proof-upload-update-status
         @label={{t "update-publication-status-proof-received"}}
         @checked={{this.mustUpdatePublicationStatus}}
         {{on "input" this.setMustUpdatePublicationStatus}}

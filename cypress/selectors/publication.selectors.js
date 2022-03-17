@@ -37,24 +37,11 @@ const selectors = {
     requestTranslation: '[data-test-route-publications---translations-request-translation]',
   },
 
-  // publications\publication\proofs\documents\template
-  proofsDocuments: {
-    newRequest: '[data-test-route-publications---proofs-documents-new-request]',
-    initialRequest: '[data-test-route-publications---proofs-documents-initial-request]',
-    extraRequest: '[data-test-route-publications---proofs-documents-extra-request]',
-    finalRequest: '[data-test-route-publications---proofs-documents-final-request]',
-    add: '[data-test-route-publications---proofs-documents-add]',
-    addSourceProof: '[data-test-route-publications---proofs-documents-add-source-proof]',
-    addCorrectedProof: '[data-test-route-publications---proofs-documents-add-corrected-proof]',
-    tableRow: '[data-test-route-publications---proofs-documents-table-row]',
-    row: {
-      checkbox: '[data-test-route-publications---proofs-documents-row-checkbox]',
-      documentName: '[data-test-route-publications---proofs-documents-row-document-name]',
-      corrected: '[data-test-route-publications---proofs-documents-row-corrected]',
-      options: '[data-test-route-publications---proofs-documents-row-options]',
-      edit: '[data-test-route-publications---proofs-documents-row-edit]',
-      delete: '[data-test-route-publications---proofs-documents-row-delete]',
-    },
+  // publications\publication\proofs\index\template
+  proofsIndex: {
+    panelBody: '[data-test-route-publications---proofs-panel-body]',
+    upload: '[data-test-route-publications---proofs-upload]',
+    newRequest: '[data-test-route-publications---proofs-new-request]',
   },
 
   // publications\publication\proofs\template
@@ -289,21 +276,17 @@ const selectors = {
   proofUpload: {
     name: '[data-test-proof-upload-name]',
     save: '[data-test-proof-upload-save]',
+    updateStatus: '[data-test-proof-upload-update-status]',
   },
 
-  // proof-edit-modal
-  // proofEdit: {
-  //   name: '[data-test-proof-edit-name]',
-  //   save: '[data-test-proof-edit-save]',
-  // },
-
   // proof-request-modal
-  // proofRequest: {
-  //   subject: '[data-test-proof-request-subject]',
-  //   message: '[data-test-proof-request-message]',
-  //   attachments: '[data-test-proof-request-attachments]',
-  //   save: '[data-test-proof-request-save]',
-  // },
+  proofRequest: {
+    translationPieces: '[data-test-proof-request-translation-pieces]',
+    updateStatus: '[data-test-proof-request-update-status]',
+    subject: '[data-test-proof-request-subject]',
+    message: '[data-test-proof-request-message]',
+    save: '[data-test-proof-request-save]',
+  },
 
   // publication-case-info-panel
   publicationCaseInfo: {
@@ -389,6 +372,26 @@ const selectors = {
   // publication-documents-list
   documentsList: {
     piece: '[data-test-document-list-piece]',
+  },
+
+  // proof-received-panel
+  proofReceivedPanel: {
+    panel: '[data-test-proof-received-panel]',
+    edit: '[data-test-proof-received-panel-edit]',
+    endDate: '[data-test-proof-received-panel-end-date]',
+    corrector: '[data-test-proof-received-panel-edit-corrector]',
+    dropdown: '[data-test-proof-received-panel-dropdown]',
+    save: '[data-test-proof-received-panel-edit-save]',
+  },
+
+  // proof-info-panel
+  proofInfoPanel: {
+    edit: {
+      corrector: '[data-test-proof-info-panel-corrector]',
+    },
+    view: {
+      corrector: '[data-test-proof-info-panel-view-corrector]',
+    },
   },
 
 };
