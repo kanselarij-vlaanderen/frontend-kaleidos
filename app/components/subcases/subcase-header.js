@@ -79,6 +79,13 @@ export default Component.extend({
     if (newsletterInfo) {
       await newsletterInfo.destroyRecord();
     }
+    /*
+    In v3.26.x, we used to call `await itemToDelete.destroyRecord();` here
+    In theory, destroyRecord() is the same as deleteRecord() followed by save(). Problem is, in the tests that's not the case.
+    The test `integration/all-flaky-tests/subcase.spec.js#should add a subcase and then delete it` would fail with the following exception thrown by Ember:
+    > Assertion Failed: Attempted to access the computed <(unknown):ember461>.isTruthy on a destroyed object, which is not allowed
+    After replacing the call to destroyRecord() with deleteRecord() & save(), the test would pass on v3.28.8
+    */
     itemToDelete.deleteRecord();
     await itemToDelete.save();
   },
