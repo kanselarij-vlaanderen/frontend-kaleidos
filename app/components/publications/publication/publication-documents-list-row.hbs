@@ -25,12 +25,12 @@
         {{t "read"}}
       </Auk::ButtonLink>
     {{/if}}
-    {{#if @onDeletePiece}}
+    {{#if @onDelete}}
       <Auk::Button
         @icon="trash"
         @layout="icon-only"
         @skin="danger-borderless"
-        {{on "click" (fn @onDeletePiece @piece)}}
+        {{on "click" (fn @onDelete @piece)}}
       />
     {{/if}}
   </Auk::List::Item>

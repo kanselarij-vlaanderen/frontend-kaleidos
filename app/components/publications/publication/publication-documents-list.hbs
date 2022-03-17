@@ -1,5 +1,9 @@
 <Auk::List>
   {{#each @pieces as |piece|}}
-    <Publications::Publication::PublicationDocumentsListRow @piece={{piece}} />
+    <Publications::Publication::PublicationDocumentsListRow
+      @piece={{piece}}
+      @viewable={{@viewable}}
+      @onDelete={{@onDeletePiece}}
+    />
   {{/each}}
 </Auk::List>
