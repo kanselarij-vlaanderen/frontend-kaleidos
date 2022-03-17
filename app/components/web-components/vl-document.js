@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency-decorators';
+import { getPieceDownloadUrlSync } from 'frontend-kaleidos/utils/documents';
 
 export default class VlDocument extends Component {
   /**
@@ -55,6 +56,10 @@ export default class VlDocument extends Component {
   @action
   showPieceViewer() {
     window.open(`/document/${this.piece.id}`);
+  }
+
+  get downloadUrl() {
+    return getPieceDownloadUrlSync(this.piece, this.file);
   }
 
   @action

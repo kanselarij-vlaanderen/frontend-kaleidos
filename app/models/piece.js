@@ -1,5 +1,4 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
-import sanitize from 'sanitize-filename';
 
 export default class Piece extends Model {
   @attr('string') name;
@@ -97,22 +96,6 @@ export default class Piece extends Model {
 
   get viewDocumentURL() {
     return `/document/${this.id}`;
-  }
-
-  get namedDownloadLinkPromise() {
-    return this.file.then((file) => {
-      if (file) {
-        const filename = `${this.name}.${file.extension}`;
-        const downloadFilename = sanitize(filename, {
-          replacement: '_',
-        });
-        return `${file.downloadLink}?name=${encodeURIComponent(
-          downloadFilename
-        )}`;
-      } else {
-        return undefined;
-      }
-    });
   }
 
   save() {

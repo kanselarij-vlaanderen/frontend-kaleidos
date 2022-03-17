@@ -36,7 +36,7 @@
           @skin="borderless"
           @layout="icon-only"
           @icon="download"
-          @href={{await this.piece.namedDownloadLinkPromise}}
+          @href={{this.downloadUrl}}
           {{! download }}
           {{! 'download' attribute doesn't specify a filename, as this gets overruled by
               the filename received in the "Content-Disposition HTTP header" }}
