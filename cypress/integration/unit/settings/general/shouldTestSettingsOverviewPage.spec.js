@@ -56,7 +56,7 @@ context('Settings overview page tests', () => {
       .click();
     cy.url().should('include', 'instellingen/gebruikers');
     // Importeer csv met Wendy en Greta
-    cy.get(utils.simpleFileUploader).click();
+    cy.get(settings.usersIndex.importCSV).click();
     cy.uploadUsersFile('files', 'importUsers', 'csv');
     // Zoek en verwijder Wendy
     cy.get(settings.usersIndex.searchInput).type('Wendy');
@@ -77,7 +77,7 @@ context('Settings overview page tests', () => {
       .parents('tr')
       .find(settings.usersIndex.row.group)
       .contains('overheid');
-    cy.get(utils.simpleFileUploader).click();
+    cy.get(settings.usersIndex.importCSV).click();
     cy.uploadUsersFile('files', 'updateUserGroup', 'csv');
     cy.get(settings.usersIndex.searchInput).type('Greta');
     cy.intercept('GET', '/users?filter=**').as('filterUsers');

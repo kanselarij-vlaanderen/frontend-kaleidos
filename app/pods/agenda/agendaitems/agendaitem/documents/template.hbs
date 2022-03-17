@@ -100,9 +100,9 @@
       {{#if this.savePieces.isRunning}}
         <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
       {{else}}
-        <FileUploader
-          @multipleFiles={{true}}
-          @uploadedFileAction={{this.uploadPiece}}
+        <Auk::FileUploader
+          @multiple={{true}}
+          @onUpload={{this.uploadPiece}}
         />
         <div class="upload-container">
           {{#each this.newPieces as |piece|}}
