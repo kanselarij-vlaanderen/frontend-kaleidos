@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency-decorators';
-import { getPieceDownloadUrlSync } from 'frontend-kaleidos/utils/documents';
+import { getPieceDownloadUrl } from 'frontend-kaleidos/utils/documents';
 
 export default class VlDocument extends Component {
   /**
@@ -59,7 +59,7 @@ export default class VlDocument extends Component {
   }
 
   get downloadUrl() {
-    return getPieceDownloadUrlSync(this.piece, this.file);
+    return getPieceDownloadUrl(this.piece, this.file);
   }
 
   @action

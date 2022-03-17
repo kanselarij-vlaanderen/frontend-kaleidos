@@ -123,16 +123,11 @@ export const restorePiecesFromPreviousAgendaitem = async function (
   }
 };
 
-export async function getPieceDisplayName(piece) {
-  const file = await piece.file;
-  return getPieceDisplayNameSync(piece, file);
-}
-
 /**
- * separate version that takes resolved file relationship
+ * takes resolved file relationship
  * reason: in order to avoid async getters: Ember does not handle these well
  */
-export function getPieceDisplayNameSync(piece, file) {
+export function getPieceDisplayName(piece, file) {
   if (file) {
     return `${piece.name}.${file.extension}`;
   } else {
@@ -140,18 +135,13 @@ export function getPieceDisplayNameSync(piece, file) {
   }
 }
 
-export async function getPieceDownloadUrl(piece) {
-  const file = await piece.file;
-  getPieceDownloadUrlSync(piece, file);
-}
-
 /**
- * separate version that takes resolved file relationship
+ * takes resolved file relationship
  * reason: in order to avoid async getters: Ember does not handle these well
  */
-export function getPieceDownloadUrlSync(piece, file) {
+export function getPieceDownloadUrl(piece, file) {
   if (file) {
-    const pieceDisplayName = getPieceDisplayNameSync(piece, file);
+    const pieceDisplayName = getPieceDisplayName(piece, file);
     const downloadFilename = sanitize(pieceDisplayName, {
       replacement: '_',
     });
