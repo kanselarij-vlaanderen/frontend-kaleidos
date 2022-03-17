@@ -92,12 +92,12 @@ const selectors = {
   },
 
   // publication-case-search
-  publicationCaseSearch: {
-    input: '[data-test-publication-case-search-input]',
-    result: '[data-test-publication-case-search-result]',
-    // TODO-SELECTOR unused selectors
-    resultList: '[data-test-publication-case-search-result-list]',
-  },
+  // publicationCaseSearch: {
+  //   input: '[data-test-publication-case-search-input]',
+  //   result: '[data-test-publication-case-search-result]',
+  //   // TODO-SELECTOR unused selectors
+  //   resultList: '[data-test-publication-case-search-result-list]',
+  // },
 
   // publications-filter-modal
   publicationsFilter: {
