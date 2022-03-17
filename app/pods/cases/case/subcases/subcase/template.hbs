@@ -6,7 +6,10 @@
   {{page-title (capitalize this.model.subcaseName)}}
 {{/if}}
 <div class="auk-u-bg-alt">
-  <Subcases::SubcaseHeader @subcase={{this.model}} />
+  <Subcases::SubcaseHeader
+    @subcase={{this.model}}
+    @onMoveSubcase={{this.refreshSubcases}}
+  />
 </div>
 <div class="auk-scroll-wrapper__body">
   <div class="auk-u-m-8">

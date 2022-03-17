@@ -207,6 +207,8 @@ context('Agendaitem changes tests', () => {
     cy.get(agenda.compareAgenda.agendaLeft).click();
     cy.get(dependency.emberPowerSelect.option).contains('Agenda D')
       .click();
+    cy.get(auk.loader).should('not.exist');
+    cy.wait(2500); // TODO-FLAKY lots of calls are happening when changing the agenda and some elements get detached from DOM
     cy.get(agenda.compareAgenda.agendaRight).click();
     cy.get(dependency.emberPowerSelect.option).contains('Ontwerpagenda E')
       .click();
