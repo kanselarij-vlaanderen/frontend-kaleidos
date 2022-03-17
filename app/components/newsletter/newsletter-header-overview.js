@@ -71,7 +71,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
             yield this.newsletterService.sendMailCampaign(this.mailCampaign.campaignId);
             this.mailCampaign.sentAt = new Date();
             yield this.mailCampaign.save();
-            yield this.args.meeting.belongsTo('mailCampaign').reload(); // TODO Why?
             this.toaster.success(this.intl.t('success-publish-newsletter-to-mail'));
           } catch(e) {
             console.log("error sending newsletter", e);
