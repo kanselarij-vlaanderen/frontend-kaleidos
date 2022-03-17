@@ -13,6 +13,11 @@
             <h6 class="auk-h4 auk-u-m-0 auk-u-mr-2">
               {{@piece.file.downloadFilename}}
             </h6>
+            {{#if @piece.receivedDate}}
+              <p class="auk-u-text-muted">
+                {{moment-format @piece.receivedDate "DD-MM-YYYY"}}
+              </p>
+            {{/if}}
             <div>
               {{#if @piece.file}}
                 <Auk::Button
