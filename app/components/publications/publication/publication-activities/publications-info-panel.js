@@ -24,7 +24,8 @@ export default class PublicationsPublicationPublicationActivitiesPublicationInfo
     // Currently only 1 publication-activity and decision are assumed
     // per publication-subcase
     this.decision = yield this.store.queryOne('decision', {
-      'filter[publication-activity][subcase][:id:]': this.args.publicationSubcase.id,
+      'filter[publication-activity][subcase][:id:]':
+        this.args.publicationSubcase.id,
       sort: 'publication-activity.start-date,publication-date',
     });
   }
@@ -54,7 +55,7 @@ export default class PublicationsPublicationPublicationActivitiesPublicationInfo
   *save() {
     yield all([
       this.args.publicationSubcase.save(),
-      this.args.publicationFlow.save()
+      this.args.publicationFlow.save(),
     ]);
     this.isEditing = false;
   }
