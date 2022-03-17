@@ -13,7 +13,6 @@ const selectors = {
     loading: '[data-test-route-publications-index-loading]',
     columnHeader: 'data-test-route-publications-index-th=',
     configIcon: '[data-test-route-publications-index-config-modal-icon]',
-    numberSelector: '.auk-form-group',
   },
 
   // publications\publication\template
@@ -31,7 +30,7 @@ const selectors = {
 
   // publications\publication\translations\index\template
   // TODO KAS-3248 Rename to translationsIndex
-  translationsDocuments: {
+  translationsIndex: {
     panelBody: '[data-test-route-publications---translations-panel-body]',
     upload: '[data-test-route-publications---translations-upload-translation]',
     requestTranslation: '[data-test-route-publications---translations-request-translation]',
@@ -326,7 +325,7 @@ const selectors = {
     save: '[data-test-publication-status-save]',
   },
 
-  // publication-info-panel
+  // publications-info-panel
   publicationsInfoPanel: {
     // TODO-SELECTOR unused selectors
     edit: '[data-test-publications-info-panel-edit]',

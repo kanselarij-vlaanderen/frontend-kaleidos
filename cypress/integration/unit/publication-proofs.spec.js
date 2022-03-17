@@ -36,7 +36,7 @@ context('Publications proofs tests', () => {
     cy.get(publication.statusPill.contentLabel).should('contain', 'Opgestart');
 
     // new request
-    cy.get(publication.translationsDocuments.requestTranslation).click();
+    cy.get(publication.translationsIndex.requestTranslation).click();
     cy.get(publication.translationRequest.save).should('be.disabled');
     cy.get(auk.datepicker).click();
     cy.setDateInFlatpickr(translationEndDate);
@@ -50,7 +50,7 @@ context('Publications proofs tests', () => {
     cy.get(publication.translationRequest.save).click();
     cy.wait('@createNewPiece');
     // upload translation
-    cy.get(publication.translationsDocuments.upload).click();
+    cy.get(publication.translationsIndex.upload).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.intercept('PATCH', '/translation-activities/*').as('patchTranslationActivities');
     cy.intercept('GET', '/pieces/**').as('getPieces');
