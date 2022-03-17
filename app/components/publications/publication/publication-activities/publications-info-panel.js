@@ -29,10 +29,6 @@ export default class PublicationsPublicationPublicationActivitiesPublicationInfo
     });
   }
 
-  get publicationModes() {
-    return this.store.peekAll('publication-mode').sortBy('position');
-  }
-
   @action
   openEditingPanel() {
     this.isEditing = true;
@@ -42,7 +38,6 @@ export default class PublicationsPublicationPublicationActivitiesPublicationInfo
   async closeEditingPanel() {
     this.isEditing = false;
     this.args.publicationSubcase.rollbackAttributes();
-    await this.args.publicationFlow.belongsTo('mode').reload();
   }
 
   @action
@@ -53,11 +48,6 @@ export default class PublicationsPublicationPublicationActivitiesPublicationInfo
   @action
   setPublicationDate(selectedDates) {
     this.decision.publicationDate = selectedDates[0];
-  }
-
-  @action
-  setPublicationMode(publicationMode) {
-    this.args.publicationFlow.mode = publicationMode;
   }
 
   @task
