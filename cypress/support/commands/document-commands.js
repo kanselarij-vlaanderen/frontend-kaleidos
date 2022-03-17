@@ -461,8 +461,10 @@ function addLinkedDocument(filenames) {
   cy.get(document.addExistingPiece.searchInput).click();
 
   filenames.forEach((name) => {
+    cy.intercept('GET', `pieces?filter**${encodeURIComponent(name)}**`).as(`getFilteredPiece${name}`);
     cy.get(document.addExistingPiece.searchInput).clear()
-      .type(name);
+      .type(name)
+      .wait(`@getFilteredPiece${name}`);
     cy.wait(1000);
     cy.get(document.addExistingPiece.checkbox).parent()
       .click();

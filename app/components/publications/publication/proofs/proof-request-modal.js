@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
-import { task, dropTask } from 'ember-concurrency-decorators';
+import { task, dropTask } from 'ember-concurrency';
 import { proofRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
 import { inject as service } from '@ember/service';
@@ -15,6 +15,7 @@ import { inject as service } from '@ember/service';
  */
 export default class PublicationsPublicationProofsProofRequestModalComponent extends Component {
   @service store;
+  @service publicationService;
 
   @tracked subject;
   @tracked message;
@@ -33,13 +34,17 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
 
   get isLoading() {
     return (
-      this.loadTranslationPieces.isRunning || this.cancel.isRunning || this.save.isRunning
+      this.loadTranslationPieces.isRunning ||
+      this.cancel.isRunning ||
+      this.save.isRunning
     );
   }
 
   get isCancelDisabled() {
     return (
-      this.loadTranslationPieces.isRunning || this.cancel.isRunning || this.save.isRunning
+      this.loadTranslationPieces.isRunning ||
+      this.cancel.isRunning ||
+      this.save.isRunning
     );
   }
 
@@ -141,36 +146,14 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
 
   @action
   async uploadPiece(file) {
-    const created = file.created;
-    const documentContainer = this.store.createRecord('document-container', {
-      created: created,
-    });
-    await documentContainer.save();
-    const piece = this.store.createRecord('piece', {
-      created: created,
-      modified: created,
-      file: file,
-      confidential: false,
-      name: file.filenameWithoutExtension,
-      documentContainer: documentContainer,
-    });
-
+    const piece = await this.publicationService.createPiece(file);
     this.uploadedPieces.pushObject(piece);
   }
 
   @task
   *deleteUploadedPiece(piece) {
     this.uploadedPieces.removeObject(piece);
-    const [file, documentContainer] = yield Promise.all([
-      piece.file,
-      piece.documentContainer,
-    ]);
-
-    yield Promise.all([
-      file.destroyRecord(),
-      documentContainer.destroyRecord(),
-      piece.destroyRecord(),
-    ]);
+    yield this.publicationService.deletePiece(piece);
   }
 
   @action
