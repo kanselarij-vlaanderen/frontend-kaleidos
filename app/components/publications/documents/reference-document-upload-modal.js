@@ -51,4 +51,14 @@ export default class PublicationsDocumentsReferenceDocumentUploadModalComponent 
   *save() {
     yield this.args.onSave(this.uploadedPieces);
   }
+
+  @action
+  setReceivedDate(selectedDates) {
+    if (selectedDates.length) {
+      this.piece.receivedDate = selectedDates[0];
+    } else {
+      // this case occurs when users manually empty the date input-field
+      this.piece.receivedDate = undefined;
+    }
+  }
 }

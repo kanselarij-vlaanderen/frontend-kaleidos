@@ -14,6 +14,15 @@
       @pieces={{this.uploadedPieces}}
       @onDeletePiece={{perform this.deleteUploadedPiece}}
     />
+    {{#if this.piece.file.isWordExtension}}
+      <div class="auk-form-group">
+        <Auk::Label>{{t "date-received"}}</Auk::Label>
+        <Auk::Datepicker
+          @date={{this.piece.receivedDate}}
+          @onChange={{this.setReceivedDate}}
+        />
+      </div>
+    {{/if}}
   </Auk::Modal::Body>
   <Auk::Modal::Footer
     @onCancel={{perform this.cancel}}
