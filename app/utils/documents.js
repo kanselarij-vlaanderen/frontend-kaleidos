@@ -1,4 +1,5 @@
 import { A } from '@ember/array';
+import sanitize from 'sanitize-filename';
 import VRDocumentName, {
   compareFunction,
 } from 'frontend-kaleidos/utils/vr-document-name';
@@ -124,5 +125,22 @@ export const restorePiecesFromPreviousAgendaitem = async function (
 
 export async function getPieceDisplayName(piece) {
   const file = await piece.file;
-  return `${piece.name}.${file.extension}`;
+  if (file) {
+    return `${piece.name}.${file.extension}`;
+  } else {
+    return piece.name;
+  }
+}
+
+export async function getPieceDownloadUrl(piece) {
+  const file = await piece.file;
+  if (file) {
+    const pieceDisplayName = await getPieceDisplayName(piece);
+    const downloadFilename = sanitize(pieceDisplayName, {
+      replacement: '_',
+    });
+    return `${file.downloadLink}?name=${encodeURIComponent(downloadFilename)}`;
+  } else {
+    return undefined;
+  }
 }

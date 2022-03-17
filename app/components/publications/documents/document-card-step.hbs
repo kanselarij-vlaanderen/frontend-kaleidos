@@ -28,8 +28,8 @@
                   @skin="borderless"
                   @layout="icon-only"
                   @icon="download"
-                  @href={{@piece.file.namedDownloadLink}}
-                  download={{@piece.file.downloadFilename}}
+                  @href={{this.downloadUrl}}
+                  download
                 />
                 {{#if @isEnabledDelete}}
                   <Auk::Button

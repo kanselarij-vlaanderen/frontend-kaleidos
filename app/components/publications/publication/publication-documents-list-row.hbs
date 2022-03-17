@@ -10,8 +10,8 @@
     <Auk::ButtonLink
       @layout="icon-only"
       @icon="download"
-      @href={{@piece.file.namedDownloadLink}}
-      download={{@piece.file.downloadFilename}}
+      @href={{this.downloadUrl}}
+      download
     >
       {{t "download"}}
     </Auk::ButtonLink>
