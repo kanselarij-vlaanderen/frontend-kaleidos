@@ -35,6 +35,15 @@
                     @extension={{this.piece.file.extension}}
                   />
                 </div>
+                {{#if this.piece.file.isWordExtension}}
+          <div class="auk-form-group">
+            <Auk::Label>{{t "date-received"}}</Auk::Label>
+            <Auk::Datepicker
+              @date={{this.piece.receivedDate}}
+              @onChange={{this.setReceivedDate}}
+            />
+          </div>
+                {{/if}}
               </div>
             </div>
           </div>

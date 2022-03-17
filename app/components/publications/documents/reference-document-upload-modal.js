@@ -58,6 +58,16 @@ export default class PublicationsDocumentsReferenceDocumentUploadModalComponent 
     this.piece = await this.publicationService.createPiece(file);
   }
 
+  @action
+  setReceivedDate(selectedDates) {
+    if (selectedDates.length) {
+      this.piece.receivedDate = selectedDates[0];
+    } else {
+      // this case occurs when users manually empty the date input-field
+      this.piece.receivedDate = undefined;
+    }
+  }
+
   initValidation() {
     this.validators = new ValidatorSet({
       name: new Validator(() => isPresent(this.piece.name)),
