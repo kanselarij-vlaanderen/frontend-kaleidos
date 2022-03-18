@@ -384,4 +384,22 @@ export default class PublicationService extends Service {
       documentContainer.destroyRecord(),
     ]);
   }
+
+  /**
+   * For publications, we want to show a link to the agendaitem but loading the models agendaitem/agenda/meeting should be avoided.
+   * Mainly because some of the relations should be loaded a certain way and we just want to generate a link, not work with the models.
+   * 
+   * @param {AgendaItemTreatment} agendaItemTreatment 
+   * @returns [meetingId, agendaId, agendaitemId] an array of id's for a linkTo to route "agenda.agendaitems.agendaitem"
+   */
+  async getModelsForAgendaitemFromTreatment(agendaItemTreatment) {
+    const agendaitem = await this.store.queryOne('agendaitem', {
+      'filter[treatments][:id:]': agendaItemTreatment.id,
+      'filter[:has-no:next-version]': 't',
+      sort: '-created',
+    });
+    const agenda = await agendaitem?.agenda;
+    const meeting = await agenda?.createdFor;
+    return [meeting.id, agenda.id, agendaitem.id];
+  }
 }

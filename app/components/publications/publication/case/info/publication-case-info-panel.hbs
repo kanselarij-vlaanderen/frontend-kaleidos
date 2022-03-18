@@ -108,17 +108,13 @@
                   class="auk-form-group"
                 >
                   <Auk::Label>{{t "decision-date"}}</Auk::Label>
-                  {{#if this.isViaCouncilOfMinisters}}
+                  {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
                     <Auk::ButtonLink
                       target="_blank"
                       @icon="chevron-right"
                       @layout="icon-right"
                       @route="agenda.agendaitems.agendaitem"
-                      @models={{array
-                                  @publicationFlow.agendaItemTreatment.agendaitem.agenda.createdFor.id
-                                  @publicationFlow.agendaItemTreatment.agendaitem.agenda.id
-                                  @publicationFlow.agendaItemTreatment.agendaitem.id
-                              }}
+                      @models={{this.modelsForAgendaitemRoute}}
                     >
                       {{#if @publicationFlow.agendaItemTreatment.startDate}}
                         {{moment-format
@@ -232,18 +228,14 @@
           <div class="auk-o-grid-col-2 auk-content">
             <h4 class="auk-u-m-0">{{t "decision-date"}}</h4>
             <p class="auk-u-m-0">
-              {{#if this.isViaCouncilOfMinisters}}
+              {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
                 <Auk::ButtonLink
                   data-test-publication-case-info-panel-start-date
                   target="_blank"
                   @icon="chevron-right"
                   @layout="icon-right"
                   @route="agenda.agendaitems.agendaitem"
-                  @models={{array
-                              @publicationFlow.agendaItemTreatment.agendaitem.agenda.createdFor.id
-                              @publicationFlow.agendaItemTreatment.agendaitem.agenda.id
-                              @publicationFlow.agendaItemTreatment.agendaitem.id
-                          }}
+                  @models={{this.modelsForAgendaitemRoute}}
                 >
                   {{#if @publicationFlow.agendaItemTreatment.startDate}}
                     {{moment-format
