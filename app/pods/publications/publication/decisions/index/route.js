@@ -14,7 +14,12 @@ export default class PublicationsPublicationDecisionsIndexRoute extends Route {
       // TODO: paginatie uitklaren in design
       'page[size]': PAGE_SIZE.PUBLICATION_FLOW_PIECES,
       sort: 'received-date,name',
-      include: 'document-container',
+      include: [
+        'file',
+        'document-container',
+        'document-container.type',
+        'access-level'
+      ].join(',')
     });
     return pieces.toArray();
   }
