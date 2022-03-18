@@ -79,3 +79,9 @@
   display: grid;
   grid-template-columns: repeat(2,1fr);
 }
+
+.list-container {
+  > * {
+    margin-top: .3rem;
+  }
+}

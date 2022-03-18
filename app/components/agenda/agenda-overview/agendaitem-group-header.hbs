@@ -1,4 +1,10 @@
 <div class="vlc-list-section-header" data-test-agendaitem-group-header-section>
+  {{#if (eq @mandatees.length 1)}}
+  <Auk::Icon @name="user" />
+  {{else if (eq @mandatees.length 0)}}
+  {{else}}
+  <Auk::Icon @name="users" />
+  {{/if}}
   <span class={{if (eq @mandatees.length 0) "vlc-list-section-header-title"}}>
     {{#each @mandatees as |mandatee index|}}
       {{#if (not-eq index 0)}}<br>{{/if}}

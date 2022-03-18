@@ -10,6 +10,9 @@
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
+       <Auk::Toolbar::Item>
+        <Agenda::AgendaOverview::AgendaSearch />
+      </Auk::Toolbar::Item>
       {{#if this.currentSession.isEditor}}
         <Auk::Toolbar::Item>
           <Auk::Button

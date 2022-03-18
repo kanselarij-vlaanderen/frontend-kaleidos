@@ -1,98 +1,119 @@
 {{!-- TODO: octane-refactor --}}
 {{!-- template-lint-disable no-action --}}
 {{#if (gt (await this.agendaitem.mandatees.length) 1)}}
-  <div class="auk-u-mb-2">
-    <div class="auk-o-flex auk-o-flex--align-baseline">
-      <h4 class="auk-h3">
-        {{t "actions"}}
-      </h4>
-      {{#if this.currentSession.isEditor}}
-        <div class="auk-u-ml-2">
-          <Auk::ButtonLink {{action "toggleIsEditing"}}>
-            {{t "edit"}}
-          </Auk::ButtonLink>
-        </div>
-      {{/if}}
-    </div>
-  </div>
-  <div class="auk-u-mb-2">
-    <h5 class="auk-h4">
-      {{t "mandatee-approval"}}
-    </h5>
-  </div>
-  <div class="auk-u-mb-4">
-    <table class="auk-table">
-      <thead>
-        <tr>
-          <th>
-            {{t "name"}}
-          </th>
-          <th>
-            {{t "function-mandatee"}}
-          </th>
-          <th>
-            {{t "approval-mandatee"}}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each (await this.mandateeApprovals) as |mandateeApproval|}}
+  <Auk::Toolbar class="auk-u-mb-2">
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
+        <h4 class="auk-h4 auk-u-m-0">
+          {{t "actions"}}
+        </h4>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
+  <Auk::Panel class="{{if this.isEditing "auk-u-bg-alt" ""}}">
+    <Auk::Panel::Header>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <h4 class="auk-panel__title">
+              {{t "mandatee-approval"}}
+            </h4>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
+          {{#if this.currentSession.isEditor}}
+          {{#if this.isEditing}}
+          {{else}}
+          <Auk::Toolbar::Item>
+            <Auk::Button
+              @skin="tertiary"
+              @icon="pencil"
+              @layout="icon-only"
+              {{action "toggleIsEditing"}}>
+              {{t "edit"}}
+            </Auk::Button>
+          </Auk::Toolbar::Item>
+          {{/if}}
+          {{/if}}
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body @noPadding={{true}}>
+      <table class="auk-table">
+        <thead>
           <tr>
-            <td>
-              <h6 class="auk-h4 auk-u-m-0">
-                {{await mandateeApproval.mandatee.person.nameToDisplay}}
-              </h6>
-            </td>
-            <td>
-              {{await mandateeApproval.mandatee.title}}
-            </td>
-            <td>
-              {{#if (not this.isEditing)}}
-                {{#if (await mandateeApproval.approval)}}
-                  <Auk::Icon @name="check" @skin="success" />
-                  <span class="auk-u-text-success">
-                    {{t "approval-mandatee"}}
-                  </span>
-                {{else}}
-                  <Auk::Icon @name="dash" @skin="muted" />
-                  <span class="auk-u-muted">
-                    {{t "not-yet-approval-mandatee"}}
-                  </span>
-                {{/if}}
-              {{else}}
-                <div class="auk-form-group">
-                  <Auk::Checkbox
-                    @label={{t "approval-mandatee"}}
-                    @checked={{not (is-empty mandateeApproval.approval)}}
-                    {{on "input" (action "toggleApproved" mandateeApproval.mandatee mandateeApproval.approval)}}
-                  />
-                </div>
-              {{/if}}
-            </td>
+            <th>
+              {{t "name"}}
+            </th>
+            <th>
+              {{t "function-mandatee"}}
+            </th>
+            <th>
+              {{t "approval-mandatee"}}
+            </th>
           </tr>
-        {{/each}}
-      </tbody>
-    </table>
-  </div>
-  {{#if this.isEditing}}
-    <Auk::Toolbar>
-      <Auk::Toolbar::Group @position="right">
-        <Auk::Toolbar::Item>
-          <Auk::Button
-            @skin="tertiary"
-            {{action "cancelEditing"}}
-          >
-            {{t "cancel"}}
-          </Auk::Button>
-        </Auk::Toolbar::Item>
-        <Auk::Toolbar::Item>
-          <WebComponents::VlSaveButton
-            @text={{t "save"}}
-            @isLoading={{this.isLoading}}
-            @saveAction={{action "saveChanges" this.agendaitem.approvals}}
-          />
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
-    </Auk::Toolbar>
-  {{/if}}
+        </thead>
+        <tbody>
+          {{#each (await this.mandateeApprovals) as |mandateeApproval|}}
+            <tr>
+              <td>
+                <h6 class="auk-h4 auk-u-m-0">
+                  {{await mandateeApproval.mandatee.person.nameToDisplay}}
+                </h6>
+              </td>
+              <td>
+                {{await mandateeApproval.mandatee.title}}
+              </td>
+              <td>
+                {{#if (not this.isEditing)}}
+                  {{#if (await mandateeApproval.approval)}}
+                    <Auk::Icon @name="check" @skin="success" />
+                    <span class="auk-u-text-success">
+                      {{t "approval-mandatee"}}
+                    </span>
+                  {{else}}
+                    <Auk::Icon @name="dash" @skin="muted" />
+                    <span class="auk-u-muted">
+                      {{t "not-yet-approval-mandatee"}}
+                    </span>
+                  {{/if}}
+                {{else}}
+                  <div class="auk-form-group">
+                    <Auk::Checkbox
+                      @label={{t "approval-mandatee"}}
+                      @checked={{not (is-empty mandateeApproval.approval)}}
+                      {{on "input" (action "toggleApproved" mandateeApproval.mandatee mandateeApproval.approval)}}
+                    />
+                  </div>
+                {{/if}}
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </Auk::Panel::Body>
+    {{#if this.isEditing}}
+      <Auk::Panel::Footer>
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <Auk::Button
+                @skin="tertiary"
+                {{action "cancelEditing"}}
+              >
+                {{t "cancel"}}
+              </Auk::Button>
+            </Auk::Toolbar::Item>
+            <Auk::Toolbar::Item>
+              <WebComponents::VlSaveButton
+                @text={{t "save"}}
+                @isLoading={{this.isLoading}}
+                @saveAction={{action "saveChanges" this.agendaitem.approvals}}
+              />
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </Auk::Panel::Footer>
+    {{/if}}
+  </Auk::Panel>
 {{/if}}

@@ -42,14 +42,18 @@
           <div class="auk-sidebar__label">
             {{#if @isOpen}}
               <span data-test-agenda-side-nav-agenda-name>
-                {{agenda.agendaName}}
+                {{#if agenda.isDesignAgenda}}
+                  <strong>Ontwerpagenda</strong> <Auk::Pill @skin="active-future">{{agenda.name}}</Auk::Pill>
+                {{else}}
+                  <strong>Agenda</strong> <Auk::Pill>{{agenda.name}}</Auk::Pill>
+                {{/if}}
               </span>
             {{else}}
               <span>
                 {{#if agenda.isDesignAgenda}}
-                  *
+                  <Auk::Pill @skin="active-future">{{agenda.name}}</Auk::Pill>
                 {{else}}
-                  {{agenda.name}}
+                  <Auk::Pill>{{agenda.name}}</Auk::Pill>
                 {{/if}}
               </span>
             {{/if}}

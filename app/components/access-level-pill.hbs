@@ -2,64 +2,110 @@
   {{#if this.isLoading}}
     <div class="auk-loader" role="alert" aria-busy="true"></div>
   {{else}}
-    {{#if (not @confidential)}}
-      {{#if (not this.isEditing)}}
+    {{#if (not this.isEditing)}}
+      {{#if (not @confidential)}}
+        {{#if (and (and (eq this.accessLevelLabel "Intern Regering")(eq @isDesignAgenda false)) (eq @isNew false))}}
         <Auk::Pill
-          @skin={{this.pillSkin}}
-          class="auk-u-cursor-pointer"
+          @skin="active"
+          @icon="users"
           data-test-access-level-pill
-          {{on "click" this.toggleEdit}}
         >
           {{this.accessLevelLabel}}
         </Auk::Pill>
-      {{else}}
-        {{!-- TODO: fix inline style (consider implementing new auk-generation document card) --}}
-        {{!-- template-lint-disable no-inline-styles  --}}
-        <div style="width:75%">
-          <Utils::ModelSelector
-            @modelName="access-level"
-            @allowClear={{true}}
-            @hideSearch={{true}}
-            @propertyToShow="label"
-            @sortField="priority"
-            @selectedItems={{@accessLevel}}
-            @selectModel={{this.changeAccessLevel}} />
-        </div>
-        {{!-- template-lint-enable no-inline-styles  --}}
-        <Auk::Button
-          @skin="borderless"
-          @layout="icon-only"
-          @icon="check"
-          {{on "click" (perform this.confirmChangeAccessLevel @accessLevel)}}
-          data-test-access-level-pill-save
+        {{else if (and (eq this.accessLevelLabel "Intern Regering")(eq @isVersion true))}}
+        <Auk::Pill
+          @skin="active"
+          @icon="users"
+          data-test-access-level-pill
         >
-          {{t "more-options"}}
-        </Auk::Button>
-        <Auk::Button
-          @skin="borderless"
-          @layout="icon-only"
-          @icon="x"
-          {{on "click" (perform this.cancelChangeAccessLevel)}}
-          data-test-access-level-pill-cancel
-        />
-      {{/if}}
-    {{/if}}
-    <Auk::Button
-      @skin={{if @confidential "danger-borderless" "muted-borderless"}}
-      @layout="icon-only"
-      @icon={{if @confidential "lock-closed" "lock-open"}}
-      @disabled={{not this.session.isEditor}}
-      {{on "click" (perform this.changeConfidentiality)}}
-    >
-      <:floater>
-        {{#if @confidential}}
-          <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
-            <p>
-              {{t "document-is-confidential"}}
-            </p>
-          </EmberTooltip>
+          {{this.accessLevelLabel}}
+        </Auk::Pill>
+        {{else if (and (and (eq this.accessLevelLabel "Intern Overheid")(eq @isFinal true)) (eq @isNew false))}}
+        <Auk::Pill
+          @skin="active"
+          @icon="users"
+          data-test-access-level-pill
+        >
+          {{this.accessLevelLabel}}
+        </Auk::Pill>
+        {{else}}
+        <Auk::Pill
+          @skin="active-future"
+          @icon="users"
+          data-test-access-level-pill
+        >
+          {{this.accessLevelLabel}}
+        </Auk::Pill>
         {{/if}}
+      {{else}}
+      <Auk::Pill
+        @skin="active"
+        @icon="users"
+        data-test-access-level-pill
+      >
+        Intern Secretarie
+      </Auk::Pill>
+      {{/if}}
+      {{#if (eq @isFinal false)}}
+      <Auk::Button
+        @skin="tertiary"
+        @layout="icon-only"
+        @icon="pencil"
+        class="auk-button--tiny"
+        {{on "click" this.toggleEdit}}
+        data-test-access-level-pill-cancel
+      />
+      {{/if}}
+    {{else}}
+      {{!-- TODO: fix inline style (consider implementing new auk-generation document card) --}}
+      {{!-- template-lint-disable no-inline-styles  --}}
+      <div style="width:100%">
+        <Utils::ModelSelector
+          @modelName="access-level"
+          @allowClear={{false}}
+          @hideSearch={{true}}
+          @propertyToShow="label"
+          @sortField="priority"
+          @selectedItems={{@accessLevel}}
+          @selectModel={{this.changeAccessLevel}}
+          class="auk-model-selector" />
+      </div>
+      <Auk::Button
+        @skin={{if @confidential "danger-borderless" "muted-borderless"}}
+        @layout="icon-only"
+        @icon={{if @confidential "lock-closed" "lock-open"}}
+        @disabled={{not this.session.isEditor}}
+        {{on "click" (perform this.changeConfidentiality)}}
+      >
+      <:floater>
+      {{#if @confidential}}
+        <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
+          <p>
+            {{t "document-is-confidential"}}
+          </p>
+        </EmberTooltip>
+      {{/if}}
       </:floater>
-    </Auk::Button>
+      </Auk::Button>
+      {{!-- template-lint-enable no-inline-styles  --}}
+      <Auk::Button
+        @skin="tertiary"
+        @layout="icon-only"
+        @icon="check"
+        class="auk-button--tiny"
+        {{on "click" (perform this.confirmChangeAccessLevel @accessLevel)}}
+        data-test-access-level-pill-save
+      >
+        {{t "more-options"}}
+      </Auk::Button>
+      <Auk::Button
+        @skin="tertiary"
+        @layout="icon-only"
+        @icon="x"
+        class="auk-button--tiny"
+        {{on "click" (perform this.cancelChangeAccessLevel)}}
+        data-test-access-level-pill-cancel
+      />
+    {{/if}}
   {{/if}}
 </div>

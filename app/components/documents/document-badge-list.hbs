@@ -1,13 +1,14 @@
 <Documents::DocumentList
   @pieces={{@pieces}}
 as |documents|>
-  <div class="grid-container">
+  <ul class="list-container">
     {{#each documents as |doc|}}
       <Documents::DocumentBadge
         @piece={{doc}}
         @isHighlighted={{includes doc @highlightedPieces}}
         @isClickable={{true}}
+        @isFuture={{@isFuture}}
       />
     {{/each}}
-  </div>
+  </ul>
 </Documents::DocumentList>

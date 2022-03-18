@@ -1033,6 +1033,14 @@
     "edit-list": "Lijst bewerken",
     "sure": "Bent u zeker?",
     "no-go-back": "Nee, ga terug",
-    "close": "Sluiten"
+    "close": "Sluiten",
+    "show-documents": "Toon documenten",
+    "hide-documents": "Verberg documenten",
+    "new-document": "Nieuw document",
+    "decision-result": "Resultaat beslissing",
+    "no-decision-set": "Nog geen beslissing ingesteld",
+    "website": "Op de website",
+    "internal-remark-title": "Interne opmerking",
+    "approval": "Goedkeuring"
   }
 }

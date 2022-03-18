@@ -12,7 +12,7 @@ export default class DocumentsDocumentBadge extends Component {
       return 'document-added';
     }
     if (this.args.piece.confidential) {
-      return 'lock-closed';
+      return 'document';
     }
     return 'document';
   }

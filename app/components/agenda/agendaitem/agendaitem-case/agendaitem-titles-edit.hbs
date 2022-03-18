@@ -1,6 +1,6 @@
 {{!-- TODO: octane-refactor --}}
 {{!-- template-lint-disable no-action --}}
-<div class="auk-box auk-u-mb-8">
+<div class="auk-box auk-u-mb-4">
   <div class="auk-u-mb-4">
     {{#if @subcase}}
       <div class="auk-form-group">
@@ -47,11 +47,32 @@
       />
     </div>
   </div>
+  <div class="auk-u-mb-4">
+    <div class="auk-form-group">
+      <Auk::Label id="internal-remark-title" class="auk-u-icon-left"><Auk::Icon @name="lock-closed" @size="small" /> {{t "util.internal-remark-title"}}</Auk::Label>
+      <Textarea
+        rows="2"
+        aria-labelledby="internal-remark-title"
+        class="auk-textarea"
+        @value="Test"
+      />
+    </div>
+  </div>
+  <div class="auk-u-mb-4">
+    <div class="auk-form-group">
+      <Auk::Label for="subcase-formallity">{{t "util.approval"}}</Auk::Label>
+      <Utils::FormallyOkSelector
+        data-test-agenda-overview-item-formally-ok={{true}}
+        @formallyOkStatusUri={{@agendaitem.formallyOk}}
+        @onChange={{this.setAndSaveFormallyOkStatus}}
+      />
+    </div>
+  </div>
   {{#if @agendaitem.showAsRemark}}
     <div class="auk-u-mb-4">
       <div class="auk-form-group">
         {{#if this.newsletterInfo}}
-          <Auk::Label for="item-show-in-newsletter">{{t "show-in-newsletter"}}</Auk::Label>
+          <Auk::Label for="item-show-in-newsletter">{{t "util.website"}}</Auk::Label>
           <Auk::Toggle
             id="item-show-in-newsletter"
             @checked={{this.newsletterInfo.inNewsletter}}

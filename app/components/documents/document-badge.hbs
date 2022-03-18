@@ -1,11 +1,36 @@
-<li class="vlc-document-list__item {{if @isHighlighted "vlc-document-list__item--active"}}">
+<li class="vlc-document-list__item">
   {{#if @isClickable}}
     <a
       data-test-document-badge-link
+      class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"
       href={{@piece.viewDocumentURL}} target="_blank" rel="noreferrer noopener"
     >
       <Auk::Icon @name={{this.documentIconName}} />
-      {{@piece.name}}
+      <span>{{@piece.name}}</span>
+      {{#if @isHighlighted}}
+        <span class="auk-o-flex auk-o-flex--spaced auk-u-text-small auk-u-muted auk-u-text-nowrap auk-u-mr-2">
+          <Auk::ColorBadge @skin="success" /> <span>{{t "util.new-document"}}</span>
+        </span>
+      {{/if}}
+      {{#if (and @piece.confidential)}}
+        {{#if @isFuture}}
+        <Auk::Pill
+          @skin="active-future"
+          @icon="users"
+          data-test-agenda-overview-item-confidentiality-locked
+        >
+          Intern secretarie
+        </Auk::Pill>
+        {{else}}
+        <Auk::Pill
+          @skin="active"
+          @icon="users"
+          data-test-agenda-overview-item-confidentiality-locked
+        >
+          Intern secretarie
+        </Auk::Pill>
+        {{/if}}
+      {{/if}}
     </a>
   {{else}}
     <span>

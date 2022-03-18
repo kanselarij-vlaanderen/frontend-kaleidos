@@ -125,6 +125,10 @@ export default class DocumentsDocumentCardComponent extends Component {
     return this.sortedPieces.slice(0).reverse(); // slice(0) as a hack to create a new array, since "reverse" happens in-place
   }
 
+  get showPieces() {
+    return this.sortedPieces.length > 1;
+  }
+
   get visiblePieces() {
     if (this.args.hideNewerVersions) {
       const idx = this.reverseSortedPieces.indexOf(this.piece);
@@ -268,6 +272,11 @@ export default class DocumentsDocumentCardComponent extends Component {
   changeAccessLevel(al) {
     this.piece.set('accessLevel', al);
     this.accessLevel = al;
+  }
+
+  @action
+  showPieceViewer() {
+    window.open(`/document/${this.piece.id}`);
   }
 
   @action

@@ -1,0 +1,23 @@
+<div class="auk-u-position-relative">
+  <div class="auk-o-flex">
+    {{!-- Show reset button when filter is active --}}
+    {{#if (not-eq this.searchText "")}}
+    <Auk::Button @icon="redo" @layout="icon-only" @skin="muted-borderless" {{on "click" this.resetFilter}}>Verwijder filter</Auk::Button>
+    {{/if}}
+    <Auk::Input
+      data-test-publication-case-search-input
+      @block={{true}}
+      @icon="search"
+      placeholder="bv. 01/2021"
+      value={{this.searchText}}
+      {{on "input" (perform this.debouncedSearch)}}
+      {{on "focusout" this.hideResults}}
+      {{on
+        "focusin"
+        (if this.search.lastSuccessful this.showResults this.hideResults)
+      }}
+      @enter={{perform this.search}}
+      autocomplete="off"
+    />
+  </div>
+</div>
