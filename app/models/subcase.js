@@ -1,5 +1,4 @@
 import { belongsTo, hasMany, attr } from '@ember-data/model';
-import { PromiseArray } from '@ember-data/store/-private';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -36,9 +35,7 @@ export default ModelWithModifier.extend({
   }),
 
   type: belongsTo('subcase-type'),
-  case: belongsTo('case', {
-    inverse: null,
-  }),
+  case: belongsTo('case'),
   requestedForMeeting: belongsTo('meeting', {
     inverse: null,
   }),
@@ -66,26 +63,6 @@ export default ModelWithModifier.extend({
     return null;
   }),
 
-  // TODO don't use this computed, use getter instead, used in subcase-item.hbs
-  nameToShow: computed('subcaseName', function() {
-    const {
-      subcaseName, title, shortTitle,
-    } = this;
-    if (subcaseName) {
-      return `${this.intl.t('in-function-of')} ${subcaseName}`;
-    } if (shortTitle) {
-      return shortTitle;
-    } if (title) {
-      return title;
-    }
-    return 'No name found.';
-  }),
-
-  // TODO don't use this computed, no more references currently?
-  sortedMandatees: computed('mandatees.[]', function() {
-    return this.get('mandatees').sortBy('priority');
-  }),
-
   // TODO don't use this computed, refactor subcase-header.js
   hasActivity: computed('agendaActivities', 'agendaActivities.[]', async function() {
     const activities = await this.get('agendaActivities');
@@ -101,35 +78,6 @@ export default ModelWithModifier.extend({
       'filter[agenda-activity][subcase][:id:]': this.get('id'),
       'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
     });
-  }),
-
-  // TODO don't use this alias, only used in this model
-  latestMeeting: alias('requestedForMeeting'),
-
-  // TODO don't use this computed, no more references currently?
-  latestAgenda: computed('latestMeeting', 'latestMeeting.latestAgenda', async function() {
-    const lastMeeting = await this.get('latestMeeting');
-    return await lastMeeting.get('latestAgenda');
-  }),
-
-  // TODO don't use this computed, no more references currently?
-  latestAgendaitem: computed('latestActivity.agendaitems.[]', 'agendaActivities.@each.agendaitems', async function() {
-    const latestActivity = await this.get('latestActivity');
-    if (latestActivity) {
-      await latestActivity.hasMany('agendaitems').reload();
-      const latestAgendaitem = await latestActivity.get('latestAgendaitem');
-      return latestAgendaitem;
-    }
-    return null;
-  }),
-
-  // TODO don't use this computed, refactor subcase-item.hbs
-  onAgendaInfo: computed('latestMeeting', async function() {
-    const latestMeeting = await this.get('latestMeeting');
-    if (latestMeeting) {
-      return latestMeeting.plannedStart;
-    }
-    return null;
   }),
 
   // TODO don't use this computed, used in 5 places, make util?
@@ -151,16 +99,6 @@ export default ModelWithModifier.extend({
       }
     }
     return false;
-  }),
-
-  // TODO don't use this computed, used in 1 route
-  subcasesFromCase: computed('case.subcases.[]', 'id', function() {
-    return PromiseArray.create({
-      //  We want to sort descending on date the subcase was concluded.
-      //  In practice, sorting on created will be close
-      promise: this.get('case').then((caze) => caze.get('subcases')
-        .then((subcases) => subcases.filter((subcase) => subcase.get('id') !== this.id).sort((subcaseA, subcaseB) => subcaseB.created - subcaseA.created))),
-    });
   }),
 
 });
