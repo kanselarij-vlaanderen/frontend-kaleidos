@@ -34,6 +34,15 @@
                 @block={{true}}
               />
             </div>
+            <div class="auk-form-group">
+              <Auk::Label>
+                {{t "email-reply-to"}}
+              </Auk::Label>
+              <Auk::Input
+                @value={{mut this.model.translationRequestReplyToEmail}}
+                @block={{true}}
+              />
+            </div>
           </div>
         </div>
       </Auk::Panel::Body>
@@ -59,6 +68,15 @@
                 @block={{true}}
               />
             </div>
+            <div class="auk-form-group">
+              <Auk::Label>
+                {{t "email-reply-to"}}
+              </Auk::Label>
+              <Auk::Input
+                @value={{mut this.model.proofRequestReplyToEmail}}
+                @block={{true}}
+              />
+            </div>
           </div>
         </div>
       </Auk::Panel::Body>
@@ -81,6 +99,15 @@
               </Auk::Label>
               <Auk::Input
                 @value={{mut this.model.publicationRequestCcEmail}}
+                @block={{true}}
+              />
+            </div>
+            <div class="auk-form-group">
+              <Auk::Label>
+                {{t "email-reply-to"}}
+              </Auk::Label>
+              <Auk::Input
+                @value={{mut this.model.publicationRequestReplyToEmail}}
                 @block={{true}}
               />
             </div>
