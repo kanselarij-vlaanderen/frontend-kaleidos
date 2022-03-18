@@ -393,5 +393,22 @@ const selectors = {
     },
   },
 
+  // decisions-info-panel
+  decisionsInfoPanel: {
+    openEdit: '[data-test-decisions-info-panel-view-edit]',
+    cancel: '[data-test-decisions-info-panel-edit-cancel]',
+    save: '[data-test-decisions-info-panel-edit-save]',
+    edit: {
+      regulationType: '[data-test-decisions-info-panel-edit-regulation-type]',
+      decisionDate: '[data-test-decisions-info-panel-edit-decision-date]',
+      numberOfPages: '[data-test-decisions-info-panel-edit-number-of-pages]',
+    },
+    view: {
+      regulationType: '[data-test-decisions-info-panel-view-regulation-type]',
+      decisionDate: '[data-test-decisions-info-panel-view-decision-date]',
+      numberOfPages: '[data-test-decisions-info-panel-view-number-of-pages]',
+    },
+  },
+
 };
 export default selectors;
