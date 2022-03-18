@@ -22,6 +22,7 @@ export default Component.extend({
   isAssigning: false,
   subcase: null,
   caseToDelete: null,
+  onMoveSubcase: null, // from args, the parent route subcases needs to be refreshed after subcase is moved/deleted
 
   canPropose: computed('subcase.{requestedForMeeting,hasActivity}', 'isAssigningToOtherAgenda', async function() {
     const {
@@ -79,7 +80,15 @@ export default Component.extend({
     if (newsletterInfo) {
       await newsletterInfo.destroyRecord();
     }
-    await itemToDelete.destroyRecord();
+    /*
+    In v3.26.x, we used to call `await itemToDelete.destroyRecord();` here
+    In theory, destroyRecord() is the same as deleteRecord() followed by save(). Problem is, in the tests that's not the case.
+    The test `integration/all-flaky-tests/subcase.spec.js#should add a subcase and then delete it` would fail with the following exception thrown by Ember:
+    > Assertion Failed: Attempted to access the computed <(unknown):ember461>.isTruthy on a destroyed object, which is not allowed
+    After replacing the call to destroyRecord() with deleteRecord() & save(), the test would pass on v3.28.8
+    */
+    itemToDelete.deleteRecord();
+    await itemToDelete.save();
   },
 
   triggerDeleteCaseDialog() {
@@ -99,6 +108,7 @@ export default Component.extend({
     this.set('isAssigningToOtherCase', false);
   },
 
+  // TODO KAS-3256 We should take another look of the deleting case feature in light of publications also using cases.
   deleteCase: task(function *(_case) {
     yield _case.destroyRecord();
     this.set('promptDeleteCase', false);
@@ -159,8 +169,8 @@ export default Component.extend({
         return;
       }
       await this.deleteSubcase(subcaseToDelete);
-
       this.navigateToSubcaseOverview(caze);
+      this.onMoveSubcase();
     },
     cancelDeleteSubcase() {
       this.set('isDeletingSubcase', false);
@@ -179,7 +189,8 @@ export default Component.extend({
 
       const subCases = await oldCase.hasMany('subcases').reload();
       if (subCases.length > 0) {
-        this.get('router').transitionTo('cases.case.subcases');
+        this.router.transitionTo('cases.case.subcases');
+        this.onMoveSubcase();
       } else {
         this.set('caseToDelete', oldCase);
         this.triggerDeleteCaseDialog();

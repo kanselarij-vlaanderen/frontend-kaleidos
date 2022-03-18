@@ -218,9 +218,8 @@
           @onDelete={{perform this.deleteUploadedPiece}}
         />
       {{else}}
-        <FileUploader
-          @multipleFiles={{false}}
-          @uploadedFileAction={{perform this.uploadPiece}}
+        <Auk::FileUploader
+          @onUpload={{perform this.uploadPiece}}
         />
       {{/if}}
     </Auk::Modal::Body>

@@ -41,7 +41,8 @@
     @allowEditing={{this.currentSession.isEditor}}
     @onSave={{this.saveGovernmentAreas}}
   />
-  <Agenda::Agendaitem::AgendaitemCase::AllSubcases
-    @subcases={{this.allSubcases}}
+  <Subcases::SubcasesHistory
+    @case={{this.case}}
+    @subcases={{this.siblingSubcases}}
   />
 {{/if}}
