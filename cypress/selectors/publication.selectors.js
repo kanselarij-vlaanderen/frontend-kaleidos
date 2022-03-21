@@ -406,6 +406,7 @@ const selectors = {
     view: {
       regulationType: '[data-test-decisions-info-panel-view-regulation-type]',
       decisionDate: '[data-test-decisions-info-panel-view-decision-date]',
+      decisionLink: '[data-test-decisions-info-panel-view-decision-link]',
       numberOfPages: '[data-test-decisions-info-panel-view-number-of-pages]',
     },
   },
