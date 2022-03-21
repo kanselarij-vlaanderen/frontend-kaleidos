@@ -78,7 +78,7 @@
         <tbody>
           {{#each this.model as |signFlow index|}}
             {{#if (eq index 0)}}
-            <tr class="auk-table__row auk-table__row__clickable">
+            <tr class="auk-table__row auk-table__row__clickable" {{on "click" this.showSidebar}}>
               <td>
                 <p class="auk-u-muted">Decreet - {{moment-format
                   signFlow.decisionActivity.startDate
@@ -130,7 +130,7 @@
             </tr>
             {{/if}}
             {{#if (not-eq index 0)}}
-            <tr class="auk-table__row auk-table__row__clickable">
+            <tr class="auk-table__row auk-table__row__clickable" {{on "click" this.showSidebar}}>
               <td>
                 <p class="auk-u-muted">Decreet - {{moment-format
                   signFlow.decisionActivity.startDate

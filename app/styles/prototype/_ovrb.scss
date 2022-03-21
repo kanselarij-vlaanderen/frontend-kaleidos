@@ -16,6 +16,15 @@
     right: 0;
     border-left: .1rem solid $auk-gray-100;
   }
+
+  tr:hover,
+  tr:focus-within {
+    background-color: $auk-gray-100;
+
+    td:last-child {
+      background-color: $auk-gray-100;
+    }
+  }
 }
 
 // Adjust procedure step to fit inside a panel

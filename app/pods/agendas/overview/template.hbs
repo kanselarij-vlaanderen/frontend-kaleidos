@@ -11,6 +11,7 @@
     @sort={{this.sort}}
     @isLoading={{this.isLoadingModel}}
     @noDataMessage={{t "no-results-found"}}
+    @onClickRow={{action "onClickRow"}}
     as |table|
   >
     <table.content as |c|>
@@ -40,7 +41,7 @@
         </th>
         <th></th>
       </c.header>
-      <c.body @class="auk-table--interaction-cursor" as |meeting|>
+      <c.body @class="auk-table--interaction-cursor auk-table--clickable-rows" as |meeting|>
         {{#if (not meeting.alreadyShown)}}
           <td data-test-route-agendas-overview-row-title>
             <span class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
@@ -82,7 +83,6 @@
           <td class="auk-u-text-align--center">
             <Auk::Button
               data-test-route-agendas-overview-row-nav-button={{true}}
-              class="auk-table__link"
               @skin="borderless"
               @layout="icon-only"
               @icon="chevron-right"
