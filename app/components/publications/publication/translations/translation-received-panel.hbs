@@ -13,7 +13,7 @@
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          <DropdownMenu data-test-translation-received-panel-dropdown @skin="borderless" @icon="three-dots" as |Menu|>
+          <Auk::DropdownMenu data-test-translation-received-panel-dropdown @skin="borderless" @icon="three-dots" as |Menu|>
             <Menu.Item
               @skin="primary"
               {{on "click" this.openProofRequestModal}}
@@ -27,7 +27,7 @@
             >
               {{t "edit-2"}}
             </Menu.Item>
-          </DropdownMenu>
+          </Auk::DropdownMenu>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>

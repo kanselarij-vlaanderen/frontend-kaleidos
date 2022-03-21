@@ -9,7 +9,7 @@
           {{t "edit"}}
         </Auk::ButtonLink>
         {{#if @allowDelete}}
-          <DropdownMenu
+          <Auk::DropdownMenu
             @skin="borderless"
             @icon="three-dots"
           as |Menu|>
@@ -20,7 +20,7 @@
             >
               {{t "delete-decision"}}
             </Menu.Item>
-          </DropdownMenu>
+          </Auk::DropdownMenu>
         {{/if}}
       {{/if}}
     </div>
