@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
-import { task } from 'ember-concurrency-decorators';
 import { action } from '@ember/object';
 import { isBlank } from '@ember/utils';
+import { task } from 'ember-concurrency';
 
 export default class EditCase extends Component {
   get isSaveDisabled() {

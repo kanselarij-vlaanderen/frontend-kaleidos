@@ -6,7 +6,7 @@ import { timeout } from 'ember-concurrency';
 import {
   dropTask,
   task
-} from 'ember-concurrency-decorators';
+} from 'ember-concurrency';
 
 export default class SidebarItem extends Component {
   /**
