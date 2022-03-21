@@ -136,6 +136,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     const mail = this.store.createRecord('email', {
       to: mailSettings.translationRequestToEmail,
       cc: mailSettings.translationRequestCcEmail,
+      replyTo: mailSettings.translationRequestReplyToEmail,
       from: mailSettings.defaultFromEmail,
       folder: outbox,
       attachments: files,
