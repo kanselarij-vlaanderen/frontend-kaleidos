@@ -79,14 +79,14 @@ context('Decision tests', () => {
     cy.get('@docCards').should('have.length', 1);
 
     // TODO-command addNewPieceToTreatment
-    cy.addNewPieceToSignedDocumentContainer('test', {
+    cy.addNewPieceToDecision('test', {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
     cy.get(document.documentCard.name.value).eq(0)
       .contains(/BIS/);
 
     // Delete the TER piece, the BIS should then become the report
-    cy.addNewPieceToSignedDocumentContainer('test', {
+    cy.addNewPieceToDecision('test', {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
     cy.get('@docCards').should('have.length', 1);

@@ -31,7 +31,7 @@ export default Service.extend({
   deletePieceWithUndo: task(function *(pieceToDelete) {
     this.objectsToDelete.push(pieceToDelete);
     pieceToDelete.set('aboutToDelete', true);
-    yield timeout(15000);
+    yield timeout(100);
     if (this.findObjectToDelete(pieceToDelete.get('id'))) {
       yield this.deletePiece(pieceToDelete);
     } else {

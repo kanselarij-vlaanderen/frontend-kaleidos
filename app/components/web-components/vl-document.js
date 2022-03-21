@@ -64,7 +64,7 @@ export default class VlDocument extends Component {
     await this.fileService.get('deletePieceWithUndo').perform(this.piece);
     // when cancelled, the aboutToDelete flag will be false
     if (this.args.didDeletePiece && this.piece.aboutToDelete) {
-      this.args.didDeletePiece(this.piece);
+      await this.args.didDeletePiece(this.piece);
     }
     // TODO delete orphan container if last piece is deleted
   }
