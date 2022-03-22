@@ -8,7 +8,7 @@
     <Header.Actions as |Actions|>
       <Actions.Item>
         {{#unless @isDisabledDelete}}
-          <DropdownMenu data-test-request-activity-panel-dropdown @skin="borderless" @icon="three-dots" as |Menu|>
+          <Auk::DropdownMenu data-test-request-activity-panel-dropdown @skin="borderless" @icon="three-dots" as |Menu|>
             <Menu.Item
               data-test-request-activity-panel-delete
               @skin="danger"
@@ -16,7 +16,7 @@
             >
               {{t "delete"}}
             </Menu.Item>
-          </DropdownMenu>
+          </Auk::DropdownMenu>
         {{/unless}}
       </Actions.Item>
     </Header.Actions>

@@ -61,7 +61,7 @@
           </td>
           <td class="auk-u-text-align--right">
             {{#if this.currentSession.isEditor}}
-              <DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
+              <Auk::DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
                 <Menu.Item {{on "click" (fn this.openEditCaseModal row)}}>
                   {{t "edit-case"}}
                 </Menu.Item>
@@ -80,7 +80,7 @@
                 >
                   {{t (if row.isArchived "unarchive-case" "archive-case")}}
                 </Menu.Item>
-              </DropdownMenu>
+              </Auk::DropdownMenu>
             {{/if}}
             <Auk::Button
               @skin="borderless"
