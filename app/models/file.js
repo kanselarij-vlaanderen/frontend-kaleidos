@@ -1,4 +1,4 @@
-import Model, { attr, belongsTo } from '@ember-data/model';
+import Model, { attr } from '@ember-data/model';
 import sanitize from 'sanitize-filename';
 
 export default class File extends Model {
@@ -7,8 +7,6 @@ export default class File extends Model {
   @attr('number') size;
   @attr('string') extension;
   @attr('datetime') created;
-
-  @belongsTo('piece') piece;
 
   // *NOTE Don't use this getter, use filename instead
   // Possible unused getter since it had an error throwing 'deprecate' method for 2 months but no support issues were ever logged
