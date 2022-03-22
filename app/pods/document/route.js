@@ -12,7 +12,7 @@ export default class DocumentRoute extends Route {
   model(params) {
     return this.store.queryOne('piece', {
       'filter[:id:]': params.piece_id,
-      include: 'file',
+      include: 'files',
     });
   }
 }

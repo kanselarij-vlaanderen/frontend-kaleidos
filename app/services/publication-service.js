@@ -376,11 +376,11 @@ export default class PublicationService extends Service {
    * @param {Piece} piece
    */
   async deletePiece(piece) {
-    const file = await piece.file;
+    const files = await piece.files.toArray();
     const documentContainer = await piece.documentContainer;
     await Promise.all([
       piece.destroyRecord(),
-      file.destroyRecord(),
+      files.map((file) => file.destroyRecord()),
       documentContainer.destroyRecord(),
     ]);
   }

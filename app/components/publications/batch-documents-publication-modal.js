@@ -35,7 +35,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
       'filter[agendaitems][:id:]': this.args.agendaitem.id,
       'page[size]': this.args.pieces.length,
       include:
-        'document-container,document-container.type,file,publication-flow,publication-flow.identification',
+        'document-container,document-container.type,files,publication-flow,publication-flow.identification',
     });
   }
 

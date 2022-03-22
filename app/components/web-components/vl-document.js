@@ -40,7 +40,7 @@ export default class VlDocument extends Component {
       this.piece = piece; // Assign what we already have, so that can be rendered already
       this.piece = (yield this.store.query('piece', {
         'filter[:id:]': piece.id,
-        include: 'file,document-container,document-container.type,access-level',
+        include: 'files,document-container,document-container.type,access-level',
       })).firstObject;
       this.file = yield this.piece.file;
       this.documentContainer = yield this.piece.documentContainer;

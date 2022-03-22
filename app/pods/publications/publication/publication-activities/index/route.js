@@ -58,7 +58,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexRoute exte
       include: [
         'email',
         'used-pieces',
-        'used-pieces.file'
+        'used-pieces.files'
       ].join(','),
     });
     let publicationActivities = this.store.query('publication-activity', {

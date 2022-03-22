@@ -51,7 +51,7 @@ export default class PublicationsPublicationTranslationsIndexRoute extends Route
 
     const requestActivities = await this.store.query('request-activity', {
       'filter[translation-subcase][:id:]': this.translationSubcase.id,
-      include: 'email,used-pieces,used-pieces.file',
+      include: 'email,used-pieces,used-pieces.files',
       sort: '-start-date',
     });
 
@@ -59,7 +59,7 @@ export default class PublicationsPublicationTranslationsIndexRoute extends Route
       'translation-activity',
       {
         'filter[subcase][:id:]': this.translationSubcase.id,
-        include: 'generated-pieces,generated-pieces.file',
+        include: 'generated-pieces,generated-pieces.files',
         sort: '-start-date',
       }
     );

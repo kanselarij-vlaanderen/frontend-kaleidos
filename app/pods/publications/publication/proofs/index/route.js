@@ -52,13 +52,13 @@ export default class PublicationsPublicationProofsRoute extends Route {
     let requestActivities = this.store.query('request-activity', {
       'filter[publication-subcase][:id:]': this.publicationSubcase.id,
       'filter[:has:proofing-activity]': true,
-      include: 'email,used-pieces,used-pieces.file',
+      include: 'email,used-pieces,used-pieces.files',
       sort: '-start-date',
     });
 
     let proofingActivities = this.store.query('proofing-activity', {
       'filter[subcase][:id:]': this.publicationSubcase.id,
-      include: 'generated-pieces,generated-pieces.file',
+      include: 'generated-pieces,generated-pieces.files',
       sort: '-start-date',
     });
 

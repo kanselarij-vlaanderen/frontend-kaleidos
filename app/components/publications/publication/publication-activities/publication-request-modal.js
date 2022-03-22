@@ -64,7 +64,7 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
         // eslint-disable-next-line prettier/prettier
         include: [
           'generated-pieces',
-          'generated-pieces.file',
+          'generated-pieces.files',
         ].join(','),
         sort: '-start-date',
       });

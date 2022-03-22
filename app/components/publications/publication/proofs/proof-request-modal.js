@@ -71,9 +71,9 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
         // eslint-disable-next-line prettier/prettier
         include: [
           'generated-pieces',
-          'generated-pieces.file',
+          'generated-pieces.files',
           'used-pieces',
-          'used-pieces.file',
+          'used-pieces.files',
         ].join(','),
         sort: '-start-date',
       });

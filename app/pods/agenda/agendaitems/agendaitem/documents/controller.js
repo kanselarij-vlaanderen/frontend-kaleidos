@@ -134,8 +134,10 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
   @task
   *deletePiece(piece) {
-    const file = yield piece.file;
-    yield file.destroyRecord();
+    const files = yield piece.files.toArray();
+    for (const file of files) {
+      yield file.destroyRecord();
+    }
     this.newPieces.removeObject(piece);
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.destroyRecord();
