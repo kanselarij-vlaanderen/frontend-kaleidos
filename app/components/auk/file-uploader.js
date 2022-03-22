@@ -12,6 +12,10 @@ import { guidFor } from '@ember/object/internals';
  * @argument {String} fileQueueName (optional) Name of the file queue to use.
  *   Setting this name will allow you to access this queue from the file-queue service outside of this component.
  * @argument {Function} onUpload: action fired for each file that gets uploaded. Passes a semantic.works File as an argument,
+ * @argument {String} accept: attribute passed to the <input> element to tell the browser which types of files it should accept. Note: this does not do validation, use `onDrop` for that.
+ * This attribute can be used to improve user experience by making the browser's file chooser only show the expected files by default.
+ * @argument {Function} validateFile: Action fired after files entered the queue, but before being created in the backend. Used to validate passed in files.
+ * Function should return a boolean based on if the file is valid or not, more info on custom validation: @see https://adopted-ember-addons.github.io/ember-file-upload/versions/v5.0.0-beta.0/docs/validation
  */
 export default class FileUploader extends Component {
   @service store;
