@@ -12,7 +12,7 @@
         </Group.Item>
       </Toolbar.Group>
       <Toolbar.Group @position="right">
-        <DropdownMenu
+        <Auk::DropdownMenu
           @skin="borderless"
           @icon="three-dots"
           @disabled={{and this.loadData.isIdle this.isEditDisabled}}
@@ -27,7 +27,7 @@
               {{t "edit-2"}}
             </Menu.Item>
           {{/if}}
-        </DropdownMenu>
+        </Auk::DropdownMenu>
       </Toolbar.Group>
     </Auk::Toolbar>
   </Auk::Panel::Header>

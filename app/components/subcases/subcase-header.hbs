@@ -18,7 +18,7 @@
           {{#if (or (is-pending this.canPropose) this.isLoading)}}
             <div class="auk-loader" role="alert" aria-busy="true"></div>
           {{else if (await this.canPropose)}}
-            <DropdownMenu
+            <Auk::DropdownMenu
               @skin="primary"
               @label={{t "propose-for-agenda"}}
               data-test-subcase-header-show-proposed-agendas={{true}}
@@ -42,11 +42,11 @@
               <Menu.Item {{action "proposeForOtherAgenda" this.subcase}}>
                 {{t "other-agenda"}}
               </Menu.Item>
-            </DropdownMenu>
+            </Auk::DropdownMenu>
           {{/if}}
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
-          <DropdownMenu
+          <Auk::DropdownMenu
             @skin="secondary"
             @label={{t "actions"}}
             data-test-subcase-header-actions-dropdown={{true}}
@@ -66,7 +66,7 @@
             >
               {{t "move-subcase"}}
             </Menu.Item>
-          </DropdownMenu>
+          </Auk::DropdownMenu>
         </Auk::Toolbar::Item>
       {{/if}}
     </Auk::Toolbar::Group>

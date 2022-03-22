@@ -60,69 +60,55 @@
         </Auk::Toolbar::Item>
       {{/if}}
       <Auk::Toolbar::Item>
-        <Auk::ButtonLink @skin="muted" @padded="padded" @icon="circle-question">
-          {{t "help"}}
-        </Auk::ButtonLink>
-        <AttachPopover
-          @renderInPlace={{true}}
-          @hideOn="clickout click"
-          @showOn="click"
-          @animation="shift"
-          @placement="bottom-end"
-        >
-          <Auk::Menu>
-            <Auk::Menu::Item @route="manual" target="_blank">
-              {{t "look-at-documentation"}}
-            </Auk::Menu::Item>
-            <Auk::Menu::Item @href="mailto:kaleidos.servicedesk@vlaanderen.be">
-              <div>
-                <span>{{t "contact-us"}}</span>
-                <span class="auk-u-text-muted auk-u-text-size--small">
-                  {{t "email-servicedesk"}}
-                </span>
-              </div>
-            </Auk::Menu::Item>
-          </Auk::Menu>
-        </AttachPopover>
+        <Auk::DropdownMenu
+          @type="button-link"
+          @skin="muted"
+          @layout="icon-left"
+          @padded="padded"
+          @icon="circle-question"
+          @label={{t "help"}}
+        as |Menu|>
+          <Menu.Item @route="manual" target="_blank">
+            {{t "look-at-documentation"}}
+          </Menu.Item>
+          <Menu.Item @href="mailto:kaleidos.servicedesk@vlaanderen.be">
+            <div>
+              <span>{{t "contact-us"}}</span>
+              <span class="auk-u-text-muted auk-u-text-size--small">
+                {{t "email-servicedesk"}}
+              </span>
+            </div>
+          </Menu.Item>
+        </Auk::DropdownMenu>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item class="auk-u-mr-3">
         {{#if this.currentSession.user}}
-          <Auk::ButtonLink
-            data-test-m-header-user-actions
+          <Auk::DropdownMenu
+            @type="button-link"
             @skin="muted"
-            @icon="chevron-down"
-            @layout="icon-right"
-          >
-            {{this.currentSession.user.firstName}}
-          </Auk::ButtonLink>
-          <AttachPopover
-            @renderInPlace={{true}}
-            @hideOn="clickout click"
-            @showOn="click"
-            @animation="shift"
-            @placement="bottom-end"
-          >
-            <Auk::Menu>
-              <Auk::Menu::Item @textOnly={{true}}>
-                <Auk::Avatar
-                  @icon="user"
-                  @name={{this.currentSession.user.fullName}}
-                >
-                  <p>{{this.currentSession.user.fullName}}</p>
-                  <p class="auk-u-text-muted auk-u-text-size--small">
-                    {{this.currentSession.group.name}}
-                  </p>
-                </Auk::Avatar>
-              </Auk::Menu::Item>
-              <Auk::Menu::Divider />
-              <Auk::Menu::Item
-                {{on "click" this.logout}}
-                data-test-m-header-user-action-logout
+            @padded="padded"
+            @label={{this.currentSession.user.firstName}}
+            data-test-m-header-user-actions
+          as |Menu|>
+            <Menu.Item @textOnly={{true}}>
+              <Auk::Avatar
+                @icon="user"
+                @name={{this.currentSession.user.fullName}}
               >
-                {{t "sign-out"}}
-              </Auk::Menu::Item>
-            </Auk::Menu>
-          </AttachPopover>
+                <p>{{this.currentSession.user.fullName}}</p>
+                <p class="auk-u-text-muted auk-u-text-size--small">
+                  {{this.currentSession.group.name}}
+                </p>
+              </Auk::Avatar>
+            </Menu.Item>
+            <Auk::Menu::Divider />
+            <Menu.Item
+              {{on "click" this.logout}}
+              data-test-m-header-user-action-logout
+            >
+              {{t "sign-out"}}
+            </Menu.Item>
+          </Auk::DropdownMenu>
         {{else}}
           <Auk::ButtonLink
             @route="login"

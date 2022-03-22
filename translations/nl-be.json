@@ -195,6 +195,7 @@
   "manage-emails": "E-mailbeheer",
   "email-to": "Ontvanger",
   "email-cc": "CC",
+  "email-reply-to": "Antwoord aan",
   "manage-alerts": "Systeemberichten beheer",
   "manage-case-types": "Dossier-types beheer",
   "manage-document-types": "Document-types beheer",
