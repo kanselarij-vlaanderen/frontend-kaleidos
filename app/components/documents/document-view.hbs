@@ -1,15 +1,12 @@
 {{#if @file}}
-  {{#if this.isPdfDocument}}
+  {{#if (can-view-document @file)}}
     <PdfView data-test-document-view-pdfview @filePath={{@file.downloadLink}} />
   {{else}}
     <div class="auk-u-p-4">
       <Auk::Alert
         @skin="warning"
         @title={{t "file-type-unsupported"}}
-        @message={{t
-                     "file-viewer-type-unsupported"
-                     fileType=@file.extension
-                 }}
+        @message={{t "file-viewer-type-unsupported" fileType=@file.extension}}
       />
     </div>
   {{/if}}
