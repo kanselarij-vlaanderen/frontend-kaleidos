@@ -4,7 +4,15 @@
   {{else}}
     {{#if (not this.isEditing)}}
       {{#if (not @confidential)}}
-        {{#if (and (and (eq this.accessLevelLabel "Intern Regering")(eq @isDesignAgenda false)) (eq @isNew false))}}
+        {{#if (eq this.accessLevelLabel "Intern secretarie")}}
+        <Auk::Pill
+          @skin="active"
+          @icon="users"
+          data-test-access-level-pill
+        >
+          Intern Secretarie
+        </Auk::Pill>
+        {{else if (and (and (eq this.accessLevelLabel "Intern Regering")(eq @isDesignAgenda false)) (eq @isNew false))}}
         <Auk::Pill
           @skin="active"
           @icon="users"
@@ -70,7 +78,7 @@
           @selectModel={{this.changeAccessLevel}}
           class="auk-model-selector" />
       </div>
-      <Auk::Button
+      {{!-- <Auk::Button
         @skin={{if @confidential "danger-borderless" "muted-borderless"}}
         @layout="icon-only"
         @icon={{if @confidential "lock-closed" "lock-open"}}
@@ -86,7 +94,7 @@
         </EmberTooltip>
       {{/if}}
       </:floater>
-      </Auk::Button>
+      </Auk::Button> --}}
       {{!-- template-lint-enable no-inline-styles  --}}
       <Auk::Button
         @skin="tertiary"

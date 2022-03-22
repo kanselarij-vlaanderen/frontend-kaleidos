@@ -29,13 +29,13 @@
       @selectModel={{this.setAccessLevel}}
     />
   </td>
-  <td class="auk-table-checkbox-col">
+  {{!-- <td class="auk-table-checkbox-col">
     <Auk::Checkbox
       @checked={{this.confidential}}
       @disabled={{this.isDisabled}}
       {{on "input" this.onInputConfidential}}
     />
-  </td>
+  </td> --}}
   <td>
     <WebComponents::AuButtonToolbar>
       {{#if this.isToBeDeleted}}
