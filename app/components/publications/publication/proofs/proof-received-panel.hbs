@@ -12,7 +12,12 @@
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
-        <DropdownMenu data-test-proof-received-panel-dropdown @skin="borderless" @icon="three-dots" as |Menu|>
+        <Auk::DropdownMenu
+          data-test-proof-received-panel-dropdown
+          @skin="borderless"
+          @icon="three-dots"
+          as |Menu|
+        >
           <Menu.Item
             @skin="primary"
             @disabled={{@isCreatePublicationRequestDisabled}}
@@ -26,7 +31,7 @@
           >
             {{t "edit-2"}}
           </Menu.Item>
-        </DropdownMenu>
+        </Auk::DropdownMenu>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
   </Auk::Panel::Header>

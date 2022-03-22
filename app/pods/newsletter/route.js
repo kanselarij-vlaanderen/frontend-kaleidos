@@ -11,7 +11,11 @@ export default class NewsletterRoute extends Route {
 
   async model(params) {
     const meeting = await this.store.findRecord('meeting', params.meeting_id);
-    const latestAgenda = await meeting.get('latestAgenda');
+    const latestAgenda = await this.store.queryOne('agenda', {
+      'filter[created-for][:id:]': meeting.id,
+      sort: '-serialnumber',
+      include: 'status',
+    });
     return {
       meeting,
       agenda: latestAgenda,
