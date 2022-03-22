@@ -1,0 +1,34 @@
+<Auk::Modal>
+  <Auk::Modal::Header
+    @title={{t
+      "upload-word-document"
+      identifier=@publicationFlow.identification.idName
+    }}
+    @onClose={{perform this.cancel}}
+  />
+  <Auk::Modal::Body>
+    <Utils::LoadableContent
+      @isLoading={{this.isLoading}}
+      @reserveSpace={{true}}
+    >
+      <Auk::FileUploader
+        @onUpload={{this.onUpload}}
+        @accept={{join "," (append this.allowedExtensions this.allowedTypes)}}
+        @validateFile={{this.validateFile}}
+      />
+    </Utils::LoadableContent>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer
+    @cancelDisabled={{this.isCancelDisabled}}
+    @onCancel={{perform this.cancel}}
+  >
+    <Auk::Button
+      @skin="primary"
+      @disabled={{this.isSaveDisabled}}
+      @loading={{this.save.isRunning}}
+      {{on "click" (perform this.save)}}
+    >
+      {{t "save"}}
+    </Auk::Button>
+  </Auk::Modal::Footer>
+</Auk::Modal>

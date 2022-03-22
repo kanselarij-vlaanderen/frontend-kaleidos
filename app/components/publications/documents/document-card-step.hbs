@@ -9,9 +9,11 @@
           <p class="auk-overline">
             {{@piece.documentContainer.type.label}}
           </p>
-          <div class="auk-o-flex auk-o-flex--vertical-center vlc-u-box-model-maximize-width">
+          <div
+            class="auk-o-flex auk-o-flex--vertical-center vlc-u-box-model-maximize-width"
+          >
             <h6 class="auk-h4 auk-u-m-0 auk-u-mr-2">
-              {{@piece.file.downloadFilename}}
+              {{@piece.name}}
             </h6>
             <div>
               {{#if @piece.file}}
@@ -22,13 +24,27 @@
                   @href={{@piece.viewDocumentURL}}
                   target="_blank"
                 />
-                <Auk::Button
-                  @skin="borderless"
-                  @layout="icon-only"
-                  @icon="download"
-                  @href={{@piece.file.namedDownloadLink}}
-                  download={{@piece.file.downloadFilename}}
-                />
+                {{#if (gt @piece.files.length 1)}}
+                  {{#each @piece.files as |file|}}
+                    <Auk::Button
+                      @skin="borderless"
+                      @href={{file.namedDownloadLink}}
+                      download={{file.downloadFilename}}
+                    >
+                      <Auk::Icon @name="download" />
+                      <Auk::Icon @name={{icon-name file.extension}} />
+                      {{uppercase file.extension}}
+                    </Auk::Button>
+                  {{/each}}
+                {{else}}
+                  <Auk::Button
+                    @skin="borderless"
+                    @layout="icon-only"
+                    @icon="download"
+                    @href={{@piece.file.namedDownloadLink}}
+                    download={{@piece.file.downloadFilename}}
+                  />
+                {{/if}}
                 {{#if @isEnabledDelete}}
                   <Auk::Button
                     @skin="danger-borderless"
@@ -44,6 +60,19 @@
       </Toolbar.Group>
       <Toolbar.Group @position="right" as |Group|>
         <Group.Item class="auk-o-flex">
+          {{#if
+            (and (not this.hasWordVersionOfDocument) @isViaCouncilOfMinisters)
+          }}
+            <Auk::Button
+              @skin="borderless"
+              @icon="plus"
+              {{on "click" this.openWordDocumentUploadModal}}
+            >
+              {{t "document-add-word-version"}}
+            </Auk::Button>
+          {{/if}}
+        </Group.Item>
+        <Group.Item class="auk-o-flex">
           {{#if @piece.accessLevel}}
             <AccessLevelPill
               @accessLevel={{await @piece.accessLevel}}
@@ -55,3 +84,10 @@
     </Auk::Toolbar>
   </Auk::Panel::Body>
 </Auk::Panel>
+{{#if this.isOpenWordDocumentUploadModal}}
+  <Publications::Documents::WordDocumentUploadModal
+    @piece={{@piece}}
+    @onSave={{perform this.saveWordDocument}}
+    @onCancel={{this.closeWordDocumentUploadModal}}
+  />
+{{/if}}
