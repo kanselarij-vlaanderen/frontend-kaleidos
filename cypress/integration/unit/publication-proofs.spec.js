@@ -33,6 +33,8 @@ context('Publications proofs tests', () => {
     cy.createPublication(fields);
     cy.get(publication.publicationNav.translations).click()
       .wait('@getTranslationsModel');
+    // Make sure the page transitioned
+    cy.url().should('contain', '/vertalingen');
     cy.get(publication.statusPill.contentLabel).should('contain', 'Opgestart');
 
     // new request
@@ -47,8 +49,16 @@ context('Publications proofs tests', () => {
     // after updating pages and words, the text of the message updates, but cypress is faster then the update
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.intercept('POST', 'pieces').as('createNewPiece');
+    cy.intercept('POST', 'request-activities').as('createRequestActivity');
+    cy.intercept('PATCH', 'translation-subcases/**').as('patchTranslationSubcase');
+    cy.intercept('POST', 'emails').as('createEmail');
+    cy.intercept('GET', 'request-activities/**/translation-activity').as('getTranslationsActivity');
     cy.get(publication.translationRequest.save).click();
-    cy.wait('@createNewPiece');
+    cy.wait('@createNewPiece')
+      .wait('@createRequestActivity')
+      .wait('@patchTranslationSubcase')
+      .wait('@createEmail')
+      .wait('@getTranslationsActivity');
     // upload translation
     cy.get(publication.translationsIndex.upload).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
