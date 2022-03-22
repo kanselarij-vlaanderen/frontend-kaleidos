@@ -51,9 +51,10 @@
           @large={{true}}
           @title={{t "documents-add"}} >
           <Auk::Modal::Body>
-            <FileUploader
-              @multipleFiles={{true}}
-              @uploadedFileAction={{this.uploadPiece}} />
+            <Auk::FileUploader
+              @multiple={{true}}
+              @onUpload={{this.uploadPiece}}
+            />
             <div class="upload-container">
               {{#each this.newPieces as |piece|}}
                 <Documents::UploadedDocument

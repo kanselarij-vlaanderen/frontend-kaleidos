@@ -18,9 +18,8 @@
           />
         </div>
       {{else}}
-        <FileUploader
-          @multipleFiles={{false}}
-          @uploadedFileAction={{this.createNewPiece}}
+        <Auk::FileUploader
+          @onUpload={{this.createNewPiece}}
         />
       {{/if}}
     </Auk::Modal::Body>

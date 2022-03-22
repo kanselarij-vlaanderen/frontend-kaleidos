@@ -85,7 +85,7 @@
             {{/if}}
             <Auk::Toolbar::Item>
               {{#if this.currentSession.isEditor}}
-                <DropdownMenu
+                <Auk::DropdownMenu
                   @skin="borderless"
                   @icon="three-dots"
                   @disabled={{this.loadPieceRelatedData.isRunning}}
@@ -109,7 +109,7 @@
                   >
                     {{t "document-delete"}}
                   </Menu.Item>
-                </DropdownMenu>
+                </Auk::DropdownMenu>
               {{/if}}
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
@@ -218,9 +218,8 @@
           @onDelete={{perform this.deleteUploadedPiece}}
         />
       {{else}}
-        <FileUploader
-          @multipleFiles={{false}}
-          @uploadedFileAction={{perform this.uploadPiece}}
+        <Auk::FileUploader
+          @onUpload={{perform this.uploadPiece}}
         />
       {{/if}}
     </Auk::Modal::Body>

@@ -2,7 +2,40 @@
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
-        <Utils::SimpleFileUploader @uploadedFile={{this.uploaded}} />
+        {{#let (file-queue name="user-upload" onFileAdded=(perform this.uploadUserFile)) as |queue|}}
+          {{!-- refactored the structure below a bit to remove redundant nesting (vl-refactor), but is still unintuitive --}}
+          {{#if queue.files.length}}
+            <Auk::Button
+              @skin="secondary"
+              @icon="import"
+              @disabled={{true}}
+            >
+              {{t "import-users-text"}}
+            </Auk::Button>
+          {{else}}
+            <label>
+              <input
+                type="file"
+                accept=".csv"
+                hidden
+                {{queue.selectFile}}
+              >
+              <span
+                data-test-route-settings-users-import-csv
+                class="auk-button auk-button--secondary auk-u-block"
+              >
+                <span class="auk-button__content">
+                  <span class="auk-icon auk-icon--default">
+                    <i class="ki ki-import"></i>
+                  </span>
+                  <span class="auk-button__label">
+                    {{t "import-users"}}
+                  </span>
+                </span>
+              </span>
+            </label>
+          {{/if}}
+        {{/let}}
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>

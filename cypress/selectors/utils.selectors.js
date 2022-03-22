@@ -21,9 +21,6 @@ const selectors = {
     field: '[data-test-government-area-selector-form-field]~span',
   },
 
-  // simple-file-uploader
-  simpleFileUploader: '[data-test-simple-file-uploader]',
-
   // utils/overviews-header-decision
   overviewsHeaderDecision: {
     title: '[data-test-overviews-header-decision-title]',
@@ -61,11 +58,6 @@ const selectors = {
     container: '[data-test-radio-dropdown-container]',
     input: '[data-test-radio-dropdown-input]',
     powerSelect: '[data-test-radio-dropdown-power-select]',
-  },
-
-  // file-uploader
-  fileUploader: {
-    upload: '[data-test-file-uploader-upload]',
   },
 
   // mandatee-selector

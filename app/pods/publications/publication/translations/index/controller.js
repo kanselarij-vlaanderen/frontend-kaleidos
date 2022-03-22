@@ -17,10 +17,6 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   @tracked showTranslationUploadModal = false;
   @tracked showTranslationRequestModal = false;
 
-  get isTranslationUploadDisabled() {
-    return this.latestTranslationActivity == null;
-  }
-
   get latestTranslationActivity() {
     const timelineActivity = this.model.find(
       (activity) => activity.isTranslationActivity
@@ -30,7 +26,23 @@ export default class PublicationsPublicationTranslationsIndexController extends 
 
   @task
   *saveTranslationUpload(translationUpload) {
-    const translationActivity = this.latestTranslationActivity;
+    let translationActivity = this.latestTranslationActivity;
+
+    if (!translationActivity) {
+      // Uploading translated documents without a request
+      const french = yield this.store.findRecordByUri(
+        'language',
+        CONSTANTS.LANGUAGES.FR
+      );
+      translationActivity = this.store.createRecord('translation-activity', {
+        startDate: new Date(),
+        subcase: this.translationSubcase,
+        language: french,
+      });
+    }
+
+    translationActivity.endDate = translationUpload.receivedDate;
+    yield translationActivity.save();
 
     const pieceSaves = [];
 
@@ -42,10 +54,6 @@ export default class PublicationsPublicationTranslationsIndexController extends 
       pieceSaves.push(piece.save());
     }
 
-    translationActivity.endDate = translationUpload.receivedDate;
-    const translationActivitySave = translationActivity.save();
-
-    let translationSubcaseSave;
     if (translationUpload.mustUpdatePublicationStatus) {
       yield this.publicationService.updatePublicationStatus(
         this.publicationFlow,
@@ -54,14 +62,10 @@ export default class PublicationsPublicationTranslationsIndexController extends 
       );
 
       this.translationSubcase.endDate = translationUpload.receivedDate;
-      translationSubcaseSave = this.translationSubcase.save();
+      yield this.translationSubcase.save();
     }
 
-    yield Promise.all([
-      translationActivitySave,
-      ...pieceSaves,
-      translationSubcaseSave,
-    ]);
+    yield Promise.all([...pieceSaves]);
 
     this.send('refresh');
     this.showTranslationUploadModal = false;
@@ -132,6 +136,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     const mail = this.store.createRecord('email', {
       to: mailSettings.translationRequestToEmail,
       cc: mailSettings.translationRequestCcEmail,
+      replyTo: mailSettings.translationRequestReplyToEmail,
       from: mailSettings.defaultFromEmail,
       folder: outbox,
       attachments: files,

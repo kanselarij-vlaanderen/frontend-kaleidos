@@ -29,6 +29,8 @@ function addNewDocumentsInUploadModal(files, model) {
   files.forEach((file, index) => {
     cy.get('@fileUploadDialog').within(() => {
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+      // ensure the new uploadedDocument component is visible before trying to continue
+      cy.get(document.uploadedDocument.nameInput).should('have.length.at.least', index + 1);
 
       if (file.newFileName) {
         cy.get(document.uploadedDocument.nameInput).eq(index)
@@ -208,7 +210,6 @@ function addDocumentToTreatment(file) {
   // 1 default item treatment exists
   cy.get(agenda.agendaitemDecision.uploadFile).click();
 
-  cy.get(utils.fileUploader.upload).click();
   cy.get(utils.vlModal.dialogWindow).within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
   });

@@ -43,7 +43,7 @@ export default class Button extends Component {
     return 'auk-button--secondary';
   }
 
-  get layout() {
+  get layoutClass() {
     if (this.args.layout === 'icon-only') {
       // TODO: Is this argument unnecessary? Could this be determined from existence of @icon && !has-block?
       return 'auk-button--icon';
