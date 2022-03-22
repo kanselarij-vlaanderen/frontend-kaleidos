@@ -81,7 +81,6 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   async attachNewReportVersion(piece) {
-    await piece.previousPiece;
     await piece.save();
     this.args.treatment.set('report', piece);
     await this.args.treatment.save();
