@@ -3,7 +3,7 @@
   <Auk::Modal::Body @noPadding={{true}}>
     <div class="auk-panel-layout">
       <div class="auk-panel-layout__main-content">
-        <Documents::DocumentView @file={{await this.selectedVersion.file}} />
+        <Documents::DocumentView @file={{this.selectedFile}} />
       </div>
       <div class="auk-panel-layout__sidebar">
         <Documents::DocumentPreview::DocumentPreviewSidebar
@@ -11,8 +11,10 @@
           @onCollapse={{this.toggleSidebar}}
           @onOpen={{this.toggleSidebar}}
           @piece={{this.selectedVersion}}
+          @file={{this.selectedFile}}
           @transitionBack={{@onClose}}
           @onSelectVersion={{this.setSelectedVersion}}
+          @onSelectFile={{this.setSelectedFile}}
           @markForSignature={{@markForSignature}}
           @unmarkForSignature={{@unmarkForSignature}}
         />

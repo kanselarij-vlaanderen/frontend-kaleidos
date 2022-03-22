@@ -72,7 +72,9 @@
         {{#if (eq this.activeTab "details")}}
           <Documents::DocumentPreview::DetailsTab
             @piece={{@piece}}
+            @file={{@file}}
             @documentContainer={{this.documentContainer}}
+            @onSelectFile={{@onSelectFile}}
           />
           {{! SIGNATURES }}
         {{else if (eq this.activeTab "signatures")}}
@@ -88,6 +90,7 @@
             @documentContainer={{this.documentContainer}}
             @currentVersion={{@piece}}
             @onSelectVersion={{@onSelectVersion}}
+            @onSelectFile={{@onSelectFile}}
           />
         {{/if}}
       </Utils::LoadableContent>

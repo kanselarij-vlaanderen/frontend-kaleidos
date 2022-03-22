@@ -1,8 +1,5 @@
 <div class="auk-u-m-4">
-  <Auk::KeyValue
-    data-test-details-tab-name
-    @key={{t "document-name"}}
-  >
+  <Auk::KeyValue data-test-details-tab-name @key={{t "document-name"}}>
     {{#if this.isEditingDetails}}
       <Textarea
         data-test-details-tab-edit-name
@@ -35,10 +32,7 @@
       {{/if}}
     </Auk::KeyValue>
   {{/if}}
-  <Auk::KeyValue 
-    data-test-details-tab-access-level
-    @key={{t "publicity"}}
-  >
+  <Auk::KeyValue data-test-details-tab-access-level @key={{t "publicity"}}>
     {{#if this.isEditingDetails}}
       <Utils::ModelSelector
         data-test-details-tab-edit-access-level
@@ -67,10 +61,29 @@
     {{/if}}
   </Auk::KeyValue>
   <Auk::KeyValue @key={{t "file-type"}}>
-    <Utils::Documents::FileTypePill
-      data-test-details-tab-file-type
-      @extension={{@piece.file.extension}}
-    />
+    {{#each @piece.files as |file|}}
+      {{#if (not-eq file @file)}}
+        <Auk::Button
+          @skin="secondary"
+          {{on "click" (fn @onSelectFile file)}}
+          disabled={{not (can-view-document file)}}
+          data-test-details-tab-file-type
+          data-test-file-type-pill
+        >
+          <Auk::Icon @name={{icon-name file.extension}} />
+          {{uppercase file.extension}}
+        </Auk::Button>
+      {{else}}
+        <Auk::Button
+          @skin="primary"
+          data-test-details-tab-file-type
+          data-test-file-type-pill
+        >
+          <Auk::Icon @name={{icon-name file.extension}} />
+          {{uppercase file.extension}}
+        </Auk::Button>
+      {{/if}}
+    {{/each}}
   </Auk::KeyValue>
   {{#if this.currentSession.isEditor}}
     <Auk::Toolbar as |toolbar|>

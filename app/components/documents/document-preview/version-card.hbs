@@ -20,7 +20,9 @@
     <div class="auk-document-card__meta">
       <Auk::PillList class="auk-u-mr-3">
         <Utils::ConfidentialityPill @confidential={{@piece.confidential}} />
-        <Utils::Documents::FileTypePill @extension={{@piece.file.extension}} />
+        {{#each @piece.files as |file|}}
+          <Utils::Documents::FileTypePill @extension={{file.extension}} />
+        {{/each}}
       </Auk::PillList>
       <div class="auk-u-mr-3">
         <p>
@@ -56,7 +58,7 @@
       @icon="download"
       @skin="borderless"
       @href={{@piece.file.namedDownloadLink}}
-      download
+      download={{@piece.file.downloadFilename}}
     />
     </div>
   </div>
