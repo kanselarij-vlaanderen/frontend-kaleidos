@@ -73,7 +73,7 @@ export default class AgendaitemDecisionComponent extends Component {
       documentContainer,
     });
     await piece.save();
-    this.args.treatment.set('report', piece);
+    this.args.treatment.report = piece;
     await this.args.treatment.save();
     this.isAddingReport = false;
     await this.loadReport.perform();
@@ -82,7 +82,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @action
   async attachNewReportVersion(piece) {
     await piece.save();
-    this.args.treatment.set('report', piece);
+    this.args.treatment.report = piece;
     await this.args.treatment.save();
     await this.loadReport.perform();
   }
@@ -97,7 +97,7 @@ export default class AgendaitemDecisionComponent extends Component {
       "Cannot create a new tag for '<(unknown):ember890>' after it has been destroyed"
     */
     if (this.previousReport) {
-      this.args.treatment.set('report', this.previousReport);
+      this.args.treatment.report = this.previousReport;
       await this.args.treatment.save();
     } // else no previous version available. Treatment no longer has a report
     await this.loadReport.perform();

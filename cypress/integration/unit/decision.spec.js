@@ -133,6 +133,7 @@ context('Decision tests', () => {
       timeout: 20000,
     });
 
+    cy.get(agenda.agendaitemDecision.uploadFile);
     cy.get(document.documentCard.card).should('have.length', 0);
   });
 
