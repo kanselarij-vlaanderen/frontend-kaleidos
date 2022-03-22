@@ -53,10 +53,7 @@ export default class PublicationsPublicationPublicationActivitiesPublicationInfo
 
   @task
   *save() {
-    yield all([
-      this.args.publicationSubcase.save(),
-      this.args.publicationFlow.save(),
-    ]);
+    yield this.args.publicationSubcase.save();
     this.isEditing = false;
   }
 }
