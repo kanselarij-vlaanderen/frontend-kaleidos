@@ -5,7 +5,8 @@
       (t "publications-new-title-via-council-of-ministers")
       (t "publications-new-title-not-via-council-of-ministers")
     }}
-    @onClose={{this.cancel}}
+    @onClose={{@onCancel}}
+    @closeDisabled={{this.save.isRunning}}
   />
   <Auk::Modal::Body>
     <Utils::LoadableContent
@@ -143,8 +144,8 @@
         <Auk::Toolbar::Item>
           <Auk::ButtonLink
             data-test-new-publication-cancel
-            disabled={{this.save.isRunning}}
-            {{on "click" this.cancel}}
+            @disabled={{this.save.isRunning}}
+            {{on "click" @onCancel}}
           >
             {{t "cancel"}}
           </Auk::ButtonLink>

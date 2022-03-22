@@ -1,11 +1,12 @@
 <Auk::Modal>
   <Auk::Modal::Header
     @title={{t "publication-edit-modal-title"}}
-    @onClose={{perform this.cancel}}
+    @onClose={{@onCancel}}
+    @closeDisabled={{this.save.isRunning}}
   />
   <Auk::Modal::Body>
     <Utils::LoadableContent
-      @isLoading={{this.isLoading}}
+      @isLoading={{this.save.isRunning}}
       @reserveSpace={{true}}
     >
       <div class="auk-form-group-layout auk-form-group-layout--standard">
@@ -23,8 +24,8 @@
     </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
+    @onCancel={{@onCancel}}
     @cancelDisabled={{this.save.isRunning}}
-    @onCancel={{perform this.cancel}}
   >
     <Auk::Button
       @skin="primary"

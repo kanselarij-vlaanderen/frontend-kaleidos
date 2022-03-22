@@ -1,7 +1,8 @@
 <Auk::Modal>
   <Auk::Modal::Header
     @title={{t "publication-registration-modal-title" }}
-    @onClose={{perform this.cancel}}
+    @onClose={{@onCancel}}
+    @closeDisabled={{this.save.isRunning}}
   />
   <Auk::Modal::Body>
     <div class="auk-form-group-layout auk-form-group-layout--standard">
@@ -26,8 +27,8 @@
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
+    @onCancel={{@onCancel}}
     @cancelDisabled={{this.save.isRunning}}
-    @onCancel={{perform this.cancel}}
   >
     <Auk::Button
       @skin="primary"
