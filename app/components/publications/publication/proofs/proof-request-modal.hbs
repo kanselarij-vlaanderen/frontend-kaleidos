@@ -5,6 +5,7 @@
       identification=@publicationFlow.identification.idName
     }}
     @onClose={{perform this.cancel}}
+    @closeDisabled={{this.isCancelDisabled}}
   />
   <Auk::Modal::Body>
     <Utils::LoadableContent
@@ -64,8 +65,8 @@
     </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
-    @cancelDisabled={{this.isCancelDisabled}}
     @onCancel={{perform this.cancel}}
+    @cancelDisabled={{this.isCancelDisabled}}
   >
     <Auk::Button
       data-test-proof-request-save

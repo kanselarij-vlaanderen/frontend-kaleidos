@@ -64,6 +64,10 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     }
   }
 
+  get publicationModes() {
+    return this.store.peekAll('publication-mode').sortBy('position');
+  }
+
   get isValid() {
     return !this.publicationNumberErrorTranslationKey;
   }
@@ -158,6 +162,11 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.publicationSubcase.dueDate = selectedDates[0];
   }
 
+  @action
+  setPublicationMode(publicationMode) {
+    this.args.publicationFlow.mode = publicationMode;
+  }
+
   @task
   *closeEditingPanel() {
     // Remove locally created numac-numbers that are not yet persisted in the backend
@@ -175,6 +184,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.agendaItemTreatment.rollbackAttributes();
     this.publicationSubcase.rollbackAttributes();
     this.args.publicationFlow.rollbackAttributes();
+    yield this.args.publicationFlow.belongsTo('mode').reload();
 
     this.isEditing = false;
   }

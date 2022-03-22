@@ -32,9 +32,8 @@
         >
           <div class="auk-form-group-layout auk-form-group-layout--grid">
             <div class="auk-o-grid">
-
-              {{! Dringend}}
-              <div class="auk-o-grid-col-4">
+              {{! Dringend }}
+              <div class="auk-o-grid-col-3">
                 <Auk::Label>
                   {{t "publication-urgent"}}
                 </Auk::Label>
@@ -48,10 +47,13 @@
                 </div>
               </div>
 
-              {{! Publicatienummer}}
-              <div class="auk-o-grid-col-4">
+              {{! Publicatienummer }}
+              <div class="auk-o-grid-col-3">
                 <div class="auk-form-group">
-                  <Auk::Label @required={{true}} @error={{this.publicationNumberErrorTranslationKey}}>
+                  <Auk::Label
+                    @required={{true}}
+                    @error={{this.publicationNumberErrorTranslationKey}}
+                  >
                     {{t "publication-number"}}
                   </Auk::Label>
                   <div class="auk-u-mb">
@@ -83,9 +85,12 @@
                 </div>
               </div>
 
-              {{! Numac-nummers}}
-              <div class="auk-o-grid-col-4">
-                <div data-test-publication-case-info-panel-edit-numac-number class="auk-form-group">
+              {{! Numac-nummers }}
+              <div class="auk-o-grid-col-3">
+                <div
+                  data-test-publication-case-info-panel-edit-numac-number
+                  class="auk-form-group"
+                >
                   <Auk::Label>
                     {{t "publication-flow-numac-number"}}
                   </Auk::Label>
@@ -101,8 +106,12 @@
                 </div>
               </div>
 
+              {{! Empty col for pretty spacing }}
+              <div class="auk-o-grid-col-3">
+              </div>
+
               {{! Datum beslissing }}
-              <div class="auk-o-grid-col-4 auk-u-mt-2">
+              <div class="auk-o-grid-col-3 auk-u-mt-2">
                 <div
                   data-test-publication-case-info-panel-edit-decision-date
                   class="auk-form-group"
@@ -118,8 +127,8 @@
                     >
                       {{#if @publicationFlow.agendaItemTreatment.startDate}}
                         {{moment-format
-                            @publicationFlow.agendaItemTreatment.startDate
-                            "DD-MM-YYYY"
+                          @publicationFlow.agendaItemTreatment.startDate
+                          "DD-MM-YYYY"
                         }}
                       {{else}}
                         {{t "to-agenda"}}
@@ -135,7 +144,7 @@
               </div>
 
               {{! Datum ontvangst }}
-              <div class="auk-o-grid-col-4 auk-u-mt-2">
+              <div class="auk-o-grid-col-3 auk-u-mt-2">
                 <div
                   data-test-publication-case-info-panel-edit-opening-date
                   class="auk-form-group"
@@ -160,7 +169,7 @@
               </div>
 
               {{! Limiet publicatie }}
-              <div class="auk-o-grid-col-4 auk-u-mt-2">
+              <div class="auk-o-grid-col-3 auk-u-mt-2">
                 <div
                   data-test-publication-case-info-panel-edit-publication-due-date
                   class="auk-form-group"
@@ -173,10 +182,13 @@
                     @onChange={{this.setPublicationDueDate}}
                   />
                   {{#if
-                       (and
-                       (not @publicationFlow.status.isFinal)
-                       (is-after @publicationFlow.publicationSubcase.dueDate precision="days")
-                       )
+                    (and
+                      (not @publicationFlow.status.isFinal)
+                      (is-after
+                        @publicationFlow.publicationSubcase.dueDate
+                        precision="days"
+                      )
+                    )
                   }}
                     <Auk::FormHelpText
                       @text={{t "date-expired"}}
@@ -187,13 +199,30 @@
                 </div>
               </div>
 
+              {{! wijze van publicatie }}
+              <div class="auk-o-grid-col-3 auk-u-mt-2">
+                <div class="auk-form-group">
+                  <Auk::Label>
+                    {{t "kind-of-publication"}}
+                  </Auk::Label>
+                  <PowerSelect
+                    @options={{this.publicationModes}}
+                    @onChange={{this.setPublicationMode}}
+                    @selected={{@publicationFlow.mode}}
+                    as |mode|
+                  >
+                    {{mode.label}}
+                  </PowerSelect>
+                </div>
+              </div>
+
             </div>
           </div>
         </Utils::LoadableContent>
       {{else}}
         <div class="auk-o-grid">
-          {{! Dringend}}
-          <div class="auk-o-grid-col-1 auk-content">
+          {{! Dringend }}
+          <div class="auk-o-grid-col-3 auk-content">
             <h4 class="auk-u-m-0">{{t "publication-urgent"}}</h4>
             <p class="auk-u-m-0">
               {{#if @publicationFlow.urgencyLevel.isUrgent}}
@@ -204,18 +233,24 @@
             </p>
           </div>
 
-          {{! Publicatienummer}}
-          <div class="auk-o-grid-col-2 auk-content">
+          {{! Publicatienummer }}
+          <div class="auk-o-grid-col-3 auk-content">
             <h4 class="auk-u-m-0">{{t "publication-number"}}</h4>
-            <p data-test-publication-case-info-panel-publication-number class="auk-u-m-0">
+            <p
+              data-test-publication-case-info-panel-publication-number
+              class="auk-u-m-0"
+            >
               {{@publicationFlow.identification.idName}}
             </p>
           </div>
 
-          {{! Numac-nummers}}
-          <div class="auk-o-grid-col-2 auk-content">
+          {{! Numac-nummers }}
+          <div class="auk-o-grid-col-3 auk-content">
             <h4 class="auk-u-m-0">{{t "publication-flow-numac-number"}}</h4>
-            <p data-test-publication-case-info-panel-numac-number class="auk-u-m-0">
+            <p
+              data-test-publication-case-info-panel-numac-number
+              class="auk-u-m-0"
+            >
               {{#if @publicationFlow.numacNumbers}}
                 {{join ", " (map-by "idName" @publicationFlow.numacNumbers)}}
               {{else}}
@@ -224,8 +259,12 @@
             </p>
           </div>
 
-          {{! Datum beslissing}}
-          <div class="auk-o-grid-col-2 auk-content">
+          {{! Empty col for pretty spacing }}
+          <div class="auk-o-grid-col-3 auk-u-mt-2">
+          </div>
+
+          {{! Datum beslissing }}
+          <div class="auk-o-grid-col-3 auk-u-mt-2 auk-content">
             <h4 class="auk-u-m-0">{{t "decision-date"}}</h4>
             <p class="auk-u-m-0">
               {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
@@ -239,8 +278,8 @@
                 >
                   {{#if @publicationFlow.agendaItemTreatment.startDate}}
                     {{moment-format
-                        @publicationFlow.agendaItemTreatment.startDate
-                        "DD-MM-YYYY"
+                      @publicationFlow.agendaItemTreatment.startDate
+                      "DD-MM-YYYY"
                     }}
                   {{else}}
                     {{t "to-agenda"}}
@@ -249,8 +288,8 @@
               {{else}}
                 {{#if @publicationFlow.agendaItemTreatment.startDate}}
                   {{moment-format
-                      @publicationFlow.agendaItemTreatment.startDate
-                      "DD-MM-YYYY"
+                    @publicationFlow.agendaItemTreatment.startDate
+                    "DD-MM-YYYY"
                   }}
                 {{else}}
                   {{t "dash"}}
@@ -259,10 +298,13 @@
             </p>
           </div>
 
-          {{! Datum ontvangst}}
-          <div class="auk-o-grid-col-2 auk-content">
+          {{! Datum ontvangst }}
+          <div class="auk-o-grid-col-3 auk-u-mt-2 auk-content">
             <h4 class="auk-u-m-0">{{t "publication-flow-opening-date"}}</h4>
-            <p data-test-publication-case-info-panel-opening-date class="auk-u-m-0">
+            <p
+              data-test-publication-case-info-panel-opening-date
+              class="auk-u-m-0"
+            >
               {{#if @publicationFlow.openingDate}}
                 {{moment-format @publicationFlow.openingDate "DD-MM-YYYY"}}
               {{else}}
@@ -271,26 +313,45 @@
             </p>
           </div>
 
-          {{! Limiet publicatie}}
-          <div class="auk-o-grid-col-2 auk-content">
-            <h4 class="auk-u-m-0">{{t "publication-flow-publication-due-date"}}</h4>
+          {{! Limiet publicatie }}
+          <div class="auk-o-grid-col-3 auk-u-mt-2 auk-content">
+            <h4 class="auk-u-m-0">
+              {{t "publication-flow-publication-due-date"}}
+            </h4>
             <p data-test-publication-case-info-panel-due-date class="auk-u-m-0">
               {{#if @publicationFlow.publicationSubcase.dueDate}}
-                {{moment-format @publicationFlow.publicationSubcase.dueDate "DD-MM-YYYY"}}
+                {{moment-format
+                  @publicationFlow.publicationSubcase.dueDate
+                  "DD-MM-YYYY"
+                }}
               {{else}}
                 {{t "dash"}}
               {{/if}}
               {{#if
-                   (and
-                   (not @publicationFlow.status.isFinal)
-                   (is-after @publicationFlow.publicationSubcase.dueDate precision="days")
-                   )
+                (and
+                  (not @publicationFlow.status.isFinal)
+                  (is-after
+                    @publicationFlow.publicationSubcase.dueDate precision="days"
+                  )
+                )
               }}
                 <Auk::FormHelpText
                   @text={{t "date-expired"}}
                   @skin="warning"
                   @icon="alert-triangle"
                 />
+              {{/if}}
+            </p>
+          </div>
+
+          {{! Wijze publicatie }}
+          <div class="auk-o-grid-col-3 auk-u-mt-2 auk-content">
+            <h4 class="auk-u-m-0">{{t "kind-of-publication"}}</h4>
+            <p class="auk-u-m-0">
+              {{#if @publicationFlow.mode}}
+                {{@publicationFlow.mode.label}}
+              {{else}}
+                {{t "dash"}}
               {{/if}}
             </p>
           </div>
