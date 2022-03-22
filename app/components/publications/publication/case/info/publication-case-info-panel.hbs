@@ -33,7 +33,7 @@
           <div class="auk-form-group-layout auk-form-group-layout--grid">
             <div class="auk-o-grid">
               {{! Dringend}}
-              <div class="auk-o-grid-col-2">
+              <div class="auk-o-grid-col-3">
                 <Auk::Label>
                   {{t "publication-urgent"}}
                 </Auk::Label>
@@ -106,8 +106,12 @@
                 </div>
               </div>
 
-              {{! Datum beslissing }}
+              {{! Empty col for pretty spacing}}
               <div class="auk-o-grid-col-3">
+              </div>
+
+              {{! Datum beslissing  }}
+              <div class="auk-o-grid-col-3  auk-u-mt-2">
                 <div
                   data-test-publication-case-info-panel-edit-decision-date
                   class="auk-form-group"
@@ -143,8 +147,9 @@
                 </div>
               </div>
 
+
               {{! Datum ontvangst }}
-              <div class="auk-o-grid-col-2 auk-u-mt-2">
+              <div class="auk-o-grid-col-3 auk-u-mt-2">
                 <div
                   data-test-publication-case-info-panel-edit-opening-date
                   class="auk-form-group"
@@ -215,8 +220,7 @@
                   </PowerSelect>
                 </div>
               </div>
-              <div class="auk-o-grid-col-3 auk-u-mt-2">
-              </div>
+
 
             </div>
           </div>
@@ -261,8 +265,12 @@
             </p>
           </div>
 
+          {{! Empty col for pretty spacing}}
+          <div class="auk-o-grid-col-3 auk-u-mt-2">
+          </div>
+
           {{! Datum beslissing}}
-          <div class="auk-o-grid-col-3 auk-content">
+          <div class="auk-o-grid-col-3  auk-u-mt-2 auk-content">
             <h4 class="auk-u-m-0">{{t "decision-date"}}</h4>
             <p class="auk-u-m-0">
               {{#if this.isViaCouncilOfMinisters}}
@@ -356,10 +364,6 @@
                 {{t "dash"}}
               {{/if}}
             </p>
-          </div>
-
-          {{! Empty col for pretty spacing}}
-          <div class="auk-o-grid-col-3 auk-u-mt-2">
           </div>
         </div>
       {{/if}}
