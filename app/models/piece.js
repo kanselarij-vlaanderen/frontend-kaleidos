@@ -93,21 +93,29 @@ export default class Piece extends Model {
   @belongsTo('signed-piece') signedPiece;
 
   get file() {
-    const files = this.files.toArray();
-    const [docxFile] = files.filter((file) =>
-      ['doc', 'docx'].includes(file.extension.toLowerCase())
-    );
-    const [pdfFile] = files.filter((file) =>
-      ['pdf'].includes(file.extension.toLowerCase())
-    );
-    const [firstFile] = files;
-    return docxFile ?? pdfFile ?? firstFile ?? undefined;
+    if (!(this.files.isDestroyed || this.files.isDestroying)) {
+      const files = this.files.toArray();
+      const [docxFile] = files.filter((file) =>
+        ['doc', 'docx'].includes(file.extension.toLowerCase())
+      );
+      const [pdfFile] = files.filter((file) =>
+        ['pdf'].includes(file.extension.toLowerCase())
+      );
+      const [firstFile] = files;
+      return docxFile ?? pdfFile ?? firstFile ?? undefined;
+    } else {
+      return undefined;
+    }
   }
 
   set file(file) {
-    let files = this.files.toArray();
-    files = [...files, file];
-    this.files = files;
+    if (!(this.files.isDestroyed || this.files.isDestroying)) {
+      this.files.then((result) => {
+        let files = result.toArray();
+        files = [...files, file];
+        this.files = files;
+      });
+    }
   }
 
   get viewDocumentURL() {
