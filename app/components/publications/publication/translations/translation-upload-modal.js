@@ -33,10 +33,6 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
 
   @dropTask
   *cancel() {
-    // necessary because close-button is not disabled when saving
-    if (this.save.isRunning) {
-      return;
-    }
     yield Promise.all(
       this.uploadedPieces.map((piece) =>
         this.deleteUploadedPiece.perform(piece)

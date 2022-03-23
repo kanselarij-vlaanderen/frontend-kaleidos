@@ -10,7 +10,7 @@
 {{else if @route}}
   <LinkTo
     type="button"
-    class="auk-button {{this.skin}} {{this.size}} {{this.layout}} {{this.disabled}} {{this.block}}"
+    class="auk-button {{this.skin}} {{this.size}} {{this.layoutClass}} {{this.disabled}} {{this.block}}"
     disabled={{@disabled}}
     @route={{@route}}
     @models={{this.models}}
@@ -25,7 +25,7 @@
   {{!-- TODO: document in writing what the difference is between a "Auk::Button" with @href and a "Auk::ButtonLink" with @href --}}
   <a
     type="button"
-    class="auk-button {{this.skin}} {{this.size}} {{this.layout}} {{this.disabled}} {{this.block}}"
+    class="auk-button {{this.skin}} {{this.size}} {{this.layoutClass}} {{this.disabled}} {{this.block}}"
     href={{@href}}
     disabled={{@disabled}}
     ...attributes
@@ -36,7 +36,7 @@
   </a>
 {{else}}
   <button
-    class="auk-button {{this.skin}} {{this.size}} {{this.layout}} {{this.disabled}} {{this.block}}"
+    class="auk-button {{this.skin}} {{this.size}} {{this.layoutClass}} {{this.disabled}} {{this.block}}"
     type="button"
     disabled={{@disabled}}
     ...attributes

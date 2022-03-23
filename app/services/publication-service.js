@@ -263,6 +263,7 @@ export default class PublicationService extends Service {
     const mail = await this.store.createRecord('email', {
       to: mailSettings.proofRequestToEmail,
       cc: mailSettings.proofRequestCcEmail,
+      replyTo: mailSettings.proofRequestReplyToEmail,
       from: mailSettings.defaultFromEmail,
       folder: outbox,
       attachments: files,
@@ -323,6 +324,7 @@ export default class PublicationService extends Service {
     const mail = this.store.createRecord('email', {
       to: mailSettings.publicationRequestToEmail,
       cc: mailSettings.publicationRequestCcEmail,
+      replyTo: mailSettings.publicationRequestReplyToEmail,
       from: mailSettings.defaultFromEmail,
       folder: outbox,
       attachments: files,

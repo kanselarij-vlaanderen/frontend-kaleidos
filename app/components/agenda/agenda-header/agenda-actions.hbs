@@ -1,6 +1,6 @@
 {{#if this.currentSession.isEditor}}
   <Auk::Toolbar::Item>
-    <DropdownMenu
+    <Auk::DropdownMenu
       @skin="primary"
       @label={{t "agenda-actions"}}
       class="auk-u-hidden@print"
@@ -73,7 +73,7 @@
           {{t "agenda-add"}}
         </Menu.Item>
       {{/if}}
-    </DropdownMenu>
+    </Auk::DropdownMenu>
   </Auk::Toolbar::Item>
 {{/if}}
 
