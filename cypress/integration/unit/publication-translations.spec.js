@@ -110,8 +110,6 @@ context('Publications translation tests', () => {
       .type(numberOfPages);
     cy.get(publication.translationRequest.numberOfWords).should('be.empty')
       .type(numberOfWords);
-    cy.get(publication.translationRequest.updateStatus).parent('label')
-      .click();
     cy.intercept('POST', 'pieces').as('createNewPiece');
     cy.intercept('POST', 'request-activities').as('createRequestActivity');
     cy.intercept('PATCH', 'translation-subcases/**').as('patchTranslationSubcase');
@@ -161,8 +159,6 @@ context('Publications translation tests', () => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.get(auk.modal.container).find(publication.documentsList.piece)
       .should('have.length', 1);
-    cy.get(publication.translationUpload.updateStatus).parent('label')
-      .click();
     cy.intercept('PATCH', '/translation-activities/*').as('patchTranslationActivities');
     cy.intercept('PATCH', '/translation-subcases/*').as('patchTranslationSubcases');
     cy.intercept('GET', '/pieces/**').as('getPieces');
