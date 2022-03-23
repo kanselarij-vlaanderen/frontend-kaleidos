@@ -23,12 +23,11 @@
                   <Auk::Label for="referenceDocumentUpload_name" @required={{true}}>
                     {{t "name"}}
                   </Auk::Label>
-                  <Auk::Input
+                  <div
                     data-test-reference-document-upload-name
-                    id="referenceDocumentUpload_name"
-                    @value={{mut this.piece.name}}
-                    {{on "input" this.validators.name.enableError}}
-                  />
+                    id="referenceDocumentUpload_name">
+                    {{this.piece.name}}
+                  </div>
                 </div>
                 <div class="auk-form-group">
                   <Auk::Label>{{t "file-type"}}</Auk::Label>
