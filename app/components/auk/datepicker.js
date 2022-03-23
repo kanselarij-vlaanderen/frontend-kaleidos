@@ -19,13 +19,12 @@ export default class Datepicker extends Component {
     return this.args.date || null;
   }
 
-  get onChange() {
-    // Return 'null' as a default since <EmberFlatpickr> doesn't handle 'undefined'.
-    return this.args.onChange || null;
-  }
-
   get placeholder() {
     return this.args.placeholder || 'Kies een datum';
+  }
+
+  get multiple() {
+    return this.args.multiple || false;
   }
 
   @action
@@ -37,5 +36,12 @@ export default class Datepicker extends Component {
   @action
   updateEnable() { // in order to make the ember-component work in a DDAU fashion (update view when the enable arg changes)
     this.flatpickrRef.set('enable', this.enable);
+  }
+
+  @action
+  // eslint-disable-next-line no-unused-vars
+  onChange(selectedDates, _dateStr, _instance) {
+    // Return 'null' as a default since <EmberFlatpickr> doesn't handle 'undefined'.
+    return this.args.onChange(this.multiple ? selectedDates : selectedDates[0]) || null;
   }
 }
