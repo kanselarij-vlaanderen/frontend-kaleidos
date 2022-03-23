@@ -29,9 +29,11 @@ export default class UtilsAddDocument extends Component {
 
   @action
   async deletePieceInCreation() {
-    const file = await this.pieceInCreation.file;
-    await this.fileService.deleteFile(file);
-    this.pieceInCreation.deleteRecord();
+    const files = await this.pieceInCreation.files.toArray();
+    for (let file of files) {
+      await file.destroyRecord();
+    }
+    await this.pieceInCreation.destroyRecord();
     this.pieceInCreation = null;
   }
 
@@ -44,6 +46,7 @@ export default class UtilsAddDocument extends Component {
       file: uploadedFile,
       name: uploadedFile.filenameWithoutExtension,
     });
+    this.pieceInCreation.save();
   }
 
   @task
