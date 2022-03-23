@@ -61,7 +61,7 @@
                   class="auk-form-group"
                 >
                   <Auk::Label>{{t "decision-date"}}</Auk::Label>
-                  {{#if this.isViaCouncilOfMinisters}}
+                  {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
                     <Auk::ButtonLink
                       target="_blank"
                       @icon="chevron-right"
