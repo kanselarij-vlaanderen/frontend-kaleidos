@@ -58,7 +58,7 @@ context('Publications overview tests', () => {
     elementsToCheck.forEach((option) => {
       // In this loop, the options list should go away after url change but it doesn't always, creating a second option list that covers elements
       cy.get(dependency.emberPowerSelect.option).should('not.exist');
-      cy.get(publication.publicationsIndex.numberSelector).find(dependency.emberPowerSelect.trigger)
+      cy.get(auk.formGroup).find(dependency.emberPowerSelect.trigger)
         .click();
       cy.get(dependency.emberPowerSelect.option).contains(option)
         .click();
