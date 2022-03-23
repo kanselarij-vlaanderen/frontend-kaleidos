@@ -5,6 +5,7 @@
       identification=@publicationFlow.identification.idName
     }}
     @onClose={{perform this.cancel}}
+    @closeDisabled={{this.isCancelDisabled}}
   />
   <Auk::Modal::Body>
     <Utils::LoadableContent
@@ -22,6 +23,7 @@
             @onUpload={{this.uploadPiece}}
           />
           <Publications::Publication::PublicationDocumentsList
+            data-test-proof-request-translation-pieces
             @pieces={{this.transferredPieces}}
             @viewable={{true}}
             @onDeletePiece={{this.unlinkTransferredPiece}}
@@ -33,6 +35,7 @@
         </div>
         <div class="auk-form-group auk-u-mt-4">
           <Auk::Checkbox
+            data-test-proof-request-update-status
             @label={{t "update-publication-status-proof-requested"}}
             @checked={{this.mustUpdatePublicationStatus}}
             {{on "input" this.setProofRequestedStatus}}
@@ -64,8 +67,8 @@
     </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
-    @cancelDisabled={{this.isCancelDisabled}}
     @onCancel={{perform this.cancel}}
+    @cancelDisabled={{this.isCancelDisabled}}
   >
     <Auk::Button
       data-test-proof-request-save

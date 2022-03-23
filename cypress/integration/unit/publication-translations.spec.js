@@ -36,10 +36,10 @@ context('Publications translation tests', () => {
     cy.url().should('contain', '/vertalingen');
     cy.get(publication.statusPill.contentLabel).should('contain', 'Opgestart');
     // Check empty state message
-    cy.get(publication.translationsDocuments.panelBody).find(auk.emptyState.message);
+    cy.get(publication.translationsIndex.panelBody).find(auk.emptyState.message);
 
     // check rollback after cancel request
-    cy.get(publication.translationsDocuments.requestTranslation).click();
+    cy.get(publication.translationsIndex.requestTranslation).click();
     cy.get(publication.translationRequest.save).should('be.disabled');
     cy.get(auk.datepicker).click();
     cy.setDateInFlatpickr(translationEndDate);
@@ -54,10 +54,10 @@ context('Publications translation tests', () => {
     cy.get(auk.modal.footer.cancel).click();
     cy.wait('@deleteFile');
     cy.get(auk.modal.container).should('not.exist');
-    cy.get(publication.translationsDocuments.panelBody).find(auk.emptyState.message);
+    cy.get(publication.translationsIndex.panelBody).find(auk.emptyState.message);
 
     // new request
-    cy.get(publication.translationsDocuments.requestTranslation).click();
+    cy.get(publication.translationsIndex.requestTranslation).click();
     cy.get(publication.translationRequest.save).should('be.disabled');
     cy.get(auk.datepicker).click();
     cy.setDateInFlatpickr(translationEndDate);
@@ -98,10 +98,10 @@ context('Publications translation tests', () => {
       .wait('@deleteFiles')
       .wait('@deleteDocumentContainers')
       .wait('@deleteRequestActivities');
-    cy.get(publication.translationsDocuments.panelBody).find(auk.emptyState.message);
+    cy.get(publication.translationsIndex.panelBody).find(auk.emptyState.message);
 
     // new request
-    cy.get(publication.translationsDocuments.requestTranslation).click();
+    cy.get(publication.translationsIndex.requestTranslation).click();
     cy.get(publication.translationRequest.save).should('be.disabled');
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.get(auk.datepicker).click();
@@ -127,7 +127,7 @@ context('Publications translation tests', () => {
       .wait('@getTranslationsActivity');
     cy.get(publication.statusPill.contentLabel).should('contain', 'Naar vertaaldienst');
     // check upload translation
-    cy.get(publication.translationsDocuments.upload).click();
+    cy.get(publication.translationsIndex.upload).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.intercept('PATCH', '/translation-activities/*').as('patchTranslationActivities');
     cy.intercept('GET', '/pieces/**').as('getPieces');
@@ -157,7 +157,7 @@ context('Publications translation tests', () => {
       .wait('@reloadTranslationModel2');
     cy.get(publication.translationReceivedPanel.endDate).contains(editedTranslationEndDate.format('DD.MM.YYYY'));
     //  upload second translation
-    cy.get(publication.translationsDocuments.upload).click();
+    cy.get(publication.translationsIndex.upload).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.get(auk.modal.container).find(publication.documentsList.piece)
       .should('have.length', 1);
