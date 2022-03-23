@@ -1,4 +1,4 @@
-<Auk::Panel>
+<Auk::Panel data-test-proof-received-panel>
   <Auk::Panel::Header @size="large">
     <Auk::Toolbar>
       <Auk::Toolbar::Group @position="left">
@@ -6,13 +6,18 @@
           <h4 class="auk-panel__title">
             {{t "received-proof"}}
           </h4>
-          <p class="auk-u-text-small auk-u-m-0">
+          <p data-test-proof-received-panel-end-date class="auk-u-text-small auk-u-m-0">
             {{moment-format @proofingActivity.endDate "DD.MM.YYYY"}}
           </p>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
-        <Auk::DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
+        <Auk::DropdownMenu
+          data-test-proof-received-panel-dropdown
+          @skin="borderless"
+          @icon="three-dots"
+          as |Menu|
+        >
           <Menu.Item
             @skin="primary"
             @disabled={{@isCreatePublicationRequestDisabled}}
@@ -20,7 +25,10 @@
           >
             {{t "request-publication"}}
           </Menu.Item>
-          <Menu.Item @skin="primary" {{on "click" this.openEditProofModal}}>
+          <Menu.Item
+            data-test-proof-received-panel-edit
+            @skin="primary" {{on "click" this.openEditProofModal}}
+          >
             {{t "edit-2"}}
           </Menu.Item>
         </Auk::DropdownMenu>
@@ -67,6 +75,7 @@
           {{t "who-proof-reads"}}
         </Auk::Label>
         <Auk::Input
+          data-test-proof-received-panel-edit-corrector
           id="proofPrintCorrector"
           @value={{mut this.newProofPrintCorrector}}
         />
@@ -77,7 +86,7 @@
       @onCancel={{this.closeEditProofModal}}
     >
       <Auk::Button
-        data-test-proof-edit-save
+        data-test-proof-received-panel-edit-save
         @skin="primary"
         @disabled={{this.isSaveDisabled}}
         @loading={{this.save.isRunning}}

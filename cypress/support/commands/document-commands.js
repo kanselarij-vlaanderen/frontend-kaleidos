@@ -412,15 +412,15 @@ function uploadUsersFile(folder, fileName, extension) {
 }
 
 /**
- * @description Opens the new piece dialog and adds the file when it is a signed document.
- * @name addNewPieceToSignedDocumentContainer
+ * @description Add a new piece to a decision.
+ * @name addNewPieceToDecision
  * @memberOf Cypress.Chainable#
  * @function
  * @param {String} oldFileName - The relative path to the file in the cypress/fixtures folder excluding the fileName
  * @param {String} file - The name of the file without the extension
  */
-function addNewPieceToSignedDocumentContainer(oldFileName, file) {
-  cy.log('addNewPieceToSignedDocumentContainer');
+function addNewPieceToDecision(oldFileName, file) {
+  cy.log('addNewPieceToDecision');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('POST', 'pieces').as(`createNewPiece_${randomInt}`);
 
@@ -443,7 +443,8 @@ function addNewPieceToSignedDocumentContainer(oldFileName, file) {
     })
       .wait(`@createNewPiece_${randomInt}`);
   });
-  cy.log('/addNewPieceToSignedDocumentContainer');
+  cy.wait(2500); // need to wait for model reload
+  cy.log('/addNewPieceToDecision');
 }
 
 /**
@@ -553,7 +554,7 @@ Cypress.Commands.add('addNewPieceToMeeting', addNewPieceToMeeting);
 Cypress.Commands.add('addNewPieceToAgendaitem', addNewPieceToAgendaitem);
 Cypress.Commands.add('addNewPieceToApprovalItem', addNewPieceToApprovalItem);
 Cypress.Commands.add('addNewPieceToSubcase', addNewPieceToSubcase);
-Cypress.Commands.add('addNewPieceToSignedDocumentContainer', addNewPieceToSignedDocumentContainer);
+Cypress.Commands.add('addNewPieceToDecision', addNewPieceToDecision);
 Cypress.Commands.add('uploadFile', uploadFile);
 Cypress.Commands.add('uploadUsersFile', uploadUsersFile);
 Cypress.Commands.add('openAgendaitemDocumentTab', openAgendaitemDocumentTab);
