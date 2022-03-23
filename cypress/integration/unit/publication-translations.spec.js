@@ -56,7 +56,7 @@ context('Publications translation tests', () => {
     cy.get(auk.modal.container).should('not.exist');
     cy.get(publication.translationsIndex.panelBody).find(auk.emptyState.message);
 
-    // new request
+    // new request to delete
     cy.get(publication.translationsIndex.requestTranslation).click();
     cy.get(publication.translationRequest.save).should('be.disabled');
     cy.get(auk.datepicker).click();
@@ -65,6 +65,9 @@ context('Publications translation tests', () => {
       .type(numberOfPages);
     cy.get(publication.translationRequest.numberOfWords).should('be.empty')
       .type(numberOfWords);
+    // uncheck the status update that is checked by default
+    cy.get(publication.translationRequest.updateStatus).parent('label')
+      .click();
     // after updating pages and words, the text of the message updates, but cypress is faster then the update
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.intercept('POST', 'pieces').as('createNewPiece');
@@ -110,8 +113,7 @@ context('Publications translation tests', () => {
       .type(numberOfPages);
     cy.get(publication.translationRequest.numberOfWords).should('be.empty')
       .type(numberOfWords);
-    cy.get(publication.translationRequest.updateStatus).parent('label')
-      .click();
+    cy.get(publication.translationRequest.updateStatus).should('be.checked'); // default checked
     cy.intercept('POST', 'pieces').as('createNewPiece');
     cy.intercept('POST', 'request-activities').as('createRequestActivity');
     cy.intercept('PATCH', 'translation-subcases/**').as('patchTranslationSubcase');
@@ -134,6 +136,9 @@ context('Publications translation tests', () => {
     cy.intercept('GET', '/translation-activities?filter**subcase**').as('reloadTranslationModel');
     cy.get(auk.modal.container).find(publication.documentsList.piece)
       .should('have.length', 1);
+    // uncheck the status update that is checked by default
+    cy.get(publication.translationUpload.updateStatus).parent('label')
+      .click();
     cy.get(publication.translationUpload.save).click()
       .wait('@patchTranslationActivities')
       .wait('@getPieces')
@@ -161,8 +166,7 @@ context('Publications translation tests', () => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.get(auk.modal.container).find(publication.documentsList.piece)
       .should('have.length', 1);
-    cy.get(publication.translationUpload.updateStatus).parent('label')
-      .click();
+    cy.get(publication.translationUpload.updateStatus).should('be.checked'); // default checked
     cy.intercept('PATCH', '/translation-activities/*').as('patchTranslationActivities');
     cy.intercept('PATCH', '/translation-subcases/*').as('patchTranslationSubcases');
     cy.intercept('GET', '/pieces/**').as('getPieces');

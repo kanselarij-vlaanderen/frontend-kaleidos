@@ -15,7 +15,7 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
   @tracked message;
   @tracked uploadedPieces = [];
   @tracked transferredPieces = [];
-  @tracked mustUpdatePublicationStatus = false;
+  @tracked mustUpdatePublicationStatus = true;
 
   validators;
 
