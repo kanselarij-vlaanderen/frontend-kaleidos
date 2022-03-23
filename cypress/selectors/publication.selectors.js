@@ -91,14 +91,6 @@ const selectors = {
     option: 'data-test-overview-table-display-config-option-checkbox=',
   },
 
-  // publication-case-search
-  publicationCaseSearch: {
-    input: '[data-test-publication-case-search-input]',
-    result: '[data-test-publication-case-search-result]',
-    // TODO-SELECTOR unused selectors
-    resultList: '[data-test-publication-case-search-result-list]',
-  },
-
   // publications-filter-modal
   publicationsFilter: {
     minister: '[data-test-publications-filter-minister]',
