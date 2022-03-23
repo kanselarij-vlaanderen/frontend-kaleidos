@@ -46,7 +46,7 @@ export default Service.extend({
     }
     const pieces = await documentContainerToDelete.get('pieces');
     await Promise.all(
-      pieces.map(async(piece) => this.deletePiece(piece))
+      pieces.map((piece) => this.deletePiece(piece))
     );
     documentContainerToDelete.destroyRecord();
   },
@@ -56,8 +56,8 @@ export default Service.extend({
     if (!pieceToDelete) {
       return;
     }
-    const file = pieceToDelete.get('file');
-    await this.deleteFile(file);
+    const files = await pieceToDelete.files;
+    await Promise.all(files.map((file) => this.deleteFile(file)));
     return pieceToDelete.destroyRecord();
     // TODO: delete container in case we just orphaned it
   },
