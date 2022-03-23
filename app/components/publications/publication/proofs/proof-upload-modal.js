@@ -10,7 +10,6 @@ import { isEmpty } from '@ember/utils';
  * @argument onCancel
  */
 export default class PublicationsPublicationProofsProofUploadModalComponent extends Component {
-  @service store;
   @service publicationService;
 
   @tracked uploadedPieces = [];
