@@ -89,13 +89,16 @@ context('Publications proofs tests', () => {
     cy.get(auk.modal.container).should('not.exist');
     cy.get(publication.proofsIndex.panelBody).find(auk.emptyState.message);
 
-    // new request
+    // new request to delete
     cy.get(publication.proofsIndex.newRequest).click();
     cy.get(auk.modal.container).find(publication.documentsList.piece)
       .should('have.length', 2);
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.get(auk.modal.container).find(publication.documentsList.piece)
       .should('have.length', 3);
+    // uncheck the status update that is checked by default
+    cy.get(publication.proofRequest.updateStatus).parent('label')
+      .click();
     cy.intercept('POST', '/proofing-activities').as('postProofingActivities');
     cy.intercept('GET', '/pieces/**').as('getPieces');
     cy.intercept('GET', '/proofing-activities?filter**subcase**').as('reloadProofModel');
@@ -104,7 +107,8 @@ context('Publications proofs tests', () => {
       .wait('@getPieces')
       .wait('@reloadProofModel');
     cy.get(auk.modal.container).should('not.exist');
-    cy.get(publication.statusPill.contentLabel).should('contain', 'Opgestart');
+    // default status updates by request and receiving translations
+    cy.get(publication.statusPill.contentLabel).should('contain', 'Vertaling in');
     cy.get(publication.requestActivityPanel.message)
       .contains(`VO-dossier: ${fields.number}`);
     // check delete
@@ -132,8 +136,7 @@ context('Publications proofs tests', () => {
     cy.get(auk.modal.container).find(publication.documentsList.piece)
       .should('have.length', 2);
     // check update status
-    cy.get(publication.proofRequest.updateStatus).parent('label')
-      .click();
+    cy.get(publication.proofRequest.updateStatus).should('be.checked'); // default checked
     cy.intercept('POST', '/proofing-activities').as('postProofingActivities');
     cy.intercept('GET', '/pieces/**').as('getPieces');
     cy.intercept('GET', '/proofing-activities?filter**subcase**').as('reloadProofModel');
@@ -155,6 +158,9 @@ context('Publications proofs tests', () => {
     cy.intercept('GET', '/proofing-activities?filter**subcase**').as('reloadProofingModel');
     cy.get(auk.modal.container).find(publication.documentsList.piece)
       .should('have.length', 1);
+    // uncheck the status update that is checked by default
+    cy.get(publication.proofUpload.updateStatus).parent('label')
+      .click();
     cy.get(publication.proofUpload.save).click()
       .wait('@patchProofingActivities')
       .wait('@getPieces')
@@ -190,8 +196,7 @@ context('Publications proofs tests', () => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.get(auk.modal.container).find(publication.documentsList.piece)
       .should('have.length', 1);
-    cy.get(publication.proofUpload.updateStatus).parent('label')
-      .click();
+    cy.get(publication.proofUpload.updateStatus).should('be.checked'); // default checked
     cy.intercept('PATCH', '/proofing-activities/*').as('patchProofingActivities2');
     cy.intercept('PATCH', '/publication-subcases/*').as('patchPublicationSubcases');
     cy.intercept('GET', '/pieces/**').as('getPieces');
