@@ -23,7 +23,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   @tracked translationDueDate = this.args.dueDate;
   @tracked subject;
   @tracked message;
-  @tracked mustUpdatePublicationStatus = false;
+  @tracked mustUpdatePublicationStatus = true;
 
   validators;
 

@@ -21,7 +21,7 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   @tracked message;
   @tracked uploadedPieces = [];
   @tracked transferredPieces = [];
-  @tracked mustUpdatePublicationStatus = false;
+  @tracked mustUpdatePublicationStatus = true;
 
   validators;
 

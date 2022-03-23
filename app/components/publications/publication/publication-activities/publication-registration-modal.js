@@ -10,7 +10,7 @@ import { tracked } from '@glimmer/tracking';
  */
 export default class PublicationDetailsModal extends Component {
   @tracked publicationDate = new Date();
-  @tracked mustUpdatePublicationStatus = false;
+  @tracked mustUpdatePublicationStatus = true;
 
   constructor() {
     super(...arguments);
