@@ -84,6 +84,10 @@ export default class AgendaitemDecisionComponent extends Component {
     await piece.save();
     this.args.treatment.report = piece;
     await this.args.treatment.save();
+    // This reload is a workaround for file-service "deleteDocumentContainer" having a stale list of pieces
+    // when deleting the full container right after adding a new report version without the version history open.
+    const documentContainer = await piece.documentContainer;
+    await documentContainer.hasMany('pieces').reload();
     await this.loadReport.perform();
   }
 
