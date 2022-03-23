@@ -33,19 +33,15 @@ export default class PublicationsDocumentsReferenceDocumentUploadModalComponent 
   }
 
   get isSaveDisabled() {
-    return !this.piece || !this.validators.areValid;
+    return !this.piece || !this.validators.areValid || this.cancel.isRunning;
   }
 
   @dropTask
   *cancel() {
-    if (!this.save.isRunning) {
-      if (this.piece) {
-        yield this.publicationService.deletePiece(this.piece);
-      }
-      this.args.onCancel();
-    } else {
-      // close-button is not disabled when saving
+    if (this.piece) {
+      yield this.publicationService.deletePiece(this.piece);
     }
+    this.args.onCancel();
   }
 
   @task
