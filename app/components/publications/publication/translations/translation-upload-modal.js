@@ -51,16 +51,6 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
   }
 
   @action
-  setReceivedAtDate(selectedDates) {
-    if (selectedDates.length) {
-      this.receivedDate = selectedDates[0];
-    } else {
-      // this case occurs when users manually empty the date input-field
-      this.receivedDate = undefined;
-    }
-  }
-
-  @action
   setTranslationReceivedStatus(event) {
     this.mustUpdatePublicationStatus = event.target.checked;
   }

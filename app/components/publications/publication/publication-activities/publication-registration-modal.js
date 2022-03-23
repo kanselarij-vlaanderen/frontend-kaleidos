@@ -30,13 +30,8 @@ export default class PublicationDetailsModal extends Component {
   }
 
   @action
-  setPublicationDate(dates) {
-    if (dates.length) {
-      this.publicationDate = dates[0];
-    } else {
-      // this case occurs when users manually empty the date input-field
-      this.publicationDate = undefined;
-    }
+  setPublicationDate(selectedDate) {
+    this.publicationDate = selectedDate;
     this.validators.publicationDate.enableError();
   }
 

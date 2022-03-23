@@ -23,11 +23,6 @@ export default class PublicationsPublicationProofsProofInfoPanelComponent extend
     this.args.publicationSubcase.rollbackAttributes();
   }
 
-  @action
-  setPublicationDueDate(selectedDates) {
-    this.args.publicationSubcase.dueDate = selectedDates[0];
-  }
-
   @task
   *save() {
     yield this.args.publicationSubcase.save();

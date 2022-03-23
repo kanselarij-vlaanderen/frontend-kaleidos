@@ -16,16 +16,6 @@ export default class PublicationsPublicationTranslationsTranslationActivityEditM
     return isEmpty(this.receivedDate) || this.save.isRunning;
   }
 
-  @action
-  setReceivedDate(selectedDates) {
-    if (selectedDates.length) {
-      this.receivedDate = selectedDates[0];
-    } else {
-      // this case occurs when users manually empty the date input-field
-      this.receivedDate = undefined;
-    }
-  }
-
   @task
   *save() {
     yield this.args.onSave({

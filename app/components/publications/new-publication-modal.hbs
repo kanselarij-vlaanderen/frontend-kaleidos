@@ -106,7 +106,7 @@
             {{else}}
               <Auk::Datepicker
                 @date={{this.decisionDate}}
-                @onChange={{this.setDecisionDate}}
+                @onChange={{set this "decisionDate"}}
               />
             {{/if}}
           </div>
@@ -121,7 +121,7 @@
             {{else}}
               <Auk::Datepicker
                 @date={{this.openingDate}}
-                @onChange={{this.setOpeningDate}}
+                @onChange={{set this "openingDate"}}
               />
             {{/if}}
           </div>
@@ -131,7 +131,7 @@
             </Auk::Label>
             <Auk::Datepicker
               @date={{this.publicationDueDate}}
-              @onChange={{this.setPublicationDueDate}}
+              @onChange={{set this "publicationDueDate"}}
             />
           </div>
         </div>

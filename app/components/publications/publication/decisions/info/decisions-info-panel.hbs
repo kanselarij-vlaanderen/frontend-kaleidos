@@ -85,7 +85,7 @@
                   {{else}}
                     <Auk::Datepicker
                       @date={{@publicationFlow.agendaItemTreatment.startDate}}
-                      @onChange={{this.setDecisionDate}}
+                      @onChange={{set this "agendaItemTreatment.startDate"}}
                     />
                   {{/if}}
                 </div>

@@ -41,16 +41,6 @@ export default class PublicationsPublicationPublicationActivitiesPublicationInfo
     this.args.publicationSubcase.rollbackAttributes();
   }
 
-  @action
-  setTargetEndDate(selectedDates) {
-    this.args.publicationSubcase.targetEndDate = selectedDates[0];
-  }
-
-  @action
-  setPublicationDate(selectedDates) {
-    this.decision.publicationDate = selectedDates[0];
-  }
-
   @task
   *save() {
     yield this.args.publicationSubcase.save();

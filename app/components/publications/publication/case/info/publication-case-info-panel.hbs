@@ -141,7 +141,7 @@
                   {{else}}
                     <Auk::Datepicker
                       @date={{@publicationFlow.agendaItemTreatment.startDate}}
-                      @onChange={{this.setDecisionDate}}
+                      @onChange={{set this "agendaItemTreatment.startDate"}}
                     />
                   {{/if}}
                 </div>
@@ -166,7 +166,7 @@
                   {{else}}
                     <Auk::Datepicker
                       @date={{@publicationFlow.openingDate}}
-                      @onChange={{this.setOpeningDate}}
+                      @onChange={{set this "args.publicationFlow.openingDate"}}
                     />
                   {{/if}}
                 </div>
@@ -183,7 +183,7 @@
                   </Auk::Label>
                   <Auk::Datepicker
                     @date={{@publicationFlow.publicationSubcase.dueDate}}
-                    @onChange={{this.setPublicationDueDate}}
+                    @onChange={{set this "publicationSubcase.dueDate"}}
                   />
                   {{#if
                     (and

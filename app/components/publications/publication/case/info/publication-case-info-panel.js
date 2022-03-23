@@ -142,21 +142,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   @action
-  setDecisionDate(selectedDates) {
-    this.agendaItemTreatment.startDate = selectedDates[0];
-  }
-
-  @action
-  setOpeningDate(selectedDates) {
-    this.args.publicationFlow.openingDate = selectedDates[0];
-  }
-
-  @action
-  setPublicationDueDate(selectedDates) {
-    this.publicationSubcase.dueDate = selectedDates[0];
-  }
-
-  @action
   setPublicationMode(publicationMode) {
     this.args.publicationFlow.mode = publicationMode;
   }

@@ -36,11 +36,6 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.isEditing = true;
   }
 
-  @action
-  setDecisionDate(selectedDates) {
-    this.agendaItemTreatment.startDate = selectedDates[0];
-  }
-
   @task
   *closeEditingPanel() {
     yield this.performCancel();
