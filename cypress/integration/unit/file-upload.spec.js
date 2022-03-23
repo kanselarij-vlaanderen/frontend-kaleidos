@@ -166,6 +166,7 @@ context('Add files to an agenda', () => { // At the meeting-level
         cy.get(document.documentCard.versionHistory)
           .find(auk.accordion.header.button)
           .click();
+        cy.get(document.vlDocument.showPieceViewer); // this line fixes flakyness since the delete button is showing while still loading data
         cy.get(document.vlDocument.piece).should('have.length', 1);
         cy.get(document.vlDocument.delete).click(); // no eq(0) needed when this is the only vl-document
       });

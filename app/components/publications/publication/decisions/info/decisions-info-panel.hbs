@@ -36,7 +36,7 @@
               {{! Type regelgeving }}
               <div class="auk-o-grid-col-4">
                 <div
-                  data-test-publication-decisions-info-panel-regulation-type
+                  data-test-decisions-info-panel-edit-regulation-type
                   class="auk-form-group"
                 >
                   <Auk::Label>
@@ -57,7 +57,7 @@
               {{! Datum beslissing }}
               <div class="auk-o-grid-col-4">
                 <div
-                  data-test-publication-decisions-info-panel-decision-date
+                  data-test-decisions-info-panel-edit-decision-date
                   class="auk-form-group"
                 >
                   <Auk::Label>{{t "decision-date"}}</Auk::Label>
@@ -90,7 +90,7 @@
               {{! Number of pages }}
               <div class="auk-o-grid-col-4">
                 <div
-                  data-test-publication-decisions-info-panel-number-of-pages
+                  data-test-decisions-info-panel-edit-number-of-pages
                   class="auk-form-group"
                 >
                   <Auk::Label>{{t "number-of-pages"}}</Auk::Label>
@@ -108,7 +108,10 @@
           {{! Type regelgeving }}
           <div class="auk-o-grid-col-3 auk-content">
             <h4 class="auk-u-m-0">{{t "regulation-type"}}</h4>
-            <p class="auk-u-m-0">
+            <p
+              data-test-decisions-info-panel-view-regulation-type
+              class="auk-u-m-0"
+            >
               {{#if @publicationFlow.regulationType}}
                 {{@publicationFlow.regulationType.label}}
               {{else}}
@@ -120,9 +123,13 @@
           {{! Datum beslissing}}
           <div class="auk-o-grid-col-3 auk-content">
             <h4 class="auk-u-m-0">{{t "decision-date"}}</h4>
-            <p class="auk-u-m-0">
+            <p
+              data-test-decisions-info-panel-view-decision-date
+              class="auk-u-m-0"
+            >
               {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
                 <Auk::ButtonLink
+                  data-test-decisions-info-panel-view-decision-link
                   target="_blank"
                   @icon="chevron-right"
                   @layout="icon-right"
@@ -154,7 +161,10 @@
           {{! Number of pages }}
           <div class="auk-o-grid-col-3 auk-content">
             <h4 class="auk-u-m-0">{{t "number-of-pages"}}</h4>
-            <p class="auk-u-m-0">
+            <p
+              data-test-decisions-info-panel-view-number-of-pages
+              class="auk-u-m-0"
+            >
               {{#if @publicationFlow.numberOfPages}}
                 {{@publicationFlow.numberOfPages}}
               {{else}}

@@ -1,104 +1,11 @@
 /* global context, it, cy, Cypress, beforeEach, afterEach */
 
 // / <reference types="Cypress" />
-import dependency from '../../selectors/dependency.selectors';
 import publication from '../../selectors/publication.selectors';
 import auk from '../../selectors/auk.selectors';
 import utils from '../../selectors/utils.selectors';
 
-/**
- * @description Translates a month number to a dutch month in lowercase.
- * @name getTranslatedMonth
- * @memberOf Cypress.Chainable#
- * @function
- * @param month {number}  the number of the month to translate (from moment so starts from 0)
- * @returns {string} the month in dutch
- */
-function getTranslatedMonth(month) {
-  // cy.log('getTranslatedMonth');
-  switch (month) {
-    case 0:
-      return 'januari';
-    case 1:
-      return 'februari';
-    case 2:
-      return 'maart';
-    case 3:
-      return 'april';
-    case 4:
-      return 'mei';
-    case 5:
-      return 'juni';
-    case 6:
-      return 'juli';
-    case 7:
-      return 'augustus';
-    case 8:
-      return 'september';
-    case 9:
-      return 'oktober';
-    case 10:
-      return 'november';
-    case 11:
-      return 'december';
-    default:
-      return '';
-  }
-}
 context('Publications proofs tests', () => {
-  const fields = {
-    number: 1600,
-    shortTitle: 'test vertalingsaanvraag',
-  };
-  const file = {
-    folder: 'files', fileName: 'test', fileExtension: 'pdf',
-  };
-  const emptyStateMessage = 'Er zijn nog geen documenten toegevoegd.';
-  const newFileName1 = 'test proof filename1';
-  const newFileName2 = 'test proof new filename2';
-  const newFileName3 = 'test proof extra filename3';
-  const numberOfPages = 5;
-  const numberOfWords = 1000;
-  const numacNumber = 123456;
-  const targetEndDate = Cypress.dayjs().add(1, 'weeks');
-  const monthDutch = getTranslatedMonth(Cypress.dayjs().month());
-  const initialRequestTitle = `Publicatieaanvraag VO-dossier: ${fields.number} - ${fields.shortTitle}`;
-  const initialRequestMessage = `Beste,\n\nIn bijlage voor drukproef:\nTitel: undefined\t\nVO-dossier: ${fields.number}\n\nVragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\t\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n`;
-  const extraRequestTitle = `BS-werknr: ${numacNumber} VO-dossier: ${fields.number} – Aanvraag nieuwe drukproef`;
-  const extraRequestMessage = `Geachte,\n\nGraag een nieuwe drukproef voor:\nBS-werknummer: ${numacNumber}\nTitel: undefined\t\nVO-dossier: ${fields.number}\n\nVragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\t\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n`;
-  const finalRequestTitle = `Verbeterde drukproef BS-werknr: ${numacNumber} VO-dossier: ${fields.number}`;
-  const finalRequestMessage = `Beste,\n\nHierbij de verbeterde drukproef :\n\nBS-werknummer: ${numacNumber}\nVO-dossier: ${fields.number}\n\nDe gewenste datum van publicatie is: ${targetEndDate.format('DD/MM/YYYY')}\t\n\nVragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\t\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n`;
-
-  function uploadDocument(file, newFileName, numberOfPages, numberOfWords) {
-    cy.get(publication.translationsDocuments.add).click();
-    cy.uploadFile(file.folder, file.fileName, file.fileExtension, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-    cy.get(publication.documentsUpload.name).should('have.value', file.fileName)
-      .clear()
-      .type(newFileName);
-    cy.get(publication.documentsUpload.numberOfPages)
-      .type(numberOfPages);
-    cy.get(publication.documentsUpload.numberOfWords)
-      .type(numberOfWords);
-    // cy.get(publication.documentsUpload.proofPrint).parent()
-    //   .click();
-  }
-
-  function clickCheckboxProof(fileName) {
-    cy.get(publication.proofsDocuments.row.documentName).contains(fileName)
-      .parent(publication.proofsDocuments.tableRow)
-      .find(publication.proofsDocuments.row.checkbox)
-      .parent()
-      .click();
-  }
-
-  function clickCheckboxTranslation(fileName) {
-    cy.get(publication.translationsDocuments.row.documentName).contains(fileName)
-      .parent(publication.translationsDocuments.tableRow)
-      .find(publication.translationsDocuments.row.checkbox)
-      .parent()
-      .click();
-  }
-
   beforeEach(() => {
     cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
     cy.visit('/publicaties');
@@ -108,252 +15,197 @@ context('Publications proofs tests', () => {
     cy.logout();
   });
 
-  it.skip('should create translation docs and request', () => {
-    cy.intercept('GET', '/translation-subcases/**').as('getTranslationSubcases');
+  it('should open a publication, request translation and check CRUD', () => {
+    const fields = {
+      number: 1600,
+      shortTitle: 'test drukproefaanvraag',
+    };
+    const file = {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf',
+    };
+    const numberOfPages = 5;
+    const numberOfWords = 1000;
+    const translationEndDate = Cypress.dayjs();
+    const editedProofEndDate = translationEndDate.add(6, 'day');
+    const corrector = 'Bob Bobson';
+    cy.intercept('GET', '/translation-activities?filter**subcase**').as('getTranslationsModel');
+
     cy.createPublication(fields);
-    cy.wait('@getTranslationSubcases');
-    cy.get(publication.publicationNav.translations).click();
-    cy.get(publication.publicationTranslations.documents).click();
+    cy.get(publication.publicationNav.translations).click()
+      .wait('@getTranslationsModel');
+    // Make sure the page transitioned
+    cy.url().should('contain', '/vertalingen');
+    cy.get(publication.statusPill.contentLabel).should('contain', 'Opgestart');
 
-    // create all necessary docs for proof
-    uploadDocument(file, newFileName1, numberOfPages, numberOfWords);
-    cy.get(publication.documentsUpload.proofPrint).parent()
-      .click();
-    cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
+    // new request
+    cy.get(publication.translationsIndex.requestTranslation).click();
+    cy.get(publication.translationRequest.save).should('be.disabled');
+    cy.get(auk.datepicker).click();
+    cy.setDateInFlatpickr(translationEndDate);
+    cy.get(publication.translationRequest.numberOfPages).should('be.empty')
+      .type(numberOfPages);
+    cy.get(publication.translationRequest.numberOfWords).should('be.empty')
+      .type(numberOfWords);
+    // after updating pages and words, the text of the message updates, but cypress is faster then the update
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.intercept('POST', 'pieces').as('createNewPiece');
-    cy.intercept('GET', '/pieces**').as('getPieces');
-    cy.get(publication.documentsUpload.save).click();
-    cy.wait('@createNewDocumentContainer');
-    cy.wait('@createNewPiece');
-    cy.wait('@getPieces');
-    uploadDocument(file, newFileName2, numberOfPages, numberOfWords);
-    cy.intercept('GET', '/pieces**').as('getPieces2');
-    cy.get(publication.documentsUpload.save).click();
-    cy.wait('@createNewDocumentContainer');
-    cy.wait('@createNewPiece');
-    cy.wait('@getPieces2');
-    uploadDocument(file, newFileName3, numberOfPages, numberOfWords);
-    cy.intercept('GET', '/pieces**').as('getPieces3');
-    cy.get(publication.documentsUpload.save).click();
-    cy.wait('@createNewDocumentContainer');
-    cy.wait('@createNewPiece');
-    cy.wait('@getPieces3');
-    cy.wait(5000);
-
-    clickCheckboxTranslation(newFileName2);
-    clickCheckboxTranslation(newFileName3);
-    cy.get(publication.translationsDocuments.requestTranslation).click();
-    cy.intercept('PATCH', '/translation-subcases/**').as('patchTranslationSubcases');
-    cy.intercept('POST', '/request-activities').as('postRequestActivities');
-    cy.intercept('POST', '/translation-activities').as('postTranslationActivities');
-    cy.intercept('POST', '/emails').as('postEmails');
-    cy.intercept('GET', '/request-activities?filter**').as('getRequestActivities');
+    cy.intercept('POST', 'request-activities').as('createRequestActivity');
+    cy.intercept('PATCH', 'translation-subcases/**').as('patchTranslationSubcase');
+    cy.intercept('POST', 'emails').as('createEmail');
+    cy.intercept('GET', 'request-activities/**/translation-activity').as('getTranslationsActivity');
     cy.get(publication.translationRequest.save).click();
-    cy.wait('@patchTranslationSubcases');
-    cy.wait('@postRequestActivities');
-    cy.wait('@postTranslationActivities');
-    cy.wait('@postEmails');
-    cy.wait('@getRequestActivities');
-  });
-
-  it.skip('should upload proofs docs and make request', () => {
-    cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
-    cy.intercept('POST', 'pieces').as('createNewPiece');
-    cy.intercept('GET', '/pieces**').as('getPieces');
-    cy.intercept('DELETE', '**/pieces/**').as('deletePieces');
-    cy.intercept('DELETE', '**/files/**').as('deleteFiles');
-    cy.intercept('DELETE', '**/document-containers/**').as('deleteDocumentContainers');
-
-    // go to publication, then proofs, then documents and make checks
-    cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields.number)
-      .parent(publication.publicationTableRow.rows)
-      .click();
-    cy.get(publication.publicationNav.publishpreview).click();
-    cy.get(publication.proofsDocuments.newRequest).should('be.disabled');
-    cy.get(publication.proofsDocuments.row.documentName).contains(newFileName1)
-      .parent(publication.proofsDocuments.tableRow)
-      .within(() => {
-        cy.get(publication.proofsDocuments.row.options).click();
-        cy.get(publication.proofsDocuments.row.delete).click();
-      });
-    cy.wait('@deletePieces');
-    cy.wait('@deleteFiles');
-    cy.wait('@deleteDocumentContainers');
-    cy.wait('@getPieces');
-    cy.wait(1000);
-    cy.get(auk.emptyState.message).contains(emptyStateMessage);
-    cy.get(publication.proofsStatuspill.notStarted);
-
-    // add source proofs (2)
-    cy.get(publication.proofsDocuments.add).click();
-    cy.get(publication.proofsDocuments.addSourceProof).click();
-    cy.uploadFile(file.folder, file.fileName, file.fileExtension, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-    cy.get(publication.proofUpload.name).should('have.value', file.fileName)
-      .clear();
-    cy.get(publication.proofUpload.save).should('be.disabled');
-    cy.get(publication.proofUpload.name).type(newFileName1);
-    cy.get(publication.proofUpload.save).click();
-    cy.wait('@createNewDocumentContainer')
-      .wait('@createNewPiece')
-      .wait('@getPieces');
-    cy.get(publication.proofsDocuments.add).click();
-    cy.get(publication.proofsDocuments.addSourceProof).click();
-    cy.uploadFile(file.folder, file.fileName, file.fileExtension, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-    cy.get(publication.proofUpload.name).should('have.value', file.fileName)
-      .clear()
-      .type(newFileName2);
-    cy.get(publication.proofUpload.save).click();
-    cy.wait('@createNewDocumentContainer')
-      .wait('@createNewPiece')
-      .wait('@getPieces');
-    // add corrected proof
-    cy.get(publication.proofsDocuments.add).click();
-    cy.get(publication.proofsDocuments.addCorrectedProof).click();
-    cy.uploadFile(file.folder, file.fileName, file.fileExtension, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-    cy.get(publication.proofUpload.name).should('have.value', file.fileName)
-      .clear()
-      .type(newFileName3);
-    cy.get(publication.proofUpload.save).click();
-    cy.wait('@createNewDocumentContainer')
-      .wait('@createNewPiece')
-      .wait('@getPieces');
-    cy.wait(2000);
-    cy.get(publication.proofsDocuments.row.documentName).contains(newFileName3)
-      .parent(publication.proofsDocuments.tableRow)
-      .find(publication.proofsDocuments.row.corrected)
-      .find(auk.icon);
-    // delete proof
-    cy.get(publication.proofsDocuments.row.documentName).contains(newFileName1)
-      .parent(publication.proofsDocuments.tableRow)
-      .within(() => {
-        cy.get(publication.proofsDocuments.row.options).click();
-        cy.get(publication.proofsDocuments.row.delete).click();
-      });
-    cy.get(publication.proofsDocuments.row.documentName).contains(newFileName1)
-      .should('not.exist');
-    // edit proof
-    cy.get(publication.proofsDocuments.row.documentName).contains(newFileName2)
-      .parent(publication.proofsDocuments.tableRow)
-      .within(() => {
-        cy.get(publication.proofsDocuments.row.options).click();
-        cy.get(publication.proofsDocuments.row.edit).click();
-      });
-    cy.get(publication.proofEdit.name).clear();
-    cy.get(publication.proofEdit.save).should('be.disabled');
-    cy.get(publication.proofEdit.name).type(newFileName1);
-    cy.intercept('PATCH', '/pieces/**').as('patchPieces');
-    cy.get(publication.proofEdit.save).click();
-    cy.wait('@patchPieces');
-    cy.wait(1000);
-
-    // new initial request select 1 doc
-    clickCheckboxProof(newFileName1);
-    cy.get(publication.proofsDocuments.newRequest).click();
-    cy.wait(1000);
-    cy.get(publication.proofsDocuments.initialRequest).click();
-    cy.get(publication.proofRequest.subject).should('have.value', initialRequestTitle);
-    cy.get(publication.proofRequest.message).should('have.value', initialRequestMessage);
-    cy.get(publication.proofRequest.attachments).children()
+    cy.wait('@createNewPiece')
+      .wait('@createRequestActivity')
+      .wait('@patchTranslationSubcase')
+      .wait('@createEmail')
+      .wait('@getTranslationsActivity');
+    // upload translation
+    cy.get(publication.translationsIndex.upload).click();
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.intercept('PATCH', '/translation-activities/*').as('patchTranslationActivities');
+    cy.intercept('GET', '/pieces/**').as('getPieces');
+    cy.intercept('GET', '/translation-activities?filter**subcase**').as('reloadTranslationModel');
+    cy.get(auk.modal.container).find(publication.documentsList.piece)
       .should('have.length', 1);
-    cy.intercept('GET', '/request-activities**').as('getRequestActivities');
-    cy.get(publication.proofRequest.save).click();
-    cy.wait('@getRequestActivities');
+    cy.get(publication.translationUpload.save).click()
+      .wait('@patchTranslationActivities')
+      .wait('@getPieces')
+      .wait('@reloadTranslationModel');
 
-    cy.get(publication.publicationProofs.documents).click();
-    cy.get(publication.proofsDocuments.row.documentName).contains(newFileName1)
-      .parent(publication.proofsDocuments.tableRow)
-      .within(() => {
-        cy.get(publication.proofsDocuments.row.options).click();
-        cy.get(publication.proofsDocuments.row.delete).should('not.exist');
-      });
-    cy.get(publication.proofsStatuspill.inProgress);
-
-    // new extra request select 2 doc and numac
-    clickCheckboxProof(newFileName1);
-    clickCheckboxProof(newFileName3);
-    cy.get(publication.sidebar.open).click();
-    cy.get(publication.sidebar.numacNumber).find(dependency.emberTagInput.input)
-      .click()
-      .type(`${numacNumber}{enter}`);
-    cy.get(publication.proofsDocuments.newRequest).click();
-    cy.wait(1000);
-    cy.get(publication.proofsDocuments.extraRequest).click();
-    cy.get(publication.proofRequest.subject).should('have.value', extraRequestTitle);
-    cy.get(publication.proofRequest.message).should('have.value', extraRequestMessage);
-    cy.get(publication.proofRequest.attachments).children()
+    // check rollback after cancel request
+    cy.get(publication.publicationNav.publishpreview).click();
+    cy.get(publication.proofsIndex.newRequest).click();
+    cy.get(auk.modal.container).find(publication.documentsList.piece)
       .should('have.length', 2);
-    cy.get(publication.proofRequest.save).click();
-    cy.wait('@getRequestActivities');
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.get(auk.modal.container).find(publication.documentsList.piece)
+      .should('have.length', 3);
+    cy.get(publication.proofRequest.message).scrollIntoView()
+      .should('have.value', `Beste,\n\nIn bijlage voor drukproef:\nTitel: test drukproefaanvraag\t\nVO-dossier: ${fields.number}\n\nVragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand emailadres.\t\n\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n`);
+    cy.intercept('DELETE', 'files/*').as('deleteFile');
+    cy.get(auk.modal.footer.cancel).click();
+    // these p
+    cy.wait('@deleteFile');
+    cy.get(auk.modal.container).should('not.exist');
+    cy.get(publication.proofsIndex.panelBody).find(auk.emptyState.message);
 
-    // check if request contains correct information and if upload works
-    cy.get(publication.proofsRequests.request.emailSubject).contains(extraRequestTitle)
-      .parents(publication.proofsRequests.request.container)
-      .within(() => {
-        cy.get(auk.accordionPanel.header.title).contains(monthDutch);
-        cy.get(publication.proofsRequests.request.upload).should('not.be.disabled')
-          .click();
-      });
-    cy.uploadFile(file.folder, file.fileName, file.fileExtension, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-    cy.get(publication.proofUpload.name).should('have.value', file.fileName)
-      .clear();
-    cy.get(publication.proofUpload.save).should('be.disabled');
-    cy.get(publication.proofUpload.name).type(newFileName2);
-    cy.get(publication.proofUpload.save).click();
-    cy.get(publication.proofsRequests.request.emailSubject).contains(extraRequestTitle)
-      .parents(publication.proofsRequests.request.container)
-      .within(() => {
-        cy.get(utils.documentList.item).should('have.length', 3);
-        cy.get(utils.documentList.name).contains(newFileName1)
-          .parent()
-          .find(utils.documentList.fileExtension)
-          .contains('PDF');
-        cy.get(utils.documentList.name).contains(newFileName2)
-          .parent()
-          .find(utils.documentList.fileExtension)
-          .contains('PDF');
-        cy.get(utils.documentList.name).contains(newFileName3)
-          .parent()
-          .find(utils.documentList.fileExtension)
-          .contains('PDF');
-        cy.get(utils.documentList.viewDocument);
-      });
-    cy.get(publication.publicationProofs.documents).click();
+    // new request
+    cy.get(publication.proofsIndex.newRequest).click();
+    cy.get(auk.modal.container).find(publication.documentsList.piece)
+      .should('have.length', 2);
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.get(auk.modal.container).find(publication.documentsList.piece)
+      .should('have.length', 3);
+    cy.intercept('POST', '/proofing-activities').as('postProofingActivities');
+    cy.intercept('GET', '/pieces/**').as('getPieces');
+    cy.intercept('GET', '/proofing-activities?filter**subcase**').as('reloadProofModel');
+    cy.get(publication.proofRequest.save).click()
+      .wait('@postProofingActivities')
+      .wait('@getPieces')
+      .wait('@reloadProofModel');
+    cy.get(auk.modal.container).should('not.exist');
+    cy.get(publication.statusPill.contentLabel).should('contain', 'Opgestart');
+    cy.get(publication.requestActivityPanel.message)
+      .contains(`VO-dossier: ${fields.number}`);
+    // check delete
+    cy.get(publication.requestActivityPanel.dropdown).click();
+    cy.get(publication.requestActivityPanel.delete).click();
+    cy.intercept('DELETE', '/proofing-activities/*').as('deleteProofing');
+    cy.intercept('DELETE', '/emails/*').as('deleteEmails');
+    cy.intercept('DELETE', '/files/*').as('deleteFiles');
+    cy.intercept('DELETE', '/document-containers/*').as('deleteDocumentContainers');
+    cy.intercept('DELETE', '/request-activities/*').as('deleteRequestActivities');
+    cy.get(utils.alertDialog.confirm).click()
+      .wait('@deleteProofing')
+      .wait('@deleteEmails')
+      .wait('@deleteFiles')
+      .wait('@deleteDocumentContainers')
+      .wait('@deleteRequestActivities');
+    cy.get(publication.proofsIndex.panelBody).find(auk.emptyState.message);
 
-    // new finalrequest
-    clickCheckboxProof(newFileName1);
-    cy.get(publication.sidebar.targetEndDate).find(auk.datepicker)
-      .click();
-    cy.setDateInFlatpickr(targetEndDate);
-    cy.get(publication.proofsDocuments.newRequest).click();
-    cy.wait(1000);
-    cy.get(publication.proofsDocuments.finalRequest).click();
-    cy.get(publication.proofRequest.subject).should('have.value', finalRequestTitle);
-    cy.get(publication.proofRequest.message).should('have.value', finalRequestMessage);
-    cy.get(publication.proofRequest.attachments).children()
+    // new request
+    cy.get(publication.proofsIndex.newRequest).click();
+    // check if correct number of files is already present
+    cy.get(auk.modal.container).find(publication.documentsList.piece)
       .should('have.length', 1);
-    cy.intercept('GET', '/request-activities**').as('getRequestActivities');
-    cy.get(publication.proofRequest.save).click();
-    cy.wait('@getRequestActivities');
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.get(auk.modal.container).find(publication.documentsList.piece)
+      .should('have.length', 2);
+    // check update status
+    cy.get(publication.proofRequest.updateStatus).parent('label')
+      .click();
+    cy.intercept('POST', '/proofing-activities').as('postProofingActivities');
+    cy.intercept('GET', '/pieces/**').as('getPieces');
+    cy.intercept('GET', '/proofing-activities?filter**subcase**').as('reloadProofModel');
+    cy.get(publication.proofRequest.save).click()
+      .wait('@postProofingActivities')
+      .wait('@getPieces')
+      .wait('@reloadProofModel');
+    cy.get(auk.modal.container).should('not.exist');
+    cy.get(publication.statusPill.contentLabel).should('contain', 'Drukproef aangevraagd');
+    cy.get(publication.requestActivityPanel.message)
+      .contains(`VO-dossier: ${fields.number}`);
 
-    // check if 'finished' checkbox works
-    cy.get(publication.publicationProofs.finished).parent()
+    // upload translation
+    cy.get(publication.proofsIndex.upload).click();
+    cy.get(publication.proofUpload.save).should('be.disabled');
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.intercept('PATCH', '/proofing-activities/*').as('patchProofingActivities');
+    cy.intercept('GET', '/pieces/**').as('getPieces');
+    cy.intercept('GET', '/proofing-activities?filter**subcase**').as('reloadProofingModel');
+    cy.get(auk.modal.container).find(publication.documentsList.piece)
+      .should('have.length', 1);
+    cy.get(publication.proofUpload.save).click()
+      .wait('@patchProofingActivities')
+      .wait('@getPieces')
+      .wait('@reloadProofingModel')
+      .wait(500);
+    cy.get(publication.statusPill.contentLabel).should('contain', 'Drukproef aangevraagd');
+    // check edit and rollback
+    cy.get(publication.proofReceivedPanel.endDate).contains(translationEndDate.format('DD.MM.YYYY'));
+    cy.get(publication.proofReceivedPanel.dropdown).click();
+    cy.get(publication.proofReceivedPanel.edit).click();
+    cy.get(auk.datepicker).click();
+    cy.setDateInFlatpickr(editedProofEndDate);
+    cy.get(publication.proofReceivedPanel.corrector).click()
+      .type(corrector);
+    cy.get(auk.modal.footer.cancel).click();
+    cy.get(publication.proofInfoPanel.view.corrector).contains('-');
+    cy.get(publication.proofReceivedPanel.endDate).contains(translationEndDate.format('DD.MM.YYYY'));
+    // save
+    cy.get(publication.proofReceivedPanel.dropdown).click();
+    cy.get(publication.proofReceivedPanel.edit).click();
+    cy.get(auk.datepicker).click();
+    cy.setDateInFlatpickr(editedProofEndDate);
+    cy.get(publication.proofReceivedPanel.corrector).click()
+      .type(corrector);
+    cy.intercept('GET', '/proofing-activities?filter**subcase**').as('reloadProofingModel2');
+    cy.get(publication.proofReceivedPanel.save).click()
+      .wait('@reloadProofingModel2');
+    cy.get(publication.proofInfoPanel.view.corrector).contains(corrector);
+    cy.get(publication.proofReceivedPanel.endDate).contains(editedProofEndDate.format('DD.MM.YYYY'));
+
+    //  upload second translation and update status
+    cy.get(publication.proofsIndex.upload).click();
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.get(auk.modal.container).find(publication.documentsList.piece)
+      .should('have.length', 1);
+    cy.get(publication.proofUpload.updateStatus).parent('label')
       .click();
-    cy.get(publication.proofsStatuspill.done);
-    cy.get(publication.proofsRequests.request.upload).should('be.disabled');
-    cy.get(publication.publicationProofs.documents).click();
-    cy.get(publication.proofsDocuments.newRequest).should('be.disabled');
-    cy.get(publication.proofsDocuments.add).should('be.disabled');
-    cy.get(publication.publicationNav.goBack).click();
-    cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields.number)
-      .parent()
-      .find(publication.publicationTableRow.row.proofsProgressBadge)
-      .find(publication.proofsStatuspill.done);
-    cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields.number)
-      .parent()
-      .click();
-    cy.get(publication.publicationNav.publishpreview).click();
-    cy.get(publication.publicationProofs.finished).parent()
-      .click();
-    cy.get(publication.proofsStatuspill.inProgress);
+    cy.intercept('PATCH', '/proofing-activities/*').as('patchProofingActivities2');
+    cy.intercept('PATCH', '/publication-subcases/*').as('patchPublicationSubcases');
+    cy.intercept('GET', '/pieces/**').as('getPieces');
+    cy.intercept('PATCH', '/publication-flows/*').as('patchPublicationFlows');
+    cy.intercept('POST', '/publication-status-changes').as('postPublicationStatusChanges');
+    // these calls happen in a random order because of promises
+    cy.get(publication.proofUpload.save).click()
+      .wait('@patchProofingActivities2')
+      .wait('@patchPublicationSubcases')
+      .wait('@getPieces')
+      .wait('@patchPublicationFlows')
+      .wait('@postPublicationStatusChanges');
+    cy.get(publication.statusPill.contentLabel).should('contain', 'Proef in');
+    cy.get(publication.proofReceivedPanel.panel).find(publication.documentsList.piece)
+      .should('have.length', 2);
   });
 });
