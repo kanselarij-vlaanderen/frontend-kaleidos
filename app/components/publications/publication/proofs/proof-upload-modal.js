@@ -15,7 +15,7 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
 
   @tracked uploadedPieces = [];
   @tracked receivedDate = new Date();
-  @tracked mustUpdatePublicationStatus = false;
+  @tracked mustUpdatePublicationStatus = true;
   @tracked proofPrintCorrector;
 
   get isCancelDisabled() {
