@@ -184,6 +184,18 @@ request the whole row and not only the arrow at the end to be clickable }}
           @publicationFlow.publicationSubcase.targetEndDate
           "DD-MM-YYYY"
         }}
+        {{#if
+          (and
+            (not @publicationFlow.status.isFinal)
+            (is-after @publicationSubcase.targetEndDate)
+          )
+        }}
+          <Auk::FormHelpText
+            @text={{t "date-expired"}}
+            @skin="warning"
+            @icon="alert-triangle"
+          />
+        {{/if}}
       {{else}}
         {{t "dash"}}
       {{/if}}
@@ -217,13 +229,6 @@ request the whole row and not only the arrow at the end to be clickable }}
             "DD-MM-YYYY"
           }}
         </div>
-        {{#if this.isPublicationOverdue}}
-          <Auk::FormHelpText
-            @text={{t "date-expired"}}
-            @skin="warning"
-            @icon="alert-triangle"
-          />
-        {{/if}}
       {{else}}
         {{t "dash"}}
       {{/if}}
