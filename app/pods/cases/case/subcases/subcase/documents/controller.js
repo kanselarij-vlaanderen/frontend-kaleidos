@@ -5,9 +5,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import {
   keepLatestTask,
-  task
-} from 'ember-concurrency-decorators';
-import {
+  task,
   all,
   timeout
 } from 'ember-concurrency';

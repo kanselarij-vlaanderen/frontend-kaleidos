@@ -53,19 +53,21 @@ export default class AddExistingPiece extends Component {
     return options;
   }
 
-  @task(function *() {
+  @task
+  *findAll() {
     yield timeout(300);
     this.pieces = yield this.store.query('piece', this.queryOptions());
     yield timeout(100);
     this.setSelectedToFalse();
-  })findAll;
+  }
 
-  @task(function *() {
+  @task
+  *searchTask() {
     yield timeout(300);
     this.pieces = yield this.store.query('piece', this.queryOptions());
     this.page = 0;
     yield timeout(100);
-  })searchTask;
+  }
 
   @action
   async select(piece, event) {

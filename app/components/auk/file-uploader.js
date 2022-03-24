@@ -1,9 +1,9 @@
 import Component from '@glimmer/component';
-import { enqueueTask } from 'ember-concurrency-decorators';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { guidFor } from '@ember/object/internals';
+import { enqueueTask } from 'ember-concurrency';
 
 /**
  * @argument {Boolean} fullHeight Stretch the upload zone over the full height

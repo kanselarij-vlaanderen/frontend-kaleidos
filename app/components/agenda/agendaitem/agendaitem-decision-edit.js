@@ -23,13 +23,13 @@ export default class AgendaitemDecisionEditComponent extends Component {
     this.treatment.set('decisionResultCode', resultCode);
   }
 
-  // eslint-disable-next-line generator-star-spacing
-  @(task(function* () {
+  @task
+  *saveTreatment() {
     yield this.treatment.save();
     if (this.args.onSave) {
       this.args.onSave();
     }
-  })) saveTreatment;
+  }
 
   @action
   cancelEdit() {

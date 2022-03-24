@@ -10,7 +10,7 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
 
   @tracked uploadedPieces = [];
   @tracked receivedDate = new Date();
-  @tracked mustUpdatePublicationStatus = false;
+  @tracked mustUpdatePublicationStatus = true;
 
   get isCancelDisabled() {
     return this.cancel.isRunning || this.save.isRunning;
