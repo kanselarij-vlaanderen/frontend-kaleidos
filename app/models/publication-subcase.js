@@ -1,6 +1,5 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { isPresent } from '@ember/utils';
-import moment from 'moment';
 
 export default class PublicationSubcase extends Model {
   @attr shortTitle;
