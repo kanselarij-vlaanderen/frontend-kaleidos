@@ -40,7 +40,7 @@
             {{#if
               (and
                 (not @publicationFlow.status.isFinal)
-                @publicationFlow.publicationSubcase.isOverdue
+                @publicationSubcase.isOverdue
               )
             }}
               <Auk::FormHelpText
