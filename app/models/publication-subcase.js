@@ -19,7 +19,7 @@ export default class PublicationSubcase extends Model {
   @hasMany('publication-activity') publicationActivities;
 
   get isOverdue() {
-    return moment(this.dueDate).isBefore(Date.now(), 'day');
+    return moment(this.targetEndDate).isBefore(Date.now(), 'hour');
   }
 
   get isFinished() {

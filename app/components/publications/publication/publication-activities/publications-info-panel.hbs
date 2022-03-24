@@ -40,10 +40,7 @@
             {{#if
               (and
                 (not @publicationFlow.status.isFinal)
-                (is-after
-                  @publicationSubcase.targetEndDate
-                  precision="days"
-                )
+                @publicationFlow.publicationSubcase.isOverdue
               )
             }}
               <Auk::FormHelpText
@@ -127,9 +124,7 @@
             {{#if
               (and
                 (not @publicationFlow.status.isFinal)
-                (is-after
-                  @publicationSubcase.targetEndDate precision="days"
-                )
+                 @publicationSubcase.isOverdue
               )
             }}
               <Auk::FormHelpText

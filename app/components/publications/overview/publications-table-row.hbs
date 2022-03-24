@@ -187,7 +187,7 @@ request the whole row and not only the arrow at the end to be clickable }}
         {{#if
           (and
             (not @publicationFlow.status.isFinal)
-            (is-after @publicationSubcase.targetEndDate)
+            @publicationFlow.publicationSubcase.isOverdue
           )
         }}
           <Auk::FormHelpText
