@@ -185,21 +185,6 @@
                     @date={{@publicationFlow.publicationSubcase.dueDate}}
                     @onChange={{this.setPublicationDueDate}}
                   />
-                  {{#if
-                    (and
-                      (not @publicationFlow.status.isFinal)
-                      (is-after
-                        @publicationFlow.publicationSubcase.dueDate
-                        precision="days"
-                      )
-                    )
-                  }}
-                    <Auk::FormHelpText
-                      @text={{t "date-expired"}}
-                      @skin="warning"
-                      @icon="alert-triangle"
-                    />
-                  {{/if}}
                 </div>
               </div>
 
@@ -334,20 +319,6 @@
                 }}
               {{else}}
                 {{t "dash"}}
-              {{/if}}
-              {{#if
-                (and
-                  (not @publicationFlow.status.isFinal)
-                  (is-after
-                    @publicationFlow.publicationSubcase.dueDate precision="days"
-                  )
-                )
-              }}
-                <Auk::FormHelpText
-                  @text={{t "date-expired"}}
-                  @skin="warning"
-                  @icon="alert-triangle"
-                />
               {{/if}}
             </p>
           </div>

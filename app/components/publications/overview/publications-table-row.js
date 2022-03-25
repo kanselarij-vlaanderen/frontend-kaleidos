@@ -93,14 +93,6 @@ export default class PublicationsTableRowComponent extends Component {
     );
   }
 
-  // TODO: review async getter once ember-resources can be used
-  get isPublicationOverdue() {
-    return (
-      !this.args.publicationFlow.status.get('isFinal') &&
-      this.args.publicationFlow.publicationSubcase.get('isOverdue')
-    );
-  }
-
   @action
   navigateToPublication() {
     this.router.transitionTo(
