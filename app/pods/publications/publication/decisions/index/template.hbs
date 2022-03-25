@@ -33,7 +33,7 @@
 {{#if this.isOpenReferenceDocumentUploadModal}}
   <Publications::Documents::ReferenceDocumentUploadModal
     @publicationFlow={{this.publicationFlow}}
-    @onSave={{perform this.saveReferenceDocument}}
+    @onSave={{perform this.saveReferenceDocuments}}
     @onCancel={{this.closeReferenceDocumentUploadModal}}
   />
 {{/if}}
