@@ -40,9 +40,9 @@ export default Service.extend({
         Accept: 'application/vnd.api+json',
         'Content-Type': 'application/vnd.api+json',
       },
-      body: {
+      body: JSON.stringify({
         meetingId: currentMeeting.id,
-      },
+      }),
     });
     if (!response.ok) {
       throw new Error(response.statusText);
@@ -60,9 +60,9 @@ export default Service.extend({
         Accept: 'application/vnd.api+json',
         'Content-Type': 'application/vnd.api+json',
       },
-      body: {
+      body: JSON.stringify({
         meetingId: currentMeeting.id,
-      },
+      }),
     });
     if (!response.ok) {
       throw new Error(response.statusText);
@@ -74,16 +74,19 @@ export default Service.extend({
   },
 
   async approveAgendaAndCloseMeeting(currentMeeting) {
-    const response = await fetch('/agenda-approve/approveAgendaAndCloseMeeting', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/vnd.api+json',
-        'Content-Type': 'application/vnd.api+json',
-      },
-      body: {
-        meetingId: currentMeeting.id,
-      },
-    });
+    const response = await fetch(
+      '/agenda-approve/approveAgendaAndCloseMeeting',
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/vnd.api+json',
+          'Content-Type': 'application/vnd.api+json',
+        },
+        body: JSON.stringify({
+          meetingId: currentMeeting.id,
+        }),
+      }
+    );
     if (!response.ok) {
       throw new Error(response.statusText);
     }
@@ -96,9 +99,9 @@ export default Service.extend({
         Accept: 'application/vnd.api+json',
         'Content-Type': 'application/vnd.api+json',
       },
-      body: {
+      body: JSON.stringify({
         meetingId: currentMeeting.id,
-      },
+      }),
     });
     if (!response.ok) {
       throw new Error(response.statusText);
@@ -118,9 +121,9 @@ export default Service.extend({
         Accept: 'application/vnd.api+json',
         'Content-Type': 'application/vnd.api+json',
       },
-      body: {
+      body: JSON.stringify({
         meetingId: currentMeeting.id,
-      },
+      }),
     });
     if (!response.ok) {
       throw new Error(response.statusText);
@@ -140,10 +143,10 @@ export default Service.extend({
         Accept: 'application/vnd.api+json',
         'Content-Type': 'application/vnd.api+json',
       },
-      body: {
+      body: JSON.stringify({
         meetingId: currentMeeting.id,
         agendaId: currentAgenda.id,
-      },
+      }),
     });
     if (!response.ok) {
       throw new Error(response.statusText);
