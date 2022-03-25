@@ -3,7 +3,6 @@ import Service, { inject as service } from '@ember/service';
 import {
   task, timeout
 } from 'ember-concurrency';
-import { ajax } from 'frontend-kaleidos/utils/ajax';
 
 // TODO: octane-refactor
 // eslint-disable-next-line ember/no-classic-classes
@@ -82,12 +81,5 @@ export default Service.extend({
 
   findObjectToDelete(id) {
     return this.objectsToDelete.find((object) => object.get('id') === id);
-  },
-
-  removeFile(id) {
-    return ajax({
-      method: 'DELETE',
-      url: `/files/${id}`,
-    });
   },
 });

@@ -1,30 +1,34 @@
 import Service, { inject as service } from '@ember/service';
-import { ajax } from 'frontend-kaleidos/utils/ajax';
 import moment from 'moment';
+import fetch from 'fetch';
 
 export default class SubcasesService extends Service {
   @service store;
   @service intl;
 
-  getPostPonedSubcaseIds() {
-    return ajax({
+  async getPostPonedSubcaseIds() {
+    const response = await fetch('/custom-subcases/getPostponedSubcases', {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/vnd.api+json',
       },
-      method: 'GET',
-      url: '/custom-subcases/getPostponedSubcases',
-    }).then(({ data }) => data.map((object) => object.id));
+    });
+    const payload = await response.json();
+    return payload.map((object) => object.id);
   }
 
   async getSubcasePhases(subcase) {
-    return ajax({
-      method: 'GET',
-      url: `/custom-subcases/getSubcasePhases?subcaseId=${subcase.id}`,
-    })
-      .then((result) => this.processSubcasePhases(result.body))
-      .catch((error) => {
-        console.log('error', error);
-      });
+    const response = fetch(
+      `/custom-subcases/getSubcasePhases?subcaseId=${subcase.id}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/vnd.api+json',
+        },
+      }
+    );
+    const payload = await response.json();
+    return this.processSubcasePhases(payload.body);
   }
 
   async processSubcasePhases(activities) {
