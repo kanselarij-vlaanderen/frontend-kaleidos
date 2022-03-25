@@ -1,4 +1,4 @@
-/* global context, it, cy, beforeEach, afterEach, Cypress */
+/* global context, it, cy, afterEach, Cypress */
 
 // / <reference types="Cypress" />
 import dependency from '../../selectors/dependency.selectors';
@@ -51,15 +51,12 @@ context('Publications via MR tests', () => {
   };
   const files = [file1, file2, file3, file4];
 
-  beforeEach(() => {
-    cy.login('Admin');
-  });
-
   afterEach(() => {
     cy.logout();
   });
 
   it('should create a new agenda with item for testing purposes', () => {
+    cy.login('Admin');
     cy.createCase(caseTitleShort);
     cy.addSubcase(type, subcaseTitleShort);
     cy.openSubcase(0);
@@ -71,6 +68,7 @@ context('Publications via MR tests', () => {
   });
 
   it('should open an agendaitem, link document to a new publication and check if it was created properly', () => {
+    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitleShort);
     cy.get(mandatee.mandateePanelView.rows).should('have.length', 1, {
@@ -121,6 +119,7 @@ context('Publications via MR tests', () => {
   });
 
   it('should open the new publication and check if data was inherited correctly', () => {
+    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
     cy.intercept('GET', '/regulation-types?**').as('getRegulationTypes');
     cy.visit('/publicaties');
     cy.wait('@getRegulationTypes');
@@ -164,6 +163,7 @@ context('Publications via MR tests', () => {
   });
 
   it('should open the new publication and check the publication case info panel', () => {
+    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
     cy.intercept('GET', '/regulation-types?**').as('getRegulationTypes');
     cy.visit('/publicaties');
     cy.wait('@getRegulationTypes');
@@ -217,15 +217,7 @@ context('Publications via MR tests', () => {
     cy.get('@documentOnMR')
       .find(document.accessLevelPill.pill)
       .as('documentOnMRPill')
-      .contains('Intern Regering')
-      .click();
-    cy.get('@documentOnMR').find(dependency.emberPowerSelect.trigger)
-      .click();
-    cy.get(dependency.emberPowerSelect.option).contains('Intern Overheid')
-      .click();
-    cy.get('@documentOnMR').find(document.accessLevelPill.save)
-      .click();
-    cy.get('@documentOnMRPill').contains('Intern Regering');
+      .contains('Intern Regering');
     cy.get(publication.publicationNav.case).click();
 
     // check link
@@ -246,6 +238,7 @@ context('Publications via MR tests', () => {
   });
 
   it('should open an agendaitem and link document to an existing publication', () => {
+    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
     cy.openAgendaForDate(agendaDate);
     cy.openAgendaitemDocumentTab('Cypress test: Publications via MR');
     cy.get(route.agendaitemDocuments.openPublication).click();
@@ -272,6 +265,7 @@ context('Publications via MR tests', () => {
   });
 
   it('should check the inheritance of regulation types and the decisions tab info panel', () => {
+    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
     const numberOfPages = 10;
 
     cy.openAgendaForDate(agendaDate);
