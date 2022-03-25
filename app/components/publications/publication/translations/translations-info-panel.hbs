@@ -31,7 +31,7 @@
             <Auk::Label>{{t "publication-flow-translation-due-date"}}</Auk::Label>
             <Auk::Datepicker
               @date={{@translationSubcase.dueDate}}
-              @onChange={{set this "args.translationSubcase.dueDate"}}
+              @onChange={{set @translationSubcase "dueDate"}}
             />
             {{#if
               (and

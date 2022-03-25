@@ -80,8 +80,8 @@
                     </Auk::ButtonLink>
                   {{else}}
                     <Auk::Datepicker
-                      @date={{@publicationFlow.agendaItemTreatment.startDate}}
-                      @onChange={{set this "agendaItemTreatment.startDate"}}
+                      @date={{this.agendaItemTreatment.startDate}}
+                      @onChange={{set this.agendaItemTreatment "startDate}}
                     />
                   {{/if}}
                 </div>
