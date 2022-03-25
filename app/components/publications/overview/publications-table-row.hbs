@@ -100,10 +100,7 @@ request the whole row and not only the arrow at the end to be clickable }}
       class="auk-u-text-nowrap"
     >
       {{#if this.translationRequestDate}}
-        {{moment-format
-          this.translationRequestDate
-          "DD-MM-YYYY"
-        }}
+        {{moment-format this.translationRequestDate "DD-MM-YYYY"}}
       {{else}}
         {{t "dash"}}
       {{/if}}
@@ -151,10 +148,7 @@ request the whole row and not only the arrow at the end to be clickable }}
       class="auk-u-text-nowrap"
     >
       {{#if this.proofReceivedDate}}
-        {{moment-format
-          this.proofReceivedDate
-          "DD-MM-YYYY"
-        }}
+        {{moment-format this.proofReceivedDate "DD-MM-YYYY"}}
       {{else}}
         {{t "dash"}}
       {{/if}}
@@ -184,6 +178,18 @@ request the whole row and not only the arrow at the end to be clickable }}
           @publicationFlow.publicationSubcase.targetEndDate
           "DD-MM-YYYY"
         }}
+        {{#if
+          (and
+            (not @publicationFlow.status.isFinal)
+            @publicationFlow.publicationSubcase.isOverdue
+          )
+        }}
+          <Auk::FormHelpText
+            @text={{t "date-expired"}}
+            @skin="warning"
+            @icon="alert-triangle"
+          />
+        {{/if}}
       {{else}}
         {{t "dash"}}
       {{/if}}
@@ -217,13 +223,6 @@ request the whole row and not only the arrow at the end to be clickable }}
             "DD-MM-YYYY"
           }}
         </div>
-        {{#if this.isPublicationOverdue}}
-          <Auk::FormHelpText
-            @text={{t "date-expired"}}
-            @skin="warning"
-            @icon="alert-triangle"
-          />
-        {{/if}}
       {{else}}
         {{t "dash"}}
       {{/if}}
@@ -271,7 +270,8 @@ request the whole row and not only the arrow at the end to be clickable }}
       {{else}}
         <Auk::StatusPill
           @step={{this.publicationStatusPillStep}}
-          @status={{this.publicationStatusPillKey}}>
+          @status={{this.publicationStatusPillKey}}
+        >
           {{@publicationFlow.status.label}}
         </Auk::StatusPill>
       {{/if}}
