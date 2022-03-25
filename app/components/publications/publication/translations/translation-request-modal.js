@@ -70,7 +70,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   *setEmailFields() {
     const publicationFlow = this.args.publicationFlow;
     const identification = yield publicationFlow.identification;
-
+    const contactPersons = yield publicationFlow.contactPersons;
     const mailParams = {
       identifier: identification.idName,
       title: publicationFlow.shortTitle,
@@ -78,9 +78,10 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
       numberOfPages: this.numberOfPages,
       numberOfWords: this.numberOfWords,
       numberOfDocuments: this.uploadedPieces.length,
+      contactPersons: contactPersons.toArray()
     };
 
-    const mailTemplate = translationRequestEmail(mailParams);
+    const mailTemplate = yield translationRequestEmail(mailParams);
     this.message = mailTemplate.message;
     this.subject = mailTemplate.subject;
   }
