@@ -24,9 +24,9 @@ export default class PublicationsPublicationDecisionsIndexController extends Con
   }
 
   @task
-  *saveReferenceDocument(piece) {
-    piece.publicationFlow = this.publicationFlow;
-    yield piece.save();
+  *saveReferenceDocuments(pieces) {
+    pieces.forEach((piece) => piece.publicationFlow = this.publicationFlow);
+    yield Promise.all(pieces.map((piece) => piece.save()));
 
     this.send('refresh');
     this.closeReferenceDocumentUploadModal();

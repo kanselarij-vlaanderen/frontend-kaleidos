@@ -10,7 +10,6 @@ import { isEmpty } from '@ember/utils';
  * @argument onCancel
  */
 export default class PublicationsPublicationProofsProofUploadModalComponent extends Component {
-  @service store;
   @service publicationService;
 
   @tracked uploadedPieces = [];
@@ -73,7 +72,7 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
 
   @task
   *deleteUploadedPiece(piece) {
-    this.uploadedPieces.removeObject(piece);
     yield this.publicationService.deletePiece(piece);
+    this.uploadedPieces.removeObject(piece);
   }
 }

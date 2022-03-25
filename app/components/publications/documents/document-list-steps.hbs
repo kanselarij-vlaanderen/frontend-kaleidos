@@ -11,7 +11,10 @@
     <div>
       <Publications::Documents::DocumentCardStep
         @piece={{piece}}
-        @isEnabledDelete={{@isEnabledDeletePiece}}
+        @isEnabledDelete={{or
+          (not @isViaCouncilOfMinisters)
+          (and @isViaCouncilOfMinisters (not piece.accessLevel))
+        }}
         @onDelete={{fn @onDeletePiece piece}}
       />
     </div>

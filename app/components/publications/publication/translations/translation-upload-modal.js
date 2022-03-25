@@ -6,7 +6,6 @@ import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 
 export default class PublicationsTranslationTranslationUploadModalComponent extends Component {
-  @service store;
   @service publicationService;
 
   @tracked uploadedPieces = [];
@@ -67,7 +66,7 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
 
   @task
   *deleteUploadedPiece(piece) {
-    this.uploadedPieces.removeObject(piece);
     yield this.publicationService.deletePiece(piece);
+    this.uploadedPieces.removeObject(piece);
   }
 }
