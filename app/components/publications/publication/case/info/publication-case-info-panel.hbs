@@ -167,10 +167,10 @@
                   class="auk-form-group"
                 >
                   <Auk::Label>{{t "publication-flow-opening-date"}}</Auk::Label>
-                    <Auk::Datepicker
-                      @date={{@publicationFlow.openingDate}}
-                      @onChange={{this.setOpeningDate}}
-                    />
+                  <Auk::Datepicker
+                    @date={{@publicationFlow.openingDate}}
+                    @onChange={{this.setOpeningDate}}
+                  />
                 </div>
               </div>
 
@@ -196,14 +196,11 @@
                   <Auk::Label>
                     {{t "case-created"}}
                   </Auk::Label>
-                    {{#if @publicationFlow.created}}
-                      {{moment-format
-                        @publicationFlow.created
-                        "DD-MM-YYYY"
-                      }}
-                    {{else}}
-                      {{t "dash"}}
-                    {{/if}}
+                  {{#if @publicationFlow.created}}
+                    {{moment-format @publicationFlow.created "DD-MM-YYYY"}}
+                  {{else}}
+                    {{t "dash"}}
+                  {{/if}}
                 </div>
               </div>
 
@@ -338,10 +335,7 @@
             <h4 class="auk-u-m-0">{{t "case-created"}}</h4>
             <p class="auk-u-m-0">
               {{#if @publicationFlow.created}}
-                {{moment-format
-                  @publicationFlow.created
-                  "DD-MM-YYYY"
-                }}
+                {{moment-format @publicationFlow.created "DD-MM-YYYY"}}
               {{else}}
                 {{t "dash"}}
               {{/if}}
