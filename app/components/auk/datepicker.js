@@ -53,7 +53,7 @@ export default class Datepicker extends Component {
   // eslint-disable-next-line no-unused-vars
   onChange(selectedDates, _dateStr, _instance) {
     if (isPresent(this.args.onChange)) {
-      return this.multiple ? selectedDates : selectedDates[0];
+      return this.args.onChange(this.multiple ? selectedDates : selectedDates[0]);
     }
     // Return 'null' as a default since <EmberFlatpickr> doesn't handle 'undefined'.
     return null;
