@@ -167,21 +167,10 @@
                   class="auk-form-group"
                 >
                   <Auk::Label>{{t "publication-flow-opening-date"}}</Auk::Label>
-                  {{#if this.isViaCouncilOfMinisters}}
-                    {{#if @publicationFlow.openingDate}}
-                      {{moment-format
-                        @publicationFlow.openingDate
-                        "DD-MM-YYYY"
-                      }}
-                    {{else}}
-                      {{t "dash"}}
-                    {{/if}}
-                  {{else}}
                     <Auk::Datepicker
                       @date={{@publicationFlow.openingDate}}
                       @onChange={{this.setOpeningDate}}
                     />
-                  {{/if}}
                 </div>
               </div>
 
