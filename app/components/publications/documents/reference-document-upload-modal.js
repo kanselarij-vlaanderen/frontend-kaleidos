@@ -1,10 +1,8 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task, dropTask } from 'ember-concurrency';
-import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
 
 /**
  * @argument {PublicationFlow} publicationFlow *
@@ -14,49 +12,43 @@ import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
 export default class PublicationsDocumentsReferenceDocumentUploadModalComponent extends Component {
   @service publicationService;
 
-  validators;
-
-  @tracked piece;
-
-  constructor() {
-    super(...arguments);
-
-    this.initValidation();
-  }
-
-  get isLoading() {
-    return this.cancel.isRunning || this.save.isRunning;
-  }
+  @tracked uploadedPieces = [];
 
   get isCancelDisabled() {
     return this.cancel.isRunning || this.save.isRunning;
   }
 
   get isSaveDisabled() {
-    return !this.piece || !this.validators.areValid || this.cancel.isRunning;
+    return (
+      this.uploadedPieces.length === 0 ||
+      this.cancel.isRunning
+    );
+  }
+
+  @action
+  async uploadPiece(file) {
+    const piece = await this.publicationService.createPiece(file);
+    this.uploadedPieces.pushObject(piece);
   }
 
   @dropTask
   *cancel() {
-    if (this.piece) {
-      yield this.publicationService.deletePiece(this.piece);
-    }
+    yield Promise.all(
+      this.uploadedPieces.map((piece) =>
+        this.deleteUploadedPiece.perform(piece)
+      )
+    );
     this.args.onCancel();
   }
 
   @task
+  *deleteUploadedPiece(piece) {
+    yield this.publicationService.deletePiece(piece);
+    this.uploadedPieces.removeObject(piece);
+  }
+
+  @task
   *save() {
-    yield this.args.onSave(this.piece);
-  }
-
-  @action
-  async createPiece(file) {
-    this.piece = await this.publicationService.createPiece(file);
-  }
-
-  initValidation() {
-    this.validators = new ValidatorSet({
-      name: new Validator(() => isPresent(this.piece.name)),
-    });
+    yield this.args.onSave(this.uploadedPieces);
   }
 }

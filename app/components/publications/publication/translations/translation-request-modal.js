@@ -14,7 +14,6 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
    * @argument onSave
    * @argument onCancel
    */
-  @service store;
   @service publicationService;
 
   @tracked uploadedPieces = [];

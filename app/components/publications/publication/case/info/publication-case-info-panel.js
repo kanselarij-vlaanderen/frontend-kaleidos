@@ -14,6 +14,8 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   @tracked isEditing;
   @tracked publicationNumber;
   @tracked publicationNumberSuffix;
+  @tracked agendaItemTreatment;
+  @tracked modelsForAgendaitemRoute;
 
   @tracked numberIsAlreadyUsed = false;
   @tracked numberIsRequired = false;
@@ -46,6 +48,10 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     // Limiet publicatie
     this.publicationSubcase = await this.args.publicationFlow
       .publicationSubcase;
+    if (this.isViaCouncilOfMinisters) {
+      // get the models meeting/agenda/agendaitem for clickable link
+      this.modelsForAgendaitemRoute = await this.publicationService.getModelsForAgendaitemFromTreatment(this.agendaItemTreatment);
+    }
   }
 
   get publicationNumberErrorTranslationKey() {
@@ -198,7 +204,9 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     }
 
     // Datum beslissing
-    saves.push(this.agendaItemTreatment.save());
+    if (!this.isViaCouncilOfMinisters) {
+      saves.push(this.agendaItemTreatment.save());
+    }
 
     // Dringend + Datum ontvangst
     saves.push(this.args.publicationFlow.save());
