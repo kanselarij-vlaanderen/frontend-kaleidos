@@ -62,7 +62,7 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
 
   @task
   *deleteUploadedPiece(piece) {
-    this.uploadedPieces.removeObject(piece);
     yield this.publicationService.deletePiece(piece);
+    this.uploadedPieces.removeObject(piece);
   }
 }

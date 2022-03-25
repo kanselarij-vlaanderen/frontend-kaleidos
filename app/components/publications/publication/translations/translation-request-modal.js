@@ -104,9 +104,9 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
 
   @task
   *deleteUploadedPiece(piece) {
+    yield this.publicationService.deletePiece(piece);
     this.uploadedPieces.removeObject(piece);
     this.setEmailFields.perform();
-    yield this.publicationService.deletePiece(piece);
   }
 
   initValidators() {
