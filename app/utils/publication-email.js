@@ -19,13 +19,18 @@ const footer = 'Met vriendelijke groet,\n'
   + 'Koolstraat 35, 1000 Brussel\t\n';
 
 async function buildContactInformation(contactPersons) {
-  let message = '\n' + 'Contactpersonen:\t\n'
-  for (const contact of contactPersons) {
-    const person = await contact.person;
-    message += `Naam: ${person.fullName}\t\n`
-      + `E-mail: ${contact.email}\t\n`
-      + '\n'
-  }
+  const contactLines = await Promise.all(
+    contactPersons.map(async (contact) => {
+      const person = await contact.person;
+      let contactLine = `- ${person.fullName}`;
+      if (contact.email) {
+        contactLine += ` (${contact.email})`;
+      }
+      return contactLine;
+    })
+  );
+  let message = '\nContactpersonen:\t\n';
+  message += contactLines.join('\n') + '\n';
   return message;
 }
 async function translationRequestEmail(params) {
