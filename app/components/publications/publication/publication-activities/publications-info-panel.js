@@ -41,6 +41,18 @@ export default class PublicationsPublicationPublicationActivitiesPublicationInfo
     this.args.publicationSubcase.rollbackAttributes();
   }
 
+  @action
+  setTargetEndDate(selectedDate) {
+    // Business wants the target end date at 12 o'clock.
+    this.args.publicationSubcase.targetEndDate = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      selectedDate.getDate(),
+      12,
+      0
+    );
+  }
+
   @task
   *save() {
     yield this.args.publicationSubcase.save();

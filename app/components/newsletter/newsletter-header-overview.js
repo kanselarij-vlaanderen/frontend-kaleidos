@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import moment from 'moment';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 
 /**
  * @argument {Meeting} meeting

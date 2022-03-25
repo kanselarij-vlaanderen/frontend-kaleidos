@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 
 export default class UtilsFormallyOkSelector extends Component {
   /**

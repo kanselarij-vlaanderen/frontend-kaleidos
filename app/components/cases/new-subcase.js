@@ -4,8 +4,8 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency-decorators';
 import { action } from '@ember/object';
+import { task } from 'ember-concurrency';
 
 export default class CasesNewSubcase extends Component {
   @service store;

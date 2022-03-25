@@ -1,9 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import {
-  task,
-  lastValue
-} from 'ember-concurrency-decorators';
+import { task, lastValue } from 'ember-concurrency';
 
 export default class SessionsSessionAgendaNavComponent extends Component {
   /**

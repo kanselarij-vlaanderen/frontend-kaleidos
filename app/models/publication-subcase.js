@@ -1,6 +1,5 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { isPresent } from '@ember/utils';
-import moment from 'moment';
 
 export default class PublicationSubcase extends Model {
   @attr shortTitle;
@@ -19,7 +18,7 @@ export default class PublicationSubcase extends Model {
   @hasMany('publication-activity') publicationActivities;
 
   get isOverdue() {
-    return moment(this.dueDate).isBefore(Date.now(), 'day');
+    return this.targetEndDate < Date.now();
   }
 
   get isFinished() {
