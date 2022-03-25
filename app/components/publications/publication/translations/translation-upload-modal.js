@@ -6,7 +6,6 @@ import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 
 export default class PublicationsTranslationTranslationUploadModalComponent extends Component {
-  @service store;
   @service publicationService;
 
   @tracked uploadedPieces = [];
