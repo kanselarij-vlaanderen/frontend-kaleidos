@@ -86,8 +86,8 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   }
 
   @action
-  setTranslationDueDate(selectedDates) {
-    this.translationDueDate = selectedDates[0];
+  setTranslationDueDate(selectedDate) {
+    this.translationDueDate = selectedDate;
     this.setEmailFields.perform();
   }
 

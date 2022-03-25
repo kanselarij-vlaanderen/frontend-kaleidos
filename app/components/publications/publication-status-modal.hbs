@@ -40,7 +40,7 @@
       <Auk::Label for="blockInput">{{t "date"}}</Auk::Label>
       <Auk::Datepicker
         @date={{this.changeDate}}
-        @onChange={{this.setChangeDate}}
+        @onChange={{set this "changeDate"}}
       />
     </div>
   </Auk::Modal::Body>

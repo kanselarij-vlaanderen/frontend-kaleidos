@@ -115,6 +115,7 @@
     "ember-qunit": "^5.1.5",
     "ember-resolver": "^8.0.3",
     "ember-responsive": "^3.0.6",
+    "ember-set-helper": "^2.0.1",
     "ember-sortable": "^2.4.0",
     "ember-source": "~3.28.8",
     "ember-tag-input": "git+https://github.com/kanselarij-vlaanderen/ember-tag-input.git#6f7d67f23274e2ebe23f8e9619353d35de94b516",

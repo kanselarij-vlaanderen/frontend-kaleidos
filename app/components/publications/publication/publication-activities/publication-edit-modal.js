@@ -30,8 +30,8 @@ export default class PublicationEditModal extends Component {
   }
 
   @action
-  setPublicationDate(dates) {
-    this.publicationDate = dates[0];
+  setPublicationDate(selectedDate) {
+    this.publicationDate = selectedDate;
     this.validators.publicationDate.enableError();
   }
 
