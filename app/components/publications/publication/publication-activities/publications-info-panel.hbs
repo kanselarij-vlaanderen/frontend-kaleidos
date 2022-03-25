@@ -35,7 +35,7 @@
             <Auk::Label>{{t "publication-target-end-date"}}</Auk::Label>
             <Auk::Datepicker
               @date={{@publicationSubcase.targetEndDate}}
-              @onChange={{set this "args.publicationSubcase.targetEndDate"}}
+              @onChange={{this.setTargetEndDate}}
             />
             {{#if
               (and
