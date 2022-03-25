@@ -5,6 +5,12 @@ import { isPresent } from '@ember/utils';
 /**
  * Kaleidos-styled wrapper for EmberFlatpickr. Takes the same arguments as EmberFlatpickr takes.
  */
+
+/**
+ *
+ * @argument {String} placeholder. Determines the input placeholder (defaults to 'Kies een datum')
+ * @argument {Boolean} multiple. Determines if multiple dates can be selected
+ */
 export default class Datepicker extends Component {
   get enable() {
     if (this.args.enable) {
