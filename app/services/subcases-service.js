@@ -10,7 +10,7 @@ export default class SubcasesService extends Service {
     const response = await fetch('/custom-subcases/getPostponedSubcases', {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/vnd.api+json',
+        Accept: 'application/vnd.api+json',
       },
     });
     const payload = await response.json();
@@ -18,12 +18,12 @@ export default class SubcasesService extends Service {
   }
 
   async getSubcasePhases(subcase) {
-    const response = fetch(
+    const response = await fetch(
       `/custom-subcases/getSubcasePhases?subcaseId=${subcase.id}`,
       {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/vnd.api+json',
+          Accept: 'application/vnd.api+json',
         },
       }
     );
