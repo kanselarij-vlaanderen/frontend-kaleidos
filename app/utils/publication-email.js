@@ -19,7 +19,7 @@ const footer = 'Met vriendelijke groet,\n'
   + 'Koolstraat 35, 1000 Brussel\t\n';
 
 async function buildContactInformation(contactPersons) {
-  let message = '\n' + 'Contact personen:\t\n'
+  let message = '\n' + 'Contactpersonen:\t\n'
   for (const contact of contactPersons) {
     const person = await contact.person;
     message += `Naam: ${person.fullName}\t\n`
