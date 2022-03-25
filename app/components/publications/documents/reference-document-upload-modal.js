@@ -43,8 +43,8 @@ export default class PublicationsDocumentsReferenceDocumentUploadModalComponent 
 
   @task
   *deleteUploadedPiece(piece) {
-    this.uploadedPieces.removeObject(piece);
     yield this.publicationService.deletePiece(piece);
+    this.uploadedPieces.removeObject(piece);
   }
 
   @task
