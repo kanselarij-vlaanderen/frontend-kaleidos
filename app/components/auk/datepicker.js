@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { isPresent } from '@ember/utils';
 
 /**
  * Kaleidos-styled wrapper for EmberFlatpickr. Takes the same arguments as EmberFlatpickr takes.
@@ -27,6 +28,10 @@ export default class Datepicker extends Component {
     return this.args.multiple || false;
   }
 
+  get mode() {
+    return this.multiple ? 'multiple' : 'single';
+  }
+
   @action
   // eslint-disable-next-line no-unused-vars
   onReady(_selectedDates, _dateStr, instance) {
@@ -41,7 +46,10 @@ export default class Datepicker extends Component {
   @action
   // eslint-disable-next-line no-unused-vars
   onChange(selectedDates, _dateStr, _instance) {
+    if (isPresent(this.args.onChange)) {
+      return this.multiple ? selectedDates : selectedDates[0];
+    }
     // Return 'null' as a default since <EmberFlatpickr> doesn't handle 'undefined'.
-    return this.args.onChange(this.multiple ? selectedDates : selectedDates[0]) || null;
+    return null;
   }
 }
