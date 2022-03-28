@@ -14,6 +14,10 @@ export default class AgendasRoute extends Route {
   afterModel() {
     return this.store.query('meeting-kind', {
       'page[size]': PAGE_SIZE.MEETING_KIND,
+      filter: {
+        ':has:priority': true,
+      },
+      sort: 'priority',
     });
   }
 

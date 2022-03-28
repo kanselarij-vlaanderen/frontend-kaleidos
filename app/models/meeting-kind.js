@@ -5,6 +5,7 @@ export default class MeetingKindModel extends Model {
   @attr('string') uri;
   @attr('string') label;
   @attr('string') altLabel;
+  @attr('number') priority;
   @attr('string') postfix;
   @attr('string') broader;
 
