@@ -23,22 +23,6 @@ export default class GovernmentAreaSelectorForm extends Component {
 
   @tracked domainSelections;
 
-  get availableDomains() {
-    return this.args.availableDomains || [];
-  }
-
-  get availableFields() {
-    return this.args.availableFields || [];
-  }
-
-  get selectedFields() {
-    return this.args.selectedFields || [];
-  }
-
-  get selectedDomains() {
-    return this.args.selectedDomains || [];
-  }
-
   constructor() {
     super(...arguments);
     this.calculateDomainSelections.perform();
@@ -46,17 +30,18 @@ export default class GovernmentAreaSelectorForm extends Component {
 
   @task
   *calculateDomainSelections() {
-    const domains = this.availableDomains.sortBy('label');
+    const availableDomains = this.args.availableDomains.sortBy('label');
     const domainSelections = [];
-    for (const domain of domains) {
-      const isDomainSelected = this.selectedDomains.includes(domain);
-      const availableFieldsForDomain = yield domain.narrower;
+    for (const availableDomain of availableDomains) {
+      const isDomainSelected =
+        this.args.selectedDomains.includes(availableDomain);
+      const availableFieldsForDomain = yield availableDomain.narrower;
       const selectedFieldsForDomain = availableFieldsForDomain.filter((field) =>
-        this.selectedFields.includes(field)
+        this.args.selectedFields.includes(field)
       );
       domainSelections.push(
         new DomainSelection(
-          domain,
+          availableDomain,
           isDomainSelected,
           availableFieldsForDomain,
           selectedFieldsForDomain
