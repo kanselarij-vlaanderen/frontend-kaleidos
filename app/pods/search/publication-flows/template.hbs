@@ -1,0 +1,112 @@
+{{ page-title
+  (t "publications")
+}}
+<div class="auk-o-grid auk-u-mb-2">
+  <div class="auk-o-grid-col-2">
+    <div class="auk-box">
+      <div class="auk-u-mb-2">
+        <Auk::Label>Type regelgeving</Auk::Label>
+        {{#each this.regulationTypes as |regulationType|}}
+          <Auk::Checkbox
+            @checked={{includes regulationType.id this.regulationTypeIds}}
+            @label={{regulationType.label}}
+            {{on "input" (fn this.toggleRegulationType regulationType)}}
+          />
+        {{/each}}
+      </div>
+      <div>
+        <Auk::Label>Status</Auk::Label>
+        {{#each this.publicationStatuses as |publicationStatus|}}
+          <Auk::Checkbox
+            @checked={{includes publicationStatus.id this.publicationStatusIds}}
+            @label={{publicationStatus.label}}
+            {{on "input" (fn this.togglePublicationStatus publicationStatus)}}
+          />
+        {{/each}}
+      </div>
+    </div>
+  </div>
+  <div class="auk-o-grid-col-10">
+    <div>
+      {{#if this.model.length}}
+        <DataTable
+          data-test-route-search-cases-data-table={{true}}
+          @content={{await this.model}}
+          @page={{this.page}}
+          @noDataMessage={{t "no-results-found"}}
+          @size={{this.size}}
+          @sort={{this.sort}}
+          @class="auk-table auk-table--striped"
+          @isLoading={{this.isLoadingModel}}
+          @onClickRow={{this.navigateToCase}}
+        as |table|
+        >
+          <table.content as |c|>
+            <c.header>
+              <ThSortable
+                @class="auk-table__col--2"
+                @currentSorting={{this.sort}}
+                @field="publicationNumber"
+                @label={{t "publication-number"}}
+              />
+              <ThSortable
+                @class="auk-table__col--7"
+                @currentSorting={{this.sort}}
+                @field="shortTitle"
+                @label={{t "short-title"}}
+              />
+              <ThSortable
+                @class="auk-table__col--1"
+                @currentSorting={{this.sort}}
+                @field="openingDate"
+                @label={{t "date-received"}}
+              />
+              <ThSortable
+                @class="auk-table__col--1"
+                @currentSorting={{this.sort}}
+                @field="statusId"
+                @label={{t "status"}}
+              />
+              <th class="auk-table__col--1"></th>
+            </c.header>
+            <c.body class="auk-table--clickable-rows" as |row|>
+              <td>
+                {{row.identification}}
+              </td>
+              <td>
+                <p>
+                  {{#if row.shortTitle}}
+                    {{row.shortTitle}}
+                  {{else}}
+                    {{row.title}}
+                  {{/if}}
+                </p>
+              </td>
+              <td>
+                {{moment-format row.openingDate}}
+              </td>
+              <td>
+                {{row.statusId}}
+              </td>
+              <td class="auk-u-text-align--right">
+                <Auk::Button
+                  @skin="borderless"
+                  @layout="icon-only"
+                  @icon="chevron-right"
+                  @route="publications.publication.index"
+                  @model={{row.id}}
+                />
+              </td>
+            </c.body>
+          </table.content>
+        </DataTable>
+      {{else}}
+        {{#if this.emptySearch}}
+          <WebComponents::VlAlert @message={{t "fill-in-search-term"}}/>
+        {{else}}
+          <WebComponents::VlAlert @message={{t "no-results-found-modify-term"}}/>
+        {{/if}}
+      {{/if}}
+    </div>
+  </div>
+</div>
