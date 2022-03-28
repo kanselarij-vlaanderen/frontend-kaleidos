@@ -24,7 +24,7 @@ export default class ApplicationRoute extends Route {
     this.intl.setLocale(['nl-be']);
 
     if (!this.isSupportedBrowser) {
-      this.transitionTo('not-supported');
+      this.router.transitionTo('not-supported');
     }
 
     try {
@@ -34,7 +34,7 @@ export default class ApplicationRoute extends Route {
     }
 
     if (this.session.isAuthenticated && !this.currentSession.hasValidGroup) {
-      this.transitionTo('accountless-users');
+      this.router.transitionTo('accountless-users');
     }
   }
 
@@ -59,7 +59,7 @@ export default class ApplicationRoute extends Route {
   @action
   willTransition(transition) {
     if (this.session.isAuthenticated && !this.currentSession.hasValidGroup) {
-      this.transitionTo('accountless-users');
+      this.router.transitionTo('accountless-users');
     }
 
     if (
