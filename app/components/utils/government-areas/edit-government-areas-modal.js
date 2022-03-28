@@ -23,6 +23,7 @@ export default class EditGovernmentAreasModal extends Component {
   *loadGovernmentAreas() {
     this.governmentDomains = yield this.store.query('concept', {
       'filter[top-concept-schemes][:uri:]': CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN,
+      'filter[deprecated]': false,
       include: 'broader,narrower',
       'page[size]': 100
     });
