@@ -13,14 +13,6 @@ class DomainSelection {
 }
 
 export default class GovernmentAreaSelectorForm extends Component {
-  /**
-   * Since fields are children of domains, this component only takes fields as arguments, and calculates the required domains internally
-   * @argument availableFields: All fields that will be listed as options to be checked
-   * @argument selectedFields: Which fields should be checked
-   * @argument onSelectFields: Action, takes an array of fields
-   * @argument onUnSelectFields: Action, takes an array of fields
-   */
-
   @tracked domainSelections;
 
   constructor() {
