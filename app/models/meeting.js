@@ -1,10 +1,8 @@
 import Model, { belongsTo, hasMany, attr } from '@ember-data/model';
 import { PromiseArray, PromiseObject } from '@ember-data/store/-private';
-import EmberObject, { computed } from '@ember/object';
+import { computed } from '@ember/object';
 import { inject } from '@ember/service';
-import CONFIG from 'frontend-kaleidos/utils/config';
 import { KALEIDOS_START_DATE } from 'frontend-kaleidos/config/config';
-import { isAnnexMeetingKind } from 'frontend-kaleidos/utils/meeting-utils';
 import moment from 'moment';
 import {
   sortDocumentContainers
@@ -26,7 +24,6 @@ export default Model.extend({
   numberRepresentation: attr('string'),
   isFinal: attr('boolean'),
   extraInfo: attr('string'),
-  kind: attr('string'),
   releasedDocuments: attr('datetime'),
   releasedDecisions: attr('datetime'),
 
@@ -36,6 +33,7 @@ export default Model.extend({
   requestedSubcases: hasMany('subcase'),
   pieces: hasMany('piece'),
 
+  kind: belongsTo('meeting-kind'),
   mainMeeting: belongsTo('meeting', {
     inverse: null,
   }),
@@ -49,8 +47,7 @@ export default Model.extend({
 
   label: computed('plannedStart', 'kind', 'numberRepresentation', function() {
     const date = moment(this.plannedStart).format('DD-MM-YYYY');
-    const kind = CONFIG.MINISTERRAAD_TYPES.TYPES.find((type) => type.uri === this.kind);
-    const kindLabel = kind ? kind.altLabel : '';
+    const kindLabel = this.get('kind').get('altLabel') || this.get('kind').get('label') || '';
     return `${kindLabel} ${this.intl.t('of')} ${date} (${this.numberRepresentation})`;
   }),
 
@@ -108,19 +105,8 @@ export default Model.extend({
     return await agenda.get('agendaName');
   }),
 
-  kindToShow: computed('kind', function() {
-    const options = CONFIG.MINISTERRAAD_TYPES.TYPES;
-    const {
-      kind,
-    } = this;
-    const foundOption = options.find((kindOption) => kindOption.uri === kind);
-
-
-    return EmberObject.create(foundOption);
-  }),
-
-  isAnnex: computed('kind', function() {
-    return isAnnexMeetingKind(this.kind);
+  isAnnex: computed('kind', async function() {
+    return await this.get('kind').isAnnexMeeting();
   }),
 
   isPreKaleidos: computed('plannedStart', function () {

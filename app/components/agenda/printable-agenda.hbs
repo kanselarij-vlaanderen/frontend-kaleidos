@@ -18,7 +18,7 @@
         )
       }}
       -
-      {{@meeting.kindToShow.altLabel}}
+      {{if @meeting.kind.altLabel @meeting.kind.altLabel @meeting.kind.label}}
     </h2>
 
     <div class="auk-content">
