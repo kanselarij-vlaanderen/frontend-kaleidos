@@ -48,7 +48,12 @@ export default Service.extend({
       throw new Error(response.statusText);
     }
 
-    const payload = await response.json()
+    const payload = await response.json();
+    if (payload.error) {
+      throw new Error(payload.error.detail);
+    }
+
+
     const newAgenda = await this.store.find('agenda', payload.data.id);
     return newAgenda;
   },
@@ -69,6 +74,10 @@ export default Service.extend({
     }
 
     const payload = await response.json();
+    if (payload.error) {
+      throw new Error(payload.error.detail);
+    }
+
     const newAgenda = await this.store.find('agenda', payload.data.id);
     return newAgenda;
   },
@@ -90,6 +99,11 @@ export default Service.extend({
     if (!response.ok) {
       throw new Error(response.statusText);
     }
+
+    const payload = await response.json();
+    if (payload.error) {
+      throw new Error(payload.error.detail);
+    }
   },
 
   async closeMeeting(currentMeeting) {
@@ -108,6 +122,10 @@ export default Service.extend({
     }
 
     const payload = await response.json();
+    if (payload.error) {
+      throw new Error(payload.error.detail);
+    }
+
     const lastApprovedAgenda = await this.store.queryOne('agenda', {
       'filter[:id:]': payload.data.id,
     });
@@ -130,6 +148,10 @@ export default Service.extend({
     }
 
     const payload = await response.json();
+    if (payload.error) {
+      throw new Error(payload.error.detail);
+    }
+
     const reopenedAgenda = await this.store.queryOne('agenda', {
       'filter[:id:]': payload.data.id,
     });
@@ -153,6 +175,10 @@ export default Service.extend({
     }
 
     const payload = await response.json();
+    if (payload.error) {
+      throw new Error(payload.error.detail);
+    }
+
     if (payload.data?.id) {
       return await this.store.queryOne('agenda', {
         'filter[:id:]': payload.data.id,
