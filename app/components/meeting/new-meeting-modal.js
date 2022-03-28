@@ -36,7 +36,7 @@ export default class MeetingNewMeetingModal extends Component {
   }
 
   get isAnnexMeeting() {
-    return isAnnexMeetingKind(this.selectedKindUri);
+    return this.kind?.isAnnexMeeting;
   }
 
   get formattedMeetingIdentifier() {
