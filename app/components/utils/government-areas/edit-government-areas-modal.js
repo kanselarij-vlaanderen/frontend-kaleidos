@@ -7,7 +7,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class EditGovernmentAreasModal extends Component {
   @service store;
-  @tracked governmentFields;
   @tracked selectedGovernmentFields = [];
   @tracked governmentDomains;
   @tracked selectedGovernmentDomains = [];
@@ -26,12 +25,6 @@ export default class EditGovernmentAreasModal extends Component {
       'filter[top-concept-schemes][:uri:]':
         CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN,
       'filter[deprecated]': false,
-      include: 'broader,narrower',
-      'page[size]': 100,
-    });
-    this.governmentFields = yield this.store.query('concept', {
-      'filter[top-concept-schemes][:uri:]':
-        CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD,
       include: 'broader,narrower',
       'page[size]': 100,
     });
