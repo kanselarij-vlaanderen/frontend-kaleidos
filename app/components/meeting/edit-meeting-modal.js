@@ -3,8 +3,6 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-import EmberObject from '@ember/object';
-import CONFIG from 'frontend-kaleidos/utils/config';
 
 /**
  * @argument {meeting}
@@ -15,7 +13,6 @@ export default class MeetingEditMeetingComponent extends Component {
   @service toaster;
 
   @tracked kind;
-  @tracked selectedKindUri;
   @tracked startDate;
   @tracked extraInfo;
   @tracked _meetingNumber;
@@ -25,12 +22,7 @@ export default class MeetingEditMeetingComponent extends Component {
     super(...arguments);
 
     this.meetingYear = this.args.meeting.plannedStart.getFullYear();
-    this.selectedKindUri = this.args.meeting.kind;
-    this.kind = EmberObject.create(
-      CONFIG.MINISTERRAAD_TYPES.TYPES.find(
-        (minsterraad) => minsterraad.uri === this.selectedKindUri
-      )
-    );
+    this.kind = this.args.meeting.kind;
     this.startDate = this.args.meeting.plannedStart;
     this.extraInfo = this.args.meeting.extraInfo;
     this.meetingNumber = this.args.meeting.number;
@@ -63,7 +55,7 @@ export default class MeetingEditMeetingComponent extends Component {
 
     this.args.meeting.extraInfo = this.extraInfo;
     this.args.meeting.plannedStart = this.startDate || now;
-    this.args.meeting.kind = this.selectedKindUri;
+    this.args.meeting.kind = this.kind;
     this.args.meeting.number = this.meetingNumber;
     this.args.meeting.numberRepresentation = this.numberRepresentation;
 
@@ -83,6 +75,6 @@ export default class MeetingEditMeetingComponent extends Component {
 
   @action
   setKind(kind) {
-    this.selectedKindUri = kind;
+    this.kind = kind;
   }
 }

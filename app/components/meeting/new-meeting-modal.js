@@ -6,9 +6,7 @@ import { inject as service } from '@ember/service';
 import { A } from '@ember/array';
 import moment from 'moment';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import CONFIG from 'frontend-kaleidos/utils/config';
 import {
-  isAnnexMeetingKind,
   fetchClosestMeetingAndAgendaId,
 } from 'frontend-kaleidos/utils/meeting-utils';
 
@@ -21,8 +19,8 @@ export default class MeetingNewMeetingModal extends Component {
   @service newsletterService;
   @service toaster;
 
+  @tracked kind = null;
   @tracked selectedMainMeeting = null;
-  @tracked selectedKindUri = null;
   @tracked isEditingFormattedMeetingIdentifier = false;
   @tracked _meetingNumber = null;
   @tracked _formattedMeetingIdentifier = null;
@@ -85,7 +83,7 @@ export default class MeetingNewMeetingModal extends Component {
       extraInfo: this.extraInfo,
       isFinal: false,
       plannedStart: startDate,
-      kind: this.selectedKindUri ?? CONFIG.MINISTERRAAD_TYPES.DEFAULT,
+      kind: this.kind,
       mainMeeting: this.selectedMainMeeting,
       number: this.meetingNumber,
       numberRepresentation: this.formattedMeetingIdentifier,
@@ -171,10 +169,7 @@ export default class MeetingNewMeetingModal extends Component {
 
   @action
   selectMainMeeting(mainMeeting) {
-    const kind = CONFIG.MINISTERRAAD_TYPES.TYPES.find(
-      (minsterraad) => minsterraad.uri === this.selectedKindUri
-    );
-    const postfix = (kind && kind.postfix) || '';
+    const postfix = this.kind?.postfix || '';
     this.selectedMainMeeting = mainMeeting;
     this.startDate = mainMeeting.plannedStart;
     this.meetingNumber = mainMeeting.number;
@@ -188,8 +183,8 @@ export default class MeetingNewMeetingModal extends Component {
   }
 
   @action
-  setKind(kind) {
-    this.selectedKindUri = kind;
+  async setKind(kind) {
+    this.kind = kind;
     if (!this.isAnnexMeeting) {
       this.selectedMainMeeting = null;
       this.initializeMeetingNumber.perform();

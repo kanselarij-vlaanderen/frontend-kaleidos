@@ -1,29 +1,41 @@
-/* eslint-disable ember/no-arrow-function-computed-properties */
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-components
-import Component from '@ember/component';
-import CONFIG from 'frontend-kaleidos/utils/config';
-import EmberObject, { computed } from '@ember/object';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
+import { task } from 'ember-concurrency';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
-export default Component.extend({
-  classNames: ['auk-u-mb-2'],
-  isLoading: null,
-  hideLabel: null,
+/**
+ * @argument {boolean} hideLabel Whether to hide the label of the dropdown
+ * @argument {boolean} initializeEmptyKind Whether to initialize the dropdown to the default meeting kind of no meeting kind was provided
+ * @argument {function} setAction Action to perform once a meeting kind has been selected
+ * @argument {MeetingKindModel} kind (Optional) The meeting kind to set the dropdown to
+ */
+export default class UtilsKindSelector extends Component {
+  @service store;
+  @tracked kind = null;
 
-  options: computed(() => CONFIG.MINISTERRAAD_TYPES.TYPES.map((meetingType) => EmberObject.create(meetingType))),
+  constructor() {
+    super(...arguments);
 
-  selectedkind: computed('kind.uri', 'options', function() {
-    return this.options.find((kind) => this.kind && kind.uri === this.kind.uri) || this.options.get('firstObject');
-  }),
+    this.kind = this.args.kind;
+    this.loadOptions.perform();
+  }
 
-  // TODO: octane-refactor
-  // eslint-disable-next-line ember/no-actions-hash
-  actions: {
-    setAction(meetingType) {
-      this.set('selectedkind', meetingType);
-      this.setAction(meetingType.get('uri'));
-    },
-  },
-});
+  @task
+  *loadOptions() {
+    yield this.store.findAll('meeting-kind', { reload: false });
+    if (this.args.initializeEmptyKind && this.args.kind === null || this.args.kind === undefined) {
+      this.setAction(this.options.firstObject);
+    }
+  }
+
+  get options() {
+    return this.store.peekAll('meeting-kind');
+  }
+
+  @action
+  setAction(kind) {
+    this.kind = kind;
+    this.args.setAction(kind);
+  }
+}
