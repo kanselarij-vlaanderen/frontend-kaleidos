@@ -59,6 +59,18 @@
           <div class="auk-o-grid-col-2">
             <div class="auk-form-group auk-u-position-relative">
               <Auk::Label>{{t "date"}}</Auk::Label>
+              <PowerSelect
+                @options={{this.publicationDateTypes}}
+                @selected={{this.selectedPublicationDateType}}
+                @onChange={{this.selectPublicationDateType}}
+              as |publicationDateType|>
+                {{publicationDateType.label}}
+              </PowerSelect>
+            </div>
+          </div>
+          <div class="auk-o-grid-col-2">
+            <div class="auk-form-group auk-u-position-relative">
+              <Auk::Label>{{t "date"}}</Auk::Label>
               <WebComponents::VlDatepicker
                 @selectedDate={{array this.dateBuffer}}
                 @dateChanged={{fn (mut this.dateBuffer)}}

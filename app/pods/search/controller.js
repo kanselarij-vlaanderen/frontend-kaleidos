@@ -22,17 +22,56 @@ export default class SearchController extends Controller {
     date: {
       type: 'string',
     },
+    publicationDateTypeKey: {
+      type: 'string',
+    },
   };
 
   @service router;
 
   sizeOptions = Object.freeze([5, 10, 20, 50, 100, 200]);
+  publicationDateTypes = Object.freeze([
+    {
+      key: 'openingDate',
+      label: 'Datum ontvangst',
+    },
+    {
+      key: 'decisionDate',
+      label: 'Datum beslissing',
+    },
+    // translationRequestDate
+    {
+      key: 'translationDueDate',
+      label: 'Limiet vertaling',
+    },
+    {
+      key: 'proofPrintRequestDate',
+      label: 'Aanvraag drukproef',
+    },
+    {
+      key: 'proofPrintReceivedDate',
+      label: 'Drukproef in',
+    },
+    {
+      key: 'publicationTargetDate',
+      label: 'Gevraagde publicatie datum',
+    },
+    {
+      key: 'publicationDate',
+      label: 'Publicatie datum',
+    },
+    {
+      key: 'publicationDueDate',
+      label: 'Limiet publicatie',
+    },
+  ]);
 
   @tracked searchText = '';
   @tracked mandatees;
   @tracked dateFrom;
   @tracked dateTo;
   @tracked date;
+  @tracked publicationDateTypeKey = 'openingDate';
   @tracked searchTextBuffer = '';
   @tracked mandateesBuffer;
   @tracked dateFromBuffer;
@@ -42,6 +81,15 @@ export default class SearchController extends Controller {
 
   get isSearchingPublicationFlows() {
     return this.router.currentRouteName === 'search.publication-flows';
+  }
+
+  get selectedPublicationDateType() {
+    return this.publicationDateTypes.filter(dt => dt.key === this.publicationDateTypeKey)[0];
+  }
+
+  @action
+  selectPublicationDateType(publicationDateType) {
+    this.publicationDateTypeKey = publicationDateType.key;
   }
 
   deserializeDate(date) {
