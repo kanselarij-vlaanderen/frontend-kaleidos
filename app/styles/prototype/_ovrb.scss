@@ -151,3 +151,9 @@
 .auk-select--block {
   width: 100%;
 }
+
+.auk-table--noactions {
+  .data-table__actions--top {
+    display: none;
+  }
+}

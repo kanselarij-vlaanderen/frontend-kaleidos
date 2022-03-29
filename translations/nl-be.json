@@ -1041,6 +1041,10 @@
     "no-decision-set": "Nog geen beslissing ingesteld",
     "website": "Op de website",
     "internal-remark-title": "Interne opmerking",
-    "approval": "Goedkeuring"
+    "approval": "Goedkeuring",
+    "searchTerm": "Zoekterm",
+    "searchOnDate": "Zoeken op datumtype",
+    "searchDate": "Datum",
+    "searchPublication": "Publicatie zoeken"
   }
 }

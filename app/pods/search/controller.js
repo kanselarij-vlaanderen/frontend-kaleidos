@@ -3,6 +3,7 @@ import Controller from '@ember/controller';
 import moment from 'moment';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
 
 export default class SearchController extends Controller {
   queryParams = {
@@ -31,6 +32,7 @@ export default class SearchController extends Controller {
   @tracked dateFromBuffer;
   @tracked dateToBuffer;
   @tracked popoverShown; // TODO, this is for a tooltip, this should be handled elsewhere
+  @service router;
 
   deserializeDate(date) {
     return date && moment(date, 'DD-MM-YYYY').toDate();

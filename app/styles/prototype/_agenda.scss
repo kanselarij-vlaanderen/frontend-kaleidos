@@ -422,6 +422,16 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
   margin-left: .3rem;
 }
 
+.auk-button--flush {
+  padding: 0 !important;
+
+  svg {
+    position: relative;
+    bottom: .1rem;
+    fill: currentColor;
+  }
+}
+
 // Auto height for panel title
 .auk-panel__header {
   height: auto;
