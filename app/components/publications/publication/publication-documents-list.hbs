@@ -1,25 +1,27 @@
 <Auk::List>
   {{#each @pieces as |piece|}}
-      <Auk::List::Item data-test-document-list-piece >
-        <div class="auk-o-flex auk-o-flex--spaced-wide auk-o-flex--vertical-center auk-u-maximize-width">
-            <div class="auk-o-flex auk-o-flex--spaced">
-            <Auk::Badge @icon="paperclip" @size="regular" />
-            <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
-          </div>
+    <Auk::List::Item data-test-document-list-piece>
+      <div
+        class="auk-o-flex auk-o-flex--spaced-wide auk-o-flex--vertical-center auk-u-maximize-width"
+      >
+        <div class="auk-o-flex auk-o-flex--spaced">
+          <Auk::Badge @icon="paperclip" @size="regular" />
+          <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
+        </div>
         {{#if @setReceivedDate}}
-        {{! TODO: Remove inline style }}
-        {{! template-lint-disable no-inline-styles }}
-            <div class="auk-form-group auk-u-m-0" style="width: 22.5rem;">
-              <Auk::Datepicker
-                @placeholder={{t "date-received-placeholder"}}
-                @date={{piece.receivedDate}}
-                @onChange={{fn @setReceivedDate piece}}
-              />
-            </div>
-        {{! template-lint-disable no-inline-styles }}
+          {{! TODO: Remove inline style }}
+          {{! template-lint-disable no-inline-styles }}
+          <div class="auk-form-group auk-u-m-0" style="width: 22.5rem;">
+            <Auk::Datepicker
+              @placeholder={{t "date-received-placeholder"}}
+              @date={{piece.receivedDate}}
+              @onChange={{fn @setReceivedDate piece}}
+            />
+          </div>
+          {{! template-lint-disable no-inline-styles }}
         {{/if}}
-          <div>
-            <WebComponents::AuButtonToolbar>
+        <div>
+          <WebComponents::AuButtonToolbar>
             <Auk::Button
               @layout="icon-only"
               @icon="download"
@@ -49,8 +51,8 @@
               />
             {{/if}}
           </WebComponents::AuButtonToolbar>
-          </div>
         </div>
-      </Auk::List::Item>
+      </div>
+    </Auk::List::Item>
   {{/each}}
 </Auk::List>

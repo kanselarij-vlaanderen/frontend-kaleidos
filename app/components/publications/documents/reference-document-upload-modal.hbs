@@ -1,6 +1,9 @@
 <Auk::Modal>
   <Auk::Modal::Header
-    @title={{t "upload-reference-document" identifier=@publicationFlow.identification.idName}}
+    @title={{t
+      "upload-reference-document"
+      identifier=@publicationFlow.identification.idName
+    }}
     @onClose={{perform this.cancel}}
     @closeDisabled={{this.isCancelDisabled}}
   />

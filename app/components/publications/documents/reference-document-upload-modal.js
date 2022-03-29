@@ -19,10 +19,7 @@ export default class PublicationsDocumentsReferenceDocumentUploadModalComponent 
   }
 
   get isSaveDisabled() {
-    return (
-      this.uploadedPieces.length === 0 ||
-      this.cancel.isRunning
-    );
+    return this.uploadedPieces.length === 0 || this.cancel.isRunning;
   }
 
   @action
