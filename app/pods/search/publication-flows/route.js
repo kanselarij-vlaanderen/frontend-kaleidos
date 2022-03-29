@@ -93,12 +93,13 @@ export default class PublicationFlowSearchRoute extends Route {
       filter[params.dateType] = [to.utc().toISOString(), from.utc().toISOString()].join(',');
     }
 
+    // ":terms:" required to be able to filter on multiple values as "OR"
     if (!isEmpty(params.regulationTypeIds)) {
-      filter.regulationTypeId = params.regulationTypeIds.join(',');
+      filter[':terms:regulationTypeId'] = params.regulationTypeIds.join(',');
     }
 
     if (!isEmpty(params.publicationStatusIds)) {
-      filter.statusId = params.publicationStatusIds;
+      filter[':terms:statusId'] = params.publicationStatusIds;
     }
 
     this.lastParams.commit();
