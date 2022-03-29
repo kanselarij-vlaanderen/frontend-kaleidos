@@ -105,8 +105,8 @@ export default Model.extend({
     return await agenda.get('agendaName');
   }),
 
-  isAnnex: computed('kind', async function() {
-    return await this.get('kind').get('isAnnexMeeting');
+  isAnnex: computed('kind', function() {
+    return this.get('kind').get('isAnnexMeeting');
   }),
 
   isPreKaleidos: computed('plannedStart', function () {
