@@ -1,7 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { TrackedArray } from 'tracked-built-ins';
 
 export default class PublicationFlowSearchController extends Controller {
   queryParams =[{
@@ -27,8 +26,8 @@ export default class PublicationFlowSearchController extends Controller {
   @tracked page;
   @tracked size;
   @tracked sort;
-  @tracked regulationTypeIds;
-  @tracked publicationStatusIds;
+  @tracked regulationTypeIds = [];
+  @tracked publicationStatusIds = [];
   @tracked status;
   // @tracked emptySearch;
 
@@ -37,8 +36,6 @@ export default class PublicationFlowSearchController extends Controller {
     this.page = 0;
     this.size = this.sizeOptions[2];
     this.sort = '-opening-date';
-    this.regulationTypeIds = new TrackedArray();
-    this.publicationStatusIds = new TrackedArray();
   }
 
   @action
@@ -52,7 +49,7 @@ export default class PublicationFlowSearchController extends Controller {
     if (checked) {
       this.regulationTypeIds.push(regulationType.id);
     } else {
-      this.regulationTypeIds.splice(el => el === this.regulationTypeIds.findIndex(regulationType.id), 1);
+      this.regulationTypeIds.splice(this.regulationTypeIds.indexOf(regulationType.id), 1);
     }
     this.regulationTypeIds = this.regulationTypeIds;
   }
@@ -64,7 +61,7 @@ export default class PublicationFlowSearchController extends Controller {
     if (checked) {
       this.publicationStatusIds.push(publicationStatus.id);
     } else {
-      this.publicationStatusIds.splice(el => el === this.publicationStatusIds.findIndex(publicationStatus.id), 1);
+      this.publicationStatusIds.splice(this.publicationStatusIds.indexOf(publicationStatus.id), 1);
     }
     this.publicationStatusIds = this.publicationStatusIds;
   }
