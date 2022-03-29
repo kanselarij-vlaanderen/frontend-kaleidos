@@ -49,12 +49,7 @@
                 @field="publicationNumber"
                 @label={{t "publication-number"}}
               />
-              <ThSortable
-                @class="auk-table__col--7"
-                @currentSorting={{this.sort}}
-                @field="shortTitle"
-                @label={{t "short-title"}}
-              />
+              <th class="auk-table__col--7">{{t "short-title"}}</th>
               <ThSortable
                 @class="auk-table__col--1"
                 @currentSorting={{this.sort}}
