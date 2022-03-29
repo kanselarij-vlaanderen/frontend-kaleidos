@@ -53,12 +53,12 @@ export default class PublicationsDocumentsReferenceDocumentUploadModalComponent 
   }
 
   @action
-  setReceivedDate(selectedDates) {
-    if (selectedDates.length) {
-      this.piece.receivedDate = selectedDates[0];
+  setReceivedDate(piece, selectedDate) {
+    if (selectedDate) {
+      piece.receivedDate = selectedDate;
     } else {
       // this case occurs when users manually empty the date input-field
-      this.piece.receivedDate = undefined;
+      piece.receivedDate = undefined;
     }
   }
 }
