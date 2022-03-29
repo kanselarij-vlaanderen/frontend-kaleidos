@@ -8,6 +8,7 @@
     <Utils::KindSelector
       data-test-new-meeting-kind
       @setAction={{this.setKind}}
+      @initializeEmptyKind={{true}}
     />
     {{#if this.isAnnexMeeting}}
       <div class="auk-u-mb-2">

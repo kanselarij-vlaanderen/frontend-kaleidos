@@ -24,7 +24,7 @@ export default class UtilsKindSelector extends Component {
   @task
   *loadOptions() {
     yield this.store.findAll('meeting-kind', { reload: false });
-    if (this.args.initializeEmptyKind && this.args.kind === null || this.args.kind === undefined) {
+    if (this.args.initializeEmptyKind && !this.args.kind) {
       this.setAction(this.options.firstObject);
     }
   }
