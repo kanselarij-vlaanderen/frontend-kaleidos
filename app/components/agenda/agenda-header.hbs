@@ -3,24 +3,45 @@
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
-          <div class="auk-o-flex auk-o-flex--vertical-center">
-            <h4
-              class="auk-toolbar-complex__title"
-              data-test-agenda-header-title
-            >
-              {{t "agenda-of"}}
-              {{moment-format @meeting.plannedStart "DD MMMM YYYY"}}
-              {{#unless @meeting.isPreKaleidos}}
-                {{t "at"}}
-                {{moment-format @meeting.plannedStart "HH:mm"}}
-              {{/unless}}
-            </h4>
-            {{#if @meeting.kindToShow.label}}
-              <span data-test-agenda-header-kind class="auk-u-muted auk-body-1">
-                -
-                {{await @meeting.kindToShow.label}}
-              </span>
-            {{/if}}
+          <div class="auk-o-flex auk-o-flex--vertical">
+            <div class="auk-o-flex auk-o-flex--vertical-center">
+              <h4
+                class="auk-toolbar-complex__title"
+                data-test-agenda-header-title
+              >
+                {{t "agenda-of"}}
+                {{moment-format @meeting.plannedStart "DD MMMM YYYY"}}
+                {{#unless @meeting.isPreKaleidos}}
+                  {{t "at"}}
+                  {{moment-format @meeting.plannedStart "HH:mm"}}
+                {{/unless}}
+              </h4>
+              {{#if @meeting.kindToShow.label}}
+                <span data-test-agenda-header-kind class="auk-u-muted auk-body-1">
+                  -
+                  {{await @meeting.kindToShow.label}}
+                </span>
+              {{/if}}
+            </div>
+
+            <div>
+              {{#if @meeting.releasedDecisions}}
+              <Auk::Pill @skin="warning" class="auk-u-mr-2 auk-u-mt-2">
+                Beslissingen worden vrijgegeven op
+                {{moment-format @meeting.releasedDecisions "DD MMMM YYYY"}}
+                om
+                {{moment-format @meeting.releasedDecisions "HH:mm"}}
+              </Auk::Pill>
+              {{/if}}
+              {{#if @meeting.releasedDocuments}}
+              <Auk::Pill @skin="warning" class="auk-u-mr-2 auk-u-mt-2">
+                Documenten worden vrijgegeven op
+                {{moment-format @meeting.releasedDocuments "DD MMMM YYYY"}}
+                om
+                {{moment-format @meeting.releasedDocuments "HH:mm"}}
+              </Auk::Pill>
+              {{/if}}
+            </div>
           </div>
           <Sessions::SessionAgendaNav
             @currentAgenda={{@currentAgenda}}
@@ -161,6 +182,33 @@
       @onClose={{this.cancelReleaseDocuments}}
     />
     <Auk::Modal::Body>
+      <div class="auk-form-group">
+        <div class="auk-o-grid">
+          <div class="auk-o-grid-col-6">
+            <Auk::Label>Datum</Auk::Label>
+            <WebComponents::VlDatepicker
+              @selectedDate=""
+              @dateChanged=""
+            />
+          </div>
+          <div class="auk-o-grid-col-3">
+            <Auk::Label>Uur</Auk::Label>
+            <Auk::Input
+              @type="number"
+              @block={{true}}
+              @value={{this.agendaitem.titlePress}}
+            />
+          </div>
+          <div class="auk-o-grid-col-3">
+            <Auk::Label>Minuten</Auk::Label>
+            <Auk::Input
+              @type="number"
+              @block={{true}}
+              @value={{this.agendaitem.titlePress}}
+            />
+          </div>
+        </div>
+      </div>
       <p>{{t "release-documents-message"}}</p>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelReleaseDocuments}}>
@@ -182,6 +230,33 @@
       @onClose={{this.cancelReleaseDecisions}}
     />
     <Auk::Modal::Body>
+      <div class="auk-form-group">
+        <div class="auk-o-grid">
+          <div class="auk-o-grid-col-6">
+            <Auk::Label>Datum</Auk::Label>
+            <WebComponents::VlDatepicker
+              @selectedDate=""
+              @dateChanged=""
+            />
+          </div>
+          <div class="auk-o-grid-col-3">
+            <Auk::Label>Uur</Auk::Label>
+            <Auk::Input
+              @type="number"
+              @block={{true}}
+              @value={{this.agendaitem.titlePress}}
+            />
+          </div>
+          <div class="auk-o-grid-col-3">
+            <Auk::Label>Minuten</Auk::Label>
+            <Auk::Input
+              @type="number"
+              @block={{true}}
+              @value={{this.agendaitem.titlePress}}
+            />
+          </div>
+        </div>
+      </div>
       <p>{{t "release-decisions-message"}}</p>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelReleaseDecisions}}>
