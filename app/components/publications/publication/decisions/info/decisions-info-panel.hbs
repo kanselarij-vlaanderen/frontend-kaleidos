@@ -61,17 +61,13 @@
                   class="auk-form-group"
                 >
                   <Auk::Label>{{t "decision-date"}}</Auk::Label>
-                  {{#if this.isViaCouncilOfMinisters}}
+                  {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
                     <Auk::ButtonLink
                       target="_blank"
                       @icon="chevron-right"
                       @layout="icon-right"
                       @route="agenda.agendaitems.agendaitem"
-                      @models={{array
-                        @publicationFlow.agendaItemTreatment.agendaitem.agenda.createdFor.id
-                        @publicationFlow.agendaItemTreatment.agendaitem.agenda.id
-                        @publicationFlow.agendaItemTreatment.agendaitem.id
-                      }}
+                      @models={{this.modelsForAgendaitemRoute}}
                     >
                       {{#if @publicationFlow.agendaItemTreatment.startDate}}
                         {{moment-format
@@ -84,8 +80,8 @@
                     </Auk::ButtonLink>
                   {{else}}
                     <Auk::Datepicker
-                      @date={{@publicationFlow.agendaItemTreatment.startDate}}
-                      @onChange={{this.setDecisionDate}}
+                      @date={{this.agendaItemTreatment.startDate}}
+                      @onChange={{set this.agendaItemTreatment "startDate"}}
                     />
                   {{/if}}
                 </div>
@@ -131,18 +127,14 @@
               data-test-decisions-info-panel-view-decision-date
               class="auk-u-m-0"
             >
-              {{#if this.isViaCouncilOfMinisters}}
+              {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
                 <Auk::ButtonLink
                   data-test-decisions-info-panel-view-decision-link
                   target="_blank"
                   @icon="chevron-right"
                   @layout="icon-right"
                   @route="agenda.agendaitems.agendaitem"
-                  @models={{array
-                    @publicationFlow.agendaItemTreatment.agendaitem.agenda.createdFor.id
-                    @publicationFlow.agendaItemTreatment.agendaitem.agenda.id
-                    @publicationFlow.agendaItemTreatment.agendaitem.id
-                  }}
+                  @models={{this.modelsForAgendaitemRoute}}
                 >
                   {{#if @publicationFlow.agendaItemTreatment.startDate}}
                     {{moment-format

@@ -29,11 +29,6 @@ export default class PublicationStatusModal extends Component {
     this.publicationStatus = status;
   }
 
-  @action
-  setChangeDate(selectedDates) {
-    this.changeDate = selectedDates[0];
-  }
-
   @task
   *savePublicationStatus() {
     yield this.args.onSave(this.publicationStatus, this.changeDate);
