@@ -27,7 +27,7 @@
     <div class="vlc-agenda-items__text">
       <div class="auk-o-flex">
         <div class="left_side">
-          <div class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center auk-u-mb-2">
+          <div class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
             <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
               <h4 class="vlc-agenda-items__subject auk-u-m-0">
                 <LinkTo
@@ -95,14 +95,14 @@
 
           {{#if (not @agendaitem.isApproval)}}
             {{#if @agendaitem.shortTitle}} {{!-- Avoid rendering the same thing twice if no "shortTitle" exists --}}
-              <pre data-test-agenda-overview-item-title class="vlc-agenda-items__body-padding auk-u-text-pre-line">
+              <pre data-test-agenda-overview-item-title class="auk-u-text-pre-line">
                 {{@agendaitem.title}}
               </pre>
             {{/if}}
           {{/if}}
 
           {{#if @agendaitem.explanation}}
-          <div class="auk-u-mb-2">
+          <div class="auk-u-mt-2">
             <p>
               <strong class="auk-u-text-bold">
                 {{t "remark-title"}}:
@@ -112,39 +112,33 @@
         {{/if}}
         </div>
       </div>
-
-      <div class="auk-o-flex auk-o-flex--justify-between">
-        {{#if this.subcase.subcaseName}}
-          <Auk::Pill class="vlc-agenda-meta__times-passed auk-u-text-capitalize">
-            {{this.subcase.subcaseName}}
-          </Auk::Pill>
-        {{else}}
-          {{!--  TODO: Only here because required for alignment of flex items --}}
-          <Auk::Pill @skin="invisible"></Auk::Pill>
-        {{/if}}
+      {{#if this.subcase.subcaseName}}
+      <div class="auk-u-mt-2">
+        <Auk::Pill class="vlc-agenda-meta__times-passed auk-u-text-capitalize">
+          {{this.subcase.subcaseName}}
+        </Auk::Pill>
       </div>
+      {{/if}}
       {{#if (or this.currentSession.isEditor this.documentsAreReleased)}}
-        {{#if this.limitedAgendaitemDocuments}}
-        <Auk::ButtonLink
-          @icon={{if this.isShowingAllDocuments "chevron-down" "chevron-right"}}
-          {{on "click" this.toggleShowingAllDocuments}}
-          class="auk-u-text-small auk-u-mt-4"
-        >
-          {{#if this.isShowingAllDocuments }}
-            {{t "util.hide-documents"}}
-          {{else}}
-            {{t "util.show-documents"}}
-          {{/if}}
-        </Auk::ButtonLink>
-        {{/if}}
-        {{#if this.isShowingAllDocuments }}
-        <div class="auk-u-mt-2">
+        <div class="auk-u-mt-4">
           <Documents::DocumentBadgeList
             @pieces={{this.limitedAgendaitemDocuments}}
             @highlightedPieces={{this.newAgendaitemDocuments}}
             @isFuture={{if (and (and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow) @isNew) true}}
           />
         </div>
+        {{#if this.enableShowMore}}
+        <Auk::ButtonLink
+          @icon={{if this.isShowingAllDocuments "dash" "plus"}}
+          {{on "click" this.toggleShowingAllDocuments}}
+          class="auk-u-text-small auk-u-mt-4"
+        >
+          {{#if this.isShowingAllDocuments }}
+            {{t "show-less"}}
+          {{else}}
+            {{t "show-more"}}
+          {{/if}}
+        </Auk::ButtonLink>
         {{/if}}
       {{/if}}
       {{#unless @isEditingFormallyOkStatus}}
