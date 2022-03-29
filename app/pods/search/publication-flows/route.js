@@ -90,7 +90,11 @@ export default class PublicationFlowSearchRoute extends Route {
     if (!isEmpty(params.date)) {
       const from = moment(params.date, 'DD-MM-YYYY').startOf('day');
       const to = moment(params.date, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
-      filter[params.dateType] = [to.utc().toISOString(), from.utc().toISOString()].join(',');
+      const dateType = 'openingDate'; // TODO: make dynamic
+      filter[':lte,gte:' + dateType] = [
+        to.utc().toISOString(),
+        from.utc().toISOString(),
+      ].join(',');
     }
 
     // ":terms:" required to be able to filter on multiple values as "OR"

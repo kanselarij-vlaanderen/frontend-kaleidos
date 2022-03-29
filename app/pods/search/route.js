@@ -21,6 +21,16 @@ export default class SearchRoute extends Route {
       refreshModel: true,
       as: 'tot',
     },
+    /* As a temporary solution, a publication-flow tab was added to the main
+     * "search" menu. For this specific case, instead of being able to filter
+     * on date range, it was spec'ed to be able to filter on 1 specific date.
+     * A selector was added, allowing to specify on which of the many dates that are
+     * relevant during the publication process the filter must be scoped
+     */
+    date: {
+      refreshModel: true,
+      as: 'datum',
+    },
   };
 
   beforeModel(transition) {
@@ -42,5 +52,6 @@ export default class SearchRoute extends Route {
     controller.page = params.page;
     controller.dateFromBuffer = controller.deserializeDate(params.dateFrom);
     controller.dateToBuffer = controller.deserializeDate(params.dateTo);
+    controller.dateBuffer = controller.deserializeDate(params.date);
   }
 }

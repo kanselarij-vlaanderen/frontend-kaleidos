@@ -55,42 +55,56 @@
             />
           </div>
         </div>
-        <div class="auk-o-grid-col-2">
-          <div class="auk-form-group auk-u-position-relative">
-            <Auk::Label>{{t "from"}}</Auk::Label>
-            <WebComponents::VlDatepicker
-              @selectedDate={{array this.dateFromBuffer}}
-              @dateChanged={{fn (mut this.dateFromBuffer)}}
-              @enableClear={{this.dateFromBuffer}}
-              @onClear={{fn (mut this.dateFromBuffer) null}}
-            />
+        {{#if this.isSearchingPublicationFlows}}
+          <div class="auk-o-grid-col-2">
+            <div class="auk-form-group auk-u-position-relative">
+              <Auk::Label>{{t "date"}}</Auk::Label>
+              <WebComponents::VlDatepicker
+                @selectedDate={{array this.dateBuffer}}
+                @dateChanged={{fn (mut this.dateBuffer)}}
+                @enableClear={{this.dateBuffer}}
+                @onClear={{fn (mut this.dateBuffer) null}}
+              />
+            </div>
           </div>
-        </div>
-        <div class="auk-o-grid-col-2">
-          <div class="auk-form-group auk-u-position-relative">
-            <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
-            <WebComponents::VlDatepicker
-              @selectedDate={{array this.dateToBuffer}}
-              @dateChanged={{fn (mut this.dateToBuffer)}}
-              @enableClear={{this.dateToBuffer}}
-              @onClear={{fn (mut this.dateToBuffer) null}}
-            />
+        {{else}}
+          <div class="auk-o-grid-col-2">
+            <div class="auk-form-group auk-u-position-relative">
+              <Auk::Label>{{t "from"}}</Auk::Label>
+              <WebComponents::VlDatepicker
+                @selectedDate={{array this.dateFromBuffer}}
+                @dateChanged={{fn (mut this.dateFromBuffer)}}
+                @enableClear={{this.dateFromBuffer}}
+                @onClear={{fn (mut this.dateFromBuffer) null}}
+              />
+            </div>
           </div>
-        </div>
-        <div class="auk-o-grid-col-2">
-          <div class="auk-form-group">
-            <Auk::Label for="ministerName">
-              {{t "minister"}}
-            </Auk::Label>
-            <Auk::Input
-              data-test-route-search-mandatee-input
-              @block={{true}}
-              @value={{this.mandateesBuffer}}
-              @enter={{fn this.search}}
-              id="ministerName"
-            />
+          <div class="auk-o-grid-col-2">
+            <div class="auk-form-group auk-u-position-relative">
+              <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
+              <WebComponents::VlDatepicker
+                @selectedDate={{array this.dateToBuffer}}
+                @dateChanged={{fn (mut this.dateToBuffer)}}
+                @enableClear={{this.dateToBuffer}}
+                @onClear={{fn (mut this.dateToBuffer) null}}
+              />
+            </div>
           </div>
-        </div>
+          <div class="auk-o-grid-col-2">
+            <div class="auk-form-group">
+              <Auk::Label for="ministerName">
+                {{t "minister"}}
+              </Auk::Label>
+              <Auk::Input
+                data-test-route-search-mandatee-input
+                @block={{true}}
+                @value={{this.mandateesBuffer}}
+                @enter={{fn this.search}}
+                id="ministerName"
+              />
+            </div>
+          </div>
+        {{/if}}
         <div class="auk-o-grid-col-1">
           <Auk::Button
             @skin="primary"
