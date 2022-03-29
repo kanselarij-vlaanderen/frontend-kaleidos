@@ -12,7 +12,11 @@ export default class JsonStringTransform extends Transform {
     if (jsonString === undefined || jsonString === null) {
       return undefined;
     } else {
-      return JSON.parse(jsonString);
+      try {
+        return JSON.parse(jsonString);
+      } catch (err) {
+        return undefined;
+      }
     }
   }
 }
