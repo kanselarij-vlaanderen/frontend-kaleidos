@@ -1,7 +1,6 @@
-{{!TODO: styling as in Figma (less borders/less margin)}}
-<Auk::Modal @size="small">
-  <Auk::Modal::Header @title={{@title}} @closeable={{false}} />
+<Auk::Modal @size="small" @headerless={{true}}>
   <Auk::Modal::Body>
+    <h3 class="auk-h3">{{@title}}</h3>
     <Utils::LoadableContent
       @isLoading={{this.isLoading}}
       @reserveSpace={{true}}
@@ -10,6 +9,7 @@
     </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
+    @bordered={{false}}
     @cancelDisabled={{this.isLoading}}
     @onCancel={{perform this.cancel}}
   >
