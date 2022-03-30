@@ -4,13 +4,19 @@ import { tracked } from '@glimmer/tracking';
 
 export default class DocumentsDocumentPreviewDocumentPreviewModal extends Component {
   @tracked selectedVersion;
-
   @tracked sidebarIsOpen = true;
 
   constructor() {
     super(...arguments);
     this.selectedVersion = this.args.piece;
-    this.sidebarIsOpen = JSON.parse(localStorage.getItem('documentViewerSidebar'))
+
+    this.sidebarStorage = JSON.parse(localStorage.getItem('documentViewerSidebar'))
+
+    if (this.sidebarStorage == false) {
+      this.sidebarIsOpen = true
+    } else {
+      this.sidebarIsOpen = true;
+    }
   }
 
   @action

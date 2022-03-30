@@ -35,7 +35,7 @@
       {{/if}}
     </Auk::KeyValue>
   {{/if}}
-  <Auk::KeyValue 
+  <Auk::KeyValue
     data-test-details-tab-access-level
     @key={{t "publicity"}}
   >
@@ -54,7 +54,7 @@
       <Utils::AccessLevelColorBadge @accessLevel={{this.accessLevel}} />
     {{/if}}
   </Auk::KeyValue>
-  <Auk::KeyValue
+  {{!-- <Auk::KeyValue
     data-test-details-tab-confidentiality
     @key={{capitalize (t "confidentiality")}}
   >
@@ -66,7 +66,7 @@
     {{else}}
       <Utils::ConfidentialityPill @confidential={{@piece.confidential}} />
     {{/if}}
-  </Auk::KeyValue>
+  </Auk::KeyValue> --}}
   <Auk::KeyValue @key={{t "file-type"}}>
     <Utils::Documents::FileTypePill
       data-test-details-tab-file-type

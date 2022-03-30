@@ -10,15 +10,15 @@ export default class AccessLevelColorBadge extends Component {
           modifier = 'success';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID:
-          modifier = 'warning';
+          modifier = 'active';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
-          modifier = 'error';
+          modifier = 'active';
           break;
       }
     } else {
-      modifier = 'default';
+      modifier = 'active';
     }
-    return modifier;
+    return 'active';
   }
 }
