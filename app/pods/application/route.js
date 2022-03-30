@@ -25,7 +25,7 @@ export default class ApplicationRoute extends Route {
     this.intl.setLocale(['nl-be']);
 
     if (!this.isSupportedBrowser) {
-      this.router.transitionTo('not-supported');
+      this.transitionTo('not-supported');
     }
 
     try {
@@ -35,7 +35,7 @@ export default class ApplicationRoute extends Route {
     }
 
     if (this.session.isAuthenticated && !this.currentSession.hasValidGroup) {
-      this.router.transitionTo('accountless-users');
+      this.transitionTo('accountless-users');
     }
 
     await this.store.query('meeting-kind', {
@@ -68,7 +68,7 @@ export default class ApplicationRoute extends Route {
   @action
   willTransition(transition) {
     if (this.session.isAuthenticated && !this.currentSession.hasValidGroup) {
-      this.router.transitionTo('accountless-users');
+      this.transitionTo('accountless-users');
     }
 
     if (

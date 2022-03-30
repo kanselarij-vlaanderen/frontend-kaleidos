@@ -11,7 +11,7 @@ export default class AgendasRoute extends Route {
   }
 
   redirect() {
-    this.router.transitionTo('agendas.overview');
+    this.transitionTo('agendas.overview');
   }
 
   @action
