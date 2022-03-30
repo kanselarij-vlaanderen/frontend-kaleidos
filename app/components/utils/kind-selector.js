@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { task } from 'ember-concurrency';
 
 /**
  * @argument {boolean} hideLabel Whether to hide the label of the dropdown
@@ -13,24 +12,15 @@ import { task } from 'ember-concurrency';
 export default class UtilsKindSelector extends Component {
   @service store;
   @tracked kind = null;
+  @tracked options = this.store.peekAll('meeting-kind'); // Meeting kinds get loaded in the agendas route, so we can just peek them here.
 
   constructor() {
     super(...arguments);
 
     this.kind = this.args.kind;
-    this.loadOptions.perform();
-  }
-
-  @task
-  *loadOptions() {
-    yield this.store.findAll('meeting-kind', { reload: false });
     if (this.args.initializeEmptyKind && !this.args.kind) {
       this.setAction(this.options.firstObject);
     }
-  }
-
-  get options() {
-    return this.store.peekAll('meeting-kind');
   }
 
   @action
