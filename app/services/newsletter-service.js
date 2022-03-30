@@ -1,5 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import moment from 'moment';
+import fetch from 'fetch';
 
 export default class NewsletterService extends Service {
   @service store;

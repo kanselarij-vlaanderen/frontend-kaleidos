@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
+import fetch from 'fetch';
 
 export default class SigninghubIframeModalComponent extends Component {
   /**
