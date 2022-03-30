@@ -145,22 +145,4 @@ export default class NewPublicationModal extends Component {
   enableErrorOnShortTitle() {
     this.isEnabledErrorOnShortTitle = true;
   }
-
-  @action
-  setDecisionDate(selectedDates) {
-    // undefined if user clears the date picker
-    this.decisionDate = selectedDates[0];
-  }
-
-  @action
-  setOpeningDate(selectedDates) {
-    // undefined if user clears the date picker
-    this.openingDate = selectedDates[0];
-  }
-
-  @action
-  setPublicationDueDate(selectedDates) {
-    // undefined if user clears the date picker
-    this.publicationDueDate = selectedDates[0];
-  }
 }

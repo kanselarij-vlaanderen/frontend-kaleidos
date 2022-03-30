@@ -9,24 +9,22 @@
         </Group.Item>
       </Toolbar.Group>
       <Toolbar.Group @position="right" as |Group|>
-        {{#unless this.isViaCouncilOfMinisters}}
-          <Group.Item>
-            <Auk::Button
-              @skin="primary"
-              @icon="plus"
-              {{on "click" this.openReferenceDocumentUploadModal}}
-            >
-              {{t "document-add"}}
-            </Auk::Button>
-          </Group.Item>
-        {{/unless}}
+        <Group.Item>
+          <Auk::Button
+            @skin="primary"
+            @icon="plus"
+            {{on "click" this.openReferenceDocumentUploadModal}}
+          >
+            {{t "document-add"}}
+          </Auk::Button>
+        </Group.Item>
       </Toolbar.Group>
     </Auk::Toolbar>
   </Auk::Panel::Header>
   <Auk::Panel::Body class="auk-u-bg-alt">
     <Publications::Documents::DocumentListSteps
       @pieces={{this.model}}
-      @isEnabledDeletePiece={{not this.isViaCouncilOfMinisters}}
+      @isViaCouncilOfMinisters={{this.isViaCouncilOfMinisters}}
       @onDeletePiece={{perform this.deletePiece}}
     />
   </Auk::Panel::Body>
@@ -35,7 +33,7 @@
 {{#if this.isOpenReferenceDocumentUploadModal}}
   <Publications::Documents::ReferenceDocumentUploadModal
     @publicationFlow={{this.publicationFlow}}
-    @onSave={{perform this.saveReferenceDocument}}
+    @onSave={{perform this.saveReferenceDocuments}}
     @onCancel={{this.closeReferenceDocumentUploadModal}}
   />
 {{/if}}

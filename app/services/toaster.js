@@ -21,7 +21,8 @@ export default class ToasterService extends Service {
     return this.toasts.filter((toast) => !this.newToasts.includes(toast));
   }
 
-  @(task(function *(toast) {
+  @task
+  *displayToast(toast) {
     toast.options.onClose = toast.options.onClose || (() => this.toasts.removeObject(toast));
     this.toasts.pushObject(toast);
     // TODO: At first glance one might think the below timeout doesn't work properly after 5 seconds. This is caused by following CSS-animation: https://github.com/kanselarij-vlaanderen/au-kaleidos-css/blob/766b9b410fae626988fc7bf0542437889c4e94b7/_auk-alert-stack.scss#L24
@@ -29,7 +30,7 @@ export default class ToasterService extends Service {
     if (this.toasts.includes(toast)) {
       this.toasts.removeObject(toast);
     }
-  })) displayToast;
+  }
 
   notify(message, title, options) {
     // eslint-disable-next-line no-param-reassign

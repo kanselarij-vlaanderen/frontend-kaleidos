@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency-decorators';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
 import moment from 'moment';
@@ -10,6 +9,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import ENV from 'frontend-kaleidos/config/environment';
 import { isEmpty } from '@ember/utils';
+import { task } from 'ember-concurrency';
 
 export default class DocumentsDocumentCardComponent extends Component {
   /**

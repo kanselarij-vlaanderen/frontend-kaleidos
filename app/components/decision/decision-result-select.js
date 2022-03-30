@@ -13,11 +13,12 @@ export default class DecisionResultSelect extends Component {
     this.loadDecisionResultCodes.perform();
   }
 
-  @(task(function *() {
+  @task
+  *loadDecisionResultCodes() {
     const codes = yield this.store.findAll('decision-result-code', {
       reload: true,
       sort: 'priority',
     });
     this.decisionResultCodes = codes;
-  })) loadDecisionResultCodes;
+  }
 }

@@ -106,8 +106,21 @@
                 </div>
               </div>
 
-              {{! Empty col for pretty spacing }}
+              {{! wijze van publicatie }}
               <div class="auk-o-grid-col-3">
+                <div class="auk-form-group">
+                  <Auk::Label>
+                    {{t "kind-of-publication"}}
+                  </Auk::Label>
+                  <PowerSelect
+                    @options={{this.publicationModes}}
+                    @onChange={{this.setPublicationMode}}
+                    @selected={{@publicationFlow.mode}}
+                    as |mode|
+                  >
+                    {{mode.label}}
+                  </PowerSelect>
+                </div>
               </div>
 
               {{! Datum beslissing }}
@@ -117,17 +130,13 @@
                   class="auk-form-group"
                 >
                   <Auk::Label>{{t "decision-date"}}</Auk::Label>
-                  {{#if this.isViaCouncilOfMinisters}}
+                  {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
                     <Auk::ButtonLink
                       target="_blank"
                       @icon="chevron-right"
                       @layout="icon-right"
                       @route="agenda.agendaitems.agendaitem"
-                      @models={{array
-                        @publicationFlow.agendaItemTreatment.agendaitem.agenda.createdFor.id
-                        @publicationFlow.agendaItemTreatment.agendaitem.agenda.id
-                        @publicationFlow.agendaItemTreatment.agendaitem.id
-                      }}
+                      @models={{this.modelsForAgendaitemRoute}}
                     >
                       {{#if @publicationFlow.agendaItemTreatment.startDate}}
                         {{moment-format
@@ -140,8 +149,8 @@
                     </Auk::ButtonLink>
                   {{else}}
                     <Auk::Datepicker
-                      @date={{@publicationFlow.agendaItemTreatment.startDate}}
-                      @onChange={{this.setDecisionDate}}
+                      @date={{this.agendaItemTreatment.startDate}}
+                      @onChange={{set this.agendaItemTreatment "startDate"}}
                     />
                   {{/if}}
                 </div>
@@ -154,21 +163,10 @@
                   class="auk-form-group"
                 >
                   <Auk::Label>{{t "publication-flow-opening-date"}}</Auk::Label>
-                  {{#if this.isViaCouncilOfMinisters}}
-                    {{#if @publicationFlow.openingDate}}
-                      {{moment-format
-                        @publicationFlow.openingDate
-                        "DD-MM-YYYY"
-                      }}
-                    {{else}}
-                      {{t "dash"}}
-                    {{/if}}
-                  {{else}}
-                    <Auk::Datepicker
-                      @date={{@publicationFlow.openingDate}}
-                      @onChange={{this.setOpeningDate}}
-                    />
-                  {{/if}}
+                  <Auk::Datepicker
+                    @date={{@publicationFlow.openingDate}}
+                    @onChange={{set @publicationFlow "openingDate"}}
+                  />
                 </div>
               </div>
 
@@ -182,41 +180,23 @@
                     {{t "publication-flow-publication-due-date"}}
                   </Auk::Label>
                   <Auk::Datepicker
-                    @date={{@publicationFlow.publicationSubcase.dueDate}}
-                    @onChange={{this.setPublicationDueDate}}
+                    @date={{this.publicationSubcase.dueDate}}
+                    @onChange={{set this.publicationSubcase "dueDate"}}
                   />
-                  {{#if
-                    (and
-                      (not @publicationFlow.status.isFinal)
-                      (is-after
-                        @publicationFlow.publicationSubcase.dueDate
-                        precision="days"
-                      )
-                    )
-                  }}
-                    <Auk::FormHelpText
-                      @text={{t "date-expired"}}
-                      @skin="warning"
-                      @icon="alert-triangle"
-                    />
-                  {{/if}}
                 </div>
               </div>
 
-              {{! wijze van publicatie }}
+              {{! Dossier aangemaakt }}
               <div class="auk-o-grid-col-3 auk-u-mt-2">
                 <div class="auk-form-group">
                   <Auk::Label>
-                    {{t "kind-of-publication"}}
+                    {{t "case-created"}}
                   </Auk::Label>
-                  <PowerSelect
-                    @options={{this.publicationModes}}
-                    @onChange={{this.setPublicationMode}}
-                    @selected={{@publicationFlow.mode}}
-                    as |mode|
-                  >
-                    {{mode.label}}
-                  </PowerSelect>
+                  {{#if @publicationFlow.created}}
+                    {{moment-format @publicationFlow.created "DD-MM-YYYY"}}
+                  {{else}}
+                    {{t "dash"}}
+                  {{/if}}
                 </div>
               </div>
 
@@ -263,26 +243,30 @@
             </p>
           </div>
 
-          {{! Empty col for pretty spacing }}
-          <div class="auk-o-grid-col-3 auk-u-mt-2">
+          {{! Wijze publicatie }}
+          <div class="auk-o-grid-col-3 auk-content">
+            <h4 class="auk-u-m-0">{{t "kind-of-publication"}}</h4>
+            <p class="auk-u-m-0">
+              {{#if @publicationFlow.mode}}
+                {{@publicationFlow.mode.label}}
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            </p>
           </div>
 
           {{! Datum beslissing }}
           <div class="auk-o-grid-col-3 auk-u-mt-2 auk-content">
             <h4 class="auk-u-m-0">{{t "decision-date"}}</h4>
             <p class="auk-u-m-0">
-              {{#if this.isViaCouncilOfMinisters}}
+              {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
                 <Auk::ButtonLink
                   data-test-publication-case-info-panel-start-date
                   target="_blank"
                   @icon="chevron-right"
                   @layout="icon-right"
                   @route="agenda.agendaitems.agendaitem"
-                  @models={{array
-                    @publicationFlow.agendaItemTreatment.agendaitem.agenda.createdFor.id
-                    @publicationFlow.agendaItemTreatment.agendaitem.agenda.id
-                    @publicationFlow.agendaItemTreatment.agendaitem.id
-                  }}
+                  @models={{this.modelsForAgendaitemRoute}}
                 >
                   {{#if @publicationFlow.agendaItemTreatment.startDate}}
                     {{moment-format
@@ -335,29 +319,15 @@
               {{else}}
                 {{t "dash"}}
               {{/if}}
-              {{#if
-                (and
-                  (not @publicationFlow.status.isFinal)
-                  (is-after
-                    @publicationFlow.publicationSubcase.dueDate precision="days"
-                  )
-                )
-              }}
-                <Auk::FormHelpText
-                  @text={{t "date-expired"}}
-                  @skin="warning"
-                  @icon="alert-triangle"
-                />
-              {{/if}}
             </p>
           </div>
 
-          {{! Wijze publicatie }}
+          {{! Dossier aangemaakt op }}
           <div class="auk-o-grid-col-3 auk-u-mt-2 auk-content">
-            <h4 class="auk-u-m-0">{{t "kind-of-publication"}}</h4>
+            <h4 class="auk-u-m-0">{{t "case-created"}}</h4>
             <p class="auk-u-m-0">
-              {{#if @publicationFlow.mode}}
-                {{@publicationFlow.mode.label}}
+              {{#if @publicationFlow.created}}
+                {{moment-format @publicationFlow.created "DD-MM-YYYY"}}
               {{else}}
                 {{t "dash"}}
               {{/if}}

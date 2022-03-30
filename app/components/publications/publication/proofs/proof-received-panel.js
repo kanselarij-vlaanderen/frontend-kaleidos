@@ -61,14 +61,4 @@ export default class PublicationsPublicationProofProofReceivedPanel extends Comp
   closePublicationRequestModal() {
     this.showPublicationRequestModal = false;
   }
-
-  @action
-  setNewReceivedDate(selectedDates) {
-    if (selectedDates.length) {
-      this.newReceivedDate = selectedDates[0];
-    } else {
-      // this case occurs when users manually empty the date input-field
-      this.newReceivedDate = undefined;
-    }
-  }
 }

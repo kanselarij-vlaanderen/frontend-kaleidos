@@ -3,7 +3,7 @@ import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { keepLatestTask, task } from 'ember-concurrency-decorators';
+import { keepLatestTask, task } from 'ember-concurrency';
 import { all, timeout } from 'ember-concurrency';
 import moment from 'moment';
 import {

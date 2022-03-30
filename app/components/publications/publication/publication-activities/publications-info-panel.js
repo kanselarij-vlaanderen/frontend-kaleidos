@@ -42,13 +42,15 @@ export default class PublicationsPublicationPublicationActivitiesPublicationInfo
   }
 
   @action
-  setTargetEndDate(selectedDates) {
-    this.args.publicationSubcase.targetEndDate = selectedDates[0];
-  }
-
-  @action
-  setPublicationDate(selectedDates) {
-    this.decision.publicationDate = selectedDates[0];
+  setTargetEndDate(selectedDate) {
+    // Business wants the target end date at 12 o'clock.
+    this.args.publicationSubcase.targetEndDate = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      selectedDate.getDate(),
+      12,
+      0
+    );
   }
 
   @task

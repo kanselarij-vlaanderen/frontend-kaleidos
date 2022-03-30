@@ -37,6 +37,18 @@
               @date={{@publicationSubcase.targetEndDate}}
               @onChange={{this.setTargetEndDate}}
             />
+            {{#if
+              (and
+                (not @publicationFlow.status.isFinal)
+                @publicationSubcase.isOverdue
+              )
+            }}
+              <Auk::FormHelpText
+                @text={{t "date-expired"}}
+                @skin="warning"
+                @icon="alert-triangle"
+              />
+            {{/if}}
           </div>
         </div>
         <div class="auk-o-grid-col-3">
@@ -58,7 +70,7 @@
                 {{else}}
                   <Auk::Datepicker
                     @date={{this.decision.publicationDate}}
-                    @onChange={{this.setPublicationDate}}
+                    @onChange={{set this.decision "publicationDate"}}
                   />
                 {{/if}}
               {{else}}
@@ -109,6 +121,19 @@
             {{else}}
               {{t "dash"}}
             {{/if}}
+            {{#if
+              (and
+                (not @publicationFlow.status.isFinal)
+                @publicationSubcase.isOverdue
+              )
+            }}
+              <Auk::FormHelpText
+                @text={{t "date-expired"}}
+                @skin="warning"
+                @icon="alert-triangle"
+              />
+            {{/if}}
+
           </p>
         </div>
         <div class="auk-o-grid-col-3 auk-content">

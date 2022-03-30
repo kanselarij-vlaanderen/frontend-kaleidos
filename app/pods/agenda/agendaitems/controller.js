@@ -6,7 +6,7 @@ import { tracked } from '@glimmer/tracking';
 import {
   task,
   lastValue
-} from 'ember-concurrency-decorators';
+} from 'ember-concurrency';
 import {
   setAgendaitemsNumber,
   AgendaitemGroup
