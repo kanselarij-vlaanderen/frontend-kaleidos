@@ -15,6 +15,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
    * @argument meeting: the viewed meeting
    * @argument currentAgenda: the selected agenda
    * @argument reverseSortedAgendas: the agendas of the meeting, reverse sorted on serial number
+   * @argument didCloseMeeting: action to take after closing a meeting
    */
   @service store;
   @service currentSession;
@@ -159,8 +160,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
    * message = null will instead show a default message in the loader, and clear the local state of the message
    * @param {String} message: the message to show. If given, the text " even geduld aub..." will always be appended
    */
-  @action
-  toggleLoadingMessage(message) {
+  setLoadingMessage(message) {
     if (message) {
       this.loadingMessage = `${message} ${this.intl.t(
         'please-be-patient'
@@ -168,8 +168,17 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     } else {
       this.loadingMessage = null;
     }
-    this.args.loading(); // hides the agenda overview/sidebar
+    if (typeof this.args.onStartLoading === 'function') {
+      this.args.onStartLoading(); // hides the agenda overview/sidebar
+    }
     this.showLoadingOverlay = !this.showLoadingOverlay; // blocks the use of buttons
+  }
+
+  clearLoadingMessage() {
+    this.loadingMessage = null;
+    if (typeof this.args.onStopLoading === 'function') {
+      this.args.onStopLoading();
+    }
   }
 
   // TODO KAS-2399 could we get rid of this when we reload the model with agendaitems includes?
@@ -198,7 +207,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
    */
   @action
   async createDesignAgenda() {
-    this.toggleLoadingMessage(this.intl.t('agenda-add-message'));
+    this.setLoadingMessage(this.intl.t('agenda-add-message'));
     try {
       const newAgenda = await this.agendaService.createNewDesignAgenda(
         this.args.meeting
@@ -206,7 +215,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       // After the agenda has been created, we want to update the agendaitems of activities
       await this.reloadAgendaitemsOfAgenda(newAgenda);
       await this.reloadMeeting();
-      this.toggleLoadingMessage(null);
+      this.clearLoadingMessage();
       return this.router.transitionTo(
         'agenda.agendaitems',
         this.args.meeting.id,
@@ -225,7 +234,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
           this.intl.t('warning-title')
         );
       }
-      this.toggleLoadingMessage(null);
+      this.clearLoadingMessage();
     }
   }
 
@@ -253,7 +262,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   @action
   async approveCurrentAgenda() {
     this.showConfirmForApprovingAgenda = false;
-    this.toggleLoadingMessage(this.intl.t('agenda-approving-text'));
+    this.setLoadingMessage(this.intl.t('agenda-approving-text'));
     if (!this.args.currentAgenda.isDesignAgenda) {
       this.showNotAllowedToast();
       return;
@@ -266,7 +275,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       await this.reloadAgenda(this.args.currentAgenda);
       await this.reloadAgendaitemsOfAgenda(this.args.currentAgenda);
       await this.reloadMeeting();
-      this.toggleLoadingMessage(null);
+      this.clearLoadingMessage();
       return this.router.transitionTo(
         'agenda.agendaitems',
         this.args.meeting.id,
@@ -277,7 +286,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         this.intl.t('error-approve-agenda', { message: error.message }),
         this.intl.t('warning-title')
       );
-      this.toggleLoadingMessage(null);
+      this.clearLoadingMessage();
     }
   }
 
@@ -303,7 +312,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   @action
   async approveCurrentAgendaAndCloseMeeting() {
     this.showConfirmForApprovingAgendaAndClosingMeeting = false;
-    this.toggleLoadingMessage(
+    this.setLoadingMessage(
       this.intl.t('agenda-approve-and-close-message')
     );
     if (!this.args.currentAgenda.isDesignAgenda) {
@@ -322,8 +331,8 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         this.intl.t('warning-title')
       );
     } finally {
-      this.toggleLoadingMessage(null);
-      this.args.refreshRoute();
+      this.clearLoadingMessage();
+      this.args.didCloseMeeting();
     }
   }
 
@@ -343,7 +352,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   @action
   async closeMeeting() {
     this.showConfirmForClosingMeeting = false;
-    this.toggleLoadingMessage(this.intl.t('agenda-close-message'));
+    this.setLoadingMessage(this.intl.t('agenda-close-message'));
     if (!this.isSessionClosable) {
       this.showNotAllowedToast();
       return;
@@ -357,7 +366,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       await this.reloadAgenda(lastApprovedAgenda);
       await this.reloadAgendaitemsOfAgenda(lastApprovedAgenda);
       await this.reloadMeeting();
-      this.toggleLoadingMessage(null);
+      this.clearLoadingMessage();
       if (isDesignAgenda) {
         return this.router.transitionTo(
           'agenda.agendaitems',
@@ -365,13 +374,13 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
           lastApprovedAgenda.id,
         );
       }
-      this.args.refreshRoute();
+      this.args.didCloseMeeting();
     } catch (error) {
       this.toaster.error(
         this.intl.t('error-close-meeting', { message: error.message }),
         this.intl.t('warning-title')
       );
-      this.toggleLoadingMessage(null);
+      this.clearLoadingMessage();
     }
   }
 
@@ -392,7 +401,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   @action
   async deleteSelectedAgenda() {
     this.showConfirmForDeletingSelectedAgenda = false;
-    this.toggleLoadingMessage(this.intl.t('agenda-delete-message'));
+    this.setLoadingMessage(this.intl.t('agenda-delete-message'));
     if (!this.canDeleteSelectedAgenda) {
       this.showNotAllowedToast();
       return;
@@ -406,7 +415,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         // Data reloading
         await this.reloadAgendaitemsOfAgenda(lastapprovedAgenda);
         await this.reloadMeeting();
-        this.toggleLoadingMessage(null);
+        this.clearLoadingMessage();
         return this.router.transitionTo(
           'agenda.agendaitems',
           this.args.meeting.id,
@@ -414,10 +423,10 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         );
       }
       // if there is no previous agenda, the meeting should have been deleted
-      this.toggleLoadingMessage(null);
+      this.clearLoadingMessage();
       this.router.transitionTo('agendas.overview');
     } catch (error) {
-      this.toggleLoadingMessage(null);
+      this.clearLoadingMessage();
       this.toaster.error(
         this.intl.t('error-delete-agenda', { message: error.message }),
         this.intl.t('warning-title')
@@ -443,7 +452,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   @action
   async reopenPreviousAgenda() {
     this.showConfirmForReopeningPreviousAgenda = false;
-    this.toggleLoadingMessage(
+    this.setLoadingMessage(
       this.intl.t('agenda-reopen-previous-version-message')
     );
     if (!this.canReopenPreviousAgenda) {
@@ -467,7 +476,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       await this.reloadAgenda(lastApprovedAgenda);
       await this.reloadAgendaitemsOfAgenda(lastApprovedAgenda);
       await this.reloadMeeting();
-      this.toggleLoadingMessage(null);
+      this.clearLoadingMessage();
       return this.router.transitionTo(
         'agenda.agendaitems',
         this.args.meeting.id,
@@ -478,7 +487,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         this.intl.t('error-reopen-previous-agenda', { message: error.message }),
         this.intl.t('warning-title')
       );
-      this.toggleLoadingMessage(null);
+      this.clearLoadingMessage();
     }
   }
 
