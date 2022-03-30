@@ -2,8 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
-import { timeout } from 'ember-concurrency';
-import { task, restartableTask } from 'ember-concurrency-decorators';
+import { timeout, task, restartableTask } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { CURRENT_GOVERNMENT_BODY } from 'frontend-kaleidos/config/config';
 

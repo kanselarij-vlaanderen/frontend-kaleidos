@@ -6,7 +6,7 @@ import { timeout } from 'ember-concurrency';
 import {
   dropTask,
   task
-} from 'ember-concurrency-decorators';
+} from 'ember-concurrency';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import VrNotulenName,

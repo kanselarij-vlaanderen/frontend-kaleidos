@@ -10,6 +10,8 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
   @tracked isEditing;
   @tracked isViaCouncilOfMinisters;
+  @tracked agendaItemTreatment;
+  @tracked modelsForAgendaitemRoute;
 
   constructor() {
     super(...arguments);
@@ -29,16 +31,15 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.isViaCouncilOfMinisters =
       await this.publicationService.getIsViaCouncilOfMinisters(this.args.publicationFlow);
     this.agendaItemTreatment = await this.args.publicationFlow.agendaItemTreatment;
+    if (this.isViaCouncilOfMinisters) {
+      // get the models meeting/agenda/agendaitem for clickable link
+      this.modelsForAgendaitemRoute = await this.publicationService.getModelsForAgendaitemFromTreatment(this.agendaItemTreatment);
+    }
   }
 
   @action
   openEditingPanel() {
     this.isEditing = true;
-  }
-
-  @action
-  setDecisionDate(selectedDates) {
-    this.agendaItemTreatment.startDate = selectedDates[0];
   }
 
   @task
@@ -70,7 +71,9 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     saves.push(this.args.publicationFlow.save());
 
     // Datum beslissing
-    saves.push(this.agendaItemTreatment.save());
+    if (!this.isViaCouncilOfMinisters) {
+      saves.push(this.agendaItemTreatment.save());
+    }
 
     await Promise.all(saves);
   }

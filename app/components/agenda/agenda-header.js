@@ -3,7 +3,6 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { debug } from '@ember/debug';
-import { task } from 'ember-concurrency-decorators';
 import { all } from 'rsvp';
 import { setAgendaitemFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import {
@@ -11,6 +10,7 @@ import {
   fetchArchivingJobForAgenda,
   fileDownloadUrlFromJob,
 } from 'frontend-kaleidos/utils/zip-agenda-files';
+import { task } from 'ember-concurrency';
 
 export default class AgendaHeader extends Component {
   /**

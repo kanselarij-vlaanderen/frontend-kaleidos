@@ -10,12 +10,11 @@ import { isEmpty } from '@ember/utils';
  * @argument onCancel
  */
 export default class PublicationsPublicationProofsProofUploadModalComponent extends Component {
-  @service store;
   @service publicationService;
 
   @tracked uploadedPieces = [];
   @tracked receivedDate = new Date();
-  @tracked mustUpdatePublicationStatus = false;
+  @tracked mustUpdatePublicationStatus = true;
   @tracked proofPrintCorrector;
 
   get isCancelDisabled() {
@@ -38,10 +37,6 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
 
   @dropTask
   *cancel() {
-    // necessary because close-button is not disabled when saving
-    if (this.save.isRunning) {
-      return;
-    }
     yield Promise.all(
       this.uploadedPieces.map((piece) =>
         this.deleteUploadedPiece.perform(piece)
@@ -61,23 +56,13 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
   }
 
   @action
-  setReceivedDate(selectedDates) {
-    if (selectedDates.length) {
-      this.receivedDate = selectedDates[0];
-    } else {
-      // this case occurs when users manually empty the date input-field
-      this.receivedDate = undefined;
-    }
-  }
-
-  @action
   setMustUpdatePublicationStatus(event) {
     this.mustUpdatePublicationStatus = event.target.checked;
   }
 
   @task
   *deleteUploadedPiece(piece) {
-    this.uploadedPieces.removeObject(piece);
     yield this.publicationService.deletePiece(piece);
+    this.uploadedPieces.removeObject(piece);
   }
 }

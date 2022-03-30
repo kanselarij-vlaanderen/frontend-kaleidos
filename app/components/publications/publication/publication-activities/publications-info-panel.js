@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { all, task } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 
 /**
  * @argument {publicationSubcase}
@@ -24,13 +24,10 @@ export default class PublicationsPublicationPublicationActivitiesPublicationInfo
     // Currently only 1 publication-activity and decision are assumed
     // per publication-subcase
     this.decision = yield this.store.queryOne('decision', {
-      'filter[publication-activity][subcase][:id:]': this.args.publicationSubcase.id,
+      'filter[publication-activity][subcase][:id:]':
+        this.args.publicationSubcase.id,
       sort: 'publication-activity.start-date,publication-date',
     });
-  }
-
-  get publicationModes() {
-    return this.store.peekAll('publication-mode').sortBy('position');
   }
 
   @action
@@ -42,30 +39,23 @@ export default class PublicationsPublicationPublicationActivitiesPublicationInfo
   async closeEditingPanel() {
     this.isEditing = false;
     this.args.publicationSubcase.rollbackAttributes();
-    await this.args.publicationFlow.belongsTo('mode').reload();
   }
 
   @action
-  setTargetEndDate(selectedDates) {
-    this.args.publicationSubcase.targetEndDate = selectedDates[0];
-  }
-
-  @action
-  setPublicationDate(selectedDates) {
-    this.decision.publicationDate = selectedDates[0];
-  }
-
-  @action
-  setPublicationMode(publicationMode) {
-    this.args.publicationFlow.mode = publicationMode;
+  setTargetEndDate(selectedDate) {
+    // Business wants the target end date at 12 o'clock.
+    this.args.publicationSubcase.targetEndDate = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      selectedDate.getDate(),
+      12,
+      0
+    );
   }
 
   @task
   *save() {
-    yield all([
-      this.args.publicationSubcase.save(),
-      this.args.publicationFlow.save()
-    ]);
+    yield this.args.publicationSubcase.save();
     this.isEditing = false;
   }
 }

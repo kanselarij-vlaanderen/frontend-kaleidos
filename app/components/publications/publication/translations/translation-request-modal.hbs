@@ -6,6 +6,7 @@
       publicationNumber=@publicationFlow.identification.idName
     }}
     @onClose={{perform this.cancel}}
+    @closeDisabled={{this.isCancelDisabled}}
   />
   <Auk::Modal::Body>
     <div class="auk-form-group-layout auk-form-group-layout--standard">
@@ -112,8 +113,8 @@
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
-    @cancelDisabled={{this.isCancelDisabled}}
     @onCancel={{perform this.cancel}}
+    @cancelDisabled={{this.isCancelDisabled}}
   >
     <Auk::Button
       data-test-publication-translation-request-save

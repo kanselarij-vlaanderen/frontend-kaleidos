@@ -126,16 +126,6 @@ export default class NewPublicationModal extends Component {
     });
   }
 
-  @action
-  cancel() {
-    // necessary because close-button is not disabled when saving
-    if (this.save.isRunning) {
-      return;
-    }
-
-    this.args.onCancel()
-  }
-
   @restartableTask
   *validateIsPublicationNumberAlreadyTaken() {
     yield timeout(1000);
@@ -154,23 +144,5 @@ export default class NewPublicationModal extends Component {
   @action
   enableErrorOnShortTitle() {
     this.isEnabledErrorOnShortTitle = true;
-  }
-
-  @action
-  setDecisionDate(selectedDates) {
-    // undefined if user clears the date picker
-    this.decisionDate = selectedDates[0];
-  }
-
-  @action
-  setOpeningDate(selectedDates) {
-    // undefined if user clears the date picker
-    this.openingDate = selectedDates[0];
-  }
-
-  @action
-  setPublicationDueDate(selectedDates) {
-    // undefined if user clears the date picker
-    this.publicationDueDate = selectedDates[0];
   }
 }

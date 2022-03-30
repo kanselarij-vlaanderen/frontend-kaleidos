@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import {
   lastValue, task
-} from 'ember-concurrency-decorators';
+} from 'ember-concurrency';
 
 export default class AgendaitemTitles extends Component {
   @service currentSession;
