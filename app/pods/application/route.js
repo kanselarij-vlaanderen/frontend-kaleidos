@@ -1,6 +1,7 @@
 import { action } from '@ember/object';
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class ApplicationRoute extends Route {
   @service moment;
@@ -36,6 +37,14 @@ export default class ApplicationRoute extends Route {
     if (this.session.isAuthenticated && !this.currentSession.hasValidGroup) {
       this.router.transitionTo('accountless-users');
     }
+
+    await this.store.query('meeting-kind', {
+      'page[size]': PAGE_SIZE.MEETING_KIND,
+      filter: {
+        ':has:priority': true, // There is an ext:MinisterraadType resource called Annex which we don't want to show in dropdowns. It does not have an ext:priority property, so we use that fact to filter it out
+      },
+      sort: 'priority',
+    });
   }
 
   get isSupportedBrowser() {
