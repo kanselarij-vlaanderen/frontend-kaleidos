@@ -1,7 +1,5 @@
 <div data-test-utils-kind-selector class="auk-form-group">
-  {{#if (not @hideLabel)}}
-    <Auk::Label>{{t "kind"}}</Auk::Label>
-  {{/if}}
+  <Auk::Label>{{t "kind"}}</Auk::Label>
   <PowerSelect
     @options={{this.options}}
     @selected={{this.kind}}
