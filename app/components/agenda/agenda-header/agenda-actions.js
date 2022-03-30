@@ -7,7 +7,7 @@ import { all } from 'rsvp'; // TODO KAS-2399 better way then this ?
 
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
-export default class AgendaActions extends Component {
+export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   /**
    * A component that contains most of the meeting/agenda actions that interact with a backend service.
    * This contains all actions of the left button in the right toolbar of Agenda::AgendaHeader component
@@ -36,18 +36,14 @@ export default class AgendaActions extends Component {
   get designAgenda() {
     // From all agendas, get the design agenda (if any)
     const agendas = this.args.reverseSortedAgendas;
-    const designAgenda = agendas
-      .filter((agenda) => agenda.get('isDesignAgenda'))
-      .get('firstObject');
+    const designAgenda = agendas.find((agenda) => agenda.isDesignAgenda);
     return designAgenda;
   }
 
   get lastApprovedAgenda() {
     // From all agendas, get the last agenda that is not a design agenda (if any)
     const agendas = this.args.reverseSortedAgendas;
-    const lastApprovedAgenda = agendas
-      .filter((agenda) => !agenda.get('isDesignAgenda'))
-      .get('firstObject');
+    const lastApprovedAgenda = agendas.find((agenda) => !agenda.isDesignAgenda);
     return lastApprovedAgenda;
   }
 
@@ -119,9 +115,7 @@ export default class AgendaActions extends Component {
     // When reloading the data for this use-case, only the agendaitems that are not "formally ok" have to be fully reloaded
     // If not reloaded, any following PATCH call on these agendaitems will succeed (due to the hasMany reload above) but with old relation data
     // *NOTE* since we only load the "nok/not yet ok" items, it is still possible to save old relations on formally ok items (although most changes should reset the formality)
-    const agendaitemsNotOk = yield this.args.currentAgenda.get(
-      'allAgendaitemsNotOk'
-    );
+    const agendaitemsNotOk = yield this.args.currentAgenda.allAgendaitemsNotOk;
     for (const agendaitem of agendaitemsNotOk) {
       // Reloading some relationships of agendaitem most likely to be changed by concurrency
       yield agendaitem.reload();
@@ -140,7 +134,7 @@ export default class AgendaActions extends Component {
    */
   @task
   *loadPiecesToDelete() {
-    const agendaitems = yield this.args.currentAgenda.get('agendaitems');
+    const agendaitems = yield this.args.currentAgenda.agendaitems;
     const previousAgenda = yield this.args.currentAgenda.previousVersion;
     const pieces = [];
     const agendaitemNewPieces = agendaitems.map(async (agendaitem) => {
@@ -187,7 +181,7 @@ export default class AgendaActions extends Component {
   async reloadAgendaitemsOfAgenda(agenda) {
     const agendaitems = await agenda.hasMany('agendaitems').reload();
     await agendaitems.map(async (agendaitem) => {
-      const agendaActivity = await agendaitem.get('agendaActivity');
+      const agendaActivity = await agendaitem.agendaActivity;
       if (agendaActivity) {
         await agendaActivity.hasMany('agendaitems').reload();
       }
@@ -368,7 +362,7 @@ export default class AgendaActions extends Component {
         return this.router.transitionTo(
           'agenda.agendaitems',
           this.args.meeting.id,
-          lastApprovedAgenda.get('id')
+          lastApprovedAgenda.id,
         );
       }
       this.args.refreshRoute();
@@ -416,7 +410,7 @@ export default class AgendaActions extends Component {
         return this.router.transitionTo(
           'agenda.agendaitems',
           this.args.meeting.id,
-          lastapprovedAgenda.get('id')
+          lastapprovedAgenda.id,
         );
       }
       // if there is no previous agenda, the meeting should have been deleted
