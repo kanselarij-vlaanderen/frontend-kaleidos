@@ -41,9 +41,9 @@ export default class ApplicationRoute extends Route {
     await this.store.query('meeting-kind', {
       'page[size]': PAGE_SIZE.MEETING_KIND,
       filter: {
-        ':has:priority': true, // There is an ext:MinisterraadType resource called Annex which we don't want to show in dropdowns. It does not have an ext:priority property, so we use that fact to filter it out
+        ':has:position': true, // There is an ext:MinisterraadType resource called Annex which we don't want to show in dropdowns. It does not have a schema:position property, so we use that fact to filter it out
       },
-      sort: 'priority',
+      sort: 'position',
     });
   }
 
