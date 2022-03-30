@@ -105,10 +105,6 @@ export default Model.extend({
     return await agenda.get('agendaName');
   }),
 
-  isAnnex: computed('kind', function() {
-    return this.get('kind').get('isAnnexMeeting');
-  }),
-
   isPreKaleidos: computed('plannedStart', function () {
     return this.plannedStart < KALEIDOS_START_DATE;
   }),

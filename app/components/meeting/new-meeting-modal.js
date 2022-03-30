@@ -34,7 +34,7 @@ export default class MeetingNewMeetingModal extends Component {
   }
 
   get isAnnexMeeting() {
-    return this.kind?.get('isAnnexMeeting');
+    return this.kind?.isAnnexMeeting;
   }
 
   get formattedMeetingIdentifier() {
@@ -94,7 +94,7 @@ export default class MeetingNewMeetingModal extends Component {
     try {
       yield meeting.save();
       const agenda = yield this.createAgenda(meeting, now);
-      if (!meeting.isAnnex && closestMeeting) {
+      if (!this.isAnnexMeeting && closestMeeting) {
         yield this.createAgendaitemToApproveMinutes(
           agenda,
           meeting,
