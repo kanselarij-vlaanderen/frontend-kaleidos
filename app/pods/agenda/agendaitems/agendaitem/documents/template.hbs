@@ -103,6 +103,7 @@
           @multipleFiles={{true}}
           @uploadedFileAction={{this.uploadPiece}}
         />
+        <Auk::Alert @message="Indien beschikbaar, gelieve het originele Word bestand op te laden." class="auk-u-mt-2" />
         <div class="upload-container">
           {{#each this.newPieces as |piece|}}
             <Documents::UploadedDocument
