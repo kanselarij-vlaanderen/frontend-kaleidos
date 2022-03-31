@@ -105,7 +105,9 @@ Router.map(function() {
     this.route('cases', { path: '/dossiers', });
     this.route('agenda-items', { path: '/agendapunten', });
     this.route('newsletter-infos', { path: '/kort-bestek', });
-    this.route('publication-flows', { path: '/publicaties', });
+    if (!isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB)) {
+      this.route('publication-flows', { path: '/publicaties', });
+    }
   });
 
   this.route('settings', { path: '/instellingen', }, function() {
