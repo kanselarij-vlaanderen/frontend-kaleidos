@@ -32,7 +32,7 @@ export default Model.extend({
   requestedSubcases: hasMany('subcase'),
   pieces: hasMany('piece'),
 
-  kind: belongsTo('meeting-kind'),
+  kind: belongsTo('concept'),
   mainMeeting: belongsTo('meeting', {
     inverse: null,
   }),

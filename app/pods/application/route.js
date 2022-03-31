@@ -1,6 +1,7 @@
 import { action } from '@ember/object';
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import CONSTANTS from '../../config/constants';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class ApplicationRoute extends Route {
@@ -38,11 +39,15 @@ export default class ApplicationRoute extends Route {
       this.transitionTo('accountless-users');
     }
 
-    await this.store.query('meeting-kind', {
-      'page[size]': PAGE_SIZE.MEETING_KIND,
+    await this.store.query('concept', {
       filter: {
-        ':has:position': true, // There is an ext:MinisterraadType resource called Annex which we don't want to show in dropdowns. It does not have a schema:position property, so we use that fact to filter it out
+        'concept-schemes': {
+          ':uri:': CONSTANTS.CONCEPT_SCHEMES.VERGADERACTIVITEIT,
+        },
+        ':has-no:narrower': true, // Only the most specific concepts, i.e. the actual meeting kinds (so no "Annex")
       },
+      include: 'broader,narrower',
+      'page[size]': PAGE_SIZE.CODE_LISTS,
       sort: 'position',
     });
   }

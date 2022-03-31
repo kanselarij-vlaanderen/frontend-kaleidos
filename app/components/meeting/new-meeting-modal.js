@@ -1,14 +1,12 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { dropTask } from 'ember-concurrency';
+import { task, dropTask } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { A } from '@ember/array';
 import moment from 'moment';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import {
-  fetchClosestMeetingAndAgendaId,
-} from 'frontend-kaleidos/utils/meeting-utils';
+import { fetchClosestMeetingAndAgendaId } from 'frontend-kaleidos/utils/meeting-utils';
 
 /**
  * @argument {didSave}
@@ -30,11 +28,15 @@ export default class MeetingNewMeetingModal extends Component {
   constructor() {
     super(...arguments);
 
+    this.initializeKind.perform();
     this.initializeMeetingNumber.perform();
   }
 
-  get isAnnexMeeting() {
-    return this.kind?.isAnnexMeeting;
+  get meetingKindPostfix() {
+    if (this.kind?.uri === CONSTANTS.MEETING_KINDS.PVV) {
+      return 'VV';
+    }
+    return '';
   }
 
   get formattedMeetingIdentifier() {
@@ -55,6 +57,11 @@ export default class MeetingNewMeetingModal extends Component {
   set meetingNumber(meetingNumber) {
     this._meetingNumber = meetingNumber;
     this._formattedMeetingIdentifier = null;
+  }
+
+  @task
+  *initializeKind() {
+    this.kind = yield this.store.findRecordByUri('concept', CONSTANTS.MEETING_KINDS.MINISTERRAAD);
   }
 
   @dropTask
@@ -94,7 +101,7 @@ export default class MeetingNewMeetingModal extends Component {
     try {
       yield meeting.save();
       const agenda = yield this.createAgenda(meeting, now);
-      if (!this.isAnnexMeeting && closestMeeting) {
+      if (!(yield this.isAnnexMeetingKind(this.kind)) && closestMeeting) {
         yield this.createAgendaitemToApproveMinutes(
           agenda,
           meeting,
@@ -167,9 +174,14 @@ export default class MeetingNewMeetingModal extends Component {
     return agendaitem;
   }
 
+  async isAnnexMeetingKind(kind) {
+    const broader = await kind?.broader;
+    return broader?.uri === CONSTANTS.MEETING_KINDS.ANNEX;
+  }
+
   @action
   selectMainMeeting(mainMeeting) {
-    const postfix = this.kind?.postfix || '';
+    const postfix = this.meetingKindPostfix;
     this.selectedMainMeeting = mainMeeting;
     this.startDate = mainMeeting.plannedStart;
     this.meetingNumber = mainMeeting.number;
@@ -185,7 +197,7 @@ export default class MeetingNewMeetingModal extends Component {
   @action
   async setKind(kind) {
     this.kind = kind;
-    if (!this.isAnnexMeeting) {
+    if (!(await this.isAnnexMeetingKind(this.kind))) {
       this.selectedMainMeeting = null;
       this.initializeMeetingNumber.perform();
     }

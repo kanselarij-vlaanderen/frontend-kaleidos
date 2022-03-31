@@ -11,7 +11,7 @@
       @selectedKind={{this.kind}}
       @disabled={{this.initializeKind.isRunning}}
     />
-    {{#if this.isAnnexMeeting}}
+    {{#if (await (this.isAnnexMeetingKind this.kind))}}
       <div class="auk-u-mb-2">
         <div class="auk-form-group">
           <Auk::Label>{{t "related-main-meeting-field-label"}}</Auk::Label>
@@ -24,7 +24,7 @@
             @selectModel={{this.selectMainMeeting}}
             as |model|
           >
-            {{model.kind.printLabel}}
+            {{kind-print-label model.kind}}
             {{t "of"}}
             {{moment-format model.plannedStart "DD-MM-YYYY"}}
             ({{model.numberRepresentation}})
@@ -49,7 +49,7 @@
       <div class="auk-form-group">
         <Auk::Label for="meetingNumberInput">{{t "meeting-number"}}</Auk::Label>
         <div class="auk-o-flex">
-          {{#unless this.isAnnexMeeting}}
+          {{#if (not (await (this.isAnnexMeetingKind this.kind)))}}
             <Auk::Input
               data-test-new-meeting-meeting-number
               @type="number"
@@ -59,7 +59,7 @@
               @width="medium"
               class="auk-u-mr-2"
             />
-          {{/unless}}
+          {{/if}}
           <div class="auk-o-flex__item">
             <div
               data-test-new-meeting-number-representation-view
@@ -95,7 +95,7 @@
         </div>
       {{/if}}
     </div>
-    {{#unless this.isAnnexMeeting}}
+    {{#if (not (await (this.isAnnexMeetingKind this.kind)))}}
       <div class="auk-u-mb-2">
         <div class="auk-form-group">
           <Auk::Label>{{t "meeting-location"}}</Auk::Label>
@@ -106,7 +106,7 @@
           />
         </div>
       </div>
-    {{/unless}}
+    {{/if}}
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
     <Auk::Button
