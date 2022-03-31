@@ -45,6 +45,18 @@
       />
     </div>
   </div>
+  <div class="auk-u-mb-4">
+    <div class="auk-form-group">
+      <Auk::Label id="private-remark-title" class="auk-u-icon-left"><Auk::Icon @name="lock-closed" @size="small" /> {{t "private-remark-title"}}</Auk::Label>
+      <Textarea
+        data-test-agendaitem-titles-edit-private-explanation={{true}}
+        rows="2"
+        aria-labelledby="private-remark-title"
+        class="auk-textarea"
+        @value={{@agendaitem.privateExplanation}}
+      />
+    </div>
+  </div>
   {{#if @agendaitem.showAsRemark}}
     <div class="auk-u-mb-4">
       <div class="auk-form-group">
