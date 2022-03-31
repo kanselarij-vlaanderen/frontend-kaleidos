@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
 export default class SearchRoute extends Route {
   @service('session') simpleAuthSession;
@@ -57,5 +58,12 @@ export default class SearchRoute extends Route {
     controller.dateFromBuffer = controller.deserializeDate(params.dateFrom);
     controller.dateToBuffer = controller.deserializeDate(params.dateTo);
     controller.dateBuffer = controller.deserializeDate(params.date);
+  }
+
+  @action
+  loading(/*transition, originRoute*/) {
+    // Disable bubbling of loading event to prevent parent loading route to be shown.
+    // Otherwise it causes a 'flickering' effect because the search filters disappear.
+    return false;
   }
 }
