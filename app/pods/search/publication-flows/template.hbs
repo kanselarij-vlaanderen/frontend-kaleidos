@@ -5,7 +5,22 @@
   <div class="auk-o-grid-col-2">
     <div class="auk-box">
       <div class="auk-u-mb-2">
-        <Auk::Label>Type regelgeving</Auk::Label>
+        <div class="auk-o-flex auk-o-flex--spaced">
+          <Auk::Button
+            @skin="muted-borderless"
+            class="auk-button--flush"
+            {{on "click" this.toggleIsSelectedAllRegulationTypes}}
+          >
+            {{#if this.isSelectedAllRegulationTypes}}
+              {{svg-jar "checkbox-checked" width="19" height="19"}}
+              <span class="auk-u-hidden">{{capitalize (t "deselect-all")}}</span>
+            {{else}}
+              {{svg-jar "checkbox-unchecked" width="19" height="19"}}
+              <span class="auk-u-hidden">{{capitalize (t "select-all")}}</span>
+            {{/if}}
+          </Auk::Button>
+          <Auk::Label>{{t "regulation-type"}}</Auk::Label>
+        </div>
         {{#each this.regulationTypes as |regulationType|}}
           <Auk::Checkbox
             @checked={{includes regulationType.id this.regulationTypeIds}}
@@ -15,7 +30,22 @@
         {{/each}}
       </div>
       <div>
-        <Auk::Label>Status</Auk::Label>
+        <div class="auk-o-flex auk-o-flex--spaced">
+          <Auk::Button
+            @skin="muted-borderless"
+            class="auk-button--flush"
+            {{on "click" this.toggleIsSelectedAllStatuses}}
+          >
+            {{#if this.isSelectedAllStatuses}}
+              {{svg-jar "checkbox-checked" width="19" height="19"}}
+              <span class="auk-u-hidden">{{capitalize (t "deselect-all")}}</span>
+            {{else}}
+              {{svg-jar "checkbox-unchecked" width="19" height="19"}}
+              <span class="auk-u-hidden">{{capitalize (t "select-all")}}</span>
+            {{/if}}
+          </Auk::Button>
+          <Auk::Label>{{t "status"}}</Auk::Label>
+        </div>
         {{#each this.publicationStatuses as |publicationStatus|}}
           <Auk::Checkbox
             @checked={{includes publicationStatus.id this.publicationStatusIds}}

@@ -116,7 +116,6 @@ export default class PublicationFlowSearchRoute extends Route {
 
   setupController(controller) {
     super.setupController(...arguments);
-    controller.emptySearch = isEmpty(this.paramsFor('search').searchText);
 
     controller.publicationStatuses = this.publicationStatuses;
     controller.regulationTypes = this.regulationTypes;

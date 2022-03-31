@@ -31,7 +31,8 @@ export default class PublicationFlowSearchController extends Controller {
   @tracked sort;
   @tracked regulationTypeIds = [];
   @tracked publicationStatusIds = [];
-  @tracked status;
+  @tracked isSelectedAllRegulationTypes = false;
+  @tracked isSelectedAllStatuses = false;
 
   constructor() {
     super(...arguments);
@@ -40,9 +41,28 @@ export default class PublicationFlowSearchController extends Controller {
     this.sort = '-opening-date';
   }
 
+  get allRegulationTypeIds() {
+    return this.regulationTypes.map((type) => type.id);
+  }
+
+  get allPublicationStatusIds() {
+    return this.publicationStatuses.map((status) => status.id);
+  }
+
   @action
   selectSize(size) {
     this.size = size;
+  }
+
+  @action
+  toggleIsSelectedAllRegulationTypes() {
+    this.isSelectedAllRegulationTypes = !this.isSelectedAllRegulationTypes;
+
+    if (this.isSelectedAllRegulationTypes) {
+      this.regulationTypeIds = this.allRegulationTypeIds;
+    } else {
+      this.regulationTypeIds = [];
+    }
   }
 
   @action
@@ -57,6 +77,20 @@ export default class PublicationFlowSearchController extends Controller {
     // have support for TrackedArray, thus, when assuming we keep the automatic `refreshModel: true`
     // approach, reassigning the array in order to trigger a refresh seems like the way to go.
     this.regulationTypeIds = this.regulationTypeIds; // eslint-disable-line no-self-assign
+
+    this.isSelectedAllRegulationTypes =
+      this.regulationTypeIds.length == this.allRegulationTypeIds.length;
+  }
+
+  @action
+  toggleIsSelectedAllStatuses() {
+    this.isSelectedAllStatuses = !this.isSelectedAllStatuses;
+
+    if (this.isSelectedAllStatuses) {
+      this.publicationStatusIds = this.allPublicationStatusIds;
+    } else {
+      this.publicationStatusIds = [];
+    }
   }
 
   @action
@@ -69,6 +103,9 @@ export default class PublicationFlowSearchController extends Controller {
     }
     // reassign array in order to trigger model refresh
     this.publicationStatusIds = this.publicationStatusIds; // eslint-disable-line no-self-assign
+
+    this.isSelectedAllStatuses =
+      this.publicationStatusIds.length == this.allPublicationStatusIds.length;
   }
 
   @action

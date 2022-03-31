@@ -976,6 +976,7 @@
   "no-ministers-found": "Geen ministers gevonden.",
   "message": "Bericht",
   "identifier": "Identificator",
+  "regulation-type": "Type regelgeving",
   "proofprint-corrector": "Drukproef verbeteraar",
   "belgian-official-gazette": "Belgisch Staatsblad",
   "publication-empty": "Er is nog geen publicatie aangevraagd.",
@@ -1019,5 +1020,7 @@
   "who-proof-reads": "Wie leest na?",
   "search-term": "zoekterm",
   "search-by-date-type": "zoeken op datumtype",
-  "search-publication": "zoek publicatie"
+  "search-publication": "zoek publicatie",
+  "select-all": "alles selecteren",
+  "deselect-all": "alles deselecteren"
 }
