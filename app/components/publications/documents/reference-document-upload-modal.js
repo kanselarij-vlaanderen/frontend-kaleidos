@@ -53,9 +53,6 @@ export default class PublicationsDocumentsReferenceDocumentUploadModalComponent 
   setReceivedDate(piece, selectedDate) {
     if (selectedDate) {
       piece.receivedDate = selectedDate;
-    } else {
-      // this case occurs when users manually empty the date input-field
-      piece.receivedDate = undefined;
     }
   }
 }

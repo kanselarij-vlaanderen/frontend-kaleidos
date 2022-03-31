@@ -39,8 +39,4 @@ export default class File extends Model {
     const regex = new RegExp(`.${this.extension}$`);
     return this.filename.replace(regex, '');
   }
-
-  get isWordExtension() {
-    return this.extension === 'docx';
-  }
 }
