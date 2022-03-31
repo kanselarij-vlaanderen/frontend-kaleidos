@@ -99,14 +99,22 @@
       {{#if this.isSearchingPublicationFlows}}
         <div class="auk-o-grid-col-2">
           <div class="auk-form-group auk-u-position-relative">
-            <Auk::Label>{{capitalize (t "search-by-date-type")}}</Auk::Label>
-            <PowerSelect
-              @options={{this.publicationDateTypes}}
-              @selected={{this.selectedPublicationDateType}}
-              @onChange={{this.selectPublicationDateType}}
-              as |publicationDateType|>
-              {{publicationDateType.label}}
-            </PowerSelect>
+            <Auk::Label for="dateType">
+              {{capitalize (t "search-by-date-type")}}
+            </Auk::Label>
+            <select
+              name="dateType"
+              id="dateType"
+              class="auk-select auk-select--block"
+              {{on "input" this.selectPublicationDateType}}>
+              {{#each this.publicationDateTypes as |dateType|}}
+                <option
+                  value={{dateType.key}}
+                  selected={{eq dateType.key this.publicationDateTypeKey}}>
+                  {{dateType.label}}
+                </option>
+              {{/each}}
+            </select>
           </div>
         </div>
         <div class="auk-o-grid-col-2">

@@ -30,15 +30,15 @@ export default class SearchController extends Controller {
   @service router;
   @service currentSession;
 
-  sizeOptions = Object.freeze([5, 10, 20, 50, 100, 200]);
-  publicationDateTypes = Object.freeze([
-    {
-      key: 'openingDate',
-      label: 'Datum ontvangst',
-    },
+  sizeOptions = [5, 10, 20, 50, 100, 200];
+  publicationDateTypes = [
     {
       key: 'decisionDate',
       label: 'Datum beslissing',
+    },
+    {
+      key: 'openingDate',
+      label: 'Datum ontvangst',
     },
     // translationRequestDate
     {
@@ -65,14 +65,14 @@ export default class SearchController extends Controller {
       key: 'publicationDueDate',
       label: 'Limiet publicatie',
     },
-  ]);
+  ];
 
   @tracked searchText = '';
   @tracked mandatees;
   @tracked dateFrom;
   @tracked dateTo;
   @tracked date;
-  @tracked publicationDateTypeKey = 'openingDate';
+  @tracked publicationDateTypeKey = this.publicationDateTypes[0]?.key;
   @tracked searchTextBuffer = '';
   @tracked mandateesBuffer;
   @tracked dateFromBuffer;
@@ -88,13 +88,9 @@ export default class SearchController extends Controller {
     return this.router.currentRouteName === 'search.publication-flows';
   }
 
-  get selectedPublicationDateType() {
-    return this.publicationDateTypes.filter(dt => dt.key === this.publicationDateTypeKey)[0];
-  }
-
   @action
-  selectPublicationDateType(publicationDateType) {
-    this.publicationDateTypeKey = publicationDateType.key;
+  selectPublicationDateType(event) {
+    this.publicationDateTypeKey = event.target.value;
   }
 
   deserializeDate(date) {
