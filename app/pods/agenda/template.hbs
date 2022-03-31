@@ -10,8 +10,8 @@
   @meeting={{this.model.meeting}}
   @currentAgenda={{this.model.agenda}}
   @reverseSortedAgendas={{this.model.reverseSortedAgendas}}
-  @onStartLoading={{this.toggleIsLoading}}
-  @onStopLoading={{this.toggleIsLoading}}
+  @onStartLoading={{this.enableIsLoading}}
+  @onStopLoading={{this.disableIsLoading}}
   @refreshRoute={{this.refresh}}
 />
 {{#if this.isLoading}}
@@ -25,9 +25,9 @@
           @meeting={{this.model.meeting}}
           @currentAgenda={{this.model.agenda}}
           @reverseSortedAgendas={{this.model.reverseSortedAgendas}}
-          @isOpen={{this.sideNavIsOpen}}
-          @onCollapse={{this.toggleSideNav}}
-          @onOpen={{this.toggleSideNav}}
+          @isOpen={{this.isOpenSideNav}}
+          @onCollapse={{this.collapseSideNav}}
+          @onOpen={{this.openSideNav}}
         />
       </div>
     {{/unless}}
