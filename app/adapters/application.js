@@ -6,6 +6,8 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
   @service intl;
   @service toaster;
 
+  // Method override from RESTAdapter base class
+  // See: https://api.emberjs.com/ember-data/3.28/classes/RESTAdapter/methods/ajax?anchor=ajax
   // eslint-disable-next-line no-unused-vars
   async ajax(url, method) {
     try {

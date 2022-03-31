@@ -1,3 +1,5 @@
+import fetch from 'fetch';
+
 export const fetchClosestMeetingAndAgendaId = async function (date) {
   const response = await fetch(`/session-service/closestMeeting?date=${date}`, {
     method: 'GET',
