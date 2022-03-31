@@ -1,32 +1,38 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { task } from 'ember-concurrency';
+import CONSTANTS from '../../config/constants';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 /**
- * @argument {boolean} hideLabel Whether to hide the label of the dropdown
- * @argument {boolean} initializeEmptyKind Whether to initialize the dropdown to the default meeting kind, "Ministerraad", if no meeting kind was provided
- * @argument {function} setAction Action to perform once a meeting kind has been selected
- * @argument {MeetingKindModel} kind (Optional) The meeting kind to set the dropdown to
+ * @argument {Concept} selectedKind The meeting kind to set the dropdown to
+ * @argument {function} onChange Action to perform once a meeting kind has been selected
+ * @argument {boolean} disabled
  */
 export default class UtilsKindSelector extends Component {
   @service store;
-  @tracked kind = null;
-  @tracked options = this.store.peekAll('meeting-kind').sortBy('position'); // Meeting kinds get loaded in the agendas route, so we can just peek them here.
-  @tracked defaultKind = this.options.firstObject;
+
+  @tracked options;
 
   constructor() {
     super(...arguments);
 
-    this.kind = this.args.kind;
-    if (this.args.initializeEmptyKind && !this.args.kind) {
-      this.setAction(this.defaultKind);
-    }
+    this.loadKinds.perform();
   }
 
-  @action
-  setAction(kind) {
-    this.kind = kind;
-    this.args.setAction(kind);
+  @task
+  *loadKinds() {
+    this.options = yield this.store.query('concept', {
+      filter: {
+        'concept-schemes': {
+          ':uri:': CONSTANTS.CONCEPT_SCHEMES.VERGADERACTIVITEIT,
+        },
+        ':has-no:narrower': true, // Only the most specific concepts, i.e. the actual meeting kinds (so no "Annex")
+      },
+      include: 'broader,narrower',
+      'page[size]': PAGE_SIZE.CODE_LISTS,
+      sort: 'position',
+    });
   }
 }
