@@ -43,6 +43,10 @@
         >
           <table.content as |c|>
             <c.header>
+              {{! In order to enable search on partial id-numbers, "identification"
+              is indexed as "text". This makes that sorting on "identification"
+              currently can't be made to work without compromising the partial search
+              ability}}
               <ThSortable
                 @class="auk-table__col--1"
                 @currentSorting={{this.sort}}
