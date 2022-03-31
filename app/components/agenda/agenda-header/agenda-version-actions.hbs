@@ -24,18 +24,7 @@
       </Menu.Item>
       <Menu.Divider />
     {{/if}}
-    {{#if (not @meeting.isFinal)}}
-      {{#if (await this.isSessionClosable)}}
-        <Menu.Item
-          @skin="danger"
-          data-test-agenda-actions-lock-agenda
-          {{on "click" this.openConfirmCloseMeeting}}
-        >
-          {{t "agenda-close"}}
-        </Menu.Item>
-        <Menu.Divider />
-      {{/if}}
-    {{else}}
+    {{#if @meeting.isFinal}}
       <Menu.Item
         data-test-agenda-actions-unlock-agenda
         {{on "click" this.createDesignAgenda}}
@@ -44,8 +33,17 @@
         {{t "agenda-reopen"}}
       </Menu.Item>
       <Menu.Divider />
+    {{else if this.isSessionClosable}}
+      <Menu.Item
+        @skin="danger"
+        data-test-agenda-actions-lock-agenda
+        {{on "click" this.openConfirmCloseMeeting}}
+      >
+        {{t "agenda-close"}}
+      </Menu.Item>
+      <Menu.Divider />
     {{/if}}
-    {{#if (await this.canDeleteSelectedAgenda)}}
+    {{#if this.canDeleteSelectedAgenda}}
       <Menu.Item
         @skin="danger"
         data-test-agenda-actions-delete-agenda
@@ -54,7 +52,7 @@
         {{t "agenda-delete"}}
       </Menu.Item>
     {{/if}}
-    {{#if (await this.canReopenPreviousAgenda)}}
+    {{#if this.canReopenPreviousAgenda}}
       <Menu.Divider />
       <Menu.Item
         @skin="danger"
@@ -64,7 +62,7 @@
         {{t "agenda-reopen-previous-version"}}
       </Menu.Item>
     {{/if}}
-    {{#if (and (not (await this.designAgenda)) (not (await @meeting.isFinal)))}}
+    {{#if (and (not this.designAgenda) (not @meeting.isFinal))}}
       <Menu.Divider />
       <Menu.Item
         data-test-agenda-actions-create-new-design
