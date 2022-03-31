@@ -72,9 +72,8 @@ export default class PublicationFlowSearchRoute extends Route {
 
     const filter = {};
 
-    if (!isEmpty(params.searchText)) {
-      filter[searchModifier + textSearchKey] = params.searchText;
-    }
+    const searchText = isEmpty(params.searchText) ? '*' : params.searchText;
+    filter[searchModifier + textSearchKey] = searchText;
 
     if (!isEmpty(params.mandatees)) {
       filter['mandateeFirstNames,mandateeFamilyNames'] = params.mandatees;
@@ -103,10 +102,6 @@ export default class PublicationFlowSearchRoute extends Route {
     }
 
     this.lastParams.commit();
-
-    if (isEmpty(params.searchText)) {
-      return [];
-    }
 
     return search('publication-flows', params.page, params.size, params.sort, filter, ((searchData) => {
       const entry = searchData.attributes;

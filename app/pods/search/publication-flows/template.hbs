@@ -105,11 +105,7 @@
           </table.content>
         </DataTable>
       {{else}}
-        {{#if this.emptySearch}}
-          <WebComponents::VlAlert @message={{t "fill-in-search-term"}}/>
-        {{else}}
-          <WebComponents::VlAlert @message={{t "no-results-found-modify-term"}}/>
-        {{/if}}
+        <WebComponents::VlAlert @message={{t "no-results-found-modify-term"}}/>
       {{/if}}
     </div>
   </div>
