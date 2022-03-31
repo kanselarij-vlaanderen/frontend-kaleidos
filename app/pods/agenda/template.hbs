@@ -7,11 +7,9 @@
   )
 }}
 <Agenda::AgendaHeader
-  {{! data}}
   @meeting={{this.model.meeting}}
   @currentAgenda={{this.model.agenda}}
   @reverseSortedAgendas={{this.model.reverseSortedAgendas}}
-  {{! actions}}
   @onStartLoading={{this.toggleIsLoading}}
   @onStopLoading={{this.toggleIsLoading}}
   @refreshRoute={{this.refresh}}
