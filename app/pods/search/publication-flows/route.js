@@ -48,10 +48,12 @@ export default class PublicationFlowSearchRoute extends Route {
       this.transitionTo('agendas');
     }
     this.publicationStatuses = await this.store.query('publication-status', {
-      'page[size]': PAGE_SIZE.CODE_LISTS
+      'page[size]': PAGE_SIZE.CODE_LISTS,
+      sort: 'position',
     });
     this.regulationTypes = await this.store.query('regulation-type', {
-      'page[size]': PAGE_SIZE.CODE_LISTS
+      'page[size]': PAGE_SIZE.CODE_LISTS,
+      sort: 'position',
     });
   }
 
