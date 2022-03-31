@@ -81,9 +81,12 @@
                 {{moment-format row.openingDate}}
               </td>
               <td>
-                <Auk::Pill>
+                <Auk::StatusPill
+                  @step={{row.statusPillStep}}
+                  @status={{row.statusPillKey}}
+                >
                   {{row.statusLabel}}
-                </Auk::Pill>
+                </Auk::StatusPill>
               </td>
               <td class="auk-u-text-align--right">
                 <Auk::Button

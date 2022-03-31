@@ -8,9 +8,14 @@ import moment from 'moment';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import { inject as service } from '@ember/service';
+import {
+  getPublicationStatusPillKey,
+  getPublicationStatusPillStep
+} from 'frontend-kaleidos/utils/publication-auk';
 
 export default class PublicationFlowSearchRoute extends Route {
-  @service metrics;
+  @service store;
+
   queryParams = {
     regulationTypeIds: {
       refreshModel: true,
@@ -45,6 +50,17 @@ export default class PublicationFlowSearchRoute extends Route {
       } else {
         _case.attributes.sessionDates = moment(sessionDates);
       }
+    }
+  }
+
+  async postProcessStatus(pubFlow) {
+    const {
+      statusId,
+    } = pubFlow.attributes;
+    if (statusId) {
+      pubFlow.attributes.status = await this.store.findRecord('publication-status', statusId);
+      pubFlow.attributes.statusPillKey = getPublicationStatusPillKey(pubFlow.attributes.status);
+      pubFlow.attributes.statusPillStep = getPublicationStatusPillStep(pubFlow.attributes.status);
     }
   }
 
@@ -111,16 +127,13 @@ export default class PublicationFlowSearchRoute extends Route {
       return [];
     }
 
-
-    const {
-      postProcessDates,
-    } = this;
-    return search('publication-flows', params.page, params.size, params.sort, filter, (searchData) => {
+    return search('publication-flows', params.page, params.size, params.sort, filter, (async (searchData) => {
       const entry = searchData.attributes;
       entry.id = searchData.id;
-      postProcessDates(searchData);
+      this.postProcessDates(searchData);
+      await this.postProcessStatus(searchData);
       return entry;
-    });
+    }).bind(this));
   }
 
   async setupController(controller) {
