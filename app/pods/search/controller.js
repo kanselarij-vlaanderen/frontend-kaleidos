@@ -80,7 +80,7 @@ export default class SearchController extends Controller {
   @tracked dateBuffer;
   @tracked popoverShown; // TODO, this is for a tooltip, this should be handled elsewhere
 
-  get userMaySearchPubflows() {
+  get userMaySearchPublicationFlows() {
     return this.currentSession.may('search-publication-flows');
   }
 

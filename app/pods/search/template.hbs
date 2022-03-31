@@ -1,14 +1,52 @@
 {{page-title (t "search")}}
 <div class="auk-u-maximize-height auk-scroll-wrapper">
   <Auk::Navbar @skin="gray-100">
-    <Auk::Toolbar @auto={{true}}>
-      <Auk::Toolbar::Group @position="left">
-        <Auk::Toolbar::Item>
+    <Auk::Toolbar @auto={{true}} as |Toolbar|>
+      <Toolbar.Group @position="left" as |Group|>
+        <Group.Item>
           <h2 data-test-route-search-title class="auk-toolbar__title">
             {{capitalize (t "search")}}
           </h2>
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
+        </Group.Item>
+        <Group.Item>
+          <Auk::Tabs as |Tabs|>
+            {{! Page-number reset when clicking a search type.
+                It is assumed that users don't want
+                to go back and forth between search results
+                for the different types while keeping the
+                page-number. }}
+            <Tabs.Tab
+              @route="search.agenda-items"
+              @current-when="search.agenda-items"
+              @query={{hash page=0}}
+            >
+              {{t "agendaitems"}}
+            </Tabs.Tab>
+            <Tabs.Tab
+              @route="search.cases"
+              @current-when="search.cases"
+              @query={{hash page=0}}
+            >
+              {{t "cases"}}
+            </Tabs.Tab>
+            <Tabs.Tab
+              @route="search.newsletter-infos"
+              @current-when="search.newsletter-infos"
+              @query={{hash page=0}}
+            >
+              {{t "newsletter"}}
+            </Tabs.Tab>
+            {{#if this.userMaySearchPublicationFlows}}
+              <Tabs.Tab
+                @route="search.publication-flows"
+                @query={{hash page=0}}
+              >
+                {{t "publications"}}
+              </Tabs.Tab>
+            {{/if}}
+          </Auk::Tabs>
+        </Group.Item>
+      </Toolbar.Group>
     </Auk::Toolbar>
   </Auk::Navbar>
 
@@ -134,49 +172,6 @@
         </div>
       </div>
       {{!-- template-lint-enable no-redundant-fn --}}
-      <Auk::Navbar class="auk-u-p-0 auk-u-mb-6">
-        <Auk::Toolbar>
-          <Auk::Toolbar::Group @position="left">
-            <Auk::Toolbar::Item>
-              <Auk::Tabs>
-                {{! Page-number reset when clicking a search type. It is assumed that users don't want
-                      to go back and forth between search results for the different types while keeping the
-                      page-number. }}
-                <Auk::Tab
-                  @route="search.agenda-items"
-                  @current-when="search.agenda-items"
-                  @query={{hash page=0}}
-                >
-                  {{t "agendaitems"}}
-                </Auk::Tab>
-                <Auk::Tab
-                  @route="search.cases"
-                  @current-when="search.cases"
-                  @query={{hash page=0}}
-                >
-                  {{t "cases"}}
-                </Auk::Tab>
-                <Auk::Tab
-                  @route="search.newsletter-infos"
-                  @current-when="search.newsletter-infos"
-                  @query={{hash page=0}}
-                >
-                  {{t "newsletter"}}
-                </Auk::Tab>
-                {{#if this.userMaySearchPubflows}}
-                  <Auk::Tab
-                    @route="search.publication-flows"
-                    @query={{hash page=0}}
-                  >
-                    {{t "publications"}}
-                  </Auk::Tab>
-                {{/if}}
-              </Auk::Tabs>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-        </Auk::Toolbar>
-      </Auk::Navbar>
-
       {{outlet}}
     </div>
   </div>
