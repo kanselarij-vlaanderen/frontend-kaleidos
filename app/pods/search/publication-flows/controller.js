@@ -29,7 +29,6 @@ export default class PublicationFlowSearchController extends Controller {
   @tracked regulationTypeIds = [];
   @tracked publicationStatusIds = [];
   @tracked status;
-  // @tracked emptySearch;
 
   constructor() {
     super(...arguments);

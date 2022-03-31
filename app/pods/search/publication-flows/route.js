@@ -1,5 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import moment from 'moment';
 import search from 'frontend-kaleidos/utils/mu-search';
@@ -123,6 +124,17 @@ export default class PublicationFlowSearchRoute extends Route {
     if (controller.page !== this.lastParams.committed.page) {
       controller.page = this.lastParams.committed.page;
     }
+  }
+
+  @action
+  loading(transition) {
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const controller = this.controllerFor(this.routeName);
+    controller.isLoadingModel = true;
+    transition.promise.finally(() => {
+      controller.isLoadingModel = false;
+    });
+    return true;
   }
 
   postProcessStatus(attributes) {
