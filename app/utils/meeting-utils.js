@@ -1,3 +1,5 @@
+import fetch from 'fetch';
+
 // TODO once codelists are correctly used in the frontend
 // we should check whether kindUri has a broader type 'Annex'
 export const isAnnexMeetingKind = function (kindUri) {
