@@ -38,31 +38,6 @@ export default class PublicationFlowSearchRoute extends Route {
     },
   };
 
-  postProcessDates(_case) {
-    const {
-      sessionDates,
-    } = _case.attributes;
-    if (sessionDates) {
-      if (Array.isArray(sessionDates)) {
-        const sorted = sessionDates.sort();
-        _case.attributes.sessionDates = sorted[sorted.length - 1];
-      } else {
-        _case.attributes.sessionDates = moment(sessionDates);
-      }
-    }
-  }
-
-  async postProcessStatus(pubFlow) {
-    const {
-      statusId,
-    } = pubFlow.attributes;
-    if (statusId) {
-      pubFlow.attributes.status = await this.store.findRecord('publication-status', statusId);
-      pubFlow.attributes.statusPillKey = getPublicationStatusPillKey(pubFlow.attributes.status);
-      pubFlow.attributes.statusPillStep = getPublicationStatusPillStep(pubFlow.attributes.status);
-    }
-  }
-
   constructor() {
     super(...arguments);
     this.lastParams = new Snapshot();
@@ -133,16 +108,15 @@ export default class PublicationFlowSearchRoute extends Route {
       return [];
     }
 
-    return search('publication-flows', params.page, params.size, params.sort, filter, (async (searchData) => {
+    return search('publication-flows', params.page, params.size, params.sort, filter, ((searchData) => {
       const entry = searchData.attributes;
       entry.id = searchData.id;
-      this.postProcessDates(searchData);
-      await this.postProcessStatus(searchData);
+      this.postProcessStatus(entry);
       return entry;
     }).bind(this));
   }
 
-  async setupController(controller) {
+  setupController(controller) {
     super.setupController(...arguments);
     controller.emptySearch = isEmpty(this.paramsFor('search').searchText);
 
@@ -151,6 +125,16 @@ export default class PublicationFlowSearchRoute extends Route {
 
     if (controller.page !== this.lastParams.committed.page) {
       controller.page = this.lastParams.committed.page;
+    }
+  }
+
+  postProcessStatus(attributes) {
+    const statusId = attributes.statusId;
+    if (statusId) {
+      const status = this.publicationStatuses.find((status) => status.id == statusId);
+      attributes.status = status;
+      attributes.statusPillKey = getPublicationStatusPillKey(status);
+      attributes.statusPillStep = getPublicationStatusPillStep(status);
     }
   }
 }
