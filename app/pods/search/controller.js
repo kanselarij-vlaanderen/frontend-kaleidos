@@ -28,6 +28,7 @@ export default class SearchController extends Controller {
   };
 
   @service router;
+  @service currentSession;
 
   sizeOptions = Object.freeze([5, 10, 20, 50, 100, 200]);
   publicationDateTypes = Object.freeze([
@@ -78,6 +79,10 @@ export default class SearchController extends Controller {
   @tracked dateToBuffer;
   @tracked dateBuffer;
   @tracked popoverShown; // TODO, this is for a tooltip, this should be handled elsewhere
+
+  get userMaySearchPubflows() {
+    return this.currentSession.may('search-publication-flows');
+  }
 
   get isSearchingPublicationFlows() {
     return this.router.currentRouteName === 'search.publication-flows';

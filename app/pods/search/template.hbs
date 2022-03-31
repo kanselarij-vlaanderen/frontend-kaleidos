@@ -163,12 +163,14 @@
                 >
                   {{t "newsletter-info"}}
                 </Auk::Tab>
-                <Auk::Tab
-                  @route="search.publication-flows"
-                  @query={{hash page=0}}
-                >
-                  {{t "publications"}}
-                </Auk::Tab>
+                {{#if this.userMaySearchPubflows}}
+                  <Auk::Tab
+                    @route="search.publication-flows"
+                    @query={{hash page=0}}
+                  >
+                    {{t "publications"}}
+                  </Auk::Tab>
+                {{/if}}
               </Auk::Tabs>
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>

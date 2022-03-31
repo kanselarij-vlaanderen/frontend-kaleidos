@@ -15,6 +15,7 @@ import {
 
 export default class PublicationFlowSearchRoute extends Route {
   @service store;
+  @service currentSession;
 
   queryParams = {
     regulationTypeIds: {
@@ -70,6 +71,9 @@ export default class PublicationFlowSearchRoute extends Route {
   }
 
   async beforeModel() {
+    if (!this.currentSession.may('search-publication-flows')) {
+      this.transitionTo('agendas');
+    }
     this.publicationStatuses = await this.store.findAll('publication-status'); // TODO convert to not use findAll
     this.regulationTypes = await this.store.findAll('regulation-type');
   }
