@@ -42,7 +42,7 @@
     "@glimmer/component": "1.0.0",
     "@glimmer/tracking": "1.0.0",
     "@kanselarij-vlaanderen/au-kaleidos-css": "2.0.3",
-    "@kanselarij-vlaanderen/au-kaleidos-icons": "2.1.0",
+    "@kanselarij-vlaanderen/au-kaleidos-icons": "git+https://github.com/kanselarij-vlaanderen/au-kaleidos-icons.git#3c9da275e5637adb79d5a91b2cac9f7a35ab8e60",
     "@lblod/ember-acmidm-login": "~1.1.1",
     "@lblod/ember-mock-login": "0.5.0-beta",
     "@lblod/ember-rdfa-editor": "0.41.0-rc1.2",

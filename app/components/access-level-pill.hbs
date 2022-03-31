@@ -7,7 +7,7 @@
         {{#if (eq this.accessLevelLabel "Intern secretarie")}}
         <Auk::Pill
           @skin="active"
-          @icon="users"
+          @icon="intern-secretarie"
           data-test-access-level-pill
         >
           Intern Secretarie
@@ -15,7 +15,7 @@
         {{else if (and (and (eq this.accessLevelLabel "Intern Regering")(eq @isDesignAgenda false)) (eq @isNew false))}}
         <Auk::Pill
           @skin="active"
-          @icon="users"
+          @icon="intern-regering"
           data-test-access-level-pill
         >
           {{this.accessLevelLabel}}
@@ -23,7 +23,7 @@
         {{else if (and (eq this.accessLevelLabel "Intern Regering")(eq @isVersion true))}}
         <Auk::Pill
           @skin="active"
-          @icon="users"
+          @icon="intern-regering"
           data-test-access-level-pill
         >
           {{this.accessLevelLabel}}
@@ -31,15 +31,47 @@
         {{else if (and (and (eq this.accessLevelLabel "Intern Overheid")(eq @isFinal true)) (eq @isNew false))}}
         <Auk::Pill
           @skin="active"
-          @icon="users"
+          @icon="intern-overheid"
           data-test-access-level-pill
         >
           {{this.accessLevelLabel}}
         </Auk::Pill>
-        {{else}}
+        {{else if (and (and (eq this.accessLevelLabel "Publiek")(eq @isFinal true)) (eq @isNew false))}}
+        <Auk::Pill
+          @skin="active"
+          @icon="public"
+          data-test-access-level-pill
+        >
+          {{this.accessLevelLabel}}
+        </Auk::Pill>
+        {{else if (eq this.accessLevelLabel "Ministerraad")}}
         <Auk::Pill
           @skin="active-future"
-          @icon="users"
+          @icon="ministerraad"
+          data-test-access-level-pill
+        >
+          {{this.accessLevelLabel}}
+        </Auk::Pill>
+        {{else if (eq this.accessLevelLabel "Intern Overheid")}}
+        <Auk::Pill
+          @skin="active-future"
+          @icon="intern-overheid"
+          data-test-access-level-pill
+        >
+          {{this.accessLevelLabel}}
+        </Auk::Pill>
+        {{else if (eq this.accessLevelLabel "Intern Regering")}}
+        <Auk::Pill
+          @skin="active-future"
+          @icon="intern-regering"
+          data-test-access-level-pill
+        >
+          {{this.accessLevelLabel}}
+        </Auk::Pill>
+        {{else if (eq this.accessLevelLabel "Publiek")}}
+        <Auk::Pill
+          @skin="active-future"
+          @icon="public"
           data-test-access-level-pill
         >
           {{this.accessLevelLabel}}
@@ -48,7 +80,7 @@
       {{else}}
       <Auk::Pill
         @skin="active"
-        @icon="users"
+        @icon="intern-secretarie"
         data-test-access-level-pill
       >
         Intern Secretarie
