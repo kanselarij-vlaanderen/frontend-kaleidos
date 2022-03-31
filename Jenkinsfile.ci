@@ -33,7 +33,11 @@ pipeline {
                 sh "cp .dist.env .env"
                 sh "rm -rf kaleidos-project 2> /dev/null"
                 //sh "eval `ssh-agent -s` && ssh-add /var/lib/jenkins/.ssh/id_rsa_github_kaleidos && git clone -b development https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
-                sh "git clone -b development https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
+                //sh "git clone -b development https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
+                sh "git clone https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
+                sh "cd kaleidos-project"
+                sh "if [ $(git rev-parse --verify --quiet ${branch}) ]; then git checkout ${branch}; fi" // Checkout branch in backend if it exists
+                sh "cd .."
             }
         }
         stage('Prepare for automated tests') {
