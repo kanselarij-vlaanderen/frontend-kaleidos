@@ -17,12 +17,17 @@
           <Utils::ModelSelector
             data-test-new-meeting-related-main-meeting
             @modelName="meeting"
-            @searchField="numberRepresentation"
-            @propertyToShow="label"
+            @searchField="number-representation"
             @sortField="-planned-start"
             @selectedItems={{this.selectedMainMeeting}}
             @selectModel={{this.selectMainMeeting}}
-          />
+            as |model|
+          >
+            {{model.kind.printLabel}}
+            {{t "of"}}
+            {{moment-format model.plannedStart "DD-MM-YYYY"}}
+            ({{model.numberRepresentation}})
+          </Utils::ModelSelector>
         </div>
       </div>
     {{else}}

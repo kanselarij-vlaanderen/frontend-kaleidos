@@ -3,7 +3,6 @@ import { PromiseArray, PromiseObject } from '@ember-data/store/-private';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import { KALEIDOS_START_DATE } from 'frontend-kaleidos/config/config';
-import moment from 'moment';
 import {
   sortDocumentContainers
 } from 'frontend-kaleidos/utils/documents';
@@ -44,12 +43,6 @@ export default Model.extend({
   }),
 
   themisPublicationActivities: hasMany('themis-publication-activity'),
-
-  label: computed('plannedStart', 'kind', 'numberRepresentation', function() {
-    const date = moment(this.plannedStart).format('DD-MM-YYYY');
-    const kindLabel = this.get('kind').get('altLabel') || this.get('kind').get('label') || '';
-    return `${kindLabel} ${this.intl.t('of')} ${date} (${this.numberRepresentation})`;
-  }),
 
   // This computed does not seem to be used anywhere
   documentContainers: computed('pieces.@each.name', 'id', 'store', function() {
