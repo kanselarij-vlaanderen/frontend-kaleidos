@@ -16,6 +16,8 @@ import {
  * @argument {Meeting} meeting
  * @argument {Agenda} currentAgenda
  * @argument {function} didApproveAgendaitems
+ * @argument onStartLoading
+ * @argument onStopLoading
  */
 export default class AgendaAgendaHeaderAgendaActions extends Component {
   @service store;
@@ -241,7 +243,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @action
   async approveAllAgendaitems() {
     this.showConfirmApprovingAllAgendaitems = false;
-    this.toggleLoadingMessage(this.intl.t('approve-all-agendaitems-message'));
+    this.args.onStartLoading(this.intl.t('approve-all-agendaitems-message'));
     const allAgendaitemsNotOk = await this.args.currentAgenda.get(
       'allAgendaitemsNotOk'
     );
@@ -252,7 +254,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
         await agendaitem.rollbackAttributes();
       }
     }
-    this.toggleLoadingMessage(null);
+    this.args.onStopLoading();
     this.args.didApproveAgendaitems();
   }
 

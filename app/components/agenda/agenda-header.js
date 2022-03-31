@@ -24,13 +24,26 @@ export default class AgendaHeader extends Component {
    * @param {String} message: the message to show. If given, the text " even geduld aub..." will always be appended
    */
   @action
-  toggleLoadingMessage(message) {
+  setLoadingMessage(message) {
     if (message) {
-      this.loadingMessage = `${message} ${this.intl.t('please-be-patient')}`;
+      this.loadingMessage = `${message} ${this.intl.t(
+        'please-be-patient'
+      )}`;
     } else {
       this.loadingMessage = null;
     }
-    this.args.loading(); // hides the agenda overview/sidebar
-    this.showLoadingOverlay = !this.showLoadingOverlay; // blocks the use of buttons
+    if (typeof this.args.onStartLoading === 'function') {
+      this.args.onStartLoading(); // hides the agenda overview/sidebar
+    }
+    this.showLoadingOverlay = true; // blocks the use of buttons
+  }
+
+  @action
+  clearLoadingMessage() {
+    this.loadingMessage = null;
+    this.showLoadingOverlay = false;
+    if (typeof this.args.onStopLoading === 'function') {
+      this.args.onStopLoading();
+    }
   }
 }

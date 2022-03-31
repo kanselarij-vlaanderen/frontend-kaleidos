@@ -12,7 +12,8 @@
   @currentAgenda={{this.model.agenda}}
   @reverseSortedAgendas={{this.model.reverseSortedAgendas}}
   {{! actions}}
-  @loading={{this.toggleIsLoading}}
+  @onStartLoading={{this.toggleIsLoading}}
+  @onStopLoading={{this.toggleIsLoading}}
   @refreshRoute={{this.refresh}}
 />
 {{#if (not this.isLoading)}}

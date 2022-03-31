@@ -76,15 +76,6 @@
   </Auk::DropdownMenu>
 {{/if}}
 
-{{#if this.showLoadingOverlay}}
-  <Auk::Modal @size="medium">
-    <Auk::Modal::Header @title={{t "loading-text"}} @closeable={{false}} />
-    <Auk::Modal::Body>
-      <Auk::Loader @message={{this.loadingMessage}} />
-    </Auk::Modal::Body>
-  </Auk::Modal>
-{{/if}}
-
 {{! new agenda actions with single pop-up for confirmation }}
 
 {{#if this.showConfirmForApprovingAgenda}}

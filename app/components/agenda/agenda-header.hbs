@@ -40,8 +40,8 @@
             @currentAgenda={{@currentAgenda}}
             @reverseSortedAgendas={{@reverseSortedAgendas}}
             @didCloseMeeting={{@refreshRoute}}
-            @onStartLoading={{@loading}}
-            @onStopLoading={{@loading}}
+            @onStartLoading={{this.setLoadingMessage}}
+            @onStopLoading={{this.clearLoadingMessage}}
           />
         </Group.Item>
         <Group.Item>
@@ -49,6 +49,8 @@
             @meeting={{@meeting}}
             @currentAgenda={{@currentAgenda}}
             @didApproveAgendaitems={{@refreshRoute}}
+            @onStartLoading={{this.setLoadingMessage}}
+            @onStopLoading={{this.clearLoadingMessage}}
           />
         </Group.Item>
       </Toolbar.Group>

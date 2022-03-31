@@ -7,16 +7,18 @@ import { all } from 'rsvp'; // TODO KAS-2399 better way then this ?
 
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
+/**
+ * A component that contains most of the meeting/agenda actions that interact with a backend service.
+ * This contains all actions of the left button in the right toolbar of Agenda::AgendaHeader component
+ *
+ * @argument meeting: the viewed meeting
+ * @argument currentAgenda: the selected agenda
+ * @argument reverseSortedAgendas: the agendas of the meeting, reverse sorted on serial number
+ * @argument didCloseMeeting: action to take after closing a meeting
+ * @argument onStartLoading
+ * @argument onStopLoading
+ */
 export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
-  /**
-   * A component that contains most of the meeting/agenda actions that interact with a backend service.
-   * This contains all actions of the left button in the right toolbar of Agenda::AgendaHeader component
-   *
-   * @argument meeting: the viewed meeting
-   * @argument currentAgenda: the selected agenda
-   * @argument reverseSortedAgendas: the agendas of the meeting, reverse sorted on serial number
-   * @argument didCloseMeeting: action to take after closing a meeting
-   */
   @service store;
   @service currentSession;
   @service agendaService;
@@ -155,32 +157,6 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     this.piecesToDeleteReopenPreviousAgenda = sortPieces(pieces);
   }
 
-  /**
-   * This method will toggle the AUOverlay modal component with a custom message
-   * message = null will instead show a default message in the loader, and clear the local state of the message
-   * @param {String} message: the message to show. If given, the text " even geduld aub..." will always be appended
-   */
-  setLoadingMessage(message) {
-    if (message) {
-      this.loadingMessage = `${message} ${this.intl.t(
-        'please-be-patient'
-      )}`;
-    } else {
-      this.loadingMessage = null;
-    }
-    if (typeof this.args.onStartLoading === 'function') {
-      this.args.onStartLoading(); // hides the agenda overview/sidebar
-    }
-    this.showLoadingOverlay = !this.showLoadingOverlay; // blocks the use of buttons
-  }
-
-  clearLoadingMessage() {
-    this.loadingMessage = null;
-    if (typeof this.args.onStopLoading === 'function') {
-      this.args.onStopLoading();
-    }
-  }
-
   // TODO KAS-2399 could we get rid of this when we reload the model with agendaitems includes?
   /**
    * After a new designagenda is created or an agenda deleted in the service we need to update the agenda activities
@@ -207,7 +183,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
    */
   @action
   async createDesignAgenda() {
-    this.setLoadingMessage(this.intl.t('agenda-add-message'));
+    this.args.onStartLoading(this.intl.t('agenda-add-message'));
     try {
       const newAgenda = await this.agendaService.createNewDesignAgenda(
         this.args.meeting
@@ -215,7 +191,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       // After the agenda has been created, we want to update the agendaitems of activities
       await this.reloadAgendaitemsOfAgenda(newAgenda);
       await this.reloadMeeting();
-      this.clearLoadingMessage();
+      this.args.onStopLoading();
       return this.router.transitionTo(
         'agenda.agendaitems',
         this.args.meeting.id,
@@ -234,7 +210,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
           this.intl.t('warning-title')
         );
       }
-      this.clearLoadingMessage();
+      this.args.onStopLoading();
     }
   }
 
@@ -262,7 +238,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   @action
   async approveCurrentAgenda() {
     this.showConfirmForApprovingAgenda = false;
-    this.setLoadingMessage(this.intl.t('agenda-approving-text'));
+    this.args.onStartLoading(this.intl.t('agenda-approving-text'));
     if (!this.args.currentAgenda.isDesignAgenda) {
       this.showNotAllowedToast();
       return;
@@ -275,7 +251,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       await this.reloadAgenda(this.args.currentAgenda);
       await this.reloadAgendaitemsOfAgenda(this.args.currentAgenda);
       await this.reloadMeeting();
-      this.clearLoadingMessage();
+      this.args.onStopLoading();
       return this.router.transitionTo(
         'agenda.agendaitems',
         this.args.meeting.id,
@@ -286,7 +262,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         this.intl.t('error-approve-agenda', { message: error.message }),
         this.intl.t('warning-title')
       );
-      this.clearLoadingMessage();
+      this.args.onStopLoading();
     }
   }
 
@@ -312,7 +288,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   @action
   async approveCurrentAgendaAndCloseMeeting() {
     this.showConfirmForApprovingAgendaAndClosingMeeting = false;
-    this.setLoadingMessage(
+    this.args.onStartLoading(
       this.intl.t('agenda-approve-and-close-message')
     );
     if (!this.args.currentAgenda.isDesignAgenda) {
@@ -331,7 +307,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         this.intl.t('warning-title')
       );
     } finally {
-      this.clearLoadingMessage();
+      this.args.onStopLoading();
       this.args.didCloseMeeting();
     }
   }
@@ -352,7 +328,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   @action
   async closeMeeting() {
     this.showConfirmForClosingMeeting = false;
-    this.setLoadingMessage(this.intl.t('agenda-close-message'));
+    this.args.onStartLoading(this.intl.t('agenda-close-message'));
     if (!this.isSessionClosable) {
       this.showNotAllowedToast();
       return;
@@ -366,7 +342,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       await this.reloadAgenda(lastApprovedAgenda);
       await this.reloadAgendaitemsOfAgenda(lastApprovedAgenda);
       await this.reloadMeeting();
-      this.clearLoadingMessage();
+      this.args.onStopLoading();
       if (isDesignAgenda) {
         return this.router.transitionTo(
           'agenda.agendaitems',
@@ -380,7 +356,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         this.intl.t('error-close-meeting', { message: error.message }),
         this.intl.t('warning-title')
       );
-      this.clearLoadingMessage();
+      this.args.onStopLoading();
     }
   }
 
@@ -401,7 +377,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   @action
   async deleteSelectedAgenda() {
     this.showConfirmForDeletingSelectedAgenda = false;
-    this.setLoadingMessage(this.intl.t('agenda-delete-message'));
+    this.args.onStartLoading(this.intl.t('agenda-delete-message'));
     if (!this.canDeleteSelectedAgenda) {
       this.showNotAllowedToast();
       return;
@@ -415,7 +391,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         // Data reloading
         await this.reloadAgendaitemsOfAgenda(lastapprovedAgenda);
         await this.reloadMeeting();
-        this.clearLoadingMessage();
+        this.args.onStopLoading();
         return this.router.transitionTo(
           'agenda.agendaitems',
           this.args.meeting.id,
@@ -423,10 +399,10 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         );
       }
       // if there is no previous agenda, the meeting should have been deleted
-      this.clearLoadingMessage();
+      this.args.onStopLoading();
       this.router.transitionTo('agendas.overview');
     } catch (error) {
-      this.clearLoadingMessage();
+      this.args.onStopLoading();
       this.toaster.error(
         this.intl.t('error-delete-agenda', { message: error.message }),
         this.intl.t('warning-title')
@@ -452,7 +428,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   @action
   async reopenPreviousAgenda() {
     this.showConfirmForReopeningPreviousAgenda = false;
-    this.setLoadingMessage(
+    this.args.onStartLoading(
       this.intl.t('agenda-reopen-previous-version-message')
     );
     if (!this.canReopenPreviousAgenda) {
@@ -476,7 +452,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       await this.reloadAgenda(lastApprovedAgenda);
       await this.reloadAgendaitemsOfAgenda(lastApprovedAgenda);
       await this.reloadMeeting();
-      this.clearLoadingMessage();
+      this.args.onStopLoading();
       return this.router.transitionTo(
         'agenda.agendaitems',
         this.args.meeting.id,
@@ -487,7 +463,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         this.intl.t('error-reopen-previous-agenda', { message: error.message }),
         this.intl.t('warning-title')
       );
-      this.clearLoadingMessage();
+      this.args.onStopLoading();
     }
   }
 
