@@ -21,7 +21,11 @@
           <div class="auk-form-group">
             <div class="auk-o-flex auk-o-flex--align-baseline">
               <Auk::Label for="dossierId" class="auk-u-mr">
-                {{capitalize (t "keyword")}}
+                {{#if this.isSearchingPublicationFlows}}
+                  {{capitalize (t "search-term")}}
+                {{else}}
+                  {{capitalize (t "keyword")}}
+                {{/if}}
               </Auk::Label>
               <span>
                 <Auk::Icon
@@ -58,7 +62,7 @@
         {{#if this.isSearchingPublicationFlows}}
           <div class="auk-o-grid-col-2">
             <div class="auk-form-group auk-u-position-relative">
-              <Auk::Label>{{t "date"}}</Auk::Label>
+              <Auk::Label>{{capitalize (t "search-by-date")}}</Auk::Label>
               <PowerSelect
                 @options={{this.publicationDateTypes}}
                 @selected={{this.selectedPublicationDateType}}

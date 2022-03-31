@@ -1016,5 +1016,7 @@
   "request-it": "Aanvragen",
   "delete-request-message": "Bent u zeker dat u de aanvraag wil verwijderen?",
   "delete-request": "Aanvraag verwijderen",
-  "who-proof-reads": "Wie leest na?"
+  "who-proof-reads": "Wie leest na?",
+  "search-term": "zoekterm",
+  "search-by-date": "zoeken op datum"
 }
