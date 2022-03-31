@@ -36,7 +36,7 @@ pipeline {
                 //sh "git clone -b development https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
                 sh "git clone https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
                 sh "cd kaleidos-project"
-                sh "if [ \$(git rev-parse --verify --quiet ${branch}) ]; then git checkout ${branch}; fi" // Checkout branch in backend if it exists
+                sh "if [ \$(git rev-parse --verify --quiet ${env.GIT_LOCAL_BRANCH}) ]; then git checkout ${env.GIT_LOCAL_BRANCH}; fi" // Checkout branch in backend if it exists
                 sh "cd .."
             }
         }
