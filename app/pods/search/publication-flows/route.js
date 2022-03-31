@@ -1,9 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import Route from '@ember/routing/route';
-import {
-  isEmpty,
-  isPresent
-} from '@ember/utils';
+import { isEmpty } from '@ember/utils';
 import moment from 'moment';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';

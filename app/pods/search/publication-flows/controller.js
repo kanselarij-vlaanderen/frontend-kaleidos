@@ -51,19 +51,21 @@ export default class PublicationFlowSearchController extends Controller {
     } else {
       this.regulationTypeIds.splice(this.regulationTypeIds.indexOf(regulationType.id), 1);
     }
-    this.regulationTypeIds = this.regulationTypeIds;
+    // At the time of writing, ember query-paramters of the type "array" don't
+    // have support for TrackedArray, thus, when assuming we keep the automatic `refreshModel: true`
+    // approach, reassigning the array in order to trigger a refresh seems like the way to go.
+    this.regulationTypeIds = this.regulationTypeIds; // eslint-disable-line no-self-assign
   }
 
   @action
   togglePublicationStatus(publicationStatus, event) {
     const checked = event.target.checked;
-    debugger
     if (checked) {
       this.publicationStatusIds.push(publicationStatus.id);
     } else {
       this.publicationStatusIds.splice(this.publicationStatusIds.indexOf(publicationStatus.id), 1);
     }
-    this.publicationStatusIds = this.publicationStatusIds;
+    this.publicationStatusIds = this.publicationStatusIds; // eslint-disable-line no-self-assign
   }
 
   @action
