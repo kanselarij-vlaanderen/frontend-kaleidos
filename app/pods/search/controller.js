@@ -78,6 +78,7 @@ export default class SearchController extends Controller {
   @tracked dateFromBuffer;
   @tracked dateToBuffer;
   @tracked dateBuffer;
+  @tracked publicationDateTypeKeyBuffer = this.publicationDateTypeKey;
   @tracked popoverShown; // TODO, this is for a tooltip, this should be handled elsewhere
 
   get userMaySearchPublicationFlows() {
@@ -90,7 +91,7 @@ export default class SearchController extends Controller {
 
   @action
   selectPublicationDateType(event) {
-    this.publicationDateTypeKey = event.target.value;
+    this.publicationDateTypeKeyBuffer = event.target.value;
   }
 
   deserializeDate(date) {
@@ -117,14 +118,10 @@ export default class SearchController extends Controller {
     this.mandatees = this.mandateesBuffer;
     if (this.isSearchingPublicationFlows) {
       this.date = this.serializeDate(this.dateBuffer);
+      this.publicationDateTypeKey = this.publicationDateTypeKeyBuffer;
     } else {
       this.dateFrom = this.serializeDate(this.dateFromBuffer);
       this.dateTo = this.serializeDate(this.dateToBuffer);
     }
-  }
-
-  @action
-  navigateToCase(_case) {
-    this.transitionToRoute('cases.case.subcases', _case.id);
   }
 }

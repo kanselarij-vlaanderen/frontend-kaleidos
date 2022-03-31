@@ -110,7 +110,7 @@
               {{#each this.publicationDateTypes as |dateType|}}
                 <option
                   value={{dateType.key}}
-                  selected={{eq dateType.key this.publicationDateTypeKey}}>
+                  selected={{eq dateType.key this.publicationDateTypeKeyBuffer}}>
                   {{dateType.label}}
                 </option>
               {{/each}}
