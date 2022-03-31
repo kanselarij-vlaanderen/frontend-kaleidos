@@ -34,6 +34,7 @@
     </Toolbar.Group>
     {{#if this.currentSession.isViewer}}
       <Toolbar.Group @position="right" as |Group|>
+        <Group.Item>
         <Agenda::AgendaHeader::AgendaVersionActions
           @meeting={{@meeting}}
           @currentAgenda={{@currentAgenda}}
@@ -42,6 +43,7 @@
           @onStartLoading={{@loading}}
           @onStopLoading={{@loading}}
         />
+        </Group.Item>
         <Group.Item>
           <Auk::DropdownMenu
             @skin="secondary"
