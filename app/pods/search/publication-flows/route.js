@@ -9,6 +9,7 @@ import {
   getPublicationStatusPillKey,
   getPublicationStatusPillStep
 } from 'frontend-kaleidos/utils/publication-auk';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class PublicationFlowSearchRoute extends Route {
   @service store;
@@ -71,8 +72,12 @@ export default class PublicationFlowSearchRoute extends Route {
     if (!this.currentSession.may('search-publication-flows')) {
       this.transitionTo('agendas');
     }
-    this.publicationStatuses = await this.store.findAll('publication-status'); // TODO convert to not use findAll
-    this.regulationTypes = await this.store.findAll('regulation-type');
+    this.publicationStatuses = await this.store.query('publication-status', {
+      'page[size]': PAGE_SIZE.CODE_LISTS
+    });
+    this.regulationTypes = await this.store.query('regulation-type', {
+      'page[size]': PAGE_SIZE.CODE_LISTS
+    });
   }
 
   model(filterParams) {

@@ -1,5 +1,3 @@
-
-
 export const PAGE_SIZE = {
   PUBLICATION_FLOWS: 10,
   NOTAS: 50,
