@@ -21,8 +21,9 @@ export default class MeetingEditMeetingComponent extends Component {
   constructor() {
     super(...arguments);
 
+    this.initializeKind.perform();
+
     this.meetingYear = this.args.meeting.plannedStart.getFullYear();
-    this.kind = this.args.meeting.kind;
     this.startDate = this.args.meeting.plannedStart;
     this.extraInfo = this.args.meeting.extraInfo;
     this.meetingNumber = this.args.meeting.number;
@@ -47,6 +48,11 @@ export default class MeetingEditMeetingComponent extends Component {
   set meetingNumber(meetingNumber) {
     this._meetingNumber = meetingNumber;
     this._numberRepresentation = null;
+  }
+
+  @task
+  *initializeKind() {
+    this.kind = yield this.args.meeting.kind;
   }
 
   @task({ drop: true })
