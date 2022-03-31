@@ -1018,5 +1018,6 @@
   "delete-request": "Aanvraag verwijderen",
   "who-proof-reads": "Wie leest na?",
   "search-term": "zoekterm",
-  "search-by-date-type": "zoeken op datumtype"
+  "search-by-date-type": "zoeken op datumtype",
+  "search-publication": "zoek publicatie"
 }
