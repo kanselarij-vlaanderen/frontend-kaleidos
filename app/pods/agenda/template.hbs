@@ -14,7 +14,10 @@
   @onStopLoading={{this.toggleIsLoading}}
   @refreshRoute={{this.refresh}}
 />
-{{#if (not this.isLoading)}}
+{{#if this.isLoading}}
+  {{! Page just goes blank when loading (only triggered on AgendaHeader actions and they provide a modal with loader)}}
+  {{! The reason for this is that we want to prevent any clicking on sideNav or content in sibling routes during actions}}
+{{else}}
   <div class="auk-panel-layout">
     {{#unless this.shouldHideNav}}
       <div class="auk-panel-layout__sidebar auk-panel-layout__agenda-history">
@@ -30,7 +33,4 @@
     {{/unless}}
     {{outlet}}
   </div>
-{{else}}
-  {{! Page just goes blank when loading (only triggered on AgendaHeader actions and they provide a modal with loader)}}
-  {{! The reason for this is that we want to prevent any clicking on sideNav or content in sibling routes during actions}}
 {{/if}}
