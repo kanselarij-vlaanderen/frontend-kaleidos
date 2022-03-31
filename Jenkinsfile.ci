@@ -36,7 +36,14 @@ pipeline {
                 //sh "git clone -b development https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
                 sh "git clone https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
                 sh "cd kaleidos-project"
-                sh "if [ \$(git rev-parse --verify --quiet ${env.CHANGE_BRANCH}) ]; then git checkout ${env.CHANGE_BRANCH}; fi" // Checkout branch in backend if it exists
+                script {
+                  branchHash = sh(returnStdout: true, script: 'git rev-parse --verify --quiet ${env.CHANGE_BRANCH}')
+                  if (branchHash?.trim()) {
+                    // git rev-parse --verify --quiet had output, which means that a branch with the name exists
+                    sh(script: 'git checkout ${env.CHANGE_BRANCH}')
+                  }
+                }
+                // sh "if [ \$(git rev-parse --verify --quiet ${env.CHANGE_BRANCH}) ]; then git checkout ${env.CHANGE_BRANCH}; fi" // Checkout branch in backend if it exists
                 sh "cd .."
             }
         }
