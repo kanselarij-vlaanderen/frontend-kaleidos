@@ -131,20 +131,20 @@ export default class PublicationStatusPill extends Component {
       this.decision = undefined;
     }
 
-    // update status-change activity
-    const oldChangeActivity = yield this.args.publicationFlow
-      .publicationStatusChange;
-    if (oldChangeActivity) {
-      yield oldChangeActivity.destroyRecord();
-    }
-    const newChangeActivity = this.store.createRecord(
+    // update publication-status-change
+    // reload the relation for possible concurrency
+    const currentStatusChange = yield this.args.publicationFlow
+      .belongsTo('publicationStatusChange')
+      .reload();
+    yield currentStatusChange?.destroyRecord();
+    const newStatusChange = this.store.createRecord(
       'publication-status-change',
       {
         startedAt: date,
         publication: this.args.publicationFlow,
       }
     );
-    yield newChangeActivity.save();
+    yield newStatusChange.save();
 
     yield this.args.publicationFlow.save();
     this.loadStatus.perform();
