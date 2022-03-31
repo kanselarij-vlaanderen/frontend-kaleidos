@@ -11,6 +11,8 @@ export default class AgendaHeader extends Component {
    * @argument currentAgenda: the selected agenda
    * @argument reverseSortedAgendas: the agendas of the meeting, reverse sorted on serial number
    * @argument refreshRoute: a callback to parent route to refresh the model
+   * @argument onStartLoading
+   * @argument onStopLoading
    */
   @service currentSession;
   @service intl;
@@ -32,9 +34,7 @@ export default class AgendaHeader extends Component {
     } else {
       this.loadingMessage = null;
     }
-    if (typeof this.args.onStartLoading === 'function') {
-      this.args.onStartLoading(); // hides the agenda overview/sidebar
-    }
+    this.args.onStartLoading(); // hides the agenda overview/sidebar
     this.showLoadingOverlay = true; // blocks the use of buttons
   }
 
@@ -42,8 +42,6 @@ export default class AgendaHeader extends Component {
   clearLoadingMessage() {
     this.loadingMessage = null;
     this.showLoadingOverlay = false;
-    if (typeof this.args.onStopLoading === 'function') {
-      this.args.onStopLoading();
-    }
+    this.args.onStopLoading();
   }
 }
