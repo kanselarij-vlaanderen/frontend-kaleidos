@@ -9,6 +9,7 @@ import { inject as service } from '@ember/service';
 
 export default class CasesSearchRoute extends Route {
   @service metrics;
+
   queryParams = {
     includeArchived: {
       refreshModel: true,

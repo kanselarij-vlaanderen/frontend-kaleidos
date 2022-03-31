@@ -1,8 +1,11 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
 
 export default class PublicationFlowSearchController extends Controller {
+  @service router;
+
   queryParams =[{
     regulationTypeIds: {
       type: 'array',
@@ -64,11 +67,12 @@ export default class PublicationFlowSearchController extends Controller {
     } else {
       this.publicationStatusIds.splice(this.publicationStatusIds.indexOf(publicationStatus.id), 1);
     }
+    // reassign array in order to trigger model refresh
     this.publicationStatusIds = this.publicationStatusIds; // eslint-disable-line no-self-assign
   }
 
   @action
   navigateToPublicationFlow(publicationFlow) {
-    this.transitionToRoute('publications.publication.index', publicationFlow.id);
+    this.router.transitionTo('publications.publication.index', publicationFlow.id);
   }
 }

@@ -3,8 +3,11 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
 import { warn } from '@ember/debug';
+import { inject as service } from '@ember/service';
 
 export default class AgendaitemsSearchController extends Controller {
+  @service router;
+
   queryParams = {
     types: {
       type: 'array',
@@ -92,7 +95,7 @@ export default class AgendaitemsSearchController extends Controller {
   @action
   navigateToAgendaitem(searchEntry) {
     if (searchEntry.meetingId) {
-      this.transitionToRoute('agenda.agendaitems.agendaitem',
+      this.router.transitionTo('agenda.agendaitems.agendaitem',
         searchEntry.meetingId, searchEntry.agendaId, searchEntry.id);
     } else {
       warn(`Agendaitem ${searchEntry.id} is not related to a meeting. Cannot navigate to detail`, {
