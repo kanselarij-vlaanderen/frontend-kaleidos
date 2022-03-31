@@ -34,7 +34,7 @@
     </Toolbar.Group>
     {{#if this.currentSession.isViewer}}
       <Toolbar.Group @position="right" as |Group|>
-        <Agenda::AgendaHeader::AgendaActions
+        <Agenda::AgendaHeader::AgendaVersionActions
           @meeting={{@meeting}}
           @currentAgenda={{@currentAgenda}}
           @reverseSortedAgendas={{@reverseSortedAgendas}}
