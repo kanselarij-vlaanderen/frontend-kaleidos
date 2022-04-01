@@ -28,27 +28,27 @@
     <Auk::Panel::Body>
       <div class="auk-o-grid">
         <div class="auk-o-grid-col-3">
-          <div data-test-publications-info-panel-target-end-date class="auk-form-group">
+          <div
+            data-test-publications-info-panel-target-end-date
+            class="auk-form-group"
+          >
             <Auk::Label>{{t "publication-target-end-date"}}</Auk::Label>
             <Auk::Datepicker
               @date={{@publicationSubcase.targetEndDate}}
               @onChange={{this.setTargetEndDate}}
             />
-          </div>
-        </div>
-        <div class="auk-o-grid-col-3">
-          <div class="auk-form-group">
-            <Auk::Label>
-              {{t "kind-of-publication"}}
-            </Auk::Label>
-            <PowerSelect
-              @options={{this.publicationModes}}
-              @onChange={{this.setPublicationMode}}
-              @selected={{@publicationFlow.mode}}
-              as |mode|
-            >
-              {{mode.label}}
-            </PowerSelect>
+            {{#if
+              (and
+                (not @publicationFlow.status.isFinal)
+                @publicationSubcase.isOverdue
+              )
+            }}
+              <Auk::FormHelpText
+                @text={{t "date-expired"}}
+                @skin="warning"
+                @icon="alert-triangle"
+              />
+            {{/if}}
           </div>
         </div>
         <div class="auk-o-grid-col-3">
@@ -70,7 +70,7 @@
                 {{else}}
                   <Auk::Datepicker
                     @date={{this.decision.publicationDate}}
-                    @onChange={{this.setPublicationDate}}
+                    @onChange={{set this.decision "publicationDate"}}
                   />
                 {{/if}}
               {{else}}
@@ -121,19 +121,21 @@
             {{else}}
               {{t "dash"}}
             {{/if}}
-          </p>
-        </div>
-        <div class="auk-o-grid-col-3 auk-content">
-          <h4 class="auk-u-m-0">{{t "kind-of-publication"}}</h4>
-          <p class="auk-u-m-0">
-            {{#if @publicationFlow.mode}}
-              {{@publicationFlow.mode.label}}
-            {{else}}
-              {{t "dash"}}
+            {{#if
+              (and
+                (not @publicationFlow.status.isFinal)
+                @publicationSubcase.isOverdue
+              )
+            }}
+              <Auk::FormHelpText
+                @text={{t "date-expired"}}
+                @skin="warning"
+                @icon="alert-triangle"
+              />
             {{/if}}
+
           </p>
         </div>
-
         <div class="auk-o-grid-col-3 auk-content">
           <h4 class="auk-u-m-0">{{t "publication-date"}}</h4>
           <p class="auk-u-m-0">

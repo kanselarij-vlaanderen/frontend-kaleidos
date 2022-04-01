@@ -2,6 +2,7 @@
   <Auk::Modal::Header
     @title={{t "upload-translation-document"}}
     @onClose={{perform this.cancel}}
+    @closeDisabled={{this.isCancelDisabled}}
   />
   <Auk::Modal::Body>
     <Auk::FileUploader
@@ -28,13 +29,13 @@
       <Auk::Datepicker
         id="translationUploadReceivedAtDate"
         @date={{this.receivedDate}}
-        @onChange={{this.setReceivedAtDate}}
+        @onChange={{set this "receivedDate"}}
       />
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
-    @cancelDisabled={{this.isCancelDisabled}}
     @onCancel={{perform this.cancel}}
+    @cancelDisabled={{this.isCancelDisabled}}
   >
     <Auk::Button
       data-test-translation-upload-save

@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 
 export default class PublicationStatusModal extends Component {
   @service store;
@@ -27,11 +27,6 @@ export default class PublicationStatusModal extends Component {
   @action
   selectPublicationStatus(status) {
     this.publicationStatus = status;
-  }
-
-  @action
-  setChangeDate(selectedDates) {
-    this.changeDate = selectedDates[0];
   }
 
   @task

@@ -1,9 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import Route from '@ember/routing/route';
-import {
-  isEmpty,
-  isPresent
-} from '@ember/utils';
+import { isEmpty, isPresent } from '@ember/utils';
+import { action } from '@ember/object';
 import moment from 'moment';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
@@ -11,6 +9,7 @@ import { inject as service } from '@ember/service';
 
 export default class CasesSearchRoute extends Route {
   @service metrics;
+
   queryParams = {
     includeArchived: {
       refreshModel: true,
@@ -151,5 +150,16 @@ export default class CasesSearchRoute extends Route {
     if (controller.page !== this.lastParams.committed.page) {
       controller.page = this.lastParams.committed.page;
     }
+  }
+
+  @action
+  loading(transition) {
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const controller = this.controllerFor(this.routeName);
+    controller.isLoadingModel = true;
+    transition.promise.finally(() => {
+      controller.isLoadingModel = false;
+    });
+    return true;
   }
 }

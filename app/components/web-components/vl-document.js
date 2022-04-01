@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 
 export default class VlDocument extends Component {
   /**
@@ -64,7 +64,7 @@ export default class VlDocument extends Component {
     await this.fileService.get('deletePieceWithUndo').perform(this.piece);
     // when cancelled, the aboutToDelete flag will be false
     if (this.args.didDeletePiece && this.piece.aboutToDelete) {
-      this.args.didDeletePiece(this.piece);
+      await this.args.didDeletePiece(this.piece);
     }
     // TODO delete orphan container if last piece is deleted
   }

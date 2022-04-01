@@ -11,8 +11,7 @@ import { oneWay } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
 import { dasherize } from '@ember/string';
 import Table from 'ember-light-table';
-import { restartableTask } from 'ember-concurrency-decorators';
-import { timeout } from 'ember-concurrency';
+import { timeout, restartableTask } from 'ember-concurrency';
 
 // TODO: octane-refactor
 // eslint-disable-next-line ember/require-tagless-components

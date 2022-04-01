@@ -16,12 +16,13 @@ export default class NewsletterNotaUpdatesRoute extends Route {
 
   @service store;
 
-  @(task(function *() {
+  @task
+  *pollModel() {
     while (true) {
       yield timeout(3 * 60000);
       this.refresh();
     }
-  })) pollModel;
+  }
 
   constructor() {
     super(...arguments);

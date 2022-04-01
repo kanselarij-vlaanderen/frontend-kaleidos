@@ -37,9 +37,10 @@ export default class TableRowNewsletterTable extends Component {
     this.isEditing = false;
   }
 
-  @(task(function *() {
+  @task
+  *saveNewsletterInfoTask() {
     yield this.newsletterInfo.save();
-  })) saveNewsletterInfoTask;
+  }
 
   @action
   async setInNewsletter(event) {

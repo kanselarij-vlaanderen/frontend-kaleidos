@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { task, dropTask } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
 import { tracked } from '@glimmer/tracking';
 
@@ -10,7 +10,7 @@ import { tracked } from '@glimmer/tracking';
  */
 export default class PublicationDetailsModal extends Component {
   @tracked publicationDate = new Date();
-  @tracked mustUpdatePublicationStatus = false;
+  @tracked mustUpdatePublicationStatus = true;
 
   constructor() {
     super(...arguments);
@@ -23,28 +23,15 @@ export default class PublicationDetailsModal extends Component {
     });
   }
 
-  get isLoading() {
-    return this.cancel.isRunning || this.save.isRunning;
-  }
-
   get isSaveDisabled() {
     return (
-      !this.validators.areValid || this.cancel.isRunning || this.save.isRunning
+      !this.validators.areValid || this.save.isRunning
     );
   }
 
-  get isCancelDisabled() {
-    return this.cancel.isRunning || this.save.isRunning;
-  }
-
   @action
-  setPublicationDate(dates) {
-    if (dates.length) {
-      this.publicationDate = dates[0];
-    } else {
-      // this case occurs when users manually empty the date input-field
-      this.publicationDate = undefined;
-    }
+  setPublicationDate(selectedDate) {
+    this.publicationDate = selectedDate;
     this.validators.publicationDate.enableError();
   }
 
@@ -59,15 +46,5 @@ export default class PublicationDetailsModal extends Component {
       publicationDate: this.publicationDate,
       mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
-  }
-
-  @dropTask
-  *cancel() {
-    // necessary because close-button is not disabled when saving
-    if (this.save.isRunning) {
-      return;
-    }
-
-    yield this.args.onCancel();
   }
 }

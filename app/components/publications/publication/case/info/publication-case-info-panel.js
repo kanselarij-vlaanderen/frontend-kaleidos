@@ -14,6 +14,8 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   @tracked isEditing;
   @tracked publicationNumber;
   @tracked publicationNumberSuffix;
+  @tracked agendaItemTreatment;
+  @tracked modelsForAgendaitemRoute;
 
   @tracked numberIsAlreadyUsed = false;
   @tracked numberIsRequired = false;
@@ -46,6 +48,10 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     // Limiet publicatie
     this.publicationSubcase = await this.args.publicationFlow
       .publicationSubcase;
+    if (this.isViaCouncilOfMinisters) {
+      // get the models meeting/agenda/agendaitem for clickable link
+      this.modelsForAgendaitemRoute = await this.publicationService.getModelsForAgendaitemFromTreatment(this.agendaItemTreatment);
+    }
   }
 
   get publicationNumberErrorTranslationKey() {
@@ -56,6 +62,10 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     } else {
       return null;
     }
+  }
+
+  get publicationModes() {
+    return this.store.peekAll('publication-mode').sortBy('position');
   }
 
   get isValid() {
@@ -138,18 +148,8 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   @action
-  setDecisionDate(selectedDates) {
-    this.agendaItemTreatment.startDate = selectedDates[0];
-  }
-
-  @action
-  setOpeningDate(selectedDates) {
-    this.args.publicationFlow.openingDate = selectedDates[0];
-  }
-
-  @action
-  setPublicationDueDate(selectedDates) {
-    this.publicationSubcase.dueDate = selectedDates[0];
+  setPublicationMode(publicationMode) {
+    this.args.publicationFlow.mode = publicationMode;
   }
 
   @task
@@ -169,6 +169,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.agendaItemTreatment.rollbackAttributes();
     this.publicationSubcase.rollbackAttributes();
     this.args.publicationFlow.rollbackAttributes();
+    yield this.args.publicationFlow.belongsTo('mode').reload();
 
     this.isEditing = false;
   }
@@ -203,7 +204,9 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     }
 
     // Datum beslissing
-    saves.push(this.agendaItemTreatment.save());
+    if (!this.isViaCouncilOfMinisters) {
+      saves.push(this.agendaItemTreatment.save());
+    }
 
     // Dringend + Datum ontvangst
     saves.push(this.args.publicationFlow.save());

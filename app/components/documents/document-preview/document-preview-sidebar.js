@@ -1,10 +1,10 @@
 import Component from '@glimmer/component';
 import ENV from 'frontend-kaleidos/config/environment';
 import { inject as service } from '@ember/service';
-import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
+import { task } from 'ember-concurrency';
 
 /**
  *

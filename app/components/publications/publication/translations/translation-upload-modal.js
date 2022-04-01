@@ -6,12 +6,11 @@ import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 
 export default class PublicationsTranslationTranslationUploadModalComponent extends Component {
-  @service store;
   @service publicationService;
 
   @tracked uploadedPieces = [];
   @tracked receivedDate = new Date();
-  @tracked mustUpdatePublicationStatus = false;
+  @tracked mustUpdatePublicationStatus = true;
 
   get isCancelDisabled() {
     return this.cancel.isRunning || this.save.isRunning;
@@ -33,10 +32,6 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
 
   @dropTask
   *cancel() {
-    // necessary because close-button is not disabled when saving
-    if (this.save.isRunning) {
-      return;
-    }
     yield Promise.all(
       this.uploadedPieces.map((piece) =>
         this.deleteUploadedPiece.perform(piece)
@@ -55,23 +50,13 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
   }
 
   @action
-  setReceivedAtDate(selectedDates) {
-    if (selectedDates.length) {
-      this.receivedDate = selectedDates[0];
-    } else {
-      // this case occurs when users manually empty the date input-field
-      this.receivedDate = undefined;
-    }
-  }
-
-  @action
   setTranslationReceivedStatus(event) {
     this.mustUpdatePublicationStatus = event.target.checked;
   }
 
   @task
   *deleteUploadedPiece(piece) {
-    this.uploadedPieces.removeObject(piece);
     yield this.publicationService.deletePiece(piece);
+    this.uploadedPieces.removeObject(piece);
   }
 }

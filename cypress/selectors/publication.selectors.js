@@ -13,7 +13,6 @@ const selectors = {
     loading: '[data-test-route-publications-index-loading]',
     columnHeader: 'data-test-route-publications-index-th=',
     configIcon: '[data-test-route-publications-index-config-modal-icon]',
-    numberSelector: '.auk-form-group',
   },
 
   // publications\publication\template
@@ -31,30 +30,17 @@ const selectors = {
 
   // publications\publication\translations\index\template
   // TODO KAS-3248 Rename to translationsIndex
-  translationsDocuments: {
+  translationsIndex: {
     panelBody: '[data-test-route-publications---translations-panel-body]',
     upload: '[data-test-route-publications---translations-upload-translation]',
     requestTranslation: '[data-test-route-publications---translations-request-translation]',
   },
 
-  // publications\publication\proofs\documents\template
-  proofsDocuments: {
-    newRequest: '[data-test-route-publications---proofs-documents-new-request]',
-    initialRequest: '[data-test-route-publications---proofs-documents-initial-request]',
-    extraRequest: '[data-test-route-publications---proofs-documents-extra-request]',
-    finalRequest: '[data-test-route-publications---proofs-documents-final-request]',
-    add: '[data-test-route-publications---proofs-documents-add]',
-    addSourceProof: '[data-test-route-publications---proofs-documents-add-source-proof]',
-    addCorrectedProof: '[data-test-route-publications---proofs-documents-add-corrected-proof]',
-    tableRow: '[data-test-route-publications---proofs-documents-table-row]',
-    row: {
-      checkbox: '[data-test-route-publications---proofs-documents-row-checkbox]',
-      documentName: '[data-test-route-publications---proofs-documents-row-document-name]',
-      corrected: '[data-test-route-publications---proofs-documents-row-corrected]',
-      options: '[data-test-route-publications---proofs-documents-row-options]',
-      edit: '[data-test-route-publications---proofs-documents-row-edit]',
-      delete: '[data-test-route-publications---proofs-documents-row-delete]',
-    },
+  // publications\publication\proofs\index\template
+  proofsIndex: {
+    panelBody: '[data-test-route-publications---proofs-panel-body]',
+    upload: '[data-test-route-publications---proofs-upload]',
+    newRequest: '[data-test-route-publications---proofs-new-request]',
   },
 
   // publications\publication\proofs\template
@@ -89,14 +75,6 @@ const selectors = {
   tableDisplayConfig: {
     close: '[data-test-publications-table-display-config-close]',
     option: 'data-test-overview-table-display-config-option-checkbox=',
-  },
-
-  // publication-case-search
-  publicationCaseSearch: {
-    input: '[data-test-publication-case-search-input]',
-    result: '[data-test-publication-case-search-result]',
-    // TODO-SELECTOR unused selectors
-    resultList: '[data-test-publication-case-search-result-list]',
   },
 
   // publications-filter-modal
@@ -289,21 +267,17 @@ const selectors = {
   proofUpload: {
     name: '[data-test-proof-upload-name]',
     save: '[data-test-proof-upload-save]',
+    updateStatus: '[data-test-proof-upload-update-status]',
   },
 
-  // proof-edit-modal
-  // proofEdit: {
-  //   name: '[data-test-proof-edit-name]',
-  //   save: '[data-test-proof-edit-save]',
-  // },
-
   // proof-request-modal
-  // proofRequest: {
-  //   subject: '[data-test-proof-request-subject]',
-  //   message: '[data-test-proof-request-message]',
-  //   attachments: '[data-test-proof-request-attachments]',
-  //   save: '[data-test-proof-request-save]',
-  // },
+  proofRequest: {
+    translationPieces: '[data-test-proof-request-translation-pieces]',
+    updateStatus: '[data-test-proof-request-update-status]',
+    subject: '[data-test-proof-request-subject]',
+    message: '[data-test-proof-request-message]',
+    save: '[data-test-proof-request-save]',
+  },
 
   // publication-case-info-panel
   publicationCaseInfo: {
@@ -343,7 +317,7 @@ const selectors = {
     save: '[data-test-publication-status-save]',
   },
 
-  // publication-info-panel
+  // publications-info-panel
   publicationsInfoPanel: {
     // TODO-SELECTOR unused selectors
     edit: '[data-test-publications-info-panel-edit]',
@@ -389,6 +363,44 @@ const selectors = {
   // publication-documents-list
   documentsList: {
     piece: '[data-test-document-list-piece]',
+  },
+
+  // proof-received-panel
+  proofReceivedPanel: {
+    panel: '[data-test-proof-received-panel]',
+    edit: '[data-test-proof-received-panel-edit]',
+    endDate: '[data-test-proof-received-panel-end-date]',
+    corrector: '[data-test-proof-received-panel-edit-corrector]',
+    dropdown: '[data-test-proof-received-panel-dropdown]',
+    save: '[data-test-proof-received-panel-edit-save]',
+  },
+
+  // proof-info-panel
+  proofInfoPanel: {
+    edit: {
+      corrector: '[data-test-proof-info-panel-corrector]',
+    },
+    view: {
+      corrector: '[data-test-proof-info-panel-view-corrector]',
+    },
+  },
+
+  // decisions-info-panel
+  decisionsInfoPanel: {
+    openEdit: '[data-test-decisions-info-panel-view-edit]',
+    cancel: '[data-test-decisions-info-panel-edit-cancel]',
+    save: '[data-test-decisions-info-panel-edit-save]',
+    edit: {
+      regulationType: '[data-test-decisions-info-panel-edit-regulation-type]',
+      decisionDate: '[data-test-decisions-info-panel-edit-decision-date]',
+      numberOfPages: '[data-test-decisions-info-panel-edit-number-of-pages]',
+    },
+    view: {
+      regulationType: '[data-test-decisions-info-panel-view-regulation-type]',
+      decisionDate: '[data-test-decisions-info-panel-view-decision-date]',
+      decisionLink: '[data-test-decisions-info-panel-view-decision-link]',
+      numberOfPages: '[data-test-decisions-info-panel-view-number-of-pages]',
+    },
   },
 
 };
