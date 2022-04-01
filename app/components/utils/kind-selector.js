@@ -21,6 +21,10 @@ export default class UtilsKindSelector extends Component {
     this.loadKinds.perform();
   }
 
+  get isLoading() {
+    return this.args.isLoading || this.loadKinds.isRunning;
+  }
+
   @task
   *loadKinds() {
     this.options = yield this.store.query('concept', {

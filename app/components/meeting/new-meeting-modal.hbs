@@ -9,7 +9,7 @@
       data-test-new-meeting-kind
       @onChange={{this.setKind}}
       @selectedKind={{this.kind}}
-      @disabled={{this.initializeKind.isRunning}}
+      @isLoading={{this.initializeKind.isRunning}}
     />
     {{#if (await (this.isAnnexMeetingKind this.kind))}}
       <div class="auk-u-mb-2">
