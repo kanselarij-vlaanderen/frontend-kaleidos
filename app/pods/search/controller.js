@@ -4,6 +4,8 @@ import moment from 'moment';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
+import { isEmpty } from '@ember/utils';
+import ENV from 'frontend-kaleidos/config/environment';
 
 export default class SearchController extends Controller {
   queryParams = {
@@ -81,8 +83,10 @@ export default class SearchController extends Controller {
   @tracked publicationDateTypeKeyBuffer = this.publicationDateTypeKey;
   @tracked popoverShown; // TODO, this is for a tooltip, this should be handled elsewhere
 
-  get userMaySearchPublicationFlows() {
-    return this.currentSession.may('search-publication-flows');
+  get isShownPublicationFlows() {
+    const isEnabled = isEmpty(ENV.APP.ENABLED_PUBLICATIONS_TAB);
+    const maySearch = this.currentSession.may('search-publication-flows');
+    return isEnabled && maySearch;
   }
 
   get isSearchingPublicationFlows() {

@@ -149,6 +149,7 @@
   "dropzone-text-multiple": "Sleep je bestanden naar hier of klik hier om bestanden te selecteren.",
   "dropzone-text": "Sleep je bestand naar hier of klik hier om een bestand te selecteren.",
   "drag-or-click-for-upload": "Sleep je {numFiles, plural, =1 {bestand} other {bestanden}} naar hier of klik hier om een bestand te selecteren.",
+  "batch-edit": "Bulk wijzigen",
   "edit": "Wijzigen",
   "edit-2": "Bewerken",
   "edit-translation-details": "Bewerk vertaling details",

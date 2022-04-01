@@ -28,8 +28,10 @@ export default class MHeader extends Component {
     }
   }
 
-  get hasPublicationsEnabled() {
-    return !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB);
+  get isShownPublications() {
+    const isEnabled = !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB);
+    const hasPermission = this.currentSession.may('manage-publication-flows');
+    return isEnabled && hasPermission;
   }
 
   get isShownSignatureFolder() {

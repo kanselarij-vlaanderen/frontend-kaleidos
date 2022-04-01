@@ -14,6 +14,7 @@ import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class PublicationFlowSearchRoute extends Route {
   @service store;
+  @service router;
   @service currentSession;
 
   queryParams = {
@@ -46,7 +47,8 @@ export default class PublicationFlowSearchRoute extends Route {
 
   async beforeModel() {
     if (!this.currentSession.may('search-publication-flows')) {
-      this.transitionTo('agendas');
+      this.router.transitionTo('agendas');
+      return;
     }
     this.publicationStatuses = await this.store.query('publication-status', {
       'page[size]': PAGE_SIZE.CODE_LISTS,

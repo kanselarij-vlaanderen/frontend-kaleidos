@@ -22,6 +22,7 @@ const groupRoles = new Map();
 
 groupRoles.set(ADMIN, [
   'manage-signatures',
+  'manage-publication-flows',
   'search-publication-flows',
 ]);
 
@@ -43,6 +44,7 @@ groupRoles.set(OVERHEID, [
 
 groupRoles.set(OVRB, [
   'manage-signatures',
+  'manage-publication-flows',
   'search-publication-flows',
 ]);
 

@@ -36,7 +36,7 @@
             >
               {{t "newsletter"}}
             </Tabs.Tab>
-            {{#if this.userMaySearchPublicationFlows}}
+            {{#if this.isShownPublicationFlows}}
               <Tabs.Tab
                 @route="search.publication-flows"
                 @query={{hash page=0}}

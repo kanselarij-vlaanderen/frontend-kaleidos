@@ -13,8 +13,8 @@ context('Testing the application as Overheid user', () => {
 
   // M-header toolbar tests
 
-  it('Should have publications, meeting, Case, Newsletter and search in toolbar', () => {
-    cy.get(utils.mHeader.publications).should('exist');
+  it('Should have meeting, Case, Newsletter and search in toolbar', () => {
+    cy.get(utils.mHeader.publications).should('not.exist');
     cy.get(utils.mHeader.agendas).should('exist');
     cy.get(utils.mHeader.cases).should('exist');
     cy.get(utils.mHeader.newsletters).should('exist');
