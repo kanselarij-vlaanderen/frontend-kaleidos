@@ -4,6 +4,7 @@ export default class Concept extends Model {
   @attr('string') label;
   @attr('string') altLabel;
   @attr('string') scopeNote;
+  @attr('boolean') deprecated;
   @attr('number') position;
   @hasMany('concept', { inverse: 'broader'}) narrower;
   // The idea behind also using broader is because ember was automatically connecting the broader parent under the narrower relation
