@@ -48,7 +48,7 @@ export default class CurrentSessionService extends Service {
     }
     let isAuthorized = this.may(roleName);
     if (!isAuthorized) {
-      this.transitionTo('agendas');
+      this.router.transitionTo('agendas');
       return false;
     }
     return true;
