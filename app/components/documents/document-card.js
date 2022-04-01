@@ -74,7 +74,7 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *loadPublicationFlowRelatedData() {
-    if (this.shouldShowPublications) {
+    if (this.userMayManagePublicationFlows) {
       const publicationFlow = yield this.piece.publicationFlow;
       yield publicationFlow?.identification;
     }
