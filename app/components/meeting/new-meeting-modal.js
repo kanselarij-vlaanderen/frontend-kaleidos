@@ -19,6 +19,7 @@ export default class MeetingNewMeetingModal extends Component {
 
   @tracked kind = null;
   @tracked selectedMainMeeting = null;
+  @tracked isAnnexMeeting = false;
   @tracked isEditingFormattedMeetingIdentifier = false;
   @tracked _meetingNumber = null;
   @tracked _formattedMeetingIdentifier = null;
@@ -62,6 +63,8 @@ export default class MeetingNewMeetingModal extends Component {
   @task
   *initializeKind() {
     this.kind = yield this.store.findRecordByUri('concept', CONSTANTS.MEETING_KINDS.MINISTERRAAD);
+    const broader = yield this.kind?.broader;
+    this.isAnnexMeeting = broader?.uri === CONSTANTS.MEETING_KINDS.ANNEX;
   }
 
   @dropTask
@@ -101,7 +104,7 @@ export default class MeetingNewMeetingModal extends Component {
     try {
       yield meeting.save();
       const agenda = yield this.createAgenda(meeting, now);
-      if (!(yield this.isAnnexMeetingKind(this.kind)) && closestMeeting) {
+      if (!this.isAnnexMeeting && closestMeeting) {
         yield this.createAgendaitemToApproveMinutes(
           agenda,
           meeting,
@@ -174,11 +177,6 @@ export default class MeetingNewMeetingModal extends Component {
     return agendaitem;
   }
 
-  async isAnnexMeetingKind(kind) {
-    const broader = await kind?.broader;
-    return broader?.uri === CONSTANTS.MEETING_KINDS.ANNEX;
-  }
-
   @action
   selectMainMeeting(mainMeeting) {
     const postfix = this.meetingKindPostfix;
@@ -197,7 +195,11 @@ export default class MeetingNewMeetingModal extends Component {
   @action
   async setKind(kind) {
     this.kind = kind;
-    if (!(await this.isAnnexMeetingKind(this.kind))) {
+
+    const broader = await this.kind?.broader;
+    this.isAnnexMeeting = broader?.uri === CONSTANTS.MEETING_KINDS.ANNEX;
+
+    if (!this.isAnnexMeeting) {
       this.selectedMainMeeting = null;
       this.initializeMeetingNumber.perform();
     }
