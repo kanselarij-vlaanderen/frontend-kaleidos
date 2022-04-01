@@ -54,7 +54,8 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   get shouldShowPublications() {
     return (
-      !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB) && this.currentSession.isOvrb
+      !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB) &&
+      this.currentSession.may('manage-publication-flows')
     );
   }
 
