@@ -13,8 +13,8 @@ context('Testing the application as Minister user', () => {
 
   // M-header toolbar tests
 
-  it('Should have publications, meeting, Case, search and Newsletter in toolbar', () => {
-    cy.get(utils.mHeader.publications).should('exist');
+  it('Should have meeting, Case, search and Newsletter in toolbar', () => {
+    cy.get(utils.mHeader.publications).should('not.exist');
     cy.get(utils.mHeader.agendas).should('exist');
     cy.get(utils.mHeader.cases).should('exist');
     cy.get(utils.mHeader.newsletters).should('exist');
