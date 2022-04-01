@@ -15,17 +15,17 @@
                 {{moment-format @meeting.plannedStart "HH:mm"}}
               {{/unless}}
             </h4>
-            {{#if @meeting.kindToShow.label}}
+            {{#if @meeting.kind.label}}
               <span
                 data-test-agenda-header-kind
                 class="auk-u-text-muted auk-body-1"
               >
                 -
-                {{await @meeting.kindToShow.label}}
+                {{@meeting.kind.label}}
               </span>
             {{/if}}
           </div>
-          <Meeting::AgendaTabs
+          <Agenda::AgendaHeader::AgendaTabs
             @currentAgenda={{@currentAgenda}}
             @currentMeeting={{@meeting}}
           />
@@ -34,238 +34,29 @@
     </Toolbar.Group>
     {{#if this.currentSession.isViewer}}
       <Toolbar.Group @position="right" as |Group|>
-        <Agenda::AgendaHeader::AgendaActions
-          @meeting={{@meeting}}
-          @currentAgenda={{@currentAgenda}}
-          @reverseSortedAgendas={{@reverseSortedAgendas}}
-          @refreshRoute={{@refreshRoute}}
-          @loading={{@loading}}
-        />
         <Group.Item>
-          <Auk::DropdownMenu
-            @skin="secondary"
-            @label={{t "actions"}}
-            class="auk-u-hidden@print"
-            data-test-agenda-header-show-options={{true}}
-            as |Menu|
-          >
-            {{#if this.canEditDesignAgenda}}
-              <Menu.Item
-                data-test-agenda-header-add-agendaitems
-                {{on "click" this.openAddAgendaitemsModal}}
-              >
-                {{t "add-to-agenda"}}
-              </Menu.Item>
-              <Menu.Divider />
-            {{/if}}
-            <Menu.Item
-              data-test-agenda-header-navigate-to-decisions
-              @route="print-overviews.decisions.agendaitems"
-              @models={{array @meeting.id @currentAgenda.id}}
-            >
-              {{t "print-decisions"}}
-            </Menu.Item>
-            <Menu.Item
-              data-test-agenda-header-navigate-to-newsletter
-              @route="newsletter"
-              @model={{@meeting.id}}
-            >
-              {{t "print-newsletter"}}
-            </Menu.Item>
-            <Menu.Item
-              data-test-agenda-header-navigate-to-pressagenda
-              @route="print-overviews.press-agenda.agendaitems"
-              @models={{array @meeting.id @currentAgenda.id}}
-            >
-              {{t "printable-press-agenda"}}
-            </Menu.Item>
-            {{#if this.showPrintButton}}
-              <Menu.Item
-                @route="agenda.agendaitems"
-                data-test-agenda-header-navigate-to-agenda-view
-              >
-                {{t "agenda-view"}}
-              </Menu.Item>
-              <Menu.Item
-                data-test-agenda-header-print-agenda
-                {{on "click" this.print}}
-              >
-                {{t "print"}}
-              </Menu.Item>
-            {{else}}
-              <Menu.Item
-                @route="agenda.print"
-                data-test-agenda-header-navigate-to-printable-agenda
-              >
-                {{t "printable-version"}}
-              </Menu.Item>
-            {{/if}}
-            <Menu.Item
-              data-test-agenda-header-download-documents
-              {{on "click" this.downloadAllDocuments}}
-            >
-              {{t "download-documents"}}
-            </Menu.Item>
-            {{#if this.currentSession.isEditor}}
-              <Menu.Divider />
-              <Menu.Item
-                data-test-agenda-header-toggle-editing-meeting
-                {{on "click" this.toggleEditingMeeting}}
-              >
-                {{t "edit-meeting"}}
-              </Menu.Item>
-            {{/if}}
-            {{#if this.canEditDesignAgenda}}
-              <Menu.Item
-                data-test-agenda-header-approve-all-agendaitems
-                {{on "click" this.openConfirmApproveAllAgendaitems}}
-              >
-                {{t "approve-all-agendaitems"}}
-              </Menu.Item>
-            {{/if}}
-            {{#if this.canReleaseDecisions}}
-              <Menu.Divider />
-              <Menu.Item
-                @skin="danger"
-                data-test-agenda-header-release-decisions
-                {{on "click" this.openConfirmReleaseDecisions}}
-              >
-                {{t "agenda-release-decisions"}}
-              </Menu.Item>
-            {{else if this.canReleaseDocuments}}
-              <Menu.Divider />
-              <Menu.Item
-                @skin="danger"
-                data-test-agenda-header-release-documents
-                {{on "click" this.openConfirmReleaseDocuments}}
-              >
-                {{t "agenda-release-documents"}}
-              </Menu.Item>
-            {{/if}}
-            {{#if this.canPublishThemis}}
-              <Menu.Divider />
-              <Menu.Item {{on "click" this.openConfirmPublishThemis}}>
-                {{t "publish-to-web"}}
-              </Menu.Item>
-              {{#if this.isAlreadyPublished}}
-                <Menu.Item
-                  @skin="danger"
-                  {{on "click" this.openConfirmUnpublishThemis}}
-                >
-                  {{t "unpublish-from-web"}}
-                </Menu.Item>
-              {{/if}}
-            {{/if}}
-          </Auk::DropdownMenu>
+          <Agenda::AgendaHeader::AgendaVersionActions
+            @meeting={{@meeting}}
+            @currentAgenda={{@currentAgenda}}
+            @reverseSortedAgendas={{@reverseSortedAgendas}}
+            @didCloseMeeting={{@refreshRoute}}
+            @onStartLoading={{this.setLoadingMessage}}
+            @onStopLoading={{this.clearLoadingMessage}}
+          />
+        </Group.Item>
+        <Group.Item>
+          <Agenda::AgendaHeader::AgendaActions
+            @meeting={{@meeting}}
+            @currentAgenda={{@currentAgenda}}
+            @didApproveAgendaitems={{@refreshRoute}}
+            @onStartLoading={{this.setLoadingMessage}}
+            @onStopLoading={{this.clearLoadingMessage}}
+          />
         </Group.Item>
       </Toolbar.Group>
     {{/if}}
   </Auk::Toolbar>
 </Auk::Navbar>
-
-{{#if this.isAddingAgendaitems}}
-  <Agenda::Agendaitem::CreateAgendaitem
-    @meeting={{@meeting}}
-    @isAddingAgendaitems={{this.isAddingAgendaitems}}
-    @onCreate={{@refreshRoute}}
-  />
-{{/if}}
-
-{{#if this.showConfirmReleaseDocuments}}
-  <Auk::Modal @size="small">
-    <Auk::Modal::Header
-      @title={{t "agenda-release-documents"}}
-      @onClose={{this.cancelReleaseDocuments}}
-    />
-    <Auk::Modal::Body>
-      <p>{{t "release-documents-message"}}</p>
-    </Auk::Modal::Body>
-    <Auk::Modal::Footer @onCancel={{this.cancelReleaseDocuments}}>
-      <Auk::Button
-        data-test-agenda-header-release-documents-confirm
-        @skin="primary"
-        {{on "click" this.releaseDocuments}}
-      >
-        {{t "release-to-public"}}
-      </Auk::Button>
-    </Auk::Modal::Footer>
-  </Auk::Modal>
-{{/if}}
-
-{{#if this.showConfirmReleaseDecisions}}
-  <Auk::Modal @size="small">
-    <Auk::Modal::Header
-      @title={{t "agenda-release-decisions"}}
-      @onClose={{this.cancelReleaseDecisions}}
-    />
-    <Auk::Modal::Body>
-      <p>{{t "release-decisions-message"}}</p>
-    </Auk::Modal::Body>
-    <Auk::Modal::Footer @onCancel={{this.cancelReleaseDecisions}}>
-      <Auk::Button
-        data-test-agenda-header-release-decisions-confirm
-        @skin="primary"
-        {{on "click" this.releaseDecisions}}
-      >
-        {{t "release-to-public"}}
-      </Auk::Button>
-    </Auk::Modal::Footer>
-  </Auk::Modal>
-{{/if}}
-
-{{#if this.showConfirmPublishThemis}}
-  <ThemisPublications::PublishConfirmationModal
-    @onCancel={{this.cancelPublishThemis}}
-    @onConfirm={{perform this.publishThemis}}
-  />
-{{/if}}
-
-{{#if this.showConfirmUnpublishThemis}}
-  <ThemisPublications::UnpublishConfirmationModal
-    @onCancel={{this.cancelUnpublishThemis}}
-    @onConfirm={{perform this.unpublishThemis}}
-  />
-{{/if}}
-
-{{#if this.isEditingMeeting}}
-  <Meeting::EditMeetingModal
-    @meeting={{@meeting}}
-    @didSave={{this.toggleEditingMeeting}}
-    @onCancel={{this.toggleEditingMeeting}}
-  />
-{{/if}}
-
-{{#if this.showConfimApprovingAllAgendaitems}}
-  <Auk::Modal @size="small">
-    <Auk::Modal::Header
-      @title={{t "approve-all-agendaitems"}}
-      @onClose={{this.cancelApproveAllAgendaitems}}
-    />
-    <Auk::Modal::Body>
-      <Utils::LoadableContent
-        @isLoading={{this.reloadAgendaitemsData.isRunning}}
-        @reserveSpace={{true}}
-      >
-        <p>
-          {{t
-            "approve-all-agendaitems-warning-message"
-            amountOfAgendaitems=(await @currentAgenda.allAgendaitemsNotOkLength)
-          }}
-        </p>
-      </Utils::LoadableContent>
-    </Auk::Modal::Body>
-    <Auk::Modal::Footer @onCancel={{this.cancelApproveAllAgendaitems}}>
-      <Auk::Button
-        data-test-agenda-header-approve-all-agendaitems-confirm
-        @skin="primary"
-        @disabled={{this.reloadAgendaitemsData.isRunning}}
-        {{on "click" this.approveAllAgendaitems}}
-      >
-        {{t "approve"}}
-      </Auk::Button>
-    </Auk::Modal::Footer>
-  </Auk::Modal>
-{{/if}}
 
 {{! TODO KAS-2399 the LoadingOverlay had a default empty message, this doesn't have one}}
 {{#if this.showLoadingOverlay}}

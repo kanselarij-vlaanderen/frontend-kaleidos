@@ -7,7 +7,9 @@
   <Auk::Modal::Body>
     <Utils::KindSelector
       data-test-new-meeting-kind
-      @setAction={{this.setKind}}
+      @onChange={{this.setKind}}
+      @selectedKind={{this.kind}}
+      @isLoading={{this.initializeKind.isRunning}}
     />
     {{#if this.isAnnexMeeting}}
       <div class="auk-u-mb-2">
@@ -16,12 +18,17 @@
           <Utils::ModelSelector
             data-test-new-meeting-related-main-meeting
             @modelName="meeting"
-            @searchField="numberRepresentation"
-            @propertyToShow="label"
+            @searchField="number-representation"
             @sortField="-planned-start"
             @selectedItems={{this.selectedMainMeeting}}
             @selectModel={{this.selectMainMeeting}}
-          />
+            as |model|
+          >
+            {{kind-print-label model.kind}}
+            {{t "of"}}
+            {{moment-format model.plannedStart "DD-MM-YYYY"}}
+            ({{model.numberRepresentation}})
+          </Utils::ModelSelector>
         </div>
       </div>
     {{else}}
