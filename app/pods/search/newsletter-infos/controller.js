@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 
 export default class NewsletterInfosSearchController extends Controller {
   @service router;
+
   queryParams = {
     page: {
       type: 'number',

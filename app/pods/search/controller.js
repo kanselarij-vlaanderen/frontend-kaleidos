@@ -3,6 +3,7 @@ import Controller from '@ember/controller';
 import moment from 'moment';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
 
 export default class SearchController extends Controller {
   queryParams = {
@@ -18,19 +19,80 @@ export default class SearchController extends Controller {
     dateTo: {
       type: 'string',
     },
+    date: {
+      type: 'string',
+    },
+    publicationDateTypeKey: {
+      type: 'string',
+    },
   };
 
-  sizeOptions = Object.freeze([5, 10, 20, 50, 100, 200]);
+  @service router;
+  @service currentSession;
+
+  sizeOptions = [5, 10, 20, 50, 100, 200];
+  publicationDateTypes = [
+    {
+      key: 'decisionDate',
+      label: 'Datum beslissing',
+    },
+    {
+      key: 'openingDate',
+      label: 'Datum ontvangst',
+    },
+    // translationRequestDate
+    {
+      key: 'translationDueDate',
+      label: 'Limiet vertaling',
+    },
+    {
+      key: 'proofPrintRequestDate',
+      label: 'Aanvraag drukproef',
+    },
+    {
+      key: 'proofPrintReceivedDate',
+      label: 'Drukproef in',
+    },
+    {
+      key: 'publicationTargetDate',
+      label: 'Gevraagde publicatie datum',
+    },
+    {
+      key: 'publicationDate',
+      label: 'Publicatie datum',
+    },
+    {
+      key: 'publicationDueDate',
+      label: 'Limiet publicatie',
+    },
+  ];
 
   @tracked searchText = '';
   @tracked mandatees;
   @tracked dateFrom;
   @tracked dateTo;
+  @tracked date;
+  @tracked publicationDateTypeKey = this.publicationDateTypes[0]?.key;
   @tracked searchTextBuffer = '';
   @tracked mandateesBuffer;
   @tracked dateFromBuffer;
   @tracked dateToBuffer;
+  @tracked dateBuffer;
+  @tracked publicationDateTypeKeyBuffer = this.publicationDateTypeKey;
   @tracked popoverShown; // TODO, this is for a tooltip, this should be handled elsewhere
+
+  get userMaySearchPublicationFlows() {
+    return this.currentSession.may('search-publication-flows');
+  }
+
+  get isSearchingPublicationFlows() {
+    return this.router.currentRouteName === 'search.publication-flows';
+  }
+
+  @action
+  selectPublicationDateType(event) {
+    this.publicationDateTypeKeyBuffer = event.target.value;
+  }
 
   deserializeDate(date) {
     return date && moment(date, 'DD-MM-YYYY').toDate();
@@ -54,12 +116,12 @@ export default class SearchController extends Controller {
   search() {
     this.searchText = this.searchTextBuffer;
     this.mandatees = this.mandateesBuffer;
-    this.dateFrom = this.serializeDate(this.dateFromBuffer);
-    this.dateTo = this.serializeDate(this.dateToBuffer);
-  }
-
-  @action
-  navigateToCase(_case) {
-    this.transitionToRoute('cases.case.subcases', _case.id);
+    if (this.isSearchingPublicationFlows) {
+      this.date = this.serializeDate(this.dateBuffer);
+      this.publicationDateTypeKey = this.publicationDateTypeKeyBuffer;
+    } else {
+      this.dateFrom = this.serializeDate(this.dateFromBuffer);
+      this.dateTo = this.serializeDate(this.dateToBuffer);
+    }
   }
 }
