@@ -47,6 +47,7 @@ export default class PublicationFlowSearchRoute extends Route {
   async beforeModel() {
     if (!this.currentSession.may('search-publication-flows')) {
       this.transitionTo('agendas');
+      return;
     }
     this.publicationStatuses = await this.store.query('publication-status', {
       'page[size]': PAGE_SIZE.CODE_LISTS,
