@@ -8,6 +8,12 @@ import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
+function pressRdfaButton(buttonName) {
+  cy.get('button').contains(buttonName)
+    .parent('button')
+    .click();
+}
+
 function currentTimestamp() {
   return Cypress.dayjs().unix();
 }
@@ -677,5 +683,30 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.itemContent.theme).contains(theme2);
     cy.get(newsletter.itemContent.richtext).contains(richtext);
     cy.get(newsletter.itemContent.remark).should('not.exist');
+  });
+
+  it('should test the rdfa editor', () => {
+    cy.visit('/vergadering/5EBA94D7751CF70008000001/kort-bestek');
+    cy.get(newsletter.buttonToolbar.edit).click();
+
+    pressRdfaButton('Strikethrough');
+    cy.get(dependency.rdfa.editorInner).type('Strikethrough');
+    pressRdfaButton('Strikethrough');
+    cy.get(dependency.rdfa.editorInner).type(' ');
+    pressRdfaButton('Underline');
+    cy.get(dependency.rdfa.editorInner).type('Underline');
+    pressRdfaButton('Underline');
+    cy.get(dependency.rdfa.editorInner).type(' ');
+    pressRdfaButton('Italic');
+    cy.get(dependency.rdfa.editorInner).type('Italic');
+    pressRdfaButton('Italic');
+    cy.get(dependency.rdfa.editorInner).type(' ');
+    pressRdfaButton('Bold');
+    cy.get(dependency.rdfa.editorInner).type('Bold');
+
+    cy.get('del').contains('Strikethrough');
+    cy.get('u').contains('Underline');
+    cy.get('em').contains('Italic');
+    cy.get('strong').contains('Bold');
   });
 });
