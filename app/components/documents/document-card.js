@@ -52,11 +52,12 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.loadPieceRelatedData.perform();
   }
 
-  get shouldShowPublications() {
-    return (
-      !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB) &&
-      this.currentSession.may('manage-publication-flows')
-    );
+  get isPublicationFlowShown() {
+    return !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB);
+  }
+
+  get isPublicationFlowLink() {
+    return this.currentSession.may('manage-publication-flows');
   }
 
   @task

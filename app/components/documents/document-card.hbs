@@ -27,7 +27,7 @@
           <Auk::Toolbar::Group @position="right">
             {{#if
               (and
-                this.shouldShowPublications
+                this.isPublicationFlowShown
                 (not this.loadPieceRelatedData.isRunning)
                 (not this.loadPublicationFlowRelatedData.isRunning)
               )
@@ -35,7 +35,7 @@
               {{! trigger fetch }}
               {{#if this.piece.publicationFlow}}
                 <Utils::Generic::LinkOrSpan
-                  @isLink={{this.shouldShowPublications}}
+                  @isLink={{this.isPublicationFlowLink}}
                   @route="publications.publication"
                   @model={{this.piece.publicationFlow}}
                 >
