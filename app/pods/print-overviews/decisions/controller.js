@@ -16,17 +16,19 @@ export default Controller.extend({
 
   title: computed('model.createdFor.plannedStart', 'titleTranslationKey', 'titleTranslationParams', async function() {
     const date = this.get('model.createdFor.plannedStart');
-    if (this.titleTranslationParams) {
-      const translatedTitleWithParams = this.intl.t(this.titleTranslationKey, this.titleTranslationParams);
+    const titleTranslationParams = await this.titleTranslationParams;
+    if (titleTranslationParams) {
+      const translatedTitleWithParams = this.intl.t(this.titleTranslationKey, titleTranslationParams);
       return getPrintOverviewTitle(translatedTitleWithParams, date);
     }
     const translatedTitle = this.intl.t(this.titleTranslationKey);
     return getPrintOverviewTitle(translatedTitle, date);
   }),
 
-  titleTranslationParams: computed('model.createdFor', function() {
+  titleTranslationParams: computed('model.createdFor', async function() {
     const meeting = this.get('model.createdFor');
-    const kindLabel = kindPrintLabel(meeting.get('kind'));
+    const kind = await meeting.get('kind');
+    const kindLabel = kindPrintLabel(kind);
     return {
       kind: kindLabel,
     };

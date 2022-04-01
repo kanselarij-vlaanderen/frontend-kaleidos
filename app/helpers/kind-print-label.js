@@ -1,7 +1,9 @@
 import { helper } from '@ember/component/helper';
 
-export function kindPrintLabel([kind]) {
+export function kindPrintLabel(kind) {
   return kind.get('altLabel') ?? kind.get('label') ?? '';
 }
 
-export default helper(kindPrintLabel);
+export default helper(([kind]) => {
+  return kindPrintLabel(kind);
+});
