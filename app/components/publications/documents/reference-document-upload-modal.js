@@ -19,10 +19,7 @@ export default class PublicationsDocumentsReferenceDocumentUploadModalComponent 
   }
 
   get isSaveDisabled() {
-    return (
-      this.uploadedPieces.length === 0 ||
-      this.cancel.isRunning
-    );
+    return this.uploadedPieces.length === 0 || this.cancel.isRunning;
   }
 
   @action
@@ -50,5 +47,12 @@ export default class PublicationsDocumentsReferenceDocumentUploadModalComponent 
   @task
   *save() {
     yield this.args.onSave(this.uploadedPieces);
+  }
+
+  @action
+  setReceivedDate(piece, selectedDate) {
+    if (selectedDate) {
+      piece.receivedDate = selectedDate;
+    }
   }
 }

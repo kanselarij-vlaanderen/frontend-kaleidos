@@ -20,7 +20,11 @@ export default class PublicationFlow extends Model {
   @belongsTo('publication-mode') mode;
   @belongsTo('regulation-type') regulationType;
   @belongsTo('urgency-level') urgencyLevel;
-  @belongsTo('publication-status-change') publicationStatusChange;
+  // This relation is read-only for concurrency reasons, the linked model is deleted/replaced often
+  // Allowing this relation to serialize with a deleted model results in errors
+  @belongsTo('publication-status-change', {
+    serialize: false,
+  }) publicationStatusChange;
   @belongsTo('publication-subcase') publicationSubcase;
   @belongsTo('translation-subcase') translationSubcase;
   @belongsTo('agenda-item-treatment') agendaItemTreatment;
