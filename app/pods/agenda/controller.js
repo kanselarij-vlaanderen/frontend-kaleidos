@@ -4,20 +4,23 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
 export default class AgendaController extends Controller {
-  @service agendaService;
   @service router;
-  @service currentSession;
 
   @tracked isLoading = false;
-  @tracked sideNavIsOpen = true;
+  @tracked isOpenSideNav = true;
 
   get shouldHideNav() {
     return this.router.currentRouteName === 'agenda.compare';
   }
 
   @action
-  toggleIsLoading() {
-    this.isLoading = !this.isLoading;
+  enableIsLoading() {
+    this.isLoading = true;
+  }
+
+  @action
+  disableIsLoading() {
+    this.isLoading = false;
   }
 
   @action
@@ -26,7 +29,12 @@ export default class AgendaController extends Controller {
   }
 
   @action
-  toggleSideNav() {
-    this.sideNavIsOpen = !this.sideNavIsOpen;
+  openSideNav() {
+    this.isOpenSideNav = true;
+  }
+
+  @action
+  collapseSideNav() {
+    this.isOpenSideNav = false;
   }
 }

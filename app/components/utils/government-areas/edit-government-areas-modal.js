@@ -9,27 +9,23 @@ export default class EditGovernmentAreasModal extends Component {
   @service store;
   @tracked governmentFields;
   @tracked selectedGovernmentFields = [];
-  @tracked governmentDomains;
   @tracked selectedGovernmentDomains = [];
 
   constructor() {
     super(...arguments);
     this.loadGovernmentAreas.perform();
     this.selectedGovernmentFields = this.args.governmentFields?.slice(0) || []; // making a copy
-    this.selectedGovernmentDomains = this.args.governmentDomains?.slice(0) || []; // making a copy
+    this.selectedGovernmentDomains =
+      this.args.governmentDomains?.slice(0) || []; // making a copy
   }
 
   @task
   *loadGovernmentAreas() {
-    this.governmentDomains = yield this.store.query('concept', {
-      'filter[top-concept-schemes][:uri:]': CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN,
-      include: 'broader,narrower',
-      'page[size]': 100
-    });
     this.governmentFields = yield this.store.query('concept', {
-      'filter[top-concept-schemes][:uri:]': CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD,
+      'filter[top-concept-schemes][:uri:]':
+        CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD,
       include: 'broader,narrower',
-      'page[size]': 100
+      'page[size]': 100,
     });
   }
 
