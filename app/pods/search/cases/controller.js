@@ -1,8 +1,11 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
 
 export default class CasesSearchController extends Controller {
+  @service router;
+
   queryParams =[{
     includeArchived: {
       type: 'boolean',
@@ -56,6 +59,6 @@ export default class CasesSearchController extends Controller {
 
   @action
   navigateToCase(_case) {
-    this.transitionToRoute('cases.case.subcases', _case.id);
+    this.router.transitionTo('cases.case.subcases', _case.id);
   }
 }

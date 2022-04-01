@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
 export default class SearchRoute extends Route {
   @service('session') simpleAuthSession;
@@ -20,6 +21,20 @@ export default class SearchRoute extends Route {
     dateTo: {
       refreshModel: true,
       as: 'tot',
+    },
+    /* As a temporary solution, a publication-flow tab was added to the main
+     * "search" menu. For this specific case, instead of being able to filter
+     * on date range, it was spec'ed to be able to filter on 1 specific date.
+     * A selector was added, allowing to specify on which of the many dates that are
+     * relevant during the publication process the filter must be scoped
+     */
+    date: {
+      refreshModel: true,
+      as: 'datum',
+    },
+    publicationDateTypeKey: {
+      refreshModel: true,
+      as: 'datum_type',
     },
   };
 
@@ -42,5 +57,13 @@ export default class SearchRoute extends Route {
     controller.page = params.page;
     controller.dateFromBuffer = controller.deserializeDate(params.dateFrom);
     controller.dateToBuffer = controller.deserializeDate(params.dateTo);
+    controller.dateBuffer = controller.deserializeDate(params.date);
+  }
+
+  @action
+  loading(/*transition, originRoute*/) {
+    // Disable bubbling of loading event to prevent parent loading route to be shown.
+    // Otherwise it causes a 'flickering' effect because the search filters disappear.
+    return false;
   }
 }
