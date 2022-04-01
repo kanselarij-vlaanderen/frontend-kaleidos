@@ -108,13 +108,13 @@
         </p>
       </Auk::Panel::Footer>
     {{/if}}
-    {{#if @agendaitem.privateExplanation }}
+    {{#if @agendaitem.privateComment }}
       <Auk::Panel::Footer class="auk-u-bg-alt">
         <p class="auk-u-muted">
           <strong class="auk-u-icon-left auk-u-text-bold">
             <Auk::Icon @name="lock-closed" @size="small" />
-            {{t "private-remark-title"}}:
-          </strong>{{@agendaitem.privateExplanation}}
+            {{t "private-comment-title"}}:
+          </strong>{{@agendaitem.privateComment}}
         </p>
       </Auk::Panel::Footer>
     {{/if}}

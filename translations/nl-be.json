@@ -428,7 +428,7 @@
   "meeting": "vergadering",
   "remark": "opmerking",
   "remark-title": "Opmerking",
-  "private-remark-title": "Interne opmerking",
+  "private-comment-title": "Interne opmerking",
   "decision": "beslissing",
   "agenda-item-treatment": "Beslissing",
   "decision-result-code": "Beslissing resultaatcode",
