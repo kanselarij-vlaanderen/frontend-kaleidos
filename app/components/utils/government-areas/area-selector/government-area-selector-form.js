@@ -22,25 +22,42 @@ export default class GovernmentAreaSelectorForm extends Component {
 
   @task
   *calculateDomainSelections() {
-    const availableDomains = this.args.availableDomains.sortBy('label');
-    const domainSelections = [];
-    for (const availableDomain of availableDomains) {
-      const isDomainSelected =
-        this.args.selectedDomains.includes(availableDomain);
-      const availableFieldsForDomain = yield availableDomain.narrower;
-      const selectedFieldsForDomain = availableFieldsForDomain.filter((field) =>
-        this.args.selectedFields.includes(field)
+    // Filter logic is applied in 2 steps, such that promises to fetch the domains can be executed using Promise.all
+    // Step 1: create an array of domains, one for each selected field, using the same order as this.selectedFields
+    // Step 2: use the array of step 1 to verify whether the domain fetched for the field is the current domain
+    const availableFields = this.args.availableFields ?? [];
+    let domainsFromAvailableFields = yield Promise.all(
+      availableFields.mapBy('broader')
+    );
+
+    let uniqueDomains = domainsFromAvailableFields
+      .filterBy('deprecated', false)
+      .uniq()
+      .sortBy('label');
+
+    const selectedFields = this.args.selectedFields ?? [];
+    const domainsFromSelectedFields = yield Promise.all(
+      selectedFields.mapBy('broader')
+    );
+
+    const selectedDomains = this.args.selectedDomains ?? [];
+
+    this.domainSelections = uniqueDomains.map((domain) => {
+      const availableFieldsForDomain = availableFields.filter(
+        (_, index) => domainsFromAvailableFields[index] === domain
       );
-      domainSelections.push(
-        new DomainSelection(
-          availableDomain,
-          isDomainSelected,
-          availableFieldsForDomain,
-          selectedFieldsForDomain
-        )
+      const selectedFieldsForDomain = selectedFields.filter(
+        (_, index) => domainsFromSelectedFields[index] === domain
       );
-    }
-    this.domainSelections = domainSelections;
+      const isSelected = selectedDomains.includes(domain);
+
+      return new DomainSelection(
+        domain,
+        isSelected,
+        availableFieldsForDomain,
+        selectedFieldsForDomain
+      );
+    });
   }
 
   @action
