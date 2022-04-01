@@ -15,13 +15,13 @@
                 {{moment-format @meeting.plannedStart "HH:mm"}}
               {{/unless}}
             </h4>
-            {{#if @meeting.kindToShow.label}}
+            {{#if @meeting.kind.label}}
               <span
                 data-test-agenda-header-kind
                 class="auk-u-text-muted auk-body-1"
               >
                 -
-                {{await @meeting.kindToShow.label}}
+                {{@meeting.kind.label}}
               </span>
             {{/if}}
           </div>

@@ -1,8 +1,10 @@
 import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 export default class Concept extends Model {
+  @attr('string') uri;
   @attr('string') label;
-  @attr('string') scopeNote;
   @attr('string') altLabel;
+  @attr('string') scopeNote;
+  @attr('number') position;
   @hasMany('concept', { inverse: 'broader'}) narrower;
   // The idea behind also using broader is because ember was automatically connecting the broader parent under the narrower relation
   // Resulting in all concepts with 1 inverse narrower to break length == 0 checks on narrower
