@@ -1,6 +1,6 @@
 <div
   class="auk-u-mb-2
-    {{if this.documentContainer.aboutToDelete "vlc-document--deleted-state"}}"
+    {{if this.documentContainer.aboutToDelete 'vlc-document--deleted-state'}}"
   {{did-update (perform this.loadPieceRelatedData) @piece}}
   {{did-update (perform this.loadPieceRelatedData) @documentContainer}}
 >
@@ -126,9 +126,7 @@
           </Auk::Toolbar::Group>
         </Auk::Toolbar>
         <div class="auk-o-flex">
-          <div
-            class="auk-o-flex auk-o-flex--vertical auk-u-maximize-width"
-          >
+          <div class="auk-o-flex auk-o-flex--vertical auk-u-maximize-width">
             {{#if this.isEditingPiece}}
               <div class="auk-o-flex auk-o-flex--vertical-center">
                 <Auk::Input
@@ -229,9 +227,7 @@
           @onDelete={{perform this.deleteUploadedPiece}}
         />
       {{else}}
-        <Auk::FileUploader
-          @onUpload={{perform this.uploadPiece}}
-        />
+        <Auk::FileUploader @onUpload={{perform this.uploadPiece}} />
       {{/if}}
     </Auk::Modal::Body>
     <WebComponents::VlModalFooter
