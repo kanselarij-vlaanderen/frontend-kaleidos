@@ -51,7 +51,7 @@ context('Publications overview tests', () => {
   it('should test all the result amount options shown options in overview', () => {
     const elementsToCheck = [
       10,
-      25,
+      50,
       100,
       200
     ];
