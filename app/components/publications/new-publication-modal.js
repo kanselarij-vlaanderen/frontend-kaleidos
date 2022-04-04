@@ -85,7 +85,11 @@ export default class NewPublicationModal extends Component {
       const identification = yield latestPublication.identification;
       const structuredIdentifier = yield identification.structuredIdentifier;
       this.number = structuredIdentifier.localIdentifier + 1;
+      // Validate in case the suggested number already exists to double down on avoiding duplication
+      // Sort may fail if data types are mixed string/integer, validation check is more strict
+      yield this.validateIsPublicationNumberAlreadyTaken.perform();
     } else {
+      // empty data only
       this.number = 1;
     }
   }
