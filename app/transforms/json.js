@@ -1,6 +1,6 @@
 import Transform from '@ember-data/serializer/transform';
 
-export default class JsonStringTransform extends Transform {
+export default class JsonTransform extends Transform {
   serialize(object) {
     if (object === undefined || object === null) {
       return undefined;
