@@ -15,7 +15,7 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
   @tracked message;
   @tracked uploadedPieces = [];
   @tracked transferredPieces = [];
-  @tracked mustUpdatePublicationStatus = false;
+  @tracked mustUpdatePublicationStatus = true;
 
   validators;
 
@@ -100,10 +100,6 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
 
   @dropTask
   *cancel() {
-    // necessary because close-button is not disabled when saving
-    if (this.save.isRunning) {
-      return;
-    }
     yield Promise.all(
       this.uploadedPieces.map((piece) =>
         this.deleteUploadedPiece.perform(piece)
@@ -141,8 +137,8 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
 
   @task
   *deleteUploadedPiece(piece) {
-    this.uploadedPieces.removeObject(piece);
     yield this.publicationService.deletePiece(piece);
+    this.uploadedPieces.removeObject(piece);
   }
 
   @action

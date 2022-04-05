@@ -23,11 +23,6 @@ export default class PublicationsPublicationTranslationsTranslationsInfoPanelCom
     this.args.translationSubcase.rollbackAttributes();
   }
 
-  @action
-  setTranslationDueDate(selectedDates) {
-    this.args.translationSubcase.dueDate = selectedDates[0];
-  }
-
   @task
   *save() {
     yield this.args.translationSubcase.save();

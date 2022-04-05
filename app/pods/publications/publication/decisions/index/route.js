@@ -13,7 +13,13 @@ export default class PublicationsPublicationDecisionsIndexRoute extends Route {
       'filter[publication-flow][:id:]': parentParams.publication_id,
       // TODO: paginatie uitklaren in design
       'page[size]': PAGE_SIZE.PUBLICATION_FLOW_PIECES,
-      include: 'document-container',
+      sort: 'received-date,name',
+      include: [
+        'file',
+        'document-container',
+        'document-container.type',
+        'access-level'
+      ].join(',')
     });
     return pieces.toArray();
   }

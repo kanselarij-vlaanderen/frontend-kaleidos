@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
 export default class AgendasRoute extends Route {
+  @service router;
   @service('session') simpleAuthSession;
 
   beforeModel(transition) {

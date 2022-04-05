@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { restartableTask } from 'ember-concurrency-decorators';
-import { timeout } from 'ember-concurrency';
+import { timeout, restartableTask } from 'ember-concurrency';
 import { isBlank } from '@ember/utils';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 

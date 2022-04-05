@@ -1,22 +1,18 @@
-{{! TODO: octane-refactor }}
-{{! template-lint-disable no-action }}
-<div data-test-utils-kind-selector class="auk-form-group">
-  {{#if (not this.hideLabel)}}
+{{#if this.isLoading}}
+  <div class="auk-u-text-muted">
+    {{t "please-be-patient"}}
+    <div class="auk-loader" role="alert" aria-busy="true"></div>
+  </div>
+{{else}}
+  <div data-test-utils-kind-selector class="auk-form-group">
     <Auk::Label>{{t "kind"}}</Auk::Label>
-  {{/if}}
-  {{#if this.isLoading}}
-    <div class="auk-u-text-muted">
-      {{t "please-be-patient"}}
-      <div class="auk-loader" role="alert" aria-busy="true"></div>
-    </div>
-  {{else}}
     <PowerSelect
       @options={{this.options}}
-      @selected={{this.selectedkind}}
-      @onChange={{action "setAction"}}
+      @selected={{@selectedKind}}
+      @onChange={{@onChange}}
       as |option|
     >
       {{option.label}}
     </PowerSelect>
-  {{/if}}
-</div>
+  </div>
+{{/if}}

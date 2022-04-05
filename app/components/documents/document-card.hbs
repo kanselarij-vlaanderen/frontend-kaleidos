@@ -14,43 +14,42 @@
         {{/if}}
       </div>
       <div class="vlc-document-card__content">
-        <Auk::Toolbar @auto={{true}}>
-          <Auk::Toolbar::Group @position="left">
-            <Auk::Toolbar::Item>
+        <Auk::Toolbar @auto={{true}} as |Toolbar|>
+          <Toolbar.Group @position="left" as |Group|>
+            <Group.Item>
               <p data-test-document-card-type class="auk-overline">
                 {{#unless this.loadPieceRelatedData.isRunning}}
                   {{this.documentContainer.type.label}}
                 {{/unless}}
               </p>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-          <Auk::Toolbar::Group @position="right">
+            </Group.Item>
+          </Toolbar.Group>
+          <Toolbar.Group @position="right" as |Group|>
             {{#if
               (and
-                this.shouldShowPublications
+                this.userMayManagePublicationFlows
                 (not this.loadPieceRelatedData.isRunning)
                 (not this.loadPublicationFlowRelatedData.isRunning)
               )
             }}
-              {{! trigger fetch }}
               {{#if this.piece.publicationFlow}}
-                {{! TODO: remove style attributes and replace classes with auk-status-pill }}
-                {{! template-lint-disable no-inline-styles }}
                 <LinkTo
-                  data-test-document-card-publication-link
-                  class="auk-pill auk-pill--default auk-u-mr-2"
                   @route="publications.publication"
                   @model={{this.piece.publicationFlow.id}}
+                  class="auk-pill auk-pill--default auk-u-mr-2"
+                  data-test-document-card-publication-link
                 >
+                  {{! TODO: remove style attributes and replace classes with auk-status-pill }}
+                  {{! template-lint-disable no-inline-styles }}
                   <Auk::Icon @name="link" style="display: none;" />
                   <span class="auk-status-pill__label" style="padding: 0;">
                     {{this.piece.publicationFlow.identification.idName}}
                   </span>
+                  {{! template-lint-enable no-inline-styles }}
                 </LinkTo>
-                {{! template-lint-enable no-inline-styles }}
               {{/if}}
             {{/if}}
-            <Auk::Toolbar::Item class="auk-o-flex">
+            <Group.Item class="auk-o-flex">
               {{#unless this.loadPieceRelatedData.isRunning}}
                 <AccessLevelPill
                   @accessLevel={{this.accessLevel}}
@@ -61,7 +60,7 @@
                   @onChangeConfidentiality={{this.changeConfidentiality}}
                 />
               {{/unless}}
-            </Auk::Toolbar::Item>
+            </Group.Item>
             {{#if
               (and
                 @hasMarkForSignature
@@ -69,7 +68,7 @@
                 (not this.loadPieceRelatedData.isRunning)
               )
             }}
-              <Auk::Toolbar::Item>
+              <Group.Item>
                 <Auk::Button
                   @skin={{if
                     this.signMarkingActivity
@@ -81,10 +80,10 @@
                   @icon={{if this.signMarkingActivity "sign" "no-sign"}}
                   {{on "click" (perform this.markOrUnmarkForSignature)}}
                 />
-              </Auk::Toolbar::Item>
+              </Group.Item>
             {{/if}}
-            <Auk::Toolbar::Item>
-              {{#if this.currentSession.isEditor}}
+            {{#if this.currentSession.isEditor}}
+              <Group.Item>
                 <Auk::DropdownMenu
                   @skin="borderless"
                   @icon="three-dots"
@@ -110,14 +109,12 @@
                     {{t "document-delete"}}
                   </Menu.Item>
                 </Auk::DropdownMenu>
-              {{/if}}
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
+              </Group.Item>
+            {{/if}}
+          </Toolbar.Group>
         </Auk::Toolbar>
         <div class="auk-o-flex">
-          <div
-            class="auk-o-flex auk-o-flex--vertical auk-u-maximize-width"
-          >
+          <div class="auk-o-flex auk-o-flex--vertical auk-u-maximize-width">
             {{#if this.isEditingPiece}}
               <div class="auk-o-flex auk-o-flex--vertical-center">
                 <Auk::Input
@@ -218,9 +215,7 @@
           @onDelete={{perform this.deleteUploadedPiece}}
         />
       {{else}}
-        <Auk::FileUploader
-          @onUpload={{perform this.uploadPiece}}
-        />
+        <Auk::FileUploader @onUpload={{perform this.uploadPiece}} />
       {{/if}}
     </Auk::Modal::Body>
     <WebComponents::VlModalFooter

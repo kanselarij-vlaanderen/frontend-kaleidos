@@ -14,7 +14,6 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
    * @argument onSave
    * @argument onCancel
    */
-  @service store;
   @service publicationService;
 
   @tracked uploadedPieces = [];
@@ -23,7 +22,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   @tracked translationDueDate = this.args.dueDate;
   @tracked subject;
   @tracked message;
-  @tracked mustUpdatePublicationStatus = false;
+  @tracked mustUpdatePublicationStatus = true;
 
   validators;
 
@@ -58,10 +57,6 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
 
   @dropTask
   *cancel() {
-    // necessary because close-button is not disabled when saving
-    if (this.save.isRunning) {
-      return;
-    }
     yield Promise.all(
       this.uploadedPieces.map((piece) =>
         this.deleteUploadedPiece.perform(piece)
@@ -74,7 +69,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   *setEmailFields() {
     const publicationFlow = this.args.publicationFlow;
     const identification = yield publicationFlow.identification;
-
+    const contactPersons = yield publicationFlow.contactPersons;
     const mailParams = {
       identifier: identification.idName,
       title: publicationFlow.shortTitle,
@@ -82,16 +77,17 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
       numberOfPages: this.numberOfPages,
       numberOfWords: this.numberOfWords,
       numberOfDocuments: this.uploadedPieces.length,
+      contactPersons: contactPersons.toArray(),
     };
 
-    const mailTemplate = translationRequestEmail(mailParams);
+    const mailTemplate = yield translationRequestEmail(mailParams);
     this.message = mailTemplate.message;
     this.subject = mailTemplate.subject;
   }
 
   @action
-  setTranslationDueDate(selectedDates) {
-    this.translationDueDate = selectedDates[0];
+  setTranslationDueDate(selectedDate) {
+    this.translationDueDate = selectedDate;
     this.setEmailFields.perform();
   }
 
@@ -109,9 +105,9 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
 
   @task
   *deleteUploadedPiece(piece) {
+    yield this.publicationService.deletePiece(piece);
     this.uploadedPieces.removeObject(piece);
     this.setEmailFields.perform();
-    yield this.publicationService.deletePiece(piece);
   }
 
   initValidators() {

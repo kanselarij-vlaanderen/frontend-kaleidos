@@ -6,14 +6,6 @@ import publication from '../../selectors/publication.selectors';
 import auk from '../../selectors/auk.selectors';
 
 context('Publications overview tests', () => {
-  const searchFields = {
-    number: 1401,
-    shortTitle: 'Besluitvorming Vlaamse Regering',
-    longTitle: 'Besluitvorming Vlaamse Regering betreffende beslissingen',
-    remark: 'Sinds 2021',
-    numacNumber: 1234567890,
-  };
-
   beforeEach(() => {
     cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
     cy.visit('/publicaties');
@@ -23,19 +15,25 @@ context('Publications overview tests', () => {
     cy.logout();
   });
 
-  it('should setup a publication for later search tests', () => {
-    // needs 15 seconds for reindex in testsuite
-    cy.createPublication(searchFields);
+  it('should setup a publication for later tests because default data has none yet', () => {
+    const fields = {
+      number: 1401,
+      shortTitle: 'Besluitvorming Vlaamse Regering',
+      longTitle: 'Besluitvorming Vlaamse Regering betreffende beslissingen',
+      remark: 'Sinds 2021',
+      numacNumber: 1234567890,
+    };
+    cy.createPublication(fields);
     cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
     cy.intercept('POST', '/identifications').as('postNumacNumber');
     cy.get(publication.remark.edit).click();
-    cy.get(publication.remark.textarea).type(searchFields.remark);
+    cy.get(publication.remark.textarea).type(fields.remark);
     cy.get(publication.remark.save).click();
     cy.wait('@patchPublicationFlow');
     cy.get(publication.publicationCaseInfo.edit).click();
     cy.get(publication.publicationCaseInfo.editView.numacNumber).find(dependency.emberTagInput.input)
       .click()
-      .type(`${searchFields.numacNumber}{enter}`);
+      .type(`${fields.numacNumber}{enter}`);
     cy.get(publication.publicationCaseInfo.editView.save).click();
     cy.wait('@postNumacNumber');
   });
@@ -53,14 +51,14 @@ context('Publications overview tests', () => {
   it('should test all the result amount options shown options in overview', () => {
     const elementsToCheck = [
       10,
-      25,
+      50,
       100,
       200
     ];
     elementsToCheck.forEach((option) => {
       // In this loop, the options list should go away after url change but it doesn't always, creating a second option list that covers elements
       cy.get(dependency.emberPowerSelect.option).should('not.exist');
-      cy.get(publication.publicationsIndex.numberSelector).find(dependency.emberPowerSelect.trigger)
+      cy.get(auk.formGroup).find(dependency.emberPowerSelect.trigger)
         .click();
       cy.get(dependency.emberPowerSelect.option).contains(option)
         .click();
@@ -168,21 +166,6 @@ context('Publications overview tests', () => {
         cy.url().should('not.contain', 'pagina=');
         cy.get(auk.pagination.previous).should('be.disabled');
       });
-  });
-
-  it('should test the search function', () => {
-    // this is data from first test
-    for (const [key, value] of Object.entries(searchFields)) {
-      cy.intercept('GET', '/publication-flows/search**').as('searchPublicationFlows');
-      cy.log(`searching for ${key}`);
-      cy.get(publication.publicationCaseSearch.input).type(value);
-      cy.wait('@searchPublicationFlows');
-      cy.get(publication.publicationCaseSearch.result).contains(searchFields.shortTitle)
-        .should('have.length', 1)
-        .click();
-      cy.get(publication.publicationHeader.shortTitle).should('contain', searchFields.shortTitle);
-      cy.get(publication.publicationNav.goBack).click();
-    }
   });
 
   it('should test changing to all statussen', () => {

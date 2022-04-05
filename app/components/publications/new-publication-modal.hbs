@@ -5,7 +5,8 @@
       (t "publications-new-title-via-council-of-ministers")
       (t "publications-new-title-not-via-council-of-ministers")
     }}
-    @onClose={{this.cancel}}
+    @onClose={{@onCancel}}
+    @closeDisabled={{this.save.isRunning}}
   />
   <Auk::Modal::Body>
     <Utils::LoadableContent
@@ -105,7 +106,7 @@
             {{else}}
               <Auk::Datepicker
                 @date={{this.decisionDate}}
-                @onChange={{this.setDecisionDate}}
+                @onChange={{set this "decisionDate"}}
               />
             {{/if}}
           </div>
@@ -113,16 +114,10 @@
             <Auk::Label>
               {{t "publication-flow-opening-date"}}
             </Auk::Label>
-            {{#if this.isViaCouncilOfMinisters}}
-              <span class="auk-u-text-muted">
-                {{moment-format this.openingDate "DD-MM-YYYY"}}
-              </span>
-            {{else}}
-              <Auk::Datepicker
-                @date={{this.openingDate}}
-                @onChange={{this.setOpeningDate}}
-              />
-            {{/if}}
+            <Auk::Datepicker
+              @date={{this.openingDate}}
+              @onChange={{set this "openingDate"}}
+            />
           </div>
           <div class="auk-o-grid-col-1 auk-form-group">
             <Auk::Label>
@@ -130,7 +125,7 @@
             </Auk::Label>
             <Auk::Datepicker
               @date={{this.publicationDueDate}}
-              @onChange={{this.setPublicationDueDate}}
+              @onChange={{set this "publicationDueDate"}}
             />
           </div>
         </div>
@@ -143,8 +138,8 @@
         <Auk::Toolbar::Item>
           <Auk::ButtonLink
             data-test-new-publication-cancel
-            disabled={{this.save.isRunning}}
-            {{on "click" this.cancel}}
+            @disabled={{this.save.isRunning}}
+            {{on "click" @onCancel}}
           >
             {{t "cancel"}}
           </Auk::ButtonLink>

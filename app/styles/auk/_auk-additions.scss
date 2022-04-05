@@ -140,3 +140,23 @@ table tr.lt-expanded-row {
 .vlc-procedure-step--nopadding {
   padding: 0;
 }
+
+
+
+// Styling copied from usertest-branch
+
+// Fix custom select styling
+.auk-select {
+  font-family: inherit;
+  background-color: #fff;
+}
+
+.auk-button--flush {
+  padding: 0 !important;
+
+  svg {
+    position: relative;
+    bottom: .1rem;
+    fill: currentColor;
+  }
+}

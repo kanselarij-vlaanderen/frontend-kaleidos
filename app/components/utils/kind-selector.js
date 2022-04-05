@@ -1,29 +1,42 @@
-/* eslint-disable ember/no-arrow-function-computed-properties */
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-components
-import Component from '@ember/component';
-import CONFIG from 'frontend-kaleidos/utils/config';
-import EmberObject, { computed } from '@ember/object';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
+import { task } from 'ember-concurrency';
+import CONSTANTS from '../../config/constants';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
-export default Component.extend({
-  classNames: ['auk-u-mb-2'],
-  isLoading: null,
-  hideLabel: null,
+/**
+ * @argument {Concept} selectedKind The meeting kind to set the dropdown to
+ * @argument {function} onChange Action to perform once a meeting kind has been selected
+ * @argument {boolean} disabled
+ */
+export default class UtilsKindSelector extends Component {
+  @service store;
 
-  options: computed(() => CONFIG.MINISTERRAAD_TYPES.TYPES.map((meetingType) => EmberObject.create(meetingType))),
+  @tracked options;
 
-  selectedkind: computed('kind.uri', 'options', function() {
-    return this.options.find((kind) => this.kind && kind.uri === this.kind.uri) || this.options.get('firstObject');
-  }),
+  constructor() {
+    super(...arguments);
 
-  // TODO: octane-refactor
-  // eslint-disable-next-line ember/no-actions-hash
-  actions: {
-    setAction(meetingType) {
-      this.set('selectedkind', meetingType);
-      this.setAction(meetingType.get('uri'));
-    },
-  },
-});
+    this.loadKinds.perform();
+  }
+
+  get isLoading() {
+    return this.args.isLoading || this.loadKinds.isRunning;
+  }
+
+  @task
+  *loadKinds() {
+    this.options = yield this.store.query('concept', {
+      filter: {
+        'concept-schemes': {
+          ':uri:': CONSTANTS.CONCEPT_SCHEMES.VERGADERACTIVITEIT,
+        },
+        ':has-no:narrower': true, // Only the most specific concepts, i.e. the actual meeting kinds (so no "Annex")
+      },
+      include: 'broader,narrower',
+      'page[size]': PAGE_SIZE.CODE_LISTS,
+      sort: 'position',
+    });
+  }
+}

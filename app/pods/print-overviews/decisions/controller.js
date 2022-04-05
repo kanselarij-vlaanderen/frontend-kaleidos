@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import { getPrintOverviewTitle } from 'frontend-kaleidos/utils/print-overview-util';
+import { kindPrintLabel } from '../../../helpers/kind-print-label';
 
 // TODO: octane-refactor
 /* eslint-disable ember/no-get */
@@ -15,17 +16,19 @@ export default Controller.extend({
 
   title: computed('model.createdFor.plannedStart', 'titleTranslationKey', 'titleTranslationParams', async function() {
     const date = this.get('model.createdFor.plannedStart');
-    if (this.titleTranslationParams) {
-      const translatedTitleWithParams = this.intl.t(this.titleTranslationKey, this.titleTranslationParams);
+    const titleTranslationParams = await this.titleTranslationParams;
+    if (titleTranslationParams) {
+      const translatedTitleWithParams = this.intl.t(this.titleTranslationKey, titleTranslationParams);
       return getPrintOverviewTitle(translatedTitleWithParams, date);
     }
     const translatedTitle = this.intl.t(this.titleTranslationKey);
     return getPrintOverviewTitle(translatedTitle, date);
   }),
 
-  titleTranslationParams: computed('model.createdFor', function() {
+  titleTranslationParams: computed('model.createdFor', async function() {
     const meeting = this.get('model.createdFor');
-    const kindLabel = meeting.get('kindToShow.altLabel');
+    const kind = await meeting.get('kind');
+    const kindLabel = kindPrintLabel(kind);
     return {
       kind: kindLabel,
     };

@@ -115,17 +115,12 @@ export default class PublicationService extends Service {
     });
     await identifier.save();
 
-    const statusChange = this.store.createRecord('publication-status-change', {
-      startedAt: now,
-    });
-    await statusChange.save();
     const publicationFlow = this.store.createRecord('publication-flow', {
       identification: identifier,
       case: case_,
       agendaItemTreatment: agendaItemTreatment,
       mandatees: mandatees,
       status: initialStatus,
-      publicationStatusChange: statusChange,
       shortTitle: publicationProperties.shortTitle,
       longTitle: publicationProperties.longTitle,
       created: now,
@@ -134,6 +129,13 @@ export default class PublicationService extends Service {
       regulationType: regulationType,
     });
     await publicationFlow.save();
+
+    const statusChange = this.store.createRecord('publication-status-change', {
+      startedAt: now,
+      publication: publicationFlow,
+    });
+    await statusChange.save();
+
     const translationSubcase = this.store.createRecord('translation-subcase', {
       created: now,
       modified: now,
@@ -212,18 +214,19 @@ export default class PublicationService extends Service {
     // already is deleted (by step below)
     await publicationFlow.save();
 
-    const oldChangeActivity = await publicationFlow.publicationStatusChange;
-    if (oldChangeActivity) {
-      await oldChangeActivity.destroyRecord();
-    }
-    const newChangeActivity = this.store.createRecord(
+    // reload the relation for possible concurrency
+    const currentStatusChange = await publicationFlow
+      .belongsTo('publicationStatusChange')
+      .reload();
+    await currentStatusChange?.destroyRecord();
+    const newStatusChange = this.store.createRecord(
       'publication-status-change',
       {
         startedAt: changeDate,
         publication: publicationFlow,
       }
     );
-    await newChangeActivity.save();
+    await newStatusChange.save();
   }
 
   /**
@@ -380,10 +383,26 @@ export default class PublicationService extends Service {
   async deletePiece(piece) {
     const file = await piece.file;
     const documentContainer = await piece.documentContainer;
-    await Promise.all([
-      piece.destroyRecord(),
-      file.destroyRecord(),
-      documentContainer.destroyRecord(),
-    ]);
+    await file.destroyRecord();
+    await documentContainer.destroyRecord();
+    await piece.destroyRecord();
+  }
+
+  /**
+   * For publications, we want to show a link to the agendaitem but loading the models agendaitem/agenda/meeting should be avoided.
+   * Mainly because some of the relations should be loaded a certain way and we just want to generate a link, not work with the models.
+   *
+   * @param {AgendaItemTreatment} agendaItemTreatment
+   * @returns [meetingId, agendaId, agendaitemId] an array of id's for a linkTo to route "agenda.agendaitems.agendaitem"
+   */
+  async getModelsForAgendaitemFromTreatment(agendaItemTreatment) {
+    const agendaitem = await this.store.queryOne('agendaitem', {
+      'filter[treatments][:id:]': agendaItemTreatment.id,
+      'filter[:has-no:next-version]': 't',
+      sort: '-created',
+    });
+    const agenda = await agendaitem?.agenda;
+    const meeting = await agenda?.createdFor;
+    return [meeting.id, agenda.id, agendaitem.id];
   }
 }

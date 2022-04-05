@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 
 class DomainSelection {
   constructor(domain, isSelected, availableFields, selectedFields) {
@@ -13,27 +13,7 @@ class DomainSelection {
 }
 
 export default class GovernmentAreaSelectorForm extends Component {
-  /**
-   * Since fields are children of domains, this component only takes fields as arguments, and calculates the required domains internally
-   * @argument availableFields: All fields that will be listed as options to be checked
-   * @argument selectedFields: Which fields should be checked
-   * @argument onSelectFields: Action, takes an array of fields
-   * @argument onUnSelectFields: Action, takes an array of fields
-   */
-
   @tracked domainSelections;
-
-  get availableFields() {
-    return this.args.availableFields || [];
-  }
-
-  get selectedFields() {
-    return this.args.selectedFields || [];
-  }
-
-  get selectedDomains() {
-    return this.args.selectedDomains || [];
-  }
 
   constructor() {
     super(...arguments);
@@ -42,32 +22,50 @@ export default class GovernmentAreaSelectorForm extends Component {
 
   @task
   *calculateDomainSelections() {
-    const domainsFromFields = yield Promise.all(this.availableFields.map((field) => field.broader));
-    const uniqueDomains = [...new Set(domainsFromFields)].sortBy('label');
-    const domainSelections = [];
-    for (const domain of uniqueDomains) {
-      // Filter logic is applied in 2 steps, such that promises to fetch the domains can be executed using Promise.all
-      // Step 1: create an array of domains, one for each selected field, using the same order as this.selectedFields
-      // Step 2: use the array of step 1 to verify whether the domain fetched for the field is the current domain
-      const selectedFieldsDomains = yield Promise.all(this.selectedFields.map((field) => field.broader));
-      // eslint-disable-next-line no-unused-vars, id-length
-      const selectedFieldsForDomain = this.selectedFields.filter((_, index) => selectedFieldsDomains[index] === domain);
+    // Filter logic is applied in 2 steps, such that promises to fetch the domains can be executed using Promise.all
+    // Step 1: create an array of domains, one for each selected field, using the same order as this.selectedFields
+    // Step 2: use the array of step 1 to verify whether the domain fetched for the field is the current domain
+    const availableFields = this.args.availableFields ?? [];
+    let domainsFromAvailableFields = yield Promise.all(
+      availableFields.mapBy('broader')
+    );
 
-      // Similar filter logic applied in 2 steps as above for the available fields
-      const availableFieldsDomains = yield Promise.all(this.availableFields.map((field) => field.broader));
-      // eslint-disable-next-line no-unused-vars, id-length
-      const availableFieldsForDomain = this.availableFields.filter((_, index) => availableFieldsDomains[index] === domain);
-      const isSelected = this.selectedDomains.includes(domain);
+    let uniqueDomains = domainsFromAvailableFields
+      .filterBy('deprecated', false)
+      .uniq()
+      .sortBy('label');
 
-      domainSelections.push(new DomainSelection(domain, isSelected, availableFieldsForDomain, selectedFieldsForDomain));
-    }
-    this.domainSelections = domainSelections;
+    const selectedFields = this.args.selectedFields ?? [];
+    const domainsFromSelectedFields = yield Promise.all(
+      selectedFields.mapBy('broader')
+    );
+
+    const selectedDomains = this.args.selectedDomains ?? [];
+
+    this.domainSelections = uniqueDomains.map((domain) => {
+      const availableFieldsForDomain = availableFields.filter(
+        (_, index) => domainsFromAvailableFields[index] === domain
+      );
+      const selectedFieldsForDomain = selectedFields.filter(
+        (_, index) => domainsFromSelectedFields[index] === domain
+      );
+      const isSelected = selectedDomains.includes(domain);
+
+      return new DomainSelection(
+        domain,
+        isSelected,
+        availableFieldsForDomain,
+        selectedFieldsForDomain
+      );
+    });
   }
 
   @action
   toggleDomainSelection(domainSelection, event) {
     const checked = event.target.checked;
-    const handler = checked ? this.args.onSelectDomains : this.args.onUnSelectDomains;
+    const handler = checked
+      ? this.args.onSelectDomains
+      : this.args.onDeselectDomains;
     if (handler) {
       handler([domainSelection.domain]);
     }
@@ -76,7 +74,9 @@ export default class GovernmentAreaSelectorForm extends Component {
   @action
   toggleFieldSelection(field, event) {
     const checked = event.target.checked;
-    const handler = checked ? this.args.onSelectFields : this.args.onUnSelectFields;
+    const handler = checked
+      ? this.args.onSelectFields
+      : this.args.onDeselectFields;
     if (handler) {
       handler([field]);
     }

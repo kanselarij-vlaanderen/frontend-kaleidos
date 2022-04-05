@@ -21,7 +21,7 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   @tracked message;
   @tracked uploadedPieces = [];
   @tracked transferredPieces = [];
-  @tracked mustUpdatePublicationStatus = false;
+  @tracked mustUpdatePublicationStatus = true;
 
   validators;
 
@@ -113,10 +113,6 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
 
   @dropTask
   *cancel() {
-    // necessary because close-button is not disabled when saving
-    if (this.save.isRunning) {
-      return;
-    }
     yield Promise.all(
       this.uploadedPieces.map((piece) =>
         this.deleteUploadedPiece.perform(piece)
@@ -152,8 +148,8 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
 
   @task
   *deleteUploadedPiece(piece) {
-    this.uploadedPieces.removeObject(piece);
     yield this.publicationService.deletePiece(piece);
+    this.uploadedPieces.removeObject(piece);
   }
 
   @action

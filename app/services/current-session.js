@@ -17,6 +17,7 @@ const {
 export default class CurrentSessionService extends Service {
   @service session;
   @service store;
+  @service router;
 
   @tracked account;
   @tracked user;
@@ -39,6 +40,19 @@ export default class CurrentSessionService extends Service {
     }
   }
   /* eslint-enable ember/no-get */
+
+  requireAuthorization(transition, roleName) {
+    let isAuthenticated = this.session.requireAuthentication(transition, 'login');
+    if (!isAuthenticated) {
+      return false;
+    }
+    let isAuthorized = this.may(roleName);
+    if (!isAuthorized) {
+      this.router.transitionTo('agendas');
+      return false;
+    }
+    return true;
+  }
 
   may(roleName) {
     return groupRoles.get(this.group.uri).includes(roleName);

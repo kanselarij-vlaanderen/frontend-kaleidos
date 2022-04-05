@@ -18,10 +18,26 @@ const footer = 'Met vriendelijke groet,\n'
   + 'publicatiesBS@vlaanderen.be\t\n'
   + 'Koolstraat 35, 1000 Brussel\t\n';
 
-function translationRequestEmail(params) {
-  const dueDate = params.dueDate ? moment(params.dueDate).format('DD-MM-YYYY') : '-';
+async function buildContactInformation(contactPersons) {
+  const contactLines = await Promise.all(
+    contactPersons.map(async (contact) => {
+      const person = await contact.person;
+      let contactLine = `- ${person.fullName}`;
+      if (contact.email) {
+        contactLine += ` (${contact.email})`;
+      }
+      return contactLine;
+    })
+  );
+  let message = '\nContactpersonen:\t\n';
+  message += contactLines.join('\n') + '\n';
+  return message;
+}
+async function translationRequestEmail(params) {
+  const dueDate = params.dueDate ? moment(params.dueDate)
+    .format('DD-MM-YYYY') : '-';
   const subject = `Vertaalaanvraag VO-dossier: ${params.identifier}`;
-  const message = 'Collega,\n'
+  let message = 'Collega,\n'
     + '\n'
     + 'Hierbij ter vertaling:\n'
     + `VO-dossier: ${params.identifier}\n`
@@ -30,6 +46,11 @@ function translationRequestEmail(params) {
     + `Aantal pagina’s: ${params.numberOfPages || ''}\t\n`
     + `Aantal woorden: ${params.numberOfWords || ''}\t\n`
     + `Aantal documenten: ${params.numberOfDocuments}\t\n`;
+
+  if (params.contactPersons.length) {
+    message += await buildContactInformation(params.contactPersons);
+  }
+
   return {
     subject: subject,
     message: [message, footer].join('\n\n'),

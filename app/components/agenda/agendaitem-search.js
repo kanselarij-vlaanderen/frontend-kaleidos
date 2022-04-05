@@ -1,8 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { timeout } from 'ember-concurrency';
-import { restartableTask } from 'ember-concurrency-decorators';
+import { timeout, restartableTask } from 'ember-concurrency';
 
 export default class AgendaItemSearch extends Component {
   @tracked searchText;

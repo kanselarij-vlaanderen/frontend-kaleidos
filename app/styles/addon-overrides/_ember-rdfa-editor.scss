@@ -62,6 +62,14 @@ $say-editor-padding: 1rem;
   padding-left: 2rem;
 }
 
+.say-content,
+.say-content p,
+.say-content ul,
+.say-content ol,
+.say-content div {
+  font-size: 1.6rem;
+}
+
 .say-container__aside { // Disable display of toast hints (https://github.com/lblod/ember-rdfa-editor/issues/26)
   display: none;
 }

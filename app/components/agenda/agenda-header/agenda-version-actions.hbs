@@ -1,0 +1,333 @@
+{{#if this.currentSession.isEditor}}
+  <Auk::DropdownMenu
+    @skin="primary"
+    @label={{t "agenda-actions"}}
+    class="auk-u-hidden@print"
+    data-test-agenda-actions-show-options={{true}}
+    as |Menu|
+  >
+    {{#if @currentAgenda.isDesignAgenda}}
+      <Menu.Item
+        data-test-agenda-actions-approve-agenda
+        {{on "click" this.openConfirmApproveAgenda}}
+      >
+        {{t "approve-design-agenda" serialnumber=@currentAgenda.serialnumber}}
+      </Menu.Item>
+      <Menu.Item
+        data-test-agenda-actions-approve-and-close-agenda
+        {{on "click" this.openConfirmApproveAgendaAndCloseMeeting}}
+      >
+        {{t
+          "approve-agenda-and-close"
+          serialnumber=@currentAgenda.serialnumber
+        }}
+      </Menu.Item>
+      <Menu.Divider />
+    {{/if}}
+    {{#if @meeting.isFinal}}
+      <Menu.Item
+        data-test-agenda-actions-unlock-agenda
+        {{on "click" this.createDesignAgenda}}
+        {{! This action does not have confirmation window}}
+      >
+        {{t "agenda-reopen"}}
+      </Menu.Item>
+      <Menu.Divider />
+    {{else if this.isSessionClosable}}
+      <Menu.Item
+        @skin="danger"
+        data-test-agenda-actions-lock-agenda
+        {{on "click" this.openConfirmCloseMeeting}}
+      >
+        {{t "agenda-close"}}
+      </Menu.Item>
+      <Menu.Divider />
+    {{/if}}
+    {{#if this.canDeleteSelectedAgenda}}
+      <Menu.Item
+        @skin="danger"
+        data-test-agenda-actions-delete-agenda
+        {{on "click" this.openConfirmDeleteSelectedAgenda}}
+      >
+        {{t "agenda-delete"}}
+      </Menu.Item>
+    {{/if}}
+    {{#if this.canReopenPreviousAgenda}}
+      <Menu.Divider />
+      <Menu.Item
+        @skin="danger"
+        data-test-agenda-actions-reopen-previous-version
+        {{on "click" this.openConfirmReopenPreviousAgenda}}
+      >
+        {{t "agenda-reopen-previous-version"}}
+      </Menu.Item>
+    {{/if}}
+    {{#if (and (not this.designAgenda) (not @meeting.isFinal))}}
+      <Menu.Divider />
+      <Menu.Item
+        data-test-agenda-actions-create-new-design
+        {{on "click" this.createDesignAgenda}}
+      >
+        {{t "agenda-add"}}
+      </Menu.Item>
+    {{/if}}
+  </Auk::DropdownMenu>
+{{/if}}
+
+{{! new agenda actions with single pop-up for confirmation }}
+
+{{#if this.showConfirmForApprovingAgenda}}
+  <Auk::Modal @size={{if (await @currentAgenda.canBeApproved) "small" "large"}}>
+    <Auk::Modal::Header
+      @title={{t "approve-design-agenda" serialnumber=@currentAgenda.serialnumber}}
+      @onClose={{this.cancelApproveAgenda}}
+    />
+    <Auk::Modal::Body>
+      <Utils::LoadableContent
+        @isLoading={{this.reloadAgendaitemsData.isRunning}}
+        @reserveSpace={{true}}
+      >
+        {{#if (await @currentAgenda.canBeApproved)}}
+          {{t "approve-agenda-confirmation"}}
+        {{else}}
+          <Auk::Alert
+            @skin="error"
+            @message={{t "approve-agenda-not-ok-message"}}
+          />
+          <div>{{t "approve-agenda-confirmation"}}</div>
+          {{#if (await @currentAgenda.approvedAgendaitemsNotOk)}}
+            <br />
+            <div
+              data-test-agenda-actions-approve-agenda-rollback-message
+              class="auk-u-mb-2"
+            >
+              {{t "rollback-agendaitem-on-approving-agenda"}}
+            </div>
+            <Agenda::AgendaHeader::AgendaActionPopupAgendaitems
+              @agendaitems={{await @currentAgenda.approvedAgendaitemsNotOk}}
+            />
+          {{/if}}
+          {{#if (await @currentAgenda.newAgendaitemsNotOk)}}
+            <br />
+            <div
+              data-test-agenda-actions-approve-agenda-move-message
+              class="auk-u-mb-2"
+            >
+              {{t
+                "move-agendaitem-on-approving-agenda"
+                serialnumber=@currentAgenda.serialnumber
+              }}
+            </div>
+            <Agenda::AgendaHeader::AgendaActionPopupAgendaitems
+              @agendaitems={{await @currentAgenda.newAgendaitemsNotOk}}
+            />
+          {{/if}}
+        {{/if}}
+      </Utils::LoadableContent>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.cancelApproveAgenda}}>
+      <Auk::Button
+        data-test-agenda-actions-approve-agenda-confirm
+        @skin={{if
+          (await @currentAgenda.canBeApproved)
+          "primary"
+          "danger-primary"
+        }}
+        @disabled={{this.reloadAgendaitemsData.isRunning}}
+        {{on "click" this.approveCurrentAgenda}}
+      >
+        {{t "approve"}}
+      </Auk::Button>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
+{{/if}}
+
+{{#if this.showConfirmForApprovingAgendaAndClosingMeeting}}
+  <Auk::Modal @size={{if (await @currentAgenda.canBeApproved) "small" "large"}}>
+    <Auk::Modal::Header
+      @title={{t
+        "approve-agenda-and-close"
+        serialnumber=@currentAgenda.serialnumber
+      }}
+      @onClose={{this.cancelApproveAgendaAndCloseMeeting}}
+    />
+    <Auk::Modal::Body>
+      <Utils::LoadableContent
+        @isLoading={{this.reloadAgendaitemsData.isRunning}}
+        @reserveSpace={{true}}
+      >
+        {{#if (await @currentAgenda.canBeApproved)}}
+          {{t "approve-agenda-close-meeting-confirmation"}}
+        {{else}}
+          <Auk::Alert
+            @skin="error"
+            @message={{t "approve-agenda-close-meeting-not-ok-message"}}
+          />
+          <div>{{t "approve-agenda-close-meeting-confirmation"}}</div>
+          {{#if (await @currentAgenda.approvedAgendaitemsNotOk)}}
+            <br />
+            <div
+              data-test-agenda-actions-approve-and-close-agenda-rollback-message
+              class="auk-u-mb-2"
+            >
+              {{t "rollback-agendaitem-on-approving-agenda-close-meeting"}}
+            </div>
+            <Agenda::AgendaHeader::AgendaActionPopupAgendaitems
+              @agendaitems={{await @currentAgenda.approvedAgendaitemsNotOk}}
+            />
+          {{/if}}
+          {{#if (await @currentAgenda.newAgendaitemsNotOk)}}
+            <br />
+            <div
+              data-test-agenda-actions-approve-and-close-agenda-delete-message
+              class="auk-u-mb-2"
+            >
+              {{t
+                "delete-agendaitem-on-closing-meeting"
+                serialnumber=@currentAgenda.serialnumber
+              }}
+            </div>
+            <Agenda::AgendaHeader::AgendaActionPopupAgendaitems
+              @agendaitems={{await @currentAgenda.newAgendaitemsNotOk}}
+            />
+          {{/if}}
+        {{/if}}
+      </Utils::LoadableContent>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.cancelApproveAgendaAndCloseMeeting}}>
+      <Auk::Button
+        data-test-agenda-actions-approve-and-close-agenda-confirm
+        @skin={{if
+          (await @currentAgenda.canBeApproved)
+          "primary"
+          "danger-primary"
+        }}
+        @disabled={{this.reloadAgendaitemsData.isRunning}}
+        {{on "click" this.approveCurrentAgendaAndCloseMeeting}}
+      >
+        {{t "approve-and-close"}}
+      </Auk::Button>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
+{{/if}}
+
+{{#if this.showConfirmForClosingMeeting}}
+  <Auk::Modal
+    @size={{if (await this.latestAgenda.isDesignAgenda) "large" "small"}}
+  >
+    <Auk::Modal::Header
+      @title={{t "agenda-close"}}
+      @onClose={{this.cancelCloseMeeting}}
+    />
+    <Auk::Modal::Body>
+      {{#if (await this.latestAgenda.isDesignAgenda)}}
+        <Auk::Alert
+          @skin="error"
+          @message={{t
+            "agenda-design-delete-message"
+            agenda=this.latestAgenda.agendaName
+          }}
+        />
+      {{/if}}
+      <div>{{t "close-meeting-confirmation"}}</div>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.cancelCloseMeeting}}>
+      <Auk::Button
+        data-test-agenda-actions-lock-agenda-confirm
+        @skin={{if
+          (await this.latestAgenda.isDesignAgenda)
+          "danger-primary"
+          "primary"
+        }}
+        {{on "click" this.closeMeeting}}
+      >
+        {{t "agenda-close"}}
+      </Auk::Button>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
+{{/if}}
+
+{{#if this.showConfirmForDeletingSelectedAgenda}}
+  <Auk::Modal @size={{if (eq @reverseSortedAgendas.length 1) "large" "small"}}>
+    <Auk::Modal::Header
+      @title={{t "agenda-delete"}}
+      @onClose={{this.cancelDeleteSelectedAgenda}}
+    />
+    <Auk::Modal::Body>
+      {{#if (eq @reverseSortedAgendas.length 1)}}
+        <Auk::Alert
+          @skin="error"
+          @message={{t "delete-final-agenda-and-meeting"}}
+        />
+      {{/if}}
+      <div>
+        {{t "delete-agenda-message" agenda=@currentAgenda.agendaName}}
+      </div>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.cancelDeleteSelectedAgenda}}>
+      <Auk::Button
+        data-test-agenda-actions-delete-agenda-confirm
+        @skin="danger-primary"
+        {{on "click" this.deleteSelectedAgenda}}
+      >
+        {{t "agenda-delete"}}
+      </Auk::Button>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
+{{/if}}
+
+{{#if this.showConfirmForReopeningPreviousAgenda}}
+  <Auk::Modal>
+    <Auk::Modal::Header
+      @title={{t "agenda-reopen-previous-version"}}
+      @onClose={{this.cancelReopenPreviousAgenda}}
+    />
+    <Auk::Modal::Body>
+      <Utils::LoadableContent
+        @isLoading={{this.loadPiecesToDelete.isRunning}}
+        @reserveSpace={{true}}
+      >
+        <Auk::Alert
+          @skin="error"
+          @message={{t
+            "agenda-reopen-confirmation"
+            designAgenda=@currentAgenda.agendaName
+            approvedAgenda=this.lastApprovedAgenda.agendaName
+          }}
+        />
+        {{#if this.loadPiecesToDelete.isRunning}}
+          <div class="auk-o-flex auk-o-flex--center auk-u-mt-4">
+            <Auk::Loader @message={{t "loading"}} />
+          </div>
+        {{/if}}
+        {{#if this.piecesToDeleteReopenPreviousAgenda}}
+          <Auk::Alert
+            @skin="warning"
+            @message={{t "agenda-reopen-pieces-delete"}}
+          />
+          <Auk::List class="auk-list auk-list--bordered">
+            {{#each this.piecesToDeleteReopenPreviousAgenda as |piece|}}
+              <Auk::List::Item>
+                <WebComponents::VlDocument @piece={{piece}} />
+              </Auk::List::Item>
+            {{/each}}
+          </Auk::List>
+        {{/if}}
+      </Utils::LoadableContent>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.cancelReopenPreviousAgenda}}>
+      <Auk::Button
+        data-test-agenda-actions-reopen-previous-version-confirm
+        @skin="danger-primary"
+        @disabled={{this.loadPiecesToDelete.isRunning}}
+        {{on "click" this.reopenPreviousAgenda}}
+      >
+        {{#if this.piecesToDeleteReopenPreviousAgenda}}
+          {{t "agenda-reopen-previous-version-with-delete"}}
+        {{else}}
+          {{t "agenda-reopen-previous-version"}}
+        {{/if}}
+      </Auk::Button>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
+{{/if}}
