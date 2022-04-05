@@ -1,9 +1,9 @@
 <div class="auk-u-mb-8">
   <Auk::Panel>
     <Auk::Panel::Header>
-      <Auk::Toolbar>
-        <Auk::Toolbar::Group @position="left">
-          <Auk::Toolbar::Item>
+      <Auk::Toolbar as |Toolbar|>
+        <Toolbar.Group @position="left" as |Group|>
+          <Group.Item>
             <h4 class="auk-panel__title">
               {{#if (not @agendaitem.showAsRemark)}}
                 {{t "note"}}
@@ -11,13 +11,13 @@
                 {{t "text"}}
               {{/if}}
             </h4>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-        <Auk::Toolbar::Group @position="right">
+          </Group.Item>
+        </Toolbar.Group>
+        <Toolbar.Group @position="right" as |Group|>
           {{!-- TODO: for now the link-button is hidden while loading.
           A disabled state would be better to avoid flashing a new button in view once loaded. --}}
           {{#if (and @subcase this.loadCase.isIdle)}}
-            <Auk::Toolbar::Item>
+            <Group.Item>
               <Auk::Button
                 @skin="tertiary"
                 @layout="icon-right"
@@ -28,10 +28,10 @@
               >
                 {{t "to-subcase"}}
               </Auk::Button>
-            </Auk::Toolbar::Item>
+            </Group.Item>
           {{/if}}
           {{#if this.currentSession.isEditor}}
-            <Auk::Toolbar::Item>
+            <Group.Item>
               <Auk::Button
                 data-test-agendaitem-titles-edit
                 @skin="tertiary"
@@ -39,9 +39,9 @@
                 @layout="icon-only"
                 {{on "click" this.startEditing}}
               />
-            </Auk::Toolbar::Item>
+            </Group.Item>
           {{/if}}
-        </Auk::Toolbar::Group>
+        </Toolbar.Group>
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body>
@@ -110,8 +110,8 @@
     {{/if}}
     {{#if @agendaitem.privateComment }}
       <Auk::Panel::Footer class="auk-u-bg-alt">
-        <p class="auk-u-muted">
-          <strong class="auk-u-icon-left auk-u-text-bold">
+        <p class="auk-u-text-muted">
+          <strong class="auk-u-text-bold">
             <Auk::Icon @name="lock-closed" @size="small" />
             {{t "private-comment-title"}}:
           </strong>{{@agendaitem.privateComment}}
