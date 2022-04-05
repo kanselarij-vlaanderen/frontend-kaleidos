@@ -26,7 +26,7 @@
   <Auk::Toolbar @size="large">
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
-        <Auk::ButtonLink {{action "closeAction"}} data-test-new-case-cancel>
+        <Auk::ButtonLink {{on "click" this.closeAction}} data-test-new-case-cancel>
           {{t "cancel"}}
         </Auk::ButtonLink>
       </Auk::Toolbar::Item>
