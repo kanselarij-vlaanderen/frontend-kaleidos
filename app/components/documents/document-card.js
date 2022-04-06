@@ -52,10 +52,9 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.loadPieceRelatedData.perform();
   }
 
-  get shouldShowPublications() {
-    return (
-      !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB) && this.currentSession.isOvrb
-    );
+  get userMayManagePublicationFlows() {
+    return !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB) &&
+      this.currentSession.may('manage-publication-flows');
   }
 
   @task
@@ -75,7 +74,7 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *loadPublicationFlowRelatedData() {
-    if (this.shouldShowPublications) {
+    if (this.userMayManagePublicationFlows) {
       const publicationFlow = yield this.piece.publicationFlow;
       yield publicationFlow?.identification;
     }

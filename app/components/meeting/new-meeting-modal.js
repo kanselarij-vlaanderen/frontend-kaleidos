@@ -1,16 +1,12 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { dropTask } from 'ember-concurrency';
+import { task, dropTask } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { A } from '@ember/array';
 import moment from 'moment';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import CONFIG from 'frontend-kaleidos/utils/config';
-import {
-  isAnnexMeetingKind,
-  fetchClosestMeetingAndAgendaId,
-} from 'frontend-kaleidos/utils/meeting-utils';
+import { fetchClosestMeetingAndAgendaId } from 'frontend-kaleidos/utils/meeting-utils';
 
 /**
  * @argument {didSave}
@@ -21,8 +17,9 @@ export default class MeetingNewMeetingModal extends Component {
   @service newsletterService;
   @service toaster;
 
+  @tracked kind = null;
   @tracked selectedMainMeeting = null;
-  @tracked selectedKindUri = null;
+  @tracked isAnnexMeeting = false;
   @tracked isEditingFormattedMeetingIdentifier = false;
   @tracked _meetingNumber = null;
   @tracked _formattedMeetingIdentifier = null;
@@ -32,11 +29,15 @@ export default class MeetingNewMeetingModal extends Component {
   constructor() {
     super(...arguments);
 
+    this.initializeKind.perform();
     this.initializeMeetingNumber.perform();
   }
 
-  get isAnnexMeeting() {
-    return isAnnexMeetingKind(this.selectedKindUri);
+  get meetingKindPostfix() {
+    if (this.kind?.uri === CONSTANTS.MEETING_KINDS.PVV) {
+      return 'VV';
+    }
+    return '';
   }
 
   get formattedMeetingIdentifier() {
@@ -57,6 +58,13 @@ export default class MeetingNewMeetingModal extends Component {
   set meetingNumber(meetingNumber) {
     this._meetingNumber = meetingNumber;
     this._formattedMeetingIdentifier = null;
+  }
+
+  @task
+  *initializeKind() {
+    this.kind = yield this.store.findRecordByUri('concept', CONSTANTS.MEETING_KINDS.MINISTERRAAD);
+    const broader = yield this.kind?.broader;
+    this.isAnnexMeeting = broader?.uri === CONSTANTS.MEETING_KINDS.ANNEX;
   }
 
   @dropTask
@@ -85,7 +93,7 @@ export default class MeetingNewMeetingModal extends Component {
       extraInfo: this.extraInfo,
       isFinal: false,
       plannedStart: startDate,
-      kind: this.selectedKindUri ?? CONFIG.MINISTERRAAD_TYPES.DEFAULT,
+      kind: this.kind,
       mainMeeting: this.selectedMainMeeting,
       number: this.meetingNumber,
       numberRepresentation: this.formattedMeetingIdentifier,
@@ -96,7 +104,7 @@ export default class MeetingNewMeetingModal extends Component {
     try {
       yield meeting.save();
       const agenda = yield this.createAgenda(meeting, now);
-      if (!meeting.isAnnex && closestMeeting) {
+      if (!this.isAnnexMeeting && closestMeeting) {
         yield this.createAgendaitemToApproveMinutes(
           agenda,
           meeting,
@@ -171,10 +179,7 @@ export default class MeetingNewMeetingModal extends Component {
 
   @action
   selectMainMeeting(mainMeeting) {
-    const kind = CONFIG.MINISTERRAAD_TYPES.TYPES.find(
-      (minsterraad) => minsterraad.uri === this.selectedKindUri
-    );
-    const postfix = (kind && kind.postfix) || '';
+    const postfix = this.meetingKindPostfix;
     this.selectedMainMeeting = mainMeeting;
     this.startDate = mainMeeting.plannedStart;
     this.meetingNumber = mainMeeting.number;
@@ -188,8 +193,12 @@ export default class MeetingNewMeetingModal extends Component {
   }
 
   @action
-  setKind(kind) {
-    this.selectedKindUri = kind;
+  async setKind(kind) {
+    this.kind = kind;
+
+    const broader = await this.kind?.broader;
+    this.isAnnexMeeting = broader?.uri === CONSTANTS.MEETING_KINDS.ANNEX;
+
     if (!this.isAnnexMeeting) {
       this.selectedMainMeeting = null;
       this.initializeMeetingNumber.perform();

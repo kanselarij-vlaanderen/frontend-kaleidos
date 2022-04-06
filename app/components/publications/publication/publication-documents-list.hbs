@@ -1,38 +1,58 @@
 <Auk::List>
   {{#each @pieces as |piece|}}
-    <div class="auk-o-flex auk-o-flex--spaced-wide">
-      <Auk::List::Item data-test-document-list-piece class="auk-o-flex auk-o-flex--spaced-wide">
+    <Auk::List::Item data-test-document-list-piece>
+      <div
+        class="auk-o-flex auk-o-flex--spaced-wide auk-o-flex--vertical-center auk-u-maximize-width"
+      >
         <div class="auk-o-flex auk-o-flex--spaced">
           <Auk::Badge @icon="paperclip" @size="regular" />
           <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
         </div>
-        <Auk::ButtonLink
-          @layout="icon-only"
-          @icon="download"
-          @href={{piece.file.namedDownloadLink}}
-          download={{piece.file.downloadFilename}}
-        >
-          {{t "download"}}
-        </Auk::ButtonLink>
-        {{#if @viewable}}
-          <Auk::ButtonLink
-            @layout="icon-only"
-            @icon="book"
-            @href={{piece.viewDocumentURL}}
-            target="_blank"
-          >
-            {{t "read"}}
-          </Auk::ButtonLink>
+        {{#if @setReceivedDate}}
+          {{! TODO: Remove inline style }}
+          {{! template-lint-disable no-inline-styles }}
+          <div class="auk-form-group auk-u-m-0" style="width: 22.5rem;">
+            <Auk::Datepicker
+              @placeholder={{t "date-received-placeholder"}}
+              @date={{piece.receivedDate}}
+              @onChange={{fn @setReceivedDate piece}}
+            />
+          </div>
+          {{! template-lint-disable no-inline-styles }}
         {{/if}}
-        {{#if @onDeletePiece}}
-          <Auk::Button
-            @icon="trash"
-            @layout="icon-only"
-            @skin="danger-borderless"
-            {{on "click" (fn @onDeletePiece piece)}}
-          />
-        {{/if}}
-      </Auk::List::Item>
-    </div>
+        <div>
+          <WebComponents::AuButtonToolbar>
+            <Auk::Button
+              @layout="icon-only"
+              @icon="download"
+              @href={{piece.file.namedDownloadLink}}
+              @skin="borderless"
+              download={{piece.file.downloadFilename}}
+            >
+              {{t "download"}}
+            </Auk::Button>
+            {{#if @viewable}}
+              <Auk::Button
+                @layout="icon-only"
+                @icon="book"
+                @skin="borderless"
+                @href={{piece.viewDocumentURL}}
+                target="_blank"
+              >
+                {{t "read"}}
+              </Auk::Button>
+            {{/if}}
+            {{#if @onDeletePiece}}
+              <Auk::Button
+                @icon="trash"
+                @layout="icon-only"
+                @skin="danger-borderless"
+                {{on "click" (fn @onDeletePiece piece)}}
+              />
+            {{/if}}
+          </WebComponents::AuButtonToolbar>
+        </div>
+      </div>
+    </Auk::List::Item>
   {{/each}}
 </Auk::List>

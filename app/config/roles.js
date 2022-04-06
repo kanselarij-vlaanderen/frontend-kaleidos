@@ -18,9 +18,12 @@ const groupRoles = new Map();
 // Available roles are:
 // - manage-signatures: currently everything related to digital signing. Will be detailed later
 //     in order to distinguish people that should prepare the flow, effectively sign, etc
+// - search-publication-flows
 
 groupRoles.set(ADMIN, [
   'manage-signatures',
+  'manage-publication-flows',
+  'search-publication-flows',
 ]);
 
 groupRoles.set(KANSELARIJ, [
@@ -41,6 +44,8 @@ groupRoles.set(OVERHEID, [
 
 groupRoles.set(OVRB, [
   'manage-signatures',
+  'manage-publication-flows',
+  'search-publication-flows',
 ]);
 
 groupRoles.set(USER, [

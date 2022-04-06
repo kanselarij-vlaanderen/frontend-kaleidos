@@ -8,8 +8,6 @@ import {
 
 export default class AgendaitemTitles extends Component {
   @service currentSession;
-  @service publicationService;
-  @service router;
 
   @lastValue('loadCase') case;
 

@@ -106,6 +106,7 @@
   "date-publication-documents": "Datum van publicatie documenten",
   "date-session": "Datum Ministerraad",
   "date-received": "Datum ontvangst",
+  "date-received-placeholder": "Kies datum van ontvangst",
   "decided": "Beslist",
   "decided-on": "Beslist op:",
   "decision-text": "Tekst beslissing",
@@ -148,6 +149,7 @@
   "dropzone-text-multiple": "Sleep je bestanden naar hier of klik hier om bestanden te selecteren.",
   "dropzone-text": "Sleep je bestand naar hier of klik hier om een bestand te selecteren.",
   "drag-or-click-for-upload": "Sleep je {numFiles, plural, =1 {bestand} other {bestanden}} naar hier of klik hier om een bestand te selecteren.",
+  "batch-edit": "Bulk wijzigen",
   "edit": "Wijzigen",
   "edit-2": "Bewerken",
   "edit-translation-details": "Bewerk vertaling details",
@@ -977,6 +979,7 @@
   "no-ministers-found": "Geen ministers gevonden.",
   "message": "Bericht",
   "identifier": "Identificator",
+  "regulation-type": "Type regelgeving",
   "proofprint-corrector": "Drukproef verbeteraar",
   "belgian-official-gazette": "Belgisch Staatsblad",
   "publication-empty": "Er is nog geen publicatie aangevraagd.",
@@ -1017,5 +1020,10 @@
   "request-it": "Aanvragen",
   "delete-request-message": "Bent u zeker dat u de aanvraag wil verwijderen?",
   "delete-request": "Aanvraag verwijderen",
-  "who-proof-reads": "Wie leest na?"
+  "who-proof-reads": "Wie leest na?",
+  "search-term": "zoekterm",
+  "search-by-date-type": "zoeken op datumtype",
+  "search-publication": "zoek publicatie",
+  "select-all": "alles selecteren",
+  "deselect-all": "alles deselecteren"
 }

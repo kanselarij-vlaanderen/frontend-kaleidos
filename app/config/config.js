@@ -1,5 +1,3 @@
-
-
 export const PAGE_SIZE = {
   PUBLICATION_FLOWS: 10,
   NOTAS: 50,
@@ -9,7 +7,6 @@ export const PAGE_SIZE = {
   PIECES: 500,
   ACTIVITIES: 500,
   CASES: 500,
-
   SELECT: 10,
 };
 
