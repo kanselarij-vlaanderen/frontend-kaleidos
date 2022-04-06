@@ -1,4 +1,4 @@
-/* global context, beforeEach, it, cy, Cypress */
+/* global context, beforeEach, afterEach, it, cy, Cypress */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -68,6 +68,10 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
 
   beforeEach(() => {
     cy.login('Admin');
+  });
+
+  afterEach(() => {
+    cy.logout();
   });
 
   // tests in newsletter route
