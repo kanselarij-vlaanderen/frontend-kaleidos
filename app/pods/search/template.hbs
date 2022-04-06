@@ -39,6 +39,7 @@
             {{#if this.isShownPublicationFlows}}
               <Tabs.Tab
                 @route="search.publication-flows"
+                @current-when="search.publication-flows"
                 @query={{hash page=0}}
               >
                 {{t "publications"}}
