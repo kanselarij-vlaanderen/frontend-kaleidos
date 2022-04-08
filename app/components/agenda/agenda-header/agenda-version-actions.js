@@ -400,7 +400,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       }
       // if there is no previous agenda, the meeting should have been deleted
       this.args.onStopLoading();
-      this.router.transitionTo('agendas.overview');
+      this.router.transitionTo('agendas');
     } catch (error) {
       this.args.onStopLoading();
       this.toaster.error(

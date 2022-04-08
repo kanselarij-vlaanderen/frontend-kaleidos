@@ -24,7 +24,102 @@
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </Auk::Navbar>
-{{outlet}}
+<div class="auk-u-maximize-height auk-scroll-wrapper">
+  <div class="auk-scroll-wrapper__body">
+    {{#if @model.length}}
+      <DataTable
+        data-test-route-agendas-overview-data-table
+        @content={{@model}}
+        @class="auk-table auk-table--agenda auk-table--striped auk-table--sticky-header"
+        @page={{this.page}}
+        @size={{this.size}}
+        @sort={{this.sort}}
+        @isLoading={{this.isLoadingModel}}
+        @noDataMessage={{t "no-results-found"}}
+        @onClickRow={{this.onClickRow}}
+        as |table|
+      >
+        <table.content as |c|>
+          <c.header>
+            <ThSortable
+              @class="auk-table__col--3"
+              @currentSorting={{this.sort}}
+              @field="created-for.planned-start"
+              @label={{t "agenda"}}
+            />
+            <ThSortable
+              @class="auk-table__col--2"
+              @currentSorting={{this.sort}}
+              @field="status"
+              @label={{t "status"}}
+            />
+            <ThSortable
+              @class="auk-table__col--2"
+              @currentSorting={{this.sort}}
+              @field="created-for.kind"
+              @label={{t "kind"}}
+            />
+            <ThSortable
+              @class="auk-table__col--2"
+              @currentSorting={{this.sort}}
+              @field="modified"
+              @label={{t "latest-modified"}}
+            />
+            <th class="auk-table__col--1"></th>
+          </c.header>
+          <c.body @class="auk-table--clickable-rows" as |agenda|>
+            <td data-test-route-agendas-overview-row-title>
+              {{agenda.agendaName}}
+              -
+              {{moment-format agenda.createdFor.plannedStart "DD.MM.YYYY"}}
+            </td>
+            <td>
+              {{#if agenda.isFinal}}
+                {{t "closed"}}
+              {{else}}
+                {{t "opened"}}
+              {{/if}}
+            </td>
+            <td data-test-route-agendas-overview-row-kind>
+              {{agenda.createdFor.kind.label}}
+            </td>
+            <td>
+              {{#if (is-pending agenda)}}
+                <div
+                  class="auk-skeleton auk-skeleton--rectangle"
+                  role="alert"
+                  aria-busy="true"
+                ></div>
+              {{else}}
+                {{moment-format
+                  agenda.modified
+                  "DD-MM-YYYY HH:mm"
+                }}
+              {{/if}}
+            </td>
+            <td class="auk-u-text-align--center">
+              <Auk::Button
+                data-test-route-agendas-overview-row-nav-button={{true}}
+                @skin="borderless"
+                @layout="icon-only"
+                @icon="chevron-right"
+                @route="agenda.agendaitems"
+                @models={{array
+                  agenda.createdFor.id
+                  agenda.id
+                }}
+              />
+            </td>
+          </c.body>
+        </table.content>
+      </DataTable>
+    {{else}}
+      <div>
+        <WebComponents::VlAlert @message={{t "no-results-found"}} />
+      </div>
+    {{/if}}
+  </div>
+</div>
 {{#if this.isCreatingNewSession}}
   <Meeting::NewMeetingModal
     @didSave={{this.successfullyAdded}}
