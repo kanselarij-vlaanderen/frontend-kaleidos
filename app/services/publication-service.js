@@ -212,7 +212,7 @@ export default class PublicationService extends Service {
       CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_RECEIVED
     );
 
-    const previousStatus = publicationFlow.status;
+    const previousStatus = await publicationFlow.status;
     const status = await this.store.findRecordByUri(
       'publication-status',
       targetStatusUri
