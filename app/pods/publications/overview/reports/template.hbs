@@ -6,9 +6,12 @@
           {{t "publication-reports-title"}}
         </h4>
       </Auk::Panel::Header>
-      <Auk::Panel::Body>
-        ...
-      </Auk::Panel::Body>
+
+      {{#each this.model as |row|}}
+        <Auk::Panel::Body>
+          <h4 class="auk-h4">{{t row.titleKey}}</h4>
+        </Auk::Panel::Body>
+      {{/each}}
     </Auk::Panel>
   </div>
 </div>
