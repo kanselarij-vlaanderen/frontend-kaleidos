@@ -78,9 +78,6 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
         publication.publicationDate
       );
       saves.push(statusUpdate);
-
-      this.publicationSubcase.endDate = publication.publicationDate;
-      saves.push(this.publicationSubcase.save());
     }
 
     yield Promise.all(saves);

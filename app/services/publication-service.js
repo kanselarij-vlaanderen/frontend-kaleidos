@@ -204,12 +204,102 @@ export default class PublicationService extends Service {
   async updatePublicationStatus(
     publicationFlow,
     targetStatusUri,
-    changeDate = new Date()
+    changeDate = new Date(),
+    decision
   ) {
-    publicationFlow.status = await this.store.findRecordByUri(
+    const translationReceivedStatus = await this.store.findRecordByUri(
+      'publication-status',
+      CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_RECEIVED
+    );
+
+    const previousStatus = publicationFlow.status;
+    const status = await this.store.findRecordByUri(
       'publication-status',
       targetStatusUri
     );
+
+    // update status
+    publicationFlow.status = status;
+
+    //undo changes when going to a previous state
+    if (status.position < previousStatus.position) {
+      if (status.position < translationReceivedStatus.position) {
+        const translationSubcase = await publicationFlow.translationSubcase;
+        if (translationSubcase.endDate) {
+          translationSubcase.endDate = null;
+          await translationSubcase.save();
+        }
+      }
+      if (previousStatus.isFinal) {
+        this.args.publicationFlow.closingDate = null;
+        const publicationSubcase = await publicationFlow.publicationSubcase;
+        if (publicationSubcase.endDate) {
+          publicationSubcase.endDate = null;
+          await publicationSubcase.save();
+        }
+      }
+      // remove decision if "published" status is reverted and it's not a Staatsblad resource
+      if (
+        previousStatus.isPublished &&
+        !status.isPublished &&
+        !decision.isStaatsbladResource
+      ) {
+        await decision.destroyRecord();
+        decision = undefined;
+      }
+    }
+
+    // update end date if status is "translation received" or further
+    if (
+      status.position >= translationReceivedStatus.position &&
+      !status.isPaused
+    ) {
+      const translationSubcase = await publicationFlow.translationSubcase;
+      if (!translationSubcase.endDate) {
+        translationSubcase.endDate = changeDate;
+        await translationSubcase.save();
+      }
+    }
+
+    // update closing dates of auxiliary activities if status is "published"
+    if (status.isFinal) {
+      this.args.publicationFlow.closingDate = changeDate;
+
+      const publicationSubcase = await publicationFlow.publicationSubcase;
+      if (!publicationSubcase.endDate) {
+        publicationSubcase.endDate = changeDate;
+        await publicationSubcase.save();
+      }
+
+      // create decision for publication activity when status changed to "published"
+      if (status.isPublished && !decision) {
+        let publicationActivities =
+          await publicationSubcase.publicationActivities;
+        // (sortBy converts to array)
+        publicationActivities = publicationActivities.sortBy('-startDate');
+        let publicationActivity = publicationActivities[0];
+
+        if (!publicationActivity) {
+          publicationActivity = this.store.createRecord(
+            'publication-activity',
+            {
+              subcase: publicationSubcase,
+              endDate: changeDate,
+            }
+          );
+          await publicationActivity.save();
+        }
+
+        decision = this.store.createRecord('decision', {
+          publicationActivity: publicationActivity,
+          publicationDate: changeDate,
+        });
+        await decision.save();
+      }
+    } else {
+      publicationFlow.closingDate = null;
+    }
+
     // Continuing without awaiting here can cause saving while related status-change
     // already is deleted (by step below)
     await publicationFlow.save();

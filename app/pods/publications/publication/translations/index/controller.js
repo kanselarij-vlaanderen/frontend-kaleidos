@@ -60,9 +60,6 @@ export default class PublicationsPublicationTranslationsIndexController extends 
         CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_RECEIVED,
         translationUpload.receivedDate
       );
-
-      this.translationSubcase.endDate = translationUpload.receivedDate;
-      yield this.translationSubcase.save();
     }
 
     yield Promise.all([...pieceSaves]);

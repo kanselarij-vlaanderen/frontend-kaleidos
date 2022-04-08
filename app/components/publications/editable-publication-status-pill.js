@@ -2,16 +2,15 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { isEmpty } from '@ember/utils';
 import {
   getPublicationStatusPillKey,
   getPublicationStatusPillStep,
 } from 'frontend-kaleidos/utils/publication-auk';
 import { task } from 'ember-concurrency';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationStatusPill extends Component {
   @service store;
+  @service publicationService;
 
   @tracked decision;
   @tracked publicationStatus;
@@ -67,115 +66,10 @@ export default class PublicationStatusPill extends Component {
 
   @task
   *savePublicationStatus(status, date) {
-    if (isEmpty(date)) {
-      date = new Date();
-    }
-    const previousStatus = this.publicationStatus;
-    const translationReceivedStatus = yield this.store.findRecordByUri(
-      'publication-status',
-      CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_RECEIVED
-    );
-    // update status
-    this.args.publicationFlow.status = status;
+    yield this.publicationService.updatePublicationStatus(this.args.publicationFlow,status.uri,date,this.decision)
 
-    //undo change when going to a previous state
-    if (status.position < previousStatus.position) {
-      if (status.position < translationReceivedStatus.position) {
-        const translationSubcase = yield this.args.publicationFlow
-          .translationSubcase;
-        if (translationSubcase.endDate) {
-          translationSubcase.endDate = null;
-          yield translationSubcase.save();
-        }
-      }
-      if (previousStatus.isFinal) {
-        this.args.publicationFlow.closingDate = null;
-        const publicationSubcase = yield this.args.publicationFlow
-          .publicationSubcase;
-        if (publicationSubcase.endDate) {
-          publicationSubcase.endDate = null;
-          yield publicationSubcase.save();
-        }
-      }
-      // remove decision if "published" status is reverted and it's not a Staatsblad resource
-      if (
-        previousStatus.isPublished &&
-        !status.isPublished &&
-        !this.decision.isStaatsbladResource
-      ) {
-        yield this.decision.destroyRecord();
-        this.decision = undefined;
-      }
-    } else {
-      if (!status.isPaused){
-        // update end date if status is "translation received"
-        if (status.position >= translationReceivedStatus.position) {
-          const translationSubcase = yield this.args.publicationFlow
-            .translationSubcase;
-          if (!translationSubcase.endDate) {
-            translationSubcase.endDate = date;
-            yield translationSubcase.save();
-          }
-        }
-        // update closing dates of auxiliary activities if status is "published"
-        if (status.isFinal) {
-          this.args.publicationFlow.closingDate = date;
-
-          const publicationSubcase = yield this.args.publicationFlow
-            .publicationSubcase;
-          if (!publicationSubcase.endDate) {
-            publicationSubcase.endDate = date;
-            yield publicationSubcase.save();
-          }
-
-          // create decision for publication activity when status changed to "published"
-          if (status.isPublished && !this.decision) {
-            let publicationActivities =
-              yield publicationSubcase.publicationActivities;
-            // (sortBy converts to array)
-            publicationActivities = publicationActivities.sortBy('-startDate');
-            let publicationActivity = publicationActivities[0];
-
-            if (!publicationActivity) {
-              publicationActivity = this.store.createRecord(
-                'publication-activity',
-                {
-                  subcase: publicationSubcase,
-                  endDate: date,
-                }
-              );
-              yield publicationActivity.save();
-            }
-
-            this.decision = this.store.createRecord('decision', {
-              publicationActivity: publicationActivity,
-              publicationDate: date,
-            });
-            yield this.decision.save();
-          }
-        } else {
-          this.args.publicationFlow.closingDate = null;
-        }
-      }
-    }
-
-    // update publication-status-change
-    // reload the relation for possible concurrency
-    const currentStatusChange = yield this.args.publicationFlow
-      .belongsTo('publicationStatusChange')
-      .reload();
-    yield currentStatusChange?.destroyRecord();
-    const newStatusChange = this.store.createRecord(
-      'publication-status-change',
-      {
-        startedAt: date,
-        publication: this.args.publicationFlow,
-      }
-    );
-    yield newStatusChange.save();
-
-    yield this.args.publicationFlow.save();
     this.loadStatus.perform();
+    this.loadDecision.perform();
     this.closeStatusSelector();
   }
 }
