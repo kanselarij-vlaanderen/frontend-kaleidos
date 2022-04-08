@@ -120,6 +120,16 @@ export default class PublicationStatusPill extends Component {
       this.args.publicationFlow.closingDate = null;
     }
 
+    // update closing dates of auxiliary activities if status is "published"
+    if (status.isTranslationReceived) {
+      const translationSubcase = yield this.args.publicationFlow
+        .translationSubcase;
+      if (!translationSubcase.endDate) {
+        translationSubcase.endDate = date;
+        yield translationSubcase.save();
+      }
+    }
+
     // remove decision if "published" status is reverted and it's not a Staatsblad resource
     const previousStatus = this.publicationStatus;
     if (
