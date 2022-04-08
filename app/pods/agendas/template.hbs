@@ -43,6 +43,13 @@
     </Toolbar.Group>
   </Auk::Toolbar>
 </Auk::Navbar>
+{{#if (or this.from this.to)}}
+  <ChangesAlert
+    @message={{t "filtered-agendas"}}
+    @buttonText={{t "clear-filter"}}
+    @clearAction={{this.clearFilter}}
+  />
+{{/if}}
 <div class="auk-u-maximize-height auk-scroll-wrapper">
   <div class="auk-scroll-wrapper__body">
     {{#if @model.length}}

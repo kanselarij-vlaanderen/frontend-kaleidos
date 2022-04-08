@@ -49,6 +49,14 @@ export default class AgendasController extends Controller.extend(DefaultQueryPar
   }
 
   @action
+  clearFilter() {
+    this.to = null;
+    this.from = null;
+    this.page = 0;
+    this.dateFilter = '';
+  }
+
+  @action
   openNewSessionModal() {
     this.isCreatingNewSession = true;
   }
