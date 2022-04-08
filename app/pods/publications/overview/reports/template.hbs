@@ -3,13 +3,20 @@
     <Auk::Panel>
       <Auk::Panel::Header>
         <h4 class="auk-panel__title">
-          {{t "publication-reports-title"}}
+          {{t "publications-reports-title"}}
         </h4>
       </Auk::Panel::Header>
 
       {{#each this.model as |row|}}
-        <Auk::Panel::Body>
-          <h4 class="auk-h4">{{t row.titleKey}}</h4>
+        <Auk::Panel::Body class="auk-o-flex auk-o-flex--justify-between">
+          <div>
+            <h4 class="auk-h4">{{t row.titleKey}}</h4>
+          </div>
+          <div>
+            <Auk::Button {{on "click" (perform row.triggerGenerateReport)}}>
+              {{t "generate-report"}}
+            </Auk::Button>
+          </div>
         </Auk::Panel::Body>
       {{/each}}
     </Auk::Panel>
