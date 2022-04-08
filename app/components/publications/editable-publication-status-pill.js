@@ -66,7 +66,12 @@ export default class PublicationStatusPill extends Component {
 
   @task
   *savePublicationStatus(status, date) {
-    yield this.publicationService.updatePublicationStatus(this.args.publicationFlow,status.uri,date,this.decision)
+    yield this.publicationService.updatePublicationStatus(
+      this.args.publicationFlow,
+      status.uri,
+      date,
+      this.decision
+    );
 
     this.loadStatus.perform();
     this.loadDecision.perform();
