@@ -11,7 +11,7 @@
     @status={{this.publicationStatusPillKey}}
     @size="small"
     @icon="pencil"
-    @isActionable={{not (or this.publicationStatus.isPublished this.decision.isStaatsbladResource)}}
+    @isActionable={{not (and this.publicationStatus.isPublished this.decision.isStaatsbladResource)}}
     @actionLabel={{t "edit-status"}}
     {{on "click" this.openStatusSelector}}
   >
