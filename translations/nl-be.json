@@ -429,7 +429,7 @@
   "time-period": "tijdsspanne",
   "meeting": "vergadering",
   "remark": "opmerking",
-  "remark-title": "Opmerking",
+  "comment-title": "Opmerking",
   "decision": "beslissing",
   "agenda-item-treatment": "Beslissing",
   "decision-result-code": "Beslissing resultaatcode",

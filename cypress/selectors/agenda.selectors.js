@@ -152,7 +152,7 @@ const selectors = {
   agendaitemTitlesView: {
     title: '[data-test-agendaitem-titles-title]',
     shortTitle: '[data-test-agendaitem-titles-short-title]',
-    explanation: '[data-test-agendaitem-titles-explanation]',
+    comment: '[data-test-agendaitem-titles-comment]',
     confidential: '[data-test-agendaitem-titles-confidential]',
     linkToSubcase: '[data-test-agendaitem-titles-link-to-subcase]',
     edit: '[data-test-agendaitem-titles-edit]',
@@ -162,7 +162,7 @@ const selectors = {
   agendaitemTitlesEdit: {
     title: '[data-test-agendaitem-titles-edit-title]',
     shorttitle: '[data-test-agendaitem-titles-edit-shorttitle]',
-    explanation: '[data-test-agendaitem-titles-edit-explanation]',
+    comment: '[data-test-agendaitem-titles-edit-comment]',
     showInNewsletter: '[data-test-agendaitem-titles-edit-showInNewsletter]',
     confidential: '[data-test-agendaitem-titles-edit-confidential]',
     actions: {

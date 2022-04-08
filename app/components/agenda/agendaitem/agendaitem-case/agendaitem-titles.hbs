@@ -99,13 +99,13 @@
         </Auk::PillList>
       </div>
     </Auk::Panel::Body>
-    {{#if @agendaitem.explanation }}
+    {{#if @agendaitem.comment }}
       <Auk::Modal::Footer @custom={{true}}>
         <Auk::Toolbar>
           <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
-              <pre data-test-agendaitem-titles-explanation class="auk-o-flex--inline auk-u-text-pre-line auk-u-italic">
-               {{t "remark-title"}}: {{@agendaitem.explanation}}
+              <pre data-test-agendaitem-titles-comment class="auk-o-flex--inline auk-u-text-pre-line auk-u-italic">
+               {{t "remark-title"}}: {{@agendaitem.comment}}
               </pre>
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
