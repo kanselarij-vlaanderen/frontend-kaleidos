@@ -888,6 +888,7 @@
   "publication-reports--type--government-domain": "Publicaties per beleidsdomein",
   "publication-reports--type--mandatee": "Publicaties per minister",
   "publication-reports--type--regulation-type": "Publicaties per type regelgeving",
+  "publication-report-last-request": "Laatst aangevraagd op {date} on {time} by {user}",
   "generate-report": "Rapport maken",
   "show-filter": "Toon filter",
   "filter-plural": "Filteren",

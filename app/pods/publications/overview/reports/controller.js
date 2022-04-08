@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
-import { inject as service } from '@ember/service';
 import { dasherize } from '@ember/string';
+import { tracked } from '@glimmer/tracking';
 import moment from 'moment';
 import { task } from 'ember-concurrency';
 
@@ -20,8 +20,22 @@ class BaseRow {
   intl;
   currentSession;
 
+  constructor(services) {
+    Object.assign(this, services);
+  }
+
+  @tracked lastJob;
+
   get titleKey() {
     return `publication-reports--type--${this.key}`;
+  }
+
+  @task
+  *loadData() {
+    this.lastJob = yield this.store.queryOne('publication-metrics-export-job', {
+      'filter[metrics-type]': this.key,
+      include: ['generated', 'generated-by'].join(',')
+    })
   }
 
   @task
@@ -40,12 +54,15 @@ class BaseRow {
       created: now,
       timeStarted: now,
       generatedBy: user,
+      metricsType: this.key,
       config: {
         name: reportName,
         query: query,
       },
     });
     yield job.save();
+
+    this.lastJob = job;
   }
 }
 
@@ -86,6 +103,4 @@ export const ReportTypeRows = [
   MandateeRow,
 ];
 
-export default class PublicationsOverviewReportsController extends Controller {
-  @service store;
-}
+export default class PublicationsOverviewReportsController extends Controller {}

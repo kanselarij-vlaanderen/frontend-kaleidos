@@ -3,14 +3,32 @@
     <Auk::Panel>
       <Auk::Panel::Header>
         <h4 class="auk-panel__title">
-          {{t "publications-reports-title"}}
+          {{t "publication-reports-title"}}
         </h4>
       </Auk::Panel::Header>
 
       {{#each this.model as |row|}}
         <Auk::Panel::Body class="auk-o-flex auk-o-flex--justify-between">
           <div>
-            <h4 class="auk-h4">{{t row.titleKey}}</h4>
+            <h4 class="auk-h4 auk-u-m-0">{{t row.titleKey}}</h4>
+            {{#if row.lastJob}}
+              <div>
+                <div class="auk-u-text-muted">
+                  {{t
+                    "publication-report-last-request"
+                    date=(moment-format row.lastJob.created "YYYY/MM/DD")
+                    time=(moment-format row.lastJob.created "HH:mm")
+                    user=row.lastJob.generatedBy.fullName
+                  }}
+                </div>
+                <Auk::ButtonLink
+                  @icon="download"
+                  @href={{row.lastJob.generated.namedDownloadLink}}
+                >
+                  {{row.lastJob.generated.downloadFilename}}
+                </Auk::ButtonLink>
+              </div>
+            {{/if}}
           </div>
           <div>
             <Auk::Button {{on "click" (perform row.triggerGenerateReport)}}>
