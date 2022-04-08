@@ -11,16 +11,57 @@ export default class AgendasRoute extends Route.extend(DataTableRouteMixin) {
 
   modelName = 'agenda';
 
-  mergeQueryOptions() {
-    return {
+  queryParams = {
+    from: {
+      refreshModel: true,
+    },
+    to: {
+      refreshModel: true,
+    },
+    page: {
+      refreshModel: true,
+    },
+    sort: {
+      refreshModel: true,
+    },
+  };
+
+  mergeQueryOptions(params) {
+    const options = {
       'filter[:has-no:next-version]': true,
     };
+    if (params.from) {
+      options['filter[created-for][:gte:planned-start]'] = params.from;
+    }
+    if (params.to) {
+      options['filter[created-for][:lte:planned-start]'] = params.to;
+    }
+
+    return options;
   };
 
   beforeModel(transition) {
     this.simpleAuthSession.requireAuthentication(transition, 'login');
   }
 
+  @action
+  loading(transition) {
+    // see snippet in https://api.emberjs.com/ember/3.27/classes/Route/events/loading?anchor=loading
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const controller = this.controllerFor(this.routeName);
+    controller.set('isLoadingModel', true);
+    transition.promise.finally(() => {
+      controller.set('isLoadingModel', false);
+    });
+
+    // only bubble loading event when transitioning between tabs
+    // to enable loading template to be shown
+    if (transition.from && transition.to) {
+      return transition.from.name != transition.to.name;
+    } else {
+      return true;
+    }
+  }
 
   @action
   refreshRoute() {

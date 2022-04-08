@@ -11,7 +11,42 @@ export default class AgendasController extends Controller.extend(DefaultQueryPar
   @service currentSession;
 
   @tracked isCreatingNewSession = false;
+  @tracked dateFilter = '';
   @tracked sort = '-status,created-for.planned-start';
+  @tracked from = null;
+  @tracked to = null;
+  @tracked page = 0;
+
+  queryParams = ['from', 'to'];
+  dateRegex = /^(?:(\d{1,2})-)??(?:(\d{1,2})-)?(\d{4})$/;
+
+  @action
+  setDateFilter(date) {
+    const newDate = date.split('/').join('-');
+    const match = this.dateRegex.exec(newDate);
+
+    if (!match) {
+      this.from = null;
+      this.to = null;
+      return;
+    }
+
+    const [, day, month, year] = match.map(num => parseInt(num, 10));
+
+    const from = new Date(year, (month - 1) || 0, day || 0);
+    const to = new Date(from);
+    if (day) {
+      to.setDate(day + 1);
+    } else if (month) {
+      to.setMonth(month); // months are 0-indexed, no +1 required
+    } else {
+      to.setYear(year + 1);
+    }
+
+    this.from = from.toISOString();
+    this.to = to.toISOString();
+    this.page = 0;
+  }
 
   @action
   openNewSessionModal() {
@@ -31,7 +66,6 @@ export default class AgendasController extends Controller.extend(DefaultQueryPar
 
   @action
   async onClickRow(agenda) {
-    console.debug('called onClickRow')
     const meeting = await agenda.createdFor;
     this.router.transitionTo('agenda.agendaitems', meeting.id, agenda.id);
   }
