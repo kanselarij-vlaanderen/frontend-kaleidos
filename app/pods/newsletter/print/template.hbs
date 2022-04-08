@@ -10,6 +10,7 @@
     <div class="auk-container auk-container--center l-printable-newsletter">
       <Utils::LogoHeader />
       <Newsletter::NewsletterMeeting
+        data-test-newsletter-print---newslettermeeting
         @allowEditing={{not this.showDraft}}
         @meeting={{this.meeting}}
       />
