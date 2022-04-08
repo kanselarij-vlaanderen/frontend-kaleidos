@@ -52,7 +52,7 @@ export default class PublicationStatusPill extends Component {
     //TODO Momenteel is er nog geen disabled voor status pill action. De if is om te voorkomen dat de modal ongewenst open gaat
     if (
       !(
-        this.publicationStatus.isPublished && this.decision.isStaatsbladResource
+        this.publicationStatus.isPublished || this.decision.isStaatsbladResource
       )
     ) {
       this.showStatusSelector = true;
