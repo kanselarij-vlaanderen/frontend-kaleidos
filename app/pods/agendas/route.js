@@ -21,6 +21,9 @@ export default class AgendasRoute extends Route.extend(DataTableRouteMixin) {
     page: {
       refreshModel: true,
     },
+    size: {
+      refreshModel: true,
+    },
     sort: {
       refreshModel: true,
     },
