@@ -180,6 +180,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     // timeout options is in milliseconds. when the download is ready, the toast should last very long so users have a time to click it
     const fileDownloadToast = {
       title: this.intl.t('file-ready'),
+      message: this.intl.t('agenda-documents-download-ready'),
       type: 'download-file',
       options: {
         timeOut: 60 * 10 * 1000,
