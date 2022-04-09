@@ -2,13 +2,6 @@ import Service, { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 
-/* eslint-disable no-unused-vars */
-import File from '../models/file';
-import DocumentContainer from '../models/document-container';
-import Piece from '../models/piece';
-import PublicationFlow from '../models/publication-flow';
-/* eslint-enable no-unused-vars */
-
 export default class PublicationService extends Service {
   @service store;
   @service toaster;
