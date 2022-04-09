@@ -1,6 +1,7 @@
 import Service, { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
+import { isEmpty } from '@ember/utils';
 
 export default class PublicationService extends Service {
   @service store;
@@ -194,20 +195,87 @@ export default class PublicationService extends Service {
     return !!subcases.length;
   }
 
-  async updatePublicationStatus(
-    publicationFlow,
-    targetStatusUri,
-    changeDate = new Date()
-  ) {
-    publicationFlow.status = await this.store.findRecordByUri(
+  async updatePublicationStatus(publicationFlow, targetStatusUri, changeDate) {
+    if (isEmpty(changeDate)) {
+      changeDate = new Date();
+    }
+
+    const previousStatus = await publicationFlow.status;
+    const targetStatus = await this.store.findRecordByUri(
       'publication-status',
       targetStatusUri
     );
-    // Continuing without awaiting here can cause saving while related status-change
-    // already is deleted (by step below)
-    await publicationFlow.save();
+    const translationSubcase = await publicationFlow.translationSubcase;
+    const publicationSubcase = await publicationFlow.publicationSubcase;
 
-    // reload the relation for possible concurrency
+    const translationReceivedStatus = await this.store.findRecordByUri(
+      'publication-status',
+      CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_RECEIVED
+    );
+
+    // Update intermediate end-dates when status progresses
+    if (!targetStatus.isPaused) {
+      if (targetStatus.position > previousStatus.position || previousStatus.isPaused) {
+        // Set end-date on translation subcase if 'translation-received' status is passed
+        if (targetStatus.position >= translationReceivedStatus.position) {
+          if (!translationSubcase.endDate) {
+            translationSubcase.endDate = changeDate;
+          }
+          // else: endDate has already been set on translation subcase
+        }
+      }
+    }
+
+    // Undo changes when status gets reverted
+    if (targetStatus.position < previousStatus.position || previousStatus.isPaused) {
+      // Undo end-date on translation-subcase if reverted before 'translation-received'
+      if (targetStatus.position < translationReceivedStatus.position) {
+        translationSubcase.endDate = null;
+      }
+    }
+
+    // Update closing date(s) if final status is reached
+    if (targetStatus.isFinal) {
+      publicationFlow.closingDate = changeDate;
+      publicationSubcase.endDate = changeDate;
+    } else {
+      publicationFlow.closingDate = null;
+      publicationSubcase.endDate = null;
+    }
+
+    // Create decision for publication activity when status changes to 'published'
+    if (targetStatus.isPublished) {
+      await this.ensureDecision(publicationSubcase, changeDate);
+    }
+
+    // Remove decision if 'published' status is reverted and it's not a Staatsblad resource
+    if (previousStatus.isPublished) {
+      const decision = await this.store.queryOne('decision', {
+        'filter[publication-activity][subcase][:id:]': publicationSubcase.id,
+        sort: 'publication-activity.start-date,publication-date',
+      });
+
+      if (decision && !decision.isStaatsbladResource) {
+        await decision.destroyRecord();
+      }
+    }
+
+    // Update publication status
+    publicationFlow.status = targetStatus;
+
+    const savePromises = [publicationFlow.save()];
+    if (translationSubcase.hasDirtyAttributes) {
+      savePromises.push(translationSubcase.save());
+    }
+    if (publicationSubcase.hasDirtyAttributes) {
+      savePromises.push(publicationSubcase.save());
+    }
+    // Await save to avoid conflicts on destroy of
+    // publication-status-change in next step
+    await Promise.all(savePromises);
+
+    // Update publication-status-change
+    // Reload relation before destroying for possible concurrency
     const currentStatusChange = await publicationFlow
       .belongsTo('publicationStatusChange')
       .reload();
@@ -397,5 +465,36 @@ export default class PublicationService extends Service {
     const agenda = await agendaitem?.agenda;
     const meeting = await agenda?.createdFor;
     return [meeting.id, agenda.id, agendaitem.id];
+  }
+
+  async ensureDecision(publicationSubcase, date) {
+    let decision = await this.store.queryOne('decision', {
+      'filter[publication-activity][subcase][:id:]': publicationSubcase.id,
+      sort: 'publication-activity.start-date,publication-date',
+    });
+
+    if (!decision) {
+      const publicationActivities = await publicationSubcase.publicationActivities;
+      let publicationActivity = publicationActivities.sortBy('-startDate')?.[0];
+
+      if (!publicationActivity) {
+        publicationActivity = this.store.createRecord(
+          'publication-activity',
+          {
+            subcase: publicationSubcase,
+            endDate: date,
+          }
+        );
+        await publicationActivity.save();
+      }
+
+      decision = this.store.createRecord('decision', {
+        publicationActivity: publicationActivity,
+        publicationDate: date,
+      });
+      await decision.save();
+    }
+
+    return decision;
   }
 }
