@@ -1,10 +1,12 @@
 import Controller from '@ember/controller';
+import EmberObject from '@ember/object';
+import { inject as service } from '@ember/service';
 import { dasherize } from '@ember/string';
 import { tracked } from '@glimmer/tracking';
 import moment from 'moment';
 import { task } from 'ember-concurrency';
 
-class BaseRow {
+class BaseRow extends EmberObject {
   /**
    * @abstract
    * @member {String} key
@@ -16,15 +18,18 @@ class BaseRow {
    * @returns {{ [key: string]: any }}
    */
 
-  store;
-  intl;
-  currentSession;
-
-  constructor(services) {
-    Object.assign(this, services);
-  }
+  @service store;
+  @service intl;
+  @service currentSession;
+  @service toaster;
 
   @tracked lastJob;
+
+  constructor() {
+    super(...arguments);
+
+    this.loadData.perform();
+  }
 
   get titleKey() {
     return `publication-reports--type--${this.key}`;
