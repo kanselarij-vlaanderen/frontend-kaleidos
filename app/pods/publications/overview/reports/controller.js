@@ -25,12 +25,6 @@ class BaseRow extends EmberObject {
 
   @tracked lastJob;
 
-  constructor() {
-    super(...arguments);
-
-    this.loadData.perform();
-  }
-
   get titleKey() {
     return `publication-reports--type--${this.key}`;
   }
