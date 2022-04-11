@@ -153,6 +153,7 @@ const selectors = {
     title: '[data-test-agendaitem-titles-title]',
     shortTitle: '[data-test-agendaitem-titles-short-title]',
     comment: '[data-test-agendaitem-titles-comment]',
+    privateComment: '[data-test-agendaitem-titles-private-comment]',
     confidential: '[data-test-agendaitem-titles-confidential]',
     linkToSubcase: '[data-test-agendaitem-titles-link-to-subcase]',
     edit: '[data-test-agendaitem-titles-edit]',
@@ -163,6 +164,7 @@ const selectors = {
     title: '[data-test-agendaitem-titles-edit-title]',
     shorttitle: '[data-test-agendaitem-titles-edit-shorttitle]',
     comment: '[data-test-agendaitem-titles-edit-comment]',
+    privateComment: '[data-test-agendaitem-titles-edit-private-comment]',
     showInNewsletter: '[data-test-agendaitem-titles-edit-showInNewsletter]',
     confidential: '[data-test-agendaitem-titles-edit-confidential]',
     actions: {

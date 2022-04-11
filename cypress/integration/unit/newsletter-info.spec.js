@@ -1,4 +1,4 @@
-/* global context, beforeEach, it, cy, Cypress */
+/* global context, beforeEach, afterEach, it, cy, Cypress */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -8,8 +8,21 @@ import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
+function pressRdfaButton(buttonName) {
+  cy.get('button').contains(buttonName)
+    .parent('button')
+    .click();
+}
+
 function currentTimestamp() {
   return Cypress.dayjs().unix();
+}
+
+function openNewsletterForDate(date) {
+  cy.get(utils.mHeader.newsletters).click();
+  cy.get(route.newsletters.row.title).contains(date.format('DD.MM.YYYY'))
+    .parent()
+    .click();
 }
 
 function changeSubcaseType(caseTitle, type) {
@@ -47,6 +60,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
   const subcaseTitleLong = `Cypress test: lange titel Nota - ${currentTimestamp()}`;
   const finalAdaptedSubcaseTitleShort = `Cypress test: Nota met aangepaste korte titel na mededeling - ${currentTimestamp()}`;
   const finalAdaptedSubcaseTitleLong = `Cypress test: Nota met aangepaste lange titel na mededeling - ${currentTimestamp()}`;
+  const fullTestEdit = `Cypress test: Edit view full - ${currentTimestamp()}`;
   const text = 'tekst om te checken of default overname correct werkt';
   const addedText = ' van 2e test';
   const theme = 'Justitie en Handhaving';
@@ -54,6 +68,10 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
 
   beforeEach(() => {
     cy.login('Admin');
+  });
+
+  afterEach(() => {
+    cy.logout();
   });
 
   // tests in newsletter route
@@ -64,10 +82,13 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.visit('/vergadering/5DD7CDA58C70A70008000001/kort-bestek');
     // There is only one row in this view, so eq(0) in not needed
     cy.get(newsletter.tableRow.newsletterRow).within(() => {
+      // this agenda does not have an approval item, so numbering should start at 1
+      cy.get(newsletter.tableRow.agendaitemNumber).contains(1);
       cy.get(newsletter.tableRow.newsletterTitle).contains('Nog geen kort bestek voor dit agendapunt.');
       cy.get(newsletter.buttonToolbar.edit).click();
     });
 
+    // TODO flakey (locally)
     cy.get(dependency.rdfa.editorInner).clear()
       .type(decisionText);
     cy.get(newsletter.editItem.themesSelector).contains('Sport')
@@ -78,6 +99,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
 
     cy.get(newsletter.tableRow.newsletterTitle).contains(subcaseNameToCheck);
     cy.get(newsletter.tableRow.newsletterTitle).contains(decisionText);
+    cy.get(newsletter.buttonToolbar.openNota).should('be.disabled');
     // TODO-newsletter there is no proof that adding theme actually worked
   });
 
@@ -166,7 +188,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.longTitle).contains(subcaseTitleLong);
     cy.get(newsletter.editItem.shortTitle).should('have.value', subcaseTitleShort);
     cy.get(newsletter.editItem.toggleFinished).should('not.be.checked');
-    // TODO check if editor empty
+    // TODO-KAS-3270 check if editor empty
     // cy.get(newsletter.editItem.rdfaEditor).should('be.empty');
     cy.get(newsletter.editItem.checkedThemes).should('not.exist');
     // add text to rdfaEditor and select theme
@@ -269,7 +291,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // value of subtitle from newsletter info is empty, but we show agendaitem title in frontend
     // TODO-newsletter are these contains correct?
     cy.get(newsletter.editItem.longTitle).should('contain', '');
-    // TODO check if editor empty
+    // TODO-KAS-3270 check if editor empty
     cy.get(newsletter.editItem.rdfaEditor).should('contain', '');
     cy.get(newsletter.editItem.checkedThemes).should('not.exist');
   });
@@ -293,7 +315,8 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.toggleFinished).should('not.be.checked');
     // check inherited values
     cy.get(newsletter.editItem.shortTitle).should('have.value', subcaseTitleShort + addedText);
-    cy.get(newsletter.editItem.rdfaEditor).contains(text + addedText);
+    cy.get(newsletter.editItem.rdfaEditor).contains(text)
+      .contains(addedText);
     cy.get(newsletter.editItem.checkedThemes).parent('label')
       .contains(theme);
     cy.get(newsletter.editItem.checkedThemes).parent('label')
@@ -356,7 +379,8 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.toggleFinished).should('not.be.checked');
     // check inherited values
     cy.get(newsletter.editItem.shortTitle).should('have.value', subcaseTitleShort + addedText);
-    cy.get(newsletter.editItem.rdfaEditor).contains(text + addedText);
+    cy.get(newsletter.editItem.rdfaEditor).contains(text)
+      .contains(addedText);
     cy.get(newsletter.editItem.checkedThemes).parent('label')
       .contains(theme);
     cy.get(newsletter.editItem.checkedThemes).parent('label')
@@ -368,5 +392,325 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       .parents(newsletter.tableRow.newsletterRow)
       .find(newsletter.tableRow.inNewsletterCheckbox)
       .should('not.be.checked');
+  });
+
+  it('should test the complete edit component', () => {
+    const caseTitleEditView = `Cypress test: Nota edit - ${currentTimestamp()}`;
+    const proposalText = 'Op voorstel van minister-president Jan Jambon';
+    const type = 'Nota';
+    const file = {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
+    };
+    const files = [file];
+
+    cy.createCase(caseTitleEditView);
+    cy.openCase(caseTitleEditView);
+    cy.addSubcase(type, fullTestEdit, null, null);
+    cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten');
+    cy.addAgendaitemToAgenda(fullTestEdit, false);
+    cy.openAgendaitemKortBestekTab(fullTestEdit);
+    cy.intercept('GET', '/themes').as('getThemes');
+    cy.get(newsletter.newsItem.create).click();
+    cy.wait('@getThemes');
+
+    // check and fill in all fields
+    cy.get(newsletter.editItem.noNota).should('be.disabled');
+    cy.get(newsletter.editItem.mandateeProposal).contains('Niet van toepassing');
+    cy.get(newsletter.editItem.rdfaEditor).clear()
+      .type('rollbackTest');
+    cy.get(newsletter.editItem.remark).should('be.empty')
+      .type('rollbackTestRemark');
+    cy.get(newsletter.editItem.toggleFinished).should('not.be.checked')
+      .click();
+    cy.get(newsletter.editItem.themesSelector).contains(theme2)
+      .click();
+    // check cancel
+    cy.get(newsletter.editItem.cancel).click();
+    cy.intercept('GET', '/themes').as('getThemes2');
+    cy.get(newsletter.newsItem.create).click();
+    cy.wait('@getThemes2');
+    cy.get(dependency.rdfa.editorInner).should('be.empty');
+    cy.get(newsletter.editItem.remark).should('be.empty');
+    cy.get(newsletter.editItem.toggleFinished).should('not.be.checked');
+
+    // check after adding nota and mandatee
+    cy.get(newsletter.editItem.cancel).click();
+    cy.openAgendaitemDossierTab(fullTestEdit);
+    cy.addAgendaitemMandatee(1);
+    cy.addDocumentsToAgendaitem(fullTestEdit, files);
+    // TODO-bug reload should not be necessary
+    // reload necessary for nota
+    cy.reload();
+    cy.openAgendaitemKortBestekTab(fullTestEdit);
+    cy.intercept('GET', '/themes').as('getThemes3');
+    cy.get(newsletter.newsItem.create).click();
+    cy.wait('@getThemes3');
+    cy.get(newsletter.editItem.mandateeProposal).contains(proposalText);
+    cy.get(newsletter.editItem.nota).invoke('removeAttr', 'target')
+      .click();
+    // TODO still opened in another tab despite removing target (perhaps not removed?)
+    // cy.url().contains('/document');
+  });
+
+  it('should test the zebra view', () => {
+    const caseTitleZebraView = `Cypress test: Nota zebra view - ${currentTimestamp()}`;
+    const agendaDate = Cypress.dayjs().add(6, 'weeks')
+      .day(4);
+    const fullTestZebraViewMededeling = `Cypress test: Zebra view full mededeling - ${currentTimestamp()}`;
+    const fullTestZebraViewNota = `Cypress test: Zebra view full nota - ${currentTimestamp()}`;
+    const file = {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
+    };
+    const files = [file];
+
+    cy.createCase(caseTitleZebraView);
+    cy.openCase(caseTitleZebraView);
+    cy.addSubcase('Mededeling', fullTestZebraViewMededeling, null, null);
+    cy.addSubcase('Nota', fullTestZebraViewNota, null, null);
+    cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
+    cy.openAgendaForDate(agendaDate);
+    cy.addAgendaitemToAgenda(fullTestZebraViewMededeling, false);
+    // check that there are no items in list with only 'verslag' and 'mededeling
+    openNewsletterForDate(agendaDate);
+    cy.get(route.newsletter.dataTable).within(() => {
+      cy.get(newsletter.tableRow.newsletterRow).should('not.exist');
+    });
+
+    // add nota to agenda and check if list contains correct item
+    cy.openAgendaForDate(agendaDate);
+    cy.addAgendaitemToAgenda(fullTestZebraViewNota, false);
+    openNewsletterForDate(agendaDate);
+    cy.get(newsletter.tableRow.newsletterRow).within(() => {
+      cy.get(newsletter.tableRow.agendaitemNumber).contains(2);
+      cy.get(newsletter.tableRow.newsletterTitle).contains('Nog geen kort bestek voor dit agendapunt.');
+      cy.get(newsletter.buttonToolbar.openNota).should('be.disabled');
+    });
+
+    // add nota to agendaitem
+    cy.openAgendaForDate(agendaDate);
+    cy.openAgendaitemKortBestekTab(fullTestZebraViewNota);
+    cy.addDocumentsToAgendaitem(fullTestZebraViewNota, files);
+    openNewsletterForDate(agendaDate);
+    // check newsitem save
+    cy.intercept('GET', '/themes').as('getThemes');
+    cy.get(newsletter.buttonToolbar.edit).click();
+    cy.wait('@getThemes');
+    cy.get(newsletter.editItem.toggleFinished).click();
+    cy.intercept('POST', '/newsletter-infos').as('postNewsItem');
+    cy.get(newsletter.editItem.save).click();
+    cy.get(utils.vlModalVerify.save).click();
+    cy.wait('@postNewsItem');
+    // TODO-bug reload should not be needed
+    // reload needed to update openNota
+    cy.reload();
+    // check if nota can be opened
+    // TODO find another way to open link in same tab? this doesn't work
+    // cy.get(newsletter.tableRow.newsletterRow).within(() => {
+    //   cy.get(newsletter.buttonToolbar.openNota).children('i')
+    //     .invoke('removeAttr', 'target')
+    //     .click();
+    // });
+    // cy.url().should('contain', '/document/');
+  });
+
+  it('should test the klad view', () => {
+    const caseTitleKladView = `Cypress test: Nota klad view - ${currentTimestamp()}`;
+    const agendaDate = Cypress.dayjs().add(6, 'weeks')
+      .day(5);
+    const richtext = 'this richtext should be visible in klad';
+    const remarkText = 'this remark should be visible in klad';
+    const fullTestKladViewMededeling = `Cypress test: Klad view full mededeling - ${currentTimestamp()}`;
+    const fullTestKladViewNota = `Cypress test: Klad view full nota - ${currentTimestamp()}`;
+
+    cy.createCase(caseTitleKladView);
+    cy.openCase(caseTitleKladView);
+    cy.addSubcase('Mededeling', fullTestKladViewMededeling, null, null);
+    cy.addSubcase('Nota', fullTestKladViewNota, null, null);
+    cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
+    cy.openAgendaForDate(agendaDate);
+    cy.addAgendaitemToAgenda(fullTestKladViewMededeling, false);
+
+    // check that there are no items in list with only 'verslag' and 'mededeling
+    // TODO no loading state or empty message makes it difficult to test
+
+    // check that there is no link to edit without newsletter
+    cy.addAgendaitemToAgenda(fullTestKladViewNota, false);
+    openNewsletterForDate(agendaDate);
+    cy.clickReverseTab('Klad');
+    cy.get(newsletter.itemContent.container).find(newsletter.itemContent.edit)
+      .should('not.exist');
+    cy.get(newsletter.itemContent.noContent);
+    // check that there is link to edit with newsletter and that info and remark text are shown
+    cy.clickReverseTab('Overzicht');
+    cy.get(newsletter.buttonToolbar.edit).click();
+    cy.get(newsletter.editItem.rdfaEditor).clear()
+      .type(richtext);
+    cy.intercept('POST', '/newsletter-infos').as('newsletterInfosPost');
+    cy.get(newsletter.editItem.save).click();
+    cy.get(utils.vlModalVerify.save).click();
+    cy.wait('@newsletterInfosPost');
+    cy.intercept('PATCH', '/newsletter-infos/**').as('patchNewsItem');
+    cy.get(newsletter.tableRow.newsletterRow).eq(0)
+      .find(newsletter.tableRow.inNewsletterCheckbox)
+      .parent()
+      .click();
+    cy.wait('@patchNewsItem');
+    cy.clickReverseTab('Klad');
+    cy.get(newsletter.itemContent.richtext).contains(richtext);
+    cy.get(newsletter.itemContent.remark).should('not.exist');
+    cy.get(newsletter.itemContent.theme).should('not.exist');
+    cy.get(newsletter.itemContent.printItemProposal).should('not.exist');
+    cy.get(newsletter.itemContent.edit).click();
+
+    // check newsitem save and that theme is shown
+    cy.get(newsletter.editItem.themesSelector).contains('Sport')
+      .click();
+    cy.get(newsletter.editItem.remark).clear()
+      .type(remarkText);
+    cy.get(newsletter.editItem.toggleFinished).click();
+    cy.intercept('PATCH', '/newsletter-infos/**').as('patchNewsItem2');
+    cy.get(newsletter.editItem.save).click();
+    cy.wait('@patchNewsItem2');
+    // existence of proposal is checked in mandatee-assigning
+    cy.get(newsletter.itemContent.remark).contains(remarkText);
+    cy.get(newsletter.itemContent.theme).contains('Sport');
+  });
+
+  it('should test the definitief view', () => {
+    const caseTitleDefinitief = `Cypress test: Nota Definitief - ${currentTimestamp()}`;
+    const agendaDate = Cypress.dayjs().add(6, 'weeks')
+      .day(6);
+    const richtext = 'this info should be visible in definitief';
+    const remarkText = 'this remark should not be visible in definitief';
+    const proposalText = 'Op voorstel van minister-president Jan Jambon';
+    const fullTestDefinitiefViewMededeling = `Cypress test: Definitief view full mededeling - ${currentTimestamp()}`;
+    const fullTestDefinitiefViewNota = `Cypress test: Definitief  view full nota - ${currentTimestamp()}`;
+
+    cy.createCase(caseTitleDefinitief);
+    cy.openCase(caseTitleDefinitief);
+    cy.addSubcase('Mededeling', fullTestDefinitiefViewMededeling, null, null);
+    cy.addSubcase('Nota', fullTestDefinitiefViewNota, null, null);
+    cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
+    cy.openAgendaForDate(agendaDate);
+    cy.addAgendaitemToAgenda(fullTestDefinitiefViewMededeling, false);
+    cy.addAgendaitemToAgenda(fullTestDefinitiefViewNota, false);
+
+    // check that there is one mededeling without proposal or themes
+    openNewsletterForDate(agendaDate);
+    cy.clickReverseTab('Definitief');
+    cy.get(newsletter.itemContent.container).should('have.length', 1);
+    cy.get(newsletter.itemContent.title).contains(fullTestDefinitiefViewMededeling);
+    cy.get(newsletter.itemContent.printItemProposal).should('not.exist');
+    cy.get(newsletter.itemContent.theme).should('not.exist');
+
+    // add mandatee, info, remark and theme to mededeling, then check if shown/not shown correctly
+    cy.openAgendaForDate(agendaDate);
+    cy.openAgendaitemDossierTab(fullTestDefinitiefViewMededeling);
+    cy.addAgendaitemMandatee(0);
+    cy.openAgendaitemKortBestekTab(fullTestDefinitiefViewMededeling);
+    cy.intercept('GET', '/themes').as('getThemes');
+    cy.get(newsletter.newsItem.edit).click();
+    cy.wait('@getThemes');
+    cy.get(newsletter.editItem.rdfaEditor).type(richtext);
+    cy.get(newsletter.editItem.remark).type(remarkText);
+    cy.get(newsletter.editItem.themesSelector).contains(theme2)
+      .click();
+    cy.intercept('PATCH', '/newsletter-infos/**').as('patchNewsItem');
+    cy.get(newsletter.editItem.save).click()
+      .wait('@patchNewsItem');
+
+    openNewsletterForDate(agendaDate);
+    cy.clickReverseTab('Definitief');
+    cy.get(newsletter.itemContent.title).contains(fullTestDefinitiefViewMededeling);
+    cy.get(newsletter.itemContent.printItemProposal).contains(proposalText);
+    cy.get(newsletter.itemContent.theme).contains(theme2);
+    cy.get(newsletter.itemContent.richtext).should('not.exist');
+    cy.get(newsletter.itemContent.remark).should('not.exist');
+
+    // check if nota is visible when selected
+    cy.clickReverseTab('Overzicht');
+    cy.get(newsletter.buttonToolbar.edit).click();
+    cy.get(newsletter.editItem.rdfaEditor).clear()
+      .type(richtext);
+    cy.get(newsletter.editItem.remark).clear()
+      .type(remarkText);
+    cy.intercept('POST', '/newsletter-infos').as('newsletterInfosPost');
+    cy.get(newsletter.editItem.save).click();
+    cy.get(utils.vlModalVerify.save).click();
+    cy.wait('@newsletterInfosPost');
+    cy.intercept('PATCH', '/newsletter-infos/**').as('patchNewsItem');
+    cy.get(newsletter.tableRow.newsletterRow)
+      .find(newsletter.tableRow.inNewsletterCheckbox)
+      .parent()
+      .click()
+      .wait('@patchNewsItem');
+    cy.clickReverseTab('Definitief');
+    cy.get(newsletter.itemContent.container).should('have.length', 2);
+    // TODO title text not found?
+    // cy.get(newsletter.itemContent.title).eq(0)
+    //   .contains(fullTestDefinitiefViewNota);
+
+    // check if mededeling is not visible when deselected in dossier
+    cy.openAgendaForDate(agendaDate);
+    cy.openAgendaitemDossierTab(fullTestDefinitiefViewMededeling);
+    cy.get(agenda.agendaitemTitlesView.edit).click();
+    cy.get(agenda.agendaitemTitlesEdit.showInNewsletter).click();
+    cy.intercept('PATCH', '/newsletter-infos/**').as('patchNewsItem2');
+    cy.get(agenda.agendaitemTitlesEdit.actions.save).click()
+      .wait('@patchNewsItem2');
+
+    openNewsletterForDate(agendaDate);
+    cy.clickReverseTab('Definitief');
+    cy.get(newsletter.itemContent.container).should('have.length', 1);
+    cy.get(newsletter.itemContent.title).should('not.contain', fullTestDefinitiefViewMededeling);
+
+    // add mandatee, info, remark and theme to nota, then check if shown/not shown correctly
+    cy.openAgendaForDate(agendaDate);
+    cy.openAgendaitemDossierTab(fullTestDefinitiefViewNota);
+    cy.addAgendaitemMandatee(0);
+    cy.openAgendaitemKortBestekTab(fullTestDefinitiefViewNota);
+    cy.intercept('GET', '/themes').as('getThemes');
+    cy.get(newsletter.newsItem.edit).click();
+    cy.wait('@getThemes');
+    cy.get(newsletter.editItem.rdfaEditor).clear()
+      .type(richtext);
+    cy.get(newsletter.editItem.remark).clear()
+      .type(remarkText);
+    cy.get(newsletter.editItem.themesSelector).contains(theme2)
+      .click();
+
+    openNewsletterForDate(agendaDate);
+    cy.clickReverseTab('Definitief');
+    // TODO title text not found?
+    // cy.get(newsletter.itemContent.title).contains(fullTestDefinitiefViewNota);
+    cy.get(newsletter.itemContent.printItemProposal).contains(proposalText);
+    cy.get(newsletter.itemContent.theme).contains(theme2);
+    cy.get(newsletter.itemContent.richtext).contains(richtext);
+    cy.get(newsletter.itemContent.remark).should('not.exist');
+  });
+
+  it('should test the rdfa editor', () => {
+    cy.visit('/vergadering/5EBA94D7751CF70008000001/kort-bestek');
+    cy.get(newsletter.buttonToolbar.edit).click();
+
+    pressRdfaButton('Strikethrough');
+    cy.get(dependency.rdfa.editorInner).type('Strikethrough');
+    pressRdfaButton('Strikethrough');
+    cy.get(dependency.rdfa.editorInner).type(' ');
+    pressRdfaButton('Underline');
+    cy.get(dependency.rdfa.editorInner).type('Underline');
+    pressRdfaButton('Underline');
+    cy.get(dependency.rdfa.editorInner).type(' ');
+    pressRdfaButton('Italic');
+    cy.get(dependency.rdfa.editorInner).type('Italic');
+    pressRdfaButton('Italic');
+    cy.get(dependency.rdfa.editorInner).type(' ');
+    pressRdfaButton('Bold');
+    cy.get(dependency.rdfa.editorInner).type('Bold');
+
+    cy.get('del').contains('Strikethrough');
+    cy.get('u').contains('Underline');
+    cy.get('em').contains('Italic');
+    cy.get('strong').contains('Bold');
   });
 });
