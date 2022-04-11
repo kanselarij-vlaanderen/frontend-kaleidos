@@ -213,25 +213,23 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
           timeOut: 3 * 60 * 1000,
         }
       );
-      this.jobMonitor.register(job);
-      job.on('didEnd', this, async function (status) {
-        if (this.toaster.toasts.includes(inCreationToast)) {
-          this.toaster.toasts.removeObject(inCreationToast);
-        }
-        if (status === job.SUCCESS) {
-          const url = await fileDownloadUrlFromJob(job, name);
-          debug(`Archive ready. Prompting for download now (${url})`);
-          fileDownloadToast.options.downloadLink = url;
-          fileDownloadToast.options.fileName = name;
-          this.toaster.displayToast.perform(fileDownloadToast);
-        } else {
-          debug('Something went wrong while generating archive.');
-          this.toaster.error(
-            this.intl.t('error'),
-            this.intl.t('warning-title')
-          );
-        }
-      });
+      await this.jobMonitor.monitor(job);
+      if (this.toaster.toasts.includes(inCreationToast)) {
+        this.toaster.toasts.removeObject(inCreationToast);
+      }
+      if (job.status === job.SUCCESS) {
+        const url = await fileDownloadUrlFromJob(job, name);
+        debug(`Archive ready. Prompting for download now (${url})`);
+        fileDownloadToast.options.downloadLink = url;
+        fileDownloadToast.options.fileName = name;
+        this.toaster.displayToast.perform(fileDownloadToast);
+      } else {
+        debug('Something went wrong while generating archive.');
+        this.toaster.error(
+          this.intl.t('error'),
+          this.intl.t('warning-title')
+        );
+      }
     } else {
       const url = await fileDownloadUrlFromJob(job, name);
       debug(`Archive ready. Prompting for download now (${url})`);
