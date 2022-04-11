@@ -31,7 +31,7 @@ export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
   }
 
   get modelsForDetailRoute() {
-    return [this.args.currentMeeting.id, this.args.currentAgenda.id, this.currentAgendaItemId || this.firstAgendaitem];
+    return [this.args.currentMeeting.id, this.args.currentAgenda.id, this.currentAgendaItemId || this.firstAgendaitem.id];
   }
 
   get isInAgendaItemDetailRoute() {

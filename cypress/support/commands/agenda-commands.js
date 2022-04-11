@@ -159,14 +159,14 @@ function visitAgendaWithLink(link) {
 function openAgendaForDate(agendaDate, index = 0) {
   cy.log('openAgendaForDate');
   const searchDate = `${agendaDate.date()}/${agendaDate.month() + 1}/${agendaDate.year()}`;
-  cy.intercept('GET', '/meetings?filter**').as('getFilteredMeetings');
+  cy.intercept('GET', '/agendas?filter**').as('getFilteredAgendas');
 
   cy.visit('');
   cy.get(route.agendasOverview.filter.container).within(() => {
     cy.get(route.agendasOverview.filter.input).type(searchDate);
     cy.get(route.agendasOverview.filter.button).click();
   });
-  cy.wait('@getFilteredMeetings', {
+  cy.wait('@getFilteredAgendas', {
     timeout: 20000,
   });
   cy.get(route.agendasOverview.dataTable).find('tbody')
@@ -401,7 +401,7 @@ function addAgendaitemToAgenda(subcaseTitle, postponed = false) {
   });
   cy.intercept('GET', '/agendaitems?filter**').as(`loadAgendaitems${randomInt}`);
   cy.wait('@createNewAgendaitem', {
-    timeout: 20000,
+    timeout: 30000,
   })
     .wait('@patchSubcase', {
       timeout: 20000,

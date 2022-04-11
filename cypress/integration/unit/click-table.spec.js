@@ -57,8 +57,8 @@ context('Table Row Click tests', () => {
   });
 
   it('should filter the agenda-page and remove the active filter afterwards', () => {
-    cy.intercept('GET', '/meetings?**').as('getMeetings');
-    cy.wait('@getMeetings', {
+    cy.intercept('GET', '/agendas?**').as('getAgendas');
+    cy.wait('@getAgendas', {
       timeout: 30000,
     });
     cy.get(route.agendasOverview.dataTable).find('tbody')
