@@ -32,6 +32,7 @@ class BaseRow extends EmberObject {
   @task
   *loadData() {
     this.lastJob = yield this.store.queryOne('publication-metrics-export-job', {
+      sort: '-created',
       'filter[metrics-type]': this.key,
       include: ['generated', 'generated-by'].join(','),
     });
