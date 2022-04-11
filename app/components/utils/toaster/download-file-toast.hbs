@@ -3,12 +3,12 @@
     class="vl-alert-relative vl-alert-relative--center-mid"
     aria-live="assertive"
     @type="success"
-    @title={{t @title}}
+    @title={{@title}}
     @closeable={{true}}
     @onClose={{@options.onClose}}
   >
     <div class="vl-alert__message auk-u-text-capitalize">
-      <p>{{t @message}}</p>
+      <p>{{@message}}</p>
       <Auk::Button
         @skin="secondary"
         @href={{@options.downloadLink}}
