@@ -41,7 +41,7 @@ class BaseRow extends EmberObject {
 
   @task
   *triggerGenerateReport(params) {
-    const inCreationToast = this.toaster.loading(
+    const generatingToast = this.toaster.loading(
       this.intl.t('publication-report--toast-generating--message'),
       this.intl.t('publication-report--toast-generating--title'),
       {
@@ -49,6 +49,46 @@ class BaseRow extends EmberObject {
       }
     );
 
+    try {
+      const file = yield this.generateReport(params);
+
+      const filename = file.downloadName;
+      const downloadLink = file.namedDownloadLink;
+
+      const downloadFileToast = {
+        title: this.intl.t('publication-report--toast-ready--title'),
+        message: this.intl.t('publication-report--toast-ready--message'),
+        type: 'download-file',
+        options: {
+          timeOut: 10 * 60 * 1000,
+          downloadLink: downloadLink,
+          fileName: filename,
+        },
+      };
+
+      this.toaster.toasts.removeObject(generatingToast);
+      this.toaster.displayToast.perform(downloadFileToast);
+    } catch (err) {
+      this.toaster.toasts.removeObject(generatingToast);
+      this.toaster.error(err.message, this.intl.t('warning-title'));
+    }
+  }
+
+  async generateReport(params) {
+    const job = await this.createReportRecord(params);
+    await job.save();
+    await this.jobMonitor.monitor(job);
+    if (job.status === job.SUCCESS) {
+      await job.belongsTo('generated').reload();
+      const file = await job.generated;
+      return file;
+    } else {
+      throw new Error(this.intl.t('publication-report--toast-error--message'));
+    }
+  }
+
+  /** @private */
+  async createReportRecord(params) {
     const now = new Date();
 
     const reportNameDatePrefix = moment(now).format('YYYYMMDDhhmmss');
@@ -57,7 +97,7 @@ class BaseRow extends EmberObject {
 
     const query = this.getReportQueryParams(params);
 
-    const user = yield this.currentSession.user;
+    const user = await this.currentSession.user;
 
     const job = this.store.createRecord('publication-metrics-export-job', {
       created: now,
@@ -69,34 +109,7 @@ class BaseRow extends EmberObject {
         query: query,
       },
     });
-    this.lastJob = job;
-
-    yield job.save();
-
-    yield this.jobMonitor.monitor(job);
-
-    this.toaster.toasts.removeObject(inCreationToast);
-
-    if (job.status === job.SUCCESS) {
-      const file = yield job.belongsTo('generated').reload();
-      const filename = file.downloadName;
-      const downloadLink = file.namedDownloadLink;
-
-      const fileDownloadToast = {
-        title: this.intl.t('publication-report--toast-ready--title'),
-        message: this.intl.t('publication-report--toast-ready--message'),
-        type: 'download-file',
-        options: {
-          timeOut: 10 * 60 * 1000,
-          downloadLink: downloadLink,
-          fileName: filename,
-        },
-      };
-
-      this.toaster.displayToast.perform(fileDownloadToast);
-    } else {
-      this.toaster.error(this.intl.t('error'), this.intl.t('warning-title'));
-    }
+    return job;
   }
 }
 
