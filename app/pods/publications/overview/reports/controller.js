@@ -49,29 +49,32 @@ class BaseRow extends EmberObject {
       }
     );
 
+    let file;
     try {
-      const file = yield this.generateReport(params);
-
-      const filename = file.downloadName;
-      const downloadLink = file.namedDownloadLink;
-
-      const downloadFileToast = {
-        title: this.intl.t('publication-report--toast-ready--title'),
-        message: this.intl.t('publication-report--toast-ready--message'),
-        type: 'download-file',
-        options: {
-          timeOut: 10 * 60 * 1000,
-          downloadLink: downloadLink,
-          fileName: filename,
-        },
-      };
-
-      this.toaster.clear(generatingToast);
-      this.toaster.displayToast.perform(downloadFileToast);
+      file = yield this.generateReport(params);
     } catch (err) {
+      console.error(err);
       this.toaster.clear(generatingToast);
       this.toaster.error(err.message, this.intl.t('warning-title'));
+      return;
     }
+
+    const filename = file.downloadName;
+    const downloadLink = file.namedDownloadLink;
+
+    const downloadFileToast = {
+      title: this.intl.t('publication-report--toast-ready--title'),
+      message: this.intl.t('publication-report--toast-ready--message'),
+      type: 'download-file',
+      options: {
+        timeOut: 10 * 60 * 1000,
+        downloadLink: downloadLink,
+        fileName: filename,
+      },
+    };
+
+    this.toaster.clear(generatingToast);
+    this.toaster.displayToast.perform(downloadFileToast);
   }
 
   async generateReport(params) {
