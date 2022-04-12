@@ -22,6 +22,7 @@ class BaseRow extends EmberObject {
   @service intl;
   @service currentSession;
   @service toaster;
+  @service jobMonitor;
 
   @tracked lastJob;
 
@@ -40,6 +41,14 @@ class BaseRow extends EmberObject {
 
   @task
   *triggerGenerateReport(params) {
+    const inCreationToast = this.toaster.loading(
+      this.intl.t('publication-report--toast-generating--message'),
+      this.intl.t('publication-report--toast-generating--title'),
+      {
+        timeOut: 3 * 60 * 1000,
+      }
+    );
+
     const now = new Date();
 
     const reportNameDatePrefix = moment(now).format('YYYYMMDDhhmmss');
@@ -60,9 +69,34 @@ class BaseRow extends EmberObject {
         query: query,
       },
     });
+    this.lastJob = job;
+
     yield job.save();
 
-    this.lastJob = job;
+    yield this.jobMonitor.monitor(job);
+
+    this.toaster.toasts.removeObject(inCreationToast);
+
+    if (job.status === job.SUCCESS) {
+      const file = yield job.belongsTo('generated').reload();
+      const filename = file.downloadName;
+      const downloadLink = file.namedDownloadLink;
+
+      const fileDownloadToast = {
+        title: this.intl.t('publication-report--toast-ready--title'),
+        message: this.intl.t('publication-report--toast-ready--message'),
+        type: 'download-file',
+        options: {
+          timeOut: 10 * 60 * 1000,
+          downloadLink: downloadLink,
+          fileName: filename,
+        },
+      };
+
+      this.toaster.displayToast.perform(fileDownloadToast);
+    } else {
+      this.toaster.error(this.intl.t('error'), this.intl.t('warning-title'));
+    }
   }
 }
 
