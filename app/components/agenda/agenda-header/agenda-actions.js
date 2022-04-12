@@ -214,9 +214,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
         }
       );
       await this.jobMonitor.monitor(job);
-      if (this.toaster.toasts.includes(inCreationToast)) {
-        this.toaster.toasts.removeObject(inCreationToast);
-      }
+      this.toaster.clear(inCreationToast);
       if (job.status === job.SUCCESS) {
         const url = await fileDownloadUrlFromJob(job, name);
         debug(`Archive ready. Prompting for download now (${url})`);

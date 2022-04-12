@@ -66,10 +66,10 @@ class BaseRow extends EmberObject {
         },
       };
 
-      this.toaster.toasts.removeObject(generatingToast);
+      this.toaster.clear(generatingToast);
       this.toaster.displayToast.perform(downloadFileToast);
     } catch (err) {
-      this.toaster.toasts.removeObject(generatingToast);
+      this.toaster.clear(generatingToast);
       this.toaster.error(err.message, this.intl.t('warning-title'));
     }
   }
