@@ -77,6 +77,7 @@ class BaseRow extends EmberObject {
     this.toaster.displayToast.perform(downloadFileToast);
   }
 
+  /** @private */
   async generateReport(params) {
     const job = await this.createReportRecord(params);
     this.lastJob = job;
