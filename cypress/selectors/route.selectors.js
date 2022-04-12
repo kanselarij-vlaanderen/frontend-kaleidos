@@ -33,6 +33,7 @@ const selectors = {
       container: '[data-test-route-agendas-overview-filter-container]',
       input: '[data-test-route-agendas-overview-filter-input]',
       button: '[data-test-route-agendas-overview-filter-button]',
+      warning: '[data-test-route-agendas-overview-filter-warning-no-results]',
     },
   },
 

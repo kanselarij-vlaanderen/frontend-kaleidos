@@ -144,7 +144,10 @@
     {{else}}
       <Auk::Panel>
         <Auk::Panel::Body>
-          <Auk::EmptyState @message={{t "no-results-found"}} />
+          <Auk::EmptyState
+            @message={{t "no-results-found"}}
+            data-test-route-agendas-overview-filter-warning-no-results
+          />
         </Auk::Panel::Body>
       </Auk::Panel>
     {{/if}}

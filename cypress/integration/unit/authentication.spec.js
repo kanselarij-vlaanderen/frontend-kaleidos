@@ -7,7 +7,6 @@ context('Authentication tests', () => {
   const acmidmButtonText = 'Meld u aan';
   it('should login/logout using xhr request (api call)', () => {
     cy.login('Admin');
-    cy.url().should('include', 'overzicht');
     cy.logout();
     cy.visit('/');
     cy.get(route.login.acmidmButton).contains(acmidmButtonText);
@@ -15,7 +14,6 @@ context('Authentication tests', () => {
 
   it('should login/logout using the mock-login and logout button', () => {
     cy.loginFlow('Admin');
-    cy.url().should('include', 'overzicht');
     cy.logoutFlow();
     cy.visit('/');
     // TODO flaky, sometimes we end up on authentication-ti.vlaanderen

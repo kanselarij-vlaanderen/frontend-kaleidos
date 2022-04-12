@@ -74,7 +74,6 @@ context('Agenda tests', () => {
       cy.get(auk.modal.footer.cancel).click();
       // instead of confirming the opened modal, we cancel and let the command handle it
       cy.deleteAgenda(true);
-      cy.url().should('include', '/overzicht');
     });
   });
 
