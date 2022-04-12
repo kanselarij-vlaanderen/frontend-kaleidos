@@ -35,7 +35,7 @@ export default ModelWithModifier.extend({
   formallyOk: attr('string'),
   isApproval: attr('boolean'), // isGoedkeuringVanDeNotulen
   explanation: attr('string'),
-  // More information: https://github.com/kanselarij-vlaanderen/kaleidos-frontend/pull/469.
+  privateComment: attr('string'),
 
   agenda: belongsTo('agenda', {
     inverse: null,

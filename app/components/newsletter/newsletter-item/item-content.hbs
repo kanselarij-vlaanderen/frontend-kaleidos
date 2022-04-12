@@ -1,6 +1,6 @@
 {{!-- TODO: octane-refactor --}}
 {{!-- template-lint-disable no-action --}}
-<div class="auk-u-non-breakable-group@print">
+<div data-test-newsletter-item-content-container class="auk-u-non-breakable-group@print">
   {{#if this.allowEditing}}
     <div class="auk-u-mb-2">
       <div class="auk-o-flex auk-o-flex--justify-between auk-o-flex--align-baseline">
@@ -23,7 +23,10 @@
         }}
           <div class="auk-o-flex auk-o-flex--justify-between ">
             <div class="auk-u-ml-2">
-              <Auk::ButtonLink {{action "startEditing"}}>
+              <Auk::ButtonLink
+                data-test-newsletter-item-content-edit
+                {{action "startEditing"}}
+              >
                 {{t "edit"}}
               </Auk::ButtonLink>
             </div>
@@ -38,7 +41,10 @@
     </div>
   {{else}}
     <div class="auk-u-mb-2">
-      <h4 class="auk-h4 auk-u-m-0">
+      <h4
+        data-test-newsletter-item-content-title
+        class="auk-h4 auk-u-m-0"
+      >
         {{#if (not this.newsletterInfo)}}
           {{this.agendaitem.shortTitle}}
         {{else}}
@@ -59,7 +65,7 @@
   {{/if}}
   {{#if (not this.agendaitem.showAsRemark)}}
     {{#if (or (not this.newsletterInfo.richtext) (eq this.newsletterInfo.richtext "&nbsp;"))}}
-      <p class="auk-u-italic auk-u-text-muted auk-u-mb-2">
+      <p data-test-newsletter-item-content-no-content class="auk-u-italic auk-u-text-muted auk-u-mb-2">
         {{t "no-newsletter-info"}}
       </p>
     {{/if}}
@@ -67,14 +73,20 @@
 </div>
 {{#if (not this.agendaitem.showAsRemark)}}
   {{#if (and this.newsletterInfo.richtext (not-eq this.newsletterInfo.richtext "&nbsp;"))}}
-    <p class="auk-u-mb-2">
+    <p
+      data-test-newsletter-item-content-richtext
+      class="auk-u-mb-2"
+    >
       <SanitizeHtml @raw={{true}} @value={{this.newsletterInfo.richtext}} />
     </p>
   {{/if}}
 {{/if}}
 {{#if this.allowEditing}}
   {{#if (await this.newsletterInfo.remark)}}
-    <p class="auk-u-text-muted auk-u-text-capitalize">
+    <p
+      data-test-newsletter-item-content-remark
+      class="auk-u-text-muted auk-u-text-capitalize"
+    >
       {{t "remark"}}: {{await this.newsletterInfo.remark}}
     </p>
   {{/if}}
@@ -88,7 +100,11 @@
         (await this.newsletterInfo.themes)
       as |theme|
       }}
-        <Auk::Pill>{{theme.label}}</Auk::Pill>
+        <Auk::Pill
+          data-test-newsletter-item-content-theme
+        >
+          {{theme.label}}
+        </Auk::Pill>
       {{/each}}
     </Auk::PillList>
   </div>
