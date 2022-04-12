@@ -108,6 +108,7 @@ context('Agenda tests', () => {
     const subcaseTitleShort = `Agenda spec edit & trim whitespace korte titel - ${testId}`;
     const subcaseTitleLong = `Agenda spec edit & trim whitespace lange titel - ${testId}`;
     const explanation = 'Dit is de opmerking';
+    const privateComment = 'Dit is de interne opmerking';
     const whitespace = '\n';
 
     cy.createAgenda(agendaKind, dateToCreateAgenda, agendaPlace).then((result) => {
@@ -152,6 +153,10 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaitemTitlesEdit.explanation).clear()
       .type(whitespace + explanation + whitespace);
     cy.get(agenda.agendaitemTitlesEdit.explanation).should('have.value', whitespace + explanation + whitespace);
+    // private comment
+    cy.get(agenda.agendaitemTitlesEdit.privateComment).clear()
+      .type(whitespace + privateComment + whitespace);
+    cy.get(agenda.agendaitemTitlesEdit.privateComment).should('have.value', whitespace + privateComment + whitespace);
     cy.intercept('PATCH', '/agendas/*').as('patchAgendas');
     cy.get(agenda.agendaitemTitlesEdit.actions.save).click();
     cy.wait('@patchAgendas');
@@ -165,7 +170,10 @@ context('Agenda tests', () => {
     cy.get('@longTitle').contains(subcaseTitleLong);
     // explanation is not trimmed
     cy.get(agenda.agendaitemTitlesView.explanation).contains(`Opmerking: ${whitespace + explanation + whitespace}`);
+    // privatec comment is not trimmed
+    cy.get(agenda.agendaitemTitlesView.privateComment).contains(`Interne opmerking: ${whitespace + privateComment + whitespace}`);
     cy.get(route.agendaitemIndex.confidential).contains('Vertrouwelijk');
+
     // rollback confidentiality should work
     cy.get(agenda.agendaitemTitlesView.edit).click();
     cy.get(agenda.agendaitemTitlesEdit.confidential).click();
