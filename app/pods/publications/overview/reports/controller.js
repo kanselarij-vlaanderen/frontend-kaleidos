@@ -79,6 +79,7 @@ class BaseRow extends EmberObject {
 
   async generateReport(params) {
     const job = await this.createReportRecord(params);
+    this.lastJob = job;
     await job.save();
     await this.jobMonitor.monitor(job);
     if (job.status === job.SUCCESS) {
