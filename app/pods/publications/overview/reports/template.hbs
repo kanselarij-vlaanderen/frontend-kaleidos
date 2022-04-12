@@ -16,7 +16,7 @@
                 <div class="auk-u-text-muted">
                   {{t
                     "publication-report-last-request"
-                    date=(moment-format row.lastJob.created "YYYY/MM/DD")
+                    date=(moment-format row.lastJob.created "DD/MM/YYYY")
                     time=(moment-format row.lastJob.created "HH:mm")
                     user=row.lastJob.generatedBy.fullName
                   }}
