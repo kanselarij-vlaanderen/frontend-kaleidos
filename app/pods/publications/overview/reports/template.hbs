@@ -21,13 +21,22 @@
                     user=row.lastJob.generatedBy.fullName
                   }}
                 </div>
-                <Auk::ButtonLink
-                  @icon="download"
-                  @href={{row.lastJob.generated.namedDownloadLink}}
-                  download
-                >
-                  {{row.lastJob.generated.downloadFilename}}
-                </Auk::ButtonLink>
+                {{#if (not row.lastJob.hasEnded)}}
+                  {{t "publication-report-running"}}
+                {{else if (eq row.lastJob.status row.lastJob.SUCCESS)}}
+                  <Auk::ButtonLink
+                    @icon="download"
+                    @href={{row.lastJob.generated.namedDownloadLink}}
+                    download
+                  >
+                    {{row.lastJob.generated.downloadFilename}}
+                  </Auk::ButtonLink>
+                {{else}} {{!ERROR}}
+                  <Auk::FormHelpText
+                    @skin="danger"
+                    @text={{t "publication-report-failed"}}
+                  />
+                {{/if}}
               </div>
             {{/if}}
           </div>
