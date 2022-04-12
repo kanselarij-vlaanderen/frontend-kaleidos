@@ -1,12 +1,39 @@
-{{#if @accessLevel.label}}
+{{#if (eq @accessLevel.label "Intern secretarie")}}
   <Auk::Pill
     @skin={{this.accessPillSkin}}
-    @icon="users"
+    @icon="intern-secretarie"
+  >
+    {{@accessLevel.label}}
+  </Auk::Pill>
+{{else if (eq @accessLevel.label "Intern Regering")}}
+  <Auk::Pill
+    @skin={{this.accessPillSkin}}
+    @icon="intern-regering"
+  >
+    {{@accessLevel.label}}
+  </Auk::Pill>
+{{else if (eq @accessLevel.label "Intern Overheid")}}
+  <Auk::Pill
+    @skin={{this.accessPillSkin}}
+    @icon="intern-overheid"
+  >
+    {{@accessLevel.label}}
+  </Auk::Pill>
+{{else if (eq @accessLevel.label "Ministerraad")}}
+  <Auk::Pill
+    @skin={{this.accessPillSkin}}
+    @icon="ministerraad"
+  >
+    {{@accessLevel.label}}
+  </Auk::Pill>
+{{else if (eq @accessLevel.label "Publiek")}}
+  <Auk::Pill
+    @skin={{this.accessPillSkin}}
+    @icon="public"
   >
     {{@accessLevel.label}}
   </Auk::Pill>
 {{else}}
-  {{t "no-accessLevel"}}
   <Auk::Pill>
     {{t "no-accessLevel"}}
   </Auk::Pill>

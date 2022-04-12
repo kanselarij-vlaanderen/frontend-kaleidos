@@ -101,7 +101,7 @@
                 }}
               </td>
               <td>
-                <Auk::StatusPill>Verzonden</Auk::StatusPill>
+                <Auk::Pill @skin="warning" @icon="mail">Verzonden</Auk::Pill>
               </td>
               <td>
                 <Auk::Button
@@ -153,7 +153,7 @@
                 }}
               </td>
               <td>
-                <Auk::StatusPill @status="neutral">Gemarkeerd voor handtekenen</Auk::StatusPill>
+                <Auk::Pill @skin="white" @icon="sign">Gemarkeerd voor handtekenen</Auk::Pill>
               </td>
               <td>
                 <Auk::Button
@@ -210,7 +210,9 @@
         />
       </div>
       <div class="auk-sidebar__body">
-        <Auk::StatusPill>Verzonden</Auk::StatusPill>
+        <Auk::Pill @skin="warning" @icon="mail">Verzonden</Auk::Pill>
+        <Auk::Pill @skin="active"
+          @icon="ministerraad">Ministerraad</Auk::Pill>
         <p class="auk-u-muted auk-u-mt-2">
           Decreet -
           {{moment-format
