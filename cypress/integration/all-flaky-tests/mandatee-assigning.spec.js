@@ -345,5 +345,19 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .scrollIntoView()
       .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits en Vlaams minister Wouter Beke')
       .should('be.visible');
+    cy.clickReverseTab('Klad');
+    cy.get(newsletter.itemContent.printItemProposal).as('proposals');
+    cy.get('@proposals').eq(0)
+      .scrollIntoView()
+      .contains('Op voorstel van minister-president Jan Jambon en viceminister-president Hilde Crevits')
+      .should('be.visible');
+    cy.get('@proposals').eq(1)
+      .scrollIntoView()
+      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits en Vlaams minister Wouter Beke')
+      .should('be.visible');
+    cy.get('@proposals').eq(2)
+      .scrollIntoView()
+      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits, viceminister-president Bart Somers, viceminister-president Ben Weyts en Vlaams minister Zuhal Demir')
+      .should('be.visible');
   });
 });
