@@ -188,13 +188,19 @@ export default Component.extend({
       this.set('isAssigningToOtherCase', false);
 
       const subCases = await oldCase.hasMany('subcases').reload();
-      if (subCases.length > 0) {
-        this.router.transitionTo('cases.case.subcases');
-        this.onMoveSubcase();
-      } else {
-        this.set('caseToDelete', oldCase);
-        this.triggerDeleteCaseDialog();
+      if (subCases.length === 0) {
+        const publicationFlow = await this.store.queryOne('publication-flow', {
+          'filter[case][:id:]': oldCase.id,
+        });
+        // TODO KAS-3315 The deletion of case is only possible in this situation
+        if (!publicationFlow) {
+          this.set('caseToDelete', oldCase);
+          this.triggerDeleteCaseDialog();
+          return;
+        }
       }
+      this.router.transitionTo('cases.case.subcases');
+      this.onMoveSubcase();
     },
 
     cancelDeleteCase() {
