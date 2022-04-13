@@ -14,6 +14,26 @@
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     {{#if this.currentSession.isMinister}}
+    <Auk::Toolbar::Group @position="right">
+      <Auk::Toolbar::Item>
+        {{#if this.isShowSignButton}}
+        <Auk::Button
+          @skin="primary"
+          @icon="sign"
+        >
+          Geselecteerde documenten handtekenen
+        </Auk::Button>
+        {{else}}
+        <Auk::Button
+          @skin="primary"
+          @icon="sign"
+          @disabled={{true}}
+        >
+          Geselecteerde documenten handtekenen
+        </Auk::Button>
+        {{/if}}
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
     {{else}}
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
@@ -47,6 +67,7 @@
        <table class="auk-table auk-table--sticky-header auk-table--action">
         <thead>
           <tr>
+            <th>{{! Select}}</th>
             <Utils::ThSortable
               @label="Dringend"
               @field="decision-activity.start-date"
@@ -70,7 +91,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="auk-table__row auk-table__row__clickable" {{on "click" this.showSidebar}}>
+          <tr class="auk-table__row">
+            <td
+              class="auk-u-text-align--center"
+            >
+              <Auk::Label class="auk-u-sr-only">Selecteer</Auk::Label>
+              <Auk::Checkbox
+                {{on "input" (action "showSignButton")}}
+              />
+            </td>
             <td
               class="auk-u-text-align--center"
             >
@@ -89,7 +118,7 @@
             <td>
               <Auk::Button
                 @skin="borderless"
-                @icon="pencil"
+                @icon="sign"
                 class="auk-table__link"
                 {{on "click" this.showSidebar}}
               >

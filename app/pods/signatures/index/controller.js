@@ -67,10 +67,16 @@ export default class SignaturesIndexController extends Controller {
   @tracked isShowSidebar = false;
   @tracked isShowAddMinister = false;
   @tracked isShowCancelSignatures = false;
+  @tracked isShowSignButton = false;
 
   @action
   showFilterModal() {
     this.isShowFilterModal = true;
+  }
+
+  @action
+  showSignButton(sort) {
+    this.isShowSignButton = true;
   }
 
   @action
