@@ -44,7 +44,7 @@
     </Toolbar.Group>
   </Auk::Toolbar>
 </Auk::Navbar>
-{{#if (or this.from this.to)}}
+{{#if (not-eq this.filter "")}}
   <ChangesAlert
     @message={{t "filtered-agendas"}}
     @buttonText={{t "clear-filter"}}
@@ -147,7 +147,7 @@
                   </td>
                   <td class="auk-u-text-align--center">
                     <Auk::Button
-                      data-test-route-agendas-overview-row-nav-button={{true}}
+                      data-test-route-agendas-overview-row-nav-button
                       @skin="borderless"
                       @layout="icon-only"
                       @icon="chevron-right"
