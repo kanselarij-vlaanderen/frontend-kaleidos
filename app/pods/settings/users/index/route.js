@@ -26,7 +26,6 @@ export default class SettingsUsersIndexRoute extends Route.extend(DataTableRoute
 
   @action
   refreshRoute() {
-    this.super(...arguments);
     this.refresh();
   }
 }

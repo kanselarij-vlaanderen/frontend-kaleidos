@@ -56,7 +56,7 @@ export default class UsersSettingsController extends Controller {
   }
 
   @action
-  refreshRoute() {
+  refresh() {
     this.send('refreshRoute');
   }
 
