@@ -60,14 +60,6 @@ export default class AgendasRoute extends Route.extend(DataTableRouteMixin) {
     transition.promise.finally(() => {
       controller.set('isLoadingModel', false);
     });
-
-    // only bubble loading event when transitioning between tabs
-    // to enable loading template to be shown
-    if (transition.from && transition.to) {
-      return transition.from.name != transition.to.name;
-    } else {
-      return true;
-    }
   }
 
   @action
