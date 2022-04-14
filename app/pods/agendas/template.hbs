@@ -100,7 +100,11 @@
               </tr>
             {{else}}
               {{#each @model as |agenda|}}
-                <tr class="auk-u-text-align--center auk-table--interaction-cursor auk-table--clickable-rows">
+                <tr
+                  class="auk-u-text-align--center auk-table--interaction-cursor auk-table--clickable-rows"
+                  {{! template-lint-disable no-invalid-interactive }}
+                  {{on "click" (fn this.onClickRow agenda)}}
+                >
                   <td data-test-route-agendas-overview-row-title>
                     <span class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
                       {{#if agenda.status.isDesignAgenda}}
