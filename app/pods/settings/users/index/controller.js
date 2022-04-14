@@ -10,6 +10,7 @@ export default class UsersSettingsController extends Controller {
 
   @service intl;
   @service toaster;
+  @service router;
 
   sizeOptions = Object.freeze([5, 10, 20, 50, 100, 200]);
   isUploadingFile = null;
@@ -47,7 +48,7 @@ export default class UsersSettingsController extends Controller {
       const response = yield file.upload('/user-management-service/import-users');
       if (response && response.status === 200) {
         this.toaster.success(this.intl.t('import-users-success'), this.intl.t('successfully-created-title'));
-        this.send('refresh');
+        this.send('refreshRoute');
       }
     } catch {
       this.toaster.error(this.intl.t('error'), this.intl.t('warning-title'));
@@ -56,11 +57,11 @@ export default class UsersSettingsController extends Controller {
 
   @action
   refreshRoute() {
-    this.send('refresh');
+    this.send('refreshRoute');
   }
 
   @action
   goToRoute(route, param) {
-    this.transitionToRoute(route, param);
+    this.router.transitionTo(route, param);
   }
 }
