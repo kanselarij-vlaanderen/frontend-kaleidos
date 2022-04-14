@@ -2,58 +2,39 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-// TODO: determine if these default qp's are still needed here, otherwise refactor to mixin-less solution
-// eslint-disable-next-line ember/no-mixins
-import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
+import { restartableTask, timeout } from 'ember-concurrency';
 
-export default class AgendasController extends Controller.extend(DefaultQueryParamsMixin) {
+export default class AgendasController extends Controller {
+  queryParams = ['page', 'size', 'sort', 'filter'];
+
   @service router;
   @service currentSession;
 
+  @tracked isLoadingModel = false;
   @tracked isCreatingNewSession = false;
-  @tracked dateFilter = '';
-  @tracked sort = '-status,created-for.planned-start';
-  @tracked from = null;
-  @tracked to = null;
+  @tracked filter = null;
   @tracked page = 0;
+  @tracked size = 10;
+  @tracked sort = '-status,created-for.planned-start';
 
-  queryParams = ['from', 'to'];
-  dateRegex = /^(?:(\d{1,2})-)??(?:(\d{1,2})-)?(\d{4})$/;
+  dateRegex = /^(?:\d{1,2}\/)??(?:\d{1,2}\/)?\d{4}$/;
 
-  @action
-  setDateFilter(date) {
-    const newDate = date.split('/').join('-');
-    const match = this.dateRegex.exec(newDate);
-
-    if (!match) {
-      this.from = null;
-      this.to = null;
-      return;
+  @restartableTask
+  *setFilter(event) {
+    yield timeout(500);
+    const date = event.target.value;
+    if (this.dateRegex.test(date)) {
+      this.filter = date;
+    } else if (date === '') {
+      this.filter = null;
     }
-
-    const [, day, month, year] = match.map(num => parseInt(num, 10));
-
-    const from = new Date(year, (month - 1) || 0, day || 0);
-    const to = new Date(from);
-    if (day) {
-      to.setDate(day + 1);
-    } else if (month) {
-      to.setMonth(month); // months are 0-indexed, no +1 required
-    } else {
-      to.setYear(year + 1);
-    }
-
-    this.from = from.toISOString();
-    this.to = to.toISOString();
     this.page = 0;
   }
 
   @action
   clearFilter() {
-    this.to = null;
-    this.from = null;
+    this.filter = null;
     this.page = 0;
-    this.dateFilter = '';
   }
 
   @action
@@ -76,5 +57,28 @@ export default class AgendasController extends Controller.extend(DefaultQueryPar
   async onClickRow(agenda) {
     const meeting = await agenda.createdFor;
     this.router.transitionTo('agenda.agendaitems', meeting.id, agenda.id);
+  }
+
+  @action
+  sortTable(sortField) {
+    this.sort = sortField;
+  }
+
+  @action
+  setSizeOption(size) {
+    this.size = size;
+    this.page = 0;
+  }
+
+  @action
+  nextPage() {
+    this.page = this.page + 1;
+  }
+
+  @action
+  prevPage() {
+    if (this.page > 0) {
+      this.page = this.page - 1;
+    }
   }
 }

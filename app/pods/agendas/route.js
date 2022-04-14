@@ -1,21 +1,16 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-// eslint-disable-next-line ember/no-mixins
-import DataTableRouteMixin from 'ember-data-table/mixins/route';
 
-export default class AgendasRoute extends Route.extend(DataTableRouteMixin) {
+export default class AgendasRoute extends Route {
   @service store;
   @service router;
   @service('session') simpleAuthSession;
 
-  modelName = 'agenda';
+  dateRegex = /^(?:(\d{1,2})-)??(?:(\d{1,2})-)?(\d{4})$/;
 
   queryParams = {
-    from: {
-      refreshModel: true,
-    },
-    to: {
+    filter: {
       refreshModel: true,
     },
     page: {
@@ -29,26 +24,42 @@ export default class AgendasRoute extends Route.extend(DataTableRouteMixin) {
     },
   };
 
-  mergeQueryOptions(params) {
-    const options = {
-      'filter[:has-no:next-version]': true,
-      sort: '-status,created-for.planned-start',
-    };
-    if (params.from) {
-      options['filter[created-for][:gte:planned-start]'] = params.from;
-    }
-    if (params.to) {
-      options['filter[created-for][:lte:planned-start]'] = params.to;
-    }
-    if (params.sort && !params.sort.includes('-status')) {
-      options['sort'] = '-status,' + params.sort;
-    }
-
-    return options;
-  };
-
   beforeModel(transition) {
     this.simpleAuthSession.requireAuthentication(transition, 'login');
+  }
+
+  async model(params) {
+    const queryParams = {
+      sort: params.sort,
+      page: {
+        number: params.page,
+        size: params.size,
+      },
+    };
+
+    if (params.filter) {
+      const date = params.filter.split('/').join('-');
+      const match = this.dateRegex.exec(date);
+
+      if (match) {
+        const [, day, month, year] = match.map(num => parseInt(num, 10));
+
+        const from = new Date(year, (month - 1) || 0, day || 0);
+        const to = new Date(from);
+        if (day) {
+          to.setDate(day + 1);
+        } else if (month) {
+          to.setMonth(month); // months are 0-indexed, no +1 required
+        } else {
+          to.setYear(year + 1);
+        }
+
+        queryParams['filter[created-for][:gte:planned-start]'] = from.toISOString();
+        queryParams['filter[created-for][:lte:planned-start]'] = to.toISOString();
+      }
+    }
+
+    return await this.store.query('agenda', queryParams);
   }
 
   @action

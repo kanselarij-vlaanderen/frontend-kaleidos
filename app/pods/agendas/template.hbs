@@ -12,20 +12,20 @@
       <Group.Item
         data-test-route-agendas-overview-filter-container
         data-children-count="1"
+        class="auk-o-flex"
       >
+        {{#if (not-eq this.filter "")}}
+          <Auk::Button @icon="redo" @layout="icon-only" @skin="muted-borderless" {{on "click" this.clearFilter}}>
+            {{t "clear-filter"}}
+          </Auk::Button>
+        {{/if}}
         <Auk::Input
-          data-test-route-agendas-overview-filter-input={{true}}
-          @value={{this.dateFilter}}
-          @enter={{fn this.setDateFilter this.dateFilter}}
-          placeholder={{t "date-example"}}
-          id={{this.id}}
-        />
-        <Auk::Button
-          @skin="secondary"
-          @layout="icon-only"
+          @block={{true}}
           @icon="search"
-          data-test-route-agendas-overview-filter-button
-          {{on "click" (fn this.setDateFilter this.dateFilter)}}
+          placeholder="bv. 01/2021"
+          value={{this.filter}}
+          {{on "input" (perform this.setFilter)}}
+          autocomplete="off"
         />
       </Group.Item>
       {{#if this.currentSession.isEditor}}
@@ -50,97 +50,115 @@
     @clearAction={{this.clearFilter}}
   />
 {{/if}}
-<div class="auk-u-maximize-height auk-scroll-wrapper">
+<div class="auk-scroll-wrapper">
   <div class="auk-scroll-wrapper__body">
     {{#if @model.length}}
-      <DataTable
-        data-test-route-agendas-overview-data-table
-        @content={{@model}}
-        @class="auk-table auk-table--agenda auk-table--striped auk-table--sticky-header"
-        @page={{this.page}}
-        @size={{this.size}}
-        @sort={{this.sort}}
-        @isLoading={{this.isLoadingModel}}
-        @noDataMessage={{t "no-results-found"}}
-        @onClickRow={{this.onClickRow}}
-        as |table|
-      >
-        <table.content as |c|>
-          <c.header>
-            <ThSortable
-              @class="auk-table__col--3"
-              @currentSorting={{this.sort}}
-              @field="created-for.planned-start"
-              @label={{t "agenda"}}
-            />
-            <th class="auk-table__col--2">
-              {{t "status"}}
-            </th>
-            <th class="auk-table__col--2">
-              {{t "kind"}}
-            </th>
-            <ThSortable
-              @class="auk-table__col--2"
-              @currentSorting={{this.sort}}
-              @field="modified"
-              @label={{t "latest-modified"}}
-            />
-            <th class="auk-table__col--1"></th>
-          </c.header>
-          {{#if (not this.isLoadingModel)}}
-            <c.body @class="auk-table--clickable-rows" as |agenda|>
-              <td data-test-route-agendas-overview-row-title>
-                {{agenda.agendaName}}
-                -
-                {{moment-format agenda.createdFor.plannedStart "DD.MM.YYYY"}}
-              </td>
-              <td>
-                {{#if agenda.isFinal}}
-                  {{t "closed"}}
-                {{else}}
-                  {{t "opened"}}
-                {{/if}}
-              </td>
-              <td data-test-route-agendas-overview-row-kind>
-                {{agenda.createdFor.kind.label}}
-              </td>
-              <td>
-                {{#if (is-pending agenda)}}
-                  <div
-                    class="auk-skeleton auk-skeleton--rectangle"
-                    role="alert"
-                    aria-busy="true"
-                  ></div>
-                {{else}}
-                  {{moment-format
-                    agenda.modified
-                    "DD-MM-YYYY HH:mm"
-                  }}
-                {{/if}}
-              </td>
-              <td class="auk-u-text-align--center">
-                <Auk::Button
-                  data-test-route-agendas-overview-row-nav-button={{true}}
-                  @skin="borderless"
-                  @layout="icon-only"
-                  @icon="chevron-right"
-                  @route="agenda.agendaitems"
-                  @models={{array
-                    agenda.createdFor.id
-                    agenda.id
-                  }}
-                />
-              </td>
-            </c.body>
-          {{else}}
+      <div class="auk-u-ml-4">
+        <table
+          data-test-route-agendas-overview-data-table
+          class="auk-table auk-table--agenda auk-table--sticky-header"
+        >
+          <thead>
             <tr>
-              <td colspan="5">
-                {{t "loading"}}
-              </td>
+              <Utils::ThSortable
+                class="auk-table__col--3 auk-table__header-title"
+                @currentSorting={{this.sort}}
+                @field="created-for.planned-start"
+                @onChange={{this.sortTable}}
+                @label={{t "agenda"}}
+              />
+              <Utils::ThSortable
+                class="auk-table__header-title"
+                @currentSorting={{this.sort}}
+                @field="status"
+                @onChange={{this.sortTable}}
+                @label={{t "status"}}
+              />
+              <Utils::ThSortable
+                class="auk-table__header-title"
+                @currentSorting={{this.sort}}
+                @field="created-for.kind.label"
+                @onChange={{this.sortTable}}
+                @label={{t "kind"}}
+              />
+              <Utils::ThSortable
+                class="auk-table__header-title"
+                @currentSorting={{this.sort}}
+                @field="modified"
+                @onChange={{this.sortTable}}
+                @label={{t "latest-modified"}}
+              />
+              <th></th>
             </tr>
-          {{/if}}
-        </table.content>
-      </DataTable>
+          </thead>
+          <tbody>
+            {{#if this.isLoadingModel}}
+              <tr>
+                <td colspan="5">
+                  {{t "loading"}}
+                </td>
+              </tr>
+            {{else}}
+              {{#each @model as |agenda|}}
+                <tr class="auk-u-text-align--center auk-table--interaction-cursor auk-table--clickable-rows">
+                  <td data-test-route-agendas-overview-row-title>
+                    <span class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
+                      {{#if agenda.status.isDesignAgenda}}
+                        <strong>{{t "design-agenda"}}</strong>
+                        <Auk::Pill @skin="active-future">{{agenda.name}}</Auk::Pill>
+                      {{else}}
+                        <strong>{{t "agenda"}}</strong>
+                        <Auk::Pill>{{agenda.name}}</Auk::Pill>
+                      {{/if}}
+                      <span>–</span>
+                      <span>
+                        {{moment-format agenda.createdFor.plannedStart "DD.MM.YYYY"}}
+                      </span>
+                    </span>
+                  </td>
+                  <td>
+                    {{#if agenda.isFinal}}
+                      <Auk::Pill>{{t "closed"}}</Auk::Pill>
+                    {{else}}
+                      <Auk::Pill @skin="active">{{t "opened"}}</Auk::Pill>
+                    {{/if}}
+                  </td>
+                  <td data-test-route-agendas-overview-row-kind>
+                    {{agenda.createdFor.kind.label}}
+                  </td>
+                  <td>
+                    {{#if (is-pending agenda)}}
+                      <div
+                        class="auk-skeleton auk-skeleton--rectangle"
+                        role="alert"
+                        aria-busy="true"
+                      ></div>
+                    {{else}}
+                      {{moment-format
+                        agenda.modified
+                        "DD.MM.YYYY — HH:mm"
+                      }}
+                    {{/if}}
+                  </td>
+                  <td class="auk-u-text-align--center">
+                    <Auk::Button
+                      data-test-route-agendas-overview-row-nav-button={{true}}
+                      @skin="borderless"
+                      @layout="icon-only"
+                      @icon="chevron-right"
+                      @route="agenda.agendaitems"
+                      @models={{array
+                        agenda.createdFor.id
+                        agenda.id
+                      }}
+                    />
+                  </td>
+                </tr>
+              {{/each}}
+            {{/if}}
+          </tbody>
+        </table>
+      </div>
     {{else}}
       <Auk::Panel>
         <Auk::Panel::Body>
@@ -152,6 +170,36 @@
       </Auk::Panel>
     {{/if}}
   </div>
+</div>
+<div>
+  <hr />
+</div>
+<div class="auk-u-mx-4">
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
+        <Auk::Pagination
+          @page={{this.page}}
+          @size={{this.size}}
+          @nbOfItems={{@model.length}}
+          @total={{@model.meta.count}}
+          @onNextPage={{this.nextPage}}
+          @onPreviousPage={{this.prevPage}}
+        />
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
+      <Auk::Toolbar::Item>
+        {{t "amount-per-page"}}
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
+        <WebComponents::AuPageSize
+          @selectedSize={{this.size}}
+          @onChange={{this.setSizeOption}}
+        />
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
 </div>
 {{#if this.isCreatingNewSession}}
   <Meeting::NewMeetingModal
