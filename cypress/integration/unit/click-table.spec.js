@@ -66,7 +66,7 @@ context('Table Row Click tests', () => {
       .should('not.have.length', 0);
     cy.get(route.agendasOverview.filter.input).click()
       .type('02/2019');
-    cy.get(route.agendasOverview.filter.button).click();
+    cy.get(route.agendasOverview.filter.warning).should('be.visible');
     cy.get(route.agendasOverview.filter.warning).contains('Geen resultaten gevonden');
     cy.get(utils.changesAlert.alert).contains('Deze data is gefilterd.');
     cy.get(utils.changesAlert.close).click();
