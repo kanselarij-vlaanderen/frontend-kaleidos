@@ -32,12 +32,16 @@ export default class AgendasRoute extends Route.extend(DataTableRouteMixin) {
   mergeQueryOptions(params) {
     const options = {
       'filter[:has-no:next-version]': true,
+      sort: '-status,created-for.planned-start',
     };
     if (params.from) {
       options['filter[created-for][:gte:planned-start]'] = params.from;
     }
     if (params.to) {
       options['filter[created-for][:lte:planned-start]'] = params.to;
+    }
+    if (params.sort && !params.sort.includes('-status')) {
+      options['sort'] = '-status,' + params.sort;
     }
 
     return options;
