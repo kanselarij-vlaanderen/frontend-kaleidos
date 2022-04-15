@@ -9,6 +9,7 @@ export default class AgendasController extends Controller {
 
   @service router;
   @service currentSession;
+  @service router;
 
   @tracked isLoadingModel = false;
   @tracked isCreatingNewSession = false;
@@ -51,6 +52,7 @@ export default class AgendasController extends Controller {
   successfullyAdded() {
     this.isCreatingNewSession = false;
     this.send('refreshRoute');
+    this.router.transitionTo('agendas.overview');
   }
 
   @action

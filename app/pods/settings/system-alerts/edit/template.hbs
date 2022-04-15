@@ -1,21 +1,19 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
 <WebComponents::VlModal
   @isOverlay={{true}}
   @title={{t "manage-alerts"}}
-  @closeModal={{action "cancel"}}
+  @closeModal={{this.cancel}}
 >
   <Auk::Modal::Body>
     <Utils::SystemAlertForm
-      @alert={{this.model}}
-      @onCancel={{action "cancel"}}
+      @alert={{@model}}
+      @onCancel={{this.cancel}}
     />
   </Auk::Modal::Body>
   <WebComponents::VlModalFooter
     @isLoading={{this.save.isRunning}}
     @cancelButtonText={{t "cancel"}}
     @saveButtonText={{t "save"}}
-    @cancelAction={{action "cancel"}}
+    @cancelAction={{this.cancel}}
     @saveAction={{perform this.save this.model}}
   />
 </WebComponents::VlModal>

@@ -391,7 +391,7 @@ function uploadFile(folder, fileName, extension, mimeType = 'application/pdf') {
  */
 function uploadUsersFile(folder, fileName, extension) {
   cy.log('uploadUsersFile');
-  cy.intercept('POST', 'user-management-service/import-users').as('createNewFile');
+  cy.intercept('POST', 'user-management/import-users').as('createNewFile');
   cy.intercept('GET', 'users?include**').as('getNewFile');
   const fileFullName = `${fileName}.${extension}`;
   const filePath = `${folder}/${fileFullName}`;
