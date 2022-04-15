@@ -29,20 +29,22 @@ export default class MeetingEditMeetingComponent extends Component {
   @tracked _meetingNumber;
   @tracked _numberRepresentation;
 
+  currentYear = new Date().getFullYear();
+
   constructor() {
     super(...arguments);
 
     const now = new Date();
 
-    this.meetingYear = this.args.meeting.plannedStart?.getFullYear() || now.getFullYear();
-    this.startDate = this.args.meeting.plannedStart || new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0, 0);
-    this.extraInfo = this.args.meeting.extraInfo;
-    this.numberRepresentation = this.args.meeting.numberRepresentation;
-    this.isFinal = this.args.isFinal ?? false;
-
     this.initializeKind.perform();
     this.initializeMeetingNumber.perform();
     this.initializeMainMeeting.perform();
+
+    this.meetingYear = this.args.meeting.plannedStart?.getFullYear() || this.currentYear;
+    this.startDate = this.args.meeting.plannedStart || new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0, 0);
+    this.extraInfo = this.args.meeting.extraInfo;
+    this.isFinal = this.args.isFinal ?? false;
+    this.numberRepresentation = this.args.meeting.numberRepresentation;
   }
 
   get meetingKindPostfix() {
@@ -102,8 +104,8 @@ export default class MeetingEditMeetingComponent extends Component {
     } else {
       const meeting = yield this.store.queryOne('meeting', {
         filter: {
-          ':gte:planned-start': new Date(this.meetingYear, 0, 1).toISOString(),
-          ':lt:planned-start': new Date(this.meetingYear + 1, 0, 1).toISOString(),
+          ':gte:planned-start': new Date(this.currentYear, 0, 1).toISOString(),
+          ':lt:planned-start': new Date(this.currentYear + 1, 0, 1).toISOString(),
         },
         sort: '-number',
       });
