@@ -26,7 +26,8 @@
 </Auk::Navbar>
 {{outlet}}
 {{#if this.isCreatingNewSession}}
-  <Meeting::NewMeetingModal
+  <Meeting::EditMeetingModal
+    @meeting={{this.newMeeting}}
     @didSave={{this.successfullyAdded}}
     @onCancel={{this.closeNewSessionModal}}
   />

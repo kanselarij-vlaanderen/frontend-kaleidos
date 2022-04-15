@@ -7,9 +7,11 @@ import { action } from '@ember/object';
 import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
 
 export default class AgendasController extends Controller.extend(DefaultQueryParamsMixin) {
+  @service store;
   @service currentSession;
 
   @tracked isCreatingNewSession = false;
+  @tracked newMeeting = this.store.createRecord('meeting');
 
   @action
   openNewSessionModal() {
@@ -19,11 +21,14 @@ export default class AgendasController extends Controller.extend(DefaultQueryPar
   @action
   closeNewSessionModal() {
     this.isCreatingNewSession = false;
+    this.newMeeting.deleteRecord();
+    this.newMeeting = this.store.createRecord('meeting');
   }
 
   @action
   successfullyAdded() {
     this.isCreatingNewSession = false;
+    this.newMeeting = this.store.createRecord('meeting');
     this.send('refreshRoute');
     this.transitionToRoute('agendas.overview');
   }

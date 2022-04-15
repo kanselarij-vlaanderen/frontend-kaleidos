@@ -193,13 +193,13 @@ context('Agenda tests', () => {
       cy.get(agenda.agendaHeader.showOptions).click();
       cy.get(agenda.agendaHeader.actions.toggleEditingMeeting).click();
       cy.get(agenda.editMeeting.meetingNumber).should('have.value', result.meetingNumber);
-      cy.get(agenda.editMeeting.numberRep).should('have.value', result.meetingNumberRep);
+      cy.get(agenda.editMeeting.numberRep.view).should('have.value', result.meetingNumberRep);
       cy.get(auk.modal.footer.cancel).click();
       // Check if the next automatic number is correct
       cy.get(utils.mHeader.agendas).click();
       cy.get(route.agendas.action.newMeeting).click();
       cy.wait(500); // await call not possible
-      cy.get(agenda.newMeeting.meetingNumber).should('have.value', (parseInt(result.meetingNumber, 10) + 1).toString());
+      cy.get(agenda.editMeeting.meetingNumber).should('have.value', (parseInt(result.meetingNumber, 10) + 1).toString());
     });
   });
 
