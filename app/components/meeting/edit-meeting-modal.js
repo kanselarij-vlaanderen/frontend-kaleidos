@@ -74,8 +74,8 @@ export default class MeetingEditMeetingComponent extends Component {
   get savingIsDisabled() {
     return (
         (this.isAnnexMeeting && !this.selectedMainMeeting) ||
-        (!this.isAnnexMeeting &&
-          (!this.numberRepresentation || !this.meetingNumber)) ||
+        !this.meetingNumber ||
+        !this.numberRepresentation ||
         this.initializeKind.isRunning ||
         this.initializeMainMeeting.isRunning ||
         this.saveMeeting.isRunning
