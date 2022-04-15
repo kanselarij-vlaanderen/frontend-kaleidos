@@ -1,7 +1,7 @@
 import fetch from 'fetch';
 
 export const fetchClosestMeetingAndAgendaId = async function (date) {
-  const response = await fetch(`/session-service/closestMeeting?date=${date}`, {
+  const response = await fetch(`/session-number/closestMeeting?date=${date}`, {
     method: 'GET',
   });
   const payload = await response.json();
@@ -9,7 +9,7 @@ export const fetchClosestMeetingAndAgendaId = async function (date) {
 };
 
 export const assignNewSessionNumbers = async function () {
-  const response = await fetch('/session-service/assignNewSessionNumbers', {
+  const response = await fetch('/session-number/assignNewSessionNumbers', {
     method: 'GET',
   });
   return response;
