@@ -20,6 +20,8 @@ export default class ApplicationRoute extends Route {
   }
 
   async beforeModel() {
+    this.moment.setLocale('nl-be');
+
     this.intl.setLocale(['nl-be']);
 
     if (!this.isSupportedBrowser) {
