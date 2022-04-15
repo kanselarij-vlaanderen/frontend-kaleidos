@@ -52,7 +52,7 @@ export default class AgendasController extends Controller {
   successfullyAdded() {
     this.isCreatingNewSession = false;
     this.send('refreshRoute');
-    this.router.transitionTo('agendas.overview');
+    this.router.transitionTo('agendas');
   }
 
   @action

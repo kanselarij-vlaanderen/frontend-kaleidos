@@ -1,6 +1,5 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { task, lastValue } from 'ember-concurrency';
 
 export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
   /**
@@ -11,23 +10,8 @@ export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
   @service store;
   @service currentSession;
 
-  @lastValue('loadFirstAgendaitem') firstAgendaitem;
-
-  constructor() {
-    super(...arguments);
-    this.loadFirstAgendaitem.perform();
-  }
-
-  @task
-  *loadFirstAgendaitem() {
-    if (this.args.currentAgenda) {
-      // sorting on show-as-remark prevents defaulting to an announcement when there are notas
-      return yield this.store.queryOne('agendaitem', {
-        'filter[agenda][:id:]': this.args.currentAgenda.id,
-        sort: 'show-as-remark,number',
-      });
-    }
-    return null;
+  get firstAgendaitem() {
+    return this.args.currentAgendaitems?.toArray().sortBy('show-as-remark').sortBy('number').firstObject;
   }
 
   get modelsForDetailRoute() {
@@ -41,11 +25,16 @@ export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
   get currentAgendaItemId() {
     const currentRoute = this.router.currentRoute;
     let agendaItemsRoute = currentRoute;
-    if (currentRoute && currentRoute.name.startsWith('agenda.agendaitems.agendaitem')) {
+    if (currentRoute?.name?.startsWith('agenda.agendaitems.agendaitem')) {
       while (agendaItemsRoute.name !== 'agenda.agendaitems.agendaitem') {
         agendaItemsRoute = agendaItemsRoute.parent;
       }
       return agendaItemsRoute.params.agendaitem_id;
+    } else if (currentRoute?.name?.startsWith('agenda.agendaitems')) {
+      while (agendaItemsRoute.name !== 'agenda.agendaitems') {
+        agendaItemsRoute = agendaItemsRoute.parent;
+      }
+      return agendaItemsRoute.queryParams.anchor;
     }
     return null;
   }

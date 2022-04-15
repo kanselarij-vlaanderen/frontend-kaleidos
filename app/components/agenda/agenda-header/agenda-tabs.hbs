@@ -2,6 +2,10 @@
   <Auk::Tab @route="agendas" @isHierarchicalBack={{true}} />
   <Auk::Tab
     @route="agenda.agendaitems.index"
+    @query={{if
+      this.currentAgendaItemId
+      (hash anchor=this.currentAgendaItemId)
+    }}
   >
     {{t "overview"}}
   </Auk::Tab>
