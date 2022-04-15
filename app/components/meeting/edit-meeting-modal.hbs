@@ -73,14 +73,14 @@
             <Auk::ButtonLink
               data-test-edit-meeting-number-representation-edit
               disabled={{this.initializeMeetingNumber.isRunning}}
-              {{on "click" this.toggleEditingFormattedMeetingIdentifier}}
+              {{on "click" this.toggleEditingNumberRepresentation}}
             >
               <small>{{t "edit"}}</small>
             </Auk::ButtonLink>
           </div>
         </div>
       </div>
-      {{#if this.isEditingFormattedMeetingIdentifier}}
+      {{#if this.isEditingNumberRepresentation}}
         <div class="auk-o-flex">
           <Auk::Input
             @width="medium"
@@ -90,7 +90,7 @@
           />
           <Auk::Button
             @skin="primary"
-            {{on "click" this.toggleEditingFormattedMeetingIdentifier}}
+            {{on "click" this.toggleEditingNumberRepresentation}}
             data-test-edit-meeting-number-representation-save
           >
             {{t "save"}}

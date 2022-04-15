@@ -19,7 +19,7 @@ export default class MeetingEditMeetingComponent extends Component {
   @service toaster;
 
   @tracked isAnnexMeeting = false;
-  @tracked isEditingFormattedMeetingIdentifier = false;
+  @tracked isEditingNumberRepresentation = false;
 
   @tracked selectedMainMeeting;
   @tracked isFinal;
@@ -210,7 +210,7 @@ export default class MeetingEditMeetingComponent extends Component {
     this.selectedMainMeeting = mainMeeting;
     this.startDate = mainMeeting.plannedStart;
     this.meetingNumber = mainMeeting.number;
-    this.formattedMeetingIdentifier = `${mainMeeting.numberRepresentation}-${this.meetingKindPostfix}`;
+    this.numberRepresentation = `${mainMeeting.numberRepresentation}-${this.meetingKindPostfix}`;
     this.extraInfo = mainMeeting.extraInfo;
   }
 
@@ -233,8 +233,8 @@ export default class MeetingEditMeetingComponent extends Component {
   }
 
   @action
-  toggleEditingFormattedMeetingIdentifier() {
-    this.isEditingFormattedMeetingIdentifier =
-      !this.isEditingFormattedMeetingIdentifier;
+  toggleEditingNumberRepresentation() {
+    this.isEditingNumberRepresentation =
+      !this.isEditingNumberRepresentation;
   }
 }
