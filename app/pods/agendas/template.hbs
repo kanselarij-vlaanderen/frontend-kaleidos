@@ -14,7 +14,7 @@
         data-children-count="1"
         class="auk-o-flex"
       >
-        {{#if (not-eq this.filter "")}}
+        {{#if this.filter}}
           <Auk::Button @icon="redo" @layout="icon-only" @skin="muted-borderless" {{on "click" this.clearFilter}}>
             {{t "clear-filter"}}
           </Auk::Button>
@@ -44,7 +44,7 @@
     </Toolbar.Group>
   </Auk::Toolbar>
 </Auk::Navbar>
-{{#if (not-eq this.filter "")}}
+{{#if this.filter}}
   <ChangesAlert
     @message={{t "filtered-agendas"}}
     @buttonText={{t "clear-filter"}}
