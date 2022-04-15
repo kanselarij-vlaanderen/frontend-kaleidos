@@ -24,7 +24,7 @@ function resetCache() {
       kaleidosProject + '/docker-compose.override.yml'
   };
 
-  cy.exec('docker-compose kill yggdrasil triplestore file cache resource migrations-service', { env })
+  cy.exec('docker-compose kill yggdrasil triplestore file cache resource migrations', { env })
     .exec(`rm -rf ${kaleidosProject}/testdata/db && rm -rf ${kaleidosProject}/testdata/files`)
     .exec(`unzip -o ${kaleidosProject}/testdata.zip -x "elasticsearch/*" -d ${kaleidosProject}`)
     .exec('docker-compose up -d', { env })
@@ -46,7 +46,7 @@ function resetSearch() {
       kaleidosProject + '/docker-compose.override.yml'
   };
 
-  cy.exec('docker-compose kill triplestore elasticsearch musearch file cache resource', { env })
+  cy.exec('docker-compose kill triplestore elasticsearch search file cache resource', { env })
     .exec(`rm -rf ${kaleidosProject}/testdata`)
     .exec(`unzip -o ${kaleidosProject}/testdata.zip -d ${kaleidosProject}`)
     .exec('docker-compose up -d', { env })

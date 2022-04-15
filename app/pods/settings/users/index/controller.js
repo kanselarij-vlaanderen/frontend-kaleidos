@@ -45,7 +45,7 @@ export default class UsersSettingsController extends Controller {
   @task
   *uploadUserFile(file) {
     try {
-      const response = yield file.upload('/user-management-service/import-users');
+      const response = yield file.upload('/user-management/import-users');
       if (response && response.status === 200) {
         this.toaster.success(this.intl.t('import-users-success'), this.intl.t('successfully-created-title'));
         this.send('refreshRoute');
