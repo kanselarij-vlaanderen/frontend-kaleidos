@@ -1,5 +1,3 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
 {{page-title (t "newsletter")}}
 <Newsletter::NewsletterHeader />
 {{#if (gt this.model.length 0)}}
@@ -8,7 +6,7 @@
       <div class="auk-u-m-8">
         <DataTable
           data-test-route-newsletters-data-table={{true}}
-          @content={{this.model}}
+          @content={{@model}}
           @class="auk-table auk-table--striped"
           @page={{this.page}}
           @size={{this.size}}
@@ -16,7 +14,7 @@
           @enableSizes={{true}}
           @isLoading={{this.isLoadingModel}}
           @noDataMessage={{t "no-results-found"}}
-          @onClickRow={{action "navigateToNewsletter"}}
+          @onClickRow={{this.navigateToNewsletter}}
           as |table|
         >
           <table.content as |c|>
@@ -60,10 +58,10 @@
                     role="alert"
                     aria-busy="true"
                   ></div>
-                {{else if (await meeting.mailCampaign)}}
-                  {{#if (await meeting.mailCampaign.isSent)}}
+                {{else if meeting.mailCampaign}}
+                  {{#if meeting.mailCampaign.isSent}}
                     {{moment-format
-                      (await meeting.mailCampaign.sentAt)
+                      meeting.mailCampaign.sentAt
                       "DD.MM.YYYY [om] HH:mm"
                     }}
                   {{else}}
@@ -82,7 +80,7 @@
                   ></div>
                 {{else}}
                   {{moment-format
-                    (await meeting.latestAgenda.modified)
+                    meeting.latestAgenda.modified
                     "DD.MM.YYYY HH:mm"
                   }}
                 {{/if}}
@@ -93,7 +91,7 @@
                   @layout="icon-only"
                   @icon="chevron-right"
                   @route="newsletter"
-                  @model={{this.meeting.id}}
+                  @model={{meeting.id}}
                 />
               </td>
             </c.body>
