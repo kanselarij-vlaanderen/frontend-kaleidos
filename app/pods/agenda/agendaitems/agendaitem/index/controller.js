@@ -37,7 +37,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     if (neighbouringItem) {
       this.router.transitionTo('agenda.agendaitems.agendaitem', this.meeting.id, this.agenda.id, neighbouringItem.id);
     } else {
-      this.router.transitionTo('agenda.agendaitems', this.meeting.id, this.agenda.id,{ queryParams: { anchor: null }});
+      this.router.transitionTo('agenda.agendaitems', this.meeting.id, this.agenda.id);
     }
   }
 
