@@ -25,7 +25,8 @@
           @icon="search"
           placeholder="bv. 01/2021"
           value={{this.filter}}
-          {{on "input" (perform this.setFilter)}}
+          {{on "input" (perform this.debouncedSetFilter)}}
+          @enter={{this.setFilter}}
           autocomplete="off"
         />
       </Group.Item>
@@ -95,7 +96,10 @@
           <tbody>
             {{#if this.isLoadingModel}}
               <tr>
-                <td colspan="5">
+                <td
+                  data-test-route-agendas-overview-loader
+                  colspan="5"
+                >
                   {{t "loading"}}
                 </td>
               </tr>

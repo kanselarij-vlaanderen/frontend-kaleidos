@@ -163,8 +163,11 @@ function openAgendaForDate(agendaDate, index = 0) {
 
   cy.visit('');
   cy.get(route.agendasOverview.filter.container).within(() => {
-    cy.get(route.agendasOverview.filter.input).type(searchDate);
+    cy.get(route.agendasOverview.filter.input).type(`${searchDate}{enter}`);
   });
+  cy.get(route.agendasOverview.loader, {
+    timeout: 5000,
+  }).should('not.exist');
   cy.wait('@getFilteredAgendas', {
     timeout: 20000,
   });

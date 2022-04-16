@@ -21,9 +21,13 @@ export default class AgendasController extends Controller {
   dateRegex = /^(?:\d{1,2}\/)??(?:\d{1,2}\/)?\d{4}$/;
 
   @restartableTask
-  *setFilter(event) {
+  *debouncedSetFilter(event) {
     yield timeout(500);
-    const date = event.target.value;
+    this.setFilter(event.target.value);
+  }
+
+  @action
+  setFilter(date) {
     if (this.dateRegex.test(date)) {
       this.filter = date;
     } else if (date === '') {
