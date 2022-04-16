@@ -12,8 +12,8 @@ export default class AgendaitemNav extends Component {
   @tracked newsItemExists = false;
   @tracked pressAgendaitemExists = false;
 
-  get agendaitem() {
-    return this.args.agendaitem;
+  get routeModels() {
+    return [this.args.meeting?.id, this.args.agenda?.id, this.args.agendaitem?.id];
   }
 
   constructor() {
@@ -23,9 +23,9 @@ export default class AgendaitemNav extends Component {
 
   @action
   async checkExistence() {
-    const agendaActivity = await this.agendaitem.get('agendaActivity');
-    this.decisionsExist = isPresent(await this.agendaitem.get('treatments'));
-    if (!this.agendaitem.isApproval) {
+    const agendaActivity = await this.args.agendaitem.get('agendaActivity');
+    this.decisionsExist = isPresent(await this.args.agendaitem.get('treatments'));
+    if (!this.args.agendaitem.isApproval) {
       if (agendaActivity) {
         const subcase = await agendaActivity.get('subcase');
         this.subcaseExists = isPresent(subcase);
@@ -33,13 +33,13 @@ export default class AgendaitemNav extends Component {
         this.subcaseExists = false;
       }
       if (this.decisionsExist) { // Treatment and decision activity are currently one entity in implementation
-        const treatment = (await this.agendaitem.get('treatments')).firstObject;
+        const treatment = (await this.args.agendaitem.get('treatments')).firstObject;
         const nli = await treatment.get('newsletterInfo');
         this.newsItemExists = isPresent(nli);
       } else {
         this.newsItemExists = false;
       }
-      this.pressAgendaitemExists = isPresent((this.agendaitem.titlePress && this.agendaitem.textPress));
+      this.pressAgendaitemExists = isPresent((this.args.agendaitem.titlePress && this.args.agendaitem.textPress));
     }
   }
 }

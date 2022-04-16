@@ -1,28 +1,28 @@
-<Auk::Tabs {{did-update this.checkExistence this.agendaitem}} data-test-agendaitem-nav-tabs>
-  <Auk::Tab @route="agenda.agendaitems.agendaitem.index" data-test-agendaitem-nav-case-tab>{{capitalize (t "case")}}</Auk::Tab>
-  <Auk::Tab @route="agenda.agendaitems.agendaitem.documents" data-test-agendaitem-nav-documents-tab>{{capitalize (t "documents")}}</Auk::Tab>
+<Auk::Tabs {{did-update this.checkExistence}} data-test-agendaitem-nav-tabs>
+  <Auk::Tab @route="agenda.agendaitems.agendaitem.index" @models={{this.routeModels}} data-test-agendaitem-nav-case-tab>{{capitalize (t "case")}}</Auk::Tab>
+  <Auk::Tab @route="agenda.agendaitems.agendaitem.documents" @models={{this.routeModels}} data-test-agendaitem-nav-documents-tab>{{capitalize (t "documents")}}</Auk::Tab>
     {{#if
       (or
         this.currentSession.isEditor
         (and @meetingIsConcluded this.decisionsExist)
       )
     }}
-      <Auk::Tab @route="agenda.agendaitems.agendaitem.decisions" data-test-agendaitem-nav-decision-tab>{{capitalize (t "decision")}}</Auk::Tab>
+      <Auk::Tab @route="agenda.agendaitems.agendaitem.decisions" @models={{this.routeModels}} data-test-agendaitem-nav-decision-tab>{{capitalize (t "decision")}}</Auk::Tab>
     {{/if}}
-  {{#if (not this.agendaitem.isApproval) }}
+  {{#if (not @agendaitem.isApproval) }}
     {{#if
       (or
       this.currentSession.isEditor
       (and @meetingIsConcluded this.newsItemExists))
     }}
-      <Auk::Tab @route="agenda.agendaitems.agendaitem.news-item" data-test-agendaitem-nav-newsletter-tab>{{capitalize (t "newsletter")}}</Auk::Tab>
+      <Auk::Tab @route="agenda.agendaitems.agendaitem.news-item" @models={{this.routeModels}} data-test-agendaitem-nav-newsletter-tab>{{capitalize (t "newsletter")}}</Auk::Tab>
     {{/if}}
     {{#if
       (or
       this.currentSession.isEditor
       (and @meetingIsConcluded this.pressAgendaitemExists))
     }}
-      <Auk::Tab @route="agenda.agendaitems.agendaitem.press-agenda" data-test-agendaitem-nav-press-agenda-tab>{{capitalize (t "agendaitem-press-agenda")}}</Auk::Tab>
+      <Auk::Tab @route="agenda.agendaitems.agendaitem.press-agenda" @models={{this.routeModels}} data-test-agendaitem-nav-press-agenda-tab>{{capitalize (t "agendaitem-press-agenda")}}</Auk::Tab>
     {{/if}}
   {{/if}}
 </Auk::Tabs>

@@ -1,7 +1,9 @@
 <div class="auk-scroll-wrapper">
   <Auk::Navbar>
     <Agenda::Agendaitem::AgendaitemNav
-      @agendaitem={{this.model}}
+      @meeting={{this.meeting}}
+      @agenda={{this.agenda}}
+      @agendaitem={{@model}}
       @meetingIsConcluded={{this.meeting.isFinal}}
     />
   </Auk::Navbar>

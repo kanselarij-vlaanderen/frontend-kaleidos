@@ -25,6 +25,7 @@ export default class AgendaitemAgendaitemsAgendaRoute extends Route {
   setupController(controller, model) {
     super.setupController(...arguments);
     controller.meeting = this.modelFor('agenda').meeting;
+    controller.agenda = this.modelFor('agenda').agenda;
 
     // eslint-disable-next-line ember/no-controller-access-in-routes
     const parentController = this.controllerFor('agenda.agendaitems');
