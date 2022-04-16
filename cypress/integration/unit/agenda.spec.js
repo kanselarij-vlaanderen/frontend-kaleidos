@@ -193,7 +193,7 @@ context('Agenda tests', () => {
       cy.get(agenda.agendaHeader.showOptions).click();
       cy.get(agenda.agendaHeader.actions.toggleEditingMeeting).click();
       cy.get(agenda.editMeeting.meetingNumber).should('have.value', result.meetingNumber);
-      cy.get(agenda.editMeeting.numberRep.view).should('eq', result.meetingNumberRep);
+      cy.get(agenda.editMeeting.numberRep.view).should('contain', result.meetingNumberRep);
       cy.get(auk.modal.footer.cancel).click();
       // Check if the next automatic number is correct
       cy.get(utils.mHeader.agendas).click();
