@@ -7,7 +7,7 @@ module.exports = function (environment) {
     environment,
     rootURL: '/',
     locationType: 'auto',
-    ember: {
+    moment: {
       includeLocales: ['nl-be'],
       allowEmpty: true,
       outputFormat:'DD-MM-YYYY',
