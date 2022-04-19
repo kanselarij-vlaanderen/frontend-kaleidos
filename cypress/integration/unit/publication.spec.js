@@ -94,7 +94,7 @@ context('Publications tests', () => {
       shortTitle: 'Some text',
       longTitle: 'Some text',
     };
-    const currentDate = Cypress.dayjs().format('DD-MM-YYYY');
+    const currentDate = Cypress.dayjs().format('DD.MM.YYYY');
 
     // error validation (and reset after cancel)
     cy.get(publication.publicationsIndex.newPublication).click();

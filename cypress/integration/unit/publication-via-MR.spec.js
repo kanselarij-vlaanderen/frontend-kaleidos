@@ -21,12 +21,12 @@ context('Publications via MR tests', () => {
   const newPublicationNumber = 1516;
   const agendaDate = Cypress.dayjs().add(13, 'weeks')
     .day(3);
-  const formattedAgendaDate = agendaDate.format('DD-MM-YYYY');
+  const formattedAgendaDate = agendaDate.format('DD.MM.YYYY');
   const columnKeyNames = ['source', 'decisionDate'];
-  const startDate = agendaDate.format('DD-MM-YYYY');
-  const openingDate = Cypress.dayjs().format('DD-MM-YYYY');
+  const startDate = agendaDate.format('DD.MM.YYYY');
+  const openingDate = Cypress.dayjs().format('DD.MM.YYYY');
   const dueDate = Cypress.dayjs().add(3, 'weeks');
-  const formattedDueDate = dueDate.format('DD-MM-YYYY');
+  const formattedDueDate = dueDate.format('DD.MM.YYYY');
   const numacNumber = 12345678;
   const testId = `${currentTimestamp()}`;
   const type = 'Nota';

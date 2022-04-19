@@ -6,4 +6,4 @@ import moment from 'moment';
  * @param translatedTitle
  * @param date
  */
-export const getPrintOverviewTitle = (translatedTitle, date) => `${translatedTitle} ${moment(date).format('dddd DD-MM-YYYY')}`;
+export const getPrintOverviewTitle = (translatedTitle, date) => `${translatedTitle} ${moment(date).format('dddd DD.MM.YYYY')}`;

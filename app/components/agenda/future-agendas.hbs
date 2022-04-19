@@ -64,7 +64,7 @@
                 <div class="auk-skeleton auk-skeleton--rectangle" role="alert" aria-busy="true"></div>
               {{else}}
                 {{t "agenda-for"}}
-                {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
+                {{moment-format meeting.plannedStart}}
               {{/if}}
             </td>
             <td>
@@ -82,7 +82,7 @@
               {{else}}
                 {{moment-format
                   (await meeting.latestAgenda.modified)
-                  "DD-MM-YYYY HH:mm"
+                  "DD.MM.YYYY HH:mm"
                 }}
               {{/if}}
             </td>

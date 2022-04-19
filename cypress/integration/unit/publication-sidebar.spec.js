@@ -111,11 +111,11 @@ context('Publications sidebar tests', () => {
         cy.get(publication.publicationTableRow.row.regulationType).should('contain', regulationType);
         cy.get(publication.publicationTableRow.row.proofPrintCorrector).should('contain', proofPrintCorrector);
         cy.get(publication.publicationTableRow.row.numacNumber).should('contain', numacNumber);
-        cy.get(publication.publicationTableRow.row.openingDate).should('contain', openingDate.format('DD-MM-YYYY'));
-        cy.get(publication.publicationTableRow.row.decisionDate).should('contain', decisionDate.format('DD-MM-YYYY'));
-        cy.get(publication.publicationTableRow.row.translationDueDate).should('contain', translationDueDate.format('DD-MM-YYYY'));
-        cy.get(publication.publicationTableRow.row.targetEndDate).should('contain', targetEndDate.format('DD-MM-YYYY'));
-        cy.get(publication.publicationTableRow.row.publicationDueDate).should('contain', publicationDueDate.format('DD-MM-YYYY'));
+        cy.get(publication.publicationTableRow.row.openingDate).should('contain', openingDate.format('DD.MM.YYYY'));
+        cy.get(publication.publicationTableRow.row.decisionDate).should('contain', decisionDate.format('DD.MM.YYYY'));
+        cy.get(publication.publicationTableRow.row.translationDueDate).should('contain', translationDueDate.format('DD.MM.YYYY'));
+        cy.get(publication.publicationTableRow.row.targetEndDate).should('contain', targetEndDate.format('DD.MM.YYYY'));
+        cy.get(publication.publicationTableRow.row.publicationDueDate).should('contain', publicationDueDate.format('DD.MM.YYYY'));
         cy.get(publication.publicationTableRow.row.isUrgent).find(auk.icon);
       });
   });

@@ -14,8 +14,8 @@
           </Group.Item>
         </Toolbar.Group>
         <Toolbar.Group @position="right" as |Group|>
-          {{!-- TODO: for now the link-button is hidden while loading.
-          A disabled state would be better to avoid flashing a new button in view once loaded. --}}
+          {{! TODO: for now the link-button is hidden while loading.
+          A disabled state would be better to avoid flashing a new button in view once loaded. }}
           {{#if (and @subcase this.loadCase.isIdle)}}
             <Group.Item>
               <Auk::Button
@@ -46,18 +46,48 @@
     </Auk::Panel::Header>
     <Auk::Panel::Body>
       <div class="auk-content">
-        <h4 data-test-agendaitem-titles-short-title>
-          {{@agendaitem.shortTitle}}
-        </h4>
+
+        <div
+          class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center"
+        >
+          <h4 data-test-agendaitem-titles-short-title class="auk-u-m-0">
+            {{@agendaitem.shortTitle}}
+          </h4>
+          <div
+            class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced"
+          >
+
+            {{#if
+              (and
+                @agendaitem.isDesignAgenda
+                (and this.currentSession.isEditor @agendaitem.formallyOkToShow)
+              )
+            }}
+              <p
+                class="auk-u-text-small auk-u-m-0 vlc-agenda-items__status auk-u-text-bold auk-o-flex {{@agendaitem.formallyOkToShow.svg.color 'vlc-agenda-items__status--positive'}}"
+              >
+                <Auk::Icon
+                  @skin={{@agendaitem.formallyOkToShow.svg.color}}
+                  @name={{@agendaitem.formallyOkToShow.svg.icon}}
+                  class="formally-ok-icon"
+                />
+                {{@agendaitem.formallyOkToShow.label}}
+              </p>
+            {{/if}}
+          </div>
+        </div>
         {{#if @agendaitem.title}}
           <div class="auk-u-mb-2">
-            <span data-test-agendaitem-titles-title class="auk-o-flex--inline auk-u-text-pre-line">
+            <span
+              data-test-agendaitem-titles-title
+              class="auk-o-flex--inline auk-u-text-pre-line"
+            >
               {{@agendaitem.title}}
             </span>
           </div>
         {{/if}}
         <Auk::PillList>
-          {{#if (not @agendaitem.showAsRemark) }}
+          {{#if (not @agendaitem.showAsRemark)}}
             {{#if @subcase.subcaseName}}
               <Auk::Pill>
                 {{capitalize @subcase.subcaseName}}
@@ -85,17 +115,6 @@
               </Auk::Pill>
             {{/if}}
           {{/if}}
-          {{#if
-            (and @agendaitem.isDesignAgenda
-                    (and this.currentSession.isEditor @agendaitem.formallyOkToShow))
-          }}
-            <Auk::Pill
-              @skin={{@agendaitem.formallyOkToShow.svg.color}}
-              @icon={{@agendaitem.formallyOkToShow.svg.icon}}
-            >
-              {{@agendaitem.formallyOkToShow.label}}
-            </Auk::Pill>
-          {{/if}}
         </Auk::PillList>
       </div>
     </Auk::Panel::Body>
@@ -104,8 +123,12 @@
         <Auk::Toolbar as |Toolbar|>
           <Toolbar.Group @position="left" as |Group|>
             <Group.Item>
-              <pre class="auk-u-text-pre-line" data-test-agendaitem-titles-comment>
-                <strong class="auk-u-text-bold">{{t "comment-title"}}: </strong>{{@agendaitem.comment}}
+              <pre
+                class="auk-u-text-pre-line"
+                data-test-agendaitem-titles-comment
+              >
+                <strong class="auk-u-text-bold">{{t "comment-title"}}:
+                </strong>{{@agendaitem.comment}}
               </pre>
             </Group.Item>
           </Toolbar.Group>
@@ -117,8 +140,15 @@
         <Auk::Toolbar as |Toolbar|>
           <Toolbar.Group @position="left" as |Group|>
             <Group.Item>
-              <pre class="auk-u-text-pre-line auk-u-text-muted" data-test-agendaitem-titles-private-comment>
-                <strong class="auk-u-text-bold"><Auk::Icon @name="lock-closed" @size="small" />{{t "private-comment-title"}}: </strong>{{@agendaitem.privateComment}}
+              <pre
+                class="auk-u-text-pre-line auk-u-text-muted"
+                data-test-agendaitem-titles-private-comment
+              >
+                <strong class="auk-u-text-bold"><Auk::Icon
+                    @name="lock-closed"
+                    @size="small"
+                  />{{t "private-comment-title"}}:
+                </strong>{{@agendaitem.privateComment}}
               </pre>
             </Group.Item>
           </Toolbar.Group>

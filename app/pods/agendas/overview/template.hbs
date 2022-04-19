@@ -108,7 +108,7 @@
                   {{#if (not meeting.alreadyShown)}}
                     <td data-test-route-agendas-overview-row-title>
                       {{t "agenda-for"}}
-                      {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
+                      {{moment-format meeting.plannedStart}}
                     </td>
                     <td>
                       {{await meeting.latestAgendaName}}
@@ -123,7 +123,7 @@
                       {{else}}
                         {{moment-format
                           (await meeting.latestAgenda.modified)
-                          "DD-MM-YYYY HH:mm"
+                          "DD.MM.YYYY HH:mm"
                         }}
                       {{/if}}
                     </td>
