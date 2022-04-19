@@ -35,6 +35,8 @@ export default class AgendasRoute extends Route {
         number: params.page,
         size: params.size,
       },
+      // include: 'status,created-for,created-for.kind',
+      'filter[:has-no:next-version]': true,
     };
 
     if (params.filter) {

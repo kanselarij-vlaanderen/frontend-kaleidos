@@ -16,7 +16,7 @@ export default class AgendasController extends Controller {
   @tracked filter = null;
   @tracked page = 0;
   @tracked size = 10;
-  @tracked sort = '-status,created-for.planned-start,created-for.kind.label';
+  @tracked sort = '-status,-created-for.planned-start,created-for.kind.label';
 
   dateRegex = /^(?:\d{1,2}\/)??(?:\d{1,2}\/)?\d{4}$/;
 
