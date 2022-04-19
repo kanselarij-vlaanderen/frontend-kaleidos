@@ -183,8 +183,18 @@ $vl-gray-50: #8695A8;
 }
 
 // Sidebar nav
-.auk-sidebar.auk-sidebar--gray-200.auk-sidebar--small.auk-sidebar--left[data-collapsed="true"] {
-  .auk-sidebar__item a {
-    padding: 1rem 1rem 1rem 1.35rem;
+.auk-sidebar {
+  width: 100%;
+
+  &.auk-sidebar--gray-200.auk-sidebar--left {
+    &[data-collapsed="true"] {
+      .auk-sidebar__item a {
+        padding: 1rem 1rem 1rem 1.35rem;
+      }
+    }
+
+    & * {
+      transition: all 200ms;
+    }
   }
 }
