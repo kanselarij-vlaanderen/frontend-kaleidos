@@ -28,7 +28,7 @@ export default Component.extend({
 
   editTitle: computed('meeting.plannedStart', function() {
     const date = this.get('meeting.plannedStart');
-    return `${this.get('intl').t('newsletter-of')} ${moment(date).format('dddd DD.MM.YYYY')}`;
+    return `${this.get('intl').t('newsletter-of')} ${moment(date).format('dddd DD-MM-YYYY')}`;
   }),
 
   // TODO: octane-refactor

@@ -8,7 +8,7 @@
       class="auk-input auk-input--block"
       @locale="nl"
       @date={{readonly this.selectedDate}} {{!-- Required Option --}}
-      @dateFormat={{if @enableTime "d.m.Y H:i" "d.m.Y"}}
+      @dateFormat={{if @enableTime "d-m-Y H:i" "d-m-Y"}}
       @enableTime={{@enableTime}}
       @time_24hr={{true}}
       @defaultHour={{@defaultHour}}
@@ -27,7 +27,7 @@
       class="auk-input auk-input--block"
       @locale="nl"
       @date={{readonly this.selectedDate}} {{!-- Required Option --}}
-      @dateFormat={{if @enableTime "d.m.Y H:i" "d.m.Y"}}
+      @dateFormat={{if @enableTime "d-m-Y H:i" "d-m-Y"}}
       @enable={{this.datesToEnable}}
       @enableTime={{@enableTime}}
       @time_24hr={{true}}

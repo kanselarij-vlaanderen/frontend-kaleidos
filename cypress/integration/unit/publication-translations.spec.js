@@ -49,7 +49,7 @@ context('Publications translation tests', () => {
       .type(numberOfWords);
     // after updating pages and words, the text of the message updates, but cypress is faster then the update
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(publication.translationRequest.message).should('have.value', `Collega,\n\nHierbij ter vertaling:\nVO-dossier: ${fields.number}\nTitel: test vertalingsaanvraag\t\nUiterste vertaaldatum: ${translationEndDate.format('DD.MM.YYYY')}\t\nAantal pagina’s: ${numberOfPages}\t\nAantal woorden: ${numberOfWords}\t\nAantal documenten: 1\t\n\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n`);
+    cy.get(publication.translationRequest.message).should('have.value', `Collega,\n\nHierbij ter vertaling:\nVO-dossier: ${fields.number}\nTitel: test vertalingsaanvraag\t\nUiterste vertaaldatum: ${translationEndDate.format('DD-MM-YYYY')}\t\nAantal pagina’s: ${numberOfPages}\t\nAantal woorden: ${numberOfWords}\t\nAantal documenten: 1\t\n\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n`);
     cy.intercept('DELETE', 'files/*').as('deleteFile');
     cy.get(auk.modal.footer.cancel).click();
     cy.wait('@deleteFile');
@@ -84,7 +84,7 @@ context('Publications translation tests', () => {
     cy.get(publication.statusPill.contentLabel).should('contain', 'Opgestart');
     cy.get(publication.requestActivityPanel.message)
       .contains(`VO-dossier: ${fields.number}`)
-      .contains(`Uiterste vertaaldatum: ${translationEndDate.format('DD.MM.YYYY')}`)
+      .contains(`Uiterste vertaaldatum: ${translationEndDate.format('DD-MM-YYYY')}`)
       .contains(`Aantal pagina’s: ${numberOfPages}`)
       .contains(`Aantal woorden: ${numberOfWords}`);
     // check delete
@@ -146,13 +146,13 @@ context('Publications translation tests', () => {
       .wait(500); // the model reloaded but not fully processed, making DOM elements reload.
     cy.get(publication.statusPill.contentLabel).should('contain', 'Naar vertaaldienst');
     // check edit and rollback
-    cy.get(publication.translationReceivedPanel.endDate).contains(translationEndDate.format('DD.MM.YYYY'));
+    cy.get(publication.translationReceivedPanel.endDate).contains(translationEndDate.format('DD-MM-YYYY'));
     cy.get(publication.translationReceivedPanel.dropdown).click();
     cy.get(publication.translationReceivedPanel.edit).click();
     cy.get(auk.datepicker).click();
     cy.setDateInFlatpickr(editedTranslationEndDate);
     cy.get(auk.modal.footer.cancel).click();
-    cy.get(publication.translationReceivedPanel.endDate).contains(translationEndDate.format('DD.MM.YYYY'));
+    cy.get(publication.translationReceivedPanel.endDate).contains(translationEndDate.format('DD-MM-YYYY'));
     cy.get(publication.translationReceivedPanel.dropdown).click();
     cy.get(publication.translationReceivedPanel.edit).click();
     cy.get(auk.datepicker).click();
@@ -160,7 +160,7 @@ context('Publications translation tests', () => {
     cy.intercept('GET', '/translation-activities?filter**subcase**').as('reloadTranslationModel2');
     cy.get(publication.translationActivityEdit.save).click()
       .wait('@reloadTranslationModel2');
-    cy.get(publication.translationReceivedPanel.endDate).contains(editedTranslationEndDate.format('DD.MM.YYYY'));
+    cy.get(publication.translationReceivedPanel.endDate).contains(editedTranslationEndDate.format('DD-MM-YYYY'));
     //  upload second translation
     cy.get(publication.translationsIndex.upload).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);

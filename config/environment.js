@@ -10,12 +10,12 @@ module.exports = function (environment) {
     ember: {
       includeLocales: ['nl-be'],
       allowEmpty: true,
-      outputFormat:'DD.MM.YYYY',
+      outputFormat:'DD-MM-YYYY',
     },
     'ember-moment': {
       includeLocales: ['nl-be'],
       allowEmpty: true,
-      outputFormat:'DD.MM.YYYY',
+      outputFormat:'DD-MM-YYYY',
     },
     metricsAdapters: [
       {

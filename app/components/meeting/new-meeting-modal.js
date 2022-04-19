@@ -130,7 +130,7 @@ export default class MeetingNewMeetingModal extends Component {
     const agenda = this.store.createRecord('agenda', {
       serialnumber: 'A',
       title: `Agenda A voor zitting ${moment(meeting.plannedStart).format(
-        'D.M.YYYY'
+        'D-M-YYYY'
       )}`,
       createdFor: meeting,
       status,
@@ -168,7 +168,7 @@ export default class MeetingNewMeetingModal extends Component {
       number: 1,
       shortTitle: `Goedkeuring van het verslag van de vergadering van ${moment(
         closestMeeting.plannedstart
-      ).format('dddd DD.MM.YYYY')}.`,
+      ).format('dddd DD-MM-YYYY')}.`,
       formallyOk: CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK,
       isApproval: true,
       treatments: A([agendaItemTreatment]),

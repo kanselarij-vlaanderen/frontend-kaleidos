@@ -112,17 +112,17 @@ export default class NewsletterInfosSearchRoute extends Route {
      * returns an off-by-one result (1 to many) in case of two open ranges combined.
      */
     if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
-      const from = moment(params.dateFrom, 'DD.MM.YYYY').startOf('day');
-      const to = moment(params.dateTo, 'DD.MM.YYYY').endOf('day'); // "To" interpreted as inclusive
+      const from = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
+      const to = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
       filter[':lte,gte:agendaitems.meetingDate'] = [
         to.utc().toISOString(),
         from.utc().toISOString(),
       ].join(',');
     } else if (!isEmpty(params.dateFrom)) {
-      const date = moment(params.dateFrom, 'DD.MM.YYYY').startOf('day');
+      const date = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
       filter[':gte:agendaitems.meetingDate'] = date.utc().toISOString();
     } else if (!isEmpty(params.dateTo)) {
-      const date = moment(params.dateTo, 'DD.MM.YYYY').endOf('day'); // "To" interpreted as inclusive
+      const date = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
       filter[':lte:agendaitems.meetingDate'] = date.utc().toISOString();
     }
 

@@ -87,14 +87,14 @@ export default class CasesSearchRoute extends Route {
      * returns an off-by-one result (1 to many) in case of two open ranges combined.
      */
     if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
-      const from = moment(params.dateFrom, 'DD.MM.YYYY').startOf('day');
-      const to = moment(params.dateTo, 'DD.MM.YYYY').endOf('day'); // "To" interpreted as inclusive
+      const from = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
+      const to = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
       filter[':lte,gte:sessionDates'] = [to.utc().toISOString(), from.utc().toISOString()].join(',');
     } else if (!isEmpty(params.dateFrom)) {
-      const date = moment(params.dateFrom, 'DD.MM.YYYY').startOf('day');
+      const date = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
       filter[':gte:sessionDates'] = date.utc().toISOString();
     } else if (!isEmpty(params.dateTo)) {
-      const date = moment(params.dateTo, 'DD.MM.YYYY').endOf('day'); // "To" interpreted as inclusive
+      const date = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
       filter[':lte:sessionDates'] = date.utc().toISOString();
     }
 

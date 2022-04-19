@@ -99,11 +99,11 @@ export default class SearchController extends Controller {
   }
 
   deserializeDate(date) {
-    return date && moment(date, 'DD.MM.YYYY').toDate();
+    return date && moment(date, 'DD-MM-YYYY').toDate();
   }
 
   serializeDate(date) {
-    return date && moment(date).format('DD.MM.YYYY');
+    return date && moment(date).format('DD-MM-YYYY');
   }
 
   @action

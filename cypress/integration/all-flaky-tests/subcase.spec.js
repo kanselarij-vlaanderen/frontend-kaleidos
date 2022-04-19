@@ -270,7 +270,7 @@ context('Subcase tests', () => {
     cy.intercept('GET', '/agendaitems**').as('getAgendaitems');
     cy.get(route.newsletters.dataTable).find('tbody')
       .children('tr')
-      .contains(`van ${Cypress.dayjs(agendaDate).format('DD.MM.YYYY')}`)
+      .contains(`van ${Cypress.dayjs(agendaDate).format('DD-MM-YYYY')}`)
       .click();
     cy.wait('@getMeetingsDetail');
     cy.wait('@getAgendaitems');

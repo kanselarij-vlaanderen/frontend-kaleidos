@@ -12,7 +12,7 @@ export default Controller.extend({
 
   title: computed('model.currentAgenda.createdFor.plannedStart', function() {
     const date = this.get('model.currentAgenda.createdFor.plannedStart');
-    return `${this.intl.t('press-agenda')} ${moment(date).format('dddd DD.MM.YYYY')}`;
+    return `${this.intl.t('press-agenda')} ${moment(date).format('dddd DD-MM-YYYY')}`;
   }),
 
   documentTitle: computed('model.currentAgenda.createdFor.plannedStart', 'definite', function() {
@@ -22,7 +22,7 @@ export default Controller.extend({
     if (this.definite === 'false') {
       prefix = 'Klad ';
     }
-    return `${prefix}${this.intl.t('agendaitem-press-agenda')} van ${moment(date).format('DD.MM.YYYY')}`;
+    return `${prefix}${this.intl.t('agendaitem-press-agenda')} van ${moment(date).format('DD-MM-YYYY')}`;
   }),
 
   filteredGroups: computed('model', 'definite', async function() {

@@ -20,7 +20,7 @@ function currentTimestamp() {
 
 function openNewsletterForDate(date) {
   cy.get(utils.mHeader.newsletters).click();
-  cy.get(route.newsletters.row.title).contains(date.format('DD.MM.YYYY'))
+  cy.get(route.newsletters.row.title).contains(date.format('DD-MM-YYYY'))
     .parent()
     .click();
 }
