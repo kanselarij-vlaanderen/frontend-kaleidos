@@ -160,3 +160,31 @@ table tr.lt-expanded-row {
     fill: currentColor;
   }
 }
+
+// Pills
+$vl-picton-blue: #16465B;
+$vl-gray-70: #687483;
+$vl-gray-50: #8695A8;
+
+.auk-pill--future {
+  border: .1rem dashed $vl-gray-50;
+  color: $vl-gray-70;
+}
+
+.auk-pill--active {
+  border: .1rem solid $vl-picton-blue !important;
+  color: $vl-picton-blue !important;
+}
+
+.auk-pill--active-future {
+  border: .1rem dashed $vl-picton-blue !important;
+  color: $vl-picton-blue !important;
+  border-radius: .2rem;
+}
+
+// Sidebar nav
+.auk-sidebar.auk-sidebar--gray-200.auk-sidebar--small.auk-sidebar--left[data-collapsed="true"] {
+  .auk-sidebar__item a {
+    padding: 1rem 1rem 1rem 1.35rem;
+  }
+}
