@@ -89,8 +89,8 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     });
 
     // TODO flakey (locally)
-    cy.get(dependency.rdfa.editorInner).clear()
-      .type(decisionText);
+    cy.get(dependency.rdfa.editorInner).clear();
+    cy.get(newsletter.editItem.rdfaEditor).type(decisionText);
     cy.get(newsletter.editItem.themesSelector).contains('Sport')
       .click();
     cy.intercept('POST', '/newsletter-infos').as('newsletterInfosPost');
@@ -189,7 +189,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.shortTitle).should('have.value', subcaseTitleShort);
     cy.get(newsletter.editItem.toggleFinished).should('not.be.checked');
     // TODO-KAS-3270 check if editor empty
-    // cy.get(newsletter.editItem.rdfaEditor).should('be.empty');
+    // cy.get(dependency.rdfa.editorInner).should('be.empty');
     cy.get(newsletter.editItem.checkedThemes).should('not.exist');
     // add text to rdfaEditor and select theme
     cy.get(newsletter.editItem.rdfaEditor).type(text);
@@ -416,8 +416,8 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // check and fill in all fields
     cy.get(newsletter.editItem.noNota).should('be.disabled');
     cy.get(newsletter.editItem.mandateeProposal).contains('Niet van toepassing');
-    cy.get(newsletter.editItem.rdfaEditor).clear()
-      .type('rollbackTest');
+    cy.get(dependency.rdfa.editorInner).clear();
+    cy.get(newsletter.editItem.rdfaEditor).type('rollbackTest');
     cy.get(newsletter.editItem.remark).should('be.empty')
       .type('rollbackTestRemark');
     cy.get(newsletter.editItem.toggleFinished).should('not.be.checked')
@@ -446,8 +446,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getThemes3');
     cy.get(newsletter.editItem.mandateeProposal).contains(proposalText);
-    cy.get(newsletter.editItem.nota).invoke('removeAttr', 'target')
-      .click();
+    cy.get(newsletter.editItem.nota);
     // TODO still opened in another tab despite removing target (perhaps not removed?)
     // cy.url().contains('/document');
   });
@@ -543,8 +542,8 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // check that there is link to edit with newsletter and that info and remark text are shown
     cy.clickReverseTab('Overzicht');
     cy.get(newsletter.buttonToolbar.edit).click();
-    cy.get(newsletter.editItem.rdfaEditor).clear()
-      .type(richtext);
+    cy.get(dependency.rdfa.editorInner).clear();
+    cy.get(newsletter.editItem.rdfaEditor).type(richtext);
     cy.intercept('POST', '/newsletter-infos').as('newsletterInfosPost');
     cy.get(newsletter.editItem.save).click();
     cy.get(utils.vlModalVerify.save).click();
@@ -630,8 +629,8 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // check if nota is visible when selected
     cy.clickReverseTab('Overzicht');
     cy.get(newsletter.buttonToolbar.edit).click();
-    cy.get(newsletter.editItem.rdfaEditor).clear()
-      .type(richtext);
+    cy.get(dependency.rdfa.editorInner).clear();
+    cy.get(newsletter.editItem.rdfaEditor).type(richtext);
     cy.get(newsletter.editItem.remark).clear()
       .type(remarkText);
     cy.intercept('POST', '/newsletter-infos').as('newsletterInfosPost');
@@ -672,8 +671,8 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.intercept('GET', '/themes').as('getThemes');
     cy.get(newsletter.newsItem.edit).click();
     cy.wait('@getThemes');
-    cy.get(newsletter.editItem.rdfaEditor).clear()
-      .type(richtext);
+    cy.get(dependency.rdfa.editorInner).clear();
+    cy.get(newsletter.editItem.rdfaEditor).type(richtext);
     cy.get(newsletter.editItem.remark).clear()
       .type(remarkText);
     cy.get(newsletter.editItem.themesSelector).contains(theme2)
