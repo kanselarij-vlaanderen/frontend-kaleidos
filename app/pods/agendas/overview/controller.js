@@ -11,6 +11,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
   store: inject(),
   intl: inject(),
   agendaService: inject(),
+  router: inject(),
 
   queryParams: ['from', 'to'],
   dateFilter: '',
@@ -88,7 +89,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
     onClickRow(meeting) {
       meeting.get('latestAgenda').then((latestAgenda) => {
         const latestAgendaId = latestAgenda.get('id');
-        this.transitionToRoute('agenda.agendaitems', meeting.id, latestAgendaId);
+        this.router.transitionTo('agenda.agendaitems', meeting.id, latestAgendaId);
       });
     },
   },
