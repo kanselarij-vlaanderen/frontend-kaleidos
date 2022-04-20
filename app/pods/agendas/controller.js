@@ -46,6 +46,7 @@ export default class AgendasController extends Controller.extend(DefaultQueryPar
       );
     }
     await this.newsletterService.createNewsItemForMeeting(this.newMeeting);
+    this.newMeeting = this.store.createRecord('meeting');
     // TODO: Should fix sessionNrBug
     // Import from meeting-utils.js
     // await assignNewSessionNumbers();

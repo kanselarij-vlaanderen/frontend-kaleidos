@@ -6,6 +6,7 @@ import { task, dropTask } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /**
+ * @argument {isNew}
  * @argument {meeting}
  * @argument {didSave}
  * @argument {onCancel}
