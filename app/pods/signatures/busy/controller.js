@@ -66,6 +66,17 @@ export default class SignaturesBusyController extends Controller {
   @tracked isShowSidebar = false;
   @tracked isShowAddMinister = false;
   @tracked isShowCancelSignatures = false;
+  @tracked isShowAddCC = false;
+
+  @action
+  showAddCC() {
+    this.isShowAddCC = true;
+  }
+
+  @action
+  closeAddCC() {
+    this.isShowAddCC = false;
+  }
 
   @action
   showFilterModal() {

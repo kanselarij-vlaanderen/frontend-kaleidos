@@ -67,6 +67,17 @@ export default class SignaturesSuccessController extends Controller {
   @tracked isShowAddMinister = false;
   @tracked isShowCancelSignatures = false;
   @tracked isShowToast = true;
+  @tracked isShowAddCC = false;
+
+  @action
+  showAddCC() {
+    this.isShowAddCC = true;
+  }
+
+  @action
+  closeAddCC() {
+    this.isShowAddCC = false;
+  }
 
   @action
   showFilterModal() {
