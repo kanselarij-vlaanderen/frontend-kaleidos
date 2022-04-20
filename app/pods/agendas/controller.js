@@ -60,8 +60,8 @@ export default class AgendasController extends Controller {
   }
 
   @action
-  async onClickRow(agenda) {
-    const meeting = await agenda.createdFor;
+  onClickRow(agenda) {
+    const meeting = agenda.createdFor;
     this.router.transitionTo('agenda.agendaitems', meeting.id, agenda.id);
   }
 
