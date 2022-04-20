@@ -19,13 +19,6 @@ export default class ApplicationRoute extends Route {
     this.setupTracking();
   }
 
-  redirect(model, transition) {
-    // Only redirect to agendas if we're navigating to /
-    if (transition.to.name === 'index') {
-      this.router.transitionTo('agendas');
-    }
-  }
-
   async beforeModel() {
     this.moment.setLocale('nl');
     this.moment.defaultFormat = 'DD.MM.YYYY';
