@@ -1,13 +1,12 @@
 <Auk::Modal @size="large">
   <Auk::Modal::Header
     @title={{if @meeting.isNew (t "new-agenda") (t "edit-meeting")}}
-    @closeAble={{true}}
     @onClose={{@onCancel}}
   />
   <Auk::Modal::Body>
     <Utils::KindSelector
-      @onChange={{this.setKind}}
-      @selectedKind={{this.kind}}
+      @onChange={{this.selectKind}}
+      @selectedKind={{this.selectedKind}}
       @isLoading={{this.initializeKind.isRunning}}
     />
     {{#if this.isAnnexMeeting}}
@@ -41,7 +40,7 @@
           <WebComponents::VlDatepicker
             @enableTime={{true}}
             @date={{array this.startDate}}
-            @dateChanged={{this.selectStartDate}}
+            @dateChanged={{set this "startDate"}}
           />
         </div>
       </div>
