@@ -55,7 +55,6 @@
           <div
             class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced"
           >
-
             {{#if
               (and
                 @agendaitem.isDesignAgenda
@@ -72,6 +71,16 @@
                 />
                 {{@agendaitem.formallyOkToShow.label}}
               </p>
+            {{/if}}
+            {{#if @subcase.confidential}}
+              <Auk::Toolbar::Item>
+                <Auk::Pill
+                  @skin="warning"
+                  @icon="lock-closed"
+                >
+                  {{t "confidential"}}
+                </Auk::Pill>
+              </Auk::Toolbar::Item>
             {{/if}}
           </div>
         </div>
