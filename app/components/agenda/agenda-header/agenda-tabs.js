@@ -41,7 +41,7 @@ export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
   get currentAgendaItemId() {
     const currentRoute = this.router.currentRoute;
     let agendaItemsRoute = currentRoute;
-    if (currentRoute && currentRoute.name?.startsWith('agenda.agendaitems.agendaitem')) {
+    if (currentRoute && currentRoute.name.startsWith('agenda.agendaitems.agendaitem')) {
       while (agendaItemsRoute.name !== 'agenda.agendaitems.agendaitem') {
         agendaItemsRoute = agendaItemsRoute.parent;
       }

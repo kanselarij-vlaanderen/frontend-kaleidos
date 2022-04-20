@@ -15,6 +15,7 @@ context('Authentication tests', () => {
 
   it('should login/logout using the mock-login and logout button', () => {
     cy.loginFlow('Admin');
+    cy.url().should('include', 'overzicht');
     cy.logoutFlow();
     cy.visit('/');
     // TODO flaky, sometimes we end up on authentication-ti.vlaanderen

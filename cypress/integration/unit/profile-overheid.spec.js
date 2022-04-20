@@ -25,6 +25,7 @@ context('Testing the application as Overheid user', () => {
   it('Should switch to Agenda tab when agenda is clicked as overheid', () => {
     cy.get(utils.mHeader.agendas).click();
     cy.get(route.agendas.title).should('exist');
+    cy.url().should('include', '/overzicht');
   });
 
   it('Should switch to cases tab when cases is clicked as overheid', () => {
