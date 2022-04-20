@@ -9,7 +9,6 @@ export default class AgendasController extends Controller {
 
   @service router;
   @service currentSession;
-  @service router;
 
   @tracked isLoadingModel = false;
   @tracked isCreatingNewSession = false;
@@ -30,10 +29,11 @@ export default class AgendasController extends Controller {
   setFilter(date) {
     if (this.dateRegex.test(date)) {
       this.filter = date;
-    } else if (date === '') {
+      this.page = 0;
+    } else if (date === '' && this.filter) {
       this.filter = null;
+      this.page = 0;
     }
-    this.page = 0;
   }
 
   @action

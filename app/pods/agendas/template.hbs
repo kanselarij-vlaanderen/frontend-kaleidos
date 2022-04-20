@@ -23,7 +23,7 @@
           data-test-route-agendas-overview-filter-input
           @block={{true}}
           @icon="search"
-          placeholder="bv. 01/2021"
+          placeholder={{t "date-example"}}
           value={{this.filter}}
           {{on "input" (perform this.debouncedSetFilter)}}
           @enter={{this.setFilter}}
@@ -106,22 +106,26 @@
             {{else}}
               {{#each @model as |agenda|}}
                 <tr
+                  role="button"
                   class="auk-u-text-align--center auk-table--interaction-cursor auk-table--clickable-rows"
-                  {{! template-lint-disable no-invalid-interactive }}
                   {{on "click" (fn this.onClickRow agenda)}}
                 >
                   <td data-test-route-agendas-overview-row-title>
                     <span class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
                       {{#if agenda.status.isDesignAgenda}}
                         <strong>{{t "design-agenda"}}</strong>
-                        <Auk::Pill @skin="active-future">{{agenda.name}}</Auk::Pill>
+                        {{#if agenda.serialnumber}}
+                          <Auk::Pill @skin="active-future">{{agenda.serialnumber}}</Auk::Pill>
+                        {{/if}}
                       {{else}}
                         <strong>{{t "agenda"}}</strong>
-                        <Auk::Pill>{{agenda.name}}</Auk::Pill>
+                        {{#if agenda.serialnumber}}
+                          <Auk::Pill>{{agenda.serialnumber}}</Auk::Pill>
+                        {{/if}}
                       {{/if}}
                       <span>–</span>
                       <span>
-                        {{moment-format agenda.createdFor.plannedStart "DD.MM.YYYY"}}
+                        {{moment-format agenda.createdFor.plannedStart "DD-MM-YYYY"}}
                       </span>
                     </span>
                   </td>
@@ -145,7 +149,7 @@
                     {{else}}
                       {{moment-format
                         agenda.modified
-                        "DD.MM.YYYY — HH:mm"
+                        "DD-MM-YYYY — HH:mm"
                       }}
                     {{/if}}
                   </td>
