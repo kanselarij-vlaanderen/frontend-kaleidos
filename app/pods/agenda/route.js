@@ -25,15 +25,10 @@ export default class AgendaRoute extends Route {
       sort: '-serialnumber',
       include: 'status',
     });
-    const agendaitems = await this.store.query('agendaitem', {
-      'filter[agenda][:id:]': agenda.id,
-      sort: 'show-as-remark,number',
-    });
 
     return {
       meeting,
       agenda,
-      agendaitems,
       reverseSortedAgendas,
     };
   }

@@ -32,12 +32,11 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
       'filter[agenda][:id:]': this.agenda.id,
       'filter[show-as-remark]': agendaitem.showAsRemark,
       'filter[:lte:number]': `"${previousNumber}"`, // Needs quotes because of bug in mu-cl-resources
-      sort: '-number',
     });
     if (neighbouringItem) {
       this.router.transitionTo('agenda.agendaitems.agendaitem', this.meeting.id, this.agenda.id, neighbouringItem.id);
     } else {
-      this.router.transitionTo('agenda.agendaitems', this.meeting.id, this.agenda.id);
+      this.router.transitionTo('agenda.agendaitems', this.meeting.id, this.agenda.id,{ queryParams: { anchor: neighbouringItem.id }});
     }
   }
 
@@ -49,12 +48,8 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @action
   async reassignNumbersAndNavigateToNeighbouringAgendaitem() {
     await this.reassignNumbersForAgendaitems();
-    await this.navigateToNeighbouringItem(this.model);
     this.agendaitemsController.send('reloadModel');
-    // The call to reloadModel causes a refresh of the agenda.agendaitems route, so its model gets recalculated
-    // Because we're a subroute of that route, our model will also get recalculated, using the current route
-    // That means that we're going to query for the current agendaitem, which has been deleted, because
-    // this method only gets called when the agendaitem gets deleted.
+    await this.navigateToNeighbouringItem(this.model);
   }
 
   @action
