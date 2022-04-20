@@ -72,7 +72,7 @@
               <Utils::ThSortable
                 class="auk-table__header-title"
                 @currentSorting={{this.sort}}
-                @field="status"
+                @field="created-for.is-final"
                 @onChange={{this.sortTable}}
                 @label={{t "status"}}
               />
@@ -126,7 +126,7 @@
                     </span>
                   </td>
                   <td>
-                    {{#if agenda.isFinal}}
+                    {{#if agenda.createdFor.isFinal}}
                       <Auk::Pill>{{t "closed"}}</Auk::Pill>
                     {{else}}
                       <Auk::Pill @skin="active">{{t "opened"}}</Auk::Pill>

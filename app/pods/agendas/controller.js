@@ -16,7 +16,7 @@ export default class AgendasController extends Controller {
   @tracked filter = null;
   @tracked page = 0;
   @tracked size = 10;
-  @tracked sort = '-status,-created-for.planned-start,created-for.kind.label';
+  @tracked sort = 'created-for.is-final,-created-for.planned-start,created-for.kind.label';
 
   dateRegex = /^(?:\d{1,2}\/)??(?:\d{1,2}\/)?\d{4}$/;
 
@@ -60,8 +60,8 @@ export default class AgendasController extends Controller {
   }
 
   @action
-  onClickRow(agenda) {
-    const meeting = agenda.createdFor;
+  async onClickRow(agenda) {
+    const meeting = await agenda.createdFor;
     this.router.transitionTo('agenda.agendaitems', meeting.id, agenda.id);
   }
 
