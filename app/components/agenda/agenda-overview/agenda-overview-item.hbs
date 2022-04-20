@@ -25,8 +25,12 @@
     <div class="vlc-agenda-items__text">
       <div class="auk-o-flex">
         <div class="left_side">
-          <div class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
-            <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
+          <div
+            class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center"
+          >
+            <div
+              class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced"
+            >
               <h4 class="vlc-agenda-items__subject auk-u-m-0">
                 <LinkTo
                   data-test-agenda-overview-item-sub-item
@@ -34,23 +38,22 @@
                   @model={{@agendaitem.id}}
                   @query={{hash anchor=@agendaitem.id}}
                 >
-              <pre class="auk-u-text-pre-line">
-                {{#if @agendaitem.shortTitle}}
-                  {{@agendaitem.shortTitle}}
-                {{else}}
-                  {{@agendaitem.title}}
-                {{! Fallback for legacy data that doesn't have a short title }}
-                {{/if}}
-              </pre>
+                  <pre class="auk-u-text-pre-line">
+                    {{#if @agendaitem.shortTitle}}
+                      {{@agendaitem.shortTitle}}
+                    {{else}}
+                      {{@agendaitem.title}}
+                      {{! Fallback for legacy data that doesn't have a short title }}
+                    {{/if}}
+                  </pre>
                 </LinkTo>
               </h4>
             </div>
-            <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
+            <div
+              class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced"
+            >
               {{#if this.subcase.confidential}}
-                <Auk::Pill
-                  @skin="warning"
-                  @icon="lock-closed"
-                >
+                <Auk::Pill @skin="warning" @icon="lock-closed">
                   {{t "confidential"}}
                 </Auk::Pill>
               {{/if}}
@@ -122,7 +125,8 @@
             {{#if @agendaitem.comment}}
               <span class="auk-u-text-bold">
                 {{t "comment-title"}}:
-              </span> {{@agendaitem.comment}}
+              </span>
+              {{@agendaitem.comment}}
             {{/if}}
           </div>
           {{#if @agendaitem.privateComment}}
@@ -187,27 +191,27 @@
               {{/if}}
             </div>
             <div class="vlc-agenda-meta__status-holder auk-u-ml-2">
-            {{#if (and this.currentSession.isEditor @showFormallyOkStatus)}}
-              {{#if @isEditingFormallyOkStatus}}
-                <Utils::FormallyOkSelector
-                  data-test-agenda-overview-item-formally-ok={{true}}
-                  @formallyOkStatusUri={{@agendaitem.formallyOk}}
-                  @onChange={{this.setAndSaveFormallyOkStatus}}
-                />
-              {{else}}
-                <p
-                  class="{{@agendaitem.formallyOkToShow.classNames}}"
-                  data-test-agenda-overview-item-status
-                >
-                  <i
-                    class="{{@agendaitem.formallyOkToShow.iconClassNames}}"
-                    aria-hidden="true"
-                  ></i>
-                  {{@agendaitem.formallyOkToShow.label}}
-                </p>
+              {{#if (and this.currentSession.isEditor @showFormallyOkStatus)}}
+                {{#if @isEditingFormallyOkStatus}}
+                  <Utils::FormallyOkSelector
+                    data-test-agenda-overview-item-formally-ok={{true}}
+                    @formallyOkStatusUri={{@agendaitem.formallyOk}}
+                    @onChange={{this.setAndSaveFormallyOkStatus}}
+                  />
+                {{else}}
+                  <p
+                    class="{{@agendaitem.formallyOkToShow.classNames}}"
+                    data-test-agenda-overview-item-status
+                  >
+                    <i
+                      class="{{@agendaitem.formallyOkToShow.iconClassNames}}"
+                      aria-hidden="true"
+                    ></i>
+                    {{@agendaitem.formallyOkToShow.label}}
+                  </p>
+                {{/if}}
               {{/if}}
-            {{/if}}
-          </div>
+            </div>
           </div>
 
         </div>

@@ -62,7 +62,11 @@
               )
             }}
               <p
-                class="auk-u-text-small auk-u-m-0 vlc-agenda-items__status auk-o-flex {{if (eq @agendaitem.formallyOkToShow.svg.color 'success') 'vlc-agenda-items__status--positive'}}"
+                class="auk-u-text-small auk-u-m-0 vlc-agenda-items__status auk-o-flex
+                  {{if
+                    (eq @agendaitem.formallyOkToShow.svg.color 'success')
+                    'vlc-agenda-items__status--positive'
+                  }}"
               >
                 <Auk::Icon
                   @skin={{@agendaitem.formallyOkToShow.svg.color}}
@@ -74,10 +78,7 @@
             {{/if}}
             {{#if @subcase.confidential}}
               <Auk::Toolbar::Item>
-                <Auk::Pill
-                  @skin="warning"
-                  @icon="lock-closed"
-                >
+                <Auk::Pill @skin="warning" @icon="lock-closed">
                   {{t "confidential"}}
                 </Auk::Pill>
               </Auk::Toolbar::Item>
@@ -153,9 +154,9 @@
                 data-test-agendaitem-titles-private-comment
               >
                 <strong class="auk-u-text-bold"><Auk::Icon
-                  @name="lock-closed"
-                  @size="small"
-                />{{t "private-comment-title"}}:
+                    @name="lock-closed"
+                    @size="small"
+                  />{{t "private-comment-title"}}:
                 </strong>{{@agendaitem.privateComment}}
               </pre>
             </Group.Item>
