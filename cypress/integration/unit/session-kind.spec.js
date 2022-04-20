@@ -164,7 +164,7 @@ context('Different session kinds should show different titles', () => {
       .contains(`Kort bestek voor de ministerraad - plan vlaamse veerkracht van ${formattedMeetingDateDots}`);
 
     // check agenda overview and order
-    cy.visit('/?size=100');
+    cy.visit('/overzicht?size=100');
     cy.get(route.agendasOverview.dataTable).find('tbody')
       .children('tr');
     // first agenda should always be the normal kind, second PVV

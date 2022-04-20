@@ -7,6 +7,7 @@ context('Authentication tests', () => {
   const acmidmButtonText = 'Meld u aan';
   it('should login/logout using xhr request (api call)', () => {
     cy.login('Admin');
+    cy.url().should('include', 'overzicht');
     cy.logout();
     cy.visit('/');
     cy.get(route.login.acmidmButton).contains(acmidmButtonText);
