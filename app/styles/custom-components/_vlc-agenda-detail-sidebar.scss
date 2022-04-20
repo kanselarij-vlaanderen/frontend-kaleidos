@@ -21,29 +21,42 @@
   padding: 1.8rem 1.5rem;
   font-size: 1.3rem;
   text-decoration: none;
-  color: $dove-gray;
-  background: $porcelain;
-  border-bottom: 0.01rem solid $ghost;
+  color: $auk-gray-600;
+  background: $auk-gray-100;
+  border-bottom: 0.01rem solid $auk-gray-300;
 }
 
 .vlc-agenda-detail-sidebar__sub-item a {
   &:hover,
   &:focus {
-    background: $blue-gray-lighter;
+    background: $auk-gray-200;
   }
 }
 
-// a.vlc-agenda-detail-sidebar__sub-item--active,
-// a.vlc-agenda-detail-sidebar__sub-item--active:hover,
-// a.vlc-agenda-detail-sidebar__sub-item--active:focus,
-// a.vlc-agenda-detail-sidebar__sub-item--active:active {
-//   .ember-power-select-selected-item{
-//     color:#000;
-//   }
-// }
+a.vlc-agenda-detail-sidebar__sub-item--active,
+a.vlc-agenda-detail-sidebar__sub-item--active:hover,
+a.vlc-agenda-detail-sidebar__sub-item--active:focus,
+a.vlc-agenda-detail-sidebar__sub-item--active:active {
+  background: $auk-color-primary;
+  border: none;
+  color: #fff;
+
+  .ember-power-select-selected-item{
+    color:#000;
+  }
+
+  span,
+  .vlc-agenda-detail-sidebar__status--positive,
+  .ember-power-select-selected-item,
+  pre,
+  p,
+  i {
+    color: #fff;
+  }
+}
 
 a.vlc-agenda-detail-sidebar__sub-item--active:focus {
-  background: darken($science-blue, 5%);
+  background: darken($auk-color-primary, 5%);
 }
 
 .vlc-agenda-meta {
@@ -56,7 +69,7 @@ a.vlc-agenda-detail-sidebar__sub-item--active:focus {
   justify-content: flex-start;
   font-size: 1.4rem;
   line-height: 130%;
-  color: $text-color;
+  color: $auk-color-text;
 }
 
 .vlc-agenda-detail-sidebar__text-container {
@@ -81,13 +94,13 @@ a.vlc-agenda-detail-sidebar__sub-item--active:focus {
 .vlc-agenda-detail-sidebar__sub-item--active a,
 .vlc-agenda-detail-sidebar__sub-item--active a:hover,
 .vlc-agenda-detail-sidebar__sub-item--active a:active {
-  background: $science-blue;
+  background: $auk-color-primary;
   color: #FFF;
 }
 
 
 .vlc-agenda-detail-sidebar__sub-item--active a:focus {
-  background: darken($science-blue, 5%);
+  background: darken($auk-color-primary, 5%);
 }
 
 .vlc-agenda-detail-sidebar-sub-item__numbering {
@@ -109,7 +122,7 @@ a.vlc-agenda-detail-sidebar__sub-item--active:focus {
 .vlc-agenda-detail-sidebar__no-items-text {
   line-height: 3.5rem;
   font-size: 1.5rem;
-  color: $blue-gray-dark;
+  color: $auk-gray-600;
   margin: 1.5rem;
 }
 
