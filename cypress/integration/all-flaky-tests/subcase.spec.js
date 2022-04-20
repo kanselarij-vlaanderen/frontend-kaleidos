@@ -335,10 +335,6 @@ context('Subcase tests', () => {
   });
 
   it('After finalizing agenda, subcase info should change to the approved status', () => {
-    const realmonth = agendaDate.month() + 1; // Js month start at 0.
-    const paddedMonth = realmonth < 10 ? `0${realmonth}` : realmonth;
-    const dateFormatDotted = `${agendaDate.date()}.${paddedMonth}.${agendaDate.year()}`;
-
     cy.openAgendaForDate(agendaDate);
     cy.setAllItemsFormallyOk(5);
     cy.approveAndCloseDesignAgenda();
@@ -346,6 +342,6 @@ context('Subcase tests', () => {
     cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
     cy.get(cases.subcaseItem.approved).should('have.length', 3);
     cy.openSubcase(2);
-    cy.get(cases.subcaseDescription.decidedOn).contains(dateFormatDotted);
+    cy.get(cases.subcaseDescription.decidedOn).contains(agendaDate.format('DD-MM-YYYY'));
   });
 });
