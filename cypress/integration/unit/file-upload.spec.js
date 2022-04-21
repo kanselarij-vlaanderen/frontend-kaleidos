@@ -144,16 +144,13 @@ context('Add files to an agenda', () => { // At the meeting-level
 
     cy.get(utils.vlModalVerify.save).contains('Verwijderen')
       .click();
+    // there is a 15 second delay to allow a user to reconsider the delete
 
     cy.wait('@deleteFile', {
-      timeout: 20000,
+      timeout: 30000,
     });
-    cy.wait('@deletePiece', {
-      timeout: 20000,
-    });
-    cy.wait('@deleteDocumentContainer', {
-      timeout: 20000,
-    });
+    cy.wait('@deletePiece');
+    cy.wait('@deleteDocumentContainer');
     cy.wait('@loadPieces');
 
     // One document should be gone.
@@ -179,11 +176,9 @@ context('Add files to an agenda', () => { // At the meeting-level
       .click();
 
     cy.wait('@deleteFile', {
-      timeout: 20000,
+      timeout: 30000,
     });
-    cy.wait('@deletePiece', {
-      timeout: 20000,
-    });
+    cy.wait('@deletePiece');
     // cy.wait('@deleteDocumentContainer', { timeout: 20000 }); // TODO-bug the deletion of document in vl-document component
     cy.wait('@loadPieces');
 
