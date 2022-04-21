@@ -25,9 +25,4 @@ export default class AgendaitemCasePanelView extends Component {
     }
     return null;
   }
-
-  @action
-  startEditing() {
-    this.args.toggleIsEditing();
-  }
 }

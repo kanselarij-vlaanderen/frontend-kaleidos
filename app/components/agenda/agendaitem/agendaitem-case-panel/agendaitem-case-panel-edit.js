@@ -26,7 +26,7 @@ export default class AgendaitemCasePanelEdit extends Component {
     if (this.newsletterInfo && this.newsletterInfo.hasDirtyAttributes) {
       this.newsletterInfo.rollbackAttributes();
     }
-    this.args.toggleIsEditing();
+    this.args.onCancel();
   }
 
   @task
@@ -65,7 +65,6 @@ export default class AgendaitemCasePanelEdit extends Component {
       }
       yield this.newsletterInfo.save();
     }
-
-    this.args.toggleIsEditing();
+    this.args.onSave();
   }
 }
