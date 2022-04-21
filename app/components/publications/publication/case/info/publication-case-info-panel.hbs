@@ -139,10 +139,7 @@
                       @models={{this.modelsForAgendaitemRoute}}
                     >
                       {{#if @publicationFlow.agendaItemTreatment.startDate}}
-                        {{moment-format
-                          @publicationFlow.agendaItemTreatment.startDate
-                          "DD-MM-YYYY"
-                        }}
+                        {{moment-format  @publicationFlow.agendaItemTreatment.startDate}}
                       {{else}}
                         {{t "to-agenda"}}
                       {{/if}}
@@ -193,7 +190,7 @@
                     {{t "case-created"}}
                   </Auk::Label>
                   {{#if @publicationFlow.created}}
-                    {{moment-format @publicationFlow.created "DD-MM-YYYY"}}
+                    {{moment-format @publicationFlow.created}}
                   {{else}}
                     {{t "dash"}}
                   {{/if}}
@@ -269,20 +266,14 @@
                   @models={{this.modelsForAgendaitemRoute}}
                 >
                   {{#if @publicationFlow.agendaItemTreatment.startDate}}
-                    {{moment-format
-                      @publicationFlow.agendaItemTreatment.startDate
-                      "DD-MM-YYYY"
-                    }}
+                    {{moment-format @publicationFlow.agendaItemTreatment.startDate}}
                   {{else}}
                     {{t "to-agenda"}}
                   {{/if}}
                 </Auk::ButtonLink>
               {{else}}
                 {{#if @publicationFlow.agendaItemTreatment.startDate}}
-                  {{moment-format
-                    @publicationFlow.agendaItemTreatment.startDate
-                    "DD-MM-YYYY"
-                  }}
+                  {{moment-format @publicationFlow.agendaItemTreatment.startDate}}
                 {{else}}
                   {{t "dash"}}
                 {{/if}}
@@ -298,7 +289,7 @@
               class="auk-u-m-0"
             >
               {{#if @publicationFlow.openingDate}}
-                {{moment-format @publicationFlow.openingDate "DD-MM-YYYY"}}
+                {{moment-format @publicationFlow.openingDate}}
               {{else}}
                 {{t "dash"}}
               {{/if}}
@@ -312,10 +303,7 @@
             </h4>
             <p data-test-publication-case-info-panel-due-date class="auk-u-m-0">
               {{#if @publicationFlow.publicationSubcase.dueDate}}
-                {{moment-format
-                  @publicationFlow.publicationSubcase.dueDate
-                  "DD-MM-YYYY"
-                }}
+                {{moment-format @publicationFlow.publicationSubcase.dueDate}}
               {{else}}
                 {{t "dash"}}
               {{/if}}
@@ -327,7 +315,7 @@
             <h4 class="auk-u-m-0">{{t "case-created"}}</h4>
             <p class="auk-u-m-0">
               {{#if @publicationFlow.created}}
-                {{moment-format @publicationFlow.created "DD-MM-YYYY"}}
+                {{moment-format @publicationFlow.created}}
               {{else}}
                 {{t "dash"}}
               {{/if}}

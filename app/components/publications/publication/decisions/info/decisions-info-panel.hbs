@@ -70,10 +70,7 @@
                       @models={{this.modelsForAgendaitemRoute}}
                     >
                       {{#if @publicationFlow.agendaItemTreatment.startDate}}
-                        {{moment-format
-                          @publicationFlow.agendaItemTreatment.startDate
-                          "DD-MM-YYYY"
-                        }}
+                        {{moment-format @publicationFlow.agendaItemTreatment.startDate}}
                       {{else}}
                         {{t "to-agenda"}}
                       {{/if}}
@@ -137,20 +134,14 @@
                   @models={{this.modelsForAgendaitemRoute}}
                 >
                   {{#if @publicationFlow.agendaItemTreatment.startDate}}
-                    {{moment-format
-                      @publicationFlow.agendaItemTreatment.startDate
-                      "DD-MM-YYYY"
-                    }}
+                    {{moment-format @publicationFlow.agendaItemTreatment.startDate}}
                   {{else}}
                     {{t "to-agenda"}}
                   {{/if}}
                 </Auk::ButtonLink>
               {{else}}
                 {{#if @publicationFlow.agendaItemTreatment.startDate}}
-                  {{moment-format
-                    @publicationFlow.agendaItemTreatment.startDate
-                    "DD-MM-YYYY"
-                  }}
+                  {{moment-format @publicationFlow.agendaItemTreatment.startDate}}
                 {{else}}
                   {{t "dash"}}
                 {{/if}}
