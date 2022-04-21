@@ -41,6 +41,10 @@ class BaseRow extends EmberObject {
 
   @task
   *triggerGenerateReport(params) {
+    yield this.performGenerateReport(params);
+  }
+
+  async performGenerateReport(params) {
     const generatingToast = this.toaster.loading(
       this.intl.t('publication-report--toast-generating--message'),
       this.intl.t('publication-report--toast-generating--title'),
@@ -51,7 +55,7 @@ class BaseRow extends EmberObject {
 
     let file;
     try {
-      file = yield this.generateReport(params);
+      file = await this.generateReport(params);
     } catch (err) {
       console.error(err);
       this.toaster.clear(generatingToast);
