@@ -18,10 +18,10 @@
       </div>
     </div>
   {{/if}}
-  <Subcase::SubcaseTitles::SubcaseTitlesPanel>
+  <Subcase::SubcaseTitles::SubcaseTitlesPanel
     @subcase={{this.subcase}}
     @allowEditing={{this.currentSession.isEditor}}
-  </Subcase::SubcaseTitles::SubcaseTitlesPanel>
+  />
   <Mandatees::MandateesPanel
     @mandatees={{this.mandatees}}
     @submitter={{this.submitter}}

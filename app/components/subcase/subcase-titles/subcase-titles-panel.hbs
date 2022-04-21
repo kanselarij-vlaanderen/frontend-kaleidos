@@ -1,13 +1,13 @@
 {{#if this.isEditing}}
-    <Subcase::SubcaseTitles::SubcaseTitlesPanelEditView
-      @subcase={{@subcase}}
-      @onCancel={{this.cancelEditing}}
-      @onSave={{this.stopEditing}}
-    />
+  <Subcase::SubcaseTitles::SubcaseTitlesPanelEdit
+    @subcase={{@subcase}}
+    @onCancel={{this.cancelEditing}}
+    @onSave={{this.stopEditing}}
+  />
 {{else}}
-    <Subcase::SubcaseTitles::SubcaseTitlesPanelView
-      @subcase={{@subcase}}
-      @allowEditing={{@allowEditing}}
-      @onClickEdit={{this.startEditing}}
-    />
+  <Subcase::SubcaseTitles::SubcaseTitlesPanelView
+    @subcase={{@subcase}}
+    @allowEditing={{@allowEditing}}
+    @onClickEdit={{this.startEditing}}
+  />
 {{/if}}

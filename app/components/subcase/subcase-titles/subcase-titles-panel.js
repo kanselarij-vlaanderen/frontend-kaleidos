@@ -6,7 +6,6 @@ import { action } from '@ember/object';
  * @argument allowEditing
  */
 export default class SubcaseTitlesPanel extends Component {
-
   @tracked isEditing = false;
 
   @action
