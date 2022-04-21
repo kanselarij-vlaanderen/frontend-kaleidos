@@ -6,7 +6,7 @@ import {
   lastValue, task
 } from 'ember-concurrency';
 
-export default class AgendaitemTitles extends Component {
+export default class AgendaitemCasePanelView extends Component {
   @service currentSession;
 
   @lastValue('loadCase') case;

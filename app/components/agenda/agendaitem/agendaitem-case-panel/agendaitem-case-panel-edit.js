@@ -8,7 +8,7 @@ import {
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { task } from 'ember-concurrency';
 
-export default class AgendaitemTitlesEdit extends Component {
+export default class AgendaitemCasePanelEdit extends Component {
   @service store;
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'comment']);
 
