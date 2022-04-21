@@ -38,11 +38,16 @@
             {{/if}}
           </div>
           <div>
-            <Auk::Button {{on "click" (perform row.triggerGenerateReport)}}>
+            <Auk::Button {{on "click" row.showGenerateReportModal}}>
               {{t "generate-report"}}
             </Auk::Button>
           </div>
         </Auk::Panel::Body>
+
+        {{#if row.isShownGenerateReportModal}}
+          <Publications::Overview::Reports::GenerateReportModal @row={{row}}
+            />
+        {{/if}}
       {{/each}}
     </Auk::Panel>
   </div>

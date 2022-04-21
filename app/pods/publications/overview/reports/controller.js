@@ -1,5 +1,5 @@
 import Controller from '@ember/controller';
-import EmberObject from '@ember/object';
+import EmberObject, { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { dasherize } from '@ember/string';
 import { tracked } from '@glimmer/tracking';
@@ -25,6 +25,7 @@ class BaseRow extends EmberObject {
   @service jobMonitor;
 
   @tracked lastJob;
+  @tracked isShownGenerateReportModal;
 
   get titleKey() {
     return `publication-reports--type--${this.key}`;
@@ -39,8 +40,19 @@ class BaseRow extends EmberObject {
     });
   }
 
+  @action
+  showGenerateReportModal() {
+    this.isShownGenerateReportModal = true;
+  }
+
+  @action
+  closeGenerateReportModal() {
+    this.isShownGenerateReportModal = false;
+  }
+
   @task
   *triggerGenerateReport(params) {
+    this.isShownGenerateReportModal = false;
     yield this.performGenerateReport(params);
   }
 
@@ -126,6 +138,7 @@ class GovernmentDomainRow extends BaseRow {
   getReportQueryParams() {
     return {
       group: this.key,
+      filter: {},
     };
   }
 }
@@ -136,6 +149,7 @@ class RegulationTypeRow extends BaseRow {
   getReportQueryParams() {
     return {
       group: this.key,
+      filter: {},
     };
   }
 }
@@ -147,6 +161,7 @@ class MandateeRow extends BaseRow {
   getReportQueryParams() {
     return {
       group: this.key,
+      filter: {},
     };
   }
 }

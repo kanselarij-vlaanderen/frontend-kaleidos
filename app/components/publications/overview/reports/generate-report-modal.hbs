@@ -1,0 +1,16 @@
+<Auk::Modal>
+  <Auk::Modal::Header
+    @title={{t "publications-reports--modal-title" name=(t @row.titleKey)}}
+    @onClose={{@row.closeGenerateReportModal}} />
+  <Auk::Modal::Body>
+    {{!TODO}}
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @onCancel={{@row.closeGenerateReportModal}}>
+    <Auk::Button
+      @skin="primary"
+      {{on "click" (perform @row.triggerGenerateReport)}}
+    >
+      {{t "publications-reports--generate--small"}}
+    </Auk::Button>
+  </Auk::Modal::Footer>
+</Auk::Modal>
