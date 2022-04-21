@@ -2,8 +2,11 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
+import { inject as service } from '@ember/service';
 
 export default class SystemAlertsController extends Controller {
+  @service router;
+
   @tracked selectedAlert = null;
 
   @action
@@ -20,6 +23,6 @@ export default class SystemAlertsController extends Controller {
 
   @action
   cancel() {
-    this.transitionToRoute('settings.overview');
+    this.router.transitionTo('settings.overview');
   }
 }
