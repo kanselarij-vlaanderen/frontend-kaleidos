@@ -38,6 +38,18 @@ class BaseRow extends EmberObject {
       'filter[metrics-type]': this.key,
       include: ['generated', 'generated-by'].join(','),
     });
+    this.startMonitorLoadedJob();
+  }
+
+  async startMonitorLoadedJob() {
+    if (this.lastJob && !this.lastJob.hasEnded) {
+      await this.jobMonitor.monitor(this.lastJob);
+      if (this.lastJob.status === this.lastJob.SUCCESS) {
+        // reload generated relationship is needed for template to rerender
+        // the template then triggers this network call again (but a workaround seems to complex for this issue)
+        this.lastJob.belongsTo('generated').reload();
+      }
+    }
   }
 
   @action
