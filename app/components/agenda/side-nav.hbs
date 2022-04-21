@@ -45,26 +45,32 @@
                   <strong>
                     {{t "design-agenda"}}
                   </strong>
-                  <Auk::Pill @skin="active-future">
-                    {{agenda.name}}
-                  </Auk::Pill>
+                  {{#if agenda.serialnumber}}
+                    <Auk::Pill @skin="active-future">
+                      {{agenda.serialnumber}}
+                    </Auk::Pill>
+                  {{/if}}
                 {{else}}
                   <strong>{{t "agenda"}}</strong>
-                  <Auk::Pill>
-                    {{agenda.name}}
-                  </Auk::Pill>
+                  {{#if agenda.serialnumber}}
+                    <Auk::Pill>
+                      {{agenda.serialnumber}}
+                    </Auk::Pill>
+                  {{/if}}
                 {{/if}}
               </span>
             {{else}}
               <span>
-                {{#if agenda.status.isDesignAgenda}}
-                  <Auk::Pill @skin="active-future">
-                    {{agenda.name}}
-                  </Auk::Pill>
-                {{else}}
-                  <Auk::Pill>
-                    {{agenda.name}}
-                  </Auk::Pill>
+                {{#if agenda.serialnumber}}
+                  {{#if agenda.status.isDesignAgenda}}
+                    <Auk::Pill @skin="active-future">
+                      {{agenda.serialnumber}}
+                    </Auk::Pill>
+                  {{else}}
+                    <Auk::Pill>
+                      {{agenda.serialnumber}}
+                    </Auk::Pill>
+                  {{/if}}
                 {{/if}}
               </span>
             {{/if}}
