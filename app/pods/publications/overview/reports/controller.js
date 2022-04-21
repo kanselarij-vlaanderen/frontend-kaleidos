@@ -84,7 +84,6 @@ class BaseRow extends EmberObject {
     await job.save();
     await this.jobMonitor.monitor(job);
     if (job.status === job.SUCCESS) {
-      await job.belongsTo('generated').reload();
       const file = await job.generated;
       return file;
     } else {
@@ -96,7 +95,7 @@ class BaseRow extends EmberObject {
   async createReportRecord(params) {
     const now = new Date();
 
-    const reportNameDatePrefix = moment(now).format('YYYYMMDDhhmmss');
+    const reportNameDatePrefix = moment(now).format('YYYYMMDDHHmmss');
     const reportNameType = dasherize(this.intl.t(this.titleKey));
     const reportName = `${reportNameDatePrefix}-${reportNameType}`;
 
@@ -106,7 +105,6 @@ class BaseRow extends EmberObject {
 
     const job = this.store.createRecord('publication-metrics-export-job', {
       created: now,
-      timeStarted: now,
       generatedBy: user,
       metricsType: this.key,
       config: {
