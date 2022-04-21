@@ -1,5 +1,5 @@
 import Model, { belongsTo, hasMany, attr } from '@ember-data/model';
-import { PromiseArray, PromiseObject } from '@ember-data/store/-private';
+import { PromiseArray } from '@ember-data/store/-private';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import { KALEIDOS_START_DATE } from 'frontend-kaleidos/config/config';
@@ -73,15 +73,6 @@ export default Model.extend({
 
   canReleaseDocuments: computed('isFinal', 'releasedDocuments', function() {
     return this.isFinal && !this.releasedDocuments;
-  }),
-
-  latestAgenda: computed('agendas.[]', function() {
-    return PromiseObject.create({
-      promise: this.get('agendas').then((agendas) => {
-        const sortedAgendas = agendas.sortBy('agendaName').reverse();
-        return sortedAgendas.get('firstObject');
-      }),
-    });
   }),
 
   sortedAgendas: computed('agendas.@each.agendaName', function() {
