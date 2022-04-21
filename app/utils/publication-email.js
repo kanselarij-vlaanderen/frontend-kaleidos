@@ -34,8 +34,7 @@ async function buildContactInformation(contactPersons) {
   return message;
 }
 async function translationRequestEmail(params) {
-  const dueDate = params.dueDate ? moment(params.dueDate)
-    .format('DD-MM-YYYY') : '-';
+  const dueDate = params.dueDate ? moment(params.dueDate).format('DD-MM-YYYY') : '-';
   const subject = `Vertaalaanvraag VO-dossier: ${params.identifier}`;
   let message = 'Collega,\n'
     + '\n'
@@ -73,9 +72,7 @@ function proofRequestEmail(params) {
 }
 
 function publicationRequestEmail(params) {
-  const targetEndDate = params.targetEndDate
-        ? moment(params.targetEndDate).format('DD-MM-YYYY')
-        : '-';
+  const targetEndDate = params.targetEndDate ? moment(params.targetEndDate).format('DD-MM-YYYY') : '-';
   const numacNumbers = params.numacNumbers
         ? params.numacNumbers.mapBy('idName').join(', ')
         : '-';
