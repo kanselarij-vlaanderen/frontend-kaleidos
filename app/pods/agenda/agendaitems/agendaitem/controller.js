@@ -6,8 +6,19 @@ export default class AgendaAgendaitemsAgendaitemController extends Controller {
   @service currentSession;
 
   @tracked meeting;
-  @tracked subcaseExists;
   @tracked decisionsExist;
   @tracked newsItemExists;
   @tracked pressAgendaitemExists;
+
+  get canShowDecisionTab() {
+    return this.currentSession.isEditor || (this.meeting.isFinal && this.decisionsExist);
+  }
+
+  get canShowNewsletterTab() {
+    return this.currentSession.isEditor || (this.meeting.isFinal && this.newsItemExists);
+  }
+
+  get canShowPressAgendaTab() {
+    return this.currentSession.isEditor || (this.meeting.isFinal && this.pressAgendaitemExists);
+  }
 }

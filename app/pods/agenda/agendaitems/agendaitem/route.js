@@ -22,8 +22,6 @@ export default class AgendaitemAgendaitemsAgendaRoute extends Route {
     }
     this.transition = transition; // set on the route for use in setupController, since the provided "transition" argument there always comes back "undefined"
 
-    const agendaActivity = await model.agendaActivity;
-    this.subcase = await agendaActivity?.subcase;
     this.treatments = await model.treatments;
     this.newsletterInfo = await this.treatments.firstObject.newsletterInfo;
   }
@@ -31,7 +29,6 @@ export default class AgendaitemAgendaitemsAgendaRoute extends Route {
   setupController(controller, model) {
     super.setupController(...arguments);
     controller.meeting = this.modelFor('agenda').meeting;
-    controller.subcaseExists = !(model.isApproval) && isPresent(this.subcase);
     controller.decisionsExist = isPresent(this.treatments);
     controller.newsItemExists = isPresent(this.newsletterInfo);
     controller.pressAgendaitemExists = isPresent(model.titlePress && model.textPress);
