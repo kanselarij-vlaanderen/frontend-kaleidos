@@ -120,14 +120,17 @@ class BaseRow extends EmberObject {
   }
 
   /** @private */
-  async createReportRecord(params) {
+  async createReportRecord(modalParams) {
     const now = new Date();
 
     const reportNameDatePrefix = moment(now).format('YYYYMMDDHHmmss');
     const reportNameType = dasherize(this.intl.t(this.titleKey));
     const reportName = `${reportNameDatePrefix}-${reportNameType}`;
 
-    const query = this.getReportQueryParams(params);
+    const query = {
+      group: this.group,
+      filter: modalParams.filter,
+    };
 
     const user = await this.currentSession.user;
 
@@ -144,44 +147,77 @@ class BaseRow extends EmberObject {
   }
 }
 
-class GovernmentDomainRow extends BaseRow {
-  key = 'government-domain';
+// per beslissingsdatum
+class ByMandatee_OnDecisionDate extends BaseRow {
+  key = 'by-mandatee--on-decision-date';
 
-  getReportQueryParams() {
-    return {
-      group: this.key,
-      filter: {},
-    };
-  }
+  group = 'mandatee';
+  filterFields = {
+    decisionDateRange: true,
+  };
 }
 
-class RegulationTypeRow extends BaseRow {
-  key = 'regulation-type';
+// per beleidsdomein
+class ByGovernmentDomain extends BaseRow {
+  key = 'by-government-domain';
 
-  getReportQueryParams() {
-    return {
-      group: this.key,
-      filter: {},
-    };
-  }
+  group = 'government-domain';
+  filterFields = {
+    publicationYear: true,
+    governmentDomain: true,
+  };
 }
 
-// TODO: will be split up in "van BVR per minister" and "van decreet per minister"
-class MandateeRow extends BaseRow {
-  key = 'mandatee';
+// BVR per minister
+class ByMandatee_OnlyBVR extends BaseRow {
+  key = 'by-mandatee--only-bvr';
 
-  getReportQueryParams() {
-    return {
-      group: this.key,
-      filter: {},
-    };
-  }
+  group = 'mandatee';
+  filterFields = {
+    publicationYear: true,
+    mandatee: true,
+  };
+}
+
+// per type regelgeving buiten ministerraad
+class ByRegulationType_OnlyNotViaCouncilOfMinisters extends BaseRow {
+  key = 'by-regulation-type--only-not-via-council-of-ministers';
+
+  group = 'regulation-type';
+  filterFields = {
+    publicationYear: true,
+  };
+}
+
+// per type regelgeving
+class ByRegulationType extends BaseRow {
+  key = 'by-regulation-type';
+
+  group = 'regulation-type';
+  filterFields = {
+    publicationYear: true,
+    regulationType: true,
+  };
+}
+
+// Decreten per minister
+class ByMandatee_OnlyDecree extends BaseRow {
+  key = 'by-mandatee--only-decree';
+
+  group = 'mandatee';
+  filterFields = {
+    publicationYear: true,
+    mandatee: true,
+  };
 }
 
 export const ReportTypeRows = [
-  GovernmentDomainRow,
-  RegulationTypeRow,
-  MandateeRow,
+  ByMandatee_OnDecisionDate,
+  ByGovernmentDomain,
+  ByMandatee_OnlyBVR,
+  ByRegulationType_OnlyNotViaCouncilOfMinisters,
+  ByRegulationType,
+  ByMandatee_OnlyDecree,
 ];
 
 export default class PublicationsOverviewReportsController extends Controller {}

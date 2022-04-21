@@ -1,14 +1,58 @@
 <Auk::Modal>
   <Auk::Modal::Header
-    @title={{t "publications-reports--modal-title" name=(t @row.titleKey)}}
-    @onClose={{@row.closeGenerateReportModal}} />
+    @title={{t "publications-reports--modal-title" title=@title}}
+    @onClose={{@onClose}}
+  />
   <Auk::Modal::Body>
-    {{!TODO}}
+    {{#if this.fields.decisionDateRange}}
+      <div class="auk-o-grid">
+        <div class="auk-o-grid-col-6">
+          {{!Beslissingsdatum}}
+          <div class="auk-form-group">
+            <Auk::Label
+              for="publicationReportsDecisionStartDate"
+              @required={{true}}
+            >
+              {{t "start-date"}}
+            </Auk::Label>
+            <Auk::Datepicker
+              id="publicationReportsDecisionStartDate"
+              @date={{this.fields.decisionDateRange.start}}
+              @onChange={{fn (mut this.fields.decisionDateRange.start)}}
+            />
+          </div>
+        </div>
+        <div class="auk-o-grid-col-6">
+          <div class="auk-form-group">
+            <Auk::Label for="publicationReportsDecisionEndDate">
+              {{t "end-date"}}
+            </Auk::Label>
+            <Auk::Datepicker
+              id="publicationReportsDecisionEndDate"
+              @date={{this.fields.decisionDateRange.end}}
+              @onChange={{fn (mut this.fields.decisionDateRange.end)}}
+            />
+          </div>
+        </div>
+      </div>
+    {{/if}}
+    {{#if this.fields.publicationYear}}
+      <div class="auk-form-group">
+        <Auk::Label for="publicationReportsPublicationYear">
+          {{t "year"}}
+        </Auk::Label>
+        <Auk::Input
+          id="publicationReportsPublicationYear"
+          @type="number"
+          @value={{mut this.fields.publicationYear.value}}
+        />
+      </div>
+    {{/if}}
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @onCancel={{@row.closeGenerateReportModal}}>
+  <Auk::Modal::Footer @onCancel={{@onClose}}>
     <Auk::Button
       @skin="primary"
-      {{on "click" (perform @row.triggerGenerateReport)}}
+      {{on "click" (perform this.triggerGenerateReport)}}
     >
       {{t "publications-reports--generate--small"}}
     </Auk::Button>

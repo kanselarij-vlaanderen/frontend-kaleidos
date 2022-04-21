@@ -53,7 +53,12 @@
         </Auk::Panel::Body>
 
         {{#if row.isShownGenerateReportModal}}
-          <Publications::Overview::Reports::GenerateReportModal @row={{row}} />
+          <Publications::Overview::Reports::GenerateReportModal
+            @title={{t row.titleKey}}
+            @fields={{row.filterFields}}
+            @onClose={{row.closeGenerateReportModal}}
+            @onGenerate={{row.triggerGenerateReport}}
+          />
         {{/if}}
       {{/each}}
     </Auk::Panel>
