@@ -50,7 +50,7 @@ export default class AgendaRoute extends Route {
   }
 
   @action
-  reloadModel() {
+  reloadAgendaModel() {
     this.refresh();
   }
 }
