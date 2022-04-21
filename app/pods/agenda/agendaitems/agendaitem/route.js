@@ -34,7 +34,7 @@ export default class AgendaitemAgendaitemsAgendaRoute extends Route {
     controller.subcaseExists = !(model.isApproval) && isPresent(this.subcase);
     controller.decisionsExist = isPresent(this.treatments);
     controller.newsItemExists = isPresent(this.newsletterInfo);
-    controller.pressAgendaitemExists = model.titlePress && model.textPress;
+    controller.pressAgendaitemExists = isPresent(model.titlePress && model.textPress);
 
     // eslint-disable-next-line ember/no-controller-access-in-routes
     const parentController = this.controllerFor('agenda.agendaitems');
