@@ -1,52 +1,56 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
-<div class="auk-u-mb-2">
-  <div class="auk-o-flex auk-o-flex--vertical-center">
-    <h2 class="auk-overline" data-test-subcase-titles-type>
-      {{#if (not this.subcase.showAsRemark)}}
-        {{t "note"}}
-      {{else}}
-        {{t "text"}}
-      {{/if}}
-    </h2>
-    {{#if this.currentSession.isEditor}}
-      <div class="auk-u-ml-2">
-        <Auk::ButtonLink
-          data-test-subcase-titles-edit
-          {{action "toggleIsEditingAction"}}
-        >
-          {{t "edit"}}
-        </Auk::ButtonLink>
-      </div>
-    {{/if}}
-  </div>
-</div>
-
-<div class="auk-u-mb-2">
-  <h4 class="auk-h3">
-    <pre class="auk-u-text-pre-line">      {{await this.subcase.shortTitle}}    </pre>
-  </h4>
-</div>
-
-<div class="auk-u-mb-2">
-  <pre class="auk-o-flex--inline auk-u-text-pre-line">    {{await this.subcase.title}}  </pre>
-</div>
-
-{{#if (not this.subcase.showAsRemark)}}
+<div class="auk-u-mb-8">
   <div class="auk-u-mb-2">
-    {{#if (await this.subcase.subcaseName)}}
-      <Auk::Pill @skin={{await this.pillSkin}}>
-        {{!capitalization using helper instead of css class:
+    <div class="auk-o-flex auk-o-flex--vertical-center">
+      <h2 class="auk-overline" data-test-subcase-titles-type>
+        {{#if (not @subcase.showAsRemark)}}
+          {{t "note"}}
+        {{else}}
+          {{t "text"}}
+        {{/if}}
+      </h2>
+      {{#if @allowEditing}}
+        <div class="auk-u-ml-2">
+          <Auk::ButtonLink
+            data-test-subcase-titles-edit
+            {{on "click" @onClickEdit}}
+          >
+            {{t "edit"}}
+          </Auk::ButtonLink>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+
+  <div class="auk-u-mb-2">
+    <h4 class="auk-h3">
+      <pre class="auk-u-text-pre-line"> {{await @subcase.shortTitle}} </pre>
+    </h4>
+  </div>
+
+  <div class="auk-u-mb-2">
+    <pre class="auk-o-flex--inline auk-u-text-pre-line">
+      {{await @subcase.title}}
+    </pre>
+  </div>
+
+  {{#if (not @subcase.showAsRemark)}}
+    <div class="auk-u-mb-2">
+      {{#if (await @subcase.subcaseName)}}
+        <Auk::Pill @skin={{await this.getPillSkin}}>
+          {{!capitalization using helper instead of css class:
             because of `display: inline-flex` property of Auk::Pill
             it is not affected by the `::first-letter` selector
             used in the auk-u-text-capitalize class }}
-        {{capitalize this.subcase.subcaseName}}
-      </Auk::Pill>
-    {{/if}}
-  </div>
-{{/if}}
-<div class="auk-u-mb-2">
-  <div class="pill-container auk-o-flex">
-    <Utils::ConfidentialityPill @confidential={{await this.subcase.confidential}} />
+          {{capitalize @subcase.subcaseName}}
+        </Auk::Pill>
+      {{/if}}
+    </div>
+  {{/if}}
+  <div class="auk-u-mb-2">
+    <div class="pill-container auk-o-flex">
+      <Utils::ConfidentialityPill
+        @confidential={{await @subcase.confidential}}
+      />
+    </div>
   </div>
 </div>
