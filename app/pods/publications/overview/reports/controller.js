@@ -5,12 +5,19 @@ import { dasherize } from '@ember/string';
 import { tracked } from '@glimmer/tracking';
 import moment from 'moment';
 import { task } from 'ember-concurrency';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 class BaseRow extends EmberObject {
   /**
    * @abstract
    * @member {String} key
    */
+
+  /**
+   * @member {{[filterKey: string]: any}} fixedQueryFilter fixed filter for publication-report-service query
+   * @default {{}} can be overriden
+   */
+  fixedQueryFilter = {};
 
   /**
    * @abstract
@@ -127,9 +134,10 @@ class BaseRow extends EmberObject {
     const reportNameType = dasherize(this.intl.t(this.titleKey));
     const reportName = `${reportNameDatePrefix}-${reportNameType}`;
 
+    const filter = Object.assign(modalParams.filter, this.fixedQueryFilter);
     const query = {
       group: this.group,
-      filter: modalParams.filter,
+      filter: filter,
     };
 
     const user = await this.currentSession.user;
@@ -152,6 +160,9 @@ class ByMandatee_OnDecisionDate extends BaseRow {
   key = 'by-mandatee--on-decision-date';
 
   group = 'mandatee';
+  // fixed query filters for this report type
+  fixedQueryFilter = {};
+  // user input fields for query filters
   filterFields = {
     decisionDateRange: true,
   };
@@ -162,6 +173,7 @@ class ByGovernmentDomain extends BaseRow {
   key = 'by-government-domain';
 
   group = 'government-domain';
+  fixedQueryFilter = {};
   filterFields = {
     publicationYear: true,
     governmentDomain: true,
@@ -173,6 +185,9 @@ class ByMandatee_OnlyBVR extends BaseRow {
   key = 'by-mandatee--only-bvr';
 
   group = 'mandatee';
+  fixedQueryFilter = {
+    regulationType: [CONSTANTS.REGULATION_TYPES.BVR],
+  };
   filterFields = {
     publicationYear: true,
     mandatee: true,
@@ -183,6 +198,9 @@ class ByMandatee_OnlyBVR extends BaseRow {
 class ByRegulationType_OnlyNotViaCouncilOfMinisters extends BaseRow {
   key = 'by-regulation-type--only-not-via-council-of-ministers';
 
+  fixedQueryFilter = {
+    isViaCouncilOfMinisters: false,
+  };
   group = 'regulation-type';
   filterFields = {
     publicationYear: true,
@@ -204,6 +222,9 @@ class ByRegulationType extends BaseRow {
 class ByMandatee_OnlyDecree extends BaseRow {
   key = 'by-mandatee--only-decree';
 
+  fixedQueryFilter = {
+    regulationType: [CONSTANTS.REGULATION_TYPES.DECREET],
+  };
   group = 'mandatee';
   filterFields = {
     publicationYear: true,
