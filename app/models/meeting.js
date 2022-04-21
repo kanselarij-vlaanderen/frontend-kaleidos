@@ -1,5 +1,5 @@
 import Model, { belongsTo, hasMany, attr } from '@ember-data/model';
-import { PromiseArray } from '@ember-data/store/-private';
+import { PromiseArray, PromiseObject } from '@ember-data/store/-private';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import { KALEIDOS_START_DATE } from 'frontend-kaleidos/config/config';
@@ -75,18 +75,19 @@ export default Model.extend({
     return this.isFinal && !this.releasedDocuments;
   }),
 
+  latestAgenda: computed('agendas.[]', function() {
+    return PromiseObject.create({
+      promise: this.get('agendas').then((agendas) => {
+        const sortedAgendas = agendas.sortBy('agendaName').reverse();
+        return sortedAgendas.get('firstObject');
+      }),
+    });
+  }),
+
   sortedAgendas: computed('agendas.@each.agendaName', function() {
     return PromiseArray.create({
       promise: this.get('agendas').then((agendas) => agendas.sortBy('agendaName').reverse()),
     });
-  }),
-
-  latestAgendaName: computed('latestAgenda.status', 'agendas', 'intl', async function() {
-    const agenda = await this.get('latestAgenda');
-    if (!agenda) {
-      return this.intl.t('no-agenda');
-    }
-    return await agenda.get('agendaName');
   }),
 
   isPreKaleidos: computed('plannedStart', function () {
