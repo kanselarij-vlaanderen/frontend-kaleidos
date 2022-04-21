@@ -8,6 +8,7 @@ import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-param
 
 export default class AgendasController extends Controller.extend(DefaultQueryParamsMixin) {
   @service currentSession;
+  @service router;
 
   @tracked isCreatingNewSession = false;
 
@@ -25,6 +26,6 @@ export default class AgendasController extends Controller.extend(DefaultQueryPar
   successfullyAdded() {
     this.isCreatingNewSession = false;
     this.send('refreshRoute');
-    this.transitionToRoute('agendas.overview');
+    this.router.transitionTo('agendas.overview');
   }
 }
