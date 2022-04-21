@@ -17,9 +17,8 @@
         </h3>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
-    {{!-- Disable edit functions on overview --}}
-    {{!-- <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
+    <Auk::Toolbar::Group @position="right">
+      {{!-- <Auk::Toolbar::Item>
         <Auk::ButtonLink
           data-test-agenda-overview-show-changes={{true}}
           class="vlc-agenda-items-section-header__link"
@@ -27,7 +26,7 @@
         >
           {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
         </Auk::ButtonLink>
-      </Auk::Toolbar::Item>
+      </Auk::Toolbar::Item> --}}
       <Auk::Toolbar::Item>
         {{#if (and this.currentSession.isEditor this.isDesignAgenda)}}
           {{#unless this.isEditingOverview}}
@@ -37,17 +36,18 @@
                 class="vlc-agenda-items-section-header__link"
                 {{on "click" this.toggleIsEditingOverview}}
               >
-                {{t "edit"}}
+                Volgorde aanpassen
               </Auk::ButtonLink>
             </div>
           {{/unless}}
         {{/if}}
       </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group> --}}
+    </Auk::Toolbar::Group>
   </Auk::Toolbar>
   {{#if (not @isLoadingNotaGroups)}}
     {{#if @notaGroups.length}}
       <div>
+        {{#if this.isEditingOverview}}
         <ul {{sortable-group onChange=@onReorderAgendaitems}}>
           {{#each @notaGroups as |agendaitemGroup index|}}
             {{! template-lint-disable simple-unless }}
@@ -56,6 +56,7 @@
             }}
               <Agenda::AgendaOverview::AgendaitemGroupHeader
                 @mandatees={{agendaitemGroup.sortedMandatees}}
+                @isEditingFormallyOkStatus={{this.isEditingOverview}}
               />
             {{/unless}}
             {{! template-lint-enable simple-unless }}
@@ -83,6 +84,38 @@
             {{/each}}
           {{/each}}
         </ul>
+        {{else}}
+        <ul>
+          {{#each @notaGroups as |agendaitemGroup index|}}
+            {{! template-lint-disable simple-unless }}
+            {{#unless
+              (and (eq index 0) (is-empty agendaitemGroup.sortedMandatees))
+            }}
+              <Agenda::AgendaOverview::AgendaitemGroupHeader
+                @mandatees={{agendaitemGroup.sortedMandatees}}
+                @isEditingFormallyOkStatus={{this.isEditingOverview}}
+              />
+            {{/unless}}
+            {{! template-lint-enable simple-unless }}
+            {{#each agendaitemGroup.agendaitems as |agendaitem|}}
+              <li
+                class="vlc-agenda-items__sub-item"
+              >
+                <Agenda::AgendaOverview::AgendaOverviewItem
+                  @agendaitem={{agendaitem}}
+                  @meeting={{@meeting}}
+                  @currentAgenda={{@currentAgenda}}
+                  @previousAgenda={{@previousAgenda}}
+                  @isNew={{includes agendaitem @newItems}}
+                  @showFormallyOkStatus={{this.isDesignAgenda}}
+                  @isEditingFormallyOkStatus={{this.isEditingOverview}}
+                  @showDragHandle={{this.isDraggingEnabled}}
+                />
+              </li>
+            {{/each}}
+          {{/each}}
+        </ul>
+        {{/if}}
       </div>
     {{else}}
       <div class="auk-u-mt-2">
@@ -99,6 +132,7 @@
   </div>
   <div class="auk-u-mb-4">
     {{#if @announcements.length}}
+      {{#if this.isEditingOverview}}
       <ul {{sortable-group onChange=@onReorderAgendaitems}}>
         {{#each @announcements as |announcement|}}
           <li
@@ -123,6 +157,25 @@
           </li>
         {{/each}}
       </ul>
+      {{else}}
+      <ul>
+        {{#each @announcements as |announcement|}}
+          <li
+            class="vlc-agenda-items__sub-item"
+          >
+            <Agenda::AgendaOverview::AgendaOverviewItem
+              @agendaitem={{announcement}}
+              @meeting={{@meeting}}
+              @currentAgenda={{@currentAgenda}}
+              @previousAgenda={{@previousAgenda}}
+              @isNew={{includes announcement @newItems}}
+              @showFormallyOkStatus={{this.isDesignAgenda}}
+              @isEditingFormallyOkStatus={{this.isEditingOverview}}
+            />
+          </li>
+        {{/each}}
+      </ul>
+      {{/if}}
     {{else}}
       <WebComponents::VlAlert @message={{t "no-announcements-yet"}} />
     {{/if}}

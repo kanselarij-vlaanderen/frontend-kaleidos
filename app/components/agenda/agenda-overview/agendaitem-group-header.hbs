@@ -1,3 +1,4 @@
+{{#unless @isEditingFormallyOkStatus}}
 <div class="vlc-list-section-header" data-test-agendaitem-group-header-section>
   {{#if (eq @mandatees.length 1)}}
   <Auk::Icon @name="user" />
@@ -14,3 +15,4 @@
     {{/each}}
   </span>
 </div>
+{{/unless}}
