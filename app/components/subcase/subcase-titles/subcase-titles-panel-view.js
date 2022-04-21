@@ -9,7 +9,7 @@ import {
 
 // TODO: octane-refactor
 // eslint-disable-next-line ember/require-tagless-components
-export default class SubcaseTitles extends Component {
+export default class SubcaseTitlesPanelView extends Component {
   classNames = ['auk-u-mb-8'];
   @service currentSession;
   subcase = null;

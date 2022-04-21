@@ -1,11 +1,12 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-
+/**
+ * @argument subcase
+ * @argument allowEditing
+ */
 export default class SubcaseTitlesPanel extends Component {
-  /**
-   * @argument subcase
-   */
+
   @tracked isEditing = false;
 
   @action

@@ -8,7 +8,7 @@ import {
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { task } from 'ember-concurrency';
 
-export default class SubcaseTitlesEdit extends Component {
+export default class SubcaseTitlesPanelEdit extends Component {
   @service store;
   propertiesToSet = Object.freeze([
     'title',
@@ -19,7 +19,7 @@ export default class SubcaseTitlesEdit extends Component {
   @action
   async cancelEditing() {
     cancelEdit(this.args.subcase, this.propertiesToSet);
-    this.args.toggleIsEditing();
+    this.args.onCancel();
   }
 
   @task
@@ -43,6 +43,6 @@ export default class SubcaseTitlesEdit extends Component {
       propertiesToSetOnSubcase,
       true
     );
-    this.args.toggleIsEditing();
+    this.args.onSave();
   }
 }
