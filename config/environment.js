@@ -7,10 +7,10 @@ module.exports = function (environment) {
     environment,
     rootURL: '/',
     locationType: 'auto',
-    moment: {
-      includeLocales: ['nl'],
+    'ember-moment': {
+      includeLocales: ['nl-be'],
       allowEmpty: true,
-      outputFormat: 'L',
+      outputFormat:'DD-MM-YYYY',
     },
     metricsAdapters: [
       {
