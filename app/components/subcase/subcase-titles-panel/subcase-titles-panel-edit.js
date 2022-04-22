@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import {
-  saveChanges as saveSubcaseTitles,
+  saveTitlesFromSubcase,
   cancelEdit,
 } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
@@ -27,21 +27,15 @@ export default class SubcaseTitlesPanelEdit extends Component {
     const trimmedTitle = trimText(this.args.subcase.title);
     const trimmedShortTitle = trimText(this.args.subcase.shortTitle);
 
-    const propertiesToSetOnAgendaitem = {
-      title: trimmedTitle,
-      shortTitle: trimmedShortTitle,
-    };
     const propertiesToSetOnSubcase = {
       title: trimmedTitle,
       shortTitle: trimmedShortTitle,
       confidential: this.args.subcase.confidential,
     };
 
-    yield saveSubcaseTitles(
+    yield saveTitlesFromSubcase(
       this.args.subcase,
-      propertiesToSetOnAgendaitem,
-      propertiesToSetOnSubcase,
-      true
+      propertiesToSetOnSubcase
     );
     this.args.onSave();
   }
