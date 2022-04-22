@@ -74,27 +74,29 @@
   {{else}}
     <Auk::Panel::Body>
       <div class="auk-o-grid">
-        <div class="auk-o-grid-col-3 auk-content">
-          <h4 class="auk-u-m-0">{{t "publication-flow-translation-due-date"}}</h4>
-          <p class="auk-u-m-0">
-            {{#if @translationSubcase.dueDate}}
-              {{moment-format @translationSubcase.dueDate}}
-            {{else}}
-              -
+        <div class="auk-o-grid-col-3">
+          <div class="auk-content">
+            <h4 class="auk-u-m-0">{{t "publication-flow-translation-due-date"}}</h4>
+            <p class="auk-u-m-0">
+              {{#if @translationSubcase.dueDate}}
+                {{moment-format @translationSubcase.dueDate}}
+              {{else}}
+                -
+              {{/if}}
+            </p>
+            {{#if
+              (and
+                (not @isFinal)
+                (is-after @translationSubcase.dueDate precision="days")
+              )
+            }}
+              <Auk::FormHelpText
+                @text={{t "date-expired"}}
+                @skin="warning"
+                @icon="alert-triangle"
+              />
             {{/if}}
-          </p>
-          {{#if
-            (and
-              (not @isFinal)
-              (is-after @translationSubcase.dueDate precision="days")
-            )
-          }}
-            <Auk::FormHelpText
-              @text={{t "date-expired"}}
-              @skin="warning"
-              @icon="alert-triangle"
-            />
-          {{/if}}
+          </div>
         </div>
       </div>
     </Auk::Panel::Body>
