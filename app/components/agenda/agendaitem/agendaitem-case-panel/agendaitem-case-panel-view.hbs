@@ -30,14 +30,14 @@
               </Auk::Button>
             </Group.Item>
           {{/if}}
-          {{#if this.currentSession.isEditor}}
+          {{#if @allowEditing}}
             <Group.Item>
               <Auk::Button
                 data-test-agendaitem-titles-edit
                 @skin="tertiary"
                 @icon="pencil"
                 @layout="icon-only"
-                {{on "click" @startEditing}}
+                {{on "click" @onClickEdit}}
               />
             </Group.Item>
           {{/if}}
@@ -87,7 +87,7 @@
           {{/if}}
           {{#if
             (and @agendaitem.isDesignAgenda
-                    (and this.currentSession.isEditor @agendaitem.formallyOkToShow))
+                    (and @allowEditing @agendaitem.formallyOkToShow))
           }}
             <Auk::Pill
               @skin={{@agendaitem.formallyOkToShow.svg.color}}
@@ -105,7 +105,10 @@
           <Toolbar.Group @position="left" as |Group|>
             <Group.Item>
               <pre class="auk-u-text-pre-line" data-test-agendaitem-titles-comment>
-                <strong class="auk-u-text-bold">{{t "comment-title"}}: </strong>{{@agendaitem.comment}}
+                <strong class="auk-u-text-bold">
+                  {{t "comment-title"}}:
+                </strong>
+                {{@agendaitem.comment}}
               </pre>
             </Group.Item>
           </Toolbar.Group>
@@ -118,7 +121,11 @@
           <Toolbar.Group @position="left" as |Group|>
             <Group.Item>
               <pre class="auk-u-text-pre-line auk-u-text-muted" data-test-agendaitem-titles-private-comment>
-                <strong class="auk-u-text-bold"><Auk::Icon @name="lock-closed" @size="small" />{{t "private-comment-title"}}: </strong>{{@agendaitem.privateComment}}
+                <strong class="auk-u-text-bold">
+                  <Auk::Icon @name="lock-closed" @size="small" />
+                  {{t "private-comment-title"}}:
+                </strong>
+                {{@agendaitem.privateComment}}
               </pre>
             </Group.Item>
           </Toolbar.Group>
