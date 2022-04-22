@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import {
   saveTitlesFromSubcase,
-  cancelEdit,
 } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { task } from 'ember-concurrency';
@@ -18,7 +17,9 @@ export default class SubcaseTitlesPanelEdit extends Component {
 
   @action
   async cancelEditing() {
-    cancelEdit(this.args.subcase, this.propertiesToSet);
+    if (this.args.subcase.hasDirtyAttributes) {
+      this.args.subcase.rollbackAttributes();
+    }
     this.args.onCancel();
   }
 
