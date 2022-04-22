@@ -1,19 +1,13 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import {
-  saveTitlesFromSubcase,
-} from 'frontend-kaleidos/utils/agendaitem-utils';
+import { saveTitlesFromSubcase } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { task } from 'ember-concurrency';
 
 export default class SubcaseTitlesPanelEdit extends Component {
   @service store;
-  propertiesToSet = Object.freeze([
-    'title',
-    'shortTitle',
-    'confidential',
-  ]);
+  propertiesToSet = Object.freeze(['title', 'shortTitle', 'confidential']);
 
   @action
   async cancelEditing() {
@@ -34,10 +28,7 @@ export default class SubcaseTitlesPanelEdit extends Component {
       confidential: this.args.subcase.confidential,
     };
 
-    yield saveTitlesFromSubcase(
-      this.args.subcase,
-      propertiesToSetOnSubcase
-    );
+    yield saveTitlesFromSubcase(this.args.subcase, propertiesToSetOnSubcase);
     this.args.onSave();
   }
 }

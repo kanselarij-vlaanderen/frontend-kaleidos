@@ -1,8 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import {
-  lastValue, task
-} from 'ember-concurrency';
+import { lastValue, task } from 'ember-concurrency';
 
 export default class AgendaitemCasePanelView extends Component {
   @lastValue('loadCase') case;
