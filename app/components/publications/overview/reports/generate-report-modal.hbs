@@ -48,6 +48,31 @@
         />
       </div>
     {{/if}}
+    {{#if this.fields.mandatee}}
+      <div
+        class="auk-form-group"
+        {{did-insert
+          this.fields.mandatee.triggerLoadData
+          this.fields.publicationYear.valueAsNumber
+        }}
+        {{did-update
+          this.fields.mandatee.triggerLoadData
+          this.fields.publicationYear.valueAsNumber
+        }}
+      >
+        <Auk::Label>
+          {{t "ministers"}}
+        </Auk::Label>
+        <PowerSelectMultiple
+          @options={{this.fields.mandatee.loadData.last}}
+          @selected={{this.fields.mandatee.value}}
+          @onChange={{fn (mut this.fields.mandatee.value)}}
+          as |person|
+        >
+          {{person.fullName}}
+        </PowerSelectMultiple>
+      </div>
+    {{/if}}
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onClose}}>
     <Auk::Button
