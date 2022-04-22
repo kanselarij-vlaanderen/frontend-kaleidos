@@ -61,16 +61,14 @@
               </span>
             {{else}}
               <span>
-                {{#if agenda.serialnumber}}
-                  {{#if agenda.status.isDesignAgenda}}
-                    <Auk::Pill @skin="active-future">
-                      {{agenda.serialnumber}}
-                    </Auk::Pill>
-                  {{else}}
-                    <Auk::Pill>
-                      {{agenda.serialnumber}}
-                    </Auk::Pill>
-                  {{/if}}
+                {{#if agenda.status.isDesignAgenda}}
+                  <Auk::Pill @skin="active-future">
+                    {{or agenda.serialnumber "-"}}
+                  </Auk::Pill>
+                {{else}}
+                  <Auk::Pill>
+                    {{or agenda.serialnumber "-"}}
+                  </Auk::Pill>
                 {{/if}}
               </span>
             {{/if}}
