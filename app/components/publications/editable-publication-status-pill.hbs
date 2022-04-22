@@ -17,7 +17,7 @@
   >
     <strong {{did-update (perform this.loadStatus) @publicationFlow.status}}>{{this.publicationStatus.label}}</strong>
     -
-    {{moment-format @publicationFlow.publicationStatusChange.startedAt "DD/MM/YYYY"}}
+    {{moment-format @publicationFlow.publicationStatusChange.startedAt}}
   </Auk::StatusPill>
 {{/if}}
 

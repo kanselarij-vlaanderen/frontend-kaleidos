@@ -128,7 +128,7 @@
           {{#if (is-pending @subcase.approved)}}
             <div class="auk-skeleton auk-skeleton--rectangle" role="alert" aria-busy="true"></div>
           {{else if (await @subcase.approved)}}
-            {{moment-format this.latestMeeting.plannedStart "DD.MM.YYYY"}}
+            {{moment-format this.latestMeeting.plannedStart}}
           {{else}}
             {{t "not-yet-decided"}}
           {{/if}}

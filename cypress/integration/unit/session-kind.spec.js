@@ -116,7 +116,7 @@ context('Different session kinds should show different titles', () => {
     const vvKind = 'Ministerraad - Plan Vlaamse Veerkracht';
     const decisionHeader = `Beslissingen van de Vlaamse Regering - ${vvKind}`;
     const newsletterHeader = `Beslissingen van de Vlaamse Regering - ${vvKind}`;
-    const formattedMeetingDateDots = agendaDate.format('DD.MM.YYYY');
+    const formattedMeetingDateDots = agendaDate.format('DD-MM-YYYY');
     // TODO-BUG KAS-3056 numbering not correct when creating agenda in different year
     const fullmeetingNumber = `VR PV ${Cypress.dayjs().format('YYYY')}/${agendaNumber}`;
     // const fullmeetingNumber = `VR PV ${agendaDate.format('YYYY')}/${agendaNumber}`;
