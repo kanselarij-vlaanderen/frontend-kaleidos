@@ -67,6 +67,10 @@
           @options={{this.fields.mandatee.loadData.last}}
           @selected={{this.fields.mandatee.value}}
           @onChange={{fn (mut this.fields.mandatee.value)}}
+          @searchEnabled={{true}}
+          @search={{this.fields.mandatee.search}}
+          @noMatchesMessage={{t "no-ministers-found"}}
+          @loadingMessage={{t "search-loading-text"}}
           as |person|
         >
           {{person.fullName}}

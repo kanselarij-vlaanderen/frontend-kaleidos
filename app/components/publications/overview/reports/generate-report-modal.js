@@ -57,6 +57,20 @@ class MandateeField extends EmberObject {
     this.loadData.perform(year);
   }
 
+  @action
+  search(searchText) {
+    let persons = this.loadData.last.value;
+
+    if (searchText) {
+      searchText = searchText.toLowerCase();
+      persons = persons.filter((person) =>
+        person.fullName.toLowerCase().includes(searchText)
+      );
+    }
+
+    return persons;
+  }
+
   @task
   *loadData(year) {
     const yearStart = new Date(year, 0, 1, 0, 0, 0, 0);
