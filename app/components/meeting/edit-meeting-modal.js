@@ -17,6 +17,7 @@ export default class MeetingEditMeetingComponent extends Component {
 
   @tracked isAnnexMeeting = false;
   @tracked isEditingNumberRepresentation = false;
+  @tracked isNew = false;
 
   @tracked selectedKind;
   @tracked selectedMainMeeting;
@@ -30,6 +31,7 @@ export default class MeetingEditMeetingComponent extends Component {
 
   constructor() {
     super(...arguments);
+    this.isNew = this.args.meeting.isNew;
 
     const now = new Date();
 
@@ -40,7 +42,7 @@ export default class MeetingEditMeetingComponent extends Component {
     this.meetingYear = this.args.meeting.plannedStart?.getFullYear() || this.currentYear;
     this.startDate = this.args.meeting.plannedStart || new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0, 0);
     this.extraInfo = this.args.meeting.extraInfo;
-    this.isFinal = this.args.isFinal ?? false;
+    this.isFinal = this.args.meeting.isFinal ?? false;
     this.numberRepresentation = this.args.meeting.numberRepresentation;
   }
 

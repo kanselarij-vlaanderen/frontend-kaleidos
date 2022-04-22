@@ -27,9 +27,8 @@
 {{outlet}}
 {{#if this.isCreatingNewSession}}
   <Meeting::EditMeetingModal
-    @isNew={{true}}
     @meeting={{this.newMeeting}}
-    @didSave={{this.successfullyAdded}}
+    @didSave={{this.createAgendaAndNewsletter}}
     @onCancel={{this.closeNewSessionModal}}
   />
 {{/if}}

@@ -32,11 +32,12 @@ export default class AgendasController extends Controller.extend(DefaultQueryPar
   }
 
   @action
-  async successfullyAdded() {
+  async createAgendaAndNewsletter() {
     const agenda = await this.createAgenda(this.newMeeting);
 
     const closestMeeting = await fetchClosestMeetingAndAgendaId(this.newMeeting.plannedStart);
-    const broader = await this.newMeeting.kind?.get('broader');
+    const kind = await this.newMeeting.kind;
+    const broader = await kind?.broader;
     const isAnnexMeeting = broader?.uri === CONSTANTS.MEETING_KINDS.ANNEX;
     if (!isAnnexMeeting && closestMeeting) {
       await this.createAgendaitemToApproveMinutes(

@@ -1,6 +1,6 @@
 <Auk::Modal @size="large">
   <Auk::Modal::Header
-    @title={{if @isNew (t "new-agenda") (t "edit-meeting")}}
+    @title={{if this.isNew (t "new-agenda") (t "edit-meeting")}}
     @onClose={{@onCancel}}
   />
   <Auk::Modal::Body>
@@ -119,7 +119,7 @@
       disabled={{this.savingIsDisabled}}
       data-test-edit-meeting-save
     >
-      {{#if @isNew}}
+      {{#if this.isNew}}
         {{t "add"}}
       {{else}}
         {{t "edit"}}
