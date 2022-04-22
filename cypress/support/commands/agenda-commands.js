@@ -207,12 +207,15 @@ function openAgendaitemKortBestekTab(agendaitemTitle) {
 function deleteAgenda(lastAgenda) {
   cy.log('deleteAgenda');
   // Call is made but cypress doesn't see it
-  // cy.intercept('POST', '/agenda-approve/deleteAgenda').as('deleteAgendaCall');
+  cy.intercept('POST', '/agenda-approve/deleteAgenda').as('postDeleteAgenda');
   cy.intercept('GET', '/agendaitems?filter**').as('loadAgendaitems');
   cy.get(agenda.agendaActions.showOptions).click();
   cy.get(agenda.agendaActions.actions.deleteAgenda).click();
   cy.get(auk.modal.container).find(agenda.agendaActions.confirm.deleteAgenda)
     .click();
+  cy.wait('@postDeleteAgenda', {
+    timeout: 60000,
+  });
   cy.get(auk.modal.container, {
     timeout: 60000,
   }).should('not.exist');
@@ -278,6 +281,12 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
   cy.get(agenda.agendaHeader.confirm.approveAllAgendaitems).click();
   cy.wait('@patchAgendaitems');
   cy.wait('@getModifiedByOfAgendaitems');
+  cy.get(auk.modal.container, {
+    timeout: 60000,
+  }).should('not.exist');
+  cy.get(auk.loader, {
+    timeout: 20000,
+  }).should('not.exist');
   cy.log('/setAllItemsFormallyOk');
 }
 

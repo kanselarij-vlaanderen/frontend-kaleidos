@@ -49,6 +49,11 @@ export default class AgendaRoute extends Route {
     }
   }
 
+  setupController(controller) {
+    super.setupController(...arguments);
+    controller.isLoading = false;
+  }
+
   @action
   reloadAgendaModel() {
     this.refresh();
