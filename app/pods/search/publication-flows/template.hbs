@@ -60,6 +60,7 @@
     <div>
       {{#if this.model.length}}
         <DataTable
+          data-test-route-search-publication-flows-data-table
           data-test-route-search-cases-data-table={{true}}
           @content={{await this.model}}
           @page={{this.page}}
