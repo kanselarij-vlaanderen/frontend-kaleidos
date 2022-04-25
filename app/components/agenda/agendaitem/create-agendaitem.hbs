@@ -16,7 +16,7 @@
     </Auk::Modal::Body>
   {{else}}
     <Auk::Modal::Body>
-      <div class="auk-o-grid auk-o-flex--align-end auk-u-mb-2">
+      <div class="auk-o-grid auk-o-grid--vertical-center">
         <div class="auk-o-grid-col-8">
           <Auk::Toolbar @auto={{true}}>
             <Auk::Toolbar::Group @position="left">
@@ -37,56 +37,56 @@
         </div>
         <div class="auk-o-grid-col-4">
           <div class="auk-form-group">
-            <Auk::Label>{{t "title-postponed-subcases"}}</Auk::Label>
             <Auk::Checkbox
+              @label={{t "title-postponed-subcases"}}
               @checked={{this.showPostponed}}
               data-test-create-agendaitem-postponed-checkbox={{true}}
               {{on "input" (action "checkShowPostponedValue")}}
             />
           </div>
         </div>
-        <div class="auk-o-grid-col-3">
-          {{#if this.searchTask.isRunning}}
-            <div class="auk-o-flex auk-o-flex--center auk-u-mt-4">
-              <Auk::Loader @message={{t "loading"}} />
-            </div>
-          {{else}}
-            <DataTable
-              data-test-create-agendaitem-data-table={{true}}
-              @content={{this.model}}
-              @sort={{this.sortParam}}
-              @page={{this.pageParam}}
-              @size={{this.sizeParam}}
-              @isLoading={{this.findAll.isRunning}}
-              @noDataMessage={{t "no-results-found"}}
-              @onClickRow={{action "selectPostponed"}}
-            as |table|>
-              <table.content as |c|>
-                <c.header>
-                  <th></th>
-                  <ThSortable @field="shortTitle" @currentSorting={{this.sortParam}} @label={{t "short-title-case"}} />
-                  <th></th>
-                </c.header>
-                <c.body as |subcase|>
-                  <td class="auk-table__col--1">
-                    <Auk::Checkbox
-                      data-test-create-agendaitem-row-subcase-checkbox={{true}}
-                      @checked={{subcase.selected}}
-                      {{on "input" (action "selectAvailableSubcase" subcase)}}
-                    />
-                  </td>
-                  <td class="auk-table__col--11">
-                    {{subcase.shortTitle}}
-                    <br>
-                    <p class="auk-u-text-muted">
-                      {{capitalize subcase.subcaseName}}
-                    </p>
-                  </td>
-                </c.body>
-              </table.content>
-            </DataTable>
-          {{/if}}
-        </div>
+      </div>
+      <div>
+        {{#if this.searchTask.isRunning}}
+          <div class="auk-o-flex auk-o-flex--center auk-u-mt-4">
+            <Auk::Loader @message={{t "loading"}} />
+          </div>
+        {{else}}
+          <DataTable
+            data-test-create-agendaitem-data-table={{true}}
+            @content={{this.model}}
+            @sort={{this.sortParam}}
+            @page={{this.pageParam}}
+            @size={{this.sizeParam}}
+            @isLoading={{this.findAll.isRunning}}
+            @noDataMessage={{t "no-results-found"}}
+            @onClickRow={{action "selectPostponed"}}
+          as |table|>
+            <table.content as |c|>
+              <c.header>
+                <th></th>
+                <ThSortable @field="shortTitle" @currentSorting={{this.sortParam}} @label={{t "short-title-case"}} />
+                <th></th>
+              </c.header>
+              <c.body as |subcase|>
+                <td class="auk-table__col--1">
+                  <Auk::Checkbox
+                    data-test-create-agendaitem-row-subcase-checkbox={{true}}
+                    @checked={{subcase.selected}}
+                    {{on "input" (action "selectAvailableSubcase" subcase)}}
+                  />
+                </td>
+                <td class="auk-table__col--11">
+                  {{subcase.shortTitle}}
+                  <br>
+                  <p class="auk-u-text-muted">
+                    {{capitalize subcase.subcaseName}}
+                  </p>
+                </td>
+              </c.body>
+            </table.content>
+          </DataTable>
+        {{/if}}
       </div>
     </Auk::Modal::Body>
     <WebComponents::VlModalFooter

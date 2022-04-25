@@ -1,11 +1,10 @@
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 // eslint-disable-next-line ember/no-mixins
 import DataTableRouteMixin from 'ember-data-table/mixins/route';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes
-export default Route.extend(DataTableRouteMixin, {
-  modelName: 'user',
+export default class SettingsUsersIndexRoute extends Route.extend(DataTableRouteMixin) {
+  modelName = 'user';
 
   // standard table-related queryParams are handled by the DataTableRouteMixin
 
@@ -23,14 +22,10 @@ export default Route.extend(DataTableRouteMixin, {
     }
 
     return options;
-  },
+  }
 
-  // TODO: octane-refactor
-  // eslint-disable-next-line ember/no-actions-hash
-  actions: {
-    refresh() {
-      this._super(...arguments);
-      this.refresh();
-    },
-  },
-});
+  @action
+  refreshRoute() {
+    this.refresh();
+  }
+}

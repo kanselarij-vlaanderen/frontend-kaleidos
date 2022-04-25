@@ -2,14 +2,45 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-// TODO: determine if these default qp's are still needed here, otherwise refactor to mixin-less solution
-// eslint-disable-next-line ember/no-mixins
-import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
+import { restartableTask, timeout } from 'ember-concurrency';
 
-export default class AgendasController extends Controller.extend(DefaultQueryParamsMixin) {
+export default class AgendasController extends Controller {
+  queryParams = ['page', 'size', 'sort', 'filter'];
+
+  @service router;
   @service currentSession;
 
+  @tracked isLoadingModel = false;
   @tracked isCreatingNewSession = false;
+  @tracked filter = null;
+  @tracked page = 0;
+  @tracked size = 10;
+  @tracked sort = 'created-for.is-final,-created-for.planned-start,created-for.kind.label';
+
+  dateRegex = /^(?:\d{1,2}\/)??(?:\d{1,2}\/)?\d{4}$/;
+
+  @restartableTask
+  *debouncedSetFilter(event) {
+    yield timeout(500);
+    this.setFilter(event.target.value);
+  }
+
+  @action
+  setFilter(date) {
+    if (this.dateRegex.test(date)) {
+      this.filter = date;
+      this.page = 0;
+    } else if (date === '' && this.filter) {
+      this.filter = null;
+      this.page = 0;
+    }
+  }
+
+  @action
+  clearFilter() {
+    this.filter = null;
+    this.page = 0;
+  }
 
   @action
   openNewSessionModal() {
@@ -25,6 +56,35 @@ export default class AgendasController extends Controller.extend(DefaultQueryPar
   successfullyAdded() {
     this.isCreatingNewSession = false;
     this.send('refreshRoute');
-    this.transitionToRoute('agendas.overview');
+    this.router.transitionTo('agendas');
+  }
+
+  @action
+  async onClickRow(agenda) {
+    const meeting = await agenda.createdFor;
+    this.router.transitionTo('agenda.agendaitems', meeting.id, agenda.id);
+  }
+
+  @action
+  sortTable(sortField) {
+    this.sort = sortField;
+  }
+
+  @action
+  setSizeOption(size) {
+    this.size = size;
+    this.page = 0;
+  }
+
+  @action
+  nextPage() {
+    this.page = this.page + 1;
+  }
+
+  @action
+  prevPage() {
+    if (this.page > 0) {
+      this.page = this.page - 1;
+    }
   }
 }

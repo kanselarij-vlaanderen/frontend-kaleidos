@@ -32,8 +32,7 @@ export default class NewCase extends Component {
   }
 
   @action
-  async createCaseAction($event) {
-    $event.preventDefault();
+  async createCaseAction() {
     const { shortTitle } = this;
     if (shortTitle === null || shortTitle.trim().length === 0) {
       this.hasError = true;

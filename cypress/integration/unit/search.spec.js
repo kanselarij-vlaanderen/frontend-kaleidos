@@ -69,7 +69,7 @@ function checkPublicationSearchForRegulationType(regulationType, pubNumber) {
 }
 
 context('Search tests', () => {
-  // INFO: enable musearch, elasticsearch and tika for this spec
+  // INFO: enable search, elasticsearch and tika for this spec
   const options = [5, 10, 25, 50, 100];
 
   const dateToCreateAgenda = Cypress.dayjs().add(2, 'weeks')
