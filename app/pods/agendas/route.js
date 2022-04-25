@@ -14,11 +14,6 @@ export default class AgendasRoute extends Route {
     this.transitionTo('agendas.overview');
   }
 
-  setupController(controller, model) {
-    super.setupController(controller, model);
-    controller.set('newMeeting', this.store.createRecord('meeting'));
-  }
-
   @action
   refreshRoute() {
     this.refresh();

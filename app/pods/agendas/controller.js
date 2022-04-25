@@ -22,13 +22,13 @@ export default class AgendasController extends Controller.extend(DefaultQueryPar
   @action
   openNewSessionModal() {
     this.isCreatingNewSession = true;
+    this.newMeeting = this.store.createRecord('meeting', { isFinal: false });
   }
 
   @action
   closeNewSessionModal() {
     this.isCreatingNewSession = false;
     this.newMeeting.deleteRecord();
-    this.newMeeting = this.store.createRecord('meeting');
   }
 
   @action
@@ -47,10 +47,6 @@ export default class AgendasController extends Controller.extend(DefaultQueryPar
       );
     }
     await this.newsletterService.createNewsItemForMeeting(this.newMeeting);
-    this.newMeeting = this.store.createRecord('meeting');
-    // TODO: Should fix sessionNrBug
-    // Import from meeting-utils.js
-    // await assignNewSessionNumbers();
     this.isCreatingNewSession = false;
     this.send('refreshRoute');
     this.router.transitionTo('agendas.overview');

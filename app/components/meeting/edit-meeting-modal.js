@@ -21,7 +21,6 @@ export default class MeetingEditMeetingComponent extends Component {
 
   @tracked selectedKind;
   @tracked selectedMainMeeting;
-  @tracked isFinal;
   @tracked startDate;
   @tracked extraInfo;
   @tracked _meetingNumber;
@@ -42,7 +41,6 @@ export default class MeetingEditMeetingComponent extends Component {
     this.meetingYear = this.args.meeting.plannedStart?.getFullYear() || this.currentYear;
     this.startDate = this.args.meeting.plannedStart || new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0, 0);
     this.extraInfo = this.args.meeting.extraInfo;
-    this.isFinal = this.args.meeting.isFinal ?? false;
     this.numberRepresentation = this.args.meeting.numberRepresentation;
   }
 
@@ -124,7 +122,6 @@ export default class MeetingEditMeetingComponent extends Component {
     this.args.meeting.number = this.meetingNumber;
     this.args.meeting.numberRepresentation = this.numberRepresentation;
     this.args.meeting.mainMeeting = this.selectedMainMeeting;
-    this.args.meeting.isFinal = this.isFinal;
 
     try {
       yield this.args.meeting.save();
