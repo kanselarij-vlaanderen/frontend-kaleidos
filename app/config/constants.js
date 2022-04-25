@@ -3,7 +3,7 @@ export default {
   CONCEPT_SCHEMES: {
     BELEIDSDOMEIN: 'http://themis.vlaanderen.be/id/concept-schema/f4981a92-8639-4da4-b1e3-0e1371feaa81',
     BELEIDSVELD: 'http://themis.vlaanderen.be/id/concept-schema/0012aad8-d6e5-49e2-af94-b1bebd484d5b',
-    VERGADERACTIVITEIT: 'http://kanselarij.vo.data.gift/id/concept-scheme/668f0c19-3864-4e96-9dd3-de806fd53357', // TODO: Replace with Themis URI
+    VERGADERACTIVITEIT: 'http://themis.vlaanderen.be/id/concept-scheme/8030c0c4-aff1-4548-92d9-3299ebc43832',
   },
   ACCESS_LEVELS: {
     INTERN_REGERING: 'http://kanselarij.vo.data.gift/id/concept/toegangs-niveaus/d335f7e3-aefd-4f93-81a2-1629c2edafa3',
@@ -92,9 +92,9 @@ export default {
     DECREET: 'http://themis.vlaanderen.be/id/concept/regelgeving-type/bf6101a9-d06b-44d4-b629-13965654c8c2',
     BVR: 'http://themis.vlaanderen.be/id/concept/regelgeving-type/ea7f5f79-f81c-459b-a0f7-d8e90e2d9b88',
   },
-  MEETING_KINDS: { // TODO: Replace with Themis URIs
-    MINISTERRAAD: 'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/A5D6B7A8-2F9C-44B6-B3BE-98D80B426254',
-    PVV: 'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/1d16cb70-0ae9-489e-bf97-c74897222e3c',
-    ANNEX: 'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/d36138a9-07f0-4df6-bbf0-abd51a24e4ce',
+  MEETING_KINDS: {
+    MINISTERRAAD: 'http://themis.vlaanderen.be/id/concept/vergaderactiviteit-type/ef51c9d5-8b45-4501-9dcd-3e00ccff524f',
+    PVV: 'http://themis.vlaanderen.be/id/concept/vergaderactiviteit-type/9b4701f8-a136-4009-94c6-d64fdc96b9a2',
+    ANNEX: 'http://themis.vlaanderen.be/id/concept/vergaderactiviteit-type/30d6a064-8cca-4485-8b37-7ab2357d931d',
   },
 };

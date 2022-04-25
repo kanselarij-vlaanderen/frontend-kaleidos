@@ -6,7 +6,6 @@ import { inject as service } from '@ember/service';
 import { A } from '@ember/array';
 import moment from 'moment';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { fetchClosestMeetingAndAgendaId } from 'frontend-kaleidos/utils/meeting-utils';
 
 /**
  * @argument {didSave}
@@ -99,7 +98,15 @@ export default class MeetingNewMeetingModal extends Component {
       numberRepresentation: this.formattedMeetingIdentifier,
     });
 
-    const closestMeeting = yield fetchClosestMeetingAndAgendaId(startDate);
+    const closestMeeting = yield this.store.queryOne('meeting', {
+      filter: {
+        ':lt:planned-start': startDate.toISOString(),
+        kind: {
+          ':has-no:broader': true,
+        },
+      },
+      sort: '-planned-start',
+    });
 
     try {
       yield meeting.save();
