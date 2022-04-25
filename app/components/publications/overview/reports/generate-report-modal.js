@@ -77,7 +77,7 @@ export default class GenerateReportModalComponent extends Component {
 
   @task
   *searchMandatee(searchText) {
-    let persons = this.loadMandatees.last.value;
+    let persons = this.mandatees;
 
     if (searchText) {
       searchText = searchText.toLowerCase();
