@@ -1,60 +1,11 @@
 import Component from '@glimmer/component';
 import { getOwner } from '@ember/application';
-import EmberObject, { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 
-class MandateeField extends EmberObject {
-  @service store;
-
-  @tracked value = [];
-
-  @action
-  triggerLoadData(el, [year]) {
-    this.loadData.perform(year);
-  }
-
-  @action
-  search(searchText) {
-    let persons = this.loadData.last.value;
-
-    if (searchText) {
-      searchText = searchText.toLowerCase();
-      persons = persons.filter((person) =>
-        person.fullName.toLowerCase().includes(searchText)
-      );
-    }
-
-    return persons;
-  }
-
-  @task
-  *loadData(year) {
-    const yearStart = new Date(year, 0, 1, 0, 0, 0, 0);
-    const nextYearStart = new Date(year + 1, 0, 1, 0, 0, 0, 0);
-
-    let persons = yield this.store.query('person', {
-      include: ['mandatees'].join(','),
-      'filter[mandatees][:lt:start]': nextYearStart.toISOString(),
-    });
-    // mu-cl-resources does not allow filtering on absence of field: end-date (active mandatees)
-    persons = yield filterAsync(persons, (person, { mandatees }) =>
-      mandatees.some((mandatee) => !mandatee.end || yearStart < mandatee.end)
-    );
-
-    return persons;
-  }
-
-  setQueryFilter(filterParams) {
-    const personUriArray = this.value.map((person) => person.uri);
-    const mandateeArray = personUriArray.map((uri) => ({ person: uri }));
-    filterParams.mandatee = mandateeArray;
-  }
-}
-
 const FIELDS = {
-  mandatee: MandateeField,
+
 };
 
 export default class GenerateReportModalComponent extends Component {
@@ -64,6 +15,8 @@ export default class GenerateReportModalComponent extends Component {
   @tracked decisionDateRangeEnd;
 
   @tracked publicationYearAsNumber;
+
+  @tracked selectedMandatees = [];
 
   constructor() {
     super(...arguments);
@@ -100,16 +53,44 @@ export default class GenerateReportModalComponent extends Component {
   }
 
   @task
+  *searchMandatee(searchText) {
+    let persons = this.loadMandatees.last.value;
+
+    if (searchText) {
+      searchText = searchText.toLowerCase();
+      persons = persons.filter((person) =>
+        person.fullName.toLowerCase().includes(searchText)
+      );
+    }
+
+    return yield persons;
+  }
+
+  @task
+  *loadMandatees() {
+    let [yearStart, nextYearStart] = convertYearToDateRange(
+      this.publicationYearAsNumber
+    );
+
+    let persons = yield this.store.query('person', {
+      include: ['mandatees'].join(','),
+      'filter[mandatees][:lt:start]': nextYearStart.toISOString(),
+    });
+    // mu-cl-resources does not allow filtering on absence of field: end-date (active mandatees)
+    persons = yield filterAsync(persons, (person, { mandatees }) =>
+      mandatees.some((mandatee) => !mandatee.end || yearStart < mandatee.end)
+    );
+
+    return persons;
+  }
+
+  @task
   *triggerGenerateReport() {
     const filterParams = {};
 
-    const publicationYear = this.publicationYearAsNumber;
-    const publicationDateRangeStart = new Date(publicationYear, 0, 1, 0, 0, 0, 0); /* eslint-disable-line prettier/prettier */ // (no new line for each number)
-    const publicationDateRangeEnd = new Date(publicationYear + 1, 0, 1, 0, 0, 0, 0); /* eslint-disable-line prettier/prettier */
-    filterParams.publicationDate = [
-      publicationDateRangeStart,
-      publicationDateRangeEnd,
-    ];
+    filterParams.publicationDate = convertYearToDateRange(
+      this.publicationYearAsNumber
+    );
 
     let decisionDateRangeEnd = this.decisionDateRangeEnd;
     if (decisionDateRangeEnd) {
@@ -121,9 +102,11 @@ export default class GenerateReportModalComponent extends Component {
       decisionDateRangeEnd,
     ];
 
-    for (const fieldKey in this.fields) {
-      const field = this.fields[fieldKey];
-      field.setQueryFilter(filterParams);
+    if (this.fields.mandatee) {
+      const mandateeArray = this.selectedMandatees.map((person) => ({
+        person: person.uri,
+      }));
+      filterParams.mandatee = mandateeArray;
     }
 
     this.args.onGenerate.perform({
@@ -144,4 +127,10 @@ async function filterAsync(persons, fnCheck) {
   persons = await Promise.all(persons);
   persons = persons.compact();
   return persons;
+}
+
+function convertYearToDateRange(year) {
+  const publicationDateRangeStart = new Date(year, 0, 1, 0, 0, 0, 0); /* eslint-disable-line prettier/prettier */ // (no new line for each number)
+  const publicationDateRangeEnd = new Date(year + 1, 0, 1, 0, 0, 0, 0); /* eslint-disable-line prettier/prettier */
+  return [publicationDateRangeStart, publicationDateRangeEnd];
 }

@@ -48,21 +48,18 @@
         />
       </div>
     {{/if}}
-    {{#if this.fields.mandatee}}
-      <div
-        class="auk-form-group"
-        {{did-insert this.fields.mandatee.triggerLoadData this.publicationYear}}
-        {{did-update this.fields.mandatee.triggerLoadData this.publicationYear}}
-      >
+    {{#if @fields.mandatee}}
+      <div class="auk-form-group">
         <Auk::Label>
           {{t "ministers"}}
         </Auk::Label>
         <PowerSelectMultiple
-          @options={{this.fields.mandatee.loadData.last}}
-          @selected={{this.fields.mandatee.value}}
-          @onChange={{fn (mut this.fields.mandatee.value)}}
+          @options={{this.loadMandatees.last}}
+          @selected={{this.selectedMandatees}}
+          @onOpen={{perform this.loadMandatees}}
+          @onChange={{fn (mut this.selectedMandatees)}}
           @searchEnabled={{true}}
-          @search={{this.fields.mandatee.search}}
+          @search={{perform this.searchMandatee}}
           @noMatchesMessage={{t "no-ministers-found"}}
           @loadingMessage={{t "search-loading-text"}}
           as |person|
