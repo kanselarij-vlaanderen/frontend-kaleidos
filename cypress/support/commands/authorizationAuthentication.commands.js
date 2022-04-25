@@ -37,9 +37,12 @@ function login(name, retries = 0) {
       }));
     });
   });
+  cy.intercept('GET', '/accounts/*').as('getAccount');
+  cy.intercept('GET', '/accounts/*/user').as('getAccountUser');
   cy.visit('').wait('@getCurrentSession')
     .then((responseBody) => {
-      if (responseBody.response.statusCode === 400) {
+      console.log(responseBody);
+      if (responseBody.error || responseBody.response?.statusCode === 400) {
         if (retries < 5) {
           cy.log('login failed, trying again');
           cy.login(name, retries + 1);
@@ -48,6 +51,7 @@ function login(name, retries = 0) {
         }
       }
     });
+  cy.wait('@getAccount').wait('@getAccountUser');
   cy.log('/login');
 }
 

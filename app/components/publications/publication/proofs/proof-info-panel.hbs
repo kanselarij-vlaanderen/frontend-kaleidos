@@ -85,40 +85,44 @@
   {{else}}
     <Auk::Panel::Body>
       <div class="auk-o-grid">
-        <div class="auk-o-grid-col-3 auk-content">
-          <h4 class="auk-u-m-0">{{t "publication-flow-publication-due-date"}}</h4>
-          <p class="auk-u-m-0">
-            {{#if @publicationSubcase.dueDate}}
-              {{moment-format @publicationSubcase.dueDate "DD-MM-YYYY"}}
-            {{else}}
-              {{t "dash"}}
-            {{/if}}
-          {{#if
-            (and
-              (not @isFinal)
-              (is-after @publicationSubcase.dueDate precision="days")
-            )
-          }}
-            <Auk::FormHelpText
-              @text={{t "date-expired"}}
-              @skin="warning"
-              @icon="alert-triangle"
-            />
-          {{/if}}
-        </p>
+        <div class="auk-o-grid-col-3">
+          <div class="auk-content">
+            <h4 class="auk-u-m-0">{{t "publication-flow-publication-due-date"}}</h4>
+            <p class="auk-u-m-0">
+              {{#if @publicationSubcase.dueDate}}
+                {{moment-format @publicationSubcase.dueDate}}
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+              {{#if
+                (and
+                  (not @isFinal)
+                  (is-after @publicationSubcase.dueDate precision="days")
+                )
+              }}
+                <Auk::FormHelpText
+                  @text={{t "date-expired"}}
+                  @skin="warning"
+                  @icon="alert-triangle"
+                />
+              {{/if}}
+            </p>
+          </div>
         </div>
-        <div class="auk-o-grid-col-3 auk-content">
-          <h4 class="auk-u-m-0">{{t "proofprint-corrector"}}</h4>
-          <p
-            data-test-proof-info-panel-view-corrector
-            class="auk-u-m-0"
-          >
-            {{#if @publicationSubcase.proofPrintCorrector}}
-              {{@publicationSubcase.proofPrintCorrector}}
-            {{else}}
-              -
-            {{/if}}
-          </p>
+        <div class="auk-o-grid-col-3">
+          <div class="auk-content">
+            <h4 class="auk-u-m-0">{{t "proofprint-corrector"}}</h4>
+            <p
+              data-test-proof-info-panel-view-corrector
+              class="auk-u-m-0"
+            >
+              {{#if @publicationSubcase.proofPrintCorrector}}
+                {{@publicationSubcase.proofPrintCorrector}}
+              {{else}}
+                -
+              {{/if}}
+            </p>
+          </div>
         </div>
       </div>
     </Auk::Panel::Body>

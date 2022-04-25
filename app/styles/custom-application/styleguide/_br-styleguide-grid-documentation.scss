@@ -1,9 +1,20 @@
 /* Styling for grid documentation
    ========================================================================== */
 
-.br-styleguide-grid-documentation [class*=auk-o-grid-col] {
-  background: $auk-gray-100;
-  margin-bottom: 1.6rem;
-  padding: 1rem;
-  text-align: center;
+.br-styleguide-sample__sample--layout-grid {
+  .auk-o-grid, .auk-o-grid-auto {
+    > * {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      background: $auk-gray-100;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    + .auk-o-grid, .auk-o-grid-auto {
+      margin-top: 3rem;
+    }
+  }
 }

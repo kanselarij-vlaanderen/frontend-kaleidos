@@ -20,9 +20,8 @@ export default class ApplicationRoute extends Route {
   }
 
   async beforeModel() {
-    this.moment.setLocale('nl');
-    this.moment.defaultFormat = 'DD.MM.YYYY';
-    this.moment.allowEmpty = true;
+    this.moment.setLocale('nl-be');
+
     this.intl.setLocale(['nl-be']);
 
     if (!this.isSupportedBrowser) {
