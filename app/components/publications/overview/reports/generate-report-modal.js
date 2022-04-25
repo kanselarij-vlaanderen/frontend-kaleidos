@@ -26,27 +26,6 @@ class PublicationYearField extends EmberObject {
   }
 }
 
-class DecisionDateRangeField extends EmberObject {
-  @tracked start;
-  @tracked end;
-
-  constructor() {
-    super(...arguments);
-    const now = new Date(Date.now());
-    this.start = new Date(now.getFullYear(), 0, 1, 0, 0, 0, 0);
-    this.end = new Date(now.getFullYear(), 11, 31, 0, 0, 0, 0); // we only use date part in frontend, so we can leave hour parts === 0
-  }
-
-  setQueryFilter(filterParams) {
-    let decisionEndDate = this.end;
-    if (decisionEndDate) {
-      decisionEndDate = new Date(this.end);
-      decisionEndDate.setDate(decisionEndDate.getDate() + 1); // api does expect next date (filters on decisionDate < endDate)
-    }
-    filterParams.decisionDate = [this.start, decisionEndDate];
-  }
-}
-
 class MandateeField extends EmberObject {
   @service store;
 
@@ -97,18 +76,23 @@ class MandateeField extends EmberObject {
 
 const FIELDS = {
   publicationYear: PublicationYearField,
-  decisionDateRange: DecisionDateRangeField,
   mandatee: MandateeField,
 };
 
 export default class GenerateReportModalComponent extends Component {
   @service store;
 
-  @tracked decisionDateRange;
+  @tracked decisionDateRangeStart;
+  @tracked decisionDateRangeEnd;
+
   @tracked publicationYear;
 
   constructor() {
     super(...arguments);
+
+    const year = new Date(Date.now()).getFullYear();
+    this.decisionDateRangeStart = new Date(year, 0, 1, 0, 0, 0, 0);
+    this.decisionDateRangeEnd = new Date(year, 11, 31, 0, 0, 0, 0); // we only use date part in frontend, so we can leave hour parts === 0
 
     let owner = getOwner(this).ownerInjection();
     const fields = this.args.fields;
@@ -125,6 +109,17 @@ export default class GenerateReportModalComponent extends Component {
   @task
   *triggerGenerateReport() {
     const queryFilter = {};
+
+    let decisionDateRangeEnd = this.decisionDateRangeEnd;
+    if (decisionDateRangeEnd) {
+      decisionDateRangeEnd = new Date(decisionDateRangeEnd);
+      decisionDateRangeEnd.setDate(decisionDateRangeEnd.getDate() + 1); // api does expect next date (filters on decisionDate < endDate)
+    }
+    queryFilter.decisionDate = [
+      this.decisionDateRangeStart,
+      decisionDateRangeEnd,
+    ];
+
     for (const fieldKey in this.fields) {
       const field = this.fields[fieldKey];
       field.setQueryFilter(queryFilter);

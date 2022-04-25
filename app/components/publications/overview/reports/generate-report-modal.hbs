@@ -4,7 +4,7 @@
     @onClose={{@onClose}}
   />
   <Auk::Modal::Body>
-    {{#if this.fields.decisionDateRange}}
+    {{#if @fields.decisionDateRange}}
       <div class="auk-o-grid">
         <div class="auk-o-grid-col-6">
           {{!Beslissingsdatum}}
@@ -17,8 +17,8 @@
             </Auk::Label>
             <Auk::Datepicker
               id="publicationReportsDecisionStartDate"
-              @date={{this.fields.decisionDateRange.start}}
-              @onChange={{fn (mut this.fields.decisionDateRange.start)}}
+              @date={{this.decisionDateRangeStart}}
+              @onChange={{fn (mut this.decisionDateRangeStart)}}
             />
           </div>
         </div>
@@ -29,8 +29,8 @@
             </Auk::Label>
             <Auk::Datepicker
               id="publicationReportsDecisionEndDate"
-              @date={{this.fields.decisionDateRange.end}}
-              @onChange={{fn (mut this.fields.decisionDateRange.end)}}
+              @date={{this.decisionDateRangeEnd}}
+              @onChange={{fn (mut this.decisionDateRangeEnd)}}
             />
           </div>
         </div>
