@@ -1,10 +1,7 @@
 import Component from '@glimmer/component';
-import { getOwner } from '@ember/application';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-
-const FIELDS = {};
 
 export default class GenerateReportModalComponent extends Component {
   @service store;
@@ -27,17 +24,6 @@ export default class GenerateReportModalComponent extends Component {
     if (this.args.fields.decisionDateRange) {
       this.decisionDateRangeStart = new Date(currentYear, 0, 1, 0, 0, 0, 0);
       this.decisionDateRangeEnd = new Date(currentYear, 11, 31, 0, 0, 0, 0); // we only use date part in frontend, so we can leave hour parts === 0
-    }
-
-    let owner = getOwner(this).ownerInjection();
-    const fields = this.args.fields;
-
-    this.fields = {};
-    for (const fieldKey in fields) {
-      const Field = FIELDS[fieldKey];
-      if (!Field) continue;
-      const field = Field.create(owner, {});
-      this.fields[fieldKey] = field;
     }
   }
 
