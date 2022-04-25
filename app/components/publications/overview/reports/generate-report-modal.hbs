@@ -4,89 +4,94 @@
     @onClose={{@onClose}}
   />
   <Auk::Modal::Body>
-    {{#if @fields.decisionDateRange}}
-      <div class="auk-o-grid">
-        <div class="auk-o-grid-col-6">
-          {{!Beslissingsdatum}}
-          <div class="auk-form-group">
-            <Auk::Label
-              for="publicationReportsDecisionStartDate"
-              @required={{true}}
-            >
-              {{t "start-date"}}
-            </Auk::Label>
-            <Auk::Datepicker
-              id="publicationReportsDecisionStartDate"
-              @date={{this.decisionDateRangeStart}}
-              @onChange={{fn (mut this.decisionDateRangeStart)}}
-            />
+    <Utils::LoadableContent
+      @isLoading={{this.isLoading}}
+      @reserveSpace={{true}}
+    >
+      {{#if @fields.decisionDateRange}}
+        <div class="auk-o-grid">
+          <div class="auk-o-grid-col-6">
+            {{!Beslissingsdatum}}
+            <div class="auk-form-group">
+              <Auk::Label
+                for="publicationReportsDecisionStartDate"
+                @required={{true}}
+              >
+                {{t "start-date"}}
+              </Auk::Label>
+              <Auk::Datepicker
+                id="publicationReportsDecisionStartDate"
+                @date={{this.decisionDateRangeStart}}
+                @onChange={{fn (mut this.decisionDateRangeStart)}}
+              />
+            </div>
+          </div>
+          <div class="auk-o-grid-col-6">
+            <div class="auk-form-group">
+              <Auk::Label for="publicationReportsDecisionEndDate">
+                {{t "end-date"}}
+              </Auk::Label>
+              <Auk::Datepicker
+                id="publicationReportsDecisionEndDate"
+                @date={{this.decisionDateRangeEnd}}
+                @onChange={{fn (mut this.decisionDateRangeEnd)}}
+              />
+            </div>
           </div>
         </div>
-        <div class="auk-o-grid-col-6">
-          <div class="auk-form-group">
-            <Auk::Label for="publicationReportsDecisionEndDate">
-              {{t "end-date"}}
-            </Auk::Label>
-            <Auk::Datepicker
-              id="publicationReportsDecisionEndDate"
-              @date={{this.decisionDateRangeEnd}}
-              @onChange={{fn (mut this.decisionDateRangeEnd)}}
-            />
-          </div>
+      {{/if}}
+      {{#if @fields.publicationYear}}
+        <div class="auk-form-group">
+          <Auk::Label for="publicationReportsPublicationYear">
+            {{t "year"}}
+          </Auk::Label>
+          <Auk::Input
+            id="publicationReportsPublicationYear"
+            @type="number"
+            @value={{this.publicationYear}}
+          />
         </div>
-      </div>
-    {{/if}}
-    {{#if @fields.publicationYear}}
-      <div class="auk-form-group">
-        <Auk::Label for="publicationReportsPublicationYear">
-          {{t "year"}}
-        </Auk::Label>
-        <Auk::Input
-          id="publicationReportsPublicationYear"
-          @type="number"
-          @value={{this.publicationYear}}
-        />
-      </div>
-    {{/if}}
-    {{#if @fields.mandatee}}
-      <div class="auk-form-group">
-        <Auk::Label>
-          {{t "ministers"}}
-        </Auk::Label>
-        <PowerSelectMultiple
-          @options={{this.mandatees}}
-          @selected={{this.selectedMandatees}}
-          {{!mandatee options is dependent on publicationYear, so only load when requested}}
-          @onOpen={{perform this.loadMandatees}}
-          @onChange={{fn (mut this.selectedMandatees)}}
-          @searchEnabled={{true}}
-          @search={{perform this.searchMandatee}}
-          @noMatchesMessage={{t "no-ministers-found"}}
-          @loadingMessage={{t "search-loading-text"}}
-          as |person|
-        >
-          {{person.fullName}}
-        </PowerSelectMultiple>
-      </div>
-    {{/if}}
-    {{#if @fields.governmentDomain}}
-      <div class="auk-form-group">
-        <Auk::Label>{{t "government-domains"}}</Auk::Label>
-        <Auk::CheckboxList>
-          {{#each this.governmentDomains as |governmentDomain|}}
-            <Auk::Checkbox
-              @checked={{includes
-                this.selectedGovernmentDomains
-                governmentDomain
-              }}
-              {{on "input" (fn this.selectGovernmentDomain governmentDomain)}}
-            >
-              {{governmentDomain.label}}
-            </Auk::Checkbox>
-          {{/each}}
-        </Auk::CheckboxList>
-      </div>
-    {{/if}}
+      {{/if}}
+      {{#if @fields.mandatee}}
+        <div class="auk-form-group">
+          <Auk::Label>
+            {{t "ministers"}}
+          </Auk::Label>
+          <PowerSelectMultiple
+            @options={{this.mandatees}}
+            @selected={{this.selectedMandatees}}
+            {{!mandatee options is dependent on publicationYear, so only load when requested}}
+            @onOpen={{perform this.loadMandatees}}
+            @onChange={{fn (mut this.selectedMandatees)}}
+            @searchEnabled={{true}}
+            @search={{perform this.searchMandatee}}
+            @noMatchesMessage={{t "no-ministers-found"}}
+            @loadingMessage={{t "search-loading-text"}}
+            as |person|
+          >
+            {{person.fullName}}
+          </PowerSelectMultiple>
+        </div>
+      {{/if}}
+      {{#if @fields.governmentDomain}}
+        <div class="auk-form-group">
+          <Auk::Label>{{t "government-domains"}}</Auk::Label>
+          <Auk::CheckboxList>
+            {{#each this.governmentDomains as |governmentDomain|}}
+              <Auk::Checkbox
+                @checked={{includes
+                  this.selectedGovernmentDomains
+                  governmentDomain
+                }}
+                {{on "input" (fn this.selectGovernmentDomain governmentDomain)}}
+              >
+                {{governmentDomain.label}}
+              </Auk::Checkbox>
+            {{/each}}
+          </Auk::CheckboxList>
+        </div>
+      {{/if}}
+    </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onClose}}>
     <Auk::Button

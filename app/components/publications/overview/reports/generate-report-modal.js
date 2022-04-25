@@ -37,6 +37,10 @@ export default class GenerateReportModalComponent extends Component {
     }
   }
 
+  get isLoading() {
+    return this.loadGovernmentDomains.isRunning;
+  }
+
   get publicationYear() {
     /// <Input /> expects property for get and set (no callback)
     return this.publicationYearAsNumber;
