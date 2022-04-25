@@ -174,7 +174,7 @@ export default class MeetingNewMeetingModal extends Component {
       agenda,
       number: 1,
       shortTitle: `Goedkeuring van het verslag van de vergadering van ${moment(
-        closestMeeting.plannedstart
+        closestMeeting.plannedStart
       ).format('dddd DD-MM-YYYY')}.`,
       formallyOk: CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK,
       isApproval: true,
