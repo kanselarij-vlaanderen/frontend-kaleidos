@@ -1,7 +1,9 @@
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import CONSTANTS from 'frontend-kaleidos/config/constants'
 
 export default class GenerateReportModalComponent extends Component {
   @service store;
@@ -12,6 +14,8 @@ export default class GenerateReportModalComponent extends Component {
   @tracked publicationYearAsNumber;
 
   @tracked selectedMandatees = [];
+
+  @tracked selectedGovernmentDomains = [];
 
   constructor() {
     super(...arguments);
@@ -24,6 +28,10 @@ export default class GenerateReportModalComponent extends Component {
     if (this.args.fields.decisionDateRange) {
       this.decisionDateRangeStart = new Date(currentYear, 0, 1, 0, 0, 0, 0);
       this.decisionDateRangeEnd = new Date(currentYear, 11, 31, 0, 0, 0, 0); // we only use date part in frontend, so we can leave hour parts === 0
+    }
+
+    if (this.args.fields.governmentDomain) {
+      this.loadGovernmentDomains.perform();
     }
   }
 
@@ -75,6 +83,27 @@ export default class GenerateReportModalComponent extends Component {
   }
 
   @task
+  *loadGovernmentDomains() {
+    let governmentDomains = yield this.store.query('concept', {
+      'filter[top-concept-schemes][:uri:]': CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN,
+      'filter[:has-no:broader]': true, // only top-level government-domains
+      'filter[deprecated]': false,
+    });
+    governmentDomains = governmentDomains.toArray();
+    return governmentDomains;
+  }
+
+  @action
+  selectGovernmentDomain(governmentDomain, ev) {
+    const checked = ev.target.checked;
+    if (checked) {
+      this.selectedGovernmentDomains.addObject(governmentDomain); // addObject ensures no duplicates
+    } else {
+      this.selectedGovernmentDomains.removeObject(governmentDomain);
+    }
+  }
+
+  @task
   *triggerGenerateReport() {
     const filterParams = {};
 
@@ -101,6 +130,11 @@ export default class GenerateReportModalComponent extends Component {
         person: person.uri,
       }));
       filterParams.mandatee = mandateeArray;
+    }
+
+    if (this.args.fields.governmentDomain) {
+      const governemtDomainArray = this.selectedGovernmentDomains.map((governmentDomain) => governmentDomain.uri);
+      filterParams.governmentDomain = governemtDomainArray;
     }
 
     this.args.onGenerate.perform({
