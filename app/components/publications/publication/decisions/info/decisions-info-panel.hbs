@@ -34,7 +34,7 @@
             <div class="auk-o-grid">
 
               {{! Type regelgeving }}
-              <div class="auk-o-grid-col-4">
+              <div class="auk-o-grid-col-3">
                 <div
                   data-test-decisions-info-panel-edit-regulation-type
                   class="auk-form-group"
@@ -55,7 +55,7 @@
               </div>
 
               {{! Datum beslissing }}
-              <div class="auk-o-grid-col-4">
+              <div class="auk-o-grid-col-3">
                 <div
                   data-test-decisions-info-panel-edit-decision-date
                   class="auk-form-group"
@@ -70,10 +70,7 @@
                       @models={{this.modelsForAgendaitemRoute}}
                     >
                       {{#if @publicationFlow.agendaItemTreatment.startDate}}
-                        {{moment-format
-                          @publicationFlow.agendaItemTreatment.startDate
-                          "DD-MM-YYYY"
-                        }}
+                        {{moment-format @publicationFlow.agendaItemTreatment.startDate}}
                       {{else}}
                         {{t "to-agenda"}}
                       {{/if}}
@@ -88,7 +85,7 @@
               </div>
 
               {{! Number of pages }}
-              <div class="auk-o-grid-col-4">
+              <div class="auk-o-grid-col-3">
                 <div
                   data-test-decisions-info-panel-edit-number-of-pages
                   class="auk-form-group"
@@ -106,71 +103,71 @@
       {{else}}
         <div class="auk-o-grid">
           {{! Type regelgeving }}
-          <div class="auk-o-grid-col-3 auk-content">
-            <h4 class="auk-u-m-0">{{t "regulation-type"}}</h4>
-            <p
-              data-test-decisions-info-panel-view-regulation-type
-              class="auk-u-m-0"
-            >
-              {{#if @publicationFlow.regulationType}}
-                {{@publicationFlow.regulationType.label}}
-              {{else}}
-                {{t "dash"}}
-              {{/if}}
-            </p>
-          </div>
-
-          {{! Datum beslissing}}
-          <div class="auk-o-grid-col-3 auk-content">
-            <h4 class="auk-u-m-0">{{t "decision-date"}}</h4>
-            <p
-              data-test-decisions-info-panel-view-decision-date
-              class="auk-u-m-0"
-            >
-              {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
-                <Auk::ButtonLink
-                  data-test-decisions-info-panel-view-decision-link
-                  target="_blank"
-                  @icon="chevron-right"
-                  @layout="icon-right"
-                  @route="agenda.agendaitems.agendaitem"
-                  @models={{this.modelsForAgendaitemRoute}}
-                >
-                  {{#if @publicationFlow.agendaItemTreatment.startDate}}
-                    {{moment-format
-                      @publicationFlow.agendaItemTreatment.startDate
-                      "DD-MM-YYYY"
-                    }}
-                  {{else}}
-                    {{t "to-agenda"}}
-                  {{/if}}
-                </Auk::ButtonLink>
-              {{else}}
-                {{#if @publicationFlow.agendaItemTreatment.startDate}}
-                  {{moment-format
-                    @publicationFlow.agendaItemTreatment.startDate
-                    "DD-MM-YYYY"
-                  }}
+          <div class="auk-o-grid-col-3">
+            <div class="auk-content">
+              <h4 class="auk-u-m-0">{{t "regulation-type"}}</h4>
+              <p
+                data-test-decisions-info-panel-view-regulation-type
+                class="auk-u-m-0"
+              >
+                {{#if @publicationFlow.regulationType}}
+                  {{@publicationFlow.regulationType.label}}
                 {{else}}
                   {{t "dash"}}
                 {{/if}}
-              {{/if}}
-            </p>
+              </p>
+            </div>
+          </div>
+
+          {{! Datum beslissing}}
+          <div class="auk-o-grid-col-3">
+            <div class="auk-content">
+              <h4 class="auk-u-m-0">{{t "decision-date"}}</h4>
+              <p
+                data-test-decisions-info-panel-view-decision-date
+                class="auk-u-m-0"
+              >
+                {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
+                  <Auk::ButtonLink
+                    data-test-decisions-info-panel-view-decision-link
+                    target="_blank"
+                    @icon="chevron-right"
+                    @layout="icon-right"
+                    @route="agenda.agendaitems.agendaitem"
+                    @models={{this.modelsForAgendaitemRoute}}
+                  >
+                    {{#if @publicationFlow.agendaItemTreatment.startDate}}
+                      {{moment-format @publicationFlow.agendaItemTreatment.startDate}}
+                    {{else}}
+                      {{t "to-agenda"}}
+                    {{/if}}
+                  </Auk::ButtonLink>
+                {{else}}
+                  {{#if @publicationFlow.agendaItemTreatment.startDate}}
+                    {{moment-format @publicationFlow.agendaItemTreatment.startDate}}
+                  {{else}}
+                    {{t "dash"}}
+                  {{/if}}
+                {{/if}}
+              </p>
+            </div>
           </div>
 
           {{! Number of pages }}
-          <div class="auk-o-grid-col-3 auk-content">
-            <h4 class="auk-u-m-0">{{t "number-of-pages"}}</h4>
-            <p
-              data-test-decisions-info-panel-view-number-of-pages
-              class="auk-u-m-0"
-            >
-              {{#if @publicationFlow.numberOfPages}}
-                {{@publicationFlow.numberOfPages}}
-              {{else}}
-                {{t "dash"}}
-              {{/if}}
-            </p>
+          <div class="auk-o-grid-col-3">
+            <div class="auk-content">
+              <h4 class="auk-u-m-0">{{t "number-of-pages"}}</h4>
+              <p
+                data-test-decisions-info-panel-view-number-of-pages
+                class="auk-u-m-0"
+              >
+                {{#if @publicationFlow.numberOfPages}}
+                  {{@publicationFlow.numberOfPages}}
+                {{else}}
+                  {{t "dash"}}
+                {{/if}}
+              </p>
+            </div>
           </div>
         </div>
       {{/if}}
