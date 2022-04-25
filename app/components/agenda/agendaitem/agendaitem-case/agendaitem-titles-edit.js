@@ -10,7 +10,7 @@ import { task } from 'ember-concurrency';
 
 export default class AgendaitemTitlesEdit extends Component {
   @service store;
-  propertiesToSet = Object.freeze(['title', 'shortTitle', 'explanation']);
+  propertiesToSet = Object.freeze(['title', 'shortTitle', 'comment']);
 
   get newsletterInfo() {
     return this.args.newsletterInfo;
@@ -39,7 +39,7 @@ export default class AgendaitemTitlesEdit extends Component {
     const propertiesToSetOnAgendaitem = {
       title: trimmedTitle,
       shortTitle: trimmedShortTitle,
-      // explanation is set directly on the agendaitem, no need to have it in here
+      // comment is set directly on the agendaitem, no need to have it in here
     };
     const propertiesToSetOnSubcase = {
       title: trimmedTitle,

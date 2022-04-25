@@ -3,68 +3,141 @@
   <p>12 columns based grid for easily layouting forms and other components. This uses flexbox internally.</p>
 </ComponentPageIntro>
 
-<StyleguideSample>
-  <div class="br-styleguide-grid-documentation">
-    <div class="auk-o-grid">
-      <div class="auk-o-grid-col-24">24</div>
-      <div class="auk-o-grid-col-12 auk-o-grid-col-sm-24">12</div>
-      <div class="auk-o-grid-col-12 auk-o-grid-col-sm-24">12</div>
-      <div class="auk-o-grid-col-6">6</div>
-      <div class="auk-o-grid-col-6">6</div>
-      <div class="auk-o-grid-col-6">6</div>
-      <div class="auk-o-grid-col-6">6</div>
-      <div class="auk-o-grid-col-4">4</div>
-      <div class="auk-o-grid-col-4">4</div>
-      <div class="auk-o-grid-col-4">4</div>
-      <div class="auk-o-grid-col-4">4</div>
-      <div class="auk-o-grid-col-4">4</div>
-      <div class="auk-o-grid-col-4">4</div>
-      <div class="auk-o-grid-col-3">3</div>
-      <div class="auk-o-grid-col-3">3</div>
-      <div class="auk-o-grid-col-3">3</div>
-      <div class="auk-o-grid-col-3">3</div>
-      <div class="auk-o-grid-col-3">3</div>
-      <div class="auk-o-grid-col-3">3</div>
-      <div class="auk-o-grid-col-3">3</div>
-      <div class="auk-o-grid-col-3">3</div>
-      <div class="auk-o-grid-col-2">2</div>
-      <div class="auk-o-grid-col-2">2</div>
-      <div class="auk-o-grid-col-2">2</div>
-      <div class="auk-o-grid-col-2">2</div>
-      <div class="auk-o-grid-col-2">2</div>
-      <div class="auk-o-grid-col-2">2</div>
-      <div class="auk-o-grid-col-2">2</div>
-      <div class="auk-o-grid-col-2">2</div>
-      <div class="auk-o-grid-col-2">2</div>
-      <div class="auk-o-grid-col-2">2</div>
-      <div class="auk-o-grid-col-2">2</div>
-      <div class="auk-o-grid-col-2">2</div>
-      <div class="auk-o-grid-col-1">1</div>
-      <div class="auk-o-grid-col-1">1</div>
-      <div class="auk-o-grid-col-1">1</div>
-      <div class="auk-o-grid-col-1">1</div>
-      <div class="auk-o-grid-col-1">1</div>
-      <div class="auk-o-grid-col-1">1</div>
-      <div class="auk-o-grid-col-1">1</div>
-      <div class="auk-o-grid-col-1">1</div>
-      <div class="auk-o-grid-col-1">1</div>
-      <div class="auk-o-grid-col-1">1</div>
-      <div class="auk-o-grid-col-1">1</div>
-      <div class="auk-o-grid-col-1">1</div>
-      <div class="auk-o-grid-col-1">1</div>
-      <div class="auk-o-grid-col-1">1</div>
-      <div class="auk-o-grid-col-1">1</div>
-      <div class="auk-o-grid-col-1">1</div>
-      <div class="auk-o-grid-col-1">1</div>
-      <div class="auk-o-grid-col-1">1</div>
-      <div class="auk-o-grid-col-1">1</div>
-      <div class="auk-o-grid-col-1">1</div>
-      <div class="auk-o-grid-col-1">1</div>
-      <div class="auk-o-grid-col-1">1</div>
-      <div class="auk-o-grid-col-1">1</div>
-      <div class="auk-o-grid-col-1">1</div>
-      <div class="auk-o-grid-col-static">This column will adapt to its content.</div>
-      <div class="auk-o-grid-col-flex">This column will fill the remaining space.</div>
+<StyleguideSample
+  @title="Default"
+  @snippet="default.hbs"
+  @modifier="layout-grid"
+>
+  {{!-- BEGIN-SNIPPET default --}}
+  <div class="auk-o-grid">
+    <div>12</div>
+    <div class="auk-o-grid-col-12">12</div>
+    <div class="auk-o-grid-col-6">6</div>
+    <div class="auk-o-grid-col-6">6</div>
+    <div class="auk-o-grid-col-4">4</div>
+    <div class="auk-o-grid-col-4">4</div>
+    <div class="auk-o-grid-col-4">4</div>
+    <div class="auk-o-grid-col-3">3</div>
+    <div class="auk-o-grid-col-3">3</div>
+    <div class="auk-o-grid-col-3">3</div>
+    <div class="auk-o-grid-col-3">3</div>
+    <div class="auk-o-grid-col-2">2</div>
+    <div class="auk-o-grid-col-2">2</div>
+    <div class="auk-o-grid-col-2">2</div>
+    <div class="auk-o-grid-col-2">2</div>
+    <div class="auk-o-grid-col-2">2</div>
+    <div class="auk-o-grid-col-2">2</div>
+    <div class="auk-o-grid-col-1">1</div>
+    <div class="auk-o-grid-col-1">1</div>
+    <div class="auk-o-grid-col-1">1</div>
+    <div class="auk-o-grid-col-1">1</div>
+    <div class="auk-o-grid-col-1">1</div>
+    <div class="auk-o-grid-col-1">1</div>
+    <div class="auk-o-grid-col-1">1</div>
+    <div class="auk-o-grid-col-1">1</div>
+    <div class="auk-o-grid-col-1">1</div>
+    <div class="auk-o-grid-col-1">1</div>
+    <div class="auk-o-grid-col-1">1</div>
+    <div class="auk-o-grid-col-1">1</div>
+  </div>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+  @title="Auto columns"
+  @snippet="auto-columns.hbs"
+  @modifier="layout-grid"
+>
+  {{!-- BEGIN-SNIPPET auto-columns --}}
+  <div class="auk-o-grid-auto">
+    <div>Lorem ipsum</div>
+    <div>Donec rhoncus neque</div>
+    <div>Mauris semper justo vel dolor</div>
+  </div>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+  @title="Auto columns with a minimum wrapping width"
+  @snippet="auto-columns-with-min-wrapping-width.hbs"
+  @modifier="layout-grid"
+>
+  {{!-- BEGIN-SNIPPET auto-columns-with-min-wrapping-width --}}
+  <div class="auk-o-grid-auto auk-o-grid-auto--min-width-large">
+    <div>Lorem ipsum</div>
+    <div>Donec rhoncus neque</div>
+    <div>Mauris semper justo vel dolor</div>
+    <div>Proin in ornare erat</div>
+    <div>Quisque at consectetur</div>
+  </div>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+  @title="Layout grid with breakpoints"
+  @snippet="layout-grid-with-breakpoints.hbs"
+  @modifier="layout-grid"
+>
+  {{!-- BEGIN-SNIPPET layout-grid-with-breakpoints --}}
+  <div class="auk-o-grid">
+    <div class="auk-o-grid-col-12 auk-o-grid-col-6@screen-medium auk-o-grid-col-3@screen-xlarge">
+      Vivamus vitae posuere
+    </div>
+    <div class="auk-o-grid-col-12 auk-o-grid-col-6@screen-medium auk-o-grid-col-3@screen-xlarge">
+      Duis pulvinar eleifend odio
+    </div>
+    <div class="auk-o-grid-col-12 auk-o-grid-col-6@screen-medium auk-o-grid-col-3@screen-xlarge">
+      Praesent ligula magna
+    </div>
+    <div class="auk-o-grid-col-12 auk-o-grid-col-6@screen-medium auk-o-grid-col-3@screen-xlarge">
+      Nullam nec risus
     </div>
   </div>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+  @title="Layout grid without gutter"
+  @snippet="layout-grid-without-gutter.hbs"
+  @modifier="layout-grid"
+>
+  {{!-- BEGIN-SNIPPET layout-grid-without-gutter --}}
+  <div class="auk-o-grid auk-o-grid--no-gutter">
+    <div class="auk-o-grid-col-4">4</div>
+    <div class="auk-o-grid-col-4">4</div>
+    <div class="auk-o-grid-col-4">4</div>
+  </div>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+  @title="Alignment modifiers"
+  @snippet="alignment-modifiers.hbs"
+  @modifier="layout-grid"
+>
+  {{!-- BEGIN-SNIPPET alignment-modifiers --}}
+  <div class="auk-o-grid auk-o-grid--align-start">
+    <div class="auk-o-grid-col-4 auk-u-height--small">align-start</div>
+    <div class="auk-o-grid-col-4 auk-u-height--xsmall">align-start</div>
+    <div class="auk-o-grid-col-4 auk-u-height--xsmall">align-start</div>
+  </div>
+
+  <div class="auk-o-grid auk-o-grid--vertical-center">
+    <div class="auk-o-grid-col-4 auk-u-height--xsmall">vertical-center</div>
+    <div class="auk-o-grid-col-4 auk-u-height--small">vertical-center</div>
+    <div class="auk-o-grid-col-4 auk-u-height--xsmall">vertical-center</div>
+  </div>
+
+  <div class="auk-o-grid auk-o-grid--align-baseline">
+    <div class="auk-o-grid-col-4 auk-u-height--xsmall">align-baseline</div>
+    <div class="auk-o-grid-col-4 auk-u-height--xsmall">align-baseline</div>
+    <div class="auk-o-grid-col-4 auk-u-height--small">align-baseline<br>(with extra lines of text<br>to illustrate this type of alignment)</div>
+  </div>
+
+  <div class="auk-o-grid auk-o-grid--align-end">
+    <div class="auk-o-grid-col-4 auk-u-height--small">align-end</div>
+    <div class="auk-o-grid-col-4 auk-u-height--small">align-end</div>
+    <div class="auk-o-grid-col-4 auk-u-height--xsmall">align-end</div>
+  </div>
+  {{!-- END-SNIPPET --}}
 </StyleguideSample>
