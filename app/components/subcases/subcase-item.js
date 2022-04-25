@@ -103,7 +103,7 @@ export default class SubcaseItemSubcasesComponent extends Component {
   @task
   *loadSubcaseIsApproved() {
     const meeting = yield this.args.subcase.requestedForMeeting;
-    if (meeting.isFinal) {
+    if (meeting?.isFinal) {
       this.approved = !!(yield this.store.queryOne('agenda-item-treatment', {
         'filter[subcase][id]': this.args.subcase.id,
         'filter[decision-result-code][:id:]': [
