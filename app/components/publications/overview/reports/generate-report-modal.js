@@ -101,12 +101,12 @@ export default class GenerateReportModalComponent extends Component {
 
   @task
   *triggerGenerateReport() {
-    const queryFilter = {};
+    const filterParams = {};
 
     const publicationYear = this.publicationYearAsNumber;
     const publicationDateRangeStart = new Date(publicationYear, 0, 1, 0, 0, 0, 0); /* eslint-disable-line prettier/prettier */ // (no new line for each number)
     const publicationDateRangeEnd = new Date(publicationYear + 1, 0, 1, 0, 0, 0, 0); /* eslint-disable-line prettier/prettier */
-    queryFilter.publicationDate = [
+    filterParams.publicationDate = [
       publicationDateRangeStart,
       publicationDateRangeEnd,
     ];
@@ -116,18 +116,18 @@ export default class GenerateReportModalComponent extends Component {
       decisionDateRangeEnd = new Date(decisionDateRangeEnd);
       decisionDateRangeEnd.setDate(decisionDateRangeEnd.getDate() + 1); // api does expect next date (filters on decisionDate < endDate)
     }
-    queryFilter.decisionDate = [
+    filterParams.decisionDate = [
       this.decisionDateRangeStart,
       decisionDateRangeEnd,
     ];
 
     for (const fieldKey in this.fields) {
       const field = this.fields[fieldKey];
-      field.setQueryFilter(queryFilter);
+      field.setQueryFilter(filterParams);
     }
 
     this.args.onGenerate.perform({
-      filter: queryFilter,
+      filter: filterParams,
     });
 
     yield; // for linter
