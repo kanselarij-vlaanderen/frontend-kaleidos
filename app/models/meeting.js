@@ -90,14 +90,6 @@ export default Model.extend({
     });
   }),
 
-  latestAgendaName: computed('latestAgenda.status', 'agendas', 'intl', async function() {
-    const agenda = await this.get('latestAgenda');
-    if (!agenda) {
-      return this.intl.t('no-agenda');
-    }
-    return await agenda.get('agendaName');
-  }),
-
   isPreKaleidos: computed('plannedStart', function () {
     return this.plannedStart < KALEIDOS_START_DATE;
   }),

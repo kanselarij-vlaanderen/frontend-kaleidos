@@ -4,20 +4,50 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import moment from 'moment';
 import { A } from '@ember/array';
-// TODO: determine if these default qp's are still needed here, otherwise refactor to mixin-less solution
-// eslint-disable-next-line ember/no-mixins
-import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
-import { fetchClosestMeetingAndAgendaId } from 'frontend-kaleidos/utils/meeting-utils';
+import { restartableTask, timeout } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-export default class AgendasController extends Controller.extend(DefaultQueryParamsMixin) {
+export default class AgendasController extends Controller {
+  queryParams = ['page', 'size', 'sort', 'filter'];
+
   @service store;
   @service currentSession;
   @service router;
   @service newsletterService;
 
   @tracked newMeeting;
+
+  @tracked isLoadingModel = false;
   @tracked isCreatingNewSession = false;
+  @tracked filter = null;
+  @tracked page = 0;
+  @tracked size = 10;
+  @tracked sort = 'created-for.is-final,-created-for.planned-start,created-for.kind.label';
+
+  dateRegex = /^(?:\d{1,2}\/)??(?:\d{1,2}\/)?\d{4}$/;
+
+  @restartableTask
+  *debouncedSetFilter(event) {
+    yield timeout(500);
+    this.setFilter(event.target.value);
+  }
+
+  @action
+  setFilter(date) {
+    if (this.dateRegex.test(date)) {
+      this.filter = date;
+      this.page = 0;
+    } else if (date === '' && this.filter) {
+      this.filter = null;
+      this.page = 0;
+    }
+  }
+
+  @action
+  clearFilter() {
+    this.filter = null;
+    this.page = 0;
+  }
 
   @action
   openNewSessionModal() {
@@ -35,7 +65,15 @@ export default class AgendasController extends Controller.extend(DefaultQueryPar
   async createAgendaAndNewsletter() {
     const agenda = await this.createAgenda(this.newMeeting);
 
-    const closestMeeting = await fetchClosestMeetingAndAgendaId(this.newMeeting.plannedStart);
+    const closestMeeting = await this.store.queryOne('meeting', {
+      filter: {
+        ':lt:planned-start': this.newMeeting.plannedStart.toISOString(),
+        kind: {
+          ':has-no:broader': true,
+        },
+      },
+      sort: '-planned-start',
+    });
     const kind = await this.newMeeting.kind;
     const broader = await kind?.broader;
     const isAnnexMeeting = broader?.uri === CONSTANTS.MEETING_KINDS.ANNEX;
@@ -49,7 +87,36 @@ export default class AgendasController extends Controller.extend(DefaultQueryPar
     await this.newsletterService.createNewsItemForMeeting(this.newMeeting);
     this.isCreatingNewSession = false;
     this.send('refreshRoute');
-    this.router.transitionTo('agendas.overview');
+    this.router.transitionTo('agendas');
+  }
+
+  @action
+  async onClickRow(agenda) {
+    const meeting = await agenda.createdFor;
+    this.router.transitionTo('agenda.agendaitems', meeting.id, agenda.id);
+  }
+
+  @action
+  sortTable(sortField) {
+    this.sort = sortField;
+  }
+
+  @action
+  setSizeOption(size) {
+    this.size = size;
+    this.page = 0;
+  }
+
+  @action
+  nextPage() {
+    this.page = this.page + 1;
+  }
+
+  @action
+  prevPage() {
+    if (this.page > 0) {
+      this.page = this.page - 1;
+    }
   }
 
   async createAgenda(meeting) {

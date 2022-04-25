@@ -166,7 +166,7 @@ context('Different session kinds should show different titles', () => {
     cy.get(route.agendasOverview.dataTable).find('tbody')
       .children('tr');
     // first agenda should always be the normal kind, second PVV
-    cy.get(route.agendasOverview.row.title).contains(formattedMeetingDateDots)
+    cy.get(route.agendasOverview.row.title).contains(formattedAgendaDate)
       .eq(0)
       .parents('tr')
       .find(route.agendasOverview.row.kind)

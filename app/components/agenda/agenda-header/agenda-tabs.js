@@ -31,7 +31,7 @@ export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
   }
 
   get modelsForDetailRoute() {
-    return [this.args.currentMeeting.id, this.args.currentAgenda.id, this.currentAgendaItemId || this.firstAgendaitem];
+    return [this.args.currentMeeting.id, this.args.currentAgenda.id, this.currentAgendaItemId || this.firstAgendaitem?.id];
   }
 
   get isInAgendaItemDetailRoute() {
@@ -41,11 +41,16 @@ export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
   get currentAgendaItemId() {
     const currentRoute = this.router.currentRoute;
     let agendaItemsRoute = currentRoute;
-    if (currentRoute && currentRoute.name.startsWith('agenda.agendaitems.agendaitem')) {
+    if (currentRoute?.name.startsWith('agenda.agendaitems.agendaitem')) {
       while (agendaItemsRoute.name !== 'agenda.agendaitems.agendaitem') {
         agendaItemsRoute = agendaItemsRoute.parent;
       }
       return agendaItemsRoute.params.agendaitem_id;
+    } else if (currentRoute?.name.startsWith('agenda.agendaitems')) {
+      while (agendaItemsRoute.name !== 'agenda.agendaitems') {
+        agendaItemsRoute = agendaItemsRoute.parent;
+      }
+      return agendaItemsRoute.queryParams.anchor;
     }
     return null;
   }
