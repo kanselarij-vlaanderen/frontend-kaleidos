@@ -13,6 +13,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @service router;
 
   @controller('agenda.agendaitems') agendaitemsController;
+  @controller('agenda') agendaController;
   @tracked meeting;
   @tracked agenda;
   @tracked agendaActivity;
@@ -25,7 +26,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @tracked isEditingAgendaItemTitles = false;
 
   async navigateToNeighbouringItem(agendaitem) {
-    // try transitioning to previous or next item
+    // try transitioning to previous or next item, called on the delete of an agendaitem
     // TODO: below query can be replaced once agenda-items have relations to previous and next items
     const previousNumber = agendaitem.number;
     const neighbouringItem = await this.store.queryOne('agendaitem', {
@@ -36,7 +37,9 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     if (neighbouringItem) {
       this.router.transitionTo('agenda.agendaitems.agendaitem', this.meeting.id, this.agenda.id, neighbouringItem.id);
     } else {
-      this.router.transitionTo('agenda.agendaitems', this.meeting.id, this.agenda.id,{ queryParams: { anchor: neighbouringItem.id }});
+      // If there is no neighbour, we most likely just deleted the last and only agendaitem
+      // In this case we should transition to the agenda overview
+      this.router.transitionTo('agenda.agendaitems', this.meeting.id, this.agenda.id,{ queryParams: { anchor: null }});
     }
   }
 
@@ -48,8 +51,10 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @action
   async reassignNumbersAndNavigateToNeighbouringAgendaitem() {
     await this.reassignNumbersForAgendaitems();
-    this.agendaitemsController.send('reloadModel');
     await this.navigateToNeighbouringItem(this.model);
+    // reload the agenda route, detail tab should no longer show if we deleted the last and only agendaitem
+    // Also, if we deleted the first agendaitem, we should also reload the main route to reload <Agenda::agendaTabs> 
+    return this.agendaController.send('reloadAgendaModel');
   }
 
   @action

@@ -17,9 +17,7 @@ Router.map(function() {
   this.route('login', { path: '/aanmelden', });
   this.route('accountless-users', { path: '/onbevoegde-gebruiker', });
 
-  this.route('agendas', { path: '/', }, function() {
-    this.route('overview', { path: '/overzicht', });
-  });
+  this.route('agendas', { path: '/overzicht', });
   this.route('agenda', { path: '/vergadering/:meeting_id/agenda/:agenda_id', }, function() {
     this.route('print', { path: '/afdrukken', });
     this.route('agendaitems', { path: '/agendapunten', }, function() {
