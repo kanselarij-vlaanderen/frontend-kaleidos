@@ -6,11 +6,39 @@
   @onSaveCase={{perform this.saveCase}}
 />
 <div class="auk-scroll-wrapper__body">
-  {{#if this.model}}
-    <Subcases::SubcasesProcess @case={{this.case}} @subcases={{this.model}} />
+  {{#if @model}}
+    <Subcases::SubcasesProcess @case={{this.case}} @subcases={{@model}} />
   {{else}}
     <div class="auk-u-m-8">
       <Auk::EmptyState @message={{t "no-subcases"}} />
     </div>
   {{/if}}
+</div>
+<hr/>
+<div class="auk-u-mx-4">
+  <Auk::Toolbar as |Toolbar|>
+    <Toolbar.Group @position="left" as |Group|>
+      <Group.Item>
+        <Auk::Pagination
+          @page={{this.page}}
+          @size={{this.size}}
+          @nbOfItems={{@model.length}}
+          @total={{@model.meta.count}}
+          @onNextPage={{this.nextPage}}
+          @onPreviousPage={{this.prevPage}}
+        />
+      </Group.Item>
+    </Toolbar.Group>
+    <Toolbar.Group @position="right" as |Group|>
+      <Group.Item>
+        {{t "amount-showed"}}
+      </Group.Item>
+      <Group.Item>
+        <WebComponents::AuPageSize
+          @selectedSize={{this.size}}
+          @onChange={{this.setSizeOption}}
+        />
+      </Group.Item>
+    </Toolbar.Group>
+  </Auk::Toolbar>
 </div>
