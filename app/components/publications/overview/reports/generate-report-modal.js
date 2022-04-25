@@ -63,7 +63,7 @@ export default class GenerateReportModalComponent extends Component {
   @tracked decisionDateRangeStart;
   @tracked decisionDateRangeEnd;
 
-  @tracked publicationYear;
+  @tracked publicationYearAsNumber;
 
   constructor() {
     super(...arguments);
@@ -86,8 +86,17 @@ export default class GenerateReportModalComponent extends Component {
     }
   }
 
-  get publicationYearAsNumber() {
-    return Number.parseInt(this.publicationYear);
+  get publicationYear() {
+    /// <Input /> expects property for get and set (no callback)
+    return this.publicationYearAsNumber;
+  }
+
+  set publicationYear(value) {
+    // necessary to convert string value of <Input /> (even with @type="number")
+    let number = Number.parseInt(value);
+    if (!Number.isNaN(number)) {
+      this.publicationYearAsNumber = number;
+    }
   }
 
   @task

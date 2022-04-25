@@ -44,21 +44,15 @@
         <Auk::Input
           id="publicationReportsPublicationYear"
           @type="number"
-          @value={{mut this.publicationYear}}
+          @value={{this.publicationYear}}
         />
       </div>
     {{/if}}
     {{#if this.fields.mandatee}}
       <div
         class="auk-form-group"
-        {{did-insert
-          this.fields.mandatee.triggerLoadData
-          this.publicationYearAsNumber
-        }}
-        {{did-update
-          this.fields.mandatee.triggerLoadData
-          this.publicationYearAsNumber
-        }}
+        {{did-insert this.fields.mandatee.triggerLoadData this.publicationYear}}
+        {{did-update this.fields.mandatee.triggerLoadData this.publicationYear}}
       >
         <Auk::Label>
           {{t "ministers"}}
