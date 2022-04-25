@@ -70,6 +70,7 @@ export default class GenerateReportModalComponent extends Component {
     persons = yield filterAsync(persons, (person, { mandatees }) =>
       mandatees.some((mandatee) => !mandatee.end || yearStart < mandatee.end)
     );
+    persons = persons.sortBy('lastName');
 
     this.mandatees = persons;
   }
@@ -96,7 +97,9 @@ export default class GenerateReportModalComponent extends Component {
       'filter[:has-no:broader]': true, // only top-level government-domains
       'filter[deprecated]': false,
     });
-    this.governmentDomains = governmentDomains.toArray();
+    governmentDomains = governmentDomains.toArray();
+    governmentDomains = governmentDomains.sortBy('label');
+    this.governmentDomains = governmentDomains;
   }
 
   @action
