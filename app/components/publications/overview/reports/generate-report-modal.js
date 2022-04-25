@@ -19,6 +19,9 @@ export default class GenerateReportModalComponent extends Component {
   @tracked governmentDomains;
   @tracked selectedGovernmentDomains = [];
 
+  @tracked regulationTypes;
+  @tracked selectedRegulationTypes = [];
+
   constructor() {
     super(...arguments);
 
@@ -35,10 +38,16 @@ export default class GenerateReportModalComponent extends Component {
     if (this.args.fields.governmentDomain) {
       this.loadGovernmentDomains.perform();
     }
+
+    if (this.args.fields.regulationType) {
+      this.loadRegulationTypes.perform();
+    }
   }
 
   get isLoading() {
-    return this.loadGovernmentDomains.isRunning;
+    return (
+      this.loadGovernmentDomains.isRunning && this.loadRegulationTypes.isRunning
+    );
   }
 
   get publicationYear() {
@@ -113,6 +122,24 @@ export default class GenerateReportModalComponent extends Component {
   }
 
   @task
+  *loadRegulationTypes() {
+    let regulationTypes = this.store.peekAll('regulation-type');
+    regulationTypes = regulationTypes.sortBy('position');
+    this.regulationTypes = regulationTypes;
+    yield; // for linter
+  }
+
+  @action
+  selectRegulationType(regulationType, ev) {
+    const checked = ev.target.checked;
+    if (checked) {
+      this.selectedRegulationTypes.addObject(regulationType); // addObject ensures no duplicates
+    } else {
+      this.selectedRegulationTypes.removeObject(regulationType);
+    }
+  }
+
+  @task
   *triggerGenerateReport() {
     const filterParams = {};
 
@@ -146,6 +173,13 @@ export default class GenerateReportModalComponent extends Component {
         (governmentDomain) => governmentDomain.uri
       );
       filterParams.governmentDomain = governemtDomainArray;
+    }
+
+    if (this.args.fields.regulationType) {
+      const regulationTypeArray = this.selectedRegulationTypes.map(
+        (regulationType) => regulationType.uri
+      );
+      filterParams.regulationType = regulationTypeArray;
     }
 
     this.args.onGenerate.perform({

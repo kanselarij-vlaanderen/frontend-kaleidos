@@ -91,6 +91,24 @@
           </Auk::CheckboxList>
         </div>
       {{/if}}
+      {{#if @fields.regulationType}}
+        <div class="auk-form-group">
+          <Auk::Label>{{t "regulation-types"}}</Auk::Label>
+          <Auk::CheckboxList>
+            {{#each this.regulationTypes as |regulationType|}}
+              <Auk::Checkbox
+                @checked={{includes
+                  this.selectedRegulationTypes
+                  regulationType
+                }}
+                {{on "input" (fn this.selectRegulationType regulationType)}}
+              >
+                {{regulationType.label}}
+              </Auk::Checkbox>
+            {{/each}}
+          </Auk::CheckboxList>
+        </div>
+      {{/if}}
     </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onClose}}>
