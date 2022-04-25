@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import CONSTANTS from 'frontend-kaleidos/config/constants'
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class GenerateReportModalComponent extends Component {
   @service store;
@@ -91,7 +91,8 @@ export default class GenerateReportModalComponent extends Component {
   @task
   *loadGovernmentDomains() {
     let governmentDomains = yield this.store.query('concept', {
-      'filter[top-concept-schemes][:uri:]': CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN,
+      'filter[top-concept-schemes][:uri:]':
+        CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN,
       'filter[:has-no:broader]': true, // only top-level government-domains
       'filter[deprecated]': false,
     });
@@ -138,7 +139,9 @@ export default class GenerateReportModalComponent extends Component {
     }
 
     if (this.args.fields.governmentDomain) {
-      const governemtDomainArray = this.selectedGovernmentDomains.map((governmentDomain) => governmentDomain.uri);
+      const governemtDomainArray = this.selectedGovernmentDomains.map(
+        (governmentDomain) => governmentDomain.uri
+      );
       filterParams.governmentDomain = governemtDomainArray;
     }
 
@@ -150,7 +153,8 @@ export default class GenerateReportModalComponent extends Component {
   }
 }
 
-async function filterAsync(persons, fnCheck) { /// abstract complexity of filtering with async & ember data record arrays from actual check
+async function filterAsync(persons, fnCheck) {
+  /// abstract complexity of filtering with async & ember data record arrays from actual check
   persons = persons.map(async (person) => {
     let mandatees = await person.mandatees;
     mandatees = mandatees.toArray();
