@@ -36,7 +36,7 @@
         </div>
       </div>
     {{/if}}
-    {{#if this.fields.publicationYear}}
+    {{#if @fields.publicationYear}}
       <div class="auk-form-group">
         <Auk::Label for="publicationReportsPublicationYear">
           {{t "year"}}
@@ -44,7 +44,7 @@
         <Auk::Input
           id="publicationReportsPublicationYear"
           @type="number"
-          @value={{mut this.fields.publicationYear.value}}
+          @value={{mut this.publicationYear}}
         />
       </div>
     {{/if}}
@@ -53,11 +53,11 @@
         class="auk-form-group"
         {{did-insert
           this.fields.mandatee.triggerLoadData
-          this.fields.publicationYear.valueAsNumber
+          this.publicationYearAsNumber
         }}
         {{did-update
           this.fields.mandatee.triggerLoadData
-          this.fields.publicationYear.valueAsNumber
+          this.publicationYearAsNumber
         }}
       >
         <Auk::Label>
