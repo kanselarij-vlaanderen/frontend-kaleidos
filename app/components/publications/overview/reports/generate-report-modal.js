@@ -4,9 +4,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 
-const FIELDS = {
-
-};
+const FIELDS = {};
 
 export default class GenerateReportModalComponent extends Component {
   @service store;
@@ -22,10 +20,14 @@ export default class GenerateReportModalComponent extends Component {
     super(...arguments);
 
     const currentYear = new Date(Date.now()).getFullYear();
-    this.publicationYear = currentYear;
+    if (this.args.fields.publicationYear) {
+      this.publicationYear = currentYear;
+    }
 
-    this.decisionDateRangeStart = new Date(currentYear, 0, 1, 0, 0, 0, 0);
-    this.decisionDateRangeEnd = new Date(currentYear, 11, 31, 0, 0, 0, 0); // we only use date part in frontend, so we can leave hour parts === 0
+    if (this.args.fields.decisionDateRange) {
+      this.decisionDateRangeStart = new Date(currentYear, 0, 1, 0, 0, 0, 0);
+      this.decisionDateRangeEnd = new Date(currentYear, 11, 31, 0, 0, 0, 0); // we only use date part in frontend, so we can leave hour parts === 0
+    }
 
     let owner = getOwner(this).ownerInjection();
     const fields = this.args.fields;
@@ -88,21 +90,25 @@ export default class GenerateReportModalComponent extends Component {
   *triggerGenerateReport() {
     const filterParams = {};
 
-    filterParams.publicationDate = convertYearToDateRange(
-      this.publicationYearAsNumber
-    );
-
-    let decisionDateRangeEnd = this.decisionDateRangeEnd;
-    if (decisionDateRangeEnd) {
-      decisionDateRangeEnd = new Date(decisionDateRangeEnd);
-      decisionDateRangeEnd.setDate(decisionDateRangeEnd.getDate() + 1); // api does expect next date (filters on decisionDate < endDate)
+    if (this.args.fields.publicationYear) {
+      filterParams.publicationDate = convertYearToDateRange(
+        this.publicationYearAsNumber
+      );
     }
-    filterParams.decisionDate = [
-      this.decisionDateRangeStart,
-      decisionDateRangeEnd,
-    ];
 
-    if (this.fields.mandatee) {
+    if (this.args.fields.decisionDateRange) {
+      let decisionDateRangeEnd = this.decisionDateRangeEnd;
+      if (decisionDateRangeEnd) {
+        decisionDateRangeEnd = new Date(decisionDateRangeEnd);
+        decisionDateRangeEnd.setDate(decisionDateRangeEnd.getDate() + 1); // api does expect next date (filters on decisionDate < endDate)
+      }
+      filterParams.decisionDate = [
+        this.decisionDateRangeStart,
+        decisionDateRangeEnd,
+      ];
+    }
+
+    if (this.args.fields.mandatee) {
       const mandateeArray = this.selectedMandatees.map((person) => ({
         person: person.uri,
       }));
