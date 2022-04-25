@@ -41,24 +41,12 @@ export default class GenerateReportModalComponent extends Component {
   }
 
   @task
-  *searchMandatee(searchText) {
-    let persons = this.loadMandatees.last.value;
-
-    if (searchText) {
-      searchText = searchText.toLowerCase();
-      persons = persons.filter((person) =>
-        person.fullName.toLowerCase().includes(searchText)
-      );
-    }
-
-    return yield persons;
-  }
-
-  @task
   *loadMandatees() {
     let [yearStart, nextYearStart] = convertYearToDateRange(
       this.publicationYearAsNumber
-    );
+    ); // does not work for decisionDateRange filter
+    // currently the mandatee filter is only used in combination with the publicationYear filter
+    // NOTE: publicationYear might not overlap with mandate date range
 
     let persons = yield this.store.query('person', {
       include: ['mandatees'].join(','),
@@ -70,6 +58,20 @@ export default class GenerateReportModalComponent extends Component {
     );
 
     return persons;
+  }
+
+  @task
+  *searchMandatee(searchText) {
+    let persons = this.loadMandatees.last.value;
+
+    if (searchText) {
+      searchText = searchText.toLowerCase();
+      persons = persons.filter((person) =>
+        person.fullName.toLowerCase().includes(searchText)
+      );
+    }
+
+    return yield persons;
   }
 
   @task
@@ -109,7 +111,7 @@ export default class GenerateReportModalComponent extends Component {
   }
 }
 
-async function filterAsync(persons, fnCheck) {
+async function filterAsync(persons, fnCheck) { /// abstract complexity of filtering with async & ember data record arrays from actual check
   persons = persons.map(async (person) => {
     let mandatees = await person.mandatees;
     mandatees = mandatees.toArray();

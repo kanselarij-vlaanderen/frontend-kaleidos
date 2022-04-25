@@ -56,6 +56,7 @@
         <PowerSelectMultiple
           @options={{this.loadMandatees.last}}
           @selected={{this.selectedMandatees}}
+          {{!mandatee options is dependent on publicationYear, so only load when requested}}
           @onOpen={{perform this.loadMandatees}}
           @onChange={{fn (mut this.selectedMandatees)}}
           @searchEnabled={{true}}
