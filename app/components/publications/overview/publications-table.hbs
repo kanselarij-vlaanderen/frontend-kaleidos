@@ -11,16 +11,14 @@
               {{#each @tableConfig.visibleColumns as |column|}}
                 {{! first cases that need a special treament. The "else" clause treats the default case }}
                 {{#if (eq column.keyName "shortTitle")}}
-                  {{! template-lint-disable no-inline-styles }}
                   <Utils::ThSortable
                     data-test-route-publications-index-th={{column.keyName}}
-                    style="min-width: 25rem;"
+                    class="auk-u-min-width-medium"
                     @currentSorting={{@sort}}
                     @field={{column.sortKey}}
                     @onChange={{@onSortChange}}
                     @label={{t column.translationKeySmall}}
                   />
-                  {{! template-lint-enable no-inline-styles }}
                 {{else}}
                   {{#if column.sortKey}}
                     <Utils::ThSortable
