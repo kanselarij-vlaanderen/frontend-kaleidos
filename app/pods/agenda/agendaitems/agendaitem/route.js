@@ -23,7 +23,7 @@ export default class AgendaitemAgendaitemsAgendaRoute extends Route {
     this.transition = transition; // set on the route for use in setupController, since the provided "transition" argument there always comes back "undefined"
 
     this.treatments = await model.treatments;
-    this.newsletterInfo = await this.treatments.firstObject.newsletterInfo;
+    this.newsletterInfo = await this.treatments?.firstObject?.newsletterInfo;
   }
 
   setupController(controller, model) {
