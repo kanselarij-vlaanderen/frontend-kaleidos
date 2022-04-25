@@ -13,8 +13,10 @@ export default class GenerateReportModalComponent extends Component {
 
   @tracked publicationYearAsNumber;
 
+  @tracked mandatees;
   @tracked selectedMandatees = [];
 
+  @tracked governmentDomains;
   @tracked selectedGovernmentDomains = [];
 
   constructor() {
@@ -65,7 +67,7 @@ export default class GenerateReportModalComponent extends Component {
       mandatees.some((mandatee) => !mandatee.end || yearStart < mandatee.end)
     );
 
-    return persons;
+    this.mandatees = persons;
   }
 
   @task
@@ -89,8 +91,7 @@ export default class GenerateReportModalComponent extends Component {
       'filter[:has-no:broader]': true, // only top-level government-domains
       'filter[deprecated]': false,
     });
-    governmentDomains = governmentDomains.toArray();
-    return governmentDomains;
+    this.governmentDomains = governmentDomains.toArray();
   }
 
   @action

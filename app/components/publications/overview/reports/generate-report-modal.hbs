@@ -54,7 +54,7 @@
           {{t "ministers"}}
         </Auk::Label>
         <PowerSelectMultiple
-          @options={{this.loadMandatees.last}}
+          @options={{this.mandatees}}
           @selected={{this.selectedMandatees}}
           {{!mandatee options is dependent on publicationYear, so only load when requested}}
           @onOpen={{perform this.loadMandatees}}
@@ -73,7 +73,7 @@
       <div class="auk-form-group">
         <Auk::Label>{{t "government-domains"}}</Auk::Label>
         <Auk::CheckboxList>
-          {{#each this.loadGovernmentDomains.last.value as |governmentDomain|}}
+          {{#each this.governmentDomains as |governmentDomain|}}
             <Auk::Checkbox
               @checked={{includes
                 this.selectedGovernmentDomains
