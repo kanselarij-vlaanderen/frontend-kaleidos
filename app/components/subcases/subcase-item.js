@@ -102,13 +102,18 @@ export default class SubcaseItemSubcasesComponent extends Component {
 
   @task
   *loadSubcaseIsApproved() {
-    this.approved = !!(yield this.store.queryOne('agenda-item-treatment', {
-      'filter[subcase][id]': this.args.subcase.id,
-      'filter[decision-result-code][:id:]': [
-        CONSTANTS.DECISION_RESULT_CODE_IDS.GOEDGEKEURD,
-        CONSTANTS.DECISION_RESULT_CODE_IDS.KENNISNAME,
-      ].join(','),
-    }));
+    const meeting = yield this.args.subcase.requestedForMeeting;
+    if (meeting.isFinal) {
+      this.approved = !!(yield this.store.queryOne('agenda-item-treatment', {
+        'filter[subcase][id]': this.args.subcase.id,
+        'filter[decision-result-code][:id:]': [
+          CONSTANTS.DECISION_RESULT_CODE_IDS.GOEDGEKEURD,
+          CONSTANTS.DECISION_RESULT_CODE_IDS.KENNISNAME,
+        ].join(','),
+      }));
+    } else {
+      this.approved = false;
+    }
   }
 
   @action
