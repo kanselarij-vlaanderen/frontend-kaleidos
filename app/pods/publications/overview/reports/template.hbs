@@ -8,7 +8,10 @@
       </Auk::Panel::Header>
 
       {{#each this.model as |row|}}
-        <Auk::Panel::Body class="auk-o-flex auk-o-flex--justify-between">
+        <Auk::Panel::Body
+          class="auk-o-flex auk-o-flex--justify-between"
+          {{will-destroy row.cancelLoadAndMonitorJob}}
+        >
           <div>
             <h4 class="auk-h4 auk-u-m-0">{{t row.titleKey}}</h4>
             {{#if row.lastJob}}

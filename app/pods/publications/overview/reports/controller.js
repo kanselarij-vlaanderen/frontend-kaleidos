@@ -1,5 +1,5 @@
 import Controller from '@ember/controller';
-import EmberObject from '@ember/object';
+import EmberObject, { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { dasherize } from '@ember/string';
 import { tracked } from '@glimmer/tracking';
@@ -24,19 +24,40 @@ class BaseRow extends EmberObject {
   @service toaster;
   @service jobMonitor;
 
-  @tracked lastJob;
+  @tracked lastLoadedJob;
+  @tracked lastStartedJob;
 
   get titleKey() {
     return `publication-reports--type--${this.key}`;
   }
 
+  get lastJob() {
+    return this.lastStartedJob || this.lastLoadedJob;
+  }
+
   @task
-  *loadData() {
-    this.lastJob = yield this.store.queryOne('publication-metrics-export-job', {
+  *loadAndMonitorJob() {
+    this.lastLoadedJob = yield this.store.queryOne('publication-metrics-export-job', {
       sort: '-created',
       'filter[metrics-type]': this.key,
       include: ['generated', 'generated-by'].join(','),
     });
+    if (this.lastLoadedJob && !this.lastLoadedJob.hasEnded) {
+      yield this.jobMonitor.monitor(this.lastLoadedJob);
+      if (this.lastLoadedJob.status === this.lastLoadedJob.SUCCESS) {
+        // reload generated relationship is needed for template to rerender
+        // the template then triggers this network call again (but a workaround seems to complex for this issue)
+        yield this.lastLoadedJob.belongsTo('generated').reload();
+      }
+    }
+  }
+
+  @action
+  cancelLoadAndMonitorJob() {
+    this.loadAndMonitorJob.last?.cancel();
+    if (this.lastLoadedJob) {
+      this.jobMonitor.stopMonitoring(this.lastLoadedJob);
+    }
   }
 
   @task
@@ -53,6 +74,7 @@ class BaseRow extends EmberObject {
       }
     );
 
+    this.cancelLoadAndMonitorJob();
     let file;
     try {
       file = await this.generateReport(params);
@@ -84,7 +106,7 @@ class BaseRow extends EmberObject {
   /** @private */
   async generateReport(params) {
     const job = await this.createReportRecord(params);
-    this.lastJob = job;
+    this.lastStartedJob = job;
     await job.save();
     await this.jobMonitor.monitor(job);
     if (job.status === job.SUCCESS) {
