@@ -155,7 +155,7 @@ context('Subcase tests', () => {
     cy.url().should('not.contain', '/dossier/');
   });
 
-  it('Changes to agendaitem should propagate to subcase', () => {
+  it.only('Changes to agendaitem should propagate to subcase', () => {
     const type = 'Mededeling';
     const shortSubcaseTitle = `Cypress test: Mededeling - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test doorstromen changes agendaitem to subcase';
@@ -189,6 +189,8 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseDescription.agendaLink).click();
     cy.get(agenda.agendaDetailSidebarItem.confidential).should('exist');
     // Index view
+    // TODO-BUG, page is loading, the new sidenav for agendas has pills and we only get those
+    cy.wait(1500); // waiting for now, remove this fix with a proper selector after merge of agenda design
     cy.get(auk.pill).contains('Vertrouwelijk');
 
     // Click the "wijzigen link.
