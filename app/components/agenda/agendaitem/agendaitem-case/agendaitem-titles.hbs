@@ -78,7 +78,11 @@
             {{/if}}
             {{#if @subcase.confidential}}
               <Auk::Toolbar::Item>
-                <Auk::Pill @skin="warning" @icon="lock-closed">
+                <Auk::Pill
+                  data-test-agendaitem-titles-confidential
+                  @skin="warning"
+                  @icon="lock-closed"
+                >
                   {{t "confidential"}}
                 </Auk::Pill>
               </Auk::Toolbar::Item>

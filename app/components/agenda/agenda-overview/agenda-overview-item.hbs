@@ -86,6 +86,17 @@
           {{!  TODO: Only here because required for alignment of flex items }}
           <span class="vlc-agenda-meta__times-passed"></span>
         {{/if}}
+        {{#if (and this.currentSession.isEditor @showFormallyOkStatus)}}
+          {{#if @isEditingFormallyOkStatus}}
+            <div class="vlc-agenda-meta__status-holder">
+              <Utils::FormallyOkSelector
+                data-test-agenda-overview-item-formally-ok={{true}}
+                @formallyOkStatusUri={{@agendaitem.formallyOk}}
+                @onChange={{this.setAndSaveFormallyOkStatus}}
+              />
+            </div>
+          {{/if}}
+        {{/if}}
       </div>
       {{#if (or this.currentSession.isEditor this.documentsAreReleased)}}
         <div class="auk-u-mt-4">
@@ -192,24 +203,16 @@
             </div>
             <div class="vlc-agenda-meta__status-holder auk-u-ml-2">
               {{#if (and this.currentSession.isEditor @showFormallyOkStatus)}}
-                {{#if @isEditingFormallyOkStatus}}
-                  <Utils::FormallyOkSelector
-                    data-test-agenda-overview-item-formally-ok={{true}}
-                    @formallyOkStatusUri={{@agendaitem.formallyOk}}
-                    @onChange={{this.setAndSaveFormallyOkStatus}}
-                  />
-                {{else}}
-                  <p
-                    class={{@agendaitem.formallyOkToShow.classNames}}
-                    data-test-agenda-overview-item-status
-                  >
-                    <i
-                      class={{@agendaitem.formallyOkToShow.iconClassNames}}
-                      aria-hidden="true"
-                    ></i>
-                    {{@agendaitem.formallyOkToShow.label}}
-                  </p>
-                {{/if}}
+                <p
+                  class={{@agendaitem.formallyOkToShow.classNames}}
+                  data-test-agenda-overview-item-status
+                >
+                  <i
+                    class={{@agendaitem.formallyOkToShow.iconClassNames}}
+                    aria-hidden="true"
+                  ></i>
+                  {{@agendaitem.formallyOkToShow.label}}
+                </p>
               {{/if}}
             </div>
           </div>

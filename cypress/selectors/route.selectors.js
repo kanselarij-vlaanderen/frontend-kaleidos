@@ -61,11 +61,6 @@ const selectors = {
     add: '[data-test-route-agenda---agendaitem-documents-add]',
   },
 
-  // agenda/agendaitems/agendaitem/index/template.hbs
-  agendaitemIndex: {
-    confidential: '[data-test-route-agenda---agendaitem-index-confidential]',
-  },
-
   /**
     ROUTE CASES
   */

@@ -61,7 +61,6 @@ const selectors = {
     subitem: '[data-test-agenda-overview-item-sub-item]', // this contains short title
     title: '[data-test-agenda-overview-item-title]',
     formallyOk: '[data-test-agenda-overview-item-formally-ok]',
-    confidentialityIcon: '[data-test-agenda-overview-item-confidentiality-locked]',
     status: '[data-test-agenda-overview-item-status]',
   },
 

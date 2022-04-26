@@ -173,14 +173,14 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaitemTitlesView.comment).contains(`Opmerking: ${whitespace + comment + whitespace}`);
     // privatec comment is not trimmed
     cy.get(agenda.agendaitemTitlesView.privateComment).contains(`Interne opmerking: ${whitespace + privateComment + whitespace}`);
-    cy.get(route.agendaitemIndex.confidential).contains('Vertrouwelijk');
+    cy.get(agenda.agendaitemTitlesView.confidential).contains('Vertrouwelijk');
 
     // rollback confidentiality should work
     cy.get(agenda.agendaitemTitlesView.edit).click();
     cy.get(agenda.agendaitemTitlesEdit.confidential).click();
-    cy.get(route.agendaitemIndex.confidential).should('not.exist');
+    cy.get(agenda.agendaitemTitlesView.confidential).should('not.exist');
     cy.get(agenda.agendaitemTitlesEdit.actions.cancel).click();
-    cy.get(route.agendaitemIndex.confidential).contains('Vertrouwelijk');
+    cy.get(agenda.agendaitemTitlesView.confidential).contains('Vertrouwelijk');
   });
 
   it('It should be automatically get the next meetingID assigned in the UI', () => {
