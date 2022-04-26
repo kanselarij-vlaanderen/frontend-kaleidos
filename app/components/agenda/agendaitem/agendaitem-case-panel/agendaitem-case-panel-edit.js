@@ -26,7 +26,7 @@ export default class AgendaitemCasePanelEdit extends Component {
       this.args.agendaitem.rollbackAttributes();
     }
     // We change the value of confidental directly on subcase, so we should also roll it back
-    if (this.args.subcase && this.args.subcase.hasDirtyAttributes) {
+    if (this.args.subcase?.hasDirtyAttributes) {
       this.args.subcase.rollbackAttributes();
     }
     if (this.newsletterInfo && this.newsletterInfo.hasDirtyAttributes) {

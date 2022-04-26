@@ -49,7 +49,7 @@
         <Auk::Button
           data-test-subcase-titles-edit-save={{true}}
           @skin="primary"
-          @isLoading={{this.saveChanges.isRunning}}
+          @loading={{this.saveChanges.isRunning}}
           {{on "click" (perform this.saveChanges)}}
         >
           {{t "save"}}
