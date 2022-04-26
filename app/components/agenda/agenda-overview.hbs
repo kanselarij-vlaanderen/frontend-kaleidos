@@ -1,9 +1,8 @@
 <div class="vlc-agenda-items auk-u-m-8 vlc-agenda-items--spaced">
-  {{#if this.isEditingOverview}}
-    <ChangesAlert
+  {{#if @isEditingOverview}}
+    <Auk::Alert
+      @skin="warning"
       @message={{t "editing-agenda-overview"}}
-      @buttonText={{t "end-editing-overview"}}
-      @clearAction={{this.toggleIsEditingOverview}}
     />
   {{/if}}
   <Auk::Toolbar class="vlc-agenda-items-section-header">
@@ -27,7 +26,7 @@
           {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
         </Auk::ButtonLink>
       </Auk::Toolbar::Item> --}}
-      <Auk::Toolbar::Item>
+      {{!-- <Auk::Toolbar::Item>
         {{#if (and this.currentSession.isEditor this.isDesignAgenda)}}
           {{#unless this.isEditingOverview}}
             <div class="auk-u-ml-2">
@@ -41,13 +40,13 @@
             </div>
           {{/unless}}
         {{/if}}
-      </Auk::Toolbar::Item>
+      </Auk::Toolbar::Item> --}}
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
   {{#if (not @isLoadingNotaGroups)}}
     {{#if @notaGroups.length}}
       <div>
-        {{#if this.isEditingOverview}}
+        {{#if @isEditingOverview}}
         <ul {{sortable-group onChange=@onReorderAgendaitems}}>
           {{#each @notaGroups as |agendaitemGroup index|}}
             {{! template-lint-disable simple-unless }}
@@ -56,7 +55,7 @@
             }}
               <Agenda::AgendaOverview::AgendaitemGroupHeader
                 @mandatees={{agendaitemGroup.sortedMandatees}}
-                @isEditingFormallyOkStatus={{this.isEditingOverview}}
+                @isEditingFormallyOkStatus={{@isEditingOverview}}
               />
             {{/unless}}
             {{! template-lint-enable simple-unless }}
@@ -77,7 +76,7 @@
                   @previousAgenda={{@previousAgenda}}
                   @isNew={{includes agendaitem @newItems}}
                   @showFormallyOkStatus={{this.isDesignAgenda}}
-                  @isEditingFormallyOkStatus={{this.isEditingOverview}}
+                  @isEditingFormallyOkStatus={{@isEditingOverview}}
                   @showDragHandle={{this.isDraggingEnabled}}
                 />
               </li>
@@ -132,7 +131,7 @@
   </div>
   <div class="auk-u-mb-4">
     {{#if @announcements.length}}
-      {{#if this.isEditingOverview}}
+      {{#if @isEditingOverview}}
       <ul {{sortable-group onChange=@onReorderAgendaitems}}>
         {{#each @announcements as |announcement|}}
           <li
@@ -151,7 +150,7 @@
               @previousAgenda={{@previousAgenda}}
               @isNew={{includes announcement @newItems}}
               @showFormallyOkStatus={{this.isDesignAgenda}}
-              @isEditingFormallyOkStatus={{this.isEditingOverview}}
+              @isEditingFormallyOkStatus={{@isEditingOverview}}
               @showDragHandle={{this.isDraggingEnabled}}
             />
           </li>

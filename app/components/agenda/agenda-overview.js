@@ -21,8 +21,6 @@ export default class AgendaOverview extends Component {
 
   dragHandleClass = '.ki-drag-handle-2';
 
-  @tracked isEditingOverview = null;
-
   get isDraggingEnabled() {
     return this.currentSession.isEditor && this.isDesignAgenda;
   }
@@ -33,6 +31,6 @@ export default class AgendaOverview extends Component {
 
   @action
   toggleIsEditingOverview() {
-    this.isEditingOverview = !this.isEditingOverview;
+    this.args.isEditingOverview = !this.args.isEditingOverview;
   }
 }
