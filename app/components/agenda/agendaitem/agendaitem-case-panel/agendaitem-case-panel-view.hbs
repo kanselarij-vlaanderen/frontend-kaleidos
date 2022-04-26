@@ -112,7 +112,7 @@
                 class="auk-u-text-pre-line"
                 data-test-agendaitem-titles-comment
               >
-                {{! p-tag opening and closing on 1 line to prevent whitespace to be rendered. }}
+                {{! Strong opening and closing on 1 line to prevent whitespace to be rendered. }}
                 {{! prettier-ignore }}
                 <strong class="auk-u-text-bold">{{t "comment-title"}}:</strong>{{@agendaitem.comment}}
               </pre>
@@ -130,7 +130,7 @@
                 class="auk-u-text-pre-line auk-u-text-muted"
                 data-test-agendaitem-titles-private-comment
               >
-                {{! p-tag opening and closing on 1 line to prevent whitespace to be rendered. }}
+                {{! Strong opening and closing on 1 line to prevent whitespace to be rendered. }}
                 {{! prettier-ignore }}
                 <strong class="auk-u-text-bold"><Auk::Icon @name="lock-closed" @size="small" />{{t "private-comment-title"}}:</strong>{{@agendaitem.privateComment}}
               </pre>
