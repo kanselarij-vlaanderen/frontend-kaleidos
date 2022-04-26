@@ -483,3 +483,12 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
     padding-bottom: 0;
   }
 }
+
+// Dirty fix for notification on agenda order
+.auk-u-show-last {
+  display: none;
+
+  &:last-of-type {
+    display: block;
+  }
+}
