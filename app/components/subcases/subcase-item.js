@@ -106,9 +106,9 @@ export default class SubcaseItemSubcasesComponent extends Component {
     if (meeting?.isFinal) {
       this.approved = !!(yield this.store.queryOne('agenda-item-treatment', {
         'filter[subcase][id]': this.args.subcase.id,
-        'filter[decision-result-code][:id:]': [
-          CONSTANTS.DECISION_RESULT_CODE_IDS.GOEDGEKEURD,
-          CONSTANTS.DECISION_RESULT_CODE_IDS.KENNISNAME,
+        'filter[decision-result-code][:uri:]': [
+          CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD,
+          CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME,
         ].join(','),
       }));
     } else {
