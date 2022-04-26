@@ -7,7 +7,6 @@
     @onSave={{this.stopEditing}}
   />
 {{else}}
-  {{! shouldShowDetails should only be false when the agendaitem is to approve minutes }}
   <Agenda::Agendaitem::AgendaitemCasePanel::AgendaitemCasePanelView
     @agendaitem={{@agendaitem}}
     @subcase={{@subcase}}

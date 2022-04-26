@@ -5,6 +5,13 @@ import { saveChanges as saveSubcaseTitles } from 'frontend-kaleidos/utils/agenda
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { task } from 'ember-concurrency';
 
+/**
+ * @argument subcase
+ * @argument agendaitem
+ * @argument newsletterInfo
+ * @argument onSave
+ * @argument onCancel
+ */
 export default class AgendaitemCasePanelEdit extends Component {
   @service store;
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'comment']);
