@@ -140,8 +140,9 @@
                 class="auk-u-text-pre-line"
                 data-test-agendaitem-titles-comment
               >
-                <strong class="auk-u-text-bold">{{t "comment-title"}}:
-                </strong>{{@agendaitem.comment}}
+                {{! Strong opening and closing on 1 line to prevent whitespace to be rendered. }}
+                {{! prettier-ignore }}
+                <strong class="auk-u-text-bold">{{t "comment-title"}}: </strong>{{@agendaitem.comment}}
               </pre>
             </Group.Item>
           </Toolbar.Group>
@@ -157,11 +158,9 @@
                 class="auk-u-text-pre-line auk-u-text-muted"
                 data-test-agendaitem-titles-private-comment
               >
-                <strong class="auk-u-text-bold"><Auk::Icon
-                    @name="lock-closed"
-                    @size="small"
-                  />{{t "private-comment-title"}}:
-                </strong>{{@agendaitem.privateComment}}
+                {{! Strong opening and closing on 1 line to prevent whitespace to be rendered. }}
+                {{! prettier-ignore }}
+                <strong class="auk-u-text-bold"><Auk::Icon @name="lock-closed" @size="small" />{{t "private-comment-title"}}: </strong>{{@agendaitem.privateComment}}
               </pre>
             </Group.Item>
           </Toolbar.Group>
