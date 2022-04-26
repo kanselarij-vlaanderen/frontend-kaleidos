@@ -26,7 +26,7 @@
           >
             {{kind-print-label model.kind}}
             {{t "of"}}
-            {{moment-format model.plannedStart "DD-MM-YYYY"}}
+            {{moment-format model.plannedStart}}
             ({{model.numberRepresentation}})
           </Utils::ModelSelector>
         </div>
@@ -63,7 +63,7 @@
           <div class="auk-o-flex__item">
             <div
               data-test-new-meeting-number-representation-view
-              class="auk-u-text-line-height--xsmall"
+              class="auk-u-text-line-height-xsmall"
             >
               {{this.formattedMeetingIdentifier}}
             </div>

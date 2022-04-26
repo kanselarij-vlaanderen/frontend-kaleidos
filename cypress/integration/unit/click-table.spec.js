@@ -57,8 +57,8 @@ context('Table Row Click tests', () => {
   });
 
   it('should filter the agenda-page and remove the active filter afterwards', () => {
-    cy.intercept('GET', '/meetings?**').as('getMeetings');
-    cy.wait('@getMeetings', {
+    cy.intercept('GET', '/agendas?**').as('getAgendas');
+    cy.wait('@getAgendas', {
       timeout: 30000,
     });
     cy.get(route.agendasOverview.dataTable).find('tbody')
@@ -66,8 +66,8 @@ context('Table Row Click tests', () => {
       .should('not.have.length', 0);
     cy.get(route.agendasOverview.filter.input).click()
       .type('02/2019');
-    cy.get(route.agendasOverview.filter.button).click();
-    cy.get(utils.vlAlert.message).contains('Er zijn nog geen historische agenda\'s');
+    cy.get(route.agendasOverview.filter.warning).should('be.visible');
+    cy.get(route.agendasOverview.filter.warning).contains('Geen resultaten gevonden');
     cy.get(utils.changesAlert.alert).contains('Deze data is gefilterd.');
     cy.get(utils.changesAlert.close).click();
     cy.get(route.agendasOverview.dataTable).find('tbody')
