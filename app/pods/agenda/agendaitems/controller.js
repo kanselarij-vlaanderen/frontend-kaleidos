@@ -83,6 +83,7 @@ export default class AgendaAgendaitemsController extends Controller {
     const reorderedAgendaitemsOfCategory = reorderedAgendaitems.filter((item) => item.showAsRemark === draggedAgendaItem.showAsRemark);
     yield setAgendaitemsNumber(reorderedAgendaitemsOfCategory, true, true); // permissions guarded in template (and backend)
     this.send('reloadModel');
+    this.isEditingOverview = true;
   }
 
   @task
