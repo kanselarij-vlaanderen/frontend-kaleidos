@@ -54,7 +54,7 @@ export default class SubcasesService extends Service {
             date: geplandeStart,
           });
           if (phaseData.decisionResultId) {
-            // Why don't we load in this data in the custom-subcases-service?
+            // KAS-3359 Why don't we load in this data in the custom-subcases-service?
             // We already have the decision-result resource in the backend query,
             // we could just send the label to the frontend as well and shave off a request here.
             // See: https://github.com/kanselarij-vlaanderen/custom-subcases-service/blob/d5ba54049ecd0ae80d73d4c1875bc5855a394dbd/repository/index.js#L69
