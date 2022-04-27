@@ -33,7 +33,9 @@ export default class GenerateReportModalComponent extends Component {
 
     if (this.args.fields.decisionDateRange) {
       this.decisionDateRangeStart = new Date(currentYear, 0, 1, 0, 0, 0, 0);
-      this.decisionDateRangeEnd = new Date(currentYear, 11, 31, 0, 0, 0, 0); // we only use date part in frontend, so we can leave hour parts === 0
+      // we only use date part in frontend, so we can leave hour parts === 0
+      // not using convertYearToDateRange: range is displayed with last day of the year as end date
+      this.decisionDateRangeEnd = new Date(currentYear, 11, 31, 0, 0, 0, 0);
     }
 
     if (this.args.fields.mandatee) {
@@ -251,6 +253,14 @@ export default class GenerateReportModalComponent extends Component {
   }
 }
 
+/**
+ * start: inclusive
+ * end: exclusive
+ * @param {number} year
+ * @returns {[Date, Date]}
+ *  first element: start of the year
+ *  second element: start of the next year
+ */
 function convertYearToDateRange(year) {
   const publicationDateRangeStart = new Date(year, 0, 1, 0, 0, 0, 0); /* eslint-disable-line prettier/prettier */ // (no new line for each number)
   const publicationDateRangeEnd = new Date(year + 1, 0, 1, 0, 0, 0, 0); /* eslint-disable-line prettier/prettier */
