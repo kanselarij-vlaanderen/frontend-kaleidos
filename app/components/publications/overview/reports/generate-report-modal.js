@@ -53,8 +53,8 @@ export default class GenerateReportModalComponent extends Component {
 
   get isLoading() {
     return (
-      this.loadGovernmentDomains.isRunning &&
-      this.loadRegulationTypes.isRunning &&
+      this.loadGovernmentDomains.isRunning ||
+      this.loadRegulationTypes.isRunning ||
       this.loadMandatees.isRunning
     );
   }
