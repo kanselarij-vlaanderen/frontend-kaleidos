@@ -50,11 +50,11 @@ services:
     entrypoint: "echo 'service disabled'"
     restart: "no"
     user: ${HOST_UID_GID}
-  newsletter-service:
+  newsletter:
     entrypoint: "echo 'service disabled'"
     restart: "no"
     user: ${HOST_UID_GID}
-  musearch:
+  search:
     user: ${HOST_UID_GID}
     environment:
       UPDATE_WAIT_INTERVAL_MINUTES: 0

@@ -116,8 +116,7 @@ context('Different session kinds should show different titles', () => {
     const vvKind = 'Ministerraad - Plan Vlaamse Veerkracht';
     const decisionHeader = `Beslissingen van de Vlaamse Regering - ${vvKind}`;
     const newsletterHeader = `Beslissingen van de Vlaamse Regering - ${vvKind}`;
-    const formattedMeetingDateHour = agendaDate.format('DD-MM-YYYY HH:mm');
-    const formattedMeetingDateDots = agendaDate.format('DD.MM.YYYY');
+    const formattedMeetingDateDots = agendaDate.format('DD-MM-YYYY');
     // TODO-BUG KAS-3056 numbering not correct when creating agenda in different year
     const fullmeetingNumber = `VR PV ${Cypress.dayjs().format('YYYY')}/${agendaNumber}`;
     // const fullmeetingNumber = `VR PV ${agendaDate.format('YYYY')}/${agendaNumber}`;
@@ -128,22 +127,21 @@ context('Different session kinds should show different titles', () => {
     cy.createAgenda(null, agendaDate, null, agendaNumber);
     // set kind to PVV
     cy.get(route.agendas.action.newMeeting).click();
-    cy.get(agenda.newMeeting.kind).click();
+    cy.get(agenda.editMeeting.kind).click();
     selectFromDropdown(vvKind);
     // select related main meeting
-    cy.get(agenda.newMeeting.relatedMainMeeting).click();
+    cy.get(agenda.editMeeting.relatedMainMeeting).click();
     selectFromDropdown(formattedAgendaDate);
-    cy.get(agenda.newMeeting.numberRep.view).should('contain', fullmeetingNumberVV);
+    cy.get(agenda.editMeeting.numberRep.view).should('contain', fullmeetingNumberVV);
     cy.intercept('PATCH', '/meetings/**').as('patchMeetings');
-    cy.get(agenda.newMeeting.save).click();
+    cy.get(agenda.editMeeting.save).click();
     cy.wait('@patchMeetings');
     // check if edit shows correct data
     cy.openAgendaForDate(agendaDate, 1);
     cy.get(agenda.agendaHeader.showOptions).click();
     cy.get(agenda.agendaHeader.actions.toggleEditingMeeting).click();
     cy.get(utils.kindSelector).contains(vvKind);
-    cy.get(utils.vlDatepicker).should('have.value', formattedMeetingDateHour);
-    cy.get(agenda.editMeeting.numberRep).should('have.value', fullmeetingNumberVV);
+    cy.get(agenda.editMeeting.numberRep.view).should('contain', fullmeetingNumberVV);
     cy.get(auk.modal.footer.cancel).click();
 
     // check if different views show correct header
@@ -168,7 +166,7 @@ context('Different session kinds should show different titles', () => {
     cy.get(route.agendasOverview.dataTable).find('tbody')
       .children('tr');
     // first agenda should always be the normal kind, second PVV
-    cy.get(route.agendasOverview.row.title).contains(formattedMeetingDateDots)
+    cy.get(route.agendasOverview.row.title).contains(formattedAgendaDate)
       .eq(0)
       .parents('tr')
       .find(route.agendasOverview.row.kind)

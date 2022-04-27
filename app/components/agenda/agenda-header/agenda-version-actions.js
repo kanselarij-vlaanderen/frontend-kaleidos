@@ -399,8 +399,8 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         );
       }
       // if there is no previous agenda, the meeting should have been deleted
-      this.args.onStopLoading();
-      this.router.transitionTo('agendas.overview');
+      this.router.transitionTo('agendas');
+      // this.args.onStopLoading does not work here because the view attempts to reload Agendaitem Nav linkTo with deleted models before transitioning
     } catch (error) {
       this.args.onStopLoading();
       this.toaster.error(

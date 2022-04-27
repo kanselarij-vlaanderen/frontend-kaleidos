@@ -189,6 +189,8 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseDescription.agendaLink).click();
     cy.get(agenda.agendaDetailSidebarItem.confidential).should('exist');
     // Index view
+    // TODO-BUG, page is loading, the new sidenav for agendas has pills and we only get those
+    cy.wait(1500); // waiting for now, remove this fix with a proper selector after merge of agenda design
     cy.get(auk.pill).contains('Vertrouwelijk');
 
     // Click the "wijzigen link.
@@ -270,7 +272,7 @@ context('Subcase tests', () => {
     cy.intercept('GET', '/agendaitems**').as('getAgendaitems');
     cy.get(route.newsletters.dataTable).find('tbody')
       .children('tr')
-      .contains(`van ${Cypress.dayjs(agendaDate).format('DD.MM.YYYY')}`)
+      .contains(`van ${Cypress.dayjs(agendaDate).format('DD-MM-YYYY')}`)
       .click();
     cy.wait('@getMeetingsDetail');
     cy.wait('@getAgendaitems');
@@ -335,10 +337,6 @@ context('Subcase tests', () => {
   });
 
   it('After finalizing agenda, subcase info should change to the approved status', () => {
-    const realmonth = agendaDate.month() + 1; // Js month start at 0.
-    const paddedMonth = realmonth < 10 ? `0${realmonth}` : realmonth;
-    const dateFormatDotted = `${agendaDate.date()}.${paddedMonth}.${agendaDate.year()}`;
-
     cy.openAgendaForDate(agendaDate);
     cy.setAllItemsFormallyOk(5);
     cy.approveAndCloseDesignAgenda();
@@ -346,6 +344,6 @@ context('Subcase tests', () => {
     cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
     cy.get(cases.subcaseItem.approved).should('have.length', 3);
     cy.openSubcase(2);
-    cy.get(cases.subcaseDescription.decidedOn).contains(dateFormatDotted);
+    cy.get(cases.subcaseDescription.decidedOn).contains(agendaDate.format('DD-MM-YYYY'));
   });
 });
