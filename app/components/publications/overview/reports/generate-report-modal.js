@@ -78,6 +78,7 @@ export default class GenerateReportModalComponent extends Component {
     let mandatees = yield this.store.query('person', {
       include: ['mandatees'].join(','),
     });
+    mandatees = mandatees.toArray();
     this.mandatees = mandatees.sortBy('lastName');
   }
 
@@ -149,6 +150,7 @@ export default class GenerateReportModalComponent extends Component {
   @task
   *loadRegulationTypes() {
     let regulationTypes = this.store.peekAll('regulation-type');
+    regulationTypes = regulationTypes.toArray();
     regulationTypes = regulationTypes.sortBy('position');
     this.regulationTypes = regulationTypes;
     yield; // for linter
