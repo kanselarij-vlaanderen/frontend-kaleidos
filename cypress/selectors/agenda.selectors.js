@@ -152,7 +152,7 @@ const selectors = {
   agendaitemTitlesView: {
     title: '[data-test-agendaitem-titles-title]',
     shortTitle: '[data-test-agendaitem-titles-short-title]',
-    explanation: '[data-test-agendaitem-titles-explanation]',
+    comment: '[data-test-agendaitem-titles-comment]',
     privateComment: '[data-test-agendaitem-titles-private-comment]',
     confidential: '[data-test-agendaitem-titles-confidential]',
     linkToSubcase: '[data-test-agendaitem-titles-link-to-subcase]',
@@ -163,7 +163,7 @@ const selectors = {
   agendaitemTitlesEdit: {
     title: '[data-test-agendaitem-titles-edit-title]',
     shorttitle: '[data-test-agendaitem-titles-edit-shorttitle]',
-    explanation: '[data-test-agendaitem-titles-edit-explanation]',
+    comment: '[data-test-agendaitem-titles-edit-comment]',
     privateComment: '[data-test-agendaitem-titles-edit-private-comment]',
     showInNewsletter: '[data-test-agendaitem-titles-edit-showInNewsletter]',
     confidential: '[data-test-agendaitem-titles-edit-confidential]',
@@ -206,8 +206,17 @@ const selectors = {
 
   // edit-meeting
   editMeeting: {
+    kind: '[data-test-utils-kind-selector]',
+    relatedMainMeeting: '[data-test-edit-meeting-related-main-meeting]',
     meetingNumber: '[data-test-edit-meeting-meeting-number]',
-    numberRep: '[data-test-edit-meeting-number-representation]',
+    meetingLocation: '[data-test-edit-meeting-meeting-location]',
+    datepicker: '[data-test-edit-meeting-datepicker]',
+    numberRep: {
+      view: '[data-test-edit-meeting-number-representation-view]',
+      edit: '[data-test-edit-meeting-number-representation-edit]',
+      input: '[data-test-edit-meeting-number-representation-input]',
+      save: '[data-test-edit-meeting-number-representation-save]',
+    },
     save: '[data-test-edit-meeting-save]',
   },
 

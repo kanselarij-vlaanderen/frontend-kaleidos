@@ -7,7 +7,7 @@ import { inject } from '@ember/service';
 // eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   router: inject(),
-  defaultRoute: 'agendas.overview',
+  defaultRoute: 'agendas',
   // TODO: octane-refactor
   // eslint-disable-next-line ember/no-actions-hash
   actions: {

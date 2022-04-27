@@ -107,7 +107,7 @@ context('Agenda tests', () => {
     const caseTitleShort = `Cypress agenda spec edit & trim whitespace - ${testId}`;
     const subcaseTitleShort = `Agenda spec edit & trim whitespace korte titel - ${testId}`;
     const subcaseTitleLong = `Agenda spec edit & trim whitespace lange titel - ${testId}`;
-    const explanation = 'Dit is de opmerking';
+    const comment = 'Dit is de opmerking';
     const privateComment = 'Dit is de interne opmerking';
     const whitespace = '\n';
 
@@ -149,14 +149,15 @@ context('Agenda tests', () => {
       .type(whitespace + subcaseTitleLong + whitespace);
     cy.get(agenda.agendaitemTitlesEdit.title).should('have.value', whitespace + subcaseTitleLong + whitespace);
 
-    // explanation
-    cy.get(agenda.agendaitemTitlesEdit.explanation).clear()
-      .type(whitespace + explanation + whitespace);
-    cy.get(agenda.agendaitemTitlesEdit.explanation).should('have.value', whitespace + explanation + whitespace);
+    // comment
+    cy.get(agenda.agendaitemTitlesEdit.comment).clear()
+      .type(whitespace + comment + whitespace);
+    cy.get(agenda.agendaitemTitlesEdit.comment).should('have.value', whitespace + comment + whitespace);
     // private comment
     cy.get(agenda.agendaitemTitlesEdit.privateComment).clear()
       .type(whitespace + privateComment + whitespace);
     cy.get(agenda.agendaitemTitlesEdit.privateComment).should('have.value', whitespace + privateComment + whitespace);
+
     cy.intercept('PATCH', '/agendas/*').as('patchAgendas');
     cy.get(agenda.agendaitemTitlesEdit.actions.save).click();
     cy.wait('@patchAgendas');
@@ -168,8 +169,8 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaitemTitlesView.title).as('longTitle');
     // This should technicaly fail but we simulate whitespace before of the actual value for readability
     cy.get('@longTitle').contains(subcaseTitleLong);
-    // explanation is not trimmed
-    cy.get(agenda.agendaitemTitlesView.explanation).contains(`Opmerking: ${whitespace + explanation + whitespace}`);
+    // comment is not trimmed
+    cy.get(agenda.agendaitemTitlesView.comment).contains(`Opmerking: ${whitespace + comment + whitespace}`);
     // privatec comment is not trimmed
     cy.get(agenda.agendaitemTitlesView.privateComment).contains(`Interne opmerking: ${whitespace + privateComment + whitespace}`);
     cy.get(route.agendaitemIndex.confidential).contains('Vertrouwelijk');
@@ -192,13 +193,13 @@ context('Agenda tests', () => {
       cy.get(agenda.agendaHeader.showOptions).click();
       cy.get(agenda.agendaHeader.actions.toggleEditingMeeting).click();
       cy.get(agenda.editMeeting.meetingNumber).should('have.value', result.meetingNumber);
-      cy.get(agenda.editMeeting.numberRep).should('have.value', result.meetingNumberRep);
+      cy.get(agenda.editMeeting.numberRep.view).should('contain', result.meetingNumberRep);
       cy.get(auk.modal.footer.cancel).click();
       // Check if the next automatic number is correct
       cy.get(utils.mHeader.agendas).click();
       cy.get(route.agendas.action.newMeeting).click();
       cy.wait(500); // await call not possible
-      cy.get(agenda.newMeeting.meetingNumber).should('have.value', (parseInt(result.meetingNumber, 10) + 1).toString());
+      cy.get(agenda.editMeeting.meetingNumber).should('have.value', (parseInt(result.meetingNumber, 10) + 1).toString());
     });
   });
 
@@ -338,4 +339,3 @@ context('Agenda tests', () => {
     cy.agendaNameExists('A', false);
   });
 });
-

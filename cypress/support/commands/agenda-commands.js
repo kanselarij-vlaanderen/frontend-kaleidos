@@ -39,7 +39,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   // Added wait, mouseover, force clicking and checking for existance of the ember power select option because of flakyness
   // Sometimes, the dropdown stays after pressing an option
   if (kind) {
-    cy.get(agenda.newMeeting.kind).click();
+    cy.get(agenda.editMeeting.kind).click();
     cy.get(dependency.emberPowerSelect.option, {
       timeout: 5000,
     }).wait(500)
@@ -55,23 +55,23 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   }
 
   // Set the start date
-  cy.get(agenda.newMeeting.datepicker).find(utils.vlDatepicker)
+  cy.get(agenda.editMeeting.datepicker).find(utils.vlDatepicker)
     .click();
   cy.setDateAndTimeInFlatpickr(date);
   // At this point, the flatpickr is still open and covers the other fields
   // To negate this, we click once with force:true on the next input field to close it
-  cy.get(agenda.newMeeting.meetingNumber).click({
+  cy.get(agenda.editMeeting.meetingNumber).click({
     force: true,
   });
 
   // Set the meetingNumber
   if (meetingNumber) {
-    cy.get(agenda.newMeeting.meetingNumber).click()
+    cy.get(agenda.editMeeting.meetingNumber).click()
       .clear()
       .type(meetingNumber);
   } else {
     // 1 test in agenda.spec uses this value
-    cy.get(agenda.newMeeting.meetingNumber).click()
+    cy.get(agenda.editMeeting.meetingNumber).click()
       .invoke('val')
       // eslint-disable-next-line
       .then((sometext) => meetingNumber = sometext);
@@ -81,15 +81,15 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   let meetingNumberRep;
 
   if (meetingNumberVisualRepresentation) {
-    cy.get(agenda.newMeeting.numberRep.edit).click();
-    cy.get(agenda.newMeeting.numberRep.input).click()
+    cy.get(agenda.editMeeting.numberRep.edit).click();
+    cy.get(agenda.editMeeting.numberRep.input).click()
       .clear()
       .type(meetingNumberVisualRepresentation);
-    cy.get(agenda.newMeeting.numberRep.save).click();
+    cy.get(agenda.editMeeting.numberRep.save).click();
   }
   // Get the value from the meetingNumber representation
-  cy.get(agenda.newMeeting.numberRep.edit).click();
-  cy.get(agenda.newMeeting.numberRep.input).click()
+  cy.get(agenda.editMeeting.numberRep.edit).click();
+  cy.get(agenda.editMeeting.numberRep.input).click()
     .invoke('val')
     .then((sometext) => {
       meetingNumberRep = sometext;
@@ -97,10 +97,10 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
 
   // Set the location
   if (location) {
-    cy.get(agenda.newMeeting.meetingLocation).click()
+    cy.get(agenda.editMeeting.meetingLocation).click()
       .type(location);
   }
-  cy.get(agenda.newMeeting.save).click();
+  cy.get(agenda.editMeeting.save).click();
 
   let meetingId;
   let agendaId;
@@ -159,14 +159,16 @@ function visitAgendaWithLink(link) {
 function openAgendaForDate(agendaDate, index = 0) {
   cy.log('openAgendaForDate');
   const searchDate = `${agendaDate.date()}/${agendaDate.month() + 1}/${agendaDate.year()}`;
-  cy.intercept('GET', '/meetings?filter**').as('getFilteredMeetings');
+  cy.intercept('GET', '/agendas?filter**').as('getFilteredAgendas');
 
   cy.visit('');
   cy.get(route.agendasOverview.filter.container).within(() => {
-    cy.get(route.agendasOverview.filter.input).type(searchDate);
-    cy.get(route.agendasOverview.filter.button).click();
+    cy.get(route.agendasOverview.filter.input).type(`${searchDate}{enter}`);
   });
-  cy.wait('@getFilteredMeetings', {
+  cy.get(route.agendasOverview.loader, {
+    timeout: 5000,
+  }).should('not.exist');
+  cy.wait('@getFilteredAgendas', {
     timeout: 20000,
   });
   cy.get(route.agendasOverview.dataTable).find('tbody')
@@ -205,12 +207,15 @@ function openAgendaitemKortBestekTab(agendaitemTitle) {
 function deleteAgenda(lastAgenda) {
   cy.log('deleteAgenda');
   // Call is made but cypress doesn't see it
-  // cy.intercept('POST', '/agenda-approve/deleteAgenda').as('deleteAgendaCall');
+  cy.intercept('POST', '/agenda-approve/deleteAgenda').as('postDeleteAgenda');
   cy.intercept('GET', '/agendaitems?filter**').as('loadAgendaitems');
   cy.get(agenda.agendaActions.showOptions).click();
   cy.get(agenda.agendaActions.actions.deleteAgenda).click();
   cy.get(auk.modal.container).find(agenda.agendaActions.confirm.deleteAgenda)
     .click();
+  cy.wait('@postDeleteAgenda', {
+    timeout: 60000,
+  });
   cy.get(auk.modal.container, {
     timeout: 60000,
   }).should('not.exist');
@@ -276,6 +281,12 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
   cy.get(agenda.agendaHeader.confirm.approveAllAgendaitems).click();
   cy.wait('@patchAgendaitems');
   cy.wait('@getModifiedByOfAgendaitems');
+  cy.get(auk.modal.container, {
+    timeout: 60000,
+  }).should('not.exist');
+  cy.get(auk.loader, {
+    timeout: 20000,
+  }).should('not.exist');
   cy.log('/setAllItemsFormallyOk');
 }
 
@@ -401,7 +412,7 @@ function addAgendaitemToAgenda(subcaseTitle, postponed = false) {
   });
   cy.intercept('GET', '/agendaitems?filter**').as(`loadAgendaitems${randomInt}`);
   cy.wait('@createNewAgendaitem', {
-    timeout: 20000,
+    timeout: 30000,
   })
     .wait('@patchSubcase', {
       timeout: 20000,

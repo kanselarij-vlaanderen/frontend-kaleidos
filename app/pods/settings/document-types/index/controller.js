@@ -1,13 +1,12 @@
 import Controller from '@ember/controller';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes
-export default Controller.extend({
-  // TODO: octane-refactor
-  // eslint-disable-next-line ember/no-actions-hash
-  actions: {
-    close() {
-      this.transitionToRoute('settings.overview');
-    },
-  },
-});
+export default class SettingsDocumentTypesIndexController extends Controller {
+  @service router;
+
+  @action
+  close() {
+    this.router.transitionTo('settings.overview');
+  }
+}

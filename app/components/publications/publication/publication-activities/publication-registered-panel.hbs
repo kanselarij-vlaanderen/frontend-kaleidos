@@ -38,7 +38,7 @@
           <Auk::Badge @icon="document" @size="regular" />
           <h5 class="auk-u-m-0">
             {{t "published-in-belgian-official-gazette-on"}}
-            {{moment-format decision.publicationDate "DD-MM-YYYY"}}
+            {{moment-format decision.publicationDate}}
           </h5>
           {{#if decision.isStaatsbladResource}}
             <Auk::ButtonLink

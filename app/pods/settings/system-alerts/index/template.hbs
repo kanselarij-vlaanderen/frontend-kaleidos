@@ -1,16 +1,14 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
 <WebComponents::VlModal
   @isOverlay={{true}}
   @title={{t "manage-alerts"}}
-  @closeModal={{action "cancel"}}
+  @closeModal={{this.cancel}}
 >
   <Auk::Modal::Body>
     <div data-test-route-settings-system-alerts-index-alerts-dropdown class="auk-form-group">
       <PowerSelect
-        @options={{this.model}}
+        @options={{@model}}
         @selected={{this.selectedAlert}}
-        @onChange={{action "selectAlert"}}
+        @onChange={{this.selectAlert}}
         as |alert|
       >
         {{alert.title}}
