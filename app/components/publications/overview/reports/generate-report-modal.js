@@ -35,6 +35,10 @@ export default class GenerateReportModalComponent extends Component {
       this.decisionDateRangeEnd = new Date(currentYear, 11, 31, 0, 0, 0, 0); // we only use date part in frontend, so we can leave hour parts === 0
     }
 
+    if (this.args.fields.mandatee) {
+      this.loadMandatees.perform();
+    }
+
     if (this.args.fields.governmentDomain) {
       this.loadGovernmentDomains.perform();
     }
@@ -46,7 +50,9 @@ export default class GenerateReportModalComponent extends Component {
 
   get isLoading() {
     return (
-      this.loadGovernmentDomains.isRunning && this.loadRegulationTypes.isRunning
+      this.loadGovernmentDomains.isRunning &&
+      this.loadRegulationTypes.isRunning &&
+      this.loadMandatees.isRunning
     );
   }
 
@@ -65,29 +71,34 @@ export default class GenerateReportModalComponent extends Component {
 
   @task
   *loadMandatees() {
-    let [yearStart, nextYearStart] = convertYearToDateRange(
-      this.publicationYearAsNumber
-    ); // does not work for decisionDateRange filter
-    // currently the mandatee filter is only used in combination with the publicationYear filter
-    // NOTE: publicationYear might not overlap with mandate date range
-
-    let persons = yield this.store.query('person', {
-      include: ['mandatees'].join(','),
-      'filter[mandatees][:lt:start]': nextYearStart.toISOString(),
-    });
+    // at the moment filtering is done on frontend
     // mu-cl-resources does not allow filtering on absence of field: end-date (active mandatees)
-    persons = yield filterAsync(persons, (person, { mandatees }) =>
-      mandatees.some((mandatee) => !mandatee.end || yearStart < mandatee.end)
-    );
-    persons = persons.sortBy('lastName');
+    // this makes the response list large
+    // => therefore fetching it once seems more performant
+    let mandatees = yield this.store.query('person', {
+      include: ['mandatees'].join(','),
+    });
+    this.mandatees = mandatees.sortBy('lastName');
+  }
 
-    this.mandatees = persons;
+  // options and search are separate tasks
+  // - mandateesOptionsTask.last.value is the default list of mandatees
+  //   shown when the power-select is opened or the searchText is cleared
+  //   task is triggered onOpen, to take in account that the date range filter might have been changed
+  //   use of task: power-select bases on task status to shows loading message
+  // - searchMandatee
+  //   it is shown when the user enters searchText in the power-select
+  @task
+  *filterMandateesTask() {
+    return yield this.filterMandatees(this.mandatees);
   }
 
   @task
   *searchMandatee(searchText) {
-    let persons = this.mandatees;
+    return yield this.filterMandatees(this.mandatees, searchText);
+  }
 
+  async filterMandatees(persons, searchText) {
     if (searchText) {
       searchText = searchText.toLowerCase();
       persons = persons.filter((person) =>
@@ -95,7 +106,21 @@ export default class GenerateReportModalComponent extends Component {
       );
     }
 
-    return yield persons;
+    let [yearStart, nextYearStart] = convertYearToDateRange(
+      this.publicationYearAsNumber
+    ); // does not work for decisionDateRange filter
+    // currently the mandatee filter is only used in combination with the publicationYear filter
+    // POSSIBLE ISSUE: publicationYear might not overlap with mandate date range
+
+    persons = await filterAsync(persons, (person, { mandatees }) =>
+      mandatees.some(
+        (mandatee) =>
+          nextYearStart < mandatee.start &&
+          (!mandatee.end || yearStart < mandatee.end)
+      )
+    );
+
+    return persons;
   }
 
   @task
