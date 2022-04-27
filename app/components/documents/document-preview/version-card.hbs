@@ -26,7 +26,7 @@
         <p>
           {{#if @piece.created}}
             {{t "uploaded-at"}}
-            {{moment-format @piece.created "DD-MM-YYYY"}}
+            {{moment-format @piece.created}}
             -
             {{moment-format @piece.created "HH:mm"}}
           {{/if}}
@@ -34,7 +34,7 @@
         {{#if @piece.accessLevelLastModified}}
           <p>
             {{t "access-level-last-modified"}}
-            {{moment-format @piece.accessLevelLastModified "DD-MM-YYYY"}}
+            {{moment-format @piece.accessLevelLastModified}}
             -
             {{moment-format @piece.accessLevelLastModified "HH:mm"}}
           </p>

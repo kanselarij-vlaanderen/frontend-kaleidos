@@ -70,10 +70,7 @@
                   </Auk::Avatar>
                 </td>
                 <td>
-                  {{moment-format
-                    signFlow.decisionActivity.startDate
-                    "DD-MM-YYYY"
-                  }}
+                  {{moment-format signFlow.decisionActivity.startDate}}
                 </td>
                 <td>
                   <DigitalSigning::SigningFlowStatus @signingFlow={{signFlow}} />

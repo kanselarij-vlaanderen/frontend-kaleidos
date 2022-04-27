@@ -17,20 +17,6 @@ export default Service.extend({
   addedPieces: null,
   addedAgendaitems: null,
 
-  /* API: session-number-service */
-
-  async getActiveAgendas(date) {
-    const response = await fetch(`/session-number/activeAgendas?date=${date}`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/vnd.api+json',
-      },
-    });
-
-    const payload = await response.json();
-    return payload.body.agendas;
-  },
-
   /* API: agenda-approve-service */
 
   async createNewDesignAgenda(currentMeeting) {
