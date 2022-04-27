@@ -1,6 +1,5 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
-{{#if (gt (await this.agendaitem.mandatees.length) 1)}}
+<div class="auk-u-mb-8">
+{{#if (gt @agendaitem.mandatees.length 1)}}
   <div class="auk-u-mb-2">
     <div class="auk-o-flex auk-o-flex--align-baseline">
       <h4 class="auk-h3">
@@ -8,7 +7,7 @@
       </h4>
       {{#if this.currentSession.isEditor}}
         <div class="auk-u-ml-2">
-          <Auk::ButtonLink {{action "toggleIsEditing"}}>
+          <Auk::ButtonLink {{on "click" this.toggleIsEditing}}>
             {{t "edit"}}
           </Auk::ButtonLink>
         </div>
@@ -36,19 +35,19 @@
         </tr>
       </thead>
       <tbody>
-        {{#each (await this.mandateeApprovals) as |mandateeApproval|}}
+        {{#each this.mandateeApprovals as |mandateeApproval|}}
           <tr>
             <td>
               <h6 class="auk-h4 auk-u-m-0">
-                {{await mandateeApproval.mandatee.person.nameToDisplay}}
+                {{mandateeApproval.mandatee.person.nameToDisplay}}
               </h6>
             </td>
             <td>
-              {{await mandateeApproval.mandatee.title}}
+              {{mandateeApproval.mandatee.title}}
             </td>
             <td>
               {{#if (not this.isEditing)}}
-                {{#if (await mandateeApproval.approval)}}
+                {{#if mandateeApproval.approval}}
                   <Auk::Icon @name="check" @skin="success" />
                   <span class="auk-u-text-success">
                     {{t "approval-mandatee"}}
@@ -64,12 +63,14 @@
                   <Auk::Checkbox
                     @label={{t "approval-mandatee"}}
                     @checked={{not (is-empty mandateeApproval.approval)}}
-                    {{on "input" (action "toggleApproved" mandateeApproval.mandatee mandateeApproval.approval)}}
+                    {{on "input" (fn this.toggleApproved mandateeApproval)}}
                   />
                 </div>
               {{/if}}
             </td>
           </tr>
+            {{else}}
+          <Auk::Loader/>
         {{/each}}
       </tbody>
     </table>
@@ -80,19 +81,23 @@
         <Auk::Toolbar::Item>
           <Auk::Button
             @skin="tertiary"
-            {{action "cancelEditing"}}
+            {{on "click" this.cancelEditing}}
           >
             {{t "cancel"}}
           </Auk::Button>
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
-          <WebComponents::VlSaveButton
-            @text={{t "save"}}
-            @isLoading={{this.isLoading}}
-            @saveAction={{action "saveChanges" this.agendaitem.approvals}}
-          />
+          <Auk::Button
+            data-test-agendaitem-titles-edit-save={{true}}
+            @skin="primary"
+            @loading={{this.isLoading}}
+            {{on "click" (fn this.saveChanges this.agendaitem.approvals)}}
+          >
+            {{t "save"}}
+          </Auk::Button>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
   {{/if}}
 {{/if}}
+</div>

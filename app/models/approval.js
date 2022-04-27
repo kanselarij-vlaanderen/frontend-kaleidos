@@ -1,13 +1,8 @@
 import Model, { belongsTo, attr } from '@ember-data/model';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes
-export default Model.extend({
-  created: attr('datetime'),
-  mandatee: belongsTo('mandatee', {
-    inverse: null,
-  }),
-  agendaitem: belongsTo('agendaitem', {
-    inverse: null,
-  }),
-});
+export default class Approval extends Model {
+  @attr('datetime') created;
+  @belongsTo('agendaitem', { inverse: null }) agendaitem;
+  @belongsTo('mandatee', { inverse: null }) mandatee;
+
+}

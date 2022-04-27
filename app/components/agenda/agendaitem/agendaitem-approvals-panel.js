@@ -1,92 +1,93 @@
-// TODO: octane-refactor
-/* eslint-disable ember/no-get */
-// eslint-disable-next-line ember/no-classic-components
-import Component from '@ember/component';
-import { inject } from '@ember/service';
-import {
-  computed, get
-} from '@ember/object';
-import moment from 'moment';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
-export default Component.extend({
-  classNames: ['auk-u-mb-8'],
-  store: inject(),
-  currentSession: inject(),
+export default class AgendaitemApprovalsPanel extends Component {
+  @service store;
+  @service currentSession;
 
-  mandateeApprovals: computed('agendaitem.{mandatees.[],approvals.@each.mandatee}', async function() {
-    const mandatees = await get(this, 'agendaitem.mandatees');
-    const approvals = await get(this, 'agendaitem.approvals');
-    return mandatees.map((mandatee) => {
-      const approvalForMandatee = this.getApprovalForMandatee(mandatee, approvals);
+  @tracked isEditing = false;
+  @tracked isLoading = false;
+  @tracked mandateeApprovals;
+  @tracked approvals;
 
-      return {
+
+  constructor() {
+    super(...arguments);
+    this.loadMandateeApprovals.perform();
+  }
+
+  @task
+  *loadMandateeApprovals() {
+    const mandatees = yield this.args.agendaitem.mandatees;
+    const agendaitemApprovals = yield this.args.agendaitem.approvals;
+    this.approvals = agendaitemApprovals.toArray();
+    this.mandateeApprovals = [];
+    for (const mandatee of mandatees.toArray()) {
+      const approvalForMandatee = yield this.findApprovalOfMandatee(mandatee);
+      this.mandateeApprovals.push({
         mandatee,
         approval: approvalForMandatee,
-        checked: !!approvalForMandatee,
-      };
-    });
-  }),
+      })
+    }
+  }
 
-  getApprovalForMandatee: (mandatee, approvals) => approvals.find((approval) => get(approval, 'mandatee.id') === get(mandatee, 'id')),
-
-  // TODO: octane-refactor
-  // eslint-disable-next-line ember/no-actions-hash
-  actions: {
-    async saveChanges() {
-      this.set('isLoading', true);
-
-      await Promise.all(get(this, 'agendaitem.approvals').map(async(approval) => {
-        const savedApproval = await approval.save();
-        return savedApproval;
-      }));
-
-      this.set('isLoading', false);
-      this.toggleProperty('isEditing');
-    },
-
-    async toggleApproved(mandatee, approval) {
-      const approvals = get(this, 'agendaitem.approvals');
-
-      if (approval) {
-        if (!approval.isDeleted) {
-          approval.deleteRecord();
-        } else {
-          approval.rollbackAttributes();
-        }
-
-        if (!approval.id) {
-          approval.unloadRecord();
-        }
-      } else {
-        const approvalToCreate = get(this, 'store').createRecord('approval', {
-          mandatee,
-          created: moment().utc()
-            .toDate(),
-          agendaitem: get(this, 'agendaitem'),
-        });
-
-        await approvals.addObject(approvalToCreate);
+  async findApprovalOfMandatee(mandatee) {
+    for (const approval of this.approvals) {
+      const mandateeOfApproval = await approval.mandatee;
+      if (mandateeOfApproval.id === mandatee.id) {
+        return approval
       }
-    },
+    }
+  }
 
-    async cancelEditing() {
-      this.set('isLoading', true);
-      const {
-        agendaitem,
-      } = this;
-      const approvals = await agendaitem.get('approvals');
-      approvals.map((approval) => {
+  @action
+  async saveChanges() {
+    this.isLoading = true;
+    const approvalPromises = [];
+    for (const approval of this.approvals) {
+      approvalPromises.push(approval.save)
+    }
+    await Promise.all(approvalPromises);
+    await this.loadMandateeApprovals.perform();
+    this.isLoading = false;
+    this.toggleIsEditing();
+  }
+
+  @action
+  toggleApproved(mandateeApproval) {
+    let approval = mandateeApproval.approval;
+    if (approval) {
+      if (!approval.isDeleted) {
+        approval.deleteRecord();
+      } else {
         approval.rollbackAttributes();
-        return approval;
+      }
+      if (!approval.id) {
+        approval.unloadRecord();
+      }
+    } else {
+       approval = this.store.createRecord('approval', {
+        mandatee: mandateeApproval.mandatee,
+        created: new Date(),
+        agendaitem: this.args.agendaitem,
       });
-      this.set('isLoading', false);
-      this.toggleProperty('isEditing');
-    },
+      this.approvals.push(approval);
+    }
+  }
 
-    async toggleIsEditing() {
-      this.toggleProperty('isEditing');
-    },
-  },
-});
+  @action
+  async cancelEditing() {
+    this.isLoading = true;
+    this.approvals.forEach((approval) => approval.rollbackAttributes());
+    this.isLoading = false;
+    this.toggleIsEditing();
+  }
+
+  @action
+  toggleIsEditing() {
+    this.isEditing = !this.isEditing;
+  }
+}
