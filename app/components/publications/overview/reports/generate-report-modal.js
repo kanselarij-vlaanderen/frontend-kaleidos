@@ -12,7 +12,7 @@ export default class GenerateReportModalComponent extends Component {
   @tracked decisionDateRangeStart;
   @tracked decisionDateRangeEnd;
 
-  @tracked publicationYearAsNumber;
+  @tracked publicationYear;
 
   @tracked mandatees;
   @tracked selectedMandatees = [];
@@ -61,24 +61,27 @@ export default class GenerateReportModalComponent extends Component {
     return !!this.decisionDateRangeStart;
   }
 
-  get publicationYear() {
-    /// <Input /> expects property for get and set (no callback)
-    return this.publicationYearAsNumber;
+  // using getters and setters to transform the year from a string to a number
+  // Input uses the property bound to @value to get and set the value
+  // It uses string
+  // Storing it in the component as a number seems more understandable and usable
+  get publicationYearAsString() {
+    return this.publicationYear;
   }
 
-  set publicationYear(value) {
+  set publicationYearAsString(value) {
     // necessary to convert string value of <Input /> (even with @type="number")
     const number = Number.parseInt(value);
     if (!Number.isNaN(number)) {
-      this.publicationYearAsNumber = number;
+      this.publicationYear = number;
     }
   }
 
   get isPublicationYearValid() {
     const currentYear = new Date().getFullYear();
     return (
-      this.publicationYearAsNumber >= 1900 &&
-      this.publicationYearAsNumber <= currentYear
+      this.publicationYear >= 1900 &&
+      this.publicationYear <= currentYear
     );
   }
 
@@ -119,7 +122,7 @@ export default class GenerateReportModalComponent extends Component {
     }
 
     const [yearStart, nextYearStart] = convertYearToDateRange(
-      this.publicationYearAsNumber
+      this.publicationYear
     ); // does not work for decisionDateRange filter
     // currently the mandatee filter is only used in combination with the publicationYear filter
     // POSSIBLE ISSUE: publicationYear might not overlap with mandate date range
@@ -197,7 +200,7 @@ export default class GenerateReportModalComponent extends Component {
 
     if (this.args.fields.publicationYear) {
       filterParams.publicationDate = convertYearToDateRange(
-        this.publicationYearAsNumber
+        this.publicationYear
       );
     }
 
