@@ -65,7 +65,7 @@ export default class GenerateReportModalComponent extends Component {
 
   // using getters and setters to transform the year from a string to a number
   // Input uses the property bound to @value to get and set the value
-  // It uses string
+  // It sets it to a string of the inputted number
   // Storing it in the component as a number seems more understandable and usable
   get publicationYearAsString() {
     return this.publicationYear;
@@ -81,10 +81,7 @@ export default class GenerateReportModalComponent extends Component {
 
   get isPublicationYearValid() {
     const currentYear = new Date().getFullYear();
-    return (
-      this.publicationYear >= 1900 &&
-      this.publicationYear <= currentYear
-    );
+    return this.publicationYear >= 1900 && this.publicationYear <= currentYear;
   }
 
   @task
