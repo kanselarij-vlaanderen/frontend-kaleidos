@@ -63,7 +63,7 @@ export default class GenerateReportModalComponent extends Component {
 
   set publicationYear(value) {
     // necessary to convert string value of <Input /> (even with @type="number")
-    let number = Number.parseInt(value);
+    const number = Number.parseInt(value);
     if (!Number.isNaN(number)) {
       this.publicationYearAsNumber = number;
     }
@@ -103,7 +103,7 @@ export default class GenerateReportModalComponent extends Component {
       );
     }
 
-    let [yearStart, nextYearStart] = convertYearToDateRange(
+    const [yearStart, nextYearStart] = convertYearToDateRange(
       this.publicationYearAsNumber
     ); // does not work for decisionDateRange filter
     // currently the mandatee filter is only used in combination with the publicationYear filter
