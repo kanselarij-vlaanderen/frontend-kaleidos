@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { lastValue, task } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 
 /**
  * @argument subcase
@@ -11,7 +11,7 @@ import { lastValue, task } from 'ember-concurrency';
  * @argument onClickEdit
  */
 export default class AgendaitemCasePanelView extends Component {
-  @lastValue('loadCase') case;
+  @tracked case;
   @tracked showLoader = false;
 
   constructor() {
@@ -22,8 +22,7 @@ export default class AgendaitemCasePanelView extends Component {
   @task
   *loadCase() {
     if (this.args.subcase) {
-      return yield this.args.subcase.case;
+      this.case = yield this.args.subcase.case;
     }
-    return null;
   }
 }
