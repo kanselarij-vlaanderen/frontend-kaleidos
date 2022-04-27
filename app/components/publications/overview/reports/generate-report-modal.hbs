@@ -58,10 +58,8 @@
             {{t "ministers"}}
           </Auk::Label>
           <PowerSelectMultiple
-            @options={{this.filterMandateesTask.last}}
+            @options={{this.mandateesOptions}}
             @selected={{this.selectedMandatees}}
-            {{!mandatee options is dependent on publicationYear, so only load when requested}}
-            @onOpen={{perform this.filterMandateesTask}}
             @onChange={{fn (mut this.selectedMandatees)}}
             @searchEnabled={{true}}
             @search={{perform this.searchMandatee}}
