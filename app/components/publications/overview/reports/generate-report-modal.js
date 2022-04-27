@@ -214,24 +214,30 @@ export default class GenerateReportModalComponent extends Component {
     }
 
     if (this.args.fields.mandatee) {
-      const mandateeArray = this.selectedMandatees.map((person) => ({
-        person: person.uri,
-      }));
-      filterParams.mandatee = mandateeArray;
+      if (this.selectedMandatees.length) {
+        const mandateeArray = this.selectedMandatees.map((person) => ({
+          person: person.uri,
+        }));
+        filterParams.mandatee = mandateeArray;
+      }
     }
 
     if (this.args.fields.governmentDomain) {
-      const governemtDomainArray = this.selectedGovernmentDomains.map(
-        (governmentDomain) => governmentDomain.uri
-      );
-      filterParams.governmentDomain = governemtDomainArray;
+      if (this.selectedGovernmentDomains.length) {
+        const governmentDomainArray = this.selectedGovernmentDomains.map(
+          (governmentDomain) => governmentDomain.uri
+        );
+        filterParams.governmentDomain = governmentDomainArray;
+      }
     }
 
     if (this.args.fields.regulationType) {
-      const regulationTypeArray = this.selectedRegulationTypes.map(
-        (regulationType) => regulationType.uri
-      );
-      filterParams.regulationType = regulationTypeArray;
+      if (this.selectedRegulationTypes.length) {
+        const regulationTypeArray = this.selectedRegulationTypes.map(
+          (regulationType) => regulationType.uri
+        );
+        filterParams.regulationType = regulationTypeArray;
+      }
     }
 
     this.args.onGenerate.perform({
