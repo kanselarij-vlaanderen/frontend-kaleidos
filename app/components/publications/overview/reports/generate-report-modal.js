@@ -74,6 +74,14 @@ export default class GenerateReportModalComponent extends Component {
     }
   }
 
+  get isPublicationYearValid() {
+    const currentYear = new Date().getFullYear();
+    return (
+      this.publicationYearAsNumber >= 1900 &&
+      this.publicationYearAsNumber <= currentYear
+    );
+  }
+
   @task
   *loadMandatees() {
     // at the moment filtering is done on frontend
@@ -177,6 +185,8 @@ export default class GenerateReportModalComponent extends Component {
     let isValid = true;
     if (this.args.fields.decisionDateRange) {
       isValid &&= this.isDecisionDateRangeStartValid;
+    } else if (this.args.fields.publicationYear) {
+      isValid &&= this.isPublicationYearValid;
     }
     return isValid;
   }

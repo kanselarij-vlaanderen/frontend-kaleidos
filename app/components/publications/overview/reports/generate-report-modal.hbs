@@ -43,13 +43,17 @@
       {{/if}}
       {{#if @fields.publicationYear}}
         <div class="auk-form-group">
-          <Auk::Label for="publicationReportsPublicationYear">
+          <Auk::Label
+            for="publicationReportsPublicationYear"
+            @error={{not this.isPublicationYearValid}}
+          >
             {{t "year"}}
           </Auk::Label>
           <Auk::Input
             id="publicationReportsPublicationYear"
             @type="number"
             @value={{this.publicationYear}}
+            @error={{not this.isPublicationYearValid}}
           />
         </div>
       {{/if}}
