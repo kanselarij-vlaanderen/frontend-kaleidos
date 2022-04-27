@@ -27,7 +27,7 @@ export default class AgendaitemApprovalsPanel extends Component {
     this.mandateeApprovals = [];
     for (const mandatee of mandatees.toArray()) {
       const approvalForMandatee = yield this.findApprovalOfMandatee(mandatee);
-      this.mandateeApprovals.push({
+      this.mandateeApprovals.addObject({
         mandatee,
         approval: approvalForMandatee,
       })
@@ -48,7 +48,7 @@ export default class AgendaitemApprovalsPanel extends Component {
     this.isLoading = true;
     const approvalPromises = [];
     for (const approval of this.approvals) {
-      approvalPromises.push(approval.save)
+      approvalPromises.push(approval.save())
     }
     await Promise.all(approvalPromises);
     await this.loadMandateeApprovals.perform();
