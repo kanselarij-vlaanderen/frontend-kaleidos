@@ -16,6 +16,7 @@
               <Auk::Label
                 for="publicationReportsDecisionStartDate"
                 @required={{true}}
+                @error={{not this.isDecisionDateRangeStartValid}}
               >
                 {{t "start-date"}}
               </Auk::Label>
@@ -23,6 +24,7 @@
                 id="publicationReportsDecisionStartDate"
                 @date={{this.decisionDateRangeStart}}
                 @onChange={{fn (mut this.decisionDateRangeStart)}}
+                @error={{not this.isDecisionDateRangeStartValid}}
               />
             </div>
           </div>
@@ -34,7 +36,6 @@
               <Auk::Datepicker
                 id="publicationReportsDecisionEndDate"
                 @date={{this.decisionDateRangeEnd}}
-                @onChange={{fn (mut this.decisionDateRangeEnd)}}
               />
             </div>
           </div>
@@ -112,6 +113,7 @@
   <Auk::Modal::Footer @onCancel={{@onClose}}>
     <Auk::Button
       @skin="primary"
+      @disabled={{not this.isValid}}
       {{on "click" (perform this.triggerGenerateReport)}}
     >
       {{t "publications-reports--generate--small"}}

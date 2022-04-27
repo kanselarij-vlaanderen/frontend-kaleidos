@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import CONFIG from 'frontend-kaleidos/config/config';
 
 export default class GenerateReportModalComponent extends Component {
   @service store;
@@ -56,6 +57,10 @@ export default class GenerateReportModalComponent extends Component {
     );
   }
 
+  get isDecisionDateRangeStartValid() {
+    return !!this.decisionDateRangeStart;
+  }
+
   get publicationYear() {
     /// <Input /> expects property for get and set (no callback)
     return this.publicationYearAsNumber;
@@ -83,6 +88,7 @@ export default class GenerateReportModalComponent extends Component {
   }
 
   get mandateesOptions() {
+    console.log('yo', this.decisionDateRangeStart);
     return this.filterMandatees();
   }
 
@@ -131,6 +137,7 @@ export default class GenerateReportModalComponent extends Component {
         CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN,
       'filter[:has-no:broader]': true, // only top-level government-domains
       'filter[deprecated]': false,
+      'page[size]': CONFIG.PAGE_SIZE.CODE_LISTS,
     });
     governmentDomains = governmentDomains.toArray();
     governmentDomains = governmentDomains.sortBy('label');
@@ -164,6 +171,14 @@ export default class GenerateReportModalComponent extends Component {
     } else {
       this.selectedRegulationTypes.removeObject(regulationType);
     }
+  }
+
+  get isValid() {
+    let isValid = true;
+    if (this.args.fields.decisionDateRange) {
+      isValid &&= this.isDecisionDateRangeStartValid;
+    }
+    return isValid;
   }
 
   @task
