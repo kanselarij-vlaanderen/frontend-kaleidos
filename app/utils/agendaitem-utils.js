@@ -98,20 +98,6 @@ export const saveChanges = async(agendaitemOrSubcase, propertiesToSetOnAgendaite
   }
 };
 
-/**
- * Save Changes only on subcase.
- *
- * @param subcase
- * @param propertiesToSetOnSubcase
- * @returns {Promise<void>}
- */
-export const saveTitlesFromSubcase = async(subcase,propertiesToSetOnSubcase) => {
-  const item = subcase;
-  await item.preEditOrSaveCheck();
-  await setNewPropertiesToModel(item, propertiesToSetOnSubcase, false);
-};
-
-
 export const destroyApprovalsOfAgendaitem = async(agendaitem) => {
   const approvals = await agendaitem.get('approvals');
   if (approvals) {
