@@ -98,7 +98,6 @@ export default class GenerateReportModalComponent extends Component {
   }
 
   get mandateesOptions() {
-    console.log('yo', this.decisionDateRangeStart);
     return this.filterMandatees();
   }
 
@@ -241,6 +240,8 @@ export default class GenerateReportModalComponent extends Component {
         filterParams.regulationType = regulationTypeArray;
       }
     }
+
+    console.log(filterParams);
 
     this.args.onGenerate.perform({
       filter: filterParams,
