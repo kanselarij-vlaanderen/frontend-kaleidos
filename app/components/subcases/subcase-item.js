@@ -2,9 +2,10 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { task } from 'ember-concurrency';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
-import { task } from 'ember-concurrency';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class SubcaseItemSubcasesComponent extends Component {
   /**
@@ -14,15 +15,20 @@ export default class SubcaseItemSubcasesComponent extends Component {
 
   @service store;
   @service intl;
+  @service subcasesService;
 
   @tracked isShowingAllDocuments = false;
   @tracked hasDocumentsToShow = false;
   @tracked subcaseDocuments;
+  @tracked phases;
+  @tracked approved;
 
   constructor() {
     super(...arguments);
     this.updateHasDocumentsToShow.perform();
     this.loadRelatedMeeting.perform();
+    this.loadSubcasePhases.perform();
+    this.loadSubcaseIsApproved.perform();
   }
 
   get documentListSize() {
@@ -87,6 +93,29 @@ export default class SubcaseItemSubcasesComponent extends Component {
     }
 
     this.subcaseDocuments = sortPieces(pieces);
+  }
+
+  @task
+  *loadSubcasePhases() {
+    this.phases = yield this.subcasesService.getSubcasePhases(this.args.subcase);
+  }
+
+  @task
+  *loadSubcaseIsApproved() {
+    const meeting = yield this.args.subcase.requestedForMeeting;
+    if (meeting?.isFinal) {
+      const approvedDecisionResultCode = yield this.store.findRecordByUri('decision-result-code', CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD);
+      const acknowledgedDecisionResultCode = yield this.store.findRecordByUri('decision-result-code', CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME);
+      this.approved = !!(yield this.store.queryOne('agenda-item-treatment', {
+        'filter[subcase][id]': this.args.subcase.id,
+        'filter[decision-result-code][:id:]': [
+          approvedDecisionResultCode.id,
+          acknowledgedDecisionResultCode.id,
+        ].join(','),
+      }));
+    } else {
+      this.approved = false;
+    }
   }
 
   @action
