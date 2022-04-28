@@ -11,7 +11,6 @@ import {
   getPublicationStatusPillStep
 } from 'frontend-kaleidos/utils/publication-auk';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
-import { isArray } from '@ember/array';
 
 export default class PublicationFlowSearchRoute extends Route {
   @service store;
@@ -142,7 +141,7 @@ export default class PublicationFlowSearchRoute extends Route {
   postProcessStatus(attributes) {
     let statusId = attributes.statusId;
     if (statusId) {
-      if (isArray(statusId)){
+      if (Array.isArray(statusId)){
         // due to inserts of double statusses we take the first one to not break the search
         statusId = statusId.firstObject;
         console.log("Flow with multiple statusses found: " + attributes.id)
