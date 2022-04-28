@@ -11,6 +11,7 @@ import {
   getPublicationStatusPillStep
 } from 'frontend-kaleidos/utils/publication-auk';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
+import { warn } from '@ember/debug';
 
 export default class PublicationFlowSearchRoute extends Route {
   @service store;
@@ -141,10 +142,11 @@ export default class PublicationFlowSearchRoute extends Route {
   postProcessStatus(attributes) {
     let statusId = attributes.statusId;
     if (statusId) {
-      if (Array.isArray(statusId)){
+      const hasMultipleStatuses = Array.isArray(statusId);
+      if (hasMultipleStatuses) {
         // due to inserts of double statuses we take the first one to not break the search
         statusId = statusId.firstObject;
-        console.log("Flow with multiple statuses found: " + attributes.id)
+        warn(`Publication flow ${attributes.id} contains multiple statusses in search index`, !hasMultipleStatuses, { id: 'search.invalid-data' });
       }
       const status = this.publicationStatuses.find((status) => status.id === statusId);
       attributes.status = status;
