@@ -146,13 +146,13 @@ context('Publications translation tests', () => {
       .wait(500); // the model reloaded but not fully processed, making DOM elements reload.
     cy.get(publication.statusPill.contentLabel).should('contain', 'Naar vertaaldienst');
     // check edit and rollback
-    cy.get(publication.translationReceivedPanel.endDate).contains(translationEndDate.format('DD.MM.YYYY'));
+    cy.get(publication.translationReceivedPanel.endDate).contains(translationEndDate.format('DD-MM-YYYY'));
     cy.get(publication.translationReceivedPanel.dropdown).click();
     cy.get(publication.translationReceivedPanel.edit).click();
     cy.get(auk.datepicker).click();
     cy.setDateInFlatpickr(editedTranslationEndDate);
     cy.get(auk.modal.footer.cancel).click();
-    cy.get(publication.translationReceivedPanel.endDate).contains(translationEndDate.format('DD.MM.YYYY'));
+    cy.get(publication.translationReceivedPanel.endDate).contains(translationEndDate.format('DD-MM-YYYY'));
     cy.get(publication.translationReceivedPanel.dropdown).click();
     cy.get(publication.translationReceivedPanel.edit).click();
     cy.get(auk.datepicker).click();
@@ -160,7 +160,7 @@ context('Publications translation tests', () => {
     cy.intercept('GET', '/translation-activities?filter**subcase**').as('reloadTranslationModel2');
     cy.get(publication.translationActivityEdit.save).click()
       .wait('@reloadTranslationModel2');
-    cy.get(publication.translationReceivedPanel.endDate).contains(editedTranslationEndDate.format('DD.MM.YYYY'));
+    cy.get(publication.translationReceivedPanel.endDate).contains(editedTranslationEndDate.format('DD-MM-YYYY'));
     //  upload second translation
     cy.get(publication.translationsIndex.upload).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);

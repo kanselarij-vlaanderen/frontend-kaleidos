@@ -1,19 +1,19 @@
 import Controller from '@ember/controller';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
 // eslint-disable-next-line ember/no-mixins
 import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes
-export default Controller.extend(DefaultQueryParamsMixin, {
-  sort: '-planned-start,number-representation',
-  isAdding: false,
-  isEditing: false,
+export default class NewslettersController extends Controller.extend(DefaultQueryParamsMixin) {
+  @service router;
 
-  // TODO: octane-refactor
-  // eslint-disable-next-line ember/no-actions-hash
-  actions: {
-    async navigateToNewsletter(meeting) {
-      this.transitionToRoute('newsletter', meeting.get('id'));
-    },
-  },
-});
+  @tracked sort = '-planned-start,number-representation';
+  @tracked isAdding = false;
+  @tracked isEditing = false;
+
+  @action
+  async navigateToNewsletter(meeting) {
+    this.router.transitionTo('newsletter', meeting.id);
+  }
+}

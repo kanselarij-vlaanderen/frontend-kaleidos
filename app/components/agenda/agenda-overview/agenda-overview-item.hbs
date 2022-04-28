@@ -1,24 +1,22 @@
-<div class={{if @agendaitem.retracted "auk-u-opacity--1/3"}}
+<div
+  class={{if @agendaitem.retracted "auk-u-opacity--1/3"}}
   {{in-viewport
     onEnter=(perform this.lazyLoadSideData)
     onExit=this.cancelLazyLoad
   }}
 >
-  <div data-test-agenda-overview-item-container class="vlc-agenda-items__body ">
+  <div data-test-agenda-overview-item-container class="vlc-agenda-items__body">
     <h4 class="vlc-agenda-items__subject">
       {{#if @showDragHandle}}
         <div class="vlc-agenda-items__cursor">
-          {{!-- TODO: grab-hand shows over the whole parent height instead of only over the grab-handle icon --}}
-          <Auk::Button
-            class="auk-u-p-0 auk-u-cursor-grab"
-            @skin="borderless"
-          >
-            <Auk::Icon @name="drag-handle-2"/>
+          {{! TODO: grab-hand shows over the whole parent height instead of only over the grab-handle icon }}
+          <Auk::Button class="auk-u-p-0 auk-u-cursor-grab" @skin="borderless">
+            <Auk::Icon @name="drag-handle-2" />
           </Auk::Button>
         </div>
       {{/if}}
       <span class="vlc-agenda-items-sub-item__numbering">
-        {{!-- For legacy data agenda-item number can be unexistent --}}
+        {{! For legacy data agenda-item number can be unexistent }}
         {{#if @agendaitem.number}}
           {{@agendaitem.number}}.
         {{/if}}
@@ -38,14 +36,19 @@
                 {{#if @agendaitem.shortTitle}}
                   {{@agendaitem.shortTitle}}
                 {{else}}
-                  {{@agendaitem.title}} {{!-- Fallback for legacy data that doesn't have a short title --}}
+                  {{@agendaitem.title}}
+                  {{! Fallback for legacy data that doesn't have a short title }}
                 {{/if}}
               </pre>
             </LinkTo>
           </h4>
 
-          {{#if @agendaitem.shortTitle}} {{!-- Avoid rendering the same thing twice if no "shortTitle" exists --}}
-            <pre data-test-agenda-overview-item-title class="vlc-agenda-items__body-padding auk-u-text-pre-line">
+          {{#if @agendaitem.shortTitle}}
+            {{! Avoid rendering the same thing twice if no "shortTitle" exists }}
+            <pre
+              data-test-agenda-overview-item-title
+              class="vlc-agenda-items__body-padding auk-u-text-pre-line"
+            >
               {{@agendaitem.title}}
             </pre>
           {{/if}}
@@ -62,7 +65,7 @@
             {{capitalize this.subcase.subcaseName}}
           </Auk::Pill>
         {{else}}
-          {{!--  TODO: Only here because required for alignment of flex items --}}
+          {{!  TODO: Only here because required for alignment of flex items }}
           <span class="vlc-agenda-meta__times-passed"></span>
         {{/if}}
         <div class="vlc-agenda-meta__status-holder">
@@ -74,8 +77,14 @@
                 @onChange={{this.setAndSaveFormallyOkStatus}}
               />
             {{else}}
-              <p class="{{@agendaitem.formallyOkToShow.classNames}}" data-test-agenda-overview-item-status>
-                <i class="{{@agendaitem.formallyOkToShow.iconClassNames}}" aria-hidden="true"></i>
+              <p
+                class="{{@agendaitem.formallyOkToShow.classNames}}"
+                data-test-agenda-overview-item-status
+              >
+                <i
+                  class="{{@agendaitem.formallyOkToShow.iconClassNames}}"
+                  aria-hidden="true"
+                ></i>
                 {{@agendaitem.formallyOkToShow.label}}
               </p>
             {{/if}}
@@ -95,7 +104,7 @@
             {{on "click" this.toggleShowingAllDocuments}}
             class="auk-u-mt-2"
           >
-            {{#if this.isShowingAllDocuments }}
+            {{#if this.isShowingAllDocuments}}
               {{t "show-less"}}
             {{else}}
               {{t "show-more"}}
@@ -104,39 +113,62 @@
         {{/if}}
       {{/if}}
       {{#unless @isEditingFormallyOkStatus}}
+        {{#if @agendaitem.comment}}
+          <p>
+            <strong class="auk-u-text-bold">
+              {{t "comment-title"}}:
+            </strong>
+            {{@agendaitem.comment}}
+          </p>
+        {{/if}}
         <div class="auk-hr">
-          <hr/>
+          <hr />
         </div>
         <div class="vlc-agenda-items__remarks">
-          <div>
-            {{#if @agendaitem.explanation}}
-              <span class="auk-u-text-bold">
-                {{t "remark-title"}}:
-              </span> {{@agendaitem.explanation}}
-            {{/if}}
-          </div>
+          {{#if @agendaitem.privateComment}}
+            <p class="auk-u-text-muted">
+              <strong class="auk-u-text-bold">
+                <Auk::Icon @name="lock-closed" @size="small" />
+                {{t "private-comment-title"}}:
+              </strong>
+              {{@agendaitem.privateComment}}
+            </p>
+          {{/if}}
           <div class="vlc-agenda-items__icons">
-            <div
-              class="auk-o-flex vlc-agenda-items__icons"
-            >
+            <div class="auk-o-flex vlc-agenda-items__icons">
               {{#if this.loadNewsletterVisibility.lastSuccessful}}
                 {{#if (not this.newsletterIsVisible)}}
-                  <Auk::Icon @name="not-visible" @skin="muted" class="auk-u-ml-2">
-                    <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
+                  <Auk::Icon
+                    @name="not-visible"
+                    @skin="muted"
+                    class="auk-u-ml-2"
+                  >
+                    <EmberTooltip
+                      @side="top-end"
+                      @tooltipClass="tooltip-custom"
+                    >
                       <p>
                         {{t "not-visible-in-newsletter"}}
                       </p>
                     </EmberTooltip>
                   </Auk::Icon>
                 {{else}}
-                  {{!-- TODO: this icon is merely here as an invisible placeholder.
+                  {{! TODO: this icon is merely here as an invisible placeholder.
                     This keeps element-height the same at all times in order to prevent "jumping" when data is being side-loaded.
-                    This should be tackled differently through modified design --}}
-                  <Auk::Icon @name="not-visible" @skin="invisible" class="auk-u-ml-2" />
+                    This should be tackled differently through modified design }}
+                  <Auk::Icon
+                    @name="not-visible"
+                    @skin="invisible"
+                    class="auk-u-ml-2"
+                  />
                 {{/if}}
               {{else}}
-                {{!-- TODO: design loading state for newsletter visibility --}}
-                <Auk::Icon @name="circle-question" @skin="muted" class="auk-u-ml-2">
+                {{! TODO: design loading state for newsletter visibility }}
+                <Auk::Icon
+                  @name="circle-question"
+                  @skin="muted"
+                  class="auk-u-ml-2"
+                >
                   <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
                     <p>
                       {{t "loading"}}

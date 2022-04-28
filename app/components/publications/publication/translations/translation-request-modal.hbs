@@ -10,9 +10,7 @@
   />
   <Auk::Modal::Body>
     <div class="auk-form-group-layout auk-form-group-layout--standard">
-      {{! TODO: Remove inline style }}
-      {{! template-lint-disable no-inline-styles }}
-      <div class="auk-form-group" style="max-width: 30rem;">
+      <div class="auk-form-group auk-u-max-width-medium">
         <Auk::Label for="translationRequestDueDate" @required={{true}}>
           {{t "publication-flow-translation-due-date"}}
         </Auk::Label>
@@ -25,7 +23,7 @@
       <div class="auk-form-group">
         <Auk::Label>{{t "translation-burden"}}</Auk::Label>
         <div
-          class="auk-form-group-layout auk-form-group-layout--standard auk-form-group-layout--grid"
+          class="auk-form-group-layout auk-form-group-layout--grid"
         >
           <div class="auk-o-grid">
             <div class="auk-o-grid-col-6">

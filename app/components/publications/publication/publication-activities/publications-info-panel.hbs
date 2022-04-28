@@ -60,7 +60,7 @@
               {{#if @publicationFlow.status.isPublished}}
                 {{#if this.decision.isStaatsbladResource}}
                   {{#if this.decision.publicationDate}}
-                    {{moment-format this.decision.publicationDate "DD-MM-YYYY"}}
+                    {{moment-format this.decision.publicationDate}}
                   {{else}}
                     {{!case: publication-date is not found in Staatsblad (does not seem to occur)}}
                     <div class="auk-u-text-muted auk-u-italic">
@@ -113,54 +113,57 @@
   {{else}}
     <Auk::Panel::Body>
       <div class="auk-o-grid">
-        <div class="auk-o-grid-col-3 auk-content">
-          <h4 class="auk-u-m-0">{{t "publication-target-end-date"}}</h4>
-          <p class="auk-u-m-0">
-            {{#if @publicationSubcase.targetEndDate}}
-              {{moment-format @publicationSubcase.targetEndDate "DD-MM-YYYY"}}
-            {{else}}
-              {{t "dash"}}
-            {{/if}}
-            {{#if
-              (and
-                (not @publicationFlow.status.isFinal)
-                @publicationSubcase.isOverdue
-              )
-            }}
-              <Auk::FormHelpText
-                @text={{t "date-expired"}}
-                @skin="warning"
-                @icon="alert-triangle"
-              />
-            {{/if}}
-
-          </p>
-        </div>
-        <div class="auk-o-grid-col-3 auk-content">
-          <h4 class="auk-u-m-0">{{t "publication-date"}}</h4>
-          <p class="auk-u-m-0">
-            {{#unless this.loadDecision.isRunning}}
-              {{#if @publicationFlow.status.isPublished}}
-                {{#if this.decision.publicationDate}}
-                  {{moment-format this.decision.publicationDate "DD-MM-YYYY"}}
-                {{else}}
-                  {{#if this.decision.isStaatsbladResource}}
-                    <div class="auk-u-text-muted auk-u-italic">
-                      {{!case: publication-date is not found in Staatsblad (does not seem to occur)}}
-                      {{t "not-known"}}
-                    </div>
-                  {{else}}
-                    {{!case: user cleared publication-date in this panel}}
-                    {{t "dash"}}
-                  {{/if}}
-                {{/if}}
+        <div class="auk-o-grid-col-3">
+          <div class="auk-content">
+            <h4 class="auk-u-m-0">{{t "publication-target-end-date"}}</h4>
+            <p class="auk-u-m-0">
+              {{#if @publicationSubcase.targetEndDate}}
+                {{moment-format @publicationSubcase.targetEndDate}}
               {{else}}
-                <div class="auk-u-text-muted auk-u-italic">
-                  {{t "not-published"}}
-                </div>
+                {{t "dash"}}
               {{/if}}
-            {{/unless}}
-          </p>
+              {{#if
+                (and
+                  (not @publicationFlow.status.isFinal)
+                  @publicationSubcase.isOverdue
+                )
+              }}
+                <Auk::FormHelpText
+                  @text={{t "date-expired"}}
+                  @skin="warning"
+                  @icon="alert-triangle"
+                />
+              {{/if}}
+            </p>
+          </div>
+        </div>
+        <div class="auk-o-grid-col-3">
+          <div class="auk-content">
+            <h4 class="auk-u-m-0">{{t "publication-date"}}</h4>
+            <p class="auk-u-m-0">
+              {{#unless this.loadDecision.isRunning}}
+                {{#if @publicationFlow.status.isPublished}}
+                  {{#if this.decision.publicationDate}}
+                    {{moment-format this.decision.publicationDate}}
+                  {{else}}
+                    {{#if this.decision.isStaatsbladResource}}
+                      <div class="auk-u-text-muted auk-u-italic">
+                        {{!case: publication-date is not found in Staatsblad (does not seem to occur)}}
+                        {{t "not-known"}}
+                      </div>
+                    {{else}}
+                      {{!case: user cleared publication-date in this panel}}
+                      {{t "dash"}}
+                    {{/if}}
+                  {{/if}}
+                {{else}}
+                  <div class="auk-u-text-muted auk-u-italic">
+                    {{t "not-published"}}
+                  </div>
+                {{/if}}
+              {{/unless}}
+            </p>
+          </div>
         </div>
       </div>
     </Auk::Panel::Body>

@@ -168,7 +168,7 @@ context('Publications proofs tests', () => {
       .wait(500);
     cy.get(publication.statusPill.contentLabel).should('contain', 'Drukproef aangevraagd');
     // check edit and rollback
-    cy.get(publication.proofReceivedPanel.endDate).contains(translationEndDate.format('DD.MM.YYYY'));
+    cy.get(publication.proofReceivedPanel.endDate).contains(translationEndDate.format('DD-MM-YYYY'));
     cy.get(publication.proofReceivedPanel.dropdown).click();
     cy.get(publication.proofReceivedPanel.edit).click();
     cy.get(auk.datepicker).click();
@@ -177,7 +177,7 @@ context('Publications proofs tests', () => {
       .type(corrector);
     cy.get(auk.modal.footer.cancel).click();
     cy.get(publication.proofInfoPanel.view.corrector).contains('-');
-    cy.get(publication.proofReceivedPanel.endDate).contains(translationEndDate.format('DD.MM.YYYY'));
+    cy.get(publication.proofReceivedPanel.endDate).contains(translationEndDate.format('DD-MM-YYYY'));
     // save
     cy.get(publication.proofReceivedPanel.dropdown).click();
     cy.get(publication.proofReceivedPanel.edit).click();
@@ -189,7 +189,7 @@ context('Publications proofs tests', () => {
     cy.get(publication.proofReceivedPanel.save).click()
       .wait('@reloadProofingModel2');
     cy.get(publication.proofInfoPanel.view.corrector).contains(corrector);
-    cy.get(publication.proofReceivedPanel.endDate).contains(editedProofEndDate.format('DD.MM.YYYY'));
+    cy.get(publication.proofReceivedPanel.endDate).contains(editedProofEndDate.format('DD-MM-YYYY'));
 
     //  upload second translation and update status
     cy.get(publication.proofsIndex.upload).click();

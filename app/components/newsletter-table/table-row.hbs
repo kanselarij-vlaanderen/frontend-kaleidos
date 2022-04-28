@@ -1,5 +1,8 @@
 <tr data-test-table-row-newsletter-row class="lt-row">
-  <td class="lt-cell align-left">
+  <td
+    data-test-table-row-newsletter-row-agendaitem-number
+    class="lt-cell align-left"
+  >
     {{@agendaitem.number}}
   </td>
   <td
@@ -48,7 +51,7 @@
   </td>
   <td class="lt-cell align-left">
     {{#if this.hasNewsletterInfo}}
-      {{moment-format this.newsletterInfo.modified "DD.MM.YYYY - HH:mm"}}
+      {{moment-format this.newsletterInfo.modified "DD-MM-YYYY - HH:mm"}}
     {{else}}
       -
     {{/if}}

@@ -23,7 +23,6 @@ export default ModelWithModifier.extend({
   store: inject(),
   number: attr('number'),
   created: attr('datetime'),
-  record: attr('string'),
   retracted: attr('boolean'), // TODO 1420 TRUE = postponed, move to treatment
   showAsRemark: attr('boolean'),
   modified: attr('datetime'),
@@ -34,8 +33,8 @@ export default ModelWithModifier.extend({
   title: attr('string'),
   formallyOk: attr('string'),
   isApproval: attr('boolean'), // isGoedkeuringVanDeNotulen
-  explanation: attr('string'),
-  // More information: https://github.com/kanselarij-vlaanderen/kaleidos-frontend/pull/469.
+  comment: attr('string'),
+  privateComment: attr('string'),
 
   agenda: belongsTo('agenda', {
     inverse: null,

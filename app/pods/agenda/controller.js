@@ -25,7 +25,7 @@ export default class AgendaController extends Controller {
 
   @action
   refresh() {
-    this.send('reloadModel');
+    this.send('reloadAgendaModel');
   }
 
   @action

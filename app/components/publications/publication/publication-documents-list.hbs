@@ -9,16 +9,13 @@
           <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
         </div>
         {{#if @setReceivedDate}}
-          {{! TODO: Remove inline style }}
-          {{! template-lint-disable no-inline-styles }}
-          <div class="auk-form-group auk-u-m-0" style="width: 22.5rem;">
+          <div class="auk-form-group auk-u-width-medium auk-u-m-0">
             <Auk::Datepicker
               @placeholder={{t "date-received-placeholder"}}
               @date={{piece.receivedDate}}
               @onChange={{fn @setReceivedDate piece}}
             />
           </div>
-          {{! template-lint-disable no-inline-styles }}
         {{/if}}
         <div>
           <WebComponents::AuButtonToolbar>
