@@ -12,7 +12,6 @@ import { task } from 'ember-concurrency';
  */
 export default class AgendaitemCasePanelView extends Component {
   @tracked case;
-  @tracked showLoader = false;
 
   constructor() {
     super(...arguments);
