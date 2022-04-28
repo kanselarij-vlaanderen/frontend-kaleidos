@@ -215,8 +215,9 @@
   </Auk::Toolbar>
 </div>
 {{#if this.isCreatingNewSession}}
-  <Meeting::NewMeetingModal
-    @didSave={{this.successfullyAdded}}
+  <Meeting::EditMeetingModal
+    @meeting={{this.newMeeting}}
+    @didSave={{this.createAgendaAndNewsletter}}
     @onCancel={{this.closeNewSessionModal}}
   />
 {{/if}}

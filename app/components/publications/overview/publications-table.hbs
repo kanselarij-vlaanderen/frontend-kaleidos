@@ -4,23 +4,21 @@
       <div class="auk-u-ml-4">
         <table
           data-test-route-publications-index-data-table
-          class="auk-table auk-table--sticky-header"
+          class="auk-table auk-table--hoverable auk-table--sticky-header auk-table--sticky-action-column"
         >
           <thead>
             <tr>
               {{#each @tableConfig.visibleColumns as |column|}}
                 {{! first cases that need a special treament. The "else" clause treats the default case }}
                 {{#if (eq column.keyName "shortTitle")}}
-                  {{! template-lint-disable no-inline-styles }}
                   <Utils::ThSortable
                     data-test-route-publications-index-th={{column.keyName}}
-                    style="min-width: 25rem;"
+                    class="auk-u-min-width-medium"
                     @currentSorting={{@sort}}
                     @field={{column.sortKey}}
                     @onChange={{@onSortChange}}
                     @label={{t column.translationKeySmall}}
                   />
-                  {{! template-lint-enable no-inline-styles }}
                 {{else}}
                   {{#if column.sortKey}}
                     <Utils::ThSortable
@@ -68,10 +66,7 @@
     {{/if}}
   </div>
 </div>
-<div>
-  <hr />
-</div>
-<div class="auk-u-mx-4">
+<div class="auk-u-px-4 auk-u-border-top">
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
