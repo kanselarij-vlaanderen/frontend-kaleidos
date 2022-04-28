@@ -1,12 +1,13 @@
 import Service from '@ember/service';
+import { A } from '@ember/array';
 import { task, timeout } from 'ember-concurrency';
 
 export default class JobMonitorService extends Service {
-  jobs = [];
+  jobs = A([]);
 
-  async monitor(job) {
+  register(job) {
     this.jobs.pushObject(job);
-    await this.monitorJobProgress.perform(job);
+    this.monitorJobProgress.perform(job);
   }
 
   @task

@@ -213,21 +213,23 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
           timeOut: 3 * 60 * 1000,
         }
       );
-      await this.jobMonitor.monitor(job);
-      this.toaster.clear(inCreationToast);
-      if (job.status === job.SUCCESS) {
-        const url = await fileDownloadUrlFromJob(job, name);
-        debug(`Archive ready. Prompting for download now (${url})`);
-        fileDownloadToast.options.downloadLink = url;
-        fileDownloadToast.options.fileName = name;
-        this.toaster.displayToast.perform(fileDownloadToast);
-      } else {
-        debug('Something went wrong while generating archive.');
-        this.toaster.error(
-          this.intl.t('error'),
-          this.intl.t('warning-title')
-        );
-      }
+      this.jobMonitor.register(job);
+      job.on('didEnd', this, async function (status) {
+        this.toaster.clear(inCreationToast);
+        if (status === job.SUCCESS) {
+          const url = await fileDownloadUrlFromJob(job, name);
+          debug(`Archive ready. Prompting for download now (${url})`);
+          fileDownloadToast.options.downloadLink = url;
+          fileDownloadToast.options.fileName = name;
+          this.toaster.displayToast.perform(fileDownloadToast);
+        } else {
+          debug('Something went wrong while generating archive.');
+          this.toaster.error(
+            this.intl.t('error'),
+            this.intl.t('warning-title')
+          );
+        }
+      });
     } else {
       const url = await fileDownloadUrlFromJob(job, name);
       debug(`Archive ready. Prompting for download now (${url})`);

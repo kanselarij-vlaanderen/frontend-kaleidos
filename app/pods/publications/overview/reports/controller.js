@@ -53,46 +53,29 @@ class BaseRow extends EmberObject {
       }
     );
 
-    let file;
-    try {
-      file = await this.generateReport(params);
-    } catch (err) {
-      console.error(err);
-      this.toaster.clear(generatingToast);
-      this.toaster.error(err.message, this.intl.t('warning-title'));
-      return;
-    }
-
-    const filename = file.downloadName;
-    const downloadLink = file.namedDownloadLink;
-
-    const downloadFileToast = {
-      title: this.intl.t('publication-report--toast-ready--title'),
-      message: this.intl.t('publication-report--toast-ready--message'),
-      type: 'download-file',
-      options: {
-        timeOut: 10 * 60 * 1000,
-        downloadLink: downloadLink,
-        fileName: filename,
-      },
-    };
-
-    this.toaster.clear(generatingToast);
-    this.toaster.displayToast.perform(downloadFileToast);
-  }
-
-  /** @private */
-  async generateReport(params) {
     const job = await this.createReportRecord(params);
     this.lastJob = job;
     await job.save();
-    await this.jobMonitor.monitor(job);
-    if (job.status === job.SUCCESS) {
-      const file = await job.generated;
-      return file;
-    } else {
-      throw new Error(this.intl.t('publication-report--toast-error--message'));
-    }
+    this.jobMonitor.register(job);
+    job.on('didEnd', this, async function (status) {
+      this.toaster.clear(generatingToast);
+      if (status === job.SUCCESS) {
+        const file = await job.generated;
+        const downloadFileToast = {
+          title: this.intl.t('publication-report--toast-ready--title'),
+          message: this.intl.t('publication-report--toast-ready--message'),
+          type: 'download-file',
+          options: {
+            timeOut: 10 * 60 * 1000,
+            downloadLink: file.namedDownloadLink,
+            fileName: file.downloadName,
+          }
+        };
+        this.toaster.displayToast.perform(downloadFileToast);
+      } else {
+        this.toaster.error(this.intl.t('error'), this.intl.t('warning-title'));
+      }
+    });
   }
 
   /** @private */
