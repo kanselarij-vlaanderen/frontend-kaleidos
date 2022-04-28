@@ -145,6 +145,7 @@ export default class PublicationFlowSearchRoute extends Route {
       if (isArray(statusId)){
         // due to inserts of double statusses we take the first one to not break the search
         statusId = statusId.firstObject;
+        console.log("Flow with multiple statusses found: " + attributes.id)
       }
       const status = this.publicationStatuses.find((status) => status.id === statusId);
       attributes.status = status;
