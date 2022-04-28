@@ -114,7 +114,7 @@
               >
                 {{! Strong opening and closing on 1 line to prevent whitespace to be rendered. }}
                 {{! prettier-ignore }}
-                <strong class="auk-u-text-bold">{{t "comment-title"}}:</strong>{{@agendaitem.comment}}
+                <strong class="auk-u-text-bold">{{t "comment-title"}}: </strong>{{@agendaitem.comment}}
               </pre>
             </Group.Item>
           </Toolbar.Group>
@@ -132,7 +132,7 @@
               >
                 {{! Strong opening and closing on 1 line to prevent whitespace to be rendered. }}
                 {{! prettier-ignore }}
-                <strong class="auk-u-text-bold"><Auk::Icon @name="lock-closed" @size="small" />{{t "private-comment-title"}}:</strong>{{@agendaitem.privateComment}}
+                <strong class="auk-u-text-bold"><Auk::Icon @name="lock-closed" @size="small" />{{t "private-comment-title"}}: </strong>{{@agendaitem.privateComment}}
               </pre>
             </Group.Item>
           </Toolbar.Group>
