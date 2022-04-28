@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { isEmpty, isPresent } from '@ember/utils';
@@ -73,7 +72,7 @@ export default class NewsletterInfosSearchRoute extends Route {
 
   model(filterParams) {
     const searchParams = this.paramsFor('search');
-    const params = { ...searchParams, ...filterParams }; // eslint-disable-line
+    const params = { ...searchParams, ...filterParams };
     if (!params.dateFrom) {
       params.dateFrom = null;
     }

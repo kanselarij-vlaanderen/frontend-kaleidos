@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
@@ -63,7 +62,7 @@ export default class PublicationFlowSearchRoute extends Route {
 
   model(filterParams) {
     const searchParams = this.paramsFor('search');
-    const params = {...searchParams, ...filterParams}; // eslint-disable-line
+    const params = {...searchParams, ...filterParams};
 
     this.lastParams.stageLive(params);
 
