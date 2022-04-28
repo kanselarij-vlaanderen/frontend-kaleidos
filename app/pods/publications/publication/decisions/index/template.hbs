@@ -11,6 +11,7 @@
       <Toolbar.Group @position="right" as |Group|>
         <Group.Item>
           <Auk::Button
+            data-test-route-publications---decisions-add-document
             @skin="primary"
             @icon="plus"
             {{on "click" this.openReferenceDocumentUploadModal}}
