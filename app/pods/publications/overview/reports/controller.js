@@ -70,8 +70,8 @@ class BaseRow extends EmberObject {
 
   async performGenerateReport(params) {
     const generatingToast = this.toaster.loading(
-      this.intl.t('publication-report--toast-generating--message'),
-      this.intl.t('publication-report--toast-generating--title'),
+      this.intl.t('publication-reports--toast-generating--message'),
+      this.intl.t('publication-reports--toast-generating--title'),
       {
         timeOut: 3 * 60 * 1000,
       }
@@ -92,8 +92,8 @@ class BaseRow extends EmberObject {
     const downloadLink = file.namedDownloadLink;
 
     const downloadFileToast = {
-      title: this.intl.t('publication-report--toast-ready--title'),
-      message: this.intl.t('publication-report--toast-ready--message'),
+      title: this.intl.t('publication-reports--toast-ready--title'),
+      message: this.intl.t('publication-reports--toast-ready--message'),
       type: 'download-file',
       options: {
         timeOut: 10 * 60 * 1000,
@@ -116,7 +116,7 @@ class BaseRow extends EmberObject {
       const file = await job.generated;
       return file;
     } else {
-      throw new Error(this.intl.t('publication-report--toast-error--message'));
+      throw new Error(this.intl.t('publication-reports--toast-error--message'));
     }
   }
 

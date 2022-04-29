@@ -18,7 +18,7 @@
               <div>
                 <div class="auk-u-text-muted">
                   {{t
-                    "publication-report-last-request"
+                    "publication-reports-last-request"
                     date=(moment-format row.lastJob.created "DD/MM/YYYY")
                     time=(moment-format row.lastJob.created "HH:mm")
                     user=row.lastJob.generatedBy.fullName
@@ -40,10 +40,10 @@
                 {{else if (eq row.lastJob.status row.lastJob.FAILED)}}
                   {{!ERROR}}
                   <div class="auk-u-text-error">
-                    {{t "publication-report-failed"}}
+                    {{t "publication-reports-failed"}}
                   </div>
                 {{else}}
-                  {{t "publication-report-running"}}
+                  {{t "publication-reports-running"}}
                 {{/if}}
               </div>
             {{/if}}
