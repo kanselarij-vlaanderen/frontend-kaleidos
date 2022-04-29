@@ -296,14 +296,14 @@ context('Search tests', () => {
   });
 
   it('combined searches in publicaties', () => {
-    const vagueTerm = 'Besluitvorming';
+    const generalTerm = '"Besluitvorming Vlaamse Regering"';
 
     cy.visit('zoeken/publicaties');
 
     // search with vague term
     cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall1');
     cy.get(route.search.input).clear();
-    cy.get(route.search.input).type(vagueTerm);
+    cy.get(route.search.input).type(generalTerm);
     cy.get(route.search.trigger).click();
     cy.wait('@publicationSearchCall1');
     cy.get(route.searchPublications.dataTable).find('tbody')
