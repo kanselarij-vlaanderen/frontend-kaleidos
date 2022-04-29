@@ -24,7 +24,12 @@
                     user=row.lastJob.generatedBy.fullName
                   }}
                 </div>
-                {{#if (and (eq row.lastJob.status row.lastJob.SUCCESS) row.lastJob.generated)}}{{!postpone showing link until file relationship is loaded}}
+                {{#if
+                  (and
+                    (eq row.lastJob.status row.lastJob.SUCCESS)
+                    row.lastJob.generated
+                  )
+                }}{{!postpone showing link until file relationship is loaded}}
                   <Auk::ButtonLink
                     @icon="download"
                     @href={{row.lastJob.generated.namedDownloadLink}}
@@ -32,8 +37,11 @@
                   >
                     {{row.lastJob.generated.downloadFilename}}
                   </Auk::ButtonLink>
-                {{else if (eq row.lastJob.status row.lastJob.FAILED)}} {{!ERROR}}
-                  <div class="auk-u-text-error">{{t "publication-report-failed"}}</div>
+                {{else if (eq row.lastJob.status row.lastJob.FAILED)}}
+                  {{!ERROR}}
+                  <div class="auk-u-text-error">
+                    {{t "publication-report-failed"}}
+                  </div>
                 {{else}}
                   {{t "publication-report-running"}}
                 {{/if}}

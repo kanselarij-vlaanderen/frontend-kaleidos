@@ -37,11 +37,14 @@ class BaseRow extends EmberObject {
 
   @task
   *loadAndMonitorJob() {
-    this.lastLoadedJob = yield this.store.queryOne('publication-metrics-export-job', {
-      sort: '-created',
-      'filter[metrics-type]': this.key,
-      include: ['generated', 'generated-by'].join(','),
-    });
+    this.lastLoadedJob = yield this.store.queryOne(
+      'publication-metrics-export-job',
+      {
+        sort: '-created',
+        'filter[metrics-type]': this.key,
+        include: ['generated', 'generated-by'].join(','),
+      }
+    );
     if (this.lastLoadedJob && !this.lastLoadedJob.hasEnded) {
       yield this.jobMonitor.monitor(this.lastLoadedJob);
       if (this.lastLoadedJob.status === this.lastLoadedJob.SUCCESS) {
