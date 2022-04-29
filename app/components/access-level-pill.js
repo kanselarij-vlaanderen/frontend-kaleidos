@@ -10,11 +10,13 @@ export default class AccessLevelPillComponent extends Component {
    * An access-level pill component.
    *
    * @argument accessLevel: an accessLevel object or null
-   * @argument confidential: boolean
+   * @argument agendaIsApproved
+   * @argument agendaIsFinal
+   * @argument agendaIsReleased
+   * @argument agendaIsPublished
    * @argument onChangeAccessLevel
    * @argument onConfirmChangeAccessLevel
    * @argument onCancelChangeAccessLevel
-   * @argument onChangeConfidentiality
    */
   @service intl;
   @service('current-session') session;
@@ -23,32 +25,40 @@ export default class AccessLevelPillComponent extends Component {
 
   get isLoading() {
     return this.confirmChangeAccessLevel.isRunning
-      || this.cancelChangeAccessLevel.isRunning
-      || this.changeConfidentiality.isRunning;
-  }
-
-  get inverseConfidentiality() {
-    return !this.args.confidential;
+      || this.cancelChangeAccessLevel.isRunning;
   }
 
   get pillSkin() {
-    let modifier;
+    let modifier = 'active-future';
     if (this.args.accessLevel) {
       switch (this.args.accessLevel.uri) {
-        case CONSTANTS.ACCESS_LEVELS.PUBLIEK:
-          modifier = 'success';
+        case CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE:
+          modifier = 'active';
+          break;
+        case CONSTANTS.ACCESS_LEVELS.MINISTERRAAD:
+        case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
+          if (this.args.agendaIsApproved) {
+            modifier = 'active';
+          }
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID:
-          modifier = 'warning';
+          if (this.args.agendaIsFinal && this.args.agendaIsReleased) {
+            modifier = 'active';
+          }
           break;
-        case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
-          modifier = 'danger';
+        case CONSTANTS.ACCESS_LEVELS.PUBLIEK:
+          if (this.args.agendaIsFinal && this.args.agendaIsPublished) {
+            modifier = 'active';
+          }
           break;
+        default:
       }
-    } else {
-      modifier = 'default';
     }
     return modifier;
+  }
+
+  get pillIcon() {
+    return 'user';
   }
 
   get accessLevelLabel() {
@@ -86,12 +96,5 @@ export default class AccessLevelPillComponent extends Component {
       yield this.args.onCancelChangeAccessLevel();
     }
     this.isEditing = false;
-  }
-
-  @task
-  *changeConfidentiality() {
-    if (this.args.onChangeConfidentiality) {
-      yield this.args.onChangeConfidentiality(!this.args.confidential);
-    }
   }
 }

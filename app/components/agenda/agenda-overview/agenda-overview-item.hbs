@@ -96,6 +96,10 @@
           <Documents::DocumentBadgeList
             @pieces={{this.limitedAgendaitemDocuments}}
             @highlightedPieces={{this.newAgendaitemDocuments}}
+            @agendaIsApproved={{@currentAgenda.isApproved}}
+            @agendaIsFinal={{@currentAgenda.isFinal}}
+            @agendaIsReleased={{this.agendaIsReleased}}
+            @agendaIsPublished={{this.agendaIsPublished}}
           />
         </div>
         {{#if this.enableShowMore}}
@@ -186,16 +190,6 @@
                 </Auk::Icon>
               {{/if}}
             </div>
-            {{#if this.subcase.confidential}}
-              <Auk::Pill
-                @skin="danger"
-                @icon="lock-closed"
-                class="auk-u-ml-2"
-                data-test-agenda-overview-item-confidentiality-locked
-              >
-                {{t "confidential"}}
-              </Auk::Pill>
-            {{/if}}
           </div>
         </div>
       {{/unless}}

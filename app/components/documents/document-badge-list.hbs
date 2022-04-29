@@ -3,11 +3,24 @@
 as |documents|>
   <div class="grid-container">
     {{#each documents as |doc|}}
-      <Documents::DocumentBadge
-        @piece={{doc}}
-        @isHighlighted={{includes doc @highlightedPieces}}
-        @isClickable={{true}}
-      />
+      <li class="vlc-document-list__item">
+        <span>
+          <a
+            href={{doc.viewDocumentURL}} target="_blank" rel="noreferrer noopener"
+            data-test-document-badge-link
+          >
+            <Auk::Icon @name='document-added' />
+            {{doc.name}}
+          </a>
+          <AccessLevelPill
+            @accessLevel={{await doc.accessLevel}}
+            @agendaIsApproved={{@agendaIsApproved}}
+            @agendaIsFinal={{@agendaIsFinal}}
+            @agendaIsReleased={{@agendaIsReleased}}
+            @agendaIsPublished={{@agendaIsPublished}}
+          />
+        </span>
+      </li>
     {{/each}}
   </div>
 </Documents::DocumentList>

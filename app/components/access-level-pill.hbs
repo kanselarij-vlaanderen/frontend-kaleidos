@@ -1,62 +1,52 @@
-<div class="auk-o-flex auk-o-flex--vertical-center">
-  {{#if this.isLoading}}
-    <div class="auk-loader" role="alert" aria-busy="true"></div>
-  {{else}}
-    {{#if (not @confidential)}}
-      {{#if (not this.isEditing)}}
-        <Auk::Pill
-          @skin={{this.pillSkin}}
-          class="auk-u-cursor-pointer"
-          data-test-access-level-pill
-          {{on "click" this.toggleEdit}}
-        >
-          {{this.accessLevelLabel}}
-        </Auk::Pill>
-      {{else}}
-        <div class="auk-u-width-3/4">
-          <Utils::ModelSelector
-            data-test-access-level-pill-selector
-            @modelName="access-level"
-            @allowClear={{true}}
-            @propertyToShow="label"
-            @sortField="priority"
-            @selectedItems={{@accessLevel}}
-            @selectModel={{this.changeAccessLevel}} />
-        </div>
-        <Auk::Button
-          @skin="borderless"
-          @layout="icon-only"
-          @icon="check"
-          {{on "click" (perform this.confirmChangeAccessLevel @accessLevel)}}
-          data-test-access-level-pill-save
-        >
-          {{t "more-options"}}
-        </Auk::Button>
-        <Auk::Button
-          @skin="borderless"
-          @layout="icon-only"
-          @icon="x"
-          {{on "click" (perform this.cancelChangeAccessLevel)}}
-          data-test-access-level-pill-cancel
-        />
-      {{/if}}
-    {{/if}}
-    <Auk::Button
-      @skin={{if @confidential "danger-borderless" "muted-borderless"}}
-      @layout="icon-only"
-      @icon={{if @confidential "lock-closed" "lock-open"}}
-      @disabled={{not this.session.isEditor}}
-      {{on "click" (perform this.changeConfidentiality)}}
+{{#if this.isLoading}}
+  <div class="auk-loader" role="alert" aria-busy="true"></div>
+{{else}}
+  {{#if (not this.isEditing)}}
+    <Auk::Pill
+      @skin={{this.pillSkin}}
+      @icon={{this.pillIcon}}
+      data-test-access-level-pill
     >
-      <:floater>
-        {{#if @confidential}}
-          <EmberTooltip @side="top" @tooltipClass="auk-tooltip">
-            <p>
-              {{t "document-is-confidential"}}
-            </p>
-          </EmberTooltip>
-        {{/if}}
-      </:floater>
+      {{this.accessLevelLabel}}
+    </Auk::Pill>
+    {{#if @isEditable}}
+      <Auk::Button
+        @skin="tertiary"
+        @layout="icon-only"
+        @icon="pencil"
+        class="auk-button--tiny"
+        {{on "click" this.toggleEdit}}
+        data-test-access-level-pill-edit
+      />
+    {{/if}}
+  {{else}}
+    <div class="auk-u-width-3/4">
+      <Utils::ModelSelector
+        @modelName="access-level"
+        @propertyToShow="label"
+        @sortField="priority"
+        @selectedItems={{@accessLevel}}
+        @selectModel={{this.changeAccessLevel}}
+        data-test-access-level-pill-selector
+      />
+    </div>
+    <Auk::Button
+      @skin="tertiary"
+      @layout="icon-only"
+      @icon="check"
+      class="auk-button--tiny"
+      {{on "click" (perform this.confirmChangeAccessLevel @accessLevel)}}
+      data-test-access-level-pill-save
+    >
+      {{t "more-options"}}
     </Auk::Button>
+    <Auk::Button
+      @skin="tertiary"
+      @layout="icon-only"
+      @icon="x"
+      class="auk-button--tiny"
+      {{on "click" (perform this.cancelChangeAccessLevel)}}
+      data-test-access-level-pill-cancel
+    />
   {{/if}}
-</div>
+{{/if}}

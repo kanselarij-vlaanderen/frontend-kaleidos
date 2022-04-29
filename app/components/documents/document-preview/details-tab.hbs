@@ -53,19 +53,6 @@
       <Utils::AccessLevelColorBadge @accessLevel={{this.accessLevel}} />
     {{/if}}
   </Auk::KeyValue>
-  <Auk::KeyValue
-    data-test-details-tab-confidentiality
-    @key={{capitalize (t "confidentiality")}}
-  >
-    {{#if this.isEditingDetails}}
-      <Auk::Toggle
-        data-test-details-tab-edit-confidentiality
-        @checked={{mut @piece.confidential}}
-      />
-    {{else}}
-      <Utils::ConfidentialityPill @confidential={{@piece.confidential}} />
-    {{/if}}
-  </Auk::KeyValue>
   <Auk::KeyValue @key={{t "file-type"}}>
     <Utils::Documents::FileTypePill
       data-test-details-tab-file-type

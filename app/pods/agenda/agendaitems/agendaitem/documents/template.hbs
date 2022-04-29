@@ -41,6 +41,10 @@
 {{#if this.governmentCanViewDocuments}}
   {{#unless this.loadData.isRunning}}
     <Documents::DocumentCardList
+      @agendaIsApproved={{this.currentAgenda.isApproved}}
+      @agendaIsFinal={{this.currentAgenda.isFinal}}
+      @agendaIsReleased={{this.agendaIsReleased}}
+      @agendaIsPublished={{this.agendaIsPublished}}
       @pieces={{this.model.pieces}}
       @highlightedPieces={{this.newAgendaitemPieces}}
       @onOpenUploadModal={{perform this.ensureFreshData}}

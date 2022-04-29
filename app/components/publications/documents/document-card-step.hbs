@@ -52,7 +52,7 @@
           {{#if @piece.accessLevel}}
             <AccessLevelPill
               @accessLevel={{await @piece.accessLevel}}
-              @confidential={{@piece.confidential}}
+              @isEditable={{true}}
             />
           {{/if}}
         </Group.Item>

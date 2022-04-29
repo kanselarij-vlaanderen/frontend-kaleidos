@@ -58,6 +58,7 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.agendaActivity = this.agendaActivity;
     controller.isSubcaseConfidential = this.isSubcaseConfidential;
     controller.loadNewPieces.perform();
+    controller.loadAgendaReleaseAndPublishedStatus.perform();
   }
 
   @action
