@@ -26,16 +26,14 @@ export default class GenerateReportModalComponent extends Component {
   constructor() {
     super(...arguments);
 
-    const currentYear = new Date(Date.now()).getFullYear();
+    const currentYear = new Date().getFullYear();
     if (this.args.fields.publicationYear) {
       this.publicationYear = currentYear;
     }
 
     if (this.args.fields.decisionDateRange) {
       this.decisionDateRangeStart = new Date(currentYear, 0, 1, 0, 0, 0, 0);
-      // we only use date part in frontend, so we can leave hour parts === 0
-      // not using convertYearToDateRange: range is displayed with last day of the year as end date
-      this.decisionDateRangeEnd = new Date(currentYear, 11, 31, 0, 0, 0, 0);
+      this.decisionDateRangeEnd = undefined;
     }
 
     if (this.args.fields.mandatee) {
@@ -60,7 +58,51 @@ export default class GenerateReportModalComponent extends Component {
   }
 
   get isDecisionDateRangeStartValid() {
-    return !!this.decisionDateRangeStart;
+    const isPresent = this.decisionDateRangeStart !== undefined;
+    if (!isPresent) {
+      return false;
+    }
+    const isWithinSensibleRange = this.isWithinSensibleRange(
+      this.decisionDateRangeStart
+    );
+    if (!isWithinSensibleRange) {
+      return false;
+    }
+    const isDecisionDateRangeValid = this.isDecisionDateRangeValid;
+    return isDecisionDateRangeValid;
+  }
+
+  get isDecisionDateRangeEndValid() {
+    const isPresent = this.decisionDateRangeEnd !== undefined;
+    if (!isPresent) {
+      return true;
+    }
+    const isWithinSensibleRange = this.isWithinSensibleRange(
+      this.decisionDateRangeEnd
+    );
+    if (!isWithinSensibleRange) {
+      return false;
+    }
+    const isDecisionDateRangeValid = this.isDecisionDateRangeValid;
+    return isDecisionDateRangeValid;
+  }
+
+  isWithinSensibleRange(date) {
+    const minDate = new Date(1981, 1, 0, 0, 0, 0, 0);
+    const currentDate = new Date();
+    return minDate <= date && date <= currentDate;
+  }
+
+  get isDecisionDateRangeValid() {
+    const canValidateRange =
+      this.decisionDateRangeStart !== undefined &&
+      this.decisionDateRangeEnd !== undefined;
+    if (!canValidateRange) {
+      // since it is not a range, it is not a valid range either
+      // return true: in order not to show errors to "skip" this check
+      return true;
+    }
+    return this.decisionDateRangeStart < this.decisionDateRangeEnd;
   }
 
   // using getters and setters to transform the year from a string to a number
@@ -81,7 +123,7 @@ export default class GenerateReportModalComponent extends Component {
 
   get isPublicationYearValid() {
     const currentYear = new Date().getFullYear();
-    return this.publicationYear >= 1900 && this.publicationYear <= currentYear;
+    return this.publicationYear >= 1981 && this.publicationYear <= currentYear;
   }
 
   @task
