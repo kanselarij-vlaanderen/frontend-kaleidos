@@ -22,7 +22,10 @@
         {{on "input" this.setMustUpdatePublicationStatus}}
       />
     </div>
-    <div class="auk-form-group">
+    <div
+      data-test-proof-upload-received-date
+      class="auk-form-group"
+    >
       <Auk::Label for="proofUploadReceivedDate" @required={{true}}>
         {{t "date"}}
       </Auk::Label>
