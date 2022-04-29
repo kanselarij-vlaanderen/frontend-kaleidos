@@ -23,55 +23,49 @@
       </span>
     </h4>
     <div class="vlc-agenda-items__text">
-      <div class="auk-o-flex">
-        <div class="left_side">
-          <div
-            class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center"
-          >
-            <div
-              class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced"
+      <div class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
+        <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
+          <h4 class="vlc-agenda-items__subject auk-u-m-0">
+            <LinkTo
+              data-test-agenda-overview-item-sub-item
+              @route="agenda.agendaitems.agendaitem"
+              @model={{@agendaitem.id}}
+              @query={{hash anchor=@agendaitem.id}}
             >
-              <h4 class="vlc-agenda-items__subject auk-u-m-0">
-                <LinkTo
-                  data-test-agenda-overview-item-sub-item
-                  @route="agenda.agendaitems.agendaitem"
-                  @model={{@agendaitem.id}}
-                  @query={{hash anchor=@agendaitem.id}}
-                >
-                  <pre class="auk-u-text-pre-line">
-                    {{#if @agendaitem.shortTitle}}
-                      {{@agendaitem.shortTitle}}
-                    {{else}}
-                      {{@agendaitem.title}}
-                      {{! Fallback for legacy data that doesn't have a short title }}
-                    {{/if}}
-                  </pre>
-                </LinkTo>
-              </h4>
-            </div>
-            <div
-              class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced"
+              <pre class="auk-u-text-pre-line">
+                {{#if @agendaitem.shortTitle}}
+                  {{@agendaitem.shortTitle}}
+                {{else}}
+                  {{@agendaitem.title}}
+                  {{! Fallback for legacy data that doesn't have a short title }}
+                {{/if}}
+              </pre>
+            </LinkTo>
+          </h4>
+        </div>
+        <div
+          class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced"
+        >
+          {{#if this.subcase.confidential}}
+            <AuPill
+              @skin="warning"
+              @icon="lock-closed"
             >
-              {{#if this.subcase.confidential}}
-                <Auk::Pill @skin="warning" @icon="lock-closed">
-                  {{t "confidential"}}
-                </Auk::Pill>
-              {{/if}}
-
-            </div>
-          </div>
-
-          {{#if @agendaitem.shortTitle}}
-            {{! Avoid rendering the same thing twice if no "shortTitle" exists }}
-            <pre
-              data-test-agenda-overview-item-title
-              class="vlc-agenda-items__body-padding auk-u-text-pre-line"
-            >
-              {{@agendaitem.title}}
-            </pre>
+              {{t "confidential"}}
+            </AuPill>
           {{/if}}
         </div>
       </div>
+
+      {{#if @agendaitem.shortTitle}}
+        {{! Avoid rendering the same thing twice if no "shortTitle" exists }}
+        <pre
+          data-test-agenda-overview-item-title
+          class="vlc-agenda-items__body-padding auk-u-text-pre-line"
+        >
+          {{@agendaitem.title}}
+        </pre>
+      {{/if}}
 
       <div class="auk-o-flex auk-o-flex--justify-between">
         {{#if this.subcase.subcaseName}}
@@ -199,10 +193,10 @@
                   class={{@agendaitem.formallyOkToShow.classNames}}
                   data-test-agenda-overview-item-status
                 >
-                  <i
-                    class={{@agendaitem.formallyOkToShow.iconClassNames}}
-                    aria-hidden="true"
-                  ></i>
+                  <Auk::Icon
+                    @name={{@agendaitem.formallyOkToShow.svg.icon}}
+                    class="formally-ok-icon"
+                  />
                   {{@agendaitem.formallyOkToShow.label}}
                 </p>
               {{/if}}
