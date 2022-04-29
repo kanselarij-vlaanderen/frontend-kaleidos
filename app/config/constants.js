@@ -55,10 +55,6 @@ export default {
     KENNISNAME: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/9f342a88-9485-4a83-87d9-245ed4b504bf',
     INGETROKKEN: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/453a36e8-6fbd-45d3-b800-ec96e59f273b',
   },
-  DECISION_RESULT_CODE_IDS: {
-    GOEDGEKEURD: '56312c4b-9d2a-4735-b0b1-2ff14bb524fd',
-    KENNISNAME: '9f342a88-9485-4a83-87d9-245ed4b504bf',
-  },
   AGENDA_STATUSSES: {
     CLOSED: 'http://kanselarij.vo.data.gift/id/agendastatus/f06f2b9f-b3e5-4315-8892-501b00650101',
     APPROVED: 'http://kanselarij.vo.data.gift/id/agendastatus/ff0539e6-3e63-450b-a9b7-cc6463a0d3d1',

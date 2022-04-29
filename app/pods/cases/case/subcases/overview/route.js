@@ -1,5 +1,4 @@
 import Route from '@ember/routing/route';
-import { action } from '@ember/object';
 
 export default class CasesCaseSubcasesOverviewRoute extends Route {
   queryParams = {
@@ -38,10 +37,5 @@ export default class CasesCaseSubcasesOverviewRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
     controller.case = this.case;
-  }
-
-  @action
-  refreshSubcasesRoute() {
-    this.refresh();
   }
 }
