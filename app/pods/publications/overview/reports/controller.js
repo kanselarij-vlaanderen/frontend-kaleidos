@@ -1,50 +1,44 @@
 import Controller from '@ember/controller';
-import EmberObject from '@ember/object';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { dasherize } from '@ember/string';
-import { tracked } from '@glimmer/tracking';
 import moment from 'moment';
-import { task } from 'ember-concurrency';
 
-class BaseRow extends EmberObject {
-  /**
-   * @abstract
-   * @member {String} key
-   */
-
-  /**
-   * @abstract
-   * @method getReportQueryParams
-   * @returns {{ [key: string]: any }}
-   */
-
+export default class PublicationsOverviewReportsController extends Controller {
   @service store;
   @service intl;
   @service currentSession;
   @service toaster;
   @service jobMonitor;
 
-  @tracked lastJob;
+  createExportJob(reportTypeUri) {
+    const now = new Date();
 
-  get titleKey() {
-    return `publication-reports--type--${this.key}`;
-  }
+    // TODO: Aside from a default (which can be constructed as follows),
+    // Configurable naming isn't in the current scope of service functionality and hence shouldn't be part of config.
+    // In case the frontend has special naming requirements, then these can be fullfilled
+    // by editing the file name after the fact in the frontend and saving through mu-cl-resources
+    const reportNameDatePrefix = moment(now).format('YYYYMMDDHHmmss');
+    const reportNameType = 'to-be-moved-to-backend';
+    const reportName = `${reportNameDatePrefix}-${reportNameType}`;
 
-  @task
-  *loadData() {
-    this.lastJob = yield this.store.queryOne('publication-metrics-export-job', {
-      sort: '-created',
-      'filter[metrics-type]': this.key,
-      include: ['generated', 'generated-by'].join(','),
+    const job = this.store.createRecord('publication-metrics-export-job', {
+      created: now,
+      generatedBy: this.currentSession.user,
+      metricsType: reportTypeUri,
+      config: {
+        name: reportName, // TODO: see comment above: move default namign logic to server
+        query: { // TODO: Adapt backend to be able to remove this "query" part.
+          //Query config shouldn't be required in this unparametrized setup.
+          // A "metricsType" should be enough
+          group: reportTypeUri,
+        },
+      },
     });
+    return job;
   }
 
-  @task
-  *triggerGenerateReport(params) {
-    yield this.performGenerateReport(params);
-  }
-
-  async performGenerateReport(params) {
+  @action
+  async generateReport(type) {
     const generatingToast = this.toaster.loading(
       this.intl.t('publication-report--toast-generating--message'),
       this.intl.t('publication-report--toast-generating--title'),
@@ -52,9 +46,7 @@ class BaseRow extends EmberObject {
         timeOut: 3 * 60 * 1000,
       }
     );
-
-    const job = await this.createReportRecord(params);
-    this.lastJob = job;
+    const job = this.createExportJob(type);
     await job.save();
     this.jobMonitor.register(job);
     job.on('didEnd', this, async function (status) {
@@ -72,72 +64,10 @@ class BaseRow extends EmberObject {
           }
         };
         this.toaster.displayToast.perform(downloadFileToast);
+        // TODO: reload model in order to update new lastReportGeneration
       } else {
         this.toaster.error(this.intl.t('error'), this.intl.t('warning-title'));
       }
     });
   }
-
-  /** @private */
-  async createReportRecord(params) {
-    const now = new Date();
-
-    const reportNameDatePrefix = moment(now).format('YYYYMMDDHHmmss');
-    const reportNameType = dasherize(this.intl.t(this.titleKey));
-    const reportName = `${reportNameDatePrefix}-${reportNameType}`;
-
-    const query = this.getReportQueryParams(params);
-
-    const user = await this.currentSession.user;
-
-    const job = this.store.createRecord('publication-metrics-export-job', {
-      created: now,
-      generatedBy: user,
-      metricsType: this.key,
-      config: {
-        name: reportName,
-        query: query,
-      },
-    });
-    return job;
-  }
 }
-
-class GovernmentDomainRow extends BaseRow {
-  key = 'government-domain';
-
-  getReportQueryParams() {
-    return {
-      group: this.key,
-    };
-  }
-}
-
-class RegulationTypeRow extends BaseRow {
-  key = 'regulation-type';
-
-  getReportQueryParams() {
-    return {
-      group: this.key,
-    };
-  }
-}
-
-// TODO: will be split up in "van BVR per minister" and "van decreet per minister"
-class MandateeRow extends BaseRow {
-  key = 'mandatee';
-
-  getReportQueryParams() {
-    return {
-      group: this.key,
-    };
-  }
-}
-
-export const ReportTypeRows = [
-  GovernmentDomainRow,
-  RegulationTypeRow,
-  MandateeRow,
-];
-
-export default class PublicationsOverviewReportsController extends Controller {}

@@ -1,16 +1,25 @@
 import Route from '@ember/routing/route';
-import { getOwner } from '@ember/application';
-import { ReportTypeRows } from './controller';
+import { inject as service } from '@ember/service';
+import reportTypes from 'frontend-kaleidos/config/publications/report-types';
 
 export default class PublicationsOverviewReportsRoute extends Route {
-  model() {
-    let owner = getOwner(this).ownerInjection();
-    return ReportTypeRows.map((Row) => {
-      // owner argument to an EmberObject: necessary for @service injection
-      const row = Row.create(owner, {});
-      // outside of constructor(): it depends on the subtype fields that have not yet been set in the constructor
-      row.loadData.perform();
-      return row;
+  @service intl;
+
+  async model() {
+    const responsePromises = reportTypes.map((reportType) => {
+      return this.store.queryOne('publication-metrics-export-job', {
+        sort: '-created',
+        'filter[metrics-type]': reportType.metricsTypeUri,
+        include: ['generated', 'generated-by'].join(','),
+      });
+    });
+    const lastReportGenerations = await Promise.all(responsePromises);
+    return reportTypes.map((reportType, i) => {
+      return {
+        title: this.intl.t(reportType.translationKey),
+        uri: reportType.metricsTypeUri,
+        lastReportGeneration: lastReportGenerations[i]
+      }
     });
   }
 }
