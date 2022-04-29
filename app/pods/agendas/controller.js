@@ -165,7 +165,7 @@ export default class AgendasController extends Controller {
       number: 1,
       shortTitle: `Goedkeuring van het verslag van de vergadering van ${moment(
         closestMeeting.plannedstart
-      ).format('dddd DD-MM-YYYY')}.`,
+      ).format('dddd DD-MM-YYYY')}`,
       formallyOk: CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK,
       isApproval: true,
       treatments: A([agendaItemTreatment]),
