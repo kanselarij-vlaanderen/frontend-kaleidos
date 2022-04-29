@@ -5,6 +5,11 @@ import { saveChanges as saveSubcaseTitles } from 'frontend-kaleidos/utils/agenda
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { task } from 'ember-concurrency';
 
+/**
+ * @argument subcase
+ * @argument onCancel
+ * @argument onSave
+ */
 export default class SubcaseTitlesPanelEdit extends Component {
   @service store;
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'confidential']);
