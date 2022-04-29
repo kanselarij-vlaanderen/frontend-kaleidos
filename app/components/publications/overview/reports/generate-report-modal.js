@@ -126,12 +126,12 @@ export default class GenerateReportModalComponent extends Component {
   }
 
   get isPublicationYearValid() {
-    const isPresent = this.publicationYear === undefined;
+    const isPresent = this.publicationYear !== undefined;
     if (!isPresent) {
       return false;
     }
     const currentYear = new Date().getFullYear();
-    return this.publicationYear >= 1981 && this.publicationYear <= currentYear;
+    return 1981 <= this.publicationYear && this.publicationYear <= currentYear;
   }
 
   @task
