@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
@@ -11,6 +10,7 @@ import {
   getPublicationStatusPillStep
 } from 'frontend-kaleidos/utils/publication-auk';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
+import { warn } from '@ember/debug';
 
 export default class PublicationFlowSearchRoute extends Route {
   @service store;
@@ -62,7 +62,7 @@ export default class PublicationFlowSearchRoute extends Route {
 
   model(filterParams) {
     const searchParams = this.paramsFor('search');
-    const params = {...searchParams, ...filterParams}; // eslint-disable-line
+    const params = {...searchParams, ...filterParams};
 
     this.lastParams.stageLive(params);
 
@@ -139,9 +139,15 @@ export default class PublicationFlowSearchRoute extends Route {
   }
 
   postProcessStatus(attributes) {
-    const statusId = attributes.statusId;
+    let statusId = attributes.statusId;
     if (statusId) {
-      const status = this.publicationStatuses.find((status) => status.id == statusId);
+      const hasMultipleStatuses = Array.isArray(statusId);
+      if (hasMultipleStatuses) {
+        // due to inserts of double statuses we take the first one to not break the search
+        statusId = statusId.firstObject;
+        warn(`Publication flow ${attributes.id} contains multiple statusses in search index`, !hasMultipleStatuses, { id: 'search.invalid-data' });
+      }
+      const status = this.publicationStatuses.find((status) => status.id === statusId);
       attributes.status = status;
       attributes.statusPillKey = getPublicationStatusPillKey(status);
       attributes.statusPillStep = getPublicationStatusPillStep(status);
