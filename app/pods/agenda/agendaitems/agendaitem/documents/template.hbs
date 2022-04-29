@@ -41,7 +41,7 @@
 {{#if this.governmentCanViewDocuments}}
   {{#unless this.loadData.isRunning}}
     <Documents::DocumentCardList
-      @agendaIsApproved={{this.currentAgenda.isApproved}}
+      @agendaIsApproved={{or this.currentAgenda.isApproved this.currentAgenda.isFinal}}
       @agendaIsFinal={{this.currentAgenda.isFinal}}
       @agendaIsReleased={{this.agendaIsReleased}}
       @agendaIsPublished={{this.agendaIsPublished}}

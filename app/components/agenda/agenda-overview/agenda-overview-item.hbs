@@ -96,7 +96,7 @@
           <Documents::DocumentBadgeList
             @pieces={{this.limitedAgendaitemDocuments}}
             @highlightedPieces={{this.newAgendaitemDocuments}}
-            @agendaIsApproved={{@currentAgenda.isApproved}}
+            @agendaIsApproved={{or @currentAgenda.isApproved @currentAgenda.isFinal}}
             @agendaIsFinal={{@currentAgenda.isFinal}}
             @agendaIsReleased={{this.agendaIsReleased}}
             @agendaIsPublished={{this.agendaIsPublished}}

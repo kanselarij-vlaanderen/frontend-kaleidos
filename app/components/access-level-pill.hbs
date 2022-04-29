@@ -9,7 +9,7 @@
     >
       {{this.accessLevelLabel}}
     </Auk::Pill>
-    {{#if @isEditable}}
+    {{#if (and this.canEdit @isEditable)}}
       <Auk::Button
         @skin="tertiary"
         @layout="icon-only"

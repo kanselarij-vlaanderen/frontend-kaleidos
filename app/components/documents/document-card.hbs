@@ -193,6 +193,10 @@
               {{! TODO: also disable delete when piece linked to other agenda-items while maintaining DDAU }}
               <WebComponents::VlDocument
                 @piece={{piece}}
+                @agendaIsApproved={{@agendaIsApproved}}
+                @agendaIsFinal={{@agendaIsFinal}}
+                @agendaIsReleased={{@agendaIsReleased}}
+                @agendaIsPublished={{@agendaIsPublished}}
                 @enableDelete={{eq piece @piece}}
                 @didDeletePiece={{@didDeletePiece}}
                 @didUpdateAccessLevel={{perform this.loadPieceRelatedData}}
