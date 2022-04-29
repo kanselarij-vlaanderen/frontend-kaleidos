@@ -8,14 +8,17 @@
       </Auk::Panel::Header>
 
       {{#each this.model as |row|}}
-        <Auk::Panel::Body class="auk-o-flex auk-o-flex--justify-between">
+        <Auk::Panel::Body
+          class="auk-o-flex auk-o-flex--justify-between"
+          {{will-destroy row.cancelLoadAndMonitorJob}}
+        >
           <div>
             <h4 class="auk-h4 auk-u-m-0">{{t row.titleKey}}</h4>
             {{#if row.lastJob}}
               <div>
                 <div class="auk-u-text-muted">
                   {{t
-                    "publication-report-last-request"
+                    "publication-reports-last-request"
                     date=(moment-format row.lastJob.created "DD/MM/YYYY")
                     time=(moment-format row.lastJob.created "HH:mm")
                     user=row.lastJob.generatedBy.fullName
@@ -26,8 +29,7 @@
                     (eq row.lastJob.status row.lastJob.SUCCESS)
                     row.lastJob.generated
                   )
-                }}
-                  {{!postpone showing link until file relationship is loaded}}
+                }}{{!postpone showing link until file relationship is loaded}}
                   <Auk::ButtonLink
                     @icon="download"
                     @href={{row.lastJob.generated.namedDownloadLink}}
@@ -36,11 +38,12 @@
                     {{row.lastJob.generated.downloadFilename}}
                   </Auk::ButtonLink>
                 {{else if (eq row.lastJob.status row.lastJob.FAILED)}}
+                  {{!ERROR}}
                   <div class="auk-u-text-error">
-                    {{t "publication-report-failed"}}
+                    {{t "publication-reports-failed"}}
                   </div>
                 {{else}}
-                  {{t "publication-report-running"}}
+                  {{t "publication-reports-running"}}
                 {{/if}}
               </div>
             {{/if}}

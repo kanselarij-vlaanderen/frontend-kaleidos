@@ -31,31 +31,43 @@ class BaseRow extends EmberObject {
   @service toaster;
   @service jobMonitor;
 
-  @tracked lastJob;
+  @tracked lastLoadedJob;
+  @tracked lastStartedJob;
   @tracked isShownGenerateReportModal;
 
   get titleKey() {
     return `publication-reports--type--${this.key}`;
   }
 
-  @task
-  *loadData() {
-    this.lastJob = yield this.store.queryOne('publication-metrics-export-job', {
-      sort: '-created',
-      'filter[metrics-type]': this.key,
-      include: ['generated', 'generated-by'].join(','),
-    });
-    this.startMonitorLoadedJob();
+  get lastJob() {
+    return this.lastStartedJob || this.lastLoadedJob;
   }
 
-  async startMonitorLoadedJob() {
-    if (this.lastJob && !this.lastJob.hasEnded) {
-      await this.jobMonitor.monitor(this.lastJob);
-      if (this.lastJob.status === this.lastJob.SUCCESS) {
+  @task
+  *loadAndMonitorJob() {
+    this.lastLoadedJob = yield this.store.queryOne(
+      'publication-metrics-export-job',
+      {
+        sort: '-created',
+        'filter[metrics-type]': this.key,
+        include: ['generated', 'generated-by'].join(','),
+      }
+    );
+    if (this.lastLoadedJob && !this.lastLoadedJob.hasEnded) {
+      yield this.jobMonitor.monitor(this.lastLoadedJob);
+      if (this.lastLoadedJob.status === this.lastLoadedJob.SUCCESS) {
         // reload generated relationship is needed for template to rerender
         // the template then triggers this network call again (but a workaround seems to complex for this issue)
-        this.lastJob.belongsTo('generated').reload();
+        yield this.lastLoadedJob.belongsTo('generated').reload();
       }
+    }
+  }
+
+  @action
+  cancelLoadAndMonitorJob() {
+    this.loadAndMonitorJob.last?.cancel();
+    if (this.lastLoadedJob) {
+      this.jobMonitor.stopMonitoring(this.lastLoadedJob);
     }
   }
 
@@ -84,6 +96,7 @@ class BaseRow extends EmberObject {
       }
     );
 
+    this.cancelLoadAndMonitorJob();
     let file;
     try {
       file = await this.generateReport(params);
@@ -115,7 +128,7 @@ class BaseRow extends EmberObject {
   /** @private */
   async generateReport(params) {
     const job = await this.createReportRecord(params);
-    this.lastJob = job;
+    this.lastStartedJob = job;
     await job.save();
     await this.jobMonitor.monitor(job);
     if (job.status === job.SUCCESS) {

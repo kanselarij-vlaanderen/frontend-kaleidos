@@ -9,7 +9,7 @@ export default class PublicationsOverviewReportsRoute extends Route {
       // owner argument to an EmberObject: necessary for @service injection
       const row = Row.create(owner, {});
       // outside of constructor(): it depends on the subtype fields that have not yet been set in the constructor
-      row.loadData.perform();
+      row.loadAndMonitorJob.perform();
       return row;
     });
   }
