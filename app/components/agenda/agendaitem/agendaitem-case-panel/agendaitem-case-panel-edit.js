@@ -1,14 +1,18 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import {
-  saveChanges as saveSubcaseTitles,
-  cancelEdit,
-} from 'frontend-kaleidos/utils/agendaitem-utils';
+import { saveChanges as saveSubcaseTitles } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { task } from 'ember-concurrency';
 
-export default class AgendaitemTitlesEdit extends Component {
+/**
+ * @argument subcase
+ * @argument agendaitem
+ * @argument newsletterInfo
+ * @argument onSave
+ * @argument onCancel
+ */
+export default class AgendaitemCasePanelEdit extends Component {
   @service store;
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'comment']);
 
@@ -18,15 +22,17 @@ export default class AgendaitemTitlesEdit extends Component {
 
   @action
   async cancelEditing() {
-    cancelEdit(this.args.agendaitem, this.propertiesToSet);
+    if (this.args.agendaitem.hasDirtyAttributes) {
+      this.args.agendaitem.rollbackAttributes();
+    }
     // We change the value of confidental directly on subcase, so we should also roll it back
-    if (this.args.subcase) {
-      cancelEdit(this.args.subcase, ['confidential']);
+    if (this.args.subcase?.hasDirtyAttributes) {
+      this.args.subcase.rollbackAttributes();
     }
     if (this.newsletterInfo && this.newsletterInfo.hasDirtyAttributes) {
       this.newsletterInfo.rollbackAttributes();
     }
-    this.args.toggleIsEditing();
+    this.args.onCancel();
   }
 
   @task
@@ -39,7 +45,6 @@ export default class AgendaitemTitlesEdit extends Component {
     const propertiesToSetOnAgendaitem = {
       title: trimmedTitle,
       shortTitle: trimmedShortTitle,
-      // comment is set directly on the agendaitem, no need to have it in here
     };
     const propertiesToSetOnSubcase = {
       title: trimmedTitle,
@@ -65,7 +70,6 @@ export default class AgendaitemTitlesEdit extends Component {
       }
       yield this.newsletterInfo.save();
     }
-
-    this.args.toggleIsEditing();
+    this.args.onSave();
   }
 }

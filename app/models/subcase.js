@@ -78,7 +78,7 @@ export default ModelWithModifier.extend({
   // TODO don't use this computed, used in 5 places, make util?
   approved: computed('treatments', 'treatments.@each.decisionResultCode', 'requestedForMeeting', async function() {
     const meeting = await this.get('requestedForMeeting');
-    if (meeting.isFinal) {
+    if (meeting?.isFinal) {
       const treatments = await this.get('treatments');
       if (treatments && treatments.get('length') > 0) {
         const treatmentIds = treatments.map((treatment) => treatment.get('id')).join(',');
