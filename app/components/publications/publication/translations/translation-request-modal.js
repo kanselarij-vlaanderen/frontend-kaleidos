@@ -70,9 +70,11 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
     const publicationFlow = this.args.publicationFlow;
     const identification = yield publicationFlow.identification;
     const contactPersons = yield publicationFlow.contactPersons;
+    const urgencyLevel = yield publicationFlow.urgencyLevel;
     const mailParams = {
       identifier: identification.idName,
       title: publicationFlow.shortTitle,
+      urgent: urgencyLevel?.isUrgent,
       dueDate: this.translationDueDate,
       numberOfPages: this.numberOfPages,
       numberOfWords: this.numberOfWords,
