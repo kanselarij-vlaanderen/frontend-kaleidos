@@ -18,8 +18,8 @@ context('Publications overview tests', () => {
   it('should setup a publication for later tests because default data has none yet', () => {
     const fields = {
       number: 1401,
-      shortTitle: 'Besluitvorming Vlaamse Regering',
-      longTitle: 'Besluitvorming Vlaamse Regering betreffende beslissingen',
+      shortTitle: 'Besluit van een Regering',
+      longTitle: 'Besluit van een Regering betreffende beslissingen',
       remark: 'Sinds 2021',
       numacNumber: 1234567890,
     };
