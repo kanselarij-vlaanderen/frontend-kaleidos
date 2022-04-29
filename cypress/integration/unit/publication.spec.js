@@ -439,30 +439,29 @@ context('Publications tests', () => {
     };
     // const noDate = Cypress.dayjs();
     const laterDate = fields2.decisionDate.add(1, 'days');
-    const earlierDate = fields2.decisionDate.substract(1, 'days');
+    const earlierDate = laterDate.subtract(1, 'days');
 
     // without date
     // cy.createPublication(fields1);
     // cy.get(publication.publicationCaseInfo.openingDate).contains(noDate);
 
     // with date
-    cy.createPublication(fields2);
+    // cy.createPublication(fields2);
     cy.intercept('GET', '/pieces?filter**publication-flow**').as('getPieces');
     cy.get(publication.publicationNav.decisions).click()
       .wait('@getPieces');
     // Make sure the page transitioned
     cy.url().should('contain', '/besluiten');
-    cy.get(publication.decisionsInfoPanel.view.decisionDate).contains(fields2.decisionDate);
-
+    cy.get(publication.decisionsInfoPanel.view.decisionDate).contains(fields2.decisionDate.format('DD-MM-YYYY'));
     // add later date
-    cy.get(publication.decisionsIndex.addDocument).click();
+    cy.get(publication.decisionsIndex.uploadReference).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.setDateInFlatpickr(laterDate);
     cy.get(publication.referenceUpload.save).click();
     cy.get(publication.documentCardStep.card).contains(laterDate.format('DD-MM-YYYY'));
 
     // add earlier date
-    cy.get(publication.decisionsIndex.addDocument).click();
+    cy.get(publication.decisionsIndex.uploadReference).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.setDateInFlatpickr(earlierDate);
     cy.get(publication.referenceUpload.save).click();
@@ -470,11 +469,4 @@ context('Publications tests', () => {
       .eq(0)
       .contains(earlierDate.format('DD-MM-YYYY'));
   });
-
-  // TODO-PUBLICATION code snipper for searching in overview table
-  // cy.get(publication.publicationTableRow.row.number).contains(`${pubNumber}`)
-  //   .parents(publication.publicationTableRow.rows)
-  //   .find(publication.publicationTableRow.row.goToPublication)
-  //   .click();
-  // cy.wait('@getNewPublicationDetail');
 });

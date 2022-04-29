@@ -30,7 +30,7 @@ const selectors = {
 
   // publications\publication\decisions\index\template
   decisionsIndex: {
-    addDocument: '[data-test-route-publications---decisions-add-document]',
+    uploadReference: '[data-test-route-publications---decisions-upload-reference]',
   },
 
   // publications\publication\translations\index\template
@@ -389,8 +389,8 @@ const selectors = {
 
   // publication-documents-list
   documentsList: {
-    piece: '[data-test-document-list-piece]',
-    deletePiece: '[data-test-document-list-delete-piece]',
+    piece: '[data-test-publication-document-list-piece]',
+    deletePiece: '[data-test-publication-document-list-delete-piece]',
   },
 
   // proof-received-panel

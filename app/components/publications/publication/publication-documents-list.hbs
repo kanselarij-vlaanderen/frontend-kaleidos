@@ -1,6 +1,6 @@
 <Auk::List>
   {{#each @pieces as |piece|}}
-    <Auk::List::Item data-test-document-list-piece>
+    <Auk::List::Item data-test-publication-document-list-piece>
       <div
         class="auk-o-flex auk-o-flex--spaced-wide auk-o-flex--vertical-center auk-u-maximize-width"
       >
@@ -41,7 +41,7 @@
             {{/if}}
             {{#if @onDeletePiece}}
               <Auk::Button
-                data-test-document-list-delete-piece
+                data-test-publication-document-list-delete-piece
                 @icon="trash"
                 @layout="icon-only"
                 @skin="danger-borderless"

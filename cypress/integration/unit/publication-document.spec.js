@@ -38,7 +38,7 @@ context('Publications documents tests', () => {
       .wait('@getPieces');
     // Make sure the page transitioned
     cy.url().should('contain', '/besluiten');
-    cy.get(publication.decisionsIndex.addDocument).click();
+    cy.get(publication.decisionsIndex.uploadReference).click();
     checkUploadAndDelete(file);
 
     // translations modals
