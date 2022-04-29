@@ -114,14 +114,22 @@ export default class GenerateReportModalComponent extends Component {
   }
 
   set publicationYearAsString(value) {
-    // necessary to convert string value of <Input /> (even with @type="number")
-    const number = Number.parseInt(value);
-    if (!Number.isNaN(number)) {
-      this.publicationYear = number;
+    if (value === '') {
+      this.publicationYear = undefined;
+    } else {
+      // necessary to convert string value of <Input /> (even with @type="number")
+      const number = Number.parseInt(value);
+      if (!Number.isNaN(number)) {
+        this.publicationYear = number;
+      }
     }
   }
 
   get isPublicationYearValid() {
+    const isPresent = this.publicationYear === undefined;
+    if (!isPresent) {
+      return false;
+    }
     const currentYear = new Date().getFullYear();
     return this.publicationYear >= 1981 && this.publicationYear <= currentYear;
   }
@@ -227,7 +235,7 @@ export default class GenerateReportModalComponent extends Component {
   get isValid() {
     let isValid = true;
     if (this.args.fields.decisionDateRange) {
-      isValid &&= this.isDecisionDateRangeStartValid;
+      isValid &&= this.isDecisionDateRangeStartValid && this.isDecisionDateRangeEndValid;
     } else if (this.args.fields.publicationYear) {
       isValid &&= this.isPublicationYearValid;
     }
