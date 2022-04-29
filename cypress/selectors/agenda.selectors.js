@@ -205,8 +205,17 @@ const selectors = {
 
   // edit-meeting
   editMeeting: {
+    kind: '[data-test-utils-kind-selector]',
+    relatedMainMeeting: '[data-test-edit-meeting-related-main-meeting]',
     meetingNumber: '[data-test-edit-meeting-meeting-number]',
-    numberRep: '[data-test-edit-meeting-number-representation]',
+    meetingLocation: '[data-test-edit-meeting-meeting-location]',
+    datepicker: '[data-test-edit-meeting-datepicker]',
+    numberRep: {
+      view: '[data-test-edit-meeting-number-representation-view]',
+      edit: '[data-test-edit-meeting-number-representation-edit]',
+      input: '[data-test-edit-meeting-number-representation-input]',
+      save: '[data-test-edit-meeting-number-representation-save]',
+    },
     save: '[data-test-edit-meeting-save]',
   },
 

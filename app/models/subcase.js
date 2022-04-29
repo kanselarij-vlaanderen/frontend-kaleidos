@@ -55,12 +55,7 @@ export default ModelWithModifier.extend({
   // TODO don't use this computed, refactor subcase-description-view.hbs && subcase-item.hbs
   // eslint-disable-next-line ember/use-brace-expansion
   phases: computed('agendaActivities.agendaitems', 'agendaActivities.agendaitems.[]', 'latestActivity.agendaitems.@each.retracted', 'approved', async function() {
-    const activities = await this.get('agendaActivities');
-    if (activities && activities.length > 0) {
-      const phases = await this.get('subcasesService').getSubcasePhases(this);
-      return phases;
-    }
-    return null;
+    return await this.get('subcasesService').getSubcasePhases(this);
   }),
 
   // TODO don't use this computed, refactor subcase-header.js

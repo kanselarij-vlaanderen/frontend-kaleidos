@@ -1,23 +1,25 @@
 <div data-test-subcase-item-container class="vlc-procedure-step">
   <div class="vlc-procedure-step__badge-wrapper">
-    {{#if (is-pending @subcase.approved)}}
-      <Auk::Badge @size="medium" />
-    {{else if (await @subcase.approved)}}
-      <Auk::Badge
-        @skin="success"
-        @size="medium"
-        @icon="check"
-        class="vlc-procedure-step__badge"
-        data-test-subcase-item-approved
-      />
+    {{#if this.loadSubcaseIsApproved.isRunning}}
+        <Auk::Badge @size="medium" />
     {{else}}
-      <Auk::Badge
-        @skin="warning"
-        @size="medium"
-        @icon="sitemap"
-        class="vlc-procedure-step__badge"
-        data-test-subcase-item-not-approved
-      />
+      {{#if this.approved}}
+        <Auk::Badge
+          @skin="success"
+          @size="medium"
+          @icon="check"
+          class="vlc-procedure-step__badge"
+          data-test-subcase-item-approved
+        />
+      {{else}}
+        <Auk::Badge
+          @skin="warning"
+          @size="medium"
+          @icon="sitemap"
+          class="vlc-procedure-step__badge"
+          data-test-subcase-item-not-approved
+        />
+      {{/if}}
     {{/if}}
   </div>
   <Auk::Toolbar @auto={{true}}>
@@ -46,18 +48,20 @@
           {{/if}}
         </div>
         <ul class="vlc-status-timeline">
-          {{#each (await @subcase.phases) as |phase|}}
-            {{#if (await phase.label)}}
-              <li
-                class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
-              >
-                <div class="vlc-status-timeline__dot"></div>
-                <div class="vlc-status-timeline__text">
-                  {{subcase-timeline-item-text phase=phase}}
-                </div>
-              </li>
-            {{/if}}
-          {{/each}}
+          {{#unless this.loadSubcasePhases.isRunning}}
+            {{#each this.phases as |phase|}}
+              {{#if phase.label}}
+                <li
+                  class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+                >
+                  <div class="vlc-status-timeline__dot"></div>
+                  <div class="vlc-status-timeline__text">
+                    {{subcase-timeline-item-text phase=phase}}
+                  </div>
+                </li>
+              {{/if}}
+            {{/each}}
+          {{/unless}}
         </ul>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>

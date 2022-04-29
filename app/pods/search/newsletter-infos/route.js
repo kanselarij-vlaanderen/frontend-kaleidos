@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { isEmpty, isPresent } from '@ember/utils';
@@ -31,49 +30,9 @@ export default class NewsletterInfosSearchRoute extends Route {
     this.lastParams = new Snapshot();
   }
 
-  postProcessAgendaitems(newsletter) {
-    const agendaitems = newsletter.attributes.agendaitems;
-    if (agendaitems) {
-      if (Array.isArray(agendaitems)) {
-        for (const agendaitem of agendaitems) {
-          if (agendaitem['nextVersionId'] == null) {
-            // there is no next version = latest agendaitem
-            newsletter.attributes.latestAgendaitem = agendaitem;
-            return;
-          }
-        }
-      }
-      newsletter.attributes.latestAgendaitem = agendaitems;
-    }
-  }
-
-  postProcessDecisions(newsletter) {
-    const decisions = newsletter.attributes.decisions;
-    if (decisions) {
-      if (Array.isArray(decisions)) {
-        // TODO for now, if there are multiple decisions, we just grab the first one
-        newsletter.attributes.decision = decisions.firstObject;
-        return;
-      }
-      newsletter.attributes.decision = decisions;
-    }
-  }
-
-  postProcessMandatees(newsletter) {
-    const mandatees = newsletter.attributes.latestAgendaitem.mandatees;
-    if (mandatees) {
-      if (Array.isArray(mandatees)) {
-        const sortedMandatees = mandatees.sortBy('priority');
-        newsletter.attributes.mandatees = sortedMandatees;
-        return;
-      }
-      newsletter.attributes.mandatees = [mandatees];
-    }
-  }
-
   model(filterParams) {
     const searchParams = this.paramsFor('search');
-    const params = { ...searchParams, ...filterParams }; // eslint-disable-line
+    const params = { ...searchParams, ...filterParams };
     if (!params.dateFrom) {
       params.dateFrom = null;
     }
@@ -185,5 +144,36 @@ export default class NewsletterInfosSearchRoute extends Route {
       controller.isLoadingModel = false;
     });
     return true;
+  }
+
+  postProcessAgendaitems(newsletter) {
+    const agendaitems = newsletter.attributes.agendaitems;
+    if (Array.isArray(agendaitems)) {
+      newsletter.attributes.latestAgendaitem = agendaitems.find((agendaitem) => {
+        return agendaitem['nextVersionId'] == null;
+      });
+    } else {
+      newsletter.attributes.latestAgendaitem = agendaitems;
+    }
+  }
+
+  postProcessDecisions(newsletter) {
+    const decisions = newsletter.attributes.decisions;
+    if (Array.isArray(decisions)) {
+      // TODO for now, if there are multiple decisions, we just grab the first one
+      newsletter.attributes.decision = decisions.firstObject;
+    } else {
+      newsletter.attributes.decision = decisions;
+    }
+  }
+
+  postProcessMandatees(newsletter) {
+    const mandatees = newsletter.attributes.latestAgendaitem.mandatees;
+    if (Array.isArray(mandatees)) {
+      const sortedMandatees = mandatees.sortBy('priority');
+      newsletter.attributes.mandatees = sortedMandatees;
+    } else {
+      newsletter.attributes.mandatees = [mandatees];
+    }
   }
 }
