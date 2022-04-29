@@ -283,8 +283,6 @@ export default class GenerateReportModalComponent extends Component {
       }
     }
 
-    console.log(filterParams);
-
     this.args.onGenerate.perform({
       filter: filterParams,
     });
