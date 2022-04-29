@@ -129,7 +129,7 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
     const mailParams = {
       identifier: identification.idName,
       shortTitle: publicationFlow.shortTitle,
-      urgent: urgencyLevel?.isUrgent,
+      isUrgent: urgencyLevel?.isUrgent,
       longTitle: publicationFlow.longTitle
         ? publicationFlow.longTitle
         : publicationFlow.shortTitle,

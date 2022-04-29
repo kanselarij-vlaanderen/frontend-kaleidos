@@ -38,7 +38,7 @@ async function translationRequestEmail(params) {
   const subject = `${params.identifier} - Vertaalaanvraag`;
   let message= '';
 
-  if (params.urgent) {
+  if (params.isUrgent) {
     message +=  `DRINGEND! Tegen ${dueDate} vertaling gewenst\t\n`
       + '\n';
   }
@@ -69,7 +69,7 @@ async function translationRequestEmail(params) {
 function proofRequestEmail(params) {
   let subject = '';
 
-  if (params.urgent) {
+  if (params.isUrgent) {
     subject +=  `DRINGEND: `;
   }
 
