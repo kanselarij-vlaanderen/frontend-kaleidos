@@ -20,18 +20,10 @@
           </div>
         </div>
       {{/if}}
-      {{#if (not this.isEditingTitles)}}
-        {{! TODO: refactor titles-component into 1 with 2 sub-components: 1 for displaying, 1 for editing }}
-        <Subcase::SubcaseCase::SubcaseTitles
-          @subcase={{@model.subcase}}
-          @toggleIsEditing={{this.toggleIsEditing}}
-        />
-      {{else}}
-        <Subcase::SubcaseCase::SubcaseTitlesEdit
-          @subcase={{@model.subcase}}
-          @toggleIsEditing={{this.toggleIsEditing}}
-        />
-      {{/if}}
+      <Subcase::SubcaseTitlesPanel
+        @subcase={{@model.subcase}}
+        @allowEditing={{this.currentSession.isEditor}}
+      />
       <Mandatees::MandateesPanel
         @mandatees={{this.mandatees}}
         @submitter={{this.submitter}}

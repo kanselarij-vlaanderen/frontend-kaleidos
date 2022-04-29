@@ -16,13 +16,6 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
   @tracked governmentAreas;
   @tracked siblingSubcasesCount;
 
-  @tracked isEditingTitles = false;
-
-  @action
-  toggleIsEditing() {
-    this.isEditingTitles = !this.isEditingTitles;
-  }
-
   @action
   async saveMandateeData(mandateeData) {
     const propertiesToSetOnAgendaitem = {

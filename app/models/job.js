@@ -1,29 +1,31 @@
 import Model, { attr } from '@ember-data/model';
+// eslint-disable-next-line ember/no-computed-properties-in-native-classes
+import { computed } from '@ember/object';
 import Evented from '@ember/object/evented';
-// eslint-disable-next-line ember/no-observers
-import {
-  observer, computed
-} from '@ember/object';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes
-export default Model.extend(Evented, {
-  RUNNING: Object.freeze('http://vocab.deri.ie/cogs#Running'),
-  SUCCESS: Object.freeze('http://vocab.deri.ie/cogs#Success'),
-  FAILED: Object.freeze('http://vocab.deri.ie/cogs#Fail'),
+export default class JobModel extends Model.extend(Evented) {
+  RUNNING = 'http://vocab.deri.ie/cogs#Running';
+  SUCCESS = 'http://vocab.deri.ie/cogs#Success';
+  FAILED = 'http://vocab.deri.ie/cogs#Fail';
 
-  created: attr(),
-  status: attr(),
-  timeStarted: attr(),
-  timeEnded: attr(),
-  hasEnded: computed('status', 'FAILED', 'SUCCESS', function() {
+  @attr('datetime') created;
+  @attr('string') status;
+  @attr('datetime') timeStarted;
+  @attr('datetime') timeEnded;
+
+  constructor() {
+    super(...arguments);
+    // eslint-disable-next-line ember/no-observers, ember/classic-decorator-no-classic-methods
+    this.addObserver('hasEnded', function() {
+      console.log('In observer');
+      if (this.hasEnded) {
+        this.trigger('didEnd', this.status);
+      }
+    });
+  }
+
+  @computed('status', 'FAILED', 'SUCCESS')
+  get hasEnded() {
     return this.status === this.SUCCESS || this.status === this.FAILED;
-  }),
-
-  // eslint-disable-next-line ember/no-observers
-  statusObserver: observer('hasEnded', function() {
-    if (this.hasEnded) {
-      this.trigger('didEnd', this.status);
-    }
-  }),
-});
+  }
+}
