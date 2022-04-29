@@ -74,7 +74,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
     const mailParams = {
       identifier: identification.idName,
       title: publicationFlow.shortTitle,
-      urgent: urgencyLevel?.isUrgent,
+      isUrgent: urgencyLevel?.isUrgent,
       dueDate: this.translationDueDate,
       numberOfPages: this.numberOfPages,
       numberOfWords: this.numberOfWords,
