@@ -187,20 +187,19 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
 
     // Cancel/save access-level in document card
     cy.get(document.accessLevelPill.pill).contains('Intern Overheid')
-      .click();
+    cy.get(document.accessLevelPill.edit).click();
     cy.get(dependency.emberPowerSelect.trigger).click();
     cy.get(dependency.emberPowerSelect.option).contains('Publiek')
       .click();
     cy.get(document.accessLevelPill.cancel).click();
     cy.get(document.accessLevelPill.pill).contains('Intern Overheid')
-      .click();
+    cy.get(document.accessLevelPill.edit).click();
     cy.get(dependency.emberPowerSelect.trigger).click();
     cy.get(dependency.emberPowerSelect.option).contains('Publiek')
       .click();
     cy.get(document.accessLevelPill.save).click();
     cy.wait('@patchPieces');
-    cy.get(document.accessLevelPill.pill).contains('Publiek')
-      .click();
+    cy.get(document.accessLevelPill.pill).contains('Publiek');
 
     // Verify only 1 piece is affected by change
     cy.get(document.documentCard.versionHistory)
