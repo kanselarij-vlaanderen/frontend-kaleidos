@@ -110,13 +110,16 @@ function createPublicationWithStatus(fields) {
  */
 function changePublicationStatus(newStatus) {
   // TODO-COMMAND unused command for now
-  cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('PATCH', '/publication-flows/**').as(`patchPublicationFlow${randomInt}`);
+  cy.intercept('POST', '/publication-status-changes').as(`postPublicationStatusChange${randomInt}`);
   cy.get(publication.statusPill.changeStatus).click();
   cy.get(publication.publicationStatus.select).click();
   cy.get(dependency.emberPowerSelect.option).contains(newStatus)
     .click();
   cy.get(publication.publicationStatus.save).click();
-  cy.wait('@patchPublicationFlow');
+  cy.wait(`@patchPublicationFlow${randomInt}`);
+  cy.wait(`@postPublicationStatusChange${randomInt}`);
 }
 
 /**
