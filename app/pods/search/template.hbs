@@ -104,6 +104,7 @@
               {{capitalize (t "search-by-date-type")}}
             </Auk::Label>
             <select
+              data-test-route-search-publication-date-type
               name="dateType"
               id="dateType"
               class="auk-select auk-select--block"
@@ -122,6 +123,7 @@
           <div class="auk-form-group auk-u-position-relative">
             <Auk::Label>{{t "date"}}</Auk::Label>
             <WebComponents::VlDatepicker
+              data-test-route-search-publication-date
               @selectedDate={{array this.dateBuffer}}
               @dateChanged={{fn (mut this.dateBuffer)}}
               @enableClear={{this.dateBuffer}}

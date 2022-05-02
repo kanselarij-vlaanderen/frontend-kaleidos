@@ -1,0 +1,18 @@
+{{#if this.isEditing}}
+  <Agenda::Agendaitem::AgendaitemCasePanel::AgendaitemCasePanelEdit
+    @agendaitem={{@agendaitem}}
+    @subcase={{@subcase}}
+    @newsletterInfo={{@newsletterInfo}}
+    @onCancel={{this.cancelEditing}}
+    @onSave={{this.stopEditing}}
+  />
+{{else}}
+  <Agenda::Agendaitem::AgendaitemCasePanel::AgendaitemCasePanelView
+    @agendaitem={{@agendaitem}}
+    @subcase={{@subcase}}
+    @shouldShowDetails={{@shouldShowDetails}}
+    @newsletterInfo={{@newsletterInfo}}
+    @onClickEdit={{this.startEditing}}
+    @allowEditing={{@allowEditing}}
+  />
+{{/if}}

@@ -16,7 +16,7 @@ context('Agendaitem changes tests', () => {
   });
 
   const agendaURL = '/vergadering/5EBA48CF95A2760008000006/agenda/f66c6d79-6ad2-49e2-af55-702df3a936d8/agendapunten';
-  const approvalTitle = 'Goedkeuring van het verslag van de vergadering van vrijdag 22-11-2019.';
+  const approvalTitle = 'Goedkeuring van het verslag van de vergadering van vrijdag 22-11-2019';
   const agendaitemIndex2 = 'testId=1589276690: Cypress test dossier 1 test stap 1';
   const caseTitle = 'testId=1589266576: Cypress test dossier 1';
   const subcaseTitle1 = `${caseTitle} test stap 1`;

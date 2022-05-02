@@ -9,7 +9,16 @@ export default class CasesCaseSubcasesSubcaseOverviewRoute extends Route {
 
   async afterModel(model) {
     // For showing the history of subcases within this route, we need a list of subcases without the current model
-    const allSubcases = this.modelFor('cases.case.subcases');
+    //  We want to sort descending on date the subcase was concluded.
+    //  In practice, reverse sorting on created will be close
+    const allSubcases = await this.store.query('subcase', {
+      filter: {
+        case: {
+          id: this.case.id,
+        },
+      },
+      sort: '-created',
+    });
     this.siblingSubcases = allSubcases.filter(
       (subcase) => subcase.id !== model.id
     );

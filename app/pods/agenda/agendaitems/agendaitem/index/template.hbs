@@ -31,24 +31,14 @@
     </Auk::Toolbar::Item>
   </Auk::Toolbar::Group>
 </Auk::Toolbar>
-{{! TODO: refactor titles-component into 1 with 2 sub-components: 1 for displaying, 1 for editing }}
-{{#if this.isEditingAgendaItemTitles}}
-  <Agenda::Agendaitem::AgendaitemCase::AgendaitemTitlesEdit
-    @agendaitem={{this.model}}
-    @subcase={{this.subcase}}
-    @newsletterInfo={{this.newsletterInfo}}
-    @toggleIsEditing={{this.toggleIsEditingAgendaItemTitles}}
-  />
-{{else}}
-  {{! shouldShowDetails should only be false when the agendaitem is to approve minutes }}
-  <Agenda::Agendaitem::AgendaitemCase::AgendaitemTitles
+
+  <Agenda::Agendaitem::AgendaitemCasePanel
     @agendaitem={{this.model}}
     @subcase={{this.subcase}}
     @shouldShowDetails={{or @agendaitem.showAsRemark this.subcase}}
     @newsletterInfo={{this.newsletterInfo}}
-    @toggleIsEditing={{this.toggleIsEditingAgendaItemTitles}}
+    @allowEditing={{this.currentSession.isEditor}}
   />
-{{/if}}
 {{#if this.model.showAsRemark}}
   <Mandatees::MandateesPanel
     @mandatees={{this.mandatees}}
@@ -69,7 +59,7 @@
       @allowEditing={{this.currentSession.isEditor}}
       @onSave={{this.saveGovernmentAreas}}
     />
-    <Agenda::Agendaitem::AgendaitemCase::AgendaitemApprovals
+    <Agenda::Agendaitem::AgendaitemApprovalsPanel
       @agendaitem={{this.model}}
     />
   {{/if}}

@@ -6,7 +6,10 @@
   />
   <Auk::Modal::Body>
     <div class="auk-form-group-layout auk-form-group-layout--standard">
-      <div class="auk-form-group">
+      <div
+        data-test-publication-registration-publication-date
+        class="auk-form-group"
+      >
         <Auk::Label for="publicationRegisterModal_publicationDate">
           {{t "date"}}
         </Auk::Label>
@@ -31,6 +34,7 @@
     @cancelDisabled={{this.save.isRunning}}
   >
     <Auk::Button
+      data-test-publication-registration-save
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
       @loading={{this.save.isRunning}}
