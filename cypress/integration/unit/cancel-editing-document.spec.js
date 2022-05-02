@@ -431,7 +431,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.documentDetailsRow.row).eq(0)
       .find(document.documentDetailsRow.accessLevel)
       .click();
-    cy.get(dependency.emberPowerSelect.option).eq(2)
+    cy.get(dependency.emberPowerSelect.option).eq(4)
       .click();
     cy.get(document.batchDocumentsDetails.save).click();
     cy.wait('@patchPieces');

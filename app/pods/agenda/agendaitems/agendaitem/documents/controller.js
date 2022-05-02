@@ -54,12 +54,14 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
   @task
   *loadAgendaReleaseAndPublishedStatus() {
-    const meeting = yield this.currentAgenda.createdFor;
-    const newsletter = yield meeting.newsletter;
-    const mailCampaign = yield meeting.mailCampagin;
+    const meeting = yield this.currentAgenda?.createdFor;
+    if (meeting) {
+      const newsletter = yield meeting.newsletter;
+      const mailCampaign = yield meeting.mailCampagin;
 
-    this.agendaIsReleased = isPresent(meeting.releasedDecisions || meeting.releasedDocuments);
-    this.agendaIsPublished = newsletter?.finished && mailCampaign?.isSent;
+      this.agendaIsReleased = isPresent(meeting.releasedDecisions || meeting.releasedDocuments);
+      this.agendaIsPublished = newsletter?.finished && mailCampaign?.isSent;
+    }
   }
 
   @task
