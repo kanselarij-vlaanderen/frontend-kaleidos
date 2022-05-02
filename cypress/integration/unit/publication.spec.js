@@ -446,7 +446,7 @@ context('Publications tests', () => {
     // cy.get(publication.publicationCaseInfo.openingDate).contains(noDate);
 
     // with date
-    // cy.createPublication(fields2);
+    cy.createPublication(fields2);
     cy.intercept('GET', '/pieces?filter**publication-flow**').as('getPieces');
     cy.get(publication.publicationNav.decisions).click()
       .wait('@getPieces');
@@ -456,6 +456,7 @@ context('Publications tests', () => {
     // add later date
     cy.get(publication.decisionsIndex.uploadReference).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.get(auk.datepicker).click();
     cy.setDateInFlatpickr(laterDate);
     cy.get(publication.referenceUpload.save).click();
     cy.get(publication.documentCardStep.card).contains(laterDate.format('DD-MM-YYYY'));
@@ -463,6 +464,7 @@ context('Publications tests', () => {
     // add earlier date
     cy.get(publication.decisionsIndex.uploadReference).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.get(auk.datepicker).click();
     cy.setDateInFlatpickr(earlierDate);
     cy.get(publication.referenceUpload.save).click();
     cy.get(publication.documentCardStep.card).should('have.length', 2)
