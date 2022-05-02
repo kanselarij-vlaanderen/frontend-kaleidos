@@ -119,6 +119,13 @@ const selectors = {
     },
   },
 
+  // search/publications
+  searchPublications: {
+    dateType: '[data-test-route-search-publication-date-type]',
+    date: '[data-test-route-search-publication-date]',
+    dataTable: '[data-test-route-search-publication-flows-data-table]',
+  },
+
   /**
     ROUTE NEWSLETTER
   */

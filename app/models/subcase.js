@@ -55,12 +55,7 @@ export default ModelWithModifier.extend({
   // TODO don't use this computed, refactor subcase-description-view.hbs && subcase-item.hbs
   // eslint-disable-next-line ember/use-brace-expansion
   phases: computed('agendaActivities.agendaitems', 'agendaActivities.agendaitems.[]', 'latestActivity.agendaitems.@each.retracted', 'approved', async function() {
-    const activities = await this.get('agendaActivities');
-    if (activities && activities.length > 0) {
-      const phases = await this.get('subcasesService').getSubcasePhases(this);
-      return phases;
-    }
-    return null;
+    return await this.get('subcasesService').getSubcasePhases(this);
   }),
 
   // TODO don't use this computed, refactor subcase-header.js
@@ -83,7 +78,7 @@ export default ModelWithModifier.extend({
   // TODO don't use this computed, used in 5 places, make util?
   approved: computed('treatments', 'treatments.@each.decisionResultCode', 'requestedForMeeting', async function() {
     const meeting = await this.get('requestedForMeeting');
-    if (meeting.isFinal) {
+    if (meeting?.isFinal) {
       const treatments = await this.get('treatments');
       if (treatments && treatments.get('length') > 0) {
         const treatmentIds = treatments.map((treatment) => treatment.get('id')).join(',');

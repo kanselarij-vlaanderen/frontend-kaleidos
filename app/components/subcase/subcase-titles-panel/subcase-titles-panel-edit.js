@@ -1,25 +1,25 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import {
-  saveChanges as saveSubcaseTitles,
-  cancelEdit,
-} from 'frontend-kaleidos/utils/agendaitem-utils';
+import { saveChanges as saveSubcaseTitles } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { task } from 'ember-concurrency';
 
-export default class SubcaseTitlesEdit extends Component {
+/**
+ * @argument subcase
+ * @argument onCancel
+ * @argument onSave
+ */
+export default class SubcaseTitlesPanelEdit extends Component {
   @service store;
-  propertiesToSet = Object.freeze([
-    'title',
-    'shortTitle',
-    'confidential',
-  ]);
+  propertiesToSet = Object.freeze(['title', 'shortTitle', 'confidential']);
 
   @action
   async cancelEditing() {
-    cancelEdit(this.args.subcase, this.propertiesToSet);
-    this.args.toggleIsEditing();
+    if (this.args.subcase.hasDirtyAttributes) {
+      this.args.subcase.rollbackAttributes();
+    }
+    this.args.onCancel();
   }
 
   @task
@@ -43,6 +43,6 @@ export default class SubcaseTitlesEdit extends Component {
       propertiesToSetOnSubcase,
       true
     );
-    this.args.toggleIsEditing();
+    this.args.onSave();
   }
 }

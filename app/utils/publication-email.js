@@ -35,13 +35,23 @@ async function buildContactInformation(contactPersons) {
 }
 async function translationRequestEmail(params) {
   const dueDate = params.dueDate ? moment(params.dueDate).format('DD-MM-YYYY') : '-';
-  const subject = `Vertaalaanvraag VO-dossier: ${params.identifier}`;
-  let message = 'Collega,\n'
+  const subject = `${params.identifier} - Vertaalaanvraag`;
+  let message= '';
+
+  if (params.isUrgent) {
+    message +=  `DRINGEND! Tegen ${dueDate} vertaling gewenst\t\n`
+      + '\n';
+  }
+
+  message += 'Collega,\n'
     + '\n'
     + 'Hierbij ter vertaling:\n'
     + `VO-dossier: ${params.identifier}\n`
+    + '\n'
     + `Titel: ${params.title}\t\n`
+    + '\n'
     + `Uiterste vertaaldatum: ${dueDate}\t\n`
+    + '\n'
     + `Aantal pagina’s: ${params.numberOfPages || ''}\t\n`
     + `Aantal woorden: ${params.numberOfWords || ''}\t\n`
     + `Aantal documenten: ${params.numberOfDocuments}\t\n`;
@@ -57,7 +67,14 @@ async function translationRequestEmail(params) {
 }
 
 function proofRequestEmail(params) {
-   const subject = `Drukproefaanvraag VO-dossier: ${params.identifier} - ${params.shortTitle}`;
+  let subject = '';
+
+  if (params.isUrgent) {
+    subject +=  `DRINGEND: `;
+  }
+
+  subject += `Drukproefaanvraag VO-dossier: ${params.identifier} - ${params.shortTitle}`;
+
    const message = 'Beste,\n'
       + '\n'
       + 'In bijlage voor drukproef:\n'

@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import Controller from '@ember/controller';
 import moment from 'moment';
 import { action } from '@ember/object';

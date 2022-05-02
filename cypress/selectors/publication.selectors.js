@@ -67,6 +67,11 @@ const selectors = {
     },
   },
 
+  // publications\publication\publication-activities\index
+  publicationActivities: {
+    register: '[data-test-route-publications---publication-activities-register]',
+  },
+
   /**
     COMPONENTS
   */
@@ -268,6 +273,7 @@ const selectors = {
     name: '[data-test-proof-upload-name]',
     save: '[data-test-proof-upload-save]',
     updateStatus: '[data-test-proof-upload-update-status]',
+    receivedDate: '[data-test-proof-upload-received-date]',
   },
 
   // proof-request-modal
@@ -330,6 +336,15 @@ const selectors = {
     dropdown: '[data-test-request-activity-panel-dropdown]',
     delete: '[data-test-request-activity-panel-delete]',
     message: '[data-test-request-activity-panel-message]',
+  },
+
+  // translations-info-panel
+  translationsInfoPanel: {
+    openEdit: '[data-test-translations-info-panel-edit]',
+    edit: {
+      dueDate: '[data-test-translations-info-panel-edit-due-date]',
+      save: '[data-test-translations-info-panel-edit-save]',
+    },
   },
 
   // translation-received-panel
@@ -403,5 +418,10 @@ const selectors = {
     },
   },
 
+  // publication-registration-modal
+  publicationRegistration: {
+    publicationDate: '[data-test-publication-registration-publication-date]',
+    save: '[data-test-publication-registration-save]',
+  },
 };
 export default selectors;
