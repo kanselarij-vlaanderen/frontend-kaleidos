@@ -129,7 +129,6 @@ const selectors = {
       name: '[data-test-details-tab-edit-name]',
       documentType: '[data-test-details-tab-edit-document-type]',
       accessLevel: '[data-test-details-tab-edit-access-level]',
-      confidentiality: '[data-test-details-tab-edit-confidentiality]',
     },
   },
 
