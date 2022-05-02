@@ -54,8 +54,8 @@ export default class PublicationsOverviewReportsController extends Controller {
       if (status === job.SUCCESS) {
         const file = await job.generated;
         const downloadFileToast = {
-          title: this.intl.t('publication-report--toast-ready--title'),
-          message: this.intl.t('publication-report--toast-ready--message'),
+          title: this.intl.t('publication-reports--toast-ready--title'),
+          message: this.intl.t('publication-reports--toast-ready--message'),
           type: 'download-file',
           options: {
             timeOut: 10 * 60 * 1000,
