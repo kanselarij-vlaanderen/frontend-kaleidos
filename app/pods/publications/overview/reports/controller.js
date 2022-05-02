@@ -3,6 +3,13 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
 
+export class ReportTypeRow {
+  constructor(lastJob, config) {
+    this.lastJob = lastJob;
+    this.config = config;
+  }
+}
+
 export default class PublicationsOverviewReportsController extends Controller {
   @service store;
   @service intl;

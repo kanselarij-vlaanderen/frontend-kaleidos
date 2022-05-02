@@ -8,9 +8,9 @@
       </Auk::Panel::Header>
       {{#each this.model as |reportType|}}
         <Publications::Reports::ReportsPanelEntry
-          @title={{reportType.title}}
-          @lastReportGeneration={{reportType.lastReportGeneration}}
-          @onClickGenerate={{fn this.generateReport reportType.uri}}
+          @title={{t reportType.config.translationKey}}
+          @lastReportGeneration={{reportType.lastJob}}
+          @onClickGenerate={{fn this.generateReport reportType}}
         />
       {{/each}}
     </Auk::Panel>
