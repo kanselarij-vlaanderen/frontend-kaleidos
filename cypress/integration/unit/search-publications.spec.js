@@ -4,141 +4,165 @@ import auk from '../../selectors/auk.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
-import publication from '../../selectors/publication.selectors';
 
-// function currentTimestamp() {
-//   return Cypress.dayjs().unix();
-// }
+function visitPublicationSearch() {
+  cy.intercept('GET', '/regulation-types?**').as('getRegulationTypes');
+  cy.intercept('GET', '/publication-flows/search?**').as('publicationInitialSearchCall');
+  cy.visit('zoeken/publicaties');
+  cy.wait('@getRegulationTypes');
+  cy.wait('@publicationInitialSearchCall');
+}
 
 function checkPublicationSearch(searchTerm, result) {
-  cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall');
-  cy.get(route.search.input).clear();
-  cy.get(route.search.input).type(searchTerm);
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt}`);
+  cy.get(route.search.input).clear()
+    .type(searchTerm);
   cy.get(route.search.trigger).click();
-  cy.wait('@publicationSearchCall');
+  cy.wait(`@publicationSearchCall${randomInt}`);
   cy.get(route.searchPublications.dataTable).find('tbody')
     .children('tr')
     .contains(result);
+  searchFakePublication();
 }
 
 function checkPublicationSearchForDateType(dateType, date, pubNumber) {
-  cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt}`);
   cy.get(route.searchPublications.dateType).select(dateType);
   cy.get(route.searchPublications.date).click();
   cy.setDateInFlatpickr(date);
   cy.get(route.search.trigger).click();
-  cy.wait('@publicationSearchCall');
+  cy.wait(`@publicationSearchCall${randomInt}`);
   cy.get(route.searchPublications.dataTable).find('tbody')
     .children('tr')
     .contains(pubNumber);
+  searchFakePublication();
+}
+
+function searchFakePublication() {
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt}`);
+  cy.visit('zoeken/publicaties?zoekterm=IKBESTANIET');
+  cy.wait(`@publicationSearchCall${randomInt}`);
+  cy.get(route.search.input).clear();
 }
 
 function checkPublicationSearchForStatusType(status, pubNumber) {
-  cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt}`);
   cy.get(auk.checkbox.checkbox).parent()
     .contains(status)
     .click()
-    .wait('@publicationSearchCall');
-  cy.get(route.searchPublications.dataTable).find('tbody')
-    .children('tr')
-    .contains(pubNumber);
+    .wait(`@publicationSearchCall${randomInt}`);
+  if (pubNumber) {
+    cy.get(route.searchPublications.row.number).should('contain', pubNumber);
+  }
 }
-
-function changeRegulationType(regulationType) {
-  cy.get(publication.publicationNav.decisions).click();
-  cy.get(publication.decisionsInfoPanel.openEdit).click();
-  cy.get(publication.decisionsInfoPanel.edit.regulationType).find(dependency.emberPowerSelect.trigger)
-    .click();
-  cy.get(dependency.emberPowerSelect.option).contains(regulationType)
-    .scrollIntoView()
-    .trigger('mouseover')
-    .click();
-  const randomInt = Math.floor(Math.random() * Math.floor(10000));
-  cy.intercept('PATCH', '/publication-flows/**').as(`patchPublicationFlow${randomInt}`);
-  cy.get(publication.decisionsInfoPanel.save).click();
-  cy.wait(`@patchPublicationFlow${randomInt}`);
-}
+// TODO-command can be used as a command
+// function changeRegulationType(regulationType) {
+//   cy.get(publication.publicationNav.decisions).click();
+//   cy.get(publication.decisionsInfoPanel.openEdit).click();
+//   cy.get(publication.decisionsInfoPanel.edit.regulationType).find(dependency.emberPowerSelect.trigger)
+//     .click();
+//   cy.get(dependency.emberPowerSelect.option).contains(regulationType)
+//     .scrollIntoView()
+//     .trigger('mouseover')
+//     .click();
+//   const randomInt = Math.floor(Math.random() * Math.floor(10000));
+//   cy.intercept('PATCH', '/publication-flows/**').as(`patchPublicationFlow${randomInt}`);
+//   cy.get(publication.decisionsInfoPanel.save).click();
+//   cy.wait(`@patchPublicationFlow${randomInt}`);
+// }
 
 function checkPublicationSearchForRegulationType(regulationType, pubNumber) {
-  cy.intercept('GET', 'publication-flows/search**').as('publicationSearchCall');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt}`);
   cy.get(auk.checkbox.checkbox).parent()
     .contains(regulationType)
     .click()
-    .wait('@publicationSearchCall');
-  cy.get(route.searchPublications.dataTable).find('tbody')
-    .children('tr')
-    .contains(pubNumber);
+    .wait(`@publicationSearchCall${randomInt}`);
+  if (pubNumber) {
+    cy.get(route.searchPublications.row.number).should('contain', pubNumber);
+  }
 }
+
+// TODO-publication make Test to register publication
+// cy.get(publication.publicationNav.publications).click();
+// cy.get(publication.publicationsInfoPanel.edit).click();
+// cy.get(publication.publicationsInfoPanel.targetEndDate).find(auk.datepicker)
+//   .click();
+// cy.setDateInFlatpickr(fields.publicationTargetEndDate);
+// cy.get(publication.publicationActivities.register).click();
+// cy.get(publication.publicationRegistration.publicationDate).find(auk.datepicker)
+//   .click();
+// cy.setDateInFlatpickr(fields.publicationDate);
+// cy.intercept('PATCH', '/publication-flows/*').as('patchPublicationFlow');
+// cy.get(publication.publicationRegistration.save).click()
+//   .wait('@patchPublicationFlow');
 
 context('Search tests', () => {
   // INFO: enable search, elasticsearch and tika for this spec
-  const options = [5, 10, 25, 50, 100];
-
-  const numacNumber = 123456;
-  const publicationDate = Cypress.dayjs().add(9, 'weeks')
-    .day(1);
+  // *WARN* All "fieldx" objects are of data that are in the default testdata, do not change.
   const fields = {
     number: 2001,
-    shortTitle: 'Besluitvorming Vlaamse Regering Uniek',
-    longTitle: 'Besluitvorming Vlaamse Regering betreffende beslissingen Origineel',
-    decisionDate: publicationDate.subtract(5, 'day'),
-    receptionDate: publicationDate.subtract(4, 'day'),
-    targetPublicationdate: publicationDate.subtract(3, 'day'),
+    shortTitle: 'Besluitvorming Vlaamse Regering hoed: uniek',
+    longTitle: 'Besluitvorming Vlaamse Regering fedora: origineel',
+    numacNumber: 123456,
+    decisionDate: Cypress.dayjs('2022-06-29'),
+    receptionDate: Cypress.dayjs('2022-06-30'),
+    publicationDueDate: Cypress.dayjs('2022-07-01'),
+    publicationTargetEndDate: Cypress.dayjs('2022-07-06'),
+    publicationDate: Cypress.dayjs('2022-07-04'),
+    translationDueDate: Cypress.dayjs('2022-07-05'),
+    requestProofStartDate: Cypress.dayjs('2022-05-02'),
+    proofingActivityEndDate: Cypress.dayjs('2022-05-03'),
   };
-  const publicationTargetEndDate = publicationDate.add(2, 'day');
-  const translationDueDate = publicationDate.add(1, 'day');
-  const requestActivityStartDate = Cypress.dayjs();
-  const proofingActivityEndDate = Cypress.dayjs().add(1, 'day');
 
   const fields1 = {
     number: 2002,
-    shortTitle: 'Besluitvorming Vlaamse Regering',
-    longTitle: 'Besluitvorming Vlaamse Regering betreffende beslissingen',
+    shortTitle: 'Besluitvorming Vlaamse Regering hoed',
+    status: 'Naar vertaaldienst',
   };
   const fields2 = {
     number: 2003,
-    shortTitle: 'Besluitvorming Vlaamse Regering',
-    longTitle: 'Besluitvorming Vlaamse Regering betreffende beslissingen',
+    shortTitle: 'Besluitvorming Vlaamse Regering hoed',
+    status: 'Vertaling in',
   };
   const fields3 = {
     number: 2004,
-    shortTitle: 'Besluitvorming Vlaamse Regering',
-    longTitle: 'Besluitvorming Vlaamse Regering betreffende beslissingen',
+    shortTitle: 'Besluitvorming Vlaamse Regering hoed',
+    status: 'Drukproef aangevraagd',
   };
-  const newStatus1 = 'Naar vertaaldienst';
-  const newStatus2 = 'Vertaling in';
-  const newStatus3 = 'Drukproef aangevraagd';
 
   const fields4 = {
     number: 2005,
-    shortTitle: 'Besluitvorming Vlaamse Regering',
-    longTitle: 'Besluitvorming Vlaamse Regering betreffende beslissingen',
+    shortTitle: 'Besluitvorming Vlaamse Regering hoed',
+    regulationType: 'Decreet',
   };
   const fields5 = {
     number: 2006,
-    shortTitle: 'Besluitvorming Vlaamse Regering',
-    longTitle: 'Besluitvorming Vlaamse Regering betreffende beslissingen',
+    shortTitle: 'Besluitvorming Vlaamse Regering hoed',
+    regulationType: 'Besluit van de Vlaamse Regering',
   };
   const fields6 = {
     number: 2007,
-    shortTitle: 'Besluitvorming Vlaamse Regering',
-    longTitle: 'Besluitvorming Vlaamse Regering betreffende beslissingen',
+    shortTitle: 'Besluitvorming Vlaamse Regering hoed',
+    regulationType: 'Ministerieel besluit',
   };
-  const newRegulationType1 = 'Decreet';
-  const newRegulationType2 = 'Besluit van de Vlaamse Regering';
-  const newRegulationType3 = 'Ministerieel besluit';
 
   const fieldsWithDoubleDates = {
     number: 2010,
-    shortTitle: 'Besluitvorming Vlaamse Regering',
-    longTitle: 'Besluitvorming Vlaamse Regering betreffende beslissingen',
-    decisionDate: publicationDate.subtract(5, 'day'),
-    receptionDate: publicationDate.subtract(4, 'day'),
-    targetPublicationdate: publicationDate.subtract(3, 'day'),
+    shortTitle: 'Besluitvorming Vlaamse Regering hoed',
+    status: 'Naar vertaaldienst',
+    regulationType: 'Decreet',
+    decisionDate: Cypress.dayjs('2022-06-29'),
+    receptionDate: Cypress.dayjs('2022-06-30'),
+    publicationDueDate: Cypress.dayjs('2022-07-01'),
   };
 
   beforeEach(() => {
-    cy.login('Admin');
+    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
   });
 
   afterEach(() => {
@@ -158,152 +182,59 @@ context('Search tests', () => {
     });
   };
 
-  it('create a publication for testing the amount of elements', () => {
-    const fields = {
-      number: 1999,
-      shortTitle: 'test',
-      longTitle: 'test',
-    };
-    cy.createPublication(fields);
-  });
-
-  it('create a publication with all diferent types of dates, numac number and unique titles', () => {
-    const file = {
-      folder: 'files', fileName: 'test', fileExtension: 'pdf',
-    };
-
-    cy.createPublication(fields);
-
-    cy.get(publication.publicationCaseInfo.edit).click();
-    cy.get(publication.publicationCaseInfo.editView.numacNumber).find(dependency.emberTagInput.input)
-      .click()
-      .type(`${numacNumber}{enter}`);
-    cy.intercept('POST', '/identifications').as('postNumacNumber');
-    cy.get(publication.publicationCaseInfo.editView.save).click();
-    cy.wait('@postNumacNumber');
-
-    cy.get(publication.publicationNav.translations).click();
-    cy.get(publication.translationsInfoPanel.openEdit).click();
-    cy.get(publication.translationsInfoPanel.edit.dueDate).find(auk.datepicker)
-      .click();
-    cy.setDateInFlatpickr(translationDueDate);
-    cy.intercept('PATCH', '/translation-subcases/*').as('patchTranslationSubcases');
-    cy.get(publication.translationsInfoPanel.edit.save).click()
-      .wait('@patchTranslationSubcases');
-
-    cy.get(publication.publicationNav.publishpreview).click();
-
-    cy.get(publication.proofsIndex.newRequest).click();
-    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.intercept('POST', '/proofing-activities').as('postProofingActivities');
-    cy.intercept('GET', '/pieces/**').as('getPieces');
-    cy.intercept('GET', '/proofing-activities?filter**subcase**').as('reloadProofModel');
-    cy.get(publication.proofRequest.save).click()
-      .wait('@postProofingActivities')
-      .wait('@getPieces')
-      .wait('@reloadProofModel');
-
-    cy.get(publication.proofsIndex.upload).click();
-    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(publication.proofUpload.receivedDate).find(auk.datepicker)
-      .click();
-    cy.setDateInFlatpickr(proofingActivityEndDate);
-    cy.intercept('PATCH', '/proofing-activities/*').as('patchProofingActivities');
-    cy.intercept('GET', '/pieces/**').as('getPieces');
-    cy.intercept('GET', '/proofing-activities?filter**subcase**').as('reloadProofingModel');
-    cy.get(publication.proofUpload.save).click()
-      .wait('@patchProofingActivities')
-      .wait('@getPieces')
-      .wait('@reloadProofingModel')
-      .wait(500);
-
-    cy.get(publication.publicationNav.publications).click();
-    cy.get(publication.publicationsInfoPanel.edit).click();
-    cy.get(publication.publicationsInfoPanel.targetEndDate).find(auk.datepicker)
-      .click();
-    cy.setDateInFlatpickr(publicationTargetEndDate);
-    cy.get(publication.publicationActivities.register).click();
-    cy.get(publication.publicationRegistration.publicationDate).find(auk.datepicker)
-      .click();
-    cy.setDateInFlatpickr(publicationDate);
-    // TODO better waits
-    cy.intercept('PATCH', '/publication-flows/*').as('patchPublicationFlow');
-    cy.get(publication.publicationRegistration.save).click()
-      .wait('@patchPublicationFlow');
-  });
-
-  it('create publications with diferent types of statuses', () => {
-    cy.createPublication(fields1);
-    cy.changePublicationStatus(newStatus1);
-    cy.createPublication(fields2);
-    cy.changePublicationStatus(newStatus2);
-    cy.createPublication(fields3);
-    cy.changePublicationStatus(newStatus3);
-  });
-
-  it('create publications with diferent types of regulations', () => {
-    cy.createPublication(fields4);
-    changeRegulationType(newRegulationType1);
-    cy.createPublication(fields5);
-    changeRegulationType(newRegulationType2);
-    cy.createPublication(fields6);
-    changeRegulationType(newRegulationType3);
-  });
-
-  it('create publication for combined searches', () => {
-    cy.createPublication(fieldsWithDoubleDates);
-    cy.changePublicationStatus(newStatus1);
-    changeRegulationType(newRegulationType1);
-  });
-
   it('Should change the amount of elements to every value in selectbox in publicaties search view', () => {
-    cy.visit('zoeken/publicaties');
+    visitPublicationSearch();
+    const options = [5, 10, 25, 50, 100];
     searchFunction(options);
   });
 
   it('search for all different unique searchterms in publicaties', () => {
-    cy.visit('zoeken/publicaties');
+    visitPublicationSearch();
     checkPublicationSearch(fields.number, fields.number);
-    checkPublicationSearch(numacNumber, fields.number);
+    checkPublicationSearch(fields.numacNumber, fields.number);
     checkPublicationSearch(fields.shortTitle, fields.number);
     checkPublicationSearch(fields.longTitle, fields.number);
   });
 
   it('search for all different dates in publicaties', () => {
-    cy.visit('zoeken/publicaties');
+    visitPublicationSearch();
     checkPublicationSearchForDateType('Datum beslissing', fields.decisionDate, fields.number);
     checkPublicationSearchForDateType('Datum ontvangst', fields.receptionDate, fields.number);
-    checkPublicationSearchForDateType('Gevraagde publicatie datum', publicationTargetEndDate, fields.number);
-    checkPublicationSearchForDateType('Limiet vertaling', translationDueDate, fields.number);
-    checkPublicationSearchForDateType('Aanvraag drukproef', requestActivityStartDate, fields.number);
-    checkPublicationSearchForDateType('Drukproef in', proofingActivityEndDate, fields.number);
-    checkPublicationSearchForDateType('Publicatie datum', publicationDate, fields.number);
-    checkPublicationSearchForDateType('Limiet publicatie', fields.targetPublicationdate, fields.number);
+    checkPublicationSearchForDateType('Gevraagde publicatie datum', fields.publicationTargetEndDate, fields.number);
+    checkPublicationSearchForDateType('Limiet vertaling', fields.translationDueDate, fields.number);
+    checkPublicationSearchForDateType('Aanvraag drukproef', fields.requestProofStartDate, fields.number);
+    checkPublicationSearchForDateType('Drukproef in', fields.proofingActivityEndDate, fields.number);
+    checkPublicationSearchForDateType('Publicatie datum', fields.publicationDate, fields.number);
+    checkPublicationSearchForDateType('Limiet publicatie', fields.publicationDueDate, fields.number);
   });
 
   it('search for different statuses in publicaties', () => {
-    cy.visit('zoeken/publicaties');
-    checkPublicationSearchForStatusType(newStatus1, fields1.number);
-    checkPublicationSearchForStatusType(newStatus2, fields2.number);
-    checkPublicationSearchForStatusType(newStatus3, fields3.number);
+    visitPublicationSearch();
+    checkPublicationSearchForStatusType('Gepauzeerd');
+    cy.get(route.searchPublications.row.number).should('not.contain', fields1.number);
+    checkPublicationSearchForStatusType(fields1.status, fields1.number);
+    checkPublicationSearchForStatusType(fields2.status, fields2.number);
+    checkPublicationSearchForStatusType(fields3.status, fields3.number);
   });
 
   it('search for different regulation types in publicaties', () => {
-    cy.visit('zoeken/publicaties');
-    checkPublicationSearchForRegulationType(newRegulationType1, fields1.number);
-    checkPublicationSearchForRegulationType(newRegulationType2, fields2.number);
-    checkPublicationSearchForRegulationType(newRegulationType3, fields3.number);
+    visitPublicationSearch();
+    checkPublicationSearchForRegulationType('Erratum');
+    cy.get(route.searchPublications.row.number).should('not.contain', fields4.number);
+    checkPublicationSearchForRegulationType(fields4.regulationType, fields4.number);
+    checkPublicationSearchForRegulationType(fields5.regulationType, fields5.number);
+    checkPublicationSearchForRegulationType(fields6.regulationType, fields6.number);
   });
 
   it('combined searches in publicaties', () => {
-    const generalTerm = '"Besluitvorming Vlaamse Regering"';
+    const generalTerm = '"Besluitvorming Vlaamse Regering hoed"';
 
-    cy.visit('zoeken/publicaties');
+    visitPublicationSearch();
 
     // search with vague term
     cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall1');
-    cy.get(route.search.input).clear();
-    cy.get(route.search.input).type(generalTerm);
+    cy.get(route.search.input).clear()
+      .type(generalTerm);
     cy.get(route.search.trigger).click();
     cy.wait('@publicationSearchCall1');
     cy.get(route.searchPublications.dataTable).find('tbody')
@@ -312,7 +243,6 @@ context('Search tests', () => {
 
     // search with double date
     cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall2');
-    cy.get(route.search.input).clear();
     cy.get(route.searchPublications.dateType).select('Datum beslissing');
     cy.get(route.searchPublications.date).click();
     cy.setDateInFlatpickr(fields.decisionDate);
@@ -325,12 +255,11 @@ context('Search tests', () => {
 
     // search with status and regulation type
     cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall3');
-    cy.get(route.search.input).clear();
     cy.get(auk.checkbox.checkbox).parent()
-      .contains(newStatus1)
+      .contains(fieldsWithDoubleDates.status)
       .click();
     cy.get(auk.checkbox.checkbox).parent()
-      .contains(newRegulationType1)
+      .contains(fieldsWithDoubleDates.regulationType)
       .click()
       .wait('@publicationSearchCall3');
     cy.get(route.searchPublications.dataTable).find('tbody')
@@ -341,10 +270,11 @@ context('Search tests', () => {
     // change status
     cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall4');
     cy.get(auk.checkbox.checkbox).parent()
-      .contains(newStatus1)
+      .contains(fieldsWithDoubleDates.status)
       .click();
+    // search with searchterm + decisionDate + regulation-type but with different status
     cy.get(auk.checkbox.checkbox).parent()
-      .contains(newStatus2)
+      .contains(fields2.status)
       .click()
       .wait('@publicationSearchCall4');
     cy.get(utils.vlAlert.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
