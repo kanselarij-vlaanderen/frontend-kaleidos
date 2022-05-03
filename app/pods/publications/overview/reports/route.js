@@ -7,7 +7,7 @@ export default class PublicationsOverviewReportsRoute extends Route {
   @service store;
   @service intl;
 
-  async model() {
+  model() {
     const rowPromises = reportTypes.map(async (reportType) => {
       const lastJob = await this.store.queryOne('publication-metrics-export-job', {
         sort: '-created',
