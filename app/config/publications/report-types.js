@@ -4,12 +4,12 @@ export default [
   {
     translationKey: 'publication-reports--type--by-mandatee--on-decision-date',
     metricsTypeUri: 'by-mandatee--on-decision-date', // TODO: these aren't URI's. that should change
+    // fixed query filters for this report type
     fixedQueryParameters: {
       group: 'mandatee',
-      // fixed query filters for this report type
       filter: {},
-      // user input fields for query filters
     },
+    // user input fields for query filters
     userInputFieldsForQuery: {
       decisionDateRange: true,
     },
