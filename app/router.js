@@ -70,7 +70,6 @@ Router.map(function() {
     this.route('loading', { path: '/laden', });
   });
 
-  if (!isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB)) {
     this.route('publications', { path: '/publicaties', }, function() {
       this.route('overview', { path: '/overzicht' }, function () {
         this.route('all', { path: '/alle-dossiers' });
@@ -89,7 +88,7 @@ Router.map(function() {
         this.route('publication-activities', { path: '/publicatie', }, function() { });
       });
     });
-  }
+
 
   if (!isEmpty(ENV.APP.ENABLE_SIGNATURES)) {
     this.route('signatures', { path: '/handtekenmap', }, function() {
@@ -104,9 +103,7 @@ Router.map(function() {
     this.route('cases', { path: '/dossiers', });
     this.route('agenda-items', { path: '/agendapunten', });
     this.route('newsletter-infos', { path: '/kort-bestek', });
-    if (!isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB)) {
-      this.route('publication-flows', { path: '/publicaties', });
-    }
+    this.route('publication-flows', { path: '/publicaties', });
   });
 
   this.route('settings', { path: '/instellingen', }, function() {
