@@ -142,6 +142,9 @@ function visitAgendaWithLink(link) {
   // cy.intercept('GET', '/agendaitems/*/agenda-activity').as('loadAgendaitems');
   cy.visit(link);
   // cy.wait('@loadAgendaitems');
+  // When opening an agenda, you should always get a loading screen.
+  // Concept-schemes loaded at application level show a blank screen, checking for loader to get past the white screen
+  cy.get(auk.loader).should('exist');
   cy.get(auk.loader, {
     timeout: 60000,
   }).should('not.exist');

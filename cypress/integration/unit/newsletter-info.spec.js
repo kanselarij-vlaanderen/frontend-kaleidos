@@ -55,14 +55,6 @@ function changeSubcaseType(caseTitle, type) {
 }
 
 context('newsletter tests, both in agenda detail view and newsletter route', () => {
-  const caseTitle = `Cypress test: Nota - ${currentTimestamp()}`;
-  const subcaseTitleShort = `Cypress test: korte titel Nota - ${currentTimestamp()}`;
-  const subcaseTitleLong = `Cypress test: lange titel Nota - ${currentTimestamp()}`;
-  const finalAdaptedSubcaseTitleShort = `Cypress test: Nota met aangepaste korte titel na mededeling - ${currentTimestamp()}`;
-  const finalAdaptedSubcaseTitleLong = `Cypress test: Nota met aangepaste lange titel na mededeling - ${currentTimestamp()}`;
-  const fullTestEdit = `Cypress test: Edit view full - ${currentTimestamp()}`;
-  const text = 'tekst om te checken of default overname correct werkt';
-  const addedText = ' van 2e test';
   const theme = 'Justitie en Handhaving';
   const theme2 = 'Landbouw en Visserij';
 
@@ -77,6 +69,8 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
   // tests in newsletter route
 
   it('Should create a newsletter and check the updated row information', () => {
+    // TODO-3367 used in search spec?
+    // TODO-3367 can merge with other spec? no setup needed for this one
     const decisionText = 'Dit is een leuke beslissing';
     const subcaseNameToCheck = 'Eerste stap';
     cy.visit('/vergadering/5DD7CDA58C70A70008000001/kort-bestek');
@@ -88,7 +82,6 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       cy.get(newsletter.buttonToolbar.edit).click();
     });
 
-    // TODO flakey (locally)
     cy.get(dependency.rdfa.editorInner).clear();
     cy.get(newsletter.editItem.rdfaEditor).type(decisionText);
     cy.get(newsletter.editItem.themesSelector).contains('Sport')
@@ -105,6 +98,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
 
   it('Should toggle the box "in kort bestek" and patch the model', () => {
     cy.intercept('PATCH', '/newsletter-infos/*').as('patchNewsletterInfo');
+    // TODO-3367 setup is less important, just click the slider on any agendaitem
     cy.visit('/vergadering/5EBA9588751CF70008000012/kort-bestek');
     // define alias
     cy.get(newsletter.tableRow.newsletterRow).find(newsletter.tableRow.inNewsletterCheckbox)
@@ -121,7 +115,6 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.wait('@patchNewsletterInfo');
     // checkbox is unchecked
     cy.get('@checkboxValue').should('not.be.checked');
-    // TODO-newsletter Check "definitief" view
   });
 
   // test in agenda detail
@@ -170,21 +163,18 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
   });
 
   it('should test default newsletter values on nota', () => {
-    const type = 'Nota';
+    const subcaseTitleShort = 'Cypress test: KB defaults 1 - Nota - 1651579812';
+    const subcaseTitleLong = 'Cypress test: KB defaults 1 - lange titel Nota - 1651579812';
+    const text = 'Tekst om te checken of default overname correct werkt.';
 
-    cy.createCase(caseTitle);
-    cy.addSubcase(type, subcaseTitleShort, subcaseTitleLong, null, null);
-    cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten');
-    cy.addAgendaitemToAgenda(subcaseTitleShort, false);
-    cy.openAgendaitemKortBestekTab(subcaseTitleShort);
-    // check if KB empty
+    cy.visitAgendaWithLink('http://localhost:4200/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten/62711BECADB457F5862A6D21/kort-bestek');
+    // check default nota has no KB
     cy.get(utils.vlAlert.message).contains('Nog geen kort bestek voor dit agendapunt.');
     // create new KB
     cy.intercept('GET', '/themes').as('getThemes');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getThemes');
     // check default values
-    // TODO-Nota check if default in-newsletter is off
     cy.get(newsletter.editItem.longTitle).contains(subcaseTitleLong);
     cy.get(newsletter.editItem.shortTitle).should('have.value', subcaseTitleShort);
     cy.get(newsletter.editItem.toggleFinished).should('not.be.checked');
@@ -206,39 +196,44 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.tableRow.newsletterTitle).contains(subcaseTitleShort)
       .parents(newsletter.tableRow.newsletterRow)
       .find(newsletter.tableRow.inNewsletterCheckbox)
-      .should('not.be.checked') // this is the default for nota
+      .should('not.be.checked') // this is the default setting for nota
       .parent()
       .click();
     cy.wait('@patchNewsItem');
   });
 
   it('should test default newsletter values on new nota', () => {
-    const type = 'Nota';
-    const adaptedSubcaseTitleShort = `Cypress test: Nota met aangepaste korte titel - ${currentTimestamp()}`;
-    const adaptedSubcaseTitleLong = `Cypress test: Nota met aangepaste lange titel- ${currentTimestamp()}`;
+    const previousSubcaseShortTitle = 'Cypress test: KB defaults 2 - Nota - 1651582137';
+    const previousSubcaseRichtext = 'Tekst om te checken of default overname correct werkt.';
+    const addedText = ' Toegevoegd op bestaande tekst.';
+    const addedTitle = ' Toegevoegd op bestaande titel.';
 
-    cy.openCase(caseTitle);
-    cy.addSubcase(type, adaptedSubcaseTitleShort, adaptedSubcaseTitleLong, null, null);
-    cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten');
-    cy.addAgendaitemToAgenda(adaptedSubcaseTitleShort, false);
-    cy.openAgendaitemKortBestekTab(adaptedSubcaseTitleShort);
-    // check if KB empty
+    const subcaseTitleShort = 'Cypress test: KB defaults 2 - Nota aangepast - 1651582232';
+    const subcaseTitleLong = 'Cypress test: KB defaults 2 - Nota met aangepaste lange titel- 1651582232';
+    // TODO KAS-3367 setup case subcase x2 proposed x2 newsletter x1 - nota
+    // TODO KAS-3367 propose first subcase on dump agenda
+
+    cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten/6271253AB783CEBD298C1CC8');
+    // confirm our subcase titles (setup is ok)
+    cy.get(agenda.agendaitemTitlesView.shortTitle).contains(subcaseTitleShort);
+    cy.get(agenda.agendaitemTitlesView.title).contains(subcaseTitleLong);
+    // check default nota has no KB
+    cy.openAgendaitemKortBestekTab(subcaseTitleShort);
     cy.get(utils.vlAlert.message).contains('Nog geen kort bestek voor dit agendapunt.');
     // create new KB
     cy.intercept('GET', '/themes').as('getThemes');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getThemes');
     // check default values
-    // TODO-Nota check if default in-newsletter is off
-    cy.get(newsletter.editItem.longTitle).contains(adaptedSubcaseTitleLong);
+    cy.get(newsletter.editItem.longTitle).contains(subcaseTitleLong);
     cy.get(newsletter.editItem.toggleFinished).should('not.be.checked');
     // check inherited values
-    cy.get(newsletter.editItem.shortTitle).should('have.value', subcaseTitleShort);
-    cy.get(newsletter.editItem.rdfaEditor).contains(text);
+    cy.get(newsletter.editItem.shortTitle).should('have.value', previousSubcaseShortTitle);
+    cy.get(newsletter.editItem.rdfaEditor).contains(previousSubcaseRichtext);
     cy.get(newsletter.editItem.checkedThemes).parent('label')
       .contains(theme);
     // edit
-    cy.get(newsletter.editItem.shortTitle).type(addedText);
+    cy.get(newsletter.editItem.shortTitle).type(addedTitle);
     cy.get(newsletter.editItem.rdfaEditor).type(addedText);
     cy.get(newsletter.editItem.themesSelector).contains(theme2)
       .click();
@@ -248,126 +243,134 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
   });
 
   it('should test default newsletter values on announcement', () => {
-    const type = 'Mededeling';
-    const adaptedSubcaseTitleShort = `Cypress test: Mededeling met aangepaste korte titel - ${currentTimestamp()}`;
-    const adaptedSubcaseTitleLong = `Cypress test: Mededeling met aangepaste lange titel- ${currentTimestamp()}`;
+    const subcaseTitleShort = 'Cypress test: KB defaults 3 - Med - 1651584615';
+    const subcaseTitleLong = 'Cypress test: KB defaults 3 - lange titel Med - 1651584615';
 
-    cy.openCase(caseTitle);
-    cy.addSubcase(type, adaptedSubcaseTitleShort, adaptedSubcaseTitleLong, null, null);
     cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten');
-    cy.addAgendaitemToAgenda(adaptedSubcaseTitleShort, false);
-    cy.openAgendaitemKortBestekTab(adaptedSubcaseTitleShort);
+    // *adding announcement to agenda creates a KB*
+    cy.addAgendaitemToAgenda(subcaseTitleShort, false);
+    cy.openAgendaitemKortBestekTab(subcaseTitleShort);
     // check if KB already exists
-    cy.get(newsletter.agendaitemNewsItem.title).contains(adaptedSubcaseTitleShort);
+    cy.get(newsletter.agendaitemNewsItem.title).contains(subcaseTitleShort);
     // check default values
     cy.get(newsletter.newsItem.edit).click();
-    cy.get(newsletter.editItem.shortTitle).should('have.value', adaptedSubcaseTitleShort);
+    cy.get(newsletter.editItem.shortTitle).should('have.value', subcaseTitleShort);
     cy.get(newsletter.editItem.toggleFinished).should('be.checked');
     // value of subtitle from newsletter info is empty, but we show agendaitem title in frontend
-    cy.get(newsletter.editItem.longTitle).contains(adaptedSubcaseTitleLong);
-    cy.get(newsletter.editItem.rdfaEditor).contains(adaptedSubcaseTitleLong);
+    cy.get(newsletter.editItem.longTitle).contains(subcaseTitleLong);
+    cy.get(newsletter.editItem.rdfaEditor).contains(subcaseTitleLong);
     cy.get(newsletter.editItem.checkedThemes).should('not.exist');
     cy.get(newsletter.editItem.cancel).click();
-    cy.openAgendaitemDossierTab(adaptedSubcaseTitleShort);
+    cy.openAgendaitemDossierTab(subcaseTitleShort);
     cy.get(agenda.agendaitemTitlesView.edit).click();
     cy.get(agenda.agendaitemTitlesEdit.showInNewsletter).should('be.checked');
   });
 
   it('should test default newsletter values and long title on announcement without long title', () => {
-    const type = 'Mededeling';
-    const adaptedSubcaseTitleShort = `Cypress test: Mededeling zonder lange titel - ${currentTimestamp()}`;
+    const subcaseTitleShort = 'Cypress test: KB defaults 4 - Med zonder lange titel - 1651584640';
 
-    cy.openCase(caseTitle);
-    cy.addSubcase(type, adaptedSubcaseTitleShort, null, null, null);
     cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten');
-    cy.addAgendaitemToAgenda(adaptedSubcaseTitleShort, false);
-    cy.openAgendaitemKortBestekTab(adaptedSubcaseTitleShort);
+    cy.addAgendaitemToAgenda(subcaseTitleShort, false);
+    cy.openAgendaitemKortBestekTab(subcaseTitleShort);
     // check if KB already exists
-    cy.get(newsletter.agendaitemNewsItem.title).contains(adaptedSubcaseTitleShort);
+    cy.get(newsletter.agendaitemNewsItem.title).contains(subcaseTitleShort);
     // check default values
     cy.get(newsletter.newsItem.edit).click();
-    cy.get(newsletter.editItem.shortTitle).should('have.value', adaptedSubcaseTitleShort);
+    cy.get(newsletter.editItem.shortTitle).should('have.value', subcaseTitleShort);
     cy.get(newsletter.editItem.toggleFinished).should('be.checked');
     // value of subtitle from newsletter info is empty, but we show agendaitem title in frontend
     // TODO-newsletter are these contains correct?
     cy.get(newsletter.editItem.longTitle).should('contain', '');
     // TODO-KAS-3270 check if editor empty
+    // TODO-KAS-3367 default richText to shorttitle?
     cy.get(newsletter.editItem.rdfaEditor).should('contain', '');
     cy.get(newsletter.editItem.checkedThemes).should('not.exist');
   });
 
   it('should test default newsletter values on new nota after multiple announcements', () => {
-    const type = 'Nota';
+    const previousSubcaseShortTitle = 'Cypress test: KB defaults 5 - Nota - 1651585885';
+    const previousSubcaseRichtext = 'Tekst om te checken of default overname correct werkt met mededelingen ertussen.';
+    const subcaseTitleShort = 'Cypress test: KB defaults 5 - Nota - na mededeling - 1651586158';
+    const subcaseTitleLong = 'Cypress test: KB defaults 5 - lange titel Nota - na mededeling - 1651586158';
 
-    cy.openCase(caseTitle);
-    cy.addSubcase(type, finalAdaptedSubcaseTitleShort, finalAdaptedSubcaseTitleLong, null, null);
-    cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten');
-    cy.addAgendaitemToAgenda(finalAdaptedSubcaseTitleShort, false);
-    cy.openAgendaitemKortBestekTab(finalAdaptedSubcaseTitleShort);
+    cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten/627134943DCDDB638260912A');
+    // confirm our subcase titles (setup is ok)
+    cy.get(agenda.agendaitemTitlesView.shortTitle).contains(subcaseTitleShort);
+    cy.get(agenda.agendaitemTitlesView.title).contains(subcaseTitleLong);
     // check if KB empty
+    cy.openAgendaitemKortBestekTab(subcaseTitleShort);
+    // TODO KAS-3367 extract, selector around the alert?
     cy.get(utils.vlAlert.message).contains('Nog geen kort bestek voor dit agendapunt.');
     // create new KB
     cy.intercept('GET', '/themes').as('getThemes');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getThemes');
     // check default values
-    cy.get(newsletter.editItem.longTitle).contains(finalAdaptedSubcaseTitleLong);
+    cy.get(newsletter.editItem.longTitle).contains(subcaseTitleLong);
     cy.get(newsletter.editItem.toggleFinished).should('not.be.checked');
     // check inherited values
-    cy.get(newsletter.editItem.shortTitle).should('have.value', subcaseTitleShort + addedText);
-    cy.get(newsletter.editItem.rdfaEditor).contains(text)
-      .contains(addedText);
+    cy.get(newsletter.editItem.shortTitle).should('have.value', previousSubcaseShortTitle);
+    cy.get(newsletter.editItem.rdfaEditor).contains(previousSubcaseRichtext);
     cy.get(newsletter.editItem.checkedThemes).parent('label')
       .contains(theme);
-    cy.get(newsletter.editItem.checkedThemes).parent('label')
-      .contains(theme2);
+    cy.intercept('POST', '/newsletter-infos').as('postNewsItem');
+    cy.get(newsletter.editItem.save).click();
+    cy.wait('@postNewsItem');
     // check KB views for in-newsletter toggle
     cy.get(agenda.agendaHeader.showOptions).click();
     cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
-    cy.get(newsletter.tableRow.newsletterTitle).contains(subcaseTitleShort + addedText)
+    // The previous subcase had "in-newsletter" as checked, verify it was not inherited
+    cy.get(newsletter.tableRow.newsletterTitle).contains(previousSubcaseShortTitle)
       .parents(newsletter.tableRow.newsletterRow)
       .find(newsletter.tableRow.inNewsletterCheckbox)
       .should('not.be.checked');
   });
 
   it('should switch between nota and announcement and test default newsletter values', () => {
+    const caseTitle = 'Cypress test: KB defaults 6 - 1651588555';
+    const previousSubcaseTitleShort = 'Cypress test: KB defaults 6 - Nota - 1651588555';
+    const previousText = 'Tekst om te checken of default overname correct werkt met switchen van type ertussen.';
+
+    const subcaseTitleShort = 'Cypress test: KB defaults 6 - Nota switch type - 1651588681';
+    const subcaseTitleLong = 'Cypress test: KB defaults 6 - Nota switch type lange titel- 1651588681';
+
     changeSubcaseType(caseTitle, 'Mededeling');
     cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten');
-    cy.openAgendaitemKortBestekTab(finalAdaptedSubcaseTitleShort);
+    cy.openAgendaitemKortBestekTab(subcaseTitleShort);
     // check if KB exists
     // check default values
     cy.get(newsletter.newsItem.edit).click();
-    cy.get(newsletter.editItem.shortTitle).should('have.value', finalAdaptedSubcaseTitleShort);
+    cy.get(newsletter.editItem.shortTitle).should('have.value', subcaseTitleShort);
     cy.get(newsletter.editItem.toggleFinished).should('be.checked');
     // value of subtitle from newsletter info is empty, but we show agendaitem title in frontend
-    cy.get(newsletter.editItem.longTitle).contains(finalAdaptedSubcaseTitleLong);
-    cy.get(newsletter.editItem.rdfaEditor).contains(finalAdaptedSubcaseTitleLong);
+    cy.get(newsletter.editItem.longTitle).contains(subcaseTitleLong);
+    cy.get(newsletter.editItem.rdfaEditor).contains(subcaseTitleLong);
     cy.get(newsletter.editItem.checkedThemes).should('not.exist');
     cy.get(newsletter.editItem.cancel).click();
 
     changeSubcaseType(caseTitle, 'Nota');
     cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten');
-    cy.openAgendaitemKortBestekTab(finalAdaptedSubcaseTitleShort);
+    cy.openAgendaitemKortBestekTab(subcaseTitleShort);
     // check if KB empty
     cy.get(utils.vlAlert.message).contains('Nog geen kort bestek voor dit agendapunt.');
 
     changeSubcaseType(caseTitle, 'Mededeling');
     cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten');
-    cy.openAgendaitemKortBestekTab(finalAdaptedSubcaseTitleShort);
+    cy.openAgendaitemKortBestekTab(subcaseTitleShort);
     // check if KB exists
     // check default values
     cy.get(newsletter.newsItem.edit).click();
-    cy.get(newsletter.editItem.shortTitle).should('have.value', finalAdaptedSubcaseTitleShort);
+    cy.get(newsletter.editItem.shortTitle).should('have.value', subcaseTitleShort);
     cy.get(newsletter.editItem.toggleFinished).should('be.checked');
     // value of subtitle from newsletter info is empty, but we show agendaitem title in frontend
-    cy.get(newsletter.editItem.longTitle).contains(finalAdaptedSubcaseTitleLong);
-    cy.get(newsletter.editItem.rdfaEditor).contains(finalAdaptedSubcaseTitleLong);
+    cy.get(newsletter.editItem.longTitle).contains(subcaseTitleLong);
+    cy.get(newsletter.editItem.rdfaEditor).contains(subcaseTitleLong);
     cy.get(newsletter.editItem.checkedThemes).should('not.exist');
     cy.get(newsletter.editItem.cancel).click();
 
     changeSubcaseType(caseTitle, 'Nota');
     cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten');
-    cy.openAgendaitemKortBestekTab(finalAdaptedSubcaseTitleShort);
+    cy.openAgendaitemKortBestekTab(subcaseTitleShort);
     // check if KB empty
     cy.get(utils.vlAlert.message).contains('Nog geen kort bestek voor dit agendapunt.');
     // create new KB
@@ -375,20 +378,17 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getThemes');
     // check default values
-    cy.get(newsletter.editItem.longTitle).contains(finalAdaptedSubcaseTitleLong);
+    cy.get(newsletter.editItem.longTitle).contains(subcaseTitleLong);
     cy.get(newsletter.editItem.toggleFinished).should('not.be.checked');
     // check inherited values
-    cy.get(newsletter.editItem.shortTitle).should('have.value', subcaseTitleShort + addedText);
-    cy.get(newsletter.editItem.rdfaEditor).contains(text)
-      .contains(addedText);
+    cy.get(newsletter.editItem.shortTitle).should('have.value', previousSubcaseTitleShort);
+    cy.get(newsletter.editItem.rdfaEditor).contains(previousText);
     cy.get(newsletter.editItem.checkedThemes).parent('label')
       .contains(theme);
-    cy.get(newsletter.editItem.checkedThemes).parent('label')
-      .contains(theme2);
     // check KB views for in-newsletter toggle
     cy.get(agenda.agendaHeader.showOptions).click();
     cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
-    cy.get(newsletter.tableRow.newsletterTitle).contains(subcaseTitleShort + addedText)
+    cy.get(newsletter.tableRow.newsletterTitle).contains(previousSubcaseTitleShort)
       .parents(newsletter.tableRow.newsletterRow)
       .find(newsletter.tableRow.inNewsletterCheckbox)
       .should('not.be.checked');
@@ -396,6 +396,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
 
   it('should test the complete edit component', () => {
     const caseTitleEditView = `Cypress test: Nota edit - ${currentTimestamp()}`;
+    const subcaseTitleShort = `Cypress test: Edit view full - ${currentTimestamp()}`;
     const proposalText = 'Op voorstel van minister-president Jan Jambon';
     const type = 'Nota';
     const file = {
@@ -405,10 +406,10 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
 
     cy.createCase(caseTitleEditView);
     cy.openCase(caseTitleEditView);
-    cy.addSubcase(type, fullTestEdit, null, null);
+    cy.addSubcase(type, subcaseTitleShort, null, null);
     cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten');
-    cy.addAgendaitemToAgenda(fullTestEdit, false);
-    cy.openAgendaitemKortBestekTab(fullTestEdit);
+    cy.addAgendaitemToAgenda(subcaseTitleShort, false);
+    cy.openAgendaitemKortBestekTab(subcaseTitleShort);
     cy.intercept('GET', '/themes').as('getThemes');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getThemes');
@@ -435,13 +436,13 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
 
     // check after adding nota and mandatee
     cy.get(newsletter.editItem.cancel).click();
-    cy.openAgendaitemDossierTab(fullTestEdit);
+    cy.openAgendaitemDossierTab(subcaseTitleShort);
     cy.addAgendaitemMandatee(1);
-    cy.addDocumentsToAgendaitem(fullTestEdit, files);
+    cy.addDocumentsToAgendaitem(subcaseTitleShort, files);
     // TODO-bug reload should not be necessary
     // reload necessary for nota
     cy.reload();
-    cy.openAgendaitemKortBestekTab(fullTestEdit);
+    cy.openAgendaitemKortBestekTab(subcaseTitleShort);
     cy.intercept('GET', '/themes').as('getThemes3');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getThemes3');
