@@ -78,10 +78,16 @@
               {{#if agenda.isDesignAgenda}}
                 {{t "latest-modified-on"}}
               {{else}}
+                {{#if agenda.modified}}
                 {{t "approved-on"}}
+              {{else}}
+                {{t "approved"}}
+                {{/if}}
               {{/if}}
+              {{#if agenda.modified}}
               <br />
               {{moment-format agenda.modified "dd DD-MM-YYYY HH:mm"}}
+                {{/if}}
             </div>
           {{/if}}
         </LinkTo>
