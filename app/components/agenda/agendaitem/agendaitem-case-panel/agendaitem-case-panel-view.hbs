@@ -57,7 +57,7 @@
             {{#if
               (and
                 @agendaitem.isDesignAgenda
-                (and this.currentSession.isEditor @agendaitem.formallyOkToShow)
+                (and @allowEditing @agendaitem.formallyOkToShow)
               )
             }}
               <p
