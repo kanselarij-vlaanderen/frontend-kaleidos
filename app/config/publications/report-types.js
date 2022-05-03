@@ -4,38 +4,44 @@ export default [
   {
     translationKey: 'publication-reports--type--by-mandatee--on-decision-date',
     metricsTypeUri: 'by-mandatee--on-decision-date', // TODO: these aren't URI's. that should change
-    // fixed query filters for this report type
-    fixedQueryParameters: {
-      group: 'mandatee',
-      filter: {},
+    // fixed job params for this report type
+    fixedParams: {
+      query: {
+        group: 'mandatee',
+        filter: {},
+      },
     },
-    // user input fields for query filters
-    userInputFieldsForQuery: {
+    // user input fields for job param filters in modal for this report type
+    userInputFieldsForParams: {
       decisionDateRange: true,
     },
   },
   {
     translationKey: 'publication-reports--type--by-government-domain',
     metricsTypeUri: 'by-government-domain',
-    fixedQueryParameters: {
-      group: 'government-domain',
-      filter: {},
+    fixedParams: {
+      query: {
+        group: 'government-domain',
+        filter: {},
+      }
     },
-    userInputFieldsForQuery: {
+    userInputFieldsForParams: {
       publicationYear: true,
-      governmentDomain: true,  
+      governmentDomain: true,
     },
   },
   {
     translationKey: 'publication-reports--type--by-mandatee--only-bvr',
     metricsTypeUri: 'by-mandatee--only-bvr',
-    fixedQueryParameters: {
-      group: 'mandatee',
-      filter: {
-        regulationType: [CONSTANTS.REGULATION_TYPES.BVR],
+    fixedParams: {
+      query: {
+        group: 'mandatee',
+        filter: {
+          regulationType: [CONSTANTS.REGULATION_TYPES.BVR],
+        }
       }
     },
-    userInputFieldsForQuery: {
+    userInputFieldsForParams: {
       publicationYear: true,
       mandatee: true,
     },
@@ -43,34 +49,40 @@ export default [
   {
     translationKey: 'publication-reports--type--by-regulation-type--only-not-via-council-of-ministers',
     metricsTypeUri: 'by-regulation-type--only-not-via-council-of-ministers',
-    fixedQueryParameters: {
-      group: 'regulation-type',
-      filter: {
-        isViaCouncilOfMinisters: false,
+    fixedParams: {
+      query: {
+        group: 'regulation-type',
+        filter: {
+          isViaCouncilOfMinisters: false,
+        }
       }
     },
-    userInputFieldsForQuery: {
+    userInputFieldsForParams: {
       publicationYear: true,
     },
   },
   {
     translationKey: 'publication-reports--type--by-regulation-type',
     metricsTypeUri: 'by-regulation-type',
-    fixedQueryParameters: {
-      group: 'regulation-type',
+    fixedParams: {
+      query: {
+        group: 'regulation-type',
+      }
     },
-    userInputFieldsForQuery: {
+    userInputFieldsForParams: {
       publicationYear: true,
-      regulationType: true,  
+      regulationType: true,
     },
   },
   {
     translationKey: 'publication-reports--type--by-mandatee--only-decree',
     metricsTypeUri: 'by-mandatee--only-decree',
-    fixedQueryParameters: {
-      group: 'mandatee',
+    fixedParams: {
+      query: {
+        group: 'mandatee',
+      }
     },
-    userInputFieldsForQuery: {
+    userInputFieldsForParams: {
       publicationYear: true,
       mandatee: true,
     },

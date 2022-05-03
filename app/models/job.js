@@ -17,7 +17,6 @@ export default class JobModel extends Model.extend(Evented) {
     super(...arguments);
     // eslint-disable-next-line ember/no-observers, ember/classic-decorator-no-classic-methods
     this.addObserver('hasEnded', function() {
-      console.log('In observer');
       if (this.hasEnded) {
         this.trigger('didEnd', this.status);
       }

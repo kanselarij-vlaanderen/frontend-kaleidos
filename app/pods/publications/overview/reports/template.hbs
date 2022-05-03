@@ -9,8 +9,9 @@
       {{#each this.model as |reportType|}}
         <Publications::Reports::ReportsPanelEntry
           @title={{t reportType.config.translationKey}}
-          @lastReportGeneration={{reportType.lastJob}}
-          @onClickGenerate={{fn this.generateReport reportType}}
+          @lastJob={{reportType.lastJob}}
+          @userInputFields={{reportType.config.userInputFieldsForParams}}
+          @onGenerateReport={{fn this.generateReport reportType}}
         />
       {{/each}}
     </Auk::Panel>

@@ -1,10 +1,28 @@
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 
 /**
  * @argument title
  * @argument lastReportGeneration (optional)
- * @argument onClickGenerate
+ * @argument onGenerateReport
  */
+export default class PublicationsReportsReportsPanelEntry extends Component {
+  @tracked isOpenGenerateReportModal;
 
-// eslint-disable-next-line ember/no-empty-glimmer-component-classes
-export default class PublicationsReportsReportsPanelEntry extends Component {}
+  @action
+  openGenerateReportModal() {
+      this.isOpenGenerateReportModal = true;
+  }
+
+  @action
+  closeGenerateReportModal() {
+      this.isOpenGenerateReportModal = false;
+  }
+
+  @action
+  generateReport(userParams) {
+    this.args.onGenerateReport(userParams);
+    this.isOpenGenerateReportModal = false;
+  }
+}

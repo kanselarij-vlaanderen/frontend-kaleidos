@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
 
-export class ReportTypeRow {
+export class ReportTypeEntry {
   constructor(lastJob, config) {
     this.lastJob = lastJob;
     this.config = config;
@@ -17,7 +17,7 @@ export default class PublicationsOverviewReportsController extends Controller {
   @service toaster;
   @service jobMonitor;
 
-  createExportJob(reportTypeUri) {
+  createExportJob(reportTypeEntry, userParams) {
     const now = new Date();
 
     // TODO: Aside from a default (which can be constructed as follows),
@@ -28,24 +28,32 @@ export default class PublicationsOverviewReportsController extends Controller {
     const reportNameType = 'to-be-moved-to-backend';
     const reportName = `${reportNameDatePrefix}-${reportNameType}`;
 
+    const fixedParams = reportTypeEntry.config.fixedParams;
+    /// TODO: use _.deepmerge
+    const jobParams = {
+      name: reportName, // TODO: see comment above: move default namign logic to server
+      query: { // TODO: Adapt backend to be able to remove this "query" part.
+        //Query config shouldn't be required in this unparametrized setup.
+        // A "metricsType" should be enough
+        group: fixedParams.query.group,
+        filter: {
+          ...fixedParams.query.filter,
+          ...userParams.query.filter,
+        }
+      },
+    };
+
     const job = this.store.createRecord('publication-metrics-export-job', {
       created: now,
       generatedBy: this.currentSession.user,
-      metricsType: reportTypeUri,
-      config: {
-        name: reportName, // TODO: see comment above: move default namign logic to server
-        query: { // TODO: Adapt backend to be able to remove this "query" part.
-          //Query config shouldn't be required in this unparametrized setup.
-          // A "metricsType" should be enough
-          group: reportTypeUri,
-        },
-      },
+      metricsType: reportTypeEntry.config.fixedParams.group,
+      config: jobParams,
     });
     return job;
   }
 
   @action
-  async generateReport(type) {
+  async generateReport(reportTypeEntry, userParams) {
     const generatingToast = this.toaster.loading(
       this.intl.t('publication-reports--toast-generating--message'),
       this.intl.t('publication-reports--toast-generating--title'),
@@ -53,7 +61,7 @@ export default class PublicationsOverviewReportsController extends Controller {
         timeOut: 3 * 60 * 1000,
       }
     );
-    const job = this.createExportJob(type);
+    const job = this.createExportJob(reportTypeEntry, userParams);
     await job.save();
     this.jobMonitor.register(job);
     job.on('didEnd', this, async function (status) {

@@ -5,23 +5,32 @@
       <div class="auk-u-text-muted">
         {{t
           "publication-reports-last-request"
-          date=(moment-format @lastReportGeneration.created)
-          time=(moment-format @lastReportGeneration.created "HH:mm")
-          user=@lastReportGeneration.generatedBy.fullName
+          date=(moment-format @lastJob.created)
+          time=(moment-format @lastJob.created "HH:mm")
+          user=@lastJob.generatedBy.fullName
         }}
       </div>
       <Auk::ButtonLink
         @icon="download"
-        @href={{@lastReportGeneration.generated.namedDownloadLink}}
+        @href={{@lastJob.generated.namedDownloadLink}}
         download
       >
-        {{@lastReportGeneration.generated.downloadFilename}}
+        {{@lastJob.generated.downloadFilename}}
       </Auk::ButtonLink>
     </div>
   </div>
   <div>
-    <Auk::Button {{on "click" @onClickGenerate}}>
+    <Auk::Button {{on "click" this.openGenerateReportModal}}>
       {{t "generate-report"}}
     </Auk::Button>
   </div>
 </Auk::Panel::Body>
+
+{{#if this.isOpenGenerateReportModal}}
+  <Publications::Overview::Reports::GenerateReportModal
+    @title={{@title}}
+    @userInputFields={{@userInputFields}}
+    @onClose={{this.closeGenerateReportModal}}
+    @onGenerateReport={{this.generateReport}}
+  />
+{{/if}}

@@ -8,7 +8,7 @@
       @isLoading={{this.isLoading}}
       @reserveSpace={{true}}
     >
-      {{#if @fields.decisionDateRange}}
+      {{#if @userInputFields.decisionDateRange}}
         <div class="auk-o-grid">
           <div class="auk-o-grid-col-6">
             {{!Beslissingsdatum}}
@@ -46,7 +46,7 @@
           </div>
         </div>
       {{/if}}
-      {{#if @fields.publicationYear}}
+      {{#if @userInputFields.publicationYear}}
         <div class="auk-form-group">
           <Auk::Label
             for="publicationReportsPublicationYear"
@@ -62,7 +62,7 @@
           />
         </div>
       {{/if}}
-      {{#if @fields.mandatee}}
+      {{#if @userInputFields.mandatee}}
         <div class="auk-form-group">
           <Auk::Label>
             {{t "ministers"}}
@@ -81,7 +81,7 @@
           </PowerSelectMultiple>
         </div>
       {{/if}}
-      {{#if @fields.governmentDomain}}
+      {{#if @userInputFields.governmentDomain}}
         <div class="auk-form-group">
           <Auk::Label>{{t "government-domains"}}</Auk::Label>
           <Auk::CheckboxList>
@@ -99,7 +99,7 @@
           </Auk::CheckboxList>
         </div>
       {{/if}}
-      {{#if @fields.regulationType}}
+      {{#if @userInputFields.regulationType}}
         <div class="auk-form-group">
           <Auk::Label>{{t "regulation-types"}}</Auk::Label>
           <Auk::CheckboxList>

@@ -27,24 +27,24 @@ export default class GenerateReportModalComponent extends Component {
     super(...arguments);
 
     const currentYear = new Date().getFullYear();
-    if (this.args.fields.publicationYear) {
+    if (this.args.userInputFields.publicationYear) {
       this.publicationYear = currentYear;
     }
 
-    if (this.args.fields.decisionDateRange) {
+    if (this.args.userInputFields.decisionDateRange) {
       this.decisionDateRangeStart = new Date(currentYear, 0, 1, 0, 0, 0, 0);
       this.decisionDateRangeEnd = undefined;
     }
 
-    if (this.args.fields.mandatee) {
+    if (this.args.userInputFields.mandatee) {
       this.loadMandatees.perform();
     }
 
-    if (this.args.fields.governmentDomain) {
+    if (this.args.userInputFields.governmentDomain) {
       this.loadGovernmentDomains.perform();
     }
 
-    if (this.args.fields.regulationType) {
+    if (this.args.userInputFields.regulationType) {
       this.loadRegulationTypes.perform();
     }
   }
@@ -234,9 +234,9 @@ export default class GenerateReportModalComponent extends Component {
 
   get isValid() {
     let isValid = true;
-    if (this.args.fields.decisionDateRange) {
+    if (this.args.userInputFields.decisionDateRange) {
       isValid &&= this.isDecisionDateRangeStartValid && this.isDecisionDateRangeEndValid;
-    } else if (this.args.fields.publicationYear) {
+    } else if (this.args.userInputFields.publicationYear) {
       isValid &&= this.isPublicationYearValid;
     }
     return isValid;
@@ -246,13 +246,13 @@ export default class GenerateReportModalComponent extends Component {
   *triggerGenerateReport() {
     const filterParams = {};
 
-    if (this.args.fields.publicationYear) {
+    if (this.args.userInputFields.publicationYear) {
       filterParams.publicationDate = convertYearToDateRange(
         this.publicationYear
       );
     }
 
-    if (this.args.fields.decisionDateRange) {
+    if (this.args.userInputFields.decisionDateRange) {
       let decisionDateRangeEnd = this.decisionDateRangeEnd;
       if (decisionDateRangeEnd) {
         decisionDateRangeEnd = new Date(decisionDateRangeEnd);
@@ -264,7 +264,7 @@ export default class GenerateReportModalComponent extends Component {
       ];
     }
 
-    if (this.args.fields.mandatee) {
+    if (this.args.userInputFields.mandatee) {
       if (this.selectedMandatees.length) {
         const mandateeArray = this.selectedMandatees.map((person) => ({
           person: person.uri,
@@ -273,7 +273,7 @@ export default class GenerateReportModalComponent extends Component {
       }
     }
 
-    if (this.args.fields.governmentDomain) {
+    if (this.args.userInputFields.governmentDomain) {
       if (this.selectedGovernmentDomains.length) {
         const governmentDomainArray = this.selectedGovernmentDomains.map(
           (governmentDomain) => governmentDomain.uri
@@ -282,7 +282,7 @@ export default class GenerateReportModalComponent extends Component {
       }
     }
 
-    if (this.args.fields.regulationType) {
+    if (this.args.userInputFields.regulationType) {
       if (this.selectedRegulationTypes.length) {
         const regulationTypeArray = this.selectedRegulationTypes.map(
           (regulationType) => regulationType.uri
@@ -291,9 +291,12 @@ export default class GenerateReportModalComponent extends Component {
       }
     }
 
-    this.args.onGenerate.perform({
-      filter: filterParams,
-    });
+    const userParams = {
+      query: {
+        filter: filterParams,
+      },
+    };
+    this.args.onGenerateReport(userParams);
 
     yield; // for linter
   }
