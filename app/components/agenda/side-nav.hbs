@@ -31,7 +31,7 @@
     {{#each @reverseSortedAgendas as |agenda|}}
       <li
         class="auk-sidebar__item auk-sidebar__item--styled
-          {{if (eq @currentAgenda.id agenda.id) "auk-sidebar__item--active"}}"
+          {{if (eq @currentAgenda.id agenda.id) 'auk-sidebar__item--active'}}"
       >
         <LinkTo
           data-test-agenda-side-nav-agenda
@@ -79,15 +79,15 @@
                 {{t "latest-modified-on"}}
               {{else}}
                 {{#if agenda.modified}}
-                {{t "approved-on"}}
-              {{else}}
-                {{t "approved"}}
+                  {{t "approved-on"}}
+                {{else}}
+                  {{t "approved"}}
                 {{/if}}
               {{/if}}
               {{#if agenda.modified}}
-              <br />
-              {{moment-format agenda.modified "dd DD-MM-YYYY HH:mm"}}
-                {{/if}}
+                <br />
+                {{moment-format agenda.modified "dd DD-MM-YYYY HH:mm"}}
+              {{/if}}
             </div>
           {{/if}}
         </LinkTo>
