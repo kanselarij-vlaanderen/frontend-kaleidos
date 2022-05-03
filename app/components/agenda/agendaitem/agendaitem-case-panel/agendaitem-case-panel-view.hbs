@@ -126,19 +126,6 @@
               </Auk::Pill>
             {{/if}}
           {{/if}}
-          {{#if
-            (and
-              @agendaitem.isDesignAgenda
-              (and @allowEditing @agendaitem.formallyOkToShow)
-            )
-          }}
-            <Auk::Pill
-              @skin={{@agendaitem.formallyOkToShow.svg.color}}
-              @icon={{@agendaitem.formallyOkToShow.svg.icon}}
-            >
-              {{@agendaitem.formallyOkToShow.label}}
-            </Auk::Pill>
-          {{/if}}
         </Auk::PillList>
       </div>
     </Auk::Panel::Body>
