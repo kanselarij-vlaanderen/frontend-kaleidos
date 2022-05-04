@@ -167,7 +167,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     const subcaseTitleLong = 'Cypress test: KB defaults 1 - lange titel Nota - 1651579812';
     const text = 'Tekst om te checken of default overname correct werkt.';
 
-    cy.visitAgendaWithLink('http://localhost:4200/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten/62711BECADB457F5862A6D21/kort-bestek');
+    cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten/62711BECADB457F5862A6D21/kort-bestek');
     // check default nota has no KB
     cy.get(utils.vlAlert.message).contains('Nog geen kort bestek voor dit agendapunt.');
     // create new KB

@@ -34,6 +34,7 @@ function checkPublicationSearchForDateType(dateType, date, pubNumber) {
   cy.setDateInFlatpickr(date);
   cy.get(route.search.trigger).click();
   cy.wait(`@publicationSearchCall${randomInt}`);
+  cy.wait(1000); // TODO This is to test if the flakyness is solved by waiting longer or if the problem is elsewhere
   cy.get(route.searchPublications.dataTable).find('tbody')
     .children('tr')
     .contains(pubNumber);
