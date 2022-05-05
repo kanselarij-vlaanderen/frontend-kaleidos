@@ -11,6 +11,17 @@ import { isPresent } from '@ember/utils';
 // TODO: octane-refactor
 // eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
+  /**
+   * @argument modelName
+   * @argument searchField
+   * @argument sortField
+   * @argument readOnly
+   * @argument allowClear
+   * @argument isLoading
+   * @argument selectedItems
+   * @argument selectModel
+   * @argument filterResults: a function that will filter out results from the dropwdown menu
+   */
   classNameBindings: ['classes'],
   store: inject(),
   modelName: null,
@@ -33,7 +44,10 @@ export default Component.extend({
       modelName, queryOptions,
     } = this;
     if (modelName) {
-      const items = yield this.store.query(modelName, queryOptions);
+      let items = yield this.store.query(modelName, queryOptions);
+      if (this.filterResults) {
+        items = this.filterResults(items);
+      }
       this.set('items', items);
     }
   }),
@@ -74,7 +88,11 @@ export default Component.extend({
       queryOptions.filter = filter;
     }
 
-    return this.store.query(modelName, queryOptions);
+    let results = yield this.store.query(modelName, queryOptions);
+    if (this.filterResults) {
+      results = this.filterResults(results);
+    }
+    return results;
   }),
 
   // TODO: octane-refactor
