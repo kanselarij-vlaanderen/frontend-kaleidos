@@ -39,19 +39,17 @@
           @models={{array @meeting.id agenda.id}}
         >
           {{#if @isOpen}}
-            <div class="auk-sidebar__label">
-              <span data-test-agenda-side-nav-agenda-name>
-                <strong>
-                  {{#if agenda.status.isDesignAgenda}}
-                    {{t "design-agenda"}}
-                  {{else}}
-                    {{t "agenda"}}
-                  {{/if}}
-                </strong>
-                <Auk::Pill @skin={{if agenda.status.isDesignAgenda "active-future" null}}>
-                  {{or agenda.serialnumber "-"}}
-                </Auk::Pill>
-              </span>
+            <div class="auk-sidebar__label" data-test-agenda-side-nav-agenda-name>
+              <strong>
+                {{#if agenda.status.isDesignAgenda}}
+                  {{t "design-agenda"}}
+                {{else}}
+                  {{t "agenda"}}
+                {{/if}}
+              </strong>
+              <Auk::Pill @skin={{if agenda.status.isDesignAgenda "active-future" null}}>
+                {{or agenda.serialnumber "-"}}
+              </Auk::Pill>
             </div>
             <div class="auk-sidebar__sublabel">
               {{#if agenda.isDesignAgenda}}
@@ -68,11 +66,9 @@
             </div>
           {{else}}
             <div class="auk-sidebar__label">
-              <span>
-                <Auk::Pill @skin={{if agenda.status.isDesignAgenda "active-future" null}}>
-                  {{or agenda.serialnumber "-"}}
-                </Auk::Pill>
-              </span>
+              <Auk::Pill @skin={{if agenda.status.isDesignAgenda "active-future" null}}>
+                {{or agenda.serialnumber "-"}}
+              </Auk::Pill>
             </div>
           {{/if}}
         </LinkTo>
