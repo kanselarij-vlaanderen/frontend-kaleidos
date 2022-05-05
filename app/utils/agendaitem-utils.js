@@ -98,13 +98,6 @@ export const saveChanges = async(agendaitemOrSubcase, propertiesToSetOnAgendaite
   }
 };
 
-export const destroyApprovalsOfAgendaitem = async(agendaitem) => {
-  const approvals = await agendaitem.get('approvals');
-  if (approvals) {
-    await Promise.all(approvals.map((approval) => approval.destroyRecord()));
-  }
-};
-
 /**
  * For a given set of agenda items, will re-order them by their groupNumber
  * ⚠️ Word of caution, this mutates the original set!
