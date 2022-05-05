@@ -9,6 +9,7 @@ export default class MandateesMandateesPanelComponent extends Component {
    * @argument submitter
    * @argument allowEditing
    * @argument onSave
+   * @GovernmentBodyOfDate Date of Case, Agenda or PublicationFlow to find the Mandatees of the right date
    */
   @tracked isEditing = false;
 

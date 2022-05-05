@@ -9,7 +9,13 @@ const VISIBLE_ROLES = [
   'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03de', // Minister-president
   'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03e0', // Minister
 ];
-
+/**
+ * @argument singleSelect
+ * @argument readOnly
+ * @argument selectedMandatee
+ * @argument chooseMandatee
+ * @GovernmentBodyOfDate Date of Case, Agenda or PublicationFlow to find the Mandatees of the right date
+ */
 export default class MandateeSelector extends Component {
   @service store;
   @tracked mandateeOptions = [];
