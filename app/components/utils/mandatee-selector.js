@@ -7,7 +7,7 @@ import { inject as service } from '@ember/service';
 
 const VISIBLE_ROLES = [
   'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03de', // Minister-president
-  'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03e0' // Minister
+  'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03e0', // Minister
 ];
 
 export default class MandateeSelector extends Component {
@@ -15,7 +15,6 @@ export default class MandateeSelector extends Component {
   @tracked mandateeOptions = [];
   @tracked filter = '';
   @tracked governmentBodyOfDate;
-
 
   defaultQueryOptions = {
     include: 'person,mandate.role',
@@ -35,13 +34,15 @@ export default class MandateeSelector extends Component {
       yield this.initialLoad;
     }
     const queryOptions = {
-      ...this.defaultQueryOptions,  // clone
+      ...this.defaultQueryOptions, // clone
     };
     if (searchTerm) {
       queryOptions['filter[person][last-name]'] = searchTerm;
     }
-    queryOptions['filter[:lte:start]'] = this.governmentBodyOfDate.toISOString();
-    queryOptions['filter[:gte:end]'] = this.governmentBodyOfDate.toISOString();
+    queryOptions['filter[:lte:start]'] =
+      this.governmentBodyOfDate.toISOString();
+    queryOptions['filter[:gte:end]'] =
+      this.governmentBodyOfDate.toISOString();
 
     let results = yield this.store.query('mandatee', queryOptions);
 
@@ -53,8 +54,12 @@ export default class MandateeSelector extends Component {
 
   @task
   *loadVisibleRoles() {
-    const visibleRoles = yield Promise.all(VISIBLE_ROLES.map((role) => this.store.findRecordByUri('role', role)));
-    this.defaultQueryOptions['filter[mandate][role][:id:]'] = visibleRoles.map((role) => role.id).join(',');
+    const visibleRoles = yield Promise.all(
+      VISIBLE_ROLES.map((role) => this.store.findRecordByUri('role', role))
+    );
+    this.defaultQueryOptions['filter[mandate][role][:id:]'] = visibleRoles
+      .map((role) => role.id)
+      .join(',');
   }
 
   @restartableTask
@@ -72,13 +77,13 @@ export default class MandateeSelector extends Component {
 
   async loadCurrentBodyMandatees(searchTerm) {
     const queryOptions = {
-      ...this.defaultQueryOptions,  // clone
+      ...this.defaultQueryOptions, // clone
     };
     if (searchTerm) {
       queryOptions['filter[person][last-name]'] = searchTerm;
     }
     queryOptions['filter[:has-no:end]'] = true;
 
-    return  await this.store.query('mandatee', queryOptions);
+    return await this.store.query('mandatee', queryOptions);
   }
 }

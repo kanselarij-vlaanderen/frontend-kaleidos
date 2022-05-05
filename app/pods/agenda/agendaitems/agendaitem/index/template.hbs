@@ -32,13 +32,13 @@
   </Auk::Toolbar::Group>
 </Auk::Toolbar>
 
-  <Agenda::Agendaitem::AgendaitemCasePanel
-    @agendaitem={{this.model}}
-    @subcase={{this.subcase}}
-    @shouldShowDetails={{or @agendaitem.showAsRemark this.subcase}}
-    @newsletterInfo={{this.newsletterInfo}}
-    @allowEditing={{this.currentSession.isEditor}}
-  />
+<Agenda::Agendaitem::AgendaitemCasePanel
+  @agendaitem={{this.model}}
+  @subcase={{this.subcase}}
+  @shouldShowDetails={{or @agendaitem.showAsRemark this.subcase}}
+  @newsletterInfo={{this.newsletterInfo}}
+  @allowEditing={{this.currentSession.isEditor}}
+/>
 {{#if this.model.showAsRemark}}
   <Mandatees::MandateesPanel
     @governmentBodyOfDate={{this.agendaCreatedDate}}
@@ -61,8 +61,6 @@
       @allowEditing={{this.currentSession.isEditor}}
       @onSave={{this.saveGovernmentAreas}}
     />
-    <Agenda::Agendaitem::AgendaitemApprovalsPanel
-      @agendaitem={{this.model}}
-    />
+    <Agenda::Agendaitem::AgendaitemApprovalsPanel @agendaitem={{this.model}} />
   {{/if}}
 {{/if}}
