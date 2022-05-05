@@ -32,14 +32,15 @@ export default class PublicationsOverviewReportsController extends Controller {
     /// TODO: use _.deepmerge
     const jobParams = {
       name: reportName, // TODO: see comment above: move default namign logic to server
-      query: { // TODO: Adapt backend to be able to remove this "query" part.
+      query: {
+        // TODO: Adapt backend to be able to remove this "query" part.
         //Query config shouldn't be required in this unparametrized setup.
         // A "metricsType" should be enough
         group: fixedParams.query.group,
         filter: {
           ...fixedParams.query.filter,
           ...userParams.query.filter,
-        }
+        },
       },
     };
 
@@ -76,7 +77,7 @@ export default class PublicationsOverviewReportsController extends Controller {
             timeOut: 10 * 60 * 1000,
             downloadLink: file.namedDownloadLink,
             fileName: file.downloadName,
-          }
+          },
         };
         this.toaster.displayToast.perform(downloadFileToast);
         // TODO: reload model in order to update new lastReportGeneration

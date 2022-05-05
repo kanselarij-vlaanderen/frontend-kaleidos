@@ -4,7 +4,8 @@ import { tracked } from '@glimmer/tracking';
 
 /**
  * @argument title
- * @argument lastReportGeneration (optional)
+ * @argument lastJob (optional)
+ * @argument userInputFields
  * @argument onGenerateReport
  */
 export default class PublicationsReportsReportsPanelEntry extends Component {
@@ -12,12 +13,12 @@ export default class PublicationsReportsReportsPanelEntry extends Component {
 
   @action
   openGenerateReportModal() {
-      this.isOpenGenerateReportModal = true;
+    this.isOpenGenerateReportModal = true;
   }
 
   @action
   closeGenerateReportModal() {
-      this.isOpenGenerateReportModal = false;
+    this.isOpenGenerateReportModal = false;
   }
 
   @action
