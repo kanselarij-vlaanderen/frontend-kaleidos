@@ -40,8 +40,8 @@ export default class MandateeSelector extends Component {
     if (searchTerm) {
       queryOptions['filter[person][last-name]'] = searchTerm;
     }
-    queryOptions['filter[:gte:start]'] = this.governmentBodyOfDate.toISOString();
-    queryOptions['filter[:lte:end]'] = this.governmentBodyOfDate.toISOString();
+    queryOptions['filter[:lte:start]'] = this.governmentBodyOfDate.toISOString();
+    queryOptions['filter[:gte:end]'] = this.governmentBodyOfDate.toISOString();
 
     let results = yield this.store.query('mandatee', queryOptions);
 
