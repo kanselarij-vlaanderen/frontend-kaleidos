@@ -78,6 +78,7 @@
 </div>
 {{#if this.showSelectMandateeModal}}
   <Mandatees::MandateesSelectorModal
+    @governmentBodyOfDate={{@governmentBodyOfDate}}
     @onClose={{this.closeSelectMandatee}}
     @onAdd={{this.addMandatee}}
   />

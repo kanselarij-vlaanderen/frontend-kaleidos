@@ -25,6 +25,13 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
 
   @tracked isEditingAgendaItemTitles = false;
 
+  get agendaCreatedDate(){
+    if (this.meeting.isPreKaleidos){
+      return this.meeting.plannedStart;
+    }
+    return this.agenda.created
+  }
+
   async navigateToNeighbouringItem(agendaitem) {
     // try transitioning to previous or next item, called on the delete of an agendaitem
     // TODO: below query can be replaced once agenda-items have relations to previous and next items
@@ -53,7 +60,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     await this.reassignNumbersForAgendaitems();
     await this.navigateToNeighbouringItem(this.model);
     // reload the agenda route, detail tab should no longer show if we deleted the last and only agendaitem
-    // Also, if we deleted the first agendaitem, we should also reload the main route to reload <Agenda::agendaTabs> 
+    // Also, if we deleted the first agendaitem, we should also reload the main route to reload <Agenda::agendaTabs>
     return this.agendaController.send('reloadAgendaModel');
   }
 

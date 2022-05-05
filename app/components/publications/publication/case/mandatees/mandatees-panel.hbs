@@ -65,6 +65,7 @@
 
 {{#if this.showSelectMandateeModal}}
   <Mandatees::MandateesSelectorModal
+    @governmentBodyOfDate={{@publicationFlow.created}}
     @onClose={{this.closeSelectMandateeModal}}
     @onAdd={{this.addMandatee}}
   />

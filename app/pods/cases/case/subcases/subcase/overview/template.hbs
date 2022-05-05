@@ -25,6 +25,7 @@
         @allowEditing={{this.currentSession.isEditor}}
       />
       <Mandatees::MandateesPanel
+        @governmentBodyOfDate={{this.case.created}}
         @mandatees={{this.mandatees}}
         @submitter={{this.submitter}}
         @allowEditing={{this.currentSession.isEditor}}

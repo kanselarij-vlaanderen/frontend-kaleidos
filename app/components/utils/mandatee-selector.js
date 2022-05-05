@@ -2,9 +2,8 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
-import { timeout, task, restartableTask } from 'ember-concurrency';
+import { restartableTask, task, timeout } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
-import { CURRENT_GOVERNMENT_BODY } from 'frontend-kaleidos/config/config';
 
 const VISIBLE_ROLES = [
   'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03de', // Minister-president
@@ -15,6 +14,8 @@ export default class MandateeSelector extends Component {
   @service store;
   @tracked mandateeOptions = [];
   @tracked filter = '';
+  @tracked governmentBodyOfDate;
+
 
   defaultQueryOptions = {
     include: 'person,mandate.role',
@@ -23,6 +24,7 @@ export default class MandateeSelector extends Component {
 
   constructor() {
     super(...arguments);
+    this.governmentBodyOfDate = this.args.governmentBodyOfDate || new Date();
     this.initialLoad = this.loadVisibleRoles.perform();
     this.mandateeOptions = this.loadMandatees.perform();
   }
@@ -38,21 +40,22 @@ export default class MandateeSelector extends Component {
     if (searchTerm) {
       queryOptions['filter[person][last-name]'] = searchTerm;
     }
-    queryOptions['filter[government-body][:uri:]'] = CURRENT_GOVERNMENT_BODY;
+    queryOptions['filter[:gte:start]'] = this.governmentBodyOfDate.toISOString();
+    queryOptions['filter[:lte:end]'] = this.governmentBodyOfDate.toISOString();
 
-    const results = yield this.store.query('mandatee', queryOptions);
-    // Many versions of a mandatee exist within a government-body.
-    // We only want the mandatees with no end-date or an end-date in the future.
-    // mu-cl-resources doesn't have :has-no:-capability for properties.
-    return results.filter((mandatee) => {
-      return !mandatee.end || (mandatee.end > new Date());
-    });
+    let results = yield this.store.query('mandatee', queryOptions);
+
+    if (results.length === 0) {
+      results = yield this.loadCurrentBodyMandatees(searchTerm);
+    }
+    return results;
   }
 
   @task
   *loadVisibleRoles() {
     const visibleRoles = yield Promise.all(VISIBLE_ROLES.map((role) => this.store.findRecordByUri('role', role)));
     this.defaultQueryOptions['filter[mandate][role][:id:]'] = visibleRoles.map((role) => role.id).join(',');
+    console.log("visibile roles")
   }
 
   @restartableTask
@@ -66,5 +69,17 @@ export default class MandateeSelector extends Component {
     if (isEmpty(param)) {
       this.mandateeOptions = this.loadMandatees.perform();
     }
+  }
+
+  async loadCurrentBodyMandatees(searchTerm) {
+    const queryOptions = {
+      ...this.defaultQueryOptions,  // clone
+    };
+    if (searchTerm) {
+      queryOptions['filter[person][last-name]'] = searchTerm;
+    }
+    queryOptions['filter[:has-no:end]'] = true;
+
+    return  await this.store.query('mandatee', queryOptions);
   }
 }
