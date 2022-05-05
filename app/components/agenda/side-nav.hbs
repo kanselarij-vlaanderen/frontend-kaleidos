@@ -31,63 +31,48 @@
     {{#each @reverseSortedAgendas as |agenda|}}
       <li
         class="auk-sidebar__item auk-sidebar__item--styled
-          {{if (eq @currentAgenda.id agenda.id) 'auk-sidebar__item--active'}}"
+          {{if (eq @currentAgenda.id agenda.id) "auk-sidebar__item--active"}}"
       >
         <LinkTo
           data-test-agenda-side-nav-agenda
           @route="agenda.agendaitems"
           @models={{array @meeting.id agenda.id}}
         >
-          <div class="auk-sidebar__label">
-            {{#if @isOpen}}
-              <span data-test-agenda-side-nav-agenda-name>
-                {{#if agenda.status.isDesignAgenda}}
-                  <strong>
-                    {{t "design-agenda"}}
-                  </strong>
-                  {{#if agenda.serialnumber}}
-                    <Auk::Pill @skin="active-future">
-                      {{agenda.serialnumber}}
-                    </Auk::Pill>
-                  {{/if}}
-                {{else}}
-                  <strong>{{t "agenda"}}</strong>
-                  {{#if agenda.serialnumber}}
-                    <Auk::Pill>
-                      {{agenda.serialnumber}}
-                    </Auk::Pill>
-                  {{/if}}
-                {{/if}}
-              </span>
-            {{else}}
-              <span>
-                {{#if agenda.status.isDesignAgenda}}
-                  <Auk::Pill @skin="active-future">
-                    {{or agenda.serialnumber "-"}}
-                  </Auk::Pill>
-                {{else}}
-                  <Auk::Pill>
-                    {{or agenda.serialnumber "-"}}
-                  </Auk::Pill>
-                {{/if}}
-              </span>
-            {{/if}}
-          </div>
           {{#if @isOpen}}
+            <div class="auk-sidebar__label">
+              <span data-test-agenda-side-nav-agenda-name>
+                <strong>
+                  {{#if agenda.status.isDesignAgenda}}
+                    {{t "design-agenda"}}
+                  {{else}}
+                    {{t "agenda"}}
+                  {{/if}}
+                </strong>
+                <Auk::Pill @skin={{if agenda.status.isDesignAgenda "active-future" null}}>
+                  {{or agenda.serialnumber "-"}}
+                </Auk::Pill>
+              </span>
+            </div>
             <div class="auk-sidebar__sublabel">
               {{#if agenda.isDesignAgenda}}
                 {{t "latest-modified-on"}}
-              {{else}}
-                {{#if agenda.modified}}
-                  {{t "approved-on"}}
-                {{else}}
-                  {{t "approved"}}
-                {{/if}}
-              {{/if}}
-              {{#if agenda.modified}}
                 <br />
                 {{moment-format agenda.modified "dd DD-MM-YYYY HH:mm"}}
+              {{else if agenda.modified}}
+                {{t "approved-on"}}
+                <br />
+                {{moment-format agenda.modified "dd DD-MM-YYYY HH:mm"}}
+              {{else}}
+                {{t "approved"}}
               {{/if}}
+            </div>
+          {{else}}
+            <div class="auk-sidebar__label">
+              <span>
+                <Auk::Pill @skin={{if agenda.status.isDesignAgenda "active-future" null}}>
+                  {{or agenda.serialnumber "-"}}
+                </Auk::Pill>
+              </span>
             </div>
           {{/if}}
         </LinkTo>
