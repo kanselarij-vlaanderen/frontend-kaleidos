@@ -1,12 +1,14 @@
-<div class="auk-o-flex auk-o-flex--justify-between">
-  <h3 class="auk-h2">
-    {{t "decision-title"}}
-  </h3>
-</div>
-{{#if this.currentSession.isEditor}}
-  <Auk::Toolbar>
-    <Auk::Toolbar::Group @position="left">
-      <Auk::Toolbar::Item>
+<Auk::Toolbar class="auk-u-mb-4" as |Toolbar|>
+  <Toolbar.Group @position="left" as |Group|>
+    <Group.Item>
+      <h4 class="auk-toolbar__title">
+        {{t "decision-title"}}
+      </h4>
+    </Group.Item>
+  </Toolbar.Group>
+  <Toolbar.Group @position="right" as |Group|>
+    {{#if this.currentSession.isEditor}}
+      <Group.Item>
         <Auk::Button
           @skin="secondary"
           @icon="plus"
@@ -15,12 +17,12 @@
         >
           {{t "add-decision"}}
         </Auk::Button>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-  </Auk::Toolbar>
-{{/if}}
+      </Group.Item>
+    {{/if}}
+  </Toolbar.Group>
+</Auk::Toolbar>
 {{#each this.treatments as |treatment|}}
-  <div class="auk-u-mb-4">
+  <div class="auk-u-mb-2">
     {{!-- As long as we see DecisionActivity & AgendaItemTreatment as 1 entity,
     we need to ensure at least 1 treatment for a relationship path to newsletterInfo --}}
     <Agenda::Agendaitem::AgendaitemDecision

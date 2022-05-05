@@ -279,3 +279,41 @@ $vl-gray-50: #8695A8;
     color: #A1ABBA !important;
   }
 }
+
+// Tiny button
+.auk-button--tiny {
+  padding: .25rem !important;
+  margin-left: .3rem;
+}
+
+$vl-green-130: #007A37;
+$vl-green-100: #009E47;
+$vl-green-10: #ECF6EE;
+.auk-pill--success {
+  border: .1rem solid $vl-green-100;
+  color: $vl-green-130 !important;
+  background-color: $vl-green-10;
+
+  .auk-icon {
+    color: $vl-green-130;
+  }
+}
+
+$vl-orange-130: #9F5804;
+$vl-orange-100: #FFA10A;
+$vl-orange-10: #FFF9E8;
+.auk-pill--warning {
+  border: .1rem solid $vl-orange-100;
+  color: $vl-orange-130 !important;
+  background-color: $vl-orange-10;
+
+  .auk-icon {
+    color: $vl-orange-130 !important;
+  }
+}
+
+.auk-panel__body--no-pad {
+  div.vlc-document-card {
+    border: 0;
+  }
+}
