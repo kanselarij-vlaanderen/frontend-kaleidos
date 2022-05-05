@@ -57,33 +57,6 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
 
   // tests in newsletter route
 
-  it('Should create a newsletter and check the updated row information', () => {
-    // TODO-3367 needed for search, refactor if refactoring
-    // TODO-3367 can merge with other spec? no setup needed for this one
-    const decisionText = 'Dit is een leuke beslissing';
-    const subcaseNameToCheck = 'Eerste stap';
-    cy.visit('/vergadering/5DD7CDA58C70A70008000001/kort-bestek');
-    // There is only one row in this view, so eq(0) in not needed
-    cy.get(newsletter.tableRow.newsletterRow).within(() => {
-      // this agenda does not have an approval item, so numbering should start at 1
-      cy.get(newsletter.tableRow.agendaitemNumber).contains(1);
-      cy.get(newsletter.tableRow.newsletterTitle).contains('Nog geen kort bestek voor dit agendapunt.');
-      cy.get(newsletter.buttonToolbar.edit).click();
-    });
-
-    cy.get(dependency.rdfa.editorInner).clear();
-    cy.get(newsletter.editItem.rdfaEditor).type(decisionText);
-    cy.get(newsletter.editItem.themesSelector).contains('Sport')
-      .click();
-    cy.intercept('POST', '/newsletter-infos').as('newsletterInfosPost');
-    cy.get(newsletter.editItem.save).click()
-      .wait('@newsletterInfosPost');
-
-    cy.get(newsletter.tableRow.newsletterTitle).contains(subcaseNameToCheck);
-    cy.get(newsletter.tableRow.newsletterTitle).contains(decisionText);
-    cy.get(newsletter.buttonToolbar.openNota).should('be.disabled');
-  });
-
   it('Should toggle the box "in kort bestek" and patch the model', () => {
     cy.intercept('PATCH', '/newsletter-infos/*').as('patchNewsletterInfo');
     cy.visit('/vergadering/5EBA9588751CF70008000012/kort-bestek');
@@ -180,6 +153,8 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       .should('not.be.checked') // this is the default setting for nota
       .parent()
       .click();
+    // the richtext is also showing in the "title"
+    cy.get(newsletter.tableRow.newsletterTitle).contains(text);
     cy.wait('@patchNewsItem');
   });
 
@@ -533,6 +508,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     const agendaLinkMed = '/vergadering/62726CD0D600B7FF7F95BBF5/agenda/62726CD1D600B7FF7F95BBF6/agendapunten/627289BFE536C464112FFE91';
     const agendaLinkNota = '/vergadering/62726CD0D600B7FF7F95BBF5/agenda/62726CD1D600B7FF7F95BBF6/agendapunten/627289D3E536C464112FFE96';
     const newsletterLink = '/vergadering/62726CD0D600B7FF7F95BBF5/kort-bestek';
+    // *note the next richtext is used in search.spec, keep them identical
     const richtextNota = 'this nota info should be visible in definitief';
     const remarkTextNota = 'this nota remark should not be visible in definitief';
     const proposalTextNota = 'Op voorstel van minister-president Jan Jambon';

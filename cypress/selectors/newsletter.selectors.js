@@ -50,6 +50,7 @@ const selectors = {
   tableRow: {
     newsletterRow: '[data-test-table-row-newsletter-row]',
     agendaitemNumber: '[data-test-table-row-newsletter-row-agendaitem-number]',
+    // TODO-selector this div contains more than just the title, rename
     newsletterTitle: '[data-test-table-row-newsletter-row-title]',
     inNewsletterCheckbox: '[data-test-table-row-newsletter-row-checkbox-in-newsletter]',
   },
