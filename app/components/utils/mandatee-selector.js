@@ -55,7 +55,6 @@ export default class MandateeSelector extends Component {
   *loadVisibleRoles() {
     const visibleRoles = yield Promise.all(VISIBLE_ROLES.map((role) => this.store.findRecordByUri('role', role)));
     this.defaultQueryOptions['filter[mandate][role][:id:]'] = visibleRoles.map((role) => role.id).join(',');
-    console.log("visibile roles")
   }
 
   @restartableTask
