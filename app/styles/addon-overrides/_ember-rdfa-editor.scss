@@ -13,13 +13,9 @@ $say-editor-padding: 1rem;
 
 
 // Custom setup for ember-rdfa-editor css
-
-@import "appuniversum/s-colors.scss";
-@import "appuniversum/s-global";
-@import "appuniversum/s-utilities";
-@import "appuniversum/s-root";
-@import "appuniversum/t-font-size";
-@import "appuniversum/t-sass-mq";
+@import "ember-appuniversum/a-settings";
+@import "ember-appuniversum/a-tools";
+@import "ember-appuniversum/a-components";
 @import "appuniversum/u-hide";
 
 // @import "ember-rdfa-editor/custom-components"; // This used to be the only import regarding the rdfa-editor styling but because we only use the basic functionality for the moment & we don't really need the deprecated styling from that package, we'll be only importing the necessary SCSS files (see below)
@@ -40,13 +36,15 @@ $say-editor-padding: 1rem;
 // @import "ember-rdfa-editor/c-annotation-content-nl";
 // @import "ember-rdfa-editor/c-annotation-content-en";
 
-// @import "ember-rdfa-editor/shame";
+@import "ember-rdfa-editor/shame";
 
 
 // Overrides
 
 :root {
-  --au-bold: 500;
+  --au-bold: 600;
+  --au-font: BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto, Helvetica,
+  Arial, sans-serif;
 }
 
 .say-container {
@@ -67,7 +65,7 @@ $say-editor-padding: 1rem;
 .say-content ul,
 .say-content ol,
 .say-content div {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
 }
 
 .say-container__aside { // Disable display of toast hints (https://github.com/lblod/ember-rdfa-editor/issues/26)
