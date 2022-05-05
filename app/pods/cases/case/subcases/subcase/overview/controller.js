@@ -16,6 +16,14 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
   @tracked governmentAreas;
   @tracked siblingSubcasesCount;
 
+  get caseCreatedDate(){
+    if (this.case.created){
+      return this.case.created;
+    } else {
+      return this.model.subcase.created;
+    }
+  }
+
   @action
   async saveMandateeData(mandateeData) {
     const propertiesToSetOnAgendaitem = {
