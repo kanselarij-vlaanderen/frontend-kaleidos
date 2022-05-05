@@ -14,6 +14,7 @@ export default Component.extend({
 
   isTryingToSave: false,
   isExpanded: false,
+  isFullscreen: false,
 
   themes: computed('newsletterInfo.themes', {
     get: async function() {
@@ -83,6 +84,10 @@ export default Component.extend({
         return this.saveChanges();
       }
       this.toggleProperty('isTryingToSave');
+    },
+
+    fullscreen() {
+      this.toggleProperty('isFullscreen');
     },
 
     async cancelEditing() {

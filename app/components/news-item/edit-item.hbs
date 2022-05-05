@@ -57,12 +57,17 @@
     </p>
   </div>
   <div class="auk-form-group">
-    <Auk::Label>{{t "decision-in-newsletter"}}</Auk::Label>
-    <WebComponents::VlRdfaEditor
-      data-test-newsletter-edit-item-rdfa-editor={{true}}
-      @richtext={{await this.newsletterInfo.richtext}}
-      @handleRdfaEditorInit={{action "handleRdfaEditorInit"}}
-    />
+    <div class={{if this.isFullscreen 'auk-rdfa-holder auk-rdfa-fullscreen' 'auk-rdfa-holder'}}>
+      <div class="auk-rdfa-holder__header auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
+        <Auk::Label class="auk-u-p-0">{{t "decision-in-newsletter"}}</Auk::Label>
+        <Auk::Button @skin="borderless" @icon={{if this.isFullscreen 'minimize' 'expand'}} {{action "fullscreen"}}>{{if this.isFullscreen 'Sluit volledig scherm' 'Volledig scherm'}}</Auk::Button>
+      </div>
+      <WebComponents::VlRdfaEditor
+        data-test-newsletter-edit-item-rdfa-editor={{true}}
+        @richtext={{await this.newsletterInfo.richtext}}
+        @handleRdfaEditorInit={{action "handleRdfaEditorInit"}}
+      />
+    </div>
   </div>
 
   <div class="auk-form-group auk-u-text-capitalize">
