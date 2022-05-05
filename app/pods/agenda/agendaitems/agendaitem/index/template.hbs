@@ -30,8 +30,6 @@
   @newsletterInfo={{this.newsletterInfo}}
   @allowEditing={{this.currentSession.isEditor}}
 />
-    @allowEditing={{this.currentSession.isEditor}}
-  />
 {{#if this.model.showAsRemark}}
   <Mandatees::MandateesPanel
     @mandatees={{this.mandatees}}
@@ -39,21 +37,19 @@
     @allowEditing={{this.currentSession.isEditor}}
     @onSave={{this.saveMandateeData}}
   />
-{{else}}
-  {{#if this.subcase}}
-    <Mandatees::MandateesPanel
-      @mandatees={{this.mandatees}}
-      @submitter={{this.submitter}}
-      @allowEditing={{this.currentSession.isEditor}}
-      @onSave={{this.saveMandateeData}}
-    />
-    <Utils::GovernmentAreas::GovernmentAreasPanel
-      @governmentAreas={{this.subcase.case.governmentAreas}}
-      @allowEditing={{this.currentSession.isEditor}}
-      @onSave={{this.saveGovernmentAreas}}
-    />
-    <Agenda::Agendaitem::AgendaitemApprovalsPanel
-      @agendaitem={{this.model}}
-    />
-  {{/if}}
+{{else if this.subcase}}
+  <Mandatees::MandateesPanel
+    @mandatees={{this.mandatees}}
+    @submitter={{this.submitter}}
+    @allowEditing={{this.currentSession.isEditor}}
+    @onSave={{this.saveMandateeData}}
+  />
+  <Utils::GovernmentAreas::GovernmentAreasPanel
+    @governmentAreas={{this.subcase.case.governmentAreas}}
+    @allowEditing={{this.currentSession.isEditor}}
+    @onSave={{this.saveGovernmentAreas}}
+  />
+  <Agenda::Agendaitem::AgendaitemApprovalsPanel
+    @agendaitem={{this.model}}
+  />
 {{/if}}
