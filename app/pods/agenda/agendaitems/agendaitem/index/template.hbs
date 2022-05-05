@@ -23,11 +23,13 @@
   </Toolbar.Group>
 </Auk::Toolbar>
 
-  <Agenda::Agendaitem::AgendaitemCasePanel
-    @agendaitem={{this.model}}
-    @subcase={{this.subcase}}
-    @shouldShowDetails={{or @agendaitem.showAsRemark this.subcase}}
-    @newsletterInfo={{this.newsletterInfo}}
+<Agenda::Agendaitem::AgendaitemCasePanel
+  @agendaitem={{this.model}}
+  @subcase={{this.subcase}}
+  @shouldShowDetails={{or @agendaitem.showAsRemark this.subcase}}
+  @newsletterInfo={{this.newsletterInfo}}
+  @allowEditing={{this.currentSession.isEditor}}
+/>
     @allowEditing={{this.currentSession.isEditor}}
   />
 {{#if this.model.showAsRemark}}
