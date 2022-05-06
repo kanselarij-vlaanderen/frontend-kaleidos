@@ -7,7 +7,7 @@
         </h4>
       </Auk::Panel::Header>
       {{#each this.model as |reportType|}}
-        <Publications::Reports::ReportsPanelEntry
+        <Publications::Overview::Reports::ReportsPanelEntry
           @title={{t reportType.config.translationKey}}
           @lastJob={{reportType.lastJob}}
           @userInputFields={{reportType.config.userInputFieldsForParams}}
