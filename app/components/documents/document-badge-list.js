@@ -1,8 +1,7 @@
-/* eslint-disable ember/no-empty-glimmer-component-classes */
-import Component from '@glimmer/component';
+import templateOnly from '@ember/component/template-only';
 
 /**
  * @argument pieces:
  * @argument highlightedPieces:
  */
-export default class DocumentsDocumentBadgeList extends Component {}
+export default templateOnly();
