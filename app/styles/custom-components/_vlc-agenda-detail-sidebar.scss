@@ -109,24 +109,7 @@ a.vlc-agenda-detail-sidebar__sub-item--active:active {
   margin: 1.5rem;
 }
 
-.vlc-agenda-detail-sidebar__formally-ok-label {
+.vlc-agenda-detail-sidebar__labels {
   display: flex;
-  padding-top: 1.5rem;
-
-  .formally-ok-icon {
-    &::before {
-      margin-right: 0.2rem;
-      height: 100%;
-      padding-bottom: 0.3rem;
-    }
-
-    &.ki-check::before {
-      line-height: 1.8rem;
-    }
-
-    &.ki-x::before {
-      font-size: 1.8rem;
-      font-weight: 700;
-    }
-  }
+  gap: .25rem;
 }

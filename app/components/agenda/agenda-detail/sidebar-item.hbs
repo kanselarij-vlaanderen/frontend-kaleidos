@@ -28,7 +28,7 @@
           </pre>
         </h4>
         {{#unless @agendaitem.aboutToDelete}}
-          <div class="vlc-agenda-detail-sidebar__formally-ok-label auk-o-flex--align-end">
+          <div class="vlc-agenda-detail-sidebar__labels auk-o-flex--align-end">
 
             {{#if this.loadNewsletterVisibility.lastSuccessful}}
               {{#unless this.newsletterIsVisible}}
@@ -53,8 +53,7 @@
             {{/if}}
 
             {{#if this.subcase.confidential}}
-              <AuPill @skin="warning" @layout="icon-only" data-test-agenda-detail-sidebar-item-confidential={{true}}>
-                <Auk::Icon @name="lock-closed" />
+              <AuPill @skin="warning" @icon="lock-closed" data-test-agenda-detail-sidebar-item-confidential={{true}}>
                 <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
                   <p>
                     {{t "confidential"}}
