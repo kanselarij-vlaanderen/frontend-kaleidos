@@ -69,7 +69,7 @@
           @onOpenUploadModal={{@onOpenUploadModal}}
           @onAddPiece={{this.attachNewReportVersion}}
           @didDeletePiece={{this.attachPreviousReportVersion}}
-          @didDeleteContainer={{this.loadReport}}
+          @didDeleteContainer={{perform this.loadReport}}
         />
       {{else}}
         {{#if this.currentSession.isEditor}}
