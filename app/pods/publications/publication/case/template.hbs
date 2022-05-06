@@ -12,7 +12,10 @@
       @publicationFlow={{this.model}} />
 
     <Publications::Publication::Case::Mandatees::MandateesPanel
-      @publicationFlow={{this.model}} @isViaCouncilOfMinisters={{this.isViaCouncilOfMinisters}}/>
+      @publicationFlow={{this.model}}
+      @isViaCouncilOfMinisters={{this.isViaCouncilOfMinisters}}
+      @agendaItemTreatment={{this.agendaItemTreatment}}
+    />
 
     <Utils::GovernmentAreas::GovernmentAreasPanel
       @governmentAreas={{this.model.case.governmentAreas}}

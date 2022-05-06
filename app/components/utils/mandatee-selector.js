@@ -16,7 +16,7 @@ const VISIBLE_ROLES = [
  * @argument readOnly
  * @argument selectedMandatee
  * @argument chooseMandatee
- * @argument {ReferenceDate} Date of to get active Mandatees for
+ * @argument {ReferenceDate} Date to get active Mandatees for
  */
 export default class MandateeSelector extends Component {
   @service store;
@@ -41,7 +41,7 @@ export default class MandateeSelector extends Component {
     if (this.initialLoad.isRunning) {
       yield this.initialLoad;
     }
-    let results = this.loadCurrentBodyMandatees(searchTerm);
+    let results = yield this.loadCurrentBodyMandatees(searchTerm);
 
     const currentBodyStartDate = results.firstObject.start;
     if (currentBodyStartDate > this.referenceDate) {
