@@ -13,15 +13,15 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
   @tracked case;
   @tracked mandatees;
   @tracked submitter;
+  @tracked meeting;
   @tracked governmentAreas;
   @tracked siblingSubcasesCount;
 
-  get caseCreatedDate() {
-    if (this.case.created) {
-      return this.case.created;
-    } else {
-      return this.model.subcase.created;
+  get subcaseReferenceDate() {
+    if (this.meeting) {
+      return this.meeting.plannedStart;
     }
+    return this.model.subcase.created;
   }
 
   @action

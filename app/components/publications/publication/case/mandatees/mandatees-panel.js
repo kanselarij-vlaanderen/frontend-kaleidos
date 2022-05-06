@@ -9,12 +9,11 @@ import { tracked } from '@glimmer/tracking';
 export default class PublicationsPublicationCaseMandateesPanelComponent extends Component {
   @tracked showSelectMandateeModal = false;
 
-  get publicationDate(){
-  if (this.args.isViaCouncilOfMinisters) {
-    return;
-  }
+  get publicationReferenceDate() {
+    if (this.args.isViaCouncilOfMinisters) {
+      return this.args.publicationFlow.agendaItemTreatment.startDate;
+    }
     return this.args.publicationFlow.openingDate;
-
   }
 
   @action

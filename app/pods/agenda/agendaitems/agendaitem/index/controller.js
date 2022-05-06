@@ -25,13 +25,6 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
 
   @tracked isEditingAgendaItemTitles = false;
 
-  get agendaCreatedDate() {
-    if (this.meeting.isPreKaleidos) {
-      return this.meeting.plannedStart;
-    }
-    return this.agenda.created;
-  }
-
   async navigateToNeighbouringItem(agendaitem) {
     // try transitioning to previous or next item, called on the delete of an agendaitem
     // TODO: below query can be replaced once agenda-items have relations to previous and next items

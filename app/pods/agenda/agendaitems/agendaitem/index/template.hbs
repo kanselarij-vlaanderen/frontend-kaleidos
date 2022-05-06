@@ -41,7 +41,7 @@
 />
 {{#if this.model.showAsRemark}}
   <Mandatees::MandateesPanel
-    @referenceDate={{this.agendaCreatedDate}}
+    @referenceDate={{this.meeting.plannedStart}}
     @mandatees={{this.mandatees}}
     @submitter={{this.submitter}}
     @allowEditing={{this.currentSession.isEditor}}
