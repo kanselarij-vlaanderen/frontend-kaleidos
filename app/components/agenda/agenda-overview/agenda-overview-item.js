@@ -11,7 +11,6 @@ import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import VrNotulenName,
 { compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
-import { isPresent } from '@ember/utils';
 
 export default class AgendaOverviewItem extends AgendaSidebarItem {
   /**
@@ -36,9 +35,6 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   @tracked agendaitemDocuments;
   @tracked newAgendaitemDocuments;
 
-  @tracked agendaIsReleased;
-  @tracked agendaIsPublished;
-
   @tracked isShowingAllDocuments = false;
 
   constructor() {
@@ -46,7 +42,6 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
     this.agendaitemDocuments = [];
     this.newAgendaitemDocuments = [];
     this.loadDocuments.perform();
-    this.loadAgendaReleaseAndPublishedStatus.perform();
   }
 
   get documentsAreReleased() {
@@ -84,18 +79,6 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
       sortedPieces = sortPieces(pieces);
     }
     this.agendaitemDocuments = sortedPieces;
-  }
-
-  @task
-  *loadAgendaReleaseAndPublishedStatus() {
-    const meeting = yield this.args.currentAgenda?.createdFor;
-    if (meeting) {
-      const newsletter = yield meeting.newsletter;
-      const mailCampaign = yield meeting.mailCampagin;
-
-      this.agendaIsReleased = isPresent(meeting.releasedDecisions || meeting.releasedDocuments);
-      this.agendaIsPublished = newsletter?.finished && mailCampaign?.isSent;
-    }
   }
 
   @dropTask

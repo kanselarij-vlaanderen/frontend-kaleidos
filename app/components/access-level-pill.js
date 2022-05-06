@@ -29,36 +29,26 @@ export default class AccessLevelPillComponent extends Component {
   }
 
   get pillSkin() {
-    let modifier = 'active-future';
+    let modifier = 'default';
     if (this.args.accessLevel) {
       switch (this.args.accessLevel.uri) {
         case CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE:
-          modifier = 'active';
-          break;
         case CONSTANTS.ACCESS_LEVELS.MINISTERRAAD:
         case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
-          if (this.args.agendaIsApproved) {
-            modifier = 'active';
-          }
+          modifier = 'danger';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID:
           if (this.args.agendaIsFinal && this.args.agendaIsReleased) {
-            modifier = 'active';
+            modifier = 'warning';
           }
           break;
         case CONSTANTS.ACCESS_LEVELS.PUBLIEK:
-          if (this.args.agendaIsFinal && this.args.agendaIsPublished) {
-            modifier = 'active';
-          }
+          modifier = 'success';
           break;
         default:
       }
     }
     return modifier;
-  }
-
-  get pillIcon() {
-    return 'user';
   }
 
   get accessLevelLabel() {

@@ -30,8 +30,6 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @tracked currentAgenda;
   @tracked previousAgenda;
   @tracked agendaActivity;
-  @tracked agendaIsReleased;
-  @tracked agendaIsPublished;
 
   @tracked isOpenPublicationModal = false;
 
@@ -50,18 +48,6 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     const hasCase = isPresent(this.agendaActivity);
     const hasPieces = isPresent(this.model.pieces);
     return hasPublicationsEnabled && mayPublish && hasCase && hasPieces;
-  }
-
-  @task
-  *loadAgendaReleaseAndPublishedStatus() {
-    const meeting = yield this.currentAgenda?.createdFor;
-    if (meeting) {
-      const newsletter = yield meeting.newsletter;
-      const mailCampaign = yield meeting.mailCampagin;
-
-      this.agendaIsReleased = isPresent(meeting.releasedDecisions || meeting.releasedDocuments);
-      this.agendaIsPublished = newsletter?.finished && mailCampaign?.isSent;
-    }
   }
 
   @task

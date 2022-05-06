@@ -54,10 +54,6 @@
                 <div class="auk-o-flex auk-o-flex--vertical-center">
                   <AccessLevelPill
                     @accessLevel={{this.accessLevel}}
-                    @agendaIsApproved={{@agendaIsApproved}}
-                    @agendaIsFinal={{@agendaIsFinal}}
-                    @agendaIsReleased={{@agendaIsReleased}}
-                    @agendaIsPublished={{@agendaIsPublished}}
                     @isEditable={{true}}
                     @onChangeAccessLevel={{this.changeAccessLevel}}
                     @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
@@ -193,10 +189,6 @@
               {{! TODO: also disable delete when piece linked to other agenda-items while maintaining DDAU }}
               <WebComponents::VlDocument
                 @piece={{piece}}
-                @agendaIsApproved={{@agendaIsApproved}}
-                @agendaIsFinal={{@agendaIsFinal}}
-                @agendaIsReleased={{@agendaIsReleased}}
-                @agendaIsPublished={{@agendaIsPublished}}
                 @enableDelete={{eq piece @piece}}
                 @didDeletePiece={{@didDeletePiece}}
                 @didUpdateAccessLevel={{perform this.loadPieceRelatedData}}

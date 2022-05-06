@@ -15,10 +15,6 @@
       {{#unless this.loadPieceRelatedData.isRunning}}
         <AccessLevelPill
           @accessLevel={{this.accessLevel}}
-          @agendaIsApproved={{@agendaIsApproved}}
-          @agendaIsFinal={{@agendaIsFinal}}
-          @agendaIsReleased={{@agendaIsReleased}}
-          @agendaIsPublished={{@agendaIsPublished}}
           @onChangeAccessLevel={{this.changeAccessLevel}}
           @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
           @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
