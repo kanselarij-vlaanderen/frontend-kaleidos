@@ -41,21 +41,11 @@ export default class MandateeSelector extends Component {
     if (this.initialLoad.isRunning) {
       yield this.initialLoad;
     }
-    const queryOptions = {
-      ...this.defaultQueryOptions, // clone
-    };
-    if (searchTerm) {
-      queryOptions['filter[person][last-name]'] = searchTerm;
-    }
-    queryOptions['filter[:lte:start]'] =
-      this.referenceDate.toISOString();
-    queryOptions['filter[:gte:end]'] =
-      this.referenceDate.toISOString();
+    let results = this.loadCurrentBodyMandatees(searchTerm);
 
-    let results = yield this.store.query('mandatee', queryOptions);
-
-    if (results.length === 0) {
-      results = yield this.loadCurrentBodyMandatees(searchTerm);
+    const currentBodyStartDate = results.firstObject.start;
+    if (currentBodyStartDate > this.referenceDate) {
+      results = yield this.loadPastBodyMandatees(searchTerm);
     }
     return results;
   }
@@ -91,6 +81,21 @@ export default class MandateeSelector extends Component {
       queryOptions['filter[person][last-name]'] = searchTerm;
     }
     queryOptions['filter[:has-no:end]'] = true;
+
+    return await this.store.query('mandatee', queryOptions);
+  }
+
+  async loadPastBodyMandatees(searchTerm) {
+    const queryOptions = {
+      ...this.defaultQueryOptions, // clone
+    };
+    if (searchTerm) {
+      queryOptions['filter[person][last-name]'] = searchTerm;
+    }
+    queryOptions['filter[:lte:start]'] =
+      this.referenceDate.toISOString();
+    queryOptions['filter[:gte:end]'] =
+      this.referenceDate.toISOString();
 
     return await this.store.query('mandatee', queryOptions);
   }
