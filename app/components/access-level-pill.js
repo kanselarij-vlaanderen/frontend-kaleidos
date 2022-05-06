@@ -38,9 +38,7 @@ export default class AccessLevelPillComponent extends Component {
           modifier = 'danger';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID:
-          if (this.args.agendaIsFinal && this.args.agendaIsReleased) {
-            modifier = 'warning';
-          }
+          modifier = 'warning';
           break;
         case CONSTANTS.ACCESS_LEVELS.PUBLIEK:
           modifier = 'success';
