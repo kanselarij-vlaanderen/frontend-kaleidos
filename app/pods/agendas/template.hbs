@@ -58,7 +58,7 @@
       <div class="auk-u-ml-4">
         <table
           data-test-route-agendas-overview-data-table
-          class="auk-table auk-table--agenda auk-table--sticky-header"
+          class="auk-table auk-table--agenda auk-table--hoverable auk-table--sticky-header auk-table--sticky-action-column"
         >
           <thead>
             <tr>
@@ -107,7 +107,7 @@
               {{#each @model as |agenda|}}
                 <tr
                   role="button"
-                  class="auk-u-text-align--center auk-table--interaction-cursor auk-table--clickable-rows"
+                  class="auk-u-text-align--center auk-table--clickable-rows"
                   {{on "click" (fn this.onClickRow agenda)}}
                 >
                   <td data-test-route-agendas-overview-row-title>
@@ -115,12 +115,12 @@
                       {{#if agenda.status.isDesignAgenda}}
                         <strong>{{t "design-agenda"}}</strong>
                         {{#if agenda.serialnumber}}
-                          <Auk::Pill @skin="active-future">{{agenda.serialnumber}}</Auk::Pill>
+                          <AuPill @skin="ongoing" @draft={{true}}>{{agenda.serialnumber}}</AuPill>
                         {{/if}}
                       {{else}}
                         <strong>{{t "agenda"}}</strong>
                         {{#if agenda.serialnumber}}
-                          <Auk::Pill>{{agenda.serialnumber}}</Auk::Pill>
+                          <AuPill>{{agenda.serialnumber}}</AuPill>
                         {{/if}}
                       {{/if}}
                       <span>–</span>
@@ -131,9 +131,9 @@
                   </td>
                   <td>
                     {{#if agenda.createdFor.isFinal}}
-                      <Auk::Pill>{{t "closed"}}</Auk::Pill>
+                      <AuPill>{{t "closed"}}</AuPill>
                     {{else}}
-                      <Auk::Pill @skin="active">{{t "opened"}}</Auk::Pill>
+                      <AuPill @skin="ongoing">{{t "opened"}}</AuPill>
                     {{/if}}
                   </td>
                   <td data-test-route-agendas-overview-row-kind>
