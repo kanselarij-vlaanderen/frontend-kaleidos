@@ -8,11 +8,14 @@ export default class PublicationsOverviewReportsRoute extends Route {
 
   model() {
     const rowPromises = REPORT_TYPES_CONFIG.map(async (reportTypeConfig) => {
-      const lastJob = await this.store.queryOne('publication-metrics-export-job', {
-        sort: '-created',
-        'filter[metrics-type]': reportTypeConfig.metricsTypeUri,
-        include: ['generated', 'generated-by'].join(','),
-      });
+      const lastJob = await this.store.queryOne(
+        'publication-metrics-export-job',
+        {
+          sort: '-created',
+          'filter[metrics-type]': reportTypeConfig.metricsTypeUri,
+          include: ['generated', 'generated-by'].join(','),
+        }
+      );
       return new ReportTypeEntry(lastJob, reportTypeConfig);
     });
     return Promise.all(rowPromises);

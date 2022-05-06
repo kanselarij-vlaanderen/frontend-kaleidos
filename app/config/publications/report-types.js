@@ -5,14 +5,15 @@ export default [
     translationKey: 'publication-reports--type--by-mandatee--on-decision-date',
     metricsTypeUri: 'by-mandatee--on-decision-date', // TODO: these aren't URI's. that should change
     // fixed job params for this report type
+    // TODO: should be set on the backend
     fixedParams: {
       query: {
-        group: 'mandatee',
+        group: 'mandateePersons',
         filter: {},
       },
     },
     // user input fields for job param filters in modal for this report type
-    userInputFieldsForParams: {
+    userInputFields: {
       decisionDateRange: true,
     },
   },
@@ -21,13 +22,13 @@ export default [
     metricsTypeUri: 'by-government-domain',
     fixedParams: {
       query: {
-        group: 'government-domain',
+        group: 'governmentDomains',
         filter: {},
-      }
+      },
     },
-    userInputFieldsForParams: {
+    userInputFields: {
       publicationYear: true,
-      governmentDomain: true,
+      governmentDomains: true,
     },
   },
   {
@@ -35,29 +36,30 @@ export default [
     metricsTypeUri: 'by-mandatee--only-bvr',
     fixedParams: {
       query: {
-        group: 'mandatee',
+        group: 'mandateePersons',
         filter: {
           regulationType: [CONSTANTS.REGULATION_TYPES.BVR],
-        }
-      }
+        },
+      },
     },
-    userInputFieldsForParams: {
+    userInputFields: {
       publicationYear: true,
-      mandatee: true,
+      mandateePersons: true,
     },
   },
   {
-    translationKey: 'publication-reports--type--by-regulation-type--only-not-via-council-of-ministers',
+    translationKey:
+      'publication-reports--type--by-regulation-type--only-not-via-council-of-ministers',
     metricsTypeUri: 'by-regulation-type--only-not-via-council-of-ministers',
     fixedParams: {
       query: {
-        group: 'regulation-type',
+        group: 'regulationType',
         filter: {
           isViaCouncilOfMinisters: false,
-        }
-      }
+        },
+      },
     },
-    userInputFieldsForParams: {
+    userInputFields: {
       publicationYear: true,
     },
   },
@@ -66,12 +68,12 @@ export default [
     metricsTypeUri: 'by-regulation-type',
     fixedParams: {
       query: {
-        group: 'regulation-type',
-      }
+        group: 'regulationType',
+      },
     },
-    userInputFieldsForParams: {
+    userInputFields: {
       publicationYear: true,
-      regulationType: true,
+      regulationTypes: true,
     },
   },
   {
@@ -79,12 +81,15 @@ export default [
     metricsTypeUri: 'by-mandatee--only-decree',
     fixedParams: {
       query: {
-        group: 'mandatee',
-      }
+        group: 'mandateePersons',
+        filter: {
+          regulationType: [CONSTANTS.REGULATION_TYPES.DECREET],
+        },
+      },
     },
-    userInputFieldsForParams: {
+    userInputFields: {
       publicationYear: true,
-      mandatee: true,
+      mandateePersons: true,
     },
-  }
+  },
 ];

@@ -10,6 +10,10 @@ export const PAGE_SIZE = {
   SELECT: 10,
 };
 
+export const TIMING = {
+  SELECT_SEARCH: 300,
+};
+
 export const PUBLICATION_EMAIL = {
   OUTBOX: 'http://themis.vlaanderen.be/id/mail-folders/4296e6af-7d4f-423d-ba89-ed4cbbb33ae7',
 };

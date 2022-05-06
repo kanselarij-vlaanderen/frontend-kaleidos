@@ -10,7 +10,7 @@
         <Publications::Overview::Reports::ReportsPanelEntry
           @title={{t reportType.config.translationKey}}
           @lastJob={{reportType.lastJob}}
-          @userInputFields={{reportType.config.userInputFieldsForParams}}
+          @userInputFields={{reportType.config.userInputFields}}
           @onGenerateReport={{fn this.generateReport reportType}}
         />
       {{/each}}

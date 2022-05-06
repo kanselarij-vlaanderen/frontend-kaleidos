@@ -25,7 +25,7 @@ export default class PublicationsOverviewReportsController extends Controller {
     // In case the frontend has special naming requirements, then these can be fullfilled
     // by editing the file name after the fact in the frontend and saving through mu-cl-resources
     const reportNameDatePrefix = moment(now).format('YYYYMMDDHHmmss');
-    const reportNameType = 'to-be-moved-to-backend';
+    const reportNameType = 'rapport'; // TODO: to be moved to backend
     const reportName = `${reportNameDatePrefix}-${reportNameType}`;
 
     const fixedParams = reportTypeEntry.config.fixedParams;
@@ -47,7 +47,7 @@ export default class PublicationsOverviewReportsController extends Controller {
     const job = this.store.createRecord('publication-metrics-export-job', {
       created: now,
       generatedBy: this.currentSession.user,
-      metricsType: reportTypeEntry.config.fixedParams.group,
+      metricsType: reportTypeEntry.config.metricsTypeUri,
       config: jobParams,
     });
     return job;

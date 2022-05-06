@@ -20,6 +20,8 @@
               >
                 {{t "start-date"}}
               </Auk::Label>
+              {{!WARNING for reviewers}}
+              {{!TODO: make this datepicker actually update after keyboard input}}
               <Auk::Datepicker
                 id="publicationReportsDecisionStartDate"
                 @date={{this.decisionDateRangeStart}}
@@ -36,6 +38,8 @@
               >
                 {{t "end-date"}}
               </Auk::Label>
+              {{!WARNING for reviewers}}
+              {{!TODO: make this datepicker actually update after keyboard input}}
               <Auk::Datepicker
                 id="publicationReportsDecisionEndDate"
                 @date={{this.decisionDateRangeEnd}}
@@ -54,15 +58,18 @@
           >
             {{t "year"}}
           </Auk::Label>
+          {{!NOTE: usertest shows select, notion docs shows number}}
+          {{!number input seems easier for user and developer to me}}
           <Auk::Input
             id="publicationReportsPublicationYear"
             @type="number"
+            @width="small"
             @value={{this.publicationYearAsString}}
             @error={{not this.isPublicationYearValid}}
           />
         </div>
       {{/if}}
-      {{#if @userInputFields.mandatee}}
+      {{#if @userInputFields.mandateePersons}}
         <div class="auk-form-group">
           <Auk::Label>
             {{t "ministers"}}
@@ -72,11 +79,13 @@
             @selected={{this.selectedMandateePersons}}
             @onChange={{fn (mut this.selectedMandateePersons)}}
             {{!loadMandatees on open: ensure date range updates are taken into account}}
-            {{!do not use onFocus: triggers multiple times (probably bug)}}
+            {{!do not use onFocus: triggers multiple times (when clicking on the bottom of the input) (probably bug)}}
             @onOpen={{this.loadMandateePersons.perform}}
             @searchEnabled={{true}}
             @search={{perform this.searchMandateePersons}}
             @noMatchesMessage={{t "no-ministers-found"}}
+            {{!Message shown when no search has been entered and there are no options.}}
+            @searchMessage={{t "no-ministers-found"}}
             @loadingMessage={{t "search-loading-text"}}
             as |person|
           >
@@ -84,7 +93,7 @@
           </PowerSelectMultiple>
         </div>
       {{/if}}
-      {{#if @userInputFields.governmentDomain}}
+      {{#if @userInputFields.governmentDomains}}
         <div class="auk-form-group">
           <Auk::Label>{{t "government-domains"}}</Auk::Label>
           <Auk::CheckboxList>
@@ -102,7 +111,7 @@
           </Auk::CheckboxList>
         </div>
       {{/if}}
-      {{#if @userInputFields.regulationType}}
+      {{#if @userInputFields.regulationTypes}}
         <div class="auk-form-group">
           <Auk::Label>{{t "regulation-types"}}</Auk::Label>
           <Auk::CheckboxList>

@@ -2,10 +2,29 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import CONFIG from 'frontend-kaleidos/config/config';
+import * as CONFIG from 'frontend-kaleidos/config/config';
 
+/**
+ * @argument title
+ * @argument onClose
+ * @argument onGenerateReport
+ * @argument {{
+ *    decisionDateRange?: boolean,
+ *    publicationYear?: boolean,
+ *    mandateePersons?: boolean,
+ *    governmentDomains?: boolean,
+ *    regulationTypes?: boolean,
+ * }} userInputFields this is an object containing the keys for the input fields to display.
+ * @example to display decision date range and government domains:
+ * ```javascript
+ * {
+ *    decisionDateRange: true,
+ *    governmentDomains: true,
+ * }
+ * ```
+ */
 export default class GenerateReportModalComponent extends Component {
   @service store;
 
@@ -39,50 +58,31 @@ export default class GenerateReportModalComponent extends Component {
       this.decisionDateRangeEnd = undefined;
     }
 
-    if (this.args.userInputFields.governmentDomain) {
+    if (this.args.userInputFields.governmentDomains) {
       this.loadGovernmentDomains.perform();
     }
 
-    if (this.args.userInputFields.regulationType) {
+    if (this.args.userInputFields.regulationTypes) {
       this.loadRegulationTypes.perform();
     }
   }
 
   get isLoading() {
     return (
-      this.loadGovernmentDomains.isRunning ||
-      this.loadRegulationTypes.isRunning
+      this.loadGovernmentDomains.isRunning || this.loadRegulationTypes.isRunning
     );
   }
 
   get isDecisionDateRangeStartValid() {
-    const isPresent = this.decisionDateRangeStart !== undefined;
-    if (!isPresent) {
-      return false;
-    }
-    const isWithinSensibleRange = this.isWithinSensibleRange(
-      this.decisionDateRangeStart
-    );
-    if (!isWithinSensibleRange) {
-      return false;
-    }
-    const isDecisionDateRangeValid = this.isDecisionDateRangeValid;
-    return isDecisionDateRangeValid;
+    if (this.decisionDateRangeStart === undefined) return false;
+    if (!this.isWithinSensibleRange(this.decisionDateRangeStart)) return false;
+    return this.isDecisionDateRangeValid;
   }
 
   get isDecisionDateRangeEndValid() {
-    const isPresent = this.decisionDateRangeEnd !== undefined;
-    if (!isPresent) {
-      return true;
-    }
-    const isWithinSensibleRange = this.isWithinSensibleRange(
-      this.decisionDateRangeEnd
-    );
-    if (!isWithinSensibleRange) {
-      return false;
-    }
-    const isDecisionDateRangeValid = this.isDecisionDateRangeValid;
-    return isDecisionDateRangeValid;
+    if (this.decisionDateRangeEnd === undefined) return true;
+    if (!this.isWithinSensibleRange(this.decisionDateRangeEnd)) return false;
+    return this.isDecisionDateRangeValid;
   }
 
   isWithinSensibleRange(date) {
@@ -96,8 +96,7 @@ export default class GenerateReportModalComponent extends Component {
       this.decisionDateRangeStart !== undefined &&
       this.decisionDateRangeEnd !== undefined;
     if (!canValidateRange) {
-      // since it is not a range, it is not a valid range either
-      // return true: in order not to show errors to "skip" this check
+      // return true: no range => so skip this step
       return true;
     }
     return this.decisionDateRangeStart < this.decisionDateRangeEnd;
@@ -123,6 +122,7 @@ export default class GenerateReportModalComponent extends Component {
     }
   }
 
+  /// TODO: try out html min and max attributes and required
   get isPublicationYearValid() {
     const isPresent = this.publicationYear !== undefined;
     if (!isPresent) {
@@ -132,12 +132,13 @@ export default class GenerateReportModalComponent extends Component {
     return 1981 <= this.publicationYear && this.publicationYear <= currentYear;
   }
 
+  // gets the date range selected by the user
   get dateRange() {
     if (this.args.userInputFields.publicationYear) {
       return convertYearToDateRange(this.publicationYear);
     }
     if (this.args.userInputFields.decisionDate) {
-      // NOT IMPLEMENTED: no report type requires this
+      // NOT IMPLEMENTED: no report type requires this yet
     }
     throw new Error('NOT IMPLEMENTED'); // for linter
   }
@@ -145,31 +146,47 @@ export default class GenerateReportModalComponent extends Component {
   @task
   *loadMandateePersons() {
     // set mandatees to unresolved promise in order to notify EmberPowerSelect of loading state
-    this.mandateePersons = this.searchMandateePersons.perform(undefined);
+    // this are the default options of the EmberPowerSelect (no searchText)
+    this.mandateePersons = this.fetchMandateePersons.perform(undefined);
     yield;
   }
 
-  @task
+  @task({
+    restartable: true,
+  })
+  // only called when search text input is not empty
   *searchMandateePersons(searchText) {
+    yield timeout(CONFIG.TIMING.SELECT_SEARCH);
+    return this.fetchMandateePersons.perform(searchText);
+  }
+
+  @task
+  *fetchMandateePersons(searchText) {
     const [dateRangeStart, dateRangeEnd] = this.dateRange;
+
+    // As long as mu-cl-resources does not support an OR filter
+    //    that allows the end date to be empty or after a specific date
+    //    we need to separte the filter in two requests
 
     // no filter on mandatee.mandate.role or government-body
     //  * allow old publication-flows to be searched
     //      which have a different role and government-body
     const commonQueryOptions = {
       'filter[:has:mandatees]': true,
-      'filter[mandatees][:lte:start]':
+      'filter[mandatees][:lt:start]':
         toDateWithoutUTCOffset(dateRangeEnd).toISOString(), // active ranges of mandatees are stored as dateTimes, but with time set to 0:00 UTC
       // since the frontend is in a different timezone, the we need to compensate for this
       'filter[last-name]': searchText, // Ember Data leaves this of when set to undefined (=> no filtering)
-      // although we sort and paginate again on the frontend, this is useful for pagination
+      // although we sort and paginate again on the frontend
+      //   after combining both query results
+      //   sorting an pagination are useful for limiting the payload size
       sort: 'last-name',
-      'page[size]': CONFIG.SELECT, // maximum number of shown mandatees for each type (some might be double and filtered out)
+      'page[size]': CONFIG.PAGE_SIZE.SELECT,
     };
 
     const pastQueryOptions = {
       ...commonQueryOptions,
-      'filter[mandatees][:gt:end]':
+      'filter[mandatees][:gte:end]':
         toDateWithoutUTCOffset(dateRangeStart).toISOString(),
     };
     const pastMandateePersons = this.store.query('person', pastQueryOptions);
@@ -195,7 +212,7 @@ export default class GenerateReportModalComponent extends Component {
       .flat()
       .uniq()
       .sortBy('lastName')
-      .slice(0, CONFIG.SELECT);
+      .slice(0, CONFIG.PAGE_SIZE.SELECT);
 
     return mandateePersons;
   }
@@ -222,7 +239,7 @@ export default class GenerateReportModalComponent extends Component {
     }
   }
 
-  @task
+  @task // @task: for consistency with other loadData tasks
   *loadRegulationTypes() {
     let regulationTypes = this.store.peekAll('regulation-type');
     regulationTypes = regulationTypes.toArray();
@@ -244,7 +261,8 @@ export default class GenerateReportModalComponent extends Component {
   get isValid() {
     let isValid = true;
     if (this.args.userInputFields.decisionDateRange) {
-      isValid &&= this.isDecisionDateRangeStartValid && this.isDecisionDateRangeEndValid;
+      isValid &&=
+        this.isDecisionDateRangeStartValid && this.isDecisionDateRangeEndValid;
     } else if (this.args.userInputFields.publicationYear) {
       isValid &&= this.isPublicationYearValid;
     }
@@ -253,6 +271,13 @@ export default class GenerateReportModalComponent extends Component {
 
   @task
   *triggerGenerateReport() {
+    const userJobParams = this.buildUserJobParameters();
+    this.args.onGenerateReport(userJobParams);
+
+    yield; // for linter
+  }
+
+  buildUserJobParameters() {
     const filterParams = {};
 
     if (this.args.userInputFields.publicationYear) {
@@ -273,41 +298,38 @@ export default class GenerateReportModalComponent extends Component {
       ];
     }
 
-    if (this.args.userInputFields.mandatee) {
-      if (this.selectedMandateePersons.length) {
-        const mandateeArray = this.selectedMandateePersons.map((person) => ({
-          person: person.uri,
-        }));
-        filterParams.mandatee = mandateeArray;
-      }
-    }
-
-    if (this.args.userInputFields.governmentDomain) {
+    if (this.args.userInputFields.governmentDomains) {
       if (this.selectedGovernmentDomains.length) {
-        const governmentDomainArray = this.selectedGovernmentDomains.map(
+        const governmentDomains = this.selectedGovernmentDomains.map(
           (governmentDomain) => governmentDomain.uri
         );
-        filterParams.governmentDomain = governmentDomainArray;
+        filterParams.governmentDomains = governmentDomains;
       }
     }
 
-    if (this.args.userInputFields.regulationType) {
+    if (this.args.userInputFields.regulationTypes) {
       if (this.selectedRegulationTypes.length) {
-        const regulationTypeArray = this.selectedRegulationTypes.map(
+        const regulationTypes = this.selectedRegulationTypes.map(
           (regulationType) => regulationType.uri
         );
-        filterParams.regulationType = regulationTypeArray;
+        filterParams.regulationType = regulationTypes;
       }
     }
 
-    const userParams = {
+    if (this.args.userInputFields.mandateePersons) {
+      if (this.selectedMandateePersons.length) {
+        const mandateePersons = this.selectedMandateePersons.mapBy('uri');
+        filterParams.mandateePersons = mandateePersons;
+      }
+    }
+
+    const userJobParams = {
       query: {
         filter: filterParams,
       },
     };
-    this.args.onGenerateReport(userParams);
 
-    yield; // for linter
+    return userJobParams;
   }
 }
 

@@ -10,13 +10,15 @@
           user=@lastJob.generatedBy.fullName
         }}
       </div>
-      <Auk::ButtonLink
-        @icon="download"
-        @href={{@lastJob.generated.namedDownloadLink}}
-        download
-      >
-        {{@lastJob.generated.downloadFilename}}
-      </Auk::ButtonLink>
+      {{#if @lastJob}}
+        <Auk::ButtonLink
+          @icon="download"
+          @href={{@lastJob.generated.namedDownloadLink}}
+          download
+        >
+          {{@lastJob.generated.downloadFilename}}
+        </Auk::ButtonLink>
+      {{/if}}
     </div>
   </div>
   <div>
