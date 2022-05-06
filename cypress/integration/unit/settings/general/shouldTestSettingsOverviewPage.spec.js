@@ -68,8 +68,12 @@ context('Settings overview page tests', () => {
       .find(settings.vlDeleteUser.delete) // only 1 row
       .click();
     cy.intercept('GET', '/users/*').as('getUsers');
+    cy.intercept('DELETE', '/accounts/*').as('deleteAccount');
+    cy.intercept('DELETE', '/users/*').as('deleteUser');
     cy.get(utils.vlModalVerify.save).click();
     cy.wait('@getUsers');
+    cy.wait('@deleteAccount');
+    cy.wait('@deleteUser');
     cy.get(settings.usersIndex.table).should('not.have.value', 'Wendy');
     // Zoek Greta en pas de groep aan met nieuwe import
     cy.get(settings.usersIndex.searchInput).clear();
