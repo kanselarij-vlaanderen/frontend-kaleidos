@@ -53,8 +53,10 @@ Cypress.Commands.overwrite("type", (originalFn, subject, text, options) => {
   if(!options){
     options = {};
   }
+  // default = 10
+  // https://docs.cypress.io/api/commands/type#Arguments
   if(!options.delay){
-    options.delay = 1;
+    options.delay = 0;
   }
   return originalFn(subject, text, options);
 });

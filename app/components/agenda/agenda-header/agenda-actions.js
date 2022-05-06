@@ -115,7 +115,6 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       yield agendaitem.hasMany('pieces').reload();
       yield agendaitem.hasMany('treatments').reload();
       yield agendaitem.hasMany('mandatees').reload();
-      yield agendaitem.hasMany('approvals').reload();
       yield agendaitem.hasMany('linkedPieces').reload();
     }
   }
