@@ -10,7 +10,7 @@ export default class MandateesMandateesPanelEditComponent extends Component {
    * @argument submitter
    * @argument onCancel
    * @argument onSave
-   * @GovernmentBodyOfDate Date of Case, Agenda or PublicationFlow to find the Mandatees of the right date
+   * @argument {ReferenceDate} Date of to get active Mandatees for
    */
   @service store;
 

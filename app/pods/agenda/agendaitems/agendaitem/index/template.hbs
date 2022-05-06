@@ -41,7 +41,7 @@
 />
 {{#if this.model.showAsRemark}}
   <Mandatees::MandateesPanel
-    @governmentBodyOfDate={{this.agendaCreatedDate}}
+    @referenceDate={{this.agendaCreatedDate}}
     @mandatees={{this.mandatees}}
     @submitter={{this.submitter}}
     @allowEditing={{this.currentSession.isEditor}}
@@ -50,7 +50,7 @@
 {{else}}
   {{#if this.subcase}}
     <Mandatees::MandateesPanel
-      @governmentBodyOfDate={{this.agendaCreatedDate}}
+      @referenceDate={{this.agendaCreatedDate}}
       @mandatees={{this.mandatees}}
       @submitter={{this.submitter}}
       @allowEditing={{this.currentSession.isEditor}}

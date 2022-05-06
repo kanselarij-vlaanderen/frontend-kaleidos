@@ -4,10 +4,18 @@ import { tracked } from '@glimmer/tracking';
 
 /**
  * @argument {PublicationFlow} publicationFlow (publication-flow,publication-flow.mandatees,publication-flow.mandatees.person)
- * @GovernmentBodyOfDate Date of PublicationFlow to find the Mandatees of the right date
+ * @argument {ReferenceDate} Date of to get active Mandatees for
  */
 export default class PublicationsPublicationCaseMandateesPanelComponent extends Component {
   @tracked showSelectMandateeModal = false;
+
+  get publicationDate(){
+  if (this.args.isViaCouncilOfMinisters) {
+    return;
+  }
+    return this.args.publicationFlow.openingDate;
+
+  }
 
   @action
   openSelectMandateeModal() {

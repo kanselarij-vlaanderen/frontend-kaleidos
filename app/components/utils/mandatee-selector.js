@@ -14,13 +14,13 @@ const VISIBLE_ROLES = [
  * @argument readOnly
  * @argument selectedMandatee
  * @argument chooseMandatee
- * @GovernmentBodyOfDate Date of Case, Agenda or PublicationFlow to find the Mandatees of the right date
+ * @argument {ReferenceDate} Date of to get active Mandatees for
  */
 export default class MandateeSelector extends Component {
   @service store;
   @tracked mandateeOptions = [];
   @tracked filter = '';
-  @tracked governmentBodyOfDate;
+  @tracked referenceDate;
 
   defaultQueryOptions = {
     include: 'person,mandate.role',
@@ -29,7 +29,7 @@ export default class MandateeSelector extends Component {
 
   constructor() {
     super(...arguments);
-    this.governmentBodyOfDate = this.args.governmentBodyOfDate || new Date();
+    this.referenceDate = this.args.referenceDate || new Date();
     this.initialLoad = this.loadVisibleRoles.perform();
     this.mandateeOptions = this.loadMandatees.perform();
   }
@@ -46,9 +46,9 @@ export default class MandateeSelector extends Component {
       queryOptions['filter[person][last-name]'] = searchTerm;
     }
     queryOptions['filter[:lte:start]'] =
-      this.governmentBodyOfDate.toISOString();
+      this.referenceDate.toISOString();
     queryOptions['filter[:gte:end]'] =
-      this.governmentBodyOfDate.toISOString();
+      this.referenceDate.toISOString();
 
     let results = yield this.store.query('mandatee', queryOptions);
 
