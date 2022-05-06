@@ -132,6 +132,10 @@ export default class MeetingEditMeetingComponent extends Component {
     }
   }
 
+  filterMainMeetingResults(meeting, results) {
+    return results.filter((result) => result.id != meeting.id);
+  }
+
   @action
   selectMainMeeting(mainMeeting) {
     this.selectedMainMeeting = mainMeeting;

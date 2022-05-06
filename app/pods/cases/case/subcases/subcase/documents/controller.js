@@ -14,9 +14,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import {
   addPieceToAgendaitem, restorePiecesFromPreviousAgendaitem
 } from 'frontend-kaleidos/utils/documents';
-import {
-  destroyApprovalsOfAgendaitem, setNotYetFormallyOk
-} from 'frontend-kaleidos/utils/agendaitem-utils';
+import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default class CasesCaseSubcasesSubcaseDocumentsController extends Controller {
   @service currentSession;
@@ -231,7 +229,6 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
     // in case the subcase is on multiple (future) open agendas
     for (const agendaitem of agendaitems.toArray()) {
       setNotYetFormallyOk(agendaitem);
-      yield destroyApprovalsOfAgendaitem(agendaitem);
       // save prior to adding pieces, micro-service does all the changes with docs
       yield agendaitem.save();
       for (const piece of pieces) {

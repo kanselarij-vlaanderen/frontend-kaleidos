@@ -29,9 +29,7 @@ export default class MHeader extends Component {
   }
 
   get isShownPublications() {
-    const isEnabled = !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB);
-    const hasPermission = this.currentSession.may('manage-publication-flows');
-    return isEnabled && hasPermission;
+    return this.currentSession.may('manage-publication-flows');
   }
 
   get isShownSignatureFolder() {
