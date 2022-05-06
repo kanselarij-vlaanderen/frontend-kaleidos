@@ -20,7 +20,7 @@ export default Component.extend({
    * @argument isLoading
    * @argument selectedItems
    * @argument selectModel
-   * @argument filterResults: a function that will filter out results from the dropwdown menu
+   * @argument filterOptions: a function that will filter out results from the dropwdown menu
    */
   classNameBindings: ['classes'],
   store: inject(),
@@ -45,8 +45,8 @@ export default Component.extend({
     } = this;
     if (modelName) {
       let items = yield this.store.query(modelName, queryOptions);
-      if (this.filterResults) {
-        items = this.filterResults(items);
+      if (this.filterOptions) {
+        items = this.filterOptions(items);
       }
       this.set('items', items);
     }
@@ -89,8 +89,8 @@ export default Component.extend({
     }
 
     let results = yield this.store.query(modelName, queryOptions);
-    if (this.filterResults) {
-      results = this.filterResults(results);
+    if (this.filterOptions) {
+      results = this.filterOptions(results);
     }
     return results;
   }),

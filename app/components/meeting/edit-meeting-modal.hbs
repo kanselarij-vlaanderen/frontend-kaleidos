@@ -22,7 +22,7 @@
             @sortField="-planned-start"
             @selectedItems={{this.selectedMainMeeting}}
             @selectModel={{this.selectMainMeeting}}
-            @filterResults={{fn this.filterMainMeetingResults @meeting}}
+            @filterOptions={{fn this.filterMainMeetingResults @meeting}}
             @isLoading={{this.initializeMainMeeting.isRunning}}
             as |model|
           >
