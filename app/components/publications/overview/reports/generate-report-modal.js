@@ -10,12 +10,15 @@ export default class GenerateReportModalComponent extends Component {
   @service store;
 
   @tracked decisionDateRangeStart;
+  // note: Date object representing the last date of the range
+  // API expects next date: in order to include moments over the course the last day
+  //  e.g. UI displays 31-12-2022, API expects 01-01-2023
   @tracked decisionDateRangeEnd;
 
   @tracked publicationYear;
 
-  @tracked mandatees;
-  @tracked selectedMandatees = [];
+  @tracked mandateePersons;
+  @tracked selectedMandateePersons = [];
 
   @tracked governmentDomains;
   @tracked selectedGovernmentDomains = [];
@@ -36,10 +39,6 @@ export default class GenerateReportModalComponent extends Component {
       this.decisionDateRangeEnd = undefined;
     }
 
-    if (this.args.userInputFields.mandatee) {
-      this.loadMandatees.perform();
-    }
-
     if (this.args.userInputFields.governmentDomain) {
       this.loadGovernmentDomains.perform();
     }
@@ -52,8 +51,7 @@ export default class GenerateReportModalComponent extends Component {
   get isLoading() {
     return (
       this.loadGovernmentDomains.isRunning ||
-      this.loadRegulationTypes.isRunning ||
-      this.loadMandatees.isRunning
+      this.loadRegulationTypes.isRunning
     );
   }
 
@@ -134,59 +132,72 @@ export default class GenerateReportModalComponent extends Component {
     return 1981 <= this.publicationYear && this.publicationYear <= currentYear;
   }
 
-  @task
-  *loadMandatees() {
-    // at the moment filtering is done on frontend
-    // mu-cl-resources does not allow filtering on absence of field: end-date (active mandatees)
-    // this makes the response list large
-    // => therefore fetching it once seems more performant
-    let mandatees = yield this.store.query('person', {
-      include: ['mandatees'].join(','),
-    });
-    mandatees = mandatees.toArray();
-    this.mandatees = mandatees.sortBy('lastName');
-  }
-
-  get mandateesOptions() {
-    return this.filterMandatees();
+  get dateRange() {
+    if (this.args.userInputFields.publicationYear) {
+      return convertYearToDateRange(this.publicationYear);
+    }
+    if (this.args.userInputFields.decisionDate) {
+      // NOT IMPLEMENTED: no report type requires this
+    }
+    throw new Error('NOT IMPLEMENTED'); // for linter
   }
 
   @task
-  *searchMandatee(searchText) {
-    return yield this.filterMandatees(searchText);
+  *loadMandateePersons() {
+    // set mandatees to unresolved promise in order to notify EmberPowerSelect of loading state
+    this.mandateePersons = this.searchMandateePersons.perform(undefined);
+    yield;
   }
 
-  filterMandatees(searchText) {
-    let persons = this.mandatees;
-    if (!persons) {
-      return;
-    }
+  @task
+  *searchMandateePersons(searchText) {
+    const [dateRangeStart, dateRangeEnd] = this.dateRange;
 
-    if (searchText) {
-      searchText = searchText.toLowerCase();
-      persons = persons.filter((person) =>
-        person.fullName.toLowerCase().includes(searchText)
-      );
-    }
+    // no filter on mandatee.mandate.role or government-body
+    //  * allow old publication-flows to be searched
+    //      which have a different role and government-body
+    const commonQueryOptions = {
+      'filter[:has:mandatees]': true,
+      'filter[mandatees][:lte:start]':
+        toDateWithoutUTCOffset(dateRangeEnd).toISOString(), // active ranges of mandatees are stored as dateTimes, but with time set to 0:00 UTC
+      // since the frontend is in a different timezone, the we need to compensate for this
+      'filter[last-name]': searchText, // Ember Data leaves this of when set to undefined (=> no filtering)
+      // although we sort and paginate again on the frontend, this is useful for pagination
+      sort: 'last-name',
+      'page[size]': CONFIG.SELECT, // maximum number of shown mandatees for each type (some might be double and filtered out)
+    };
 
-    const [yearStart, nextYearStart] = convertYearToDateRange(
-      this.publicationYear
-    ); // does not work for decisionDateRange filter
-    // currently the mandatee filter is only used in combination with the publicationYear filter
-    // POSSIBLE ISSUE: publicationYear might not overlap with mandate date range
+    const pastQueryOptions = {
+      ...commonQueryOptions,
+      'filter[mandatees][:gt:end]':
+        toDateWithoutUTCOffset(dateRangeStart).toISOString(),
+    };
+    const pastMandateePersons = this.store.query('person', pastQueryOptions);
 
-    persons = persons.filter((person) => {
-      // not using await in order in order to use mandateeOptions getter
-      let mandatees = person.get('mandatees');
-      mandatees = mandatees.toArray();
-      return mandatees.some(
-        (mandatee) =>
-          nextYearStart < mandatee.start &&
-          (!mandatee.end || yearStart < mandatee.end)
-      );
-    });
+    const currentQueryOptions = {
+      ...commonQueryOptions,
+      // HACK: mu-cl-resources quirk: has-no is intended to be used with relationships,
+      //   but seems to be working with an attribute in this case.
+      //   It might change with mu-cl-resource updates.
+      'filter[mandatees][:has-no:end]': true,
+    };
+    const currentMandateePersons = this.store.query(
+      'person',
+      currentQueryOptions
+    );
 
-    return persons;
+    let mandateePersons = yield Promise.all([
+      pastMandateePersons,
+      currentMandateePersons,
+    ]);
+    mandateePersons = mandateePersons
+      .map((persons) => persons.toArray())
+      .flat()
+      .uniq()
+      .sortBy('lastName')
+      .slice(0, CONFIG.SELECT);
+
+    return mandateePersons;
   }
 
   @task
@@ -196,11 +207,9 @@ export default class GenerateReportModalComponent extends Component {
         CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN,
       'filter[:has-no:broader]': true, // only top-level government-domains
       'filter[deprecated]': false,
-      'page[size]': CONFIG.PAGE_SIZE.CODE_LISTS,
+      'page[size]': 100,
     });
-    governmentDomains = governmentDomains.toArray();
-    governmentDomains = governmentDomains.sortBy('label');
-    this.governmentDomains = governmentDomains;
+    this.governmentDomains = governmentDomains.toArray().sortBy('label');
   }
 
   @action
@@ -265,8 +274,8 @@ export default class GenerateReportModalComponent extends Component {
     }
 
     if (this.args.userInputFields.mandatee) {
-      if (this.selectedMandatees.length) {
-        const mandateeArray = this.selectedMandatees.map((person) => ({
+      if (this.selectedMandateePersons.length) {
+        const mandateeArray = this.selectedMandateePersons.map((person) => ({
           person: person.uri,
         }));
         filterParams.mandatee = mandateeArray;
@@ -303,6 +312,7 @@ export default class GenerateReportModalComponent extends Component {
 }
 
 /**
+ * convert a year (number) to a Date range
  * start: inclusive
  * end: exclusive
  * @param {number} year
@@ -314,4 +324,23 @@ function convertYearToDateRange(year) {
   const publicationDateRangeStart = new Date(year, 0, 1, 0, 0, 0, 0); /* eslint-disable-line prettier/prettier */ // (no new line for each number)
   const publicationDateRangeEnd = new Date(year + 1, 0, 1, 0, 0, 0, 0); /* eslint-disable-line prettier/prettier */
   return [publicationDateRangeStart, publicationDateRangeEnd];
+}
+
+/**
+ * Get Date minus the timezone offset from UTC.
+ * @param {Date} date
+ * @returns {Date}
+ */
+function toDateWithoutUTCOffset(date) {
+  return new Date(
+    Date.UTC(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      date.getHours(),
+      date.getMinutes(),
+      date.getSeconds(),
+      date.getMilliseconds()
+    )
+  );
 }

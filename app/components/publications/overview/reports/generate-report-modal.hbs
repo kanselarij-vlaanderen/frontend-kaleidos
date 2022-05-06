@@ -68,11 +68,14 @@
             {{t "ministers"}}
           </Auk::Label>
           <PowerSelectMultiple
-            @options={{this.mandateesOptions}}
-            @selected={{this.selectedMandatees}}
-            @onChange={{fn (mut this.selectedMandatees)}}
+            @options={{this.mandateePersons}}
+            @selected={{this.selectedMandateePersons}}
+            @onChange={{fn (mut this.selectedMandateePersons)}}
+            {{!loadMandatees on open: ensure date range updates are taken into account}}
+            {{!do not use onFocus: triggers multiple times (probably bug)}}
+            @onOpen={{this.loadMandateePersons.perform}}
             @searchEnabled={{true}}
-            @search={{perform this.searchMandatee}}
+            @search={{perform this.searchMandateePersons}}
             @noMatchesMessage={{t "no-ministers-found"}}
             @loadingMessage={{t "search-loading-text"}}
             as |person|
