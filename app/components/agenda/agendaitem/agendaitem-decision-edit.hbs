@@ -14,7 +14,7 @@
     class="auk-button--tiny"
     @loading={{this.saveTreatment.isRunning}}
     {{on "click" (perform this.saveTreatment)}}
-    data-test-access-level-pill-cancel
+    data-test-agendaitem-decision-edit-save
   >
     {{t "save"}}
   </Auk::Button>
@@ -24,7 +24,7 @@
     @icon="x"
     class="auk-button--tiny"
     {{on "click" this.cancelEdit}}
-    data-test-agendaitem-decision-edit-save
+    data-test-access-level-pill-cancel
   >
     {{t "cancel"}}
   </Auk::Button>
