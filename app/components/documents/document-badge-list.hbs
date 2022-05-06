@@ -9,7 +9,7 @@ as |documents|>
             href={{doc.viewDocumentURL}} target="_blank" rel="noreferrer noopener"
             data-test-document-badge-link
           >
-            <Auk::Icon @name='document-added' />
+            <Auk::Icon @name={{if (includes doc @highlightedPieces) "document-added" "document"}} />
             {{doc.name}}
           </a>
           <AccessLevelPill
