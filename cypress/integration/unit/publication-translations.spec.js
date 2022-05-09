@@ -50,7 +50,7 @@ context('Publications translation tests', () => {
       .type(numberOfWords);
     // after updating pages and words, the text of the message updates, but cypress is faster then the update
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(publication.translationRequest.message).should('have.value', `Collega,\n\nHierbij ter vertaling:\nVO-dossier: ${fields.number}\nTitel: test vertalingsaanvraag\t\nUiterste vertaaldatum: ${translationEndDate.format('DD-MM-YYYY')}\t\nAantal pagina’s: ${numberOfPages}\t\nAantal woorden: ${numberOfWords}\t\nAantal documenten: 1\t\n\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n`);
+    cy.get(publication.translationRequest.message).should('have.value', `Collega,\n\nHierbij ter vertaling:\nVO-dossier: ${fields.number}\n\nTitel: test vertalingsaanvraag\t\n\nUiterste vertaaldatum: ${translationEndDate.format('DD-MM-YYYY')}\t\n\nAantal pagina’s: ${numberOfPages}\t\nAantal woorden: ${numberOfWords}\t\nAantal documenten: 1\t\n\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n`);
     cy.intercept('DELETE', 'files/*').as('deleteFile');
     cy.get(auk.modal.footer.cancel).click();
     cy.wait('@deleteFile');

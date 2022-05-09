@@ -35,7 +35,7 @@ async function buildContactInformation(contactPersons) {
 }
 async function translationRequestEmail(params) {
   const dueDate = params.dueDate ? moment(params.dueDate).format('DD-MM-YYYY') : '-';
-  const subject = `Vertaalaanvraag VO-dossier: ${params.identifier}`;
+  const subject = `${params.identifier} - Vertaalaanvraag`;
   let message= '';
 
   if (params.isUrgent) {
@@ -47,8 +47,11 @@ async function translationRequestEmail(params) {
     + '\n'
     + 'Hierbij ter vertaling:\n'
     + `VO-dossier: ${params.identifier}\n`
+    + '\n'
     + `Titel: ${params.title}\t\n`
+    + '\n'
     + `Uiterste vertaaldatum: ${dueDate}\t\n`
+    + '\n'
     + `Aantal pagina’s: ${params.numberOfPages || ''}\t\n`
     + `Aantal woorden: ${params.numberOfWords || ''}\t\n`
     + `Aantal documenten: ${params.numberOfDocuments}\t\n`;
