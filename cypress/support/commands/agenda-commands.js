@@ -142,6 +142,9 @@ function visitAgendaWithLink(link) {
   // cy.intercept('GET', '/agendaitems/*/agenda-activity').as('loadAgendaitems');
   cy.visit(link);
   // cy.wait('@loadAgendaitems');
+  // When opening an agenda, you should always get a loading screen.
+  // Concept-schemes loaded at application level show a blank screen, checking for loader to get past the white screen
+  cy.get(auk.loader).should('exist');
   cy.get(auk.loader, {
     timeout: 60000,
   }).should('not.exist');
@@ -458,31 +461,32 @@ function agendaitemExists(agendaitemName) {
   cy.get(auk.loader, {
     timeout: 20000,
   }).should('not.exist');
-  cy.get(auk.tab.activeHref).then((element) => {
-    const selectedReverseTab = element[0].text;
-    if (selectedReverseTab.includes('Detail')) {
-      cy.get(agenda.agendaDetailSidebar.subitem)
-        .contains(agendaitemName, {
-          timeout: 12000,
-        })
-        .as('foundAgendaitem');
-    } else {
-      if (!selectedReverseTab.includes('Overzicht')) {
-        cy.clickReverseTab('Overzicht');
-        cy.get(agenda.agendaOverviewItem.subitem);
-        // data loading could be awaited  '/agendaitem?filter**' or next get() fails, solved bij checking loading modal
-        cy.log('data needs to be loaded now, waiting a few seconds');
-        cy.get(auk.loader, {
-          timeout: 20000,
-        }).should('not.exist');
+  cy.get(agenda.agendaTabs.tabs).find(auk.tab.activeHref)
+    .then((element) => {
+      const selectedReverseTab = element[0].text.trim();
+      if (selectedReverseTab.includes('Detail')) {
+        cy.get(agenda.agendaDetailSidebar.subitem)
+          .contains(agendaitemName, {
+            timeout: 12000,
+          })
+          .as('foundAgendaitem');
+      } else {
+        if (!selectedReverseTab.includes('Overzicht')) {
+          cy.clickReverseTab('Overzicht');
+          cy.get(agenda.agendaOverviewItem.subitem);
+          // data loading could be awaited  '/agendaitem?filter**' or next get() fails, solved bij checking loading modal
+          cy.log('data needs to be loaded now, waiting a few seconds');
+          cy.get(auk.loader, {
+            timeout: 20000,
+          }).should('not.exist');
+        }
+        cy.get(agenda.agendaOverviewItem.subitem)
+          .contains(agendaitemName, {
+            timeout: 24000,
+          })
+          .as('foundAgendaitem');
       }
-      cy.get(agenda.agendaOverviewItem.subitem)
-        .contains(agendaitemName, {
-          timeout: 24000,
-        })
-        .as('foundAgendaitem');
-    }
-  });
+    });
   cy.log('/agendaitemExists');
   // By getting the aliased agendaitem as last action in the command, we can chain off this in future commands
   // Used mainly for the command "openDetailOfAgendaitem"
@@ -562,6 +566,8 @@ function closeAgenda() {
     timeout: 60000,
   }).should('not.exist');
   cy.get(auk.loader).should('not.exist');
+  // TODO-bug current-when should mark overzicht tab as active, but we enter a state where none of the tabs are active
+  cy.clickReverseTab('Overzicht');
   cy.log('/closeAgenda');
 }
 

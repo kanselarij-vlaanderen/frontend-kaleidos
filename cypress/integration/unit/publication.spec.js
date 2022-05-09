@@ -89,7 +89,7 @@ context('Publications tests', () => {
         .day(3),
       receptionDate: Cypress.dayjs().add(1, 'weeks')
         .day(3),
-      targetPublicationdate: Cypress.dayjs().add(1, 'weeks')
+      publicationDueDate: Cypress.dayjs().add(1, 'weeks')
         .day(3),
       shortTitle: 'Some text',
       longTitle: 'Some text',
