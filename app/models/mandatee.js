@@ -21,7 +21,6 @@ export default Model.extend({
   person: belongsTo('person'),
   mandate: belongsTo('mandate'),
 
-  approvals: hasMany('approval'),
   subcases: hasMany('subcase', {
     inverse: null,
   }),

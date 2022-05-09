@@ -38,7 +38,7 @@ context('meeting actions tests', () => {
     cy.visitAgendaWithLink('/vergadering/5EB2CB8FF5E126000900000D/agenda/cd6b8ae7-0f00-451c-b4ad-fa236d5e6a20/agendapunten');
     cy.openDetailOfAgendaitem(subcaseTitleShort);
     // verify this profile does not have the option to delete approved agendaitems
-    cy.wait(1000); // controls buttons is not clickable yet (no calls are running, element detached from DOM)
+    cy.wait(2000); // controls buttons is not clickable yet (no calls are running, element detached from DOM)
     cy.get(agenda.agendaitemControls.actions).click();
     cy.get(agenda.agendaitemControls.action.delete).should('not.exist');
   });

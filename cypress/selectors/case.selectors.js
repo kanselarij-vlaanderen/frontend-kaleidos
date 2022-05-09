@@ -48,6 +48,7 @@ const selectors = {
   // subcase-description-edit
   subcaseDescriptionEdit: {
     type: '[data-test-subcase-description-edit-type]',
+    save: '[data-test-subcase-description-edit-save]',
   },
 
   // subcase-item
