@@ -566,6 +566,8 @@ function closeAgenda() {
     timeout: 60000,
   }).should('not.exist');
   cy.get(auk.loader).should('not.exist');
+  // TODO-bug current-when should mark overzicht tab as active, but we enter a state where none of the tabs are active
+  cy.clickReverseTab('Overzicht');
   cy.log('/closeAgenda');
 }
 

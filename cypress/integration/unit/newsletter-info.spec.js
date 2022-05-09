@@ -389,7 +389,8 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // TODO-bug reload should not be necessary
     // reload necessary for nota
     cy.reload();
-    cy.openAgendaitemKortBestekTab(subcaseTitleShort);
+
+    cy.visitAgendaWithLink(agendaitemKBLink);
     cy.intercept('GET', '/themes').as('getThemes3');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getThemes3');
