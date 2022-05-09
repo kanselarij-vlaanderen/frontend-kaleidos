@@ -42,6 +42,7 @@ context('Publications translation tests', () => {
     cy.get(publication.translationsIndex.requestTranslation).click();
     cy.get(publication.translationRequest.save).should('be.disabled');
     cy.get(auk.datepicker).click();
+    // TODO-publication get datepicker in specific modal or in div
     cy.setDateInFlatpickr(translationEndDate);
     cy.get(publication.translationRequest.numberOfPages).should('be.empty')
       .type(numberOfPages);
