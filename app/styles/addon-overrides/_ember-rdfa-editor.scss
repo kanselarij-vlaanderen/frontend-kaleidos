@@ -59,7 +59,6 @@ $au-base: 1.8rem;
   }
 }
 
-
 .auk-rdfa-fullscreen {
   position: fixed;
   display: flex;
@@ -72,6 +71,8 @@ $au-base: 1.8rem;
   z-index: 99999;
   background-color: #fff;
   box-shadow: 0 0 6rem rgba(0,0,0,.8);
+  border-radius: .3rem;
+  overflow: hidden;
 
   > .ember-view {
     height: 100%;
