@@ -78,16 +78,16 @@ export default Component.extend({
   // TODO: octane-refactor
   // eslint-disable-next-line ember/no-actions-hash
   actions: {
+    fullscreen() {
+      this.toggleProperty('isFullscreen');
+    },
+
     async trySaveChanges() {
       const themes = await this.get('themes');
       if (themes.length > 0) {
         return this.saveChanges();
       }
       this.toggleProperty('isTryingToSave');
-    },
-
-    fullscreen() {
-      this.toggleProperty('isFullscreen');
     },
 
     async cancelEditing() {
