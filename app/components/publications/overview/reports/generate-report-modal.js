@@ -36,6 +36,12 @@ export default class GenerateReportModalComponent extends Component {
 
   @tracked publicationYear;
 
+  // LIMITATION:
+  //  1. a person will not show up in the select
+  //    if: a mandatee resigned in the year before the publication
+  //  2. a person can be selected person that was not a mandatee in that year
+  //    if a person is selected
+  //      and then the publication year is changed
   @tracked mandateePersons;
   @tracked selectedMandateePersons = [];
 
@@ -164,7 +170,7 @@ export default class GenerateReportModalComponent extends Component {
 
     // As long as mu-cl-resources does not support an OR filter
     //    that allows the end date to be empty or after a specific date
-    //    we need to separte the filter in two requests
+    //    we need to separate the filter in two requests
 
     // no filter on mandatee.mandate.role or government-body
     //  * allow old publication-flows to be searched
