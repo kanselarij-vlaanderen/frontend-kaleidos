@@ -1,4 +1,5 @@
 <div class="auk-o-flex--justify-between">
+  {{#if this.canEditNewsletter}}
   <Auk::Button
     data-test-newsletter-table-button-toolbar-edit={{true}}
     @skin="borderless"
@@ -6,6 +7,7 @@
     @icon="pencil"
     {{on "click" @onEdit}}
   />
+  {{/if}}
   {{#if (is-pending (await @agendaitem.notaOrVisienota))}}
     <div class="auk-loader" role="alert" aria-busy="true">
       <EmberTooltip @side="bottom" @tooltipClass="auk-tooltip">
