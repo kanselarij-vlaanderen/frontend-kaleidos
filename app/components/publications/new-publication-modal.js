@@ -32,7 +32,7 @@ export default class NewPublicationModal extends Component {
 
   @tracked numberIsAlreadyUsed = false;
   @tracked numberIsRequired = false;
-  @tracked numberIsReset = false;
+  @tracked numberResetAfterSaveValidation = false;
   @tracked isEnabledErrorOnShortTitle = false;
 
   constructor() {
@@ -53,7 +53,7 @@ export default class NewPublicationModal extends Component {
   get publicationNumberErrorTranslationKey() {
     if (this.numberIsRequired) {
       return 'publication-number-required-and-numeric';
-    } else if (this.numberIsReset) {
+    } else if (this.numberResetAfterSaveValidation) {
       return 'publication-number-already-taken-new-number-created';
     } else if (this.numberIsAlreadyUsed) {
       return 'publication-number-already-taken';
@@ -116,7 +116,7 @@ export default class NewPublicationModal extends Component {
     yield this.validateIsPublicationNumberAlreadyTaken.perform();
     if (!this.isValid) {
       yield this.initPublicationNumber.perform();
-      this.numberIsReset = true;
+      this.numberResetAfterSaveValidation = true;
       return;
     }
 
