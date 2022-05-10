@@ -36,7 +36,7 @@
                   <Auk::Icon @name="not-visible" />
                   <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
                     <p>
-                      Op de website
+                      {{t "on-the-website"}}
                     </p>
                   </EmberTooltip>
                 </Auk::Pill>
@@ -63,7 +63,7 @@
             {{/if}}
 
             {{#if @showFormallyOkStatus}}
-              <Auk::Pill @skin="blank" @layout="icon-only" class="{{@agendaitem.formallyOkToShow.classNames}}">
+              <Auk::Pill data-test-agenda-detail-sidebar-item-status-pill @skin="blank" @layout="icon-only" class="{{@agendaitem.formallyOkToShow.classNames}}">
                 <i class="{{@agendaitem.formallyOkToShow.iconClassNames}} {{@agendaitem.formallyOkToShow.classNames}}" />
                 <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
                   <p>
