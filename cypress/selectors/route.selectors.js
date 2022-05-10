@@ -118,7 +118,10 @@ const selectors = {
   searchPublications: {
     dateType: '[data-test-route-search-publication-date-type]',
     date: '[data-test-route-search-publication-date]',
-    dataTable: '[data-test-route-search-publication-flows-data-table]',
+    dataTable: '[data-test-route-search-publication-data-table]',
+    row: {
+      number: '[data-test-route-search-publication-row-number]',
+    },
   },
 
   /**

@@ -36,9 +36,8 @@ const selectors = {
 
   // agenda-detail/sidebar
   agendaDetailSidebar: {
-    // TODO-selector subItem only works for nota's, not announcement
+    // notes and announcements use same selector
     subitem: '[data-test-agenda-detail-sidebar-sub-item]',
-    announcementSubitem: '[data-test-agenda-detail-sidebar-announcement-sub-item]',
   },
 
   // agenda-detail/sidebar-item
@@ -131,6 +130,11 @@ const selectors = {
         deleteItems: '[data-test-agenda-actions-approve-and-close-agenda-delete-message]',
       },
     },
+  },
+
+  // agenda-tabs
+  agendaTabs: {
+    tabs: '[data-test-agenda-nav-tabs]',
   },
 
   // agenda-side-nav
