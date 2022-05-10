@@ -16,7 +16,7 @@ const VISIBLE_ROLES = [
  * @argument readOnly
  * @argument selectedMandatee
  * @argument chooseMandatee
- * @argument {ReferenceDate} Date to get active Mandatees for
+ * @argument {Date} referenceDate: Date to get active Mandatees for
  */
 export default class MandateeSelector extends Component {
   @service store;

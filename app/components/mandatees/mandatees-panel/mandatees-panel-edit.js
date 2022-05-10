@@ -10,7 +10,7 @@ export default class MandateesMandateesPanelEditComponent extends Component {
    * @argument submitter
    * @argument onCancel
    * @argument onSave
-   * @argument {ReferenceDate} Date to get active Mandatees for
+   * @argument {Date} referenceDate: Date to get active Mandatees for
    */
   @service store;
 
