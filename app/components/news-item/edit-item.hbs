@@ -12,34 +12,6 @@
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          {{#if @newsletterInfo}}
-            {{#if @newsletterInfo.inNewsletter}}
-              <AuPill @draft={{true}} @skin="default" @icon="visible">
-                {{t "visible-in-newsletter"}}
-              </AuPill>
-            {{else}}
-              <AuPill @draft={{true}} @skin="default" @icon="not-visible">
-                {{t "hidden-in-newsletter"}}
-              </AuPill>
-            {{/if}}
-          {{else}}
-            <Auk::Pill>
-              {{t "no-newsletter-info"}}
-            </Auk::Pill>
-          {{/if}}
-        </Auk::Toolbar::Item>
-        <Auk::Toolbar::Item>
-         {{#if @newsletterInfo.finished}}
-            <AuPill @skin="success">
-              {{t "finished"}}
-            </AuPill>
-          {{else}}
-            <AuPill @skin="warning">
-              {{t "not-finished"}}
-            </AuPill>
-          {{/if}}
-        </Auk::Toolbar::Item>
-        <Auk::Toolbar::Item>
           {{#if (not (is-pending this.agendaitem.notaOrVisienota))}}
             {{#if (not (await this.agendaitem.notaOrVisienota))}}
               <Auk::Button

@@ -24,6 +24,11 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
   }
 
   @action
+  save() {
+    this.isEditing = true;
+  }
+
+  @action
   confirmNotaModifiedWarning() {
     this.notaModifiedWarningConfirmed = true;
   }

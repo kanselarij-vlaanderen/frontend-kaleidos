@@ -8,20 +8,12 @@
   <AuToolbarGroup>
     {{#if this.model}}
       {{#if this.isEditing}}
-        <AuButtonGroup>
-          <AuButton
-            @skin="link"
-            {{on "click" this.stopEditing}}
-          >
-            {{t "cancel"}}
-          </AuButton>
-          <AuButton
-            @skin="primary"
-            {{on "click" this.stopEditing}}
-          >
-            {{t "save"}}
-          </AuButton>
-        </AuButtonGroup>
+        <AuButton
+          @skin="link"
+          {{on "click" this.stopEditing}}
+        >
+          {{t "cancel"}}
+        </AuButton>
       {{else}}
         <AuButton
           @icon="pencil"
