@@ -32,6 +32,7 @@ export default class NewPublicationModal extends Component {
 
   @tracked numberIsAlreadyUsed = false;
   @tracked numberIsRequired = false;
+  @tracked numberIsReset = false;
   @tracked isEnabledErrorOnShortTitle = false;
 
   constructor() {
@@ -52,8 +53,9 @@ export default class NewPublicationModal extends Component {
   get publicationNumberErrorTranslationKey() {
     if (this.numberIsRequired) {
       return 'publication-number-required-and-numeric';
+    } else if (this.numberIsReset) {
+      return 'publication-number-already-taken-new-number-created';
     } else if (this.numberIsAlreadyUsed) {
-      console.log("number used")
       return 'publication-number-already-taken';
     } else {
       return null;
@@ -111,9 +113,10 @@ export default class NewPublicationModal extends Component {
 
   @task
   *save() {
-    const isValid = yield this.untilValidated();
-    if (!isValid) {
-      console.log("NOT VALID")
+    yield this.validateIsPublicationNumberAlreadyTaken.perform();
+    if (!this.isValid) {
+      yield this.initPublicationNumber.perform();
+      this.numberIsReset = true;
       return;
     }
 
@@ -130,22 +133,12 @@ export default class NewPublicationModal extends Component {
 
   @restartableTask
   *validateIsPublicationNumberAlreadyTaken() {
-    console.log("validate")
     yield timeout(1000);
     this.numberIsAlreadyUsed =
       yield this.publicationService.publicationNumberAlreadyTaken(
         this.number,
         this.suffix
       );
-    console.log(this.numberIsAlreadyUsed)
-  }
-
-  async untilValidated() {
-    console.log("until validated")
-    await this.validateIsPublicationNumberAlreadyTaken.last;
-    console.log(this.isValid)
-
-    return this.isValid;
   }
 
   @action
