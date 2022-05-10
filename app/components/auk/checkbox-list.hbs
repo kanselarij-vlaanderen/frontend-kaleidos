@@ -5,7 +5,7 @@
       @labelSkin="bold"
       @checked={{@checked}}
       disabled={{@disabled}}
-      {{on "input" @onToggle}}
+      {{on "input" this.onToggle}}
     />
     <div class="auk-u-ml-2">
       {{yield}}
