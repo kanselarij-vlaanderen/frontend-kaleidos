@@ -133,6 +133,7 @@
 {{/if}}
 {{#if this.showConfirmPublishThemis}}
   <ThemisPublications::PublishConfirmationModal
+    @newsletter="Bent u zeker dat u de nieuwsbrief op de website wil publiceren?"
     @onCancel={{this.cancelPublishThemis}}
     @onConfirm={{perform this.publishThemis}}
   />
@@ -145,6 +146,7 @@
 {{/if}}
 {{#if this.showConfirmPublishAll}}
   <ThemisPublications::PublishConfirmationModal
+    @newsletter="Bent u zeker dat u de nieuwsbrief via alle kanalen (Belga, website en mail) wil publiceren? Dit Kort Bestek zal naar alle ingeschreven groepen verstuurd worden."
     @title={{t "send-newsitem-to-all"}}
     @onCancel={{this.cancelPublishAll}}
     @onConfirm={{perform this.publishToAll}}
