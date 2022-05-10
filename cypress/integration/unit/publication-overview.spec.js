@@ -24,18 +24,18 @@ context('Publications overview tests', () => {
       numacNumber: 1234567890,
     };
     cy.createPublication(fields);
-    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
     cy.intercept('POST', '/identifications').as('postNumacNumber');
     cy.get(publication.remark.edit).click();
     cy.get(publication.remark.textarea).type(fields.remark);
     cy.get(publication.remark.save).click();
-    cy.wait('@patchPublicationFlow');
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
     cy.get(publication.publicationCaseInfo.edit).click();
     cy.get(publication.publicationCaseInfo.editView.numacNumber).find(dependency.emberTagInput.input)
       .click()
       .type(`${fields.numacNumber}{enter}`);
     cy.get(publication.publicationCaseInfo.editView.save).click();
     cy.wait('@postNumacNumber');
+    cy.wait('@patchPublicationFlow');
   });
 
   // TODO-SETUP once we have default data, this test could be moved to click-table.spec

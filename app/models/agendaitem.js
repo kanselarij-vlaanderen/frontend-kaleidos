@@ -56,7 +56,6 @@ export default ModelWithModifier.extend({
   }),
 
   mandatees: hasMany('mandatee'),
-  approvals: hasMany('approval'),
   pieces: hasMany('piece'),
   linkedPieces: hasMany('piece'),
 
