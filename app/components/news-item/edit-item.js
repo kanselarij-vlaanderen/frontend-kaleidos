@@ -10,7 +10,6 @@ import { isNone } from '@ember/utils';
 // eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   intl: inject(),
-  classNames: ['auk-box'],
 
   isTryingToSave: false,
   isExpanded: false,

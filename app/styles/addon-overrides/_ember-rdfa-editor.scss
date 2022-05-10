@@ -7,13 +7,6 @@ $say-editor-background: white;
 $say-toolbar-background: white;
 $say-editor-padding: 1rem;
 $say-paper-min-height: calc(40rem - 66px);
-$au-base: 1.8rem;
-
-// Custom setup for ember-rdfa-editor css
-@import "ember-appuniversum/a-settings";
-@import "ember-appuniversum/a-tools";
-@import "ember-appuniversum/c-icon";
-@import "appuniversum/u-hide";
 
 // @import "ember-rdfa-editor/custom-components"; // This used to be the only import regarding the rdfa-editor styling but because we only use the basic functionality for the moment & we don't really need the deprecated styling from that package, we'll be only importing the necessary SCSS files (see below)
 @import "ember-rdfa-editor/c-container";
@@ -25,10 +18,16 @@ $au-base: 1.8rem;
 @import "ember-rdfa-editor/c-table";
 @import "ember-rdfa-editor/shame";
 
-// Overrides
-:root {
-  --au-bold: 600;
-  --au-font: BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+// Custom typography
+.say-content {
+  &,
+  p,
+  ul,
+  ol,
+  div {
+    @include au-font-size(1.8rem);
+    font-family: BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
 }
 
 // Reduce height of inner
@@ -87,5 +86,9 @@ $au-base: 1.8rem;
   .say-editor__paper,
   .say-editor__inner {
     min-height: calc(100vh - 13.1rem);
+  }
+
+  .say-editor {
+    padding-top: 3rem;
   }
 }
