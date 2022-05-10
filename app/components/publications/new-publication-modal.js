@@ -53,6 +53,7 @@ export default class NewPublicationModal extends Component {
     if (this.numberIsRequired) {
       return 'publication-number-required-and-numeric';
     } else if (this.numberIsAlreadyUsed) {
+      console.log("number used")
       return 'publication-number-already-taken';
     } else {
       return null;
@@ -112,6 +113,7 @@ export default class NewPublicationModal extends Component {
   *save() {
     const isValid = yield this.untilValidated();
     if (!isValid) {
+      console.log("NOT VALID")
       return;
     }
 
@@ -128,16 +130,21 @@ export default class NewPublicationModal extends Component {
 
   @restartableTask
   *validateIsPublicationNumberAlreadyTaken() {
+    console.log("validate")
     yield timeout(1000);
     this.numberIsAlreadyUsed =
       yield this.publicationService.publicationNumberAlreadyTaken(
         this.number,
         this.suffix
       );
+    console.log(this.numberIsAlreadyUsed)
   }
 
   async untilValidated() {
+    console.log("until validated")
     await this.validateIsPublicationNumberAlreadyTaken.last;
+    console.log(this.isValid)
+
     return this.isValid;
   }
 
