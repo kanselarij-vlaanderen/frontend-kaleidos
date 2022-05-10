@@ -305,7 +305,7 @@ context('Search tests', () => {
 
   it('Search for richText in kort-bestek and open the detail view by clicking row', () => {
     cy.visit('/zoeken/kort-bestek');
-    // TODO-setup this test searches for data from other tests (newsletter-info.spec) and could fail
+    // Testdata available in default data
     const searchTerm = 'Dit is een leuke beslissing';
     cy.get(route.search.input).clear();
     cy.get(route.search.input).type(searchTerm);
@@ -327,6 +327,24 @@ context('Search tests', () => {
     cy.url().should('contain', '/agenda/');
     cy.url().should('contain', '/agendapunten/');
     cy.url().should('contain', '/kort-bestek');
+  });
+
+  it('Search for richText in kort-bestek and open the detail view by clicking row', () => {
+    cy.visit('/zoeken/kort-bestek');
+    // *note: this test searches for data from newsletter-info.spec and could fail
+    // the reasoning behind this is for making sure that the index updates still work
+    const searchTerm = 'this nota info should be visible in definitief';
+    cy.get(route.search.input).clear();
+    cy.get(route.search.input).type(searchTerm);
+
+    cy.intercept('GET', '/newsletter-infos/search?**').as('newsletterSearchCall');
+    cy.get(route.search.trigger).click();
+    cy.wait('@newsletterSearchCall');
+
+    cy.get(route.searchNewsletterInfos.dataTable).find('tbody')
+      .children('tr')
+      .should('have.length', 1);
+    cy.get(route.searchNewsletterInfos.row.title).contains(searchTerm);
   });
 
   it('Search for kort-bestek items that have links to multiple agendaitem/agenda versions', () => {

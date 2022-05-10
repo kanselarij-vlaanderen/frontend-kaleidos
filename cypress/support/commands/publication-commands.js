@@ -13,7 +13,7 @@ import auk from '../../selectors/auk.selectors';
  * @name fillInNewPublicationFields
  * @memberOf Cypress.Chainable#
  * @function
- * @param {number: Number, suffix: String, decisionDate: Object, receptionDate: Object, targetPublicationdate: Object, shortTitle: String, longTitle: String} fields The fields for the case
+ * @param {number: Number, suffix: String, decisionDate: Object, receptionDate: Object, publicationDueDate: Object, shortTitle: String, longTitle: String} fields The fields for the case
  */
 function fillInNewPublicationFields(fields) {
   cy.log('fillInNewPublicationFields');
@@ -36,10 +36,11 @@ function fillInNewPublicationFields(fields) {
       .click();
     cy.setDateInFlatpickr(fields.receptionDate);
   }
-  if (fields.targetPublicationDate) {
+  // Limiet publicatie
+  if (fields.publicationDueDate) {
     cy.get(auk.datepicker).eq(2)
       .click();
-    cy.setDateInFlatpickr(fields.targetPublicationDate);
+    cy.setDateInFlatpickr(fields.publicationDueDate);
   }
   cy.get(publication.newPublication.shortTitle).click()
     .type(fields.shortTitle);
@@ -92,7 +93,7 @@ function createPublication(fields) {
  * @name createPublicationWithStatus
  * @memberOf Cypress.Chainable#
  * @function
- * @param {number: Number, suffix: String, decisionDate: Object, receptionDate: Object, targetPublicationdate: Object, shortTitle: String, longTitle: String, newStatus: String} fields The data for the new publication
+ * @param {number: Number, suffix: String, decisionDate: Object, receptionDate: Object, publicationDueDate: Object, shortTitle: String, longTitle: String, newStatus: String} fields The data for the new publication
  */
 function createPublicationWithStatus(fields) {
   // TODO-COMMAND unused command for now
