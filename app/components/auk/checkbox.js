@@ -16,6 +16,7 @@ import Component from '@glimmer/component';
  * @argument checked {Boolean}
  * @argument disabled {Boolean}
  * @argument label {String}
+ * @argument labelSkin {String}
  */
 export default class Checkbox extends Component {
   get labelSkinClass() {
