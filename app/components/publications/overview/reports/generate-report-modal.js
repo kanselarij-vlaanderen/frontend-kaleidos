@@ -6,6 +6,13 @@ import { task, timeout } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import * as CONFIG from 'frontend-kaleidos/config/config';
 
+const VISIBLE_ROLE_URIS = [
+  CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT,
+  CONSTANTS.MANDATE_ROLES.MINISTER,
+  CONSTANTS.MANDATE_ROLES.VOORZITTER,
+  CONSTANTS.MANDATE_ROLES.GEMEENSCHAPSMINISTER,
+];
+
 /**
  * @argument title
  * @argument onClose
@@ -65,6 +72,10 @@ export default class GenerateReportModalComponent extends Component {
     if (this.args.userInputFields.regulationTypes) {
       this.loadRegulationTypes.perform();
     }
+
+    if (this.args.userInputFields.mandateePersons) {
+      this.loadVisibleRoles.perform();
+    }
   }
 
   get isLoading() {
@@ -95,10 +106,8 @@ export default class GenerateReportModalComponent extends Component {
     const canValidateRange =
       this.decisionDateRangeStart !== undefined &&
       this.decisionDateRangeEnd !== undefined;
-    if (!canValidateRange) {
-      // return true: no range => so skip this step
-      return true;
-    }
+    // return true: no range => so skip this step
+    if (!canValidateRange) return true;
     return this.decisionDateRangeStart < this.decisionDateRangeEnd;
   }
 
@@ -144,6 +153,11 @@ export default class GenerateReportModalComponent extends Component {
   }
 
   @task
+  *loadVisibleRoles() {
+    this.visibleRoles = yield Promise.all(VISIBLE_ROLE_URIS.map((role) => this.store.findRecordByUri('role', role)));
+  }
+
+  @task
   *loadMandateePersons() {
     // set mandatees to unresolved promise in order to notify EmberPowerSelect of loading state
     // this are the default options of the EmberPowerSelect (no searchText)
@@ -162,6 +176,10 @@ export default class GenerateReportModalComponent extends Component {
 
   @task
   *fetchMandateePersons(searchText) {
+    if (this.loadVisibleRoles.isRunning) {
+      yield this.loadVisibleRoles.last;
+    }
+
     const [dateRangeStart, dateRangeEnd] = this.dateRange;
 
     // As long as mu-cl-resources does not support an OR filter
@@ -172,7 +190,8 @@ export default class GenerateReportModalComponent extends Component {
     //  * allow old publication-flows to be searched
     //      which have a different role and government-body
     const commonQueryOptions = {
-      'filter[:has:mandatees]': true,
+      // 'filter[:has:mandatees]': true,
+      'filter[mandatees][mandate][role][:id:]': this.visibleRoles.map((role) => role.id).join(','),
       'filter[mandatees][:lt:start]':
         toDateWithoutUTCOffset(dateRangeEnd).toISOString(), // active ranges of mandatees are stored as dateTimes, but with time set to 0:00 UTC
       // since the frontend is in a different timezone, the we need to compensate for this
