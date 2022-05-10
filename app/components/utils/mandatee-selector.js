@@ -80,6 +80,12 @@ export default class MandateeSelector extends Component {
     if (searchTerm) {
       queryOptions['filter[person][last-name]'] = searchTerm;
     }
+    /* WARNING: use of the :has-no:  filter is officially only documented for use with relations, not properties.
+    However, at the time of writing, this method works in the case of xsd:datetime as well.
+    If this test case should ever fail, the loadCurrentBodyMandatees method can be adjusted
+    to fetch the mandatee with the most recent start date,
+    and then use that start date to get the current government body.
+    This is less efficient than the current method, but would require no hard-coding and does not rely on :has-no: */
     queryOptions['filter[:has-no:end]'] = true;
 
     return await this.store.query('mandatee', queryOptions);
@@ -92,10 +98,8 @@ export default class MandateeSelector extends Component {
     if (searchTerm) {
       queryOptions['filter[person][last-name]'] = searchTerm;
     }
-    queryOptions['filter[:lte:start]'] =
-      this.referenceDate.toISOString();
-    queryOptions['filter[:gte:end]'] =
-      this.referenceDate.toISOString();
+    queryOptions['filter[:lte:start]'] = this.referenceDate.toISOString();
+    queryOptions['filter[:gte:end]'] = this.referenceDate.toISOString();
 
     return await this.store.query('mandatee', queryOptions);
   }
