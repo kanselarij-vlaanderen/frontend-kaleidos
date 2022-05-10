@@ -340,6 +340,7 @@ const selectors = {
 
   // translations-info-panel
   translationsInfoPanel: {
+    // TODO-SELECTOR unused selectors
     openEdit: '[data-test-translations-info-panel-edit]',
     edit: {
       dueDate: '[data-test-translations-info-panel-edit-due-date]',
