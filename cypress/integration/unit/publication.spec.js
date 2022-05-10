@@ -424,10 +424,6 @@ context('Publications tests', () => {
   });
 
   it('publications:decisions: check date received', () => {
-    // const fields1 = {
-    //   number: 1250,
-    //   shortTitle: 'test beslissing zonder datum',
-    // };
     const fields2 = {
       number: 1251,
       shortTitle: 'test beslissing met datum',
@@ -437,13 +433,8 @@ context('Publications tests', () => {
     const file = {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     };
-    // const noDate = Cypress.dayjs();
     const laterDate = fields2.decisionDate.add(1, 'days');
     const earlierDate = laterDate.subtract(1, 'days');
-
-    // without date
-    // cy.createPublication(fields1);
-    // cy.get(publication.publicationCaseInfo.openingDate).contains(noDate);
 
     // with date
     cy.createPublication(fields2);
