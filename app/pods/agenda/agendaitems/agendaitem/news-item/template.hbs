@@ -15,15 +15,26 @@
           {{t "cancel"}}
         </AuButton>
       {{else}}
-        <AuButton
-          @icon="pencil"
-          @iconAlignment="left"
-          @skin="link"
-          data-test-route-agenda---news-item-edit
-          {{on "click" this.startEditing}}
-        >
-            {{t "edit"}}
-        </AuButton>
+        <AuButtonGroup>
+          <AuButton
+            @icon="expand"
+            @iconAlignment="left"
+            @skin="link"
+            data-test-route-agenda---news-item-edit
+            {{on "click" this.startEditingFullscreen}}
+          >
+            Tekst bewerken
+          </AuButton>
+          <AuButton
+            @icon="pencil"
+            @iconAlignment="left"
+            @skin="link"
+            data-test-route-agenda---news-item-edit
+            {{on "click" this.startEditing}}
+          >
+              {{t "edit"}}
+          </AuButton>
+        </AuButtonGroup>
       {{/if}}
     {{else}}
       <AuButton
@@ -58,6 +69,7 @@
       @agendaitem={{this.agendaitem}}
       @onCancel={{this.stopEditing}}
       @onSave={{this.stopEditing}}
+      @fullscreen={{this.isEditingFullscreen}}
     />
   {{else}}
     <Agenda::Agendaitem::AgendaitemNewsItem

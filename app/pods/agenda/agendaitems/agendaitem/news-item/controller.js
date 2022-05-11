@@ -12,6 +12,7 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
   @tracked notaModifiedTime = null;
 
   @tracked isEditing = false;
+  @tracked isEditingFullscreen = false;
   @tracked notaModifiedWarningConfirmed = false;
 
   // Nota changed since last newsitem edit
@@ -36,6 +37,12 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
   @action
   startEditing() {
     this.isEditing = true;
+  }
+
+  @action
+  startEditingFullscreen() {
+    this.isEditing = true;
+    this.isEditingFullscreen = true;
   }
 
   @action
