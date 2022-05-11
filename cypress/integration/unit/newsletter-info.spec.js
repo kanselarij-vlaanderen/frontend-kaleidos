@@ -635,4 +635,58 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get('em').contains('Italic');
     cy.get('strong').contains('Bold');
   });
+
+  it('should test the rdfa editor keypresses', () => {
+    cy.visit('/vergadering/5EBA94D7751CF70008000001/kort-bestek');
+    cy.get(newsletter.buttonToolbar.edit).click();
+
+    cy.get(dependency.rdfa.editorInner).type('{ctrl+u}Underline')
+      .type('{ctrl+u} ');
+    cy.get('u').contains('Underline');
+    cy.get(dependency.rdfa.editorInner).type('{ctrl+i}Italic')
+      .type('{ctrl+i} ');
+    cy.get('em').contains('Italic');
+    cy.get(dependency.rdfa.editorInner).type('{ctrl+b}Bold')
+      .type('{ctrl+b} ');
+    cy.get('strong').contains('Bold');
+
+    // check single backspace
+    cy.get(dependency.rdfa.editorInner).type('{selectAll}{backspace}');
+    cy.get(dependency.rdfa.editorInner).should('not.contain', 'Bol');
+    // check single delete
+    cy.get(dependency.rdfa.editorInner).type('Bold')
+      .type('{selectall}{del}');
+    cy.get(dependency.rdfa.editorInner).should('not.contain', 'Bold');
+    // check separate backspaces
+    cy.get(dependency.rdfa.editorInner).type('Bold')
+      .type('{end}{backspace}')
+      .type('{backspace}')
+      .type('{backspace}')
+      .type('{backspace}');
+    cy.get(dependency.rdfa.editorInner).should('not.contain', 'Bol');
+    // check separate deletes
+    cy.get(dependency.rdfa.editorInner).type('Bold')
+      .type('{home}{del}')
+      .type('{del}')
+      .type('{del}')
+      .type('{del}');
+    cy.get(dependency.rdfa.editorInner).should('not.contain', 'old');
+    cy.get(newsletter.editItem.cancel).click();
+
+    // check enter
+    cy.get(newsletter.buttonToolbar.edit).click();
+    cy.get(dependency.rdfa.editorInner).find('br')
+      .should('not.exist');
+    cy.get(dependency.rdfa.editorInner).type('{enter}');
+    cy.get(dependency.rdfa.editorInner).find('br');
+    // check space
+    cy.get(dependency.rdfa.editorInner).clear()
+      .type(' ');
+    cy.get(dependency.rdfa.editorInner).should('contain', ' ');
+    cy.get(dependency.rdfa.editorInner).should('not.contain', '\u00a0');
+    // check &nbsp;
+    cy.get(dependency.rdfa.editorInner).clear()
+      .type('test  test');
+    cy.get(dependency.rdfa.editorInner).should('contain', '\u00a0');
+  });
 });
