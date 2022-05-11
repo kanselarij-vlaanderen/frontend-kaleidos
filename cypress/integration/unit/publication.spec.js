@@ -375,10 +375,91 @@ context('Publications tests', () => {
       .should('have.length', 1);
   });
 
-  // TODO-PUBLICATION code snipper for searching in overview table
-  // cy.get(publication.publicationTableRow.row.number).contains(`${pubNumber}`)
-  //   .parents(publication.publicationTableRow.rows)
-  //   .find(publication.publicationTableRow.row.goToPublication)
-  //   .click();
-  // cy.wait('@getNewPublicationDetail');
+  it('publications:caseInfo: check publication number uniqueness', () => {
+    const fieldsUsed = {
+      number: 1221,
+      shortTitle: 'test',
+    };
+    const fields1 = {
+      number: 1222,
+      shortTitle: 'test',
+    };
+    const fields2 = {
+      number: 1223,
+      shortTitle: 'test',
+    };
+
+    cy.createPublication(fieldsUsed);
+    cy.createPublication(fields1);
+    cy.intercept('PATCH', '/identifications/**').as('patchIdentifications');
+    cy.intercept('PATCH', '/structured-identifiers/**').as('patchStructuredIdentifiers');
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlows');
+    cy.get(publication.publicationCaseInfo.edit).click();
+    cy.get(publication.publicationCaseInfo.editView.publicationNumber).click()
+      .clear()
+      .type(fieldsUsed.number);
+    cy.get(auk.formHelpText).should('exist');
+    cy.get(publication.publicationCaseInfo.editView.suffix).type('BIS');
+    cy.get(auk.formHelpText).should('not.exist');
+    cy.get(publication.publicationCaseInfo.editView.save).click()
+      .wait('@patchIdentifications')
+      .wait('@patchStructuredIdentifiers')
+      .wait('@patchPublicationFlows');
+
+    cy.createPublication(fields2);
+    cy.get(publication.publicationCaseInfo.edit).click();
+    cy.get(publication.publicationCaseInfo.editView.publicationNumber).click()
+      .clear()
+      .type(fieldsUsed.number);
+    cy.get(publication.publicationCaseInfo.editView.suffix).type('BIS');
+    cy.get(auk.formHelpText).should('exist');
+    cy.get(publication.publicationCaseInfo.editView.suffix).clear()
+      .type('TER');
+    cy.get(auk.formHelpText).should('not.exist');
+    // changes not saved
+    cy.get(publication.publicationCaseInfo.editView.suffix).clear()
+      .type('BIS');
+    cy.get(auk.formHelpText).should('exist');
+    cy.get(publication.publicationHeader.number).contains(`${fieldsUsed.number} TER`);
+  });
+
+  it('publications:decisions: check date received', () => {
+    const fields2 = {
+      number: 1251,
+      shortTitle: 'test beslissing met datum',
+      decisionDate: Cypress.dayjs().add(1, 'weeks')
+        .day(3),
+    };
+    const file = {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf',
+    };
+    const laterDate = fields2.decisionDate.add(1, 'days');
+    const earlierDate = laterDate.subtract(1, 'days');
+
+    // with date
+    cy.createPublication(fields2);
+    cy.intercept('GET', '/pieces?filter**publication-flow**').as('getPieces');
+    cy.get(publication.publicationNav.decisions).click()
+      .wait('@getPieces');
+    // Make sure the page transitioned
+    cy.url().should('contain', '/besluiten');
+    cy.get(publication.decisionsInfoPanel.view.decisionDate).contains(fields2.decisionDate.format('DD-MM-YYYY'));
+    // add later date
+    cy.get(publication.decisionsIndex.uploadReference).click();
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.get(auk.datepicker).click();
+    cy.setDateInFlatpickr(laterDate);
+    cy.get(publication.referenceUpload.save).click();
+    cy.get(publication.documentCardStep.card).contains(laterDate.format('DD-MM-YYYY'));
+
+    // add earlier date
+    cy.get(publication.decisionsIndex.uploadReference).click();
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.get(auk.datepicker).click();
+    cy.setDateInFlatpickr(earlierDate);
+    cy.get(publication.referenceUpload.save).click();
+    cy.get(publication.documentCardStep.card).should('have.length', 2)
+      .eq(0)
+      .contains(earlierDate.format('DD-MM-YYYY'));
+  });
 });

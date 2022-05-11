@@ -44,7 +44,10 @@ const selectors = {
   agendaDetailSidebarItem: {
     shortTitle: '[data-test-agenda-detail-sidebar-item-short-title]',
     confidential: '[data-test-agenda-detail-sidebar-item-confidential]',
-    status: '[data-test-agenda-detail-sidebar-item-status]',
+    status: {
+      formallyOk: '[data-test-agenda-detail-sidebar-item-status-pill] > .ki-check',
+      notYetFormallyOk: '[data-test-agenda-detail-sidebar-item-status-pill] > .ki-circle-question',
+    },
     // Test tag is not possible, CSS is added conditionally
     retracted: '.auk-u-opacity--1\\/3',
   },
@@ -60,7 +63,6 @@ const selectors = {
     subitem: '[data-test-agenda-overview-item-sub-item]', // this contains short title
     title: '[data-test-agenda-overview-item-title]',
     formallyOk: '[data-test-agenda-overview-item-formally-ok]',
-    confidentialityIcon: '[data-test-agenda-overview-item-confidentiality-locked]',
     status: '[data-test-agenda-overview-item-status]',
   },
 
