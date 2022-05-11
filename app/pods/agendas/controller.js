@@ -24,7 +24,7 @@ export default class AgendasController extends Controller {
   @tracked size = 10;
   @tracked sort = 'created-for.is-final,-created-for.planned-start,created-for.kind.label';
 
-  dateRegex = /^(?:\d{1,2}\/)??(?:\d{1,2}\/)?\d{4}$/;
+  dateRegex = /^(?:(\d{1,2})[/-])??(?:(\d{1,2})[/-])?(\d{4})$/;
 
   @restartableTask
   *debouncedSetFilter(event) {

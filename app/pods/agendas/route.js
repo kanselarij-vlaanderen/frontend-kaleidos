@@ -7,7 +7,7 @@ export default class AgendasRoute extends Route {
   @service router;
   @service('session') simpleAuthSession;
 
-  dateRegex = /^(?:(\d{1,2})-)??(?:(\d{1,2})-)?(\d{4})$/;
+  dateRegex = /^(?:(\d{1,2})[/-])??(?:(\d{1,2})[/-])?(\d{4})$/;
 
   queryParams = {
     filter: {
