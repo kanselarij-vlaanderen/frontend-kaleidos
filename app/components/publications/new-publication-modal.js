@@ -16,11 +16,13 @@ import { isBlank } from '@ember/utils';
  *  longTitle: string,
  *  decisionDate: Date,
  *  publicationDueDate: Date,
- * })) => Promise<void> } onSave
+ * }) => Promise<void> } onSave
  */
 export default class NewPublicationModal extends Component {
   @service publicationService;
   @service store;
+  @service toaster;
+  @service intl;
 
   @tracked number = null;
   @tracked suffix = null;
@@ -32,7 +34,6 @@ export default class NewPublicationModal extends Component {
 
   @tracked numberIsAlreadyUsed = false;
   @tracked numberIsRequired = false;
-  @tracked numberResetAfterSaveValidation = false;
   @tracked isEnabledErrorOnShortTitle = false;
 
   constructor() {
@@ -53,8 +54,6 @@ export default class NewPublicationModal extends Component {
   get publicationNumberErrorTranslationKey() {
     if (this.numberIsRequired) {
       return 'publication-number-required-and-numeric';
-    } else if (this.numberResetAfterSaveValidation) {
-      return 'publication-number-already-taken-new-number-created';
     } else if (this.numberIsAlreadyUsed) {
       return 'publication-number-already-taken';
     } else {
@@ -111,12 +110,24 @@ export default class NewPublicationModal extends Component {
     yield this.validateIsPublicationNumberAlreadyTaken.perform();
   }
 
+  @restartableTask
+  *preSaveValidation() {
+    yield this.validateIsPublicationNumberAlreadyTaken.perform();
+    if (this.numberIsAlreadyUsed) {
+      // another user was creating a publication at the same time, we suggest a new number and show a toast
+      yield this.initPublicationNumber.perform();
+      this.toaster.warning(this.intl.t('publication-number-already-taken-new-number-created'));
+      // the new suggested number is already valid
+      this.numberIsAlreadyUsed = false;
+      return true;
+    }
+    return false;
+  }
+
   @task
   *save() {
-    yield this.validateIsPublicationNumberAlreadyTaken.perform();
-    if (!this.isValid) {
-      yield this.initPublicationNumber.perform();
-      this.numberResetAfterSaveValidation = true;
+    const numberWasRecentlyUsed = yield this.preSaveValidation.perform();
+    if (!this.isValid || numberWasRecentlyUsed) {
       return;
     }
 
