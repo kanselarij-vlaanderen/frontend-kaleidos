@@ -57,7 +57,7 @@
 
       <div class="auk-o-flex auk-o-flex--justify-between">
         {{#if this.subcase.subcaseName}}
-          <Auk::Pill class="vlc-agenda-meta__times-passed">
+          <Auk::Pill data-test-agenda-overview-item-subcase-name class="vlc-agenda-meta__times-passed">
             {{!capitalization using helper instead of css class:
                   because of `display: inline-flex` property of Auk::Pill
                   it is not affected by the `::first-letter` selector
