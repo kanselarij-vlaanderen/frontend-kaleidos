@@ -1,12 +1,12 @@
 <div class="auk-o-flex--justify-between">
   {{#if this.canEditNewsletter}}
-  <Auk::Button
-    data-test-newsletter-table-button-toolbar-edit={{true}}
-    @skin="borderless"
-    @layout="icon-only"
-    @icon="pencil"
-    {{on "click" @onEdit}}
-  />
+    <Auk::Button
+      data-test-newsletter-table-button-toolbar-edit={{true}}
+      @skin="borderless"
+      @layout="icon-only"
+      @icon="pencil"
+      {{on "click" @onEdit}}
+    />
   {{/if}}
   {{#if (is-pending (await @agendaitem.notaOrVisienota))}}
     <div class="auk-loader" role="alert" aria-busy="true">
@@ -25,7 +25,11 @@
     >
       <:floater>
         <EmberTooltip @side="bottom" @tooltipClass="auk-tooltip">
-          {{if (await @agendaitem.notaOrVisienota) (t "open-note") (t "no-nota")}}
+          {{if
+            (await @agendaitem.notaOrVisienota)
+            (t "open-note")
+            (t "no-nota")
+          }}
         </EmberTooltip>
       </:floater>
     </Auk::Button>
