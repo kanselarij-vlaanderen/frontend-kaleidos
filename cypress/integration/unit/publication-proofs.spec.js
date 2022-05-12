@@ -213,4 +213,54 @@ context('Publications proofs tests', () => {
     cy.get(publication.proofReceivedPanel.panel).find(publication.documentsList.piece)
       .should('have.length', 2);
   });
+
+  it('should open a publication, upload proof without request, then request proof and check history', () => {
+    const fields = {
+      number: 1661,
+      shortTitle: 'test drukproefaanvraag',
+    };
+    const file = {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf',
+    };
+    cy.intercept('GET', '/proofing-activities?filter**subcase**').as('getProofingModel');
+
+    cy.createPublication(fields);
+    cy.get(publication.publicationNav.publishpreview).click()
+      .wait('@getProofingModel');
+    // Make sure the page transitioned
+    cy.url().should('contain', '/drukproeven');
+
+    // upload proofwithout request
+    cy.get(publication.proofsIndex.upload).click();
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.intercept('GET', '/pieces/**').as('getPieces');
+    cy.intercept('GET', '/proofing-activities?filter**subcase**').as('reloadProofingModel');
+    cy.get(publication.proofUpload.save).click()
+      .wait('@getPieces')
+      .wait('@reloadProofingModel');
+    cy.get(publication.proofReceivedPanel.panel).should('have.length', 1);
+
+    // request proof
+    cy.get(publication.proofsIndex.newRequest).click();
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.intercept('POST', 'pieces').as('createNewPiece');
+    cy.intercept('POST', 'proofing-activities').as('createRequestActivity');
+    cy.intercept('POST', 'emails').as('createEmail');
+    cy.intercept('GET', 'request-activities/**/proofing-activity').as('getProofingsActivity');
+    cy.get(publication.proofRequest.save).click();
+    cy.wait('@createNewPiece')
+      .wait('@createRequestActivity')
+      .wait('@createEmail')
+      .wait('@getProofingsActivity');
+
+    // check history
+    cy.get(publication.proofsIndex.panelBody).children()
+      .as('panels');
+    cy.get('@panels').should('have.length', 2);
+    cy.get('@panels').eq(0)
+      .contains('Aanvraag verzonden');
+    cy.get('@panels').eq(1)
+      .find(publication.proofReceivedPanel.panel)
+      .contains('Drukproef ontvangen');
+  });
 });
