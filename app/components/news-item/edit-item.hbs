@@ -73,13 +73,37 @@
       </p>
     </div>
     <div class="auk-form-group">
-      <div class={{if this.isFullscreen 'auk-rdfa-holder auk-rdfa-fullscreen' 'auk-rdfa-holder'}}>
+      <div class={{if (or this.isFullscreen @fullscreen) 'auk-rdfa-holder auk-rdfa-fullscreen' 'auk-rdfa-holder'}}>
         <div class="auk-rdfa-holder__header auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
           <Auk::Label class="auk-u-p-0">
             {{t "decision-in-newsletter"}}
-            <span class={{if this.isFullscreen '' 'au-u-hidden-visually'}}>  voor {{@newsletterInfo.title}}</span>
+            <span class={{if (or this.isFullscreen @fullscreen) '' 'au-u-hidden-visually'}}>  voor {{@newsletterInfo.title}}</span>
           </Auk::Label>
-          <Auk::Button @skin="borderless" @icon={{if this.isFullscreen 'minimize' 'expand'}} {{action "fullscreen"}}>{{if this.isFullscreen 'Sluit volledig scherm' 'Volledig scherm'}}</Auk::Button>
+          {{#if @fullscreen}}
+          <AuButtonGroup>
+            <Auk::Button @skin="borderless" @icon="minimize" {{action "closeFullscreen"}}>Sluit volledig scherm</Auk::Button>
+            <WebComponents::VlSaveButton
+              data-test-newsletter-edit-item-save={{true}}
+              @text={{t "save"}}
+              @isLoading={{this.isLoading}}
+              @saveAction={{action "trySaveChanges"}}
+            />
+          </AuButtonGroup>
+          {{else}}
+            {{#if this.isFullscreen}}
+            <AuButtonGroup>
+              <Auk::Button @skin="borderless" @icon="minimize" {{action "fullscreen"}}>Sluit volledig scherm</Auk::Button>
+              <WebComponents::VlSaveButton
+                data-test-newsletter-edit-item-save={{true}}
+                @text={{t "save"}}
+                @isLoading={{this.isLoading}}
+                @saveAction={{action "trySaveChanges"}}
+              />
+            </AuButtonGroup>
+            {{else}}
+            <Auk::Button @skin="borderless" @icon="expand" {{action "fullscreen"}}>Volledig scherm</Auk::Button>
+            {{/if}}
+          {{/if}}
         </div>
         <WebComponents::VlRdfaEditor
           data-test-newsletter-edit-item-rdfa-editor={{true}}

@@ -61,6 +61,7 @@ export default Component.extend({
     }
     await newsletterInfo.save().then(async() => {
       this.set('isLoading', false);
+      this.set('fullscreen', false);
     });
     if (this.onSave) {
       this.onSave();
@@ -79,6 +80,11 @@ export default Component.extend({
   actions: {
     fullscreen() {
       this.toggleProperty('isFullscreen');
+    },
+
+    closeFullscreen() {
+      this.set('isFullscreen', false);
+      this.set('fullscreen', false);
     },
 
     async trySaveChanges() {
