@@ -49,11 +49,11 @@ context('Subcase tests', () => {
   // const caseTitle = 'Cypress test: subcases - 1594024946'; // The case is in the default data set with id 5F02E3F87DE3FC0008000002
   const subcaseTitleShort = `Cypress test: add subcase - ${currentTimestamp()}`;
 
-  // before(() => {
-  //   cy.login('Admin');
-  //   cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
-  //   cy.logoutFlow();
-  // });
+  before(() => {
+    cy.login('Admin');
+    cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
+    cy.logoutFlow();
+  });
 
   beforeEach(() => {
     cy.login('Admin');
@@ -348,7 +348,7 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseDescription.decidedOn).contains(agendaDate.format('DD-MM-YYYY'));
   });
 
-  it.only('check capital letters of subcase name', () => {
+  it('check capital letters of subcase name', () => {
     const capital = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     const nonCapital = 'principiële goedkeuring m.h.o. op adviesaanvraag';
 
