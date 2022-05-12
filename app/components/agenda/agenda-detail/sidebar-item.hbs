@@ -20,76 +20,69 @@
       {{/if}}
     </span>
     <div class="vlc-agenda-detail-sidebar__text-container">
-      <h4 class="vlc-agenda-detail-sidebar__subject">
-        <pre data-test-agenda-detail-sidebar-item-short-title class="auk-u-text-pre-line">
-          {{#if @agendaitem.shortTitle}}
-            {{@agendaitem.shortTitle}}
-          {{else}}
-            {{@agendaitem.title}} {{!-- Fallback for legacy data that doesn't have a short title --}}
-          {{/if}}
-        </pre>
-      </h4>
-      {{#if (not @agendaitem.aboutToDelete)}}
+      <div class="auk-o-flex auk-o-flex--justify-between auk-o-flex--align-start">
+        <h4 class="vlc-agenda-detail-sidebar__subject">
+          <pre data-test-agenda-detail-sidebar-item-short-title class="auk-u-text-pre-line">
+            {{!-- Fallback for legacy data that doesn't have a short title --}}
+            {{or @agendaitem.shortTitle @agendaitem.title}}
+          </pre>
+        </h4>
+        {{#unless @agendaitem.aboutToDelete}}
+          <div class="vlc-agenda-detail-sidebar__labels auk-o-flex--align-end">
+
+            {{#if this.loadNewsletterVisibility.lastSuccessful}}
+              {{#unless this.newsletterIsVisible}}
+                <Auk::Pill @skin="blank" @layout="icon-only">
+                  <Auk::Icon @name="not-visible" />
+                  <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
+                    <p>
+                      {{t "not-visible-in-newsletter"}}
+                    </p>
+                  </EmberTooltip>
+                </Auk::Pill>
+              {{/unless}}
+            {{else}}
+              <Auk::Pill @skin="blank" @layout="icon-only">
+                <Auk::Icon @name="three-dots" />
+                <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
+                  <p>
+                    {{t "loading"}}
+                  </p>
+                </EmberTooltip>
+              </Auk::Pill>
+            {{/if}}
+
+            {{#if this.subcase.confidential}}
+              <AuPill @skin="warning" @icon="lock-closed" data-test-agenda-detail-sidebar-item-confidential={{true}}>
+                <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
+                  <p>
+                    {{t "confidential"}}
+                  </p>
+                </EmberTooltip>
+              </AuPill>
+            {{/if}}
+
+            {{#if @showFormallyOkStatus}}
+              <Auk::Pill data-test-agenda-detail-sidebar-item-status-pill @skin="blank" @layout="icon-only" class="{{@agendaitem.formallyOkToShow.classNames}}">
+                <i class="{{@agendaitem.formallyOkToShow.iconClassNames}} {{@agendaitem.formallyOkToShow.classNames}}" />
+                <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
+                  <p>
+                    {{@agendaitem.formallyOkToShow.label}}
+                  </p>
+                </EmberTooltip>
+              </Auk::Pill>
+            {{/if}}
+          </div>
+        {{/unless}}
+      </div>
+
+      {{#if (and (not @agendaitem.aboutToDelete) @isNew)}}
         <div>
           <div class="auk-o-flex auk-o-flex--justify-between">
-            <div class="auk-o-flex auk-o-flex--align-end auk-u-mt-2">
-              {{#if @isNew}}
-                <span class="vlc-agenda-meta__recently-added">
-                  <Auk::Icon @name="calendar-new" @size="small" />
-                  <EmberTooltip @side="top-start" @tooltipClass="auk-tooltip">
-                    <p>
-                      {{t "added-agendaitem-text"}}
-                    </p>
-                  </EmberTooltip>
-                </span>
-              {{/if}}
-
-              {{#if this.loadNewsletterVisibility.lastSuccessful}}
-                {{#if (not this.newsletterIsVisible)}}
-                  <span class="vlc-agenda-meta__recently-added">
-                    <Auk::Icon @name="not-visible" @size="small" />
-                    <EmberTooltip @side="top-start" @tooltipClass="auk-tooltip">
-                      <p>
-                        {{t "not-visible-in-newsletter"}}
-                      </p>
-                    </EmberTooltip>
-                  </span>
-                {{else}}
-                  {{!-- TODO: this icon is merely here as an invisible placeholder.
-                    This keeps element-height the same at all times in order to prevent "jumping" when data is being side-loaded.
-                    This should be tackled differently through modified design --}}
-                  {{!-- template-lint-disable no-inline-styles --}}
-                  <i
-                    class="ki ki-not-visible auk-u-mr-2 auk-u-opacity--1/2"
-                    style="visibility:hidden"
-                  ></i>
-                  {{!-- template-lint-enable no-inline-styles --}}
-                {{/if}}
-              {{else}}
-                {{!-- TODO: design loading state for newsletter visibility --}}
-                <i class="ki-circle-question auk-u-mr-2 auk-u-opacity--1/2">
-                  <EmberTooltip @side="top" @tooltipClass="auk-tooltip">
-                    <p>
-                      {{t "loading"}}
-                    </p>
-                  </EmberTooltip>
-                </i>
-              {{/if}}
-
-              {{#if this.subcase.confidential}}
-                <span>
-                  <Auk::Icon data-test-agenda-detail-sidebar-item-confidential={{true}} @name="lock-closed" @size="small" />
-                </span>
-              {{/if}}
-            </div>
-
-            <div class="vlc-agenda-detail-sidebar__formally-ok-label auk-o-flex--align-end">
-              {{#if @showFormallyOkStatus}}
-                <i class="{{@agendaitem.formallyOkToShow.iconClassNames}} {{@agendaitem.formallyOkToShow.classNames}}" />
-                <p class="{{@agendaitem.formallyOkToShow.classNames}}" data-test-agenda-detail-sidebar-item-status>
-                  {{@agendaitem.formallyOkToShow.label}}
-                </p>
-              {{/if}}
+            <div class="auk-o-flex auk-o-flex--align-end vlc-agenda-detail-sidebar-item__icon">
+              <p class="auk-u-text-small auk-u-muted">
+                <Auk::ColorBadge @skin="success" /> {{t "added-agendaitem-text"}}
+              </p>
             </div>
           </div>
         </div>
