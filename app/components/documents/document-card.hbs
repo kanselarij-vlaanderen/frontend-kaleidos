@@ -1,5 +1,6 @@
 <div
-  class="vlc-document-card {{if this.documentContainer.aboutToDelete "vlc-document--deleted-state"}}"
+  class="vlc-document-card
+    {{if this.documentContainer.aboutToDelete 'vlc-document--deleted-state'}}"
   {{did-update (perform this.loadPieceRelatedData) @piece}}
   {{did-update (perform this.loadPieceRelatedData) @documentContainer}}
   data-test-document-card

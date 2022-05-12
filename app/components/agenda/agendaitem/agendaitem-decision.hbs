@@ -3,7 +3,7 @@
     <Auk::Toolbar @auto={{true}} as |Toolbar|>
       <Toolbar.Group @position="left" as |Group|>
         <Group.Item class="auk-content">
-          <h4 class="auk-u-my-2">{{t "result-decision" }}</h4>
+          <h4 class="auk-u-my-2">{{t "result-decision"}}</h4>
           {{#if (not this.isEditing)}}
             <div class="auk-o-flex auk-u-my-2">
               {{#if @treatment.decisionResultCode}}
@@ -20,7 +20,7 @@
                   @skin="tertiary"
                   @icon="pencil"
                   class="auk-button--tiny"
-                    @layout="icon-only"
+                  @layout="icon-only"
                   {{on "click" this.toggleEdit}}
                   data-test-agendaitem-decision-edit
                 >
@@ -46,7 +46,8 @@
                 @skin="borderless"
                 @icon="three-dots"
                 data-test-agendaitem-decision-dropdown-menu-options
-                as |Menu|>
+                as |Menu|
+              >
                 <Menu.Item
                   @skin="danger"
                   data-test-agendaitem-decision-delete
@@ -62,7 +63,7 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
   <Auk::Panel::Body @noPadding={{true}}>
-  {{#if this.loadReport.isIdle}}
+    {{#if this.loadReport.isIdle}}
       {{#if this.report}}
         <Documents::DocumentCard
           @piece={{this.report}}
@@ -74,16 +75,16 @@
         />
       {{else}}
         {{#if this.currentSession.isEditor}}
-        <div class="auk-u-p-2">
-          <Auk::Button
-            @skin="borderless"
-            @icon="upload"
-            {{on "click" this.toggleIsAddingReport}}
-            data-test-agendaitem-decision-upload-file
-          >
-            {{t "signed-decision-add"}}
-          </Auk::Button>
-        </div>
+          <div class="auk-u-p-2">
+            <Auk::Button
+              @skin="borderless"
+              @icon="upload"
+              {{on "click" this.toggleIsAddingReport}}
+              data-test-agendaitem-decision-upload-file
+            >
+              {{t "signed-decision-add"}}
+            </Auk::Button>
+          </div>
         {{/if}}
       {{/if}}
     {{else}}

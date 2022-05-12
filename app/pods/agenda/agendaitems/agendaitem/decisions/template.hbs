@@ -23,8 +23,8 @@
 </Auk::Toolbar>
 {{#each this.treatments as |treatment|}}
   <div class="auk-u-mb-2">
-    {{!-- As long as we see DecisionActivity & AgendaItemTreatment as 1 entity,
-    we need to ensure at least 1 treatment for a relationship path to newsletterInfo --}}
+    {{! As long as we see DecisionActivity & AgendaItemTreatment as 1 entity,
+    we need to ensure at least 1 treatment for a relationship path to newsletterInfo }}
     <Agenda::Agendaitem::AgendaitemDecision
       @treatment={{treatment}}
       @onDeleteTreatment={{this.refresh}}

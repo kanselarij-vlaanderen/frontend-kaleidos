@@ -5,12 +5,13 @@
       @options={{this.decisionResultCodes}}
       @selected={{@selected}}
       @onChange={{@onChange}}
-    as |resultCode|>
+      as |resultCode|
+    >
       <Decision::DecisionResultSelect::SelectItem
         @decisionResultCode={{resultCode}}
       />
     </PowerSelect>
   </div>
 {{else}}
-  <Auk::Loader/>
+  <Auk::Loader />
 {{/if}}
