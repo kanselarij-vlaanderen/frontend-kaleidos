@@ -35,6 +35,6 @@ export default class ButtonToolbarNewsletterTable extends Component {
   }
 
   get canEditNewsletter(){
-    return this.currentSession.isEditor;
+    return this.currentSession.may('manage-newsletter-infos');
   }
 }
