@@ -3,27 +3,75 @@
     <Toolbar.Group @position="left" as |Group|>
       <Group.Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
-          <div class="auk-o-flex auk-o-flex--vertical-center">
-            <h4
-              class="auk-toolbar-complex__title"
-              data-test-agenda-header-title
-            >
-              {{t "agenda-of"}}
-              {{moment-format @meeting.plannedStart "DD MMMM YYYY"}}
-              {{#unless @meeting.isPreKaleidos}}
-                {{t "at"}}
-                {{moment-format @meeting.plannedStart "HH:mm"}}
-              {{/unless}}
-            </h4>
-            {{#if @meeting.kind.label}}
-              <span
-                data-test-agenda-header-kind
-                class="auk-u-text-muted auk-body-1"
+          <div class="auk-o-flex auk-o-flex--vertical">
+            <div class="auk-o-flex auk-o-flex--vertical-center">
+              <h4
+                class="auk-toolbar-complex__title"
+                data-test-agenda-header-title
               >
-                -
-                {{@meeting.kind.label}}
-              </span>
-            {{/if}}
+                {{t "agenda-of"}}
+                {{moment-format @meeting.plannedStart "DD MMMM YYYY"}}
+                {{#unless @meeting.isPreKaleidos}}
+                  {{t "at"}}
+                  {{moment-format @meeting.plannedStart "HH:mm"}}
+                {{/unless}}
+              </h4>
+              {{#if @meeting.kindToShow.label}}
+                <span data-test-agenda-header-kind class="auk-u-muted auk-body-1">
+                  -
+                  {{await @meeting.kindToShow.label}}
+                </span>
+              {{/if}}
+            </div>
+
+            <div>
+              {{#if @meeting.releasedDecisions}}
+                {{#if (is-same-or-before @meeting.releasedDecisions [(moment-format (now) "DD-MM-YY")] [precision='milliseconds'])}}
+                <AuPill @skin="success" @icon="check" class="auk-u-mr-2 auk-u-mt-2">
+                  Beslissingen zijn vrijgegeven op
+                  {{moment-format @meeting.releasedDecisions "DD-MM-YYYY"}}
+                  om
+                  {{moment-format @meeting.releasedDecisions "HH:mm"}}
+                </AuPill>
+                {{else}}
+                <AuPill @skin="warning" @icon="clock" class="auk-u-mr-2 auk-u-mt-2">
+                  Beslissingen worden vrijgegeven op
+                  {{moment-format @meeting.releasedDecisions "DD-MM-YYYY"}}
+                  om
+                  {{moment-format @meeting.releasedDecisions "HH:mm"}}
+                </AuPill>
+                {{/if}}
+              {{/if}}
+              {{#if @meeting.releasedDocuments}}
+                {{#if (is-same-or-before @meeting.releasedDocuments [(moment-format (now) "DD-MM-YY")] [precision='milliseconds'])}}
+                <AuPill @skin="success" @icon="check" class="auk-u-mr-2 auk-u-mt-2">
+                  Documenten zijn vrijgegeven op
+                  {{moment-format @meeting.releasedDocuments "DD-MM-YYYY"}}
+                  om
+                  {{moment-format @meeting.releasedDocuments "HH:mm"}}
+                </AuPill>
+                {{else}}
+                <AuPill @skin="warning" @icon="clock" class="auk-u-mr-2 auk-u-mt-2">
+                  Documenten zijn vrijgegeven op
+                  {{moment-format @meeting.releasedDocuments "DD-MM-YYYY"}}
+                  om
+                  {{moment-format @meeting.releasedDocuments "HH:mm"}}
+                </AuPill>
+                {{/if}}
+
+                {{#if this.canPublishThemis}}
+                  {{#if this.isAlreadyPublished}}
+                  <AuPill @skin="success" @icon="check" class="auk-u-mr-2 auk-u-mt-2">
+                    Documenten zijn gepubliceerd
+                  </AuPill>
+                  {{else}}
+                  <AuPill @skin="default" @icon="circle-info" class="auk-u-mr-2 auk-u-mt-2">
+                    Documenten zijn nog niet gepubliceerd
+                  </AuPill>
+                  {{/if}}
+                {{/if}}
+              {{/if}}
+            </div>
           </div>
           <Agenda::AgendaHeader::AgendaTabs
             @currentAgenda={{@currentAgenda}}
@@ -35,20 +83,20 @@
     {{#if this.currentSession.isViewer}}
       <Toolbar.Group @position="right" as |Group|>
         <Group.Item>
-          <Agenda::AgendaHeader::AgendaVersionActions
+          <Agenda::AgendaHeader::AgendaActions
             @meeting={{@meeting}}
             @currentAgenda={{@currentAgenda}}
-            @reverseSortedAgendas={{@reverseSortedAgendas}}
-            @didCloseMeeting={{@refreshRoute}}
+            @didApproveAgendaitems={{@refreshRoute}}
             @onStartLoading={{this.setLoadingMessage}}
             @onStopLoading={{this.clearLoadingMessage}}
           />
         </Group.Item>
         <Group.Item>
-          <Agenda::AgendaHeader::AgendaActions
+          <Agenda::AgendaHeader::AgendaVersionActions
             @meeting={{@meeting}}
             @currentAgenda={{@currentAgenda}}
-            @didApproveAgendaitems={{@refreshRoute}}
+            @reverseSortedAgendas={{@reverseSortedAgendas}}
+            @didCloseMeeting={{@refreshRoute}}
             @onStartLoading={{this.setLoadingMessage}}
             @onStopLoading={{this.clearLoadingMessage}}
           />

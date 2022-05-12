@@ -7,21 +7,17 @@
     {{#if @newsletter}}
     <p>{{@newsletter}}</p>
     {{else}}
-    <fieldset>
-      <legend class="auk-label">
-        {{t "publish-publication-scope-selection"}}
-      </legend>
-      <Auk::RadioList as |List|>
-        {{#each this.options as |option|}}
-          <List.Radio
-            @label={{option.label}}
-            @checked={{eq this.selectedOption.value option.value}}
-            value={{option.value}}
-            {{on "change" this.selectOption}}
-          />
-        {{/each}}
-      </Auk::RadioList>
-    </fieldset>
+    <div class="auk-form-group" data-test-edit-meeting-datepicker>
+      <Auk::Label>Wanneer wilt u de documenten publiceren?</Auk::Label>
+      <div class="auk-o-flex auk-o-flex--spaced">
+        <WebComponents::VlDatepicker
+          @enableTime={{true}}
+          @date={{now}}
+          class="auk-u-maximize-width"
+        />
+        <Auk::Button>Nu</Auk::Button>
+      </div>
+    </div>
     {{/if}}
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>

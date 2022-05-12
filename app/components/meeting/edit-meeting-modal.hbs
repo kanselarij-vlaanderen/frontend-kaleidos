@@ -37,7 +37,7 @@
       <div class="auk-u-mb-2">
         <div class="auk-form-group" data-test-edit-meeting-datepicker>
           <Auk::Label>{{t "start-date"}}</Auk::Label>
-          {{! TODO: Replace this with Auk::Datepicker, which isn't fully compliant yet (e.g. no time support) }}
+          {{! TODO: Replace this with Auk::Datepicker, which isnt fully compliant yet (e.g. no time support) }}
           <WebComponents::VlDatepicker
             @enableTime={{true}}
             @date={{array this.startDate}}
@@ -46,6 +46,21 @@
         </div>
       </div>
     {{/if}}
+    <div class="auk-u-mb-2">
+        <div class="auk-form-group" data-test-edit-meeting-datepicker>
+          <Auk::Label>Publicatie datum</Auk::Label>
+          <WebComponents::VlDatepicker
+              @enableTime={{true}}
+              @date={{array this.startDate}}
+              @dateChanged={{set this "startDate"}}
+              class="auk-u-maximize-width"
+            />
+          <AuHelpText @skin="secondary" @size="small">
+            <AuIcon @icon="info-circle" />
+            Standaard de volgende werkdag na de vergaderdatum om 14u.
+          </AuHelpText>
+        </div>
+      </div>
     <div class="auk-u-mb-2">
       <div class="auk-form-group">
         <Auk::Label>

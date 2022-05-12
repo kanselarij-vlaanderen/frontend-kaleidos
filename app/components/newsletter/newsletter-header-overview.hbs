@@ -3,16 +3,30 @@
     <Toolbar.Group @position="left" as |Group|>
       <Group.Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
-          <div class="auk-o-flex auk-o-flex--vertical-center">
-            <h4
-              class="auk-toolbar-complex__title auk-u-text-capitalize"
-              data-test-newsletter-header-overview-title
-            >
-              {{t "newsletter-overview-pdf-name"}}
-              -
-              {{@meeting.kind.label}}
-              {{moment-format @meeting.plannedStart "DD MMMM YYYY"}}
-            </h4>
+          <div class="auk-o-flex auk-o-flex--vertical">
+            <div class="auk-o-flex auk-o-flex--vertical-center">
+              <h4
+                class="auk-toolbar-complex__title auk-u-text-capitalize"
+                data-test-newsletter-header-overview-title
+              >
+                {{t "newsletter-overview-pdf-name"}}
+                -
+                {{@meeting.kind.label}}
+                {{moment-format @meeting.plannedStart "DD MMMM YYYY"}}
+              </h4>
+            </div>
+            <div>
+              {{#if this.isAlreadyPublished}}
+               <AuPill @skin="success" @icon="check" class="auk-u-mr-2 auk-u-mt-2">
+                  Gepubliceerd op de website
+                </AuPill>
+              {{/if}}
+              {{#if this.mailCampaign}}
+                <AuPill @skin="success" @icon="check" class="auk-u-mr-2 auk-u-mt-2">
+                  Gepubliceerd via mail
+                </AuPill>
+              {{/if}}
+            </div>
           </div>
           <Auk::Tabs @reversed={{true}}>
             <Auk::Tab @route="newsletters" @isHierarchicalBack={{true}} />
@@ -99,7 +113,7 @@
             {{#if this.isAlreadyPublished}}
               <Menu.Divider />
               <Menu.Item @skin="danger" {{on "click" this.openConfirmUnpublishThemis}}>
-                {{t "retract-newsitem-from-web"}}
+                <AuIcon @icon="undo" @alignment="left" /> {{t "retract-newsitem-from-web"}}
               </Menu.Item>
             {{/if}}
           {{/if}}
@@ -140,6 +154,7 @@
 {{/if}}
 {{#if this.showConfirmUnpublishThemis}}
   <ThemisPublications::UnpublishConfirmationModal
+    @newsletter="Bent u zeker dat u de publicatie van de nieuwsbrief wil terugtrekken?"
     @onCancel={{this.cancelUnpublishThemis}}
     @onConfirm={{perform this.unpublishThemis}}
   />

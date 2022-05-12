@@ -24,7 +24,7 @@
 // @import "ember-appuniversum/c-form";
 // @import "ember-appuniversum/c-form-row";
 @import "ember-appuniversum/c-heading";
-// @import "ember-appuniversum/c-help-text";
+@import "ember-appuniversum/c-help-text";
 // @import "ember-appuniversum/c-hr";
 @import "ember-appuniversum/c-icon";
 // @import "ember-appuniversum/c-input";
@@ -67,4 +67,21 @@
   &:focus {
     text-decoration: none;
   }
+}
+
+// Fix alignment of icons in helptext
+.au-c-help-text {
+  .au-c-icon {
+    top: .2rem;
+  }
+}
+
+// Fix icons in menu
+.auk-menu__item {
+  display: flex;
+  align-items: center;
+}
+
+.auk-menu__item--danger {
+  font-weight: 500;
 }

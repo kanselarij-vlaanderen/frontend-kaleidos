@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { task } from 'ember-concurrency';
 
 export default class AgendaHeader extends Component {
   /**
@@ -16,9 +17,28 @@ export default class AgendaHeader extends Component {
    */
   @service currentSession;
   @service intl;
+  @service store;
 
   @tracked loadingMessage = null;
   @tracked showLoadingOverlay = false;
+  @tracked latestPublicationActivity;
+
+  constructor() {
+    super(...arguments);
+    this.loadLatestPublicationActivity.perform();
+  }
+
+  get canPublishThemis() {
+    return (
+      this.currentSession.isEditor &&
+      this.args.meeting.isFinal &&
+      this.args.meeting.releasedDocuments
+    );
+  }
+
+  get isAlreadyPublished() {
+    return this.latestPublicationActivity != null;
+  }
 
   /**
    * This method will toggle a modal component with a custom message
@@ -43,5 +63,16 @@ export default class AgendaHeader extends Component {
     this.loadingMessage = null;
     this.showLoadingOverlay = false;
     this.args.onStopLoading();
+  }
+
+  @task
+  *loadLatestPublicationActivity() {
+    this.latestPublicationActivity = yield this.store.queryOne(
+      'themis-publication-activity',
+      {
+        sort: '-start-date',
+        'filter[meeting][:uri:]': this.args.meeting.uri,
+      }
+    );
   }
 }

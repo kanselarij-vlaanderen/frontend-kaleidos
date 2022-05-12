@@ -49,7 +49,7 @@
         data-test-agenda-actions-delete-agenda
         {{on "click" this.openConfirmDeleteSelectedAgenda}}
       >
-        {{t "agenda-delete"}}
+        <AuIcon @icon="bin" @alignment="left" />{{t "agenda-delete"}}
       </Menu.Item>
     {{/if}}
     {{#if this.canReopenPreviousAgenda}}

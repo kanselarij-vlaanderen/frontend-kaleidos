@@ -102,7 +102,7 @@
     </Menu.Item>
     {{#if this.isAlreadyPublished}}
       <Menu.Item @skin="danger" {{on "click" this.openConfirmUnpublishThemis}}>
-        {{t "unpublish-from-web"}}
+        <AuIcon @icon="undo" @alignment="left" /> {{t "unpublish-from-web"}}
       </Menu.Item>
     {{/if}}
   {{/if}}
