@@ -26,20 +26,22 @@
   align-items: center;
 
   .formally-ok-icon {
-    &::before {
-      margin-right: 0.4rem;
-      height: 100%;
-    }
+    i {
+      &::before {
+        margin-right: 0.4rem;
+        height: 100%;
+      }
 
-    &.ki-check::before {
-      line-height: 2.4rem;
-    }
+      &.ki-check::before {
+        line-height: 2.4rem;
+      }
 
-    &.ki-x::before {
-      margin-right: 0;
-      font-size: 2.1rem;
-      line-height: 2.3rem;
-      font-weight: 700;
+      &.ki-x::before {
+        margin-right: 0;
+        font-size: 2.1rem;
+        line-height: 2.3rem;
+        font-weight: 700;
+      }
     }
   }
 }

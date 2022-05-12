@@ -1,4 +1,11 @@
 <div class="auk-section-header auk-section-header--default" data-test-agendaitem-group-header-section>
+  <div class="auk-u-mr">
+    {{#if (eq @mandatees.length 1)}}
+      <Auk::Icon @name="user" />
+    {{else if (gt @mandatees.length 1)}}
+      <Auk::Icon @name="users" />
+    {{/if}}
+  </div>
   <div class="auk-section-header__title auk-section-header__title--small {{if (eq @mandatees.length 0) "auk-section-header__title--muted"}}">
     {{#each @mandatees as |mandatee index|}}
       {{#if (not-eq index 0)}}<br>{{/if}}
