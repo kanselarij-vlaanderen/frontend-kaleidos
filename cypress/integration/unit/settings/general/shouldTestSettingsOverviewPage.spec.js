@@ -74,8 +74,8 @@ context('Settings overview page tests', () => {
     cy.wait('@getUsers');
     cy.wait('@deleteAccount');
     cy.wait('@deleteUser');
-    cy.get(settings.usersIndex.searchInput).clear();
     cy.get(settings.usersIndex.table).should('not.have.value', 'Wendy');
+    cy.get(settings.usersIndex.searchInput).clear();
     // Zoek Greta en pas de groep aan met nieuwe import
     cy.get(settings.usersIndex.table).contains('Greta')
       .parents('tr')
