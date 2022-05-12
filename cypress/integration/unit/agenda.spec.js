@@ -5,9 +5,56 @@ import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
 import route from  '../../selectors/route.selectors';
 import utils from  '../../selectors/utils.selectors';
+import dependency from  '../../selectors/dependency.selectors';
 
 function currentTimestamp() {
   return Cypress.dayjs().unix();
+}
+
+function selectFromDropdown(item) {
+  cy.get(dependency.emberPowerSelect.option, {
+    timeout: 5000,
+  }).wait(500)
+    .contains(item)
+    .scrollIntoView()
+    .trigger('mouseover')
+    .click({
+      force: true,
+    });
+  cy.get(dependency.emberPowerSelect.option, {
+    timeout: 15000,
+  }).should('not.exist');
+}
+
+function getTranslatedMonth(month) {
+  switch (month) {
+    case 0:
+      return 'januari';
+    case 1:
+      return 'februari';
+    case 2:
+      return 'maart';
+    case 3:
+      return 'april';
+    case 4:
+      return 'mei';
+    case 5:
+      return 'juni';
+    case 6:
+      return 'juli';
+    case 7:
+      return 'augustus';
+    case 8:
+      return 'september';
+    case 9:
+      return 'oktober';
+    case 10:
+      return 'november';
+    case 11:
+      return 'december';
+    default:
+      return '';
+  }
 }
 
 context('Agenda tests', () => {
@@ -173,14 +220,14 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaitemTitlesView.comment).contains(`Opmerking: ${whitespace + comment + whitespace}`);
     // privatec comment is not trimmed
     cy.get(agenda.agendaitemTitlesView.privateComment).contains(`Interne opmerking: ${whitespace + privateComment + whitespace}`);
-    cy.get(route.agendaitemIndex.confidential).contains('Vertrouwelijk');
+    cy.get(agenda.agendaitemTitlesView.confidential).contains('Vertrouwelijk');
 
     // rollback confidentiality should work
     cy.get(agenda.agendaitemTitlesView.edit).click();
     cy.get(agenda.agendaitemTitlesEdit.confidential).click();
-    cy.get(route.agendaitemIndex.confidential).should('not.exist');
+    cy.get(agenda.agendaitemTitlesView.confidential).should('not.exist');
     cy.get(agenda.agendaitemTitlesEdit.actions.cancel).click();
-    cy.get(route.agendaitemIndex.confidential).contains('Vertrouwelijk');
+    cy.get(agenda.agendaitemTitlesView.confidential).contains('Vertrouwelijk');
   });
 
   it('It should be automatically get the next meetingID assigned in the UI', () => {
@@ -337,5 +384,58 @@ context('Agenda tests', () => {
     // By checking the lenght of agendas and confirming "Agenda A", not other agenda exists
     cy.get(agenda.agendaSideNav.agenda).should('have.length', 1);
     cy.agendaNameExists('A', false);
+  });
+
+  it('Should create agenda, switch to PVV, then switch back to MR', () => {
+    const agendaNumberMR = 190;
+    const agendaDateMR = Cypress.dayjs().add(4, 'weeks')
+      .day(3);
+    const vvKind = 'Ministerraad - Plan Vlaamse Veerkracht';
+    const formattedAgendaDateMR = agendaDateMR.format('DD-MM-YYYY');
+    const suffixVV = '-VV';
+    const fullmeetingNumber = `VR PV ${Cypress.dayjs().format('YYYY')}/${agendaNumberMR}`;
+    const fullmeetingNumberVV = `${fullmeetingNumber}${suffixVV}`;
+    const mrKind = 'Ministerraad';
+    const agendaNumberPVV = 191;
+    const agendaDatePVV = agendaDateMR.add(1, 'days');
+
+    const monthDutchMR = getTranslatedMonth(agendaDateMR.month());
+    const dateFormatMR = `${agendaDateMR.date()} ${monthDutchMR} ${agendaDateMR.year()}`;
+    const dateFormatPVV = `${agendaDatePVV.date()} ${monthDutchMR} ${agendaDateMR.year()}`;
+
+    cy.createAgenda(null, agendaDateMR, null, agendaNumberMR);
+    cy.createAgenda(null, agendaDatePVV, null, agendaNumberPVV);
+
+    // switch to PVV
+    cy.openAgendaForDate(agendaDatePVV);
+    cy.get(agenda.agendaHeader.showOptions).click();
+    cy.get(agenda.agendaHeader.actions.toggleEditingMeeting).click();
+    cy.get(agenda.editMeeting.kind).click();
+    selectFromDropdown(vvKind);
+    cy.get(agenda.editMeeting.relatedMainMeeting).click();
+    // selectFromDropdown(formattedAgendaDatePVV);
+    // cy.get(dependency.emberPowerSelect.option).should('not.contain', formattedAgendaDatePVV);
+    selectFromDropdown(formattedAgendaDateMR);
+    cy.get(agenda.editMeeting.numberRep.view).should('contain', fullmeetingNumberVV);
+    cy.intercept('PATCH', '/meetings/**').as('patchMeetings');
+    cy.get(agenda.editMeeting.save).click();
+    cy.wait('@patchMeetings');
+    cy.get(agenda.agendaHeader.title).contains(dateFormatMR);
+    cy.get(agenda.agendaHeader.kind).contains(vvKind);
+
+    // switch to MR
+    cy.openAgendaForDate(agendaDateMR, 1);
+    cy.get(agenda.agendaHeader.showOptions).click();
+    cy.get(agenda.agendaHeader.actions.toggleEditingMeeting).click();
+    cy.get(agenda.editMeeting.kind).click();
+    selectFromDropdown(mrKind);
+    cy.get(agenda.editMeeting.datepicker).click();
+    cy.setDateInFlatpickr(agendaDatePVV);
+    cy.get(agenda.editMeeting.numberRep.view).should('contain', fullmeetingNumber);
+    cy.intercept('PATCH', '/meetings/**').as('patchMeetingsPVV');
+    cy.get(agenda.editMeeting.save).click();
+    cy.wait('@patchMeetingsPVV');
+    cy.get(agenda.agendaHeader.title).contains(dateFormatPVV);
+    cy.get(agenda.agendaHeader.kind).contains(mrKind);
   });
 });

@@ -1002,7 +1002,7 @@
   "date-approved": "Datum goedgekeurd",
   "consult-agendaitem-decision": "Laatste agendering bekijken",
   "postponed": "Uitgesteld",
-  "date-example": "bv. 01/2021",
+  "date-example": "bv. 01-2022",
   "edit-status": "Status aanpassen",
   "view-in-signinghub": "Bekijken in SigningHub",
   "send-to-signinghub": "Doorsturen naar SigningHub",
@@ -1030,5 +1030,6 @@
   "search-by-date-type": "zoeken op datumtype",
   "search-publication": "zoek publicatie",
   "select-all": "alles selecteren",
-  "deselect-all": "alles deselecteren"
+  "deselect-all": "alles deselecteren",
+  "on-the-website": "Op de website"
 }

@@ -7,7 +7,7 @@ export default class AgendasRoute extends Route {
   @service router;
   @service('session') simpleAuthSession;
 
-  dateRegex = /^(?:(\d{1,2})-)??(?:(\d{1,2})-)?(\d{4})$/;
+  dateRegex = /^(?:(\d{1,2})[/-])??(?:(\d{1,2})[/-])?(\d{4})$/;
 
   queryParams = {
     filter: {
@@ -45,8 +45,7 @@ export default class AgendasRoute extends Route {
 
       if (match) {
         const [, day, month, year] = match.map(num => parseInt(num, 10));
-
-        const from = new Date(year, (month - 1) || 0, day || 0);
+        const from = new Date(year, (month - 1) || 0, day || 1);
         const to = new Date(from);
         if (day) {
           to.setDate(day + 1);
