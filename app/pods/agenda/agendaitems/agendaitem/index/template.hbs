@@ -1,22 +1,13 @@
-<Auk::Toolbar class="auk-u-mb-4">
-  <Auk::Toolbar::Group @position="left">
-    <Auk::Toolbar::Item>
+<Auk::Toolbar class="auk-u-mb-4" as |Toolbar|>
+  <Toolbar.Group @position="left" as |Group|>
+    <Group.Item>
       <h3 class="auk-toolbar__title">
         {{t "agendaitem-case"}}
       </h3>
-    </Auk::Toolbar::Item>
-    {{#if (await this.subcase.confidential)}}
-      <Auk::Toolbar::Item>
-        <Auk::Pill
-          data-test-route-agenda---agendaitem-index-confidential
-          @skin="danger"
-          @icon="lock-closed"
-        >{{t "confidential"}}</Auk::Pill>
-      </Auk::Toolbar::Item>
-    {{/if}}
-  </Auk::Toolbar::Group>
-  <Auk::Toolbar::Group @position="right">
-    <Auk::Toolbar::Item>
+    </Group.Item>
+  </Toolbar.Group>
+  <Toolbar.Group @position="right" as |Group|>
+    <Group.Item>
       {{#if this.currentSession.isEditor}}
         {{#if (not this.agenda.isFinal)}}
           <Agenda::Agendaitem::AgendaitemControls
@@ -28,17 +19,17 @@
           />
         {{/if}}
       {{/if}}
-    </Auk::Toolbar::Item>
-  </Auk::Toolbar::Group>
+    </Group.Item>
+  </Toolbar.Group>
 </Auk::Toolbar>
 
-  <Agenda::Agendaitem::AgendaitemCasePanel
-    @agendaitem={{this.model}}
-    @subcase={{this.subcase}}
-    @shouldShowDetails={{or @agendaitem.showAsRemark this.subcase}}
-    @newsletterInfo={{this.newsletterInfo}}
-    @allowEditing={{this.currentSession.isEditor}}
-  />
+<Agenda::Agendaitem::AgendaitemCasePanel
+  @agendaitem={{this.model}}
+  @subcase={{this.subcase}}
+  @shouldShowDetails={{or @agendaitem.showAsRemark this.subcase}}
+  @newsletterInfo={{this.newsletterInfo}}
+  @allowEditing={{this.currentSession.isEditor}}
+/>
 {{#if this.model.showAsRemark}}
   <Mandatees::MandateesPanel
     @mandatees={{this.mandatees}}
@@ -46,21 +37,16 @@
     @allowEditing={{this.currentSession.isEditor}}
     @onSave={{this.saveMandateeData}}
   />
-{{else}}
-  {{#if this.subcase}}
-    <Mandatees::MandateesPanel
-      @mandatees={{this.mandatees}}
-      @submitter={{this.submitter}}
-      @allowEditing={{this.currentSession.isEditor}}
-      @onSave={{this.saveMandateeData}}
-    />
-    <Utils::GovernmentAreas::GovernmentAreasPanel
-      @governmentAreas={{this.subcase.case.governmentAreas}}
-      @allowEditing={{this.currentSession.isEditor}}
-      @onSave={{this.saveGovernmentAreas}}
-    />
-    <Agenda::Agendaitem::AgendaitemApprovalsPanel
-      @agendaitem={{this.model}}
-    />
-  {{/if}}
+{{else if this.subcase}}
+  <Mandatees::MandateesPanel
+    @mandatees={{this.mandatees}}
+    @submitter={{this.submitter}}
+    @allowEditing={{this.currentSession.isEditor}}
+    @onSave={{this.saveMandateeData}}
+  />
+  <Utils::GovernmentAreas::GovernmentAreasPanel
+    @governmentAreas={{this.subcase.case.governmentAreas}}
+    @allowEditing={{this.currentSession.isEditor}}
+    @onSave={{this.saveGovernmentAreas}}
+  />
 {{/if}}

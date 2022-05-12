@@ -37,26 +37,21 @@ a.vlc-agenda-detail-sidebar__sub-item--active,
 a.vlc-agenda-detail-sidebar__sub-item--active:hover,
 a.vlc-agenda-detail-sidebar__sub-item--active:focus,
 a.vlc-agenda-detail-sidebar__sub-item--active:active {
-  background: $auk-color-primary;
-  border: none;
-  color: #fff;
+  background: $auk-white;
 
-  .ember-power-select-selected-item{
-    color:#000;
+  &:before {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+
+    width: 0.4rem;
+    height: 100%;
+    background-color: $auk-color-primary;
+
+    content: "";
   }
-
-  span,
-  .vlc-agenda-detail-sidebar__status--positive,
-  .ember-power-select-selected-item,
-  pre,
-  p,
-  i {
-    color: #fff;
-  }
-}
-
-a.vlc-agenda-detail-sidebar__sub-item--active:focus {
-  background: darken($auk-color-primary, 5%);
 }
 
 .vlc-agenda-meta {
@@ -91,18 +86,6 @@ a.vlc-agenda-detail-sidebar__sub-item--active:focus {
   text-overflow: ellipsis
 }
 
-.vlc-agenda-detail-sidebar__sub-item--active a,
-.vlc-agenda-detail-sidebar__sub-item--active a:hover,
-.vlc-agenda-detail-sidebar__sub-item--active a:active {
-  background: $auk-color-primary;
-  color: #FFF;
-}
-
-
-.vlc-agenda-detail-sidebar__sub-item--active a:focus {
-  background: darken($auk-color-primary, 5%);
-}
-
 .vlc-agenda-detail-sidebar-sub-item__numbering {
   min-width: 3rem;
   text-align: right;
@@ -126,24 +109,7 @@ a.vlc-agenda-detail-sidebar__sub-item--active:focus {
   margin: 1.5rem;
 }
 
-.vlc-agenda-detail-sidebar__formally-ok-label {
+.vlc-agenda-detail-sidebar__labels {
   display: flex;
-  padding-top: 1.5rem;
-
-  .formally-ok-icon {
-    &::before {
-      margin-right: 0.2rem;
-      height: 100%;
-      padding-bottom: 0.3rem;
-    }
-
-    &.ki-check::before {
-      line-height: 1.8rem;
-    }
-
-    &.ki-x::before {
-      font-size: 1.8rem;
-      font-weight: 700;
-    }
-  }
+  gap: .25rem;
 }

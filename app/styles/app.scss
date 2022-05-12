@@ -20,6 +20,11 @@
 @import 'auk-icons'; // sourced from "au-kaleidos-icons" npm package
 
 
+// AU STYLING
+@import 'au/au-base';
+@import 'au/au-components';
+
+
 // WEBUNIVERSUM 2 LEGACY STYLING
 @import 'wu/wu-legacy'; // partly copied from "lblod/ember-vo-webuniversum" npm package (needed for "lblod/ember-vo-webuniversum-data-table")
 
