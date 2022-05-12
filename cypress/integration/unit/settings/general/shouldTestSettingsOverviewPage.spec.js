@@ -67,8 +67,6 @@ context('Settings overview page tests', () => {
       .parents('tr')
       .find(settings.vlDeleteUser.delete) // only 1 row
       .click();
-    cy.intercept('DELETE', '/accounts/*').as('deleteAccount');
-    cy.intercept('DELETE', '/users/*').as('deleteUser');
     cy.intercept('GET', '/users/*').as('getUsers');
     cy.intercept('DELETE', '/accounts/*').as('deleteAccount');
     cy.intercept('DELETE', '/users/*').as('deleteUser');
