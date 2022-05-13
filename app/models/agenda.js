@@ -59,14 +59,14 @@ export default Model.extend(LoadableModel, {
 
   isFinal: computed.alias('status.isFinal'),
 
-  canBeApproved: computed('agendaitems.@each.formallyOk', function() {
+  canBeApproved: computed('agendaitems.content.@each.formallyOk', function() {
     return this.get('agendaitems').then((agendaitems) => {
       const approvedAgendaitems = agendaitems.filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.OK].includes(agendaitem.get('formallyOk')));
       return approvedAgendaitems.get('length') === agendaitems.get('length');
     });
   }),
 
-  allAgendaitemsNotOk: computed('agendaitems.@each.formallyOk', function() {
+  allAgendaitemsNotOk: computed('agendaitems.content.@each.formallyOk', function() {
     return this.get('agendaitems').then((agendaitems) => {
       const allAgendaitemsNotOk = agendaitems.filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.get('formallyOk')));
       return allAgendaitemsNotOk.sortBy('number');

@@ -60,12 +60,12 @@ export default ModelWithModifier.extend({
   linkedPieces: hasMany('piece'),
 
   // TODO only used in print agenda function
-  sortedPieces: computed('pieces.@each.name', function() {
+  sortedPieces: computed('pieces.content.@each.name', function() {
     return A(this.get('pieces').toArray()).sort((pieceA, pieceB) => compareFunction(new VRDocumentName(pieceA.get('name')), new VRDocumentName(pieceB.get('name'))));
   }),
 
   // TODO KAS-2975 only used for compare function
-  documentContainers: computed('pieces.@each.name', 'id', function() {
+  documentContainers: computed('pieces.content.@each.name', 'id', function() {
     return PromiseArray.create({
       promise: this.get('pieces').then((pieces) => {
         if (pieces && pieces.get('length') > 0) {
@@ -158,7 +158,7 @@ export default ModelWithModifier.extend({
     return documentContainers && documentContainers.some((documentContainers) => documentContainers.checkAdded);
   }),
 
-  newsletterInfo: computed('treatments.@each.newsletterInfo', 'treatments', 'id', async function() {
+  newsletterInfo: computed('treatments.content.@each.newsletterInfo', 'treatments', 'id', async function() {
     const newsletterInfos = await this.store.query('newsletter-info', {
       'filter[agenda-item-treatment][agendaitem][:id:]': this.get('id'),
     });

@@ -14,7 +14,7 @@ function equalContentArrays(array1, array2) {
 // eslint-disable-next-line ember/no-classic-classes
 export default Controller.extend({
 
-  notaGroups: computed('model.notas.@each.sortedMandatees', function() {
+  notaGroups: computed('model.notas.content.@each.sortedMandatees', function() {
     const agendaitems = this.get('model.notas');
     if (agendaitems.length > 0) {
       let currentSubmittersArray = agendaitems.firstObject.sortedMandatees;

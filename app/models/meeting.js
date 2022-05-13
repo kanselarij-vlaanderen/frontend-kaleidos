@@ -84,7 +84,7 @@ export default Model.extend({
     });
   }),
 
-  sortedAgendas: computed('agendas.@each.agendaName', function() {
+  sortedAgendas: computed('agendas.content.@each.agendaName', function() {
     return PromiseArray.create({
       promise: this.get('agendas').then((agendas) => agendas.sortBy('agendaName').reverse()),
     });
