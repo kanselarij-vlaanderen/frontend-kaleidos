@@ -1,6 +1,7 @@
 <Auk::Modal::Body>
   <div class="auk-o-flex auk-o-flex--vertical-center">
     <Auk::Input
+      data-test-utils-case-search-input
       @value={{this.searchText}}
       placeholder={{t "search-placeholder"}}
       @block={{true}}
@@ -27,7 +28,7 @@
         {{#each (await this.results) as |row|}}
           {{!-- TODO: address accessibility concern, keeping in mind that users want the whole row to be clickable --}}
           {{!-- template-lint-disable no-invalid-interactive --}}
-          <tr>
+          <tr data-test-utils-case-search-row>
             <td onclick={{fn this.selectCase row}}>
               <p>
                 {{#if row.shortTitle}}
