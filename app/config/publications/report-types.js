@@ -3,9 +3,8 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default [
   {
     translationKey: 'publication-reports--type--by-mandatees--on-decision-date',
-    metricsTypeUri: 'http://themis.vlaanderen.be/id/concept/publicatierapporttype/by-mandatees-on-decision-date', // TODO: these aren't URI's. that should change
+    metricsTypeUri: 'http://themis.vlaanderen.be/id/concept/publicatierapporttype/by-mandatees-on-decision-date',
     // fixed job params for this report type
-    // TODO: should be set on the backend
     fixedParams: {
       query: {
         group: 'mandateePersons',
