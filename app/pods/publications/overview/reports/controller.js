@@ -4,8 +4,9 @@ import { inject as service } from '@ember/service';
 import moment from 'moment';
 
 export class ReportTypeEntry {
-  constructor(lastJob, config) {
+  constructor(lastJob, type, config) {
     this.lastJob = lastJob;
+    this.type = type;
     this.config = config;
   }
 }
@@ -47,7 +48,7 @@ export default class PublicationsOverviewReportsController extends Controller {
     const job = this.store.createRecord('publication-metrics-export-job', {
       created: now,
       generatedBy: this.currentSession.user,
-      metricsType: reportTypeEntry.config.metricsTypeUri,
+      type: reportTypeEntry.type,
       config: jobParams,
     });
     return job;
