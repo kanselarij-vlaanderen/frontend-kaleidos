@@ -1,7 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import moment from 'moment';
 
 export class ReportTypeEntry {
   constructor(lastJob, type, config) {
@@ -13,6 +12,7 @@ export class ReportTypeEntry {
 
 export default class PublicationsOverviewReportsController extends Controller {
   @service store;
+  @service router;
   @service intl;
   @service currentSession;
   @service toaster;
@@ -21,22 +21,10 @@ export default class PublicationsOverviewReportsController extends Controller {
   createExportJob(reportTypeEntry, userParams) {
     const now = new Date();
 
-    // TODO: Aside from a default (which can be constructed as follows),
-    // Configurable naming isn't in the current scope of service functionality and hence shouldn't be part of config.
-    // In case the frontend has special naming requirements, then these can be fullfilled
-    // by editing the file name after the fact in the frontend and saving through mu-cl-resources
-    const reportNameDatePrefix = moment(now).format('YYYYMMDDHHmmss');
-    const reportNameType = 'rapport'; // TODO: to be moved to backend
-    const reportName = `${reportNameDatePrefix}-${reportNameType}`;
-
     const fixedParams = reportTypeEntry.config.fixedParams;
-    /// TODO: use _.deepmerge
+    /// TOREVIEW: use _.merge?
     const jobParams = {
-      name: reportName, // TODO: see comment above: move default namign logic to server
       query: {
-        // TODO: Adapt backend to be able to remove this "query" part.
-        //Query config shouldn't be required in this unparametrized setup.
-        // A "metricsType" should be enough
         group: fixedParams.query.group,
         filter: {
           ...fixedParams.query.filter,
@@ -66,7 +54,8 @@ export default class PublicationsOverviewReportsController extends Controller {
     const job = this.createExportJob(reportTypeEntry, userParams);
     await job.save();
     this.jobMonitor.register(job);
-    job.on('didEnd', this, async function (status) {
+    const thisRouteName = this.router.currentRouteName;
+    job.on('didEnd', this, async (status) => {
       this.toaster.clear(generatingToast);
       if (status === job.SUCCESS) {
         const file = await job.generated;
@@ -81,7 +70,9 @@ export default class PublicationsOverviewReportsController extends Controller {
           },
         };
         this.toaster.displayToast.perform(downloadFileToast);
-        // TODO: reload model in order to update new lastReportGeneration
+        if (this.router.isActive(thisRouteName)) {
+          this.send('refreshRoute');
+        }
       } else {
         this.toaster.error(this.intl.t('error'), this.intl.t('warning-title'));
       }

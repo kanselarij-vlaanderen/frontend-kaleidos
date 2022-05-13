@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import REPORT_TYPES_CONFIG from 'frontend-kaleidos/config/publications/report-types';
 import { ReportTypeEntry } from './controller'
@@ -33,5 +34,10 @@ export default class PublicationsOverviewReportsRoute extends Route {
     });
 
     return Promise.all(reportTypeEntries);
+  }
+
+  @action
+  refreshRoute() {
+    super.refresh();
   }
 }
