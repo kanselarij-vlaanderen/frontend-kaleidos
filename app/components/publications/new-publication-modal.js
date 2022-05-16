@@ -127,19 +127,17 @@ export default class NewPublicationModal extends Component {
   @task
   *save() {
     const numberWasRecentlyUsed = yield this.preSaveValidation.perform();
-    if (!this.isValid || numberWasRecentlyUsed) {
-      return;
+    if (this.isValid && !numberWasRecentlyUsed) {
+      yield this.args.onSave({
+        number: this.number,
+        suffix: this.suffix,
+        shortTitle: this.shortTitle,
+        longTitle: this.longTitle,
+        decisionDate: this.decisionDate,
+        openingDate: this.openingDate,
+        publicationDueDate: this.publicationDueDate,
+      });
     }
-
-    yield this.args.onSave({
-      number: this.number,
-      suffix: this.suffix,
-      shortTitle: this.shortTitle,
-      longTitle: this.longTitle,
-      decisionDate: this.decisionDate,
-      openingDate: this.openingDate,
-      publicationDueDate: this.publicationDueDate,
-    });
   }
 
   @restartableTask
