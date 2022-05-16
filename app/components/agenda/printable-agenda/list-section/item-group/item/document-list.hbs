@@ -2,7 +2,10 @@
   {{#each @pieces as |piece|}}
     <li>
       <span class="auk-o-flex--inline auk-o-flex--vertical-center">
-        <span>({{piece.name}})</span>
+        <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Document
+          @piece={{piece}}
+          @accessLevel={{await piece.accessLevel}}
+        />
       </span>
     </li>
   {{/each}}
