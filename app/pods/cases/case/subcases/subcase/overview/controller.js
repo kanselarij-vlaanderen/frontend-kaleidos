@@ -20,8 +20,9 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
   get subcaseReferenceDate() {
     if (this.meeting) {
       return this.meeting.plannedStart;
+    } else {
+      return this.model.subcase.created;
     }
-    return this.model.subcase.created;
   }
 
   @action
