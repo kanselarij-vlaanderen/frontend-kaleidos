@@ -13,6 +13,8 @@ export default class AccessLevelColorBadge extends Component {
           modifier = 'warning';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
+        case CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE:
+        case CONSTANTS.ACCESS_LEVELS.MINISTERRAAD:
           modifier = 'error';
           break;
       }
