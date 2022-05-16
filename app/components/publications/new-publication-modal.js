@@ -90,6 +90,9 @@ export default class NewPublicationModal extends Component {
     } else {
       this.number = 1;
     }
+    // reset validation state. New number is valid.
+    this.numberIsAlreadyUsed = false;
+
   }
 
   @restartableTask
@@ -117,11 +120,10 @@ export default class NewPublicationModal extends Component {
       // another user was creating a publication at the same time, we suggest a new number and show a toast
       yield this.initPublicationNumber.perform();
       this.toaster.warning(this.intl.t('publication-number-already-taken-new-number-created'));
-      // the new suggested number is already valid
-      this.numberIsAlreadyUsed = false;
       return true;
+    } else {
+      return false;
     }
-    return false;
   }
 
   @task
