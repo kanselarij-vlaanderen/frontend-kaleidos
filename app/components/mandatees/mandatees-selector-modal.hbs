@@ -8,8 +8,7 @@
       <Auk::Label>{{t "minister"}}</Auk::Label>
       <Utils::MandateeSelector
         @referenceDate={{@referenceDate}}
-        @chooseMandatee={{fn (mut this.selectedMandatee)}}
-        @singleSelect={{true}}
+        @onSelectMandatee={{fn (mut this.selectedMandatee)}}
         @selectedMandatees={{this.selectedMandatee}}
       />
     </Utils::LoadableContent>

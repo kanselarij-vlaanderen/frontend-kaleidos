@@ -12,10 +12,10 @@ const VISIBLE_ROLES = [
   'http://themis.vlaanderen.be/id/bestuursfunctie/60d0dc2ab1838d01fca7db67', // Gemeenschapsminister
 ];
 /**
- * @argument singleSelect
- * @argument readOnly
+ * @argument multiple
+ * @argument disabled
  * @argument selectedMandatee
- * @argument chooseMandatee
+ * @argument onSelectMandatee
  * @argument {Date} referenceDate: Date to get active Mandatees for
  */
 export default class MandateeSelector extends Component {
