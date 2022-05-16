@@ -54,13 +54,10 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
 
     if (!publicationActivity) {
       // Publication registration without a request
-      publicationActivity = this.store.createRecord(
-        'publication-activity',
-        {
-          startDate: new Date(),
-          subcase: this.publicationSubcase,
-        }
-      );
+      publicationActivity = this.store.createRecord('publication-activity', {
+        startDate: new Date(),
+        subcase: this.publicationSubcase,
+      });
     }
     publicationActivity.endDate = publicationDate;
     yield publicationActivity.save();
@@ -127,7 +124,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
       //    so no check whether they are linked to a translationActivity is required
       if (!proofingActivity) {
         const pieceDelete = this.publicationService.deletePiece(piece);
-        deletes.push(pieceDelete)
+        deletes.push(pieceDelete);
       }
     }
 

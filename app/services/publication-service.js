@@ -215,7 +215,10 @@ export default class PublicationService extends Service {
 
     // Update intermediate end-dates when status progresses
     if (!targetStatus.isPaused) {
-      if (targetStatus.position > previousStatus.position || previousStatus.isPaused) {
+      if (
+        targetStatus.position > previousStatus.position ||
+        previousStatus.isPaused
+      ) {
         // Set end-date on translation subcase if 'translation-received' status is passed
         if (targetStatus.position >= translationReceivedStatus.position) {
           if (!translationSubcase.endDate) {
@@ -227,7 +230,10 @@ export default class PublicationService extends Service {
     }
 
     // Undo changes when status gets reverted
-    if (targetStatus.position < previousStatus.position || previousStatus.isPaused) {
+    if (
+      targetStatus.position < previousStatus.position ||
+      previousStatus.isPaused
+    ) {
       // Undo end-date on translation-subcase if reverted before 'translation-received'
       if (targetStatus.position < translationReceivedStatus.position) {
         translationSubcase.endDate = null;
