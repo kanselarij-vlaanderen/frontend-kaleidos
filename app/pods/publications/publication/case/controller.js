@@ -4,8 +4,6 @@ import { action } from '@ember/object';
 
 export default class CaseController extends Controller {
   @tracked isViaCouncilOfMinisters;
-  @tracked agendaItemTreatment;
-
   @tracked _case;
 
   @action

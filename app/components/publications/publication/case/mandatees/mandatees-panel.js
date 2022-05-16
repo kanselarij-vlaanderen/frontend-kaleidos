@@ -5,16 +5,16 @@ import { tracked } from '@glimmer/tracking';
 /**
  * @argument {PublicationFlow} publicationFlow (publication-flow,publication-flow.mandatees,publication-flow.mandatees.person)
  * @argument {Boolean} isViaCouncilOfMinisters
- * @argument {AgendaItemTreatment} agendaItemTreatment
  */
 export default class PublicationsPublicationCaseMandateesPanelComponent extends Component {
   @tracked showSelectMandateeModal = false;
 
   get publicationReferenceDate() {
     if (this.args.isViaCouncilOfMinisters) {
-      return this.args.agendaItemTreatment.startDate;
+      return this.args.publicationFlow.agendaItemTreatment.get('startDate');
+    } else {
+      return this.args.publicationFlow.openingDate;
     }
-    return this.args.publicationFlow.openingDate;
   }
 
   @action
