@@ -467,34 +467,34 @@ export default class PublicationService extends Service {
     return [meeting.id, agenda.id, agendaitem.id];
   }
 
+  /** @private */
   async ensureDecision(publicationSubcase, date) {
-    let decision = await this.store.queryOne('decision', {
-      'filter[publication-activity][subcase][:id:]': publicationSubcase.id,
-      sort: 'publication-activity.start-date,publication-date',
-    });
+    // using Ember Data relationships instead of query
+    //   this seems more in line with expectation
+    //   especially when models are created and saved async.
+    // since most of the time there are only 1 publication-activity and decision it won't impact performance much
 
-    if (!decision) {
-      const publicationActivities = await publicationSubcase.publicationActivities;
-      let publicationActivity = publicationActivities.sortBy('-startDate')?.[0];
+    let publicationActivities = await publicationSubcase.publicationActivities;
+    publicationActivities = publicationActivities.toArray();
+    let decisions = publicationActivities.mapBy('decisions');
+    decisions = await Promise.all(decisions);
+    decisions = decisions.map((records) => records.toArray()).flat();
+    const hasDecision = decisions.length !== 0;
+    if (hasDecision) return;
 
-      if (!publicationActivity) {
-        publicationActivity = this.store.createRecord(
-          'publication-activity',
-          {
-            subcase: publicationSubcase,
-            endDate: date,
-          }
-        );
-        await publicationActivity.save();
-      }
-
-      decision = this.store.createRecord('decision', {
-        publicationActivity: publicationActivity,
-        publicationDate: date,
+    let publicationActivity = publicationActivities.sortBy('-startDate')?.[0];
+    if (!publicationActivity) {
+      publicationActivity = this.store.createRecord('publication-activity', {
+        subcase: publicationSubcase,
+        endDate: date,
       });
-      await decision.save();
+      await publicationActivity.save();
     }
 
-    return decision;
+    const decision = this.store.createRecord('decision', {
+      publicationActivity: publicationActivity,
+      publicationDate: date,
+    });
+    await decision.save();
   }
 }
