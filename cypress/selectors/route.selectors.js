@@ -61,11 +61,6 @@ const selectors = {
     add: '[data-test-route-agenda---agendaitem-documents-add]',
   },
 
-  // agenda/agendaitems/agendaitem/index/template.hbs
-  agendaitemIndex: {
-    confidential: '[data-test-route-agenda---agendaitem-index-confidential]',
-  },
-
   /**
     ROUTE CASES
   */
@@ -116,6 +111,16 @@ const selectors = {
       mandatees: '[data-test-route-search-newsletter-infos-row-mandatees]',
       decisionResult: '[data-test-route-search-newsletter-infos-row-decision-result]',
       goToAgendaitem: '[data-test-route-search-newsletter-infos-row-go-to-agendaitem]',
+    },
+  },
+
+  // search/publications
+  searchPublications: {
+    dateType: '[data-test-route-search-publication-date-type]',
+    date: '[data-test-route-search-publication-date]',
+    dataTable: '[data-test-route-search-publication-data-table]',
+    row: {
+      number: '[data-test-route-search-publication-row-number]',
     },
   },
 

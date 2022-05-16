@@ -28,6 +28,11 @@ const selectors = {
   //   requests: '[data-test-route-publications---translations-tab-requests]',
   // },
 
+  // publications\publication\decisions\index\template
+  decisionsIndex: {
+    uploadReference: '[data-test-route-publications---decisions-upload-reference]',
+  },
+
   // publications\publication\translations\index\template
   // TODO KAS-3248 Rename to translationsIndex
   translationsIndex: {
@@ -65,6 +70,12 @@ const selectors = {
       upload: '[data-test-route-publications---proofs-requests-upload]',
       emailSubject: '[data-test-route-publications---proofs-requests-email-subject]',
     },
+  },
+
+  // publications\publication\publication-activities\index
+  publicationActivities: {
+    register: '[data-test-route-publications---publication-activities-register]',
+    request: '[data-test-route-publications---publication-activities-request]',
   },
 
   /**
@@ -224,6 +235,11 @@ const selectors = {
   // publication-status-selector
   // statusSelector: '[data-test-publication-status-selector]',
 
+  // reference-upload-modal
+  referenceUpload: {
+    save: '[data-test-reference-upload-save]',
+  },
+
   // urgency-level-checkbox
   urgencyLevelCheckbox: '[data-test-urgency-level-checkbox]',
 
@@ -268,6 +284,7 @@ const selectors = {
     name: '[data-test-proof-upload-name]',
     save: '[data-test-proof-upload-save]',
     updateStatus: '[data-test-proof-upload-update-status]',
+    receivedDate: '[data-test-proof-upload-received-date]',
   },
 
   // proof-request-modal
@@ -327,9 +344,20 @@ const selectors = {
 
   // request-activity-panel
   requestActivityPanel: {
+    panel: '[data-test-request-activity-panel]',
     dropdown: '[data-test-request-activity-panel-dropdown]',
     delete: '[data-test-request-activity-panel-delete]',
     message: '[data-test-request-activity-panel-message]',
+  },
+
+  // translations-info-panel
+  translationsInfoPanel: {
+    // TODO-SELECTOR unused selectors
+    openEdit: '[data-test-translations-info-panel-edit]',
+    edit: {
+      dueDate: '[data-test-translations-info-panel-edit-due-date]',
+      save: '[data-test-translations-info-panel-edit-save]',
+    },
   },
 
   // translation-received-panel
@@ -362,7 +390,8 @@ const selectors = {
 
   // publication-documents-list
   documentsList: {
-    piece: '[data-test-document-list-piece]',
+    piece: '[data-test-publication-document-list-piece]',
+    deletePiece: '[data-test-publication-document-list-delete-piece]',
   },
 
   // proof-received-panel
@@ -403,5 +432,15 @@ const selectors = {
     },
   },
 
+  // publication-registration-modal
+  publicationRegistration: {
+    publicationDate: '[data-test-publication-registration-publication-date]',
+    save: '[data-test-publication-registration-save]',
+  },
+
+  // publication-registered-panel
+  publicationRegisteredPanel: {
+    panel: '[data-test-publication-registered-panel]',
+  },
 };
 export default selectors;

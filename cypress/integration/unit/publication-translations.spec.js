@@ -42,6 +42,7 @@ context('Publications translation tests', () => {
     cy.get(publication.translationsIndex.requestTranslation).click();
     cy.get(publication.translationRequest.save).should('be.disabled');
     cy.get(auk.datepicker).click();
+    // TODO-publication get datepicker in specific modal or in div
     cy.setDateInFlatpickr(translationEndDate);
     cy.get(publication.translationRequest.numberOfPages).should('be.empty')
       .type(numberOfPages);
@@ -49,7 +50,7 @@ context('Publications translation tests', () => {
       .type(numberOfWords);
     // after updating pages and words, the text of the message updates, but cypress is faster then the update
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(publication.translationRequest.message).should('have.value', `Collega,\n\nHierbij ter vertaling:\nVO-dossier: ${fields.number}\nTitel: test vertalingsaanvraag\t\nUiterste vertaaldatum: ${translationEndDate.format('DD-MM-YYYY')}\t\nAantal pagina’s: ${numberOfPages}\t\nAantal woorden: ${numberOfWords}\t\nAantal documenten: 1\t\n\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n`);
+    cy.get(publication.translationRequest.message).should('have.value', `Collega,\n\nHierbij ter vertaling:\nVO-dossier: ${fields.number}\n\nTitel: test vertalingsaanvraag\t\n\nUiterste vertaaldatum: ${translationEndDate.format('DD-MM-YYYY')}\t\n\nAantal pagina’s: ${numberOfPages}\t\nAantal woorden: ${numberOfWords}\t\nAantal documenten: 1\t\n\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n`);
     cy.intercept('DELETE', 'files/*').as('deleteFile');
     cy.get(auk.modal.footer.cancel).click();
     cy.wait('@deleteFile');
@@ -182,5 +183,67 @@ context('Publications translation tests', () => {
     cy.get(publication.statusPill.contentLabel).should('contain', 'Vertaling in');
     cy.get(publication.translationReceivedPanel.panel).find(publication.documentsList.piece)
       .should('have.length', 2);
+  });
+
+  it('should open a publication, upload translation without request, then request translation and check history', () => {
+    const fields = {
+      number: 1616,
+      shortTitle: 'test vertalingsaanvraag',
+    };
+    const file = {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf',
+    };
+    const translationEndDate = Cypress.dayjs();
+    cy.intercept('GET', '/translation-activities?filter**subcase**').as('getTranslationsModel');
+
+    cy.createPublication(fields);
+    cy.get(publication.publicationNav.translations).click()
+      .wait('@getTranslationsModel');
+    // Make sure the page transitioned
+    cy.url().should('contain', '/vertalingen');
+
+    // upload translation without request
+    cy.get(publication.translationsIndex.upload).click();
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.intercept('PATCH', '/translation-subcases/*').as('patchTranslationSubcases');
+    cy.intercept('GET', '/pieces/**').as('getPieces');
+    cy.intercept('PATCH', '/publication-flows/*').as('patchPublicationFlows');
+    cy.intercept('POST', '/publication-status-changes').as('postPublicationStatusChanges');
+    // these calls happen in a random order because of promises
+    cy.get(publication.translationUpload.save).click()
+      .wait('@patchTranslationSubcases')
+      .wait('@getPieces')
+      .wait('@patchPublicationFlows')
+      .wait('@postPublicationStatusChanges');
+    cy.get(publication.translationReceivedPanel.panel).should('have.length', 1);
+
+    // request translation
+    cy.get(publication.translationsIndex.requestTranslation).click();
+    cy.get(auk.datepicker).click();
+    cy.setDateInFlatpickr(translationEndDate);
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.intercept('POST', 'pieces').as('createNewPiece');
+    cy.intercept('POST', 'request-activities').as('createRequestActivity');
+    cy.intercept('PATCH', 'translation-subcases/**').as('patchTranslationSubcase');
+    cy.intercept('POST', 'emails').as('createEmail');
+    cy.intercept('GET', 'request-activities/**/translation-activity').as('getTranslationsActivity');
+    cy.get(publication.translationRequest.save).click();
+    cy.wait('@createNewPiece')
+      .wait('@createRequestActivity')
+      .wait('@patchTranslationSubcase')
+      .wait('@createEmail')
+      .wait('@getTranslationsActivity');
+
+    // check history
+    cy.get(publication.translationsIndex.panelBody).children()
+      .as('panels');
+    cy.get('@panels').should('have.length', 2);
+    cy.get('@panels').eq(0)
+      // TODO can't put selector on accordion panel, is this good enough?
+      // .find(publication.requestActivityPanel.panel)
+      .contains('Aanvraag verzonden');
+    cy.get('@panels').eq(1)
+      .find(publication.translationReceivedPanel.panel)
+      .contains('Vertaling ontvangen');
   });
 });

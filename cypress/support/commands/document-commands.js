@@ -466,7 +466,8 @@ function addLinkedDocument(filenames) {
     cy.get(document.addExistingPiece.searchInput).clear()
       .type(name)
       .wait(`@getFilteredPiece${name}`);
-    cy.wait(1000);
+    // For every char typed, a call to "/pieces?filter" occurs, causing constant reloads of the dom.
+    cy.wait(3000);
     cy.get(document.addExistingPiece.checkbox).parent()
       .click();
   });

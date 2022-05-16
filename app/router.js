@@ -70,25 +70,24 @@ Router.map(function() {
     this.route('loading', { path: '/laden', });
   });
 
-  if (!isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB)) {
-    this.route('publications', { path: '/publicaties', }, function() {
-      this.route('overview', { path: '/overzicht' }, function () {
-        this.route('all', { path: '/alle-dossiers' });
-        this.route('urgent', { path: '/dringend' });
-        this.route('translation', { path: '/in-vertaling' });
-        this.route('proof', { path: '/aanvraag-drukproef' });
-        this.route('proofread', { path: '/nalezen' });
-        this.route('late', { path: '/te-laat-in-bs' });
-      });
-      this.route('publication', { path: ':publication_id', }, function() {
-        this.route('case', { path: '/dossier', });
-        this.route('decisions', { path: '/besluiten', }, function() { });
-        this.route('translations', { path: '/vertalingen',}, function() { });
-        this.route('proofs', { path: '/drukproeven',}, function() { });
-        this.route('publication-activities', { path: '/publicatie', }, function() { });
-      });
+  this.route('publications', { path: '/publicaties', }, function() {
+    this.route('overview', { path: '/overzicht' }, function () {
+      this.route('all', { path: '/alle-dossiers' });
+      this.route('urgent', { path: '/dringend' });
+      this.route('translation', { path: '/in-vertaling' });
+      this.route('proof', { path: '/aanvraag-drukproef' });
+      this.route('proofread', { path: '/nalezen' });
+      this.route('late', { path: '/te-laat-in-bs' });
+      this.route('reports', { path: '/rapporten' });
     });
-  }
+    this.route('publication', { path: ':publication_id', }, function() {
+      this.route('case', { path: '/dossier', });
+      this.route('decisions', { path: '/besluiten', }, function() { });
+      this.route('translations', { path: '/vertalingen',}, function() { });
+      this.route('proofs', { path: '/drukproeven',}, function() { });
+      this.route('publication-activities', { path: '/publicatie', }, function() { });
+    });
+  });
 
   if (!isEmpty(ENV.APP.ENABLE_SIGNATURES)) {
     this.route('signatures', { path: '/handtekenmap', }, function() {
@@ -103,9 +102,7 @@ Router.map(function() {
     this.route('cases', { path: '/dossiers', });
     this.route('agenda-items', { path: '/agendapunten', });
     this.route('newsletter-infos', { path: '/kort-bestek', });
-    if (!isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB)) {
-      this.route('publication-flows', { path: '/publicaties', });
-    }
+    this.route('publication-flows', { path: '/publicaties', });
   });
 
   this.route('settings', { path: '/instellingen', }, function() {

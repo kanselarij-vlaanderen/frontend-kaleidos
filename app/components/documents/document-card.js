@@ -7,8 +7,6 @@ import moment from 'moment';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import ENV from 'frontend-kaleidos/config/environment';
-import { isEmpty } from '@ember/utils';
 import { task } from 'ember-concurrency';
 
 export default class DocumentsDocumentCardComponent extends Component {
@@ -53,8 +51,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   get userMayManagePublicationFlows() {
-    return !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB) &&
-      this.currentSession.may('manage-publication-flows');
+    return this.currentSession.may('manage-publication-flows');
   }
 
   @task

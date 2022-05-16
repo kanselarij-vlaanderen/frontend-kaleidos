@@ -43,11 +43,10 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   }
 
   get isShownOpenPublicationModal() {
-    const hasPublicationsEnabled = isPresent(ENV.APP.ENABLE_PUBLICATIONS_TAB);
     const mayPublish = this.currentSession.may('manage-publication-flows');
     const hasCase = isPresent(this.agendaActivity);
     const hasPieces = isPresent(this.model.pieces);
-    return hasPublicationsEnabled && mayPublish && hasCase && hasPieces;
+    return mayPublish && hasCase && hasPieces;
   }
 
   @task

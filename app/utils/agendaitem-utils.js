@@ -4,26 +4,6 @@ import moment from 'moment';
 import { A } from '@ember/array';
 
 /**
- * Cancel the Edit.
- * @param agendaitemOrSubcase
- * @param propertiesToSet
- */
-export const cancelEdit = (agendaitemOrSubcase, propertiesToSet) => {
-  const isSubcase = agendaitemOrSubcase.get('modelName') === 'subcase';
-  if (agendaitemOrSubcase.get('hasDirtyAttributes')) {
-    agendaitemOrSubcase.rollbackAttributes();
-  }
-  if (isSubcase) {
-    agendaitemOrSubcase.belongsTo('type').reload();
-  }
-  agendaitemOrSubcase.reload();
-  const keys = Object.keys(propertiesToSet);
-  keys.forEach(async() => {
-    keys.forEach((prop) => agendaitemOrSubcase.notifyPropertyChange(prop));
-  });
-};
-
-/**
  * @description Zet een agendaitem of subcase naar nog niet formeel ok
  * @param subcaseOrAgendaitem De agendaitem of subcae waarvan de formaliteit gereset dient te worden naar nog niet formeel ok
  */
@@ -115,13 +95,6 @@ export const saveChanges = async(agendaitemOrSubcase, propertiesToSetOnAgendaite
         await setModifiedOnAgendaOfAgendaitem(agendaitem);
       }));
     }
-  }
-};
-
-export const destroyApprovalsOfAgendaitem = async(agendaitem) => {
-  const approvals = await agendaitem.get('approvals');
-  if (approvals) {
-    await Promise.all(approvals.map((approval) => approval.destroyRecord()));
   }
 };
 

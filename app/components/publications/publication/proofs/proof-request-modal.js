@@ -125,10 +125,11 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   *setEmailFields() {
     const publicationFlow = this.args.publicationFlow;
     const identification = yield publicationFlow.identification;
-
+    const urgencyLevel = yield publicationFlow.urgencyLevel;
     const mailParams = {
       identifier: identification.idName,
       shortTitle: publicationFlow.shortTitle,
+      isUrgent: urgencyLevel?.isUrgent,
       longTitle: publicationFlow.longTitle
         ? publicationFlow.longTitle
         : publicationFlow.shortTitle,

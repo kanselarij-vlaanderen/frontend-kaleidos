@@ -60,7 +60,7 @@
     <div>
       {{#if this.model.length}}
         <DataTable
-          data-test-route-search-cases-data-table={{true}}
+          data-test-route-search-publication-data-table
           @content={{await this.model}}
           @page={{this.page}}
           @noDataMessage={{t "no-results-found"}}
@@ -95,7 +95,7 @@
               <th class="auk-table__col--1"></th>
             </c.header>
             <c.body class="auk-table--clickable-rows" as |row|>
-              <td>
+              <td data-test-route-search-publication-row-number>
                 {{row.identification}}
               </td>
               <td>
