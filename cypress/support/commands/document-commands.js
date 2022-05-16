@@ -239,6 +239,7 @@ function addNewPieceToMeeting(oldFileName, file) {
  */
 function openAgendaitemDocumentTab(agendaitemTitle, alreadyHasDocs = false, isAdmin = true) {
   cy.log('openAgendaitemDocumentTab');
+  // TODO-command the next command switches to case tab if when we are already on the documents tab.
   cy.openDetailOfAgendaitem(agendaitemTitle, isAdmin);
   cy.get(agenda.agendaitemNav.documentsTab)
     .click()
