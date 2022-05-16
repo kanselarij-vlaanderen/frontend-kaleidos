@@ -61,8 +61,8 @@ export default class AccessLevelPillComponent extends Component {
   }
 
   @action
-  toggleEdit() {
-    this.isEditing = !this.isEditing;
+  openEditMode() {
+    this.isEditing = true;
   }
 
   @action
