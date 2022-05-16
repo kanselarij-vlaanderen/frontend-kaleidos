@@ -3,7 +3,8 @@
 {{else}}
   {{#if (not this.isEditing)}}
     <Auk::Pill
-      @skin={{this.pillSkin}}
+      @skin="active"
+      @icon={{this.pillIcon}}
       data-test-access-level-pill
     >
       {{this.accessLevelLabel}}

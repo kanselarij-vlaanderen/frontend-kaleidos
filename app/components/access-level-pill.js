@@ -24,25 +24,29 @@ export default class AccessLevelPillComponent extends Component {
       || this.cancelChangeAccessLevel.isRunning;
   }
 
-  get pillSkin() {
-    let modifier = 'default';
+  get pillIcon() {
+    let icon = '';
     if (this.args.accessLevel) {
       switch (this.args.accessLevel.uri) {
-        case CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE:
         case CONSTANTS.ACCESS_LEVELS.MINISTERRAAD:
+          icon = 'ministerraad';
+          break;
+        case CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE:
+          icon = 'intern-secretarie';
+          break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
-          modifier = 'danger';
+          icon = 'intern-regering';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID:
-          modifier = 'warning';
+          icon = 'intern-overheid';
           break;
         case CONSTANTS.ACCESS_LEVELS.PUBLIEK:
-          modifier = 'success';
+          icon = 'public';
           break;
         default:
       }
     }
-    return modifier;
+    return icon;
   }
 
   get accessLevelLabel() {

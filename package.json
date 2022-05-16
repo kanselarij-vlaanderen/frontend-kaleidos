@@ -42,14 +42,14 @@
     "edition": "octane"
   },
   "devDependencies": {
-    "@appuniversum/ember-appuniversum": "^1.0.1",
+    "@appuniversum/ember-appuniversum": "1.0.1",
     "@ember/optional-features": "^2.0.0",
     "@ember/render-modifiers": "^2.0.0",
     "@ember/test-helpers": "^2.6.0",
     "@glimmer/component": "^1.0.4",
     "@glimmer/tracking": "^1.0.4",
     "@kanselarij-vlaanderen/au-kaleidos-css": "2.5.10",
-    "@kanselarij-vlaanderen/au-kaleidos-icons": "3.0.0",
+    "@kanselarij-vlaanderen/au-kaleidos-icons": "git+https://github.com/kanselarij-vlaanderen/au-kaleidos-icons.git#4215fb9b3320bbac216af8f93b7fbc43224c3bdb",
     "@lblod/ember-acmidm-login": "~1.3.0",
     "@lblod/ember-mock-login": "^0.5.0-beta",
     "@lblod/ember-rdfa-editor": "0.50.0-beta.4",
