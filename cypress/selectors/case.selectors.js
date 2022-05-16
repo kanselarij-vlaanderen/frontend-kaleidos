@@ -43,6 +43,7 @@ const selectors = {
     // TODO-selector unused selector
     modified: '[data-test-subcase-description-modified]',
     edit: '[data-test-subcase-description-edit]',
+    subcaseName: '[data-test-subcase-description-subcase-name]',
   },
 
   // subcase-description-edit
@@ -76,6 +77,7 @@ const selectors = {
   subcaseTitlesView: {
     type: '[data-test-subcase-titles-type]',
     edit: '[data-test-subcase-titles-edit]',
+    subcaseName: '[data-test-subcase-titles-panel-subcase-name]',
   },
 
   // subcase-titles-edit
