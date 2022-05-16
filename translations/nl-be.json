@@ -778,7 +778,7 @@
   "view-documents-details": "Bekijk documenten",
   "publication-number-already-taken": "Het gekozen publicatienummer is reeds in gebruik. Gelieve een ander nummer te kiezen of een suffix te gebruiken.",
   "publication-number-already-taken-with-params": "Het publicatienummer {number} {suffix} is reeds in gebruik. Gebruik een ander nummer of suffix om door te gaan.",
-  "publication-number-already-taken-new-number-created": "Het gekozen publicatienummer was reeds in gebruik, er is een nieuw nummer aangemaakt. Probeer opnieuw.",
+  "publication-number-already-taken-new-number-created": "Het gekozen publicatienummer is intussen reeds in gebruik. Er is een nieuw nummer aangemaakt. Probeer opnieuw op te slaan.",
   "without-suffix": "zonder suffix",
   "with-suffix": "met suffix",
   "publication-flow-publication-number-help": "Het publicatienummer bestaat uit een numerieke stam en een alfanumeriek achtervoegsel.",
