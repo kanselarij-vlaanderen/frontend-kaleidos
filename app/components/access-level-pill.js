@@ -10,10 +10,6 @@ export default class AccessLevelPillComponent extends Component {
    * An access-level pill component.
    *
    * @argument accessLevel: an accessLevel object or null
-   * @argument agendaIsApproved
-   * @argument agendaIsFinal
-   * @argument agendaIsReleased
-   * @argument agendaIsPublished
    * @argument onChangeAccessLevel
    * @argument onConfirmChangeAccessLevel
    * @argument onCancelChangeAccessLevel
