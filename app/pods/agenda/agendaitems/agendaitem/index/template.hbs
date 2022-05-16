@@ -38,19 +38,17 @@
     @allowEditing={{this.currentSession.isEditor}}
     @onSave={{this.saveMandateeData}}
   />
-{{else}}
-  {{#if this.subcase}}
-    <Mandatees::MandateesPanel
-      @referenceDate={{this.meeting.plannedStart}}
-      @mandatees={{this.mandatees}}
-      @submitter={{this.submitter}}
-      @allowEditing={{this.currentSession.isEditor}}
-      @onSave={{this.saveMandateeData}}
-    />
-    <Utils::GovernmentAreas::GovernmentAreasPanel
-      @governmentAreas={{this.subcase.case.governmentAreas}}
-      @allowEditing={{this.currentSession.isEditor}}
-      @onSave={{this.saveGovernmentAreas}}
-    />
-  {{/if}}
+{{else if this.subcase}}
+  <Mandatees::MandateesPanel
+    @referenceDate={{this.meeting.plannedStart}}
+    @mandatees={{this.mandatees}}
+    @submitter={{this.submitter}}
+    @allowEditing={{this.currentSession.isEditor}}
+    @onSave={{this.saveMandateeData}}
+  />
+  <Utils::GovernmentAreas::GovernmentAreasPanel
+    @governmentAreas={{this.subcase.case.governmentAreas}}
+    @allowEditing={{this.currentSession.isEditor}}
+    @onSave={{this.saveGovernmentAreas}}
+  />
 {{/if}}
