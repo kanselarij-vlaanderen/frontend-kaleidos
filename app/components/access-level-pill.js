@@ -57,7 +57,7 @@ export default class AccessLevelPillComponent extends Component {
   }
 
   get canEdit() {
-    return this.session.may('manage-document-access-levels');
+    return this.args.isEditable && this.session.may('manage-document-access-levels');
   }
 
   @action
