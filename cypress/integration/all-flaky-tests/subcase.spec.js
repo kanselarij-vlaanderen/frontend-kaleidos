@@ -6,6 +6,7 @@ import auk from '../../selectors/auk.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
+import dependency from '../../selectors/dependency.selectors';
 
 function currentTimestamp() {
   return Cypress.dayjs().unix();
@@ -445,5 +446,37 @@ context('Subcase tests', () => {
     cy.get(utils.vlModalVerify.container).should('not.exist');
     cy.get(cases.subcaseOverviewHeader.titleContainer).contains(caseTitle3);
     cy.get(cases.subcaseItem.container).should('not.exist');
+  });
+
+  it('check capital letters of subcase name', () => {
+    const capital = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+    const nonCapital = 'principiële goedkeuring m.h.o. op adviesaanvraag';
+
+    // this agenda may no longer exist if this spec is run after agenda.spec
+    cy.visitAgendaWithLink('vergadering/5EB2CD4EF5E1260009000015/agenda/9da67561-a827-47a2-8f58-8b3fd5739df4/agendapunten');
+    cy.get(agenda.agendaHeader.showOptions).click();
+    cy.get(agenda.agendaHeader.actions.addAgendaitems).click();
+    cy.get(agenda.createAgendaitem.row.subcaseName).contains(capital);
+    cy.get(auk.modal.footer.cancel).click();
+
+    cy.visitAgendaWithLink('vergadering/5EB2CD4EF5E1260009000015/agenda/5EB2CD4FF5E1260009000016/agendapunten');
+    cy.get(agenda.agendaOverviewItem.subcaseName).contains(capital);
+    cy.get(agenda.agendaOverviewItem.subitem).eq(1)
+      .click();
+    cy.get(agenda.agendaitemTitlesView.subcaseName).contains(capital);
+
+    cy.visit('dossiers/5EBA9528751CF7000800000A/deeldossiers');
+    cy.get(cases.subcaseItem.link).contains(nonCapital);
+    cy.get(cases.subcaseOverviewHeader.createSubcase).click();
+    cy.get(cases.newSubcase.procedureName).find(dependency.emberPowerSelect.trigger)
+      .click();
+    cy.get(dependency.emberPowerSelect.option).contains(capital);
+    cy.get(auk.modal.footer.cancel).click();
+
+    cy.get(cases.subcaseItem.link).eq(0)
+      .click();
+    cy.get(cases.subcaseDescription.subcaseName).contains(nonCapital)
+      .should('have.class', 'auk-u-text-capitalize');
+    cy.get(cases.subcaseTitlesView.subcaseName).contains(capital);
   });
 });
