@@ -24,9 +24,6 @@ export default class DecisionResultPill extends Component {
     } else if (selectedUri === codes.UITGESTELD) {
       return 'clock';
     }
-    // } else if (selectedUri === codes.INGETROKKEN) {
-    //  return 'danger';
-    // }
     return 'circle-info';
   }
 }
