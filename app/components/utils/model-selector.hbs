@@ -17,7 +17,7 @@
     {{#if (has-block)}}
       {{yield model}}
     {{else}}
-      {{model-property-to-show model @displayField}}
+      {{get model @displayField}}
     {{/if}}
   </PowerSelectMultiple>
 {{else}}
@@ -39,7 +39,7 @@
     {{#if (has-block)}}
       {{yield model}}
     {{else}}
-      {{model-property-to-show model @displayField}}
+      {{get model @displayField}}
     {{/if}}
   </PowerSelect>
 {{/if}}
