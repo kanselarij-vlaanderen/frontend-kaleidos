@@ -72,7 +72,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     saves.push(decision.save());
 
     if (publication.mustUpdatePublicationStatus) {
-      const statusUpdate = this.publicationService.updatePublicationStatus(
+      const statusUpdate = this.publicationService.changePublicationStatus(
         this.publicationFlow,
         CONSTANTS.PUBLICATION_STATUSES.PUBLISHED,
         publication.publicationDate

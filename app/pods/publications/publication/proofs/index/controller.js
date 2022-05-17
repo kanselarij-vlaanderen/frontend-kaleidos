@@ -58,7 +58,7 @@ export default class PublicationsPublicationProofsController extends Controller 
     }
 
     if (proofUpload.mustUpdatePublicationStatus) {
-      yield this.publicationService.updatePublicationStatus(
+      yield this.publicationService.changePublicationStatus(
         this.publicationFlow,
         CONSTANTS.PUBLICATION_STATUSES.PROOF_RECEIVED,
         proofUpload.receivedDate

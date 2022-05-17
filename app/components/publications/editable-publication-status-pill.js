@@ -68,7 +68,7 @@ export default class PublicationStatusPill extends Component {
   *savePublicationStatus(status, changeDate) {
     const previousStatus = this.publicationStatus;
     if (previousStatus != status) {
-      yield this.publicationService.updatePublicationStatus(
+      yield this.publicationService.managePublicationStatusChange(
         this.args.publicationFlow,
         status.uri,
         changeDate

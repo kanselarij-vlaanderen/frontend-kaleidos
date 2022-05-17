@@ -195,7 +195,56 @@ export default class PublicationService extends Service {
     return !!subcases.length;
   }
 
-  async updatePublicationStatus(publicationFlow, targetStatusUri, changeDate) {
+  /**
+   * Change the status and register the status change
+   * @param {PublicationFlow} publicationFlow
+   * @param {string} targetStatusUri
+   * @param {Date?} changeDate
+   */
+  async changePublicationStatus(publicationFlow, targetStatusUri, changeDate) {
+    if (isEmpty(changeDate)) {
+      changeDate = new Date();
+    }
+
+    publicationFlow.status = await this.store.findRecordByUri(
+      'publication-status',
+      targetStatusUri
+    );
+    // Continuing without awaiting here can cause saving while related status-change
+    // already is deleted (by step below)
+    await publicationFlow.save();
+
+    // reload the relation for possible concurrency
+    const currentStatusChange = await publicationFlow
+      .belongsTo('publicationStatusChange')
+      .reload();
+    await currentStatusChange?.destroyRecord();
+    const newStatusChange = this.store.createRecord(
+      'publication-status-change',
+      {
+        startedAt: changeDate,
+        publication: publicationFlow,
+      }
+    );
+    await newStatusChange.save();
+  }
+
+  /**
+   * Change the status, register the status change, synchronize dates*
+   * * In order to synchronize publicationDate
+   *   when changing status to "Published"
+   *      a 'publication-activity' and 'decision' are created when there are none.
+   *   Analogously when changing status from "Published" to something else
+   *      a 'decision'-record is deleted.
+   * @param {PublicationFlow} publicationFlow
+   * @param {string} targetStatusUri
+   * @param {Date?} changeDate
+   */
+  async managePublicationStatusChange(
+    publicationFlow,
+    targetStatusUri,
+    changeDate
+  ) {
     if (isEmpty(changeDate)) {
       changeDate = new Date();
     }
@@ -215,7 +264,10 @@ export default class PublicationService extends Service {
 
     // Update intermediate end-dates when status progresses
     if (!targetStatus.isPaused) {
-      if (targetStatus.position > previousStatus.position || previousStatus.isPaused) {
+      if (
+        targetStatus.position > previousStatus.position ||
+        previousStatus.isPaused
+      ) {
         // Set end-date on translation subcase if 'translation-received' status is passed
         if (targetStatus.position >= translationReceivedStatus.position) {
           if (!translationSubcase.endDate) {
@@ -227,7 +279,10 @@ export default class PublicationService extends Service {
     }
 
     // Undo changes when status gets reverted
-    if (targetStatus.position < previousStatus.position || previousStatus.isPaused) {
+    if (
+      targetStatus.position < previousStatus.position ||
+      previousStatus.isPaused
+    ) {
       // Undo end-date on translation-subcase if reverted before 'translation-received'
       if (targetStatus.position < translationReceivedStatus.position) {
         translationSubcase.endDate = null;
@@ -338,7 +393,7 @@ export default class PublicationService extends Service {
     await mail.save();
 
     if (proofRequestProperties.mustUpdatePublicationStatus) {
-      await this.updatePublicationStatus(
+      await this.changePublicationStatus(
         publicationFlow,
         CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED
       );
@@ -399,7 +454,7 @@ export default class PublicationService extends Service {
     await mail.save();
 
     if (publicationRequestProperties.mustUpdatePublicationStatus) {
-      await this.updatePublicationStatus(
+      await this.changePublicationStatus(
         publicationFlow,
         CONSTANTS.PUBLICATION_STATUSES.PUBLICATION_REQUESTED
       );
@@ -467,6 +522,7 @@ export default class PublicationService extends Service {
     return [meeting.id, agenda.id, agendaitem.id];
   }
 
+  /** @private */
   async ensureDecision(publicationSubcase, date) {
     let decision = await this.store.queryOne('decision', {
       'filter[publication-activity][subcase][:id:]': publicationSubcase.id,

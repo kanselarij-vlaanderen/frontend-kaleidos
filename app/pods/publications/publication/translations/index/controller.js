@@ -55,7 +55,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     }
 
     if (translationUpload.mustUpdatePublicationStatus) {
-      yield this.publicationService.updatePublicationStatus(
+      yield this.publicationService.changePublicationStatus(
         this.publicationFlow,
         CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_RECEIVED,
         translationUpload.receivedDate
@@ -147,7 +147,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     yield mail.save();
 
     if (translationRequest.mustUpdatePublicationStatus) {
-      yield this.publicationService.updatePublicationStatus(
+      yield this.publicationService.changePublicationStatus(
         this.publicationFlow,
         CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_REQUESTED
       );
