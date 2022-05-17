@@ -28,7 +28,7 @@
           @propertyToShow="label"
           @sortField="priority"
           @selectedItems={{this.documentType}}
-          @selectModel={{this.setDocumentType}}
+          @onChange={{this.setDocumentType}}
         />
       {{else}}
         {{this.documentType.label}}
@@ -47,7 +47,7 @@
         @propertyToShow="label"
         @sortField="priority"
         @selectedItems={{this.accessLevel}}
-        @selectModel={{this.setAccessLevel}}
+        @onChange={{this.setAccessLevel}}
       />
     {{else}}
       <Utils::AccessLevelColorBadge @accessLevel={{this.accessLevel}} />

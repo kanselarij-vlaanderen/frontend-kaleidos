@@ -12,7 +12,7 @@
     @searchMessage={{null}}
     @search={{perform this.searchTask}}
     @oninput={{this.resetValueIfEmpty}}
-    @onChange={{this.selectModel}}
+    @onChange={{@onChange}}
   as |model|>
     {{#if (has-block)}}
       {{yield model}}
@@ -34,7 +34,7 @@
     @closeOnSelect={{false}}
     @search={{perform this.searchTask}}
     @oninput={{this.resetValueIfEmpty}}
-    @onChange={{this.selectModel}}
+    @onChange={{@onChange}}
   as |model|>
     {{#if (has-block)}}
       {{yield model}}

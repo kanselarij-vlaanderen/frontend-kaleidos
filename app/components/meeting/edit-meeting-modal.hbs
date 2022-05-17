@@ -21,7 +21,7 @@
             @searchField="number-representation"
             @sortField="-planned-start"
             @selectedItems={{this.selectedMainMeeting}}
-            @selectModel={{this.selectMainMeeting}}
+            @onChange={{this.selectMainMeeting}}
             @filterOptions={{fn this.filterMainMeetingResults @meeting}}
             @isLoading={{this.initializeMainMeeting.isRunning}}
             as |model|

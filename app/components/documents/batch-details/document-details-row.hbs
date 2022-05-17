@@ -27,7 +27,7 @@
         @propertyToShow="label"
         @sortField="priority"
         @selectedItems={{@row.documentType}}
-        @selectModel={{@row.setDocumentType}}
+        @onChange={{@row.setDocumentType}}
       />
     {{else}}
       {{@row.documentType.label}}
@@ -42,7 +42,7 @@
         @propertyToShow="label"
         @sortField="priority"
         @selectedItems={{@row.accessLevel}}
-        @selectModel={{@row.setAccessLevel}}
+        @onChange={{@row.setAccessLevel}}
       />
     </td>
     <td class="auk-table-checkbox-col">

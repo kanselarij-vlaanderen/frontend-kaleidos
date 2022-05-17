@@ -14,7 +14,7 @@
       @sortField="priority"
       @readOnly={{this.isDisabled}}
       @selectedItems={{this.documentType}}
-      @selectModel={{this.setDocumentType}}
+      @onChange={{this.setDocumentType}}
     />
   </td>
   <td>
@@ -25,7 +25,7 @@
       @sortField="priority"
       @readOnly={{this.isDisabled}}
       @selectedItems={{this.accessLevel}}
-      @selectModel={{this.setAccessLevel}}
+      @onChange={{this.setAccessLevel}}
     />
   </td>
   <td class="auk-table-checkbox-col">

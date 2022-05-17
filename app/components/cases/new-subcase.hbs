@@ -75,7 +75,7 @@
           @searchField="label"
           @sortField="label"
           @selectedItems={{this.type}}
-          @selectModel={{this.selectType}}
+          @onChange={{this.selectType}}
         as |model|>
           {{capitalize model.label}}
         </Utils::ModelSelector>
@@ -92,7 +92,7 @@
               @sortField="label"
               @filter={{this.filter}}
               @selectedItems={{this.selectedShortcut}}
-              @selectModel={{this.selectSubcaseName}}
+              @onChange={{this.selectSubcaseName}}
             as |model|>
               {{capitalize model.label}}
             </Utils::ModelSelector>

@@ -16,7 +16,7 @@ export default class UtilsModelSelectrComponent extends Component {
    * @argument allowClear
    * @argument isLoading
    * @argument selectedItems
-   * @argument selectModel
+   * @argument onChange
    * @argument filterOptions: a function that will filter out results from the dropwdown menu
    */
   @service store;
@@ -93,11 +93,6 @@ export default class UtilsModelSelectrComponent extends Component {
       results = this.args.filterOptions(results);
     }
     return results;
-  }
-
-  @action
-  selectModel(items) {
-    this.args.selectModel(items);
   }
 
   @action

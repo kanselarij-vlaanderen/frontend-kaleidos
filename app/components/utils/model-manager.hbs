@@ -13,7 +13,7 @@
           @searchField="label"
           @sortField="label"
           @selectedItems={{this.item}}
-          @selectModel={{action "selectModel"}}
+          @onChange={{action "selectModel"}}
         as |model|>
           {{capitalize model.label}}
         </Utils::ModelSelector>
