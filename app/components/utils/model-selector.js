@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
@@ -27,7 +26,6 @@ export default class UtilsModelSelectrComponent extends Component {
   classNameBindings = ['classes'];
   loadingMessage = 'Even geduld aub..';
   noMatchesMessage = 'Geen zoekresultaten gevonden';
-  @tracked _queryOptions = {};
 
   constructor () {
     super(...arguments);
@@ -41,14 +39,7 @@ export default class UtilsModelSelectrComponent extends Component {
     return isPresent(this.args.searchField);
   }
 
-  set queryOptions(options) {
-    this._queryOptions = options;
-  }
-
   get queryOptions() {
-    if (this._queryOptions) {
-      return this._queryOptions;
-    }
     const options = {};
     const {
       includeField,
@@ -79,9 +70,7 @@ export default class UtilsModelSelectrComponent extends Component {
   @task
   *searchTask (searchValue) {
     yield timeout(300);
-    const {
-      queryOptions,
-    } = this;
+    const queryOptions = this.queryOptions;
     if (queryOptions.filter) {
       queryOptions.filter[this.args.searchField] = searchValue;
     } else {
@@ -95,15 +84,5 @@ export default class UtilsModelSelectrComponent extends Component {
       results = this.args.filterOptions(results);
     }
     return results;
-  }
-
-  @action
-  resetValueIfEmpty(param) {
-    if (param === '') {
-      this.queryOptions = {
-        sort: this.args.sortField,
-      };
-      this.findAll.perform();
-    }
   }
 }

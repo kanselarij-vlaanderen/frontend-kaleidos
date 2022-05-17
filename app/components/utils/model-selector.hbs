@@ -11,7 +11,6 @@
     @noMatchesMessage={{this.noMatchesMessage}}
     @closeOnSelect={{false}}
     @search={{perform this.searchTask}}
-    @oninput={{this.resetValueIfEmpty}}
     @onChange={{@onChange}}
   as |model|>
     {{#if (has-block)}}
@@ -33,7 +32,6 @@
     @searchEnabled={{this.searchEnabled}}
     @searchMessage={{null}}
     @search={{perform this.searchTask}}
-    @oninput={{this.resetValueIfEmpty}}
     @onChange={{@onChange}}
   as |model|>
     {{#if (has-block)}}
