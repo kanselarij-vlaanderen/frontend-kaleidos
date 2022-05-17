@@ -7,7 +7,7 @@
     disabled={{@disabled}}
   />
   {{#if (or (has-block) @label)}}
-    <span>
+    <span class="auk-checkbox__label {{this.labelSkinClass}}">
       {{#if (has-block)}}
         {{yield}}
       {{else}}
