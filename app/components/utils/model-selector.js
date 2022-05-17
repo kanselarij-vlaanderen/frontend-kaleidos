@@ -14,6 +14,7 @@ export default class UtilsModelSelectrComponent extends Component {
    * @argument placeholder
    * @argument disabled
    * @argument allowClear
+   * @argument multiple
    * @argument isLoading
    * @argument selectedItems
    * @argument onChange
