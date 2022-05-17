@@ -79,19 +79,19 @@
   {{#if this.canReleaseDecisions}}
     <Menu.Divider />
     <Menu.Item
-      @skin="danger"
       data-test-agenda-header-release-decisions
       {{on "click" this.openConfirmReleaseDecisions}}
     >
+      <AuIcon @icon="circle-check" @alignment="left" />
       {{t "agenda-release-decisions"}}
     </Menu.Item>
   {{else if this.canReleaseDocuments}}
     <Menu.Divider />
     <Menu.Item
-      @skin="danger"
       data-test-agenda-header-release-documents
       {{on "click" this.openConfirmReleaseDocuments}}
     >
+      <AuIcon @icon="circle-check" @alignment="left" />
       {{t "agenda-release-documents"}}
     </Menu.Item>
   {{/if}}

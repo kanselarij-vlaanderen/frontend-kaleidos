@@ -43,15 +43,6 @@
       </Menu.Item>
       <Menu.Divider />
     {{/if}}
-    {{#if this.canDeleteSelectedAgenda}}
-      <Menu.Item
-        @skin="danger"
-        data-test-agenda-actions-delete-agenda
-        {{on "click" this.openConfirmDeleteSelectedAgenda}}
-      >
-        <AuIcon @icon="bin" @alignment="left" />{{t "agenda-delete"}}
-      </Menu.Item>
-    {{/if}}
     {{#if this.canReopenPreviousAgenda}}
       <Menu.Divider />
       <Menu.Item
@@ -60,6 +51,15 @@
         {{on "click" this.openConfirmReopenPreviousAgenda}}
       >
         {{t "agenda-reopen-previous-version"}}
+      </Menu.Item>
+    {{/if}}
+    {{#if this.canDeleteSelectedAgenda}}
+      <Menu.Item
+        @skin="danger"
+        data-test-agenda-actions-delete-agenda
+        {{on "click" this.openConfirmDeleteSelectedAgenda}}
+      >
+        <AuIcon @icon="bin" @alignment="left" />{{t "agenda-delete"}}
       </Menu.Item>
     {{/if}}
     {{#if (and (not this.designAgenda) (not @meeting.isFinal))}}
