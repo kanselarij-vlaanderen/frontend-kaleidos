@@ -25,7 +25,6 @@ export default class UtilsModelSelectrComponent extends Component {
   propertyToShow = null;
   loadingMessage = 'Even geduld aub..';
   noMatchesMessage = 'Geen zoekresultaten gevonden';
-  selectedItems = null;
   @tracked _queryOptions = {};
 
   constructor () {

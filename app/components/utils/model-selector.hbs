@@ -1,7 +1,7 @@
 {{#if (not this.multiSelect)}}
   <PowerSelect
     @options={{this.items}}
-    @selected={{this.selectedItems}}
+    @selected={{@selectedItems}}
     @disabled={{this.readOnly}}
     @allowClear={{this.allowClear}}
     @searchField={{@searchField}}
@@ -23,7 +23,7 @@
 {{else}}
   <PowerSelectMultiple
     @options={{this.items}}
-    @selected={{this.selectedItems}}
+    @selected={{@selectedItems}}
     @disabled={{this.readOnly}}
     @searchField={{@searchField}}
     @placeholder={{@placeholder}}
