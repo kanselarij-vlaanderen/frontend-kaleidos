@@ -23,7 +23,6 @@ export default class UtilsModelSelectrComponent extends Component {
   @service store;
   @tracked items;
 
-  classNameBindings = ['classes'];
   loadingMessage = 'Even geduld aub..';
   noMatchesMessage = 'Geen zoekresultaten gevonden';
 
