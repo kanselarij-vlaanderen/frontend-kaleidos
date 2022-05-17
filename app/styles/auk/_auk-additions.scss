@@ -140,3 +140,9 @@ table tr.lt-expanded-row {
 .vlc-procedure-step--nopadding {
   padding: 0;
 }
+
+$vl-picton-blue: #16465B;
+.auk-pill--active {
+  border: .1rem solid $vl-picton-blue !important;
+  color: $vl-picton-blue !important;
+}

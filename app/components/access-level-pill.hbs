@@ -14,7 +14,7 @@
         @skin="tertiary"
         @layout="icon-only"
         @icon="pencil"
-        class="auk-button--tiny"
+        @size="tiny"
         {{on "click" this.openEditMode}}
         data-test-access-level-pill-edit
       />
@@ -34,7 +34,7 @@
       @skin="tertiary"
       @layout="icon-only"
       @icon="check"
-      class="auk-button--tiny"
+      @size="tiny"
       {{on "click" (perform this.confirmChangeAccessLevel @accessLevel)}}
       data-test-access-level-pill-save
     />
@@ -42,7 +42,7 @@
       @skin="tertiary"
       @layout="icon-only"
       @icon="x"
-      class="auk-button--tiny"
+      @size="tiny"
       {{on "click" (perform this.cancelChangeAccessLevel)}}
       data-test-access-level-pill-cancel
     />

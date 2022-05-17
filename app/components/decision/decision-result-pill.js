@@ -13,6 +13,17 @@ export default class DecisionResultPill extends Component {
     // } else if (selectedUri === codes.INGETROKKEN) {
     //  return 'danger';
     // }
-    return 'default';
+    return 'white';
+  }
+
+  get icon() {
+    const codes = CONSTANTS.DECISION_RESULT_CODE_URIS;
+    const selectedUri = this.args.decisionResultCode.get('uri');
+    if (selectedUri === codes.GOEDGEKEURD) {
+      return 'check';
+    } else if (selectedUri === codes.UITGESTELD) {
+      return 'clock';
+    }
+    return 'circle-info';
   }
 }
