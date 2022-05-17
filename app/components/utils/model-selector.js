@@ -1,16 +1,11 @@
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-components
-import Component from '@ember/component';
-import { inject } from '@ember/service';
-import {
-  task, timeout
-} from 'ember-concurrency';
-import { computed } from '@ember/object';
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
+import { task, timeout } from 'ember-concurrency';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
-export default Component.extend({
+export default class UtilsModelSelectrComponent extends Component {
   /**
    * @argument modelName
    * @argument searchField
@@ -22,43 +17,39 @@ export default Component.extend({
    * @argument selectModel
    * @argument filterOptions: a function that will filter out results from the dropwdown menu
    */
-  classNameBindings: ['classes'],
-  store: inject(),
-  modelName: null,
-  searchField: null,
-  propertyToShow: null,
-  placeholder: null,
-  sortField: null,
-  filter: null,
-  loadingMessage: 'Even geduld aub..',
-  noMatchesMessage: 'Geen zoekresultaten gevonden',
-  selectedItems: null,
+  @service store;
 
-  init() {
-    this._super(...arguments);
+  classNameBindings = ['classes'];
+  searchField = null;
+  propertyToShow = null;
+  placeholder = null;
+  sortField = null;
+  filter = null;
+  loadingMessage = 'Even geduld aub..';
+  noMatchesMessage = 'Geen zoekresultaten gevonden';
+  selectedItems = null;
+  @tracked _queryOptions = {};
+
+  constructor () {
+    super(...arguments);
+
     this.findAll.perform();
-  },
+  }
 
-  findAll: task(function *() {
-    const {
-      modelName, queryOptions,
-    } = this;
-    if (modelName) {
-      let items = yield this.store.query(modelName, queryOptions);
-      if (this.filterOptions) {
-        items = this.filterOptions(items);
-      }
-      this.set('items', items);
-    }
-  }),
-
-  searchEnabled: computed('searchField', function() {
+  get searchEnabled() {
     // default searchEnabled = false on powerSelect
     // to avoid adding @searchEnabled={{true}} on all uses of this component, we assume search should be enabled when a searchField is given
     return isPresent(this.searchField);
-  }),
+  }
 
-  queryOptions: computed('sortField', 'searchField', 'filter', 'modelName', 'includeField', function() {
+  set queryOptions(options) {
+    this._queryOptions = options;
+  }
+
+  get queryOptions() {
+    if (this._queryOptions) {
+      return this._queryOptions;
+    }
     const options = {};
     const {
       filter, sortField, includeField,
@@ -73,9 +64,21 @@ export default Component.extend({
       options.include = includeField;
     }
     return options;
-  }),
+  }
 
-  searchTask: task(function *(searchValue) {
+  @task
+  *findAll() {
+    if (this.args.modelName) {
+      let items = yield this.store.query(this.args.modelName, this.queryOptions);
+      if (this.args.filterOptions) {
+        items = this.args.filterOptions(items);
+      }
+      this.items = items;
+    }
+  }
+
+  @task
+  *searchTask (searchValue) {
     yield timeout(300);
     const {
       queryOptions, searchField, modelName,
@@ -89,26 +92,24 @@ export default Component.extend({
     }
 
     let results = yield this.store.query(modelName, queryOptions);
-    if (this.filterOptions) {
-      results = this.filterOptions(results);
+    if (this.args.filterOptions) {
+      results = this.args.filterOptions(results);
     }
     return results;
-  }),
+  }
 
-  // TODO: octane-refactor
-  // eslint-disable-next-line ember/no-actions-hash
-  actions: {
-    selectModel(items) {
-      this.selectModel(items);
-    },
+  @action
+  selectModel(items) {
+    this.args.selectModel(items);
+  }
 
-    resetValueIfEmpty(param) {
-      if (param === '') {
-        this.set('queryOptions', {
-          sort: this.sortField,
-        });
-        this.findAll.perform();
-      }
-    },
-  },
-});
+  @action
+  resetValueIfEmpty(param) {
+    if (param === '') {
+      this.queryOptions = {
+        sort: this.sortField,
+      };
+      this.findAll.perform();
+    }
+  }
+}
