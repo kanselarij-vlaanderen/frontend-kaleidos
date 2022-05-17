@@ -12,7 +12,7 @@ export default class UtilsModelSelectrComponent extends Component {
    * @argument searchField
    * @argument sortField
    * @argument placeholder
-   * @argument readOnly
+   * @argument disabled
    * @argument allowClear
    * @argument isLoading
    * @argument selectedItems

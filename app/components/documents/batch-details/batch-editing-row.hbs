@@ -12,7 +12,7 @@
       @searchField="label"
       @propertyToShow="label"
       @sortField="priority"
-      @readOnly={{this.isDisabled}}
+      @disabled={{this.isDisabled}}
       @selectedItems={{this.documentType}}
       @onChange={{this.setDocumentType}}
     />
@@ -23,7 +23,7 @@
       @allowClear={{true}}
       @propertyToShow="label"
       @sortField="priority"
-      @readOnly={{this.isDisabled}}
+      @disabled={{this.isDisabled}}
       @selectedItems={{this.accessLevel}}
       @onChange={{this.setAccessLevel}}
     />
