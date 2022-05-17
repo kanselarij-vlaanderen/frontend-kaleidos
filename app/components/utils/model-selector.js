@@ -24,9 +24,6 @@ export default class UtilsModelSelectrComponent extends Component {
   @service store;
   @tracked items;
 
-  loadingMessage = 'Even geduld aub..';
-  noMatchesMessage = 'Geen zoekresultaten gevonden';
-
   constructor () {
     super(...arguments);
 
