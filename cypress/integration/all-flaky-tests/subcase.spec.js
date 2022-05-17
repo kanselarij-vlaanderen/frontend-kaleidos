@@ -482,6 +482,7 @@ context('Subcase tests', () => {
   });
 
   it('check submission activities', () => {
+    const kind = 'Ministerraad';
     const fileName = 'VR 2020 1212 DOC.0001-1';
     const file = {
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: fileName, fileType: 'Nota',
@@ -489,7 +490,7 @@ context('Subcase tests', () => {
     const caseTitle2 = 'cypress test: submission activities new title';
     const caseTitle = 'cypress test: submission activities';
 
-    // setup
+    // TODO-setup
     cy.createCase(caseTitle);
     cy.addSubcase(null, subcaseTitleShort);
     cy.openSubcase(0);
@@ -501,9 +502,10 @@ context('Subcase tests', () => {
         folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 1212 DOC.0001-2', fileType: 'Nota',
       }
     ]);
-    cy.proposeSubcaseForAgenda(agendaDate);
+    cy.createAgenda(kind, agendaDate);
 
     cy.openAgendaForDate(agendaDate);
+    cy.addAgendaitemToAgenda(subcaseTitleShort);
     cy.openDetailOfAgendaitem(subcaseTitleShort);
     cy.reload();
     cy.get(agenda.agendaitemNav.documentsTab).click();
@@ -512,7 +514,13 @@ context('Subcase tests', () => {
     cy.get(agenda.agendaitemTitlesView.edit).click();
     cy.get(agenda.agendaitemTitlesEdit.shorttitle).clear()
       .type(caseTitle2);
-    cy.get(agenda.agendaitemTitlesEdit.actions.save).click();
+    cy.intercept('PATCH', '/subcases/*').as('patchSubcases5');
+    cy.intercept('PATCH', '/agendaitems/*').as('patchAgendaitems');
+    cy.intercept('PATCH', '/agendas/*').as('patchAgendas');
+    cy.get(agenda.agendaitemTitlesEdit.actions.save).click()
+      .wait('@patchSubcases5')
+      .wait('@patchAgendaitems')
+      .wait('@patchAgendas');
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
     cy.get(cases.subcaseDetailNav.documents).click();
     // if this fails, we are probably saving subcase with an incomplete list of submission activities
