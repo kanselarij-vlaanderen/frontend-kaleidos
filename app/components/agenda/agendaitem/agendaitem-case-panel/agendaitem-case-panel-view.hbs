@@ -100,7 +100,7 @@
         <Auk::PillList>
           {{#if (not @agendaitem.showAsRemark)}}
             {{#if @subcase.subcaseName}}
-              <Auk::Pill>
+              <Auk::Pill data-test-agendaitem-subcase-name>
                 {{capitalize @subcase.subcaseName}}
               </Auk::Pill>
             {{/if}}
