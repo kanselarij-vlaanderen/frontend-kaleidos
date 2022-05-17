@@ -22,7 +22,6 @@ export default class UtilsModelSelectrComponent extends Component {
 
   classNameBindings = ['classes'];
   propertyToShow = null;
-  sortField = null;
   filter = null;
   loadingMessage = 'Even geduld aub..';
   noMatchesMessage = 'Geen zoekresultaten gevonden';
@@ -51,10 +50,10 @@ export default class UtilsModelSelectrComponent extends Component {
     }
     const options = {};
     const {
-      filter, sortField, includeField,
+      filter, includeField,
     } = this;
-    if (sortField) {
-      options.sort = sortField;
+    if (this.args.sortField) {
+      options.sort = this.args.sortField;
     }
     if (filter) {
       options.filter = filter;
@@ -106,7 +105,7 @@ export default class UtilsModelSelectrComponent extends Component {
   resetValueIfEmpty(param) {
     if (param === '') {
       this.queryOptions = {
-        sort: this.sortField,
+        sort: this.args.sortField,
       };
       this.findAll.perform();
     }
