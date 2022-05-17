@@ -10,13 +10,14 @@ export default class UtilsModelSelectrComponent extends Component {
    * @argument field
    * @argument searchField
    * @argument sortField
+   * @argument displayField
+   * @argument includeField
    * @argument placeholder
    * @argument disabled
    * @argument allowClear
    * @argument multiple
    * @argument isLoading
    * @argument selected
-   * @argument displayField
    * @argument onChange
    * @argument filterOptions: a function that will filter out results from the dropwdown menu
    */
@@ -40,17 +41,14 @@ export default class UtilsModelSelectrComponent extends Component {
 
   get queryOptions() {
     const options = {};
-    const {
-      includeField,
-    } = this;
     if (this.args.sortField) {
       options.sort = this.args.sortField;
     }
     if (this.args.filter) {
       options.filter = this.args.filter;
     }
-    if (includeField) {
-      options.include = includeField;
+    if (this.args.includeField) {
+      options.include = this.args.includeField;
     }
     return options;
   }
