@@ -17,13 +17,13 @@ export default class UtilsModelSelectrComponent extends Component {
    * @argument multiple
    * @argument isLoading
    * @argument selected
+   * @argument displayField
    * @argument onChange
    * @argument filterOptions: a function that will filter out results from the dropwdown menu
    */
   @service store;
 
   classNameBindings = ['classes'];
-  propertyToShow = null;
   loadingMessage = 'Even geduld aub..';
   noMatchesMessage = 'Geen zoekresultaten gevonden';
   @tracked _queryOptions = {};

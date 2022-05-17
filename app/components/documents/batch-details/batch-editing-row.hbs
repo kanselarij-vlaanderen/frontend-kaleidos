@@ -10,7 +10,7 @@
       @modelName="document-type"
       @allowClear={{true}}
       @searchField="label"
-      @propertyToShow="label"
+      @displayField="label"
       @sortField="priority"
       @disabled={{this.isDisabled}}
       @selected={{this.documentType}}
@@ -21,7 +21,7 @@
     <Utils::ModelSelector
       @modelName="access-level"
       @allowClear={{true}}
-      @propertyToShow="label"
+      @displayField="label"
       @sortField="priority"
       @disabled={{this.isDisabled}}
       @selected={{this.accessLevel}}

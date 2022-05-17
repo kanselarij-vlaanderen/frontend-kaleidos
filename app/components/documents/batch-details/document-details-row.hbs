@@ -24,7 +24,7 @@
         @modelName="document-type"
         @allowClear={{true}}
         @searchField="label"
-        @propertyToShow="label"
+        @displayField="label"
         @sortField="priority"
         @selected={{@row.documentType}}
         @onChange={{@row.setDocumentType}}
@@ -39,7 +39,7 @@
         data-test-document-details-row-access-level
         @modelName="access-level"
         @allowClear={{true}}
-        @propertyToShow="label"
+        @displayField="label"
         @sortField="priority"
         @selected={{@row.accessLevel}}
         @onChange={{@row.setAccessLevel}}

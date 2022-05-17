@@ -14,7 +14,7 @@
       data-test-edit-document-row-type={{true}}
       @modelName="document-type"
       @searchField="label"
-      @propertyToShow="label"
+      @displayField="label"
       @sortField="priority"
       @selected={{this.documentContainer.type}}
       @onChange={{this.selectDocumentType}}
@@ -25,7 +25,7 @@
       data-test-edit-document-row-access-level={{true}}
       @modelName="access-level"
       @allowClear={{true}}
-      @propertyToShow="label"
+      @displayField="label"
       @disabled={{@piece.confidential}}
       @sortField="label"
       @selected={{@piece.accessLevel}}
