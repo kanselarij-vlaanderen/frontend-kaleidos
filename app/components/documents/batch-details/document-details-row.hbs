@@ -26,7 +26,7 @@
         @searchField="label"
         @propertyToShow="label"
         @sortField="priority"
-        @selectedItems={{@row.documentType}}
+        @selected={{@row.documentType}}
         @onChange={{@row.setDocumentType}}
       />
     {{else}}
@@ -41,7 +41,7 @@
         @allowClear={{true}}
         @propertyToShow="label"
         @sortField="priority"
-        @selectedItems={{@row.accessLevel}}
+        @selected={{@row.accessLevel}}
         @onChange={{@row.setAccessLevel}}
       />
     </td>

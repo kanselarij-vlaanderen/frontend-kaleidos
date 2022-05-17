@@ -74,7 +74,7 @@
           @modelName="subcase-type"
           @searchField="label"
           @sortField="label"
-          @selectedItems={{this.type}}
+          @selected={{this.type}}
           @onChange={{this.selectType}}
         as |model|>
           {{capitalize model.label}}
@@ -91,7 +91,7 @@
               @searchField="label"
               @sortField="label"
               @filter={{this.filter}}
-              @selectedItems={{this.selectedShortcut}}
+              @selected={{this.selectedShortcut}}
               @onChange={{this.selectSubcaseName}}
             as |model|>
               {{capitalize model.label}}

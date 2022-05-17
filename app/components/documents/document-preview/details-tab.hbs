@@ -27,7 +27,7 @@
           @searchField="label"
           @propertyToShow="label"
           @sortField="priority"
-          @selectedItems={{this.documentType}}
+          @selected={{this.documentType}}
           @onChange={{this.setDocumentType}}
         />
       {{else}}
@@ -46,7 +46,7 @@
         @allowClear={{true}}
         @propertyToShow="label"
         @sortField="priority"
-        @selectedItems={{this.accessLevel}}
+        @selected={{this.accessLevel}}
         @onChange={{this.setAccessLevel}}
       />
     {{else}}

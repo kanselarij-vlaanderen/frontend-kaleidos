@@ -16,7 +16,7 @@
       @searchField="label"
       @propertyToShow="label"
       @sortField="priority"
-      @selectedItems={{this.documentContainer.type}}
+      @selected={{this.documentContainer.type}}
       @onChange={{this.selectDocumentType}}
     />
   </td>
@@ -28,7 +28,7 @@
       @propertyToShow="label"
       @disabled={{@piece.confidential}}
       @sortField="label"
-      @selectedItems={{@piece.accessLevel}}
+      @selected={{@piece.accessLevel}}
       @onChange={{this.selectAccessLevel}}
     />
   </td>
