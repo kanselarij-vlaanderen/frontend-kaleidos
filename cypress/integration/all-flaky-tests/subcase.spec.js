@@ -7,6 +7,7 @@ import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import document from '../../selectors/document.selectors';
 
 function currentTimestamp() {
   return Cypress.dayjs().unix();
@@ -478,5 +479,45 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseDescription.subcaseName).contains(nonCapital)
       .should('have.class', 'auk-u-text-capitalize');
     cy.get(cases.subcaseTitlesView.subcaseName).contains(capital);
+  });
+
+  it('check submission activities', () => {
+    const fileName = 'VR 2020 1212 DOC.0001-1';
+    const file = {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: fileName, fileType: 'Nota',
+    };
+    const caseTitle2 = 'cypress test: submission activities new title';
+    const caseTitle = 'cypress test: submission activities';
+
+    // setup
+    cy.createCase(caseTitle);
+    cy.addSubcase(null, subcaseTitleShort);
+    cy.openSubcase(0);
+    cy.addDocumentsToSubcase([
+      {
+        folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 1212 DOC.0001-1', fileType: 'Nota',
+      },
+      {
+        folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 1212 DOC.0001-2', fileType: 'Nota',
+      }
+    ]);
+    cy.proposeSubcaseForAgenda(agendaDate);
+
+    cy.openAgendaForDate(agendaDate);
+    cy.openDetailOfAgendaitem(subcaseTitleShort);
+    cy.reload();
+    cy.get(agenda.agendaitemNav.documentsTab).click();
+    cy.addNewPiece('VR 2020 1212 DOC.0001-1', file, 'agendaitems');
+    cy.get(agenda.agendaitemNav.caseTab).click();
+    cy.get(agenda.agendaitemTitlesView.edit).click();
+    cy.get(agenda.agendaitemTitlesEdit.shorttitle).clear()
+      .type(caseTitle2);
+    cy.get(agenda.agendaitemTitlesEdit.actions.save).click();
+    cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
+    cy.get(cases.subcaseDetailNav.documents).click();
+    // if this fails, we are probably saving subcase with an incomplete list of submission activities
+    cy.get(document.documentCard.card).should('have.length', 2)
+      .find(document.documentCard.name.value)
+      .contains(`${file.newFileName}BIS`);
   });
 });
