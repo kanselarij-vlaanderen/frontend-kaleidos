@@ -253,7 +253,7 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 2);
     cy.get(agenda.agendaOverviewItem.subitem).contains(approvalTitle);
     cy.get(agenda.agendaOverviewItem.subitem).contains(subcaseTitleShortApproved);
-    cy.addAgendaitemToAgenda(subcaseTitleShortNew);
+    cy.addAgendaitemToAgenda(subcaseTitleShortNew); // !TODO KAS-3413 could be placed in setup
 
     cy.get(agenda.agendaActions.showOptions).click();
     cy.get(agenda.agendaActions.actions.lockAgenda).click();

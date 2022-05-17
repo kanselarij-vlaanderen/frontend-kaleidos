@@ -32,7 +32,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   cy.intercept('POST', '/newsletter-infos').as('createNewsletter');
   cy.intercept('PATCH', '/meetings/**').as('patchMeetings');
 
-  cy.visit('');
+  cy.visit('/overzicht?size=2');
   cy.get(route.agendas.action.newMeeting).click();
 
   // Set the kind
@@ -164,7 +164,7 @@ function openAgendaForDate(agendaDate, index = 0) {
   const searchDate = `${agendaDate.date()}/${agendaDate.month() + 1}/${agendaDate.year()}`;
   cy.intercept('GET', '/agendas?filter**').as('getFilteredAgendas');
 
-  cy.visit('');
+  cy.visit('/overzicht?size=2');
   cy.get(route.agendasOverview.filter.container).within(() => {
     cy.get(route.agendasOverview.filter.input).type(`${searchDate}{enter}`);
   });
@@ -358,7 +358,7 @@ function approveAndCloseDesignAgenda(shouldConfirm = true) {
  * @param {String} subcaseTitle - The title of the case, Mandatory
  * @param {boolean} postponed - DO NOT USE, Feature no longer works properly but still exists, default false
  */
-function addAgendaitemToAgenda(subcaseTitle, postponed = false) {
+function addAgendaitemToAgenda(subcaseTitle) {
   cy.log('addAgendaitemToAgenda');
   cy.intercept('GET', '/subcases?**sort**').as('getSubcasesFiltered');
   cy.intercept('POST', '/agendaitems').as('createNewAgendaitem');
@@ -376,9 +376,6 @@ function addAgendaitemToAgenda(subcaseTitle, postponed = false) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
   cy.get(utils.vlModal.dialogWindow).within(() => {
-    if (postponed) {
-      cy.get(agenda.createAgendaitem.postponedCheckbox).click();
-    }
     cy.get(auk.loader, {
       timeout: 12000,
     }).should('not.exist');

@@ -202,7 +202,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
 
     cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten');
     // *adding announcement to agenda creates a KB*
-    cy.addAgendaitemToAgenda(subcaseTitleShort, false);
+    cy.addAgendaitemToAgenda(subcaseTitleShort);
     cy.openAgendaitemKortBestekTab(subcaseTitleShort);
     // check if KB already exists
     cy.get(newsletter.agendaitemNewsItem.title).contains(subcaseTitleShort);
@@ -224,7 +224,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     const subcaseTitleShort = 'Cypress test: KB defaults 4 - Med zonder lange titel - 1651584640';
 
     cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten');
-    cy.addAgendaitemToAgenda(subcaseTitleShort, false);
+    cy.addAgendaitemToAgenda(subcaseTitleShort);
     cy.openAgendaitemKortBestekTab(subcaseTitleShort);
     // check if KB already exists
     cy.get(newsletter.agendaitemNewsItem.title).contains(subcaseTitleShort);
@@ -419,7 +419,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
 
     // add nota to agenda and check if list contains correct item
     cy.visitAgendaWithLink(agendaLink);
-    cy.addAgendaitemToAgenda(subcaseTitleNota, false);
+    cy.addAgendaitemToAgenda(subcaseTitleNota);
     cy.visit(newsletterLink);
     cy.get(newsletter.tableRow.newsletterRow).within(() => {
       cy.get(newsletter.tableRow.agendaitemNumber).contains(2);

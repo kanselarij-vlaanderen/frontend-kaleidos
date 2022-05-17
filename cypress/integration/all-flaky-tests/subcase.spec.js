@@ -172,7 +172,7 @@ context('Subcase tests', () => {
 
     // Aanmaken agendaitem
     cy.openAgendaForDate(agendaDate);
-    cy.addAgendaitemToAgenda(shortSubcaseTitle, false);
+    cy.addAgendaitemToAgenda(shortSubcaseTitle);
     cy.openAgendaitemDossierTab(shortSubcaseTitle);
 
     // Status is hidden

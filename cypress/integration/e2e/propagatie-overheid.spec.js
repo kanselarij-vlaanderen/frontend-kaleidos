@@ -41,7 +41,7 @@ context('Propagation to other graphs', () => {
     cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
 
     cy.openAgendaForDate(agendaDate);
-    cy.addAgendaitemToAgenda(subcaseTitle1, false);
+    cy.addAgendaitemToAgenda(subcaseTitle1);
     cy.addDocumentsToAgendaitem(subcaseTitle1, files);
 
     cy.setFormalOkOnItemWithIndex(0);

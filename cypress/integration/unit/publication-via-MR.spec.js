@@ -64,7 +64,7 @@ context('Publications via MR tests', () => {
     cy.addDocumentsToSubcase(files);
     cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.openAgendaForDate(agendaDate);
-    cy.addAgendaitemToAgenda(subcaseTitleShort, false);
+    cy.addAgendaitemToAgenda(subcaseTitleShort);
   });
 
   it('should open an agendaitem, link document to a new publication and check if it was created properly', () => {
