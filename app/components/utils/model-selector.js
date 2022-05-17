@@ -22,6 +22,7 @@ export default class UtilsModelSelectrComponent extends Component {
    * @argument filterOptions: a function that will filter out results from the dropwdown menu
    */
   @service store;
+  @tracked items;
 
   classNameBindings = ['classes'];
   loadingMessage = 'Even geduld aub..';
