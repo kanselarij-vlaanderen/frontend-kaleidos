@@ -62,6 +62,7 @@ const selectors = {
     container: '[data-test-agenda-overview-item-container]',
     subitem: '[data-test-agenda-overview-item-sub-item]', // this contains short title
     title: '[data-test-agenda-overview-item-title]',
+    subcaseName: '[data-test-agenda-overview-item-subcase-name]',
     formallyOk: '[data-test-agenda-overview-item-formally-ok]',
     status: '[data-test-agenda-overview-item-status]',
   },
@@ -158,6 +159,7 @@ const selectors = {
   agendaitemTitlesView: {
     title: '[data-test-agendaitem-titles-title]',
     shortTitle: '[data-test-agendaitem-titles-short-title]',
+    subcaseName: '[data-test-agendaitem-subcase-name]',
     comment: '[data-test-agendaitem-titles-comment]',
     privateComment: '[data-test-agendaitem-titles-private-comment]',
     confidential: '[data-test-agendaitem-titles-confidential]',
@@ -233,6 +235,7 @@ const selectors = {
     dataTable: '[data-test-create-agendaitem-data-table]',
     row: {
       checkBox: '[data-test-create-agendaitem-row-subcase-checkbox]',
+      subcaseName: '[data-test-create-agendaitem-row-subcase-name]',
     },
   },
 };

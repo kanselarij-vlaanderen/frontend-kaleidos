@@ -132,5 +132,11 @@ const selectors = {
     message: '[data-test-vl-alert-message]',
   },
 
+  // case-search
+  caseSearch: {
+    input: '[data-test-utils-case-search-input]',
+    row: '[data-test-utils-case-search-row]',
+  },
+
 };
 export default selectors;
