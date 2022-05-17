@@ -6,7 +6,7 @@
     <Auk::Icon @name={{if @isHighlighted "document-added" "document"}} />
     {{@doc.name}}
   </a>
-  {{#if this.showAccessLevel}}
+  {{#if @isShowingAccessLevel}}
     <AccessLevelPill
       @accessLevel={{@accessLevel}}
     />
