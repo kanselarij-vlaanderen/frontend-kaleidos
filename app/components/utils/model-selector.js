@@ -21,7 +21,6 @@ export default class UtilsModelSelectrComponent extends Component {
   @service store;
 
   classNameBindings = ['classes'];
-  searchField = null;
   propertyToShow = null;
   sortField = null;
   filter = null;
@@ -39,7 +38,7 @@ export default class UtilsModelSelectrComponent extends Component {
   get searchEnabled() {
     // default searchEnabled = false on powerSelect
     // to avoid adding @searchEnabled={{true}} on all uses of this component, we assume search should be enabled when a searchField is given
-    return isPresent(this.searchField);
+    return isPresent(this.args.searchField);
   }
 
   set queryOptions(options) {
@@ -81,13 +80,13 @@ export default class UtilsModelSelectrComponent extends Component {
   *searchTask (searchValue) {
     yield timeout(300);
     const {
-      queryOptions, searchField, modelName,
+      queryOptions, modelName,
     } = this;
     if (queryOptions.filter) {
-      queryOptions.filter[searchField] = searchValue;
+      queryOptions.filter[this.args.searchField] = searchValue;
     } else {
       const filter = {};
-      filter[searchField] = searchValue;
+      filter[this.args.searchField] = searchValue;
       queryOptions.filter = filter;
     }
 
