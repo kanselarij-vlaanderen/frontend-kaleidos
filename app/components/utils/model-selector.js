@@ -79,7 +79,7 @@ export default class UtilsModelSelectrComponent extends Component {
   *searchTask (searchValue) {
     yield timeout(300);
     const {
-      queryOptions, modelName,
+      queryOptions,
     } = this;
     if (queryOptions.filter) {
       queryOptions.filter[this.args.searchField] = searchValue;
@@ -89,7 +89,7 @@ export default class UtilsModelSelectrComponent extends Component {
       queryOptions.filter = filter;
     }
 
-    let results = yield this.store.query(modelName, queryOptions);
+    let results = yield this.store.query(this.args.modelName, queryOptions);
     if (this.args.filterOptions) {
       results = this.args.filterOptions(results);
     }
