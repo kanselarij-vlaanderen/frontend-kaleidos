@@ -1,26 +1,4 @@
-{{#if (not @multiple)}}
-  <PowerSelect
-    @options={{this.items}}
-    @selected={{@selectedItems}}
-    @disabled={{@disabled}}
-    @allowClear={{@allowClear}}
-    @searchField={{@searchField}}
-    @placeholder={{@placeholder}}
-    @loadingMessage={{this.loadingMessage}}
-    @noMatchesMessage={{this.noMatchesMessage}}
-    @searchEnabled={{this.searchEnabled}}
-    @searchMessage={{null}}
-    @search={{perform this.searchTask}}
-    @oninput={{this.resetValueIfEmpty}}
-    @onChange={{@onChange}}
-  as |model|>
-    {{#if (has-block)}}
-      {{yield model}}
-    {{else}}
-      {{model-property-to-show model this.propertyToShow}}
-    {{/if}}
-  </PowerSelect>
-{{else}}
+{{#if @multiple}}
   <PowerSelectMultiple
     @options={{this.items}}
     @selected={{@selectedItems}}
@@ -42,4 +20,26 @@
       {{model-property-to-show model this.propertyToShow}}
     {{/if}}
   </PowerSelectMultiple>
+{{else}}
+  <PowerSelect
+    @options={{this.items}}
+    @selected={{@selectedItems}}
+    @disabled={{@disabled}}
+    @allowClear={{@allowClear}}
+    @searchField={{@searchField}}
+    @placeholder={{@placeholder}}
+    @loadingMessage={{this.loadingMessage}}
+    @noMatchesMessage={{this.noMatchesMessage}}
+    @searchEnabled={{this.searchEnabled}}
+    @searchMessage={{null}}
+    @search={{perform this.searchTask}}
+    @oninput={{this.resetValueIfEmpty}}
+    @onChange={{@onChange}}
+  as |model|>
+    {{#if (has-block)}}
+      {{yield model}}
+    {{else}}
+      {{model-property-to-show model this.propertyToShow}}
+    {{/if}}
+  </PowerSelect>
 {{/if}}
