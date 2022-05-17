@@ -8,6 +8,7 @@ import { task, timeout } from 'ember-concurrency';
 export default class UtilsModelSelectrComponent extends Component {
   /**
    * @argument modelName
+   * @argument field
    * @argument searchField
    * @argument sortField
    * @argument placeholder
@@ -22,7 +23,6 @@ export default class UtilsModelSelectrComponent extends Component {
 
   classNameBindings = ['classes'];
   propertyToShow = null;
-  filter = null;
   loadingMessage = 'Even geduld aub..';
   noMatchesMessage = 'Geen zoekresultaten gevonden';
   selectedItems = null;
@@ -50,13 +50,13 @@ export default class UtilsModelSelectrComponent extends Component {
     }
     const options = {};
     const {
-      filter, includeField,
+      includeField,
     } = this;
     if (this.args.sortField) {
       options.sort = this.args.sortField;
     }
-    if (filter) {
-      options.filter = filter;
+    if (this.args.filter) {
+      options.filter = this.args.filter;
     }
     if (includeField) {
       options.include = includeField;
