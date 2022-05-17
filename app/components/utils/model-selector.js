@@ -10,6 +10,7 @@ export default class UtilsModelSelectrComponent extends Component {
    * @argument modelName
    * @argument searchField
    * @argument sortField
+   * @argument placeholder
    * @argument readOnly
    * @argument allowClear
    * @argument isLoading
@@ -22,7 +23,6 @@ export default class UtilsModelSelectrComponent extends Component {
   classNameBindings = ['classes'];
   searchField = null;
   propertyToShow = null;
-  placeholder = null;
   sortField = null;
   filter = null;
   loadingMessage = 'Even geduld aub..';
