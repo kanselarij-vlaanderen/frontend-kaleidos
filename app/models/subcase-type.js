@@ -4,6 +4,7 @@ export default class Subcase extends Model {
   @attr label;
   @attr altLabel;
   @attr scopeNote;
+  @attr uri;
 
   @hasMany('subcase', { inverse: null }) subcases;
 }
