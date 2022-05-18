@@ -24,17 +24,13 @@
         @subcase={{@model.subcase}}
         @allowEditing={{this.currentSession.isEditor}}
       />
-      {{#if this.loadData.isRunning}}
-        <div class="auk-skeleton auk-skeleton--rectangle" role="alert" aria-busy="true"></div>
-      {{else}}
-        <Mandatees::MandateesPanel
-          @mandatees={{this.mandatees}}
-          @submitter={{this.submitter}}
-          @emptyStateMessage={{if this.showMandateesNotApplicableMessage (t "not-applicable")}}
-          @allowEditing={{this.currentSession.isEditor}}
-          @onSave={{this.saveMandateeData}}
-        />
-      {{/if}}
+      <Mandatees::MandateesPanel
+        @mandatees={{this.mandatees}}
+        @submitter={{this.submitter}}
+        @emptyStateMessage={{if this.showMandateesNotApplicableMessage (t "not-applicable")}}
+        @allowEditing={{this.currentSession.isEditor}}
+        @onSave={{this.saveMandateeData}}
+      />
       <Utils::GovernmentAreas::GovernmentAreasPanel
         @governmentAreas={{this.governmentAreas}}
         @allowEditing={{this.currentSession.isEditor}}
