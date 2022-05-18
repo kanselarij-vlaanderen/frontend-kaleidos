@@ -28,20 +28,20 @@ export default class AccessLevelPillComponent extends Component {
     let icon = '';
     if (this.args.accessLevel) {
       switch (this.args.accessLevel.uri) {
-        case CONSTANTS.ACCESS_LEVELS.MINISTERRAAD:
-          icon = 'ministerraad';
-          break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE:
-          icon = 'intern-secretarie';
+          icon = 'users-single';
+          break;
+        case CONSTANTS.ACCESS_LEVELS.MINISTERRAAD:
+          icon = 'users-one-of-four';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
-          icon = 'intern-regering';
+          icon = 'users-two-of-four';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID:
-          icon = 'intern-overheid';
+          icon = 'users-three-of-four';
           break;
         case CONSTANTS.ACCESS_LEVELS.PUBLIEK:
-          icon = 'public';
+          icon = 'users-four-of-four';
           break;
         default:
       }

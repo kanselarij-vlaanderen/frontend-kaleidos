@@ -2,13 +2,13 @@
   <div class="auk-loader" role="alert" aria-busy="true"></div>
 {{else}}
   {{#if (not this.isEditing)}}
-    <Auk::Pill
-      @skin="active"
+    <AuPill
+      @skin="ongoing"
       @icon={{this.pillIcon}}
       data-test-access-level-pill
     >
       {{this.accessLevelLabel}}
-    </Auk::Pill>
+    </AuPill>
     {{#if this.canEdit}}
       <Auk::Button
         @skin="tertiary"
