@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
 import { task, timeout } from 'ember-concurrency';
 
-export default class UtilsModelSelectrComponent extends Component {
+export default class UtilsModelSelectorComponent extends Component {
   /**
    * @argument modelName
    * @argument field
