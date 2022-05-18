@@ -93,8 +93,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   // Set the step name
   if (stepName) {
-    cy.get(cases.newSubcase.procedureName).find(dependency.emberPowerSelect.trigger)
-      .click();
+    cy.get(cases.newSubcase.procedureName).click();
     cy.get(dependency.emberPowerSelect.option).contains(stepName)
       .scrollIntoView()
       .trigger('mouseover')

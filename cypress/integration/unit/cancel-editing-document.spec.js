@@ -88,7 +88,6 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.documentDetailsRow.row).as('documentRows');
     cy.get('@documentRows').eq(0)
       .find(document.documentDetailsRow.type)
-      .find(dependency.emberPowerSelect.trigger)
       .click();
     cy.get(dependency.emberPowerSelect.option).contains('Decreet')
       .click();
