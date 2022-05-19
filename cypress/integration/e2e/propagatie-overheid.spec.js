@@ -55,7 +55,7 @@ context('Propagation to other graphs', () => {
 
     // Change the rights of the treatment report
     cy.get(document.documentCard.card).within(() => {
-      cy.get(document.accessLevelPill.pill).click();
+      cy.get(document.accessLevelPill.edit).click();
       cy.get(dependency.emberPowerSelect.trigger).click();
     });
     cy.get(dependency.emberPowerSelect.option).contains('Intern Overheid')
