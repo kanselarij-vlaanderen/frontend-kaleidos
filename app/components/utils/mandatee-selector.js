@@ -18,7 +18,7 @@ export default class MandateeSelector extends Component {
 
   defaultQueryOptions = {
     include: 'person,mandate.role',
-    sort: 'priority',
+    sort: '-start', // Assumes that all mandatee start's are updated when something changes. Otherwise some might fall off default page size
   };
 
   constructor() {
@@ -40,7 +40,9 @@ export default class MandateeSelector extends Component {
     }
     queryOptions['filter[government-body][:uri:]'] = CURRENT_GOVERNMENT_BODY;
 
-    const results = yield this.store.query('mandatee', queryOptions);
+    // Assumes that there are < default page-size active mandatees
+    let results = yield this.store.query('mandatee', queryOptions);
+    results = results.sortBy('priority'); // TODO: sorting on both "start" and "priority" yields incomplete results. Thus part of the sort in frontend
     // Many versions of a mandatee exist within a government-body.
     // We only want the mandatees with no end-date or an end-date in the future.
     // mu-cl-resources doesn't have :has-no:-capability for properties.
