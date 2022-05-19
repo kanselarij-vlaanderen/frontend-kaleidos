@@ -25,10 +25,10 @@
           @modelName="document-type"
           @allowClear={{true}}
           @searchField="label"
-          @propertyToShow="label"
+          @displayField="label"
           @sortField="priority"
-          @selectedItems={{this.documentType}}
-          @selectModel={{this.setDocumentType}}
+          @selected={{this.documentType}}
+          @onChange={{this.setDocumentType}}
         />
       {{else}}
         {{this.documentType.label}}
@@ -44,10 +44,10 @@
         data-test-details-tab-edit-access-level
         @modelName="access-level"
         @allowClear={{true}}
-        @propertyToShow="label"
+        @displayField="label"
         @sortField="priority"
-        @selectedItems={{this.accessLevel}}
-        @selectModel={{this.setAccessLevel}}
+        @selected={{this.accessLevel}}
+        @onChange={{this.setAccessLevel}}
       />
     {{else}}
       <Utils::AccessLevelColorBadge @accessLevel={{this.accessLevel}} />

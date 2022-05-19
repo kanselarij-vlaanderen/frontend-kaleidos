@@ -88,7 +88,6 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.documentDetailsRow.row).as('documentRows');
     cy.get('@documentRows').eq(0)
       .find(document.documentDetailsRow.type)
-      .find(dependency.emberPowerSelect.trigger)
       .click();
     cy.get(dependency.emberPowerSelect.option).contains('Decreet')
       .click();
@@ -96,7 +95,6 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
 
     cy.get('@documentRows').eq(0)
       .find(document.documentDetailsRow.accessLevel)
-      .find(dependency.emberPowerSelect.trigger)
       .click();
     cy.get(dependency.emberPowerSelect.option).contains('Publiek')
       .scrollIntoView()
@@ -126,7 +124,6 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .contains('Nota');
     cy.get('@documentRows').eq(0)
       .find(document.documentDetailsRow.accessLevel)
-      .find(dependency.emberPowerSelect.trigger)
       .click();
     cy.get(dependency.emberPowerSelect.option).contains('Intern Overheid')
       .scrollIntoView()
