@@ -69,6 +69,9 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
       publicationDate: publicationDate,
       publicationActivity: publicationActivity,
     });
+    // The decision (and the publicationActivity) must be saved
+    //  before calling the publicationService.updatePublicationStatus method.
+    //  otherwise that method creates duplicate Decisions and PublicationActivities
     yield decision.save();
 
     if (publication.mustUpdatePublicationStatus) {
