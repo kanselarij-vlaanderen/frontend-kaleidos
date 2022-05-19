@@ -1,11 +1,9 @@
 import Controller from '@ember/controller';
 import { action, set } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { tracked } from '@glimmer/tracking';
 
-export default class SignaturesIndexController extends Controller {
+export default class SignaturesSignController extends Controller {
   @service router;
-  @service currentSession;
 
   queryParams = {
     page: {
@@ -61,67 +59,5 @@ export default class SignaturesIndexController extends Controller {
       agenda.id,
       agendaitem.id
     );
-  }
-
-  @tracked isShowFilterModal = false;
-  @tracked isShowSidebar = false;
-  @tracked isShowAddMinister = false;
-  @tracked isShowCancelSignatures = false;
-  @tracked isShowSignButton = false;
-  @tracked isShowAddCC = false;
-
-  @action
-  showAddCC() {
-    this.isShowAddCC = true;
-  }
-
-  @action
-  closeAddCC() {
-    this.isShowAddCC = false;
-  }
-
-  @action
-  showFilterModal() {
-    this.isShowFilterModal = true;
-  }
-
-  @action
-  showSignButton(sort) {
-    this.isShowSignButton = true;
-  }
-
-  @action
-  closeFilterModal() {
-    this.isShowFilterModal = false;
-  }
-
-  @action
-  showSidebar() {
-    this.isShowSidebar = true;
-  }
-
-  @action
-  closeSidebar() {
-    this.isShowSidebar = false;
-  }
-
-  @action
-  showAddMinister() {
-    this.isShowAddMinister = true;
-  }
-
-  @action
-  closeAddMinister() {
-    this.isShowAddMinister = false;
-  }
-
-  @action
-  showCancelSignatures() {
-    this.isShowCancelSignatures = true;
-  }
-
-  @action
-  closeCancelSignatures() {
-    this.isShowCancelSignatures = false;
   }
 }

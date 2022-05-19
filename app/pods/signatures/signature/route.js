@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 
-export default class SignaturesIndexRoute extends Route {
+export default class SignaturesSignRoute extends Route {
   queryParams = {
     page: {
       refreshModel: true,
