@@ -77,7 +77,6 @@ context('new document viewer tests', () => {
     // check cancel
     cy.get(document.previewDetailsTab.edit).click();
     fillInEditDetails(newName, newDocumentType, newAccessLevel);
-    cy.get(document.previewDetailsTab.editing.confidentiality).click();
     cy.get(document.previewDetailsTab.cancel).click();
     cy.get(document.previewDetailsTab.name).should('contain', bisName);
     cy.get(document.previewDetailsTab.documentType).should('contain', file.fileType);
@@ -140,7 +139,6 @@ context('new document viewer tests', () => {
       .should('have.class', 'auk-document-card active')
       .within(() => {
         cy.get(document.previewVersionCard.details).contains(`${newAccessLevel} - ${searchDocumentType}`);
-        cy.get(auk.confidentialityPill.unlocked);
         cy.get(auk.fileTypePill).contains('PDF');
       });
     cy.get(document.previewVersionCard.name).eq(1)
@@ -151,7 +149,6 @@ context('new document viewer tests', () => {
       .should('have.class', 'auk-document-card active')
       .within(() => {
         cy.get(document.previewVersionCard.details).contains(`${defaultAccessLevel} - ${searchDocumentType}`);
-        cy.get(auk.confidentialityPill.unlocked);
         cy.get(auk.fileTypePill).contains('PDF');
       });
     cy.get(document.documentPreviewSidebar.tabs.details).click();

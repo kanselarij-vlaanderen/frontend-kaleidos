@@ -45,12 +45,6 @@
         @onChange={{@row.setAccessLevel}}
       />
     </td>
-    <td class="auk-table-checkbox-col">
-      <Auk::Checkbox
-        @checked={{@row.confidential}}
-        {{on "input" this.toggleConfidential}}
-      />
-    </td>
   {{else}}
     <td>
       <Utils::Documents::FileTypePill

@@ -26,14 +26,10 @@
       @modelName="access-level"
       @allowClear={{true}}
       @displayField="label"
-      @disabled={{@piece.confidential}}
       @sortField="label"
       @selected={{@piece.accessLevel}}
       @onChange={{this.selectAccessLevel}}
     />
-  </td>
-  <td>
-    <Auk::Toggle @checked={{mut @piece.confidential}} />
   </td>
   <td class="auk-u-text-align--right">
     <Auk::Button

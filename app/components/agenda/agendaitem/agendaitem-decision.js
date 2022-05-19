@@ -33,13 +33,8 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   @action
-  openEditingWindow() {
-    this.isEditing = true;
-  }
-
-  @action
-  closeEditingWindow() {
-    this.isEditing = false;
+  toggleEdit() {
+    this.isEditing = !this.isEditing;
   }
 
   @action
@@ -68,7 +63,6 @@ export default class AgendaitemDecisionComponent extends Component {
     });
     await documentContainer.save();
     piece.setProperties({
-      confidential: false,
       accessLevel: this.defaultAccessLevel,
       documentContainer,
     });
