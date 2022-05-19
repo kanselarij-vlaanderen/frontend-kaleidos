@@ -1,4 +1,4 @@
-import Component from '@glimmer/component';
+import templateOnly from '@ember/component/template-only';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
@@ -9,7 +9,6 @@ export class Row {
   @tracked name;
   @tracked documentType;
   @tracked accessLevel;
-  @tracked confidential;
   @tracked isToBeDeleted = false;
 
   @action
@@ -23,20 +22,9 @@ export class Row {
   }
 
   @action
-  setConfidential(confidential) {
-    this.confidential = confidential;
-  }
-
-  @action
   setToBeDeleted(isToBeDeleted) {
     this.isToBeDeleted = isToBeDeleted;
   }
 }
 
-export default class DocumentDetailsRow extends Component {
-  @action
-  toggleConfidential(event) {
-    const confidential = event.target.checked;
-    this.args.row.setConfidential(confidential);
-  }
-}
+export default templateOnly();

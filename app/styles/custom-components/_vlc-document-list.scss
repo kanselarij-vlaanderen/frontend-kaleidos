@@ -12,7 +12,7 @@
   list-style: none;
   margin: 0.4rem 1rem 0.4rem 0;
 
-  a, span {
+  a, span:not(.auk-pill) {
     display: flex;
     align-items: center;
     color: $auk-gray-600;
@@ -78,4 +78,5 @@
 .grid-container {
   display: grid;
   grid-template-columns: repeat(2,1fr);
+  justify-items: start;
 }

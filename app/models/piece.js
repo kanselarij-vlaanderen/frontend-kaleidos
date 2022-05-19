@@ -8,7 +8,6 @@ export default class Piece extends Model {
   @attr('datetime') created;
   @attr('datetime') receivedDate;
   @attr('datetime') modified;
-  @attr('boolean') confidential;
   @attr('datetime') accessLevelLastModified;
 
   @belongsTo('access-level') accessLevel;
@@ -104,9 +103,7 @@ export default class Piece extends Model {
     if (dirtyType != 'deleted') {
       const now = new Date();
       this.modified = now;
-      if (!this.confidential) {
-        this.accessLevelLastModified = now;
-      }
+      this.accessLevelLastModified = now;
     }
     return super.save(...arguments);
   }
