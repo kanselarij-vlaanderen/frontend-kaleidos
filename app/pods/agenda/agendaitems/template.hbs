@@ -2,10 +2,12 @@
   <div class="auk-panel-layout__agenda-items">
     <div class="auk-sidebar auk-sidebar--gray-100 auk-sidebar--left auk-u-maximize-width">
       <div class="auk-scroll-wrapper">
-        <Agenda::AgendaitemSearch
-          @searchText={{readonly this.filter}}
-          @onSearch={{this.searchAgendaitems}}
-        />
+        <div class="au-u-padding-tiny">
+          <Agenda::AgendaitemSearch
+            @searchText={{readonly this.filter}}
+            @onSearch={{this.searchAgendaitems}}
+          />
+        </div>
         <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical auk-u-hidden@print">
           <Agenda::AgendaDetail::Sidebar
             @notaGroups={{this.notaGroups}}

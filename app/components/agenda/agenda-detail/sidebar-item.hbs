@@ -23,43 +23,52 @@
       <div class="auk-o-flex auk-o-flex--justify-between auk-o-flex--align-start">
         <h4 class="vlc-agenda-detail-sidebar__subject">
           <pre data-test-agenda-detail-sidebar-item-short-title class="auk-u-text-pre-line">
-            {{!-- Fallback for legacy data that doesn't have a short title --}}
+            {{!-- Fallback for legacy data that doesnt have a short title --}}
             {{or @agendaitem.shortTitle @agendaitem.title}}
           </pre>
         </h4>
         {{#unless @agendaitem.aboutToDelete}}
           <div class="vlc-agenda-detail-sidebar__labels auk-o-flex--align-end">
-
-            {{#if this.loadNewsletterVisibility.lastSuccessful}}
-              {{#unless this.newsletterIsVisible}}
-                <Auk::Pill @skin="blank" @layout="icon-only">
-                  <Auk::Icon @name="not-visible" />
+            {{#if (and (and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow) @isNew)}}
+              {{#if this.newsletterIsVisible}}
+                <AuPill @skin="border"  @icon="website" @draft={{true}}>
                   <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
                     <p>
-                      {{t "not-visible-in-newsletter"}}
+                      {{t "visible-in-newsletter"}}
                     </p>
                   </EmberTooltip>
-                </Auk::Pill>
-              {{/unless}}
-            {{else}}
-              <Auk::Pill @skin="blank" @layout="icon-only">
-                <Auk::Icon @name="three-dots" />
-                <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
-                  <p>
-                    {{t "loading"}}
-                  </p>
-                </EmberTooltip>
-              </Auk::Pill>
-            {{/if}}
+                </AuPill>
+              {{/if}}
 
-            {{#if this.subcase.confidential}}
-              <AuPill @skin="warning" @icon="lock-closed" data-test-agenda-detail-sidebar-item-confidential={{true}}>
-                <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
-                  <p>
-                    {{t "confidential"}}
-                  </p>
-                </EmberTooltip>
-              </AuPill>
+              {{#if this.subcase.confidential}}
+                <AuPill @skin="warning" @icon="lock-closed" @draft={{true}} data-test-agenda-detail-sidebar-item-confidential={{true}}>
+                  <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
+                    <p>
+                      {{t "confidential"}}
+                    </p>
+                  </EmberTooltip>
+                </AuPill>
+              {{/if}}
+            {{else}}
+              {{#if this.newsletterIsVisible}}
+                <AuPill @skin="border" @icon="website">
+                  <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
+                    <p>
+                      {{t "visible-in-newsletter"}}
+                    </p>
+                  </EmberTooltip>
+                </AuPill>
+              {{/if}}
+
+              {{#if this.subcase.confidential}}
+                <AuPill @skin="warning" @icon="lock-closed" data-test-agenda-detail-sidebar-item-confidential={{true}}>
+                  <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
+                    <p>
+                      {{t "confidential"}}
+                    </p>
+                  </EmberTooltip>
+                </AuPill>
+              {{/if}}
             {{/if}}
 
             {{#if @showFormallyOkStatus}}
