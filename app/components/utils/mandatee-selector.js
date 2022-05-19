@@ -45,7 +45,11 @@ export default class MandateeSelector extends Component {
     // We only want the mandatees with no end-date or an end-date in the future.
     // mu-cl-resources doesn't have :has-no:-capability for properties.
     return results.filter((mandatee) => {
-      return !mandatee.end || (mandatee.end > new Date());
+      if (mandatee.end) {
+        return new Date() < mandatee.end;  // end is in the future
+      } else {
+        return true;
+      }
     });
   }
 

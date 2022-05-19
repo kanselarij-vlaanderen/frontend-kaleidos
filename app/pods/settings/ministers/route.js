@@ -27,7 +27,9 @@ export default class SettingsMinistersRoute extends Route {
     // mu-cl-resources doesn't have :has-no:-capability for properties.
     return results.filter((mandatee) => {
       if (mandatee.end) {
-        return mandatee.end && mandatee.end < new Date();
+        return new Date() < mandatee.end; // end is in the future
+      } else {
+        return true;
       }
     });
 
