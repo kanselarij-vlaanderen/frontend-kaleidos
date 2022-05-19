@@ -52,10 +52,10 @@
     <Utils::ModelSelector
       @modelName="alert-type"
       @searchField="label"
-      @propertyToShow="label"
+      @displayField="label"
       @sortField="label"
-      @selectedItems={{this.alert.type}}
-      @selectModel={{action "selectType"}}
+      @selected={{this.alert.type}}
+      @onChange={{action "selectType"}}
     />
   </div>
 </div>

@@ -88,7 +88,6 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.documentDetailsRow.row).as('documentRows');
     cy.get('@documentRows').eq(0)
       .find(document.documentDetailsRow.type)
-      .find(dependency.emberPowerSelect.trigger)
       .click();
     cy.get(dependency.emberPowerSelect.option).contains('Decreet')
       .click();
@@ -96,7 +95,6 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
 
     cy.get('@documentRows').eq(0)
       .find(document.documentDetailsRow.accessLevel)
-      .find(dependency.emberPowerSelect.trigger)
       .click();
     cy.get(dependency.emberPowerSelect.option).contains('Publiek')
       .scrollIntoView()
@@ -126,7 +124,6 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .contains('Nota');
     cy.get('@documentRows').eq(0)
       .find(document.documentDetailsRow.accessLevel)
-      .find(dependency.emberPowerSelect.trigger)
       .click();
     cy.get(dependency.emberPowerSelect.option).contains('Intern Overheid')
       .scrollIntoView()
@@ -186,21 +183,20 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .click();
 
     // Cancel/save access-level in document card
-    cy.get(document.accessLevelPill.pill).contains('Intern Overheid')
-      .click();
+    cy.get(document.accessLevelPill.pill).contains('Intern Overheid');
+    cy.get(document.accessLevelPill.edit).click();
     cy.get(dependency.emberPowerSelect.trigger).click();
     cy.get(dependency.emberPowerSelect.option).contains('Publiek')
       .click();
     cy.get(document.accessLevelPill.cancel).click();
-    cy.get(document.accessLevelPill.pill).contains('Intern Overheid')
-      .click();
+    cy.get(document.accessLevelPill.pill).contains('Intern Overheid');
+    cy.get(document.accessLevelPill.edit).click();
     cy.get(dependency.emberPowerSelect.trigger).click();
     cy.get(dependency.emberPowerSelect.option).contains('Publiek')
       .click();
     cy.get(document.accessLevelPill.save).click();
     cy.wait('@patchPieces');
-    cy.get(document.accessLevelPill.pill).contains('Publiek')
-      .click();
+    cy.get(document.accessLevelPill.pill).contains('Publiek');
 
     // Verify only 1 piece is affected by change
     cy.get(document.documentCard.versionHistory)
@@ -432,7 +428,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.documentDetailsRow.row).eq(0)
       .find(document.documentDetailsRow.accessLevel)
       .click();
-    cy.get(dependency.emberPowerSelect.option).eq(2)
+    cy.get(dependency.emberPowerSelect.option).eq(4)
       .click();
     cy.get(document.batchDocumentsDetails.save).click();
     cy.wait('@patchPieces');

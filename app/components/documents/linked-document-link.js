@@ -67,12 +67,6 @@ export default class LinkedDocumentLink extends Component {
   }
 
   @action
-  async changeConfidentiality(confidential) {
-    this.lastPiece.set('confidential', confidential);
-    await this.lastPiece.save();
-  }
-
-  @action
   async reloadAccessLevel() {
     this.accessLevel = await this.lastPiece.belongsTo('accessLevel').reload();
   }
