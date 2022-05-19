@@ -2,34 +2,32 @@
   {{#if
     (and (not (is-pending this.isDeletable)) (not (is-pending this.isPostPonable)))
   }}
-    <WebComponents::AuButtonToolbar>
-      <Auk::DropdownMenu
-        @label={{t "actions"}}
-        class="auk-u-hidden@print"
-        data-test-agendaitem-controls-actions={{true}}
-      as |Menu|>
-        {{#if this.isPostPonable}}
-          {{#if @agendaitem.retracted}}
-            <Menu.Item {{on "click" (fn this.advanceAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-advance>
-              {{t "not-postpone"}}
-            </Menu.Item>
-          {{else}}
-            <Menu.Item {{on "click" (fn this.postponeAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-postpone>
-              {{t "postpone"}}
-            </Menu.Item>
-          {{/if}}
-        {{/if}}
-        {{#if (or this.currentSession.isAdmin (await this.isDeletable))}}
-          <Menu.Item
-            @skin="danger"
-            data-test-agendaitem-controls-action-delete
-            {{on "click" this.toggleIsVerifying}}
-          >
-            {{t "delete"}}
+    <Auk::DropdownMenu
+      @label={{t "actions"}}
+      class="auk-u-hidden@print"
+      data-test-agendaitem-controls-actions={{true}}
+    as |Menu|>
+      {{#if this.isPostPonable}}
+        {{#if @agendaitem.retracted}}
+          <Menu.Item {{on "click" (fn this.advanceAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-advance>
+            {{t "not-postpone"}}
+          </Menu.Item>
+        {{else}}
+          <Menu.Item {{on "click" (fn this.postponeAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-postpone>
+            {{t "postpone"}}
           </Menu.Item>
         {{/if}}
-      </Auk::DropdownMenu>
-    </WebComponents::AuButtonToolbar>
+      {{/if}}
+      {{#if (or this.currentSession.isAdmin (await this.isDeletable))}}
+        <Menu.Item
+          @skin="danger"
+          data-test-agendaitem-controls-action-delete
+          {{on "click" this.toggleIsVerifying}}
+        >
+          {{t "delete"}}
+        </Menu.Item>
+      {{/if}}
+    </Auk::DropdownMenu>
   {{else}}
     <div class="auk-loader" role="alert" aria-busy="true"></div>
   {{/if}}

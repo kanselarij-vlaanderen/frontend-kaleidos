@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { saveChanges as saveSubcaseTitles } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { task } from 'ember-concurrency';
+import CONFIG from 'frontend-kaleidos/utils/config';
 
 /**
  * @argument subcase
@@ -71,5 +72,20 @@ export default class AgendaitemCasePanelEdit extends Component {
       yield this.newsletterInfo.save();
     }
     this.args.onSave();
+  }
+
+  @action
+  async setAndSaveFormallyOkStatus(newFormallyOkUri) {
+    this.args.agendaitem.formallyOk = newFormallyOkUri;
+    const status = CONFIG.formallyOkOptions.find((type) => type.uri === newFormallyOkUri);
+    try {
+      await this.args.agendaitem.save();
+      this.toaster.success(this.intl.t('successfully-modified-formally-ok-status', {
+        status: status.label,
+      }));
+    } catch {
+      this.args.agendaitem.rollbackAttributes();
+      this.toaster.error();
+    }
   }
 }

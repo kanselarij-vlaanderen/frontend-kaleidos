@@ -1,42 +1,38 @@
-<Auk::Toolbar class="auk-u-mb-4" as |Toolbar|>
-  <Toolbar.Group @position="left" as |Group|>
-    <Group.Item>
-      <h4 class="auk-toolbar__title">
-        {{t "documents"}}
-      </h4>
-    </Group.Item>
-  </Toolbar.Group>
-  <Toolbar.Group @position="right" as |Group|>
+<AuToolbar class="au-u-margin-bottom" as |Group|>
+  <Group>
+    <AuHeading @level="3" @skin="4">
+      {{t "documents"}}
+    </AuHeading>
+  </Group>
+  <Group>
+    <AuButtonGroup>
     {{#if this.model.pieces.length}}
-      <Group.Item>
-        {{#if this.currentSession.isEditor}}
-          <Auk::Button
-            data-test-route-agenda---agendaitem-documents-batch-edit
-            @icon="pencil"
-            {{on "click" this.openBatchDetails}}
-          >
-            {{t "batch-edit"}}
-          </Auk::Button>
-        {{else}}
-          <Auk::Button {{on "click" this.openBatchDetails}}>
-            {{t "view-documents-details"}}
-          </Auk::Button>
-        {{/if}}
-      </Group.Item>
+      {{#if this.currentSession.isEditor}}
+        <Auk::Button
+          data-test-route-agenda---agendaitem-documents-batch-edit
+          @icon="pencil"
+          {{on "click" this.openBatchDetails}}
+        >
+          {{t "batch-edit"}}
+        </Auk::Button>
+      {{else}}
+        <Auk::Button {{on "click" this.openBatchDetails}}>
+          {{t "view-documents-details"}}
+        </Auk::Button>
+      {{/if}}
     {{/if}}
     {{#if this.isShownOpenPublicationModal}}
-      <Group.Item>
-        <Auk::Button
-          data-test-route-agenda---agendaitem-documents-open-publication
-          @icon="copy"
-          {{on "click" this.openPublicationModal}}
-        >
-          {{t "agendaitem-documents-documents-for-publication"}}
-        </Auk::Button>
-      </Group.Item>
+      <Auk::Button
+        data-test-route-agenda---agendaitem-documents-open-publication
+        @icon="copy"
+        {{on "click" this.openPublicationModal}}
+      >
+        {{t "agendaitem-documents-documents-for-publication"}}
+      </Auk::Button>
     {{/if}}
-  </Toolbar.Group>
-</Auk::Toolbar>
+    </AuButtonGroup>
+  </Group>
+</AuToolbar>
 
 {{#if this.governmentCanViewDocuments}}
   {{#unless this.loadData.isRunning}}

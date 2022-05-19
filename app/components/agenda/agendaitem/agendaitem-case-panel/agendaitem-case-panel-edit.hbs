@@ -60,6 +60,16 @@
       />
     </div>
   </div>
+  <div class="auk-u-mb-4">
+    <div class="auk-form-group">
+      <Auk::Label for="subcase-formallity">{{t "util.approval"}}</Auk::Label>
+      <Utils::FormallyOkSelector
+        data-test-agenda-overview-item-formally-ok={{true}}
+        @formallyOkStatusUri={{@agendaitem.formallyOk}}
+        @onChange={{this.setAndSaveFormallyOkStatus}}
+      />
+    </div>
+  </div>
   {{#if @agendaitem.showAsRemark}}
     <div class="auk-u-mb-4">
       <div class="auk-form-group">

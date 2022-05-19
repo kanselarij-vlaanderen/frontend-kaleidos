@@ -1,26 +1,22 @@
-<Auk::Toolbar class="auk-u-mb-4" as |Toolbar|>
-  <Toolbar.Group @position="left" as |Group|>
-    <Group.Item>
-      <h4 class="auk-toolbar__title">
-        {{t "decision-title"}}
-      </h4>
-    </Group.Item>
-  </Toolbar.Group>
-  <Toolbar.Group @position="right" as |Group|>
+<AuToolbar class="au-u-margin-bottom" as |Group|>
+  <Group>
+    <AuHeading @level="3" @skin="4">
+      {{t "decision-title"}}
+    </AuHeading>
+  </Group>
+  <Group>
     {{#if this.currentSession.isEditor}}
-      <Group.Item>
-        <Auk::Button
-          @skin="secondary"
-          @icon="plus"
-          data-test-route-agenda---decisions-add-treatment
-          {{on "click" this.addTreatment}}
-        >
-          {{t "add-decision"}}
-        </Auk::Button>
-      </Group.Item>
+      <Auk::Button
+        @skin="secondary"
+        @icon="plus"
+        data-test-route-agenda---decisions-add-treatment
+        {{on "click" this.addTreatment}}
+      >
+        {{t "add-decision"}}
+      </Auk::Button>
     {{/if}}
-  </Toolbar.Group>
-</Auk::Toolbar>
+  </Group>
+</AuToolbar>
 {{#each this.treatments as |treatment|}}
   <div class="auk-u-mb-2">
     {{! As long as we see DecisionActivity & AgendaItemTreatment as 1 entity,
