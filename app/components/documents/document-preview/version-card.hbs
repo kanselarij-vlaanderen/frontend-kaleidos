@@ -1,44 +1,42 @@
 <li data-test-version-card-container class="auk-document-card {{if @isHighlighted "active"}}">
   <div class="auk-document-card__content">
+    {{#if @documentContainer.type}}
     <div
       data-test-version-card-details
-      class="auk-document-card__details"
+      class="auk-document-card__details auk-u-m-0"
     >
-      <Utils::AccessLevelColorBadge
-        @accessLevel={{this.accessLevel}}
-        class="auk-overline"
-      />
-      {{#if @documentContainer.type}}
-        <span class="auk-overline">-</span>
-        <span class="auk-overline">{{@documentContainer.type.label}}</span>
-      {{/if}}
+      <span class="auk-overline">{{@documentContainer.type.label}}</span>
     </div>
+    {{/if}}
     <h4
       data-test-version-card-name
-      class="auk-document-card__title">{{@piece.name}}
+      class="auk-document-card__title auk-u-m-0">{{@piece.name}}
     </h4>
+    <div class="auk-u-mb-2 auk-u-muted auk-u-text-small">
+      <p>
+        {{#if @piece.created}}
+          {{t "uploaded-at"}}
+          {{moment-format @piece.created "DD-MM-YYYY"}}
+          -
+          {{moment-format @piece.created "HH:mm"}}
+        {{/if}}
+      </p>
+      {{#if @piece.accessLevelLastModified}}
+        <p>
+          {{t "access-level-last-modified"}}
+          {{moment-format @piece.accessLevelLastModified "DD-MM-YYYY"}}
+          -
+          {{moment-format @piece.accessLevelLastModified "HH:mm"}}
+        </p>
+      {{/if}}
+    </div>
     <div class="auk-document-card__meta">
       <Auk::PillList class="auk-u-mr-3">
+        <Utils::AccessLevelColorBadge
+          @accessLevel={{this.accessLevel}}
+        />
         <Utils::Documents::FileTypePill @extension={{@piece.file.extension}} />
       </Auk::PillList>
-      <div class="auk-u-mr-3">
-        <p>
-          {{#if @piece.created}}
-            {{t "uploaded-at"}}
-            {{moment-format @piece.created}}
-            -
-            {{moment-format @piece.created "HH:mm"}}
-          {{/if}}
-        </p>
-        {{#if @piece.accessLevelLastModified}}
-          <p>
-            {{t "access-level-last-modified"}}
-            {{moment-format @piece.accessLevelLastModified}}
-            -
-            {{moment-format @piece.accessLevelLastModified "HH:mm"}}
-          </p>
-        {{/if}}
-      </div>
     </div>
   </div>
   <div class="auk-document-card__actions">
