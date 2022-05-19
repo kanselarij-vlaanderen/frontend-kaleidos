@@ -477,7 +477,9 @@ function addLinkedDocument(filenames) {
     cy.get(document.addExistingPiece.checkbox).parent()
       .click();
   });
+  cy.intercept('PATCH', '/subcases/*').as('patchSubcase');
   cy.get(utils.vlModalFooter.save).click();
+  cy.wait('@patchSubcase');
   cy.log('/addLinkedDocument');
 }
 
