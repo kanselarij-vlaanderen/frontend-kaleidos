@@ -1,4 +1,4 @@
-/* global context, it, cy, afterEach, Cypress */
+/* global context, it, cy, beforeEach, afterEach, Cypress */
 
 // / <reference types="Cypress" />
 import dependency from '../../selectors/dependency.selectors';
@@ -10,70 +10,43 @@ import agenda from '../../selectors/agenda.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
-function currentTimestamp() {
-  return Cypress.dayjs().unix();
-}
-
 context('Publications via MR tests', () => {
-  const publicationNumber = 1515;
-  const publicationNumber2 = 1517;
-  const publicationNumber3 = 1518;
-  const newPublicationNumber = 1516;
-  const agendaDate = Cypress.dayjs().add(13, 'weeks')
-    .day(3);
+  const publicationNumber1 = 1515;
+  const publicationNumber2 = 1516;
+  const publicationNumber3 = 1517;
+  const publicationNumber4 = 1518;
+  const agendaDate = Cypress.dayjs('2022-04-18').hour(10);
+  const agendaitemDetailLink = '/vergadering/6286497109DEF9BE3C9DA980/agenda/6286497309DEF9BE3C9DA981/agendapunten/6286499609DEF9BE3C9DA987';
+  const agendaitemDocLink = '/vergadering/6286497109DEF9BE3C9DA980/agenda/6286497309DEF9BE3C9DA981/agendapunten/6286499609DEF9BE3C9DA987/documenten';
   const formattedAgendaDate = agendaDate.format('DD-MM-YYYY');
   const columnKeyNames = ['source', 'decisionDate'];
   const startDate = agendaDate.format('DD-MM-YYYY');
   const openingDate = Cypress.dayjs().format('DD-MM-YYYY');
   const dueDate = Cypress.dayjs().add(3, 'weeks');
   const formattedDueDate = dueDate.format('DD-MM-YYYY');
-  const numacNumber = 12345678;
-  const testId = `${currentTimestamp()}`;
-  const type = 'Nota';
-  const caseTitleShort = 'Cypress test: Dossier publications via MR';
-  const subcaseTitleShort = `Cypress test: Publications via MR - ${testId}`;
+  const numacNumber = 134792468;
+  const subcaseTitleShort = 'Cypress test: Publications via MR - 1652967454';
   const nameToCheck = 'Jambon';
-  const fileName1 = 'nieuwePublicatie';
-  const fileName2 = 'bestaandePublicatie';
-  const fileName3 = 'publicatieMB';
-  const fileName4 = 'publicatieDecreet';
-  const file1 = {
-    folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: fileName1, fileType: 'Nota',
-  };
-  const file2 = {
-    folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: fileName2, fileType: 'BVR',
-  };
-  const file3 = {
-    folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: fileName3, fileType: 'MB',
-  };
-  const file4 = {
-    folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: fileName4, fileType: 'Decreet',
-  };
-  const files = [file1, file2, file3, file4];
+  const fileName1 = 'nieuwePublicatie'; // type nota
+  const fileName2 = 'bestaandePublicatie'; // type BVR
+  const fileName3 = 'publicatieMB'; // type MB
+  const fileName4 = 'publicatieDecreet'; // type Decreet
+
+  // setup for this spec
+  // agenda with 1 proposed subcase/agendaitem with 4 documents
+  // 1 nota, 1 BVR, 1 MB, 1 Decreet
+
+  beforeEach(() => {
+    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
+  });
 
   afterEach(() => {
     cy.logout();
   });
 
-  it('should create a new agenda with item for testing purposes', () => {
-    cy.login('Admin');
-    cy.createCase(caseTitleShort);
-    cy.addSubcase(type, subcaseTitleShort);
-    cy.openSubcase(0);
-    cy.addSubcaseMandatee(1);
-    cy.addDocumentsToSubcase(files);
-    cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
-    cy.openAgendaForDate(agendaDate);
-    cy.addAgendaitemToAgenda(subcaseTitleShort);
-  });
-
   it('should open an agendaitem, link document to a new publication and check if it was created properly', () => {
-    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
-    cy.openAgendaForDate(agendaDate);
-    cy.openDetailOfAgendaitem(subcaseTitleShort);
-    cy.get(mandatee.mandateePanelView.rows).should('have.length', 1, {
-      timeout: 5000,
-    })
+    cy.visitAgendaWithLink(agendaitemDetailLink);
+    cy.get(mandatee.mandateePanelView.rows).should('have.length', 1)
       .eq(0)
       .find(mandatee.mandateePanelView.row.name)
       .should('contain', nameToCheck);
@@ -88,7 +61,7 @@ context('Publications via MR tests', () => {
     // create new publication
     cy.get(publication.newPublication.number).click()
       .clear()
-      .type(publicationNumber);
+      .type(publicationNumber1);
     cy.intercept('POST', '/publication-flows').as('createNewPublicationFlow');
     // more posts happen, but the patch is the final part of the create action
     cy.intercept('PATCH', '/pieces/**').as('patchPieceForPublication');
@@ -107,7 +80,7 @@ context('Publications via MR tests', () => {
     cy.get(auk.loader, {
       timeout: 60000,
     }).should('not.exist');
-    cy.get(publication.publicationTableRow.row.publicationNumber).contains(publicationNumber)
+    cy.get(publication.publicationTableRow.row.publicationNumber).contains(publicationNumber1)
       .parent()
       .as('row');
     cy.get(publication.publicationTableRow.row.shortTitle).contains(subcaseTitleShort);
@@ -119,25 +92,22 @@ context('Publications via MR tests', () => {
   });
 
   it('should open the new publication and check if data was inherited correctly', () => {
-    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
     cy.intercept('GET', '/regulation-types?**').as('getRegulationTypes');
     cy.visit('/publicaties');
     cy.wait('@getRegulationTypes');
     cy.get(auk.loader, {
       timeout: 60000,
     }).should('not.exist');
-    cy.get(publication.publicationTableRow.row.publicationNumber).contains(publicationNumber)
+    cy.get(publication.publicationTableRow.row.publicationNumber).contains(publicationNumber1)
       .click();
 
     // check data
-    cy.get(publication.publicationCaseInfo.publicationNumber).contains(publicationNumber);
+    cy.get(publication.publicationCaseInfo.publicationNumber).contains(publicationNumber1);
     cy.get(publication.publicationCaseInfo.startDate).contains(startDate);
     cy.get(publication.publicationCaseInfo.openingDate).contains(openingDate);
 
     // check mandatee inheritance
-    cy.get(publication.mandateesPanel.rows).should('have.length', 1, {
-      timeout: 5000,
-    })
+    cy.get(publication.mandateesPanel.rows).should('have.length', 1)
       .eq(0)
       .find(publication.mandateesPanel.row.fullName)
       .should('contain', nameToCheck);
@@ -163,21 +133,20 @@ context('Publications via MR tests', () => {
   });
 
   it('should open the new publication and check the publication case info panel', () => {
-    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
     cy.intercept('GET', '/regulation-types?**').as('getRegulationTypes');
     cy.visit('/publicaties');
     cy.wait('@getRegulationTypes');
     cy.get(auk.loader, {
       timeout: 60000,
     }).should('not.exist');
-    cy.get(publication.publicationTableRow.row.publicationNumber).contains(publicationNumber)
+    cy.get(publication.publicationTableRow.row.publicationNumber).contains(publicationNumber1)
       .click();
 
     // check rollback after cancel edit
     cy.get(publication.publicationCaseInfo.edit).click();
     cy.get(publication.publicationCaseInfo.editView.publicationNumber).click()
       .clear()
-      .type(newPublicationNumber);
+      .type(publicationNumber2);
     cy.get(publication.publicationCaseInfo.editView.numacNumber).find(dependency.emberTagInput.input)
       .click()
       .type(`${numacNumber}{enter}`);
@@ -185,7 +154,7 @@ context('Publications via MR tests', () => {
       .click();
     cy.setDateInFlatpickr(dueDate);
     cy.get(publication.publicationCaseInfo.editView.cancel).click();
-    cy.get(publication.publicationCaseInfo.publicationNumber).contains(publicationNumber);
+    cy.get(publication.publicationCaseInfo.publicationNumber).contains(publicationNumber1);
     cy.get(publication.publicationCaseInfo.numacNumber).contains('-');
     cy.get(publication.publicationCaseInfo.dueDate).contains('-');
 
@@ -193,7 +162,7 @@ context('Publications via MR tests', () => {
     cy.get(publication.publicationCaseInfo.edit).click();
     cy.get(publication.publicationCaseInfo.editView.publicationNumber).click()
       .clear()
-      .type(newPublicationNumber);
+      .type(publicationNumber2);
     cy.get(publication.publicationCaseInfo.editView.numacNumber).find(dependency.emberTagInput.input)
       .click()
       .type(`${numacNumber}{enter}`);
@@ -205,7 +174,7 @@ context('Publications via MR tests', () => {
     cy.get(publication.publicationCaseInfo.editView.save).click();
     cy.wait('@patchPublicationFlow');
     cy.wait('@patchPublicationSubcase');
-    cy.get(publication.publicationCaseInfo.publicationNumber).contains(newPublicationNumber);
+    cy.get(publication.publicationCaseInfo.publicationNumber).contains(publicationNumber2);
     cy.get(publication.publicationCaseInfo.numacNumber).contains(numacNumber);
     cy.get(publication.publicationCaseInfo.dueDate).contains(formattedDueDate);
 
@@ -231,16 +200,14 @@ context('Publications via MR tests', () => {
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.wait('@getPiecesPubFlow');
     cy.wait('@getPiecesSignMarking');
-    cy.get(document.documentCard.pubLink).contains(newPublicationNumber)
+    cy.get(document.documentCard.pubLink).contains(publicationNumber2)
       .click();
     cy.url().should('contain', '/publicaties/');
     cy.url().should('contain', '/dossier');
   });
 
   it('should open an agendaitem and link document to an existing publication', () => {
-    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
-    cy.openAgendaForDate(agendaDate);
-    cy.openAgendaitemDocumentTab('Cypress test: Publications via MR');
+    cy.visitAgendaWithLink(agendaitemDocLink);
     cy.get(route.agendaitemDocuments.openPublication).click();
     cy.get(publication.batchDocumentsPublicationRow.name).contains(fileName2)
       .parent()
@@ -253,11 +220,11 @@ context('Publications via MR tests', () => {
       .click();
     cy.get('@row').find(publication.publicationsFlowSelector)
       .click();
-    cy.intercept('GET', `/publication-flows**?filter**${newPublicationNumber}**`).as('getFilteredId');
+    cy.intercept('GET', `/publication-flows**?filter**${publicationNumber2}**`).as('getFilteredId');
     cy.intercept('PATCH', '/pieces/**').as('patchPieces');
-    cy.get(dependency.emberPowerSelect.searchInput).type(newPublicationNumber)
+    cy.get(dependency.emberPowerSelect.searchInput).type(publicationNumber2)
       .wait('@getFilteredId');
-    cy.get(dependency.emberPowerSelect.option).contains(newPublicationNumber)
+    cy.get(dependency.emberPowerSelect.option).contains(publicationNumber2)
       .scrollIntoView()
       .trigger('mouseover')
       .click()
@@ -265,11 +232,8 @@ context('Publications via MR tests', () => {
   });
 
   it('should check the inheritance of regulation types and the decisions tab info panel', () => {
-    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
     const numberOfPages = 10;
-
-    cy.openAgendaForDate(agendaDate);
-    cy.openAgendaitemDocumentTab('Cypress test: Publications via MR');
+    cy.visitAgendaWithLink(agendaitemDocLink);
     cy.get(route.agendaitemDocuments.openPublication).click();
 
     // make new publication for MB
@@ -279,7 +243,7 @@ context('Publications via MR tests', () => {
       .click();
     cy.get(publication.newPublication.number).click()
       .clear()
-      .type(publicationNumber2);
+      .type(publicationNumber3);
     cy.intercept('POST', '/publication-flows').as('createNewPublicationFlow');
     // more posts happen, but the patch is the final part of the create action
     cy.intercept('PATCH', '/pieces/**').as('patchPieceForPublication');
@@ -298,7 +262,7 @@ context('Publications via MR tests', () => {
       .click();
     cy.get(publication.newPublication.number).click()
       .clear()
-      .type(publicationNumber3);
+      .type(publicationNumber4);
     cy.intercept('POST', '/publication-flows').as('createNewPublicationFlow');
     // more posts happen, but the patch is the final part of the create action
     cy.intercept('PATCH', '/pieces/**').as('patchPieceForPublication');
@@ -318,17 +282,17 @@ context('Publications via MR tests', () => {
     }).should('not.exist');
 
     // check if the regulation type is inherited correctly on all publications
-    cy.get(publication.publicationTableRow.row.publicationNumber).contains(newPublicationNumber)
+    cy.get(publication.publicationTableRow.row.publicationNumber).contains(publicationNumber2)
       .click();
     cy.get(publication.publicationNav.decisions).click();
     cy.get(publication.decisionsInfoPanel.view.regulationType).contains('Besluit van de Vlaamse Regering');
     cy.get(publication.publicationNav.goBack).click();
-    cy.get(publication.publicationTableRow.row.publicationNumber).contains(publicationNumber2)
+    cy.get(publication.publicationTableRow.row.publicationNumber).contains(publicationNumber3)
       .click();
     cy.get(publication.publicationNav.decisions).click();
     cy.get(publication.decisionsInfoPanel.view.regulationType).contains('Ministerieel besluit');
     cy.get(publication.publicationNav.goBack).click();
-    cy.get(publication.publicationTableRow.row.publicationNumber).contains(publicationNumber3)
+    cy.get(publication.publicationTableRow.row.publicationNumber).contains(publicationNumber4)
       .click();
     cy.get(publication.publicationNav.decisions).click();
     cy.get(publication.decisionsInfoPanel.view.regulationType).contains('Decreet');

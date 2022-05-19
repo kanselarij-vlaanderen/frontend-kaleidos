@@ -53,7 +53,7 @@ context('Tests on pieces and page-sizes of agendaitems and subcase', () => {
     cy.get(document.linkedDocumentLink.card).should('have.length', amountOfDocs);
   });
 
-  it('Adding more then 20 pieces to subcase should show all', () => {
+  it('Should test the linking of documents to subcase and verify agendaitem is updated', () => {
     // current setup:
     // Case with proposed subcase
     // Cypress.dayjs('2020-04-07');
