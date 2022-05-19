@@ -413,3 +413,22 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
     display: block;
   }
 }
+
+.au-c-pill {
+  white-space: nowrap;
+}
+
+.vlc-agenda-items--spaced .auk-section-header {
+  margin-top: 1.5rem;
+}
+
+.au-c-pill {
+  line-height: var(--au-global-line-height) !important;
+  display: inline-flex !important;
+  font-weight: var(--au-medium) !important;
+  padding: 0.1rem 0.6rem 0 !important;
+}
+
+.au-c-pill--ongoing {
+  color: var(--vl-picton-120) !important;
+}

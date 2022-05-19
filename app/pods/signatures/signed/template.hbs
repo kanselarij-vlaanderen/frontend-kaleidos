@@ -89,7 +89,7 @@
                 {{/if}}
               </td>
               <td>
-                <p class="auk-u-muted">Decreet - {{moment-format
+                <p class="au-u-muted">Decreet - {{moment-format
                   signFlow.decisionActivity.startDate
                   "DD-MM-YYYY"
                 }}</p>
@@ -132,7 +132,7 @@
                 {{/if}}
               </td>
               <td>
-                <p class="auk-u-muted">Decreet - {{moment-format
+                <p class="au-u-muted">Decreet - {{moment-format
                   signFlow.decisionActivity.startDate
                   "DD-MM-YYYY"
                 }}</p>
@@ -193,7 +193,7 @@
       </div>
       <div class="auk-sidebar__body">
         <Auk::Pill @skin="success" @icon="mail">Verzonden</Auk::Pill>
-        <p class="auk-u-muted auk-u-mt-2">
+        <p class="au-u-muted auk-u-mt-2">
           Decreet -
           {{moment-format
             signFlow.decisionActivity.startDate
@@ -201,7 +201,7 @@
           }}
         </p>
         <h5 class="auk-h4 auk-u-m-0">{{signFlow.signSubcase.signMarkingActivity.piece.name}}</h5>
-        <p class="auk-u-small auk-u-muted"><strong>Dossier:</strong> Omkadering leerlingondersteuning <Auk::Pill @skin="warning" @icon="lock-closed" @layout="icon-only">Vertrouwelijk</Auk::Pill></p>
+        <p class="auk-u-small au-u-muted"><strong>Dossier:</strong> Omkadering leerlingondersteuning <Auk::Pill @skin="warning" @icon="lock-closed" @layout="icon-only">Vertrouwelijk</Auk::Pill></p>
         <div class="auk-o-flex auk-o-flex--spaced-wide auk-u-mt-2">
           <Auk::ButtonLink
             @skin="borderless"
@@ -319,7 +319,7 @@
                 id="signatureToggle"
                 @checked={{if (eq signFlow.signSubcase.signMarkingActivity.piece.documentContainer.type.label "Nota") true false}}
               />
-              <label for="signatureToggle" class="auk-c-toggle-label auk-u-muted">
+              <label for="signatureToggle" class="auk-c-toggle-label au-u-muted">
                 Dringend
               </label>
             </div>

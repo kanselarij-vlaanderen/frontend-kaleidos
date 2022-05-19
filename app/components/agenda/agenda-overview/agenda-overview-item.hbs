@@ -1,3 +1,99 @@
+{{#if @isEditingFormallyOkStatus}}
+  {{#if (and @showDragHandle @isNew)}}
+  <div data-test-agenda-overview-item-container class="vlc-agenda-items__body ">
+    <h4 class="vlc-agenda-items__subject auk-u-m-0">
+      <div class="vlc-agenda-items__cursor auk-o-flex auk-o-flex--spaced">
+        {{! TODO: grab-hand shows over the whole parent height instead of only over the grab-handle icon }}
+        <Auk::Button class="auk-u-p-0 auk-u-cursor-grab" @skin="borderless">
+          <Auk::Icon @name="drag-handle-2" />
+        </Auk::Button>
+        <Auk::Button class="auk-u-p-0" @skin="borderless">
+          <Auk::Icon @name="chevron-up" />
+        </Auk::Button>
+        <Auk::Button class="auk-u-p-0" @skin="borderless">
+          <Auk::Icon @name="chevron-down" />
+        </Auk::Button>
+      </div>
+      <div class="vlc-agenda-items__cursor">
+        {{! TODO: grab-hand shows over the whole parent height instead of only over the grab-handle icon }}
+
+      </div>
+      <span class="vlc-agenda-items-sub-item__numbering">
+        {{!-- For legacy data agenda-item number can be unexistent --}}
+        {{#if @agendaitem.number}}
+          {{@agendaitem.number}}.
+        {{/if}}
+      </span>
+    </h4>
+    <div class="vlc-agenda-items__text">
+      <div class="auk-o-flex">
+        <div class="left_side">
+          <div class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
+            <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
+              <h4 class="vlc-agenda-items__subject auk-u-m-0">
+                <LinkTo
+                  data-test-agenda-overview-item-sub-item
+                  @route="agenda.agendaitems.agendaitem"
+                  @model={{@agendaitem.id}}
+                  @query={{hash anchor=@agendaitem.id}}
+                >
+                  <pre class="auk-u-text-pre-line">
+                    {{#if @agendaitem.shortTitle}}
+                      {{@agendaitem.shortTitle}}
+                    {{else}}
+                      {{@agendaitem.title}} {{!-- Fallback for legacy data that doesnt have a short title --}}
+                    {{/if}}
+                  </pre>
+                </LinkTo>
+              </h4>
+            </div>
+            <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
+              {{#if this.subcase.confidential}}
+                {{#if (and (and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow) @isNew)}}
+                <Auk::Pill
+                  @skin="warning-future"
+                  @icon="lock-closed"
+                  data-test-agenda-overview-item-confidentiality-locked
+                >
+                  {{t "confidential"}}
+                </Auk::Pill>
+                {{else}}
+                <Auk::Pill
+                  @skin="warning"
+                  @icon="lock-closed"
+                  data-test-agenda-overview-item-confidentiality-locked
+                >
+                  {{t "confidential"}}
+                </Auk::Pill>
+                {{/if}}
+              {{else}}
+                <Auk::Pill @skin="invisible"></Auk::Pill>
+              {{/if}}
+              {{#if this.newsletterIsVisible}}
+                {{#if (and (and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow) @isNew)}}
+                <Auk::Pill
+                  @skin="future"
+                  @icon="website"
+                >
+                  Op de website
+                </Auk::Pill>
+                {{else}}
+                <Auk::Pill
+                  @skin="blank"
+                  @icon="website"
+                >
+                  Op de website
+                </Auk::Pill>
+                {{/if}}
+              {{/if}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{/if}}
+{{else}}
 <div
   class={{if @agendaitem.retracted "auk-u-opacity--1/3"}}
   {{in-viewport
@@ -7,16 +103,8 @@
 >
   <div data-test-agenda-overview-item-container class="vlc-agenda-items__body">
     <h4 class="vlc-agenda-items__subject">
-      {{#if @showDragHandle}}
-        <div class="vlc-agenda-items__cursor">
-          {{! TODO: grab-hand shows over the whole parent height instead of only over the grab-handle icon }}
-          <Auk::Button class="auk-u-p-0 auk-u-cursor-grab" @skin="borderless">
-            <Auk::Icon @name="drag-handle-2" />
-          </Auk::Button>
-        </div>
-      {{/if}}
       <span class="vlc-agenda-items-sub-item__numbering">
-        {{! For legacy data agenda-item number can be unexistent }}
+        {{!-- For legacy data agenda-item number can be unexistent --}}
         {{#if @agendaitem.number}}
           {{@agendaitem.number}}.
         {{/if}}
@@ -37,22 +125,55 @@
                   {{@agendaitem.shortTitle}}
                 {{else}}
                   {{@agendaitem.title}}
-                  {{! Fallback for legacy data that doesn't have a short title }}
+                  {{! Fallback for legacy data that doesnt have a short title }}
                 {{/if}}
               </pre>
             </LinkTo>
           </h4>
+          {{#if @isNew}}
+            <p class="auk-u-text-small au-u-muted auk-u-text-nowrap auk-u-mr-2">
+              <Auk::ColorBadge @skin="success" /> {{t "added-agendaitem-text"}}
+            </p>
+          {{/if}}
         </div>
         <div
           class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced"
         >
+          {{#if this.loadNewsletterVisibility.lastSuccessful}}
+            {{#if (and (and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow) @isNew)}}
+            <AuPill
+              @skin="border"
+              @draft={{true}}
+              @icon="website"
+            >
+              Op de website
+            </AuPill>
+            {{else}}
+            <AuPill
+              @skin="border"
+              @icon="website"
+            >
+              Op de website
+            </AuPill>
+            {{/if}}
+          {{/if}}
           {{#if this.subcase.confidential}}
+            {{#if (and (and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow) @isNew)}}
+            <AuPill
+              @skin="warning"
+              @draft={{true}}
+              @icon="lock-closed"
+            >
+              {{t "confidential"}}
+            </AuPill>
+            {{else}}
             <AuPill
               @skin="warning"
               @icon="lock-closed"
             >
               {{t "confidential"}}
             </AuPill>
+            {{/if}}
           {{/if}}
         </div>
       </div>
@@ -97,6 +218,7 @@
           <Documents::DocumentBadgeList
             @pieces={{this.limitedAgendaitemDocuments}}
             @highlightedPieces={{this.newAgendaitemDocuments}}
+            @isFuture={{if (and (and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow) @isNew) true}}
           />
         </div>
         {{#if this.enableShowMore}}
@@ -113,7 +235,7 @@
           </Auk::ButtonLink>
         {{/if}}
       {{/if}}
-      {{#unless @isEditingFormallyOkStatus}}
+      {{#if (or @agendaitem.explanation (and this.currentSession.isEditor @showFormallyOkStatus))}}
         {{#if @agendaitem.comment}}
           <p>
             <strong class="auk-u-text-bold">
@@ -126,6 +248,7 @@
           <hr />
         </div>
         <div class="vlc-agenda-items__remarks">
+          <div>
           {{#if @agendaitem.privateComment}}
             <p class="auk-u-text-muted">
               <strong class="auk-u-text-bold">
@@ -135,59 +258,9 @@
               {{@agendaitem.privateComment}}
             </p>
           {{/if}}
+          </div>
           <div class="vlc-agenda-items__icons">
-            <div class="auk-o-flex vlc-agenda-items__icons">
-              {{#if this.loadNewsletterVisibility.lastSuccessful}}
-                {{#if (not this.newsletterIsVisible)}}
-                  <Auk::Icon
-                    @name="not-visible"
-                    @skin="muted"
-                    class="auk-u-ml-2"
-                  >
-                    <EmberTooltip
-                      @side="top-end"
-                      @tooltipClass="tooltip-custom"
-                    >
-                      <p>
-                        {{t "not-visible-in-newsletter"}}
-                      </p>
-                    </EmberTooltip>
-                  </Auk::Icon>
-                {{else}}
-                  {{! TODO: this icon is merely here as an invisible placeholder.
-                    This keeps element-height the same at all times in order to prevent "jumping" when data is being side-loaded.
-                    This should be tackled differently through modified design }}
-                  <Auk::Icon
-                    @name="not-visible"
-                    @skin="invisible"
-                    class="auk-u-ml-2"
-                  />
-                {{/if}}
-              {{else}}
-                {{! TODO: design loading state for newsletter visibility }}
-                <Auk::Icon
-                  @name="circle-question"
-                  @skin="muted"
-                  class="auk-u-ml-2"
-                >
-                  <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
-                    <p>
-                      {{t "loading"}}
-                    </p>
-                  </EmberTooltip>
-                </Auk::Icon>
-              {{/if}}
-              {{#if @isNew}}
-                <Auk::Icon @name="calendar-new" class="auk-u-ml-2">
-                  <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
-                    <p>
-                      {{t "added-agendaitem-text"}}
-                    </p>
-                  </EmberTooltip>
-                </Auk::Icon>
-              {{/if}}
-            </div>
-            <div class="vlc-agenda-meta__status-holder auk-u-ml-2">
+            <div class="vlc-agenda-meta__status-holder">
               {{#if (and this.currentSession.isEditor @showFormallyOkStatus)}}
                 <p
                   class={{@agendaitem.formallyOkToShow.classNames}}
@@ -202,9 +275,9 @@
               {{/if}}
             </div>
           </div>
-
         </div>
-      {{/unless}}
+      {{/if}}
     </div>
   </div>
 </div>
+{{/if}}
