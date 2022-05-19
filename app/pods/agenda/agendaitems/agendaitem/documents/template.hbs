@@ -7,7 +7,7 @@
   <Group>
     <AuButtonGroup>
     {{#if this.model.pieces.length}}
-      {{#if this.currentSession.isEditor}}
+      {{#if (and this.currentSession.isEditor this.currentAgenda.isDesignAgenda)}}
         <Auk::Button
           data-test-route-agenda---agendaitem-documents-batch-edit
           @icon="pencil"
@@ -56,7 +56,7 @@
     <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
   </div>
 {{/if}}
-{{#if this.currentSession.isEditor}}
+{{#if (and this.currentSession.isEditor this.currentAgenda.isDesignAgenda)}}
   <div class="auk-u-mb-4">
     <Auk::Button
       @skin="tertiary"
