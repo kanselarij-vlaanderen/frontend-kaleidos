@@ -13,13 +13,13 @@ export default class PublicationsOverviewUrgentRoute extends PublicationsOvervie
 
   beforeModel() {
     super.beforeModel(...arguments);
-    const notPublishedStatuses = this.store.peekAll('publication-status').rejectBy('isPublished');
+    const allStatusesExceptPublished = this.store.peekAll('publication-status').rejectBy('isPublished');
     this.filter = {
       'urgency-level': {
         ':uri:': CONSTANTS.URGENCY_LEVELS.SPEEDPROCEDURE,
       },
       status: {
-        ':id:': notPublishedStatuses.mapBy('id').join(','),
+        ':id:': allStatusesExceptPublished.mapBy('id').join(','),
       },
     };
   }
