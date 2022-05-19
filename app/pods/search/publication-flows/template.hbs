@@ -5,47 +5,28 @@
   <div class="auk-o-grid-col-2">
     <div class="auk-box">
       <div class="auk-u-mb-2">
-        <div class="auk-o-flex auk-o-flex--spaced">
-          <Auk::Button
-            @skin="muted-borderless"
-            class="auk-button--flush"
-            {{on "click" this.toggleIsSelectedAllRegulationTypes}}
-          >
-            {{#if this.isSelectedAllRegulationTypes}}
-              {{svg-jar "checkbox-checked" width="19" height="19"}}
-              <span class="auk-u-hidden">{{capitalize (t "deselect-all")}}</span>
-            {{else}}
-              {{svg-jar "checkbox-unchecked" width="19" height="19"}}
-              <span class="auk-u-hidden">{{capitalize (t "select-all")}}</span>
-            {{/if}}
-          </Auk::Button>
-          <Auk::Label>{{t "regulation-type"}}</Auk::Label>
-        </div>
-        {{#each this.regulationTypes as |regulationType|}}
-          <Auk::Checkbox
-            @checked={{includes regulationType.id this.regulationTypeIds}}
-            @label={{regulationType.label}}
-            {{on "input" (fn this.toggleRegulationType regulationType)}}
-          />
-        {{/each}}
+        <Auk::CheckboxList
+          @checkable={{true}}
+          @label={{t "regulation-type"}}
+          @checked={{this.isSelectedAllRegulationTypes}}
+          @onToggle={{this.toggleIsSelectedAllRegulationTypes}}
+        >
+          {{#each this.regulationTypes as |regulationType|}}
+            <Auk::Checkbox
+              @checked={{includes regulationType.id this.regulationTypeIds}}
+              @label={{regulationType.label}}
+              {{on "input" (fn this.toggleRegulationType regulationType)}}
+            />
+          {{/each}}
+        </Auk::CheckboxList>
       </div>
-      <div>
-        <div class="auk-o-flex auk-o-flex--spaced">
-          <Auk::Button
-            @skin="muted-borderless"
-            class="auk-button--flush"
-            {{on "click" this.toggleIsSelectedAllStatuses}}
-          >
-            {{#if this.isSelectedAllStatuses}}
-              {{svg-jar "checkbox-checked" width="19" height="19"}}
-              <span class="auk-u-hidden">{{capitalize (t "deselect-all")}}</span>
-            {{else}}
-              {{svg-jar "checkbox-unchecked" width="19" height="19"}}
-              <span class="auk-u-hidden">{{capitalize (t "select-all")}}</span>
-            {{/if}}
-          </Auk::Button>
-          <Auk::Label>{{t "status"}}</Auk::Label>
-        </div>
+
+      <Auk::CheckboxList
+        @checkable={{true}}
+        @label={{t "status"}}
+        @checked={{this.isSelectedAllStatuses}}
+        @onToggle={{this.toggleIsSelectedAllStatuses}}
+      >
         {{#each this.publicationStatuses as |publicationStatus|}}
           <Auk::Checkbox
             @checked={{includes publicationStatus.id this.publicationStatusIds}}
@@ -53,15 +34,14 @@
             {{on "input" (fn this.togglePublicationStatus publicationStatus)}}
           />
         {{/each}}
-      </div>
+      </Auk::CheckboxList>
     </div>
   </div>
   <div class="auk-o-grid-col-10">
     <div>
       {{#if this.model.length}}
         <DataTable
-          data-test-route-search-publication-flows-data-table
-          data-test-route-search-cases-data-table={{true}}
+          data-test-route-search-publication-data-table
           @content={{await this.model}}
           @page={{this.page}}
           @noDataMessage={{t "no-results-found"}}
@@ -96,7 +76,7 @@
               <th class="auk-table__col--1"></th>
             </c.header>
             <c.body class="auk-table--clickable-rows" as |row|>
-              <td>
+              <td data-test-route-search-publication-row-number>
                 {{row.identification}}
               </td>
               <td>

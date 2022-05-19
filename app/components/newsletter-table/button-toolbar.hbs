@@ -23,7 +23,11 @@
     >
       <:floater>
         <EmberTooltip @side="bottom" @tooltipClass="auk-tooltip">
-          {{if (await @agendaitem.notaOrVisienota) (t "open-note") (t "no-nota")}}
+          {{if
+            (await @agendaitem.notaOrVisienota)
+            (t "open-note")
+            (t "no-nota")
+          }}
         </EmberTooltip>
       </:floater>
     </Auk::Button>

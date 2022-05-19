@@ -386,7 +386,6 @@
   "loading": "Aan het laden",
   "user": "Gebruiker",
   "user-role": "Gebruikersrol",
-  "loading-text-inactive": "Even geduld",
   "please-be-patient": "Even geduld aub...",
   "warning-text": "Venster sluiten",
   "continue": "Doorgaan",
@@ -678,6 +677,7 @@
   "decision-activity-result-postponed": "Er is beslist om dit agendapunt uit te stellen",
   "decision-activity-result": "op de agenda van",
   "result-decision": "Resultaat beslissing",
+  "no-decision-set": "Nog geen beslissing ingesteld",
   "loading-active-agendas": "De actieve agendas worden geladen.",
   "loading-publications": "De publicaties worden geladen.",
   "no-documents-to-download-warning-text": "De vergadering heeft geen documenten om te downloaden.",
@@ -778,6 +778,7 @@
   "view-documents-details": "Bekijk documenten",
   "publication-number-already-taken": "Het gekozen publicatienummer is reeds in gebruik. Gelieve een ander nummer te kiezen of een suffix te gebruiken.",
   "publication-number-already-taken-with-params": "Het publicatienummer {number} {suffix} is reeds in gebruik. Gebruik een ander nummer of suffix om door te gaan.",
+  "publication-number-already-taken-new-number-created": "Het gekozen publicatienummer is intussen reeds in gebruik. Er is een nieuw nummer aangemaakt. Probeer opnieuw op te slaan.",
   "without-suffix": "zonder suffix",
   "with-suffix": "met suffix",
   "publication-flow-publication-number-help": "Het publicatienummer bestaat uit een numerieke stam en een alfanumeriek achtervoegsel.",
@@ -1001,7 +1002,7 @@
   "date-approved": "Datum goedgekeurd",
   "consult-agendaitem-decision": "Laatste agendering bekijken",
   "postponed": "Uitgesteld",
-  "date-example": "bv. 01/2021",
+  "date-example": "bv. 01-2022",
   "edit-status": "Status aanpassen",
   "view-in-signinghub": "Bekijken in SigningHub",
   "send-to-signinghub": "Doorsturen naar SigningHub",
@@ -1029,5 +1030,6 @@
   "search-by-date-type": "zoeken op datumtype",
   "search-publication": "zoek publicatie",
   "select-all": "alles selecteren",
-  "deselect-all": "alles deselecteren"
+  "deselect-all": "alles deselecteren",
+  "on-the-website": "Op de website"
 }

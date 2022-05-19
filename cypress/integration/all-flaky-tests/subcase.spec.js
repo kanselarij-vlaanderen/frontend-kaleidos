@@ -6,6 +6,7 @@ import auk from '../../selectors/auk.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
+import dependency from '../../selectors/dependency.selectors';
 
 function currentTimestamp() {
   return Cypress.dayjs().unix();
@@ -191,7 +192,7 @@ context('Subcase tests', () => {
     // Index view
     // TODO-BUG, page is loading, the new sidenav for agendas has pills and we only get those
     cy.wait(1500); // waiting for now, remove this fix with a proper selector after merge of agenda design
-    cy.get(auk.pill).contains('Vertrouwelijk');
+    cy.get(agenda.agendaitemTitlesView.confidential).contains('Vertrouwelijk');
 
     // Click the "wijzigen link.
     cy.get(agenda.agendaitemTitlesView.edit).click();
@@ -345,5 +346,137 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseItem.approved).should('have.length', 3);
     cy.openSubcase(2);
     cy.get(cases.subcaseDescription.decidedOn).contains(agendaDate.format('DD-MM-YYYY'));
+  });
+
+  it('move subcases', () => {
+    const randomInt1 = Math.floor(Math.random() * Math.floor(10000));
+    const randomInt2 = randomInt1 + 1;
+    const type = 'Nota';
+    const caseTitle1 = `Cypress test ${randomInt1}: move subcases`;
+    const caseTitle2 = `Cypress test ${randomInt2}: move subcases`;
+    const caseTitle3 = 'Besluitvorming Vlaamse Regering hoed';
+    const subcaseShortTitle1 = 'Short title 1 for moving subcase';
+    const subcaseShortTitle2 = 'Short title 2 for moving subcase';
+    const subcaseShortTitle3 = 'Short title 3 for moving subcase';
+    const subcaseShortTitle4 = 'Short title 4 for moving subcase';
+
+    // setup
+    cy.createCase(caseTitle1);
+    cy.addSubcase(type, subcaseShortTitle1);
+    cy.addSubcase(type, subcaseShortTitle2);
+    cy.createCase(caseTitle2);
+    // wait for search index
+    cy.wait(30000);
+
+    // use case 1
+    cy.openCase(caseTitle1);
+    cy.openSubcase(0);
+    cy.get(cases.subcaseHeader.actionsDropdown).click();
+    cy.get(cases.subcaseHeader.actions.moveSubcase).click();
+    cy.intercept('GET', 'cases/search?**').as('searchCall1');
+    cy.get(utils.caseSearch.input).type(caseTitle2)
+      .wait('@searchCall1')
+      .wait(1000);
+    cy.intercept('PATCH', 'subcases/**').as('patchSubcases1');
+    cy.get(utils.caseSearch.row).contains(caseTitle2)
+      .click()
+      .wait('@patchSubcases1');
+    cy.get(utils.vlModalVerify.container).should('not.exist');
+    cy.openCase(caseTitle2);
+    cy.get(cases.subcaseItem.container).should('have.length', 1)
+      .find(cases.subcaseItem.link)
+      .contains(subcaseShortTitle2);
+
+    // use case 2
+    cy.openCase(caseTitle1);
+    cy.openSubcase(0);
+    cy.get(cases.subcaseHeader.actionsDropdown).click();
+    cy.get(cases.subcaseHeader.actions.moveSubcase).click();
+    cy.intercept('GET', 'cases/search?**').as('searchCall2');
+    cy.get(utils.caseSearch.input).type(caseTitle2)
+      .wait('@searchCall2')
+      .wait(1000);
+    cy.intercept('PATCH', 'subcases/**').as('patchSubcases2');
+    cy.get(utils.caseSearch.row).contains(caseTitle2)
+      .click()
+      .wait('@patchSubcases2');
+    cy.get(utils.vlModalVerify.cancel).click();
+    cy.get(cases.subcaseOverviewHeader.titleContainer).contains(caseTitle1);
+    cy.get(cases.subcaseItem.container).should('not.exist');
+    cy.openCase(caseTitle2);
+    cy.get(cases.subcaseItem.container).should('have.length', 2)
+      .find(cases.subcaseItem.link)
+      .contains(subcaseShortTitle1);
+
+    // use case 3
+    cy.openCase(caseTitle1);
+    cy.addSubcase(type, subcaseShortTitle3);
+    cy.openSubcase(0);
+    cy.get(cases.subcaseHeader.actionsDropdown).click();
+    cy.get(cases.subcaseHeader.actions.moveSubcase).click();
+    cy.intercept('GET', 'cases/search?**').as('searchCall3');
+    cy.get(utils.caseSearch.input).type(caseTitle2)
+      .wait('@searchCall3')
+      .wait(1000);
+    cy.intercept('PATCH', 'subcases/**').as('patchSubcases3');
+    cy.get(utils.caseSearch.row).contains(caseTitle2)
+      .click()
+      .wait('@patchSubcases3');
+    cy.get(utils.vlModalVerify.save).click();
+    cy.get(route.casesOverview.dataTable);
+    cy.openCase(caseTitle2);
+    cy.get(cases.subcaseItem.container).should('have.length', 3)
+      .find(cases.subcaseItem.link)
+      .contains(subcaseShortTitle3);
+
+    // use case 4
+    cy.openCase(caseTitle3);
+    cy.addSubcase(type, subcaseShortTitle4);
+    cy.openSubcase(0);
+    cy.get(cases.subcaseHeader.actionsDropdown).click();
+    cy.get(cases.subcaseHeader.actions.moveSubcase).click();
+    cy.intercept('GET', 'cases/search?**').as('searchCall4');
+    cy.get(utils.caseSearch.input).type(caseTitle2)
+      .wait('@searchCall4')
+      .wait(1000);
+    cy.intercept('PATCH', 'subcases/**').as('patchSubcases4');
+    cy.get(utils.caseSearch.row).contains(caseTitle2)
+      .click()
+      .wait('@patchSubcases4');
+    cy.get(utils.vlModalVerify.container).should('not.exist');
+    cy.get(cases.subcaseOverviewHeader.titleContainer).contains(caseTitle3);
+    cy.get(cases.subcaseItem.container).should('not.exist');
+  });
+
+  it('check capital letters of subcase name', () => {
+    const capital = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+    const nonCapital = 'principiële goedkeuring m.h.o. op adviesaanvraag';
+
+    // this agenda may no longer exist if this spec is run after agenda.spec
+    cy.visitAgendaWithLink('vergadering/5EB2CD4EF5E1260009000015/agenda/9da67561-a827-47a2-8f58-8b3fd5739df4/agendapunten');
+    cy.get(agenda.agendaHeader.showOptions).click();
+    cy.get(agenda.agendaHeader.actions.addAgendaitems).click();
+    cy.get(agenda.createAgendaitem.row.subcaseName).contains(capital);
+    cy.get(auk.modal.footer.cancel).click();
+
+    cy.visitAgendaWithLink('vergadering/5EB2CD4EF5E1260009000015/agenda/5EB2CD4FF5E1260009000016/agendapunten');
+    cy.get(agenda.agendaOverviewItem.subcaseName).contains(capital);
+    cy.get(agenda.agendaOverviewItem.subitem).eq(1)
+      .click();
+    cy.get(agenda.agendaitemTitlesView.subcaseName).contains(capital);
+
+    cy.visit('dossiers/5EBA9528751CF7000800000A/deeldossiers');
+    cy.get(cases.subcaseItem.link).contains(nonCapital);
+    cy.get(cases.subcaseOverviewHeader.createSubcase).click();
+    cy.get(cases.newSubcase.procedureName).find(dependency.emberPowerSelect.trigger)
+      .click();
+    cy.get(dependency.emberPowerSelect.option).contains(capital);
+    cy.get(auk.modal.footer.cancel).click();
+
+    cy.get(cases.subcaseItem.link).eq(0)
+      .click();
+    cy.get(cases.subcaseDescription.subcaseName).contains(nonCapital)
+      .should('have.class', 'auk-u-text-capitalize');
+    cy.get(cases.subcaseTitlesView.subcaseName).contains(capital);
   });
 });

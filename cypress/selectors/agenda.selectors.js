@@ -21,6 +21,7 @@ const selectors = {
     edit: '[data-test-agendaitem-decision-edit]',
     delete: '[data-test-agendaitem-decision-delete]',
     container: '[data-test-agendaitem-decision-container]',
+    dropdownMenu: '[data-test-agendaitem-decision-dropdown-menu-options]',
   },
 
   // agendaitem-decision-edit
@@ -36,16 +37,18 @@ const selectors = {
 
   // agenda-detail/sidebar
   agendaDetailSidebar: {
-    // TODO-selector subItem only works for nota's, not announcement
+    // notes and announcements use same selector
     subitem: '[data-test-agenda-detail-sidebar-sub-item]',
-    announcementSubitem: '[data-test-agenda-detail-sidebar-announcement-sub-item]',
   },
 
   // agenda-detail/sidebar-item
   agendaDetailSidebarItem: {
     shortTitle: '[data-test-agenda-detail-sidebar-item-short-title]',
     confidential: '[data-test-agenda-detail-sidebar-item-confidential]',
-    status: '[data-test-agenda-detail-sidebar-item-status]',
+    status: {
+      formallyOk: '[data-test-agenda-detail-sidebar-item-status-pill] > .ki-check',
+      notYetFormallyOk: '[data-test-agenda-detail-sidebar-item-status-pill] > .ki-circle-question',
+    },
     // Test tag is not possible, CSS is added conditionally
     retracted: '.auk-u-opacity--1\\/3',
   },
@@ -60,8 +63,8 @@ const selectors = {
     container: '[data-test-agenda-overview-item-container]',
     subitem: '[data-test-agenda-overview-item-sub-item]', // this contains short title
     title: '[data-test-agenda-overview-item-title]',
+    subcaseName: '[data-test-agenda-overview-item-subcase-name]',
     formallyOk: '[data-test-agenda-overview-item-formally-ok]',
-    confidentialityIcon: '[data-test-agenda-overview-item-confidentiality-locked]',
     status: '[data-test-agenda-overview-item-status]',
   },
 
@@ -131,6 +134,11 @@ const selectors = {
     },
   },
 
+  // agenda-tabs
+  agendaTabs: {
+    tabs: '[data-test-agenda-nav-tabs]',
+  },
+
   // agenda-side-nav
   agendaSideNav: {
     agenda: '[data-test-agenda-side-nav-agenda]',
@@ -152,6 +160,7 @@ const selectors = {
   agendaitemTitlesView: {
     title: '[data-test-agendaitem-titles-title]',
     shortTitle: '[data-test-agendaitem-titles-short-title]',
+    subcaseName: '[data-test-agendaitem-subcase-name]',
     comment: '[data-test-agendaitem-titles-comment]',
     privateComment: '[data-test-agendaitem-titles-private-comment]',
     confidential: '[data-test-agendaitem-titles-confidential]',
@@ -227,6 +236,7 @@ const selectors = {
     dataTable: '[data-test-create-agendaitem-data-table]',
     row: {
       checkBox: '[data-test-create-agendaitem-row-subcase-checkbox]',
+      subcaseName: '[data-test-create-agendaitem-row-subcase-name]',
     },
   },
 };
