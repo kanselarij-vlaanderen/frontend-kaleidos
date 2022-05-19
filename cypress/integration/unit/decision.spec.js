@@ -225,7 +225,7 @@ context('Decision tests', () => {
     // remove decision with file
     cy.get('@decision').eq(0)
       .within(() => {
-        cy.get(utils.dropdownMenu.options).click();
+        cy.get(agenda.agendaitemDecision.dropdownMenu).click();
         cy.get(agenda.agendaitemDecision.delete).click();
       });
     cy.intercept('GET', '/agenda-item-treatments?filter**').as('filterDecision');

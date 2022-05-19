@@ -48,9 +48,11 @@ export default class SubcaseItemSubcasesComponent extends Component {
 
   get nameToShow() {
     if (this.args.subcase.subcaseName) {
-      return `${this.intl.t('in-function-of')} ${
-        this.args.subcase.subcaseName
-      }`;
+      const subcaseName = this.args.subcase.subcaseName;
+      const formattedSubcaseName =
+        subcaseName.substring(0, 1).toLowerCase() +
+        subcaseName.substring(1, subcaseName.length);
+      return `${this.intl.t('in-function-of')} ${formattedSubcaseName}`;
     }
     if (this.args.subcase.shortTitle) {
       return this.args.subcase.shortTitle;
@@ -97,15 +99,23 @@ export default class SubcaseItemSubcasesComponent extends Component {
 
   @task
   *loadSubcasePhases() {
-    this.phases = yield this.subcasesService.getSubcasePhases(this.args.subcase);
+    this.phases = yield this.subcasesService.getSubcasePhases(
+      this.args.subcase
+    );
   }
 
   @task
   *loadSubcaseIsApproved() {
     const meeting = yield this.args.subcase.requestedForMeeting;
     if (meeting?.isFinal) {
-      const approvedDecisionResultCode = yield this.store.findRecordByUri('decision-result-code', CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD);
-      const acknowledgedDecisionResultCode = yield this.store.findRecordByUri('decision-result-code', CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME);
+      const approvedDecisionResultCode = yield this.store.findRecordByUri(
+        'decision-result-code',
+        CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
+      );
+      const acknowledgedDecisionResultCode = yield this.store.findRecordByUri(
+        'decision-result-code',
+        CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
+      );
       this.approved = !!(yield this.store.queryOne('agenda-item-treatment', {
         'filter[subcase][id]': this.args.subcase.id,
         'filter[decision-result-code][:id:]': [
