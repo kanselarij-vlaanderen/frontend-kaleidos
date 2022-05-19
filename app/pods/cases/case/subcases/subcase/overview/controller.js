@@ -18,7 +18,7 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
   @tracked siblingSubcasesCount;
 
   get showMandateesNotApplicableMessage() {
-    return [CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING].includes(this.model.type?.uri);
+    return [CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING].includes(this.model.subcase.get('type')?.get('uri'));
   }
 
   @action

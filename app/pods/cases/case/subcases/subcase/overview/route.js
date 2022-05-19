@@ -18,7 +18,6 @@ export default class CasesCaseSubcasesSubcaseOverviewRoute extends Route {
 
   async model(params) {
     const subcase = this.modelFor('cases.case.subcases.subcase');
-    const type = await subcase.type;
     // For showing the history of subcases within this route, we need a list of subcases without the current model
     //  We want to sort descending on date the subcase was concluded.
     //  In practice, reverse sorting on created will be close
@@ -41,7 +40,6 @@ export default class CasesCaseSubcasesSubcaseOverviewRoute extends Route {
 
     return {
       subcase,
-      type,
       siblingSubcases,
     }
   }
