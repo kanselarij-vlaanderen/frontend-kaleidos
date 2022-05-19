@@ -3,7 +3,6 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
-import cases from '../../selectors/case.selectors';
 import document from '../../selectors/document.selectors';
 
 context('Tests on pieces and page-sizes of agendaitems and subcase', () => {
