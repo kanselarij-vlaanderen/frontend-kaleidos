@@ -63,7 +63,6 @@ export default class AgendaitemDecisionComponent extends Component {
     });
     await documentContainer.save();
     piece.setProperties({
-      confidential: false,
       accessLevel: this.defaultAccessLevel,
       documentContainer,
     });
