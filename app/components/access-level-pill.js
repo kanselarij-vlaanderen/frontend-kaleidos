@@ -10,11 +10,9 @@ export default class AccessLevelPillComponent extends Component {
    * An access-level pill component.
    *
    * @argument accessLevel: an accessLevel object or null
-   * @argument confidential: boolean
    * @argument onChangeAccessLevel
    * @argument onConfirmChangeAccessLevel
    * @argument onCancelChangeAccessLevel
-   * @argument onChangeConfidentiality
    */
   @service intl;
   @service('current-session') session;
@@ -23,32 +21,32 @@ export default class AccessLevelPillComponent extends Component {
 
   get isLoading() {
     return this.confirmChangeAccessLevel.isRunning
-      || this.cancelChangeAccessLevel.isRunning
-      || this.changeConfidentiality.isRunning;
+      || this.cancelChangeAccessLevel.isRunning;
   }
 
-  get inverseConfidentiality() {
-    return !this.args.confidential;
-  }
-
-  get pillSkin() {
-    let modifier;
+  get pillIcon() {
+    let icon = '';
     if (this.args.accessLevel) {
       switch (this.args.accessLevel.uri) {
-        case CONSTANTS.ACCESS_LEVELS.PUBLIEK:
-          modifier = 'success';
+        case CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE:
+          icon = 'users-single';
           break;
-        case CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID:
-          modifier = 'warning';
+        case CONSTANTS.ACCESS_LEVELS.MINISTERRAAD:
+          icon = 'users-one-of-four';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
-          modifier = 'danger';
+          icon = 'users-two-of-four';
           break;
+        case CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID:
+          icon = 'users-three-of-four';
+          break;
+        case CONSTANTS.ACCESS_LEVELS.PUBLIEK:
+          icon = 'users-four-of-four';
+          break;
+        default:
       }
-    } else {
-      modifier = 'default';
     }
-    return modifier;
+    return icon;
   }
 
   get accessLevelLabel() {
@@ -58,11 +56,13 @@ export default class AccessLevelPillComponent extends Component {
     return this.intl.t('no-accessLevel');
   }
 
+  get canEdit() {
+    return this.args.isEditable && this.session.may('manage-document-access-levels');
+  }
+
   @action
-  toggleEdit() {
-    if (this.session.isEditor) {
-      this.isEditing = !this.isEditing;
-    }
+  openEditMode() {
+    this.isEditing = true;
   }
 
   @action
@@ -86,12 +86,5 @@ export default class AccessLevelPillComponent extends Component {
       yield this.args.onCancelChangeAccessLevel();
     }
     this.isEditing = false;
-  }
-
-  @task
-  *changeConfidentiality() {
-    if (this.args.onChangeConfidentiality) {
-      yield this.args.onChangeConfidentiality(!this.args.confidential);
-    }
   }
 }

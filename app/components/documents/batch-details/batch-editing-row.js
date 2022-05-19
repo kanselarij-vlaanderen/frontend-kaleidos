@@ -31,13 +31,6 @@ export default class BatchEditingRow extends Component {
     return firstProperty;
   }
 
-  get confidential() {
-    if (this.args.selectedRows.length === 0) {
-      return false;
-    }
-    return this.args.selectedRows.every((row) => row.confidential);
-  }
-
   get isToBeDeleted() {
     // some-check: always indicate destructive action will be performed
     return this.args.selectedRows.some((row) => row.isToBeDeleted);
@@ -61,14 +54,6 @@ export default class BatchEditingRow extends Component {
   setToBeDeleted(isToBeDeleted) {
     for (const row of this.args.selectedRows) {
       row.isToBeDeleted = isToBeDeleted;
-    }
-  }
-
-  @action
-  onInputConfidential(event) {
-    const checked = event.target.checked;
-    for (const row of this.args.selectedRows) {
-      row.confidential = checked;
     }
   }
 }
