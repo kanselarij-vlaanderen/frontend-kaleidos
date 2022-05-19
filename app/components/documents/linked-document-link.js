@@ -8,6 +8,7 @@ import { task } from 'ember-concurrency';
 export default class LinkedDocumentLink extends Component {
   @service store;
   @service currentSession;
+  @service piecesService;
 
   @tracked isOpenVerifyDeleteModal = false;
 
@@ -63,6 +64,7 @@ export default class LinkedDocumentLink extends Component {
   @action
   async saveAccessLevel() {
     await this.lastPiece.save();
+    await this.piecesService.updatePreviousAccessLevels(this.piece);
     this.loadData.perform();
   }
 

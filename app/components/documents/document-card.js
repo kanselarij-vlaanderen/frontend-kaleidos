@@ -28,6 +28,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @service fileService;
   @service toaster;
   @service intl;
+  @service piecesService;
 
   @tracked isOpenUploadModal = false;
   @tracked isOpenVerifyDeleteModal = false;
@@ -91,6 +92,7 @@ export default class DocumentsDocumentCardComponent extends Component {
       this.piece = yield loadPiece(this.piece.id);
       this.documentContainer = yield this.piece.documentContainer;
       this.accessLevel = yield this.piece.accessLevel;
+      yield this.loadVersionHistory.perform();
     } else if (this.args.documentContainer) {
       // TODO KAS-2777 This else does not seem used (no <Documents::DocumentCard> that passes this arg)
       this.documentContainer = this.args.documentContainer;
@@ -111,6 +113,9 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *loadVersionHistory() {
     this.pieces = yield this.documentContainer.hasMany('pieces').reload();
+    for (const piece of this.pieces.toArray()) {
+      yield piece.belongsTo('accessLevel').reload();
+    }
   }
 
   get sortedPieces() {
@@ -269,6 +274,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   async saveAccessLevel() {
     // TODO make sure not to overwrite things
     await this.piece.save();
+    await this.piecesService.updatePreviousAccessLevels(this.piece);
     await this.loadPieceRelatedData.perform();
   }
 
