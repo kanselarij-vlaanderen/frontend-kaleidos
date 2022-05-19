@@ -314,7 +314,7 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
 }
 
 // Document list
-.vlc-document-list__item > a {
+.vlc-document-list__item > span > a {
   > span:not([class]),
   > .auk-icon {
     color: #545961;
