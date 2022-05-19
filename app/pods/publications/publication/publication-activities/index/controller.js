@@ -69,7 +69,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
       publicationDate: publicationDate,
       publicationActivity: publicationActivity,
     });
-    saves.push(decision.save());
+    yield decision.save();
 
     if (publication.mustUpdatePublicationStatus) {
       const statusUpdate = this.publicationService.updatePublicationStatus(
@@ -78,9 +78,6 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
         publication.publicationDate
       );
       saves.push(statusUpdate);
-
-      this.publicationSubcase.endDate = publication.publicationDate;
-      saves.push(this.publicationSubcase.save());
     }
 
     yield Promise.all(saves);
