@@ -31,11 +31,11 @@
           @selectModel={{this.setDocumentType}}
         />
       {{else}}
-        {{this.documentType.label}}
+        <Utils::AccessLevelColorBadge @accessLevel={{this.accessLevel}} />
       {{/if}}
     </Auk::KeyValue>
   {{/if}}
-  <Auk::KeyValue 
+  <Auk::KeyValue
     data-test-details-tab-access-level
     @key={{t "publicity"}}
   >

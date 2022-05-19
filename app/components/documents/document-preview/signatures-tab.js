@@ -1,7 +1,8 @@
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { task } from 'ember-concurrency';
 
 export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent extends Component {
   @service currentSession;
@@ -9,6 +10,18 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
 
   @tracked signMarkingActivity;
   @tracked agendaitem;
+
+  @tracked isShowAddCC = false;
+
+  @action
+  showAddCC() {
+    this.isShowAddCC = true;
+  }
+
+  @action
+  closeAddCC() {
+    this.isShowAddCC = false;
+  }
 
   constructor() {
     super(...arguments);
@@ -27,7 +40,7 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
       'filter[:has-no:next-version]': 't',
       sort: '-created',
     })
-    
+
   }
 
   @task
@@ -40,5 +53,34 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
       yield this.args.unmarkForSignature(this.args.piece);
     }
     yield this.loadSignatureRelatedData.perform();
+  }
+
+  @tracked isShowAddMinister = false;
+  @tracked isShowCancelSignatures = false;
+  @tracked isInEditMode = false;
+
+  @action
+  showAddMinister() {
+    this.isShowAddMinister = true;
+  }
+
+  @action
+  closeAddMinister() {
+    this.isShowAddMinister = false;
+  }
+
+  @action
+  showCancelSignatures() {
+    this.isShowCancelSignatures = true;
+  }
+
+  @action
+  closeCancelSignatures() {
+    this.isShowCancelSignatures = false;
+  }
+
+  @action
+  putInEditMode() {
+    this.isInEditMode = !this.isInEditMode;
   }
 }
