@@ -20,40 +20,12 @@ export default Service.extend({
   /* API: agenda-approve-service */
 
   async createNewDesignAgenda(currentMeeting) {
-    const response = await fetch('/agenda-approve/createDesignAgenda', {
+    const endpoint = `/agenda-approve/meetings/${currentMeeting.id}/reopen`;
+    const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
-        Accept: 'application/vnd.api+json',
         'Content-Type': 'application/vnd.api+json',
       },
-      body: JSON.stringify({
-        meetingId: currentMeeting.id,
-      }),
-    });
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-
-    const payload = await response.json();
-    if (payload.error) {
-      throw new Error(payload.error.detail);
-    }
-
-
-    const newAgenda = await this.store.find('agenda', payload.data.id);
-    return newAgenda;
-  },
-
-  async approveDesignAgenda(currentMeeting) {
-    const response = await fetch('/agenda-approve/approveAgenda', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/vnd.api+json',
-        'Content-Type': 'application/vnd.api+json',
-      },
-      body: JSON.stringify({
-        meetingId: currentMeeting.id,
-      }),
     });
     if (!response.ok) {
       throw new Error(response.statusText);
@@ -68,20 +40,14 @@ export default Service.extend({
     return newAgenda;
   },
 
-  async approveAgendaAndCloseMeeting(currentMeeting) {
-    const response = await fetch(
-      '/agenda-approve/approveAgendaAndCloseMeeting',
-      {
-        method: 'POST',
-        headers: {
-          Accept: 'application/vnd.api+json',
-          'Content-Type': 'application/vnd.api+json',
-        },
-        body: JSON.stringify({
-          meetingId: currentMeeting.id,
-        }),
-      }
-    );
+  async approveDesignAgenda(currentAgenda) {
+    const endpoint = `/agenda-approve/agendas/${currentAgenda.id}/approve`;
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+      },
+    });
     if (!response.ok) {
       throw new Error(response.statusText);
     }
@@ -89,19 +55,33 @@ export default Service.extend({
     const payload = await response.json();
     if (payload.error) {
       throw new Error(payload.error.detail);
+    }
+
+    const newAgenda = await this.store.find('agenda', payload.data.id);
+    return newAgenda;
+  },
+
+  async approveAgendaAndCloseMeeting(currentAgenda) {
+    const endpoint = `/agenda-approve/agendas/${currentAgenda.id}/close`;
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
     }
   },
 
   async closeMeeting(currentMeeting) {
-    const response = await fetch('/agenda-approve/closeMeeting', {
+    const endpoint = `/agenda-approve/meetings/${currentMeeting.id}/close`;
+    const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
-        Accept: 'application/vnd.api+json',
         'Content-Type': 'application/vnd.api+json',
       },
-      body: JSON.stringify({
-        meetingId: currentMeeting.id,
-      }),
     });
     if (!response.ok) {
       throw new Error(response.statusText);
@@ -118,16 +98,13 @@ export default Service.extend({
     return lastApprovedAgenda;
   },
 
-  async reopenPreviousAgenda(currentMeeting) {
-    const response = await fetch('/agenda-approve/reopenPreviousAgenda', {
+  async reopenPreviousAgenda(currentAgenda) {
+    const endpoint = `/agenda-approve/agendas/${currentAgenda.id}/reopen`;
+    const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
-        Accept: 'application/vnd.api+json',
         'Content-Type': 'application/vnd.api+json',
       },
-      body: JSON.stringify({
-        meetingId: currentMeeting.id,
-      }),
     });
     if (!response.ok) {
       throw new Error(response.statusText);
@@ -144,23 +121,19 @@ export default Service.extend({
     return reopenedAgenda;
   },
 
-  async deleteAgenda(currentMeeting, currentAgenda) {
-    const response = await fetch('/agenda-approve/deleteAgenda', {
-      method: 'POST',
+  async deleteAgenda(currentAgenda) {
+    const endpoint = `/agenda-approve/agendas/${currentAgenda.id}`;
+    const response = await fetch(endpoint, {
+      method: 'DELETE',
       headers: {
-        Accept: 'application/vnd.api+json',
         'Content-Type': 'application/vnd.api+json',
       },
-      body: JSON.stringify({
-        meetingId: currentMeeting.id,
-        agendaId: currentAgenda.id,
-      }),
     });
     if (!response.ok) {
       throw new Error(response.statusText);
     }
 
-    const payload = await response.json();
+     const payload = await response.json();
     if (payload.error) {
       throw new Error(payload.error.detail);
     }
@@ -172,10 +145,10 @@ export default Service.extend({
     }
   },
 
-  /* API: agenda-sort-service */
+  /* API: agenda-comparison-service */
 
   async agendaWithChanges(currentAgendaID, agendaToCompareID) {
-    const endpoint = new URL('/agenda-sort/agenda-with-changes', window.location.origin);
+    const endpoint = new URL('/agenda-comparison/agenda-with-changes', window.location.origin);
     const queryParams = new URLSearchParams(Object.entries({
       agendaToCompare: agendaToCompareID,
       selectedAgenda: currentAgendaID,

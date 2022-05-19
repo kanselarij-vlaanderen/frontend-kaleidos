@@ -244,7 +244,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     }
     try {
       const newAgenda = await this.agendaService.approveDesignAgenda(
-        this.args.meeting
+        this.args.currentAgenda
       );
       // Data reloading
       await this.reloadAgenda(this.args.currentAgenda);
@@ -295,7 +295,8 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       return;
     }
     try {
-      await this.agendaService.approveAgendaAndCloseMeeting(this.args.meeting);
+      await this.agendaService.approveAgendaAndCloseMeeting(this.args.currentAgenda);
+
       // Data reloading
       await this.reloadAgenda(this.args.currentAgenda);
       await this.reloadAgendaitemsOfAgenda(this.args.currentAgenda);
@@ -383,7 +384,6 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     }
     try {
       const lastapprovedAgenda = await this.agendaService.deleteAgenda(
-        this.args.meeting,
         this.args.currentAgenda
       );
       if (lastapprovedAgenda) {
@@ -445,7 +445,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         this.piecesToDeleteReopenPreviousAgenda = null;
       }
       const lastApprovedAgenda = await this.agendaService.reopenPreviousAgenda(
-        this.args.meeting
+        this.args.currentAgenda
       );
       // Data reloading
       await this.reloadAgenda(lastApprovedAgenda);
