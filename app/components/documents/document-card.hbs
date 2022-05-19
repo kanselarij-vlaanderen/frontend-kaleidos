@@ -50,14 +50,15 @@
           {{/if}}
           <Group.Item class="auk-o-flex">
             {{#unless this.loadPieceRelatedData.isRunning}}
-              <AccessLevelPill
-                @accessLevel={{this.accessLevel}}
-                @confidential={{this.piece.confidential}}
-                @onChangeAccessLevel={{this.changeAccessLevel}}
-                @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
-                @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
-                @onChangeConfidentiality={{this.changeConfidentiality}}
-              />
+              <div class="auk-o-flex auk-o-flex--vertical-center">
+                <AccessLevelPill
+                  @accessLevel={{this.accessLevel}}
+                  @isEditable={{true}}
+                  @onChangeAccessLevel={{this.changeAccessLevel}}
+                  @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
+                  @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
+                />
+              </div>
             {{/unless}}
           </Group.Item>
           {{#if

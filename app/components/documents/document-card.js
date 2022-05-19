@@ -154,7 +154,6 @@ export default class DocumentsDocumentCardComponent extends Component {
       modified: now,
       file: file,
       previousPiece: previousPiece,
-      confidential: previousPiece.confidential,
       accessLevel: previousAccessLevel || this.defaultAccessLevel,
       documentContainer: this.documentContainer,
     });
@@ -277,14 +276,6 @@ export default class DocumentsDocumentCardComponent extends Component {
     // TODO make sure not to overwrite things
     await this.piece.save();
     await this.loadPieceRelatedData.perform();
-  }
-
-  @action
-  async changeConfidentiality(confidential) {
-    this.piece.set('confidential', confidential);
-    // TODO make sure not to overwrite things
-    await this.piece.save();
-    this.toaster.success(this.intl.t('successfully-saved'));
   }
 
   @action
