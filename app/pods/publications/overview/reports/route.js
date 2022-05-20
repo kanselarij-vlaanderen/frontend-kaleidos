@@ -17,7 +17,7 @@ export default class PublicationsOverviewReportsRoute extends Route {
 
     // configuration order determines order in UI
     const reportTypeEntries = REPORT_TYPES_CONFIG.map(async (reportTypeConfig) => {
-      const reportType = reportTypes.findBy('uri', reportTypeConfig.metricsTypeUri);
+      const reportType = reportTypes.findBy('uri', reportTypeConfig.uri);
       if (!reportType) {
         console.error('report type config uri does not exist')
       }

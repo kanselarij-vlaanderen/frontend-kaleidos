@@ -36,7 +36,7 @@ export default class PublicationsOverviewReportsController extends Controller {
     const job = this.store.createRecord('publication-metrics-export-job', {
       created: now,
       generatedBy: this.currentSession.user,
-      type: reportTypeEntry.type,
+      reportType: reportTypeEntry.type,
       config: jobParams,
     });
     return job;
