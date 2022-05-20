@@ -468,8 +468,7 @@ context('Subcase tests', () => {
     cy.visit('dossiers/5EBA9528751CF7000800000A/deeldossiers');
     cy.get(cases.subcaseItem.link).contains(nonCapital);
     cy.get(cases.subcaseOverviewHeader.createSubcase).click();
-    cy.get(cases.newSubcase.procedureName).find(dependency.emberPowerSelect.trigger)
-      .click();
+    cy.get(cases.newSubcase.procedureName).click();
     cy.get(dependency.emberPowerSelect.option).contains(capital);
     cy.get(auk.modal.footer.cancel).click();
 

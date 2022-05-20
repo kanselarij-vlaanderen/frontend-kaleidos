@@ -63,7 +63,7 @@
             {{/if}}
 
             {{#if @showFormallyOkStatus}}
-              <Auk::Pill data-test-agenda-detail-sidebar-item-status-pill @skin="blank" @layout="icon-only" class="{{@agendaitem.formallyOkToShow.classNames}}">
+              <Auk::Pill data-test-agenda-detail-sidebar-item-status-pill @skin="blank" @layout="icon-only">
                 <i class="{{@agendaitem.formallyOkToShow.iconClassNames}} {{@agendaitem.formallyOkToShow.classNames}}" />
                 <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
                   <p>
@@ -79,10 +79,12 @@
       {{#if (and (not @agendaitem.aboutToDelete) @isNew)}}
         <div>
           <div class="auk-o-flex auk-o-flex--justify-between">
-            <div class="auk-o-flex auk-o-flex--align-end vlc-agenda-detail-sidebar-item__icon">
-              <p class="auk-u-text-small auk-u-muted">
-                <Auk::ColorBadge @skin="success" /> {{t "added-agendaitem-text"}}
-              </p>
+            <div class="auk-o-flex auk-o-flex--vertical-center auk-u-text-small auk-u-muted">
+              <Auk::ColorBadge
+                @skin="success"
+                class="auk-u-mr"
+              />
+              {{t "added-agendaitem-text"}}
             </div>
           </div>
         </div>

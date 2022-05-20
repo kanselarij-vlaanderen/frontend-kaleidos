@@ -146,12 +146,13 @@
             (or
               (is-pending @subcase.requestedBy)
               (is-pending @subcase.requestedBy.person)
+              this.loadAgendaData.isRunning
             )
           }}
             <div class="auk-skeleton auk-skeleton--rectangle" role="alert" aria-busy="true"></div>
           {{else if @subcase.requestedBy}}
             {{@subcase.requestedBy.person.nameToDisplay}}
-          {{else}}
+          {{else if this.showNotYetRequestedMessage}}
             {{t "not-yet-requested"}}
           {{/if}}
         </div>

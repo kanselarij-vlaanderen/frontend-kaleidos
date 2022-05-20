@@ -27,6 +27,7 @@
       <Mandatees::MandateesPanel
         @mandatees={{this.mandatees}}
         @submitter={{this.submitter}}
+        @emptyStateMessage={{if this.showMandateesNotApplicableMessage (t "not-applicable")}}
         @allowEditing={{this.currentSession.isEditor}}
         @onSave={{this.saveMandateeData}}
       />
@@ -38,35 +39,12 @@
       <Subcases::SubcasesHistory
         @case={{this.case}}
         @subcases={{@model.siblingSubcases}}
+        @page={{this.page}}
+        @size={{this.size}}
+        @onNextPage={{this.nextPage}}
+        @onPreviousPage={{this.prevPage}}
+        @onSetSizeOption={{this.setSizeOption}}
       />
     </div>
-  </div>
-  <hr/>
-  <div class="auk-u-mx-4">
-    <Auk::Toolbar as |Toolbar|>
-      <Toolbar.Group @position="left" as |Group|>
-        <Group.Item>
-          <Auk::Pagination
-            @page={{this.page}}
-            @size={{this.size}}
-            @nbOfItems={{@model.siblingSubcases.length}}
-            @total={{this.siblingSubcasesCount}}
-            @onNextPage={{this.nextPage}}
-            @onPreviousPage={{this.prevPage}}
-          />
-        </Group.Item>
-      </Toolbar.Group>
-      <Toolbar.Group @position="right" as |Group|>
-        <Group.Item>
-          {{t "amount-showed"}}
-        </Group.Item>
-        <Group.Item>
-          <WebComponents::AuPageSize
-            @selectedSize={{this.size}}
-            @onChange={{this.setSizeOption}}
-          />
-        </Group.Item>
-      </Toolbar.Group>
-    </Auk::Toolbar>
   </div>
 {{/if}}

@@ -14,6 +14,10 @@
   }
 }
 
+.vlc-document-card--borderless {
+  border: none;
+}
+
 .vlc-document-card__summary {
   display: flex;
   align-items: center;

@@ -14,10 +14,10 @@
       data-test-edit-document-row-type={{true}}
       @modelName="document-type"
       @searchField="label"
-      @propertyToShow="label"
+      @displayField="label"
       @sortField="priority"
-      @selectedItems={{this.documentContainer.type}}
-      @selectModel={{this.selectDocumentType}}
+      @selected={{this.documentContainer.type}}
+      @onChange={{this.selectDocumentType}}
     />
   </td>
   <td>
@@ -25,10 +25,10 @@
       data-test-edit-document-row-access-level={{true}}
       @modelName="access-level"
       @allowClear={{true}}
-      @propertyToShow="label"
+      @displayField="label"
       @sortField="label"
-      @selectedItems={{@piece.accessLevel}}
-      @selectModel={{this.selectAccessLevel}}
+      @selected={{@piece.accessLevel}}
+      @onChange={{this.selectAccessLevel}}
     />
   </td>
   <td class="auk-u-text-align--right">
