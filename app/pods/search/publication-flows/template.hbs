@@ -93,7 +93,7 @@
               </td>
               <td>
                 {{#if row.numacNumbers.length}}
-                  {{join ", " row.numacNumbers}}
+                  {{join ", " (sort row.numacNumbers)}}
                 {{else}}
                   {{t "dash"}}
                 {{/if}}
