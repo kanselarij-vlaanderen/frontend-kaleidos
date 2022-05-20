@@ -24,10 +24,10 @@
         @modelName="document-type"
         @allowClear={{true}}
         @searchField="label"
-        @propertyToShow="label"
+        @displayField="label"
         @sortField="priority"
-        @selectedItems={{@row.documentType}}
-        @selectModel={{@row.setDocumentType}}
+        @selected={{@row.documentType}}
+        @onChange={{@row.setDocumentType}}
       />
     {{else}}
       {{@row.documentType.label}}
@@ -39,10 +39,10 @@
         data-test-document-details-row-access-level
         @modelName="access-level"
         @allowClear={{true}}
-        @propertyToShow="label"
+        @displayField="label"
         @sortField="priority"
-        @selectedItems={{@row.accessLevel}}
-        @selectModel={{@row.setAccessLevel}}
+        @selected={{@row.accessLevel}}
+        @onChange={{@row.setAccessLevel}}
       />
     </td>
   {{else}}

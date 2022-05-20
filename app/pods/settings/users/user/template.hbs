@@ -41,10 +41,10 @@
                 <Utils::ModelSelector
                   @modelName="account-group"
                   @searchField="name"
-                  @propertyToShow="name"
+                  @displayField="name"
                   @sortField="name"
-                  @selectedItems={{this.model.group}}
-                  @selectModel={{this.setAndSaveGroup}}
+                  @selected={{this.model.group}}
+                  @onChange={{this.setAndSaveGroup}}
                 />
               </dd>
             </div>

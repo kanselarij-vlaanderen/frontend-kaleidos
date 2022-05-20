@@ -12,9 +12,10 @@
     @skin="tertiary"
     @layout="icon-only"
     @icon="check"
-    @size="tiny"
+    @size="xsmall"
     @loading={{this.saveTreatment.isRunning}}
     {{on "click" (perform this.saveTreatment)}}
+    class="auk-u-ml"
     data-test-agendaitem-decision-edit-save
   >
     {{t "save"}}
@@ -23,8 +24,9 @@
     @skin="tertiary"
     @layout="icon-only"
     @icon="x"
-    @size="tiny"
+    @size="xsmall"
     {{on "click" this.cancelEdit}}
+    class="auk-u-ml"
     data-test-access-level-pill-cancel
   >
     {{t "cancel"}}

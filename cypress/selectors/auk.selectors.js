@@ -16,6 +16,10 @@ const selectors = {
 
   /** Section multiple selector AUK components **/
 
+  alertStack: {
+    container: '.auk-alert-stack',
+  },
+
   alert: {
     container: '.auk-alert',
     title: '.auk-alert__title',

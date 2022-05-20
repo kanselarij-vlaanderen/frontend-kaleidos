@@ -10,22 +10,22 @@
       @modelName="document-type"
       @allowClear={{true}}
       @searchField="label"
-      @propertyToShow="label"
+      @displayField="label"
       @sortField="priority"
-      @readOnly={{this.isDisabled}}
-      @selectedItems={{this.documentType}}
-      @selectModel={{this.setDocumentType}}
+      @disabled={{this.isDisabled}}
+      @selected={{this.documentType}}
+      @onChange={{this.setDocumentType}}
     />
   </td>
   <td>
     <Utils::ModelSelector
       @modelName="access-level"
       @allowClear={{true}}
-      @propertyToShow="label"
+      @displayField="label"
       @sortField="priority"
-      @readOnly={{this.isDisabled}}
-      @selectedItems={{this.accessLevel}}
-      @selectModel={{this.setAccessLevel}}
+      @disabled={{this.isDisabled}}
+      @selected={{this.accessLevel}}
+      @onChange={{this.setAccessLevel}}
     />
   </td>
   <td>
