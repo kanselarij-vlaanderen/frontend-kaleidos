@@ -8,7 +8,7 @@ export default ApplicationAdapter.extend({
     if (relationship.meta.key === 'pieces') {
       newUrl += '?page[size]=999';
       if (namesOnly) {
-        newUrl += '&fields[pieces]=name,confidential';
+        newUrl += '&fields[pieces]=name';
       }
     }
     if (relationship.meta.key === 'linkedPieces') {

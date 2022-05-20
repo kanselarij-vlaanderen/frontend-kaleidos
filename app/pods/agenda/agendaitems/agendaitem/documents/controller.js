@@ -11,9 +11,8 @@ import {
   restorePiecesFromPreviousAgendaitem,
 } from 'frontend-kaleidos/utils/documents';
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
-import { isPresent } from '@ember/utils';
+import { isEmpty, isPresent } from '@ember/utils';
 import ENV from 'frontend-kaleidos/config/environment';
-import { isEmpty } from '@ember/utils';
 
 export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service currentSession;
@@ -31,7 +30,6 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @tracked currentAgenda;
   @tracked previousAgenda;
   @tracked agendaActivity;
-  @tracked isSubcaseConfidential;
 
   @tracked isOpenPublicationModal = false;
 
@@ -79,7 +77,6 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
       modified: now,
       file: file,
       accessLevel: this.defaultAccessLevel,
-      confidential: this.isSubcaseConfidential || false,
       name: file.filenameWithoutExtension,
       documentContainer: documentContainer,
     });

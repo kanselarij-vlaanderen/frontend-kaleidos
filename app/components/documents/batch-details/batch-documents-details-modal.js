@@ -64,7 +64,6 @@ export default class BatchDocumentsDetailsModal extends Component {
         row.piece = piece;
         row.name = piece.name;
         row.accessLevel = piece.accessLevel;
-        row.confidential = piece.confidential;
         row.documentContainer = await piece.documentContainer;
         row.documentType = row.documentContainer.type;
         return row;
@@ -114,7 +113,6 @@ export default class BatchDocumentsDetailsModal extends Component {
         }
       } else {
         piece.name = row.name;
-        piece.confidential = row.confidential;
         // does not check for relationship changes
         let hasChanged = piece.dirtyType === 'updated';
         if (documentContainer.type !== row.documentType) {

@@ -25,10 +25,10 @@
           @modelName="document-type"
           @allowClear={{true}}
           @searchField="label"
-          @propertyToShow="label"
+          @displayField="label"
           @sortField="priority"
-          @selectedItems={{this.documentType}}
-          @selectModel={{this.setDocumentType}}
+          @selected={{this.documentType}}
+          @onChange={{this.setDocumentType}}
         />
       {{else}}
         {{this.documentType.label}}
@@ -44,26 +44,13 @@
         data-test-details-tab-edit-access-level
         @modelName="access-level"
         @allowClear={{true}}
-        @propertyToShow="label"
+        @displayField="label"
         @sortField="priority"
-        @selectedItems={{this.accessLevel}}
-        @selectModel={{this.setAccessLevel}}
+        @selected={{this.accessLevel}}
+        @onChange={{this.setAccessLevel}}
       />
     {{else}}
       <Utils::AccessLevelColorBadge @accessLevel={{this.accessLevel}} />
-    {{/if}}
-  </Auk::KeyValue>
-  <Auk::KeyValue
-    data-test-details-tab-confidentiality
-    @key={{capitalize (t "confidentiality")}}
-  >
-    {{#if this.isEditingDetails}}
-      <Auk::Toggle
-        data-test-details-tab-edit-confidentiality
-        @checked={{mut @piece.confidential}}
-      />
-    {{else}}
-      <Utils::ConfidentialityPill @confidential={{@piece.confidential}} />
     {{/if}}
   </Auk::KeyValue>
   <Auk::KeyValue @key={{t "file-type"}}>
