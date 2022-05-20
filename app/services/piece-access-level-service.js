@@ -29,9 +29,9 @@ export default class PieceAccessLevelService extends Service {
   @service store;
 
   async updatePreviousAccessLevels(piece) {
-    const internSecretarie = this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE);
-    const ministerraad = this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.MINISTERRAAD);
-    const internRegering = this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
+    const internSecretarie = await this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE);
+    const ministerraad = await this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.MINISTERRAAD);
+    const internRegering = await this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
 
     const accessLevel = await piece.accessLevel;
 
