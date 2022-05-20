@@ -34,16 +34,17 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
   }
 
   async afterModel() {
-    this.defaultAccessLevel = await this.store.findRecordByUri(
-      'access-level',
-      CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
-    );
     this.agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
     this.currentAgenda = await this.agendaitem.agenda;
     this.previousAgenda = await this.currentAgenda.previousVersion;
     this.agendaActivity = await this.agendaitem.agendaActivity;
     this.subcase = await this.agendaActivity?.subcase;
-    this.isSubcaseConfidential = this.subcase?.confidential;
+    this.defaultAccessLevel = await this.store.findRecordByUri(
+      'access-level',
+      this.subcase?.confidential
+        ? CONSTANTS.ACCESS_LEVELS.MINISTERRAAD
+        : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
+    );
   }
 
   setupController(controller) {
@@ -56,7 +57,6 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.currentAgenda = this.currentAgenda;
     controller.previousAgenda = this.previousAgenda;
     controller.agendaActivity = this.agendaActivity;
-    controller.isSubcaseConfidential = this.isSubcaseConfidential;
     controller.loadNewPieces.perform();
   }
 

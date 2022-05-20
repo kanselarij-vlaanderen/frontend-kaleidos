@@ -5,8 +5,11 @@ import {
   action,
   computed
 } from '@ember/object';
+import { inject as service } from '@ember/service';
 
 export default class ButtonToolbarNewsletterTable extends Component {
+  @service currentSession;
+
   @computed('args.agendaitem')
   get latestMeetingId() {
     return  this.args.agendaitem.get('agenda').then((agenda) => agenda.get('createdFor').then((meeting) => meeting.id));
@@ -29,5 +32,9 @@ export default class ButtonToolbarNewsletterTable extends Component {
       const piece = await nota.get('lastPiece');
       window.open(`/document/${piece.get('id')}`);
     }
+  }
+
+  get canEditNewsletter(){
+    return this.currentSession.may('manage-newsletter-infos');
   }
 }

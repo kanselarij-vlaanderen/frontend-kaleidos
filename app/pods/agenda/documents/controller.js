@@ -47,7 +47,6 @@ export default class AgendaDocumentsController extends Controller {
       modified: now,
       file: file,
       accessLevel: this.defaultAccessLevel,
-      confidential: false,
       name: file.filenameWithoutExtension,
       meeting: this.meeting,
       documentContainer: documentContainer,
