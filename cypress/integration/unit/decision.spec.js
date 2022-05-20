@@ -155,7 +155,7 @@ context('Decision tests', () => {
   });
 
   it('should test the decision CRUD', () => {
-    const agendaDate = Cypress.dayjs('2022-04-18').hour(10);
+    const agendaDate = Cypress.dayjs('2022-04-19').hour(10);
     const file = {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     };

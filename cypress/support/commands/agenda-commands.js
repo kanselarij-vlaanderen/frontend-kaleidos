@@ -372,6 +372,7 @@ function addAgendaitemToAgenda(subcaseTitle) {
   cy.wait('@getSubcasesFiltered', {
     timeout: 20000,
   });
+  const encodedSubcaseTitle = encodeURIComponent(subcaseTitle);
 
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
@@ -381,11 +382,11 @@ function addAgendaitemToAgenda(subcaseTitle) {
     }).should('not.exist');
     cy.get(dependency.emberDataTable.isLoading).should('not.exist');
     // type the subcase title from parameters to search
+    cy.intercept('GET', `/subcases?filter**filter[short-title]=${encodedSubcaseTitle}**`).as('getSubcasesFiltered');
     cy.get(agenda.createAgendaitem.input).clear()
       .type(subcaseTitle, {
         force: true,
       });
-    cy.intercept('GET', `/subcases?filter**filter[short-title]=${subcaseTitle}**`).as('getSubcasesFiltered');
     cy.wait('@getSubcasesFiltered', {
       timeout: 12000,
     });

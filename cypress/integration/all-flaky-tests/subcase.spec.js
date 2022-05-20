@@ -451,14 +451,30 @@ context('Subcase tests', () => {
   it('check capital letters of subcase name', () => {
     const capital = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     const nonCapital = 'principiële goedkeuring m.h.o. op adviesaanvraag';
+    const subcaseWithName = 'testId=1589266576: Cypress test dossier 1 test stap 2';
+    const encodedSubcaseTitle = encodeURIComponent(subcaseWithName);
 
     // this agenda may no longer exist if this spec is run after agenda.spec
+    // subcase name (if present) in "add agendaitem to agenda" feature
     cy.visitAgendaWithLink('vergadering/5EB2CD4EF5E1260009000015/agenda/9da67561-a827-47a2-8f58-8b3fd5739df4/agendapunten');
     cy.get(agenda.agendaHeader.showOptions).click();
     cy.get(agenda.agendaHeader.actions.addAgendaitems).click();
+    cy.get(agenda.createAgendaitem.input).clear()
+      .type(subcaseWithName, {
+        force: true,
+      });
+    cy.intercept('GET', `/subcases?filter**filter*short-title*=${encodedSubcaseTitle}**`).as('getSubcasesFiltered');
+    cy.wait('@getSubcasesFiltered', {
+      timeout: 12000,
+    });
+    cy.get(auk.loader, {
+      timeout: 12000,
+    }).should('not.exist');
+    cy.get(dependency.emberDataTable.isLoading).should('not.exist');
     cy.get(agenda.createAgendaitem.row.subcaseName).contains(capital);
     cy.get(auk.modal.footer.cancel).click();
 
+    // subcasename in overview and detail case tab
     cy.visitAgendaWithLink('vergadering/5EB2CD4EF5E1260009000015/agenda/5EB2CD4FF5E1260009000016/agendapunten');
     cy.get(agenda.agendaOverviewItem.subcaseName).contains(capital);
     cy.get(agenda.agendaOverviewItem.subitem).eq(1)

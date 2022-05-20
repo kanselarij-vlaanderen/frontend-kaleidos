@@ -125,8 +125,7 @@ context('Publications via MR tests', () => {
     cy.wait('@patchPublicationFlow');
     cy.get(publication.mandateesPanel.rows).should('have.length', 2);
     // check if mandatee on MR still the same after change on publication
-    cy.openAgendaForDate(agendaDate);
-    cy.openDetailOfAgendaitem(subcaseTitleShort);
+    cy.visitAgendaWithLink(agendaitemDetailLink);
     cy.get(mandatee.mandateePanelView.rows).should('have.length', 1)
       .find(mandatee.mandateePanelView.row.name)
       .should('contain', nameToCheck);
