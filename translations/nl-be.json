@@ -716,6 +716,7 @@
   "publications-new-warning-message": "Deze actie dient voor publicaties van documenten die niet via de Ministerraad komen.",
   "publication-search-message": "Vul een bestaand publicatienummer in",
   "publication-number": "Publicatienummer",
+  "publication-number-small": "Pubnr.",
   "structured-identifier": "Gestructureerde identificator",
   "input-error-message": "Dit veld dient ingevuld te worden.",
   "modal-error-alert-message": "Eén of meerdere velden bevatten een fout.",
