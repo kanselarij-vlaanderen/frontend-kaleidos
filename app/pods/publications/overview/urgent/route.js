@@ -9,20 +9,24 @@ export default class PublicationsOverviewUrgentRoute extends PublicationsOvervie
     'numberOfPages',
     'publicationDueDate',
   ];
-  tableConfigStorageKey = "publication-table.urgent";
+  tableConfigStorageKey = 'publication-table.urgent';
 
   beforeModel() {
-    super.beforeModel(...arguments)
+    super.beforeModel(...arguments);
+    const allStatusesExceptPublished = this.store.peekAll('publication-status').rejectBy('isPublished');
     this.filter = {
       'urgency-level': {
         ':uri:': CONSTANTS.URGENCY_LEVELS.SPEEDPROCEDURE,
+      },
+      status: {
+        ':id:': allStatusesExceptPublished.mapBy('id').join(','),
       },
     };
   }
 
   renderTemplate(controller) {
     this.render('publications.overview.all', {
-      controller: controller
+      controller: controller,
     });
   }
 }
