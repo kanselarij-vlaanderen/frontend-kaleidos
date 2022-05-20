@@ -1,4 +1,5 @@
 <Auk::Sidebar
+  @size="xsmall"
   @position="left"
   @skin="gray-200"
   class={{if @isOpen "auk-scroll-wrapper"}}
@@ -47,9 +48,9 @@
                   {{t "agenda"}}
                 {{/if}}
               </strong>
-              <Auk::Pill @skin={{if agenda.status.isDesignAgenda "active-future" null}}>
+              <AuPill @skin={{if agenda.status.isDesignAgenda "ongoing" null}} @draft={{agenda.status.isDesignAgenda}}>
                 {{or agenda.serialnumber "-"}}
-              </Auk::Pill>
+              </AuPill>
             </div>
             <div class="auk-sidebar__sublabel">
               {{#if agenda.isDesignAgenda}}
@@ -66,9 +67,9 @@
             </div>
           {{else}}
             <div class="auk-sidebar__label">
-              <Auk::Pill @skin={{if agenda.status.isDesignAgenda "active-future" null}}>
+              <AuPill @skin={{if agenda.status.isDesignAgenda "ongoing" null}} @draft={{agenda.status.isDesignAgenda}}>
                 {{or agenda.serialnumber "-"}}
-              </Auk::Pill>
+              </AuPill>
             </div>
           {{/if}}
         </LinkTo>

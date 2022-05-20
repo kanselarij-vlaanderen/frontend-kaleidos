@@ -53,6 +53,7 @@
         </div>
       {{/if}}
     </div>
+    <Documents::LinkedDocuments @agendaitemOrSubcase={{this.subcase}}/>
   </div>
 </div>
 
@@ -90,4 +91,3 @@
       @disableSave={{eq this.newPieces.length 0}} />
   </WebComponents::VlModal>
 {{/if}}
-<Documents::LinkedDocuments @agendaitemOrSubcase={{this.subcase}}/>

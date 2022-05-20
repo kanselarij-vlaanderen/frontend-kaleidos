@@ -16,11 +16,13 @@ import { isBlank } from '@ember/utils';
  *  longTitle: string,
  *  decisionDate: Date,
  *  publicationDueDate: Date,
- * })) => Promise<void> } onSave
+ * }) => Promise<void> } onSave
  */
 export default class NewPublicationModal extends Component {
   @service publicationService;
   @service store;
+  @service toaster;
+  @service intl;
 
   @tracked number = null;
   @tracked suffix = null;
@@ -88,6 +90,9 @@ export default class NewPublicationModal extends Component {
     } else {
       this.number = 1;
     }
+    // reset validation state. New number is valid.
+    this.numberIsAlreadyUsed = false;
+
   }
 
   @restartableTask
@@ -108,22 +113,33 @@ export default class NewPublicationModal extends Component {
     yield this.validateIsPublicationNumberAlreadyTaken.perform();
   }
 
+  @restartableTask
+  *preSaveValidation() {
+    yield this.validateIsPublicationNumberAlreadyTaken.perform();
+    if (this.numberIsAlreadyUsed) {
+      // another user was creating a publication at the same time, we suggest a new number and show a toast
+      yield this.initPublicationNumber.perform();
+      this.toaster.warning(this.intl.t('publication-number-already-taken-new-number-created'));
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @task
   *save() {
-    const isValid = yield this.untilValidated();
-    if (!isValid) {
-      return;
+    const numberWasRecentlyUsed = yield this.preSaveValidation.perform();
+    if (this.isValid && !numberWasRecentlyUsed) {
+      yield this.args.onSave({
+        number: this.number,
+        suffix: this.suffix,
+        shortTitle: this.shortTitle,
+        longTitle: this.longTitle,
+        decisionDate: this.decisionDate,
+        openingDate: this.openingDate,
+        publicationDueDate: this.publicationDueDate,
+      });
     }
-
-    yield this.args.onSave({
-      number: this.number,
-      suffix: this.suffix,
-      shortTitle: this.shortTitle,
-      longTitle: this.longTitle,
-      decisionDate: this.decisionDate,
-      openingDate: this.openingDate,
-      publicationDueDate: this.publicationDueDate,
-    });
   }
 
   @restartableTask
@@ -134,11 +150,6 @@ export default class NewPublicationModal extends Component {
         this.number,
         this.suffix
       );
-  }
-
-  async untilValidated() {
-    await this.validateIsPublicationNumberAlreadyTaken.last;
-    return this.isValid;
   }
 
   @action

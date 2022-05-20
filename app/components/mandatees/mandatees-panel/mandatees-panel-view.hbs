@@ -61,7 +61,7 @@
     </Auk::Panel::Body>
   {{else}}
     <Auk::Panel::Body>
-      <Auk::EmptyState @message={{t "no-ministers-added"}} />
+      <Auk::EmptyState @message={{or @emptyStateMessage (t "no-ministers-added")}} />
     </Auk::Panel::Body>
   {{/if}}
 </Auk::Panel>

@@ -15,11 +15,9 @@
       {{#unless this.loadPieceRelatedData.isRunning}}
         <AccessLevelPill
           @accessLevel={{this.accessLevel}}
-          @confidential={{this.piece.confidential}}
           @onChangeAccessLevel={{this.changeAccessLevel}}
           @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
           @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
-          @onChangeConfidentiality={{this.changeConfidentiality}}
         />
       {{/unless}}
       {{#if this.file}}

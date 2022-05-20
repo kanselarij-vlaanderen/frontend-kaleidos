@@ -22,12 +22,16 @@ const groupRoles = new Map();
 
 groupRoles.set(ADMIN, [
   'manage-signatures',
+  'manage-document-access-levels',
   'manage-publication-flows',
+  'manage-newsletter-infos',
   'search-publication-flows',
 ]);
 
 groupRoles.set(KANSELARIJ, [
   'manage-signatures',
+  'manage-document-access-levels',
+  'manage-newsletter-infos',
 ]);
 
 groupRoles.set(MINISTER, [
