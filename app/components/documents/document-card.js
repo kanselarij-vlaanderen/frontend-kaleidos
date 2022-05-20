@@ -28,7 +28,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @service fileService;
   @service toaster;
   @service intl;
-  @service piecesService;
+  @service pieceAccessLevelService;
 
   @tracked isOpenUploadModal = false;
   @tracked isOpenVerifyDeleteModal = false;
@@ -274,7 +274,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   async saveAccessLevel() {
     // TODO make sure not to overwrite things
     await this.piece.save();
-    await this.piecesService.updatePreviousAccessLevels(this.piece);
+    await this.pieceAccessLevelService.updatePreviousAccessLevels(this.piece);
     await this.loadPieceRelatedData.perform();
   }
 

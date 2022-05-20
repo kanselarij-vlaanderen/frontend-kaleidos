@@ -20,7 +20,7 @@ export default class VlDocument extends Component {
   @service fileService;
   @service toaster;
   @service intl;
-  @service piecesService;
+  @service pieceAccessLevelService;
 
   @tracked piece;
   @tracked file;
@@ -104,7 +104,7 @@ export default class VlDocument extends Component {
   async saveAccessLevel() {
     // TODO make sure not to overwrite things
     await this.piece.save();
-    await this.piecesService.updatePreviousAccessLevels(this.piece);
+    await this.pieceAccessLevelService.updatePreviousAccessLevels(this.piece);
     await this.loadPieceRelatedData.perform();
     if (this.args.didUpdateAccessLevel) {
       this.args.didUpdateAccessLevel(this.accessLevel);
