@@ -14,6 +14,8 @@ import { task } from 'ember-concurrency';
  */
 export default class AgendaitemCasePanelEdit extends Component {
   @service store;
+  @service pieceAccessLevelService;
+
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'comment']);
 
   get newsletterInfo() {
@@ -37,6 +39,10 @@ export default class AgendaitemCasePanelEdit extends Component {
 
   @task
   *saveChanges() {
+    if (this.args.subcase) {
+      yield this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
+    }
+
     const shouldResetFormallyOk = this.args.agendaitem.hasDirtyAttributes;
 
     const trimmedTitle = trimText(this.args.agendaitem.title);
