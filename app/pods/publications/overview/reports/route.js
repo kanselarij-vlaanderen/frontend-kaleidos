@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import REPORT_TYPES_CONFIG from 'frontend-kaleidos/config/publications/report-types';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { ReportTypeEntry } from './controller'
 
 export default class PublicationsOverviewReportsRoute extends Route {
@@ -26,6 +27,7 @@ export default class PublicationsOverviewReportsRoute extends Route {
         'publication-metrics-export-job',
         {
           sort: '-created',
+          'filter[status][:uri:]': CONSTANTS.JOB_STATUSSES.SUCCESS,
           'filter[report-type][:uri:]': reportType.uri,
           include: ['generated', 'generated-by'].join(','),
         }

@@ -38,6 +38,11 @@ export default {
     DECREET: 'https://data.vlaanderen.be/id/concept/AardWetgeving/Decreet',
     BVR: 'https://data.vlaanderen.be/id/concept/AardWetgeving/BesluitVanDeVlaamseRegering',
   },
+  JOB_STATUSSES: {
+    RUNNING: 'http://vocab.deri.ie/cogs#Running',
+    SUCCESS: 'http://vocab.deri.ie/cogs#Success',
+    FAILED: 'http://vocab.deri.ie/cogs#Fail',
+  },
   // TODO: despite the naming, these are actually agendaitem-types (nota, mededeling)
   // that get converted to booleans like `showAsRemark` and get assigned to subcases as a
   // preset for future agenda-items resulting from that subcase too.
