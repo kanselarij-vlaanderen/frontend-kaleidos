@@ -27,6 +27,7 @@
     we need to ensure at least 1 treatment for a relationship path to newsletterInfo }}
     <Agenda::Agendaitem::AgendaitemDecision
       @treatment={{treatment}}
+      @agendaitemIsConfidential={{this.subcase.confidential}}
       @onDeleteTreatment={{this.refresh}}
       @allowDelete={{gt this.treatments.length 1}}
     />

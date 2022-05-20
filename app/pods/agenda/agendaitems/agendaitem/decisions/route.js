@@ -15,12 +15,15 @@ export default class DecisionsAgendaitemAgendaitemsAgendaRoute extends Route {
 
   async afterModel() {
     this.meeting = await this.modelFor('agenda').meeting;
+    const agendaActivity = await this.agendaitem.agendaActivity;
+    this.subcase = await agendaActivity?.subcase;
   }
 
   setupController(controller) {
     super.setupController(...arguments);
     controller.agendaitem = this.agendaitem;
     controller.meeting = this.meeting;
+    controller.subcase = this.subcase;
   }
 
   @action

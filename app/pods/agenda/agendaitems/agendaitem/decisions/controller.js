@@ -9,6 +9,7 @@ export default class DecisionAgendaitemAgendaitemsAgendaController extends Contr
 
   @tracked agendaitem;
   @tracked meeting;
+  @tracked subcase;
 
   get treatments() {
     return this.model;

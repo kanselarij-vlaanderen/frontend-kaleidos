@@ -34,6 +34,7 @@
         {{#each (await agendaitemRow.treatments) as |treatment|}}
           <Agenda::Agendaitem::AgendaitemDecision
             @subcase={{await agendaitemRow.content.agendaActivity.subcase}}
+            @agendaitemIsConfidential={{await agendaitemRow.content.agendaActivity.subcase.confidential}}
             @isTableRow={{true}}
             @treatment={{treatment}}
             @agendaitem={{await agendaitemRow.content}}
