@@ -26,7 +26,7 @@ export default class PublicationsOverviewReportsRoute extends Route {
         'publication-metrics-export-job',
         {
           sort: '-created',
-          'filter[type][:uri:]': reportType.uri,
+          'filter[report-type][:uri:]': reportType.uri,
           include: ['generated', 'generated-by'].join(','),
         }
       );
