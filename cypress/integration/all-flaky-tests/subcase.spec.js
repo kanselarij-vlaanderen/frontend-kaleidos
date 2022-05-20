@@ -459,7 +459,9 @@ context('Subcase tests', () => {
     cy.visitAgendaWithLink('vergadering/5EB2CD4EF5E1260009000015/agenda/9da67561-a827-47a2-8f58-8b3fd5739df4/agendapunten');
     cy.get(agenda.agendaHeader.showOptions).click();
     cy.get(agenda.agendaHeader.actions.addAgendaitems).click();
-    cy.get(agenda.createAgendaitem.input).clear()
+    cy.get(dependency.emberDataTable.isLoading).should('not.exist');
+    cy.get(agenda.createAgendaitem.input).should('not.be.disabled')
+      .clear()
       .type(subcaseWithName, {
         force: true,
       });
