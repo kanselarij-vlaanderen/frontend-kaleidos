@@ -1,12 +1,12 @@
 <AuToolbar class="au-u-margin-bottom" as |Group|>
   <Group>
     <AuHeading @level="3" @skin="4">
-      {{t "agendaitem-case"}}
+      {{t "agendaitem-case"}} {{this.agenda.isDesignAgenda}}
     </AuHeading>
   </Group>
   <Group>
     {{#if this.currentSession.isEditor}}
-      {{#if (not this.agenda.isFinal)}}
+      {{#if this.agenda.isDesignAgenda}}
         <Agenda::Agendaitem::AgendaitemControls
           @agendaitem={{this.model}}
           @agendaActivity={{this.agendaActivity}}
@@ -20,6 +20,7 @@
 </AuToolbar>
 
 <Agenda::Agendaitem::AgendaitemCasePanel
+  @isDesignAgenda={{this.agenda.isDesignAgenda}}
   @agendaitem={{this.model}}
   @subcase={{this.subcase}}
   @shouldShowDetails={{or @agendaitem.showAsRemark this.subcase}}
@@ -28,6 +29,7 @@
 />
 {{#if this.model.showAsRemark}}
   <Mandatees::MandateesPanel
+    @isDesignAgenda={{this.agenda.isDesignAgenda}}
     @mandatees={{this.mandatees}}
     @submitter={{this.submitter}}
     @allowEditing={{this.currentSession.isEditor}}
@@ -35,12 +37,14 @@
   />
 {{else if this.subcase}}
   <Mandatees::MandateesPanel
+    @isDesignAgenda={{this.agenda.isDesignAgenda}}
     @mandatees={{this.mandatees}}
     @submitter={{this.submitter}}
     @allowEditing={{this.currentSession.isEditor}}
     @onSave={{this.saveMandateeData}}
   />
   <Utils::GovernmentAreas::GovernmentAreasPanel
+    @isDesignAgenda={{this.agenda.isDesignAgenda}}
     @governmentAreas={{this.subcase.case.governmentAreas}}
     @allowEditing={{this.currentSession.isEditor}}
     @onSave={{this.saveGovernmentAreas}}

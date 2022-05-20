@@ -29,7 +29,7 @@
               </Auk::Button>
             </Group.Item>
           {{/if}}
-          {{#if @allowEditing}}
+          {{#if (and @allowEditing @isDesignAgenda)}}
             <Group.Item>
               <Auk::Button
                 data-test-agendaitem-titles-edit

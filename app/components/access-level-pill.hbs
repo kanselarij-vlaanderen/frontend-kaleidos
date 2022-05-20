@@ -2,7 +2,7 @@
   <div class="auk-loader" role="alert" aria-busy="true"></div>
 {{else}}
   {{#if (not this.isEditing)}}
-    {{#if this.canEdit}}
+    {{#if (and this.canEdit @isDesignAgenda)}}
     <span class="au-c-pill-container">
       <AuPill
         @skin="ongoing"

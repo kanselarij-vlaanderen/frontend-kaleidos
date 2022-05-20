@@ -75,6 +75,7 @@
     @agendaitem={{this.agendaitem}}
     @onCancel={{this.cancelBatchDetails}}
     @onSave={{this.saveBatchDetails}}
+    @isDesignAgenda={{this.currentAgenda.isDesignAgenda}}
   />
 {{/if}}
 
@@ -83,6 +84,7 @@
     @pieces={{this.model.pieces}}
     @agendaitem={{this.agendaitem}}
     @onClose={{this.closePublicationModal}}
+    @isDesignAgenda={{this.currentAgenda.isDesignAgenda}}
   />
 {{/if}}
 
@@ -125,4 +127,4 @@
   </WebComponents::VlModal>
 {{/if}}
 
-<Documents::LinkedDocuments @agendaitemOrSubcase={{this.agendaitem}} />
+<Documents::LinkedDocuments @agendaitemOrSubcase={{this.agendaitem}} @isDesignAgenda={{this.currentAgenda.isDesignAgenda}} />

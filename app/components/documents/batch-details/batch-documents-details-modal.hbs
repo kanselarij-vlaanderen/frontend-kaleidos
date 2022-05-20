@@ -5,7 +5,7 @@
       <table class="auk-table auk-table--styled auk-table--bordered">
         <thead>
           <tr>
-            {{#if this.isEditingEnabled}}
+            {{#if (and this.isEditingEnabled @isDesignAgenda)}}
               <th class="auk-table-checkbox-col">
                 <Auk::Checkbox
                   @checked={{this.areAllSelected}}
@@ -15,7 +15,7 @@
             {{/if}}
             <th>{{t "document-name"}}</th>
             <th>{{t "document-type"}}</th>
-            {{#if this.isEditingEnabled}}
+            {{#if (and this.isEditingEnabled @isDesignAgenda)}}
               <th>{{t "publicity"}}</th>
             {{else}}
               <th>{{t "file-type"}}</th>
@@ -24,7 +24,7 @@
           </tr>
         </thead>
         <tbody>
-          {{#if this.isEditingEnabled}}
+          {{#if (and this.isEditingEnabled @isDesignAgenda)}}
             <Documents::BatchDetails::BatchEditingRow
               @selectedRows={{this.selectedRows}}
             />
@@ -35,6 +35,7 @@
               @isEditingEnabled={{this.isEditingEnabled}}
               @isSelected={{includes row this.selectedRows}}
               @onSelect={{this.toggleSelection}}
+              @isDesignAgenda={{@isDesignAgenda}}
             />
           {{/each}}
         </tbody>

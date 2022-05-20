@@ -27,7 +27,7 @@
                   {{/unless}}
                 </p>
                 {{#if @isHighlighted}}
-                  <p class="auk-u-text-small auk-u-muted auk-u-text-nowrap auk-u-mr-2">
+                  <p class="auk-u-text-small au-u-muted auk-u-text-nowrap auk-u-mr-2">
                     <Auk::ColorBadge @skin="success" /> {{t "util.new-document"}}
                   </p>
                 {{/if}}
@@ -94,6 +94,7 @@
           {{/if}}
           <Group.Item class="auk-o-flex">
             {{#unless this.loadPieceRelatedData.isRunning}}
+              {{#if @isDesignAgenda}}
               <div class="auk-o-flex auk-o-flex--vertical-center">
                 <AccessLevelPill
                   @accessLevel={{this.accessLevel}}
@@ -106,6 +107,7 @@
                   @isFinal={{@isFinal}}
                 />
               </div>
+              {{/if}}
             {{/unless}}
           </Group.Item>
           {{#if
@@ -115,6 +117,7 @@
               (not this.loadPieceRelatedData.isRunning)
             )
           }}
+            {{#if @isDesignAgenda}}
             <Group.Item>
               <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--center">
                 <Auk::Toggle
@@ -122,7 +125,7 @@
                   @checked={{if this.signMarkingActivity true false}}
                   {{on "click" (perform this.markOrUnmarkForSignature)}}
                 />
-                <label for="signatureToggle" class="auk-c-toggle-label auk-u-muted">
+                <label for="signatureToggle" class="auk-c-toggle-label au-u-muted">
                   {{#if this.markOrUnmarkForSignature.isRunning}}
                   <Auk::Loader />
                   {{else}}
@@ -131,8 +134,9 @@
                 </label>
               </div>
             </Group.Item>
+            {{/if}}
           {{/if}}
-          {{#if this.currentSession.isEditor}}
+          {{#if (and this.currentSession.isEditor @isDesignAgenda)}}
             <Group.Item>
               <Auk::DropdownMenu
                 @skin="borderless"

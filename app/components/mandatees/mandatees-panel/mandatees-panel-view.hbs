@@ -6,7 +6,7 @@
           <h4 class="auk-panel__title">{{t "ministers"}}</h4>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
-      {{#if @showEditButton}}
+      {{#if (and @showEditButton @isDesignAgenda)}}
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <Auk::Button

@@ -2,7 +2,7 @@
   data-test-document-details-row
   class={{if @row.isToBeDeleted "auk-u-opacity--1/2"}}
 >
-  {{#if @isEditingEnabled}}
+  {{#if (and @isEditingEnabled @isDesignAgenda)}}
     <td class="auk-table-checkbox-col">
       <Auk::Checkbox
         @checked={{@isSelected}}
@@ -11,14 +11,14 @@
     </td>
   {{/if}}
   <td>
-    {{#if @isEditingEnabled}}
+    {{#if (and @isEditingEnabled @isDesignAgenda)}}
       <Auk::Input data-test-document-details-input type="text" @block @value={{mut @row.name}} />
     {{else}}
       {{@row.name}}
     {{/if}}
   </td>
   <td>
-    {{#if @isEditingEnabled}}
+    {{#if (and @isEditingEnabled @isDesignAgenda)}}
       <Utils::ModelSelector
         data-test-document-details-row-type
         @modelName="document-type"
@@ -33,7 +33,7 @@
       {{@row.documentType.label}}
     {{/if}}
   </td>
-  {{#if @isEditingEnabled}}
+  {{#if (and @isEditingEnabled @isDesignAgenda)}}
     <td>
       <Utils::ModelSelector
         data-test-document-details-row-access-level
@@ -54,7 +54,15 @@
   {{/if}}
   <td>
     <WebComponents::AuButtonToolbar>
-      {{#if (not @isEditingEnabled)}}
+      {{#if (not @isDesignAgenda)}}
+        <Auk::Button
+          @layout="icon-only"
+          @icon="book"
+          @skin="borderless"
+          @href={{@row.piece.viewDocumentURL}}
+          target="_blank"
+        />
+      {{else if (not @isEditingEnabled)}}
         <Auk::Button
           @layout="icon-only"
           @icon="book"

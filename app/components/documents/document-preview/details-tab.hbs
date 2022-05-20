@@ -25,13 +25,13 @@
           @modelName="document-type"
           @allowClear={{true}}
           @searchField="label"
-          @propertyToShow="label"
+          @displayField="label"
           @sortField="priority"
-          @selectedItems={{this.documentType}}
-          @selectModel={{this.setDocumentType}}
+          @selected={{this.documentType}}
+          @onChange={{this.setDocumentType}}
         />
       {{else}}
-        <Utils::AccessLevelColorBadge @accessLevel={{this.accessLevel}} />
+        {{this.documentType.label}}
       {{/if}}
     </Auk::KeyValue>
   {{/if}}

@@ -30,6 +30,7 @@
           </Auk::Button>
         {{/if}}
         {{#unless this.loadPieceRelatedData.isRunning}}
+          {{#if @isDesignAgenda}}
           <AccessLevelPill
             @accessLevel={{this.accessLevel}}
             @confidential={{this.piece.confidential}}
@@ -42,11 +43,12 @@
             @isFinal={{@isFinal}}
             @isVersion={{@isVersion}}
           />
+          {{/if}}
         {{/unless}}
       </div>
     </div>
     {{#if this.currentSession.isEditor}}
-      <div class="vlc-document-card-item__meta auk-u-muted">
+      <div class="vlc-document-card-item__meta au-u-muted">
         {{!-- no piece.created in legacy data --}}
         {{!-- TODO: when created date is absent, the layout seems irregular
               this will be addressed with new document card styling --}}
