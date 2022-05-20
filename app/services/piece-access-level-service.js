@@ -84,13 +84,14 @@ export default class PieceAccessLevelService extends Service {
       return;
     }
 
-    const ministerraad = this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.MINISTERRAAD);
+    const ministerraad = await this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.MINISTERRAAD);
 
-    const treatments = await subcase.treaments;
-    for (const treatment of treatments) {
-      const piece = await treatment.piece;
+    const treatments = await subcase.treatments;
+    for (const treatment of treatments.toArray()) {
+      const piece = await treatment.report;
 
       piece.accessLevel = ministerraad;
+      await piece.save();
     }
   }
 }
