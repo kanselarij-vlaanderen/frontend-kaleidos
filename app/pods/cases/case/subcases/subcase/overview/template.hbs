@@ -27,6 +27,7 @@
       <Mandatees::MandateesPanel
         @mandatees={{this.mandatees}}
         @submitter={{this.submitter}}
+        @emptyStateMessage={{if this.showMandateesNotApplicableMessage (t "not-applicable")}}
         @allowEditing={{this.currentSession.isEditor}}
         @onSave={{this.saveMandateeData}}
       />
