@@ -15,4 +15,3 @@ export const PUBLICATION_EMAIL = {
 };
 
 export const KALEIDOS_START_DATE = new Date(2019, 9 /* =october */, 1);
-export const CURRENT_GOVERNMENT_BODY = 'http://themis.vlaanderen.be/id/bestuursorgaan/5fed907ee6670526694a0706';
