@@ -19,8 +19,8 @@ export default Service.extend({
 
   /* API: agenda-approve-service */
 
-  async createNewDesignAgenda(currentMeeting) {
-    const endpoint = `/agenda-approve/meetings/${currentMeeting.id}/reopen`;
+  async reopenMeeting(meeting) {
+    const endpoint = `/agenda-approve/meetings/${meeting.id}/reopen`;
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
