@@ -1,5 +1,5 @@
 import Controller from '@ember/controller';
-import { inject as service } from '@ember/service';
+// import { inject as service } from '@ember/service';
 // import { task } from 'ember-concurrency';
 // import { isPresent } from '@ember/utils';
 
@@ -7,7 +7,7 @@ import { inject as service } from '@ember/service';
 /* eslint-disable ember/no-get */
 // eslint-disable-next-line ember/no-classic-classes
 export default Controller.extend({
-  currentSession: service(),
+  // currentSession: service(),
 
   /*
   This route is currently a read-only-feature.
