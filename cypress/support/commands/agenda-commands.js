@@ -210,13 +210,13 @@ function openAgendaitemKortBestekTab(agendaitemTitle) {
 function deleteAgenda(lastAgenda) {
   cy.log('deleteAgenda');
   // Call is made but cypress doesn't see it
-  cy.intercept('POST', '/agenda-approve/deleteAgenda').as('postDeleteAgenda');
+  cy.intercept('DELETE', '/agendas/*').as('deleteAgenda');
   cy.intercept('GET', '/agendaitems?filter**').as('loadAgendaitems');
   cy.get(agenda.agendaActions.showOptions).click();
   cy.get(agenda.agendaActions.actions.deleteAgenda).click();
   cy.get(auk.modal.container).find(agenda.agendaActions.confirm.deleteAgenda)
     .click();
-  cy.wait('@postDeleteAgenda', {
+  cy.wait('@deleteAgenda', {
     timeout: 60000,
   });
   cy.get(auk.modal.container, {
@@ -557,7 +557,7 @@ function changeSelectedAgenda(agendaName) {
 function closeAgenda() {
   cy.log('closeAgenda');
   // Call is made but cypress doesn't see it
-  // cy.intercept('POST', '/agenda-approve/closeAgenda').as('closeAgendaCall');
+  // cy.intercept('POST', '/agendas/*/close').as('closeAgendaCall');
   cy.get(agenda.agendaActions.showOptions).click();
   cy.get(agenda.agendaActions.actions.lockAgenda).click();
   cy.get(agenda.agendaActions.confirm.lockAgenda).click();
@@ -600,7 +600,7 @@ function reopenAgenda() {
 function reopenPreviousAgenda() {
   cy.log('reopenPreviousAgenda');
   // Call is made but cypress doesn't see it
-  // cy.intercept('POST', '/agenda-approve/reopenPreviousAgenda').as('reopenPreviousAgendaCall');
+  // cy.intercept('POST', '/agendas/*/reopen').as('reopenPreviousAgendaCall');
   cy.get(agenda.agendaActions.showOptions).click();
   cy.get(agenda.agendaActions.actions.reopenPreviousVersion).click();
   cy.get(agenda.agendaActions.confirm.reopenPreviousVersion).click();
