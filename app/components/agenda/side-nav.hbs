@@ -30,8 +30,8 @@
   </Auk::Navbar>
   <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
     <ul>
-      {{#each @reverseSortedAgendas as |agenda|}}
-        {{#if agenda.isDesignAgenda}}
+      {{#each @reverseSortedAgendas as |agenda index|}}
+        {{#if (or agenda.isDesignAgenda (eq index 0))}}
         <li
           class="auk-sidebar__item auk-sidebar__item--styled
             {{if (eq @currentAgenda.id agenda.id) "auk-sidebar__item--active"}}"
@@ -80,15 +80,19 @@
       {{/each}}
     </ul>
     {{#if @isOpen}}
+    {{#each @reverseSortedAgendas as |agenda index|}}
+    {{#if (eq index 1)}}
     <Auk::Navbar @skin="gray-200">
       <AuHeading @level="3" @skin="functional">
-        Goedgekeurd
+        Vorige agenda's
       </AuHeading>
     </Auk::Navbar>
     {{/if}}
+    {{/each}}
+    {{/if}}
     <ul>
-      {{#each @reverseSortedAgendas as |agenda|}}
-        {{#unless agenda.isDesignAgenda}}
+      {{#each @reverseSortedAgendas as |agenda index|}}
+        {{#unless (or agenda.isDesignAgenda (eq index 0))}}
         <li
           class="auk-sidebar__item auk-sidebar__item--styled
             {{if (eq @currentAgenda.id agenda.id) "auk-sidebar__item--active"}}"
