@@ -87,6 +87,6 @@ export default class MandateesService extends Service {
   @task
   *loadVisibleRoles() {
     const visibleRoles = yield Promise.all(VISIBLE_ROLES.map((role) => this.store.findRecordByUri('role', role)));
-    this.visibleRoles = visibleRoles
+    this.visibleRoles = visibleRoles;
   }
 }
