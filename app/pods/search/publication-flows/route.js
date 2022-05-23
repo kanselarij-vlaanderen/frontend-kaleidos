@@ -111,7 +111,7 @@ export default class PublicationFlowSearchRoute extends Route {
     return search('publication-flows', params.page, params.size, params.sort, filter, ((searchData) => {
       const entry = searchData.attributes;
       entry.id = searchData.id;
-      this.postProcessStatus(entry);
+      this.postProcessSearchEntry(entry);
       return entry;
     }).bind(this));
   }
@@ -138,7 +138,8 @@ export default class PublicationFlowSearchRoute extends Route {
     return true;
   }
 
-  postProcessStatus(attributes) {
+  postProcessSearchEntry(attributes) {
+    // post-process publication-status
     let statusId = attributes.statusId;
     if (statusId) {
       const hasMultipleStatuses = Array.isArray(statusId);
@@ -151,6 +152,12 @@ export default class PublicationFlowSearchRoute extends Route {
       attributes.status = status;
       attributes.statusPillKey = getPublicationStatusPillKey(status);
       attributes.statusPillStep = getPublicationStatusPillStep(status);
+    }
+    // post-process numac numbers
+    if (attributes.numacNumbers === null) {
+      attributes.numacNumbers = [];
+    } else if (!Array.isArray(attributes.numacNumbers)) {
+      attributes.numacNumbers = [attributes.numacNumbers];
     }
   }
 }
