@@ -6,7 +6,7 @@
       @reserveSpace={{true}}
     >
       <Auk::Label>{{t "minister"}}</Auk::Label>
-      <Utils::MandateeSelector
+      <Mandatees::MandateeSelector
         @referenceDate={{@referenceDate}}
         @onSelectMandatee={{fn (mut this.selectedMandatee)}}
         @selectedMandatees={{this.selectedMandatee}}
