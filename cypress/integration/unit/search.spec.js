@@ -140,7 +140,7 @@ context('Search tests', () => {
       cy.wait('@patchTreatments');
     });
 
-    // The next 3 tests do not use any of the context data, but are needed to give index the time to update
+    // *The next 3 tests do not use any of the context data, but are needed to give index the time to update
     it('Should change the amount of elements to every value in selectbox in agendapunten search view', () => {
       cy.visit('zoeken/agendapunten');
       searchFunction(options);
@@ -216,20 +216,39 @@ context('Search tests', () => {
 
     it('Search for funky searchterms on dossiers ONLY beslissingsfiche', () => {
       cy.visit('/zoeken/dossiers');
-      // const caseTitleShort = 'Cypress search dossier 2';
-      const wordsFromPdf = [
+      // const wordsFromDocumentPdf = [
+      //   'Telefoon',
+      //   'computer'
+      // ];
+      const wordsFromTreatmentPdf = [
         'krokkettenmaker',
         'codez',
         'krok*'
       ];
-      wordsFromPdf.forEach((searchTerm) => {
-        cy.get(route.search.input).clear();
-        cy.get(route.search.input).type(searchTerm);
+      // wordsFromDocumentPdf.forEach((searchTerm) => {
+      //   cy.get(route.search.input).clear();
+      //   cy.get(route.search.input).type(searchTerm);
+      //   cy.intercept('GET', `/cases/search?**${encodeURIComponent(searchTerm)}`).as('decisionsSearchCall');
+      //   cy.get(route.search.trigger).click();
+      //   cy.wait('@decisionsSearchCall');
+
+      //   cy.get(route.searchCases.dataTable).find('tbody')
+      //     .children('tr')
+      //     .contains(case1TitleShort);
+      // });
+
+      // Toggling decisions forces an empty datatable to ensure our searchTerm result is new, not the previous result
+      cy.get(route.searchCases.toggleDecisions).parent()
+        .click();
+      wordsFromTreatmentPdf.forEach((searchTerm) => {
         cy.get(route.searchCases.toggleDecisions).parent()
           .click();
-
-        cy.intercept('GET', '/cases/search?**').as('decisionsSearchCall');
-        cy.get(route.search.trigger).click();
+        cy.get(route.search.input).clear();
+        cy.get(route.search.input).type(searchTerm);
+        cy.get(route.search.trigger).click(); // no results found in documents
+        cy.intercept('GET', `/cases/search?**${encodeURIComponent(searchTerm)}**`).as('decisionsSearchCall');
+        cy.get(route.searchCases.toggleDecisions).parent()
+          .click(); // 1 result found in treatments
         cy.wait('@decisionsSearchCall');
 
         cy.get(route.searchCases.dataTable).find('tbody')
