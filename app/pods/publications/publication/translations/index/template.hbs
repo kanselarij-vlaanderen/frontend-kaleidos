@@ -63,6 +63,10 @@
                 @onEditTranslationActivity={{perform
                   this.editTranslationActivity
                 }}
+                @onDeletePiece={{if
+                  event.canDeletePieces
+                  (perform this.deleteReceivedPiece event)
+                }}
                 @onCreateProofRequest={{perform this.saveProofRequest}}
               />
             </Utils::Timeline::Event>

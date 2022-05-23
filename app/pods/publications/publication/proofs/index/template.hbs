@@ -66,6 +66,10 @@
                 @publicationFlow={{this.publicationFlow}}
                 @proofPrintCorrector={{this.publicationSubcase.proofPrintCorrector}}
                 @onEditProofingActivity={{perform this.editProofingActivity}}
+                @onDeletePiece={{if
+                  event.canDeletePieces
+                  (perform this.deleteReceivedPiece event)
+                }}
                 @onCreatePublicationRequest={{perform
                   this.savePublicationRequest
                 }}

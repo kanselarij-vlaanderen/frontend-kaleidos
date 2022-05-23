@@ -6,9 +6,25 @@ import { warn } from '@ember/debug';
 
 export class TimelineActivity {
   @tracked activity;
+  @tracked canDeletePieces;
 
   constructor(activity) {
     this.activity = activity;
+    this.initFields();
+  }
+
+  async initFields() {
+    if (this.isProofingActivity) {
+      let pieces = await this.activity.generatedPieces;
+      pieces = pieces.toArray();
+      let publicationActivities = await Promise.all(
+        pieces.map((piece) => piece.publicationActivitiesUsedBy)
+      );
+      publicationActivities = publicationActivities.flatMap((publicationActivities) =>
+        publicationActivities.toArray()
+      );
+      this.canDeletePieces = publicationActivities.length === 0;
+    }
   }
 
   get isRequestActivity() {
