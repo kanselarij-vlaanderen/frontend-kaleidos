@@ -463,8 +463,10 @@ function addNewPieceToDecision(oldFileName, file) {
 function addLinkedDocument(filenames) {
   // NOTE: this works in subcase view, untested in agendaitem view
   cy.intercept('GET', 'pieces').as('createNewPiece');
+  cy.intercept('GET', '/pieces?page**').as('getPiecesList');
   cy.log('addLinkedDocument');
   cy.get(document.linkedDocuments.add).click();
+  cy.wait('@getPiecesList');
   cy.get(document.addExistingPiece.searchInput).click();
 
   filenames.forEach((name) => {
@@ -473,7 +475,7 @@ function addLinkedDocument(filenames) {
       .type(name)
       .wait(`@getFilteredPiece${name}`);
     // For every char typed, a call to "/pieces?filter" occurs, causing constant reloads of the dom.
-    cy.wait(3000);
+    cy.wait(1000);
     cy.get(document.addExistingPiece.checkbox).parent()
       .click();
   });
