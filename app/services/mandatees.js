@@ -72,13 +72,15 @@ export default class MandateesService extends Service {
     }
     let mandatees = yield this.store.query('mandatee', queryOptions);
     mandatees = mandatees.sortBy('priority').toArray(); // TODO: sorting on both "start" and "priority" yields incomplete results. Thus part of the sort in frontend
-    mandatees = mandatees.filter((mandatee) => {
-      if (referenceDate) {
-        return referenceDate < mandatee.end;
-      } else {
-        return true;
-      }
-    });
+    if (referenceDate) {
+      mandatees = mandatees.filter((mandatee) => {
+        if (mandatee.end) {
+          return referenceDate < mandatee.end;
+        } else {
+          return true;
+        }
+      });
+    }
     return mandatees;
   }
 
