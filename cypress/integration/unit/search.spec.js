@@ -29,21 +29,6 @@ context('Search tests', () => {
     });
   };
 
-  it('Should change the amount of elements to every value in selectbox in agendapunten search view', () => {
-    cy.visit('zoeken/agendapunten');
-    searchFunction(options);
-  });
-
-  it('Should change the amount of elements to every value in selectbox in dossiers search view', () => {
-    cy.visit('zoeken/dossiers');
-    searchFunction(options);
-  });
-
-  it('Should change the amount of elements to every value in selectbox in kort-bestek search view', () => {
-    cy.visit('zoeken/kort-bestek');
-    searchFunction(options);
-  });
-
   it('Search for non existing searchterm in agendaitems', () => {
     cy.visit('/zoeken/agendapunten');
     cy.get(route.search.input).clear();
@@ -155,32 +140,20 @@ context('Search tests', () => {
       cy.wait('@patchTreatments');
     });
 
-    it('Search for funky searchterms in agendaitems', () => {
-      cy.visit('/zoeken/agendapunten');
-      const newSubcase2TitleShort = 'korte titel for batterij';
-      // TODO-bug reenable to check if autocomplete works better now ? (+7 months later)
-      const wordsToCheck1 = [
-        'peerd',
-        // 'peer', // TODO-bug autocomplete search does not yet work here.
-        // 'batter', // TODO-bug autocomplete search does not yet work here.
-        'batterij'
-      ];
-      wordsToCheck1.forEach((searchTerm) => {
-        cy.get(route.search.input).clear();
-        cy.get(route.search.input).type(searchTerm);
+    // The next 3 tests do not use any of the context data, but are needed to give index the time to update
+    it('Should change the amount of elements to every value in selectbox in agendapunten search view', () => {
+      cy.visit('zoeken/agendapunten');
+      searchFunction(options);
+    });
 
-        cy.intercept('GET', '/agendaitems/search?**').as('searchCall');
-        cy.get(route.search.trigger).click();
-        cy.wait('@searchCall');
+    it('Should change the amount of elements to every value in selectbox in dossiers search view', () => {
+      cy.visit('zoeken/dossiers');
+      searchFunction(options);
+    });
 
-        cy.get(route.searchAgendaitems.dataTable).find('tbody')
-          .children('tr')
-          .contains(newSubcase2TitleShort);
-      });
-
-      cy.get(utils.mHeader.settings).click();
-      cy.get(utils.mHeader.search).click();
-      cy.get(route.search.input).should('have.value', '');
+    it('Should change the amount of elements to every value in selectbox in kort-bestek search view', () => {
+      cy.visit('zoeken/kort-bestek');
+      searchFunction(options);
     });
 
     it('Search for funky searchterms in dossiers', () => {
@@ -211,6 +184,34 @@ context('Search tests', () => {
           .children('tr')
           .contains(case1TitleShort);
       });
+    });
+
+    it('Search for funky searchterms in agendaitems', () => {
+      cy.visit('/zoeken/agendapunten');
+      const newSubcase2TitleShort = 'korte titel for batterij';
+      // TODO-bug reenable to check if autocomplete works better now ? (+7 months later)
+      const wordsToCheck1 = [
+        'peerd',
+        // 'peer', // TODO-bug autocomplete search does not yet work here.
+        // 'batter', // TODO-bug autocomplete search does not yet work here.
+        'batterij'
+      ];
+      wordsToCheck1.forEach((searchTerm) => {
+        cy.get(route.search.input).clear();
+        cy.get(route.search.input).type(searchTerm);
+
+        cy.intercept('GET', '/agendaitems/search?**').as('searchCall');
+        cy.get(route.search.trigger).click();
+        cy.wait('@searchCall');
+
+        cy.get(route.searchAgendaitems.dataTable).find('tbody')
+          .children('tr')
+          .contains(newSubcase2TitleShort);
+      });
+
+      cy.get(utils.mHeader.settings).click();
+      cy.get(utils.mHeader.search).click();
+      cy.get(route.search.input).should('have.value', '');
     });
 
     it('Search for funky searchterms on dossiers ONLY beslissingsfiche', () => {
