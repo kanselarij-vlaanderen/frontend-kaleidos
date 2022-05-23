@@ -28,7 +28,7 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @task
   *loadCodelists() {
-    this.defaultAccessLevel = yield this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
+    this.defaultAccessLevel = yield this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
     this.decisionDocType = yield this.store.findRecordByUri('document-type', CONSTANTS.DOCUMENT_TYPES.DECISION);
   }
 
