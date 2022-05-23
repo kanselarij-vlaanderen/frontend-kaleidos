@@ -89,6 +89,23 @@ export default class PublicationsPublicationProofsController extends Controller 
   }
 
   @task
+  *deleteReceivedPiece(proofReceivedEvent, piece) {
+    yield this.performDeleteReceivedPiece(proofReceivedEvent, piece);
+    this.send('refresh');
+  }
+
+  async performDeleteReceivedPiece(proofReceivedEvent, piece) {
+    await this.publicationService.deletePiece(piece);
+    const proofingActivity = proofReceivedEvent.activity;
+    let pieces = await proofingActivity.generatedPieces;
+    pieces = pieces.toArray();
+    if (pieces.length === 0) {
+      proofingActivity.endDate = null;
+      await proofingActivity.save();
+    }
+  }
+
+  @task
   *deleteRequest(requestActivity) {
     const proofingActivity = yield requestActivity.proofingActivity;
     yield proofingActivity.destroyRecord();

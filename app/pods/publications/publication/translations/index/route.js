@@ -6,9 +6,28 @@ import { inject as service } from '@ember/service';
 
 export class TimelineActivity {
   @tracked activity;
+  @tracked canDeletePieces;
 
   constructor(activity) {
     this.activity = activity;
+    this.initFields();
+  }
+
+  async initFields() {
+    if (this.isTranslationActivity) {
+      let pieces = await Promise.all([
+        this.activity.usedPieces,
+        this.activity.generatedPieces
+      ]);
+      pieces = pieces.flatMap((pieces) => pieces.toArray());
+      let proofingActivities = await Promise.all(
+        pieces.map((piece) => piece.proofingActivitiesUsedBy)
+      );
+      proofingActivities = proofingActivities.flatMap((proofingActivities) =>
+        proofingActivities.toArray()
+      );
+      this.canDeletePieces = proofingActivities.length === 0;
+    }
   }
 
   get isRequestActivity() {

@@ -72,6 +72,23 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   }
 
   @task
+  *deleteReceivedPiece(translationReceivedEvent, piece) {
+    yield this.performDeleteReceivedPiece(translationReceivedEvent, piece);
+    this.send('refresh');
+  }
+
+  async performDeleteReceivedPiece(translationReceivedEvent, piece) {
+    await this.publicationService.deletePiece(piece);
+    const translationActivity = translationReceivedEvent.activity;
+    let pieces = await translationActivity.generatedPieces;
+    pieces = pieces.toArray();
+    if (pieces.length === 0) {
+      translationActivity.endDate = null;
+      await translationActivity.save();
+    }
+  }
+
+  @task
   *editTranslationActivity(translationEdit) {
     const saves = [];
 
