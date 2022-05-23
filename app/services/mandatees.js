@@ -19,7 +19,7 @@ export default class MandateesService extends Service {
   }
 
   @task
-  *getMandateesActiveOn(referenceDate) {
+  *getMandateesActiveOn(referenceDate=new Date()) {
     // Since this data is static, a local memoization/caching mechanism can be added
     // here in case of performance issues
     const governmentBody = yield this.fetchGovernmentBody.perform(referenceDate);
