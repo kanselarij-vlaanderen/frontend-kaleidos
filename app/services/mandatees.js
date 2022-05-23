@@ -1,7 +1,5 @@
 import Service, { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
-// import CONSTANTS from 'frontend-kaleidos/config/constants';
-// import {  } from 'frontend-kaleidos/config/config';
 
 const VISIBLE_ROLES = [
   'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03de', // Minister-president
