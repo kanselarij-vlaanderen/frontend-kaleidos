@@ -41,7 +41,7 @@ export default class MandateesService extends Service {
       'filter[start][:lte:time]': referenceDate.toISOString(),
       'filter[:has-no:end]': 'yes'
     });
-    const [closedBody, openBody] = (yield Promise.all([closedRange, openRange]))
+    const [closedBody, openBody] = yield Promise.all([closedRange, openRange]);
     const existingBody = closedBody || openBody;
     if (existingBody) {
       if (closedBody && openBody) {
