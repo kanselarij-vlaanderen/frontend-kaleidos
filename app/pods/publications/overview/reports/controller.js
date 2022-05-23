@@ -22,7 +22,6 @@ export default class PublicationsOverviewReportsController extends Controller {
     const now = new Date();
 
     const fixedParams = reportTypeEntry.config.fixedParams;
-    /// TOREVIEW: use _.merge?
     const jobParams = {
       query: {
         group: fixedParams.query.group,

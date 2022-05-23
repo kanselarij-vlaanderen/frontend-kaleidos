@@ -118,7 +118,6 @@ export default class GenerateReportModalComponent extends Component {
     if (value === '') {
       this.publicationYear = undefined;
     } else {
-      // necessary to convert string value of <Input /> (even with @type="number")
       const number = Number.parseInt(value);
       if (!Number.isNaN(number)) {
         this.publicationYear = number;
@@ -172,16 +171,14 @@ export default class GenerateReportModalComponent extends Component {
     //    that allows the end date to be empty or after a specific date
     //    we need to separate the filter in two requests
 
-    // no filter on mandatee.mandate.role or government-body
-    //  * allow old publication-flows to be searched
-    //      which have a different role and government-body
     const commonQueryOptions = {
       'filter[:has:mandatees]': true,
       // DISABLED: query timeouts
       // 'filter[mandatees][mandate][role][:id:]': this.visibleRoles.map((role) => role.id).join(','),
+      // active ranges of mandatees are stored as dateTimes, but with time set to 0:00 UTC
+      // since the frontend is in a different timezone, we need to compensate for this
       'filter[mandatees][:lt:start]':
-        toDateWithoutUTCOffset(dateRangeEnd).toISOString(), // active ranges of mandatees are stored as dateTimes, but with time set to 0:00 UTC
-      // since the frontend is in a different timezone, the we need to compensate for this
+        toDateWithoutUTCOffset(dateRangeEnd).toISOString(),
       'filter[last-name]': searchText, // Ember Data leaves this of when set to undefined (=> no filtering)
       // although we sort and paginate again on the frontend
       //   after combining both query results

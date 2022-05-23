@@ -10,8 +10,8 @@
     >
       {{#if @userInputFields.decisionDateRange}}
         <div class="auk-o-grid">
+          {{!Beslissingsdatum}}
           <div class="auk-o-grid-col-6">
-            {{!Beslissingsdatum}}
             <div class="auk-form-group">
               <Auk::Label
                 for="publicationReportsDecisionStartDate"
@@ -20,8 +20,6 @@
               >
                 {{t "start-date"}}
               </Auk::Label>
-              {{!WARNING for reviewers}}
-              {{!TODO: make this datepicker actually update after keyboard input}}
               <Auk::Datepicker
                 id="publicationReportsDecisionStartDate"
                 @date={{this.decisionDateRangeStart}}
@@ -38,8 +36,6 @@
               >
                 {{t "end-date"}}
               </Auk::Label>
-              {{!WARNING for reviewers}}
-              {{!TODO: make this datepicker actually update after keyboard input}}
               <Auk::Datepicker
                 id="publicationReportsDecisionEndDate"
                 @date={{this.decisionDateRangeEnd}}
@@ -58,8 +54,6 @@
           >
             {{t "year"}}
           </Auk::Label>
-          {{!NOTE: usertest shows select, notion docs shows number}}
-          {{!number input seems easier for user and developer to me}}
           <Auk::Input
             id="publicationReportsPublicationYear"
             @type="number"
