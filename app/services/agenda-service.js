@@ -20,7 +20,7 @@ export default Service.extend({
   /* API: agenda-approve-service */
 
   async reopenMeeting(meeting) {
-    const endpoint = `/agenda-approve/meetings/${meeting.id}/reopen`;
+    const endpoint = `/meetings/${meeting.id}/reopen`;
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
@@ -40,7 +40,7 @@ export default Service.extend({
   },
 
   async approveDesignAgenda(currentAgenda) {
-    const endpoint = `/agenda-approve/agendas/${currentAgenda.id}/approve`;
+    const endpoint = `/agendas/${currentAgenda.id}/approve`;
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
@@ -60,7 +60,7 @@ export default Service.extend({
   },
 
   async approveAgendaAndCloseMeeting(currentAgenda) {
-    const endpoint = `/agenda-approve/agendas/${currentAgenda.id}/close`;
+    const endpoint = `/agendas/${currentAgenda.id}/close`;
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
@@ -74,7 +74,7 @@ export default Service.extend({
   },
 
   async closeMeeting(currentMeeting) {
-    const endpoint = `/agenda-approve/meetings/${currentMeeting.id}/close`;
+    const endpoint = `/meetings/${currentMeeting.id}/close`;
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
@@ -94,7 +94,7 @@ export default Service.extend({
   },
 
   async reopenPreviousAgenda(currentAgenda) {
-    const endpoint = `/agenda-approve/agendas/${currentAgenda.id}/reopen`;
+    const endpoint = `/agendas/${currentAgenda.id}/reopen`;
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
@@ -114,7 +114,7 @@ export default Service.extend({
   },
 
   async deleteAgenda(currentAgenda) {
-    const endpoint = `/agenda-approve/agendas/${currentAgenda.id}`;
+    const endpoint = `/agendas/${currentAgenda.id}`;
     const response = await fetch(endpoint, {
       method: 'DELETE',
       headers: {
