@@ -29,7 +29,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @task
   *loadCodelists() {
     this.defaultAccessLevel = yield this.store.findRecordByUri(
-      'access-level', this.args.agendaitemIsConfidential
+      'access-level', this.args.subcaseIsConfidential
         ? CONSTANTS.ACCESS_LEVELS.MINISTERRAAD
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
