@@ -88,6 +88,5 @@ export default class MandateesService extends Service {
   *loadVisibleRoles() {
     const visibleRoles = yield Promise.all(VISIBLE_ROLES.map((role) => this.store.findRecordByUri('role', role)));
     this.visibleRoles = visibleRoles
-    // this.defaultQueryOptions['filter[mandate][role][:id:]'] = visibleRoles.map((role) => role.id).join(',');
   }
 }
