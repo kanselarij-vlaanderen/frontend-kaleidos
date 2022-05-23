@@ -14,8 +14,9 @@
         @skin="tertiary"
         @layout="icon-only"
         @icon="pencil"
-        @size="tiny"
+        @size="small"
         {{on "click" this.openEditMode}}
+        class="auk-u-ml"
         data-test-access-level-pill-edit
       />
     {{/if}}
@@ -23,10 +24,11 @@
     <div class="auk-u-maximize-width">
       <Utils::ModelSelector
         @modelName="access-level"
-        @propertyToShow="label"
+        @allowClear={{true}}
+        @displayField="label"
         @sortField="priority"
-        @selectedItems={{@accessLevel}}
-        @selectModel={{this.changeAccessLevel}}
+        @selected={{@accessLevel}}
+        @onChange={{this.changeAccessLevel}}
         data-test-access-level-pill-selector
       />
     </div>
@@ -34,16 +36,18 @@
       @skin="tertiary"
       @layout="icon-only"
       @icon="check"
-      @size="tiny"
+      @size="small"
       {{on "click" (perform this.confirmChangeAccessLevel @accessLevel)}}
+      class="auk-u-ml"
       data-test-access-level-pill-save
     />
     <Auk::Button
       @skin="tertiary"
       @layout="icon-only"
       @icon="x"
-      @size="tiny"
+      @size="small"
       {{on "click" (perform this.cancelChangeAccessLevel)}}
+      class="auk-u-ml"
       data-test-access-level-pill-cancel
     />
   {{/if}}

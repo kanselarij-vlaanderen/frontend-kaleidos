@@ -12,8 +12,8 @@
           @modelName={{this.modelName}}
           @searchField="label"
           @sortField="label"
-          @selectedItems={{this.item}}
-          @selectModel={{action "selectModel"}}
+          @selected={{this.item}}
+          @onChange={{action "selectModel"}}
         as |model|>
           {{capitalize model.label}}
         </Utils::ModelSelector>

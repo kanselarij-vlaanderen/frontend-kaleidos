@@ -69,7 +69,10 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
       publicationDate: publicationDate,
       publicationActivity: publicationActivity,
     });
-    saves.push(decision.save());
+    // The decision (and the publicationActivity) must be saved
+    //  before calling the publicationService.updatePublicationStatus method.
+    //  otherwise that method creates duplicate Decisions and PublicationActivities
+    yield decision.save();
 
     if (publication.mustUpdatePublicationStatus) {
       const statusUpdate = this.publicationService.updatePublicationStatus(
@@ -78,9 +81,6 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
         publication.publicationDate
       );
       saves.push(statusUpdate);
-
-      this.publicationSubcase.endDate = publication.publicationDate;
-      saves.push(this.publicationSubcase.save());
     }
 
     yield Promise.all(saves);

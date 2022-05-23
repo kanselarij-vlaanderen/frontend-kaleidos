@@ -8,6 +8,7 @@ import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { task } from 'ember-concurrency';
+import { isPresent } from '@ember/utils';
 
 export default class DocumentsDocumentCardComponent extends Component {
   /**
@@ -22,6 +23,7 @@ export default class DocumentsDocumentCardComponent extends Component {
    * @argument didDeleteContainer: action triggered when a container has been deleted
    * @argument onOpenUploadModal: action triggered before the modal to upload a new version opens
    * @argument onAddPiece: action triggered when a new version has been added
+   * @argument bordered: determines if the card has a border
    */
   @service store;
   @service currentSession;
@@ -52,6 +54,10 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   get userMayManagePublicationFlows() {
     return this.currentSession.may('manage-publication-flows');
+  }
+
+  get bordered() {
+    return isPresent(this.args.bordered) ? this.args.bordered : true;
   }
 
   @task
