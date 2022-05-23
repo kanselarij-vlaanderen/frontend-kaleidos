@@ -108,12 +108,12 @@ export default class PublicationFlowSearchRoute extends Route {
 
     this.lastParams.commit();
 
-    return search('publication-flows', params.page, params.size, params.sort, filter, ((searchData) => {
+    return search('publication-flows', params.page, params.size, params.sort, filter, (searchData) => {
       const entry = searchData.attributes;
       entry.id = searchData.id;
       this.postProcessSearchEntry(entry);
       return entry;
-    }).bind(this));
+    });
   }
 
   setupController(controller) {
