@@ -1,21 +1,20 @@
 import Service, { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 import { singularize } from 'ember-inflector';
 import fetch from 'fetch';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
 import { A } from '@ember/array';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes
-export default Service.extend({
-  store: service(),
-  toaster: service(),
-  intl: service(),
-  currentSession: service(),
-  newsletterService: service(),
+export default class AgendaService extends Service {
+  @service store;
+  @service toaster;
+  @service intl;
+  @service currentSession;
+  @service newsletterService;
 
-  addedPieces: null,
-  addedAgendaitems: null,
+  @tracked addedPieces = null;
+  @tracked addedAgendaitems = null;
 
   /* API: agenda-approve-service */
 
@@ -37,7 +36,7 @@ export default Service.extend({
     } else {
       throw new Error(response.statusText);
     }
-  },
+  }
 
   async approveDesignAgenda(currentAgenda) {
     const endpoint = `/agendas/${currentAgenda.id}/approve`;
@@ -57,7 +56,7 @@ export default Service.extend({
     } else {
       throw new Error(response.statusText);
     }
-  },
+  }
 
   async approveAgendaAndCloseMeeting(currentAgenda) {
     const endpoint = `/agendas/${currentAgenda.id}/close`;
@@ -71,7 +70,7 @@ export default Service.extend({
     if (!response.ok) {
       throw new Error(response.statusText);
     }
-  },
+  }
 
   async closeMeeting(currentMeeting) {
     const endpoint = `/meetings/${currentMeeting.id}/close`;
@@ -91,7 +90,7 @@ export default Service.extend({
     } else {
       throw new Error(response.statusText);
     }
-  },
+  }
 
   async reopenPreviousAgenda(currentAgenda) {
     const endpoint = `/agendas/${currentAgenda.id}/reopen`;
@@ -111,7 +110,7 @@ export default Service.extend({
     } else {
       throw new Error(response.statusText);
     }
-  },
+  }
 
   async deleteAgenda(currentAgenda) {
     const endpoint = `/agendas/${currentAgenda.id}`;
@@ -135,7 +134,7 @@ export default Service.extend({
     } else {
       throw new Error(response.statusText);
     }
-  },
+  }
 
   /* API: agenda-comparison-service */
 
@@ -149,10 +148,10 @@ export default Service.extend({
     const response = await fetch(endpoint);
     if (response.ok) {
       const result = await response.json();
-      this.set('addedPieces', result.addedDocuments);
-      this.set('addedAgendaitems', result.addedAgendaitems);
+      this.addedPieces = result.addedDocuments;
+      this.addedAgendaitems = result.addedAgendaitems;
     }
-  },
+  }
 
   async newAgendaItems(currentAgendaId, comparedAgendaId) {
     const url = `/agendas/${currentAgendaId}/compare/${comparedAgendaId}/agenda-items`;
@@ -167,7 +166,7 @@ export default Service.extend({
       itemsFromStore.push(itemFromStore);
     }
     return itemsFromStore;
-  },
+  }
 
   async modifiedAgendaItems(currentAgendaId, comparedAgendaId, scopeFields) {
     // scopefields specify which fields to base upon for determining if an item was modified
@@ -183,7 +182,7 @@ export default Service.extend({
       itemsFromStore.push(itemFromStore);
     }
     return itemsFromStore;
-  },
+  }
 
   async changedPieces(currentAgendaId, comparedAgendaId, agendaItemId) {
     const url = `/agendas/${currentAgendaId}/compare/${comparedAgendaId}/agenda-item/${agendaItemId}/pieces`;
@@ -198,7 +197,7 @@ export default Service.extend({
       piecesFromStore.push(pieceFromStore);
     }
     return piecesFromStore;
-  },
+  }
 
   /* No API */
 
@@ -212,7 +211,7 @@ export default Service.extend({
       return lastItem.number + 1;
     }
     return 1;
-  },
+  }
 
   /**
    * @argument meeting
@@ -244,7 +243,7 @@ export default Service.extend({
     });
     await agendaActivity.save();
     for (const submissionActivity of submissionActivities) {
-      submissionActivity.set('agendaActivity', agendaActivity);
+      submissionActivity.agendaActivity = agendaActivity;
       await submissionActivity.save();
     }
 
@@ -303,7 +302,7 @@ export default Service.extend({
       newsItem.save();
     }
     return agendaitem;
-  },
+  }
 
   async groupAgendaitemsOnGroupName(agendaitems) {
     let previousAgendaitemGroupName;
@@ -334,7 +333,7 @@ export default Service.extend({
         agendaitem.set('ownGroupName', currentAgendaitemGroupName);
       })
     );
-  },
+  }
 
   async deleteAgendaitem(agendaitem) {
     const agendaitemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), {
@@ -371,14 +370,15 @@ export default Service.extend({
     } else {
       await agendaitemToDelete.destroyRecord();
     }
-  },
+  }
 
   async deleteAgendaitemFromMeeting(agendaitem) {
     if (this.currentSession.isAdmin) {
-      return await this.deleteAgendaitem(agendaitem);
+      await this.deleteAgendaitem(agendaitem);
+    } else {
+      this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
     }
-    this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
-  },
+  }
 
   async retrieveModifiedDateFromNota(agendaitem) {
     const nota = await agendaitem.get('nota');
@@ -392,5 +392,5 @@ export default Service.extend({
       return lastPiece.created;
     }
     return null;
-  },
-});
+  }
+}
