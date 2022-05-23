@@ -27,17 +27,16 @@ export default Service.extend({
         'Content-Type': 'application/vnd.api+json',
       },
     });
-    if (!response.ok) {
+    if (response.ok) {
+      const payload = await response.json();
+      if (payload.error) {
+        throw new Error(payload.error.detail);
+      }
+      const newAgenda = await this.store.findRecord('agenda', payload.data.id);
+      return newAgenda;
+    } else {
       throw new Error(response.statusText);
     }
-
-    const payload = await response.json();
-    if (payload.error) {
-      throw new Error(payload.error.detail);
-    }
-
-    const newAgenda = await this.store.find('agenda', payload.data.id);
-    return newAgenda;
   },
 
   async approveDesignAgenda(currentAgenda) {
@@ -48,17 +47,16 @@ export default Service.extend({
         'Content-Type': 'application/vnd.api+json',
       },
     });
-    if (!response.ok) {
+    if (response.ok) {
+      const payload = await response.json();
+      if (payload.error) {
+        throw new Error(payload.error.detail);
+      }
+      const newAgenda = await this.store.findRecord('agenda', payload.data.id);
+      return newAgenda;
+    } else {
       throw new Error(response.statusText);
     }
-
-    const payload = await response.json();
-    if (payload.error) {
-      throw new Error(payload.error.detail);
-    }
-
-    const newAgenda = await this.store.find('agenda', payload.data.id);
-    return newAgenda;
   },
 
   async approveAgendaAndCloseMeeting(currentAgenda) {
@@ -83,19 +81,16 @@ export default Service.extend({
         'Content-Type': 'application/vnd.api+json',
       },
     });
-    if (!response.ok) {
+    if (response.ok) {
+      const payload = await response.json();
+      if (payload.error) {
+        throw new Error(payload.error.detail);
+      }
+      const lastApprovedAgenda = await this.store.findRecord('agenda', payload.data.id);
+      return lastApprovedAgenda;
+    } else {
       throw new Error(response.statusText);
     }
-
-    const payload = await response.json();
-    if (payload.error) {
-      throw new Error(payload.error.detail);
-    }
-
-    const lastApprovedAgenda = await this.store.queryOne('agenda', {
-      'filter[:id:]': payload.data.id,
-    });
-    return lastApprovedAgenda;
   },
 
   async reopenPreviousAgenda(currentAgenda) {
@@ -106,19 +101,16 @@ export default Service.extend({
         'Content-Type': 'application/vnd.api+json',
       },
     });
-    if (!response.ok) {
+    if (response.ok) {
+      const payload = await response.json();
+      if (payload.error) {
+        throw new Error(payload.error.detail);
+      }
+      const reopenedAgenda = await this.store.findRecord('agenda', payload.data.id);
+      return reopenedAgenda;
+    } else {
       throw new Error(response.statusText);
     }
-
-    const payload = await response.json();
-    if (payload.error) {
-      throw new Error(payload.error.detail);
-    }
-
-    const reopenedAgenda = await this.store.queryOne('agenda', {
-      'filter[:id:]': payload.data.id,
-    });
-    return reopenedAgenda;
   },
 
   async deleteAgenda(currentAgenda) {
@@ -129,19 +121,19 @@ export default Service.extend({
         'Content-Type': 'application/vnd.api+json',
       },
     });
-    if (!response.ok) {
+    if (response.ok) {
+      const payload = await response.json();
+      if (payload.error) {
+        throw new Error(payload.error.detail);
+      }
+      if (payload.data?.id) {
+        const lastApprovedAgenda = await this.store.findRecord('agenda', payload.data.id);
+        return lastApprovedAgenda;
+      } else {
+        return null;
+      }
+    } else {
       throw new Error(response.statusText);
-    }
-
-     const payload = await response.json();
-    if (payload.error) {
-      throw new Error(payload.error.detail);
-    }
-
-    if (payload.data?.id) {
-      return await this.store.queryOne('agenda', {
-        'filter[:id:]': payload.data.id,
-      });
     }
   },
 
