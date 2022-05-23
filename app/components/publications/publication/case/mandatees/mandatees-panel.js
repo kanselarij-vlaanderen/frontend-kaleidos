@@ -9,14 +9,6 @@ import { tracked } from '@glimmer/tracking';
 export default class PublicationsPublicationCaseMandateesPanelComponent extends Component {
   @tracked showSelectMandateeModal = false;
 
-  get publicationReferenceDate() {
-    if (this.args.isViaCouncilOfMinisters) {
-      return this.args.publicationFlow.agendaItemTreatment.get('startDate');
-    } else {
-      return this.args.publicationFlow.openingDate;
-    }
-  }
-
   @action
   openSelectMandateeModal() {
     this.showSelectMandateeModal = true;

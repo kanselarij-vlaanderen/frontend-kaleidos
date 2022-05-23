@@ -65,7 +65,10 @@
 
 {{#if this.showSelectMandateeModal}}
   <Mandatees::MandateesSelectorModal
-    @referenceDate={{this.publicationReferenceDate}}
+    @referenceDate={{if @viaCouncilOfMinisters
+      @publicationFlow.agendaItemTreatment.startDate
+      @publicationFlow.openingDate
+    }}
     @onClose={{this.closeSelectMandateeModal}}
     @onAdd={{this.addMandatee}}
   />

@@ -18,14 +18,6 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
   @tracked governmentAreas;
   @tracked siblingSubcasesCount;
 
-  get subcaseReferenceDate() {
-    if (this.meeting) {
-      return this.meeting.plannedStart;
-    } else {
-      return this.model.subcase.created;
-    }
-  }
-
   get showMandateesNotApplicableMessage() {
     return [CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING].includes(this.model.subcase.type?.get('uri'));
   }
