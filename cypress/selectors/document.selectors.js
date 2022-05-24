@@ -97,8 +97,9 @@ const selectors = {
 
   // linked-document-link
   linkedDocumentLink: {
-    typeLabel: '[data-test-linked-document-link-type-label]',
     card: '[data-test-linked-document-link-card]',
+    typeLabel: '[data-test-linked-document-link-type-label]',
+    name: '[data-test-linked-document-link-name]',
     // TODO-selector unused selector
     versionHistory: '[data-test-linked-document-link-version-history]',
   },

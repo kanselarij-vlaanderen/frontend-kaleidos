@@ -145,7 +145,7 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     });
     cy.openAgendaForDate(agendaDate);
 
-    cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
+    cy.addAgendaitemToAgenda(SubcaseTitleShort);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.get('@listItems');
 

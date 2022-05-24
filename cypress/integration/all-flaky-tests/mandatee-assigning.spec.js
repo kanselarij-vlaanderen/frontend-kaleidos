@@ -114,7 +114,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openAgendaForDate(agendaDate);
 
-    cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
+    cy.addAgendaitemToAgenda(SubcaseTitleShort);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
 
     // Dependency: We should already have 3 mandatees that we inherit from previous subcase, now we add 1 more
