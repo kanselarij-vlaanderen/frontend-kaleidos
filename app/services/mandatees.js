@@ -1,5 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 const VISIBLE_ROLES = [
   'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03de', // Minister-president
@@ -59,7 +60,7 @@ export default class MandateesService extends Service {
       'filter[government-body][:uri:]': governmentBody.uri,
       include: 'person,mandate.role',
       'filter[mandate][role][:id:]': this.visibleRoles.map((role) => role.id).join(','),
-      'page[size]': 100
+      'page[size]': PAGE_SIZE.MANDATEES_IN_GOV_BODY
     }
     if (referenceDate) {
       // Many versions of a mandatee exist within a government-body.
