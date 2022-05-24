@@ -21,11 +21,13 @@
             </Auk::Toolbar::Item>
             <Auk::Toolbar::Item class="auk-u-maximize-width">
               <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
-                <p data-test-document-card-type class="vlc-subline">
+                {{#if this.documentContainer.type.label}}
+                <p data-test-document-card-type class="vlc-subline au-u-muted">
                   {{#unless this.loadPieceRelatedData.isRunning}}
                     {{this.documentContainer.type.label}}
                   {{/unless}}
                 </p>
+                {{/if}}
                 {{#if @isHighlighted}}
                   <p class="auk-u-text-small au-u-muted auk-u-text-nowrap auk-u-mr-2">
                     <Auk::ColorBadge @skin="success" /> {{t "util.new-document"}}

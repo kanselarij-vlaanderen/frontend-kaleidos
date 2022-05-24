@@ -5,7 +5,7 @@
     {{#if (and this.canEdit @isDesignAgenda)}}
     <span class="au-c-pill-container">
       <AuPill
-        @skin="ongoing"
+        @skin={{this.pillSkin}}
         @icon={{this.pillIcon}}
         @draft={{if (and (and (eq @isFinal false) (eq @isNew true))(or (eq this.accessLevelLabel "Ministerraad")(eq this.accessLevelLabel "Intern Overheid")(eq this.accessLevelLabel "Intern Regering")(eq this.accessLevelLabel "Publiek"))) true}}
         data-test-access-level-pill
@@ -13,7 +13,7 @@
         {{this.accessLevelLabel}}
       </AuPill>
       {{#if this.canEdit}}
-      <button class="au-c-pill-action au-c-pill--ongoing" type="button" {{on "click" this.openEditMode}}>
+      <button class="au-c-pill-action au-c-pill--{{this.pillSkin}}" type="button" {{on "click" this.openEditMode}}>
         <AuIcon @icon="pencil" />
         <span class="au-u-hidden-visually">Edit</span>
       </button>
@@ -21,7 +21,7 @@
     </span>
     {{else}}
     <AuPill
-      @skin="ongoing"
+      @skin={{this.pillSkin}}
       @draft={{if (or (eq this.accessLevelLabel "Ministerraad")(eq this.accessLevelLabel "Intern Overheid")) true}}
       @icon={{this.pillIcon}}
       data-test-access-level-pill
