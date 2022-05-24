@@ -202,7 +202,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
 
     cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten');
     // *adding announcement to agenda creates a KB*
-    cy.addAgendaitemToAgenda(subcaseTitleShort, false);
+    cy.addAgendaitemToAgenda(subcaseTitleShort);
     cy.openAgendaitemKortBestekTab(subcaseTitleShort);
     // check if KB already exists
     cy.get(newsletter.agendaitemNewsItem.title).contains(subcaseTitleShort);
@@ -224,7 +224,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     const subcaseTitleShort = 'Cypress test: KB defaults 4 - Med zonder lange titel - 1651584640';
 
     cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten');
-    cy.addAgendaitemToAgenda(subcaseTitleShort, false);
+    cy.addAgendaitemToAgenda(subcaseTitleShort);
     cy.openAgendaitemKortBestekTab(subcaseTitleShort);
     // check if KB already exists
     cy.get(newsletter.agendaitemNewsItem.title).contains(subcaseTitleShort);
@@ -419,7 +419,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
 
     // add nota to agenda and check if list contains correct item
     cy.visitAgendaWithLink(agendaLink);
-    cy.addAgendaitemToAgenda(subcaseTitleNota, false);
+    cy.addAgendaitemToAgenda(subcaseTitleNota);
     cy.visit(newsletterLink);
     cy.get(newsletter.tableRow.newsletterRow).within(() => {
       cy.get(newsletter.tableRow.agendaitemNumber).contains(2);
@@ -611,9 +611,11 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.itemContent.remark).should('not.exist');
   });
 
+  // RDFA tests can be flaky locally when having dev tools open or when running in background (not in focus)
   it('should test the rdfa editor', () => {
     cy.visit('/vergadering/5EBA94D7751CF70008000001/kort-bestek');
-    cy.get(newsletter.buttonToolbar.edit).click();
+    cy.get(newsletter.buttonToolbar.edit).eq(0)
+      .click();
 
     pressRdfaButton('Strikethrough');
     cy.get(dependency.rdfa.editorInner).type('Strikethrough');
@@ -634,11 +636,13 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get('u').contains('Underline');
     cy.get('em').contains('Italic');
     cy.get('strong').contains('Bold');
+    cy.get(newsletter.editItem.cancel).click();
   });
 
   it('should test the rdfa editor keypresses', () => {
     cy.visit('/vergadering/5EBA94D7751CF70008000001/kort-bestek');
-    cy.get(newsletter.buttonToolbar.edit).click();
+    cy.get(newsletter.buttonToolbar.edit).eq(0)
+      .click();
 
     cy.get(dependency.rdfa.editorInner).type('{ctrl+u}Underline')
       .type('{ctrl+u} ');
@@ -674,7 +678,8 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.cancel).click();
 
     // check enter
-    cy.get(newsletter.buttonToolbar.edit).click();
+    cy.get(newsletter.buttonToolbar.edit).eq(0)
+      .click();
     cy.get(dependency.rdfa.editorInner).find('br')
       .should('not.exist');
     cy.get(dependency.rdfa.editorInner).type('{enter}');
@@ -688,5 +693,6 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(dependency.rdfa.editorInner).clear()
       .type('test  test');
     cy.get(dependency.rdfa.editorInner).should('contain', '\u00a0');
+    cy.get(newsletter.editItem.cancel).click();
   });
 });

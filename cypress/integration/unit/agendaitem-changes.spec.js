@@ -50,7 +50,7 @@ context('Agendaitem changes tests', () => {
   it('should add an agendaitem and highlight it as changed', () => {
     cy.visitAgendaWithLink(agendaURL);
     // when toggling show changes  the agendaitem added since current agenda should show
-    cy.addAgendaitemToAgenda(subcaseTitle2, false);
+    cy.addAgendaitemToAgenda(subcaseTitle2);
     cy.setFormalOkOnItemWithIndex(2); // punt 3
     cy.toggleShowChanges();
     cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 3);
@@ -76,7 +76,7 @@ context('Agendaitem changes tests', () => {
     cy.visit(agendaURL);
     cy.changeSelectedAgenda('Ontwerpagenda');
     // when toggling show changes  the agendaitem added since current agenda should show
-    cy.addAgendaitemToAgenda(subcaseTitle3, false);
+    cy.addAgendaitemToAgenda(subcaseTitle3);
     cy.setFormalOkOnItemWithIndex(4);
     cy.toggleShowChanges();
     cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 2);
