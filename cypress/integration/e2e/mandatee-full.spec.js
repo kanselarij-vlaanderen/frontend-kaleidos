@@ -25,7 +25,7 @@ context('Full test for creating mandatees', () => {
   // TODO-mandateeThemis After themis migration, creating of mandatee has been disabled
   // TODO decide if we want to keep this test for future reenabling or just remove, many selectors no longer exist
   xit('should add new minister', () => {
-    cy.visit('/');
+    cy.visit('/overzicht?size=2');
     const KIND = 'Ministerraad';
 
     const agendaDate = Cypress.dayjs().add(1, 'weeks')
@@ -81,7 +81,7 @@ context('Full test for creating mandatees', () => {
     cy.createAgenda(KIND, agendaDate, 'locatie');
 
     cy.openAgendaForDate(agendaDate);
-    cy.addAgendaitemToAgenda(subcaseTitle1, false);
+    cy.addAgendaitemToAgenda(subcaseTitle1);
     cy.openDetailOfAgendaitem(subcaseTitle1);
     cy.addSubcaseMandatee(0, 'Homans', ministerTitle);
     cy.setFormalOkOnItemWithIndex(0);
@@ -105,7 +105,7 @@ context('Full test for creating mandatees', () => {
     cy.get(utils.vlModalVerify.save).contains('Einddatum aanpassen');
     cy.get(utils.vlModalVerify.cancel).click();
     cy.get(mandatee.editMandatee.cancel).click();
-    cy.visit('/');
+    cy.visit('/overzicht?size=2');
     cy.get(utils.mHeader.settings).click();
     cy.get(settings.settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');

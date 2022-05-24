@@ -15,6 +15,7 @@
       {{#unless this.loadPieceRelatedData.isRunning}}
         <AccessLevelPill
           @accessLevel={{this.accessLevel}}
+          @isEditable={{true}}
           @onChangeAccessLevel={{this.changeAccessLevel}}
           @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
           @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
