@@ -80,7 +80,8 @@ export default class PieceAccessLevelService extends Service {
     });
 
     await Promise.all(pieces.toArray().map((piece) => {
-      if (piece.accessLevel.get('uri') !== ministerraad.uri) {
+      const accessLevel = await piece.accessLevel;
+      if (accessLevel.uri !== ministerraad.uri) {
         piece.accessLevel = ministerraad;
         return piece.save();
       }
