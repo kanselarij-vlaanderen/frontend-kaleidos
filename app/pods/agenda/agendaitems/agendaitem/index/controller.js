@@ -25,6 +25,16 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
 
   @tracked isEditingAgendaItemTitles = false;
 
+  get latestAgenda() {
+    return this.reverseSortedAgendas.firstObject;
+  }
+
+  get currentAgendaIsLatest() {
+    return (
+      this.latestAgenda.id === this.agenda.id
+    );
+  }
+
   async navigateToNeighbouringItem(agendaitem) {
     // try transitioning to previous or next item, called on the delete of an agendaitem
     // TODO: below query can be replaced once agenda-items have relations to previous and next items
@@ -53,7 +63,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     await this.reassignNumbersForAgendaitems();
     await this.navigateToNeighbouringItem(this.model);
     // reload the agenda route, detail tab should no longer show if we deleted the last and only agendaitem
-    // Also, if we deleted the first agendaitem, we should also reload the main route to reload <Agenda::agendaTabs> 
+    // Also, if we deleted the first agendaitem, we should also reload the main route to reload <Agenda::agendaTabs>
     return this.agendaController.send('reloadAgendaModel');
   }
 

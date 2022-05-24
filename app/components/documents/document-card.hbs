@@ -94,6 +94,7 @@
           {{/if}}
           <Group.Item class="auk-o-flex">
             {{#unless this.loadPieceRelatedData.isRunning}}
+              {{#if @isDesignAgenda}}
               <div class="auk-o-flex auk-o-flex--vertical-center">
                 <AccessLevelPill
                   @accessLevel={{this.accessLevel}}
@@ -106,6 +107,7 @@
                   @isFinal={{@isFinal}}
                 />
               </div>
+              {{/if}}
             {{/unless}}
           </Group.Item>
           {{#if

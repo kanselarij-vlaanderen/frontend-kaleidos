@@ -7,7 +7,7 @@
   <Group>
     <AuButtonGroup>
     {{#if this.model.pieces.length}}
-      {{#if (and this.currentSession.isEditor this.currentAgenda.isDesignAgenda)}}
+      {{#if (and this.currentSession.isEditor (or this.currentAgenda.isDesignAgenda this.currentAgendaIsLatest))}}
         <Auk::Button
           data-test-route-agenda---agendaitem-documents-batch-edit
           @icon="pencil"
@@ -46,7 +46,7 @@
       @hasMarkForSignature={{this.isShownSignatureMarker}}
       @markForSignature={{this.markForSignature}}
       @unmarkForSignature={{this.unmarkForSignature}}
-      @isDesignAgenda={{this.currentAgenda.isDesignAgenda}}
+      @isDesignAgenda={{or this.currentAgenda.isDesignAgenda this.currentAgendaIsLatest}}
       @isNew={{await this.agendaitem.checkAdded}}
       @isFinal={{this.currentAgenda.isFinal}}
     />
@@ -75,7 +75,7 @@
     @agendaitem={{this.agendaitem}}
     @onCancel={{this.cancelBatchDetails}}
     @onSave={{this.saveBatchDetails}}
-    @isDesignAgenda={{this.currentAgenda.isDesignAgenda}}
+    @isDesignAgenda={{or this.currentAgenda.isDesignAgenda this.currentAgendaIsLatest}}
   />
 {{/if}}
 
@@ -84,7 +84,7 @@
     @pieces={{this.model.pieces}}
     @agendaitem={{this.agendaitem}}
     @onClose={{this.closePublicationModal}}
-    @isDesignAgenda={{this.currentAgenda.isDesignAgenda}}
+    @isDesignAgenda={{or this.currentAgenda.isDesignAgenda this.currentAgendaIsLatest}}
   />
 {{/if}}
 
@@ -127,4 +127,4 @@
   </WebComponents::VlModal>
 {{/if}}
 
-<Documents::LinkedDocuments @agendaitemOrSubcase={{this.agendaitem}} @isDesignAgenda={{this.currentAgenda.isDesignAgenda}} />
+<Documents::LinkedDocuments @agendaitemOrSubcase={{this.agendaitem}} @isDesignAgenda={{or this.currentAgenda.isDesignAgenda this.currentAgendaIsLatest}} />

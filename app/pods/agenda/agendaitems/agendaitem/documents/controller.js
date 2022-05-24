@@ -1,4 +1,4 @@
-import Controller from '@ember/controller';
+import Controller, { inject as controller } from '@ember/controller';
 import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
@@ -15,23 +15,35 @@ import { isEmpty, isPresent } from '@ember/utils';
 import ENV from 'frontend-kaleidos/config/environment';
 
 export default class DocumentsAgendaitemsAgendaController extends Controller {
+  @controller('agenda.agendaitems') agendaitemsController;
+  @controller('agenda') agendaController;
   @service currentSession;
   @service intl;
   @service store;
   @service agendaService;
   @service signatureService;
-
   @tracked showBatchDetails = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked defaultAccessLevel;
   @tracked newPieces = A([]);
   @tracked newAgendaitemPieces;
+  @tracked reverseSortedAgendas;
   @tracked agendaitem;
   @tracked currentAgenda;
   @tracked previousAgenda;
   @tracked agendaActivity;
 
   @tracked isOpenPublicationModal = false;
+
+  get latestAgenda() {
+    return this.reverseSortedAgendas.firstObject;
+  }
+
+  get currentAgendaIsLatest() {
+    return (
+      this.latestAgenda.id === this.currentAgenda.id
+    );
+  }
 
   get governmentCanViewDocuments() {
     const isOverheid = this.currentSession.isOverheid;

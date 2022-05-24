@@ -50,6 +50,7 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
     controller.agendaitem = this.agendaitem;
+    controller.reverseSortedAgendas = this.modelFor('agenda').reverseSortedAgendas;
     controller.defaultAccessLevel = this.defaultAccessLevel;
     controller.showBatchDetails = false;
     controller.isOpenPieceUploadModal = false;

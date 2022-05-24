@@ -6,7 +6,7 @@
   </Group>
   <Group>
     {{#if this.currentSession.isEditor}}
-      {{#if this.agenda.isDesignAgenda}}
+      {{#if (or this.agenda.isDesignAgenda this.currentAgendaIsLatest)}}
         <Agenda::Agendaitem::AgendaitemControls
           @agendaitem={{this.model}}
           @agendaActivity={{this.agendaActivity}}
@@ -20,7 +20,7 @@
 </AuToolbar>
 
 <Agenda::Agendaitem::AgendaitemCasePanel
-  @isDesignAgenda={{this.agenda.isDesignAgenda}}
+  @isDesignAgenda={{or this.agenda.isDesignAgenda this.currentAgendaIsLatest}}
   @agendaitem={{this.model}}
   @subcase={{this.subcase}}
   @shouldShowDetails={{or @agendaitem.showAsRemark this.subcase}}
@@ -29,7 +29,7 @@
 />
 {{#if this.model.showAsRemark}}
   <Mandatees::MandateesPanel
-    @isDesignAgenda={{this.agenda.isDesignAgenda}}
+    @isDesignAgenda={{or this.agenda.isDesignAgenda this.currentAgendaIsLatest}}
     @mandatees={{this.mandatees}}
     @submitter={{this.submitter}}
     @allowEditing={{this.currentSession.isEditor}}
@@ -37,14 +37,14 @@
   />
 {{else if this.subcase}}
   <Mandatees::MandateesPanel
-    @isDesignAgenda={{this.agenda.isDesignAgenda}}
+    @isDesignAgenda={{or this.agenda.isDesignAgenda this.currentAgendaIsLatest}}
     @mandatees={{this.mandatees}}
     @submitter={{this.submitter}}
     @allowEditing={{this.currentSession.isEditor}}
     @onSave={{this.saveMandateeData}}
   />
   <Utils::GovernmentAreas::GovernmentAreasPanel
-    @isDesignAgenda={{this.agenda.isDesignAgenda}}
+    @isDesignAgenda={{or this.agenda.isDesignAgenda this.currentAgendaIsLatest}}
     @governmentAreas={{this.subcase.case.governmentAreas}}
     @allowEditing={{this.currentSession.isEditor}}
     @onSave={{this.saveGovernmentAreas}}
