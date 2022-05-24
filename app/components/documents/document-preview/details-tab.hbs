@@ -40,12 +40,11 @@
     @key={{t "publicity"}}
   >
     {{#if this.isEditingDetails}}
-      <Utils::ModelSelector
+      <Utils::AccessLevelSelector
         data-test-details-tab-edit-access-level
-        @modelName="access-level"
         @allowClear={{true}}
         @displayField="label"
-        @sortField="priority"
+        @sortField="position"
         @selected={{this.accessLevel}}
         @onChange={{this.setAccessLevel}}
       />
