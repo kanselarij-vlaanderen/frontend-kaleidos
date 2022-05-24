@@ -114,7 +114,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openAgendaForDate(agendaDate);
 
-    cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
+    cy.addAgendaitemToAgenda(SubcaseTitleShort);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
 
     // Dependency: We should already have 3 mandatees that we inherit from previous subcase, now we add 1 more
@@ -332,19 +332,20 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.wait(`@patchNewsletterInfo${randomInt}`);
 
     cy.clickReverseTab('Definitief');
-    cy.get(newsletter.itemContent.printItemProposal).as('proposals');
+    cy.get(newsletter.itemContent.printItemProposal).as('proposals')
+      .should('have.length', 3);
     cy.get('@proposals').eq(0)
       .contains('Op voorstel van minister-president Jan Jambon en viceminister-president Hilde Crevits');
     cy.get('@proposals').eq(1)
       .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits, viceminister-president Bart Somers, viceminister-president Ben Weyts en Vlaams minister Zuhal Demir');
     cy.get('@proposals').eq(2)
-      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits en Vlaams minister Wouter Beke');
+      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits en Vlaams minister Matthias Diependaele');
     cy.clickReverseTab('Klad');
     cy.get(newsletter.itemContent.printItemProposal).as('proposals');
     cy.get('@proposals').eq(0)
       .contains('Op voorstel van minister-president Jan Jambon en viceminister-president Hilde Crevits');
     cy.get('@proposals').eq(1)
-      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits en Vlaams minister Wouter Beke');
+      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits en Vlaams minister Matthias Diependaele');
     cy.get('@proposals').eq(2)
       .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits, viceminister-president Bart Somers, viceminister-president Ben Weyts en Vlaams minister Zuhal Demir');
   });

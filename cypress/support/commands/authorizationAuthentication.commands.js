@@ -39,7 +39,7 @@ function login(name, retries = 0) {
   });
   cy.intercept('GET', '/accounts/*').as('getAccount');
   cy.intercept('GET', '/accounts/*/user').as('getAccountUser');
-  cy.visit('').wait('@getCurrentSession')
+  cy.visit('/overzicht?size=2').wait('@getCurrentSession')
     .then((responseBody) => {
       console.log(responseBody);
       if (responseBody.error || responseBody.response?.statusCode === 400) {
@@ -67,7 +67,7 @@ function logout() {
     method: 'DELETE',
     url: '/mock/sessions/current',
   }).then(() => {
-    cy.visit('/');
+    cy.visit('/overzicht?size=2');
   });
   cy.log('/logout');
 }
@@ -99,7 +99,7 @@ function loginFlow(name) {
 function logoutFlow() {
   cy.log('logoutFlow');
   cy.intercept('DELETE', '/mock/sessions/current').as('mockLogout');
-  cy.visit('');
+  cy.visit('/overzicht?size=2');
   cy.get(utils.mHeader.userActions).click();
   cy.get(utils.mHeader.userAction.logout)
     .contains('Afmelden')
