@@ -73,25 +73,17 @@ export default class PieceAccessLevelService extends Service {
    * "Ministerraad" access level.
    */
   async updateDecisionsAccessLevelOfSubcase(subcase) {
-    await subcase.preEditOrSaveCheck();
-
-    if (!subcase.hasDirtyAttributes) {
-      return;
-    }
-
-    let { confidential: [, confidential] = [] } = subcase.changedAttributes();
-    if (!confidential) {
-      return;
-    }
-
     const ministerraad = await this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.MINISTERRAAD);
+    const pieces = await this.store.query('piece', {
+      'filter[agenda-item-treatment][subcase][:id:]': subcase.id,
+      include: 'access-level',
+    });
 
-    const treatments = await subcase.treatments;
-    for (const treatment of treatments.toArray()) {
-      const piece = await treatment.report;
-
-      piece.accessLevel = ministerraad;
-      await piece.save();
-    }
+    await Promise.all(pieces.toArray().map((piece) => {
+      if (piece.accessLevel.get('uri') !== ministerraad.uri) {
+        piece.accessLevel = ministerraad;
+        return piece.save();
+      }
+    }));
   }
 }

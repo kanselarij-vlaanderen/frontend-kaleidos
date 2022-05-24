@@ -26,7 +26,6 @@ export default class SubcaseTitlesPanelEdit extends Component {
 
   @task
   *saveChanges() {
-    yield this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
 
     const trimmedTitle = trimText(this.args.subcase.title);
     const trimmedShortTitle = trimText(this.args.subcase.shortTitle);
@@ -47,6 +46,9 @@ export default class SubcaseTitlesPanelEdit extends Component {
       propertiesToSetOnSubcase,
       true
     );
+    if (this.args.subcase.confidential) {
+      yield this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
+    }
     this.args.onSave();
   }
 }

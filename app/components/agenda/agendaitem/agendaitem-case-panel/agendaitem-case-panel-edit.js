@@ -39,10 +39,6 @@ export default class AgendaitemCasePanelEdit extends Component {
 
   @task
   *saveChanges() {
-    if (this.args.subcase) {
-      yield this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
-    }
-
     const shouldResetFormallyOk = this.args.agendaitem.hasDirtyAttributes;
 
     const trimmedTitle = trimText(this.args.agendaitem.title);
@@ -64,6 +60,9 @@ export default class AgendaitemCasePanelEdit extends Component {
       propertiesToSetOnSubcase,
       shouldResetFormallyOk
     );
+    if (this.args.subcase && this.args.subcase.confidential) {
+      yield this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
+    }
     if (
       this.newsletterInfo &&
       (this.newsletterInfo.hasDirtyAttributes ||
