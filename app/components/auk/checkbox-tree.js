@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { isPresent } from '@ember/utils';
 
 export default class CheckboxTree extends Component {
   constructor(owner, args) {
@@ -32,7 +33,9 @@ export default class CheckboxTree extends Component {
       this.itemIds = [];
     }
 
-    this.args.onTreeUpdate(this.itemIds);
+    if (isPresent(this.args.onTreeUpdate)) {
+      this.args.onTreeUpdate(this.itemIds);
+    }
   }
 
   @action
@@ -54,6 +57,8 @@ export default class CheckboxTree extends Component {
     this.isSelectedSomeItems =
       (this.itemIds.length > 0) && (this.itemIds.length < this.allItemIds.length);
 
-    this.args.onTreeUpdate(this.itemIds);
+    if (isPresent(this.args.onTreeUpdate)) {
+      this.args.onTreeUpdate(this.itemIds);
+    }
   }
 }
