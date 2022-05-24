@@ -79,7 +79,7 @@ export default class PieceAccessLevelService extends Service {
       include: 'access-level',
     });
 
-    await Promise.all(pieces.toArray().map((piece) => {
+    await Promise.all(pieces.toArray().map(async (piece) => {
       const accessLevel = await piece.accessLevel;
       if (accessLevel.uri !== ministerraad.uri) {
         piece.accessLevel = ministerraad;
