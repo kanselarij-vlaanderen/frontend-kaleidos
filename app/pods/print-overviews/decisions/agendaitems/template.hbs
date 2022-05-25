@@ -32,12 +32,14 @@
           </Auk::Toolbar>
         </div>
         {{#each (await agendaitemRow.treatments) as |treatment|}}
-          <Agenda::Agendaitem::AgendaitemDecision
-            @subcase={{await agendaitemRow.content.agendaActivity.subcase}}
-            @isTableRow={{true}}
-            @treatment={{treatment}}
-            @agendaitem={{await agendaitemRow.content}}
-          />
+          {{#let (await agendaitemRow.content.agendaActivity.subcase) as |subcase|}}
+            <Agenda::Agendaitem::AgendaitemDecision
+              @subcase={{subcase}}
+              @isTableRow={{true}}
+              @treatment={{treatment}}
+              @agendaitem={{await agendaitemRow.content}}
+            />
+          {{/let}}
         {{/each}}
       </div>
     {{/if}}
