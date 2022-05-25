@@ -7,19 +7,19 @@ export default class AccessLevelColorBadge extends Component {
     if (this.args.accessLevel) {
       switch (this.args.accessLevel.uri) {
         case CONSTANTS.ACCESS_LEVELS.PUBLIEK:
-          modifier = 'ongoing';
+          modifier = 'success';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID:
-          modifier = 'ongoing';
+          modifier = 'border';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
-          modifier = 'ongoing';
+          modifier = 'border';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE:
-          modifier = 'ongoing';
+          modifier = 'warning';
           break;
         case CONSTANTS.ACCESS_LEVELS.MINISTERRAAD:
-          modifier = 'ongoing';
+          modifier = 'warning';
           break;
       }
     } else {
