@@ -154,7 +154,7 @@ export default class PublicationFlowSearchRoute extends Route {
       attributes.statusPillStep = getPublicationStatusPillStep(status);
     }
     // post-process numac numbers
-    if (attributes.numacNumbers === null) {
+    if (!attributes.numacNumbers) {
       attributes.numacNumbers = [];
     } else if (!Array.isArray(attributes.numacNumbers)) {
       attributes.numacNumbers = [attributes.numacNumbers];
