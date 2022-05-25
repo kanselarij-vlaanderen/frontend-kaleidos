@@ -1,4 +1,4 @@
-<li data-test-version-card-container class="auk-document-card {{if @isHighlighted "active"}}">
+<li data-test-version-card-container class="auk-document-card auk-document-card--clickable {{if @isHighlighted "active"}}" {{on "click" (fn @onSelectVersion @piece)}}>
   <div class="auk-document-card__content">
     {{#if @documentContainer.type}}
     <div
@@ -10,7 +10,7 @@
     {{/if}}
     <h4
       data-test-version-card-name
-      class="auk-document-card__title auk-u-m-0">{{@piece.name}}
+      class="auk-document-card__title auk-u-m-0">{{@piece.name}}.{{@piece.file.extension}}
     </h4>
     <div class="auk-u-mb-2 au-u-muted auk-u-text-small">
       <p>
@@ -29,32 +29,6 @@
           {{moment-format @piece.accessLevelLastModified "HH:mm"}}
         </p>
       {{/if}}
-    </div>
-    <div class="auk-document-card__meta">
-      <Auk::PillList class="auk-u-mr-3">
-        <Utils::AccessLevelColorBadge
-          @accessLevel={{this.accessLevel}}
-        />
-        <Utils::Documents::FileTypePill @extension={{@piece.file.extension}} />
-      </Auk::PillList>
-    </div>
-  </div>
-  <div class="auk-document-card__actions">
-    <div class="auk-button-toolbar">
-      <Auk::Button
-        data-test-version-card-open
-        @layout="icon-only"
-        @icon="book"
-        @skin="borderless"
-        {{on "click" (fn @onSelectVersion @piece)}}
-      />
-      <Auk::Button
-      @layout="icon-only"
-      @icon="download"
-      @skin="borderless"
-      @href={{@piece.file.namedDownloadLink}}
-      download
-    />
     </div>
   </div>
 </li>
