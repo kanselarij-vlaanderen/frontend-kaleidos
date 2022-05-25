@@ -67,9 +67,9 @@
         data-test-details-tab-access-level
         @key="Bronbestand"
       >
-        <AuLink href={{@piece.file.namedDownloadLink}} @skin="primary" @icon="download" @iconAlignment="left" download>{{@piece.name}}.{{@piece.file.extension}}</AuLink>
+        <p>{{@piece.name}}.{{@piece.file.extension}}</p>
         <AuHr />
-        <Auk::FileUploader />
+        <AuButton @icon="upload" @iconAlignment="left" @skin="secondary">Vervangen</AuButton>
       </Auk::KeyValue>
     </Auk::Panel::Body>
     <Auk::Panel::Footer>
