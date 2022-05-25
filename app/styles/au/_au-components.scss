@@ -96,6 +96,10 @@
   border-radius: 0;
 }
 
+.au-c-modal__body {
+  overflow: hidden;
+}
+
 .au-c-modal__title {
   @include au-font-size($au-h5);
 }
