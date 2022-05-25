@@ -14,6 +14,7 @@ export default class MHeader extends Component {
   @service session;
   @service currentSession;
   @service router;
+  @service searchTabStorage;
 
   constructor() {
     super(...arguments);

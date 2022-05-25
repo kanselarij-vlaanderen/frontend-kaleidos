@@ -7,7 +7,7 @@
       <Auk::Toolbar::Item>
         <Auk::Tabs>
           <Auk::Tab
-            @route="search.index"
+            @route={{this.searchTabStorage.route}}
             @current-when="search"
             data-test-m-header-search
           >

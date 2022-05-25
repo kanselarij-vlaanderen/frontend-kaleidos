@@ -8,6 +8,8 @@ import { inject as service } from '@ember/service';
 
 export default class AgendaitemSearchRoute extends Route {
   @service metrics;
+  @service searchTabStorage;
+
   queryParams = {
     types: {
       refreshModel: true,
@@ -38,6 +40,8 @@ export default class AgendaitemSearchRoute extends Route {
   }
 
   model(filterParams) {
+    this.searchTabStorage.route = this.routeName;
+
     const searchParams = this.paramsFor('search');
     const params = {...searchParams, ...filterParams};
     if (!params.dateFrom) {

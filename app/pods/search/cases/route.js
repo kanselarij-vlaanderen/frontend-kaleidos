@@ -8,6 +8,7 @@ import { inject as service } from '@ember/service';
 
 export default class CasesSearchRoute extends Route {
   @service metrics;
+  @service searchTabStorage;
 
   queryParams = {
     includeArchived: {
@@ -52,6 +53,8 @@ export default class CasesSearchRoute extends Route {
   }
 
   model(filterParams) {
+    this.searchTabStorage.route = this.routeName;
+
     const searchParams = this.paramsFor('search');
     const params = {...searchParams, ...filterParams};
 

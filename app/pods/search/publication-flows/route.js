@@ -16,6 +16,7 @@ export default class PublicationFlowSearchRoute extends Route {
   @service store;
   @service router;
   @service currentSession;
+  @service searchTabStorage;
 
   queryParams = {
     regulationTypeIds: {
@@ -46,6 +47,8 @@ export default class PublicationFlowSearchRoute extends Route {
   }
 
   async beforeModel() {
+    this.searchTabStorage.route = this.routeName;
+
     if (!this.currentSession.may('search-publication-flows')) {
       this.router.transitionTo('agendas');
       return;
