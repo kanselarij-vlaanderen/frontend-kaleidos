@@ -14,6 +14,11 @@ const selectors = {
     save: '[data-test-new-case-save]',
   },
 
+  // subcase-detail-nav
+  subcaseDetailNav: {
+    documents: '[data-test-subcase-detail-nav-documents]',
+  },
+
   // subcase-overview-header
   subcaseOverviewHeader: {
     titleContainer: '[data-test-subcase-overview-header-title-container]',

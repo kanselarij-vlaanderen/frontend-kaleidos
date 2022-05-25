@@ -239,6 +239,7 @@ function addNewPieceToMeeting(oldFileName, file) {
  */
 function openAgendaitemDocumentTab(agendaitemTitle, alreadyHasDocs = false, isAdmin = true) {
   cy.log('openAgendaitemDocumentTab');
+  // TODO-command the next command switches to case tab if when we are already on the documents tab.
   cy.openDetailOfAgendaitem(agendaitemTitle, isAdmin);
   cy.get(agenda.agendaitemNav.documentsTab)
     .click()
@@ -422,7 +423,9 @@ function uploadUsersFile(folder, fileName, extension) {
 function addNewPieceToDecision(oldFileName, file) {
   cy.log('addNewPieceToDecision');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
-  cy.intercept('POST', 'pieces').as(`createNewPiece_${randomInt}`);
+  cy.intercept('POST', '/pieces').as(`createNewPiece_${randomInt}`);
+  cy.intercept('PATCH', '/agenda-item-treatments/*').as(`patchTreatment_${randomInt}`);
+  cy.intercept('GET', '/pieces/*/previous-piece').as(`getPreviousPiece_${randomInt}`);
 
   cy.get(document.documentCard.name.value).contains(oldFileName)
     .parents(document.documentCard.card)
@@ -443,7 +446,10 @@ function addNewPieceToDecision(oldFileName, file) {
     })
       .wait(`@createNewPiece_${randomInt}`);
   });
-  cy.wait(2500); // need to wait for model reload
+  cy.wait(`@patchTreatment_${randomInt}`);
+  cy.wait(`@getPreviousPiece_${randomInt}`);
+  cy.get(auk.modal.container).should('not.exist');
+  cy.get(auk.loader).should('not.exist');
   cy.log('/addNewPieceToDecision');
 }
 
@@ -457,8 +463,10 @@ function addNewPieceToDecision(oldFileName, file) {
 function addLinkedDocument(filenames) {
   // NOTE: this works in subcase view, untested in agendaitem view
   cy.intercept('GET', 'pieces').as('createNewPiece');
+  cy.intercept('GET', '/pieces?page**').as('getPiecesList');
   cy.log('addLinkedDocument');
   cy.get(document.linkedDocuments.add).click();
+  cy.wait('@getPiecesList');
   cy.get(document.addExistingPiece.searchInput).click();
 
   filenames.forEach((name) => {
@@ -467,11 +475,13 @@ function addLinkedDocument(filenames) {
       .type(name)
       .wait(`@getFilteredPiece${name}`);
     // For every char typed, a call to "/pieces?filter" occurs, causing constant reloads of the dom.
-    cy.wait(3000);
+    cy.wait(1000);
     cy.get(document.addExistingPiece.checkbox).parent()
       .click();
   });
+  cy.intercept('PATCH', '/subcases/*').as('patchSubcase');
   cy.get(utils.vlModalFooter.save).click();
+  cy.wait('@patchSubcase');
   cy.log('/addLinkedDocument');
 }
 
