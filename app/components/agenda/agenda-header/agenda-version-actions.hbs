@@ -22,9 +22,9 @@
           serialnumber=@currentAgenda.serialnumber
         }}
       </Menu.Item>
-      <Menu.Divider />
     {{/if}}
     {{#if @meeting.isFinal}}
+      <Menu.Divider />
       <Menu.Item
         data-test-agenda-actions-unlock-agenda
         {{on "click" this.createDesignAgenda}}
@@ -32,7 +32,6 @@
       >
         {{t "agenda-reopen"}}
       </Menu.Item>
-      <Menu.Divider />
     {{else if this.isSessionClosable}}
       <Menu.Item
         @skin="danger"
@@ -41,9 +40,9 @@
       >
         {{t "agenda-close"}}
       </Menu.Item>
-      <Menu.Divider />
     {{/if}}
     {{#if this.canReopenPreviousAgenda}}
+      <Menu.Divider />
       <Menu.Item
         @skin="danger"
         data-test-agenda-actions-reopen-previous-version

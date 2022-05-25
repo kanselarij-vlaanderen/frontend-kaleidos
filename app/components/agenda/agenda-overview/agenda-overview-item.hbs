@@ -48,6 +48,26 @@
               </h4>
             </div>
             <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
+              {{#if @isAnnouncement}}
+              {{#if this.newsletterIsVisible}}
+                {{#if (and (and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow) @isNew)}}
+                <AuPill
+                  @skin="border"
+                  @draft={{true}}
+                  @icon="website"
+                >
+                  Op de website
+                </AuPill>
+                {{else}}
+                <AuPill
+                  @skin="border"
+                  @icon="website"
+                >
+                  Op de website
+                </AuPill>
+                {{/if}}
+              {{/if}}
+              {{/if}}
               {{#if this.subcase.confidential}}
                 {{#if (and (and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow) @isNew)}}
                 <Auk::Pill
@@ -68,23 +88,6 @@
                 {{/if}}
               {{else}}
                 <Auk::Pill @skin="invisible"></Auk::Pill>
-              {{/if}}
-              {{#if this.newsletterIsVisible}}
-                {{#if (and (and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow) @isNew)}}
-                <Auk::Pill
-                  @skin="future"
-                  @icon="website"
-                >
-                  Op de website
-                </Auk::Pill>
-                {{else}}
-                <Auk::Pill
-                  @skin="blank"
-                  @icon="website"
-                >
-                  Op de website
-                </Auk::Pill>
-                {{/if}}
               {{/if}}
             </div>
           </div>
@@ -139,6 +142,7 @@
         <div
           class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced"
         >
+          {{#if @isAnnouncement}}
           {{#if this.loadNewsletterVisibility.lastSuccessful}}
             {{#if (and (and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow) @isNew)}}
             <AuPill
@@ -156,6 +160,7 @@
               Op de website
             </AuPill>
             {{/if}}
+          {{/if}}
           {{/if}}
           {{#if this.subcase.confidential}}
             {{#if (and (and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow) @isNew)}}

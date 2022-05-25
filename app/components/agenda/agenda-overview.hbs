@@ -114,6 +114,7 @@
                   @showFormallyOkStatus={{this.isDesignAgenda}}
                   @isEditingFormallyOkStatus={{this.isEditingOverview}}
                   @showDragHandle={{this.isDraggingEnabled}}
+                  @isAnnouncement={{false}}
                 />
               </li>
             {{/each}}
@@ -158,6 +159,7 @@
               @showFormallyOkStatus={{this.isDesignAgenda}}
               @isEditingFormallyOkStatus={{@isEditingOverview}}
               @showDragHandle={{this.isDraggingEnabled}}
+              @isAnnouncement={{true}}
             />
           </li>
           {{else}}
