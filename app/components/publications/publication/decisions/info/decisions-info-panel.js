@@ -31,7 +31,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.isViaCouncilOfMinisters =
       await this.publicationService.getIsViaCouncilOfMinisters(this.args.publicationFlow);
     this.agendaItemTreatment = await this.args.publicationFlow.agendaItemTreatment;
-    if (this.isViaCouncilOfMinisters) {
+    if (this.isViaCouncilOfMinisters && this.agendaItemTreatment) {
       // get the models meeting/agenda/agendaitem for clickable link
       this.modelsForAgendaitemRoute = await this.publicationService.getModelsForAgendaitemFromTreatment(this.agendaItemTreatment);
     }
