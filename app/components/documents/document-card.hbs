@@ -22,7 +22,7 @@
             <Auk::Toolbar::Item class="auk-u-maximize-width">
               <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
                 {{#if this.documentContainer.type.label}}
-                <p data-test-document-card-type class="vlc-subline au-u-muted">
+                <p data-test-document-card-type class="vlc-subline au-u-medium au-u-muted">
                   {{#unless this.loadPieceRelatedData.isRunning}}
                     {{this.documentContainer.type.label}}
                   {{/unless}}
@@ -226,9 +226,9 @@
       as |c|
     >
       <c.header
-        @badgeIcon="document"
+        @badgeIcon="pdf"
       >
-        <p data-test-document-card-type class="vlc-subline au-u-muted">
+        <p data-test-document-card-type class="vlc-subline au-u-medium au-u-muted">
           PDF
         </p>
         <div class="au-u-flex au-u-flex--spaced-small">
@@ -266,9 +266,9 @@
       as |c|
     >
       <c.header
-        @badgeIcon="document"
+        @badgeIcon="word"
       >
-        <p data-test-document-card-type class="vlc-subline au-u-muted">
+        <p data-test-document-card-type class="vlc-subline au-u-medium au-u-muted">
           DOCX
         </p>
         <div class="au-u-flex au-u-flex--spaced-small">
