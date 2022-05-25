@@ -12,7 +12,7 @@
   {{/if}}
   <td>
     {{#if (and @isEditingEnabled @isDesignAgenda)}}
-      <Auk::Input data-test-document-details-input type="text" @block @value={{mut @row.name}} />
+      <Auk::Input data-test-document-details-input type="text" @block @value={{mut @row.name}} class="auk-u-maximize-width" />
     {{else}}
       {{@row.name}}
     {{/if}}

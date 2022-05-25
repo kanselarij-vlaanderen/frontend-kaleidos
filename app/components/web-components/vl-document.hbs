@@ -30,7 +30,7 @@
           </Auk::Button>
         {{/if}}
         {{#unless this.loadPieceRelatedData.isRunning}}
-          {{#if @isDesignAgenda}}
+          {{#if (and @isDesignAgenda (not @isVersion))}}
           <AccessLevelPill
             @accessLevel={{this.accessLevel}}
             @confidential={{this.piece.confidential}}

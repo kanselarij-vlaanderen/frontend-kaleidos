@@ -34,39 +34,13 @@
                   </p>
                 {{/if}}
               </div>
-              {{#if this.isEditingPiece}}
-              <div class="auk-o-flex auk-o-flex--vertical-center auk-u-maximize-width">
-                <Auk::Input
-                  data-test-document-card-name-input={{true}}
-                  @block={{true}}
-                  @value={{this.pieceNameBuffer}}
-                />
-                <Auk::Button
-                  data-test-document-card-name-save={{true}}
-                  @skin="tertiary"
-                  @layout="icon-only"
-                  @icon="check"
-                  class="auk-button--tiny"
-                  {{on "click" (perform this.savePieceName)}}
-                />
-                <Auk::Button
-                  data-test-document-card-name-cancel={{true}}
-                  @skin="tertiary"
-                  @layout="icon-only"
-                  @icon="x"
-                  class="auk-button--tiny"
-                  {{on "click" this.cancelEditPieceName}}
-                />
-              </div>
-              {{else}}
-                <h6 class="auk-h4" data-test-document-card-name-value>
-                  {{! template-lint-disable no-invalid-interactive }}
-                  <span {{on "click" this.showPieceViewer}}>
-                    {{this.piece.name}}.{{#if (eq this.piece.file.extension "docx")}}pdf{{else}}{{this.piece.file.extension}}{{/if}}
-                  </span>
-                  {{! template-lint-enable no-invalid-interactive }}
-                </h6>
-              {{/if}}
+              <h6 class="auk-h4" data-test-document-card-name-value>
+                {{! template-lint-disable no-invalid-interactive }}
+                <span {{on "click" this.showPieceViewer}}>
+                  {{this.piece.name}}.{{#if (eq this.piece.file.extension "docx")}}pdf{{else}}{{this.piece.file.extension}}{{/if}}
+                </span>
+                {{! template-lint-enable no-invalid-interactive }}
+              </h6>
             </Auk::Toolbar::Item>
           </Toolbar.Group>
           <Toolbar.Group @position="right" as |Group|>
@@ -154,7 +128,7 @@
                   {{t "new-version"}}
                 </Menu.Item>
                 <Menu.Item {{on "click" this.enableEditPieceName}}>
-                  {{t "document-title-edit"}}
+                  Wijzigen
                 </Menu.Item>
                 <Menu.Divider />
                 <Menu.Item
@@ -238,6 +212,106 @@
     {{/if}}
   </div>
 </div>
+
+{{#if this.isEditingPiece}}
+<WebComponents::VlModal
+  @closeModal={{this.cancelEditPieceName}}
+  @isOverlay={{true}}
+  @title="Document wijzigen"
+>
+  <Auk::Modal::Body>
+    <AuCard
+      @flex={{true}}
+      @size="small"
+      as |c|
+    >
+      <c.header
+        @badgeIcon="document"
+      >
+        <p data-test-document-card-type class="vlc-subline au-u-muted">
+          PDF
+        </p>
+        <div class="au-u-flex au-u-flex--spaced-small">
+          <Auk::Input
+            data-test-document-card-name-input={{true}}
+            @block={{true}}
+            @value={{this.pieceNameBuffer}}
+          />
+          <AuButtonGroup class="au-u-flex--no-wrap">
+            <AuButton @skin="secondary" {{on "click" this.replacePDF}}>
+              Vervangen
+            </AuButton>
+          </AuButtonGroup>
+        </div>
+        {{#if this.piece.created}}
+        <AuHelpText @skin="secondary">
+          {{t "uploaded-at"}}
+          {{moment-format this.piece.created}}
+          {{t "at"}}
+          {{moment-format this.piece.created "HH:mm"}}
+        </AuHelpText>
+        {{/if}}
+      </c.header>
+      {{#if this.hasReplacePDF}}
+      <c.content>
+        <Auk::FileUploader />
+      </c.content>
+      {{/if}}
+    </AuCard>
+    {{#if (eq this.piece.file.extension "docx")}}
+    <AuCard
+      @flex={{true}}
+      @size="small"
+      class="au-u-margin-top-small"
+      as |c|
+    >
+      <c.header
+        @badgeIcon="document"
+      >
+        <p data-test-document-card-type class="vlc-subline au-u-muted">
+          DOCX
+        </p>
+        <div class="au-u-flex au-u-flex--spaced-small">
+          <Auk::Input
+            data-test-document-card-name-input={{true}}
+            @block={{true}}
+            @value={{this.pieceNameBuffer}}
+          />
+          <AuButtonGroup class="au-u-flex--no-wrap">
+            <AuButton @skin="secondary" {{on "click" this.replaceDOCX}}>
+              Vervangen
+            </AuButton>
+            <AuButton @alert={{true}} @hideText={{true}} @icon="bin" @skin="secondary">
+              Verwijderen
+            </AuButton>
+          </AuButtonGroup>
+        </div>
+        {{#if this.piece.created}}
+        <AuHelpText @skin="secondary">
+          {{t "uploaded-at"}}
+          {{moment-format this.piece.created}}
+          {{t "at"}}
+          {{moment-format this.piece.created "HH:mm"}}
+        </AuHelpText>
+        {{/if}}
+      </c.header>
+      {{#if this.hasReplaceDOCX}}
+      <c.content>
+        <Auk::FileUploader />
+      </c.content>
+      {{/if}}
+    </AuCard>
+    {{/if}}
+  </Auk::Modal::Body>
+  <WebComponents::VlModalFooter
+    @cancelButtonText={{t "cancel"}}
+    @saveButtonText={{t "save"}}
+    @cancelAction={{this.cancelEditPieceName}}
+    @saveAction={{perform this.savePieceName}}
+  />
+</WebComponents::VlModal>
+
+{{/if}}
 
 {{#if this.isOpenUploadModal}}
   <WebComponents::VlModal

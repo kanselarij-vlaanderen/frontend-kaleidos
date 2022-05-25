@@ -44,6 +44,19 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked defaultAccessLevel;
   @tracked pieces = A();
 
+  @tracked hasReplacePDF;
+  @tracked hasReplaceDOCX;
+
+  @action
+  replacePDF() {
+    this.hasReplacePDF = !this.hasReplacePDF;
+  }
+
+  @action
+  replaceDOCX() {
+    this.hasReplaceDOCX = !this.hasReplaceDOCX;
+  }
+
   constructor() {
     super(...arguments);
     this.loadCodelists.perform();
