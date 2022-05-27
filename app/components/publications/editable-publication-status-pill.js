@@ -10,6 +10,7 @@ import { task } from 'ember-concurrency';
 
 export default class PublicationStatusPill extends Component {
   @service store;
+  @service router;
   @service publicationService;
 
   @tracked decision;
@@ -75,6 +76,7 @@ export default class PublicationStatusPill extends Component {
       );
       this.loadStatus.perform();
       this.loadDecision.perform();
+      this.router.refresh('publications.publication')
     }
     this.closeStatusSelector();
   }
