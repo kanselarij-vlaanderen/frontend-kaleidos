@@ -3,7 +3,6 @@
 module.exports = function (environment) {
   let ENV = {
     modulePrefix: 'frontend-kaleidos',
-    podModulePrefix: 'frontend-kaleidos/pods',
     environment,
     rootURL: '/',
     locationType: 'auto',
