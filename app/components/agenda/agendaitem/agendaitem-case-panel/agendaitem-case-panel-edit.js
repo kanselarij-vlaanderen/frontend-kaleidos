@@ -58,7 +58,8 @@ export default class AgendaitemCasePanelEdit extends Component {
       this.args.agendaitem,
       propertiesToSetOnAgendaitem,
       propertiesToSetOnSubcase,
-      shouldResetFormallyOk
+      shouldResetFormallyOk,
+      this.store,
     );
     if (this.args.subcase && this.args.subcase.confidential) {
       yield this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);

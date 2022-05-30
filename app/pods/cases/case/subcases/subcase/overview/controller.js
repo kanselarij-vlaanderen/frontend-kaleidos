@@ -6,6 +6,7 @@ import { saveChanges } from 'frontend-kaleidos/utils/agendaitem-utils';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CasesCaseSubcasesSubcaseOverviewController extends Controller {
+  @service store;
   @service currentSession;
 
   @tracked page = 0;
@@ -36,7 +37,8 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
       this.model.subcase,
       propertiesToSetOnAgendaitem,
       propertiesToSetOnSubcase,
-      true
+      true,
+      this.store,
     );
   }
 

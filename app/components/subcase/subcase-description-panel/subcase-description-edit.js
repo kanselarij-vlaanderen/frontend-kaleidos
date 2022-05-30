@@ -91,7 +91,8 @@ export default class SubcaseDescriptionEdit extends Component {
       this.args.subcase,
       propertiesToSetOnAgendaitem,
       propertiesToSetOnSubCase,
-      resetFormallyOk
+      resetFormallyOk,
+      this.store,
     );
 
     if (this.showAsRemark !== oldShowAsRemark) {

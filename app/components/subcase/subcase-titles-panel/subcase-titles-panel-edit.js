@@ -44,7 +44,8 @@ export default class SubcaseTitlesPanelEdit extends Component {
       this.args.subcase,
       propertiesToSetOnAgendaitem,
       propertiesToSetOnSubcase,
-      true
+      true,
+      this.store,
     );
     if (this.args.subcase.confidential) {
       yield this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);

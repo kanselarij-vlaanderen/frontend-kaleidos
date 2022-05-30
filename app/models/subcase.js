@@ -51,14 +51,6 @@ export default ModelWithModifier.extend({
     return null;
   }),
 
-  // TODO don't use this computed, refactor agendaitem-utils.js
-  agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaActivities', async function() {
-    return await this.store.query('agendaitem', {
-      'filter[agenda-activity][subcase][:id:]': this.get('id'),
-      'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
-    });
-  }),
-
   // TODO don't use this computed, used in 5 places, make util?
   approved: computed('treatments', 'treatments.@each.decisionResultCode', 'requestedForMeeting', async function() {
     const meeting = await this.get('requestedForMeeting');

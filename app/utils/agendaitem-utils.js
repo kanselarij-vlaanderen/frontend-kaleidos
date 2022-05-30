@@ -70,7 +70,7 @@ export const setModifiedOnAgendaOfAgendaitem = async(agendaitem) => {
  * @param resetFormallyOk
  * @returns {Promise<void>}
  */
-export const saveChanges = async(agendaitemOrSubcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk) => {
+export const saveChanges = async(agendaitemOrSubcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk, store) => {
   const item = agendaitemOrSubcase;
   const isAgendaitem = item.get('modelName') === 'agendaitem';
 
@@ -88,7 +88,10 @@ export const saveChanges = async(agendaitemOrSubcase, propertiesToSetOnAgendaite
     await setModifiedOnAgendaOfAgendaitem(item);
   } else {
     await setNewPropertiesToModel(item, propertiesToSetOnSubcase, false);
-    const agendaitemsOnDesignAgendaToEdit = await item.get('agendaitemsOnDesignAgendaToEdit');
+    const agendaitemsOnDesignAgendaToEdit = await store.query('agendaitem', {
+      'filter[agenda-activity][subcase][:id:]': item.id,
+      'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
+    });
     if (agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0) {
       await Promise.all(agendaitemsOnDesignAgendaToEdit.map(async(agendaitem) => {
         await setNewPropertiesToModel(agendaitem, propertiesToSetOnAgendaitem, resetFormallyOk);
