@@ -43,7 +43,7 @@ export default ModelWithModifier.extend({
     inverse: null,
   }),
 
-  // TODO don't use this computed, used in 1 controller
+  // TODO don't use this computed
   latestActivity: computed('agendaActivities', 'agendaActivities.[]', async function() {
     const activities = await this.get('agendaActivities').then((activities) => activities.sortBy('startDate'));
     if (activities && activities.length > 0) {
