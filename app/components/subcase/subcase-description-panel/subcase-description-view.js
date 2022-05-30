@@ -11,7 +11,9 @@ export default class SubcaseDescriptionView extends Component {
    */
   @service store;
   @service currentSession;
+  @service subcasesService;
 
+  @tracked phases = null;
   @tracked subcaseType = null;
   @tracked latestMeeting = null;
   @tracked latestAgenda = null;
@@ -28,6 +30,7 @@ export default class SubcaseDescriptionView extends Component {
 
   @task
   *loadAgendaData() {
+    this.phases = yield this.subcasesService.getSubcasePhases(this.args.subcase);
     this.subcaseType = yield this.args.subcase.type;
     this.latestMeeting = yield this.args.subcase.requestedForMeeting;
     if (this.latestMeeting) {

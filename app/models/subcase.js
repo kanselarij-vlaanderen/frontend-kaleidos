@@ -11,7 +11,6 @@ export default ModelWithModifier.extend({
   modelName: alias('constructor.modelName'),
   store: inject(),
   intl: inject(),
-  subcasesService: inject(),
 
   created: attr('datetime'),
   modified: attr('datetime'),
@@ -50,12 +49,6 @@ export default ModelWithModifier.extend({
       return activities.get('lastObject');
     }
     return null;
-  }),
-
-  // TODO don't use this computed, refactor subcase-description-view.hbs && subcase-item.hbs
-  // eslint-disable-next-line ember/use-brace-expansion
-  phases: computed('agendaActivities.agendaitems', 'agendaActivities.agendaitems.[]', 'latestActivity.agendaitems.@each.retracted', 'approved', async function() {
-    return await this.get('subcasesService').getSubcasePhases(this);
   }),
 
   // TODO don't use this computed, refactor subcase-header.js
