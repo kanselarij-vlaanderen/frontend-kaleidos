@@ -25,7 +25,7 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
     super(...arguments);
 
     this.initValidators();
-    this.initOrganizations();
+    this.initOrganizations.perform();
   }
 
   @task
@@ -84,8 +84,9 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
     this.isOpenOrganizationAddModal = false;
   }
 
-  async initOrganizations() {
-    this.organizations = await this.loadOrganizations.perform('');
+  @task
+  *initOrganizations() {
+    this.organizations = yield this.loadOrganizations.perform('');
   }
 
   initValidators() {
