@@ -1,4 +1,4 @@
-import PublicationsOverviewBaseController from '../_base/controller';
+import PublicationsOverviewBaseController from './_base';
 import { tracked } from '@glimmer/tracking';
 
 export default class PublicationsOverviewLateController extends PublicationsOverviewBaseController {

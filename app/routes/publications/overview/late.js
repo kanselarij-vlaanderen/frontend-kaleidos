@@ -1,4 +1,4 @@
-import PublicationsOverviewBaseRoute from '../_base/route';
+import PublicationsOverviewBaseRoute from './_base';
 
 export default class PublicationsOverviewLateRoute extends PublicationsOverviewBaseRoute {
   defaultColumns= [

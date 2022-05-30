@@ -1,4 +1,4 @@
-import PublicationsOverviewBaseRoute from '../_base/route';
+import PublicationsOverviewBaseRoute from './_base';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 const PROOF_STATUSES_URIS = [
