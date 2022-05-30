@@ -51,15 +51,6 @@ export default ModelWithModifier.extend({
     return null;
   }),
 
-  // TODO don't use this computed, refactor subcase-header.js
-  hasActivity: computed('agendaActivities', 'agendaActivities.[]', async function() {
-    const activities = await this.get('agendaActivities');
-    if (activities && activities.length > 0) {
-      return true;
-    }
-    return false;
-  }),
-
   // TODO don't use this computed, refactor agendaitem-utils.js
   agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaActivities', async function() {
     return await this.store.query('agendaitem', {

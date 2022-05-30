@@ -24,7 +24,7 @@ export default Component.extend({
   caseToDelete: null,
   onMoveSubcase: null, // from args, the parent route subcases needs to be refreshed after subcase is moved/deleted
 
-  canPropose: computed('subcase.{requestedForMeeting,hasActivity}', 'isAssigningToOtherAgenda', async function() {
+  canPropose: computed('subcase.{requestedForMeeting,agendaActivities}', 'isAssigningToOtherAgenda', async function() {
     const {
       isAssigningToOtherAgenda, isLoading,
     } = this;
@@ -32,9 +32,9 @@ export default Component.extend({
       subcase,
     } = this;
     const requestedForMeeting = await subcase.get('requestedForMeeting');
-    const hasActivity = await subcase.get('hasActivity');
+    const activities = await subcase.get('agendaActivities');
 
-    if (hasActivity || requestedForMeeting || isAssigningToOtherAgenda || isLoading) {
+    if (activities?.legnth || requestedForMeeting || isAssigningToOtherAgenda || isLoading) {
       return false;
     }
 
