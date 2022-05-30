@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import { getPrintOverviewTitle } from 'frontend-kaleidos/utils/print-overview-util';
-import { kindPrintLabel } from '../../../helpers/kind-print-label';
+import { kindPrintLabel } from 'frontend-kaleidos/helpers/kind-print-label';
 
 // TODO: octane-refactor
 /* eslint-disable ember/no-get */
