@@ -65,17 +65,20 @@ export default class AgendasRoute extends Route {
 
   @action
   loading(transition) {
-    // see snippet in https://api.emberjs.com/ember/3.27/classes/Route/events/loading?anchor=loading
-    if (transition.from === null || transition.from.name !== this.routeName) {
-      return true;
-    }
-
     // eslint-disable-next-line ember/no-controller-access-in-routes
     const controller = this.controllerFor(this.routeName);
-    controller.set('isLoadingModel', true);
+    controller.isLoadingModel = true;
     transition.promise.finally(() => {
-      controller.set('isLoadingModel', false);
+      controller.isLoadingModel = false;
     });
+
+   // only bubble loading event when transitioning between tabs
+   // to enable loading template to be shown
+   if (transition.from && transition.to) {
+     return transition.from.name != transition.to.name;
+   } else {
+     return true;
+   }
   }
 
   @action
