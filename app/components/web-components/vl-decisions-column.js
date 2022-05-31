@@ -1,32 +1,38 @@
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-components
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { computed } from '@ember/object';
+import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
-export default Component.extend({
-  store: service(),
+export default class WebComponentsVlDecisionsColumn extends Component {
+  @service store;
 
-  textToShow: computed('row', 'value', 'row.agendaActivity.subcase', async function() {
-    const agendaitem = await this.row;
-    const agendaActivity = await agendaitem?.agendaActivity;
-    const subcase = await agendaActivity?.subcase;
+  @tracked textToShow;
+
+  constructor() {
+    super(...arguments);
+
+    this.loadTextToShow.perform();
+  }
+
+  @task
+  *loadTextToShow() {
+    const agendaitem = yield this.row;
+    const agendaActivity = yield agendaitem?.agendaActivity;
+    const subcase = yield agendaActivity?.subcase;
     let approved = false;
 
-    const meeting = await subcase?.requestedForMeeting;
+    const meeting = yield subcase?.requestedForMeeting;
     if (meeting?.isFinal) {
-      const approvedDecisionResultCode = await this.store.findRecordByUri(
+      const approvedDecisionResultCode = yield this.store.findRecordByUri(
         'decision-result-code',
         CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
       );
-      const acknowledgedDecisionResultCode = await this.store.findRecordByUri(
+      const acknowledgedDecisionResultCode = yield this.store.findRecordByUri(
         'decision-result-code',
         CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
       );
-      approved = !!(await this.store.queryOne('agenda-item-treatment', {
+      approved = !!(yield this.store.queryOne('agenda-item-treatment', {
         'filter[subcase][id]': subcase.id,
         'filter[decision-result-code][:id:]': [
           approvedDecisionResultCode.id,
@@ -36,8 +42,8 @@ export default Component.extend({
     }
 
     if (approved) {
-      return 'Beslist';
+      this.textToShow = 'Beslist';
     }
-    return 'Niet beslist';
-  }),
-});
+    this.textToShow = 'Niet beslist';
+  }
+}
