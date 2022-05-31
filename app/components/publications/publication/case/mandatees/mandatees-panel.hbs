@@ -64,8 +64,11 @@
 </div>
 
 {{#if this.showSelectMandateeModal}}
+  {{! The @publicationFlow.openingDate is no more than a fallback in case decision date
+  isn't filled in, which in theory can be the case for a non-MR publication-flow, but in practice should
+  hardly ever occur }}
   <Mandatees::MandateesSelectorModal
-    @referenceDate={{if @viaCouncilOfMinisters
+    @referenceDate={{or
       @publicationFlow.agendaItemTreatment.startDate
       @publicationFlow.openingDate
     }}

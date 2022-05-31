@@ -4,7 +4,6 @@ import { tracked } from '@glimmer/tracking';
 
 /**
  * @argument {PublicationFlow} publicationFlow (publication-flow,publication-flow.mandatees,publication-flow.mandatees.person)
- * @argument {Boolean} isViaCouncilOfMinisters
  */
 export default class PublicationsPublicationCaseMandateesPanelComponent extends Component {
   @tracked showSelectMandateeModal = false;
