@@ -67,26 +67,12 @@ export default Model.extend({
     });
   }),
 
-  canReleaseDecisions: computed('isFinal', 'releasedDecisions', function() {
-    return this.isFinal && !this.releasedDecisions;
-  }),
-
-  canReleaseDocuments: computed('isFinal', 'releasedDocuments', function() {
-    return this.isFinal && !this.releasedDocuments;
-  }),
-
   latestAgenda: computed('agendas.[]', function() {
     return PromiseObject.create({
       promise: this.get('agendas').then((agendas) => {
         const sortedAgendas = agendas.sortBy('agendaName').reverse();
         return sortedAgendas.get('firstObject');
       }),
-    });
-  }),
-
-  sortedAgendas: computed('agendas.@each.agendaName', function() {
-    return PromiseArray.create({
-      promise: this.get('agendas').then((agendas) => agendas.sortBy('agendaName').reverse()),
     });
   }),
 
