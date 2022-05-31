@@ -377,7 +377,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .click();
   });
 
-  it('should test batch document edit', () => {
+  it.only('should test batch document edit', () => {
     // const agendaDate = Cypress.dayjs('2022-04-14');
     // const subcaseTitleShort = 'Cypress test: Batch editing - agendaitem pieces - short title - 1652693433';
     const fileName2 = 'Rij 2 test pdf 2';
@@ -439,6 +439,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .click();
     cy.get(dependency.emberPowerSelect.option).eq(1)
       .click();
+    cy.wait(500); // minor wait between ember power selects to ensure the previous one closed
     cy.get(document.documentDetailsRow.row).eq(0)
       .find(document.documentDetailsRow.type)
       .click();
@@ -467,6 +468,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .click();
     cy.get(dependency.emberPowerSelect.option).eq(0)
       .click();
+    cy.wait(500); // minor wait between ember power selects to ensure the previous one closed
     cy.get(document.documentDetailsRow.row).eq(0)
       .find(document.documentDetailsRow.type)
       .click();

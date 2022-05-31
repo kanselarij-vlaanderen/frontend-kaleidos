@@ -2,7 +2,14 @@ import Service, { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /*
- * This service is used to update the access levels of the previous version of a piece.
+ * This service is used to make necessary changes to access levels of certain pieces when an access level
+ * or confidentiality of a piece, subcase, ... is edited.
+ */
+export default class PieceAccessLevelService extends Service {
+  @service store;
+
+/*
+ * This method is used to update the access levels of the previous version of a piece.
  * Only previous pieces are updated, next pieces are left unchanged.
  *
  * - When the access level is changed to "Intern secretarie", all previous access levels are set to "Intern secretarie".
@@ -25,9 +32,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
  * The reason for halting when encountering an access level that does not need to be changed, is that normally all other
  * pieces encountered also won't need changing.
  */
-export default class PieceAccessLevelService extends Service {
-  @service store;
-
   async updatePreviousAccessLevels(piece) {
     const internSecretarie = await this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE);
     const ministerraad = await this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.MINISTERRAAD);
@@ -61,5 +65,26 @@ export default class PieceAccessLevelService extends Service {
 
       previousPiece = await previousPiece.previousPiece;
     }
+  }
+
+  /*
+   * This method is used to update the access levels of the pieces of a subcase's treatments. When a subcase has
+   * been updated to being confidential, all the pieces connected to it through agenda-item-treatments get the
+   * "Ministerraad" access level.
+   */
+  async updateDecisionsAccessLevelOfSubcase(subcase) {
+    const ministerraad = await this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.MINISTERRAAD);
+    const pieces = await this.store.query('piece', {
+      'filter[agenda-item-treatment][subcase][:id:]': subcase.id,
+      include: 'access-level',
+    });
+
+    await Promise.all(pieces.toArray().map(async (piece) => {
+      const accessLevel = await piece.accessLevel;
+      if (accessLevel.uri !== ministerraad.uri) {
+        piece.accessLevel = ministerraad;
+        return piece.save();
+      }
+    }));
   }
 }
