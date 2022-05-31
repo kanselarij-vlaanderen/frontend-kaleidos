@@ -42,15 +42,6 @@ export default ModelWithModifier.extend({
     inverse: null,
   }),
 
-  // TODO don't use this computed
-  latestActivity: computed('agendaActivities', 'agendaActivities.[]', async function() {
-    const activities = await this.get('agendaActivities').then((activities) => activities.sortBy('startDate'));
-    if (activities && activities.length > 0) {
-      return activities.get('lastObject');
-    }
-    return null;
-  }),
-
   // TODO don't use this computed, used in 5 places, make util?
   approved: computed('treatments', 'treatments.@each.decisionResultCode', 'requestedForMeeting', async function() {
     const meeting = await this.get('requestedForMeeting');
