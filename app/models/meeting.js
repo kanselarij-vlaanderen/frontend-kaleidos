@@ -44,7 +44,9 @@ export default Model.extend({
 
   themisPublicationActivities: hasMany('themis-publication-activity'),
 
-  // This computed does not seem to be used anywhere
+  // TODO this computed property is used in:
+  // - agendaitem#hasAddedPieces
+  // Refactor that usage and remove this computed property
   documentContainers: computed('pieces.@each.name', 'id', 'store', function() {
     return PromiseArray.create({
       promise: this.get('pieces').then((pieces) => {
@@ -67,6 +69,9 @@ export default Model.extend({
     });
   }),
 
+  // TODO this computed property is used in:
+  // - agenda-activity#latestAgendaitem
+  // Refactor that usage and remove this computed property
   latestAgenda: computed('agendas.[]', function() {
     return PromiseObject.create({
       promise: this.get('agendas').then((agendas) => {
@@ -76,6 +81,11 @@ export default Model.extend({
     });
   }),
 
+  // TODO this computed property is used in:
+  // - agenda template
+  // - Agenda::PrintableAgenda
+  // - Agenda::AgendaHeader
+  // Refactor these usages and remove this computed property
   isPreKaleidos: computed('plannedStart', function () {
     return this.plannedStart < KALEIDOS_START_DATE;
   }),
