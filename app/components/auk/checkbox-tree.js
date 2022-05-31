@@ -2,35 +2,34 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { isPresent } from '@ember/utils';
+import { TrackedArray } from 'tracked-built-ins';
 
 export default class CheckboxTree extends Component {
-  constructor(owner, args) {
-    super(owner, args);
+  @tracked itemIds; // still needed despite TrackedArray in case a new TrackedArray gets assigned
 
-    this.isSelectedAllItems =
-      this.itemIds.length == this.allItemIds.length;
-
-    this.isSelectedSomeItems =
-      (this.itemIds.length > 0) && (this.itemIds.length < this.allItemIds.length);
+  constructor() {
+    super(...arguments);
+    this.itemIds = new TrackedArray(this.args.selectedItems || []);
   }
-
-  @tracked itemIds = this.args.selectedItems || [];
-  @tracked isSelectedAllItems = false;
-  @tracked isSelectedSomeItems = false;
 
   get allItemIds() {
     return this.args.items.map((item) => item.id);
   }
 
+  get isSelectedAllItems() {
+    return this.allItemIds.every((id) => this.itemIds.indexOf(id) >= 0);
+  }
+
+  get isSelectedSomeItems() {
+    return this.allItemIds.some((id) => this.itemIds.indexOf(id) >= 0);
+  }
+
   @action
   toggleTree() {
-    this.isSelectedAllItems = !this.isSelectedAllItems;
-    this.isSelectedSomeItems = false;
-
     if (this.isSelectedAllItems) {
-      this.itemIds = this.allItemIds;
+      this.itemIds = new TrackedArray([]);
     } else {
-      this.itemIds = [];
+      this.itemIds = new TrackedArray(this.allItemIds);
     }
 
     if (isPresent(this.args.onTreeUpdate)) {
@@ -47,15 +46,6 @@ export default class CheckboxTree extends Component {
     } else {
       this.itemIds.splice(this.itemIds.indexOf(item.id), 1);
     }
-
-    // trigger an array 'reset' so the UI gets updated (see: https://stackoverflow.com/questions/57468327/why-wont-my-tracked-array-update-in-ember-octane)
-    this.itemIds = this.itemIds; // eslint-disable-line no-self-assign
-
-    this.isSelectedAllItems =
-      this.itemIds.length == this.allItemIds.length;
-
-    this.isSelectedSomeItems =
-      (this.itemIds.length > 0) && (this.itemIds.length < this.allItemIds.length);
 
     if (isPresent(this.args.onTreeUpdate)) {
       this.args.onTreeUpdate(this.itemIds);
