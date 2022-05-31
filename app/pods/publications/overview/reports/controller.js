@@ -5,7 +5,7 @@ import { inject as service } from '@ember/service';
 export class ReportTypeEntry {
   constructor(lastJob, type, config) {
     this.lastJob = lastJob;
-    this.type = type;
+    this.model = type;
     this.config = config;
   }
 }
@@ -35,7 +35,7 @@ export default class PublicationsOverviewReportsController extends Controller {
     const job = this.store.createRecord('publication-metrics-export-job', {
       created: now,
       generatedBy: this.currentSession.user,
-      reportType: reportTypeEntry.type,
+      reportType: reportTypeEntry.model,
       config: jobParams,
     });
     return job;
