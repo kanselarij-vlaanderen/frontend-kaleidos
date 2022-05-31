@@ -10,7 +10,7 @@ export default class Piece extends Model {
   @attr('datetime') modified;
   @attr('datetime') accessLevelLastModified;
 
-  @belongsTo('access-level') accessLevel;
+  @belongsTo('concept') accessLevel;
   @belongsTo('language') language;
   @belongsTo('file') file;
   @belongsTo('file', {
