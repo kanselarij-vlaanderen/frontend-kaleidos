@@ -117,21 +117,19 @@ function changeSubcaseAccessLevel(confidentialityChange, newShortTitle, newLongT
  */
 function addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
   cy.log('addSubcaseMandatee');
-  cy.intercept('GET', '/mandatees**').as('getMandatees');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('GET', '/government-bodies?filter**').as(`getGovernmentBodies${randomInt}`);
+  cy.intercept('GET', '/mandatees?filter**government-body**').as(`getMandatees${randomInt}`);
 
-  if (mandateeSearchText) {
-    cy.intercept('GET', `/mandatees**?filter**${mandateeSearchText.split(' ', 1)}**`).as('getFilteredMandatees');
-  }
   cy.intercept('PATCH', '/subcases/*').as('patchSubcase');
   cy.get(mandatee.mandateePanelView.actions.edit).click();
   cy.get(mandatee.mandateePanelEdit.actions.add).click();
-  cy.wait('@getMandatees');
+  cy.wait(`@getGovernmentBodies${randomInt}`);
+  cy.wait(`@getMandatees${randomInt}`);
   cy.get(utils.mandateeSelector.container).find(dependency.emberPowerSelect.trigger)
     .click();
-  // cy.get(dependency.emberPowerSelect.searchInput).type('g').clear(); // only use this when default data does not have active ministers
   if (mandateeSearchText) {
-    cy.get(dependency.emberPowerSelect.searchInput).type(mandateeSearchText)
-      .wait('@getFilteredMandatees');
+    cy.get(dependency.emberPowerSelect.searchInput).type(mandateeSearchText);
   }
   cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
   // we can search or select by number
