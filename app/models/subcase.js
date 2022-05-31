@@ -1,7 +1,5 @@
 import { belongsTo, hasMany, attr } from '@ember-data/model';
-import { computed } from '@ember/object';
 import { inject } from '@ember/service';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { alias } from '@ember/object/computed';
 import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 
@@ -41,26 +39,4 @@ export default ModelWithModifier.extend({
   requestedBy: belongsTo('mandatee', {
     inverse: null,
   }),
-
-  // TODO don't use this computed, used in 5 places, make util?
-  approved: computed('treatments', 'treatments.@each.decisionResultCode', 'requestedForMeeting', async function() {
-    const meeting = await this.get('requestedForMeeting');
-    if (meeting?.isFinal) {
-      const treatments = await this.get('treatments');
-      if (treatments && treatments.get('length') > 0) {
-        const treatmentIds = treatments.map((treatment) => treatment.get('id')).join(',');
-        const approvedTreatment = await this.store.queryOne('agenda-item-treatment', {
-          'filter[id]': treatmentIds,
-          'filter[decision-result-code][:uri:]': CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD,
-        });
-        const acknowledgedTreatment = await this.store.queryOne('agenda-item-treatment', {
-          'filter[id]': treatmentIds,
-          'filter[decision-result-code][:uri:]': CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME,
-        });
-        return !!approvedTreatment || !!acknowledgedTreatment;
-      }
-    }
-    return false;
-  }),
-
 });
