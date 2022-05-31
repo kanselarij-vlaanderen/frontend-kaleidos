@@ -3,7 +3,7 @@
     @label={{@label}}
     @labelSkin="bold"
     @checked={{this.isSelectedAllItems}}
-    @indeterminate={{this.isSelectedSomeItems}}
+    @indeterminate={{and (not this.isSelectedAllItems) this.isSelectedSomeItems}}
     @disabled={{@disabled}}
     {{on "input" this.toggleTree}}
   />
