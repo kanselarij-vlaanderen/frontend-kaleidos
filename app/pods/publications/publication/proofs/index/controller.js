@@ -91,7 +91,6 @@ export default class PublicationsPublicationProofsController extends Controller 
   @task
   *deleteReceivedPiece(proofReceivedEvent, piece) {
     yield this.performDeleteReceivedPiece(proofReceivedEvent, piece);
-    this.send('refresh');
   }
 
   async performDeleteReceivedPiece(proofReceivedEvent, piece) {
