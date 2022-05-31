@@ -117,6 +117,10 @@ a.vlc-agenda-detail-sidebar__sub-item--active {
 // Document card
 .vlc-document-card__content .auk-h4 {
   margin: 0;
+}
+
+.vlc-document-card__content .auk-h4 span {
+  margin: 0;
   color: #0055CC;
   cursor: pointer;
 

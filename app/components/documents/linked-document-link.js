@@ -5,6 +5,7 @@ import { action } from '@ember/object';
 import { A } from '@ember/array';
 import { task } from 'ember-concurrency';
 
+
 export default class LinkedDocumentLink extends Component {
   @service store;
   @service currentSession;
@@ -13,6 +14,7 @@ export default class LinkedDocumentLink extends Component {
 
   @tracked sortedPieces = [];
   @tracked accessLevel;
+  @tracked piece;
 
   constructor() {
     super(...arguments);
@@ -69,5 +71,10 @@ export default class LinkedDocumentLink extends Component {
   @action
   async reloadAccessLevel() {
     this.accessLevel = await this.lastPiece.belongsTo('accessLevel').reload();
+  }
+
+  @action
+  showPieceViewer() {
+    window.open(`/document/${this.lastPiece.id}`);
   }
 }

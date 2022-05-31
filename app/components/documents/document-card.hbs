@@ -143,36 +143,22 @@
           {{/if}}
         </Toolbar.Group>
         </Auk::Toolbar>
-        <div class="auk-o-flex">
-          <div
-            class="auk-o-flex auk-o-flex--vertical vlc-u-box-model-maximize-width"
-          >
-            <div class="vlc-document-card-content__meta auk-u-mt-2">
-              {{! no piece.created in legacy data }}
-              {{! TODO: when created date is absent, the layout seems irregular
-                    this will be addressed with new document card styling }}
-              <div>
-                {{#if this.piece.created}}
-                  {{t "uploaded-at"}}
-                  {{moment-format this.piece.created}}
-                  {{t "at"}}
-                  {{moment-format this.piece.created "HH:mm"}}
-                  {{#if (eq this.piece.file.extension "docx")}}
-                    als <a href="#!">Word document</a>
-                  {{/if}}
-                {{/if}}
-              </div>
-              {{#if this.piece.accessLevelLastModified}}
-                <div>
-                  {{t "access-level-last-modified"}}
-                  {{moment-format this.piece.accessLevelLastModified}}
-                  {{t "at"}}
-                  {{moment-format this.piece.accessLevelLastModified "HH:mm"}}
-                </div>
-              {{/if}}
-            </div>
+        {{#if this.piece.created}}
+        {{#if (eq this.piece.file.extension "docx")}}
+        <div class="vlc-document-card-content__meta auk-u-mt-2">
+          {{! no piece.created in legacy data }}
+          {{! TODO: when created date is absent, the layout seems irregular
+                this will be addressed with new document card styling }}
+          <div>
+            {{t "uploaded-at"}}
+            {{moment-format this.piece.created}}
+            {{t "at"}}
+            {{moment-format this.piece.created "HH:mm"}}
+            als <a href="#!">Word document</a>
           </div>
         </div>
+        {{/if}}
+        {{/if}}
       </div>
     </div>
     {{#if (await this.showPieces)}}
