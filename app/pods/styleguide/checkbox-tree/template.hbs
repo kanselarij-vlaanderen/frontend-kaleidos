@@ -8,7 +8,7 @@
   <Auk::CheckboxTree
     @label="Label"
     @items={{this.sampleItems}}
-    @onTreeUpdate={{this.stateChange}}
+    @didUpdate={{this.stateChange}}
   />
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
@@ -44,7 +44,7 @@
       <td>Determines what items are checked by default. Ids must match those of the items.</td>
     </tr>
     <tr>
-      <td><code>@onTreeUpdate</code></td>
+      <td><code>@didUpdate</code></td>
       <td>function</td>
       <td class="auk-table__col--3"></td>
       <td>Callback function. Returns the checked items as ids.</td>

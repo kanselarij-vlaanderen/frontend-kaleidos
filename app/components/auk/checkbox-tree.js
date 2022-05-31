@@ -28,8 +28,8 @@ export default class CheckboxTree extends Component {
       this.selectedItems = new TrackedArray(this.args.items);
     }
 
-    if (isPresent(this.args.onTreeUpdate)) {
-      this.args.onTreeUpdate(this.selectedItems);
+    if (isPresent(this.args.didUpdate)) {
+      this.args.didUpdate(this.selectedItems);
     }
   }
 
@@ -43,8 +43,8 @@ export default class CheckboxTree extends Component {
       this.selectedItems.splice(this.selectedItems.indexOf(item), 1);
     }
 
-    if (isPresent(this.args.onTreeUpdate)) {
-      this.args.onTreeUpdate(this.selectedItems);
+    if (isPresent(this.args.didUpdate)) {
+      this.args.didUpdate(this.selectedItems);
     }
   }
 }
