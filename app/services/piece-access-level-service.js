@@ -33,9 +33,9 @@ export default class PieceAccessLevelService extends Service {
  * pieces encountered also won't need changing.
  */
   async updatePreviousAccessLevels(piece) {
-    const internSecretarie = await this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE);
-    const ministerraad = await this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.MINISTERRAAD);
-    const internRegering = await this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
+    const internSecretarie = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE);
+    const ministerraad = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.MINISTERRAAD);
+    const internRegering = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
 
     const accessLevel = await piece.accessLevel;
 
@@ -73,7 +73,7 @@ export default class PieceAccessLevelService extends Service {
    * "Ministerraad" access level.
    */
   async updateDecisionsAccessLevelOfSubcase(subcase) {
-    const ministerraad = await this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.MINISTERRAAD);
+    const ministerraad = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.MINISTERRAAD);
     const pieces = await this.store.query('piece', {
       'filter[agenda-item-treatment][subcase][:id:]': subcase.id,
       include: 'access-level',
