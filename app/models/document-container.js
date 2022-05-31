@@ -57,17 +57,4 @@ export default Model.extend({
       });
     }
   ),
-
-  reverseSortedPieces: computed('pieces.[]', function() {
-    return PromiseArray.create({
-      promise: this.get('pieces').then((pieces) => pieces.sortBy('created').reverse()),
-    });
-  }),
-
-  checkAdded: computed('uri', 'addedPieces.[]', function() {
-    if (this.addedPieces) {
-      return this.addedPieces.includes(this.get('uri'));
-    }
-    return null;
-  }),
 });
