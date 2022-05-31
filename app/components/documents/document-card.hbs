@@ -287,6 +287,27 @@
       </c.content>
       {{/if}}
     </AuCard>
+    {{else}}
+    <AuCard
+      @flex={{true}}
+      @size="small"
+      class="au-u-margin-top-small"
+      as |c|
+    >
+      <c.header
+        @badgeIcon="word"
+      >
+        <p data-test-document-card-type class="vlc-subline au-u-medium au-u-muted">
+          DOCX
+        </p>
+        <div class="au-u-flex au-u-flex--spaced-small">
+          <AuHeading @skin="5" @level="3">Bronbestand opladen</AuHeading>
+        </div>
+      </c.header>
+      <c.content>
+        <Auk::FileUploader />
+      </c.content>
+    </AuCard>
     {{/if}}
   </Auk::Modal::Body>
   <WebComponents::VlModalFooter
