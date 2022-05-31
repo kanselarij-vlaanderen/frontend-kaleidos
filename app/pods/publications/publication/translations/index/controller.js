@@ -74,7 +74,6 @@ export default class PublicationsPublicationTranslationsIndexController extends 
   @task
   *deleteReceivedPiece(translationReceivedEvent, piece) {
     yield this.performDeleteReceivedPiece(translationReceivedEvent, piece);
-    this.send('refresh');
   }
 
   async performDeleteReceivedPiece(translationReceivedEvent, piece) {
