@@ -5,36 +5,20 @@
   <div class="auk-o-grid-col-2">
     <div class="auk-box">
       <div class="auk-u-mb-2">
-        <Auk::CheckboxList
-          @checkable={{true}}
+        <Auk::CheckboxTree
           @label={{t "regulation-type"}}
-          @checked={{this.isSelectedAllRegulationTypes}}
-          @onToggle={{this.toggleIsSelectedAllRegulationTypes}}
-        >
-          {{#each this.regulationTypes as |regulationType|}}
-            <Auk::Checkbox
-              @checked={{includes regulationType.id this.regulationTypeIds}}
-              @label={{regulationType.label}}
-              {{on "input" (fn this.toggleRegulationType regulationType)}}
-            />
-          {{/each}}
-        </Auk::CheckboxList>
+          @items={{this.regulationTypes}}
+          @selectedItems={{this.selectedRegulationTypes}}
+          @didUpdate={{this.updateSelectedRegulationTypes}}
+        />
       </div>
 
-      <Auk::CheckboxList
-        @checkable={{true}}
+      <Auk::CheckboxTree
         @label={{t "status"}}
-        @checked={{this.isSelectedAllStatuses}}
-        @onToggle={{this.toggleIsSelectedAllStatuses}}
-      >
-        {{#each this.publicationStatuses as |publicationStatus|}}
-          <Auk::Checkbox
-            @checked={{includes publicationStatus.id this.publicationStatusIds}}
-            @label={{publicationStatus.label}}
-            {{on "input" (fn this.togglePublicationStatus publicationStatus)}}
-          />
-        {{/each}}
-      </Auk::CheckboxList>
+        @items={{this.publicationStatuses}}
+        @selectedItems={{this.selectedPublicationStatuses}}
+        @didUpdate={{this.updateSelectedPublicationStatuses}}
+      />
     </div>
   </div>
   <div class="auk-o-grid-col-10">
