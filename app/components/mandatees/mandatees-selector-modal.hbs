@@ -6,9 +6,9 @@
       @reserveSpace={{true}}
     >
       <Auk::Label>{{t "minister"}}</Auk::Label>
-      <Utils::MandateeSelector
-        @chooseMandatee={{fn (mut this.selectedMandatee)}}
-        @singleSelect={{true}}
+      <Mandatees::MandateeSelector
+        @referenceDate={{@referenceDate}}
+        @onSelectMandatee={{fn (mut this.selectedMandatee)}}
         @selectedMandatees={{this.selectedMandatee}}
       />
     </Utils::LoadableContent>

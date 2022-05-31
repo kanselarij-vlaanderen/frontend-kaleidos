@@ -64,7 +64,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *loadCodelists() {
     this.defaultAccessLevel = yield this.store.findRecordByUri(
-      'access-level',
+      'concept',
       CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
   }

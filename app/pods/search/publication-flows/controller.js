@@ -31,8 +31,6 @@ export default class PublicationFlowSearchController extends Controller {
   @tracked sort;
   @tracked regulationTypeIds = [];
   @tracked publicationStatusIds = [];
-  @tracked isSelectedAllRegulationTypes = false;
-  @tracked isSelectedAllStatuses = false;
 
   constructor() {
     super(...arguments);
@@ -41,12 +39,12 @@ export default class PublicationFlowSearchController extends Controller {
     this.sort = '-opening-date';
   }
 
-  get allRegulationTypeIds() {
-    return this.regulationTypes.map((type) => type.id);
+  get selectedRegulationTypes() {
+    return this.regulationTypeIds.map((typeId) => this.regulationTypes.find(type => type.id === typeId));
   }
 
-  get allPublicationStatusIds() {
-    return this.publicationStatuses.map((status) => status.id);
+  get selectedPublicationStatuses() {
+    return this.publicationStatusIds.map((statusId) => this.publicationStatuses.find(status => status.id === statusId));
   }
 
   @action
@@ -55,57 +53,13 @@ export default class PublicationFlowSearchController extends Controller {
   }
 
   @action
-  toggleIsSelectedAllRegulationTypes() {
-    this.isSelectedAllRegulationTypes = !this.isSelectedAllRegulationTypes;
-
-    if (this.isSelectedAllRegulationTypes) {
-      this.regulationTypeIds = this.allRegulationTypeIds;
-    } else {
-      this.regulationTypeIds = [];
-    }
+  updateSelectedRegulationTypes(regulationTypes) {
+    this.regulationTypeIds = regulationTypes.map(rt => rt.id);
   }
 
   @action
-  toggleRegulationType(regulationType, event) {
-    const checked = event.target.checked;
-    if (checked) {
-      this.regulationTypeIds.push(regulationType.id);
-    } else {
-      this.regulationTypeIds.splice(this.regulationTypeIds.indexOf(regulationType.id), 1);
-    }
-    // At the time of writing, ember query-paramters of the type "array" don't
-    // have support for TrackedArray, thus, when assuming we keep the automatic `refreshModel: true`
-    // approach, reassigning the array in order to trigger a refresh seems like the way to go.
-    this.regulationTypeIds = this.regulationTypeIds; // eslint-disable-line no-self-assign
-
-    this.isSelectedAllRegulationTypes =
-      this.regulationTypeIds.length == this.allRegulationTypeIds.length;
-  }
-
-  @action
-  toggleIsSelectedAllStatuses() {
-    this.isSelectedAllStatuses = !this.isSelectedAllStatuses;
-
-    if (this.isSelectedAllStatuses) {
-      this.publicationStatusIds = this.allPublicationStatusIds;
-    } else {
-      this.publicationStatusIds = [];
-    }
-  }
-
-  @action
-  togglePublicationStatus(publicationStatus, event) {
-    const checked = event.target.checked;
-    if (checked) {
-      this.publicationStatusIds.push(publicationStatus.id);
-    } else {
-      this.publicationStatusIds.splice(this.publicationStatusIds.indexOf(publicationStatus.id), 1);
-    }
-    // reassign array in order to trigger model refresh
-    this.publicationStatusIds = this.publicationStatusIds; // eslint-disable-line no-self-assign
-
-    this.isSelectedAllStatuses =
-      this.publicationStatusIds.length == this.allPublicationStatusIds.length;
+  updateSelectedPublicationStatuses(publicationStatuses) {
+    this.publicationStatusIds = publicationStatuses.map(ps => ps.id);
   }
 
   @action
