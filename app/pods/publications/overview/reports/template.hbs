@@ -8,7 +8,7 @@
       </Auk::Panel::Header>
       {{#each this.model as |reportTypeEntry|}}
         <Publications::Overview::Reports::ReportsPanelEntry
-          @title={{t reportTypeEntry.config.translationKey}}
+          @title={{reportTypeEntry.model.label}}
           @lastJob={{reportTypeEntry.lastJob}}
           @userInputFields={{reportTypeEntry.config.userInputFields}}
           @onGenerateReport={{fn this.generateReport reportTypeEntry}}
