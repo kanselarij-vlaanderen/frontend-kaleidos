@@ -32,13 +32,13 @@ export default class MandateesService extends Service {
   *fetchGovernmentBody(referenceDate) {
     const closedRange = this.store.queryOne('government-body', {
       'filter[is-timespecialization-of][:has:is-timespecialization-of]': 'yes',
-      'filter[start][:lte:time]': referenceDate.toISOString(),
-      'filter[end][:gt:time]': referenceDate.toISOString()
+      'filter[generation][:lte:time]': referenceDate.toISOString(),
+      'filter[invalidation][:gt:time]': referenceDate.toISOString()
     });
     const openRange = this.store.queryOne('government-body', {
       'filter[is-timespecialization-of][:has:is-timespecialization-of]': 'yes',
-      'filter[start][:lte:time]': referenceDate.toISOString(),
-      'filter[:has-no:end]': 'yes'
+      'filter[generation][:lte:time]': referenceDate.toISOString(),
+      'filter[:has-no:invalidation]': 'yes'
     });
     const [closedBody, openBody] = yield Promise.all([closedRange, openRange]);
     const existingBody = closedBody || openBody;
