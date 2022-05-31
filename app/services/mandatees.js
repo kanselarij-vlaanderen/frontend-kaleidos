@@ -53,6 +53,7 @@ export default class MandateesService extends Service {
 
   @task
   *fetchMandateesForGovernmentBody(governmentBody, referenceDate=null) {
+    yield this.loadVisibleRoles.last; // Make sure visible roles are loaded
     // If no referenceDate is specified, all mandatees within the given governmentBody.
     // Can be multiple versions (see documentation on https://themis-test.vlaanderen.be/docs/catalogs#ministers ,
     // 2.2.4 mandatarissen)
