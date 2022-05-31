@@ -46,23 +46,25 @@ export default class SubcaseDescriptionView extends Component {
       });
 
 
-      const approvedDecisionResultCode = yield this.store.findRecordByUri(
-        'decision-result-code',
-        CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
-      );
-      const acknowledgedDecisionResultCode = yield this.store.findRecordByUri(
-        'decision-result-code',
-        CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
-      );
-      this.approved = !!(yield this.store.queryOne('agenda-item-treatment', {
-        'filter[subcase][id]': this.args.subcase.id,
-        'filter[decision-result-code][:id:]': [
-          approvedDecisionResultCode.id,
-          acknowledgedDecisionResultCode.id,
-        ].join(','),
-      }));
-    } else {
-      this.approved = false;
+      if (this.latestMeeting.isFinal) {
+        const approvedDecisionResultCode = yield this.store.findRecordByUri(
+          'decision-result-code',
+          CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
+        );
+        const acknowledgedDecisionResultCode = yield this.store.findRecordByUri(
+          'decision-result-code',
+          CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
+        );
+        this.approved = !!(yield this.store.queryOne('agenda-item-treatment', {
+          'filter[subcase][id]': this.args.subcase.id,
+          'filter[decision-result-code][:id:]': [
+            approvedDecisionResultCode.id,
+            acknowledgedDecisionResultCode.id,
+          ].join(','),
+        }));
+      } else {
+        this.approved = false;
+      }
     }
   }
 }
