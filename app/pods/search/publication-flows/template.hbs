@@ -8,16 +8,16 @@
         <Auk::CheckboxTree
           @label={{t "regulation-type"}}
           @items={{this.regulationTypes}}
-          @selectedItems={{this.regulationTypeIds}}
-          @onTreeUpdate={{this.updateRegulationTypeIds}}
+          @selectedItems={{this.selectedRegulationTypes}}
+          @onTreeUpdate={{this.updateSelectedRegulationTypes}}
         />
       </div>
 
       <Auk::CheckboxTree
         @label={{t "status"}}
         @items={{this.publicationStatuses}}
-        @selectedItems={{this.publicationStatusIds}}
-        @onTreeUpdate={{this.updatePublicationStatus}}
+        @selectedItems={{this.selectedPublicationStatuses}}
+        @onTreeUpdate={{this.updateSelectedPublicationStatuses}}
       />
     </div>
   </div>

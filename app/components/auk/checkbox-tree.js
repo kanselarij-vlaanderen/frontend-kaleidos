@@ -5,35 +5,31 @@ import { isPresent } from '@ember/utils';
 import { TrackedArray } from 'tracked-built-ins';
 
 export default class CheckboxTree extends Component {
-  @tracked itemIds; // still needed despite TrackedArray in case a new TrackedArray gets assigned
+  @tracked selectedItems; // still needed despite TrackedArray in case a new TrackedArray gets assigned
 
   constructor() {
     super(...arguments);
-    this.itemIds = new TrackedArray(this.args.selectedItems || []);
-  }
-
-  get allItemIds() {
-    return this.args.items.map((item) => item.id);
+    this.selectedItems = new TrackedArray(this.args.selectedItems || []);
   }
 
   get isSelectedAllItems() {
-    return this.allItemIds.every((id) => this.itemIds.indexOf(id) >= 0);
+    return this.args.items.every((item) => this.selectedItems.indexOf(item) >= 0);
   }
 
   get isSelectedSomeItems() {
-    return this.allItemIds.some((id) => this.itemIds.indexOf(id) >= 0);
+    return this.args.items.some((item) => this.selectedItems.indexOf(item) >= 0);
   }
 
   @action
   toggleTree() {
     if (this.isSelectedAllItems) {
-      this.itemIds = new TrackedArray([]);
+      this.selectedItems = new TrackedArray([]);
     } else {
-      this.itemIds = new TrackedArray(this.allItemIds);
+      this.selectedItems = new TrackedArray(this.args.items);
     }
 
     if (isPresent(this.args.onTreeUpdate)) {
-      this.args.onTreeUpdate(this.itemIds);
+      this.args.onTreeUpdate(this.selectedItems);
     }
   }
 
@@ -42,13 +38,13 @@ export default class CheckboxTree extends Component {
     const checked = event.target.checked;
 
     if (checked) {
-      this.itemIds.push(item.id);
+      this.selectedItems.push(item);
     } else {
-      this.itemIds.splice(this.itemIds.indexOf(item.id), 1);
+      this.selectedItems.splice(this.selectedItems.indexOf(item), 1);
     }
 
     if (isPresent(this.args.onTreeUpdate)) {
-      this.args.onTreeUpdate(this.itemIds);
+      this.args.onTreeUpdate(this.selectedItems);
     }
   }
 }

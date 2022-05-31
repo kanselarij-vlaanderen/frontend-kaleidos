@@ -39,19 +39,27 @@ export default class PublicationFlowSearchController extends Controller {
     this.sort = '-opening-date';
   }
 
+  get selectedRegulationTypes() {
+    return this.regulationTypeIds.map((typeId) => this.regulationTypes.find(type => type.id === typeId));
+  }
+
+  get selectedPublicationStatuses() {
+    return this.publicationStatusIds.map((statusId) => this.publicationStatuses.find(status => status.id === statusId));
+  }
+
   @action
   selectSize(size) {
     this.size = size;
   }
 
   @action
-  updateRegulationTypeIds(regulationTypeIds) {
-    this.regulationTypeIds = regulationTypeIds;
+  updateSelectedRegulationTypes(regulationTypes) {
+    this.regulationTypeIds = regulationTypes.map(rt => rt.id);
   }
 
   @action
-  updatePublicationStatus(publicationStatusIds) {
-    this.publicationStatusIds = publicationStatusIds;
+  updateSelectedPublicationStatuses(publicationStatuses) {
+    this.publicationStatusIds = publicationStatuses.map(ps => ps.id);
   }
 
   @action

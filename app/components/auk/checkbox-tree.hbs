@@ -11,7 +11,7 @@
     {{#each @items as |item|}}
       <Auk::Checkbox
         @label={{item.label}}
-        @checked={{includes item.id this.itemIds}}
+        @checked={{includes item this.selectedItems}}
         @disabled={{@disabled}}
         {{on "input" (fn this.toggleItem item)}}
       />
