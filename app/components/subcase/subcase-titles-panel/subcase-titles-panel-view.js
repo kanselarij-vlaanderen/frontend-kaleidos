@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -9,6 +10,8 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
  * @argument onClickEdit
  */
 export default class SubcaseTitlesPanelView extends Component {
+  @service store;
+
   @tracked approved;
 
   constructor() {
