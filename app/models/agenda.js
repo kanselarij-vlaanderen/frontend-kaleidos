@@ -62,7 +62,6 @@ export default Model.extend(LoadableModel, {
   }),
 
   // TODO this computed property is used in:
-  // - agenda#allAgendaitemsNotOkLength
   // - Agenda::AgendaHeader::AgendaActions
   // - Agenda::AgendaHeader::AgendaVersionActions
   // Refactor these uses and remove this computed property
@@ -71,14 +70,6 @@ export default Model.extend(LoadableModel, {
       const allAgendaitemsNotOk = agendaitems.filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.get('formallyOk')));
       return allAgendaitemsNotOk.sortBy('number');
     });
-  }),
-
-  // TODO this computed property is used in:
-  // - Agenda::AgendaHeader::AgendaActions
-  // Refactor this use and remove this computed property
-  allAgendaitemsNotOkLength: computed('allAgendaitemsNotOk', async function() {
-    const agendaitemsToCount = await this.get('allAgendaitemsNotOk');
-    return agendaitemsToCount.length;
   }),
 
   // TODO this computed property is used in:

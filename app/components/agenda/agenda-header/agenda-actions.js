@@ -79,6 +79,11 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     return this.latestPublicationActivity != null;
   }
 
+  async allAgendaitemsNotOkLength(agenda) {
+    const agendaitemsToCount = await agenda.allAgendaitemsNotOk;
+    return agendaitemsToCount.length;
+  }
+
   @task
   *loadLatestPublicationActivity() {
     this.latestPublicationActivity = yield this.store.queryOne(
