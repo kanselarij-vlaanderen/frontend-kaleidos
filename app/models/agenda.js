@@ -62,16 +62,6 @@ export default Model.extend(LoadableModel, {
   }),
 
   // TODO this computed property is used in:
-  // - Agenda::AgendaHeader::AgendaVersionActions
-  // Refactor this use and remove this computed property
-  canBeApproved: computed('agendaitems.@each.formallyOk', function() {
-    return this.get('agendaitems').then((agendaitems) => {
-      const approvedAgendaitems = agendaitems.filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.OK].includes(agendaitem.get('formallyOk')));
-      return approvedAgendaitems.get('length') === agendaitems.get('length');
-    });
-  }),
-
-  // TODO this computed property is used in:
   // - agenda#allAgendaitemsNotOkLength
   // - Agenda::AgendaHeader::AgendaActions
   // - Agenda::AgendaHeader::AgendaVersionActions

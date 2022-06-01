@@ -77,7 +77,7 @@
 {{! new agenda actions with single pop-up for confirmation }}
 
 {{#if this.showConfirmForApprovingAgenda}}
-  <Auk::Modal @size={{if (await @currentAgenda.canBeApproved) "small" "large"}}>
+  <Auk::Modal @size={{if (await (this.canBeApproved @currentAgenda)) "small" "large"}}>
     <Auk::Modal::Header
       @title={{t "approve-design-agenda" serialnumber=@currentAgenda.serialnumber}}
       @onClose={{this.cancelApproveAgenda}}
@@ -87,7 +87,7 @@
         @isLoading={{this.reloadAgendaitemsData.isRunning}}
         @reserveSpace={{true}}
       >
-        {{#if (await @currentAgenda.canBeApproved)}}
+        {{#if (await (this.canBeApproved @currentAgenda))}}
           {{t "approve-agenda-confirmation"}}
         {{else}}
           <Auk::Alert
@@ -129,7 +129,7 @@
       <Auk::Button
         data-test-agenda-actions-approve-agenda-confirm
         @skin={{if
-          (await @currentAgenda.canBeApproved)
+          (await (this.canBeApproved @currentAgenda))
           "primary"
           "danger-primary"
         }}
@@ -143,7 +143,7 @@
 {{/if}}
 
 {{#if this.showConfirmForApprovingAgendaAndClosingMeeting}}
-  <Auk::Modal @size={{if (await @currentAgenda.canBeApproved) "small" "large"}}>
+  <Auk::Modal @size={{if (await (this.canBeApproved @currentAgenda)) "small" "large"}}>
     <Auk::Modal::Header
       @title={{t
         "approve-agenda-and-close"
@@ -156,7 +156,7 @@
         @isLoading={{this.reloadAgendaitemsData.isRunning}}
         @reserveSpace={{true}}
       >
-        {{#if (await @currentAgenda.canBeApproved)}}
+        {{#if (await (this.canBeApproved @currentAgenda))}}
           {{t "approve-agenda-close-meeting-confirmation"}}
         {{else}}
           <Auk::Alert
@@ -198,7 +198,7 @@
       <Auk::Button
         data-test-agenda-actions-approve-and-close-agenda-confirm
         @skin={{if
-          (await @currentAgenda.canBeApproved)
+          (await (this.canBeApproved @currentAgenda))
           "primary"
           "danger-primary"
         }}
