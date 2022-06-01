@@ -32,6 +32,7 @@
 />
 {{#if this.model.showAsRemark}}
   <Mandatees::MandateesPanel
+    @referenceDate={{this.meeting.plannedStart}}
     @mandatees={{this.mandatees}}
     @submitter={{this.submitter}}
     @allowEditing={{this.currentSession.isEditor}}
@@ -39,6 +40,7 @@
   />
 {{else if this.subcase}}
   <Mandatees::MandateesPanel
+    @referenceDate={{this.meeting.plannedStart}}
     @mandatees={{this.mandatees}}
     @submitter={{this.submitter}}
     @allowEditing={{this.currentSession.isEditor}}

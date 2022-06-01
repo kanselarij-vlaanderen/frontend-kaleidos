@@ -6,6 +6,7 @@ import { task } from 'ember-concurrency';
  * @callback {() => Promise} onClose
  * @callback {(mandatee: Mandatee) => Promise} onLink
  * @dependsOn {Mandatee[]} mandatees ('mandatee,mandatee.person')
+ * @argument {Date} referenceDate: Date to get active Mandatees for
  */
 export default class MandateesMandateesSelectorModalComponent extends Component {
   @tracked selectedMandatee;

@@ -119,8 +119,8 @@ export default class PublicationFlowSearchRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
 
-    controller.publicationStatuses = this.publicationStatuses;
-    controller.regulationTypes = this.regulationTypes;
+    controller.publicationStatuses = this.publicationStatuses.toArray();
+    controller.regulationTypes = this.regulationTypes.toArray();
 
     if (controller.page !== this.lastParams.committed.page) {
       controller.page = this.lastParams.committed.page;
