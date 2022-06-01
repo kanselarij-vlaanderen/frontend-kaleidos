@@ -5,7 +5,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 // LoadableModel is still depended upon here and there. Should refactor out in the more general direction the codebase handles these load operations.
 // eslint-disable-next-line ember/no-mixins
 import LoadableModel from 'ember-data-storefront/mixins/loadable-model';
-import { A } from '@ember/array';
 
 // TODO: octane-refactor
 /* eslint-disable ember/no-get */
@@ -71,20 +70,4 @@ export default Model.extend(LoadableModel, {
       return allAgendaitemsNotOk.sortBy('number');
     });
   }),
-
-  // TODO this computed property is used in:
-  // - Agenda::AgendaHeader::AgendaActions
-  // Refactor this use and remove this computed property
-  approvedAgendaitemsNotOk: computed('allAgendaitemsNotOk', async function() {
-    const agendaitemsToFilter = await this.get('allAgendaitemsNotOk');
-    const approvedAgendaitems = A([]);
-    for (const agendaitem of agendaitemsToFilter) {
-      const previousVersion = await agendaitem.get('previousVersion');
-      if (previousVersion) {
-        approvedAgendaitems.pushObject(agendaitem);
-      }
-    }
-    return approvedAgendaitems;
-  }),
-
 });

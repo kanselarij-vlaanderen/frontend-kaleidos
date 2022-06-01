@@ -121,6 +121,18 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     return newAgendaitems;
   }
 
+  async approvedAgendaitemsNotOk(agenda) {
+    const agendaitemsToFilter = await agenda.allAgendaitemsNotOk;
+    const approvedAgendaitems = A([]);
+    for (const agendaitem of agendaitemsToFilter) {
+      const previousVersion = await agendaitem.previousVersion;
+      if (previousVersion) {
+        approvedAgendaitems.pushObject(agendaitem);
+      }
+    }
+    return approvedAgendaitems;
+  }
+
   /**
    * This task will reload the agendaitems of the current agenda
    * Any new agendaitem or changed formality is picked up by this, to avoid stale data created by concurrent edits of agendaitem

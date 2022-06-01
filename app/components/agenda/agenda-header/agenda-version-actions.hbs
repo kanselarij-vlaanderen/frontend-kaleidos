@@ -95,7 +95,7 @@
             @message={{t "approve-agenda-not-ok-message"}}
           />
           <div>{{t "approve-agenda-confirmation"}}</div>
-          {{#if (await @currentAgenda.approvedAgendaitemsNotOk)}}
+          {{#if (await (this.approvedAgendaitemsNotOk @currentAgenda))}}
             <br />
             <div
               data-test-agenda-actions-approve-agenda-rollback-message
@@ -104,7 +104,7 @@
               {{t "rollback-agendaitem-on-approving-agenda"}}
             </div>
             <Agenda::AgendaHeader::AgendaActionPopupAgendaitems
-              @agendaitems={{await @currentAgenda.approvedAgendaitemsNotOk}}
+              @agendaitems={{await (this.approvedAgendaitemsNotOk @currentAgenda)}}
             />
           {{/if}}
           {{#if (await (this.newAgendaitemsNotOk @currentAgenda))}}
@@ -164,7 +164,7 @@
             @message={{t "approve-agenda-close-meeting-not-ok-message"}}
           />
           <div>{{t "approve-agenda-close-meeting-confirmation"}}</div>
-          {{#if (await @currentAgenda.approvedAgendaitemsNotOk)}}
+          {{#if (await (this.approvedAgendaitemsNotOk @currentAgenda))}}
             <br />
             <div
               data-test-agenda-actions-approve-and-close-agenda-rollback-message
@@ -173,7 +173,7 @@
               {{t "rollback-agendaitem-on-approving-agenda-close-meeting"}}
             </div>
             <Agenda::AgendaHeader::AgendaActionPopupAgendaitems
-              @agendaitems={{await @currentAgenda.approvedAgendaitemsNotOk}}
+              @agendaitems={{await (this.approvedAgendaitemsNotOk @currentAgenda)}}
             />
           {{/if}}
           {{#if (await (this.newAgendaitemsNotOk @currentAgenda))}}
