@@ -25,6 +25,11 @@
         @allowEditing={{this.currentSession.isEditor}}
       />
       <Mandatees::MandateesPanel
+        @referenceDate={{if
+          this.meeting
+          this.meeting.plannedStart
+          this.model.subcase.created
+        }}
         @mandatees={{this.mandatees}}
         @submitter={{this.submitter}}
         @emptyStateMessage={{if this.showMandateesNotApplicableMessage (t "not-applicable")}}
