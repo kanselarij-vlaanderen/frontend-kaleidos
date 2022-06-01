@@ -110,9 +110,13 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   }
 
   async newAgendaitemsNotOk(agenda) {
-    const agendaitemsToFilter = await agenda.allAgendaitemsNotOk;
+    const agendaitems = await agenda.agendaitems;
+    const allAgendaitemsNotOk = agendaitems
+          .filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.get('formallyOk')))
+          .sortBy('number');
+
     const newAgendaitems = A([]);
-    for (const agendaitem of agendaitemsToFilter) {
+    for (const agendaitem of allAgendaitemsNotOk) {
       const previousVersion = await agendaitem.previousVersion;
       if (!previousVersion) {
         newAgendaitems.pushObject(agendaitem);
@@ -122,9 +126,13 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   }
 
   async approvedAgendaitemsNotOk(agenda) {
-    const agendaitemsToFilter = await agenda.allAgendaitemsNotOk;
+    const agendaitems = await agenda.agendaitems;
+    const allAgendaitemsNotOk = agendaitems
+          .filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.get('formallyOk')))
+          .sortBy('number');
+
     const approvedAgendaitems = A([]);
-    for (const agendaitem of agendaitemsToFilter) {
+    for (const agendaitem of allAgendaitemsNotOk) {
       const previousVersion = await agendaitem.previousVersion;
       if (previousVersion) {
         approvedAgendaitems.pushObject(agendaitem);

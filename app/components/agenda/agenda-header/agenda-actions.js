@@ -11,6 +11,7 @@ import {
   fetchArchivingJobForAgenda,
   fileDownloadUrlFromJob,
 } from 'frontend-kaleidos/utils/zip-agenda-files';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /**
  * @argument {Meeting} meeting
@@ -79,9 +80,11 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     return this.latestPublicationActivity != null;
   }
 
-  async allAgendaitemsNotOkLength(agenda) {
-    const agendaitemsToCount = await agenda.allAgendaitemsNotOk;
-    return agendaitemsToCount.length;
+  async allAgendaitemsNotOk(agenda) {
+    const agendaitems = await agenda.agendaitems;
+    return agendaitems
+          .filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.get('formallyOk')))
+          .sortBy('number');
   }
 
   @task
@@ -111,9 +114,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     // When reloading the data for this use-case, only the agendaitems that are not "formally ok" have to be fully reloaded
     // If not reloaded, any following PATCH call on these agendaitems will succeed (due to the hasMany reload above) but with old relation data
     // *NOTE* since we only load the "nok/not yet ok" items, it is still possible to save old relations on formally ok items (although most changes should reset the formality)
-    const agendaitemsNotOk = yield this.args.currentAgenda.get(
-      'allAgendaitemsNotOk'
-    );
+    const agendaitemsNotOk = yield this.allAgendaitemsNotOk(this.args.currentAgenda);
     for (const agendaitem of agendaitemsNotOk) {
       // Reloading some relationships of agendaitem most likely to be changed by concurrency
       yield agendaitem.reload();
@@ -247,9 +248,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   async approveAllAgendaitems() {
     this.showConfirmApprovingAllAgendaitems = false;
     this.args.onStartLoading(this.intl.t('approve-all-agendaitems-message'));
-    const allAgendaitemsNotOk = await this.args.currentAgenda.get(
-      'allAgendaitemsNotOk'
-    );
+    const allAgendaitemsNotOk = await this.allAgendaitemsNotOk(this.args.currentAgenda);
     for (const agendaitem of allAgendaitemsNotOk) {
       try {
         await setAgendaitemFormallyOk(agendaitem);

@@ -1,7 +1,6 @@
 import Model, { hasMany, belongsTo, attr } from '@ember-data/model';
 import { computed } from '@ember/object';
 import { reads } from '@ember/object/computed';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 // LoadableModel is still depended upon here and there. Should refactor out in the more general direction the codebase handles these load operations.
 // eslint-disable-next-line ember/no-mixins
 import LoadableModel from 'ember-data-storefront/mixins/loadable-model';
@@ -58,16 +57,5 @@ export default Model.extend(LoadableModel, {
       prefix = 'Agenda';
     }
     return `${prefix} ${agendaName}`;
-  }),
-
-  // TODO this computed property is used in:
-  // - Agenda::AgendaHeader::AgendaActions
-  // - Agenda::AgendaHeader::AgendaVersionActions
-  // Refactor these uses and remove this computed property
-  allAgendaitemsNotOk: computed('agendaitems.@each.formallyOk', function() {
-    return this.get('agendaitems').then((agendaitems) => {
-      const allAgendaitemsNotOk = agendaitems.filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.get('formallyOk')));
-      return allAgendaitemsNotOk.sortBy('number');
-    });
   }),
 });
