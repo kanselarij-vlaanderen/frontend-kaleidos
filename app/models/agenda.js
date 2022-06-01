@@ -42,20 +42,4 @@ export default Model.extend(LoadableModel, {
 
     return this.get('isDesignAgenda');
   },
-
-  // TODO This computed property is used in:
-  // - agenda template
-  // - agenda::AgendaHeader::AgendaVersionActions
-  // Refactor these uses and remove this computed property
-  agendaName: computed('serialnumber', 'status.isDesignAgenda', function() {
-    const isDesignAgenda = this.get('status.isDesignAgenda');
-    const agendaName = this.serialnumber || '';
-    let prefix;
-    if (isDesignAgenda) {
-      prefix = 'Ontwerpagenda';
-    } else {
-      prefix = 'Agenda';
-    }
-    return `${prefix} ${agendaName}`;
-  }),
 });
