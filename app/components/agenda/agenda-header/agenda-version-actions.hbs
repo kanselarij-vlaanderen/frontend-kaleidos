@@ -107,7 +107,7 @@
               @agendaitems={{await @currentAgenda.approvedAgendaitemsNotOk}}
             />
           {{/if}}
-          {{#if (await @currentAgenda.newAgendaitemsNotOk)}}
+          {{#if (await (this.newAgendaitemsNotOk @currentAgenda))}}
             <br />
             <div
               data-test-agenda-actions-approve-agenda-move-message
@@ -119,7 +119,7 @@
               }}
             </div>
             <Agenda::AgendaHeader::AgendaActionPopupAgendaitems
-              @agendaitems={{await @currentAgenda.newAgendaitemsNotOk}}
+              @agendaitems={{await (await (this.newAgendaitemsNotOk @currentAgenda))}}
             />
           {{/if}}
         {{/if}}
@@ -176,7 +176,7 @@
               @agendaitems={{await @currentAgenda.approvedAgendaitemsNotOk}}
             />
           {{/if}}
-          {{#if (await @currentAgenda.newAgendaitemsNotOk)}}
+          {{#if (await (this.newAgendaitemsNotOk @currentAgenda))}}
             <br />
             <div
               data-test-agenda-actions-approve-and-close-agenda-delete-message
@@ -188,7 +188,7 @@
               }}
             </div>
             <Agenda::AgendaHeader::AgendaActionPopupAgendaitems
-              @agendaitems={{await @currentAgenda.newAgendaitemsNotOk}}
+              @agendaitems={{await (this.newAgendaitemsNotOk @currentAgenda)}}
             />
           {{/if}}
         {{/if}}

@@ -82,21 +82,6 @@ export default Model.extend(LoadableModel, {
   }),
 
   // TODO this computed property is used in:
-  // - Agenda::AgendaHeader::AgendaVersionActions
-  // Refactor this use and remove this computed property
-  newAgendaitemsNotOk: computed('allAgendaitemsNotOk', async function() {
-    const agendaitemsToFilter = await this.get('allAgendaitemsNotOk');
-    const newAgendaitems = A([]);
-    for (const agendaitem of agendaitemsToFilter) {
-      const previousVersion = await agendaitem.get('previousVersion');
-      if (!previousVersion) {
-        newAgendaitems.pushObject(agendaitem);
-      }
-    }
-    return newAgendaitems;
-  }),
-
-  // TODO this computed property is used in:
   // - Agenda::AgendaHeader::AgendaActions
   // Refactor this use and remove this computed property
   approvedAgendaitemsNotOk: computed('allAgendaitemsNotOk', async function() {

@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
+import { A } from '@ember/array';
 import { all } from 'rsvp'; // TODO KAS-2399 better way then this ?
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
@@ -106,6 +107,18 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     const agendaitems = await agenda.agendaitems;
     const approvedAgendaitems = agendaitems.filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.OK].includes(agendaitem.get('formallyOk')));
     return approvedAgendaitems.length === agendaitems.length;
+  }
+
+  async newAgendaitemsNotOk(agenda) {
+    const agendaitemsToFilter = await agenda.allAgendaitemsNotOk;
+    const newAgendaitems = A([]);
+    for (const agendaitem of agendaitemsToFilter) {
+      const previousVersion = await agendaitem.previousVersion;
+      if (!previousVersion) {
+        newAgendaitems.pushObject(agendaitem);
+      }
+    }
+    return newAgendaitems;
   }
 
   /**
