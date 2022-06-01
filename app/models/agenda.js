@@ -62,12 +62,6 @@ export default Model.extend(LoadableModel, {
   }),
 
   // TODO this computed property is used in:
-  // - agenda.agendaitems.agendaitem.index template
-  // Refactor this use and remove this computed property
-  isFinal: computed.alias('status.isFinal'),
-
-
-  // TODO this computed property is used in:
   // - Agenda::AgendaHeader::AgendaVersionActions
   // Refactor this use and remove this computed property
   canBeApproved: computed('agendaitems.@each.formallyOk', function() {
