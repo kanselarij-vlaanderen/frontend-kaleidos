@@ -248,8 +248,8 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   async approveAllAgendaitems() {
     this.showConfirmApprovingAllAgendaitems = false;
     this.args.onStartLoading(this.intl.t('approve-all-agendaitems-message'));
-    const allAgendaitemsNotOk = await this.allAgendaitemsNotOk(this.args.currentAgenda);
-    for (const agendaitem of allAgendaitemsNotOk) {
+    const agendaitemsNotOk = await this.allAgendaitemsNotOk(this.args.currentAgenda);
+    for (const agendaitem of agendaitemsNotOk) {
       try {
         await setAgendaitemFormallyOk(agendaitem);
       } catch {

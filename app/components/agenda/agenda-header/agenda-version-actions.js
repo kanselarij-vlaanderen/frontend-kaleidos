@@ -109,6 +109,13 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     return approvedAgendaitems.length === agendaitems.length;
   }
 
+  async allAgendaitemsNotOk(agenda) {
+    const agendaitems = await agenda.agendaitems;
+    return agendaitems
+          .filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.get('formallyOk')))
+          .sortBy('number');
+  }
+
   async newAgendaitemsNotOk(agenda) {
     const agendaitems = await agenda.agendaitems;
     const allAgendaitemsNotOk = agendaitems
@@ -157,7 +164,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     // When reloading the data for this use-case, only the agendaitems that are not "formally ok" have to be fully reloaded
     // If not reloaded, any following PATCH call on these agendaitems will succeed (due to the hasMany reload above) but with old relation data
     // *NOTE* since we only load the "nok/not yet ok" items, it is still possible to save old relations on formally ok items (although most changes should reset the formality)
-    const agendaitemsNotOk = yield this.args.currentAgenda.allAgendaitemsNotOk;
+    const agendaitemsNotOk = yield this.allAgendaitemsNotOk(this.args.currentAgenda);
     for (const agendaitem of agendaitemsNotOk) {
       // Reloading some relationships of agendaitem most likely to be changed by concurrency
       yield agendaitem.reload();
