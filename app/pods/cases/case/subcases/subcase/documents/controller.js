@@ -150,11 +150,22 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
         const agendaActivities = await this.subcase.agendaActivities;
         const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
         if (latestActivity) {
-          await latestActivity.hasMany('agendaitems').reload(); // This fixes a case where approving an agenda did not update latestAgendaitem
-          const latestAgendaitem = await latestActivity.get('latestAgendaitem');
-          await restorePiecesFromPreviousAgendaitem(latestAgendaitem, documentContainer);
-          // TODO: make sure we're not loading stale cache
-          await latestAgendaitem.hasMany('pieces').reload();
+          const agendaitems = await latestActivity.hasMany('agendaitems').reload(); // This fixes a case where approving an agenda did not update latestAgendaitem
+          const meeting = await this.subcase.requestedForMeeting;
+          const agendas = await meeting.agendas;
+          const sortedAgendas = agendas.sortBy('serialnumber').reverse();
+          const latestAgenda = sortedAgendas.firstObject;
+          for (let index = 0; index < agendaitems.length; index++) {
+            const agendaitem = agendaitems.objectAt(index);
+            const agenda = await agendaitem.get('agenda');
+
+            if (agenda.get('id') === latestAgenda.get('id')) {
+              await restorePiecesFromPreviousAgendaitem(agendaitem, documentContainer);
+              // TODO: make sure we're not loading stale cache
+              await agendaitem.hasMany('pieces').reload();
+              break;
+            }
+          }
         }
       }
       this.send('reloadModel');

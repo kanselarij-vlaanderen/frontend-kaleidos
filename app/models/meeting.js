@@ -1,5 +1,5 @@
 import Model, { belongsTo, hasMany, attr } from '@ember-data/model';
-import { PromiseArray, PromiseObject } from '@ember-data/store/-private';
+import { PromiseArray } from '@ember-data/store/-private';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import { KALEIDOS_START_DATE } from 'frontend-kaleidos/config/config';
@@ -65,18 +65,6 @@ export default Model.extend({
             include: 'type,pieces,pieces.access-level,pieces.next-piece,pieces.previous-piece',
           }).then((containers) => sortDocumentContainers(this.get('pieces'), containers));
         }
-      }),
-    });
-  }),
-
-  // TODO this computed property is used in:
-  // - agenda-activity#latestAgendaitem
-  // Refactor that usage and remove this computed property
-  latestAgenda: computed('agendas.[]', function() {
-    return PromiseObject.create({
-      promise: this.get('agendas').then((agendas) => {
-        const sortedAgendas = agendas.sortBy('agendaName').reverse();
-        return sortedAgendas.get('firstObject');
       }),
     });
   }),
