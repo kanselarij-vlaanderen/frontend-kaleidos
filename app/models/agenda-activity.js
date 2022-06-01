@@ -10,6 +10,9 @@ export default Model.extend({
   agendaitems: hasMany('agendaitems'), // TODO ember-data model name should be singular?
   submissionActivities: hasMany('submission-activity'),
 
+  // TODO This computed property is used in:
+  // - cases.case.subcases.subcase.documents controller#setPreviousPiecesFromAgendaitem
+  // Refactor this usage and remove this computed property
   latestAgendaitem: computed('agendaitems.[]', 'subcase', async function() {
     const subcase = await this.get('subcase');
     const meeting = await subcase.get('requestedForMeeting');
