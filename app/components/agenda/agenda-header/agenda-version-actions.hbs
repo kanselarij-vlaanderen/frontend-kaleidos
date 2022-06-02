@@ -77,7 +77,7 @@
 {{! new agenda actions with single pop-up for confirmation }}
 
 {{#if this.showConfirmForApprovingAgenda}}
-  <Auk::Modal @size={{if (await (this.canBeApproved @currentAgenda)) "small" "large"}}>
+  <Auk::Modal @size={{if (await (this.canBeApproved)) "small" "large"}}>
     <Auk::Modal::Header
       @title={{t "approve-design-agenda" serialnumber=@currentAgenda.serialnumber}}
       @onClose={{this.cancelApproveAgenda}}
@@ -87,7 +87,7 @@
         @isLoading={{this.reloadAgendaitemsData.isRunning}}
         @reserveSpace={{true}}
       >
-        {{#if (await (this.canBeApproved @currentAgenda))}}
+        {{#if (await (this.canBeApproved))}}
           {{t "approve-agenda-confirmation"}}
         {{else}}
           <Auk::Alert
@@ -95,7 +95,7 @@
             @message={{t "approve-agenda-not-ok-message"}}
           />
           <div>{{t "approve-agenda-confirmation"}}</div>
-          {{#if (await (this.approvedAgendaitemsNotOk @currentAgenda))}}
+          {{#if (await (this.approvedAgendaitemsNotOk))}}
             <br />
             <div
               data-test-agenda-actions-approve-agenda-rollback-message
@@ -104,10 +104,10 @@
               {{t "rollback-agendaitem-on-approving-agenda"}}
             </div>
             <Agenda::AgendaHeader::AgendaActionPopupAgendaitems
-              @agendaitems={{await (this.approvedAgendaitemsNotOk @currentAgenda)}}
+              @agendaitems={{await (this.approvedAgendaitemsNotOk)}}
             />
           {{/if}}
-          {{#if (await (this.newAgendaitemsNotOk @currentAgenda))}}
+          {{#if (await (this.newAgendaitemsNotOk))}}
             <br />
             <div
               data-test-agenda-actions-approve-agenda-move-message
@@ -119,7 +119,7 @@
               }}
             </div>
             <Agenda::AgendaHeader::AgendaActionPopupAgendaitems
-              @agendaitems={{await (await (this.newAgendaitemsNotOk @currentAgenda))}}
+              @agendaitems={{await (this.newAgendaitemsNotOk)}}
             />
           {{/if}}
         {{/if}}
@@ -129,7 +129,7 @@
       <Auk::Button
         data-test-agenda-actions-approve-agenda-confirm
         @skin={{if
-          (await (this.canBeApproved @currentAgenda))
+          (await this.canBeApproved)
           "primary"
           "danger-primary"
         }}
@@ -143,7 +143,7 @@
 {{/if}}
 
 {{#if this.showConfirmForApprovingAgendaAndClosingMeeting}}
-  <Auk::Modal @size={{if (await (this.canBeApproved @currentAgenda)) "small" "large"}}>
+  <Auk::Modal @size={{if (await (this.canBeApproved)) "small" "large"}}>
     <Auk::Modal::Header
       @title={{t
         "approve-agenda-and-close"
@@ -156,7 +156,7 @@
         @isLoading={{this.reloadAgendaitemsData.isRunning}}
         @reserveSpace={{true}}
       >
-        {{#if (await (this.canBeApproved @currentAgenda))}}
+        {{#if (await (this.canBeApproved))}}
           {{t "approve-agenda-close-meeting-confirmation"}}
         {{else}}
           <Auk::Alert
@@ -164,7 +164,7 @@
             @message={{t "approve-agenda-close-meeting-not-ok-message"}}
           />
           <div>{{t "approve-agenda-close-meeting-confirmation"}}</div>
-          {{#if (await (this.approvedAgendaitemsNotOk @currentAgenda))}}
+          {{#if (await (this.approvedAgendaitemsNotOk))}}
             <br />
             <div
               data-test-agenda-actions-approve-and-close-agenda-rollback-message
@@ -173,10 +173,10 @@
               {{t "rollback-agendaitem-on-approving-agenda-close-meeting"}}
             </div>
             <Agenda::AgendaHeader::AgendaActionPopupAgendaitems
-              @agendaitems={{await (this.approvedAgendaitemsNotOk @currentAgenda)}}
+              @agendaitems={{await (this.approvedAgendaitemsNotOk)}}
             />
           {{/if}}
-          {{#if (await (this.newAgendaitemsNotOk @currentAgenda))}}
+          {{#if (await (this.newAgendaitemsNotOk))}}
             <br />
             <div
               data-test-agenda-actions-approve-and-close-agenda-delete-message
@@ -188,7 +188,7 @@
               }}
             </div>
             <Agenda::AgendaHeader::AgendaActionPopupAgendaitems
-              @agendaitems={{await (this.newAgendaitemsNotOk @currentAgenda)}}
+              @agendaitems={{await (this.newAgendaitemsNotOk)}}
             />
           {{/if}}
         {{/if}}
@@ -198,7 +198,7 @@
       <Auk::Button
         data-test-agenda-actions-approve-and-close-agenda-confirm
         @skin={{if
-          (await (this.canBeApproved @currentAgenda))
+          (await (this.canBeApproved))
           "primary"
           "danger-primary"
         }}

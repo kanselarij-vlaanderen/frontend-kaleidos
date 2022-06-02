@@ -7,6 +7,7 @@ import { A } from '@ember/array';
 import { all } from 'rsvp'; // TODO KAS-2399 better way then this ?
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import bind from 'frontend-kaleidos/utils/bind';
 
 /**
  * A component that contains most of the meeting/agenda actions that interact with a backend service.
@@ -103,24 +104,23 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     );
   }
 
-  async canBeApproved(agenda) {
-    const agendaitems = await agenda.agendaitems;
+  @bind
+  async canBeApproved() {
+    const agendaitems = await this.args.currentAgenda.agendaitems;
     const approvedAgendaitems = agendaitems.filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.OK].includes(agendaitem.get('formallyOk')));
     return approvedAgendaitems.length === agendaitems.length;
   }
 
-  async allAgendaitemsNotOk(agenda) {
-    const agendaitems = await agenda.agendaitems;
+  async allAgendaitemsNotOk() {
+    const agendaitems = await this.args.currentAgenda.agendaitems;
     return agendaitems
           .filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.get('formallyOk')))
           .sortBy('number');
   }
 
-  async newAgendaitemsNotOk(agenda) {
-    const agendaitems = await agenda.agendaitems;
-    const allAgendaitemsNotOk = agendaitems
-          .filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.get('formallyOk')))
-          .sortBy('number');
+  @bind
+  async newAgendaitemsNotOk() {
+    const allAgendaitemsNotOk = await this.allAgendaitemsNotOk();
 
     const newAgendaitems = A([]);
     for (const agendaitem of allAgendaitemsNotOk) {
@@ -132,11 +132,9 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     return newAgendaitems;
   }
 
-  async approvedAgendaitemsNotOk(agenda) {
-    const agendaitems = await agenda.agendaitems;
-    const allAgendaitemsNotOk = agendaitems
-          .filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.get('formallyOk')))
-          .sortBy('number');
+  @bind
+  async approvedAgendaitemsNotOk() {
+    const allAgendaitemsNotOk = await this.allAgendaitemsNotOk();
 
     const approvedAgendaitems = A([]);
     for (const agendaitem of allAgendaitemsNotOk) {
@@ -164,7 +162,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     // When reloading the data for this use-case, only the agendaitems that are not "formally ok" have to be fully reloaded
     // If not reloaded, any following PATCH call on these agendaitems will succeed (due to the hasMany reload above) but with old relation data
     // *NOTE* since we only load the "nok/not yet ok" items, it is still possible to save old relations on formally ok items (although most changes should reset the formality)
-    const agendaitemsNotOk = yield this.allAgendaitemsNotOk(this.args.currentAgenda);
+    const agendaitemsNotOk = yield this.allAgendaitemsNotOk();
     for (const agendaitem of agendaitemsNotOk) {
       // Reloading some relationships of agendaitem most likely to be changed by concurrency
       yield agendaitem.reload();

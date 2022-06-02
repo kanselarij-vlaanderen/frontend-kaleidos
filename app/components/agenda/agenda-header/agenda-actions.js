@@ -12,6 +12,7 @@ import {
   fileDownloadUrlFromJob,
 } from 'frontend-kaleidos/utils/zip-agenda-files';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import bind from 'frontend-kaleidos/utils/bind';
 
 /**
  * @argument {Meeting} meeting
@@ -80,8 +81,9 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     return this.latestPublicationActivity != null;
   }
 
-  async allAgendaitemsNotOk(agenda) {
-    const agendaitems = await agenda.agendaitems;
+  @bind
+  async allAgendaitemsNotOk() {
+    const agendaitems = await this.args.currentAgenda.agendaitems;
     return agendaitems
           .filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.get('formallyOk')))
           .sortBy('number');
