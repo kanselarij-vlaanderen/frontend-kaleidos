@@ -24,6 +24,10 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     return timelineActivity ? timelineActivity.activity : null;
   }
 
+  get shownActivities() {
+    return this.model.filter((row) => row.isShown)
+  }
+
   @task
   *saveTranslationUpload(translationUpload) {
     let translationActivity = this.latestTranslationActivity;
@@ -69,6 +73,22 @@ export default class PublicationsPublicationTranslationsIndexController extends 
 
     this.send('refresh');
     this.showTranslationUploadModal = false;
+  }
+
+  @task
+  *deleteReceivedPiece(translationReceivedEvent, piece) {
+    yield this.performDeleteReceivedPiece(translationReceivedEvent, piece);
+  }
+
+  async performDeleteReceivedPiece(translationReceivedEvent, piece) {
+    await this.publicationService.deletePiece(piece);
+    const translationActivity = translationReceivedEvent.activity;
+    let pieces = await translationActivity.generatedPieces;
+    pieces = pieces.toArray();
+    if (pieces.length === 0) {
+      translationActivity.endDate = null;
+      await translationActivity.save();
+    }
   }
 
   @task
