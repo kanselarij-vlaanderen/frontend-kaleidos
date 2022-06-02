@@ -31,15 +31,15 @@ export default class CompareAgendaList extends Component {
   @tracked combinedAgendaitems = [] ;
   @tracked combinedAnnouncements = [] ;
 
-  async hasChanges(agendaitem) {
+  async hasChanges(agendaitem, agendaService) {
     let hasAddedPieces = false;
-    const pieces = await agendaitem.pieces;
+    const pieces = await agendaitem?.pieces;
     if (pieces?.length) {
       const documentContainers = await this.store.query('document-container', {
         filter: {
           pieces: {
             agendaitems: {
-              id: agendaitem.id,
+              id: agendaitem?.id,
             },
           },
         },
@@ -50,8 +50,7 @@ export default class CompareAgendaList extends Component {
       });
       hasAddedPieces = documentContainers?.some((documentContainer) => documentContainer.checkAdded);
     }
-    const checkAdded = agendaitem.addedAgendaitems && agendaitem.addedAgendaitems.includes(agendaitem.id);
-
+    const checkAdded = agendaitem && agendaService.addedAgendaitems.includes(agendaitem.id);
     return checkAdded || hasAddedPieces;
   }
 
