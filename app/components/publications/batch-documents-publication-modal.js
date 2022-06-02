@@ -104,15 +104,40 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
   @action
   async linkPublicationFlow(piece, publicationFlow) {
+    let publicationFlowHasChanged = false;
+
     const regulationType = await publicationFlow.regulationType;
     if (!regulationType) {
       const regulationTypeFromDocument =
         await this.getRegulationTypeThroughReferenceDocument(piece);
       if (regulationTypeFromDocument) {
         publicationFlow.regulationType = regulationTypeFromDocument;
-        await publicationFlow.save();
+        publicationFlowHasChanged = true;
       }
     }
+
+    // Ensure the publication-flow is linked to the same agenda-item-treatment as
+    // the document. This might differ if the publication-flow has been created before
+    // the subcase was handled on an agenda and a dummy agenda-item-treatment was
+    // created back then. A dummy agenda-item-treatment can be recognized because it
+    // doesn't have a related agendaitem in Kaleidos.
+    const agendaItemTreatment = await publicationFlow.agendaItemTreatment;
+    if (agendaItemTreatment.id != this.agendaItemTreatment.id) {
+      const agendaitem = await this.store.queryOne('agendaitem', {
+        'filter[treatments][:id:]': agendaItemTreatment.id
+      });
+      if (!agendaitem) {
+        publicationFlow.agendaItemTreatment = this.agendaItemTreatment;
+        publicationFlowHasChanged = true;
+        // destroy the dummy agenda-item-treatment
+        await agendaItemTreatment.destroyRecord();
+      }
+    }
+
+    if (publicationFlowHasChanged) {
+      await publicationFlow.save();
+    }
+
     piece.publicationFlow = publicationFlow;
     await piece.save();
   }
