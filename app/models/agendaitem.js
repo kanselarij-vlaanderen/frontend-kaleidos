@@ -1,5 +1,5 @@
 import { hasMany, belongsTo, attr } from '@ember-data/model';
-import { PromiseArray, PromiseObject } from '@ember-data/store/-private';
+import { PromiseObject } from '@ember-data/store/-private';
 import EmberObject, { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -10,7 +10,6 @@ import {
 import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 import VRDocumentName, { compareFunction } from 'frontend-kaleidos/utils/vr-document-name';
 import { A } from '@ember/array';
-import { sortDocumentContainers } from 'frontend-kaleidos/utils/documents';
 
 // TODO: octane-refactor
 /* eslint-disable ember/no-get */
@@ -65,32 +64,6 @@ export default ModelWithModifier.extend({
   // Refactor these uses and remove this computed property
   sortedPieces: computed('pieces.@each.name', function() {
     return A(this.get('pieces').toArray()).sort((pieceA, pieceB) => compareFunction(new VRDocumentName(pieceA.get('name')), new VRDocumentName(pieceB.get('name'))));
-  }),
-
-  // KAS-2975 only used for compare function
-  // TODO this computed property is used in:
-  // - agendaitem#hasAddedPieces
-  // Refactor this use and remove this computed property
-  documentContainers: computed('pieces.@each.name', 'id', function() {
-    return PromiseArray.create({
-      promise: this.get('pieces').then((pieces) => {
-        if (pieces && pieces.get('length') > 0) {
-          return this.store.query('document-container', {
-            filter: {
-              pieces: {
-                agendaitems: {
-                  id: this.get('id'),
-                },
-              },
-            },
-            page: {
-              size: pieces.get('length'), // # documentContainers will always be <= # pieces
-            },
-            include: 'type,pieces,pieces.access-level,pieces.next-piece,pieces.previous-piece',
-          }).then((containers) => sortDocumentContainers(this.get('pieces'), containers));
-        }
-      }),
-    });
   }),
 
   isDesignAgenda: reads('agenda.isDesignAgenda'),
@@ -165,35 +138,15 @@ export default ModelWithModifier.extend({
   }),
 
   // TODO this computed property is used in:
-  // - Agenda::AGendaHeader::AgendaACtionPOpupAgendaitems
-  // - agendaitem#hasChanges
+  // - Agenda::AgendaHeader::AgendaActionPopupAgendaitems
   // Refactor these usages and remove this computed property
   checkAdded: computed('id', 'addedAgendaitems.[]', 'agenda.createdFor.agendas.[]', async function() {
     const wasAdded = (this.addedAgendaitems && this.addedAgendaitems.includes(this.id));
     return wasAdded;
   }),
 
-  // TODO KAS-2975 only used for compare function
   // TODO this computed property is used in:
-  // - Agenda::CompareAgendaList
-  // Refactor this usage and remove this computed property
-  hasChanges: computed('checkAdded', 'hasAddedPieces', async function() {
-    const hasAddedPieces = await this.hasAddedPieces;
-    const checkAdded = await this.checkAdded;
-    return checkAdded || hasAddedPieces;
-  }),
-
-  // TODO KAS-2975 only used for compare function
-  // TODO this computed property is used in:
-  // - agendaitem#hasChanges
-  // Refactor this usage and remove this computed property
-  hasAddedPieces: computed('documentContainers.[]', 'addedPieces.[]', async function() {
-    const documentContainers = await this.get('documentContainers');
-    return documentContainers && documentContainers.some((documentContainers) => documentContainers.checkAdded);
-  }),
-
-  // TODO this computed property is used in:
-  // - Agenda::AgendaHeader::AgendaACtionPopupAgendaitems
+  // - Agenda::AgendaHeader::AgendaActionPopupAgendaitems
   // Refactor this usage and remove this computed property
   newsletterInfo: computed('treatments.@each.newsletterInfo', 'treatments', 'id', async function() {
     const newsletterInfos = await this.store.query('newsletter-info', {

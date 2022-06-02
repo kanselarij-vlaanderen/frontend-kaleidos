@@ -31,6 +31,29 @@ export default class CompareAgendaList extends Component {
   @tracked combinedAgendaitems = [] ;
   @tracked combinedAnnouncements = [] ;
 
+  async hasChanges(agendaitem) {
+    let hasAddedPieces = false;
+    const pieces = await agendaitem.pieces;
+    if (pieces?.length) {
+      const documentContainers = await this.store.query('document-container', {
+        filter: {
+          pieces: {
+            agendaitems: {
+              id: agendaitem.id,
+            },
+          },
+        },
+        page: {
+          size: pieces.length, // # documentContainers will always be <= # pieces
+        },
+        include: 'type,pieces,pieces.access-level,pieces.next-piece,pieces.previous-piece',
+      });
+      hasAddedPieces = documentContainers?.some((documentContainer) => documentContainer.checkAdded);
+    }
+    const checkAdded = agendaitem.addedAgendaitems && agendaitem.addedAgendaitems.includes(agendaitem.id);
+
+    return checkAdded || hasAddedPieces;
+  }
 
   async bothAgendasSelected() {
     if (this.agendaOne && this.agendaTwo) {
