@@ -190,9 +190,10 @@ export default class PublicationService extends Service {
   }
 
   async getIsViaCouncilOfMinisters(publicationFlow) {
-    const _case = await publicationFlow.case;
-    const subcases = await _case.subcases;
-    return !!subcases.length;
+    const agendaitem = await this.store.queryOne('agendaitem', {
+      'filter[treatments][publication-flows][:id:]': publicationFlow.id,
+    });
+    return agendaitem != null;
   }
 
   async updatePublicationStatus(publicationFlow, targetStatusUri, changeDate) {
