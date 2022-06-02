@@ -33,8 +33,12 @@ export default class GenerateReportModalComponent extends Component {
   // API expects next date: in order to include moments over the course the last day
   //  e.g. UI displays 31-12-2022, API expects 01-01-2023
   @tracked decisionDateRangeEnd;
+  @tracked decisionDateMin;
+  @tracked decisionDateMax;
 
   @tracked publicationYear;
+  @tracked publicationYearMax;
+  @tracked publicationYearMin;
 
   // LIMITATION:
   //  1. a person will not show up in the select
@@ -57,11 +61,15 @@ export default class GenerateReportModalComponent extends Component {
     const currentYear = new Date().getFullYear();
     if (this.args.userInputFields.publicationYear) {
       this.publicationYear = currentYear;
+      this.publicationYearMin = 1981;
+      this.publicationYearMax = currentYear;
     }
 
     if (this.args.userInputFields.decisionDateRange) {
       this.decisionDateRangeStart = new Date(currentYear, 0, 1, 0, 0, 0, 0);
       this.decisionDateRangeEnd = undefined;
+      this.decisionDateMin = new Date(1981, 0, 1, 0, 0, 0, 0);
+      this.decisionDateMax = new Date();
     }
 
     if (this.args.userInputFields.governmentDomains) {
@@ -92,7 +100,7 @@ export default class GenerateReportModalComponent extends Component {
   }
 
   isWithinSensibleRange(date) {
-    const minDate = new Date(1981, 1, 0, 0, 0, 0, 0);
+    const minDate = new Date(1981, 0, 1, 0, 0, 0, 0);
     const currentDate = new Date();
     return minDate <= date && date <= currentDate;
   }
@@ -103,7 +111,8 @@ export default class GenerateReportModalComponent extends Component {
       this.decisionDateRangeEnd !== undefined;
     // return true: no range => so skip this step
     if (!canValidateRange) return true;
-    return this.decisionDateRangeStart < this.decisionDateRangeEnd;
+    // equality means 1-day range
+    return this.decisionDateRangeStart <= this.decisionDateRangeEnd;
   }
 
   // using getters and setters to transform the year from a string to a number
@@ -125,7 +134,6 @@ export default class GenerateReportModalComponent extends Component {
     }
   }
 
-  /// TODO: try out html min and max attributes and required
   get isPublicationYearValid() {
     const isPresent = this.publicationYear !== undefined;
     if (!isPresent) {
