@@ -11,7 +11,9 @@
       @sortField="label"
       @selectedAgenda={{this.agendaOne}}
       @selectModel={{this.chooseAgendaOne}}
-    />
+    as |agenda|>
+      {{await (agenda-name agenda)}}
+    </Utils::AgendaSelector>
     <Utils::AgendaSelector
       data-test-compare-agenda-right={{true}}
       @agendas={{@reverseSortedAgendas}}
@@ -22,7 +24,9 @@
       @sortField="label"
       @selectedAgenda={{this.agendaTwo}}
       @selectModel={{this.chooseAgendaTwo}}
-    />
+    as |agenda|>
+      {{await (agenda-name agenda)}}
+    </Utils::AgendaSelector>
   </div>
 
   {{#if (or (await this.combinedAgendaitems) (await this.combinedAnnouncements))}}
