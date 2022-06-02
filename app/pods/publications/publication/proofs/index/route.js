@@ -72,7 +72,13 @@ export default class PublicationsPublicationProofsRoute extends Route {
 
     let proofingActivities = this.store.query('proofing-activity', {
       'filter[subcase][:id:]': this.publicationSubcase.id,
-      include: 'generated-pieces,generated-pieces.file',
+      include: [
+        'used-pieces',
+        'used-pieces.publication-activities-used-by',
+        'generated-pieces',
+        'generated-pieces.file',
+        'generated-pieces.publication-activities-used-by',
+      ].join(','),
       sort: '-start-date',
     });
 

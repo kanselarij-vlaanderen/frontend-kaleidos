@@ -18,9 +18,7 @@ export class TimelineActivity {
       pieces = pieces.flat();
       let proofingActivities = pieces.mapBy('proofingActivitiesUsedBy');
       proofingActivities = await Promise.all(proofingActivities);
-      proofingActivities = proofingActivities.map((proofingActivities) =>
-        proofingActivities.toArray()
-      );
+      proofingActivities = proofingActivities.map((proofingActivities) => proofingActivities.toArray());
       proofingActivities = proofingActivities.flat();
       row.canDeletePieces = proofingActivities.length === 0;
     }
@@ -79,7 +77,13 @@ export default class PublicationsPublicationTranslationsIndexRoute extends Route
       'translation-activity',
       {
         'filter[subcase][:id:]': this.translationSubcase.id,
-        include: 'generated-pieces,generated-pieces.file',
+        include: [
+          'used-pieces',
+          'used-pieces.proofing-activities-used-by',
+          'generated-pieces',
+          'generated-pieces.file',
+          'generated-pieces.proofing-activities-used-by',
+        ].join(','),
         sort: '-start-date',
       }
     );
