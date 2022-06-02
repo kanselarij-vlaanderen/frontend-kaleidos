@@ -50,7 +50,7 @@ export default class CompareAgendaList extends Component {
         },
         include: 'type,pieces,pieces.access-level,pieces.next-piece,pieces.previous-piece',
       });
-      hasAddedPieces = documentContainers?.some((documentContainer) => documentContainer.checkAdded);
+      hasAddedPieces = documentContainers?.any((dc) => this.agendaService.addedPieces?.includes(dc.uri));
     }
     const checkAdded = agendaitem && this.agendaService.addedAgendaitems.includes(agendaitem.id);
     return checkAdded || hasAddedPieces;
