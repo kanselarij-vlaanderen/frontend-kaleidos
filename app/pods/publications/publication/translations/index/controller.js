@@ -24,6 +24,10 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     return timelineActivity ? timelineActivity.activity : null;
   }
 
+  get shownActivities() {
+    return this.model.filter((row) => row.isShown)
+  }
+
   @task
   *saveTranslationUpload(translationUpload) {
     let translationActivity = this.latestTranslationActivity;

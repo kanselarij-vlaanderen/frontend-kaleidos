@@ -28,6 +28,10 @@ export default class PublicationsPublicationProofsController extends Controller 
     return timelineActivity ? timelineActivity.activity : null;
   }
 
+  get shownActivities() {
+    return this.model.filter((activity) => activity.isShown)
+  }
+
   @task
   *saveProofUpload(proofUpload) {
     let proofingActivity = this.latestProofingActivity;

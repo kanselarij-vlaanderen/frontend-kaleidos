@@ -38,45 +38,43 @@
       data-test-route-publications---proofs-panel-body
       class="auk-u-bg-alt"
     >
-      {{#each @model as |event|}}
-        {{#if event.isShown}}
-          {{#if event.isRequestActivity}}
-            <Utils::Timeline::Event
-              @badgeIcon="mail"
-              @badgeSkin="primary"
-              @event={{event}}
-              as |event|
-            >
-              <Publications::Publication::RequestActivityPanel
-                @title={{t "requested-proof"}}
-                @requestActivity={{event.activity}}
-                @isDisabledDelete={{event.activity.proofingActivity.isFinished}}
-                @onDeleteRequest={{perform this.deleteRequest event.activity}}
-              />
-            </Utils::Timeline::Event>
-          {{else if event.isProofingActivity}}
-            <Utils::Timeline::Event
-              @badgeIcon="check"
-              @badgeSkin="success"
-              @event={{event}}
-              as |event|
-            >
-              <Publications::Publication::Proofs::ProofReceivedPanel
-                @proofingActivity={{event.activity}}
-                @publicationFlow={{this.publicationFlow}}
-                @proofPrintCorrector={{this.publicationSubcase.proofPrintCorrector}}
-                @onEditProofingActivity={{perform this.editProofingActivity}}
-                @onDeletePiece={{if
-                  event.canDeletePieces
-                  (perform this.deleteReceivedPiece event)
-                }}
-                @onCreatePublicationRequest={{perform
-                  this.savePublicationRequest
-                }}
-                @isCreatePublicationRequestDisabled={{this.isCreatePublicationRequestDisabled}}
-              />
-            </Utils::Timeline::Event>
-          {{/if}}
+      {{#each this.shownActivities as |event|}}
+        {{#if event.isRequestActivity}}
+          <Utils::Timeline::Event
+            @badgeIcon="mail"
+            @badgeSkin="primary"
+            @event={{event}}
+            as |event|
+          >
+            <Publications::Publication::RequestActivityPanel
+              @title={{t "requested-proof"}}
+              @requestActivity={{event.activity}}
+              @isDisabledDelete={{event.activity.proofingActivity.isFinished}}
+              @onDeleteRequest={{perform this.deleteRequest event.activity}}
+            />
+          </Utils::Timeline::Event>
+        {{else if event.isProofingActivity}}
+          <Utils::Timeline::Event
+            @badgeIcon="check"
+            @badgeSkin="success"
+            @event={{event}}
+            as |event|
+          >
+            <Publications::Publication::Proofs::ProofReceivedPanel
+              @proofingActivity={{event.activity}}
+              @publicationFlow={{this.publicationFlow}}
+              @proofPrintCorrector={{this.publicationSubcase.proofPrintCorrector}}
+              @onEditProofingActivity={{perform this.editProofingActivity}}
+              @onDeletePiece={{if
+                event.canDeletePieces
+                (perform this.deleteReceivedPiece event)
+              }}
+              @onCreatePublicationRequest={{perform
+                this.savePublicationRequest
+              }}
+              @isCreatePublicationRequestDisabled={{this.isCreatePublicationRequestDisabled}}
+            />
+          </Utils::Timeline::Event>
         {{/if}}
       {{else}}
         <Auk::EmptyState @bordered={{true}} @message={{t "no-proofs-yet"}} />
