@@ -15,9 +15,6 @@ import { A } from '@ember/array';
 /* eslint-disable ember/no-get */
 export default ModelWithModifier.extend({
   modelName: alias('constructor.modelName'),
-  agendaService: inject(),
-  addedAgendaitems: alias('agendaService.addedAgendaitems'),
-  addedPieces: alias('agendaService.addedPieces'),
 
   store: inject(),
   number: attr('number'),
@@ -69,6 +66,9 @@ export default ModelWithModifier.extend({
   isDesignAgenda: reads('agenda.isDesignAgenda'),
 
 
+  // TODO this computed property is used in:
+  // - agendaitem#notaOrVisienota
+  // Refactor these usages and remove this computed property
   nota: computed('id', function() {
     return PromiseObject.create({
       promise: this.store.queryOne('document-container', {
@@ -135,23 +135,5 @@ export default ModelWithModifier.extend({
     const options = CONFIG.formallyOkOptions;
     const foundOption = options.find((formallyOkOption) => formallyOkOption.uri === this.formallyOk);
     return EmberObject.create(foundOption);
-  }),
-
-  // TODO this computed property is used in:
-  // - Agenda::AgendaHeader::AgendaActionPopupAgendaitems
-  // Refactor these usages and remove this computed property
-  checkAdded: computed('id', 'addedAgendaitems.[]', 'agenda.createdFor.agendas.[]', async function() {
-    const wasAdded = (this.addedAgendaitems && this.addedAgendaitems.includes(this.id));
-    return wasAdded;
-  }),
-
-  // TODO this computed property is used in:
-  // - Agenda::AgendaHeader::AgendaActionPopupAgendaitems
-  // Refactor this usage and remove this computed property
-  newsletterInfo: computed('treatments.@each.newsletterInfo', 'treatments', 'id', async function() {
-    const newsletterInfos = await this.store.query('newsletter-info', {
-      'filter[agenda-item-treatment][agendaitem][:id:]': this.get('id'),
-    });
-    return newsletterInfos.get('firstObject');
   }),
 });
