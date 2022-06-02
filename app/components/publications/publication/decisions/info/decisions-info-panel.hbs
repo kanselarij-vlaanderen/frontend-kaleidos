@@ -97,6 +97,20 @@
                   />
                 </div>
               </div>
+
+              {{! Aantal uittreksels }}
+              <div class="auk-o-grid-col-3">
+                <div
+                  data-test-decisions-info-panel-edit-number-of-extracts
+                  class="auk-form-group"
+                >
+                  <Auk::Label>{{t "publication-flow-number-of-extracts"}}</Auk::Label>
+                  <Auk::Input
+                    @type="number"
+                    @value={{@publicationFlow.numberOfExtracts}}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </Utils::LoadableContent>
@@ -163,6 +177,23 @@
               >
                 {{#if @publicationFlow.numberOfPages}}
                   {{@publicationFlow.numberOfPages}}
+                {{else}}
+                  {{t "dash"}}
+                {{/if}}
+              </p>
+            </div>
+          </div>
+
+          {{! Aantal uittreksels }}
+          <div class="auk-o-grid-col-3">
+            <div class="auk-content">
+              <h4 class="auk-u-m-0">{{t "publication-flow-number-of-extracts"}}</h4>
+              <p
+                data-test-decisions-info-panel-view-number-of-extracts
+                class="auk-u-m-0"
+              >
+                {{#if @publicationFlow.numberOfExtracts}}
+                  {{@publicationFlow.numberOfExtracts}}
                 {{else}}
                   {{t "dash"}}
                 {{/if}}
