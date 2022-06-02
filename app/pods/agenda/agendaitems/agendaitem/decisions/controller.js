@@ -6,6 +6,7 @@ import { tracked } from '@glimmer/tracking';
 export default class DecisionAgendaitemAgendaitemsAgendaController extends Controller {
   @service currentSession;
   @service store;
+  @service newsletterService;
 
   @tracked agendaitem;
   @tracked meeting;
@@ -20,16 +21,15 @@ export default class DecisionAgendaitemAgendaitemsAgendaController extends Contr
     const now = new Date();
     const agendaActivity = await this.agendaitem.agendaActivity;
     const subcase = await agendaActivity?.subcase
-    const newsletterInfo = await this.treatments.firstObject.newsletterInfo;
     const newTreatment = this.store.createRecord('agenda-item-treatment', {
       created: now,
       modified: now,
       startDate: startDate,
       agendaitem: this.agendaitem,
       subcase: subcase,
-      newsletterInfo: newsletterInfo,
     });
     await newTreatment.save();
+    await this.newsletterService.linkNewsItemToNewTreatment(this.agendaitem);
     this.refresh();
   }
 

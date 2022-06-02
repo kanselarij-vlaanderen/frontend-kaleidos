@@ -7,6 +7,7 @@ import { inject } from '@ember/service';
 export default Controller.extend({
   intl: inject(),
   store: inject(),
+  newsletterService: inject(),
 
   columns: computed(function() {
     return [{
@@ -80,6 +81,7 @@ export default Controller.extend({
         subcase: subcase,
       });
       await treatment.save();
+      await this.newsletterService.linkNewsItemToNewTreatment(agendaitem);
     },
   },
 });
