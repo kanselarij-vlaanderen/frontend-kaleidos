@@ -13,6 +13,8 @@
       <Auk::Checkbox @label="Label 3" />
       <Auk::Checkbox @label="Label 4" @disabled={{true}} @checked={{true}} />
       <Auk::Checkbox @label="Label 5" @disabled={{true}} />
+      <Auk::Checkbox @label="Label 6" @indeterminate={{true}} />
+      <Auk::Checkbox @label="Label 7" @disabled={{true}} @indeterminate={{true}} />
     </Auk::CheckboxList>
   </fieldset>
   {{!-- END-SNIPPET --}}
@@ -40,20 +42,6 @@
         @snippet="checkbox-without-label.hbs">
   {{!-- BEGIN-SNIPPET checkbox-without-label --}}
   <Auk::Checkbox @checked={{true}} />
-  {{!-- END-SNIPPET --}}
-</StyleguideSample>
-
-<StyleguideSample
-        @title="Checkable list"
-        @snippet="checkable-list.hbs">
-  {{!-- BEGIN-SNIPPET checkable-list --}}
-  <Auk::CheckboxList @checkable={{true}} @label="Group label" @checked={{true}}>
-    <Auk::Checkbox @label="Label 1" @checked={{false}} />
-    <Auk::Checkbox @label="Label 2" @checked={{false}} />
-    <Auk::Checkbox @label="Label 3" @checked={{false}} />
-    <Auk::Checkbox @label="Label 4" @checked={{false}} />
-    <Auk::Checkbox @label="Label 5" @checked={{false}} />
-  </Auk::CheckboxList>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 

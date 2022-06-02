@@ -94,6 +94,7 @@ context('Agenda-Header actions tests', () => {
     const subcaseTitleShortNew = 'Cypress test: Approve Approve and close - formal not ok: new item - 1651751749';
     const subcaseTitleShortApproved = 'Cypress test: Approve Approve and close - formal not ok: approved item - 1651751749';
     const subcaseTitleShortApprovedEdited = `${subcaseTitleShortApproved} EDITED`;
+    const approvalTitle = 'Goedkeuring van het verslag';
 
     // *Setup of this test:
     // Agenda A has 1 approval and 1 agendaitem
@@ -128,6 +129,8 @@ context('Agenda-Header actions tests', () => {
     cy.get(agenda.agendaitemTitlesView.shortTitle).contains(subcaseTitleShortApproved);
     cy.get(agenda.agendaitemTitlesView.shortTitle).contains(subcaseTitleShortApprovedEdited)
       .should('not.exist');
+    cy.get(agenda.agendaDetailSidebarItem.shortTitle).contains(approvalTitle);
+    cy.get(agenda.agendaDetailSidebarItem.shortTitle).contains(subcaseTitleShortApproved);
     cy.get(agenda.agendaDetailSidebarItem.shortTitle).contains(subcaseTitleShortNew)
       .should('not.exist');
   });

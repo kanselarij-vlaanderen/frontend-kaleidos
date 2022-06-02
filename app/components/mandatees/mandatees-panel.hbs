@@ -1,6 +1,7 @@
 <div class="auk-u-mb-8">
   {{#if this.isEditing}}
     <Mandatees::MandateesPanel::MandateesPanelEdit
+      @referenceDate={{@referenceDate}}
       @mandatees={{@mandatees}}
       @submitter={{@submitter}}
       @onCancel={{this.cancelEditing}}

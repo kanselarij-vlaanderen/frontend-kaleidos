@@ -12,6 +12,8 @@ import { task } from 'ember-concurrency';
  */
 export default class SubcaseTitlesPanelEdit extends Component {
   @service store;
+  @service pieceAccessLevelService;
+
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'confidential']);
 
   @action
@@ -24,6 +26,7 @@ export default class SubcaseTitlesPanelEdit extends Component {
 
   @task
   *saveChanges() {
+
     const trimmedTitle = trimText(this.args.subcase.title);
     const trimmedShortTitle = trimText(this.args.subcase.shortTitle);
 
@@ -43,6 +46,9 @@ export default class SubcaseTitlesPanelEdit extends Component {
       propertiesToSetOnSubcase,
       true
     );
+    if (this.args.subcase.confidential) {
+      yield this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
+    }
     this.args.onSave();
   }
 }

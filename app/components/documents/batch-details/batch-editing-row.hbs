@@ -18,11 +18,10 @@
     />
   </td>
   <td>
-    <Utils::ModelSelector
-      @modelName="access-level"
+    <Utils::AccessLevelSelector
       @allowClear={{true}}
       @displayField="label"
-      @sortField="priority"
+      @sortField="position"
       @disabled={{this.isDisabled}}
       @selected={{this.accessLevel}}
       @onChange={{this.setAccessLevel}}
