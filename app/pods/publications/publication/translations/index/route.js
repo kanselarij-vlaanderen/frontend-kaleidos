@@ -5,30 +5,31 @@ import { warn } from '@ember/debug';
 import { inject as service } from '@ember/service';
 
 export class TimelineActivity {
-  @tracked activity;
-  @tracked canDeletePieces;
+  static async create(activity) {
+    const row = new TimelineActivity();
+    row.activity = activity;
 
-  constructor(activity) {
-    this.activity = activity;
-    this.initFields();
-  }
-
-  async initFields() {
-    if (this.isTranslationActivity) {
+    if (row.isTranslationActivity) {
       let pieces = await Promise.all([
-        this.activity.usedPieces,
-        this.activity.generatedPieces
+        row.activity.usedPieces,
+        row.activity.generatedPieces,
       ]);
-      pieces = pieces.flatMap((pieces) => pieces.toArray());
-      let proofingActivities = await Promise.all(
-        pieces.map((piece) => piece.proofingActivitiesUsedBy)
-      );
-      proofingActivities = proofingActivities.flatMap((proofingActivities) =>
+      pieces = pieces.map((pieces) => pieces.toArray());
+      pieces = pieces.flat();
+      let proofingActivities = pieces.mapBy('proofingActivitiesUsedBy');
+      proofingActivities = await Promise.all(proofingActivities);
+      proofingActivities = proofingActivities.map((proofingActivities) =>
         proofingActivities.toArray()
       );
-      this.canDeletePieces = proofingActivities.length === 0;
+      proofingActivities = proofingActivities.flat();
+      row.canDeletePieces = proofingActivities.length === 0;
     }
+
+    return row;
   }
+
+  @tracked activity;
+  @tracked canDeletePieces;
 
   get isRequestActivity() {
     return this.activity.constructor.modelName === 'request-activity';
@@ -83,10 +84,12 @@ export default class PublicationsPublicationTranslationsIndexRoute extends Route
       }
     );
 
-    return [
-      ...requestActivities.map((request) => new TimelineActivity(request)),
-      ...translationActivities.map((translation) => new TimelineActivity(translation))
-    ].sortBy('date').reverseObjects();
+    let rows = await Promise.all([
+      ...requestActivities.map((request) => TimelineActivity.create(request)),
+      ...translationActivities.map((translation) => TimelineActivity.create(translation)),
+    ]);
+    rows = rows.sortBy('date').reverseObjects();
+    return rows;
   }
 
   afterModel() {

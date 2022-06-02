@@ -5,27 +5,25 @@ import { inject as service } from '@ember/service';
 import { warn } from '@ember/debug';
 
 export class TimelineActivity {
+  static async create(activity) {
+    const row = new TimelineActivity(activity);
+    row.activity = activity;
+
+    if (row.isProofingActivity) {
+      let pieces = await row.activity.generatedPieces;
+      pieces = pieces.toArray();
+      let publicationActivities = pieces.mapBy('publicationActivitiesUsedBy');
+      publicationActivities = await Promise.all(publicationActivities);
+      publicationActivities = publicationActivities.map((publicationActivities) => publicationActivities.toArray());
+      publicationActivities = publicationActivities.flat();
+      row.canDeletePieces = publicationActivities.length === 0;
+    }
+
+    return row;
+  }
+
   @tracked activity;
   @tracked canDeletePieces;
-
-  constructor(activity) {
-    this.activity = activity;
-    this.initFields();
-  }
-
-  async initFields() {
-    if (this.isProofingActivity) {
-      let pieces = await this.activity.generatedPieces;
-      pieces = pieces.toArray();
-      let publicationActivities = await Promise.all(
-        pieces.map((piece) => piece.publicationActivitiesUsedBy)
-      );
-      publicationActivities = publicationActivities.flatMap((publicationActivities) =>
-        publicationActivities.toArray()
-      );
-      this.canDeletePieces = publicationActivities.length === 0;
-    }
-  }
 
   get isRequestActivity() {
     return this.activity.constructor.modelName === 'request-activity';
@@ -83,12 +81,12 @@ export default class PublicationsPublicationProofsRoute extends Route {
       proofingActivities,
     ]);
 
-    return [
-      ...requestActivities.map((request) => new TimelineActivity(request)),
-      ...proofingActivities.map((proofing) => new TimelineActivity(proofing)),
-    ]
-      .sortBy('date')
-      .reverseObjects();
+    let rows = await Promise.all([
+      ...requestActivities.map((request) => TimelineActivity.create(request)),
+      ...proofingActivities.map((proofing) => TimelineActivity.create(proofing)),
+    ]);
+    rows = rows.sortBy('date').reverseObjects();
+    return rows;
   }
 
   async afterModel() {
