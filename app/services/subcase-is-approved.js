@@ -17,13 +17,13 @@ export default class SubcaseIsApprovedService extends Service {
         CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
       );
 
-      return !!(await this.store.queryOne('agenda-item-treatment', {
+      return await this.store.count('agenda-item-treatment', {
         'filter[subcase][id]': subcase.id,
         'filter[decision-result-code][:id:]': [
           approvedDecisionResultCode.id,
           acknowledgedDecisionResultCode.id,
         ].join(','),
-      }));
+      });
     }
     return false;
   }
