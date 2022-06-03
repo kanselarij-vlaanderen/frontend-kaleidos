@@ -1,4 +1,6 @@
-<div data-test-mandatee-selector-container>
+<div data-test-mandatee-selector-container
+  {{did-update (perform this.loadMandatees) @openSearch}}
+>
   {{#if @multiple}}
     <PowerSelectMultiple
       @options={{this.mandateeOptions}}
@@ -6,7 +8,7 @@
       @disabled={{@disabled}}
       @closeOnSelect={{false}}
       @searchEnabled={{true}}
-      @search={{perform this.searchTask}}
+      @search={{if @openSearch (perform this.searchMandatee) (perform this.filterMandatees)}}
       @oninput={{this.resetMandateeOptionsIfEmpty}}
       @onChange={{@onSelectMandatee}}
       as |mandatee|
@@ -25,7 +27,7 @@
       @selected={{await @selectedMandatees}}
       @disabled={{@disabled}}
       @searchEnabled={{true}}
-      @search={{perform this.searchTask}}
+      @search={{if @openSearch (perform this.searchMandatee) (perform this.filterMandatees)}}
       @oninput={{this.resetMandateeOptionsIfEmpty}}
       @onChange={{@onSelectMandatee}}
       as |mandatee|
