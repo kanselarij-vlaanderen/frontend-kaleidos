@@ -38,35 +38,37 @@
       data-test-route-publications---translations-panel-body
       class="auk-u-bg-alt"
     >
-      {{#each @model as |event|}}
-        {{#if event.isShown}}
-          {{#if event.isRequestActivity}}
-            <Utils::Timeline::Event
-              @badgeIcon="mail"
-              @badgeSkin="primary"
-              @event={{event}} as |event|>
-              <Publications::Publication::RequestActivityPanel
-                @title={{t "requested-translation"}}
-                @requestActivity={{event.activity}}
-                @isDisabledDelete={{event.activity.translationActivity.isFinished}}
-                @onDeleteRequest={{perform this.deleteRequest event.activity}}
-              />
-            </Utils::Timeline::Event>
-          {{else if event.isTranslationActivity}}
-            <Utils::Timeline::Event
-              @badgeIcon="check"
-              @badgeSkin="success"
-              @event={{event}} as |event|>
-              <Publications::Publication::Translations::TranslationReceivedPanel
-                @translationActivity={{event.activity}}
-                @publicationFlow={{this.publicationFlow}}
-                @onEditTranslationActivity={{perform
-                  this.editTranslationActivity
-                }}
-                @onCreateProofRequest={{perform this.saveProofRequest}}
-              />
-            </Utils::Timeline::Event>
-          {{/if}}
+      {{#each this.shownActivities as |event|}}
+        {{#if event.isRequestActivity}}
+          <Utils::Timeline::Event
+            @badgeIcon="mail"
+            @badgeSkin="primary"
+            @event={{event}} as |event|>
+            <Publications::Publication::RequestActivityPanel
+              @title={{t "requested-translation"}}
+              @requestActivity={{event.activity}}
+              @isDisabledDelete={{event.activity.translationActivity.isFinished}}
+              @onDeleteRequest={{perform this.deleteRequest event.activity}}
+            />
+          </Utils::Timeline::Event>
+        {{else if event.isTranslationActivity}}
+          <Utils::Timeline::Event
+            @badgeIcon="check"
+            @badgeSkin="success"
+            @event={{event}} as |event|>
+            <Publications::Publication::Translations::TranslationReceivedPanel
+              @translationActivity={{event.activity}}
+              @publicationFlow={{this.publicationFlow}}
+              @onEditTranslationActivity={{perform
+                this.editTranslationActivity
+              }}
+              @onDeletePiece={{if
+                event.canDeletePieces
+                (perform this.deleteReceivedPiece event)
+              }}
+              @onCreateProofRequest={{perform this.saveProofRequest}}
+            />
+          </Utils::Timeline::Event>
         {{/if}}
       {{else}}
         <Auk::EmptyState @bordered={{true}} @message={{t "no-translations-yet"}} />

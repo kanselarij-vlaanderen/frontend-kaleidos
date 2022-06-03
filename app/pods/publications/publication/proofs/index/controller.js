@@ -28,6 +28,10 @@ export default class PublicationsPublicationProofsController extends Controller 
     return timelineActivity ? timelineActivity.activity : null;
   }
 
+  get shownActivities() {
+    return this.model.filter((activity) => activity.isShown)
+  }
+
   @task
   *saveProofUpload(proofUpload) {
     let proofingActivity = this.latestProofingActivity;
@@ -86,6 +90,22 @@ export default class PublicationsPublicationProofsController extends Controller 
 
     this.send('refresh');
     this.showProofRequestModal = false;
+  }
+
+  @task
+  *deleteReceivedPiece(proofReceivedEvent, piece) {
+    yield this.performDeleteReceivedPiece(proofReceivedEvent, piece);
+  }
+
+  async performDeleteReceivedPiece(proofReceivedEvent, piece) {
+    await this.publicationService.deletePiece(piece);
+    const proofingActivity = proofReceivedEvent.activity;
+    let pieces = await proofingActivity.generatedPieces;
+    pieces = pieces.toArray();
+    if (pieces.length === 0) {
+      proofingActivity.endDate = null;
+      await proofingActivity.save();
+    }
   }
 
   @task
