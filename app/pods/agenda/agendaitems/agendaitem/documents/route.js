@@ -40,7 +40,7 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     this.agendaActivity = await this.agendaitem.agendaActivity;
     this.subcase = await this.agendaActivity?.subcase;
     this.defaultAccessLevel = await this.store.findRecordByUri(
-      'access-level',
+      'concept',
       this.subcase?.confidential
         ? CONSTANTS.ACCESS_LEVELS.MINISTERRAAD
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING

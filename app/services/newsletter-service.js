@@ -16,10 +16,10 @@ export default class NewsletterService extends Service {
         type: 'mail-campaigns',
         relationships: {
           meeting: {
-            data: { type: 'meetings', id: meeting.id }
-          }
-        }
-      }
+            data: { type: 'meetings', id: meeting.id },
+          },
+        },
+      },
     };
     const response = await fetch(endpoint, {
       method: 'POST',
@@ -36,7 +36,7 @@ export default class NewsletterService extends Service {
           this.intl.t('warning-title')
         );
       }
-     throw new Error('An exception ocurred: ' + JSON.stringify(result.errors));
+      throw new Error('An exception ocurred: ' + JSON.stringify(result.errors));
     }
     const mailCampaign = this.store.createRecord('mail-campaign', {
       campaignId: result.data.id,
@@ -78,10 +78,10 @@ export default class NewsletterService extends Service {
         type: 'belga-newsletters',
         relationships: {
           meeting: {
-            data: { type: 'meetings', id: meetingId }
-          }
-        }
-      }
+            data: { type: 'meetings', id: meetingId },
+          },
+        },
+      },
     };
     const response = await fetch(endpoint, {
       method: 'POST',
@@ -172,6 +172,23 @@ export default class NewsletterService extends Service {
     }
   }
 
+  /**
+   * Update the hasMany('agenda-item-treatment') of newsletter-info when adding a new treatment
+   * @param {Agendaitem} agendaitem
+   */
+  async linkNewsItemToNewTreatment(agendaitem) {
+    const newsletterInfo = await this.store.queryOne('newsletter-info', {
+      'filter[agenda-item-treatment][agendaitem][:id:]': agendaitem.id,
+    });
+    if (newsletterInfo) {
+      const agendaItemTreatments = await agendaitem
+        .hasMany('treatments')
+        .reload();
+      newsletterInfo.agendaItemTreatment = agendaItemTreatments;
+      await newsletterInfo.save();
+    }
+  }
+
   async deleteCampaign(id) {
     const endpoint = `/newsletter/mail-campaigns/${id}`;
     try {
@@ -189,7 +206,6 @@ export default class NewsletterService extends Service {
       );
     }
   }
-
 
   async createNewsItemForMeeting(meeting) {
     if (this.currentSession.isEditor) {

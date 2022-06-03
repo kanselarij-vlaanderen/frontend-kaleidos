@@ -14,6 +14,7 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
   @tracked case;
   @tracked mandatees;
   @tracked submitter;
+  @tracked meeting;
   @tracked governmentAreas;
   @tracked siblingSubcasesCount;
 

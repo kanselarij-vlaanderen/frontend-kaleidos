@@ -5,36 +5,20 @@
   <div class="auk-o-grid-col-2">
     <div class="auk-box">
       <div class="auk-u-mb-2">
-        <Auk::CheckboxList
-          @checkable={{true}}
+        <Auk::CheckboxTree
           @label={{t "regulation-type"}}
-          @checked={{this.isSelectedAllRegulationTypes}}
-          @onToggle={{this.toggleIsSelectedAllRegulationTypes}}
-        >
-          {{#each this.regulationTypes as |regulationType|}}
-            <Auk::Checkbox
-              @checked={{includes regulationType.id this.regulationTypeIds}}
-              @label={{regulationType.label}}
-              {{on "input" (fn this.toggleRegulationType regulationType)}}
-            />
-          {{/each}}
-        </Auk::CheckboxList>
+          @items={{this.regulationTypes}}
+          @selectedItems={{this.selectedRegulationTypes}}
+          @didUpdate={{this.updateSelectedRegulationTypes}}
+        />
       </div>
 
-      <Auk::CheckboxList
-        @checkable={{true}}
+      <Auk::CheckboxTree
         @label={{t "status"}}
-        @checked={{this.isSelectedAllStatuses}}
-        @onToggle={{this.toggleIsSelectedAllStatuses}}
-      >
-        {{#each this.publicationStatuses as |publicationStatus|}}
-          <Auk::Checkbox
-            @checked={{includes publicationStatus.id this.publicationStatusIds}}
-            @label={{publicationStatus.label}}
-            {{on "input" (fn this.togglePublicationStatus publicationStatus)}}
-          />
-        {{/each}}
-      </Auk::CheckboxList>
+        @items={{this.publicationStatuses}}
+        @selectedItems={{this.selectedPublicationStatuses}}
+        @didUpdate={{this.updateSelectedPublicationStatuses}}
+      />
     </div>
   </div>
   <div class="auk-o-grid-col-10">
@@ -58,9 +42,12 @@
                 @class="auk-table__col--1"
                 @currentSorting={{this.sort}}
                 @field="identificationKeyword"
-                @label={{t "publication-number"}}
+                @label={{t "publication-number-small"}}
               />
               <th class="auk-table__col--7">{{t "short-title"}}</th>
+              <th class="auk-table__col--1">
+                {{t "publication-flow-numac-number"}}
+              </th>
               <ThSortable
                 @class="auk-table__col--1"
                 @currentSorting={{this.sort}}
@@ -87,6 +74,13 @@
                     {{row.title}}
                   {{/if}}
                 </p>
+              </td>
+              <td>
+                {{#if row.numacNumbers.length}}
+                  {{join ", " (sort row.numacNumbers)}}
+                {{else}}
+                  {{t "dash"}}
+                {{/if}}
               </td>
               <td>
                 {{moment-format row.openingDate}}

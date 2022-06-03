@@ -7,6 +7,7 @@ import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import document from '../../selectors/document.selectors';
 
 function currentTimestamp() {
   return Cypress.dayjs().unix();
@@ -172,7 +173,7 @@ context('Subcase tests', () => {
 
     // Aanmaken agendaitem
     cy.openAgendaForDate(agendaDate);
-    cy.addAgendaitemToAgenda(shortSubcaseTitle, false);
+    cy.addAgendaitemToAgenda(shortSubcaseTitle);
     cy.openAgendaitemDossierTab(shortSubcaseTitle);
 
     // Status is hidden
@@ -451,14 +452,32 @@ context('Subcase tests', () => {
   it('check capital letters of subcase name', () => {
     const capital = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     const nonCapital = 'principiële goedkeuring m.h.o. op adviesaanvraag';
+    const subcaseWithName = 'testId=1589266576: Cypress test dossier 1 test stap 2';
+    const encodedSubcaseTitle = encodeURIComponent(subcaseWithName);
 
     // this agenda may no longer exist if this spec is run after agenda.spec
+    // subcase name (if present) in "add agendaitem to agenda" feature
     cy.visitAgendaWithLink('vergadering/5EB2CD4EF5E1260009000015/agenda/9da67561-a827-47a2-8f58-8b3fd5739df4/agendapunten');
     cy.get(agenda.agendaHeader.showOptions).click();
     cy.get(agenda.agendaHeader.actions.addAgendaitems).click();
+    cy.get(dependency.emberDataTable.isLoading).should('not.exist');
+    cy.get(agenda.createAgendaitem.input).should('not.be.disabled')
+      .clear()
+      .type(subcaseWithName, {
+        force: true,
+      });
+    cy.intercept('GET', `/subcases?filter**filter*short-title*=${encodedSubcaseTitle}**`).as('getSubcasesFiltered');
+    cy.wait('@getSubcasesFiltered', {
+      timeout: 12000,
+    });
+    cy.get(auk.loader, {
+      timeout: 12000,
+    }).should('not.exist');
+    cy.get(dependency.emberDataTable.isLoading).should('not.exist');
     cy.get(agenda.createAgendaitem.row.subcaseName).contains(capital);
     cy.get(auk.modal.footer.cancel).click();
 
+    // subcasename in overview and detail case tab
     cy.visitAgendaWithLink('vergadering/5EB2CD4EF5E1260009000015/agenda/5EB2CD4FF5E1260009000016/agendapunten');
     cy.get(agenda.agendaOverviewItem.subcaseName).contains(capital);
     cy.get(agenda.agendaOverviewItem.subitem).eq(1)
@@ -477,5 +496,53 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseDescription.subcaseName).contains(nonCapital)
       .should('have.class', 'auk-u-text-capitalize');
     cy.get(cases.subcaseTitlesView.subcaseName).contains(capital);
+  });
+
+  it('check submission activities', () => {
+    const kind = 'Ministerraad';
+    const fileName = 'VR 2020 1212 DOC.0001-1';
+    const file = {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: fileName, fileType: 'Nota',
+    };
+    const caseTitle2 = 'cypress test: submission activities new title';
+    const caseTitle = 'cypress test: submission activities';
+
+    // TODO-setup
+    cy.createCase(caseTitle);
+    cy.addSubcase(null, subcaseTitleShort);
+    cy.openSubcase(0);
+    cy.addDocumentsToSubcase([
+      {
+        folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 1212 DOC.0001-1', fileType: 'Nota',
+      },
+      {
+        folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 1212 DOC.0001-2', fileType: 'Nota',
+      }
+    ]);
+    cy.createAgenda(kind, agendaDate);
+
+    cy.openAgendaForDate(agendaDate);
+    cy.addAgendaitemToAgenda(subcaseTitleShort);
+    cy.openDetailOfAgendaitem(subcaseTitleShort);
+    cy.reload();
+    cy.get(agenda.agendaitemNav.documentsTab).click();
+    cy.addNewPiece('VR 2020 1212 DOC.0001-1', file, 'agendaitems');
+    cy.get(agenda.agendaitemNav.caseTab).click();
+    cy.get(agenda.agendaitemTitlesView.edit).click();
+    cy.get(agenda.agendaitemTitlesEdit.shorttitle).clear()
+      .type(caseTitle2);
+    cy.intercept('PATCH', '/subcases/*').as('patchSubcases5');
+    cy.intercept('PATCH', '/agendaitems/*').as('patchAgendaitems');
+    cy.intercept('PATCH', '/agendas/*').as('patchAgendas');
+    cy.get(agenda.agendaitemTitlesEdit.actions.save).click()
+      .wait('@patchSubcases5')
+      .wait('@patchAgendaitems')
+      .wait('@patchAgendas');
+    cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
+    cy.get(cases.subcaseDetailNav.documents).click();
+    // if this fails, we are probably saving subcase with an incomplete list of submission activities
+    cy.get(document.documentCard.card).should('have.length', 2)
+      .find(document.documentCard.name.value)
+      .contains(`${file.newFileName}BIS`);
   });
 });
