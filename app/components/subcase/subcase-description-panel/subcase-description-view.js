@@ -46,6 +46,6 @@ export default class SubcaseDescriptionView extends Component {
         sort: '-created',
       });
     }
-    this.approved = yield this.subcaseIsApproved.approved(this.args.subcase);
+    this.approved = yield this.subcaseIsApproved.isApproved(this.args.subcase);
   }
 }

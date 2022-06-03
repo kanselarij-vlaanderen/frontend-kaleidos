@@ -4,7 +4,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class SubcaseIsApprovedService extends Service {
   @service store;
 
-  async approved(subcase) {
+  async isApproved(subcase) {
     const meeting = await subcase.requestedForMeeting;
 
     if (meeting?.isFinal) {
