@@ -15,10 +15,7 @@
     >
       {{await mandatee.fullDisplayName}}
       <span class="auk-u-text-muted auk-u-text-size--small">
-        {{moment-format mandatee.start "YYYY"}}-{{moment-format
-          mandatee.end
-          "YYYY"
-        }}
+        {{moment-format mandatee.start}} tot {{if mandatee.end (moment-format mandatee.end) "heden"}}
       </span>
     </PowerSelectMultiple>
   {{else}}
@@ -32,13 +29,10 @@
       @onChange={{@onSelectMandatee}}
       as |mandatee|
     >
-      {{await mandatee.fullDisplayName}}
-      <span class="auk-u-text-muted auk-u-text-size--small">
-        {{moment-format mandatee.start "YYYY"}}-{{moment-format
-          mandatee.end
-          "YYYY"
-        }}
-      </span>
+    {{await mandatee.fullDisplayName}}
+    <span class="auk-u-text-muted auk-u-text-size--small">
+      {{moment-format mandatee.start}} tot {{if mandatee.end (moment-format mandatee.end) "heden"}}
+    </span>
     </PowerSelect>
   {{/if}}
 </div>
