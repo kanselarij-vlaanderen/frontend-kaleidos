@@ -25,7 +25,9 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
   }
 
   async model() {
-    const newsletterInfo = await this.agendaItemTreatment.newsletterInfo;
+    const newsletterInfo = await this.store.queryOne('newsletter-info', {
+      'filter[agenda-item-treatment][:id:]': this.agendaItemTreatment.id,
+    });
     return newsletterInfo;
   }
 

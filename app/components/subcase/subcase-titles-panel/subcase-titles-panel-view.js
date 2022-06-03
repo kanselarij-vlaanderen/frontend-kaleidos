@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /**
  * @argument subcase
@@ -10,7 +9,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
  * @argument onClickEdit
  */
 export default class SubcaseTitlesPanelView extends Component {
-  @service store;
+  @service subcaseIsApproved;
 
   @tracked approved;
 
@@ -21,26 +20,7 @@ export default class SubcaseTitlesPanelView extends Component {
 
   @task
   *loadApproved() {
-    const meeting = yield this.args.subcase.requestedForMeeting;
-    if (meeting?.isFinal) {
-      const approvedDecisionResultCode = yield this.store.findRecordByUri(
-        'decision-result-code',
-        CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
-      );
-      const acknowledgedDecisionResultCode = yield this.store.findRecordByUri(
-        'decision-result-code',
-        CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
-      );
-      this.approved = !!(yield this.store.queryOne('agenda-item-treatment', {
-        'filter[subcase][id]': this.args.subcase.id,
-        'filter[decision-result-code][:id:]': [
-          approvedDecisionResultCode.id,
-          acknowledgedDecisionResultCode.id,
-        ].join(','),
-      }));
-    } else {
-      this.approved = false;
-    }
+    this.approved = yield this.subcaseIsApproved.approved(this.args.subcase);
   }
 
   get pillSkin(){

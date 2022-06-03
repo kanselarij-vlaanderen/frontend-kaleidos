@@ -12,6 +12,7 @@ export default class SubcaseDescriptionView extends Component {
   @service store;
   @service currentSession;
   @service subcasesService;
+  @service subcaseIsApproved;
 
   @tracked phases = null;
   @tracked subcaseType = null;
@@ -44,27 +45,7 @@ export default class SubcaseDescriptionView extends Component {
         'filter[:has-no:next-version]': 't',
         sort: '-created',
       });
-
-
-      if (this.latestMeeting.isFinal) {
-        const approvedDecisionResultCode = yield this.store.findRecordByUri(
-          'decision-result-code',
-          CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
-        );
-        const acknowledgedDecisionResultCode = yield this.store.findRecordByUri(
-          'decision-result-code',
-          CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
-        );
-        this.approved = !!(yield this.store.queryOne('agenda-item-treatment', {
-          'filter[subcase][id]': this.args.subcase.id,
-          'filter[decision-result-code][:id:]': [
-            approvedDecisionResultCode.id,
-            acknowledgedDecisionResultCode.id,
-          ].join(','),
-        }));
-      } else {
-        this.approved = false;
-      }
     }
+    this.approved = yield this.subcaseIsApproved.approved(this.args.subcase);
   }
 }

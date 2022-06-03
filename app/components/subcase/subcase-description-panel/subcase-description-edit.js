@@ -4,7 +4,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
-import { saveChanges } from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default class SubcaseDescriptionEdit extends Component {
   /**
@@ -14,6 +13,7 @@ export default class SubcaseDescriptionEdit extends Component {
    */
   @service store;
   @service newsletterService;
+  @service saveAgendaitemChanges
 
   @tracked subcaseName;
   @tracked caseTypes;
@@ -87,12 +87,11 @@ export default class SubcaseDescriptionEdit extends Component {
       showAsRemark: this.showAsRemark,
     };
     const oldShowAsRemark = this.args.subcase.showAsRemark;
-    await saveChanges(
+    await this.saveAgendaitemChanges.saveChanges(
       this.args.subcase,
       propertiesToSetOnAgendaitem,
       propertiesToSetOnSubCase,
       resetFormallyOk,
-      this.store,
     );
 
     if (this.showAsRemark !== oldShowAsRemark) {
