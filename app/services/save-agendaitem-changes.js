@@ -7,7 +7,7 @@ export default class SaveAgendaitemChangesService extends Service {
 
   async saveChanges(agendaitemOrSubcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk) {
     const item = agendaitemOrSubcase;
-    const isAgendaitem = item.get('modelName') === 'agendaitem';
+    const isAgendaitem = item.modelName === 'agendaitem';
 
     await item.preEditOrSaveCheck();
     if (isAgendaitem) {
@@ -27,7 +27,7 @@ export default class SaveAgendaitemChangesService extends Service {
         'filter[agenda-activity][subcase][:id:]': item.id,
         'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
       });
-      if (agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0) {
+      if (agendaitemsOnDesignAgendaToEdit?.length > 0) {
         await Promise.all(agendaitemsOnDesignAgendaToEdit.map(async(agendaitem) => {
           await setNewPropertiesToModel(agendaitem, propertiesToSetOnAgendaitem, resetFormallyOk);
           await setModifiedOnAgendaOfAgendaitem(agendaitem);
