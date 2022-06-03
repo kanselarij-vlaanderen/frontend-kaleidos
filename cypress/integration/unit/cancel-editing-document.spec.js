@@ -24,7 +24,7 @@ function uploadFileToCancel(file) {
 
 function openAgendaitemDocumentBatchEdit() {
   cy.intercept('GET', '/document-types?**').as('getDocumentTypes');
-  cy.intercept('GET', '/access-levels?**').as('getAccessLevels');
+  cy.intercept('GET', '/concepts?**').as('getAccessLevels');
   cy.get(route.agendaitemDocuments.batchEdit).click();
   cy.wait('@getDocumentTypes');
   cy.wait('@getAccessLevels');

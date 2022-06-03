@@ -21,12 +21,11 @@
     />
   </td>
   <td>
-    <Utils::ModelSelector
+    <Utils::AccessLevelSelector
       data-test-edit-document-row-access-level={{true}}
-      @modelName="access-level"
       @allowClear={{true}}
       @displayField="label"
-      @sortField="label"
+      @sortField="position"
       @selected={{@piece.accessLevel}}
       @onChange={{this.selectAccessLevel}}
     />

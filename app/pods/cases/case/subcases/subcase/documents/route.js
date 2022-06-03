@@ -33,7 +33,7 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
   }
 
   async afterModel() {
-    this.defaultAccessLevel = await this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
+    this.defaultAccessLevel = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
   }
 
   setupController(controller) {
