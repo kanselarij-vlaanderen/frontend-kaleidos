@@ -34,7 +34,7 @@ export default Component.extend({
     const requestedForMeeting = await subcase.get('requestedForMeeting');
     const activities = await subcase.get('agendaActivities');
 
-    if (activities?.legnth || requestedForMeeting || isAssigningToOtherAgenda || isLoading) {
+    if (activities?.length || requestedForMeeting || isAssigningToOtherAgenda || isLoading) {
       return false;
     }
 
