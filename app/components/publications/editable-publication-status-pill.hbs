@@ -16,8 +16,6 @@
     {{on "click" this.openStatusSelector}}
   >
     <strong {{did-update (perform this.loadStatus) @publicationFlow.status}}>{{this.publicationStatus.label}}</strong>
-    -
-    {{moment-format @publicationFlow.publicationStatusChange.startedAt}}
   </Auk::StatusPill>
 {{/if}}
 
