@@ -2,6 +2,14 @@
   <Auk::Modal::Header @title={{t "add-minister"}} @onClose={{@onClose}} />
   <Auk::Modal::Body>
     <Auk::Checkbox @checked={{this.openSearch}} {{on "input" this.setOpenSearch}} />
+    {{t "open-search-for-mandatee"}}
+    <Auk::Icon @skin="muted" @name="circle-info">
+      <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
+        <p>
+          {{t "open-search-for-mandatee-tooltip"}}
+        </p>
+      </EmberTooltip>
+    </Auk::Icon>
     <Utils::LoadableContent
       @isLoading={{this.onAdd.isRunning}}
       @reserveSpace={{true}}
