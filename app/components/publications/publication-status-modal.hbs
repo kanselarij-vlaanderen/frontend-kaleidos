@@ -36,13 +36,6 @@
         {{status.label}}
       </PowerSelect>
     </div>
-    <div class="auk-form-group">
-      <Auk::Label for="blockInput">{{t "date"}}</Auk::Label>
-      <Auk::Datepicker
-        @date={{this.changeDate}}
-        @onChange={{set this "changeDate"}}
-      />
-    </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
     <Auk::Button
