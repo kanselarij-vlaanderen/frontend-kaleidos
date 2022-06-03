@@ -1,4 +1,5 @@
-<div data-test-mandatee-selector-container
+<div
+  data-test-mandatee-selector-container
   {{did-update (perform this.loadMandatees) @openSearch}}
 >
   {{#if @multiple}}
@@ -8,14 +9,20 @@
       @disabled={{@disabled}}
       @closeOnSelect={{false}}
       @searchEnabled={{true}}
-      @search={{if @openSearch (perform this.searchMandatee) (perform this.filterMandatees)}}
+      @search={{if
+        @openSearch
+        (perform this.searchMandatee)
+        (perform this.filterMandatees)
+      }}
       @oninput={{this.resetMandateeOptionsIfEmpty}}
       @onChange={{@onSelectMandatee}}
       as |mandatee|
     >
       {{await mandatee.fullDisplayName}}
       <span class="auk-u-text-muted auk-u-text-size--small">
-        {{moment-format mandatee.start}} tot {{if mandatee.end (moment-format mandatee.end) "heden"}}
+        {{moment-format mandatee.start}}
+        tot
+        {{if mandatee.end (moment-format mandatee.end) "heden"}}
       </span>
     </PowerSelectMultiple>
   {{else}}
@@ -24,15 +31,21 @@
       @selected={{await @selectedMandatees}}
       @disabled={{@disabled}}
       @searchEnabled={{true}}
-      @search={{if @openSearch (perform this.searchMandatee) (perform this.filterMandatees)}}
+      @search={{if
+        @openSearch
+        (perform this.searchMandatee)
+        (perform this.filterMandatees)
+      }}
       @oninput={{this.resetMandateeOptionsIfEmpty}}
       @onChange={{@onSelectMandatee}}
       as |mandatee|
     >
-    {{await mandatee.fullDisplayName}}
-    <span class="auk-u-text-muted auk-u-text-size--small">
-      {{moment-format mandatee.start}} tot {{if mandatee.end (moment-format mandatee.end) "heden"}}
-    </span>
+      {{await mandatee.fullDisplayName}}
+      <span class="auk-u-text-muted auk-u-text-size--small">
+        {{moment-format mandatee.start}}
+        tot
+        {{if mandatee.end (moment-format mandatee.end) "heden"}}
+      </span>
     </PowerSelect>
   {{/if}}
 </div>
