@@ -2,11 +2,10 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { saveChanges } from 'frontend-kaleidos/utils/agendaitem-utils';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CasesCaseSubcasesSubcaseOverviewController extends Controller {
-  @service store;
+  @service saveAgendaitemChanges;
   @service currentSession;
 
   @tracked page = 0;
@@ -34,12 +33,11 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
     };
     this.mandatees = mandateeData.mandatees;
     this.submitter = mandateeData.submitter;
-    await saveChanges(
+    await this.saveAgendaitemChanges.saveChanges(
       this.model.subcase,
       propertiesToSetOnAgendaitem,
       propertiesToSetOnSubcase,
       true,
-      this.store,
     );
   }
 

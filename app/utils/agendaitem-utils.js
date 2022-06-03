@@ -62,46 +62,6 @@ export const setModifiedOnAgendaOfAgendaitem = async(agendaitem) => {
 };
 
 /**
- * Save Changes on agenda item or subcase.
- *
- * @param agendaitemOrSubcase
- * @param propertiesToSetOnAgendaitem
- * @param propertiesToSetOnSubcase
- * @param resetFormallyOk
- * @returns {Promise<void>}
- */
-export const saveChanges = async(agendaitemOrSubcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk, store) => {
-  const item = agendaitemOrSubcase;
-  const isAgendaitem = item.get('modelName') === 'agendaitem';
-
-  await item.preEditOrSaveCheck();
-  if (isAgendaitem) {
-    const agenda = await item.agenda;
-    const agendaStatus = await agenda.status;
-    const agendaActivity = await item.agendaActivity;
-    if (agendaActivity && (agendaStatus.isDesignAgenda || agendaStatus.isFinal)) {
-      const agendaitemSubcase = await agendaActivity.subcase;
-      await agendaitemSubcase.preEditOrSaveCheck();
-      await setNewPropertiesToModel(agendaitemSubcase, propertiesToSetOnSubcase, false);
-    }
-    await setNewPropertiesToModel(item, propertiesToSetOnAgendaitem, resetFormallyOk);
-    await setModifiedOnAgendaOfAgendaitem(item);
-  } else {
-    await setNewPropertiesToModel(item, propertiesToSetOnSubcase, false);
-    const agendaitemsOnDesignAgendaToEdit = await store.query('agendaitem', {
-      'filter[agenda-activity][subcase][:id:]': item.id,
-      'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
-    });
-    if (agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0) {
-      await Promise.all(agendaitemsOnDesignAgendaToEdit.map(async(agendaitem) => {
-        await setNewPropertiesToModel(agendaitem, propertiesToSetOnAgendaitem, resetFormallyOk);
-        await setModifiedOnAgendaOfAgendaitem(agendaitem);
-      }));
-    }
-  }
-};
-
-/**
  * For a given set of agenda items, will re-order them by their groupNumber
  * ⚠️ Word of caution, this mutates the original set!
  * @param {Array} agendaitems   Agenda items to mutate

@@ -2,15 +2,13 @@ import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import {
-  saveChanges,
-  reorderAgendaitemsOnAgenda,
-} from 'frontend-kaleidos/utils/agendaitem-utils';
+import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
   @service store;
   @service currentSession;
   @service router;
+  @service saveAgendaitemChanges;
 
   @controller('agenda.agendaitems') agendaitemsController;
   @controller('agenda') agendaController;
@@ -83,12 +81,11 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     };
     this.mandatees = mandateeData.mandatees;
     this.submitter = mandateeData.submitter;
-    await saveChanges(
+    await this.saveAgendaitemChanges.saveChanges(
       this.model,
       propertiesToSetOnAgendaitem,
       propertiesToSetOnSubcase,
       true,
-      this.store
     );
     this.agendaitemsController.groupNotasOnGroupName.perform();
   }
