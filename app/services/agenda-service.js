@@ -6,6 +6,14 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
 import { A } from '@ember/array';
 
+function responseHasJson(response) {
+  return response.headers.get('Content-Type').includes('json');
+}
+
+function formatErrorPayload(payload) {
+  return payload.errors.map((e) => e.title).join('\n');
+}
+
 export default class AgendaService extends Service {
   @service store;
   @service toaster;
@@ -26,16 +34,15 @@ export default class AgendaService extends Service {
         'Content-Type': 'application/vnd.api+json',
       },
     });
-    if (response.ok) {
+    if (responseHasJson(response)) {
       const payload = await response.json();
-      if (payload.error) {
-        throw new Error(payload.error.detail);
+      if (payload.errors) {
+        throw new Error(formatErrorPayload(payload));
       }
       const newAgenda = await this.store.findRecord('agenda', payload.data.id);
       return newAgenda;
-    } else {
-      throw new Error(response.statusText);
     }
+    throw new Error(response.statusText);
   }
 
   async approveDesignAgenda(currentAgenda) {
@@ -46,16 +53,15 @@ export default class AgendaService extends Service {
         'Content-Type': 'application/vnd.api+json',
       },
     });
-    if (response.ok) {
+    if (responseHasJson(response)) {
       const payload = await response.json();
-      if (payload.error) {
-        throw new Error(payload.error.detail);
+      if (payload.errors) {
+        throw new Error(formatErrorPayload(payload));
       }
       const newAgenda = await this.store.findRecord('agenda', payload.data.id);
       return newAgenda;
-    } else {
-      throw new Error(response.statusText);
     }
+    throw new Error(response.statusText);
   }
 
   async approveAgendaAndCloseMeeting(currentAgenda) {
@@ -68,6 +74,10 @@ export default class AgendaService extends Service {
     });
 
     if (!response.ok) {
+      if (responseHasJson) {
+        const payload = await response.json();
+        throw new Error(formatErrorPayload(payload));
+      }
       throw new Error(response.statusText);
     }
   }
@@ -80,16 +90,15 @@ export default class AgendaService extends Service {
         'Content-Type': 'application/vnd.api+json',
       },
     });
-    if (response.ok) {
+    if (responseHasJson(response)) {
       const payload = await response.json();
-      if (payload.error) {
-        throw new Error(payload.error.detail);
+      if (payload.errors) {
+        throw new Error(formatErrorPayload(payload));
       }
       const lastApprovedAgenda = await this.store.findRecord('agenda', payload.data.id);
       return lastApprovedAgenda;
-    } else {
-      throw new Error(response.statusText);
     }
+    throw new Error(response.statusText);
   }
 
   async reopenPreviousAgenda(currentAgenda) {
@@ -100,16 +109,15 @@ export default class AgendaService extends Service {
         'Content-Type': 'application/vnd.api+json',
       },
     });
-    if (response.ok) {
+    if (responseHasJson(response)) {
       const payload = await response.json();
-      if (payload.error) {
-        throw new Error(payload.error.detail);
+      if (payload.errors) {
+        throw new Error(formatErrorPayload(payload));
       }
       const reopenedAgenda = await this.store.findRecord('agenda', payload.data.id);
       return reopenedAgenda;
-    } else {
-      throw new Error(response.statusText);
     }
+    throw new Error(response.statusText);
   }
 
   async deleteAgenda(currentAgenda) {
@@ -120,10 +128,10 @@ export default class AgendaService extends Service {
         'Content-Type': 'application/vnd.api+json',
       },
     });
-    if (response.ok) {
+    if (responseHasJson(response)) {
       const payload = await response.json();
-      if (payload.error) {
-        throw new Error(payload.error.detail);
+      if (payload.errors) {
+        throw new Error(formatErrorPayload(payload));
       }
       if (payload.data?.id) {
         const lastApprovedAgenda = await this.store.findRecord('agenda', payload.data.id);
@@ -131,9 +139,8 @@ export default class AgendaService extends Service {
       } else {
         return null;
       }
-    } else {
-      throw new Error(response.statusText);
     }
+    throw new Error(response.statusText);
   }
 
   /* API: agenda-comparison-service */
