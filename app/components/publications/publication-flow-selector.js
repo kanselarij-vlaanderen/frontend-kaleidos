@@ -29,7 +29,7 @@ export default class PublicationsPublicationFlowSelectorComponent extends Compon
     // the (sub)case was handled on an agenda
     const filterNotViaCouncilOfMinisters = {
       'agenda-item-treatment': {
-        ':has:agendaitem': 'yes',
+        ':has-no:agendaitem': 'yes',
       },
     };
 
