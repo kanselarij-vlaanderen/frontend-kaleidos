@@ -5,7 +5,7 @@ export default class SubcaseIsApprovedService extends Service {
   @service store;
 
   async isApproved(subcase) {
-    const meeting = await subcase.requestedForMeeting;
+    const meeting = await subcase?.requestedForMeeting;
 
     if (meeting?.isFinal) {
       const approvedDecisionResultCode = await this.store.findRecordByUri(
