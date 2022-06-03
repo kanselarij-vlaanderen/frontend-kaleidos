@@ -18,7 +18,7 @@ export default class SubcaseIsApprovedService extends Service {
       );
 
       return await this.store.count('agenda-item-treatment', {
-        'filter[subcase][id]': subcase.id,
+        'filter[subcase][:id:]': subcase.id,
         'filter[decision-result-code][:id:]': [
           approvedDecisionResultCode.id,
           acknowledgedDecisionResultCode.id,
