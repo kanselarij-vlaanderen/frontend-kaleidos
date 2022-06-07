@@ -24,32 +24,17 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
   constructor() {
     super(...arguments);
 
-    this.initValidators();
-    this.initOrganizations();
+    this.validators = new ValidatorSet({
+      firstName: new Validator(() => isPresent(this.firstName)),
+      lastName: new Validator(() => isPresent(this.lastName)),
+    });
+    this.organizations = this.loadOrganizations('');
   }
 
   @task
   *searchOrganizations(searchTerm) {
     yield timeout(300);
-    return this.loadOrganizations.perform(searchTerm);
-  }
-
-  @task
-  *loadOrganizations(searchTerm) {
-    const query = {};
-    if (searchTerm) {
-      query['filter[name]'] = searchTerm;
-    } else {
-      // TODO This is not ideal, there are currently +- 60 organizations that come from ACM-IDM, they don't have a name
-      // TODO need a better filter, add a boolean to model maybe ?
-      query['filter[:gt:name]'] = ''; // workaround to filter on resources that have a 'name' attribute
-    }
-    const organizations = yield this.store.query('organization', {
-      ...query,
-      'page[size]': PAGE_SIZE.SELECT,
-      sort: 'name',
-    });
-    return organizations;
+    return this.loadOrganizations(searchTerm);
   }
 
   @task
@@ -84,14 +69,20 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
     this.isOpenOrganizationAddModal = false;
   }
 
-  async initOrganizations() {
-    this.organizations = await this.loadOrganizations.perform('');
-  }
-
-  initValidators() {
-    this.validators = new ValidatorSet({
-      firstName: new Validator(() => isPresent(this.firstName)),
-      lastName: new Validator(() => isPresent(this.lastName)),
+  async loadOrganizations(searchTerm) {
+    const query = {};
+    if (searchTerm) {
+      query['filter[name]'] = searchTerm;
+    } else {
+      // TODO This is not ideal, there are currently +- 60 organizations that come from ACM-IDM, they don't have a name
+      // TODO need a better filter, add a boolean to model maybe ?
+      query['filter[:gt:name]'] = ''; // workaround to filter on resources that have a 'name' attribute
+    }
+    const organizations = await this.store.query('organization', {
+      ...query,
+      'page[size]': PAGE_SIZE.SELECT,
+      sort: 'name',
     });
+    return organizations;
   }
 }

@@ -55,21 +55,6 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
   @task
   *loadProofPieces() {
     let proofingActivity = this.args.proofingActivity;
-    if (!proofingActivity) {
-      // Fetch latest finished proofing-activity
-      proofingActivity = yield this.store.queryOne('proofing-activity', {
-        'filter[subcase][publication-flow][:id:]': this.args.publicationFlow.id,
-        // Filter on end-date is a workaround to ensure end date exists
-        'filter[:gte:end-date]': '1302-07-11',
-        // eslint-disable-next-line prettier/prettier
-        include: [
-          'generated-pieces',
-          'generated-pieces.file',
-        ].join(','),
-        sort: '-start-date',
-      });
-    }
-
     if (proofingActivity) {
       let generatedPieces = yield proofingActivity.generatedPieces;
       generatedPieces = generatedPieces.toArray();

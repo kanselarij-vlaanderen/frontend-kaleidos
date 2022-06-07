@@ -75,6 +75,7 @@ export default class PublicationStatusPill extends Component {
       );
       this.loadStatus.perform();
       this.loadDecision.perform();
+      this.args.onChange();
     }
     this.closeStatusSelector();
   }
