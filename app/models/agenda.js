@@ -1,6 +1,4 @@
 import Model, { hasMany, belongsTo, attr } from '@ember-data/model';
-// eslint-disable-next-line ember/no-computed-properties-in-native-classes
-import { reads } from '@ember/object/computed';
 // LoadableModel is still depended upon here and there. Should refactor out in the more general direction the codebase handles these load operations.
 // eslint-disable-next-line ember/no-mixins
 import LoadableModel from 'ember-data-storefront/mixins/loadable-model';
@@ -28,10 +26,6 @@ export default class Agenda extends Model.extend(LoadableModel) {
     inverse: null,
     serialize: false,
   }) agendaitems;
-
-
-  // TODO: Either refactor these two or figure out how to make them accessible using @tracked ?
-  @reads('status.isApproved') isApproved;
 
   async asyncCheckIfDesignAgenda() {
     await this.status;
