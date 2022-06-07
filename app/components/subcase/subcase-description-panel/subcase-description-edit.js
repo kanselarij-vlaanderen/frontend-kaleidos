@@ -13,7 +13,7 @@ export default class SubcaseDescriptionEdit extends Component {
    */
   @service store;
   @service newsletterService;
-  @service saveAgendaitemChanges
+  @service agendaitemAndSubcasePropertiesSync;
 
   @tracked subcaseName;
   @tracked caseTypes;
@@ -87,7 +87,7 @@ export default class SubcaseDescriptionEdit extends Component {
       showAsRemark: this.showAsRemark,
     };
     const oldShowAsRemark = this.args.subcase.showAsRemark;
-    await this.saveAgendaitemChanges.saveChanges(
+    await this.agendaitemAndSubcasePropertiesSync.saveChanges(
       this.args.subcase,
       propertiesToSetOnAgendaitem,
       propertiesToSetOnSubCase,

@@ -39,7 +39,7 @@ const setModifiedOnAgendaOfAgendaitem = async(agendaitem) => {
   }
 };
 
-export default class SaveAgendaitemChangesService extends Service {
+export default class AgendaitemAndSubcasePropertiesSyncService extends Service {
   @service store;
 
   async saveChanges(agendaitemOrSubcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk) {

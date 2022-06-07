@@ -14,7 +14,7 @@ import { task } from 'ember-concurrency';
 export default class AgendaitemCasePanelEdit extends Component {
   @service store;
   @service pieceAccessLevelService;
-  @service saveAgendaitemChanges;
+  @service agendaitemAndSubcasePropertiesSync;
 
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'comment']);
 
@@ -54,7 +54,7 @@ export default class AgendaitemCasePanelEdit extends Component {
       confidential: this.args.subcase?.confidential,
     };
 
-    yield this.saveAgendaitemChanges.saveChanges(
+    yield this.agendaitemAndSubcasePropertiesSync.saveChanges(
       this.args.agendaitem,
       propertiesToSetOnAgendaitem,
       propertiesToSetOnSubcase,
