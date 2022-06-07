@@ -11,7 +11,7 @@ export default class PublicationFlow extends Model {
   @attr('datetime') created;
   @attr('datetime') modified;
   @attr('number') numberOfPages;
-  @attr('number') numberOfExtracts;
+  @attr('number') numberOfExtracts; // = aantal uittreksels
 
   @belongsTo('case') case;
   @belongsTo('identification', {
