@@ -42,7 +42,7 @@
           <tbody>
             {{#if @isLoading}}
               <tr data-test-route-publications-index-loading>
-                <td colspan={{add @tableColumns.length 1}}>
+                <td colspan={{add @tableConfig.visibleColumns.length 1}}>
                   {{t "loading"}}
                 </td>
               </tr>
