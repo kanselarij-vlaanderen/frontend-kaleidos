@@ -26,9 +26,4 @@ export default class Agenda extends Model.extend(LoadableModel) {
     inverse: null,
     serialize: false,
   }) agendaitems;
-
-  async asyncCheckIfDesignAgenda() {
-    await this.status;
-    return this.isDesignAgenda;
-  }
 }

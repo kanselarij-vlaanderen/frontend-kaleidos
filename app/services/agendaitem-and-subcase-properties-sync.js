@@ -31,7 +31,7 @@ const setNewPropertiesToModel = async(model, propertiesToSet, resetFormallyOk = 
  */
 const setModifiedOnAgendaOfAgendaitem = async(agendaitem) => {
   const agenda = await agendaitem.get('agenda');
-  const isDesignAgenda = await agenda.asyncCheckIfDesignAgenda();
+  const isDesignAgenda = await agenda.status.get('isDesignAgenda');
   if (agenda && isDesignAgenda) {
     agenda.set('modified', moment().utc()
       .toDate());
