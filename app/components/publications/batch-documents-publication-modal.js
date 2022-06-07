@@ -128,13 +128,14 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
       } else {
         // Publication-flow is already linked to an agenda-item-treatment that has been
         // handled on an agenda. We cannot relink the publication-flow in that case.
-        // In practice, this scenario will not occur since they are not able to select
-        // such a publication-flow in the publication-flow-selector.
+        // In practice this scenario will only occur in concurrency scenarios where
+        // multiple users try to link the same publication at the same time to
+        // different cases.
         this.toaster.error(
           this.intl.t('unable-to-relink-publication-flow'),
           this.intl.t('warning-title')
         );
-        throw Error('Unable to relink publication flow');
+        return;
       }
     }
 
