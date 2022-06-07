@@ -15,7 +15,7 @@ export default class AgendaItemTreatment extends Model {
   @belongsTo('agendaitem') agendaitem;
   @belongsTo('subcase') subcase;
   @belongsTo('piece') report;
-  @belongsTo('newsletter-info') newsletterInfo;
+  @belongsTo('newsletter-info', { serialize: false }) newsletterInfo;
   @belongsTo('decision-result-code', { inverse: null }) decisionResultCode;
   @hasMany('publication-flow') publicationFlows;
   @hasMany('sign-flow') signFlows;
