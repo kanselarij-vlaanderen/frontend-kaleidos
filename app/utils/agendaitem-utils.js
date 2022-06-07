@@ -1,6 +1,5 @@
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import EmberObject from '@ember/object';
-import moment from 'moment';
 import { A } from '@ember/array';
 
 /**
@@ -22,42 +21,6 @@ export const setAgendaitemFormallyOk = async(agendaitem) => {
   if (agendaitem.get('formallyOk') !== CONSTANTS.ACCEPTANCE_STATUSSES.OK) {
     agendaitem.set('formallyOk', CONSTANTS.ACCEPTANCE_STATUSSES.OK);
     await agendaitem.save();
-  }
-};
-
-/**
- * @description Set some properties on a model.
- * @param model Kan van het type agendaitem of subcase zijn
- * @param propertiesToSet de properties die we dienen aan te passen
- * @param resetFormallyOk Dient de formaliteit aangepast te worden of niet (default true)
- * @returns {Promise<*>}
- */
-export const setNewPropertiesToModel = async(model, propertiesToSet, resetFormallyOk = true) => {
-  if (resetFormallyOk) {
-    setNotYetFormallyOk(model);
-  }
-
-  const keys = Object.keys(propertiesToSet);
-  for (const key of keys) {
-    model.set(key, propertiesToSet[key]);
-  }
-
-  await model.save();
-  return model.reload();
-};
-
-/**
- * @description Zet de modified date property van een agenda op basis van de doorgegeven agendaitem
- * @param agendaitem Het agendaitem om de agenda mee op te vragen.
- * @returns {Promise<void>}
- */
-export const setModifiedOnAgendaOfAgendaitem = async(agendaitem) => {
-  const agenda = await agendaitem.get('agenda');
-  const isDesignAgenda = await agenda.asyncCheckIfDesignAgenda();
-  if (agenda && isDesignAgenda) {
-    agenda.set('modified', moment().utc()
-      .toDate());
-    agenda.save();
   }
 };
 

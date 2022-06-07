@@ -1,11 +1,7 @@
 import { belongsTo, hasMany, attr } from '@ember-data/model';
-import { inject as service } from '@ember/service';
 import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 
 export default class Subcase extends ModelWithModifier {
-  @service store;
-  @service intl;
-
   @attr('datetime') created;
   @attr('datetime') modified;
   @attr shortTitle;

@@ -1,13 +1,50 @@
 import Service, { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { setNewPropertiesToModel, setModifiedOnAgendaOfAgendaitem } from 'frontend-kaleidos/utils/agendaitem-utils';
+import moment from 'moment';
+import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 
-export default class SaveAgendaitemChangesService extends Service {
+/**
+ * @description Set some properties on a model.
+ * @param model Kan van het type agendaitem of subcase zijn
+ * @param propertiesToSet de properties die we dienen aan te passen
+ * @param resetFormallyOk Dient de formaliteit aangepast te worden of niet (default true)
+ * @returns {Promise<*>}
+ */
+const setNewPropertiesToModel = async(model, propertiesToSet, resetFormallyOk = true) => {
+  if (resetFormallyOk) {
+    setNotYetFormallyOk(model);
+  }
+
+  const keys = Object.keys(propertiesToSet);
+  for (const key of keys) {
+    model.set(key, propertiesToSet[key]);
+  }
+
+  await model.save();
+  return model.reload();
+};
+
+/**
+ * @description Zet de modified date property van een agenda op basis van de doorgegeven agendaitem
+ * @param agendaitem Het agendaitem om de agenda mee op te vragen.
+ * @returns {Promise<void>}
+ */
+const setModifiedOnAgendaOfAgendaitem = async(agendaitem) => {
+  const agenda = await agendaitem.get('agenda');
+  const isDesignAgenda = await agenda.asyncCheckIfDesignAgenda();
+  if (agenda && isDesignAgenda) {
+    agenda.set('modified', moment().utc()
+      .toDate());
+    agenda.save();
+  }
+};
+
+export default class AgendaitemAndSubcasePropertiesSyncService extends Service {
   @service store;
 
   async saveChanges(agendaitemOrSubcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk) {
     const item = agendaitemOrSubcase;
-    const isAgendaitem = item.get('modelName') === 'agendaitem';
+    const isAgendaitem = item.modelName === 'agendaitem';
 
     await item.preEditOrSaveCheck();
     if (isAgendaitem) {
@@ -27,7 +64,7 @@ export default class SaveAgendaitemChangesService extends Service {
         'filter[agenda-activity][subcase][:id:]': item.id,
         'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
       });
-      if (agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0) {
+      if (agendaitemsOnDesignAgendaToEdit?.length > 0) {
         await Promise.all(agendaitemsOnDesignAgendaToEdit.map(async(agendaitem) => {
           await setNewPropertiesToModel(agendaitem, propertiesToSetOnAgendaitem, resetFormallyOk);
           await setModifiedOnAgendaOfAgendaitem(agendaitem);

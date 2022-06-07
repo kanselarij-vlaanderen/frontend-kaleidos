@@ -20,7 +20,7 @@ export default class SubcaseTitlesPanelView extends Component {
 
   @task
   *loadApproved() {
-    this.approved = yield this.subcaseIsApproved.approved(this.args.subcase);
+    this.approved = yield this.subcaseIsApproved.isApproved(this.args.subcase);
   }
 
   get pillSkin(){
