@@ -85,7 +85,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   async allAgendaitemsNotOk() {
     const agendaitems = await this.args.currentAgenda.agendaitems;
     return agendaitems
-          .filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.get('formallyOk')))
+          .filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.formallyOk))
           .sortBy('number');
   }
 
