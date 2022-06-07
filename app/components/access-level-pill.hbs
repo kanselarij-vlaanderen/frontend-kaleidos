@@ -22,11 +22,10 @@
     {{/if}}
   {{else}}
     <div class="auk-u-maximize-width">
-      <Utils::ModelSelector
-        @modelName="access-level"
+      <Utils::AccessLevelSelector
         @allowClear={{true}}
         @displayField="label"
-        @sortField="priority"
+        @sortField="position"
         @selected={{@accessLevel}}
         @onChange={{this.changeAccessLevel}}
         data-test-access-level-pill-selector

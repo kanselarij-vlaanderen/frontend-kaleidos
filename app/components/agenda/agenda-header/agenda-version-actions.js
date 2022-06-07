@@ -178,20 +178,17 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
    * Also reopens the meeting if needed (for action unlockAgenda)
    * The agenda gets copied including the agendatems and a new design agenda id is returned
    * We then reload some models/relations and route to the new agenda
-   * *NOTE* Both action unlockMeeting and createNewDesignAgenda do not have confirmation windows
    */
   @action
-  async createDesignAgenda() {
+  async reopenMeeting() {
     this.args.onStartLoading(this.intl.t('agenda-add-message'));
     try {
-      const newAgenda = await this.agendaService.createNewDesignAgenda(
-        this.args.meeting
-      );
+      const newAgenda = await this.agendaService.reopenMeeting(this.args.meeting);
       // After the agenda has been created, we want to update the agendaitems of activities
       await this.reloadAgendaitemsOfAgenda(newAgenda);
       await this.reloadMeeting();
       this.args.onStopLoading();
-      return this.router.transitionTo(
+      this.router.transitionTo(
         'agenda.agendaitems',
         this.args.meeting.id,
         newAgenda.id
@@ -244,7 +241,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     }
     try {
       const newAgenda = await this.agendaService.approveDesignAgenda(
-        this.args.meeting
+        this.args.currentAgenda
       );
       // Data reloading
       await this.reloadAgenda(this.args.currentAgenda);
@@ -295,7 +292,8 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       return;
     }
     try {
-      await this.agendaService.approveAgendaAndCloseMeeting(this.args.meeting);
+      await this.agendaService.approveAgendaAndCloseMeeting(this.args.currentAgenda);
+
       // Data reloading
       await this.reloadAgenda(this.args.currentAgenda);
       await this.reloadAgendaitemsOfAgenda(this.args.currentAgenda);
@@ -383,7 +381,6 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     }
     try {
       const lastapprovedAgenda = await this.agendaService.deleteAgenda(
-        this.args.meeting,
         this.args.currentAgenda
       );
       if (lastapprovedAgenda) {
@@ -445,7 +442,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         this.piecesToDeleteReopenPreviousAgenda = null;
       }
       const lastApprovedAgenda = await this.agendaService.reopenPreviousAgenda(
-        this.args.meeting
+        this.args.currentAgenda
       );
       // Data reloading
       await this.reloadAgenda(lastApprovedAgenda);

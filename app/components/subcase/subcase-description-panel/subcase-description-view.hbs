@@ -19,7 +19,7 @@
       {{@subcase.subcaseName}}
     </p>
     <ul class="vlc-status-timeline">
-      {{#each (await @subcase.phases) as |phase|}}
+      {{#each this.phases as |phase|}}
         <li
           class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
           data-test-subcase-description-timeline-item
@@ -125,9 +125,9 @@
           data-test-subcase-description-decided-on
           class="auk-key-value-item__value"
         >
-          {{#if (is-pending @subcase.approved)}}
+          {{#if (is-empty this.approved)}}
             <div class="auk-skeleton auk-skeleton--rectangle" role="alert" aria-busy="true"></div>
-          {{else if (await @subcase.approved)}}
+          {{else if this.approved}}
             {{moment-format this.latestMeeting.plannedStart}}
           {{else}}
             {{t "not-yet-decided"}}

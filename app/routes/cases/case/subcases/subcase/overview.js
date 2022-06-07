@@ -37,12 +37,13 @@ export default class CasesCaseSubcasesSubcaseOverviewRoute extends Route {
     return {
       subcase,
       siblingSubcases,
-    }
+    };
   }
 
   async afterModel(model) {
     this.mandatees = (await model.subcase.mandatees).sortBy('priority');
     this.submitter = await model.subcase.requestedBy;
+    this.meeting = await model.subcase.requestedForMeeting;
     this.governmentAreas = await this.case.governmentAreas;
   }
 
@@ -51,6 +52,7 @@ export default class CasesCaseSubcasesSubcaseOverviewRoute extends Route {
     controller.mandatees = this.mandatees;
     controller.submitter = this.submitter;
     controller.case = this.case;
+    controller.meeting = this.meeting;
     controller.governmentAreas = this.governmentAreas;
   }
 }

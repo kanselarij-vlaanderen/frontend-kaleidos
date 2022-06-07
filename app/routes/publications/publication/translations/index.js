@@ -5,11 +5,29 @@ import { warn } from '@ember/debug';
 import { inject as service } from '@ember/service';
 
 export class TimelineActivity {
-  @tracked activity;
+  static async create(activity) {
+    const row = new TimelineActivity();
+    row.activity = activity;
 
-  constructor(activity) {
-    this.activity = activity;
+    if (row.isTranslationActivity) {
+      let pieces = await Promise.all([
+        row.activity.usedPieces,
+        row.activity.generatedPieces,
+      ]);
+      pieces = pieces.map((pieces) => pieces.toArray());
+      pieces = pieces.flat();
+      let proofingActivities = pieces.mapBy('proofingActivitiesUsedBy');
+      proofingActivities = await Promise.all(proofingActivities);
+      proofingActivities = proofingActivities.map((proofingActivities) => proofingActivities.toArray());
+      proofingActivities = proofingActivities.flat();
+      row.canDeletePieces = proofingActivities.length === 0;
+    }
+
+    return row;
   }
+
+  @tracked activity;
+  @tracked canDeletePieces;
 
   get isRequestActivity() {
     return this.activity.constructor.modelName === 'request-activity';
@@ -59,15 +77,23 @@ export default class PublicationsPublicationTranslationsIndexRoute extends Route
       'translation-activity',
       {
         'filter[subcase][:id:]': this.translationSubcase.id,
-        include: 'generated-pieces,generated-pieces.file',
+        include: [
+          'used-pieces',
+          'used-pieces.proofing-activities-used-by',
+          'generated-pieces',
+          'generated-pieces.file',
+          'generated-pieces.proofing-activities-used-by',
+        ].join(','),
         sort: '-start-date',
       }
     );
 
-    return [
-      ...requestActivities.map((request) => new TimelineActivity(request)),
-      ...translationActivities.map((translation) => new TimelineActivity(translation))
-    ].sortBy('date').reverseObjects();
+    let rows = await Promise.all([
+      ...requestActivities.map((request) => TimelineActivity.create(request)),
+      ...translationActivities.map((translation) => TimelineActivity.create(translation)),
+    ]);
+    rows = rows.sortBy('date').reverseObjects();
+    return rows;
   }
 
   afterModel() {

@@ -2,15 +2,13 @@ import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import {
-  saveChanges,
-  reorderAgendaitemsOnAgenda
-} from 'frontend-kaleidos/utils/agendaitem-utils';
+import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
   @service store;
   @service currentSession;
   @service router;
+  @service agendaitemAndSubcasePropertiesSync;
 
   @controller('agenda.agendaitems') agendaitemsController;
   @controller('agenda') agendaController;
@@ -35,11 +33,21 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
       'filter[:lte:number]': `"${previousNumber}"`, // Needs quotes because of bug in mu-cl-resources
     });
     if (neighbouringItem) {
-      this.router.transitionTo('agenda.agendaitems.agendaitem', this.meeting.id, this.agenda.id, neighbouringItem.id);
+      this.router.transitionTo(
+        'agenda.agendaitems.agendaitem',
+        this.meeting.id,
+        this.agenda.id,
+        neighbouringItem.id
+      );
     } else {
       // If there is no neighbour, we most likely just deleted the last and only agendaitem
       // In this case we should transition to the agenda overview
-      this.router.transitionTo('agenda.agendaitems', this.meeting.id, this.agenda.id,{ queryParams: { anchor: null }});
+      this.router.transitionTo(
+        'agenda.agendaitems',
+        this.meeting.id,
+        this.agenda.id,
+        { queryParams: { anchor: null } }
+      );
     }
   }
 
@@ -53,7 +61,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     await this.reassignNumbersForAgendaitems();
     await this.navigateToNeighbouringItem(this.model);
     // reload the agenda route, detail tab should no longer show if we deleted the last and only agendaitem
-    // Also, if we deleted the first agendaitem, we should also reload the main route to reload <Agenda::agendaTabs> 
+    // Also, if we deleted the first agendaitem, we should also reload the main route to reload <Agenda::agendaTabs>
     return this.agendaController.send('reloadAgendaModel');
   }
 
@@ -73,7 +81,12 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     };
     this.mandatees = mandateeData.mandatees;
     this.submitter = mandateeData.submitter;
-    await saveChanges(this.model, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
+    await this.agendaitemAndSubcasePropertiesSync.saveChanges(
+      this.model,
+      propertiesToSetOnAgendaitem,
+      propertiesToSetOnSubcase,
+      true,
+    );
     this.agendaitemsController.groupNotasOnGroupName.perform();
   }
 

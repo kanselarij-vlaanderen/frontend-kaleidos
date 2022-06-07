@@ -25,6 +25,7 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     this.submitter = undefined;
     if (this.subcase) {
       this.submitter = await this.subcase.requestedBy;
+      this.meeting = await this.subcase.requestedForMeeting;
       const case_ = await this.subcase.case;
       await case_.governmentAreas;
     }
@@ -49,5 +50,6 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.newsletterInfo = this.newsletterInfo;
     controller.mandatees = this.mandatees;
     controller.submitter = this.submitter;
+    controller.meeting = this.meeting;
   }
 }

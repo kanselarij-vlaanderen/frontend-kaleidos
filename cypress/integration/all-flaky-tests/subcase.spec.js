@@ -107,6 +107,7 @@ context('Subcase tests', () => {
     cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
     cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
+    cy.wait(2000);
     cy.deleteSubcase();
   });
 

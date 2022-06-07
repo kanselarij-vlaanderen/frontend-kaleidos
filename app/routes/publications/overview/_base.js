@@ -52,7 +52,8 @@ export default class PublicationsOverviewBaseRoute extends Route {
     });
 
     const uniqueIncludes = [...new Set(pathsRequiringInclude)];
-    this.includes = uniqueIncludes;
+    // Sort includes to increase cache-hit chances
+    this.includes = uniqueIncludes.sort();
   }
 
   model(params) {
