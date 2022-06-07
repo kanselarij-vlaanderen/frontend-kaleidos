@@ -1,6 +1,5 @@
 import Service, { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import moment from 'moment';
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 
 /**
@@ -30,12 +29,11 @@ const setNewPropertiesToModel = async(model, propertiesToSet, resetFormallyOk = 
  * @returns {Promise<void>}
  */
 const setModifiedOnAgendaOfAgendaitem = async(agendaitem) => {
-  const agenda = await agendaitem.get('agenda');
+  const agenda = await agendaitem.agenda;
   const isDesignAgenda = await agenda.status.get('isDesignAgenda');
   if (agenda && isDesignAgenda) {
-    agenda.set('modified', moment().utc()
-      .toDate());
-    agenda.save();
+    agenda.set('modified', new Date());
+    await agenda.save();
   }
 };
 

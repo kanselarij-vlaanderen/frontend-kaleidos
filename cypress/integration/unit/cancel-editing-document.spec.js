@@ -377,7 +377,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .click();
   });
 
-  it.only('should test batch document edit', () => {
+  it('should test batch document edit', () => {
     // const agendaDate = Cypress.dayjs('2022-04-14');
     // const subcaseTitleShort = 'Cypress test: Batch editing - agendaitem pieces - short title - 1652693433';
     const fileName2 = 'Rij 2 test pdf 2';

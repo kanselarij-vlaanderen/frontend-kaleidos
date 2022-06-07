@@ -117,6 +117,7 @@ export default class PublicationService extends Service {
       status: initialStatus,
       shortTitle: publicationProperties.shortTitle,
       longTitle: publicationProperties.longTitle,
+      numberOfExtracts: 1,
       created: now,
       openingDate: publicationProperties.openingDate,
       modified: now,

@@ -8,12 +8,10 @@ export default class PublicationStatusModal extends Component {
   @service store;
 
   @tracked publicationStatus;
-  @tracked changeDate;
 
   constructor() {
     super(...arguments);
     this.publicationStatus = this.args.publicationStatus;
-    this.changeDate = new Date();
   }
 
   get publicationStatusses() {
@@ -31,6 +29,6 @@ export default class PublicationStatusModal extends Component {
 
   @task
   *savePublicationStatus() {
-    yield this.args.onSave(this.publicationStatus, this.changeDate);
+    yield this.args.onSave(this.publicationStatus, new Date());
   }
 }

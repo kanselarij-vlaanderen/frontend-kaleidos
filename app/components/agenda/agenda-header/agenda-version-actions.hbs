@@ -27,7 +27,7 @@
     {{#if @meeting.isFinal}}
       <Menu.Item
         data-test-agenda-actions-unlock-agenda
-        {{on "click" this.createDesignAgenda}}
+        {{on "click" this.reopenMeeting}}
         {{! This action does not have confirmation window}}
       >
         {{t "agenda-reopen"}}
@@ -66,7 +66,8 @@
       <Menu.Divider />
       <Menu.Item
         data-test-agenda-actions-create-new-design
-        {{on "click" this.createDesignAgenda}}
+        {{on "click" this.reopenMeeting}}
+        {{! This action does not have confirmation window}}
       >
         {{t "agenda-add"}}
       </Menu.Item>
