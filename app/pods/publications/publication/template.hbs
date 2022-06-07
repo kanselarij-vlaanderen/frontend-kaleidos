@@ -7,7 +7,10 @@
       <Auk::Toolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
           <span class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced auk-u-mb-2">
-            <Publications::EditablePublicationStatusPill @publicationFlow={{this.model}} />
+            <Publications::EditablePublicationStatusPill
+              @publicationFlow={{this.model}}
+              @onChange={{this.refreshRoute}}
+            />
             <span class="auk-overline auk-u-text-muted" data-test-route-publications-publication-header-number>
               {{uppercase (t "publication-flow")}}
               -

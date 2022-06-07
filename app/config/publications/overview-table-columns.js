@@ -16,8 +16,7 @@ export default [
     translationKeySmall: 'publications-table-publication-number-small',
     sortKey: 'identification.structured-identifier.local-identifier,-created',
     apiFieldPaths: [
-      'identification.structured-identifier.local-identifier',
-      'identification.structured-identifier.version-identifier',
+      'identification.id-name',
       'created',
     ],
   },
@@ -26,7 +25,10 @@ export default [
     translationKey: 'publications-table-numac-number',
     translationKeySmall: 'publications-table-numac-number-small',
     sortKey: 'numac-numbers.id-name,-created',
-    apiFieldPaths: ['numac-numbers.id-name', 'created'],
+    apiFieldPaths: [
+      'numac-numbers.id-name',
+      'created'
+    ],
   },
   {
     keyName: 'shortTitle',
@@ -146,6 +148,6 @@ export default [
     translationKey: 'publications-table-status',
     translationKeySmall: 'publications-table-status-small',
     sortKey: 'status.position,publication-status-change.started-at',
-    apiFieldPaths: ['status.position', 'publication-status-change.started-at'],
+    apiFieldPaths: ['status.position'],
   },
 ];
