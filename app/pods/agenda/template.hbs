@@ -1,5 +1,5 @@
 {{page-title
-  (await (agenda-name this.model.agenda))
+  this.model.agenda.agendaName
   " van "
   (moment-format
     this.model.meeting.plannedStart

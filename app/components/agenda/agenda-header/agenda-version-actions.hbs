@@ -225,7 +225,7 @@
           @skin="error"
           @message={{t
             "agenda-design-delete-message"
-            agenda=(await (agenda-name this.latestAgenda))
+            agenda=this.latestAgenda.agendaName
           }}
         />
       {{/if}}
@@ -261,7 +261,7 @@
         />
       {{/if}}
       <div>
-        {{t "delete-agenda-message" agenda=(await (agenda-name @currentAgenda))}}
+        {{t "delete-agenda-message" agenda=@currentAgenda.agendaName}}
       </div>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelDeleteSelectedAgenda}}>
@@ -291,8 +291,8 @@
           @skin="error"
           @message={{t
             "agenda-reopen-confirmation"
-            designAgenda=(await (agenda-name @currentAgenda))
-            approvedAgenda=(await (agenda-name this.lastApprovedAgenda))
+            designAgenda=@currentAgenda.agendaName
+            approvedAgenda=this.lastApprovedAgenda.agendaName
           }}
         />
         {{#if this.loadPiecesToDelete.isRunning}}

@@ -12,7 +12,7 @@
       @selectedAgenda={{this.agendaOne}}
       @selectModel={{this.chooseAgendaOne}}
     as |agenda|>
-      {{await (agenda-name agenda)}}
+      {{agenda.agendaName}}
     </Utils::AgendaSelector>
     <Utils::AgendaSelector
       data-test-compare-agenda-right={{true}}
@@ -25,7 +25,7 @@
       @selectedAgenda={{this.agendaTwo}}
       @selectModel={{this.chooseAgendaTwo}}
     as |agenda|>
-      {{await (agenda-name agenda)}}
+      {{agenda.agendaName}}
     </Utils::AgendaSelector>
   </div>
 
