@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { timeout, restartableTask, all } from 'ember-concurrency';
+import { timeout, restartableTask } from 'ember-concurrency';
 import { isBlank } from '@ember/utils';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
@@ -56,7 +56,7 @@ export default class PublicationsPublicationFlowSelectorComponent extends Compon
       include: 'identification',
     });
 
-    const [publicationsByCase, publicationsNotViaCouncilOfMinisters] = yield all([
+    const [publicationsByCase, publicationsNotViaCouncilOfMinisters] = yield Promise.all([
       searchByCase,
       searchNotViaCouncilOfMinisters
     ]);
