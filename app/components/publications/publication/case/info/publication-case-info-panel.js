@@ -48,7 +48,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     // Limiet publicatie
     this.publicationSubcase = await this.args.publicationFlow
       .publicationSubcase;
-    if (this.isViaCouncilOfMinisters) {
+    if (this.isViaCouncilOfMinisters && this.agendaItemTreatment) {
       // get the models meeting/agenda/agendaitem for clickable link
       this.modelsForAgendaitemRoute = await this.publicationService.getModelsForAgendaitemFromTreatment(this.agendaItemTreatment);
     }

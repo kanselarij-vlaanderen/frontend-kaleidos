@@ -169,6 +169,8 @@ context('Publications proofs tests', () => {
     cy.get(publication.statusPill.contentLabel).should('contain', 'Drukproef aangevraagd');
     // check edit and rollback
     cy.get(publication.proofReceivedPanel.endDate).contains(translationEndDate.format('DD-MM-YYYY'));
+    // TODO flaky dropdown opening: Attempted to access the computed <frontend-kaleidos@component:attach-popover::ember486>._hideOn on a destroyed object, which is not allowed
+    cy.wait(1000);
     cy.get(publication.proofReceivedPanel.dropdown).click();
     cy.get(publication.proofReceivedPanel.edit).click();
     cy.get(auk.datepicker).click();
@@ -242,14 +244,16 @@ context('Publications proofs tests', () => {
 
     // request proof
     cy.get(publication.proofsIndex.newRequest).click();
-    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.intercept('POST', 'pieces').as('createNewPiece');
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.wait('@createNewPiece');
+    cy.get(auk.modal.container).find(publication.documentsList.piece)
+      .should('have.length', 1);
     cy.intercept('POST', 'proofing-activities').as('createRequestActivity');
     cy.intercept('POST', 'emails').as('createEmail');
     cy.intercept('GET', 'request-activities/**/proofing-activity').as('getProofingsActivity');
     cy.get(publication.proofRequest.save).click();
-    cy.wait('@createNewPiece')
-      .wait('@createRequestActivity')
+    cy.wait('@createRequestActivity')
       .wait('@createEmail')
       .wait('@getProofingsActivity');
 

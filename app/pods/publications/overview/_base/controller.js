@@ -5,7 +5,7 @@ import { tracked } from '@glimmer/tracking';
 export default class PublicationsOverviewBaseController extends Controller {
   @tracked page = 0;
   @tracked size = 25;
-  @tracked sort = '-created';
+  @tracked sort = '-identification.structured-identifier.local-identifier';
 
   @tracked tableConfig;
 

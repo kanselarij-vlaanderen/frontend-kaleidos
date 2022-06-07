@@ -17,7 +17,6 @@ export default class AgendaitemDecisionComponent extends Component {
   @tracked isAddingReport = false;
   @tracked treatmentToDelete = null;
 
-  @tracked defaultAccessLevel;
   @tracked decisionDocType;
 
   constructor() {
@@ -28,7 +27,6 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @task
   *loadCodelists() {
-    this.defaultAccessLevel = yield this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
     this.decisionDocType = yield this.store.findRecordByUri('document-type', CONSTANTS.DOCUMENT_TYPES.DECISION);
   }
 
@@ -61,9 +59,25 @@ export default class AgendaitemDecisionComponent extends Component {
       created: now,
       type: this.decisionDocType,
     });
+
+    let subcaseIsConfidential = false;
+    if (this.args.subcase) {
+      subcaseIsConfidential = this.args.subcase.confidential;
+    } else if (this.args.agendaitem) {
+      const agendaActivity = await this.args.agendaitem.agendaActivity;
+      const subcase = await agendaActivity?.subcase;
+      subcaseIsConfidential = subcase?.confidential;
+    }
+
+    const defaultAccessLevel = await this.store.findRecordByUri(
+      'concept', subcaseIsConfidential
+        ? CONSTANTS.ACCESS_LEVELS.MINISTERRAAD
+        : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
+    );
+
     await documentContainer.save();
     piece.setProperties({
-      accessLevel: this.defaultAccessLevel,
+      accessLevel: defaultAccessLevel,
       documentContainer,
     });
     await piece.save();

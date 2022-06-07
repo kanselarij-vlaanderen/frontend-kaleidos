@@ -17,7 +17,7 @@
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
   <div>
-    {{#if this.performSearch.isRunning}}
+    {{#if this.searchTask.isRunning}}
       <div class="auk-o-flex auk-o-flex--center auk-u-mt-4">
         <Auk::Loader @message={{t "loading"}} />
       </div>
