@@ -1,51 +1,41 @@
 import Model, { belongsTo, hasMany, attr } from '@ember-data/model';
-import { computed } from '@ember/object';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { KALEIDOS_START_DATE } from 'frontend-kaleidos/config/config';
 
-// TODO: octane-refactor
-/* eslint-disable ember/no-get */
-// eslint-disable-next-line ember/no-classic-classes
-export default Model.extend({
-  intl: inject(),
-  store: inject(),
+export default class Meeting extends Model {
+  @service store;
+  @service intl;
 
-  uri: attr('string'),
-  plannedStart: attr('datetime'),
-  startedOn: attr('datetime'),
-  endedOn: attr('datetime'),
-  location: attr('string'),
-  number: attr('number'),
-  numberRepresentation: attr('string'),
-  isFinal: attr('boolean'),
-  extraInfo: attr('string'),
-  releasedDocuments: attr('datetime'),
-  releasedDecisions: attr('datetime'),
+  @attr uri;
+  @attr('datetime') plannedStart;
+  @attr('datetime') startedOn;
+  @attr('datetime') endedOn;
+  @attr location;
+  @attr('number') number;
+  @attr numberRepresentation;
+  @attr('boolean') isFinal;
+  @attr extraInfo;
+  @attr('datetime') releasedDocuments;
+  @attr('datetime') releasedDecisions;
 
-  agendas: hasMany('agenda', {
+  @hasMany('agenda', {
     inverse: null, serialize: false,
-  }),
-  requestedSubcases: hasMany('subcase'),
-  pieces: hasMany('piece'),
+  }) agendas;
+  @hasMany('subcase') requestedSubcases;
+  @hasMany('piece') pieces;
+  @hasMany('themis-publication-activity') themisPublicationActivities;
 
-  kind: belongsTo('concept'),
-  mainMeeting: belongsTo('meeting', {
+  @belongsTo('concept') kind;
+  @belongsTo('meeting', {
     inverse: null,
-  }),
-  newsletter: belongsTo('newsletter-info'),
-  mailCampaign: belongsTo('mail-campaign'),
-  agenda: belongsTo('agenda', {
+  }) mainMeeting;
+  @belongsTo('newsletter-info') newletter;
+  @belongsTo('mail-campaign') mailCampaign;
+  @belongsTo('agenda', {
     inverse: null,
-  }),
+  }) agenda;
 
-  themisPublicationActivities: hasMany('themis-publication-activity'),
-
-  // TODO this computed property is used in:
-  // - agenda template
-  // - Agenda::PrintableAgenda
-  // - Agenda::AgendaHeader
-  // Refactor these usages and remove this computed property
-  isPreKaleidos: computed('plannedStart', function () {
+  get isPreKaleidos() {
     return this.plannedStart < KALEIDOS_START_DATE;
-  }),
-});
+  }
+}
