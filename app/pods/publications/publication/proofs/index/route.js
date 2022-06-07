@@ -74,7 +74,6 @@ export default class PublicationsPublicationProofsRoute extends Route {
       'filter[subcase][:id:]': this.publicationSubcase.id,
       include: [
         'used-pieces',
-        'used-pieces.publication-activities-used-by',
         'generated-pieces',
         'generated-pieces.file',
         'generated-pieces.publication-activities-used-by',
