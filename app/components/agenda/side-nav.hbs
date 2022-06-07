@@ -53,7 +53,7 @@
               </AuPill>
             </div>
             <div class="auk-sidebar__sublabel">
-              {{#if agenda.isDesignAgenda}}
+              {{#if agenda.status.isDesignAgenda}}
                 {{t "latest-modified-on"}}
                 <br />
                 {{moment-format agenda.modified "dd DD-MM-YYYY HH:mm"}}

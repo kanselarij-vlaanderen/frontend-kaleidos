@@ -6,7 +6,7 @@
     data-test-agenda-actions-show-options={{true}}
     as |Menu|
   >
-    {{#if @currentAgenda.isDesignAgenda}}
+    {{#if @currentAgenda.status.isDesignAgenda}}
       <Menu.Item
         data-test-agenda-actions-approve-agenda
         {{on "click" this.openConfirmApproveAgenda}}
@@ -213,14 +213,14 @@
 
 {{#if this.showConfirmForClosingMeeting}}
   <Auk::Modal
-    @size={{if (await this.latestAgenda.isDesignAgenda) "large" "small"}}
+    @size={{if (await this.latestAgenda.status.isDesignAgenda) "large" "small"}}
   >
     <Auk::Modal::Header
       @title={{t "agenda-close"}}
       @onClose={{this.cancelCloseMeeting}}
     />
     <Auk::Modal::Body>
-      {{#if (await this.latestAgenda.isDesignAgenda)}}
+      {{#if (await this.latestAgenda.status.isDesignAgenda)}}
         <Auk::Alert
           @skin="error"
           @message={{t
@@ -235,7 +235,7 @@
       <Auk::Button
         data-test-agenda-actions-lock-agenda-confirm
         @skin={{if
-          (await this.latestAgenda.isDesignAgenda)
+          (await this.latestAgenda.status.isDesignAgenda)
           "danger-primary"
           "primary"
         }}

@@ -35,7 +35,7 @@ export default class AgendaitemControls extends Component {
 
   // TODO document this
   get isDeletable() {
-    const designAgenda = this.args.currentAgenda.get('isDesignAgenda');
+    const designAgenda = this.args.currentAgenda.status.get('isDesignAgenda');
     const agendaActivity = this.args.agendaActivity;
     if (!designAgenda) {
       return false;

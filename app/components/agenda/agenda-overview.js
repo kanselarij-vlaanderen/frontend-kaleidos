@@ -28,7 +28,7 @@ export default class AgendaOverview extends Component {
   }
 
   get isDesignAgenda() {
-    return this.args.currentAgenda.isDesignAgenda;
+    return this.args.currentAgenda.status.get('isDesignAgenda');
   }
 
   @action

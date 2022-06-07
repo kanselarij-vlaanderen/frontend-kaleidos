@@ -49,7 +49,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
 
   get canEditDesignAgenda() {
     return (
-      this.currentSession.isEditor && this.args.currentAgenda.isDesignAgenda
+      this.currentSession.isEditor && this.args.currentAgenda.status.get('isDesignAgenda')
     );
   }
 

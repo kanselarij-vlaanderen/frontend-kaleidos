@@ -13,6 +13,6 @@ export default class AgendaSidebar extends Component {
    */
 
   get isDesignAgenda() {
-    return this.args.currentAgenda.isDesignAgenda;
+    return this.args.currentAgenda.status.get('isDesignAgenda');
   }
 }

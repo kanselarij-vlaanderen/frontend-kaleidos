@@ -31,7 +31,6 @@ export default class Agenda extends Model.extend(LoadableModel) {
 
 
   // TODO: Either refactor these two or figure out how to make them accessible using @tracked ?
-  @reads('status.isDesignAgenda') isDesignAgenda;
   @reads('status.isApproved') isApproved;
 
   async asyncCheckIfDesignAgenda() {
