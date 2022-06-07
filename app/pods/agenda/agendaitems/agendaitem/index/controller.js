@@ -8,7 +8,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @service store;
   @service currentSession;
   @service router;
-  @service agendaitemAndSubcasePropertiesSyncService;
+  @service agendaitemAndSubcasePropertiesSync;
 
   @controller('agenda.agendaitems') agendaitemsController;
   @controller('agenda') agendaController;
@@ -81,7 +81,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     };
     this.mandatees = mandateeData.mandatees;
     this.submitter = mandateeData.submitter;
-    await this.agendaitemAndSubcasePropertiesSyncService.saveChanges(
+    await this.agendaitemAndSubcasePropertiesSync.saveChanges(
       this.model,
       propertiesToSetOnAgendaitem,
       propertiesToSetOnSubcase,
