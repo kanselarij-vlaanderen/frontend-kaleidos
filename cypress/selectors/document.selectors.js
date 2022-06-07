@@ -85,7 +85,7 @@ const selectors = {
     // Clicking the pill in this component toggles edit mode
     pill: '[data-test-access-level-pill]',
     selector: '[data-test-access-level-selector]',
-    edit: '[data-test-editable-access-level-pill] + button',
+    edit: '[data-test-access-level-pill] + button',
     save: '[data-test-access-level-pill-save]',
     cancel: '[data-test-access-level-pill-cancel]',
   },
