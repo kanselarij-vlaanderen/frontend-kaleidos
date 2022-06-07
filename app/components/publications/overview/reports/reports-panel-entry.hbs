@@ -1,25 +1,25 @@
 <Auk::Panel::Body class="auk-o-flex auk-o-flex--justify-between">
   <div>
     <h4 class="auk-h4 auk-u-m-0">{{@title}}</h4>
-    <div>
-      <div class="auk-u-text-muted">
-        {{t
-          "publication-reports-last-request"
-          date=(moment-format @lastJob.created)
-          time=(moment-format @lastJob.created "HH:mm")
-          user=@lastJob.generatedBy.fullName
-        }}
+    {{#if @lastJob}}
+      <div>
+        <div class="auk-u-text-muted">
+          {{t
+            "publication-reports-last-request"
+            date=(moment-format @lastJob.created)
+            time=(moment-format @lastJob.created "HH:mm")
+            user=@lastJob.generatedBy.fullName
+          }}
+        </div>
+          <Auk::ButtonLink
+            @icon="download"
+            @href={{@lastJob.generated.namedDownloadLink}}
+            download
+          >
+            {{@lastJob.generated.downloadFilename}}
+          </Auk::ButtonLink>
       </div>
-      {{#if @lastJob}}
-        <Auk::ButtonLink
-          @icon="download"
-          @href={{@lastJob.generated.namedDownloadLink}}
-          download
-        >
-          {{@lastJob.generated.downloadFilename}}
-        </Auk::ButtonLink>
-      {{/if}}
-    </div>
+    {{/if}}
   </div>
   <div>
     <Auk::Button {{on "click" this.openGenerateReportModal}}>
