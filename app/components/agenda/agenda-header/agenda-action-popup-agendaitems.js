@@ -8,10 +8,9 @@ export default class AgendaAgendaHeaderAgendaActionPopupAgendaitemsComponenet ex
 
   @bind
   async newsletterInfo(agendaitem) {
-    const newsletterInfos = await this.store.query('newsletter-info', {
+    return await this.store.queryOne('newsletter-info', {
       'filter[agenda-item-treatment][agendaitem][:id:]': agendaitem.id,
     });
-    return newsletterInfos.firstObject;
   }
 
   @bind
