@@ -1,15 +1,20 @@
 <Auk::Modal @size="large">
   <Auk::Modal::Header @title={{t "add-minister"}} @onClose={{@onClose}} />
   <Auk::Modal::Body>
-    <Auk::Checkbox @checked={{this.openSearch}} {{on "input" this.setOpenSearch}} />
-    {{t "open-search-for-mandatee"}}
-    <Auk::Icon @skin="muted" @name="circle-info">
-      <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
-        <p>
-          {{t "open-search-for-mandatee-tooltip"}}
-        </p>
-      </EmberTooltip>
-    </Auk::Icon>
+    <div class="auk-o-flex--inline auk-o-flex--vertical-center auk-u-mb-2">
+      <Auk::Checkbox
+        @label={{t "open-search-for-mandatee"}}
+        @checked={{this.openSearch}}
+        {{on "input" this.setOpenSearch}}
+      />
+      <Auk::Icon @skin="muted" @name="circle-info" class="auk-u-ml">
+        <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
+          <p>
+            {{t "open-search-for-mandatee-tooltip"}}
+          </p>
+        </EmberTooltip>
+      </Auk::Icon>
+    </div>
     <Utils::LoadableContent
       @isLoading={{this.onAdd.isRunning}}
       @reserveSpace={{true}}
