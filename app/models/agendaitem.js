@@ -4,9 +4,7 @@ import EmberObject, { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import CONFIG from 'frontend-kaleidos/utils/config';
-import {
-  alias, reads
-} from '@ember/object/computed';
+import { alias } from '@ember/object/computed';
 import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 import VRDocumentName, { compareFunction } from 'frontend-kaleidos/utils/vr-document-name';
 import { A } from '@ember/array';
@@ -62,9 +60,6 @@ export default ModelWithModifier.extend({
   sortedPieces: computed('pieces.@each.name', function() {
     return A(this.get('pieces').toArray()).sort((pieceA, pieceB) => compareFunction(new VRDocumentName(pieceA.get('name')), new VRDocumentName(pieceB.get('name'))));
   }),
-
-  isDesignAgenda: reads('agenda.isDesignAgenda'),
-
 
   // TODO this computed property is used in:
   // - agendaitem#notaOrVisienota
