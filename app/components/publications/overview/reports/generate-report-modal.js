@@ -280,12 +280,10 @@ export default class GenerateReportModalComponent extends Component {
     return isValid;
   }
 
-  @task
-  *triggerGenerateReport() {
+  @action
+  triggerGenerateReport() {
     const userJobParams = this.buildUserJobParameters();
     this.args.onGenerateReport(userJobParams);
-
-    yield; // for linter
   }
 
   buildUserJobParameters() {

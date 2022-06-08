@@ -137,7 +137,7 @@
     <Auk::Button
       @skin="primary"
       @disabled={{not this.isValid}}
-      {{on "click" (perform this.triggerGenerateReport)}}
+      {{on "click" this.triggerGenerateReport}}
     >
       {{t "publications-reports--generate--small"}}
     </Auk::Button>
