@@ -167,7 +167,7 @@ export default class GenerateReportModalComponent extends Component {
   })
   // only called when search text input is not empty
   *searchMandateePersons(searchText) {
-    yield timeout(CONFIG.TIMING.SELECT_SEARCH);
+    yield timeout(CONFIG.LIVE_SEARCH_DEBOUNCE_TIME);
     return this.fetchMandateePersons.perform(searchText);
   }
 
