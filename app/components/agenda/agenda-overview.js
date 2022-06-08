@@ -24,7 +24,7 @@ export default class AgendaOverview extends Component {
   @tracked isEditingOverview = null;
 
   get canEdit() {
-    return this.currentSession.isEditor && this.currentAgenda.status.get('isDesignAgenda');
+    return this.currentSession.isEditor && this.args.currentAgenda.status.get('isDesignAgenda');
   }
 
   @action
