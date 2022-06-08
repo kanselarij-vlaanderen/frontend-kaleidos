@@ -38,18 +38,37 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   @tracked showConfirmForReopeningPreviousAgenda = false;
   @tracked piecesToDeleteReopenPreviousAgenda = null;
 
-  get designAgenda() {
-    // From all agendas, get the design agenda (if any)
-    const agendas = this.args.reverseSortedAgendas;
-    const designAgenda = agendas.find((agenda) => agenda.status.get('isDesignAgenda'));
-    return designAgenda;
+  @tracked isDesignAgenda = false;
+  @tracked designAgenda = null;
+  @tracked lastApprovedAgenda = null;
+
+  constructor() {
+    super(...arguments);
+
+    this.loadAgendaData.perform();
   }
 
-  get lastApprovedAgenda() {
-    // From all agendas, get the last agenda that is not a design agenda (if any)
-    const agendas = this.args.reverseSortedAgendas;
-    const lastApprovedAgenda = agendas.find((agenda) => !agenda.status.get('isDesignAgenda'));
-    return lastApprovedAgenda;
+
+  @task
+  *loadAgendaData() {
+    const status = yield this.args.currentAgenda.status;
+    this.isDesignAgenda = status.isDesignAgenda;
+
+    for (const agenda of this.args.reverseSortedAgendas.toArray()) {
+      const status = yield agenda.status;
+      if (status.isDesignAgenda) {
+        this.designAgenda = agenda;
+        break;
+      }
+    }
+
+    for (const agenda of this.args.reverseSortedAgendas.toArray()) {
+      const status = yield agenda.status;
+      if (!status.isDesignAgenda) {
+        this.lastApprovedAgenda = agenda;
+        break;
+      }
+    }
   }
 
   get latestAgenda() {
@@ -88,8 +107,8 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       isSessionClosable &&
       this.currentSession.isAdmin &&
       this.currentAgendaIsLatest &&
-      this.args.currentAgenda.status.get('isDesignAgenda')
-    );
+      this.isDesignAgenda
+    )
   }
 
   /**
@@ -99,7 +118,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
    */
   get canDeleteSelectedAgenda() {
     return (
-      this.args.currentAgenda.status.get('isDesignAgenda') ||
+      this.isDesignAgenda ||
       (this.currentSession.isAdmin && this.currentAgendaIsLatest)
     );
   }
@@ -279,7 +298,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   async approveCurrentAgenda() {
     this.showConfirmForApprovingAgenda = false;
     this.args.onStartLoading(this.intl.t('agenda-approving-text'));
-    if (!this.args.currentAgenda.status.get('isDesignAgenda')) {
+    if (!this.isDesignAgenda) {
       this.showNotAllowedToast();
       return;
     }
@@ -331,7 +350,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     this.args.onStartLoading(
       this.intl.t('agenda-approve-and-close-message')
     );
-    if (!this.args.currentAgenda.status.get('isDesignAgenda')) {
+    if (!this.isDesignAgenda) {
       this.showNotAllowedToast();
       return;
     }
@@ -374,7 +393,6 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       this.showNotAllowedToast();
       return;
     }
-    const isDesignAgenda = await this.args.currentAgenda.status.get('isDesignAgenda');
     try {
       const lastApprovedAgenda = await this.agendaService.closeMeeting(
         this.args.meeting
@@ -384,7 +402,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       await this.reloadAgendaitemsOfAgenda(lastApprovedAgenda);
       await this.reloadMeeting();
       this.args.onStopLoading();
-      if (isDesignAgenda) {
+      if (this.isDesignAgenda) {
         return this.router.transitionTo(
           'agenda.agendaitems',
           this.args.meeting.id,

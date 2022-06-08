@@ -5,7 +5,7 @@
   data-test-agenda-header-show-options={{true}}
   as |Menu|
 >
-  {{#if this.canEditDesignAgenda}}
+  {{#if (and this.currentSession.isEditor @currentAgenda.status.isDesignAgenda)}}
     <Menu.Item
       data-test-agenda-header-add-agendaitems
       {{on "click" this.openAddAgendaitemsModal}}
@@ -68,7 +68,7 @@
       {{t "edit-meeting"}}
     </Menu.Item>
   {{/if}}
-  {{#if this.canEditDesignAgenda}}
+  {{#if (and this.currentSession.isEditor @currentAgenda.status.isDesignAgenda)}}
     <Menu.Item
       data-test-agenda-header-approve-all-agendaitems
       {{on "click" this.openConfirmApproveAllAgendaitems}}
