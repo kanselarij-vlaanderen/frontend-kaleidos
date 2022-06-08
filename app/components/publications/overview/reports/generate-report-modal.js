@@ -173,6 +173,8 @@ export default class GenerateReportModalComponent extends Component {
 
   @task
   *fetchMandateePersons(searchText) {
+    // TODO: this task logic can be replaced by calling the right method from the
+    // mandatee-service and mapping mandatee results to persons.
     const [dateRangeStart, dateRangeEnd] = this.dateRange;
 
     // As long as mu-cl-resources does not support an OR filter
