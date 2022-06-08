@@ -75,7 +75,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     return this.args.reverseSortedAgendas.firstObject;
   }
 
-  get isSessionClosable() {
+  get isMeetingClosable() {
     // The session is closable when there are more than 1 agendas OR when there is only 1 agenda that is not a design agenda
     const agendas = this.args.reverseSortedAgendas;
     if (agendas.length > 1 || this.lastApprovedAgenda) {
@@ -92,7 +92,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
 
   /**
    * - the meeting must not be final
-   * - the meeting to have at least one approved agenda (isSessionClosable)
+   * - the meeting to have at least one approved agenda (isMeetingClosable)
    * - the user must be admin
    * - the current selected agenda must be the last one
    * - the current selected agenda should be design agenda
@@ -101,10 +101,9 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
    * @returns boolean
    */
   get canReopenPreviousAgenda() {
-    const isSessionClosable = this.isSessionClosable;
     return (
-      !this.currentSession.isFinal &&
-      isSessionClosable &&
+      !this.args.meeting.isFinal &&
+      this.isMeetingClosable &&
       this.currentSession.isAdmin &&
       this.currentAgendaIsLatest &&
       this.isDesignAgenda
@@ -389,7 +388,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   async closeMeeting() {
     this.showConfirmForClosingMeeting = false;
     this.args.onStartLoading(this.intl.t('agenda-close-message'));
-    if (!this.isSessionClosable) {
+    if (!this.isMeetingClosable) {
       this.showNotAllowedToast();
       return;
     }
