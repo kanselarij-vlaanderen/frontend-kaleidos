@@ -47,6 +47,10 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     return this.router.currentRouteName === 'agenda.print';
   }
 
+  get canEditDesignAgenda() {
+    return this.currentSession.isEditor && this.args.currentAgenda.status.get('isDesignAgenda');
+  }
+
   get canReleaseDecisions() {
     return (
       this.currentSession.isEditor &&
