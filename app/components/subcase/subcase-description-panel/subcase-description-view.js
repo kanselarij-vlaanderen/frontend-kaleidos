@@ -11,11 +11,15 @@ export default class SubcaseDescriptionView extends Component {
    */
   @service store;
   @service currentSession;
+  @service subcasesService;
+  @service subcaseIsApproved;
 
+  @tracked phases = null;
   @tracked subcaseType = null;
   @tracked latestMeeting = null;
   @tracked latestAgenda = null;
   @tracked latestAgendaitem = null;
+  @tracked approved = null;
 
   constructor() {
     super(...arguments);
@@ -28,6 +32,7 @@ export default class SubcaseDescriptionView extends Component {
 
   @task
   *loadAgendaData() {
+    this.phases = yield this.subcasesService.getSubcasePhases(this.args.subcase);
     this.subcaseType = yield this.args.subcase.type;
     this.latestMeeting = yield this.args.subcase.requestedForMeeting;
     if (this.latestMeeting) {
@@ -41,5 +46,6 @@ export default class SubcaseDescriptionView extends Component {
         sort: '-created',
       });
     }
+    this.approved = yield this.subcaseIsApproved.isApproved(this.args.subcase);
   }
 }

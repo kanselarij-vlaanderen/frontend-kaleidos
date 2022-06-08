@@ -147,7 +147,8 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
     if (documentContainer) {
       const lastPiece = await documentContainer.get('lastPiece'); // TODO: what is the purpose of getting lastPiece here
       if (this.subcase && lastPiece) {
-        const latestActivity = await this.subcase.get('latestActivity');
+        const agendaActivities = await this.subcase.agendaActivities;
+        const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
         if (latestActivity) {
           await latestActivity.hasMany('agendaitems').reload(); // This fixes a case where approving an agenda did not update latestAgendaitem
           const latestAgendaitem = await latestActivity.get('latestAgendaitem');
