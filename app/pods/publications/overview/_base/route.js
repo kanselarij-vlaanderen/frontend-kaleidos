@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import PublicationTableConfig from 'frontend-kaleidos/utils/publication-table-config';
 
 /**
@@ -10,6 +11,8 @@ import PublicationTableConfig from 'frontend-kaleidos/utils/publication-table-co
 
 /** @abstract */
 export default class PublicationsOverviewBaseRoute extends Route {
+  @service store;
+
   defaultColumns;
   tableConfigStorageKey;
 

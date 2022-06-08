@@ -5,6 +5,7 @@ import CONSTANTS from '../../config/constants';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class ApplicationRoute extends Route {
+  @service store;
   @service moment;
   @service intl;
   @service session;

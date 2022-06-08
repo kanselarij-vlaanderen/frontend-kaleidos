@@ -191,9 +191,20 @@ export default class PublicationService extends Service {
   }
 
   async getIsViaCouncilOfMinisters(publicationFlow) {
-    const _case = await publicationFlow.case;
-    const subcases = await _case.subcases;
-    return !!subcases.length;
+    // Not using the query below since a bug in mu-cache/mu-cl-resources
+    // doesn't invalidate the cache entry when a publication gets linked
+    // to an agendaitem. As a workaround querying via agenda-item-treatment id
+    // for now.
+
+    // const agendaitem = await this.store.queryOne('agendaitem', {
+    //   'filter[treatments][publication-flows][:id:]': publicationFlow.id,
+    // });
+
+    const agendaItemTreatment = await publicationFlow.agendaItemTreatment;
+    const agendaitem = await this.store.queryOne('agendaitem', {
+      'filter[treatments][:id:]': agendaItemTreatment.id
+    });
+    return agendaitem != null;
   }
 
   async updatePublicationStatus(publicationFlow, targetStatusUri, changeDate) {
