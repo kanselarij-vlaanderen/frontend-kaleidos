@@ -2,7 +2,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default [
   {
-    translationKey: 'publication-reports--type--by-mandatees--on-decision-date',
     uri: 'http://themis.vlaanderen.be/id/concept/publicatierapporttype/by-mandatees-on-decision-date',
     // fixed job params for this report type
     fixedParams: {
@@ -17,7 +16,6 @@ export default [
     },
   },
   {
-    translationKey: 'publication-reports--type--by-government-domains',
     uri: 'http://themis.vlaanderen.be/id/concept/publicatierapporttype/by-government-domains',
     fixedParams: {
       query: {
@@ -31,7 +29,6 @@ export default [
     },
   },
   {
-    translationKey: 'publication-reports--type--by-mandatees--only-bvr',
     uri: 'http://themis.vlaanderen.be/id/concept/publicatierapporttype/by-mandatees-only-bvr',
     fixedParams: {
       query: {
@@ -47,8 +44,6 @@ export default [
     },
   },
   {
-    translationKey:
-      'publication-reports--type--by-regulation-type--only-not-via-council-of-ministers',
     uri: 'http://themis.vlaanderen.be/id/concept/publicatierapporttype/by-regulation-type-only-not-via-council-of-ministers',
     fixedParams: {
       query: {
@@ -63,7 +58,6 @@ export default [
     },
   },
   {
-    translationKey: 'publication-reports--type--by-regulation-type',
     uri: 'http://themis.vlaanderen.be/id/concept/publicatierapporttype/by-regulation-type',
     fixedParams: {
       query: {
@@ -76,8 +70,6 @@ export default [
     },
   },
   {
-
-    translationKey: 'publication-reports--type--by-mandatees--only-decree',
     uri: 'http://themis.vlaanderen.be/id/concept/publicatierapporttype/by-mandatees-only-decree',
     fixedParams: {
       query: {
