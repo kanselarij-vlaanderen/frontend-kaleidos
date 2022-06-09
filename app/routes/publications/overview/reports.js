@@ -3,7 +3,14 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import REPORT_TYPES_CONFIG from 'frontend-kaleidos/config/publications/report-types';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { ReportTypeEntry } from './controller'
+
+class ReportTypeEntry {
+  constructor(lastJob, type, config) {
+    this.lastJob = lastJob;
+    this.model = type;
+    this.config = config;
+  }
+}
 
 export default class PublicationsOverviewReportsRoute extends Route {
   @service store;

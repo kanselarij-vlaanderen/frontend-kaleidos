@@ -2,14 +2,6 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
-export class ReportTypeEntry {
-  constructor(lastJob, type, config) {
-    this.lastJob = lastJob;
-    this.model = type;
-    this.config = config;
-  }
-}
-
 export default class PublicationsOverviewReportsController extends Controller {
   @service store;
   @service router;
