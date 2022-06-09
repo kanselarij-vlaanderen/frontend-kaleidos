@@ -1,0 +1,145 @@
+<Auk::Modal>
+  <Auk::Modal::Header
+    @title={{t "publications-reports--modal-title" title=@title}}
+    @onClose={{@onClose}}
+  />
+  <Auk::Modal::Body>
+    <Utils::LoadableContent
+      @isLoading={{this.isLoading}}
+      @reserveSpace={{true}}
+    >
+      {{#if @userInputFields.decisionDateRange}}
+        <div class="auk-o-grid">
+          {{!Beslissingsdatum}}
+          <div class="auk-o-grid-col-6">
+            <div class="auk-form-group">
+              <Auk::Label
+                for="publicationReportsDecisionStartDate"
+                @required={{true}}
+                @error={{not this.isDecisionDateRangeStartValid}}
+              >
+                {{t "start-date"}}
+              </Auk::Label>
+              <Auk::Datepicker
+                id="publicationReportsDecisionStartDate"
+                @date={{this.decisionDateRangeStart}}
+                {{!validation of start being before end is done in controller to allow flexible editing}}
+                @min={{this.decisionDateMin}}
+                @max={{this.decisionDateMax}}
+                @onChange={{fn (mut this.decisionDateRangeStart)}}
+                @error={{not this.isDecisionDateRangeStartValid}}
+              />
+            </div>
+          </div>
+          <div class="auk-o-grid-col-6">
+            <div class="auk-form-group">
+              <Auk::Label
+                for="publicationReportsDecisionEndDate"
+                @error={{not this.isDecisionDateRangeEndValid}}
+              >
+                {{t "end-date"}}
+              </Auk::Label>
+              <Auk::Datepicker
+                id="publicationReportsDecisionEndDate"
+                @date={{this.decisionDateRangeEnd}}
+                @min={{this.decisionDateMin}}
+                @max={{this.decisionDateMax}}
+                @onChange={{fn (mut this.decisionDateRangeEnd)}}
+                @error={{not this.isDecisionDateRangeEndValid}}
+              />
+            </div>
+          </div>
+        </div>
+      {{/if}}
+      {{#if @userInputFields.publicationYear}}
+        <div class="auk-form-group">
+          <Auk::Label
+            for="publicationReportsPublicationYear"
+            @error={{not this.isPublicationYearValid}}
+          >
+            {{t "year"}}
+          </Auk::Label>
+          <Auk::Input
+            id="publicationReportsPublicationYear"
+            @type="number"
+            @width="small"
+            @value={{this.publicationYearAsString}}
+            {{!min/max does not prevent input of invalid year by typing}}
+            @error={{not this.isPublicationYearValid}}
+            min={{this.publicationYearMin}}
+            max={{this.publicationYearMax}}
+          />
+        </div>
+      {{/if}}
+      {{#if @userInputFields.mandateePersons}}
+        <div class="auk-form-group">
+          <Auk::Label>
+            {{t "ministers"}}
+          </Auk::Label>
+          <PowerSelectMultiple
+            @options={{this.mandateePersons}}
+            @selected={{this.selectedMandateePersons}}
+            @onChange={{fn (mut this.selectedMandateePersons)}}
+            {{!loadMandatees on open: ensure date range updates are taken into account}}
+            {{!do not use onFocus: triggers multiple times (when clicking on the bottom of the input) (probably bug)}}
+            @onOpen={{this.loadMandateePersons.perform}}
+            @searchEnabled={{true}}
+            @search={{perform this.searchMandateePersons}}
+            @noMatchesMessage={{t "no-ministers-found"}}
+            {{!Message shown when no search has been entered and there are no options.}}
+            @searchMessage={{t "no-ministers-found"}}
+            @loadingMessage={{t "search-loading-text"}}
+            as |person|
+          >
+            {{person.fullName}}
+          </PowerSelectMultiple>
+        </div>
+      {{/if}}
+      {{#if @userInputFields.governmentDomains}}
+        <div class="auk-form-group">
+          <Auk::Label>{{t "government-domains"}}</Auk::Label>
+          <Auk::CheckboxList>
+            {{#each this.governmentDomains as |governmentDomain|}}
+              <Auk::Checkbox
+                @checked={{includes
+                  this.selectedGovernmentDomains
+                  governmentDomain
+                }}
+                {{on "input" (fn this.selectGovernmentDomain governmentDomain)}}
+              >
+                {{governmentDomain.label}}
+              </Auk::Checkbox>
+            {{/each}}
+          </Auk::CheckboxList>
+        </div>
+      {{/if}}
+      {{#if @userInputFields.regulationTypes}}
+        <div class="auk-form-group">
+          <Auk::Label>{{t "regulation-types"}}</Auk::Label>
+          <Auk::CheckboxList>
+            {{#each this.regulationTypes as |regulationType|}}
+              <Auk::Checkbox
+                @checked={{includes
+                  this.selectedRegulationTypes
+                  regulationType
+                }}
+                {{on "input" (fn this.selectRegulationType regulationType)}}
+              >
+                {{regulationType.label}}
+              </Auk::Checkbox>
+            {{/each}}
+          </Auk::CheckboxList>
+        </div>
+      {{/if}}
+    </Utils::LoadableContent>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @onCancel={{@onClose}}>
+    <Auk::Button
+      @skin="primary"
+      @disabled={{not this.isValid}}
+      {{on "click" this.triggerGenerateReport}}
+    >
+      {{t "publications-reports--generate--small"}}
+    </Auk::Button>
+  </Auk::Modal::Footer>
+</Auk::Modal>

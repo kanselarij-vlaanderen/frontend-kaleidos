@@ -6,11 +6,12 @@
           {{t "publication-reports-title"}}
         </h4>
       </Auk::Panel::Header>
-      {{#each this.model as |reportType|}}
-        <Publications::Reports::ReportsPanelEntry
-          @title={{reportType.title}}
-          @lastReportGeneration={{reportType.lastReportGeneration}}
-          @onClickGenerate={{fn this.generateReport reportType.uri}}
+      {{#each this.model as |reportTypeEntry|}}
+        <Publications::Overview::Reports::ReportsPanelEntry
+          @title={{reportTypeEntry.model.label}}
+          @lastJob={{reportTypeEntry.lastJob}}
+          @userInputFields={{reportTypeEntry.config.userInputFields}}
+          @onGenerateReport={{fn this.generateReport reportTypeEntry}}
         />
       {{/each}}
     </Auk::Panel>

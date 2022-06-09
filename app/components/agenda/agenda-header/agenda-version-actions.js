@@ -6,7 +6,7 @@ import { inject as service } from '@ember/service';
 import { all } from 'rsvp'; // TODO KAS-2399 better way then this ?
 
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import { approveAgendaAndCloseMeeting, approveDesignAgenda, closeMeeting, createNewDesignAgenda, deleteAgenda, reopenPreviousAgenda } from 'frontend-kaleidos/utils/agenda-approval';
+import { approveAgendaAndCloseMeeting, approveDesignAgenda, closeMeeting, createNewDesignAgenda, deleteAgenda, reopenMeeting, reopenPreviousAgenda } from 'frontend-kaleidos/utils/agenda-approval';
 
 /**
  * A component that contains most of the meeting/agenda actions that interact with a backend service.
@@ -179,19 +179,18 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
    * Also reopens the meeting if needed (for action unlockAgenda)
    * The agenda gets copied including the agendatems and a new design agenda id is returned
    * We then reload some models/relations and route to the new agenda
-   * *NOTE* Both action unlockMeeting and createNewDesignAgenda do not have confirmation windows
    */
   @action
-  async createDesignAgenda() {
+  async reopenMeeting() {
     this.args.onStartLoading(this.intl.t('agenda-add-message'));
     try {
-      const newAgendaId = await createNewDesignAgenda(this.args.meeting);
+      const newAgendaId = await reopenMeeting(this.args.meeting);
       const newAgenda = await this.store.find('agenda', newAgendaId);
       // After the agenda has been created, we want to update the agendaitems of activities
       await this.reloadAgendaitemsOfAgenda(newAgenda);
       await this.reloadMeeting();
       this.args.onStopLoading();
-      return this.router.transitionTo(
+      this.router.transitionTo(
         'agenda.agendaitems',
         this.args.meeting.id,
         newAgenda.id
@@ -243,7 +242,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       return;
     }
     try {
-      const newAgendaId = await approveDesignAgenda(this.args.meeting);
+      const newAgendaId = await approveDesignAgenda(this.args.currentAgenda);
       const newAgenda = await this.store.find('agenda', newAgendaId);
       // Data reloading
       await this.reloadAgenda(this.args.currentAgenda);
@@ -294,7 +293,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       return;
     }
     try {
-      await approveAgendaAndCloseMeeting(this.args.meeting);
+      await approveAgendaAndCloseMeeting(this.args.currentAgenda);
       // Data reloading
       await this.reloadAgenda(this.args.currentAgenda);
       await this.reloadAgendaitemsOfAgenda(this.args.currentAgenda);
@@ -382,7 +381,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       return;
     }
     try {
-      const lastApprovedAgendaId = await deleteAgenda(this.args.meeting, this.args.currentAgenda);
+      const lastApprovedAgendaId = await deleteAgenda(this.args.currentAgenda);
       let lastApprovedAgenda;
       if (lastApprovedAgendaId) {
         lastApprovedAgenda = await this.store.queryOne('agenda', {
@@ -447,7 +446,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         );
         this.piecesToDeleteReopenPreviousAgenda = null;
       }
-      const lastApprovedAgendaId = await reopenPreviousAgenda(this.args.meeting);
+      const lastApprovedAgendaId = await reopenPreviousAgenda(this.args.currentAgenda);
       const lastApprovedAgenda = await this.store.queryOne('agenda', {
         'filter[:id:]': lastApprovedAgendaId,
       });

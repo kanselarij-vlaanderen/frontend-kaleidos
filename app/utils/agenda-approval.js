@@ -1,156 +1,128 @@
 import fetch from 'fetch';
 
+function responseHasJson(response) {
+  return response.headers.get('Content-Type').includes('json');
+}
+
+function formatErrorPayload(payload) {
+  return payload.errors.map((e) => e.title).join('\n');
+}
+
 /* API: agenda-approve-service */
 
-async function createNewDesignAgenda(currentMeeting) {
-  const response = await fetch('/agenda-approve/createDesignAgenda', {
+async function reopenMeeting(meeting) {
+  const endpoint = `/meetings/${meeting.id}/reopen`;
+  const response = await fetch(endpoint, {
     method: 'POST',
     headers: {
-      Accept: 'application/vnd.api+json',
       'Content-Type': 'application/vnd.api+json',
     },
-    body: JSON.stringify({
-      meetingId: currentMeeting.id,
-    }),
   });
-  if (!response.ok) {
-    throw new Error(response.statusText);
-  }
-
-  const payload = await response.json();
-  if (payload.error) {
-    throw new Error(payload.error.detail);
-  }
-
-  return payload.data.id;
-}
-
-async function approveDesignAgenda(currentMeeting) {
-  const response = await fetch('/agenda-approve/approveAgenda', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/vnd.api+json',
-      'Content-Type': 'application/vnd.api+json',
-    },
-    body: JSON.stringify({
-      meetingId: currentMeeting.id,
-    }),
-  });
-  if (!response.ok) {
-    throw new Error(response.statusText);
-  }
-
-  const payload = await response.json();
-  if (payload.error) {
-    throw new Error(payload.error.detail);
-  }
-
-  return payload.data.id;
-}
-
-async function approveAgendaAndCloseMeeting(currentMeeting) {
-  const response = await fetch(
-    '/agenda-approve/approveAgendaAndCloseMeeting',
-    {
-      method: 'POST',
-      headers: {
-        Accept: 'application/vnd.api+json',
-        'Content-Type': 'application/vnd.api+json',
-      },
-      body: JSON.stringify({
-        meetingId: currentMeeting.id,
-      }),
+  if (responseHasJson(response)) {
+    const payload = await response.json();
+    if (payload.errors) {
+      throw new Error(formatErrorPayload(payload));
     }
-  );
-  if (!response.ok) {
-    throw new Error(response.statusText);
+    return payload.data.id;
   }
+  throw new Error(response.statusText);
+}
 
-  const payload = await response.json();
-  if (payload.error) {
-    throw new Error(payload.error.detail);
+async function approveDesignAgenda(currentAgenda) {
+  const endpoint = `/agendas/${currentAgenda.id}/approve`;
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/vnd.api+json',
+    },
+  });
+  if (responseHasJson(response)) {
+    const payload = await response.json();
+    if (payload.errors) {
+      throw new Error(formatErrorPayload(payload));
+    }
+    return payload.data.id;
+  }
+  throw new Error(response.statusText);
+}
+
+async function approveAgendaAndCloseMeeting(currentAgenda) {
+  const endpoint = `/agendas/${currentAgenda.id}/close`;
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/vnd.api+json',
+    },
+  });
+
+  if (!response.ok) {
+    if (responseHasJson) {
+      const payload = await response.json();
+      throw new Error(formatErrorPayload(payload));
+    }
+    throw new Error(response.statusText);
   }
 }
 
 async function closeMeeting(currentMeeting) {
-  const response = await fetch('/agenda-approve/closeMeeting', {
+  const endpoint = `/meetings/${currentMeeting.id}/close`;
+  const response = await fetch(endpoint, {
     method: 'POST',
     headers: {
-      Accept: 'application/vnd.api+json',
       'Content-Type': 'application/vnd.api+json',
     },
-    body: JSON.stringify({
-      meetingId: currentMeeting.id,
-    }),
   });
-  if (!response.ok) {
-    throw new Error(response.statusText);
+  if (responseHasJson(response)) {
+    const payload = await response.json();
+    if (payload.errors) {
+      throw new Error(formatErrorPayload(payload));
+    }
+    return payload.data.id;
   }
-
-  const payload = await response.json();
-  if (payload.error) {
-    throw new Error(payload.error.detail);
-  }
-
-  return payload.data.id;
+  throw new Error(response.statusText);
 }
 
-async function reopenPreviousAgenda(currentMeeting) {
-  const response = await fetch('/agenda-approve/reopenPreviousAgenda', {
+async function reopenPreviousAgenda(currentAgenda) {
+  const endpoint = `/agendas/${currentAgenda.id}/reopen`;
+  const response = await fetch(endpoint, {
     method: 'POST',
     headers: {
-      Accept: 'application/vnd.api+json',
       'Content-Type': 'application/vnd.api+json',
     },
-    body: JSON.stringify({
-      meetingId: currentMeeting.id,
-    }),
   });
-  if (!response.ok) {
-    throw new Error(response.statusText);
+  if (responseHasJson(response)) {
+    const payload = await response.json();
+    if (payload.errors) {
+      throw new Error(formatErrorPayload(payload));
+    }
+    return payload.data.id;
   }
-
-  const payload = await response.json();
-  if (payload.error) {
-    throw new Error(payload.error.detail);
-  }
-
-  return payload.data.id;
+  throw new Error(response.statusText);
 }
 
-async function deleteAgenda(currentMeeting, currentAgenda) {
-  const response = await fetch('/agenda-approve/deleteAgenda', {
-    method: 'POST',
+async function deleteAgenda(currentAgenda) {
+  const endpoint = `/agendas/${currentAgenda.id}`;
+  const response = await fetch(endpoint, {
+    method: 'DELETE',
     headers: {
-      Accept: 'application/vnd.api+json',
       'Content-Type': 'application/vnd.api+json',
     },
-    body: JSON.stringify({
-      meetingId: currentMeeting.id,
-      agendaId: currentAgenda.id,
-    }),
   });
-  if (!response.ok) {
-    throw new Error(response.statusText);
+  if (responseHasJson(response)) {
+    const payload = await response.json();
+    if (payload.errors) {
+      throw new Error(formatErrorPayload(payload));
+    }
+    return payload.data.id;
   }
-
-  const payload = await response.json();
-  if (payload.error) {
-    throw new Error(payload.error.detail);
-  }
-
-  if (payload.data?.id) {
-    return await this.store.queryOne('agenda', {
-      'filter[:id:]': payload.data.id,
-    });
-  }
+  throw new Error(response.statusText);
 }
 
 export {
-  createNewDesignAgenda,
   approveDesignAgenda,
   approveAgendaAndCloseMeeting,
   closeMeeting,
+  reopenMeeting,
   reopenPreviousAgenda,
   deleteAgenda,
 }

@@ -12,6 +12,8 @@ import { task } from 'ember-concurrency';
 export default class PublicationsBatchDocumentsPublicationModalComponent extends Component {
   @service store;
   @service publicationService;
+  @service toaster;
+  @service intl;
 
   @tracked isOpenNewPublicationModal = false;
 
@@ -104,15 +106,53 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
   @action
   async linkPublicationFlow(piece, publicationFlow) {
+    let publicationFlowHasChanged = false;
+
+    const _case = await publicationFlow.case;
+    if (this.case.id != _case.id) {
+      const agendaItemTreatment = await publicationFlow.agendaItemTreatment;
+      const agendaitem = await this.store.queryOne('agendaitem', {
+        'filter[treatments][:id:]': agendaItemTreatment.id
+      });
+      if (!agendaitem) {
+        // Selected publication-flow is currently linked to another case (not via MR).
+        // We need to relink the publication-flow to this case and cleanup the dummy data
+        // that was created for the publication-flow back then.
+        publicationFlow.case = this.case;
+        publicationFlow.agendaItemTreatment = this.agendaItemTreatment;
+        publicationFlowHasChanged = true;
+        await Promise.all([
+          _case.destroyRecord(),
+          agendaItemTreatment.destroyRecord(),
+        ]);
+      } else {
+        // Publication-flow is already linked to an agenda-item-treatment that has been
+        // handled on an agenda. We cannot relink the publication-flow in that case.
+        // In practice this scenario will only occur in concurrency scenarios where
+        // multiple users try to link the same publication at the same time to
+        // different cases.
+        this.toaster.error(
+          this.intl.t('unable-to-relink-publication-flow'),
+          this.intl.t('warning-title')
+        );
+        return;
+      }
+    }
+
     const regulationType = await publicationFlow.regulationType;
     if (!regulationType) {
       const regulationTypeFromDocument =
         await this.getRegulationTypeThroughReferenceDocument(piece);
       if (regulationTypeFromDocument) {
         publicationFlow.regulationType = regulationTypeFromDocument;
-        await publicationFlow.save();
+        publicationFlowHasChanged = true;
       }
     }
+
+    if (publicationFlowHasChanged) {
+      await publicationFlow.save();
+    }
+
     piece.publicationFlow = publicationFlow;
     await piece.save();
   }
