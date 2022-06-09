@@ -113,7 +113,7 @@ async function deleteAgenda(currentAgenda) {
     if (payload.errors) {
       throw new Error(formatErrorPayload(payload));
     }
-    return payload.data.id;
+    return payload.data?.id;
   }
   throw new Error(response.statusText);
 }
