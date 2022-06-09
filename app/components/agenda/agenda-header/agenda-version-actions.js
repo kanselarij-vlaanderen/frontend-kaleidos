@@ -6,7 +6,14 @@ import { inject as service } from '@ember/service';
 import { all } from 'rsvp'; // TODO KAS-2399 better way then this ?
 
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import { approveAgendaAndCloseMeeting, approveDesignAgenda, closeMeeting, createNewDesignAgenda, deleteAgenda, reopenMeeting, reopenPreviousAgenda } from 'frontend-kaleidos/utils/agenda-approval';
+import {
+  approveAgendaAndCloseMeeting,
+  approveDesignAgenda,
+  closeMeeting,
+  deleteAgenda,
+  reopenMeeting,
+  reopenPreviousAgenda,
+} from 'frontend-kaleidos/utils/agenda-approval';
 
 /**
  * A component that contains most of the meeting/agenda actions that interact with a backend service.
