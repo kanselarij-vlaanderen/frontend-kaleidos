@@ -192,7 +192,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     this.args.onStartLoading(this.intl.t('agenda-add-message'));
     try {
       const newAgendaId = await reopenMeeting(this.args.meeting);
-      const newAgenda = await this.store.find('agenda', newAgendaId);
+      const newAgenda = await this.store.findRecord('agenda', newAgendaId);
       // After the agenda has been created, we want to update the agendaitems of activities
       await this.reloadAgendaitemsOfAgenda(newAgenda);
       await this.reloadMeeting();
@@ -250,7 +250,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     }
     try {
       const newAgendaId = await approveDesignAgenda(this.args.currentAgenda);
-      const newAgenda = await this.store.find('agenda', newAgendaId);
+      const newAgenda = await this.store.findRecord('agenda', newAgendaId);
       // Data reloading
       await this.reloadAgenda(this.args.currentAgenda);
       await this.reloadAgendaitemsOfAgenda(this.args.currentAgenda);
@@ -340,9 +340,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     const isDesignAgenda = await this.args.currentAgenda.isDesignAgenda;
     try {
       const lastApprovedAgendaId = await closeMeeting(this.args.meeting);
-      const lastApprovedAgenda = await this.store.queryOne('agenda', {
-        'filter[:id:]': lastApprovedAgendaId,
-      });
+      const lastApprovedAgenda = await this.store.findRecord('agenda', lastApprovedAgendaId);
       // Data reloading
       await this.reloadAgenda(lastApprovedAgenda);
       await this.reloadAgendaitemsOfAgenda(lastApprovedAgenda);
@@ -391,11 +389,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       const lastApprovedAgendaId = await deleteAgenda(this.args.currentAgenda);
       let lastApprovedAgenda;
       if (lastApprovedAgendaId) {
-        lastApprovedAgenda = await this.store.queryOne('agenda', {
-          'filter[:id:]': lastApprovedAgendaId,
-        });
-      }
-      if (lastApprovedAgenda) {
+        lastApprovedAgenda = await this.store.findRecord('agenda', lastApprovedAgendaId);
         // Data reloading
         await this.reloadAgendaitemsOfAgenda(lastApprovedAgenda);
         await this.reloadMeeting();
@@ -454,9 +448,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         this.piecesToDeleteReopenPreviousAgenda = null;
       }
       const lastApprovedAgendaId = await reopenPreviousAgenda(this.args.currentAgenda);
-      const lastApprovedAgenda = await this.store.queryOne('agenda', {
-        'filter[:id:]': lastApprovedAgendaId,
-      });
+      const lastApprovedAgenda = await this.store.findRecord('agenda', lastApprovedAgendaId);
       // Data reloading
       await this.reloadAgenda(lastApprovedAgenda);
       await this.reloadAgendaitemsOfAgenda(lastApprovedAgenda);
