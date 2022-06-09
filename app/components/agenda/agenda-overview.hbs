@@ -53,10 +53,12 @@
             {{#unless
               (and (eq index 0) (is-empty agendaitemGroup.sortedMandatees))
             }}
+              {{#unless this.isDraggingEnabled}}
               <Agenda::AgendaOverview::AgendaitemGroupHeader
                 @mandatees={{agendaitemGroup.sortedMandatees}}
                 @isEditingFormallyOkStatus={{@isEditingOverview}}
               />
+              {{/unless}}
             {{/unless}}
             {{! template-lint-enable simple-unless }}
             {{#each agendaitemGroup.agendaitems as |agendaitem|}}
