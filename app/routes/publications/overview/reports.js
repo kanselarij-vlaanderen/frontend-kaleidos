@@ -1,25 +1,45 @@
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import reportTypes from 'frontend-kaleidos/config/publications/report-types';
+import REPORT_TYPES_CONFIG from 'frontend-kaleidos/config/publications/report-types';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { ReportTypeEntry } from './controller'
 
 export default class PublicationsOverviewReportsRoute extends Route {
-  @service intl;
+  @service store;
 
   async model() {
-    const responsePromises = reportTypes.map((reportType) => {
-      return this.store.queryOne('publication-metrics-export-job', {
-        sort: '-created',
-        'filter[metrics-type]': reportType.metricsTypeUri,
-        include: ['generated', 'generated-by'].join(','),
-      });
-    });
-    const lastReportGenerations = await Promise.all(responsePromises);
-    return reportTypes.map((reportType, i) => {
-      return {
-        title: this.intl.t(reportType.translationKey),
-        uri: reportType.metricsTypeUri,
-        lastReportGeneration: lastReportGenerations[i]
+    let reportTypes = await this.store.findAll('publication-report-type');
+    reportTypes = reportTypes.toArray();
+
+    if (reportTypes.length !== REPORT_TYPES_CONFIG.length) {
+      console.error('incorrect number of report types configured')
+    }
+
+    // configuration order determines order in UI
+    const reportTypeEntries = REPORT_TYPES_CONFIG.map(async (reportTypeConfig) => {
+      const reportType = reportTypes.findBy('uri', reportTypeConfig.uri);
+      if (!reportType) {
+        console.error('report type config uri does not exist')
       }
+
+      const lastJob = await this.store.queryOne(
+        'publication-metrics-export-job',
+        {
+          sort: '-created',
+          'filter[status][:uri:]': CONSTANTS.JOB_STATUSSES.SUCCESS,
+          'filter[report-type][:uri:]': reportType.uri,
+          include: ['generated', 'generated-by'].join(','),
+        }
+      );
+      return new ReportTypeEntry(lastJob, reportType, reportTypeConfig);
     });
+
+    return Promise.all(reportTypeEntries);
+  }
+
+  @action
+  refreshRoute() {
+    super.refresh();
   }
 }
