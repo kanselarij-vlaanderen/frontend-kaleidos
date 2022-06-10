@@ -134,7 +134,7 @@ export default [
     keyName: 'source',
     translationKey: 'publications-table-source',
     translationKeySmall: 'publications-table-source-small',
-    apiFieldPaths: ['case.subcases.uri'],
+    apiFieldPaths: [], // data is fetched using queryOne in publication-service
   },
   {
     keyName: 'lastEdited',

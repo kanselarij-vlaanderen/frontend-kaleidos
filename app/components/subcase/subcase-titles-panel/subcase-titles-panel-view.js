@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 
@@ -8,6 +9,8 @@ import { task } from 'ember-concurrency';
  * @argument onClickEdit
  */
 export default class SubcaseTitlesPanelView extends Component {
+  @service subcaseIsApproved;
+
   @tracked approved;
 
   constructor() {
@@ -17,7 +20,7 @@ export default class SubcaseTitlesPanelView extends Component {
 
   @task
   *loadApproved() {
-    this.approved = yield this.args.subcase.approved;
+    this.approved = yield this.subcaseIsApproved.isApproved(this.args.subcase);
   }
 
   get pillSkin(){

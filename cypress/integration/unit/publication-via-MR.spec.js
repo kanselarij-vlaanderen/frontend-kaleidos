@@ -100,6 +100,8 @@ context('Publications via MR tests', () => {
     }).should('not.exist');
     cy.get(publication.publicationTableRow.row.publicationNumber).contains(publicationNumber1)
       .click();
+    cy.url().should('include', '/publicatie')
+      .should('include', '/dossier');
 
     // check data
     cy.get(publication.publicationCaseInfo.publicationNumber).contains(publicationNumber1);
@@ -140,6 +142,8 @@ context('Publications via MR tests', () => {
     }).should('not.exist');
     cy.get(publication.publicationTableRow.row.publicationNumber).contains(publicationNumber1)
       .click();
+    cy.url().should('include', '/publicatie')
+      .should('include', '/dossier');
 
     // check rollback after cancel edit
     cy.get(publication.publicationCaseInfo.edit).click();
@@ -219,10 +223,13 @@ context('Publications via MR tests', () => {
       .click();
     cy.get('@row').find(publication.publicationsFlowSelector)
       .click();
-    cy.intercept('GET', `/publication-flows**?filter**${publicationNumber2}**`).as('getFilteredId');
+    cy.intercept('GET', `/publication-flows**?filter**case**${publicationNumber2}**`).as('getFilteredIdCase');
+    cy.intercept('GET', `/publication-flows**?filter**agenda*item*treatment**${publicationNumber2}**`).as('getFilteredIdTreatment');
     cy.intercept('PATCH', '/pieces/**').as('patchPieces');
     cy.get(dependency.emberPowerSelect.searchInput).type(publicationNumber2)
-      .wait('@getFilteredId');
+      .wait('@getFilteredIdCase')
+      .wait('@getFilteredIdTreatment');
+    cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(publicationNumber2)
       .scrollIntoView()
       .trigger('mouseover')
@@ -283,16 +290,22 @@ context('Publications via MR tests', () => {
     // check if the regulation type is inherited correctly on all publications
     cy.get(publication.publicationTableRow.row.publicationNumber).contains(publicationNumber2)
       .click();
+    cy.url().should('include', '/publicatie')
+      .should('include', '/dossier');
     cy.get(publication.publicationNav.decisions).click();
     cy.get(publication.decisionsInfoPanel.view.regulationType).contains('Besluit van de Vlaamse Regering');
     cy.get(publication.publicationNav.goBack).click();
     cy.get(publication.publicationTableRow.row.publicationNumber).contains(publicationNumber3)
       .click();
+    cy.url().should('include', '/publicatie')
+      .should('include', '/dossier');
     cy.get(publication.publicationNav.decisions).click();
     cy.get(publication.decisionsInfoPanel.view.regulationType).contains('Ministerieel besluit');
     cy.get(publication.publicationNav.goBack).click();
     cy.get(publication.publicationTableRow.row.publicationNumber).contains(publicationNumber4)
       .click();
+    cy.url().should('include', '/publicatie')
+      .should('include', '/dossier');
     cy.get(publication.publicationNav.decisions).click();
     cy.get(publication.decisionsInfoPanel.view.regulationType).contains('Decreet');
 
