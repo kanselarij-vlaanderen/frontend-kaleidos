@@ -462,7 +462,9 @@
   "notification-loading-text": "De notificatie wordt geladen.",
   "new-agendaitem": "Nieuw agendapunt",
   "from": "Vanaf",
+  "until": "tot",
   "until-inclusive": "Tot en met",
+  "present-time": "heden",
   "search-in-decisions-only": "Zoek enkel in beslissingen",
   "search-in-announcements-only": "Zoek enkel in mededelingen",
   "search-include-archived": "Zoek ook in archief",
@@ -1039,5 +1041,7 @@
   "search-publication": "zoek publicatie",
   "select-all": "alles selecteren",
   "deselect-all": "alles deselecteren",
-  "on-the-website": "Op de website"
+  "on-the-website": "Op de website",
+  "open-search-for-mandatee": "Vrij zoeken",
+  "open-search-for-mandatee-tooltip": "Opgelet. Activeer deze optie enkel indien strikt noodzakelijk. In tegenstelling tot bij standaard zoeken, kunnen de aangeboden resultaten bij vrij zoeken ook ministers bevatten die niet actief zijn/waren gedurende de referentieperiode waarvoor u zoekt. Deze functionaliteit kan bv. gebruikt worden om net-niet-meer actieve ministers (rond een ministerwissel) toe te wijzen. "
 }
