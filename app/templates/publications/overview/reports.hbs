@@ -1,0 +1,19 @@
+<div class="auk-scroll-wrapper">
+  <div class="auk-scroll-wrapper__body auk-u-p-4">
+    <Auk::Panel>
+      <Auk::Panel::Header>
+        <h4 class="auk-panel__title">
+          {{t "publication-reports-title"}}
+        </h4>
+      </Auk::Panel::Header>
+      {{#each this.model as |reportTypeEntry|}}
+        <Publications::Overview::Reports::ReportsPanelEntry
+          @title={{reportTypeEntry.model.label}}
+          @lastJob={{reportTypeEntry.lastJob}}
+          @userInputFields={{reportTypeEntry.config.userInputFields}}
+          @onGenerateReport={{fn this.generateReport reportTypeEntry}}
+        />
+      {{/each}}
+    </Auk::Panel>
+  </div>
+</div>

@@ -2,6 +2,7 @@ import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 import { deprecatingAlias } from '@ember/object/computed'; // eslint-disable-line
 
 export default class Person extends Model {
+  @attr('string') uri;
   @attr('string') firstName;
   @attr('string') lastName;
   // TODO: factor out this alias (kept in on purpose to keep merge conflicts low)
