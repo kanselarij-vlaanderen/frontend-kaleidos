@@ -897,7 +897,7 @@
   "publications-tabs-late": "Te laat in BS",
   "publications-tabs-reports": "Rapporten",
   "publication-reports-title": "Jaarlijkse rapporten",
-  "publication-reports-last-request": "Laatst aangevraagd op {date} on {time} by {user}",
+  "publication-reports-last-request": "Laatst aangevraagd op {date} om {time} door {user}",
   "publication-reports-running": "Rapportgeneratie bezig...",
   "publication-reports-failed": "Rapportgeneratie mislukt",
   "publication-reports--toast-generating--title": "Rapport maken",
