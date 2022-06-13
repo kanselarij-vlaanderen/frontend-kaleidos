@@ -23,8 +23,8 @@ export default Model.extend({
   numberRepresentation: attr('string'),
   isFinal: attr('boolean'),
   extraInfo: attr('string'),
-  releasedDocuments: attr('datetime'),
-  releasedDecisions: attr('datetime'),
+  // releasedDocuments: attr('datetime'), // TODO KAS-3431: replace this attr and everything depending on it
+  // releasedDecisions: attr('datetime'), // TODO KAS-3431: replace this attr and everything depending on it
 
   agendas: hasMany('agenda', {
     inverse: null, serialize: false,
@@ -42,6 +42,8 @@ export default Model.extend({
     inverse: null,
   }),
 
+  decisionPublicationActivity: belongsTo('decision-publication-activity'),
+  documentPublicationActivity: belongsTo('document-publication-activity'),
   themisPublicationActivities: hasMany('themis-publication-activity'),
 
   // This computed does not seem to be used anywhere
