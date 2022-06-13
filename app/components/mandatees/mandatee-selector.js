@@ -27,13 +27,20 @@ export default class MandateeSelector extends Component {
 
   @task
   *loadMandatees() {
-    this.mandateeOptions = yield this.mandatees.getMandateesActiveOn.perform(this.referenceDate);
+    if (this.args.openSearch) {
+      this.mandateeOptions = [];
+    } else {
+      this.mandateeOptions = yield this.mandatees.getMandateesActiveOn.perform(this.referenceDate);
+    }
   }
 
   @restartableTask
-  *searchTask(searchTerm) {
+  *filterMandatees(searchTerm) {
     yield timeout(100);
-    return this.filterMandatees(searchTerm);
+    return this.mandateeOptions.filter((mandatee) => {
+      const lastName = mandatee.belongsTo('person').value().lastName;
+      return lastName.toLowerCase().startsWith(searchTerm.toLowerCase());
+    });
   }
 
   @action
@@ -43,10 +50,9 @@ export default class MandateeSelector extends Component {
     }
   }
 
-  filterMandatees(searchTerm) {
-    return this.mandateeOptions.filter((mandatee) => {
-      const lastName = mandatee.belongsTo('person').value().lastName;
-      return lastName.toLowerCase().startsWith(searchTerm.toLowerCase());
-    });
+  @restartableTask
+  *searchMandatee(searchTerm) {
+    yield timeout(300);
+    this.mandateeOptions = yield this.mandatees.fetchMandateesByName.perform(searchTerm, this.referenceDate);
   }
 }

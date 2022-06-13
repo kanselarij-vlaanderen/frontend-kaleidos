@@ -9,6 +9,14 @@ const VISIBLE_ROLES = [
   'http://themis.vlaanderen.be/id/bestuursfunctie/60d0dc2ab1838d01fca7db67', // Gemeenschapsminister
 ];
 
+// Generates a sorting function (argument for Array.prototype.sort) for sorting
+// by absolute distance to a referenceDate
+function sortByDeltaToRef(referenceDate) {
+  return function(a, b) {
+    return Math.abs(referenceDate - a) - Math.abs(referenceDate - b);
+  }
+}
+
 export default class MandateesService extends Service {
   @service store;
 
@@ -84,6 +92,34 @@ export default class MandateesService extends Service {
       });
     }
     return mandatees;
+  }
+
+  @task
+  *fetchMandateesByName(nameSearchTerm, referenceDate) {
+    const queryOptions = {
+      'filter[person][last-name]': nameSearchTerm,
+      'filter[:has:government-body]': 'yes',
+      include: 'person,mandate.role',
+      'page[size]': 20
+    };
+    const preOptions = {
+      ...queryOptions,
+      'sort': '-start',
+      'filter[:lt:start]': referenceDate.toISOString()
+    };
+    const postOptions = {
+      ...queryOptions,
+      'sort': 'start',
+      'filter[:gte:start]': referenceDate.toISOString()
+    };
+    const requests = [
+      this.store.query('mandatee', preOptions),
+      this.store.query('mandatee', postOptions)
+    ];
+    const [preMandatees, postMandatees] = yield Promise.all(requests);
+    const mandatees = [...preMandatees.toArray(), ...postMandatees.toArray()];
+    const sortedMandatees = mandatees.sort((a, b) => sortByDeltaToRef(referenceDate)(a.start, b.start));
+    return sortedMandatees;
   }
 
   @task
