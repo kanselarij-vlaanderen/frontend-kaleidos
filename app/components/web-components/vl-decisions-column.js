@@ -17,7 +17,7 @@ export default class WebComponentsVlDecisionsColumn extends Component {
 
   @task
   *loadTextToShow() {
-    const agendaitem = yield this.args.row.content || this.args.row;
+    const agendaitem = yield this.args.row?.content || this.args.row;
     const agendaActivity = yield agendaitem?.agendaActivity;
     const subcase = yield agendaActivity?.subcase;
     const approved = yield this.subcaseIsApproved.isApproved(subcase);
