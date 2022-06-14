@@ -1,7 +1,6 @@
 import Model, { hasMany, belongsTo, attr } from '@ember-data/model';
 
 export default class AgendaItemTreatment extends Model {
-  @attr('date') startDate; // for publications: displayed as: Datum beslissing
   @attr('datetime') modified;
   @attr('datetime') created;
 
@@ -18,6 +17,5 @@ export default class AgendaItemTreatment extends Model {
   @belongsTo('piece') report;
   @belongsTo('newsletter-info', { serialize: false }) newsletterInfo;
   @belongsTo('decision-result-code', { inverse: null }) decisionResultCode;
-  @hasMany('publication-flow') publicationFlows;
   @hasMany('sign-flow') signFlows;
 }

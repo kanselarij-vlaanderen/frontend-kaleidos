@@ -19,14 +19,14 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
   @tracked referenceDocument;
   @tracked case;
-  @tracked agendaItemTreatment;
+  @tracked decisionActivity;
   @tracked mandatees;
 
   constructor() {
     super(...arguments);
     this.loadPieces.perform();
     this.loadCase.perform();
-    this.loadAgendaItemTreatment.perform();
+    this.loadDecisionActivity.perform();
     this.loadMandatees.perform();
   }
 
@@ -55,11 +55,11 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   }
 
   @task
-  *loadAgendaItemTreatment() {
-    this.agendaItemTreatment = yield this.store.queryOne(
-      'agenda-item-treatment',
+  *loadDecisionActivity() {
+    this.decisionActivity = yield this.store.queryOne(
+      'decision-activity',
       {
-        'filter[agendaitem][:id:]': this.args.agendaitem.id,
+        'filter[treatment][agendaitem][:id:]': this.args.agendaitem.id,
         sort: '-start-date',
       }
     );
@@ -95,7 +95,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
         publicationProperties,
         {
           case: this.case,
-          agendaItemTreatment: this.agendaItemTreatment,
+          decisionActivity: this.decisionActivity,
           mandatees: this.mandatees,
           regulationType: regulationType,
         }
@@ -110,20 +110,20 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
     const _case = await publicationFlow.case;
     if (this.case.id != _case.id) {
-      const agendaItemTreatment = await publicationFlow.agendaItemTreatment;
+      const decisionActivity = await publicationFlow.decisionActivity;
       const agendaitem = await this.store.queryOne('agendaitem', {
-        'filter[treatments][:id:]': agendaItemTreatment.id
+        'filter[treatments][decision-activity][:id:]': decisionActivity.id
       });
       if (!agendaitem) {
         // Selected publication-flow is currently linked to another case (not via MR).
         // We need to relink the publication-flow to this case and cleanup the dummy data
         // that was created for the publication-flow back then.
         publicationFlow.case = this.case;
-        publicationFlow.agendaItemTreatment = this.agendaItemTreatment;
+        publicationFlow.decisionActivity = this.decisionActivity;
         publicationFlowHasChanged = true;
         await Promise.all([
           _case.destroyRecord(),
-          agendaItemTreatment.destroyRecord(),
+          decisionActivity.destroyRecord(),
         ]);
       } else {
         // Publication-flow is already linked to an agenda-item-treatment that has been

@@ -28,8 +28,10 @@ export default class PublicationsPublicationFlowSelectorComponent extends Compon
     // to support relinking a publication-flow that was created before
     // the (sub)case was handled on an agenda
     const filterNotViaCouncilOfMinisters = {
-      'agenda-item-treatment': {
-        ':has-no:agendaitem': 'yes',
+      'decision-activity': {
+        'treatment': {
+          ':has-no:agendaitem': 'yes',
+        },
       },
     };
 
