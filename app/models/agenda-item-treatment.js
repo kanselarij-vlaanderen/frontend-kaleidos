@@ -5,7 +5,8 @@ export default class AgendaItemTreatment extends Model {
   @attr('datetime') modified;
   @attr('datetime') created;
 
-  /* 
+  @belongsTo('decision-activity') decisionActivity;
+  /*
     *Warning*: The relation to "agendaitem" is one-to-many in frontend, but many-to-many in data.
     Calling this relation will randomly only load 1 of the possible many relations, a save of the model will then delete the other linked agendaitems.
     This belongsTo should only be used to set the agendaitem on initial creation of the model.
