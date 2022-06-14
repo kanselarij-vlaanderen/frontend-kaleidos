@@ -17,12 +17,13 @@ export default class WebComponentsVlDecisionsColumn extends Component {
 
   @task
   *loadTextToShow() {
-    const agendaitem = yield this.row;
+    const agendaitem = yield this.args.row.content || this.args.row;
     const agendaActivity = yield agendaitem?.agendaActivity;
     const subcase = yield agendaActivity?.subcase;
-    const approved = this.subcaseIsApproved.isApproved(subcase);
+    const approved = yield this.subcaseIsApproved.isApproved(subcase);
     if (approved) {
       this.textToShow = 'Beslist';
+      return;
     }
     this.textToShow = 'Niet beslist';
   }
