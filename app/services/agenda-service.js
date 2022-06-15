@@ -6,14 +6,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
 import { A } from '@ember/array';
 
-function responseHasJson(response) {
-  return response.headers.get('Content-Type').includes('json');
-}
-
-function formatErrorPayload(payload) {
-  return payload.errors.map((e) => e.title).join('\n');
-}
-
 export default class AgendaService extends Service {
   @service store;
   @service toaster;
@@ -24,126 +16,7 @@ export default class AgendaService extends Service {
   @tracked addedPieces = null;
   @tracked addedAgendaitems = null;
 
-  /* API: agenda-approve-service */
-
-  async reopenMeeting(meeting) {
-    const endpoint = `/meetings/${meeting.id}/reopen`;
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/vnd.api+json',
-      },
-    });
-    if (responseHasJson(response)) {
-      const payload = await response.json();
-      if (payload.errors) {
-        throw new Error(formatErrorPayload(payload));
-      }
-      const newAgenda = await this.store.findRecord('agenda', payload.data.id);
-      return newAgenda;
-    }
-    throw new Error(response.statusText);
-  }
-
-  async approveDesignAgenda(currentAgenda) {
-    const endpoint = `/agendas/${currentAgenda.id}/approve`;
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/vnd.api+json',
-      },
-    });
-    if (responseHasJson(response)) {
-      const payload = await response.json();
-      if (payload.errors) {
-        throw new Error(formatErrorPayload(payload));
-      }
-      const newAgenda = await this.store.findRecord('agenda', payload.data.id);
-      return newAgenda;
-    }
-    throw new Error(response.statusText);
-  }
-
-  async approveAgendaAndCloseMeeting(currentAgenda) {
-    const endpoint = `/agendas/${currentAgenda.id}/close`;
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/vnd.api+json',
-      },
-    });
-
-    if (!response.ok) {
-      if (responseHasJson) {
-        const payload = await response.json();
-        throw new Error(formatErrorPayload(payload));
-      }
-      throw new Error(response.statusText);
-    }
-  }
-
-  async closeMeeting(currentMeeting) {
-    const endpoint = `/meetings/${currentMeeting.id}/close`;
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/vnd.api+json',
-      },
-    });
-    if (responseHasJson(response)) {
-      const payload = await response.json();
-      if (payload.errors) {
-        throw new Error(formatErrorPayload(payload));
-      }
-      const lastApprovedAgenda = await this.store.findRecord('agenda', payload.data.id);
-      return lastApprovedAgenda;
-    }
-    throw new Error(response.statusText);
-  }
-
-  async reopenPreviousAgenda(currentAgenda) {
-    const endpoint = `/agendas/${currentAgenda.id}/reopen`;
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/vnd.api+json',
-      },
-    });
-    if (responseHasJson(response)) {
-      const payload = await response.json();
-      if (payload.errors) {
-        throw new Error(formatErrorPayload(payload));
-      }
-      const reopenedAgenda = await this.store.findRecord('agenda', payload.data.id);
-      return reopenedAgenda;
-    }
-    throw new Error(response.statusText);
-  }
-
-  async deleteAgenda(currentAgenda) {
-    const endpoint = `/agendas/${currentAgenda.id}`;
-    const response = await fetch(endpoint, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/vnd.api+json',
-      },
-    });
-    if (responseHasJson(response)) {
-      const payload = await response.json();
-      if (payload.errors) {
-        throw new Error(formatErrorPayload(payload));
-      }
-      if (payload.data?.id) {
-        const lastApprovedAgenda = await this.store.findRecord('agenda', payload.data.id);
-        return lastApprovedAgenda;
-      } else {
-        return null;
-      }
-    }
-    throw new Error(response.statusText);
-  }
-
-  /* API: agenda-comparison-service */
+  /* API: agenda-sort-service */
 
   async agendaWithChanges(currentAgendaID, agendaToCompareID) {
     const endpoint = new URL('/agenda-comparison/agenda-with-changes', window.location.origin);
