@@ -35,6 +35,11 @@ export default Model.extend({
   }),
   signSigningActivities: hasMany('sign-signing-activity'),
 
+  // TODO this computed property is used in:
+  // - mandatee#priorirtyAlpha
+  // - settings.ministers template
+  // - Utils::MandateeSelector
+  // Refactor these uses and remove this computed property
   fullDisplayName: computed('person', 'title', 'person.nameToDisplay', function() {
     const nameToDisplay = this.get('person.nameToDisplay');
     if (nameToDisplay) {
@@ -43,10 +48,11 @@ export default Model.extend({
     return `${this.get('title')}`;
   }),
 
-  /**
-   * Using this to sort will map the priority number to the alphabet, giving a correct alphabetical sort with numbers higher than 9.
-   * TODO: clean up hacky map-to-alphabet sorting
-   */
+  // Using this to sort will map the priority number to the alphabet, giving a correct alphabetical sort with numbers higher than 9.
+  // TODO: clean up hacky map-to-alphabet sorting
+  // TODO this computed property is used in:
+  // - agendaitem-utils#setCalculatedGroupNumbers
+  // Refactor this use and remove this computed property
   priorityAlpha: computed('priority', 'fullDisplayName', function() {
     const priority = this.get('priority');
     if (typeof priority === 'number') {

@@ -56,7 +56,7 @@
           >
             {{#if
               (and
-                @agendaitem.isDesignAgenda
+                @agendaitem.status.isDesignAgenda
                 (and @allowEditing @agendaitem.formallyOkToShow)
               )
             }}

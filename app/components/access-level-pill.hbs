@@ -2,23 +2,24 @@
   <div class="auk-loader" role="alert" aria-busy="true"></div>
 {{else}}
   {{#if (not this.isEditing)}}
-    <AuPill
-      @skin="ongoing"
-      @icon={{this.pillIcon}}
-      data-test-access-level-pill
-    >
-      {{this.accessLevelLabel}}
-    </AuPill>
-    {{#if this.canEdit}}
-      <Auk::Button
-        @skin="tertiary"
-        @layout="icon-only"
-        @icon="pencil"
-        @size="small"
-        {{on "click" this.openEditMode}}
-        class="auk-u-ml"
-        data-test-access-level-pill-edit
-      />
+    {{#if (not this.canEdit)}}
+      <AuPill
+        @skin="ongoing"
+        @icon={{this.pillIcon}}
+        data-test-access-level-pill
+      >
+        {{this.accessLevelLabel}}
+      </AuPill>
+    {{else}}
+      <AuPill
+        @skin="ongoing"
+        @icon={{this.pillIcon}}
+        @onClickAction={{this.openEditMode}}
+        @actionIcon="pencil"
+        data-test-access-level-pill
+      >
+        {{this.accessLevelLabel}}
+      </AuPill>
     {{/if}}
   {{else}}
     <div class="auk-u-maximize-width">

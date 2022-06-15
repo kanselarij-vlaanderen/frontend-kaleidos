@@ -283,7 +283,7 @@
   "notifications": "Meldingen",
   "number-session": "Nummer vergadering: ",
   "of": "van",
-  "on-agenda": "Geagendeerd",
+  "on-agenda-for-meeting": "Geagendeerd voor de zitting van",
   "on-agenda-of": "Op agenda van",
   "on-agenda-for": "Geagendeerd voor:",
   "other-agenda": "Andere agenda",
@@ -462,7 +462,9 @@
   "notification-loading-text": "De notificatie wordt geladen.",
   "new-agendaitem": "Nieuw agendapunt",
   "from": "Vanaf",
+  "until": "tot",
   "until-inclusive": "Tot en met",
+  "present-time": "heden",
   "search-in-decisions-only": "Zoek enkel in beslissingen",
   "search-in-announcements-only": "Zoek enkel in mededelingen",
   "search-include-archived": "Zoek ook in archief",
@@ -895,7 +897,7 @@
   "publications-tabs-late": "Te laat in BS",
   "publications-tabs-reports": "Rapporten",
   "publication-reports-title": "Jaarlijkse rapporten",
-  "publication-reports-last-request": "Laatst aangevraagd op {date} on {time} by {user}",
+  "publication-reports-last-request": "Laatst aangevraagd op {date} om {time} door {user}",
   "publication-reports-running": "Rapportgeneratie bezig...",
   "publication-reports-failed": "Rapportgeneratie mislukt",
   "publication-reports--toast-generating--title": "Rapport maken",
@@ -1039,5 +1041,7 @@
   "search-publication": "zoek publicatie",
   "select-all": "alles selecteren",
   "deselect-all": "alles deselecteren",
-  "on-the-website": "Op de website"
+  "on-the-website": "Op de website",
+  "open-search-for-mandatee": "Vrij zoeken",
+  "open-search-for-mandatee-tooltip": "Opgelet. Activeer deze optie enkel indien strikt noodzakelijk. In tegenstelling tot bij standaard zoeken, kunnen de aangeboden resultaten bij vrij zoeken ook ministers bevatten die niet actief zijn/waren gedurende de referentieperiode waarvoor u zoekt. Deze functionaliteit kan bv. gebruikt worden om net-niet-meer actieve ministers (rond een ministerwissel) toe te wijzen. "
 }

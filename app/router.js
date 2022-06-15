@@ -12,8 +12,7 @@ const Router = EmberRouter.extend({
 });
 
 Router.map(function() {
-  // mock-login-route as name to avoid collision with mock-login component provided by addon
-  this.route('mock-login-route', { path: '/mock-login', });
+  this.route('mock-login');
   this.route('login', { path: '/aanmelden', });
   this.route('accountless-users', { path: '/onbevoegde-gebruiker', });
 
