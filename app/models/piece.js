@@ -36,9 +36,9 @@ export default class Piece extends Model {
   @belongsTo('submission-activity', {
     serialize: false
   }) submissionActivity;
-  @belongsTo('agenda-item-treatment', {
-    inverse: null
-  }) treatment;
+  @belongsTo('decision-activity', {
+    inverse: null // TODO: figure out why `inverse: null` here. If no reason, remove.
+  }) decisionActivity;
   @belongsTo('newsletter-info') newsletter;
   @belongsTo('meeting', {
     inverse: null

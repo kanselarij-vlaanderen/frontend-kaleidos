@@ -20,7 +20,7 @@ export default ModelWithModifier.extend({
   remark: attr('string'),
 
   agendaItemTreatment: hasMany('agenda-item-treatment', {
-    serialize: true, // on creation of the newsletter-info, multiple decisions (for now also treatments) might already exist.
+    serialize: true, // TODO: make this belongsTo
   }),
   meeting: belongsTo('meeting', {
     inverse: null,
@@ -37,7 +37,8 @@ export default ModelWithModifier.extend({
     const treatments = await this.get('agendaItemTreatment');
     const treatment = treatments.firstObject;
     if (treatment) {
-      const subcase = await treatment.get('subcase');
+      const decisionActivity = await treatment.get('decisionActivity');
+      const subcase = await decisionActivity.get('subcase');
       const mandatees = await subcase.get('mandatees');
       const sortedMandatees = await mandatees.sortBy('priority');
       let proposalText = this.intl.t('proposal-text');

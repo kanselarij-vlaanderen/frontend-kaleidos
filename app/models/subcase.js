@@ -24,5 +24,5 @@ export default class Subcase extends ModelWithModifier {
   @hasMany('submission-activity', { serialize: false }) submissionActivities;
   @hasMany('piece') linkedPieces;
   @hasMany('mandatee') mandatees;
-  @hasMany('agenda-item-treatment', { inverse: null }) treatments;
+  @hasMany('decision-activity', { inverse: null }) decisionActivities; // TODO: document why "inverse: null" is here or remove
 }

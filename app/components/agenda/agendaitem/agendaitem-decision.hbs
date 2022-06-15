@@ -6,9 +6,9 @@
           <h4 class="auk-u-my-2">{{t "result-decision"}}</h4>
           {{#if (not this.isEditing)}}
             <div class="auk-o-flex auk-u-my-2">
-              {{#if @treatment.decisionResultCode}}
+              {{#if @decisionActivity.decisionResultCode}}
                 <Decision::DecisionResultPill
-                  @decisionResultCode={{@treatment.decisionResultCode}}
+                  @decisionResultCode={{@decisionActivity.decisionResultCode}}
                 />
               {{else}}
                 <Auk::Pill>
@@ -31,7 +31,7 @@
             </div>
           {{else}}
             <Agenda::Agendaitem::AgendaitemDecisionEdit
-              @agendaItemTreatment={{@treatment}}
+              @decisionActivity={{@decisionActivity}}
               @onSave={{this.toggleEdit}}
               @onCancel={{this.toggleEdit}}
               @isTableRow={{@isTableRow}}
@@ -52,7 +52,7 @@
                 <Menu.Item
                   @skin="danger"
                   data-test-agendaitem-decision-delete
-                  {{on "click" (fn this.promptDeleteTreatment @treatment)}}
+                  {{on "click" (fn this.promptDeleteDecisionActivity @decisionActivity)}}
                 >
                   {{t "delete-decision"}}
                 </Menu.Item>
@@ -99,7 +99,7 @@
     @title={{t "delete-decision"}}
     @message={{t "delete-decision-message"}}
     @cancel={{this.cancel}}
-    @verify={{this.deleteTreatment}}
+    @verify={{this.deleteDecisionActivity}}
   />
 {{/if}}
 {{#if this.isAddingReport}}

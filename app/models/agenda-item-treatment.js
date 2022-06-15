@@ -13,9 +13,6 @@ export default class AgendaItemTreatment extends Model {
     see method getLatestAgendaitemFromTreatment in publicationService.
   */
   @belongsTo('agendaitem') agendaitem;
-  @belongsTo('subcase') subcase;
-  @belongsTo('piece') report;
   @belongsTo('newsletter-info', { serialize: false }) newsletterInfo;
-  @belongsTo('decision-result-code', { inverse: null }) decisionResultCode;
   @hasMany('sign-flow') signFlows;
 }

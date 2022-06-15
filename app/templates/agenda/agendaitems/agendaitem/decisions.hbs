@@ -13,7 +13,7 @@
           @skin="secondary"
           @icon="plus"
           data-test-route-agenda---decisions-add-treatment
-          {{on "click" this.addTreatment}}
+          {{on "click" this.addDecisionActivity}}
         >
           {{t "add-decision"}}
         </Auk::Button>
@@ -21,15 +21,13 @@
     {{/if}}
   </Toolbar.Group>
 </Auk::Toolbar>
-{{#each this.treatments as |treatment|}}
+{{#each this.model as |decisionActivity|}}
   <div class="auk-u-mb-2">
-    {{! As long as we see DecisionActivity & AgendaItemTreatment as 1 entity,
-    we need to ensure at least 1 treatment for a relationship path to newsletterInfo }}
     <Agenda::Agendaitem::AgendaitemDecision
       @agendaitem={{this.agendaitem}}
-      @treatment={{treatment}}
-      @onDeleteTreatment={{this.refresh}}
-      @allowDelete={{gt this.treatments.length 1}}
+      @decisionActivity={{decisionActivity}}
+      @onDeleteDecisionActivity={{this.refresh}}
+      @allowDelete={{gt this.decisionActivities.length 1}}
     />
   </div>
 {{/each}}

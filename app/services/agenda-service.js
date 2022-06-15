@@ -260,13 +260,19 @@ export default class AgendaService extends Service {
       'filter[:uri:]': defaultDecisionResultCodeUri,
     });
 
-    // Treatment of agenda-item / decision activity
-    const agendaItemTreatment = await this.store.createRecord('agenda-item-treatment', {
-      created: now,
-      modified: now,
+    // decision-activity
+    const decisionActivity = await this.store.createRecord('decision-activity', {
       subcase,
       startDate: meeting.plannedStart,
       decisionResultCode,
+    });
+    await decisionActivity.save();
+
+    // Treatment
+    const agendaItemTreatment = await this.store.createRecord('agenda-item-treatment', {
+      created: now,
+      modified: now,
+      decisionActivity,
     });
     await agendaItemTreatment.save();
 
@@ -361,6 +367,7 @@ export default class AgendaService extends Service {
             await newsletter.destroyRecord();
           }
           // TODO DELETE REPORT !
+          // TODO: delete decision activity
           await treatment.destroyRecord();
         }));
       }

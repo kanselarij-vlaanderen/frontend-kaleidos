@@ -148,13 +148,22 @@ export default class AgendasController extends Controller {
     );
 
     const startDate = newMeeting.plannedStart;
+    const decisionActivity = this.store.createRecord(
+      'decision-activity',
+      {
+        startDate: startDate,
+        decisionResultCode,
+        // no subcase. Minutes approval aren't part of a (sub)case
+      }
+    );
+    await decisionActivity.save();
+
     const agendaItemTreatment = this.store.createRecord(
       'agenda-item-treatment',
       {
         created: now,
         modified: now,
-        startDate: startDate,
-        decisionResultCode,
+        decisionActivity,
       }
     );
     await agendaItemTreatment.save();

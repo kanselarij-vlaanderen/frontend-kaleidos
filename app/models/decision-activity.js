@@ -4,5 +4,9 @@ export default class decisionActivity extends Model {
   @attr('date') startDate; // for publications: displayed as: Datum beslissing
 
   @belongsTo('agenda-item-treatment') treatment;
+  @belongsTo('subcase') subcase;
+  @belongsTo('decision-result-code', { inverse: null }) decisionResultCode;
+  @belongsTo('piece') report;
+
   @hasMany('publication-flow') publicationFlows;
 }

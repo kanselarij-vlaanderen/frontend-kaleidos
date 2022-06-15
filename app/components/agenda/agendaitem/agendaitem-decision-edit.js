@@ -4,16 +4,16 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 
 export default class AgendaitemDecisionEditComponent extends Component {
-  @tracked treatment = this.args.agendaItemTreatment;
+  @tracked decisionActivity = this.args.decisionActivity;
 
   @action
   changeDecisionResultCode(resultCode) {
-    this.treatment.set('decisionResultCode', resultCode);
+    this.decisionActivity.set('decisionResultCode', resultCode);
   }
 
   @task
-  *saveTreatment() {
-    yield this.treatment.save();
+  *saveDecisionActivity() {
+    yield this.decisionActivity.save();
     if (this.args.onSave) {
       this.args.onSave();
     }
@@ -21,10 +21,10 @@ export default class AgendaitemDecisionEditComponent extends Component {
 
   @action
   cancelEdit() {
-    this.treatment.belongsTo('decisionResultCode').reload(); // "rollback relationship"
+    this.decisionActivity.belongsTo('decisionResultCode').reload(); // "rollback relationship"
     if (this.args.onCancel) {
       this.args.onCancel();
     }
-    return this.treatment;
+    return this.decisionActivity;
   }
 }

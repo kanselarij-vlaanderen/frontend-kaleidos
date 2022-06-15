@@ -7,20 +7,22 @@ export default class DecisionsAgendaitemAgendaitemsAgendaRoute extends Route {
 
   model() {
     this.agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
-    return this.store.query('agenda-item-treatment', {
-      'filter[agendaitem][:id:]': this.agendaitem.id,
-      include: 'report',
+    return this.store.query('decision-activity', {
+      'filter[treatment][agendaitem][:id:]': this.agendaitem.id,
+      include: 'report,treatment',
     });
   }
 
-  async afterModel() {
+  async afterModel(model) {
     this.meeting = await this.modelFor('agenda').meeting;
+    this.agendaItemTreatment = await model.firstObject.treatment;
   }
 
   setupController(controller) {
     super.setupController(...arguments);
     controller.agendaitem = this.agendaitem;
     controller.meeting = this.meeting;
+    controller.agendaItemTreatment = this.agendaItemTreatment;
   }
 
   @action

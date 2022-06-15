@@ -73,15 +73,19 @@ export default Controller.extend({
       const startDate = meeting.plannedStart;
       const agendaActivity = await agendaitem.agendaActivity;
       const subcase =  await agendaActivity.subcase;
+      const decisionActivity = this.store.createRecord('decision-activity', {
+        startDate: startDate,
+        subcase: subcase,
+      });
+      await decisionActivity.save();
       const treatment = this.store.createRecord('agenda-item-treatment', {
         created: now,
         modified: now,
-        startDate: startDate,
-        agendaitem: agendaitem,
-        subcase: subcase,
+        agendaitem,
+        decisionActivity
       });
       await treatment.save();
-      await this.newsletterService.linkNewsItemToNewTreatment(agendaitem);
+      await this.newsletterService.linkNewsItemToNewTreatment(agendaitem); // TODO: this can be removed?
     },
   },
 });
