@@ -9,4 +9,5 @@ export default class decisionActivity extends Model {
   @belongsTo('piece') report;
 
   @hasMany('publication-flow') publicationFlows;
+  @hasMany('sign-flow') signFlows;
 }

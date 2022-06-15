@@ -34,7 +34,8 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
   *markOrUnmarkForSignature() {
     if (!this.signMarkingActivity) {
       const agendaItemTreatment = yield this.agendaitem.treatment;
-      yield this.args.markForSignature(this.args.piece, agendaItemTreatment);
+      const decisionActivity = yield agendaItemTreatment.decisionActivity;
+      yield this.args.markForSignature(this.args.piece, decisionActivity);
     } else {
       yield this.args.unmarkForSignature(this.args.piece);
     }

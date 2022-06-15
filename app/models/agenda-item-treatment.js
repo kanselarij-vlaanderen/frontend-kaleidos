@@ -9,5 +9,4 @@ export default class AgendaItemTreatment extends Model {
   // Merely hasMany because agenda-item can have different versions (one per agenda-version)
   @hasMany('agendaitem', { serialize: false }) agendaitems;
   @belongsTo('newsletter-info', { serialize: false }) newsletterInfo;
-  @hasMany('sign-flow') signFlows;
 }
