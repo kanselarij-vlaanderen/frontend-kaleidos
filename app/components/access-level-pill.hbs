@@ -3,7 +3,7 @@
 {{else}}
   {{#if (not this.isEditing)}}
     <AuPill
-      @skin="ongoing"
+      @skin={{this.pillSkin}}
       @icon={{this.pillIcon}}
       data-test-access-level-pill
     >
