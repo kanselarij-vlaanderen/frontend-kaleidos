@@ -126,7 +126,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
           decisionActivity.destroyRecord(),
         ]);
       } else {
-        // Publication-flow is already linked to an agenda-item-treatment that has been
+        // Publication-flow is already linked to an decision-activity that has been
         // handled on an agenda. We cannot relink the publication-flow in that case.
         // In practice this scenario will only occur in concurrency scenarios where
         // multiple users try to link the same publication at the same time to
