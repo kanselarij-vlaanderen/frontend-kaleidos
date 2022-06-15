@@ -387,9 +387,8 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     }
     try {
       const lastApprovedAgendaId = await deleteAgenda(this.args.currentAgenda);
-      let lastApprovedAgenda;
       if (lastApprovedAgendaId) {
-        lastApprovedAgenda = await this.store.findRecord('agenda', lastApprovedAgendaId);
+        const lastApprovedAgenda = await this.store.findRecord('agenda', lastApprovedAgendaId);
         // Data reloading
         await this.reloadAgendaitemsOfAgenda(lastApprovedAgenda);
         await this.reloadMeeting();
