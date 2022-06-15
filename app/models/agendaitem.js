@@ -51,8 +51,8 @@ export default ModelWithModifier.extend({
   agendaActivity: belongsTo('agenda-activity', {
     inverse: null,
   }),
-  treatments: hasMany('agenda-item-treatment', {
-    inverse: null,
+  treatment: belongsTo('agenda-item-treatment', {
+    inverse: null, // TODO: document why inverse:null. Remove otherwise
   }),
 
   mandatees: hasMany('mandatee'),
@@ -158,10 +158,10 @@ export default ModelWithModifier.extend({
     return documentContainers && documentContainers.some((documentContainers) => documentContainers.checkAdded);
   }),
 
-  newsletterInfo: computed('treatments.@each.newsletterInfo', 'treatments', 'id', async function() {
-    const newsletterInfos = await this.store.query('newsletter-info', {
+  newsletterInfo: computed('treatment.newsletterInfo', 'treatment', 'id', async function() {
+    const agendaItemTreatment = await this.store.queryOne('newsletter-info', {
       'filter[agenda-item-treatment][agendaitem][:id:]': this.get('id'),
     });
-    return newsletterInfos.get('firstObject');
+    return agendaItemTreatment;
   }),
 });

@@ -197,12 +197,12 @@ export default class PublicationService extends Service {
     // for now.
 
     // const agendaitem = await this.store.queryOne('agendaitem', {
-    //   'filter[treatments][decision-activity][publication-flows][:id:]': publicationFlow.id,
+    //   'filter[treatment][decision-activity][publication-flows][:id:]': publicationFlow.id,
     // });
 
     const decisionActivity = await publicationFlow.decisionActivity;
     const agendaitem = await this.store.queryOne('agendaitem', {
-      'filter[treatments][decision-activity][:id:]': decisionActivity.id
+      'filter[treatment][decision-activity][:id:]': decisionActivity.id
     });
     return agendaitem != null;
   }
@@ -470,7 +470,7 @@ export default class PublicationService extends Service {
    */
   async getModelsForAgendaitemFromDecisionActivity(decisionActivity) {
     const agendaitem = await this.store.queryOne('agendaitem', {
-      'filter[treatments][decision-activity][:id:]': decisionActivity.id,
+      'filter[treatment][decision-activity][:id:]': decisionActivity.id,
       'filter[:has-no:next-version]': 't',
       sort: '-created',
     });

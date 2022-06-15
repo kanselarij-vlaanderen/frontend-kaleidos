@@ -128,11 +128,11 @@ export default class NewsletterService extends Service {
       // FIXME: The relationship 'agendaitem' to 'agenda-item-treatment' is "inverse: null",
       // hence the requirement for the "reload" here. Without it, adding a new
       // newsletterInfo immediately after adding a treatment can break data.
-      const agendaItemTreatments = await agendaitem
-        .hasMany('treatments')
+      const agendaItemTreatment = await agendaitem
+        .belongsTo('treatment')
         .reload();
       const news = this.store.createRecord('newsletter-info', {
-        agendaItemTreatment: agendaItemTreatments,
+        agendaItemTreatment,
         inNewsletter,
       });
       if (agendaitem.showAsRemark) {
@@ -156,7 +156,7 @@ export default class NewsletterService extends Service {
             {
               'filter[agenda-item-treatment][decision-activity][subcase][case][:id:]': _case.id,
               'filter[agenda-item-treatment][agendaitem][show-as-remark]': false, // Don't copy over news item from announcement
-              sort: '-agenda-item-treatment.agendaitem.agenda-activity.start-date',
+              sort: '-agenda-item-treatment.agendaitems.agenda-activity.start-date',
             }
           );
           if (previousNewsItem) {
@@ -169,23 +169,6 @@ export default class NewsletterService extends Service {
         }
       }
       return news;
-    }
-  }
-
-  /**
-   * Update the hasMany('agenda-item-treatment') of newsletter-info when adding a new treatment
-   * @param {Agendaitem} agendaitem
-   */
-  async linkNewsItemToNewTreatment(agendaitem) {
-    const newsletterInfo = await this.store.queryOne('newsletter-info', {
-      'filter[agenda-item-treatment][agendaitem][:id:]': agendaitem.id,
-    });
-    if (newsletterInfo) {
-      const agendaItemTreatments = await agendaitem
-        .hasMany('treatments')
-        .reload();
-      newsletterInfo.agendaItemTreatment = agendaItemTreatments;
-      await newsletterInfo.save();
     }
   }
 

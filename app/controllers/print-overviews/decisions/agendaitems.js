@@ -63,6 +63,7 @@ export default Controller.extend({
   // TODO: octane-refactor
   // eslint-disable-next-line ember/no-actions-hash
   actions: {
+    // TODO: this should be "addDecisionActivity" instead.
     async addTreatment(agendaitemRow) {
       const now = new Date();
       const agendaitem = await this.store.findRecord('agendaitem', agendaitemRow.content.id, {

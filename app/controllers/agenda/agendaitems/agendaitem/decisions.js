@@ -22,7 +22,6 @@ export default class DecisionAgendaitemAgendaitemsAgendaController extends Contr
       subcase: subcase,
     });
     await newDecisionActivity.save();
-    await this.newsletterService.linkNewsItemToNewTreatment(this.agendaitem);
     this.refresh();
   }
 

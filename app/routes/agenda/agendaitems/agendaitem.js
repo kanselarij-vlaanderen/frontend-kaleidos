@@ -22,9 +22,9 @@ export default class AgendaitemAgendaitemsAgendaRoute extends Route {
     }
     this.transition = transition; // set on the route for use in setupController, since the provided "transition" argument there always comes back "undefined"
 
-    const treatments = await model.treatments; // TODO: make this relationship singular
-    this.newsletterInfo = await treatments?.firstObject?.newsletterInfo;
-    this.decisionActivity = await treatments?.firstObject?.decisionActivity;
+    const agendaItemTreatment = await model.treatment;
+    this.newsletterInfo = await agendaItemTreatment?.newsletterInfo;
+    this.decisionActivity = await agendaItemTreatment?.decisionActivity;
   }
 
   setupController(controller, model) {

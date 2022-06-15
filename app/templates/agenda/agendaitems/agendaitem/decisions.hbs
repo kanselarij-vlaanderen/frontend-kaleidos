@@ -21,13 +21,12 @@
     {{/if}}
   </Toolbar.Group>
 </Auk::Toolbar>
-{{#each this.model as |decisionActivity|}}
-  <div class="auk-u-mb-2">
-    <Agenda::Agendaitem::AgendaitemDecision
-      @agendaitem={{this.agendaitem}}
-      @decisionActivity={{decisionActivity}}
-      @onDeleteDecisionActivity={{this.refresh}}
-      @allowDelete={{gt this.decisionActivities.length 1}}
-    />
-  </div>
-{{/each}}
+<div class="auk-u-mb-2">
+  {{!TODO: delete hard-coded to false for now. Figure out new requirements regarding deleting and re-adding}}
+  <Agenda::Agendaitem::AgendaitemDecision
+    @agendaitem={{this.agendaitem}}
+    @decisionActivity={{this.model}}
+    @onDeleteDecisionActivity={{this.refresh}}
+    @allowDelete={{false}}
+  />
+</div>

@@ -112,7 +112,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     if (this.case.id != _case.id) {
       const decisionActivity = await publicationFlow.decisionActivity;
       const agendaitem = await this.store.queryOne('agendaitem', {
-        'filter[treatments][decision-activity][:id:]': decisionActivity.id
+        'filter[treatment][decision-activity][:id:]': decisionActivity.id
       });
       if (!agendaitem) {
         // Selected publication-flow is currently linked to another case (not via MR).

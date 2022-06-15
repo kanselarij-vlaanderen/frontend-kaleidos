@@ -177,7 +177,7 @@ export default class AgendasController extends Controller {
       ).format('dddd DD-MM-YYYY')}`,
       formallyOk: CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK,
       isApproval: true,
-      treatments: A([agendaItemTreatment]),
+      treatment: agendaItemTreatment,
     });
     await agendaitem.save();
     return agendaitem;

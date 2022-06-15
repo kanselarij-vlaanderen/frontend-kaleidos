@@ -12,7 +12,7 @@
     @columns={{this.columns}}
     as |agendaitemRow|
   >
-    {{#if (is-pending agendaitemRow.treatments)}}
+    {{#if (is-pending agendaitemRow.treatment)}}
       <WebComponents::VlLoader @text={{t "decisions-loading-text"}} />
     {{else}}
       <div class="auk-u-m-8">
@@ -31,16 +31,14 @@
             </Auk::Toolbar::Group>
           </Auk::Toolbar>
         </div>
-        {{#each (await agendaitemRow.treatments) as |treatment|}}
-          {{#let (await agendaitemRow.content.agendaActivity.subcase) as |subcase|}}
-            <Agenda::Agendaitem::AgendaitemDecision
-              @subcase={{subcase}}
-              @isTableRow={{true}}
-              @treatment={{treatment}}
-              @agendaitem={{await agendaitemRow.content}}
-            />
-          {{/let}}
-        {{/each}}
+        {{#let (await agendaitemRow.content.agendaActivity.subcase) as |subcase|}}
+          <Agenda::Agendaitem::AgendaitemDecision
+            @subcase={{subcase}}
+            @isTableRow={{true}}
+            @treatment={{await agendaitemRow.treatment}}
+            @agendaitem={{await agendaitemRow.content}}
+          />
+        {{/let}}
       </div>
     {{/if}}
   </Utils::AgendaitemTable>

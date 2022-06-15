@@ -299,7 +299,7 @@ export default class AgendaService extends Service {
       pieces: submittedPieces,
       linkedPieces: await subcase.linkedPieces,
       agendaActivity,
-      treatments: A([agendaItemTreatment]),
+      treatment: agendaItemTreatment,
     });
     await agendaitem.save();
     await lastAgenda.hasMany('agendaitems').reload();
@@ -354,22 +354,20 @@ export default class AgendaService extends Service {
     });
     agendaitemToDelete.set('aboutToDelete', true);
     const agendaActivity = await agendaitemToDelete.get('agendaActivity');
-    const treatments = await agendaitemToDelete.get('treatments');
+    const treatment = await agendaitemToDelete.get('treatment');
 
     if (agendaActivity) {
       const subcase = await agendaActivity.get('subcase');
       await agendaActivity.hasMany('agendaitems').reload();
       const agendaitemsFromActivity = await agendaActivity.get('agendaitems');
-      if (treatments) {
-        await Promise.all(treatments.map(async(treatment) => {
-          const newsletter = await treatment.get('newsletterInfo');
-          if (newsletter) {
-            await newsletter.destroyRecord();
-          }
-          // TODO DELETE REPORT !
-          // TODO: delete decision activity
-          await treatment.destroyRecord();
-        }));
+      if (treatment) {
+        const newsletter = await treatment.get('newsletterInfo');
+        if (newsletter) {
+          await newsletter.destroyRecord();
+        }
+        // TODO DELETE REPORT !
+        // TODO: delete decision activity
+        await treatment.destroyRecord();
       }
       await Promise.all(agendaitemsFromActivity.map(async(agendaitem) => {
         const agenda = await agendaitem.get('agenda');

@@ -5,14 +5,9 @@ export default class AgendaItemTreatment extends Model {
   @attr('datetime') created;
 
   @belongsTo('decision-activity') decisionActivity;
-  /*
-    *Warning*: The relation to "agendaitem" is one-to-many in frontend, but many-to-many in data.
-    Calling this relation will randomly only load 1 of the possible many relations, a save of the model will then delete the other linked agendaitems.
-    This belongsTo should only be used to set the agendaitem on initial creation of the model.
-    Any reads should be on the inverse "agendaitem.treatments" or with a query via id.
-    see method getLatestAgendaitemFromTreatment in publicationService.
-  */
-  @belongsTo('agendaitem') agendaitem;
+
+  // Merely hasMany because agenda-item can have different versions (one per agenda-version)
+  @hasMany('agendaitem', { serialize: false }) agendaitems;
   @belongsTo('newsletter-info', { serialize: false }) newsletterInfo;
   @hasMany('sign-flow') signFlows;
 }

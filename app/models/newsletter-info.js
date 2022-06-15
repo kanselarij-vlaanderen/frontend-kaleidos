@@ -19,8 +19,8 @@ export default ModelWithModifier.extend({
   publicationDocDate: attr('datetime'),
   remark: attr('string'),
 
-  agendaItemTreatment: hasMany('agenda-item-treatment', {
-    serialize: true, // TODO: make this belongsTo
+  agendaItemTreatment: belongsTo('agenda-item-treatment', {
+    serialize: true, // TODO: research if this still needs expliciting. belongsTo is normally serialized anyway (this used to be a hasMany)
   }),
   meeting: belongsTo('meeting', {
     inverse: null,
@@ -34,8 +34,7 @@ export default ModelWithModifier.extend({
 
   newsletterProposal: computed('agendaItemTreatment.{[],@each.subcase}', async function() {
     // eslint-disable-next-line ember/no-get
-    const treatments = await this.get('agendaItemTreatment');
-    const treatment = treatments.firstObject;
+    const treatment = await this.get('agendaItemTreatment');
     if (treatment) {
       const decisionActivity = await treatment.get('decisionActivity');
       const subcase = await decisionActivity.get('subcase');
