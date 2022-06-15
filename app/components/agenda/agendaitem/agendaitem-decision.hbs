@@ -5,29 +5,12 @@
         <Group.Item class="auk-content">
           <h4 class="auk-u-my-2">{{t "result-decision"}}</h4>
           {{#if (not this.isEditing)}}
-            <div class="auk-o-flex auk-u-my-2">
-              {{#if @treatment.decisionResultCode}}
-                <Decision::DecisionResultPill
-                  @decisionResultCode={{@treatment.decisionResultCode}}
-                />
-              {{else}}
-                <Auk::Pill>
-                  {{t "no-decision-set"}}
-                </Auk::Pill>
-              {{/if}}
-              {{#if this.currentSession.isEditor}}
-                <Auk::Button
-                  @skin="tertiary"
-                  @icon="pencil"
-                  @size="xsmall"
-                  @layout="icon-only"
-                  {{on "click" this.toggleEdit}}
-                  class="auk-u-ml"
-                  data-test-agendaitem-decision-edit
-                >
-                  {{t "edit"}}
-                </Auk::Button>
-              {{/if}}
+            <div class="auk-u-my-2">
+              <Decision::DecisionResultPill
+                @decisionResultCode={{@treatment.decisionResultCode}}
+                @isEditable={{this.currentSession.isEditor}}
+                @onEdit={{this.toggleEdit}}
+              />
             </div>
           {{else}}
             <Agenda::Agendaitem::AgendaitemDecisionEdit

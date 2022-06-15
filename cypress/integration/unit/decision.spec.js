@@ -126,7 +126,7 @@ context('Decision tests', () => {
     cy.get(agenda.agendaitemNav.decisionTab).click();
     cy.url().should('contain', '/beslissingen');
     cy.intercept('PATCH', 'agenda-item-treatments/**').as('patchTreatment');
-    cy.get(agenda.agendaitemDecision.edit).click();
+    cy.get(agenda.decisionResultPill.edit).click();
     cy.get(agenda.agendaitemDecisionEdit.resultContainer).within(() => {
       cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
         .click();
@@ -236,7 +236,7 @@ context('Decision tests', () => {
     // switch between all decision results
     decisionTypes.forEach((type) => {
       cy.get('@decision').eq(0)
-        .find(agenda.agendaitemDecision.edit)
+        .find(agenda.decisionResultPill.edit)
         .click();
       cy.get(dependency.emberPowerSelect.trigger).click();
       cy.get(dependency.emberPowerSelect.option).contains(type)

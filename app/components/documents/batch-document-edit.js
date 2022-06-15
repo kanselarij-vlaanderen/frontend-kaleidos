@@ -17,11 +17,14 @@ class DocumentHistory {
    * Piece until which the document history of the container should be shown
   */
   @tracked lastPiece
+  // Original accessLevel of the document's last piece
+  accessLevel;
 }
 
 export default class DocumentsBatchDocumentEdit extends Component {
   @service store;
   @service fileService;
+  @service pieceAccessLevelService;
 
   @tracked documentHistories = A([]);
 
@@ -103,6 +106,8 @@ export default class DocumentsBatchDocumentEdit extends Component {
       const matchingPiece = allPieces.find((piece) => piece.get('id') === containerPiece.get('id'));
       if (matchingPiece) {
         history.lastPiece = matchingPiece;
+        const accessLevel = yield matchingPiece.accessLevel;
+        history.accessLevel = accessLevel;
         break;
       }
     }
@@ -119,6 +124,9 @@ export default class DocumentsBatchDocumentEdit extends Component {
       } else {
         await history.lastPiece.save();
         await history.documentContainer.save();
+        if (history.accessLevel !== history.lastPiece.accessLevel) {
+          await this.pieceAccessLevelService.updatePreviousAccessLevels(history.lastPiece);
+        }
       }
     });
     yield all(updatePromises);

@@ -1,96 +1,41 @@
 import Model, { belongsTo, hasMany, attr } from '@ember-data/model';
-import { PromiseArray, PromiseObject } from '@ember-data/store/-private';
-import { computed } from '@ember/object';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { KALEIDOS_START_DATE } from 'frontend-kaleidos/config/config';
-import {
-  sortDocumentContainers
-} from 'frontend-kaleidos/utils/documents';
 
-// TODO: octane-refactor
-/* eslint-disable ember/no-get */
-// eslint-disable-next-line ember/no-classic-classes
-export default Model.extend({
-  intl: inject(),
-  store: inject(),
+export default class Meeting extends Model {
+  @service store;
+  @service intl;
 
-  uri: attr('string'),
-  plannedStart: attr('datetime'),
-  startedOn: attr('datetime'),
-  endedOn: attr('datetime'),
-  location: attr('string'),
-  number: attr('number'),
-  numberRepresentation: attr('string'),
-  isFinal: attr('boolean'),
-  extraInfo: attr('string'),
-  releasedDocuments: attr('datetime'),
-  releasedDecisions: attr('datetime'),
+  @attr uri;
+  @attr('datetime') plannedStart;
+  @attr('datetime') startedOn;
+  @attr('datetime') endedOn;
+  @attr location;
+  @attr('number') number;
+  @attr numberRepresentation;
+  @attr('boolean') isFinal;
+  @attr extraInfo;
+  @attr('datetime') releasedDocuments;
+  @attr('datetime') releasedDecisions;
 
-  agendas: hasMany('agenda', {
+  @hasMany('agenda', {
     inverse: null, serialize: false,
-  }),
-  requestedSubcases: hasMany('subcase'),
-  pieces: hasMany('piece'),
+  }) agendas;
+  @hasMany('subcase') requestedSubcases;
+  @hasMany('piece') pieces;
+  @hasMany('themis-publication-activity') themisPublicationActivities;
 
-  kind: belongsTo('concept'),
-  mainMeeting: belongsTo('meeting', {
+  @belongsTo('concept') kind;
+  @belongsTo('meeting', {
     inverse: null,
-  }),
-  newsletter: belongsTo('newsletter-info'),
-  mailCampaign: belongsTo('mail-campaign'),
-  agenda: belongsTo('agenda', {
+  }) mainMeeting;
+  @belongsTo('newsletter-info') newletter;
+  @belongsTo('mail-campaign') mailCampaign;
+  @belongsTo('agenda', {
     inverse: null,
-  }),
+  }) agenda;
 
-  themisPublicationActivities: hasMany('themis-publication-activity'),
-
-  // This computed does not seem to be used anywhere
-  documentContainers: computed('pieces.@each.name', 'id', 'store', function() {
-    return PromiseArray.create({
-      promise: this.get('pieces').then((pieces) => {
-        if (pieces && pieces.get('length') > 0) {
-          return this.store.query('document-container', {
-            filter: {
-              pieces: {
-                meeting: {
-                  id: this.get('id'),
-                },
-              },
-            },
-            page: {
-              size: pieces.get('length'), // # documentContainers will always be <= # pieces
-            },
-            include: 'type,pieces,pieces.access-level,pieces.next-piece,pieces.previous-piece',
-          }).then((containers) => sortDocumentContainers(this.get('pieces'), containers));
-        }
-      }),
-    });
-  }),
-
-  canReleaseDecisions: computed('isFinal', 'releasedDecisions', function() {
-    return this.isFinal && !this.releasedDecisions;
-  }),
-
-  canReleaseDocuments: computed('isFinal', 'releasedDocuments', function() {
-    return this.isFinal && !this.releasedDocuments;
-  }),
-
-  latestAgenda: computed('agendas.[]', function() {
-    return PromiseObject.create({
-      promise: this.get('agendas').then((agendas) => {
-        const sortedAgendas = agendas.sortBy('agendaName').reverse();
-        return sortedAgendas.get('firstObject');
-      }),
-    });
-  }),
-
-  sortedAgendas: computed('agendas.@each.agendaName', function() {
-    return PromiseArray.create({
-      promise: this.get('agendas').then((agendas) => agendas.sortBy('agendaName').reverse()),
-    });
-  }),
-
-  isPreKaleidos: computed('plannedStart', function () {
+  get isPreKaleidos() {
     return this.plannedStart < KALEIDOS_START_DATE;
-  }),
-});
+  }
+}

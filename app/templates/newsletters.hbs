@@ -72,18 +72,20 @@
                 {{/if}}
               </td>
               <td>
-                {{#if (is-pending meeting.latestAgenda)}}
-                  <div
-                    class="auk-skeleton auk-skeleton--rectangle"
-                    role="alert"
-                    aria-busy="true"
-                  ></div>
-                {{else}}
-                  {{moment-format
-                    meeting.latestAgenda.modified
-                    "DD-MM-YYYY HH:mm"
-                  }}
-                {{/if}}
+                {{#let (this.latestAgenda meeting) as |latestAgenda|}}
+                  {{#if (is-pending latestAgenda)}}
+                    <div
+                      class="auk-skeleton auk-skeleton--rectangle"
+                      role="alert"
+                      aria-busy="true"
+                    ></div>
+                  {{else}}
+                    {{moment-format
+                      (get (await latestAgenda) "modified")
+                      "DD-MM-YYYY HH:mm"
+                    }}
+                  {{/if}}
+                {{/let}}
               </td>
               <td class="auk-u-text-align--center">
                 <Auk::Button

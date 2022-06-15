@@ -145,16 +145,27 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
     // TODO: Assess if we need to go over container. `previousVersion` (if existant) might suffice?
     const documentContainer = await deletedPiece.documentContainer;
     if (documentContainer) {
-      const lastPiece = await documentContainer.get('lastPiece'); // TODO: what is the purpose of getting lastPiece here
+      const lastPiece = await documentContainer.lastPiece; // TODO: what is the purpose of getting lastPiece here
       if (this.subcase && lastPiece) {
         const agendaActivities = await this.subcase.agendaActivities;
         const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
         if (latestActivity) {
-          await latestActivity.hasMany('agendaitems').reload(); // This fixes a case where approving an agenda did not update latestAgendaitem
-          const latestAgendaitem = await latestActivity.get('latestAgendaitem');
-          await restorePiecesFromPreviousAgendaitem(latestAgendaitem, documentContainer);
-          // TODO: make sure we're not loading stale cache
-          await latestAgendaitem.hasMany('pieces').reload();
+          const agendaitems = await latestActivity.hasMany('agendaitems').reload(); // This fixes a case where approving an agenda did not update latestAgendaitem
+          const meeting = await this.subcase.requestedForMeeting;
+          const agendas = await meeting.agendas;
+          const sortedAgendas = agendas.sortBy('serialnumber').reverse();
+          const latestAgenda = sortedAgendas.firstObject;
+          for (let index = 0; index < agendaitems.length; index++) {
+            const agendaitem = agendaitems.objectAt(index);
+            const agenda = await agendaitem.agenda;
+
+            if (agenda.id === latestAgenda.id) {
+              await restorePiecesFromPreviousAgendaitem(agendaitem, documentContainer);
+              // TODO: make sure we're not loading stale cache
+              await agendaitem.hasMany('pieces').reload();
+              break;
+            }
+          }
         }
       }
       this.send('reloadModel');
@@ -222,7 +233,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
     // Link piece to all agendaitems that are related to the subcase via an agendaActivity
     // and related to an agenda in the design status
     const agendaitems = yield this.store.query('agendaitem', {
-      'filter[agenda-activity][subcase][:id:]': this.subcase.get('id'),
+      'filter[agenda-activity][subcase][:id:]': this.subcase.id,
       'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
     });
 
