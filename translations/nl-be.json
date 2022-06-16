@@ -841,6 +841,8 @@
   "delete-agendaitem-on-closing-meeting": "Volgende agendapunten zullen worden verwijderd van agenda {serialnumber} en terug agendeerbaar worden gemaakt.",
   "number-point-title": "{number}. {title}",
   "source": "Bron",
+  "decision-release-date": "Publicatiedatum",
+  "decision-release-date-help": "Standaard de volgende werkdag na de vergaderdatum om 14u.",
   "publications-search-placeholder": "Filter op numac of pubnr.",
   "publications-setting-show-columns-modal-title": "Tabel weergave instellingen",
   "publications-table-short-title": "Korte titel",

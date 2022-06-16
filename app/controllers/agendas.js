@@ -52,17 +52,49 @@ export default class AgendasController extends Controller {
   @action
   openNewSessionModal() {
     this.isCreatingNewSession = true;
-    this.newMeeting = this.store.createRecord('meeting', { isFinal: false });
+    // because we use the EditMeetingModal to create and edit a meeting,
+    //  in order to allow genericity inside the component, x-publication-activities are created before opening
+    this.newDecisionPublicationActivity = this.store.createRecord(
+      'decision-publication-activity',
+      {}
+    );
+    this.newDocumentPublicationActivity = this.store.createRecord(
+      'document-publication-activity',
+      {}
+    );
+    this.newThemisPublicationActivity = this.store.createRecord(
+      'themis-publication-activity',
+      {
+        scope: [
+          CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS,
+          CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS,
+        ],
+      }
+    );
+    this.newMeeting = this.store.createRecord('meeting', { 
+      isFinal: false,
+      decisionPublicationActivity: this.newDecisionPublicationActivity,
+      documentPublicationActivity: this.newDocumentPublicationActivity,
+      themisPublicationActivities: [this.newThemisPublicationActivity],
+    });
   }
 
   @action
   closeNewSessionModal() {
     this.isCreatingNewSession = false;
     this.newMeeting.deleteRecord();
+    this.newDocumentPublicationActivity.deleteRecord();
+    this.newDecisionPublicationActivity.deleteRecord();
+    this.newThemisPublicationActivity.deleteRecord();
   }
 
   @action
   async createAgendaAndNewsletter() {
+    await Promise.all([
+      this.newDecisionPublicationActivity.save(),
+      this.newDocumentPublicationActivity.save(),
+      this.newThemisPublicationActivity.save(),
+    ]);
     const agenda = await this.createAgenda(this.newMeeting);
 
     const closestMeeting = await this.store.queryOne('meeting', {

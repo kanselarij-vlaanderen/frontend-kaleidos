@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task, dropTask } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { getNextWorkday } from 'frontend-kaleidos/utils/date-util';
 
 /**
  * @argument {isNew}
@@ -22,6 +23,10 @@ export default class MeetingEditMeetingComponent extends Component {
   @tracked selectedKind;
   @tracked selectedMainMeeting;
   @tracked startDate;
+  // In order to adapt default value to the selected startDate, we distinguish not specified and cleared
+  //  When not not specified -> _plannedPublicationDate === undefined
+  //  When cleared -> _plannedPublicationDate === null
+  @tracked _plannedPublicationDate; // planned date of release of documents and publication to Themis (meeting.documentPublicationActivity.plannedStart and meeting.themisPublicationActivity.plannedStart)
   @tracked extraInfo;
   @tracked _meetingNumber;
   @tracked _numberRepresentation;
@@ -32,16 +37,29 @@ export default class MeetingEditMeetingComponent extends Component {
     super(...arguments);
     this.isNew = this.args.meeting.isNew;
 
-    const now = new Date();
-
+    this.initFields.perform();
     this.initializeKind.perform();
     this.initializeMeetingNumber.perform();
     this.initializeMainMeeting.perform();
+  }
+
+  @task
+  *initFields() {
+    const now = new Date();
 
     this.meetingYear = this.args.meeting.plannedStart?.getFullYear() || this.currentYear;
     this.startDate = this.args.meeting.plannedStart || new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0, 0);
     this.extraInfo = this.args.meeting.extraInfo;
     this.numberRepresentation = this.args.meeting.numberRepresentation;
+
+    if (this.isNew) {
+      const meeting = this.args.meeting;
+      this._plannedPublicationDate = undefined;
+      this.decisionPublicationActivity = yield meeting.decisionPublicationActivity;
+      this.documentPublicationActivity = yield meeting.documentPublicationActivity;
+      const themisPublicationActivities = yield meeting.themisPublicationActivities;
+      this.themisPublicationActivity = themisPublicationActivities.firstObject;
+    }
   }
 
   get meetingKindPostfix() {
@@ -49,6 +67,19 @@ export default class MeetingEditMeetingComponent extends Component {
       return 'VV';
     }
     return '';
+  }
+
+  /** if user did not set plannedPublicationDate: display next workday after meeting */
+  get plannedPublicationDate() {
+    this.startDate; // listen to changes of startDate
+
+    if (this._plannedPublicationDate !== undefined) {
+      return this._plannedPublicationDate;
+    } else {
+      // eslint-disable-next-line prettier/prettier
+      const plannedPublicationDate = getNextWorkday(this.startDate, 14, 0, 0, 0);
+      return plannedPublicationDate;
+    }
   }
 
   get numberRepresentation() {
@@ -79,6 +110,11 @@ export default class MeetingEditMeetingComponent extends Component {
         this.initializeMainMeeting.isRunning ||
         this.saveMeeting.isRunning
       );
+  }
+
+  setPlannedPublicationDate(date) {
+    // set to null when cleared: in order to distinguish from untouched state.
+    this._plannedPublicationDate = date ? date : null;
   }
 
   @task
@@ -123,11 +159,18 @@ export default class MeetingEditMeetingComponent extends Component {
     this.args.meeting.numberRepresentation = this.numberRepresentation;
     this.args.meeting.mainMeeting = this.selectedMainMeeting;
 
+    if (this.isNew) {
+      this.themisPublicationActivity.plannedStart = this.plannedPublicationDate;
+      this.documentPublicationActivity.plannedStart = this.plannedPublicationDate;
+    }
+
     try {
       yield this.args.meeting.save();
-    } catch {
+    } catch (err) {
+      console.error(err);
       this.toaster.error();
     } finally {
+      // TOASK: Is this correct?
       yield this.args.didSave();
     }
   }
