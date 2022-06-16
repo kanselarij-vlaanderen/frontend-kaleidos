@@ -68,15 +68,7 @@ export default Model.extend({
       }),
     });
   }),
-
-  canReleaseDecisions: computed('isFinal', 'releasedDecisions', function() {
-    return this.isFinal && !this.releasedDecisions;
-  }),
-
-  canReleaseDocuments: computed('isFinal', 'releasedDocuments', function() {
-    return this.isFinal && !this.releasedDocuments;
-  }),
-
+  
   latestAgenda: computed('agendas.[]', function() {
     return PromiseObject.create({
       promise: this.get('agendas').then((agendas) => {
