@@ -49,6 +49,31 @@ export default class AccessLevelPillComponent extends Component {
     return icon;
   }
 
+  get pillSkin() {
+    let skin = 'warning';
+    if (this.args.accessLevel) {
+      switch (this.args.accessLevel.uri) {
+        case CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE:
+          skin = 'warning';
+          break;
+        case CONSTANTS.ACCESS_LEVELS.MINISTERRAAD:
+          skin = 'warning';
+          break;
+        case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
+          skin = 'border';
+          break;
+        case CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID:
+          skin = 'border';
+          break;
+        case CONSTANTS.ACCESS_LEVELS.PUBLIEK:
+          skin = 'success';
+          break;
+        default:
+      }
+    }
+    return skin;
+  }
+
   get accessLevelLabel() {
     if (this.args.accessLevel) {
       return this.args.accessLevel.label;

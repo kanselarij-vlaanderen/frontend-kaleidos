@@ -27,7 +27,7 @@
         </Auk::ButtonLink>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
-        {{#if (and this.currentSession.isEditor this.isDesignAgenda)}}
+        {{#if this.canEdit}}
           {{#unless this.isEditingOverview}}
             <div class="auk-u-ml-2">
               <Auk::ButtonLink
@@ -65,7 +65,7 @@
                   model=agendaitem
                   distance="30"
                   handle=this.dragHandleClass
-                  disabled=(not this.isDraggingEnabled)
+                  disabled=(not this.canEdit)
                 }}
               >
                 <Agenda::AgendaOverview::AgendaOverviewItem
@@ -74,9 +74,9 @@
                   @currentAgenda={{@currentAgenda}}
                   @previousAgenda={{@previousAgenda}}
                   @isNew={{includes agendaitem @newItems}}
-                  @showFormallyOkStatus={{this.isDesignAgenda}}
+                  @showFormallyOkStatus={{@currentAgenda.status.isDesignAgenda}}
                   @isEditingFormallyOkStatus={{this.isEditingOverview}}
-                  @showDragHandle={{this.isDraggingEnabled}}
+                  @showDragHandle={{this.canEdit}}
                 />
               </li>
             {{/each}}
@@ -106,7 +106,7 @@
               model=announcement
               distance="30"
               handle=this.dragHandleClass
-              disabled=(not this.isDraggingEnabled)
+              disabled=(not this.canEdit)
             }}
           >
             <Agenda::AgendaOverview::AgendaOverviewItem
@@ -115,9 +115,9 @@
               @currentAgenda={{@currentAgenda}}
               @previousAgenda={{@previousAgenda}}
               @isNew={{includes announcement @newItems}}
-              @showFormallyOkStatus={{this.isDesignAgenda}}
+              @showFormallyOkStatus={{@currentAgenda.status.isDesignAgenda}}
               @isEditingFormallyOkStatus={{this.isEditingOverview}}
-              @showDragHandle={{this.isDraggingEnabled}}
+              @showDragHandle={{this.canEdit}}
             />
           </li>
         {{/each}}

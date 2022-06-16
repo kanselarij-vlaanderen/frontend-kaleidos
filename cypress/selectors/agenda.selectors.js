@@ -18,7 +18,6 @@ const selectors = {
   // agendaitem-decision
   agendaitemDecision: {
     uploadFile: '[data-test-agendaitem-decision-upload-file]',
-    edit: '[data-test-agendaitem-decision-edit]',
     container: '[data-test-agendaitem-decision-container]',
   },
 
@@ -31,6 +30,7 @@ const selectors = {
   // decision-result-pill
   decisionResultPill: {
     pill: '[data-test-decision-result-pill]',
+    edit: '[data-test-decision-result-pill] + button',
   },
 
   // agenda-detail/sidebar

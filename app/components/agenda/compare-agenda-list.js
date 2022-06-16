@@ -3,6 +3,7 @@ import Component from '@glimmer/component';
 import EmberObject, { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import bind from 'frontend-kaleidos/utils/bind';
 
 export default class CompareAgendaList extends Component {
   /**
@@ -31,6 +32,29 @@ export default class CompareAgendaList extends Component {
   @tracked combinedAgendaitems = [] ;
   @tracked combinedAnnouncements = [] ;
 
+  @bind
+  async hasChanges(agendaitem) {
+    let hasAddedPieces = false;
+    const pieces = await agendaitem?.pieces;
+    if (pieces?.length) {
+      const documentContainers = await this.store.query('document-container', {
+        filter: {
+          pieces: {
+            agendaitems: {
+              id: agendaitem?.id,
+            },
+          },
+        },
+        page: {
+          size: pieces.length, // # documentContainers will always be <= # pieces
+        },
+        include: 'type,pieces,pieces.access-level,pieces.next-piece,pieces.previous-piece',
+      });
+      hasAddedPieces = documentContainers?.any((dc) => this.agendaService.addedPieces?.includes(dc.uri));
+    }
+    const checkAdded = agendaitem && this.agendaService.addedAgendaitems.includes(agendaitem.id);
+    return checkAdded || hasAddedPieces;
+  }
 
   async bothAgendasSelected() {
     if (this.agendaOne && this.agendaTwo) {
