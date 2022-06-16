@@ -13,16 +13,9 @@ export default class DecisionsAgendaitemAgendaitemsAgendaRoute extends Route {
     });
   }
 
-  async afterModel(model) {
-    this.meeting = await this.modelFor('agenda').meeting;
-    this.agendaItemTreatment = await model.treatment;
-  }
-
   setupController(controller) {
     super.setupController(...arguments);
     controller.agendaitem = this.agendaitem;
-    controller.meeting = this.meeting;
-    controller.agendaItemTreatment = this.agendaItemTreatment;
   }
 
   @action

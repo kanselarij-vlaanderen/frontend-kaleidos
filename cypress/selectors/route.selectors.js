@@ -50,8 +50,7 @@ const selectors = {
 
   // agenda/agendaitems/agendaitem/decisions/template.hbs
   agendaitemDecisions: {
-    // TODO-selector unused selector
-    addTreatment: '[data-test-route-agenda---decisions-add-treatment]',
+    addTreatment: '[data-test-route-agenda---decisions-add-treatment]', // TODO: remove tests related to adding extra decision
   },
 
   // agenda/agendaitems/agendaitem/documents/template

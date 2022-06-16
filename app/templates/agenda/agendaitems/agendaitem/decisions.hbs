@@ -6,27 +6,10 @@
       </h4>
     </Group.Item>
   </Toolbar.Group>
-  <Toolbar.Group @position="right" as |Group|>
-    {{#if this.currentSession.isEditor}}
-      <Group.Item>
-        <Auk::Button
-          @skin="secondary"
-          @icon="plus"
-          data-test-route-agenda---decisions-add-treatment
-          {{on "click" this.addDecisionActivity}}
-        >
-          {{t "add-decision"}}
-        </Auk::Button>
-      </Group.Item>
-    {{/if}}
-  </Toolbar.Group>
 </Auk::Toolbar>
 <div class="auk-u-mb-2">
-  {{!TODO: delete hard-coded to false for now. Figure out new requirements regarding deleting and re-adding}}
   <Agenda::Agendaitem::AgendaitemDecision
     @agendaitem={{this.agendaitem}}
     @decisionActivity={{this.model}}
-    @onDeleteDecisionActivity={{this.refresh}}
-    @allowDelete={{false}}
   />
 </div>

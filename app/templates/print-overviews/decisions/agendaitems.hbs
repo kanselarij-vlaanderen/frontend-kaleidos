@@ -16,27 +16,11 @@
       <WebComponents::VlLoader @text={{t "decisions-loading-text"}} />
     {{else}}
       <div class="auk-u-m-8">
-        <div class="auk-u-mb-4">
-          <Auk::Toolbar>
-            <Auk::Toolbar::Group @position="center">
-              <Auk::Toolbar::Item>
-                <Auk::Button
-                  @skin="secondary"
-                  @icon="plus"
-                  {{action "addTreatment" agendaitemRow}}
-                >
-                  {{t "add-decision"}}
-                </Auk::Button>
-              </Auk::Toolbar::Item>
-            </Auk::Toolbar::Group>
-          </Auk::Toolbar>
-        </div>
+        {{! TODO: Figure out if this old, unmaintained route still works properly}}
         {{#let (await agendaitemRow.content.agendaActivity.subcase) as |subcase|}}
           <Agenda::Agendaitem::AgendaitemDecision
+            @decisionActivity={{await agendaitemRow.content.treatment.decisionActivity}}
             @subcase={{subcase}}
-            @isTableRow={{true}}
-            @treatment={{await agendaitemRow.treatment}}
-            @agendaitem={{await agendaitemRow.content}}
           />
         {{/let}}
       </div>

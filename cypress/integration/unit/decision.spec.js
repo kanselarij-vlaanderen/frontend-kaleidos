@@ -194,44 +194,13 @@ context('Decision tests', () => {
     // CRUD of decisions
     cy.get(agenda.agendaitemDecision.container).as('decision');
     cy.get('@decision').should('have.length', 1);
-    // check if delete is not possible when only one decision exists
-    cy.get('@decision').eq(0)
-      .within(() => {
-        cy.get(utils.dropdownMenu.options).should('not.exist');
-      });
-    // add decision without file
-    cy.get(route.agendaitemDecisions.addTreatment).click();
-    cy.get('@decision').should('have.length', 2);
-    // remove decision without file
-    cy.get('@decision').eq(0)
-      .within(() => {
-        cy.get(utils.dropdownMenu.options).click();
-        cy.get(agenda.agendaitemDecision.delete).click();
-      });
-    cy.intercept('DELETE', '/agenda-item-treatments/*').as('deleteDecision');
-    cy.get(utils.vlModalVerify.save).click();
-    cy.wait('@deleteDecision');
-    cy.get(agenda.agendaitemDecision.uploadFile).as('decisionList');
-    cy.get('@decision').should('have.length', 1);
-    // add decision with file
-    cy.get(route.agendaitemDecisions.addTreatment).click();
-    cy.get('@decision').should('have.length', 2);
+    // add report ("beslissingsfiche") to existing pre-generated decision-activity
     cy.get(agenda.agendaitemDecision.uploadFile).eq(0)
       .click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
     cy.get(utils.vlModalFooter.save).click();
     // TODO better waits, flakys
     cy.wait(2000);
-    // remove decision with file
-    cy.get('@decision').eq(0)
-      .within(() => {
-        cy.get(agenda.agendaitemDecision.dropdownMenu).click();
-        cy.get(agenda.agendaitemDecision.delete).click();
-      });
-    cy.intercept('GET', '/agenda-item-treatments?filter**').as('filterDecision');
-    cy.get(utils.vlModalVerify.save).click();
-    cy.wait('@deleteDecision');
-    cy.wait('@filterDecision');
     cy.get('@decision').should('have.length', 1);
     // switch between all decision results
     decisionTypes.forEach((type) => {

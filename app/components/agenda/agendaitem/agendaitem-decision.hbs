@@ -34,30 +34,7 @@
               @decisionActivity={{@decisionActivity}}
               @onSave={{this.toggleEdit}}
               @onCancel={{this.toggleEdit}}
-              @isTableRow={{@isTableRow}}
             />
-          {{/if}}
-        </Group.Item>
-      </Toolbar.Group>
-      <Toolbar.Group @position="right" as |Group|>
-        <Group.Item>
-          {{#if this.currentSession.isEditor}}
-            {{#if @allowDelete}}
-              <Auk::DropdownMenu
-                @skin="borderless"
-                @icon="three-dots"
-                data-test-agendaitem-decision-dropdown-menu-options
-                as |Menu|
-              >
-                <Menu.Item
-                  @skin="danger"
-                  data-test-agendaitem-decision-delete
-                  {{on "click" (fn this.promptDeleteDecisionActivity @decisionActivity)}}
-                >
-                  {{t "delete-decision"}}
-                </Menu.Item>
-              </Auk::DropdownMenu>
-            {{/if}}
           {{/if}}
         </Group.Item>
       </Toolbar.Group>
@@ -94,14 +71,6 @@
     {{/if}}
   </Auk::Panel::Body>
 </Auk::Panel>
-{{#if this.isVerifyingDelete}}
-  <WebComponents::VlModalVerify
-    @title={{t "delete-decision"}}
-    @message={{t "delete-decision-message"}}
-    @cancel={{this.cancel}}
-    @verify={{this.deleteDecisionActivity}}
-  />
-{{/if}}
 {{#if this.isAddingReport}}
   <Utils::AddDocument
     @title={{t "signed-decision-add"}}

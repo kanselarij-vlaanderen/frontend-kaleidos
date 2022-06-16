@@ -6,9 +6,11 @@ import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /**
+ * TODO; subcase/agendaitem arguments are merely used for determining confidentiality of added report file. Simplify this. Maybe just determine subcase from decisionActivity and work from there?
+ * @argument subcase; optional
+ * @argument agendaitem; optional
  * @argument decisionActivity
- * @argument onDeleteDecisionActivity
- * @argument allowDelete
+ * @argument {Boolean} isTableRow: other layout when in edit mode
  */
 export default class AgendaitemDecisionComponent extends Component {
   @service currentSession;
@@ -18,9 +20,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @tracked previousReport;
 
   @tracked isEditing = false;
-  @tracked isVerifyingDelete = null;
   @tracked isAddingReport = false;
-  @tracked decisionActivityToDelete = null;
 
   @tracked decisionDocType;
 
@@ -45,12 +45,6 @@ export default class AgendaitemDecisionComponent extends Component {
     this.isAddingReport = !this.isAddingReport;
   }
 
-  @action
-  promptDeleteDecisionActivity(activity) {
-    this.decisionActivityToDelete = activity;
-    this.isVerifyingDelete = true;
-  }
-
   @task
   *loadReport() {
     this.report = yield this.args.decisionActivity.report;
@@ -66,6 +60,7 @@ export default class AgendaitemDecisionComponent extends Component {
     });
 
     let subcaseIsConfidential = false;
+    // TODO: determine if this is desired behavior for determining access level
     if (this.args.subcase) {
       subcaseIsConfidential = this.args.subcase.confidential;
     } else if (this.args.agendaitem) {
@@ -118,20 +113,5 @@ export default class AgendaitemDecisionComponent extends Component {
       await this.args.decisionActivity.save();
     } // else no previous version available. DecisionActivity no longer has a report
     await this.loadReport.perform();
-  }
-
-  @action
-  async deleteDecisionActivity() {
-    await this.decisionActivityToDelete.destroyRecord();
-    if (this.args.onDeleteDecisionActivity) {
-      await this.args.onDeleteDecisionActivity(this.decisionActivityToDelete);
-    }
-    this.isVerifyingDelete = false;
-  }
-
-  @action
-  cancel() {
-    this.decisionActivityToDelete = null;
-    this.isVerifyingDelete = false;
   }
 }

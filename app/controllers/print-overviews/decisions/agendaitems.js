@@ -6,8 +6,6 @@ import { inject } from '@ember/service';
 // eslint-disable-next-line ember/no-classic-classes
 export default Controller.extend({
   intl: inject(),
-  store: inject(),
-  newsletterService: inject(),
 
   columns: computed(function() {
     return [{
@@ -59,34 +57,4 @@ export default Controller.extend({
       cellComponent: 'web-components/vl-table-actions',
     }];
   }),
-
-  // TODO: octane-refactor
-  // eslint-disable-next-line ember/no-actions-hash
-  actions: {
-    // TODO: this should be "addDecisionActivity" instead.
-    async addTreatment(agendaitemRow) {
-      const now = new Date();
-      const agendaitem = await this.store.findRecord('agendaitem', agendaitemRow.content.id, {
-        include: 'agenda,agenda.created-for',
-      });
-      const agenda = await agendaitem.agenda;
-      const meeting = await agenda.createdFor;
-      const startDate = meeting.plannedStart;
-      const agendaActivity = await agendaitem.agendaActivity;
-      const subcase =  await agendaActivity.subcase;
-      const decisionActivity = this.store.createRecord('decision-activity', {
-        startDate: startDate,
-        subcase: subcase,
-      });
-      await decisionActivity.save();
-      const treatment = this.store.createRecord('agenda-item-treatment', {
-        created: now,
-        modified: now,
-        agendaitem,
-        decisionActivity
-      });
-      await treatment.save();
-      await this.newsletterService.linkNewsItemToNewTreatment(agendaitem); // TODO: this can be removed?
-    },
-  },
 });
