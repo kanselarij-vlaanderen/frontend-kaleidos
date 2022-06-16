@@ -37,7 +37,7 @@ export default ModelWithModifier.extend({
   // - Newsletter:NewsletterItem::ItemContent
   // - Agenda::Agendaitem::AgendaitemNewsItem
   // Refactor these usages and remove this computed property
-  newsletterProposal: computed('agendaItemTreatment.{[],@each.subcase}', async function() {
+  newsletterProposal: computed('agendaItemTreatment.decisionActivity.subcase', async function() {
     // eslint-disable-next-line ember/no-get
     const treatment = await this.get('agendaItemTreatment');
     if (treatment) {
