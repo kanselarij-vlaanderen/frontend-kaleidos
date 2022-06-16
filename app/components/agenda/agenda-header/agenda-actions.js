@@ -38,7 +38,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
 
   constructor() {
     super(...arguments);
-    this.loadLatestPublicationActivity.perform();
+    this.loadPublicationActivities.perform();
   }
 
   get showPrintButton() {
@@ -52,10 +52,14 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   }
 
   get canReleaseDecisions() {
+    if (this.loadPublicationActivities.isRunning) {
+      return false;
+    }
+
     return (
       this.currentSession.isEditor &&
       this.args.meeting.isFinal &&
-      !this.args.meeting.releasedDecisions
+      !this.decisionPublicationActivity.startDate
     );
   }
 
@@ -80,14 +84,21 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   }
 
   @task
-  *loadLatestPublicationActivity() {
-    this.latestPublicationActivity = yield this.store.queryOne(
-      'themis-publication-activity',
-      {
-        sort: '-start-date',
-        'filter[meeting][:uri:]': this.args.meeting.uri,
-      }
-    );
+  *loadPublicationActivities() {
+    const meeting = yield this.store.queryOne('meeting', {
+      'filter[:uri:]': this.args.meeting.uri,
+      include: [
+        'decision-publication-activity',
+        'document-publication-activity',
+        'themis-publication-activities',
+      ].join(','),
+    });
+
+    /* eslint-disable prettier/prettier */
+    this.decisionPublicationActivity = yield meeting.decisionPublicationActivity;
+    this.documentPublicationActivity = yield meeting.documentPublicationActivity;
+    this.themisPublicationActivities = yield meeting.themisPublicationActivities;
+    /* eslint-enable prettier/prettier */
   }
 
   /**
@@ -274,8 +285,9 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @action
   releaseDecisions() {
     this.showConfirmReleaseDecisions = false;
-    this.args.meeting.releasedDecisions = new Date();
-    this.args.meeting.save();
+    this.decisionPublicationActivity.startDate = new Date();
+    this.decisionPublicationActivity.save();
+    console.log(this.decisionPublicationActivity);
   }
 
   @action
