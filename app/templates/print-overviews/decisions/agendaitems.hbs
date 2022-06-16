@@ -12,19 +12,18 @@
     @columns={{this.columns}}
     as |agendaitemRow|
   >
-    {{#if (is-pending agendaitemRow.treatment)}}
-      <WebComponents::VlLoader @text={{t "decisions-loading-text"}} />
-    {{else}}
-      <div class="auk-u-m-8">
-        {{! TODO: Figure out if this old, unmaintained route still works properly}}
-        {{#let (await agendaitemRow.content.agendaActivity.subcase) as |subcase|}}
+    {{#let (await agendaitemRow.agendaActivity.subcase) (await agendaitemRow.treatment.decisionActivity) as |subcase decisionActivity|}}
+      {{#if (and subcase decisionActivity)}}
+        <div class="auk-u-m-8">
           <Agenda::Agendaitem::AgendaitemDecision
-            @decisionActivity={{await agendaitemRow.content.treatment.decisionActivity}}
+            @decisionActivity={{decisionActivity}}
             @subcase={{subcase}}
           />
-        {{/let}}
-      </div>
-    {{/if}}
+        </div>
+      {{else}}
+        <WebComponents::VlLoader @text={{t "decisions-loading-text"}} />
+      {{/if}}
+    {{/let}}
   </Utils::AgendaitemTable>
 </div>
 {{outlet}}
