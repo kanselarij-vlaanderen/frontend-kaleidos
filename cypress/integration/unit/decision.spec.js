@@ -1,7 +1,6 @@
 /* global context, it, cy, beforeEach, afterEach, Cypress */
 // / <reference types="Cypress" />
 
-import route from '../../selectors/route.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
 import cases from '../../selectors/case.selectors';

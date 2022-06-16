@@ -4,7 +4,6 @@ import { singularize } from 'ember-inflector';
 import fetch from 'fetch';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
-import { A } from '@ember/array';
 
 export default class AgendaService extends Service {
   @service store;
