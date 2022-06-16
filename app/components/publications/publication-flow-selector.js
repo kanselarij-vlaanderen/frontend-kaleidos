@@ -30,7 +30,7 @@ export default class PublicationsPublicationFlowSelectorComponent extends Compon
     const filterNotViaCouncilOfMinisters = {
       'decision-activity': {
         'treatment': {
-          ':has-no:agendaitem': 'yes',
+          ':has-no:agendaitems': 'yes',
         },
       },
     };

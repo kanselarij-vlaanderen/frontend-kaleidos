@@ -155,7 +155,7 @@ export default class NewsletterService extends Service {
             'newsletter-info',
             {
               'filter[agenda-item-treatment][decision-activity][subcase][case][:id:]': _case.id,
-              'filter[agenda-item-treatment][agendaitem][show-as-remark]': false, // Don't copy over news item from announcement
+              'filter[agenda-item-treatment][agendaitems][show-as-remark]': false, // Don't copy over news item from announcement
               sort: '-agenda-item-treatment.agendaitems.agenda-activity.start-date',
             }
           );

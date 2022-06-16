@@ -8,7 +8,7 @@ export default class DecisionsAgendaitemAgendaitemsAgendaRoute extends Route {
   model() {
     this.agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
     return this.store.queryOne('decision-activity', {
-      'filter[treatment][agendaitem][:id:]': this.agendaitem.id,
+      'filter[treatment][agendaitems][:id:]': this.agendaitem.id,
       include: 'report,treatment',
     });
   }

@@ -12,10 +12,7 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
     // Because NewsletterInfo is connected via treatment:
     // Check if a treatment exists, otherwise redirect gracefully. This should only happen with corrupt data.
     const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
-    // Relationship agendaitem to agenda-item-treatment' is "inverse: null" Need to query here instead of 'get'ting async while that's still there.
-    this.agendaItemTreatment = await this.store.queryOne('agenda-item-treatment', {
-      'filter[agendaitem][:id:]': agendaitem.id,
-    });
+    this.agendaItemTreatment = await agendaitem.treatment;
     if (!this.agendaItemTreatment) {
       warn(`Agenda item "${agendaitem.id}" is missing a treatment`, {
         id: 'broken-data.missing-agenda-item-treatment',

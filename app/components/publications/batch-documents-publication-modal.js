@@ -59,7 +59,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     this.decisionActivity = yield this.store.queryOne(
       'decision-activity',
       {
-        'filter[treatment][agendaitem][:id:]': this.args.agendaitem.id,
+        'filter[treatment][agendaitems][:id:]': this.args.agendaitem.id,
         sort: '-start-date',
       }
     );
