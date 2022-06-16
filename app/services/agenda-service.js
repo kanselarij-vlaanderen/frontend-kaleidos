@@ -176,7 +176,7 @@ export default class AgendaService extends Service {
     await agendaitem.save();
     await lastAgenda.hasMany('agendaitems').reload();
     await subcase.hasMany('agendaActivities').reload();
-    await subcase.hasMany('treatments').reload();
+    await subcase.hasMany('submissionActivities').reload();
     subcase.set('requestedForMeeting', meeting);
     await subcase.save();
     updateModifiedProperty(lastAgenda);
@@ -250,7 +250,7 @@ export default class AgendaService extends Service {
       await subcase.set('requestedForMeeting', null);
       await subcase.save();
       await subcase.hasMany('agendaActivities').reload();
-      await subcase.hasMany('treatments').reload();
+      await subcase.hasMany('submissionActivities').reload();
     } else {
       await agendaitemToDelete.destroyRecord();
     }
