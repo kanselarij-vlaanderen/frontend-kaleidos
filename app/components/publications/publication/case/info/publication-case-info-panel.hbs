@@ -9,18 +9,20 @@
             </h4>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
-        {{#unless this.isEditing}}
-          <Auk::Toolbar::Group @position="right">
-            <Auk::Toolbar::Item>
-              <Auk::Button
-                data-test-publication-case-info-panel-edit
-                @skin="tertiary"
-                @icon="pencil"
-                @layout="icon-only"
-                {{on "click" this.openEditingPanel}}
-              />
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
+        {{#unless this.initFields.isRunning}}
+          {{#unless this.isEditing}}
+            <Auk::Toolbar::Group @position="right">
+              <Auk::Toolbar::Item>
+                <Auk::Button
+                  data-test-publication-case-info-panel-edit
+                  @skin="tertiary"
+                  @icon="pencil"
+                  @layout="icon-only"
+                  {{on "click" this.openEditingPanel}}
+                />
+              </Auk::Toolbar::Item>
+            </Auk::Toolbar::Group>
+          {{/unless}}
         {{/unless}}
       </Auk::Toolbar>
     </Auk::Panel::Header>

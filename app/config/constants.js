@@ -39,6 +39,11 @@ export default {
     DECREET: 'https://data.vlaanderen.be/id/concept/AardWetgeving/Decreet',
     BVR: 'https://data.vlaanderen.be/id/concept/AardWetgeving/BesluitVanDeVlaamseRegering',
   },
+  JOB_STATUSSES: {
+    RUNNING: 'http://vocab.deri.ie/cogs#Running',
+    SUCCESS: 'http://vocab.deri.ie/cogs#Success',
+    FAILED: 'http://vocab.deri.ie/cogs#Fail',
+  },
   // TODO: despite the naming, these are actually agendaitem-types (nota, mededeling)
   // that get converted to booleans like `showAsRemark` and get assigned to subcases as a
   // preset for future agenda-items resulting from that subcase too.
@@ -103,4 +108,10 @@ export default {
     PVV: 'http://themis.vlaanderen.be/id/concept/vergaderactiviteit-type/9b4701f8-a136-4009-94c6-d64fdc96b9a2',
     ANNEX: 'http://themis.vlaanderen.be/id/concept/vergaderactiviteit-type/30d6a064-8cca-4485-8b37-7ab2357d931d',
   },
+  MANDATE_ROLES: {
+    MINISTER_PRESIDENT: 'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03de', // Minister-president
+    MINISTER: 'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03e0', // Minister
+    VOORZITTER: 'http://themis.vlaanderen.be/id/bestuursfunctie/60d0dc2ab1838d01fca7db65', // Voorzitter
+    GEMEENSCHAPSMINISTER: 'http://themis.vlaanderen.be/id/bestuursfunctie/60d0dc2ab1838d01fca7db67', // Gemeenschapsminister
+  }
 };

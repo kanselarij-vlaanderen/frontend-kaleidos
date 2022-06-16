@@ -38,6 +38,13 @@ export default class Datepicker extends Component {
     return this.multiple ? 'multiple' : 'single';
   }
 
+  get error() {
+    if (this.args.error) {
+      return 'auk-input--error';
+    }
+    return null;
+  }
+
   @action
   // eslint-disable-next-line no-unused-vars
   onReady(_selectedDates, _dateStr, instance) {

@@ -2,7 +2,7 @@
   <Auk::Icon @name="calendar"/>
   <EmberFlatpickr
     data-test-auk-datepickr
-    class="auk-input auk-input--block"
+    class="auk-input auk-input--block {{this.error}}"
     placeholder={{this.placeholder}}
     @allowInput={{true}}
     @clickOpens={{true}}
@@ -19,6 +19,8 @@
     @onReady={{this.onReady}}
     @shorthandCurrentMonth={{true}}
     @disabled={{@disabled}}
+    @minDate={{@min}}
+    @maxDate={{@max}}
     {{!-- @enableTime={{@enableTime}} --}}
     {{!-- @time_24hr={{true}} --}}
   />
