@@ -125,12 +125,7 @@ export default class NewsletterService extends Service {
   // TODO title = shortTitle, inconsistenties fix/conversion needed if this is changed
   async createNewsItemForAgendaitem(agendaitem, inNewsletter = false) {
     if (this.currentSession.isEditor) {
-      // FIXME: The relationship 'agendaitem' to 'agenda-item-treatment' is "inverse: null",
-      // hence the requirement for the "reload" here. Without it, adding a new
-      // newsletterInfo immediately after adding a treatment can break data.
-      const agendaItemTreatment = await agendaitem
-        .belongsTo('treatment')
-        .reload();
+      const agendaItemTreatment = await agendaitem.treatment;
       const news = this.store.createRecord('newsletter-info', {
         agendaItemTreatment,
         inNewsletter,
