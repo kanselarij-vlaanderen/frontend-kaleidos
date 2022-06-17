@@ -77,9 +77,10 @@
             {{#if @subcase.confidential}}
               <Auk::Toolbar::Item>
                 <AuPill
-                  data-test-agendaitem-titles-confidential
+                  @size="small"
                   @skin="warning"
                   @icon="lock-closed"
+                  data-test-agendaitem-titles-confidential
                 >
                   {{t "confidential"}}
                 </AuPill>
