@@ -14,6 +14,7 @@ export default class BatchDocumentsDetailsModal extends Component {
   @service store;
   @service currentSession;
   @service fileService;
+  @service pieceAccessLevelService;
 
   @tracked rows;
   @tracked selectedRows = [];
@@ -114,6 +115,7 @@ export default class BatchDocumentsDetailsModal extends Component {
       } else {
         piece.name = row.name;
         // does not check for relationship changes
+        let accessLevelHasChanged = false;
         let hasChanged = piece.dirtyType === 'updated';
         if (documentContainer.type !== row.documentType) {
           hasChanged = true;
@@ -121,11 +123,15 @@ export default class BatchDocumentsDetailsModal extends Component {
         }
         if (piece.accessLevel !== row.accessLevel) {
           hasChanged = true;
+          accessLevelHasChanged = true;
           piece.accessLevel = row.accessLevel;
         }
         if (hasChanged) {
           await piece.save();
           await documentContainer.save();
+          if (accessLevelHasChanged) {
+            await this.pieceAccessLevelService.updatePreviousAccessLevels(piece);
+          }
         }
       }
     });

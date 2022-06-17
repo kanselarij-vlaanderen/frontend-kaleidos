@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
 
 export default class AgendaitemControls extends Component {
   /**
@@ -19,6 +20,13 @@ export default class AgendaitemControls extends Component {
   @tracked isSavingRetracted = false;
   @tracked isVerifying = false;
   @tracked showLoader = false;
+  @tracked isDesignAgenda;
+
+  constructor() {
+    super(...arguments);
+
+    this.loadAgendaData.perform();
+  }
 
   get isPostPonable() {
     const agendaActivity = this.args.agendaActivity;
@@ -35,9 +43,8 @@ export default class AgendaitemControls extends Component {
 
   // TODO document this
   get isDeletable() {
-    const designAgenda = this.args.currentAgenda.get('isDesignAgenda');
     const agendaActivity = this.args.agendaActivity;
-    if (!designAgenda) {
+    if (!this.isDesignAgenda) {
       return false;
     }
     if (agendaActivity) {
@@ -55,6 +62,12 @@ export default class AgendaitemControls extends Component {
       return this.intl.t('delete-agendaitem-from-meeting-message');
     }
     return null;
+  }
+
+  @task
+  *loadAgendaData () {
+    const status = yield this.args.currentAgenda.status;
+    this.isDesignAgenda = status.isDesignAgenda;
   }
 
   async deleteItem(agendaitem) {

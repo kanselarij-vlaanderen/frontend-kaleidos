@@ -1,4 +1,4 @@
-{{#if @currentAgenda.isDesignAgenda}}
+{{#if @currentAgenda.status.isDesignAgenda}}
   {{#if
     (and (not (is-pending this.isDeletable)) (not (is-pending this.isPostPonable)))
   }}
