@@ -1,5 +1,6 @@
 {{#if (not @isEditable)}}
   <AuPill
+    @size="small"
     @skin={{this.skin}}
     @icon={{this.icon}}
     data-test-decision-result-pill
@@ -8,6 +9,7 @@
   </AuPill>
 {{else}}
   <AuPill
+    @size="small"
     @skin={{this.skin}}
     @icon={{this.icon}}
     @onClickAction={{@onEdit}}

@@ -115,12 +115,12 @@
                       {{#if agenda.status.isDesignAgenda}}
                         <strong>{{t "design-agenda"}}</strong>
                         {{#if agenda.serialnumber}}
-                          <AuPill @skin="ongoing" @draft={{true}}>{{agenda.serialnumber}}</AuPill>
+                          <AuPill @size="small" @skin="ongoing" @draft={{true}}>{{agenda.serialnumber}}</AuPill>
                         {{/if}}
                       {{else}}
                         <strong>{{t "agenda"}}</strong>
                         {{#if agenda.serialnumber}}
-                          <AuPill>{{agenda.serialnumber}}</AuPill>
+                          <AuPill @size="small">{{agenda.serialnumber}}</AuPill>
                         {{/if}}
                       {{/if}}
                       <span>–</span>
@@ -131,9 +131,9 @@
                   </td>
                   <td>
                     {{#if agenda.createdFor.isFinal}}
-                      <AuPill>{{t "closed"}}</AuPill>
+                      <AuPill @size="small">{{t "closed"}}</AuPill>
                     {{else}}
-                      <AuPill @skin="ongoing">{{t "opened"}}</AuPill>
+                      <AuPill @size="small" @skin="ongoing">{{t "opened"}}</AuPill>
                     {{/if}}
                   </td>
                   <td data-test-route-agendas-overview-row-kind>
