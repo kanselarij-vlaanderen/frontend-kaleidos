@@ -96,15 +96,17 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
   @task
   *setEmailFields() {
     const publicationFlow = this.args.publicationFlow;
-    const [identification, numacNumbers, publicationSubcase] =
+    const [identification, numacNumbers, publicationSubcase, urgencyLevel] =
       yield Promise.all([
         publicationFlow.identification,
         publicationFlow.numacNumbers,
         publicationFlow.publicationSubcase,
+        publicationFlow.urgencyLevel,
       ]);
 
     const mailParams = {
       identifier: identification.idName,
+      isUrgent: urgencyLevel?.isUrgent,
       targetEndDate: publicationSubcase.targetEndDate,
       numacNumbers: numacNumbers,
     };
