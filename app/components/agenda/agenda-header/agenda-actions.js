@@ -5,12 +5,19 @@ import { task } from 'ember-concurrency';
 import { debug } from '@ember/debug';
 import { inject as service } from '@ember/service';
 import { all } from 'rsvp';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { setAgendaitemFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
+import * as AgendaPublicationUtils from 'frontend-kaleidos/utils/agenda-publication';
 import {
   constructArchiveName,
   fetchArchivingJobForAgenda,
   fileDownloadUrlFromJob,
 } from 'frontend-kaleidos/utils/zip-agenda-files';
+
+const THEMIS_PUBLICATION_SCOPE = [
+  CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS,
+  CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS,
+];
 
 /**
  * @argument {Meeting} meeting
@@ -30,11 +37,15 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @tracked isAddingAgendaitems = false;
   @tracked isEditingMeeting = false;
   @tracked showConfirmApprovingAllAgendaitems = false;
-  @tracked showConfirmReleaseDecisions = false;
-  @tracked showConfirmReleaseDocuments = false;
+  @tracked showConfirmPublishInternalDecisions = false;
+  @tracked showPlanPublicationModal = false;
   @tracked showConfirmPublishThemis = false;
   @tracked showConfirmUnpublishThemis = false;
-  @tracked latestPublicationActivity;
+
+  @tracked internalDecisionPublicationActivity;
+  @tracked internalDocumentPublicationActivity;
+  @tracked themisPublicationActivities;
+  @tracked latestThemisPublicationActivity;
 
   constructor() {
     super(...arguments);
@@ -51,7 +62,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     );
   }
 
-  get canReleaseDecisions() {
+  get canPublishInternalDecisions() {
     if (this.loadPublicationActivities.isRunning) {
       return false;
     }
@@ -59,28 +70,53 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     return (
       this.currentSession.isEditor &&
       this.args.meeting.isFinal &&
-      !this.decisionPublicationActivity.startDate
+      this.internalDecisionPublicationActivity != null && // disable for the old data-model (without decision-publication-activity)
+      AgendaPublicationUtils.getIsCertainlyNotStarted(this.internalDecisionPublicationActivity)
     );
   }
 
-  get canReleaseDocuments() {
-    return (
-      this.currentSession.isEditor &&
-      this.args.meeting.isFinal &&
-      !this.args.meeting.releasedDocuments
-    );
+  // Plan publication of documents internally (=Vrijgeven) and on Themis
+  get canPlanPublication() {
+    if (this.loadPublicationActivities.isRunning) {
+      return false;
+    }
+    let can = this.currentSession.isEditor;
+    can &&= this.args.meeting.isFinal;
+    if (this.themisPublicationActivities.length === 1) {
+      can &&= AgendaPublicationUtils.getIsCertainlyNotStarted(this.latestThemisPublicationActivity);
+      can &&= AgendaPublicationUtils.getHasScope(this.latestThemisPublicationActivity, THEMIS_PUBLICATION_SCOPE);
+    } else {
+      // cases:
+      //  - old data-model (no themis-publication-activity)
+      //  - next publication already scheduled
+      can = false;
+    }
+    return can;
   }
 
   get canPublishThemis() {
-    return (
-      this.currentSession.isEditor &&
-      this.args.meeting.isFinal &&
-      this.args.meeting.releasedDocuments
-    );
+    if (this.loadPublicationActivities.isRunning) {
+      return false;
+    }
+    let can = this.args.meeting.isFinal;
+
+    const isInternalDecisionPublicationScheduled = this.internalDecisionPublicationActivity?.startDate != null;
+    if (isInternalDecisionPublicationScheduled) {
+      const isInternalDecisionsPublished = this.internalDocumentPublicationActivity.startDate < new Date();
+      can &&= isInternalDecisionsPublished;
+    }
+
+    const isInternalDocumentPublicationScheduled = this.internalDocumentPublicationActivity?.startDate != null;
+    if (isInternalDocumentPublicationScheduled) {
+      const isInternalDocumentsPublished = this.internalDocumentPublicationActivity.startDate < new Date();
+      can &&= isInternalDocumentsPublished;
+    }
+
+    return can;
   }
 
   get isAlreadyPublished() {
-    return this.latestPublicationActivity != null;
+    return this.latestThemisPublicationActivity != null;
   }
 
   @task
@@ -94,11 +130,16 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       ].join(','),
     });
 
-    /* eslint-disable prettier/prettier */
-    this.decisionPublicationActivity = yield meeting.decisionPublicationActivity;
-    this.documentPublicationActivity = yield meeting.documentPublicationActivity;
-    this.themisPublicationActivities = yield meeting.themisPublicationActivities;
-    /* eslint-enable prettier/prettier */
+    this.internalDecisionPublicationActivity = yield meeting.decisionPublicationActivity;
+    this.internalDocumentPublicationActivity = yield meeting.documentPublicationActivity;
+
+    const themisPublicationActivities = yield meeting.themisPublicationActivities;
+    this.themisPublicationActivities = themisPublicationActivities.toArray();
+    let latestThemisPublicationActivity = this.themisPublicationActivities.find((it) => it.startDate == null);
+    if (latestThemisPublicationActivity == null) {
+      latestThemisPublicationActivity = this.themisPublicationActivities.sortBy('startDate').reverse()[0]
+    }
+    this.latestThemisPublicationActivity = latestThemisPublicationActivity;
   }
 
   /**
@@ -273,38 +314,35 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   }
 
   @action
-  openConfirmReleaseDecisions() {
-    this.showConfirmReleaseDecisions = true;
+  openConfirmPublishInternalDecisions() {
+    this.showConfirmPublishInternalDecisions = true;
   }
 
   @action
-  cancelReleaseDecisions() {
-    this.showConfirmReleaseDecisions = false;
+  cancelPublishInternalDecisions() {
+    this.showConfirmPublishInternalDecisions = false;
   }
 
   @action
-  releaseDecisions() {
-    this.showConfirmReleaseDecisions = false;
-    this.decisionPublicationActivity.startDate = new Date();
-    this.decisionPublicationActivity.save();
-    console.log(this.decisionPublicationActivity);
+  publishInternalDecisions() {
+    this.showConfirmPublishInternalDecisions = false;
+    this.internalDecisionPublicationActivity.startDate = new Date();
+    this.internalDecisionPublicationActivity.save();
   }
 
   @action
-  openConfirmReleaseDocuments() {
-    this.showConfirmReleaseDocuments = true;
+  openPlanPublicationModal() {
+    this.showPlanPublicationModal = true;
   }
 
   @action
-  cancelReleaseDocuments() {
-    this.showConfirmReleaseDocuments = false;
+  cancelPlanPublication() {
+    this.showPlanPublicationModal = false;
   }
 
   @action
-  releaseDocuments() {
-    this.showConfirmReleaseDocuments = false;
-    this.args.meeting.releasedDocuments = new Date();
-    this.args.meeting.save();
+  didSavePlanPublication() {
+    this.showPlanPublicationModal = false;
   }
 
   @action

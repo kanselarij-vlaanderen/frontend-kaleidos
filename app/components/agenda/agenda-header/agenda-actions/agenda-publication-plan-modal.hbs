@@ -1,0 +1,93 @@
+<Auk::Modal @size="small">
+  <Auk::Modal::Header
+    @title={{t "agenda-publication-planned-modal-title"}}
+    @onClose={{@onCancel}}
+    @closeDisabled={{this.save.isRunning}}
+  />
+  <Auk::Modal::Body>
+    <Utils::LoadableContent
+      @isLoading={{this.save.isRunning}}
+      @reserveSpace={{true}}
+    >
+      <div class="auk-form-group-layout auk-form-group-layout--standard">
+        <div class="auk-form-group">
+          <Auk::Label
+            @error={{eq false this.isInternalDocumentPublicationDateValid}}
+          >
+            {{t "agenda-publication-internal-documents-question"}}
+          </Auk::Label>
+          <div class="auk-o-flex">
+            {{#if this.canPublishInternalDocuments}}
+              <WebComponents::VlDatepicker
+                class="auk-o-flex__item"
+                @error={{eq false this.isInternalDocumentPublicationDateValid}}
+                @enableTime={{true}}
+                @date={{array this.internalDocumentPublicationDate}}
+                @min={{this.minPublicationDate}}
+                @dateChanged={{this.setInternalDocumentPublicationDatePicker}}
+              />
+              <Auk::Button
+                class="auk-u-ml-2"
+                {{on "click" this.setInternalDocumentPublicationDateNow}}
+              >
+                {{t "now"}}
+              </Auk::Button>
+            {{else}}
+              <div>
+                {{moment-format this.internalDocumentPublicationDate "DD-MM-YYYY HH:mm"}}
+              </div>
+            {{/if}}
+          </div>
+          {{#if this.internalDocumentPublicationMessage}}
+            <Auk::FormHelpText
+              class="auk-u-mt"
+              @icon="circle-info"
+              @text={{t "internal-document-publication-message--started"}}
+            />
+          {{/if}}
+        </div>
+        <div class="auk-form-group">
+          <Auk::Label @error={{eq false this.isThemisPublicationDateValid}}>
+            {{t "agenda-publication-themis-question"}}
+          </Auk::Label>
+          <div class="auk-o-flex">
+            <WebComponents::VlDatepicker
+              class="auk-o-flex__item"
+              @error={{eq false this.isThemisPublicationDateValid}}
+              @enableTime={{true}}
+              @date={{array this.themisPublicationDate}}
+              @dateChanged={{this.setThemisPublicationDatePicker}}
+              @min={{this.minPublicationDate}}
+            />
+            <Auk::Button
+              class="auk-u-ml-2"
+              {{on "click" this.setThemisPublicationDateNow}}
+            >
+              {{t "now"}}
+            </Auk::Button>
+          </div>
+          {{#if this.themisPublicationMessage}}
+            <AuHelpText>
+              <AuIcon @icon="info-circle" />
+              {{t this.themisPublicationMessage}}
+            </AuHelpText>
+          {{/if}}
+        </div>
+      </div>
+    </Utils::LoadableContent>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer
+    @onCancel={{@onCancel}}
+    @cancelDisabled={{this.save.isRunning}}
+  >
+    <Auk::Button
+      data-test-agenda-header-release-documents-confirm
+      @skin="primary"
+      @disabled={{not this.canSave}}
+      @loading={{this.save.isRunning}}
+      {{on "click" (perform this.save)}}
+    >
+      {{t "publish-to-public"}}
+    </Auk::Button>
+  </Auk::Modal::Footer>
+</Auk::Modal>

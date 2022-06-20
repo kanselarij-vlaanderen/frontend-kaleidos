@@ -18,3 +18,5 @@ export const PUBLICATION_EMAIL = {
 };
 
 export const KALEIDOS_START_DATE = new Date(2019, 9 /* =october */, 1);
+
+export const PUBLICATION_PROCESSING_WINDOW = 30 * 60;

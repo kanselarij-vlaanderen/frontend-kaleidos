@@ -76,26 +76,26 @@
       {{t "approve-all-agendaitems"}}
     </Menu.Item>
   {{/if}}
-  {{#if this.canReleaseDecisions}}
+  {{#if this.canPublishInternalDecisions}}
     <Menu.Divider />
     <Menu.Item
       @skin="danger"
       data-test-agenda-header-release-decisions
-      {{on "click" this.openConfirmReleaseDecisions}}
+      {{on "click" this.openConfirmPublishInternalDecisions}}
     >
       {{t "agenda-release-decisions"}}
     </Menu.Item>
-  {{else if this.canReleaseDocuments}}
+  {{else if this.canPlanPublication}}
     <Menu.Divider />
+    {{! template-lint-disable no-invalid-interactive }}
     <Menu.Item
       @skin="danger"
       data-test-agenda-header-release-documents
-      {{on "click" this.openConfirmReleaseDocuments}}
+      {{on "click" this.openPlanPublicationModal}}
     >
-      {{t "agenda-release-documents"}}
+      {{t "agenda-publish-planned"}}
     </Menu.Item>
-  {{/if}}
-  {{#if this.canPublishThemis}}
+  {{else if this.canPublishThemis}}
     <Menu.Divider />
     <Menu.Item {{on "click" this.openConfirmPublishThemis}}>
       {{t "publish-to-web"}}
@@ -156,20 +156,20 @@
   </Auk::Modal>
 {{/if}}
 
-{{#if this.showConfirmReleaseDecisions}}
+{{#if this.showConfirmPublishInternalDecisions}}
   <Auk::Modal @size="small">
     <Auk::Modal::Header
       @title={{t "agenda-release-decisions"}}
-      @onClose={{this.cancelReleaseDecisions}}
+      @onClose={{this.cancelPublishInternalDecisions}}
     />
     <Auk::Modal::Body>
       <p>{{t "release-decisions-message"}}</p>
     </Auk::Modal::Body>
-    <Auk::Modal::Footer @onCancel={{this.cancelReleaseDecisions}}>
+    <Auk::Modal::Footer @onCancel={{this.cancelPublishInternalDecisions}}>
       <Auk::Button
         data-test-agenda-header-release-decisions-confirm
         @skin="primary"
-        {{on "click" this.releaseDecisions}}
+        {{on "click" this.publishInternalDecisions}}
       >
         {{t "release-to-public"}}
       </Auk::Button>
@@ -177,25 +177,12 @@
   </Auk::Modal>
 {{/if}}
 
-{{#if this.showConfirmReleaseDocuments}}
-  <Auk::Modal @size="small">
-    <Auk::Modal::Header
-      @title={{t "agenda-release-documents"}}
-      @onClose={{this.cancelReleaseDocuments}}
-    />
-    <Auk::Modal::Body>
-      <p>{{t "release-documents-message"}}</p>
-    </Auk::Modal::Body>
-    <Auk::Modal::Footer @onCancel={{this.cancelReleaseDocuments}}>
-      <Auk::Button
-        data-test-agenda-header-release-documents-confirm
-        @skin="primary"
-        {{on "click" this.releaseDocuments}}
-      >
-        {{t "release-to-public"}}
-      </Auk::Button>
-    </Auk::Modal::Footer>
-  </Auk::Modal>
+{{#if this.showPlanPublicationModal}}
+  <Agenda::AgendaHeader::AgendaActions::AgendaPublicationPlanModal
+    @meeting={{@meeting}}
+    @onCancel={{this.cancelPlanPublication}}
+    @didSave={{this.didSavePlanPublication}}
+  />
 {{/if}}
 
 {{#if this.showConfirmPublishThemis}}

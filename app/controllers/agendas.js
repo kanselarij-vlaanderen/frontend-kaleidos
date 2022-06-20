@@ -71,7 +71,7 @@ export default class AgendasController extends Controller {
         ],
       }
     );
-    this.newMeeting = this.store.createRecord('meeting', { 
+    this.newMeeting = this.store.createRecord('meeting', {
       isFinal: false,
       decisionPublicationActivity: this.newDecisionPublicationActivity,
       documentPublicationActivity: this.newDocumentPublicationActivity,
