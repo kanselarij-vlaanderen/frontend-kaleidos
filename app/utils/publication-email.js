@@ -93,7 +93,12 @@ function publicationRequestEmail(params) {
   const numacNumbers = params.numacNumbers
         ? params.numacNumbers.mapBy('idName').join(', ')
         : '-';
-  const subject = `Publicatieaanvraag BS-werknr: ${numacNumbers} VO-dossier: ${params.identifier}`;
+  let subject = '';
+
+  if (params.isUrgent) {
+    subject +=  `DRINGEND: `;
+  }
+  subject += `Publicatieaanvraag BS-werknr: ${numacNumbers} VO-dossier: ${params.identifier}`;
   const message = 'Beste,\n'
     + '\n'
     + 'Hierbij de verbeterde drukproef :\n'
