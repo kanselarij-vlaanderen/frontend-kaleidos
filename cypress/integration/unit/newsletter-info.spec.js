@@ -689,10 +689,12 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       .type(' ');
     cy.get(dependency.rdfa.editorInner).should('contain', ' ');
     cy.get(dependency.rdfa.editorInner).should('not.contain', '\u00a0');
-    // check &nbsp;
+    // check that there are no &nbsp;
+    // see: https://github.com/lblod/ember-rdfa-editor/pull/245
     cy.get(dependency.rdfa.editorInner).clear()
       .type('test  test');
-    cy.get(dependency.rdfa.editorInner).should('contain', '\u00a0');
+    cy.get(dependency.rdfa.editorInner).should('contain', ' ');
+    cy.get(dependency.rdfa.editorInner).should('not.contain', '\u00a0');
     cy.get(newsletter.editItem.cancel).click();
   });
 });
