@@ -37,3 +37,10 @@
   background-color: transparent;
   border-color: transparent;
 }
+
+@media print {
+  .au-c-pill {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
