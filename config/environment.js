@@ -40,6 +40,7 @@ module.exports = function (environment) {
     APP: {
       // eslint-disable-next-line quotes
       ENABLE_SIGNATURES: '{{ENABLE_SIGNATURES}}',
+      PUBLICATION_PROCESSING_WINDOW: '{{PUBLICATION_PROCESSING_WINDOW}}'
       // Here you can pass flags/options to your application instance
       // when it is created
     },
@@ -65,6 +66,7 @@ module.exports = function (environment) {
 
   if (environment === 'development') {
     ENV.APP.ENABLE_SIGNATURES = true;
+    ENV.APP.PUBLICATION_PROCESSING_WINDOW = 30 * 60; // 30min
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;
     // ENV.APP.LOG_TRANSITIONS = true;
@@ -79,6 +81,7 @@ module.exports = function (environment) {
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
     ENV.APP.ENABLE_SIGNATURES = true;
+    ENV.APP.PUBLICATION_PROCESSING_WINDOW = 30 * 60; // 30min
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
   }
@@ -88,6 +91,7 @@ module.exports = function (environment) {
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
     ENV.APP.ENABLE_SIGNATURES = true;
+    ENV.APP.PUBLICATION_PROCESSING_WINDOW = 30 * 60; // 30min
   }
 
   return ENV;

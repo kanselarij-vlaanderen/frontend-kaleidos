@@ -6,6 +6,7 @@ import moment from 'moment';
 import { A } from '@ember/array';
 import { restartableTask, timeout } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import AgendaPublicationUtils from 'frontend-kaleidos/utils/agenda-publication';
 
 export default class AgendasController extends Controller {
   queryParams = ['page', 'size', 'sort', 'filter'];
@@ -65,10 +66,7 @@ export default class AgendasController extends Controller {
     this.newThemisPublicationActivity = this.store.createRecord(
       'themis-publication-activity',
       {
-        scope: [
-          CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS,
-          CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS,
-        ],
+        scope: AgendaPublicationUtils.THEMIS_PUBLICATION_SCOPES,
       }
     );
     this.newMeeting = this.store.createRecord('meeting', {

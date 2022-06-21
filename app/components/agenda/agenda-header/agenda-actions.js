@@ -5,7 +5,6 @@ import { task } from 'ember-concurrency';
 import { debug } from '@ember/debug';
 import { inject as service } from '@ember/service';
 import { all } from 'rsvp';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { setAgendaitemFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import * as AgendaPublicationUtils from 'frontend-kaleidos/utils/agenda-publication';
 import {
@@ -13,11 +12,6 @@ import {
   fetchArchivingJobForAgenda,
   fileDownloadUrlFromJob,
 } from 'frontend-kaleidos/utils/zip-agenda-files';
-
-const THEMIS_PUBLICATION_SCOPE = [
-  CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS,
-  CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS,
-];
 
 /**
  * @argument {Meeting} meeting
@@ -84,7 +78,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     can &&= this.args.meeting.isFinal;
     if (this.themisPublicationActivities.length === 1) {
       can &&= AgendaPublicationUtils.getIsCertainlyNotStarted(this.latestThemisPublicationActivity);
-      can &&= AgendaPublicationUtils.getHasScope(this.latestThemisPublicationActivity, THEMIS_PUBLICATION_SCOPE);
+      can &&= AgendaPublicationUtils.getHasScope(this.latestThemisPublicationActivity, AgendaPublicationUtils.THEMIS_PUBLICATION_SCOPE_INITIAL);
     } else {
       // cases:
       //  - old data-model (no themis-publication-activity)

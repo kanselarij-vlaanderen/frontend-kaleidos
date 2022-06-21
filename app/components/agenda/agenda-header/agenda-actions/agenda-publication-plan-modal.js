@@ -3,16 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
-import * as CONFIG from 'frontend-kaleidos/config/config';
 import * as AgendaPublicationUtils from 'frontend-kaleidos/utils/agenda-publication';
-
-const THEMIS_PUBLICATION_SCOPE = [
-  CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS,
-  CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS,
-];
-
-const PUBLICATION_PROCESSING_WINDOW_MS = CONFIG.PUBLICATION_PROCESSING_WINDOW * 1000;
 
 /**
  * Planned agenda related publications:
@@ -34,7 +25,7 @@ export default class AgendaPublicationPlanModal extends Component {
 
   @task
   *initFields() {
-    this.minPublicationDate = new Date(Date.now() + PUBLICATION_PROCESSING_WINDOW_MS);
+    this.minPublicationDate = new Date(Date.now() + AgendaPublicationUtils.PROCESSING_WINDOW_MS);
     this.minPublicationDate.setSeconds(0);
     this.minPublicationDate.setMilliseconds(0);
 
@@ -135,7 +126,7 @@ export default class AgendaPublicationPlanModal extends Component {
       this.themisPublicationActivity = this.store.createRecord(
         'themis-publication-activity',
         {
-          scope: THEMIS_PUBLICATION_SCOPE,
+          scope: AgendaPublicationUtils.THEMIS_PUBLICATION_SCOPE_INITIAL,
           meeting: this.args.meeting,
         }
       );
