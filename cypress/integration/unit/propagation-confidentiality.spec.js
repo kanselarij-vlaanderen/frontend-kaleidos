@@ -1,4 +1,4 @@
-/* global context, it, cy, Cypress, afterEach */
+/* global context, it, cy, afterEach */
 // / <reference types="Cypress" />
 
 import auk from '../../selectors/auk.selectors';
@@ -41,6 +41,8 @@ function checkAccess(docName, hasAccess = true) {
     .as('currentDoc');
   cy.get(auk.loader).should('not.exist');
   cy.get('@currentDoc').find(document.documentCard.versionHistory)
+    .find(auk.accordion.header.button)
+    .should('not.be.disabled')
     .click();
   cy.get(auk.loader).should('not.exist');
   cy.get('@currentDoc').find(document.vlDocument.piece)
@@ -53,9 +55,9 @@ function checkAccess(docName, hasAccess = true) {
 }
 
 context('Propagation of confidentiality setup', () => {
-  const agendaDate = Cypress.dayjs('2022-04-20').hour(10);
-  const subcaseTitle1 = 'test propagatie vertrouwelijkheid 1655729512';
-  // const agendaitem1Link = 'vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten/62B06EBFEC3CB8277FF058F0/documenten';
+  // const agendaDate = Cypress.dayjs('2022-04-20').hour(10);
+  // const subcaseTitle1 = 'test propagatie vertrouwelijkheid 1655729512';
+  const agendaitem1Link = 'vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten/62B06EBFEC3CB8277FF058F0/documenten';
   const docName1 = 'VR 2022 2004 DOC.0001-01 propagatie intern secretarie';
   const docName2 = 'VR 2022 2004 DOC.0001-02 propagatie ministerraad';
   const docName3 = 'VR 2022 2004 DOC.0001-03 propagatie intern regering';
@@ -82,15 +84,14 @@ context('Propagation of confidentiality setup', () => {
 
   it('login as kanselarij and check access', () => {
     cy.login('Kanselarij');
-    cy.openAgendaForDate(agendaDate);
-    cy.openAgendaitemDocumentTab(subcaseTitle1, true);
+    cy.visitAgendaWithLink(agendaitem1Link);
     checkAccess(docName1);
     checkAccess(docName2);
     checkAccess(docName3);
     checkAccess(docName4);
     checkAccess(docName5);
 
-    cy.openAgendaitemDocumentTab(subcaseTitle2, true);
+    cy.openAgendaitemDocumentTab(subcaseTitle2);
     checkAccess(docNameLocked1);
     checkAccess(docNameLocked2);
     checkAccess(docNameLocked3);
@@ -103,15 +104,14 @@ context('Propagation of confidentiality setup', () => {
 
   it('login as minister and check access', () => {
     cy.login('Minister');
-    cy.openAgendaForDate(agendaDate);
-    cy.openAgendaitemDocumentTab(subcaseTitle1, true);
+    cy.visitAgendaWithLink(agendaitem1Link);
     checkAccess(docName1, false);
     checkAccess(docName2);
     checkAccess(docName3);
     checkAccess(docName4);
     checkAccess(docName5);
 
-    cy.openAgendaitemDocumentTab(subcaseTitle2, true);
+    cy.openAgendaitemDocumentTab(subcaseTitle2);
     checkAccess(docNameLocked1, false);
     checkAccess(docNameLocked2);
     checkAccess(docNameLocked3);
@@ -121,15 +121,14 @@ context('Propagation of confidentiality setup', () => {
 
   it('login as kabinet and check access', () => {
     cy.login('Kabinet');
-    cy.openAgendaForDate(agendaDate);
-    cy.openAgendaitemDocumentTab(subcaseTitle1, true);
+    cy.visitAgendaWithLink(agendaitem1Link);
     checkAccess(docName1, false);
     checkAccess(docName2, false);
     checkAccess(docName3);
     checkAccess(docName4);
     checkAccess(docName5);
 
-    cy.openAgendaitemDocumentTab(subcaseTitle2, true);
+    cy.openAgendaitemDocumentTab(subcaseTitle2);
     checkAccess(docNameLocked1, false);
     checkAccess(docNameLocked2, false);
     checkAccess(docNameLocked3);
@@ -139,15 +138,14 @@ context('Propagation of confidentiality setup', () => {
 
   it('login as overheid and check access', () => {
     cy.login('Overheid');
-    cy.openAgendaForDate(agendaDate);
-    cy.openAgendaitemDocumentTab(subcaseTitle1, true);
+    cy.visitAgendaWithLink(agendaitem1Link);
     checkAccess(docName1, false);
     checkAccess(docName2, false);
     checkAccess(docName3, false);
     checkAccess(docName4);
     checkAccess(docName5);
 
-    cy.openAgendaitemDocumentTab(subcaseTitle2, true);
+    cy.openAgendaitemDocumentTab(subcaseTitle2);
     checkAccess(docNameLocked1, false);
     checkAccess(docNameLocked2, false);
     checkAccess(docNameLocked3, false);
