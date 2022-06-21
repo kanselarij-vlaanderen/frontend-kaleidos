@@ -12,19 +12,19 @@
     {{! prettier-ignore }}
     <p class="auk-u-m-0 l-printable-agenda__description auk-u-text-pre-line"><SanitizeHtml @raw={{true}} @value={{@item.title}} /></p>
   {{/if}}
-  <Auk::PillList
+  <div
     class="{{if
         (or @item.retracted (await @item.agendaActivity.subcase.confidential))
         "auk-u-mt-2"
       }}"
   >
     {{#if (await @item.agendaActivity.subcase.confidential)}}
-      <Auk::Pill @skin="danger" @layout="icon-left" @icon="lock-closed">
+      <AuPill @size="small" @skin="danger" @icon="lock-closed">
         {{t "confidential"}}
-      </Auk::Pill>
+      </AuPill>
     {{/if}}
     {{#if @item.retracted}}
-      <Auk::Pill>{{t "postponed"}}</Auk::Pill>
+      <AuPill @size="small">{{t "postponed"}}</AuPill>
     {{/if}}
-  </Auk::PillList>
+  </div>
 </div>

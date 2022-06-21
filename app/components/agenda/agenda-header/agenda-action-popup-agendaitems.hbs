@@ -21,7 +21,10 @@
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <p class="{{agendaitem.formallyOkToShow.classNames}}">
-                <i class="{{agendaitem.formallyOkToShow.iconClassNames}}" aria-hidden="true"></i>
+                <Auk::Icon
+                  @name={{agendaitem.formallyOkToShow.svg.icon}}
+                  class="formally-ok-icon"
+                />
                 {{agendaitem.formallyOkToShow.label}}
               </p>
             </Auk::Toolbar::Item>

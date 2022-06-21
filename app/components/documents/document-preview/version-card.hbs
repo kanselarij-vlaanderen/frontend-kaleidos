@@ -18,9 +18,9 @@
       class="auk-document-card__title">{{@piece.name}}
     </h4>
     <div class="auk-document-card__meta">
-      <Auk::PillList class="auk-u-mr-3">
+      <div class="auk-u-mr-3">
         <Utils::Documents::FileTypePill @extension={{@piece.file.extension}} />
-      </Auk::PillList>
+      </div>
       <div class="auk-u-mr-3">
         <p>
           {{#if @piece.created}}
