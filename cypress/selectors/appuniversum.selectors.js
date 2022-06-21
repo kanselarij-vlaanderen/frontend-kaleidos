@@ -4,6 +4,6 @@ const selectors = {
 
   /** Section single selector ember-appuniversum components **/
 
-  pill: '.auk-c-pill',
+  pill: '.au-c-pill',
 };
 export default selectors;
