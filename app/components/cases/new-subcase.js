@@ -141,10 +141,15 @@ export default class CasesNewSubcase extends Component {
 
   @action
   async copySubcaseProperties(subcase, latestSubcase, fullCopy, pieces) {
+    const type = await subcase.type;
+    const subcaseTypeWithoutMandatees = [
+      CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING,
+    ].includes(type?.uri);
     // Everything to copy from latest subcase
-    subcase.mandatees = await latestSubcase.mandatees;
-    subcase.requestedBy = await latestSubcase.requestedBy;
-
+    if (!subcaseTypeWithoutMandatees) {
+      subcase.mandatees = await latestSubcase.mandatees;
+      subcase.requestedBy = await latestSubcase.requestedBy;
+    }
     if (fullCopy) {
       subcase.linkedPieces = await latestSubcase.linkedPieces;
       subcase.subcaseName = latestSubcase.subcaseName;
