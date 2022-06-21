@@ -5,6 +5,7 @@ import { task } from 'ember-concurrency';
 /**
  * @argument subcase
  * @argument agendaitem
+ * @argument agenda
  * @argument newsletterInfo
  * @argument shouldShowDetails - shouldShowDetails should only be false when the agendaitem is to approve minutes
  * @argument allowEditing
