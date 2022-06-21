@@ -40,12 +40,13 @@ export default Model.extend({
   // - settings.ministers template
   // - Utils::MandateeSelector
   // Refactor these uses and remove this computed property
-  fullDisplayName: computed('person', 'title', 'person.nameToDisplay', function() {
+  fullDisplayName: computed('person', 'title', 'person.nameToDisplay', 'mandate.role.label', function() {
     const nameToDisplay = this.get('person.nameToDisplay');
+    const title = this.get('title') ?? this.get('mandate.role.label');
     if (nameToDisplay) {
-      return `${nameToDisplay}, ${this.get('title')}`;
+      return `${nameToDisplay}, ${title}`;
     }
-    return `${this.get('title')}`;
+    return `${title}`;
   }),
 
   // Using this to sort will map the priority number to the alphabet, giving a correct alphabetical sort with numbers higher than 9.
