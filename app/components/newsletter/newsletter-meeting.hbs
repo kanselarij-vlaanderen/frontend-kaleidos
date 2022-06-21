@@ -4,13 +4,6 @@
   <h2 class="auk-h2 auk-u-text-family-serif auk-u-text-capitalize" data-test-newsletter-meeting-title>
     {{t "newsletter-overview-pdf-name"}} - {{kind-print-label this.meeting.kind}} {{t "of"}} {{moment-format this.meeting.plannedStart "dddd DD-MM-YYYY"}}
   </h2>
-  {{#if (and this.allowEditing this.currentSession.isEditor)}}
-    <div class="auk-u-ml-4">
-      <Auk::ButtonLink {{action "toggleIsEditing"}}>
-        {{t "edit"}}
-      </Auk::ButtonLink>
-    </div>
-  {{/if}}
 </div>
 <div class="auk-u-mb-4 auk-o-flex auk-o-flex--justify-between">
   <div>
@@ -36,19 +29,6 @@
     </p>
   </div>
 </div>
-{{#if this.isEditing}}
-  <WebComponents::VlModal
-    @isOverlay={{true}}
-    @closeModal={{action "close"}}
-    @title={{this.editTitle}}
-  >
-    <Newsletter::EditNewsletter
-      @newsletter={{await this.meeting.newsletter}}
-      @selectedMeeting={{this.meeting}}
-      @close={{action "close"}}
-    />
-  </WebComponents::VlModal>
-{{/if}}
 <div class="auk-hr">
   <hr/>
 </div>
