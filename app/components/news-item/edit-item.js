@@ -1,50 +1,73 @@
-// TODO: octane-refactor
-/* eslint-disable ember/no-get */
-// eslint-disable-next-line ember/no-classic-components
-import Component from '@ember/component';
-import { computed } from '@ember/object';
-import { inject } from '@ember/service';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { action,  } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { isNone } from '@ember/utils';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
-export default Component.extend({
-  intl: inject(),
+export default class NewsItemEditItemComponent extends Component {
+  @service intl;
 
-  isTryingToSave: false,
-  isExpanded: false,
-  isFullscreen: false,
+  @tracked editorInstance;
 
-  themes: computed('newsletterInfo.themes', {
-    get: async function() {
-      const newsletterInfo = await this.get('newsletterInfo');
-      if (newsletterInfo) {
-        return await this.newsletterInfo.get('themes').then((themes) => themes.toArray());
-      }
+  @tracked initValue;
+  @tracked _isFullscreen;
+  @tracked isTryingToSave = false;
+  @tracked isExpanded = false;
+  @tracked isLoading = false;
 
-      return [];
-    },
-    // eslint-disable-next-line no-unused-vars
-    set(key, value) {
-      return value;
-    },
-  }),
+  set isFullscreen(isFullscreen) {
+    this._isFullscreen = isFullscreen;
+  }
 
-  editorInstanceAvailable: computed('editorInstance', function() {
-    return this.get('editorInstance') ? true : false; // eslint-disable-line
-  }),
+  get isFullscreen() {
+    return this._isFullscreen ?? this.args.isFullscreen;
+  }
 
-  hasNota: computed('agendaitem', async function() {
-    const nota = await this.agendaitem.get('nota');
-    if (nota) {
-      return true;
+  get editorInstanceAvailable() {
+    return this.editorInstance ? true : false;
+  }
+
+  get hasNota() {
+    return this.args.agendaitem.nota;
+  }
+
+  get richtext() {
+    if (!this.editorInstanceAvailable) {
+      throw new Error("Can't get rich text since editor-instance isn't available!");
     }
-    return false;
-  }),
+    return this.editorInstance.htmlContent;
+  }
 
+  @action
+  toggleFullscreen() {
+    this.isFullscreen = !this.isFullscreen;
+  }
+
+  @action
+  async trySaveChanges() {
+    const themes = (await this.args.newsletterInfo.themes).toArray();
+    if (themes.length > 0) {
+      return this.saveChanges();
+    }
+    this.isTryingToSave = true;
+  }
+
+  @action
+  async cancelEditing() {
+    const newsletterInfo = await this.args.newsletterInfo;
+    newsletterInfo.rollbackAttributes();
+    if (!newsletterInfo.isDeleted) {
+      newsletterInfo.hasMany('themes').reload();
+    }
+    if (this.args.onCancel) {
+      this.args.onCancel();
+    }
+  }
+
+  @action
   async saveChanges() {
-    this.set('isLoading', true);
-    const newsletterInfo = await this.get('newsletterInfo');
+    this.isLoading = true;
+    const newsletterInfo = await this.args.newsletterInfo;
     try {
       // The editor introduces &nbsp; instead of normal spaces to work around
       // certain browsers' behavior where normal spaces on outer ends of text nodes
@@ -55,87 +78,37 @@ export default Component.extend({
       // to keep the editor's workaround behavior, while replacing unnecessary &nbsp;'s
       //
       const cleanedHtml = this.richtext.replaceAll(/(?<!>)&nbsp;(?!<)/gm, ' ');
-      newsletterInfo.set('richtext', cleanedHtml);
+      newsletterInfo.richtext = cleanedHtml;
     } catch {
       // pass
     }
-    await newsletterInfo.save().then(async() => {
-      this.set('isLoading', false);
-      this.set('fullscreen', false);
-    });
-    if (this.onSave) {
-      this.onSave();
+    await newsletterInfo.save();
+
+    this.isLoading = false;
+    if (this.args.onSave) {
+      this.args.onSave();
     }
-  },
+  }
 
-  richtext: computed('editorInstance.htmlContent', 'editorInstanceAvailable', function() {
-    if (!this.editorInstanceAvailable) {
-      throw new Error("Can't get rich text since editor-instance isn't available!");
+  @action
+  async openDocument() {
+    const nota = await this.args.agendaitem.notaOrVisienota;
+    if (!nota) {
+      return;
     }
-    return this.editorInstance.htmlContent;
-  }),
+    const piece = await nota.lastPiece;
+    window.open(`/document/${piece.get('id')}`);
+  }
 
-  // TODO: octane-refactor
-  // eslint-disable-next-line ember/no-actions-hash
-  actions: {
-    fullscreen() {
-      this.toggleProperty('isFullscreen');
-    },
-
-    closeFullscreen() {
-      this.set('isFullscreen', false);
-      this.set('fullscreen', false);
-    },
-
-    async trySaveChanges() {
-      const themes = await this.get('themes');
-      if (themes.length > 0) {
-        return this.saveChanges();
-      }
-      this.toggleProperty('isTryingToSave');
-    },
-
-    async cancelEditing() {
-      const newsletterInfo = await this.get('newsletterInfo');
-      newsletterInfo.rollbackAttributes();
-      if (!newsletterInfo.isDeleted) {
-        newsletterInfo.hasMany('themes').reload();
-      }
-      if (this.onCancel) {
-        this.onCancel();
-      }
-    },
-
-    cancelSaveChanges() {
-      this.toggleProperty('isTryingToSave');
-    },
-
-    async saveChanges() {
-      return this.saveChanges();
-    },
-
-    async openDocument(agendaitem) {
-      const nota = await agendaitem.get('notaOrVisienota');
-      if (!nota) {
-        return;
-      }
-      const piece = await nota.get('lastPiece');
-      window.open(`/document/${piece.get('id')}`);
-    },
-
-    async handleRdfaEditorInit(editorInterface) {
-      const newsletterInfo = await this.get('newsletterInfo');
-      let newsLetterInfoText = newsletterInfo.get('richtext');
-      if (isNone(newsLetterInfoText)) {
-        // editor stringifies non-string values (to "undefined" for example)
-        newsLetterInfoText = '';
-      }
-      editorInterface.setHtmlContent(newsLetterInfoText);
-      this.set('editorInstance', editorInterface);
-    },
-
-    descriptionUpdated(val) {
-      this.set('initValue', `${this.get('initValue')} ${val}`);
-    },
-  },
-});
+  @action
+  async handleRdfaEditorInit(editorInterface) {
+    const newsletterInfo = await this.args.newsletterInfo;
+    let newsLetterInfoText = newsletterInfo.richtext;
+    if (isNone(newsLetterInfoText)) {
+      // editor stringifies non-string values (to "undefined" for example)
+      newsLetterInfoText = '';
+    }
+    editorInterface.setHtmlContent(newsLetterInfoText);
+    this.editorInstance = editorInterface;
+  }
+}

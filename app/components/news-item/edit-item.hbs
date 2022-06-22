@@ -1,5 +1,3 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
 <Auk::Panel>
   <Auk::Panel::Header>
     <Auk::Toolbar>
@@ -12,8 +10,8 @@
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          {{#if (not (is-pending this.agendaitem.notaOrVisienota))}}
-            {{#if (not (await this.agendaitem.notaOrVisienota))}}
+          {{#if (not (is-pending @agendaitem.notaOrVisienota))}}
+            {{#if (not (await @agendaitem.notaOrVisienota))}}
               <AuButton
                 data-test-newsletter-edit-item-no-nota
                 @skin="naked"
@@ -31,7 +29,7 @@
                 @icon="document"
                 @iconAlginment="left"
                 class="au-u-padding-right-none"
-                {{action "openDocument" this.agendaitem bubbles=false}}
+                {{on "click" this.openDocument}}
               >
                 {{t "open-note"}}
               </AuButton>
@@ -49,9 +47,9 @@
   </Auk::Panel::Header>
   <Auk::Panel::Body class="au-u-background-gray-100">
     <div class="auk-form-group">
-      <Auk::Label>{{t "title"}}</Auk::Label>
+      <AuLabel>{{t "title"}}</AuLabel>
       <p data-test-newsletter-edit-item-long-title>
-        {{this.agendaitem.title}}
+        {{@agendaitem.title}}
       </p>
     </div>
     <div class="auk-form-group">
@@ -59,7 +57,7 @@
       <AuInput
         data-test-newsletter-edit-item-short-title
         @width="block"
-        @value={{this.newsletterInfo.title}}
+        @value={{@newsletterInfo.title}}
       />
     </div>
     <div class="auk-form-group">
@@ -67,50 +65,50 @@
       <p
         data-test-newsletter-edit-item-mandatee-proposal
       >
-        {{#if (await this.newsletterInfo.newsletterProposal)}}
-          {{await this.newsletterInfo.newsletterProposal}}
+        {{#if (await @newsletterInfo.newsletterProposal)}}
+          {{await @newsletterInfo.newsletterProposal}}
         {{else}}
           {{t "not-applicable"}}
         {{/if}}
       </p>
     </div>
     <div class="auk-form-group">
-      <div class={{if (or this.isFullscreen @fullscreen) 'auk-rdfa-holder auk-rdfa-fullscreen' 'auk-rdfa-holder'}}>
+      <div class={{if this.isFullscreen 'auk-rdfa-holder auk-rdfa-fullscreen' 'auk-rdfa-holder'}}>
         <div class="auk-rdfa-holder__header auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
           <AuLabel class="auk-u-p-0">
             {{t "decision-in-newsletter"}}
-            <span class={{if (or this.isFullscreen @fullscreen) '' 'au-u-hidden-visually'}}>  voor {{@newsletterInfo.title}}</span>
+            <span class={{if this.isFullscreen '' 'au-u-hidden-visually'}}>  voor {{@newsletterInfo.title}}</span>
           </AuLabel>
           {{#if @fullscreen}}
           <AuButtonGroup>
-            <AuButton @skin="naked" @icon="minimize" @iconAlignment="left" {{action "closeFullscreen"}}>Sluit volledig scherm</AuButton>
+            <AuButton @skin="naked" @icon="minimize" @iconAlignment="left" {{on "click" this.toggleFullscreen}}>Sluit volledig scherm</AuButton>
             <WebComponents::VlSaveButton
               data-test-newsletter-edit-item-save={{true}}
               @text={{t "save"}}
               @isLoading={{this.isLoading}}
-              @saveAction={{action "trySaveChanges"}}
+              @saveAction={{this.trySaveChanges}}
             />
           </AuButtonGroup>
           {{else}}
             {{#if this.isFullscreen}}
             <AuButtonGroup>
-              <AuButton @skin="naked" @icon="minimize" @iconAlignment="left" {{action "fullscreen"}}>Sluit volledig scherm</AuButton>
+              <AuButton @skin="naked" @icon="minimize" @iconAlignment="left" {{on "click" this.toggleFullscreen}}>Sluit volledig scherm</AuButton>
               <WebComponents::VlSaveButton
                 data-test-newsletter-edit-item-save={{true}}
                 @text={{t "save"}}
                 @isLoading={{this.isLoading}}
-                @saveAction={{action "trySaveChanges"}}
+                @saveAction={{this.trySaveChanges}}
               />
             </AuButtonGroup>
             {{else}}
-            <AuButton @skin="naked" @icon="expand" @iconAlignment="left" {{action "fullscreen"}}>Volledig scherm</AuButton>
+            <AuButton @skin="naked" @icon="expand" @iconAlignment="left" {{on "click" this.toggleFullscreen}}>Volledig scherm</AuButton>
             {{/if}}
           {{/if}}
         </div>
         <WebComponents::VlRdfaEditor
           data-test-newsletter-edit-item-rdfa-editor={{true}}
           @richtext={{await this.newsletterInfo.richtext}}
-          @handleRdfaEditorInit={{action "handleRdfaEditorInit"}}
+          @handleRdfaEditorInit={{this.handleRdfaEditorInit}}
         />
       </div>
     </div>
@@ -121,7 +119,7 @@
       <AuInput
         data-test-newsletter-edit-item-remark
         @width="block"
-        @value={{this.newsletterInfo.remark}}
+        @value={{@newsletterInfo.remark}}
       />
     </div>
     <div class="auk-form-group">
@@ -129,19 +127,19 @@
       <Auk::Toggle
         data-test-newsletter-edit-item-toggle-finished
         id="item-finished"
-        @checked={{this.newsletterInfo.finished}}
+        @checked={{@newsletterInfo.finished}}
       />
     </div>
     <div class="auk-form-group" data-test-newsletter-edit-item-themes-selector>
       <AuLabel>{{t "themes"}}</AuLabel>
-      <Utils::ThemesSelector @selectedThemes={{await this.newsletterInfo.themes}} />
+      <Utils::ThemesSelector @selectedThemes={{await @newsletterInfo.themes}} />
     </div>
   </Auk::Panel::Body>
   <Auk::Panel::Body class="au-u-background-gray-100">
     <Auk::Toolbar>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          <Auk::ButtonLink data-test-newsletter-edit-item-cancel {{action "cancelEditing"}}>
+          <Auk::ButtonLink data-test-newsletter-edit-item-cancel {{on "click" this.cancelEditing}}>
             {{t "cancel"}}
           </Auk::ButtonLink>
         </Auk::Toolbar::Item>
@@ -150,7 +148,7 @@
             data-test-newsletter-edit-item-save={{true}}
             @text={{t "save"}}
             @isLoading={{this.isLoading}}
-            @saveAction={{action "trySaveChanges"}}
+            @saveAction={{this.trySaveChanges}}
           />
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
@@ -162,8 +160,8 @@
   <WebComponents::VlModalVerify
     @title={{t "no-themes-selected"}}
     @message={{t "no-themes-selected-message"}}
-    @cancel={{action "cancelSaveChanges"}}
-    @verify={{action "saveChanges"}}
+    @cancel={{set this "isTryingToSave" false}}
+    @verify={{this.saveChanges}}
     @buttonText="save"
     @buttonType="warning"
     @showIcon={{false}}
