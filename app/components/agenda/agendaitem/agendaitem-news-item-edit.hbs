@@ -89,12 +89,13 @@
               >
                 {{t "close-fullscreen"}}
               </AuButton>
-              <WebComponents::VlSaveButton
-                data-test-newsletter-edit-item-save={{true}}
-                @text={{t "save"}}
-                @isLoading={{this.isLoading}}
-                @saveAction={{this.trySaveChanges}}
-              />
+              <AuButton
+                @loading={{this.isLoading}}
+                {{on "click" this.trySaveChanges}}
+                data-test-newsletter-edit-item-save
+              >
+                {{t "save"}}
+              </AuButton>
             </AuButtonGroup>
           {{else}}
             <AuButton
@@ -146,12 +147,13 @@
           </Auk::ButtonLink>
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
-          <WebComponents::VlSaveButton
-            data-test-newsletter-edit-item-save={{true}}
-            @text={{t "save"}}
-            @isLoading={{this.isLoading}}
-            @saveAction={{this.trySaveChanges}}
-          />
+          <AuButton
+            @loading={{this.isLoading}}
+            {{on "click" this.trySaveChanges}}
+            data-test-newsletter-edit-item-save
+          >
+            {{t "save"}}
+          </AuButton>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
