@@ -79,18 +79,7 @@
             {{t "decision-in-newsletter"}}
             <span class={{if this.isFullscreen '' 'au-u-hidden-visually'}}>  voor {{@newsletterInfo.title}}</span>
           </AuLabel>
-          {{#if @fullscreen}}
-          <AuButtonGroup>
-            <AuButton @skin="naked" @icon="minimize" @iconAlignment="left" {{on "click" this.toggleFullscreen}}>Sluit volledig scherm</AuButton>
-            <WebComponents::VlSaveButton
-              data-test-newsletter-edit-item-save={{true}}
-              @text={{t "save"}}
-              @isLoading={{this.isLoading}}
-              @saveAction={{this.trySaveChanges}}
-            />
-          </AuButtonGroup>
-          {{else}}
-            {{#if this.isFullscreen}}
+          {{#if this.isFullscreen}}
             <AuButtonGroup>
               <AuButton @skin="naked" @icon="minimize" @iconAlignment="left" {{on "click" this.toggleFullscreen}}>Sluit volledig scherm</AuButton>
               <WebComponents::VlSaveButton
@@ -100,9 +89,8 @@
                 @saveAction={{this.trySaveChanges}}
               />
             </AuButtonGroup>
-            {{else}}
+          {{else}}
             <AuButton @skin="naked" @icon="expand" @iconAlignment="left" {{on "click" this.toggleFullscreen}}>Volledig scherm</AuButton>
-            {{/if}}
           {{/if}}
         </div>
         <WebComponents::VlRdfaEditor
