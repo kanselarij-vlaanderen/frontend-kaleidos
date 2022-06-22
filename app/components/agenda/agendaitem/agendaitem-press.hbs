@@ -5,8 +5,8 @@
     </AuHeading>
   </Group>
   <Group>
-    {{#unless this.isEditing}}
-      {{#if this.currentSession.isEditor}}
+    {{#if (not this.currentSession.isEditing)}}
+      {{#if this.isEditor}}
         <AuButton
           @skin="secondary"
           @icon="pencil"
@@ -15,15 +15,10 @@
           {{t "edit"}}
         </AuButton>
       {{/if}}
-    {{/unless}}
+    {{/if}}
   </Group>
 </AuToolbar>
-{{#if this.isEditing}}
-  <AgendaitemPressEdit
-    @agendaitem={{@agendaitem}}
-    @isEditing={{this.isEditing}}
-  />
-  {{else}}
+{{#if (not this.currentSession.isEditing)}}
   <Auk::Panel>
     <Auk::Panel::Header>
       <Auk::Toolbar>
@@ -53,4 +48,8 @@
       </div>
     </Auk::Panel::Body>
   </Auk::Panel>
+{{else}}
+  <AgendaitemPressEdit
+    @agendaitem={{@agendaitem}}
+    @isEditing={{this.currentSession.isEditing}} />
 {{/if}}
