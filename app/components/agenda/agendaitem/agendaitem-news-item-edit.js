@@ -4,7 +4,7 @@ import { action,  } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { isNone } from '@ember/utils';
 
-export default class NewsItemEditItemComponent extends Component {
+export default class AgendaAgendaitemAgendaitemNewsItemEditComponent extends Component {
   @service intl;
 
   @tracked editorInstance;
