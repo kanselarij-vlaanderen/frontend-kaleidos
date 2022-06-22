@@ -64,7 +64,7 @@
     {{/unless}}
   {{/if}}
   {{#if this.isEditing}}
-    <NewsItem::EditItem
+    <Agenda::Agendaitem::AgendaitemNewsItemEdit
       @newsletterInfo={{this.model}}
       @agendaitem={{this.agendaitem}}
       @onCancel={{this.stopEditing}}
