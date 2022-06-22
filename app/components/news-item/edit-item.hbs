@@ -14,25 +14,27 @@
         <Auk::Toolbar::Item>
           {{#if (not (is-pending this.agendaitem.notaOrVisienota))}}
             {{#if (not (await this.agendaitem.notaOrVisienota))}}
-              <Auk::Button
+              <AuButton
                 data-test-newsletter-edit-item-no-nota
-                @skin="borderless"
+                @skin="naked"
                 @icon="document"
+                @iconAlignment="left"
                 @disabled={{true}}
                 class="au-u-padding-right-none"
               >
                 {{t "no-nota"}}
-              </Auk::Button>
+              </AuButton>
             {{else}}
-              <Auk::Button
+              <AuButton
                 data-test-newsletter-edit-item-nota
-                @skin="borderless"
+                @skin="naked"
                 @icon="document"
+                @iconAlginment="left"
                 class="au-u-padding-right-none"
                 {{action "openDocument" this.agendaitem bubbles=false}}
               >
                 {{t "open-note"}}
-              </Auk::Button>
+              </AuButton>
             {{/if}}
           {{else}}
             <div class="auk-loader" role="alert" aria-busy="true">
@@ -53,15 +55,15 @@
       </p>
     </div>
     <div class="auk-form-group">
-      <Auk::Label>{{t "short-title"}}</Auk::Label>
-      <Auk::Input
+      <AuLabel>{{t "short-title"}}</AuLabel>
+      <AuInput
         data-test-newsletter-edit-item-short-title
-        @block={{true}}
+        @width="block"
         @value={{this.newsletterInfo.title}}
       />
     </div>
     <div class="auk-form-group">
-      <Auk::Label>{{t "mandatee-proposal"}}</Auk::Label>
+      <AuLabel>{{t "mandatee-proposal"}}</AuLabel>
       <p
         data-test-newsletter-edit-item-mandatee-proposal
       >
@@ -75,13 +77,13 @@
     <div class="auk-form-group">
       <div class={{if (or this.isFullscreen @fullscreen) 'auk-rdfa-holder auk-rdfa-fullscreen' 'auk-rdfa-holder'}}>
         <div class="auk-rdfa-holder__header auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
-          <Auk::Label class="auk-u-p-0">
+          <AuLabel class="auk-u-p-0">
             {{t "decision-in-newsletter"}}
             <span class={{if (or this.isFullscreen @fullscreen) '' 'au-u-hidden-visually'}}>  voor {{@newsletterInfo.title}}</span>
-          </Auk::Label>
+          </AuLabel>
           {{#if @fullscreen}}
           <AuButtonGroup>
-            <Auk::Button @skin="borderless" @icon="minimize" {{action "closeFullscreen"}}>Sluit volledig scherm</Auk::Button>
+            <AuButton @skin="naked" @icon="minimize" @iconAlignment="left" {{action "closeFullscreen"}}>Sluit volledig scherm</AuButton>
             <WebComponents::VlSaveButton
               data-test-newsletter-edit-item-save={{true}}
               @text={{t "save"}}
@@ -92,7 +94,7 @@
           {{else}}
             {{#if this.isFullscreen}}
             <AuButtonGroup>
-              <Auk::Button @skin="borderless" @icon="minimize" {{action "fullscreen"}}>Sluit volledig scherm</Auk::Button>
+              <AuButton @skin="naked" @icon="minimize" @iconAlignment="left" {{action "fullscreen"}}>Sluit volledig scherm</AuButton>
               <WebComponents::VlSaveButton
                 data-test-newsletter-edit-item-save={{true}}
                 @text={{t "save"}}
@@ -101,7 +103,7 @@
               />
             </AuButtonGroup>
             {{else}}
-            <Auk::Button @skin="borderless" @icon="expand" {{action "fullscreen"}}>Volledig scherm</Auk::Button>
+            <AuButton @skin="naked" @icon="expand" @iconAlignment="left" {{action "fullscreen"}}>Volledig scherm</AuButton>
             {{/if}}
           {{/if}}
         </div>
@@ -115,15 +117,15 @@
   </Auk::Panel::Body>
   <Auk::Panel::Body class="au-u-background-gray-100">
     <div class="auk-form-group auk-u-text-capitalize">
-      <Auk::Label>Opmerking</Auk::Label>
-      <Auk::Input
+      <AuLabel>Opmerking</AuLabel>
+      <AuInput
         data-test-newsletter-edit-item-remark
-        @block={{true}}
+        @width="block"
         @value={{this.newsletterInfo.remark}}
       />
     </div>
     <div class="auk-form-group">
-      <Auk::Label for="item-finished">{{t "finished"}}</Auk::Label>
+      <AuLabel for="item-finished">{{t "finished"}}</AuLabel>
       <Auk::Toggle
         data-test-newsletter-edit-item-toggle-finished
         id="item-finished"
@@ -131,7 +133,7 @@
       />
     </div>
     <div class="auk-form-group" data-test-newsletter-edit-item-themes-selector>
-      <Auk::Label>{{t "themes"}}</Auk::Label>
+      <AuLabel>{{t "themes"}}</AuLabel>
       <Utils::ThemesSelector @selectedThemes={{await this.newsletterInfo.themes}} />
     </div>
   </Auk::Panel::Body>
