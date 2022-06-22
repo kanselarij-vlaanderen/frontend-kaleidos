@@ -1,12 +1,48 @@
-<div class="vlc-padding-bottom--large">
-  <div class="auk-u-mb-2">
-    <h3 class="auk-h4" data-test-agendaitem-news-item-title>
-      {{@newsletterInfo.title}}
-    </h3>
-  </div>
-  <div class="auk-u-mb-2">
-    <div class="auk-content">
-      <p class="auk-u-italic">
+<Auk::Panel>
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <AuHeading @level="4" @skin="5" data-test-agendaitem-news-item-title>
+            {{@newsletterInfo.title}}
+          </AuHeading>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          {{#if @newsletterInfo}}
+            {{#if @newsletterInfo.inNewsletter}}
+              <AuPill @skin="default" @icon="visible">
+                {{t "visible-in-newsletter"}}
+              </AuPill>
+            {{else}}
+              <AuPill @skin="default" @icon="not-visible">
+                {{t "hidden-in-newsletter"}}
+              </AuPill>
+            {{/if}}
+          {{else}}
+            <Auk::Pill>
+              {{t "no-newsletter-info"}}
+            </Auk::Pill>
+          {{/if}}
+        </Auk::Toolbar::Item>
+        <Auk::Toolbar::Item>
+         {{#if @newsletterInfo.finished}}
+            <AuPill @skin="success">
+              {{t "finished"}}
+            </AuPill>
+          {{else}}
+            <AuPill @skin="warning">
+              {{t "not-finished"}}
+            </AuPill>
+          {{/if}}
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    <AuContent @skin="small">
+      <p class="au-u-italic">
         {{await @newsletterInfo.newsletterProposal}}
       </p>
       <p>
@@ -15,41 +51,36 @@
           @value={{@newsletterInfo.richtext}}
         />
       </p>
-    </div>
-  </div>
+    </AuContent>
+  </Auk::Panel::Body>
   {{#if @newsletterInfo.remark}}
-    <p class="auk-u-text-muted auk-u-text-capitalize auk-u-text-size--small">
-      {{t "remark"}}: {{@newsletterInfo.remark}}
+  <Auk::Panel::Body>
+    <p class="au-u-muted auk-u-text-capitalize auk-u-text-small">
+      <strong>{{t "remark"}}</strong>: {{@newsletterInfo.remark}}
     </p>
+  </Auk::Panel::Body>
   {{/if}}
-  <div
-    class="auk-u-mb-2 auk-u-mt-2"
-    data-test-agendaitem-news-item-themes>
-    {{#if (is-pending @newsletterInfo.themes)}}
-      <WebComponents::VlLoader @text={{t "themes-loading-text"}} />
-    {{else if (gt (await @newsletterInfo.themes.length) 0)}}
-      {{#each
-        (await @newsletterInfo.themes)
-      as |theme|
-      }}
-        <AuPill @size="small">{{theme.label}}</AuPill>
-      {{/each}}
-    {{else}}
-      <div class="auk-u-mt-2">
-        <WebComponents::VlAlert @message={{t "no-themes-yet"}} />
-      </div>
-    {{/if}}
-  </div>
-  <hr/>
-  <div class="auk-u-mb-4 auk-u-mt-2">
-    {{#if @newsletterInfo.finished}}
-      <AuPill @size="small" @skin="success">
-        {{t "finished"}}
-      </AuPill>
-    {{else}}
-      <AuPill @size="small" @skin="warning">
-        {{t "not-finished"}}
-      </AuPill>
-    {{/if}}
-  </div>
-</div>
+  <Auk::Panel::Body>
+    <div data-test-agendaitem-news-item-themes>
+      {{#if (is-pending @newsletterInfo.themes)}}
+        <WebComponents::VlLoader @text={{t "themes-loading-text"}} />
+      {{else if (gt (await @newsletterInfo.themes.length) 0)}}
+        <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
+          <strong>Thema's:</strong>
+          <Auk::PillList>
+            {{#each
+              (await @newsletterInfo.themes)
+            as |theme|
+            }}
+              <AuPill>{{theme.label}}</AuPill>
+            {{/each}}
+          </Auk::PillList>
+        </div>
+      {{else}}
+        <div class="auk-u-mt-2">
+          <WebComponents::VlAlert @message={{t "no-themes-yet"}} />
+        </div>
+      {{/if}}
+    </div>
+  </Auk::Panel::Body>
+</Auk::Panel>
