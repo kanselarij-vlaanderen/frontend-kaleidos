@@ -10,10 +10,10 @@ import { isNone } from '@ember/utils';
 // eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   intl: inject(),
-  classNames: ['auk-box'],
 
   isTryingToSave: false,
   isExpanded: false,
+  isFullscreen: false,
 
   themes: computed('newsletterInfo.themes', {
     get: async function() {
@@ -61,6 +61,7 @@ export default Component.extend({
     }
     await newsletterInfo.save().then(async() => {
       this.set('isLoading', false);
+      this.set('fullscreen', false);
     });
     if (this.onSave) {
       this.onSave();
@@ -77,6 +78,15 @@ export default Component.extend({
   // TODO: octane-refactor
   // eslint-disable-next-line ember/no-actions-hash
   actions: {
+    fullscreen() {
+      this.toggleProperty('isFullscreen');
+    },
+
+    closeFullscreen() {
+      this.set('isFullscreen', false);
+      this.set('fullscreen', false);
+    },
+
     async trySaveChanges() {
       const themes = await this.get('themes');
       if (themes.length > 0) {
