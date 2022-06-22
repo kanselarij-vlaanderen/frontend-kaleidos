@@ -1,5 +1,3 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
 <AuToolbar class="au-u-margin-bottom" as |Group|>
   <Group>
     <AuHeading @level="3" @skin="4">
@@ -7,31 +5,36 @@
     </AuHeading>
   </Group>
   <Group>
-    {{#if (not this.currentSession.isEditing)}}
-      {{#if this.isEditor}}
+    {{#unless this.isEditing}}
+      {{#if this.currentSession.isEditor}}
         <AuButton
           @skin="secondary"
           @icon="pencil"
-          {{action "toggleIsEditing"}}>
           @iconAlignment="left"
+          {{on "click" this.toggleIsEditing}}>
           {{t "edit"}}
         </AuButton>
       {{/if}}
-    {{/if}}
+    {{/unless}}
   </Group>
 </AuToolbar>
-{{#if (not this.currentSession.isEditing)}}
+{{#if this.isEditing}}
+  <AgendaitemPressEdit
+    @agendaitem={{@agendaitem}}
+    @isEditing={{this.isEditing}}
+  />
+  {{else}}
   <Auk::Panel>
     <Auk::Panel::Header>
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
-            <h4 class="auk-h4 auk-u-my-2">{{this.agendaitem.titlePress}}</h4>
+            <h4 class="auk-h4 auk-u-my-2">{{@agendaitem.titlePress}}</h4>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            {{#if this.agendaitem.forPress}}
+            {{#if @agendaitem.forPress}}
               <AuPill @skin="success" @icon="users">
                 {{t "for-press"}}
               </AuPill>
@@ -46,12 +49,8 @@
     </Auk::Panel::Header>
     <Auk::Panel::Body>
       <div class="auk-content">
-        {{this.agendaitem.textPress}}
+        {{@agendaitem.textPress}}
       </div>
     </Auk::Panel::Body>
   </Auk::Panel>
-{{else}}
-  <AgendaitemPressEdit
-    @agendaitem={{this.agendaitem}}
-    @isEditing={{this.currentSession.isEditing}} />
 {{/if}}
