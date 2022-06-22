@@ -9,12 +9,13 @@
   <Group>
     {{#if (not this.currentSession.isEditing)}}
       {{#if this.isEditor}}
-        <Auk::Button
+        <AuButton
           @skin="secondary"
           @icon="pencil"
           {{action "toggleIsEditing"}}>
+          @iconAlignment="left"
           {{t "edit"}}
-        </Auk::Button>
+        </AuButton>
       {{/if}}
     {{/if}}
   </Group>
