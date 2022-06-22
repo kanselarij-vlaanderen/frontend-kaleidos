@@ -63,7 +63,7 @@
   <Auk::Panel::Body>
     <div data-test-agendaitem-news-item-themes>
       {{#if (is-pending @newsletterInfo.themes)}}
-        <WebComponents::VlLoader @text={{t "themes-loading-text"}} />
+        <Auk::Loader @message={{t "themes-loading-text"}} />
       {{else if (gt (await @newsletterInfo.themes.length) 0)}}
         <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
           <strong>Thema's:</strong>
@@ -78,7 +78,7 @@
         </div>
       {{else}}
         <div class="auk-u-mt-2">
-          <WebComponents::VlAlert @message={{t "no-themes-yet"}} />
+          <Auk::Alert @message={{t "no-themes-yet"}} />
         </div>
       {{/if}}
     </div>
