@@ -125,7 +125,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
 
     cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten/62711BECADB457F5862A6D21/kort-bestek');
     // check default nota has no KB
-    cy.get(utils.vlAlert.message).contains('Nog geen kort bestek voor dit agendapunt.');
+    cy.get(newsletter.newsItem.alert).contains('Nog geen kort bestek voor dit agendapunt.');
     // create new KB
     cy.intercept('GET', '/themes').as('getThemes');
     cy.get(newsletter.newsItem.create).click();
@@ -173,7 +173,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(agenda.agendaitemTitlesView.title).contains(subcaseTitleLong);
     // check default nota has no KB
     cy.openAgendaitemKortBestekTab(subcaseTitleShort);
-    cy.get(utils.vlAlert.message).contains('Nog geen kort bestek voor dit agendapunt.');
+    cy.get(newsletter.newsItem.alert).contains('Nog geen kort bestek voor dit agendapunt.');
     // create new KB
     cy.intercept('GET', '/themes').as('getThemes');
     cy.get(newsletter.newsItem.create).click();
@@ -254,7 +254,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // check if KB empty
     cy.openAgendaitemKortBestekTab(subcaseTitleShort);
     // TODO KAS-3367 extract, selector around the alert?
-    cy.get(utils.vlAlert.message).contains('Nog geen kort bestek voor dit agendapunt.');
+    cy.get(newsletter.newsItem.alert).contains('Nog geen kort bestek voor dit agendapunt.');
     // create new KB
     cy.intercept('GET', '/themes').as('getThemes');
     cy.get(newsletter.newsItem.create).click();
@@ -306,7 +306,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     changeSubcaseType(subcaseLink, 'Nota');
     cy.visitAgendaWithLink(agendaitemKBLink);
     // check if KB empty
-    cy.get(utils.vlAlert.message).contains('Nog geen kort bestek voor dit agendapunt.');
+    cy.get(newsletter.newsItem.alert).contains('Nog geen kort bestek voor dit agendapunt.');
 
     changeSubcaseType(subcaseLink, 'Mededeling');
     cy.visitAgendaWithLink(agendaitemKBLink);
@@ -324,7 +324,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     changeSubcaseType(subcaseLink, 'Nota');
     cy.visitAgendaWithLink(agendaitemKBLink);
     // check if KB empty
-    cy.get(utils.vlAlert.message).contains('Nog geen kort bestek voor dit agendapunt.');
+    cy.get(newsletter.newsItem.alert).contains('Nog geen kort bestek voor dit agendapunt.');
     // create new KB
     cy.intercept('GET', '/themes').as('getThemes');
     cy.get(newsletter.newsItem.create).click();

@@ -8,6 +8,7 @@ const selectors = {
   newsItem: {
     edit: '[data-test-route-agenda---news-item-edit]',
     create: '[data-test-route-agenda---news-item-create]',
+    alert: '[data-test-route-agenda---news-item-alert]',
   },
 
   // component agendaitem-news-item

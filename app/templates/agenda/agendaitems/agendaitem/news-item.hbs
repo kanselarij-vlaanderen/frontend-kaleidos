@@ -78,6 +78,9 @@
   {{/if}}
 {{else}}
   <div class="auk-u-mt-2">
-    <Auk::Alert @message={{t "no-newsletter-info"}} />
+    <Auk::Alert
+      @message={{t "no-newsletter-info"}}
+      data-test-route-agenda---news-item-alert
+    />
   </div>
 {{/if}}
