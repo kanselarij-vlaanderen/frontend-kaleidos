@@ -1,6 +1,10 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
 export default class IndexSearchRoute extends Route {
+  @service currentSession;
+  @service router
+
   beforeModel() {
     /* It is assumed here that explicitly navigating to the index-route
      * expresses a desire to "reset", to "start a new search-session".
@@ -12,14 +16,21 @@ export default class IndexSearchRoute extends Route {
      * of the "search" route, even though the queryParams are marked `refreshModel: true`.
      * As a result "searchTextBuffer" doesn't get cleared.
      */
-    this.transitionTo('search.agenda-items', {
-      queryParams: {
-        searchText: null,
-        mandatees: null,
-        dateFrom: null,
-        dateTo: null,
-        page: 0,
-      },
+    const queryParams = {
+      searchText: null,
+      mandatees: null,
+      dateFrom: null,
+      dateTo: null,
+      page: 0,
+    }
+    // ovrb users get directed to publication search
+    if (this.currentSession.isOvrb) {
+      return this.router.transitionTo('search.publication-flows', {
+        queryParams: queryParams,
+      });
+    }
+    this.router.transitionTo('search.agenda-items', {
+      queryParams: queryParams,
     });
   }
 }
