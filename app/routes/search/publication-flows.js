@@ -11,6 +11,7 @@ import {
 } from 'frontend-kaleidos/utils/publication-auk';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { warn } from '@ember/debug';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationFlowSearchRoute extends Route {
   @service store;
@@ -25,6 +26,10 @@ export default class PublicationFlowSearchRoute extends Route {
     publicationStatusIds: {
       refreshModel: true,
       as: 'statussen',
+    },
+    urgencyLevelIds: {
+      refreshModel: true,
+      as: 'dringend',
     },
     page: {
       refreshModel: true,
@@ -58,6 +63,10 @@ export default class PublicationFlowSearchRoute extends Route {
       'page[size]': PAGE_SIZE.CODE_LISTS,
       sort: 'position',
     });
+    this.urgencyLevels = await this.store.query('urgency-level', {
+      'page[size]': PAGE_SIZE.CODE_LISTS,
+      sort: 'position',
+    });
   }
 
   model(filterParams) {
@@ -88,13 +97,16 @@ export default class PublicationFlowSearchRoute extends Route {
      * mu-search(/elastic?) (semtech/mu-search:0.6.0-beta.11, semtech/mu-search-elastic-backend:1.0.0)
      * returns an off-by-one result (1 to many) in case of two open ranges combined.
      */
-    if (!isEmpty(params.date)) {
-      const from = moment(params.date, 'DD-MM-YYYY').startOf('day');
-      const to = moment(params.date, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
-      filter[':lte,gte:' + params.publicationDateTypeKey] = [
-        to.utc().toISOString(),
-        from.utc().toISOString(),
-      ].join(',');
+    if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
+      const from = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
+      const to = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
+      filter[':lte,gte:' + params.publicationDateTypeKey] = [to.utc().toISOString(), from.utc().toISOString()].join(',');
+    } else if (!isEmpty(params.dateFrom)) {
+      const date = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
+      filter[':gte:' + params.publicationDateTypeKey] = date.utc().toISOString();
+    } else if (!isEmpty(params.dateTo)) {
+      const date = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
+      filter[':lte:' + params.publicationDateTypeKey] = date.utc().toISOString();
     }
 
     // ":terms:" required to be able to filter on multiple values as "OR"
@@ -104,6 +116,10 @@ export default class PublicationFlowSearchRoute extends Route {
 
     if (!isEmpty(params.publicationStatusIds)) {
       filter[':terms:statusId'] = params.publicationStatusIds;
+    }
+
+    if (!isEmpty(params.urgencyLevelIds)) {
+      filter[':terms:urgencyLevelId'] = params.urgencyLevelIds;
     }
 
     this.lastParams.commit();
@@ -121,6 +137,7 @@ export default class PublicationFlowSearchRoute extends Route {
 
     controller.publicationStatuses = this.publicationStatuses.toArray();
     controller.regulationTypes = this.regulationTypes.toArray();
+    controller.urgencyLevels = this.urgencyLevels.toArray();
 
     if (controller.page !== this.lastParams.committed.page) {
       controller.page = this.lastParams.committed.page;
@@ -152,6 +169,11 @@ export default class PublicationFlowSearchRoute extends Route {
       attributes.status = status;
       attributes.statusPillKey = getPublicationStatusPillKey(status);
       attributes.statusPillStep = getPublicationStatusPillStep(status);
+    }
+    let urgencyLevelId = attributes.urgencyLevelId;
+    if (urgencyLevelId) {
+      const urgencyLevel = this.urgencyLevels.find((urgencyLevel) => urgencyLevel.id === urgencyLevelId);
+      attributes.urgent = urgencyLevel.uri === CONSTANTS.URGENCY_LEVELS.SPEEDPROCEDURE;
     }
     // post-process numac numbers
     if (!attributes.numacNumbers) {

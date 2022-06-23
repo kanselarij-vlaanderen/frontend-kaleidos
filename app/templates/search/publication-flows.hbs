@@ -12,12 +12,19 @@
           @didUpdate={{this.updateSelectedRegulationTypes}}
         />
       </div>
-
+      <div class="auk-u-mb-2">
+        <Auk::CheckboxTree
+          @label={{t "status"}}
+          @items={{this.publicationStatuses}}
+          @selectedItems={{this.selectedPublicationStatuses}}
+          @didUpdate={{this.updateSelectedPublicationStatuses}}
+        />
+      </div>
       <Auk::CheckboxTree
-        @label={{t "status"}}
-        @items={{this.publicationStatuses}}
-        @selectedItems={{this.selectedPublicationStatuses}}
-        @didUpdate={{this.updateSelectedPublicationStatuses}}
+        @label={{t "publication-urgent"}}
+        @items={{this.urgencyLevels}}
+        @selectedItems={{this.selectedUrgencyLevels}}
+        @didUpdate={{this.updateSelectedUrgencyLevels}}
       />
     </div>
   </div>
@@ -38,6 +45,12 @@
         >
           <table.content as |c|>
             <c.header>
+              <ThSortable
+                @class="auk-table__col--1"
+                @currentSorting={{this.sort}}
+                @field="urgencyLevelId"
+                @label={{t "publication-urgent"}}
+              />
               <ThSortable
                 @class="auk-table__col--1"
                 @currentSorting={{this.sort}}
@@ -63,6 +76,13 @@
               <th class="auk-table__col--1"></th>
             </c.header>
             <c.body class="auk-table--clickable-rows" as |row|>
+              <td>
+                {{#if row.urgent}}
+                  <Auk::Icon @skin="warning" @name="alert-triangle" />
+                {{else}}
+                  {{t "dash"}}
+                {{/if}}
+              </td>
               <td data-test-route-search-publication-row-number>
                 {{row.identification}}
               </td>

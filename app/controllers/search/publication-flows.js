@@ -13,6 +13,9 @@ export default class PublicationFlowSearchController extends Controller {
     publicationStatusIds: {
       type: 'array',
     },
+    urgencyLevelIds: {
+      type: 'array',
+    },
     page: {
       type: 'number',
     },
@@ -31,6 +34,7 @@ export default class PublicationFlowSearchController extends Controller {
   @tracked sort;
   @tracked regulationTypeIds = [];
   @tracked publicationStatusIds = [];
+  @tracked urgencyLevelIds = [];
 
   constructor() {
     super(...arguments);
@@ -47,6 +51,10 @@ export default class PublicationFlowSearchController extends Controller {
     return this.publicationStatusIds.map((statusId) => this.publicationStatuses.find(status => status.id === statusId));
   }
 
+  get selectedUrgencyLevels() {
+    return this.urgencyLevelIds.map((urgencyLevelId) => this.urgencyLevels.find(urgency => urgency.id === urgencyLevelId));
+  }
+
   @action
   selectSize(size) {
     this.size = size;
@@ -60,6 +68,11 @@ export default class PublicationFlowSearchController extends Controller {
   @action
   updateSelectedPublicationStatuses(publicationStatuses) {
     this.publicationStatusIds = publicationStatuses.map(ps => ps.id);
+  }
+
+  @action
+  updateSelectedUrgencyLevels(urgencyLevels) {
+    this.urgencyLevelIds = urgencyLevels.map(ps => ps.id);
   }
 
   @action
