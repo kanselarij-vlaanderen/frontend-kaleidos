@@ -38,13 +38,13 @@
   {{#if (not @subcase.showAsRemark)}}
     <div class="auk-u-mb-2">
       {{#if @subcase.subcaseName}}
-        <Auk::Pill data-test-subcase-titles-panel-subcase-name @skin={{this.pillSkin}}>
+        <AuPill data-test-subcase-titles-panel-subcase-name @size="small" @skin={{this.pillSkin}}>
           {{!capitalization using helper instead of css class:
-            because of `display: inline-flex` property of Auk::Pill
+            because of `display: inline-flex` property of AuPill
             it is not affected by the `::first-letter` selector
             used in the auk-u-text-capitalize class }}
           {{capitalize @subcase.subcaseName}}
-        </Auk::Pill>
+        </AuPill>
       {{/if}}
     </div>
   {{/if}}

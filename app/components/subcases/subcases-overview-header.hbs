@@ -32,19 +32,17 @@
             <span class="auk-u-block auk-overline">
               {{t "publications"}}
             </span>
-            <Auk::PillList>
+            <div>
               {{#each this.publicationFlows as |publicationFlow|}}
-                <LinkTo
-                  class="auk-u-mr-2"
+                <AuPill
+                  @size="small"
                   @route="publications.publication"
                   @model={{publicationFlow.id}}
                 >
-                  <Auk::Pill @skin="white">
-                    {{publicationFlow.identification.idName}}
-                  </Auk::Pill>
-                </LinkTo>
+                  {{publicationFlow.identification.idName}}
+                </AuPill>
               {{/each}}
-            </Auk::PillList>
+            </div>
           </div>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
