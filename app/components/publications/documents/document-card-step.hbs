@@ -15,6 +15,7 @@
             </h6>
             {{#if @piece.receivedDate}}
               <p class="auk-u-text-muted">
+                {{t "received-at"}}
                 {{moment-format @piece.receivedDate}}
               </p>
             {{/if}}
