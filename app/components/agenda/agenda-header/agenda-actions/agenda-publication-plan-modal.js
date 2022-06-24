@@ -111,7 +111,7 @@ export default class AgendaPublicationPlanModal extends Component {
     if (this.canPublishInternalDocuments) {
       if (this.internalDocumentPublicationActivity == null) {
         this.internalDocumentPublicationActivity = this.store.createRecord(
-          'document-publication-activity',
+          'internal-document-publication-activity',
           {
             meeting: this.args.meeting,
           }
