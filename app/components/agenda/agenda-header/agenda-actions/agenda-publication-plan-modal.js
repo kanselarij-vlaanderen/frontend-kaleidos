@@ -112,38 +112,12 @@ export default class AgendaPublicationPlanModal extends Component {
   *save() {
     if (!this.isValid) return;
 
-    const saves = [];
+    const params = {};
     if (this.canPublishInternalDocuments) {
-      if (this.internalDocumentPublicationActivity == null) {
-        this.internalDocumentPublicationActivity = this.store.createRecord(
-          'internal-document-publication-activity',
-          {
-            meeting: this.args.meeting,
-          }
-        );
-      }
-      this.internalDocumentPublicationActivity.startDate = this.internalDocumentPublicationDate;
-      const internalDocumentSave = this.internalDocumentPublicationActivity.save();
-      saves.push(internalDocumentSave);
+      params.internalDocumentPublicationDate = this.internalDocumentPublicationDate;
     }
-
-    let themisPublicationActivity = this.plannedThemisPublicationActivity;
-    if (themisPublicationActivity == null) {
-      themisPublicationActivity = this.store.createRecord(
-        'themis-publication-activity',
-        {
-          scope: AgendaPublicationUtils.THEMIS_PUBLICATION_SCOPE_INITIAL,
-          meeting: this.args.meeting,
-        }
-      );
-    }
-    themisPublicationActivity.startDate = this.themisPublicationDate;
-    const themisSave = themisPublicationActivity.save();
-    saves.push(themisSave);
-
-    yield Promise.all(saves);
-
-    yield this.args.didSave();
+    params.themisPublicationDate = this.themisPublicationDate;
+    yield this.args.onSave(params);
   }
 
   getSuggestedPublicationDate(xPublicationActivity) {

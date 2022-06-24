@@ -334,8 +334,39 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     this.showPlanPublicationModal = false;
   }
 
-  @action
-  didSavePlanPublication() {
+  @task
+  *savePlanPublication(params) {
+    const saves = [];
+    if ('internalDocumentPublicationDate' in params) {
+      if (this.internalDocumentPublicationActivity == null) {
+        this.internalDocumentPublicationActivity = this.store.createRecord(
+          'internal-document-publication-activity',
+          {
+            meeting: this.args.meeting,
+          }
+        );
+      }
+      this.internalDocumentPublicationActivity.startDate = params.internalDocumentPublicationDate;
+      const internalDocumentSave = this.internalDocumentPublicationActivity.save();
+      saves.push(internalDocumentSave);
+    }
+
+    let themisPublicationActivity = this.plannedThemisPublicationActivity;
+    if (themisPublicationActivity == null) {
+      themisPublicationActivity = this.store.createRecord(
+        'themis-publication-activity',
+        {
+          scope: AgendaPublicationUtils.THEMIS_PUBLICATION_SCOPE_INITIAL,
+          meeting: this.args.meeting,
+        }
+      );
+    }
+    themisPublicationActivity.startDate = params.themisPublicationDate;
+    const themisSave = themisPublicationActivity.save();
+    saves.push(themisSave);
+
+    yield Promise.all(saves);
+
     this.showPlanPublicationModal = false;
   }
 
