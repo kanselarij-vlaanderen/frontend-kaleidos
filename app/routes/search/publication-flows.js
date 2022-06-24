@@ -119,7 +119,7 @@ export default class PublicationFlowSearchRoute extends Route {
     }
 
     if (params.urgentOnly) {
-      filter[':terms:urgencyLevelId'] = this.urgencyLevelSpeed.id;
+      filter['urgencyLevelId'] = this.urgencyLevelSpeed.id;
     }
 
     this.lastParams.commit();
