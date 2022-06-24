@@ -35,3 +35,18 @@ export function getHasScope(themisPublicationActivity, scopeToMatch) {
   hasScope &&= scope.every((it) => scopeToMatch.includes(it));
   return hasScope;
 }
+
+export function getPlannedThemisPublicationActivity(themisPublicationActivities) {
+  const possibleInitialActivities = themisPublicationActivities.filter((it) => {
+      return getHasScope(it, THEMIS_PUBLICATION_SCOPE_INITIAL);
+  });
+
+  if (possibleInitialActivities.length === 0) {
+    return undefined; // legacy data
+  } else if (possibleInitialActivities.length === 1) {
+    return possibleInitialActivities[0];
+  } else {
+    const firstScheduledActivity = possibleInitialActivities.sortBy('startDate')[0];
+    return firstScheduledActivity;
+  }
+}

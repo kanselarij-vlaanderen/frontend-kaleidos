@@ -1,3 +1,4 @@
+
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
@@ -8,7 +9,7 @@ import * as AgendaPublicationUtils from 'frontend-kaleidos/utils/agenda-publicat
 /**
  * Planned agenda related publications:
  * - InternalDocumentPublicationActivity
- * - ThemisPublicationActivity: only 1st publication
+ * - ThemisPublicationActivity: only planned publication
  */
 export default class AgendaPublicationPlanModal extends Component {
   @service store;
@@ -30,14 +31,18 @@ export default class AgendaPublicationPlanModal extends Component {
     this.minPublicationDate.setMilliseconds(0);
 
     const meeting = this.args.meeting;
+    // 1. resolve relationships (for use in getters)
     // relationships already loaded in AgendaActionsComponent
     this.internalDocumentPublicationActivity = yield meeting.internalDocumentPublicationActivity;
-    let themisPublicationActivities = yield meeting.themisPublicationActivities;
-    themisPublicationActivities = themisPublicationActivities.toArray();
-    this.themisPublicationActivity = themisPublicationActivities[0]; // should be the only one
+    this.themisPublicationActivities = yield meeting.themisPublicationActivities;
 
+    // 2. set fields
     this.internalDocumentPublicationDate = this.getSuggestedPublicationDate(this.internalDocumentPublicationActivity);
-    this.themisPublicationDate = this.getSuggestedPublicationDate(this.themisPublicationActivity);
+    this.themisPublicationDate = this.getSuggestedPublicationDate(this.plannedThemisPublicationActivity);
+  }
+
+  get plannedThemisPublicationActivity() {
+    return AgendaPublicationUtils.getPlannedThemisPublicationActivity(this.themisPublicationActivities);
   }
 
   get canPublishInternalDocuments() {
@@ -122,8 +127,9 @@ export default class AgendaPublicationPlanModal extends Component {
       saves.push(internalDocumentSave);
     }
 
-    if (this.themisPublicationActivity == null) {
-      this.themisPublicationActivity = this.store.createRecord(
+    let themisPublicationActivity = this.plannedThemisPublicationActivity;
+    if (themisPublicationActivity == null) {
+      themisPublicationActivity = this.store.createRecord(
         'themis-publication-activity',
         {
           scope: AgendaPublicationUtils.THEMIS_PUBLICATION_SCOPE_INITIAL,
@@ -131,8 +137,8 @@ export default class AgendaPublicationPlanModal extends Component {
         }
       );
     }
-    this.themisPublicationActivity.startDate = this.themisPublicationDate;
-    const themisSave = this.themisPublicationActivity.save();
+    themisPublicationActivity.startDate = this.themisPublicationDate;
+    const themisSave = themisPublicationActivity.save();
     saves.push(themisSave);
 
     yield Promise.all(saves);

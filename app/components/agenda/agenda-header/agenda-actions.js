@@ -69,6 +69,10 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     );
   }
 
+  get plannedThemisPublicationActivity() {
+    return AgendaPublicationUtils.getPlannedThemisPublicationActivity(this.themisPublicationActivities);
+  }
+
   // Plan publication of documents internally (=Vrijgeven) and on Themis
   get canPlanPublication() {
     if (this.loadPublicationActivities.isRunning) {
@@ -76,14 +80,10 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     }
     let can = this.currentSession.isEditor;
     can &&= this.args.meeting.isFinal;
-    if (this.themisPublicationActivities.length === 1) {
-      can &&= AgendaPublicationUtils.getIsCertainlyNotStarted(this.latestThemisPublicationActivity);
-      can &&= AgendaPublicationUtils.getHasScope(this.latestThemisPublicationActivity, AgendaPublicationUtils.THEMIS_PUBLICATION_SCOPE_INITIAL);
+    if (this.plannedThemisPublicationActivity != null) {
+      can &&= AgendaPublicationUtils.getIsCertainlyNotStarted(this.plannedThemisPublicationActivity);
     } else {
-      // cases:
-      //  - old data-model (no themis-publication-activity)
-      //  - next publication already scheduled
-      can = false;
+      can &&= false; // legacy data
     }
     return can;
   }
