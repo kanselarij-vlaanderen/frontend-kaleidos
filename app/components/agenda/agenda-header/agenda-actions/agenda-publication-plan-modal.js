@@ -7,7 +7,7 @@ import * as AgendaPublicationUtils from 'frontend-kaleidos/utils/agenda-publicat
 
 /**
  * Planned agenda related publications:
- * - (internal) DocumentPublicationActivity
+ * - InternalDocumentPublicationActivity
  * - ThemisPublicationActivity: only 1st publication
  */
 export default class AgendaPublicationPlanModal extends Component {
@@ -31,7 +31,7 @@ export default class AgendaPublicationPlanModal extends Component {
 
     const meeting = this.args.meeting;
     // relationships already loaded in AgendaActionsComponent
-    this.internalDocumentPublicationActivity = yield meeting.documentPublicationActivity;
+    this.internalDocumentPublicationActivity = yield meeting.internalDocumentPublicationActivity;
     let themisPublicationActivities = yield meeting.themisPublicationActivities;
     themisPublicationActivities = themisPublicationActivities.toArray();
     this.themisPublicationActivity = themisPublicationActivities[0]; // should be the only one

@@ -42,8 +42,8 @@ export default Model.extend({
     inverse: null,
   }),
 
-  decisionPublicationActivity: belongsTo('decision-publication-activity'),
-  documentPublicationActivity: belongsTo('document-publication-activity'),
+  internalDecisionPublicationActivity: belongsTo('internal-decision-publication-activity'),
+  internalDocumentPublicationActivity: belongsTo('internal-document-publication-activity'),
   themisPublicationActivities: hasMany('themis-publication-activity'),
 
   // This computed does not seem to be used anywhere
@@ -68,7 +68,7 @@ export default Model.extend({
       }),
     });
   }),
-  
+
   latestAgenda: computed('agendas.[]', function() {
     return PromiseObject.create({
       promise: this.get('agendas').then((agendas) => {

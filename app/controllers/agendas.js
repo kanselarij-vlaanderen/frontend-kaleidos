@@ -55,24 +55,24 @@ export default class AgendasController extends Controller {
     this.isCreatingNewSession = true;
     // because we use the EditMeetingModal to create and edit a meeting,
     //  in order to allow genericity inside the component, x-publication-activities are created before opening
-    this.newDecisionPublicationActivity = this.store.createRecord(
-      'decision-publication-activity',
+    this.newInternalDecisionPublicationActivity = this.store.createRecord(
+      'internal-decision-publication-activity',
       {}
     );
-    this.newDocumentPublicationActivity = this.store.createRecord(
-      'document-publication-activity',
+    this.newInternalDocumentPublicationActivity = this.store.createRecord(
+      'internal-document-publication-activity',
       {}
     );
     this.newThemisPublicationActivity = this.store.createRecord(
       'themis-publication-activity',
       {
-        scope: AgendaPublicationUtils.THEMIS_PUBLICATION_SCOPES,
+        scope: AgendaPublicationUtils.THEMIS_PUBLICATION_SCOPE_INITIAL,
       }
     );
     this.newMeeting = this.store.createRecord('meeting', {
       isFinal: false,
-      decisionPublicationActivity: this.newDecisionPublicationActivity,
-      documentPublicationActivity: this.newDocumentPublicationActivity,
+      internalDecisionPublicationActivity: this.newInternalDecisionPublicationActivity,
+      internalDocumentPublicationActivity: this.newInternalDocumentPublicationActivity,
       themisPublicationActivities: [this.newThemisPublicationActivity],
     });
   }
@@ -81,16 +81,16 @@ export default class AgendasController extends Controller {
   closeNewSessionModal() {
     this.isCreatingNewSession = false;
     this.newMeeting.deleteRecord();
-    this.newDocumentPublicationActivity.deleteRecord();
-    this.newDecisionPublicationActivity.deleteRecord();
+    this.newInternalDocumentPublicationActivity.deleteRecord();
+    this.newInternalDecisionPublicationActivity.deleteRecord();
     this.newThemisPublicationActivity.deleteRecord();
   }
 
   @action
   async createAgendaAndNewsletter() {
     await Promise.all([
-      this.newDecisionPublicationActivity.save(),
-      this.newDocumentPublicationActivity.save(),
+      this.newInternalDecisionPublicationActivity.save(),
+      this.newInternalDocumentPublicationActivity.save(),
       this.newThemisPublicationActivity.save(),
     ]);
     const agenda = await this.createAgenda(this.newMeeting);

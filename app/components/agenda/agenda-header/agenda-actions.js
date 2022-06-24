@@ -118,14 +118,14 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     const meeting = yield this.store.queryOne('meeting', {
       'filter[:uri:]': this.args.meeting.uri,
       include: [
-        'decision-publication-activity',
-        'document-publication-activity',
+        'internal-decision-publication-activity',
+        'internal-document-publication-activity',
         'themis-publication-activities',
       ].join(','),
     });
 
-    this.internalDecisionPublicationActivity = yield meeting.decisionPublicationActivity;
-    this.internalDocumentPublicationActivity = yield meeting.documentPublicationActivity;
+    this.internalDecisionPublicationActivity = yield meeting.internalDecisionPublicationActivity;
+    this.internalDocumentPublicationActivity = yield meeting.internalDocumentPublicationActivity;
 
     const themisPublicationActivities = yield meeting.themisPublicationActivities;
     this.themisPublicationActivities = themisPublicationActivities.toArray();
