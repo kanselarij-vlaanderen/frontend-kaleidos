@@ -30,7 +30,7 @@ export function getIsCertainlyNotStarted(xPublicationActivity) {
 }
 
 export function getHasScope(themisPublicationActivity, scopeToMatch) {
-  const scope = themisPublicationActivity.scope;
+  const scope = themisPublicationActivity.scope ?? []; // empty scope `[]` is returned as `undefined` when fetched
   let hasScope = scope.length === scopeToMatch.length;
   hasScope &&= scope.every((it) => scopeToMatch.includes(it));
   return hasScope;
