@@ -5,7 +5,7 @@ export default class IndexSearchRoute extends Route {
   @service currentSession;
   @service router
 
-  beforeModel() {
+  beforeModel(transition) {
     /* It is assumed here that explicitly navigating to the index-route
      * expresses a desire to "reset", to "start a new search-session".
      * Therefore all parameters except filters -such as "type" of agenda-item- are cleared.
@@ -16,15 +16,24 @@ export default class IndexSearchRoute extends Route {
      * of the "search" route, even though the queryParams are marked `refreshModel: true`.
      * As a result "searchTextBuffer" doesn't get cleared.
      */
+    // We have to mention the arrays or we run into the problem that clicking multiple times
+    // results in these arrays being transformed to strings "[]"
     const queryParams = {
       searchText: null,
       mandatees: null,
       dateFrom: null,
       dateTo: null,
       page: 0,
+      regulationTypeIds: [],
+      publicationStatusIds: [],
     }
     // ovrb users get directed to publication search
     if (this.currentSession.isOvrb) {
+      // clicking search route while filters are selected will clear filters but not he checkboxes
+      // This workaround blocks transitions to the same route to prevent this.
+      if (this.router.currentRouteName === 'search.publication-flows') {
+        transition.abort();
+      }
       return this.router.transitionTo('search.publication-flows', {
         queryParams: queryParams,
       });
