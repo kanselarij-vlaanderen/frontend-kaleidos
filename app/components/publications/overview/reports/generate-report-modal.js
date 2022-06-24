@@ -27,6 +27,7 @@ import * as CONFIG from 'frontend-kaleidos/config/config';
  */
 export default class GenerateReportModalComponent extends Component {
   @service store;
+  @service mandatees;
 
   @tracked decisionDateRangeStart;
   // note: Date object representing the last date of the range
@@ -177,55 +178,54 @@ export default class GenerateReportModalComponent extends Component {
     // mandatee-service and mapping mandatee results to persons.
     const [dateRangeStart, dateRangeEnd] = this.dateRange;
 
-    // As long as mu-cl-resources does not support an OR filter
-    //    that allows the end date to be empty or after a specific date
-    //    we need to separate the filter in two requests
+    // // As long as mu-cl-resources does not support an OR filter
+    // //    that allows the end date to be empty or after a specific date
+    // //    we need to separate the filter in two requests
 
-    const commonQueryOptions = {
-      'filter[:has:mandatees]': true,
-      // DISABLED: query timeouts
-      // 'filter[mandatees][mandate][role][:id:]': this.visibleRoles.map((role) => role.id).join(','),
-      // active ranges of mandatees are stored as dateTimes, but with time set to 0:00 UTC
-      // since the frontend is in a different timezone, we need to compensate for this
-      'filter[mandatees][:lt:start]':
-        toDateWithoutUTCOffset(dateRangeEnd).toISOString(),
-      'filter[last-name]': searchText, // Ember Data leaves this of when set to undefined (=> no filtering)
-      // although we sort and paginate again on the frontend
-      //   after combining both query results
-      //   sorting an pagination are useful for limiting the payload size
-      sort: 'last-name',
-      'page[size]': CONFIG.PAGE_SIZE.SELECT,
-    };
+    // const commonQueryOptions = {
+    //   'filter[:has:mandatees]': true,
+    //   // DISABLED: query timeouts
+    //   // 'filter[mandatees][mandate][role][:id:]': this.visibleRoles.map((role) => role.id).join(','),
+    //   // active ranges of mandatees are stored as dateTimes, but with time set to 0:00 UTC
+    //   // since the frontend is in a different timezone, we need to compensate for this
+    //   'filter[mandatees][:lt:start]':
+    //     toDateWithoutUTCOffset(dateRangeEnd).toISOString(),
+    //   'filter[last-name]': searchText, // Ember Data leaves this of when set to undefined (=> no filtering)
+    //   // although we sort and paginate again on the frontend
+    //   //   after combining both query results
+    //   //   sorting an pagination are useful for limiting the payload size
+    //   sort: 'last-name',
+    //   'page[size]': CONFIG.PAGE_SIZE.SELECT,
+    // };
 
-    const pastQueryOptions = {
-      ...commonQueryOptions,
-      'filter[mandatees][:gte:end]':
-        toDateWithoutUTCOffset(dateRangeStart).toISOString(),
-    };
-    const pastMandateePersons = this.store.query('person', pastQueryOptions);
+    // const pastQueryOptions = {
+    //   ...commonQueryOptions,
+    //   'filter[mandatees][:gte:end]':
+    //     toDateWithoutUTCOffset(dateRangeStart).toISOString(),
+    // };
+    // const pastMandateePersons = this.store.query('person', pastQueryOptions);
 
-    const currentQueryOptions = {
-      ...commonQueryOptions,
-      // HACK: mu-cl-resources quirk: has-no is intended to be used with relationships,
-      //   but seems to be working with an attribute in this case.
-      //   It might change with mu-cl-resource updates.
-      'filter[mandatees][:has-no:end]': true,
-    };
-    const currentMandateePersons = this.store.query(
-      'person',
-      currentQueryOptions
-    );
+    // const currentQueryOptions = {
+    //   ...commonQueryOptions,
+    //   // HACK: mu-cl-resources quirk: has-no is intended to be used with relationships,
+    //   //   but seems to be working with an attribute in this case.
+    //   //   It might change with mu-cl-resource updates.
+    //   'filter[mandatees][:has-no:end]': true,
+    // };
+    // const currentMandateePersons = this.store.query(
+    //   'person',
+    //   currentQueryOptions
+    // );
 
-    let mandateePersons = yield Promise.all([
-      pastMandateePersons,
-      currentMandateePersons,
-    ]);
-    mandateePersons = mandateePersons
-      .map((persons) => persons.toArray())
-      .flat()
-      .uniq()
-      .sortBy('lastName')
-      .slice(0, CONFIG.PAGE_SIZE.SELECT);
+    const allMandatees = yield this.mandatees.getMandateesActiveForRange.perform(dateRangeStart, dateRangeEnd, searchText);
+    const allPersons= [];
+    for (const mandatee of allMandatees) {
+      const person =yield mandatee.person;
+      allPersons.addObject(person);
+    }
+
+    const mandateePersons = allPersons
+      .sortBy('lastName');
 
     return mandateePersons;
   }
@@ -364,16 +364,16 @@ function convertYearToDateRange(year) {
  * @param {Date} date
  * @returns {Date}
  */
-function toDateWithoutUTCOffset(date) {
-  return new Date(
-    Date.UTC(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-      date.getHours(),
-      date.getMinutes(),
-      date.getSeconds(),
-      date.getMilliseconds()
-    )
-  );
-}
+// function toDateWithoutUTCOffset(date) {
+//   return new Date(
+//     Date.UTC(
+//       date.getFullYear(),
+//       date.getMonth(),
+//       date.getDate(),
+//       date.getHours(),
+//       date.getMinutes(),
+//       date.getSeconds(),
+//       date.getMilliseconds()
+//     )
+//   );
+// }
