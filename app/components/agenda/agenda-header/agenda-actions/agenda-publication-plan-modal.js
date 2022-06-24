@@ -145,7 +145,7 @@ export default class AgendaPublicationPlanModal extends Component {
       return xPublicationActivity.startDate;
     } else {
       const isPlanned = xPublicationActivity?.plannedStart != null;
-      const isNotExpired = this.minPublicationDate < xPublicationActivity.plannedStart;
+      const isNotExpired = this.minPublicationDate < xPublicationActivity?.plannedStart;
       if (isPlanned && isNotExpired) {
         return xPublicationActivity.plannedStart;
       } else {
