@@ -177,7 +177,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
         }
       );
       yield themisPublicationActivity.save();
-      yield this.loadLatestPublicationActivity.perform();
+      yield this.loadPublicationActivities.perform();
       this.toaster.success(this.intl.t('success-publish-to-web'));
     } catch (e) {
       this.toaster.error(
