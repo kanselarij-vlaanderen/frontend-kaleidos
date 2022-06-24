@@ -241,9 +241,7 @@ export default class GenerateReportModalComponent extends Component {
     });
     this.governmentDomains = governmentDomains.toArray().sortBy('label');
     // everything selected by default
-    for (const governmentDomain of this.governmentDomains) {
-      this.selectedGovernmentDomains.addObject(governmentDomain)
-    }
+    this.selectedGovernmentDomains = this.governmentDomains.slice();
   }
 
   @action
@@ -264,9 +262,7 @@ export default class GenerateReportModalComponent extends Component {
     this.regulationTypes = regulationTypes;
     yield; // for linter
     // everything selected by default
-    for (const regulationType of this.regulationTypes) {
-      this.selectedRegulationTypes.addObject(regulationType)
-    }
+    this.selectedRegulationTypes = this.regulationTypes.slice();
   }
 
   @action
