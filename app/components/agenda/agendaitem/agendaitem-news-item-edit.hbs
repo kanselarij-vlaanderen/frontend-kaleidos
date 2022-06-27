@@ -47,13 +47,13 @@
   </Auk::Panel::Header>
   <Auk::Panel::Body class="au-u-background-gray-100">
     <div class="auk-form-group">
-      <AuLabel>{{t "title"}}</AuLabel>
+      <Auk::Label>{{t "title"}}</Auk::Label>
       <p data-test-newsletter-edit-item-long-title>
         {{@agendaitem.title}}
       </p>
     </div>
     <div class="auk-form-group">
-      <AuLabel>{{t "short-title"}}</AuLabel>
+      <Auk::Label>{{t "short-title"}}</Auk::Label>
       <AuInput
         data-test-newsletter-edit-item-short-title
         @width="block"
@@ -61,7 +61,7 @@
       />
     </div>
     <div class="auk-form-group">
-      <AuLabel>{{t "mandatee-proposal"}}</AuLabel>
+      <Auk::Label>{{t "mandatee-proposal"}}</Auk::Label>
       <p
         data-test-newsletter-edit-item-mandatee-proposal
       >
@@ -75,10 +75,10 @@
     <div class="auk-form-group">
       <div class={{if this.isFullscreen 'auk-rdfa-holder auk-rdfa-fullscreen' 'auk-rdfa-holder'}}>
         <div class="auk-rdfa-holder__header auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
-          <AuLabel class="auk-u-p-0">
+          <Auk::Label class="auk-u-p-0">
             {{t "decision-in-newsletter"}}
             <span class={{if this.isFullscreen '' 'au-u-hidden-visually'}}>  voor {{@newsletterInfo.title}}</span>
-          </AuLabel>
+          </Auk::Label>
           {{#if this.isFullscreen}}
             <AuButtonGroup>
               <AuButton
@@ -118,7 +118,7 @@
   </Auk::Panel::Body>
   <Auk::Panel::Body class="au-u-background-gray-100">
     <div class="auk-form-group auk-u-text-capitalize">
-      <AuLabel>Opmerking</AuLabel>
+      <Auk::Label>Opmerking</Auk::Label>
       <AuInput
         data-test-newsletter-edit-item-remark
         @width="block"
@@ -126,7 +126,7 @@
       />
     </div>
     <div class="auk-form-group">
-      <AuLabel for="item-finished">{{t "finished"}}</AuLabel>
+      <Auk::Label for="item-finished">{{t "finished"}}</Auk::Label>
       <Auk::Toggle
         data-test-newsletter-edit-item-toggle-finished
         id="item-finished"
@@ -134,7 +134,7 @@
       />
     </div>
     <div class="auk-form-group" data-test-newsletter-edit-item-themes-selector>
-      <AuLabel>{{t "themes"}}</AuLabel>
+      <Auk::Label>{{t "themes"}}</Auk::Label>
       <Utils::ThemesSelector @selectedThemes={{await @newsletterInfo.themes}} />
     </div>
   </Auk::Panel::Body>
