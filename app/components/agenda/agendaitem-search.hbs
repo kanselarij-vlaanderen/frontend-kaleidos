@@ -16,9 +16,9 @@
       </Auk::Toolbar::Item>
       <AuButton
         @icon="search"
-        @iconAlignment={{if @fullwidth "left"}}
+        @iconAlignment={{if (not @hideButtonText) "left"}}
         @loading={{this.search.isRunning}}
-        @hideText={{not @fullwidth}}
+        @hideText={{@hideButtonText}}
         >
         {{t "search"}}
       </AuButton>
