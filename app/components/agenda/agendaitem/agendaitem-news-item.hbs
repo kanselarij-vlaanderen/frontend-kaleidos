@@ -1,15 +1,15 @@
 <Auk::Panel>
   <Auk::Panel::Header>
-    <Auk::Toolbar>
-      <Auk::Toolbar::Group @position="left">
-        <Auk::Toolbar::Item>
+    <Auk::Toolbar as |Toolbar|>
+      <Toolbar.Group @position="left" as |Group|>
+        <Group.Item>
           <AuHeading @level="4" @skin="5" data-test-agendaitem-news-item-title>
             {{@newsletterInfo.title}}
           </AuHeading>
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
-      <Auk::Toolbar::Group @position="right">
-        <Auk::Toolbar::Item>
+        </Group.Item>
+      </Toolbar.Group>
+      <Toolbar.Group @position="right" as |Group|>
+        <Group.Item>
           {{#if @newsletterInfo}}
             {{#if @newsletterInfo.inNewsletter}}
               <AuPill @skin="default" @icon="visible">
@@ -25,9 +25,9 @@
               {{t "no-newsletter-info"}}
             </AuPill>
           {{/if}}
-        </Auk::Toolbar::Item>
-        <Auk::Toolbar::Item>
-         {{#if @newsletterInfo.finished}}
+        </Group.Item>
+        <Group.Item>
+          {{#if @newsletterInfo.finished}}
             <AuPill @skin="success">
               {{t "finished"}}
             </AuPill>
@@ -36,8 +36,8 @@
               {{t "not-finished"}}
             </AuPill>
           {{/if}}
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
+        </Group.Item>
+      </Toolbar.Group>
     </Auk::Toolbar>
   </Auk::Panel::Header>
   <Auk::Panel::Body>
