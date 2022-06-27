@@ -62,7 +62,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     return (
       this.currentSession.isEditor &&
       this.args.meeting.isFinal &&
-      this.internalDecisionPublicationActivity != null && // disable for the old data-model (without decision-publication-activity)
+      this.internalDecisionPublicationActivity != null && // disable for the old data model (without decision-publication-activity)
       AgendaPublicationUtils.getIsCertainlyNotStarted(this.internalDecisionPublicationActivity)
     );
   }
@@ -80,7 +80,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     if (this.plannedThemisPublicationActivity != null) {
       can &&= AgendaPublicationUtils.getIsCertainlyNotStarted(this.plannedThemisPublicationActivity);
     } else {
-      can &&= false; // legacy data
+      can &&= false; // old data model
     }
     return can;
   }
@@ -98,7 +98,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       );
       can &&= isInternalDocumentPublicationScheduled;
     } else {
-      can &&= true; // legacy data
+      can &&= true; // old data model
     }
 
     return can;
