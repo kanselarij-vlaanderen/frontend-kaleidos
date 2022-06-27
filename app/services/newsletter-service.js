@@ -1,12 +1,11 @@
 import Service, { inject as service } from '@ember/service';
-import moment from 'moment';
 import fetch from 'fetch';
+import * as AgendaPublicationUtils from 'frontend-kaleidos/utils/agenda-publication';
 
 export default class NewsletterService extends Service {
   @service store;
   @service toaster;
   @service intl;
-  @service formatter;
   @service currentSession;
 
   async createCampaign(meeting, silent = false) {
@@ -209,21 +208,20 @@ export default class NewsletterService extends Service {
 
   async createNewsItemForMeeting(meeting) {
     if (this.currentSession.isEditor) {
-      const plannedStart = await meeting.get('plannedStart');
-      const pubDate = moment(plannedStart).set({
-        hour: 14,
-        minute: 0,
-      });
-      const pubDocDate = moment(plannedStart).weekday(7).set({
-        hour: 14,
-        minute: 0,
-      });
+      let [internalDocumentPublicationActivity, themisPublicationActivities] = await Promise.all([
+        meeting.internalDocumentPublicationActivity,
+        meeting.themisPublicationActivities,
+      ]);
+      themisPublicationActivities = themisPublicationActivities.toArray();
+      const internalDocumentPublicationDate = internalDocumentPublicationActivity.startDate ?? internalDocumentPublicationActivity.plannedStart;
+      const plannedThemisPublicationActivity = AgendaPublicationUtils.getPlannedThemisPublicationActivity(themisPublicationActivities);
+      const plannedThemisPublicationDate = plannedThemisPublicationActivity.startDate ?? plannedThemisPublicationActivity.plannedStart;
       const newsletter = this.store.createRecord('newsletter-info', {
         meeting,
         finished: false,
         mandateeProposal: null,
-        publicationDate: this.formatter.formatDate(pubDate),
-        publicationDocDate: this.formatter.formatDate(pubDocDate),
+        publicationDate: plannedThemisPublicationDate,
+        publicationDocDate: internalDocumentPublicationDate,
       });
       await newsletter.save();
       meeting.newsletter = newsletter;
