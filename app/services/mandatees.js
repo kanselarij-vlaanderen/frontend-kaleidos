@@ -149,7 +149,7 @@ export default class MandateesService extends Service {
   @task
   *fetchGovernmentBodiesForRange(referenceDateFrom, referenceDateTo) {
     const governmentBodies = [];
-    const startedInRange = this.store.query('government-body', {
+    const closedInRange = this.store.query('government-body', {
       'filter[is-timespecialization-of][:has:is-timespecialization-of]': 'yes',
       'filter[generation][:lt:time]': referenceDateTo.toISOString(),
       'filter[invalidation][:gte:time]': referenceDateFrom.toISOString(),
@@ -160,8 +160,8 @@ export default class MandateesService extends Service {
       'filter[:has-no:invalidation]': 'yes'
     });
 
-    const [startedBodies, activeBody] = yield Promise.all([startedInRange, activeRange]);
-    governmentBodies.addObjects(startedBodies);
+    const [closedBodies, activeBody] = yield Promise.all([closedInRange, activeRange]);
+    governmentBodies.addObjects(closedBodies);
     governmentBodies.addObject(activeBody);
     if (governmentBodies.length) {
       return governmentBodies;
