@@ -57,9 +57,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   }
 
   get canPublishInternalDecisions() {
-    if (this.loadPublicationActivities.isRunning) {
-      return false;
-    }
+    if (this.loadPublicationActivities.isRunning) return false;
 
     return (
       this.currentSession.isEditor &&
@@ -75,9 +73,8 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
 
   // Plan publication of documents internally (=Vrijgeven) and on Themis
   get canPlanPublication() {
-    if (this.loadPublicationActivities.isRunning) {
-      return false;
-    }
+    if (this.loadPublicationActivities.isRunning) return false;
+
     let can = this.currentSession.isEditor;
     can &&= this.args.meeting.isFinal;
     if (this.plannedThemisPublicationActivity != null) {
@@ -89,15 +86,21 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   }
 
   get canPublishThemis() {
-    if (this.loadPublicationActivities.isRunning) {
-      return false;
+    if (this.loadPublicationActivities.isRunning) return false;
+
+    let can = this.currentSession.isEditor;
+    can &&= this.args.meeting.isFinal;
+
+    if (this.internalDocumentPublicationActivity != null) {
+      const isInternalDocumentPublicationScheduled = (
+        this.internalDocumentPublicationActivity.startDate != null
+        && this.internalDocumentPublicationActivity.startDate < new Date()
+      );
+      can &&= isInternalDocumentPublicationScheduled;
+    } else {
+      can &&= true; // legacy data
     }
-    let can = this.args.meeting.isFinal;
-    const isInternalDocumentPublicationScheduled = (
-      this.internalDocumentPublicationActivity?.startDate != null
-      && this.internalDocumentPublicationActivity.startDate < new Date()
-    );
-    can &&= isInternalDocumentPublicationScheduled;
+
     return can;
   }
 
