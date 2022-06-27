@@ -63,7 +63,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       this.currentSession.isEditor &&
       this.args.meeting.isFinal &&
       this.internalDecisionPublicationActivity != null && // disable for the old data model (without decision-publication-activity)
-      AgendaPublicationUtils.getIsCertainlyNotStarted(this.internalDecisionPublicationActivity)
+      AgendaPublicationUtils.getIsNotStarted(this.internalDecisionPublicationActivity)
     );
   }
 
@@ -78,7 +78,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     let can = this.currentSession.isEditor;
     can &&= this.args.meeting.isFinal;
     if (this.plannedThemisPublicationActivity != null) {
-      can &&= AgendaPublicationUtils.getIsCertainlyNotStarted(this.plannedThemisPublicationActivity);
+      can &&= AgendaPublicationUtils.getIsNotStarted(this.plannedThemisPublicationActivity);
     } else {
       can &&= false; // old data model
     }

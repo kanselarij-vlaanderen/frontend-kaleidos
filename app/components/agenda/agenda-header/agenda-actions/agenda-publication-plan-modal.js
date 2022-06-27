@@ -49,7 +49,7 @@ export default class AgendaPublicationPlanModal extends Component {
     if (!this.internalDocumentPublicationActivity) {
       return true;
     } else {
-      return AgendaPublicationUtils.getIsCertainlyNotStarted(this.internalDocumentPublicationActivity);
+      return AgendaPublicationUtils.getIsNotStarted(this.internalDocumentPublicationActivity);
     }
   }
 
