@@ -118,6 +118,24 @@ export default class AgendaAgendaitemsRoute extends Route {
   }
 
   @action
+  loading(transition) {
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const controller = this.controllerFor(this.routeName);
+    controller.isLoadingModel = true;
+    transition.promise.finally(() => {
+      controller.isLoadingModel = false;
+    });
+
+   // only bubble loading event when transitioning between tabs
+   // to enable loading template to be shown
+   if (transition.from && transition.to) {
+     return transition.from.name != transition.to.name;
+   } else {
+     return true;
+   }
+  }
+
+  @action
   reloadModel() {
     this.refresh();
   }
