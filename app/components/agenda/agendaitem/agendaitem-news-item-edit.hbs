@@ -73,11 +73,11 @@
       </p>
     </div>
     <div class="auk-form-group">
-      <div class={{if this.isFullscreen 'auk-rdfa-holder auk-rdfa-fullscreen' 'auk-rdfa-holder'}}>
+      <div class="auk-rdfa-holder {{if this.isFullscreen "auk-rdfa-fullscreen"}}">
         <div class="auk-rdfa-holder__header auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
           <Auk::Label class="auk-u-p-0">
             {{t "decision-in-newsletter"}}
-            <span class={{if this.isFullscreen '' 'au-u-hidden-visually'}}>  voor {{@newsletterInfo.title}}</span>
+            <span class={{unless this.isFullscreen "au-u-hidden-visually"}}>  voor {{@newsletterInfo.title}}</span>
           </Auk::Label>
           {{#if this.isFullscreen}}
             <AuButtonGroup>
