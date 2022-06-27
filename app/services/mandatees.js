@@ -136,8 +136,10 @@ export default class MandateesService extends Service {
     const governmentBodies = yield this.fetchGovernmentBodiesForRange.perform(referenceDateFrom, referenceDateTo);
     if (governmentBodies.length) {
       for (const governmentBody of governmentBodies) {
-        const mandatees = yield this.fetchMandateesForGovernmentBodyRange.perform(governmentBody, referenceDateFrom, referenceDateTo, searchText);
-        activeMandateesInRange.addObjects(mandatees);
+        if (governmentBody) { // TODO KAS-3500 can be null
+          const mandatees = yield this.fetchMandateesForGovernmentBodyRange.perform(governmentBody, referenceDateFrom, referenceDateTo, searchText);
+          activeMandateesInRange.addObjects(mandatees);
+        }
       }
 
     }
@@ -185,7 +187,6 @@ export default class MandateesService extends Service {
     if (referenceDateFrom) {
       // Many versions of a mandatee exist within a government-body.
       // We only want those versions with a start-end range that covers the given referenceDate
-      queryOptions['filter[:gte:start]'] = referenceDateFrom.toISOString();
       queryOptions['filter[:lt:start]'] = referenceDateTo.toISOString();
       // No queryOptions[':lt:end'] = referenceDate; here
       // "end" is optional in data.
@@ -193,6 +194,19 @@ export default class MandateesService extends Service {
       // That's why we do some filtering client-side (see below)
     }
     let mandatees = yield this.store.query('mandatee', queryOptions);
+    // We need to filter out the mandatees that are in the body but have an end date before the range starts
+    // or active mandatees who have no end date yet
+    mandatees = mandatees.filter((mandatee) => {
+      if (mandatee.end) {
+        if (mandatee.end >= referenceDateFrom) {
+          return true;
+        }
+        return false;
+      } else {
+        // currently active mandatees
+        return true; 
+      }
+    });
     mandatees = mandatees.sortBy('priority').toArray(); // TODO: sorting on both "start" and "priority" yields incomplete results. Thus part of the sort in frontend
     return mandatees;
   }
