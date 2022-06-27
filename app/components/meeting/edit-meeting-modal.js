@@ -49,6 +49,7 @@ export default class MeetingEditMeetingComponent extends Component {
   @task
   *initFields() {
     const now = new Date();
+    this.now = now;
 
     this.meetingYear = this.args.meeting.plannedStart?.getFullYear() || this.currentYear;
     this.startDate = this.args.meeting.plannedStart || new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0, 0);
@@ -84,8 +85,17 @@ export default class MeetingEditMeetingComponent extends Component {
   }
 
   get minPlannedPublicationDate() {
-    const minTimeMS = Math.max(this.startDate.getTime(), Date.now())
-    return new Date(minTimeMS + AgendaPublicationUtils.PROCESSING_WINDOW_MS);
+    const minTimeMS = Math.max(this.startDate.getTime(), this.now)
+    const date = new Date(minTimeMS + AgendaPublicationUtils.PROCESSING_WINDOW_MS);
+    date.setMilliseconds(0); // WORKAROUND: Flatpickr does not handle @minDate and milliseconds correctly: sometimes causes flickering when not 0
+    return date;
+  }
+
+  get errorPlannedPublicationDate() {
+    if (this.plannedPublicationDate === null) {
+      return 'no-date';
+    }
+    return null;
   }
 
   get numberRepresentation() {
@@ -112,6 +122,7 @@ export default class MeetingEditMeetingComponent extends Component {
         (this.isAnnexMeeting && !this.selectedMainMeeting) ||
         !this.meetingNumber ||
         !this.numberRepresentation ||
+        this.errorPlannedPublicationDate ||
         this.initializeKind.isRunning ||
         this.initializeMainMeeting.isRunning ||
         this.saveMeeting.isRunning

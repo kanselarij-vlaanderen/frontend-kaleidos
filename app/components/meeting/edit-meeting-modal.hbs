@@ -55,7 +55,10 @@
             class="auk-form-group"
             data-test-edit-meeting-release-date-datepicker
           >
-            <Auk::Label>
+            <Auk::Label
+              @required={{true}}
+              @error={{this.errorPlannedPublicationDate}}
+            >
               {{t "decision-release-date"}}
             </Auk::Label>
             {{! TODO: Replace this with Auk::Datepicker, which isn't fully compliant yet (e.g. no time support) }}
@@ -63,6 +66,7 @@
               @enableTime={{true}}
               @date={{array this.plannedPublicationDate}}
               @min={{this.minPlannedPublicationDate}}
+              @error={{this.errorPlannedPublicationDate}}
               @dateChanged={{this.setPlannedPublicationDate}}
             />
             <Auk::FormHelpText
