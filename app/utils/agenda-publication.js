@@ -19,9 +19,7 @@ export const PROCESSING_WINDOW_MS = PROCESSING_WINDOW * 1000;
  * @returns {boolean}
  */
 export function getIsNotStarted(xPublicationActivity) {
-  if (xPublicationActivity.startDate == null) {
-      return true;
-  }
+  if (xPublicationActivity.startDate == null) return true;
   const minPublicationDate = new Date(Date.now() + PROCESSING_WINDOW_MS);
   const isNotStarted = minPublicationDate < xPublicationActivity.startDate;
   return isNotStarted;
@@ -36,7 +34,7 @@ export function getHasScope(themisPublicationActivity, scopeToMatch) {
 
 export function getPlannedThemisPublicationActivity(themisPublicationActivities) {
   const possibleInitialActivities = themisPublicationActivities.filter((it) => {
-      return getHasScope(it, THEMIS_PUBLICATION_SCOPE_INITIAL);
+    return getHasScope(it, THEMIS_PUBLICATION_SCOPE_INITIAL);
   });
 
   if (possibleInitialActivities.length === 0) {
