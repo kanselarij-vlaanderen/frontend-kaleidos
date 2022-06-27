@@ -37,6 +37,7 @@
       <Agenda::AgendaitemSearch
         @searchText={{readonly this.filter}}
         @onSearch={{this.searchAgendaitems}}
+        @fullwidth={{true}}
       />
       <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical auk-u-hidden@print">
         {{#if this.loadDocuments.isRunning}}
