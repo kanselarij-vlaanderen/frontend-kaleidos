@@ -11,10 +11,7 @@
       {{t "date-publication"}}
     </h4>
     <p class="auk-u-italic">
-      {{moment-format
-        (await this.meeting.newsletter.publicationDate)
-        "DD MMMM YYYY - HH:ss"
-      }}
+      {{this.formatStart (await this.meeting.internalDecisionPublicationActivity)}}
     </p>
   </div>
   <div>
@@ -22,10 +19,7 @@
       {{t "newsletter-doc-date"}}
     </h4>
     <p class="auk-u-italic">
-      {{moment-format
-        (await this.meeting.newsletter.publicationDocDate)
-        "DD MMMM YYYY - HH:ss"
-      }}
+      {{this.formatStart (await this.meeting.internalDocumentPublicationActivity)}}
     </p>
   </div>
 </div>

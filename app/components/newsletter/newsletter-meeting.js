@@ -3,6 +3,7 @@
 // eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { inject } from '@ember/service';
+import moment from 'moment'
 
 // TODO: octane-refactor
 // eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
@@ -19,6 +20,17 @@ export default Component.extend({
     if (!newsletter && this.currentSession.isEditor) {
       await this.newsletterService.createNewsItemForMeeting(meeting);
     }
+  },
+
+  formatStart(internalXPublicationActivity) {
+    const start = internalXPublicationActivity?.startDate ?? internalXPublicationActivity?.plannedStart;
+    let formattedStart;
+    if (start != null) {
+      formattedStart = moment(start).format('DD MMMM YYYY - HH:ss');
+    } else {
+      formattedStart = '-';
+    }
+    return formattedStart;
   },
 
   // TODO: octane-refactor
