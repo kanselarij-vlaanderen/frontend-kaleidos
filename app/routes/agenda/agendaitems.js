@@ -126,13 +126,15 @@ export default class AgendaAgendaitemsRoute extends Route {
       controller.isLoadingModel = false;
     });
 
-   // only bubble loading event when transitioning between tabs
-   // to enable loading template to be shown
-   if (transition.from && transition.to) {
-     return transition.from.name != transition.to.name;
-   } else {
-     return true;
-   }
+    // If only queryParams changed (e.g. the filter), we don't want to bubble
+    // the loading event so we can handle it ourselves with an inline loader.
+    // When changing routes, e.g. when switching tabs, we do want to display
+    // the loading page.
+    if (transition.from && transition.to) {
+      return transition.from.name != transition.to.name;
+    } else {
+      return true;
+    }
   }
 
   @action
