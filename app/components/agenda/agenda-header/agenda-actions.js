@@ -93,19 +93,11 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       return false;
     }
     let can = this.args.meeting.isFinal;
-
-    const isInternalDecisionPublicationScheduled = this.internalDecisionPublicationActivity?.startDate != null;
-    if (isInternalDecisionPublicationScheduled) {
-      const isInternalDecisionsPublished = this.internalDocumentPublicationActivity.startDate < new Date();
-      can &&= isInternalDecisionsPublished;
-    }
-
-    const isInternalDocumentPublicationScheduled = this.internalDocumentPublicationActivity?.startDate != null;
-    if (isInternalDocumentPublicationScheduled) {
-      const isInternalDocumentsPublished = this.internalDocumentPublicationActivity.startDate < new Date();
-      can &&= isInternalDocumentsPublished;
-    }
-
+    const isInternalDocumentPublicationScheduled = (
+      this.internalDocumentPublicationActivity?.startDate != null
+      && this.internalDocumentPublicationActivity.startDate < new Date()
+    );
+    can &&= isInternalDocumentPublicationScheduled;
     return can;
   }
 
