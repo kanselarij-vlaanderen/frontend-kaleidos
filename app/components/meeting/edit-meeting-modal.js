@@ -5,6 +5,7 @@ import { action } from '@ember/object';
 import { task, dropTask } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { getNextWorkday } from 'frontend-kaleidos/utils/date-util';
+import * as AgendaPublicationUtils from 'frontend-kaleidos/utils/agenda-publication';
 
 /**
  * @argument {isNew}
@@ -24,9 +25,11 @@ export default class MeetingEditMeetingComponent extends Component {
   @tracked selectedMainMeeting;
   @tracked startDate;
   // In order to adapt default value to the selected startDate, we distinguish not specified and cleared
-  //  When not not specified -> _plannedPublicationDate === undefined
-  //  When cleared -> _plannedPublicationDate === null
-  @tracked _plannedPublicationDate; // planned date of release of documents and publication to Themis (meeting.internalDocumentPublicationActivity.plannedStart and meeting.themisPublicationActivity.plannedStart)
+  //  not specified -> userInputPlannedPublicationDate === undefined
+  //  cleared -> userInputPlannedPublicationDate === null
+  // planned date of release of documents and publication to Themis (meeting.internalDocumentPublicationActivity.plannedStart and meeting.themisPublicationActivity.plannedStart)
+  //  as inputted by user
+  @tracked userInputPlannedPublicationDate;
   @tracked extraInfo;
   @tracked _meetingNumber;
   @tracked _numberRepresentation;
@@ -54,7 +57,7 @@ export default class MeetingEditMeetingComponent extends Component {
 
     if (this.isNew) {
       const meeting = this.args.meeting;
-      this._plannedPublicationDate = undefined;
+      this.userInputPlannedPublicationDate = undefined;
       this.internalDecisionPublicationActivity = yield meeting.internalDecisionPublicationActivity;
       this.internalDocumentPublicationActivity = yield meeting.internalDocumentPublicationActivity;
       const themisPublicationActivities = yield meeting.themisPublicationActivities;
@@ -73,13 +76,16 @@ export default class MeetingEditMeetingComponent extends Component {
   get plannedPublicationDate() {
     this.startDate; // listen to changes of startDate
 
-    if (this._plannedPublicationDate !== undefined) {
-      return this._plannedPublicationDate;
+    if (this.userInputPlannedPublicationDate !== undefined) {
+      return this.userInputPlannedPublicationDate;
     } else {
-      // eslint-disable-next-line prettier/prettier
-      const plannedPublicationDate = getNextWorkday(this.startDate, 14, 0, 0, 0);
-      return plannedPublicationDate;
+      return getNextWorkday(this.startDate, 14, 0, 0, 0);
     }
+  }
+
+  get minPlannedPublicationDate() {
+    const minTimeMS = Math.max(this.startDate.getTime(), Date.now())
+    return new Date(minTimeMS + AgendaPublicationUtils.PROCESSING_WINDOW_MS);
   }
 
   get numberRepresentation() {
@@ -112,9 +118,21 @@ export default class MeetingEditMeetingComponent extends Component {
       );
   }
 
-  setPlannedPublicationDate(date) {
-    // set to null when cleared: in order to distinguish from untouched state.
-    this._plannedPublicationDate = date ? date : null;
+  @action
+  setPlannedPublicationDate(newPlannedPublicationDate) {
+    // when clearing VlDatepicker manually, it does not pass undefined or null,
+    //  but instead passes the now Date as the new Date
+    // the @min however does clear the @date, when it is below @min,
+    //  but this does not trigger this action
+    // because minPlannedPublicationDate is always higher than now
+    //  it results in a visually cleared datepicker,
+    //  but the @tracked userPlannedPublicationDate being set
+    // this check prevents that confusing case
+    if (newPlannedPublicationDate < this.minPlannedPublicationDate) {
+      this.userInputPlannedPublicationDate = null;
+    } else {
+      this.userInputPlannedPublicationDate = newPlannedPublicationDate;
+    }
   }
 
   @task
@@ -170,7 +188,6 @@ export default class MeetingEditMeetingComponent extends Component {
       console.error(err);
       this.toaster.error();
     } finally {
-      // TOASK: Is this correct?
       yield this.args.didSave();
     }
   }
