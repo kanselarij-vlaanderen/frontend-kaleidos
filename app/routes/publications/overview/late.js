@@ -18,13 +18,13 @@ export default class PublicationsOverviewLateRoute extends PublicationsOverviewB
         ':id:': pendingStatuses.mapBy('id').join(','),
       },
       'publication-subcase': {
-        // notice: due-date is datetime but appears as a date to the user
+        // notice: target-end-date is datetime but appears as a date to the user
         // If a user enters '2022-02-07', it is saved as '2022-02-06 23:00 UTC'
         // This is interpreted as < 2022-02-08 00:00 Flemish time. => due-datetime + 1 day
-        // We do a (due-date < startOfDay) check. This allows decisions published
+        // We do a (target-end-date < startOfDay) check. This allows decisions published
         // in the course of the day not to be marked as overdue.
         // @see also: `get isOverdue` in publication-subcase
-        ':lt:due-date': getStartOfToday().toISOString(),
+        ':lt:target-end-date': getStartOfToday().toISOString(),
       },
     };
   }
