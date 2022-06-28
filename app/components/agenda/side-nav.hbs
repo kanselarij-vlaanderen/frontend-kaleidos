@@ -9,7 +9,7 @@
     <Auk::Toolbar as |Toolbar|>
       {{#if @isOpen}}
         <Toolbar.Group @position="left">
-          <h2 class="auk-toolbar-complex__title--small">{{t "nav-title"}}</h2>
+          <AuHeading @level="2" @skin="6">{{t "nav-title"}}</AuHeading>
         </Toolbar.Group>
       {{/if}}
       <Toolbar.Group @position={{if @isOpen "right" "center"}} as |Group|>
@@ -82,9 +82,9 @@
     {{#if @isOpen}}
       {{#each @reverseSortedAgendas as |agenda index|}}
         {{#if (eq index 1)}}
-          <Auk::Navbar @skin="gray-200">
+          <Auk::Navbar @skin="gray-200" class="auk-u-border-top">
             <AuHeading @level="3" @skin="functional">
-              Vorige agenda's
+              {{t "previous-agendas"}}
             </AuHeading>
           </Auk::Navbar>
         {{/if}}
@@ -92,7 +92,7 @@
     {{/if}}
     <ul>
       {{#each @reverseSortedAgendas as |agenda index|}}
-        {{#unless (or agenda.status.isDesignAgenda (eq index 0))}}
+        {{#if (not (or agenda.status.isDesignAgenda (eq index 0)))}}
           <li
             class="auk-sidebar__item auk-sidebar__item--styled
               {{if (eq @currentAgenda.id agenda.id) "auk-sidebar__item--active"}}"
@@ -137,7 +137,7 @@
               {{/if}}
             </LinkTo>
           </li>
-        {{/unless}}
+        {{/if}}
       {{/each}}
     </ul>
   </div>
