@@ -76,7 +76,7 @@ export default class CurrentSessionService extends Service {
   }
 
   get isOvrb() {
-    return [ADMIN, OVRB].includes(this.groupUri);
+    return [OVRB].includes(this.groupUri);
   }
 
   get isOverheid() {
