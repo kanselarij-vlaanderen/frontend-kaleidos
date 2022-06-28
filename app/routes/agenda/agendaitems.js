@@ -126,15 +126,14 @@ export default class AgendaAgendaitemsRoute extends Route {
       controller.isLoadingModel = false;
     });
 
-    // If only queryParams changed (e.g. the filter), we don't want to bubble
+    // If only the filter queryParam changed, we don't want to bubble
     // the loading event so we can handle it ourselves with an inline loader.
-    // When changing routes, e.g. when switching tabs, we do want to display
-    // the loading page.
-    if (transition.from && transition.to) {
-      return transition.from.name != transition.to.name;
-    } else {
-      return true;
+    // When changing routes, e.g. when switching tabs, or when other queryParams
+    // change we do want to display the loading page.
+    if (transition.queryParamsOnly && transition.from && transition.to) {
+      return transition.from.queryParams?.filter === transition.to.queryParams?.filter;
     }
+    return true;
   }
 
   @action
