@@ -14,14 +14,17 @@
           />
         </div>
       </Auk::Toolbar::Item>
-      <AuButton
+      <Auk::Button
         @icon="search"
-        @iconAlignment={{if (not @hideButtonText) "left"}}
+        @skin="primary"
         @loading={{this.search.isRunning}}
-        @hideText={{@hideButtonText}}
-        >
-        {{t "search"}}
-      </AuButton>
+        @layout={{if @hideButtonText "icon-only"}}
+        {{on "click" (perform this.search)}}
+      >
+        {{#if (not @hideButtonText)}}
+          {{t "search"}}
+        {{/if}}
+      </Auk::Button>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </Auk::Navbar>
