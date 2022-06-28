@@ -102,11 +102,11 @@
               {{! Aantal uittreksels }}
               <div class="auk-o-grid-col-3">
                 <div
-                  data-test-decisions-info-panel-edit-number-of-extracts
                   class="auk-form-group"
                 >
                   <Auk::Label>{{t "publication-flow-number-of-extracts"}}</Auk::Label>
                   <Auk::Input
+                    data-test-decisions-info-panel-edit-number-of-extracts
                     @type="number"
                     @block={{true}}
                     @value={{@publicationFlow.numberOfExtracts}}
