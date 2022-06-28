@@ -97,7 +97,7 @@
             </span>
           </div>
         {{/if}}
-        <Auk::PillList>
+        <Auk::PillList class="auk-u-mt-2">
           {{#if (not @agendaitem.showAsRemark)}}
             {{#if @subcase.subcaseName}}
               <Auk::Pill data-test-agendaitem-subcase-name>
@@ -113,7 +113,7 @@
             {{#if @newsletterInfo}}
               {{#if @newsletterInfo.inNewsletter}}
                 <Auk::Pill @skin="success" @icon="visible">
-                  {{t "visible-in-newsletter"}}
+                  {{t "on-the-website"}}
                 </Auk::Pill>
               {{else}}
                 <Auk::Pill @skin="danger" @icon="not-visible">
