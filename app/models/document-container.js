@@ -57,7 +57,7 @@ export default Model.extend({
   // - Documents::BatchDocumentEdit
   // - WebComponents::VlTableActions
   // - NewsletterTable::ButtonToolbar
-  // - NewsItem::EditItem
+  // - Agenda::Agendaitem::AgendaitemNewsItemEdit
   // - cases.case.subcases.subcase.documents controller#setPreviousPiecesFromAgendaitem
   // - agenda.agendaitems.agendaitem.documents controller#setPreviousPiecesFromAgendaitem
   // - agenda-service#retrieveModifiedDateFromNota

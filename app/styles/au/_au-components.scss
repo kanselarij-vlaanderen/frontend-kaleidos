@@ -6,12 +6,59 @@
 
 @import 'ember-appuniversum/c-icon';
 @import 'ember-appuniversum/c-pill';
+@import 'ember-appuniversum/c-heading';
+@import "ember-appuniversum/c-button";
+@import "ember-appuniversum/c-button-group";
+@import "ember-appuniversum/c-link";
+@import "ember-appuniversum/c-toolbar";
+@import "ember-appuniversum/c-input";
 
 
 // Overrides
 
 .au-c-pill {
   border-radius: .5rem; // default border radius is .5rem in Kaleidos
+  padding-top: 0;
+}
 
-  line-height: 1; // vertical alignment is a bit off in Kaleidos
+.au-c-pill-action {
+  &:focus {
+    outline: 0.3rem solid $auk-yellow-500; // focus color of interaction elements is yellow in Kaleidos
+  }
+}
+
+.au-c-pill--link {
+  cursor: pointer;
+
+  &:focus {
+    outline: 0.3rem solid $auk-yellow-500; // focus color of interaction elements is yellow in Kaleidos
+  }
+}
+
+// Change button link to Kaleidos style
+.au-c-button--link {
+  text-decoration: none;
+  font-weight: 500;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+}
+
+
+
+// Additions
+
+.au-c-pill--blank {
+  color: $au-pill-color;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+@media print {
+  .au-c-pill {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
 }

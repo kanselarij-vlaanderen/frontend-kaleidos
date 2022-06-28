@@ -3,6 +3,7 @@
 import agenda from '../../selectors/agenda.selectors';
 import cases from '../../selectors/case.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
@@ -178,7 +179,7 @@ context('Subcase tests', () => {
     cy.openAgendaitemDossierTab(shortSubcaseTitle);
 
     // Status is hidden
-    cy.get(auk.pill).contains('Zichtbaar in kort bestek');
+    cy.get(appuniversum.pill).contains('Zichtbaar in kort bestek');
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
 
     // Assert status also hidden
@@ -212,7 +213,7 @@ context('Subcase tests', () => {
     cy.wait('@newsletterInfosPatch');
 
     // Assert status shown & confidentiality icon is visible
-    cy.get(auk.pill).contains('Verborgen in kort bestek');
+    cy.get(appuniversum.pill).contains('Verborgen in kort bestek');
 
     // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
     cy.get(agenda.agendaDetailSidebarItem.confidential).should('exist');

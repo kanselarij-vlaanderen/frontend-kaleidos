@@ -23,11 +23,12 @@
       {{/unless}}
       {{#if this.file}}
         <Auk::Button
-          data-test-vl-document-showPieceViewer
           @skin="borderless"
           @layout="icon-only"
           @icon="book"
           {{on "click" this.showPieceViewer}}
+          class="auk-u-ml-2"
+          data-test-vl-document-showPieceViewer
         >
           {{t "view-document-details"}}
         </Auk::Button>
