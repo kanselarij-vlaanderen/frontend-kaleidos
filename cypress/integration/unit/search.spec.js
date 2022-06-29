@@ -121,10 +121,10 @@ context('Search tests', () => {
       // *Existing data test: add this to setup, check ownership of files before zipping!
       // cy.visitAgendaWithLink('/vergadering/62878EB2E1ADA5F6A459ABFD/agenda/62878EB3E1ADA5F6A459ABFE/agendapunten/6287924CE1ADA5F6A459AC09/documenten');
       // cy.addDocumentsToAgendaitem(subcase1TitleShortNoIcon, [fileAgendaitem1]);
-      // cy.intercept('PATCH', 'agenda-item-treatments/**').as('patchTreatments');
+      // cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
       // cy.addDocumentToTreatment(fileTreatment1);
       // cy.get(utils.vlModalFooter.save).click();
-      // cy.wait('@patchTreatments');
+      // cy.wait('@patchDecisionActivities');
 
       // *Live data test: change agendaitem/subcase titles, upload treatment file (*piece* for future tests in comment).
       cy.visit('/dossiers/62878FD1E1ADA5F6A459AC03/deeldossiers/6287918EE1ADA5F6A459AC05/overzicht');
@@ -134,10 +134,10 @@ context('Search tests', () => {
 
       cy.visitAgendaWithLink('/vergadering/62878EB2E1ADA5F6A459ABFD/agenda/62878EB3E1ADA5F6A459ABFE/agendapunten/62879264E1ADA5F6A459AC0D/documenten');
       // cy.addDocumentsToAgendaitem(newSubcase2TitleShort, [fileAgendaitem2]);
-      cy.intercept('PATCH', 'agenda-item-treatments/**').as('patchTreatments');
+      cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
       cy.addDocumentToTreatment(fileTreatment2);
       cy.get(utils.vlModalFooter.save).click();
-      cy.wait('@patchTreatments');
+      cy.wait('@patchDecisionActivities');
     });
 
     // *The next 3 tests do not use any of the context data, but are needed to give index the time to update
