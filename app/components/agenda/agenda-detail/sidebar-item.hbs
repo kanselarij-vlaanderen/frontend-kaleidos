@@ -29,58 +29,30 @@
         </h4>
         {{#unless @agendaitem.aboutToDelete}}
           <div class="vlc-agenda-detail-sidebar__labels auk-o-flex--align-end">
-            {{#if (and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow @isNew)}}
-              {{#if this.newsletterIsVisible}}
-                <AuPill
-                  @size="small"
-                  @skin="border"
-                  @icon="website"
-                  @draft={{true}}
-                >
-                  <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
-                    {{t "visible-in-newsletter"}}
-                  </EmberTooltip>
-                </AuPill>
-              {{/if}}
-
-              {{#if this.subcase.confidential}}
-                <AuPill
-                  @size="small"
-                  @skin="warning"
-                  @icon="lock-closed"
-                  @draft={{true}}
-                  data-test-agenda-detail-sidebar-item-confidential={{true}}
-                >
-                  <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
-                    {{t "confidential"}}
-                  </EmberTooltip>
-                </AuPill>
-              {{/if}}
-            {{else}}
-              {{#if this.newsletterIsVisible}}
-                <AuPill
-                  @size="small"
-                  @skin="border"
-                  @icon="website"
-                >
-                  <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
-                    {{t "visible-in-newsletter"}}
-                  </EmberTooltip>
-                </AuPill>
-              {{/if}}
-
-              {{#if this.subcase.confidential}}
-                <AuPill
-                  @size="small"
-                  @skin="warning"
-                  @icon="lock-closed"
-                  data-test-agenda-detail-sidebar-item-confidential={{true}}
-                >
-                  <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
-                    {{t "confidential"}}
-                  </EmberTooltip>
-                </AuPill>
-              {{/if}}
+            {{#if this.newsletterIsVisible}}
+              <AuPill
+                @size="small"
+                @skin="border"
+                @icon="website"
+                @draft={{and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow @isNew}}
+              >
+                <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
+                  {{t "visible-in-newsletter"}}
+                </EmberTooltip>
+              </AuPill>
+            {{/if}}
+            {{#if this.subcase.confidential}}
+              <AuPill
+                @size="small"
+                @skin="warning"
+                @icon="lock-closed"
+                @draft={{and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow @isNew}}
+                data-test-agenda-detail-sidebar-item-confidential
+              >
+                <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
+                  {{t "confidential"}}
+                </EmberTooltip>
+              </AuPill>
             {{/if}}
 
             {{#if @showFormallyOkStatus}}
