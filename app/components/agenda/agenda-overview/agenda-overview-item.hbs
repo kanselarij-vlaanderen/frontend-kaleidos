@@ -72,7 +72,7 @@
                 {{#if (and (and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow) @isNew)}}
                 <Auk::Pill
                   @skin="warning-future"
-                  @icon="lock-closed"
+                  @icon="not-visible"
                   data-test-agenda-overview-item-confidentiality-locked
                 >
                   {{t "confidential"}}
@@ -80,7 +80,7 @@
                 {{else}}
                 <Auk::Pill
                   @skin="warning"
-                  @icon="lock-closed"
+                  @icon="not-visible"
                   data-test-agenda-overview-item-confidentiality-locked
                 >
                   {{t "confidential"}}
@@ -167,14 +167,14 @@
             <AuPill
               @skin="warning"
               @draft={{true}}
-              @icon="lock-closed"
+              @icon="not-visible"
             >
               {{t "confidential"}}
             </AuPill>
             {{else}}
             <AuPill
               @skin="warning"
-              @icon="lock-closed"
+              @icon="not-visible"
             >
               {{t "confidential"}}
             </AuPill>

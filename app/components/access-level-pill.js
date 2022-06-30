@@ -29,10 +29,10 @@ export default class AccessLevelPillComponent extends Component {
     if (this.args.accessLevel) {
       switch (this.args.accessLevel.uri) {
         case CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE:
-          icon = 'users-single';
+          icon = 'users-one-of-four';
           break;
         case CONSTANTS.ACCESS_LEVELS.MINISTERRAAD:
-          icon = 'users-one-of-four';
+          icon = 'lock-closed';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
           icon = 'users-two-of-four';

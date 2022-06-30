@@ -41,7 +41,7 @@
               {{/if}}
 
               {{#if this.subcase.confidential}}
-                <AuPill @skin="warning" @icon="lock-closed" @draft={{true}} data-test-agenda-detail-sidebar-item-confidential={{true}}>
+                <AuPill @skin="warning" @icon="not-visible" @draft={{true}} data-test-agenda-detail-sidebar-item-confidential={{true}}>
                   <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
                     <p>
                       {{t "confidential"}}
@@ -61,7 +61,7 @@
               {{/if}}
 
               {{#if this.subcase.confidential}}
-                <AuPill @skin="warning" @icon="lock-closed" data-test-agenda-detail-sidebar-item-confidential={{true}}>
+                <AuPill @skin="warning" @icon="not-visible" data-test-agenda-detail-sidebar-item-confidential={{true}}>
                   <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
                     <p>
                       {{t "confidential"}}

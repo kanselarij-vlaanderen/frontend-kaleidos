@@ -19,7 +19,7 @@
       }}"
   >
     {{#if (await @item.agendaActivity.subcase.confidential)}}
-      <Auk::Pill @skin="danger" @layout="icon-left" @icon="lock-closed">
+      <Auk::Pill @skin="danger" @layout="icon-left" @icon="not-visible">
         {{t "confidential"}}
       </Auk::Pill>
     {{/if}}

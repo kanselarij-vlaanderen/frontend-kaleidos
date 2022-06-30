@@ -14,7 +14,7 @@
               {{#if @isHighlighted}}
               <Auk::Badge @icon="document-added" @size="large" />
               {{else if @piece.confidential }}
-              <Auk::Badge @icon="document" @size="large" />
+              <Auk::Badge @icon="not-visible" @size="large" />
               {{ else }}
               <Auk::Badge @icon="document" @size="large" />
               {{/if}}
