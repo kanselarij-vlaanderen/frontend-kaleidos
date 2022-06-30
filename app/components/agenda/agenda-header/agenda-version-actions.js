@@ -193,7 +193,6 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       // Reloading some relationships of agendaitem most likely to be changed by concurrency
       yield agendaitem.reload();
       yield agendaitem.hasMany('pieces').reload();
-      yield agendaitem.belongsTo('treatment').reload();
       yield agendaitem.hasMany('mandatees').reload();
       yield agendaitem.hasMany('linkedPieces').reload();
     }

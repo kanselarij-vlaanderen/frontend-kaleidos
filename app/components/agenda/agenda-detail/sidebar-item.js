@@ -79,13 +79,10 @@ export default class SidebarItem extends Component {
   @task
   *loadNewsletterVisibility() {
     const treatment = yield this.args.agendaitem.treatment;
-    if (treatment) { // TODO: this is only the case for the first item of the agenda (approval, older data)
-      const newsletterInfo = yield treatment.newsletterInfo;
-      if (newsletterInfo) {
-        this.newsletterIsVisible = newsletterInfo.inNewsletter;
-      } else {
-        this.newsletterIsVisible = false;
-      }
+    // not all agendaitems have treatments (mainly in legacy)
+    const newsletterInfo = yield treatment?.newsletterInfo;
+    if (newsletterInfo) {
+      this.newsletterIsVisible = newsletterInfo.inNewsletter;
     } else {
       this.newsletterIsVisible = false;
     }

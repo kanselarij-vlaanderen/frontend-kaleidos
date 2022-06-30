@@ -48,11 +48,6 @@ const selectors = {
     addDocuments: '[data-test-route-agenda-documents-add-documents]',
   },
 
-  // agenda/agendaitems/agendaitem/decisions/template.hbs
-  agendaitemDecisions: {
-    addTreatment: '[data-test-route-agenda---decisions-add-treatment]', // TODO: remove tests related to adding extra decision
-  },
-
   // agenda/agendaitems/agendaitem/documents/template
   agendaitemDocuments: {
     batchEdit: '[data-test-route-agenda---agendaitem-documents-batch-edit]',

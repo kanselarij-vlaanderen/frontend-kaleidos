@@ -20,9 +20,10 @@ export default class Subcase extends ModelWithModifier {
   @belongsTo('meeting', { inverse: null }) requestedForMeeting;
   @belongsTo('mandatee', { inverse: null }) requestedBy;
 
+  // inverse: null or serialize: false is used for possible concurrency issues when saving without reloading possible stale relations.
   @hasMany('agenda-activity', { inverse: null }) agendaActivities;
   @hasMany('submission-activity', { serialize: false }) submissionActivities;
   @hasMany('piece') linkedPieces;
   @hasMany('mandatee') mandatees;
-  @hasMany('decision-activity', { inverse: null }) decisionActivities; // TODO: document why "inverse: null" is here or remove
+  @hasMany('decision-activity', { inverse: null }) decisionActivities;
 }

@@ -19,9 +19,7 @@ export default ModelWithModifier.extend({
   publicationDocDate: attr('datetime'),
   remark: attr('string'),
 
-  agendaItemTreatment: belongsTo('agenda-item-treatment', {
-    serialize: true, // TODO: research if this still needs expliciting. belongsTo is normally serialized anyway (this used to be a hasMany)
-  }),
+  agendaItemTreatment: belongsTo('agenda-item-treatment'),
   meeting: belongsTo('meeting', {
     inverse: null,
   }),

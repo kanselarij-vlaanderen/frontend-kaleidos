@@ -32,10 +32,6 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
     super.setupController(...arguments);
     const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
     controller.set('agendaitem', agendaitem);
-
-    const agendaItemTreatment = await agendaitem.get('agenda-item-treatment');
-    controller.set('agendaItemTreatment', agendaItemTreatment);
-
     controller.set('notaModifiedTime',
       await this.agendaService.retrieveModifiedDateFromNota(controller.get('agendaitem')));
   }

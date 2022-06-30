@@ -66,8 +66,8 @@ export default class PrintNewsletterRoute extends Route {
     const filteredAgendaitems = [];
     for (const agendaitem of agendaitems) {
       try {
-        const agendaItemTreatment = await agendaitem.get('treatment');
-        const newsletterInfo = await agendaItemTreatment.get('newsletterInfo');
+        const agendaItemTreatment = await agendaitem.treatment;
+        const newsletterInfo = await agendaItemTreatment?.newsletterInfo;
         if (newsletterInfo && newsletterInfo.inNewsletter) {
           filteredAgendaitems.push(agendaitem);
         }
