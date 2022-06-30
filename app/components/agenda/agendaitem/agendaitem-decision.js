@@ -7,7 +7,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /**
  * @argument decisionActivity
- * @argument {Boolean} isTableRow: other layout when in edit mode
  */
 export default class AgendaitemDecisionComponent extends Component {
   @service currentSession;
