@@ -92,11 +92,11 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     can &&= this.args.meeting.isFinal;
 
     if (this.internalDocumentPublicationActivity != null) {
-      const isInternalDocumentPublicationScheduled = (
+      const isInternalDocumentPublished = (
         this.internalDocumentPublicationActivity.startDate != null
         && this.internalDocumentPublicationActivity.startDate < new Date()
       );
-      can &&= isInternalDocumentPublicationScheduled;
+      can &&= isInternalDocumentPublished;
     } else {
       can &&= true; // old data model
     }
