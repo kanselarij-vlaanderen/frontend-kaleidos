@@ -6,9 +6,6 @@ import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /**
- * TODO; subcase/agendaitem arguments are merely used for determining confidentiality of added report file. Simplify this. Maybe just determine subcase from decisionActivity and work from there?
- * @argument subcase; optional
- * @argument agendaitem; optional
  * @argument decisionActivity
  * @argument {Boolean} isTableRow: other layout when in edit mode
  */
@@ -59,15 +56,8 @@ export default class AgendaitemDecisionComponent extends Component {
       type: this.decisionDocType,
     });
 
-    let subcaseIsConfidential = false;
-    // TODO: determine if this is desired behavior for determining access level
-    if (this.args.subcase) {
-      subcaseIsConfidential = this.args.subcase.confidential;
-    } else if (this.args.agendaitem) {
-      const agendaActivity = await this.args.agendaitem.agendaActivity;
-      const subcase = await agendaActivity?.subcase;
-      subcaseIsConfidential = subcase?.confidential;
-    }
+    const subcase = await this.args.decisionActivity.subcase;
+    const subcaseIsConfidential = subcase?.confidential;
 
     const defaultAccessLevel = await this.store.findRecordByUri(
       'concept', subcaseIsConfidential
