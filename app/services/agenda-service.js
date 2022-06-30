@@ -226,19 +226,22 @@ export default class AgendaService extends Service {
     });
     agendaitemToDelete.set('aboutToDelete', true);
     const agendaActivity = await agendaitemToDelete.get('agendaActivity');
-    const treatment = await agendaitemToDelete.get('treatment');
+    const treatment = await agendaitemToDelete.treatment;
 
     if (agendaActivity) {
       const subcase = await agendaActivity.get('subcase');
       await agendaActivity.hasMany('agendaitems').reload();
       const agendaitemsFromActivity = await agendaActivity.get('agendaitems');
       if (treatment) {
+        const decisionActivity = await treatment.decisionActivity;
         const newsletter = await treatment.get('newsletterInfo');
         if (newsletter) {
           await newsletter.destroyRecord();
         }
+        if (decisionActivity) {
+          await decisionActivity.destroyRecord();
+        }
         // TODO DELETE REPORT !
-        // TODO: delete decision activity
         await treatment.destroyRecord();
       }
       await Promise.all(agendaitemsFromActivity.map(async(agendaitem) => {
