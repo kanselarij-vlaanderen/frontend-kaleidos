@@ -57,9 +57,20 @@ export default class PrintNewsletterRoute extends Route {
     });
   }
 
+  async afterModel() {
+    const meeting = this.modelFor('newsletter').meeting;
+    this.meeting = await this.store.queryOne('meeting', {
+      'filter[:uri:]': meeting.uri,
+      include: [
+        'internal-document-publication-activity',
+        'themis-publication-activities'
+      ].join(','),
+    });
+  }
+
   setupController(controller) {
     super.setupController(...arguments);
-    controller.set('meeting', this.modelFor('newsletter').meeting);
+    controller.set('meeting', this.meeting);
   }
 
   async filterAgendaitems(agendaitems) {
