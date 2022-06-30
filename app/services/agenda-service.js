@@ -253,7 +253,7 @@ export default class AgendaService extends Service {
       await subcase.set('requestedForMeeting', null);
       await subcase.save();
       await subcase.hasMany('agendaActivities').reload();
-      await subcase.hasMany('submissionActivities').reload();
+      await subcase.hasMany('decisionActivities').reload();
     } else {
       await agendaitemToDelete.destroyRecord();
     }
