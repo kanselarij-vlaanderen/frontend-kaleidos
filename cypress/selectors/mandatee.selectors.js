@@ -26,11 +26,6 @@ const selectors = {
     },
   },
 
-  // mandatee-selector-modal
-  mandateeSelector: {
-    openSearch: '[data-test-mandatee-selector-open-search]',
-  },
-
   // create-mandatee
   createMandatee: {
     titleContainer: '[data-test-create-mandatee-title-container]',

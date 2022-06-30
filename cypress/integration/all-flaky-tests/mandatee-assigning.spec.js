@@ -434,7 +434,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(dependency.emberPowerSelect.option).contains('heden');
   });
 
-  it.only('check free search', () => {
+  it('check free search', () => {
     const agendaDate2022BeforeMay = Cypress.dayjs('2022-02-28');
     const subcaseShortTitle = 'testId=1653051342: korte titel';
 
@@ -443,11 +443,32 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     cy.get(mandatee.mandateePanelView.actions.edit).click();
     cy.get(mandatee.mandateePanelEdit.actions.add).click();
+    cy.get(utils.mandateesSelector.openSearch).parent()
+      .click();
     cy.get(utils.mandateeSelector.container).click();
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.searchInput).clear()
+      .type('Martens');
     cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Type to search', {
       timeout: 50000,
     });
-    cy.get(dependency.emberPowerSelect.option).contains('heden');
+    cy.get(dependency.emberPowerSelect.option).should('have.length', 4);
+    cy.get(dependency.emberPowerSelect.option).contains('Luc Martens, Vlaams minister van Cultuur, Gezin en Welzijn');
+    cy.get(dependency.emberPowerSelect.option).contains('28-09-1998 tot 12-07-1999');
+    cy.get(dependency.emberPowerSelect.option).contains('01-01-1998 tot 27-09-1998');
+    cy.get(dependency.emberPowerSelect.option).contains('22-09-1997 tot 31-12-1997');
+    cy.get(dependency.emberPowerSelect.option).contains('20-06-1995 tot 21-09-1997')
+      .parent()
+      .click();
+    cy.get(utils.mandateesSelector.add).click();
+    cy.intercept('PATCH', '/subcases/*').as('patchSubcases');
+    cy.intercept('PATCH', '/agendaitems/*').as('patchAgendaitems');
+    cy.intercept('PATCH', '/agendas/*').as('patchAgendas');
+    cy.get(mandatee.mandateePanelEdit.actions.save).click()
+      .wait('@patchSubcases')
+      .wait('@patchAgendaitems')
+      .wait('@patchAgendas');
+    cy.get(mandatee.mandateePanelView.rows).should('have.length', 1)
+      .contains('Luc Martens');
   });
 });
