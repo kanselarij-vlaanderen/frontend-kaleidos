@@ -40,7 +40,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @task
   *loadLatestPublicationActivity() {
     this.latestPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
-      sort: '-start-date',
+      'filter[:lte:start-date]': new Date().toISOString(),
       'filter[meeting][:uri:]': this.args.meeting.uri,
     });
   }
