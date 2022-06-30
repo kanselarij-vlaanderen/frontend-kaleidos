@@ -105,7 +105,8 @@ context('Publications new features tests', () => {
     cy.get(publication.proofsIndex.newRequest).click();
     cy.get(publication.proofRequest.save).click();
     cy.get(publication.publicationNav.translations).click();
-    cy.get(publication.translationReceivedPanel.panel).find(publication.documentsList.deletePiece)
+    cy.get(publication.translationReceivedPanel.panel).find(publication.documentsList.piece)
+      .find(publication.documentsList.deletePiece)
       .should('not.exist');
 
     // check proofs docs removable
@@ -149,7 +150,8 @@ context('Publications new features tests', () => {
 
     // check proofs docs not removable once used in publication request
     cy.get(publication.publicationNav.publishpreview).click();
-    cy.get(publication.proofReceivedPanel.panel).find(publication.documentsList.deletePiece)
+    cy.get(publication.proofReceivedPanel.panel).find(publication.documentsList.piece)
+      .find(publication.documentsList.deletePiece)
       .should('not.exist');
 
     // check publication registration updates correctly
