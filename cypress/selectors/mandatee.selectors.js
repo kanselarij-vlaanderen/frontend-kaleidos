@@ -25,6 +25,12 @@ const selectors = {
       save: '[data-test-mandatee-panel-edit-save]',
     },
   },
+
+  // mandatee-selector-modal
+  mandateeSelector: {
+    openSearch: '[data-test-mandatee-selector-open-search]',
+  },
+
   // create-mandatee
   createMandatee: {
     titleContainer: '[data-test-create-mandatee-title-container]',

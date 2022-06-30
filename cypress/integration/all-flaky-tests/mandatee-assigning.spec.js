@@ -6,9 +6,17 @@ import agenda from '../../selectors/agenda.selectors';
 import utils from '../../selectors/utils.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import auk from '../../selectors/auk.selectors';
+import dependency from '../../selectors/dependency.selectors';
 
 function currentTimestamp() {
   return Cypress.dayjs().unix();
+}
+
+function checkMandateesInList(mandatees, dateRange) {
+  mandatees.forEach((mandatee) => {
+    cy.get(dependency.emberPowerSelect.option).contains(mandatee)
+      .contains(dateRange);
+  });
 }
 
 context('Assigning a mandatee to agendaitem or subcase should update linked subcase/agendaitems, KAS-1291', () => {
@@ -19,9 +27,9 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
   // const caseTitle = 'Cypress test: mandatee sync - 1594023300';  // The case is in the default data set with id 5F02DD8A7DE3FC0008000001
 
   before(() => {
-    cy.login('Admin');
-    cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
-    cy.logoutFlow();
+    // cy.login('Admin');
+    // cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
+    // cy.logoutFlow();
   });
 
   beforeEach(() => {
@@ -348,5 +356,98 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits en Vlaams minister Matthias Diependaele');
     cy.get('@proposals').eq(2)
       .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits, viceminister-president Bart Somers, viceminister-president Ben Weyts en Vlaams minister Zuhal Demir');
+  });
+
+  it('check list of mandatees in 2020 agenda', () => {
+    const agendaDate2020 = Cypress.dayjs('2020-04-07');
+    const subcaseShortTitle = 'Cypress test: 20+ documents agendaitem with subcase - 1589286110';
+    const mandateeNames2020 = [
+      'Jan Jambon, Minister-president van de Vlaamse Regering',
+      'Jan Jambon, Vlaams minister van Buitenlandse Zaken, Cultuur, ICT en Facilitair Management',
+      'Hilde Crevits, Vlaams minister van Economie, Innovatie, Werk, Sociale economie en Landbouw',
+      'Bart Somers, Vlaams minister van Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen',
+      'Ben Weyts, Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand',
+      'Zuhal Demir, Vlaams minister van Justitie en Handhaving, Omgeving, Energie en Toerisme',
+      'Wouter Beke, Vlaams minister van Welzijn, Volksgezondheid, Gezin en Armoedebestrijding',
+      'Matthias Diependaele, Vlaams minister van Financiën en Begroting, Wonen en Onroerend Erfgoed',
+      'Lydia Peeters, Vlaams minister van Mobiliteit en Openbare Werken',
+      'Benjamin Dalle, Vlaams minister van Brussel, Jeugd en Media'
+    ];
+    const dateRange = '02-10-2019 tot 09-05-2021';
+
+    cy.openAgendaForDate(agendaDate2020);
+    cy.openDetailOfAgendaitem(subcaseShortTitle);
+    cy.get(mandatee.mandateePanelView.actions.edit).click();
+    cy.get(mandatee.mandateePanelEdit.actions.add).click();
+    cy.get(utils.mandateeSelector.container).click();
+    cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Type to search');
+    cy.get(dependency.emberPowerSelect.option).should('have.length', 10);
+    checkMandateesInList(mandateeNames2020, dateRange);
+  });
+
+  it('check list of mandatees in 2022 agenda before may', () => {
+    const agendaDate2022BeforeMay = Cypress.dayjs('2022-02-28');
+    const subcaseShortTitle = 'testId=1653051342: korte titel';
+    const mandateeNames2022BeforeMay = [
+      'Jan Jambon, Minister-president van de Vlaamse Regering',
+      'Jan Jambon, Vlaams minister van Buitenlandse Zaken, Cultuur, Digitalisering en Facilitair Management',
+      'Hilde Crevits, Vlaams minister van Economie, Innovatie, Werk, Sociale economie en Landbouw',
+      'Bart Somers, Vlaams minister van Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen',
+      'Ben Weyts, Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand',
+      'Zuhal Demir, Vlaams minister van Justitie en Handhaving, Omgeving, Energie en Toerisme',
+      'Wouter Beke, Vlaams minister van Welzijn, Volksgezondheid, Gezin en Armoedebestrijding',
+      'Matthias Diependaele, Vlaams minister van Financiën en Begroting, Wonen en Onroerend Erfgoed',
+      'Lydia Peeters, Vlaams minister van Mobiliteit en Openbare Werken',
+      'Benjamin Dalle, Vlaams minister van Brussel, Jeugd en Media'
+    ];
+    const dateRange = '10-05-2021 tot 16-05-2022';
+
+    cy.openAgendaForDate(agendaDate2022BeforeMay);
+    cy.openDetailOfAgendaitem(subcaseShortTitle);
+    cy.get(mandatee.mandateePanelView.actions.edit).click();
+    cy.get(mandatee.mandateePanelEdit.actions.add).click();
+    cy.get(utils.mandateeSelector.container).click();
+    cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Type to search');
+    cy.get(dependency.emberPowerSelect.option).should('have.length', 10);
+    checkMandateesInList(mandateeNames2022BeforeMay, dateRange);
+  });
+
+  it('check if current list of mandatees contains heden', () => {
+    const agendaDate = Cypress.dayjs();
+    const subcaseShortTitle = 'testId=1589266576: Cypress test dossier 1 test stap 2';
+
+    cy.createAgenda('Ministerraad', agendaDate);
+    cy.openAgendaForDate(agendaDate);
+    // TODO misschien dump case of eigen case?
+    cy.addAgendaitemToAgenda(subcaseShortTitle);
+
+    cy.openDetailOfAgendaitem(subcaseShortTitle);
+    cy.get(mandatee.mandateePanelView.actions.edit).click();
+    cy.get(mandatee.mandateePanelEdit.actions.add).click();
+    cy.get(utils.mandateeSelector.container).click();
+    cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Type to search', {
+      timeout: 50000,
+    });
+    cy.get(dependency.emberPowerSelect.option).contains('heden');
+  });
+
+  it.only('check free search', () => {
+    const agendaDate2022BeforeMay = Cypress.dayjs('2022-02-28');
+    const subcaseShortTitle = 'testId=1653051342: korte titel';
+
+    cy.openAgendaForDate(agendaDate2022BeforeMay);
+    cy.openDetailOfAgendaitem(subcaseShortTitle);
+
+    cy.get(mandatee.mandateePanelView.actions.edit).click();
+    cy.get(mandatee.mandateePanelEdit.actions.add).click();
+    cy.get(utils.mandateeSelector.container).click();
+    cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Type to search', {
+      timeout: 50000,
+    });
+    cy.get(dependency.emberPowerSelect.option).contains('heden');
   });
 });
