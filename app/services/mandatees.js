@@ -130,18 +130,15 @@ export default class MandateesService extends Service {
 
   @task
   *getMandateesActiveForRange(referenceDateFrom=new Date(), referenceDateTo=new Date(), searchText) {
-    // Since this data is static, a local memoization/caching mechanism can be added
-    // here in case of performance issues
     const activeMandateesInRange = [];
     const governmentBodies = yield this.fetchGovernmentBodiesForRange.perform(referenceDateFrom, referenceDateTo);
     if (governmentBodies.length) {
       for (const governmentBody of governmentBodies) {
-        if (governmentBody) { // TODO KAS-3500 can be null
+        if (governmentBody) {
           const mandatees = yield this.fetchMandateesForGovernmentBodyRange.perform(governmentBody, referenceDateFrom, referenceDateTo, searchText);
           activeMandateesInRange.addObjects(mandatees);
         }
       }
-
     }
     return activeMandateesInRange;
   }
@@ -184,15 +181,13 @@ export default class MandateesService extends Service {
     if (searchText) {
       queryOptions['filter[person][last-name]'] = searchText;
     }
-    if (referenceDateFrom) {
-      // Many versions of a mandatee exist within a government-body.
-      // We only want those versions with a start-end range that covers the given referenceDate
-      queryOptions['filter[:lt:start]'] = referenceDateTo.toISOString();
-      // No queryOptions[':lt:end'] = referenceDate; here
-      // "end" is optional in data.
-      // mu-cl-resources doesn't have :has-no:-capability for simple properties (which end-date is)
-      // That's why we do some filtering client-side (see below)
-    }
+    // Many versions of a mandatee exist within a government-body.
+    // We only want those versions with a start-end range that covers the given referenceDate
+    queryOptions['filter[:lt:start]'] = referenceDateTo.toISOString();
+    // No queryOptions[':lt:end'] = referenceDate; here
+    // "end" is optional in data.
+    // mu-cl-resources doesn't have :has-no:-capability for simple properties (which end-date is)
+    // That's why we do some filtering client-side (see below)
     let mandatees = yield this.store.query('mandatee', queryOptions);
     // We need to filter out the mandatees that are in the body but have an end date before the range starts
     // or active mandatees who have no end date yet
