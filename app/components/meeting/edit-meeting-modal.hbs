@@ -56,17 +56,17 @@
             data-test-edit-meeting-release-date-datepicker
           >
             <Auk::Label
-              @error={{this.errorPlannedPublicationDate}}
+              @error={{this.errorUnconfirmedPublicationTime}}
             >
               {{t "decision-release-date"}}
             </Auk::Label>
             {{! TODO: Replace this with Auk::Datepicker, which isn't fully compliant yet (e.g. no time support) }}
             <WebComponents::VlDatepicker
               @enableTime={{true}}
-              @date={{array this.plannedPublicationDate}}
-              @min={{this.minPlannedPublicationDate}}
-              @error={{this.errorPlannedPublicationDate}}
-              @dateChanged={{this.setPlannedPublicationDate}}
+              @date={{array this.unconfirmedPublicationTime}}
+              @min={{this.minUnconfirmedPublicationTime}}
+              @error={{this.errorUnconfirmedPublicationTime}}
+              @dateChanged={{this.setUnconfirmedPublicationTime}}
             />
             <Auk::FormHelpText
               class="auk-u-mt"

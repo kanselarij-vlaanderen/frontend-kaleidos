@@ -25,11 +25,11 @@ export default class MeetingEditMeetingComponent extends Component {
   @tracked selectedMainMeeting;
   @tracked startDate;
   // In order to adapt default value to the selected startDate, we distinguish not specified and cleared
-  //  not specified -> userInputPlannedPublicationDate === undefined
-  //  cleared -> userInputPlannedPublicationDate === null
+  //  not specified -> userInputUnconfirmedPublicationTime === undefined
+  //  cleared -> userInputUnconfirmedPublicationTime === null
   // planned date of release of documents and publication to Themis (internalDocumentPublicationActivity.unconfirmedPublicationTime and themisPublicationActivity.unconfirmedPublicationTime)
   //  as inputted by user
-  @tracked userInputPlannedPublicationDate;
+  @tracked userInputUnconfirmedPublicationTime;
   @tracked extraInfo;
   @tracked _meetingNumber;
   @tracked _numberRepresentation;
@@ -58,7 +58,7 @@ export default class MeetingEditMeetingComponent extends Component {
 
     if (this.isNew) {
       const meeting = this.args.meeting;
-      this.userInputPlannedPublicationDate = undefined;
+      this.userInputUnconfirmedPublicationTime = undefined;
       this.internalDecisionPublicationActivity = yield meeting.internalDecisionPublicationActivity;
       this.internalDocumentPublicationActivity = yield meeting.internalDocumentPublicationActivity;
       const themisPublicationActivities = yield meeting.themisPublicationActivities;
@@ -73,26 +73,26 @@ export default class MeetingEditMeetingComponent extends Component {
     return '';
   }
 
-  /** if user did not set plannedPublicationDate: display next workday after meeting */
-  get plannedPublicationDate() {
+  /** if user did not set unconfirmedPublicationTime: display next workday after meeting */
+  get unconfirmedPublicationTime() {
     this.startDate; // listen to changes of startDate
 
-    if (this.userInputPlannedPublicationDate !== undefined) {
-      return this.userInputPlannedPublicationDate;
+    if (this.userInputUnconfirmedPublicationTime !== undefined) {
+      return this.userInputUnconfirmedPublicationTime;
     } else {
       return getNextWorkday(this.startDate, 14, 0, 0, 0);
     }
   }
 
-  get minPlannedPublicationDate() {
+  get minUnconfirmedPublicationTime() {
     const minTimeMS = Math.max(this.startDate.getTime(), this.now)
     const date = new Date(minTimeMS + AgendaPublicationUtils.PROCESSING_WINDOW_MS);
     date.setMilliseconds(0); // WORKAROUND: Flatpickr does not handle @minDate and milliseconds correctly: sometimes causes flickering when not 0
     return date;
   }
 
-  get errorPlannedPublicationDate() {
-    if (this.plannedPublicationDate === null) {
+  get errorUnconfirmedPublicationTime() {
+    if (this.unconfirmedPublicationTime === null) {
       return 'no-date';
     }
     return null;
@@ -122,7 +122,7 @@ export default class MeetingEditMeetingComponent extends Component {
         (this.isAnnexMeeting && !this.selectedMainMeeting) ||
         !this.meetingNumber ||
         !this.numberRepresentation ||
-        this.errorPlannedPublicationDate ||
+        this.errorUnconfirmedPublicationTime ||
         this.initializeKind.isRunning ||
         this.initializeMainMeeting.isRunning ||
         this.saveMeeting.isRunning
@@ -130,19 +130,19 @@ export default class MeetingEditMeetingComponent extends Component {
   }
 
   @action
-  setPlannedPublicationDate(newPlannedPublicationDate) {
+  setUnconfirmedPublicationTime(newUnconfirmedPublicationTime) {
     // when clearing VlDatepicker manually, it does not pass undefined or null,
     //  but instead passes the now Date as the new Date
     // the @min however does clear the @date, when it is below @min,
     //  but this does not trigger this action
-    // because minPlannedPublicationDate is always higher than now
+    // because minUnconfirmedPublicationTime is always higher than now
     //  it results in a visually cleared datepicker,
-    //  but the @tracked userPlannedPublicationDate being set
+    //  but the @tracked userUnconfirmedPublicationTime being set
     // this check prevents that confusing case
-    if (newPlannedPublicationDate < this.minPlannedPublicationDate) {
-      this.userInputPlannedPublicationDate = null;
+    if (newUnconfirmedPublicationTime < this.minUnconfirmedPublicationTime) {
+      this.userInputUnconfirmedPublicationTime = null;
     } else {
-      this.userInputPlannedPublicationDate = newPlannedPublicationDate;
+      this.userInputUnconfirmedPublicationTime = newUnconfirmedPublicationTime;
     }
   }
 
@@ -189,8 +189,8 @@ export default class MeetingEditMeetingComponent extends Component {
     this.args.meeting.mainMeeting = this.selectedMainMeeting;
 
     if (this.isNew) {
-      this.themisPublicationActivity.unconfirmedPublicationTime = this.plannedPublicationDate;
-      this.internalDocumentPublicationActivity.unconfirmedPublicationTime = this.plannedPublicationDate;
+      this.themisPublicationActivity.unconfirmedPublicationTime = this.unconfirmedPublicationTime;
+      this.internalDocumentPublicationActivity.unconfirmedPublicationTime = this.unconfirmedPublicationTime;
     }
 
     try {
