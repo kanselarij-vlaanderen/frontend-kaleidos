@@ -315,7 +315,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @action
   publishInternalDecisions() {
     this.showConfirmPublishInternalDecisions = false;
-    this.internalDecisionPublicationActivity.plannedPublicationTime = new Date();
+    this.internalDecisionPublicationActivity.startTime = new Date();
     this.internalDecisionPublicationActivity.save();
   }
 
