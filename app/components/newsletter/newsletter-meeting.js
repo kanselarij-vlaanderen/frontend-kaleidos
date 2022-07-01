@@ -23,7 +23,7 @@ export default Component.extend({
   },
 
   formatStart(internalXPublicationActivity) {
-    const start = internalXPublicationActivity?.startDate ?? internalXPublicationActivity?.plannedStart;
+    const start = internalXPublicationActivity?.plannedPublicationTime ?? internalXPublicationActivity?.unconfirmedPublicationTime;
     let formattedStart;
     if (start != null) {
       formattedStart = moment(start).format('DD MMMM YYYY - HH:ss');

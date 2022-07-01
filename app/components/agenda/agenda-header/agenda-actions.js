@@ -93,8 +93,8 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
 
     if (this.internalDocumentPublicationActivity != null) {
       const isInternalDocumentPublished = (
-        this.internalDocumentPublicationActivity.startDate != null
-        && this.internalDocumentPublicationActivity.startDate < new Date()
+        this.internalDocumentPublicationActivity.plannedPublicationTime != null
+        && this.internalDocumentPublicationActivity.plannedPublicationTime < new Date()
       );
       can &&= isInternalDocumentPublished;
     } else {
@@ -124,9 +124,9 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
 
     const themisPublicationActivities = yield meeting.themisPublicationActivities;
     this.themisPublicationActivities = themisPublicationActivities.toArray();
-    let latestThemisPublicationActivity = this.themisPublicationActivities.find((it) => it.startDate == null);
+    let latestThemisPublicationActivity = this.themisPublicationActivities.find((it) => it.plannedStart == null);
     if (latestThemisPublicationActivity == null) {
-      latestThemisPublicationActivity = this.themisPublicationActivities.sortBy('startDate').reverse()[0]
+      latestThemisPublicationActivity = this.themisPublicationActivities.sortBy('plannedStart').reverse()[0]
     }
     this.latestThemisPublicationActivity = latestThemisPublicationActivity;
   }
@@ -166,7 +166,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       const themisPublicationActivity = this.store.createRecord(
         'themis-publication-activity',
         {
-          startDate: new Date(),
+          plannedPublicationTime: new Date(),
           meeting: this.args.meeting,
           scope,
         }
@@ -199,7 +199,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       const themisPublicationActivity = this.store.createRecord(
         'themis-publication-activity',
         {
-          startDate: new Date(),
+          plannedPublicationTime: new Date(),
           meeting: this.args.meeting,
           scope,
         }
@@ -315,7 +315,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @action
   publishInternalDecisions() {
     this.showConfirmPublishInternalDecisions = false;
-    this.internalDecisionPublicationActivity.startDate = new Date();
+    this.internalDecisionPublicationActivity.plannedPublicationTime = new Date();
     this.internalDecisionPublicationActivity.save();
   }
 
@@ -341,7 +341,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
           }
         );
       }
-      this.internalDocumentPublicationActivity.startDate = params.internalDocumentPublicationDate;
+      this.internalDocumentPublicationActivity.plannedPublicationTime = params.internalDocumentPublicationDate;
       const internalDocumentSave = this.internalDocumentPublicationActivity.save();
       saves.push(internalDocumentSave);
     }
@@ -356,7 +356,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
         }
       );
     }
-    themisPublicationActivity.startDate = params.themisPublicationDate;
+    themisPublicationActivity.plannedPublicationTime = params.themisPublicationDate;
     const themisSave = themisPublicationActivity.save();
     saves.push(themisSave);
 

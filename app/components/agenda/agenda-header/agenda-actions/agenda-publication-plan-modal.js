@@ -121,13 +121,13 @@ export default class AgendaPublicationPlanModal extends Component {
   }
 
   getSuggestedPublicationDate(xPublicationActivity) {
-    if (xPublicationActivity?.startDate != null) {
-      return xPublicationActivity.startDate;
+    if (xPublicationActivity?.plannedPublicationTime != null) {
+      return xPublicationActivity.plannedPublicationTime;
     } else {
-      const isPlanned = xPublicationActivity?.plannedStart != null;
-      const isNotExpired = this.minPublicationDate < xPublicationActivity?.plannedStart;
+      const isPlanned = xPublicationActivity?.unconfirmedPublicationTime != null;
+      const isNotExpired = this.minPublicationDate < xPublicationActivity?.unconfirmedPublicationTime;
       if (isPlanned && isNotExpired) {
-        return xPublicationActivity.plannedStart;
+        return xPublicationActivity.unconfirmedPublicationTime;
       } else {
         return this.minPublicationDate;
       }

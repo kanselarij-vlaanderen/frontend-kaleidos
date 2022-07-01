@@ -27,7 +27,7 @@ export default class MeetingEditMeetingComponent extends Component {
   // In order to adapt default value to the selected startDate, we distinguish not specified and cleared
   //  not specified -> userInputPlannedPublicationDate === undefined
   //  cleared -> userInputPlannedPublicationDate === null
-  // planned date of release of documents and publication to Themis (meeting.internalDocumentPublicationActivity.plannedStart and meeting.themisPublicationActivity.plannedStart)
+  // planned date of release of documents and publication to Themis (internalDocumentPublicationActivity.unconfirmedPublicationTime and themisPublicationActivity.unconfirmedPublicationTime)
   //  as inputted by user
   @tracked userInputPlannedPublicationDate;
   @tracked extraInfo;
@@ -189,8 +189,8 @@ export default class MeetingEditMeetingComponent extends Component {
     this.args.meeting.mainMeeting = this.selectedMainMeeting;
 
     if (this.isNew) {
-      this.themisPublicationActivity.plannedStart = this.plannedPublicationDate;
-      this.internalDocumentPublicationActivity.plannedStart = this.plannedPublicationDate;
+      this.themisPublicationActivity.unconfirmedPublicationTime = this.plannedPublicationDate;
+      this.internalDocumentPublicationActivity.unconfirmedPublicationTime = this.plannedPublicationDate;
     }
 
     try {

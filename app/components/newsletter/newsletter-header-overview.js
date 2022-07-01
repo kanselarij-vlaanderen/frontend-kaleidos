@@ -40,7 +40,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @task
   *loadLatestPublicationActivity() {
     this.latestPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
-      'filter[:lte:start-date]': new Date().toISOString(),
+      'filter[:lte:planned-publication-time]': new Date().toISOString(),
       'filter[meeting][:uri:]': this.args.meeting.uri,
     });
   }
@@ -107,7 +107,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   *publishThemis(scope) {
     try {
       const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
-        startDate: new Date(),
+        plannedPublicationTime: new Date(),
         meeting: this.args.meeting,
         scope
       });
@@ -127,7 +127,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   *unpublishThemis(scope) {
     try {
       const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
-        startDate: new Date(),
+        plannedPublicationTime: new Date(),
         meeting: this.args.meeting,
         scope
       });
