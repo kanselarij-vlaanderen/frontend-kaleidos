@@ -13,21 +13,21 @@ if (Number.isNaN(PROCESSING_WINDOW)) {
 export const PROCESSING_WINDOW_MS = PROCESSING_WINDOW * 1000;
 
 /**
- * Themis and document publication activities actual start date is a certain amount of time before their startDate attribute
+ * Themis and document publication activities actual start date is a certain amount of time before their plannedPublicationTime attribute
  * This method determines whether the publication process is not in progress or finished.
  * @param {XPublicationActivity} xPublicationActivity
  * @returns {boolean}
  */
 export function getIsNotStarted(xPublicationActivity) {
-  if (xPublicationActivity.startDate == null) return true;
+  if (xPublicationActivity.plannedPublicationTime == null) return true;
   const minPublicationDate = new Date(Date.now() + PROCESSING_WINDOW_MS);
-  const isNotStarted = minPublicationDate < xPublicationActivity.startDate;
+  const isNotStarted = minPublicationDate < xPublicationActivity.plannedPublicationTime;
   return isNotStarted;
 }
 
 export function getIsPublished(xPublicationActivity) {
   const now = new Date();
-  return xPublicationActivity.startDate != null && xPublicationActivity.startDate < now;
+  return xPublicationActivity.plannedPublicationTime != null && xPublicationActivity.plannedPublicationTime < now;
 }
 
 export function getHasScope(themisPublicationActivity, scopeToMatch) {
@@ -47,7 +47,7 @@ export function getPlannedThemisPublicationActivity(themisPublicationActivities)
   } else if (possibleInitialActivities.length === 1) {
     return possibleInitialActivities[0];
   } else {
-    const firstScheduledActivity = possibleInitialActivities.sortBy('startDate')[0];
+    const firstScheduledActivity = possibleInitialActivities.sortBy('plannedPublicationTime')[0];
     return firstScheduledActivity;
   }
 }
