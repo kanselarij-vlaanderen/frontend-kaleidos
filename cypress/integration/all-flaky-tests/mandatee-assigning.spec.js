@@ -27,9 +27,9 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
   // const caseTitle = 'Cypress test: mandatee sync - 1594023300';  // The case is in the default data set with id 5F02DD8A7DE3FC0008000001
 
   before(() => {
-    // cy.login('Admin');
-    // cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
-    // cy.logoutFlow();
+    cy.login('Admin');
+    cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
+    cy.logoutFlow();
   });
 
   beforeEach(() => {
