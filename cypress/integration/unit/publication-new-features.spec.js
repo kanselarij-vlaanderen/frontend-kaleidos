@@ -5,10 +5,10 @@ import publication from '../../selectors/publication.selectors';
 import auk from '../../selectors/auk.selectors';
 
 beforeEach(() => {
-  cy.login('Admin');
-  // cy.intercept('GET', '/regulation-types?**').as('getRegulationTypes');
-  // cy.visit('/publicaties');
-  // cy.wait('@getRegulationTypes');
+  cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
+  cy.intercept('GET', '/regulation-types?**').as('getRegulationTypes');
+  cy.visit('/publicaties');
+  cy.wait('@getRegulationTypes');
 });
 
 afterEach(() => {
