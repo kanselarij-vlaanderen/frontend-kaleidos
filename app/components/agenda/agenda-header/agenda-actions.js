@@ -63,7 +63,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       this.currentSession.isEditor &&
       this.args.meeting.isFinal &&
       this.internalDecisionPublicationActivity != null && // disable for the old data model (without decision-publication-activity)
-      AgendaPublicationUtils.getIsNotStarted(this.internalDecisionPublicationActivity)
+      this.internalDecisionPublicationActivity.startTime == null
     );
   }
 
