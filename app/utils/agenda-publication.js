@@ -25,6 +25,11 @@ export function getIsNotStarted(xPublicationActivity) {
   return isNotStarted;
 }
 
+export function getIsPublished(xPublicationActivity) {
+  const now = new Date();
+  return xPublicationActivity.startDate != null && xPublicationActivity.startDate < now;
+}
+
 export function getHasScope(themisPublicationActivity, scopeToMatch) {
   const scope = themisPublicationActivity.scope ?? []; // empty scope `[]` is returned as `undefined` when fetched
   let hasScope = scope.length === scopeToMatch.length;
