@@ -1,7 +1,7 @@
 import Model, { attr, belongsTo } from '@ember-data/model';
 
 export default class InternalDecisionPublicationActivity extends Model {
-  @attr('datetime') startDate;
+  @attr('datetime') startTime;
 
   @belongsTo('meeting') meeting;
 }
