@@ -18,7 +18,6 @@ const selectors = {
   // agendaitem-decision
   agendaitemDecision: {
     uploadFile: '[data-test-agendaitem-decision-upload-file]',
-    edit: '[data-test-agendaitem-decision-edit]',
     delete: '[data-test-agendaitem-decision-delete]',
     container: '[data-test-agendaitem-decision-container]',
     dropdownMenu: '[data-test-agendaitem-decision-dropdown-menu-options]',
@@ -33,6 +32,7 @@ const selectors = {
   // decision-result-pill
   decisionResultPill: {
     pill: '[data-test-decision-result-pill]',
+    edit: '[data-test-decision-result-pill] + button',
   },
 
   // agenda-detail/sidebar
@@ -46,8 +46,8 @@ const selectors = {
     shortTitle: '[data-test-agenda-detail-sidebar-item-short-title]',
     confidential: '[data-test-agenda-detail-sidebar-item-confidential]',
     status: {
-      formallyOk: '[data-test-agenda-detail-sidebar-item-status-pill] > .ki-check',
-      notYetFormallyOk: '[data-test-agenda-detail-sidebar-item-status-pill] > .ki-circle-question',
+      formallyOk: '[data-test-agenda-detail-sidebar-item-status-pill] > .au-c-icon--check',
+      notYetFormallyOk: '[data-test-agenda-detail-sidebar-item-status-pill] > .au-c-icon--circle-question',
     },
     // Test tag is not possible, CSS is added conditionally
     retracted: '.auk-u-opacity--1\\/3',

@@ -32,6 +32,11 @@ export default ModelWithModifier.extend({
     inverse: null,
   }),
 
+  // TODO This computed property is used in:
+  // - Agenda::Agendaitem::agendaitemNewsItemEdit
+  // - Newsletter:NewsletterItem::ItemContent
+  // - Agenda::Agendaitem::AgendaitemNewsItem
+  // Refactor these usages and remove this computed property
   newsletterProposal: computed('agendaItemTreatment.{[],@each.subcase}', async function() {
     // eslint-disable-next-line ember/no-get
     const treatments = await this.get('agendaItemTreatment');

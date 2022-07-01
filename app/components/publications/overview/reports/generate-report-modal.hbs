@@ -102,8 +102,8 @@
             {{#each this.governmentDomains as |governmentDomain|}}
               <Auk::Checkbox
                 @checked={{includes
-                  this.selectedGovernmentDomains
                   governmentDomain
+                  this.selectedGovernmentDomains
                 }}
                 {{on "input" (fn this.selectGovernmentDomain governmentDomain)}}
               >
@@ -120,8 +120,8 @@
             {{#each this.regulationTypes as |regulationType|}}
               <Auk::Checkbox
                 @checked={{includes
-                  this.selectedRegulationTypes
                   regulationType
+                  this.selectedRegulationTypes
                 }}
                 {{on "input" (fn this.selectRegulationType regulationType)}}
               >

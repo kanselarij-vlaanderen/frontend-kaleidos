@@ -48,12 +48,12 @@
                   {{t "agenda"}}
                 {{/if}}
               </strong>
-              <AuPill @skin={{if agenda.status.isDesignAgenda "ongoing" null}} @draft={{agenda.status.isDesignAgenda}}>
+              <AuPill @size="small" @skin={{if agenda.status.isDesignAgenda "ongoing" null}} @draft={{agenda.status.isDesignAgenda}}>
                 {{or agenda.serialnumber "-"}}
               </AuPill>
             </div>
             <div class="auk-sidebar__sublabel">
-              {{#if agenda.isDesignAgenda}}
+              {{#if agenda.status.isDesignAgenda}}
                 {{t "latest-modified-on"}}
                 <br />
                 {{moment-format agenda.modified "dd DD-MM-YYYY HH:mm"}}
@@ -67,7 +67,7 @@
             </div>
           {{else}}
             <div class="auk-sidebar__label">
-              <AuPill @skin={{if agenda.status.isDesignAgenda "ongoing" null}} @draft={{agenda.status.isDesignAgenda}}>
+              <AuPill @size="small" @skin={{if agenda.status.isDesignAgenda "ongoing" null}} @draft={{agenda.status.isDesignAgenda}}>
                 {{or agenda.serialnumber "-"}}
               </AuPill>
             </div>

@@ -35,18 +35,25 @@ export default Model.extend({
   }),
   signSigningActivities: hasMany('sign-signing-activity'),
 
-  fullDisplayName: computed('person', 'title', 'person.nameToDisplay', function() {
+  // TODO this computed property is used in:
+  // - mandatee#priorirtyAlpha
+  // - settings.ministers template
+  // - Utils::MandateeSelector
+  // Refactor these uses and remove this computed property
+  fullDisplayName: computed('person', 'title', 'person.nameToDisplay', 'mandate.role.label', function() {
     const nameToDisplay = this.get('person.nameToDisplay');
+    const title = this.get('title') ?? this.get('mandate.role.label');
     if (nameToDisplay) {
-      return `${nameToDisplay}, ${this.get('title')}`;
+      return `${nameToDisplay}, ${title}`;
     }
-    return `${this.get('title')}`;
+    return `${title}`;
   }),
 
-  /**
-   * Using this to sort will map the priority number to the alphabet, giving a correct alphabetical sort with numbers higher than 9.
-   * TODO: clean up hacky map-to-alphabet sorting
-   */
+  // Using this to sort will map the priority number to the alphabet, giving a correct alphabetical sort with numbers higher than 9.
+  // TODO: clean up hacky map-to-alphabet sorting
+  // TODO this computed property is used in:
+  // - agendaitem-utils#setCalculatedGroupNumbers
+  // Refactor this use and remove this computed property
   priorityAlpha: computed('priority', 'fullDisplayName', function() {
     const priority = this.get('priority');
     if (typeof priority === 'number') {

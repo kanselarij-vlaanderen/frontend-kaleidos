@@ -137,6 +137,5 @@ const selectors = {
     input: '[data-test-utils-case-search-input]',
     row: '[data-test-utils-case-search-row]',
   },
-
 };
 export default selectors;

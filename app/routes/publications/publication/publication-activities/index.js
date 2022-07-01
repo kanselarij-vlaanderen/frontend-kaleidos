@@ -45,6 +45,7 @@ export class TimelineActivity {
 
 export default class PublicationsPublicationPublicationActivitiesIndexRoute extends Route {
   @service store;
+  @service router;
 
   async model() {
     this.publicationSubcase = this.modelFor(
@@ -94,6 +95,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexRoute exte
 
   @action
   refresh() {
-    super.refresh();
+    // We want to refresh our own route + parent route which has the info panel
+    this.router.refresh('publications.publication.publication-activities')
   }
 }

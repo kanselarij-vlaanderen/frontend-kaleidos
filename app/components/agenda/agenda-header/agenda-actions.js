@@ -12,6 +12,8 @@ import {
   fetchArchivingJobForAgenda,
   fileDownloadUrlFromJob,
 } from 'frontend-kaleidos/utils/zip-agenda-files';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
+import bind from 'frontend-kaleidos/utils/bind';
 
 /**
  * @argument {Meeting} meeting
@@ -51,9 +53,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   }
 
   get canEditDesignAgenda() {
-    return (
-      this.currentSession.isEditor && this.args.currentAgenda.isDesignAgenda
-    );
+    return this.currentSession.isEditor && this.args.currentAgenda.status.get('isDesignAgenda');
   }
 
   get canPublishInternalDecisions() {
@@ -108,6 +108,14 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     return this.latestThemisPublicationActivity != null;
   }
 
+  @bind
+  async allAgendaitemsNotOk() {
+    const agendaitems = await this.args.currentAgenda.agendaitems;
+    return agendaitems
+          .filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.formallyOk))
+          .sortBy('number');
+  }
+
   @task
   *loadPublicationActivities() {
     const meeting = yield this.store.queryOne('meeting', {
@@ -147,9 +155,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     // When reloading the data for this use-case, only the agendaitems that are not "formally ok" have to be fully reloaded
     // If not reloaded, any following PATCH call on these agendaitems will succeed (due to the hasMany reload above) but with old relation data
     // *NOTE* since we only load the "nok/not yet ok" items, it is still possible to save old relations on formally ok items (although most changes should reset the formality)
-    const agendaitemsNotOk = yield this.args.currentAgenda.get(
-      'allAgendaitemsNotOk'
-    );
+    const agendaitemsNotOk = yield this.allAgendaitemsNotOk(this.args.currentAgenda);
     for (const agendaitem of agendaitemsNotOk) {
       // Reloading some relationships of agendaitem most likely to be changed by concurrency
       yield agendaitem.reload();
@@ -283,10 +289,8 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   async approveAllAgendaitems() {
     this.showConfirmApprovingAllAgendaitems = false;
     this.args.onStartLoading(this.intl.t('approve-all-agendaitems-message'));
-    const allAgendaitemsNotOk = await this.args.currentAgenda.get(
-      'allAgendaitemsNotOk'
-    );
-    for (const agendaitem of allAgendaitemsNotOk) {
+    const agendaitemsNotOk = await this.allAgendaitemsNotOk(this.args.currentAgenda);
+    for (const agendaitem of agendaitemsNotOk) {
       try {
         await setAgendaitemFormallyOk(agendaitem);
       } catch {

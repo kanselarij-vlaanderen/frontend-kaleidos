@@ -23,6 +23,10 @@ export default Model.extend({
   type: belongsTo('document-type'),
   agendaItemTreatment: belongsTo('agenda-item-treatment'),
 
+  // TODO this computed property is used in:
+  // - Documents::LinkedDocumentLink
+  // - document-container#lastPiece
+  // Refactor these uses and remove this property
   sortedPieces: computed('pieces.[]', function() {
     return PromiseArray.create({
       promise: this.get('pieces').then(async(pieces) => {
@@ -48,6 +52,16 @@ export default Model.extend({
     });
   }),
 
+  // TODO this computed property is used in:
+  // - Documents::LinkedDocumentList
+  // - Documents::BatchDocumentEdit
+  // - WebComponents::VlTableActions
+  // - NewsletterTable::ButtonToolbar
+  // - Agenda::Agendaitem::AgendaitemNewsItemEdit
+  // - cases.case.subcases.subcase.documents controller#setPreviousPiecesFromAgendaitem
+  // - agenda.agendaitems.agendaitem.documents controller#setPreviousPiecesFromAgendaitem
+  // - agenda-service#retrieveModifiedDateFromNota
+  // Refactor these uses and remove this property
   lastPiece: computed(
     'sortedPieces.[]',
     'pieces.[]', // Why? TODO: Comment
@@ -57,17 +71,4 @@ export default Model.extend({
       });
     }
   ),
-
-  reverseSortedPieces: computed('pieces.[]', function() {
-    return PromiseArray.create({
-      promise: this.get('pieces').then((pieces) => pieces.sortBy('created').reverse()),
-    });
-  }),
-
-  checkAdded: computed('uri', 'addedPieces.[]', function() {
-    if (this.addedPieces) {
-      return this.addedPieces.includes(this.get('uri'));
-    }
-    return null;
-  }),
 });
