@@ -248,4 +248,76 @@ context('Decision tests', () => {
       cy.get(agenda.decisionResultPill.pill).contains(type);
     });
   });
+
+  it('should test if adding decision sets correct default acces rights', () => {
+    const agendaDate = Cypress.dayjs('2022-04-18');
+    const shortTitle = 'Cypress test: Publications via MR - 1652967454';
+    const file = {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf',
+    };
+
+    cy.openAgendaForDate(agendaDate);
+    cy.openDetailOfAgendaitem(shortTitle);
+
+    cy.get(agenda.agendaitemNav.decisionTab).click();
+    cy.get(agenda.agendaitemDecision.uploadFile).click();
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.intercept('POST', '/pieces').as('postPieces');
+    cy.intercept('PATCH', '/agenda-item-treatments/*').as('patchTreatments');
+    cy.get(utils.vlModalFooter.save).click()
+      .wait('@postPieces')
+      .wait('@patchTreatments');
+    cy.get(document.accessLevelPill.pill).contains('Intern Regering');
+  });
+
+  it('should test if changing subcase to confidential sets correct acces rights', () => {
+    // const agendaDate = Cypress.dayjs('2022-04-18');
+    // const shortTitle = 'Cypress test: Publications via MR - 1652967454';
+
+    cy.visit('/dossiers/6286483409DEF9BE3C9DA975/deeldossiers/6286483B09DEF9BE3C9DA976/overzicht');
+    cy.get(cases.subcaseTitlesView.edit).click();
+    cy.get(cases.subcaseTitlesEdit.confidential).click();
+    cy.intercept('PATCH', '/subcases/*').as('patchSubcases');
+    cy.intercept('PATCH', '/agendaitems/*').as('patchagendaitems');
+    cy.intercept('PATCH', '/agendas/*').as('patchAgenda');
+    cy.intercept('PATCH', '/pieces/*').as('patchPieces');
+    cy.get(cases.subcaseTitlesEdit.actions.save).click()
+      .wait('@patchSubcases')
+      .wait('@patchagendaitems')
+      .wait('@patchAgenda')
+      .wait('@patchPieces');
+    cy.get(cases.subcaseDetailNav.decisions).click();
+
+    // cy.openAgendaForDate(agendaDate);
+    // cy.openDetailOfAgendaitem(shortTitle);
+
+    // cy.get(agenda.agendaitemNav.decisionTab).click();
+    cy.get(document.accessLevelPill.pill).contains('Ministerraad');
+  });
+
+  it('should test if adding decision to confidential subcase sets correct default acces rights', () => {
+    const agendaDate = Cypress.dayjs('2022-04-18');
+    const shortTitle = 'Cypress test: Publications via MR - 1652967454';
+    const file = {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf',
+    };
+
+    cy.openAgendaForDate(agendaDate);
+    cy.openDetailOfAgendaitem(shortTitle);
+
+    cy.get(agenda.agendaitemNav.decisionTab).click();
+    cy.get(route.agendaitemDecisions.addTreatment).click();
+    cy.get(agenda.agendaitemDecision.uploadFile).click();
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.intercept('POST', '/pieces').as('postPieces');
+    cy.intercept('PATCH', '/agenda-item-treatments/*').as('patchTreatments');
+    cy.get(utils.vlModalFooter.save).click()
+      .wait('@postPieces')
+      .wait('@patchTreatments');
+    cy.get(auk.loader).should('not.exist');
+    // TODO-waits: waiting for loader to not exist not enough
+    cy.wait(2000);
+    cy.get(document.accessLevelPill.pill).eq(1)
+      .contains('Ministerraad');
+  });
 });
