@@ -1,6 +1,6 @@
 <Auk::Modal @size="small">
   <Auk::Modal::Header
-    @title={{t "agenda-publication-planned-modal-title"}}
+    @title={{t "agenda-publish-planned"}}
     @onClose={{@onCancel}}
     @closeDisabled={{this.save.isRunning}}
   />
@@ -48,7 +48,7 @@
         </div>
         <div class="auk-form-group">
           <Auk::Label @error={{eq false this.isThemisPublicationDateValid}}>
-            {{t "agenda-publication-themis-question"}}
+            {{t "agenda-publication-website-question"}}
           </Auk::Label>
           <div class="auk-o-flex">
             <WebComponents::VlDatepicker
