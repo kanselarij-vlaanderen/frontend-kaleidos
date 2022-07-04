@@ -31,7 +31,7 @@ export function getIsPublished(xPublicationActivity) {
 }
 
 export function getHasScope(themisPublicationActivity, scopeToMatch) {
-  const scope = themisPublicationActivity.scope ?? []; // empty scope `[]` is returned as `undefined` when fetched
+  const scope = themisPublicationActivity.scope ?? []; // empty scope `[]` is returned as `undefined` when fetched // TODO move to string-set transform?
   let hasScope = scope.length === scopeToMatch.length;
   hasScope &&= scope.every((it) => scopeToMatch.includes(it));
   return hasScope;
