@@ -213,9 +213,9 @@ export default class NewsletterService extends Service {
         meeting.themisPublicationActivities,
       ]);
       themisPublicationActivities = themisPublicationActivities.toArray();
-      const internalDocumentPublicationDate = internalDocumentPublicationActivity.plannedPublicationTime ?? internalDocumentPublicationActivity.unconfirmedPublicationTime;
+      const internalDocumentPublicationDate = internalDocumentPublicationActivity?.plannedPublicationTime ?? internalDocumentPublicationActivity?.unconfirmedPublicationTime;
       const plannedThemisPublicationActivity = AgendaPublicationUtils.getPlannedThemisPublicationActivity(themisPublicationActivities);
-      const plannedThemisPublicationDate = plannedThemisPublicationActivity.plannedPublicationTime ?? plannedThemisPublicationActivity.unconfirmedPublicationTime;
+      const plannedThemisPublicationDate = plannedThemisPublicationActivity?.plannedPublicationTime ?? plannedThemisPublicationActivity?.unconfirmedPublicationTime;
       const newsletter = this.store.createRecord('newsletter-info', {
         meeting,
         finished: false,
