@@ -11,7 +11,7 @@
       {{t "date-publication"}}
     </h4>
     <p class="auk-u-italic">
-      {{this.formatStart (await this.meeting.internalDecisionPublicationActivity)}}
+      {{this.formatPublicationTime this.internalDocumentPublicationTime}}
     </p>
   </div>
   <div>
@@ -19,7 +19,7 @@
       {{t "newsletter-doc-date"}}
     </h4>
     <p class="auk-u-italic">
-      {{this.formatStart (await this.meeting.internalDocumentPublicationActivity)}}
+      {{this.formatPublicationTime this.themisPublicationTime}}
     </p>
   </div>
 </div>

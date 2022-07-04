@@ -3,7 +3,7 @@
 // eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import moment from 'moment'
+import moment from 'moment';
 
 // TODO: octane-refactor
 // eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
@@ -12,6 +12,8 @@ export default Component.extend({
   intl: inject(),
   currentSession: inject(),
   newsletterService: inject(),
+  internalDocumentPublicationTime: null,
+  themisPublicationTime: null,
 
   async init() {
     this._super(...arguments);
@@ -20,13 +22,20 @@ export default Component.extend({
     if (!newsletter && this.currentSession.isEditor) {
       await this.newsletterService.createNewsItemForMeeting(meeting);
     }
+    const internalDocumentPublicationActivity = await meeting.internalDocumentPublicationActivity;
+    const internalDocumentPublicationTime = internalDocumentPublicationActivity?.plannedPublicationTime ?? internalDocumentPublicationActivity?.unconfirmedPublicationTime;
+    this.set('internalDocumentPublicationTime', internalDocumentPublicationTime);
+    const themisPublicationActivities = await meeting.themisPublicationActivities.then(a => a.toArray());
+    const themisPublicationActivity = themisPublicationActivities.sortBy('plannedPublicationTime').firstObject;
+    const themisPublicationTime = themisPublicationActivity?.plannedPublicationTime ?? themisPublicationActivity?.unconfirmedPublicationTime;
+    this.set('themisPublicationTime', themisPublicationTime);
   },
 
-  formatStart(internalXPublicationActivity) {
-    const start = internalXPublicationActivity?.plannedPublicationTime ?? internalXPublicationActivity?.unconfirmedPublicationTime;
+  formatPublicationTime(date) {
+    console.log(date)
     let formattedStart;
-    if (start != null) {
-      formattedStart = moment(start).format('DD MMMM YYYY - HH:ss');
+    if (date != null) {
+      formattedStart = moment(date).format('DD MMMM YYYY - HH:ss');
     } else {
       formattedStart = '-';
     }
