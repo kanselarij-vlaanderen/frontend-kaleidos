@@ -132,9 +132,9 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
 
     const themisPublicationActivities = yield meeting.themisPublicationActivities;
     this.themisPublicationActivities = themisPublicationActivities.toArray();
-    let latestThemisPublicationActivity = this.themisPublicationActivities.find((it) => it.plannedStart == null);
+    let latestThemisPublicationActivity = this.themisPublicationActivities.find((it) => it.plannedPublicationTime == null);
     if (latestThemisPublicationActivity == null) {
-      latestThemisPublicationActivity = this.themisPublicationActivities.sortBy('plannedStart').reverse()[0]
+      latestThemisPublicationActivity = this.themisPublicationActivities.sortBy('plannedPublicationTime').reverse()[0]
     }
     this.latestThemisPublicationActivity = latestThemisPublicationActivity;
   }
