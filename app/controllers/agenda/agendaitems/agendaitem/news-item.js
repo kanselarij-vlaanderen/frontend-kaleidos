@@ -2,7 +2,6 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import moment from 'moment';
 
 export default class NewsItemAgendaitemAgendaitemsAgendaController extends Controller {
   @service store;
@@ -22,7 +21,7 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
   get notaHasChanged() {
     const modifiedNliTime = this.newsletterInfo.modified;
     if (modifiedNliTime && this.notaModifiedTime) {
-      return moment(modifiedNliTime).isBefore(moment(this.notaModifiedTime));
+      return modifiedNliTime < this.notaModifiedTime;
     }
     return false;
   }
