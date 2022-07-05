@@ -95,18 +95,17 @@
   (gt (await this.newsletterInfo.themes.length) 0)
 }}
   <div class="auk-u-mt-3 auk-u-non-breakable-group@print">
-    <Auk::PillList>
-      {{#each
-        (await this.newsletterInfo.themes)
-      as |theme|
-      }}
-        <Auk::Pill
-          data-test-newsletter-item-content-theme
-        >
-          {{theme.label}}
-        </Auk::Pill>
-      {{/each}}
-    </Auk::PillList>
+    {{#each
+      (await this.newsletterInfo.themes)
+    as |theme|
+    }}
+      <AuPill
+        @size="small"
+        data-test-newsletter-item-content-theme
+      >
+        {{theme.label}}
+      </AuPill>
+    {{/each}}
   </div>
 {{!-- {{else if (and this.allowEditing this.newsletterInfo.richtext)}}
   <div class="auk-u-mb-2">

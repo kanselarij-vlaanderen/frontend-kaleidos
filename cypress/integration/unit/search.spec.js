@@ -272,6 +272,7 @@ context('Search tests', () => {
       cy.get(agenda.agendaitemSearch.input).type(searchText);
       cy.wait(200);
       cy.wait(`@searchCallOverview-${searchText}`);
+      cy.wait(500);
 
       // Should find nothing.
       cy.get(utils.vlAlert.message).contains(alertMessageNota);
@@ -308,6 +309,7 @@ context('Search tests', () => {
         cy.get(agenda.agendaitemSearch.input).type(searchTerm);
         cy.wait(200);
         cy.wait(`@searchCallOverview-${searchTerm}`);
+        cy.wait(500);
         cy.get(agenda.agendaOverviewItem.subitem).contains(newSubcase2TitleShort);
       });
       wordsToCheck2.forEach((searchTerm) => {
@@ -317,6 +319,7 @@ context('Search tests', () => {
         cy.get(agenda.agendaitemSearch.input).type(searchTerm);
         cy.wait(200);
         cy.wait(`@searchCallOverview-${searchTerm}`);
+        cy.wait(500);
         cy.get(agenda.agendaOverviewItem.subitem).contains(subcase1TitleShortNoIcon);
       });
     });

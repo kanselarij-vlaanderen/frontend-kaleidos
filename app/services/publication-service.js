@@ -109,6 +109,11 @@ export default class PublicationService extends Service {
     });
     await identifier.save();
 
+    const standardUrgencyLevel = await this.store.findRecordByUri(
+      'urgency-level',
+      CONSTANTS.URGENCY_LEVELS.STANDARD,
+    );
+
     const publicationFlow = this.store.createRecord('publication-flow', {
       identification: identifier,
       case: case_,
@@ -122,6 +127,7 @@ export default class PublicationService extends Service {
       openingDate: publicationProperties.openingDate,
       modified: now,
       regulationType: regulationType,
+      urgencyLevel: standardUrgencyLevel,
     });
     await publicationFlow.save();
 

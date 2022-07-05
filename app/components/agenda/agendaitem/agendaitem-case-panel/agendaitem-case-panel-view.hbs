@@ -56,7 +56,7 @@
           >
             {{#if
               (and
-                @agendaitem.status.isDesignAgenda
+                @agenda.status.isDesignAgenda
                 (and @allowEditing @agendaitem.formallyOkToShow)
               )
             }}
@@ -77,9 +77,10 @@
             {{#if @subcase.confidential}}
               <Auk::Toolbar::Item>
                 <AuPill
-                  data-test-agendaitem-titles-confidential
+                  @size="small"
                   @skin="warning"
                   @icon="lock-closed"
+                  data-test-agendaitem-titles-confidential
                 >
                   {{t "confidential"}}
                 </AuPill>
@@ -97,36 +98,40 @@
             </span>
           </div>
         {{/if}}
-        <Auk::PillList>
-          {{#if (not @agendaitem.showAsRemark)}}
-            {{#if @subcase.subcaseName}}
-              <Auk::Pill data-test-agendaitem-subcase-name>
+        {{#if (not @agendaitem.showAsRemark)}}
+          {{#if @subcase.subcaseName}}
+            <div class="auk-u-mt-2">
+              <AuPill @size="small" data-test-agendaitem-subcase-name>
                 {{capitalize @subcase.subcaseName}}
-              </Auk::Pill>
-            {{/if}}
-            {{#if @agendaitem.retracted}}
-              <Auk::Pill>
+              </AuPill>
+            </div>
+          {{/if}}
+          {{#if @agendaitem.retracted}}
+            <div class="auk-u-mt-2">
+              <AuPill @size="small">
                 {{t "postponed-item"}}
-              </Auk::Pill>
-            {{/if}}
-          {{else}}
+              </AuPill>
+            </div>
+          {{/if}}
+        {{else}}
+          <div class="auk-u-mt-2">
             {{#if @newsletterInfo}}
               {{#if @newsletterInfo.inNewsletter}}
-                <Auk::Pill @skin="success" @icon="visible">
+                <AuPill @size="small" @skin="success" @icon="visible">
                   {{t "visible-in-newsletter"}}
-                </Auk::Pill>
+                </AuPill>
               {{else}}
-                <Auk::Pill @skin="danger" @icon="not-visible">
+                <AuPill @size="small" @skin="danger" @icon="not-visible">
                   {{t "hidden-in-newsletter"}}
-                </Auk::Pill>
+                </AuPill>
               {{/if}}
             {{else}}
-              <Auk::Pill>
+              <AuPill @size="small">
                 {{t "no-newsletter-info"}}
-              </Auk::Pill>
+              </AuPill>
             {{/if}}
-          {{/if}}
-        </Auk::PillList>
+          </div>
+        {{/if}}
       </div>
     </Auk::Panel::Body>
     {{#if @agendaitem.comment}}

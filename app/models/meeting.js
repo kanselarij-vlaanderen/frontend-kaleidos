@@ -29,7 +29,7 @@ export default class Meeting extends Model {
   @belongsTo('meeting', {
     inverse: null,
   }) mainMeeting;
-  @belongsTo('newsletter-info') newletter;
+  @belongsTo('newsletter-info') newsletter;
   @belongsTo('mail-campaign') mailCampaign;
   @belongsTo('agenda', {
     inverse: null,

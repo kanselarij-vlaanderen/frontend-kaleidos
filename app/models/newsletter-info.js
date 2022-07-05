@@ -31,7 +31,7 @@ export default ModelWithModifier.extend({
   }),
 
   // TODO This computed property is used in:
-  // - NewsItem::EditItem
+  // - Agenda::Agendaitem::agendaitemNewsItemEdit
   // - Newsletter:NewsletterItem::ItemContent
   // - Agenda::Agendaitem::AgendaitemNewsItem
   // Refactor these usages and remove this computed property

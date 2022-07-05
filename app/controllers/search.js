@@ -18,9 +18,6 @@ export default class SearchController extends Controller {
     dateTo: {
       type: 'string',
     },
-    date: {
-      type: 'string',
-    },
     publicationDateTypeKey: {
       type: 'string',
     },
@@ -70,13 +67,11 @@ export default class SearchController extends Controller {
   @tracked mandatees;
   @tracked dateFrom;
   @tracked dateTo;
-  @tracked date;
   @tracked publicationDateTypeKey = this.publicationDateTypes[0]?.key;
   @tracked searchTextBuffer = '';
   @tracked mandateesBuffer;
   @tracked dateFromBuffer;
   @tracked dateToBuffer;
-  @tracked dateBuffer;
   @tracked publicationDateTypeKeyBuffer = this.publicationDateTypeKey;
   @tracked popoverShown; // TODO, this is for a tooltip, this should be handled elsewhere
 
@@ -114,13 +109,12 @@ export default class SearchController extends Controller {
   @action
   search() {
     this.searchText = this.searchTextBuffer;
-    this.mandatees = this.mandateesBuffer;
     if (this.isSearchingPublicationFlows) {
-      this.date = this.serializeDate(this.dateBuffer);
       this.publicationDateTypeKey = this.publicationDateTypeKeyBuffer;
     } else {
-      this.dateFrom = this.serializeDate(this.dateFromBuffer);
-      this.dateTo = this.serializeDate(this.dateToBuffer);
+      this.mandatees = this.mandateesBuffer;
     }
+    this.dateFrom = this.serializeDate(this.dateFromBuffer);
+    this.dateTo = this.serializeDate(this.dateToBuffer);
   }
 }

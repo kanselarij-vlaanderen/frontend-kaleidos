@@ -219,7 +219,7 @@ request the whole row and not only the arrow at the end to be clickable }}
       class="auk-u-text-nowrap"
     >
       {{#if @publicationFlow.publicationSubcase.dueDate}}
-        <div class="{{if this.isPublicationOverdue 'auk-u-text-bold'}}">
+        <div>
           {{moment-format @publicationFlow.publicationSubcase.dueDate}}
         </div>
       {{else}}

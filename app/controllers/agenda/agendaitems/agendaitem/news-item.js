@@ -9,9 +9,11 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
   @service newsletterService;
   @service currentSession;
 
+  @tracked agendaitem;
   @tracked notaModifiedTime = null;
 
   @tracked isEditing = false;
+  @tracked isEditingFullscreen = false;
   @tracked notaModifiedWarningConfirmed = false;
 
   // Nota changed since last newsitem edit
@@ -34,11 +36,18 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
   }
 
   @action
+  startEditingFullscreen() {
+    this.isEditing = true;
+    this.isEditingFullscreen = true;
+  }
+
+  @action
   stopEditing() {
     if (this.model.isDeleted) {
       this.model = null;
     }
     this.isEditing = false;
+    this.isEditingFullscreen = false;
   }
 
   @action

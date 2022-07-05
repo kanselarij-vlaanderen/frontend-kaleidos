@@ -29,48 +29,39 @@
         </h4>
         {{#unless @agendaitem.aboutToDelete}}
           <div class="vlc-agenda-detail-sidebar__labels auk-o-flex--align-end">
-
-            {{#if this.loadNewsletterVisibility.lastSuccessful}}
-              {{#unless this.newsletterIsVisible}}
-                <Auk::Pill @skin="blank" @layout="icon-only">
-                  <Auk::Icon @name="not-visible" />
-                  <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
-                    <p>
-                      {{t "not-visible-in-newsletter"}}
-                    </p>
-                  </EmberTooltip>
-                </Auk::Pill>
-              {{/unless}}
-            {{else}}
-              <Auk::Pill @skin="blank" @layout="icon-only">
-                <Auk::Icon @name="three-dots" />
+            {{#if this.newsletterIsVisible}}
+              <AuPill
+                @size="small"
+                @skin="border"
+                @icon="website"
+                @draft={{and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow @isNew}}
+              >
                 <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
-                  <p>
-                    {{t "loading"}}
-                  </p>
+                  {{t "visible-in-newsletter"}}
                 </EmberTooltip>
-              </Auk::Pill>
+              </AuPill>
             {{/if}}
-
             {{#if this.subcase.confidential}}
-              <AuPill @skin="warning" @icon="lock-closed" data-test-agenda-detail-sidebar-item-confidential={{true}}>
+              <AuPill
+                @size="small"
+                @skin="warning"
+                @icon="lock-closed"
+                data-test-agenda-detail-sidebar-item-confidential
+              >
                 <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
-                  <p>
-                    {{t "confidential"}}
-                  </p>
+                  {{t "confidential"}}
                 </EmberTooltip>
               </AuPill>
             {{/if}}
 
             {{#if @showFormallyOkStatus}}
-              <Auk::Pill data-test-agenda-detail-sidebar-item-status-pill @skin="blank" @layout="icon-only">
-                <i class="{{@agendaitem.formallyOkToShow.iconClassNames}} {{@agendaitem.formallyOkToShow.classNames}}" />
+              {{!-- TODO: Needs to be replaced with AuPill component with 'blank' skin, but option is not available yet --}}
+              <div class="au-c-pill au-c-pill--blank au-c-pill--small" data-test-agenda-detail-sidebar-item-status-pill>
+                <AuIcon @icon={{@agendaitem.formallyOkToShow.svg.icon}} class="{{if @agendaitem.formallyOkToShow.svg.color (concat "au-u-" @agendaitem.formallyOkToShow.svg.color)}}" />
                 <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
-                  <p>
-                    {{@agendaitem.formallyOkToShow.label}}
-                  </p>
+                  {{@agendaitem.formallyOkToShow.label}}
                 </EmberTooltip>
-              </Auk::Pill>
+              </div>
             {{/if}}
           </div>
         {{/unless}}

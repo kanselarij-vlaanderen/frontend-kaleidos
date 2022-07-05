@@ -48,6 +48,7 @@
         >
           {{#if this.subcase.confidential}}
             <AuPill
+              @size="small"
               @skin="warning"
               @icon="lock-closed"
             >
@@ -69,13 +70,13 @@
 
       <div class="auk-o-flex auk-o-flex--justify-between">
         {{#if this.subcase.subcaseName}}
-          <Auk::Pill data-test-agenda-overview-item-subcase-name class="vlc-agenda-meta__times-passed">
+          <AuPill @size="small" class="vlc-agenda-meta__times-passed" data-test-agenda-overview-item-subcase-name>
             {{!capitalization using helper instead of css class:
                   because of `display: inline-flex` property of Auk::Pill
                   it is not affected by the `::first-letter` selector
                   used in the auk-u-text-capitalize class }}
             {{capitalize this.subcase.subcaseName}}
-          </Auk::Pill>
+          </AuPill>
         {{else}}
           {{!  TODO: Only here because required for alignment of flex items }}
           <span class="vlc-agenda-meta__times-passed"></span>
