@@ -355,7 +355,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       themisPublicationActivity = this.store.createRecord(
         'themis-publication-activity',
         {
-          scope: AgendaPublicationUtils.THEMIS_PUBLICATION_SCOPE_INITIAL,
+          scope: AgendaPublicationUtils.THEMIS_PUBLICATION_SCOPE_PLANNED,
           meeting: this.args.meeting,
         }
       );

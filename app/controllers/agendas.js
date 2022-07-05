@@ -66,7 +66,7 @@ export default class AgendasController extends Controller {
     this.newThemisPublicationActivity = this.store.createRecord(
       'themis-publication-activity',
       {
-        scope: AgendaPublicationUtils.THEMIS_PUBLICATION_SCOPE_INITIAL,
+        scope: AgendaPublicationUtils.THEMIS_PUBLICATION_SCOPE_PLANNED,
       }
     );
     this.newMeeting = this.store.createRecord('meeting', {

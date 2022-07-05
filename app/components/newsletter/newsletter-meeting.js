@@ -4,6 +4,7 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import moment from 'moment';
+import * as AgendaPublicationUtils from 'frontend-kaleidos/utils/agenda-publication';
 
 // TODO: octane-refactor
 // eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
@@ -18,17 +19,18 @@ export default Component.extend({
   async init() {
     this._super(...arguments);
     const meeting = await this.get('meeting');
+
+    const internalDocumentPublicationActivity = await meeting.internalDocumentPublicationActivity;
+    const internalDocumentPublicationTime = AgendaPublicationUtils.getMostCertainPublicationTime(internalDocumentPublicationActivity);
+    const themisPublicationActivities = await meeting.themisPublicationActivities.then(a => a.toArray());
+    const themisPublicationTime = AgendaPublicationUtils.getFinalMostCertainPublicationTime(themisPublicationActivities, [AgendaPublicationUtils.THEMIS_PUBLICATION_SCOPES.NEWSITEMS]);
+    this.set('internalDocumentPublicationTime', internalDocumentPublicationTime);
+    this.set('themisPublicationTime', themisPublicationTime);
+
     const newsletter = await meeting.get('newsletter');
     if (!newsletter && this.currentSession.isEditor) {
       await this.newsletterService.createNewsItemForMeeting(meeting);
     }
-    const internalDocumentPublicationActivity = await meeting.internalDocumentPublicationActivity;
-    const internalDocumentPublicationTime = internalDocumentPublicationActivity?.plannedPublicationTime ?? internalDocumentPublicationActivity?.unconfirmedPublicationTime;
-    this.set('internalDocumentPublicationTime', internalDocumentPublicationTime);
-    const themisPublicationActivities = await meeting.themisPublicationActivities.then(a => a.toArray());
-    const themisPublicationActivity = themisPublicationActivities.sortBy('plannedPublicationTime').firstObject;
-    const themisPublicationTime = themisPublicationActivity?.plannedPublicationTime ?? themisPublicationActivity?.unconfirmedPublicationTime;
-    this.set('themisPublicationTime', themisPublicationTime);
   },
 
   formatPublicationTime(date) {

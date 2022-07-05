@@ -1,7 +1,13 @@
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import ENV from 'frontend-kaleidos/config/environment';
 
-export const THEMIS_PUBLICATION_SCOPE_INITIAL = [
+/**
+ * @typedef {'newsitems'|'documents'} ThemisPublicationScopeEntry
+ */
+
+export const THEMIS_PUBLICATION_SCOPES = CONSTANTS.THEMIS_PUBLICATION_SCOPES;
+
+export const THEMIS_PUBLICATION_SCOPE_PLANNED = [
   CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS,
   CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS,
 ];
@@ -30,24 +36,50 @@ export function getIsPublished(xPublicationActivity) {
   return xPublicationActivity.plannedPublicationTime != null && xPublicationActivity.plannedPublicationTime < now;
 }
 
+export function getMostCertainPublicationTime(xPublicationActivity) {
+  return xPublicationActivity?.plannedPublicationTime ?? xPublicationActivity?.unconfirmedPublicationTime;
+}
+
+/**
+ * Gets the plannedPublicationTime if possible, falls back to unconfirmedPublicationTime
+ * When an depublication operation has took place, returns undefined
+ * @param {ThemisPublicationActivity[]} themisPublicationActivities
+ * @param {ThemisPublicationScopeEntry[]} scopeEntries
+ * @returns {Date|undefined}
+ */
+export function getFinalMostCertainPublicationTime(themisPublicationActivities, scopeEntries) {
+  themisPublicationActivities = themisPublicationActivities.sortBy('plannedPublicationTime').reverse();
+  for (let themisPublicationActivity of themisPublicationActivities) {
+    if (getIsDepublication(themisPublicationActivity)) return undefined; // because it will undo previous publications
+    if (scopeEntries == null || getHasInScope(themisPublicationActivity, scopeEntries)) {
+      return getMostCertainPublicationTime(themisPublicationActivity);
+    }
+  }
+}
+
 export function getHasScope(themisPublicationActivity, scopeToMatch) {
   const scope = themisPublicationActivity.scope;
   let hasScope = scope.length === scopeToMatch.length;
-  hasScope &&= scope.every((it) => scopeToMatch.includes(it));
+  hasScope &&= scopeToMatch.every((it) => scope.includes(it));
   return hasScope;
+}
+
+export function getIsDepublication(themisPublicationActivity) {
+  return getHasInScope(themisPublicationActivity, []);
+}
+
+export function getHasInScope(themisPublicationActivity, subjects) {
+  return subjects.every((subject) => themisPublicationActivity.scope.includes(subject));
 }
 
 export function getPlannedThemisPublicationActivity(themisPublicationActivities) {
   const possibleInitialActivities = themisPublicationActivities.filter((it) => {
-    return getHasScope(it, THEMIS_PUBLICATION_SCOPE_INITIAL);
+    return getHasScope(it, THEMIS_PUBLICATION_SCOPE_PLANNED);
   });
 
   if (possibleInitialActivities.length === 0) {
-    return undefined; // legacy data
-  } else if (possibleInitialActivities.length === 1) {
-    return possibleInitialActivities[0];
-  } else {
-    const firstScheduledActivity = possibleInitialActivities.sortBy('plannedPublicationTime')[0];
-    return firstScheduledActivity;
+    return undefined; // old data | < KAS-3431
   }
+
+  return possibleInitialActivities.sortBy('plannedPublicationTime')[0];
 }
