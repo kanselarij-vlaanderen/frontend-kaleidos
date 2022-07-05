@@ -1,7 +1,7 @@
 <Documents::DocumentList
   @pieces={{@pieces}}
 as |documents|>
-  <div class="grid-container">
+  <ul>
     {{#each documents as |doc|}}
       <li class="vlc-document-list__item">
         <Documents::DocumentBadge
@@ -12,5 +12,5 @@ as |documents|>
         />
       </li>
     {{/each}}
-  </div>
+  </ul>
 </Documents::DocumentList>
