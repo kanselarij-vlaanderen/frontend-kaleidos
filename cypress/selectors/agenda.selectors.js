@@ -18,9 +18,8 @@ const selectors = {
   // agendaitem-decision
   agendaitemDecision: {
     uploadFile: '[data-test-agendaitem-decision-upload-file]',
-    delete: '[data-test-agendaitem-decision-delete]',
+    // TODO-selector unused selector
     container: '[data-test-agendaitem-decision-container]',
-    dropdownMenu: '[data-test-agendaitem-decision-dropdown-menu-options]',
   },
 
   // agendaitem-decision-edit

@@ -116,7 +116,7 @@ export default class SubcaseItemSubcasesComponent extends Component {
         'decision-result-code',
         CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
       );
-      this.approved = !!(yield this.store.queryOne('agenda-item-treatment', {
+      this.approved = !!(yield this.store.queryOne('decision-activity', {
         'filter[subcase][id]': this.args.subcase.id,
         'filter[decision-result-code][:id:]': [
           approvedDecisionResultCode.id,

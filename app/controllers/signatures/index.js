@@ -47,9 +47,9 @@ export default class SignaturesIndexController extends Controller {
   }
 
   @action
-  async navigateToDecision(treatment) {
+  async navigateToDecision(decisionActivity) {
     const agendaitem = await this.store.queryOne('agendaitem', {
-      'filter[treatments][:id:]': treatment.get('id'),
+      'filter[treatment][decision-activity][:id:]': decisionActivity.id,
       'filter[:has-no:next-version]': 't',
       sort: '-created',
     });

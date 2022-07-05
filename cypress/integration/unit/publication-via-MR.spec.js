@@ -224,11 +224,11 @@ context('Publications via MR tests', () => {
     cy.get('@row').find(publication.publicationsFlowSelector)
       .click();
     cy.intercept('GET', `/publication-flows**?filter**case**${publicationNumber2}**`).as('getFilteredIdCase');
-    cy.intercept('GET', `/publication-flows**?filter**agenda*item*treatment**${publicationNumber2}**`).as('getFilteredIdTreatment');
+    cy.intercept('GET', `/publication-flows**?filter**decision-activity**${publicationNumber2}**`).as('getFilteredIdDecisionActivity');
     cy.intercept('PATCH', '/pieces/**').as('patchPieces');
     cy.get(dependency.emberPowerSelect.searchInput).type(publicationNumber2)
       .wait('@getFilteredIdCase')
-      .wait('@getFilteredIdTreatment');
+      .wait('@getFilteredIdDecisionActivity');
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(publicationNumber2)
       .scrollIntoView()

@@ -28,7 +28,7 @@ export default class PublicationFlow extends Model {
   }) publicationStatusChange;
   @belongsTo('publication-subcase') publicationSubcase;
   @belongsTo('translation-subcase') translationSubcase;
-  @belongsTo('agenda-item-treatment') agendaItemTreatment;
+  @belongsTo('decision-activity') decisionActivity;
 
   @hasMany('identification', {
     inverse: 'publicationFlowForNumac',
