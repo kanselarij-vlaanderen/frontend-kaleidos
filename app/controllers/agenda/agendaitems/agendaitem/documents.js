@@ -252,9 +252,9 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @action
   async markForSignature(piece) {
     // Placed the getting of these variables here to lessen loading time in router
-    const treatments = await this.agendaitem.treatments;
-    const agendaItemTreatment = treatments.firstObject;
-    await this.signatureService.markDocumentForSignature(piece, agendaItemTreatment);
+    const agendaItemTreatment = await this.agendaitem.treatment;
+    const decisionActivity = await agendaItemTreatment.decisionActivity;
+    await this.signatureService.markDocumentForSignature(piece, decisionActivity);
   }
 
   @action

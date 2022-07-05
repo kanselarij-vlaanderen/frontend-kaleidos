@@ -15,10 +15,10 @@ export default class DocumentController extends Controller {
       this.router.transitionTo('agendas');
     }
   }
-  
+
   @action
-  async markForSignature(piece, agendaItemTreatment) {
-    await this.signatureService.markDocumentForSignature(piece, agendaItemTreatment);
+  async markForSignature(piece, decisionActivity) {
+    await this.signatureService.markDocumentForSignature(piece, decisionActivity);
   }
 
   @action

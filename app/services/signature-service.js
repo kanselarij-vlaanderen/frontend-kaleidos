@@ -6,8 +6,8 @@ export default class SignatureService extends Service {
   @service intl;
   @service currentSession;
 
-  async markDocumentForSignature(piece, agendaItemTreatment) {
-    const subcase = await agendaItemTreatment?.subcase;
+  async markDocumentForSignature(piece, decisionActivity) {
+    const subcase = await decisionActivity?.subcase;
     if (subcase) {
       const caze = await subcase.case;
       const creator = await this.currentSession.user;
@@ -19,7 +19,7 @@ export default class SignatureService extends Service {
         shortTitle: caze.shortTitle,
         longTitle: caze.title,
         case: caze,
-        decisionActivity: agendaItemTreatment,
+        decisionActivity,
         creator: creator,
       });
       await signFlow.save();
@@ -51,7 +51,7 @@ export default class SignatureService extends Service {
     }
     const signSubcase = await signMarkingActivity.signSubcase;
     const signFlow = await signSubcase.signFlow;
-    
+
     await signFlow.destroyRecord();
     await signSubcase.destroyRecord();
     await signMarkingActivity.destroyRecord();

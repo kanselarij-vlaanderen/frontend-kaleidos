@@ -69,16 +69,16 @@
                       @route="agenda.agendaitems.agendaitem"
                       @models={{this.modelsForAgendaitemRoute}}
                     >
-                      {{#if @publicationFlow.agendaItemTreatment.startDate}}
-                        {{moment-format @publicationFlow.agendaItemTreatment.startDate}}
+                      {{#if @publicationFlow.decisionActivity.startDate}}
+                        {{moment-format @publicationFlow.decisionActivity.startDate}}
                       {{else}}
                         {{t "to-agenda"}}
                       {{/if}}
                     </Auk::ButtonLink>
                   {{else}}
                     <Auk::Datepicker
-                      @date={{this.agendaItemTreatment.startDate}}
-                      @onChange={{set this.agendaItemTreatment "startDate"}}
+                      @date={{this.decisionActivity.startDate}}
+                      @onChange={{set this.decisionActivity "startDate"}}
                     />
                   {{/if}}
                 </div>
@@ -152,15 +152,15 @@
                     @route="agenda.agendaitems.agendaitem"
                     @models={{this.modelsForAgendaitemRoute}}
                   >
-                    {{#if @publicationFlow.agendaItemTreatment.startDate}}
-                      {{moment-format @publicationFlow.agendaItemTreatment.startDate}}
+                    {{#if @publicationFlow.decisionActivity.startDate}}
+                      {{moment-format @publicationFlow.decisionActivity.startDate}}
                     {{else}}
                       {{t "to-agenda"}}
                     {{/if}}
                   </Auk::ButtonLink>
                 {{else}}
-                  {{#if @publicationFlow.agendaItemTreatment.startDate}}
-                    {{moment-format @publicationFlow.agendaItemTreatment.startDate}}
+                  {{#if @publicationFlow.decisionActivity.startDate}}
+                    {{moment-format @publicationFlow.decisionActivity.startDate}}
                   {{else}}
                     {{t "dash"}}
                   {{/if}}
