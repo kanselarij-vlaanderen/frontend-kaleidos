@@ -11,6 +11,7 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
 
   @tracked agendaitem;
   @tracked agendaItemTreatment;
+  @tracked newsletterInfo;
   @tracked notaModifiedTime = null;
 
   @tracked isEditing = false;
@@ -19,7 +20,7 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
 
   // Nota changed since last newsitem edit
   get notaHasChanged() {
-    const modifiedNliTime = this.model.modified;
+    const modifiedNliTime = this.newsletterInfo.modified;
     if (modifiedNliTime && this.notaModifiedTime) {
       return moment(modifiedNliTime).isBefore(moment(this.notaModifiedTime));
     }
@@ -44,8 +45,8 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
 
   @action
   stopEditing() {
-    if (this.model.isDeleted) {
-      this.model = null;
+    if (this.newsletterInfo.isDeleted) {
+      this.newsletterInfo = null;
     }
     this.isEditing = false;
     this.isEditingFullscreen = false;
@@ -53,8 +54,7 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
 
   @action
   async createAndStartEditing() {
-    const newsItem = await this.newsletterService.createNewsItemForAgendaitem(this.agendaitem);
-    this.model = newsItem;
+    this.newsletterInfo = await this.newsletterService.createNewsItemForAgendaitem(this.agendaitem);
     this.isEditing = true;
   }
 

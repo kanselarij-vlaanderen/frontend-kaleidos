@@ -25,10 +25,9 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
   }
 
   async model() {
-    const newsletterInfo = await this.store.queryOne('newsletter-info', {
+    this.newsletterInfo = await this.store.queryOne('newsletter-info', {
       'filter[agenda-item-treatment][:id:]': this.agendaItemTreatment.id,
     });
-    return newsletterInfo;
   }
 
   async setupController(controller) {
@@ -36,6 +35,7 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
     const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
     controller.agendaitem = agendaitem;
     controller.agendaItemTreatment = await agendaitem.agendaItemTreatment;
+    controller.newsletterInfo = this.newsletterInfo;
     const notaModifiedTime = await this.agendaService.retrieveModifiedDateFromNota(agendaitem);
     controller.notaModifiedTime = notaModifiedTime;
   }

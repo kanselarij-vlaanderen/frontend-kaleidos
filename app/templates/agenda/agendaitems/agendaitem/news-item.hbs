@@ -6,7 +6,7 @@
   </AuToolbarGroup>
   {{#if this.currentSession.isEditor}}
     <AuToolbarGroup>
-      {{#if this.model}}
+      {{#if this.newsletterInfo}}
         {{#if this.isEditing}}
           <AuButton
             @skin="link"
@@ -49,7 +49,7 @@
     </AuToolbarGroup>
   {{/if}}
 </AuToolbar>
-{{#if this.model}}
+{{#if this.newsletterInfo}}
   {{#if (and this.notaHasChanged this.currentSession.isEditor)}}
     {{#unless this.notaModifiedWarningConfirmed}}
       <ChangesAlert
@@ -64,7 +64,7 @@
   {{/if}}
   {{#if this.isEditing}}
     <Agenda::Agendaitem::AgendaitemNewsItemEdit
-      @newsletterInfo={{this.model}}
+      @newsletterInfo={{this.newsletterInfo}}
       @agendaitem={{this.agendaitem}}
       @onCancel={{this.stopEditing}}
       @onSave={{this.stopEditing}}
@@ -73,7 +73,7 @@
   {{else}}
     <Agenda::Agendaitem::AgendaitemNewsItem
       @agendaitem={{this.agendaitem}}
-      @newsletterInfo={{this.model}}
+      @newsletterInfo={{this.newsletterInfo}}
     />
   {{/if}}
 {{else}}
