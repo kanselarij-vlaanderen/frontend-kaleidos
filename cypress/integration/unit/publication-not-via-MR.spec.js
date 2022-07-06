@@ -6,10 +6,6 @@ import publication from '../../selectors/publication.selectors';
 import utils from '../../selectors/utils.selectors';
 import route from '../../selectors/route.selectors';
 
-function currentTimestamp() {
-  return Cypress.dayjs().unix();
-}
-
 function selectFromDropdown(item) {
   cy.get(dependency.emberPowerSelect.option, {
     timeout: 5000,
@@ -28,46 +24,40 @@ function selectFromDropdown(item) {
 
 context('link publication not via MR to MR', () => {
   // const nameToCheck = 'Jambon';
-  const testId = `testId=${currentTimestamp()}`;
-  const caseShortTitle1 = `Cypress link publication not via MR to MR linked - ${testId}`;
-  const caseShortTitle2 = `Cypress link publication not via MR to MR unlinked - ${testId}`;
-  const type = 'Mededeling';
-  const subcaseShortTitle1 = `test for linking publication not via MR to MR linked - ${testId}`;
-  const subcaseShortTitle2 = `test for linking publication not via MR to MR unlinked - ${testId}`;
+  const agendaDetailLink = 'vergadering/62C5974E03A74CBB92D216A3/agenda/62C5974F03A74CBB92D216A4/agendapunten/62C5975303A74CBB92D216A7';
+  // const subcaseShortTitle1 = 'Subcase for linking publication not via MR to MR linked - 1657116367';
+  const subcaseShortTitle2 = 'Subcase for linking publication not via MR to MR unlinked - 1657116367';
   const domain1 = {
     name: 'Cultuur, Jeugd, Sport en Media',
     selected: true,
     fields: ['Media'],
   };
-  const file1 = {
-    folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test for linking publication not via MR to MR - DOC1', fileType: 'Nota',
-  };
-  const file2 = {
-    folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test for linking publication not via MR to MR - DOC2', fileType: 'Nota',
-  };
-  const file3 = {
-    folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test for linking publication not via MR to MR - DOC3', fileType: 'Nota',
-  };
+  // const file1 = {
+  //   folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test for linking publication not via MR to MR - DOC1', fileType: 'Nota',
+  // };
+  // const file2 = {
+  //   folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test for linking publication not via MR to MR - DOC2', fileType: 'BVR',
+  // };
+  // const file3 = {
+  //   folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test for linking publication not via MR to MR - DOC3', fileType: 'Decreet',
+  // };
 
-  const agendaDate1 = Cypress.dayjs().add(1, 'weeks')
-    .day(21);
-  const agendaDate2 = Cypress.dayjs().add(1, 'weeks')
-    .day(22);
+  const agendaDate = Cypress.dayjs('2022-04-21').hour(10);
 
   const fields1 = {
-    number: 9000,
+    number: 3000,
     shortTitle: 'publication already linked to MR',
     decisionDate: Cypress.dayjs().add(1, 'weeks')
       .day(3),
   };
   const fields2 = {
-    number: 9001,
+    number: 3001,
     // this shorttitle will be subcaseShortTitle2, command changed to allow for this possibility
     decisionDate: Cypress.dayjs().add(1, 'weeks')
       .day(3),
   };
   const fields3 = {
-    number: 9002,
+    number: 3002,
     shortTitle: 'publication not via MR for linking to MR',
     decisionDate: Cypress.dayjs().add(1, 'weeks')
       .day(3),
@@ -84,53 +74,10 @@ context('link publication not via MR to MR', () => {
     cy.logout();
   });
 
-  it('setup link publication not via MR to MR', () => {
-    cy.login('Admin');
-    cy.createCase(caseShortTitle1);
-    cy.addSubcase(type, subcaseShortTitle1);
-    cy.openSubcase(0);
-    cy.addDocumentsToSubcase([file1]);
-
-    cy.createCase(caseShortTitle2);
-    cy.addSubcase(type, subcaseShortTitle2);
-    cy.openSubcase(0);
-    cy.addSubcaseMandatee(1);
-    cy.addDomainsAndFields([domain1]);
-    cy.addDocumentsToSubcase([file2, file3]);
-
-    cy.createAgenda('Ministerraad', agendaDate1, 'Zaal oxford bij Cronos Leuven');
-    cy.openAgendaForDate(agendaDate1);
-    cy.addAgendaitemToAgenda(subcaseShortTitle1);
-
-    cy.openAgendaitemDocumentTab(subcaseShortTitle1, true);
-    cy.get(route.agendaitemDocuments.openPublication).click();
-    cy.get(publication.batchDocumentsPublicationRow.new).click();
-    cy.fillInNewPublicationFields(fields1);
-    cy.get(publication.newPublication.create).click();
-
-    cy.createAgenda('Ministerraad', agendaDate2, 'Zaal oxford bij Cronos Leuven');
-    cy.openAgendaForDate(agendaDate2);
-    cy.addAgendaitemToAgenda(subcaseShortTitle2);
-
-    cy.openAgendaitemDocumentTab(subcaseShortTitle2, true);
-    cy.get(route.agendaitemDocuments.openPublication).click();
-    cy.get(publication.batchDocumentsPublicationRow.name).contains(file2.newFileName)
-      .parent()
-      .find(publication.batchDocumentsPublicationRow.new)
-      .click();
-    cy.fillInNewPublicationFields(fields2);
-    cy.intercept('POST', '/cases').as('createNewCase');
-    cy.intercept('POST', '/publication-flows').as('createNewPublicationFlow');
-    cy.get(publication.newPublication.create).click()
-      .wait('@createNewCase')
-      .wait('@createNewPublicationFlow');
-
-    cy.createPublication(fields3);
-  });
-
   it('link publication not via MR to MR', () => {
     cy.login('Admin');
-    cy.openAgendaForDate(agendaDate2);
+    cy.visitAgendaWithLink(agendaDetailLink);
+    // cy.openAgendaForDate(agendaDate2);
     cy.openAgendaitemDocumentTab(subcaseShortTitle2, true);
     cy.get(route.agendaitemDocuments.openPublication).click();
 
@@ -156,7 +103,7 @@ context('link publication not via MR to MR', () => {
       .type(fields3.number);
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.intercept('DELETE', '/cases/*').as('deleteCases');
-    cy.intercept('DELETE', '/agenda-item-treatments/*').as('deleteTreatments');
+    cy.intercept('DELETE', '/decision-activities/*').as('deleteDecisionActivity');
     cy.intercept('PATCH', '/publication-flows/*').as('patchPublicationFlows');
     cy.intercept('PATCH', '/pieces/*').as('patchPieces');
     cy.get(dependency.emberPowerSelect.option).contains(fields3.number)
@@ -164,7 +111,7 @@ context('link publication not via MR to MR', () => {
       .trigger('mouseover')
       .click()
       .wait('@deleteCases')
-      .wait('@deleteTreatments')
+      .wait('@deleteDecisionActivity')
       .wait('@patchPublicationFlows')
       .wait('@patchPieces');
 
@@ -198,11 +145,11 @@ context('link publication not via MR to MR', () => {
       .should('have.length', 1, {
         timeout: 5000,
       });
-    // TODO-BUG
+    // TODO-BUG file name is being showed instead of piece name, might be intended
     // cy.get('@documentOnMR').contains(file3.newFileName);
     // check if link to agendaitem works
     cy.get(publication.publicationNav.case).click();
-    cy.get(publication.publicationCaseInfo.startDate).contains(agendaDate2.format('DD-MM-YYYY'));
+    cy.get(publication.publicationCaseInfo.startDate).contains(agendaDate.format('DD-MM-YYYY'));
     cy.get(publication.publicationCaseInfo.startDate).invoke('removeAttr', 'target')
       .scrollIntoView()
       .click();

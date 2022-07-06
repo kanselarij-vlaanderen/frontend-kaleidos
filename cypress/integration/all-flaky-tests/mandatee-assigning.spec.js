@@ -359,8 +359,9 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
   });
 
   it('check list of mandatees in 2020 agenda', () => {
-    const agendaDate2020 = Cypress.dayjs('2020-04-07');
-    const subcaseShortTitle = 'Cypress test: 20+ documents agendaitem with subcase - 1589286110';
+    // const agendaDate2020 = Cypress.dayjs('2020-04-07');
+    // const subcaseShortTitle = 'Cypress test: 20+ documents agendaitem with subcase - 1589286110';
+    const agendaitemLink = 'vergadering/5EBA94D7751CF70008000001/agenda/5EBA94D8751CF70008000002/agendapunten/5EBA9512751CF70008000008';
     const mandateeNames2020 = [
       'Jan Jambon, Minister-president van de Vlaamse Regering',
       'Jan Jambon, Vlaams minister van Buitenlandse Zaken, Cultuur, ICT en Facilitair Management',
@@ -375,8 +376,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     ];
     const dateRange = '02-10-2019 tot 09-05-2021';
 
-    cy.openAgendaForDate(agendaDate2020);
-    cy.openDetailOfAgendaitem(subcaseShortTitle);
+    cy.visitAgendaWithLink(agendaitemLink);
     cy.get(mandatee.mandateePanelView.actions.edit).click();
     cy.get(mandatee.mandateePanelEdit.actions.add).click();
     cy.get(utils.mandateeSelector.container).click();
@@ -387,8 +387,9 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
   });
 
   it('check list of mandatees in 2022 agenda before may', () => {
-    const agendaDate2022BeforeMay = Cypress.dayjs('2022-02-28');
-    const subcaseShortTitle = 'testId=1653051342: korte titel';
+    // const agendaDate2022BeforeMay = Cypress.dayjs('2022-02-28');
+    // const subcaseShortTitle = 'testId=1653051342: korte titel';
+    const agendaitemLink = 'vergadering/62878EB2E1ADA5F6A459ABFD/agenda/62878EB3E1ADA5F6A459ABFE/agendapunten/62879264E1ADA5F6A459AC0D';
     const mandateeNames2022BeforeMay = [
       'Jan Jambon, Minister-president van de Vlaamse Regering',
       'Jan Jambon, Vlaams minister van Buitenlandse Zaken, Cultuur, Digitalisering en Facilitair Management',
@@ -403,8 +404,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     ];
     const dateRange = '10-05-2021 tot 16-05-2022';
 
-    cy.openAgendaForDate(agendaDate2022BeforeMay);
-    cy.openDetailOfAgendaitem(subcaseShortTitle);
+    cy.visitAgendaWithLink(agendaitemLink);
     cy.get(mandatee.mandateePanelView.actions.edit).click();
     cy.get(mandatee.mandateePanelEdit.actions.add).click();
     cy.get(utils.mandateeSelector.container).click();
@@ -415,14 +415,9 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
   });
 
   it('check if current list of mandatees contains heden', () => {
-    const agendaDate = Cypress.dayjs();
-    const subcaseShortTitle = 'testId=1589266576: Cypress test dossier 1 test stap 2';
+    const subcaseShortTitle = 'Cypress test: assign mandatee'; // partial match to subcases used earlier
 
-    cy.createAgenda('Ministerraad', agendaDate);
     cy.openAgendaForDate(agendaDate);
-    // TODO misschien dump case of eigen case?
-    cy.addAgendaitemToAgenda(subcaseShortTitle);
-
     cy.openDetailOfAgendaitem(subcaseShortTitle);
     cy.get(mandatee.mandateePanelView.actions.edit).click();
     cy.get(mandatee.mandateePanelEdit.actions.add).click();
@@ -435,11 +430,11 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
   });
 
   it('check free search', () => {
-    const agendaDate2022BeforeMay = Cypress.dayjs('2022-02-28');
-    const subcaseShortTitle = 'testId=1653051342: korte titel';
+    // const agendaDate2022BeforeMay = Cypress.dayjs('2022-02-28');
+    // const subcaseShortTitle = 'testId=1653051342: korte titel';
+    const agendaitemLink = 'vergadering/62878EB2E1ADA5F6A459ABFD/agenda/62878EB3E1ADA5F6A459ABFE/agendapunten/62879264E1ADA5F6A459AC0D';
 
-    cy.openAgendaForDate(agendaDate2022BeforeMay);
-    cy.openDetailOfAgendaitem(subcaseShortTitle);
+    cy.visitAgendaWithLink(agendaitemLink);
 
     cy.get(mandatee.mandateePanelView.actions.edit).click();
     cy.get(mandatee.mandateePanelEdit.actions.add).click();
