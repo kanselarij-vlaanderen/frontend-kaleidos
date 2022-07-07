@@ -44,9 +44,6 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
 
   @action
   stopEditing() {
-    if (this.newsletterInfo.isDeleted) {
-      this.newsletterInfo = null;
-    }
     this.isEditing = false;
     this.isEditingFullscreen = false;
   }
