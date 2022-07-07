@@ -27,6 +27,10 @@
             @newsletterInfo={{await
               agendaitem.treatments.firstObject.newsletterInfo
             }}
+            @onSaveNewsletterEdit={{fn
+              this.saveNewsletterChanges
+              agendaitem.treatments.firstObject.newsletterInfo
+            }}
           />
         {{/let}}
       {{/each}}
@@ -41,6 +45,10 @@
             @allowEditing={{this.showDraft}}
             @agendaitem={{agendaitem}}
             @newsletterInfo={{await
+              agendaitem.treatments.firstObject.newsletterInfo
+            }}
+            @onSaveNewsletterEdit={{fn
+              this.saveNewsletterChanges
               agendaitem.treatments.firstObject.newsletterInfo
             }}
           />

@@ -1,36 +1,36 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
-{{#if (is-pending this.newsletterInfo)}}
-  <WebComponents::VlLoader @text={{t "newsletter-info-loading-text"}} />
-{{else if (not this.isEditing)}}
-  {{#if (not this.allowEditing)}}
-    {{#if (await this.newsletterInfo.inNewsletter)}}
+<div class="auk-u-mb-10">
+  {{#if (is-pending @newsletterInfo)}}
+    <WebComponents::VlLoader @text={{t "newsletter-info-loading-text"}} />
+  {{else if (not this.isEditing)}}
+    {{#if (not @allowEditing)}}
+      {{#if (await @newsletterInfo.inNewsletter)}}
+        <Newsletter::NewsletterItem::ItemContent
+          @agendaitem={{@agendaitem}}
+          @newsletterInfo={{@newsletterInfo}}
+          @itemIndex={{@itemIndex}}
+          @allowEditing={{@allowEditing}}
+          @showIndex={{@showIndex}}
+          @isEditing={{this.isEditing}}
+          @onStartEditing={{this.startEditing}}
+        />
+      {{/if}}
+    {{else}}
       <Newsletter::NewsletterItem::ItemContent
-        @allowEditing={{this.allowEditing}}
-        @onStartEditing={{action "startEditing"}}
-        @itemIndex={{this.itemIndex}}
-        @showIndex={{this.showIndex}}
+        @agendaitem={{@agendaitem}}
+        @newsletterInfo={{@newsletterInfo}}
+        @itemIndex={{@itemIndex}}
+        @allowEditing={{@allowEditing}}
+        @showIndex={{@showIndex}}
         @isEditing={{this.isEditing}}
-        @agendaitem={{this.agendaitem}}
-        @newsletterInfo={{this.newsletterInfo}}
+        @onStartEditing={{this.startEditing}}
       />
     {{/if}}
   {{else}}
-    <Newsletter::NewsletterItem::ItemContent
-      @allowEditing={{this.allowEditing}}
-      @onStartEditing={{action "startEditing"}}
-      @itemIndex={{this.itemIndex}}
-      @showIndex={{this.showIndex}}
-      @isEditing={{this.isEditing}}
-      @agendaitem={{this.agendaitem}}
-      @newsletterInfo={{this.newsletterInfo}}
+    <Agenda::Agendaitem::AgendaitemNewsItemEdit
+      @agendaitem={{@agendaitem}}
+      @newsletterInfo={{@newsletterInfo}}
+      @onSave={{this.saveChanges}}
+      @onCancel={{this.stopEditing}}
     />
   {{/if}}
-{{else}}
-  <Agenda::Agendaitem::AgendaitemNewsItemEdit
-    @agendaitem={{this.agendaitem}}
-    @newsletterInfo={{this.newsletterInfo}}
-    @onSave={{action "stopEditing"}}
-    @onCancel={{action "stopEditing"}}
-  />
-{{/if}}
+</div>

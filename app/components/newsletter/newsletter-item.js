@@ -1,28 +1,37 @@
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-components
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
-export default Component.extend({
-  classNames: ['auk-u-mb-10'],
-  isEditing: false,
-  itemIndex: 0,
-  showIndex: false,
-  agendaitem: null,
-  newsletterInfo: null,
+/**
+ * @argument agendaitem
+ * @argument newsletterInfo
+ * @argument {number} itemIndex
+ * @argument {boolean} allowEditing
+ * @argument {boolean} showIndex
+ */
+export default class NewsletterNewsletterItemComponent extends Component {
+  @tracked isEditing = false;
+  @tracked itemIndex = 0;
+  @tracked showIndex = false;
+  agendaitem = null;
+  newsletterInfo = null;
 
-  allowEditing: true,
+  allowEditing = true;
 
-  // TODO: octane-refactor
-  // eslint-disable-next-line ember/no-actions-hash
-  actions: {
-    stopEditing() {
-      this.set('isEditing', false);
-    },
-    startEditing() {
-      this.set('isEditing', true);
-    },
-  },
+  @action
+  stopEditing() {
+    this.isEditing = false;
+  }
+  @action
+  startEditing() {
+    this.isEditing = true;
+  }
 
-});
+  @action
+  async saveChanges() {
+    if (this.args.onSave) {
+      await this.args.onSaveNewsletterEdit();
+    }
+    this.stopEditing();
+  }
+}
