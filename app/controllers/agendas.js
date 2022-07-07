@@ -3,7 +3,6 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import moment from 'moment';
-import { A } from '@ember/array';
 import { restartableTask, timeout } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
@@ -148,13 +147,22 @@ export default class AgendasController extends Controller {
     );
 
     const startDate = newMeeting.plannedStart;
+    const decisionActivity = this.store.createRecord(
+      'decision-activity',
+      {
+        startDate: startDate,
+        decisionResultCode,
+        // no subcase. Minutes approval aren't part of a (sub)case
+      }
+    );
+    await decisionActivity.save();
+
     const agendaItemTreatment = this.store.createRecord(
       'agenda-item-treatment',
       {
         created: now,
         modified: now,
-        startDate: startDate,
-        decisionResultCode,
+        decisionActivity,
       }
     );
     await agendaItemTreatment.save();
@@ -168,7 +176,7 @@ export default class AgendasController extends Controller {
       ).format('dddd DD-MM-YYYY')}`,
       formallyOk: CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK,
       isApproval: true,
-      treatments: A([agendaItemTreatment]),
+      treatment: agendaItemTreatment,
     });
     await agendaitem.save();
     return agendaitem;

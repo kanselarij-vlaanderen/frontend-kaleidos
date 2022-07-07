@@ -4,7 +4,6 @@ import { singularize } from 'ember-inflector';
 import fetch from 'fetch';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
-import { A } from '@ember/array';
 
 export default class AgendaService extends Service {
   @service store;
@@ -133,13 +132,19 @@ export default class AgendaService extends Service {
       'filter[:uri:]': defaultDecisionResultCodeUri,
     });
 
-    // Treatment of agenda-item / decision activity
-    const agendaItemTreatment = await this.store.createRecord('agenda-item-treatment', {
-      created: now,
-      modified: now,
+    // decision-activity
+    const decisionActivity = await this.store.createRecord('decision-activity', {
       subcase,
       startDate: meeting.plannedStart,
       decisionResultCode,
+    });
+    await decisionActivity.save();
+
+    // Treatment
+    const agendaItemTreatment = await this.store.createRecord('agenda-item-treatment', {
+      created: now,
+      modified: now,
+      decisionActivity,
     });
     await agendaItemTreatment.save();
 
@@ -166,12 +171,12 @@ export default class AgendaService extends Service {
       pieces: submittedPieces,
       linkedPieces: await subcase.linkedPieces,
       agendaActivity,
-      treatments: A([agendaItemTreatment]),
+      treatment: agendaItemTreatment,
     });
     await agendaitem.save();
     await lastAgenda.hasMany('agendaitems').reload();
     await subcase.hasMany('agendaActivities').reload();
-    await subcase.hasMany('treatments').reload();
+    await subcase.hasMany('submissionActivities').reload();
     subcase.set('requestedForMeeting', meeting);
     await subcase.save();
     updateModifiedProperty(lastAgenda);
@@ -221,21 +226,23 @@ export default class AgendaService extends Service {
     });
     agendaitemToDelete.set('aboutToDelete', true);
     const agendaActivity = await agendaitemToDelete.get('agendaActivity');
-    const treatments = await agendaitemToDelete.get('treatments');
+    const treatment = await agendaitemToDelete.treatment;
 
     if (agendaActivity) {
       const subcase = await agendaActivity.get('subcase');
       await agendaActivity.hasMany('agendaitems').reload();
       const agendaitemsFromActivity = await agendaActivity.get('agendaitems');
-      if (treatments) {
-        await Promise.all(treatments.map(async(treatment) => {
-          const newsletter = await treatment.get('newsletterInfo');
-          if (newsletter) {
-            await newsletter.destroyRecord();
-          }
-          // TODO DELETE REPORT !
-          await treatment.destroyRecord();
-        }));
+      if (treatment) {
+        const decisionActivity = await treatment.decisionActivity;
+        const newsletter = await treatment.get('newsletterInfo');
+        if (newsletter) {
+          await newsletter.destroyRecord();
+        }
+        if (decisionActivity) {
+          await decisionActivity.destroyRecord();
+        }
+        // TODO DELETE REPORT !
+        await treatment.destroyRecord();
       }
       await Promise.all(agendaitemsFromActivity.map(async(agendaitem) => {
         const agenda = await agendaitem.get('agenda');
@@ -246,7 +253,7 @@ export default class AgendaService extends Service {
       await subcase.set('requestedForMeeting', null);
       await subcase.save();
       await subcase.hasMany('agendaActivities').reload();
-      await subcase.hasMany('treatments').reload();
+      await subcase.hasMany('decisionActivities').reload();
     } else {
       await agendaitemToDelete.destroyRecord();
     }

@@ -424,7 +424,7 @@ function addNewPieceToDecision(oldFileName, file) {
   cy.log('addNewPieceToDecision');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('POST', '/pieces').as(`createNewPiece_${randomInt}`);
-  cy.intercept('PATCH', '/agenda-item-treatments/*').as(`patchTreatment_${randomInt}`);
+  cy.intercept('PATCH', '/decision-activities/*').as(`patchDecisionActivity_${randomInt}`);
   cy.intercept('GET', '/pieces/*/previous-piece').as(`getPreviousPiece_${randomInt}`);
 
   cy.get(document.documentCard.name.value).contains(oldFileName)
@@ -446,7 +446,7 @@ function addNewPieceToDecision(oldFileName, file) {
     })
       .wait(`@createNewPiece_${randomInt}`);
   });
-  cy.wait(`@patchTreatment_${randomInt}`);
+  cy.wait(`@patchDecisionActivity_${randomInt}`);
   cy.wait(`@getPreviousPiece_${randomInt}`);
   cy.get(auk.modal.container).should('not.exist');
   cy.get(auk.loader).should('not.exist');

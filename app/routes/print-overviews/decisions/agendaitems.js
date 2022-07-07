@@ -7,7 +7,7 @@ import { inject as service } from '@ember/service';
 export default Route.extend({
   routeNamePrefix: 'decisions',
   sort: 'number',
-  include: 'agenda-activity,agenda-activity.subcase',
+  include: 'agenda-activity,agenda-activity.subcase,treatment,treatment.decision-activity',
   currentSession: service(),
   store: service(),
   modelName: 'agendaitem',

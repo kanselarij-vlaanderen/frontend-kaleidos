@@ -5,6 +5,9 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
+/**
+ * @argument decisionActivity
+ */
 export default class AgendaitemDecisionComponent extends Component {
   @service currentSession;
   @service store;
@@ -13,9 +16,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @tracked previousReport;
 
   @tracked isEditing = false;
-  @tracked isVerifyingDelete = null;
   @tracked isAddingReport = false;
-  @tracked treatmentToDelete = null;
 
   @tracked decisionDocType;
 
@@ -40,15 +41,9 @@ export default class AgendaitemDecisionComponent extends Component {
     this.isAddingReport = !this.isAddingReport;
   }
 
-  @action
-  promptDeleteTreatment(treatment) {
-    this.treatmentToDelete = treatment;
-    this.isVerifyingDelete = true;
-  }
-
   @task
   *loadReport() {
-    this.report = yield this.args.treatment.report;
+    this.report = yield this.args.decisionActivity.report;
     this.previousReport = yield this.report?.previousPiece;
   }
 
@@ -60,14 +55,8 @@ export default class AgendaitemDecisionComponent extends Component {
       type: this.decisionDocType,
     });
 
-    let subcaseIsConfidential = false;
-    if (this.args.subcase) {
-      subcaseIsConfidential = this.args.subcase.confidential;
-    } else if (this.args.agendaitem) {
-      const agendaActivity = await this.args.agendaitem.agendaActivity;
-      const subcase = await agendaActivity?.subcase;
-      subcaseIsConfidential = subcase?.confidential;
-    }
+    const subcase = await this.args.decisionActivity.subcase;
+    const subcaseIsConfidential = subcase?.confidential;
 
     const defaultAccessLevel = await this.store.findRecordByUri(
       'concept', subcaseIsConfidential
@@ -81,8 +70,8 @@ export default class AgendaitemDecisionComponent extends Component {
       documentContainer,
     });
     await piece.save();
-    this.args.treatment.report = piece;
-    await this.args.treatment.save();
+    this.args.decisionActivity.report = piece;
+    await this.args.decisionActivity.save();
     this.isAddingReport = false;
     await this.loadReport.perform();
   }
@@ -90,8 +79,8 @@ export default class AgendaitemDecisionComponent extends Component {
   @action
   async attachNewReportVersion(piece) {
     await piece.save();
-    this.args.treatment.report = piece;
-    await this.args.treatment.save();
+    this.args.decisionActivity.report = piece;
+    await this.args.decisionActivity.save();
     // This reload is a workaround for file-service "deleteDocumentContainer" having a stale list of pieces
     // when deleting the full container right after adding a new report version without the version history open.
     const documentContainer = await piece.documentContainer;
@@ -109,24 +98,9 @@ export default class AgendaitemDecisionComponent extends Component {
       "Cannot create a new tag for '<(unknown):ember890>' after it has been destroyed"
     */
     if (this.previousReport) {
-      this.args.treatment.report = this.previousReport;
-      await this.args.treatment.save();
-    } // else no previous version available. Treatment no longer has a report
+      this.args.decisionActivity.report = this.previousReport;
+      await this.args.decisionActivity.save();
+    } // else no previous version available. DecisionActivity no longer has a report
     await this.loadReport.perform();
-  }
-
-  @action
-  async deleteTreatment() {
-    await this.treatmentToDelete.destroyRecord();
-    if (this.args.onDeleteTreatment) {
-      await this.args.onDeleteTreatment(this.treatmentToDelete);
-    }
-    this.isVerifyingDelete = false;
-  }
-
-  @action
-  cancel() {
-    this.treatmentToDelete = null;
-    this.isVerifyingDelete = false;
   }
 }
