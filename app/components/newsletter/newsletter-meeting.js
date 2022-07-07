@@ -34,7 +34,6 @@ export default Component.extend({
   },
 
   formatPublicationTime(date) {
-    console.log(date)
     let formattedStart;
     if (date != null) {
       formattedStart = moment(date).format('DD MMMM YYYY - HH:ss');
