@@ -55,6 +55,12 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
   }
 
   @action
+  async saveNewsletter() {
+    await this.newsletterInfo.save();
+    this.stopEditing();
+  }
+
+  @action
   refresh() {
     this.send('reloadModel');
   }

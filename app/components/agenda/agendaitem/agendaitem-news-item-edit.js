@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action,  } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { isNone } from '@ember/utils';
+import { task } from 'ember-concurrency';
 
 export default class AgendaAgendaitemAgendaitemNewsItemEditComponent extends Component {
   @service intl;
@@ -10,29 +11,28 @@ export default class AgendaAgendaitemAgendaitemNewsItemEditComponent extends Com
   @tracked editorInstance;
 
   @tracked initValue;
-  @tracked _isFullscreen;
+  @tracked isFullscreen;
   @tracked isTryingToSave = false;
   @tracked isExpanded = false;
-  @tracked isLoading = false;
 
-  set isFullscreen(isFullscreen) {
-    this._isFullscreen = isFullscreen;
-  }
+  @tracked title;
+  @tracked remark;
+  @tracked isFinished;
+  @tracked themes;
 
-  get isFullscreen() {
-    return this._isFullscreen ?? this.args.isFullscreen;
-  }
+  constructor() {
+    super(...arguments);
 
-  get editorInstanceAvailable() {
-    return this.editorInstance ? true : false;
-  }
+    this.isFullscreen = this.args.isFullscreen;
 
-  get hasNota() {
-    return this.args.agendaitem.nota;
+    this.title = this.args.newsletterInfo.title;
+    this.remark = this.args.newsletterInfo.remark;
+    this.isFinished = this.args.newsletterInfo.finished;
+    this.themes = this.args.newsletterInfo.themes.toArray();
   }
 
   get richtext() {
-    if (!this.editorInstanceAvailable) {
+    if (!this.editorInstance) {
       throw new Error("Can't get rich text since editor-instance isn't available!");
     }
     return this.editorInstance.htmlContent;
@@ -45,49 +45,43 @@ export default class AgendaAgendaitemAgendaitemNewsItemEditComponent extends Com
 
   @action
   async trySaveChanges() {
-    const themes = (await this.args.newsletterInfo.themes).toArray();
-    if (themes.length > 0) {
-      return this.saveChanges();
+    if (this.themes.length > 0) {
+      return this.saveChanges.perform();
     }
     this.isTryingToSave = true;
   }
 
   @action
   async cancelEditing() {
-    const newsletterInfo = await this.args.newsletterInfo;
-    newsletterInfo.rollbackAttributes();
-    if (!newsletterInfo.isDeleted) {
-      newsletterInfo.hasMany('themes').reload();
-    }
     if (this.args.onCancel) {
       this.args.onCancel();
     }
   }
 
-  @action
-  async saveChanges() {
-    this.isLoading = true;
-    const newsletterInfo = await this.args.newsletterInfo;
-    try {
-      // The editor introduces &nbsp; instead of normal spaces to work around
-      // certain browsers' behavior where normal spaces on outer ends of text nodes
-      // aren't rendered in the content-editable. In recent versions of the editor however,
-      // this &nbsp;-inserting seems to happen too often, which results in very long
-      // lines that don't break, which is undesired.
-      // Here we replace all &nbsp's that don't lean against html tags in an attempt
-      // to keep the editor's workaround behavior, while replacing unnecessary &nbsp;'s
-      //
-      const cleanedHtml = this.richtext.replaceAll(/(?<!>)&nbsp;(?!<)/gm, ' ');
-      newsletterInfo.richtext = cleanedHtml;
-    } catch {
-      // pass
-    }
-    await newsletterInfo.save();
-
-    this.isLoading = false;
+  @task
+  *saveChanges() {
     if (this.args.onSave) {
-      this.args.onSave();
+      this.args.newsletterInfo.title = this.title;
+      this.args.newsletterInfo.remark = this.remark;
+      this.args.newsletterInfo.finished = this.isFinished;
+      this.args.newsletterInfo.themes = this.themes;
+      try {
+        // The editor introduces &nbsp; instead of normal spaces to work around
+        // certain browsers' behavior where normal spaces on outer ends of text nodes
+        // aren't rendered in the content-editable. In recent versions of the editor however,
+        // this &nbsp;-inserting seems to happen too often, which results in very long
+        // lines that don't break, which is undesired.
+        // Here we replace all &nbsp's that don't lean against html tags in an attempt
+        // to keep the editor's workaround behavior, while replacing unnecessary &nbsp;'s
+        //
+        const cleanedHtml = this.richtext.replaceAll(/(?<!>)&nbsp;(?!<)/gm, ' ');
+        this.args.newsletterInfo.richtext = cleanedHtml;
+      } catch {
+        // pass
+      }
+      yield this.args.onSave();
     }
+    this.isTryingToSave = false;
   }
 
   @action

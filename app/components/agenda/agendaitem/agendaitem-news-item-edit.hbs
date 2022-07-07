@@ -57,7 +57,7 @@
       <AuInput
         data-test-newsletter-edit-item-short-title
         @width="block"
-        @value={{@newsletterInfo.title}}
+        @value={{this.title}}
       />
     </div>
     <div class="auk-form-group">
@@ -90,7 +90,7 @@
                 {{t "close-fullscreen"}}
               </AuButton>
               <AuButton
-                @loading={{this.isLoading}}
+                @loading={{this.saveChanges.isRunning}}
                 {{on "click" this.trySaveChanges}}
                 data-test-newsletter-edit-item-save
               >
@@ -122,7 +122,7 @@
       <AuInput
         data-test-newsletter-edit-item-remark
         @width="block"
-        @value={{@newsletterInfo.remark}}
+        @value={{this.remark}}
       />
     </div>
     <div class="auk-form-group">
@@ -130,12 +130,12 @@
       <Auk::Toggle
         data-test-newsletter-edit-item-toggle-finished
         id="item-finished"
-        @checked={{@newsletterInfo.finished}}
+        @checked={{this.isFinished}}
       />
     </div>
     <div class="auk-form-group" data-test-newsletter-edit-item-themes-selector>
       <Auk::Label>{{t "themes"}}</Auk::Label>
-      <Utils::ThemesSelector @selectedThemes={{await @newsletterInfo.themes}} />
+      <Utils::ThemesSelector @selectedThemes={{this.themes}} />
     </div>
   </Auk::Panel::Body>
   <Auk::Panel::Body class="au-u-background-gray-100">
@@ -148,7 +148,7 @@
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
           <AuButton
-            @loading={{this.isLoading}}
+            @loading={{this.saveChanges.isRunning}}
             {{on "click" this.trySaveChanges}}
             data-test-newsletter-edit-item-save
           >
@@ -165,7 +165,7 @@
     @title={{t "no-themes-selected"}}
     @message={{t "no-themes-selected-message"}}
     @cancel={{set this "isTryingToSave" false}}
-    @verify={{this.saveChanges}}
+    @verify={{perform this.saveChanges}}
     @buttonText="save"
     @buttonType="warning"
     @showIcon={{false}}
