@@ -31,15 +31,13 @@ export default class TableRowNewsletterTable extends Component {
 
   @action
   stopEditing() {
-    if (this.newsletterInfo.isDeleted) {
-      this.newsletterInfo = null;
-    }
     this.isEditing = false;
   }
 
   @task
   *saveNewsletterInfoTask() {
     yield this.newsletterInfo.save();
+    this.stopEditing();
   }
 
   @action
