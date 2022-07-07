@@ -4,6 +4,8 @@ import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import VrLegacyDocumentsName,
+{ compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
 
 export default class DocumentsSubcaseSubcasesRoute extends Route {
   @service store;
@@ -25,7 +27,14 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
       pieces.push(...submissionPieces);
     }
 
-    const sortedPieces = sortPieces(pieces);
+    let sortedPieces;
+    const meeting = await subcase.requestedForMeeting;
+    if (meeting?.isPreKaleidos) {
+      sortedPieces = sortPieces(pieces, VrLegacyDocumentsName, compareLegacyDocuments);
+    } else {
+      sortedPieces = sortPieces(pieces);
+    }
+
     return {
       pieces: sortedPieces,
       // linkedPieces: this.modelFor('cases.case.subcases.subcase').get('linkedPieces')
