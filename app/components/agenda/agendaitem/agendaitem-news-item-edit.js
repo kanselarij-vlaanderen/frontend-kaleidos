@@ -18,7 +18,7 @@ export default class AgendaAgendaitemAgendaitemNewsItemEditComponent extends Com
   @tracked title;
   @tracked remark;
   @tracked isFinished;
-  @tracked themes;
+  @tracked _themes;
 
   constructor() {
     super(...arguments);
@@ -28,7 +28,14 @@ export default class AgendaAgendaitemAgendaitemNewsItemEditComponent extends Com
     this.title = this.args.newsletterInfo.title;
     this.remark = this.args.newsletterInfo.remark;
     this.isFinished = this.args.newsletterInfo.finished;
-    this.themes = this.args.newsletterInfo.themes.toArray();
+  }
+
+  get themes() {
+    return this._themes ?? this.args.newsletterInfo.themes.toArray();
+  }
+
+  set themes(themes) {
+    this._themes = themes;
   }
 
   get richtext() {
