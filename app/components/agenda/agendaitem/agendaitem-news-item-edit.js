@@ -48,17 +48,18 @@ export default class AgendaAgendaitemAgendaitemNewsItemEditComponent extends Com
   }
 
   @action
-  async trySaveChanges() {
-    if (this.themes.length > 0) {
-      return this.saveChanges.perform();
-    }
-    this.isTryingToSave = true;
-  }
-
-  @action
   async cancelEditing() {
     if (this.args.onCancel) {
       this.args.onCancel();
+    }
+  }
+
+  @task
+  *trySaveChanges() {
+    if (this.themes.length > 0) {
+      yield this.saveChanges.perform();
+    } else {
+      this.isTryingToSave = true;
     }
   }
 

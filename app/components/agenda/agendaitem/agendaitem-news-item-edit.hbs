@@ -91,7 +91,7 @@
               </AuButton>
               <AuButton
                 @loading={{this.saveChanges.isRunning}}
-                {{on "click" this.trySaveChanges}}
+                {{on "click" (perform this.trySaveChanges)}}
                 data-test-newsletter-edit-item-save
               >
                 {{t "save"}}
@@ -151,7 +151,7 @@
         <Auk::Toolbar::Item>
           <AuButton
             @loading={{this.saveChanges.isRunning}}
-            {{on "click" this.trySaveChanges}}
+            {{on "click" (perform this.trySaveChanges)}}
             data-test-newsletter-edit-item-save
           >
             {{t "save"}}
