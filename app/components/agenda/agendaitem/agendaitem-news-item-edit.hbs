@@ -133,10 +133,12 @@
         @checked={{this.isFinished}}
       />
     </div>
-    <div class="auk-form-group" data-test-newsletter-edit-item-themes-selector>
-      <Auk::Label>{{t "themes"}}</Auk::Label>
-      <Utils::ThemesSelector @selectedThemes={{this.themes}} />
-    </div>
+    {{#unless this.loadThemes.isRunning}}
+      <div class="auk-form-group" data-test-newsletter-edit-item-themes-selector>
+        <Auk::Label>{{t "themes"}}</Auk::Label>
+        <Utils::ThemesSelector @selectedThemes={{this.themes}} />
+      </div>
+    {{/unless}}
   </Auk::Panel::Body>
   <Auk::Panel::Body class="au-u-background-gray-100">
     <Auk::Toolbar>
