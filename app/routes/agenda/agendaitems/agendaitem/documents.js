@@ -7,7 +7,7 @@ import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import VrNotulenName, {
   compareFunction as compareNotulen,
 } from 'frontend-kaleidos/utils/vr-notulen-name';
-import VrLegacyDocumentsName,
+import VrLegacyDocumentName,
 { compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
 
 export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
@@ -27,7 +27,7 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     if (agendaitem.isApproval) {
       sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
     } else if (meeting.isPreKaleidos) {
-      sortedPieces = sortPieces(pieces, VrLegacyDocumentsName, compareLegacyDocuments);
+      sortedPieces = sortPieces(pieces, VrLegacyDocumentName, compareLegacyDocuments);
     } else {
       sortedPieces = sortPieces(pieces);
     }

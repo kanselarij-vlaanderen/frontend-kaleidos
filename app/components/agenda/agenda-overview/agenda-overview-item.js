@@ -11,7 +11,7 @@ import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import VrNotulenName,
 { compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
-import VrLegacyDocumentsName,
+import VrLegacyDocumentName,
 { compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
 
 export default class AgendaOverviewItem extends AgendaSidebarItem {
@@ -78,7 +78,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
     if (this.args.agendaitem.isApproval) {
       sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
     } else if (this.args.meeting.isPreKaleidos) {
-      sortedPieces = sortPieces(pieces, VrLegacyDocumentsName, compareLegacyDocuments);
+      sortedPieces = sortPieces(pieces, VrLegacyDocumentName, compareLegacyDocuments);
     } else {
       sortedPieces = sortPieces(pieces);
     }

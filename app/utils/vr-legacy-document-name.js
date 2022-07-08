@@ -1,7 +1,10 @@
 import CONFIG from 'frontend-kaleidos/utils/config';
 import moment from 'moment';
 
-export default class VRDocumentName {
+/**
+ * This code is 99% the same as vr-document-name.js and is used to cover some issues sorting legacy documents
+ */
+export default class VRLegacyDocumentName {
   static get regexGroups() {
     return Object.freeze({
       date: '(?<date>[12][90][0-9]{2} [0-3][0-9][01][0-9])',
@@ -15,12 +18,12 @@ export default class VRDocumentName {
   }
 
   static get looseRegex() {
-    const regexGroup = VRDocumentName.regexGroups;
+    const regexGroup = VRLegacyDocumentName.regexGroups;
     return new RegExp(`VR ${regexGroup.date}${regexGroup.casePrefix} ${regexGroup.docType}\\.${regexGroup.caseNr}([/-]${regexGroup.index})?(.*?)${regexGroup.versionSuffix}?$`);
   }
 
   static get strictRegex() {
-    const regexGroup = VRDocumentName.regexGroups;
+    const regexGroup = VRLegacyDocumentName.regexGroups;
     return new RegExp(`^VR ${regexGroup.date}${regexGroup.casePrefix} ${regexGroup.docType}\\.${regexGroup.caseNr}(/${regexGroup.index})?${regexGroup.versionSuffix}?$`);
   }
 
@@ -37,7 +40,7 @@ export default class VRDocumentName {
   }
 
   get regex() {
-    return this.strict ? VRDocumentName.strictRegex : VRDocumentName.looseRegex;
+    return this.strict ? VRLegacyDocumentName.strictRegex : VRLegacyDocumentName.looseRegex;
   }
 
   parseMeta() {
@@ -55,32 +58,20 @@ export default class VRDocumentName {
       casePrefix: match.groups.casePrefix,
       docType: match.groups.docType,
       caseNr: parseInt(match.groups.caseNr, 10),
-      index: parseInt(match.groups.index || 1, 10),
+      // for legacy there is not always an index for the first document, so assuming index 0 in that case instead of NaN.
+      index: parseInt(match.groups.index || 0, 10), 
       versionSuffix,
       versionNumber,
     };
     return meta;
   }
 
-  // TODO: Mag misschien weg?
-  // Will only be needed by backend renaming service
-  // static fromMeta (meta) {
-  //   const date = meta.date || Date();
-  //   const docType = meta.docType || 'DOC';
-  //   const caseNr = meta.caseNr.padStart(4, '0');
-  //   const index = meta.index.toString();
-  //   const pieceNr = meta.pieceNr || 1;
-  //   const formattedDate = moment(date).format('YYYY DDMM');
-  //
-  //   return VRDocumentName(`VR ${formattedDate} ${docType}.${caseNr}/${index}${this.pieceSuffixes[pieceNr]}`);
-  // }
-
   get isValid() {
-    return VRDocumentName.strictRegex.test(this.name);
+    return VRLegacyDocumentName.strictRegex.test(this.name);
   }
 
   get withoutVersionSuffix() {
-    return this.name.replace(new RegExp(`${VRDocumentName.regexGroups.versionSuffix}$`, 'ui'), '');
+    return this.name.replace(new RegExp(`${VRLegacyDocumentName.regexGroups.versionSuffix}$`, 'ui'), '');
   }
 
   withOtherVersionSuffix(pieceNr) {
@@ -96,6 +87,7 @@ export const compareFunction = function(parameterA, parameterB) {
       return (metaB.caseNr - metaA.caseNr) // Case number descending (newest first)
         || (metaA.index - metaB.index) // Index ascending
         || (metaB.date - metaA.date) // Date descending (newest first)
+        // for legacy the sorting on versionNumber is reversed compared to normal. 
         || (metaA.versionNumber - metaB.versionNumber); // versionNumber ascending (newest last)
     } catch { // Only a parses
       return -1;
