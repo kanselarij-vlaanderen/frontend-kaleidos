@@ -29,7 +29,7 @@ export default class NewsletterNewsletterItemComponent extends Component {
 
   @action
   async saveChanges() {
-    if (this.args.onSave) {
+    if (this.args.onSaveNewsletterEdit) {
       await this.args.onSaveNewsletterEdit();
     }
     this.stopEditing();

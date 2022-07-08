@@ -13,6 +13,6 @@ export default class PrintNewsletterController extends Controller {
 
   @action
   async saveNewsletterChanges(newsletterInfo) {
-    await newsletterInfo.save();
+    await newsletterInfo?.save();
   }
 }

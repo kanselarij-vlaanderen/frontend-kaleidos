@@ -19,19 +19,16 @@
       </h1>
       {{#each (await this.model.notas) as |agendaitem index|}}
         {{#let (add index 1) as |humanIndex|}}
-          <Newsletter::NewsletterItem
-            @showIndex={{this.showDraft}}
-            @allowEditing={{this.showDraft}}
-            @itemIndex={{if this.showDraft agendaitem.number humanIndex}}
-            @agendaitem={{agendaitem}}
-            @newsletterInfo={{await
-              agendaitem.treatment.newsletterInfo
-            }}
-            @onSaveNewsletterEdit={{fn
-              this.saveNewsletterChanges
-              agendaitem.treatments.firstObject.newsletterInfo
-            }}
-          />
+          {{#let (await agendaitem.treatment.newsletterInfo) as |newsletterInfo|}}
+            <Newsletter::NewsletterItem
+              @showIndex={{this.showDraft}}
+              @allowEditing={{this.showDraft}}
+              @itemIndex={{if this.showDraft agendaitem.number humanIndex}}
+              @agendaitem={{agendaitem}}
+              @newsletterInfo={{newsletterInfo}}
+              @onSaveNewsletterEdit={{fn this.saveNewsletterChanges newsletterInfo}}
+            />
+          {{/let}}
         {{/let}}
       {{/each}}
       {{#if (await this.model.announcements.length)}}
@@ -39,19 +36,16 @@
           {{t "announcements-subtitle"}}
         </h2>
         {{#each (await this.model.announcements) as |agendaitem|}}
-          <Newsletter::NewsletterItem
-            @showIndex={{this.showDraft}}
-            @itemIndex={{agendaitem.number}}
-            @allowEditing={{this.showDraft}}
-            @agendaitem={{agendaitem}}
-            @newsletterInfo={{await
-              agendaitem.treatment.newsletterInfo
-            }}
-            @onSaveNewsletterEdit={{fn
-              this.saveNewsletterChanges
-              agendaitem.treatments.firstObject.newsletterInfo
-            }}
-          />
+          {{#let (await agendaitem.treatment.newsletterInfo) as |newsletterInfo|}}
+            <Newsletter::NewsletterItem
+              @showIndex={{this.showDraft}}
+              @itemIndex={{agendaitem.number}}
+              @allowEditing={{this.showDraft}}
+              @agendaitem={{agendaitem}}
+              @newsletterInfo={{newsletterInfo}}
+              @onSaveNewsletterEdit={{fn this.saveNewsletterChanges newsletterInfo}}
+            />
+          {{/let}}
         {{/each}}
       {{/if}}
     </div>
