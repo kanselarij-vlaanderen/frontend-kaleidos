@@ -121,7 +121,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
     });
   cy.log('/createAgenda');
   cy.wait('@patchMeetings', {
-    timeout: 20000,
+    timeout: 60000,
   })
     .then(() => new Cypress.Promise((resolve) => {
       resolve({
