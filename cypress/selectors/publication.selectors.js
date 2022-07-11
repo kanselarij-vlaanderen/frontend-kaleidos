@@ -340,6 +340,9 @@ const selectors = {
     edit: '[data-test-publications-info-panel-edit]',
     targetEndDate: '[data-test-publications-info-panel-target-end-date]',
     save: '[data-test-publications-info-panel-save]',
+    view: {
+      publicationDate: '[data-test-publications-info-panel-view-publication-date]',
+    },
   },
 
   // request-activity-panel
@@ -397,6 +400,7 @@ const selectors = {
   // proof-received-panel
   proofReceivedPanel: {
     panel: '[data-test-proof-received-panel]',
+    publicationRequest: '[data-test-proof-received-panel-publication-request]',
     edit: '[data-test-proof-received-panel-edit]',
     endDate: '[data-test-proof-received-panel-end-date]',
     corrector: '[data-test-proof-received-panel-edit-corrector]',
@@ -423,12 +427,14 @@ const selectors = {
       regulationType: '[data-test-decisions-info-panel-edit-regulation-type]',
       decisionDate: '[data-test-decisions-info-panel-edit-decision-date]',
       numberOfPages: '[data-test-decisions-info-panel-edit-number-of-pages]',
+      numberOfExtracts: '[data-test-decisions-info-panel-edit-number-of-extracts]',
     },
     view: {
       regulationType: '[data-test-decisions-info-panel-view-regulation-type]',
       decisionDate: '[data-test-decisions-info-panel-view-decision-date]',
       decisionLink: '[data-test-decisions-info-panel-view-decision-link]',
       numberOfPages: '[data-test-decisions-info-panel-view-number-of-pages]',
+      numberOfExtracts: '[data-test-decisions-info-panel-view-number-of-extracts]',
     },
   },
 
@@ -441,6 +447,13 @@ const selectors = {
   // publication-registered-panel
   publicationRegisteredPanel: {
     panel: '[data-test-publication-registered-panel]',
+  },
+
+  // publication-request-modal
+  publicationRequest: {
+    body: '[data-test-publication-request-body]',
+    subject: '[data-test-publication-request-subject]',
+    save: '[data-test-publication-request-save]',
   },
 };
 export default selectors;

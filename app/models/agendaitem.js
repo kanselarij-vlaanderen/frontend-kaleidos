@@ -45,9 +45,7 @@ export default ModelWithModifier.extend({
   agendaActivity: belongsTo('agenda-activity', {
     inverse: null,
   }),
-  treatments: hasMany('agenda-item-treatment', {
-    inverse: null,
-  }),
+  treatment: belongsTo('agenda-item-treatment'),
 
   mandatees: hasMany('mandatee'),
   pieces: hasMany('piece'),

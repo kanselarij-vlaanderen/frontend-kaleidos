@@ -13,6 +13,9 @@ export default class PublicationFlowSearchController extends Controller {
     publicationStatusIds: {
       type: 'array',
     },
+    urgentOnly: {
+      type: 'boolean',
+    },
     page: {
       type: 'number',
     },
@@ -31,12 +34,14 @@ export default class PublicationFlowSearchController extends Controller {
   @tracked sort;
   @tracked regulationTypeIds = [];
   @tracked publicationStatusIds = [];
+  @tracked urgentOnly;
 
   constructor() {
     super(...arguments);
     this.page = 0;
     this.size = this.sizeOptions[2];
     this.sort = '-opening-date';
+    this.urgentOnly = false;
   }
 
   get selectedRegulationTypes() {
@@ -60,6 +65,11 @@ export default class PublicationFlowSearchController extends Controller {
   @action
   updateSelectedPublicationStatuses(publicationStatuses) {
     this.publicationStatusIds = publicationStatuses.map(ps => ps.id);
+  }
+
+  @action
+  toggleUrgentOnly() {
+    this.urgentOnly = !this.urgentOnly;
   }
 
   @action

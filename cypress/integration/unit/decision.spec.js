@@ -1,7 +1,6 @@
 /* global context, it, cy, beforeEach, afterEach, Cypress */
 // / <reference types="Cypress" />
 
-import route from '../../selectors/route.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
 import cases from '../../selectors/case.selectors';
@@ -39,13 +38,13 @@ context('Decision tests', () => {
 
     cy.intercept('POST', 'pieces').as('createNewPiece');
     cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
-    cy.intercept('PATCH', 'agenda-item-treatments/**').as('patchTreatments');
+    cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
     cy.intercept('DELETE', 'pieces/*').as('deletePiece');
     cy.intercept('DELETE', 'document-containers/*').as('deleteDocumentContainer');
     cy.get(utils.vlModalFooter.save).click();
     cy.wait('@createNewPiece');
     cy.wait('@createNewDocumentContainer');
-    cy.wait('@patchTreatments');
+    cy.wait('@patchDecisionActivities');
 
     cy.get(document.documentCard.card).as('docCards');
     cy.get('@docCards').should('have.length', 1);
@@ -77,7 +76,7 @@ context('Decision tests', () => {
       .click();
     cy.wait('@deleteFile');
     cy.wait('@deletePiece');
-    cy.wait('@patchTreatments');
+    cy.wait('@patchDecisionActivities');
 
     // Delete the document-container + all pieces
     cy.get('@docCards').eq(0)
@@ -125,7 +124,7 @@ context('Decision tests', () => {
     // change decision result
     cy.get(agenda.agendaitemNav.decisionTab).click();
     cy.url().should('contain', '/beslissingen');
-    cy.intercept('PATCH', 'agenda-item-treatments/**').as('patchTreatment');
+    cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivity');
     cy.get(agenda.decisionResultPill.edit).click();
     cy.get(agenda.agendaitemDecisionEdit.resultContainer).within(() => {
       cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
@@ -135,7 +134,7 @@ context('Decision tests', () => {
       .scrollIntoView()
       .click();
     cy.get(agenda.agendaitemDecisionEdit.save).click()
-      .wait('@patchTreatment');
+      .wait('@patchDecisionActivity');
 
     // NOTE: right now, changing the status of the treatment does not change the retracted attribute of agendaitem
     // so clicking "uitstellen" should be followed by manually setting the "uitgesteld" status on treatment
@@ -183,68 +182,41 @@ context('Decision tests', () => {
     // check the default of an announcement agendaitem
     cy.get(agenda.decisionResultPill.pill).contains('Akte genomen');
     // check the default of a note agendaitem
+    cy.intercept('get', '/decision-activities?filter**').as('loadDecisionActivity_1');
     cy.get(agenda.agendaDetailSidebar.subitem).eq(1)
       .click();
+    cy.wait('@loadDecisionActivity_1');
     cy.get(agenda.decisionResultPill.pill).contains('Goedgekeurd');
     // check the default of an approval agendaitem
+    cy.intercept('get', '/decision-activities?filter**').as('loadDecisionActivity_2');
     cy.get(agenda.agendaDetailSidebar.subitem).eq(0)
       .click();
     cy.get(agenda.decisionResultPill.pill).contains('Goedgekeurd');
+    cy.wait('@loadDecisionActivity_2');
 
     // CRUD of decisions
-    cy.get(agenda.agendaitemDecision.container).as('decision');
-    cy.get('@decision').should('have.length', 1);
-    // check if delete is not possible when only one decision exists
-    cy.get('@decision').eq(0)
-      .within(() => {
-        cy.get(utils.dropdownMenu.options).should('not.exist');
-      });
-    // add decision without file
-    cy.get(route.agendaitemDecisions.addTreatment).click();
-    cy.get('@decision').should('have.length', 2);
-    // remove decision without file
-    cy.get('@decision').eq(0)
-      .within(() => {
-        cy.get(utils.dropdownMenu.options).click();
-        cy.get(agenda.agendaitemDecision.delete).click();
-      });
-    cy.intercept('DELETE', '/agenda-item-treatments/*').as('deleteDecision');
-    cy.get(utils.vlModalVerify.save).click();
-    cy.wait('@deleteDecision');
-    cy.get(agenda.agendaitemDecision.uploadFile).as('decisionList');
-    cy.get('@decision').should('have.length', 1);
-    // add decision with file
-    cy.get(route.agendaitemDecisions.addTreatment).click();
-    cy.get('@decision').should('have.length', 2);
+    // add report ("beslissingsfiche") to existing pre-generated decision-activity
     cy.get(agenda.agendaitemDecision.uploadFile).eq(0)
       .click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+    cy.intercept('POST', 'pieces').as('createNewPiece');
+    cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
+    cy.intercept('GET', 'pieces/*/previous-piece').as('getPreviousPiece');
     cy.get(utils.vlModalFooter.save).click();
-    // TODO better waits, flakys
-    cy.wait(2000);
-    // remove decision with file
-    cy.get('@decision').eq(0)
-      .within(() => {
-        cy.get(agenda.agendaitemDecision.dropdownMenu).click();
-        cy.get(agenda.agendaitemDecision.delete).click();
-      });
-    cy.intercept('GET', '/agenda-item-treatments?filter**').as('filterDecision');
-    cy.get(utils.vlModalVerify.save).click();
-    cy.wait('@deleteDecision');
-    cy.wait('@filterDecision');
-    cy.get('@decision').should('have.length', 1);
-    // switch between all decision results
+    cy.wait('@createNewPiece');
+    cy.wait('@patchDecisionActivities');
+    cy.wait('@getPreviousPiece');
+    cy.get(auk.loader).should('not.exist');
     decisionTypes.forEach((type) => {
-      cy.get('@decision').eq(0)
-        .find(agenda.decisionResultPill.edit)
+      cy.get(agenda.decisionResultPill.edit)
         .click();
       cy.get(dependency.emberPowerSelect.trigger).click();
       cy.get(dependency.emberPowerSelect.option).contains(type)
         .click();
       const randomInt = Math.floor(Math.random() * Math.floor(10000));
-      cy.intercept('PATCH', 'agenda-item-treatments/**').as(`patchTreatments_${randomInt}`);
+      cy.intercept('PATCH', 'decision-activities/**').as(`patchDecisionActivities_${randomInt}`);
       cy.get(agenda.agendaitemDecisionEdit.save).click();
-      cy.wait(`@patchTreatments_${randomInt}`);
+      cy.wait(`@patchDecisionActivities_${randomInt}`);
       cy.get(agenda.decisionResultPill.pill).contains(type);
     });
   });

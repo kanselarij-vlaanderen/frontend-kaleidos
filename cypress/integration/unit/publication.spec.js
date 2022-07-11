@@ -123,7 +123,7 @@ context('Publications tests', () => {
 
   it('should edit inscription and this data must be visible in the overview', () => {
     const fields = {
-      number: 200,
+      number: 2500,
       shortTitle: 'Korte titel cypress test',
       longTitle: 'Lange titel voor de cypress test.',
     };

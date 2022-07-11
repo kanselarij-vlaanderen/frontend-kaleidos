@@ -20,6 +20,7 @@ function checkPublicationSearch(searchTerm, result) {
     .type(searchTerm);
   cy.get(route.search.trigger).click();
   cy.wait(`@publicationSearchCall${randomInt}`);
+  cy.wait(1000); // TODO flakyness because of postprocessing of the results
   cy.get(route.searchPublications.dataTable).find('tbody')
     .children('tr')
     .contains(result);
