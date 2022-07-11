@@ -22,8 +22,8 @@
           {{#let (await agendaitem.treatment.newsletterInfo) as |newsletterInfo|}}
             <Newsletter::NewsletterItem
               @showIndex={{this.showDraft}}
-              @allowEditing={{this.showDraft}}
               @itemIndex={{if this.showDraft agendaitem.number humanIndex}}
+              @allowEditing={{this.showDraft}}
               @agendaitem={{agendaitem}}
               @newsletterInfo={{newsletterInfo}}
               @onSaveNewsletterEdit={{fn this.saveNewsletterChanges newsletterInfo}}
