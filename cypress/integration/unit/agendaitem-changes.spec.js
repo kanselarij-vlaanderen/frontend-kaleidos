@@ -71,7 +71,8 @@ context('Agendaitem changes tests', () => {
   });
 
   it('should add an agendaitem of type remark and highlight it as added', () => {
-    cy.openCase(caseTitle);
+    const caseLink = 'dossiers/5EBA489795A2760008000001/deeldossiers';
+    cy.visit(caseLink);
     cy.addSubcase('Mededeling', subcaseTitle3, `${subcaseTitle3} lange titel`, 'In voorbereiding', 'Principiële goedkeuring m.h.o. op adviesaanvraag');
     cy.visitAgendaWithLink(agendaURL);
     cy.changeSelectedAgenda('Ontwerpagenda');
