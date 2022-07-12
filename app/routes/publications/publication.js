@@ -11,7 +11,7 @@ export default class PublicationRoute extends Route {
       include: [
         'case',
         'case.subcases',
-        'agenda-item-treatment',
+        'decision-activity',
         'status',
         'mode',
         'identification.structured-identifier',

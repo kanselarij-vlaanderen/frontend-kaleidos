@@ -26,7 +26,7 @@ export default class PrintNewsletterRoute extends Route {
       'filter[agenda][:id:]': agenda.id,
       'filter[show-as-remark]': params.showDraft ? false : undefined,
       'filter[is-approval]': false,
-      include: 'mandatees,treatments.newsletter-info',
+      include: 'mandatees,treatment.newsletter-info',
       sort: 'number',
       'page[size]': PAGE_SIZE.AGENDAITEMS,
     });
@@ -77,8 +77,8 @@ export default class PrintNewsletterRoute extends Route {
     const filteredAgendaitems = [];
     for (const agendaitem of agendaitems) {
       try {
-        const agendaItemTreatment = await agendaitem.get('treatments').firstObject;
-        const newsletterInfo = await agendaItemTreatment.get('newsletterInfo');
+        const agendaItemTreatment = await agendaitem.treatment;
+        const newsletterInfo = await agendaItemTreatment?.newsletterInfo;
         if (newsletterInfo && newsletterInfo.inNewsletter) {
           filteredAgendaitems.push(agendaitem);
         }

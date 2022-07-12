@@ -5,7 +5,7 @@
 >
   <Auk::Label class="auk-u-sr-only">{{t "result-decision"}}</Auk::Label>
   <Decision::DecisionResultSelect
-    @selected={{this.treatment.decisionResultCode}}
+    @selected={{this.decisionActivity.decisionResultCode}}
     @onChange={{this.changeDecisionResultCode}}
   />
   <Auk::Button
@@ -13,8 +13,8 @@
     @layout="icon-only"
     @icon="check"
     @size="xsmall"
-    @loading={{this.saveTreatment.isRunning}}
-    {{on "click" (perform this.saveTreatment)}}
+    @loading={{this.saveDecisionActivity.isRunning}}
+    {{on "click" (perform this.saveDecisionActivity)}}
     class="auk-u-ml"
     data-test-agendaitem-decision-edit-save
   >

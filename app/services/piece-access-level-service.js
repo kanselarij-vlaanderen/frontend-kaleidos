@@ -68,14 +68,14 @@ export default class PieceAccessLevelService extends Service {
   }
 
   /*
-   * This method is used to update the access levels of the pieces of a subcase's treatments. When a subcase has
-   * been updated to being confidential, all the pieces connected to it through agenda-item-treatments get the
+   * This method is used to update the access levels of the reports related to of a subcase's decision-activity.
+   * When a subcase has been updated to being confidential, all the reports of the decision-activity get the
    * "Ministerraad" access level.
    */
   async updateDecisionsAccessLevelOfSubcase(subcase) {
     const ministerraad = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.MINISTERRAAD);
     const pieces = await this.store.query('piece', {
-      'filter[agenda-item-treatment][subcase][:id:]': subcase.id,
+      'filter[decision-activity][subcase][:id:]': subcase.id,
       include: 'access-level',
     });
 

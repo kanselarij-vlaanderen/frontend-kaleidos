@@ -27,7 +27,7 @@ export default class IndexNewsletterRoute extends Route {
     };
     let agendaitems = await this.store.query('agendaitem', {
       filter,
-      include: 'treatments.newsletter-info',
+      include: 'treatment.newsletter-info',
       sort: params.sort,
       'page[size]': PAGE_SIZE.AGENDAITEMS,
     });
@@ -38,8 +38,7 @@ export default class IndexNewsletterRoute extends Route {
 
     return Promise.all(
       agendaitems.map(async (agendaitem) => {
-        const agendaItemTreatments = await agendaitem.get('treatments');
-        const agendaItemTreatment = agendaItemTreatments.firstObject;
+        const agendaItemTreatment = await agendaitem.get('treatment');
         const newsletterInfo = await agendaItemTreatment.get('newsletterInfo');
         return {
           agendaitem,

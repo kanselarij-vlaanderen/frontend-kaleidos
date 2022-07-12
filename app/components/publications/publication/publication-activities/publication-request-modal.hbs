@@ -13,7 +13,7 @@
       @reserveSpace={{true}}
     >
       <div class="auk-form-group-layout auk-form-group-layout--standard">
-        <div class="auk-form-group">
+        <div class="auk-form-group" data-test-publication-request-body>
           <Auk::Label @required={{true}}>
             {{t "attachments"}}
           </Auk::Label>
@@ -44,6 +44,7 @@
             {{t "subject"}}
           </Auk::Label>
           <Auk::Input
+            data-test-publication-request-subject
             id="publicationRequestModal_subject"
             @block={{true}}
             @value={{mut this.subject}}
@@ -68,6 +69,7 @@
     @cancelDisabled={{this.isCancelDisabled}}
   >
     <Auk::Button
+      data-test-publication-request-save
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
       @loading={{this.save.isRunning}}

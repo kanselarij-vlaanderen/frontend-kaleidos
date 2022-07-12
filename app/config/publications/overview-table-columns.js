@@ -54,8 +54,8 @@ export default [
     keyName: 'decisionDate',
     translationKey: 'publications-table-decision-date',
     translationKeySmall: 'publications-table-decision-date-small',
-    sortKey: 'agenda-item-treatment.start-date',
-    apiFieldPaths: ['agenda-item-treatment.start-date'],
+    sortKey: 'decision-activity.start-date',
+    apiFieldPaths: ['decision-activity.start-date'],
   },
   {
     keyName: 'openingDate',

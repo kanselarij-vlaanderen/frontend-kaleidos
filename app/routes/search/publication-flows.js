@@ -11,6 +11,7 @@ import {
 } from 'frontend-kaleidos/utils/publication-auk';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { warn } from '@ember/debug';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationFlowSearchRoute extends Route {
   @service store;
@@ -25,6 +26,10 @@ export default class PublicationFlowSearchRoute extends Route {
     publicationStatusIds: {
       refreshModel: true,
       as: 'statussen',
+    },
+    urgentOnly: {
+      refreshModel: true,
+      as: 'dringend',
     },
     page: {
       refreshModel: true,
@@ -58,6 +63,10 @@ export default class PublicationFlowSearchRoute extends Route {
       'page[size]': PAGE_SIZE.CODE_LISTS,
       sort: 'position',
     });
+    this.urgencyLevelSpeed = await this.store.findRecordByUri(
+      'urgency-level',
+      CONSTANTS.URGENCY_LEVELS.SPEEDPROCEDURE,
+    );
   }
 
   model(filterParams) {
@@ -109,6 +118,10 @@ export default class PublicationFlowSearchRoute extends Route {
       filter[':terms:statusId'] = params.publicationStatusIds;
     }
 
+    if (params.urgentOnly) {
+      filter['urgencyLevelId'] = this.urgencyLevelSpeed.id;
+    }
+
     this.lastParams.commit();
 
     return search('publication-flows', params.page, params.size, params.sort, filter, (searchData) => {
@@ -155,6 +168,10 @@ export default class PublicationFlowSearchRoute extends Route {
       attributes.status = status;
       attributes.statusPillKey = getPublicationStatusPillKey(status);
       attributes.statusPillStep = getPublicationStatusPillStep(status);
+    }
+    let urgencyLevelId = attributes.urgencyLevelId;
+    if (urgencyLevelId) {
+      attributes.urgent = urgencyLevelId === this.urgencyLevelSpeed.id;
     }
     // post-process numac numbers
     if (!attributes.numacNumbers) {

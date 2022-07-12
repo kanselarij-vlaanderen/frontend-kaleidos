@@ -27,15 +27,15 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
       'filter[:has-no:next-version]': 't',
       sort: '-created',
     })
-    
+
   }
 
   @task
   *markOrUnmarkForSignature() {
     if (!this.signMarkingActivity) {
-      const treatments = yield this.agendaitem.treatments;
-      const agendaItemTreatment = treatments.firstObject;
-      yield this.args.markForSignature(this.args.piece, agendaItemTreatment);
+      const agendaItemTreatment = yield this.agendaitem.treatment;
+      const decisionActivity = yield agendaItemTreatment.decisionActivity;
+      yield this.args.markForSignature(this.args.piece, decisionActivity);
     } else {
       yield this.args.unmarkForSignature(this.args.piece);
     }

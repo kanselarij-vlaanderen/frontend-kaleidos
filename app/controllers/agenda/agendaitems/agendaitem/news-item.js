@@ -10,7 +10,6 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
   @service currentSession;
 
   @tracked agendaitem;
-  @tracked agendaItemTreatment;
   @tracked notaModifiedTime = null;
 
   @tracked isEditing = false;

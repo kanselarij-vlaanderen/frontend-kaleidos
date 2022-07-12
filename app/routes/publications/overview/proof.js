@@ -1,5 +1,6 @@
 import PublicationsOverviewBaseRoute from './_base';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { inject as service } from '@ember/service';
 
 const PROOF_STATUSES_URIS = [
   CONSTANTS.PUBLICATION_STATUSES.PROOF_REQUESTED,
@@ -7,6 +8,8 @@ const PROOF_STATUSES_URIS = [
 ];
 
 export default class PublicationsOverviewProofRoute extends PublicationsOverviewBaseRoute {
+  @service store;
+
   defaultColumns = [
     'isUrgent',
     'publicationNumber',

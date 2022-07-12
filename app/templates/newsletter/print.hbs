@@ -24,7 +24,7 @@
             @itemIndex={{if this.showDraft agendaitem.number humanIndex}}
             @agendaitem={{agendaitem}}
             @newsletterInfo={{await
-              agendaitem.treatments.firstObject.newsletterInfo
+              agendaitem.treatment.newsletterInfo
             }}
           />
         {{/let}}
@@ -40,7 +40,7 @@
             @allowEditing={{this.showDraft}}
             @agendaitem={{agendaitem}}
             @newsletterInfo={{await
-              agendaitem.treatments.firstObject.newsletterInfo
+              agendaitem.treatment.newsletterInfo
             }}
           />
         {{/each}}

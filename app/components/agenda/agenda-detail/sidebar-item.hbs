@@ -28,33 +28,25 @@
           </pre>
         </h4>
         {{#unless @agendaitem.aboutToDelete}}
-          <div class="vlc-agenda-detail-sidebar__labels auk-o-flex--align-end" >
-            {{#if this.loadNewsletterVisibility.lastSuccessful}}
-              {{#unless this.newsletterIsVisible}}
-                {{!-- TODO: Needs to be replaced with AuPill component with 'blank' skin, but option is not available yet --}}
-                <div class="au-c-pill au-c-pill--blank au-c-pill--small">
-                  <AuIcon @icon="not-visible" />
-                  <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
-                    {{t "not-visible-in-newsletter"}}
-                  </EmberTooltip>
-                </div>
-              {{/unless}}
-            {{else}}
-              {{!-- TODO: Needs to be replaced with AuPill component with 'blank' skin, but option is not available yet --}}
-              <div class="au-c-pill au-c-pill--blank au-c-pill--small">
-                <AuIcon @icon="three-dots" />
+          <div class="vlc-agenda-detail-sidebar__labels auk-o-flex--align-end">
+            {{#if this.newsletterIsVisible}}
+              <AuPill
+                @size="small"
+                @skin="border"
+                @icon="website"
+                @draft={{and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow @isNew}}
+              >
                 <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
-                  {{t "loading"}}
+                  {{t "visible-in-newsletter"}}
                 </EmberTooltip>
-              </div>
+              </AuPill>
             {{/if}}
-
             {{#if this.subcase.confidential}}
               <AuPill
                 @size="small"
                 @skin="warning"
                 @icon="lock-closed"
-                data-test-agenda-detail-sidebar-item-confidential={{true}}
+                data-test-agenda-detail-sidebar-item-confidential
               >
                 <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
                   {{t "confidential"}}
