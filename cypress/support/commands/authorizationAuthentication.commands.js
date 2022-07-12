@@ -40,7 +40,6 @@ function login(name, retries = 0) {
   cy.intercept('GET', '/accounts/*').as('getAccount');
   cy.intercept('GET', '/accounts/*/user').as('getAccountUser');
   cy.intercept('GET', '/concepts?filter**').as('loadConcepts');
-  cy.intercept('GET', '/agendas?filter**').as('loadAgendasRoute');
   cy.visit('/overzicht?size=2').wait('@getCurrentSession')
     .then((responseBody) => {
       console.log(responseBody);
@@ -54,7 +53,7 @@ function login(name, retries = 0) {
       }
     });
   cy.wait('@getAccount').wait('@getAccountUser');
-  cy.wait('@loadConcepts').wait('@loadAgendasRoute');
+  cy.wait('@loadConcepts');
   cy.log('/login');
 }
 
