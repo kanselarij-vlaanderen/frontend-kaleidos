@@ -17,6 +17,7 @@
   {{#if @isShowingAccessLevel}}
     <AccessLevelPill
       @accessLevel={{@accessLevel}}
+      @isDraft={{not (await (is-access-level-in-effect @doc))}}
     />
   {{/if}}
 </div>

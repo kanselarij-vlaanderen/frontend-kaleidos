@@ -17,6 +17,7 @@
             {{#if this.lastPiece}}
               <AccessLevelPill
                 @accessLevel={{this.accessLevel}}
+                @isDraft={{not (await (is-access-level-in-effect this.lastPiece))}}
                 @onChangeAccessLevel={{this.changeAccessLevel}}
                 @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
                 @onCancelChangeAccessLevel={{this.reloadAccessLevel}}

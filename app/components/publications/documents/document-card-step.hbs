@@ -53,6 +53,7 @@
           {{#if @piece.accessLevel}}
             <AccessLevelPill
               @accessLevel={{await @piece.accessLevel}}
+              @isDraft={{not (await (is-access-level-in-effect @piece))}}
             />
           {{/if}}
         </Group.Item>

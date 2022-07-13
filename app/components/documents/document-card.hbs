@@ -47,6 +47,7 @@
               <div class="auk-o-flex auk-o-flex--vertical-center">
                 <AccessLevelPill
                   @accessLevel={{this.accessLevel}}
+                  @isDraft={{not (await (is-access-level-in-effect this.piece))}}
                   @isEditable={{true}}
                   @onChangeAccessLevel={{this.changeAccessLevel}}
                   @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
