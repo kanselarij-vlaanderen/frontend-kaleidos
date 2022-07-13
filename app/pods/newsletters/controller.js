@@ -5,15 +5,6 @@ import { inject as service } from '@ember/service';
 // eslint-disable-next-line ember/no-mixins
 import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
 
-export default class NewslettersController extends Controller.extend(DefaultQueryParamsMixin) {
-  @service router;
+export default class NewslettersController extends Controller {
 
-  @tracked sort = '-planned-start,number-representation';
-  @tracked isAdding = false;
-  @tracked isEditing = false;
-
-  @action
-  async navigateToNewsletter(meeting) {
-    this.router.transitionTo('newsletter', meeting.id);
-  }
 }

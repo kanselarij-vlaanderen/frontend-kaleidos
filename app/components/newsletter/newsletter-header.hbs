@@ -6,6 +6,17 @@
           {{t "newsletter"}}
         </h1>
       </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
+        <Auk::Tabs>
+          <Auk::Tab @route="newsletters.index">
+            Alle berichten
+          </Auk::Tab>
+          <Auk::Tab @route="newsletters.search">
+            <Auk::Icon @name="search" />
+            Bericht zoeken
+          </Auk::Tab>
+        </Auk::Tabs>
+      </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </Auk::Navbar>

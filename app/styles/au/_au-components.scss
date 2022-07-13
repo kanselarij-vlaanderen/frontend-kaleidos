@@ -112,3 +112,8 @@
 .au-c-button {
   cursor: pointer;
 }
+
+// Fix missing noactions class
+.auk-table--noactions .data-table__actions--top {
+  display: none;
+}

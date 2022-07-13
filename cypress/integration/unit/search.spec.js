@@ -274,7 +274,7 @@ context('Search tests', () => {
   });
 
   it('Search for title in kort-bestek and open the detail view by clicking icon', () => {
-    cy.visit('/zoeken/kort-bestek');
+    cy.visit('/kort-bestek/bericht-zoeken');
     // TODO-setup this test searches for data from other tests (mandatee-assigning.spec) and could fail
     const searchTerm = 'assign mandatee';
     cy.get(route.search.input).clear();
@@ -304,7 +304,7 @@ context('Search tests', () => {
   });
 
   it('Search for richText in kort-bestek and open the detail view by clicking row', () => {
-    cy.visit('/zoeken/kort-bestek');
+    cy.visit('/kort-bestek/bericht-zoeken');
     // Testdata available in default data
     const searchTerm = 'Dit is een leuke beslissing';
     cy.get(route.search.input).clear();
@@ -330,7 +330,7 @@ context('Search tests', () => {
   });
 
   it('Search for richText in kort-bestek and open the detail view by clicking row', () => {
-    cy.visit('/zoeken/kort-bestek');
+    cy.visit('/kort-bestek/bericht-zoeken');
     // *note: this test searches for data from newsletter-info.spec and could fail
     // the reasoning behind this is for making sure that the index updates still work
     const searchTerm = 'this nota info should be visible in definitief';
@@ -348,7 +348,7 @@ context('Search tests', () => {
   });
 
   it('Search for kort-bestek items that have links to multiple agendaitem/agenda versions', () => {
-    cy.visit('/zoeken/kort-bestek');
+    cy.visit('kort-bestek/bericht-zoeken');
     // TODO-setup this test searches for data from other tests (agendaitem-changes.spec) and could fail
     const searchTerm = 'testId=1589266576';
     cy.get(route.search.input).clear();
@@ -364,7 +364,7 @@ context('Search tests', () => {
   });
 
   it('Search for mandatee in kort-bestek', () => {
-    cy.visit('/zoeken/kort-bestek');
+    cy.visit('kort-bestek/bericht-zoeken');
     // TODO-setup this test searches for data from other tests (mandatee-assigning.spec) and could fail
     const searchTerm = 'test';
     const mandateeSearchTerm = 'Jambon';

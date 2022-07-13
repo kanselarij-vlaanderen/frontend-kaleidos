@@ -1,101 +1,48 @@
 {{page-title (t "search")}}
 <div class="auk-u-maximize-height auk-scroll-wrapper">
-  <Auk::Navbar @skin="gray-100">
-    <Auk::Toolbar @auto={{true}} as |Toolbar|>
-      <Toolbar.Group @position="left" as |Group|>
-        <Group.Item>
-          <h2 data-test-route-search-title class="auk-toolbar__title">
-            {{capitalize (t "search")}}
-          </h2>
-        </Group.Item>
-        <Group.Item>
-          <Auk::Tabs as |Tabs|>
-            {{! Page-number reset when clicking a search type.
-                It is assumed that users don't want
-                to go back and forth between search results
-                for the different types while keeping the
-                page-number. }}
-            <Tabs.Tab
-              @route="search.agenda-items"
-              @current-when="search.agenda-items"
-              @query={{hash page=0}}
-            >
-              {{t "agendaitems"}}
-            </Tabs.Tab>
-            <Tabs.Tab
-              @route="search.cases"
-              @current-when="search.cases"
-              @query={{hash page=0}}
-            >
-              {{t "cases"}}
-            </Tabs.Tab>
-            <Tabs.Tab
-              @route="search.newsletter-infos"
-              @current-when="search.newsletter-infos"
-              @query={{hash page=0}}
-            >
-              {{t "newsletter"}}
-            </Tabs.Tab>
-            {{#if this.isShownPublicationFlows}}
-              <Tabs.Tab
-                @route="search.publication-flows"
-                @current-when="search.publication-flows"
-                @query={{hash page=0}}
-              >
-                {{t "publications"}}
-              </Tabs.Tab>
-            {{/if}}
-          </Auk::Tabs>
-        </Group.Item>
-      </Toolbar.Group>
-    </Auk::Toolbar>
-  </Auk::Navbar>
-
   <Auk::Navbar>
     {{!-- template-lint-disable no-redundant-fn --}}
     {{!-- TODO: Using plain decorated action for Input's @enter doesn't work for some reason --}}
-    <div class="auk-o-grid auk-o-grid--align-end auk-u-maximize-width auk-u-mb-4 auk-u-mt-4">
-      <div class="auk-o-grid-col-4">
-        <div class="auk-form-group">
-          <div class="auk-o-flex auk-o-flex--align-baseline">
-            <Auk::Label for="dossierId" class="auk-u-mr">
-              {{#if this.isSearchingPublicationFlows}}
-                {{capitalize (t "search-term")}}
-              {{else}}
-                {{capitalize (t "keyword")}}
-              {{/if}}
-            </Auk::Label>
-            <span>
-              <Auk::Icon
-                @name="circle-info"
-                @skin="muted"
-                class="auk-u-cursor-pointer"
-                {{on "click" this.openPopover}}
+    <div class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-end auk-u-maximize-width auk-u-mb-4 auk-u-mt-4">
+      <div class="auk-form-group au-u-margin-bottom-none au-u-3-4">
+        <div class="auk-o-flex auk-o-flex--align-baseline">
+          <Auk::Label for="dossierId" class="auk-u-mr">
+            {{#if this.isSearchingPublicationFlows}}
+              {{capitalize (t "search-term")}}
+            {{else}}
+              {{capitalize (t "keyword")}}
+            {{/if}}
+          </Auk::Label>
+          <span>
+            <Auk::Icon
+              @name="circle-info"
+              @skin="muted"
+              class="auk-u-cursor-pointer"
+              {{on "click" this.openPopover}}
+            >
+              <AttachPopover
+                @class="auk-popover"
+                @showOn="click"
+                @placement="right"
+                @hideOn="clickout"
+                @isShown={{this.popoverShown}}
+                @renderInPlace={{true}}
               >
-                <AttachPopover
-                  @class="auk-popover"
-                  @showOn="click"
-                  @placement="right"
-                  @hideOn="clickout"
-                  @isShown={{this.popoverShown}}
-                  @renderInPlace={{true}}
-                >
-                  <Utils::SearchLegend
-                    @userClickedClose={{this.closePopover}}
-                  />
-                </AttachPopover>
-              </Auk::Icon>
-            </span>
-          </div>
-          <Auk::Input
-            @block={{true}}
-            placeholder={{t "search-placeholder"}}
-            @value={{this.searchTextBuffer}}
-            @enter={{fn this.search}}
-            id="dossierId"
-            data-test-route-search-input
-          />
+                <Utils::SearchLegend
+                  @userClickedClose={{this.closePopover}}
+                />
+              </AttachPopover>
+            </Auk::Icon>
+          </span>
         </div>
+        <Auk::Input
+          @block={{true}}
+          placeholder={{t "search-placeholder"}}
+          @value={{this.searchTextBuffer}}
+          @enter={{fn this.search}}
+          id="dossierId"
+          data-test-route-search-input
+        />
       </div>
       {{#if this.isSearchingPublicationFlows}}
         <div class="auk-o-grid-col-2">
@@ -133,7 +80,7 @@
           </div>
         </div>
       {{else}}
-        <div class="auk-o-grid-col-2">
+        {{!-- <div class="auk-o-grid-col-2">
           <div class="auk-form-group auk-u-position-relative">
             <Auk::Label>{{t "from"}}</Auk::Label>
             <WebComponents::VlDatepicker
@@ -170,9 +117,9 @@
               id="ministerName"
             />
           </div>
-        </div>
+        </div> --}}
       {{/if}}
-      <div class="auk-o-grid-col-1">
+      <div class="auk-form-group au-u-margin-bottom-none au-u-1-4">
         <Auk::Button
           @skin="primary"
           @icon="search"
