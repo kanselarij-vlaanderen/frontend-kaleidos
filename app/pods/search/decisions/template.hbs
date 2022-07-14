@@ -7,10 +7,10 @@
       <AuHeading @level="3" @skin="6">Inhoud</AuHeading>
       <AuList class="au-u-margin-top-tiny" as |Item|>
         <Item class="au-c-list-item__divider"><AuLink @skin="button-naked" @route="search.all" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Alle inhoud</AuLink></Item>
-        <Item><AuLink @route="search.agenda-items" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact" @active={{true}}>Agendapunt</AuLink></Item>
+        <Item><AuLink @route="search.agenda-items" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Agendapunt</AuLink></Item>
         <Item><AuLink @route="search.cases" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Dossier</AuLink></Item>
         <Item><AuLink @route="search.documents" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Document</AuLink></Item>
-        <Item><AuLink @route="search.decisions" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Beslissing</AuLink></Item>
+        <Item><AuLink @route="search.decisions" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact" @active={{true}}>Beslissing</AuLink></Item>
         <Item><AuLink @route="search.newsletter-infos" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Kort bestek</AuLink></Item>
         <Item><AuLink @route="search.announcements" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Mededeling</AuLink></Item>
       </AuList>
@@ -52,11 +52,23 @@
       </div>
     </div>
     <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-tiny">
-      <Auk::Label>Agenda versie</Auk::Label>
+      <Auk::Label>Resultaat beslissing</Auk::Label>
+      <AuLink>Alles selecteren</AuLink>
       <Auk::Checkbox
-        @checked={{this.latestOnly}}
-        @label="{{t "only-on-final-agenda"}}"
-        {{on "input" this.toggleLatestOnly}}
+        @checked=""
+        @label="Goedgekeurd"
+      />
+      <Auk::Checkbox
+        @checked=""
+        @label="Uitgesteld"
+      />
+      <Auk::Checkbox
+        @checked=""
+        @label="Nog geen beslissing"
+      />
+      <Auk::Checkbox
+        @checked=""
+        @label="Afgekeurd"
       />
     </div>
 
@@ -83,7 +95,7 @@
       {{#if this.model.length}}
         <div class="au-u-flex au-u-flex--no-wrap au-u-flex--spaced au-u-flex--between au-u-flex--vertical-center au-u-margin-bottom-small">
           <p class="au-u-muted">
-            <strong class="au-u-medium">19</strong> resultaten voor <strong class="au-u-medium">"test"</strong> in agendapunten
+            <strong class="au-u-medium">19</strong> resultaten voor <strong class="au-u-medium">"test"</strong> in beslissingen
           </p>
           <div>
             <AuLabel for="sort" class="au-u-hidden-visually">Sorteer op:</AuLabel>
@@ -176,8 +188,6 @@
                         Versie A
                       </AuLink>
                     </p>
-
-
                   </c.content>
                 </AuCard>
               </td>

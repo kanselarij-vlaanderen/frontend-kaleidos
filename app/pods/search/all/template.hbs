@@ -6,8 +6,8 @@
     <div class="au-u-margin-top-tiny">
       <AuHeading @level="3" @skin="6">Inhoud</AuHeading>
       <AuList class="au-u-margin-top-tiny" as |Item|>
-        <Item class="au-c-list-item__divider"><AuLink @skin="button-naked" @route="search.all" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Alle inhoud</AuLink></Item>
-        <Item><AuLink @route="search.agenda-items" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact" @active={{true}}>Agendapunt</AuLink></Item>
+        <Item class="au-c-list-item__divider"><AuLink @skin="button-naked" @route="search.all" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact" @active={{true}}>Alle inhoud</AuLink></Item>
+        <Item><AuLink @route="search.agenda-items" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Agendapunt</AuLink></Item>
         <Item><AuLink @route="search.cases" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Dossier</AuLink></Item>
         <Item><AuLink @route="search.documents" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Document</AuLink></Item>
         <Item><AuLink @route="search.decisions" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Beslissing</AuLink></Item>
@@ -15,7 +15,7 @@
         <Item><AuLink @route="search.announcements" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Mededeling</AuLink></Item>
       </AuList>
     </div>
-    <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-small">
+    <div class="au-c-card au-o-box au-o-box--small au-u-margin-top">
       <div class="auk-form-group auk-u-position-relative au-u-margin-bottom-small">
         <Auk::Label>{{t "from"}}</Auk::Label>
         <WebComponents::VlDatepicker
@@ -51,17 +51,9 @@
         />
       </div>
     </div>
-    <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-tiny">
-      <Auk::Label>Agenda versie</Auk::Label>
-      <Auk::Checkbox
-        @checked={{this.latestOnly}}
-        @label="{{t "only-on-final-agenda"}}"
-        {{on "input" this.toggleLatestOnly}}
-      />
-    </div>
 
-    {{!-- <div class="auk-box au-u-margin-top-small"> --}}
-      {{!-- <div class="auk-u-mb-2">
+    {{!-- <div class="auk-box au-u-margin-top-small">
+      <div class="auk-u-mb-2">
         <Auk::Label>{{t "type"}}</Auk::Label>
         <Auk::Checkbox
           @checked={{this.includeNotas}}
@@ -73,17 +65,23 @@
           @label={{capitalize (t "announcement")}}
           {{on "input" this.toggleIncludeMededelingen}}
         />
-      </div> --}}
-
-    {{!-- </div> --}}
-
+      </div>
+      <div>
+        <Auk::Label>{{t "version"}}</Auk::Label>
+        <Auk::Checkbox
+          @checked={{this.latestOnly}}
+          @label={{t "only-on-final-agenda"}}
+          {{on "input" this.toggleLatestOnly}}
+        />
+      </div>
+    </div> --}}
   </div>
   <div class="auk-o-grid-col-10">
     <div>
       {{#if this.model.length}}
         <div class="au-u-flex au-u-flex--no-wrap au-u-flex--spaced au-u-flex--between au-u-flex--vertical-center au-u-margin-bottom-small">
           <p class="au-u-muted">
-            <strong class="au-u-medium">19</strong> resultaten voor <strong class="au-u-medium">"test"</strong> in agendapunten
+            <strong class="au-u-medium">19</strong> resultaten voor <strong class="au-u-medium">"test"</strong>
           </p>
           <div>
             <AuLabel for="sort" class="au-u-hidden-visually">Sorteer op:</AuLabel>

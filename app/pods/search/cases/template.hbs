@@ -3,29 +3,105 @@
 }}
 <div class="auk-o-grid auk-u-mb-2">
   <div class="auk-o-grid-col-2">
-    <div class="auk-box">
-      <div class="auk-u-mb-2">
+    <div class="au-u-margin-top-tiny">
+      <AuHeading @level="3" @skin="6">Inhoud</AuHeading>
+      <AuList class="au-u-margin-top-tiny" as |Item|>
+        <Item class="au-c-list-item__divider"><AuLink @skin="button-naked" @route="search.all" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Alle inhoud</AuLink></Item>
+        <Item><AuLink @route="search.agenda-items" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Agendapunt</AuLink></Item>
+        <Item><AuLink @route="search.cases" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact" @active={{true}}>Dossier</AuLink></Item>
+        <Item><AuLink @route="search.documents" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Document</AuLink></Item>
+        <Item><AuLink @route="search.decisions" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Beslissing</AuLink></Item>
+        <Item><AuLink @route="search.newsletter-infos" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Kort bestek</AuLink></Item>
+        <Item><AuLink @route="search.announcements" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Mededeling</AuLink></Item>
+      </AuList>
+    </div>
+    <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-small">
+      <div class="auk-form-group auk-u-position-relative au-u-margin-bottom-small">
+        <Auk::Label>{{t "from"}}</Auk::Label>
+        <WebComponents::VlDatepicker
+          @selectedDate={{array this.dateFromBuffer}}
+          @dateChanged={{fn (mut this.dateFromBuffer)}}
+          @enableClear={{this.dateFromBuffer}}
+          @onClear={{fn (mut this.dateFromBuffer) null}}
+          @allowInput={{true}}
+        />
+      </div>
+      <div class="auk-form-group auk-u-position-relative">
+        <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
+        <WebComponents::VlDatepicker
+          @selectedDate={{array this.dateToBuffer}}
+          @dateChanged={{fn (mut this.dateToBuffer)}}
+          @enableClear={{this.dateToBuffer}}
+          @onClear={{fn (mut this.dateToBuffer) null}}
+          @allowInput={{true}}
+        />
+      </div>
+    </div>
+    <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-tiny">
+      <div class="auk-form-group">
+        <Auk::Label for="ministerName">
+          Minister/bevoegdheid
+        </Auk::Label>
+        <Auk::Input
+          data-test-route-search-mandatee-input
+          @block={{true}}
+          @value=""
+          @enter=""
+          id="ministerName"
+        />
+      </div>
+    </div>
+    <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-tiny">
+      <Auk::Label>Beperkt toegankelijk</Auk::Label>
+        <Auk::Checkbox
+          @checked=""
+          @label="Enkel beperkt toegankelijk"
+        />
+      {{!-- <div>
         <Auk::Label>{{t "type"}}</Auk::Label>
         <Auk::Checkbox
           @checked={{this.decisionsOnly}}
           @label={{t "search-in-decisions-only"}}
-          data-test-route-search-cases-toggle-decisions={{true}}
           {{on "input" this.toggleDecisionsOnly}}
         />
-      </div>
-      <div>
+      </div> --}}
+      {{!-- <div class="au-u-margin-top-small">
         <Auk::Label>{{t "archive"}}</Auk::Label>
         <Auk::Checkbox
           @checked={{this.includeArchived}}
           @label={{t "search-include-archived"}}
           {{on "input" this.toggleIncludeArchived}}
         />
-      </div>
+      </div> --}}
     </div>
   </div>
   <div class="auk-o-grid-col-10">
     <div>
       {{#if this.model.length}}
+        <div class="au-u-flex au-u-flex--no-wrap au-u-flex--spaced au-u-flex--between au-u-flex--vertical-center au-u-margin-bottom-small">
+          <p class="au-u-muted">
+            <strong class="au-u-medium">26</strong> resultaten voor <strong class="au-u-medium">"test"</strong> in dossiers
+          </p>
+          <div>
+            <AuLabel for="sort" class="au-u-hidden-visually">Sorteer op:</AuLabel>
+            <select
+              name="sort"
+              id="sort"
+              class="auk-select">
+                <option
+                  value="relevantie"
+                  selected="selected"
+                >
+                  Relevantie
+                </option>
+                <option
+                  value="datum-aflopend"
+                >
+                  Datum aflopend
+                </option>
+            </select>
+          </div>
+        </div>
         <DataTable
           data-test-route-search-cases-data-table={{true}}
           @content={{await this.model}}
@@ -33,54 +109,48 @@
           @noDataMessage={{t "no-results-found"}}
           @size={{this.size}}
           @sort={{this.sort}}
-          @class="auk-table auk-table--striped"
+          @class="auk-card-table"
           @isLoading={{this.isLoadingModel}}
-          @onClickRow={{this.navigateToCase}}
         as |table|
         >
           <table.content as |c|>
-            <c.header>
-              <th class="auk-table__col--8">
-                {{t "case-name"}}
-              </th>
-              <ThSortable
-                @class="auk-table__col--2"
-                @currentSorting={{this.sort}}
-                @field="created"
-                @label={{t "created-on"}}
-              />
-              <ThSortable
-                @class="auk-table__col--1"
-                @currentSorting={{this.sort}}
-                @field="sessionDates"
-                @label={{t "on-agenda-of"}}
-              />
-              <th class="auk-table__col--1"></th>
-            </c.header>
             <c.body class="auk-table--clickable-rows" as |row|>
               <td>
-                <p>
-                  {{#if row.shortTitle}}
-                    {{row.shortTitle}}
-                  {{else}}
-                    {{row.title}}
-                  {{/if}}
-                </p>
-              </td>
-              <td>
-                {{moment-format row.created "DD-MM-YYYY HH:mm"}}
-              </td>
-              <td>
-                {{moment-format row.sessionDates}}
-              </td>
-              <td class="auk-u-text-align--right">
-                <Auk::Button
-                  @skin="borderless"
-                  @layout="icon-only"
-                  @icon="chevron-right"
-                  @route="cases.case.subcases"
-                  @model={{row.id}}
-                />
+                <AuCard
+                  @shadow={{true}}
+                  @size="small"
+                  as |card|
+                >
+                  <card.header>
+                    <div class="au-u-flex au-u-flex--spaced">
+                      <div class="au-u-5-6">
+                        <p class="au-u-para-small au-u-muted au-u-medium">
+                          {{moment-format row.sessionDates}}
+                        </p>
+                        <AuHeading @level="3" @skin="4">
+                          <AuLink
+                            class="au-u-padding-none"
+                            @route="cases.case.subcases"
+                            @model={{row.id}}>
+                            {{#if row.shortTitle}}
+                              {{row.shortTitle}}
+                            {{else}}
+                              {{row.title}}
+                            {{/if}}
+                          </AuLink>
+                        </AuHeading>
+                      </div>
+                      <div class="au-u-1-6 au-u-text-right">
+                        {{!-- <AuPill @size="small">
+
+                        </AuPill> --}}
+                      </div>
+                    </div>
+                  </card.header>
+                  <card.content>
+                    <p class="au-u-para">Tekst ...... <strong>test</strong> ....... tekst</p>
+                  </card.content>
+                </AuCard>
               </td>
             </c.body>
           </table.content>

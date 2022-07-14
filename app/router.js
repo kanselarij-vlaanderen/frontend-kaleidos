@@ -111,8 +111,13 @@ Router.map(function() {
   }
 
   this.route('search', { path: '/zoeken', }, function() {
-    this.route('cases', { path: '/dossiers', });
+    this.route('all', { path: '/alle-types', });
     this.route('agenda-items', { path: '/agendapunten', });
+    this.route('cases', { path: '/dossiers', });
+    this.route('documents', { path: '/documenten', });
+    this.route('decisions', { path: '/beslissingen', });
+    this.route('newsletter-infos', { path: '/kort-bestek', });
+    this.route('announcements', { path: '/mededelingen', });
   });
 
   this.route('settings', { path: '/instellingen', }, function() {
