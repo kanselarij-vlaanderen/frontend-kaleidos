@@ -14,7 +14,7 @@ const VISIBLE_ROLES = [
 function sortByDeltaToRef(referenceDate) {
   return function(a, b) {
     return Math.abs(referenceDate - a) - Math.abs(referenceDate - b);
-  }
+  };
 }
 
 export default class MandateesService extends Service {
@@ -33,6 +33,8 @@ export default class MandateesService extends Service {
     if (governmentBody) {
       const mandatees = yield this.fetchMandateesForGovernmentBody.perform(governmentBody, referenceDate);
       return mandatees;
+    } else {
+      return [];
     }
   }
 
@@ -70,7 +72,7 @@ export default class MandateesService extends Service {
       include: 'person,mandate.role',
       'filter[mandate][role][:id:]': this.visibleRoles.map((role) => role.id).join(','),
       'page[size]': PAGE_SIZE.MANDATEES_IN_GOV_BODY
-    }
+    };
     if (referenceDate) {
       // Many versions of a mandatee exist within a government-body.
       // We only want those versions with a start-end range that covers the given referenceDate
@@ -180,7 +182,7 @@ export default class MandateesService extends Service {
       include: 'person,mandate.role',
       'filter[mandate][role][:id:]': this.visibleRoles.map((role) => role.id).join(','),
       'page[size]': PAGE_SIZE.MANDATEES_IN_GOV_BODY
-    }
+    };
     if (searchText) {
       queryOptions['filter[person][last-name]'] = searchText;
     }
@@ -204,7 +206,7 @@ export default class MandateesService extends Service {
         return false;
       } else {
         // currently active mandatees
-        return true; 
+        return true;
       }
     });
     mandatees = mandatees.sortBy('priority').toArray(); // TODO: sorting on both "start" and "priority" yields incomplete results. Thus part of the sort in frontend
