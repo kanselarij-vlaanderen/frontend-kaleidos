@@ -125,6 +125,7 @@ export default class AgendaPublicationPlanModal extends Component {
       return xPublicationActivity.plannedPublicationTime;
     } else {
       const isPlanned = xPublicationActivity?.unconfirmedPublicationTime != null;
+      // TODO KAS-3431 status?
       const isNotExpired = this.minPublicationDate < xPublicationActivity?.unconfirmedPublicationTime;
       if (isPlanned && isNotExpired) {
         return xPublicationActivity.unconfirmedPublicationTime;

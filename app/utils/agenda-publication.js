@@ -37,11 +37,11 @@ export function getIsPublished(xPublicationActivity) {
 }
 
 export function getMostCertainPublicationTime(xPublicationActivity) {
-  return xPublicationActivity?.plannedPublicationTime ?? xPublicationActivity?.unconfirmedPublicationTime;
+  return xPublicationActivity?.plannedPublicationTime;
 }
 
 /**
- * Gets the plannedPublicationTime if possible, falls back to unconfirmedPublicationTime
+ * Gets the plannedPublicationTim
  * When an depublication operation has took place, returns undefined
  * @param {ThemisPublicationActivity[]} themisPublicationActivities
  * @param {ThemisPublicationScopeEntry[]} scopeEntries

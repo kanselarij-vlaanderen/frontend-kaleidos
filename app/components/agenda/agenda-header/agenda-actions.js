@@ -63,7 +63,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       this.currentSession.isEditor &&
       this.args.meeting.isFinal &&
       this.internalDecisionPublicationActivity != null && // disable for the old data model (without decision-publication-activity)
-      this.internalDecisionPublicationActivity.startTime == null
+      this.internalDecisionPublicationActivity.startDate == null
     );
   }
 
@@ -316,10 +316,12 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   }
 
   @action
-  publishInternalDecisions() {
+  async publishInternalDecisions() {
+    const status = await this.store.findRecordByUri('release-status', CONSTANTS.RELEASE_STATUSES.RELEASED);
     this.showConfirmPublishInternalDecisions = false;
-    this.internalDecisionPublicationActivity.startTime = new Date();
-    this.internalDecisionPublicationActivity.save();
+    this.internalDecisionPublicationActivity.startDate = new Date();
+    this.internalDecisionPublicationActivity.status = status;
+    await this.internalDecisionPublicationActivity.save();
   }
 
   @action

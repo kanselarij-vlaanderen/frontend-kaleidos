@@ -1,6 +1,5 @@
 import Service, { inject as service } from '@ember/service';
 import fetch from 'fetch';
-import * as AgendaPublicationUtils from 'frontend-kaleidos/utils/agenda-publication';
 
 export default class NewsletterService extends Service {
   @service store;
@@ -186,20 +185,11 @@ export default class NewsletterService extends Service {
 
   async createNewsItemForMeeting(meeting) {
     if (this.currentSession.isEditor) {
-      let [internalDocumentPublicationActivity, themisPublicationActivities] = await Promise.all([
-        meeting.internalDocumentPublicationActivity,
-        meeting.themisPublicationActivities,
-      ]);
-      themisPublicationActivities = themisPublicationActivities.toArray();
-      const internalDocumentPublicationDate = internalDocumentPublicationActivity?.plannedPublicationTime ?? internalDocumentPublicationActivity?.unconfirmedPublicationTime;
-      const plannedThemisPublicationActivity = AgendaPublicationUtils.getPlannedThemisPublicationActivity(themisPublicationActivities);
-      const plannedThemisPublicationDate = plannedThemisPublicationActivity?.plannedPublicationTime ?? plannedThemisPublicationActivity?.unconfirmedPublicationTime;
+      // TODO KAS-3431 do we still need a newsletter-info on meeting when we have those new models?
       const newsletter = this.store.createRecord('newsletter-info', {
         meeting,
         finished: false,
         mandateeProposal: null,
-        publicationDate: plannedThemisPublicationDate,
-        publicationDocDate: internalDocumentPublicationDate,
       });
       await newsletter.save();
       meeting.newsletter = newsletter;

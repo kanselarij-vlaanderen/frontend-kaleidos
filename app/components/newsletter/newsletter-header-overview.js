@@ -4,6 +4,7 @@ import moment from 'moment';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /**
  * @argument {Meeting} meeting
@@ -42,6 +43,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     this.latestPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
       'filter[:lte:planned-publication-time]': new Date().toISOString(),
       'filter[meeting][:uri:]': this.args.meeting.uri,
+      'filter[status][:uri:]': CONSTANTS.RELEASE_STATUSES.RELEASED,
     });
   }
 
@@ -105,11 +107,13 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   @task
   *publishThemis(scope) {
+    const status = yield this.store.findRecordByUri('release-status', CONSTANTS.RELEASE_STATUSES.RELEASED);
     try {
       const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
-        plannedPublicationTime: new Date(),
+        startDate: new Date(),
         meeting: this.args.meeting,
-        scope
+        scope,
+        status
       });
       yield themisPublicationActivity.save();
       yield this.loadLatestPublicationActivity.perform();
@@ -125,11 +129,13 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   @task
   *unpublishThemis(scope) {
+    const status = yield this.store.findRecordByUri('release-status', CONSTANTS.RELEASE_STATUSES.RELEASED);
     try {
       const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
-        plannedPublicationTime: new Date(),
+        startDate: new Date(),
         meeting: this.args.meeting,
-        scope
+        scope,
+        status
       });
       yield themisPublicationActivity.save();
       this.toaster.success(this.intl.t('success-unpublish-from-web'));

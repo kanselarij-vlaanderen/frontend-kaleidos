@@ -188,9 +188,10 @@ export default class MeetingEditMeetingComponent extends Component {
     this.args.meeting.numberRepresentation = this.numberRepresentation;
     this.args.meeting.mainMeeting = this.selectedMainMeeting;
 
+    // TODO KAS-3431 status?
     if (this.isNew) {
-      this.themisPublicationActivity.unconfirmedPublicationTime = this.unconfirmedPublicationTime;
-      this.internalDocumentPublicationActivity.unconfirmedPublicationTime = this.unconfirmedPublicationTime;
+      // this.themisPublicationActivity.unconfirmedPublicationTime = this.unconfirmedPublicationTime;
+      // this.internalDocumentPublicationActivity.unconfirmedPublicationTime = this.unconfirmedPublicationTime;
     }
 
     try {

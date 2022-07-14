@@ -21,10 +21,11 @@ export default Component.extend({
     const meeting = await this.get('meeting');
 
     const internalDocumentPublicationActivity = await meeting.internalDocumentPublicationActivity;
-    const internalDocumentPublicationTime = AgendaPublicationUtils.getMostCertainPublicationTime(internalDocumentPublicationActivity);
+    // const internalDocumentPublicationTime = AgendaPublicationUtils.getMostCertainPublicationTime(internalDocumentPublicationActivity);
+    // const internalDocumentPublicationTime = internalDocumentPublicationActivity.plannedPublicationTime;
     const themisPublicationActivities = await meeting.themisPublicationActivities.then(a => a.toArray());
     const themisPublicationTime = AgendaPublicationUtils.getFinalMostCertainPublicationTime(themisPublicationActivities, [AgendaPublicationUtils.THEMIS_PUBLICATION_SCOPES.NEWSITEMS]);
-    this.set('internalDocumentPublicationTime', internalDocumentPublicationTime);
+    this.set('internalDocumentPublicationActivity', internalDocumentPublicationActivity);
     this.set('themisPublicationTime', themisPublicationTime);
 
     const newsletter = await meeting.get('newsletter');

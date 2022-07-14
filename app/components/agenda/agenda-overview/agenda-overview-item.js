@@ -45,7 +45,9 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   }
 
   get documentsAreReleased() {
-    return this.args.meeting.releasedDocuments < new Date();
+    // TODO KAS-3431 todo async? load with task or already load in top route (agenda)?
+    const internalDocumentPublicationActivity = this.args.meeting.internalDocumentPublicationActivity;
+    return internalDocumentPublicationActivity.get('plannedPublicationTime') < new Date();
   }
 
   get documentListSize() {

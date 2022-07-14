@@ -27,9 +27,11 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
   @tracked newPieces = A([]);
 
   get governmentCanViewDocuments() {
+    // TODO KAS-3431
+    // TODO KAS-3431 check the date? the planned date is filled in as soon as meeting is created. We should only show them if the date has passed?
     const isOverheid = this.currentSession.isOverheid;
 
-    const documentsAreReleased = this.subcase.get('requestedForMeeting.releasedDocuments'); // TODO: async ...?
+    const documentsAreReleased = this.subcase.get('requestedForMeeting.internalDocumentPublicationActivity.plannedPublicationTime'); // TODO: async ...?
     return !(isOverheid && !documentsAreReleased);
   }
 
