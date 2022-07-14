@@ -62,14 +62,14 @@ export default class GenerateReportModalComponent extends Component {
     const currentYear = new Date().getFullYear();
     if (this.args.userInputFields.publicationYear) {
       this.publicationYear = currentYear;
-      this.publicationYearMin = 1981;
+      this.publicationYearMin = this.publicationsStartYear;
       this.publicationYearMax = currentYear;
     }
 
     if (this.args.userInputFields.decisionDateRange) {
       this.decisionDateRangeStart = new Date(currentYear, 0, 1, 0, 0, 0, 0);
       this.decisionDateRangeEnd = undefined;
-      this.decisionDateMin = new Date(1981, 0, 1, 0, 0, 0, 0);
+      this.decisionDateMin = new Date(this.publicationsStartYear, 0, 1, 0, 0, 0, 0);
       this.decisionDateMax = new Date();
     }
 
@@ -84,6 +84,10 @@ export default class GenerateReportModalComponent extends Component {
     if (this.args.userInputFields.mandateePersons) {
       this.loadMandateePersons();
     }
+  }
+
+  get publicationsStartYear() {
+    return CONFIG.PUBLICATION_REPORT_START_YEAR;
   }
 
   get isLoading() {
@@ -105,7 +109,7 @@ export default class GenerateReportModalComponent extends Component {
   }
 
   isWithinSensibleRange(date) {
-    const minDate = new Date(1981, 0, 1, 0, 0, 0, 0);
+    const minDate = new Date(this.publicationsStartYear, 0, 1, 0, 0, 0, 0);
     const currentDate = new Date();
     return minDate <= date && date <= currentDate;
   }
@@ -145,7 +149,7 @@ export default class GenerateReportModalComponent extends Component {
       return false;
     }
     const currentYear = new Date().getFullYear();
-    return 1981 <= this.publicationYear && this.publicationYear <= currentYear;
+    return this.publicationsStartYear <= this.publicationYear && this.publicationYear <= currentYear;
   }
 
   get dateRange() {
@@ -320,22 +324,3 @@ function convertYearToDateRange(year) {
   const publicationDateRangeEnd = new Date(year + 1, 0, 1, 0, 0, 0, 0); /* eslint-disable-line prettier/prettier */
   return [publicationDateRangeStart, publicationDateRangeEnd];
 }
-
-/**
- * Get Date minus the timezone offset from UTC.
- * @param {Date} date
- * @returns {Date}
- */
-// function toDateWithoutUTCOffset(date) {
-//   return new Date(
-//     Date.UTC(
-//       date.getFullYear(),
-//       date.getMonth(),
-//       date.getDate(),
-//       date.getHours(),
-//       date.getMinutes(),
-//       date.getSeconds(),
-//       date.getMilliseconds()
-//     )
-//   );
-// }
