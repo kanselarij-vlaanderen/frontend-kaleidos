@@ -118,6 +118,25 @@ export default class AgendaAgendaitemsRoute extends Route {
   }
 
   @action
+  loading(transition) {
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const controller = this.controllerFor(this.routeName);
+    controller.isLoadingModel = true;
+    transition.promise.finally(() => {
+      controller.isLoadingModel = false;
+    });
+
+    // If only the filter queryParam changed, we don't want to bubble
+    // the loading event so we can handle it ourselves with an inline loader.
+    // When changing routes, e.g. when switching tabs, or when other queryParams
+    // change we do want to display the loading page.
+    if (transition.queryParamsOnly && transition.from && transition.to) {
+      return transition.from.queryParams?.filter === transition.to.queryParams?.filter;
+    }
+    return true;
+  }
+
+  @action
   reloadModel() {
     this.refresh();
   }

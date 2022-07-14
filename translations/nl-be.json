@@ -59,6 +59,7 @@
   "agendaitems-document-loading-progress-message": "Documenten van {count}/{total} agendapunten geladen",
   "note": "Nota",
   "agendas": "Agenda’s",
+  "previous-agendas": "Vorige agenda’s",
   "alt-document-name": "Alternatieve document naam",
   "amount-showed": "Dossiers per pagina",
   "annotation-on-agenda": "Annotatie bij agendering: ",
@@ -118,8 +119,6 @@
   "delete": "Verwijderen",
   "delete-comment": "Bericht verwijderen",
   "delete-comment-message": "Bent u zeker dat u het bericht wil verwijderen? Deze actie kan niet meer ongedaan gemaakt worden.",
-  "delete-decision": "Beslissing verwijderen",
-  "delete-decision-message": "Bent u zeker dat u de beslissing wil verwijderen? Deze actie kan niet meer ongedaan gemaakt worden.",
   "delete-document-message": "Bent u zeker dat u het document wilt verwijderen? Deze actie kan niet meer ongedaan gemaakt worden.",
   "delete-mandatee-message": "Bent u zeker dat u de minister wilt verwijderen? Deze actie kan niet meer ongedaan gemaakt worden.",
   "design": "Klad",
@@ -155,6 +154,7 @@
   "batch-edit": "Bulk wijzigen",
   "edit": "Wijzigen",
   "edit-2": "Bewerken",
+  "edit-text": "Tekst bewerken",
   "edit-translation-details": "Bewerk vertaling details",
   "edit-case": "Dossier wijzigen",
   "edit-minister": "Minister wijzigen",
@@ -735,6 +735,7 @@
   "translation-info": "Vertaling info",
   "translation-burden": "Vertaallast",
   "document": "Document",
+  "new-document": "Nieuw document",
   "proof": "Drukproef",
   "publication": "Publicatie",
   "proof-info": "Drukproef info",
@@ -1043,5 +1044,7 @@
   "deselect-all": "alles deselecteren",
   "on-the-website": "Op de website",
   "open-search-for-mandatee": "Vrij zoeken",
-  "open-search-for-mandatee-tooltip": "Opgelet. Activeer deze optie enkel indien strikt noodzakelijk. In tegenstelling tot bij standaard zoeken, kunnen de aangeboden resultaten bij vrij zoeken ook ministers bevatten die niet actief zijn/waren gedurende de referentieperiode waarvoor u zoekt. Deze functionaliteit kan bv. gebruikt worden om net-niet-meer actieve ministers (rond een ministerwissel) toe te wijzen. "
+  "open-search-for-mandatee-tooltip": "Opgelet. Activeer deze optie enkel indien strikt noodzakelijk. In tegenstelling tot bij standaard zoeken, kunnen de aangeboden resultaten bij vrij zoeken ook ministers bevatten die niet actief zijn/waren gedurende de referentieperiode waarvoor u zoekt. Deze functionaliteit kan bv. gebruikt worden om net-niet-meer actieve ministers (rond een ministerwissel) toe te wijzen. ",
+  "fullscreen": "Volledig scherm",
+  "close-fullscreen": "Sluit volledig scherm"
 }

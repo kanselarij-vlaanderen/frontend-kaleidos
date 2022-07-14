@@ -1,5 +1,6 @@
 import PublicationsOverviewBaseRoute from './_base';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { inject as service } from '@ember/service';
 
 // eslint-disable-next-line prettier/prettier
 const PROOFREAD_STATUSES_URIS = [
@@ -7,6 +8,8 @@ const PROOFREAD_STATUSES_URIS = [
 ];
 
 export default class PublicationsOverviewProofreadRoute extends PublicationsOverviewBaseRoute {
+  @service store;
+
   defaultColumns = [
     'isUrgent',
     'publicationNumber',

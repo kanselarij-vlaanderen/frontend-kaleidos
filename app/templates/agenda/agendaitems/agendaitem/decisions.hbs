@@ -6,30 +6,9 @@
       </h4>
     </Group.Item>
   </Toolbar.Group>
-  <Toolbar.Group @position="right" as |Group|>
-    {{#if this.currentSession.isEditor}}
-      <Group.Item>
-        <Auk::Button
-          @skin="secondary"
-          @icon="plus"
-          data-test-route-agenda---decisions-add-treatment
-          {{on "click" this.addTreatment}}
-        >
-          {{t "add-decision"}}
-        </Auk::Button>
-      </Group.Item>
-    {{/if}}
-  </Toolbar.Group>
 </Auk::Toolbar>
-{{#each this.treatments as |treatment|}}
-  <div class="auk-u-mb-2">
-    {{! As long as we see DecisionActivity & AgendaItemTreatment as 1 entity,
-    we need to ensure at least 1 treatment for a relationship path to newsletterInfo }}
-    <Agenda::Agendaitem::AgendaitemDecision
-      @agendaitem={{this.agendaitem}}
-      @treatment={{treatment}}
-      @onDeleteTreatment={{this.refresh}}
-      @allowDelete={{gt this.treatments.length 1}}
-    />
-  </div>
-{{/each}}
+<div class="auk-u-mb-2">
+  <Agenda::Agendaitem::AgendaitemDecision
+    @decisionActivity={{this.model}}
+  />
+</div>

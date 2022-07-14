@@ -1,10 +1,15 @@
-{{#if this.isAgendaitemDetailRoute}}
+{{#if this.isLoading}}
+  <div class="auk-panel-layout__main-content auk-u-bg-alt">
+    <Auk::Loader @message={{t "agenda-loading"}} />
+  </div>
+{{else if this.isAgendaitemDetailRoute}}
   <div class="auk-panel-layout__agenda-items">
     <div class="auk-sidebar auk-sidebar--gray-100 auk-sidebar--left auk-u-maximize-width">
       <div class="auk-scroll-wrapper">
         <Agenda::AgendaitemSearch
           @searchText={{readonly this.filter}}
           @onSearch={{this.searchAgendaitems}}
+          @hideButtonText={{true}}
         />
         <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical auk-u-hidden@print">
           <Agenda::AgendaDetail::Sidebar

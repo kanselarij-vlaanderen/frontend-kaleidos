@@ -12,37 +12,17 @@
     @columns={{this.columns}}
     as |agendaitemRow|
   >
-    {{#if (is-pending agendaitemRow.treatments)}}
-      <WebComponents::VlLoader @text={{t "decisions-loading-text"}} />
-    {{else}}
-      <div class="auk-u-m-8">
-        <div class="auk-u-mb-4">
-          <Auk::Toolbar>
-            <Auk::Toolbar::Group @position="center">
-              <Auk::Toolbar::Item>
-                <Auk::Button
-                  @skin="secondary"
-                  @icon="plus"
-                  {{action "addTreatment" agendaitemRow}}
-                >
-                  {{t "add-decision"}}
-                </Auk::Button>
-              </Auk::Toolbar::Item>
-            </Auk::Toolbar::Group>
-          </Auk::Toolbar>
+    {{#let (await agendaitemRow.agendaActivity.subcase) (await agendaitemRow.treatment.decisionActivity) as |subcase decisionActivity|}}
+      {{#if (and subcase decisionActivity)}}
+        <div class="auk-u-m-8">
+          <Agenda::Agendaitem::AgendaitemDecision
+            @decisionActivity={{decisionActivity}}
+          />
         </div>
-        {{#each (await agendaitemRow.treatments) as |treatment|}}
-          {{#let (await agendaitemRow.content.agendaActivity.subcase) as |subcase|}}
-            <Agenda::Agendaitem::AgendaitemDecision
-              @subcase={{subcase}}
-              @isTableRow={{true}}
-              @treatment={{treatment}}
-              @agendaitem={{await agendaitemRow.content}}
-            />
-          {{/let}}
-        {{/each}}
-      </div>
-    {{/if}}
+      {{else}}
+        <WebComponents::VlLoader @text={{t "decisions-loading-text"}} />
+      {{/if}}
+    {{/let}}
   </Utils::AgendaitemTable>
 </div>
 {{outlet}}

@@ -19,9 +19,7 @@ export default ModelWithModifier.extend({
   publicationDocDate: attr('datetime'),
   remark: attr('string'),
 
-  agendaItemTreatment: hasMany('agenda-item-treatment', {
-    serialize: true, // on creation of the newsletter-info, multiple decisions (for now also treatments) might already exist.
-  }),
+  agendaItemTreatment: belongsTo('agenda-item-treatment'),
   meeting: belongsTo('meeting', {
     inverse: null,
   }),
@@ -33,16 +31,16 @@ export default ModelWithModifier.extend({
   }),
 
   // TODO This computed property is used in:
-  // - NewsItem::EditItem
+  // - Agenda::Agendaitem::agendaitemNewsItemEdit
   // - Newsletter:NewsletterItem::ItemContent
   // - Agenda::Agendaitem::AgendaitemNewsItem
   // Refactor these usages and remove this computed property
-  newsletterProposal: computed('agendaItemTreatment.{[],@each.subcase}', async function() {
+  newsletterProposal: computed('agendaItemTreatment.decisionActivity.subcase', async function() {
     // eslint-disable-next-line ember/no-get
-    const treatments = await this.get('agendaItemTreatment');
-    const treatment = treatments.firstObject;
+    const treatment = await this.get('agendaItemTreatment');
     if (treatment) {
-      const subcase = await treatment.get('subcase');
+      const decisionActivity = await treatment.get('decisionActivity');
+      const subcase = await decisionActivity.get('subcase');
       const mandatees = await subcase.get('mandatees');
       const sortedMandatees = await mandatees.sortBy('priority');
       let proposalText = this.intl.t('proposal-text');

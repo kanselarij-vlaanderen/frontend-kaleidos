@@ -45,9 +45,7 @@ export default ModelWithModifier.extend({
   agendaActivity: belongsTo('agenda-activity', {
     inverse: null,
   }),
-  treatments: hasMany('agenda-item-treatment', {
-    inverse: null,
-  }),
+  treatment: belongsTo('agenda-item-treatment'),
 
   mandatees: hasMany('mandatee'),
   pieces: hasMany('piece'),
@@ -83,7 +81,7 @@ export default ModelWithModifier.extend({
   }),
 
   // TODO this computed property is used in:
-  // - NewsItem::EditItem
+  // - Agenda::Agendaitem::AgendaitemNewsItemEdit
   // - NewsletterTable::ButtonToolbar
   // Refactor these usages and remove this computed property
   notaOrVisienota: computed('id', 'nota', function() {

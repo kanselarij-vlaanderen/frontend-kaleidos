@@ -17,14 +17,14 @@ export default class SubcaseIsApprovedService extends Service {
         CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
       );
 
-      const nrAgendaItemTreamts = await this.store.count('agenda-item-treatment', {
+      const nrDecisionActivities = await this.store.count('decision-activity', {
         'filter[subcase][:id:]': subcase.id,
         'filter[decision-result-code][:id:]': [
           approvedDecisionResultCode.id,
           acknowledgedDecisionResultCode.id,
         ].join(','),
       });
-      return nrAgendaItemTreamts > 0;
+      return nrDecisionActivities > 0;
     }
     return false;
   }

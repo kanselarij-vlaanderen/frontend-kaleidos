@@ -67,6 +67,7 @@ const selectors = {
 
   // mandatees-selector-modal
   mandateesSelector: {
+    openSearch: '[data-test-mandatees-selector-open-search]',
     cancel: '[data-test-mandatees-selector-cancel]',
     add: '[data-test-mandatees-selector-add]',
   },

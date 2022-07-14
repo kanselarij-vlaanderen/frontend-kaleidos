@@ -86,8 +86,8 @@ request the whole row and not only the arrow at the end to be clickable }}
   {{/if}}
   {{#if @tableColumnDisplayOptions.decisionDate}}
     <td data-test-publication-table-row-decision-date class="auk-u-text-nowrap">
-      {{#if @publicationFlow.agendaItemTreatment.startDate}}
-        {{moment-format @publicationFlow.agendaItemTreatment.startDate}}
+      {{#if @publicationFlow.decisionActivity.startDate}}
+        {{moment-format @publicationFlow.decisionActivity.startDate}}
       {{else}}
         {{t "dash"}}
       {{/if}}
@@ -219,7 +219,7 @@ request the whole row and not only the arrow at the end to be clickable }}
       class="auk-u-text-nowrap"
     >
       {{#if @publicationFlow.publicationSubcase.dueDate}}
-        <div class="{{if this.isPublicationOverdue 'auk-u-text-bold'}}">
+        <div>
           {{moment-format @publicationFlow.publicationSubcase.dueDate}}
         </div>
       {{else}}

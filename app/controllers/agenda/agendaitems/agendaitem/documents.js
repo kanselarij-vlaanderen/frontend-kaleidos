@@ -49,6 +49,12 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     return mayPublish && hasCase && hasPieces;
   }
 
+  get isShownSignatureMarker() {
+    const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
+    const hasPermission = this.currentSession.may('manage-signatures');
+    return isEnabled && hasPermission;
+  }
+
   @task
   *loadNewPieces() {
     if (this.previousAgenda) {
@@ -246,9 +252,9 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @action
   async markForSignature(piece) {
     // Placed the getting of these variables here to lessen loading time in router
-    const treatments = await this.agendaitem.treatments;
-    const agendaItemTreatment = treatments.firstObject;
-    await this.signatureService.markDocumentForSignature(piece, agendaItemTreatment);
+    const agendaItemTreatment = await this.agendaitem.treatment;
+    const decisionActivity = await agendaItemTreatment.decisionActivity;
+    await this.signatureService.markDocumentForSignature(piece, decisionActivity);
   }
 
   @action
@@ -259,11 +265,5 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @action
   refresh() {
     this.send('reloadModel');
-  }
-
-  get isShownSignatureMarker() {
-    const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
-    const hasPermission = this.currentSession.may('manage-signatures');
-    return isEnabled && hasPermission;
   }
 }

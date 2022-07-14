@@ -14,7 +14,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   @tracked isEditing;
   @tracked publicationNumber;
   @tracked publicationNumberSuffix;
-  @tracked agendaItemTreatment;
+  @tracked decisionActivity;
   @tracked modelsForAgendaitemRoute;
 
   @tracked numberIsAlreadyUsed = false;
@@ -44,14 +44,14 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     // Numac-nummers
     this.numacNumbers = yield this.args.publicationFlow.numacNumbers;
     // Datum beslissing
-    this.agendaItemTreatment = yield this.args.publicationFlow
-      .agendaItemTreatment;
+    this.decisionActivity = yield this.args.publicationFlow
+      .decisionActivity;
     // Limiet publicatie
     this.publicationSubcase = yield this.args.publicationFlow
       .publicationSubcase;
-    if (this.isViaCouncilOfMinisters && this.agendaItemTreatment) {
+    if (this.isViaCouncilOfMinisters && this.decisionActivity) {
       // get the models meeting/agenda/agendaitem for clickable link
-      this.modelsForAgendaitemRoute = yield this.publicationService.getModelsForAgendaitemFromTreatment(this.agendaItemTreatment);
+      this.modelsForAgendaitemRoute = yield this.publicationService.getModelsForAgendaitemFromDecisionActivity(this.decisionActivity);
     }
   }
 
@@ -167,7 +167,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
     this.identification.rollbackAttributes();
     this.structuredIdentifier.rollbackAttributes();
-    this.agendaItemTreatment.rollbackAttributes();
+    this.decisionActivity.rollbackAttributes();
     this.publicationSubcase.rollbackAttributes();
     this.args.publicationFlow.rollbackAttributes();
     yield this.args.publicationFlow.belongsTo('mode').reload();
@@ -206,7 +206,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
     // Datum beslissing
     if (!this.isViaCouncilOfMinisters) {
-      saves.push(this.agendaItemTreatment.save());
+      saves.push(this.decisionActivity.save());
     }
 
     // Dringend + Datum ontvangst

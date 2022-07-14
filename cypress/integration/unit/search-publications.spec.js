@@ -20,6 +20,7 @@ function checkPublicationSearch(searchTerm, result) {
     .type(searchTerm);
   cy.get(route.search.trigger).click();
   cy.wait(`@publicationSearchCall${randomInt}`);
+  cy.wait(1000); // TODO flakyness because of postprocessing of the results
   cy.get(route.searchPublications.dataTable).find('tbody')
     .children('tr')
     .contains(result);
@@ -30,7 +31,9 @@ function checkPublicationSearchForDateType(dateType, date, pubNumber) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt}`);
   cy.get(route.searchPublications.dateType).select(dateType);
-  cy.get(route.searchPublications.date).click();
+  cy.get(route.search.from).click();
+  cy.setDateInFlatpickr(date);
+  cy.get(route.search.to).click();
   cy.setDateInFlatpickr(date);
   cy.get(route.search.trigger).click();
   cy.wait(`@publicationSearchCall${randomInt}`);
@@ -248,7 +251,9 @@ context('Search tests', () => {
     // search with double date
     cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall2');
     cy.get(route.searchPublications.dateType).select('Datum beslissing');
-    cy.get(route.searchPublications.date).click();
+    cy.get(route.search.from).click();
+    cy.setDateInFlatpickr(fields.decisionDate);
+    cy.get(route.search.to).click();
     cy.setDateInFlatpickr(fields.decisionDate);
     cy.get(route.search.trigger).click();
     cy.wait('@publicationSearchCall2');
@@ -283,27 +288,4 @@ context('Search tests', () => {
       .wait('@publicationSearchCall4');
     cy.get(utils.vlAlert.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
   });
-
-  // it('temporary test to try and identift why this is flaky, more logs included', () => {
-  //   visitPublicationSearch();
-  //   for (let int = 0; int < 10; int++) {
-  //     // checkPublicationSearchForDateType
-  //     const randomInt = Math.floor(Math.random() * Math.floor(10000));
-  //     cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt}`);
-  //     cy.get(route.searchPublications.dateType).select('Limiet vertaling');
-  //     cy.get(route.searchPublications.date).click();
-  //     cy.setDateInFlatpickr(fields.translationDueDate);
-  //     cy.get(route.search.trigger).click();
-  //     cy.wait(`@publicationSearchCall${randomInt}`).its('response.body')
-  //       .then((responseBody) => {
-  //         cy.log('responseData', responseBody?.data);
-  //         cy.log('responseData 0', responseBody?.data[0]?.id);
-  //       });
-  //     cy.wait(1000); // TODO This is to test if the flakyness is solved by waiting longer or if the problem is elsewhere
-  //     cy.get(route.searchPublications.dataTable).find('tbody')
-  //       .children('tr')
-  //       .contains(fields.number);
-  //     searchFakePublication();
-  //   }
-  // });
 });
