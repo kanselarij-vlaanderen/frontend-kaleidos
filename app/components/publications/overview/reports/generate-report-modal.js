@@ -174,60 +174,15 @@ export default class GenerateReportModalComponent extends Component {
 
   @task
   *fetchMandateePersons(searchText) {
-    // TODO: this task logic can be replaced by calling the right method from the
-    // mandatee-service and mapping mandatee results to persons.
     const [dateRangeStart, dateRangeEnd] = this.dateRange;
-
-    // // As long as mu-cl-resources does not support an OR filter
-    // //    that allows the end date to be empty or after a specific date
-    // //    we need to separate the filter in two requests
-
-    // const commonQueryOptions = {
-    //   'filter[:has:mandatees]': true,
-    //   // DISABLED: query timeouts
-    //   // 'filter[mandatees][mandate][role][:id:]': this.visibleRoles.map((role) => role.id).join(','),
-    //   // active ranges of mandatees are stored as dateTimes, but with time set to 0:00 UTC
-    //   // since the frontend is in a different timezone, we need to compensate for this
-    //   'filter[mandatees][:lt:start]':
-    //     toDateWithoutUTCOffset(dateRangeEnd).toISOString(),
-    //   'filter[last-name]': searchText, // Ember Data leaves this of when set to undefined (=> no filtering)
-    //   // although we sort and paginate again on the frontend
-    //   //   after combining both query results
-    //   //   sorting an pagination are useful for limiting the payload size
-    //   sort: 'last-name',
-    //   'page[size]': CONFIG.PAGE_SIZE.SELECT,
-    // };
-
-    // const pastQueryOptions = {
-    //   ...commonQueryOptions,
-    //   'filter[mandatees][:gte:end]':
-    //     toDateWithoutUTCOffset(dateRangeStart).toISOString(),
-    // };
-    // const pastMandateePersons = this.store.query('person', pastQueryOptions);
-
-    // const currentQueryOptions = {
-    //   ...commonQueryOptions,
-    //   // HACK: mu-cl-resources quirk: has-no is intended to be used with relationships,
-    //   //   but seems to be working with an attribute in this case.
-    //   //   It might change with mu-cl-resource updates.
-    //   'filter[mandatees][:has-no:end]': true,
-    // };
-    // const currentMandateePersons = this.store.query(
-    //   'person',
-    //   currentQueryOptions
-    // );
-
-    const allMandatees = yield this.mandatees.getMandateesActiveForRange.perform(dateRangeStart, dateRangeEnd, searchText);
-    const allPersons= [];
-    for (const mandatee of allMandatees) {
-      const person =yield mandatee.person;
-      allPersons.addObject(person);
+    const mandatees = yield this.mandatees.getMandateesActiveOn.perform(dateRangeStart, dateRangeEnd, searchText);
+    const persons = [];
+    for (const mandatee of mandatees) {
+      const person = yield mandatee.person;
+      persons.addObject(person);
     }
 
-    const mandateePersons = allPersons
-      .sortBy('lastName');
-
-    return mandateePersons;
+    return persons.sortBy('lastName');
   }
 
   @task
