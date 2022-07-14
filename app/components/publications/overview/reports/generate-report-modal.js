@@ -80,6 +80,10 @@ export default class GenerateReportModalComponent extends Component {
     if (this.args.userInputFields.regulationTypes) {
       this.loadRegulationTypes.perform();
     }
+
+    if (this.args.userInputFields.mandateePersons) {
+      this.loadMandateePersons();
+    }
   }
 
   get isLoading() {
@@ -144,7 +148,6 @@ export default class GenerateReportModalComponent extends Component {
     return 1981 <= this.publicationYear && this.publicationYear <= currentYear;
   }
 
-  // gets the date range selected by the user
   get dateRange() {
     if (this.args.userInputFields.publicationYear) {
       return convertYearToDateRange(this.publicationYear);
@@ -155,12 +158,12 @@ export default class GenerateReportModalComponent extends Component {
     throw new Error('NOT IMPLEMENTED'); // for linter
   }
 
-  @task
-  *loadMandateePersons() {
-    // set mandatees to unresolved promise in order to notify EmberPowerSelect of loading state
-    // this are the default options of the EmberPowerSelect (no searchText)
-    this.mandateePersons = this.fetchMandateePersons.perform(undefined);
-    yield;
+  @action
+  loadMandateePersons() {
+    if (this.args.userInputFields.mandateePersons) {
+      // Assign a promise to mandateePersons to enable loading state on ember-power-select
+      this.mandateePersons = this.fetchMandateePersons.perform(undefined);
+    }
   }
 
   @task({
