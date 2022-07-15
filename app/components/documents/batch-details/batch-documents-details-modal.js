@@ -103,11 +103,8 @@ export default class BatchDocumentsDetailsModal extends Component {
       if (row.isToBeDeleted) {
         await this.fileService.deletePiece(piece);
 
-        if (this.args.agendaitem) {
-          await restorePiecesFromPreviousAgendaitem(
-            this.args.agendaitem,
-            row.documentContainer
-          );
+        if (this.args.didDeletePiece) {
+          await this.args.didDeletePiece(piece);
         }
 
         const piecesInContainer = await row.documentContainer.pieces;

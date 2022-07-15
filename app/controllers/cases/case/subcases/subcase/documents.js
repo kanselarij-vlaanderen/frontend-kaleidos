@@ -23,7 +23,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
   case;
   subcase;
   defaultAccessLevel;
-  @tracked isEnabledPieceEdit = false;
+  @tracked showBatchDetails = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked defaultAccessLevel;
   @tracked newPieces = A([]);
@@ -33,19 +33,6 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
 
     const documentsAreReleased = this.subcase.get('requestedForMeeting.releasedDocuments'); // TODO: async ...?
     return !(isOverheid && !documentsAreReleased);
-  }
-
-  @action
-  async enablePieceEdit() {
-    // TODO reload must be moved to save handler
-    // when Documents::BatchDocumentEdit component bubbles 'save' action
-    await this.ensureFreshData.perform();
-    this.isEnabledPieceEdit = true;
-  }
-
-  @action
-  disablePieceEdit() {
-    this.isEnabledPieceEdit = false;
   }
 
   @action
@@ -86,7 +73,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
     yield this.handleSubmittedPieces.perform(this.newPieces);
     this.isOpenPieceUploadModal = false;
     this.newPieces = A();
-    this.send('reloadModel');
+    this.refresh();
   }
 
   /**
@@ -107,7 +94,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
     piece.cases.pushObject(this.case);
     yield piece.save();
     yield this.handleSubmittedPieces.perform([piece]);
-    this.send('reloadModel');
+    this.refresh();
   }
 
   @task
@@ -169,7 +156,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
           }
         }
       }
-      this.send('reloadModel');
+      this.refresh();
     }
   }
 
@@ -223,10 +210,9 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
 
       yield submissionActivity.save();
       return submissionActivity;
+    } else { // Create first submission activity to add pieces on
+      return this.createSubmissionActivity.perform(pieces);
     }
-
-    // Create first submission activity to add pieces on
-    return this.createSubmissionActivity.perform(pieces);
   }
 
   @task
@@ -265,7 +251,25 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
         }
       }
     }
-    this.send('reloadModel');
+    this.refresh();
+  }
+
+
+  @action
+  async openBatchDetails() {
+    await this.ensureFreshData.perform();
+    this.showBatchDetails = true;
+  }
+
+  @action
+  cancelBatchDetails() {
+    this.showBatchDetails = false;
+  }
+
+  @action
+  saveBatchDetails() {
+    this.refresh();
+    this.showBatchDetails = false;
   }
 
   @action

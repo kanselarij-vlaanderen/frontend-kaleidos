@@ -36,12 +36,13 @@
         @didDeletePiece={{this.refresh}}
         @didDeleteContainer={{this.refresh}}
       />
+
       {{#if this.currentSession.isEditor}}
         <div class="auk-u-mb-4">
           <Auk::Button
+            data-test-route-agenda-documents-add-documents
             @skin="tertiary"
             @icon="plus"
-            data-test-route-agenda-documents-add-documents
             {{on "click" this.openPieceUploadModal}}
           >
             {{t "documents-add"}}
