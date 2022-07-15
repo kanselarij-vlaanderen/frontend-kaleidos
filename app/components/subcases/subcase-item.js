@@ -96,7 +96,8 @@ export default class SubcaseItemSubcasesComponent extends Component {
       pieces.push(...submissionPieces);
     }
 
-    if (this.args.subcase?.requestedForMeeting.get('isPreKaleidos')) {
+    const meeting = yield this.args.subcase?.requestedForMeeting;
+    if (meeting?.isPreKaleidos) {
       this.subcaseDocuments = sortPieces(pieces, VrLegacyDocumentName, compareLegacyDocuments);
     } else {
       this.subcaseDocuments = sortPieces(pieces);
