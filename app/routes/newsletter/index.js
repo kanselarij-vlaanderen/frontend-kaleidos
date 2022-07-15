@@ -4,7 +4,6 @@ import { action } from '@ember/object';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class IndexNewsletterRoute extends Route {
-  @service currentSession;
   @service store;
 
   queryParams = {
@@ -13,20 +12,20 @@ export default class IndexNewsletterRoute extends Route {
     },
   };
 
-  /* Although counterintuïtive for a route named "newsletter", this model needs to
+  /* Although counterintuitive for a route named "newsletter", this model needs to
    * be centered around agenda-items, since we need to provide "blank rows" for the items
    * that don't have a newsletter-info yet.
    */
   async model(params) {
-    const agenda = await this.modelFor('newsletter').agenda;
-    const filter = {
-      'show-as-remark': false,
-      agenda: {
-        id: agenda.id,
-      },
-    };
+    const newsletterModel = this.modelFor('newsletter');
+    const agenda = newsletterModel.agenda;
     let agendaitems = await this.store.query('agendaitem', {
-      filter,
+      filter: {
+        'show-as-remark': false,
+        agenda: {
+          id: agenda.id,
+        },
+      },
       include: 'treatment.newsletter-info',
       sort: params.sort,
       'page[size]': PAGE_SIZE.AGENDAITEMS,
@@ -38,18 +37,18 @@ export default class IndexNewsletterRoute extends Route {
 
     return Promise.all(
       agendaitems.map(async (agendaitem) => {
-        const agendaItemTreatment = await agendaitem.get('treatment');
-        const newsletterInfo = await agendaItemTreatment.get('newsletterInfo');
+        const agendaItemTreatment = await agendaitem.treatment;
+        const newsletterItem = await agendaItemTreatment.newsletterInfo;
         return {
           agendaitem,
-          newsletterInfo,
+          newsletterItem,
         };
       })
     );
   }
 
   @action
-  refresh() {
+  reloadModel() {
     super.refresh();
   }
 }

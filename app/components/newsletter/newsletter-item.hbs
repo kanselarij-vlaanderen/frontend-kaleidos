@@ -3,7 +3,7 @@
     <WebComponents::VlLoader @text={{t "newsletter-info-loading-text"}} />
   {{else if (not this.isEditing)}}
     {{#if (not @allowEditing)}}
-      {{#if (await @newsletterInfo.inNewsletter)}}
+      {{#if @newsletterInfo.inNewsletter}}
         <Newsletter::NewsletterItem::ItemContent
           @agendaitem={{@agendaitem}}
           @newsletterInfo={{@newsletterInfo}}
