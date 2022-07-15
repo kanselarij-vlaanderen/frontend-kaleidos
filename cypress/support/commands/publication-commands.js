@@ -42,8 +42,10 @@ function fillInNewPublicationFields(fields) {
       .click();
     cy.setDateInFlatpickr(fields.publicationDueDate);
   }
-  cy.get(publication.newPublication.shortTitle).click()
-    .type(fields.shortTitle);
+  if (fields.shortTitle) {
+    cy.get(publication.newPublication.shortTitle).click()
+      .type(fields.shortTitle);
+  }
   if (fields.longTitle) {
     cy.get(publication.newPublication.longTitle).click()
       .type(fields.longTitle);

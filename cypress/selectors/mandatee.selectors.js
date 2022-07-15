@@ -25,6 +25,7 @@ const selectors = {
       save: '[data-test-mandatee-panel-edit-save]',
     },
   },
+
   // create-mandatee
   createMandatee: {
     titleContainer: '[data-test-create-mandatee-title-container]',
