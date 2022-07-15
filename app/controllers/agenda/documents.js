@@ -12,7 +12,7 @@ export default class AgendaDocumentsController extends Controller {
 
   meeting;
   defaultAccessLevel;
-  @tracked showBatchDetails = false;
+  @tracked isOpenBatchDetailsModal = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked newPieces = A([]);
 
@@ -95,18 +95,18 @@ export default class AgendaDocumentsController extends Controller {
 
   @action
   openBatchDetails() {
-    this.showBatchDetails = true;
+    this.isOpenBatchDetailsModal = true;
   }
 
   @action
   cancelBatchDetails() {
-    this.showBatchDetails = false;
+    this.isOpenBatchDetailsModal = false;
   }
 
   @action
   saveBatchDetails() {
     this.refresh();
-    this.showBatchDetails = false;
+    this.isOpenBatchDetailsModal = false;
   }
 
   @action

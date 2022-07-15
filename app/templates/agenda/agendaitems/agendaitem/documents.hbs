@@ -69,7 +69,7 @@
   </div>
 {{/if}}
 
-{{#if this.showBatchDetails}}
+{{#if this.isOpenBatchDetailsModal}}
   <Documents::BatchDetails::BatchDocumentsDetailsModal
     @pieces={{this.model.pieces}}
     @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}

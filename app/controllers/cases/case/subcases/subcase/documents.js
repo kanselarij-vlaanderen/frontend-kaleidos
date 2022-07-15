@@ -23,7 +23,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
   case;
   subcase;
   defaultAccessLevel;
-  @tracked showBatchDetails = false;
+  @tracked isOpenBatchDetailsModal = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked defaultAccessLevel;
   @tracked newPieces = A([]);
@@ -258,18 +258,18 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
   @action
   async openBatchDetails() {
     await this.ensureFreshData.perform();
-    this.showBatchDetails = true;
+    this.isOpenBatchDetailsModal = true;
   }
 
   @action
   cancelBatchDetails() {
-    this.showBatchDetails = false;
+    this.isOpenBatchDetailsModal = false;
   }
 
   @action
   saveBatchDetails() {
     this.refresh();
-    this.showBatchDetails = false;
+    this.isOpenBatchDetailsModal = false;
   }
 
   @action

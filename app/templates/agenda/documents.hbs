@@ -84,7 +84,7 @@
   </WebComponents::VlModal>
 {{/if}}
 
-{{#if this.showBatchDetails}}
+{{#if this.isOpenBatchDetailsModal}}
   <Documents::BatchDetails::BatchDocumentsDetailsModal
     @pieces={{this.model}}
     @onCancel={{this.cancelBatchDetails}}

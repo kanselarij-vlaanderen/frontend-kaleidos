@@ -21,7 +21,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service agendaService;
   @service signatureService;
 
-  @tracked showBatchDetails = false;
+  @tracked isOpenBatchDetailsModal = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked defaultAccessLevel;
   @tracked newPieces = A([]);
@@ -225,18 +225,18 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @action
   async openBatchDetails() {
     await this.ensureFreshData.perform();
-    this.showBatchDetails = true;
+    this.isOpenBatchDetailsModal = true;
   }
 
   @action
   cancelBatchDetails() {
-    this.showBatchDetails = false;
+    this.isOpenBatchDetailsModal = false;
   }
 
   @action
   saveBatchDetails() {
     this.refresh();
-    this.showBatchDetails = false;
+    this.isOpenBatchDetailsModal = false;
   }
 
   @action
