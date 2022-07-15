@@ -1,6 +1,9 @@
 import PublicationsOverviewBaseRoute from './_base';
+import { inject as service } from '@ember/service';
 
 export default class PublicationsOverviewLateRoute extends PublicationsOverviewBaseRoute {
+  @service store;
+
   defaultColumns= [
     'publicationNumber',
     'numacNumber',

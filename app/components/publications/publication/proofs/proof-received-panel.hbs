@@ -20,6 +20,7 @@
         >
           <Menu.Item
             @skin="primary"
+            data-test-proof-received-panel-publication-request
             @disabled={{@isCreatePublicationRequestDisabled}}
             {{on "click" this.openPublicationRequestModal}}
           >

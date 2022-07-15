@@ -10,6 +10,7 @@ export default Route.extend({
   include: 'agenda-activity,agenda-activity.subcase',
   shouldFilterRemarks: true,
   currentSession: service(),
+  store: service(),
   modelName: 'agendaitem',
   filter: null,
   page: 0,
