@@ -5,13 +5,14 @@ import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
 import { task } from 'ember-concurrency';
 import { all } from 'ember-concurrency';
-import moment from 'moment';
 
 export default class AgendaDocumentsController extends Controller {
   @service currentSession;
   @service store;
 
   @tracked isEnabledPieceEdit = false;
+  meeting;
+  defaultAccessLevel;
   @tracked isOpenPieceUploadModal = false;
   @tracked newPieces = A([]);
 
@@ -33,8 +34,7 @@ export default class AgendaDocumentsController extends Controller {
 
   @action
   uploadPiece(file) {
-    const now = moment().utc()
-      .toDate();
+    const now = new Date();
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
     });

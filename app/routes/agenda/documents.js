@@ -26,8 +26,8 @@ export default class AgendaDocumentsRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
     const meeting = this.modelFor('agenda').meeting;
-    controller.set('meeting', meeting);
-    controller.set('defaultAccessLevel', this.defaultAccessLevel);
+    controller.meeting = meeting;
+    controller.defaultAccessLevel = this.defaultAccessLevel;
   }
 
   @action
