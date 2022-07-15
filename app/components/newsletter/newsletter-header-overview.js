@@ -40,10 +40,19 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   @task
   *loadLatestPublicationActivity() {
+    /* 
+      TODO KAS-3431 is this correct? we want to get the publication that is linked to newsitems only?
+      Filtering on startDate + the status should ensure it is released to valvas
+      sorting in latest startdate in case there is more than 1?
+      Does the scope of "document, newsitems" come out of this query as well?
+    */
+
     this.latestPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
-      'filter[:lte:planned-publication-time]': new Date().toISOString(),
+      'filter[:lte:start-date]': new Date().toISOString(),
       'filter[meeting][:uri:]': this.args.meeting.uri,
       'filter[status][:uri:]': CONSTANTS.RELEASE_STATUSES.RELEASED,
+      'filter[scope]': 'newsitems',
+      sort: '-start-date',
     });
   }
 

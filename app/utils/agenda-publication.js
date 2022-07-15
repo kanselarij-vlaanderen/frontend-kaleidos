@@ -7,7 +7,7 @@ import ENV from 'frontend-kaleidos/config/environment';
 
 export const THEMIS_PUBLICATION_SCOPES = CONSTANTS.THEMIS_PUBLICATION_SCOPES;
 
-export const THEMIS_PUBLICATION_SCOPE_PLANNED = [
+export const THEMIS_PUBLICATION_SCOPE_NEWS_DOCS = [
   CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS,
   CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS,
 ];
@@ -74,7 +74,7 @@ export function getHasInScope(themisPublicationActivity, subjects) {
 
 export function getPlannedThemisPublicationActivity(themisPublicationActivities) {
   const possibleInitialActivities = themisPublicationActivities.filter((it) => {
-    return getHasScope(it, THEMIS_PUBLICATION_SCOPE_PLANNED);
+    return getHasScope(it, THEMIS_PUBLICATION_SCOPE_NEWS_DOCS);
   });
 
   if (possibleInitialActivities.length === 0) {
@@ -82,4 +82,15 @@ export function getPlannedThemisPublicationActivity(themisPublicationActivities)
   }
 
   return possibleInitialActivities.sortBy('plannedPublicationTime')[0];
+}
+
+export async function checkIfDocumentsAreReleasedForMeeting(meeting, store) {
+  const internalDocumentPublication = await store.queryOne('internal-document-publication-activity', {
+    'filter[meeting][:id:]': meeting.id,
+    include: 'status',
+  });
+  const releaseStatus = await internalDocumentPublication?.status;
+  const areDocumentsReleased = releaseStatus?.isReleased;
+  const isPlannedPublicationExpired = internalDocumentPublication.plannedPublicationTime < new Date();
+  return areDocumentsReleased && isPlannedPublicationExpired ;
 }

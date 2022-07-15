@@ -120,15 +120,15 @@ export default class AgendaPublicationPlanModal extends Component {
     yield this.args.onSave(params);
   }
 
-  getSuggestedPublicationDate(xPublicationActivity) {
-    if (xPublicationActivity?.plannedPublicationTime != null) {
-      return xPublicationActivity.plannedPublicationTime;
+  getSuggestedPublicationDate(PublicationActivity) {
+    if (PublicationActivity?.plannedPublicationTime != null) {
+      return PublicationActivity.plannedPublicationTime;
     } else {
-      const isPlanned = xPublicationActivity?.unconfirmedPublicationTime != null;
-      // TODO KAS-3431 status?
-      const isNotExpired = this.minPublicationDate < xPublicationActivity?.unconfirmedPublicationTime;
+      // TODO KAS-3431 why this check, could this ever be null?
+      const isPlanned = PublicationActivity?.plannedPublicationTime != null;
+      const isNotExpired = this.minPublicationDate < PublicationActivity?.plannedPublicationTime;
       if (isPlanned && isNotExpired) {
-        return xPublicationActivity.unconfirmedPublicationTime;
+        return PublicationActivity.plannedPublicationTime;
       } else {
         return this.minPublicationDate;
       }

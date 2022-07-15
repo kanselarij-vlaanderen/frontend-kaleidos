@@ -11,6 +11,7 @@ import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import VrNotulenName,
 { compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
+import * as themisPublicationUtils from 'frontend-kaleidos/utils/agenda-publication';
 
 export default class AgendaOverviewItem extends AgendaSidebarItem {
   /**
@@ -36,18 +37,14 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   @tracked newAgendaitemDocuments;
 
   @tracked isShowingAllDocuments = false;
+  @tracked documentsAreReleased = false;
 
   constructor() {
     super(...arguments);
     this.agendaitemDocuments = [];
     this.newAgendaitemDocuments = [];
     this.loadDocuments.perform();
-  }
-
-  get documentsAreReleased() {
-    // TODO KAS-3431 todo async? load with task or already load in top route (agenda)?
-    const internalDocumentPublicationActivity = this.args.meeting.internalDocumentPublicationActivity;
-    return internalDocumentPublicationActivity.get('plannedPublicationTime') < new Date();
+    this.loadDocumentsReleaseStatus.perform();
   }
 
   get documentListSize() {
@@ -68,6 +65,11 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   @task
   *setFormallyOkStatus(status) {
     yield this.args.setFormallyOkAction(status.uri);
+  }
+
+  @task
+  *loadDocumentsReleaseStatus() {
+    this.documentsAreReleased = yield themisPublicationUtils.checkIfDocumentsAreReleasedForMeeting(this.args.meeting, this.store);
   }
 
   @task

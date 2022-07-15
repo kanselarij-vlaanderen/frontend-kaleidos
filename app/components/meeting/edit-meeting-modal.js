@@ -24,12 +24,7 @@ export default class MeetingEditMeetingComponent extends Component {
   @tracked selectedKind;
   @tracked selectedMainMeeting;
   @tracked startDate;
-  // In order to adapt default value to the selected startDate, we distinguish not specified and cleared
-  //  not specified -> userInputUnconfirmedPublicationTime === undefined
-  //  cleared -> userInputUnconfirmedPublicationTime === null
-  // planned date of release of documents and publication to Themis (internalDocumentPublicationActivity.unconfirmedPublicationTime and themisPublicationActivity.unconfirmedPublicationTime)
-  //  as inputted by user
-  @tracked userInputUnconfirmedPublicationTime;
+  @tracked plannedDocumentReleaseDate;
   @tracked extraInfo;
   @tracked _meetingNumber;
   @tracked _numberRepresentation;
@@ -40,29 +35,17 @@ export default class MeetingEditMeetingComponent extends Component {
     super(...arguments);
     this.isNew = this.args.meeting.isNew;
 
-    this.initFields.perform();
-    this.initializeKind.perform();
-    this.initializeMeetingNumber.perform();
-    this.initializeMainMeeting.perform();
-  }
-
-  @task
-  *initFields() {
     const now = new Date();
-    this.now = now;
-
     this.meetingYear = this.args.meeting.plannedStart?.getFullYear() || this.currentYear;
     this.startDate = this.args.meeting.plannedStart || new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0, 0);
     this.extraInfo = this.args.meeting.extraInfo;
     this.numberRepresentation = this.args.meeting.numberRepresentation;
 
-    if (this.isNew) {
-      const meeting = this.args.meeting;
-      this.userInputUnconfirmedPublicationTime = undefined;
-      this.internalDecisionPublicationActivity = yield meeting.internalDecisionPublicationActivity;
-      this.internalDocumentPublicationActivity = yield meeting.internalDocumentPublicationActivity;
-      const themisPublicationActivities = yield meeting.themisPublicationActivities;
-      this.themisPublicationActivity = themisPublicationActivities.firstObject;
+    this.initializeKind.perform();
+    this.initializeMeetingNumber.perform();
+    this.initializeMainMeeting.perform();
+    if (!this.args.meeting.isFinal) {
+      this.initializePublicationModels.perform();
     }
   }
 
@@ -73,26 +56,25 @@ export default class MeetingEditMeetingComponent extends Component {
     return '';
   }
 
-  /** if user did not set unconfirmedPublicationTime: display next workday after meeting */
-  get unconfirmedPublicationTime() {
+  get suggestedDocumentReleaseDate() {
     this.startDate; // listen to changes of startDate
 
-    if (this.userInputUnconfirmedPublicationTime !== undefined) {
-      return this.userInputUnconfirmedPublicationTime;
+    if (this.plannedDocumentReleaseDate !== undefined) {
+      return this.plannedDocumentReleaseDate;
     } else {
       return getNextWorkday(this.startDate, 14, 0, 0, 0);
     }
   }
 
-  get minUnconfirmedPublicationTime() {
+  get minSuggestedPublicationTime() {
     const minTimeMS = Math.max(this.startDate.getTime(), this.now)
     const date = new Date(minTimeMS + AgendaPublicationUtils.PROCESSING_WINDOW_MS);
     date.setMilliseconds(0); // WORKAROUND: Flatpickr does not handle @minDate and milliseconds correctly: sometimes causes flickering when not 0
     return date;
   }
 
-  get errorUnconfirmedPublicationTime() {
-    if (this.unconfirmedPublicationTime === null) {
+  get errorSuggestedPublicationTime() {
+    if (this.suggestedDocumentReleaseDate === null) {
       return 'no-date';
     }
     return null;
@@ -122,7 +104,7 @@ export default class MeetingEditMeetingComponent extends Component {
         (this.isAnnexMeeting && !this.selectedMainMeeting) ||
         !this.meetingNumber ||
         !this.numberRepresentation ||
-        this.errorUnconfirmedPublicationTime ||
+        this.errorSuggestedPublicationTime ||
         this.initializeKind.isRunning ||
         this.initializeMainMeeting.isRunning ||
         this.saveMeeting.isRunning
@@ -130,19 +112,19 @@ export default class MeetingEditMeetingComponent extends Component {
   }
 
   @action
-  setUnconfirmedPublicationTime(newUnconfirmedPublicationTime) {
+  setPlannedPublicationDate(newPlannedDocumentReleaseDate) {
     // when clearing VlDatepicker manually, it does not pass undefined or null,
     //  but instead passes the now Date as the new Date
     // the @min however does clear the @date, when it is below @min,
     //  but this does not trigger this action
-    // because minUnconfirmedPublicationTime is always higher than now
+    // because minSuggestedPublicationTime is always higher than now
     //  it results in a visually cleared datepicker,
-    //  but the @tracked userUnconfirmedPublicationTime being set
+    //  but the @tracked plannedDocumentReleaseDate being set
     // this check prevents that confusing case
-    if (newUnconfirmedPublicationTime < this.minUnconfirmedPublicationTime) {
-      this.userInputUnconfirmedPublicationTime = null;
+    if (newPlannedDocumentReleaseDate < this.minSuggestedPublicationTime) {
+      this.plannedDocumentReleaseDate = this.minSuggestedPublicationTime;
     } else {
-      this.userInputUnconfirmedPublicationTime = newUnconfirmedPublicationTime;
+      this.plannedDocumentReleaseDate = newPlannedDocumentReleaseDate;
     }
   }
 
@@ -177,6 +159,33 @@ export default class MeetingEditMeetingComponent extends Component {
     }
   }
 
+  @task
+  *initializePublicationModels() {
+    // load the records by fetching the relation, this works for both old and new meetings
+    const meeting = this.args.meeting;
+    this.internalDecisionPublicationActivity = yield meeting.internalDecisionPublicationActivity;
+    this.internalDocumentPublicationActivity = yield meeting.internalDocumentPublicationActivity;
+    const themisPublicationActivities = yield meeting.themisPublicationActivities;
+    // TODO KAS-3431 possible to get the wrong object when newsletters have been released already and an edit happens here
+    // TODO KAS-3431 should we filter on the scope of "documents" here in that case?
+    this.themisPublicationActivity = themisPublicationActivities.firstObject;
+    if (this.isNew) {
+      // load plannedStatus and empty date (to be filled in by getter)
+      const plannedStatus = yield this.store.findRecordByUri('release-status', CONSTANTS.RELEASE_STATUSES.PLANNED);
+      this.plannedDocumentReleaseDate = undefined;
+
+      // set the status of all to "planned", no status was set on creation
+      this.internalDecisionPublicationActivity.status = plannedStatus;
+      this.internalDocumentPublicationActivity.status = plannedStatus;
+      this.themisPublicationActivity.status = plannedStatus;
+    } else {
+      // get the planned date from existing data
+      // we could get this from either this or themis publication, both should be equal at this point
+      this.plannedDocumentReleaseDate = this.internalDocumentPublicationActivity.plannedPublicationTime;
+    }
+  
+  }
+
   @dropTask
   *saveMeeting() {
     const now = new Date();
@@ -188,14 +197,19 @@ export default class MeetingEditMeetingComponent extends Component {
     this.args.meeting.numberRepresentation = this.numberRepresentation;
     this.args.meeting.mainMeeting = this.selectedMainMeeting;
 
-    // TODO KAS-3431 status?
-    if (this.isNew) {
-      // this.themisPublicationActivity.unconfirmedPublicationTime = this.unconfirmedPublicationTime;
-      // this.internalDocumentPublicationActivity.unconfirmedPublicationTime = this.unconfirmedPublicationTime;
+    if (!this.args.meeting.isFinal) {
+      // update the plannedDate (not needed for decisions)
+      this.themisPublicationActivity.plannedPublicationTime = this.plannedDocumentReleaseDate;
+      this.internalDocumentPublicationActivity.plannedPublicationTime = this.plannedDocumentReleaseDate;
     }
 
     try {
       yield this.args.meeting.save();
+      if (!this.args.meeting.isFinal) {
+        yield this.themisPublicationActivity.save();
+        yield this.internalDocumentPublicationActivity.save();
+        yield this.internalDecisionPublicationActivity.save();
+      }
     } catch (err) {
       console.error(err);
       this.toaster.error();

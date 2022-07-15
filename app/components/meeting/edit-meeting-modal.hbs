@@ -46,27 +46,20 @@
         </div>
       </div>
       {{!Publicatiedatum}}
-      {{!LIMITATION: In order to reduce complexity caused by existing x-publication-activity
-        the plannedReleaseDate can only be changed for new meetings
-        A second reason is that old meeting records do not have x-publication-activities}}
-      {{#if this.isNew}}
+      {{#if (not @meeting.isFinal)}}
         <div class="auk-u-mb-2">
-          <div
-            class="auk-form-group"
-            data-test-edit-meeting-release-date-datepicker
-          >
+          <div class="auk-form-group">
             <Auk::Label
-              @error={{this.errorUnconfirmedPublicationTime}}
+              @error={{this.errorSuggestedPublicationTime}}
             >
-              {{t "publication-date"}}
+              {{t "date-publication-documents"}}
             </Auk::Label>
             {{! TODO: Replace this with Auk::Datepicker, which isn't fully compliant yet (e.g. no time support) }}
             <WebComponents::VlDatepicker
               @enableTime={{true}}
-              @date={{array this.unconfirmedPublicationTime}}
-              @min={{this.minUnconfirmedPublicationTime}}
-              @error={{this.errorUnconfirmedPublicationTime}}
-              @dateChanged={{this.setUnconfirmedPublicationTime}}
+              @date={{array this.suggestedDocumentReleaseDate}}
+              @min={{this.minSuggestedPublicationTime}}
+              @dateChanged={{this.setPlannedPublicationDate}}
             />
             <Auk::FormHelpText
               class="auk-u-mt"

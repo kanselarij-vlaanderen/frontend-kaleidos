@@ -39,7 +39,7 @@
   </Toolbar.Group>
 </Auk::Toolbar>
 
-{{#if this.governmentCanViewDocuments}}
+{{#if this.areDocumentsViewable}}
   {{#unless this.loadData.isRunning}}
     <Documents::DocumentCardList
       @pieces={{this.model.pieces}}

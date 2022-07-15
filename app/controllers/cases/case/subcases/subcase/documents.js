@@ -25,14 +25,13 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
   @tracked isOpenPieceUploadModal = false;
   @tracked defaultAccessLevel;
   @tracked newPieces = A([]);
+  @tracked canGovernmentViewDocuments = false;
 
-  get governmentCanViewDocuments() {
-    // TODO KAS-3431
-    // TODO KAS-3431 check the date? the planned date is filled in as soon as meeting is created. We should only show them if the date has passed?
-    const isOverheid = this.currentSession.isOverheid;
-
-    const documentsAreReleased = this.subcase.get('requestedForMeeting.internalDocumentPublicationActivity.plannedPublicationTime'); // TODO: async ...?
-    return !(isOverheid && !documentsAreReleased);
+  get areDocumentsViewable() {
+    if (this.currentSession.isOverheid) {
+      return this.canGovernmentViewDocuments;
+    }
+    return true;
   }
 
   @action

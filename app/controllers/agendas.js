@@ -5,7 +5,7 @@ import { action } from '@ember/object';
 import moment from 'moment';
 import { restartableTask, timeout } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import AgendaPublicationUtils from 'frontend-kaleidos/utils/agenda-publication';
+import themisPublicationUtils from 'frontend-kaleidos/utils/agenda-publication';
 
 export default class AgendasController extends Controller {
   queryParams = ['page', 'size', 'sort', 'filter'];
@@ -51,29 +51,27 @@ export default class AgendasController extends Controller {
 
   @action
   openNewSessionModal() {
-    this.isCreatingNewSession = true;
-    // because we use the EditMeetingModal to create and edit a meeting,
-    //  in order to allow genericity inside the component, x-publication-activities are created before opening
+    this.newMeeting = this.store.createRecord('meeting', { isFinal: false });
     this.newInternalDecisionPublicationActivity = this.store.createRecord(
       'internal-decision-publication-activity',
-      {}
+      {
+        meeting: this.newMeeting,
+      }
     );
     this.newInternalDocumentPublicationActivity = this.store.createRecord(
       'internal-document-publication-activity',
-      {}
+      {
+        meeting: this.newMeeting,
+      }
     );
     this.newThemisPublicationActivity = this.store.createRecord(
       'themis-publication-activity',
       {
-        scope: AgendaPublicationUtils.THEMIS_PUBLICATION_SCOPE_PLANNED,
+        meeting: this.newMeeting,
+        scope: themisPublicationUtils.THEMIS_PUBLICATION_SCOPE_NEWS_DOCS,
       }
     );
-    this.newMeeting = this.store.createRecord('meeting', {
-      isFinal: false,
-      internalDecisionPublicationActivity: this.newInternalDecisionPublicationActivity,
-      internalDocumentPublicationActivity: this.newInternalDocumentPublicationActivity,
-      themisPublicationActivities: [this.newThemisPublicationActivity],
-    });
+    this.isCreatingNewSession = true;
   }
 
   @action

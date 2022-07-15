@@ -35,7 +35,12 @@ export default class Meeting extends Model {
 
   @belongsTo('internal-decision-publication-activity') internalDecisionPublicationActivity;
   @belongsTo('internal-document-publication-activity') internalDocumentPublicationActivity;
-  @hasMany('themis-publication-activity') themisPublicationActivities;
+  // TODO KAS-3431 concurrency issues can occur since these activities are created/edited by multiple people
+  // do to not serialize this and only set meeting on themis-publication
+  // read-only relation, reloads might be needed / use query on model with meetingid to avoid
+  @hasMany('themis-publication-activity',  {
+    serialize: false,
+  }) themisPublicationActivities;
 
 
   get isPreKaleidos() {

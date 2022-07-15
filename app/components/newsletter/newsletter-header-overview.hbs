@@ -131,6 +131,7 @@
     @verify={{perform this.publishToBelga}}
   />
 {{/if}}
+{{!-- TODO KAS-3431 this still needs work, releasing documents should not be an option in newsletter? --}}
 {{#if this.showConfirmPublishThemis}}
   <ThemisPublications::PublishConfirmationModal
     @onCancel={{this.cancelPublishThemis}}

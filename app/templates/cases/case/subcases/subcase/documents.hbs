@@ -18,7 +18,7 @@
           {{/if}}
         </div>
       </div>
-      {{#if this.governmentCanViewDocuments}}
+      {{#if this.areDocumentsViewable}}
         {{#unless this.loadData.isRunning}}
           {{#if this.isEnabledPieceEdit}}
             <Documents::BatchDocumentEdit

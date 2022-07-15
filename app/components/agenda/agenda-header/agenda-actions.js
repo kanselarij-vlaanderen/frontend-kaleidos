@@ -72,6 +72,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   }
 
   // Plan publication of documents internally (=Vrijgeven) and on Themis
+  // TODO KAS-3431 planPublication should no longer be possible when released, this needs work
   get canPlanPublication() {
     if (this.loadPublicationActivities.isRunning) return false;
 
@@ -336,35 +337,40 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
 
   @task
   *savePlanPublication(params) {
+    const confirmedStatus = yield this.store.findRecordByUri('release-status', CONSTANTS.RELEASE_STATUSES.CONFIRMED);
     const saves = [];
+    // TODO KAS-3431 there should always be a model for these, it is created at meeting creation and migrations should cover all
     if ('internalDocumentPublicationDate' in params) {
-      if (this.internalDocumentPublicationActivity == null) {
-        this.internalDocumentPublicationActivity = this.store.createRecord(
-          'internal-document-publication-activity',
-          {
-            meeting: this.args.meeting,
-          }
-        );
-      }
+      // if (this.internalDocumentPublicationActivity == null) {
+      //   this.internalDocumentPublicationActivity = this.store.createRecord(
+      //     'internal-document-publication-activity',
+      //     {
+      //       meeting: this.args.meeting,
+      //     }
+      //   );
+      // }
       this.internalDocumentPublicationActivity.plannedPublicationTime = params.internalDocumentPublicationDate;
+      this.internalDocumentPublicationActivity.status = confirmedStatus;
       const internalDocumentSave = this.internalDocumentPublicationActivity.save();
       saves.push(internalDocumentSave);
     }
 
     let themisPublicationActivity = this.plannedThemisPublicationActivity;
-    if (themisPublicationActivity == null) {
-      themisPublicationActivity = this.store.createRecord(
-        'themis-publication-activity',
-        {
-          scope: AgendaPublicationUtils.THEMIS_PUBLICATION_SCOPE_PLANNED,
-          meeting: this.args.meeting,
-        }
-      );
-    }
+    // if (themisPublicationActivity == null) {
+    //   themisPublicationActivity = this.store.createRecord(
+    //     'themis-publication-activity',
+    //     {
+    //       scope: AgendaPublicationUtils.THEMIS_PUBLICATION_SCOPE_NEWS_DOCS,
+    //       meeting: this.args.meeting,
+    //     }
+    //   );
+    // }
     themisPublicationActivity.plannedPublicationTime = params.themisPublicationDate;
+    themisPublicationActivity.status = confirmedStatus;
     const themisSave = themisPublicationActivity.save();
     saves.push(themisSave);
 
+    // TODO KAS-3431 multiple repeated saves (concurrency or self) will possibly overwrite the properties set by document-release-service if done near the release window.
     yield Promise.all(saves);
 
     this.showPlanPublicationModal = false;

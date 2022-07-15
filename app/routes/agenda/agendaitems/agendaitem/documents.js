@@ -7,9 +7,11 @@ import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import VrNotulenName, {
   compareFunction as compareNotulen,
 } from 'frontend-kaleidos/utils/vr-notulen-name';
+import * as themisPublicationUtils from 'frontend-kaleidos/utils/agenda-publication';
 
 export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
   @service store;
+  @service currentSession;
 
   async model() {
     const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
@@ -45,6 +47,10 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
         ? CONSTANTS.ACCESS_LEVELS.MINISTERRAAD
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
+    if (this.currentSession.isOverheid) {
+      const meeting = await this.modelFor('agenda').meeting;
+      this.canGovernmentViewDocuments = await themisPublicationUtils.checkIfDocumentsAreReleasedForMeeting(meeting, this.store);
+    }
   }
 
   setupController(controller) {
@@ -57,6 +63,7 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.currentAgenda = this.currentAgenda;
     controller.previousAgenda = this.previousAgenda;
     controller.agendaActivity = this.agendaActivity;
+    controller.canGovernmentViewDocuments = this.canGovernmentViewDocuments;
     controller.loadNewPieces.perform();
   }
 

@@ -32,16 +32,13 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @tracked agendaActivity;
 
   @tracked isOpenPublicationModal = false;
+  @tracked canGovernmentViewDocuments = false;
 
-  get governmentCanViewDocuments() {
-    // TODO KAS-3431 could we not get the meeting from the top route instead?
-    // TODO KAS-3431 check the date? the planned date is filled in as soon as meeting is created. We should only show them if the date has passed?
-    const isOverheid = this.currentSession.isOverheid;
-
-    const documentsAreReleased = this.agendaitem.get(
-      'agenda.createdFor.internalDocumentPublicationActivity.plannedPublicationTime'
-    ); // TODO async ...?
-    return !(isOverheid && !documentsAreReleased);
+  get areDocumentsViewable() {
+    if (this.currentSession.isOverheid) {
+      return this.canGovernmentViewDocuments;
+    }
+    return true;
   }
 
   get isShownOpenPublicationModal() {
