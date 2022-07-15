@@ -9,7 +9,6 @@ import {
   all,
   timeout
 } from 'ember-concurrency';
-import moment from 'moment';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import {
   addPieceToAgendaitem, restorePiecesFromPreviousAgendaitem
@@ -21,6 +20,9 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
   @service intl;
   @service store;
 
+  case;
+  subcase;
+  defaultAccessLevel;
   @tracked isEnabledPieceEdit = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked defaultAccessLevel;
@@ -53,8 +55,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
 
   @action
   uploadPiece(file) {
-    const now = moment().utc()
-      .toDate();
+    const now = new Date();
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
     });
