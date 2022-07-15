@@ -14,7 +14,7 @@ const VISIBLE_ROLES = [
 function sortByDeltaToRef(referenceDate) {
   return function(a, b) {
     return Math.abs(referenceDate - a) - Math.abs(referenceDate - b);
-  }
+  };
 }
 
 export default class MandateesService extends Service {
@@ -26,41 +26,53 @@ export default class MandateesService extends Service {
   }
 
   @task
-  *getMandateesActiveOn(referenceDate=new Date()) {
+  *loadVisibleRoles() {
+    const visibleRoles = yield Promise.all(VISIBLE_ROLES.map((role) => this.store.findRecordByUri('role', role)));
+    this.visibleRoles = visibleRoles;
+  }
+
+  @task
+  *getMandateesActiveOn(referenceDateFrom=new Date(), referenceDateTo, searchText) {
+    if (!referenceDateTo) {
+      referenceDateTo = referenceDateFrom;
+    }
     // Since this data is static, a local memoization/caching mechanism can be added
     // here in case of performance issues
-    const governmentBody = yield this.fetchGovernmentBody.perform(referenceDate);
-    if (governmentBody) {
-      const mandatees = yield this.fetchMandateesForGovernmentBody.perform(governmentBody, referenceDate);
-      return mandatees;
+    const activeMandateesInRange = [];
+    const governmentBodies = yield this.fetchGovernmentBodies.perform(referenceDateFrom, referenceDateTo);
+    for (const governmentBody of governmentBodies) {
+      const mandatees = yield this.fetchMandateesForGovernmentBody.perform(governmentBody, referenceDateFrom, referenceDateTo, searchText);
+      activeMandateesInRange.addObjects(mandatees);
     }
+
+    return activeMandateesInRange;
   }
 
   @task
-  *fetchGovernmentBody(referenceDate) {
-    const closedRange = this.store.queryOne('government-body', {
+  *fetchGovernmentBodies(referenceDateFrom, referenceDateTo) {
+    const governmentBodies = [];
+    const closedInRange = this.store.query('government-body', {
       'filter[is-timespecialization-of][:has:is-timespecialization-of]': 'yes',
-      'filter[generation][:lte:time]': referenceDate.toISOString(),
-      'filter[invalidation][:gt:time]': referenceDate.toISOString()
+      'filter[generation][:lt:time]': referenceDateTo.toISOString(),
+      'filter[invalidation][:gte:time]': referenceDateFrom.toISOString(),
     });
-    const openRange = this.store.queryOne('government-body', {
+    const activeRange = this.store.queryOne('government-body', {
       'filter[is-timespecialization-of][:has:is-timespecialization-of]': 'yes',
-      'filter[generation][:lte:time]': referenceDate.toISOString(),
+      'filter[generation][:lt:time]': referenceDateTo.toISOString(),
       'filter[:has-no:invalidation]': 'yes'
     });
-    const [closedBody, openBody] = yield Promise.all([closedRange, openRange]);
-    const existingBody = closedBody || openBody;
-    if (existingBody) {
-      if (closedBody && openBody) {
-        console.warn('Multiple active government bodies for given referenceDate. Probably something wrong in data');
-      }
-      return existingBody;
+
+    const [closedBodies, activeBody] = yield Promise.all([closedInRange, activeRange]);
+    governmentBodies.addObjects(closedBodies);
+    if (activeBody) {
+      governmentBodies.addObject(activeBody);
     }
-    return null;
+
+    return governmentBodies;
   }
 
   @task
-  *fetchMandateesForGovernmentBody(governmentBody, referenceDate=null) {
+  *fetchMandateesForGovernmentBody(governmentBody, referenceDateFrom, referenceDateTo, searchText) {
     yield this.loadVisibleRoles.last; // Make sure visible roles are loaded
     // If no referenceDate is specified, all mandatees within the given governmentBody.
     // Can be multiple versions (see documentation on https://themis-test.vlaanderen.be/docs/catalogs#ministers ,
@@ -70,27 +82,32 @@ export default class MandateesService extends Service {
       include: 'person,mandate.role',
       'filter[mandate][role][:id:]': this.visibleRoles.map((role) => role.id).join(','),
       'page[size]': PAGE_SIZE.MANDATEES_IN_GOV_BODY
+    };
+    if (searchText) {
+      queryOptions['filter[person][last-name]'] = searchText;
     }
-    if (referenceDate) {
+    if (referenceDateTo) {
       // Many versions of a mandatee exist within a government-body.
       // We only want those versions with a start-end range that covers the given referenceDate
-      queryOptions['filter[:lte:start]'] = referenceDate.toISOString();
+      queryOptions['filter[:lt:start]'] = referenceDateTo.toISOString();
       // No queryOptions[':lt:end'] = referenceDate; here
       // "end" is optional in data.
       // mu-cl-resources doesn't have :has-no:-capability for simple properties (which end-date is)
       // That's why we do some filtering client-side (see below)
     }
     let mandatees = yield this.store.query('mandatee', queryOptions);
-    mandatees = mandatees.sortBy('priority').toArray(); // TODO: sorting on both "start" and "priority" yields incomplete results. Thus part of the sort in frontend
-    if (referenceDate) {
+    // We need to filter out the mandatees that are in the body
+    // but have an end date before the range starts or active mandatees (i.e. no end date)
+    if (referenceDateFrom) {
       mandatees = mandatees.filter((mandatee) => {
         if (mandatee.end) {
-          return referenceDate < mandatee.end;
+          return mandatee.end >= referenceDateFrom;
         } else {
-          return true;
+          return true; // currently active mandatees
         }
       });
     }
+    mandatees = mandatees.sortBy('priority').toArray(); // TODO: sorting on both "start" and "priority" yields incomplete results. Thus part of the sort in frontend
     return mandatees;
   }
 
@@ -120,11 +137,5 @@ export default class MandateesService extends Service {
     const mandatees = [...preMandatees.toArray(), ...postMandatees.toArray()];
     const sortedMandatees = mandatees.sort((a, b) => sortByDeltaToRef(referenceDate)(a.start, b.start));
     return sortedMandatees;
-  }
-
-  @task
-  *loadVisibleRoles() {
-    const visibleRoles = yield Promise.all(VISIBLE_ROLES.map((role) => this.store.findRecordByUri('role', role)));
-    this.visibleRoles = visibleRoles;
   }
 }

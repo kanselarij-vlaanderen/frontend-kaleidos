@@ -68,6 +68,7 @@
             @error={{not this.isPublicationYearValid}}
             min={{this.publicationYearMin}}
             max={{this.publicationYearMax}}
+            {{on "focusout" this.loadMandateePersons}}
           />
         </div>
       {{/if}}
@@ -80,13 +81,9 @@
             @options={{this.mandateePersons}}
             @selected={{this.selectedMandateePersons}}
             @onChange={{fn (mut this.selectedMandateePersons)}}
-            {{!loadMandatees on open: ensure date range updates are taken into account}}
-            {{!do not use onFocus: triggers multiple times (when clicking on the bottom of the input) (probably bug)}}
-            @onOpen={{this.loadMandateePersons.perform}}
             @searchEnabled={{true}}
             @search={{perform this.searchMandateePersons}}
             @noMatchesMessage={{t "no-ministers-found"}}
-            {{!Message shown when no search has been entered and there are no options.}}
             @searchMessage={{t "no-ministers-found"}}
             @loadingMessage={{t "search-loading-text"}}
             as |person|
