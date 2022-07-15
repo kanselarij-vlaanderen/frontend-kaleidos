@@ -15,10 +15,6 @@ export default class AgendaDocumentsController extends Controller {
   @tracked isOpenPieceUploadModal = false;
   @tracked newPieces = A([]);
 
-  get iterablePieces() {
-    return this.pieces.toArray();
-  }
-
   @action
   enablePieceEdit() {
     this.isEnabledPieceEdit = true;
