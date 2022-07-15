@@ -247,7 +247,7 @@ context('Decision tests', () => {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     };
 
-    cy.visit('http://localhost:4200/dossiers/628392747A5496079478E275/deeldossiers/628392827A5496079478E277/overzicht');
+    cy.visit('dossiers/628392747A5496079478E275/deeldossiers/628392827A5496079478E277/overzicht');
     cy.get(cases.subcaseTitlesView.edit).click();
     cy.get(cases.subcaseTitlesEdit.confidential).click();
     cy.intercept('PATCH', '/subcases/*').as('patchSubcases');
