@@ -10,22 +10,11 @@ export default class AgendaDocumentsController extends Controller {
   @service currentSession;
   @service store;
 
-  @tracked isEnabledPieceEdit = false;
   meeting;
   defaultAccessLevel;
+  @tracked showBatchDetails = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked newPieces = A([]);
-
-  @action
-  enablePieceEdit() {
-    this.isEnabledPieceEdit = true;
-  }
-
-  @action
-  disablePieceEdit() {
-    this.isEnabledPieceEdit = false;
-    this.send('reloadModel');
-  }
 
   @action
   openPieceUploadModal() {
@@ -102,6 +91,22 @@ export default class AgendaDocumentsController extends Controller {
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.destroyRecord();
     yield piece.destroyRecord();
+  }
+
+  @action
+  openBatchDetails() {
+    this.showBatchDetails = true;
+  }
+
+  @action
+  cancelBatchDetails() {
+    this.showBatchDetails = false;
+  }
+
+  @action
+  saveBatchDetails() {
+    this.refresh();
+    this.showBatchDetails = false;
   }
 
   @action
