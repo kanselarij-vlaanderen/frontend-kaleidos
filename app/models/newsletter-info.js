@@ -31,9 +31,9 @@ export default ModelWithModifier.extend({
   }),
 
   // TODO This computed property is used in:
-  // - Agenda::Agendaitem::agendaitemNewsItemEdit
   // - Newsletter:NewsletterItem::ItemContent
-  // - Agenda::Agendaitem::AgendaitemNewsItem
+  // - NewsletterItem::EditPanel
+  // - NewsletterItem::ViewPanel
   // Refactor these usages and remove this computed property
   newsletterProposal: computed('agendaItemTreatment.decisionActivity.subcase', async function() {
     // eslint-disable-next-line ember/no-get

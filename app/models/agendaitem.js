@@ -81,7 +81,7 @@ export default ModelWithModifier.extend({
   }),
 
   // TODO this computed property is used in:
-  // - Agenda::Agendaitem::AgendaitemNewsItemEdit
+  // - NewsletterItem::EditPanel
   // - NewsletterItem::TableRow
   // Refactor these usages and remove this computed property
   notaOrVisienota: computed('id', 'nota', function() {

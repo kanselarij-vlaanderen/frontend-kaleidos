@@ -35,7 +35,7 @@ export default class NewsletterItemEditPanelComponent extends Component {
     this.title = this.newsletterItem.title;
     this.remark = this.newsletterItem.remark;
     this.richtext = this.newsletterItem.richtext;
-    this.isFinished = this.newsletterItem.isFinished;
+    this.isFinished = this.newsletterItem.finished;
     this.selectedThemes = (yield this.newsletterItem.themes).toArray();
   }
 

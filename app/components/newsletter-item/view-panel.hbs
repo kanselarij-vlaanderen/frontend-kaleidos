@@ -4,30 +4,24 @@
       <Toolbar.Group @position="left" as |Group|>
         <Group.Item>
           <AuHeading @level="4" @skin="5" data-test-agendaitem-news-item-title>
-            {{@newsletterInfo.title}}
+            {{@newsletterItem.title}}
           </AuHeading>
         </Group.Item>
       </Toolbar.Group>
       <Toolbar.Group @position="right" as |Group|>
         <Group.Item>
-          {{#if @newsletterInfo}}
-            {{#if @newsletterInfo.inNewsletter}}
-              <AuPill @skin="default" @icon="visible">
-                {{t "visible-in-newsletter"}}
-              </AuPill>
-            {{else}}
-              <AuPill @skin="default" @icon="not-visible">
-                {{t "hidden-in-newsletter"}}
-              </AuPill>
-            {{/if}}
+          {{#if @newsletterItem.inNewsletter}}
+            <AuPill @skin="default" @icon="visible">
+              {{t "visible-in-newsletter"}}
+            </AuPill>
           {{else}}
-            <AuPill>
-              {{t "no-newsletter-info"}}
+            <AuPill @skin="default" @icon="not-visible">
+              {{t "hidden-in-newsletter"}}
             </AuPill>
           {{/if}}
         </Group.Item>
         <Group.Item>
-          {{#if @newsletterInfo.finished}}
+          {{#if @newsletterItem.finished}}
             <AuPill @skin="success">
               {{t "finished"}}
             </AuPill>
@@ -43,35 +37,32 @@
   <Auk::Panel::Body>
     <AuContent @skin="small">
       <p class="au-u-italic">
-        {{await @newsletterInfo.newsletterProposal}}
+        {{await @newsletterItem.newsletterProposal}}
       </p>
       <p>
         <SanitizeHtml
           @raw={{true}}
-          @value={{@newsletterInfo.richtext}}
+          @value={{@newsletterItem.richtext}}
         />
       </p>
     </AuContent>
   </Auk::Panel::Body>
-  {{#if @newsletterInfo.remark}}
+  {{#if @newsletterItem.remark}}
     <Auk::Panel::Body>
       <p class="au-u-muted auk-u-text-capitalize auk-u-text-small">
-        <strong>{{t "remark"}}</strong>: {{@newsletterInfo.remark}}
+        <strong>{{t "remark"}}</strong>: {{@newsletterItem.remark}}
       </p>
     </Auk::Panel::Body>
   {{/if}}
   <Auk::Panel::Body>
     <div data-test-agendaitem-news-item-themes>
-      {{#if (is-pending @newsletterInfo.themes)}}
+      {{#if (is-pending @newsletterItem.themes)}}
         <Auk::Loader @message={{t "themes-loading-text"}} />
-      {{else if (gt (await @newsletterInfo.themes.length) 0)}}
+      {{else if (await @newsletterItem.themes.length)}}
         <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
           <strong>Thema's:</strong>
           <Auk::PillList>
-            {{#each
-              (await @newsletterInfo.themes)
-            as |theme|
-            }}
+            {{#each (await @newsletterItem.themes) as |theme|}}
               <AuPill>{{theme.label}}</AuPill>
             {{/each}}
           </Auk::PillList>

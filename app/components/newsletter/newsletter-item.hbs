@@ -26,11 +26,11 @@
       />
     {{/if}}
   {{else}}
-    <Agenda::Agendaitem::AgendaitemNewsItemEdit
+    <NewsletterItem::EditPanel
+      @newsletterItem={{@newsletterInfo}}
       @agendaitem={{@agendaitem}}
-      @newsletterInfo={{@newsletterInfo}}
-      @onSave={{this.saveChanges}}
       @onCancel={{this.stopEditing}}
+      @onSave={{this.saveChanges}}
     />
   {{/if}}
 </div>
