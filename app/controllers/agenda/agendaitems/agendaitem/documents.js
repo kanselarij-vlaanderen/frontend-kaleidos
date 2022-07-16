@@ -21,9 +21,9 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service agendaService;
   @service signatureService;
 
+  defaultAccessLevel;
   @tracked isOpenBatchDetailsModal = false;
   @tracked isOpenPieceUploadModal = false;
-  @tracked defaultAccessLevel;
   @tracked newPieces = A([]);
   @tracked newAgendaitemPieces;
   @tracked agendaitem;
@@ -235,8 +235,8 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
   @action
   saveBatchDetails() {
-    this.refresh();
     this.isOpenBatchDetailsModal = false;
+    this.refresh();
   }
 
   @action

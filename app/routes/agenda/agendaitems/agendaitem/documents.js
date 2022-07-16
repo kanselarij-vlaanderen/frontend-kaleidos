@@ -56,7 +56,7 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     super.setupController(...arguments);
     controller.agendaitem = this.agendaitem;
     controller.defaultAccessLevel = this.defaultAccessLevel;
-    controller.showBatchDetails = false;
+    controller.isOpenBatchDetailsModal = false;
     controller.isOpenPieceUploadModal = false;
     controller.isOpenPublicationModal = false;
     controller.currentAgenda = this.currentAgenda;

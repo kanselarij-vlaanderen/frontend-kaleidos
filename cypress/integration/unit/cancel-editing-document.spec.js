@@ -237,7 +237,6 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.intercept('DELETE', '/files/**').as('deleteLastFile');
     cy.intercept('DELETE', '/pieces/**').as('deleteLastPiece');
     cy.intercept('DELETE', '/document-containers/**').as('deleteContainer');
-    cy.intercept('PUT', '/agendaitems/**/pieces/restore').as('restoreAgendaitemLastPiece');
     cy.get(route.agendaitemDocuments.batchEdit).click();
     cy.get(document.documentDetailsRow.row).as('documentRows');
     cy.get('@documentRows').eq(0)
