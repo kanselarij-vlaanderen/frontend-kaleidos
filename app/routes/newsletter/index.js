@@ -21,10 +21,10 @@ export default class IndexNewsletterRoute extends Route {
     const agenda = newsletterModel.agenda;
     let agendaitems = await this.store.query('agendaitem', {
       filter: {
-        'show-as-remark': false,
         agenda: {
-          id: agenda.id,
+          ':id:': agenda.id,
         },
+        'show-as-remark': false,
       },
       include: 'treatment.newsletter-info',
       sort: params.sort,

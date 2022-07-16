@@ -17,34 +17,32 @@
       <h1 class="auk-h1 auk-u-text-family-serif">
         {{t "agendaitems-subtitle"}}
       </h1>
-      {{#each (await this.model.notas) as |agendaitem index|}}
-        {{#let (add index 1) as |humanIndex|}}
-          {{#let (await agendaitem.treatment.newsletterInfo) as |newsletterInfo|}}
-            <Newsletter::NewsletterItem
-              @showIndex={{this.showDraft}}
-              @itemIndex={{if this.showDraft agendaitem.number humanIndex}}
-              @allowEditing={{this.showDraft}}
+      {{#each this.model.notas as |agendaitem|}}
+        {{#let (await agendaitem.treatment.newsletterInfo) as |newsletterItem|}}
+          <div class="auk-u-mb-10">
+            <NewsletterItem::Print
+              @newsletterItem={{newsletterItem}}
               @agendaitem={{agendaitem}}
-              @newsletterInfo={{newsletterInfo}}
-              @onSaveNewsletterEdit={{fn this.saveNewsletterChanges newsletterInfo}}
+              @isDraftView={{this.showDraft}}
+              @onSave={{perform this.saveNewsletterItem newsletterItem}}
             />
-          {{/let}}
+          </div>
         {{/let}}
       {{/each}}
-      {{#if (await this.model.announcements.length)}}
+      {{#if this.model.announcements.length}}
         <h2 class="auk-h1">
           {{t "announcements-subtitle"}}
         </h2>
-        {{#each (await this.model.announcements) as |agendaitem|}}
-          {{#let (await agendaitem.treatment.newsletterInfo) as |newsletterInfo|}}
-            <Newsletter::NewsletterItem
-              @showIndex={{this.showDraft}}
-              @itemIndex={{agendaitem.number}}
-              @allowEditing={{this.showDraft}}
-              @agendaitem={{agendaitem}}
-              @newsletterInfo={{newsletterInfo}}
-              @onSaveNewsletterEdit={{fn this.saveNewsletterChanges newsletterInfo}}
-            />
+        {{#each this.model.announcements as |agendaitem|}}
+          {{#let (await agendaitem.treatment.newsletterInfo) as |newsletterItem|}}
+            <div class="auk-u-mb-10">
+              <NewsletterItem::Print
+                @newsletterItem={{newsletterItem}}
+                @agendaitem={{agendaitem}}
+                @isDraftView={{this.showDraft}}
+                @onSave={{perform this.saveNewsletterItem newsletterItem}}
+              />
+            </div>
           {{/let}}
         {{/each}}
       {{/if}}

@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
+import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
 
 export default class PrintNewsletterController extends Controller {
   queryParams = {
@@ -11,8 +11,8 @@ export default class PrintNewsletterController extends Controller {
 
   @tracked showDraft = false;
 
-  @action
-  async saveNewsletterChanges(newsletterInfo) {
-    await newsletterInfo?.save();
+  @task
+  *saveNewsletterItem(newsletterItem) {
+    yield newsletterItem.save();
   }
 }
