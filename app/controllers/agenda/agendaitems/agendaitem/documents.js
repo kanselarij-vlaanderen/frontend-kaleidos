@@ -154,12 +154,9 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     // TODO: Assess if we need to go over container. `previousVersion` (if existant) might suffice?
     const documentContainer = await deletedPiece.documentContainer;
     if (documentContainer) {
-      const lastPiece = await documentContainer.get('lastPiece'); // TODO: what is the purpose of getting lastPiece here
-      if (this.agendaitem && lastPiece) {
-        await restorePiecesFromPreviousAgendaitem(
-          this.agendaitem,
-          documentContainer
-        );
+      const pieces = documentContainer.pieces;
+      if (this.agendaitem && pieces.length > 0) {
+        await restorePiecesFromPreviousAgendaitem(this.agendaitem, documentContainer);
         // TODO: make sure we're not loading stale cache
       }
       this.refresh();

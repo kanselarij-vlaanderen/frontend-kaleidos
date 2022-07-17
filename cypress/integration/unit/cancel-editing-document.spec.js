@@ -244,7 +244,6 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .click();
     cy.get(document.batchDocumentsDetails.save).click();
     cy.wait('@deleteLastFile').wait('@deleteLastPiece')
-      .wait('@restoreAgendaitemLastPiece')
       .wait('@deleteContainer');
 
     // make sure modal is closed before continuing
