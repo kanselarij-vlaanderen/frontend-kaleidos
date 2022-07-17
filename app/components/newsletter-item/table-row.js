@@ -22,7 +22,7 @@ export default class NewsletterItemTableRowComponent extends Component {
   @action
   async toggleInNewsletterFlag(event) {
     this.args.newsletterItem.inNewsletter = event.target.checked;
-    await this.saveNewsletterItem.perform();
+    await this.saveNewsletterItem.perform(this.args.newsletterItem);
   }
 
   @action
