@@ -5,30 +5,16 @@ import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
 import { task } from 'ember-concurrency';
 import { all } from 'ember-concurrency';
-import moment from 'moment';
 
 export default class AgendaDocumentsController extends Controller {
   @service currentSession;
   @service store;
 
-  @tracked isEnabledPieceEdit = false;
+  meeting;
+  defaultAccessLevel;
+  @tracked isOpenBatchDetailsModal = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked newPieces = A([]);
-
-  get iterablePieces() {
-    return this.pieces.toArray();
-  }
-
-  @action
-  enablePieceEdit() {
-    this.isEnabledPieceEdit = true;
-  }
-
-  @action
-  disablePieceEdit() {
-    this.isEnabledPieceEdit = false;
-    this.send('reloadModel');
-  }
 
   @action
   openPieceUploadModal() {
@@ -37,8 +23,7 @@ export default class AgendaDocumentsController extends Controller {
 
   @action
   uploadPiece(file) {
-    const now = moment().utc()
-      .toDate();
+    const now = new Date();
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
     });
@@ -106,6 +91,22 @@ export default class AgendaDocumentsController extends Controller {
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.destroyRecord();
     yield piece.destroyRecord();
+  }
+
+  @action
+  openBatchDetails() {
+    this.isOpenBatchDetailsModal = true;
+  }
+
+  @action
+  cancelBatchDetails() {
+    this.isOpenBatchDetailsModal = false;
+  }
+
+  @action
+  saveBatchDetails() {
+    this.refresh();
+    this.isOpenBatchDetailsModal = false;
   }
 
   @action
