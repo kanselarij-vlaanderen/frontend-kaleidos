@@ -299,6 +299,9 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(agenda.agendaitemNav.newsletterTab)
       .should('be.visible')
       .click();
+    cy.get(auk.loader, {
+      timeout: 60000,
+    }).should('not.exist');
 
     cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
