@@ -54,7 +54,6 @@ export default Model.extend({
 
   // TODO this computed property is used in:
   // - Documents::LinkedDocumentList
-  // - Documents::BatchDocumentEdit
   // - WebComponents::VlTableActions
   // - NewsletterItem::TableRow
   // - NewsletterItem::EditPanel

@@ -9,7 +9,6 @@ import {
   all,
   timeout
 } from 'ember-concurrency';
-import moment from 'moment';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import {
   addPieceToAgendaitem, restorePiecesFromPreviousAgendaitem
@@ -21,7 +20,10 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
   @service intl;
   @service store;
 
-  @tracked isEnabledPieceEdit = false;
+  case;
+  subcase;
+  defaultAccessLevel;
+  @tracked isOpenBatchDetailsModal = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked defaultAccessLevel;
   @tracked newPieces = A([]);
@@ -34,27 +36,13 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
   }
 
   @action
-  async enablePieceEdit() {
-    // TODO reload must be moved to save handler
-    // when Documents::BatchDocumentEdit component bubbles 'save' action
-    await this.ensureFreshData.perform();
-    this.isEnabledPieceEdit = true;
-  }
-
-  @action
-  disablePieceEdit() {
-    this.isEnabledPieceEdit = false;
-  }
-
-  @action
   async openPieceUploadModal() {
     this.isOpenPieceUploadModal = true;
   }
 
   @action
   uploadPiece(file) {
-    const now = moment().utc()
-      .toDate();
+    const now = new Date();
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
     });
@@ -85,7 +73,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
     yield this.handleSubmittedPieces.perform(this.newPieces);
     this.isOpenPieceUploadModal = false;
     this.newPieces = A();
-    this.send('reloadModel');
+    this.refresh();
   }
 
   /**
@@ -106,7 +94,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
     piece.cases.pushObject(this.case);
     yield piece.save();
     yield this.handleSubmittedPieces.perform([piece]);
-    this.send('reloadModel');
+    this.refresh();
   }
 
   @task
@@ -168,7 +156,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
           }
         }
       }
-      this.send('reloadModel');
+      this.refresh();
     }
   }
 
@@ -222,10 +210,9 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
 
       yield submissionActivity.save();
       return submissionActivity;
+    } else { // Create first submission activity to add pieces on
+      return this.createSubmissionActivity.perform(pieces);
     }
-
-    // Create first submission activity to add pieces on
-    return this.createSubmissionActivity.perform(pieces);
   }
 
   @task
@@ -264,7 +251,25 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
         }
       }
     }
-    this.send('reloadModel');
+    this.refresh();
+  }
+
+
+  @action
+  async openBatchDetails() {
+    await this.ensureFreshData.perform();
+    this.isOpenBatchDetailsModal = true;
+  }
+
+  @action
+  cancelBatchDetails() {
+    this.isOpenBatchDetailsModal = false;
+  }
+
+  @action
+  saveBatchDetails() {
+    this.refresh();
+    this.isOpenBatchDetailsModal = false;
   }
 
   @action

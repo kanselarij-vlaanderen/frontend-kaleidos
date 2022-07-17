@@ -4,6 +4,8 @@ import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import VrLegacyDocumentName,
+{ compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
 
 export default class DocumentsSubcaseSubcasesRoute extends Route {
   @service store;
@@ -25,7 +27,14 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
       pieces.push(...submissionPieces);
     }
 
-    const sortedPieces = sortPieces(pieces);
+    let sortedPieces;
+    const meeting = await subcase.requestedForMeeting;
+    if (meeting?.isPreKaleidos) {
+      sortedPieces = sortPieces(pieces, VrLegacyDocumentName, compareLegacyDocuments);
+    } else {
+      sortedPieces = sortPieces(pieces);
+    }
+
     return {
       pieces: sortedPieces,
       // linkedPieces: this.modelFor('cases.case.subcases.subcase').get('linkedPieces')
@@ -39,10 +48,10 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
     const subcase = this.modelFor('cases.case.subcases.subcase');
-    controller.set('subcase', subcase);
+    controller.subcase = subcase;
     const _case = this.modelFor('cases.case');
-    controller.set('case', _case);
-    controller.set('defaultAccessLevel', this.defaultAccessLevel);
+    controller.case = _case;
+    controller.defaultAccessLevel = this.defaultAccessLevel;
   }
 
   @action

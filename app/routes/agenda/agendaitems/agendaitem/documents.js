@@ -7,6 +7,8 @@ import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import VrNotulenName, {
   compareFunction as compareNotulen,
 } from 'frontend-kaleidos/utils/vr-notulen-name';
+import VrLegacyDocumentName,
+{ compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
 
 export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
   @service store;
@@ -21,8 +23,11 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     });
     pieces = pieces.toArray();
     let sortedPieces;
+    const meeting = this.modelFor('agenda').meeting;
     if (agendaitem.isApproval) {
       sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
+    } else if (meeting.isPreKaleidos) {
+      sortedPieces = sortPieces(pieces, VrLegacyDocumentName, compareLegacyDocuments);
     } else {
       sortedPieces = sortPieces(pieces);
     }
@@ -51,7 +56,7 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     super.setupController(...arguments);
     controller.agendaitem = this.agendaitem;
     controller.defaultAccessLevel = this.defaultAccessLevel;
-    controller.showBatchDetails = false;
+    controller.isOpenBatchDetailsModal = false;
     controller.isOpenPieceUploadModal = false;
     controller.isOpenPublicationModal = false;
     controller.currentAgenda = this.currentAgenda;
