@@ -34,7 +34,9 @@ export default class NewsletterItemEditPanelComponent extends Component {
 
     this.title = this.newsletterItem.title;
     this.remark = this.newsletterItem.remark;
-    this.richtext = this.newsletterItem.richtext;
+    // rdfa-editor doesn't correctly handle 'undefined' as initial value.
+    // Therefore we pass an empty string instead.
+    this.richtext = this.newsletterItem.richtext || '';
     this.isFinished = this.newsletterItem.finished;
     this.selectedThemes = (yield this.newsletterItem.themes).toArray();
   }
@@ -99,8 +101,6 @@ export default class NewsletterItemEditPanelComponent extends Component {
   @action
   handleRdfaEditorInit(editorInterface) {
     this.editorInstance = editorInterface;
-    // rdfa-editor doesn't correctly handle 'undefined' as initial value.
-    // Therefore we pass an empty string instead.
-    editorInterface.setHtmlContent(this.richtext || '');
+    editorInterface.setHtmlContent(this.richtext);
   }
 }
