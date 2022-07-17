@@ -1,6 +1,7 @@
 import Service, { inject as service } from '@ember/service';
 import moment from 'moment';
 import fetch from 'fetch';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class NewsletterService extends Service {
   @service store;
@@ -163,6 +164,43 @@ export default class NewsletterService extends Service {
       }
     }
     return news;
+  }
+
+  async generateNewsItemMandateeProposalText(newsItem) {
+    const treatment = await newsItem.agendaItemTreatment;
+    if (treatment) {
+      let mandatees = await this.store.query('mandatee', {
+        'filter[subcases][decision-activities][treatment][:id:]': treatment.id,
+        sort: 'priority',
+        page: {
+          size: PAGE_SIZE.MANDATEES_IN_GOV_BODY,
+        },
+      });
+
+      if (!mandatees.length) {
+        const mandatee = await this.store.queryOne('mandatee', {
+          'filter[requested-subcases][decision-activities][treatment][:id:]': treatment.id,
+        });
+        mandatees = [mandatee];
+      }
+
+      const titles = mandatees.map((mandatee) => mandatee.newsletterTitle || mandatee.title);
+      let proposalText;
+      if (titles.length > 1) {
+        // construct string like "mandatee_1, mandatee_2, mandatee_3 en mandatee_4"
+        proposalText = [
+          titles.slice(0, titles.length - 1).join(', '), // all elements but last one
+          titles.slice(titles.length - 1) // last element
+        ].join(' en ');
+      } else {
+        proposalText = titles[0] || '';
+      }
+
+      let proposalPrefix = this.intl.t('proposal-text');
+      return `${proposalPrefix}${proposalText}`;
+    } else {
+      return null;
+    }
   }
 
   async deleteCampaign(id) {

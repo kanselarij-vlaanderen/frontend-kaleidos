@@ -10,6 +10,7 @@ export default class NewsletterItemEditPanelComponent extends Component {
   editorInstance;
   @tracked newsletterItem;
   @tracked isFullscreen = false;
+  @tracked proposalText;
   @tracked isOpenMissingThemesModal = false;
 
   // Local copy of newsletterItem attributes/relations to facilitate rollback
@@ -39,6 +40,8 @@ export default class NewsletterItemEditPanelComponent extends Component {
     this.richtext = this.newsletterItem.richtext || '';
     this.isFinished = this.newsletterItem.finished;
     this.selectedThemes = (yield this.newsletterItem.themes).toArray();
+
+    this.proposalText = yield this.newsletterService.generateNewsItemMandateeProposalText(this.newsletterItem);
   }
 
   @action

@@ -44,9 +44,9 @@
         {{/if}}
       </div>
 
-      {{#if (await @newsletterItem.newsletterProposal)}}
+      {{#if this.proposalText}}
         <div class="auk-u-mb-3 l-printable-newsletter__proposal-label" data-test-newsletter-item-content-print-item-proposal>
-          {{await @newsletterItem.newsletterProposal}}
+          {{this.proposalText}}
         </div>
       {{/if}}
     </div>

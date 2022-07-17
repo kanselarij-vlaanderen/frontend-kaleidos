@@ -70,8 +70,8 @@
           <p
             data-test-newsletter-edit-item-mandatee-proposal
           >
-            {{#if (await this.newsletterItem.newsletterProposal)}}
-              {{await this.newsletterItem.newsletterProposal}}
+            {{#if this.proposalText}}
+              {{this.proposalText}}
             {{else}}
               {{t "not-applicable"}}
             {{/if}}

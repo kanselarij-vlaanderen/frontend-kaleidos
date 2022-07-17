@@ -58,9 +58,21 @@ export default class PrintNewsletterRoute extends Route {
       }
     }
 
+    const newsItemMapper = async (agendaitem) => {
+      const agendaItemTreatment = await agendaitem.treatment;
+      const newsletterItem = await agendaItemTreatment.newsletterInfo;
+      return {
+        agendaitem,
+        newsletterItem,
+      };
+    };
+
+    const notasWithNewsItem = await Promise.all(notas.map(newsItemMapper));
+    const announcementsWithNewsItem = await Promise.all(announcements.map(newsItemMapper));
+
     return hash({
-      notas,
-      announcements,
+      notas: notasWithNewsItem,
+      announcements: announcementsWithNewsItem,
     });
   }
 
