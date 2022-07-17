@@ -27,6 +27,8 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
   }
 
   async afterModel() {
+    // Get most recent version of document with type 'Nota',
+    // but only if there are multiple versions of the document
     const latestNotaVersion = await this.store.queryOne('piece', {
       filter: {
         agendaitems: {
@@ -38,6 +40,7 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
           },
         },
         ':has-no:next-piece': 'yes',
+        ':has:previous-piece': 'yes',
       }
     });
 
