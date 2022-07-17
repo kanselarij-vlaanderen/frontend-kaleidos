@@ -181,7 +181,7 @@ export default class NewsletterService extends Service {
         const mandatee = await this.store.queryOne('mandatee', {
           'filter[requested-subcases][decision-activities][treatment][:id:]': treatment.id,
         });
-        mandatees = [mandatee];
+        mandatees = mandatee ? [mandatee] : [];
       }
 
       const titles = mandatees.map((mandatee) => mandatee.newsletterTitle || mandatee.title);
