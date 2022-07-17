@@ -184,23 +184,25 @@ export default class NewsletterService extends Service {
         mandatees = mandatee ? [mandatee] : [];
       }
 
-      const titles = mandatees.map((mandatee) => mandatee.newsletterTitle || mandatee.title);
-      let proposalText;
-      if (titles.length > 1) {
-        // construct string like "mandatee_1, mandatee_2, mandatee_3 en mandatee_4"
-        proposalText = [
-          titles.slice(0, titles.length - 1).join(', '), // all elements but last one
-          titles.slice(titles.length - 1) // last element
-        ].join(' en ');
-      } else {
-        proposalText = titles[0] || '';
-      }
+      if (mandatees.length) {
+        const titles = mandatees.map((mandatee) => mandatee.newsletterTitle || mandatee.title);
+        let proposalText;
+        if (titles.length > 1) {
+          // construct string like "mandatee_1, mandatee_2, mandatee_3 en mandatee_4"
+          proposalText = [
+            titles.slice(0, titles.length - 1).join(', '), // all elements but last one
+            titles.slice(titles.length - 1) // last element
+          ].join(' en ');
+        } else {
+          proposalText = titles[0] || '';
+        }
 
-      let proposalPrefix = this.intl.t('proposal-text');
-      return `${proposalPrefix}${proposalText}`;
-    } else {
-      return null;
+        let proposalPrefix = this.intl.t('proposal-text');
+        return `${proposalPrefix}${proposalText}`;
+      }
     }
+
+    return null;
   }
 
   async deleteCampaign(id) {
