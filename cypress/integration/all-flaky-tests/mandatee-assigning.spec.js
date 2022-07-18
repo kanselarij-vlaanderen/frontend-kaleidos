@@ -296,13 +296,15 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(agenda.agendaDetailSidebar.subitem).as('agendaitems');
     cy.get('@agendaitems').eq(1)
       .click();
+    cy.get(auk.loader, {
+      timeout: 60000,
+    }).should('not.exist');
     cy.get(agenda.agendaitemNav.newsletterTab)
       .should('be.visible')
       .click();
     cy.get(auk.loader, {
       timeout: 60000,
     }).should('not.exist');
-
     cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
     cy.get(newsletter.editItem.save).click();
@@ -310,6 +312,9 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.wait(`@postNewsletterInfo${randomInt}`);
     cy.get('@agendaitems').eq(2)
       .click();
+    cy.get(auk.loader, {
+      timeout: 60000,
+    }).should('not.exist');
     cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
     cy.get(newsletter.editItem.save).click();
@@ -317,6 +322,9 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.wait(`@postNewsletterInfo${randomInt}`);
     cy.get('@agendaitems').eq(3)
       .click();
+    cy.get(auk.loader, {
+      timeout: 60000,
+    }).should('not.exist');
     cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
     cy.get(newsletter.editItem.save).click();

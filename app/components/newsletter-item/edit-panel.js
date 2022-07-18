@@ -18,7 +18,7 @@ export default class NewsletterItemEditPanelComponent extends Component {
   @tracked remark;
   @tracked richText;
   @tracked isFinished;
-  @tracked selectedThemes;
+  @tracked selectedThemes = [];
 
   constructor() {
     super(...arguments);
