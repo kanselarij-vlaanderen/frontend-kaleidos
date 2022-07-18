@@ -350,9 +350,9 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .click();
     cy.wait(`@patchNewsletterInfo${randomInt}`);
 
-    cy.intercept('GET', '/mandatees?filter').as('getMandatees1');
-    cy.intercept('GET', '/mandatees?filter').as('getMandatees2');
-    cy.intercept('GET', '/mandatees?filter').as('getMandatees3');
+    cy.intercept('GET', '/mandatees?filter**').as('getMandatees1');
+    cy.intercept('GET', '/mandatees?filter**').as('getMandatees2');
+    cy.intercept('GET', '/mandatees?filter**').as('getMandatees3');
     cy.clickReverseTab('Definitief');
     cy.get(newsletter.itemContent.printItemProposal).as('proposals')
       .should('have.length', 3);
