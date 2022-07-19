@@ -4,5 +4,5 @@ export default class InternalDecisionPublicationActivity extends Model {
   @attr('datetime') startDate;
 
   @belongsTo('meeting') meeting;
-  @belongsTo('release-status') status;
+  @belongsTo('concept') status;
 }

@@ -85,12 +85,9 @@ export function getPlannedThemisPublicationActivity(themisPublicationActivities)
 }
 
 export async function checkIfDocumentsAreReleasedForMeeting(meeting, store) {
-  const internalDocumentPublication = await store.queryOne('internal-document-publication-activity', {
+  const publicationActivity = await store.queryOne('internal-document-publication-activity', {
     'filter[meeting][:id:]': meeting.id,
-    include: 'status',
+    'filter[status][:uri:]': CONSTANTS.RELEASE_STATUSES.RELEASED,
   });
-  const releaseStatus = await internalDocumentPublication?.status;
-  const areDocumentsReleased = releaseStatus?.isReleased;
-  const isPlannedPublicationExpired = internalDocumentPublication.plannedPublicationTime < new Date();
-  return areDocumentsReleased && isPlannedPublicationExpired ;
+  return publicationActivity != null;
 }
