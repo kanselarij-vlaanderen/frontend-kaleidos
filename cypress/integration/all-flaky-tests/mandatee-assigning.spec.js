@@ -366,6 +366,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.wait('@getMandatees1');
     cy.wait('@getMandatees2');
     cy.wait('@getMandatees3');
+    cy.wait(2000);
     cy.get(newsletter.itemContent.printItemProposal).as('proposals');
     cy.get('@proposals').eq(0)
       .contains('Op voorstel van minister-president Jan Jambon en viceminister-president Hilde Crevits');
