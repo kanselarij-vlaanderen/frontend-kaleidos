@@ -27,6 +27,7 @@ import * as CONFIG from 'frontend-kaleidos/config/config';
  */
 export default class GenerateReportModalComponent extends Component {
   @service store;
+  @service mandatees;
 
   @tracked decisionDateRangeStart;
   // note: Date object representing the last date of the range
@@ -61,14 +62,14 @@ export default class GenerateReportModalComponent extends Component {
     const currentYear = new Date().getFullYear();
     if (this.args.userInputFields.publicationYear) {
       this.publicationYear = currentYear;
-      this.publicationYearMin = 1981;
+      this.publicationYearMin = this.publicationsStartYear;
       this.publicationYearMax = currentYear;
     }
 
     if (this.args.userInputFields.decisionDateRange) {
       this.decisionDateRangeStart = new Date(currentYear, 0, 1, 0, 0, 0, 0);
       this.decisionDateRangeEnd = undefined;
-      this.decisionDateMin = new Date(1981, 0, 1, 0, 0, 0, 0);
+      this.decisionDateMin = new Date(this.publicationsStartYear, 0, 1, 0, 0, 0, 0);
       this.decisionDateMax = new Date();
     }
 
@@ -79,6 +80,14 @@ export default class GenerateReportModalComponent extends Component {
     if (this.args.userInputFields.regulationTypes) {
       this.loadRegulationTypes.perform();
     }
+
+    if (this.args.userInputFields.mandateePersons) {
+      this.loadMandateePersons();
+    }
+  }
+
+  get publicationsStartYear() {
+    return CONFIG.PUBLICATION_REPORT_START_YEAR;
   }
 
   get isLoading() {
@@ -100,7 +109,7 @@ export default class GenerateReportModalComponent extends Component {
   }
 
   isWithinSensibleRange(date) {
-    const minDate = new Date(1981, 0, 1, 0, 0, 0, 0);
+    const minDate = new Date(this.publicationsStartYear, 0, 1, 0, 0, 0, 0);
     const currentDate = new Date();
     return minDate <= date && date <= currentDate;
   }
@@ -140,10 +149,9 @@ export default class GenerateReportModalComponent extends Component {
       return false;
     }
     const currentYear = new Date().getFullYear();
-    return 1981 <= this.publicationYear && this.publicationYear <= currentYear;
+    return this.publicationsStartYear <= this.publicationYear && this.publicationYear <= currentYear;
   }
 
-  // gets the date range selected by the user
   get dateRange() {
     if (this.args.userInputFields.publicationYear) {
       return convertYearToDateRange(this.publicationYear);
@@ -154,12 +162,12 @@ export default class GenerateReportModalComponent extends Component {
     throw new Error('NOT IMPLEMENTED'); // for linter
   }
 
-  @task
-  *loadMandateePersons() {
-    // set mandatees to unresolved promise in order to notify EmberPowerSelect of loading state
-    // this are the default options of the EmberPowerSelect (no searchText)
-    this.mandateePersons = this.fetchMandateePersons.perform(undefined);
-    yield;
+  @action
+  loadMandateePersons() {
+    if (this.args.userInputFields.mandateePersons) {
+      // Assign a promise to mandateePersons to enable loading state on ember-power-select
+      this.mandateePersons = this.fetchMandateePersons.perform(undefined);
+    }
   }
 
   @task({
@@ -173,61 +181,15 @@ export default class GenerateReportModalComponent extends Component {
 
   @task
   *fetchMandateePersons(searchText) {
-    // TODO: this task logic can be replaced by calling the right method from the
-    // mandatee-service and mapping mandatee results to persons.
     const [dateRangeStart, dateRangeEnd] = this.dateRange;
+    const mandatees = yield this.mandatees.getMandateesActiveOn.perform(dateRangeStart, dateRangeEnd, searchText);
+    const persons = [];
+    for (const mandatee of mandatees) {
+      const person = yield mandatee.person;
+      persons.addObject(person);
+    }
 
-    // As long as mu-cl-resources does not support an OR filter
-    //    that allows the end date to be empty or after a specific date
-    //    we need to separate the filter in two requests
-
-    const commonQueryOptions = {
-      'filter[:has:mandatees]': true,
-      // DISABLED: query timeouts
-      // 'filter[mandatees][mandate][role][:id:]': this.visibleRoles.map((role) => role.id).join(','),
-      // active ranges of mandatees are stored as dateTimes, but with time set to 0:00 UTC
-      // since the frontend is in a different timezone, we need to compensate for this
-      'filter[mandatees][:lt:start]':
-        toDateWithoutUTCOffset(dateRangeEnd).toISOString(),
-      'filter[last-name]': searchText, // Ember Data leaves this of when set to undefined (=> no filtering)
-      // although we sort and paginate again on the frontend
-      //   after combining both query results
-      //   sorting an pagination are useful for limiting the payload size
-      sort: 'last-name',
-      'page[size]': CONFIG.PAGE_SIZE.SELECT,
-    };
-
-    const pastQueryOptions = {
-      ...commonQueryOptions,
-      'filter[mandatees][:gte:end]':
-        toDateWithoutUTCOffset(dateRangeStart).toISOString(),
-    };
-    const pastMandateePersons = this.store.query('person', pastQueryOptions);
-
-    const currentQueryOptions = {
-      ...commonQueryOptions,
-      // HACK: mu-cl-resources quirk: has-no is intended to be used with relationships,
-      //   but seems to be working with an attribute in this case.
-      //   It might change with mu-cl-resource updates.
-      'filter[mandatees][:has-no:end]': true,
-    };
-    const currentMandateePersons = this.store.query(
-      'person',
-      currentQueryOptions
-    );
-
-    let mandateePersons = yield Promise.all([
-      pastMandateePersons,
-      currentMandateePersons,
-    ]);
-    mandateePersons = mandateePersons
-      .map((persons) => persons.toArray())
-      .flat()
-      .uniq()
-      .sortBy('lastName')
-      .slice(0, CONFIG.PAGE_SIZE.SELECT);
-
-    return mandateePersons;
+    return persons.sortBy('lastName');
   }
 
   @task
@@ -361,23 +323,4 @@ function convertYearToDateRange(year) {
   const publicationDateRangeStart = new Date(year, 0, 1, 0, 0, 0, 0); /* eslint-disable-line prettier/prettier */ // (no new line for each number)
   const publicationDateRangeEnd = new Date(year + 1, 0, 1, 0, 0, 0, 0); /* eslint-disable-line prettier/prettier */
   return [publicationDateRangeStart, publicationDateRangeEnd];
-}
-
-/**
- * Get Date minus the timezone offset from UTC.
- * @param {Date} date
- * @returns {Date}
- */
-function toDateWithoutUTCOffset(date) {
-  return new Date(
-    Date.UTC(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-      date.getHours(),
-      date.getMinutes(),
-      date.getSeconds(),
-      date.getMilliseconds()
-    )
-  );
 }

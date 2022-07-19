@@ -1,5 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import fetch from 'fetch';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class NewsletterService extends Service {
   @service store;
@@ -122,47 +123,84 @@ export default class NewsletterService extends Service {
 
   // TODO title = shortTitle, inconsistenties fix/conversion needed if this is changed
   async createNewsItemForAgendaitem(agendaitem, inNewsletter = false) {
-    if (this.currentSession.isEditor) {
-      const agendaItemTreatment = await agendaitem.treatment;
-      const news = this.store.createRecord('newsletter-info', {
-        agendaItemTreatment,
-        inNewsletter,
-      });
-      if (agendaitem.showAsRemark) {
-        const content = agendaitem.title;
-        news.title = agendaitem.shortTitle || content;
-        news.richtext = content;
-        news.finished = true;
-        news.inNewsletter = true;
-      } else {
-        news.title = agendaitem.shortTitle;
-        news.subtitle = agendaitem.title;
-        news.finished = false;
-        news.inNewsletter = false;
-        // Use news item "of previous subcase" as a default
-        try {
-          const activity = await agendaitem.get('agendaActivity');
-          const subcase = await activity.get('subcase');
-          const _case = await subcase.get('case');
-          const previousNewsItem = await this.store.queryOne(
-            'newsletter-info',
-            {
-              'filter[agenda-item-treatment][decision-activity][subcase][case][:id:]': _case.id,
-              'filter[agenda-item-treatment][agendaitems][show-as-remark]': false, // Don't copy over news item from announcement
-              sort: '-agenda-item-treatment.agendaitems.agenda-activity.start-date',
-            }
-          );
-          if (previousNewsItem) {
-            news.richtext = previousNewsItem.richtext;
-            news.title = previousNewsItem.title;
-            news.themes = await previousNewsItem.get('themes');
+    const agendaItemTreatment = await agendaitem.treatment;
+    const news = this.store.createRecord('newsletter-info', {
+      agendaItemTreatment,
+      inNewsletter,
+    });
+    if (agendaitem.showAsRemark) {
+      const content = agendaitem.title;
+      news.title = agendaitem.shortTitle || content;
+      news.richtext = content;
+      news.finished = true;
+      news.inNewsletter = true;
+    } else {
+      news.title = agendaitem.shortTitle;
+      news.subtitle = agendaitem.title;
+      news.finished = false;
+      news.inNewsletter = false;
+      // Use news item "of previous subcase" as a default
+      try {
+        const activity = await agendaitem.agendaActivity;
+        const subcase = await activity.subcase;
+        const _case = await subcase.case;
+        const previousNewsItem = await this.store.queryOne(
+          'newsletter-info',
+          {
+            'filter[agenda-item-treatment][decision-activity][subcase][case][:id:]': _case.id,
+            'filter[agenda-item-treatment][agendaitems][show-as-remark]': false, // Don't copy over news item from announcement
+            sort: '-agenda-item-treatment.agendaitems.agenda-activity.start-date',
           }
-        } catch (error) {
-          console.log(error);
+        );
+        if (previousNewsItem) {
+          news.richtext = previousNewsItem.richtext;
+          news.title = previousNewsItem.title;
+          news.themes = await previousNewsItem.themes;
         }
+      } catch (error) {
+        console.log(error);
       }
-      return news;
     }
+    return news;
+  }
+
+  async generateNewsItemMandateeProposalText(newsItem) {
+    const treatment = await newsItem.agendaItemTreatment;
+    if (treatment) {
+      let mandatees = await this.store.query('mandatee', {
+        'filter[subcases][decision-activities][treatment][:id:]': treatment.id,
+        sort: 'priority',
+        page: {
+          size: PAGE_SIZE.MANDATEES_IN_GOV_BODY,
+        },
+      });
+
+      if (!mandatees.length) {
+        const mandatee = await this.store.queryOne('mandatee', {
+          'filter[requested-subcases][decision-activities][treatment][:id:]': treatment.id,
+        });
+        mandatees = mandatee ? [mandatee] : [];
+      }
+
+      if (mandatees.length) {
+        const titles = mandatees.map((mandatee) => mandatee.newsletterTitle || mandatee.title);
+        let proposalText;
+        if (titles.length > 1) {
+          // construct string like "mandatee_1, mandatee_2, mandatee_3 en mandatee_4"
+          proposalText = [
+            titles.slice(0, titles.length - 1).join(', '), // all elements but last one
+            titles.slice(titles.length - 1) // last element
+          ].join(' en ');
+        } else {
+          proposalText = titles[0] || '';
+        }
+
+        let proposalPrefix = this.intl.t('proposal-text');
+        return `${proposalPrefix}${proposalText}`;
+      }
+    }
+
+    return null;
   }
 
   async deleteCampaign(id) {

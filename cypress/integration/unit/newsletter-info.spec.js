@@ -614,8 +614,10 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
   // RDFA tests can be flaky locally when having dev tools open or when running in background (not in focus)
   it('should test the rdfa editor', () => {
     cy.visit('/vergadering/5EBA94D7751CF70008000001/kort-bestek');
+    cy.intercept('GET', '/themes').as('getThemes');
     cy.get(newsletter.buttonToolbar.edit).eq(0)
       .click();
+    cy.wait('@getThemes');
 
     pressRdfaButton('Strikethrough');
     cy.get(dependency.rdfa.editorInner).type('Strikethrough');

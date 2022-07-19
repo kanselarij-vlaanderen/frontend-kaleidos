@@ -4,8 +4,9 @@ import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import VrLegacyDocumentName,
+{ compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
 import * as themisPublicationUtils from 'frontend-kaleidos/utils/agenda-publication';
-
 
 export default class DocumentsSubcaseSubcasesRoute extends Route {
   @service store;
@@ -28,7 +29,14 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
       pieces.push(...submissionPieces);
     }
 
-    const sortedPieces = sortPieces(pieces);
+    let sortedPieces;
+    this.meeting = await subcase.requestedForMeeting;
+    if (this.meeting?.isPreKaleidos) {
+      sortedPieces = sortPieces(pieces, VrLegacyDocumentName, compareLegacyDocuments);
+    } else {
+      sortedPieces = sortPieces(pieces);
+    }
+
     return {
       pieces: sortedPieces,
       // linkedPieces: this.modelFor('cases.case.subcases.subcase').get('linkedPieces')
@@ -37,21 +45,17 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
 
   async afterModel() {
     this.defaultAccessLevel = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
-    if (this.currentSession.isOverheid) {
-      const subcase = this.modelFor('cases.case.subcases.subcase');
-      const meeting = await subcase.requestedForMeeting;
-      this.canGovernmentViewDocuments = await themisPublicationUtils.checkIfDocumentsAreReleasedForMeeting(meeting, this.store);
-    }
+    this.documentsAreVisible = this.currentSession.isOverheid && await themisPublicationUtils.checkIfDocumentsAreReleasedForMeeting(this.meeting, this.store);
   }
 
   setupController(controller) {
     super.setupController(...arguments);
     const subcase = this.modelFor('cases.case.subcases.subcase');
-    controller.set('subcase', subcase);
+    controller.subcase = subcase;
     const _case = this.modelFor('cases.case');
-    controller.set('case', _case);
-    controller.set('defaultAccessLevel', this.defaultAccessLevel);
-    controller.set('canGovernmentViewDocuments', this.canGovernmentViewDocuments);
+    controller.case = _case;
+    controller.documentsAreVisible = this.documentsAreReleased;
+    controller.defaultAccessLevel = this.defaultAccessLevel;
   }
 
   @action

@@ -13,6 +13,8 @@ export const PAGE_SIZE = {
 
 export const LIVE_SEARCH_DEBOUNCE_TIME = 300;
 
+export const PUBLICATION_REPORT_START_YEAR = 1981;
+
 export const PUBLICATION_EMAIL = {
   OUTBOX: 'http://themis.vlaanderen.be/id/mail-folders/4296e6af-7d4f-423d-ba89-ed4cbbb33ae7',
 };

@@ -7,6 +7,8 @@ import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import VrNotulenName, {
   compareFunction as compareNotulen,
 } from 'frontend-kaleidos/utils/vr-notulen-name';
+import VrLegacyDocumentName,
+{ compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
 import * as themisPublicationUtils from 'frontend-kaleidos/utils/agenda-publication';
 
 export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
@@ -23,8 +25,11 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     });
     pieces = pieces.toArray();
     let sortedPieces;
+    this.meeting = this.modelFor('agenda').meeting;
     if (agendaitem.isApproval) {
       sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
+    } else if (this.meeting.isPreKaleidos) {
+      sortedPieces = sortPieces(pieces, VrLegacyDocumentName, compareLegacyDocuments);
     } else {
       sortedPieces = sortPieces(pieces);
     }
@@ -48,8 +53,7 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
     if (this.currentSession.isOverheid) {
-      const meeting = await this.modelFor('agenda').meeting;
-      this.canGovernmentViewDocuments = await themisPublicationUtils.checkIfDocumentsAreReleasedForMeeting(meeting, this.store);
+      this.documentsAreVisible = this.currentSession.isOverheid && await themisPublicationUtils.checkIfDocumentsAreReleasedForMeeting(this.meeting, this.store);
     }
   }
 
@@ -57,13 +61,13 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     super.setupController(...arguments);
     controller.agendaitem = this.agendaitem;
     controller.defaultAccessLevel = this.defaultAccessLevel;
-    controller.showBatchDetails = false;
+    controller.isOpenBatchDetailsModal = false;
     controller.isOpenPieceUploadModal = false;
     controller.isOpenPublicationModal = false;
     controller.currentAgenda = this.currentAgenda;
     controller.previousAgenda = this.previousAgenda;
     controller.agendaActivity = this.agendaActivity;
-    controller.canGovernmentViewDocuments = this.canGovernmentViewDocuments;
+    controller.documentsAreVisible = this.documentsAreVisible;
     controller.loadNewPieces.perform();
   }
 

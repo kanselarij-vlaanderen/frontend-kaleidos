@@ -32,6 +32,8 @@ Router.map(function() {
     this.route('documents', { path: '/documenten', });
   });
 
+  this.route('agendaitem', { path: '/agendapunten/:agendaitem_id' }); // redirect route
+
   this.route('cases', { path: '/dossiers', }, function() {
     this.route('case', { path: ':id', }, function() {
       this.route('subcases', { path: '/deeldossiers', }, function() {

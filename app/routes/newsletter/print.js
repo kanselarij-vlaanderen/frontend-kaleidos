@@ -21,15 +21,24 @@ export default class PrintNewsletterRoute extends Route {
   @service store;
 
   async model(params) {
-    const agenda = await this.modelFor('newsletter').agenda;
-    const agendaitems = await this.store.query('agendaitem', {
-      'filter[agenda][:id:]': agenda.id,
-      'filter[show-as-remark]': params.showDraft ? false : undefined,
-      'filter[is-approval]': false,
-      include: 'mandatees,treatment.newsletter-info',
+    const newsletterModel = this.modelFor('newsletter');
+    const agenda = newsletterModel.agenda;
+    let agendaitems = await this.store.query('agendaitem', {
+      filter: {
+        agenda: {
+          ':id:': agenda.id,
+        },
+        'show-as-remark': params.showDraft ? false : undefined,
+      },
+      include: 'treatment.newsletter-info',
       sort: 'number',
       'page[size]': PAGE_SIZE.AGENDAITEMS,
     });
+
+    // The approval items should not be shown on newsletter views
+    // Pre-Kaleidos items have undefined isApproval so can't be filtered in the query above
+    agendaitems = agendaitems.filter((item) => item.isApproval !== true);
+
     let notas = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark);
     let announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
 
@@ -37,11 +46,9 @@ export default class PrintNewsletterRoute extends Route {
       notas = notas.sortBy('number');
       announcements = announcements.sortBy('number');
     } else { // Items need to be ordered by minister protocol order
-      const filteredNotas = await this.filterAgendaitems(notas);
-
       // TODO: Below is a hacky way of grouping agendaitems for protocol order. Refactor.
       await setCalculatedGroupNumbers(notas);
-      await this.agendaService.groupAgendaitemsOnGroupName(filteredNotas);
+      await this.agendaService.groupAgendaitemsOnGroupName(notas);
       const groupedAgendaitems = Object.values(groupAgendaitemsByGroupname(notas));
 
       const itemGroups = sortByNumber(groupedAgendaitems, true); // An array of groups
@@ -51,41 +58,26 @@ export default class PrintNewsletterRoute extends Route {
       }
     }
 
-    return hash({
-      notas,
-      announcements,
-    });
-  }
+    const newsItemMapper = async (agendaitem) => {
+      const agendaItemTreatment = await agendaitem.treatment;
+      const newsletterItem = await agendaItemTreatment.newsletterInfo;
+      return {
+        agendaitem,
+        newsletterItem,
+      };
+    };
 
-  async afterModel() {
-    const meeting = this.modelFor('newsletter').meeting;
-    this.meeting = await this.store.queryOne('meeting', {
-      'filter[:uri:]': meeting.uri,
-      include: [
-        'internal-document-publication-activity',
-        'themis-publication-activities'
-      ].join(','),
+    const notasWithNewsItem = await Promise.all(notas.map(newsItemMapper));
+    const announcementsWithNewsItem = await Promise.all(announcements.map(newsItemMapper));
+
+    return hash({
+      notas: notasWithNewsItem,
+      announcements: announcementsWithNewsItem,
     });
   }
 
   setupController(controller) {
     super.setupController(...arguments);
-    controller.set('meeting', this.meeting);
-  }
-
-  async filterAgendaitems(agendaitems) {
-    const filteredAgendaitems = [];
-    for (const agendaitem of agendaitems) {
-      try {
-        const agendaItemTreatment = await agendaitem.treatment;
-        const newsletterInfo = await agendaItemTreatment?.newsletterInfo;
-        if (newsletterInfo && newsletterInfo.inNewsletter) {
-          filteredAgendaitems.push(agendaitem);
-        }
-      } catch (exception) {
-        console.warn('An exception occurred: ', exception);
-      }
-    }
-    return filteredAgendaitems;
+    controller.meeting = this.modelFor('newsletter').meeting;
   }
 }

@@ -38,9 +38,8 @@
     {{/if}}
   </Toolbar.Group>
 </Auk::Toolbar>
-
-{{#if this.areDocumentsViewable}}
-  {{#unless this.loadData.isRunning}}
+{{#unless this.loadData.isRunning}}
+  {{#if this.documentsAreVisible}}
     <Documents::DocumentCardList
       @pieces={{this.model.pieces}}
       @highlightedPieces={{this.newAgendaitemPieces}}
@@ -52,12 +51,12 @@
       @markForSignature={{this.markForSignature}}
       @unmarkForSignature={{this.unmarkForSignature}}
     />
-  {{/unless}}
-{{else}}
-  <div class="auk-u-mt-2">
-    <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
-  </div>
-{{/if}}
+  {{else}}
+    <div class="auk-u-mt-2">
+      <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
+    </div>
+  {{/if}}
+{{/unless}}
 {{#if this.currentSession.isEditor}}
   <div class="auk-u-mb-4">
     <Auk::Button
@@ -71,10 +70,10 @@
   </div>
 {{/if}}
 
-{{#if this.showBatchDetails}}
+{{#if this.isOpenBatchDetailsModal}}
   <Documents::BatchDetails::BatchDocumentsDetailsModal
     @pieces={{this.model.pieces}}
-    @agendaitem={{this.agendaitem}}
+    @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
     @onCancel={{this.cancelBatchDetails}}
     @onSave={{this.saveBatchDetails}}
   />
