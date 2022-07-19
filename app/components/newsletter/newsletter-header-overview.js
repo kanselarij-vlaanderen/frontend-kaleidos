@@ -40,7 +40,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   @task
   *loadLatestPublicationActivity() {
-    /* 
+    /*
       TODO KAS-3431 is this correct? we want to get the publication that is linked to newsitems only?
       Filtering on startDate + the status should ensure it is released to valvas
       sorting in latest startdate in case there is more than 1?
@@ -116,7 +116,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   @task
   *publishThemis(scope) {
-    const status = yield this.store.findRecordByUri('release-status', CONSTANTS.RELEASE_STATUSES.RELEASED);
+    const status = yield this.store.findRecordByUri('concept', CONSTANTS.RELEASE_STATUSES.RELEASED);
     try {
       const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
         startDate: new Date(),
@@ -138,7 +138,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   @task
   *unpublishThemis(scope) {
-    const status = yield this.store.findRecordByUri('release-status', CONSTANTS.RELEASE_STATUSES.RELEASED);
+    const status = yield this.store.findRecordByUri('concept', CONSTANTS.RELEASE_STATUSES.RELEASED);
     try {
       const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
         startDate: new Date(),

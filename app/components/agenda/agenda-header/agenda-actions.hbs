@@ -85,13 +85,13 @@
     >
       {{t "agenda-release-decisions"}}
     </Menu.Item>
-  {{else if this.canPlanPublication}}
+  {{else if this.canPlanDocumentPublication}}
     <Menu.Divider />
     {{! template-lint-disable no-invalid-interactive }}
     <Menu.Item
       @skin="danger"
       data-test-agenda-header-release-documents
-      {{on "click" this.openPlanPublicationModal}}
+      {{on "click" this.openPlanDocumentPublicationModal}}
     >
       {{t "agenda-publish-planned"}}
     </Menu.Item>
@@ -100,7 +100,7 @@
     <Menu.Item {{on "click" this.openConfirmPublishThemis}}>
       {{t "publish-to-web"}}
     </Menu.Item>
-    {{#if this.isAlreadyPublished}}
+    {{#if this.canUnpublishThemis}}
       <Menu.Item @skin="danger" {{on "click" this.openConfirmUnpublishThemis}}>
         {{t "unpublish-from-web"}}
       </Menu.Item>
@@ -177,11 +177,12 @@
   </Auk::Modal>
 {{/if}}
 
-{{#if this.showPlanPublicationModal}}
-  <Agenda::AgendaHeader::AgendaActions::AgendaPublicationPlanModal
-    @meeting={{@meeting}}
-    @onCancel={{this.cancelPlanPublication}}
-    @onSave={{perform this.savePlanPublication}}
+{{#if this.showPlanDocumentPublicationModal}}
+  <Meeting::DocumentPublicationPlanningModal
+    @documentPublicationActivity={{this.documentPublicationActivity}}
+    @themisPublicationActivity={{this.themisPublicationActivity}}
+    @onCancel={{this.cancelPlanDocumentPublication}}
+    @onSave={{perform this.planDocumentPublication}}
   />
 {{/if}}
 

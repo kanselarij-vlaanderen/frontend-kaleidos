@@ -1,0 +1,72 @@
+<Auk::Modal @size="small">
+  <Auk::Modal::Header
+    @title={{t "agenda-publish-planned"}}
+    @onClose={{this.cancel}}
+    @closeDisabled={{this.save.isRunning}}
+  />
+  <Auk::Modal::Body>
+    <Utils::LoadableContent
+      @isLoading={{this.save.isRunning}}
+      @reserveSpace={{true}}
+    >
+      <div class="auk-form-group-layout auk-form-group-layout--standard">
+        <div class="auk-form-group">
+          <Auk::Label>
+            {{t "agenda-publication-internal-documents-question"}}
+          </Auk::Label>
+          <div class="auk-o-flex">
+            <WebComponents::VlDatepicker
+              class="auk-o-flex__item"
+              @enableTime={{true}}
+              @date={{array @documentPublicationActivity.plannedDate}}
+              @dateChanged={{this.setInternalDocumentPublicationDatePicker}}
+              @disabled={{this.isDisabledInternalDocumentPublication}}
+            />
+            <Auk::Button
+              class="auk-u-ml-2"
+              disabled={{this.isDisabledInternalDocumentPublication}}
+              {{on "click" this.setInternalDocumentPublicationDateNow}}
+            >
+              {{t "now"}}
+            </Auk::Button>
+          </div>
+        </div>
+        <div class="auk-form-group">
+          <Auk::Label>
+            {{t "agenda-publication-website-question"}}
+          </Auk::Label>
+          <div class="auk-o-flex">
+            <WebComponents::VlDatepicker
+              class="auk-o-flex__item"
+              @enableTime={{true}}
+              @date={{array @themisPublicationActivity.plannedDate}}
+              @dateChanged={{this.setThemisPublicationDatePicker}}
+              @disabled={{this.isDisabledThemisPublication}}
+            />
+            <Auk::Button
+              class="auk-u-ml-2"
+              disabled={{this.isDisabledThemisPublication}}
+              {{on "click" this.setThemisPublicationDateNow}}
+            >
+              {{t "now"}}
+            </Auk::Button>
+          </div>
+        </div>
+      </div>
+    </Utils::LoadableContent>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer
+    @onCancel={{this.cancel}}
+    @cancelDisabled={{this.save.isRunning}}
+  >
+    <Auk::Button
+      data-test-agenda-header-release-documents-confirm
+      @skin="primary"
+      @disabled={{this.isDisabledSave}}
+      @loading={{this.save.isRunning}}
+      {{on "click" (perform this.save)}}
+    >
+      {{t "publish-to-public"}}
+    </Auk::Button>
+  </Auk::Modal::Footer>
+</Auk::Modal>

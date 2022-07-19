@@ -49,17 +49,15 @@
       {{#if (not @meeting.isFinal)}}
         <div class="auk-u-mb-2">
           <div class="auk-form-group">
-            <Auk::Label
-              @error={{this.errorSuggestedPublicationTime}}
-            >
+            <Auk::Label>
               {{t "date-publication-documents"}}
             </Auk::Label>
             {{! TODO: Replace this with Auk::Datepicker, which isn't fully compliant yet (e.g. no time support) }}
             <WebComponents::VlDatepicker
               @enableTime={{true}}
-              @date={{array this.suggestedDocumentReleaseDate}}
-              @min={{this.minSuggestedPublicationTime}}
-              @dateChanged={{this.setPlannedPublicationDate}}
+              @date={{array this.plannedDocumentPublicationDate}}
+              @dateChanged={{this.setPlannedDocumentPublicationDate}}
+              @disabled={{this.isDisabledPlannedDocumentPublicationDate}}
             />
             <Auk::FormHelpText
               class="auk-u-mt"

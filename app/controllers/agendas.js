@@ -5,7 +5,7 @@ import { action } from '@ember/object';
 import moment from 'moment';
 import { restartableTask, timeout } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import themisPublicationUtils from 'frontend-kaleidos/utils/agenda-publication';
+import { getNextWorkday } from 'frontend-kaleidos/utils/date-util';
 
 export default class AgendasController extends Controller {
   queryParams = ['page', 'size', 'sort', 'filter'];
@@ -15,7 +15,9 @@ export default class AgendasController extends Controller {
   @service router;
   @service newsletterService;
 
+  defaultPublicationActivityStatus;
   @tracked newMeeting;
+  @tracked publicationActivities = [];
 
   @tracked isLoadingModel = false;
   @tracked isCreatingNewSession = false;
@@ -51,26 +53,34 @@ export default class AgendasController extends Controller {
 
   @action
   openNewSessionModal() {
-    this.newMeeting = this.store.createRecord('meeting', { isFinal: false });
-    this.newInternalDecisionPublicationActivity = this.store.createRecord(
-      'internal-decision-publication-activity',
-      {
+    const now = new Date();
+    const plannedStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0, 0);
+    this.newMeeting = this.store.createRecord('meeting', {
+      plannedStart,
+      isFinal: false,
+    });
+    const nextWorkday = getNextWorkday(plannedStart, 14, 0, 0, 0);
+    this.publicationActivities = [
+      this.store.createRecord('internal-decision-publication-activity', {
         meeting: this.newMeeting,
-      }
-    );
-    this.newInternalDocumentPublicationActivity = this.store.createRecord(
-      'internal-document-publication-activity',
-      {
+        status: this.defaultPublicationActivityStatus,
+      }),
+      this.store.createRecord('internal-document-publication-activity', {
         meeting: this.newMeeting,
-      }
-    );
-    this.newThemisPublicationActivity = this.store.createRecord(
-      'themis-publication-activity',
-      {
+        status: this.defaultPublicationActivityStatus,
+        plannedDate: nextWorkday,
+      }),
+      this.store.createRecord('themis-publication-activity', {
         meeting: this.newMeeting,
-        scope: themisPublicationUtils.THEMIS_PUBLICATION_SCOPE_NEWS_DOCS,
-      }
-    );
+        status: this.defaultPublicationActivityStatus,
+        plannedDate: nextWorkday,
+        scope: [
+          CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS,
+          CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS,
+        ],
+      }),
+    ];
+
     this.isCreatingNewSession = true;
   }
 
@@ -78,18 +88,11 @@ export default class AgendasController extends Controller {
   closeNewSessionModal() {
     this.isCreatingNewSession = false;
     this.newMeeting.deleteRecord();
-    this.newInternalDocumentPublicationActivity.deleteRecord();
-    this.newInternalDecisionPublicationActivity.deleteRecord();
-    this.newThemisPublicationActivity.deleteRecord();
+    this.publicationActivities.forEach((activity) => activity.deleteRecord());
   }
 
   @action
   async createAgendaAndNewsletter() {
-    await Promise.all([
-      this.newInternalDecisionPublicationActivity.save(),
-      this.newInternalDocumentPublicationActivity.save(),
-      this.newThemisPublicationActivity.save(),
-    ]);
     const agenda = await this.createAgenda(this.newMeeting);
 
     const closestMeeting = await this.store.queryOne('meeting', {

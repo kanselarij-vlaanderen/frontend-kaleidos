@@ -6,7 +6,6 @@ import { debug } from '@ember/debug';
 import { inject as service } from '@ember/service';
 import { all } from 'rsvp';
 import { setAgendaitemFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
-import * as AgendaPublicationUtils from 'frontend-kaleidos/utils/agenda-publication';
 import {
   constructArchiveName,
   fetchArchivingJobForAgenda,
@@ -34,13 +33,13 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @tracked isEditingMeeting = false;
   @tracked showConfirmApprovingAllAgendaitems = false;
   @tracked showConfirmPublishInternalDecisions = false;
-  @tracked showPlanPublicationModal = false;
+  @tracked showPlanDocumentPublicationModal = false;
   @tracked showConfirmPublishThemis = false;
   @tracked showConfirmUnpublishThemis = false;
 
-  @tracked internalDecisionPublicationActivity;
-  @tracked internalDocumentPublicationActivity;
-  @tracked themisPublicationActivities;
+  @tracked decisionPublicationActivity;
+  @tracked documentPublicationActivity;
+  @tracked themisPublicationActivity;
   @tracked latestThemisPublicationActivity;
 
   constructor() {
@@ -57,56 +56,58 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   }
 
   get canPublishInternalDecisions() {
-    if (this.loadPublicationActivities.isRunning) return false;
-
-    return (
-      this.currentSession.isEditor &&
-      this.args.meeting.isFinal &&
-      this.internalDecisionPublicationActivity != null && // disable for the old data model (without decision-publication-activity)
-      this.internalDecisionPublicationActivity.startDate == null
-    );
-  }
-
-  get plannedThemisPublicationActivity() {
-    return AgendaPublicationUtils.getPlannedThemisPublicationActivity(this.themisPublicationActivities);
-  }
-
-  // Plan publication of documents internally (=Vrijgeven) and on Themis
-  // TODO KAS-3431 planPublication should no longer be possible when released, this needs work
-  get canPlanPublication() {
-    if (this.loadPublicationActivities.isRunning) return false;
-
-    let can = this.currentSession.isEditor;
-    can &&= this.args.meeting.isFinal;
-    if (this.plannedThemisPublicationActivity != null) {
-      can &&= AgendaPublicationUtils.getIsNotStarted(this.plannedThemisPublicationActivity);
+    if (this.loadPublicationActivities.isRunning) {
+      return false;
     } else {
-      can &&= false; // old data model
+      return (
+        this.currentSession.isEditor &&
+          this.args.meeting.isFinal &&
+          this.decisionPublicationActivity.status.get('uri') == CONSTANTS.RELEASE_STATUSES.PLANNED
+      );
     }
-    return can;
+  }
+
+  get canPlanDocumentPublication() {
+    if (this.loadPublicationActivities.isRunning) {
+      return false;
+    } else {
+      // get('uri') will immediately resolve since we preloaded the statuses
+      // in loadPublicationActivities()
+      const documentsNotYetReleased = [
+        this.documentPublicationActivity.status,
+        this.themisPublicationActivity.status,
+      ].some((status) => status.get('uri') == CONSTANTS.RELEASE_STATUSES.PLANNED);
+
+      return (
+        this.currentSession.isEditor &&
+          this.args.meeting.isFinal &&
+          documentsNotYetReleased
+      );
+    }
   }
 
   get canPublishThemis() {
-    if (this.loadPublicationActivities.isRunning) return false;
-
-    let can = this.currentSession.isEditor;
-    can &&= this.args.meeting.isFinal;
-
-    if (this.internalDocumentPublicationActivity != null) {
-      const isInternalDocumentPublished = (
-        this.internalDocumentPublicationActivity.plannedPublicationTime != null
-        && this.internalDocumentPublicationActivity.plannedPublicationTime < new Date()
-      );
-      can &&= isInternalDocumentPublished;
+    if (this.loadPublicationActivities.isRunning) {
+      return false;
     } else {
-      can &&= true; // old data model
-    }
+      // get('uri') will immediately resolve since we preloaded the statuses
+      // in loadPublicationActivities()
+      const internalDocumentsAlreadyReleased = this.documentPublicationActivity.status.get('uri') == CONSTANTS.RELEASE_STATUSES.RELEASED;
 
-    return can;
+      return this.currentSession.isEditor &&
+        this.args.meeting.isFinal &&
+        internalDocumentsAlreadyReleased;
+    }
   }
 
-  get isAlreadyPublished() {
-    return this.latestThemisPublicationActivity != null;
+  get canUnpublishThemis() {
+    if (this.loadPublicationActivities.isRunning) {
+      return false;
+    } else {
+      return this.currentSession.isEditor &&
+        this.args.meeting.isFinal &&
+        this.latestThemisPublicationActivity != null;
+    }
   }
 
   @bind
@@ -119,25 +120,25 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
 
   @task
   *loadPublicationActivities() {
-    const meeting = yield this.store.queryOne('meeting', {
-      'filter[:uri:]': this.args.meeting.uri,
-      include: [
-        'internal-decision-publication-activity',
-        'internal-document-publication-activity',
-        'themis-publication-activities',
-      ].join(','),
+    // Ensure we get fresh data to avoid concurrency conflicts
+    this.decisionPublicationActivity = yield this.args.meeting.belongsTo('decisionPublicationActivity').reload();
+    yield this.decisionPublicationActivity.status; // used in get-functions above
+    this.documentPublicationActivity = yield this.args.meeting.belongsTo('documentPublicationActivity').reload();
+    yield this.documentPublicationActivity.status; // used in get-functions above
+    // Documents can be published multiple times to Themis.
+    // We're only interested in the first (earliest) publication.
+    this.themisPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
+      'filter[meeting][:uri:]': this.args.meeting.uri,
+      'filter[scope]': CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS,
+      sort: 'planned-date',
+      include: 'status'
     });
 
-    this.internalDecisionPublicationActivity = yield meeting.internalDecisionPublicationActivity;
-    this.internalDocumentPublicationActivity = yield meeting.internalDocumentPublicationActivity;
-
-    const themisPublicationActivities = yield meeting.themisPublicationActivities;
-    this.themisPublicationActivities = themisPublicationActivities.toArray();
-    let latestThemisPublicationActivity = this.themisPublicationActivities.find((it) => it.plannedPublicationTime == null);
-    if (latestThemisPublicationActivity == null) {
-      latestThemisPublicationActivity = this.themisPublicationActivities.sortBy('plannedPublicationTime').reverse()[0]
-    }
-    this.latestThemisPublicationActivity = latestThemisPublicationActivity;
+    this.latestThemisPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
+      'filter[meeting][:uri:]': this.args.meeting.uri,
+      'filter[status][:uri:]': CONSTANTS.RELEASE_STATUSES.RELEASED,
+      sort: '-start-date',
+    });
   }
 
   /**
@@ -166,17 +167,33 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     }
   }
 
+  @action
+  async publishInternalDecisions() {
+    const status = await this.store.findRecordByUri('concept', CONSTANTS.RELEASE_STATUSES.RELEASED);
+    this.showConfirmPublishInternalDecisions = false;
+    this.decisionPublicationActivity.startDate = new Date();
+    this.decisionPublicationActivity.status = status;
+    await this.decisionPublicationActivity.save();
+  }
+
+  @task
+  *planDocumentPublication(plannedActivities) {
+    yield Promise.all(plannedActivities.map((activity) => activity.save()));
+    this.showPlanDocumentPublicationModal = false;
+  }
+
   @task
   *publishThemis(scope) {
     try {
-      const themisPublicationActivity = this.store.createRecord(
-        'themis-publication-activity',
-        {
-          plannedPublicationTime: new Date(),
-          meeting: this.args.meeting,
-          scope,
-        }
-      );
+      const status = yield this.store.findRecordByUri('concept', CONSTANTS.RELEASE_STATUSES.RELEASED);
+      const now = new Date();
+      const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
+        plannedDate: now,
+        startDate: now,
+        meeting: this.args.meeting,
+        scope,
+        status,
+      });
       yield themisPublicationActivity.save();
       yield this.loadPublicationActivities.perform();
       this.toaster.success(this.intl.t('success-publish-to-web'));
@@ -189,28 +206,20 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     this.showConfirmPublishThemis = false;
   }
 
-  @action
-  openConfirmUnpublishThemis() {
-    this.showConfirmUnpublishThemis = true;
-  }
-
-  @action
-  cancelUnpublishThemis() {
-    this.showConfirmUnpublishThemis = false;
-  }
-
   @task
   *unpublishThemis(scope) {
     try {
-      const themisPublicationActivity = this.store.createRecord(
-        'themis-publication-activity',
-        {
-          plannedPublicationTime: new Date(),
-          meeting: this.args.meeting,
-          scope,
-        }
-      );
+      const status = yield this.store.findRecordByUri('concept', CONSTANTS.RELEASE_STATUSES.RELEASED);
+      const now = new Date();
+      const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
+        plannedDate: now,
+        startDate: now,
+        meeting: this.args.meeting,
+        scope,
+        status,
+      });
       yield themisPublicationActivity.save();
+      yield this.loadPublicationActivities.perform();
       this.toaster.success(this.intl.t('success-unpublish-from-web'));
     } catch (e) {
       this.toaster.error(
@@ -307,6 +316,16 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   }
 
   @action
+  openConfirmUnpublishThemis() {
+    this.showConfirmUnpublishThemis = true;
+  }
+
+  @action
+  cancelUnpublishThemis() {
+    this.showConfirmUnpublishThemis = false;
+  }
+
+  @action
   openConfirmPublishInternalDecisions() {
     this.showConfirmPublishInternalDecisions = true;
   }
@@ -317,63 +336,13 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   }
 
   @action
-  async publishInternalDecisions() {
-    const status = await this.store.findRecordByUri('release-status', CONSTANTS.RELEASE_STATUSES.RELEASED);
-    this.showConfirmPublishInternalDecisions = false;
-    this.internalDecisionPublicationActivity.startDate = new Date();
-    this.internalDecisionPublicationActivity.status = status;
-    await this.internalDecisionPublicationActivity.save();
+  openPlanDocumentPublicationModal() {
+    this.showPlanDocumentPublicationModal = true;
   }
 
   @action
-  openPlanPublicationModal() {
-    this.showPlanPublicationModal = true;
-  }
-
-  @action
-  cancelPlanPublication() {
-    this.showPlanPublicationModal = false;
-  }
-
-  @task
-  *savePlanPublication(params) {
-    const confirmedStatus = yield this.store.findRecordByUri('release-status', CONSTANTS.RELEASE_STATUSES.CONFIRMED);
-    const saves = [];
-    // TODO KAS-3431 there should always be a model for these, it is created at meeting creation and migrations should cover all
-    if ('internalDocumentPublicationDate' in params) {
-      // if (this.internalDocumentPublicationActivity == null) {
-      //   this.internalDocumentPublicationActivity = this.store.createRecord(
-      //     'internal-document-publication-activity',
-      //     {
-      //       meeting: this.args.meeting,
-      //     }
-      //   );
-      // }
-      this.internalDocumentPublicationActivity.plannedPublicationTime = params.internalDocumentPublicationDate;
-      this.internalDocumentPublicationActivity.status = confirmedStatus;
-      const internalDocumentSave = this.internalDocumentPublicationActivity.save();
-      saves.push(internalDocumentSave);
-    }
-
-    let themisPublicationActivity = this.plannedThemisPublicationActivity;
-    // if (themisPublicationActivity == null) {
-    //   themisPublicationActivity = this.store.createRecord(
-    //     'themis-publication-activity',
-    //     {
-    //       scope: AgendaPublicationUtils.THEMIS_PUBLICATION_SCOPE_NEWS_DOCS,
-    //       meeting: this.args.meeting,
-    //     }
-    //   );
-    // }
-    themisPublicationActivity.plannedPublicationTime = params.themisPublicationDate;
-    themisPublicationActivity.status = confirmedStatus;
-    const themisSave = themisPublicationActivity.save();
-    saves.push(themisSave);
-
-    // TODO KAS-3431 multiple repeated saves (concurrency or self) will possibly overwrite the properties set by document-release-service if done near the release window.
-    yield Promise.all(saves);
-
-    this.showPlanPublicationModal = false;
+  cancelPlanDocumentPublication() {
+    this.showPlanDocumentPublicationModal = false;
   }
 
   @action
