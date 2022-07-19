@@ -2,63 +2,59 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import moment from 'moment';
+import { task } from 'ember-concurrency';
 
 export default class NewsItemAgendaitemAgendaitemsAgendaController extends Controller {
-  @service store;
-  @service newsletterService;
   @service currentSession;
 
   @tracked agendaitem;
-  @tracked notaModifiedTime = null;
+  @tracked notaModifiedTime;
+  @tracked hideNotaModificationWarning = false;
 
   @tracked isEditing = false;
-  @tracked isEditingFullscreen = false;
-  @tracked notaModifiedWarningConfirmed = false;
+  @tracked isFullscreen = false;
 
-  // Nota changed since last newsitem edit
+  get canEditNewsletter(){
+    return this.currentSession.may('manage-newsletter-infos');
+  }
+
   get notaHasChanged() {
-    const modifiedNliTime = this.model.modified;
-    if (modifiedNliTime && this.notaModifiedTime) {
-      return moment(modifiedNliTime).isBefore(moment(this.notaModifiedTime));
-    }
-    return false;
+    return this.notaModifiedTime && this.model?.modified && this.model?.modified < this.notaModifiedTime;
+  }
+
+  get showNotaModificationWarning() {
+    return !this.hideNotaModificationWarning && this.notaHasChanged;
   }
 
   @action
-  confirmNotaModifiedWarning() {
-    this.notaModifiedWarningConfirmed = true;
-  }
-
-  @action
-  startEditing() {
+  openFullscreenEdit() {
+    this.isFullscreen = true;
     this.isEditing = true;
   }
 
   @action
-  startEditingFullscreen() {
+  openEdit() {
+    this.isFullscreen = false;
     this.isEditing = true;
-    this.isEditingFullscreen = true;
   }
 
   @action
-  stopEditing() {
-    if (this.model.isDeleted) {
-      this.model = null;
-    }
+  closeEdit() {
     this.isEditing = false;
-    this.isEditingFullscreen = false;
+  }
+
+  @task
+  *saveNewsletterItem(newsletterItem) {
+    const mustReloadModel = newsletterItem.isNew;
+    yield newsletterItem.save();
+    this.isEditing = false;
+    if (mustReloadModel) {
+      this.send('reloadModel');
+    }
   }
 
   @action
-  async createAndStartEditing() {
-    const newsItem = await this.newsletterService.createNewsItemForAgendaitem(this.agendaitem);
-    this.model = newsItem;
-    this.isEditing = true;
-  }
-
-  @action
-  refresh() {
-    this.send('reloadModel');
+  dismissNotaModifiedWarning() {
+    this.hideNotaModificationWarning = true;
   }
 }

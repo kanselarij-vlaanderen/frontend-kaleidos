@@ -55,11 +55,10 @@ export default Model.extend({
   // TODO this computed property is used in:
   // - Documents::LinkedDocumentList
   // - WebComponents::VlTableActions
-  // - NewsletterTable::ButtonToolbar
-  // - Agenda::Agendaitem::AgendaitemNewsItemEdit
+  // - NewsletterItem::TableRow
+  // - NewsletterItem::EditPanel
   // - cases.case.subcases.subcase.documents controller#setPreviousPiecesFromAgendaitem
   // - agenda.agendaitems.agendaitem.documents controller#setPreviousPiecesFromAgendaitem
-  // - agenda-service#retrieveModifiedDateFromNota
   // Refactor these uses and remove this property
   lastPiece: computed(
     'sortedPieces.[]',

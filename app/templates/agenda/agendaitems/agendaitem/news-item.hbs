@@ -1,86 +1,82 @@
-<AuToolbar class="au-u-margin-bottom">
-  <AuToolbarGroup>
+<AuToolbar class="au-u-margin-bottom" as |Group|>
+  <Group>
     <AuHeading @level="3" @skin="4">
       {{t "newsletter-title"}}
     </AuHeading>
-  </AuToolbarGroup>
-  {{#if this.currentSession.isEditor}}
-    <AuToolbarGroup>
-      {{#if this.model}}
-        {{#if this.isEditing}}
+  </Group>
+  {{#if this.canEditNewsletter}}
+    <Group>
+      {{#if this.isEditing}}
+        <AuButton
+          @skin="link"
+          {{on "click" this.closeEdit}}
+        >
+          {{t "cancel"}}
+        </AuButton>
+      {{else if this.model}}
+        <AuButtonGroup>
           <AuButton
+            @icon="expand"
+            @iconAlignment="left"
             @skin="link"
-            {{on "click" this.stopEditing}}
+            {{on "click" this.openFullscreenEdit}}
           >
-            {{t "cancel"}}
+            {{t "edit-text"}}
           </AuButton>
-        {{else}}
-          <AuButtonGroup>
-            <AuButton
-              @icon="expand"
-              @iconAlignment="left"
-              @skin="link"
-              {{on "click" this.startEditingFullscreen}}
-            >
-              {{t "edit-text"}}
-            </AuButton>
-            <AuButton
-              @icon="pencil"
-              @iconAlignment="left"
-              @skin="link"
-              data-test-route-agenda---news-item-edit
-              {{on "click" this.startEditing}}
-            >
-              {{t "edit"}}
-            </AuButton>
-          </AuButtonGroup>
-        {{/if}}
+          <AuButton
+            @icon="pencil"
+            @iconAlignment="left"
+            @skin="link"
+            data-test-route-agenda---news-item-edit
+            {{on "click" this.openEdit}}
+          >
+            {{t "edit"}}
+          </AuButton>
+        </AuButtonGroup>
       {{else}}
         <AuButton
           @icon="add"
           @iconAlignment="left"
           @skin="secondary"
           data-test-route-agenda---news-item-create
-          {{on "click" this.createAndStartEditing}}
+          {{on "click" this.openEdit}}
         >
-            {{t "create"}}
+          {{t "create"}}
         </AuButton>
       {{/if}}
-    </AuToolbarGroup>
+    </Group>
   {{/if}}
 </AuToolbar>
-{{#if this.model}}
-  {{#if (and this.notaHasChanged this.currentSession.isEditor)}}
-    {{#unless this.notaModifiedWarningConfirmed}}
-      <ChangesAlert
-        @message={{t
-          "nota-changed-message"
-          date=(moment-format this.notaModifiedTime "D MMMM YYYY")
-          time=(moment-format this.notaModifiedTime "H:mm")
-        }}
-        @buttonText={{t "close"}}
-        @clearAction={{this.confirmNotaModifiedWarning}} />
-    {{/unless}}
-  {{/if}}
-  {{#if this.isEditing}}
-    <Agenda::Agendaitem::AgendaitemNewsItemEdit
-      @newsletterInfo={{this.model}}
-      @agendaitem={{this.agendaitem}}
-      @onCancel={{this.stopEditing}}
-      @onSave={{this.stopEditing}}
-      @isFullscreen={{this.isEditingFullscreen}}
+
+{{#if this.showNotaModificationWarning}}
+  <ChangesAlert
+    @message={{t
+      "nota-changed-message"
+      date=(moment-format this.notaModifiedTime "D MMMM YYYY")
+      time=(moment-format this.notaModifiedTime "H:mm")
+    }}
+    @buttonText={{t "close"}}
+    @clearAction={{this.dismissNotaModifiedWarning}} />
+{{/if}}
+{{#if this.isEditing}}
+  <NewsletterItem::EditPanel
+    @newsletterItem={{this.model}}
+    @agendaitem={{this.agendaitem}}
+    @isFullscreen={{this.isFullscreen}}
+    @onCancel={{this.closeEdit}}
+    @onSave={{perform this.saveNewsletterItem}}
+  />
+{{else}}
+  {{#if this.model}}
+    <NewsletterItem::ViewPanel
+      @newsletterItem={{this.model}}
     />
   {{else}}
-    <Agenda::Agendaitem::AgendaitemNewsItem
-      @agendaitem={{this.agendaitem}}
-      @newsletterInfo={{this.model}}
-    />
+    <div class="auk-u-mt-2">
+      <Auk::EmptyState
+        @message={{t "no-newsletter-info"}}
+        data-test-route-agenda---news-item-alert
+      />
+    </div>
   {{/if}}
-{{else}}
-  <div class="auk-u-mt-2">
-    <Auk::EmptyState
-      @message={{t "no-newsletter-info"}}
-      data-test-route-agenda---news-item-alert
-    />
-  </div>
 {{/if}}

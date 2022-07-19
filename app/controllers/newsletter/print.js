@@ -1,4 +1,5 @@
 import Controller from '@ember/controller';
+import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 
 export default class PrintNewsletterController extends Controller {
@@ -9,4 +10,9 @@ export default class PrintNewsletterController extends Controller {
   };
 
   @tracked showDraft = false;
+
+  @task
+  *saveNewsletterItem(newsletterItem) {
+    yield newsletterItem.save();
+  }
 }

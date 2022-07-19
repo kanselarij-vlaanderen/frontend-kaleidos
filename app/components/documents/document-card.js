@@ -92,19 +92,18 @@ export default class DocumentsDocumentCardComponent extends Component {
         include: 'document-container,document-container.type,access-level',
       });
 
-    const piece = this.args.piece;
-    if (piece) {
+    if (this.args.piece) {
       this.piece = this.args.piece; // Assign what we already have, so that can be rendered already
       this.piece = yield loadPiece(this.piece.id);
       this.documentContainer = yield this.piece.documentContainer;
       this.accessLevel = yield this.piece.accessLevel;
       yield this.loadVersionHistory.perform();
     } else if (this.args.documentContainer) {
-      // TODO KAS-2777 This else does not seem used (no <Documents::DocumentCard> that passes this arg)
+      // This else does not seem used (no <Documents::DocumentCard> that passes this arg)
       this.documentContainer = this.args.documentContainer;
       yield this.loadVersionHistory.perform();
-      // TODO KAS-2777 does this work? Where is this.piece coming from if args.piece was not given?
-      this.piece = yield loadPiece(this.piece.id);
+      const lastPiece = this.reverseSortedPieces.lastObject;
+      this.piece = yield loadPiece(lastPiece.id);
       this.accessLevel = yield this.piece.accessLevel;
     } else {
       throw new Error(

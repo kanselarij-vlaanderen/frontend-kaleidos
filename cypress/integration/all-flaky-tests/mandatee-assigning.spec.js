@@ -296,10 +296,15 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(agenda.agendaDetailSidebar.subitem).as('agendaitems');
     cy.get('@agendaitems').eq(1)
       .click();
+    cy.get(auk.loader, {
+      timeout: 60000,
+    }).should('not.exist');
     cy.get(agenda.agendaitemNav.newsletterTab)
       .should('be.visible')
       .click();
-
+    cy.get(auk.loader, {
+      timeout: 60000,
+    }).should('not.exist');
     cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
     cy.get(newsletter.editItem.save).click();
@@ -307,6 +312,9 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.wait(`@postNewsletterInfo${randomInt}`);
     cy.get('@agendaitems').eq(2)
       .click();
+    cy.get(auk.loader, {
+      timeout: 60000,
+    }).should('not.exist');
     cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
     cy.get(newsletter.editItem.save).click();
@@ -314,6 +322,9 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.wait(`@postNewsletterInfo${randomInt}`);
     cy.get('@agendaitems').eq(3)
       .click();
+    cy.get(auk.loader, {
+      timeout: 60000,
+    }).should('not.exist');
     cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
     cy.get(newsletter.editItem.save).click();
@@ -339,6 +350,9 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .click();
     cy.wait(`@patchNewsletterInfo${randomInt}`);
 
+    cy.intercept('GET', '/mandatees?filter**').as('getMandatees1');
+    cy.intercept('GET', '/mandatees?filter**').as('getMandatees2');
+    cy.intercept('GET', '/mandatees?filter**').as('getMandatees3');
     cy.clickReverseTab('Definitief');
     cy.get(newsletter.itemContent.printItemProposal).as('proposals')
       .should('have.length', 3);
@@ -349,6 +363,10 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@proposals').eq(2)
       .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits en Vlaams minister Matthias Diependaele');
     cy.clickReverseTab('Klad');
+    cy.wait('@getMandatees1');
+    cy.wait('@getMandatees2');
+    cy.wait('@getMandatees3');
+    cy.wait(2000);
     cy.get(newsletter.itemContent.printItemProposal).as('proposals');
     cy.get('@proposals').eq(0)
       .contains('Op voorstel van minister-president Jan Jambon en viceminister-president Hilde Crevits');
