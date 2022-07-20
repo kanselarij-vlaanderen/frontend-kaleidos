@@ -23,6 +23,9 @@ export default class MeetingEditMeetingComponent extends Component {
   @tracked selectedKind;
   @tracked selectedMainMeeting;
   @tracked startDate;
+  @tracked decisionPublicationActivity;
+  @tracked documentPublicationActivity;
+  @tracked themisPublicationActivity;
   @tracked plannedDocumentPublicationDate;
   @tracked extraInfo;
   @tracked _meetingNumber;
@@ -130,7 +133,7 @@ export default class MeetingEditMeetingComponent extends Component {
       this.decisionPublicationActivity = yield this.args.meeting.belongsTo('internalDecisionPublicationActivity').reload();
       this.documentPublicationActivity = yield this.args.meeting.belongsTo('internalDocumentPublicationActivity').reload();
       // Documents can be published multiple times to Themis.
-      // We're only interested in the first (earliest) publication.
+      // We're only interested in the first (earliest) publication of documents.
       this.themisPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
         'filter[meeting][:uri:]': this.args.meeting.uri,
         'filter[scope]': CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS,

@@ -1,8 +1,6 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
 <div class="auk-o-flex auk-o-flex--justify-between auk-o-flex--align-baseline">
   <h2 class="auk-h2 auk-u-text-family-serif auk-u-text-capitalize" data-test-newsletter-meeting-title>
-    {{t "newsletter-overview-pdf-name"}} - {{kind-print-label this.meeting.kind}} {{t "of"}} {{moment-format this.meeting.plannedStart "dddd DD-MM-YYYY"}}
+    {{t "newsletter-overview-pdf-name"}} - {{kind-print-label this.meeting.kind}} {{t "of"}} {{moment-format @meeting.plannedStart "dddd DD-MM-YYYY"}}
   </h2>
 </div>
 <div class="auk-u-mb-4 auk-o-flex auk-o-flex--justify-between">
@@ -11,7 +9,7 @@
       {{t "date-publication"}}
     </h4>
     <p class="auk-u-italic">
-      {{this.formatPublicationTime this.internalDocumentPublicationActivity.plannedPublicationTime}}
+      {{moment-format @meeting.plannedStart "DD MMMM YYYY - HH:ss"}}
     </p>
   </div>
   <div>
@@ -19,7 +17,7 @@
       {{t "newsletter-doc-date"}}
     </h4>
     <p class="auk-u-italic">
-      {{this.formatPublicationTime this.themisPublicationTime}}
+      {{moment-format this.themisPublicationActivity.plannedDate "DD MMMM YYYY - HH:ss"}}
     </p>
   </div>
 </div>

@@ -18,24 +18,6 @@ if (Number.isNaN(PROCESSING_WINDOW)) {
 }
 export const PROCESSING_WINDOW_MS = PROCESSING_WINDOW * 1000;
 
-/**
- * Themis and document publication activities actual start date is a certain amount of time before their plannedPublicationTime attribute
- * This method determines whether the publication process is not in progress or finished.
- * @param {XPublicationActivity} xPublicationActivity
- * @returns {boolean}
- */
-export function getIsNotStarted(xPublicationActivity) {
-  if (xPublicationActivity.plannedPublicationTime == null) return true;
-  const minPublicationDate = new Date(Date.now() + PROCESSING_WINDOW_MS);
-  const isNotStarted = minPublicationDate < xPublicationActivity.plannedPublicationTime;
-  return isNotStarted;
-}
-
-export function getIsPublished(xPublicationActivity) {
-  const now = new Date();
-  return xPublicationActivity.plannedPublicationTime != null && xPublicationActivity.plannedPublicationTime < now;
-}
-
 export function getMostCertainPublicationTime(xPublicationActivity) {
   return xPublicationActivity?.plannedPublicationTime;
 }
@@ -70,24 +52,4 @@ export function getIsDepublication(themisPublicationActivity) {
 
 export function getHasInScope(themisPublicationActivity, subjects) {
   return subjects.every((subject) => themisPublicationActivity.scope.includes(subject));
-}
-
-export function getPlannedThemisPublicationActivity(themisPublicationActivities) {
-  const possibleInitialActivities = themisPublicationActivities.filter((it) => {
-    return getHasScope(it, THEMIS_PUBLICATION_SCOPE_NEWS_DOCS);
-  });
-
-  if (possibleInitialActivities.length === 0) {
-    return undefined; // old data | < KAS-3431
-  }
-
-  return possibleInitialActivities.sortBy('plannedPublicationTime')[0];
-}
-
-export async function checkIfDocumentsAreReleasedForMeeting(meeting, store) {
-  const publicationActivity = await store.queryOne('internal-document-publication-activity', {
-    'filter[meeting][:id:]': meeting.id,
-    'filter[status][:uri:]': CONSTANTS.RELEASE_STATUSES.RELEASED,
-  });
-  return publicationActivity != null;
 }
