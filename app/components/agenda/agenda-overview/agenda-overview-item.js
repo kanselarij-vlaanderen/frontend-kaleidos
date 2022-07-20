@@ -45,7 +45,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
     this.agendaitemDocuments = [];
     this.newAgendaitemDocuments = [];
     this.loadDocuments.perform();
-    this.loadDocumentsReleaseStatus.perform();
+    this.loadDocumentsPublicationStatus.perform();
   }
 
   get documentListSize() {
@@ -69,7 +69,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   }
 
   @task
-  *loadDocumentsReleaseStatus() {
+  *loadDocumentsPublicationStatus() {
     // Additional failsafe check on document visibility. Strictly speaking this check
     // is not necessary since documents are not propagated by Yggdrasil if they
     // should not be visible yet for a specific profile.
