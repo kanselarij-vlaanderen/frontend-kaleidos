@@ -44,8 +44,13 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
   }
 
   async afterModel() {
-    this.defaultAccessLevel = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
     this.documentsAreVisible = this.currentSession.isOverheid && await themisPublicationUtils.checkIfDocumentsAreReleasedForMeeting(this.meeting, this.store);
+    this.defaultAccessLevel = await this.store.findRecordByUri(
+      'concept',
+      this.subcase.confidential
+        ? CONSTANTS.ACCESS_LEVELS.MINISTERRAAD
+        : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
+    );
   }
 
   setupController(controller) {
