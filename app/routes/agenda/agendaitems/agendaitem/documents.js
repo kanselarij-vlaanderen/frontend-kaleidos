@@ -9,7 +9,6 @@ import VrNotulenName, {
 } from 'frontend-kaleidos/utils/vr-notulen-name';
 import VrLegacyDocumentName,
 { compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
-import * as themisPublicationUtils from 'frontend-kaleidos/utils/agenda-publication';
 
 export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
   @service store;
@@ -52,8 +51,16 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
         ? CONSTANTS.ACCESS_LEVELS.MINISTERRAAD
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
+
+    // Additional failsafe check on document visibility. Strictly speaking this check
+    // is not necessary since documents are not propagated by Yggdrasil if they
+    // should not be visible yet for a specific profile.
     if (this.currentSession.isOverheid) {
-      this.documentsAreVisible = this.currentSession.isOverheid && await themisPublicationUtils.checkIfDocumentsAreReleasedForMeeting(this.meeting, this.store);
+      const documentPublicationActivity = await this.meeting.internalDocumentPublicationActivity;
+      const documentPublicationStatus = await documentPublicationActivity.status;
+      this.documentsAreVisible = documentPublicationStatus == CONSTANTS.RELEASE_STATUSES.RELEASED;
+    } else {
+      this.documentsAreVisible = true;
     }
   }
 

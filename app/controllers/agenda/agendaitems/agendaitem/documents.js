@@ -25,14 +25,13 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   defaultAccessLevel;
   @tracked isOpenBatchDetailsModal = false;
   @tracked isOpenPieceUploadModal = false;
+  @tracked isOpenPublicationModal = false;
   @tracked newPieces = A([]);
   @tracked newAgendaitemPieces;
   @tracked agendaitem;
   @tracked currentAgenda;
   @tracked previousAgenda;
   @tracked agendaActivity;
-
-  @tracked isOpenPublicationModal = false;
 
   get isShownOpenPublicationModal() {
     const mayPublish = this.currentSession.may('manage-publication-flows');

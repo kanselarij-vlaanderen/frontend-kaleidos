@@ -12,7 +12,7 @@ import CONFIG from 'frontend-kaleidos/utils/config';
 import VrNotulenName,
 { compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
 import VrLegacyDocumentName, { compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
-import * as themisPublicationUtils from 'frontend-kaleidos/utils/agenda-publication';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class AgendaOverviewItem extends AgendaSidebarItem {
   /**
@@ -38,7 +38,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   @tracked newAgendaitemDocuments;
 
   @tracked isShowingAllDocuments = false;
-  @tracked documentsAreReleased = false;
+  @tracked documentsAreVisible = false;
 
   constructor() {
     super(...arguments);
@@ -70,7 +70,16 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
 
   @task
   *loadDocumentsReleaseStatus() {
-    this.documentsAreReleased = yield themisPublicationUtils.checkIfDocumentsAreReleasedForMeeting(this.args.meeting, this.store);
+    // Additional failsafe check on document visibility. Strictly speaking this check
+    // is not necessary since documents are not propagated by Yggdrasil if they
+    // should not be visible yet for a specific profile.
+    if (this.currentSession.isOverheid) {
+      const documentPublicationActivity = yield this.args.meeting.internalDocumentPublicationActivity;
+      const documentPublicationStatus = yield documentPublicationActivity.status;
+      this.documentsAreVisible = documentPublicationStatus == CONSTANTS.RELEASE_STATUSES.RELEASED;
+    } else {
+      this.documentsAreVisible = true;
+    }
   }
 
   @task
