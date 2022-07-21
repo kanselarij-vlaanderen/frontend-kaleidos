@@ -6,7 +6,7 @@
   />
   <Auk::Modal::Body>
     <Utils::LoadableContent
-      @isLoading={{this.save.isRunning}}
+      @isLoading={{or this.ensureFreshData.isRunning this.save.isRunning}}
       @reserveSpace={{true}}
     >
       <div class="auk-form-group-layout auk-form-group-layout--standard">

@@ -12,6 +12,23 @@ export default class MeetingDocumentPublicationPlanningModalComponent extends Co
   @service currentSession;
   @service store;
 
+  constructor() {
+    super(...arguments);
+    this.ensureFreshData.perform();
+  }
+
+  @task
+  *ensureFreshData() {
+    yield Promise.all([
+      this.args.themisPublicationActivity.reload(),
+      this.args.documentPublicationActivity.reload(),
+    ]);
+    yield Promise.all([
+      this.args.themisPublicationActivity.belongsTo('status').reload(),
+      this.args.documentPublicationActivity.belongsTo('status').reload(),
+    ]);
+  }
+
   get estimatedThemisExecutionStart() {
     return subMilliseconds(this.args.themisPublicationActivity.plannedDate, ESTIMATED_PUBLICATION_DURATION);
   }
