@@ -3,19 +3,32 @@ import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { isBlank } from '@ember/utils';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { ESTIMATED_PUBLICATION_DURATION } from 'frontend-kaleidos/config/config';
+import subMilliseconds from 'date-fns/subMilliseconds';
+import isPast from 'date-fns/isPast';
 
 export default class MeetingDocumentPublicationPlanningModalComponent extends Component {
 
+  get estimatedThemisExecutionStart() {
+    return subMilliseconds(this.args.themisPublicationActivity, ESTIMATED_PUBLICATION_DURATION);
+  }
+
+  get estimatedDocumentExecutionStart() {
+    return subMilliseconds(this.args.documentPublicationActivity, ESTIMATED_PUBLICATION_DURATION);
+  }
+
   get isDisabledThemisPublication() {
-    const alreadyReleased = this.args.themisPublicationActivity.status.get('uri') == CONSTANTS.RELEASE_STATUSES.RELEASED;
-    // TODO add check if status confirmed that it doesn't fall within the release window
-    return alreadyReleased;
+    const statusPromise = this.args.themisPublicationActivity;
+    const alreadyReleased = statusPromise.get('uri') == CONSTANTS.RELEASE_STATUSES.RELEASED;
+    const lockedInReleaseWindow = statusPromise.get('uri') != CONSTANTS.RELEASE_STATUSES.CONFIRMED && isPast(this.estimatedThemisExecutionStart);
+    return alreadyReleased || lockedInReleaseWindow;
   }
 
   get isDisabledInternalDocumentPublication() {
-    const alreadyReleased = this.args.documentPublicationActivity.status.get('uri') == CONSTANTS.RELEASE_STATUSES.RELEASED;
-    // TODO add check if status is confirmed that it doesn't fall within the release window
-    return alreadyReleased;
+    const statusPromise = this.args.documentPublicationActivity;
+    const alreadyReleased = statusPromise.get('uri') == CONSTANTS.RELEASE_STATUSES.RELEASED;
+    const lockedInReleaseWindow = statusPromise.get('uri') != CONSTANTS.RELEASE_STATUSES.CONFIRMED && isPast(this.estimatedDocumentExecutionStart);
+    return alreadyReleased || lockedInReleaseWindow;
   }
 
   get isDisabledSave() {
