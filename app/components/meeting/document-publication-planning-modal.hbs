@@ -1,7 +1,7 @@
 <Auk::Modal @size="small">
   <Auk::Modal::Header
     @title={{t "agenda-publish-planned"}}
-    @onClose={{this.cancel}}
+    @onClose={{@onCancel}}
     @closeDisabled={{this.save.isRunning}}
   />
   <Auk::Modal::Body>
@@ -18,7 +18,7 @@
             <WebComponents::VlDatepicker
               class="auk-o-flex__item"
               @enableTime={{true}}
-              @date={{array @documentPublicationActivity.plannedDate}}
+              @date={{array this.documentPublicationPlannedDate}}
               @dateChanged={{this.setDocumentPublicationDatePicker}}
               @disabled={{this.isDisabledDocumentPublication}}
             />
@@ -39,7 +39,7 @@
             <WebComponents::VlDatepicker
               class="auk-o-flex__item"
               @enableTime={{true}}
-              @date={{array @themisPublicationActivity.plannedDate}}
+              @date={{array this.themisPublicationPlannedDate}}
               @dateChanged={{this.setThemisPublicationDatePicker}}
               @disabled={{this.isDisabledThemisPublication}}
             />
@@ -56,7 +56,7 @@
     </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
-    @onCancel={{this.cancel}}
+    @onCancel={{@onCancel}}
     @cancelDisabled={{this.save.isRunning}}
   >
     <Auk::Button

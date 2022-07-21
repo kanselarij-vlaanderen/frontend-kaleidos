@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { isBlank } from '@ember/utils';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -11,6 +12,9 @@ import isPast from 'date-fns/isPast';
 export default class MeetingDocumentPublicationPlanningModalComponent extends Component {
   @service currentSession;
   @service store;
+
+  @tracked themisPublicationPlannedDate;
+  @tracked documentPublicationPlannedDate;
 
   constructor() {
     super(...arguments);
@@ -27,6 +31,9 @@ export default class MeetingDocumentPublicationPlanningModalComponent extends Co
       this.args.themisPublicationActivity.belongsTo('status').reload(),
       this.args.documentPublicationActivity.belongsTo('status').reload(),
     ]);
+
+    this.themisPublicationPlannedDate = this.args.themisPublicationActivity.plannedDate;
+    this.documentPublicationPlannedDate = this.args.documentPublicationActivity.plannedDate;
   }
 
   get estimatedThemisExecutionStart() {
@@ -54,55 +61,59 @@ export default class MeetingDocumentPublicationPlanningModalComponent extends Co
   }
 
   get isDisabledSave() {
-    return isBlank(this.args.documentPublicationActivity.plannedDate) ||
-      isBlank(this.args.themisPublicationActivity.plannedDate) ||
+    return isBlank(this.documentPublicationPlannedDate) ||
+      isBlank(this.themisPublicationPlannedDate) ||
       this.save.isRunning;
   }
 
   @action
   setDocumentPublicationDateNow() {
-    this.args.documentPublicationActivity.plannedDate = new Date();
+    this.documentPublicationPlannedDate = new Date();
   }
 
   @action
   setDocumentPublicationDatePicker(date) {
-    this.args.documentPublicationActivity.plannedDate = date;
+    this.documentPublicationPlannedDate = date;
   }
 
   @action
   setThemisPublicationDateNow() {
-    this.args.themisPublicationActivity.plannedDate = new Date();
+    this.themisPublicationPlannedDate = new Date();
   }
 
   @action
   setThemisPublicationDatePicker(date) {
-    this.args.themisPublicationActivity.plannedDate = date;
-  }
-
-  @action
-  cancel() {
-    this.args.documentPublicationActivity.rollbackAttributes();
-    this.args.themisPublicationActivity.rollbackAttributes();
-    this.args.onCancel();
+    this.themisPublicationPlannedDate = date;
   }
 
   @task
   *save() {
-    const plannedActivities = [];
-    const status = yield this.store.findRecordByUri('concept', CONSTANTS.RELEASE_STATUSES.CONFIRMED);
+    this.args.themisPublicationActivity.plannedDate = this.themisPublicationPlannedDate;
+    this.args.documentPublicationActivity.plannedDate = this.documentPublicationPlannedDate;
 
-    if (!this.isDisabledDocumentPublication) {
-      this.args.documentPublicationActivity.status = status;
+    // We're going to pass only activities to @onSave that require an update,
+    // either because current status is 'planned' and must be updated to 'confirmed'
+    // or because current status is 'confirmed' but planned date has changed
+    const plannedActivities = [];
+    const confirmedStatus = yield this.store.findRecordByUri('concept', CONSTANTS.RELEASE_STATUSES.CONFIRMED);
+
+    const [documentPublicationStatus, themisPublicationStatus] = yield Promise.all([
+      this.args.documentPublicationActivity.status,
+      this.args.themisPublicationActivity.status,
+    ]);
+
+    if (documentPublicationStatus.uri == CONSTANTS.RELEASE_STATUSES.PLANNED ||
+        (documentPublicationStatus.uri == CONSTANTS.RELEASE_STATUSES.CONFIRMED && this.args.documentPublicationActivity.hasDirtyAttributes)) {
+      this.args.documentPublicationActivity.status = confirmedStatus;
       plannedActivities.push(this.args.documentPublicationActivity);
     }
 
-    if (!this.isDisabledThemisPublication) {
-      this.args.themisPublicationActivity.status = status;
+    if (themisPublicationStatus.uri == CONSTANTS.RELEASE_STATUSES.PLANNED ||
+        (themisPublicationStatus.uri == CONSTANTS.RELEASE_STATUSES.CONFIRMED && this.args.themisPublicationActivity.hasDirtyAttributes)) {
+      this.args.themisPublicationActivity.status = confirmedStatus;
       plannedActivities.push(this.args.themisPublicationActivity);
     }
 
-    if (plannedActivities.length) {
-      yield this.args.onSave(plannedActivities);
-    }
+    yield this.args.onSave(plannedActivities);
   }
 }

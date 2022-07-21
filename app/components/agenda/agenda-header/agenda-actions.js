@@ -32,7 +32,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @tracked isAddingAgendaitems = false;
   @tracked isEditingMeeting = false;
   @tracked showConfirmApprovingAllAgendaitems = false;
-  @tracked showConfirmPublishInternalDecisions = false;
+  @tracked showConfirmPublishDecisions = false;
   @tracked showPlanDocumentPublicationModal = false;
   @tracked showConfirmPublishThemis = false;
   @tracked showConfirmUnpublishThemis = false;
@@ -55,7 +55,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     return this.currentSession.isEditor && this.args.currentAgenda.status.get('isDesignAgenda');
   }
 
-  get canPublishInternalDecisions() {
+  get canPublishDecisions() {
     return (
       this.currentSession.may('manage-decision-publications') &&
         this.args.meeting.isFinal &&
@@ -78,11 +78,11 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   get canPublishThemis() {
     // get('uri') will immediately resolve since we preloaded the statuses
     // in loadPublicationActivities()
-    const documentsNotYetReleased = this.documentPublicationActivity?.status.get('uri') == CONSTANTS.RELEASE_STATUSES.RELEASED;
+    const documentsAlreadyReleased = this.documentPublicationActivity?.status.get('uri') == CONSTANTS.RELEASE_STATUSES.RELEASED;
 
     return this.currentSession.may('manage-themis-publications') &&
       this.args.meeting.isFinal &&
-      documentsNotYetReleased;
+      documentsAlreadyReleased;
   }
 
   get canUnpublishThemis() {
@@ -149,9 +149,9 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   }
 
   @action
-  async publishInternalDecisions() {
+  async publishDecisions() {
     const status = await this.store.findRecordByUri('concept', CONSTANTS.RELEASE_STATUSES.RELEASED);
-    this.showConfirmPublishInternalDecisions = false;
+    this.showConfirmPublishDecisions = false;
     this.decisionPublicationActivity.startDate = new Date();
     this.decisionPublicationActivity.status = status;
     await this.decisionPublicationActivity.save();
@@ -307,13 +307,13 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   }
 
   @action
-  openConfirmPublishInternalDecisions() {
-    this.showConfirmPublishInternalDecisions = true;
+  openConfirmPublishDecisions() {
+    this.showConfirmPublishDecisions = true;
   }
 
   @action
-  cancelPublishInternalDecisions() {
-    this.showConfirmPublishInternalDecisions = false;
+  cancelPublishDecisions() {
+    this.showConfirmPublishDecisions = false;
   }
 
   @action
