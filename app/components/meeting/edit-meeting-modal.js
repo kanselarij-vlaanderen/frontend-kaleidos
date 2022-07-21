@@ -207,9 +207,13 @@ export default class MeetingEditMeetingComponent extends Component {
   @action
   selectMainMeeting(mainMeeting) {
     this.selectedMainMeeting = mainMeeting;
-    this.startDate = mainMeeting.plannedStart;
-    this.meetingNumber = mainMeeting.number;
     this.numberRepresentation = `${mainMeeting.numberRepresentation}-${this.meetingKindPostfix}`;
+    this.startDate = mainMeeting.plannedStart;
+    if (!this.isDisabledPlannedDocumentPublicationDate) {
+      const nextBusinessDay = setMinutes(setHours(addBusinessDays(mainMeeting.startDate, 1), 14), 0);
+      this.plannedDocumentPublicationDate = nextBusinessDay;
+    }
+    this.meetingNumber = mainMeeting.number;
     this.extraInfo = mainMeeting.extraInfo;
   }
 
