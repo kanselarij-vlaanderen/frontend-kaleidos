@@ -57,13 +57,14 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
 
   get canPublishInternalDecisions() {
     return (
-      this.currentSession.isEditor &&
+      this.currentSession.may('manage-decision-publications') &&
         this.args.meeting.isFinal &&
         this.decisionPublicationActivity?.status.get('uri') == CONSTANTS.RELEASE_STATUSES.PLANNED
     );
   }
 
   get canPlanDocumentPublication() {
+    const mayManagePublication = this.currentSession.may('manage-document-publications') || this.currentSession.may('manage-themis-publications');
     // get('uri') will immediately resolve since we preloaded the statuses
     // in loadPublicationActivities()
     const documentsNotYetReleased = [
@@ -71,11 +72,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       this.themisPublicationActivity?.status,
     ].some((status) => status?.get('uri') == CONSTANTS.RELEASE_STATUSES.PLANNED);
 
-    return (
-      this.currentSession.isEditor &&
-        this.args.meeting.isFinal &&
-        documentsNotYetReleased
-    );
+    return mayManagePublication && this.args.meeting.isFinal && documentsNotYetReleased;
   }
 
   get canPublishThemis() {
@@ -83,13 +80,13 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     // in loadPublicationActivities()
     const documentsNotYetReleased = this.documentPublicationActivity?.status.get('uri') == CONSTANTS.RELEASE_STATUSES.RELEASED;
 
-    return this.currentSession.isEditor &&
+    return this.currentSession.may('manage-themis-publications') &&
       this.args.meeting.isFinal &&
       documentsNotYetReleased;
   }
 
   get canUnpublishThemis() {
-    return this.currentSession.isEditor &&
+    return this.currentSession.may('manage-themis-publications') &&
       this.args.meeting.isFinal &&
       this.latestThemisPublicationActivity != null;
   }

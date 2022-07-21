@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { isBlank } from '@ember/utils';
@@ -8,6 +9,7 @@ import subMilliseconds from 'date-fns/subMilliseconds';
 import isPast from 'date-fns/isPast';
 
 export default class MeetingDocumentPublicationPlanningModalComponent extends Component {
+  @service currentSession;
 
   get estimatedThemisExecutionStart() {
     return subMilliseconds(this.args.themisPublicationActivity, ESTIMATED_PUBLICATION_DURATION);
@@ -18,17 +20,19 @@ export default class MeetingDocumentPublicationPlanningModalComponent extends Co
   }
 
   get isDisabledThemisPublication() {
+    const hasPermission = this.currentSession.may('manage-themis-publications');
     const statusPromise = this.args.themisPublicationActivity;
     const alreadyReleased = statusPromise.get('uri') == CONSTANTS.RELEASE_STATUSES.RELEASED;
     const lockedInReleaseWindow = statusPromise.get('uri') != CONSTANTS.RELEASE_STATUSES.CONFIRMED && isPast(this.estimatedThemisExecutionStart);
-    return alreadyReleased || lockedInReleaseWindow;
+    return !hasPermission || alreadyReleased || lockedInReleaseWindow;
   }
 
   get isDisabledInternalDocumentPublication() {
+    const hasPermission = this.currentSession.may('manage-document-publications');
     const statusPromise = this.args.documentPublicationActivity;
     const alreadyReleased = statusPromise.get('uri') == CONSTANTS.RELEASE_STATUSES.RELEASED;
     const lockedInReleaseWindow = statusPromise.get('uri') != CONSTANTS.RELEASE_STATUSES.CONFIRMED && isPast(this.estimatedDocumentExecutionStart);
-    return alreadyReleased || lockedInReleaseWindow;
+    return !hasPermission || alreadyReleased || lockedInReleaseWindow;
   }
 
   get isDisabledSave() {
