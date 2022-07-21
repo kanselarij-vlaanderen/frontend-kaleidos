@@ -7,7 +7,7 @@ export default class IsAccessLevelInEffect extends Helper {
   @service agendaService;
 
   async compute([piece]) {
-    let inEffect = false;
+    let inEffect = true;
     if (piece) {
       // Always assume that we're dealing with the latest agenda
       const accessLevel = await piece.accessLevel;
