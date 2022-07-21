@@ -91,6 +91,14 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       this.latestThemisPublicationActivity != null;
   }
 
+  // Themis publication from the agenda-side always publishes both, newsitems and documents
+  get themisPublicationScopes() {
+    return [
+      CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS,
+      CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS
+    ];
+  }
+
   @bind
   async allAgendaitemsNotOk() {
     const agendaitems = await this.args.currentAgenda.agendaitems;
@@ -160,6 +168,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @task
   *planDocumentPublication(plannedActivities) {
     yield Promise.all(plannedActivities.map((activity) => activity.save()));
+    yield this.loadPublicationActivities.perform();
     this.showPlanDocumentPublicationModal = false;
   }
 

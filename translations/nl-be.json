@@ -518,6 +518,8 @@
   "publication-scope-newsitems-and-documents": "Nieuwsberichten en documenten",
   "publication-scope-newsitems-only": "Enkel nieuwsberichten",
   "publication-scope-documents-only": "Enkel documenten",
+  "confirm-publication-scope-newsitems-only": "Bent u zeker dat u de berichten op de website wilt publiceren?",
+  "confirm-publication-scope-newsitems-and-documents": "Bent u zeker dat u de berichten en documenten op de website wilt publiceren?",
   "release-to-public": "Vrijgeven",
   "publish-to-public": "Publiceren",
   "retract-from-public": "Terugtrekken",

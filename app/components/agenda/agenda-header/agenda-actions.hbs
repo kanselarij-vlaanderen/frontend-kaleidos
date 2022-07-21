@@ -188,6 +188,7 @@
 
 {{#if this.showConfirmPublishThemis}}
   <ThemisPublications::PublishConfirmationModal
+    @scope={{this.themisPublicationScopes}}
     @onCancel={{this.cancelPublishThemis}}
     @onConfirm={{perform this.publishThemis}}
   />

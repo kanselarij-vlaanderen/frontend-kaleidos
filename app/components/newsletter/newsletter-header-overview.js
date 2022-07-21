@@ -37,6 +37,19 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     return this.currentSession.may('manage-themis-publications');
   }
 
+  // Scope of the Themis publication from the newsletter-side depends on the most recent publication.
+  // - if it's the first publication, only newsitems are published
+  // - if latest publication includes documents, republication should also include documents
+  get themisPublicationScopes() {
+    const scope = [ CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS ];
+    const latestPublicationIncludesDocuments = this.latestPublicationActivity?.scope.includes(CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS);
+    if (latestPublicationIncludesDocuments) {
+      scope.push(CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS);
+    }
+
+    return scope;
+  }
+
   @task
   *loadMailCampaign() {
     this.mailCampaign = yield this.args.meeting.mailCampaign;
@@ -47,7 +60,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     this.latestPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
       'filter[meeting][:uri:]': this.args.meeting.uri,
       'filter[status][:uri:]': CONSTANTS.RELEASE_STATUSES.RELEASED,
-      'filter[scope]': 'newsitems',
       sort: '-start-date',
     });
   }
@@ -57,7 +69,8 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   }
 
   get isAlreadyPublished() {
-    return this.latestPublicationActivity != null;
+    return this.latestPublicationActivity != null &&
+      this.latestPublicationActivity.scope.includes(CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS);
   }
 
   @action
@@ -147,6 +160,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
         status
       });
       yield themisPublicationActivity.save();
+      this.loadLatestPublicationActivity.perform();
       this.toaster.success(this.intl.t('success-unpublish-from-web'));
     } catch(e) {
       this.toaster.error(
