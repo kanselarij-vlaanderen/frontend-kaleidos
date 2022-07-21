@@ -4,6 +4,9 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task, dropTask } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import addBusinessDays from 'date-fns/addBusinessDays';
+import setHours from 'date-fns/setHours';
+import setMinutes from 'date-fns/setMinutes';
 
 /**
  * @argument {isNew}
@@ -83,6 +86,15 @@ export default class MeetingEditMeetingComponent extends Component {
         this.initializeMainMeeting.isRunning ||
         this.saveMeeting.isRunning
       );
+  }
+
+  @action
+  setStartDate(date) {
+    this.startDate = date;
+    if (!this.isDisabledPlannedDocumentPublicationDate) {
+      const nextBusinessDay = setMinutes(setHours(addBusinessDays(date, 1), 14), 0);
+      this.plannedDocumentPublicationDate = nextBusinessDay;
+    }
   }
 
   @action

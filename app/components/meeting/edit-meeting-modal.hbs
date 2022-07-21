@@ -41,32 +41,30 @@
           <WebComponents::VlDatepicker
             @enableTime={{true}}
             @date={{array this.startDate}}
-            @dateChanged={{set this "startDate"}}
+            @dateChanged={{this.setStartDate}}
           />
         </div>
       </div>
       {{!Publicatiedatum}}
-      {{#if (not @meeting.isFinal)}}
-        <div class="auk-u-mb-2">
-          <div class="auk-form-group">
-            <Auk::Label>
-              {{t "date-publication-documents"}}
-            </Auk::Label>
-            {{! TODO: Replace this with Auk::Datepicker, which isn't fully compliant yet (e.g. no time support) }}
-            <WebComponents::VlDatepicker
-              @enableTime={{true}}
-              @date={{array this.plannedDocumentPublicationDate}}
-              @dateChanged={{this.setPlannedDocumentPublicationDate}}
-              @disabled={{this.isDisabledPlannedDocumentPublicationDate}}
-            />
-            <Auk::FormHelpText
-              class="auk-u-mt"
-              @icon="circle-info"
-              @text={{t "agenda-publication--publication-date--help"}}
-            />
-          </div>
+      <div class="auk-u-mb-2">
+        <div class="auk-form-group">
+          <Auk::Label>
+            {{t "date-publication-documents"}}
+          </Auk::Label>
+          {{! TODO: Replace this with Auk::Datepicker, which isn't fully compliant yet (e.g. no time support) }}
+          <WebComponents::VlDatepicker
+            @enableTime={{true}}
+            @date={{array this.plannedDocumentPublicationDate}}
+            @dateChanged={{this.setPlannedDocumentPublicationDate}}
+            @disabled={{this.isDisabledPlannedDocumentPublicationDate}}
+          />
+          <Auk::FormHelpText
+            class="auk-u-mt"
+            @icon="circle-info"
+            @text={{t "agenda-publication--publication-date--help"}}
+          />
         </div>
-      {{/if}}
+      </div>
     {{/if}}
     <div class="auk-u-mb-2">
       <div class="auk-form-group">
