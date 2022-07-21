@@ -50,7 +50,7 @@ export default class IsAccessLevelInEffect extends Helper {
           inEffect = true;
           break;
         case CONSTANTS.ACCESS_LEVELS.MINISTERRAAD:
-          if (isDesignAgenda && !isPresent(previousAgenda) | pieceChanged) {
+          if (isDesignAgenda && (!isPresent(previousAgenda) | pieceChanged)) {
             inEffect = false;
           }
           break;
