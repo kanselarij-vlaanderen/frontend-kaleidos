@@ -1,8 +1,11 @@
 import Component from '@glimmer/component';
+import { later, cancel } from '@ember/runloop';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { PUBLICATION_ACTIVITY_REFRESH_INTERVAL_MS } from 'frontend-kaleidos/config/config';
+
 
 export default class AgendaAgendaHeaderPublicationPillsComponent extends Component {
   @service store;
@@ -12,8 +15,11 @@ export default class AgendaAgendaHeaderPublicationPillsComponent extends Compone
   constructor() {
     super(...arguments);
     this.loadPublicationActivities.perform();
+  }
 
-    // TODO add polling to refresh data
+  willDestroy() {
+    super.willDestroy(...arguments);
+    cancel(this.scheduledRefresh);
   }
 
   get isConfirmedDocumentPublicationPlanning() {
@@ -32,16 +38,22 @@ export default class AgendaAgendaHeaderPublicationPillsComponent extends Compone
     return this.latestThemisPublicationActivity?.scope.includes(CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS);
   }
 
+  schedulePublicationActivitiesRefresh() {
+    this.scheduledRefresh = later(this, () => this.loadPublicationActivities.perform(), PUBLICATION_ACTIVITY_REFRESH_INTERVAL_MS);
+  }
+
   @task
   *loadPublicationActivities() {
-    const decisionPublicationActivity = yield this.args.meeting.internalDecisionPublicationActivity;
-    yield decisionPublicationActivity.status;
-    const documentPublicationActivity = yield this.args.meeting.internalDocumentPublicationActivity;
-    yield documentPublicationActivity.status;
+    const decisionPublicationActivity = yield this.args.meeting.belongsTo('internalDecisionPublicationActivity').reload();
+    yield decisionPublicationActivity.belongsTo('status').reload();
+    const documentPublicationActivity = yield this.args.meeting.belongsTo('internalDocumentPublicationActivity').reload();
+    yield documentPublicationActivity.belongsTo('status').reload();
 
     this.latestThemisPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
       'filter[meeting][:uri:]': this.args.meeting.uri,
       sort: '-start-date',
     });
+
+    this.schedulePublicationActivitiesRefresh();
   }
 }
