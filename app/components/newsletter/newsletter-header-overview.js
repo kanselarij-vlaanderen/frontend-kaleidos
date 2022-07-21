@@ -33,6 +33,10 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     this.loadLatestPublicationActivity.perform();
   }
 
+  get mayManageThemis() {
+    return this.currentSession.may('manage-themis-publications');
+  }
+
   @task
   *loadMailCampaign() {
     this.mailCampaign = yield this.args.meeting.mailCampaign;
@@ -40,15 +44,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   @task
   *loadLatestPublicationActivity() {
-    /*
-      TODO KAS-3431 is this correct? we want to get the publication that is linked to newsitems only?
-      Filtering on startDate + the status should ensure it is released to valvas
-      sorting in latest startdate in case there is more than 1?
-      Does the scope of "document, newsitems" come out of this query as well?
-    */
-
     this.latestPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
-      'filter[:lte:start-date]': new Date().toISOString(),
       'filter[meeting][:uri:]': this.args.meeting.uri,
       'filter[status][:uri:]': CONSTANTS.RELEASE_STATUSES.RELEASED,
       'filter[scope]': 'newsitems',
@@ -117,9 +113,11 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @task
   *publishThemis(scope) {
     const status = yield this.store.findRecordByUri('concept', CONSTANTS.RELEASE_STATUSES.RELEASED);
+    const now = new Date();
     try {
       const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
-        startDate: new Date(),
+        plannedDate: now,
+        startDate: now,
         meeting: this.args.meeting,
         scope,
         status
@@ -139,9 +137,11 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @task
   *unpublishThemis(scope) {
     const status = yield this.store.findRecordByUri('concept', CONSTANTS.RELEASE_STATUSES.RELEASED);
+    const now = new Date();
     try {
       const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
-        startDate: new Date(),
+        plannedDate: now,
+        startDate: now,
         meeting: this.args.meeting,
         scope,
         status
@@ -164,7 +164,9 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     // Specific example: no newsletters (for notes) present! we need at least one note to avoid an empty mail/belga
     // A different example is a note without themes, valid for belga but not for mailchimp (no recipients)
     yield this.publishToBelga.perform();
-    yield this.publishThemis.perform(scope);
+    if (this.currentSession.may('manage-themis-publications')) {
+      yield this.publishThemis.perform(scope);
+    }
 
     this.showConfirmPublishAll = false;
   }

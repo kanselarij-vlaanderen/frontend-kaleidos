@@ -14,11 +14,7 @@ export default class NewsletterRoute extends Route {
     const latestAgenda = await this.store.queryOne('agenda', {
       'filter[created-for][:id:]': meeting.id,
       sort: '-serialnumber',
-      include: [
-        'status',
-        'internal-document-publication-activity',
-        'themis-publication-activities'
-      ].join(','),
+      include: 'status',
     });
     return {
       meeting,
