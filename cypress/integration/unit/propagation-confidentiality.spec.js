@@ -97,12 +97,14 @@ context('Propagation of confidentiality setup', () => {
     checkAccess(docNameLocked3);
     checkAccess(docNameLocked4);
     checkAccess(docNameLocked5);
-    cy.releaseDocuments();
+    // TODO reenable release documents with MeetingDocumentPublicationPlanningModalComponent
+    // cy.releaseDocuments();
     // wait for yggie a bit, the next 2 profiles will succeed, enough time should have passed for overheid profile
     cy.wait(20000);
   });
 
-  it('login as minister and check access', () => {
+  // TODO reenable test to release documents with MeetingDocumentPublicationPlanningModalComponent
+  it.skip('login as minister and check access', () => {
     cy.login('Minister');
     cy.visitAgendaWithLink(agendaitem1Link);
     checkAccess(docName1, false);
@@ -119,7 +121,8 @@ context('Propagation of confidentiality setup', () => {
     checkAccess(docNameLocked5);
   });
 
-  it('login as kabinet and check access', () => {
+  // TODO reenable test to release documents with MeetingDocumentPublicationPlanningModalComponent
+  it.skip('login as kabinet and check access', () => {
     cy.login('Kabinet');
     cy.visitAgendaWithLink(agendaitem1Link);
     checkAccess(docName1, false);
@@ -136,7 +139,8 @@ context('Propagation of confidentiality setup', () => {
     checkAccess(docNameLocked5);
   });
 
-  it('login as overheid and check access', () => {
+  // TODO reenable test to release documents with MeetingDocumentPublicationPlanningModalComponent
+  it.skip('login as overheid and check access', () => {
     cy.login('Overheid');
     cy.visitAgendaWithLink(agendaitem1Link);
     checkAccess(docName1, false);
