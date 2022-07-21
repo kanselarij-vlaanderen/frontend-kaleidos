@@ -40,15 +40,15 @@ export default class MeetingEditMeetingComponent extends Component {
     super(...arguments);
     this.isNew = this.args.meeting.isNew;
 
-    this.meetingYear = this.args.meeting.plannedStart?.getFullYear() || this.currentYear;
-    this.startDate = this.args.meeting.plannedStart;
-    this.extraInfo = this.args.meeting.extraInfo;
-    this.numberRepresentation = this.args.meeting.numberRepresentation;
-
     this.initializeKind.perform();
     this.initializeMeetingNumber.perform();
     this.initializeMainMeeting.perform();
     this.initializePublicationModels.perform();
+
+    this.meetingYear = this.args.meeting.plannedStart?.getFullYear() || this.currentYear;
+    this.startDate = this.args.meeting.plannedStart;
+    this.extraInfo = this.args.meeting.extraInfo;
+    this.numberRepresentation = this.args.meeting.numberRepresentation;
   }
 
   get meetingKindPostfix() {
@@ -207,13 +207,13 @@ export default class MeetingEditMeetingComponent extends Component {
   @action
   selectMainMeeting(mainMeeting) {
     this.selectedMainMeeting = mainMeeting;
+    this.meetingNumber = mainMeeting.number;
     this.numberRepresentation = `${mainMeeting.numberRepresentation}-${this.meetingKindPostfix}`;
     this.startDate = mainMeeting.plannedStart;
     if (!this.isDisabledPlannedDocumentPublicationDate) {
       const nextBusinessDay = setMinutes(setHours(addBusinessDays(mainMeeting.startDate, 1), 14), 0);
       this.plannedDocumentPublicationDate = nextBusinessDay;
     }
-    this.meetingNumber = mainMeeting.number;
     this.extraInfo = mainMeeting.extraInfo;
   }
 
