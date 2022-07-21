@@ -51,10 +51,12 @@
       <Toolbar.Group @position="right" as |Group|>
         <Group.Item class="auk-o-flex">
           {{#if @piece.accessLevel}}
-            <AccessLevelPill
-              @accessLevel={{await @piece.accessLevel}}
-              @isDraft={{not (await (is-access-level-in-effect @piece))}}
-            />
+            {{#let (await @piece.accessLevel) as |accessLevel|}}
+              <AccessLevelPill
+                @accessLevel={{accessLevel}}
+                @isDraft={{not (await (is-access-level-in-effect accessLevel @piece))}}
+              />
+            {{/let}}
           {{/if}}
         </Group.Item>
       </Toolbar.Group>

@@ -15,7 +15,7 @@
       {{#unless this.loadPieceRelatedData.isRunning}}
         <AccessLevelPill
           @accessLevel={{this.accessLevel}}
-          @isDraft={{not (await (is-access-level-in-effect this.piece))}}
+          @isDraft={{not (await (is-access-level-in-effect this.accessLevel this.piece))}}
           @isEditable={{true}}
           @onChangeAccessLevel={{this.changeAccessLevel}}
           @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
