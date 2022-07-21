@@ -5,7 +5,9 @@ import { action } from '@ember/object';
 import moment from 'moment';
 import { restartableTask, timeout } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { getNextWorkday } from 'frontend-kaleidos/utils/date-util';
+import addBusinessDays from 'date-fns/addBusinessDays';
+import setHours from 'date-fns/setHours';
+import setMinutes from 'date-fns/setMinutes';
 
 export default class AgendasController extends Controller {
   queryParams = ['page', 'size', 'sort', 'filter'];
@@ -59,7 +61,7 @@ export default class AgendasController extends Controller {
       plannedStart,
       isFinal: false,
     });
-    const nextWorkday = getNextWorkday(plannedStart, 14, 0, 0, 0);
+    const nextBusinessDay = setMinutes(setHours(addBusinessDays(plannedStart, 1), 14), 0);
     this.publicationActivities = [
       this.store.createRecord('internal-decision-publication-activity', {
         meeting: this.newMeeting,
@@ -68,12 +70,12 @@ export default class AgendasController extends Controller {
       this.store.createRecord('internal-document-publication-activity', {
         meeting: this.newMeeting,
         status: this.defaultPublicationActivityStatus,
-        plannedDate: nextWorkday,
+        plannedDate: nextBusinessDay,
       }),
       this.store.createRecord('themis-publication-activity', {
         meeting: this.newMeeting,
         status: this.defaultPublicationActivityStatus,
-        plannedDate: nextWorkday,
+        plannedDate: nextBusinessDay,
         scope: [
           CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS,
           CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS,
