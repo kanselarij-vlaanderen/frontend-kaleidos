@@ -70,7 +70,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     const documentsNotYetReleased = [
       this.documentPublicationActivity?.status,
       this.themisPublicationActivity?.status,
-    ].some((status) => status?.get('uri') == CONSTANTS.RELEASE_STATUSES.PLANNED);
+    ].some((status) => status?.get('uri') != CONSTANTS.RELEASE_STATUSES.RELEASED);
 
     return mayManagePublication && this.args.meeting.isFinal && documentsNotYetReleased;
   }
@@ -104,7 +104,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     // Ensure we get fresh data to avoid concurrency conflicts
     this.decisionPublicationActivity = yield this.args.meeting.belongsTo('internalDecisionPublicationActivity').reload();
     yield this.decisionPublicationActivity.status; // used in get-functions above
-    this.documentPublicationActivity = yield this.args.meeting.belongsTo('internalDecisionPublicationActivity').reload();
+    this.documentPublicationActivity = yield this.args.meeting.belongsTo('internalDocumentPublicationActivity').reload();
     yield this.documentPublicationActivity.status; // used in get-functions above
     // Documents can be published multiple times to Themis.
     // We're only interested in the first (earliest) publication.

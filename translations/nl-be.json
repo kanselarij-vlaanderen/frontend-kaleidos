@@ -521,6 +521,7 @@
   "release-to-public": "Vrijgeven",
   "publish-to-public": "Publiceren",
   "retract-from-public": "Terugtrekken",
+  "confirm": "Bevestigen",
   "unable-to-relink-publication-flow": "De publicatie kan niet gekoppeld worden aan dit dossier",
   "no-accessLevel": "Nog geen openbaarheid",
   "faulty-agendaitems-message": "Er zijn agendapunten gevonden zonder procedurestap. Verwijder deze manueel om verder te gaan",

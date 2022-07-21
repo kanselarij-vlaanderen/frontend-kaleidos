@@ -87,9 +87,7 @@
     </Menu.Item>
   {{else if this.canPlanDocumentPublication}}
     <Menu.Divider />
-    {{! template-lint-disable no-invalid-interactive }}
     <Menu.Item
-      @skin="danger"
       data-test-agenda-header-release-documents
       {{on "click" this.openPlanDocumentPublicationModal}}
     >

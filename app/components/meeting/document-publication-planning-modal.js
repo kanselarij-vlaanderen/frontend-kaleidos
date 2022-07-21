@@ -10,28 +10,29 @@ import isPast from 'date-fns/isPast';
 
 export default class MeetingDocumentPublicationPlanningModalComponent extends Component {
   @service currentSession;
+  @service store;
 
   get estimatedThemisExecutionStart() {
-    return subMilliseconds(this.args.themisPublicationActivity, ESTIMATED_PUBLICATION_DURATION);
+    return subMilliseconds(this.args.themisPublicationActivity.plannedDate, ESTIMATED_PUBLICATION_DURATION);
   }
 
   get estimatedDocumentExecutionStart() {
-    return subMilliseconds(this.args.documentPublicationActivity, ESTIMATED_PUBLICATION_DURATION);
+    return subMilliseconds(this.args.documentPublicationActivity.plannedDate, ESTIMATED_PUBLICATION_DURATION);
   }
 
   get isDisabledThemisPublication() {
     const hasPermission = this.currentSession.may('manage-themis-publications');
-    const statusPromise = this.args.themisPublicationActivity;
+    const statusPromise = this.args.themisPublicationActivity.status;
     const alreadyReleased = statusPromise.get('uri') == CONSTANTS.RELEASE_STATUSES.RELEASED;
-    const lockedInReleaseWindow = statusPromise.get('uri') != CONSTANTS.RELEASE_STATUSES.CONFIRMED && isPast(this.estimatedThemisExecutionStart);
+    const lockedInReleaseWindow = statusPromise.get('uri') == CONSTANTS.RELEASE_STATUSES.CONFIRMED && isPast(this.estimatedThemisExecutionStart);
     return !hasPermission || alreadyReleased || lockedInReleaseWindow;
   }
 
-  get isDisabledInternalDocumentPublication() {
+  get isDisabledDocumentPublication() {
     const hasPermission = this.currentSession.may('manage-document-publications');
-    const statusPromise = this.args.documentPublicationActivity;
+    const statusPromise = this.args.documentPublicationActivity.status;
     const alreadyReleased = statusPromise.get('uri') == CONSTANTS.RELEASE_STATUSES.RELEASED;
-    const lockedInReleaseWindow = statusPromise.get('uri') != CONSTANTS.RELEASE_STATUSES.CONFIRMED && isPast(this.estimatedDocumentExecutionStart);
+    const lockedInReleaseWindow = statusPromise.get('uri') == CONSTANTS.RELEASE_STATUSES.CONFIRMED && isPast(this.estimatedDocumentExecutionStart);
     return !hasPermission || alreadyReleased || lockedInReleaseWindow;
   }
 
@@ -42,13 +43,13 @@ export default class MeetingDocumentPublicationPlanningModalComponent extends Co
   }
 
   @action
-  setInternalDocumentPublicationDateNow() {
-    this.args.documentPublicationDate.plannedDate = new Date();
+  setDocumentPublicationDateNow() {
+    this.args.documentPublicationActivity.plannedDate = new Date();
   }
 
   @action
-  setInternalDocumentPublicationDatePicker(date) {
-    this.args.documentPublicationDate.plannedDate = date;
+  setDocumentPublicationDatePicker(date) {
+    this.args.documentPublicationActivity.plannedDate = date;
   }
 
   @action
@@ -65,6 +66,7 @@ export default class MeetingDocumentPublicationPlanningModalComponent extends Co
   cancel() {
     this.args.documentPublicationActivity.rollbackAttributes();
     this.args.themisPublicationActivity.rollbackAttributes();
+    this.args.onCancel();
   }
 
   @task
@@ -72,7 +74,7 @@ export default class MeetingDocumentPublicationPlanningModalComponent extends Co
     const plannedActivities = [];
     const status = yield this.store.findRecordByUri('concept', CONSTANTS.RELEASE_STATUSES.CONFIRMED);
 
-    if (!this.isDisabledInternalDocumentPublication) {
+    if (!this.isDisabledDocumentPublication) {
       this.args.documentPublicationActivity.status = status;
       plannedActivities.push(this.args.documentPublicationActivity);
     }
