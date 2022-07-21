@@ -56,58 +56,42 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   }
 
   get canPublishInternalDecisions() {
-    if (this.loadPublicationActivities.isRunning) {
-      return false;
-    } else {
-      return (
-        this.currentSession.isEditor &&
-          this.args.meeting.isFinal &&
-          this.decisionPublicationActivity.status.get('uri') == CONSTANTS.RELEASE_STATUSES.PLANNED
-      );
-    }
+    return (
+      this.currentSession.isEditor &&
+        this.args.meeting.isFinal &&
+        this.decisionPublicationActivity?.status.get('uri') == CONSTANTS.RELEASE_STATUSES.PLANNED
+    );
   }
 
   get canPlanDocumentPublication() {
-    if (this.loadPublicationActivities.isRunning) {
-      return false;
-    } else {
-      // get('uri') will immediately resolve since we preloaded the statuses
-      // in loadPublicationActivities()
-      const documentsNotYetReleased = [
-        this.documentPublicationActivity.status,
-        this.themisPublicationActivity.status,
-      ].some((status) => status.get('uri') == CONSTANTS.RELEASE_STATUSES.PLANNED);
+    // get('uri') will immediately resolve since we preloaded the statuses
+    // in loadPublicationActivities()
+    const documentsNotYetReleased = [
+      this.documentPublicationActivity?.status,
+      this.themisPublicationActivity?.status,
+    ].some((status) => status?.get('uri') == CONSTANTS.RELEASE_STATUSES.PLANNED);
 
-      return (
-        this.currentSession.isEditor &&
-          this.args.meeting.isFinal &&
-          documentsNotYetReleased
-      );
-    }
+    return (
+      this.currentSession.isEditor &&
+        this.args.meeting.isFinal &&
+        documentsNotYetReleased
+    );
   }
 
   get canPublishThemis() {
-    if (this.loadPublicationActivities.isRunning) {
-      return false;
-    } else {
-      // get('uri') will immediately resolve since we preloaded the statuses
-      // in loadPublicationActivities()
-      const internalDocumentsAlreadyReleased = this.documentPublicationActivity.status.get('uri') == CONSTANTS.RELEASE_STATUSES.RELEASED;
+    // get('uri') will immediately resolve since we preloaded the statuses
+    // in loadPublicationActivities()
+    const documentsNotYetReleased = this.documentPublicationActivity?.status.get('uri') == CONSTANTS.RELEASE_STATUSES.RELEASED;
 
-      return this.currentSession.isEditor &&
-        this.args.meeting.isFinal &&
-        internalDocumentsAlreadyReleased;
-    }
+    return this.currentSession.isEditor &&
+      this.args.meeting.isFinal &&
+      documentsNotYetReleased;
   }
 
   get canUnpublishThemis() {
-    if (this.loadPublicationActivities.isRunning) {
-      return false;
-    } else {
-      return this.currentSession.isEditor &&
-        this.args.meeting.isFinal &&
-        this.latestThemisPublicationActivity != null;
-    }
+    return this.currentSession.isEditor &&
+      this.args.meeting.isFinal &&
+      this.latestThemisPublicationActivity != null;
   }
 
   @bind
@@ -121,9 +105,9 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @task
   *loadPublicationActivities() {
     // Ensure we get fresh data to avoid concurrency conflicts
-    this.decisionPublicationActivity = yield this.args.meeting.belongsTo('decisionPublicationActivity').reload();
+    this.decisionPublicationActivity = yield this.args.meeting.belongsTo('internalDecisionPublicationActivity').reload();
     yield this.decisionPublicationActivity.status; // used in get-functions above
-    this.documentPublicationActivity = yield this.args.meeting.belongsTo('documentPublicationActivity').reload();
+    this.documentPublicationActivity = yield this.args.meeting.belongsTo('internalDecisionPublicationActivity').reload();
     yield this.documentPublicationActivity.status; // used in get-functions above
     // Documents can be published multiple times to Themis.
     // We're only interested in the first (earliest) publication.
