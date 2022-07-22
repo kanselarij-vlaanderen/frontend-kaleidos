@@ -362,7 +362,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     }
     try {
       await approveAgendaAndCloseMeeting(this.args.currentAgenda);
-      yield timeout(1000); // timeout to await async cache invalidations in backend to be finished
+      await timeout(1000); // timeout to await async cache invalidations in backend to be finished
       // Data reloading
       await this.reloadAgenda(this.args.currentAgenda);
       await this.reloadAgendaitemsOfAgenda(this.args.currentAgenda);
@@ -401,7 +401,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     }
     try {
       const lastApprovedAgendaId = await closeMeeting(this.args.meeting);
-      yield timeout(1000); // timeout to await async cache invalidations in backend to be finished
+      await timeout(1000); // timeout to await async cache invalidations in backend to be finished
       const lastApprovedAgenda = await this.store.findRecord('agenda', lastApprovedAgendaId);
       // Data reloading
       await this.reloadAgenda(lastApprovedAgenda);
