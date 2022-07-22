@@ -618,14 +618,14 @@ function reopenPreviousAgenda() {
  */
 function releaseDecisions() {
   cy.log('releaseDecisions');
-  cy.intercept('PATCH', '/meetings/**').as('patchMeetings');
+  cy.intercept('PATCH', '/internal-decision-publication-activities/**').as('patchDecisionPubActivity');
 
   cy.get(agenda.agendaHeader.showOptions).click();
   cy.get(agenda.agendaHeader.actions.releaseDecisions).click({
     force: true,
   });
   cy.get(agenda.agendaHeader.confirm.releaseDecisions).click();
-  cy.wait('@patchMeetings', {
+  cy.wait('@patchDecisionPubActivity', {
     timeout: 20000,
   });
   cy.log('/releaseDecisions');
@@ -639,12 +639,12 @@ function releaseDecisions() {
  */
 function releaseDocuments() {
   cy.log('releaseDocuments');
-  cy.intercept('PATCH', '/meetings/**').as('patchMeetings');
+  cy.intercept('PATCH', '/internal-document-publication-activity/**').as('patchDocPubActivity');
 
   cy.get(agenda.agendaHeader.showOptions).click();
   cy.get(agenda.agendaHeader.actions.releaseDocuments).click();
   cy.get(agenda.agendaHeader.confirm.releaseDocuments).click();
-  cy.wait('@patchMeetings', {
+  cy.wait('@patchDocPubActivity', {
     timeout: 20000,
   });
   cy.log('/releaseDocuments');

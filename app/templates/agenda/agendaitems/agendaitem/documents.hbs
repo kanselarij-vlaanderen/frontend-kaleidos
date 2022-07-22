@@ -38,24 +38,25 @@
     {{/if}}
   </Toolbar.Group>
 </Auk::Toolbar>
-
-{{#if this.governmentCanViewDocuments}}
-  <Documents::DocumentCardList
-    @pieces={{this.model.pieces}}
-    @highlightedPieces={{this.newAgendaitemPieces}}
-    @onOpenUploadModal={{perform this.ensureFreshData}}
-    @onAddPiece={{perform this.addPiece}}
-    @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
-    @didDeleteContainer={{this.refresh}}
-    @hasMarkForSignature={{this.isShownSignatureMarker}}
-    @markForSignature={{this.markForSignature}}
-    @unmarkForSignature={{this.unmarkForSignature}}
-  />
-{{else}}
-  <div class="auk-u-mt-2">
-    <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
-  </div>
-{{/if}}
+{{#unless this.loadData.isRunning}}
+  {{#if this.documentsAreVisible}}
+    <Documents::DocumentCardList
+      @pieces={{this.model.pieces}}
+      @highlightedPieces={{this.newAgendaitemPieces}}
+      @onOpenUploadModal={{perform this.ensureFreshData}}
+      @onAddPiece={{perform this.addPiece}}
+      @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
+      @didDeleteContainer={{this.refresh}}
+      @hasMarkForSignature={{this.isShownSignatureMarker}}
+      @markForSignature={{this.markForSignature}}
+      @unmarkForSignature={{this.unmarkForSignature}}
+    />
+  {{else}}
+    <div class="auk-u-mt-2">
+      <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
+    </div>
+  {{/if}}
+{{/unless}}
 {{#if this.currentSession.isEditor}}
   <div class="auk-u-mb-4">
     <Auk::Button

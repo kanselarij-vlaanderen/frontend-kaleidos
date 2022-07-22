@@ -11,8 +11,8 @@ import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import VrNotulenName,
 { compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
-import VrLegacyDocumentName,
-{ compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
+import VrLegacyDocumentName, { compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class AgendaOverviewItem extends AgendaSidebarItem {
   /**
@@ -38,16 +38,14 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   @tracked newAgendaitemDocuments;
 
   @tracked isShowingAllDocuments = false;
+  @tracked documentsAreVisible = false;
 
   constructor() {
     super(...arguments);
     this.agendaitemDocuments = [];
     this.newAgendaitemDocuments = [];
     this.loadDocuments.perform();
-  }
-
-  get documentsAreReleased() {
-    return this.args.meeting.releasedDocuments < new Date();
+    this.loadDocumentsPublicationStatus.perform();
   }
 
   get documentListSize() {
@@ -68,6 +66,20 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   @task
   *setFormallyOkStatus(status) {
     yield this.args.setFormallyOkAction(status.uri);
+  }
+
+  @task
+  *loadDocumentsPublicationStatus() {
+    // Additional failsafe check on document visibility. Strictly speaking this check
+    // is not necessary since documents are not propagated by Yggdrasil if they
+    // should not be visible yet for a specific profile.
+    if (this.currentSession.isOverheid) {
+      const documentPublicationActivity = yield this.args.meeting.internalDocumentPublicationActivity;
+      const documentPublicationStatus = yield documentPublicationActivity.status;
+      this.documentsAreVisible = documentPublicationStatus == CONSTANTS.RELEASE_STATUSES.RELEASED;
+    } else {
+      this.documentsAreVisible = true;
+    }
   }
 
   @task

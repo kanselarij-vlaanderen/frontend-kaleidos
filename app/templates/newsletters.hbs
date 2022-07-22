@@ -1,5 +1,15 @@
 {{page-title (t "newsletter")}}
-<Newsletter::NewsletterHeader />
+<Auk::Navbar @skin="gray-100">
+  <Auk::Toolbar @auto={{true}}>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
+        <h1 class="auk-toolbar__title" data-test-newsletter-header-title>
+          {{t "newsletter"}}
+        </h1>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
+</Auk::Navbar>
 {{#if (gt this.model.length 0)}}
   <div class="auk-u-maximize-height auk-scroll-wrapper">
     <div class="auk-scroll-wrapper__body">

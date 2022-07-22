@@ -5,6 +5,9 @@ import { action } from '@ember/object';
 import moment from 'moment';
 import { restartableTask, timeout } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import addBusinessDays from 'date-fns/addBusinessDays';
+import setHours from 'date-fns/setHours';
+import setMinutes from 'date-fns/setMinutes';
 
 export default class AgendasController extends Controller {
   queryParams = ['page', 'size', 'sort', 'filter'];
@@ -14,7 +17,9 @@ export default class AgendasController extends Controller {
   @service router;
   @service newsletterService;
 
+  defaultPublicationActivityStatus;
   @tracked newMeeting;
+  @tracked publicationActivities = [];
 
   @tracked isLoadingModel = false;
   @tracked isCreatingNewSession = false;
@@ -50,14 +55,42 @@ export default class AgendasController extends Controller {
 
   @action
   openNewSessionModal() {
+    const now = new Date();
+    const plannedStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0, 0);
+    this.newMeeting = this.store.createRecord('meeting', {
+      plannedStart,
+      isFinal: false,
+    });
+    const nextBusinessDay = setMinutes(setHours(addBusinessDays(plannedStart, 1), 14), 0);
+    this.publicationActivities = [
+      this.store.createRecord('internal-decision-publication-activity', {
+        meeting: this.newMeeting,
+        status: this.defaultPublicationActivityStatus,
+      }),
+      this.store.createRecord('internal-document-publication-activity', {
+        meeting: this.newMeeting,
+        status: this.defaultPublicationActivityStatus,
+        plannedDate: nextBusinessDay,
+      }),
+      this.store.createRecord('themis-publication-activity', {
+        meeting: this.newMeeting,
+        status: this.defaultPublicationActivityStatus,
+        plannedDate: nextBusinessDay,
+        scope: [
+          CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS,
+          CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS,
+        ],
+      }),
+    ];
+
     this.isCreatingNewSession = true;
-    this.newMeeting = this.store.createRecord('meeting', { isFinal: false });
   }
 
   @action
   closeNewSessionModal() {
     this.isCreatingNewSession = false;
     this.newMeeting.deleteRecord();
+    this.publicationActivities.forEach((activity) => activity.deleteRecord());
   }
 
   @action

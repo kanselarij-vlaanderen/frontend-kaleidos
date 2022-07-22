@@ -20,3 +20,6 @@ export const PUBLICATION_EMAIL = {
 };
 
 export const KALEIDOS_START_DATE = new Date(2019, 9 /* =october */, 1);
+
+// Number of milliseconds it takes to release a publication via Yggdrasil/Themis
+export const ESTIMATED_PUBLICATION_DURATION = 30 * 60 * 1000;

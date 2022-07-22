@@ -29,7 +29,7 @@
         </Toolbar.Group>
       </Auk::Toolbar>
 
-      {{#if this.governmentCanViewDocuments}}
+      {{#if this.documentsAreVisible}}
         <Documents::DocumentCardList
           @pieces={{this.model.pieces}}
           @onAddPiece={{perform this.addPiece}}

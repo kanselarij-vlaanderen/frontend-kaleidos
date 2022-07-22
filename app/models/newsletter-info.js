@@ -14,8 +14,6 @@ export default ModelWithModifier.extend({
   mandateeProposal: attr('string'),
   finished: attr('boolean'),
   inNewsletter: attr('boolean'),
-  publicationDate: attr('datetime'),
-  publicationDocDate: attr('datetime'),
   remark: attr('string'),
 
   agendaItemTreatment: belongsTo('agenda-item-treatment'),

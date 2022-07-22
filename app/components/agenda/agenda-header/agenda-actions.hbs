@@ -76,23 +76,22 @@
       {{t "approve-all-agendaitems"}}
     </Menu.Item>
   {{/if}}
-  {{#if this.canReleaseDecisions}}
+  {{#if this.canPublishDecisions}}
     <Menu.Divider />
     <Menu.Item
       @skin="danger"
       data-test-agenda-header-release-decisions
-      {{on "click" this.openConfirmReleaseDecisions}}
+      {{on "click" this.openConfirmPublishDecisions}}
     >
       {{t "agenda-release-decisions"}}
     </Menu.Item>
-  {{else if this.canReleaseDocuments}}
-    <Menu.Divider />
+  {{/if}}
+  {{#if this.canPlanDocumentPublication}}
     <Menu.Item
-      @skin="danger"
       data-test-agenda-header-release-documents
-      {{on "click" this.openConfirmReleaseDocuments}}
+      {{on "click" this.openPlanDocumentPublicationModal}}
     >
-      {{t "agenda-release-documents"}}
+      {{t "agenda-publish-planned"}}
     </Menu.Item>
   {{/if}}
   {{#if this.canPublishThemis}}
@@ -100,11 +99,12 @@
     <Menu.Item {{on "click" this.openConfirmPublishThemis}}>
       {{t "publish-to-web"}}
     </Menu.Item>
-    {{#if this.isAlreadyPublished}}
-      <Menu.Item @skin="danger" {{on "click" this.openConfirmUnpublishThemis}}>
-        {{t "unpublish-from-web"}}
-      </Menu.Item>
-    {{/if}}
+  {{/if}}
+  {{#if this.canUnpublishThemis}}
+    <Menu.Divider />
+    <Menu.Item @skin="danger" {{on "click" this.openConfirmUnpublishThemis}}>
+      {{t "unpublish-from-web"}}
+    </Menu.Item>
   {{/if}}
 </Auk::DropdownMenu>
 
@@ -156,20 +156,20 @@
   </Auk::Modal>
 {{/if}}
 
-{{#if this.showConfirmReleaseDecisions}}
+{{#if this.showConfirmPublishDecisions}}
   <Auk::Modal @size="small">
     <Auk::Modal::Header
       @title={{t "agenda-release-decisions"}}
-      @onClose={{this.cancelReleaseDecisions}}
+      @onClose={{this.cancelPublishDecisions}}
     />
     <Auk::Modal::Body>
       <p>{{t "release-decisions-message"}}</p>
     </Auk::Modal::Body>
-    <Auk::Modal::Footer @onCancel={{this.cancelReleaseDecisions}}>
+    <Auk::Modal::Footer @onCancel={{this.cancelPublishDecisions}}>
       <Auk::Button
         data-test-agenda-header-release-decisions-confirm
         @skin="primary"
-        {{on "click" this.releaseDecisions}}
+        {{on "click" this.publishDecisions}}
       >
         {{t "release-to-public"}}
       </Auk::Button>
@@ -177,25 +177,13 @@
   </Auk::Modal>
 {{/if}}
 
-{{#if this.showConfirmReleaseDocuments}}
-  <Auk::Modal @size="small">
-    <Auk::Modal::Header
-      @title={{t "agenda-release-documents"}}
-      @onClose={{this.cancelReleaseDocuments}}
-    />
-    <Auk::Modal::Body>
-      <p>{{t "release-documents-message"}}</p>
-    </Auk::Modal::Body>
-    <Auk::Modal::Footer @onCancel={{this.cancelReleaseDocuments}}>
-      <Auk::Button
-        data-test-agenda-header-release-documents-confirm
-        @skin="primary"
-        {{on "click" this.releaseDocuments}}
-      >
-        {{t "release-to-public"}}
-      </Auk::Button>
-    </Auk::Modal::Footer>
-  </Auk::Modal>
+{{#if this.showPlanDocumentPublicationModal}}
+  <Meeting::DocumentPublicationPlanningModal
+    @documentPublicationActivity={{this.documentPublicationActivity}}
+    @themisPublicationActivity={{this.themisPublicationActivity}}
+    @onCancel={{this.cancelPlanDocumentPublication}}
+    @onSave={{perform this.planDocumentPublication}}
+  />
 {{/if}}
 
 {{#if this.showConfirmPublishThemis}}

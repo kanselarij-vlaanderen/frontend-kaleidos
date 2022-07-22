@@ -32,15 +32,19 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @tracked isAddingAgendaitems = false;
   @tracked isEditingMeeting = false;
   @tracked showConfirmApprovingAllAgendaitems = false;
-  @tracked showConfirmReleaseDecisions = false;
-  @tracked showConfirmReleaseDocuments = false;
+  @tracked showConfirmPublishDecisions = false;
+  @tracked showPlanDocumentPublicationModal = false;
   @tracked showConfirmPublishThemis = false;
   @tracked showConfirmUnpublishThemis = false;
-  @tracked latestPublicationActivity;
+
+  @tracked decisionPublicationActivity;
+  @tracked documentPublicationActivity;
+  @tracked themisPublicationActivity;
+  @tracked latestThemisPublicationActivity;
 
   constructor() {
     super(...arguments);
-    this.loadLatestPublicationActivity.perform();
+    this.loadPublicationActivities.perform();
   }
 
   get showPrintButton() {
@@ -51,32 +55,40 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     return this.currentSession.isEditor && this.args.currentAgenda.status.get('isDesignAgenda');
   }
 
-  get canReleaseDecisions() {
+  get canPublishDecisions() {
     return (
-      this.currentSession.isEditor &&
-      this.args.meeting.isFinal &&
-      !this.args.meeting.releasedDecisions
+      this.currentSession.may('manage-decision-publications') &&
+        this.args.meeting.isFinal &&
+        this.decisionPublicationActivity?.status.get('uri') == CONSTANTS.RELEASE_STATUSES.PLANNED
     );
   }
 
-  get canReleaseDocuments() {
-    return (
-      this.currentSession.isEditor &&
-      this.args.meeting.isFinal &&
-      !this.args.meeting.releasedDocuments
-    );
+  get canPlanDocumentPublication() {
+    const mayManagePublication = this.currentSession.may('manage-document-publications') || this.currentSession.may('manage-themis-publications');
+    // get('uri') will immediately resolve since we preloaded the statuses
+    // in loadPublicationActivities()
+    const documentsNotYetReleased = [
+      this.documentPublicationActivity?.status,
+      this.themisPublicationActivity?.status,
+    ].some((status) => status?.get('uri') != CONSTANTS.RELEASE_STATUSES.RELEASED);
+
+    return mayManagePublication && this.args.meeting.isFinal && documentsNotYetReleased;
   }
 
   get canPublishThemis() {
-    return (
-      this.currentSession.isEditor &&
+    // get('uri') will immediately resolve since we preloaded the statuses
+    // in loadPublicationActivities()
+    const documentsAlreadyReleased = this.documentPublicationActivity?.status.get('uri') == CONSTANTS.RELEASE_STATUSES.RELEASED;
+
+    return this.currentSession.may('manage-themis-publications') &&
       this.args.meeting.isFinal &&
-      this.args.meeting.releasedDocuments
-    );
+      documentsAlreadyReleased;
   }
 
-  get isAlreadyPublished() {
-    return this.latestPublicationActivity != null;
+  get canUnpublishThemis() {
+    return this.currentSession.may('manage-themis-publications') &&
+      this.args.meeting.isFinal &&
+      this.latestThemisPublicationActivity != null;
   }
 
   @bind
@@ -88,14 +100,26 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   }
 
   @task
-  *loadLatestPublicationActivity() {
-    this.latestPublicationActivity = yield this.store.queryOne(
-      'themis-publication-activity',
-      {
-        sort: '-start-date',
-        'filter[meeting][:uri:]': this.args.meeting.uri,
-      }
-    );
+  *loadPublicationActivities() {
+    // Ensure we get fresh data to avoid concurrency conflicts
+    this.decisionPublicationActivity = yield this.args.meeting.belongsTo('internalDecisionPublicationActivity').reload();
+    yield this.decisionPublicationActivity.status; // used in get-functions above
+    this.documentPublicationActivity = yield this.args.meeting.belongsTo('internalDocumentPublicationActivity').reload();
+    yield this.documentPublicationActivity.status; // used in get-functions above
+    // Documents can be published multiple times to Themis.
+    // We're only interested in the first (earliest) publication.
+    this.themisPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
+      'filter[meeting][:uri:]': this.args.meeting.uri,
+      'filter[scope]': CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS,
+      sort: 'planned-date',
+      include: 'status'
+    });
+
+    this.latestThemisPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
+      'filter[meeting][:uri:]': this.args.meeting.uri,
+      'filter[status][:uri:]': CONSTANTS.RELEASE_STATUSES.RELEASED,
+      sort: '-start-date',
+    });
   }
 
   /**
@@ -124,19 +148,35 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     }
   }
 
+  @action
+  async publishDecisions() {
+    const status = await this.store.findRecordByUri('concept', CONSTANTS.RELEASE_STATUSES.RELEASED);
+    this.showConfirmPublishDecisions = false;
+    this.decisionPublicationActivity.startDate = new Date();
+    this.decisionPublicationActivity.status = status;
+    await this.decisionPublicationActivity.save();
+  }
+
+  @task
+  *planDocumentPublication(plannedActivities) {
+    yield Promise.all(plannedActivities.map((activity) => activity.save()));
+    this.showPlanDocumentPublicationModal = false;
+  }
+
   @task
   *publishThemis(scope) {
     try {
-      const themisPublicationActivity = this.store.createRecord(
-        'themis-publication-activity',
-        {
-          startDate: new Date(),
-          meeting: this.args.meeting,
-          scope,
-        }
-      );
+      const status = yield this.store.findRecordByUri('concept', CONSTANTS.RELEASE_STATUSES.RELEASED);
+      const now = new Date();
+      const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
+        plannedDate: now,
+        startDate: now,
+        meeting: this.args.meeting,
+        scope,
+        status,
+      });
       yield themisPublicationActivity.save();
-      yield this.loadLatestPublicationActivity.perform();
+      yield this.loadPublicationActivities.perform();
       this.toaster.success(this.intl.t('success-publish-to-web'));
     } catch (e) {
       this.toaster.error(
@@ -147,28 +187,20 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     this.showConfirmPublishThemis = false;
   }
 
-  @action
-  openConfirmUnpublishThemis() {
-    this.showConfirmUnpublishThemis = true;
-  }
-
-  @action
-  cancelUnpublishThemis() {
-    this.showConfirmUnpublishThemis = false;
-  }
-
   @task
   *unpublishThemis(scope) {
     try {
-      const themisPublicationActivity = this.store.createRecord(
-        'themis-publication-activity',
-        {
-          startDate: new Date(),
-          meeting: this.args.meeting,
-          scope,
-        }
-      );
+      const status = yield this.store.findRecordByUri('concept', CONSTANTS.RELEASE_STATUSES.RELEASED);
+      const now = new Date();
+      const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
+        plannedDate: now,
+        startDate: now,
+        meeting: this.args.meeting,
+        scope,
+        status,
+      });
       yield themisPublicationActivity.save();
+      yield this.loadPublicationActivities.perform();
       this.toaster.success(this.intl.t('success-unpublish-from-web'));
     } catch (e) {
       this.toaster.error(
@@ -265,37 +297,33 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   }
 
   @action
-  openConfirmReleaseDecisions() {
-    this.showConfirmReleaseDecisions = true;
+  openConfirmUnpublishThemis() {
+    this.showConfirmUnpublishThemis = true;
   }
 
   @action
-  cancelReleaseDecisions() {
-    this.showConfirmReleaseDecisions = false;
+  cancelUnpublishThemis() {
+    this.showConfirmUnpublishThemis = false;
   }
 
   @action
-  releaseDecisions() {
-    this.showConfirmReleaseDecisions = false;
-    this.args.meeting.releasedDecisions = new Date();
-    this.args.meeting.save();
+  openConfirmPublishDecisions() {
+    this.showConfirmPublishDecisions = true;
   }
 
   @action
-  openConfirmReleaseDocuments() {
-    this.showConfirmReleaseDocuments = true;
+  cancelPublishDecisions() {
+    this.showConfirmPublishDecisions = false;
   }
 
   @action
-  cancelReleaseDocuments() {
-    this.showConfirmReleaseDocuments = false;
+  openPlanDocumentPublicationModal() {
+    this.showPlanDocumentPublicationModal = true;
   }
 
   @action
-  releaseDocuments() {
-    this.showConfirmReleaseDocuments = false;
-    this.args.meeting.releasedDocuments = new Date();
-    this.args.meeting.save();
+  cancelPlanDocumentPublication() {
+    this.showPlanDocumentPublicationModal = false;
   }
 
   @action
