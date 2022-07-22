@@ -16,6 +16,10 @@ Router.map(function() {
   this.route('login', { path: '/aanmelden', });
   this.route('accountless-users', { path: '/onbevoegde-gebruiker', });
 
+  // Redirect routes
+  this.route('agendaitem', { path: '/agendapunten/:agendaitem_id' });
+  this.route('meeting', { path: '/vergaderingen/:meeting_id' });
+
   this.route('agendas', { path: '/overzicht', });
   this.route('agenda', { path: '/vergadering/:meeting_id/agenda/:agenda_id', }, function() {
     this.route('print', { path: '/afdrukken', });
@@ -31,8 +35,6 @@ Router.map(function() {
     this.route('compare', { path: '/vergelijken', });
     this.route('documents', { path: '/documenten', });
   });
-
-  this.route('agendaitem', { path: '/agendapunten/:agendaitem_id' }); // redirect route
 
   this.route('cases', { path: '/dossiers', }, function() {
     this.route('case', { path: ':id', }, function() {
