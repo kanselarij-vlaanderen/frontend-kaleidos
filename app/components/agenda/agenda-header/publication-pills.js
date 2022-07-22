@@ -15,7 +15,7 @@ export default class AgendaAgendaHeaderPublicationPillsComponent extends Compone
 
   constructor() {
     super(...arguments);
-    this.loadPublicationActivities.perform();
+    this.loadInitialData.perform();
   }
 
   willDestroy() {
@@ -53,6 +53,13 @@ export default class AgendaAgendaHeaderPublicationPillsComponent extends Compone
 
   schedulePublicationActivitiesRefresh() {
     this.scheduledRefresh = later(this, () => this.loadPublicationActivities.perform(), PUBLICATION_ACTIVITY_REFRESH_INTERVAL_MS);
+  }
+
+  // Seperate task to make a distinction in the template
+  // between the initial data loading  and subsequent (background) data reloads
+  @task
+  *loadInitialData() {
+    yield this.loadPublicationActivities.perform();
   }
 
   @task
