@@ -72,6 +72,7 @@ export default class AgendaAgendaHeaderPublicationPillsComponent extends Compone
     this.latestThemisPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
       'filter[meeting][:uri:]': this.args.meeting.uri,
       sort: '-start-date',
+      include: 'status',
     });
 
     this.schedulePublicationActivitiesRefresh();
