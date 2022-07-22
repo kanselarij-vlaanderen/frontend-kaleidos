@@ -618,7 +618,7 @@ function reopenPreviousAgenda() {
  */
 function releaseDecisions() {
   cy.log('releaseDecisions');
-  cy.intercept('PATCH', '/internal-decision-publication-activity/**').as('patchDecisionPubActivity');
+  cy.intercept('PATCH', '/internal-decision-publication-activities/**').as('patchDecisionPubActivity');
 
   cy.get(agenda.agendaHeader.showOptions).click();
   cy.get(agenda.agendaHeader.actions.releaseDecisions).click({
