@@ -52,10 +52,7 @@ export default class MeetingEditMeetingComponent extends Component {
   }
 
   get meetingKindPostfix() {
-    if (this.selectedKind?.uri === CONSTANTS.MEETING_KINDS.PVV) {
-      return 'VV';
-    }
-    return '';
+    return this.selectedKind?.uri === CONSTANTS.MEETING_KINDS.PVV ? 'VV' : '';
   }
 
   get numberRepresentation() {
