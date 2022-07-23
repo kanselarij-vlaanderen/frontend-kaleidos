@@ -14,7 +14,7 @@ export default class PublicationsOverviewTranslationRoute extends PublicationsOv
   tableConfigStorageKey = "publication-table.translation";
 
   beforeModel() {
-    super.beforeModel(...arguments)
+    super.beforeModel(...arguments);
     this.filter = {
       status: {
         ':uri:': CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_REQUESTED,
