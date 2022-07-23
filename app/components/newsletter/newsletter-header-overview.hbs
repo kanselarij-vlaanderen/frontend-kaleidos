@@ -137,6 +137,7 @@
 {{/if}}
 {{#if this.showConfirmPublishThemis}}
   <ThemisPublications::PublishConfirmationModal
+    @scope={{this.themisPublicationScopes}}
     @onCancel={{this.cancelPublishThemis}}
     @onConfirm={{perform this.publishThemis}}
   />
@@ -150,6 +151,7 @@
 {{#if this.showConfirmPublishAll}}
   <ThemisPublications::PublishConfirmationModal
     @title={{t "send-newsitem-to-all"}}
+    @scope={{this.themisPublicationScopes}}
     @onCancel={{this.cancelPublishAll}}
     @onConfirm={{perform this.publishToAll}}
   />
