@@ -23,17 +23,11 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
   case;
   subcase;
   defaultAccessLevel;
+  documentsAreVisible;
   @tracked isOpenBatchDetailsModal = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked defaultAccessLevel;
   @tracked newPieces = A([]);
-
-  get governmentCanViewDocuments() {
-    const isOverheid = this.currentSession.isOverheid;
-
-    const documentsAreReleased = this.subcase.get('requestedForMeeting.releasedDocuments'); // TODO: async ...?
-    return !(isOverheid && !documentsAreReleased);
-  }
 
   @action
   async openPieceUploadModal() {

@@ -15,8 +15,6 @@ export default class Meeting extends Model {
   @attr numberRepresentation;
   @attr('boolean') isFinal;
   @attr extraInfo;
-  @attr('datetime') releasedDocuments;
-  @attr('datetime') releasedDecisions;
 
   @hasMany('agenda', {
     inverse: null, serialize: false,
@@ -34,6 +32,13 @@ export default class Meeting extends Model {
   @belongsTo('agenda', {
     inverse: null,
   }) agenda;
+
+  @belongsTo('internal-decision-publication-activity') internalDecisionPublicationActivity;
+  @belongsTo('internal-document-publication-activity') internalDocumentPublicationActivity;
+  @hasMany('themis-publication-activity',  {
+    serialize: false,
+  }) themisPublicationActivities;
+
 
   get isPreKaleidos() {
     return this.plannedStart < KALEIDOS_START_DATE;

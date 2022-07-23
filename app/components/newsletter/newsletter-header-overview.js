@@ -4,6 +4,7 @@ import moment from 'moment';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /**
  * @argument {Meeting} meeting
@@ -32,6 +33,23 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     this.loadLatestPublicationActivity.perform();
   }
 
+  get mayManageThemis() {
+    return this.currentSession.may('manage-themis-publications');
+  }
+
+  // Scope of the Themis publication from the newsletter-side depends on the most recent publication.
+  // - if it's the first publication, only newsitems are published
+  // - if latest publication includes documents, republication should also include documents
+  get themisPublicationScopes() {
+    const scope = [ CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS ];
+    const latestPublicationIncludesDocuments = this.latestPublicationActivity?.scope.includes(CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS);
+    if (latestPublicationIncludesDocuments) {
+      scope.push(CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS);
+    }
+
+    return scope;
+  }
+
   @task
   *loadMailCampaign() {
     this.mailCampaign = yield this.args.meeting.mailCampaign;
@@ -40,8 +58,9 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @task
   *loadLatestPublicationActivity() {
     this.latestPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
-      sort: '-start-date',
       'filter[meeting][:uri:]': this.args.meeting.uri,
+      'filter[status][:uri:]': CONSTANTS.RELEASE_STATUSES.RELEASED,
+      sort: '-start-date',
     });
   }
 
@@ -50,7 +69,8 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   }
 
   get isAlreadyPublished() {
-    return this.latestPublicationActivity != null;
+    return this.latestPublicationActivity != null &&
+      this.latestPublicationActivity.scope.includes(CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS);
   }
 
   @action
@@ -105,11 +125,15 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   @task
   *publishThemis(scope) {
+    const status = yield this.store.findRecordByUri('concept', CONSTANTS.RELEASE_STATUSES.RELEASED);
+    const now = new Date();
     try {
       const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
-        startDate: new Date(),
+        plannedDate: now,
+        startDate: now,
         meeting: this.args.meeting,
-        scope
+        scope,
+        status
       });
       yield themisPublicationActivity.save();
       yield this.loadLatestPublicationActivity.perform();
@@ -125,13 +149,18 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   @task
   *unpublishThemis(scope) {
+    const status = yield this.store.findRecordByUri('concept', CONSTANTS.RELEASE_STATUSES.RELEASED);
+    const now = new Date();
     try {
       const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
-        startDate: new Date(),
+        plannedDate: now,
+        startDate: now,
         meeting: this.args.meeting,
-        scope
+        scope,
+        status
       });
       yield themisPublicationActivity.save();
+      this.loadLatestPublicationActivity.perform();
       this.toaster.success(this.intl.t('success-unpublish-from-web'));
     } catch(e) {
       this.toaster.error(
@@ -149,7 +178,9 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     // Specific example: no newsletters (for notes) present! we need at least one note to avoid an empty mail/belga
     // A different example is a note without themes, valid for belga but not for mailchimp (no recipients)
     yield this.publishToBelga.perform();
-    yield this.publishThemis.perform(scope);
+    if (this.currentSession.may('manage-themis-publications')) {
+      yield this.publishThemis.perform(scope);
+    }
 
     this.showConfirmPublishAll = false;
   }

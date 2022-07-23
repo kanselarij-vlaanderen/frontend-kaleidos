@@ -21,26 +21,17 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service agendaService;
   @service signatureService;
 
+  documentsAreVisible;
   defaultAccessLevel;
   @tracked isOpenBatchDetailsModal = false;
   @tracked isOpenPieceUploadModal = false;
+  @tracked isOpenPublicationModal = false;
   @tracked newPieces = A([]);
   @tracked newAgendaitemPieces;
   @tracked agendaitem;
   @tracked currentAgenda;
   @tracked previousAgenda;
   @tracked agendaActivity;
-
-  @tracked isOpenPublicationModal = false;
-
-  get governmentCanViewDocuments() {
-    const isOverheid = this.currentSession.isOverheid;
-
-    const documentsAreReleased = this.agendaitem.get(
-      'agenda.createdFor.releasedDocuments'
-    ); // TODO async ...?
-    return !(isOverheid && !documentsAreReleased);
-  }
 
   get isShownOpenPublicationModal() {
     const mayPublish = this.currentSession.may('manage-publication-flows');

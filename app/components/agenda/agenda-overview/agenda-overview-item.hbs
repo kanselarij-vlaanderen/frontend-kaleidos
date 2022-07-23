@@ -93,7 +93,7 @@
           {{/if}}
         {{/if}}
       </div>
-      {{#if (or this.currentSession.isEditor this.documentsAreReleased)}}
+      {{#if this.documentsAreVisible}}
         <div class="auk-u-mt-4">
           <Documents::DocumentBadgeList
             @pieces={{this.limitedAgendaitemDocuments}}

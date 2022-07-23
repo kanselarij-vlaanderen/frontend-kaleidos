@@ -68,10 +68,12 @@
               <Menu.Item {{on "click" this.openConfirmPublishBelga}}>
                 {{t "send-newsitem-to-belga"}}
               </Menu.Item>
-              <Menu.Item {{on "click" this.openConfirmPublishThemis}}>
-                {{t "send-newsitem-to-web"}}
-              </Menu.Item>
             {{/if}}
+          {{/if}}
+          {{#if this.mayManageThemis}}
+            <Menu.Item {{on "click" this.openConfirmPublishThemis}}>
+              {{t "send-newsitem-to-web"}}
+            </Menu.Item>
           {{/if}}
           {{#if this.shouldShowPrintButton}}
             <Menu.Divider />
@@ -96,6 +98,8 @@
                 {{t "delete-campaign"}}
               </Menu.Item>
             {{/if}}
+          {{/if}}
+          {{#if this.mayManageThemis}}
             {{#if this.isAlreadyPublished}}
               <Menu.Divider />
               <Menu.Item @skin="danger" {{on "click" this.openConfirmUnpublishThemis}}>
@@ -133,6 +137,7 @@
 {{/if}}
 {{#if this.showConfirmPublishThemis}}
   <ThemisPublications::PublishConfirmationModal
+    @scope={{this.themisPublicationScopes}}
     @onCancel={{this.cancelPublishThemis}}
     @onConfirm={{perform this.publishThemis}}
   />
@@ -146,6 +151,7 @@
 {{#if this.showConfirmPublishAll}}
   <ThemisPublications::PublishConfirmationModal
     @title={{t "send-newsitem-to-all"}}
+    @scope={{this.themisPublicationScopes}}
     @onCancel={{this.cancelPublishAll}}
     @onConfirm={{perform this.publishToAll}}
   />

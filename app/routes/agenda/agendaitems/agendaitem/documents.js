@@ -12,6 +12,7 @@ import VrLegacyDocumentName,
 
 export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
   @service store;
+  @service currentSession;
 
   async model() {
     const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
@@ -23,10 +24,10 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     });
     pieces = pieces.toArray();
     let sortedPieces;
-    const meeting = this.modelFor('agenda').meeting;
+    this.meeting = this.modelFor('agenda').meeting;
     if (agendaitem.isApproval) {
       sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
-    } else if (meeting.isPreKaleidos) {
+    } else if (this.meeting.isPreKaleidos) {
       sortedPieces = sortPieces(pieces, VrLegacyDocumentName, compareLegacyDocuments);
     } else {
       sortedPieces = sortPieces(pieces);
@@ -50,6 +51,17 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
         ? CONSTANTS.ACCESS_LEVELS.MINISTERRAAD
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
+
+    // Additional failsafe check on document visibility. Strictly speaking this check
+    // is not necessary since documents are not propagated by Yggdrasil if they
+    // should not be visible yet for a specific profile.
+    if (this.currentSession.isOverheid) {
+      const documentPublicationActivity = await this.meeting.internalDocumentPublicationActivity;
+      const documentPublicationStatus = await documentPublicationActivity.status;
+      this.documentsAreVisible = documentPublicationStatus == CONSTANTS.RELEASE_STATUSES.RELEASED;
+    } else {
+      this.documentsAreVisible = true;
+    }
   }
 
   setupController(controller) {
@@ -62,6 +74,7 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.currentAgenda = this.currentAgenda;
     controller.previousAgenda = this.previousAgenda;
     controller.agendaActivity = this.agendaActivity;
+    controller.documentsAreVisible = this.documentsAreVisible;
     controller.loadNewPieces.perform();
   }
 
