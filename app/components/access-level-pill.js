@@ -35,10 +35,10 @@ export default class AccessLevelPillComponent extends Component {
           icon = 'lock-closed';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
-          icon = 'folder';
+          icon = 'circle';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID:
-          icon = 'draft';
+          icon = 'circle-full';
           break;
         case CONSTANTS.ACCESS_LEVELS.PUBLIEK:
           icon = 'users-four-of-four';
