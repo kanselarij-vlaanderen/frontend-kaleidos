@@ -60,7 +60,7 @@ export default class AccessLevelPillComponent extends Component {
           skin = 'warning';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
-          skin = 'border';
+          skin = 'warning';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID:
           skin = 'border';
