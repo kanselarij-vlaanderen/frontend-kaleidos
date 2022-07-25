@@ -4,8 +4,8 @@
 <div class="auk-o-grid auk-u-mb-2">
   <div class="auk-o-grid-col-2">
     <div class="au-u-margin-top-tiny">
-      <AuHeading @level="3" @skin="6">Inhoud</AuHeading>
-      <AuList class="au-u-margin-top-tiny" as |Item|>
+      <AuHeading @level="3" @skin="6" class="au-u-hidden-visually">Inhoud</AuHeading>
+      <AuList as |Item|>
         <Item class="au-c-list-item__divider"><AuLink @skin="button-naked" @route="search.all" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact" @active={{true}}>Alle inhoud</AuLink></Item>
         <Item><AuLink @route="search.agenda-items" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Agendapunt</AuLink></Item>
         <Item><AuLink @route="search.cases" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Dossier</AuLink></Item>
@@ -123,49 +123,40 @@
                   as |c|
                 >
                   <c.header>
-                    <div class="au-u-flex au-u-flex--spaced">
-                      <div class="au-u-5-6">
-                        <p class="au-u-para-small au-u-muted au-u-medium">
-                          {{moment-format row.sessionDates}}
-                        </p>
-                        <AuHeading @level="3" @skin="4">
-                          <AuLink
-                            class="au-u-padding-none"
-                            @route="agenda.agendaitems.agendaitem"
-                            @models={{array row.meetingId row.agendaId row.id}}>
-                            {{#if row.shortTitle}}
-                              {{row.shortTitle}}
-                            {{else}}
-                              {{row.title}}
-                            {{/if}}
-                          </AuLink>
-                        </AuHeading>
-                      </div>
-                      <div class="au-u-1-6 au-u-text-right">
-                        <AuPill @size="small">
-                          {{#if (eq row.showAsAnnouncement "true")}}
-                            {{capitalize (t "announcement")}}
-                          {{else}}
-                            {{t "note"}}
-                          {{/if}}
-                        </AuPill>
-                      </div>
+                    <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
+                      <AuPill @size="small">
+                        {{#if (eq row.showAsAnnouncement "true")}}
+                          {{capitalize (t "announcement")}}
+                        {{else}}
+                          {{t "note"}}
+                        {{/if}}
+                      </AuPill>
+                      <p class="au-u-para-small au-u-muted au-u-medium">
+                        {{moment-format row.sessionDates}}
+                      </p>
                     </div>
+                    <AuHeading @level="3" @skin="4">
+                      <AuLink
+                        class="au-u-padding-none"
+                        @route="agenda.agendaitems.agendaitem"
+                        @models={{array row.meetingId row.agendaId row.id}}>
+                        {{#if row.shortTitle}}
+                          {{row.shortTitle}}
+                        {{else}}
+                          {{row.title}}
+                        {{/if}}
+                      </AuLink>
+                    </AuHeading>
                   </c.header>
                   <c.content>
                     <p class="au-u-para">Tekst ...... <strong>test</strong> ....... tekst</p>
-                    <p class="au-u-para-small au-u-margin-top-small">
+                    <p class="au-u-para-small au-u-margin-top-small au-u-muted">
                       Uit
                       <AuLink @skin="secondary">
                         Agenda versie C
-                        {{!-- {{#if (eq row.agendaSerialNumber.length 1)}}
-                          {{t "agenda"}} {{row.agendaSerialNumber}}
-                        {{else}}
-                          {{t "agenda"}}
-                        {{/if}} --}}
                       </AuLink>
                     </p>
-                    <p class="au-u-para-small au-u-margin-top-none">
+                    <p class="au-u-para-small au-u-margin-top-none au-u-muted">
                       Ook gevonden in
                       <AuLink @skin="secondary">
                         Versie B
@@ -174,8 +165,6 @@
                         Versie A
                       </AuLink>
                     </p>
-
-
                   </c.content>
                 </AuCard>
               </td>

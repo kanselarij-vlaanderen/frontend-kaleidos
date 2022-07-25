@@ -4,8 +4,8 @@
 <div class="auk-o-grid auk-u-mb-2">
   <div class="auk-o-grid-col-2">
     <div class="au-u-margin-top-tiny">
-      <AuHeading @level="3" @skin="6">Inhoud</AuHeading>
-      <AuList class="au-u-margin-top-tiny" as |Item|>
+      <AuHeading @level="3" @skin="6" class="au-u-hidden-visually">Inhoud</AuHeading>
+      <AuList as |Item|>
         <Item class="au-c-list-item__divider"><AuLink @skin="button-naked" @route="search.all" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Alle inhoud</AuLink></Item>
         <Item><AuLink @route="search.agenda-items" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Agendapunt</AuLink></Item>
         <Item><AuLink @route="search.cases" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact" @active={{true}}>Dossier</AuLink></Item>
@@ -80,7 +80,7 @@
       {{#if this.model.length}}
         <div class="au-u-flex au-u-flex--no-wrap au-u-flex--spaced au-u-flex--between au-u-flex--vertical-center au-u-margin-bottom-small">
           <p class="au-u-muted">
-            <strong class="au-u-medium">26</strong> resultaten voor <strong class="au-u-medium">"test"</strong> in dossiers
+            <strong class="au-u-medium">26</strong> resultaten voor <strong class="au-u-medium">"test"</strong> in <strong>dossiers</strong>
           </p>
           <div>
             <AuLabel for="sort" class="au-u-hidden-visually">Sorteer op:</AuLabel>
@@ -122,33 +122,31 @@
                   as |card|
                 >
                   <card.header>
-                    <div class="au-u-flex au-u-flex--spaced">
-                      <div class="au-u-5-6">
-                        <p class="au-u-para-small au-u-muted au-u-medium">
-                          {{moment-format row.sessionDates}}
-                        </p>
-                        <AuHeading @level="3" @skin="4">
-                          <AuLink
-                            class="au-u-padding-none"
-                            @route="cases.case.subcases"
-                            @model={{row.id}}>
-                            {{#if row.shortTitle}}
-                              {{row.shortTitle}}
-                            {{else}}
-                              {{row.title}}
-                            {{/if}}
-                          </AuLink>
-                        </AuHeading>
-                      </div>
-                      <div class="au-u-1-6 au-u-text-right">
-                        {{!-- <AuPill @size="small">
-
-                        </AuPill> --}}
-                      </div>
-                    </div>
+                    <p class="au-u-para-small au-u-muted au-u-medium">
+                      {{moment-format row.sessionDates}}
+                    </p>
+                    <AuHeading @level="3" @skin="4">
+                      <AuLink
+                        class="au-u-padding-none"
+                        @route="cases.case.subcases"
+                        @model={{row.id}}>
+                        {{#if row.shortTitle}}
+                          {{row.shortTitle}}
+                        {{else}}
+                          {{row.title}}
+                        {{/if}}
+                      </AuLink>
+                    </AuHeading>
                   </card.header>
                   <card.content>
                     <p class="au-u-para">Tekst ...... <strong>test</strong> ....... tekst</p>
+                    <p class="au-u-para-small au-u-margin-top-small au-u-muted">
+                      Gevonden in
+                      <AuLink @skin="secondary">
+                        Agendapunt ...
+                      </AuLink>
+                      en nog 4 andere plaatsen
+                    </p>
                   </card.content>
                 </AuCard>
               </td>
