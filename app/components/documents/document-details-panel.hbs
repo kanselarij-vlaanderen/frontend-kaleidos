@@ -63,6 +63,9 @@
           {{#if this.replacementFile}}
             {{this.replacementFile.name}}
           {{else}}
+            {{! Note that showing this composed name as "source file name" might be confusing.
+            Especially so when one just replaced the source and the same generated name pops up again (comoposed of piece name, which stays the same).
+            Better show original source file (not document) name?}}
             {{@piece.name}}.{{@piece.file.extension}}
           {{/if}}
         </p>
