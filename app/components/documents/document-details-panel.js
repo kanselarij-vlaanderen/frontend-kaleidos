@@ -33,7 +33,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
 
    @task
    *cancelEditDetails() {
-     this.args.piece.rollbackAttributes();
+     this.args.piece.rollbackAttributes(); // in case of piece name change
      yield this.loadDetailsData.perform();
      if (this.replacementFile) {
        this.replacementFile.destroyRecord()
