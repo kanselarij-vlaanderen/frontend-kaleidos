@@ -136,7 +136,7 @@
         data-test-details-tab-access-level
         @key={{t "publicity"}}
       >
-        <Utils::AccessLevelColorBadge @accessLevel={{this.accessLevel}} />
+        <AccessLevelPill @accessLevel={{this.accessLevel}} @isEditable={{false}} />
       </Auk::KeyValue>
       <Auk::KeyValue data-test-details-tab-access-level @key={{t "source-file"}}>
         <AuLink
