@@ -41,10 +41,7 @@
           @value={{mut @piece.name}}
         />
       </Auk::KeyValue>
-      <Auk::KeyValue
-        data-test-details-tab-access-level
-        @key={{t "publicity"}}
-      >
+      <Auk::KeyValue data-test-details-tab-access-level @key={{t "publicity"}}>
         {{#if this.isEditingDetails}}
           <Utils::AccessLevelSelector
             @allowClear={{true}}
@@ -58,7 +55,10 @@
           <Utils::AccessLevelColorBadge @accessLevel={{this.accessLevel}} />
         {{/if}}
       </Auk::KeyValue>
-      <Auk::KeyValue data-test-details-tab-access-level @key={{t "source-file"}}>
+      <Auk::KeyValue
+        data-test-details-tab-access-level
+        @key={{t "source-file"}}
+      >
         <p>
           {{#if this.replacementFile}}
             {{this.replacementFile.name}}
@@ -108,10 +108,7 @@
   {{#if this.isUploadingReplacementFile}}
     <Auk::Modal>
       <Auk::Modal::Body>
-        <Auk::FileUploader
-          @multiple={{false}}
-          @onUpload={{this.replaceFile}}
-        />
+        <Auk::FileUploader @multiple={{false}} @onUpload={{this.replaceFile}} />
       </Auk::Modal::Body>
     </Auk::Modal>
   {{/if}}
@@ -152,13 +149,16 @@
       <Auk::KeyValue data-test-details-tab-name @key={{t "document-name"}}>
         {{@piece.name}}.{{@piece.file.extension}}
       </Auk::KeyValue>
+      <Auk::KeyValue data-test-details-tab-access-level @key={{t "publicity"}}>
+        <AccessLevelPill
+          @accessLevel={{this.accessLevel}}
+          @isEditable={{false}}
+        />
+      </Auk::KeyValue>
       <Auk::KeyValue
         data-test-details-tab-access-level
-        @key={{t "publicity"}}
+        @key={{t "source-file"}}
       >
-        <AccessLevelPill @accessLevel={{this.accessLevel}} @isEditable={{false}} />
-      </Auk::KeyValue>
-      <Auk::KeyValue data-test-details-tab-access-level @key={{t "source-file"}}>
         <AuLink
           href={{@piece.file.namedDownloadLink}}
           @skin="primary"
