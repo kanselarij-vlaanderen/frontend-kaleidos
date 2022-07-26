@@ -1,21 +1,21 @@
 {{ page-title
-  (t "agendaitems")
+  (t "cases")
 }}
 <div class="auk-o-grid auk-u-mb-2">
   <div class="auk-o-grid-col-2">
     <div class="au-u-margin-top-tiny">
       <AuHeading @level="3" @skin="6" class="au-u-hidden-visually">Inhoud</AuHeading>
       <AuList as |Item|>
-        <Item class="au-c-list-item__divider"><AuLink @skin="button-naked" @route="search.all" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact" @active={{true}}>Alle inhoud</AuLink></Item>
-        <Item><AuLink @route="search.agenda-items" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Agendapunt</AuLink></Item>
-        <Item><AuLink @route="search.cases" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Dossier</AuLink></Item>
-        <Item><AuLink @route="search.documents" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Document</AuLink></Item>
-        <Item><AuLink @route="search.decisions" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Beslissing</AuLink></Item>
-        <Item><AuLink @route="search.newsletter-infos" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Kort bestek</AuLink></Item>
-        <Item><AuLink @route="search.announcements" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Mededeling</AuLink></Item>
+        <Item class="au-c-list-item__divider"><AuLink @skin="button-naked" @route="search-future.all" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Alle inhoud</AuLink></Item>
+        <Item><AuLink @route="search-future.agenda-items" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Agendapunt</AuLink></Item>
+        <Item><AuLink @route="search-future.cases" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact" @active={{true}}>Dossier</AuLink></Item>
+        <Item><AuLink @route="search-future.documents" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Document</AuLink></Item>
+        <Item><AuLink @route="search-future.decisions" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Beslissing</AuLink></Item>
+        <Item><AuLink @route="search-future.newsletter-infos" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Kort bestek</AuLink></Item>
+        <Item><AuLink @route="search-future.announcements" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Mededeling</AuLink></Item>
       </AuList>
     </div>
-    <div class="au-c-card au-o-box au-o-box--small au-u-margin-top">
+    <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-small">
       <div class="auk-form-group auk-u-position-relative au-u-margin-bottom-small">
         <Auk::Label>{{t "from"}}</Auk::Label>
         <WebComponents::VlDatepicker
@@ -51,37 +51,36 @@
         />
       </div>
     </div>
-
-    {{!-- <div class="auk-box au-u-margin-top-small">
-      <div class="auk-u-mb-2">
+    <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-tiny">
+      <Auk::Label>Beperkt toegankelijk</Auk::Label>
+        <Auk::Checkbox
+          @checked=""
+          @label="Enkel beperkt toegankelijk"
+        />
+      {{!-- <div>
         <Auk::Label>{{t "type"}}</Auk::Label>
         <Auk::Checkbox
-          @checked={{this.includeNotas}}
-          @label={{t "note"}}
-          {{on "input" this.toggleIncludeNotas}}
+          @checked={{this.decisionsOnly}}
+          @label={{t "search-in-decisions-only"}}
+          {{on "input" this.toggleDecisionsOnly}}
         />
+      </div> --}}
+      {{!-- <div class="au-u-margin-top-small">
+        <Auk::Label>{{t "archive"}}</Auk::Label>
         <Auk::Checkbox
-          @checked={{this.includeMededelingen}}
-          @label={{capitalize (t "announcement")}}
-          {{on "input" this.toggleIncludeMededelingen}}
+          @checked={{this.includeArchived}}
+          @label={{t "search-include-archived"}}
+          {{on "input" this.toggleIncludeArchived}}
         />
-      </div>
-      <div>
-        <Auk::Label>{{t "version"}}</Auk::Label>
-        <Auk::Checkbox
-          @checked={{this.latestOnly}}
-          @label={{t "only-on-final-agenda"}}
-          {{on "input" this.toggleLatestOnly}}
-        />
-      </div>
-    </div> --}}
+      </div> --}}
+    </div>
   </div>
   <div class="auk-o-grid-col-10">
     <div>
       {{#if this.model.length}}
         <div class="au-u-flex au-u-flex--no-wrap au-u-flex--spaced au-u-flex--between au-u-flex--vertical-center au-u-margin-bottom-small">
           <p class="au-u-muted">
-            <strong class="au-u-medium">19</strong> resultaten voor <strong class="au-u-medium">"test"</strong>
+            <strong class="au-u-medium">26</strong> resultaten voor <strong class="au-u-medium">"test"</strong> in <strong>dossiers</strong>
           </p>
           <div>
             <AuLabel for="sort" class="au-u-hidden-visually">Sorteer op:</AuLabel>
@@ -104,42 +103,33 @@
           </div>
         </div>
         <DataTable
-          data-test-route-search-agendaitems-data-table={{true}}
-          @content={{this.model}}
+          data-test-route-search-cases-data-table={{true}}
+          @content={{await this.model}}
           @page={{this.page}}
           @noDataMessage={{t "no-results-found"}}
           @size={{this.size}}
           @sort={{this.sort}}
           @class="auk-card-table"
           @isLoading={{this.isLoadingModel}}
-          as |table|
+        as |table|
         >
           <table.content as |c|>
-            <c.body as |row|>
+            <c.body class="auk-table--clickable-rows" as |row|>
               <td>
                 <AuCard
                   @shadow={{true}}
                   @size="small"
-                  as |c|
+                  as |card|
                 >
-                  <c.header>
-                    <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
-                      <AuPill @size="small">
-                        {{#if (eq row.showAsAnnouncement "true")}}
-                          {{capitalize (t "announcement")}}
-                        {{else}}
-                          {{t "note"}}
-                        {{/if}}
-                      </AuPill>
-                      <p class="au-u-para-small au-u-muted au-u-medium">
-                        {{moment-format row.sessionDates}}
-                      </p>
-                    </div>
+                  <card.header>
+                    <p class="au-u-para-small au-u-muted au-u-medium">
+                      {{moment-format row.sessionDates}}
+                    </p>
                     <AuHeading @level="3" @skin="4">
                       <AuLink
                         class="au-u-padding-none"
-                        @route="agenda.agendaitems.agendaitem"
-                        @models={{array row.meetingId row.agendaId row.id}}>
+                        @route="cases.case.subcases"
+                        @model={{row.id}}>
                         {{#if row.shortTitle}}
                           {{row.shortTitle}}
                         {{else}}
@@ -147,25 +137,17 @@
                         {{/if}}
                       </AuLink>
                     </AuHeading>
-                  </c.header>
-                  <c.content>
+                  </card.header>
+                  <card.content>
                     <p class="au-u-para">Tekst ...... <strong>test</strong> ....... tekst</p>
                     <p class="au-u-para-small au-u-margin-top-small au-u-muted">
-                      Uit
+                      Gevonden in
                       <AuLink @skin="secondary">
-                        Agenda versie C
+                        Agendapunt ...
                       </AuLink>
+                      en nog 4 andere plaatsen
                     </p>
-                    <p class="au-u-para-small au-u-margin-top-none au-u-muted">
-                      Ook gevonden in
-                      <AuLink @skin="secondary">
-                        Versie B
-                      </AuLink>,
-                      <AuLink @skin="secondary">
-                        Versie A
-                      </AuLink>
-                    </p>
-                  </c.content>
+                  </card.content>
                 </AuCard>
               </td>
             </c.body>

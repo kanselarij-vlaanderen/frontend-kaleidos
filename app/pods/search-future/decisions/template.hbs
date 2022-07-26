@@ -6,13 +6,13 @@
     <div class="au-u-margin-top-tiny">
       <AuHeading @level="3" @skin="6" class="au-u-hidden-visually">Inhoud</AuHeading>
       <AuList as |Item|>
-        <Item class="au-c-list-item__divider"><AuLink @skin="button-naked" @route="search.all" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Alle inhoud</AuLink></Item>
-        <Item><AuLink @route="search.agenda-items" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Agendapunt</AuLink></Item>
-        <Item><AuLink @route="search.cases" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Dossier</AuLink></Item>
-        <Item><AuLink @route="search.documents" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact" @active={{true}}>Document</AuLink></Item>
-        <Item><AuLink @route="search.decisions" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Beslissing</AuLink></Item>
-        <Item><AuLink @route="search.newsletter-infos" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Kort bestek</AuLink></Item>
-        <Item><AuLink @route="search.announcements" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Mededeling</AuLink></Item>
+        <Item class="au-c-list-item__divider"><AuLink @skin="button-naked" @route="search-future.all" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Alle inhoud</AuLink></Item>
+        <Item><AuLink @route="search-future.agenda-items" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Agendapunt</AuLink></Item>
+        <Item><AuLink @route="search-future.cases" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Dossier</AuLink></Item>
+        <Item><AuLink @route="search-future.documents" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Document</AuLink></Item>
+        <Item><AuLink @route="search-future.decisions" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact" @active={{true}}>Beslissing</AuLink></Item>
+        <Item><AuLink @route="search-future.newsletter-infos" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Kort bestek</AuLink></Item>
+        <Item><AuLink @route="search-future.announcements" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Mededeling</AuLink></Item>
       </AuList>
     </div>
     <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-small">
@@ -52,51 +52,23 @@
       </div>
     </div>
     <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-tiny">
-      <Auk::Label>Vertrouwelijk?</Auk::Label>
-      <Auk::Checkbox
-        @checked={{this.latestOnly}}
-        @label="Enkel vertrouwelijk"
-        {{on "input" this.toggleLatestOnly}}
-      />
-    </div>
-    <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-tiny">
-      <Auk::Label>Type document</Auk::Label>
+      <Auk::Label>Resultaat beslissing</Auk::Label>
       <AuLink>Alles selecteren</AuLink>
       <Auk::Checkbox
         @checked=""
-        @label="Decreet"
+        @label="Goedgekeurd"
       />
       <Auk::Checkbox
         @checked=""
-        @label="BVR"
+        @label="Uitgesteld"
       />
       <Auk::Checkbox
         @checked=""
-        @label="MB"
+        @label="Nog geen beslissing"
       />
       <Auk::Checkbox
         @checked=""
-        @label="Besluit leidend ambtenaar"
-      />
-      <Auk::Checkbox
-        @checked=""
-        @label="Bericht"
-      />
-      <Auk::Checkbox
-        @checked=""
-        @label="Omzendbrief"
-      />
-      <Auk::Checkbox
-        @checked=""
-        @label="Koninklijk besluit"
-      />
-      <Auk::Checkbox
-        @checked=""
-        @label="Erratum"
-      />
-      <Auk::Checkbox
-        @checked=""
-        @label="Andere"
+        @label="Afgekeurd"
       />
     </div>
 
@@ -123,7 +95,7 @@
       {{#if this.model.length}}
         <div class="au-u-flex au-u-flex--no-wrap au-u-flex--spaced au-u-flex--between au-u-flex--vertical-center au-u-margin-bottom-small">
           <p class="au-u-muted">
-            <strong class="au-u-medium">19</strong> resultaten voor <strong class="au-u-medium">"test"</strong> in <strong>documenten</strong>
+            <strong class="au-u-medium">19</strong> resultaten voor <strong class="au-u-medium">"test"</strong> in <strong>beslissingen</strong>
           </p>
           <div>
             <AuLabel for="sort" class="au-u-hidden-visually">Sorteer op:</AuLabel>
@@ -165,18 +137,9 @@
                   as |c|
                 >
                   <c.header>
-                    <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
-                      {{!-- <AuPill @size="small">
-                        {{#if (eq row.showAsAnnouncement "true")}}
-                          {{capitalize (t "announcement")}}
-                        {{else}}
-                          {{t "note"}}
-                        {{/if}}
-                      </AuPill> --}}
-                      <p class="au-u-para-small au-u-muted au-u-medium">
-                        {{moment-format row.sessionDates}}
-                      </p>
-                    </div>
+                    <p class="au-u-para-small au-u-muted au-u-medium">
+                      {{moment-format row.sessionDates}}
+                    </p>
                     <AuHeading @level="3" @skin="4">
                       <AuLink
                         class="au-u-padding-none"
@@ -192,10 +155,10 @@
                   </c.header>
                   <c.content>
                     <p class="au-u-para">Tekst ...... <strong>test</strong> ....... tekst</p>
-                    <p class="au-u-para-small au-u-margin-top-small au-u-muted">
-                      <AuLink @skin="secondary" @icon="document" @iconAlignment="left">
-                        Documentnaam.pdf
-                      </AuLink>
+                    <p class="au-u-margin-top-small">
+                      <AuPill @size="small" @skin="success" @icon="check" @iconAlignment="left">
+                        Goedgekeurd
+                      </AuPill>
                     </p>
                   </c.content>
                 </AuCard>

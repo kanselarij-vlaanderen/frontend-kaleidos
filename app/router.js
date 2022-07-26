@@ -111,6 +111,11 @@ Router.map(function() {
   }
 
   this.route('search', { path: '/zoeken', }, function() {
+    this.route('agenda-items', { path: '/agendapunten', });
+    this.route('cases', { path: '/dossiers', });
+  });
+
+  this.route('search-future', { path: '/zoeken-toekomst', }, function() {
     this.route('all', { path: '/alle-types', });
     this.route('agenda-items', { path: '/agendapunten', });
     this.route('cases', { path: '/dossiers', });
