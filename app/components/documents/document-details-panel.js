@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-import { isPresent } from '@ember/utils';
 
 export default class DocumentsDocumentDetailsPanel extends Component {
   /**
