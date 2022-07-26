@@ -72,6 +72,9 @@ export default class DocumentsDocumentDetailsPanel extends Component {
 
    @action
    replaceFile(file) {
+     if (this.replacementFile) { // in case of re-replace before saving
+       this.replacementFile.destroyRecord();
+     }
      this.replacementFile = file;
      this.isUploadingReplacementFile = false;
    }
