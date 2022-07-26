@@ -15,6 +15,7 @@ import { task } from 'ember-concurrency';
  */
 export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Component {
   @service currentSession;
+  @service router;
 
   @tracked documentContainer;
   @tracked activeTab = 'details';
@@ -38,5 +39,10 @@ export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Comp
   @action
   setActiveTab(tabName) {
     this.activeTab = tabName;
+  }
+
+  @action
+  navigateToVersion(piece) {
+    this.router.transitionTo('document', piece.id);
   }
 }

@@ -87,7 +87,7 @@
           <Documents::DocumentPreview::VersionsTab
             @documentContainer={{this.documentContainer}}
             @currentVersion={{@piece}}
-            @onSelectVersion={{@onSelectVersion}}
+            @onSelectVersion={{this.navigateToVersion}}
           />
         {{/if}}
       </Utils::LoadableContent>
