@@ -59,11 +59,18 @@
         {{/if}}
       </Auk::KeyValue>
       <Auk::KeyValue data-test-details-tab-access-level @key={{t "source-file"}}>
-        <p>{{@piece.name}}.{{@piece.file.extension}}</p>
+        <p>
+          {{#if this.replacementFile}}
+            {{this.replacementFile.name}}
+          {{else}}
+            {{@piece.name}}.{{@piece.file.extension}}
+          {{/if}}
+        </p>
         <AuButton
           @icon="upload"
           @iconAlignment="left"
           @skin="link"
+          {{on "click" (fn (mut this.isUploadingReplacementFile) true)}}
         >{{t "replace"}}</AuButton>
       </Auk::KeyValue>
     </Auk::Panel::Body>
@@ -95,6 +102,16 @@
       </Auk::Toolbar>
     </Auk::Panel::Footer>
   </Auk::Panel>
+  {{#if this.isUploadingReplacementFile}}
+    <Auk::Modal>
+      <Auk::Modal::Body>
+        <Auk::FileUploader
+          @multiple={{false}}
+          @onUpload={{this.replaceFile}}
+        />
+      </Auk::Modal::Body>
+    </Auk::Modal>
+  {{/if}}
 {{else}}
   <Auk::Panel>
     <Auk::Panel::Header class="auk-u-px-1">
