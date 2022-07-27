@@ -118,11 +118,11 @@
             {{#if @newsletterInfo}}
               {{#if @newsletterInfo.inNewsletter}}
                 <AuPill @size="small" @skin="success" @icon="visible">
-                  {{t "visible-in-newsletter"}}
+                  {{t "on-the-website"}}
                 </AuPill>
               {{else}}
                 <AuPill @size="small" @skin="danger" @icon="not-visible">
-                  {{t "hidden-in-newsletter"}}
+                  {{t "not-on-the-website"}}
                 </AuPill>
               {{/if}}
             {{else}}

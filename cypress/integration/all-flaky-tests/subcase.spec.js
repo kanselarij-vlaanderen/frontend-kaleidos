@@ -179,7 +179,7 @@ context('Subcase tests', () => {
     cy.openAgendaitemDossierTab(shortSubcaseTitle);
 
     // Status is hidden
-    cy.get(appuniversum.pill).contains('Zichtbaar in kort bestek');
+    cy.get(appuniversum.pill).contains('Op de website');
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
 
     // Assert status also hidden
