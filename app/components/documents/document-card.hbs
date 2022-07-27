@@ -5,22 +5,29 @@
   data-test-document-card
 >
   <div class="vlc-document-card__summary">
-    <div class="auk-u-mr-3">
-      {{#if @isHighlighted}}
-        <Auk::Badge @skin="success" @icon="document-added" @size="large" />
-      {{else}}
-        <Auk::Badge @icon="document" @size="large" />
-      {{/if}}
-    </div>
     <div class="vlc-document-card__content">
       <Auk::Toolbar @auto={{true}} as |Toolbar|>
         <Toolbar.Group @position="left" as |Group|>
           <Group.Item>
-            <p data-test-document-card-type class="auk-overline">
-              {{#unless this.loadPieceRelatedData.isRunning}}
-                {{this.documentContainer.type.label}}
-              {{/unless}}
-            </p>
+            {{#if @isHighlighted}}
+              <Auk::Badge @skin="success" @icon="document-added" @size="large" />
+            {{else}}
+              <Auk::Badge @icon="document" @size="large" />
+            {{/if}}
+          </Group.Item>
+          <Group.Item class="auk-u-maximize-width">
+            <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
+              <p data-test-document-card-type="" class="vlc-subline au-u-medium au-u-muted">
+                {{#unless this.loadPieceRelatedData.isRunning}}
+                  {{this.documentContainer.type.label}}
+                {{/unless}}
+              </p>
+            </div>
+            <h6 class="auk-h4" data-test-document-card-name-value="">
+              <span>
+                {{this.piece.name}}
+              </span>
+            </h6>
           </Group.Item>
         </Toolbar.Group>
         <Toolbar.Group @position="right" as |Group|>
@@ -107,61 +114,28 @@
           {{/if}}
         </Toolbar.Group>
       </Auk::Toolbar>
-      <div class="auk-o-flex">
-        <div class="auk-o-flex auk-o-flex--vertical auk-u-maximize-width">
-          {{#if this.isEditingPiece}}
-            <div class="auk-o-flex auk-o-flex--vertical-center">
-              <Auk::Input
-                data-test-document-card-name-input={{true}}
-                @block={{true}}
-                @value={{this.pieceNameBuffer}}
-              />
-              <Auk::Button
-                data-test-document-card-name-save={{true}}
-                @skin="borderless"
-                @layout="icon-only"
-                @icon="check"
-                {{on "click" (perform this.savePieceName)}}
-              />
-              <Auk::Button
-                data-test-document-card-name-cancel={{true}}
-                @skin="borderless"
-                @layout="icon-only"
-                @icon="x"
-                {{on "click" this.cancelEditPieceName}}
-              />
-            </div>
-          {{else}}
-            <h6 class="auk-h4" data-test-document-card-name-value>
-              {{! template-lint-disable no-invalid-interactive }}
-              <span {{on "click" this.enableEditPieceName}}>
-                {{this.piece.name}}
-              </span>
-              {{! template-lint-enable no-invalid-interactive }}
-            </h6>
+      <div class="vlc-document-card-content__meta auk-u-mt-2">
+        {{! no piece.created in legacy data }}
+        {{! TODO: when created date is absent, the layout seems irregular
+              this will be addressed with new document card styling }}
+        <div>
+          {{#if this.piece.created}}
+            {{t "uploaded-at"}}
+            {{moment-format this.piece.created}}
+            {{t "at"}}
+            {{moment-format this.piece.created "HH:mm"}}
           {{/if}}
-          <div class="vlc-document-card-content__meta">
-            {{! no piece.created in legacy data }}
-            {{! TODO: when created date is absent, the layout seems irregular
-                  this will be addressed with new document card styling }}
-            <div>
-              {{#if this.piece.created}}
-                {{t "uploaded-at"}}
-                {{moment-format this.piece.created}}
-                {{t "at"}}
-                {{moment-format this.piece.created "HH:mm"}}
-              {{/if}}
-            </div>
-            {{#if this.piece.accessLevelLastModified}}
-              <div>
-                {{t "access-level-last-modified"}}
-                {{moment-format this.piece.accessLevelLastModified}}
-                {{t "at"}}
-                {{moment-format this.piece.accessLevelLastModified "HH:mm"}}
-              </div>
-            {{/if}}
-          </div>
         </div>
+        {{!-- Looks no longer required in new mock-ups, but unsure, since this was quite a recent addition
+        {{#if this.piece.accessLevelLastModified}}
+          <div>
+            {{t "access-level-last-modified"}}
+            {{moment-format this.piece.accessLevelLastModified}}
+            {{t "at"}}
+            {{moment-format this.piece.accessLevelLastModified "HH:mm"}}
+          </div>
+        {{/if}}
+        --}}
       </div>
     </div>
   </div>
