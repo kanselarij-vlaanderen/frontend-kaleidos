@@ -18,7 +18,6 @@ export default class DocumentsDocumentCardComponent extends Component {
    *
    * @argument piece: a Piece object
    * @argument documentContainer: a DocumentContainer object
-   * @argument hideNewerVersions: boolean indicating if pieces newer than @piece should be hidden in the history
    * @argument didDeletePiece: action triggered when a piece has been deleted
    * @argument didDeleteContainer: action triggered when a container has been deleted
    * @argument onOpenUploadModal: action triggered before the modal to upload a new version opens
@@ -132,11 +131,8 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   get visiblePieces() {
-    if (this.args.hideNewerVersions) {
-      const idx = this.reverseSortedPieces.indexOf(this.piece);
-      return A(this.reverseSortedPieces.slice(idx));
-    }
-    return this.reverseSortedPieces;
+    const idx = this.reverseSortedPieces.indexOf(this.piece) + 1;
+    return A(this.reverseSortedPieces.slice(idx));
   }
 
   @action
