@@ -8,7 +8,8 @@ import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { task } from 'ember-concurrency';
-import { isPresent } from '@ember/utils';
+import { isPresent, isEmpty } from '@ember/utils';
+import ENV from 'frontend-kaleidos/config/environment';
 
 export default class DocumentsDocumentCardComponent extends Component {
   /**
@@ -50,6 +51,7 @@ export default class DocumentsDocumentCardComponent extends Component {
     super(...arguments);
     this.loadCodelists.perform();
     this.loadPieceRelatedData.perform();
+    this.signaturesEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
   }
 
   get userMayManagePublicationFlows() {

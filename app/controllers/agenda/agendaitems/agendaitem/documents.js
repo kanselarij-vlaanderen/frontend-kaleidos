@@ -40,12 +40,6 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     return mayPublish && hasCase && hasPieces;
   }
 
-  get isShownSignatureMarker() {
-    const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
-    const hasPermission = this.currentSession.may('manage-signatures');
-    return isEnabled && hasPermission;
-  }
-
   @task
   *loadNewPieces() {
     if (this.previousAgenda) {
