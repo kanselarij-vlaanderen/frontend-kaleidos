@@ -64,6 +64,9 @@ export default class AgendaService extends Service {
   }
 
   async changedPieces(currentAgendaId, comparedAgendaId, agendaItemId) {
+    if (!this.currentSession.may('view-document-version-info')) {
+      return [];
+    }
     const url = `/agendas/${currentAgendaId}/compare/${comparedAgendaId}/agenda-item/${agendaItemId}/pieces`;
     const response = await fetch(url);
     const payload = await response.json();

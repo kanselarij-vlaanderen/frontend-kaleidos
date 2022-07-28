@@ -144,63 +144,65 @@
       </div>
     </div>
   </div>
-  {{#if (gt this.visiblePieces.length 0)}}
-    <div class="vlc-document-card-versions">
-      <Auk::Accordion>
-        <Auk::Accordion::Item
-          @title={{t "previous-versions"}}
-          @disabled={{this.loadPieceRelatedData.isRunning}}
-          @expandTask={{this.loadVersionHistory}}
-          data-test-document-card-version-history
-        >
-          {{#if this.loadVersionHistory.isRunning}}
-            <div class="auk-u-p-3">
-              <Auk::Loader />
-            </div>
-          {{else}}
-            {{#each this.visiblePieces as |piece|}}
-              <div
-                class="vlc-document-holder"
-                {{did-update (perform this.loadPieceRelatedData) piece}}
-              >
-                <div class="vlc-document-card-item" data-test-vl-document-piece>
-                  <div class="vlc-document-card-item__title">
-                    <h6
-                      class="auk-h4"
-                      data-test-vl-document-name
-                    >
-                      {{#unless piece.file}}
-                        <EmberTooltip @side="bottom" @tooltipClass="auk-tooltip">
-                          {{t "document-not-consultable"}}
-                        </EmberTooltip>
-                      {{/unless}}
-                      {{piece.name}}
-                    </h6>
-                    <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"></div>
-                  </div>
-                  {{#if (and this.currentSession.isEditor this.piece.created)}}
-                  {{!-- no piece.created in legacy data --}}
-                    <div class="vlc-document-card-item__meta">
-                      {{#if this.piece.created}}
-                        {{t "uploaded-at"}}
-                        {{moment-format this.piece.created}}
-                        {{!--
-                          {{t "at"}}
-                          {{moment-format this.piece.created "HH:mm"}}
-                        --}}
-                      {{/if}}
+  {{#if (user-may "view-document-version-info")}}
+    {{#if (gt this.visiblePieces.length 0)}}
+      <div class="vlc-document-card-versions">
+        <Auk::Accordion>
+          <Auk::Accordion::Item
+            @title={{t "previous-versions"}}
+            @disabled={{this.loadPieceRelatedData.isRunning}}
+            @expandTask={{this.loadVersionHistory}}
+            data-test-document-card-version-history
+          >
+            {{#if this.loadVersionHistory.isRunning}}
+              <div class="auk-u-p-3">
+                <Auk::Loader />
+              </div>
+            {{else}}
+              {{#each this.visiblePieces as |piece|}}
+                <div
+                  class="vlc-document-holder"
+                  {{did-update (perform this.loadPieceRelatedData) piece}}
+                >
+                  <div class="vlc-document-card-item" data-test-vl-document-piece>
+                    <div class="vlc-document-card-item__title">
+                      <h6
+                        class="auk-h4"
+                        data-test-vl-document-name
+                      >
+                        {{#unless piece.file}}
+                          <EmberTooltip @side="bottom" @tooltipClass="auk-tooltip">
+                            {{t "document-not-consultable"}}
+                          </EmberTooltip>
+                        {{/unless}}
+                        {{piece.name}}
+                      </h6>
+                      <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"></div>
                     </div>
-                  {{/if}}
-                  <div class="vlc-document-card-item__icon">
-                    <Auk::Icon @name="clock-rewind" @size="large" />
+                    {{#if (and this.currentSession.isEditor this.piece.created)}}
+                    {{!-- no piece.created in legacy data --}}
+                      <div class="vlc-document-card-item__meta">
+                        {{#if this.piece.created}}
+                          {{t "uploaded-at"}}
+                          {{moment-format this.piece.created}}
+                          {{!--
+                            {{t "at"}}
+                            {{moment-format this.piece.created "HH:mm"}}
+                          --}}
+                        {{/if}}
+                      </div>
+                    {{/if}}
+                    <div class="vlc-document-card-item__icon">
+                      <Auk::Icon @name="clock-rewind" @size="large" />
+                    </div>
                   </div>
                 </div>
-              </div>
-            {{/each}}
-          {{/if}}
-        </Auk::Accordion::Item>
-      </Auk::Accordion>
-    </div>
+              {{/each}}
+            {{/if}}
+          </Auk::Accordion::Item>
+        </Auk::Accordion>
+      </div>
+    {{/if}}
   {{/if}}
 </div>
 {{#if this.isOpenUploadModal}}

@@ -25,6 +25,7 @@ const groupRoles = new Map();
 // - manage-decision-publications: Publishing agenda-item decisions to other Kaleidos profiles
 // - manage-document-publications: Publishing agenda-item related documents to other Kaleidos profiles
 // - manage-themis-publications: Publishing newsletter-info and related documents to Themis (general public).
+// - view-document-version-info: View info related to document versioning. Is this this a recent addition? Older versions, ...
 
 groupRoles.set(ADMIN, [
   'manage-signatures',
@@ -35,6 +36,7 @@ groupRoles.set(ADMIN, [
   'manage-decision-publications',
   'manage-document-publications',
   'manage-themis-publications',
+  'view-document-version-info',
 ]);
 
 groupRoles.set(KANSELARIJ, [
@@ -44,14 +46,17 @@ groupRoles.set(KANSELARIJ, [
   'manage-decision-publications',
   'manage-document-publications',
   'manage-themis-publications',
+  'view-document-version-info',
 ]);
 
 groupRoles.set(MINISTER, [
   'manage-signatures',
+  'view-document-version-info',
 ]);
 
 groupRoles.set(KABINET, [
   'manage-signatures',
+  'view-document-version-info',
 ]);
 
 groupRoles.set(OVERHEID, [
@@ -62,6 +67,7 @@ groupRoles.set(OVRB, [
   'manage-signatures',
   'manage-publication-flows',
   'search-publication-flows',
+  'view-document-version-info',
 ]);
 
 groupRoles.set(USER, [
