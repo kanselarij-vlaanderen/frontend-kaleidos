@@ -70,17 +70,20 @@
             )
           }}
             <Group.Item>
-              <Auk::Button
-                @skin={{if
-                  this.signMarkingActivity
-                  "success-borderless"
-                  "muted-borderless"
-                }}
-                @layout="icon-only"
-                @loading={{this.markOrUnmarkForSignature.isRunning}}
-                @icon={{if this.signMarkingActivity "sign" "no-sign"}}
-                {{on "click" (perform this.markOrUnmarkForSignature)}}
-              />
+              <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--center">
+                <Auk::Toggle
+                  id="signatureToggle"
+                  @checked={{if this.signMarkingActivity true false}}
+                  {{on "click" (perform this.markOrUnmarkForSignature)}}
+                />
+                <label for="signatureToggle" class="auk-c-toggle-label auk-u-text-muted">
+                  {{#if this.markOrUnmarkForSignature.isRunning}}
+                    <Auk::Loader />
+                  {{else}}
+                    Te handtekenen
+                  {{/if}}
+                </label>
+              </div>
             </Group.Item>
           {{/if}}
           {{#if this.currentSession.isEditor}}
