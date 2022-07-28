@@ -11,8 +11,7 @@ import {
   restorePiecesFromPreviousAgendaitem,
 } from 'frontend-kaleidos/utils/documents';
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
-import { isEmpty, isPresent } from '@ember/utils';
-import ENV from 'frontend-kaleidos/config/environment';
+import { isPresent } from '@ember/utils';
 
 export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service currentSession;
