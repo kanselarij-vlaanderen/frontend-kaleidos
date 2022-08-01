@@ -1,4 +1,4 @@
-/* global context, beforeEach, afterEach, it, cy */
+/* global context, beforeEach, afterEach, it, cy, Cypress */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -502,6 +502,29 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // existence of proposal is checked in mandatee-assigning
     cy.get(newsletter.itemContent.remark).contains(remarkText);
     cy.get(newsletter.itemContent.theme).contains('Sport');
+  });
+
+  it.only('should test that the definitief view POST newsletter-infos does not exist', () => {
+    const newsletterLink = '/vergadering/62726CD0D600B7FF7F95BBF5/kort-bestek';
+
+    cy.visit(newsletterLink);
+    cy.clickReverseTab('Definitief');
+    cy.get(newsletter.newsletterPrintHeader.publicationPlannedDate).contains('11 april 2022 - 14:00');
+
+    // kind of hacky solution to check if a POST doesn't happen, create exception so test doesn't fail when wait fails, then assert that wait failed
+    // also no code can be run after this, it must be the end of the test
+    Cypress.on('fail', (err) => {
+      if (err.message.includes('postNewsletterInfo')) {
+        return true;
+      }
+      throw err;
+    });
+    cy.intercept('POST', '/newsletter-infos').as('postNewsletterInfo');
+    cy.wait('@postNewsletterInfo', {
+      requestTimeout: 5000,
+    }).then((xhr) => {
+      (xhr.response.body).should('not.exist');
+    });
   });
 
   it('should test the definitief view', () => {

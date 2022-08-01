@@ -74,5 +74,10 @@ const selectors = {
     remark: '[data-test-newsletter-item-content-remark]',
     theme: '[data-test-newsletter-item-content-theme]',
   },
+
+  // component newsletter-print-header
+  newsletterPrintHeader: {
+    publicationPlannedDate: '[data-test-newsletter-print-header-publication-planned-date]',
+  },
 };
 export default selectors;
