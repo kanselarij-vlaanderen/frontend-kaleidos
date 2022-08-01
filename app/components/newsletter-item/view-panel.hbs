@@ -35,7 +35,7 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
   <Auk::Panel::Body>
-    <AuContent @skin="small">
+    <div class="auk-content">
       <p class="au-u-italic">
         {{this.proposalText}}
       </p>
@@ -45,7 +45,7 @@
           @value={{@newsletterItem.richtext}}
         />
       </p>
-    </AuContent>
+    </div>
   </Auk::Panel::Body>
   {{#if @newsletterItem.remark}}
     <Auk::Panel::Body>
