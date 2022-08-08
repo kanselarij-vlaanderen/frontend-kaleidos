@@ -115,6 +115,7 @@ const selectors = {
     dateType: '[data-test-route-search-publication-date-type]',
     dataTable: '[data-test-route-search-publication-data-table]',
     row: {
+      urgency: '[data-test-route-search-publication-row-urgency]',
       number: '[data-test-route-search-publication-row-number]',
     },
   },

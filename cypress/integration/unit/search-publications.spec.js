@@ -2,6 +2,7 @@
 // / <reference types="Cypress" />
 import auk from '../../selectors/auk.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import publication from '../../selectors/publication.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
@@ -287,5 +288,70 @@ context('Search tests', () => {
       .click()
       .wait('@publicationSearchCall4');
     cy.get(utils.vlAlert.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
+  });
+
+  it('check the urgent filter', () => {
+    const randomInt = Math.floor(Math.random() * Math.floor(10000));
+    const fieldsUrgent = {
+      number: 6006,
+      shortTitle: 'test vertalingsaanvraag',
+    };
+
+    // check that no result is given if there are no urgent publications
+    visitPublicationSearch();
+    cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt}`);
+    cy.get(auk.checkbox.checkbox).parent()
+      .contains('Dringend')
+      .click()
+      .wait(`@publicationSearchCall${randomInt}`);
+    cy.get(utils.vlAlert.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
+
+    // create an urgent publication
+    cy.createPublication(fieldsUrgent);
+    cy.get(publication.publicationCaseInfo.edit).click();
+    cy.get(publication.urgencyLevelCheckbox).parent()
+      .click();
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    cy.get(publication.publicationCaseInfo.editView.save).click()
+      .wait('@patchPublicationFlow');
+    // TODO-wait: is it necessary to wait this long? Is it better to add an urgent publication to the test zip and skip the above?
+    cy.wait(60000);
+
+    // check that only the urgent publication is shown
+    // TODO-multiple: test with multiple publications?
+    visitPublicationSearch();
+    cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt + 1}`);
+    cy.get(auk.checkbox.checkbox).parent()
+      .contains('Dringend')
+      .click()
+      .wait(`@publicationSearchCall${randomInt + 1}`);
+    cy.get(route.searchPublications.dataTable).find('tbody')
+      .children('tr')
+      .should('have.length', 1)
+      .contains(fieldsUrgent.number);
+    cy.get(route.searchPublications.row.urgency).find(auk.icon);
+
+    // check combined filters
+    cy.get(auk.checkbox.checkbox).parent()
+      .contains('Besluit van de Vlaamse Regering')
+      .click();
+    cy.get(utils.vlAlert.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
+    cy.get(auk.checkbox.checkbox).parent()
+      .contains('Besluit van de Vlaamse Regering')
+      .click();
+    cy.get(auk.checkbox.checkbox).parent()
+      .contains('Decreet')
+      .click();
+    cy.get(route.searchPublications.dataTable).find('tbody')
+      .children('tr')
+      .should('have.length', 1)
+      .contains(fieldsUrgent.number);
+  });
+
+  it('check if going to search as OVRB opens the publications tab', () => {
+    // TODO-spec this might be moved to profile OVRB spec if that gets made?
+    cy.get(utils.mHeader.search).click();
+    cy.get(route.search.title).should('exist');
+    cy.url().should('include', '/zoeken/publicaties');
   });
 });
