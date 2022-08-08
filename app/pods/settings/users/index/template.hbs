@@ -1,49 +1,126 @@
-<Utils::SettingsHeader @title={{t "manage-users"}}>
-  <Auk::Toolbar>
-    <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
-        {{#let (file-queue name="user-upload" onFileAdded=(perform this.uploadUserFile)) as |queue|}}
-          {{!-- refactored the structure below a bit to remove redundant nesting (vl-refactor), but is still unintuitive --}}
-          {{#if queue.files.length}}
-            <Auk::Button
-              @skin="secondary"
-              @icon="import"
-              @disabled={{true}}
-            >
-              {{t "import-users-text"}}
-            </Auk::Button>
-          {{else}}
-            <label>
-              <input
-                type="file"
-                accept=".csv"
-                hidden
-                {{queue.selectFile}}
-              >
-              <span
-                data-test-route-settings-users-import-csv
-                class="auk-button auk-button--secondary auk-u-block"
-              >
-                <span class="auk-button__content">
-                  <span class="auk-icon auk-icon--default">
-                    <i class="ki ki-import"></i>
-                  </span>
-                  <span class="auk-button__label">
-                    {{t "import-users"}}
-                  </span>
-                </span>
-              </span>
-            </label>
-          {{/if}}
-        {{/let}}
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-  </Auk::Toolbar>
-</Utils::SettingsHeader>
-<div class="auk-u-m-8">
-  <Auk::Toolbar>
-    <Auk::Toolbar::Group @position="left">
-      <Auk::Toolbar::Item>
+<div class="auk-o-grid auk-u-mb-2">
+  <div class="auk-o-grid-col-2">
+    <div class="au-c-card au-o-box au-o-box--small">
+      <Auk::Label>Filteren op organisatie</Auk::Label>
+      <div class="au-u-flex au-u-flex--spaced-tiny">
+        <div class="au-u-4-5">
+          <Auk::Input
+            @type="search"
+            class="au-u-1-1"
+          />
+        </div>
+        <div class="au-u-1-5">
+          <Auk::Button
+            @skin="secondary"
+            @layout="icon-only"
+            @icon="plus"
+            class="au-u-1-1"
+          />
+        </div>
+      </div>
+      <p class="au-u-h-functional au-u-margin-top-tiny"><AuLinkExternal @icon="external"
+      @iconAlignment="right">Lijst met OVO codes</AuLinkExternal></p>
+      <AuHr />
+      <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--between au-u-flex--vertical-center">
+        <div class="au-u-medium">
+          OVO00001
+        </div>
+        <div>
+          <Auk::Button
+            @skin="muted-borderless"
+            @layout="icon-only"
+            @icon="x"
+            class="au-u-1-1"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-tiny">
+      <Auk::Label>Filteren op status</Auk::Label>
+      <Auk::Checkbox
+        @checked={{true}}
+        @label="Actief"
+      />
+      <Auk::Checkbox
+        @checked={{true}}
+        @label="Inactief"
+      />
+      <Auk::Checkbox
+        @checked={{true}}
+        @label="Geblokkeerd"
+      />
+    </div>
+    <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-tiny">
+      <Auk::Label>Filteren op rechtengroep</Auk::Label>
+      <Auk::CheckboxList
+        @checkable={{true}}
+        @checked={{true}}
+        @label="Kanselarij"
+      >
+        <Auk::Checkbox
+          @checked={{true}}
+          @label="Admin"
+        />
+        <Auk::Checkbox
+          @checked={{true}}
+          @label="Secretarie"
+        />
+        <Auk::Checkbox
+          @checked={{true}}
+          @label="OVRB"
+        />
+        <Auk::Checkbox
+          @checked={{true}}
+          @label="Standaard"
+        />
+      </Auk::CheckboxList>
+      <Auk::Checkbox
+        @checked={{true}}
+        @label="Minister"
+      />
+      <Auk::Checkbox
+        @checked={{true}}
+        @label="Kabinet"
+      />
+      <Auk::Checkbox
+        @checked={{true}}
+        @label="Overheid"
+      />
+    </div>
+  </div>
+  <div class="auk-o-grid-col-10">
+    <div class="auk-navbar auk-navbar--bordered-bottom au-u-padding-left-none au-u-padding-right-none  au-u-padding-top-none au-u-padding-bottom-small au-u-flex--between">
+      <div class="au-u-flex au-u-flex--spaced-tiny">
+        <Auk::Button
+          @icon="circle-full"
+          @skin="secondary"
+          @disabled={{true}}
+        >
+          Activeren
+        </Auk::Button>
+        <Auk::Button
+          @icon="circle-pause"
+          @skin="secondary"
+          @disabled={{true}}
+        >
+          Deactiveren
+        </Auk::Button>
+        <Auk::Button
+          @icon="circle-x"
+          @skin="danger-primary"
+          @disabled={{true}}
+        >
+          Blokkeren
+        </Auk::Button>
+        <Auk::Button
+          @icon="users"
+          @skin="borderless"
+          @disabled={{true}}
+        >
+          Rollen wijzigen
+        </Auk::Button>
+      </div>
+      <div>
         <Auk::Input
           data-test-route-settings-users-search-input
           @type="search"
@@ -51,87 +128,94 @@
         />
         <Auk::Button
           data-test-route-settings-users-search-button
-          @skin="secondary"
-          @layout="icon-only"
+          @skin="primary"
           @icon="search"
           {{on "click" this.refresh}}
-        />
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-  </Auk::Toolbar>
-
-  <DataTable
-    data-test-route-settings-users-table={{true}}
-    @content={{await this.model}}
-    @class="auk-table auk-table--striped"
-    @isLoading={{this.isLoadingModel}}
-    @page={{this.page}}
-    @size={{this.size}}
-    @sort={{this.sort}}
-    @noDataMessage={{t "no-results-found"}}
-    as |table|
-  >
-    <table.content as |c|>
-      <c.header>
-        <ThSortable
-          @class="auk-table__col--3"
-          @currentSorting={{this.sort}}
-          @field="first-name"
-          @label={{t "first-name"}}
-        />
-        <ThSortable
-          @class="auk-table__col--2"
-          @currentSorting={{this.sort}}
-          @field="last-name"
-          @label={{t "last-name"}}
-        />
-        <th
-                class="auk-table__col--2"
         >
-          {{t "email"}}
-        </th>
-        <ThSortable
-          @class="auk-table__col--2"
-          @currentSorting={{this.sort}}
-          @field="organization.identifier"
-          @label={{t "ovo-code"}}
-        />
-        <ThSortable
-          @class="auk-table__col--2"
-          @currentSorting={{this.sort}}
-          @field="group.name"
-          @label={{t "group"}}
-        />
-        <th class="auk-table__col--1"></th>
-      </c.header>
-      <c.body as |user|>
-        <td data-test-route-settings-users-row-first-name>
-          {{user.firstName}}
-        </td>
-        <td>
-          {{user.lastName}}
-        </td>
-        <td>
-          {{if user.email user.email "-"}}
-        </td>
-        <td>
-          {{if user.organization.identifier user.organization.identifier "-"}}
-        </td>
-        <td data-test-route-settings-users-row-group>
-          {{#if user.group}}
-            {{user.group.name}}
-          {{else}}
-            -
-          {{/if}}
-        </td>
-        <td>
-          {{!-- TODO: this action-bar component triggers seemingly unnecessary new requests for a user --}}
-          <WebComponents::LightTable::VlcUserTableActionbar
-            @row={{user}}
-            @goToRoute={{this.goToRoute}}
+          Zoeken
+        </Auk::Button>
+      </div>
+    </div>
+    <DataTable
+      data-test-route-settings-users-table={{true}}
+      @content={{await this.model}}
+      @class="auk-table auk-table--styled auk-table--bordered auk-table--noactions"
+      @isLoading={{this.isLoadingModel}}
+      @page={{this.page}}
+      @size={{this.size}}
+      @sort={{this.sort}}
+      @noDataMessage={{t "no-results-found"}}
+      as |table|
+    >
+      <table.content as |c|>
+        <c.header>
+          <th class="auk-table-checkbox-col">
+            <Auk::Checkbox
+              @checked=""
+            />
+          </th>
+          <ThSortable
+            @currentSorting={{this.sort}}
+            @field="first-name"
+            @label="Naam"
           />
-        </td>
-      </c.body>
-    </table.content>
-  </DataTable>
+          <ThSortable
+            @currentSorting={{this.sort}}
+            @field="organization.identifier"
+            @label="Organisatie"
+          />
+          <ThSortable
+            @currentSorting={{this.sort}}
+            @field="group.name"
+            @label="Rechtengroep"
+          />
+          <ThSortable
+            @currentSorting={{this.sort}}
+            @field="group.name"
+            @label="Status"
+          />
+          <th></th>
+        </c.header>
+        <c.body as |user|>
+          <td>
+            <Auk::Checkbox
+              @checked=""
+            />
+          </td>
+          <td data-test-route-settings-users-row-first-name>
+            {{user.firstName}} {{user.lastName}}
+          </td>
+          <td>
+            {{#if user.organization.identifier}}
+            <p class="au-u-muted au-u-h-functional">
+            {{user.organization.identifier}}
+            </p>
+            <p>Kaleidos</p>
+            {{else}}
+              -
+            {{/if}}
+          </td>
+          <td data-test-route-settings-users-row-group>
+            {{#if user.group}}
+              {{user.group.name}}
+            {{else}}
+
+            {{/if}}
+          </td>
+          <td>
+            <AuPill @icon="circle-full" @skin="success" @size="small">
+              Actief
+            </AuPill>
+          </td>
+          <td class="auk-u-text-align--right">
+            {{!-- TODO: this action-bar component triggers seemingly unnecessary new requests for a user --}}
+            <WebComponents::LightTable::VlcUserTableActionbar
+              @row={{user}}
+              @goToRoute={{this.goToRoute}}
+            />
+          </td>
+        </c.body>
+      </table.content>
+    </DataTable>
+  </div>
 </div>
