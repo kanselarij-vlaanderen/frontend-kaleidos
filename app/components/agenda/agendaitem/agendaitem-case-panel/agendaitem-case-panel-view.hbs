@@ -112,13 +112,13 @@
           {{else}}
             {{#if @newsletterInfo}}
               {{#if @newsletterInfo.inNewsletter}}
-                <Auk::Pill @skin="success" @icon="visible">
+                <Auk::Pill @skin="success" @icon="website">
                   {{t "on-the-website"}}
                 </Auk::Pill>
               {{else}}
-                <Auk::Pill @skin="danger" @icon="not-visible">
+                {{!-- <Auk::Pill @skin="danger" @icon="not-visible">
                   {{t "hidden-in-newsletter"}}
-                </Auk::Pill>
+                </Auk::Pill> --}}
               {{/if}}
             {{else}}
               <Auk::Pill>

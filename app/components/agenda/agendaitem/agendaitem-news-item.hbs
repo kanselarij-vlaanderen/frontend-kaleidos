@@ -12,13 +12,13 @@
         <Auk::Toolbar::Item>
           {{#if @newsletterInfo}}
             {{#if @newsletterInfo.inNewsletter}}
-              <AuPill @draft={{true}} @skin="default" @icon="visible">
+              <AuPill @draft={{true}} @skin="default" @icon="website">
                 {{t "on-the-website"}}
               </AuPill>
             {{else}}
-              <AuPill @draft={{true}} @skin="default" @icon="not-visible">
+              {{!-- <AuPill @draft={{true}} @skin="default" @icon="not-visible">
                 {{t "hidden-in-newsletter"}}
-              </AuPill>
+              </AuPill> --}}
             {{/if}}
           {{else}}
             <Auk::Pill>
