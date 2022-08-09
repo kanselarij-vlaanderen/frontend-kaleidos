@@ -1,0 +1,275 @@
+<div class="auk-scroll-wrapper__body au-u-background-gray-100">
+  <div class="auk-u-m-4">
+    <div class="auk-navbar auk-navbar--bordered-bottom au-u-padding-left-none au-u-padding-right-none  au-u-padding-top-none au-u-padding-bottom-small au-u-flex--between">
+      <div class="au-u-flex au-u-flex--spaced-tiny">
+        {{#if (eq this.checked false)}}
+        <Auk::Button
+          @icon="circle-full"
+          @skin="secondary"
+          @disabled={{true}}
+        >
+          Activeren
+        </Auk::Button>
+        <Auk::Button
+          @icon="circle-pause"
+          @skin="secondary"
+          @disabled={{true}}
+
+        >
+          Deactiveren
+        </Auk::Button>
+        <Auk::Button
+          @icon="circle-x"
+          @skin="danger-primary"
+          @disabled={{true}}
+        >
+          Blokkeren
+        </Auk::Button>
+        {{else}}
+        <Auk::Button
+          @icon="circle-full"
+          @skin="secondary"
+          @disabled={{if (eq this.itemActivated true) true}}
+          {{on "click" this.activateAll}}
+        >
+          Activeren
+        </Auk::Button>
+        <Auk::Button
+          @icon="circle-pause"
+          @skin="secondary"
+          @disabled={{if (eq this.itemActivated false) true}}
+          {{on "click" this.disableAll}}
+
+        >
+          Deactiveren
+        </Auk::Button>
+        <Auk::Button
+          @icon="circle-x"
+          @skin="danger-primary"
+          {{on "click" this.blockAll}}
+        >
+          Blokkeren
+        </Auk::Button>
+        {{/if}}
+      </div>
+      <div>
+        <Auk::Input
+          data-test-route-settings-users-search-input
+          @type="search"
+          @value={{this.filter}}
+        />
+        <Auk::Button
+          data-test-route-settings-users-search-button
+          @skin="primary"
+          @icon="search"
+          {{on "click" this.refresh}}
+        >
+          Zoeken
+        </Auk::Button>
+      </div>
+    </div>
+    <DataTable
+      data-test-route-settings-users-table={{true}}
+      @content={{await this.model}}
+      @class="auk-table auk-table--styled auk-table--bordered auk-table--noactions"
+      @isLoading={{this.isLoadingModel}}
+      @page={{this.page}}
+      @size={{this.size}}
+      @sort={{this.sort}}
+      @noDataMessage={{t "no-results-found"}}
+      as |table|
+    >
+      <table.content as |c|>
+        <c.header>
+          <th class="auk-table-checkbox-col">
+            <Auk::Checkbox
+              @checked={{false}}
+              {{on "click" this.checkAll}}
+            />
+          </th>
+          <ThSortable
+            @currentSorting={{this.sort}}
+            @field="first-name"
+            @label="Organisatie"
+          />
+          <ThSortable
+            @currentSorting={{this.sort}}
+            @field="organization.identifier"
+            @label="OVO-code"
+          />
+          <ThSortable
+            @currentSorting={{this.sort}}
+            @field="group.name"
+            @label="Aantal gebruikers"
+          />
+          <ThSortable
+            @currentSorting={{this.sort}}
+            @field="group.name"
+            @label="Status"
+          />
+          <th></th>
+        </c.header>
+        {{#if this.checked}}
+        <tr class="au-u-background-gray-200">
+          <td colspan="6">
+            <p class="au-u-text-center">Alle 9 organisaties zijn geselecteerd op deze pagina. <AuLink>Selecteer alle ... organisaties.</AuLink></p>
+          </td>
+        </tr>
+        {{/if }}
+        <c.body as |user|>
+          <td>
+            <Auk::Checkbox
+              @checked={{this.checked}}
+            />
+          </td>
+          <td data-test-route-settings-users-row-first-name>
+            {{#if user.organization.identifier}}
+            Kaleidos
+            {{else}}
+              -
+            {{/if}}
+          </td>
+          <td>
+            {{#if user.organization.identifier}}
+            {{user.organization.identifier}}
+            {{else}}
+              -
+            {{/if}}
+          </td>
+          <td data-test-route-settings-users-row-group>
+            <AuLink>112 gebruikers</AuLink>
+          </td>
+          <td>
+            {{#if this.itemActivated}}
+            <AuPill @icon="circle-full" @skin="success" @size="small">
+              Actief
+            </AuPill>
+            {{ else }}
+            <AuPill @icon="circle-pause" @skin="default" @size="small">
+              Inactief
+            </AuPill>
+            {{/if}}
+          </td>
+          <td class="auk-u-text-align--right">
+            <div class="auk-o-flex auk-o-flex--justify-end">
+              <Auk::DropdownMenu
+                @skin="borderless"
+                @icon="three-dots"
+                as |Menu|
+              >
+                {{#if this.itemActivated}}
+                <Menu.Item
+                >
+                  Activeren
+                </Menu.Item>
+                {{else}}
+                <Menu.Item>
+                  Deactiveren
+                </Menu.Item>
+                {{/if}}
+
+                <Menu.Divider />
+                <Menu.Item
+                  @skin="danger"
+                  {{on "click" this.block}}
+                >
+                  Blokkeren
+                </Menu.Item>
+              </Auk::DropdownMenu>
+              {{!-- TODO: this action-bar component triggers seemingly unnecessary new requests for a user --}}
+              <WebComponents::LightTable::VlcUserTableActionbar
+                @row={{user}}
+                @goToRoute={{this.goToRoute}}
+              />
+            </div>
+          </td>
+        </c.body>
+      </table.content>
+    </DataTable>
+  </div>
+</div>
+
+{{#if this.showActivateAll}}
+  <Auk::Modal @size="small">
+    <Auk::Modal::Header
+      @title="Activeren"
+      @onClose={{this.activateAll}}
+    />
+    <Auk::Modal::Body>
+      <p>Gedeactiveerde gebruikers hebben tijdelijk geen toegang tot Kaleidos. Zij kunnen later opnieuw geactiveerd worden.</p>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.activateAll}}>
+      <Auk::Button
+        @skin="primary"
+        {{on "click" this.activateAllToggle}}
+      >
+        Activeren
+      </Auk::Button>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
+{{/if}}
+
+{{#if this.showDisableAll}}
+  <Auk::Modal @size="small">
+    <Auk::Modal::Header
+      @title="Deactiveren"
+      @onClose={{this.disableAll}}
+    />
+    <Auk::Modal::Body>
+      <p>Gedeactiveerde gebruikers hebben tijdelijk geen toegang tot Kaleidos. Zij kunnen later opnieuw geactiveerd worden.</p>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.disableAll}}>
+      <Auk::Button
+        @skin="primary"
+        {{on "click" this.disableAllToggle}}
+      >
+        Deactiveren
+      </Auk::Button>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
+{{/if}}
+
+{{#if this.showBlockAll}}
+  <Auk::Modal @size="small">
+    <Auk::Modal::Header
+      @title="Blokkeren"
+      @onClose={{this.blockAll}}
+    />
+    <Auk::Modal::Body>
+      <p>Geblokkeerde gebruikers worden definitief uit Kaleidos gehouden. Zij kunnen niet meer geactiveerd worden.</p>
+      <p class="au-u-margin-bottom-small">Typ “Blokkeren” om <strong>9 gebruikers</strong> te blokkeren.</p>
+      <Auk::Input />
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.blockAll}}>
+      <Auk::Button
+        @skin="danger-primary"
+        {{on "click" this.blockAll}}
+      >
+        Blokkeren
+      </Auk::Button>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
+{{/if}}
+
+
+{{#if this.showBlock}}
+  <Auk::Modal @size="small">
+    <Auk::Modal::Header
+      @title="Blokkeren"
+      @onClose={{this.block}}
+    />
+    <Auk::Modal::Body>
+      <p>Geblokkeerde gebruikers worden definitief uit Kaleidos gehouden. Zij kunnen niet meer geactiveerd worden.</p>
+      <p class="au-u-margin-bottom-small">Typ “Blokkeren” om <strong>deze gebruiker</strong> te blokkeren.</p>
+      <Auk::Input />
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.block}}>
+      <Auk::Button
+        @skin="danger-primary"
+        {{on "click" this.blockAll}}
+      >
+        Blokkeren
+      </Auk::Button>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
+{{/if}}
