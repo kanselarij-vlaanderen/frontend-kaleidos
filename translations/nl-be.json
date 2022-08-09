@@ -173,8 +173,6 @@
   "opened": "Geopend",
   "for-press": "Publiek",
   "show-in-newsletter": "In kort bestek",
-  "visible-in-newsletter": "Zichtbaar in kort bestek",
-  "hidden-in-newsletter": "Verborgen in kort bestek",
   "formal-nok": "Nog niet formeel OK",
   "formal-ok": "Formeel OK",
   "function-mandatee": "Formele titel",
@@ -697,7 +695,6 @@
   "meeting-number-visual-representation": "Nummer van de vergadering",
   "approve-all-agendaitems": "Alles formeel goedkeuren",
   "approve-all-agendaitems-warning-message": "Bent u zeker dat u {amountOfAgendaitems} agendapunten formeel wil goedkeuren",
-  "not-visible-in-newsletter": "Niet zichtbaar in Kort Bestek",
   "publications": "Publicaties",
   "priority-procedure": "Spoedprocedure",
   "publications-new": "Nieuwe publicatie",
@@ -1050,8 +1047,14 @@
   "select-all": "alles selecteren",
   "deselect-all": "alles deselecteren",
   "on-the-website": "Op de website",
+  "not-on-the-website": "Niet op de website",
   "open-search-for-mandatee": "Vrij zoeken",
   "open-search-for-mandatee-tooltip": "Opgelet. Activeer deze optie enkel indien strikt noodzakelijk. In tegenstelling tot bij standaard zoeken, kunnen de aangeboden resultaten bij vrij zoeken ook ministers bevatten die niet actief zijn/waren gedurende de referentieperiode waarvoor u zoekt. Deze functionaliteit kan bv. gebruikt worden om net-niet-meer actieve ministers (rond een ministerwissel) toe te wijzen. ",
   "fullscreen": "Volledig scherm",
-  "close-fullscreen": "Sluit volledig scherm"
+  "close-fullscreen": "Sluit volledig scherm",
+  "decisions-were-released-at": "Beslissingen zijn vrijgegeven op {date} om {time}",
+  "documents-were-released-at": "Documenten zijn vrijgegeven op {date} om {time}",
+  "documents-are-planned-to-release-at": "Vrijgave van documenten gepland op {date} om {time}",
+  "documents-were-published-at": "Documenten zijn gepubliceerd op {date} om {time}",
+  "documents-are-planned-to-release-at": "Publicatie documenten gepland op {date} om {time}"
 }

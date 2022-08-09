@@ -20,14 +20,14 @@ export default class PublicationsOverviewReportsRoute extends Route {
     reportTypes = reportTypes.toArray();
 
     if (reportTypes.length !== REPORT_TYPES_CONFIG.length) {
-      console.error('incorrect number of report types configured')
+      console.error('incorrect number of report types configured');
     }
 
     // configuration order determines order in UI
     const reportTypeEntries = REPORT_TYPES_CONFIG.map(async (reportTypeConfig) => {
       const reportType = reportTypes.findBy('uri', reportTypeConfig.uri);
       if (!reportType) {
-        console.error('report type config uri does not exist')
+        console.error('report type config uri does not exist');
       }
 
       const lastJob = await this.store.queryOne(
