@@ -64,4 +64,54 @@ export default class UsersSettingsController extends Controller {
   goToRoute(route, param) {
     this.router.transitionTo(route, param);
   }
+
+  @tracked checked = false;
+  @tracked itemActivated = true;
+
+  @action
+  checkAll() {
+    this.checked = !this.checked;
+  }
+
+  @tracked showActivateAll = false;
+
+  @action
+  activateAll() {
+    this.showActivateAll = !this.showActivateAll;
+  }
+
+  @action
+  activateAllToggle() {
+    this.showActivateAll = !this.showActivateAll;
+    this.itemActivated = true;
+    this.toaster.success("De status van 9 gebruikers is successvol gewijzigd", "Gelukt!");
+  }
+
+  @tracked showDisableAll = false;
+
+  @action
+  disableAll() {
+    this.showDisableAll = !this.showDisableAll;
+  }
+
+  @action
+  disableAllToggle() {
+    this.showDisableAll = !this.showDisableAll;
+    this.itemActivated = false;
+    this.toaster.success("De status van 9 gebruikers is successvol gewijzigd", "Gelukt!");
+  }
+
+  @tracked showBlockAll = false;
+
+  @action
+  blockAll() {
+    this.showBlockAll = !this.showBlockAll;
+  }
+
+  @tracked showBlock = false;
+
+  @action
+  block() {
+    this.showBlock = !this.showBlock;
+  }
 }
