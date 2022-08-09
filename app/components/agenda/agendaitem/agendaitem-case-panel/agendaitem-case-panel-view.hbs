@@ -5,10 +5,10 @@
         <Toolbar.Group @position="left" as |Group|>
           <Group.Item>
             <h4 class="auk-panel__title">
-              {{#if (not @agendaitem.showAsRemark)}}
-                {{t "note"}}
-              {{else}}
+              {{#if @agendaitem.showAsRemark}}
                 {{t "text"}}
+              {{else}}
+                {{t "note"}}
               {{/if}}
             </h4>
           </Group.Item>
@@ -98,22 +98,7 @@
             </span>
           </div>
         {{/if}}
-        {{#if (not @agendaitem.showAsRemark)}}
-          {{#if @subcase.subcaseName}}
-            <div class="auk-u-mt-2">
-              <AuPill @size="small" data-test-agendaitem-subcase-name>
-                {{capitalize @subcase.subcaseName}}
-              </AuPill>
-            </div>
-          {{/if}}
-          {{#if @agendaitem.retracted}}
-            <div class="auk-u-mt-2">
-              <AuPill @size="small">
-                {{t "postponed-item"}}
-              </AuPill>
-            </div>
-          {{/if}}
-        {{else}}
+        {{#if @agendaitem.showAsRemark}}
           <div class="auk-u-mt-2">
             {{#if @newsletterInfo}}
               {{#if @newsletterInfo.inNewsletter}}
@@ -131,6 +116,21 @@
               </AuPill>
             {{/if}}
           </div>
+        {{else}}
+          {{#if @subcase.subcaseName}}
+            <div class="auk-u-mt-2">
+              <AuPill @size="small" data-test-agendaitem-subcase-name>
+                {{capitalize @subcase.subcaseName}}
+              </AuPill>
+            </div>
+          {{/if}}
+          {{#if @agendaitem.retracted}}
+            <div class="auk-u-mt-2">
+              <AuPill @size="small">
+                {{t "postponed-item"}}
+              </AuPill>
+            </div>
+          {{/if}}
         {{/if}}
       </div>
     </Auk::Panel::Body>
