@@ -46,8 +46,7 @@ context('Propagation to other graphs', () => {
 
     cy.setFormalOkOnItemWithIndex(0);
     cy.setFormalOkOnItemWithIndex(1);
-    cy.approveDesignAgenda();
-    cy.closeAgenda();
+    cy.approveAndCloseDesignAgenda();
 
     cy.openDetailOfAgendaitem(subcaseTitle1);
     cy.addDocumentToTreatment(file);
@@ -106,8 +105,7 @@ context('Propagation to other graphs', () => {
     cy.logoutFlow();
   });
 
-  // TODO reenable test to release documents with MeetingDocumentPublicationPlanningModalComponent
-  it.skip('Test as Admin', () => {
+  it('Test as Admin', () => {
     cy.login('Admin');
     cy.openAgendaForDate(agendaDate);
     cy.releaseDocuments();
@@ -115,8 +113,7 @@ context('Propagation to other graphs', () => {
     cy.logoutFlow();
   });
 
-  // TODO reenable test to release documents with MeetingDocumentPublicationPlanningModalComponent
-  it.skip('Test as Overheid', () => {
+  it('Test as Overheid', () => {
     cy.login('Overheid');
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);

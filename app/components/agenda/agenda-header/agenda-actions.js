@@ -65,6 +65,8 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
 
   get canPlanDocumentPublication() {
     const mayManagePublication = this.currentSession.may('manage-document-publications') || this.currentSession.may('manage-themis-publications');
+    // With slow network, it's possible to open the planning modal when the task is running resulting in errors
+    const loadingActivities = this.loadPublicationActivities.isRunning;
     // get('uri') will immediately resolve since we preloaded the statuses
     // in loadPublicationActivities()
     const documentsNotYetReleased = [
@@ -72,7 +74,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       this.themisPublicationActivity?.status,
     ].some((status) => status?.get('uri') != CONSTANTS.RELEASE_STATUSES.RELEASED);
 
-    return mayManagePublication && this.args.meeting.isFinal && documentsNotYetReleased;
+    return mayManagePublication && !loadingActivities && this.args.meeting.isFinal && documentsNotYetReleased;
   }
 
   get canPublishThemis() {

@@ -637,12 +637,15 @@ function releaseDecisions() {
  * @memberOf Cypress.Chainable#
  * @function
  */
-function releaseDocuments() {
+function releaseDocuments(now = true) {
   cy.log('releaseDocuments');
-  cy.intercept('PATCH', '/internal-document-publication-activity/**').as('patchDocPubActivity');
+  cy.intercept('PATCH', '/internal-document-publication-activities/**').as('patchDocPubActivity');
 
   cy.get(agenda.agendaHeader.showOptions).click();
   cy.get(agenda.agendaHeader.actions.releaseDocuments).click();
+  if (now) {
+    cy.get(agenda.agendaHeader.actions.releaseDocumentsNow).click();
+  }
   cy.get(agenda.agendaHeader.confirm.releaseDocuments).click();
   cy.wait('@patchDocPubActivity', {
     timeout: 20000,
