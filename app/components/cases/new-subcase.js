@@ -158,6 +158,8 @@ export default class CasesNewSubcase extends Component {
     } else {
       subcase.linkedPieces = pieces;
     }
+    // TODO KAS-3484 is there a situation where we don't have to inherit the governmentAreas?
+    subcase.governmentAreas = await latestSubcase.governmentAreas;
     return subcase;
   }
 

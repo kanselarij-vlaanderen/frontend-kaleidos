@@ -26,4 +26,5 @@ export default class Subcase extends ModelWithModifier {
   @hasMany('piece') linkedPieces;
   @hasMany('mandatee') mandatees;
   @hasMany('decision-activity', { inverse: null }) decisionActivities;
+  @hasMany('concept') governmentAreas;
 }
