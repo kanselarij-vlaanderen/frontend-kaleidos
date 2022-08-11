@@ -63,17 +63,16 @@
   {{#if @agendaitem.showAsRemark}}
     <div class="auk-u-mb-4">
       <div class="auk-form-group">
+        <Auk::Label for="item-show-in-newsletter">
+          {{t "on-the-website"}}
+        </Auk::Label>
         {{#if this.newsletterInfo}}
-          <Auk::Label for="item-show-in-newsletter">
-            {{t "show-in-newsletter"}}
-          </Auk::Label>
           <Auk::Toggle
             id="item-show-in-newsletter"
             @checked={{this.newsletterInfo.inNewsletter}}
-            data-test-agendaitem-titles-edit-showInNewsletter={{true}}
+            data-test-agendaitem-titles-edit-showInNewsletter
           />
         {{else}}
-          <Auk::Label>{{t "show-in-newsletter"}}</Auk::Label>
           {{t "no-newsletter-info"}}
         {{/if}}
       </div>
