@@ -229,8 +229,8 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
    */
   @task({ maxConcurrency: 3, enqueue: true })
   *setAgendaitemFormallyOkThrottled(agendaitem) {
-    if (agendaitem.get('formallyOk') !== CONSTANTS.ACCEPTANCE_STATUSSES.OK) {
-      agendaitem.set('formallyOk', CONSTANTS.ACCEPTANCE_STATUSSES.OK);
+    if (agendaitem.formallyOk !== CONSTANTS.ACCEPTANCE_STATUSSES.OK) {
+      agendaitem.formallyOk = CONSTANTS.ACCEPTANCE_STATUSSES.OK;
       return yield agendaitem.save();
     }
   }
