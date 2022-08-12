@@ -29,22 +29,6 @@
             >
               {{t "cases"}}
             </Tabs.Tab>
-            <Tabs.Tab
-              @route="search.newsletter-infos"
-              @current-when="search.newsletter-infos"
-              @query={{hash page=0}}
-            >
-              {{t "newsletter"}}
-            </Tabs.Tab>
-            {{#if this.isShownPublicationFlows}}
-              <Tabs.Tab
-                @route="search.publication-flows"
-                @current-when="search.publication-flows"
-                @query={{hash page=0}}
-              >
-                {{t "publications"}}
-              </Tabs.Tab>
-            {{/if}}
           </Auk::Tabs>
         </Group.Item>
       </Toolbar.Group>
@@ -59,11 +43,7 @@
         <div class="auk-form-group">
           <div class="auk-o-flex auk-o-flex--align-baseline">
             <Auk::Label for="dossierId" class="auk-u-mr">
-              {{#if this.isSearchingPublicationFlows}}
-                {{capitalize (t "search-term")}}
-              {{else}}
-                {{capitalize (t "keyword")}}
-              {{/if}}
+              {{capitalize (t "keyword")}}
             </Auk::Label>
             <span>
               <Auk::Icon
@@ -97,29 +77,6 @@
           />
         </div>
       </div>
-      {{#if this.isSearchingPublicationFlows}}
-        <div class="auk-o-grid-col-2">
-          <div class="auk-form-group auk-u-position-relative">
-            <Auk::Label for="dateType">
-              {{capitalize (t "search-by-date-type")}}
-            </Auk::Label>
-            <select
-              data-test-route-search-publication-date-type
-              name="dateType"
-              id="dateType"
-              class="auk-select auk-select--block"
-              {{on "input" this.selectPublicationDateType}}>
-              {{#each this.publicationDateTypes as |dateType|}}
-                <option
-                  value={{dateType.key}}
-                  selected={{eq dateType.key this.publicationDateTypeKeyBuffer}}>
-                  {{dateType.label}}
-                </option>
-              {{/each}}
-            </select>
-          </div>
-        </div>
-      {{/if}}
       <div class="auk-o-grid-col-2">
         <div class="auk-form-group auk-u-position-relative">
           <Auk::Label>{{t "from"}}</Auk::Label>
@@ -146,22 +103,20 @@
           />
         </div>
       </div>
-      {{#if (not this.isSearchingPublicationFlows)}}
-        <div class="auk-o-grid-col-2">
-          <div class="auk-form-group">
-            <Auk::Label for="ministerName">
-              {{t "minister"}}
-            </Auk::Label>
-            <Auk::Input
-              data-test-route-search-mandatee-input
-              @block={{true}}
-              @value={{this.mandateesBuffer}}
-              @enter={{fn this.search}}
-              id="ministerName"
-            />
-          </div>
+      <div class="auk-o-grid-col-2">
+        <div class="auk-form-group">
+          <Auk::Label for="ministerName">
+            {{t "minister"}}
+          </Auk::Label>
+          <Auk::Input
+            data-test-route-search-mandatee-input
+            @block={{true}}
+            @value={{this.mandateesBuffer}}
+            @enter={{fn this.search}}
+            id="ministerName"
+          />
         </div>
-      {{/if}}
+      </div>
       <div class="auk-o-grid-col-1">
         <Auk::Button
           @skin="primary"
@@ -171,11 +126,7 @@
           type="button"
           {{on "click" this.search}}
         >
-          {{#if this.isSearchingPublicationFlows}}
-            {{capitalize (t "search-publication")}}
-          {{else}}
-            {{t "search"}}
-          {{/if}}
+          {{t "search"}}
         </Auk::Button>
       </div>
     </div>

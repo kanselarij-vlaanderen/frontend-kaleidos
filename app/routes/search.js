@@ -22,10 +22,6 @@ export default class SearchRoute extends Route {
       refreshModel: true,
       as: 'tot',
     },
-    publicationDateTypeKey: {
-      refreshModel: true,
-      as: 'datum_type',
-    },
   };
 
   beforeModel(transition) {

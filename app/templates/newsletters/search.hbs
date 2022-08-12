@@ -1,0 +1,196 @@
+{{!-- TODO KAS-3550 other page title ?--}}
+{{page-title (t "newsletter-info")}}
+<div class="auk-u-maximize-height auk-scroll-wrapper">
+  <Auk::Navbar>
+    {{!-- template-lint-disable no-redundant-fn --}}
+    {{!-- TODO: Using plain decorated action for Input's @enter doesn't work for some reason --}}
+    <div class="auk-o-grid auk-o-grid--align-end auk-u-maximize-width auk-u-mb-4 auk-u-mt-4">
+      <div class="auk-o-grid-col-4">
+        <div class="auk-form-group">
+          <div class="auk-o-flex auk-o-flex--align-baseline">
+            <Auk::Label for="dossierId" class="auk-u-mr">
+              {{capitalize (t "keyword")}}
+            </Auk::Label>
+            <span>
+              <Auk::Icon
+                @name="circle-info"
+                @skin="muted"
+                class="auk-u-cursor-pointer"
+                {{on "click" this.openPopover}}
+              >
+                <AttachPopover
+                  @class="auk-popover"
+                  @showOn="click"
+                  @placement="right"
+                  @hideOn="clickout"
+                  @isShown={{this.popoverShown}}
+                  @renderInPlace={{true}}
+                >
+                  <Utils::SearchLegend
+                    @userClickedClose={{this.closePopover}}
+                  />
+                </AttachPopover>
+              </Auk::Icon>
+            </span>
+          </div>
+          <Auk::Input
+            @block={{true}}
+            placeholder={{t "search-placeholder"}}
+            @value={{this.searchTextBuffer}}
+            @enter={{fn this.search}}
+            id="dossierId"
+            data-test-route-search-input
+          />
+        </div>
+      </div>
+      <div class="auk-o-grid-col-2">
+        <div class="auk-form-group auk-u-position-relative">
+          <Auk::Label>{{t "from"}}</Auk::Label>
+          <WebComponents::VlDatepicker
+            data-test-route-search-date-from
+            @selectedDate={{array this.dateFromBuffer}}
+            @dateChanged={{fn (mut this.dateFromBuffer)}}
+            @enableClear={{this.dateFromBuffer}}
+            @onClear={{fn (mut this.dateFromBuffer) null}}
+            @allowInput={{true}}
+          />
+        </div>
+      </div>
+      <div class="auk-o-grid-col-2">
+        <div class="auk-form-group auk-u-position-relative">
+          <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
+          <WebComponents::VlDatepicker
+            data-test-route-search-date-to
+            @selectedDate={{array this.dateToBuffer}}
+            @dateChanged={{fn (mut this.dateToBuffer)}}
+            @enableClear={{this.dateToBuffer}}
+            @onClear={{fn (mut this.dateToBuffer) null}}
+            @allowInput={{true}}
+          />
+        </div>
+      </div>
+      <div class="auk-o-grid-col-2">
+        <div class="auk-form-group">
+          <Auk::Label for="ministerName">
+            {{t "minister"}}
+          </Auk::Label>
+          <Auk::Input
+            data-test-route-search-mandatee-input
+            @block={{true}}
+            @value={{this.mandateesBuffer}}
+            @enter={{fn this.search}}
+            id="ministerName"
+          />
+        </div>
+      </div>
+      <div class="auk-o-grid-col-1">
+        <Auk::Button
+          @skin="primary"
+          @icon="search"
+          @block="true"
+          data-test-route-search-trigger
+          type="button"
+          {{on "click" this.search}}
+        >
+          {{t "search"}}
+        </Auk::Button>
+      </div>
+    </div>
+    {{!-- template-lint-enable no-redundant-fn --}}
+  </Auk::Navbar>
+  <div class="auk-scroll-wrapper__body">
+    <div class="auk-u-m-4">
+      <div class="auk-u-mb-2">
+        {{#if this.model.length}}
+          <DataTable
+            data-test-route-search-newsletter-infos-data-table={{true}}
+            @content={{this.model}}
+            @page={{this.page}}
+            @noDataMessage={{t "no-results-found"}}
+            @size={{this.size}}
+            @sort={{this.sort}}
+            @class="auk-table auk-table--striped auk-table--vertical-align-top"
+            @isLoading={{this.isLoadingModel}}
+            @onClickRow={{this.navigateToNewsletter}}
+            as |table|
+          >
+            <table.content as |c|>
+              <c.header>
+                <th class="auk-table__col--6">
+                  {{t "title-and-content"}}
+                </th>
+                <ThSortable
+                  @class="auk-table__col--2"
+                  @currentSorting={{this.sort}}
+                  @field="agendaitems.meetingDate"
+                  @label={{t "agenda-of"}}
+                />
+                <th class="auk-table__col--2">
+                  {{t "minister"}}
+                </th>
+                {{! sorting on this field won't work as-is, since you can have multiple decisions}}
+                <th class="auk-table__col--1">
+                  {{t "agendaitem-decision"}}
+                </th>
+                <th class="auk-table__col--1"></th>
+              </c.header>
+              <c.body class="auk-table--clickable-rows" as |row|>
+                {{! each row has been processed to have 1 decision (object) as well as 1 latestAgendaitem (object)}}
+                {{! see postProcess methods in route}}
+                {{#let row.latestAgendaitem as |latestAgendaitem|}}
+                  <td data-test-route-search-newsletter-infos-row-title>
+                    <h3 class="auk-h4 auk-u-mb">
+                      {{row.title}}
+                    </h3>
+                    <p class="auk-u-mr-2">
+                      <SanitizeHtml @raw={{true}} @value={{row.richtext}} />
+                    </p>
+                  </td>
+                  <td>
+                    {{moment-format latestAgendaitem.meetingDate}}
+                  </td>
+                  <td data-test-route-search-newsletter-infos-row-mandatees>
+                    {{#each row.mandatees as |mandatee|}}
+                      {{#let (concat mandatee.firstName " " mandatee.familyName) as |fullName|}}
+                        {{fullName}}{{if (has-next mandatee row.mandatees) ", "}}
+                      {{/let}}
+                    {{/each}}
+                  </td>
+                  <td data-test-route-search-newsletter-infos-row-decision-result>
+                    {{row.decision.decisionResultCodeLabel}}
+                  </td>
+                  <td
+                    data-test-route-search-newsletter-infos-row-go-to-agendaitem
+                    class="auk-u-text-align--right"
+                  >
+                    {{#if latestAgendaitem}}
+                      <Auk::Button
+                        @skin="borderless"
+                        @layout="icon-only"
+                        @icon="chevron-right"
+                        @route="agenda.agendaitems.agendaitem.news-item"
+                        @models={{array
+                          latestAgendaitem.meetingId
+                          latestAgendaitem.agendaId
+                          latestAgendaitem.id
+                        }}
+                      />
+                    {{/if}}
+                  </td>
+                {{/let}}
+              </c.body>
+            </table.content>
+          </DataTable>
+        {{else}}
+          {{#if this.emptySearch}}
+            <WebComponents::VlAlert @message={{t "fill-in-search-term"}} />
+          {{else}}
+            <WebComponents::VlAlert
+              @message={{t "no-results-found-modify-term"}}
+            />
+          {{/if}}
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</div>

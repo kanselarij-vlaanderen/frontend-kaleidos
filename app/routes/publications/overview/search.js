@@ -13,12 +13,28 @@ import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { warn } from '@ember/debug';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-export default class PublicationFlowSearchRoute extends Route {
+export default class PublicationsOverviewSearchRoute extends Route {
   @service store;
   @service router;
   @service currentSession;
 
   queryParams = {
+    searchText: {
+      refreshModel: true,
+      as: 'zoekterm',
+    },
+    dateFrom: {
+      refreshModel: true,
+      as: 'vanaf',
+    },
+    dateTo: {
+      refreshModel: true,
+      as: 'tot',
+    },
+    publicationDateTypeKey: {
+      refreshModel: true,
+      as: 'datum_type',
+    },
     regulationTypeIds: {
       refreshModel: true,
       as: 'types_regelgeving',
@@ -132,9 +148,20 @@ export default class PublicationFlowSearchRoute extends Route {
     });
   }
 
-  setupController(controller) {
-    super.setupController(...arguments);
+  /* There is no reset of query parameters here by means of "resetController".
+   * It is assumed that -unless users explicitly click the main "search" button-
+   * search state (term, page number, ...) should be remembered, especially with
+   * a trial-and-error search-session in mind, where users navigate to a detail item,
+   * realize it's not what they're looking for and go back in history.
+   */
 
+  setupController(controller, model) {
+    super.setupController(controller, model);
+    const params = this.paramsFor('search');
+    controller.searchTextBuffer = params.searchText;
+    controller.page = params.page;
+    controller.dateFromBuffer = controller.deserializeDate(params.dateFrom);
+    controller.dateToBuffer = controller.deserializeDate(params.dateTo);
     controller.publicationStatuses = this.publicationStatuses.toArray();
     controller.regulationTypes = this.regulationTypes.toArray();
 
@@ -144,14 +171,8 @@ export default class PublicationFlowSearchRoute extends Route {
   }
 
   @action
-  loading(transition) {
-    // eslint-disable-next-line ember/no-controller-access-in-routes
-    const controller = this.controllerFor(this.routeName);
-    controller.isLoadingModel = true;
-    transition.promise.finally(() => {
-      controller.isLoadingModel = false;
-    });
-    return true;
+  loading() {
+    return false;
   }
 
   postProcessSearchEntry(attributes) {

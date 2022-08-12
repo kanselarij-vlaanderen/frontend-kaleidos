@@ -8,7 +8,7 @@ import utils from '../../selectors/utils.selectors';
 function visitPublicationSearch() {
   cy.intercept('GET', '/regulation-types?**').as('getRegulationTypes');
   cy.intercept('GET', '/publication-flows/search?**').as('publicationInitialSearchCall');
-  cy.visit('zoeken/publicaties');
+  cy.visit('publicaties/overzicht/dossier-zoeken');
   cy.wait('@getRegulationTypes');
   cy.wait('@publicationInitialSearchCall');
 }
@@ -47,7 +47,7 @@ function checkPublicationSearchForDateType(dateType, date, pubNumber) {
 function searchFakePublication() {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt}`);
-  cy.visit('zoeken/publicaties?zoekterm=IKBESTANIET');
+  cy.visit('publicaties/overzicht/dossier-zoeken?zoekterm=IKBESTANIET');
   cy.wait(`@publicationSearchCall${randomInt}`);
   cy.get(route.search.input).clear();
 }

@@ -116,7 +116,7 @@ context('link publication not via MR to MR', () => {
       .wait('@patchPieces');
 
     // go to publication
-    cy.visit('/zoeken/publicaties');
+    cy.visit('/publicaties/overzicht/dossier-zoeken');
     cy.get(route.search.input).clear()
       .type(fields3.number);
     cy.get(route.search.trigger).click();

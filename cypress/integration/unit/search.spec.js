@@ -53,7 +53,7 @@ context('Search tests', () => {
   });
 
   it('Search for richText in kort-bestek and open the detail view by clicking row', () => {
-    cy.visit('/zoeken/kort-bestek');
+    cy.visit('/kort-bestek/bericht-zoeken');
     // Testdata available in default data
     const searchTerm = 'Dit is een leuke beslissing';
     cy.get(route.search.input).clear();
@@ -152,7 +152,7 @@ context('Search tests', () => {
     });
 
     it('Should change the amount of elements to every value in selectbox in kort-bestek search view', () => {
-      cy.visit('zoeken/kort-bestek');
+      cy.visit('kort-bestek/bericht-zoeken');
       searchFunction(options);
     });
 

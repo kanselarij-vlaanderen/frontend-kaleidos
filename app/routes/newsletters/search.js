@@ -8,7 +8,24 @@ import { inject as service } from '@ember/service';
 
 export default class NewsletterInfosSearchRoute extends Route {
   @service metrics;
+
   queryParams = {
+    searchText: {
+      refreshModel: true,
+      as: 'zoekterm',
+    },
+    mandatees: {
+      refreshModel: true,
+      as: 'minister',
+    },
+    dateFrom: {
+      refreshModel: true,
+      as: 'vanaf',
+    },
+    dateTo: {
+      refreshModel: true,
+      as: 'tot',
+    },
     page: {
       refreshModel: true,
       as: 'pagina',
@@ -126,8 +143,14 @@ export default class NewsletterInfosSearchRoute extends Route {
     });
   }
 
-  setupController(controller) {
-    super.setupController(...arguments);
+  setupController(controller, model) {
+    super.setupController(controller, model);
+    const params = this.paramsFor('search');
+    controller.searchTextBuffer = params.searchText;
+    controller.mandateesBuffer = params.mandatees;
+    controller.page = params.page;
+    controller.dateFromBuffer = controller.deserializeDate(params.dateFrom);
+    controller.dateToBuffer = controller.deserializeDate(params.dateTo);
     controller.emptySearch = isEmpty(this.paramsFor('search').searchText);
 
     if (controller.page !== this.lastParams.committed.page) {
@@ -136,14 +159,10 @@ export default class NewsletterInfosSearchRoute extends Route {
   }
 
   @action
-  loading(transition) {
-    // eslint-disable-next-line ember/no-controller-access-in-routes
-    const controller = this.controllerFor(this.routeName);
-    controller.isLoadingModel = true;
-    transition.promise.finally(() => {
-      controller.isLoadingModel = false;
-    });
-    return true;
+  loading(/*transition, originRoute*/) {
+    // Disable bubbling of loading event to prevent parent loading route to be shown.
+    // Otherwise it causes a 'flickering' effect because the search filters disappear.
+    return false;
   }
 
   postProcessAgendaitems(newsletter) {
