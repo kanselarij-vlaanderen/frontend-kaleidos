@@ -80,12 +80,10 @@ export default class PublicationsOverviewSearchController extends Controller {
   ];
 
   @tracked searchText = '';
-  @tracked mandatees;
   @tracked dateFrom;
   @tracked dateTo;
   @tracked publicationDateTypeKey = this.publicationDateTypes[0]?.key;
   @tracked searchTextBuffer = '';
-  @tracked mandateesBuffer;
   @tracked dateFromBuffer;
   @tracked dateToBuffer;
   @tracked publicationDateTypeKeyBuffer = this.publicationDateTypeKey;
@@ -103,10 +101,6 @@ export default class PublicationsOverviewSearchController extends Controller {
     this.size = this.sizeOptions[2];
     this.sort = '-opening-date';
     this.urgentOnly = false;
-  }
-
-  get isShownPublicationFlows() {
-    return this.currentSession.may('search-publication-flows');
   }
 
   get selectedRegulationTypes() {

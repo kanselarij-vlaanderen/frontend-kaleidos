@@ -6,12 +6,10 @@ import { inject as service } from '@ember/service';
 import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
 import bind from 'frontend-kaleidos/utils/bind';
 
-export default class NewslettersController extends Controller.extend(DefaultQueryParamsMixin) {
+export default class NewslettersOverviewController extends Controller.extend(DefaultQueryParamsMixin) {
   @service router;
 
   @tracked sort = '-planned-start,number-representation';
-  @tracked isAdding = false;
-  @tracked isEditing = false;
 
   @bind
   async latestAgenda(meeting) {
