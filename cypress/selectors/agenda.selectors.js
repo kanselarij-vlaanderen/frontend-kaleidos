@@ -74,6 +74,7 @@ const selectors = {
     formallyOkEdit: '[data-test-agenda-overview-formally-ok-edit]',
   },
 
+  // TODO-selector rename, some of there are in other modals
   // agenda-header
   agendaHeader: {
     showOptions: '[data-test-agenda-header-show-options]',
@@ -86,6 +87,7 @@ const selectors = {
       downloadDocuments: '[data-test-agenda-header-download-documents]',
       releaseDecisions: '[data-test-agenda-header-release-decisions]',
       releaseDocuments: '[data-test-agenda-header-release-documents]',
+      releaseDocumentsNow: '[data-test-agenda-header-release-documents-now]',
       approveAllAgendaitems: '[data-test-agenda-header-approve-all-agendaitems]',
       // TODO-selector unused selectors
       navigateToAgendaView: ['data-test-agenda-header-navigate-to-agenda-view'],
