@@ -18,6 +18,7 @@ const selectors = {
   subcaseDetailNav: {
     overview: '[data-test-subcase-detail-nav-overview]',
     documents: '[data-test-subcase-detail-nav-documents]',
+    decisions: '[data-test-subcase-detail-nav-decisions]',
   },
 
   // subcase-overview-header

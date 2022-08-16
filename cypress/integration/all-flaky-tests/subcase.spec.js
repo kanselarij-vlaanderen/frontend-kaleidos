@@ -179,7 +179,7 @@ context('Subcase tests', () => {
     cy.openAgendaitemDossierTab(shortSubcaseTitle);
 
     // Status is hidden
-    cy.get(appuniversum.pill).contains('Zichtbaar in kort bestek');
+    cy.get(appuniversum.pill).contains('Op de website');
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
 
     // Assert status also hidden
@@ -213,7 +213,7 @@ context('Subcase tests', () => {
     cy.wait('@newsletterInfosPatch');
 
     // Assert status shown & confidentiality icon is visible
-    cy.get(appuniversum.pill).contains('Verborgen in kort bestek');
+    cy.get(appuniversum.pill).contains('Niet op de website');
 
     // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
     cy.get(agenda.agendaDetailSidebarItem.confidential).should('exist');
