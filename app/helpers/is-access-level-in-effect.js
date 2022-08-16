@@ -1,7 +1,7 @@
 import Helper from '@ember/component/helper';
 import { inject as service } from '@ember/service';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isPresent } from '@ember/utils';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class IsAccessLevelInEffect extends Helper {
   @service agendaService;
@@ -12,7 +12,7 @@ export default class IsAccessLevelInEffect extends Helper {
       return true;
     }
 
-    let inEffect = true;
+    let inEffect = false;
     if (piece) {
       // Always assume that we're dealing with the latest agenda
       const agendaitems = (await piece.agendaitems).toArray();
@@ -31,7 +31,7 @@ export default class IsAccessLevelInEffect extends Helper {
       const meeting = await agenda.createdFor;
 
       switch (accessLevel.uri) {
-        case CONSTANTS.ACCESS_LEVELS.MINISTERRAAD:
+        case CONSTANTS.ACCESS_LEVELS.MINISTERRAAD: {
           const isDesignAgenda = (await agenda.status).isDesignAgenda;
           const previousAgenda = await agenda.previousAgenda;
           let pieceChanged = false;
@@ -45,29 +45,35 @@ export default class IsAccessLevelInEffect extends Helper {
             ).includes(piece);
           }
           if (isDesignAgenda && (!isPresent(previousAgenda) | pieceChanged)) {
-            inEffect = false;
+            inEffect = true;
           }
           break;
-        case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
-          const decisionsReleased = isPresent(meeting.releasedDecisions);
-          if (!decisionsReleased) {
-            inEffect = false;
+        }
+        case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING: {
+          const decisionPubActivity = await meeting.internalDecisionPublicationActivity;
+          const decisionStatus = await decisionPubActivity?.status;
+          if (decisionStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED) {
+            inEffect = true;
           }
           break;
-        case CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID:
-          const documentsReleased = isPresent(meeting.releasedDocuments);
-          if (!documentsReleased) {
-            inEffect = false;
+        }
+        case CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID: {
+          const documentPubActivity = await meeting.internalDocumentPublicationActivity;
+          const documentStatus = await documentPubActivity?.status;
+          if (documentStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED) {
+            inEffect = true;
           }
           break;
-        case CONSTANTS.ACCESS_LEVELS.PUBLIEK:
+        }
+        case CONSTANTS.ACCESS_LEVELS.PUBLIEK: {
           const documentsReleasedToThemis = (
             await meeting.themisPublicationActivities
           ).any((activity) => activity.scope.includes('documents'));
-          if (!documentsReleasedToThemis) {
-            inEffect = false;
+          if (documentsReleasedToThemis) {
+            inEffect = true;
           }
           break;
+        }
         default:
       }
     }
