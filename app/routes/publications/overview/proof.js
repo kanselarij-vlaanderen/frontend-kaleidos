@@ -22,7 +22,7 @@ export default class PublicationsOverviewProofRoute extends PublicationsOverview
   tableConfigStorageKey = "publication-table.proof";
 
   beforeModel() {
-    super.beforeModel(...arguments)
+    super.beforeModel(...arguments);
     const proofStatuses = this.store.peekAll('publication-status').filter((it) => {
       return PROOF_STATUSES_URIS.includes(it.uri);
     });

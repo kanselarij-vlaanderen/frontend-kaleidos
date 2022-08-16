@@ -12,11 +12,11 @@
         <Group.Item>
           {{#if @newsletterItem.inNewsletter}}
             <AuPill @skin="default" @icon="visible">
-              {{t "visible-in-newsletter"}}
+              {{t "on-the-website"}}
             </AuPill>
           {{else}}
             <AuPill @skin="default" @icon="not-visible">
-              {{t "hidden-in-newsletter"}}
+              {{t "not-on-the-website"}}
             </AuPill>
           {{/if}}
         </Group.Item>
@@ -35,7 +35,7 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
   <Auk::Panel::Body>
-    <AuContent @skin="small">
+    <div class="auk-content">
       <p class="au-u-italic">
         {{this.proposalText}}
       </p>
@@ -45,7 +45,7 @@
           @value={{@newsletterItem.richtext}}
         />
       </p>
-    </AuContent>
+    </div>
   </Auk::Panel::Body>
   {{#if @newsletterItem.remark}}
     <Auk::Panel::Body>
