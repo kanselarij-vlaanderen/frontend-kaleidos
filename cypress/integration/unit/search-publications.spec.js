@@ -154,6 +154,7 @@ context('Search tests', () => {
     number: 2007,
     shortTitle: 'Besluitvorming Vlaamse Regering hoed',
     regulationType: 'Ministerieel besluit',
+    // TODO-setup make urgent, change features.spec.js
   };
 
   const fieldsWithDoubleDates = {
@@ -249,36 +250,51 @@ context('Search tests', () => {
       .children('tr')
       .should('have.length', 8);
 
-    // search with double date
+    // check urgent
     cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall2');
+    cy.get(auk.checkbox.checkbox).parent()
+      .contains('Dringend')
+      .click();
+    cy.get(route.search.trigger).click();
+    cy.wait('@publicationSearchCall2');
+    cy.get(route.searchPublications.dataTable).find('tbody')
+      .children('tr')
+      .should('have.length', 1);
+    // remove urgent
+    cy.get(auk.checkbox.checkbox).parent()
+      .contains('Dringend')
+      .click();
+
+    // search with double date
+    cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall3');
     cy.get(route.searchPublications.dateType).select('Datum beslissing');
     cy.get(route.search.from).click();
     cy.setDateInFlatpickr(fields.decisionDate);
     cy.get(route.search.to).click();
     cy.setDateInFlatpickr(fields.decisionDate);
     cy.get(route.search.trigger).click();
-    cy.wait('@publicationSearchCall2');
+    cy.wait('@publicationSearchCall3');
     cy.get(route.searchPublications.dataTable).find('tbody')
       .children('tr')
       .should('have.length', 2)
       .contains(fieldsWithDoubleDates.number);
 
     // search with status and regulation type
-    cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall3');
+    cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall4');
     cy.get(auk.checkbox.checkbox).parent()
       .contains(fieldsWithDoubleDates.status)
       .click();
     cy.get(auk.checkbox.checkbox).parent()
       .contains(fieldsWithDoubleDates.regulationType)
       .click()
-      .wait('@publicationSearchCall3');
+      .wait('@publicationSearchCall4');
     cy.get(route.searchPublications.dataTable).find('tbody')
       .children('tr')
       .should('have.length', 1)
       .contains(fieldsWithDoubleDates.number);
 
     // change status
-    cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall4');
+    cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall5');
     cy.get(auk.checkbox.checkbox).parent()
       .contains(fieldsWithDoubleDates.status)
       .click();
@@ -286,72 +302,22 @@ context('Search tests', () => {
     cy.get(auk.checkbox.checkbox).parent()
       .contains(fields2.status)
       .click()
-      .wait('@publicationSearchCall4');
+      .wait('@publicationSearchCall5');
     cy.get(utils.vlAlert.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
   });
 
   it('check the urgent filter', () => {
-    const randomInt = Math.floor(Math.random() * Math.floor(10000));
-    const fieldsUrgent = {
-      number: 6006,
-      shortTitle: 'test vertalingsaanvraag',
-    };
-
-    // check that no result is given if there are no urgent publications
+    // TODO-setup DATA comes from publication-new-features.spec.js
     visitPublicationSearch();
+    const randomInt = Math.floor(Math.random() * Math.floor(10000));
     cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt}`);
     cy.get(auk.checkbox.checkbox).parent()
       .contains('Dringend')
       .click()
       .wait(`@publicationSearchCall${randomInt}`);
-    cy.get(utils.vlAlert.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
-
-    // create an urgent publication
-    cy.createPublication(fieldsUrgent);
-    cy.get(publication.publicationCaseInfo.edit).click();
-    cy.get(publication.urgencyLevelCheckbox).parent()
-      .click();
-    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
-    cy.get(publication.publicationCaseInfo.editView.save).click()
-      .wait('@patchPublicationFlow');
-    // TODO-wait: is it necessary to wait this long? Is it better to add an urgent publication to the test zip and skip the above?
-    cy.wait(60000);
-
-    // check that only the urgent publication is shown
-    // TODO-multiple: test with multiple publications?
-    visitPublicationSearch();
-    cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt + 1}`);
-    cy.get(auk.checkbox.checkbox).parent()
-      .contains('Dringend')
-      .click()
-      .wait(`@publicationSearchCall${randomInt + 1}`);
-    cy.get(route.searchPublications.dataTable).find('tbody')
-      .children('tr')
-      .should('have.length', 1)
-      .contains(fieldsUrgent.number);
+    cy.wait(1000); // TODO all results are shown because of postprocessing of the results
+    cy.get(route.searchPublications.row.number).should('contain', fields6.number);
     cy.get(route.searchPublications.row.urgency).find(auk.icon);
-
-    // check combined filters
-    cy.get(auk.checkbox.checkbox).parent()
-      .contains('Besluit van de Vlaamse Regering')
-      .click();
-    cy.get(utils.vlAlert.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
-    cy.get(auk.checkbox.checkbox).parent()
-      .contains('Besluit van de Vlaamse Regering')
-      .click();
-    cy.get(auk.checkbox.checkbox).parent()
-      .contains('Decreet')
-      .click();
-    cy.get(route.searchPublications.dataTable).find('tbody')
-      .children('tr')
-      .should('have.length', 1)
-      .contains(fieldsUrgent.number);
-  });
-
-  it('check if going to search as OVRB opens the publications tab', () => {
-    // TODO-spec this might be moved to profile OVRB spec if that gets made?
-    cy.get(utils.mHeader.search).click();
-    cy.get(route.search.title).should('exist');
-    cy.url().should('include', '/zoeken/publicaties');
   });
 });
+

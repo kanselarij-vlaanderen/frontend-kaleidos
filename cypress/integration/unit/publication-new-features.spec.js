@@ -44,14 +44,14 @@ context('Publications new features tests', () => {
     cy.get(publication.publicationRequest.subject).should('have.value', 'DRINGEND: Publicatieaanvraag BS-werknr:  VO-dossier: 2007');
     cy.get(auk.modal.footer.cancel).click();
 
-    // remove urgency
-    cy.get(publication.publicationNav.case).click();
-    cy.get(publication.publicationCaseInfo.edit).click();
-    cy.get(publication.urgencyLevelCheckbox).parent()
-      .click();
-    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow2');
-    cy.get(publication.publicationCaseInfo.editView.save).click()
-      .wait('@patchPublicationFlow2');
+    // remove urgency // TODO-setup needed in new search test
+    // cy.get(publication.publicationNav.case).click();
+    // cy.get(publication.publicationCaseInfo.edit).click();
+    // cy.get(publication.urgencyLevelCheckbox).parent()
+    //   .click();
+    // cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow2');
+    // cy.get(publication.publicationCaseInfo.editView.save).click()
+    //   .wait('@patchPublicationFlow2');
   });
 
   it('should check number of extracts default, docs removable, uploaded docs inherited when making new publication and registration updates correctly', () => {
