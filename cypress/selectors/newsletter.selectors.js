@@ -77,7 +77,6 @@ const selectors = {
 
   // component newsletter-print-header
   newsletterPrintHeader: {
-    // TODO-SELECTOR unused selectors
     publicationPlannedDate: '[data-test-newsletter-print-header-publication-planned-date]',
   },
 };
