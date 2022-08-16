@@ -36,18 +36,14 @@
         />
       </Auk::KeyValue>
       <Auk::KeyValue data-test-details-tab-access-level @key={{t "publicity"}}>
-        {{#if this.isEditingDetails}}
-          <Utils::AccessLevelSelector
-            @allowClear={{true}}
-            @displayField="label"
-            @sortField="position"
-            @selected={{this.accessLevel}}
-            @onChange={{this.setAccessLevel}}
-            data-test-details-tab-edit-access-level
-          />
-        {{else}}
-          <Utils::AccessLevelColorBadge @accessLevel={{this.accessLevel}} />
-        {{/if}}
+        <Utils::AccessLevelSelector
+          @allowClear={{true}}
+          @displayField="label"
+          @sortField="position"
+          @selected={{this.accessLevel}}
+          @onChange={{this.setAccessLevel}}
+          data-test-details-tab-edit-access-level
+        />
       </Auk::KeyValue>
       <Auk::KeyValue
         data-test-details-tab-access-level
