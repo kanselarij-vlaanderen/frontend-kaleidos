@@ -17,6 +17,13 @@
 @import 'ember-appuniversum/c-modal';
 
 
+// Fixes
+
+.au-c-modal__close {
+  background-color: transparent; // fix UA default background-color styling
+}
+
+
 // Overrides
 
 .au-c-pill {
@@ -38,8 +45,7 @@
   }
 }
 
-// Change button link to Kaleidos style
-.au-c-button--link {
+.au-c-button--link { // change button link to Kaleidos style
   text-decoration: none;
   font-weight: 500;
 
@@ -49,6 +55,21 @@
   }
 }
 
+.au-c-modal__header {
+  padding: .7rem 2rem;
+
+  @include mq(medium) {
+    padding: 1.4rem 2rem;
+  }
+}
+
+.au-c-modal__title {
+  @include au-font-size(var(--au-h5-small));
+
+  @include mq(medium) {
+    @include au-font-size(var(--au-h5));
+  }
+}
 
 
 // Additions

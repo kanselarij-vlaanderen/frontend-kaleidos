@@ -136,7 +136,7 @@ context('new document viewer tests', () => {
     cy.get(document.documentPreviewSidebar.tabs.versions).click();
     cy.get(document.previewVersionCard.name).contains(newName)
       .parents(document.previewVersionCard.container)
-      .should('have.class', 'auk-document-card active')
+      .should('have.class', 'active')
       .within(() => {
         cy.get(document.previewVersionCard.details).contains(`${newAccessLevel} - ${searchDocumentType}`);
         cy.get(auk.fileTypePill).contains('PDF');
@@ -146,7 +146,7 @@ context('new document viewer tests', () => {
       .find(document.previewVersionCard.open)
       .click()
       .parents(document.previewVersionCard.container)
-      .should('have.class', 'auk-document-card active')
+      .should('have.class', 'active')
       .within(() => {
         cy.get(document.previewVersionCard.details).contains(`${defaultAccessLevel} - ${searchDocumentType}`);
         cy.get(auk.fileTypePill).contains('PDF');

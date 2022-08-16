@@ -82,6 +82,7 @@
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
             <Auk::Button
+              data-test-details-tab-cancel
               @skin="borderless"
               @disabled={{this.isProcessing}}
               {{on "click" (perform this.cancelEditDetails)}}
@@ -93,6 +94,7 @@
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <Auk::Button
+              data-test-details-tab-save
               @skin="primary"
               @disabled={{this.isProcessing}}
               @loading={{this.saveDetails.isRunning}}
@@ -127,6 +129,7 @@
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <Auk::Button
+                data-test-details-tab-edit
                 @skin="tertiary"
                 @icon="pencil"
                 @layout="icon-only"
