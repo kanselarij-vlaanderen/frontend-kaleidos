@@ -12,27 +12,21 @@
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body class="auk-u-p-1">
-      {{#if (or this.documentType this.isEditingDetails)}}
-        <Auk::KeyValue
-          data-test-details-tab-document-type
-          @key={{t "document-type"}}
-        >
-          {{#if this.isEditingDetails}}
-            <Utils::ModelSelector
-              data-test-details-tab-edit-document-type
-              @modelName="document-type"
-              @allowClear={{true}}
-              @searchField="label"
-              @displayField="label"
-              @sortField="priority"
-              @selected={{this.documentType}}
-              @onChange={{this.setDocumentType}}
-            />
-          {{else}}
-            {{this.documentType.label}}
-          {{/if}}
-        </Auk::KeyValue>
-      {{/if}}
+      <Auk::KeyValue
+        data-test-details-tab-document-type
+        @key={{t "document-type"}}
+      >
+        <Utils::ModelSelector
+          data-test-details-tab-edit-document-type
+          @modelName="document-type"
+          @allowClear={{true}}
+          @searchField="label"
+          @displayField="label"
+          @sortField="priority"
+          @selected={{this.documentType}}
+          @onChange={{this.setDocumentType}}
+        />
+      </Auk::KeyValue>
       <Auk::KeyValue data-test-details-tab-name @key={{t "document-name"}}>
         <Textarea
           data-test-details-tab-edit-name
@@ -141,7 +135,7 @@
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body class="auk-u-p-1">
-      {{#if (or this.documentType this.isEditingDetails)}}
+      {{#if this.documentType}}
         <Auk::KeyValue
           data-test-details-tab-document-type
           @key={{t "document-type"}}
