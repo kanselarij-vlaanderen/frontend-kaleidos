@@ -48,8 +48,8 @@ export default class NewsletterInfosSearchRoute extends Route {
   }
 
   model(filterParams) {
-    const searchParams = this.paramsFor('search');
-    const params = { ...searchParams, ...filterParams };
+    const params = {...filterParams};
+    this.filterParams = filterParams;
     if (!params.dateFrom) {
       params.dateFrom = null;
     }
@@ -129,7 +129,7 @@ export default class NewsletterInfosSearchRoute extends Route {
   }
 
   afterModel(model) {
-    const keyword = this.paramsFor('search').searchText;
+    const keyword = this.filterParams.searchText;
     let count;
     if (model && model.meta && isPresent(model.meta.count)) {
       count = model.meta.count;
@@ -145,13 +145,13 @@ export default class NewsletterInfosSearchRoute extends Route {
 
   setupController(controller, model) {
     super.setupController(controller, model);
-    const params = this.paramsFor('search');
+    const params = this.filterParams;
     controller.searchTextBuffer = params.searchText;
     controller.mandateesBuffer = params.mandatees;
     controller.page = params.page;
     controller.dateFromBuffer = controller.deserializeDate(params.dateFrom);
     controller.dateToBuffer = controller.deserializeDate(params.dateTo);
-    controller.emptySearch = isEmpty(this.paramsFor('search').searchText);
+    controller.emptySearch = isEmpty(params.searchText);
 
     if (controller.page !== this.lastParams.committed.page) {
       controller.page = this.lastParams.committed.page;
@@ -159,10 +159,14 @@ export default class NewsletterInfosSearchRoute extends Route {
   }
 
   @action
-  loading(/*transition, originRoute*/) {
-    // Disable bubbling of loading event to prevent parent loading route to be shown.
-    // Otherwise it causes a 'flickering' effect because the search filters disappear.
-    return false;
+  loading(transition) {
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const controller = this.controllerFor(this.routeName);
+    controller.isLoadingModel = true;
+    transition.promise.finally(() => {
+      controller.isLoadingModel = false;
+    });
+    return true;
   }
 
   postProcessAgendaitems(newsletter) {

@@ -86,8 +86,8 @@ export default class PublicationsOverviewSearchRoute extends Route {
   }
 
   model(filterParams) {
-    const searchParams = this.paramsFor('search');
-    const params = {...searchParams, ...filterParams};
+    const params = {...filterParams};
+    this.filterParams = filterParams;
 
     this.lastParams.stageLive(params);
 
@@ -157,7 +157,7 @@ export default class PublicationsOverviewSearchRoute extends Route {
 
   setupController(controller, model) {
     super.setupController(controller, model);
-    const params = this.paramsFor('search');
+    const params = this.filterParams;
     controller.searchTextBuffer = params.searchText;
     controller.page = params.page;
     controller.dateFromBuffer = controller.deserializeDate(params.dateFrom);
@@ -171,7 +171,15 @@ export default class PublicationsOverviewSearchRoute extends Route {
   }
 
   @action
-  loading() {
+  loading(transition) {
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const controller = this.controllerFor(this.routeName);
+    controller.isLoadingModel = true;
+    transition.promise.finally(() => {
+      controller.isLoadingModel = false;
+    });
+    // Disable bubbling of loading event to prevent parent loading route to be shown.
+    // Otherwise it causes a 'flickering' effect because the search filters disappear.
     return false;
   }
 

@@ -94,6 +94,7 @@ export default class PublicationsOverviewSearchController extends Controller {
   @tracked regulationTypeIds = [];
   @tracked publicationStatusIds = [];
   @tracked urgentOnly;
+  @tracked isLoadingModel;
 
   constructor() {
     super(...arguments);

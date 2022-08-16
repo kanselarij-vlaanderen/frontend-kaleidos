@@ -47,6 +47,7 @@ export default class NewsletterInfosSearchController extends Controller {
   @tracked size;
   @tracked sort;
   @tracked emptySearch;
+  @tracked isLoadingModel;
 
   constructor() {
     super(...arguments);
