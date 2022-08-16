@@ -55,6 +55,17 @@
               {{t "confidential"}}
             </AuPill>
           {{/if}}
+          {{#if this.loadNewsletterVisibility.lastSuccessful}}
+            {{#if this.newsletterIsVisible}}
+              <AuPill
+                @skin="border"
+                @icon="website"
+                @draft={{and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow @isNew}}
+              >
+                {{t "on-the-website"}}
+              </AuPill>
+            {{/if}}
+          {{/if}}
         </div>
       </div>
 
@@ -93,7 +104,7 @@
           {{/if}}
         {{/if}}
       </div>
-      {{#if (or this.currentSession.isEditor this.documentsAreReleased)}}
+      {{#if this.documentsAreVisible}}
         <div class="auk-u-mt-4">
           <Documents::DocumentBadgeList
             @pieces={{this.limitedAgendaitemDocuments}}
@@ -141,46 +152,6 @@
           </div>
           <div class="vlc-agenda-items__icons">
             <div class="auk-o-flex vlc-agenda-items__icons">
-              {{#if this.loadNewsletterVisibility.lastSuccessful}}
-                {{#if (not this.newsletterIsVisible)}}
-                  <Auk::Icon
-                    @name="not-visible"
-                    @skin="muted"
-                    class="auk-u-ml-2"
-                  >
-                    <EmberTooltip
-                      @side="top-end"
-                      @tooltipClass="tooltip-custom"
-                    >
-                      <p>
-                        {{t "not-visible-in-newsletter"}}
-                      </p>
-                    </EmberTooltip>
-                  </Auk::Icon>
-                {{else}}
-                  {{! TODO: this icon is merely here as an invisible placeholder.
-                    This keeps element-height the same at all times in order to prevent "jumping" when data is being side-loaded.
-                    This should be tackled differently through modified design }}
-                  <Auk::Icon
-                    @name="not-visible"
-                    @skin="invisible"
-                    class="auk-u-ml-2"
-                  />
-                {{/if}}
-              {{else}}
-                {{! TODO: design loading state for newsletter visibility }}
-                <Auk::Icon
-                  @name="circle-question"
-                  @skin="muted"
-                  class="auk-u-ml-2"
-                >
-                  <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
-                    <p>
-                      {{t "loading"}}
-                    </p>
-                  </EmberTooltip>
-                </Auk::Icon>
-              {{/if}}
               {{#if @isNew}}
                 <Auk::Icon @name="calendar-new" class="auk-u-ml-2">
                   <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">

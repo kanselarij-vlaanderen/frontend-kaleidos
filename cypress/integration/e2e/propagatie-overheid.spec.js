@@ -46,8 +46,7 @@ context('Propagation to other graphs', () => {
 
     cy.setFormalOkOnItemWithIndex(0);
     cy.setFormalOkOnItemWithIndex(1);
-    cy.approveDesignAgenda();
-    cy.closeAgenda();
+    cy.approveAndCloseDesignAgenda();
 
     cy.openDetailOfAgendaitem(subcaseTitle1);
     cy.addDocumentToTreatment(file);

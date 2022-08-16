@@ -24,14 +24,20 @@ groupRoles.set(ADMIN, [
   'manage-signatures',
   'manage-document-access-levels',
   'manage-publication-flows',
-  'manage-newsletter-infos',
   'search-publication-flows',
+  'manage-newsletter-infos',
+  'manage-decision-publications',
+  'manage-document-publications',
+  'manage-themis-publications',
 ]);
 
 groupRoles.set(KANSELARIJ, [
   'manage-signatures',
   'manage-document-access-levels',
   'manage-newsletter-infos',
+  'manage-decision-publications',
+  'manage-document-publications',
+  'manage-themis-publications',
 ]);
 
 groupRoles.set(MINISTER, [

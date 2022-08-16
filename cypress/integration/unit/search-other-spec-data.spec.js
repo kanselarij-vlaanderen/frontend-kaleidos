@@ -15,6 +15,7 @@ context('Search tests', () => {
 
   it('Search for title in kort-bestek and open the detail view by clicking icon', () => {
     cy.visit('/zoeken/kort-bestek');
+    cy.wait(1500); // TODO-bug flakyness on this page, maybe cypress is too fast??
     // ! depends on mandatee-assigning.spec and could fail
     const searchTerm = 'assign mandatee';
     cy.get(route.search.input).clear();

@@ -23,7 +23,7 @@ export default class PublicationsOverviewProofreadRoute extends PublicationsOver
   tableConfigStorageKey = "publication-table.proofread";
 
   beforeModel() {
-    super.beforeModel(...arguments)
+    super.beforeModel(...arguments);
     const proofreadStatuses = this.store.peekAll('publication-status').filter((it) => {
       return PROOFREAD_STATUSES_URIS.includes(it.uri);
     });

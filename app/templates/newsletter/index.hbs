@@ -36,9 +36,10 @@
       </thead>
       <tbody>
         {{#each this.model as |item|}}
-          <NewsletterTable::TableRow
+          <NewsletterItem::TableRow
             @agendaitem={{item.agendaitem}}
-            @newsletterInfo={{item.newsletterInfo}}
+            @newsletterItem={{item.newsletterItem}}
+            @onSave={{perform this.saveNewsletterItem}}
           />
         {{/each}}
       </tbody>

@@ -1,6 +1,6 @@
 <LinkTo
   class={{this.class}}
-  @route={{this.currentRoute}}
+  @route={{this.currentRouteName}}
   @model={{@agendaitem.id}}
 >
   {{!-- Long term, I think we rather want this component to trigger an action when the "active" status toggles.
@@ -37,7 +37,7 @@
                 @draft={{and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow @isNew}}
               >
                 <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
-                  {{t "visible-in-newsletter"}}
+                  {{t "on-the-website"}}
                 </EmberTooltip>
               </AuPill>
             {{/if}}

@@ -52,7 +52,7 @@ export default class CurrentSessionService extends Service {
   }
 
   may(roleName) {
-    return groupRoles.get(this.group.uri).includes(roleName);
+    return groupRoles.get(this.groupUri)?.includes(roleName);
   }
 
   get groupUri() {

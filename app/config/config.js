@@ -13,8 +13,14 @@ export const PAGE_SIZE = {
 
 export const LIVE_SEARCH_DEBOUNCE_TIME = 300;
 
+export const PUBLICATION_REPORT_START_YEAR = 1981;
+
 export const PUBLICATION_EMAIL = {
   OUTBOX: 'http://themis.vlaanderen.be/id/mail-folders/4296e6af-7d4f-423d-ba89-ed4cbbb33ae7',
 };
 
 export const KALEIDOS_START_DATE = new Date(2019, 9 /* =october */, 1);
+
+// Number of milliseconds it takes to release a publication via Yggdrasil/Themis
+export const ESTIMATED_PUBLICATION_DURATION = 30 * 60 * 1000;
+export const PUBLICATION_ACTIVITY_REFRESH_INTERVAL_MS = 60 * 1000;

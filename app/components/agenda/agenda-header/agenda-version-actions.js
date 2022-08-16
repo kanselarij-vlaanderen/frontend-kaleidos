@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { A } from '@ember/array';
 import { all } from 'rsvp'; // TODO KAS-2399 better way then this ?
@@ -362,6 +362,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     }
     try {
       await approveAgendaAndCloseMeeting(this.args.currentAgenda);
+      await timeout(1000); // timeout to await async cache invalidations in backend to be finished
       // Data reloading
       await this.reloadAgenda(this.args.currentAgenda);
       await this.reloadAgendaitemsOfAgenda(this.args.currentAgenda);
@@ -400,6 +401,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     }
     try {
       const lastApprovedAgendaId = await closeMeeting(this.args.meeting);
+      await timeout(1000); // timeout to await async cache invalidations in backend to be finished
       const lastApprovedAgenda = await this.store.findRecord('agenda', lastApprovedAgendaId);
       // Data reloading
       await this.reloadAgenda(lastApprovedAgenda);

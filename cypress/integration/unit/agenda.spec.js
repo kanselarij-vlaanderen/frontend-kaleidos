@@ -213,6 +213,11 @@ context('Agenda tests', () => {
 
   it('It should be automatically get the next meetingID assigned in the UI', () => {
     const agendaDateSingle = Cypress.dayjs();
+    cy.intercept('GET', '/meetings/**/internal-decision-publication-activity').as('getDecisionPubActivity');
+    cy.intercept('GET', '/meetings/**/internal-document-publication-activity').as('getDocPubActivity');
+    cy.intercept('GET', '/themis-publication-activities**').as('getThemisPubActivity');
+    cy.intercept('GET', '/concepts?filter**').as('loadConcepts');
+
     // We have to make this agenda with number 1 to ensure numbering works
     cy.createAgenda(agendaKind, agendaDateSingle, agendaPlace, 1);
     cy.createAgenda(agendaKind, agendaDateSingle, agendaPlace, null, 'VV AA 1999/2BIS').then((result) => {
@@ -220,6 +225,10 @@ context('Agenda tests', () => {
       // Check the values in edit session view
       cy.get(agenda.agendaHeader.showOptions).click();
       cy.get(agenda.agendaHeader.actions.toggleEditingMeeting).click();
+      cy.wait('@getDecisionPubActivity');
+      cy.wait('@getDocPubActivity');
+      cy.wait('@getThemisPubActivity');
+      cy.wait('@loadConcepts');
       cy.get(agenda.editMeeting.meetingNumber).should('have.value', result.meetingNumber);
       cy.get(agenda.editMeeting.numberRep.view).should('contain', result.meetingNumberRep);
       cy.get(auk.modal.footer.cancel).click();
@@ -296,10 +305,18 @@ context('Agenda tests', () => {
     cy.createAgenda(null, agendaDateMR, null, agendaNumberMR);
     cy.createAgenda(null, agendaDatePVV, null, agendaNumberPVV);
 
+    cy.intercept('GET', '/meetings/**/internal-decision-publication-activity').as('getDecisionPubActivity');
+    cy.intercept('GET', '/meetings/**/internal-document-publication-activity').as('getDocPubActivity');
+    cy.intercept('GET', '/themis-publication-activities**').as('getThemisPubActivity');
+    cy.intercept('GET', '/concepts?filter**').as('loadConcepts');
     // switch to PVV
     cy.openAgendaForDate(agendaDatePVV);
     cy.get(agenda.agendaHeader.showOptions).click();
     cy.get(agenda.agendaHeader.actions.toggleEditingMeeting).click();
+    cy.wait('@getDecisionPubActivity');
+    cy.wait('@getDocPubActivity');
+    cy.wait('@getThemisPubActivity');
+    cy.wait('@loadConcepts');
     cy.get(agenda.editMeeting.kind).click();
     selectFromDropdown(vvKind);
     cy.get(agenda.editMeeting.relatedMainMeeting).click();
@@ -317,6 +334,10 @@ context('Agenda tests', () => {
     cy.openAgendaForDate(agendaDateMR, 1);
     cy.get(agenda.agendaHeader.showOptions).click();
     cy.get(agenda.agendaHeader.actions.toggleEditingMeeting).click();
+    cy.wait('@getDecisionPubActivity');
+    cy.wait('@getDocPubActivity');
+    cy.wait('@getThemisPubActivity');
+    cy.wait('@loadConcepts');
     cy.get(agenda.editMeeting.kind).click();
     selectFromDropdown(mrKind);
     cy.get(agenda.editMeeting.datepicker).click();

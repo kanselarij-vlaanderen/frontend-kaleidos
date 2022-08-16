@@ -124,6 +124,11 @@ context('Different session kinds should show different titles', () => {
     const fullmeetingNumberVV = `${fullmeetingNumber}${suffixVV}`;
     const newCaseTitle = 'Dossier voor PVV agenda';
 
+    cy.intercept('GET', '/meetings/**/internal-decision-publication-activity').as('getDecisionPubActivity');
+    cy.intercept('GET', '/meetings/**/internal-document-publication-activity').as('getDocPubActivity');
+    cy.intercept('GET', '/themis-publication-activities**').as('getThemisPubActivity');
+    cy.intercept('GET', '/concepts?filter**').as('loadConcepts');
+
     cy.createAgenda(null, agendaDate, null, agendaNumber);
     // set kind to PVV
     cy.get(route.agendas.action.newMeeting).click();
@@ -140,6 +145,10 @@ context('Different session kinds should show different titles', () => {
     cy.openAgendaForDate(agendaDate, 1);
     cy.get(agenda.agendaHeader.showOptions).click();
     cy.get(agenda.agendaHeader.actions.toggleEditingMeeting).click();
+    cy.wait('@getDecisionPubActivity');
+    cy.wait('@getDocPubActivity');
+    cy.wait('@getThemisPubActivity');
+    cy.wait('@loadConcepts');
     cy.get(utils.kindSelector).contains(vvKind);
     cy.get(agenda.editMeeting.numberRep.view).should('contain', fullmeetingNumberVV);
     cy.get(auk.modal.footer.cancel).click();

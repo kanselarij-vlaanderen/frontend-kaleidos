@@ -266,18 +266,4 @@ export default class AgendaService extends Service {
       this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
     }
   }
-
-  async retrieveModifiedDateFromNota(agendaitem) {
-    const nota = await agendaitem.get('nota');
-    if (!nota) {
-      return null;
-    }
-    const pieces = await nota.get('pieces');
-    const hasRevision = pieces.length > 1;
-    if (hasRevision) {
-      const lastPiece = await nota.get('lastPiece');
-      return lastPiece.created;
-    }
-    return null;
-  }
 }

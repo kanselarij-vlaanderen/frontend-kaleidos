@@ -21,26 +21,17 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service agendaService;
   @service signatureService;
 
-  @tracked showBatchDetails = false;
+  documentsAreVisible;
+  defaultAccessLevel;
+  @tracked isOpenBatchDetailsModal = false;
   @tracked isOpenPieceUploadModal = false;
-  @tracked defaultAccessLevel;
+  @tracked isOpenPublicationModal = false;
   @tracked newPieces = A([]);
   @tracked newAgendaitemPieces;
   @tracked agendaitem;
   @tracked currentAgenda;
   @tracked previousAgenda;
   @tracked agendaActivity;
-
-  @tracked isOpenPublicationModal = false;
-
-  get governmentCanViewDocuments() {
-    const isOverheid = this.currentSession.isOverheid;
-
-    const documentsAreReleased = this.agendaitem.get(
-      'agenda.createdFor.releasedDocuments'
-    ); // TODO async ...?
-    return !(isOverheid && !documentsAreReleased);
-  }
 
   get isShownOpenPublicationModal() {
     const mayPublish = this.currentSession.may('manage-publication-flows');
@@ -154,12 +145,9 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     // TODO: Assess if we need to go over container. `previousVersion` (if existant) might suffice?
     const documentContainer = await deletedPiece.documentContainer;
     if (documentContainer) {
-      const lastPiece = await documentContainer.get('lastPiece'); // TODO: what is the purpose of getting lastPiece here
-      if (this.agendaitem && lastPiece) {
-        await restorePiecesFromPreviousAgendaitem(
-          this.agendaitem,
-          documentContainer
-        );
+      const pieces = documentContainer.pieces;
+      if (this.agendaitem && pieces.length > 0) {
+        await restorePiecesFromPreviousAgendaitem(this.agendaitem, documentContainer);
         // TODO: make sure we're not loading stale cache
       }
       this.refresh();
@@ -225,18 +213,18 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @action
   async openBatchDetails() {
     await this.ensureFreshData.perform();
-    this.showBatchDetails = true;
+    this.isOpenBatchDetailsModal = true;
   }
 
   @action
   cancelBatchDetails() {
-    this.showBatchDetails = false;
+    this.isOpenBatchDetailsModal = false;
   }
 
   @action
   saveBatchDetails() {
+    this.isOpenBatchDetailsModal = false;
     this.refresh();
-    this.showBatchDetails = false;
   }
 
   @action
