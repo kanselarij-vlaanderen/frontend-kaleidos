@@ -63,21 +63,7 @@ export default class NewsletterItemEditPanelComponent extends Component {
     this.newsletterItem.remark = this.remark;
     this.newsletterItem.finished = this.isFinished;
     this.newsletterItem.themes = this.selectedThemes;
-    try {
-      // The editor introduces &nbsp; instead of normal spaces to work around
-      // certain browsers' behavior where normal spaces on outer ends of text nodes
-      // aren't rendered in the content-editable. In recent versions of the editor however,
-      // this &nbsp;-inserting seems to happen too often, which results in very long
-      // lines that don't break, which is undesired.
-      // Here we replace all &nbsp's that don't lean against html tags in an attempt
-      // to keep the editor's workaround behavior, while replacing unnecessary &nbsp;'s
-      //
-      const richtext = this.editorInstance.htmlContent;
-      const cleanedHtml = richtext.replaceAll(/(?<!>)&nbsp;(?!<)/gm, ' ');
-      this.newsletterItem.richtext = cleanedHtml;
-    } catch {
-      // pass
-    }
+    this.newsletterItem.richtext = this.editorInstance.htmlContent;
     yield this.args.onSave(this.newsletterItem);
     this.isOpenMissingThemesModal = false;
   }
