@@ -17,9 +17,6 @@ export default ModelWithModifier.extend({
   remark: attr('string'),
 
   agendaItemTreatment: belongsTo('agenda-item-treatment'),
-  meeting: belongsTo('meeting', {
-    inverse: null,
-  }),
   pieces: hasMany('piece', {
     inverse: null,
   }),

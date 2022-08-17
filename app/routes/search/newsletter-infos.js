@@ -85,8 +85,6 @@ export default class NewsletterInfosSearchRoute extends Route {
       filter[':lte:agendaitems.meetingDate'] = date.utc().toISOString();
     }
 
-    // filter out newsletters that are general newsletters
-    filter[':has-no:generalNewsletterMeetingId'] = 't';
     // filter out newsletters that are not linked to a meeting via treatment(s)/agendaitem(s)
     filter[':has:agendaitems'] = 't';
 
