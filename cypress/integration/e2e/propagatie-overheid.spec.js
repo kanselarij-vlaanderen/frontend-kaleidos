@@ -50,11 +50,6 @@ context('Propagation to other graphs', () => {
     cy.setFormalOkOnItemWithIndex(1);
     cy.approveAndCloseDesignAgenda();
 
-    // check status pills (use within because find doesn't work, probably can't chain of appuniversum wormhole)
-    cy.get(agenda.publicationPills.container).within(() => {
-      cy.get(appuniversum.pill).should('not.exist');
-    });
-
     cy.openDetailOfAgendaitem(subcaseTitle1);
     cy.addDocumentToTreatment(file);
     cy.get(utils.vlModalFooter.save).click();
@@ -79,6 +74,11 @@ context('Propagation to other graphs', () => {
     cy.get(agenda.agendaitemTitlesEdit.actions.save).click();
     cy.wait('@patchAgendaitem');
 
+    // check status pills (use within because find doesn't work, probably can't chain of appuniversum wormhole)
+    cy.get(agenda.publicationPills.container).within(() => {
+      cy.get(appuniversum.pill).should('not.exist');
+    });
+
     cy.releaseDecisions();
     cy.wait(60000);
     // check status pills (use within because find doesn't work, probably can't chain of appuniversum wormhole)
@@ -86,78 +86,7 @@ context('Propagation to other graphs', () => {
       cy.get(appuniversum.pill).contains(`Beslissingen zijn vrijgegeven op ${todayFormatted}`);
     });
 
-    cy.get(agenda.agendaHeader.showOptions).click();
-    cy.get(agenda.agendaHeader.actions.releaseDocuments).click({
-      force: true,
-    });
-    cy.get(agenda.agendaHeader.confirm.releaseDocuments).click()
-      .wait(2000);
-    cy.get(agenda.publicationPills.container).within(() => {
-      cy.get(appuniversum.pill).eq(1)
-        .contains(`Publicatie documenten gepland op ${agendaDate.add(2, 'day').format('DD-MM-YYYY')}`);
-      cy.get(appuniversum.pill).eq(2)
-        .contains(`Publicatie documenten gepland op ${agendaDate.add(2, 'day').format('DD-MM-YYYY')}`);
-    });
-
     cy.logoutFlow();
-  });
-
-  it('change defaults and check status pills', () => {
-    cy.login('Admin');
-    const newAgendaDate = Cypress.dayjs().add(2, 'weeks')
-      .day(4)
-      .hour(14)
-      .minute(0);
-    const newReleaseDate = Cypress.dayjs().add(2, 'weeks')
-      .day(5)
-      .hour(14)
-      .minute(0);
-    cy.createAgenda(null, newAgendaDate, 'Zaal oxford bij Cronos Leuven', null, null, newAgendaDate);
-    cy.log(newAgendaDate.format('DD-MM-YYYY HH:mm'));
-
-    cy.openAgendaForDate(newAgendaDate);
-
-    cy.setFormalOkOnItemWithIndex(0);
-    cy.approveAndCloseDesignAgenda();
-
-    // check if planned release date is the changed value
-    cy.get(agenda.agendaHeader.showOptions).click();
-    cy.get(agenda.agendaHeader.actions.releaseDocuments).click({
-      force: true,
-    });
-    cy.get(utils.vlDatepicker).eq(0)
-      .should('have.value', newAgendaDate.format('DD-MM-YYYY HH:mm'));
-    cy.get(utils.vlDatepicker).eq(1)
-      .should('have.value', newAgendaDate.format('DD-MM-YYYY HH:mm'));
-    cy.get(agenda.agendaHeader.confirm.releaseDocuments).click()
-      .wait(2000);
-    cy.get(agenda.publicationPills.container).within(() => {
-      cy.get(appuniversum.pill).eq(0)
-        .contains(`Publicatie documenten gepland op ${newAgendaDate.format('DD-MM-YYYY')}`);
-      cy.get(appuniversum.pill).eq(1)
-        .contains(`Publicatie documenten gepland op ${newAgendaDate.format('DD-MM-YYYY')}`);
-    });
-
-    // change release date and check if value changed
-    cy.get(agenda.agendaHeader.showOptions).click();
-    cy.get(agenda.agendaHeader.actions.releaseDocuments).click({
-      force: true,
-    });
-    cy.get(utils.vlDatepicker).eq(0)
-      .click();
-    cy.setDateAndTimeInFlatpickr(newReleaseDate);
-    cy.get(utils.vlDatepicker).eq(1)
-      .click({
-        force: true,
-      });
-    cy.setDateAndTimeInFlatpickr(newReleaseDate);
-    cy.get(agenda.agendaHeader.confirm.releaseDocuments).click()
-      .wait(2000);
-    cy.get(agenda.publicationPills.container).within(() => {
-      cy.get(appuniversum.pill).contains(`Publicatie documenten gepland op ${newReleaseDate.format('DD-MM-YYYY')}`);
-      // cy.get(appuniversum.pill).eq(1)
-      //   .contains(`Publicatie documenten gepland op ${newReleaseDate.format('DD-MM-YYYY')}`);
-    });
   });
 
   it('Test as Minister', () => {
@@ -192,7 +121,15 @@ context('Propagation to other graphs', () => {
     cy.login('Admin');
     cy.openAgendaForDate(agendaDate);
     cy.releaseDocuments();
+    cy.get(agenda.publicationPills.container).within(() => {
+      cy.get(appuniversum.pill).eq(1)
+        .contains(`Publicatie documenten gepland op ${todayFormatted}`);
+    });
     cy.wait(60000);
+    cy.get(agenda.publicationPills.container).within(() => {
+      cy.get(appuniversum.pill).eq(1)
+        .contains(`Documenten zijn vrijgegeven op ${todayFormatted}`);
+    });
     cy.logoutFlow();
   });
 
