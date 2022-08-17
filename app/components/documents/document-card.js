@@ -170,6 +170,15 @@ export default class DocumentsDocumentCardComponent extends Component {
   *addPiece() {
     try {
       yield this.args.onAddPiece(this.newPiece);
+
+      const internRegering = yield this.store.findRecordByUri(
+        'concept',
+        CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
+      );
+      const previousPiece = this.sortedPieces.lastObject;
+      previousPiece.accessLevel = internRegering;
+      yield previousPiece.save();
+
       this.loadVersionHistory.perform();
       this.newPiece = null;
       this.isOpenUploadModal = false;
