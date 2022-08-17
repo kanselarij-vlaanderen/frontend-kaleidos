@@ -17,8 +17,7 @@ export default class PublicationsOverviewBaseRoute extends Route {
   tableConfigStorageKey;
 
   tableConfig;
-  includes;
-  filter;
+  filter; // set in subclasses
 
   queryParams = {
     page: {
@@ -41,22 +40,6 @@ export default class PublicationsOverviewBaseRoute extends Route {
     if (!this.tableConfig.visibleColumns.length) {
       this.tableConfig.loadDefault();
     }
-
-    // determine which included data the visible columns require
-    let requiredFieldPaths = [];
-    for (const column of Object.values(this.tableConfig.visibleColumns)) {
-      requiredFieldPaths = requiredFieldPaths.concat(column.apiFieldPaths);
-    }
-    // Filter for field-paths that are more than 1 hop away, thus requiring an include
-    const pathsRequiringInclude = requiredFieldPaths.filter((path) => {
-      return path.includes('.');
-    }).map((path) => {
-      return path.split('.').slice(0, -1).join('.');
-    });
-
-    const uniqueIncludes = [...new Set(pathsRequiringInclude)];
-    // Sort includes to increase cache-hit chances
-    this.includes = uniqueIncludes.sort();
   }
 
   model(params) {
@@ -68,9 +51,6 @@ export default class PublicationsOverviewBaseRoute extends Route {
         size: params.size,
       },
     };
-    if (this.includes.length) {
-      queryParams.include = this.includes.join(',');
-    }
     return this.store.query('publication-flow', queryParams);
   }
 
