@@ -30,7 +30,6 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   cy.intercept('POST', '/meetings').as('createNewMeeting');
   cy.intercept('POST', '/agendas').as('createNewAgenda');
   cy.intercept('POST', '/newsletter-infos').as('createNewsletter');
-  cy.intercept('PATCH', '/meetings/**').as('patchMeetings');
 
   cy.visit('/overzicht?size=2');
   cy.get(route.agendas.action.newMeeting).click();
@@ -118,16 +117,13 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
     .its('response.body')
     .then((responseBody) => {
       agendaId = responseBody.data.id;
-    });
-  cy.log('/createAgenda');
-  cy.wait('@patchMeetings', {
-    timeout: 60000,
-  })
+    })
     .then(() => new Cypress.Promise((resolve) => {
       resolve({
         meetingId, meetingNumber, agendaId, meetingNumberRep,
       });
     }));
+  cy.log('/createAgenda');
 }
 
 /**
