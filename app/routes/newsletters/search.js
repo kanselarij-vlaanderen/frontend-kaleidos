@@ -164,7 +164,9 @@ export default class NewsletterInfosSearchRoute extends Route {
     transition.promise.finally(() => {
       controller.isLoadingModel = false;
     });
-    return true;
+    // Disable bubbling of loading event to prevent parent loading route to be shown.
+    // Otherwise it causes a 'flickering' effect because the search filters disappear.
+    return false;
   }
 
   postProcessAgendaitems(newsletter) {
