@@ -22,24 +22,18 @@
       </div>
       <div class="auk-form-group auk-u-position-relative au-u-margin-bottom-none au-u-1-6">
         <Auk::Label>{{t "from"}}</Auk::Label>
-        <WebComponents::VlDatepicker
+        <Auk::Datepicker
           data-test-route-search-date-from
-          @selectedDate={{array this.dateFromBuffer}}
-          @dateChanged={{fn (mut this.dateFromBuffer)}}
-          @enableClear={{this.dateFromBuffer}}
-          @onClear={{fn (mut this.dateFromBuffer) null}}
-          @allowInput={{true}}
+          @date={{this.dateFromBuffer}}
+          @onChange={{set this "dateFromBuffer"}}
         />
       </div>
       <div class="auk-form-group auk-u-position-relative au-u-margin-bottom-none au-u-1-6">
         <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
-        <WebComponents::VlDatepicker
+        <Auk::Datepicker
           data-test-route-search-date-to
-          @selectedDate={{array this.dateToBuffer}}
-          @dateChanged={{fn (mut this.dateToBuffer)}}
-          @enableClear={{this.dateToBuffer}}
-          @onClear={{fn (mut this.dateToBuffer) null}}
-          @allowInput={{true}}
+          @date={{this.dateToBuffer}}
+          @onChange={{set this "dateToBuffer"}}
         />
       </div>
       <div class="auk-form-group au-u-margin-bottom-none au-u-1-6">
