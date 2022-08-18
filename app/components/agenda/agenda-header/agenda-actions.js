@@ -5,7 +5,6 @@ import { task } from 'ember-concurrency';
 import { debug } from '@ember/debug';
 import { inject as service } from '@ember/service';
 import { all } from 'rsvp';
-import { setAgendaitemFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import {
   constructArchiveName,
   fetchArchivingJobForAgenda,
@@ -222,6 +221,20 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     this.showConfirmUnpublishThemis = false;
   }
 
+  /**
+   * @name setAgendaitemFormallyOkThrottled
+   * @description set formally ok on agendaitems, throttled task.
+   * @param agendaitem
+   * @returns promise
+   */
+  @task({ maxConcurrency: 3, enqueue: true })
+  *setAgendaitemFormallyOkThrottled(agendaitem) {
+    if (agendaitem.formallyOk !== CONSTANTS.ACCEPTANCE_STATUSSES.OK) {
+      agendaitem.formallyOk = CONSTANTS.ACCEPTANCE_STATUSSES.OK;
+      return yield agendaitem.save();
+    }
+  }
+
   @action
   async downloadAllDocuments() {
     // timeout options is in milliseconds. when the download is ready, the toast should last very long so users have a time to click it
@@ -291,13 +304,8 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     this.showConfirmApprovingAllAgendaitems = false;
     this.args.onStartLoading(this.intl.t('approve-all-agendaitems-message'));
     const agendaitemsNotOk = await this.allAgendaitemsNotOk(this.args.currentAgenda);
-    for (const agendaitem of agendaitemsNotOk) {
-      try {
-        await setAgendaitemFormallyOk(agendaitem);
-      } catch {
-        await agendaitem.rollbackAttributes();
-      }
-    }
+    const savePromises = agendaitemsNotOk.map((agendaitem) => this.setAgendaitemFormallyOkThrottled.perform(agendaitem));
+    await all(savePromises);
     this.args.onStopLoading();
     this.args.didApproveAgendaitems();
   }
