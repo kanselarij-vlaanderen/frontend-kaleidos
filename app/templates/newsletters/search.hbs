@@ -17,18 +17,16 @@
           data-test-route-search-input
         />
       </div>
-      <div class="auk-form-group auk-u-position-relative au-u-margin-bottom-none au-u-1-6">
+      <div class="auk-form-group auk-u-position-relative au-u-margin-bottom-none au-u-1-6" data-test-route-search-date-from>
         <Auk::Label>{{t "from"}}</Auk::Label>
         <Auk::Datepicker
-          data-test-route-search-date-from
           @date={{this.dateFromBuffer}}
           @onChange={{set this "dateFromBuffer"}}
         />
       </div>
-      <div class="auk-form-group auk-u-position-relative au-u-margin-bottom-none au-u-1-6">
+      <div class="auk-form-group auk-u-position-relative au-u-margin-bottom-none au-u-1-6" data-test-route-search-date-to>
         <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
         <Auk::Datepicker
-          data-test-route-search-date-to
           @date={{this.dateToBuffer}}
           @onChange={{set this "dateToBuffer"}}
         />

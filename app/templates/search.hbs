@@ -55,20 +55,18 @@
         </div>
       </div>
       <div class="auk-o-grid-col-2">
-        <div class="auk-form-group auk-u-position-relative">
+        <div class="auk-form-group auk-u-position-relative" data-test-route-search-date-from>
           <Auk::Label>{{t "from"}}</Auk::Label>
           <Auk::Datepicker
-            data-test-route-search-date-from
             @date={{this.dateFromBuffer}}
             @onChange={{set this "dateFromBuffer"}}
           />
         </div>
       </div>
       <div class="auk-o-grid-col-2">
-        <div class="auk-form-group auk-u-position-relative">
+        <div class="auk-form-group auk-u-position-relative" data-test-route-search-date-to>
           <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
           <Auk::Datepicker
-            data-test-route-search-date-to
             @date={{this.dateToBuffer}}
             @onChange={{set this "dateToBuffer"}}
           />
