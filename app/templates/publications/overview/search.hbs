@@ -3,94 +3,86 @@
   <Auk::Navbar>
     {{!-- template-lint-disable no-redundant-fn --}}
     {{!-- TODO: Using plain decorated action for Input's @enter doesn't work for some reason --}}
-    <div class="auk-o-grid auk-o-grid--align-end auk-u-maximize-width auk-u-mb-4 auk-u-mt-4">
-      <div class="auk-o-grid-col-4">
-        <div class="auk-form-group">
-          <div class="auk-o-flex auk-o-flex--align-baseline">
-            <Auk::Label for="dossierId" class="auk-u-mr">
-              {{capitalize (t "search-term")}}
-            </Auk::Label>
-            <span>
-              <Auk::Icon
-                @name="circle-info"
-                @skin="muted"
-                class="auk-u-cursor-pointer"
-                {{on "click" this.openPopover}}
-              >
-                <AttachPopover
-                  @class="auk-popover"
-                  @showOn="click"
-                  @placement="right"
-                  @hideOn="clickout"
-                  @isShown={{this.popoverShown}}
-                  @renderInPlace={{true}}
-                >
-                  <Utils::SearchLegend
-                    @userClickedClose={{this.closePopover}}
-                  />
-                </AttachPopover>
-              </Auk::Icon>
-            </span>
-          </div>
-          <Auk::Input
-            @block={{true}}
-            placeholder={{t "search-placeholder"}}
-            @value={{this.searchTextBuffer}}
-            @enter={{fn this.search}}
-            id="dossierId"
-            data-test-route-search-input
-          />
-        </div>
-      </div>
-      <div class="auk-o-grid-col-2">
-        <div class="auk-form-group auk-u-position-relative">
-          <Auk::Label for="dateType">
-            {{capitalize (t "search-by-date-type")}}
+    <div class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-end auk-u-maximize-width auk-u-mb-4 auk-u-mt-4">
+      <div class="auk-form-group au-u-margin-bottom-none au-u-2-6">
+        <div class="auk-o-flex auk-o-flex--align-baseline">
+          <Auk::Label for="dossierId" class="auk-u-mr">
+            {{capitalize (t "search-term")}}
           </Auk::Label>
-          <select
-            data-test-route-search-publication-date-type
-            name="dateType"
-            id="dateType"
-            class="auk-select auk-select--block"
-            {{on "input" this.selectPublicationDateType}}
+          <span>
+            <Auk::Icon
+              @name="circle-info"
+              @skin="muted"
+              class="auk-u-cursor-pointer"
+              {{on "click" this.openPopover}}
             >
-            {{#each this.publicationDateTypes as |dateType|}}
-              <option
-                value={{dateType.key}}
-                selected={{eq dateType.key this.publicationDateTypeKeyBuffer}}>
-                {{dateType.label}}
-              </option>
-            {{/each}}
-          </select>
+              <AttachPopover
+                @class="auk-popover"
+                @showOn="click"
+                @placement="right"
+                @hideOn="clickout"
+                @isShown={{this.popoverShown}}
+                @renderInPlace={{true}}
+              >
+                <Utils::SearchLegend
+                  @userClickedClose={{this.closePopover}}
+                />
+              </AttachPopover>
+            </Auk::Icon>
+          </span>
         </div>
+        <Auk::Input
+          @block={{true}}
+          placeholder={{t "search-placeholder"}}
+          @value={{this.searchTextBuffer}}
+          @enter={{fn this.search}}
+          id="dossierId"
+          data-test-route-search-input
+        />
       </div>
-      <div class="auk-o-grid-col-2">
-        <div class="auk-form-group auk-u-position-relative">
-          <Auk::Label>{{t "from"}}</Auk::Label>
-          <WebComponents::VlDatepicker
-            data-test-route-search-date-from
-            @selectedDate={{array this.dateFromBuffer}}
-            @dateChanged={{fn (mut this.dateFromBuffer)}}
-            @enableClear={{this.dateFromBuffer}}
-            @onClear={{fn (mut this.dateFromBuffer) null}}
-            @allowInput={{true}}
-          />
-        </div>
+      <div class="auk-form-group au-u-margin-bottom-none auk-u-position-relative au-u-1-6">
+        <Auk::Label for="dateType">
+          {{capitalize (t "search-by-date-type")}}
+        </Auk::Label>
+        <select
+          data-test-route-search-publication-date-type
+          name="dateType"
+          id="dateType"
+          class="auk-select auk-select--block"
+          {{on "input" this.selectPublicationDateType}}
+        >
+          {{#each this.publicationDateTypes as |dateType|}}
+            <option
+              value={{dateType.key}}
+              selected={{eq dateType.key this.publicationDateTypeKeyBuffer}}>
+              {{dateType.label}}
+            </option>
+          {{/each}}
+        </select>
       </div>
-      <div class="auk-o-grid-col-2">
-        <div class="auk-form-group auk-u-position-relative">
-          <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
-          <WebComponents::VlDatepicker
-            data-test-route-search-date-to
-            @selectedDate={{array this.dateToBuffer}}
-            @dateChanged={{fn (mut this.dateToBuffer)}}
-            @enableClear={{this.dateToBuffer}}
-            @onClear={{fn (mut this.dateToBuffer) null}}
-            @allowInput={{true}}
-          />
-        </div>
+      <div class="auk-form-group au-u-margin-bottom-none auk-u-position-relative au-u-1-6">
+        <Auk::Label>{{t "from"}}</Auk::Label>
+        <WebComponents::VlDatepicker
+          data-test-route-search-date-from
+          @selectedDate={{array this.dateFromBuffer}}
+          @dateChanged={{fn (mut this.dateFromBuffer)}}
+          @enableClear={{this.dateFromBuffer}}
+          @onClear={{fn (mut this.dateFromBuffer) null}}
+          @allowInput={{true}}
+        />
       </div>
-      <div class="auk-o-grid-col-1">
+      <div class="auk-form-group au-u-margin-bottom-none auk-u-position-relative au-u-1-6">
+        <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
+        <WebComponents::VlDatepicker
+          data-test-route-search-date-to
+          @selectedDate={{array this.dateToBuffer}}
+          @dateChanged={{fn (mut this.dateToBuffer)}}
+          @enableClear={{this.dateToBuffer}}
+          @onClear={{fn (mut this.dateToBuffer) null}}
+          @allowInput={{true}}
+        />
+      </div>
+      <div class="auk-form-group au-u-margin-bottom-none au-u-1-6">
         <Auk::Button
           @skin="primary"
           @icon="search"
@@ -99,7 +91,7 @@
           type="button"
           {{on "click" this.search}}
         >
-          {{capitalize (t "search-publication")}}
+          {{capitalize (t "search")}}
         </Auk::Button>
       </div>
     </div>
@@ -107,7 +99,7 @@
   </Auk::Navbar>
   <div class="auk-scroll-wrapper__body">
     {{!-- TODO seperate route or here? --}}
-    <div class="auk-u-m-4">    
+    <div class="auk-u-m-4">
       <div class="auk-o-grid auk-u-mb-2">
         <div class="auk-o-grid-col-2">
           <div class="auk-box">
