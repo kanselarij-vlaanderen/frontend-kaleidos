@@ -42,7 +42,6 @@ export default class NewsletterInfosSearchController extends Controller {
   @tracked mandateesBuffer;
   @tracked dateFromBuffer;
   @tracked dateToBuffer;
-  @tracked popoverShown; // TODO, this is for a tooltip, this should be handled elsewhere
   @tracked page;
   @tracked size;
   @tracked sort;
@@ -62,16 +61,6 @@ export default class NewsletterInfosSearchController extends Controller {
 
   serializeDate(date) {
     return date && moment(date).format('DD-MM-YYYY');
-  }
-
-  @action
-  openPopover() {
-    this.popoverShown = true;
-  }
-
-  @action
-  closePopover() { // TODO, this is for a tooltip, this should be handled elsewhere
-    this.popoverShown = false;
   }
 
   @action

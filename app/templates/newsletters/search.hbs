@@ -9,27 +9,7 @@
           <Auk::Label for="dossierId" class="auk-u-mr">
             {{capitalize (t "keyword")}}
           </Auk::Label>
-          <span>
-            <Auk::Icon
-              @name="circle-info"
-              @skin="muted"
-              class="auk-u-cursor-pointer"
-              {{on "click" this.openPopover}}
-            >
-              <AttachPopover
-                @class="auk-popover"
-                @showOn="click"
-                @placement="right"
-                @hideOn="clickout"
-                @isShown={{this.popoverShown}}
-                @renderInPlace={{true}}
-              >
-                <Utils::SearchLegend
-                  @userClickedClose={{this.closePopover}}
-                />
-              </AttachPopover>
-            </Auk::Icon>
-          </span>
+          <Utils::SearchTooltip />
         </div>
         <Auk::Input
           @block={{true}}
