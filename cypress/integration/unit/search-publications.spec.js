@@ -2,7 +2,7 @@
 // / <reference types="Cypress" />
 import auk from '../../selectors/auk.selectors';
 import dependency from '../../selectors/dependency.selectors';
-import publication from '../../selectors/publication.selectors';
+// import publication from '../../selectors/publication.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
