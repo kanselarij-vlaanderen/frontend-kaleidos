@@ -7,6 +7,7 @@ const {
   KABINET,
   OVERHEID,
   OVRB,
+  KORT_BESTEK,
   USER,
 } = CONSTANTS.ACCOUNT_GROUPS;
 
@@ -56,6 +57,10 @@ groupRoles.set(OVRB, [
   'manage-signatures',
   'manage-publication-flows',
   'search-publication-flows',
+]);
+
+groupRoles.set(KORT_BESTEK, [
+  'manage-newsletter-infos',
 ]);
 
 groupRoles.set(USER, [
