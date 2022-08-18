@@ -43,7 +43,8 @@ export default class SearchController extends Controller {
   }
 
   @action
-  search() {
+  search(e) {
+    e.preventDefault();
     this.searchText = this.searchTextBuffer;
     this.mandatees = this.mandateesBuffer;
     this.dateFrom = this.serializeDate(this.dateFromBuffer);

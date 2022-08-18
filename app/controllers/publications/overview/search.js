@@ -125,7 +125,8 @@ export default class PublicationsOverviewSearchController extends Controller {
   }
 
   @action
-  search() {
+  search(e) {
+    e.preventDefault();
     this.searchText = this.searchTextBuffer;
     this.publicationDateTypeKey = this.publicationDateTypeKeyBuffer;
     this.dateFrom = this.serializeDate(this.dateFromBuffer);

@@ -36,9 +36,7 @@
   </Auk::Navbar>
 
   <Auk::Navbar>
-    {{!-- template-lint-disable no-redundant-fn --}}
-    {{!-- TODO: Using plain decorated action for Input's @enter doesn't work for some reason --}}
-    <div class="auk-o-grid auk-o-grid--align-end auk-u-maximize-width auk-u-mb-4 auk-u-mt-4">
+    <form {{on "submit" this.search}} class="auk-o-grid auk-o-grid--align-end auk-u-maximize-width auk-u-mb-4 auk-u-mt-4">
       <div class="auk-o-grid-col-4">
         <div class="auk-form-group">
           <div class="auk-o-flex auk-o-flex--align-baseline">
@@ -51,7 +49,6 @@
             @block={{true}}
             placeholder={{t "search-placeholder"}}
             @value={{this.searchTextBuffer}}
-            @enter={{fn this.search}}
             id="dossierId"
             data-test-route-search-input
           />
@@ -86,7 +83,6 @@
             data-test-route-search-mandatee-input
             @block={{true}}
             @value={{this.mandateesBuffer}}
-            @enter={{fn this.search}}
             id="ministerName"
           />
         </div>
@@ -97,14 +93,12 @@
           @icon="search"
           @block="true"
           data-test-route-search-trigger
-          type="button"
-          {{on "click" this.search}}
+          type="submit"
         >
           {{t "search"}}
         </Auk::Button>
       </div>
-    </div>
-    {{!-- template-lint-enable no-redundant-fn --}}
+    </form>
   </Auk::Navbar>
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-m-4">

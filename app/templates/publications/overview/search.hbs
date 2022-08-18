@@ -1,9 +1,7 @@
 {{page-title (t "publications-tabs-search") }}
 <div class="auk-u-maximize-height auk-scroll-wrapper">
   <Auk::Navbar>
-    {{!-- template-lint-disable no-redundant-fn --}}
-    {{!-- TODO: Using plain decorated action for Input's @enter doesn't work for some reason --}}
-    <div class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-end auk-u-maximize-width auk-u-mb-4 auk-u-mt-4">
+    <form {{on "submit" this.search}} class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-end auk-u-maximize-width auk-u-mb-4 auk-u-mt-4">
       <div class="auk-form-group au-u-margin-bottom-none au-u-2-6">
         <div class="auk-o-flex auk-o-flex--align-baseline">
           <Auk::Label for="dossierId" class="auk-u-mr">
@@ -15,7 +13,6 @@
           @block={{true}}
           placeholder={{t "search-placeholder"}}
           @value={{this.searchTextBuffer}}
-          @enter={{fn this.search}}
           id="dossierId"
           data-test-route-search-input
         />
@@ -62,17 +59,14 @@
           @icon="search"
           @block="true"
           data-test-route-search-trigger
-          type="button"
-          {{on "click" this.search}}
+          type="submit"
         >
           {{capitalize (t "search")}}
         </Auk::Button>
       </div>
-    </div>
-    {{!-- template-lint-enable no-redundant-fn --}}
+    </form>
   </Auk::Navbar>
   <div class="auk-scroll-wrapper__body">
-    {{!-- TODO seperate route or here? --}}
     <div class="auk-u-m-4">
       <div class="auk-o-grid auk-u-mb-2">
         <div class="auk-o-grid-col-2">
