@@ -193,7 +193,10 @@
                 </table.content>
               </DataTable>
             {{else}}
-              <WebComponents::VlAlert @message={{t "no-results-found-modify-term"}}/>
+              <Auk::EmptyState
+                @bordered={{true}}
+                @message={{t "no-results-found-modify-term"}}
+              />
             {{/if}}
           </div>
         </div>

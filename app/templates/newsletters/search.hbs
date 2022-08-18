@@ -142,9 +142,13 @@
           </DataTable>
         {{else}}
           {{#if this.emptySearch}}
-            <WebComponents::VlAlert @message={{t "fill-in-search-term"}} />
+            <Auk::EmptyState
+              @bordered={{true}}
+              @message={{t "fill-in-search-term"}}
+            />
           {{else}}
-            <WebComponents::VlAlert
+            <Auk::EmptyState
+              @bordered={{true}}
               @message={{t "no-results-found-modify-term"}}
             />
           {{/if}}
