@@ -13,18 +13,6 @@ export const setNotYetFormallyOk = (subcaseOrAgendaitem) => {
 };
 
 /**
- *@name setAgendaitemFormallyOk
- *@description Zet een agendapunt naar formeel Ok.
- * @param agendaitem
- */
-export const setAgendaitemFormallyOk = async(agendaitem) => {
-  if (agendaitem.get('formallyOk') !== CONSTANTS.ACCEPTANCE_STATUSSES.OK) {
-    agendaitem.set('formallyOk', CONSTANTS.ACCEPTANCE_STATUSSES.OK);
-    await agendaitem.save();
-  }
-};
-
-/**
  * For a given set of agenda items, will re-order them by their groupNumber
  * ⚠️ Word of caution, this mutates the original set!
  * @param {Array} agendaitems   Agenda items to mutate
