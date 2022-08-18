@@ -4,6 +4,7 @@ import agenda from '../../selectors/agenda.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
+import auk from '../../selectors/auk.selectors';
 
 context('Search tests', () => {
   const options = [5, 10, 25, 50, 100];
@@ -38,7 +39,7 @@ context('Search tests', () => {
     cy.get(route.search.trigger).click();
     cy.wait('@searchCall');
 
-    cy.get(utils.vlAlert.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
+    cy.get(auk.emptyState.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
   });
 
   it('Searchfield should be empty after revisiting search page', () => {
@@ -275,8 +276,8 @@ context('Search tests', () => {
       cy.wait(500);
 
       // Should find nothing.
-      cy.get(utils.vlAlert.message).contains(alertMessageNota);
-      cy.get(utils.vlAlert.message).contains(alertMessageRemark);
+      cy.get(auk.emptyState.message).contains(alertMessageNota);
+      cy.get(auk.emptyState.message).contains(alertMessageRemark);
 
       const wordsToCheck1 = [
         'peerd',
