@@ -3,6 +3,7 @@ import moment from 'moment';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
+import { isEmpty } from '@ember/utils';
 
 export default class NewsletterInfosSearchController extends Controller {
   @service router;
@@ -45,7 +46,6 @@ export default class NewsletterInfosSearchController extends Controller {
   @tracked page;
   @tracked size;
   @tracked sort;
-  @tracked emptySearch;
   @tracked isLoadingModel;
 
   constructor() {
@@ -53,6 +53,10 @@ export default class NewsletterInfosSearchController extends Controller {
     this.page = 0;
     this.size = this.sizeOptions[2];
     this.sort = '-agendaitems.meetingDate';
+  }
+
+  get isEmptySearch() {
+    return isEmpty(this.searchText);
   }
 
   deserializeDate(date) {

@@ -141,7 +141,7 @@
             </table.content>
           </DataTable>
         {{else}}
-          {{#if this.emptySearch}}
+          {{#if this.isEmptySearch}}
             <Auk::EmptyState
               @bordered={{true}}
               @message={{t "fill-in-search-term"}}

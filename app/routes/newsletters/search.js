@@ -151,7 +151,6 @@ export default class NewsletterInfosSearchRoute extends Route {
     controller.page = params.page;
     controller.dateFromBuffer = controller.deserializeDate(params.dateFrom);
     controller.dateToBuffer = controller.deserializeDate(params.dateTo);
-    controller.emptySearch = isEmpty(params.searchText);
 
     if (controller.page !== this.lastParams.committed.page) {
       controller.page = this.lastParams.committed.page;
