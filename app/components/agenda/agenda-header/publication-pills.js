@@ -65,9 +65,9 @@ export default class AgendaAgendaHeaderPublicationPillsComponent extends Compone
   @task
   *loadPublicationActivities() {
     const decisionPublicationActivity = yield this.args.meeting.belongsTo('internalDecisionPublicationActivity').reload();
-    yield decisionPublicationActivity.belongsTo('status').reload();
+    yield decisionPublicationActivity?.belongsTo('status').reload();
     const documentPublicationActivity = yield this.args.meeting.belongsTo('internalDocumentPublicationActivity').reload();
-    yield documentPublicationActivity.belongsTo('status').reload();
+    yield documentPublicationActivity?.belongsTo('status').reload();
 
     this.latestThemisPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
       'filter[meeting][:uri:]': this.args.meeting.uri,

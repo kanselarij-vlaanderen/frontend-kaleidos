@@ -113,9 +113,9 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   *loadPublicationActivities() {
     // Ensure we get fresh data to avoid concurrency conflicts
     this.decisionPublicationActivity = yield this.args.meeting.belongsTo('internalDecisionPublicationActivity').reload();
-    yield this.decisionPublicationActivity.status; // used in get-functions above
+    yield this.decisionPublicationActivity?.status; // used in get-functions above
     this.documentPublicationActivity = yield this.args.meeting.belongsTo('internalDocumentPublicationActivity').reload();
-    yield this.documentPublicationActivity.status; // used in get-functions above
+    yield this.documentPublicationActivity?.status; // used in get-functions above
     // Documents can be published multiple times to Themis.
     // We're only interested in the first (earliest) publication.
     this.themisPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
