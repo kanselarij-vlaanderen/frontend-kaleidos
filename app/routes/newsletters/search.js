@@ -74,10 +74,10 @@ export default class NewsletterInfosSearchRoute extends Route {
 
     const filter = {};
 
-    if (!isEmpty(params.searchText)) {
+    if (isPresent(params.searchText)) {
       filter[`${searchModifier}${textSearchKey}`] = params.searchText;
     }
-    if (!isEmpty(params.mandatees)) {
+    if (isPresent(params.mandatees)) {
       filter[
         'agendaitems.mandatees.firstName,agendaitems.mandatees.familyName'
       ] = params.mandatees;
@@ -87,17 +87,17 @@ export default class NewsletterInfosSearchRoute extends Route {
      * mu-search(/elastic?) (semtech/mu-search:0.6.0-beta.11, semtech/mu-search-elastic-backend:1.0.0)
      * returns an off-by-one result (1 to many) in case of two open ranges combined.
      */
-    if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
+    if (isPresent(params.dateFrom) && isPresent(params.dateTo)) {
       const from = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
       const to = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
       filter[':lte,gte:agendaitems.meetingDate'] = [
         to.utc().toISOString(),
         from.utc().toISOString(),
       ].join(',');
-    } else if (!isEmpty(params.dateFrom)) {
+    } else if (isPresent(params.dateFrom)) {
       const date = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
       filter[':gte:agendaitems.meetingDate'] = date.utc().toISOString();
-    } else if (!isEmpty(params.dateTo)) {
+    } else if (isPresent(params.dateTo)) {
       const date = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
       filter[':lte:agendaitems.meetingDate'] = date.utc().toISOString();
     }

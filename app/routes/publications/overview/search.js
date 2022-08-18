@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
-import { isEmpty } from '@ember/utils';
+import { isEmpty, isPresent } from '@ember/utils';
 import moment from 'moment';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
@@ -105,7 +105,7 @@ export default class PublicationsOverviewSearchRoute extends Route {
     const searchText = isEmpty(params.searchText) ? '*' : params.searchText;
     filter[searchModifier + textSearchKey] = searchText;
 
-    if (!isEmpty(params.mandatees)) {
+    if (isPresent(params.mandatees)) {
       filter['mandateeFirstNames,mandateeFamilyNames'] = params.mandatees;
     }
 
@@ -113,24 +113,24 @@ export default class PublicationsOverviewSearchRoute extends Route {
      * mu-search(/elastic?) (semtech/mu-search:0.6.0-beta.11, semtech/mu-search-elastic-backend:1.0.0)
      * returns an off-by-one result (1 to many) in case of two open ranges combined.
      */
-    if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
+    if (isPresent(params.dateFrom) && isPresent(params.dateTo)) {
       const from = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
       const to = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
       filter[':lte,gte:' + params.publicationDateTypeKey] = [to.utc().toISOString(), from.utc().toISOString()].join(',');
-    } else if (!isEmpty(params.dateFrom)) {
+    } else if (isPresent(params.dateFrom)) {
       const date = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
       filter[':gte:' + params.publicationDateTypeKey] = date.utc().toISOString();
-    } else if (!isEmpty(params.dateTo)) {
+    } else if (isPresent(params.dateTo)) {
       const date = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
       filter[':lte:' + params.publicationDateTypeKey] = date.utc().toISOString();
     }
 
     // ":terms:" required to be able to filter on multiple values as "OR"
-    if (!isEmpty(params.regulationTypeIds)) {
+    if (isPresent(params.regulationTypeIds)) {
       filter[':terms:regulationTypeId'] = params.regulationTypeIds.join(',');
     }
 
-    if (!isEmpty(params.publicationStatusIds)) {
+    if (isPresent(params.publicationStatusIds)) {
       filter[':terms:statusId'] = params.publicationStatusIds;
     }
 
