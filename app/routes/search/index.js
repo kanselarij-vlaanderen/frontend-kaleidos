@@ -37,14 +37,9 @@ export default class IndexSearchRoute extends Route {
       return this.router.transitionTo('search.publication-flows', {
         queryParams: queryParams,
       });
-    } else if (this.currentSession.isKortBestek) {
-      this.router.transitionTo('search.newsletter-infos', {
-        queryParams: queryParams,
-      });
-    } else {
-      this.router.transitionTo('search.agenda-items', {
-        queryParams: queryParams,
-      });
-    }
+    };
+    this.router.transitionTo('search.agenda-items', {
+      queryParams: queryParams,
+    });
   }
 }
