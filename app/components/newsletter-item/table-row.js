@@ -9,10 +9,6 @@ export default class NewsletterItemTableRowComponent extends Component {
 
   @tracked isOpenEditView = false;
 
-  get canEditNewsletter(){
-    return this.currentSession.may('manage-newsletter-infos');
-  }
-
   @task
   *saveNewsletterItem(newsletterItem) {
     yield this.args.onSave(newsletterItem);
