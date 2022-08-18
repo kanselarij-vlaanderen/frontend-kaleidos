@@ -40,7 +40,7 @@
       <div class="auk-o-grid-col-4">
         <div class="auk-form-group">
           <div class="auk-o-flex auk-o-flex--align-baseline">
-            <Auk::Label for="dossierId" class="auk-u-mr">
+            <Auk::Label for="keyword" class="auk-u-mr">
               {{capitalize (t "keyword")}}
             </Auk::Label>
             <Utils::SearchTooltip />
@@ -49,7 +49,7 @@
             @block={{true}}
             placeholder={{t "search-placeholder"}}
             @value={{this.searchTextBuffer}}
-            id="dossierId"
+            id="keyword"
             data-test-route-search-input
           />
         </div>

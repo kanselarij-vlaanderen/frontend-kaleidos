@@ -4,7 +4,7 @@
     <form {{on "submit" this.search}} class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-end auk-u-maximize-width auk-u-mb-4 auk-u-mt-4">
       <div class="auk-form-group au-u-margin-bottom-none au-u-2-6">
         <div class="auk-o-flex auk-o-flex--align-baseline">
-          <Auk::Label for="dossierId" class="auk-u-mr">
+          <Auk::Label for="keyword" class="auk-u-mr">
             {{capitalize (t "search-term")}}
           </Auk::Label>
           <Utils::SearchTooltip />
@@ -13,7 +13,7 @@
           @block={{true}}
           placeholder={{t "search-placeholder"}}
           @value={{this.searchTextBuffer}}
-          id="dossierId"
+          id="keyword"
           data-test-route-search-input
         />
       </div>
