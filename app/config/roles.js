@@ -20,6 +20,7 @@ const groupRoles = new Map();
 //     in order to distinguish people that should prepare the flow, effectively sign, etc
 // - search-publication-flows
 // - manage-publication-flows: General viewing and editing of publication flows
+// - manage-documents: modifying document details, uploading new versions, removing.
 // - manage-document-access-levels: modifying document access levels
 // - manage-newsletter-infos: General viewing and editing of newsletter info
 // - manage-decision-publications: Publishing agenda-item decisions to other Kaleidos profiles
@@ -29,6 +30,7 @@ const groupRoles = new Map();
 
 groupRoles.set(ADMIN, [
   'manage-signatures',
+  'manage-documents',
   'manage-document-access-levels',
   'manage-publication-flows',
   'search-publication-flows',
@@ -41,6 +43,7 @@ groupRoles.set(ADMIN, [
 
 groupRoles.set(KANSELARIJ, [
   'manage-signatures',
+  'manage-documents',
   'manage-document-access-levels',
   'manage-newsletter-infos',
   'manage-decision-publications',

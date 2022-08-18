@@ -195,10 +195,8 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @action
   enableEditPieceName() {
-    if (this.currentSession.isEditor) {
-      this.pieceNameBuffer = this.piece.name;
-      this.isEditingPiece = true;
-    }
+    this.pieceNameBuffer = this.piece.name;
+    this.isEditingPiece = true;
   }
 
   @action
