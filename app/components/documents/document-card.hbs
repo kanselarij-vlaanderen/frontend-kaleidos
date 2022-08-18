@@ -104,7 +104,7 @@
                   {{t "new-version"}}
                 </Menu.Item>
                 <Menu.Item {{on "click" this.enableEditPieceName}}>
-                  {{t "document-title-edit"}}
+                  {{t "edit"}}
                 </Menu.Item>
                 <Menu.Divider />
                 <Menu.Item
@@ -205,6 +205,51 @@
     {{/if}}
   {{/if}}
 </div>
+{{#if this.isEditingPiece}}
+  <WebComponents::VlModal
+    @closeModal={{this.cancelEditPieceName}}
+    @isOverlay={{true}}
+    @title={{t "modify-document"}}
+  >
+    <Auk::Modal::Body>
+      <AuCard
+        @flex={{true}}
+        @size="small"
+        as |c|
+      >
+        <c.header
+          @badgeIcon={{if (eq this.piece.file.extension "pdf") "pdf" "document"}}
+        >
+          <p data-test-document-card-type class="vlc-subline au-u-medium au-u-muted">
+            {{uppercase this.piece.file.extension}}
+          </p>
+          <div class="au-u-flex au-u-flex--spaced-small">
+            <Auk::Input
+              data-test-document-card-name-input={{true}}
+              @block={{true}}
+              @value={{this.pieceNameBuffer}}
+            />
+          </div>
+          {{#if this.piece.created}}
+            <AuHelpText @skin="secondary">
+              {{t "uploaded-at"}}
+              {{moment-format this.piece.created}}
+              {{t "at"}}
+              {{moment-format this.piece.created "HH:mm"}}
+            </AuHelpText>
+          {{/if}}
+        </c.header>
+      </AuCard>
+    </Auk::Modal::Body>
+    <WebComponents::VlModalFooter
+      @cancelButtonText={{t "cancel"}}
+      @saveButtonText={{t "save"}}
+      @cancelAction={{this.cancelEditPieceName}}
+      @saveAction={{perform this.savePieceName}}
+    />
+  </WebComponents::VlModal>
+{{/if}}
+
 {{#if this.isOpenUploadModal}}
   <WebComponents::VlModal
     @closeModal={{perform this.cancelUploadPiece}}

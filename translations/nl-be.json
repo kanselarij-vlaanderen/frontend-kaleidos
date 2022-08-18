@@ -1056,5 +1056,6 @@
   "documents-were-released-at": "Documenten zijn vrijgegeven op {date} om {time}",
   "documents-are-planned-to-release-at": "Vrijgave van documenten gepland op {date} om {time}",
   "documents-were-published-at": "Documenten zijn gepubliceerd op {date} om {time}",
-  "documents-are-planned-to-release-at": "Publicatie documenten gepland op {date} om {time}"
+  "documents-are-planned-to-release-at": "Publicatie documenten gepland op {date} om {time}",
+  "modify-document": "Document wijzigen"
 }
