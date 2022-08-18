@@ -7,7 +7,6 @@ import { isEmpty } from '@ember/utils';
 
 export default class NewsletterInfosSearchController extends Controller {
   @service router;
-  @service currentSession;
 
   queryParams = {
     searchText: {

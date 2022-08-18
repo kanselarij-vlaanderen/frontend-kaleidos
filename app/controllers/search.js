@@ -2,7 +2,6 @@ import Controller from '@ember/controller';
 import moment from 'moment';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
 
 export default class SearchController extends Controller {
   queryParams = {
@@ -19,9 +18,6 @@ export default class SearchController extends Controller {
       type: 'string',
     },
   };
-
-  @service router;
-  @service currentSession;
 
   sizeOptions = [5, 10, 20, 50, 100, 200];
 

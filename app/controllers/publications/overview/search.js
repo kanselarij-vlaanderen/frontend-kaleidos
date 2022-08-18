@@ -6,7 +6,6 @@ import { inject as service } from '@ember/service';
 
 export default class PublicationsOverviewSearchController extends Controller {
   @service router;
-  @service currentSession;
 
   queryParams = {
     searchText: {
