@@ -5,6 +5,7 @@ import moment from 'moment';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import { inject as service } from '@ember/service';
+import parseDate from '../../utils/parse-date-search-param';
 
 export default class NewsletterInfosSearchRoute extends Route {
   @service metrics;
@@ -149,8 +150,8 @@ export default class NewsletterInfosSearchRoute extends Route {
     controller.searchTextBuffer = params.searchText;
     controller.mandateesBuffer = params.mandatees;
     controller.page = params.page;
-    controller.dateFromBuffer = controller.deserializeDate(params.dateFrom);
-    controller.dateToBuffer = controller.deserializeDate(params.dateTo);
+    controller.dateFromBuffer = parseDate(params.dateFrom);
+    controller.dateToBuffer = parseDate(params.dateTo);
 
     if (controller.page !== this.lastParams.committed.page) {
       controller.page = this.lastParams.committed.page;

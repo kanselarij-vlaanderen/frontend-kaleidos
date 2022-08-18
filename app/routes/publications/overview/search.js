@@ -12,6 +12,7 @@ import {
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { warn } from '@ember/debug';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import parseDate from '../../../utils/parse-date-search-param';
 
 export default class PublicationsOverviewSearchRoute extends Route {
   @service store;
@@ -160,8 +161,8 @@ export default class PublicationsOverviewSearchRoute extends Route {
     const params = this.filterParams;
     controller.searchTextBuffer = params.searchText;
     controller.page = params.page;
-    controller.dateFromBuffer = controller.deserializeDate(params.dateFrom);
-    controller.dateToBuffer = controller.deserializeDate(params.dateTo);
+    controller.dateFromBuffer = parseDate(params.dateFrom);
+    controller.dateToBuffer = parseDate(params.dateTo);
     controller.publicationStatuses = this.publicationStatuses.toArray();
     controller.regulationTypes = this.regulationTypes.toArray();
 

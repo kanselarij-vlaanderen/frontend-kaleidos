@@ -3,6 +3,7 @@ import moment from 'moment';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
+import formatDate from '../../../utils/format-date-search-param';
 
 export default class PublicationsOverviewSearchController extends Controller {
   @service router;
@@ -115,21 +116,13 @@ export default class PublicationsOverviewSearchController extends Controller {
     this.publicationDateTypeKeyBuffer = event.target.value;
   }
 
-  deserializeDate(date) {
-    return date && moment(date, 'DD-MM-YYYY').toDate();
-  }
-
-  serializeDate(date) {
-    return date && moment(date).format('DD-MM-YYYY');
-  }
-
   @action
   search(e) {
     e.preventDefault();
     this.searchText = this.searchTextBuffer;
     this.publicationDateTypeKey = this.publicationDateTypeKeyBuffer;
-    this.dateFrom = this.serializeDate(this.dateFromBuffer);
-    this.dateTo = this.serializeDate(this.dateToBuffer);
+    this.dateFrom = formatDate(this.dateFromBuffer);
+    this.dateTo = formatDate(this.dateToBuffer);
   }
 
   @action

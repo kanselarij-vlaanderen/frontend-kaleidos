@@ -1,9 +1,9 @@
 import Controller from '@ember/controller';
-import moment from 'moment';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
+import formatDate from '../../utils/format-date-search-param';
 
 export default class NewsletterInfosSearchController extends Controller {
   @service router;
@@ -58,21 +58,13 @@ export default class NewsletterInfosSearchController extends Controller {
     return isEmpty(this.searchText);
   }
 
-  deserializeDate(date) {
-    return date && moment(date, 'DD-MM-YYYY').toDate();
-  }
-
-  serializeDate(date) {
-    return date && moment(date).format('DD-MM-YYYY');
-  }
-
   @action
   search(e) {
     e.preventDefault();
     this.searchText = this.searchTextBuffer;
     this.mandatees = this.mandateesBuffer;
-    this.dateFrom = this.serializeDate(this.dateFromBuffer);
-    this.dateTo = this.serializeDate(this.dateToBuffer);
+    this.dateFrom = formatDate(this.dateFromBuffer);
+    this.dateTo = formatDate(this.dateToBuffer);
   }
 
   @action
