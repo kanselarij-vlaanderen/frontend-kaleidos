@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { isEmpty, isPresent } from '@ember/utils';
-import moment from 'moment';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import { inject as service } from '@ember/service';
@@ -13,6 +12,8 @@ import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { warn } from '@ember/debug';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import parseDate from '../../../utils/parse-date-search-param';
+import startOfDay from 'date-fns/startOfDay';
+import endOfDay from 'date-fns/endOfDay';
 
 export default class PublicationsOverviewSearchRoute extends Route {
   @service store;
@@ -115,15 +116,15 @@ export default class PublicationsOverviewSearchRoute extends Route {
      * returns an off-by-one result (1 to many) in case of two open ranges combined.
      */
     if (isPresent(params.dateFrom) && isPresent(params.dateTo)) {
-      const from = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
-      const to = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
-      filter[':lte,gte:' + params.publicationDateTypeKey] = [to.utc().toISOString(), from.utc().toISOString()].join(',');
+      const from = startOfDay(parseDate(params.dateFrom));
+      const to = endOfDay(parseDate(params.dateTo)); // "To" interpreted as inclusive
+      filter[':lte,gte:' + params.publicationDateTypeKey] = [to.toISOString(), from.toISOString()].join(',');
     } else if (isPresent(params.dateFrom)) {
-      const date = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
-      filter[':gte:' + params.publicationDateTypeKey] = date.utc().toISOString();
+      const date = startOfDay(parseDate(params.dateFrom));
+      filter[':gte:' + params.publicationDateTypeKey] = date.toISOString();
     } else if (isPresent(params.dateTo)) {
-      const date = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
-      filter[':lte:' + params.publicationDateTypeKey] = date.utc().toISOString();
+      const date = endOfDay(parseDate(params.dateTo)); // "To" interpreted as inclusive
+      filter[':lte:' + params.publicationDateTypeKey] = date.toISOString();
     }
 
     // ":terms:" required to be able to filter on multiple values as "OR"
