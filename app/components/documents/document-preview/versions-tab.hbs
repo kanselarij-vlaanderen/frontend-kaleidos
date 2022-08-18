@@ -6,6 +6,7 @@
           @piece={{version}}
           @documentContainer={{@documentContainer}}
           @isHighlighted={{eq @currentVersion version}}
+          @onSelectVersion={{@onSelectVersion}}
           {{on "click" (fn @onSelectVersion version)}}
         />
       {{/each}}
