@@ -52,8 +52,7 @@ Router.map(function() {
   });
 
   this.route('newsletters', { path: '/kort-bestek', }, function() {
-    this.route('overview', { path: '', });
-    this.route('search', { path: '/bericht-zoeken', });
+    this.route('search', { path: '/zoeken', });
   });
 
   this.route('newsletter', { path: '/vergadering/:meeting_id/kort-bestek', }, function() {
@@ -86,7 +85,7 @@ Router.map(function() {
       this.route('proofread', { path: '/nalezen' });
       this.route('late', { path: '/te-laat-in-bs' });
       this.route('reports', { path: '/rapporten' });
-      this.route('search', { path: '/dossier-zoeken' });
+      this.route('search', { path: '/zoeken' });
     });
     this.route('publication', { path: ':publication_id', }, function() {
       this.route('case', { path: '/dossier', });
