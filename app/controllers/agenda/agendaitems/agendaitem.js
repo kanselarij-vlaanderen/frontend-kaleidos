@@ -15,7 +15,7 @@ export default class AgendaAgendaitemsAgendaitemController extends Controller {
   }
 
   get canShowNewsletterTab() {
-    return this.currentSession.isEditor || (this.meeting.isFinal && this.newsItemExists);
+    return this.currentSession.may('manage-newsletter-infos') || (this.meeting.isFinal && this.newsItemExists);
   }
 
   get canShowPressAgendaTab() {
