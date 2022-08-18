@@ -18,6 +18,7 @@ export default {
     ADMIN: 'http://data.kanselarij.vlaanderen.be/id/group/admin',
     KANSELARIJ: 'http://data.kanselarij.vlaanderen.be/id/group/kanselarij',
     OVRB: 'http://data.kanselarij.vlaanderen.be/id/group/OVRB',
+    KORT_BESTEK: 'http://data.kanselarij.vlaanderen.be/id/group/kort-bestek',
     MINISTER: 'http://data.kanselarij.vlaanderen.be/id/group/minister',
     KABINET: 'http://data.kanselarij.vlaanderen.be/id/group/kabinet',
     OVERHEID: 'http://data.kanselarij.vlaanderen.be/id/group/overheid',

@@ -12,7 +12,7 @@ export default class ExtendedSessionService extends SessionService {
     } catch (error) { // eslint-disable-line no-unused-vars
       this.invalidate();
     }
-    super.handleAuthentication('agendas');
+    super.handleAuthentication('index');
   }
 
   handleInvalidation() {
