@@ -14,7 +14,7 @@
               data-test-new-subcase-type
               as |List|
             >
-              {{#each this.caseTypes as |type index|}}
+              {{#each this.agendaItemTypes as |type index|}}
                 <List.Radio
                   @label={{type.label}}
                   @checked={{eq index 0}}
