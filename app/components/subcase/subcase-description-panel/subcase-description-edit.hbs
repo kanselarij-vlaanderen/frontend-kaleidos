@@ -5,12 +5,12 @@
         <fieldset>
           <legend class="auk-label">{{t "subcase-type"}}</legend>
           <Auk::RadioList data-test-subcase-description-edit-type @layout="inline" as |List|>
-            {{#each this.caseTypes as |type|}}
+            {{#each this.agendaItemTypes as |type|}}
               <List.Radio
                 @label={{type.label}}
-                @checked={{eq type.uri this.caseType.uri}}
+                @checked={{eq type.uri this.agendaItemType.uri}}
                 value={{type.id}}
-                {{on "change" this.selectCaseType}}
+                {{on "change" this.selectAgendaItemType}}
               />
             {{/each}}
           </Auk::RadioList>
