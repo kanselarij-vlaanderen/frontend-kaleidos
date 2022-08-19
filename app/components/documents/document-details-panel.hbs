@@ -25,6 +25,7 @@
           @sortField="priority"
           @selected={{this.documentType}}
           @onChange={{this.setDocumentType}}
+          @renderInPlace={{true}} {{! Required to make the seach box focusable }}
         />
       </Auk::KeyValue>
       <Auk::KeyValue data-test-details-tab-name @key={{t "document-name"}}>
