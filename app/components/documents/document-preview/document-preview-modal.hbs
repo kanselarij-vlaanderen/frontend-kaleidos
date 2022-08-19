@@ -7,7 +7,9 @@
   <:title>
     <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
       {{this.selectedVersion.name}}
-      <AuLink href={{this.selectedVersion.file.namedDownloadLink}} @skin="button-naked" @icon="download" @iconAlignment="left" download>Downloaden</AuLink>
+      {{#if this.selectedVersion.file}}
+        <AuLink href={{this.selectedVersion.file.namedDownloadLink}} @skin="button-naked" @icon="download" @iconAlignment="left" download>Downloaden</AuLink>
+      {{/if}}
     </span>
   </:title>
   <:body>
