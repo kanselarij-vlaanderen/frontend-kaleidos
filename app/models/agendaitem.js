@@ -18,7 +18,6 @@ export default ModelWithModifier.extend({
   number: attr('number'),
   created: attr('datetime'),
   retracted: attr('boolean'), // TODO 1420 TRUE = postponed, move to treatment
-  showAsRemark: attr('boolean'),
   modified: attr('datetime'),
   titlePress: attr('string'),
   textPress: attr('string'),
@@ -46,6 +45,7 @@ export default ModelWithModifier.extend({
     inverse: null,
   }),
   treatment: belongsTo('agenda-item-treatment'),
+  type: belongsTo('concept'),
 
   mandatees: hasMany('mandatee'),
   pieces: hasMany('piece'),
