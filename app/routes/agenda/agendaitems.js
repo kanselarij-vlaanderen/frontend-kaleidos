@@ -69,7 +69,7 @@ export default class AgendaAgendaitemsRoute extends Route {
 
     if (params.filter) {
       const filter = {
-        ':phrase_prefix:title,shortTitle': `${params.filter}`,
+        ':phrase_prefix:title,shortTitle,pieceNames': `${params.filter}`,
         meetingId: meeting.id,
         agendaId: agenda.id,
       };
