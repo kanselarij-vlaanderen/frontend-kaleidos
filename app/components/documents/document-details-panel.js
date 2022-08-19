@@ -10,8 +10,6 @@ export default class DocumentsDocumentDetailsPanel extends Component {
    */
    @service currentSession;
    @tracked isEditingDetails = false;
-   @tracked isUploadingReplacementFile = false;
-   @tracked replacementFile;
    @tracked documentType;
    @tracked accessLevel;
 
@@ -34,23 +32,15 @@ export default class DocumentsDocumentDetailsPanel extends Component {
    *cancelEditDetails() {
      this.args.piece.rollbackAttributes(); // in case of piece name change
      yield this.loadDetailsData.perform();
-     if (this.replacementFile) {
-       this.replacementFile.destroyRecord()
-       this.replacementFile = undefined;
-     }
      this.isEditingDetails = false;
    }
 
    @task
    *saveDetails() {
-     if (this.replacementFile) {
-       this.args.piece.file = this.replacementFile;
-     }
      this.args.piece.accessLevel = this.accessLevel;
      yield this.args.piece.save();
      this.args.documentContainer.type = this.documentType;
      yield this.args.documentContainer.save();
-     this.replacementFile = undefined;
      this.isEditingDetails = false;
    }
 
@@ -67,14 +57,5 @@ export default class DocumentsDocumentDetailsPanel extends Component {
    @action
    setDocumentType(docType) {
      this.documentType = docType;
-   }
-
-   @action
-   replaceFile(file) {
-     if (this.replacementFile) { // in case of re-replace before saving
-       this.replacementFile.destroyRecord();
-     }
-     this.replacementFile = file;
-     this.isUploadingReplacementFile = false;
    }
 }

@@ -51,21 +51,10 @@
         @key={{t "source-file"}}
       >
         <p>
-          {{#if this.replacementFile}}
-            {{this.replacementFile.name}}
-          {{else}}
-            {{! Note that showing this composed name as "source file name" might be confusing.
-            Especially so when one just replaced the source and the same generated name pops up again (comoposed of piece name, which stays the same).
-            Better show original source file (not document) name?}}
-            {{@piece.name}}.{{@piece.file.extension}}
-          {{/if}}
+          {{! Note that showing this composed name as "source file name" might be confusing.
+          Better show original source file (not document) name?}}
+          {{@piece.name}}.{{@piece.file.extension}}
         </p>
-        <AuButton
-          @icon="upload"
-          @iconAlignment="left"
-          @skin="link"
-          {{on "click" (fn (mut this.isUploadingReplacementFile) true)}}
-        >{{t "replace"}}</AuButton>
       </Auk::KeyValue>
     </Auk::Panel::Body>
     <Auk::Panel::Footer>
