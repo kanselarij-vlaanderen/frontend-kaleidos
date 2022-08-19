@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 // TODO: octane-refactor
 /* eslint-disable ember/no-get */
@@ -23,7 +24,9 @@ export default Route.extend({
       },
     };
     if (this.shouldFilterRemarks) {
-      filter['show-as-remark'] = false;
+      filter['type'] = {
+        ':uri:': CONSTANTS.AGENDA_ITEM_TYPES.NOTA,
+      };
     }
     this.set('filter', filter);
     return this.store

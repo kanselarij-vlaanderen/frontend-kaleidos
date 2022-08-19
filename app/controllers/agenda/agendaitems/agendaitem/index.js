@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
   @service store;
@@ -20,16 +21,22 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @tracked submitter;
   @tracked newsletterInfo;
   @tracked mandatees;
+  @tracked type;
 
   @tracked isEditingAgendaItemTitles = false;
+
+  get isRemark() {
+    return this.type.uri === CONSTANTS.AGENDA_ITEM_TYPES.REMARK;
+  }
 
   async navigateToNeighbouringItem(agendaitem) {
     // try transitioning to previous or next item, called on the delete of an agendaitem
     // TODO: below query can be replaced once agenda-items have relations to previous and next items
     const previousNumber = agendaitem.number;
+    const agendaItemType = await agendaitem.type;
     const neighbouringItem = await this.store.queryOne('agendaitem', {
       'filter[agenda][:id:]': this.agenda.id,
-      'filter[show-as-remark]': agendaitem.showAsRemark,
+      'filter[type][:id:]': agendaItemType.id,
       'filter[:lte:number]': `"${previousNumber}"`, // Needs quotes because of bug in mu-cl-resources
     });
     if (neighbouringItem) {

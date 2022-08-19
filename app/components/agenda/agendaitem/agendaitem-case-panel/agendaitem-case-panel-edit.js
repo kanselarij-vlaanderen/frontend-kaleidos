@@ -1,8 +1,10 @@
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { task } from 'ember-concurrency';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /**
  * @argument subcase
@@ -16,10 +18,21 @@ export default class AgendaitemCasePanelEdit extends Component {
   @service pieceAccessLevelService;
   @service agendaitemAndSubcasePropertiesSync;
 
+  @tracked agendaItemType;
+
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'comment']);
+
+  constructor() {
+    super(...arguments);
+    this.loadAgendaItemType.perform();
+  }
 
   get newsletterInfo() {
     return this.args.newsletterInfo;
+  }
+
+  get isRemark() {
+    return this.agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.REMARK;
   }
 
   @action
@@ -35,6 +48,11 @@ export default class AgendaitemCasePanelEdit extends Component {
       this.newsletterInfo.rollbackAttributes();
     }
     this.args.onCancel();
+  }
+
+  @task
+  *loadAgendaItemType() {
+    this.agendaItemType = yield this.args.agendaitem.type;
   }
 
   @task
@@ -65,10 +83,9 @@ export default class AgendaitemCasePanelEdit extends Component {
     }
     if (
       this.newsletterInfo &&
-      (this.newsletterInfo.hasDirtyAttributes ||
-        this.args.agendaitem.showAsRemark)
+      (this.newsletterInfo.hasDirtyAttributes || this.isRemark)
     ) {
-      if (this.args.agendaitem.showAsRemark) {
+      if (this.isRemark) {
         // Keep generated newsletterInfo for announcement in sync
         this.newsletterInfo.richtext = trimmedTitle;
         this.newsletterInfo.title = trimmedShortTitle;

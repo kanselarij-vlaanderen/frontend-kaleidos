@@ -51,7 +51,7 @@
       {{/if}}
     </div>
 
-    {{#unless @agendaitem.showAsRemark}}
+    {{#unless this.isRemark}}
       {{#if @newsletterItem.richtext}}
         <p data-test-newsletter-item-content-richtext class="auk-u-mb-2">
           <SanitizeHtml @raw={{true}} @value={{@newsletterItem.richtext}} />
