@@ -1,14 +1,33 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-// eslint-disable-next-line ember/no-mixins
-import DataTableRouteMixin from 'ember-data-table/mixins/route';
 
-export default class NewslettersRoute extends Route.extend(DataTableRouteMixin) {
+export default class NewslettersRoute extends Route {
   @service('session') simpleAuthSession;
 
-  modelName = 'meeting';
+  queryParams = {
+    page: {
+      refreshModel: true,
+    },
+    size: {
+      refreshModel: true,
+    },
+    sort: {
+      refreshModel: true,
+    },
+  };
 
   beforeModel(transition) {
     this.simpleAuthSession.requireAuthentication(transition, 'login');
+  }
+
+  async model(params) {
+    const queryParams = {
+      page: {
+        number: params.page,
+        size: params.size,
+      },
+      sort: params.sort,
+    };
+    return await this.store.query('meeting', queryParams);
   }
 }
