@@ -97,6 +97,6 @@ export default class CurrentSessionService extends Service {
   }
 
   get isEditor() {
-    return [ADMIN, KANSELARIJ].includes(this.groupUri);
+    return [ADMIN, KANSELARIJ, KORT_BESTEK].includes(this.groupUri);
   }
 }
