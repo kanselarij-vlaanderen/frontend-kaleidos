@@ -79,8 +79,8 @@ export default class AgendaAgendaitemsRoute extends Route {
       agendaitems = agendaitems.filter((ai) => matchingIds.includes(ai.id));
     }
 
-    let notas = [];
-    let announcements = [];
+    const notas = [];
+    const announcements = [];
     for (const agendaitem of agendaitems.toArray()) {
       const type = await agendaitem.type;
       if (type?.uri === CONSTANTS.AGENDA_ITEM_TYPES.REMARK) {

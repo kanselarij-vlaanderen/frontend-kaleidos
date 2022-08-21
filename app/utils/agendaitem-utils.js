@@ -68,7 +68,7 @@ export const groupAgendaitemsByGroupname = (agendaitems) => {
  */
 export const parseDraftsAndGroupsFromAgendaitems = async(agendaitems) => {
   // Drafts are items without an approval or remark
-  let draftAgendaitems = [];
+  const draftAgendaitems = [];
   for (const agendaitem of agendaitems.toArray()) {
     const type = await agendaitem.type;
     if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA && !agendaitem.isApproval) {
@@ -126,17 +126,16 @@ export const setAgendaitemsNumber = async(agendaitems, isEditor, isDesignAgenda)
 export const reorderAgendaitemsOnAgenda = async(agenda, isEditor) => {
   await agenda.hasMany('agendaitems').reload();
   const agendaitems = await agenda.get('agendaitems');
-  let actualAgendaitems = [];
-  let actualAnnouncements = [];
+  const actualAgendaitems = [];
+  const actualAnnouncements = [];
   for (const agendaitem of agendaitems.sortBy('number').toArray()) {
-    if (agendaitem.isDeleted) {
-      continue;
-    }
-    const type = await agendaitem.type;
-    if(type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA ) {
-      actualAgendaitems.push(agendaitem);
-    } else {
-      actualAnnouncements.push(agendaitem);
+    if (!agendaitem.isDeleted) {
+      const type = await agendaitem.type;
+      if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {
+        actualAgendaitems.push(agendaitem);
+      } else {
+        actualAnnouncements.push(agendaitem);
+      }
     }
   }
   await setAgendaitemsNumber(actualAgendaitems, isEditor, true);

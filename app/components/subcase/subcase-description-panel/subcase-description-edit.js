@@ -59,7 +59,7 @@ export default class SubcaseDescriptionEdit extends Component {
   }
 
   @action
-  async selectAgendaItemType(event) {
+  selectAgendaItemType(event) {
     const id = event.target.value;
     this.agendaItemType = this.store.peekRecord('concept', id);
   }

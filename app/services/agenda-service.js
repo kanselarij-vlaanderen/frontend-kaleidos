@@ -104,7 +104,7 @@ export default class AgendaService extends Service {
       'filter[status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
       sort: '-created', // serialnumber
     });
-    const agendaItemType = await subcase.get('agendaItemType');
+    const agendaItemType = await subcase.agendaItemType;
     const isAnnouncement = agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.REMARK;
     const numberToAssign = await this.computeNextItemNumber(lastAgenda, agendaItemType);
 

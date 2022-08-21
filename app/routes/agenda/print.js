@@ -23,8 +23,8 @@ export default Route.extend({
       },
       include: 'mandatees',
     });
-    let notas = []
-    let announcements = [];
+    const notas = []
+    const announcements = [];
     for (const agendaitem of agendaitems.sortBy('number').toArray()) {
       const type = await agendaitem.type;
       if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {

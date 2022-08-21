@@ -161,7 +161,7 @@ export default class CasesNewSubcase extends Component {
     if (fullCopy) {
       subcase.linkedPieces = await latestSubcase.linkedPieces;
       subcase.subcaseName = latestSubcase.subcaseName;
-      subcase.agendaItemType = latestSubcase.agendaItemType;
+      subcase.agendaItemType = await latestSubcase.agendaItemType;
       subcase.confidential = latestSubcase.confidential;
     } else {
       subcase.linkedPieces = pieces;

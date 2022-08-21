@@ -33,7 +33,7 @@ export default Route.extend({
       sort: 'number',
     });
 
-    let announcements = []
+    const announcements = []
     for (const agendaitem of agendaitems.sortBy('number').toArray()) {
       const type = await agendaitem.type;
       if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.REMARK) {
