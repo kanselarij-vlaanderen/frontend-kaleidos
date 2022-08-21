@@ -19,7 +19,7 @@ export default class NewslettersController extends Controller {
     },
   };
 
-  sizeOptions = Object.freeze([10, 25, 50, 100, 200]);
+  sizeOptions = [10, 25, 50, 100, 200];
 
   @tracked page;
   @tracked size;
