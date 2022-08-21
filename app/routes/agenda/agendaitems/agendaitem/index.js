@@ -37,7 +37,6 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     await model.hasMany('mandatees').reload();
     await model.hasMany('pieces').reload();
     this.mandatees = (await model.mandatees).sortBy('priority');
-    this.type = await model.type;
   }
 
   async setupController(controller) {
@@ -52,6 +51,5 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.mandatees = this.mandatees;
     controller.submitter = this.submitter;
     controller.meeting = this.meeting;
-    controller.type = this.type;
   }
 }

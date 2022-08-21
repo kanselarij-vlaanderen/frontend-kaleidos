@@ -3,7 +3,6 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
   @service store;
@@ -21,13 +20,8 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @tracked submitter;
   @tracked newsletterInfo;
   @tracked mandatees;
-  @tracked type;
 
   @tracked isEditingAgendaItemTitles = false;
-
-  get isRemark() {
-    return this.type.uri === CONSTANTS.AGENDA_ITEM_TYPES.REMARK;
-  }
 
   async navigateToNeighbouringItem(agendaitem) {
     // try transitioning to previous or next item, called on the delete of an agendaitem
