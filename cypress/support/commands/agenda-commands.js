@@ -118,16 +118,15 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
     .its('response.body')
     .then((responseBody) => {
       agendaId = responseBody.data.id;
-    })
-    .then(() => new Cypress.Promise((resolve) => {
-      resolve({
-        meetingId, meetingNumber, agendaId, meetingNumberRep,
-      });
-    }));
+    });
+  cy.log('/createAgenda');
   cy.wait('@createAgendaitem', {
     timeout: 60000,
-  });
-  cy.log('/createAgenda');
+  }).then(() => new Cypress.Promise((resolve) => {
+    resolve({
+      meetingId, meetingNumber, agendaId, meetingNumberRep,
+    });
+  }));
 }
 
 /**
