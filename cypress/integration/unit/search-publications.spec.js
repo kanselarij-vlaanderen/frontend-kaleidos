@@ -8,7 +8,7 @@ import utils from '../../selectors/utils.selectors';
 function visitPublicationSearch() {
   cy.intercept('GET', '/regulation-types?**').as('getRegulationTypes');
   cy.intercept('GET', '/publication-flows/search?**').as('publicationInitialSearchCall');
-  cy.visit('zoeken/publicaties');
+  cy.visit('publicaties/overzicht/zoeken');
   cy.wait('@getRegulationTypes');
   cy.wait('@publicationInitialSearchCall');
 }
@@ -47,7 +47,7 @@ function checkPublicationSearchForDateType(dateType, date, pubNumber) {
 function searchFakePublication() {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt}`);
-  cy.visit('zoeken/publicaties?zoekterm=IKBESTANIET');
+  cy.visit('publicaties/overzicht/zoeken?zoekterm=IKBESTANIET');
   cy.wait(`@publicationSearchCall${randomInt}`);
   cy.get(route.search.input).clear();
 }
@@ -251,9 +251,13 @@ context('Search tests', () => {
     // search with double date
     cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall2');
     cy.get(route.searchPublications.dateType).select('Datum beslissing');
-    cy.get(route.search.from).click();
+    cy.get(route.search.from)
+      .find(auk.datepicker)
+      .click();
     cy.setDateInFlatpickr(fields.decisionDate);
-    cy.get(route.search.to).click();
+    cy.get(route.search.to)
+      .find(auk.datepicker)
+      .click();
     cy.setDateInFlatpickr(fields.decisionDate);
     cy.get(route.search.trigger).click();
     cy.wait('@publicationSearchCall2');
@@ -271,6 +275,7 @@ context('Search tests', () => {
       .contains(fieldsWithDoubleDates.regulationType)
       .click()
       .wait('@publicationSearchCall3');
+    cy.get(dependency.emberDataTable.isLoading).should('not.exist');
     cy.get(route.searchPublications.dataTable).find('tbody')
       .children('tr')
       .should('have.length', 1)
@@ -286,6 +291,7 @@ context('Search tests', () => {
       .contains(fields2.status)
       .click()
       .wait('@publicationSearchCall4');
-    cy.get(utils.vlAlert.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
+    cy.get(dependency.emberDataTable.isLoading).should('not.exist');
+    cy.get(auk.emptyState.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
   });
 });
