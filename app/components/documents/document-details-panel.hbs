@@ -130,7 +130,7 @@
         </Auk::KeyValue>
       {{/if}}
       <Auk::KeyValue data-test-details-tab-name @key={{t "document-name"}}>
-        {{@piece.name}}
+        {{@piece.name}}.{{@piece.file.extension}}
       </Auk::KeyValue>
       <Auk::KeyValue data-test-details-tab-access-level @key={{t "publicity"}}>
         <AccessLevelPill
