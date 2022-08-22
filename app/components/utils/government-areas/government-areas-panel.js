@@ -39,7 +39,7 @@ export default class GovernmentAreasPanel extends Component {
 
   @keepLatestTask
   *groupGovernmentFieldsByDomain() {
-    const governmentAreas = yield this.args.governmentAreas?.toArray();
+    const governmentAreas = this.args.governmentAreas?.toArray();
     if (!governmentAreas) {
       return;
     }
