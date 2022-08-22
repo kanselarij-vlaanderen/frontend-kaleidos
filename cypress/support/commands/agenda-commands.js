@@ -30,6 +30,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   cy.intercept('POST', '/meetings').as('createNewMeeting');
   cy.intercept('POST', '/agendas').as('createNewAgenda');
   cy.intercept('POST', '/newsletter-infos').as('createNewsletter');
+  cy.intercept('POST', '/agendaitems').as('createAgendaitem');
 
   cy.visit('/overzicht?size=2');
   cy.get(route.agendas.action.newMeeting).click();
@@ -123,6 +124,9 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
         meetingId, meetingNumber, agendaId, meetingNumberRep,
       });
     }));
+  cy.wait('@createAgendaitem', {
+    timeout: 60000,
+  });
   cy.log('/createAgenda');
 }
 
