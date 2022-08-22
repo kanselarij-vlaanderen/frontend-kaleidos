@@ -48,11 +48,10 @@ export default Route.extend({
 
   redirect() {
     if (!this.currentSession.isEditor) {
-      this.transitionTo(`print-overviews.${this.routeNamePrefix}.overview`, {
-        queryParams: {
-          definite: true,
-        },
-      });
+      // there currently is no view for decisions that non-editors are allowed to see.
+      // there is also no way to reach this route from the UI for those users
+      // entering the address still works so we fallback to agendas
+      this.transitionTo('agendas');
     }
   },
 
