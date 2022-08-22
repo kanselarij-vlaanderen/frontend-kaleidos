@@ -41,20 +41,17 @@
         </div>
       </Auk::Toolbar>
       {{#if this.lastPiece.created}}
-        {{#if (eq this.lastPiece.file.extension "docx")}}
-          <div class="vlc-document-card-content__meta auk-u-mt-2">
-            {{! no piece.created in legacy data }}
-            {{! TODO: when created date is absent, the layout seems irregular
-                  this will be addressed with new document card styling }}
-            <div>
-              {{t "uploaded-at"}}
-              {{moment-format this.lastPiece.created}}
-              {{t "at"}}
-              {{moment-format this.lastPiece.created "HH:mm"}}
-              als <a href="#!">Word document</a>
-            </div>
+        <div class="vlc-document-card-content__meta auk-u-mt-2">
+          {{! no piece.created in legacy data }}
+          {{! TODO: when created date is absent, the layout seems irregular
+                this will be addressed with new document card styling }}
+          <div>
+            {{t "uploaded-at"}}
+            {{moment-format this.lastPiece.created}}
+            {{t "at"}}
+            {{moment-format this.lastPiece.created "HH:mm"}}
           </div>
-        {{/if}}
+        </div>
       {{/if}}
     </div>
   </div>
