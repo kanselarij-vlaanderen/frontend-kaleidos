@@ -1,6 +1,5 @@
 /* global context, it, cy, beforeEach */
 // / <reference types="Cypress" />
-import auk from '../../selectors/auk.selectors';
 import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
@@ -155,34 +154,5 @@ context('Add files to an agenda', () => { // At the meeting-level
 
     // One document should be gone.
     cy.get('@docCards').should('have.length', 1);
-
-    // Delete another document
-    cy.get('@docCards').eq(0)
-      .within(() => {
-        cy.get(document.documentCard.name.value).contains(/2e/);
-        cy.get(document.documentCard.versionHistory)
-          .find(auk.accordion.header.button)
-          .click();
-        cy.get(document.vlDocument.showPieceViewer); // this line fixes flakyness since the delete button is showing while still loading data
-        cy.get(document.vlDocument.piece).should('have.length', 1);
-        cy.get(document.vlDocument.delete).click(); // no eq(0) needed when this is the only vl-document
-      });
-
-    cy.intercept('DELETE', 'files/*').as('deleteFile');
-    cy.intercept('DELETE', 'pieces/*').as('deletePiece');
-    cy.intercept('DELETE', 'document-containers/*').as('deleteDocumentContainer');
-
-    cy.get(utils.vlModalVerify.save).contains('Verwijderen')
-      .click();
-
-    cy.wait('@deleteFile', {
-      timeout: 30000,
-    });
-    cy.wait('@deletePiece');
-    // cy.wait('@deleteDocumentContainer', { timeout: 20000 }); // TODO-bug the deletion of document in vl-document component
-    cy.wait('@loadPieces');
-
-    // Nothing should be left
-    cy.get(document.documentCard.card).should('have.length', 0);
   });
 });
