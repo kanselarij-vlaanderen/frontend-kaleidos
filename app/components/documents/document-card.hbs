@@ -17,17 +17,26 @@
           </Group.Item>
           <Group.Item class="auk-u-maximize-width">
             <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
-              <p data-test-document-card-type="" class="vlc-subline au-u-medium au-u-muted">
+              <span data-test-document-card-type class="auk-overline">
                 {{#unless this.loadPieceRelatedData.isRunning}}
                   {{this.documentContainer.type.label}}
                 {{/unless}}
-              </p>
+              </span>
             </div>
             <h6 class="auk-h4" data-test-document-card-name-value="">
               <span>
                 {{this.piece.name}}{{#if this.piece.file}}.{{this.piece.file.extension}}{{/if}}
               </span>
             </h6>
+            <div class="vlc-document-card-content__meta">
+              {{! no piece.created in legacy data }}
+              {{#if this.piece.created}}
+                {{t "uploaded-at"}}
+                {{moment-format this.piece.created}}
+                {{t "at"}}
+                {{moment-format this.piece.created "HH:mm"}}
+              {{/if}}
+            </div>
           </Group.Item>
         </Toolbar.Group>
         <Toolbar.Group @position="right" as |Group|>
@@ -119,29 +128,6 @@
           {{/if}}
         </Toolbar.Group>
       </Auk::Toolbar>
-      <div class="vlc-document-card-content__meta auk-u-mt-2">
-        {{! no piece.created in legacy data }}
-        {{! TODO: when created date is absent, the layout seems irregular
-              this will be addressed with new document card styling }}
-        <div>
-          {{#if this.piece.created}}
-            {{t "uploaded-at"}}
-            {{moment-format this.piece.created}}
-            {{t "at"}}
-            {{moment-format this.piece.created "HH:mm"}}
-          {{/if}}
-        </div>
-        {{!-- Looks no longer required in new mock-ups, but unsure, since this was quite a recent addition
-        {{#if this.piece.accessLevelLastModified}}
-          <div>
-            {{t "access-level-last-modified"}}
-            {{moment-format this.piece.accessLevelLastModified}}
-            {{t "at"}}
-            {{moment-format this.piece.accessLevelLastModified "HH:mm"}}
-          </div>
-        {{/if}}
-        --}}
-      </div>
     </div>
   </div>
   {{#if (user-may "view-document-version-info")}}
@@ -167,7 +153,7 @@
                   <div class="vlc-document-card-item" data-test-vl-document-piece>
                     <div class="vlc-document-card-item__title">
                       <h6
-                        class="auk-h4"
+                        class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
                         data-test-vl-document-name
                       >
                         {{#unless piece.file}}
@@ -175,25 +161,23 @@
                             {{t "document-not-consultable"}}
                           </EmberTooltip>
                         {{/unless}}
-                        {{piece.name}}
+                        {{piece.name}}{{#if piece.file}}.{{piece.file.extension}}{{/if}}
                       </h6>
                       <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"></div>
                     </div>
                     {{#if (and this.currentSession.isEditor this.piece.created)}}
                     {{!-- no piece.created in legacy data --}}
-                      <div class="vlc-document-card-item__meta">
+                      <div class="vlc-document-card-item__meta au-u-muted">
                         {{#if this.piece.created}}
                           {{t "uploaded-at"}}
                           {{moment-format this.piece.created}}
-                          {{!--
-                            {{t "at"}}
-                            {{moment-format this.piece.created "HH:mm"}}
-                          --}}
+                          {{t "at"}}
+                          {{moment-format this.piece.created "HH:mm"}}
                         {{/if}}
                       </div>
                     {{/if}}
                     <div class="vlc-document-card-item__icon">
-                      <Auk::Icon @name="clock-rewind" @size="large" />
+                      <Auk::Icon @name="clock-rewind" @size="small" />
                     </div>
                   </div>
                 </div>
