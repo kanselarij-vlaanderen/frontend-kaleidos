@@ -18,7 +18,7 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
   const nameToCheck = 'Cultuur, Jeugd, Sport en Media';
   before(() => {
     cy.login('Admin');
-    cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
+    // cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logoutFlow();
   });
 
@@ -207,13 +207,13 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     cy.get(auk.loader, {
       timeout: 60000,
     }).should('not.exist');
-    cy.get(utils.governmentAreasPanel.rows).should('have.length', 5);
+    cy.get(utils.governmentAreasPanel.rows).should('have.length', 2);
     cy.get('@agendaitems').eq(2)
       .click();
     cy.get(auk.loader, {
       timeout: 40000,
     }).should('not.exist');
-    cy.get(utils.governmentAreasPanel.rows).should('have.length', 5);
+    cy.get(utils.governmentAreasPanel.rows).should('have.length', 3);
     cy.get('@agendaitems').eq(3)
       .click();
     cy.get(auk.loader, {
@@ -230,7 +230,7 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
 
     cy.log('in non-edit view, check if domains of last selected agendaitem are correctly ordered');
     cy.get(agenda.agendaDetailSidebar.subitem).as('agendaitems');
-    cy.get('@agendaitems').eq(1)
+    cy.get('@agendaitems').eq(3)
       .click();
     cy.get(auk.loader, {
       timeout: 60000,
@@ -248,7 +248,7 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
       .should('contain', 'Landbouw en Visserij');
 
     cy.log('deleting a mandatee and saving, check the non-edit view again');
-    cy.get('@agendaitems').eq(2)
+    cy.get('@agendaitems').eq(3)
       .click();
     // delete by running same domain and fields, should uncheck the same fields
     cy.addDomainsAndFields(domains);
@@ -256,12 +256,13 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     cy.get(agenda.agendaDetailSidebar.subitem).as('agendaitems');
     cy.get('@agendaitems').eq(1)
       .click();
-    cy.get(utils.governmentAreasPanel.rows).should('have.length', 4);
+    cy.get(utils.governmentAreasPanel.rows).should('have.length', 2);
     cy.get('@agendaitems').eq(2)
       .click();
-    cy.get(utils.governmentAreasPanel.rows).should('have.length', 4);
+    cy.get(utils.governmentAreasPanel.rows).should('have.length', 3);
     cy.get('@agendaitems').eq(3)
       .click();
+    // 1 less field, other sibling subcases are not affected
     cy.get(utils.governmentAreasPanel.rows).should('have.length', 4);
   });
 });
