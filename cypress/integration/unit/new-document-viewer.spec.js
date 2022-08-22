@@ -141,7 +141,6 @@ context('new document viewer tests', () => {
       });
     cy.get(document.previewVersionCard.name).eq(1)
       .parents(document.previewVersionCard.container)
-      .find(document.previewVersionCard.open)
       .click()
       .parents(document.previewVersionCard.container)
       .should('have.class', 'active')
@@ -149,8 +148,7 @@ context('new document viewer tests', () => {
         cy.get(document.previewVersionCard.details).contains(`${searchDocumentType}`);
       });
     cy.get(document.documentPreviewSidebar.tabs.details).click();
-    cy.get(document.previewDetailsTab.name).should('contain', `${file.fileName}.pdf`);
-    cy.get(document.previewDetailsTab.name).should('not.contain', newName);
+    cy.get(document.previewDetailsTab.name).should('contain', `${newName}.pdf`);
     cy.get(document.previewDetailsTab.documentType).should('contain', searchDocumentType);
     cy.get(document.previewDetailsTab.accessLevel).should('contain', defaultAccessLevel);
   });
