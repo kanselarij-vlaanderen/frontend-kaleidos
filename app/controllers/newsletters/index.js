@@ -26,8 +26,6 @@ export default class NewslettersIndexController extends Controller.extend(Defaul
   @tracked page;
   @tracked size;
   @tracked sort = '-planned-start,number-representation';
-  @tracked isAdding = false;
-  @tracked isEditing = false;
 
   constructor() {
     super(...arguments);

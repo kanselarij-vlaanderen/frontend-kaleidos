@@ -2,8 +2,8 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
 export default class NewslettersIndexRoute extends Route {
-  @service('session') simpleAuthSession;
-
+  @service store;
+  
   queryParams = {
     page: {
       refreshModel: true,
@@ -15,10 +15,6 @@ export default class NewslettersIndexRoute extends Route {
       refreshModel: true,
     },
   };
-
-  beforeModel(transition) {
-    this.simpleAuthSession.requireAuthentication(transition, 'login');
-  }
 
   async model(params) {
     const queryParams = {
