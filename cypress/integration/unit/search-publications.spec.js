@@ -52,6 +52,19 @@ function searchFakePublication() {
   cy.get(route.search.input).clear();
 }
 
+function checkPagination(optionsToCheck) {
+  optionsToCheck.forEach((option) => {
+    const randomInt = Math.floor(Math.random() * Math.floor(10000));
+    cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt}`);
+    cy.get(utils.numberPagination.container).find(dependency.emberPowerSelect.trigger)
+      .click();
+    cy.get(dependency.emberPowerSelect.option).contains(option)
+      .click();
+    cy.wait(`@publicationSearchCall${randomInt}`);
+    cy.url().should('include', `aantal=${option}`);
+  });
+}
+
 function checkPublicationSearchForStatusType(status, pubNumber) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt}`);
@@ -173,23 +186,10 @@ context('Search tests', () => {
     cy.logout();
   });
 
-  const searchFunction = (elementsToCheck) => {
-    elementsToCheck.forEach((option) => {
-      cy.get(route.search.input).type('test');
-      cy.get(route.search.trigger).click();
-      cy.get(utils.numberPagination.container).find(dependency.emberPowerSelect.trigger)
-        .click();
-      cy.get(dependency.emberPowerSelect.option).contains(option)
-        .click();
-      cy.url().should('include', `aantal=${option}`);
-      cy.get(route.search.input).clear();
-    });
-  };
-
   it('Should change the amount of elements to every value in selectbox in publicaties search view', () => {
     visitPublicationSearch();
     const options = [5, 10, 25, 50, 100];
-    searchFunction(options);
+    checkPagination(options);
   });
 
   it('search for all different unique searchterms in publicaties', () => {
