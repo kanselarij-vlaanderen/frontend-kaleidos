@@ -273,6 +273,11 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   @action
+  showPieceViewer(piece) {
+    window.open(`/document/${piece.id}`);
+  }
+
+  @action
   async saveAccessLevel() {
     // TODO make sure not to overwrite things
     await this.piece.save();
