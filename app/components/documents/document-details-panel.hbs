@@ -130,7 +130,7 @@
         </Auk::KeyValue>
       {{/if}}
       <Auk::KeyValue data-test-details-tab-name @key={{t "document-name"}}>
-        {{@piece.name}}.{{@piece.file.extension}}
+        {{@piece.name}}{{#if @piece.file}}.{{@piece.file.extension}}{{/if}}
       </Auk::KeyValue>
       <Auk::KeyValue data-test-details-tab-access-level @key={{t "publicity"}}>
         <AccessLevelPill
@@ -142,13 +142,17 @@
         data-test-details-tab-access-level
         @key={{t "source-file"}}
       >
-        <AuLink
-          href={{@piece.file.namedDownloadLink}}
-          @skin="primary"
-          @icon="download"
-          @iconAlignment="left"
-          download
-        >{{@piece.name}}.{{@piece.file.extension}}</AuLink>
+        {{#if @piece.file}}
+          <AuLink
+            href={{@piece.file.namedDownloadLink}}
+            @skin="primary"
+            @icon="download"
+            @iconAlignment="left"
+            download
+          >{{@piece.name}}.{{@piece.file.extension}}</AuLink>
+        {{else}}
+          {{@piece.name}}
+        {{/if}}
       </Auk::KeyValue>
     </Auk::Panel::Body>
   </Auk::Panel>
