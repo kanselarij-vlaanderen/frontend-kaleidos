@@ -35,17 +35,15 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
   <Auk::Panel::Body>
-    <div class="auk-content">
+    <AuContent>
       <p class="au-u-italic">
         {{this.proposalText}}
       </p>
-      <p>
-        <SanitizeHtml
-          @raw={{true}}
-          @value={{@newsletterItem.richtext}}
-        />
-      </p>
-    </div>
+      <SanitizeHtml
+        @raw={{true}}
+        @value={{@newsletterItem.richtext}}
+      />
+    </AuContent>
   </Auk::Panel::Body>
   {{#if @newsletterItem.remark}}
     <Auk::Panel::Body>

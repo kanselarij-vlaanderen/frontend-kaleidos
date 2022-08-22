@@ -1,0 +1,204 @@
+{{page-title (t "publications-tabs-search") }}
+<div class="auk-u-maximize-height auk-scroll-wrapper">
+  <Auk::Navbar>
+    <form {{on "submit" this.search}} class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-end auk-u-maximize-width auk-u-mb-4 auk-u-mt-4">
+      <div class="auk-form-group au-u-margin-bottom-none au-u-2-6">
+        <div class="auk-o-flex auk-o-flex--align-baseline">
+          <Auk::Label for="keyword" class="auk-u-mr">
+            {{capitalize (t "search-term")}}
+          </Auk::Label>
+          <Utils::SearchTooltip />
+        </div>
+        <Auk::Input
+          @block={{true}}
+          placeholder={{t "search-placeholder"}}
+          @value={{this.searchTextBuffer}}
+          id="keyword"
+          data-test-route-search-input
+        />
+      </div>
+      <div class="auk-form-group au-u-margin-bottom-none auk-u-position-relative au-u-1-6">
+        <Auk::Label for="dateType">
+          {{capitalize (t "search-by-date-type")}}
+        </Auk::Label>
+        <select
+          data-test-route-search-publication-date-type
+          name="dateType"
+          id="dateType"
+          class="auk-select auk-select--block"
+          {{on "input" this.selectPublicationDateType}}
+        >
+          {{#each this.publicationDateTypes as |dateType|}}
+            <option
+              value={{dateType.key}}
+              selected={{eq dateType.key this.publicationDateTypeKeyBuffer}}>
+              {{dateType.label}}
+            </option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="auk-form-group au-u-margin-bottom-none auk-u-position-relative au-u-1-6" data-test-route-search-date-from>
+        <Auk::Label>{{t "from"}}</Auk::Label>
+        <Auk::Datepicker
+          @date={{this.dateFromBuffer}}
+          @onChange={{set this "dateFromBuffer"}}
+        />
+      </div>
+      <div class="auk-form-group au-u-margin-bottom-none auk-u-position-relative au-u-1-6" data-test-route-search-date-to>
+        <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
+        <Auk::Datepicker
+          @date={{this.dateToBuffer}}
+          @onChange={{set this "dateToBuffer"}}
+        />
+      </div>
+      <div class="auk-form-group au-u-margin-bottom-none au-u-1-6">
+        <Auk::Button
+          @skin="primary"
+          @icon="search"
+          @block="true"
+          data-test-route-search-trigger
+          type="submit"
+        >
+          {{capitalize (t "search")}}
+        </Auk::Button>
+      </div>
+    </form>
+  </Auk::Navbar>
+  <div class="auk-scroll-wrapper__body">
+    <div class="auk-u-m-4">
+      <div class="auk-o-grid auk-u-mb-2">
+        <div class="auk-o-grid-col-2">
+          <div class="auk-box">
+            <div class="auk-u-mb-2">
+              <Auk::CheckboxTree
+                @label={{t "regulation-type"}}
+                @items={{this.regulationTypes}}
+                @selectedItems={{this.selectedRegulationTypes}}
+                @didUpdate={{this.updateSelectedRegulationTypes}}
+              />
+            </div>
+            <div class="auk-u-mb-2">
+              <Auk::CheckboxTree
+                @label={{t "status"}}
+                @items={{this.publicationStatuses}}
+                @selectedItems={{this.selectedPublicationStatuses}}
+                @didUpdate={{this.updateSelectedPublicationStatuses}}
+              />
+            </div>
+            <Auk::Checkbox
+              @checked={{this.urgentOnly}}
+              @label={{t "publication-urgent"}}
+              @labelSkin="bold"
+              {{on "input" this.toggleUrgentOnly}}
+            />
+          </div>
+        </div>
+        <div class="auk-o-grid-col-10">
+          <div>
+            {{#if this.model.length}}
+              <DataTable
+                data-test-route-search-publication-data-table
+                @content={{await this.model}}
+                @page={{this.page}}
+                @noDataMessage={{t "no-results-found"}}
+                @size={{this.size}}
+                @sort={{this.sort}}
+                @class="auk-table auk-table--striped auk-table--vertical-align-top auk-table--noactions"
+                @isLoading={{this.isLoadingModel}}
+                @onClickRow={{this.navigateToPublicationFlow}}
+                as |table|
+              >
+                <table.content as |c|>
+                  <c.header>
+                    <ThSortable
+                      @class="auk-table__col--1"
+                      @currentSorting={{this.sort}}
+                      @field="urgencyLevelId"
+                      @label={{t "publication-urgent"}}
+                    />
+                    <ThSortable
+                      @class="auk-table__col--1"
+                      @currentSorting={{this.sort}}
+                      @field="identificationKeyword"
+                      @label={{t "publication-number-small"}}
+                    />
+                    <th class="auk-table__col--7">{{t "short-title"}}</th>
+                    <th class="auk-table__col--1">
+                      {{t "publication-flow-numac-number"}}
+                    </th>
+                    <ThSortable
+                      @class="auk-table__col--1"
+                      @currentSorting={{this.sort}}
+                      @field="openingDate"
+                      @label={{t "date-received"}}
+                    />
+                    <ThSortable
+                      @class="auk-table__col--2"
+                      @currentSorting={{this.sort}}
+                      @field="statusId"
+                      @label={{t "status"}}
+                    />
+                    <th class="auk-table__col--1"></th>
+                  </c.header>
+                  <c.body class="auk-table--clickable-rows" as |row|>
+                    <td>
+                      {{#if row.urgent}}
+                        <Auk::Icon @skin="warning" @name="alert-triangle" />
+                      {{else}}
+                        {{t "dash"}}
+                      {{/if}}
+                    </td>
+                    <td data-test-route-search-publication-row-number>
+                      {{row.identification}}
+                    </td>
+                    <td>
+                      <p>
+                        {{#if row.shortTitle}}
+                          {{row.shortTitle}}
+                        {{else}}
+                          {{row.title}}
+                        {{/if}}
+                      </p>
+                    </td>
+                    <td>
+                      {{#if row.numacNumbers.length}}
+                        {{join ", " (sort row.numacNumbers)}}
+                      {{else}}
+                        {{t "dash"}}
+                      {{/if}}
+                    </td>
+                    <td>
+                      {{moment-format row.openingDate}}
+                    </td>
+                    <td>
+                      <Auk::StatusPill
+                        @step={{row.statusPillStep}}
+                        @status={{row.statusPillKey}}
+                      >
+                        {{row.status.label}}
+                      </Auk::StatusPill>
+                    </td>
+                    <td class="auk-u-text-align--right">
+                      <Auk::Button
+                        @skin="borderless"
+                        @layout="icon-only"
+                        @icon="chevron-right"
+                        @route="publications.publication.index"
+                        @model={{row.id}}
+                      />
+                    </td>
+                  </c.body>
+                </table.content>
+              </DataTable>
+            {{else}}
+              <Auk::EmptyState
+                @bordered={{true}}
+                @message={{t "no-results-found-modify-term"}}
+              />
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
