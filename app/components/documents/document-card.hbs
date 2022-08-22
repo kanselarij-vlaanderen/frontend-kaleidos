@@ -25,7 +25,7 @@
             </div>
             <h6 class="auk-h4" data-test-document-card-name-value="">
               <span>
-                {{this.piece.name}}
+                {{this.piece.name}}{{#if this.piece.file}}.{{this.piece.file.extension}}{{/if}}
               </span>
             </h6>
           </Group.Item>
