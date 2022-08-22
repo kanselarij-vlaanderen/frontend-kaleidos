@@ -37,7 +37,7 @@ export default class LinkedDocumentLink extends Component {
   }
 
   get reverseSortedPieces() {
-    return this.sortedPieces.slice(0).reverse();
+    return this.sortedPieces.slice(1).reverse();
   }
 
   @action

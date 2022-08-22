@@ -7,9 +7,14 @@
       <Auk::Toolbar @auto={{true}}>
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
-            <p class="auk-overline" data-test-linked-document-link-type-label>
+            <p class="vlc-subline au-u-medium au-u-muted" data-test-linked-document-link-type-label>
               {{@documentContainer.type.label}}
             </p>
+            <h6 class="auk-h4">
+              <LinkTo @route="document" @model={{this.lastPiece.id}} target="_blank">
+                {{this.lastPiece.name}}
+              </LinkTo>
+            </h6>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
         <div class="vlc-document-card-toolbar__right">
@@ -35,17 +40,22 @@
           </Auk::Toolbar::Item>
         </div>
       </Auk::Toolbar>
-      <h6 data-test-linked-document-link-name class="auk-h4">
-        {{this.lastPiece.name}}
-      </h6>
-      <div class="vlc-document-card-content__meta">
-        {{#if this.lastPiece.created}}
-          {{t "uploaded-at"}}
-          {{moment-format this.lastPiece.created}}
-          {{t "at"}}
-          {{moment-format this.lastPiece.created "HH:mm"}}
+      {{#if this.lastPiece.created}}
+        {{#if (eq this.lastPiece.file.extension "docx")}}
+          <div class="vlc-document-card-content__meta auk-u-mt-2">
+            {{! no piece.created in legacy data }}
+            {{! TODO: when created date is absent, the layout seems irregular
+                  this will be addressed with new document card styling }}
+            <div>
+              {{t "uploaded-at"}}
+              {{moment-format this.lastPiece.created}}
+              {{t "at"}}
+              {{moment-format this.lastPiece.created "HH:mm"}}
+              als <a href="#!">Word document</a>
+            </div>
+          </div>
         {{/if}}
-      </div>
+      {{/if}}
     </div>
   </div>
   {{#if this.reverseSortedPieces.length}}
