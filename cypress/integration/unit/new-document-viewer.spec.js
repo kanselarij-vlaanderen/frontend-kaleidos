@@ -3,7 +3,6 @@
 
 import document from '../../selectors/document.selectors';
 import dependency from '../../selectors/dependency.selectors';
-import auk from '../../selectors/auk.selectors';
 
 context('new document viewer tests', () => {
   function fillInEditDetails(newName, newDocumentType, newAccessLevel) {
@@ -134,12 +133,11 @@ context('new document viewer tests', () => {
   it('should check versions in version tab', () => {
     cy.get(document.documentPreviewSidebar.open).click();
     cy.get(document.documentPreviewSidebar.tabs.versions).click();
-    cy.get(document.previewVersionCard.name).contains(newName)
+    cy.get(document.previewVersionCard.name).contains(`${newName}.pdf`)
       .parents(document.previewVersionCard.container)
       .should('have.class', 'active')
       .within(() => {
-        cy.get(document.previewVersionCard.details).contains(`${newAccessLevel} - ${searchDocumentType}`);
-        cy.get(auk.fileTypePill).contains('PDF');
+        cy.get(document.previewVersionCard.details).contains(`${searchDocumentType}`);
       });
     cy.get(document.previewVersionCard.name).eq(1)
       .parents(document.previewVersionCard.container)
@@ -148,14 +146,12 @@ context('new document viewer tests', () => {
       .parents(document.previewVersionCard.container)
       .should('have.class', 'active')
       .within(() => {
-        cy.get(document.previewVersionCard.details).contains(`${defaultAccessLevel} - ${searchDocumentType}`);
-        cy.get(auk.fileTypePill).contains('PDF');
+        cy.get(document.previewVersionCard.details).contains(`${searchDocumentType}`);
       });
     cy.get(document.documentPreviewSidebar.tabs.details).click();
-    cy.get(document.previewDetailsTab.name).should('contain', file.fileName);
+    cy.get(document.previewDetailsTab.name).should('contain', `${file.fileName}.pdf`);
     cy.get(document.previewDetailsTab.name).should('not.contain', newName);
     cy.get(document.previewDetailsTab.documentType).should('contain', searchDocumentType);
     cy.get(document.previewDetailsTab.accessLevel).should('contain', defaultAccessLevel);
-    cy.get(auk.fileTypePill).contains('PDF');
   });
 });
