@@ -72,9 +72,4 @@ export default class LinkedDocumentLink extends Component {
   async reloadAccessLevel() {
     this.accessLevel = await this.lastPiece.belongsTo('accessLevel').reload();
   }
-
-  @action
-  showPieceViewer(piece) {
-    window.open(`/document/${piece.id}`);
-  }
 }
