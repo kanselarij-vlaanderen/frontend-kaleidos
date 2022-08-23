@@ -12,6 +12,7 @@
     @closeOnSelect={{false}}
     @search={{perform this.searchTask}}
     @onChange={{@onChange}}
+    @renderInPlace={{@renderInPlace}}
     ...attributes
   as |model|>
     {{#if (has-block)}}
@@ -34,6 +35,7 @@
     @searchMessage={{null}}
     @search={{perform this.searchTask}}
     @onChange={{@onChange}}
+    @renderInPlace={{@renderInPlace}}
     ...attributes
   as |model|>
     {{#if (has-block)}}

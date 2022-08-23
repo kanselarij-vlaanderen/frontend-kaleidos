@@ -1,14 +1,33 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { isEmpty, isPresent } from '@ember/utils';
-import moment from 'moment';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import { inject as service } from '@ember/service';
+import parseDate from '../../utils/parse-date-search-param';
+import startOfDay from 'date-fns/startOfDay';
+import endOfDay from 'date-fns/endOfDay';
 
 export default class NewsletterInfosSearchRoute extends Route {
   @service metrics;
+
   queryParams = {
+    searchText: {
+      refreshModel: true,
+      as: 'zoekterm',
+    },
+    mandatees: {
+      refreshModel: true,
+      as: 'minister',
+    },
+    dateFrom: {
+      refreshModel: true,
+      as: 'vanaf',
+    },
+    dateTo: {
+      refreshModel: true,
+      as: 'tot',
+    },
     page: {
       refreshModel: true,
       as: 'pagina',
@@ -31,8 +50,8 @@ export default class NewsletterInfosSearchRoute extends Route {
   }
 
   model(filterParams) {
-    const searchParams = this.paramsFor('search');
-    const params = { ...searchParams, ...filterParams };
+    const params = {...filterParams};
+    this.filterParams = filterParams;
     if (!params.dateFrom) {
       params.dateFrom = null;
     }
@@ -57,10 +76,10 @@ export default class NewsletterInfosSearchRoute extends Route {
 
     const filter = {};
 
-    if (!isEmpty(params.searchText)) {
+    if (isPresent(params.searchText)) {
       filter[`${searchModifier}${textSearchKey}`] = params.searchText;
     }
-    if (!isEmpty(params.mandatees)) {
+    if (isPresent(params.mandatees)) {
       filter[
         'agendaitems.mandatees.firstName,agendaitems.mandatees.familyName'
       ] = params.mandatees;
@@ -70,23 +89,18 @@ export default class NewsletterInfosSearchRoute extends Route {
      * mu-search(/elastic?) (semtech/mu-search:0.6.0-beta.11, semtech/mu-search-elastic-backend:1.0.0)
      * returns an off-by-one result (1 to many) in case of two open ranges combined.
      */
-    if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
-      const from = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
-      const to = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
-      filter[':lte,gte:agendaitems.meetingDate'] = [
-        to.utc().toISOString(),
-        from.utc().toISOString(),
-      ].join(',');
-    } else if (!isEmpty(params.dateFrom)) {
-      const date = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
-      filter[':gte:agendaitems.meetingDate'] = date.utc().toISOString();
-    } else if (!isEmpty(params.dateTo)) {
-      const date = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
-      filter[':lte:agendaitems.meetingDate'] = date.utc().toISOString();
+    if (isPresent(params.dateFrom) && isPresent(params.dateTo)) {
+      const from = startOfDay(parseDate(params.dateFrom));
+      const to = endOfDay(parseDate(params.dateTo)); // "To" interpreted as inclusive
+      filter[':lte,gte:agendaitems.meetingDate'] = [to.toISOString(), from.toISOString()].join(',');
+    } else if (isPresent(params.dateFrom)) {
+      const date = startOfDay(parseDate(params.dateFrom));
+      filter[':gte:agendaitems.meetingDate'] = date.toISOString();
+    } else if (isPresent(params.dateTo)) {
+      const date = endOfDay(parseDate(params.dateTo)); // "To" interpreted as inclusive
+      filter[':lte:agendaitems.meetingDate'] = date.toISOString();
     }
 
-    // filter out newsletters that are general newsletters
-    filter[':has-no:generalNewsletterMeetingId'] = 't';
     // filter out newsletters that are not linked to a meeting via treatment(s)/agendaitem(s)
     filter[':has:agendaitems'] = 't';
 
@@ -112,7 +126,7 @@ export default class NewsletterInfosSearchRoute extends Route {
   }
 
   afterModel(model) {
-    const keyword = this.paramsFor('search').searchText;
+    const keyword = this.filterParams.searchText;
     let count;
     if (model && model.meta && isPresent(model.meta.count)) {
       count = model.meta.count;
@@ -126,9 +140,14 @@ export default class NewsletterInfosSearchRoute extends Route {
     });
   }
 
-  setupController(controller) {
-    super.setupController(...arguments);
-    controller.emptySearch = isEmpty(this.paramsFor('search').searchText);
+  setupController(controller, model) {
+    super.setupController(controller, model);
+    const params = this.filterParams;
+    controller.searchTextBuffer = params.searchText;
+    controller.mandateesBuffer = params.mandatees;
+    controller.page = params.page;
+    controller.dateFromBuffer = parseDate(params.dateFrom);
+    controller.dateToBuffer = parseDate(params.dateTo);
 
     if (controller.page !== this.lastParams.committed.page) {
       controller.page = this.lastParams.committed.page;
@@ -143,7 +162,9 @@ export default class NewsletterInfosSearchRoute extends Route {
     transition.promise.finally(() => {
       controller.isLoadingModel = false;
     });
-    return true;
+    // Disable bubbling of loading event to prevent parent loading route to be shown.
+    // Otherwise it causes a 'flickering' effect because the search filters disappear.
+    return false;
   }
 
   postProcessAgendaitems(newsletter) {

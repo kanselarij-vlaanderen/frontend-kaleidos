@@ -15,7 +15,6 @@ export default class AgendasController extends Controller {
   @service store;
   @service currentSession;
   @service router;
-  @service newsletterService;
 
   defaultPublicationActivityStatus;
   @tracked newMeeting;
@@ -94,7 +93,7 @@ export default class AgendasController extends Controller {
   }
 
   @action
-  async createAgendaAndNewsletter() {
+  async createNewSession() {
     const agenda = await this.createAgenda(this.newMeeting);
 
     const closestMeeting = await this.store.queryOne('meeting', {
@@ -116,7 +115,6 @@ export default class AgendasController extends Controller {
         closestMeeting
       );
     }
-    await this.newsletterService.createNewsItemForMeeting(this.newMeeting);
     this.isCreatingNewSession = false;
     this.send('refreshRoute');
     this.router.transitionTo('agendas');

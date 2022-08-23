@@ -20,6 +20,7 @@ export default class UtilsModelSelectorComponent extends Component {
    * @argument selected
    * @argument onChange
    * @argument filterOptions: a function that will filter out results from the dropwdown menu
+   * @argument renderInPlace
    */
   @service store;
   @tracked items;
