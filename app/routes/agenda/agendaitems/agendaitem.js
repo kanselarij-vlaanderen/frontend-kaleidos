@@ -1,6 +1,5 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { isPresent } from '@ember/utils';
 
 export default class AgendaitemAgendaitemsAgendaRoute extends Route {
   @service store;
@@ -22,17 +21,13 @@ export default class AgendaitemAgendaitemsAgendaRoute extends Route {
     }
     this.transition = transition; // set on the route for use in setupController, since the provided "transition" argument there always comes back "undefined"
 
-    const agendaItemTreatment = await model.treatment;
-    this.newsletterInfo = await agendaItemTreatment?.newsletterInfo;
-    this.decisionActivity = await agendaItemTreatment?.decisionActivity;
+    this.treatment = await model.treatment;
   }
 
   setupController(controller, model) {
     super.setupController(...arguments);
     controller.meeting = this.modelFor('agenda').meeting;
-    controller.decisionsExist = isPresent(this.decisionActivity);
-    controller.newsItemExists = isPresent(this.newsletterInfo);
-    controller.pressAgendaitemExists = isPresent(model.titlePress && model.textPress);
+    controller.treatment = this.treatment;
 
     // eslint-disable-next-line ember/no-controller-access-in-routes
     const parentController = this.controllerFor('agenda.agendaitems');
