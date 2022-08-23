@@ -55,22 +55,22 @@
       {{/if}}
     </div>
   </div>
-  {{#if this.reverseSortedPieces.length}}
-    <div class="vlc-document-card-versions">
-      <Auk::Accordion>
-        <Auk::Accordion::Item
-          @title={{t "show-pieces"}}
-          data-test-linked-document-link-version-history
-        >
-          {{#each this.reverseSortedPieces as |piece|}}
-            <WebComponents::VlDocument
-              @piece={{piece}}
-              @didUpdateAccessLevel={{perform this.loadData}}
-            />
-          {{/each}}
-        </Auk::Accordion::Item>
-      </Auk::Accordion>
-    </div>
+    {{#if this.reverseSortedPieceHistory.length}}
+      <div class="vlc-document-card-versions">
+        <Auk::Accordion>
+          <Auk::Accordion::Item
+            @title={{t "previous-versions"}}
+            data-test-linked-document-link-version-history
+          >
+            {{#each this.reverseSortedPieceHistory as |piece|}}
+              <WebComponents::VlDocument
+                @piece={{piece}}
+                @didUpdateAccessLevel={{perform this.loadData}}
+              />
+            {{/each}}
+          </Auk::Accordion::Item>
+        </Auk::Accordion>
+      </div>
   {{/if}}
 </div>
 
