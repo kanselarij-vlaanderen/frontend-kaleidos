@@ -54,10 +54,6 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.signaturesEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
   }
 
-  get userMayManagePublicationFlows() {
-    return this.currentSession.may('manage-publication-flows');
-  }
-
   get bordered() {
     return isPresent(this.args.bordered) ? this.args.bordered : true;
   }
@@ -79,7 +75,7 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *loadPublicationFlowRelatedData() {
-    if (this.userMayManagePublicationFlows) {
+    if (this.currentSession.may('manage-publication-flows')) {
       const publicationFlow = yield this.piece.publicationFlow;
       yield publicationFlow?.identification;
     }
@@ -270,11 +266,6 @@ export default class DocumentsDocumentCardComponent extends Component {
   changeAccessLevel(al) {
     this.piece.set('accessLevel', al);
     this.accessLevel = al;
-  }
-
-  @action
-  showPieceViewer(piece) {
-    window.open(`/document/${piece.id}`);
   }
 
   @action
