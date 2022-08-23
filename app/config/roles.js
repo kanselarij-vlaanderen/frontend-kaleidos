@@ -39,8 +39,7 @@ groupRoles.set(KANSELARIJ, [
   'manage-newsletter-infos',
   'manage-decision-publications',
   'manage-document-publications',
-  'manage-themis-publications',
-  'manage-settings',
+  'manage-themis-publications'
 ]);
 
 groupRoles.set(MINISTER, [
