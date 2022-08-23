@@ -1,0 +1,159 @@
+{{#if this.isEditingDetails}}
+  <Auk::Panel class="auk-panel--editing">
+    <Auk::Panel::Header class="auk-u-px-1">
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <h4 class="auk-h4 auk-u-m-0">
+              {{t "document-properties"}}
+            </h4>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body class="auk-u-p-1">
+      <Auk::KeyValue
+        data-test-details-tab-document-type
+        @key={{t "document-type"}}
+      >
+        <Utils::ModelSelector
+          data-test-details-tab-edit-document-type
+          @modelName="document-type"
+          @allowClear={{true}}
+          @searchField="label"
+          @displayField="label"
+          @sortField="priority"
+          @selected={{this.documentType}}
+          @onChange={{this.setDocumentType}}
+          @renderInPlace={{true}} {{! Required to make the seach box focusable }}
+        />
+      </Auk::KeyValue>
+      <Auk::KeyValue data-test-details-tab-name @key={{t "document-name"}}>
+        <Textarea
+          data-test-details-tab-edit-name
+          aria-labelledby="piece-name"
+          class="auk-textarea"
+          @value={{mut @piece.name}}
+        />
+      </Auk::KeyValue>
+      <Auk::KeyValue data-test-details-tab-access-level @key={{t "publicity"}}>
+        <Utils::AccessLevelSelector
+          @allowClear={{true}}
+          @displayField="label"
+          @sortField="position"
+          @selected={{this.accessLevel}}
+          @onChange={{this.setAccessLevel}}
+          data-test-details-tab-edit-access-level
+        />
+      </Auk::KeyValue>
+      <Auk::KeyValue
+        data-test-details-tab-access-level
+        @key={{t "source-file"}}
+      >
+        <p>
+          {{! Note that showing this composed name as "source file name" might be confusing.
+          Better show original source file (not document) name?}}
+          {{@piece.name}}.{{@piece.file.extension}}
+        </p>
+      </Auk::KeyValue>
+    </Auk::Panel::Body>
+    <Auk::Panel::Footer>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <Auk::Button
+              data-test-details-tab-cancel
+              @skin="borderless"
+              @disabled={{this.isProcessing}}
+              {{on "click" (perform this.cancelEditDetails)}}
+            >
+              {{t "cancel"}}
+            </Auk::Button>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <Auk::Button
+              data-test-details-tab-save
+              @skin="primary"
+              @disabled={{this.isProcessing}}
+              @loading={{this.saveDetails.isRunning}}
+              {{on "click" (perform this.saveDetails)}}
+            >
+              {{t "save"}}
+            </Auk::Button>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Footer>
+  </Auk::Panel>
+  {{#if this.isUploadingReplacementFile}}
+    <Auk::Modal>
+      <Auk::Modal::Body>
+        <Auk::FileUploader @multiple={{false}} @onUpload={{this.replaceFile}} />
+      </Auk::Modal::Body>
+    </Auk::Modal>
+  {{/if}}
+{{else}}
+  <Auk::Panel>
+    <Auk::Panel::Header class="auk-u-px-1">
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <h4 class="auk-h4 auk-u-m-0">
+              {{t "document-properties"}}
+            </h4>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        {{#if this.currentSession.isEditor}}
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <Auk::Button
+                data-test-details-tab-edit
+                @skin="tertiary"
+                @icon="pencil"
+                @layout="icon-only"
+                {{on "click" this.openEditDetails}}
+              />
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        {{/if}}
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body class="auk-u-p-1">
+      {{#if this.documentType}}
+        <Auk::KeyValue
+          data-test-details-tab-document-type
+          @key={{t "document-type"}}
+        >
+          {{this.documentType.label}}
+        </Auk::KeyValue>
+      {{/if}}
+      <Auk::KeyValue data-test-details-tab-name @key={{t "document-name"}}>
+        {{@piece.name}}{{#if @piece.file}}.{{@piece.file.extension}}{{/if}}
+      </Auk::KeyValue>
+      <Auk::KeyValue data-test-details-tab-access-level @key={{t "publicity"}}>
+        <AccessLevelPill
+          @accessLevel={{this.accessLevel}}
+          @isEditable={{false}}
+        />
+      </Auk::KeyValue>
+      <Auk::KeyValue
+        data-test-details-tab-access-level
+        @key={{t "source-file"}}
+      >
+        {{#if @piece.file}}
+          <AuLink
+            href={{@piece.file.namedDownloadLink}}
+            @skin="primary"
+            @icon="download"
+            @iconAlignment="left"
+            download
+          >{{@piece.name}}.{{@piece.file.extension}}</AuLink>
+        {{else}}
+          {{@piece.name}}
+        {{/if}}
+      </Auk::KeyValue>
+    </Auk::Panel::Body>
+  </Auk::Panel>
+{{/if}}
