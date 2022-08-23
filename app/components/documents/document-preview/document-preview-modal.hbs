@@ -1,6 +1,18 @@
-<Auk::Modal @size="full-screen">
-  <Auk::Modal::Header @title={{this.selectedVersion.name}} @onClose={{@onClose}} />
-  <Auk::Modal::Body @noPadding={{true}}>
+<AuModal
+  @modalOpen={{true}}
+  @closeModal={{@onClose}}
+  @size="fullscreen"
+  @padding="none"
+>
+  <:title>
+    <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+      {{this.selectedVersion.name}}
+      {{#if this.selectedVersion.file}}
+        <AuLink href={{this.selectedVersion.file.namedDownloadLink}} @skin="button-naked" @icon="download" @iconAlignment="left" download>Downloaden</AuLink>
+      {{/if}}
+    </span>
+  </:title>
+  <:body>
     <div class="auk-panel-layout">
       <div class="auk-panel-layout__main-content">
         <Documents::DocumentView @file={{await this.selectedVersion.file}} />
@@ -11,12 +23,12 @@
           @onCollapse={{this.toggleSidebar}}
           @onOpen={{this.toggleSidebar}}
           @piece={{this.selectedVersion}}
-          @transitionBack={{@onClose}}
           @onSelectVersion={{this.setSelectedVersion}}
+          @transitionBack={{@onClose}}
           @markForSignature={{@markForSignature}}
           @unmarkForSignature={{@unmarkForSignature}}
         />
       </div>
     </div>
-  </Auk::Modal::Body>
-</Auk::Modal>
+  </:body>
+</AuModal>

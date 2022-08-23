@@ -482,7 +482,7 @@ export default class PublicationService extends Service {
     });
     const agenda = await agendaitem?.agenda;
     const meeting = await agenda?.createdFor;
-    return [meeting.id, agenda.id, agendaitem.id];
+    return [meeting?.id, agenda?.id, agendaitem?.id];
   }
 
   async ensureDecision(publicationSubcase, date) {

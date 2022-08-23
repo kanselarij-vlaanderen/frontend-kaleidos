@@ -1,29 +1,26 @@
 import { belongsTo, hasMany, attr } from '@ember-data/model';
-import { alias } from '@ember/object/computed';
-import { inject } from '@ember/service';
 import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 
-// TODO: octane refactor
-export default ModelWithModifier.extend({
-  modelName: alias('constructor.modelName'),
-  intl: inject(),
-  text: attr('string'),
-  subtitle: attr('string'),
-  title: attr('string'),
-  richtext: attr('string'),
-  mandateeProposal: attr('string'),
-  finished: attr('boolean'),
-  inNewsletter: attr('boolean'),
-  remark: attr('string'),
+export default class NewsletterInfo extends ModelWithModifier {
+  @attr text;
+  @attr subtitle;
+  @attr title;
+  @attr richtext;
+  @attr mandateeProposal;
+  @attr('boolean') finished;
+  @attr('boolean') inNewsletter;
+  @attr remark;
 
-  agendaItemTreatment: belongsTo('agenda-item-treatment'),
-  meeting: belongsTo('meeting', {
+  get modelName() {
+    return this.constructor.modelName;
+  }
+
+  @belongsTo('agenda-item-treatment') agendaItemTreatment;
+
+  @hasMany('piece', {
     inverse: null,
-  }),
-  pieces: hasMany('piece', {
+  }) pieces;
+  @hasMany('themes', {
     inverse: null,
-  }),
-  themes: hasMany('themes', {
-    inverse: null,
-  }),
-});
+  }) themes;
+}
