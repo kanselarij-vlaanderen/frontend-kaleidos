@@ -9,7 +9,29 @@ import bind from 'frontend-kaleidos/utils/bind';
 export default class NewslettersIndexController extends Controller.extend(DefaultQueryParamsMixin) {
   @service router;
 
+  queryParams = {
+    page: {
+      type: 'number',
+    },
+    size: {
+      type: 'number',
+    },
+    sort: {
+      type: 'string',
+    },
+  };
+
+  sizeOptions = [10, 25, 50, 100, 200];
+
+  @tracked page;
+  @tracked size;
   @tracked sort = '-planned-start,number-representation';
+
+  constructor() {
+    super(...arguments);
+    this.page = 0;
+    this.size = this.sizeOptions[0];
+  }
 
   @bind
   async latestAgenda(meeting) {
