@@ -23,6 +23,7 @@ const groupRoles = new Map();
 
 groupRoles.set(ADMIN, [
   'manage-signatures',
+  'manage-agenda-versions',
   'manage-document-access-levels',
   'manage-publication-flows',
   'search-publication-flows',
@@ -35,6 +36,7 @@ groupRoles.set(ADMIN, [
 
 groupRoles.set(KANSELARIJ, [
   'manage-signatures',
+  'manage-agenda-versions',
   'manage-document-access-levels',
   'manage-newsletter-infos',
   'manage-decision-publications',
