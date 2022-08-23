@@ -44,7 +44,7 @@
         <Toolbar.Group @position="right" as |Group|>
           {{#if
             (and
-              this.userMayManagePublicationFlows
+              (user-may "manage-publication-flows")
               (not this.loadPieceRelatedData.isRunning)
               (not this.loadPublicationFlowRelatedData.isRunning)
             )
