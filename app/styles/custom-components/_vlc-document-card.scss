@@ -18,16 +18,15 @@
     margin: 0;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
 
-    span {
-      margin: 0;
-      color: #0055CC;
-      cursor: pointer;
+  a.auk-h4 {
+    text-decoration: none;
+    color: #0055CC;
 
-      &:hover,
-      &:focus {
-        color: #004099;
-      }
+    &:hover,
+    &:focus {
+      color: #004099;
     }
   }
 }
@@ -117,19 +116,15 @@
   }
 }
 
-.vlc-document-card-item__title-link {
-  color: #69717C;
-  text-decoration: underline;
-  cursor: pointer;
-
+a.vlc-document-card-item__title-link {
   &.auk-h4 {
     color: #69717C;
-  }
 
-  &:hover,
-  &:focus {
-    text-decoration: none;
-    color: #545961;
+    &:hover,
+    &:focus {
+      text-decoration: none;
+      color: #545961;
+    }
   }
 }
 
