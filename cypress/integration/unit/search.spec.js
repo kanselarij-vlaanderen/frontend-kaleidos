@@ -4,6 +4,7 @@ import agenda from '../../selectors/agenda.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
+import auk from '../../selectors/auk.selectors';
 
 context('Search tests', () => {
   const options = [5, 10, 25, 50, 100];
@@ -38,7 +39,7 @@ context('Search tests', () => {
     cy.get(route.search.trigger).click();
     cy.wait('@searchCall');
 
-    cy.get(utils.vlAlert.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
+    cy.get(auk.emptyState.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
   });
 
   it('Searchfield should be empty after revisiting search page', () => {
@@ -53,7 +54,7 @@ context('Search tests', () => {
   });
 
   it('Search for richText in kort-bestek and open the detail view by clicking row', () => {
-    cy.visit('/zoeken/kort-bestek');
+    cy.visit('/kort-bestek/zoeken');
     // Testdata available in default data
     const searchTerm = 'Dit is een leuke beslissing';
     cy.get(route.search.input).clear();
@@ -152,7 +153,7 @@ context('Search tests', () => {
     });
 
     it('Should change the amount of elements to every value in selectbox in kort-bestek search view', () => {
-      cy.visit('zoeken/kort-bestek');
+      cy.visit('kort-bestek/zoeken');
       searchFunction(options);
     });
 

@@ -1,0 +1,64 @@
+<span>
+  <Auk::Icon
+    @name="circle-info"
+    @skin="muted"
+    class="auk-u-cursor-pointer"
+    {{on "click" this.openModal}}
+  >
+    <AttachPopover
+      @class="auk-popover"
+      @showOn="click"
+      @placement="right"
+      @hideOn="clickout"
+      @isShown={{this.isOpenModal}}
+      @renderInPlace={{false}}
+    >
+      <div class="auk-popover__header">
+        <Auk::Toolbar as |Toolbar|>
+          <Toolbar.Group @position="left" as |Group|>
+            <Group.Item>
+              <h4 class="auk-toolbar__title">{{t "search-legend-title"}}</h4>
+            </Group.Item>
+          </Toolbar.Group>
+          <Toolbar.Group @position="right" as |Group|>
+            <Group.Item>
+              <Auk::Button
+                @icon="x"
+                @layout="icon-only"
+                @skin="muted"
+                {{on "click" this.closeModal}}
+              >
+              </Auk::Button>
+            </Group.Item>
+          </Toolbar.Group>
+        </Auk::Toolbar>
+      </div>
+      <div class="auk-popover__body">
+        <table class="auk-table">
+          <thead>
+            <tr>
+              <th>{{t "search-legend-header-example"}}</th>
+              <th>{{t "search-legend-header-explanation"}}</th>
+            </tr>
+            <tr>
+              <td class="auk-table__col--4">{{t "search-legend-and-example"}}</td>
+              <td class="auk-table__col--8">{{t "search-legend-and-explanation"}}</td>
+            </tr>
+            <tr>
+              <td class="auk-table__col--4">{{t "search-legend-not-example"}}</td>
+              <td class="auk-table__col--8">{{t "search-legend-not-explanation"}}</td>
+            </tr>
+            <tr>
+              <td class="auk-table__col--4">{{t "search-legend-order-example"}}</td>
+              <td class="auk-table__col--8">{{t "search-legend-order-explanation"}}</td>
+            </tr>
+            <tr>
+              <td class="auk-table__col--4">{{t "search-legend-wildcard-example"}}</td>
+              <td class="auk-table__col--8">{{t "search-legend-wildcard-explanation"}}</td>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </AttachPopover>
+  </Auk::Icon>
+</span>

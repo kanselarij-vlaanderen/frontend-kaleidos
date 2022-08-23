@@ -29,22 +29,6 @@
             >
               {{t "cases"}}
             </Tabs.Tab>
-            <Tabs.Tab
-              @route="search.newsletter-infos"
-              @current-when="search.newsletter-infos"
-              @query={{hash page=0}}
-            >
-              {{t "newsletter"}}
-            </Tabs.Tab>
-            {{#if this.isShownPublicationFlows}}
-              <Tabs.Tab
-                @route="search.publication-flows"
-                @current-when="search.publication-flows"
-                @query={{hash page=0}}
-              >
-                {{t "publications"}}
-              </Tabs.Tab>
-            {{/if}}
           </Auk::Tabs>
         </Group.Item>
       </Toolbar.Group>
@@ -52,134 +36,67 @@
   </Auk::Navbar>
 
   <Auk::Navbar>
-    {{!-- template-lint-disable no-redundant-fn --}}
-    {{!-- TODO: Using plain decorated action for Input's @enter doesn't work for some reason --}}
-    <div class="auk-o-grid auk-o-grid--align-end auk-u-maximize-width auk-u-mb-4 auk-u-mt-4">
+    <form {{on "submit" this.search}} class="auk-o-grid auk-o-grid--align-end auk-u-maximize-width auk-u-mb-4 auk-u-mt-4">
       <div class="auk-o-grid-col-4">
         <div class="auk-form-group">
           <div class="auk-o-flex auk-o-flex--align-baseline">
-            <Auk::Label for="dossierId" class="auk-u-mr">
-              {{#if this.isSearchingPublicationFlows}}
-                {{capitalize (t "search-term")}}
-              {{else}}
-                {{capitalize (t "keyword")}}
-              {{/if}}
+            <Auk::Label for="keyword" class="auk-u-mr">
+              {{capitalize (t "keyword")}}
             </Auk::Label>
-            <span>
-              <Auk::Icon
-                @name="circle-info"
-                @skin="muted"
-                class="auk-u-cursor-pointer"
-                {{on "click" this.openPopover}}
-              >
-                <AttachPopover
-                  @class="auk-popover"
-                  @showOn="click"
-                  @placement="right"
-                  @hideOn="clickout"
-                  @isShown={{this.popoverShown}}
-                  @renderInPlace={{true}}
-                >
-                  <Utils::SearchLegend
-                    @userClickedClose={{this.closePopover}}
-                  />
-                </AttachPopover>
-              </Auk::Icon>
-            </span>
+            <Utils::SearchTooltip />
           </div>
           <Auk::Input
             @block={{true}}
             placeholder={{t "search-placeholder"}}
             @value={{this.searchTextBuffer}}
-            @enter={{fn this.search}}
-            id="dossierId"
+            id="keyword"
             data-test-route-search-input
           />
         </div>
       </div>
-      {{#if this.isSearchingPublicationFlows}}
-        <div class="auk-o-grid-col-2">
-          <div class="auk-form-group auk-u-position-relative">
-            <Auk::Label for="dateType">
-              {{capitalize (t "search-by-date-type")}}
-            </Auk::Label>
-            <select
-              data-test-route-search-publication-date-type
-              name="dateType"
-              id="dateType"
-              class="auk-select auk-select--block"
-              {{on "input" this.selectPublicationDateType}}>
-              {{#each this.publicationDateTypes as |dateType|}}
-                <option
-                  value={{dateType.key}}
-                  selected={{eq dateType.key this.publicationDateTypeKeyBuffer}}>
-                  {{dateType.label}}
-                </option>
-              {{/each}}
-            </select>
-          </div>
-        </div>
-      {{/if}}
       <div class="auk-o-grid-col-2">
-        <div class="auk-form-group auk-u-position-relative">
+        <div class="auk-form-group auk-u-position-relative" data-test-route-search-date-from>
           <Auk::Label>{{t "from"}}</Auk::Label>
-          <WebComponents::VlDatepicker
-            data-test-route-search-date-from
-            @selectedDate={{array this.dateFromBuffer}}
-            @dateChanged={{fn (mut this.dateFromBuffer)}}
-            @enableClear={{this.dateFromBuffer}}
-            @onClear={{fn (mut this.dateFromBuffer) null}}
-            @allowInput={{true}}
+          <Auk::Datepicker
+            @date={{this.dateFromBuffer}}
+            @onChange={{set this "dateFromBuffer"}}
           />
         </div>
       </div>
       <div class="auk-o-grid-col-2">
-        <div class="auk-form-group auk-u-position-relative">
+        <div class="auk-form-group auk-u-position-relative" data-test-route-search-date-to>
           <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
-          <WebComponents::VlDatepicker
-            data-test-route-search-date-to
-            @selectedDate={{array this.dateToBuffer}}
-            @dateChanged={{fn (mut this.dateToBuffer)}}
-            @enableClear={{this.dateToBuffer}}
-            @onClear={{fn (mut this.dateToBuffer) null}}
-            @allowInput={{true}}
+          <Auk::Datepicker
+            @date={{this.dateToBuffer}}
+            @onChange={{set this "dateToBuffer"}}
           />
         </div>
       </div>
-      {{#if (not this.isSearchingPublicationFlows)}}
-        <div class="auk-o-grid-col-2">
-          <div class="auk-form-group">
-            <Auk::Label for="ministerName">
-              {{t "minister"}}
-            </Auk::Label>
-            <Auk::Input
-              data-test-route-search-mandatee-input
-              @block={{true}}
-              @value={{this.mandateesBuffer}}
-              @enter={{fn this.search}}
-              id="ministerName"
-            />
-          </div>
+      <div class="auk-o-grid-col-2">
+        <div class="auk-form-group">
+          <Auk::Label for="ministerName">
+            {{t "minister"}}
+          </Auk::Label>
+          <Auk::Input
+            data-test-route-search-mandatee-input
+            @block={{true}}
+            @value={{this.mandateesBuffer}}
+            id="ministerName"
+          />
         </div>
-      {{/if}}
+      </div>
       <div class="auk-o-grid-col-1">
         <Auk::Button
           @skin="primary"
           @icon="search"
           @block="true"
           data-test-route-search-trigger
-          type="button"
-          {{on "click" this.search}}
+          type="submit"
         >
-          {{#if this.isSearchingPublicationFlows}}
-            {{capitalize (t "search-publication")}}
-          {{else}}
-            {{t "search"}}
-          {{/if}}
+          {{t "search"}}
         </Auk::Button>
       </div>
-    </div>
-    {{!-- template-lint-enable no-redundant-fn --}}
+    </form>
   </Auk::Navbar>
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-m-4">

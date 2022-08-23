@@ -104,6 +104,11 @@ const selectors = {
     title: '[data-test-agenda-header-title]',
   },
 
+  // publication-pills
+  publicationPills: {
+    container: '[data-test-publication-pills-container]',
+  },
+
   // agenda-actions
   agendaActions: {
     showOptions: '[data-test-agenda-actions-show-options]',
@@ -199,6 +204,7 @@ const selectors = {
   },
 
   // new-meeting
+  // TODO-selectors cleanup unused selectors
   newMeeting: {
     kind: '[data-test-utils-kind-selector]',
     relatedMainMeeting: '[data-test-new-meeting-related-main-meeting]',
@@ -221,6 +227,7 @@ const selectors = {
     meetingNumber: '[data-test-edit-meeting-meeting-number]',
     meetingLocation: '[data-test-edit-meeting-meeting-location]',
     datepicker: '[data-test-edit-meeting-datepicker]',
+    documentPublicationDate: '[data-test-edit-meeting-document-publication-date]',
     numberRep: {
       view: '[data-test-edit-meeting-number-representation-view]',
       edit: '[data-test-edit-meeting-number-representation-edit]',
