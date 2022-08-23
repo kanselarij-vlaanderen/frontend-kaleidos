@@ -18,7 +18,7 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
   const nameToCheck = 'Cultuur, Jeugd, Sport en Media';
   before(() => {
     cy.login('Admin');
-    // cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
+    cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logoutFlow();
   });
 
@@ -74,10 +74,10 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     cy.get('@listItems').eq(0)
       .find(utils.governmentAreasPanel.row.fields)
       .should('contain', '-');
-    cy.proposeSubcaseForAgenda(agendaDate);
 
     // Check if agendaitem has the same amount of domains
     cy.openAgendaForDate(agendaDate);
+    cy.addAgendaitemToAgenda(SubcaseTitleShort);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
 
     cy.get(utils.governmentAreasPanel.rows).as('listItems');
@@ -98,8 +98,12 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     const domains = [domain3];
     cy.openCase(caseName);
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, null, null);
-    cy.openSubcase(0);
-    cy.proposeSubcaseForAgenda(agendaDate);
+
+    cy.openAgendaForDate(agendaDate);
+    cy.addAgendaitemToAgenda(SubcaseTitleShort);
+    cy.openDetailOfAgendaitem(SubcaseTitleShort);
+    cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
+    cy.get(auk.loader).should('not.exist');
 
     // Dependency: We should already have 2 domains that we inherit from previous subcase, now we add 1 more
 
@@ -193,8 +197,9 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, null, null);
     cy.openSubcase(0);
     cy.addDomainsAndFields(domains);
-    cy.proposeSubcaseForAgenda(agendaDate);
     cy.openAgendaForDate(agendaDate);
+    cy.addAgendaitemToAgenda(SubcaseTitleShort);
+    cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.get(auk.loader, {
       timeout: 60000,
     }).should('not.exist');
