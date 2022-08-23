@@ -6,7 +6,7 @@
       </div>
       <div class="auk-u-mb-2">
         <p class="auk-overline">
-          {{if (eq subcase.agendaItemType.uri this.remarkUri) (t "announcement") (t "note")}}
+          {{if (is-remark subcase.agendaItemType) (t "announcement") (t "note")}}
         </p>
       </div>
       <div class="auk-u-mb-2">
