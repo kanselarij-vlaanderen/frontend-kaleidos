@@ -80,6 +80,7 @@ export default class CasesNewSubcase extends Component {
 
   get areLoadingTasksRunning() {
     return (
+      this.loadDefaultAgendaItemType.isRunning ||
       this.loadAgendaItemTypes.isRunning ||
       this.loadLatestSubcase.isRunning ||
       this.loadTitleData.isRunning
@@ -116,7 +117,7 @@ export default class CasesNewSubcase extends Component {
       shortTitle: trimText(this.shortTitle),
       title: trimText(this.title),
       confidential: this.confidential,
-      agendaItemType: this.agendaItemType,
+      agendaItemType: this.agendaItemType ?? await this.store.findRecordByUri('concept', CONSTANTS.AGENDA_ITEM_TYPES.NOTA),
       case: this.args.case,
       created: date,
       modified: date,
