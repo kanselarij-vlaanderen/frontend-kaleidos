@@ -138,7 +138,11 @@ context('Different session kinds should show different titles', () => {
     cy.get(agenda.editMeeting.relatedMainMeeting).click();
     selectFromDropdown(formattedAgendaDate);
     cy.get(agenda.editMeeting.numberRep.view).should('contain', fullmeetingNumberVV);
+    cy.intercept('POST', '/meetings').as('createMeeting');
+    cy.intercept('POST', '/agendas').as('createAgenda');
     cy.get(agenda.editMeeting.save).click();
+    cy.wait('@createMeeting');
+    cy.wait('@createAgenda');
     // check if edit shows correct data
     cy.openAgendaForDate(agendaDate, 1);
     cy.get(agenda.agendaHeader.showOptions).click();
