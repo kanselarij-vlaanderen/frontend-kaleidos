@@ -23,13 +23,10 @@
                 {{/unless}}
               </span>
             </div>
-            <h6 class="auk-h4" data-test-document-card-name-value>
-              {{! template-lint-disable no-invalid-interactive }}
-              <span {{on "click" (fn this.showPieceViewer this.piece)}}>
-                {{this.piece.name}}{{#if this.piece.file}}.{{this.piece.file.extension}}{{/if}}
-              </span>
-              {{! template-lint-enable no-invalid-interactive }}
-            </h6>
+            <LinkTo @route="document" @model={{this.piece.id}}
+              class="auk-h4" data-test-document-card-name-value>
+              {{this.piece.name}}{{#if this.piece.file}}.{{this.piece.file.extension}}{{/if}}
+            </LinkTo>
             <div class="vlc-document-card-content__meta">
               {{! no piece.created in legacy data }}
               {{#if this.piece.created}}
@@ -155,14 +152,11 @@
                   <div class="vlc-document-card-item" data-test-vl-document-piece>
                     <div class="vlc-document-card-item__title">
                       {{#if piece.file}}
-                        {{! template-lint-disable no-invalid-interactive }}
-                        <h6
+                        <LinkTo @route="document" @model={{piece.id}}
                           class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
-                          {{on "click" (fn this.showPieceViewer piece)}}
                           data-test-vl-document-name>
                           {{piece.name}}{{#if piece.file}}.{{piece.file.extension}}{{/if}}
-                        </h6>
-                        {{! template-lint-enable no-invalid-interactive }}
+                        </LinkTo>
                       {{else}}
                         <h6
                           class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
@@ -176,17 +170,15 @@
                       {{/if}}
                       <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"></div>
                     </div>
-                    {{#if (and this.currentSession.isEditor this.piece.created)}}
-                    {{!-- no piece.created in legacy data --}}
-                      <div class="vlc-document-card-item__meta au-u-muted">
-                        {{#if this.piece.created}}
-                          {{t "uploaded-at"}}
-                          {{moment-format this.piece.created}}
-                          {{t "at"}}
-                          {{moment-format this.piece.created "HH:mm"}}
-                        {{/if}}
-                      </div>
-                    {{/if}}
+                    <div class="vlc-document-card-item__meta au-u-muted">
+                      {{!-- no piece.created in legacy data --}}
+                      {{#if this.piece.created}}
+                        {{t "uploaded-at"}}
+                        {{moment-format this.piece.created}}
+                        {{t "at"}}
+                        {{moment-format this.piece.created "HH:mm"}}
+                      {{/if}}
+                    </div>
                     <div class="vlc-document-card-item__icon">
                       <Auk::Icon @name="clock-rewind" @size="small" />
                     </div>
