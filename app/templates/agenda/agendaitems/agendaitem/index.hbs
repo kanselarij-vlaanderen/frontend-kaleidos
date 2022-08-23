@@ -30,7 +30,7 @@
   @newsletterInfo={{this.newsletterInfo}}
   @allowEditing={{this.currentSession.isEditor}}
 />
-{{#if (is-remark @model.type)}}
+{{#if (is-announcement @model.type)}}
   <Mandatees::MandateesPanel
     @referenceDate={{this.meeting.plannedStart}}
     @mandatees={{this.mandatees}}

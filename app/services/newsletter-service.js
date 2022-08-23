@@ -130,7 +130,7 @@ export default class NewsletterService extends Service {
       inNewsletter,
     });
     const agendaItemType = await agendaitem.type;
-    if (agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.REMARK) {
+    if (agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
       const content = agendaitem.title;
       news.title = agendaitem.shortTitle || content;
       news.richtext = content;

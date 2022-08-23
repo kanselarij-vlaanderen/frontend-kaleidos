@@ -65,7 +65,7 @@ export default class AgendaitemCasePanelEdit extends Component {
       yield this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
     }
     const agendaItemType = yield this.args.agendaitem.type;
-    const isAnnouncement = agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.REMARK;
+    const isAnnouncement = agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
     if (
       this.newsletterInfo &&
       (this.newsletterInfo.hasDirtyAttributes || isAnnouncement)

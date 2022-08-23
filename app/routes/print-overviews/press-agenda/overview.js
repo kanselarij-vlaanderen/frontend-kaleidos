@@ -36,7 +36,7 @@ export default Route.extend({
     const announcements = []
     for (const agendaitem of agendaitems.sortBy('number').toArray()) {
       const type = await agendaitem.type;
-      if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.REMARK) {
+      if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
         announcements.push(agendaitem);
       }
     }

@@ -128,7 +128,7 @@ export default class CompareAgendaList extends Component {
           id,
         },
         'type': {
-          ':uri:': CONSTANTS.AGENDA_ITEM_TYPES.REMARK,
+          ':uri:': CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT,
         },
       },
       sort: 'number',

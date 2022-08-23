@@ -108,7 +108,7 @@ export default class SubcaseDescriptionEdit extends Component {
       if (newsletterInfo?.id) {
         await newsletterInfo.destroyRecord();
       }
-      if (this.agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.REMARK) {
+      if (this.agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
         const newNewsletterInfo =
           await this.newsletterService.createNewsItemForAgendaitem(
             latestAgendaitem,

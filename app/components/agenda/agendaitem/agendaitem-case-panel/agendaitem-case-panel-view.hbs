@@ -5,7 +5,7 @@
         <Toolbar.Group @position="left" as |Group|>
           <Group.Item>
             <h4 class="auk-panel__title">
-              {{#if (is-remark @agendaitem.type)}}
+              {{#if (is-announcement @agendaitem.type)}}
                 {{t "text"}}
               {{else}}
                 {{t "note"}}
@@ -98,7 +98,7 @@
             </span>
           </div>
         {{/if}}
-        {{#if (is-remark @agendaitem.type)}}
+        {{#if (is-announcement @agendaitem.type)}}
           <div class="auk-u-mt-2">
             {{#if @newsletterInfo}}
               {{#if @newsletterInfo.inNewsletter}}

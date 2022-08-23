@@ -83,7 +83,7 @@ export default class AgendaAgendaitemsRoute extends Route {
     const announcements = [];
     for (const agendaitem of agendaitems.toArray()) {
       const type = await agendaitem.type;
-      if (type?.uri === CONSTANTS.AGENDA_ITEM_TYPES.REMARK) {
+      if (type?.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
         announcements.push(agendaitem);
       } else {
         notas.push(agendaitem);

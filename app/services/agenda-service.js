@@ -105,7 +105,7 @@ export default class AgendaService extends Service {
       sort: '-created', // serialnumber
     });
     const agendaItemType = await subcase.agendaItemType;
-    const isAnnouncement = agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.REMARK;
+    const isAnnouncement = agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
     const numberToAssign = await this.computeNextItemNumber(lastAgenda, agendaItemType);
 
     // Generate press text
@@ -183,7 +183,7 @@ export default class AgendaService extends Service {
     updateModifiedProperty(lastAgenda);
 
     // Create default newsletterInfo for announcements with inNewsLetter = true
-    if (agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.REMARK) {
+    if (agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
       const newsItem = await this.newsletterService.createNewsItemForAgendaitem(agendaitem, true);
       newsItem.save();
     }
