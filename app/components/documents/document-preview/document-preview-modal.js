@@ -3,9 +3,12 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class DocumentsDocumentPreviewDocumentPreviewModal extends Component {
-  @tracked selectedVersion;
+  /**
+   * @argument piece
+   */
 
   @tracked sidebarIsOpen = true;
+  @tracked selectedVersion;
 
   constructor() {
     super(...arguments);
@@ -14,13 +17,13 @@ export default class DocumentsDocumentPreviewDocumentPreviewModal extends Compon
   }
 
   @action
-  setSelectedVersion(piece) {
-    this.selectedVersion = piece;
-  }
-
-  @action
   toggleSidebar() {
     this.sidebarIsOpen = !this.sidebarIsOpen;
     localStorage.setItem('documentViewerSidebar',JSON.stringify(this.sidebarIsOpen));
+  }
+
+  @action
+  setSelectedVersion(piece) {
+    this.selectedVersion = piece;
   }
 }
