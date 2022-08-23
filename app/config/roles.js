@@ -39,7 +39,7 @@ groupRoles.set(KANSELARIJ, [
   'manage-newsletter-infos',
   'manage-decision-publications',
   'manage-document-publications',
-  'manage-themis-publications'
+  'manage-themis-publications',
 ]);
 
 groupRoles.set(MINISTER, [
@@ -62,6 +62,7 @@ groupRoles.set(OVRB, [
 
 groupRoles.set(KORT_BESTEK, [
   'manage-newsletter-infos',
+  'manage-themis-publications',
 ]);
 
 groupRoles.set(USER, [
