@@ -140,3 +140,15 @@ table tr.lt-expanded-row {
 .vlc-procedure-step--nopadding {
   padding: 0;
 }
+
+
+// Addition coming from prototype which needs to be ported to auk css library
+
+.auk-document-card--clickable {
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    background-color: var(--au-gray-100);
+  }
+}
