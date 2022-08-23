@@ -12,11 +12,9 @@
                 {{@documentContainer.type.label}}
               </span>
             </div>
-            <h6 class="auk-h4">
-              <LinkTo @route="document" @model={{this.lastPiece.id}} target="_blank">
-                {{this.lastPiece.name}}{{#if this.lastPiece.file}}.{{this.lastPiece.file.extension}}{{/if}}
-              </LinkTo>
-            </h6>
+            <LinkTo @route="document" @model={{this.lastPiece.id}} target="_blank" class="auk-h4">
+              {{this.lastPiece.name}}{{#if this.lastPiece.file}}.{{this.lastPiece.file.extension}}{{/if}}
+            </LinkTo>
             <div class="vlc-document-card-content__meta">
               {{! no lastPiece.created in legacy data }}
               {{#if this.lastPiece.created}}
