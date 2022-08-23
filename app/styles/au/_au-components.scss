@@ -20,10 +20,18 @@
 @import 'ember-appuniversum/c-modal';
 @import 'ember-appuniversum/c-toolbar';
 
+// Fixes
+
+.au-c-modal__close {
+  background-color: transparent; // fix UA default background-color styling
+}
+
 // Overrides
 
 .au-c-pill {
   line-height: 1; // vertical alignment is a bit off in Kaleidos
+  border-radius: .5rem; // default border radius is .5rem in Kaleidos
+  padding-top: 0;
 }
 
 .au-c-pill-action {
@@ -41,12 +49,28 @@
 }
 
 .au-c-button--link { // change button link to Kaleidos style
-  text-decoration: none;
-  font-weight: 500;
+                     text-decoration: none;
+                     font-weight: 500;
 
-  &:hover,
-  &:focus {
-    text-decoration: none;
+                     &:hover,
+                     &:focus {
+                       text-decoration: none;
+                     }
+                   }
+
+.au-c-modal__header {
+  padding: .7rem 2rem;
+
+  @include mq(medium) {
+    padding: 1.4rem 2rem;
+  }
+}
+
+.au-c-modal__title {
+  @include au-font-size(var(--au-h5-small));
+
+  @include mq(medium) {
+    @include au-font-size(var(--au-h5));
   }
 }
 

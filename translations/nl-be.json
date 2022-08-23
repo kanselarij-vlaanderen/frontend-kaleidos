@@ -1059,6 +1059,9 @@
   "documents-were-published-at": "Documenten zijn gepubliceerd op {date} om {time}",
   "documents-are-planned-to-release-at": "Publicatie documenten gepland op {date} om {time}",
   "modify-document": "Document wijzigen",
+  "document-properties": "Documenteigenschappen",
+  "replace": "Vervangen",
+  "source-file": "Bronbestand",
   "newsletters-tabs-search": "Bericht zoeken",
   "newsletters-tabs-overview": "Alle berichten"
 }

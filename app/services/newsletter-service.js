@@ -221,20 +221,6 @@ export default class NewsletterService extends Service {
     }
   }
 
-  async createNewsItemForMeeting(meeting) {
-    if (this.currentSession.isEditor) {
-      // TODO KAS-3431 do we still need a newsletter-info on meeting when we have those new models?
-      const newsletter = this.store.createRecord('newsletter-info', {
-        meeting,
-        finished: false,
-        mandateeProposal: null,
-      });
-      await newsletter.save();
-      meeting.newsletter = newsletter;
-      return await meeting.save();
-    }
-  }
-
   // TODO These are for developers use - in comments for follow up
   /*
   downloadBelgaXML(meetingId) {
