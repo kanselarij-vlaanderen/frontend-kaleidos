@@ -217,7 +217,7 @@
 {{#if this.isCreatingNewSession}}
   <Meeting::EditMeetingModal
     @meeting={{this.newMeeting}}
-    @didSave={{this.createAgendaAndNewsletter}}
+    @didSave={{this.createNewSession}}
     @onCancel={{this.closeNewSessionModal}}
   />
 {{/if}}

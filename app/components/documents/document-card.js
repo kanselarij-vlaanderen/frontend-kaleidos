@@ -168,6 +168,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   *addPiece() {
     try {
       yield this.args.onAddPiece(this.newPiece);
+      this.pieceAccessLevelService.updatePreviousAccessLevel(this.newPiece);
       this.loadVersionHistory.perform();
       this.newPiece = null;
       this.isOpenUploadModal = false;
@@ -269,6 +270,11 @@ export default class DocumentsDocumentCardComponent extends Component {
   changeAccessLevel(al) {
     this.piece.set('accessLevel', al);
     this.accessLevel = al;
+  }
+
+  @action
+  showPieceViewer(piece) {
+    window.open(`/document/${piece.id}`);
   }
 
   @action

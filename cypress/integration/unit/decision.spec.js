@@ -67,16 +67,8 @@ context('Decision tests', () => {
         cy.get(document.documentCard.versionHistory)
           .find(auk.accordion.header.button)
           .click();
-        cy.get(document.vlDocument.piece).should('have.length', 3);
-        cy.get(document.vlDocument.delete).eq(0) // this is the TER piece
-          .click();
+        cy.get(document.vlDocument.piece).should('have.length', 2);
       });
-    // verify modal
-    cy.get(utils.vlModalVerify.save).contains('Verwijderen')
-      .click();
-    cy.wait('@deleteFile');
-    cy.wait('@deletePiece');
-    cy.wait('@patchDecisionActivities');
 
     // Delete the document-container + all pieces
     cy.get('@docCards').eq(0)

@@ -142,7 +142,7 @@ table tr.lt-expanded-row {
 }
 
 
-// Document card changes 07/2022
+// Addition coming from prototype which needs to be ported to auk css library
 
 .auk-document-card--clickable {
   cursor: pointer;
@@ -151,37 +151,4 @@ table tr.lt-expanded-row {
   &:focus {
     background-color: var(--au-gray-100);
   }
-}
-
-// Vlc document card
-.vlc-document-card__content .auk-h4 {
-  margin: 0;
-}
-
-.vlc-document-card__content .auk-h4 span {
-  margin: 0;
-  color: #0055CC;
-  cursor: pointer;
-
-  &:hover,
-  &:focus {
-    color: #004099;
-  }
-}
-
-.vlc-document-card {
-  padding: 0;
-}
-
-.vlc-document-card__summary {
-  padding: 1.8rem;
-}
-
-.vlc-document-card-versions {
-  border-top: .1rem solid #CCD1D9;
-  margin-top: 0;
-}
-
-.vlc-document-card-versions .auk-accordion__item .auk-accordion__content {
-  margin: 0;
 }

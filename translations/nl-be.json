@@ -900,6 +900,7 @@
   "publications-tabs-proofread": "Nalezen",
   "publications-tabs-late": "Te laat in BS",
   "publications-tabs-reports": "Rapporten",
+  "publications-tabs-search": "Dossier zoeken",
   "publication-reports-title": "Jaarlijkse rapporten",
   "publication-reports-last-request": "Laatst aangevraagd op {date} om {time} door {user}",
   "publication-reports-running": "Rapportgeneratie bezig...",
@@ -1057,5 +1058,10 @@
   "documents-are-planned-to-release-at": "Vrijgave van documenten gepland op {date} om {time}",
   "documents-were-published-at": "Documenten zijn gepubliceerd op {date} om {time}",
   "documents-are-planned-to-release-at": "Publicatie documenten gepland op {date} om {time}",
-  "modify-document": "Document wijzigen"
+  "modify-document": "Document wijzigen",
+  "document-properties": "Documenteigenschappen",
+  "replace": "Vervangen",
+  "source-file": "Bronbestand",
+  "newsletters-tabs-search": "Bericht zoeken",
+  "newsletters-tabs-overview": "Alle berichten"
 }

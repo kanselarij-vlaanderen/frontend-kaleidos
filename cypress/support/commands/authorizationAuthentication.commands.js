@@ -71,6 +71,7 @@ function logout() {
   }).then(() => {
     cy.visit('/overzicht?size=2');
   });
+  cy.wait(1000);
   cy.log('/logout');
 }
 

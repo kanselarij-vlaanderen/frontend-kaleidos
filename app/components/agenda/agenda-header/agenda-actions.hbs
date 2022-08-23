@@ -14,13 +14,15 @@
     </Menu.Item>
     <Menu.Divider />
   {{/if}}
-  <Menu.Item
-    data-test-agenda-header-navigate-to-decisions
-    @route="print-overviews.decisions.agendaitems"
-    @models={{array @meeting.id @currentAgenda.id}}
-  >
-    {{t "print-decisions"}}
-  </Menu.Item>
+  {{#if this.currentSession.isEditor}}
+    <Menu.Item
+      data-test-agenda-header-navigate-to-decisions
+      @route="print-overviews.decisions.agendaitems"
+      @models={{array @meeting.id @currentAgenda.id}}
+    >
+      {{t "print-decisions"}}
+    </Menu.Item>
+  {{/if}}
   <Menu.Item
     data-test-agenda-header-navigate-to-newsletter
     @route="newsletter"

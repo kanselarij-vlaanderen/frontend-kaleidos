@@ -23,14 +23,15 @@ import utils from '../../selectors/utils.selectors';
  * @param {string} location The location of the meeting to enter as input
  * @param {number} meetingNumber The number of the meeting to enter as input
  * @param {string} meetingNumberVisualRepresentation The visual representation of the meetingnumber to enter as input
+ * @param {*} plannedRelease The Cypress.dayjs object with the date and time to set for the planned release of the documents
  * @returns {Promise<String>} the id of the created agenda
  */
-function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRepresentation) {
+function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRepresentation, plannedRelease) {
   cy.log('createAgenda');
   cy.intercept('POST', '/meetings').as('createNewMeeting');
   cy.intercept('POST', '/agendas').as('createNewAgenda');
   cy.intercept('POST', '/newsletter-infos').as('createNewsletter');
-  cy.intercept('PATCH', '/meetings/**').as('patchMeetings');
+  cy.intercept('POST', '/agendaitems').as('createAgendaitem');
 
   cy.visit('/overzicht?size=2');
   cy.get(route.agendas.action.newMeeting).click();
@@ -63,6 +64,16 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   cy.get(agenda.editMeeting.meetingNumber).click({
     force: true,
   });
+
+  // Set the planned document release
+  if (plannedRelease) {
+    cy.get(agenda.editMeeting.documentPublicationDate).find(utils.vlDatepicker)
+      .click();
+    cy.setDateAndTimeInFlatpickr(plannedRelease);
+    cy.get(agenda.editMeeting.meetingNumber).click({
+      force: true,
+    });
+  }
 
   // Set the meetingNumber
   if (meetingNumber) {
@@ -120,14 +131,13 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
       agendaId = responseBody.data.id;
     });
   cy.log('/createAgenda');
-  cy.wait('@patchMeetings', {
+  cy.wait('@createAgendaitem', {
     timeout: 60000,
-  })
-    .then(() => new Cypress.Promise((resolve) => {
-      resolve({
-        meetingId, meetingNumber, agendaId, meetingNumberRep,
-      });
-    }));
+  }).then(() => new Cypress.Promise((resolve) => {
+    resolve({
+      meetingId, meetingNumber, agendaId, meetingNumberRep,
+    });
+  }));
 }
 
 /**

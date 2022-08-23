@@ -2,6 +2,7 @@
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
 import document from '../../selectors/document.selectors';
 import dependency from '../../selectors/dependency.selectors';
@@ -14,6 +15,7 @@ function currentTimestamp() {
 }
 
 context('Propagation to other graphs', () => {
+  const todayFormatted = Cypress.dayjs().format('DD-MM-YYYY');
   const agendaDate = Cypress.dayjs().add(1, 'weeks')
     .day(6); // Next friday
   const caseTitle = `testId=${currentTimestamp()}: Cypress test dossier 1`;
@@ -72,8 +74,18 @@ context('Propagation to other graphs', () => {
     cy.get(agenda.agendaitemTitlesEdit.actions.save).click();
     cy.wait('@patchAgendaitem');
 
+    // check status pills (use within because find doesn't work, probably can't chain of appuniversum wormhole)
+    cy.get(agenda.publicationPills.container).within(() => {
+      cy.get(appuniversum.pill).should('not.exist');
+    });
+
     cy.releaseDecisions();
     cy.wait(60000);
+    // check status pills (use within because find doesn't work, probably can't chain of appuniversum wormhole)
+    cy.get(agenda.publicationPills.container).within(() => {
+      cy.get(appuniversum.pill).contains(`Beslissingen zijn vrijgegeven op ${todayFormatted}`);
+    });
+
     cy.logoutFlow();
   });
 
@@ -109,7 +121,15 @@ context('Propagation to other graphs', () => {
     cy.login('Admin');
     cy.openAgendaForDate(agendaDate);
     cy.releaseDocuments();
+    cy.get(agenda.publicationPills.container).within(() => {
+      cy.get(appuniversum.pill).eq(1)
+        .contains(`Publicatie documenten gepland op ${todayFormatted}`);
+    });
     cy.wait(60000);
+    cy.get(agenda.publicationPills.container).within(() => {
+      cy.get(appuniversum.pill).eq(1)
+        .contains(`Documenten zijn vrijgegeven op ${todayFormatted}`);
+    });
     cy.logoutFlow();
   });
 
