@@ -199,10 +199,8 @@ context('Publications via MR tests', () => {
     cy.url().should('contain', '/agenda/');
     cy.url().should('contain', '/agendapunten');
     cy.intercept('GET', '/pieces/*/publication-flow').as('getPiecesPubFlow');
-    cy.intercept('GET', '/pieces/*/sign-marking**').as('getPiecesSignMarking');
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.wait('@getPiecesPubFlow');
-    cy.wait('@getPiecesSignMarking');
     cy.get(document.documentCard.pubLink).contains(publicationNumber2)
       .click();
     cy.url().should('contain', '/publicaties/');
