@@ -41,14 +41,10 @@ export default class NewsletterService extends Service {
       campaignId: result.data.id,
       campaignWebId: result.data.attributes.webId,
       archiveUrl: result.data.attributes.archiveUrl,
+      meeting: meeting,
     });
 
     await mailCampaign.save();
-    const reloadedMeeting = await this.store.findRecord('meeting', meeting.id, {
-      reload: true,
-    });
-    reloadedMeeting.mailCampaign = mailCampaign;
-    await reloadedMeeting.save();
     return mailCampaign;
   }
 

@@ -27,7 +27,10 @@ export default class Meeting extends Model {
   @belongsTo('meeting', {
     inverse: null,
   }) mainMeeting;
-  @belongsTo('mail-campaign') mailCampaign;
+  // mailcampaign is read-only to prevent concurrency issues
+  @belongsTo('mail-campaign', {
+    serialize: false,
+  }) mailCampaign;
   @belongsTo('agenda', {
     inverse: null,
   }) agenda;

@@ -224,19 +224,12 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   @task
   *deleteCampaign() {
-    const meeting = this.args.meeting;
-
     if (this.mailCampaign?.campaignId) {
       yield this.newsletterService.deleteCampaign(this.mailCampaign.campaignId);
       this.toaster.success(this.intl.t('success-delete-newsletter'));
     }
     this.mailCampaign.destroyRecord();
-    const reloadedMeeting = yield this.store.findRecord('meeting', meeting.id, {
-      reload: true,
-    });
-    reloadedMeeting.mailCampaign = null;
-
-    yield reloadedMeeting.save();
+    yield this.args.meeting.belongsTo('mailCampaign').reload();
     yield this.loadMailCampaign.perform();
   }
 
