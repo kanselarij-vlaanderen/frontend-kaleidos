@@ -24,7 +24,7 @@ export default class AgendaitemCasePanelEdit extends Component {
   }
 
   @action
-  async cancelEditing() {
+  cancelEditing() {
     if (this.args.agendaitem.hasDirtyAttributes) {
       this.args.agendaitem.rollbackAttributes();
     }
