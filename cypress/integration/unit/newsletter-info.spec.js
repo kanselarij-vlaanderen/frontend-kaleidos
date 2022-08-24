@@ -522,6 +522,8 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // check that there is one mededeling without proposal or themes
     cy.visit(newsletterLink);
     cy.clickReverseTab('Definitief');
+    // actual time is 14:00, but server time is being used as "local time" in the test it seems
+    cy.get(newsletter.newsletterPrintHeader.publicationPlannedDate).contains('11 april 2022 - 12:00');
     cy.get(newsletter.itemContent.container).should('have.length', 1);
     cy.get(newsletter.itemContent.title).contains(subcaseTitleMededeling);
     cy.get(newsletter.itemContent.printItemProposal).should('not.exist');
