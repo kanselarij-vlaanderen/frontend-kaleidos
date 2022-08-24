@@ -64,18 +64,18 @@ export default class AgendaitemCasePanelEdit extends Component {
     if (this.args.subcase && this.args.subcase.confidential) {
       yield this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
     }
-    const agendaItemType = yield this.args.agendaitem.type;
-    const isAnnouncement = agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
-    if (
-      this.newsletterInfo &&
-      (this.newsletterInfo.hasDirtyAttributes || isAnnouncement)
-    ) {
+
+    if (this.newsletterInfo) {
+      const agendaItemType = yield this.args.agendaitem.type;
+      const isAnnouncement = agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
       if (isAnnouncement) {
-        // Keep generated newsletterInfo for announcement in sync
+        // Keep generated newsletterInfo for announcement automatically in sync
         this.newsletterInfo.richtext = trimmedTitle;
         this.newsletterInfo.title = trimmedShortTitle;
+        yield this.newsletterInfo.save();
+      } else if (this.newsletterInfo.hasDirtyAttributes) {
+        yield this.newsletterInfo.save();
       }
-      yield this.newsletterInfo.save();
     }
     this.args.onSave();
   }
