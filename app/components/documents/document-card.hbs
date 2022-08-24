@@ -36,9 +36,9 @@
               </div>
               <h6 class="auk-h4" data-test-document-card-name-value>
                 {{! template-lint-disable no-invalid-interactive }}
-                <span {{on "click" this.showPieceViewer}}>
+                <AuButton @skin="naked" class="au-c-button--document" {{on "click" this.showPieceViewer}}>
                   {{this.piece.name}}.{{#if (eq this.piece.file.extension "docx")}}pdf{{else}}{{this.piece.file.extension}}{{/if}}
-                </span>
+                </AuButton>
                 {{! template-lint-enable no-invalid-interactive }}
               </h6>
             </Auk::Toolbar::Item>

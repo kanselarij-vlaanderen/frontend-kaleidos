@@ -39,3 +39,13 @@
 .vlc-document-card-versions .auk-accordion__item .auk-accordion__content {
   margin: 0;
 }
+
+// Document card button
+.au-c-button--document {
+  padding: 0;
+  height: initial;
+  line-height: initial;
+  white-space: inherit;
+  text-align: left;
+  border: 0;
+}
