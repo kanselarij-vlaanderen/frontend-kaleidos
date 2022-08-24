@@ -35,16 +35,18 @@
     </Toolbar.Group>
     {{#if this.currentSession.isViewer}}
       <Toolbar.Group @position="right" as |Group|>
-        <Group.Item>
-          <Agenda::AgendaHeader::AgendaVersionActions
-            @meeting={{@meeting}}
-            @currentAgenda={{@currentAgenda}}
-            @reverseSortedAgendas={{@reverseSortedAgendas}}
-            @didCloseMeeting={{@refreshRoute}}
-            @onStartLoading={{this.setLoadingMessage}}
-            @onStopLoading={{this.clearLoadingMessage}}
-          />
-        </Group.Item>
+        {{#if (user-may "manage-agenda-versions")}}
+          <Group.Item>
+            <Agenda::AgendaHeader::AgendaVersionActions
+              @meeting={{@meeting}}
+              @currentAgenda={{@currentAgenda}}
+              @reverseSortedAgendas={{@reverseSortedAgendas}}
+              @didCloseMeeting={{@refreshRoute}}
+              @onStartLoading={{this.setLoadingMessage}}
+              @onStopLoading={{this.clearLoadingMessage}}
+            />
+          </Group.Item>
+        {{/if}}
         <Group.Item>
           <Agenda::AgendaHeader::AgendaActions
             @meeting={{@meeting}}
