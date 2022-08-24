@@ -19,7 +19,6 @@ context('Testing internal and themis document release pills', () => {
       .hour(14)
       .minute(0);
     cy.createAgenda(null, newAgendaDate, 'Zaal oxford bij Cronos Leuven', null, null);
-    cy.log(newAgendaDate.format('DD-MM-YYYY HH:mm'));
 
     cy.openAgendaForDate(newAgendaDate);
 
