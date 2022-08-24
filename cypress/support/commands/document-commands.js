@@ -131,7 +131,9 @@ function addNewPiece(oldFileName, file, modelToPatch, hasSubcase = true) {
   });
   cy.wait(1000); // Cypress is too fast
 
-  cy.get(utils.vlModalFooter.save).click()
+  cy.get(utils.vlModalFooter.save).click({
+    force: true, // covered by the pop-up in headless tests where ut stays open while it shouldn't
+  })
     .wait(`@createNewPiece_${randomInt}`);
 
   // for agendaitems and subcases both are patched, not waiting causes flaky tests
