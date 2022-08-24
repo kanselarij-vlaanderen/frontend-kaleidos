@@ -27,14 +27,8 @@ export default class CasesNewSubcase extends Component {
 
   constructor() {
     super(...arguments);
-    this.loadDefaultAgendaItemType.perform();
     this.loadAgendaItemTypes.perform();
     this.loadTitleData.perform();
-  }
-
-  @task
-  *loadDefaultAgendaItemType() {
-    this.agendaItemType = yield this.store.findRecordByUri('concept', CONSTANTS.AGENDA_ITEM_TYPES.NOTA);
   }
 
   @task
@@ -50,6 +44,7 @@ export default class CasesNewSubcase extends Component {
         size: PAGE_SIZE.CODE_LISTS,
       },
     });
+    this.agendaItemType = yield this.store.findRecordByUri('concept', CONSTANTS.AGENDA_ITEM_TYPES.NOTA);
   }
 
   @task
@@ -80,7 +75,6 @@ export default class CasesNewSubcase extends Component {
 
   get areLoadingTasksRunning() {
     return (
-      this.loadDefaultAgendaItemType.isRunning ||
       this.loadAgendaItemTypes.isRunning ||
       this.loadLatestSubcase.isRunning ||
       this.loadTitleData.isRunning
@@ -117,7 +111,7 @@ export default class CasesNewSubcase extends Component {
       shortTitle: trimText(this.shortTitle),
       title: trimText(this.title),
       confidential: this.confidential,
-      agendaItemType: this.agendaItemType ?? await this.store.findRecordByUri('concept', CONSTANTS.AGENDA_ITEM_TYPES.NOTA),
+      agendaItemType: this.agendaItemType,
       case: this.args.case,
       created: date,
       modified: date,
@@ -205,7 +199,7 @@ export default class CasesNewSubcase extends Component {
   }
 
   @action
-  typeChanged(event) {
+  selectAgendaItemType(event) {
     const id = event.target.value;
     this.agendaItemType = this.store.peekRecord('concept', id);
   }
