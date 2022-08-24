@@ -61,7 +61,7 @@
   >
     {{t "download-documents"}}
   </Menu.Item>
-  {{#if this.currentSession.isEditor}}
+  {{#if (user-may "manage-meetings")}}
     <Menu.Divider />
     <Menu.Item
       data-test-agenda-header-toggle-editing-meeting
