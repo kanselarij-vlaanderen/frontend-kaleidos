@@ -7,6 +7,7 @@ const {
   KABINET,
   OVERHEID,
   OVRB,
+  KORT_BESTEK,
   USER,
 } = CONSTANTS.ACCOUNT_GROUPS;
 
@@ -30,6 +31,9 @@ const groupRoles = new Map();
 
 groupRoles.set(ADMIN, [
   'manage-signatures',
+  'manage-agenda-versions',
+  'manage-agendaitems',
+  'manage-meetings',
   'manage-documents',
   'manage-document-access-levels',
   'manage-publication-flows',
@@ -38,17 +42,22 @@ groupRoles.set(ADMIN, [
   'manage-decision-publications',
   'manage-document-publications',
   'manage-themis-publications',
+  'manage-settings',
   'view-document-version-info',
 ]);
 
 groupRoles.set(KANSELARIJ, [
   'manage-signatures',
+  'manage-agenda-versions',
+  'manage-agendaitems',
+  'manage-meetings',
   'manage-documents',
   'manage-document-access-levels',
   'manage-newsletter-infos',
   'manage-decision-publications',
   'manage-document-publications',
   'manage-themis-publications',
+  'manage-settings',
   'view-document-version-info',
 ]);
 
@@ -71,6 +80,11 @@ groupRoles.set(OVRB, [
   'manage-publication-flows',
   'search-publication-flows',
   'view-document-version-info',
+]);
+
+groupRoles.set(KORT_BESTEK, [
+  'manage-newsletter-infos',
+  'manage-themis-publications',
 ]);
 
 groupRoles.set(USER, [
