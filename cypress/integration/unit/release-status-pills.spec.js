@@ -6,7 +6,7 @@ import appuniversum from '../../selectors/appuniversum.selectors';
 import utils from '../../selectors/utils.selectors';
 
 
-context('Propagation to other graphs', () => {
+context('Testing internal and themis document release pills', () => {
   it('change defaults and check status pills', () => {
     cy.login('Admin');
     const newAgendaDate = Cypress.dayjs().add(2, 'weeks')
