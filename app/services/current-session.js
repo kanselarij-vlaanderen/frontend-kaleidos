@@ -8,6 +8,7 @@ const {
   ADMIN,
   KANSELARIJ,
   OVRB,
+  KORT_BESTEK,
   MINISTER,
   KABINET,
   OVERHEID,
@@ -79,6 +80,10 @@ export default class CurrentSessionService extends Service {
     return [OVRB].includes(this.groupUri);
   }
 
+  get isKortBestek() {
+    return [KORT_BESTEK].includes(this.groupUri);
+  }
+
   get isOverheid() {
     return [OVERHEID].includes(this.groupUri);
   }
@@ -88,10 +93,10 @@ export default class CurrentSessionService extends Service {
   }
 
   get isViewer() {
-    return [ADMIN, KANSELARIJ, MINISTER, KABINET, OVERHEID].includes(this.groupUri);
+    return [ADMIN, KANSELARIJ, MINISTER, KABINET, OVERHEID, KORT_BESTEK].includes(this.groupUri);
   }
 
   get isEditor() {
-    return [ADMIN, KANSELARIJ].includes(this.groupUri);
+    return [ADMIN, KANSELARIJ, KORT_BESTEK].includes(this.groupUri);
   }
 }
