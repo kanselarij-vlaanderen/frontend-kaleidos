@@ -209,7 +209,7 @@ export default class AgendasController extends Controller {
       formallyOk: CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK,
       isApproval: true,
       treatment: agendaItemTreatment,
-      nota: notaType,
+      type: notaType,
     });
     await agendaitem.save();
     return agendaitem;
