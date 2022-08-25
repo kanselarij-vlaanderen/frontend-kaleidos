@@ -73,7 +73,7 @@ context('Decision tests', () => {
     // Delete the document-container + all pieces
     cy.get('@docCards').eq(0)
       .within(() => {
-        cy.get(document.documentCard.name.value).contains(/BIS/);
+        cy.get(document.documentCard.name.value).contains(/TER/);
         cy.get(document.documentCard.actions).should('not.be.disabled')
           .click();
         cy.get(document.documentCard.delete).click();

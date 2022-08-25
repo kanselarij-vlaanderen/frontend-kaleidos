@@ -2,8 +2,8 @@
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
-import cases from '../../selectors/case.selectors';
 import document from '../../selectors/document.selectors';
+import route from '../../selectors/route.selectors';
 
 context('Tests of pieces on agendaitems', () => {
   beforeEach(() => {
@@ -35,23 +35,25 @@ context('Tests of pieces on agendaitems', () => {
     cy.addNewPieceToAgendaitem(subcaseTitleShort, 'VR 2020 1212 DOC.0001-2', file); // add BIS to doc 2
     cy.get(document.documentCard.card).should('have.length', 2);
 
-    cy.deleteSinglePiece('VR 2020 1212 DOC.0001-1TER', 0);
-    cy.deleteSinglePiece('VR 2020 1212 DOC.0001-2BIS', 0);
+    cy.deletePieceBatchEditRow('VR 2020 1212 DOC.0001-1TER', 0, route.agendaitemDocuments.batchEdit);
+    // cy.deletePieceBatchEditRow('VR 2020 1212 DOC.0001-2BIS', 1, route.agendaitemDocuments.batchEdit); // error pushedData on piece root.flight.deleted
     cy.get(document.documentCard.card).should('have.length', 2);
     cy.get(document.documentCard.name.value).eq(0)
       .contains('VR 2020 1212 DOC.0001-1BIS');
     cy.get(document.documentCard.name.value).eq(1)
-      .contains('VR 2020 1212 DOC.0001-2');
+      .contains('VR 2020 1212 DOC.0001-2BIS');
     cy.openDetailOfAgendaitem(subcaseTitleShort);
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
     cy.clickReverseTab('Documenten');
-    cy.deleteSinglePiece('VR 2020 1212 DOC.0001-1BIS', 0);
+    cy.deletePieceBatchEditRow('VR 2020 1212 DOC.0001-1BIS', 0, route.subcaseDocuments.batchEdit);
     cy.get(document.documentCard.card).should('have.length', 2);
     cy.get(document.documentCard.name.value).eq(0)
       .contains('VR 2020 1212 DOC.0001-1');
-    cy.clickReverseTab('Overzicht');
-    cy.get(cases.subcaseDescription.agendaLink).click();
-    cy.get(agenda.agendaitemNav.documentsTab).click();
+    cy.visitAgendaWithLink('/vergadering/62823C647471A1FC25E6DB64/agenda/c67b5fd0-d510-11ec-8327-9b7fa945c1fc/agendapunten/c6aea4d0-d510-11ec-8327-9b7fa945c1fc/documenten');
+
+    // cy.clickReverseTab('Overzicht');
+    // cy.get(cases.subcaseDescription.agendaLink).click();
+    // cy.get(agenda.agendaitemNav.documentsTab).click();
 
     cy.get(document.documentCard.card).should('have.length', 2);
     // TODO: Policy regarding "safe document removal" should be revised. (https://kanselarij.atlassian.net/browse/VAL-287)

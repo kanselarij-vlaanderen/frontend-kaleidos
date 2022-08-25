@@ -40,17 +40,13 @@ function checkAccess(docName, hasAccess = true) {
     .parents(document.documentCard.card)
     .as('currentDoc');
   cy.get(auk.loader).should('not.exist');
-  cy.get('@currentDoc').find(document.documentCard.versionHistory)
-    .find(auk.accordion.header.button)
-    .should('not.be.disabled')
-    .click();
-  cy.get(auk.loader).should('not.exist');
-  cy.get('@currentDoc').find(document.vlDocument.piece)
-    .find(document.accessLevelPill.pill);
+  cy.get('@currentDoc').find(document.accessLevelPill.pill);
   if (hasAccess) {
-    cy.get(document.vlDocument.showPieceViewer);
+    cy.get('@currentDoc').find(document.documentCard.name.value)
+      .should('contain', '.pdf');
   } else {
-    cy.get(document.vlDocument.showPieceViewer).should('not.exist');
+    cy.get('@currentDoc').find(document.documentCard.name.value)
+      .should('not.contain', '.pdf');
   }
 }
 
