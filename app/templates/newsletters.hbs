@@ -7,113 +7,17 @@
           {{t "newsletter"}}
         </h1>
       </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
+        <Auk::Tabs>
+          <Auk::Tab @route="newsletters.index">
+            {{t "newsletters-tabs-overview"}}
+          </Auk::Tab>
+          <Auk::Tab @route="newsletters.search" @icon="search">
+            {{t "newsletters-tabs-search"}}
+          </Auk::Tab>
+        </Auk::Tabs>
+      </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </Auk::Navbar>
-{{#if (gt this.model.length 0)}}
-  <div class="auk-u-maximize-height auk-scroll-wrapper">
-    <div class="auk-scroll-wrapper__body">
-      <div class="auk-u-m-8">
-        <DataTable
-          data-test-route-newsletters-data-table={{true}}
-          @content={{@model}}
-          @class="auk-table auk-table--striped"
-          @page={{this.page}}
-          @size={{this.size}}
-          @sort={{this.sort}}
-          @enableSizes={{true}}
-          @isLoading={{this.isLoadingModel}}
-          @noDataMessage={{t "no-results-found"}}
-          @onClickRow={{this.navigateToNewsletter}}
-          as |table|
-        >
-          <table.content as |c|>
-            <c.header>
-              <ThSortable
-                @class="auk-table__col--5"
-                @currentSorting={{this.sort}}
-                @field="planned-start,number-representation"
-                @label={{t "newsletter"}}
-              />
-              <th class="auk-table__col--3">
-                {{!TODO: should sort on field agendas but does not return all 10 results }}
-                {{concat (t "newsletter") " " (t "sent-at")}}
-              </th>
-              <th class="auk-table__col--3">
-                {{!TODO: should sort on latest modified agenda }}
-                {{t "latest-modified"}}
-              </th>
-              <th class="auk-table__col--1"></th>
-            </c.header>
-            <c.body @class="auk-table--clickable-rows" as |meeting|>
-              <td data-test-route-newsletters-data-table-row-title>
-                {{#if (is-pending meeting)}}
-                  <div
-                    class="auk-skeleton auk-skeleton--rectangle"
-                    role="alert"
-                    aria-busy="true"
-                  ></div>
-                {{else}}
-                  {{t
-                    "newsletter-for-meeting-of"
-                    kind=(lowercase (kind-print-label meeting.kind))
-                  }}
-                  {{moment-format meeting.plannedStart}}
-                {{/if}}
-              </td>
-              <td>
-                {{#if (is-pending meeting.mailCampaign)}}
-                  <div
-                    class="auk-skeleton auk-skeleton--rectangle"
-                    role="alert"
-                    aria-busy="true"
-                  ></div>
-                {{else if meeting.mailCampaign}}
-                  {{#if meeting.mailCampaign.isSent}}
-                    {{moment-format
-                      meeting.mailCampaign.sentAt
-                      "DD-MM-YYYY [om] HH:mm"
-                    }}
-                  {{else}}
-                    {{t "not-sent-yet"}}
-                  {{/if}}
-                {{else}}
-                  {{t "not-yet-created"}}
-                {{/if}}
-              </td>
-              <td>
-                {{#let (this.latestAgenda meeting) as |latestAgenda|}}
-                  {{#if (is-pending latestAgenda)}}
-                    <div
-                      class="auk-skeleton auk-skeleton--rectangle"
-                      role="alert"
-                      aria-busy="true"
-                    ></div>
-                  {{else}}
-                    {{moment-format
-                      (get (await latestAgenda) "modified")
-                      "DD-MM-YYYY HH:mm"
-                    }}
-                  {{/if}}
-                {{/let}}
-              </td>
-              <td class="auk-u-text-align--center">
-                <Auk::Button
-                  @skin="borderless"
-                  @layout="icon-only"
-                  @icon="chevron-right"
-                  @route="newsletter"
-                  @model={{meeting.id}}
-                />
-              </td>
-            </c.body>
-          </table.content>
-        </DataTable>
-      </div>
-    </div>
-  </div>
-{{else}}
-  <div class="auk-u-m-8">
-    <WebComponents::VlAlert @message={{t "no-meetings"}} />
-  </div>
-{{/if}}
+{{outlet}}

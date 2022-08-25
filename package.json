@@ -113,7 +113,6 @@
     "ember-mu-transform-helpers": "^2.1.2",
     "ember-named-blocks-polyfill": "^0.2.4",
     "ember-page-title": "^6.2.2",
-    "ember-pdfjs-wrapper": "git+https://github.com/MikiDi/ember-pdfjs-wrapper.git#8300c671d3293dad0c5ccf87defdec6d08f839b3",
     "ember-power-select": "^5.0.4",
     "ember-prism": "^0.7.0",
     "ember-promise-helpers": "^1.0.9",

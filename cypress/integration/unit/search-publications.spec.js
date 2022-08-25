@@ -2,13 +2,14 @@
 // / <reference types="Cypress" />
 import auk from '../../selectors/auk.selectors';
 import dependency from '../../selectors/dependency.selectors';
+// import publication from '../../selectors/publication.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
 function visitPublicationSearch() {
   cy.intercept('GET', '/regulation-types?**').as('getRegulationTypes');
   cy.intercept('GET', '/publication-flows/search?**').as('publicationInitialSearchCall');
-  cy.visit('zoeken/publicaties');
+  cy.visit('publicaties/overzicht/zoeken');
   cy.wait('@getRegulationTypes');
   cy.wait('@publicationInitialSearchCall');
 }
@@ -47,9 +48,22 @@ function checkPublicationSearchForDateType(dateType, date, pubNumber) {
 function searchFakePublication() {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt}`);
-  cy.visit('zoeken/publicaties?zoekterm=IKBESTANIET');
+  cy.visit('publicaties/overzicht/zoeken?zoekterm=IKBESTANIET');
   cy.wait(`@publicationSearchCall${randomInt}`);
   cy.get(route.search.input).clear();
+}
+
+function checkPagination(optionsToCheck) {
+  optionsToCheck.forEach((option) => {
+    const randomInt = Math.floor(Math.random() * Math.floor(10000));
+    cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt}`);
+    cy.get(utils.numberPagination.container).find(dependency.emberPowerSelect.trigger)
+      .click();
+    cy.get(dependency.emberPowerSelect.option).contains(option)
+      .click();
+    cy.wait(`@publicationSearchCall${randomInt}`);
+    cy.url().should('include', `aantal=${option}`);
+  });
 }
 
 function checkPublicationSearchForStatusType(status, pubNumber) {
@@ -153,6 +167,7 @@ context('Search tests', () => {
     number: 2007,
     shortTitle: 'Besluitvorming Vlaamse Regering hoed',
     regulationType: 'Ministerieel besluit',
+    // TODO-setup make urgent, change features.spec.js
   };
 
   const fieldsWithDoubleDates = {
@@ -173,23 +188,10 @@ context('Search tests', () => {
     cy.logout();
   });
 
-  const searchFunction = (elementsToCheck) => {
-    elementsToCheck.forEach((option) => {
-      cy.get(route.search.input).type('test');
-      cy.get(route.search.trigger).click();
-      cy.get(utils.numberPagination.container).find(dependency.emberPowerSelect.trigger)
-        .click();
-      cy.get(dependency.emberPowerSelect.option).contains(option)
-        .click();
-      cy.url().should('include', `aantal=${option}`);
-      cy.get(route.search.input).clear();
-    });
-  };
-
   it('Should change the amount of elements to every value in selectbox in publicaties search view', () => {
     visitPublicationSearch();
     const options = [5, 10, 25, 50, 100];
-    searchFunction(options);
+    checkPagination(options);
   });
 
   it('search for all different unique searchterms in publicaties', () => {
@@ -248,36 +250,56 @@ context('Search tests', () => {
       .children('tr')
       .should('have.length', 8);
 
-    // search with double date
+    // check urgent
     cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall2');
-    cy.get(route.searchPublications.dateType).select('Datum beslissing');
-    cy.get(route.search.from).click();
-    cy.setDateInFlatpickr(fields.decisionDate);
-    cy.get(route.search.to).click();
-    cy.setDateInFlatpickr(fields.decisionDate);
+    cy.get(auk.checkbox.checkbox).parent()
+      .contains('Dringend')
+      .click();
     cy.get(route.search.trigger).click();
     cy.wait('@publicationSearchCall2');
+    cy.get(route.searchPublications.dataTable).find('tbody')
+      .children('tr')
+      .should('have.length', 1);
+    // remove urgent
+    cy.get(auk.checkbox.checkbox).parent()
+      .contains('Dringend')
+      .click();
+
+    // search with double date
+    cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall3');
+    cy.get(route.searchPublications.dateType).select('Datum beslissing');
+    cy.get(route.search.from)
+      .find(auk.datepicker)
+      .click();
+    cy.setDateInFlatpickr(fields.decisionDate);
+    cy.get(route.search.to)
+      .find(auk.datepicker)
+      .click();
+    cy.setDateInFlatpickr(fields.decisionDate);
+    cy.get(route.search.trigger).click();
+    cy.wait('@publicationSearchCall3');
     cy.get(route.searchPublications.dataTable).find('tbody')
       .children('tr')
       .should('have.length', 2)
       .contains(fieldsWithDoubleDates.number);
 
     // search with status and regulation type
-    cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall3');
+    cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall4');
     cy.get(auk.checkbox.checkbox).parent()
       .contains(fieldsWithDoubleDates.status)
       .click();
     cy.get(auk.checkbox.checkbox).parent()
       .contains(fieldsWithDoubleDates.regulationType)
       .click()
-      .wait('@publicationSearchCall3');
+      .wait('@publicationSearchCall4');
+    cy.get(dependency.emberDataTable.isLoading).should('not.exist');
     cy.get(route.searchPublications.dataTable).find('tbody')
       .children('tr')
       .should('have.length', 1)
       .contains(fieldsWithDoubleDates.number);
 
     // change status
-    cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall4');
+    cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall5');
     cy.get(auk.checkbox.checkbox).parent()
       .contains(fieldsWithDoubleDates.status)
       .click();
@@ -285,7 +307,9 @@ context('Search tests', () => {
     cy.get(auk.checkbox.checkbox).parent()
       .contains(fields2.status)
       .click()
-      .wait('@publicationSearchCall4');
-    cy.get(utils.vlAlert.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
+      .wait('@publicationSearchCall5');
+    cy.get(dependency.emberDataTable.isLoading).should('not.exist');
+    cy.get(auk.emptyState.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
   });
 });
+

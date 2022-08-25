@@ -10,12 +10,11 @@ import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
 
 export default class AgendasController extends Controller {
-  queryParams = ['page', 'size', 'sort', 'filter'];
+  queryParams = ['pageAgendas', 'sizeAgendas', 'sortAgendas', 'filterAgendas'];
 
   @service store;
   @service currentSession;
   @service router;
-  @service newsletterService;
 
   defaultPublicationActivityStatus;
   @tracked newMeeting;
@@ -23,10 +22,10 @@ export default class AgendasController extends Controller {
 
   @tracked isLoadingModel = false;
   @tracked isCreatingNewSession = false;
-  @tracked filter = null;
-  @tracked page = 0;
-  @tracked size = 10;
-  @tracked sort = 'created-for.is-final,-created-for.planned-start,created-for.kind.label';
+  @tracked filterAgendas = null;
+  @tracked pageAgendas = 0;
+  @tracked sizeAgendas = 10;
+  @tracked sortAgendas = 'created-for.is-final,-created-for.planned-start,created-for.kind.label';
 
   dateRegex = /^(?:(\d{1,2})[/-])??(?:(\d{1,2})[/-])?(\d{4})$/;
 
@@ -39,18 +38,18 @@ export default class AgendasController extends Controller {
   @action
   setFilter(date) {
     if (this.dateRegex.test(date)) {
-      this.filter = date;
-      this.page = 0;
-    } else if (date === '' && this.filter) {
-      this.filter = null;
-      this.page = 0;
+      this.filterAgendas = date;
+      this.pageAgendas = 0;
+    } else if (date === '' && this.filterAgendas) {
+      this.filterAgendas = null;
+      this.pageAgendas = 0;
     }
   }
 
   @action
   clearFilter() {
-    this.filter = null;
-    this.page = 0;
+    this.filterAgendas = null;
+    this.pageAgendas = 0;
   }
 
   @action
@@ -94,7 +93,7 @@ export default class AgendasController extends Controller {
   }
 
   @action
-  async createAgendaAndNewsletter() {
+  async createNewSession() {
     const agenda = await this.createAgenda(this.newMeeting);
 
     const closestMeeting = await this.store.queryOne('meeting', {
@@ -116,7 +115,6 @@ export default class AgendasController extends Controller {
         closestMeeting
       );
     }
-    await this.newsletterService.createNewsItemForMeeting(this.newMeeting);
     this.isCreatingNewSession = false;
     this.send('refreshRoute');
     this.router.transitionTo('agendas');
@@ -135,19 +133,19 @@ export default class AgendasController extends Controller {
 
   @action
   setSizeOption(size) {
-    this.size = size;
-    this.page = 0;
+    this.sizeAgendas = size;
+    this.pageAgendas = 0;
   }
 
   @action
   nextPage() {
-    this.page = this.page + 1;
+    this.pageAgendas = this.pageAgendas + 1;
   }
 
   @action
   prevPage() {
-    if (this.page > 0) {
-      this.page = this.page - 1;
+    if (this.pageAgendas > 0) {
+      this.pageAgendas = this.pageAgendas - 1;
     }
   }
 

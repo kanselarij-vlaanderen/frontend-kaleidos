@@ -170,6 +170,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   *addPiece() {
     try {
       yield this.args.onAddPiece(this.newPiece);
+      this.pieceAccessLevelService.updatePreviousAccessLevel(this.newPiece);
       this.loadVersionHistory.perform();
       this.newPiece = null;
       this.isOpenUploadModal = false;

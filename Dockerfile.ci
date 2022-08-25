@@ -10,7 +10,7 @@ RUN DEPLOY_ENV=test ember build --environment=cypress-test
 
 FROM semtech/ember-proxy-service:1.5.1
 
-ENV STATIC_FOLDERS_REGEX="^/(assets|fonts|files|ember-pdfjs-wrapper|@appuniversum)/"
+ENV STATIC_FOLDERS_REGEX="^/(assets|fonts|files|@appuniversum)/"
 ENV EMBER_OAUTH_LOGOUT_URL="/mock-login"
 
 COPY ./proxy/torii-authorization.conf /config/torii-authorization.conf

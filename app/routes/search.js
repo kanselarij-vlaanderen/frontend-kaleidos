@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import parseDate from '../utils/parse-date-search-param';
 
 export default class SearchRoute extends Route {
   @service('session') simpleAuthSession;
@@ -22,10 +23,6 @@ export default class SearchRoute extends Route {
       refreshModel: true,
       as: 'tot',
     },
-    publicationDateTypeKey: {
-      refreshModel: true,
-      as: 'datum_type',
-    },
   };
 
   beforeModel(transition) {
@@ -45,8 +42,8 @@ export default class SearchRoute extends Route {
     controller.searchTextBuffer = params.searchText;
     controller.mandateesBuffer = params.mandatees;
     controller.page = params.page;
-    controller.dateFromBuffer = controller.deserializeDate(params.dateFrom);
-    controller.dateToBuffer = controller.deserializeDate(params.dateTo);
+    controller.dateFromBuffer = parseDate(params.dateFrom);
+    controller.dateToBuffer = parseDate(params.dateTo);
   }
 
   @action
