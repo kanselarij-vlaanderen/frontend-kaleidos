@@ -3,60 +3,47 @@
   class={{if this.deletePiece.isRunning "vlc-document--deleted-state"}}
 >
   <Auk::Panel::Body>
-    <Auk::Toolbar @auto={{true}} as |Toolbar|>
-      <Toolbar.Group @position="left" as |Group|>
-        <Group.Item class="vlc-u-box-model-maximize-width">
-          <p class="auk-overline">
-            {{@piece.documentContainer.type.label}}
-          </p>
-          <div class="auk-o-flex auk-o-flex--vertical-center vlc-u-box-model-maximize-width">
-            <h6 class="auk-h4 auk-u-m-0 auk-u-mr-2">
-              {{@piece.file.downloadFilename}}
-            </h6>
-            {{#if @piece.receivedDate}}
-              <p class="auk-u-text-muted">
-                {{t "received-at"}}
-                {{moment-format @piece.receivedDate}}
-              </p>
-            {{/if}}
-            <div>
-              {{#if @piece.file}}
-                <Auk::Button
-                  @skin="borderless"
-                  @layout="icon-only"
-                  @icon="book"
-                  @href={{@piece.viewDocumentURL}}
-                  target="_blank"
-                />
-                <Auk::Button
-                  @skin="borderless"
-                  @layout="icon-only"
-                  @icon="download"
-                  @href={{@piece.file.namedDownloadLink}}
-                  download={{@piece.file.downloadFilename}}
-                />
-                {{#if @isEnabledDelete}}
-                  <Auk::Button
-                    @skin="danger-borderless"
-                    @layout="icon-only"
-                    @icon="trash"
-                    {{on "click" (perform this.deletePiece)}}
-                  />
+    <div class="vlc-document-card vlc-document-card--borderless">
+      <div class="vlc-document-card__content">
+        <Auk::Toolbar @auto={{true}} as |Toolbar|>
+          <Toolbar.Group @position="left" as |Group|>
+            <Group.Item class="auk-u-maximize-width">
+              <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
+                <span class="auk-overline">
+                  {{@piece.documentContainer.type.label}}
+                </span>
+              </div>
+              <LinkTo @route="document" @model={{@piece.id}} target="_blank" class="auk-h4">
+                {{@piece.name}}{{#if @piece.file}}.{{@piece.file.extension}}{{/if}}
+              </LinkTo>
+              <div class="vlc-document-card-content__meta">
+                {{#if @piece.receivedDate}}
+                  {{t "received-at"}}
+                  {{moment-format @piece.receivedDate}}
                 {{/if}}
+              </div>
+            </Group.Item>
+          </Toolbar.Group>
+          <Toolbar.Group @position="right" as |Group|>
+            <Group.Item class="auk-o-flex">
+              {{#if (and @isEnabledDelete @piece.file)}}
+                <Auk::DropdownMenu
+                  @skin="borderless"
+                  @icon="three-dots"
+                  as |Menu|
+                >
+                  <Menu.Item
+                    @skin="danger"
+                    {{on "click" (perform this.deletePiece)}}
+                  >
+                    {{t "document-delete"}}
+                  </Menu.Item>
+                </Auk::DropdownMenu>
               {{/if}}
-            </div>
-          </div>
-        </Group.Item>
-      </Toolbar.Group>
-      <Toolbar.Group @position="right" as |Group|>
-        <Group.Item class="auk-o-flex">
-          {{#if @piece.accessLevel}}
-            <AccessLevelPill
-              @accessLevel={{await @piece.accessLevel}}
-            />
-          {{/if}}
-        </Group.Item>
-      </Toolbar.Group>
-    </Auk::Toolbar>
+            </Group.Item>
+          </Toolbar.Group>
+        </Auk::Toolbar>
+      </div>
+    </div>
   </Auk::Panel::Body>
 </Auk::Panel>
