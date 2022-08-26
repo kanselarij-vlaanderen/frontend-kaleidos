@@ -186,10 +186,6 @@ context('Publications via MR tests', () => {
     // data loading happens
     cy.get(publication.documentCardStep.card).as('documentOnMR')
       .should('have.length', 1);
-    cy.get('@documentOnMR')
-      .find(document.accessLevelPill.pill)
-      .as('documentOnMRPill')
-      .contains('Intern Regering');
     cy.get(publication.publicationNav.case).click();
 
     // check link
