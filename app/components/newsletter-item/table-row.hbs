@@ -58,7 +58,7 @@
   </td>
   <td class="lt-cell align-left">
     <div class="auk-o-flex--justify-between">
-      {{#if this.canEditNewsletter}}
+      {{#if (user-may "manage-newsletter-infos")}}
         <Auk::Button
           data-test-newsletter-table-button-toolbar-edit={{true}}
           @skin="borderless"

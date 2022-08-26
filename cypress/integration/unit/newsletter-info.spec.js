@@ -143,6 +143,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.intercept('POST', '/newsletter-infos').as('postNewsItem');
     cy.get(newsletter.editItem.save).click();
     cy.wait('@postNewsItem');
+    cy.wait(1000);// flakyness, zebra view does not have this newsitem yet sometimes
     // check KB views for in-newsletter toggle
     cy.get(agenda.agendaHeader.showOptions).click();
     cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();

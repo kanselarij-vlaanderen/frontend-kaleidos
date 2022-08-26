@@ -16,7 +16,7 @@
           </div>
           <Auk::Tabs @reversed={{true}}>
             <Auk::Tab @route="newsletters" @isHierarchicalBack={{true}} />
-            {{#if this.currentSession.isEditor}}
+            {{#if (user-may "manage-newsletter-infos")}}
               <Auk::Tab @route="newsletter.index" @model={{@meeting.id}}>
                 {{t "overview"}}
               </Auk::Tab>
@@ -53,7 +53,7 @@
           class="auk-u-hidden@print"
           as |Menu|
         >
-          {{#if this.currentSession.isEditor}}
+          {{#if (user-may "manage-newsletter-infos")}}
             {{#if this.loadMailCampaign.isRunning}}
               <Menu.Item @textOnly={{true}}>
                 <Auk::Loader @message={{t "newsletter-loading-text"}} />
@@ -70,7 +70,7 @@
               </Menu.Item>
             {{/if}}
           {{/if}}
-          {{#if this.mayManageThemis}}
+          {{#if (user-may "manage-themis-publications")}}
             <Menu.Item {{on "click" this.openConfirmPublishThemis}}>
               {{t "send-newsitem-to-web"}}
             </Menu.Item>
@@ -81,7 +81,7 @@
               {{t "print"}}
             </Menu.Item>
           {{/if}}
-          {{#if this.currentSession.isEditor}}
+          {{#if (user-may "manage-newsletter-infos")}}
             {{! TODO These are for developers use - in comments for follow up }}
             {{!-- <Menu.Divider />  --}}
             {{!--
@@ -99,7 +99,7 @@
               </Menu.Item>
             {{/if}}
           {{/if}}
-          {{#if this.mayManageThemis}}
+          {{#if (user-may "manage-themis-publications")}}
             {{#if this.isAlreadyPublished}}
               <Menu.Divider />
               <Menu.Item @skin="danger" {{on "click" this.openConfirmUnpublishThemis}}>

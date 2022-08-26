@@ -2,6 +2,7 @@
 // / <reference types="Cypress" />
 import auk from '../../selectors/auk.selectors';
 import dependency from '../../selectors/dependency.selectors';
+// import publication from '../../selectors/publication.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
@@ -166,6 +167,7 @@ context('Search tests', () => {
     number: 2007,
     shortTitle: 'Besluitvorming Vlaamse Regering hoed',
     regulationType: 'Ministerieel besluit',
+    // TODO-setup make urgent, change features.spec.js
   };
 
   const fieldsWithDoubleDates = {
@@ -248,8 +250,23 @@ context('Search tests', () => {
       .children('tr')
       .should('have.length', 8);
 
-    // search with double date
+    // check urgent
     cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall2');
+    cy.get(auk.checkbox.checkbox).parent()
+      .contains('Dringend')
+      .click();
+    cy.get(route.search.trigger).click();
+    cy.wait('@publicationSearchCall2');
+    cy.get(route.searchPublications.dataTable).find('tbody')
+      .children('tr')
+      .should('have.length', 1);
+    // remove urgent
+    cy.get(auk.checkbox.checkbox).parent()
+      .contains('Dringend')
+      .click();
+
+    // search with double date
+    cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall3');
     cy.get(route.searchPublications.dateType).select('Datum beslissing');
     cy.get(route.search.from)
       .find(auk.datepicker)
@@ -260,21 +277,21 @@ context('Search tests', () => {
       .click();
     cy.setDateInFlatpickr(fields.decisionDate);
     cy.get(route.search.trigger).click();
-    cy.wait('@publicationSearchCall2');
+    cy.wait('@publicationSearchCall3');
     cy.get(route.searchPublications.dataTable).find('tbody')
       .children('tr')
       .should('have.length', 2)
       .contains(fieldsWithDoubleDates.number);
 
     // search with status and regulation type
-    cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall3');
+    cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall4');
     cy.get(auk.checkbox.checkbox).parent()
       .contains(fieldsWithDoubleDates.status)
       .click();
     cy.get(auk.checkbox.checkbox).parent()
       .contains(fieldsWithDoubleDates.regulationType)
       .click()
-      .wait('@publicationSearchCall3');
+      .wait('@publicationSearchCall4');
     cy.get(dependency.emberDataTable.isLoading).should('not.exist');
     cy.get(route.searchPublications.dataTable).find('tbody')
       .children('tr')
@@ -282,7 +299,7 @@ context('Search tests', () => {
       .contains(fieldsWithDoubleDates.number);
 
     // change status
-    cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall4');
+    cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall5');
     cy.get(auk.checkbox.checkbox).parent()
       .contains(fieldsWithDoubleDates.status)
       .click();
@@ -290,8 +307,9 @@ context('Search tests', () => {
     cy.get(auk.checkbox.checkbox).parent()
       .contains(fields2.status)
       .click()
-      .wait('@publicationSearchCall4');
+      .wait('@publicationSearchCall5');
     cy.get(dependency.emberDataTable.isLoading).should('not.exist');
     cy.get(auk.emptyState.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
   });
 });
+

@@ -10,7 +10,7 @@ export default class AccessLevelPillComponent extends Component {
    * An access-level pill component.
    *
    * @argument accessLevel: an accessLevel object or null
-   * @argument {Boolean} isEditable
+   * @argument isEditable: provide editing option (with built-in role check)
    * @argument onChangeAccessLevel
    * @argument onConfirmChangeAccessLevel
    * @argument onCancelChangeAccessLevel

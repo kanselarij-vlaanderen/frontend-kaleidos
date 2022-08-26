@@ -51,7 +51,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   }
 
   get canEditDesignAgenda() {
-    return this.currentSession.isEditor && this.args.currentAgenda.status.get('isDesignAgenda');
+    return this.currentSession.may('manage-agendaitems') && this.args.currentAgenda.status.get('isDesignAgenda');
   }
 
   get canPublishDecisions() {
