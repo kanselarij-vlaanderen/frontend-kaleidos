@@ -60,16 +60,17 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.documentCard.card).eq(0)
       .find(document.documentCard.name.value)
       .contains(`${file.newFileName}BIS`);
-    cy.get(document.documentCard.versionHistory)
-      .find(auk.accordion.header.button)
-      .click();
-    cy.get(document.vlDocument.piece).as('pieces');
-    cy.get('@pieces').each(() => {
-      cy.get(document.accessLevelPill.pill).contains('Intern Regering');
-    });
-    cy.get(document.documentCard.versionHistory)
-      .find(auk.accordion.header.button)
-      .click();
+    // TODO-access-level verification of access-level no longer in history
+    // cy.get(document.documentCard.versionHistory)
+    //   .find(auk.accordion.header.button)
+    //   .click();
+    // cy.get(document.vlDocument.piece).as('pieces');
+    // cy.get('@pieces').each(() => {
+    //   cy.get(document.accessLevelPill.pill).contains('Intern Regering');
+    // });
+    // cy.get(document.documentCard.versionHistory)
+    //   .find(auk.accordion.header.button)
+    //   .click();
 
     // Cancel/save of document-type and access-level in editing view
     cy.get(route.agendaitemDocuments.batchEdit).click();
@@ -94,16 +95,17 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.documentDetailsRow.row).should('not.exist');
 
     // Verify nothing changed after cancel
-    cy.get(document.documentCard.versionHistory)
-      .find(auk.accordion.header.button)
-      .click();
-    cy.get(document.vlDocument.piece).as('pieces');
-    cy.get('@pieces').each(() => {
-      cy.get(document.accessLevelPill.pill).contains('Intern Regering');
-    });
-    cy.get(document.documentCard.versionHistory)
-      .find(auk.accordion.header.button)
-      .click();
+    // TODO-access-level verification of access-level no longer in history
+    // cy.get(document.documentCard.versionHistory)
+    //   .find(auk.accordion.header.button)
+    //   .click();
+    // cy.get(document.vlDocument.piece).as('pieces');
+    // cy.get('@pieces').each(() => {
+    //   cy.get(document.accessLevelPill.pill).contains('Intern Regering');
+    // });
+    // cy.get(document.documentCard.versionHistory)
+    //   .find(auk.accordion.header.button)
+    //   .click();
 
     cy.get(route.agendaitemDocuments.batchEdit).click();
     cy.get(document.documentDetailsRow.row).as('documentRows');
@@ -122,53 +124,57 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.documentDetailsRow.row).should('not.exist');
 
     // Verify only 1 piece is affected by change
-    cy.get(document.documentCard.versionHistory)
-      .find(auk.accordion.header.button)
-      .click();
-    cy.get(document.vlDocument.piece).as('pieces');
-    cy.get('@pieces').eq(0)
-      .find(document.accessLevelPill.pill)
-      .contains('Intern Overheid');
-    cy.get('@pieces').eq(1)
-      .find(document.accessLevelPill.pill)
-      .contains('Intern Regering');
-    cy.get(document.documentCard.versionHistory)
-      .find(auk.accordion.header.button)
-      .click();
+    // TODO-access-level verification of access-level no longer in history
+    // cy.get(document.documentCard.versionHistory)
+    //   .find(auk.accordion.header.button)
+    //   .click();
+    // cy.get(document.vlDocument.piece).as('pieces');
+    // cy.get('@pieces').eq(0)
+    //   .find(document.accessLevelPill.pill)
+    //   .contains('Intern Overheid');
+    // cy.get('@pieces').eq(1)
+    //   .find(document.accessLevelPill.pill)
+    //   .contains('Intern Regering');
+    // cy.get(document.documentCard.versionHistory)
+    //   .find(auk.accordion.header.button)
+    //   .click();
 
     // Cancel/save name in document card
     const extraName = (' - Nota');
     const savedName = `${fileName}BIS${extraName}`;
     cy.intercept('PATCH', '/pieces/**').as('patchPieces');
 
-    cy.get(document.documentCard.name.value).contains(fileName)
-      .click();
+    cy.get(document.documentCard.name.value).contains(fileName);
+    cy.get(document.documentCard.actions).click();
+    cy.get(document.documentCard.editPiece).click();
     cy.get(document.documentCard.name.input).type(extraName);
-    cy.get(document.documentCard.name.cancel).click();
+    cy.get(utils.vlModalFooter.cancel).click();
     // assert old value is back
-    cy.get(document.documentCard.name.value).contains(fileName)
-      .click();
+    cy.get(document.documentCard.name.value).contains(fileName);
+    cy.get(document.documentCard.actions).click();
+    cy.get(document.documentCard.editPiece).click();
     cy.get(document.documentCard.name.input).type(extraName);
-    cy.get(document.documentCard.name.save).click();
+    cy.get(utils.vlModalFooter.save).click();
     cy.wait('@patchPieces');
     // assert new value is set
     cy.get(document.documentCard.name.value)
       .contains(savedName);
 
     // Verify only 1 piece is affected by change
-    cy.get(document.documentCard.versionHistory)
-      .find(auk.accordion.header.button)
-      .click();
-    cy.get(document.vlDocument.piece).as('pieces');
-    cy.get('@pieces').eq(0)
-      .find(document.accessLevelPill.pill)
-      .contains('Intern Overheid');
-    cy.get('@pieces').eq(1)
-      .find(document.accessLevelPill.pill)
-      .contains('Intern Regering');
-    cy.get(document.documentCard.versionHistory)
-      .find(auk.accordion.header.button)
-      .click();
+    // TODO-access-level verification of access-level no longer in history
+    // cy.get(document.documentCard.versionHistory)
+    //   .find(auk.accordion.header.button)
+    //   .click();
+    // cy.get(document.vlDocument.piece).as('pieces');
+    // cy.get('@pieces').eq(0)
+    //   .find(document.accessLevelPill.pill)
+    //   .contains('Intern Overheid');
+    // cy.get('@pieces').eq(1)
+    //   .find(document.accessLevelPill.pill)
+    //   .contains('Intern Regering');
+    // cy.get(document.documentCard.versionHistory)
+    //   .find(auk.accordion.header.button)
+    //   .click();
 
     // Cancel/save access-level in document card
     cy.get(document.accessLevelPill.pill).contains('Intern Overheid');
@@ -187,19 +193,20 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.accessLevelPill.pill).contains('Publiek');
 
     // Verify only 1 piece is affected by change
-    cy.get(document.documentCard.versionHistory)
-      .find(auk.accordion.header.button)
-      .click();
-    cy.get(document.vlDocument.piece).as('pieces');
-    cy.get('@pieces').eq(0)
-      .find(document.accessLevelPill.pill)
-      .contains('Publiek');
-    cy.get('@pieces').eq(1)
-      .find(document.accessLevelPill.pill)
-      .contains('Intern Regering');
-    cy.get(document.documentCard.versionHistory)
-      .find(auk.accordion.header.button)
-      .click();
+    // TODO-access-level verification of access-level no longer in history
+    // cy.get(document.documentCard.versionHistory)
+    //   .find(auk.accordion.header.button)
+    //   .click();
+    // cy.get(document.vlDocument.piece).as('pieces');
+    // cy.get('@pieces').eq(0)
+    //   .find(document.accessLevelPill.pill)
+    //   .contains('Publiek');
+    // cy.get('@pieces').eq(1)
+    //   .find(document.accessLevelPill.pill)
+    //   .contains('Intern Regering');
+    // cy.get(document.documentCard.versionHistory)
+    //   .find(auk.accordion.header.button)
+    //   .click();
 
     // delete the BIS piece
     cy.intercept('DELETE', '/files/**').as('deleteFileBis');
@@ -225,13 +232,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get('@documentName').contains(savedName)
       .should('not.exist');
     cy.get('@documentName').contains(file.newFileName);
-    cy.get(document.documentCard.versionHistory)
-      .find(auk.accordion.header.button)
-      .click();
-    cy.get(document.vlDocument.piece).should('have.length', 1);
-    cy.get(document.documentCard.versionHistory)
-      .find(auk.accordion.header.button)
-      .click();
+    cy.get(document.documentCard.versionHistory).should('not.exist');
 
     // delete the last piece, should delete container
     cy.intercept('DELETE', '/files/**').as('deleteLastFile');
@@ -338,14 +339,11 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').eq(0)
       .find(document.vlDocument.name)
-      .contains(`${file.newFileName}QUATER`);
+      .contains(`${file.newFileName}TER`);
     cy.get('@pieces').eq(1)
       .find(document.vlDocument.name)
-      .contains(`${file.newFileName}TER`);
-    cy.get('@pieces').eq(2)
-      .find(document.vlDocument.name)
       .contains(`${file.newFileName}BIS`);
-    cy.get('@pieces').eq(3)
+    cy.get('@pieces').eq(2)
       .find(document.vlDocument.name)
       .contains(file.newFileName);
     cy.get(document.documentCard.versionHistory)
@@ -360,14 +358,11 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').eq(0)
       .find(document.vlDocument.name)
-      .contains(`${file.newFileName}QUATER`);
+      .contains(`${file.newFileName}TER`);
     cy.get('@pieces').eq(1)
       .find(document.vlDocument.name)
-      .contains(`${file.newFileName}TER`);
-    cy.get('@pieces').eq(2)
-      .find(document.vlDocument.name)
       .contains(`${file.newFileName}BIS`);
-    cy.get('@pieces').eq(3)
+    cy.get('@pieces').eq(2)
       .find(document.vlDocument.name)
       .contains(file.newFileName);
     cy.get(document.documentCard.versionHistory)

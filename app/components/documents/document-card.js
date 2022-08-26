@@ -8,7 +8,8 @@ import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { task } from 'ember-concurrency';
-import { isPresent } from '@ember/utils';
+import { isPresent, isEmpty } from '@ember/utils';
+import ENV from 'frontend-kaleidos/config/environment';
 
 export default class DocumentsDocumentCardComponent extends Component {
   /**
@@ -18,7 +19,6 @@ export default class DocumentsDocumentCardComponent extends Component {
    *
    * @argument piece: a Piece object
    * @argument documentContainer: a DocumentContainer object
-   * @argument hideNewerVersions: boolean indicating if pieces newer than @piece should be hidden in the history
    * @argument didDeletePiece: action triggered when a piece has been deleted
    * @argument didDeleteContainer: action triggered when a container has been deleted
    * @argument onOpenUploadModal: action triggered before the modal to upload a new version opens
@@ -51,10 +51,7 @@ export default class DocumentsDocumentCardComponent extends Component {
     super(...arguments);
     this.loadCodelists.perform();
     this.loadPieceRelatedData.perform();
-  }
-
-  get userMayManagePublicationFlows() {
-    return this.currentSession.may('manage-publication-flows');
+    this.signaturesEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
   }
 
   get bordered() {
@@ -78,7 +75,7 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *loadPublicationFlowRelatedData() {
-    if (this.userMayManagePublicationFlows) {
+    if (this.currentSession.may('manage-publication-flows')) {
       const publicationFlow = yield this.piece.publicationFlow;
       yield publicationFlow?.identification;
     }
@@ -132,11 +129,8 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   get visiblePieces() {
-    if (this.args.hideNewerVersions) {
-      const idx = this.reverseSortedPieces.indexOf(this.piece);
-      return A(this.reverseSortedPieces.slice(idx));
-    }
-    return this.reverseSortedPieces;
+    const idx = this.reverseSortedPieces.indexOf(this.piece) + 1;
+    return A(this.reverseSortedPieces.slice(idx));
   }
 
   @action
@@ -198,10 +192,8 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @action
   enableEditPieceName() {
-    if (this.currentSession.isEditor) {
-      this.pieceNameBuffer = this.piece.name;
-      this.isEditingPiece = true;
-    }
+    this.pieceNameBuffer = this.piece.name;
+    this.isEditingPiece = true;
   }
 
   @action

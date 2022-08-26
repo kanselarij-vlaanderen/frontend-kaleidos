@@ -131,7 +131,9 @@ function addNewPiece(oldFileName, file, modelToPatch, hasSubcase = true) {
   });
   cy.wait(1000); // Cypress is too fast
 
-  cy.get(utils.vlModalFooter.save).click()
+  cy.get(utils.vlModalFooter.save).click({
+    force: true, // covered by the pop-up in headless tests where ut stays open while it shouldn't
+  })
     .wait(`@createNewPiece_${randomInt}`);
 
   // for agendaitems and subcases both are patched, not waiting causes flaky tests
@@ -519,6 +521,37 @@ function deleteSinglePiece(fileName, indexToDelete) {
 }
 
 /**
+ * @description delete a piece row from the document batch editing view
+ * @name deletePieceBatchEditRow
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param String fileName - The exact name of the file (as seen in document-card title)
+ * @param Number indexToDelete - The index of the row in the list
+ */
+function deletePieceBatchEditRow(fileName, indexToDelete, editSelector) {
+  cy.log('deletePieceBatchEditRow');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('DELETE', 'pieces/*').as(`deletePiece${randomInt}`);
+  cy.intercept('PUT', '/agendaitems/**/pieces/restore').as(`putRestoreAgendaitems${randomInt}`);
+  cy.get(editSelector).click();
+  cy.get(document.documentDetailsRow.row).as('documentRows');
+  cy.get('@documentRows').eq(indexToDelete)
+    .find(document.documentDetailsRow.input)
+    .should('have.value', fileName); // check if name matches
+  cy.get('@documentRows').eq(indexToDelete)
+    .find(document.documentDetailsRow.delete)
+    .click();
+  cy.get('@documentRows').eq(indexToDelete)
+    .find(document.documentDetailsRow.undoDelete);
+  cy.get(document.batchDocumentsDetails.save).click();
+  cy.wait(`@deletePiece${randomInt}`, {
+    timeout: 40000,
+  }).wait(`@putRestoreAgendaitems${randomInt}`);
+  cy.wait(2000);
+  cy.log('/deletePieceBatchEditRow');
+}
+
+/**
  * @description verifies if a piece in the history view of a document-card should be deletable (show icon)
  * @name isPieceDeletable
  * @memberOf Cypress.Chainable#
@@ -573,3 +606,4 @@ Cypress.Commands.add('openAgendaitemDossierTab', openAgendaitemDossierTab);
 Cypress.Commands.add('addLinkedDocument', addLinkedDocument);
 Cypress.Commands.add('deleteSinglePiece', deleteSinglePiece);
 Cypress.Commands.add('isPieceDeletable', isPieceDeletable);
+Cypress.Commands.add('deletePieceBatchEditRow', deletePieceBatchEditRow);

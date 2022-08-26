@@ -4,18 +4,21 @@
 // Imports
 // sourced from "@appuniversum/ember-appuniversum" npm package
 
-@import 'ember-appuniversum/c-heading';
-@import 'ember-appuniversum/c-icon';
-@import 'ember-appuniversum/c-pill';
-@import 'ember-appuniversum/c-heading';
+@import 'ember-appuniversum/c-badge';
 @import 'ember-appuniversum/c-button';
 @import 'ember-appuniversum/c-button-group';
-@import 'ember-appuniversum/c-link';
-@import 'ember-appuniversum/c-toolbar';
-@import 'ember-appuniversum/c-input';
-@import 'ember-appuniversum/c-loader';
-@import 'ember-appuniversum/c-modal';
+@import 'ember-appuniversum/c-card';
 @import 'ember-appuniversum/c-content';
+@import 'ember-appuniversum/c-heading';
+@import 'ember-appuniversum/c-help-text';
+@import 'ember-appuniversum/c-hr';
+@import 'ember-appuniversum/c-icon';
+@import 'ember-appuniversum/c-link';
+@import 'ember-appuniversum/c-list';
+@import 'ember-appuniversum/c-list-horizontal';
+@import 'ember-appuniversum/c-pill';
+@import 'ember-appuniversum/c-modal';
+@import 'ember-appuniversum/c-toolbar';
 
 // Fixes
 
@@ -26,8 +29,9 @@
 // Overrides
 
 .au-c-pill {
+  line-height: 1; // vertical alignment is a bit off in Kaleidos
   border-radius: .5rem; // default border radius is .5rem in Kaleidos
-                        padding-top: 0;
+  padding-top: 0;
 }
 
 .au-c-pill-action {
@@ -164,6 +168,44 @@
   }
 }
 
+// Fix icons in menu
+.auk-menu__item {
+  display: flex;
+  align-items: center;
+}
+
+.auk-menu__item--danger {
+  font-weight: 500;
+}
+
+// Modal fixes
+.au-c-modal--fullscreen {
+  max-width: 100%;
+  max-height: 100%;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  border-radius: 0;
+}
+
+.au-c-modal__title {
+  @include au-font-size($au-h5);
+}
+
+.au-c-modal__close {
+  background-color: $au-white;
+}
+
+
+// Make appuniversum button pointer consistent with kaleidos
+.au-c-button {
+  cursor: pointer;
+}
+
+// Fix missing noactions class
+.auk-table--noactions .data-table__actions--top {
+  display: none;
+}
 
 // Additions
 
