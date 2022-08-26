@@ -95,6 +95,7 @@ const selectors = {
 
   datepicker: '[data-test-auk-datepickr]',
   icon: '.auk-icon',
+  warningIcon: '.ki ki-alert-triangle auk-icon--warning',
 
   confidentialityPill: {
     locked: '[data-test-confidentiality-pill-icon-locked]',
