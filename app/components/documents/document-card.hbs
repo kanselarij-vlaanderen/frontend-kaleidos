@@ -111,7 +111,10 @@
                 >
                   {{t "new-version"}}
                 </Menu.Item>
-                <Menu.Item {{on "click" this.enableEditPieceName}}>
+                <Menu.Item
+                  data-test-document-edit-piece
+                  {{on "click" this.enableEditPieceName}}
+                >
                   {{t "edit"}}
                 </Menu.Item>
                 <Menu.Divider />

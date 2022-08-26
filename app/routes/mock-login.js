@@ -7,7 +7,7 @@ export default class MockLoginRoute extends Route {
   @service store;
 
   beforeModel() {
-    this.simpleAuthSession.prohibitAuthentication('agendas');
+    this.simpleAuthSession.prohibitAuthentication('index');
   }
 
   model() {

@@ -141,7 +141,7 @@
                     <th class="auk-table__col--1"></th>
                   </c.header>
                   <c.body class="auk-table--clickable-rows" as |row|>
-                    <td>
+                    <td data-test-route-search-publication-row-urgency>
                       {{#if row.urgent}}
                         <Auk::Icon @skin="warning" @name="alert-triangle" />
                       {{else}}

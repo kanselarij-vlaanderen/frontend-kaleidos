@@ -11,16 +11,16 @@ export default class AgendasRoute extends Route {
   dateRegex = /^(?:(\d{1,2})[/-])??(?:(\d{1,2})[/-])?(\d{4})$/;
 
   queryParams = {
-    filter: {
+    filterAgendas: {
       refreshModel: true,
     },
-    page: {
+    pageAgendas: {
       refreshModel: true,
     },
-    size: {
+    sizeAgendas: {
       refreshModel: true,
     },
-    sort: {
+    sortAgendas: {
       refreshModel: true,
     },
   };
@@ -31,17 +31,17 @@ export default class AgendasRoute extends Route {
 
   async model(params) {
     const queryParams = {
-      sort: params.sort,
+      sort: params.sortAgendas,
       page: {
-        number: params.page,
-        size: params.size,
+        number: params.pageAgendas,
+        size: params.sizeAgendas,
       },
       include: 'status,created-for,created-for.kind',
       'filter[:has-no:next-version]': true,
     };
 
-    if (params.filter) {
-      const date = params.filter.split('/').join('-');
+    if (params.filterAgendas) {
+      const date = params.filterAgendas.split('/').join('-');
       const match = this.dateRegex.exec(date);
 
       if (match) {
