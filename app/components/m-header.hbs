@@ -102,6 +102,13 @@
               </Auk::Avatar>
             </Menu.Item>
             <Auk::Menu::Divider />
+            <Menu.Item @route="mock-login-route"
+              {{on "click" this.logout}}
+              data-test-m-header-user-action-logout
+            >
+              Wissel gebruiker
+            </Menu.Item>
+            <Auk::Menu::Divider />
             <Menu.Item
               {{on "click" this.logout}}
               data-test-m-header-user-action-logout
