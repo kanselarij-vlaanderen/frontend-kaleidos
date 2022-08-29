@@ -64,6 +64,9 @@ export default class AgendaService extends Service {
   }
 
   async changedPieces(currentAgendaId, comparedAgendaId, agendaItemId) {
+    if (!this.currentSession.may('view-document-version-info')) {
+      return [];
+    }
     const url = `/agendas/${currentAgendaId}/compare/${comparedAgendaId}/agenda-item/${agendaItemId}/pieces`;
     const response = await fetch(url);
     const payload = await response.json();
@@ -80,10 +83,10 @@ export default class AgendaService extends Service {
 
   /* No API */
 
-  async computeNextItemNumber(agenda, isAnnouncement) {
+  async computeNextItemNumber(agenda, agendaItemType) {
     const lastItem = await this.store.queryOne('agendaitem', {
       'filter[agenda][:id:]': agenda.id,
-      'filter[show-as-remark]': isAnnouncement,
+      'filter[type][:id:]': agendaItemType.get('id'),
       sort: '-number',
     });
     if (lastItem) {
@@ -104,8 +107,9 @@ export default class AgendaService extends Service {
       'filter[status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
       sort: '-created', // serialnumber
     });
-    const isAnnouncement = subcase.get('showAsRemark');
-    const numberToAssign = await this.computeNextItemNumber(lastAgenda, isAnnouncement);
+    const agendaItemType = await subcase.agendaItemType;
+    const isAnnouncement = agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
+    const numberToAssign = await this.computeNextItemNumber(lastAgenda, agendaItemType);
 
     // Generate press text
     const mandatees = await subcase.get('mandatees');
@@ -166,7 +170,7 @@ export default class AgendaService extends Service {
       title: subcase.title,
       shortTitle: subcase.shortTitle,
       formallyOk: CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK,
-      showAsRemark: isAnnouncement,
+      type: agendaItemType,
       mandatees,
       pieces: submittedPieces,
       linkedPieces: await subcase.linkedPieces,
@@ -182,7 +186,7 @@ export default class AgendaService extends Service {
     updateModifiedProperty(lastAgenda);
 
     // Create default newsletterInfo for announcements with inNewsLetter = true
-    if (agendaitem.showAsRemark) {
+    if (agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
       const newsItem = await this.newsletterService.createNewsItemForAgendaitem(agendaitem, true);
       newsItem.save();
     }

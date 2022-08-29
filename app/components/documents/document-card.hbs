@@ -5,28 +5,43 @@
   data-test-document-card
 >
   <div class="vlc-document-card__summary">
-    <div class="auk-u-mr-3">
-      {{#if @isHighlighted}}
-        <Auk::Badge @skin="success" @icon="document-added" @size="large" />
-      {{else}}
-        <Auk::Badge @icon="document" @size="large" />
-      {{/if}}
-    </div>
     <div class="vlc-document-card__content">
       <Auk::Toolbar @auto={{true}} as |Toolbar|>
         <Toolbar.Group @position="left" as |Group|>
           <Group.Item>
-            <p data-test-document-card-type class="auk-overline">
-              {{#unless this.loadPieceRelatedData.isRunning}}
-                {{this.documentContainer.type.label}}
-              {{/unless}}
-            </p>
+            {{#if @isHighlighted}}
+              <Auk::Badge @skin="success" @icon="document-added" @size="large" />
+            {{else}}
+              <Auk::Badge @icon="document" @size="large" />
+            {{/if}}
+          </Group.Item>
+          <Group.Item class="auk-u-maximize-width">
+            <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
+              <span data-test-document-card-type class="auk-overline">
+                {{#unless this.loadPieceRelatedData.isRunning}}
+                  {{this.documentContainer.type.label}}
+                {{/unless}}
+              </span>
+            </div>
+            <LinkTo @route="document" @model={{this.piece.id}} target="_blank"
+              class="auk-h4" data-test-document-card-name-value>
+              {{this.piece.name}}{{#if this.piece.file}}.{{this.piece.file.extension}}{{/if}}
+            </LinkTo>
+            <div class="vlc-document-card-content__meta">
+              {{! no piece.created in legacy data }}
+              {{#if this.piece.created}}
+                {{t "uploaded-at"}}
+                {{moment-format this.piece.created}}
+                {{t "at"}}
+                {{moment-format this.piece.created "HH:mm"}}
+              {{/if}}
+            </div>
           </Group.Item>
         </Toolbar.Group>
         <Toolbar.Group @position="right" as |Group|>
           {{#if
             (and
-              this.userMayManagePublicationFlows
+              (user-may "manage-publication-flows")
               (not this.loadPieceRelatedData.isRunning)
               (not this.loadPublicationFlowRelatedData.isRunning)
             )
@@ -55,28 +70,33 @@
               </div>
             {{/unless}}
           </Group.Item>
-          {{#if
-            (and
-              @hasMarkForSignature
-              (not this.loadSignatureRelatedData.isRunning)
-              (not this.loadPieceRelatedData.isRunning)
-            )
-          }}
-            <Group.Item>
-              <Auk::Button
-                @skin={{if
-                  this.signMarkingActivity
-                  "success-borderless"
-                  "muted-borderless"
-                }}
-                @layout="icon-only"
-                @loading={{this.markOrUnmarkForSignature.isRunning}}
-                @icon={{if this.signMarkingActivity "sign" "no-sign"}}
-                {{on "click" (perform this.markOrUnmarkForSignature)}}
-              />
-            </Group.Item>
+          {{#if this.signaturesEnabled}} {{! feature flag }}
+            {{#if
+              (and
+                (user-may "manage-signatures")
+                (not this.loadSignatureRelatedData.isRunning)
+                (not this.loadPieceRelatedData.isRunning)
+              )
+            }}
+              <Group.Item>
+                <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--center">
+                  <Auk::Toggle
+                    id="signatureToggle"
+                    @checked={{if this.signMarkingActivity true false}}
+                    {{on "click" (perform this.markOrUnmarkForSignature)}}
+                  />
+                  <label for="signatureToggle" class="auk-c-toggle-label auk-u-text-muted">
+                    {{#if this.markOrUnmarkForSignature.isRunning}}
+                      <Auk::Loader />
+                    {{else}}
+                      Te handtekenen
+                    {{/if}}
+                  </label>
+                </div>
+              </Group.Item>
+            {{/if}}
           {{/if}}
-          {{#if this.currentSession.isEditor}}
+          {{#if (user-may "manage-documents")}}
             <Group.Item>
               <Auk::DropdownMenu
                 @skin="borderless"
@@ -91,8 +111,11 @@
                 >
                   {{t "new-version"}}
                 </Menu.Item>
-                <Menu.Item {{on "click" this.enableEditPieceName}}>
-                  {{t "document-title-edit"}}
+                <Menu.Item
+                  data-test-document-edit-piece
+                  {{on "click" this.enableEditPieceName}}
+                >
+                  {{t "edit"}}
                 </Menu.Item>
                 <Menu.Divider />
                 <Menu.Item
@@ -107,91 +130,115 @@
           {{/if}}
         </Toolbar.Group>
       </Auk::Toolbar>
-      <div class="auk-o-flex">
-        <div class="auk-o-flex auk-o-flex--vertical auk-u-maximize-width">
-          {{#if this.isEditingPiece}}
-            <div class="auk-o-flex auk-o-flex--vertical-center">
-              <Auk::Input
-                data-test-document-card-name-input={{true}}
-                @block={{true}}
-                @value={{this.pieceNameBuffer}}
-              />
-              <Auk::Button
-                data-test-document-card-name-save={{true}}
-                @skin="borderless"
-                @layout="icon-only"
-                @icon="check"
-                {{on "click" (perform this.savePieceName)}}
-              />
-              <Auk::Button
-                data-test-document-card-name-cancel={{true}}
-                @skin="borderless"
-                @layout="icon-only"
-                @icon="x"
-                {{on "click" this.cancelEditPieceName}}
-              />
-            </div>
-          {{else}}
-            <h6 class="auk-h4" data-test-document-card-name-value>
-              {{! template-lint-disable no-invalid-interactive }}
-              <span {{on "click" this.enableEditPieceName}}>
-                {{this.piece.name}}
-              </span>
-              {{! template-lint-enable no-invalid-interactive }}
-            </h6>
-          {{/if}}
-          <div class="vlc-document-card-content__meta">
-            {{! no piece.created in legacy data }}
-            {{! TODO: when created date is absent, the layout seems irregular
-                  this will be addressed with new document card styling }}
-            <div>
-              {{#if this.piece.created}}
-                {{t "uploaded-at"}}
-                {{moment-format this.piece.created}}
-                {{t "at"}}
-                {{moment-format this.piece.created "HH:mm"}}
-              {{/if}}
-            </div>
-            {{#if this.piece.accessLevelLastModified}}
-              <div>
-                {{t "access-level-last-modified"}}
-                {{moment-format this.piece.accessLevelLastModified}}
-                {{t "at"}}
-                {{moment-format this.piece.accessLevelLastModified "HH:mm"}}
-              </div>
-            {{/if}}
-          </div>
-        </div>
-      </div>
     </div>
   </div>
-  <div class="vlc-document-card-versions">
-    <Auk::Accordion>
-      <Auk::Accordion::Item
-        @title={{t "show-pieces"}}
-        @disabled={{this.loadPieceRelatedData.isRunning}}
-        @expandTask={{this.loadVersionHistory}}
-        data-test-document-card-version-history
-      >
-        {{#if this.loadVersionHistory.isRunning}}
-          <div class="auk-u-p-3">
-            <Auk::Loader />
-          </div>
-        {{else}}
-          {{#each this.visiblePieces as |piece|}}
-            {{! TODO: also disable delete when piece linked to other agenda-items while maintaining DDAU }}
-            <WebComponents::VlDocument
-              @piece={{piece}}
-              @enableDelete={{eq piece @piece}}
-              @didDeletePiece={{@didDeletePiece}}
-              @didUpdateAccessLevel={{perform this.loadPieceRelatedData}}
-            />
-          {{/each}}
-        {{/if}}
-      </Auk::Accordion::Item>
-    </Auk::Accordion>
-  </div>
+  {{#if (user-may "view-document-version-info")}}
+    {{#if (gt this.visiblePieces.length 0)}}
+      <div class="vlc-document-card-versions">
+        <Auk::Accordion>
+          <Auk::Accordion::Item
+            @title={{t "previous-versions"}}
+            @disabled={{this.loadPieceRelatedData.isRunning}}
+            @expandTask={{this.loadVersionHistory}}
+            data-test-document-card-version-history
+          >
+            {{#if this.loadVersionHistory.isRunning}}
+              <div class="auk-u-p-3">
+                <Auk::Loader />
+              </div>
+            {{else}}
+              {{#each this.visiblePieces as |piece|}}
+                <div
+                  class="vlc-document-holder"
+                  {{did-update (perform this.loadPieceRelatedData) piece}}
+                >
+                  <div class="vlc-document-card-item" data-test-vl-document-piece>
+                    <div class="vlc-document-card-item__title">
+                      {{#if piece.file}}
+                        <LinkTo @route="document" @model={{piece.id}} target="_blank"
+                          class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
+                          data-test-vl-document-name>
+                          {{piece.name}}{{#if piece.file}}.{{piece.file.extension}}{{/if}}
+                        </LinkTo>
+                      {{else}}
+                        <h6
+                          class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
+                          data-test-vl-document-name
+                        >
+                          <EmberTooltip @side="bottom" @tooltipClass="auk-tooltip">
+                            {{t "document-not-consultable"}}
+                          </EmberTooltip>
+                          {{piece.name}}{{#if piece.file}}.{{piece.file.extension}}{{/if}}
+                        </h6>
+                      {{/if}}
+                      <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"></div>
+                    </div>
+                    <div class="vlc-document-card-item__meta au-u-muted">
+                      {{!-- no piece.created in legacy data --}}
+                      {{#if this.piece.created}}
+                        {{t "uploaded-at"}}
+                        {{moment-format this.piece.created}}
+                        {{t "at"}}
+                        {{moment-format this.piece.created "HH:mm"}}
+                      {{/if}}
+                    </div>
+                    <div class="vlc-document-card-item__icon">
+                      <Auk::Icon @name="clock-rewind" @size="small" />
+                    </div>
+                  </div>
+                </div>
+              {{/each}}
+            {{/if}}
+          </Auk::Accordion::Item>
+        </Auk::Accordion>
+      </div>
+    {{/if}}
+  {{/if}}
 </div>
+{{#if this.isEditingPiece}}
+  <WebComponents::VlModal
+    @closeModal={{this.cancelEditPieceName}}
+    @isOverlay={{true}}
+    @title={{t "modify-document"}}
+  >
+    <Auk::Modal::Body>
+      <AuCard
+        @flex={{true}}
+        @size="small"
+        as |c|
+      >
+        <c.header
+          @badgeIcon={{if (eq this.piece.file.extension "pdf") "pdf" "document"}}
+        >
+          <p data-test-document-card-type class="vlc-subline au-u-medium au-u-muted">
+            {{uppercase this.piece.file.extension}}
+          </p>
+          <div class="au-u-flex au-u-flex--spaced-small">
+            <Auk::Input
+              data-test-document-card-name-input={{true}}
+              @block={{true}}
+              @value={{this.pieceNameBuffer}}
+            />
+          </div>
+          {{#if this.piece.created}}
+            <AuHelpText @skin="secondary">
+              {{t "uploaded-at"}}
+              {{moment-format this.piece.created}}
+              {{t "at"}}
+              {{moment-format this.piece.created "HH:mm"}}
+            </AuHelpText>
+          {{/if}}
+        </c.header>
+      </AuCard>
+    </Auk::Modal::Body>
+    <WebComponents::VlModalFooter
+      @cancelButtonText={{t "cancel"}}
+      @saveButtonText={{t "save"}}
+      @cancelAction={{this.cancelEditPieceName}}
+      @saveAction={{perform this.savePieceName}}
+    />
+  </WebComponents::VlModal>
+{{/if}}
 
 {{#if this.isOpenUploadModal}}
   <WebComponents::VlModal

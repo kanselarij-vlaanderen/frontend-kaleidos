@@ -6,14 +6,13 @@ const selectors = {
     name: {
       value: '[data-test-document-card-name-value]',
       input: '[data-test-document-card-name-input]',
-      save: '[data-test-document-card-name-save]',
-      cancel: '[data-test-document-card-name-cancel]',
     },
     pubLink: '[data-test-document-card-publication-link]',
     versionHistory: '[data-test-document-card-version-history]',
     actions: '[data-test-document-card-actions]',
     delete: '[data-test-document-card-delete]',
     uploadPiece: '[data-test-document-upload-new-piece]',
+    editPiece: '[data-test-document-edit-piece]',
   },
 
   // vl-document

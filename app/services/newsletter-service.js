@@ -1,6 +1,7 @@
 import Service, { inject as service } from '@ember/service';
 import fetch from 'fetch';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class NewsletterService extends Service {
   @service store;
@@ -128,7 +129,8 @@ export default class NewsletterService extends Service {
       agendaItemTreatment,
       inNewsletter,
     });
-    if (agendaitem.showAsRemark) {
+    const agendaItemType = await agendaitem.type;
+    if (agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
       const content = agendaitem.title;
       news.title = agendaitem.shortTitle || content;
       news.richtext = content;
@@ -148,7 +150,7 @@ export default class NewsletterService extends Service {
           'newsletter-info',
           {
             'filter[agenda-item-treatment][decision-activity][subcase][case][:id:]': _case.id,
-            'filter[agenda-item-treatment][agendaitems][show-as-remark]': false, // Don't copy over news item from announcement
+            'filter[agenda-item-treatment][agendaitems][type][:uri:]': CONSTANTS.AGENDA_ITEM_TYPES.NOTA, // Don't copy over news item from announcement
             sort: '-agenda-item-treatment.agendaitems.agenda-activity.start-date',
           }
         );

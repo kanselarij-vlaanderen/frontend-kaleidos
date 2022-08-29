@@ -5,6 +5,7 @@ import {
   parseDraftsAndGroupsFromAgendaitems,
   sortByNumber
 } from 'frontend-kaleidos/utils/agendaitem-utils';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 // TODO: octane-refactor
 // eslint-disable-next-line ember/no-classic-classes
@@ -32,7 +33,13 @@ export default Route.extend({
       sort: 'number',
     });
 
-    const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
+    const announcements = []
+    for (const agendaitem of agendaitems.sortBy('number').toArray()) {
+      const type = await agendaitem.type;
+      if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
+        announcements.push(agendaitem);
+      }
+    }
 
     const {
       draftAgendaitems, groupedAgendaitems,

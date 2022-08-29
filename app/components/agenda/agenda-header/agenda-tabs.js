@@ -21,10 +21,10 @@ export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
   @task
   *loadFirstAgendaitem() {
     if (this.args.currentAgenda) {
-      // sorting on show-as-remark prevents defaulting to an announcement when there are notas
+      // sorting on type prevents defaulting to an announcement when there are notas
       return yield this.store.queryOne('agendaitem', {
         'filter[agenda][:id:]': this.args.currentAgenda.id,
-        sort: 'show-as-remark,number',
+        sort: 'type,number',
       });
     }
     return null;

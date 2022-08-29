@@ -198,6 +198,7 @@ export default class AgendasController extends Controller {
     );
     await agendaItemTreatment.save();
 
+    const notaType = await this.store.findRecordByUri('concept', CONSTANTS.AGENDA_ITEM_TYPES.NOTA);
     const agendaitem = this.store.createRecord('agendaitem', {
       created: now,
       agenda,
@@ -208,6 +209,7 @@ export default class AgendasController extends Controller {
       formallyOk: CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK,
       isApproval: true,
       treatment: agendaItemTreatment,
+      type: notaType,
     });
     await agendaitem.save();
     return agendaitem;

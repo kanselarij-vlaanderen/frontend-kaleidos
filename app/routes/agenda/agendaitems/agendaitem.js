@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class AgendaitemAgendaitemsAgendaRoute extends Route {
   @service store;
@@ -15,7 +16,8 @@ export default class AgendaitemAgendaitemsAgendaRoute extends Route {
   }
 
   async afterModel(model, transition) {
-    const arrayToSearch = model.showAsRemark ? this.modelFor('agenda.agendaitems').announcements : this.modelFor('agenda.agendaitems').notas;
+    const type = await model.type;
+    const arrayToSearch = (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) ? this.modelFor('agenda.agendaitems').announcements : this.modelFor('agenda.agendaitems').notas;
     if (!arrayToSearch.includes(model) && arrayToSearch.length) { // This can happen when the selected item no longer is visible in the sidebar after filtering
       this.transitionTo('agenda.agendaitems.agendaitem', arrayToSearch[0]);
     }

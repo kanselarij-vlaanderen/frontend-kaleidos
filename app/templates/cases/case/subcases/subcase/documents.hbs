@@ -14,6 +14,7 @@
             <Group.Item>
               {{#if this.currentSession.isEditor}}
                 <Auk::Button
+                  data-test-route-cases---subcase-documents-batch-edit
                   @icon="pencil"
                   {{on "click" this.openBatchDetails}}
                 >

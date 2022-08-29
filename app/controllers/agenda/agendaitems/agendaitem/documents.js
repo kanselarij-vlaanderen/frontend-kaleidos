@@ -11,8 +11,7 @@ import {
   restorePiecesFromPreviousAgendaitem,
 } from 'frontend-kaleidos/utils/documents';
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
-import { isEmpty, isPresent } from '@ember/utils';
-import ENV from 'frontend-kaleidos/config/environment';
+import { isPresent } from '@ember/utils';
 
 export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service currentSession;
@@ -38,12 +37,6 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     const hasCase = isPresent(this.agendaActivity);
     const hasPieces = isPresent(this.model.pieces);
     return mayPublish && hasCase && hasPieces;
-  }
-
-  get isShownSignatureMarker() {
-    const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
-    const hasPermission = this.currentSession.may('manage-signatures');
-    return isEnabled && hasPermission;
   }
 
   @task
