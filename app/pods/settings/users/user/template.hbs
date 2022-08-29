@@ -3,7 +3,14 @@
   @title={{t 'manage-user'
     firstName=this.model.firstName
     lastName=this.model.lastName}}
-/>
+>
+  <Auk::Button
+    @icon="circle-x"
+    @skin="danger-primary"
+  >
+    Blokkeren
+  </Auk::Button>
+</Utils::SettingsHeader>
 
 <div class="auk-o-grid">
   <div class="auk-o-grid-col-6 auk-u-m">
@@ -46,6 +53,14 @@
                   @selectedItems={{this.model.group}}
                   @selectModel={{this.setAndSaveGroup}}
                 />
+              </dd>
+            </div>
+          </dl>
+          <dl>
+            <div class="auk-key-value-item auk-key-value-item--horizontal">
+              <dt class="auk-key-value-item__label">Laatst gezien</dt>
+              <dd class="auk-key-value-item__value">
+                Ma 20-06-2022 – 12:10
               </dd>
             </div>
           </dl>

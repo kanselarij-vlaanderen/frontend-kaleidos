@@ -1,5 +1,5 @@
 {{!-- TODO: octane-refactor, fix accessibility concern --}}
 {{!-- template-lint-disable no-action no-invalid-interactive --}}
-<div data-test-auk-back-button class="u-padding--left--small auk-u-cursor-pointer" {{action "goToParentRoute"}}>
-  <Auk::Icon @name="chevron-left" />
-</div>
+<AuButton @skin="naked" @icon="hierarchical-back" @iconAlignment="left" data-test-auk-back-button {{action "goToParentRoute"}}>
+  Terug
+</AuButton>

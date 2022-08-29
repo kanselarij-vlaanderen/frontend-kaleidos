@@ -2,7 +2,14 @@
   <div class="auk-u-m-4">
     <div class="auk-o-grid auk-u-mb-2">
       <div class="auk-o-grid-col-2">
-        <div class="au-c-card au-o-box au-o-box--small">
+        <div class="au-u-margin-top-tiny">
+          <AuHeading @level="3" @skin="6" class="au-u-hidden-visually">Inhoud</AuHeading>
+          <AuList as |Item|>
+            <Item><AuLink @route="settings.users" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact" @active={{true}}>Alle gebruikers</AuLink></Item>
+            <Item><AuLink @route="settings.users" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Geblokkeerd</AuLink></Item>
+          </AuList>
+        </div>
+        <div class="au-c-card au-o-box au-o-box--small au-u-margin-top">
           <Auk::Label>Filteren op organisatie</Auk::Label>
           <div class="au-u-flex au-u-flex--spaced-tiny">
             <div class="au-u-4-5">
@@ -38,44 +45,46 @@
           </div>
         </div>
         <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-tiny">
-          <Auk::Label>Filteren op status</Auk::Label>
-          <Auk::Checkbox
-            @checked={{true}}
-            @label="Actief"
-          />
-          <Auk::Checkbox
-            @checked={{true}}
-            @label="Inactief"
-          />
-          <Auk::Checkbox
-            @checked={{true}}
-            @label="Geblokkeerd"
-          />
+          <Auk::Label>Filteren op laatst gezien</Auk::Label>
+          <div class="auk-form-group auk-u-position-relative au-u-margin-bottom-small">
+            <Auk::Label>{{t "from"}}</Auk::Label>
+            <WebComponents::VlDatepicker
+              @selectedDate={{array this.dateFromBuffer}}
+              @dateChanged={{fn (mut this.dateFromBuffer)}}
+              @enableClear={{this.dateFromBuffer}}
+              @onClear={{fn (mut this.dateFromBuffer) null}}
+              @allowInput={{true}}
+            />
+          </div>
+          <div class="auk-form-group auk-u-position-relative">
+            <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
+            <WebComponents::VlDatepicker
+              @selectedDate={{array this.dateToBuffer}}
+              @dateChanged={{fn (mut this.dateToBuffer)}}
+              @enableClear={{this.dateToBuffer}}
+              @onClear={{fn (mut this.dateToBuffer) null}}
+              @allowInput={{true}}
+            />
+          </div>
         </div>
         <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-tiny">
           <Auk::Label>Filteren op rechtengroep</Auk::Label>
-          <Auk::CheckboxList
-            @checkable={{true}}
+          <Auk::Checkbox
             @checked={{true}}
-            @label="Kanselarij"
-          >
-            <Auk::Checkbox
-              @checked={{true}}
-              @label="Admin"
-            />
-            <Auk::Checkbox
-              @checked={{true}}
-              @label="Secretarie"
-            />
-            <Auk::Checkbox
-              @checked={{true}}
-              @label="OVRB"
-            />
-            <Auk::Checkbox
-              @checked={{true}}
-              @label="Standaard"
-            />
-          </Auk::CheckboxList>
+            @label="Admin"
+          />
+          <Auk::Checkbox
+            @checked={{true}}
+            @label="Secretarie"
+          />
+          <Auk::Checkbox
+            @checked={{true}}
+            @label="OVRB"
+          />
+          <Auk::Checkbox
+            @checked={{true}}
+            @label="Kort bestek"
+          />
           <Auk::Checkbox
             @checked={{true}}
             @label="Minister"
@@ -83,6 +92,14 @@
           <Auk::Checkbox
             @checked={{true}}
             @label="Kabinet"
+          />
+          <Auk::Checkbox
+            @checked={{true}}
+            @label="Vlaams Parlement"
+          />
+          <Auk::Checkbox
+            @checked={{true}}
+            @label="Raad van State"
           />
           <Auk::Checkbox
             @checked={{true}}
@@ -99,15 +116,7 @@
               @skin="secondary"
               @disabled={{true}}
             >
-              Activeren
-            </Auk::Button>
-            <Auk::Button
-              @icon="circle-pause"
-              @skin="secondary"
-              @disabled={{true}}
-
-            >
-              Deactiveren
+              Deblokkeren
             </Auk::Button>
             <Auk::Button
               @icon="circle-x"
@@ -120,19 +129,9 @@
             <Auk::Button
               @icon="circle-full"
               @skin="secondary"
-              @disabled={{if (eq this.itemActivated true) true}}
               {{on "click" this.activateAll}}
             >
-              Activeren
-            </Auk::Button>
-            <Auk::Button
-              @icon="circle-pause"
-              @skin="secondary"
-              @disabled={{if (eq this.itemActivated false) true}}
-              {{on "click" this.disableAll}}
-
-            >
-              Deactiveren
+              Deblokkeren
             </Auk::Button>
             <Auk::Button
               @icon="circle-x"
@@ -191,12 +190,12 @@
               <ThSortable
                 @currentSorting={{this.sort}}
                 @field="group.name"
-                @label="Rechtengroep"
+                @label="Groep"
               />
               <ThSortable
                 @currentSorting={{this.sort}}
                 @field="group.name"
-                @label="Status"
+                @label="Laatst gezien"
               />
               <th></th>
             </c.header>
@@ -214,35 +213,34 @@
                 />
               </td>
               <td data-test-route-settings-users-row-first-name>
+                <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small {{if (or (eq user.firstName "Tom")(eq user.firstName "Hannes")) "au-u-muted"}}">
                 {{user.firstName}} {{user.lastName}}
+                {{#if (or (eq user.firstName "Tom")(eq user.firstName "Hannes"))}}
+                <AuPill @icon="circle-x" @skin="error" @size="small">
+                  Geblokkeerd
+                </AuPill>
+                {{/if}}
+                </span>
               </td>
               <td>
                 {{#if user.organization.identifier}}
                 <p class="au-u-muted au-u-h-functional">
                 {{user.organization.identifier}}
                 </p>
-                <p>Kaleidos</p>
+                <p class="{{if (or (eq user.firstName "Tom")(eq user.firstName "Hannes")) "au-u-muted"}}">Kaleidos</p>
                 {{else}}
                   -
                 {{/if}}
               </td>
-              <td data-test-route-settings-users-row-group>
+              <td data-test-route-settings-users-row-group class="{{if (or (eq user.firstName "Tom")(eq user.firstName "Hannes")) "au-u-muted"}}">
                 {{#if user.group}}
                   {{user.group.name}}
                 {{else}}
                   -
                 {{/if}}
               </td>
-              <td>
-                {{#if this.itemActivated}}
-                <AuPill @icon="circle-full" @skin="success" @size="small">
-                  Actief
-                </AuPill>
-                {{ else }}
-                <AuPill @icon="circle-pause" @skin="default" @size="small">
-                  Inactief
-                </AuPill>
-                {{/if}}
+              <td class="{{if (or (eq user.firstName "Tom")(eq user.firstName "Hannes")) "au-u-muted"}}">
+                Ma 20-06-2022 – 12:10
               </td>
               <td class="auk-u-text-align--right">
                 <div class="auk-o-flex auk-o-flex--justify-end">
@@ -251,24 +249,19 @@
                     @icon="three-dots"
                     as |Menu|
                   >
-                    {{#if this.itemActivated}}
+                    {{#if (or (eq user.firstName "Tom")(eq user.firstName "Hannes"))}}
                     <Menu.Item
                     >
-                      Activeren
+                      Deblokkeren
                     </Menu.Item>
                     {{else}}
-                    <Menu.Item>
-                      Deactiveren
-                    </Menu.Item>
-                    {{/if}}
-
-                    <Menu.Divider />
                     <Menu.Item
                       @skin="danger"
                       {{on "click" this.block}}
                     >
                       Blokkeren
                     </Menu.Item>
+                    {{/if}}
                   </Auk::DropdownMenu>
                   {{!-- TODO: this action-bar component triggers seemingly unnecessary new requests for a user --}}
                   <WebComponents::LightTable::VlcUserTableActionbar
@@ -292,14 +285,14 @@
       @onClose={{this.activateAll}}
     />
     <Auk::Modal::Body>
-      <p>Gedeactiveerde gebruikers hebben tijdelijk geen toegang tot Kaleidos. Zij kunnen later opnieuw geactiveerd worden.</p>
+      <p>Door een gebruiker te deblokkeren krijgt deze opnieuw toegang tot Kaleidos. Je gaat <strong>2 gebruikers</strong> deblokkeren.</p>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.activateAll}}>
       <Auk::Button
         @skin="primary"
         {{on "click" this.activateAllToggle}}
       >
-        Activeren
+        Gebruikers deblokkeren
       </Auk::Button>
     </Auk::Modal::Footer>
   </Auk::Modal>
@@ -332,8 +325,8 @@
       @onClose={{this.blockAll}}
     />
     <Auk::Modal::Body>
-      <p>Geblokkeerde gebruikers worden definitief uit Kaleidos gehouden. Zij kunnen niet meer geactiveerd worden.</p>
-      <p class="au-u-margin-bottom-small">Typ “Blokkeren” om <strong>9 gebruikers</strong> te blokkeren.</p>
+      <p>Geblokkeerde gebruikers kunnen zich niet meer aanmelden bij Kaleidos. Indien nodig kan deze blokkering later ongedaan gemaakt worden.</p>
+      <p class="au-u-margin-bottom-small">Typ “Blokkeren” om <strong>8 gebruikers</strong> te blokkeren.</p>
       <Auk::Input />
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.blockAll}}>

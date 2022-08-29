@@ -84,7 +84,7 @@ export default class UsersSettingsController extends Controller {
   activateAllToggle() {
     this.showActivateAll = !this.showActivateAll;
     this.itemActivated = true;
-    this.toaster.success("De status van 9 gebruikers is successvol gewijzigd", "Gelukt!");
+    this.toaster.success("De status van 2 gebruikers is successvol gewijzigd", "Gelukt!");
   }
 
   @tracked showDisableAll = false;
@@ -98,7 +98,7 @@ export default class UsersSettingsController extends Controller {
   disableAllToggle() {
     this.showDisableAll = !this.showDisableAll;
     this.itemActivated = false;
-    this.toaster.success("De status van 9 gebruikers is successvol gewijzigd", "Gelukt!");
+    this.toaster.success("De status van 8 gebruikers is successvol gewijzigd", "Gelukt!");
   }
 
   @tracked showBlockAll = false;
