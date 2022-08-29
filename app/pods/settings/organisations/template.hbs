@@ -1,191 +1,149 @@
 <div class="auk-scroll-wrapper__body au-u-background-gray-100">
   <div class="auk-u-m-4">
-    <div class="auk-navbar auk-navbar--bordered-bottom au-u-padding-left-none au-u-padding-right-none  au-u-padding-top-none au-u-padding-bottom-small au-u-flex--between">
-      <div class="au-u-flex au-u-flex--spaced-tiny">
-        {{#if (eq this.checked false)}}
-        <Auk::Button
-          @icon="circle-full"
-          @skin="secondary"
-          @disabled={{true}}
-        >
-          Activeren
-        </Auk::Button>
-        <Auk::Button
-          @icon="circle-pause"
-          @skin="secondary"
-          @disabled={{true}}
-
-        >
-          Deactiveren
-        </Auk::Button>
-        <Auk::Button
-          @icon="circle-x"
-          @skin="danger-primary"
-          @disabled={{true}}
-        >
-          Blokkeren
-        </Auk::Button>
-        {{else}}
-        <Auk::Button
-          @icon="circle-full"
-          @skin="secondary"
-          @disabled={{if (eq this.itemActivated true) true}}
-          {{on "click" this.activateAll}}
-        >
-          Activeren
-        </Auk::Button>
-        <Auk::Button
-          @icon="circle-pause"
-          @skin="secondary"
-          @disabled={{if (eq this.itemActivated false) true}}
-          {{on "click" this.disableAll}}
-
-        >
-          Deactiveren
-        </Auk::Button>
-        <Auk::Button
-          @icon="circle-x"
-          @skin="danger-primary"
-          {{on "click" this.blockAll}}
-        >
-          Blokkeren
-        </Auk::Button>
-        {{/if}}
+    <div class="auk-o-grid auk-u-mb-2">
+      <div class="auk-o-grid-col-2">
+        <div class="au-u-margin-top-tiny">
+          <AuHeading @level="3" @skin="6" class="au-u-hidden-visually">Inhoud</AuHeading>
+          <AuList as |Item|>
+            <Item><AuLink @route="settings.organisations" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact" @active={{true}}>Alle gebruikers</AuLink></Item>
+            <Item><AuLink @route="settings.organisations" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Geblokkeerd</AuLink></Item>
+          </AuList>
+        </div>
       </div>
-      <div>
-        <Auk::Input
-          data-test-route-settings-users-search-input
-          @type="search"
-          @value={{this.filter}}
-        />
-        <Auk::Button
-          data-test-route-settings-users-search-button
-          @skin="primary"
-          @icon="search"
-          {{on "click" this.refresh}}
+      <div class="auk-o-grid-col-10">
+        <div class="auk-navbar auk-navbar--bordered-bottom au-u-padding-left-none au-u-padding-right-none  au-u-padding-top-none au-u-padding-bottom-small au-u-flex--between">
+          <div class="au-u-flex au-u-flex--spaced-tiny">
+            {{#if (eq this.checked false)}}
+            <Auk::Button
+              @icon="circle-full"
+              @skin="secondary"
+              @disabled={{true}}
+            >
+              Deblokkeren
+            </Auk::Button>
+            <Auk::Button
+              @icon="circle-x"
+              @skin="danger-primary"
+              @disabled={{true}}
+            >
+              Blokkeren
+            </Auk::Button>
+            {{else}}
+            <Auk::Button
+              @icon="circle-full"
+              @skin="secondary"
+              {{on "click" this.activateAll}}
+            >
+              Deblokkeren
+            </Auk::Button>
+            <Auk::Button
+              @icon="circle-x"
+              @skin="danger-primary"
+              {{on "click" this.blockAll}}
+            >
+              Blokkeren
+            </Auk::Button>
+            {{/if}}
+          </div>
+          {{!-- <div>
+            <Auk::Input
+              data-test-route-settings-users-search-input
+              @type="search"
+              @value={{this.filter}}
+            />
+            <Auk::Button
+              data-test-route-settings-users-search-button
+              @skin="primary"
+              @icon="search"
+              {{on "click" this.refresh}}
+            >
+              Zoeken
+            </Auk::Button>
+          </div> --}}
+        </div>
+        <DataTable
+          data-test-route-settings-users-table={{true}}
+          @content={{await this.model}}
+          @class="auk-table auk-table--styled auk-table--bordered auk-table--noactions"
+          @isLoading={{this.isLoadingModel}}
+          @page={{this.page}}
+          @size={{this.size}}
+          @sort={{this.sort}}
+          @noDataMessage={{t "no-results-found"}}
+          as |table|
         >
-          Zoeken
-        </Auk::Button>
+          <table.content as |c|>
+            <c.header>
+              <th class="auk-table-checkbox-col">
+                <Auk::Checkbox
+                  @checked={{false}}
+                  {{on "click" this.checkAll}}
+                />
+              </th>
+              <ThSortable
+                @currentSorting={{this.sort}}
+                @field="first-name"
+                @label="Organisatie"
+              />
+              <ThSortable
+                @currentSorting={{this.sort}}
+                @field="organization.identifier"
+                @label="OVO-code"
+              />
+              <ThSortable
+                @currentSorting={{this.sort}}
+                @field="group.name"
+                @label="Aantal gebruikers"
+              />
+            </c.header>
+            {{#if this.checked}}
+            <tr class="au-u-background-gray-200">
+              <td colspan="6">
+                <p class="au-u-text-center">Alle 9 organisaties zijn geselecteerd op deze pagina. <AuLink>Selecteer alle ... organisaties.</AuLink></p>
+              </td>
+            </tr>
+            {{/if }}
+            <c.body as |user|>
+              <td>
+                <Auk::Checkbox
+                  @checked={{this.checked}}
+                />
+              </td>
+              <td data-test-route-settings-users-row-first-name>
+                {{#if user.organization.identifier}}
+                <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small {{if (eq user.firstName "Tom") "au-u-muted"}}">
+                {{#if (eq user.firstName "Tom")}}
+                Kaleidos
+                <AuPill @icon="circle-x" @skin="error" @size="small">
+                  Geblokkeerd
+                </AuPill>
+                {{else}}
+                Naam organisatie
+                {{/if}}
+                </span>
+                {{else}}
+                  Naam organisatie
+                {{/if}}
+              </td>
+              <td class="{{if (eq user.firstName "Tom") "au-u-muted"}}">
+                {{#if user.organization.identifier}}
+                {{#if (eq user.firstName "Tom")}}
+                {{user.organization.identifier}}
+                {{else}}
+                  OVO000081
+                {{/if}}
+                {{else}}
+                  OVO000017
+                {{/if}}
+              </td>
+              <td data-test-route-settings-users-row-group>
+                <AuLink>112 gebruikers</AuLink>
+              </td>
+            </c.body>
+          </table.content>
+        </DataTable>
       </div>
     </div>
-    <DataTable
-      data-test-route-settings-users-table={{true}}
-      @content={{await this.model}}
-      @class="auk-table auk-table--styled auk-table--bordered auk-table--noactions"
-      @isLoading={{this.isLoadingModel}}
-      @page={{this.page}}
-      @size={{this.size}}
-      @sort={{this.sort}}
-      @noDataMessage={{t "no-results-found"}}
-      as |table|
-    >
-      <table.content as |c|>
-        <c.header>
-          <th class="auk-table-checkbox-col">
-            <Auk::Checkbox
-              @checked={{false}}
-              {{on "click" this.checkAll}}
-            />
-          </th>
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field="first-name"
-            @label="Organisatie"
-          />
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field="organization.identifier"
-            @label="OVO-code"
-          />
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field="group.name"
-            @label="Aantal gebruikers"
-          />
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field="group.name"
-            @label="Status"
-          />
-          <th></th>
-        </c.header>
-        {{#if this.checked}}
-        <tr class="au-u-background-gray-200">
-          <td colspan="6">
-            <p class="au-u-text-center">Alle 9 organisaties zijn geselecteerd op deze pagina. <AuLink>Selecteer alle ... organisaties.</AuLink></p>
-          </td>
-        </tr>
-        {{/if }}
-        <c.body as |user|>
-          <td>
-            <Auk::Checkbox
-              @checked={{this.checked}}
-            />
-          </td>
-          <td data-test-route-settings-users-row-first-name>
-            {{#if user.organization.identifier}}
-            Kaleidos
-            {{else}}
-              -
-            {{/if}}
-          </td>
-          <td>
-            {{#if user.organization.identifier}}
-            {{user.organization.identifier}}
-            {{else}}
-              -
-            {{/if}}
-          </td>
-          <td data-test-route-settings-users-row-group>
-            <AuLink>112 gebruikers</AuLink>
-          </td>
-          <td>
-            {{#if this.itemActivated}}
-            <AuPill @icon="circle-full" @skin="success" @size="small">
-              Actief
-            </AuPill>
-            {{ else }}
-            <AuPill @icon="circle-pause" @skin="default" @size="small">
-              Inactief
-            </AuPill>
-            {{/if}}
-          </td>
-          <td class="auk-u-text-align--right">
-            <div class="auk-o-flex auk-o-flex--justify-end">
-              <Auk::DropdownMenu
-                @skin="borderless"
-                @icon="three-dots"
-                as |Menu|
-              >
-                {{#if this.itemActivated}}
-                <Menu.Item
-                >
-                  Activeren
-                </Menu.Item>
-                {{else}}
-                <Menu.Item>
-                  Deactiveren
-                </Menu.Item>
-                {{/if}}
-
-                <Menu.Divider />
-                <Menu.Item
-                  @skin="danger"
-                  {{on "click" this.block}}
-                >
-                  Blokkeren
-                </Menu.Item>
-              </Auk::DropdownMenu>
-              {{!-- TODO: this action-bar component triggers seemingly unnecessary new requests for a user --}}
-              <WebComponents::LightTable::VlcUserTableActionbar
-                @row={{user}}
-                @goToRoute={{this.goToRoute}}
-              />
-            </div>
-          </td>
-        </c.body>
-      </table.content>
-    </DataTable>
   </div>
 </div>
 
