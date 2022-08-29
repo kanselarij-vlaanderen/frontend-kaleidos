@@ -68,7 +68,13 @@ export const groupAgendaitemsByGroupname = (agendaitems) => {
  */
 export const parseDraftsAndGroupsFromAgendaitems = async(agendaitems) => {
   // Drafts are items without an approval or remark
-  const draftAgendaitems = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isApproval);
+  const draftAgendaitems = [];
+  for (const agendaitem of agendaitems.toArray()) {
+    const type = await agendaitem.type;
+    if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA && !agendaitem.isApproval) {
+      draftAgendaitems.push(agendaitem);
+    }
+  }
 
   // Calculate the priorities on the drafts
   await setCalculatedGroupNumbers(draftAgendaitems);
@@ -120,10 +126,18 @@ export const setAgendaitemsNumber = async(agendaitems, isEditor, isDesignAgenda)
 export const reorderAgendaitemsOnAgenda = async(agenda, isEditor) => {
   await agenda.hasMany('agendaitems').reload();
   const agendaitems = await agenda.get('agendaitems');
-  const actualAgendaitems = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isDeleted)
-    .sortBy('number');
-  const actualAnnouncements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark && !agendaitem.isDeleted)
-    .sortBy('number');
+  const actualAgendaitems = [];
+  const actualAnnouncements = [];
+  for (const agendaitem of agendaitems.sortBy('number').toArray()) {
+    if (!agendaitem.isDeleted) {
+      const type = await agendaitem.type;
+      if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {
+        actualAgendaitems.push(agendaitem);
+      } else {
+        actualAnnouncements.push(agendaitem);
+      }
+    }
+  }
   await setAgendaitemsNumber(actualAgendaitems, isEditor, true);
   await setAgendaitemsNumber(actualAnnouncements, isEditor, true);
 };

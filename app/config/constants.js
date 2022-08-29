@@ -6,6 +6,7 @@ export default {
     VERGADERACTIVITEIT: 'http://themis.vlaanderen.be/id/concept-scheme/8030c0c4-aff1-4548-92d9-3299ebc43832',
     ACCESS_LEVELS: 'http://themis.vlaanderen.be/id/concept-scheme/9b354d36-250b-43d7-887c-db28fe2fc6fb',
     RELEASE_STATUSES: 'http://themis.vlaanderen.be/id/concept-scheme/49c93ef8-ca21-4ff9-b6d3-8351b410b563',
+    AGENDA_ITEM_TYPES: 'http://themis.vlaanderen.be/id/concept-scheme/55c9120c-6a3d-49c4-80c8-ed01e9b92a9b',
   },
   ACCESS_LEVELS: {
     INTERN_SECRETARIE: 'http://themis.vlaanderen.be/id/concept/toegangsniveau/66804c35-4652-4ff4-b927-16982a3b6de8',
@@ -46,13 +47,6 @@ export default {
     SUCCESS: 'http://vocab.deri.ie/cogs#Success',
     FAILED: 'http://vocab.deri.ie/cogs#Fail',
   },
-  // TODO: despite the naming, these are actually agendaitem-types (nota, mededeling)
-  // that get converted to booleans like `showAsRemark` and get assigned to subcases as a
-  // preset for future agenda-items resulting from that subcase too.
-  CASE_TYPES: {
-    NOTA: 'http://kanselarij.vo.data.gift/id/dossier-type-codes/1b6a6975-28e7-46b5-83fe-da37bb967db2',
-    REMARK: 'http://kanselarij.vo.data.gift/id/dossier-type-codes/305E9678-8106-4C14-9BD6-60AE2032D794',
-  },
   SUBCASE_TYPES: {
     BEKRACHTIGING: 'http://example.com/step/bdba2bbc-7af6-490b-98a8-433955cfe869',
   },
@@ -72,6 +66,10 @@ export default {
     CLOSED: 'http://kanselarij.vo.data.gift/id/agendastatus/f06f2b9f-b3e5-4315-8892-501b00650101',
     APPROVED: 'http://kanselarij.vo.data.gift/id/agendastatus/ff0539e6-3e63-450b-a9b7-cc6463a0d3d1',
     DESIGN: 'http://kanselarij.vo.data.gift/id/agendastatus/2735d084-63d1-499f-86f4-9b69eb33727f',
+  },
+  AGENDA_ITEM_TYPES: {
+    NOTA: 'http://themis.vlaanderen.be/id/concept/agendapunt-type/dd47a8f8-3ad2-4d5a-8318-66fc02fe80fd',
+    ANNOUNCEMENT: 'http://themis.vlaanderen.be/id/concept/agendapunt-type/8f8adcf0-58ef-4edc-9e36-0c9095fd76b0',
   },
   // PUBLICATIONS
   PUBLICATION_STATUSES: {

@@ -60,7 +60,7 @@
       />
     </div>
   </div>
-  {{#if @agendaitem.showAsRemark}}
+  {{#if (is-announcement @agendaitem.type)}}
     <div class="auk-u-mb-4">
       <div class="auk-form-group">
         <Auk::Label for="item-show-in-newsletter">

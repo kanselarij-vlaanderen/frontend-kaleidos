@@ -13,12 +13,12 @@ export default class CasesNewSubcase extends Component {
   @tracked filter = Object.freeze({
     type: 'subcase-name',
   });
-  @tracked caseTypes;
+  @tracked agendaItemTypes;
   @tracked title;
   @tracked shortTitle;
   @tracked confidential;
 
-  @tracked showAsRemark;
+  @tracked agendaItemType;
   @tracked selectedShortcut;
   @tracked subcaseName;
   @tracked type;
@@ -27,21 +27,24 @@ export default class CasesNewSubcase extends Component {
 
   constructor() {
     super(...arguments);
-    this.loadCaseTypes.perform();
+    this.loadAgendaItemTypes.perform();
     this.loadTitleData.perform();
   }
 
   @task
-  *loadCaseTypes() {
-    this.caseTypes = yield this.store.query('case-type', {
+  *loadAgendaItemTypes() {
+    this.agendaItemTypes = yield this.store.query('concept', {
       sort: '-label',
       filter: {
-        deprecated: false,
+        'concept-schemes': {
+          ':uri:': CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES,
+        }
       },
       page: {
         size: PAGE_SIZE.CODE_LISTS,
       },
     });
+    this.agendaItemType = yield this.store.findRecordByUri('concept', CONSTANTS.AGENDA_ITEM_TYPES.NOTA);
   }
 
   @task
@@ -72,7 +75,7 @@ export default class CasesNewSubcase extends Component {
 
   get areLoadingTasksRunning() {
     return (
-      this.loadCaseTypes.isRunning ||
+      this.loadAgendaItemTypes.isRunning ||
       this.loadLatestSubcase.isRunning ||
       this.loadTitleData.isRunning
     );
@@ -108,7 +111,7 @@ export default class CasesNewSubcase extends Component {
       shortTitle: trimText(this.shortTitle),
       title: trimText(this.title),
       confidential: this.confidential,
-      showAsRemark: this.showAsRemark || false,
+      agendaItemType: this.agendaItemType,
       case: this.args.case,
       created: date,
       modified: date,
@@ -153,7 +156,7 @@ export default class CasesNewSubcase extends Component {
     if (fullCopy) {
       subcase.linkedPieces = await latestSubcase.linkedPieces;
       subcase.subcaseName = latestSubcase.subcaseName;
-      subcase.showAsRemark = latestSubcase.showAsRemark;
+      subcase.agendaItemType = await latestSubcase.agendaItemType;
       subcase.confidential = latestSubcase.confidential;
     } else {
       subcase.linkedPieces = pieces;
@@ -196,10 +199,9 @@ export default class CasesNewSubcase extends Component {
   }
 
   @action
-  typeChanged(event) {
+  selectAgendaItemType(event) {
     const id = event.target.value;
-    const type = this.store.peekRecord('case-type', id);
-    this.showAsRemark = type.get('uri') === CONSTANTS.CASE_TYPES.REMARK;
+    this.agendaItemType = this.store.peekRecord('concept', id);
   }
 
   @action
