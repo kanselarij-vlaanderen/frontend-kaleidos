@@ -68,7 +68,7 @@ export default class IsAccessLevelInEffect extends Helper {
         case CONSTANTS.ACCESS_LEVELS.PUBLIEK: {
           const documentsReleasedToThemis = (
             await meeting.themisPublicationActivities
-          ).any((activity) => activity.scope.includes('documents'));
+          ).any((activity) => activity.scope.includes('documents') && activity.startDate < new Date());
           if (documentsReleasedToThemis) {
             inEffect = true;
           }
