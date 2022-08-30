@@ -56,7 +56,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   }
 
   // Set the start date
-  cy.get(agenda.editMeeting.datepicker).find(utils.vlDatepicker)
+  cy.get(agenda.editMeeting.datepicker).find(auk.datepicker)
     .click();
   cy.setDateAndTimeInFlatpickr(date);
   // At this point, the flatpickr is still open and covers the other fields
@@ -67,7 +67,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
 
   // Set the planned document release
   if (plannedRelease) {
-    cy.get(agenda.editMeeting.documentPublicationDate).find(utils.vlDatepicker)
+    cy.get(agenda.editMeeting.documentPublicationDate).find(auk.datepicker)
       .click();
     cy.setDateAndTimeInFlatpickr(plannedRelease);
     cy.get(agenda.editMeeting.meetingNumber).click({
