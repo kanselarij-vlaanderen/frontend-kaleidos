@@ -14,7 +14,8 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
         'agenda-activity',
         'agenda-activity.subcase',
         'agenda-activity.subcase.type',
-        'agenda-activity.subcase.mandatees'
+        'agenda-activity.subcase.mandatees',
+        'type',
       ].join(','),
     });
   }
