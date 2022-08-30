@@ -46,7 +46,7 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
     const governmentAreas = this.governmentAreas;
     governmentAreas.clear();
     governmentAreas.pushObjects(newGovernmentAreas);
-    await this.case.save();
+    await this.case.save(); // TODO
   }
 
   @action
