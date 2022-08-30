@@ -6,7 +6,6 @@ export default class Subcase extends ModelWithModifier {
   @attr('datetime') modified;
   @attr shortTitle;
   @attr title;
-  @attr('boolean') showAsRemark;
   @attr('boolean') confidential;
   @attr('boolean') isArchived;
   @attr subcaseName;
@@ -19,6 +18,7 @@ export default class Subcase extends ModelWithModifier {
   @belongsTo('case') case;
   @belongsTo('meeting', { inverse: null }) requestedForMeeting;
   @belongsTo('mandatee', { inverse: null }) requestedBy;
+  @belongsTo('concept') agendaItemType;
 
   // inverse: null or serialize: false is used for possible concurrency issues when saving without reloading possible stale relations.
   @hasMany('agenda-activity', { inverse: null }) agendaActivities;

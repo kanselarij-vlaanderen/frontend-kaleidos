@@ -27,11 +27,10 @@
   @agendaitem={{this.model}}
   @subcase={{this.subcase}}
   @agenda={{this.agenda}}
-  @shouldShowDetails={{or @agendaitem.showAsRemark this.subcase}}
   @newsletterInfo={{this.newsletterInfo}}
   @allowEditing={{this.currentSession.isEditor}}
 />
-{{#if this.model.showAsRemark}}
+{{#if (is-announcement @model.type)}}
   <Mandatees::MandateesPanel
     @referenceDate={{this.meeting.plannedStart}}
     @mandatees={{this.mandatees}}

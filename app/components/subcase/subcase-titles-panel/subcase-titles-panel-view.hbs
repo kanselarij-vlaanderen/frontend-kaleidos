@@ -2,7 +2,7 @@
   <div class="auk-u-mb-2">
     <div class="auk-o-flex auk-o-flex--vertical-center">
       <h2 class="auk-overline" data-test-subcase-titles-type>
-        {{#if (not @subcase.showAsRemark)}}
+        {{#if (is-nota @subcase.agendaItemType)}}
           {{t "note"}}
         {{else}}
           {{t "text"}}
@@ -35,7 +35,7 @@
     </pre>
   </div>
 
-  {{#if (not @subcase.showAsRemark)}}
+  {{#if (is-nota @subcase.agendaItemType)}}
     <div class="auk-u-mb-2">
       {{#if @subcase.subcaseName}}
         <AuPill data-test-subcase-titles-panel-subcase-name @size="small" @skin={{this.pillSkin}}>
