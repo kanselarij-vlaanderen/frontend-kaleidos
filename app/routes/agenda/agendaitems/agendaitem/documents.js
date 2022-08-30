@@ -57,8 +57,10 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     // should not be visible yet for a specific profile.
     if (this.currentSession.isOverheid) {
       const documentPublicationActivity = await this.meeting.internalDocumentPublicationActivity;
-      const documentPublicationStatus = await documentPublicationActivity.status;
-      this.documentsAreVisible = documentPublicationStatus.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
+      if (documentPublicationActivity) {
+        const documentPublicationStatus = await documentPublicationActivity.status;
+        this.documentsAreVisible = documentPublicationStatus.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
+      }
     } else {
       this.documentsAreVisible = true;
     }
