@@ -80,7 +80,7 @@ context('Propagation to other graphs', () => {
     });
 
     cy.releaseDecisions();
-    cy.wait(60000);
+    cy.wait(80000);
     // check status pills (use within because find doesn't work, probably can't chain of appuniversum wormhole)
     cy.get(agenda.publicationPills.container).within(() => {
       cy.get(appuniversum.pill).contains(`Beslissingen zijn vrijgegeven op ${todayFormatted}`);

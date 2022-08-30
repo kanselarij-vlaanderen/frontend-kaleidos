@@ -75,8 +75,10 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
     // should not be visible yet for a specific profile.
     if (this.currentSession.isOverheid) {
       const documentPublicationActivity = yield this.args.meeting.internalDocumentPublicationActivity;
-      const documentPublicationStatus = yield documentPublicationActivity.status;
-      this.documentsAreVisible = documentPublicationStatus.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
+      if (documentPublicationActivity) {
+        const documentPublicationStatus = yield documentPublicationActivity?.status;
+        this.documentsAreVisible = documentPublicationStatus.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
+      }
     } else {
       this.documentsAreVisible = true;
     }

@@ -67,9 +67,11 @@ context('Create case as Admin user', () => {
     // ensure type is the same after copy to new subcase
     // ensure confidentiality is the same after copy to new subcase
     cy.intercept('POST', '/subcases').as('createNewSubcase');
+    cy.intercept('POST', '/submission-activities').as('createSubmission');
     cy.get(cases.subcaseOverviewHeader.createSubcase).click();
     cy.get(cases.newSubcase.clonePreviousSubcase).click();
     cy.wait('@createNewSubcase');
+    cy.wait('@createSubmission');
     cy.openSubcase(0);
     cy.get(cases.subcaseTitlesView.type).contains('Mededeling');
     cy.get(route.subcaseOverview.confidentialityCheckBox).should('be.checked');

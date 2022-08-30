@@ -346,6 +346,7 @@ function approveDesignAgenda(shouldConfirm = true) {
 function approveAndCloseDesignAgenda(shouldConfirm = true) {
   cy.log('approveAndCloseDesignAgenda');
 
+  cy.intercept('POST', '/agendas/*/close').as('closeAgenda');
   cy.get(agenda.agendaActions.showOptions).click();
   cy.get(agenda.agendaActions.actions.approveAndCloseAgenda).click();
   cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
@@ -357,6 +358,8 @@ function approveAndCloseDesignAgenda(shouldConfirm = true) {
       timeout: 60000,
     }).should('not.exist');
   }
+  cy.wait('@closeAgenda');
+  cy.get(auk.loader).should('not.exist'); // loader when refreshing data
   cy.log('/approveAndCloseDesignAgenda');
 }
 
