@@ -49,8 +49,8 @@ export default class CasesCaseSubcasesOverview extends Controller {
   }
 
   @action
-  openEditCaseModal(caze) {
-    this.caseToEdit = caze;
+  openEditCaseModal(_case) {
+    this.caseToEdit = _case;
     this.showEditCaseModal = true;
   }
 
@@ -84,19 +84,19 @@ export default class CasesCaseSubcasesOverview extends Controller {
   }
 
   @action
-  async unarchiveCase(caze) {
-    caze.isArchived = false;
-    const subcases = await caze.subcases;
+  async unarchiveCase(_case) {
+    _case.isArchived = false;
+    const subcases = await _case.subcases;
     await Promise.all(subcases.map(async(subcase) => {
       subcase.isArchived = false;
       return await subcase.save();
     }));
-    await caze.save();
+    await _case.save();
   }
 
   @action
-  requestArchiveCase(caze) {
-    this.selectedCase = caze;
+  requestArchiveCase(_case) {
+    this.selectedCase = _case;
     this.isArchivingCase = true;
   }
 
@@ -107,11 +107,11 @@ export default class CasesCaseSubcasesOverview extends Controller {
   }
 
   @action
-  close(caze) {
-    if (!caze) {
+  close(_case) {
+    if (!_case) {
       return;
     }
-    this.router.transitionTo('cases.case.subcases', caze.id);
+    this.router.transitionTo('cases.case.subcases', _case.id);
   }
 
   @action
