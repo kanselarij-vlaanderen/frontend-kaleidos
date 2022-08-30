@@ -1,4 +1,4 @@
-import Model, { attr, hasMany } from '@ember-data/model';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
 // Case should be a reserved word, so added "Model"
 export default class CaseModel extends Model {
@@ -8,12 +8,10 @@ export default class CaseModel extends Model {
   @attr('string') number;
   @attr('boolean') isArchived;
 
+  @belongsTo('decisionmaking-flow') decisionmakingFlow;
   @hasMany('publication-flow') publicationFlows;
   @hasMany('concept') governmentAreas;
-  // This relation is saved on subcase and should be read-only here
-  @hasMany('subcase', {
-    serialize: false,
-  }) subcases;
+
   @hasMany('piece') pieces;
   @hasMany('sign-flow') signFlows;
 }
