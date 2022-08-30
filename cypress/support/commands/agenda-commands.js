@@ -357,6 +357,7 @@ function approveAndCloseDesignAgenda(shouldConfirm = true) {
       timeout: 60000,
     }).should('not.exist');
   }
+  cy.get(auk.loader).should('not.exist'); // loader when refreshing data
   cy.log('/approveAndCloseDesignAgenda');
 }
 

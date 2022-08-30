@@ -15,7 +15,6 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
   @tracked mandatees;
   @tracked submitter;
   @tracked meeting;
-  @tracked governmentAreas;
   @tracked siblingSubcasesCount;
 
   get showMandateesNotApplicableMessage() {
@@ -43,10 +42,10 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
 
   @action
   async saveGovernmentAreas(newGovernmentAreas) {
-    const governmentAreas = this.governmentAreas;
+    const governmentAreas = this.model.subcase.governmentAreas;
     governmentAreas.clear();
     governmentAreas.pushObjects(newGovernmentAreas);
-    await this.case.save();
+    await this.model.subcase.save();
   }
 
   @action

@@ -47,7 +47,7 @@ export default class CasesCaseSubcasesSubcaseOverviewRoute extends Route {
     this.mandatees = (await model.subcase.mandatees).sortBy('priority');
     this.submitter = await model.subcase.requestedBy;
     this.meeting = await model.subcase.requestedForMeeting;
-    this.governmentAreas = await this.case.governmentAreas;
+    await model.subcase.governmentAreas;
   }
 
   async setupController(controller) {
