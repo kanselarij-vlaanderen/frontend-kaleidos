@@ -31,7 +31,7 @@ export default class AgendaitemSearchRoute extends Route {
     },
   };
 
-  textSearchFields = Object.freeze(['title', 'shortTitle', 'data.content', 'titlePress', 'textPress']);
+  textSearchFields = ['title^3', 'shortTitle^3', 'data.content', 'titlePress', 'textPress'];
 
   constructor() {
     super(...arguments);
@@ -101,7 +101,7 @@ export default class AgendaitemSearchRoute extends Route {
     if (isEmpty(params.searchText)) {
       return [];
     }
-    return search('agendaitems', params.page, params.size, params.sort, filter, (agendaitem) => {
+    return search('agendaitems', params.page, params.size, null, filter, (agendaitem) => {
       const entry = agendaitem.attributes;
       entry.id = agendaitem.id;
       return entry;
