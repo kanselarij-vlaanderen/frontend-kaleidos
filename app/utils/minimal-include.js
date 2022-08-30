@@ -21,14 +21,14 @@ export default function minimalInclude(paths) {
     .reduce((acc, path, i, arr) => {
       let isPrefix = false;
       arr.slice(i + 1).forEach((otherPath, j) => {
-        if (path.includes(`${otherPath}.`)) {
+        if (path.startsWith(`${otherPath}.`)) {
           arr.splice(i + j + 1, 1);
           // We deleted an element further down the array, decrease the index so
           // it still points to the right element
           i--;
         }
         if (!isPrefix) {
-          isPrefix = otherPath.includes(`${path}.`)
+          isPrefix = otherPath.startsWith(`${path}.`)
         }
       });
       if (isPrefix) return acc;
