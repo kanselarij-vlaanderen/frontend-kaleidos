@@ -136,9 +136,9 @@ function addDomainsAndFields(domains) {
       });
     }
   });
-  cy.intercept('PATCH', '/cases/*').as('saveCase');
+  cy.intercept('PATCH', '/subcases/*').as('saveSubcase');
   cy.get(utils.editGovernmentFieldsModal.save).click();
-  cy.wait('@saveCase');
+  cy.wait('@saveSubcase');
 
   cy.log('/addDomainsAndFields');
 }
