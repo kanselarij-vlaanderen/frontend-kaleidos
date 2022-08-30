@@ -47,7 +47,7 @@
         {{! Users explicitly want the whole row to be clickable instead of only the arrow at the end }}
         {{! template-lint-disable no-invalid-interactive }}
         <c.body class="auk-table--clickable-rows" as |row|>
-          <td {{on "click" (fn this.navigateToCase row)}}>
+          <td {{on "click" (fn this.navigateToDecisionmakingFlow row)}}>
             <p>
               {{#if row.shortTitle}}
                 {{row.shortTitle}}
@@ -56,7 +56,7 @@
               {{/if}}
             </p>
           </td>
-          <td {{on "click" (fn this.navigateToCase row)}}>
+          <td {{on "click" (fn this.navigateToDecisionmakingFlow row)}}>
             {{moment-format row.created "DD-MM-YYYY HH:mm"}}
           </td>
           <td class="auk-u-text-align--right">

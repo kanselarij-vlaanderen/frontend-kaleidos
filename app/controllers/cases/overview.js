@@ -107,15 +107,15 @@ export default class CasesCaseSubcasesOverview extends Controller {
   }
 
   @action
-  close(_case) {
-    if (!_case) {
+  close(dmf) {
+    if (!dmf) {
       return;
     }
-    this.router.transitionTo('cases.case.subcases', _case.id);
+    this.navigateToDecisionmakingFlow(dmf);
   }
 
   @action
-  navigateToCase(_case) {
-    this.router.transitionTo('cases.case.subcases', _case.id);
+  navigateToDecisionmakingFlow(dmf) {
+    this.router.transitionTo('cases.case.subcases', dmf.id);
   }
 }
