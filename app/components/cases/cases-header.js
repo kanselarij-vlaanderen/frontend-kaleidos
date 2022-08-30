@@ -13,8 +13,8 @@ export default class CasesHeader extends Component {
   }
 
   @action
-  closeAction(caze) {
+  closeAction() {
     this.isAddingCase = !this.isAddingCase;
-    this.args.close(caze);
+    this.args.close(...arguments);
   }
 }

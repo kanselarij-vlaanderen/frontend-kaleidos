@@ -10,7 +10,7 @@
   {{/if}}
 
   <div
-    class="auk-form-group {{this.getClassForShortTitle}}"
+    class="auk-form-group {{if this.hasError "auk-form-group--error"}}"
     data-test-new-case-shorttitle
   >
     <Auk::Label id="case-short-title">{{t "short-title-case"}}</Auk::Label>
@@ -25,7 +25,7 @@
   <Auk::Toolbar @size="large">
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
-        <Auk::ButtonLink {{on "click" this.closeAction}} data-test-new-case-cancel>
+        <Auk::ButtonLink {{on "click" @onCancel}} data-test-new-case-cancel>
           {{t "cancel"}}
         </Auk::ButtonLink>
       </Auk::Toolbar::Item>
@@ -36,7 +36,7 @@
           @skin="primary"
           @loading={{this.isLoading}}
           data-test-new-case-save={{true}}
-          {{on "click" this.createCaseAction}}
+          {{on "click" this.validateAndCreateCase}}
         >
           {{t "create-case"}}
         </Auk::Button>

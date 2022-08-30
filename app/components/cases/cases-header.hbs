@@ -28,7 +28,10 @@
       @isOverlay={{true}}
       @closeModal={{this.toggleAddingCase}}
       @title={{t "new-case"}} >
-      <Cases::NewCase @close={{this.closeAction}} />
+      <Cases::NewCase
+        @didSave={{this.closeAction}}
+        @onCancel={{this.closeAction}}
+      />
     </WebComponents::VlModal>
   {{/if}}
 </Auk::Navbar>
