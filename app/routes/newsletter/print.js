@@ -8,6 +8,7 @@ import {
   sortByNumber
 } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PrintNewsletterRoute extends Route {
   queryParams = {
@@ -28,7 +29,9 @@ export default class PrintNewsletterRoute extends Route {
         agenda: {
           ':id:': agenda.id,
         },
-        'show-as-remark': params.showDraft ? false : undefined,
+        'type': {
+          ':uri:': params.showDraft ? CONSTANTS.AGENDA_ITEM_TYPES.NOTA : undefined,
+        },
       },
       include: 'treatment.newsletter-info',
       sort: 'number',
@@ -39,8 +42,16 @@ export default class PrintNewsletterRoute extends Route {
     // Pre-Kaleidos items have undefined isApproval so can't be filtered in the query above
     agendaitems = agendaitems.filter((item) => item.isApproval !== true);
 
-    let notas = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark);
-    let announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
+    let notas = []
+    let announcements = [];
+    for (const agendaitem of agendaitems.sortBy('number').toArray()) {
+      const type = await agendaitem.type;
+      if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {
+        notas.push(agendaitem);
+      } else {
+        announcements.push(agendaitem);
+      }
+    }
 
     if (params.showDraft) {
       notas = notas.sortBy('number');

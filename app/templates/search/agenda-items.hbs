@@ -72,7 +72,7 @@
                 </p>
               </td>
               <td>
-                {{#if (eq row.showAsAnnouncement "true")}}
+                {{#if (is-announcement row.type)}}
                   {{capitalize (t "announcement")}}
                 {{else}}
                   {{t "note"}}
@@ -102,9 +102,15 @@
         </DataTable>
       {{else}}
         {{#if this.emptySearch}}
-          <WebComponents::VlAlert @message={{t "fill-in-search-term"}}/>
+          <Auk::EmptyState
+            @bordered={{true}}
+            @message={{t "fill-in-search-term"}}
+          />
         {{else}}
-          <WebComponents::VlAlert @message={{t "no-results-found-modify-term"}}/>
+          <Auk::EmptyState
+            @bordered={{true}}
+            @message={{t "no-results-found-modify-term"}}
+          />
         {{/if}}
       {{/if}}
     </div>

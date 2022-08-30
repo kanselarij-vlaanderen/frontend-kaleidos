@@ -5,6 +5,7 @@ import { action } from '@ember/object';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import search from 'frontend-kaleidos/utils/mu-search';
 import { animationFrame } from 'ember-concurrency';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class AgendaAgendaitemsRoute extends Route {
   queryParams = {
@@ -33,7 +34,8 @@ export default class AgendaAgendaitemsRoute extends Route {
     let agendaitems = await this.store.query('agendaitem', {
       'filter[agenda][:id:]': agenda.id,
       'page[size]': PAGE_SIZE.AGENDAITEMS,
-      sort: 'show-as-remark,number',
+      sort: 'type,number',
+      include: 'type',
     });
 
     // Ensure mandatee data for each agendaitem is loaded
@@ -69,7 +71,7 @@ export default class AgendaAgendaitemsRoute extends Route {
 
     if (params.filter) {
       const filter = {
-        ':phrase_prefix:title,shortTitle': `${params.filter}`,
+        ':phrase_prefix:title,shortTitle,pieceNames': `${params.filter}`,
         meetingId: meeting.id,
         agendaId: agenda.id,
       };
@@ -77,8 +79,16 @@ export default class AgendaAgendaitemsRoute extends Route {
       agendaitems = agendaitems.filter((ai) => matchingIds.includes(ai.id));
     }
 
-    const notas = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark);
-    const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
+    const notas = [];
+    const announcements = [];
+    for (const agendaitem of agendaitems.toArray()) {
+      const type = await agendaitem.type;
+      if (type?.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
+        announcements.push(agendaitem);
+      } else {
+        notas.push(agendaitem);
+      }
+    }
     const filteredNewItems = newItems.filter((agendaitem) => agendaitems.includes(agendaitem));
 
     this.previousAgenda = previousAgenda; // for use in setupController

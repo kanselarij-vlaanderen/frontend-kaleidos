@@ -1,31 +1,53 @@
 <div class="vlc-document-card auk-u-mb-2" data-test-linked-document-link-card>
   <div class="vlc-document-card__summary">
-    <div class="auk-u-mr-3">
-      <Auk::Badge @icon="document" @size="large"/>
-    </div>
     <div class="vlc-document-card__content">
-      <Auk::Toolbar @auto={{true}}>
-        <Auk::Toolbar::Group @position="left">
-          <Auk::Toolbar::Item>
-            <p class="auk-overline" data-test-linked-document-link-type-label>
-              {{@documentContainer.type.label}}
-            </p>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-        <div class="vlc-document-card-toolbar__right">
-          <Auk::Toolbar::Item>
-            {{#if this.lastPiece}}
-              <AccessLevelPill
-                @accessLevel={{this.accessLevel}}
-                @isDraft={{not (await (is-access-level-in-effect this.accessLevel this.lastPiece))}}
-                @onChangeAccessLevel={{this.changeAccessLevel}}
-                @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
-                @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
-              />
-            {{/if}}
-          </Auk::Toolbar::Item>
-          <Auk::Toolbar::Item>
-            {{#if this.currentSession.isEditor}}
+      <Auk::Toolbar @auto={{true}} as |Toolbar|>
+        <Toolbar.Group @position="left" as |Group|>
+          <Group.Item>
+            <Auk::Badge @icon="document" @size="large" />
+          </Group.Item>
+          <Group.Item class="auk-u-maximize-width">
+            <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
+              <span data-test-linked-document-link-type-label class="auk-overline">
+                {{@documentContainer.type.label}}
+              </span>
+            </div>
+            <LinkTo
+              data-test-linked-document-link-name
+              @route="document"
+              @model={{this.lastPiece.id}}
+              target="_blank"
+              class="auk-h4"
+            >
+              {{this.lastPiece.name}}{{#if this.lastPiece.file}}.{{this.lastPiece.file.extension}}{{/if}}
+            </LinkTo>
+            <div class="vlc-document-card-content__meta">
+              {{! no lastPiece.created in legacy data }}
+              {{#if this.lastPiece.created}}
+                {{t "uploaded-at"}}
+                {{moment-format this.lastPiece.created}}
+                {{t "at"}}
+                {{moment-format this.lastPiece.created "HH:mm"}}
+              {{/if}}
+            </div>
+          </Group.Item>
+        </Toolbar.Group>
+        <Toolbar.Group @position="right" as |Group|>
+          <Group.Item class="auk-o-flex">
+            <div class="auk-o-flex auk-o-flex--vertical-center">
+              {{#if this.lastPiece}}
+                <AccessLevelPill
+                  @accessLevel={{this.accessLevel}}
+                  @isDraft={{not (await (is-access-level-in-effect this.accessLevel this.lastPiece))}}
+                  @onChangeAccessLevel={{this.changeAccessLevel}}
+                  @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
+                  @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
+                />
+              {{/if}}
+            </div>
+          </Group.Item>
+          <Group.Item>
+            {{#if (user-may "manage-documents")}}
               <Auk::Button
                 @skin="danger-borderless"
                 @layout="icon-only"
@@ -33,38 +55,64 @@
                 {{on "click" this.deletePieceLink}}
               />
             {{/if}}
-          </Auk::Toolbar::Item>
-        </div>
+          </Group.Item>
+        </Toolbar.Group>
       </Auk::Toolbar>
-      <h6 data-test-linked-document-link-name class="auk-h4">
-        {{this.lastPiece.name}}
-      </h6>
-      <div class="vlc-document-card-content__meta">
-        {{#if this.lastPiece.created}}
-          {{t "uploaded-at"}}
-          {{moment-format this.lastPiece.created}}
-          {{t "at"}}
-          {{moment-format this.lastPiece.created "HH:mm"}}
-        {{/if}}
-      </div>
     </div>
   </div>
-  {{#if this.reverseSortedPieces.length}}
-    <div class="vlc-document-card-versions">
-      <Auk::Accordion>
-        <Auk::Accordion::Item
-          @title={{t "show-pieces"}}
-          data-test-linked-document-link-version-history
-        >
-          {{#each this.reverseSortedPieces as |piece|}}
-            <WebComponents::VlDocument
-              @piece={{piece}}
-              @didUpdateAccessLevel={{perform this.loadData}}
-            />
-          {{/each}}
-        </Auk::Accordion::Item>
-      </Auk::Accordion>
-    </div>
+  {{#if (user-may "view-document-version-info")}}
+    {{#if this.reverseSortedPieceHistory.length}}
+      <div class="vlc-document-card-versions">
+        <Auk::Accordion>
+          <Auk::Accordion::Item
+            @title={{t "previous-versions"}}
+            data-test-linked-document-link-version-history
+          >
+            {{#each this.reverseSortedPieceHistory as |piece|}}
+              <div
+                class="vlc-document-holder"
+                {{did-update (perform this.loadData) piece}}
+              >
+                <div class="vlc-document-card-item" data-test-vl-document-piece>
+                  <div class="vlc-document-card-item__title">
+                    {{#if piece.file}}
+                      <LinkTo @route="document" @model={{piece.id}}
+                        class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
+                        data-test-vl-document-name>
+                        {{piece.name}}{{#if piece.file}}.{{piece.file.extension}}{{/if}}
+                      </LinkTo>
+                    {{else}}
+                      <h6
+                        class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
+                        data-test-vl-document-name
+                      >
+                        <EmberTooltip @side="bottom" @tooltipClass="auk-tooltip">
+                          {{t "document-not-consultable"}}
+                        </EmberTooltip>
+                        {{piece.name}}{{#if piece.file}}.{{piece.file.extension}}{{/if}}
+                      </h6>
+                    {{/if}}
+                    <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"></div>
+                  </div>
+                  <div class="vlc-document-card-item__meta au-u-muted">
+                    {{!-- no piece.created in legacy data --}}
+                    {{#if piece.created}}
+                      {{t "uploaded-at"}}
+                      {{moment-format piece.created}}
+                      {{t "at"}}
+                      {{moment-format piece.created "HH:mm"}}
+                    {{/if}}
+                  </div>
+                  <div class="vlc-document-card-item__icon">
+                    <Auk::Icon @name="clock-rewind" @size="small" />
+                  </div>
+                </div>
+              </div>
+            {{/each}}
+          </Auk::Accordion::Item>
+        </Auk::Accordion>
+      </div>
+    {{/if}}
   {{/if}}
 </div>
 

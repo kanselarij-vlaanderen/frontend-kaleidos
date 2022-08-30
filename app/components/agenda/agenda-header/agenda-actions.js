@@ -5,7 +5,6 @@ import { task } from 'ember-concurrency';
 import { debug } from '@ember/debug';
 import { inject as service } from '@ember/service';
 import { all } from 'rsvp';
-import { setAgendaitemFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import {
   constructArchiveName,
   fetchArchivingJobForAgenda,
@@ -52,7 +51,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   }
 
   get canEditDesignAgenda() {
-    return this.currentSession.isEditor && this.args.currentAgenda.status.get('isDesignAgenda');
+    return this.currentSession.may('manage-agendaitems') && this.args.currentAgenda.status.get('isDesignAgenda');
   }
 
   get canPublishDecisions() {
@@ -113,9 +112,9 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   *loadPublicationActivities() {
     // Ensure we get fresh data to avoid concurrency conflicts
     this.decisionPublicationActivity = yield this.args.meeting.belongsTo('internalDecisionPublicationActivity').reload();
-    yield this.decisionPublicationActivity.status; // used in get-functions above
+    yield this.decisionPublicationActivity?.status; // used in get-functions above
     this.documentPublicationActivity = yield this.args.meeting.belongsTo('internalDocumentPublicationActivity').reload();
-    yield this.documentPublicationActivity.status; // used in get-functions above
+    yield this.documentPublicationActivity?.status; // used in get-functions above
     // Documents can be published multiple times to Themis.
     // We're only interested in the first (earliest) publication.
     this.themisPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
@@ -222,6 +221,20 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     this.showConfirmUnpublishThemis = false;
   }
 
+  /**
+   * @name setAgendaitemFormallyOkThrottled
+   * @description set formally ok on agendaitems, throttled task.
+   * @param agendaitem
+   * @returns promise
+   */
+  @task({ maxConcurrency: 3, enqueue: true })
+  *setAgendaitemFormallyOkThrottled(agendaitem) {
+    if (agendaitem.formallyOk !== CONSTANTS.ACCEPTANCE_STATUSSES.OK) {
+      agendaitem.formallyOk = CONSTANTS.ACCEPTANCE_STATUSSES.OK;
+      return yield agendaitem.save();
+    }
+  }
+
   @action
   async downloadAllDocuments() {
     // timeout options is in milliseconds. when the download is ready, the toast should last very long so users have a time to click it
@@ -291,13 +304,8 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     this.showConfirmApprovingAllAgendaitems = false;
     this.args.onStartLoading(this.intl.t('approve-all-agendaitems-message'));
     const agendaitemsNotOk = await this.allAgendaitemsNotOk(this.args.currentAgenda);
-    for (const agendaitem of agendaitemsNotOk) {
-      try {
-        await setAgendaitemFormallyOk(agendaitem);
-      } catch {
-        await agendaitem.rollbackAttributes();
-      }
-    }
+    const savePromises = agendaitemsNotOk.map((agendaitem) => this.setAgendaitemFormallyOkThrottled.perform(agendaitem));
+    await all(savePromises);
     this.args.onStopLoading();
     this.args.didApproveAgendaitems();
   }

@@ -636,7 +636,6 @@
   "style-guide-alerts": "Alerts",
   "style-guide-documents": "Documents",
   "style-guide-buttons": "Buttons",
-  "style-guide-pills": "Pills",
   "style-guide-panels": "Panels",
   "style-guide-title": "Style guide",
   "style-guide-icons": "Icons",
@@ -901,6 +900,7 @@
   "publications-tabs-proofread": "Nalezen",
   "publications-tabs-late": "Te laat in BS",
   "publications-tabs-reports": "Rapporten",
+  "publications-tabs-search": "Dossier zoeken",
   "publication-reports-title": "Jaarlijkse rapporten",
   "publication-reports-last-request": "Laatst aangevraagd op {date} om {time} door {user}",
   "publication-reports-running": "Rapportgeneratie bezig...",
@@ -1052,9 +1052,16 @@
   "open-search-for-mandatee-tooltip": "Opgelet. Activeer deze optie enkel indien strikt noodzakelijk. In tegenstelling tot bij standaard zoeken, kunnen de aangeboden resultaten bij vrij zoeken ook ministers bevatten die niet actief zijn/waren gedurende de referentieperiode waarvoor u zoekt. Deze functionaliteit kan bv. gebruikt worden om net-niet-meer actieve ministers (rond een ministerwissel) toe te wijzen. ",
   "fullscreen": "Volledig scherm",
   "close-fullscreen": "Sluit volledig scherm",
+  "previous-versions": "Vorige versies",
   "decisions-were-released-at": "Beslissingen zijn vrijgegeven op {date} om {time}",
   "documents-were-released-at": "Documenten zijn vrijgegeven op {date} om {time}",
   "documents-are-planned-to-release-at": "Vrijgave van documenten gepland op {date} om {time}",
   "documents-were-published-at": "Documenten zijn gepubliceerd op {date} om {time}",
-  "documents-are-planned-to-release-at": "Publicatie documenten gepland op {date} om {time}"
+  "documents-are-planned-to-release-at": "Publicatie documenten gepland op {date} om {time}",
+  "modify-document": "Document wijzigen",
+  "document-properties": "Documenteigenschappen",
+  "replace": "Vervangen",
+  "source-file": "Bronbestand",
+  "newsletters-tabs-search": "Bericht zoeken",
+  "newsletters-tabs-overview": "Alle berichten"
 }

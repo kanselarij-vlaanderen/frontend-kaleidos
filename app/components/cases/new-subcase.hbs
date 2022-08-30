@@ -14,12 +14,12 @@
               data-test-new-subcase-type
               as |List|
             >
-              {{#each this.caseTypes as |type index|}}
+              {{#each this.agendaItemTypes as |type|}}
                 <List.Radio
                   @label={{type.label}}
-                  @checked={{eq index 0}}
+                  @checked={{eq this.agendaItemType.id type.id}}
                   value={{type.id}}
-                  {{on "change" this.typeChanged}}
+                  {{on "change" this.selectAgendaItemType}}
                 />
               {{/each}}
             </Auk::RadioList>

@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 // TODO: octane-refactor
 /* eslint-disable ember/no-get */
@@ -23,7 +24,9 @@ export default Route.extend({
       },
     };
     if (this.shouldFilterRemarks) {
-      filter['show-as-remark'] = false;
+      filter['type'] = {
+        ':uri:': CONSTANTS.AGENDA_ITEM_TYPES.NOTA,
+      }
     }
     this.set('filter', filter);
     return this.store
@@ -48,11 +51,10 @@ export default Route.extend({
 
   redirect() {
     if (!this.currentSession.isEditor) {
-      this.transitionTo(`print-overviews.${this.routeNamePrefix}.overview`, {
-        queryParams: {
-          definite: true,
-        },
-      });
+      // there currently is no view for decisions that non-editors are allowed to see.
+      // there is also no way to reach this route from the UI for those users
+      // entering the address still works so we fallback to agendas
+      this.transitionTo('agendas');
     }
   },
 

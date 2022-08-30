@@ -29,6 +29,10 @@ export default class File extends Model {
     return `/files/${this.id}/download`;
   }
 
+  get inlineViewLink() {
+    return `/files/${this.id}/download?content-disposition=inline`;
+  }
+
   get namedDownloadLink() {
     return `${this.downloadLink}?name=${encodeURIComponent(
       this.downloadFilename

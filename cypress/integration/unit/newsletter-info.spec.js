@@ -143,6 +143,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.intercept('POST', '/newsletter-infos').as('postNewsItem');
     cy.get(newsletter.editItem.save).click();
     cy.wait('@postNewsItem');
+    cy.wait(1000);// flakyness, zebra view does not have this newsitem yet sometimes
     // check KB views for in-newsletter toggle
     cy.get(agenda.agendaHeader.showOptions).click();
     cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
@@ -522,6 +523,8 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // check that there is one mededeling without proposal or themes
     cy.visit(newsletterLink);
     cy.clickReverseTab('Definitief');
+    // actual time is 14:00, but server time is being used as "local time" in the test it seems
+    cy.get(newsletter.newsletterPrintHeader.publicationPlannedDate).contains('11 april 2022 - 12:00');
     cy.get(newsletter.itemContent.container).should('have.length', 1);
     cy.get(newsletter.itemContent.title).contains(subcaseTitleMededeling);
     cy.get(newsletter.itemContent.printItemProposal).should('not.exist');

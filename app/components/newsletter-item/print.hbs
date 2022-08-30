@@ -51,7 +51,7 @@
       {{/if}}
     </div>
 
-    {{#unless @agendaitem.showAsRemark}}
+    {{#if (is-nota @agendaitem.type)}}
       {{#if @newsletterItem.richtext}}
         <p data-test-newsletter-item-content-richtext class="auk-u-mb-2">
           <SanitizeHtml @raw={{true}} @value={{@newsletterItem.richtext}} />
@@ -61,7 +61,7 @@
           {{t "no-newsletter-info"}}
         </p>
       {{/if}}
-    {{/unless}}
+    {{/if}}
 
     {{#if (and @isDraftView @newsletterItem.remark)}}
       <p data-test-newsletter-item-content-remark class="auk-u-text-muted auk-u-text-capitalize">

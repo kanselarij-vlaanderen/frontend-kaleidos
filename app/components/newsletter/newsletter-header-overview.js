@@ -33,10 +33,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     this.loadLatestPublicationActivity.perform();
   }
 
-  get mayManageThemis() {
-    return this.currentSession.may('manage-themis-publications');
-  }
-
   // Scope of the Themis publication from the newsletter-side depends on the most recent publication.
   // - if it's the first publication, only newsitems are published
   // - if latest publication includes documents, republication should also include documents

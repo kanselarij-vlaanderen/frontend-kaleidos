@@ -89,13 +89,13 @@ const selectors = {
     checkbox: '.auk-checkbox__toggle',
   },
   loader: '.auk-loader',
-  pill: '.auk-pill',
   // TODO-selector unused selectors
   input: '.auk-input',
   textarea: '.auk-textarea',
 
   datepicker: '[data-test-auk-datepickr]',
   icon: '.auk-icon',
+  warningIcon: '.ki ki-alert-triangle auk-icon--warning',
 
   confidentialityPill: {
     locked: '[data-test-confidentiality-pill-icon-locked]',

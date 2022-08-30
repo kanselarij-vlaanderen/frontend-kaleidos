@@ -5,6 +5,6 @@ export default class LoginRoute extends Route {
   @service('session') simpleAuthSession;
 
   beforeModel() {
-    this.simpleAuthSession.prohibitAuthentication('agendas');
+    this.simpleAuthSession.prohibitAuthentication('index');
   }
 }

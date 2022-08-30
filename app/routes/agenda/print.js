@@ -4,6 +4,7 @@ import {
   task, all
 } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 // TODO: octane-refactor
 // eslint-disable-next-line ember/no-classic-classes
@@ -22,9 +23,17 @@ export default Route.extend({
       },
       include: 'mandatees',
     });
-    const notas = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark).sortBy('number');
+    const notas = []
+    const announcements = [];
+    for (const agendaitem of agendaitems.sortBy('number').toArray()) {
+      const type = await agendaitem.type;
+      if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {
+        notas.push(agendaitem);
+      } else {
+        announcements.push(agendaitem);
+      }
+    }
     await this.ensureDocuments.perform(notas);
-    const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark).sortBy('number');
     await this.ensureDocuments.perform(announcements);
 
     return hash({

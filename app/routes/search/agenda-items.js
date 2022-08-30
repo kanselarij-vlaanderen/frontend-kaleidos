@@ -5,6 +5,7 @@ import moment from 'moment';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import { inject as service } from '@ember/service';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class AgendaitemSearchRoute extends Route {
   @service metrics;
@@ -85,9 +86,9 @@ export default class AgendaitemSearchRoute extends Route {
 
     if (params.types.length) {
       if (params.types.includes('nota') && !params.types.includes('mededeling')) {
-        filter.showAsAnnouncement = false;
+        filter.type = CONSTANTS.AGENDA_ITEM_TYPES.NOTA;
       } else if (params.types.includes('mededeling') && !params.types.includes('nota')) {
-        filter.showAsAnnouncement = true;
+        filter.type = CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
       }
     }
 

@@ -45,3 +45,8 @@ services:
     user: ${HOST_UID_GID}
     environment:
       DELTA_INTERVAL_MS: 10000
+  # The RELEASE_CRON_PATTERN is the value that the service cron job runs for and defaults to once per minute.
+  # This is too slow for testing so making the cron shorter here
+  document-release:
+    environment:
+      RELEASE_CRON_PATTERN: "0/30 * * * * *"

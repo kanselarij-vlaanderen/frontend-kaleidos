@@ -1,6 +1,6 @@
 {
   "name": "frontend-kaleidos",
-  "version": "5.34.1",
+  "version": "5.35.0",
   "private": true,
   "description": "Frontend of the Kaleidos application",
   "repository": {
@@ -51,7 +51,7 @@
     "@ember/test-helpers": "^2.6.0",
     "@glimmer/component": "^1.0.4",
     "@glimmer/tracking": "^1.0.4",
-    "@kanselarij-vlaanderen/au-kaleidos-css": "2.5.16",
+    "@kanselarij-vlaanderen/au-kaleidos-css": "2.6.0",
     "@kanselarij-vlaanderen/au-kaleidos-icons": "3.0.1",
     "@lblod/ember-acmidm-login": "~1.3.0",
     "@lblod/ember-mock-login": "^0.5.0-beta",
@@ -113,7 +113,6 @@
     "ember-mu-transform-helpers": "^2.1.2",
     "ember-named-blocks-polyfill": "^0.2.4",
     "ember-page-title": "^6.2.2",
-    "ember-pdfjs-wrapper": "git+https://github.com/MikiDi/ember-pdfjs-wrapper.git#8300c671d3293dad0c5ccf87defdec6d08f839b3",
     "ember-power-select": "^5.0.4",
     "ember-prism": "^0.7.0",
     "ember-promise-helpers": "^1.0.9",

@@ -141,6 +141,14 @@ table tr.lt-expanded-row {
   padding: 0;
 }
 
-.auk-pill-list {
-  gap: 1rem;
+
+// Addition coming from prototype which needs to be ported to auk css library
+
+.auk-document-card--clickable {
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    background-color: var(--au-gray-100);
+  }
 }

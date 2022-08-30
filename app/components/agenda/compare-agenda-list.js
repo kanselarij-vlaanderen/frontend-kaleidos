@@ -4,6 +4,7 @@ import EmberObject, { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import bind from 'frontend-kaleidos/utils/bind';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CompareAgendaList extends Component {
   /**
@@ -111,7 +112,9 @@ export default class CompareAgendaList extends Component {
         agenda: {
           id,
         },
-        'show-as-remark': false,
+        'type': {
+          ':uri:': CONSTANTS.AGENDA_ITEM_TYPES.NOTA,
+        },
       },
       sort: 'number',
       include: 'agenda,agenda-activity,agenda-activity.subcase,mandatees',
@@ -124,7 +127,9 @@ export default class CompareAgendaList extends Component {
         agenda: {
           id,
         },
-        'show-as-remark': true,
+        'type': {
+          ':uri:': CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT,
+        },
       },
       sort: 'number',
       include: 'agenda,agenda-activity,agenda-activity.subcase,mandatees',

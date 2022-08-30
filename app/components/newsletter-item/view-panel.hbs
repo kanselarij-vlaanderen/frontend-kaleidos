@@ -35,17 +35,15 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
   <Auk::Panel::Body>
-    <div class="auk-content">
+    <AuContent>
       <p class="au-u-italic">
         {{this.proposalText}}
       </p>
-      <p>
-        <SanitizeHtml
-          @raw={{true}}
-          @value={{@newsletterItem.richtext}}
-        />
-      </p>
-    </div>
+      <SanitizeHtml
+        @raw={{true}}
+        @value={{@newsletterItem.richtext}}
+      />
+    </AuContent>
   </Auk::Panel::Body>
   {{#if @newsletterItem.remark}}
     <Auk::Panel::Body>
@@ -59,13 +57,13 @@
       {{#if (is-pending @newsletterItem.themes)}}
         <Auk::Loader @message={{t "themes-loading-text"}} />
       {{else if (await @newsletterItem.themes.length)}}
-        <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
+        <div class="auk-o-flex auk-o-flex--spaced">
           <strong>Thema's:</strong>
-          <Auk::PillList>
+          <div class="auk-o-flex auk-o-flex--wrap auk-o-flex-gap--small">
             {{#each (await @newsletterItem.themes) as |theme|}}
               <AuPill>{{theme.label}}</AuPill>
             {{/each}}
-          </Auk::PillList>
+          </div>
         </div>
       {{else}}
         <div class="auk-u-mt-2">
