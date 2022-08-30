@@ -1,4 +1,6 @@
 <Auk::Navbar @skin="gray-100">
+  {{! TODO: The toolbar conditionally dissapears when the modal is in the foreground.
+  Is this necessary/desired?}}
   {{#if (not this.isAddingCase)}}
     <Auk::Toolbar @auto={{true}}>
       <Auk::Toolbar::Group @position="left">
