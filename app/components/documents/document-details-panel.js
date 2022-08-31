@@ -9,6 +9,8 @@ export default class DocumentsDocumentDetailsPanel extends Component {
    * @argument piece: a Piece object
    */
    @service currentSession;
+   @service pieceAccessLevelService;
+
    @tracked isEditingDetails = false;
    @tracked documentType;
    @tracked accessLevel;
@@ -39,6 +41,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
    *saveDetails() {
      this.args.piece.accessLevel = this.accessLevel;
      yield this.args.piece.save();
+     yield this.pieceAccessLevelService.updatePreviousAccessLevels(this.args.piece);
      this.args.documentContainer.type = this.documentType;
      yield this.args.documentContainer.save();
      this.isEditingDetails = false;
