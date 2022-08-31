@@ -11,7 +11,7 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
   @tracked page = 0;
   @tracked size = 25;
 
-  @tracked case;
+  @tracked decisionmakingFlow;
   @tracked mandatees;
   @tracked submitter;
   @tracked meeting;
@@ -46,7 +46,7 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
     const governmentAreas = this.governmentAreas;
     governmentAreas.clear();
     governmentAreas.pushObjects(newGovernmentAreas);
-    await this.case.save(); // TODO
+    await this.decisionmakingFlow.save();
   }
 
   @action

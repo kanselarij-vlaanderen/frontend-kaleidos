@@ -2,12 +2,13 @@
 
 <Subcases::SubcasesOverviewHeader
   @case={{this.case}}
+  @decisionmakingFlow={{this.decisionmakingFlow}}
   @onCreateSubcase={{this.refreshSubcases}}
   @onSaveCase={{perform this.saveCase}}
 />
 <div class="auk-scroll-wrapper__body">
   {{#if @model}}
-    <Subcases::SubcasesProcess @case={{this.case}} @subcases={{@model}} />
+    <Subcases::SubcasesProcess @decisionmakingFlow={{this.decisionmakingFlow}} @subcases={{@model}} />
   {{else}}
     <div class="auk-u-m-8">
       <Auk::EmptyState @message={{t "no-subcases"}} />

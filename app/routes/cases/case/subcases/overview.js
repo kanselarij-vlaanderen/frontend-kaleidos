@@ -15,8 +15,9 @@ export default class CasesCaseSubcasesOverviewRoute extends Route {
     },
   };
 
-  beforeModel() {
+  async beforeModel() {
     this.decisionmakingFlow = this.modelFor('cases.case');
+    this.case = await this.decisionmakingFlow.case;
   }
 
   model(params) {
@@ -35,6 +36,7 @@ export default class CasesCaseSubcasesOverviewRoute extends Route {
 
   setupController(controller) {
     super.setupController(...arguments);
-    controller.case = this.case; // TODO
+    controller.decisionmakingFlow = this.decisionmakingFlow;
+    controller.case = this.case;
   }
 }
