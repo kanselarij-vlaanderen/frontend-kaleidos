@@ -231,13 +231,13 @@ context('Subcase tests', () => {
 
     // Are there Themes in this agenda? Should be none
     cy.openAgendaitemKortBestekTab(subcaseTitleShort);
-    cy.intercept('GET', '**/themes').as('getAgendaitemThemes');
+    cy.intercept('GET', '/themes**').as('getAgendaitemThemes');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getAgendaitemThemes');
     cy.get(newsletter.editItem.cancel).click();
 
     // open themes ediging pane.
-    cy.intercept('GET', '**/themes').as('getAgendaitemThemes');
+    cy.intercept('GET', '/themes**').as('getAgendaitemThemes');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getAgendaitemThemes');
 
