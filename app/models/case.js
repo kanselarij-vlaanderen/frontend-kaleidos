@@ -9,9 +9,8 @@ export default class CaseModel extends Model {
   @attr('boolean') isArchived;
 
   @belongsTo('decisionmaking-flow') decisionmakingFlow;
-  @hasMany('publication-flow') publicationFlows;
-  @hasMany('concept') governmentAreas;
 
   @hasMany('piece') pieces;
+  @hasMany('publication-flow') publicationFlows;
   @hasMany('sign-flow') signFlows;
 }
