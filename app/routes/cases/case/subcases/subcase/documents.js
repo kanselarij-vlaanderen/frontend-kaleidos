@@ -60,14 +60,15 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     } else {
       this.documentsAreVisible = true;
     }
+    const decisionmakingFlow = this.modelFor('cases.case');
+    this.case = await decisionmakingFlow.case;
   }
 
   setupController(controller) {
     super.setupController(...arguments);
     const subcase = this.modelFor('cases.case.subcases.subcase');
     controller.subcase = subcase;
-    const _case = this.modelFor('cases.case'); // TODO
-    controller.case = _case;
+    controller.case = this.case;
     controller.documentsAreVisible = this.documentsAreVisible;
     controller.defaultAccessLevel = this.defaultAccessLevel;
   }
