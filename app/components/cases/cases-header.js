@@ -4,8 +4,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
 /**
- * TODO: rename action to something more self-explanatory
- * @argument close: action passing down a newly created decisionmaking-flow.
+ * @argument didCreateNewCase: action passing down a newly created decisionmaking-flow.
  */
 export default class CasesHeader extends Component {
   @service currentSession;
@@ -17,8 +16,8 @@ export default class CasesHeader extends Component {
   }
 
   @action
-  closeAction() {
-    this.isAddingCase = !this.isAddingCase;
-    this.args.close(...arguments);
+  saveNewCase() {
+    this.toggleAddingCase();
+    this.args.didCreateNewCase(...arguments);
   }
 }

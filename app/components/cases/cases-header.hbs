@@ -1,7 +1,4 @@
 <Auk::Navbar @skin="gray-100">
-  {{! TODO: The toolbar conditionally dissapears when the modal is in the foreground.
-  Is this necessary/desired?}}
-  {{#if (not this.isAddingCase)}}
     <Auk::Toolbar @auto={{true}}>
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
@@ -25,15 +22,15 @@
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
-  {{else}}
-    <WebComponents::VlModal
-      @isOverlay={{true}}
-      @closeModal={{this.toggleAddingCase}}
-      @title={{t "new-case"}} >
-      <Cases::NewCase
-        @didSave={{this.closeAction}}
-        @onCancel={{this.closeAction}}
-      />
-    </WebComponents::VlModal>
-  {{/if}}
 </Auk::Navbar>
+{{#if this.isAddingCase}}
+  <WebComponents::VlModal
+    @isOverlay={{true}}
+    @closeModal={{this.toggleAddingCase}}
+    @title={{t "new-case"}} >
+    <Cases::NewCase
+      @didSave={{this.saveNewCase}}
+      @onCancel={{this.toggleAddingCase}}
+    />
+  </WebComponents::VlModal>
+{{/if}}
