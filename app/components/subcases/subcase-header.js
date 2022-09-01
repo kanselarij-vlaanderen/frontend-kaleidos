@@ -63,8 +63,8 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.promptDeleteCase = true;
   }
 
-  navigateToSubcaseOverview(caze) {
-    this.router.transitionTo('cases.case.subcases', caze.id);
+  navigateToSubcaseOverview(_case) {
+    this.router.transitionTo('cases.case.subcases', _case.id);
   }
 
   toggleAllPropertiesBackToDefault() {
@@ -79,7 +79,9 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   // TODO KAS-3256 We should take another look of the deleting case feature in light of publications also using cases.
   @task
   *deleteCase(_case) {
+    const dmf = yield _case.decisionmakingFlow;
     yield _case.destroyRecord();
+    yield dmf.destroyRecord();
     this.promptDeleteCase = false;
     this.caseToDelete = null;
     this.router.transitionTo('cases');
@@ -133,7 +135,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   async deleteSubcase() {
     this.isLoading = true;
     const subcaseToDelete = await this.subcaseToDelete;
-    const caze = await subcaseToDelete.case;
+    const _case = await subcaseToDelete.case;
 
     subcaseToDelete.hasMany('agendaActivities').reload();
     const agendaActivities = await subcaseToDelete.agendaActivities;
@@ -159,7 +161,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     itemToDelete.deleteRecord();
     await itemToDelete.save();
 
-    this.navigateToSubcaseOverview(caze);
+    this.navigateToSubcaseOverview(_case);
     this.args.onMoveSubcase();
   }
 
@@ -175,15 +177,22 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
 
   @action
   async moveSubcase(newCase) {
-    const edCase = await this.store.findRecord('case', newCase.id); // ensure we have an ember-data case
+    const newDMF = await this.store.queryOne('decisionmaking-flow', {
+      filter: {
+        case: {
+          ':id:': newCase.id,
+        },
+      },
+    });
 
-    const oldCase = await this.args.subcase.case;
-    this.args.subcase.case = edCase;
+    const oldDMF = await this.args.subcase.decisionmakingFlow;
+    this.args.subcase.decisionmakingFlow = newDMF;
     await this.args.subcase.save();
     this.isAssigningToOtherCase = false;
 
-    const subCases = await oldCase.hasMany('subcases').reload();
+    const subCases = await oldDMF.hasMany('subcases').reload();
     if (subCases.length === 0) {
+      const oldCase = await oldDMF.case;
       const publicationFlow = await this.store.queryOne('publication-flow', {
         'filter[case][:id:]': oldCase.id,
       });
