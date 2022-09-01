@@ -9,16 +9,17 @@ export default class SignatureService extends Service {
   async markDocumentForSignature(piece, decisionActivity) {
     const subcase = await decisionActivity?.subcase;
     if (subcase) {
-      const caze = await subcase.case;
+      const dmf = await subcase.decisionmakingFlow;
+      const _case = await dmf.case;
       const creator = await this.currentSession.user;
       const now = new Date();
 
       // TODO: Shouldn't the short & long title be coming from the agendaitem. Also when would show or edit this data?
       const signFlow = this.store.createRecord('sign-flow', {
         openingDate: now,
-        shortTitle: caze.shortTitle,
-        longTitle: caze.title,
-        case: caze,
+        shortTitle: _case.shortTitle,
+        longTitle: _case.title,
+        case: _case,
         decisionActivity,
         creator: creator,
       });
