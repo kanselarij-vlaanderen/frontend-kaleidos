@@ -35,7 +35,7 @@ export default class CasesCaseSubcasesOverview extends Controller {
   page = 0;
   size = 20;
 
-  sort = '-created';
+  sort = '-opened';
   showArchived = false;
   @tracked selectedCase = null;
   @tracked caseToEdit = null;
@@ -49,8 +49,8 @@ export default class CasesCaseSubcasesOverview extends Controller {
   }
 
   @action
-  openEditCaseModal(_case) {
-    this.caseToEdit = _case;
+  async openEditCaseModal(_case) {
+    this.caseToEdit = await _case;
     this.showEditCaseModal = true;
   }
 
@@ -61,8 +61,8 @@ export default class CasesCaseSubcasesOverview extends Controller {
   }
 
   @action
-  async saveEditCase(caseData) {
-    await caseData.save();
+  async saveEditCase(_case) {
+    await _case.save();
     this.closeEditCaseModal();
   }
 
@@ -107,7 +107,7 @@ export default class CasesCaseSubcasesOverview extends Controller {
   }
 
   @action
-  close(dmf) {
+  navigateToNewCase(dmf) {
     if (!dmf) {
       return;
     }
