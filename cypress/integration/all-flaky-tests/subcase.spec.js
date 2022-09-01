@@ -66,7 +66,7 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor het aanmaken van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
+    cy.visit('/dossiers/B60EECB0-2A07-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, subcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
 

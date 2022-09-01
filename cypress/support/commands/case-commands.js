@@ -19,7 +19,7 @@ import route from '../../selectors/route.selectors';
  */
 function createCase(shortTitle) {
   cy.log('createCase');
-  cy.intercept('POST', '/cases').as('createNewCase');
+  cy.intercept('POST', '/decisionmaking-flows').as('createNewCase');
   cy.visit('/dossiers');
 
   cy.get(cases.casesHeader.addCase).click();

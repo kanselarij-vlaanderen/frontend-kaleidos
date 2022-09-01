@@ -128,7 +128,7 @@ context('Search tests', () => {
       // cy.wait('@patchDecisionActivities');
 
       // *Live data test: change agendaitem/subcase titles, upload treatment file (*piece* for future tests in comment).
-      cy.visit('/dossiers/62878FD1E1ADA5F6A459AC03/deeldossiers/6287918EE1ADA5F6A459AC05/overzicht');
+      cy.visit('/dossiers/B60EED6E-2A07-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6287918EE1ADA5F6A459AC05/overzicht');
       cy.intercept('PATCH', '/agendaitems/*').as('patchAgendaitem');
       cy.changeSubcaseAccessLevel(null, newSubcase2TitleShort, subcase2TitleLong);
       cy.wait('@patchAgendaitem');
