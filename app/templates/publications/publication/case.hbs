@@ -15,12 +15,6 @@
       @publicationFlow={{this.model}}
     />
 
-    <Utils::GovernmentAreas::GovernmentAreasPanel
-      @governmentAreas={{this.decisionmakinFlow.governmentAreas}}
-      @allowEditing={{not this.isViaCouncilOfMinisters}}
-      @onSave={{this.saveGovernmentAreas}}
-    />
-
     <Publications::Publication::Case::ContactPersons::ContactPersonsPanel
       @publicationFlow={{this.model}} />
   </div>
