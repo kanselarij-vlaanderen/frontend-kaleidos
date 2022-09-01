@@ -161,6 +161,7 @@ export default class CasesNewSubcase extends Component {
     } else {
       subcase.linkedPieces = pieces;
     }
+    subcase.governmentAreas = await latestSubcase.governmentAreas;
     return subcase;
   }
 

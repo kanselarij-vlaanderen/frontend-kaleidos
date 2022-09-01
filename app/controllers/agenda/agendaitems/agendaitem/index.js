@@ -93,10 +93,9 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
 
   @action
   async saveGovernmentAreas(newGovernmentAreas) {
-    const dmf = await this.subcase.decisionmakingFlow;
-    const governmentAreas = await dmf.governmentAreas;
+    const governmentAreas = await this.subcase.governmentAreas;
     governmentAreas.clear();
     governmentAreas.pushObjects(newGovernmentAreas);
-    await dmf.save();
+    await this.subcase.save();
   }
 }
