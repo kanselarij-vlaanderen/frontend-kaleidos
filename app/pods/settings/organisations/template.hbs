@@ -1,17 +1,27 @@
 <div class="auk-scroll-wrapper__body au-u-background-gray-100">
-  <div class="auk-u-m-4">
-    <div class="auk-o-grid auk-u-mb-2">
+  <div class="au-c-body-container au-c-body-container--scroll">
+    <div class="auk-o-grid au-o-grid--stretch">
       <div class="auk-o-grid-col-2">
-        <div class="au-u-margin-top-tiny">
+        <div class="au-c-sidebar">
           <AuHeading @level="3" @skin="6" class="au-u-hidden-visually">Inhoud</AuHeading>
-          <AuList as |Item|>
-            <Item><AuLink @route="settings.organisations" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact" @active={{true}}>Alle gebruikers</AuLink></Item>
-            <Item><AuLink @route="settings.organisations" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Geblokkeerd</AuLink></Item>
-          </AuList>
+          <ul class="au-c-list-navigation">
+            <li class="au-c-list-navigation__item">
+              <AuNavigationLink
+                @route="settings.organisations"
+              >
+                Alle gebruikers
+              </AuNavigationLink>
+            </li>
+            <li class="au-c-list-navigation__item">
+              <AuNavigationLink class="au-u-medium">
+                Geblokkeerd
+              </AuNavigationLink>
+            </li>
+          </ul>
         </div>
       </div>
       <div class="auk-o-grid-col-10">
-        <div class="auk-navbar auk-navbar--bordered-bottom au-u-padding-left-none au-u-padding-right-none  au-u-padding-top-none au-u-padding-bottom-small au-u-flex--between">
+        <div class="auk-navbar auk-navbar--bordered-bottom au-u-padding-left-none au-u-padding-right-tiny au-u-padding-top-small au-u-padding-bottom-small au-u-flex--between">
           <div class="au-u-flex au-u-flex--spaced-tiny">
             {{#if (eq this.checked false)}}
             <Auk::Button
