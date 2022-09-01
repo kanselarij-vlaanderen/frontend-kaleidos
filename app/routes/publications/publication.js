@@ -9,8 +9,7 @@ export default class PublicationRoute extends Route {
     return this.store.queryOne('publication-flow', {
       'filter[:id:]': params.publication_id,
       include: [
-        'case',
-        'case.subcases',
+        'case.decisionmaking-flow.subcases',
         'decision-activity',
         'status',
         'mode',

@@ -9,15 +9,16 @@ export default class CaseRoute extends Route {
   }
 
   async afterModel(model) {
-    this._case = await model.case;
-    await this._case.governmentAreas;
+    const _case = await model.case;
+    this.decisionmakingFlow = await _case.decisionmakingFlow;
+    await this.decisionmakingFlow.governmentAreas;
     this.isViaCouncilOfMinisters =
       await this.publicationService.getIsViaCouncilOfMinisters(model);
   }
 
   setupController(controller) {
     super.setupController(...arguments);
-    controller._case = this._case;
+    controller.decisionmakingFlow = this.decisionmakingFlow;
     controller.isViaCouncilOfMinisters = this.isViaCouncilOfMinisters;
   }
 }
