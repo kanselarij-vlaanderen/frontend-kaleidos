@@ -56,23 +56,23 @@ export default class PublicationService extends Service {
   ) {
     const now = new Date();
 
-    let case_;
+    let _case;
     let decisionActivity;
     let mandatees;
     let regulationType;
     const isViaCouncilOfMinisters = !!viaCouncilOfMinisterOptions;
     if (isViaCouncilOfMinisters) {
-      case_ = viaCouncilOfMinisterOptions.case;
+      _case = viaCouncilOfMinisterOptions.case;
       decisionActivity = viaCouncilOfMinisterOptions.decisionActivity;
       mandatees = viaCouncilOfMinisterOptions.mandatees;
       regulationType = viaCouncilOfMinisterOptions.regulationType;
     } else {
-      case_ = this.store.createRecord('case', {
+      _case = this.store.createRecord('case', {
         shortTitle: publicationProperties.shortTitle,
         title: publicationProperties.longTitle,
         created: now,
       });
-      await case_.save();
+      await _case.save();
       decisionActivity = this.store.createRecord('decision-activity', {
         startDate: notViaCouncilOfMinistersOptions.decisionDate,
       });
@@ -116,7 +116,7 @@ export default class PublicationService extends Service {
 
     const publicationFlow = this.store.createRecord('publication-flow', {
       identification: identifier,
-      case: case_,
+      case: _case,
       decisionActivity: decisionActivity,
       mandatees: mandatees,
       status: initialStatus,
