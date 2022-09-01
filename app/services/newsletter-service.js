@@ -145,11 +145,11 @@ export default class NewsletterService extends Service {
       try {
         const activity = await agendaitem.agendaActivity;
         const subcase = await activity.subcase;
-        const _case = await subcase.case;
+        const dmf = await subcase.decisionmakingFlow;
         const previousNewsItem = await this.store.queryOne(
           'newsletter-info',
           {
-            'filter[agenda-item-treatment][decision-activity][subcase][case][:id:]': _case.id,
+            'filter[agenda-item-treatment][decision-activity][subcase][decisionmaking-flow][:id:]': dmf.id,
             'filter[agenda-item-treatment][agendaitems][type][:uri:]': CONSTANTS.AGENDA_ITEM_TYPES.NOTA, // Don't copy over news item from announcement
             sort: '-agenda-item-treatment.agendaitems.agenda-activity.start-date',
           }
