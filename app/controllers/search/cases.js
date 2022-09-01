@@ -58,7 +58,7 @@ export default class CasesSearchController extends Controller {
   }
 
   @action
-  navigateToCase(_case) {
-    this.router.transitionTo('cases.case.subcases', _case.id);
+  async navigateToCase(dmf) {
+    this.router.transitionTo('cases.case.subcases', dmf.id);
   }
 }
