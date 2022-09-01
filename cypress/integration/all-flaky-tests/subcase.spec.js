@@ -282,7 +282,7 @@ context('Subcase tests', () => {
     cy.wait('@getAgendaitems');
 
     // open the themes editor.
-    cy.intercept('GET', '**/themes').as('getKortBestekThemes');
+    cy.intercept('GET', '/themes**').as('getKortBestekThemes');
     cy.get(newsletter.tableRow.newsletterRow).eq(0)
       .find(newsletter.buttonToolbar.edit)
       .click();
