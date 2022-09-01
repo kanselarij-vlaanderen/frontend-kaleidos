@@ -105,7 +105,7 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor het aanmaken en verwijderen van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
+    cy.visit('/dossiers/B60EECB0-2A07-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.wait(2000);
@@ -118,7 +118,7 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor niet kunnen verwijderen van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
+    cy.visit('/dossiers/B60EECB0-2A07-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.proposeSubcaseForAgenda(agendaDate);
@@ -134,7 +134,7 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor te klikken op de link naar agenda vanuit procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
+    cy.visit('/dossiers/B60EECB0-2A07-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.proposeSubcaseForAgenda(agendaDate);
@@ -345,7 +345,7 @@ context('Subcase tests', () => {
     cy.setAllItemsFormallyOk(5);
     cy.approveAndCloseDesignAgenda();
 
-    cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
+    cy.visit('/dossiers/B60EECB0-2A07-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.get(cases.subcaseItem.approved).should('have.length', 3);
     cy.openSubcase(2);
     cy.get(cases.subcaseDescription.decidedOn).contains(agendaDate.format('DD-MM-YYYY'));
@@ -486,7 +486,7 @@ context('Subcase tests', () => {
       .click();
     cy.get(agenda.agendaitemTitlesView.subcaseName).contains(capital);
 
-    cy.visit('dossiers/5EBA9528751CF7000800000A/deeldossiers');
+    cy.visit('dossiers/B60EECA6-2A07-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.get(cases.subcaseItem.link).contains(nonCapital);
     cy.get(cases.subcaseOverviewHeader.createSubcase).click();
     cy.get(cases.newSubcase.procedureName).click();
