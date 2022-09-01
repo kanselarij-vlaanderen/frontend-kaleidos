@@ -25,7 +25,8 @@ export default class NewCase extends Component {
     });
     yield _case.save();
     const decisionmakingFlow = this.store.createRecord('decisionmaking-flow', {
-      case: _case
+      case: _case,
+      opened: newDate,
     });
     yield decisionmakingFlow.save();
     return this.args.didSave(decisionmakingFlow);
