@@ -1,6 +1,7 @@
 import JSONAPIAdapter from '@ember-data/adapter/json-api';
 import { inject as service } from '@ember/service';
 import { later } from '@ember/runloop';
+import minimalInclude from 'frontend-kaleidos/utils/minimal-include';
 
 export default class ApplicationAdapter extends JSONAPIAdapter {
   @service intl;
@@ -19,6 +20,22 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
       this.toaster.error(this.intl.t('couldnt-answer-net-req'));
       throw error;
     }
+  }
+
+  buildQuery(snapshot) {
+    const query = super.buildQuery(snapshot);
+    if (query?.include) {
+      query.include = minimalInclude(query.include.split(','));
+    }
+    return query;
+  }
+
+  buildURL(modelName, id, snapshot, requestType, query) {
+    if (query?.include) {
+      query.include = minimalInclude(query.include.split(','));
+    }
+    const url = super.buildURL(modelName, id, snapshot, requestType, query);
+    return url;
   }
 
   // from https://github.com/lblod/frontend-gelinkt-notuleren/blob/5d3c17e9c084e13ea8354c81bf378a27043d7e59/app/adapters/application.js
