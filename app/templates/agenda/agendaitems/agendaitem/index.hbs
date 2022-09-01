@@ -47,7 +47,7 @@
     @onSave={{this.saveMandateeData}}
   />
   <Utils::GovernmentAreas::GovernmentAreasPanel
-    @governmentAreas={{this.subcase.case.governmentAreas}}
+    @governmentAreas={{this.subcase.decisionmakingFlow.governmentAreas}}
     @allowEditing={{this.currentSession.isEditor}}
     @onSave={{this.saveGovernmentAreas}}
   />

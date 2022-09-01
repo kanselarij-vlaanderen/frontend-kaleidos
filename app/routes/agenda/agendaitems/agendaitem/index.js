@@ -27,8 +27,8 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     if (this.subcase) {
       this.submitter = await this.subcase.requestedBy;
       this.meeting = await this.subcase.requestedForMeeting;
-      const case_ = await this.subcase.case;
-      await case_.governmentAreas;
+      const dmf = await this.subcase.decisionmakingFlow;
+      await dmf.governmentAreas;
     }
     const agendaItemTreatment = await model.treatment;
     this.newsletterInfo = await agendaItemTreatment?.newsletterInfo;
