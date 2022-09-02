@@ -5,6 +5,25 @@
   <div class="auk-o-grid-col-2">
     <div class="auk-box">
       <div class="auk-u-mb-2">
+        <Auk::Label for="sort-type">
+          {{t "sort-by"}}
+        </Auk::Label>
+        <select
+          name="sort-type"
+          id="sort-type"
+          class="auk-select auk-select--block"
+          {{on "input" this.selectSort}}
+        >
+          {{#each this.sortOptions as |sortType|}}
+            <option
+              value={{sortType.value}}
+              selected={{eq sortType.value this.sort}}>
+              {{sortType.label}}
+            </option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="auk-u-mb-2">
         <Auk::Label>{{t "type"}}</Auk::Label>
         <Auk::Checkbox
           @checked={{this.includeNotas}}
