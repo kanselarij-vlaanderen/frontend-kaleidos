@@ -15,6 +15,12 @@
       @publicationFlow={{this.model}}
     />
 
+    {{#if this.governmentAreas}}
+      <Utils::GovernmentAreas::GovernmentAreasPanel
+        @governmentAreas={{this.governmentAreas}}
+      />
+    {{/if}}
+
     <Publications::Publication::Case::ContactPersons::ContactPersonsPanel
       @publicationFlow={{this.model}} />
   </div>
