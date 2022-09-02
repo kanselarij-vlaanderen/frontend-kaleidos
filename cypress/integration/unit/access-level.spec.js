@@ -7,39 +7,69 @@ import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
-function setVldocAccesLevel(position, accesLevel) {
-  const randomInt = Math.floor(Math.random() * Math.floor(10000));
-  cy.log('setVldocAccesLevel');
-  // this next line is a loading check
-  cy.get(document.vlDocument.showPieceViewer);
-  cy.get(document.vlDocument.piece).eq(position)
-    .as('document');
-  cy.get('@document').find(document.accessLevelPill.edit)
+function setPreviousVersionAccesLevel(docName, previousVersionName, accesLevel, openSidebar = false) {
+  // Open correct versionHistory
+  cy.get(document.documentCard.name.value).contains(docName)
+    .parents(document.documentCard.card)
+    .as('currentDoc');
+  cy.get('@currentDoc').find(document.documentCard.versionHistory)
+    .find(auk.accordion.header.button)
     .click();
-  cy.get('@document').find(dependency.emberPowerSelect.trigger)
+
+  // go to viewer and change accesLevel
+  cy.get(document.vlDocument.name).contains(previousVersionName)
+    .invoke('removeAttr', 'target')
     .click();
-  cy.get(dependency.emberPowerSelect.option).contains(accesLevel)
+  if (openSidebar) {
+    cy.get(document.documentPreviewSidebar.open).click();
+  }
+  cy.get(document.previewDetailsTab.edit).click();
+  cy.wait(1000);
+  cy.get(document.previewDetailsTab.editing.accessLevel)
+    // .find(dependency.emberPowerSelect.trigger)
     .click();
-  cy.intercept('PATCH', '/pieces/*').as(`patchPieces${randomInt}`);
-  cy.get(document.accessLevelPill.save).click()
-    .wait(`@patchPieces${randomInt}`);
-  // TODO-waits: better wait, 7000 mostly too long but sometimes isn't, waiting for loader to not exist not enough
-  cy.wait(7000);
-  cy.log('/setVldocAccesLevel');
+  cy.get(dependency.emberPowerSelect.option)
+    .contains(accesLevel)
+    .click();
+  cy.intercept('PATCH', 'pieces/**').as('patchPieces');
+  cy.intercept('PATCH', 'document-containers/**').as('patchDocuments');
+  cy.get(document.previewDetailsTab.save).click()
+    .wait('@patchPieces')
+    .wait('@patchDocuments');
+
+  cy.go('back');
+  cy.get(auk.loader).should('not.exist');
 }
 
-function checkVldocAccesLevel(position, accesLevel) {
-  cy.log('checkVldocAccesLevel');
-  // this next line is a loading check
-  cy.get(document.vlDocument.showPieceViewer);
-  cy.get(document.vlDocument.piece).eq(position)
-    .as('document');
-  cy.get('@document').find(document.accessLevelPill.pill)
-    .contains(accesLevel);
-  cy.log('/checkVldocAccesLevel');
+function checkPreviousVersionAccesLevel(docName, previousVersionName, accesLevel, openSidebar = false) {
+  // Open correct versionHistory
+  cy.get(document.documentCard.name.value).contains(docName)
+    .parents(document.documentCard.card)
+    .as('currentDoc');
+  cy.get('@currentDoc').find(document.documentCard.versionHistory)
+    .find(auk.accordion.header.button)
+    .click();
+
+  // go to viewer and check accesLevel
+  cy.get(document.vlDocument.name).contains(previousVersionName)
+    .invoke('removeAttr', 'target')
+    .click();
+  if (openSidebar) {
+    cy.get(document.documentPreviewSidebar.open).click();
+  }
+  cy.get(document.accessLevelPill.pill).contains(accesLevel);
+
+  cy.go('back');
+  cy.get(auk.loader).should('not.exist');
 }
 
 context('Decision tests', () => {
+  const agendaDate = Cypress.dayjs('2022-04-18');
+  const subcaseTitle = 'Cypress test: Publications via MR - 1652967454';
+  const file = {
+    folder: 'files', fileName: 'test', fileExtension: 'pdf',
+  };
+
   beforeEach(() => {
     cy.login('Admin');
   });
@@ -48,33 +78,52 @@ context('Decision tests', () => {
     cy.logout();
   });
 
-  it.only('should change the access level on a BIS/TER and check if underlying acces level changes correctly', () => {
-    const agendaDate = Cypress.dayjs('2022-04-18');
-    const subcaseTitle = 'Cypress test: Publications via MR - 1652967454';
-    const file = {
-      folder: 'files', fileName: 'test', fileExtension: 'pdf',
-    };
-    const caseName = 'Cypress case: Dossier publications via MR - 1652967454';
-    const type = 'Nota';
-    const SubcaseTitleShort = 'Cypress subcase: linked documents - 1652967454';
-    const subcaseTitleLong = 'Cypress test voor het wijzigen van toegangsrechten op linked documents';
+  it('should add a BIS/TER and check if underlying acces level changes to intern regering', () => {
+    cy.openAgendaForDate(agendaDate);
+    cy.openAgendaitemDocumentTab(subcaseTitle);
+    cy.get(document.documentCard.name.value).contains('bestaandePublicatie')
+      .parents(document.documentCard.card)
+      .as('thirdCard');
 
-    Cypress.on('uncaught:exception', (err) => {
-      if (err.message.includes('Cannot read properties of null')) {
-        return false;
-      }
-    });
+    // set acceslevel to public
+    cy.get('@thirdCard').find(document.accessLevelPill.edit)
+      .eq(0)
+      .click();
+    cy.get('@thirdCard').find(dependency.emberPowerSelect.trigger)
+      .click();
+    cy.get(dependency.emberPowerSelect.option).contains('Publiek')
+      .click();
+
+    // upload document
+    cy.get('@thirdCard').find(document.documentCard.actions)
+      .click();
+    cy.get('@thirdCard').find(document.documentCard.uploadPiece)
+      .click();
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.intercept('POST', 'submission-activities').as('postSubmissionActivities');
+    cy.intercept('PATCH', 'agendaitems/**').as('patchAgendaitems');
+    cy.get(utils.vlModalFooter.save).click()
+      .wait('@postSubmissionActivities')
+      .wait('@patchAgendaitems');
+    cy.wait(2000);
+
+    checkPreviousVersionAccesLevel('bestaandePublicatieBIS.pdf', 'bestaandePublicatie.pdf', 'Intern Regering', true);
+  });
+
+  it('should change the access level on a BIS/TER and check if underlying acces level changes correctly', () => {
+    // setup
     cy.openAgendaForDate(agendaDate);
     cy.openAgendaitemDocumentTab(subcaseTitle);
 
-    // add BIS and TER
+    // set aliases
     cy.get(document.documentCard.name.value).contains('publicatieDecreet')
       .parents(document.documentCard.card)
       .as('firstCard');
     cy.get(document.documentCard.name.value).contains('publicatieMB')
       .parents(document.documentCard.card)
       .as('secondCard');
-    // TODO-selector double selector
+
+    // add BIS and TER
     cy.get('@secondCard').find(document.documentCard.actions)
       .click();
     cy.get('@secondCard').find(document.documentCard.uploadPiece)
@@ -86,7 +135,18 @@ context('Decision tests', () => {
       .wait('@postSubmissionActivities')
       .wait('@patchAgendaitems');
     cy.wait(2000);
+    // set accesLevels to publiek
+    cy.get('@secondCard').find(document.accessLevelPill.edit)
+      .eq(0)
+      .click();
+    cy.get('@secondCard').find(dependency.emberPowerSelect.trigger)
+      .click();
+    cy.get(dependency.emberPowerSelect.option).contains('Publiek')
+      .click();
+    cy.get(document.accessLevelPill.save).click();
+    setPreviousVersionAccesLevel('publicatieMBBIS', 'publicatieMB', 'Publiek', true);
 
+    // add BIS and TER
     cy.get('@firstCard').find(document.documentCard.actions)
       .click();
     cy.get('@firstCard').find(document.documentCard.uploadPiece)
@@ -109,48 +169,48 @@ context('Decision tests', () => {
       .wait('@postSubmissionActivities3')
       .wait('@patchAgendaitems3');
     cy.wait(2000);
-    // set BIS and TER levels to public
-    cy.get('@firstCard').find(document.documentCard.versionHistory)
-      .find(auk.accordion.header.button)
+    // set accesLevels to publiek
+    cy.get('@secondCard').find(document.accessLevelPill.edit)
+      .eq(0)
       .click();
-    setVldocAccesLevel(0, 'Publiek');
-    setVldocAccesLevel(1, 'Publiek');
-    setVldocAccesLevel(2, 'Publiek');
+    cy.get('@secondCard').find(dependency.emberPowerSelect.trigger)
+      .click();
+    cy.get(dependency.emberPowerSelect.option).contains('Publiek')
+      .click();
+    cy.get(document.accessLevelPill.save).click();
+    cy.get(auk.loader).should('not.exist');
+    setPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreetBIS', 'Publiek');
+    setPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreet', 'Publiek');
 
-    // change access level of BIS on DocumentCard
+    // change access level on VlDocument
+    cy.get('@secondCard').find(document.accessLevelPill.edit)
+      .eq(0)
+      .click();
+    cy.get('@secondCard').find(dependency.emberPowerSelect.trigger)
+      .click();
+    cy.get(dependency.emberPowerSelect.option).contains('Intern Overheid')
+      .click();
+    cy.get(document.accessLevelPill.save).click();
+    cy.get(auk.loader).should('not.exist');
+    checkPreviousVersionAccesLevel('publicatieMBBIS.pdf', 'publicatieMB.pdf', 'Intern Regering');
+
     cy.get('@firstCard').find(document.accessLevelPill.edit)
       .eq(0)
       .click();
     cy.get('@firstCard').find(dependency.emberPowerSelect.trigger)
       .click();
-    cy.get(dependency.emberPowerSelect.option).contains('Publiek')
+    cy.get(dependency.emberPowerSelect.option).contains('Intern Regering')
       .click();
-    cy.intercept('PATCH', '/pieces/*').as('patchPieces1');
-    cy.get(document.accessLevelPill.save).click()
-      .wait('@patchPieces1');
-    cy.wait(5000);
-    checkVldocAccesLevel(0, 'Publiek');
-    checkVldocAccesLevel(1, 'Intern Regering');
-    checkVldocAccesLevel(2, 'Intern Regering');
-
-    // change access level on VlDocument
-    setVldocAccesLevel(1, 'Publiek');
-    setVldocAccesLevel(2, 'Publiek');
-    setVldocAccesLevel(0, 'Intern Overheid');
-    checkVldocAccesLevel(0, 'Intern Overheid');
-    checkVldocAccesLevel(1, 'Intern Regering');
-    checkVldocAccesLevel(2, 'Intern Regering');
+    cy.get(document.accessLevelPill.save).click();
+    cy.get(auk.loader).should('not.exist');
+    checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreetBIS', 'Intern Regering');
+    checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreet', 'Intern Regering');
 
     // change access level on BatchDocumentsDetailsModal on single document
-    setVldocAccesLevel(1, 'Publiek');
-    setVldocAccesLevel(2, 'Publiek');
     cy.get(route.agendaitemDocuments.batchEdit).click();
-    // cy.get(document.documentDetailsRow.input).should('have.value', 'publicatieDecreetTER')
-    //   .parents(document.documentDetailsRow.row)
-    //   .as('row1');
     cy.get(document.documentDetailsRow.accessLevel).eq(0)
       .click();
-    cy.get(dependency.emberPowerSelect.option).contains('Intern Regering')
+    cy.get(dependency.emberPowerSelect.option).contains('Ministerraad')
       .click();
     cy.intercept('PATCH', '/pieces/**').as('patchPieces1');
     cy.intercept('GET', '/document-containers/**').as('getDocumentContainers1');
@@ -158,13 +218,8 @@ context('Decision tests', () => {
       .wait('@patchPieces1')
       .wait('@getDocumentContainers1');
 
-    cy.get('@firstCard').find(document.documentCard.versionHistory)
-      .find(auk.accordion.header.button)
-      .click();
-    cy.wait(5000);
-    checkVldocAccesLevel(0, 'Intern Regering');
-    checkVldocAccesLevel(1, 'Intern Regering');
-    checkVldocAccesLevel(2, 'Intern Regering');
+    checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreetBIS', 'Ministerraad');
+    checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreet', 'Ministerraad');
 
     // change access level on BatchDocumentEdit on multiple documents
     cy.get(route.agendaitemDocuments.batchEdit).click();
@@ -176,7 +231,7 @@ context('Decision tests', () => {
     //   .as('row2');
     cy.get(document.documentDetailsRow.accessLevel).eq(0)
       .click();
-    cy.get(dependency.emberPowerSelect.option).contains('Ministerraad')
+    cy.get(dependency.emberPowerSelect.option).contains('Intern Secretarie')
       .click();
     cy.get(document.documentDetailsRow.accessLevel).eq(1)
       .click();
@@ -188,66 +243,20 @@ context('Decision tests', () => {
       .wait('@patchPieces2')
       .wait('@getDocumentContainers2');
 
-    cy.get('@firstCard').find(document.documentCard.versionHistory)
-      .find(auk.accordion.header.button)
+    checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreetBIS', 'Intern Secretarie');
+    checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreet', 'Intern Secretarie');
+    checkPreviousVersionAccesLevel('publicatieMBBIS.pdf', 'publicatieMB.pdf', 'Intern Secretarie');
+
+    // change access level to a lower one and check that there are no changes to underlying level
+    cy.get('@secondCard').find(document.accessLevelPill.edit)
+      .eq(0)
       .click();
-    cy.wait(5000);
-    checkVldocAccesLevel(0, 'Ministerraad');
-    checkVldocAccesLevel(1, 'Ministerraad');
-    checkVldocAccesLevel(2, 'Ministerraad');
-    cy.get('@firstCard').find(document.documentCard.versionHistory)
-      .find(auk.accordion.header.button)
+    cy.get('@secondCard').find(dependency.emberPowerSelect.trigger)
       .click();
-    cy.get('@secondCard').find(document.documentCard.versionHistory)
-      .find(auk.accordion.header.button)
+    cy.get(dependency.emberPowerSelect.option).contains('Intern Overheid')
       .click();
-    cy.wait(5000);
-    checkVldocAccesLevel(0, 'Intern Secretarie');
-    checkVldocAccesLevel(1, 'Intern Secretarie');
-
-    // change access level on LinkedDocumentLink
-    cy.openCase(caseName);
-    cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, null, null);
-    cy.openAgendaForDate(agendaDate);
-    cy.addAgendaitemToAgenda(SubcaseTitleShort);
-    cy.openAgendaitemDocumentTab(SubcaseTitleShort);
-    cy.get(document.linkedDocumentLink.name).contains('publicatieDecreet')
-      .parents(document.linkedDocumentLink.card)
-      .as('firstLinkedCard');
-
-    cy.get('@firstLinkedCard').find(document.linkedDocumentLink.versionHistory)
-      .find(auk.accordion.header.button)
-      .click();
-    setVldocAccesLevel(0, 'Publiek');
-
-    checkVldocAccesLevel(0, 'Publiek');
-    checkVldocAccesLevel(1, 'Ministerraad');
-    checkVldocAccesLevel(2, 'Ministerraad');
-  });
-
-  it('should change the access level on a BIS/TER and check if underlying acces level changes correctly', () => {
-    const agendaDate = Cypress.dayjs('2022-04-18');
-    const SubcaseTitleShort = 'Cypress subcase: linked documents - 1652967454';
-
-    Cypress.on('uncaught:exception', (err) => {
-      if (err.message.includes('Cannot read properties of null')) {
-        return false;
-      }
-    });
-
-    cy.openAgendaForDate(agendaDate);
-    cy.openAgendaitemDocumentTab(SubcaseTitleShort);
-    cy.get(document.linkedDocumentLink.name).contains('publicatieDecreet')
-      .parents(document.linkedDocumentLink.card)
-      .as('firstCard');
-
-    cy.get('@firstCard').find(document.linkedDocumentLink.versionHistory)
-      .find(auk.accordion.header.button)
-      .click();
-    setVldocAccesLevel(0, 'Publiek');
-
-    checkVldocAccesLevel(0, 'Publiek');
-    checkVldocAccesLevel(1, 'Ministerraad');
-    checkVldocAccesLevel(2, 'Ministerraad');
+    cy.get(document.accessLevelPill.save).click();
+    cy.get(auk.loader).should('not.exist');
+    checkPreviousVersionAccesLevel('publicatieMBBIS.pdf', 'publicatieMB.pdf', 'Intern Secretarie');
   });
 });
