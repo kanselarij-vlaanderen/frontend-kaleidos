@@ -105,3 +105,7 @@ $say-editor-padding: 1rem;
     padding-top: 3rem;
   }
 }
+
+.say-editor__inner {
+  overflow-wrap: anywhere;
+}
