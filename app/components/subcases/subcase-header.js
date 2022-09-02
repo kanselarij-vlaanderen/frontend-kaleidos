@@ -63,8 +63,8 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.promptDeleteCase = true;
   }
 
-  navigateToSubcaseOverview(_case) {
-    this.router.transitionTo('cases.case.subcases', _case.id);
+  navigateToSubcaseOverview(dmf) {
+    this.router.transitionTo('cases.case.subcases', dmf.id);
   }
 
   toggleAllPropertiesBackToDefault() {
@@ -135,7 +135,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   async deleteSubcase() {
     this.isLoading = true;
     const subcaseToDelete = await this.subcaseToDelete;
-    const _case = await subcaseToDelete.case;
+    const dmf = await subcaseToDelete.decisionmakingFlow;
 
     subcaseToDelete.hasMany('agendaActivities').reload();
     const agendaActivities = await subcaseToDelete.agendaActivities;
@@ -161,7 +161,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     itemToDelete.deleteRecord();
     await itemToDelete.save();
 
-    this.navigateToSubcaseOverview(_case);
+    this.navigateToSubcaseOverview(dmf);
     this.args.onMoveSubcase();
   }
 
