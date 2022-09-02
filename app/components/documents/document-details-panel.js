@@ -4,58 +4,63 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 
+/**
+ * @param {Piece} piece
+ */
 export default class DocumentsDocumentDetailsPanel extends Component {
-  /**
-   * @argument piece: a Piece object
-   */
-   @service currentSession;
-   @tracked isEditingDetails = false;
-   @tracked documentType;
-   @tracked accessLevel;
+  @service currentSession;
+  @service pieceAccessLevelService;
 
-   constructor() {
-     super(...arguments);
-     this.loadDetailsData.perform();
-   }
+  @tracked isEditingDetails = false;
+  @tracked documentType;
+  @tracked accessLevel;
 
-   get isProcessing() {
-     return this.saveDetails.isRunning || this.cancelEditDetails.isRunning;
-   }
+  constructor() {
+    super(...arguments);
+    this.loadDetailsData.perform();
+  }
 
-   @task
-   *loadDetailsData() {
-     this.documentType = yield this.args.documentContainer.type;
-     this.accessLevel = yield this.args.piece.accessLevel;
-   }
+  get isProcessing() {
+    return this.saveDetails.isRunning || this.cancelEditDetails.isRunning;
+  }
 
-   @task
-   *cancelEditDetails() {
-     this.args.piece.rollbackAttributes(); // in case of piece name change
-     yield this.loadDetailsData.perform();
-     this.isEditingDetails = false;
-   }
+  @task
+  *loadDetailsData() {
+    this.documentType = yield this.args.documentContainer.type;
+    this.accessLevel = yield this.args.piece.accessLevel;
+  }
 
-   @task
-   *saveDetails() {
-     this.args.piece.accessLevel = this.accessLevel;
-     yield this.args.piece.save();
-     this.args.documentContainer.type = this.documentType;
-     yield this.args.documentContainer.save();
-     this.isEditingDetails = false;
-   }
+  @task
+  *cancelEditDetails() {
+    this.args.piece.rollbackAttributes(); // in case of piece name change
+    yield this.loadDetailsData.perform();
+    this.isEditingDetails = false;
+  }
 
-   @action
-   openEditDetails() {
-     this.isEditingDetails = true;
-   }
+  @task
+  *saveDetails() {
+    this.args.piece.accessLevel = this.accessLevel;
+    yield this.args.piece.save();
+    yield this.pieceAccessLevelService.updatePreviousAccessLevels(
+      this.args.piece
+    );
+    this.args.documentContainer.type = this.documentType;
+    yield this.args.documentContainer.save();
+    this.isEditingDetails = false;
+  }
 
-   @action
-   setAccessLevel(accessLevel) {
-     this.accessLevel = accessLevel;
-   }
+  @action
+  openEditDetails() {
+    this.isEditingDetails = true;
+  }
 
-   @action
-   setDocumentType(docType) {
-     this.documentType = docType;
-   }
+  @action
+  setAccessLevel(accessLevel) {
+    this.accessLevel = accessLevel;
+  }
+
+  @action
+  setDocumentType(docType) {
+    this.documentType = docType;
+  }
 }
