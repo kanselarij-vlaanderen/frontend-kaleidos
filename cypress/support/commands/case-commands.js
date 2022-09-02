@@ -55,6 +55,7 @@ function createCase(shortTitle) {
 function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   cy.log('addSubcase');
   cy.intercept('POST', '/subcases').as('addSubcase-createNewSubcase');
+  cy.intercept('GET', '/decisionmaking-flows/**/subcases').as('addSubcase-reloadDecisionmakingFlow');
   // TODO-COMMAND is this wait needed?
   cy.wait(2000);
 
@@ -109,7 +110,8 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
     .its('response.body')
     .then((responseBody) => {
       subcaseId = responseBody.data.id;
-    })
+    });
+  cy.wait('@addSubcase-reloadDecisionmakingFlow')
     .then(() => new Cypress.Promise((resolve) => {
       resolve({
         subcaseId,
