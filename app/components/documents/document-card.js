@@ -163,8 +163,10 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *uploadReplacementFile(file) {
+    const oldFile = yield this.args.piece.file;
     this.args.piece.file = file;
     yield this.args.piece.save();
+    yield this.fileService.deleteFile(oldFile);
     this.isUploadingNewVersion = false;
   }
 
