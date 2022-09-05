@@ -1,42 +1,36 @@
 import Service, { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
+import { task, timeout } from 'ember-concurrency';
+import { DOCUMENT_DELETE_UNDO_TIME_MS } from 'frontend-kaleidos/config/config';
 
-import {
-  task, timeout
-} from 'ember-concurrency';
+export default class FileService extends Service {
+  @service store;
+  @service toaster;
+  @tracked objectsToDelete = [];
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes
-export default Service.extend({
-  toaster: service(),
-  store: service(),
-  shouldUndoChanges: false,
-
-  init() {
-    this._super(...arguments);
-    this.set('objectsToDelete', []);
-  },
-
-  deleteDocumentContainerWithUndo: task(function *(documentContainerToDelete) {
+  @task
+  *deleteDocumentContainerWithUndo(documentContainerToDelete) {
     this.objectsToDelete.push(documentContainerToDelete);
     documentContainerToDelete.set('aboutToDelete', true);
-    yield timeout(15000);
+    yield timeout(DOCUMENT_DELETE_UNDO_TIME_MS);
     if (this.findObjectToDelete(documentContainerToDelete.get('id'))) {
       yield this.deleteDocumentContainer(documentContainerToDelete);
     } else {
       documentContainerToDelete.set('aboutToDelete', false);
     }
-  }),
+  }
 
-  deletePieceWithUndo: task(function *(pieceToDelete) {
+  @task
+  *deletePieceWithUndo(pieceToDelete) {
     this.objectsToDelete.push(pieceToDelete);
     pieceToDelete.set('aboutToDelete', true);
-    yield timeout(15000);
+    yield timeout(DOCUMENT_DELETE_UNDO_TIME_MS);
     if (this.findObjectToDelete(pieceToDelete.get('id'))) {
       yield this.deletePiece(pieceToDelete);
     } else {
       pieceToDelete.set('aboutToDelete', false);
     }
-  }),
+  }
 
   async deleteDocumentContainer(documentContainer) {
     const documentContainerToDelete = await documentContainer;
@@ -48,7 +42,7 @@ export default Service.extend({
       pieces.map(async(piece) => this.deletePiece(piece))
     );
     documentContainerToDelete.destroyRecord();
-  },
+  }
 
   async deletePiece(piece) {
     const pieceToDelete = await piece;
@@ -59,7 +53,7 @@ export default Service.extend({
     await this.deleteFile(file);
     return pieceToDelete.destroyRecord();
     // TODO: delete container in case we just orphaned it
-  },
+  }
 
   async deleteFile(file) {
     const fileToDelete = await file;
@@ -67,7 +61,7 @@ export default Service.extend({
       return;
     }
     return fileToDelete.destroyRecord();
-  },
+  }
 
   async reverseDelete(id) {
     const foundObjectToDelete = this.findObjectToDelete(id);
@@ -77,9 +71,9 @@ export default Service.extend({
       id
     );
     record.set('aboutToDelete', false);
-  },
+  }
 
   findObjectToDelete(id) {
     return this.objectsToDelete.find((object) => object.get('id') === id);
-  },
-});
+  }
+}
