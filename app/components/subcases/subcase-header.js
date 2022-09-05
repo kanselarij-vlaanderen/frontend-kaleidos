@@ -176,14 +176,8 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   }
 
   @action
-  async moveSubcase(newCase) {
-    const newDMF = await this.store.queryOne('decisionmaking-flow', {
-      filter: {
-        case: {
-          ':id:': newCase.id,
-        },
-      },
-    });
+  async moveSubcase(_newDMF) {
+    const newDMF = await this.store.findRecord('decisionmaking-flow', _newDMF.id);
 
     const oldDMF = await this.args.subcase.decisionmakingFlow;
     this.args.subcase.decisionmakingFlow = newDMF;
