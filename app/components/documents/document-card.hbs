@@ -258,10 +258,7 @@
           as |c|
         >
           <c.header>
-            <Auk::FileUploader
-              @fullHeight={{true}}
-              @onUpload={{perform this.uploadReplacementFile}}
-            />
+            <Auk::FileUploader @onUpload={{perform this.uploadReplacementFile}} />
           </c.header>
         </AuCard>
       {{/if}}
