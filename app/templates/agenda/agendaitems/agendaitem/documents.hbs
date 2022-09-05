@@ -18,10 +18,6 @@
           >
             {{t "batch-edit"}}
           </Auk::Button>
-        {{else if (not this.currentSession.isOverheid)}}
-          <Auk::Button {{on "click" this.openBatchDetails}}>
-            {{t "view-documents-details"}}
-          </Auk::Button>
         {{/if}}
       </Group.Item>
     {{/if}}
