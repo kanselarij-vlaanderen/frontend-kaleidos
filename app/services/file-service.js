@@ -39,9 +39,7 @@ export default class FileService extends Service {
       return;
     }
     const pieces = await documentContainerToDelete.get('pieces');
-    await Promise.all(
-      pieces.map(async(piece) => this.deletePiece(piece))
-    );
+    await Promise.all(pieces.map(async (piece) => this.deletePiece(piece)));
     documentContainerToDelete.destroyRecord();
   }
 
