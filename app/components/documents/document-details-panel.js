@@ -58,6 +58,11 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   }
 
   @action
+  setAccessLevel(accessLevel) {
+    this.accessLevel = accessLevel;
+  }
+
+  @action
   setDocumentType(docType) {
     this.documentType = docType;
   }
