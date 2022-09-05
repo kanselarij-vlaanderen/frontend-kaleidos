@@ -306,9 +306,49 @@
           />
           <Auk::List class="auk-list auk-list--bordered">
             {{#each this.piecesToDeleteReopenPreviousAgenda as |piece|}}
-              <Auk::List::Item>
-                <WebComponents::VlDocument @piece={{piece}} />
-              </Auk::List::Item>
+                <div class="vlc-document-card vlc-document-card--borderless">
+                  <div class="vlc-document-card__content">
+                    <Auk::Toolbar @auto={{true}} as |Toolbar|>
+                      <Toolbar.Group @position="left" as |Group|>
+                        <Group.Item class="auk-u-maximize-width">
+                          <div
+                            class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced"
+                          ></div>
+                          <LinkTo
+                            @route="document"
+                            @model={{piece.id}}
+                            target="_blank"
+                            class="auk-h4"
+                          >
+                            {{! prettier-ignore }}
+                            {{piece.name}}{{#if piece.file}}.{{piece.file.extension}}{{/if}}
+                          </LinkTo>
+                          <div class="vlc-document-card-content__meta">
+                            {{t "uploaded-at"}}
+                            {{moment-format piece.created}}
+                            {{t "at"}}
+                            {{moment-format piece.created "HH:mm"}}
+                          </div>
+                        </Group.Item>
+                      </Toolbar.Group>
+                      <Toolbar.Group @position="right" as |Group|>
+                        <Group.Item class="auk-u-maximize-width">
+                          {{#if piece.file}}
+                            <Auk::Button
+                              @skin="borderless"
+                              @layout="icon-only"
+                              @icon="book"
+                              class="auk-u-ml-2"
+                              {{on "click" (fn this.showPieceViewer piece)}}
+                            >
+                              {{t "view-document-details"}}
+                            </Auk::Button>
+                          {{/if}}
+                        </Group.Item>
+                      </Toolbar.Group>
+                    </Auk::Toolbar>
+                  </div>
+                </div>
             {{/each}}
           </Auk::List>
         {{/if}}
