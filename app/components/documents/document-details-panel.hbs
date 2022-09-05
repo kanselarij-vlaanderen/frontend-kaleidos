@@ -1,14 +1,14 @@
 {{#if this.isEditingDetails}}
   <Auk::Panel class="auk-panel--editing">
     <Auk::Panel::Header class="auk-u-px-1">
-      <Auk::Toolbar>
-        <Auk::Toolbar::Group @position="left">
-          <Auk::Toolbar::Item>
+      <Auk::Toolbar as |Toolbar|>
+        <Toolbar.Group @position="left" as |Group|>
+          <Group.Item>
             <h4 class="auk-h4 auk-u-m-0">
               {{t "document-properties"}}
             </h4>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
+          </Group.Item>
+        </Toolbar.Group>
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body class="auk-u-p-1">
@@ -97,26 +97,38 @@
 {{else}}
   <Auk::Panel>
     <Auk::Panel::Header class="auk-u-px-1">
-      <Auk::Toolbar>
-        <Auk::Toolbar::Group @position="left">
-          <Auk::Toolbar::Item>
+      <Auk::Toolbar as |Toolbar|>
+        <Toolbar.Group @position="left" as |Group|>
+          <Group.Item>
             <h4 class="auk-h4 auk-u-m-0">
               {{t "document-properties"}}
             </h4>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
+          </Group.Item>
+        </Toolbar.Group>
         {{#if this.currentSession.isEditor}}
-          <Auk::Toolbar::Group @position="right">
-            <Auk::Toolbar::Item>
-              <Auk::Button
+          <Toolbar.Group @position="right" as |Group|>
+            {{#if this.isLastVersionOfPiece}}
+              <Group.Item>
+                <AuButton
+                  data-test-details-tab-delete
+                  @skin="secondary"
+                  @alert={{true}}
+                  @icon="trash"
+                  @hideText={{true}}
+                  {{on "click" (fn (mut this.isOpenVerifyDeleteModal) true)}}
+                />
+              </Group.Item>
+            {{/if}}
+            <Group.Item>
+              <AuButton
                 data-test-details-tab-edit
-                @skin="tertiary"
+                @skin="secondary"
                 @icon="pencil"
-                @layout="icon-only"
+                @hideText={{true}}
                 {{on "click" this.openEditDetails}}
               />
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
+            </Group.Item>
+          </Toolbar.Group>
         {{/if}}
       </Auk::Toolbar>
     </Auk::Panel::Header>
@@ -156,4 +168,12 @@
       </Auk::KeyValue>
     </Auk::Panel::Body>
   </Auk::Panel>
+{{/if}}
+{{#if this.isOpenVerifyDeleteModal}}
+  <WebComponents::VlModalVerify
+    @title={{t "document-delete"}}
+    @message={{t "delete-document-message"}}
+    @cancel={{fn (mut this.isOpenVerifyDeleteModal) false}}
+    @verify={{this.verifyDeleteDocument}}
+  />
 {{/if}}
