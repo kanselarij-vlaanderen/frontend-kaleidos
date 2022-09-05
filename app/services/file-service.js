@@ -11,12 +11,12 @@ export default class FileService extends Service {
   @task
   *deleteDocumentContainerWithUndo(documentContainerToDelete) {
     this.objectsToDelete.push(documentContainerToDelete);
-    documentContainerToDelete.set('aboutToDelete', true);
+    documentContainerToDelete.aboutToDelete = true;
     yield timeout(DOCUMENT_DELETE_UNDO_TIME_MS);
-    if (this.findObjectToDelete(documentContainerToDelete.get('id'))) {
+    if (this.findObjectToDelete(documentContainerToDelete.id)) {
       yield this.deleteDocumentContainer(documentContainerToDelete);
     } else {
-      documentContainerToDelete.set('aboutToDelete', false);
+      documentContainerToDelete.aboutToDelete = false;
     }
   }
 
@@ -24,12 +24,12 @@ export default class FileService extends Service {
   @task
   *deletePieceWithUndo(pieceToDelete) {
     this.objectsToDelete.push(pieceToDelete);
-    pieceToDelete.set('aboutToDelete', true);
+    pieceToDelete.aboutToDelete = true;
     yield timeout(DOCUMENT_DELETE_UNDO_TIME_MS);
-    if (this.findObjectToDelete(pieceToDelete.get('id'))) {
+    if (this.findObjectToDelete(pieceToDelete.id)) {
       yield this.deletePiece(pieceToDelete);
     } else {
-      pieceToDelete.set('aboutToDelete', false);
+      pieceToDelete.aboutToDelete = false;
     }
   }
 
@@ -38,7 +38,7 @@ export default class FileService extends Service {
     if (!documentContainerToDelete) {
       return;
     }
-    const pieces = await documentContainerToDelete.get('pieces');
+    const pieces = await documentContainerToDelete.pieces;
     await Promise.all(pieces.map(async (piece) => this.deletePiece(piece)));
     documentContainerToDelete.destroyRecord();
   }
@@ -48,7 +48,7 @@ export default class FileService extends Service {
     if (!pieceToDelete) {
       return;
     }
-    const file = pieceToDelete.get('file');
+    const file = await pieceToDelete.file;
     await this.deleteFile(file);
     return pieceToDelete.destroyRecord();
     // TODO: delete container in case we just orphaned it
@@ -66,13 +66,13 @@ export default class FileService extends Service {
     const foundObjectToDelete = this.findObjectToDelete(id);
     this.objectsToDelete.removeObject(foundObjectToDelete);
     const record = await this.store.findRecord(
-      foundObjectToDelete.get('constructor.modelName'),
+      foundObjectToDelete.constructor.modelName,
       id
     );
-    record.set('aboutToDelete', false);
+    record.aboutToDelete = false;
   }
 
   findObjectToDelete(id) {
-    return this.objectsToDelete.find((object) => object.get('id') === id);
+    return this.objectsToDelete.find((object) => object.id === id);
   }
 }
