@@ -20,6 +20,7 @@ export default class FileService extends Service {
     }
   }
 
+  // TODO KAS-3588 DELETE if not used in KAS-3587 (last version delete)
   @task
   *deletePieceWithUndo(pieceToDelete) {
     this.objectsToDelete.push(pieceToDelete);
