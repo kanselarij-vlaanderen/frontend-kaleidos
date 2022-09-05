@@ -5,63 +5,62 @@ import { action } from '@ember/object';
 import { isPresent } from '@ember/utils';
 import { task } from 'ember-concurrency';
 
+/**
+ * @param {Piece} piece
+ */
 export default class DocumentsDocumentDetailsPanel extends Component {
-  /**
-   * @argument piece: a Piece object
-   */
-   @service currentSession;
-   @tracked isEditingDetails = false;
-   @tracked isOpenVerifyDeleteModal = false;
-   @tracked documentType;
-   @tracked accessLevel;
-   @tracked isLastVersionOfPiece;
+  @service currentSession;
+  @service pieceAccessLevelService;
+  @tracked isEditingDetails = false;
+  @tracked isOpenVerifyDeleteModal = false;
+  @tracked documentType;
+  @tracked accessLevel;
+  @tracked isLastVersionOfPiece;
 
-   constructor() {
-     super(...arguments);
-     this.loadDetailsData.perform();
-   }
+  constructor() {
+    super(...arguments);
+    this.loadDetailsData.perform();
+  }
 
-   get isProcessing() {
-     return this.saveDetails.isRunning || this.cancelEditDetails.isRunning;
-   }
+  get isProcessing() {
+    return this.saveDetails.isRunning || this.cancelEditDetails.isRunning;
+  }
 
-   @task
-   *loadDetailsData() {
-     this.documentType = yield this.args.documentContainer.type;
-     this.accessLevel = yield this.args.piece.accessLevel;
+  @task
+  *loadDetailsData() {
+    this.documentType = yield this.args.documentContainer.type;
+    this.accessLevel = yield this.args.piece.accessLevel;
      this.isLastVersionOfPiece = !isPresent(yield this.args.piece.nextPiece);
-   }
+  }
 
-   @task
-   *cancelEditDetails() {
-     this.args.piece.rollbackAttributes(); // in case of piece name change
-     yield this.loadDetailsData.perform();
-     this.isEditingDetails = false;
-   }
+  @task
+  *cancelEditDetails() {
+    this.args.piece.rollbackAttributes(); // in case of piece name change
+    yield this.loadDetailsData.perform();
+    this.isEditingDetails = false;
+  }
 
-   @task
-   *saveDetails() {
-     this.args.piece.accessLevel = this.accessLevel;
-     yield this.args.piece.save();
-     this.args.documentContainer.type = this.documentType;
-     yield this.args.documentContainer.save();
-     this.isEditingDetails = false;
-   }
+  @task
+  *saveDetails() {
+    this.args.piece.accessLevel = this.accessLevel;
+    yield this.args.piece.save();
+    yield this.pieceAccessLevelService.updatePreviousAccessLevels(
+      this.args.piece
+    );
+    this.args.documentContainer.type = this.documentType;
+    yield this.args.documentContainer.save();
+    this.isEditingDetails = false;
+  }
 
-   @action
-   openEditDetails() {
-     this.isEditingDetails = true;
-   }
+  @action
+  openEditDetails() {
+    this.isEditingDetails = true;
+  }
 
-   @action
-   setAccessLevel(accessLevel) {
-     this.accessLevel = accessLevel;
-   }
-
-   @action
-   setDocumentType(docType) {
-     this.documentType = docType;
-   }
+  @action
+  setDocumentType(docType) {
+    this.documentType = docType;
+  }
 
   @action
   async verifyDeleteDocument() {

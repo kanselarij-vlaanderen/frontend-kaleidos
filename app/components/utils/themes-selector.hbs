@@ -1,15 +1,17 @@
 {{#if this.findAll.isRunning}}
-  <WebComponents::VlLoader @text={{t "themes-loading-text"}} />
+  <Auk::Loader @message={{t "themes-loading-text"}} />
 {{else}}
   <div class="auk-o-grid">
-    {{#each this.selectedThemesReload as |theme|}}
+    {{#each this.themes as |theme|}}
       <div class="auk-o-grid-col-4">
         <div class="auk-u-mb">
-          <Auk::Checkbox
-            @checked={{theme.selected}}
-            @label={{theme.label}}
-            {{on "input" (fn this.selectModel theme)}}
-          />
+          {{#let (includes theme @selectedThemes) as |checked|}}
+            <Auk::Checkbox
+              @checked={{checked}}
+              @label={{theme.label}}
+              {{on "input" (fn this.toggleTheme theme checked)}}
+            />
+          {{/let}}
         </div>
       </div>
     {{/each}}
