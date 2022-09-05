@@ -1,6 +1,11 @@
 /* Appuniversum components
    ========================================================================== */
 
+// SCSS variables (to override)
+
+$au-button-height: 3.4rem;
+
+
 // Imports
 // sourced from "@appuniversum/ember-appuniversum" npm package
 
@@ -21,11 +26,23 @@
 @import 'ember-appuniversum/c-toolbar';
 @import 'ember-appuniversum/c-input';
 
+
+// CSS variables (to override)
+
+:root {
+  --au-outline: 0.3rem solid #{$auk-yellow-500};
+
+  --au-icon-size-medium: 1.8rem;
+  --au-icon-size-large: 2.2rem;
+}
+
+
 // Fixes
 
 .au-c-modal__close {
   background-color: transparent; // fix UA default background-color styling
 }
+
 
 // Overrides
 
@@ -35,29 +52,19 @@
   padding-top: 0;
 }
 
-.au-c-pill-action {
-  &:focus {
-    outline: 0.3rem solid $auk-yellow-500; // focus color of interaction elements is yellow in Kaleidos
-  }
-}
-
 .au-c-pill--link {
   cursor: pointer;
-
-  &:focus {
-    outline: 0.3rem solid $auk-yellow-500; // focus color of interaction elements is yellow in Kaleidos
-  }
 }
 
 .au-c-button--link { // change button link to Kaleidos style
-                     text-decoration: none;
-                     font-weight: 500;
+  text-decoration: none;
+  font-weight: 500;
 
-                     &:hover,
-                     &:focus {
-                       text-decoration: none;
-                     }
-                   }
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+}
 
 .au-c-modal__header {
   padding: .7rem 2rem;
@@ -197,16 +204,11 @@
   background-color: $au-white;
 }
 
-
-// Make appuniversum button pointer consistent with kaleidos
-.au-c-button {
-  cursor: pointer;
-}
-
 // Fix missing noactions class
 .auk-table--noactions .data-table__actions--top {
   display: none;
 }
+
 
 // Additions
 
