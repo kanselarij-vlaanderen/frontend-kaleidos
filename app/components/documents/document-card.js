@@ -35,6 +35,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked isOpenUploadModal = false;
   @tracked isOpenVerifyDeleteModal = false;
   @tracked isEditingPiece = false;
+  @tracked isUploadingNewVersion = false;
 
   @tracked piece;
   @tracked accessLevel;
@@ -158,6 +159,13 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.newPiece.name = new VRDocumentName(
       previousPiece.name
     ).withOtherVersionSuffix(this.sortedPieces.length + 1);
+  }
+
+  @task
+  *uploadReplacementFile(file) {
+    this.args.piece.file = file;
+    yield this.args.piece.save();
+    this.isUploadingNewVersion = false;
   }
 
   @task

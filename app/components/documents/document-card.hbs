@@ -210,26 +210,61 @@
         <c.header
           @badgeIcon={{if (eq this.piece.file.extension "pdf") "pdf" "document"}}
         >
-          <p data-test-document-card-type class="vlc-subline au-u-medium au-u-muted">
-            {{uppercase this.piece.file.extension}}
-          </p>
-          <div class="au-u-flex au-u-flex--spaced-small">
-            <Auk::Input
-              data-test-document-card-name-input={{true}}
-              @block={{true}}
-              @value={{this.pieceNameBuffer}}
-            />
+          <div class="auk-o-grid">
+            <div class="auk-o-grid-col-10">
+              <p data-test-document-card-type class="vlc-subline au-u-medium au-u-muted">
+                {{uppercase this.piece.file.extension}}
+              </p>
+              <div class="au-u-flex au-u-flex--spaced-small">
+                <Auk::Input
+                  data-test-document-card-name-input={{true}}
+                  @block={{true}}
+                  @value={{this.pieceNameBuffer}}
+                />
+              </div>
+              {{#if this.piece.created}}
+                <AuHelpText @skin="secondary">
+                  {{t "uploaded-at"}}
+                  {{moment-format this.piece.created}}
+                  {{t "at"}}
+                  {{moment-format this.piece.created "HH:mm"}}
+                </AuHelpText>
+              {{/if}}
+            </div>
+            <div class="auk-o-grid-col-2">
+              {{#if this.isUploadingNewVersion}}
+                <AuButton
+                  @skin="secondary"
+                  @alert={{true}}
+                  {{on "click" (fn (mut this.isUploadingNewVersion) false)}}
+                >
+                  {{t "cancel"}}
+                </AuButton>
+              {{else}}
+                <AuButton
+                  @skin="secondary"
+                  {{on "click" (fn (mut this.isUploadingNewVersion) true)}}
+                >
+                  {{t "replace"}}
+                </AuButton>
+              {{/if}}
+            </div>
           </div>
-          {{#if this.piece.created}}
-            <AuHelpText @skin="secondary">
-              {{t "uploaded-at"}}
-              {{moment-format this.piece.created}}
-              {{t "at"}}
-              {{moment-format this.piece.created "HH:mm"}}
-            </AuHelpText>
-          {{/if}}
         </c.header>
       </AuCard>
+      {{#if this.isUploadingNewVersion}}
+        <AuCard
+          @size="flush"
+          as |c|
+        >
+          <c.header>
+            <Auk::FileUploader
+              @fullHeight={{true}}
+              @onUpload={{perform this.uploadReplacementFile}}
+            />
+          </c.header>
+        </AuCard>
+      {{/if}}
     </Auk::Modal::Body>
     <WebComponents::VlModalFooter
       @cancelButtonText={{t "cancel"}}
