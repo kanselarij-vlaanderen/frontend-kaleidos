@@ -3,21 +3,26 @@
   @title={{t 'manage-user'
     firstName=this.model.firstName
     lastName=this.model.lastName}}
->
-  <Auk::Button
-    @icon="circle-x"
-    @skin="danger-primary"
-  >
-    Blokkeren
-  </Auk::Button>
-</Utils::SettingsHeader>
+/>
 
 <div class="auk-o-grid">
   <div class="auk-o-grid-col-6 auk-u-m">
     <div class="auk-u-m-4 auk-u-mr-2 auk-u-ml-2">
       <Auk::Panel>
         <Auk::Panel::Header>
-          <h4 data-test-route-settings---user-general-info class="auk-panel__title">{{t 'manage-users-general-info'}}</h4>
+          <AuToolbar class="auk-u-maximize-width" as |Group|>
+            <Group>
+              <h4 data-test-route-settings---user-general-info class="auk-panel__title">{{t 'manage-users-general-info'}}</h4>
+            </Group>
+            <Group>
+              <AuButton
+                @alert={{true}}
+                {{on "click" this.blockPerson}}
+              >
+                Persoon blokkeren
+              </AuButton>
+            </Group>
+          </AuToolbar>
         </Auk::Panel::Header>
         <Auk::Panel::Body>
           <dl>
@@ -41,7 +46,7 @@
               @layout="horizontal"
             />
           </dl>
-          <dl>
+          {{!-- <dl>
             <div class="auk-key-value-item auk-key-value-item--horizontal">
               <dt class="auk-key-value-item__label">{{t 'manage-users-group'}}</dt>
               <dd class="auk-key-value-item__value">
@@ -55,9 +60,9 @@
                 />
               </dd>
             </div>
-          </dl>
+          </dl> --}}
           <dl>
-            <div class="auk-key-value-item auk-key-value-item--horizontal">
+            <div class="auk-key-value-item auk-key-value-item--horizontal au-u-margin-bottom-none">
               <dt class="auk-key-value-item__label">Laatst gezien</dt>
               <dd class="auk-key-value-item__value">
                 Ma 20-06-2022 – 12:10
@@ -72,23 +77,110 @@
         <Auk::Panel::Header>
           <h4 data-test-route-settings---user-technical-info class="auk-panel__title">{{t 'manage-users-technical-info'}}</h4>
         </Auk::Panel::Header>
-        <Auk::Panel::Body>
-          <dl>
-            <Auk::KeyValue
-              @key={{t 'manage-users-void'}}
-              @value={{this.model.account.voId}}
-              @layout="horizontal"
-            />
-          </dl>
-          <dl>
-            <Auk::KeyValue
-              @key={{t 'manage-users-ovo'}}
-              @value={{if this.model.organization.identifier this.model.organization.identifier "-"}}
-              @layout="horizontal"
-            />
-          </dl>
+        <Auk::Panel::Body class="au-u-padding-none">
+          <AuTable>
+            <:header>
+              <tr>
+                <th>Organisatie</th>
+                <th>OVO</th>
+                <th>Groep</th>
+                <th></th>
+              </tr>
+            </:header>
+            <:body>
+              <tr class="au-u-muted">
+                <td>Departement Omgeving</td>
+                <td>OV003323</td>
+                <td>Kabinet</td>
+                <td class="au-u-text-right">
+                  <AuButton @skin="naked" @icon="circle-full" @iconAlignment="left" {{on "click" this.unblockRelation}}>
+                    Werkrelatie deblokkeren
+                  </AuButton>
+                </td>
+              </tr>
+              <tr>
+                <td>Sport Vlaanderen</td>
+                <td>OVO000070</td>
+                <td>Overheid</td>
+                <td class="au-u-text-right">
+                  <AuButton @skin="naked" @icon="circle-x" @iconAlignment="left" @alert={{true}} {{on "click" this.blockRelation}}>
+                    Werkrelatie blokkeren
+                  </AuButton>
+                </td>
+              </tr>
+            </:body>
+          </AuTable>
         </Auk::Panel::Body>
       </Auk::Panel>
     </div>
   </div>
 </div>
+
+{{#if this.showUnblockRelation}}
+  <Auk::Modal @size="small">
+    <Auk::Modal::Header
+      @title="Werkrelatie deblokkeren"
+      @onClose={{this.unblockRelation}}
+    />
+    <Auk::Modal::Body>
+      <div class="au-o-flow au-o-flow--small">
+        <p>Door de werkrelatie van een gebruiker te deblokkeren geef je deze opnieuw toegang. </p>
+        <p>Ben je zeker dat je deze werkrelatie van deze persoon wil deblokkeren?</p>
+      </div>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.unblockRelation}}>
+      <Auk::Button
+        @skin="primary"
+        {{on "click" this.addUnblockRelation}}
+      >
+        Ja, werkrelatie deblokkeren
+      </Auk::Button>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
+{{/if}}
+
+{{#if this.showBlockRelation}}
+  <Auk::Modal @size="small">
+    <Auk::Modal::Header
+      @title="Werkrelatie blokkeren"
+      @onClose={{this.blockRelation}}
+    />
+    <Auk::Modal::Body>
+      <div class="au-o-flow au-o-flow--small">
+        <p>Door de werkrelatie van een gebruiker te blokkeren ontzeg je enkel deze toegang. De gebruiker kan inloggen via andere werkrelaties indien deze beschikbaar zijn.</p>
+      </div>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.blockRelation}}>
+      <Auk::Button
+        @skin="danger-primary"
+        {{on "click" this.addBlockRelation}}
+      >
+        Werkrelatie blokkeren
+      </Auk::Button>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
+{{/if}}
+
+
+{{#if this.showBlockPerson}}
+  <Auk::Modal @size="small">
+    <Auk::Modal::Header
+      @title="Persoon blokkeren"
+      @onClose={{this.blockPerson}}
+    />
+    <Auk::Modal::Body>
+      <div class="au-o-flow au-o-flow--small">
+        <p>Door een persoon te blokkeren kan deze niet meer inloggen. Alle toegangen worden ontzegd.</p>
+        <p>Ben je zeker dat je <strong>User</strong> wil blokkeren uit Kaleidos?</p>
+      </div>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.blockPerson}}>
+      <Auk::Button
+        @skin="danger-primary"
+        {{on "click" this.addBlockPerson}}
+      >
+        Ja, persoon blokkeren
+      </Auk::Button>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
+{{/if}}

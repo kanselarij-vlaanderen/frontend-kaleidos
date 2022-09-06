@@ -3,3 +3,11 @@
     background-color: transparent !important;
   }
 }
+
+.auk-panel .au-c-table-wrapper {
+  border: 0;
+
+  tr:last-child {
+    border-bottom: 0;
+  }
+}
