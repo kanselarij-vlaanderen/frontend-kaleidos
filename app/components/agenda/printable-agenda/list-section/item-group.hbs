@@ -18,12 +18,18 @@
     {{#if this.items.first.sortedPieces}}
       <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
         @pieces={{this.items.first.sortedPieces}}
+        @isDraftAccessLevelArgs={{hash
+          meeting=@isDraftAccessLevelArgs.meeting
+          agenda=@isDraftAccessLevelArgs.agenda
+          agendaitem=this.items.first
+        }}
       />
     {{/if}}
   </div>
   {{#each this.items.remainder as |agendaitem|}}
     <Agenda::PrintableAgenda::ListSection::ItemGroup::Item
       @item={{agendaitem}}
+      @isDraftAccessLevelArgs={{@isDraftAccessLevelArgs}}
       value={{agendaitem.number}}
     />
   {{/each}}

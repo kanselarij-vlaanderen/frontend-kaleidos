@@ -1,15 +1,10 @@
 import Route from '@ember/routing/route';
-import { hash } from 'rsvp';
-import {
-  task, all
-} from 'ember-concurrency';
+import { task, all } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes
-export default Route.extend({
-  store: service(),
+export default class AgendaPrintRoute extends Route {
+  @service store;
 
   async model() {
     const {
@@ -36,14 +31,24 @@ export default Route.extend({
     await this.ensureDocuments.perform(notas);
     await this.ensureDocuments.perform(announcements);
 
-    return hash({
+    // Data needed to determine if access-level is draft
+    // const internalDecisionPublicationActivityStatus = await (await meeting.internalDecisionPublicationActivity).status;
+    // const internalDocumentPublicationActivityStatus = await (await meeting.internalDocumentPublicationActivity).status;
+    // const themisPublicationActivities = await meeting.themisPublicationActivities;
+
+    return {
+      agenda,
       meeting,
+      // internalDecisionPublicationActivityStatus,
+      // internalDocumentPublicationActivityStatus,
+      // themisPublicationActivities,
       notas,
       announcements,
-    });
-  },
+    };
+  }
 
-  ensureDocuments: task(function *(agendaitems) {
+  @task
+  *ensureDocuments(agendaitems) {
     const tasks = [];
     for (const agendaitem of agendaitems) {
       if (!agendaitem.hasMany('pieces').value()) {
@@ -51,15 +56,14 @@ export default Route.extend({
       }
     }
     yield all(tasks);
-  }),
+  }
 
-  loadDocuments: task(function *(agendaitem) {
+  @task({ maxConcurrency: 2, enqueue: true })
+  *loadDocuments(agendaitem) {
     yield agendaitem.hasMany('pieces').reload({
       adapterOptions: {
         namesOnly: true,
       },
     });
-  }).maxConcurrency(2)
-    .enqueue(),
-
-});
+  }
+}

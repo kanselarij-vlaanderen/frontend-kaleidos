@@ -2,6 +2,14 @@
 {{#if this.showAccessLevel}}
   <AccessLevelPill
     @accessLevel={{@accessLevel}}
-    @isDraft={{not (await (is-access-level-in-effect @accessLevel @piece))}}
+    @isDraft={{await
+      (is-draft-access-level
+        meeting=@isDraftAccessLevelArgs.meeting
+        agenda=@isDraftAccessLevelArgs.agenda
+        agendaitem=@isDraftAccessLevelArgs.agendaitem
+        piece=@piece
+        accessLevel=@accessLevel
+      )
+    }}
   />
 {{/if}}

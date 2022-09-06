@@ -7,6 +7,11 @@
   {{#if @item.sortedPieces}}
     <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
       @pieces={{@item.sortedPieces}}
+      @isDraftAccessLevelArgs={{hash
+        meeting=@isDraftAccessLevelArgs.meeting
+        agenda=@isDraftAccessLevelArgs.agenda
+        agendaitem=@item
+      }}
     />
   {{/if}}
 </div>

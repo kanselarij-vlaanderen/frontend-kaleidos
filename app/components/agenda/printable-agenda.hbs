@@ -30,6 +30,7 @@
           {{#each @notas as |notaGroup|}}
             <Agenda::PrintableAgenda::ListSection::ItemGroup
               @items={{notaGroup}}
+              @isDraftAccessLevelArgs={{@isDraftAccessLevelArgs}}
             />
           {{/each}}
         </Agenda::PrintableAgenda::ListSection>
@@ -44,6 +45,7 @@
           {{#each @announcements as |announcement|}}
             <Agenda::PrintableAgenda::ListSection::ItemGroup::Item
               @item={{announcement}}
+              @isDraftAccessLevelArgs={{@isDraftAccessLevelArgs}}
             />
           {{/each}}
         </Agenda::PrintableAgenda::ListSection>
