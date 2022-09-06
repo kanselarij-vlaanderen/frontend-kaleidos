@@ -60,6 +60,7 @@
               <div data-test-compare-agendaitem-left>
                 <Agenda::AgendaOverview::AgendaOverviewItem
                   @meeting={{@meeting}}
+                  @agenda={{this.agendaOne}}
                   @agendaitem={{combinedAgendaitem.left}}
                 />
               </div>
@@ -70,6 +71,7 @@
               <div data-test-compare-agendaitem-right>
                 <Agenda::AgendaOverview::AgendaOverviewItem
                   @meeting={{@meeting}}
+                  @agenda={{this.agendaTwo}}
                   @agendaitem={{combinedAgendaitem.right}}
                 />
               </div>
@@ -94,6 +96,7 @@
                 <div data-test-compare-announcement-left>
                   <Agenda::AgendaOverview::AgendaOverviewItem
                     @meeting={{@meeting}}
+                    @agenda={{this.agendaOne}}
                     @agendaitem={{combinedAnnouncement.left}}
                   />
                 </div>
@@ -104,6 +107,7 @@
                 <div data-test-compare-announcement-right>
                   <Agenda::AgendaOverview::AgendaOverviewItem
                     @meeting={{@meeting}}
+                    @agenda={{this.agendaTwo}}
                     @agendaitem={{combinedAnnouncement.right}}
                   />
                 </div>

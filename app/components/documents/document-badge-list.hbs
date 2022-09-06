@@ -9,6 +9,7 @@ as |documents|>
           @accessLevel={{await doc.accessLevel}}
           @isShowingAccessLevel={{this.shouldShowAccessLevel (await doc.accessLevel)}}
           @isHighlighted={{includes doc @highlightedPieces}}
+          @isDraftAccessLevelArgs={{@isDraftAccessLevelArgs}}
         />
       </li>
     {{/each}}
