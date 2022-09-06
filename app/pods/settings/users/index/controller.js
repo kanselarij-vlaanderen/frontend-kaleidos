@@ -73,45 +73,29 @@ export default class UsersSettingsController extends Controller {
     this.checked = !this.checked;
   }
 
-  @tracked showActivateAll = false;
+  @tracked showBlockRelation = false;
 
   @action
-  activateAll() {
-    this.showActivateAll = !this.showActivateAll;
+  blockRelation() {
+    this.showBlockRelation = !this.showBlockRelation;
   }
 
   @action
-  activateAllToggle() {
-    this.showActivateAll = !this.showActivateAll;
-    this.itemActivated = true;
-    this.toaster.success("De status van 2 gebruikers is successvol gewijzigd", "Gelukt!");
+  addBlockRelation() {
+    this.showBlockRelation = !this.showBlockRelation;
+    this.toaster.success("De werkrelatie is geblokkeerd.");
   }
 
-  @tracked showDisableAll = false;
+  @tracked showBlockPerson = false;
 
   @action
-  disableAll() {
-    this.showDisableAll = !this.showDisableAll;
+  blockPerson() {
+    this.showBlockPerson = !this.showBlockPerson;
   }
 
   @action
-  disableAllToggle() {
-    this.showDisableAll = !this.showDisableAll;
-    this.itemActivated = false;
-    this.toaster.success("De status van 8 gebruikers is successvol gewijzigd", "Gelukt!");
-  }
-
-  @tracked showBlockAll = false;
-
-  @action
-  blockAll() {
-    this.showBlockAll = !this.showBlockAll;
-  }
-
-  @tracked showBlock = false;
-
-  @action
-  block() {
-    this.showBlock = !this.showBlock;
+  addBlockPerson() {
+    this.showBlockPerson = !this.showBlockPerson;
+    this.toaster.success("De persoon is geblokkeerd.");
   }
 }

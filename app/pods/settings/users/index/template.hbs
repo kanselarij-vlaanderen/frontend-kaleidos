@@ -1,163 +1,130 @@
 <div class="auk-scroll-wrapper__body au-u-background-gray-100">
   <div class="auk-o-grid au-o-grid--stretch">
     <div class="auk-o-grid-col-2">
-      <div class="au-c-sidebar">
-        <div>
-          <AuHeading @level="3" @skin="6" class="au-u-hidden-visually">Inhoud</AuHeading>
-          <ul class="au-c-list-navigation">
-            <li class="au-c-list-navigation__item">
-              <AuNavigationLink
-                @route="settings.users"
-              >
-                Alle gebruikers
-              </AuNavigationLink>
-            </li>
-            <li class="au-c-list-navigation__item">
-              <AuNavigationLink class="au-u-medium">
-                Geblokkeerd
-              </AuNavigationLink>
-            </li>
-          </ul>
-          <div class="au-o-box au-o-box--small au-u-padding-top-none">
-            <div class="au-c-card au-o-box au-o-box--small">
-              <Auk::Label>Filteren op organisatie</Auk::Label>
-              <div class="au-u-flex au-u-flex--spaced-tiny">
-                <div class="au-u-4-5">
-                  <Auk::Input
-                    @type="search"
-                    class="au-u-1-1"
-                  />
-                </div>
-                <div class="au-u-1-5">
-                  <Auk::Button
-                    @skin="secondary"
-                    @layout="icon-only"
-                    @icon="plus"
-                    class="au-u-1-1"
-                  />
-                </div>
-              </div>
-              <p class="au-u-h-functional au-u-margin-top-tiny"><AuLinkExternal @icon="external"
-              @iconAlignment="right">Lijst met OVO codes</AuLinkExternal></p>
-              <AuHr />
-              <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--between au-u-flex--vertical-center">
-                <div class="au-u-medium">
-                  OVO00001
-                </div>
-                <div>
-                  <Auk::Button
-                    @skin="muted-borderless"
-                    @layout="icon-only"
-                    @icon="x"
-                    class="au-u-1-1"
-                  />
-                </div>
-              </div>
+      <div class="au-o-box au-o-box--small au-u-padding-right-none">
+        <div class="au-c-card au-o-box au-o-box--small">
+          <Auk::Label>Filteren op organisatie</Auk::Label>
+          <div class="au-u-flex au-u-flex--spaced-tiny">
+            <div class="au-u-4-5">
+              <Auk::Input
+                @type="search"
+                class="au-u-1-1"
+              />
             </div>
-            <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-tiny">
-              <Auk::Label>Filteren op laatst gezien</Auk::Label>
-              <div class="auk-form-group auk-u-position-relative au-u-margin-bottom-small">
-                <Auk::Label>{{t "from"}}</Auk::Label>
-                <WebComponents::VlDatepicker
-                  @selectedDate={{array this.dateFromBuffer}}
-                  @dateChanged={{fn (mut this.dateFromBuffer)}}
-                  @enableClear={{this.dateFromBuffer}}
-                  @onClear={{fn (mut this.dateFromBuffer) null}}
-                  @allowInput={{true}}
-                />
-              </div>
-              <div class="auk-form-group auk-u-position-relative">
-                <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
-                <WebComponents::VlDatepicker
-                  @selectedDate={{array this.dateToBuffer}}
-                  @dateChanged={{fn (mut this.dateToBuffer)}}
-                  @enableClear={{this.dateToBuffer}}
-                  @onClear={{fn (mut this.dateToBuffer) null}}
-                  @allowInput={{true}}
-                />
-              </div>
+            <div class="au-u-1-5">
+              <Auk::Button
+                @skin="secondary"
+                @layout="icon-only"
+                @icon="plus"
+                class="au-u-1-1"
+              />
             </div>
-            <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-tiny">
-              <Auk::Label>Filteren op rechtengroep</Auk::Label>
-              <Auk::Checkbox
-                @checked={{true}}
-                @label="Admin"
-              />
-              <Auk::Checkbox
-                @checked={{true}}
-                @label="Secretarie"
-              />
-              <Auk::Checkbox
-                @checked={{true}}
-                @label="OVRB"
-              />
-              <Auk::Checkbox
-                @checked={{true}}
-                @label="Kort bestek"
-              />
-              <Auk::Checkbox
-                @checked={{true}}
-                @label="Minister"
-              />
-              <Auk::Checkbox
-                @checked={{true}}
-                @label="Kabinet"
-              />
-              <Auk::Checkbox
-                @checked={{true}}
-                @label="Vlaams Parlement"
-              />
-              <Auk::Checkbox
-                @checked={{true}}
-                @label="Raad van State"
-              />
-              <Auk::Checkbox
-                @checked={{true}}
-                @label="Overheid"
+          </div>
+          <p class="au-u-h-functional au-u-margin-top-tiny">
+            <AuLinkExternal
+              @icon="external"
+              @iconAlignment="right">
+              Lijst met OVO codes
+            </AuLinkExternal>
+          </p>
+          <AuHr />
+          <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--between au-u-flex--vertical-center">
+            <div>
+              <p class="au-u-muted">
+                OVO00001
+              </p>
+              <p>Het Vlaams Parlement</p>
+            </div>
+            <div>
+              <Auk::Button
+                @skin="muted-borderless"
+                @layout="icon-only"
+                @icon="x"
+                class="au-u-1-1"
               />
             </div>
           </div>
         </div>
+        <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-tiny">
+          <Auk::Label>Filteren op laatst gezien</Auk::Label>
+          <div class="auk-form-group auk-u-position-relative au-u-margin-bottom-small">
+            <Auk::Label>{{t "from"}}</Auk::Label>
+            <WebComponents::VlDatepicker
+              @selectedDate={{array this.dateFromBuffer}}
+              @dateChanged={{fn (mut this.dateFromBuffer)}}
+              @enableClear={{this.dateFromBuffer}}
+              @onClear={{fn (mut this.dateFromBuffer) null}}
+              @allowInput={{true}}
+            />
+          </div>
+          <div class="auk-form-group auk-u-position-relative">
+            <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
+            <WebComponents::VlDatepicker
+              @selectedDate={{array this.dateToBuffer}}
+              @dateChanged={{fn (mut this.dateToBuffer)}}
+              @enableClear={{this.dateToBuffer}}
+              @onClear={{fn (mut this.dateToBuffer) null}}
+              @allowInput={{true}}
+            />
+          </div>
+        </div>
+        <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-tiny">
+          <Auk::Label>Filteren op rechtengroep</Auk::Label>
+          <Auk::Checkbox
+            @checked={{true}}
+            @label="Admin"
+          />
+          <Auk::Checkbox
+            @checked={{true}}
+            @label="Secretarie"
+          />
+          <Auk::Checkbox
+            @checked={{true}}
+            @label="OVRB"
+          />
+          <Auk::Checkbox
+            @checked={{true}}
+            @label="Kort bestek"
+          />
+          <Auk::Checkbox
+            @checked={{true}}
+            @label="Minister"
+          />
+          <Auk::Checkbox
+            @checked={{true}}
+            @label="Kabinet"
+          />
+          <Auk::Checkbox
+            @checked={{true}}
+            @label="Vlaams Parlement"
+          />
+          <Auk::Checkbox
+            @checked={{true}}
+            @label="Raad van State"
+          />
+          <Auk::Checkbox
+            @checked={{true}}
+            @label="Overheid"
+          />
+        </div>
+        <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-tiny">
+          <Auk::Label>Geblokkeerd op</Auk::Label>
+          <Auk::Checkbox
+            @checked={{true}}
+            @label="Werkrelatie"
+          />
+          <Auk::Checkbox
+            @checked={{true}}
+            @label="Persoon"
+          />
+        </div>
       </div>
     </div>
     <div class="auk-o-grid-col-10">
-      <div class="auk-navbar auk-navbar--bordered-bottom au-u-padding-left-none au-u-padding-right-small au-u-padding-top-small au-u-padding-bottom-small au-u-flex--between">
-        <div class="au-u-flex au-u-flex--spaced-tiny">
-          {{#if (eq this.checked false)}}
-          <Auk::Button
-            @icon="circle-full"
-            @skin="secondary"
-            @disabled={{true}}
-          >
-            Deblokkeren
-          </Auk::Button>
-          <Auk::Button
-            @icon="circle-x"
-            @skin="danger-primary"
-            @disabled={{true}}
-          >
-            Blokkeren
-          </Auk::Button>
-          {{else}}
-          <Auk::Button
-            @icon="circle-full"
-            @skin="secondary"
-            {{on "click" this.activateAll}}
-          >
-            Deblokkeren
-          </Auk::Button>
-          <Auk::Button
-            @icon="circle-x"
-            @skin="danger-primary"
-            {{on "click" this.blockAll}}
-          >
-            Blokkeren
-          </Auk::Button>
-          {{/if}}
-        </div>
-        <div>
+      <div class="auk-navbar auk-navbar--bordered-bottom au-u-padding-left-none au-u-padding-right-small au-u-padding-top-small au-u-padding-bottom-small au-u-flex--between au-u-flex--spaced-tiny">
           <Auk::Input
             data-test-route-settings-users-search-input
+            class="auk-u-maximize-width"
             @type="search"
             @value={{this.filter}}
           />
@@ -169,7 +136,6 @@
           >
             Zoeken
           </Auk::Button>
-        </div>
       </div>
       <DataTable
         data-test-route-settings-users-table={{true}}
@@ -184,12 +150,6 @@
       >
         <table.content as |c|>
           <c.header>
-            <th class="auk-table-checkbox-col">
-              <Auk::Checkbox
-                @checked={{false}}
-                {{on "click" this.checkAll}}
-              />
-            </th>
             <ThSortable
               @currentSorting={{this.sort}}
               @field="first-name"
@@ -220,62 +180,145 @@
           </tr>
           {{/if }}
           <c.body as |user|>
-            <td>
-              <Auk::Checkbox
-                @checked={{this.checked}}
-              />
-            </td>
             <td data-test-route-settings-users-row-first-name>
-              <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small {{if (or (eq user.firstName "Tom")(eq user.firstName "Hannes")) "au-u-muted"}}">
+              <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small {{if (eq user.firstName "Tom") "au-u-muted"}}">
               {{user.firstName}} {{user.lastName}}
-              {{#if (or (eq user.firstName "Tom")(eq user.firstName "Hannes"))}}
+              {{#if (eq user.firstName "Tom")}}
               <AuPill @icon="circle-x" @skin="error" @size="small">
-                Geblokkeerd
+                Persoon geblokkeerd
               </AuPill>
               {{/if}}
               </span>
             </td>
+            <td class="au-o-flow au-o-flow--tiny">
+              {{#if (eq user.firstName "Tom")}}
+              <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+                <div>
+                  <p class="au-u-muted au-u-h-functional">
+                    OVO000032
+                  </p>
+                  <p class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small au-u-muted">
+                    Kaleidos
+                  </p>
+                </div>
+                <AuPill @icon="circle-x" @skin="error" @size="small">
+                  Werkrelatie geblokkeerd
+                </AuPill>
+              </div>
+              <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+                <div>
+                  <p class="au-u-muted au-u-h-functional">
+                    OVO000032
+                  </p>
+                  <p class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small au-u-muted">
+                    Sport Vlaanderen
+                  </p>
+                </div>
+                <AuPill @icon="circle-x" @skin="error" @size="small">
+                  Werkrelatie geblokkeerd
+                </AuPill>
+              </div>
+              {{else if (eq user.firstName "Hannes")}}
+              <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+                <div>
+                  <p class="au-u-muted au-u-h-functional">
+                    OVO000032
+                  </p>
+                  <p class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small au-u-muted">
+                    Kaleidos
+                  </p>
+                </div>
+                <AuPill @icon="circle-x" @skin="error" @size="small">
+                  Werkrelatie geblokkeerd
+                </AuPill>
+              </div>
+              <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+                <div>
+                  <p class="au-u-muted au-u-h-functional">
+                    OVO000032
+                  </p>
+                  <p class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+                    Sport Vlaanderen
+                  </p>
+                </div>
+              </div>
+              {{else}}
+                {{#if user.organization.identifier}}
+                <p class="au-u-muted au-u-h-functional">
+                {{user.organization.identifier}}
+                </p>
+                <p class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+                  Kaleidos
+                </p>
+                {{else}}
+                <div>
+                  <p class="au-u-muted au-u-h-functional">
+                  OV000001827
+                  </p>
+                  <p class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+                    Departement Kanselarij en Bestuur
+                  </p>
+                </div>
+                {{/if}}
+              {{/if}}
+            </td>
+            <td data-test-route-settings-users-row-group>
+              {{#if (eq user.firstName "Tom")}}
+              <div class="au-u-flex au-u-flex--column au-u-flex--spaced">
+                <p class="au-u-muted">Kabinet</p>
+                <p class="au-u-muted">Overheid</p>
+              </div>
+              {{else if (eq user.firstName "Hannes")}}
+              <div class="au-u-flex au-u-flex--column au-u-flex--spaced">
+                <p class="au-u-muted">Kabinet</p>
+                <p>Overheid</p>
+              </div>
+              {{else}}
+                {{#if user.group}}
+                  {{user.group.name}}
+                {{else}}
+                  -
+                {{/if}}
+              {{/if}}
+            </td>
             <td>
-              {{#if user.organization.identifier}}
-              <p class="au-u-muted au-u-h-functional">
-              {{user.organization.identifier}}
-              </p>
-              <p class="{{if (or (eq user.firstName "Tom")(eq user.firstName "Hannes")) "au-u-muted"}}">Kaleidos</p>
+              {{#if (eq user.firstName "Tom")}}
+              <div class="au-u-flex au-u-flex--column au-u-flex--spaced">
+                <p class="au-u-muted">Ma 20-06-2022 – 12:10</p>
+                <p class="au-u-muted">Ma 20-06-2022 – 12:10</p>
+              </div>
+              {{else if (eq user.firstName "Hannes")}}
+              <div class="au-u-flex au-u-flex--column au-u-flex--spaced">
+                <p class="au-u-muted">Ma 20-06-2022 – 12:10</p>
+                <p>Ma 20-06-2022 – 12:10</p>
+              </div>
               {{else}}
-                -
-              {{/if}}
-            </td>
-            <td data-test-route-settings-users-row-group class="{{if (or (eq user.firstName "Tom")(eq user.firstName "Hannes")) "au-u-muted"}}">
-              {{#if user.group}}
-                {{user.group.name}}
-              {{else}}
-                -
-              {{/if}}
-            </td>
-            <td class="{{if (or (eq user.firstName "Tom")(eq user.firstName "Hannes")) "au-u-muted"}}">
               Ma 20-06-2022 – 12:10
+              {{/if}}
             </td>
             <td class="auk-u-text-align--right">
               <div class="auk-o-flex auk-o-flex--justify-end">
+                {{#if (eq user.firstName "Tom")}}
+                {{else}}
                 <Auk::DropdownMenu
                   @skin="borderless"
                   @icon="three-dots"
                   as |Menu|
                 >
-                  {{#if (or (eq user.firstName "Tom")(eq user.firstName "Hannes"))}}
-                  <Menu.Item
-                  >
-                    Deblokkeren
-                  </Menu.Item>
-                  {{else}}
                   <Menu.Item
                     @skin="danger"
-                    {{on "click" this.block}}
+                    {{on "click" this.blockRelation}}
                   >
-                    Blokkeren
+                    Werkrelatie blokkeren
                   </Menu.Item>
-                  {{/if}}
+                  <Menu.Item
+                    @skin="danger"
+                    {{on "click" this.blockPerson}}
+                  >
+                    Persoon blokkeren
+                  </Menu.Item>
                 </Auk::DropdownMenu>
+                {{/if}}
                 {{!-- TODO: this action-bar component triggers seemingly unnecessary new requests for a user --}}
                 <WebComponents::LightTable::VlcUserTableActionbar
                   @row={{user}}
@@ -290,86 +333,68 @@
   </div>
 </div>
 
-{{#if this.showActivateAll}}
+{{#if this.showBlockRelation}}
   <Auk::Modal @size="small">
     <Auk::Modal::Header
-      @title="Activeren"
-      @onClose={{this.activateAll}}
+      @title="Persoon blokkeren"
+      @onClose={{this.blockRelation}}
     />
     <Auk::Modal::Body>
-      <p>Door een gebruiker te deblokkeren krijgt deze opnieuw toegang tot Kaleidos. Je gaat <strong>2 gebruikers</strong> deblokkeren.</p>
+      <div class="au-o-flow au-o-flow--small">
+        <p>Door de werkrelatie van een gebruiker te blokkeren ontzeg je enkel deze toegang. De gebruiker kan inloggen via andere werkrelaties indien deze beschikbaar zijn.</p>
+        <AuFieldset as |f|>
+          <f.legend>Welke werkrelatie wil je blokkeren?</f.legend>
+          <f.content>
+            <AuControlCheckbox
+              @label="Departement Omgeving - Kabinet"
+              @name="Checkboxs"
+              @value="CheckboxOne"
+              @identifier="CheckboxOne"
+              @checked={{false}}
+              @disabled= {{false}}
+            />
+            <AuControlCheckbox
+              @label="Sport Vlaanderen - Overheid"
+              @name="Checkboxs"
+              @value="CheckboxTwo"
+              @identifier="CheckboxTwo"
+              @checked={{false}}
+              @disabled= {{false}}
+            />
+          </f.content>
+        </AuFieldset>
+      </div>
     </Auk::Modal::Body>
-    <Auk::Modal::Footer @onCancel={{this.activateAll}}>
-      <Auk::Button
-        @skin="primary"
-        {{on "click" this.activateAllToggle}}
-      >
-        Gebruikers deblokkeren
-      </Auk::Button>
-    </Auk::Modal::Footer>
-  </Auk::Modal>
-{{/if}}
-
-{{#if this.showDisableAll}}
-  <Auk::Modal @size="small">
-    <Auk::Modal::Header
-      @title="Deactiveren"
-      @onClose={{this.disableAll}}
-    />
-    <Auk::Modal::Body>
-      <p>Gedeactiveerde gebruikers hebben tijdelijk geen toegang tot Kaleidos. Zij kunnen later opnieuw geactiveerd worden.</p>
-    </Auk::Modal::Body>
-    <Auk::Modal::Footer @onCancel={{this.disableAll}}>
-      <Auk::Button
-        @skin="primary"
-        {{on "click" this.disableAllToggle}}
-      >
-        Deactiveren
-      </Auk::Button>
-    </Auk::Modal::Footer>
-  </Auk::Modal>
-{{/if}}
-
-{{#if this.showBlockAll}}
-  <Auk::Modal @size="small">
-    <Auk::Modal::Header
-      @title="Blokkeren"
-      @onClose={{this.blockAll}}
-    />
-    <Auk::Modal::Body>
-      <p>Geblokkeerde gebruikers kunnen zich niet meer aanmelden bij Kaleidos. Indien nodig kan deze blokkering later ongedaan gemaakt worden.</p>
-      <p class="au-u-margin-bottom-small">Typ “Blokkeren” om <strong>8 gebruikers</strong> te blokkeren.</p>
-      <Auk::Input />
-    </Auk::Modal::Body>
-    <Auk::Modal::Footer @onCancel={{this.blockAll}}>
+    <Auk::Modal::Footer @onCancel={{this.blockRelation}}>
       <Auk::Button
         @skin="danger-primary"
-        {{on "click" this.blockAll}}
+        {{on "click" this.addBlockRelation}}
       >
-        Blokkeren
+        Werkrelatie blokkeren
       </Auk::Button>
     </Auk::Modal::Footer>
   </Auk::Modal>
 {{/if}}
 
 
-{{#if this.showBlock}}
+{{#if this.showBlockPerson}}
   <Auk::Modal @size="small">
     <Auk::Modal::Header
-      @title="Blokkeren"
-      @onClose={{this.block}}
+      @title="Persoon blokkeren"
+      @onClose={{this.blockPerson}}
     />
     <Auk::Modal::Body>
-      <p>Geblokkeerde gebruikers worden definitief uit Kaleidos gehouden. Zij kunnen niet meer geactiveerd worden.</p>
-      <p class="au-u-margin-bottom-small">Typ “Blokkeren” om <strong>deze gebruiker</strong> te blokkeren.</p>
-      <Auk::Input />
+      <div class="au-o-flow au-o-flow--small">
+        <p>Door een persoon te blokkeren kan deze niet meer inloggen. Alle toegangen worden ontzegd.</p>
+        <p>Ben je zeker dat je <strong>User</strong> wil blokkeren uit Kaleidos?</p>
+      </div>
     </Auk::Modal::Body>
-    <Auk::Modal::Footer @onCancel={{this.block}}>
+    <Auk::Modal::Footer @onCancel={{this.blockPerson}}>
       <Auk::Button
         @skin="danger-primary"
-        {{on "click" this.blockAll}}
+        {{on "click" this.addBlockPerson}}
       >
-        Blokkeren
+        Ja, persoon blokkeren
       </Auk::Button>
     </Auk::Modal::Footer>
   </Auk::Modal>
