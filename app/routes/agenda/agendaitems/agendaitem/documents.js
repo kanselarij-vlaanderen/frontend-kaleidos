@@ -24,7 +24,8 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     });
     pieces = pieces.toArray();
     let sortedPieces;
-    this.meeting = this.modelFor('agenda').meeting;
+    const { agenda, meeting } = this.modelFor('agenda');
+    this.meeting = meeting;
     if (agendaitem.isApproval) {
       sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
     } else if (this.meeting.isPreKaleidos) {
@@ -36,6 +37,9 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     return {
       pieces: sortedPieces,
       // linkedPieces: this.modelFor('agenda.agendaitems.agendaitem').get('linkedPieces')
+      meeting,
+      agenda,
+      agendaitem,
     };
   }
 

@@ -49,6 +49,11 @@
       @didDeleteContainer={{this.refresh}}
       @markForSignature={{this.markForSignature}}
       @unmarkForSignature={{this.unmarkForSignature}}
+      @isDraftAccessLevelArgs={{hash
+        meeting=@model.meeting
+        agenda=@model.agenda
+        agendaitem=@model.agendaitem
+      }}
     />
   {{else}}
     <div class="auk-u-mt-2">
