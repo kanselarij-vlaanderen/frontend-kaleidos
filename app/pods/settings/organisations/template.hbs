@@ -2,75 +2,61 @@
   <div class="au-c-body-container au-c-body-container--scroll">
     <div class="auk-o-grid au-o-grid--stretch">
       <div class="auk-o-grid-col-2">
-        <div class="au-c-sidebar">
-          <AuHeading @level="3" @skin="6" class="au-u-hidden-visually">Inhoud</AuHeading>
-          <ul class="au-c-list-navigation">
-            <li class="au-c-list-navigation__item">
-              <AuNavigationLink
-                @route="settings.organisations"
-              >
-                Alle gebruikers
-              </AuNavigationLink>
-            </li>
-            <li class="au-c-list-navigation__item">
-              <AuNavigationLink class="au-u-medium">
-                Geblokkeerd
-              </AuNavigationLink>
-            </li>
-          </ul>
+        <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny au-u-padding-right-none">
+          <div class="au-c-card au-o-box au-o-box--small">
+            <Auk::Label>Filteren op organisatie</Auk::Label>
+            <div class="au-u-flex au-u-flex--spaced-tiny">
+              <div class="au-u-4-5">
+                <Auk::Input
+                  @type="search"
+                  class="au-u-1-1"
+                />
+              </div>
+              <div class="au-u-1-5">
+                <Auk::Button
+                  @skin="secondary"
+                  @layout="icon-only"
+                  @icon="plus"
+                  class="au-u-1-1"
+                />
+              </div>
+            </div>
+            <p class="au-u-h-functional au-u-margin-top-tiny">
+              <AuLinkExternal
+                @icon="external"
+                @iconAlignment="right">
+                Lijst met OVO codes
+              </AuLinkExternal>
+            </p>
+            <AuHr />
+            <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--between au-u-flex--vertical-center">
+              <div>
+                <p class="au-u-muted">
+                  OVO00001
+                </p>
+                <p>Het Vlaams Parlement</p>
+              </div>
+              <div>
+                <Auk::Button
+                  @skin="muted-borderless"
+                  @layout="icon-only"
+                  @icon="x"
+                  class="au-u-1-1"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="au-c-card au-o-box au-o-box--small">
+            <AuToggleSwitch
+              @label="Toon enkel geblokkeerde"
+              @identifier="blocked"
+              @name="blocked"
+              @checked={{false}}
+            />
+          </div>
         </div>
       </div>
       <div class="auk-o-grid-col-10">
-        <div class="auk-navbar auk-navbar--bordered-bottom au-u-padding-left-none au-u-padding-right-tiny au-u-padding-top-small au-u-padding-bottom-small au-u-flex--between">
-          <div class="au-u-flex au-u-flex--spaced-tiny">
-            {{#if (eq this.checked false)}}
-            <Auk::Button
-              @icon="circle-full"
-              @skin="secondary"
-              @disabled={{true}}
-            >
-              Deblokkeren
-            </Auk::Button>
-            <Auk::Button
-              @icon="circle-x"
-              @skin="danger-primary"
-              @disabled={{true}}
-            >
-              Blokkeren
-            </Auk::Button>
-            {{else}}
-            <Auk::Button
-              @icon="circle-full"
-              @skin="secondary"
-              {{on "click" this.activateAll}}
-            >
-              Deblokkeren
-            </Auk::Button>
-            <Auk::Button
-              @icon="circle-x"
-              @skin="danger-primary"
-              {{on "click" this.blockAll}}
-            >
-              Blokkeren
-            </Auk::Button>
-            {{/if}}
-          </div>
-          {{!-- <div>
-            <Auk::Input
-              data-test-route-settings-users-search-input
-              @type="search"
-              @value={{this.filter}}
-            />
-            <Auk::Button
-              data-test-route-settings-users-search-button
-              @skin="primary"
-              @icon="search"
-              {{on "click" this.refresh}}
-            >
-              Zoeken
-            </Auk::Button>
-          </div> --}}
-        </div>
         <DataTable
           data-test-route-settings-users-table={{true}}
           @content={{await this.model}}
@@ -84,12 +70,6 @@
         >
           <table.content as |c|>
             <c.header>
-              <th class="auk-table-checkbox-col">
-                <Auk::Checkbox
-                  @checked={{false}}
-                  {{on "click" this.checkAll}}
-                />
-              </th>
               <ThSortable
                 @currentSorting={{this.sort}}
                 @field="first-name"
@@ -105,20 +85,9 @@
                 @field="group.name"
                 @label="Aantal gebruikers"
               />
+              <th></th>
             </c.header>
-            {{#if this.checked}}
-            <tr class="au-u-background-gray-200">
-              <td colspan="6">
-                <p class="au-u-text-center">Alle 9 organisaties zijn geselecteerd op deze pagina. <AuLink>Selecteer alle ... organisaties.</AuLink></p>
-              </td>
-            </tr>
-            {{/if }}
             <c.body as |user|>
-              <td>
-                <Auk::Checkbox
-                  @checked={{this.checked}}
-                />
-              </td>
               <td data-test-route-settings-users-row-first-name>
                 {{#if user.organization.identifier}}
                 <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small {{if (eq user.firstName "Tom") "au-u-muted"}}">
@@ -149,6 +118,36 @@
               <td data-test-route-settings-users-row-group>
                 <AuLink>112 gebruikers</AuLink>
               </td>
+              <td class="auk-u-text-align--right">
+              <div class="auk-o-flex auk-o-flex--justify-end">
+                {{#if (eq user.firstName "Tom")}}
+                <Auk::DropdownMenu
+                  @skin="borderless"
+                  @icon="three-dots"
+                  as |Menu|
+                >
+                  <Menu.Item
+                    {{on "click" this.unblock}}
+                  >
+                    Organisatie deblokkeren
+                  </Menu.Item>
+                </Auk::DropdownMenu>
+                {{else}}
+                <Auk::DropdownMenu
+                  @skin="borderless"
+                  @icon="three-dots"
+                  as |Menu|
+                >
+                  <Menu.Item
+                    @skin="danger"
+                    {{on "click" this.block}}
+                  >
+                    Organisatie blokkeren
+                  </Menu.Item>
+                </Auk::DropdownMenu>
+                {{/if}}
+              </div>
+            </td>
             </c.body>
           </table.content>
         </DataTable>
@@ -157,86 +156,43 @@
   </div>
 </div>
 
-{{#if this.showActivateAll}}
+{{#if this.showUnblock}}
   <Auk::Modal @size="small">
     <Auk::Modal::Header
-      @title="Activeren"
-      @onClose={{this.activateAll}}
+      @title="Organisatie deblokkeren"
+      @onClose={{this.unblock}}
     />
     <Auk::Modal::Body>
-      <p>Gedeactiveerde gebruikers hebben tijdelijk geen toegang tot Kaleidos. Zij kunnen later opnieuw geactiveerd worden.</p>
+      <p>Gebruikers die een werkrelatie hebben met deze organisatie krijgen opnieuw toegang tot Kaleidos</p>
+      <p>Ben je zeker dat je deze organisatie wil deblokkeren uit Kaleidos?</p>
     </Auk::Modal::Body>
-    <Auk::Modal::Footer @onCancel={{this.activateAll}}>
+    <Auk::Modal::Footer @onCancel={{this.unblock}}>
       <Auk::Button
         @skin="primary"
-        {{on "click" this.activateAllToggle}}
+        {{on "click" this.addUnblock}}
       >
-        Activeren
+        Ja, organisatie deblokkeren
       </Auk::Button>
     </Auk::Modal::Footer>
   </Auk::Modal>
 {{/if}}
-
-{{#if this.showDisableAll}}
-  <Auk::Modal @size="small">
-    <Auk::Modal::Header
-      @title="Deactiveren"
-      @onClose={{this.disableAll}}
-    />
-    <Auk::Modal::Body>
-      <p>Gedeactiveerde gebruikers hebben tijdelijk geen toegang tot Kaleidos. Zij kunnen later opnieuw geactiveerd worden.</p>
-    </Auk::Modal::Body>
-    <Auk::Modal::Footer @onCancel={{this.disableAll}}>
-      <Auk::Button
-        @skin="primary"
-        {{on "click" this.disableAllToggle}}
-      >
-        Deactiveren
-      </Auk::Button>
-    </Auk::Modal::Footer>
-  </Auk::Modal>
-{{/if}}
-
-{{#if this.showBlockAll}}
-  <Auk::Modal @size="small">
-    <Auk::Modal::Header
-      @title="Blokkeren"
-      @onClose={{this.blockAll}}
-    />
-    <Auk::Modal::Body>
-      <p>Geblokkeerde gebruikers worden definitief uit Kaleidos gehouden. Zij kunnen niet meer geactiveerd worden.</p>
-      <p class="au-u-margin-bottom-small">Typ “Blokkeren” om <strong>9 gebruikers</strong> te blokkeren.</p>
-      <Auk::Input />
-    </Auk::Modal::Body>
-    <Auk::Modal::Footer @onCancel={{this.blockAll}}>
-      <Auk::Button
-        @skin="danger-primary"
-        {{on "click" this.blockAll}}
-      >
-        Blokkeren
-      </Auk::Button>
-    </Auk::Modal::Footer>
-  </Auk::Modal>
-{{/if}}
-
 
 {{#if this.showBlock}}
   <Auk::Modal @size="small">
     <Auk::Modal::Header
-      @title="Blokkeren"
+      @title="Organisatie blokkeren"
       @onClose={{this.block}}
     />
     <Auk::Modal::Body>
-      <p>Geblokkeerde gebruikers worden definitief uit Kaleidos gehouden. Zij kunnen niet meer geactiveerd worden.</p>
-      <p class="au-u-margin-bottom-small">Typ “Blokkeren” om <strong>deze gebruiker</strong> te blokkeren.</p>
-      <Auk::Input />
+      <p>Gebruikers die een werkrelatie hebben met deze organisatie zullen niet meer in Kaleidos kunnen.</p>
+      <p>Ben je zeker dat je deze organisatie wil blokkeren uit Kaleidos?</p>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.block}}>
       <Auk::Button
         @skin="danger-primary"
-        {{on "click" this.blockAll}}
+        {{on "click" this.addBlock}}
       >
-        Blokkeren
+        Ja, organisatie blokkeren
       </Auk::Button>
     </Auk::Modal::Footer>
   </Auk::Modal>

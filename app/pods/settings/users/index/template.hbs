@@ -1,7 +1,7 @@
 <div class="auk-scroll-wrapper__body au-u-background-gray-100">
   <div class="auk-o-grid au-o-grid--stretch">
     <div class="auk-o-grid-col-2">
-      <div class="au-o-box au-o-box--small au-u-padding-right-none">
+      <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny au-u-padding-right-none">
         <div class="au-c-card au-o-box au-o-box--small">
           <Auk::Label>Filteren op organisatie</Auk::Label>
           <div class="au-u-flex au-u-flex--spaced-tiny">
@@ -45,7 +45,7 @@
             </div>
           </div>
         </div>
-        <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-tiny">
+        <div class="au-c-card au-o-box au-o-box--small">
           <Auk::Label>Filteren op laatst gezien</Auk::Label>
           <div class="auk-form-group auk-u-position-relative au-u-margin-bottom-small">
             <Auk::Label>{{t "from"}}</Auk::Label>
@@ -68,7 +68,7 @@
             />
           </div>
         </div>
-        <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-tiny">
+        <div class="au-c-card au-o-box au-o-box--small">
           <Auk::Label>Filteren op rechtengroep</Auk::Label>
           <Auk::Checkbox
             @checked={{true}}
@@ -107,7 +107,7 @@
             @label="Overheid"
           />
         </div>
-        <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-tiny">
+        <div class="au-c-card au-o-box au-o-box--small">
           <Auk::Label>Geblokkeerd op</Auk::Label>
           <Auk::Checkbox
             @checked={{true}}
