@@ -6,7 +6,9 @@
       <Documents::LinkedDocumentLink
         @documentContainer={{history.documentContainer}}
         @lastPiece={{history.lastPiece}}
-        @onUnlinkDocumentContainer={{@onUnlinkDocumentContainer}} />
+        @onUnlinkDocumentContainer={{@onUnlinkDocumentContainer}}
+        @isDraftAccessLevelArgs={{@isDraftAccessLevelArgs}}
+      />
     {{else}}
       <div class="auk-u-mt-2">
         <WebComponents::VlAlert @message={{t "no-documents-yet"}} />

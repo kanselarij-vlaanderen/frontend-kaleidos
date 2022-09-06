@@ -9,7 +9,9 @@
   {{#unless this.loadData.isRunning}}
     <Documents::LinkedDocumentList
       @linkedPieces={{this.linkedPieces}}
-      @onUnlinkDocumentContainer={{perform this.unlinkDocumentContainer}} />
+      @onUnlinkDocumentContainer={{perform this.unlinkDocumentContainer}}
+      @isDraftAccessLevelArgs={{@isDraftAccessLevelArgs}}
+    />
   {{/unless}}
   {{#if (user-may "manage-documents")}}
     <div class="auk-u-mb-4">

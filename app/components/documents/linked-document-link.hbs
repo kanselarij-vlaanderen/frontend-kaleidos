@@ -38,7 +38,15 @@
               {{#if this.lastPiece}}
                 <AccessLevelPill
                   @accessLevel={{this.accessLevel}}
-                  @isDraft={{not (await (is-access-level-in-effect this.accessLevel this.lastPiece))}}
+                  @isDraft={{await
+                    (is-draft-access-level
+                      meeting=@isDraftAccessLevelArgs.meeting
+                      agenda=@isDraftAccessLevelArgs.agenda
+                      agendaitem=@isDraftAccessLevelArgs.agendaitem
+                      piece=this.lastPiece
+                      accessLevel=this.accessLevel
+                    )
+                  }}
                   @onChangeAccessLevel={{this.changeAccessLevel}}
                   @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
                   @onCancelChangeAccessLevel={{this.reloadAccessLevel}}

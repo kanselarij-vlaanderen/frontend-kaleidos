@@ -129,4 +129,11 @@
   </WebComponents::VlModal>
 {{/if}}
 
-<Documents::LinkedDocuments @agendaitemOrSubcase={{this.agendaitem}} />
+<Documents::LinkedDocuments
+  @agendaitemOrSubcase={{this.agendaitem}}
+  @isDraftAccessLevelArgs={{hash
+    meeting=@model.meeting
+    agenda=@model.agenda
+    agendaitem=@model.agendaitem
+  }}
+/>
