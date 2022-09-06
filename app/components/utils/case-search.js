@@ -40,7 +40,7 @@ export default class CaseSearch extends Component {
       filter[':sqs:title'] = '*'; // search without filter
     }
 
-    this.results = await search('cases', this.page, this.size, null, filter, (item) => {
+    this.results = await search('decisionmaking-flows', this.page, this.size, null, filter, (item) => {
       const entry = item.attributes;
       entry.id = item.id;
       return entry;

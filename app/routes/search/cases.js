@@ -119,7 +119,7 @@ export default class CasesSearchRoute extends Route {
     const {
       postProcessDates,
     } = this;
-    return search('cases', params.page, params.size, sort, filter, (searchData) => {
+    return search('decisionmaking-flows', params.page, params.size, sort, filter, (searchData) => {
       const entry = searchData.attributes;
       entry.id = searchData.id;
       postProcessDates(searchData);
