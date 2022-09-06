@@ -1,6 +1,7 @@
 import ENV from 'frontend-kaleidos/config/environment';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 import { isEmpty } from '@ember/utils';
 import Component from '@glimmer/component';
 
@@ -41,5 +42,12 @@ export default class MHeader extends Component {
   @action
   logout() {
     this.session.invalidate();
+  }
+
+  @tracked showSwitch = false;
+
+  @action
+  switch() {
+    this.showSwitch = !this.showSwitch;
   }
 }

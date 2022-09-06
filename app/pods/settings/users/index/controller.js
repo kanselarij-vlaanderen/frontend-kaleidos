@@ -65,14 +65,6 @@ export default class UsersSettingsController extends Controller {
     this.router.transitionTo(route, param);
   }
 
-  @tracked checked = false;
-  @tracked itemActivated = true;
-
-  @action
-  checkAll() {
-    this.checked = !this.checked;
-  }
-
   @tracked showBlockRelation = false;
 
   @action

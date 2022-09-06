@@ -103,10 +103,10 @@
             </Menu.Item>
             <Auk::Menu::Divider />
             <Menu.Item @route="mock-login-route"
-              {{on "click" this.logout}}
+              {{on "click" this.switch}}
               data-test-m-header-user-action-logout
             >
-              Wissel gebruiker
+              Aanmelden als
             </Menu.Item>
             <Auk::Menu::Divider />
             <Menu.Item
@@ -129,3 +129,60 @@
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </Auk::Navbar>
+
+{{#if this.showSwitch}}
+  <Auk::Modal @size="small">
+    <Auk::Modal::Header
+      @title="Aanmelden als"
+      @onClose={{this.switch}}
+    />
+    <Auk::Modal::Body>
+      <div class="au-o-flow au-o-flow--small">
+        <p>Je kan je aanmelden als een ander profiel om rechten te testen.</p>
+
+        <div>
+          <AuLabel for="login">Selecteer met welk je profiel wenst aan te melden</AuLabel>
+          <select
+            name="login"
+            id="login"
+            class="auk-select auk-select--block"
+          >
+            <option value=""></option>
+            <option
+              value="Secretarie">
+              Secretarie
+            </option>
+            <option
+              value="OVRB">
+              OVRB
+            </option>
+            <option
+              value="Kort Bestek">
+              Kort Bestek
+            </option>
+            <option
+              value="Minister">
+              Minister
+            </option>
+            <option
+              value="Kabinet">
+              Kabinet
+            </option>
+            <option
+              value="Overheid">
+              Overheid
+            </option>
+          </select>
+        </div>
+      </div>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.switch}}>
+      <Auk::Button
+        @skin="primary"
+        {{on "click" this.switch}}
+      >
+        Opnieuw aanmelden
+      </Auk::Button>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
+{{/if}}
