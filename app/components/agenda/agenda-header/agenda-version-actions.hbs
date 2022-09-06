@@ -278,6 +278,7 @@
         @reserveSpace={{true}}
       >
         <Auk::Alert
+          data-test-agenda-version-actions-reopen-modal-error
           @skin="error"
           @message={{t
             "agenda-reopen-confirmation"
@@ -292,55 +293,42 @@
         {{/if}}
         {{#if this.piecesToDeleteReopenPreviousAgenda}}
           <Auk::Alert
+            data-test-agenda-version-actions-reopen-modal-warning
             @skin="warning"
             @message={{t "agenda-reopen-pieces-delete"}}
           />
-          <Auk::List class="auk-list auk-list--bordered">
-            {{#each this.piecesToDeleteReopenPreviousAgenda as |piece|}}
-              <div class="vlc-document-card vlc-document-card--borderless">
-                <div class="vlc-document-card__content">
-                  <Auk::Toolbar @auto={{true}} as |Toolbar|>
-                    <Toolbar.Group @position="left" as |Group|>
-                      <Group.Item class="auk-u-maximize-width">
-                        <div
-                          class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced"
-                        ></div>
-                        <LinkTo
-                          @route="document"
-                          @model={{piece.id}}
-                          target="_blank"
-                          class="auk-h4"
-                        >
-                          {{piece.name}}
+          <div class="vlc-document-card-versions">
+            <Auk::Accordion>
+              <Auk::Accordion::Item
+                @isDefaultActive=true
+                @title={{t "view-documents-details"}}
+              >
+                {{#each this.piecesToDeleteReopenPreviousAgenda as |piece|}}
+                  <div class="vlc-document-holder">
+                    <div class="vlc-document-card-item" data-test-agenda-version-actions-reopen-modal-piece>
+                      <div class="vlc-document-card-item__title">
+                        <LinkTo @route="document" @model={{piece.id}} target="_blank"
+                          class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
+                          data-test-agenda-version-actions-reopen-modal-piece-name>
+                          {{piece.name}}{{#if piece.file}}.{{piece.file.extension}}{{/if}}
                         </LinkTo>
-                        <div class="vlc-document-card-content__meta">
-                          {{t "uploaded-at"}}
-                          {{moment-format piece.created}}
-                          {{t "at"}}
-                          {{moment-format piece.created "HH:mm"}}
-                        </div>
-                      </Group.Item>
-                    </Toolbar.Group>
-                    <Toolbar.Group @position="right" as |Group|>
-                      <Group.Item class="auk-u-maximize-width">
-                        {{#if piece.file}}
-                          <Auk::Button
-                            @skin="borderless"
-                            @layout="icon-only"
-                            @icon="book"
-                            class="auk-u-ml-2"
-                            {{on "click" (fn this.showPieceViewer piece)}}
-                          >
-                            {{t "view-document-details"}}
-                          </Auk::Button>
-                        {{/if}}
-                      </Group.Item>
-                    </Toolbar.Group>
-                  </Auk::Toolbar>
-                </div>
-              </div>
-            {{/each}}
-          </Auk::List>
+                        <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"></div>
+                      </div>
+                      <div class="vlc-document-card-item__meta au-u-muted">
+                        {{t "uploaded-at"}}
+                        {{moment-format piece.created}}
+                        {{t "at"}}
+                        {{moment-format piece.created "HH:mm"}}
+                      </div>
+                      <div class="vlc-document-card-item__icon">
+                        <Auk::Icon @name="clock-rewind" @size="small" />
+                      </div>
+                    </div>
+                  </div>
+                {{/each}}
+              </Auk::Accordion::Item>
+            </Auk::Accordion>
+          </div>
         {{/if}}
       </Utils::LoadableContent>
     </Auk::Modal::Body>
