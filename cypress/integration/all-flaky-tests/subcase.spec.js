@@ -357,11 +357,9 @@ context('Subcase tests', () => {
     const type = 'Nota';
     const caseTitle1 = `Cypress test ${randomInt1}: move subcases`;
     const caseTitle2 = `Cypress test ${randomInt2}: move subcases`;
-    const caseTitle3 = 'Besluitvorming Vlaamse Regering hoed';
     const subcaseShortTitle1 = 'Short title 1 for moving subcase';
     const subcaseShortTitle2 = 'Short title 2 for moving subcase';
     const subcaseShortTitle3 = 'Short title 3 for moving subcase';
-    const subcaseShortTitle4 = 'Short title 4 for moving subcase';
 
     // setup
     cy.createCase(caseTitle1);
@@ -431,24 +429,6 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseItem.container).should('have.length', 3)
       .find(cases.subcaseItem.link)
       .contains(subcaseShortTitle3);
-
-    // use case 4
-    cy.openCase(caseTitle3);
-    cy.addSubcase(type, subcaseShortTitle4);
-    cy.openSubcase(0);
-    cy.get(cases.subcaseHeader.actionsDropdown).click();
-    cy.get(cases.subcaseHeader.actions.moveSubcase).click();
-    cy.intercept('GET', 'cases/search?**').as('searchCall4');
-    cy.get(utils.caseSearch.input).type(caseTitle2)
-      .wait('@searchCall4')
-      .wait(1000);
-    cy.intercept('PATCH', 'subcases/**').as('patchSubcases4');
-    cy.get(utils.caseSearch.row).contains(caseTitle2)
-      .click()
-      .wait('@patchSubcases4');
-    cy.get(utils.vlModalVerify.container).should('not.exist');
-    cy.get(cases.subcaseOverviewHeader.titleContainer).contains(caseTitle3);
-    cy.get(cases.subcaseItem.container).should('not.exist');
   });
 
   it('check capital letters of subcase name', () => {
