@@ -15,16 +15,24 @@
               <h4 data-test-route-settings---user-general-info class="auk-panel__title">{{t 'manage-users-general-info'}}</h4>
             </Group>
             <Group>
+              {{#if this.blocked}}
+              <AuButton
+                {{on "click" this.blockPerson}}
+              >
+                Persoon deblokkeren
+              </AuButton>
+              {{else}}
               <AuButton
                 @alert={{true}}
                 {{on "click" this.blockPerson}}
               >
                 Persoon blokkeren
               </AuButton>
+              {{/if}}
             </Group>
           </AuToolbar>
         </Auk::Panel::Header>
-        <Auk::Panel::Body>
+        <Auk::Panel::Body class="{{if this.blocked 'au-u-muted'}}">
           <dl>
             <Auk::KeyValue
               @key={{t 'manage-users-full-name'}}
@@ -75,7 +83,7 @@
     <div class="auk-u-m-4 auk-u-mr-2 auk-u-ml-2">
       <Auk::Panel>
         <Auk::Panel::Header>
-          <h4 data-test-route-settings---user-technical-info class="auk-panel__title">{{t 'manage-users-technical-info'}}</h4>
+          <h4 data-test-route-settings---user-technical-info class="auk-panel__title">Rechten</h4>
         </Auk::Panel::Header>
         <Auk::Panel::Body class="au-u-padding-none">
           <AuTable>
@@ -88,6 +96,28 @@
               </tr>
             </:header>
             <:body>
+              {{#if this.blocked}}
+              <tr class="au-u-muted">
+                <td>Departement Omgeving</td>
+                <td>OV003323</td>
+                <td>Kabinet</td>
+                <td class="au-u-text-right">
+                  <AuPill @icon="circle-x" @skin="error" @size="small">
+                    Geblokkeerd
+                  </AuPill>
+                </td>
+              </tr>
+              <tr class="au-u-muted">
+                <td>Sport Vlaanderen</td>
+                <td>OVO000070</td>
+                <td>Overheid</td>
+                <td class="au-u-text-right">
+                  <AuPill @icon="circle-x" @skin="error" @size="small">
+                    Geblokkeerd
+                  </AuPill>
+                </td>
+              </tr>
+              {{else}}
               <tr class="au-u-muted">
                 <td>Departement Omgeving</td>
                 <td>OV003323</td>
@@ -108,6 +138,7 @@
                   </AuButton>
                 </td>
               </tr>
+              {{/if}}
             </:body>
           </AuTable>
         </Auk::Panel::Body>
@@ -125,7 +156,7 @@
     <Auk::Modal::Body>
       <div class="au-o-flow au-o-flow--small">
         <p>Door de werkrelatie van een gebruiker te deblokkeren geef je deze opnieuw toegang. </p>
-        <p>Ben je zeker dat je deze werkrelatie van deze persoon wil deblokkeren?</p>
+        <p>Ben je zeker dat je deze werkrelatie van <strong>user</strong> wil deblokkeren?</p>
       </div>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.unblockRelation}}>
@@ -163,6 +194,28 @@
 
 
 {{#if this.showBlockPerson}}
+  {{#if this.blocked}}
+  <Auk::Modal @size="small">
+    <Auk::Modal::Header
+      @title="Persoon deblokkeren"
+      @onClose={{this.blockPerson}}
+    />
+    <Auk::Modal::Body>
+      <div class="au-o-flow au-o-flow--small">
+        <p>Door een persoon te deblokkeren geef je deze opnieuw toegang tot Kaleidos.</p>
+        <p>Ben je zeker dat je <strong>user</strong> opnieuw wil toelaten in Kaleidos?</p>
+      </div>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.blockPerson}}>
+      <Auk::Button
+        @skin="primary"
+        {{on "click" this.addUnblockPerson}}
+      >
+        Ja, persoon deblokkeren
+      </Auk::Button>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
+  {{else}}
   <Auk::Modal @size="small">
     <Auk::Modal::Header
       @title="Persoon blokkeren"
@@ -183,4 +236,5 @@
       </Auk::Button>
     </Auk::Modal::Footer>
   </Auk::Modal>
+  {{/if}}
 {{/if}}
