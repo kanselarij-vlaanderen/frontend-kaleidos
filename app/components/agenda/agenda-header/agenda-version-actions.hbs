@@ -300,19 +300,29 @@
           <div class="vlc-document-card-versions">
             <Auk::Accordion>
               <Auk::Accordion::Item
-                @isDefaultActive=true
+                @isDefaultActive={{true}}
                 @title={{t "view-documents-details"}}
               >
                 {{#each this.piecesToDeleteReopenPreviousAgenda as |piece|}}
                   <div class="vlc-document-holder">
-                    <div class="vlc-document-card-item" data-test-agenda-version-actions-reopen-modal-piece>
+                    <div
+                      class="vlc-document-card-item"
+                      data-test-agenda-version-actions-reopen-modal-piece
+                    >
                       <div class="vlc-document-card-item__title">
-                        <LinkTo @route="document" @model={{piece.id}} target="_blank"
+                        <LinkTo
+                          @route="document"
+                          @model={{piece.id}}
+                          target="_blank"
                           class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
-                          data-test-agenda-version-actions-reopen-modal-piece-name>
-                          {{piece.name}}{{#if piece.file}}.{{piece.file.extension}}{{/if}}
+                          data-test-agenda-version-actions-reopen-modal-piece-name
+                        >
+                          {{! prettier-ignore}}
+                          {{piece.name}}.{{piece.file.extension}}
                         </LinkTo>
-                        <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"></div>
+                        <div
+                          class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"
+                        ></div>
                       </div>
                       <div class="vlc-document-card-item__meta au-u-muted">
                         {{t "uploaded-at"}}
