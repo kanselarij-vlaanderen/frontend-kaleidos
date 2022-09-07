@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { isPresent } from '@ember/utils';
 import { restorePiecesFromPreviousAgendaitem } from 'frontend-kaleidos/utils/documents';
 
 export default class DocumentController extends Controller {
@@ -10,7 +11,7 @@ export default class DocumentController extends Controller {
   @service fileService;
   @service signatureService;
 
-  @tracked pieceIsFromDecision;
+  @tracked decisionActivity;
 
   @action
   transitionBack() {
@@ -35,7 +36,7 @@ export default class DocumentController extends Controller {
   @action
   async didDeletePiece(piece) {
     const previousPiece = await piece.previousPiece;
-    if (this.pieceIsFromDecision) {
+    if (isPresent(this.decisionActivity)) {
       const decisionActivity = await piece.decisionActivity;
       await this.fileService.deletePiece(piece);
       await this._didDeletePieceFromDecision(decisionActivity, previousPiece);
