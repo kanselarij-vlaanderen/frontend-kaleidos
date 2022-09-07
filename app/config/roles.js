@@ -72,7 +72,6 @@ groupRoles.set(KABINET, [
 ]);
 
 groupRoles.set(OVERHEID, [
-  'manage-signatures',
 ]);
 
 groupRoles.set(OVRB, [
