@@ -68,7 +68,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   }
 
   @action
-  async verifyDeleteDocument() {
+  verifyDeleteDocument() {
     if (this.args.didDeletePiece) {
       this.args.didDeletePiece(this.args.piece);
     }
