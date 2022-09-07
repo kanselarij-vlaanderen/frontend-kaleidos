@@ -30,10 +30,27 @@
             <div class="vlc-document-card-content__meta">
               {{! no piece.created in legacy data }}
               {{#if this.piece.created}}
-                {{t "uploaded-at"}}
-                {{moment-format this.piece.created}}
-                {{t "at"}}
-                {{moment-format this.piece.created "HH:mm"}}
+                <p>
+                  {{t "uploaded-at"}}
+                  {{moment-format this.piece.created}}
+                  {{t "at"}}
+                  {{moment-format this.piece.created "HH:mm"}}
+                </p>
+              {{/if}}
+              {{#if this.piece.file.primarySource.created}}
+                <p>
+                  {{t "uploaded-at"}}
+                  {{moment-format this.piece.file.primarySource.created}}
+                  {{t "at"}}
+                  {{moment-format this.piece.file.primarySource.created "HH:mm"}}
+                  {{t "as"}}
+                  <AuLinkExternal
+                    href={{this.piece.file.primarySource.namedDownloadLink}}
+                    download
+                  >
+                    {{t (if (eq this.piece.file.primarySouce.extension "docx") "word-document" "source-file-lowercase")}}
+                  </AuLinkExternal>
+                </p>
               {{/if}}
             </div>
           </Group.Item>
@@ -197,7 +214,7 @@
 </div>
 {{#if this.isEditingPiece}}
   <WebComponents::VlModal
-    @closeModal={{this.cancelEditPieceName}}
+    @closeModal={{this.cancelPieceEdit}}
     @isOverlay={{true}}
     @title={{t "modify-document"}}
   >
@@ -210,49 +227,119 @@
         <c.header
           @badgeIcon={{if (eq this.piece.file.extension "pdf") "pdf" "document"}}
         >
-          <div class="auk-o-grid">
-            <p data-test-document-card-type class="vlc-subline au-u-medium au-u-muted">
-              {{uppercase this.piece.file.extension}}
-            </p>
-            <div class="au-u-flex au-u-flex--spaced-small">
-              <Auk::Input
-                data-test-document-card-name-input={{true}}
-                @block={{true}}
-                @value={{this.pieceNameBuffer}}
-              />
-              <AuButtonGroup class="au-u-flex--no-wrap">
-                <AuButton
-                  @skin="secondary"
-                  {{on "click" this.toggleUploadReplacementFile}}
-                >
-                  {{t "replace"}}
-                </AuButton>
-              </AuButtonGroup>
-            </div>
-            {{#if this.piece.created}}
-              <AuHelpText @skin="secondary">
-                {{t "uploaded-at"}}
-                {{moment-format this.piece.created}}
-                {{t "at"}}
-                {{moment-format this.piece.created "HH:mm"}}
-              </AuHelpText>
-            {{/if}}
+          <p data-test-document-card-type class="vlc-subline au-u-medium au-u-muted">
+            {{uppercase this.piece.file.extension}}
+          </p>
+          <div class="au-u-flex au-u-flex--spaced-small">
+            <Auk::Input
+              data-test-document-card-name-input={{true}}
+              @block={{true}}
+              @value={{this.pieceNameBuffer}}
+            />
+            <AuButtonGroup class="au-u-flex--no-wrap">
+              <AuButton
+                @skin="secondary"
+                {{on "click" this.toggleUploadReplacementFile}}
+              >
+                {{t "replace"}}
+              </AuButton>
+            </AuButtonGroup>
           </div>
+          {{#if this.piece.created}}
+            <AuHelpText @skin="secondary">
+              {{t "uploaded-at"}}
+              {{moment-format this.piece.created}}
+              {{t "at"}}
+              {{moment-format this.piece.created "HH:mm"}}
+            </AuHelpText>
+          {{/if}}
         </c.header>
-        {{#if this.isUploadingNewVersion}}
+        {{#if this.isUploadingReplacementFile}}
           <c.content>
             <Auk::FileUploader
-              @onUpload={{this.uploadReplacementFile}}
+              @onUpload={{set this "replacementFile"}}
             />
           </c.content>
         {{/if}}
       </AuCard>
+      {{#if this.piece.file.primarySource}}
+        <AuCard
+          @flex={{true}}
+          @size="small"
+          class="au-u-margin-top-small {{if this.isDeletingSourceFile 'vlc-document--deleted-state'}}"
+          as |c|
+        >
+          <c.header
+            @badgeIcon={{if (eq this.piece.file.primarySource.extension "docx") "word" "document"}}
+          >
+            <p class="vlc-subline au-u-medium au-u-muted">
+              {{uppercase this.piece.file.primarySource.extension}}
+            </p>
+            <div class="au-u-flex au-u-flex--between au-u-flex--spaced-small">
+              <p>
+                {{this.piece.name}}
+              </p>
+              <AuButtonGroup class="au-u-flex--no-wrap">
+                <AuButton
+                  @skin="secondary"
+                  {{on "click" this.toggleUploadReplacementSourceFile}}
+                >
+                  {{t "replace"}}
+                </AuButton>
+                <AuButton
+                  @skin="secondary"
+                  @alert={{true}}
+                  @icon="trash"
+                  @hideText={{true}}
+                  {{on "click" (toggle "isDeletingSourceFile" this)}}
+                >
+                </AuButton>
+              </AuButtonGroup>
+            </div>
+            {{#if this.piece.file.primarySource.created}}
+              <AuHelpText @skin="secondary">
+                {{t "uploaded-at"}}
+                {{moment-format this.piece.file.primarySource.created}}
+                {{t "at"}}
+                {{moment-format this.piece.file.primarySource.created "HH:mm"}}
+              </AuHelpText>
+            {{/if}}
+          </c.header>
+          {{#if this.isUploadingReplacementSourceFile}}
+            <c.content>
+              <Auk::FileUploader
+                @onUpload={{set this "replacementSourceFile"}}
+              />
+            </c.content>
+          {{/if}}
+        </AuCard>
+      {{else}}
+        <AuCard
+          @flex={{true}}
+          @size="small"
+          class="au-u-margin-top-small"
+          as |c|
+        >
+          <c.header
+            @badgeIcon="document"
+          >
+            <div class="au-u-flex au-u-flex--spaced-small">
+              <AuHeading @skin="5" @level="3">Bronbestand opladen</AuHeading>
+            </div>
+          </c.header>
+          <c.content>
+            <Auk::FileUploader
+              @onUpload={{set this "uploadedSourceFile"}}
+            />
+          </c.content>
+        </AuCard>
+      {{/if}}
     </Auk::Modal::Body>
     <WebComponents::VlModalFooter
       @cancelButtonText={{t "cancel"}}
       @saveButtonText={{t "save"}}
-      @cancelAction={{this.cancelEditPieceName}}
-      @saveAction={{perform this.savePieceName}}
+      @cancelAction={{this.cancelPieceEdit}}
+      @saveAction={{perform this.savePieceEdit}}
     />
   </WebComponents::VlModal>
 {{/if}}

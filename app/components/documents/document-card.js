@@ -35,7 +35,9 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked isOpenUploadModal = false;
   @tracked isOpenVerifyDeleteModal = false;
   @tracked isEditingPiece = false;
-  @tracked isUploadingNewVersion = false;
+  @tracked isUploadingReplacementFile = false;
+  @tracked isUploadingReplacementSourceFile = false;
+  @tracked isDeletingSourceFile = false;
 
   @tracked piece;
   @tracked accessLevel;
@@ -43,7 +45,9 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked signMarkingActivity;
 
   @tracked uploadedFile;
-  @tracked replacingFile;
+  @tracked uploadedSourceFile;
+  @tracked replacementFile;
+  @tracked replacementSourceFile;
   @tracked newPiece;
   @tracked pieceNameBuffer;
   @tracked defaultAccessLevel;
@@ -145,12 +149,18 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @action
   async toggleUploadReplacementFile() {
-    if (this.replacingFile) {
-      await this.replacingFile.destroyRecord();
-    }
-    this.replacingFile = null;
-    this.isUploadingNewVersion = !this.isUploadingNewVersion;
+    await this.replacementFile?.destroyRecord();
+    this.replacementFile = null;
+    this.isUploadingReplacementFile = !this.isUploadingReplacementFile;
   }
+
+  @action
+  async toggleUploadReplacementSourceFile() {
+    await this.replacementSourceFile?.destroyRecord();
+    this.replacementSourceFile = null;
+    this.isUploadingReplacementSourceFile = !this.isUploadingReplacementSourceFile;
+  }
+
 
   @task
   *uploadPiece(file) {
@@ -169,11 +179,6 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.newPiece.name = new VRDocumentName(
       previousPiece.name
     ).withOtherVersionSuffix(this.sortedPieces.length + 1);
-  }
-
-  @action
-  uploadReplacementFile(file) {
-    this.replacingFile = file;
   }
 
   @task
@@ -213,31 +218,60 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   @action
-  async cancelEditPieceName() {
-    if (this.replacingFile && this.isUploadingNewVersion) {
-      await this.replacingFile.destroyRecord();
-    }
+  async cancelPieceEdit() {
     this.isEditingPiece = false;
     this.pieceNameBuffer = null;
-    this.isUploadingNewVersion = false;
-    this.replacingFile = null;
+
+    await this.replacementFile?.destroyRecord();
+    this.isUploadingReplacementFile = false;
+    this.replacementFile = null;
+
+    await this.replacementSourceFile?.destroyRecord();
+    this.isUploadingReplacementSourceFile = false;
+    this.replacementSourceFile = null;
+
+    await this.uploadedSourceFile?.destroyRecord();
+    this.uploadedSourceFile = null;
+
+    this.isDeletingSourceFile = false;
   }
 
   @task
-  *savePieceName() {
+  *savePieceEdit() {
     const now = moment().toDate();
     this.piece.set('modified', now);
     this.piece.set('name', this.pieceNameBuffer);
-    if (this.replacingFile) {
+    if (this.replacementFile) {
       const oldFile = yield this.piece.file;
       yield oldFile.destroyRecord();
-      this.piece.file = this.replacingFile;
+      this.piece.file = this.replacementFile;
+    }
+    if (this.replacementSourceFile) {
+      const file = yield this.piece.file;
+      const oldSource = yield file.primarySource;
+      yield oldSource.destroyRecord();
+      file.primarySource = this.replacementSourceFile;
+      yield file.save();
+    }
+    if (this.uploadedSourceFile) {
+      const file = yield this.piece.file;
+      file.primarySource = this.uploadedSourceFile;
+      yield file.save()
+    }
+    if (this.isDeletingSourceFile) {
+      const file = yield this.piece.file;
+      const sourceFile = yield file.primarySource;
+      yield sourceFile.destroyRecord();
     }
     yield this.piece.save();
     this.isEditingPiece = false;
     this.pieceNameBuffer = null;
-    this.isUploadingNewVersion = false;
-    this.replacingFile = null;
+    this.isUploadingReplacementFile = false;
+    this.replacementFile = null;
+    this.isUploadingReplacementSourceFile = false;
+    this.replacementSourceFile = false;
+    this.uploadedSourceFile = null;
+    this.isDeletingSourceFile = false;
   }
 
   @task
