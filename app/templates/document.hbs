@@ -1,11 +1,7 @@
-{{#if this.loadWhereIsPieceFrom.isRunning}}
-  <Auk::Loader />
-{{else}}
-  <Documents::DocumentPreview::DocumentPreviewModal
-    @piece={{this.model}}
-    @onClose={{this.transitionBack}}
-    @markForSignature={{this.markForSignature}}
-    @unmarkForSignature={{this.unmarkForSignature}}
-    @didDeletePiece={{this.didDeletePiece}}
-  />
-{{/if}}
+<Documents::DocumentPreview::DocumentPreviewModal
+  @piece={{this.model}}
+  @onClose={{this.transitionBack}}
+  @markForSignature={{this.markForSignature}}
+  @unmarkForSignature={{this.unmarkForSignature}}
+  @didDeletePiece={{this.didDeletePiece}}
+/>
