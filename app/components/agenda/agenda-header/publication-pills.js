@@ -23,18 +23,6 @@ export default class AgendaAgendaHeaderPublicationPillsComponent extends Compone
     cancel(this.scheduledRefresh);
   }
 
-  get mayManageDecisionPublications() {
-    return this.currentSession.may('manage-decision-publications');
-  }
-
-  get mayManageDocumentPublications() {
-    return this.currentSession.may('manage-document-publications');
-  }
-
-  get mayManageThemisPublications() {
-    return this.currentSession.may('manage-themis-publications');
-  }
-
   get isConfirmedDocumentPublicationPlanning() {
     return this.args.meeting.internalDocumentPublicationActivity.get('status.uri') == CONSTANTS.RELEASE_STATUSES.CONFIRMED;
   }
