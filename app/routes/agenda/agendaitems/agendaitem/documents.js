@@ -58,7 +58,7 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     if (this.currentSession.isOverheid) {
       const documentPublicationActivity = await this.meeting.internalDocumentPublicationActivity;
       if (documentPublicationActivity) {
-        const documentPublicationStatus = await documentPublicationActivity.status;
+        const documentPublicationStatus = await documentPublicationActivity?.status;
         this.documentsAreVisible = documentPublicationStatus.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
       }
     } else {
