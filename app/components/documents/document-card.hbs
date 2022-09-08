@@ -172,6 +172,9 @@
                         </h6>
                       {{/if}}
                       <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"></div>
+                      <AccessLevelPill
+                        @accessLevel={{await piece.accessLevel}}
+                      />
                     </div>
                     <div class="vlc-document-card-item__meta au-u-muted">
                       {{!-- no piece.created in legacy data --}}
