@@ -67,7 +67,6 @@ groupRoles.set(MINISTER, [
 ]);
 
 groupRoles.set(KABINET, [
-  'manage-signatures',
   'view-document-version-info',
 ]);
 
