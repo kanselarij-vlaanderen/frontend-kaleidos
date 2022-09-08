@@ -63,8 +63,8 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.promptDeleteCase = true;
   }
 
-  navigateToSubcaseOverview(dmf) {
-    this.router.transitionTo('cases.case.subcases', dmf.id);
+  navigateToSubcaseOverview(decisionmakingFlow) {
+    this.router.transitionTo('cases.case.subcases', decisionmakingFlow.id);
   }
 
   toggleAllPropertiesBackToDefault() {
@@ -79,9 +79,9 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   // TODO KAS-3256 We should take another look of the deleting case feature in light of publications also using cases.
   @task
   *deleteCase(_case) {
-    const dmf = yield _case.decisionmakingFlow;
+    const decisionmakingFlow = yield _case.decisionmakingFlow;
     yield _case.destroyRecord();
-    yield dmf.destroyRecord();
+    yield decisionmakingFlow.destroyRecord();
     this.promptDeleteCase = false;
     this.caseToDelete = null;
     this.router.transitionTo('cases');
@@ -135,7 +135,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   async deleteSubcase() {
     this.isLoading = true;
     const subcaseToDelete = await this.subcaseToDelete;
-    const dmf = await subcaseToDelete.decisionmakingFlow;
+    const decisionmakingFlow = await subcaseToDelete.decisionmakingFlow;
 
     subcaseToDelete.hasMany('agendaActivities').reload();
     const agendaActivities = await subcaseToDelete.agendaActivities;
@@ -161,7 +161,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     itemToDelete.deleteRecord();
     await itemToDelete.save();
 
-    this.navigateToSubcaseOverview(dmf);
+    this.navigateToSubcaseOverview(decisionmakingFlow);
     this.args.onMoveSubcase();
   }
 
@@ -176,17 +176,17 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   }
 
   @action
-  async moveSubcase(_newDMF) {
-    const newDMF = await this.store.findRecord('decisionmaking-flow', _newDMF.id);
+  async moveSubcase(_newDecisionmakingFlow) {
+    const newDecisionmakingFlow = await this.store.findRecord('decisionmaking-flow', _newDecisionmakingFlow.id);
 
-    const oldDMF = await this.args.subcase.decisionmakingFlow;
-    this.args.subcase.decisionmakingFlow = newDMF;
+    const oldDecisionmakingFlow = await this.args.subcase.decisionmakingFlow;
+    this.args.subcase.decisionmakingFlow = newDecisionmakingFlow;
     await this.args.subcase.save();
     this.isAssigningToOtherCase = false;
 
-    const subCases = await oldDMF.hasMany('subcases').reload();
+    const subCases = await oldDecisionmakingFlow.hasMany('subcases').reload();
     if (subCases.length === 0) {
-      const oldCase = await oldDMF.case;
+      const oldCase = await oldDecisionmakingFlow.case;
       const publicationFlow = await this.store.queryOne('publication-flow', {
         'filter[case][:id:]': oldCase.id,
       });

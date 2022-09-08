@@ -86,8 +86,8 @@ export default class CasesCaseSubcasesOverview extends Controller {
   @action
   async unarchiveCase(_case) {
     _case.isArchived = false;
-    const dmf = await _case.decisionmakingFlow;
-    const subcases = await dmf.subcases;
+    const decisionmakingFlow = await _case.decisionmakingFlow;
+    const subcases = await decisionmakingFlow.subcases;
     await Promise.all(subcases.map(async(subcase) => {
       subcase.isArchived = false;
       return await subcase.save();
@@ -108,15 +108,15 @@ export default class CasesCaseSubcasesOverview extends Controller {
   }
 
   @action
-  navigateToNewCase(dmf) {
-    if (!dmf) {
+  navigateToNewCase(decisionmakingFlow) {
+    if (!decisionmakingFlow) {
       return;
     }
-    this.navigateToDecisionmakingFlow(dmf);
+    this.navigateToDecisionmakingFlow(decisionmakingFlow);
   }
 
   @action
-  navigateToDecisionmakingFlow(dmf) {
-    this.router.transitionTo('cases.case.subcases', dmf.id);
+  navigateToDecisionmakingFlow(decisionmakingFlow) {
+    this.router.transitionTo('cases.case.subcases', decisionmakingFlow.id);
   }
 }
