@@ -33,7 +33,7 @@ context('Publications new features tests', () => {
     cy.get(auk.modal.footer.cancel).click();
 
     // check if proof mail subject contains urgent
-    cy.get(publication.publicationNav.publishpreview).click();
+    cy.get(publication.publicationNav.proofs).click();
     cy.get(publication.proofsIndex.newRequest).click();
     cy.get(publication.proofRequest.subject).should('have.value', 'DRINGEND: Drukproefaanvraag VO-dossier: 2007 - Besluitvorming Vlaamse Regering hoed');
     cy.get(auk.modal.footer.cancel).click();
@@ -101,7 +101,7 @@ context('Publications new features tests', () => {
       .wait('@patchtranslationSubcase');
     cy.get(publication.translationReceivedPanel.panel).find(publication.documentsList.piece)
       .should('have.length', 1);
-    cy.get(publication.publicationNav.publishpreview).click();
+    cy.get(publication.publicationNav.proofs).click();
     cy.get(publication.proofsIndex.newRequest).click();
     cy.get(publication.proofRequest.save).click();
     cy.get(publication.publicationNav.translations).click();
@@ -110,7 +110,7 @@ context('Publications new features tests', () => {
       .should('not.exist');
 
     // check proofs docs removable
-    cy.get(publication.publicationNav.publishpreview).click();
+    cy.get(publication.publicationNav.proofs).click();
     cy.get(publication.proofsIndex.upload).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.intercept('PATCH', '/publication-subcases/**').as('patchPublicationSubcase');
@@ -149,7 +149,7 @@ context('Publications new features tests', () => {
     cy.wait(2000);
 
     // check proofs docs not removable once used in publication request
-    cy.get(publication.publicationNav.publishpreview).click();
+    cy.get(publication.publicationNav.proofs).click();
     cy.get(publication.proofReceivedPanel.panel).find(publication.documentsList.piece)
       .find(publication.documentsList.deletePiece)
       .should('not.exist');

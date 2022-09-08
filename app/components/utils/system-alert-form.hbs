@@ -13,10 +13,7 @@
         @enableTime={{true}}
       />
     </div>
-    <div
-      data-test-system-alert-form-to-date
-      class="auk-form-group auk-u-mb-3"
-    >
+    <div class="auk-form-group auk-u-mb-3">
       <Auk::Label>{{t "end-date"}}</Auk::Label>
       <WebComponents::VlDatepicker
         @date={{array (moment-format this.alert.endDate "YYYY-MM-DDTHH:mm:ssZ")}}

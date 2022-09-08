@@ -26,8 +26,8 @@ context('Testing internal and themis document release pills', () => {
     cy.approveAndCloseDesignAgenda();
 
     // check if planned release date is the changed value
-    cy.get(agenda.agendaHeader.showOptions).click();
-    cy.get(agenda.agendaHeader.actions.releaseDocuments).click({
+    cy.get(agenda.agendaActions.showOptions).click();
+    cy.get(agenda.agendaActions.releaseDocuments).click({
       force: true,
     });
     cy.get(utils.vlDatepicker).eq(0)
@@ -36,7 +36,7 @@ context('Testing internal and themis document release pills', () => {
       .should('have.value', nextDay.format('DD-MM-YYYY HH:mm'));
     cy.intercept('PATCH', 'internal-document-publication-activities/*').as('patchInternalActivity');
     cy.intercept('PATCH', 'themis-publication-activities/*').as('patchThemisActivity');
-    cy.get(agenda.agendaHeader.confirm.releaseDocuments).click();
+    cy.get(agenda.publicationPlanning.confirm.releaseDocuments).click();
     cy.wait('@patchInternalActivity');
     cy.wait('@patchThemisActivity');
     cy.get(agenda.publicationPills.container).within(() => {
@@ -47,8 +47,8 @@ context('Testing internal and themis document release pills', () => {
     });
 
     // change release date and check if value changed
-    cy.get(agenda.agendaHeader.showOptions).click();
-    cy.get(agenda.agendaHeader.actions.releaseDocuments).click({
+    cy.get(agenda.agendaActions.showOptions).click();
+    cy.get(agenda.agendaActions.releaseDocuments).click({
       force: true,
     });
     cy.get(utils.vlDatepicker).eq(0)
@@ -61,7 +61,7 @@ context('Testing internal and themis document release pills', () => {
     cy.intercept('PATCH', 'internal-document-publication-activities/*').as('patchInternalActivity');
     cy.intercept('PATCH', 'themis-publication-activities/*').as('patchInternalActivity');
     cy.setDateAndTimeInFlatpickr(newReleaseDate);
-    cy.get(agenda.agendaHeader.confirm.releaseDocuments).click();
+    cy.get(agenda.publicationPlanning.confirm.releaseDocuments).click();
     cy.wait('@patchInternalActivity');
     cy.wait('@patchThemisActivity');
     cy.get(agenda.publicationPills.container).within(() => {

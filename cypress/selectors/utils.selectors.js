@@ -31,17 +31,6 @@ const selectors = {
     title: '[data-test-overviews-header-print-title]',
   },
 
-  // utils/document/list
-  documentList: {
-    item: '[data-test-utils-document-list-item]',
-    name: '[data-test-utils-document-list-name]',
-    fileExtension: '[data-test-utils-document-list-file-extension]',
-    viewDocument: '[data-test-utils-document-list-view-document]',
-  },
-
-  // utils/kind-selector
-  kindSelector: '[data-test-utils-kind-selector]',
-
   // changes-alert
   changesAlert: {
     alert: '[data-test-changes-alert]',
@@ -55,9 +44,7 @@ const selectors = {
 
   // radio-dropdown
   radioDropdown: {
-    container: '[data-test-radio-dropdown-container]',
     input: '[data-test-radio-dropdown-input]',
-    powerSelect: '[data-test-radio-dropdown-power-select]',
   },
 
   // mandatee-selector
@@ -68,7 +55,6 @@ const selectors = {
   // mandatees-selector-modal
   mandateesSelector: {
     openSearch: '[data-test-mandatees-selector-open-search]',
-    cancel: '[data-test-mandatees-selector-cancel]',
     add: '[data-test-mandatees-selector-add]',
   },
 
@@ -85,13 +71,6 @@ const selectors = {
   // edit-government-fields-modal
   editGovernmentFieldsModal: {
     save: '[data-test-edit-government-fields-modal-save]',
-    // TODO-SELECTORS unused selectors
-    selectorForm: '[data-test-edit-government-fields-modal-selector-form]',
-  },
-
-  // dropdown-menu
-  dropdownMenu: {
-    options: '[data-test-dropdown-menu-options]',
   },
 
   alertDialog: {
@@ -119,7 +98,6 @@ const selectors = {
   // vl-modal-verify
   vlModalVerify: {
     container: '[data-test-vl-modal-verify-container]',
-    close: '[data-test-vl-modal-verify-close]',
     cancel: '[data-test-vl-modal-verify-cancel]',
     save: '[data-test-vl-modal-verify-save]',
   },
@@ -127,9 +105,7 @@ const selectors = {
   // vl-alert
   vlAlert: {
     close: '[data-test-vl-alert-close]',
-    // TODO-selector unused selectors
     container: '[data-test-vl-alert]',
-    title: '[data-test-vl-alert-title]',
     message: '[data-test-vl-alert-message]',
   },
 

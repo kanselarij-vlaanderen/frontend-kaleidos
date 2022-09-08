@@ -23,7 +23,7 @@
               @disabled={{this.isDisabledDocumentPublication}}
             />
             <Auk::Button
-              data-test-agenda-header-release-documents-now
+              data-test-publication-planning-release-documents-now
               class="auk-u-ml-2"
               disabled={{this.isDisabledDocumentPublication}}
               {{on "click" this.setDocumentPublicationDateNow}}
@@ -61,7 +61,7 @@
     @cancelDisabled={{this.save.isRunning}}
   >
     <Auk::Button
-      data-test-agenda-header-release-documents-confirm
+      data-test-publication-planning-release-documents-confirm
       @skin="primary"
       @disabled={{this.isDisabledSave}}
       @loading={{this.save.isRunning}}

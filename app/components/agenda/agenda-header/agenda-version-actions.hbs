@@ -2,18 +2,18 @@
   @skin="primary"
   @label={{t "agenda-actions"}}
   class="auk-u-hidden@print"
-  data-test-agenda-actions-show-options={{true}}
+  data-test-agenda-version-actions-show-options={{true}}
   as |Menu|
 >
   {{#if @currentAgenda.status.isDesignAgenda}}
     <Menu.Item
-      data-test-agenda-actions-approve-agenda
+      data-test-agenda-version-actions-approve-agenda
       {{on "click" this.openConfirmApproveAgenda}}
     >
       {{t "approve-design-agenda" serialnumber=@currentAgenda.serialnumber}}
     </Menu.Item>
     <Menu.Item
-      data-test-agenda-actions-approve-and-close-agenda
+      data-test-agenda-version-actions-approve-and-close-agenda
       {{on "click" this.openConfirmApproveAgendaAndCloseMeeting}}
     >
       {{t
@@ -25,7 +25,7 @@
   {{/if}}
   {{#if @meeting.isFinal}}
     <Menu.Item
-      data-test-agenda-actions-unlock-agenda
+      data-test-agenda-version-actions-unlock-agenda
       {{on "click" this.reopenMeeting}}
       {{! This action does not have confirmation window}}
     >
@@ -35,7 +35,7 @@
   {{else if this.isMeetingClosable}}
     <Menu.Item
       @skin="danger"
-      data-test-agenda-actions-lock-agenda
+      data-test-agenda-version-actions-lock-agenda
       {{on "click" this.openConfirmCloseMeeting}}
     >
       {{t "agenda-close"}}
@@ -45,7 +45,7 @@
   {{#if this.canDeleteSelectedAgenda}}
     <Menu.Item
       @skin="danger"
-      data-test-agenda-actions-delete-agenda
+      data-test-agenda-version-actions-delete-agenda
       {{on "click" this.openConfirmDeleteSelectedAgenda}}
     >
       {{t "agenda-delete"}}
@@ -55,7 +55,7 @@
     <Menu.Divider />
     <Menu.Item
       @skin="danger"
-      data-test-agenda-actions-reopen-previous-version
+      data-test-agenda-version-actions-reopen-previous-version
       {{on "click" this.openConfirmReopenPreviousAgenda}}
     >
       {{t "agenda-reopen-previous-version"}}
@@ -64,7 +64,6 @@
   {{#if (and (not this.designAgenda) (not @meeting.isFinal))}}
     <Menu.Divider />
     <Menu.Item
-      data-test-agenda-actions-create-new-design
       {{on "click" this.reopenMeeting}}
       {{! This action does not have confirmation window}}
     >
@@ -97,7 +96,7 @@
           {{#if (await (this.approvedAgendaitemsNotOk))}}
             <br />
             <div
-              data-test-agenda-actions-approve-agenda-rollback-message
+              data-test-agenda-version-actions-approve-agenda-rollback-message
               class="auk-u-mb-2"
             >
               {{t "rollback-agendaitem-on-approving-agenda"}}
@@ -109,7 +108,7 @@
           {{#if (await (this.newAgendaitemsNotOk))}}
             <br />
             <div
-              data-test-agenda-actions-approve-agenda-move-message
+              data-test-agenda-version-actions-approve-agenda-move-message
               class="auk-u-mb-2"
             >
               {{t
@@ -126,7 +125,7 @@
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelApproveAgenda}}>
       <Auk::Button
-        data-test-agenda-actions-approve-agenda-confirm
+        data-test-agenda-version-actions-approve-agenda-confirm
         @skin={{if
                   (await this.canBeApproved)
                   "primary"
@@ -166,7 +165,7 @@
           {{#if (await (this.approvedAgendaitemsNotOk))}}
             <br />
             <div
-              data-test-agenda-actions-approve-and-close-agenda-rollback-message
+              data-test-agenda-version-actions-approve-and-close-agenda-rollback-message
               class="auk-u-mb-2"
             >
               {{t "rollback-agendaitem-on-approving-agenda-close-meeting"}}
@@ -178,7 +177,7 @@
           {{#if (await (this.newAgendaitemsNotOk))}}
             <br />
             <div
-              data-test-agenda-actions-approve-and-close-agenda-delete-message
+              data-test-agenda-version-actions-approve-and-close-agenda-delete-message
               class="auk-u-mb-2"
             >
               {{t
@@ -195,7 +194,7 @@
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelApproveAgendaAndCloseMeeting}}>
       <Auk::Button
-        data-test-agenda-actions-approve-and-close-agenda-confirm
+        data-test-agenda-version-actions-approve-and-close-agenda-confirm
         @skin={{if
                   (await (this.canBeApproved))
                   "primary"
@@ -232,7 +231,7 @@
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelCloseMeeting}}>
       <Auk::Button
-        data-test-agenda-actions-lock-agenda-confirm
+        data-test-agenda-version-actions-lock-agenda-confirm
         @skin={{if
                   (await this.latestAgenda.status.isDesignAgenda)
                   "danger-primary"
@@ -265,7 +264,7 @@
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelDeleteSelectedAgenda}}>
       <Auk::Button
-        data-test-agenda-actions-delete-agenda-confirm
+        data-test-agenda-version-actions-delete-agenda-confirm
         @skin="danger-primary"
         {{on "click" this.deleteSelectedAgenda}}
       >
@@ -316,7 +315,7 @@
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelReopenPreviousAgenda}}>
       <Auk::Button
-        data-test-agenda-actions-reopen-previous-version-confirm
+        data-test-agenda-version-actions-reopen-previous-version-confirm
         @skin="danger-primary"
         @disabled={{this.loadPiecesToDelete.isRunning}}
         {{on "click" this.reopenPreviousAgenda}}

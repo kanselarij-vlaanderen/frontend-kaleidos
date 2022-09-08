@@ -28,22 +28,22 @@ context('Agenda reopen previous tests', () => {
     cy.agendaNameExists('A');
     // check if action does not exist on design agenda A
     // TODO: opening and re-opening doesn't seem to work in test env.
-    // cy.get(agenda.agendaActions.showOptions).click();
-    // cy.get(agenda.agendaActions.actions.reopenPreviousVersion).should('not.exist');
-    // cy.get(agenda.agendaActions.showOptions).click();
+    // cy.get(agenda.agendaVersionActions.showOptions).click();
+    // cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).should('not.exist');
+    // cy.get(agenda.agendaVersionActions.showOptions).click();
     cy.approveDesignAgenda();
     // verify we have 2 agendas, A(approved) and B(design)
     cy.get(agenda.agendaSideNav.agenda).should('have.length', 2);
     cy.agendaNameExists('B');
     cy.agendaNameExists('A', false);
-    cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.actions.reopenPreviousVersion).click();
+    cy.get(agenda.agendaVersionActions.showOptions).click();
+    cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).click();
     // Check the message in the confirm modal
     cy.get(auk.modal.header.title).contains(reopenPreviousVersion);
     cy.get(auk.alert.message).contains(designAgendaB);
     cy.get(auk.alert.message).contains(approvedagendaA);
     cy.get(auk.loader).should('not.exist'); // data loading task might be running, disabling the next button
-    cy.get(agenda.agendaActions.confirm.reopenPreviousVersion).contains(reopenPreviousVersion)
+    cy.get(agenda.agendaVersionActions.confirm.reopenPreviousVersion).contains(reopenPreviousVersion)
       .click();
     cy.get(auk.modal.container, {
       timeout: 60000,
@@ -70,7 +70,7 @@ context('Agenda reopen previous tests', () => {
     cy.agendaNameExists('B', false);
     cy.agendaNameExists('A', false);
     // Check if action does not exist when there are multiple agendas but no design agenda
-    cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.actions.reopenPreviousVersion).should('not.exist');
+    cy.get(agenda.agendaVersionActions.showOptions).click();
+    cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).should('not.exist');
   });
 });

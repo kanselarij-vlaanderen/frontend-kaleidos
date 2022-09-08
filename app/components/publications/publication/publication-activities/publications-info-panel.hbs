@@ -99,7 +99,6 @@
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <Auk::Button
-              data-test-publications-info-panel-save
               @skin="primary"
               @loading={{this.save.isRunning}}
               {{on "click" (perform this.save)}}

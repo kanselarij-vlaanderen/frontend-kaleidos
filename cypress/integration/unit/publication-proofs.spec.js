@@ -73,7 +73,7 @@ context('Publications proofs tests', () => {
       .wait('@reloadTranslationModel');
 
     // check rollback after cancel request
-    cy.get(publication.publicationNav.publishpreview).click();
+    cy.get(publication.publicationNav.proofs).click();
     cy.get(publication.proofsIndex.newRequest).click();
     cy.get(auk.modal.container).find(publication.documentsList.piece)
       .should('have.length', 2);
@@ -227,7 +227,7 @@ context('Publications proofs tests', () => {
     cy.intercept('GET', '/proofing-activities?filter**subcase**').as('getProofingModel');
 
     cy.createPublication(fields);
-    cy.get(publication.publicationNav.publishpreview).click()
+    cy.get(publication.publicationNav.proofs).click()
       .wait('@getProofingModel');
     // Make sure the page transitioned
     cy.url().should('contain', '/drukproeven');

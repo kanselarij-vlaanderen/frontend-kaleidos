@@ -33,7 +33,6 @@ const selectors = {
     filter: {
       container: '[data-test-route-agendas-overview-filter-container]',
       input: '[data-test-route-agendas-overview-filter-input]',
-      button: '[data-test-route-agendas-overview-filter-button]',
       warning: '[data-test-route-agendas-overview-filter-warning-no-results]',
     },
   },
@@ -44,7 +43,6 @@ const selectors = {
 
   // agenda/documents/template
   agendaDocuments: {
-    cardList: '[data-test-route-agenda-documents-card-list]',
     addDocuments: '[data-test-route-agenda-documents-add-documents]',
   },
 
@@ -115,7 +113,6 @@ const selectors = {
     dateType: '[data-test-route-search-publication-date-type]',
     dataTable: '[data-test-route-search-publication-data-table]',
     row: {
-      urgency: '[data-test-route-search-publication-row-urgency]',
       number: '[data-test-route-search-publication-row-number]',
     },
   },
