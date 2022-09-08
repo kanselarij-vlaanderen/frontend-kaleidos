@@ -35,7 +35,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked isOpenUploadModal = false;
   @tracked isOpenVerifyDeleteModal = false;
   @tracked isEditingPiece = false;
-  @tracked isUploadingNewVersion = false;
+  @tracked isUploadingReplacementFile = false;
 
   @tracked piece;
   @tracked accessLevel;
@@ -149,7 +149,7 @@ export default class DocumentsDocumentCardComponent extends Component {
       await this.replacingFile.destroyRecord();
     }
     this.replacingFile = null;
-    this.isUploadingNewVersion = !this.isUploadingNewVersion;
+    this.isUploadingReplacementFile = !this.isUploadingReplacementFile;
   }
 
   @task
@@ -214,12 +214,12 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @action
   async cancelEditPieceName() {
-    if (this.replacingFile && this.isUploadingNewVersion) {
+    if (this.replacingFile && this.isUploadingReplacementFile) {
       await this.replacingFile.destroyRecord();
     }
     this.isEditingPiece = false;
     this.pieceNameBuffer = null;
-    this.isUploadingNewVersion = false;
+    this.isUploadingReplacementFile = false;
     this.replacingFile = null;
   }
 
@@ -236,7 +236,7 @@ export default class DocumentsDocumentCardComponent extends Component {
     yield this.piece.save();
     this.isEditingPiece = false;
     this.pieceNameBuffer = null;
-    this.isUploadingNewVersion = false;
+    this.isUploadingReplacementFile = false;
     this.replacingFile = null;
   }
 
