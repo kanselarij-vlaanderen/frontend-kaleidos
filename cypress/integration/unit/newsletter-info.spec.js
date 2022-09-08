@@ -127,7 +127,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // check default nota has no KB
     cy.get(newsletter.newsItem.alert).contains('Nog geen kort bestek voor dit agendapunt.');
     // create new KB
-    cy.intercept('GET', '/themes').as('getThemes');
+    cy.intercept('GET', '/themes**').as('getThemes');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getThemes');
     // check default values
@@ -176,7 +176,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.openAgendaitemKortBestekTab(subcaseTitleShort);
     cy.get(newsletter.newsItem.alert).contains('Nog geen kort bestek voor dit agendapunt.');
     // create new KB
-    cy.intercept('GET', '/themes').as('getThemes');
+    cy.intercept('GET', '/themes**').as('getThemes');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getThemes');
     // check default values
@@ -257,7 +257,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // TODO KAS-3367 extract, selector around the alert?
     cy.get(newsletter.newsItem.alert).contains('Nog geen kort bestek voor dit agendapunt.');
     // create new KB
-    cy.intercept('GET', '/themes').as('getThemes');
+    cy.intercept('GET', '/themes**').as('getThemes');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getThemes');
     // check default values
@@ -327,7 +327,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // check if KB empty
     cy.get(newsletter.newsItem.alert).contains('Nog geen kort bestek voor dit agendapunt.');
     // create new KB
-    cy.intercept('GET', '/themes').as('getThemes');
+    cy.intercept('GET', '/themes**').as('getThemes');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getThemes');
     // check default values
@@ -358,7 +358,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     const files = [file];
 
     cy.visitAgendaWithLink(agendaitemKBLink);
-    cy.intercept('GET', '/themes').as('getThemes');
+    cy.intercept('GET', '/themes**').as('getThemes');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getThemes');
 
@@ -375,7 +375,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       .click();
     // check cancel
     cy.get(newsletter.editItem.cancel).click();
-    cy.intercept('GET', '/themes').as('getThemes2');
+    cy.intercept('GET', '/themes**').as('getThemes2');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getThemes2');
     cy.get(dependency.rdfa.editorInner).should('be.empty');
@@ -392,7 +392,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.reload();
 
     cy.visitAgendaWithLink(agendaitemKBLink);
-    cy.intercept('GET', '/themes').as('getThemes3');
+    cy.intercept('GET', '/themes**').as('getThemes3');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getThemes3');
     cy.get(newsletter.editItem.mandateeProposal).contains(proposalText);
@@ -434,7 +434,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.addDocumentsToAgendaitem(subcaseTitleNota, files);
     cy.visit(newsletterLink);
     // check newsitem save
-    cy.intercept('GET', '/themes').as('getThemes');
+    cy.intercept('GET', '/themes**').as('getThemes');
     cy.get(newsletter.buttonToolbar.edit).click();
     cy.wait('@getThemes');
     cy.get(newsletter.editItem.toggleFinished).click();
@@ -534,7 +534,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.visitAgendaWithLink(agendaLinkMed);
     cy.addAgendaitemMandatee(2); // Hilde Crevits
     cy.openAgendaitemKortBestekTab(subcaseTitleMededeling);
-    cy.intercept('GET', '/themes').as('getThemes_1');
+    cy.intercept('GET', '/themes**').as('getThemes_1');
     cy.get(newsletter.newsItem.edit).click();
     cy.wait('@getThemes_1');
     cy.get(newsletter.editItem.rdfaEditor).type(richtextMededeling);
@@ -596,7 +596,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.visitAgendaWithLink(agendaLinkNota);
     cy.addAgendaitemMandatee(0);
     cy.openAgendaitemKortBestekTab(subcaseTitleNota);
-    cy.intercept('GET', '/themes').as('getThemes_2');
+    cy.intercept('GET', '/themes**').as('getThemes_2');
     cy.get(newsletter.newsItem.edit).click();
     cy.wait('@getThemes_2');
     cy.get(newsletter.editItem.themesSelector).contains(theme2)
@@ -617,7 +617,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
   // RDFA tests can be flaky locally when having dev tools open or when running in background (not in focus)
   it('should test the rdfa editor', () => {
     cy.visit('/vergadering/5EBA94D7751CF70008000001/kort-bestek');
-    cy.intercept('GET', '/themes').as('getThemes');
+    cy.intercept('GET', '/themes**').as('getThemes');
     cy.get(newsletter.buttonToolbar.edit).eq(0)
       .click();
     cy.wait('@getThemes');
