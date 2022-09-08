@@ -206,11 +206,9 @@ export default class PublicationService extends Service {
     //   'filter[treatment][decision-activity][publication-flows][:id:]': publicationFlow.id,
     // });
 
-    const decisionActivity = await publicationFlow.decisionActivity;
-    const agendaitem = await this.store.queryOne('agendaitem', {
-      'filter[treatment][decision-activity][:id:]': decisionActivity.id
-    });
-    return agendaitem != null;
+    const _case = await publicationFlow.case;
+    const decisionmakingFlow = await _case.decisionmakingFlow;
+    return decisionmakingFlow != null;
   }
 
   async updatePublicationStatus(publicationFlow, targetStatusUri, changeDate) {
