@@ -15,7 +15,7 @@
             {{t "case"}}
           </span>
           <Auk::AbbreviatedText
-            @text={{or @case.shortTitle @case.title}}
+            @text={{or @decisionmakingFlow.case.shortTitle @decisionmakingFlow.case.title}}
             @maxLength={{250}}
           />
         </div>
@@ -77,7 +77,6 @@
   <Cases::NewSubcase
     @onClose={{this.closeAddSubcaseModal}}
     @onCreate={{this.onCreateSubcase}}
-    @case={{@case}}
     @decisionmakingFlow={{@decisionmakingFlow}}
   />
 {{/if}}
@@ -86,6 +85,6 @@
   <Cases::EditCase
     @onClose={{this.closeEditCaseModal}}
     @onSave={{this.saveCase}}
-    @case={{@case}}
+    @case={{this.case}}
   />
 {{/if}}
