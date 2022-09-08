@@ -9,8 +9,8 @@ export default class SignatureService extends Service {
   async markDocumentForSignature(piece, decisionActivity) {
     const subcase = await decisionActivity?.subcase;
     if (subcase) {
-      const dmf = await subcase.decisionmakingFlow;
-      const _case = await dmf.case;
+      const decisionmakingFlow = await subcase.decisionmakingFlow;
+      const _case = await decisionmakingFlow.case;
       const creator = await this.currentSession.user;
       const now = new Date();
 

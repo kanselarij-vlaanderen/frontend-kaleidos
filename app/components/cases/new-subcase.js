@@ -67,8 +67,9 @@ export default class CasesNewSubcase extends Component {
       this.shortTitle = this.latestSubcase.shortTitle;
       this.confidential = this.latestSubcase.confidential;
     } else {
-      this.title = this.args.case.title;
-      this.shortTitle = this.args.case.shortTitle;
+      const _case = yield this.args.decisionmakingFlow.case;
+      this.title = _case.title;
+      this.shortTitle = _case.shortTitle;
       this.confidential = false;
     }
   }
