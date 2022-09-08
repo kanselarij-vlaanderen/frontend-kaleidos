@@ -34,11 +34,17 @@
         </Auk::Panel::Header>
         <Auk::Panel::Body class="{{if this.blocked 'au-u-muted'}}">
           <dl>
-            <Auk::KeyValue
-              @key={{t 'manage-users-full-name'}}
-              @value={{this.model.fullName}}
-              @layout="horizontal"
-            />
+            <div class="auk-key-value-item auk-key-value-item--horizontal">
+              <div class="auk-key-value-item__label">{{t 'manage-users-full-name'}}</div>
+              <div class="auk-key-value-item__value au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+                {{this.model.fullName}}
+                {{#if this.blocked}}
+                <AuPill @icon="circle-x" @skin="error" @size="small">
+                  Geblokkeerd
+                </AuPill>
+                {{/if}}
+              </div>
+            </div>
           </dl>
           <dl>
             <Auk::KeyValue

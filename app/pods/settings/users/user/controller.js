@@ -51,15 +51,14 @@ export default class SettingsUsersUserController extends Controller {
   @action
   addBlockPerson() {
     this.showBlockPerson = !this.showBlockPerson;
-    this.blocked = !this.blocked;
+    this.blocked = true;
     this.toaster.success("De persoon is geblokkeerd.");
   }
 
   @action
   addUnblockPerson() {
     this.showBlockPerson = !this.showBlockPerson;
-    this.blocked = !this.blocked;
+    this.blocked = false;
     this.toaster.success("De persoon is gedeblokkeerd.");
   }
-
 }

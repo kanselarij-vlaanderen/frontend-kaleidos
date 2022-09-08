@@ -8,6 +8,7 @@
             <div class="au-u-flex au-u-flex--spaced-tiny">
               <div class="au-u-4-5">
                 <Auk::Input
+                  placeholder="OVO of organisatie"
                   @type="search"
                   class="au-u-1-1"
                 />
@@ -83,7 +84,7 @@
               <ThSortable
                 @currentSorting={{this.sort}}
                 @field="group.name"
-                @label="Aantal gebruikers"
+                @label="Gebruikers gezien"
               />
               <th></th>
             </c.header>
