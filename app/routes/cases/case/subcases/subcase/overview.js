@@ -15,7 +15,7 @@ export default class CasesCaseSubcasesSubcaseOverviewRoute extends Route {
     },
   };
 
-  async beforeModel() {
+  beforeModel() {
     this.decisionmakingFlow = this.modelFor('cases.case');
   }
 
