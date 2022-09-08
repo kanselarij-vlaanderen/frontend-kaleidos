@@ -15,7 +15,7 @@
   <:body>
     <div class="auk-panel-layout">
       <div class="auk-panel-layout__main-content">
-        <Documents::DocumentView @file={{await this.selectedVersion.file}} />
+        <Documents::DocumentView @file={{this.selectedVersion.file}} />
       </div>
       <div class="auk-panel-layout__sidebar">
         <Documents::DocumentPreview::DocumentPreviewSidebar
