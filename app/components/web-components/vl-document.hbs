@@ -30,7 +30,7 @@
           </Auk::Button>
         {{/if}}
         {{#unless this.loadPieceRelatedData.isRunning}}
-          {{#if (and @isDesignAgenda (not @isVersion))}}
+          {{#if @isDesignAgenda}}
           <AccessLevelPill
             @accessLevel={{this.accessLevel}}
             @confidential={{this.piece.confidential}}
@@ -53,10 +53,10 @@
         {{!-- TODO: when created date is absent, the layout seems irregular
               this will be addressed with new document card styling --}}
         {{#if this.piece.created}}
+        {{#if (eq this.piece.file.extension "docx")}}
           {{t "uploaded-at"}}
-          {{moment-format this.piece.created "DD.MM.YYYY"}}
-          {{t "at"}}
-          {{moment-format this.piece.created "HH:mm"}}
+            Geüpload als <a href="#!">Word document</a>
+        {{/if}}
         {{/if}}
       </div>
     {{/if}}
