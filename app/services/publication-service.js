@@ -57,6 +57,7 @@ export default class PublicationService extends Service {
     const now = new Date();
 
     let _case;
+    let governmentAreas;
     let decisionActivity;
     let mandatees;
     let regulationType;
@@ -66,6 +67,17 @@ export default class PublicationService extends Service {
       decisionActivity = viaCouncilOfMinisterOptions.decisionActivity;
       mandatees = viaCouncilOfMinisterOptions.mandatees;
       regulationType = viaCouncilOfMinisterOptions.regulationType;
+
+      const decisionmakingFlow = await _case.decisionmakingFlow;
+      const latestSubcase = await this.store.queryOne('subcase', {
+        filter: {
+          'decisionmaking-flow': {
+            ':id:': decisionmakingFlow.id,
+          }
+        },
+        sort: '-created',
+      });
+      governmentAreas = await latestSubcase.governmentAreas;
     } else {
       _case = this.store.createRecord('case', {
         shortTitle: publicationProperties.shortTitle,
@@ -78,6 +90,7 @@ export default class PublicationService extends Service {
       });
       await decisionActivity.save();
       mandatees = [];
+      governmentAreas = [];
     }
 
     const initialStatus = await this.store.findRecordByUri(
@@ -128,6 +141,7 @@ export default class PublicationService extends Service {
       modified: now,
       regulationType: regulationType,
       urgencyLevel: standardUrgencyLevel,
+      governmentAreas: governmentAreas,
     });
     await publicationFlow.save();
 
