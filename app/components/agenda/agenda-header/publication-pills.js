@@ -9,7 +9,6 @@ import { PUBLICATION_ACTIVITY_REFRESH_INTERVAL_MS } from 'frontend-kaleidos/conf
 
 export default class AgendaAgendaHeaderPublicationPillsComponent extends Component {
   @service store;
-  @service currentSession;
 
   @tracked latestThemisPublicationActivity;
 
