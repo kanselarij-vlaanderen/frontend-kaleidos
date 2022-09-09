@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
-import moment from 'moment';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
@@ -167,7 +166,7 @@ export default class DocumentsDocumentCardComponent extends Component {
     yield this.loadVersionHistory.perform();
     const previousPiece = this.sortedPieces.lastObject;
     const previousAccessLevel = yield previousPiece.accessLevel;
-    const now = moment().utc().toDate();
+    const now = new Date();
     this.newPiece = this.store.createRecord('piece', {
       created: now,
       modified: now,
@@ -238,9 +237,9 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *savePieceEdit() {
-    const now = moment().toDate();
-    this.piece.set('modified', now);
-    this.piece.set('name', this.pieceNameBuffer);
+    const now = new Date();
+    this.piece.modified = now;
+    this.piece.name = this.pieceNameBuffer;
     if (this.replacementFile) {
       const oldFile = yield this.piece.file;
       yield oldFile.destroyRecord();
@@ -325,9 +324,9 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   @action
-  changeAccessLevel(al) {
-    this.piece.set('accessLevel', al);
-    this.accessLevel = al;
+  changeAccessLevel(accessLevel) {
+    this.piece.accessLevel = accessLevel;
+    this.accessLevel = accessLevel;
   }
 
   @action
