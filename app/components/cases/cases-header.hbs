@@ -10,7 +10,7 @@
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          {{#if this.currentSession.isEditor}}
+          {{#if (user-may "manage-cases")}}
             <Auk::Button
               data-test-cases-header-add-case
               @skin="primary"

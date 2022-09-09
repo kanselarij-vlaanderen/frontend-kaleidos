@@ -98,7 +98,7 @@
           {{!  TODO: Only here because required for alignment of flex items }}
           <span class="vlc-agenda-meta__times-passed"></span>
         {{/if}}
-        {{#if (and this.currentSession.isEditor @showFormallyOkStatus)}}
+        {{#if (and (user-may "manage-agendaitems") @showFormallyOkStatus)}}
           {{#if @isEditingFormallyOkStatus}}
             <div class="vlc-agenda-meta__status-holder">
               <Utils::FormallyOkSelector
@@ -158,7 +158,7 @@
           </div>
           <div class="vlc-agenda-items__icons">
             <div class="vlc-agenda-meta__status-holder auk-u-ml-2">
-              {{#if (and this.currentSession.isEditor @showFormallyOkStatus)}}
+              {{#if (and (user-may "manage-agendaitems") @showFormallyOkStatus)}}
                 <p
                   class={{@agendaitem.formallyOkToShow.classNames}}
                   data-test-agenda-overview-item-status

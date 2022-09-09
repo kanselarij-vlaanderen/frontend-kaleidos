@@ -50,7 +50,7 @@ export default Route.extend({
   },
 
   redirect() {
-    if (!this.currentSession.isEditor) {
+    if (this.currentSession.may('manage-decisions')) {
       // there currently is no view for decisions that non-editors are allowed to see.
       // there is also no way to reach this route from the UI for those users
       // entering the address still works so we fallback to agendas

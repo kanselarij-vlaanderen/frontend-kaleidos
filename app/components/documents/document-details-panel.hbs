@@ -105,7 +105,7 @@
             </h4>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
-        {{#if this.currentSession.isEditor}}
+        {{#if (user-may "manage-documents")}}
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <Auk::Button

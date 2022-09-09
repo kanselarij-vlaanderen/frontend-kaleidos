@@ -30,7 +30,7 @@
           autocomplete="off"
         />
       </Group.Item>
-      {{#if this.currentSession.isEditor}}
+      {{#if (user-may "manage-meetings")}}
         <Group.Item>
           <Auk::Button
             @skin="primary"
