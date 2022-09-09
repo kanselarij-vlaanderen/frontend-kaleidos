@@ -34,9 +34,6 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked isOpenUploadModal = false;
   @tracked isOpenVerifyDeleteModal = false;
   @tracked isEditingPiece = false;
-  @tracked isUploadingReplacementFile = false;
-  @tracked isUploadingReplacementSourceFile = false;
-  @tracked isDeletingSourceFile = false;
 
   @tracked piece;
   @tracked accessLevel;
@@ -44,11 +41,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked signMarkingActivity;
 
   @tracked uploadedFile;
-  @tracked uploadedSourceFile;
-  @tracked replacementFile;
-  @tracked replacementSourceFile;
   @tracked newPiece;
-  @tracked pieceNameBuffer;
   @tracked defaultAccessLevel;
   @tracked pieces = A();
 
@@ -146,21 +139,6 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.isOpenUploadModal = true;
   }
 
-  @action
-  async toggleUploadReplacementFile() {
-    await this.replacementFile?.destroyRecord();
-    this.replacementFile = null;
-    this.isUploadingReplacementFile = !this.isUploadingReplacementFile;
-  }
-
-  @action
-  async toggleUploadReplacementSourceFile() {
-    await this.replacementSourceFile?.destroyRecord();
-    this.replacementSourceFile = null;
-    this.isUploadingReplacementSourceFile = !this.isUploadingReplacementSourceFile;
-  }
-
-
   @task
   *uploadPiece(file) {
     yield this.loadVersionHistory.perform();
@@ -208,69 +186,6 @@ export default class DocumentsDocumentCardComponent extends Component {
   *cancelUploadPiece() {
     yield this.deleteUploadedPiece.perform();
     this.isOpenUploadModal = false;
-  }
-
-  @action
-  enableEditPieceName() {
-    this.pieceNameBuffer = this.piece.name;
-    this.isEditingPiece = true;
-  }
-
-  @action
-  async cancelPieceEdit() {
-    this.isEditingPiece = false;
-    this.pieceNameBuffer = null;
-
-    await this.replacementFile?.destroyRecord();
-    this.isUploadingReplacementFile = false;
-    this.replacementFile = null;
-
-    await this.replacementSourceFile?.destroyRecord();
-    this.isUploadingReplacementSourceFile = false;
-    this.replacementSourceFile = null;
-
-    await this.uploadedSourceFile?.destroyRecord();
-    this.uploadedSourceFile = null;
-
-    this.isDeletingSourceFile = false;
-  }
-
-  @task
-  *savePieceEdit() {
-    const now = new Date();
-    this.piece.modified = now;
-    this.piece.name = this.pieceNameBuffer;
-    if (this.replacementFile) {
-      const oldFile = yield this.piece.file;
-      yield oldFile.destroyRecord();
-      this.piece.file = this.replacementFile;
-    }
-    if (this.replacementSourceFile) {
-      const file = yield this.piece.file;
-      const oldSource = yield file.primarySource;
-      yield oldSource.destroyRecord();
-      file.primarySource = this.replacementSourceFile;
-      yield file.save();
-    }
-    if (this.uploadedSourceFile) {
-      const file = yield this.piece.file;
-      file.primarySource = this.uploadedSourceFile;
-      yield file.save()
-    }
-    if (this.isDeletingSourceFile) {
-      const file = yield this.piece.file;
-      const sourceFile = yield file.primarySource;
-      yield sourceFile.destroyRecord();
-    }
-    yield this.piece.save();
-    this.isEditingPiece = false;
-    this.pieceNameBuffer = null;
-    this.isUploadingReplacementFile = false;
-    this.replacementFile = null;
-    this.isUploadingReplacementSourceFile = false;
-    this.replacementSourceFile = false;
-    this.uploadedSourceFile = null;
-    this.isDeletingSourceFile = false;
   }
 
   @task
