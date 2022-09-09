@@ -1,6 +1,6 @@
 <div data-test-publication-pills-container>
   {{#unless this.loadInitialData.isRunning}}
-    {{#if this.mayManageDecisionPublications}}
+    {{#if (user-may "manage-decision-publications")}}
       {{#if @meeting.internalDecisionPublicationActivity.startDate}}
         <AuPill @skin="success" @icon="check" class="auk-u-mr-2 auk-u-mt-2">
           {{t
@@ -11,7 +11,7 @@
         </AuPill>
       {{/if}}
     {{/if}}
-    {{#if this.mayManageDocumentPublications}}
+    {{#if (user-may "manage-document-publications")}}
       {{#if @meeting.internalDocumentPublicationActivity.startDate}}
         <AuPill @skin="success" @icon="check" class="auk-u-mr-2 auk-u-mt-2">
           {{t
@@ -32,7 +32,7 @@
         {{/if}}
       {{/if}}
     {{/if}}
-    {{#if this.mayManageThemisPublications}}
+    {{#if (user-may "manage-themis-publications")}}
       {{#if (and this.isReleasedThemisPublicationActivity this.themisPublicationIncludesDocuments)}}
         <AuPill @skin="success" @icon="check" class="auk-u-mr-2 auk-u-mt-2">
           {{t

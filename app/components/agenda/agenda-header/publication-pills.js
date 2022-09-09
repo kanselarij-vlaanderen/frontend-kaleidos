@@ -9,7 +9,6 @@ import { PUBLICATION_ACTIVITY_REFRESH_INTERVAL_MS } from 'frontend-kaleidos/conf
 
 export default class AgendaAgendaHeaderPublicationPillsComponent extends Component {
   @service store;
-  @service currentSession;
 
   @tracked latestThemisPublicationActivity;
 
@@ -21,18 +20,6 @@ export default class AgendaAgendaHeaderPublicationPillsComponent extends Compone
   willDestroy() {
     super.willDestroy(...arguments);
     cancel(this.scheduledRefresh);
-  }
-
-  get mayManageDecisionPublications() {
-    return this.currentSession.may('manage-decision-publications');
-  }
-
-  get mayManageDocumentPublications() {
-    return this.currentSession.may('manage-document-publications');
-  }
-
-  get mayManageThemisPublications() {
-    return this.currentSession.may('manage-themis-publications');
   }
 
   get isConfirmedDocumentPublicationPlanning() {

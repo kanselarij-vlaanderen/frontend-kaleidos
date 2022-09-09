@@ -61,7 +61,7 @@ export default class CasesSearchRoute extends Route {
       params.page = 0;
     }
 
-    const textSearchFields = ['title', 'shortTitle', 'subcaseTitle', 'subcaseSubTitle'];
+    const textSearchFields = ['title^4', 'shortTitle^4', 'subcaseTitle^2', 'subcaseSubTitle^2'];
     if (params.decisionsOnly) {
       textSearchFields.push('decisions.content');
     } else {

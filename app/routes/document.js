@@ -15,4 +15,19 @@ export default class DocumentRoute extends Route {
       include: 'file',
     });
   }
+
+  async afterModel(model) {
+    this.decisionActivity = await this.store.queryOne('decision-activity', {
+      filter: {
+        report: {
+          ':id:': model?.id,
+        },
+      },
+    });
+  }
+
+  setupController(controller) {
+    super.setupController(...arguments);
+    controller.decisionActivity = this.decisionActivity;
+  }
 }
