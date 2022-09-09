@@ -19,7 +19,7 @@
                 {{@agendaitem.shortTitle}}
               {{/if}}
             </h4>
-            {{#if (and @newsletterItem this.canEditNewsletter)}}
+            {{#if (and @newsletterItem (user-may "manage-newsletter-infos"))}}
               <div class="auk-o-flex auk-o-flex--justify-between ">
                 <div class="auk-u-ml-2">
                   <Auk::ButtonLink

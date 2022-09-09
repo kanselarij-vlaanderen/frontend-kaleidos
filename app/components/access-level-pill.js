@@ -28,7 +28,7 @@ export default class AccessLevelPillComponent extends Component {
   get pillIcon() {
     let icon = '';
     if (this.args.accessLevel) {
-      switch (this.args.accessLevel.uri) {
+      switch (this.args.accessLevel.get('uri')) {
         case CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE:
           icon = 'users-single';
           break;
@@ -53,7 +53,7 @@ export default class AccessLevelPillComponent extends Component {
   get pillSkin() {
     let skin = 'warning';
     if (this.args.accessLevel) {
-      switch (this.args.accessLevel.uri) {
+      switch (this.args.accessLevel.get('uri')) {
         case CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE:
           skin = 'warning';
           break;
@@ -77,7 +77,7 @@ export default class AccessLevelPillComponent extends Component {
 
   get accessLevelLabel() {
     if (this.args.accessLevel) {
-      return this.args.accessLevel.label;
+      return this.args.accessLevel.get('label');
     }
     return this.intl.t('no-accessLevel');
   }

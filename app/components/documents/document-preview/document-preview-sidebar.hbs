@@ -71,6 +71,7 @@
           <Documents::DocumentPreview::DetailsTab
             @piece={{@piece}}
             @documentContainer={{this.documentContainer}}
+            @didDeletePiece={{@didDeletePiece}}
           />
           {{! SIGNATURES }}
         {{else if (eq this.activeTab "signatures")}}
