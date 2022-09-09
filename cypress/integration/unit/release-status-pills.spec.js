@@ -3,7 +3,7 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
-import utils from '../../selectors/utils.selectors';
+import auk from '../../selectors/auk.selectors';
 
 
 context('Testing internal and themis document release pills', () => {
@@ -30,9 +30,9 @@ context('Testing internal and themis document release pills', () => {
     cy.get(agenda.agendaHeader.actions.releaseDocuments).click({
       force: true,
     });
-    cy.get(utils.vlDatepicker).eq(0)
+    cy.get(auk.datepicker).eq(0)
       .should('have.value', nextDay.format('DD-MM-YYYY HH:mm'));
-    cy.get(utils.vlDatepicker).eq(1)
+    cy.get(auk.datepicker).eq(1)
       .should('have.value', nextDay.format('DD-MM-YYYY HH:mm'));
     cy.intercept('PATCH', 'internal-document-publication-activities/*').as('patchInternalActivity');
     cy.intercept('PATCH', 'themis-publication-activities/*').as('patchThemisActivity');
@@ -51,10 +51,10 @@ context('Testing internal and themis document release pills', () => {
     cy.get(agenda.agendaHeader.actions.releaseDocuments).click({
       force: true,
     });
-    cy.get(utils.vlDatepicker).eq(0)
+    cy.get(auk.datepicker).eq(0)
       .click();
     cy.setDateAndTimeInFlatpickr(newReleaseDate);
-    cy.get(utils.vlDatepicker).eq(1)
+    cy.get(auk.datepicker).eq(1)
       .click({
         force: true,
       });
