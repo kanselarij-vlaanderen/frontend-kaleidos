@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { isBlank } from '@ember/utils';
 
@@ -12,8 +11,11 @@ import { isBlank } from '@ember/utils';
 export default class NewCase extends Component {
   @service store;
 
-  shortTitle = null;
-  @tracked hasError = false;
+  @tracked shortTitle;
+
+  get isCreateDisabled() {
+    return isBlank(this.shortTitle);
+  }
 
   get isLoading() {
     return this.createCase.isRunning;
@@ -34,14 +36,5 @@ export default class NewCase extends Component {
     });
     yield decisionmakingFlow.save();
     return this.args.didSave(decisionmakingFlow);
-  }
-
-  @action
-  async validateAndCreateCase() {
-    if (isBlank(this.shortTitle)) {
-      this.hasError = true;
-    } else {
-      await this.createCase.perform();
-    }
   }
 }
