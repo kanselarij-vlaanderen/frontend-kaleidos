@@ -108,14 +108,6 @@ export default class CasesCaseSubcasesOverview extends Controller {
   }
 
   @action
-  navigateToNewCase(decisionmakingFlow) {
-    if (!decisionmakingFlow) {
-      return;
-    }
-    this.navigateToDecisionmakingFlow(decisionmakingFlow);
-  }
-
-  @action
   navigateToDecisionmakingFlow(decisionmakingFlow) {
     this.router.transitionTo('cases.case.subcases', decisionmakingFlow.id);
   }

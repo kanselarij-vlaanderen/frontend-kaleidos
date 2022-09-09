@@ -8,16 +8,16 @@ import { action } from '@ember/object';
  */
 export default class CasesHeader extends Component {
   @service currentSession;
-  @tracked isAddingCase = false;
+  @tracked isOpenNewCaseModal = false;
 
   @action
-  toggleAddingCase() {
-    this.isAddingCase = !this.isAddingCase;
+  toggleIsOpenNewCaseModal() {
+    this.isOpenNewCaseModal = !this.isOpenNewCaseModal;
   }
 
   @action
   saveNewCase() {
-    this.toggleAddingCase();
+    this.toggleIsOpenNewCaseModal();
     this.args.didCreateNewCase(...arguments);
   }
 }

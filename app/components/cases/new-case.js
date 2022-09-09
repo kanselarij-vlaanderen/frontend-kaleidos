@@ -1,9 +1,10 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import moment from 'moment';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
+import { isBlank } from '@ember/utils';
+
 /**
   * @argument didSave: action, passes down the newly created decisionmakingFlow
   * @argument onCancel: action
@@ -14,32 +15,30 @@ export default class NewCase extends Component {
   shortTitle = null;
   @tracked hasError = false;
 
+  get isLoading() {
+    return this.createCase.isRunning;
+  }
+
   @task
   *createCase() {
-    const newDate = moment().utc().toDate();
-    const { shortTitle } = this;
+    const now = new Date();
     const _case = this.store.createRecord('case', {
-      shortTitle,
+      shortTitle: this.shortTitle,
       isArchived: false,
-      created: newDate,
+      created: now,
     });
     yield _case.save();
     const decisionmakingFlow = this.store.createRecord('decisionmaking-flow', {
       case: _case,
-      opened: newDate,
+      opened: now,
     });
     yield decisionmakingFlow.save();
     return this.args.didSave(decisionmakingFlow);
   }
 
-  get isLoading() {
-    return this.createCase.isRunning;
-  }
-
   @action
   async validateAndCreateCase() {
-    const { shortTitle } = this;
-    if (shortTitle === null || shortTitle.trim().length === 0) {
+    if (isBlank(this.shortTitle)) {
       this.hasError = true;
     } else {
       await this.createCase.perform();

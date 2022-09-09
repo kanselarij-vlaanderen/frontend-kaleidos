@@ -22,16 +22,16 @@
   </div>
 </Auk::Modal::Body>
 <Auk::Modal::Footer @custom={{true}}>
-  <Auk::Toolbar @size="large">
-    <Auk::Toolbar::Group @position="left">
-      <Auk::Toolbar::Item>
+  <Auk::Toolbar @size="large" as |Toolbar|>
+    <Toolbar.Group @position="left" as |Group|>
+      <Group.Item>
         <Auk::ButtonLink {{on "click" @onCancel}} data-test-new-case-cancel>
           {{t "cancel"}}
         </Auk::ButtonLink>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-    <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
+      </Group.Item>
+    </Toolbar.Group>
+    <Toolbar.Group @position="right" as |Group|>
+      <Group.Item>
         <Auk::Button
           @skin="primary"
           @loading={{this.isLoading}}
@@ -40,7 +40,7 @@
         >
           {{t "create-case"}}
         </Auk::Button>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
+      </Group.Item>
+    </Toolbar.Group>
   </Auk::Toolbar>
 </Auk::Modal::Footer>

@@ -1,36 +1,36 @@
 <Auk::Navbar @skin="gray-100">
-    <Auk::Toolbar @auto={{true}}>
-      <Auk::Toolbar::Group @position="left">
-        <Auk::Toolbar::Item>
+    <Auk::Toolbar @auto={{true}} as |Toolbar|>
+      <Toolbar.Group @position="left" as |Group|>
+        <Group.Item>
           <h1 data-test-cases-header-title class="auk-toolbar__title">
             {{t "cases"}}
           </h1>
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
-      <Auk::Toolbar::Group @position="right">
-        <Auk::Toolbar::Item>
+        </Group.Item>
+      </Toolbar.Group>
+      <Toolbar.Group @position="right" as |Group|>
+        <Group.Item>
           {{#if this.currentSession.isEditor}}
             <Auk::Button
               data-test-cases-header-add-case
               @skin="primary"
               @icon="plus"
-              {{on "click" this.toggleAddingCase}}
+              {{on "click" this.toggleIsOpenNewCaseModal}}
             >
               {{t "add-case"}}
             </Auk::Button>
           {{/if}}
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
+        </Group.Item>
+      </Toolbar.Group>
     </Auk::Toolbar>
 </Auk::Navbar>
-{{#if this.isAddingCase}}
+{{#if this.isOpenNewCaseModal}}
   <WebComponents::VlModal
     @isOverlay={{true}}
-    @closeModal={{this.toggleAddingCase}}
+    @closeModal={{this.toggleIsOpenNewCaseModal}}
     @title={{t "new-case"}} >
     <Cases::NewCase
       @didSave={{this.saveNewCase}}
-      @onCancel={{this.toggleAddingCase}}
+      @onCancel={{this.toggleIsOpenNewCaseModal}}
     />
   </WebComponents::VlModal>
 {{/if}}
