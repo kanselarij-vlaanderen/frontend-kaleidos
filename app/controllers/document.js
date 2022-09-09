@@ -37,9 +37,8 @@ export default class DocumentController extends Controller {
   async didDeletePiece(piece) {
     const previousPiece = await piece.previousPiece;
     if (isPresent(this.decisionActivity)) {
-      const decisionActivity = await piece.decisionActivity;
       await this.fileService.deletePiece(piece);
-      await this._didDeletePieceFromDecision(decisionActivity, previousPiece);
+      await this._didDeletePieceFromDecision(this.decisionActivity, previousPiece);
     } else {
       // Fetch linked agendaitem before the piece is deleted and we lose the link
       const agendaitem = await this.store.queryOne('agendaitem', {
