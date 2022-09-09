@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 // / <reference types="Cypress" />
 
+import auk from '../../selectors/auk.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
 import settings from '../../selectors/settings.selectors';
@@ -64,7 +65,7 @@ context('Full test for creating mandatees', () => {
       .scrollIntoView()
       .click();
 
-    cy.get(utils.vlDatepicker).eq(0)
+    cy.get(auk.datepicker).eq(0)
       .click();
     cy.setDateInFlatpickr(agendaDate);
 
@@ -98,7 +99,7 @@ context('Full test for creating mandatees', () => {
       hour: 10, minute: 10,
     });
 
-    cy.get(utils.vlDatepicker).eq(1)
+    cy.get(auk.datepicker).eq(1)
       .click();
     cy.setDateInFlatpickr(enddateForMandatee);
     cy.get(mandatee.editMandatee.save).click();

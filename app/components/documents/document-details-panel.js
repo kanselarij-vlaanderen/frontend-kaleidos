@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { isPresent } from '@ember/utils';
 import { task } from 'ember-concurrency';
 
 /**
@@ -10,10 +11,13 @@ import { task } from 'ember-concurrency';
 export default class DocumentsDocumentDetailsPanel extends Component {
   @service currentSession;
   @service pieceAccessLevelService;
-
   @tracked isEditingDetails = false;
+  @tracked isOpenVerifyDeleteModal = false;
+  @tracked isUploadingReplacementFile = false;
+  @tracked replacementFile;
   @tracked documentType;
   @tracked accessLevel;
+  @tracked isLastVersionOfPiece;
 
   constructor() {
     super(...arguments);
@@ -28,17 +32,26 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   *loadDetailsData() {
     this.documentType = yield this.args.documentContainer.type;
     this.accessLevel = yield this.args.piece.accessLevel;
+     this.isLastVersionOfPiece = !isPresent(yield this.args.piece.nextPiece);
   }
 
   @task
   *cancelEditDetails() {
     this.args.piece.rollbackAttributes(); // in case of piece name change
     yield this.loadDetailsData.perform();
+    yield this.replacementFile?.destroyRecord();
+    this.isUploadingReplacementFile = false;
+    this.replacementFile = null;
     this.isEditingDetails = false;
   }
 
   @task
   *saveDetails() {
+    if (this.replacementFile) {
+      const oldFile = yield this.args.piece.file;
+      yield oldFile.destroyRecord();
+      this.args.piece.file = this.replacementFile;
+    }
     this.args.piece.accessLevel = this.accessLevel;
     yield this.args.piece.save();
     yield this.pieceAccessLevelService.updatePreviousAccessLevels(
@@ -47,6 +60,15 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     this.args.documentContainer.type = this.documentType;
     yield this.args.documentContainer.save();
     this.isEditingDetails = false;
+    this.replacementFile = null;
+    this.isUploadingReplacementFile = !this.isUploadingReplacementFile;
+  }
+
+  @action
+  async toggleUploadReplacementFile() {
+    await this.replacementFile?.destroyRecord();
+    this.replacementFile = null;
+    this.isUploadingReplacementFile = !this.isUploadingReplacementFile;
   }
 
   @action
@@ -62,5 +84,13 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @action
   setDocumentType(docType) {
     this.documentType = docType;
+  }
+
+  @action
+  verifyDeleteDocument() {
+    if (this.args.didDeletePiece) {
+      this.args.didDeletePiece(this.args.piece);
+    }
+    this.isOpenVerifyDeleteModal = false;
   }
 }

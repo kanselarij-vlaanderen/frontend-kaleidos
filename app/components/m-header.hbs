@@ -33,7 +33,7 @@
               {{t "newsletter"}}
             </Auk::Tab>
           {{/if}}
-          {{#if this.isShownPublications}}
+          {{#if (user-may "manage-publication-flows")}}
             <Auk::Tab @route="publications" data-test-m-header-publications>
               {{t "publications"}}
             </Auk::Tab>
