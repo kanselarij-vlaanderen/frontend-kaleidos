@@ -338,6 +338,17 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   @action
+  changeAccessLevelOfPiece(piece, accessLevel) {
+    piece.set('accessLevel', accessLevel);
+  }
+
+  @action
+  async saveAccessLevelOfPiece(piece) {
+    await piece.save();
+    await this.pieceAccessLevelService.updatePreviousAccessLevels(piece);
+  }
+
+  @action
   async reloadAccessLevel() {
     await this.loadPieceRelatedData.perform();
   }
