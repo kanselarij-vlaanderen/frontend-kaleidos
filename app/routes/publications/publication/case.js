@@ -1,9 +1,6 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
 
 export default class CaseRoute extends Route {
-  @service publicationService;
-
   model() {
     return this.modelFor('publications.publication');
   }
