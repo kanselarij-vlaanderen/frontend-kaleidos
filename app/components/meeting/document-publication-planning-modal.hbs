@@ -15,11 +15,11 @@
             {{t "agenda-publication-internal-documents-question"}}
           </Auk::Label>
           <div class="auk-o-flex">
-            <WebComponents::VlDatepicker
+            <Auk::Datepicker
               class="auk-o-flex__item"
               @enableTime={{true}}
-              @date={{array this.documentPublicationPlannedDate}}
-              @dateChanged={{this.setDocumentPublicationDatePicker}}
+              @date={{this.documentPublicationPlannedDate}}
+              @onChange={{set this "documentPublicationPlannedDate"}}
               @disabled={{this.isDisabledDocumentPublication}}
             />
             <Auk::Button
@@ -37,11 +37,11 @@
             {{t "agenda-publication-website-question"}}
           </Auk::Label>
           <div class="auk-o-flex">
-            <WebComponents::VlDatepicker
+            <Auk::Datepicker
               class="auk-o-flex__item"
               @enableTime={{true}}
-              @date={{array this.themisPublicationPlannedDate}}
-              @dateChanged={{this.setThemisPublicationDatePicker}}
+              @date={{this.themisPublicationPlannedDate}}
+              @onChange={{set this "themisPublicationPlannedDate"}}
               @disabled={{this.isDisabledThemisPublication}}
             />
             <Auk::Button

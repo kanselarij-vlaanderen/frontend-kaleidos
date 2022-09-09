@@ -37,11 +37,10 @@
       <div class="auk-u-mb-2">
         <div class="auk-form-group" data-test-edit-meeting-datepicker>
           <Auk::Label>{{t "start-date"}}</Auk::Label>
-          {{! TODO: Replace this with Auk::Datepicker, which isn't fully compliant yet (e.g. no time support) }}
-          <WebComponents::VlDatepicker
+          <Auk::Datepicker
             @enableTime={{true}}
-            @date={{array this.startDate}}
-            @dateChanged={{this.setStartDate}}
+            @date={{this.startDate}}
+            @onChange={{this.setStartDate}}
           />
         </div>
       </div>
@@ -51,11 +50,10 @@
           <Auk::Label>
             {{t "date-publication-documents"}}
           </Auk::Label>
-          {{! TODO: Replace this with Auk::Datepicker, which isn't fully compliant yet (e.g. no time support) }}
-          <WebComponents::VlDatepicker
+          <Auk::Datepicker
             @enableTime={{true}}
-            @date={{array this.plannedDocumentPublicationDate}}
-            @dateChanged={{this.setPlannedDocumentPublicationDate}}
+            @date={{this.plannedDocumentPublicationDate}}
+            @onChange={{set this "plannedDocumentPublicationDate"}}
             @disabled={{this.isDisabledPlannedDocumentPublicationDate}}
           />
           <Auk::FormHelpText

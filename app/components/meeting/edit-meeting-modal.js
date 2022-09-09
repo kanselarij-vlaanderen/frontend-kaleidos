@@ -94,11 +94,6 @@ export default class MeetingEditMeetingComponent extends Component {
     }
   }
 
-  @action
-  setPlannedDocumentPublicationDate(plannedDate) {
-    this.plannedDocumentPublicationDate = plannedDate;
-  }
-
   @task
   *initializeMainMeeting() {
     this.selectedMainMeeting = yield this.args.meeting.mainMeeting;
