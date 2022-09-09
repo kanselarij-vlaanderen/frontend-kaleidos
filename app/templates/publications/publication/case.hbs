@@ -15,11 +15,11 @@
       @publicationFlow={{this.model}}
     />
 
-    {{#if this.governmentAreas}}
-      <Utils::GovernmentAreas::GovernmentAreasPanel
-        @governmentAreas={{this.governmentAreas}}
-      />
-    {{/if}}
+    <Utils::GovernmentAreas::GovernmentAreasPanel
+      @governmentAreas={{this.governmentAreas}}
+      @allowEditing={{true}}
+      @onSave={{this.saveGovernmentAreas}}
+    />
 
     <Publications::Publication::Case::ContactPersons::ContactPersonsPanel
       @publicationFlow={{this.model}} />

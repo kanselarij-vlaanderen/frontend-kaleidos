@@ -9,9 +9,7 @@ export default class CaseRoute extends Route {
   }
 
   async afterModel(model) {
-    const _case = await model.case;
-    const decisionmakingFlow = await _case.decisionmakingFlow;
-    this.governmentAreas = await decisionmakingFlow?.governmentAreas;
+    this.governmentAreas = await model.governmentAreas;
   }
 
   setupController(controller) {
