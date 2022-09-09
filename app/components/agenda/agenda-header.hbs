@@ -33,7 +33,7 @@
         </div>
       </Group.Item>
     </Toolbar.Group>
-    {{#if this.currentSession.isViewer}}
+    {{#if (user-may "view-agenda-actions")}}
       <Toolbar.Group @position="right" as |Group|>
         {{#if (user-may "manage-agenda-versions")}}
           <Group.Item>
