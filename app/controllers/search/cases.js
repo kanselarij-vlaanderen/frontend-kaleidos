@@ -5,6 +5,7 @@ import { inject as service } from '@ember/service';
 
 export default class CasesSearchController extends Controller {
   @service router;
+  @service intl;
 
   queryParams =[{
     includeArchived: {
@@ -24,7 +25,11 @@ export default class CasesSearchController extends Controller {
     },
   }];
 
-  sizeOptions = Object.freeze([5, 10, 20, 50, 100, 200]);
+  sizeOptions = [5, 10, 20, 50, 100, 200];
+  sortOptions = [
+    { value: '-session-dates', label: this.intl.t('meeting-date') },
+    { value: '', label: this.intl.t('relevance-score') }, // empty string as value because null is not handled correctly by select-element
+  ];
 
   @tracked page;
   @tracked size;
@@ -37,7 +42,7 @@ export default class CasesSearchController extends Controller {
     super(...arguments);
     this.page = 0;
     this.size = this.sizeOptions[2];
-    this.sort = '-session-dates';
+    this.sort = this.sortOptions[0].value;
     this.includeArchived = true;
     this.decisionsOnly = false;
   }
@@ -45,6 +50,11 @@ export default class CasesSearchController extends Controller {
   @action
   selectSize(size) {
     this.size = size;
+  }
+
+  @action
+  selectSort(event) {
+    this.sort = event.target.value;
   }
 
   @action
