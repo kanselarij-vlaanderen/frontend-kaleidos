@@ -8,7 +8,13 @@
     <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
       {{this.selectedVersion.name}}
       {{#if this.selectedVersion.file}}
-        <AuLink href={{this.selectedVersion.file.namedDownloadLink}} @skin="button-naked" @icon="download" @iconAlignment="left" download>Downloaden</AuLink>
+        <AuLinkExternal
+          {{! TODO: AuExternalLink doesn't support @style="button-naked" yet}}
+          @icon="download"
+          @iconAlignment="left"
+          href={{this.selectedVersion.file.namedDownloadLink}}
+          download
+        >{{t "download-2"}}</AuLinkExternal>
       {{/if}}
     </span>
   </:title>

@@ -19,6 +19,7 @@ const selectors = {
   vlDocument: {
     piece: '[data-test-vl-document-piece]',
     name: '[data-test-vl-document-name]',
+    // TODO-selector cleanup selectors and usage
     delete: '[data-test-vl-document-delete-piece]',
   },
 
