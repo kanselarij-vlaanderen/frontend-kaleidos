@@ -100,7 +100,9 @@
                       {{row.title}}
                     </h3>
                     <p class="auk-u-mr-2">
-                      <SanitizeHtml @raw={{true}} @value={{row.richtext}} />
+                      <AuContent>
+                        <SanitizeHtml @raw={{true}} @value={{row.richtext}} />
+                      </AuContent>
                     </p>
                   </td>
                   <td>
