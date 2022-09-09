@@ -75,7 +75,7 @@ export default class SettingsOrganisationsController extends Controller {
   @action
   addBlock() {
     this.showBlock = !this.showBlock;
-    this.toaster.success("Organisatie geblokkeerd");
+    this.toaster.success("Organisatie geblokkeerd.");
   }
 
   @tracked showUnblock = false;
@@ -88,6 +88,19 @@ export default class SettingsOrganisationsController extends Controller {
   @action
   addUnblock() {
     this.showUnblock = !this.showUnblock;
-    this.toaster.success("Organisatie gedeblokkeerd");
+    this.toaster.success("Organisatie gedeblokkeerd.");
+  }
+
+  @tracked showArchive = false;
+
+  @action
+  archive() {
+    this.showArchive = !this.showArchive;
+  }
+
+  @action
+  addArchive() {
+    this.showArchive = !this.showArchive;
+    this.toaster.success("120 gebruikers gearchiveerd.");
   }
 }

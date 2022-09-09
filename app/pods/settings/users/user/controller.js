@@ -40,6 +40,19 @@ export default class SettingsUsersUserController extends Controller {
     this.toaster.success("De werkrelatie is geblokkeerd.");
   }
 
+  @tracked showArchive = false;
+
+  @action
+  archive() {
+    this.showArchive = !this.showArchive;
+  }
+
+  @action
+  addArchive() {
+    this.showArchive = !this.showArchive;
+    this.toaster.success("Deze gebruiker is gearchiveerd.");
+  }
+
   @tracked showBlockPerson = false;
   @tracked blocked = false;
 

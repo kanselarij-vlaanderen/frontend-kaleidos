@@ -5,8 +5,8 @@
     lastName=this.model.lastName}}
 />
 
-<div class="auk-o-grid">
-  <div class="auk-o-grid-col-6 auk-u-m">
+<div class="au-o-grid">
+  <div class="au-o-grid__item au-u-3-4@medium au-u-2-3@large">
     <div class="auk-u-m-4 auk-u-mr-2 auk-u-ml-2">
       <Auk::Panel>
         <Auk::Panel::Header>
@@ -15,6 +15,15 @@
               <h4 data-test-route-settings---user-general-info class="auk-panel__title">{{t 'manage-users-general-info'}}</h4>
             </Group>
             <Group>
+              <AuButton
+                @skin="naked"
+                @alert={{true}}
+                @icon="bin"
+                @iconAlignment="left"
+                {{on "click" this.archive}}
+              >
+                Gebruiker archiveren
+              </AuButton>
               {{#if this.blocked}}
               <AuButton
                 {{on "click" this.blockPerson}}
@@ -193,6 +202,29 @@
         {{on "click" this.addBlockRelation}}
       >
         Werkrelatie blokkeren
+      </Auk::Button>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
+{{/if}}
+
+{{#if this.showArchive}}
+  <Auk::Modal @size="small">
+    <Auk::Modal::Header
+      @title="Gebruiker archiveren"
+      @onClose={{this.archive}}
+    />
+    <Auk::Modal::Body>
+      <div class="au-o-flow au-o-flow--small">
+        <p>Door deze gebruiker te archiveren zal deze niet meer zichtbaar zijn in het gebruikersbeheer van Kaleidos. Wanneer een gebruiker opnieuw aaanmeldt en een legitieme werkrelatie heeft, zal deze gebruiker opnieuw in de lijst verschijnen.</p>
+      <p>Ben je zeker dat je <strong>deze gebruiker</strong> wil archiveren binnen Kaleidos?</p>
+      </div>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.archive}}>
+      <Auk::Button
+        @skin="danger-primary"
+        {{on "click" this.addArchive}}
+      >
+        Ja, gebruiker archiveren
       </Auk::Button>
     </Auk::Modal::Footer>
   </Auk::Modal>

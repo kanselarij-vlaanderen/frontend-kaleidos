@@ -132,6 +132,12 @@
                   >
                     Organisatie deblokkeren
                   </Menu.Item>
+                  <Menu.Item
+                    @skin="danger"
+                    {{on "click" this.archive}}
+                  >
+                    Organisatie archiveren
+                  </Menu.Item>
                 </Auk::DropdownMenu>
                 {{else}}
                 <Auk::DropdownMenu
@@ -144,6 +150,12 @@
                     {{on "click" this.block}}
                   >
                     Organisatie blokkeren
+                  </Menu.Item>
+                  <Menu.Item
+                    @skin="danger"
+                    {{on "click" this.archive}}
+                  >
+                    Organisatie archiveren
                   </Menu.Item>
                 </Auk::DropdownMenu>
                 {{/if}}
@@ -194,6 +206,27 @@
         {{on "click" this.addBlock}}
       >
         Ja, organisatie blokkeren
+      </Auk::Button>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
+{{/if}}
+
+{{#if this.showArchive}}
+  <Auk::Modal @size="small">
+    <Auk::Modal::Header
+      @title="Gebruikers archiveren"
+      @onClose={{this.archive}}
+    />
+    <Auk::Modal::Body>
+      <p>Door deze gebruikers te archiveren zullen deze niet meer zichtbaar zijn in het gebruikersbeheer van Kaleidos. Ook niet als ze nog een andere werkrelatie hebben dan met <strong>Naam organisatie</strong>. Wanneer een gebruiker opnieuw aaanmeldt en een legitieme werkrelatie heeft, zal deze gebruiker opnieuw in de lijst verschijnen.</p>
+      <p>Ben je zeker dat je <strong>120 gebruikers</strong> wil archiveren binnen Kaleidos?</p>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.archive}}>
+      <Auk::Button
+        @skin="danger-primary"
+        {{on "click" this.addArchive}}
+      >
+        Ja, 120 gebruikers blokkeren
       </Auk::Button>
     </Auk::Modal::Footer>
   </Auk::Modal>
