@@ -68,13 +68,8 @@ export default class PublicationService extends Service {
       mandatees = viaCouncilOfMinisterOptions.mandatees;
       regulationType = viaCouncilOfMinisterOptions.regulationType;
 
-      const decisionmakingFlow = await _case.decisionmakingFlow;
       const latestSubcase = await this.store.queryOne('subcase', {
-        filter: {
-          'decisionmaking-flow': {
-            ':id:': decisionmakingFlow.id,
-          }
-        },
+        'filter[decisionmaking-flow][case][:id:]': _case.id,
         sort: '-created',
       });
       governmentAreas = await latestSubcase.governmentAreas;
