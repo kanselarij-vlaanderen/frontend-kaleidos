@@ -50,12 +50,25 @@
         data-test-details-tab-access-level
         @key={{t "source-file"}}
       >
-        <p>
-          {{! Note that showing this composed name as "source file name" might be confusing.
-          Better show original source file (not document) name?}}
-          {{@piece.name}}.{{@piece.file.extension}}
-        </p>
+        <div class="au-u-flex au-u-flex--between">
+          <p>
+            {{! Note that showing this composed name as "source file name" might be confusing.
+            Better show original source file (not document) name?}}
+            {{@piece.name}}.{{@piece.file.extension}}
+          </p>
+          <AuButton
+            @icon="upload"
+            @iconAlignment="left"
+            @skin="secondary"
+            {{on "click" (toggle "isUploadingReplacementFile" this)}}
+          >
+            {{t "replace"}}
+          </AuButton>
+        </div>
       </Auk::KeyValue>
+      {{#if this.isUploadingReplacementFile}}
+        <Auk::FileUploader @onUpload={{set this "replacementFile"}} />
+      {{/if}}
     </Auk::Panel::Body>
     <Auk::Panel::Footer>
       <Auk::Toolbar>
@@ -87,13 +100,6 @@
       </Auk::Toolbar>
     </Auk::Panel::Footer>
   </Auk::Panel>
-  {{#if this.isUploadingReplacementFile}}
-    <Auk::Modal>
-      <Auk::Modal::Body>
-        <Auk::FileUploader @multiple={{false}} @onUpload={{this.replaceFile}} />
-      </Auk::Modal::Body>
-    </Auk::Modal>
-  {{/if}}
 {{else}}
   <Auk::Panel>
     <Auk::Panel::Header class="auk-u-px-1">

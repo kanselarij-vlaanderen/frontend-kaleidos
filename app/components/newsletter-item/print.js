@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 
 export default class NewsletterItemPrintComponent extends Component {
-  @service currentSession;
   @service newsletterService;
 
   @tracked proposalText;
@@ -14,10 +13,6 @@ export default class NewsletterItemPrintComponent extends Component {
   constructor() {
     super(...arguments);
     this.loadData.perform();
-  }
-
-  get canEditNewsletter(){
-    return this.currentSession.may('manage-newsletter-infos');
   }
 
   @task

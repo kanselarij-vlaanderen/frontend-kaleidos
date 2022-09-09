@@ -12,6 +12,8 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @service pieceAccessLevelService;
 
   @tracked isEditingDetails = false;
+  @tracked isUploadingReplacementFile = false;
+  @tracked replacementFile;
   @tracked documentType;
   @tracked accessLevel;
 
@@ -34,11 +36,19 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   *cancelEditDetails() {
     this.args.piece.rollbackAttributes(); // in case of piece name change
     yield this.loadDetailsData.perform();
+    yield this.replacementFile?.destroyRecord();
+    this.isUploadingReplacementFile = false;
+    this.replacementFile = null;
     this.isEditingDetails = false;
   }
 
   @task
   *saveDetails() {
+    if (this.replacementFile) {
+      const oldFile = yield this.args.piece.file;
+      yield oldFile.destroyRecord();
+      this.args.piece.file = this.replacementFile;
+    }
     this.args.piece.accessLevel = this.accessLevel;
     yield this.args.piece.save();
     yield this.pieceAccessLevelService.updatePreviousAccessLevels(
@@ -47,6 +57,15 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     this.args.documentContainer.type = this.documentType;
     yield this.args.documentContainer.save();
     this.isEditingDetails = false;
+    this.replacementFile = null;
+    this.isUploadingReplacementFile = !this.isUploadingReplacementFile;
+  }
+
+  @action
+  async toggleUploadReplacementFile() {
+    await this.replacementFile?.destroyRecord();
+    this.replacementFile = null;
+    this.isUploadingReplacementFile = !this.isUploadingReplacementFile;
   }
 
   @action
