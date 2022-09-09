@@ -33,9 +33,6 @@ const groupRoles = new Map();
 // - manage-agendaitems: Approve all agendaitems, add new agendaitems to an agenda, ...
 // - manage-decisions: Open the decisions print-overview of an agenda. TBD if this is a useful role
 // - manage-cases: Create and update cases
-// - view-archived-cases: View cases that have been archived
-// - view-agenda-actions: Show the agenda actions dropdown in the agenda overview
-// - view-newsletters: Show the newsletters tab in the header
 
 groupRoles.set(ADMIN, [
   'manage-signatures',
@@ -43,7 +40,6 @@ groupRoles.set(ADMIN, [
   'manage-agendaitems',
   'manage-decisions',
   'manage-cases',
-  'view-archived-cases',
   'manage-meetings',
   'manage-documents',
   'manage-document-access-levels',
@@ -55,8 +51,6 @@ groupRoles.set(ADMIN, [
   'manage-themis-publications',
   'manage-settings',
   'view-document-version-info',
-  'view-agenda-actions',
-  'view-newsletters',
 ]);
 
 groupRoles.set(KANSELARIJ, [
@@ -65,7 +59,6 @@ groupRoles.set(KANSELARIJ, [
   'manage-agendaitems',
   'manage-decisions',
   'manage-cases',
-  'view-archived-cases',
   'manage-meetings',
   'manage-documents',
   'manage-document-access-levels',
@@ -75,26 +68,18 @@ groupRoles.set(KANSELARIJ, [
   'manage-themis-publications',
   'manage-settings',
   'view-document-version-info',
-  'view-agenda-actions',
-  'view-newsletters',
 ]);
 
 groupRoles.set(MINISTER, [
   'manage-signatures',
   'view-document-version-info',
-  'view-agenda-actions',
-  'view-newsletters',
 ]);
 
 groupRoles.set(KABINET, [
   'view-document-version-info',
-  'view-agenda-actions',
-  'view-newsletters',
 ]);
 
 groupRoles.set(OVERHEID, [
-  'view-agenda-actions',
-  'view-newsletters',
 ]);
 
 groupRoles.set(OVRB, [
@@ -102,15 +87,11 @@ groupRoles.set(OVRB, [
   'manage-publication-flows',
   'search-publication-flows',
   'view-document-version-info',
-  'view-agenda-actions',
-  'view-newsletters',
 ]);
 
 groupRoles.set(KORT_BESTEK, [
   'manage-newsletter-infos',
   'manage-themis-publications',
-  'view-agenda-actions',
-  'view-newsletters',
 ]);
 
 groupRoles.set(USER, [
