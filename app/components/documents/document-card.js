@@ -34,6 +34,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked isOpenUploadModal = false;
   @tracked isOpenVerifyDeleteModal = false;
   @tracked isEditingPiece = false;
+  @tracked isUploadingReplacementFile = false;
 
   @tracked piece;
   @tracked accessLevel;
@@ -41,6 +42,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked signMarkingActivity;
 
   @tracked uploadedFile;
+  @tracked replacingFile;
   @tracked newPiece;
   @tracked pieceNameBuffer;
   @tracked defaultAccessLevel;
@@ -140,6 +142,15 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.isOpenUploadModal = true;
   }
 
+  @action
+  async toggleUploadReplacementFile() {
+    if (this.replacingFile) {
+      await this.replacingFile.destroyRecord();
+    }
+    this.replacingFile = null;
+    this.isUploadingReplacementFile = !this.isUploadingReplacementFile;
+  }
+
   @task
   *uploadPiece(file) {
     yield this.loadVersionHistory.perform();
@@ -157,6 +168,11 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.newPiece.name = new VRDocumentName(
       previousPiece.name
     ).withOtherVersionSuffix(this.sortedPieces.length + 1);
+  }
+
+  @action
+  uploadReplacementFile(file) {
+    this.replacingFile = file;
   }
 
   @task
@@ -196,9 +212,14 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   @action
-  cancelEditPieceName() {
+  async cancelEditPieceName() {
+    if (this.replacingFile && this.isUploadingReplacementFile) {
+      await this.replacingFile.destroyRecord();
+    }
     this.isEditingPiece = false;
     this.pieceNameBuffer = null;
+    this.isUploadingReplacementFile = false;
+    this.replacingFile = null;
   }
 
   @task
@@ -206,9 +227,16 @@ export default class DocumentsDocumentCardComponent extends Component {
     const now = moment().toDate();
     this.piece.set('modified', now);
     this.piece.set('name', this.pieceNameBuffer);
+    if (this.replacingFile) {
+      const oldFile = yield this.piece.file;
+      yield oldFile.destroyRecord();
+      this.piece.file = this.replacingFile;
+    }
     yield this.piece.save();
     this.isEditingPiece = false;
     this.pieceNameBuffer = null;
+    this.isUploadingReplacementFile = false;
+    this.replacingFile = null;
   }
 
   @task
@@ -273,6 +301,17 @@ export default class DocumentsDocumentCardComponent extends Component {
     await this.piece.save();
     await this.pieceAccessLevelService.updatePreviousAccessLevels(this.piece);
     await this.loadPieceRelatedData.perform();
+  }
+
+  @action
+  changeAccessLevelOfPiece(piece, accessLevel) {
+    piece.set('accessLevel', accessLevel);
+  }
+
+  @action
+  async saveAccessLevelOfPiece(piece) {
+    await piece.save();
+    await this.pieceAccessLevelService.updatePreviousAccessLevels(piece);
   }
 
   @action

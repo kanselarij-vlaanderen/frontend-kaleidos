@@ -2,14 +2,8 @@
    ========================================================================== */
 
 // Imports
-// sourced from "@appuniversum/appuniversum" npm package
+// sourced from "@appuniversum/ember-appuniversum" npm package
 
-@import 'appuniversum/s-colors';
-@import 'appuniversum/s-global';
-@import 'appuniversum/s-utilities';
-@import 'appuniversum/s-root';
-@import 'appuniversum/t-font-size';
-@import 'appuniversum/t-sass-mq';
-@import 'appuniversum/u-hide';
-@import 'appuniversum/u-paragraphs';
+@import 'ember-appuniversum/a-settings';
+@import 'ember-appuniversum/a-tools';
 @import 'ember-appuniversum/a-utilities';

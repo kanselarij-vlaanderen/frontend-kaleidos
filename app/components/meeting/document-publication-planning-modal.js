@@ -72,18 +72,8 @@ export default class MeetingDocumentPublicationPlanningModalComponent extends Co
   }
 
   @action
-  setDocumentPublicationDatePicker(date) {
-    this.documentPublicationPlannedDate = date;
-  }
-
-  @action
   setThemisPublicationDateNow() {
     this.themisPublicationPlannedDate = new Date();
-  }
-
-  @action
-  setThemisPublicationDatePicker(date) {
-    this.themisPublicationPlannedDate = date;
   }
 
   @task
