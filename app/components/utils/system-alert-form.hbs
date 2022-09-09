@@ -7,10 +7,10 @@
       class="auk-form-group"
     >
       <Auk::Label>{{t "start-date"}}</Auk::Label>
-      <WebComponents::VlDatepicker
-        @date={{array (moment-format this.alert.beginDate "YYYY-MM-DDTHH:mm:ssZ")}}
-        @dateChanged={{action "selectBeginDate"}}
+      <Auk::Datepicker
         @enableTime={{true}}
+        @date={{this.beginDate}}
+        @onChange={{this.selectBeginDate}}
       />
     </div>
     <div
@@ -18,10 +18,10 @@
       class="auk-form-group auk-u-mb-3"
     >
       <Auk::Label>{{t "end-date"}}</Auk::Label>
-      <WebComponents::VlDatepicker
-        @date={{array (moment-format this.alert.endDate "YYYY-MM-DDTHH:mm:ssZ")}}
-        @dateChanged={{action "selectEndDate"}}
+      <Auk::Datepicker
         @enableTime={{true}}
+        @date={{this.endDate}}
+        @onChange={{this.selectEndDate}}
       />
     </div>
   </div>

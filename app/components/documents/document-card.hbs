@@ -172,6 +172,15 @@
                         </h6>
                       {{/if}}
                       <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"></div>
+                      <div class="auk-o-flex auk-o-flex--vertical-center">
+                        <AccessLevelPill
+                          @accessLevel={{piece.accessLevel}}
+                          @isEditable={{true}}
+                          @onChangeAccessLevel={{fn this.changeAccessLevelOfPiece piece}}
+                          @onConfirmChangeAccessLevel={{fn this.saveAccessLevelOfPiece piece}}
+                          @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
+                        />
+                      </div>
                     </div>
                     <div class="vlc-document-card-item__meta au-u-muted">
                       {{!-- no piece.created in legacy data --}}
@@ -287,8 +296,8 @@
 {{/if}}
 {{#if this.isOpenVerifyDeleteModal}}
   <WebComponents::VlModalVerify
-    @title={{t "document-delete"}}
-    @message={{t "delete-document-message"}}
+    @title={{t "document-container-delete"}}
+    @message={{t "delete-document-container-message"}}
     @cancel={{this.cancelDeleteDocumentContainer}}
     @verify={{this.verifyDeleteDocumentContainer}}
   />
