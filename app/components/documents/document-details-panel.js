@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { isPresent } from '@ember/utils';
 import { task } from 'ember-concurrency';
 
 /**
@@ -10,12 +11,13 @@ import { task } from 'ember-concurrency';
 export default class DocumentsDocumentDetailsPanel extends Component {
   @service currentSession;
   @service pieceAccessLevelService;
-
   @tracked isEditingDetails = false;
+  @tracked isOpenVerifyDeleteModal = false;
   @tracked isUploadingReplacementFile = false;
   @tracked replacementFile;
   @tracked documentType;
   @tracked accessLevel;
+  @tracked isLastVersionOfPiece;
 
   constructor() {
     super(...arguments);
@@ -30,6 +32,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   *loadDetailsData() {
     this.documentType = yield this.args.documentContainer.type;
     this.accessLevel = yield this.args.piece.accessLevel;
+     this.isLastVersionOfPiece = !isPresent(yield this.args.piece.nextPiece);
   }
 
   @task
@@ -81,5 +84,13 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @action
   setDocumentType(docType) {
     this.documentType = docType;
+  }
+
+  @action
+  verifyDeleteDocument() {
+    if (this.args.didDeletePiece) {
+      this.args.didDeletePiece(this.args.piece);
+    }
+    this.isOpenVerifyDeleteModal = false;
   }
 }

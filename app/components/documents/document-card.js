@@ -18,7 +18,6 @@ export default class DocumentsDocumentCardComponent extends Component {
    *
    * @argument piece: a Piece object
    * @argument documentContainer: a DocumentContainer object
-   * @argument didDeletePiece: action triggered when a piece has been deleted
    * @argument didDeleteContainer: action triggered when a container has been deleted
    * @argument onOpenUploadModal: action triggered before the modal to upload a new version opens
    * @argument onAddPiece: action triggered when a new version has been added
