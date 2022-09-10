@@ -219,25 +219,42 @@
         <c.header
           @badgeIcon={{if (eq this.piece.file.extension "pdf") "pdf" "document"}}
         >
-          <p data-test-document-card-type class="vlc-subline au-u-medium au-u-muted">
-            {{uppercase this.piece.file.extension}}
-          </p>
-          <div class="au-u-flex au-u-flex--spaced-small">
-            <Auk::Input
-              data-test-document-card-name-input={{true}}
-              @block={{true}}
-              @value={{this.pieceNameBuffer}}
-            />
+          <div class="auk-o-grid">
+            <p data-test-document-card-type class="vlc-subline au-u-medium au-u-muted">
+              {{uppercase this.piece.file.extension}}
+            </p>
+            <div class="au-u-flex au-u-flex--spaced-small">
+              <Auk::Input
+                data-test-document-card-name-input={{true}}
+                @block={{true}}
+                @value={{this.pieceNameBuffer}}
+              />
+              <AuButtonGroup class="au-u-flex--no-wrap">
+                <AuButton
+                  @skin="secondary"
+                  {{on "click" this.toggleUploadReplacementFile}}
+                >
+                  {{t "replace"}}
+                </AuButton>
+              </AuButtonGroup>
+            </div>
+            {{#if this.piece.created}}
+              <AuHelpText @skin="secondary">
+                {{t "uploaded-at"}}
+                {{moment-format this.piece.created}}
+                {{t "at"}}
+                {{moment-format this.piece.created "HH:mm"}}
+              </AuHelpText>
+            {{/if}}
           </div>
-          {{#if this.piece.created}}
-            <AuHelpText @skin="secondary">
-              {{t "uploaded-at"}}
-              {{moment-format this.piece.created}}
-              {{t "at"}}
-              {{moment-format this.piece.created "HH:mm"}}
-            </AuHelpText>
-          {{/if}}
         </c.header>
+        {{#if this.isUploadingReplacementFile}}
+          <c.content>
+            <Auk::FileUploader
+              @onUpload={{this.uploadReplacementFile}}
+            />
+          </c.content>
+        {{/if}}
       </AuCard>
     </Auk::Modal::Body>
     <WebComponents::VlModalFooter

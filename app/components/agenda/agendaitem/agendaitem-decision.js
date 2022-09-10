@@ -87,20 +87,4 @@ export default class AgendaitemDecisionComponent extends Component {
     await documentContainer.hasMany('pieces').reload();
     await this.loadReport.perform();
   }
-
-  @action
-  // eslint-disable-next-line no-unused-vars
-  async attachPreviousReportVersion(piece) {
-    /*
-      the deleted piece comes in from params, but not used here because we tracked the previous version.
-      Note: this used to be a task but something kept going wrong.
-      Trying to get piece.documentContainer after piece was destroyed kept failing after an ember upgrade:
-      "Cannot create a new tag for '<(unknown):ember890>' after it has been destroyed"
-    */
-    if (this.previousReport) {
-      this.args.decisionActivity.report = this.previousReport;
-      await this.args.decisionActivity.save();
-    } // else no previous version available. DecisionActivity no longer has a report
-    await this.loadReport.perform();
-  }
 }

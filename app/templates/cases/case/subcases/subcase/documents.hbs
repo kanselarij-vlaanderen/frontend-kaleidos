@@ -34,7 +34,6 @@
         <Documents::DocumentCardList
           @pieces={{this.model.pieces}}
           @onAddPiece={{perform this.addPiece}}
-          @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
           @didDeleteContainer={{this.refresh}}
         />
       {{else}}
