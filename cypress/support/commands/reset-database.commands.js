@@ -26,7 +26,6 @@ function resetCache() {
 
   cy.exec('docker-compose kill yggdrasil triplestore file cache resource migrations', { env })
     .exec(`rm -rf ${kaleidosProject}/testdata/db && rm -rf ${kaleidosProject}/testdata/files`)
-    .exec(`zip -F ${kaleidosProject}/testdata-parts.zip --out ${kaleidosProject}/testdata.zip`)
     .exec(`unzip -o ${kaleidosProject}/testdata.zip -x "elasticsearch/*" -d ${kaleidosProject}`)
     .exec('docker-compose up -d', { env })
     .wait(3000)
@@ -49,8 +48,9 @@ function resetSearch() {
 
   cy.exec('docker-compose kill triplestore elasticsearch search file cache resource', { env })
     .exec(`rm -rf ${kaleidosProject}/testdata`)
-    .exec(`zip -F ${kaleidosProject}/testdata-parts.zip --out ${kaleidosProject}/testdata.zip`)
     .exec(`unzip -o ${kaleidosProject}/testdata.zip -d ${kaleidosProject}`)
+    .exec(`unzip -o ${kaleidosProject}/testdata-elasticsearch.zip -d ${kaleidosProject}`)
+    .exec(`mv ${kaleidosProject}/testdata-elasticsearch/* ${kaleidosProject}/testdata`)
     .exec('docker-compose up -d', { env })
     .wait(60000)
 }
