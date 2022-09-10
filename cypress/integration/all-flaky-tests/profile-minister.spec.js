@@ -2,7 +2,6 @@
 // / <reference types="Cypress" />
 
 import cases from '../../selectors/case.selectors';
-import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
