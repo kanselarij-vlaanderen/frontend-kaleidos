@@ -54,7 +54,9 @@
     {{#if (is-nota @agendaitem.type)}}
       {{#if @newsletterItem.richtext}}
         <p data-test-newsletter-item-print-richtext class="auk-u-mb-2">
-          <SanitizeHtml @raw={{true}} @value={{@newsletterItem.richtext}} />
+          <AuContent>
+            <SanitizeHtml @raw={{true}} @value={{@newsletterItem.richtext}} />
+          </AuContent>
         </p>
       {{else}}
         <p data-test-newsletter-item-print-no-content class="auk-u-italic auk-u-text-muted auk-u-mb-2">
