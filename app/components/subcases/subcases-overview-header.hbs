@@ -47,7 +47,7 @@
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     {{/if}}
-    {{#if this.currentSession.isEditor}}
+    {{#if (user-may "manage-cases")}}
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           <Auk::Button

@@ -51,7 +51,7 @@
     </div>
   {{/if}}
 {{/unless}}
-{{#if this.currentSession.isEditor}}
+{{#if (user-may "manage-documents")}}
   <div class="auk-u-mb-4">
     <Auk::Button
       @skin="tertiary"

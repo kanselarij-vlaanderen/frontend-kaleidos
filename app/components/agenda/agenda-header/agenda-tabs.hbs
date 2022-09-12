@@ -17,7 +17,7 @@
       {{t "detail"}}
     </Auk::Tab>
   {{/if}}
-  {{#if this.currentSession.isEditor}}
+  {{#if (user-may "manage-agenda-versions")}}
     <Auk::Tab @route="agenda.compare">
       {{t "compare"}}
     </Auk::Tab>

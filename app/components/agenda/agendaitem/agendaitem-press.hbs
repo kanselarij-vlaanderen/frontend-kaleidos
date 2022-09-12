@@ -6,7 +6,7 @@
   </Group>
   <Group>
     {{#if (not this.currentSession.isEditing)}}
-      {{#if this.isEditor}}
+      {{#if (user-may "manage-agendaitems")}}
         <AuButton
           @skin="secondary"
           @icon="pencil"

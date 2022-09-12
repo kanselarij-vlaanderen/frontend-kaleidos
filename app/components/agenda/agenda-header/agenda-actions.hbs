@@ -14,7 +14,7 @@
     </Menu.Item>
     <Menu.Divider />
   {{/if}}
-  {{#if this.currentSession.isEditor}}
+  {{#if (user-may "manage-decisions")}}
     <Menu.Item
       data-test-agenda-header-navigate-to-decisions
       @route="print-overviews.decisions.agendaitems"
