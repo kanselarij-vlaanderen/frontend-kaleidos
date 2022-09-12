@@ -530,6 +530,11 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   }
 
   @action
+  showPieceViewer(piece) {
+    window.open(`/document/${piece.id}`);
+  }
+
+  @action
   async reloadMeeting() {
     // This is a workaround for route not reloading attributes and agendas on refresh model
     await this.args.meeting.reload();

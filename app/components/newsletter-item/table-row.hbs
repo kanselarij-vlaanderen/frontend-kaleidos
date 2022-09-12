@@ -16,7 +16,9 @@
         </p>
       </div>
       <div class="auk-u-mb-2">
-        <SanitizeHtml @raw={{true}} @value={{@newsletterItem.richtext}} />
+        <AuContent>
+          <SanitizeHtml @raw={{true}} @value={{@newsletterItem.richtext}} />
+        </AuContent>
       </div>
       {{#if @newsletterItem.remark}}
         <p class="auk-u-text-muted auk-u-text-capitalize auk-u-text-size--small">

@@ -161,7 +161,9 @@
       {{#if this.loadNewsletterHTML.isRunning}}
         <WebComponents::VlLoader @text={{t "preview-loading-text"}} />
       {{else}}
-        <SanitizeHtml @raw={{true}} @value={{this.newsletterHTML}} />
+        <AuContent>
+          <SanitizeHtml @raw={{true}} @value={{this.newsletterHTML}} />
+        </AuContent>
       {{/if}}
     </Auk::Modal::Body>
   </Auk::Modal>

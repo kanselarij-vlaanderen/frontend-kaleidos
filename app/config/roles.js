@@ -67,12 +67,10 @@ groupRoles.set(MINISTER, [
 ]);
 
 groupRoles.set(KABINET, [
-  'manage-signatures',
   'view-document-version-info',
 ]);
 
 groupRoles.set(OVERHEID, [
-  'manage-signatures',
 ]);
 
 groupRoles.set(OVRB, [

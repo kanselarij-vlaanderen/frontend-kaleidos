@@ -49,6 +49,8 @@ function resetSearch() {
   cy.exec('docker-compose kill triplestore elasticsearch search file cache resource', { env })
     .exec(`rm -rf ${kaleidosProject}/testdata`)
     .exec(`unzip -o ${kaleidosProject}/testdata.zip -d ${kaleidosProject}`)
+    .exec(`unzip -o ${kaleidosProject}/testdata-elasticsearch.zip -d ${kaleidosProject}`)
+    .exec(`mv ${kaleidosProject}/testdata-elasticsearch/* ${kaleidosProject}/testdata`)
     .exec('docker-compose up -d', { env })
     .wait(60000)
 }

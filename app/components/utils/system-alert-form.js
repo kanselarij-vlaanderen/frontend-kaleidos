@@ -10,6 +10,16 @@ export default class SystemAlertFormComponent extends Component {
     return this.args.alert;
   }
 
+  get beginDate() {
+    const beginDate = this.alert.beginDate;
+    return moment.isMoment(beginDate) ? moment(beginDate).toDate() : beginDate;
+  }
+
+  get endDate() {
+    const endDate = this.alert.endDate;
+    return moment.isMoment(endDate) ? moment(endDate).toDate() : endDate;
+  }
+
   @action
   selectType(type) {
     this.alert.type = type;

@@ -137,6 +137,12 @@ const selectors = {
         deleteItems: '[data-test-agenda-version-actions-approve-and-close-agenda-delete-message]',
       },
     },
+    reopenModal: {
+      error: '[data-test-agenda-version-actions-reopen-modal-error]',
+      warning: '[data-test-agenda-version-actions-reopen-modal-warning]',
+      piece: '[data-test-agenda-version-actions-reopen-modal-piece]',
+      pieceName: '[data-test-agenda-version-actions-reopen-modal-piece-name]',
+    },
   },
 
   // agenda-tabs
