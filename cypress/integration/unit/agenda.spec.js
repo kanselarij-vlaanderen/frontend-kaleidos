@@ -317,7 +317,7 @@ context('Agenda tests', () => {
     cy.wait('@getDocPubActivity');
     cy.wait('@getThemisPubActivity');
     cy.wait('@loadConcepts');
-    cy.get(agenda.editMeeting.kind).click();
+    cy.get(utils.kindSelector.kind).click();
     selectFromDropdown(vvKind);
     cy.get(agenda.editMeeting.relatedMainMeeting).click();
     // selectFromDropdown(formattedAgendaDatePVV);
@@ -338,7 +338,7 @@ context('Agenda tests', () => {
     cy.wait('@getDocPubActivity');
     cy.wait('@getThemisPubActivity');
     cy.wait('@loadConcepts');
-    cy.get(agenda.editMeeting.kind).click();
+    cy.get(utils.kindSelector.kind).click();
     selectFromDropdown(mrKind);
     cy.get(agenda.editMeeting.datepicker).click();
     cy.setDateInFlatpickr(agendaDatePVV);

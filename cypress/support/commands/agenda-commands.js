@@ -40,7 +40,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   // Added wait, mouseover, force clicking and checking for existance of the ember power select option because of flakyness
   // Sometimes, the dropdown stays after pressing an option
   if (kind) {
-    cy.get(agenda.editMeeting.kind).click();
+    cy.get(utils.kindSelector.kind).click();
     cy.get(dependency.emberPowerSelect.option, {
       timeout: 5000,
     }).wait(500)

@@ -114,5 +114,9 @@ const selectors = {
     input: '[data-test-utils-case-search-input]',
     row: '[data-test-utils-case-search-row]',
   },
+
+  kindSelector: {
+    kind: '[data-test-utils-kind-selector]',
+  },
 };
 export default selectors;
