@@ -374,7 +374,7 @@ context('Subcase tests', () => {
     cy.openSubcase(0);
     cy.get(cases.subcaseHeader.actionsDropdown).click();
     cy.get(cases.subcaseHeader.actions.moveSubcase).click();
-    cy.intercept('GET', 'cases/search?**').as('searchCall1');
+    cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall1');
     cy.get(utils.caseSearch.input).type(caseTitle2)
       .wait('@searchCall1')
       .wait(1000);
@@ -393,7 +393,7 @@ context('Subcase tests', () => {
     cy.openSubcase(0);
     cy.get(cases.subcaseHeader.actionsDropdown).click();
     cy.get(cases.subcaseHeader.actions.moveSubcase).click();
-    cy.intercept('GET', 'cases/search?**').as('searchCall2');
+    cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall2');
     cy.get(utils.caseSearch.input).type(caseTitle2)
       .wait('@searchCall2')
       .wait(1000);
@@ -415,7 +415,7 @@ context('Subcase tests', () => {
     cy.openSubcase(0);
     cy.get(cases.subcaseHeader.actionsDropdown).click();
     cy.get(cases.subcaseHeader.actions.moveSubcase).click();
-    cy.intercept('GET', 'cases/search?**').as('searchCall3');
+    cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall3');
     cy.get(utils.caseSearch.input).type(caseTitle2)
       .wait('@searchCall3')
       .wait(1000);
