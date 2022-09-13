@@ -132,7 +132,7 @@ context('Different session kinds should show different titles', () => {
     cy.createAgenda(null, agendaDate, null, agendaNumber);
     // set kind to PVV
     cy.get(route.agendas.action.newMeeting).click();
-    cy.get(agenda.editMeeting.kind).click();
+    cy.get(utils.kindSelector.kind).click();
     selectFromDropdown(vvKind);
     // select related main meeting
     cy.get(agenda.editMeeting.relatedMainMeeting).click();

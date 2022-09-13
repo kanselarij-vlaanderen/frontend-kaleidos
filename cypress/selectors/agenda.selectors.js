@@ -212,7 +212,6 @@ const selectors = {
 
   // edit-meeting
   editMeeting: {
-    kind: '[data-test-utils-kind-selector]',
     relatedMainMeeting: '[data-test-edit-meeting-related-main-meeting]',
     meetingNumber: '[data-test-edit-meeting-meeting-number]',
     meetingLocation: '[data-test-edit-meeting-meeting-location]',
