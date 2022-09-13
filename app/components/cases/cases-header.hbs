@@ -9,7 +9,7 @@
       </Toolbar.Group>
       <Toolbar.Group @position="right" as |Group|>
         <Group.Item>
-          {{#if this.currentSession.isEditor}}
+          {{#if (user-may "manage-cases")}}
             <Auk::Button
               data-test-cases-header-add-case
               @skin="primary"

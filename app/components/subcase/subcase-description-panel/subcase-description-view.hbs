@@ -3,7 +3,7 @@
     <h3 class="auk-h2">
       {{t "subcase"}}
     </h3>
-    {{#if this.currentSession.isEditor}}
+    {{#if (user-may "manage-cases")}}
       <div class="auk-u-ml-2">
         <Auk::ButtonLink
           data-test-subcase-description-edit

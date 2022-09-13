@@ -2,7 +2,6 @@
 // / <reference types="Cypress" />
 
 import cases from '../../selectors/case.selectors';
-import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
@@ -19,7 +18,7 @@ context('Testing the application as Overheid user', () => {
     cy.get(utils.mHeader.agendas).should('exist');
     cy.get(utils.mHeader.publications).should('not.exist');
     cy.get(utils.mHeader.cases).should('exist');
-    cy.get(utils.mHeader.newsletters).should('exist');
+    cy.get(utils.mHeader.newsletters).should('not.exist');
     cy.get(utils.mHeader.search).should('exist');
     cy.get(utils.mHeader.settings).should('not.exist');
   });
@@ -34,12 +33,6 @@ context('Testing the application as Overheid user', () => {
     cy.get(utils.mHeader.cases).click();
     cy.get(cases.casesHeader.title).should('exist');
     cy.url().should('include', '/dossiers');
-  });
-
-  it('Should switch to newsletter tab when newsletter is clicked as overheid', () => {
-    cy.get(utils.mHeader.newsletters).click();
-    cy.get(newsletter.newsletterHeader.title).should('exist');
-    cy.url().should('include', '/kort-bestek');
   });
 
   it('Should switch to search tab when search is clicked as overheid', () => {

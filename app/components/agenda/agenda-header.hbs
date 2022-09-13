@@ -33,31 +33,29 @@
         </div>
       </Group.Item>
     </Toolbar.Group>
-    {{#if this.currentSession.isViewer}}
-      <Toolbar.Group @position="right" as |Group|>
-        {{#if (user-may "manage-agenda-versions")}}
-          <Group.Item>
-            <Agenda::AgendaHeader::AgendaVersionActions
-              @meeting={{@meeting}}
-              @currentAgenda={{@currentAgenda}}
-              @reverseSortedAgendas={{@reverseSortedAgendas}}
-              @didCloseMeeting={{@refreshRoute}}
-              @onStartLoading={{this.setLoadingMessage}}
-              @onStopLoading={{this.clearLoadingMessage}}
-            />
-          </Group.Item>
-        {{/if}}
+    <Toolbar.Group @position="right" as |Group|>
+      {{#if (user-may "manage-agenda-versions")}}
         <Group.Item>
-          <Agenda::AgendaHeader::AgendaActions
+          <Agenda::AgendaHeader::AgendaVersionActions
             @meeting={{@meeting}}
             @currentAgenda={{@currentAgenda}}
-            @didApproveAgendaitems={{@refreshRoute}}
+            @reverseSortedAgendas={{@reverseSortedAgendas}}
+            @didCloseMeeting={{@refreshRoute}}
             @onStartLoading={{this.setLoadingMessage}}
             @onStopLoading={{this.clearLoadingMessage}}
           />
         </Group.Item>
-      </Toolbar.Group>
-    {{/if}}
+      {{/if}}
+      <Group.Item>
+        <Agenda::AgendaHeader::AgendaActions
+          @meeting={{@meeting}}
+          @currentAgenda={{@currentAgenda}}
+          @didApproveAgendaitems={{@refreshRoute}}
+          @onStartLoading={{this.setLoadingMessage}}
+          @onStopLoading={{this.clearLoadingMessage}}
+        />
+      </Group.Item>
+    </Toolbar.Group>
   </Auk::Toolbar>
 </Auk::Navbar>
 

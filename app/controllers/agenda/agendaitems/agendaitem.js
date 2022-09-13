@@ -22,7 +22,7 @@ export default class AgendaAgendaitemsAgendaitemController extends Controller {
   }
 
   get canShowDecisionTab() {
-    return this.currentSession.isEditor
+    return this.currentSession.may('manage-decisions')
       || (this.meeting.isFinal && this.hasDecision);
   }
 
@@ -32,7 +32,7 @@ export default class AgendaAgendaitemsAgendaitemController extends Controller {
   }
 
   get canShowPressAgendaTab() {
-    return this.currentSession.isEditor
+    return this.currentSession.may('manage-agendaitems')
       || (this.meeting.isFinal && this.hasPressAgendaitem);
   }
 }

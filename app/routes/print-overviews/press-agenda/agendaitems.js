@@ -50,7 +50,7 @@ export default Route.extend({
   },
 
   redirect() {
-    if (!this.currentSession.isEditor) {
+    if (!this.currentSession.may('manage-agendaitems')) {
       this.transitionTo(`print-overviews.${this.routeNamePrefix}.overview`, {
         queryParams: {
           definite: true,

@@ -111,7 +111,7 @@
             </h4>
           </Group.Item>
         </Toolbar.Group>
-        {{#if this.currentSession.isEditor}}
+        {{#if (user-may "manage-documents")}}
           <Toolbar.Group @position="right" as |Group|>
             {{#if this.isLastVersionOfPiece}}
               <Group.Item>
