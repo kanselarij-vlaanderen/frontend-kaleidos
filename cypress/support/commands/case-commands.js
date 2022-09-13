@@ -143,16 +143,16 @@ function openCase(caseTitle) {
  * @param {String} caseTitle The title to search in the list of cases, should be unique
  */
 function searchCase(caseTitle) {
-  cy.log('seachCsearchCasease');
+  cy.log('searchCase');
   cy.visit('zoeken/dossiers');
   cy.get(route.search.input).type(caseTitle);
   const splitCaseTitle =  `${caseTitle.split(' ', 1)}`;
   // this new part is required to translate 'testId=xxxx:' into its encoded form for url
   const encodedCaseTitle = encodeURIComponent(splitCaseTitle);
-  cy.intercept('GET', `/cases/search?**${encodedCaseTitle}**`).as('getCaseSearchResult');
+  cy.intercept('GET', `/decisionmaking-flows/search?**${encodedCaseTitle}**`).as('decisionmakingSearchResult');
   cy.get(route.search.trigger)
     .click()
-    .wait('@getCaseSearchResult');
+    .wait('@decisionmakingSearchResult');
   cy.get(auk.loader).should('not.exist');
   cy.url().should('include', `?zoekterm=${encodedCaseTitle}`);
   cy.get(route.searchCases.dataTable).contains(caseTitle)

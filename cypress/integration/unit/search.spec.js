@@ -85,8 +85,8 @@ context('Search tests', () => {
     const agendaLink = '/vergadering/62878EB2E1ADA5F6A459ABFD/agenda/62878EB3E1ADA5F6A459ABFE/agendapunten';
 
     // *data case 1
-    // link to case: '/dossiers/62878EC5E1ADA5F6A459AC02/deeldossiers'
-    // link to subcase: '/dossiers/62878EC5E1ADA5F6A459AC02/deeldossiers/62879183E1ADA5F6A459AC04/overzicht'
+    // link to case: '/dossiers/E14FB529-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers'
+    // link to subcase: '/dossiers/E14FB529-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/62879183E1ADA5F6A459AC04/overzicht'
     // link to agendaitem detail: '/vergadering/62878EB2E1ADA5F6A459ABFD/agenda/62878EB3E1ADA5F6A459ABFE/agendapunten/6287924CE1ADA5F6A459AC09/documenten'
     const case1TitleShort = 'testId=1653051049: Cypress search dossier 1';
     const subcase1TitleShortNoIcon = 'testId=1653051049: dit is de korte titel for search'; // used for opening agendaitem
@@ -103,8 +103,8 @@ context('Search tests', () => {
 
 
     // *data case 2
-    // link to case: '/dossiers/62878FD1E1ADA5F6A459AC03/deeldossiers'
-    // link to subcase: '/dossiers/62878FD1E1ADA5F6A459AC03/deeldossiers/6287918EE1ADA5F6A459AC05/overzicht'
+    // link to case: '/dossiers/E14FB5C8-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers'
+    // link to subcase: '/dossiers/E14FB5C8-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6287918EE1ADA5F6A459AC05/overzicht'
     // link to agendaitem detail: '/vergadering/62878EB2E1ADA5F6A459ABFD/agenda/62878EB3E1ADA5F6A459ABFE/agendapunten/62879264E1ADA5F6A459AC0D/documenten'
     const case2TitleShort = 'testId=1653051342: Cypress search dossier 2';
     const newSubcase2TitleShort = 'testId=1653051342: korte titel for batterij';
@@ -128,7 +128,7 @@ context('Search tests', () => {
       // cy.wait('@patchDecisionActivities');
 
       // *Live data test: change agendaitem/subcase titles, upload treatment file (*piece* for future tests in comment).
-      cy.visit('/dossiers/B60EED6E-2A07-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6287918EE1ADA5F6A459AC05/overzicht');
+      cy.visit('/dossiers/E14FB5C8-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6287918EE1ADA5F6A459AC05/overzicht');
       cy.intercept('PATCH', '/agendaitems/*').as('patchAgendaitem');
       cy.changeSubcaseAccessLevel(null, newSubcase2TitleShort, subcase2TitleLong);
       cy.wait('@patchAgendaitem');
@@ -177,9 +177,9 @@ context('Search tests', () => {
         cy.get(route.search.input).clear();
         cy.get(route.search.input).type(searchTerm);
 
-        cy.intercept('GET', '/cases/search?**').as('casesSearchCall');
+        cy.intercept('GET', '/decisionmaking-flows/search?**').as('decisionmakingSearchCall');
         cy.get(route.search.trigger).click();
-        cy.wait('@casesSearchCall');
+        cy.wait('@decisionmakingSearchCall');
 
         cy.get(route.searchCases.dataTable).find('tbody')
           .children('tr')
@@ -229,7 +229,7 @@ context('Search tests', () => {
       // wordsFromDocumentPdf.forEach((searchTerm) => {
       //   cy.get(route.search.input).clear();
       //   cy.get(route.search.input).type(searchTerm);
-      //   cy.intercept('GET', `/cases/search?**${encodeURIComponent(searchTerm)}`).as('decisionsSearchCall');
+      //   cy.intercept('GET', `/decisionmaking-flows/search?**${encodeURIComponent(searchTerm)}`).as('decisionsSearchCall');
       //   cy.get(route.search.trigger).click();
       //   cy.wait('@decisionsSearchCall');
 
@@ -247,7 +247,7 @@ context('Search tests', () => {
         cy.get(route.search.input).clear();
         cy.get(route.search.input).type(searchTerm);
         cy.get(route.search.trigger).click(); // no results found in documents
-        cy.intercept('GET', `/cases/search?**${encodeURIComponent(searchTerm)}**`).as('decisionsSearchCall');
+        cy.intercept('GET', `/decisionmaking-flows/search?**${encodeURIComponent(searchTerm)}**`).as('decisionsSearchCall');
         cy.get(route.searchCases.toggleDecisions).parent()
           .click(); // 1 result found in treatments
         cy.wait('@decisionsSearchCall');

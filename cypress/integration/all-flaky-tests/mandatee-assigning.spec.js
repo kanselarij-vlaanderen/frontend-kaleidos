@@ -42,7 +42,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een minister voor agendering vanuit procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('/dossiers/B60EEC60-2A07-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+    cy.visit('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
 
@@ -80,7 +80,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een minister na agendering vanuit procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('/dossiers/B60EEC60-2A07-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+    cy.visit('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.proposeSubcaseForAgenda(agendaDate);
@@ -118,7 +118,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een minister vanuit agendaitem op ontwerpagenda';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('/dossiers/B60EEC60-2A07-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+    cy.visit('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openAgendaForDate(agendaDate);
 
@@ -152,7 +152,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     // Check if subcase has the same amount of mandatees
     cy.intercept('GET', '/subcases?filter**').as('getSubcase');
-    cy.visit('/dossiers/B60EEC60-2A07-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+    cy.visit('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.wait('@getSubcase');
     cy.openSubcase(0);
 
