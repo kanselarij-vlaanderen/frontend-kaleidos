@@ -151,7 +151,7 @@ context('Different session kinds should show different titles', () => {
     cy.wait('@getDocPubActivity');
     cy.wait('@getThemisPubActivity');
     cy.wait('@loadConcepts');
-    cy.get(utils.kindSelector).contains(vvKind);
+    cy.get(utils.kindSelector.kind).contains(vvKind);
     cy.get(agenda.editMeeting.numberRep.view).should('contain', fullmeetingNumberVV);
     cy.get(auk.modal.footer.cancel).click();
 

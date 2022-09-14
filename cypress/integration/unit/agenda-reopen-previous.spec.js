@@ -77,9 +77,9 @@ context('Agenda reopen previous tests', () => {
     cy.get(auk.loader).should('not.exist');
     cy.get(auk.alert.message).contains(designAgendaB);
     cy.get(auk.alert.message).contains(approvedagendaA);
-    cy.get(agenda.agendaActions.reopenModal.error).contains(designAgendaB);
-    cy.get(agenda.agendaActions.reopenModal.error).contains(approvedagendaA);
-    cy.get(agenda.agendaActions.reopenModal.warning).should('not.exist');
+    cy.get(agenda.agendaVersionActions.reopenModal.error).contains(designAgendaB);
+    cy.get(agenda.agendaVersionActions.reopenModal.error).contains(approvedagendaA);
+    cy.get(agenda.agendaVersionActions.reopenModal.warning).should('not.exist');
     cy.get(auk.loader).should('not.exist'); // data loading task might be running, disabling the next button
     cy.get(agenda.agendaVersionActions.confirm.reopenPreviousVersion).contains(reopenPreviousVersion)
       .click();

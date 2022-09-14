@@ -82,7 +82,7 @@ request the whole row and not only the arrow at the end to be clickable }}
     </td>
   {{/if}}
   {{#if @tableColumnDisplayOptions.decisionDate}}
-    <td class="auk-u-text-nowrap">
+    <td data-test-publication-table-row-decision-date class="auk-u-text-nowrap">
       {{#if @publicationFlow.decisionActivity.startDate}}
         {{moment-format @publicationFlow.decisionActivity.startDate}}
       {{else}}

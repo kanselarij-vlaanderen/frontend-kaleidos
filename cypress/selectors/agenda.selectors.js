@@ -119,7 +119,7 @@ const selectors = {
       approveAndCloseAgenda: '[data-test-agenda-version-actions-approve-and-close-agenda]',
       lockAgenda: '[data-test-agenda-version-actions-lock-agenda]',
       unlockAgenda: '[data-test-agenda-version-actions-unlock-agenda]',
-      reopenPreviousVersion: '[data-test-version-agenda-actions-reopen-previous-version]',
+      reopenPreviousVersion: '[data-test-agenda-version-actions-reopen-previous-version]',
       deleteAgenda: '[data-test-agenda-version-actions-delete-agenda]',
     },
     confirm: {

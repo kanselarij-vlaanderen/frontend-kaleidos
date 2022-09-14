@@ -73,6 +73,7 @@ const selectors = {
       publicationNumber: '[data-test-publication-table-row-publication-number]',
       translationDueDate: '[data-test-publication-table-row-translation-due-date]',
       targetEndDate: '[data-test-publication-table-row-target-end-date]',
+      decisionDate: '[data-test-publication-table-row-decision-date]',
       status: '[data-test-publication-table-row-status]',
       source: '[data-test-publication-table-row-source]',
       goToPublication: '[data-test-publication-table-row-go-to-publication]',
