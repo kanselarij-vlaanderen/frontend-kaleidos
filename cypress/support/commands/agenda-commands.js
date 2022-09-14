@@ -291,7 +291,7 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
   cy.get(agenda.agendaActions.approveAllAgendaitems).click();
   cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
   cy.get(auk.modal.body).should('contain', verifyText);
-  cy.get(agenda.agendaHeader.confirm.approveAllAgendaitems).click();
+  cy.get(agenda.agendaActions.confirm.approveAllAgendaitems).click();
   cy.wait('@patchAgendaitems');
   cy.wait('@getModifiedByOfAgendaitems');
   cy.get(auk.modal.container, {
@@ -635,7 +635,7 @@ function releaseDecisions() {
   cy.get(agenda.agendaActions.releaseDecisions).click({
     force: true,
   });
-  cy.get(agenda.publicationPlanning.confirm.releaseDecisions).click();
+  cy.get(agenda.agendaActions.confirm.releaseDecisions).click();
   cy.wait('@patchDecisionPubActivity', {
     timeout: 20000,
   });

@@ -344,8 +344,10 @@ context('Agenda tests', () => {
     cy.setDateInFlatpickr(agendaDatePVV);
     cy.get(agenda.editMeeting.numberRep.view).should('contain', fullmeetingNumber);
     cy.intercept('PATCH', '/meetings/**').as('patchMeetingsPVV');
+    cy.intercept('PATCH', 'internal-document-publication-activities/*').as('patchInternalActivity');
     cy.get(agenda.editMeeting.save).click();
     cy.wait('@patchMeetingsPVV');
+    cy.wait('@patchInternalActivity');
     cy.get(agenda.agendaHeader.title).contains(dateFormatPVV);
     cy.get(agenda.agendaHeader.kind).contains(mrKind);
   });
