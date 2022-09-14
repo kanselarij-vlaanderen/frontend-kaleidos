@@ -479,6 +479,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(utils.vlModalVerify.save).click();
     cy.wait('@newsletterInfosPost');
     cy.intercept('PATCH', '/newsletter-infos/**').as('patchNewsItem');
+    cy.wait(2000); // TODO-BUG rare flaky where parent is not longer connected to dom, data reload happening?
     cy.get(newsletter.tableRow.newsletterRow).eq(0)
       .find(newsletter.tableRow.inNewsletterCheckbox)
       .parent()
