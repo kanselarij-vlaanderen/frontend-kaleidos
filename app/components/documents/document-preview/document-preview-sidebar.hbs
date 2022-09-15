@@ -21,7 +21,6 @@
               </Auk::Tab>
               {{#if this.isShownSignatureTab}}
                 <Auk::Tab
-                  data-test-document-preview-sidebar-tab-signatures
                   {{on "click" (fn this.setActiveTab "signatures")}}
                   @active={{eq this.activeTab "signatures"}}
                 >
@@ -41,7 +40,6 @@
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <Auk::Button
-              data-test-document-preview-sidebar-close
               @skin="borderless"
               @icon="chevron-right"
               @layout="icon-only"

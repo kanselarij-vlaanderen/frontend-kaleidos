@@ -2,12 +2,12 @@
   @skin="secondary"
   @label={{t "actions"}}
   class="auk-u-hidden@print"
-  data-test-agenda-header-show-options={{true}}
+  data-test-agenda-actions-show-options={{true}}
   as |Menu|
 >
   {{#if this.canEditDesignAgenda}}
     <Menu.Item
-      data-test-agenda-header-add-agendaitems
+      data-test-agenda-actions-add-agendaitems
       {{on "click" this.openAddAgendaitemsModal}}
     >
       {{t "add-to-agenda"}}
@@ -16,7 +16,7 @@
   {{/if}}
   {{#if (user-may "manage-decisions")}}
     <Menu.Item
-      data-test-agenda-header-navigate-to-decisions
+      data-test-agenda-actions-navigate-to-decisions
       @route="print-overviews.decisions.agendaitems"
       @models={{array @meeting.id @currentAgenda.id}}
     >
@@ -24,14 +24,14 @@
     </Menu.Item>
   {{/if}}
   <Menu.Item
-    data-test-agenda-header-navigate-to-newsletter
+    data-test-agenda-actions-navigate-to-newsletter
     @route="newsletter"
     @model={{@meeting.id}}
   >
     {{t "print-newsletter"}}
   </Menu.Item>
   <Menu.Item
-    data-test-agenda-header-navigate-to-pressagenda
+    data-test-agenda-actions-printable-press-agenda
     @route="print-overviews.press-agenda.agendaitems"
     @models={{array @meeting.id @currentAgenda.id}}
   >
@@ -40,23 +40,22 @@
   {{#if this.showPrintButton}}
     <Menu.Item
       @route="agenda.agendaitems"
-      data-test-agenda-header-navigate-to-agenda-view
     >
       {{t "agenda-view"}}
     </Menu.Item>
-    <Menu.Item data-test-agenda-header-print-agenda {{on "click" this.print}}>
+    <Menu.Item {{on "click" this.print}}>
       {{t "print"}}
     </Menu.Item>
   {{else}}
     <Menu.Item
       @route="agenda.print"
-      data-test-agenda-header-navigate-to-printable-agenda
+      data-test-agenda-actions-navigate-to-printable-agenda
     >
       {{t "printable-version"}}
     </Menu.Item>
   {{/if}}
   <Menu.Item
-    data-test-agenda-header-download-documents
+    data-test-agenda-actions-download-documents
     {{on "click" this.downloadAllDocuments}}
   >
     {{t "download-documents"}}
@@ -64,7 +63,7 @@
   {{#if (user-may "manage-meetings")}}
     <Menu.Divider />
     <Menu.Item
-      data-test-agenda-header-toggle-editing-meeting
+      data-test-agenda-actions-toggle-editing-meeting
       {{on "click" this.toggleEditingMeeting}}
     >
       {{t "edit-meeting"}}
@@ -72,7 +71,7 @@
   {{/if}}
   {{#if this.canEditDesignAgenda}}
     <Menu.Item
-      data-test-agenda-header-approve-all-agendaitems
+      data-test-agenda-actions-approve-all-agendaitems
       {{on "click" this.openConfirmApproveAllAgendaitems}}
     >
       {{t "approve-all-agendaitems"}}
@@ -82,7 +81,7 @@
     <Menu.Divider />
     <Menu.Item
       @skin="danger"
-      data-test-agenda-header-release-decisions
+      data-test-agenda-actions-release-decisions
       {{on "click" this.openConfirmPublishDecisions}}
     >
       {{t "agenda-release-decisions"}}
@@ -90,7 +89,7 @@
   {{/if}}
   {{#if this.canPlanDocumentPublication}}
     <Menu.Item
-      data-test-agenda-header-release-documents
+      data-test-agenda-actions-release-documents
       {{on "click" this.openPlanDocumentPublicationModal}}
     >
       {{t "agenda-publish-planned"}}
@@ -147,7 +146,7 @@
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelApproveAllAgendaitems}}>
       <Auk::Button
-        data-test-agenda-header-approve-all-agendaitems-confirm
+        data-test-agenda-actions-approve-all-agendaitems-confirm
         @skin="primary"
         @disabled={{this.reloadAgendaitemsData.isRunning}}
         {{on "click" this.approveAllAgendaitems}}
@@ -169,7 +168,7 @@
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelPublishDecisions}}>
       <Auk::Button
-        data-test-agenda-header-release-decisions-confirm
+        data-test-agenda-actions-release-decisions-confirm
         @skin="primary"
         {{on "click" this.publishDecisions}}
       >

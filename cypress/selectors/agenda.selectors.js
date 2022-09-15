@@ -11,15 +11,12 @@ const selectors = {
     documentsTab: '[data-test-agendaitem-nav-documents-tab]',
     decisionTab: '[data-test-agendaitem-nav-decision-tab]',
     newsletterTab: '[data-test-agendaitem-nav-newsletter-tab]',
-    pressAgendaTab: '[data-test-agendaitem-nav-press-agenda-tab]',
     activeTab: '[data-test-agendaitem-nav-tabs] .auk-tabs__tab--active > *',
   },
 
   // agendaitem-decision
   agendaitemDecision: {
     uploadFile: '[data-test-agendaitem-decision-upload-file]',
-    // TODO-selector unused selector
-    container: '[data-test-agendaitem-decision-container]',
   },
 
   // agendaitem-decision-edit
@@ -74,34 +71,39 @@ const selectors = {
     formallyOkEdit: '[data-test-agenda-overview-formally-ok-edit]',
   },
 
-  // TODO-selector rename, some of there are in other modals
   // agenda-header
   agendaHeader: {
-    showOptions: '[data-test-agenda-header-show-options]',
+    kind: '[data-test-agenda-header-kind]',
+    title: '[data-test-agenda-header-title]',
+  },
+
+  // agenda-actions
+  agendaActions: {
+    showOptions: '[data-test-agenda-actions-show-options]',
+    addAgendaitems: '[data-test-agenda-actions-add-agendaitems]',
+    navigateToDecisions: '[data-test-agenda-actions-navigate-to-decisions]',
+    navigateToNewsletter: '[data-test-agenda-actions-navigate-to-newsletter]',
+    navigateToPrintablePressAgenda: '[data-test-agenda-actions-printable-press-agenda]',
+    navigateToPrintableAgenda: '[data-test-agenda-actions-navigate-to-printable-agenda]',
+    downloadDocuments: '[data-test-agenda-actions-download-documents]',
+    toggleEditingMeeting: '[data-test-agenda-actions-toggle-editing-meeting]',
+    releaseDecisions: '[data-test-agenda-actions-release-decisions]',
+    releaseDocuments: '[data-test-agenda-actions-release-documents]',
+    approveAllAgendaitems: '[data-test-agenda-actions-approve-all-agendaitems]',
+    confirm: {
+      releaseDecisions: '[data-test-agenda-actions-release-decisions-confirm]',
+      approveAllAgendaitems: '[data-test-agenda-actions-approve-all-agendaitems-confirm]',
+    },
+  },
+
+  // publication-planning-modal
+  publicationPlanning: {
     actions: {
-      navigateToPrintableAgenda: '[data-test-agenda-header-navigate-to-printable-agenda]',
-      addAgendaitems: '[data-test-agenda-header-add-agendaitems]',
-      navigateToDecisions: '[data-test-agenda-header-navigate-to-decisions]',
-      navigateToNewsletter: '[data-test-agenda-header-navigate-to-newsletter]',
-      toggleEditingMeeting: '[data-test-agenda-header-toggle-editing-meeting]',
-      downloadDocuments: '[data-test-agenda-header-download-documents]',
-      releaseDecisions: '[data-test-agenda-header-release-decisions]',
-      releaseDocuments: '[data-test-agenda-header-release-documents]',
-      releaseDocumentsNow: '[data-test-agenda-header-release-documents-now]',
-      approveAllAgendaitems: '[data-test-agenda-header-approve-all-agendaitems]',
-      // TODO-selector unused selectors
-      navigateToAgendaView: ['data-test-agenda-header-navigate-to-agenda-view'],
-      navigateToPressagenda: '[data-test-agenda-header-navigate-to-pressagenda]',
-      printAgenda: ['data-test-agenda-header-print-agenda'],
+      releaseDocumentsNow: '[data-test-publication-planning-release-documents-now]',
     },
     confirm: {
-      releaseDocuments: '[data-test-agenda-header-release-documents-confirm]',
-      releaseDecisions: '[data-test-agenda-header-release-decisions-confirm]',
-      approveAllAgendaitems: '[data-test-agenda-header-approve-all-agendaitems-confirm]',
+      releaseDocuments: '[data-test-publication-planning-release-documents-confirm]',
     },
-    kind: '[data-test-agenda-header-kind]',
-    // TODO-selector unused selector
-    title: '[data-test-agenda-header-title]',
   },
 
   // publication-pills
@@ -109,33 +111,32 @@ const selectors = {
     container: '[data-test-publication-pills-container]',
   },
 
-  // agenda-actions
-  agendaActions: {
-    showOptions: '[data-test-agenda-actions-show-options]',
+  // agenda-version-actions
+  agendaVersionActions: {
+    showOptions: '[data-test-agenda-version-actions-show-options]',
     actions: {
-      approveAgenda: '[data-test-agenda-actions-approve-agenda]',
-      approveAndCloseAgenda: '[data-test-agenda-actions-approve-and-close-agenda]',
-      lockAgenda: '[data-test-agenda-actions-lock-agenda]',
-      unlockAgenda: '[data-test-agenda-actions-unlock-agenda]',
-      reopenPreviousVersion: '[data-test-agenda-actions-reopen-previous-version]',
-      deleteAgenda: '[data-test-agenda-actions-delete-agenda]',
-      createNewDesignAgenda: '[data-test-agenda-actions-create-new-design]',
+      approveAgenda: '[data-test-agenda-version-actions-approve-agenda]',
+      approveAndCloseAgenda: '[data-test-agenda-version-actions-approve-and-close-agenda]',
+      lockAgenda: '[data-test-agenda-version-actions-lock-agenda]',
+      unlockAgenda: '[data-test-agenda-version-actions-unlock-agenda]',
+      reopenPreviousVersion: '[data-test-agenda-version-actions-reopen-previous-version]',
+      deleteAgenda: '[data-test-agenda-version-actions-delete-agenda]',
     },
     confirm: {
-      approveAgenda: '[data-test-agenda-actions-approve-agenda-confirm]',
-      approveAndCloseAgenda: '[data-test-agenda-actions-approve-and-close-agenda-confirm]',
-      lockAgenda: '[data-test-agenda-actions-lock-agenda-confirm]',
-      reopenPreviousVersion: '[data-test-agenda-actions-reopen-previous-version-confirm]',
-      deleteAgenda: '[data-test-agenda-actions-delete-agenda-confirm]',
+      approveAgenda: '[data-test-agenda-version-actions-approve-agenda-confirm]',
+      approveAndCloseAgenda: '[data-test-agenda-version-actions-approve-and-close-agenda-confirm]',
+      lockAgenda: '[data-test-agenda-version-actions-lock-agenda-confirm]',
+      reopenPreviousVersion: '[data-test-agenda-version-actions-reopen-previous-version-confirm]',
+      deleteAgenda: '[data-test-agenda-version-actions-delete-agenda-confirm]',
     },
     messages: {
       approveAgenda: {
-        rollbackItems: '[data-test-agenda-actions-approve-agenda-rollback-message]',
-        moveItems: '[data-test-agenda-actions-approve-agenda-move-message]',
+        rollbackItems: '[data-test-agenda-version-actions-approve-agenda-rollback-message]',
+        moveItems: '[data-test-agenda-version-actions-approve-agenda-move-message]',
       },
       approveAndCloseAgenda: {
-        rollbackItems: '[data-test-agenda-actions-approve-and-close-agenda-rollback-message]',
-        deleteItems: '[data-test-agenda-actions-approve-and-close-agenda-delete-message]',
+        rollbackItems: '[data-test-agenda-version-actions-approve-and-close-agenda-rollback-message]',
+        deleteItems: '[data-test-agenda-version-actions-approve-and-close-agenda-delete-message]',
       },
     },
     reopenModal: {
@@ -209,26 +210,8 @@ const selectors = {
     input: '[data-test-agendaitem-search-input]',
   },
 
-  // new-meeting
-  // TODO-selectors cleanup unused selectors
-  newMeeting: {
-    kind: '[data-test-utils-kind-selector]',
-    relatedMainMeeting: '[data-test-new-meeting-related-main-meeting]',
-    meetingNumber: '[data-test-new-meeting-meeting-number]',
-    meetingLocation: '[data-test-new-meeting-meeting-location]',
-    datepicker: '[data-test-new-meeting-datepicker]',
-    numberRep: {
-      view: '[data-test-new-meeting-number-representation-view]',
-      edit: '[data-test-new-meeting-number-representation-edit]',
-      input: '[data-test-new-meeting-number-representation-input]',
-      save: '[data-test-new-meeting-number-representation-save]',
-    },
-    save: '[data-test-new-meeting-save]',
-  },
-
   // edit-meeting
   editMeeting: {
-    kind: '[data-test-utils-kind-selector]',
     relatedMainMeeting: '[data-test-edit-meeting-related-main-meeting]',
     meetingNumber: '[data-test-edit-meeting-meeting-number]',
     meetingLocation: '[data-test-edit-meeting-meeting-location]',
@@ -246,7 +229,6 @@ const selectors = {
   // create-agendaitem
   createAgendaitem: {
     input: '[data-test-create-agendaitem-input]',
-    postponedCheckbox: '[data-test-create-agendaitem-postponed-checkbox]',
     dataTable: '[data-test-create-agendaitem-data-table]',
     row: {
       checkBox: '[data-test-create-agendaitem-row-subcase-checkbox]',

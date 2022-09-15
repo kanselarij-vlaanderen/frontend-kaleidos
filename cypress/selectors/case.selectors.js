@@ -45,9 +45,6 @@ const selectors = {
     meetingNumber: '[data-test-subcase-description-meeting-number]',
     meetingPlannedStart: '[data-test-subcase-description-meeting-planned-start]',
     agendaLink: '[data-test-subcase-description-agenda-link]',
-    agendaLinkContainer: '[data-test-subcase-description-agenda-link-container]',
-    // TODO-selector unused selector
-    modified: '[data-test-subcase-description-modified]',
     edit: '[data-test-subcase-description-edit]',
     subcaseName: '[data-test-subcase-description-subcase-name]',
   },
@@ -59,13 +56,10 @@ const selectors = {
   },
 
   // subcase-item
-  // TODO-selector better names
   subcaseItem: {
     container: '[data-test-subcase-item-container]',
     link: '[data-test-subcase-item-link]',
     approved: '[data-test-subcase-item-approved]',
-    // TODO-selector unused selector
-    notApproved: '[data-test-subcase-item-not-approved]',
   },
 
   // subcase-header
@@ -93,8 +87,6 @@ const selectors = {
     confidential: '[data-test-subcase-titles-edit-confidential]',
     actions: {
       save: '[data-test-subcase-titles-edit-save]',
-      // TODO-selector unused selector
-      cancel: '[data-test-subcase-titles-edit-cancel]',
     },
   },
 };

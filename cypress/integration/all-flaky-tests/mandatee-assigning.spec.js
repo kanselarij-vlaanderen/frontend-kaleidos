@@ -331,8 +331,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(utils.vlModalVerify.save).click();
     cy.wait(`@postNewsletterInfo${randomInt}`);
 
-    cy.get(agenda.agendaHeader.showOptions).click();
-    cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
+    cy.get(agenda.agendaActions.showOptions).click();
+    cy.get(agenda.agendaActions.navigateToNewsletter).click();
     // Toggle all newsletters to show
     cy.get(newsletter.tableRow.newsletterRow).eq(0)
       .find(newsletter.tableRow.inNewsletterCheckbox)
@@ -354,7 +354,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.intercept('GET', '/mandatees?filter**').as('getMandatees2');
     cy.intercept('GET', '/mandatees?filter**').as('getMandatees3');
     cy.clickReverseTab('Definitief');
-    cy.get(newsletter.itemContent.printItemProposal).as('proposals')
+    cy.get(newsletter.newsletterPrint.printItemProposal).as('proposals')
       .should('have.length', 3);
     cy.get('@proposals').eq(0)
       .contains('Op voorstel van minister-president Jan Jambon en viceminister-president Hilde Crevits');
@@ -367,7 +367,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.wait('@getMandatees2');
     cy.wait('@getMandatees3');
     cy.wait(2000);
-    cy.get(newsletter.itemContent.printItemProposal).as('proposals');
+    cy.get(newsletter.newsletterPrint.printItemProposal).as('proposals');
     cy.get('@proposals').eq(0)
       .contains('Op voorstel van minister-president Jan Jambon en viceminister-president Hilde Crevits');
     cy.get('@proposals').eq(1)

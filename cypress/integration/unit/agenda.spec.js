@@ -83,10 +83,10 @@ context('Agenda tests', () => {
     cy.get(auk.modal.footer.cancel).click();
 
     // Should not be able to close a session with only a design agenda, cfr. KAS-1551
-    cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.actions.lockAgenda).should('not.exist');
+    cy.get(agenda.agendaVersionActions.showOptions).click();
+    cy.get(agenda.agendaVersionActions.actions.lockAgenda).should('not.exist');
     // Should not be able to reopenprevious with only a design agenda
-    cy.get(agenda.agendaActions.actions.reopenPreviousVersion).should('not.exist');
+    cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).should('not.exist');
 
     // Adding new agendaitem changes messages in actions (based on formally ok status)
     const agendaitemName = 'Derde stap';
@@ -118,10 +118,10 @@ context('Agenda tests', () => {
   it('should create a new agenda and then delete the last agenda (and automatically the meeting)', () => {
     // const agendaDate = Cypress.dayjs('2022-04-08');
     cy.visitAgendaWithLink('/vergadering/627E52AD89C002BE724F77B9/agenda/627E52AE89C002BE724F77BA/agendapunten');
-    cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.actions.deleteAgenda).click();
+    cy.get(agenda.agendaVersionActions.showOptions).click();
+    cy.get(agenda.agendaVersionActions.actions.deleteAgenda).click();
     cy.get(auk.modal.body).find(auk.alert.message);
-    cy.get(agenda.agendaActions.confirm.deleteAgenda);
+    cy.get(agenda.agendaVersionActions.confirm.deleteAgenda);
     cy.get(auk.modal.footer.cancel).click();
     // instead of confirming the opened modal, we cancel and let the command handle it
     cy.deleteAgenda(true);
@@ -223,8 +223,8 @@ context('Agenda tests', () => {
     cy.createAgenda(agendaKind, agendaDateSingle, agendaPlace, null, 'VV AA 1999/2BIS').then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
       // Check the values in edit session view
-      cy.get(agenda.agendaHeader.showOptions).click();
-      cy.get(agenda.agendaHeader.actions.toggleEditingMeeting).click();
+      cy.get(agenda.agendaActions.showOptions).click();
+      cy.get(agenda.agendaActions.toggleEditingMeeting).click();
       cy.wait('@getDecisionPubActivity');
       cy.wait('@getDocPubActivity');
       cy.wait('@getThemisPubActivity');
@@ -264,8 +264,8 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaOverviewItem.subitem).contains(subcaseTitleShortApproved);
     cy.addAgendaitemToAgenda(subcaseTitleShortNew); // !TODO KAS-3413 could be placed in setup
 
-    cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.actions.lockAgenda).click();
+    cy.get(agenda.agendaVersionActions.showOptions).click();
+    cy.get(agenda.agendaVersionActions.actions.lockAgenda).click();
     cy.get(auk.modal.body).find(auk.alert.message)
       .contains('met alle wijzigingen wil verwijderen?');
     cy.get(auk.modal.footer.cancel).click();
@@ -311,13 +311,13 @@ context('Agenda tests', () => {
     cy.intercept('GET', '/concepts?filter**').as('loadConcepts');
     // switch to PVV
     cy.openAgendaForDate(agendaDatePVV);
-    cy.get(agenda.agendaHeader.showOptions).click();
-    cy.get(agenda.agendaHeader.actions.toggleEditingMeeting).click();
+    cy.get(agenda.agendaActions.showOptions).click();
+    cy.get(agenda.agendaActions.toggleEditingMeeting).click();
     cy.wait('@getDecisionPubActivity');
     cy.wait('@getDocPubActivity');
     cy.wait('@getThemisPubActivity');
     cy.wait('@loadConcepts');
-    cy.get(agenda.editMeeting.kind).click();
+    cy.get(utils.kindSelector.kind).click();
     selectFromDropdown(vvKind);
     cy.get(agenda.editMeeting.relatedMainMeeting).click();
     // selectFromDropdown(formattedAgendaDatePVV);
@@ -332,20 +332,22 @@ context('Agenda tests', () => {
 
     // switch to MR
     cy.openAgendaForDate(agendaDateMR, 1);
-    cy.get(agenda.agendaHeader.showOptions).click();
-    cy.get(agenda.agendaHeader.actions.toggleEditingMeeting).click();
+    cy.get(agenda.agendaActions.showOptions).click();
+    cy.get(agenda.agendaActions.toggleEditingMeeting).click();
     cy.wait('@getDecisionPubActivity');
     cy.wait('@getDocPubActivity');
     cy.wait('@getThemisPubActivity');
     cy.wait('@loadConcepts');
-    cy.get(agenda.editMeeting.kind).click();
+    cy.get(utils.kindSelector.kind).click();
     selectFromDropdown(mrKind);
     cy.get(agenda.editMeeting.datepicker).click();
     cy.setDateInFlatpickr(agendaDatePVV);
     cy.get(agenda.editMeeting.numberRep.view).should('contain', fullmeetingNumber);
     cy.intercept('PATCH', '/meetings/**').as('patchMeetingsPVV');
+    cy.intercept('PATCH', 'internal-document-publication-activities/*').as('patchInternalActivity');
     cy.get(agenda.editMeeting.save).click();
     cy.wait('@patchMeetingsPVV');
+    cy.wait('@patchInternalActivity');
     cy.get(agenda.agendaHeader.title).contains(dateFormatPVV);
     cy.get(agenda.agendaHeader.kind).contains(mrKind);
   });

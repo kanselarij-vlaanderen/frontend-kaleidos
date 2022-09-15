@@ -5,15 +5,11 @@ const selectors = {
     option: '.ember-power-select-option',
     optionLoadingMessage: '.ember-power-select-option--loading-message',
     searchInput: '.ember-power-select-search-input',
-    selectedItem: '.ember-power-select-selected-item',
   },
 
   // flatPickr
   flatPickr: {
     // including '.open' ensures you have the correct flatpickr if there are multiple on the page
-    flatpickrMonthDropdownMonths: '.open  .flatpickr-monthDropdown-months',
-    numInputWrapper: '.open  .numInputWrapper',
-    inputNumInputCurYear: '.open  input.numInput.cur-year',
     // time
     time: '.open .flatpickr-time',
     hour: '.flatpickr-hour',
@@ -34,9 +30,7 @@ const selectors = {
 
   // ember-tag-input
   emberTagInput: {
-    tag: '.emberTagInput-tag',
     input: '.emberTagInput-input',
-    remove: '.emberTagInput-remove',
   },
 
   // ember-data table

@@ -110,9 +110,9 @@ context('Agenda-Header actions tests', () => {
     cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 3);
     cy.approveAndCloseDesignAgenda(false);
     cy.get(auk.modal.body).find(auk.alert.message);
-    cy.get(agenda.agendaActions.messages.approveAndCloseAgenda.rollbackItems);
-    cy.get(agenda.agendaActions.messages.approveAndCloseAgenda.deleteItems);
-    cy.get(agenda.agendaActions.confirm.approveAndCloseAgenda).click();
+    cy.get(agenda.agendaVersionActions.messages.approveAndCloseAgenda.rollbackItems);
+    cy.get(agenda.agendaVersionActions.messages.approveAndCloseAgenda.deleteItems);
+    cy.get(agenda.agendaVersionActions.confirm.approveAndCloseAgenda).click();
     cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');
@@ -162,9 +162,9 @@ context('Agenda-Header actions tests', () => {
     cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 3);
     cy.approveDesignAgenda(false);
     cy.get(auk.modal.body).find(auk.alert.message);
-    cy.get(agenda.agendaActions.messages.approveAgenda.rollbackItems);
-    cy.get(agenda.agendaActions.messages.approveAgenda.moveItems);
-    cy.get(agenda.agendaActions.confirm.approveAgenda).click();
+    cy.get(agenda.agendaVersionActions.messages.approveAgenda.rollbackItems);
+    cy.get(agenda.agendaVersionActions.messages.approveAgenda.moveItems);
+    cy.get(agenda.agendaVersionActions.confirm.approveAgenda).click();
     cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');

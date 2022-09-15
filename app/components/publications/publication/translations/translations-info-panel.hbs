@@ -12,7 +12,6 @@
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <Auk::Button
-              data-test-translations-info-panel-edit
               @skin="tertiary"
               @icon="pencil"
               @layout="icon-only"
@@ -28,10 +27,7 @@
     <Auk::Panel::Body>
       <div class="auk-o-grid">
         <div class="auk-o-grid-col-3">
-          <div
-            data-test-translations-info-panel-edit-due-date
-            class="auk-form-group"
-          >
+          <div class="auk-form-group">
             <Auk::Label>{{t "publication-flow-translation-due-date"}}</Auk::Label>
             <Auk::Datepicker
               @date={{@translationSubcase.dueDate}}
@@ -69,7 +65,6 @@
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <Auk::Button
-              data-test-translations-info-panel-edit-save
               @skin="primary"
               @loading={{this.save.isRunning}}
               {{on "click" (perform this.save)}}
