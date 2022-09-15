@@ -40,7 +40,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   // Added wait, mouseover, force clicking and checking for existance of the ember power select option because of flakyness
   // Sometimes, the dropdown stays after pressing an option
   if (kind) {
-    cy.get(agenda.editMeeting.kind).click();
+    cy.get(utils.kindSelector.kind).click();
     cy.get(dependency.emberPowerSelect.option, {
       timeout: 5000,
     }).wait(500)
@@ -56,7 +56,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   }
 
   // Set the start date
-  cy.get(agenda.editMeeting.datepicker).find(utils.vlDatepicker)
+  cy.get(agenda.editMeeting.datepicker).find(auk.datepicker)
     .click();
   cy.setDateAndTimeInFlatpickr(date);
   // At this point, the flatpickr is still open and covers the other fields
@@ -67,7 +67,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
 
   // Set the planned document release
   if (plannedRelease) {
-    cy.get(agenda.editMeeting.documentPublicationDate).find(utils.vlDatepicker)
+    cy.get(agenda.editMeeting.documentPublicationDate).find(auk.datepicker)
       .click();
     cy.setDateAndTimeInFlatpickr(plannedRelease);
     cy.get(agenda.editMeeting.meetingNumber).click({
@@ -222,9 +222,9 @@ function deleteAgenda(lastAgenda) {
   // Call is made but cypress doesn't see it
   cy.intercept('DELETE', '/agendas/*').as('deleteAgenda');
   cy.intercept('GET', '/agendaitems?filter**').as('loadAgendaitems');
-  cy.get(agenda.agendaActions.showOptions).click();
-  cy.get(agenda.agendaActions.actions.deleteAgenda).click();
-  cy.get(auk.modal.container).find(agenda.agendaActions.confirm.deleteAgenda)
+  cy.get(agenda.agendaVersionActions.showOptions).click();
+  cy.get(agenda.agendaVersionActions.actions.deleteAgenda).click();
+  cy.get(auk.modal.container).find(agenda.agendaVersionActions.confirm.deleteAgenda)
     .click();
   cy.wait('@deleteAgenda', {
     timeout: 60000,
@@ -286,12 +286,12 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
   cy.log('setAllItemsFormallyOk');
   const verifyText = `Bent u zeker dat u ${amountOfFormallyOks} agendapunten formeel wil goedkeuren`;
   cy.intercept('GET', '/agendaitems/*/modified-by').as('getModifiedByOfAgendaitems');
-  cy.get(agenda.agendaHeader.showOptions).click();
+  cy.get(agenda.agendaActions.showOptions).click();
   cy.intercept('PATCH', '/agendaitems/**').as('patchAgendaitems');
-  cy.get(agenda.agendaHeader.actions.approveAllAgendaitems).click();
+  cy.get(agenda.agendaActions.approveAllAgendaitems).click();
   cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
   cy.get(auk.modal.body).should('contain', verifyText);
-  cy.get(agenda.agendaHeader.confirm.approveAllAgendaitems).click();
+  cy.get(agenda.agendaActions.confirm.approveAllAgendaitems).click();
   cy.wait('@patchAgendaitems');
   cy.wait('@getModifiedByOfAgendaitems');
   cy.get(auk.modal.container, {
@@ -315,11 +315,11 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
 function approveDesignAgenda(shouldConfirm = true) {
   cy.log('approveDesignAgenda');
 
-  cy.get(agenda.agendaActions.showOptions).click();
-  cy.get(agenda.agendaActions.actions.approveAgenda).click();
+  cy.get(agenda.agendaVersionActions.showOptions).click();
+  cy.get(agenda.agendaVersionActions.actions.approveAgenda).click();
   cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
   if (shouldConfirm) {
-    cy.get(auk.modal.container).find(agenda.agendaActions.confirm.approveAgenda)
+    cy.get(auk.modal.container).find(agenda.agendaVersionActions.confirm.approveAgenda)
       .click();
     // as long as the modal exists, the action is not completed
     cy.get(auk.modal.container, {
@@ -346,11 +346,11 @@ function approveDesignAgenda(shouldConfirm = true) {
 function approveAndCloseDesignAgenda(shouldConfirm = true) {
   cy.log('approveAndCloseDesignAgenda');
 
-  cy.get(agenda.agendaActions.showOptions).click();
-  cy.get(agenda.agendaActions.actions.approveAndCloseAgenda).click();
+  cy.get(agenda.agendaVersionActions.showOptions).click();
+  cy.get(agenda.agendaVersionActions.actions.approveAndCloseAgenda).click();
   cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
   if (shouldConfirm) {
-    cy.get(auk.modal.container).find(agenda.agendaActions.confirm.approveAndCloseAgenda)
+    cy.get(auk.modal.container).find(agenda.agendaVersionActions.confirm.approveAndCloseAgenda)
       .click();
     // as long as the modal exists, the action is not completed
     cy.get(auk.modal.container, {
@@ -378,8 +378,8 @@ function addAgendaitemToAgenda(subcaseTitle) {
   cy.intercept('PATCH', '/agendas/**').as('patchAgenda');
 
   cy.get(auk.loader).should('not.exist');
-  cy.get(agenda.agendaHeader.showOptions).click();
-  cy.get(agenda.agendaHeader.actions.addAgendaitems).click();
+  cy.get(agenda.agendaActions.showOptions).click();
+  cy.get(agenda.agendaActions.addAgendaitems).click();
   cy.wait('@getSubcasesFiltered', {
     timeout: 20000,
   });
@@ -567,9 +567,9 @@ function closeAgenda() {
   cy.log('closeAgenda');
   // Call is made but cypress doesn't see it
   // cy.intercept('POST', '/agendas/*/close').as('closeAgendaCall');
-  cy.get(agenda.agendaActions.showOptions).click();
-  cy.get(agenda.agendaActions.actions.lockAgenda).click();
-  cy.get(agenda.agendaActions.confirm.lockAgenda).click();
+  cy.get(agenda.agendaVersionActions.showOptions).click();
+  cy.get(agenda.agendaVersionActions.actions.lockAgenda).click();
+  cy.get(agenda.agendaVersionActions.confirm.lockAgenda).click();
   // as long as the modal exists, the action is not completed
   cy.get(auk.modal.container, {
     timeout: 60000,
@@ -589,8 +589,8 @@ function closeAgenda() {
  */
 function reopenAgenda() {
   cy.log('reopenAgenda');
-  cy.get(agenda.agendaActions.showOptions).click();
-  cy.get(agenda.agendaActions.actions.unlockAgenda).click();
+  cy.get(agenda.agendaVersionActions.showOptions).click();
+  cy.get(agenda.agendaVersionActions.actions.unlockAgenda).click();
   // Currently, this action has no confirmation popup but a loading overlay is showing
   cy.get(auk.modal.container, {
     timeout: 60000,
@@ -610,9 +610,9 @@ function reopenPreviousAgenda() {
   cy.log('reopenPreviousAgenda');
   // Call is made but cypress doesn't see it
   // cy.intercept('POST', '/agendas/*/reopen').as('reopenPreviousAgendaCall');
-  cy.get(agenda.agendaActions.showOptions).click();
-  cy.get(agenda.agendaActions.actions.reopenPreviousVersion).click();
-  cy.get(agenda.agendaActions.confirm.reopenPreviousVersion).click();
+  cy.get(agenda.agendaVersionActions.showOptions).click();
+  cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).click();
+  cy.get(agenda.agendaVersionActions.confirm.reopenPreviousVersion).click();
   // as long as the modal exists, the action is not completed
   cy.get(auk.modal.container, {
     timeout: 60000,
@@ -631,11 +631,11 @@ function releaseDecisions() {
   cy.log('releaseDecisions');
   cy.intercept('PATCH', '/internal-decision-publication-activities/**').as('patchDecisionPubActivity');
 
-  cy.get(agenda.agendaHeader.showOptions).click();
-  cy.get(agenda.agendaHeader.actions.releaseDecisions).click({
+  cy.get(agenda.agendaActions.showOptions).click();
+  cy.get(agenda.agendaActions.releaseDecisions).click({
     force: true,
   });
-  cy.get(agenda.agendaHeader.confirm.releaseDecisions).click();
+  cy.get(agenda.agendaActions.confirm.releaseDecisions).click();
   cy.wait('@patchDecisionPubActivity', {
     timeout: 20000,
   });
@@ -652,12 +652,12 @@ function releaseDocuments(now = true) {
   cy.log('releaseDocuments');
   cy.intercept('PATCH', '/internal-document-publication-activities/**').as('patchDocPubActivity');
 
-  cy.get(agenda.agendaHeader.showOptions).click();
-  cy.get(agenda.agendaHeader.actions.releaseDocuments).click();
+  cy.get(agenda.agendaActions.showOptions).click();
+  cy.get(agenda.agendaActions.releaseDocuments).click();
   if (now) {
-    cy.get(agenda.agendaHeader.actions.releaseDocumentsNow).click();
+    cy.get(agenda.publicationPlanning.actions.releaseDocumentsNow).click();
   }
-  cy.get(agenda.agendaHeader.confirm.releaseDocuments).click();
+  cy.get(agenda.publicationPlanning.confirm.releaseDocuments).click();
   cy.wait('@patchDocPubActivity', {
     timeout: 20000,
   });

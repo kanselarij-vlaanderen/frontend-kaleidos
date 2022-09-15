@@ -19,37 +19,14 @@ const selectors = {
   vlDocument: {
     piece: '[data-test-vl-document-piece]',
     name: '[data-test-vl-document-name]',
-    showPieceViewer: '[data-test-vl-document-showPieceViewer]',
+    // TODO-selector cleanup selectors and usage
     delete: '[data-test-vl-document-delete-piece]',
-  },
-
-  // Old batch editing modal (meeting and subcase)
-  // batch-document-edit
-  batchDocumentEdit: {
-    // TODO-selector unused selectors, no tests for subcase and agenda
-    cancel: '[data-test-batch-document-edit-cancel]',
-    save: '[data-test-batch-document-edit-save]',
-  },
-
-  // edit-document-row
-  editDocumentRow: {
-    // TODO-selector unused selectors
-    row: '[data-test-edit-document-row]',
-    type: '[data-test-edit-document-row-type]',
-    accessLevel: '[data-test-edit-document-row-access-level]',
   },
 
   // New batch editing modal (agendaitem)
   // batch-documents-details-modal
   batchDocumentsDetails: {
     save: '[data-test-batch-documents-details-save]',
-  },
-
-  // batch-document-details-modal
-  batchEditingRow: {
-    // TODO-batchEdit new modal can select multiple documents and set the same value, new tests needed
-    // TODO-selector unused selector
-    row: '[data-test-batch-editing-row]',
   },
 
   // edit-document-row
@@ -97,21 +74,15 @@ const selectors = {
   // linked-document-link
   linkedDocumentLink: {
     card: '[data-test-linked-document-link-card]',
-    typeLabel: '[data-test-linked-document-link-type-label]',
     name: '[data-test-linked-document-link-name]',
-    // TODO-selector unused selector
-    versionHistory: '[data-test-linked-document-link-version-history]',
   },
 
   // document-preview-sidebar
   documentPreviewSidebar: {
     open: '[data-test-document-preview-sidebar-open]',
-    close: '[data-test-document-preview-sidebar-close]',
     tabs: {
       details: '[data-test-document-preview-sidebar-tab-details]',
       versions: '[data-test-document-preview-sidebar-tab-versions]',
-      // TODO-selector unused selector
-      signatures: '[data-test-document-preview-sidebar-tab-signatures]',
     },
   },
 
@@ -123,8 +94,6 @@ const selectors = {
     name: '[data-test-details-tab-name]',
     documentType: '[data-test-details-tab-document-type]',
     accessLevel: '[data-test-details-tab-access-level]',
-    confidentiality: '[data-test-details-tab-confidentiality]',
-    filetype: '[data-test-details-tab-filetype]',
     editing: {
       name: '[data-test-details-tab-edit-name]',
       documentType: '[data-test-details-tab-edit-document-type]',
@@ -132,24 +101,16 @@ const selectors = {
     },
   },
 
-  // document-preview/versions-tab
-  previewVersionsTab: {
-    // TODO-selector unused selector
-    list: '[data-test-versions-tab-list]',
-  },
-
   // document-preview/version-card
   previewVersionCard: {
     container: '[data-test-version-card-container]',
     details: '[data-test-version-card-details]',
     name: '[data-test-version-card-name]',
-    open: '[data-test-version-card-open]',
   },
 
   // document-view
   documentView: {
     pdfView: '[data-test-document-view-pdfview]',
-    text: '.textLayer > span',
   },
 
   // document-badge

@@ -12,7 +12,7 @@
         <Toolbar.Group @position="right" as |Group|>
           {{#if this.model.length}}
             <Group.Item>
-              {{#if this.currentSession.isEditor}}
+              {{#if (user-may "manage-documents")}}
                 <Auk::Button
                   @icon="pencil"
                   {{on "click" this.openBatchDetails}}
@@ -30,14 +30,12 @@
       </Auk::Toolbar>
 
       <Documents::DocumentCardList
-        data-test-route-agenda-documents-card-list
         @pieces={{this.model}}
         @onAddPiece={{perform this.addPiece}}
-        @didDeletePiece={{this.refresh}}
         @didDeleteContainer={{this.refresh}}
       />
 
-      {{#if this.currentSession.isEditor}}
+      {{#if (user-may "manage-documents")}}
         <div class="auk-u-mb-4">
           <Auk::Button
             data-test-route-agenda-documents-add-documents

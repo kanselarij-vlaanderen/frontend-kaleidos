@@ -1,6 +1,6 @@
 <Utils::LoadableContent @isLoading={{this.loadVersionsData.isRunning}}>
   <div class="auk-u-m-2">
-    <ul data-test-versions-tab-list class="auk-document-cards">
+    <ul class="auk-document-cards">
       {{#each this.sortedVersions as |version|}}
         <Documents::DocumentPreview::VersionCard
           @piece={{version}}

@@ -34,10 +34,7 @@
               >
                 {{t "definite"}}
               </Auk::Tab>
-              <Auk::Tab
-                @route="newsletter.nota-updates"
-                data-test-newsletter-header-overview-nota-updates
-              >
+              <Auk::Tab @route="newsletter.nota-updates">
                 {{t "newsletter-update-notas"}}
               </Auk::Tab>
             {{/if}}
@@ -164,7 +161,9 @@
       {{#if this.loadNewsletterHTML.isRunning}}
         <WebComponents::VlLoader @text={{t "preview-loading-text"}} />
       {{else}}
-        <SanitizeHtml @raw={{true}} @value={{this.newsletterHTML}} />
+        <AuContent>
+          <SanitizeHtml @raw={{true}} @value={{this.newsletterHTML}} />
+        </AuContent>
       {{/if}}
     </Auk::Modal::Body>
   </Auk::Modal>

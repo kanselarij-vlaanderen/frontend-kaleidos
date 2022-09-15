@@ -11,7 +11,6 @@ import { task } from 'ember-concurrency';
  */
 export default class BatchDocumentsDetailsModal extends Component {
   @service store;
-  @service currentSession;
   @service fileService;
   @service pieceAccessLevelService;
 
@@ -29,10 +28,6 @@ export default class BatchDocumentsDetailsModal extends Component {
 
   get isSaveDisabled() {
     return this.isLoading || this.save.isRunning;
-  }
-
-  get isEditingEnabled() {
-    return this.currentSession.isEditor;
   }
 
   @task

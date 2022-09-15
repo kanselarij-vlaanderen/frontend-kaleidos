@@ -4,7 +4,7 @@
       {{t "newsletter-title"}}
     </AuHeading>
   </Group>
-  {{#if this.canEditNewsletter}}
+  {{#if (user-may "manage-newsletter-infos")}}
     <Group>
       {{#if this.isEditing}}
         <AuButton

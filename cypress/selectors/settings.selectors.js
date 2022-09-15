@@ -38,39 +38,17 @@ const selectors = {
     manageSubcaseTypes: '[data-test-route-settings-overview-manage-subcase-types]',
   },
 
-  // route settings/ministers
-  ministers: {
-    add: '[data-test-route-settings-ministers-add]',
-    // TODO-selector unused selectors
-    sortableGroup: '[data-test-route-settings-ministers-sortable-group]',
-    sortableGroupRow: '[data-test-route-settings-ministers-sortable-group-row]',
-    mandatee: {
-      edit: '[data-test-route-settings-ministers-mandatee-edit]',
-      delete: '[data-test-route-settings-ministers-mandatee-delete]',
-      // TODO-selector unused selectors
-      fullDisplayName: '[data-test-route-settings-ministers-mandatee-full-display-name]',
-      nickname: '[data-test-route-settings-ministers-mandatee-nickname]',
-      priority: '[data-test-route-settings-ministers-mandatee-priority]',
-      resign: '[data-test-mandatee-route-settings-ministers-mandatee-resign]',
-    },
-  },
-
   // route settings/system-alerts/index/template
   systemAlertsIndex: {
     alerts: '[data-test-route-settings-system-alerts-index-alerts-dropdown]',
     add: '[data-test-route-settings-system-alerts-index-add]',
     remove: '[data-test-route-settings-system-alerts-index-remove]',
-    // TODO-selector unused selector (remove?)
-    edit: '[data-test-route-settings-system-alerts-index-edit]',
   },
 
   // component system-alert-form
   systemAlertForm: {
     title: '[data-test-system-alert-form-title] input',
     message: '[data-test-system-alert-form-message] textarea',
-    // TODO-selector unused selectors (remove?)
-    fromDate: '[data-test-system-alert-form-from-date] input',
-    toDate: '[data-test-system-alert-form-to-date] input',
   },
 
   // component system-alert
@@ -84,20 +62,5 @@ const selectors = {
   // component next-button
   // TODO-selector this component is just a linkTo, refactor to au component
   goToUserDetail: '[data-test-next-button-user-detail]',
-
-  // component model-manager
-  modelManager: {
-    add: '[data-test-vl-model-manager-add]',
-    edit: '[data-test-vl-model-manager-edit]',
-    delete: '[data-test-vl-model-manager-delete]',
-  },
-
-  // component manage-government-fields
-  manageGovernmentFields: {
-    add: '[data-test-manage-government-fields-add]',
-    // TODO-selector unused selector
-    edit: '[data-test-manage-government-fields-edit]',
-    delete: '[data-test-manage-government-fields-delete]',
-  },
 };
 export default selectors;

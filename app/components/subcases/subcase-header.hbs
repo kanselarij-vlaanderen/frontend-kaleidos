@@ -11,7 +11,7 @@
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
-      {{#if this.currentSession.isEditor}}
+      {{#if (user-may "manage-agendaitems")}}
         <Auk::Toolbar::Item>
           {{#if (or this.loadData.isRunning this.isLoading)}}
             <div class="auk-loader" role="alert" aria-busy="true"></div>

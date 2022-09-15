@@ -29,8 +29,8 @@ context('Formally ok/nok tests', () => {
     cy.get(agenda.agendaOverviewItem.status).should('contain', 'Formeel OK');
     cy.setFormalOkOnItemWithIndex(0, true, 'Nog niet formeel OK');
     cy.get(agenda.agendaOverviewItem.status).should('contain', 'Nog niet formeel OK');
-    cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.actions.approveAgenda).click();
+    cy.get(agenda.agendaVersionActions.showOptions).click();
+    cy.get(agenda.agendaVersionActions.actions.approveAgenda).click();
     // "formeel niet ok" and "formeel nog niet ok" status are not approvable
     cy.get(auk.alert.message).should('exist');
     cy.get(auk.modal.footer.cancel).click();

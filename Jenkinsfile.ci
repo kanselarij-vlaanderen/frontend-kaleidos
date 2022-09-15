@@ -62,8 +62,8 @@ pipeline {
                 // Reset the contents of DB an search
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} rm -fs elasticsearch  search"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} kill triplestore file cache resource yggdrasil migrations"
-                sh "cd ${WORKSPACE}/kaleidos-project && rm -rf testdata"
-                sh "cd ${WORKSPACE}/kaleidos-project && unzip -o testdata.zip -d ${WORKSPACE}/kaleidos-project"
+                sh "cd ${WORKSPACE}/kaleidos-project && rm -rf testdata && rm -rf testdata-elasticsearch"
+                sh "cd ${WORKSPACE}/kaleidos-project && unzip -o testdata.zip -d ${WORKSPACE}/kaleidos-project && unzip -o testdata-elasticsearch.zip -d ${WORKSPACE}/kaleidos-project && mv ${WORKSPACE}/kaleidos-project/testdata-elasticsearch/* ${WORKSPACE}/kaleidos-project/testdata"
                 sh "cd ${WORKSPACE}/kaleidos-project && chmod 1777 -R data"
                 sh "cd ${WORKSPACE}/kaleidos-project && rm -rf data/*"
                 sh "cd ${WORKSPACE}/kaleidos-project && cp -rf testdata/* data"

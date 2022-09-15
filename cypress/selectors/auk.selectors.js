@@ -21,8 +21,6 @@ const selectors = {
   },
 
   alert: {
-    container: '.auk-alert',
-    title: '.auk-alert__title',
     message: '.auk-alert__message',
   },
 
@@ -35,10 +33,7 @@ const selectors = {
     body: '.auk-modal__body',
     header: {
       title: '.auk-modal__header .auk-toolbar__title',
-      // TODO-selector unused selectors
       close: '.auk-modal__header .auk-button .auk-icon .ki-x',
-      minimize: '.auk-modal__header .auk-button .auk-icon .ki-minimize',
-      expand: '.auk-modal__header .auk-button .auk-icon .ki-expand',
     },
     footer: {
       cancel: '.auk-modal__footer .auk-toolbar-complex__left .auk-button-link',
@@ -52,21 +47,12 @@ const selectors = {
     },
   },
 
-  accordionPanel: {
-    header: {
-      title: '.auk-accordion-panel__header .auk-accordion__title',
-    },
-  },
-
-  // TODO-selector unused selectors
   emptyState: {
-    container: '.auk-empty-state',
     message: '.auk-empty-state__content',
   },
 
   tab: {
     tab: '.auk-tabs__tab',
-    active: '.auk-tabs__tab--active',
     activeHref: '.auk-tabs__tab--active > *',
     hierarchicalBack: '.auk-tabs__hierarchical-back',
   },
@@ -84,25 +70,13 @@ const selectors = {
   /** Section single selector AUK components **/
 
   checkbox: {
-    // TODO-selector unused selectors
-    container: '.auk-checkbox',
     checkbox: '.auk-checkbox__toggle',
   },
   loader: '.auk-loader',
-  // TODO-selector unused selectors
   input: '.auk-input',
-  textarea: '.auk-textarea',
 
   datepicker: '[data-test-auk-datepickr]',
-  icon: '.auk-icon',
-  warningIcon: '.ki ki-alert-triangle auk-icon--warning',
 
-  confidentialityPill: {
-    locked: '[data-test-confidentiality-pill-icon-locked]',
-    unlocked: '[data-test-confidentiality-pill-icon-unlocked]',
-  },
-
-  fileTypePill: '[data-test-file-type-pill]',
   formHelpText: '.auk-form-help-text',
   formGroup: '.auk-form-group',
 };

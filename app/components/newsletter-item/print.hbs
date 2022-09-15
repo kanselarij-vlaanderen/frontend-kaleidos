@@ -7,7 +7,7 @@
   />
 {{else}}
   {{#if (or @isDraftView @newsletterItem.inNewsletter)}}
-    <div data-test-newsletter-item-content-container class="auk-u-non-breakable-group@print">
+    <div data-test-newsletter-item-print-container class="auk-u-non-breakable-group@print">
       <div class="auk-u-mb-2">
         {{#if @isDraftView}}
           <div class="auk-o-flex auk-o-flex--justify-between auk-o-flex--align-baseline">
@@ -19,11 +19,11 @@
                 {{@agendaitem.shortTitle}}
               {{/if}}
             </h4>
-            {{#if (and @newsletterItem this.canEditNewsletter)}}
+            {{#if (and @newsletterItem (user-may "manage-newsletter-infos"))}}
               <div class="auk-o-flex auk-o-flex--justify-between ">
                 <div class="auk-u-ml-2">
                   <Auk::ButtonLink
-                    data-test-newsletter-item-content-edit
+                    data-test-newsletter-item-print-edit
                     {{on "click" this.openEdit}}
                   >
                     {{t "edit"}}
@@ -38,14 +38,14 @@
             {{/if}}
           </div>
         {{else}}
-          <h4 data-test-newsletter-item-content-title class="auk-h4 auk-u-m-0">
+          <h4 data-test-newsletter-item-print-title class="auk-h4 auk-u-m-0">
             {{@newsletterItem.title}}
           </h4>
         {{/if}}
       </div>
 
       {{#if this.proposalText}}
-        <div class="auk-u-mb-3 l-printable-newsletter__proposal-label" data-test-newsletter-item-content-print-item-proposal>
+        <div class="auk-u-mb-3 l-printable-newsletter__proposal-label" data-test-newsletter-item-print-proposal>
           {{this.proposalText}}
         </div>
       {{/if}}
@@ -53,18 +53,20 @@
 
     {{#if (is-nota @agendaitem.type)}}
       {{#if @newsletterItem.richtext}}
-        <p data-test-newsletter-item-content-richtext class="auk-u-mb-2">
-          <SanitizeHtml @raw={{true}} @value={{@newsletterItem.richtext}} />
+        <p data-test-newsletter-item-print-richtext class="auk-u-mb-2">
+          <AuContent>
+            <SanitizeHtml @raw={{true}} @value={{@newsletterItem.richtext}} />
+          </AuContent>
         </p>
       {{else}}
-        <p data-test-newsletter-item-content-no-content class="auk-u-italic auk-u-text-muted auk-u-mb-2">
+        <p data-test-newsletter-item-print-no-content class="auk-u-italic auk-u-text-muted auk-u-mb-2">
           {{t "no-newsletter-info"}}
         </p>
       {{/if}}
     {{/if}}
 
     {{#if (and @isDraftView @newsletterItem.remark)}}
-      <p data-test-newsletter-item-content-remark class="auk-u-text-muted auk-u-text-capitalize">
+      <p data-test-newsletter-item-print-remark class="auk-u-text-muted auk-u-text-capitalize">
         {{t "remark"}}: {{@newsletterItem.remark}}
       </p>
     {{/if}}
@@ -74,7 +76,7 @@
         {{#each @newsletterItem.themes as |theme|}}
           <AuPill
             @size="small"
-            data-test-newsletter-item-content-theme
+            data-test-newsletter-item-print-theme
           >
             {{theme.label}}
           </AuPill>

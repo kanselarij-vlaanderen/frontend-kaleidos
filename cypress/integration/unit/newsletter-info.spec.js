@@ -127,7 +127,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // check default nota has no KB
     cy.get(newsletter.newsItem.alert).contains('Nog geen kort bestek voor dit agendapunt.');
     // create new KB
-    cy.intercept('GET', '/themes').as('getThemes');
+    cy.intercept('GET', '/themes**').as('getThemes');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getThemes');
     // check default values
@@ -145,17 +145,17 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.wait('@postNewsItem');
     cy.wait(1000);// flakyness, zebra view does not have this newsitem yet sometimes
     // check KB views for in-newsletter toggle
-    cy.get(agenda.agendaHeader.showOptions).click();
-    cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
+    cy.get(agenda.agendaActions.showOptions).click();
+    cy.get(agenda.agendaActions.navigateToNewsletter).click();
     cy.intercept('PATCH', '/newsletter-infos/**').as('patchNewsItem');
-    cy.get(newsletter.tableRow.newsletterTitle).contains(subcaseTitleShort)
+    cy.get(newsletter.tableRow.titleContent).contains(subcaseTitleShort)
       .parents(newsletter.tableRow.newsletterRow)
       .find(newsletter.tableRow.inNewsletterCheckbox)
       .should('not.be.checked') // this is the default setting for nota
       .parent()
       .click();
     // the richtext is also showing in the "title"
-    cy.get(newsletter.tableRow.newsletterTitle).contains(text);
+    cy.get(newsletter.tableRow.titleContent).contains(text);
     cy.wait('@patchNewsItem');
   });
 
@@ -176,7 +176,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.openAgendaitemKortBestekTab(subcaseTitleShort);
     cy.get(newsletter.newsItem.alert).contains('Nog geen kort bestek voor dit agendapunt.');
     // create new KB
-    cy.intercept('GET', '/themes').as('getThemes');
+    cy.intercept('GET', '/themes**').as('getThemes');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getThemes');
     // check default values
@@ -257,7 +257,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // TODO KAS-3367 extract, selector around the alert?
     cy.get(newsletter.newsItem.alert).contains('Nog geen kort bestek voor dit agendapunt.');
     // create new KB
-    cy.intercept('GET', '/themes').as('getThemes');
+    cy.intercept('GET', '/themes**').as('getThemes');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getThemes');
     // check default values
@@ -272,10 +272,10 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.save).click();
     cy.wait('@postNewsItem');
     // check KB views for in-newsletter toggle
-    cy.get(agenda.agendaHeader.showOptions).click();
-    cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
+    cy.get(agenda.agendaActions.showOptions).click();
+    cy.get(agenda.agendaActions.navigateToNewsletter).click();
     // The previous subcase had "in-newsletter" as checked, verify it was not inherited
-    cy.get(newsletter.tableRow.newsletterTitle).contains(previousSubcaseShortTitle)
+    cy.get(newsletter.tableRow.titleContent).contains(previousSubcaseShortTitle)
       .parents(newsletter.tableRow.newsletterRow)
       .find(newsletter.tableRow.inNewsletterCheckbox)
       .should('not.be.checked');
@@ -327,7 +327,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // check if KB empty
     cy.get(newsletter.newsItem.alert).contains('Nog geen kort bestek voor dit agendapunt.');
     // create new KB
-    cy.intercept('GET', '/themes').as('getThemes');
+    cy.intercept('GET', '/themes**').as('getThemes');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getThemes');
     // check default values
@@ -339,9 +339,9 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.checkedThemes).parent('label')
       .contains(theme);
     // check KB views for in-newsletter toggle
-    cy.get(agenda.agendaHeader.showOptions).click();
-    cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
-    cy.get(newsletter.tableRow.newsletterTitle).contains(previousSubcaseTitleShort)
+    cy.get(agenda.agendaActions.showOptions).click();
+    cy.get(agenda.agendaActions.navigateToNewsletter).click();
+    cy.get(newsletter.tableRow.titleContent).contains(previousSubcaseTitleShort)
       .parents(newsletter.tableRow.newsletterRow)
       .find(newsletter.tableRow.inNewsletterCheckbox)
       .should('not.be.checked');
@@ -358,7 +358,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     const files = [file];
 
     cy.visitAgendaWithLink(agendaitemKBLink);
-    cy.intercept('GET', '/themes').as('getThemes');
+    cy.intercept('GET', '/themes**').as('getThemes');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getThemes');
 
@@ -375,7 +375,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       .click();
     // check cancel
     cy.get(newsletter.editItem.cancel).click();
-    cy.intercept('GET', '/themes').as('getThemes2');
+    cy.intercept('GET', '/themes**').as('getThemes2');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getThemes2');
     cy.get(dependency.rdfa.editorInner).should('be.empty');
@@ -392,7 +392,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.reload();
 
     cy.visitAgendaWithLink(agendaitemKBLink);
-    cy.intercept('GET', '/themes').as('getThemes3');
+    cy.intercept('GET', '/themes**').as('getThemes3');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getThemes3');
     cy.get(newsletter.editItem.mandateeProposal).contains(proposalText);
@@ -424,7 +424,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.visit(newsletterLink);
     cy.get(newsletter.tableRow.newsletterRow).within(() => {
       cy.get(newsletter.tableRow.agendaitemNumber).contains(2);
-      cy.get(newsletter.tableRow.newsletterTitle).contains('Nog geen kort bestek voor dit agendapunt.');
+      cy.get(newsletter.tableRow.titleContent).contains('Nog geen kort bestek voor dit agendapunt.');
       cy.get(newsletter.buttonToolbar.openNota).should('be.disabled');
     });
 
@@ -434,7 +434,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.addDocumentsToAgendaitem(subcaseTitleNota, files);
     cy.visit(newsletterLink);
     // check newsitem save
-    cy.intercept('GET', '/themes').as('getThemes');
+    cy.intercept('GET', '/themes**').as('getThemes');
     cy.get(newsletter.buttonToolbar.edit).click();
     cy.wait('@getThemes');
     cy.get(newsletter.editItem.toggleFinished).click();
@@ -466,9 +466,9 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
 
     cy.visit(newsletterLink);
     cy.clickReverseTab('Klad');
-    cy.get(newsletter.itemContent.container).find(newsletter.itemContent.edit)
+    cy.get(newsletter.newsletterPrint.container).find(newsletter.newsletterPrint.edit)
       .should('not.exist');
-    cy.get(newsletter.itemContent.noContent);
+    cy.get(newsletter.newsletterPrint.noContent);
     // check that there is link to edit with newsletter and that info and remark text are shown
     cy.clickReverseTab('Overzicht');
     cy.get(newsletter.buttonToolbar.edit).click();
@@ -479,17 +479,18 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(utils.vlModalVerify.save).click();
     cy.wait('@newsletterInfosPost');
     cy.intercept('PATCH', '/newsletter-infos/**').as('patchNewsItem');
+    cy.wait(2000); // TODO-BUG rare flaky where parent is not longer connected to dom, data reload happening?
     cy.get(newsletter.tableRow.newsletterRow).eq(0)
       .find(newsletter.tableRow.inNewsletterCheckbox)
       .parent()
       .click();
     cy.wait('@patchNewsItem');
     cy.clickReverseTab('Klad');
-    cy.get(newsletter.itemContent.richtext).contains(richtext);
-    cy.get(newsletter.itemContent.remark).should('not.exist');
-    cy.get(newsletter.itemContent.theme).should('not.exist');
-    cy.get(newsletter.itemContent.printItemProposal).should('not.exist');
-    cy.get(newsletter.itemContent.edit).click();
+    cy.get(newsletter.newsletterPrint.richtext).contains(richtext);
+    cy.get(newsletter.newsletterPrint.remark).should('not.exist');
+    cy.get(newsletter.newsletterPrint.theme).should('not.exist');
+    cy.get(newsletter.newsletterPrint.printItemProposal).should('not.exist');
+    cy.get(newsletter.newsletterPrint.edit).click();
 
     // check newsitem save and that theme is shown
     cy.get(newsletter.editItem.themesSelector).contains('Sport')
@@ -501,8 +502,8 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.save).click();
     cy.wait('@patchNewsItem2');
     // existence of proposal is checked in mandatee-assigning
-    cy.get(newsletter.itemContent.remark).contains(remarkText);
-    cy.get(newsletter.itemContent.theme).contains('Sport');
+    cy.get(newsletter.newsletterPrint.remark).contains(remarkText);
+    cy.get(newsletter.newsletterPrint.theme).contains('Sport');
   });
 
   it('should test the definitief view', () => {
@@ -525,16 +526,16 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.clickReverseTab('Definitief');
     // actual time is 14:00, but server time is being used as "local time" in the test it seems
     cy.get(newsletter.newsletterPrintHeader.publicationPlannedDate).contains('11 april 2022 - 12:00');
-    cy.get(newsletter.itemContent.container).should('have.length', 1);
-    cy.get(newsletter.itemContent.title).contains(subcaseTitleMededeling);
-    cy.get(newsletter.itemContent.printItemProposal).should('not.exist');
-    cy.get(newsletter.itemContent.theme).should('not.exist');
+    cy.get(newsletter.newsletterPrint.container).should('have.length', 1);
+    cy.get(newsletter.newsletterPrint.title).contains(subcaseTitleMededeling);
+    cy.get(newsletter.newsletterPrint.printItemProposal).should('not.exist');
+    cy.get(newsletter.newsletterPrint.theme).should('not.exist');
 
     // add mandatee, info, remark and theme to mededeling, then check if shown/not shown correctly
     cy.visitAgendaWithLink(agendaLinkMed);
     cy.addAgendaitemMandatee(2); // Hilde Crevits
     cy.openAgendaitemKortBestekTab(subcaseTitleMededeling);
-    cy.intercept('GET', '/themes').as('getThemes_1');
+    cy.intercept('GET', '/themes**').as('getThemes_1');
     cy.get(newsletter.newsItem.edit).click();
     cy.wait('@getThemes_1');
     cy.get(newsletter.editItem.rdfaEditor).type(richtextMededeling);
@@ -547,11 +548,11 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
 
     cy.visit(newsletterLink);
     cy.clickReverseTab('Definitief');
-    cy.get(newsletter.itemContent.title).contains(subcaseTitleMededeling);
-    cy.get(newsletter.itemContent.printItemProposal).contains(proposalTextMededeling);
-    cy.get(newsletter.itemContent.theme).contains(theme);
-    cy.get(newsletter.itemContent.richtext).should('not.exist');
-    cy.get(newsletter.itemContent.remark).should('not.exist');
+    cy.get(newsletter.newsletterPrint.title).contains(subcaseTitleMededeling);
+    cy.get(newsletter.newsletterPrint.printItemProposal).contains(proposalTextMededeling);
+    cy.get(newsletter.newsletterPrint.theme).contains(theme);
+    cy.get(newsletter.newsletterPrint.richtext).should('not.exist');
+    cy.get(newsletter.newsletterPrint.remark).should('not.exist');
 
     // check if nota is visible when selected
     cy.clickReverseTab('Overzicht');
@@ -574,8 +575,8 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       .click()
       .wait('@patchNewsItem1');
     cy.clickReverseTab('Definitief');
-    cy.get(newsletter.itemContent.container).should('have.length', 2);
-    cy.get(newsletter.itemContent.title).eq(0)
+    cy.get(newsletter.newsletterPrint.container).should('have.length', 2);
+    cy.get(newsletter.newsletterPrint.title).eq(0)
       .contains(subcaseTitleNota);
 
     // check if mededeling is not visible when deselected in dossier
@@ -588,15 +589,15 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
 
     cy.visit(newsletterLink);
     cy.clickReverseTab('Definitief');
-    cy.get(newsletter.itemContent.container).should('have.length', 1);
-    cy.get(newsletter.itemContent.title).should('not.contain', subcaseTitleMededeling);
+    cy.get(newsletter.newsletterPrint.container).should('have.length', 1);
+    cy.get(newsletter.newsletterPrint.title).should('not.contain', subcaseTitleMededeling);
 
     // add mandatee and theme to nota, then check if shown/not shown correctly
     // visit link of mededeling, open nota (less agenda loading)
     cy.visitAgendaWithLink(agendaLinkNota);
     cy.addAgendaitemMandatee(0);
     cy.openAgendaitemKortBestekTab(subcaseTitleNota);
-    cy.intercept('GET', '/themes').as('getThemes_2');
+    cy.intercept('GET', '/themes**').as('getThemes_2');
     cy.get(newsletter.newsItem.edit).click();
     cy.wait('@getThemes_2');
     cy.get(newsletter.editItem.themesSelector).contains(theme2)
@@ -607,17 +608,17 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
 
     cy.visit(newsletterLink);
     cy.clickReverseTab('Definitief');
-    cy.get(newsletter.itemContent.title).contains(subcaseTitleNota);
-    cy.get(newsletter.itemContent.printItemProposal).contains(proposalTextNota);
-    cy.get(newsletter.itemContent.theme).contains(theme2);
-    cy.get(newsletter.itemContent.richtext).contains(richtextNota);
-    cy.get(newsletter.itemContent.remark).should('not.exist');
+    cy.get(newsletter.newsletterPrint.title).contains(subcaseTitleNota);
+    cy.get(newsletter.newsletterPrint.printItemProposal).contains(proposalTextNota);
+    cy.get(newsletter.newsletterPrint.theme).contains(theme2);
+    cy.get(newsletter.newsletterPrint.richtext).contains(richtextNota);
+    cy.get(newsletter.newsletterPrint.remark).should('not.exist');
   });
 
   // RDFA tests can be flaky locally when having dev tools open or when running in background (not in focus)
   it('should test the rdfa editor', () => {
     cy.visit('/vergadering/5EBA94D7751CF70008000001/kort-bestek');
-    cy.intercept('GET', '/themes').as('getThemes');
+    cy.intercept('GET', '/themes**').as('getThemes');
     cy.get(newsletter.buttonToolbar.edit).eq(0)
       .click();
     cy.wait('@getThemes');

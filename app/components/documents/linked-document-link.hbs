@@ -8,7 +8,7 @@
           </Group.Item>
           <Group.Item class="auk-u-maximize-width">
             <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
-              <span data-test-linked-document-link-type-label class="auk-overline">
+              <span class="auk-overline">
                 {{@documentContainer.type.label}}
               </span>
             </div>
@@ -63,10 +63,7 @@
     {{#if this.reverseSortedPieceHistory.length}}
       <div class="vlc-document-card-versions">
         <Auk::Accordion>
-          <Auk::Accordion::Item
-            @title={{t "previous-versions"}}
-            data-test-linked-document-link-version-history
-          >
+          <Auk::Accordion::Item @title={{t "previous-versions"}}>
             {{#each this.reverseSortedPieceHistory as |piece|}}
               <div
                 class="vlc-document-holder"

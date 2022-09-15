@@ -6,7 +6,7 @@
     {{@agendaitem.number}}
   </td>
   <td
-    data-test-table-row-newsletter-row-title
+    data-test-table-row-newsletter-row-title-content
     class="lt-cell align-left auk-table__col--7"
   >
     {{#if @newsletterItem}}
@@ -16,7 +16,9 @@
         </p>
       </div>
       <div class="auk-u-mb-2">
-        <SanitizeHtml @raw={{true}} @value={{@newsletterItem.richtext}} />
+        <AuContent>
+          <SanitizeHtml @raw={{true}} @value={{@newsletterItem.richtext}} />
+        </AuContent>
       </div>
       {{#if @newsletterItem.remark}}
         <p class="auk-u-text-muted auk-u-text-capitalize auk-u-text-size--small">

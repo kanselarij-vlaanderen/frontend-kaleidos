@@ -9,7 +9,7 @@
   <Toolbar.Group @position="right" as |Group|>
     {{#if this.model.pieces.length}}
       <Group.Item>
-        {{#if this.currentSession.isEditor}}
+        {{#if (user-may "manage-documents")}}
           <Auk::Button
             data-test-route-agenda---agendaitem-documents-batch-edit
             @icon="pencil"
@@ -17,10 +17,6 @@
             {{on "click" this.openBatchDetails}}
           >
             {{t "batch-edit"}}
-          </Auk::Button>
-        {{else}}
-          <Auk::Button {{on "click" this.openBatchDetails}}>
-            {{t "view-documents-details"}}
           </Auk::Button>
         {{/if}}
       </Group.Item>
@@ -45,7 +41,6 @@
       @highlightedPieces={{this.newAgendaitemPieces}}
       @onOpenUploadModal={{perform this.ensureFreshData}}
       @onAddPiece={{perform this.addPiece}}
-      @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
       @didDeleteContainer={{this.refresh}}
       @markForSignature={{this.markForSignature}}
       @unmarkForSignature={{this.unmarkForSignature}}
@@ -56,7 +51,7 @@
     </div>
   {{/if}}
 {{/unless}}
-{{#if this.currentSession.isEditor}}
+{{#if (user-may "manage-documents")}}
   <div class="auk-u-mb-4">
     <Auk::Button
       @skin="tertiary"
