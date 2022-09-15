@@ -32,6 +32,7 @@ $au-button-height: 3.4rem;
 :root {
   --au-outline: 0.3rem solid #{$auk-yellow-500};
 
+  --au-icon-size: 1.6rem;
   --au-icon-size-medium: 1.8rem;
   --au-icon-size-large: 2.2rem;
 }
@@ -174,6 +175,21 @@ $au-button-height: 3.4rem;
   em { // default text color in Kaleidos
     color: $auk-color-text;
   }
+}
+
+.au-c-button,
+.au-c-link {
+  vertical-align: middle;
+}
+
+.au-c-button--link,
+.au-c-button--tertiary,
+.au-c-link {
+  font-size: $au-button-font-size;
+}
+
+.au-c-icon {
+  bottom: 0;
 }
 
 // Fix icons in menu

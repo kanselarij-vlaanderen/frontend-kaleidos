@@ -152,3 +152,10 @@ table tr.lt-expanded-row {
     background-color: var(--au-gray-100);
   }
 }
+
+
+// Flex helpers
+
+.auk-o-flex__item--fix {
+  flex: 0 0 auto !important;
+}
