@@ -10,14 +10,14 @@ import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
 function checkDecisionPage(headerText) {
-  cy.get(agenda.agendaHeader.showOptions).click();
-  cy.get(agenda.agendaHeader.actions.navigateToDecisions).click();
+  cy.get(agenda.agendaActions.showOptions).click();
+  cy.get(agenda.agendaActions.navigateToDecisions).click();
   cy.get(utils.overviewsHeaderDecision.title).contains(headerText);
 }
 
 function checkNewsletterPage(headerText, newsletterTitle) {
-  cy.get(agenda.agendaHeader.showOptions).click();
-  cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
+  cy.get(agenda.agendaActions.showOptions).click();
+  cy.get(agenda.agendaActions.navigateToNewsletter).click();
   cy.get(newsletter.newsletterHeaderOverview.title).contains(headerText);
   cy.clickReverseTab('Klad');
   cy.get(newsletter.newsletterMeeting.title).contains(newsletterTitle);
@@ -132,7 +132,7 @@ context('Different session kinds should show different titles', () => {
     cy.createAgenda(null, agendaDate, null, agendaNumber);
     // set kind to PVV
     cy.get(route.agendas.action.newMeeting).click();
-    cy.get(agenda.editMeeting.kind).click();
+    cy.get(utils.kindSelector.kind).click();
     selectFromDropdown(vvKind);
     // select related main meeting
     cy.get(agenda.editMeeting.relatedMainMeeting).click();
@@ -145,13 +145,13 @@ context('Different session kinds should show different titles', () => {
     cy.wait('@createAgenda');
     // check if edit shows correct data
     cy.openAgendaForDate(agendaDate, 1);
-    cy.get(agenda.agendaHeader.showOptions).click();
-    cy.get(agenda.agendaHeader.actions.toggleEditingMeeting).click();
+    cy.get(agenda.agendaActions.showOptions).click();
+    cy.get(agenda.agendaActions.toggleEditingMeeting).click();
     cy.wait('@getDecisionPubActivity');
     cy.wait('@getDocPubActivity');
     cy.wait('@getThemisPubActivity');
     cy.wait('@loadConcepts');
-    cy.get(utils.kindSelector).contains(vvKind);
+    cy.get(utils.kindSelector.kind).contains(vvKind);
     cy.get(agenda.editMeeting.numberRep.view).should('contain', fullmeetingNumberVV);
     cy.get(auk.modal.footer.cancel).click();
 
