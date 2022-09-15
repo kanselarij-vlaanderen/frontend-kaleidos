@@ -62,7 +62,7 @@ context('Testing the application as Kort bestek user', () => {
     cy.url().should('include', '/kort-bestek');
   });
 
-  it.only('Should have limited options in the agenda actions', () => {
+  it('Should have limited options in the agenda actions', () => {
     cy.visitAgendaWithLink('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten');
 
     cy.get(agenda.agendaActions.showOptions).click();
