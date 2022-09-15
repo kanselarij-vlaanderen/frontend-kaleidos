@@ -53,8 +53,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   }
 
   async reassignNumbersForAgendaitems() {
-    const isEditor = this.currentSession.isEditor;
-    await reorderAgendaitemsOnAgenda(this.agenda, isEditor);
+    await reorderAgendaitemsOnAgenda(this.agenda, this.currentSession.may('manage-agendaitems'));
   }
 
   @action

@@ -9,7 +9,6 @@ import { inject } from '@ember/service';
 export default Component.extend({
   classNames: ['auk-u-bg-alt'],
   router: inject(),
-  currentSession: inject(),
   title: null,
   routeModelPrefix: null,
   modelsForHierarchicalBack: null,

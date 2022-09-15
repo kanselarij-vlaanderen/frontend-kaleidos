@@ -15,19 +15,19 @@
       </tr>
     </thead>
     <tbody>
-      {{#each this.model as |mandatee index|}}
+      {{#each this.model as |mandatee|}}
         <tr>
-          <td data-test-route-settings-ministers-mandatee-full-display-name={{index}} class="mandatee-draggable-row">
+          <td class="mandatee-draggable-row">
             {{#if (is-pending mandatee.fullDisplayName)}}
               <div class="auk-skeleton auk-skeleton--rectangle" role="alert" aria-busy="true"></div>
             {{else}}
               {{await mandatee.fullDisplayName}}
             {{/if}}
           </td>
-          <td data-test-route-settings-ministers-mandatee-nickname={{index}} class="mandatee-draggable-row">
+          <td class="mandatee-draggable-row">
             {{mandatee.newsletterTitle}}
           </td>
-          <td data-test-route-settings-ministers-mandatee-priority={{index}} class="mandatee-draggable-row">
+          <td class="mandatee-draggable-row">
             {{mandatee.priority}}
           </td>
         </tr>

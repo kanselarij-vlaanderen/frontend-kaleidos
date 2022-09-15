@@ -5,7 +5,7 @@
       <table class="auk-table auk-table--styled auk-table--bordered">
         <thead>
           <tr>
-            {{#if this.isEditingEnabled}}
+            {{#if (user-may "manage-documents")}}
               <th class="auk-table-checkbox-col">
                 <Auk::Checkbox
                   @checked={{this.areAllSelected}}
@@ -15,7 +15,7 @@
             {{/if}}
             <th>{{t "document-name"}}</th>
             <th>{{t "document-type"}}</th>
-            {{#if this.isEditingEnabled}}
+            {{#if (user-may "manage-documents")}}
               <th>{{t "publicity"}}</th>
             {{else}}
               <th>{{t "file-type"}}</th>
@@ -24,7 +24,7 @@
           </tr>
         </thead>
         <tbody>
-          {{#if this.isEditingEnabled}}
+          {{#if (user-may "manage-documents")}}
             <Documents::BatchDetails::BatchEditingRow
               @selectedRows={{this.selectedRows}}
             />
@@ -32,7 +32,7 @@
           {{#each this.rows as |row|}}
             <Documents::BatchDetails::DocumentDetailsRow
               @row={{row}}
-              @isEditingEnabled={{this.isEditingEnabled}}
+              @isEditingEnabled={{user-may "manage-documents"}}
               @isSelected={{includes row this.selectedRows}}
               @onSelect={{this.toggleSelection}}
             />
@@ -42,7 +42,7 @@
     </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
-    {{#if this.isEditingEnabled}}
+    {{#if (user-may "manage-documents")}}
       <Auk::Button
         data-test-batch-documents-details-save
         @skin="primary"

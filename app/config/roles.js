@@ -28,11 +28,18 @@ const groupRoles = new Map();
 // - manage-document-publications: Publishing agenda-item related documents to other Kaleidos profiles
 // - manage-themis-publications: Publishing newsletter-info and related documents to Themis (general public).
 // - view-document-version-info: View info related to document versioning. Is this this a recent addition? Older versions, ...
+// - manage-meetings: Create and update meetings
+// - manage-agenda-versions: Create new agenda versions, close agenda versions, reopen old agenda versions, ...
+// - manage-agendaitems: Approve all agendaitems, add new agendaitems to an agenda, ...
+// - manage-decisions: Open the decisions print-overview of an agenda. TBD if this is a useful role
+// - manage-cases: Create and update cases
 
 groupRoles.set(ADMIN, [
   'manage-signatures',
   'manage-agenda-versions',
   'manage-agendaitems',
+  'manage-decisions',
+  'manage-cases',
   'manage-meetings',
   'manage-documents',
   'manage-document-access-levels',
@@ -50,6 +57,8 @@ groupRoles.set(KANSELARIJ, [
   'manage-signatures',
   'manage-agenda-versions',
   'manage-agendaitems',
+  'manage-decisions',
+  'manage-cases',
   'manage-meetings',
   'manage-documents',
   'manage-document-access-levels',

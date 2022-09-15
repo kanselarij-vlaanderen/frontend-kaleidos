@@ -8,7 +8,7 @@
   </Toolbar.Group>
   <Toolbar.Group @position="right" as |Group|>
     <Group.Item>
-      {{#if this.currentSession.isEditor}}
+      {{#if (user-may "manage-agendaitems")}}
         {{#if (not this.agenda.status.isFinal)}}
           <Agenda::Agendaitem::AgendaitemControls
             @agendaitem={{this.model}}
@@ -28,14 +28,14 @@
   @subcase={{this.subcase}}
   @agenda={{this.agenda}}
   @newsletterInfo={{this.newsletterInfo}}
-  @allowEditing={{this.currentSession.isEditor}}
+  @allowEditing={{user-may "manage-agendaitems"}}
 />
 {{#if (is-announcement @model.type)}}
   <Mandatees::MandateesPanel
     @referenceDate={{this.meeting.plannedStart}}
     @mandatees={{this.mandatees}}
     @submitter={{this.submitter}}
-    @allowEditing={{this.currentSession.isEditor}}
+    @allowEditing={{user-may "manage-agendaitems"}}
     @onSave={{this.saveMandateeData}}
   />
 {{else if this.subcase}}
@@ -43,12 +43,12 @@
     @referenceDate={{this.meeting.plannedStart}}
     @mandatees={{this.mandatees}}
     @submitter={{this.submitter}}
-    @allowEditing={{this.currentSession.isEditor}}
+    @allowEditing={{user-may "manage-agendaitems"}}
     @onSave={{this.saveMandateeData}}
   />
   <Utils::GovernmentAreas::GovernmentAreasPanel
     @governmentAreas={{this.subcase.governmentAreas}}
-    @allowEditing={{this.currentSession.isEditor}}
+    @allowEditing={{user-may "manage-agendaitems"}}
     @onSave={{this.saveGovernmentAreas}}
   />
 {{/if}}

@@ -7,7 +7,7 @@
           <hr />
         </div>
       </div>
-      {{#if this.currentSession.isEditor}}
+      {{#if (user-may "manage-cases")}}
         {{! TODO these classes do not exist and do nothing }}
         <div class="confidentialities">
           <div class="confidential">
@@ -22,7 +22,7 @@
       {{/if}}
       <Subcase::SubcaseTitlesPanel
         @subcase={{@model.subcase}}
-        @allowEditing={{this.currentSession.isEditor}}
+        @allowEditing={{user-may "manage-cases"}}
       />
       <Mandatees::MandateesPanel
         @referenceDate={{if
@@ -33,12 +33,12 @@
         @mandatees={{this.mandatees}}
         @submitter={{this.submitter}}
         @emptyStateMessage={{if this.showMandateesNotApplicableMessage (t "not-applicable")}}
-        @allowEditing={{this.currentSession.isEditor}}
+        @allowEditing={{user-may "manage-cases"}}
         @onSave={{this.saveMandateeData}}
       />
       <Utils::GovernmentAreas::GovernmentAreasPanel
         @governmentAreas={{@model.subcase.governmentAreas}}
-        @allowEditing={{this.currentSession.isEditor}}
+        @allowEditing={{user-may "manage-cases"}}
         @onSave={{this.saveGovernmentAreas}}
       />
       <Subcases::SubcasesHistory

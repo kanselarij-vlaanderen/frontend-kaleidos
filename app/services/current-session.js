@@ -6,7 +6,6 @@ import groupRoles from 'frontend-kaleidos/config/roles';
 
 const {
   ADMIN,
-  KANSELARIJ,
   OVRB,
   KORT_BESTEK,
   MINISTER,
@@ -86,17 +85,5 @@ export default class CurrentSessionService extends Service {
 
   get isOverheid() {
     return [OVERHEID].includes(this.groupUri);
-  }
-
-  get isPublic() {
-    return [ADMIN, KANSELARIJ, MINISTER, KABINET, OVERHEID, USER].includes(this.groupUri);
-  }
-
-  get isViewer() {
-    return [ADMIN, KANSELARIJ, MINISTER, KABINET, OVERHEID, KORT_BESTEK].includes(this.groupUri);
-  }
-
-  get isEditor() {
-    return [ADMIN, KANSELARIJ, KORT_BESTEK].includes(this.groupUri);
   }
 }

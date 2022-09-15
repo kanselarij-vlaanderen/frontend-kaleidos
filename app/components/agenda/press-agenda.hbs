@@ -37,7 +37,7 @@
                     {{agendaitem.titlePress}}
                   </h3>
                   {{#if (eq this.definite "false")}}
-                    {{#if this.currentSession.isEditor}}
+                    {{#if (user-may "manage-agendaitems")}}
                       <div class="auk-u-ml-2">
                         <Auk::ButtonLink
                           {{action "toggleIsEditing" agendaitem}}

@@ -1,4 +1,4 @@
-<Auk::Panel data-test-agendaitem-decision-container>
+<Auk::Panel>
   <Auk::Panel::Header @size="auto">
     <Auk::Toolbar @auto={{true}} as |Toolbar|>
       <Toolbar.Group @position="left" as |Group|>
@@ -8,7 +8,7 @@
             <div class="auk-u-my-2">
               <Decision::DecisionResultPill
                 @decisionResultCode={{@decisionActivity.decisionResultCode}}
-                @isEditable={{this.currentSession.isEditor}}
+                @isEditable={{user-may "manage-decisions"}}
                 @onEdit={{this.toggleEdit}}
               />
             </div>
@@ -34,19 +34,17 @@
           @didDeleteContainer={{perform this.loadReport}}
           @bordered={{false}}
         />
-      {{else}}
-        {{#if this.currentSession.isEditor}}
-          <div class="auk-u-p-2">
-            <Auk::Button
-              @skin="borderless"
-              @icon="upload"
-              {{on "click" this.toggleIsAddingReport}}
-              data-test-agendaitem-decision-upload-file
-            >
-              {{t "signed-decision-add"}}
-            </Auk::Button>
-          </div>
-        {{/if}}
+      {{else if (user-may "manage-decisions")}}
+        <div class="auk-u-p-2">
+          <Auk::Button
+            @skin="borderless"
+            @icon="upload"
+            {{on "click" this.toggleIsAddingReport}}
+            data-test-agendaitem-decision-upload-file
+          >
+            {{t "signed-decision-add"}}
+          </Auk::Button>
+        </div>
       {{/if}}
     {{else}}
       <Auk::Loader />

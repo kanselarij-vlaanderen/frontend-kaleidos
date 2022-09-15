@@ -8,10 +8,7 @@ request the whole row and not only the arrow at the end to be clickable }}
 >
   {{! template-lint-enable no-invalid-interactive }}
   {{#if @tableColumnDisplayOptions.isUrgent}}
-    <td
-      data-test-publication-table-row-is-urgent
-      class="auk-u-text-align--center"
-    >
+    <td class="auk-u-text-align--center">
       {{#if @publicationFlow.urgencyLevel.isUrgent}}
         <Auk::Icon @skin="warning" @name="alert-triangle" />
       {{else}}
@@ -29,7 +26,7 @@ request the whole row and not only the arrow at the end to be clickable }}
     </td>
   {{/if}}
   {{#if @tableColumnDisplayOptions.numacNumber}}
-    <td data-test-publication-table-row-numac-number>
+    <td>
       {{#if @publicationFlow.numacNumbers.length}}
         {{join ", " (map-by "idName" @publicationFlow.numacNumbers)}}
       {{else}}
@@ -51,7 +48,7 @@ request the whole row and not only the arrow at the end to be clickable }}
     </td>
   {{/if}}
   {{#if @tableColumnDisplayOptions.remark}}
-    <td data-test-publication-table-row-remark class="auk-u-text-align--center">
+    <td class="auk-u-text-align--center">
       {{#if @publicationFlow.remark}}
         <Auk::ButtonLink
           @layout="icon-only"
@@ -64,7 +61,7 @@ request the whole row and not only the arrow at the end to be clickable }}
               @tooltipClass="auk-tooltip"
               @side="left"
             >
-              <p data-test-publication-table-row-remark-tooltip>
+              <p>
                 {{@publicationFlow.remark}}
               </p>
             </EmberTooltip>
@@ -94,7 +91,7 @@ request the whole row and not only the arrow at the end to be clickable }}
     </td>
   {{/if}}
   {{#if @tableColumnDisplayOptions.openingDate}}
-    <td data-test-publication-table-row-opening-date class="auk-u-text-nowrap">
+    <td class="auk-u-text-nowrap">
       {{#if @publicationFlow.openingDate}}
         {{moment-format @publicationFlow.openingDate}}
       {{else}}
@@ -160,10 +157,7 @@ request the whole row and not only the arrow at the end to be clickable }}
     </td>
   {{/if}}
   {{#if @tableColumnDisplayOptions.proofPrintCorrector}}
-    <td
-      data-test-publication-table-row-proof-print-corrector
-      class="auk-u-text-nowrap"
-    >
+    <td class="auk-u-text-nowrap">
       {{#if @publicationFlow.publicationSubcase.proofPrintCorrector}}
         <Auk::Avatar @icon="user" @size="small">
           <p>{{@publicationFlow.publicationSubcase.proofPrintCorrector}}</p>
@@ -198,10 +192,7 @@ request the whole row and not only the arrow at the end to be clickable }}
     </td>
   {{/if}}
   {{#if @tableColumnDisplayOptions.publicationDate}}
-    <td
-      data-test-publication-table-row-publication-date
-      class="auk-u-text-nowrap"
-    >
+    <td class="auk-u-text-nowrap">
       {{#if this.loadData.isRunning}}
         ...
       {{else}}
@@ -214,10 +205,7 @@ request the whole row and not only the arrow at the end to be clickable }}
     </td>
   {{/if}}
   {{#if @tableColumnDisplayOptions.publicationDueDate}}
-    <td
-      data-test-publication-table-row-publication-due-date
-      class="auk-u-text-nowrap"
-    >
+    <td class="auk-u-text-nowrap">
       {{#if @publicationFlow.publicationSubcase.dueDate}}
         <div>
           {{moment-format @publicationFlow.publicationSubcase.dueDate}}
@@ -228,10 +216,7 @@ request the whole row and not only the arrow at the end to be clickable }}
     </td>
   {{/if}}
   {{#if @tableColumnDisplayOptions.regulationType}}
-    <td
-      data-test-publication-table-row-regulation-type
-      class="auk-u-text-nowrap"
-    >
+    <td class="auk-u-text-nowrap">
       {{#if @publicationFlow.regulationType.abbreviation}}
         {{@publicationFlow.regulationType.abbreviation}}
       {{else if @publicationFlow.regulationType}}

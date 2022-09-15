@@ -24,7 +24,7 @@
           <Auk::Tab @route="cases" data-test-m-header-cases>
             {{t "cases"}}
           </Auk::Tab>
-          {{#if this.currentSession.isViewer}}
+          {{#if (user-may "manage-newsletter-infos")}}
             <Auk::Tab
               @route="newsletters"
               @current-when="newsletters newsletter print-overviews.newsletter"
