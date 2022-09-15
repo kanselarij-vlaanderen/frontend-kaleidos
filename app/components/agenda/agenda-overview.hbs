@@ -19,26 +19,27 @@
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
-        <Auk::ButtonLink
-          data-test-agenda-overview-show-changes={{true}}
-          {{on "click" @toggleShowModifiedOnly}}
-        >
-          {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
-        </Auk::ButtonLink>
-      </Auk::Toolbar::Item>
-      <Auk::Toolbar::Item>
-        {{#if this.canEdit}}
-          {{#unless this.isEditingOverview}}
-            <div class="auk-u-ml-2">
-              <Auk::ButtonLink
+        <AuButtonGroup>
+          <AuButton
+            @skin="naked"
+            data-test-agenda-overview-show-changes={{true}}
+            {{on "click" @toggleShowModifiedOnly}}
+          >
+            {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
+          </AuButton>
+          {{#if this.canEdit}}
+            {{#unless this.isEditingOverview}}
+              <AuButton
+                @skin="naked"
+                @icon="pencil"
                 data-test-agenda-overview-formally-ok-edit={{true}}
                 {{on "click" this.toggleIsEditingOverview}}
               >
                 {{t "edit"}}
-              </Auk::ButtonLink>
-            </div>
-          {{/unless}}
-        {{/if}}
+              </AuButton>
+            {{/unless}}
+          {{/if}}
+        </AuButtonGroup>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>

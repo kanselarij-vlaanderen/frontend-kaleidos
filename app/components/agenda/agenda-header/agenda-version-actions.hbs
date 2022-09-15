@@ -123,14 +123,15 @@
       </Utils::LoadableContent>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelApproveAgenda}}>
-      <Auk::Button
+      <AuButton
         data-test-agenda-version-actions-approve-agenda-confirm
-        @skin={{if (await this.canBeApproved) "primary" "danger-primary"}}
+        @skin="primary"
+        @alert={{not (await (this.canBeApproved))}}
         @disabled={{this.reloadAgendaitemsData.isRunning}}
         {{on "click" this.approveCurrentAgenda}}
       >
         {{t "approve"}}
-      </Auk::Button>
+      </AuButton>
     </Auk::Modal::Footer>
   </Auk::Modal>
 {{/if}}
@@ -189,14 +190,15 @@
       </Utils::LoadableContent>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelApproveAgendaAndCloseMeeting}}>
-      <Auk::Button
+      <AuButton
         data-test-agenda-version-actions-approve-and-close-agenda-confirm
-        @skin={{if (await (this.canBeApproved)) "primary" "danger-primary"}}
+        @skin="primary"
+        @alert={{not (await (this.canBeApproved))}}
         @disabled={{this.reloadAgendaitemsData.isRunning}}
         {{on "click" this.approveCurrentAgendaAndCloseMeeting}}
       >
         {{t "approve-and-close"}}
-      </Auk::Button>
+      </AuButton>
     </Auk::Modal::Footer>
   </Auk::Modal>
 {{/if}}
@@ -223,17 +225,14 @@
       </div>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelCloseMeeting}}>
-      <Auk::Button
+      <AuButton
         data-test-agenda-version-actions-lock-agenda-confirm
-        @skin={{if
-          (await this.latestAgenda.status.isDesignAgenda)
-          "danger-primary"
-          "primary"
-        }}
+        @skin="primary"
+        @alert={{await this.latestAgenda.status.isDesignAgenda}}
         {{on "click" this.closeMeeting}}
       >
         {{t "agenda-close"}}
-      </Auk::Button>
+      </AuButton>
     </Auk::Modal::Footer>
   </Auk::Modal>
 {{/if}}
@@ -255,13 +254,14 @@
       </div>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelDeleteSelectedAgenda}}>
-      <Auk::Button
+      <AuButton
         data-test-agenda-version-actions-delete-agenda-confirm
-        @skin="danger-primary"
+        @skin="primary"
+        @alert={{true}}
         {{on "click" this.deleteSelectedAgenda}}
       >
         {{t "agenda-delete"}}
-      </Auk::Button>
+      </AuButton>
     </Auk::Modal::Footer>
   </Auk::Modal>
 {{/if}}
@@ -342,9 +342,10 @@
       </Utils::LoadableContent>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelReopenPreviousAgenda}}>
-      <Auk::Button
+      <AuButton
         data-test-agenda-version-actions-reopen-previous-version-confirm
-        @skin="danger-primary"
+        @skin="primary"
+        @alert={{true}}
         @disabled={{this.loadPiecesToDelete.isRunning}}
         {{on "click" this.reopenPreviousAgenda}}
       >
@@ -353,7 +354,7 @@
         {{else}}
           {{t "agenda-reopen-previous-version"}}
         {{/if}}
-      </Auk::Button>
+      </AuButton>
     </Auk::Modal::Footer>
   </Auk::Modal>
 {{/if}}

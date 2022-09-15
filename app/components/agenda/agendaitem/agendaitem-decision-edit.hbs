@@ -8,27 +8,25 @@
     @selected={{this.decisionActivity.decisionResultCode}}
     @onChange={{this.changeDecisionResultCode}}
   />
-  <Auk::Button
-    @skin="tertiary"
-    @layout="icon-only"
-    @icon="check"
-    @size="xsmall"
-    @loading={{this.saveDecisionActivity.isRunning}}
-    {{on "click" (perform this.saveDecisionActivity)}}
+  <AuButton
     class="auk-u-ml"
     data-test-agendaitem-decision-edit-save
+    @skin="naked"
+    @icon="check"
+    @hideText={{true}}
+    @loading={{this.saveDecisionActivity.isRunning}}
+    {{on "click" (perform this.saveDecisionActivity)}}
   >
     {{t "save"}}
-  </Auk::Button>
-  <Auk::Button
-    @skin="tertiary"
-    @layout="icon-only"
-    @icon="x"
-    @size="xsmall"
-    {{on "click" this.cancelEdit}}
-    class="auk-u-ml"
+  </AuButton>
+  <AuButton
     data-test-access-level-pill-cancel
+    @skin="naked"
+    @icon="x"
+    @hideText={{true}}
+    @loading={{this.saveDecisionActivity.isRunning}}
+    {{on "click" this.cancelEdit}}
   >
     {{t "cancel"}}
-  </Auk::Button>
+  </AuButton>
 </div>

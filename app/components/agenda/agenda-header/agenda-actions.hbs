@@ -145,14 +145,14 @@
       </Utils::LoadableContent>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelApproveAllAgendaitems}}>
-      <Auk::Button
+      <AuButton
         data-test-agenda-actions-approve-all-agendaitems-confirm
         @skin="primary"
         @disabled={{this.reloadAgendaitemsData.isRunning}}
         {{on "click" this.approveAllAgendaitems}}
       >
         {{t "approve"}}
-      </Auk::Button>
+      </AuButton>
     </Auk::Modal::Footer>
   </Auk::Modal>
 {{/if}}
@@ -167,13 +167,13 @@
       <p>{{t "release-decisions-message"}}</p>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelPublishDecisions}}>
-      <Auk::Button
+      <AuButton
         data-test-agenda-actions-release-decisions-confirm
         @skin="primary"
         {{on "click" this.publishDecisions}}
       >
         {{t "release-to-public"}}
-      </Auk::Button>
+      </AuButton>
     </Auk::Modal::Footer>
   </Auk::Modal>
 {{/if}}

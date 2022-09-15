@@ -8,7 +8,6 @@ import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-uti
 // TODO: octane-refactor
 // eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
-  classNames: ['auk-box'],
   isTableRow: false,
   store: inject(),
   // TODO: octane-refactor

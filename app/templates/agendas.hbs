@@ -32,14 +32,14 @@
       </Group.Item>
       {{#if (user-may "manage-meetings")}}
         <Group.Item>
-          <Auk::Button
+          <AuButton
             @skin="primary"
             @icon="plus"
             data-test-route-agendas-new-meeting
             {{on "click" this.openNewSessionModal}}
           >
             {{t "new-agenda"}}
-          </Auk::Button>
+          </AuButton>
         </Group.Item>
       {{/if}}
     </Toolbar.Group>
