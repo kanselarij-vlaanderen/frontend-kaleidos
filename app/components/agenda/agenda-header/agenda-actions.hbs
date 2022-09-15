@@ -31,6 +31,7 @@
     {{t "print-newsletter"}}
   </Menu.Item>
   <Menu.Item
+    data-test-agenda-actions-printable-press-agenda
     @route="print-overviews.press-agenda.agendaitems"
     @models={{array @meeting.id @currentAgenda.id}}
   >
@@ -54,6 +55,7 @@
     </Menu.Item>
   {{/if}}
   <Menu.Item
+    data-test-agenda-actions-download-documents
     {{on "click" this.downloadAllDocuments}}
   >
     {{t "download-documents"}}
