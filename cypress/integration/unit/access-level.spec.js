@@ -41,7 +41,7 @@ function setPreviousVersionAccesLevel(docName, previousVersionName, accesLevel, 
   cy.get(auk.loader).should('not.exist');
 }
 
-function checkPreviousVersionAccesLevel(docName, previousVersionName, accesLevel, openSidebar = false) {
+function checkPreviousVersionAccesLevel(docName, previousVersionName, accesLevel) {
   // Open correct versionHistory
   cy.get(document.documentCard.name.value).contains(docName)
     .parents(document.documentCard.card)
@@ -50,17 +50,14 @@ function checkPreviousVersionAccesLevel(docName, previousVersionName, accesLevel
     .find(auk.accordion.header.button)
     .click();
 
-  // go to viewer and check accesLevel
+  // check accesLevel in history view
   cy.get(document.vlDocument.name).contains(previousVersionName)
-    .invoke('removeAttr', 'target')
+    .parents(document.vlDocument.piece)
+    .find(document.accessLevelPill.pill)
+    .contains(accesLevel);
+  cy.get('@currentDoc').find(document.documentCard.versionHistory)
+    .find(auk.accordion.header.button)
     .click();
-  if (openSidebar) {
-    cy.get(document.documentPreviewSidebar.open).click();
-  }
-  cy.get(document.accessLevelPill.pill).contains(accesLevel);
-
-  cy.go('back');
-  cy.get(auk.loader).should('not.exist');
 }
 
 context('Decision tests', () => {
@@ -107,7 +104,7 @@ context('Decision tests', () => {
       .wait('@patchAgendaitems');
     cy.wait(2000);
 
-    checkPreviousVersionAccesLevel('bestaandePublicatieBIS.pdf', 'bestaandePublicatie.pdf', 'Intern Regering', true);
+    checkPreviousVersionAccesLevel('bestaandePublicatieBIS.pdf', 'bestaandePublicatie', 'Intern Regering');
   });
 
   it('should change the access level on a BIS/TER and check if underlying acces level changes correctly', () => {
@@ -192,7 +189,7 @@ context('Decision tests', () => {
       .click();
     cy.get(document.accessLevelPill.save).click();
     cy.get(auk.loader).should('not.exist');
-    checkPreviousVersionAccesLevel('publicatieMBBIS.pdf', 'publicatieMB.pdf', 'Intern Regering');
+    checkPreviousVersionAccesLevel('publicatieMBBIS.pdf', 'publicatieMB', 'Intern Regering');
 
     cy.get('@firstCard').find(document.accessLevelPill.edit)
       .eq(0)
@@ -204,7 +201,7 @@ context('Decision tests', () => {
     cy.get(document.accessLevelPill.save).click();
     cy.get(auk.loader).should('not.exist');
     checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreetBIS', 'Intern Regering');
-    checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreet', 'Intern Regering');
+    checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreet.pdf', 'Intern Regering');
 
     // change access level on BatchDocumentsDetailsModal on single document
     cy.get(route.agendaitemDocuments.batchEdit).click();
@@ -219,7 +216,7 @@ context('Decision tests', () => {
       .wait('@getDocumentContainers1');
 
     checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreetBIS', 'Ministerraad');
-    checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreet', 'Ministerraad');
+    checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreet.pdf', 'Ministerraad');
 
     // change access level on BatchDocumentEdit on multiple documents
     cy.get(route.agendaitemDocuments.batchEdit).click();
@@ -244,8 +241,8 @@ context('Decision tests', () => {
       .wait('@getDocumentContainers2');
 
     checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreetBIS', 'Intern Secretarie');
-    checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreet', 'Intern Secretarie');
-    checkPreviousVersionAccesLevel('publicatieMBBIS.pdf', 'publicatieMB.pdf', 'Intern Secretarie');
+    checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreet.pdf', 'Intern Secretarie');
+    checkPreviousVersionAccesLevel('publicatieMBBIS', 'publicatieMB', 'Intern Secretarie');
 
     // change access level to a lower one and check that there are no changes to underlying level
     cy.get('@secondCard').find(document.accessLevelPill.edit)
@@ -257,6 +254,6 @@ context('Decision tests', () => {
       .click();
     cy.get(document.accessLevelPill.save).click();
     cy.get(auk.loader).should('not.exist');
-    checkPreviousVersionAccesLevel('publicatieMBBIS.pdf', 'publicatieMB.pdf', 'Intern Secretarie');
+    checkPreviousVersionAccesLevel('publicatieMBBIS', 'publicatieMB', 'Intern Secretarie');
   });
 });
