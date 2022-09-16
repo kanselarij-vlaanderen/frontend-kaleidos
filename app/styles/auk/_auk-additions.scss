@@ -159,3 +159,29 @@ table tr.lt-expanded-row {
 .auk-o-flex__item--fix {
   flex: 0 0 auto !important;
 }
+
+
+// File uploader
+
+.auk-file-upload input[type="file"] {
+  &:hover,
+  &:focus,
+  &:active {
+    &:not([disabled]) ~ .auk-file-upload__content {
+      .auk-file-upload__action-button {
+        box-shadow: none;
+
+        color: $au-button-secondary-hover-color;
+        background-color: transparent;
+        border-color: $au-button-secondary-hover-color;
+      }
+    }
+  }
+}
+
+
+// Accordion panel
+
+.auk-accordion-panel__title-container {
+  padding: 0;
+}

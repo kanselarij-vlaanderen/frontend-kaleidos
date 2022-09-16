@@ -25,6 +25,7 @@ $au-button-height: 3.4rem;
 @import 'ember-appuniversum/c-modal';
 @import 'ember-appuniversum/c-toolbar';
 @import 'ember-appuniversum/c-input';
+@import 'ember-appuniversum/c-loader';
 
 
 // CSS variables (to override)
@@ -57,7 +58,8 @@ $au-button-height: 3.4rem;
   cursor: pointer;
 }
 
-.au-c-button--link { // change button link to Kaleidos style
+.au-c-button--link,
+.au-c-button--link-secondary { // change button link to Kaleidos style
   text-decoration: none;
   font-weight: 500;
 
