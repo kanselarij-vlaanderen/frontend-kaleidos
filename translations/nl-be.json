@@ -1072,5 +1072,10 @@
   "newsletters-tabs-overview": "Alle berichten",
   "source-file-lowercase": "bronbestand",
   "word-document": "Word document",
-  "as": "als"
+  "as": "als",
+  "redo": "Opnieuw doen",
+  "minimize": "Minimaliseren",
+  "maximize": "Maximaliseren",
+  "show": "Weergeven",
+  "hide": "Verbergen"
 }

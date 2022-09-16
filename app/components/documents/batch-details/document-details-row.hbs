@@ -54,29 +54,34 @@
   <td>
     <WebComponents::AuButtonToolbar>
       {{#if (not @isEditingEnabled)}}
-        <Auk::Button
-          @layout="icon-only"
+        <AuButton
+          @skin="naked"
           @icon="book"
-          @skin="borderless"
+          @hideText={{true}}
           @href={{@row.piece.viewDocumentURL}}
           target="_blank"
         />
       {{else if @row.isToBeDeleted}}
-        <Auk::Button
+        <AuButton
           data-test-document-details-row-undo-delete
-          @icon="redo"
-          @layout="icon-only"
-          @skin="borderless"
+          @skin="naked"
+          @icon="undo"
+          @hideText={{true}}
           {{on "click" (fn @row.setToBeDeleted false)}}
-        />
+        >
+          {{t "undo"}}
+        </AuButton>
       {{else}}
-        <Auk::Button
+        <AuButton
           data-test-document-details-row-delete
+          @skin="naked"
+          @alert={{true}}
           @icon="trash"
-          @layout="icon-only"
-          @skin="danger-borderless"
+          @hideText={{true}}
           {{on "click" (fn @row.setToBeDeleted true)}}
-        />
+        >
+          {{t "delete"}}
+        </AuButton>
       {{/if}}
     </WebComponents::AuButtonToolbar>
   </td>

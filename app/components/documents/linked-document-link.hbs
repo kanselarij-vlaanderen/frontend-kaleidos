@@ -45,12 +45,15 @@
           </Group.Item>
           <Group.Item>
             {{#if (user-may "manage-documents")}}
-              <Auk::Button
-                @skin="danger-borderless"
-                @layout="icon-only"
+              <AuButton
+                @skin="naked"
+                @alert={{true}}
                 @icon="link-broken"
+                @hideText={{true}}
                 {{on "click" this.deletePieceLink}}
-              />
+              >
+                {{t "delete"}}
+              </AuButton>
             {{/if}}
           </Group.Item>
         </Toolbar.Group>

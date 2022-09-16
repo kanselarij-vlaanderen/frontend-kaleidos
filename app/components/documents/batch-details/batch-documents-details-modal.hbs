@@ -43,7 +43,7 @@
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
     {{#if (user-may "manage-documents")}}
-      <Auk::Button
+      <AuButton
         data-test-batch-documents-details-save
         @skin="primary"
         @disabled={{this.isSaveDisabled}}
@@ -51,7 +51,7 @@
         {{on "click" (perform this.save)}}
       >
         {{t "save"}}
-      </Auk::Button>
+      </AuButton>
     {{/if}}
   </Auk::Modal::Footer>
 </Auk::Modal>

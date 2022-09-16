@@ -18,7 +18,13 @@
   </div>
 
   {{#if (or @code @snippet)}}
-    <Auk::ButtonLink @skin="muted" class="br-styleguide-sample-show-code-btn" {{on "click" this.toggleVisibility}}>Toggle code</Auk::ButtonLink>
+    <AuButton
+      class="br-styleguide-sample-show-code-btn"
+      @skin="link-secondary"
+      {{on "click" this.toggleVisibility}}
+    >
+      Toggle code
+    </AuButton>
   {{/if}}
 
   {{#unless this.visibility}}

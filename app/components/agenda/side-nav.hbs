@@ -22,7 +22,11 @@
             @hideText={{true}}
             {{on "click" (if @isOpen @onCollapse @onOpen)}}
           >
-            {{t "toggle"}}
+            {{#if @isOpen}}
+              {{t "hide"}}
+            {{else}}
+              {{t "show"}}
+            {{/if}}
           </AuButton>
         </Group.Item>
       </Toolbar.Group>

@@ -74,19 +74,19 @@
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
-            <Auk::Button
+            <AuButton
               data-test-details-tab-cancel
-              @skin="borderless"
+              @skin="naked"
               @disabled={{this.isProcessing}}
               {{on "click" (perform this.cancelEditDetails)}}
             >
               {{t "cancel"}}
-            </Auk::Button>
+            </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <Auk::Button
+            <AuButton
               data-test-details-tab-save
               @skin="primary"
               @disabled={{this.isProcessing}}
@@ -94,7 +94,7 @@
               {{on "click" (perform this.saveDetails)}}
             >
               {{t "save"}}
-            </Auk::Button>
+            </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
