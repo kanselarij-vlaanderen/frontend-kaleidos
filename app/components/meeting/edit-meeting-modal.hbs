@@ -44,26 +44,26 @@
           />
         </div>
       </div>
-      {{!Publicatiedatum}}
-      <div class="auk-u-mb-2">
-        <div data-test-edit-meeting-document-publication-date class="auk-form-group">
-          <Auk::Label>
-            {{t "date-publication-documents"}}
-          </Auk::Label>
-          <Auk::Datepicker
-            @enableTime={{true}}
-            @date={{this.plannedDocumentPublicationDate}}
-            @onChange={{set this "plannedDocumentPublicationDate"}}
-            @disabled={{this.isDisabledPlannedDocumentPublicationDate}}
-          />
-          <Auk::FormHelpText
-            class="auk-u-mt"
-            @icon="circle-info"
-            @text={{t "agenda-publication--publication-date--help"}}
-          />
-        </div>
-      </div>
     {{/if}}
+    {{!Publicatiedatum}}
+    <div class="auk-u-mb-2">
+      <div data-test-edit-meeting-document-publication-date class="auk-form-group">
+        <Auk::Label>
+          {{t "date-publication-documents"}}
+        </Auk::Label>
+        <Auk::Datepicker
+          @enableTime={{true}}
+          @date={{this.plannedDocumentPublicationDate}}
+          @onChange={{set this "plannedDocumentPublicationDate"}}
+          @disabled={{this.isDisabledPlannedDocumentPublicationDate}}
+        />
+        <Auk::FormHelpText
+          class="auk-u-mt"
+          @icon="circle-info"
+          @text={{t "agenda-publication--publication-date--help"}}
+        />
+      </div>
+    </div>
     <div class="auk-u-mb-2">
       <div class="auk-form-group">
         <Auk::Label>
