@@ -208,7 +208,7 @@ export default class MeetingEditMeetingComponent extends Component {
     this.numberRepresentation = `${mainMeeting.numberRepresentation}-${this.meetingKindPostfix}`;
     this.startDate = mainMeeting.plannedStart;
     if (!this.isDisabledPlannedDocumentPublicationDate) {
-      const nextBusinessDay = setMinutes(setHours(addBusinessDays(mainMeeting.startDate, 1), 14), 0);
+      const nextBusinessDay = setMinutes(setHours(addBusinessDays(this.startDate, 1), 14), 0);
       this.plannedDocumentPublicationDate = nextBusinessDay;
     }
     this.extraInfo = mainMeeting.extraInfo;
