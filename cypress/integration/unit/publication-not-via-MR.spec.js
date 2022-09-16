@@ -3,7 +3,6 @@
 // / <reference types="Cypress" />
 import dependency from '../../selectors/dependency.selectors';
 import publication from '../../selectors/publication.selectors';
-import utils from '../../selectors/utils.selectors';
 import route from '../../selectors/route.selectors';
 
 function selectFromDropdown(item) {
@@ -27,11 +26,11 @@ context('link publication not via MR to MR', () => {
   const agendaDetailLink = 'vergadering/62C5974E03A74CBB92D216A3/agenda/62C5974F03A74CBB92D216A4/agendapunten/62C5975303A74CBB92D216A7';
   // const subcaseShortTitle1 = 'Subcase for linking publication not via MR to MR linked - 1657116367';
   const subcaseShortTitle2 = 'Subcase for linking publication not via MR to MR unlinked - 1657116367';
-  const domain1 = {
-    name: 'Cultuur, Jeugd, Sport en Media',
-    selected: true,
-    fields: ['Media'],
-  };
+  // const domain1 = {
+  //   name: 'Cultuur, Jeugd, Sport en Media',
+  //   selected: true,
+  //   fields: ['Media'],
+  // };
   // const file1 = {
   //   folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test for linking publication not via MR to MR - DOC1', fileType: 'Nota',
   // };
@@ -130,13 +129,16 @@ context('link publication not via MR to MR', () => {
     //   .eq(0)
     //   .find(publication.mandateesPanel.row.fullName)
     //   .should('contain', nameToCheck);
+
+    // Publications should no longer have government areas, as these are no
+    // longer part of a case (now they're on decisionmaking-flow).
     // check if publication inherited field
-    cy.get(utils.governmentAreasPanel.rows).as('listItems');
-    cy.get('@listItems').should('have.length', 1, {
-      timeout: 5000,
-    });
-    cy.get('@listItems').contains(domain1.name);
-    cy.get('@listItems').contains(domain1.fields[0]);
+    // cy.get(utils.governmentAreasPanel.rows).as('listItems');
+    // cy.get('@listItems').should('have.length', 1, {
+    //   timeout: 5000,
+    // });
+    // cy.get('@listItems').contains(domain1.name);
+    // cy.get('@listItems').contains(domain1.fields[0]);
     // check if document linked
     cy.intercept('GET', '/pieces?filter**publication-flow**').as('getPieces');
     cy.get(publication.publicationNav.decisions).click()

@@ -56,28 +56,36 @@ export default class PublicationService extends Service {
   ) {
     const now = new Date();
 
-    let case_;
+    let _case;
+    let governmentAreas;
     let decisionActivity;
     let mandatees;
     let regulationType;
     const isViaCouncilOfMinisters = !!viaCouncilOfMinisterOptions;
     if (isViaCouncilOfMinisters) {
-      case_ = viaCouncilOfMinisterOptions.case;
+      _case = viaCouncilOfMinisterOptions.case;
       decisionActivity = viaCouncilOfMinisterOptions.decisionActivity;
       mandatees = viaCouncilOfMinisterOptions.mandatees;
       regulationType = viaCouncilOfMinisterOptions.regulationType;
+
+      const latestSubcase = await this.store.queryOne('subcase', {
+        'filter[decisionmaking-flow][case][:id:]': _case.id,
+        sort: '-created',
+      });
+      governmentAreas = await latestSubcase.governmentAreas;
     } else {
-      case_ = this.store.createRecord('case', {
+      _case = this.store.createRecord('case', {
         shortTitle: publicationProperties.shortTitle,
         title: publicationProperties.longTitle,
         created: now,
       });
-      await case_.save();
+      await _case.save();
       decisionActivity = this.store.createRecord('decision-activity', {
         startDate: notViaCouncilOfMinistersOptions.decisionDate,
       });
       await decisionActivity.save();
       mandatees = [];
+      governmentAreas = [];
     }
 
     const initialStatus = await this.store.findRecordByUri(
@@ -116,7 +124,7 @@ export default class PublicationService extends Service {
 
     const publicationFlow = this.store.createRecord('publication-flow', {
       identification: identifier,
-      case: case_,
+      case: _case,
       decisionActivity: decisionActivity,
       mandatees: mandatees,
       status: initialStatus,
@@ -128,6 +136,7 @@ export default class PublicationService extends Service {
       modified: now,
       regulationType: regulationType,
       urgencyLevel: standardUrgencyLevel,
+      governmentAreas: governmentAreas,
     });
     await publicationFlow.save();
 
@@ -197,20 +206,9 @@ export default class PublicationService extends Service {
   }
 
   async getIsViaCouncilOfMinisters(publicationFlow) {
-    // Not using the query below since a bug in mu-cache/mu-cl-resources
-    // doesn't invalidate the cache entry when a publication gets linked
-    // to an agendaitem. As a workaround querying via agenda-item-treatment id
-    // for now.
-
-    // const agendaitem = await this.store.queryOne('agendaitem', {
-    //   'filter[treatment][decision-activity][publication-flows][:id:]': publicationFlow.id,
-    // });
-
-    const decisionActivity = await publicationFlow.decisionActivity;
-    const agendaitem = await this.store.queryOne('agendaitem', {
-      'filter[treatment][decision-activity][:id:]': decisionActivity.id
-    });
-    return agendaitem != null;
+    const _case = await publicationFlow.case;
+    const decisionmakingFlow = await _case.decisionmakingFlow;
+    return decisionmakingFlow != null;
   }
 
   async updatePublicationStatus(publicationFlow, targetStatusUri, changeDate) {

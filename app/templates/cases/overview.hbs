@@ -1,5 +1,5 @@
 {{page-title (t "cases")}}
-<Cases::CasesHeader @isAddingCase={{this.isAddingCase}} @close={{this.close}} />
+<Cases::CasesHeader @didCreateNewCase={{this.navigateToDecisionmakingFlow}} />
 <div class="auk-scroll-wrapper__body">
   <div class="auk-u-m-8">
     <Auk::Toolbar>
@@ -39,7 +39,7 @@
           <ThSortable
             class="auk-table__col--1"
             @currentSorting={{this.sort}}
-            @field="created"
+            @field="opened"
             @label={{t "created-on"}}
           />
           <th class="auk-table__col--1"></th>
@@ -47,22 +47,22 @@
         {{! Users explicitly want the whole row to be clickable instead of only the arrow at the end }}
         {{! template-lint-disable no-invalid-interactive }}
         <c.body class="auk-table--clickable-rows" as |row|>
-          <td {{on "click" (fn this.navigateToCase row)}}>
+          <td {{on "click" (fn this.navigateToDecisionmakingFlow row)}}>
             <p>
-              {{#if row.shortTitle}}
-                {{row.shortTitle}}
+              {{#if row.case.shortTitle}}
+                {{row.case.shortTitle}}
               {{else}}
-                {{row.title}}
+                {{row.case.title}}
               {{/if}}
             </p>
           </td>
-          <td {{on "click" (fn this.navigateToCase row)}}>
-            {{moment-format row.created "DD-MM-YYYY HH:mm"}}
+          <td {{on "click" (fn this.navigateToDecisionmakingFlow row)}}>
+            {{moment-format row.opened "DD-MM-YYYY HH:mm"}}
           </td>
           <td class="auk-u-text-align--right">
             {{#if (user-may "manage-cases")}}
               <Auk::DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
-                <Menu.Item {{on "click" (fn this.openEditCaseModal row)}}>
+                <Menu.Item {{on "click" (fn this.openEditCaseModal row.case)}}>
                   {{t "edit-case"}}
                 </Menu.Item>
                 <Menu.Item
@@ -70,15 +70,15 @@
                     "click"
                     (fn
                       (if
-                        row.isArchived
+                        row.case.isArchived
                         this.unarchiveCase
                         this.requestArchiveCase
                       )
-                      row
+                      row.case
                     )
                   }}
                 >
-                  {{t (if row.isArchived "unarchive-case" "archive-case")}}
+                  {{t (if row.case.isArchived "unarchive-case" "archive-case")}}
                 </Menu.Item>
               </Auk::DropdownMenu>
             {{/if}}

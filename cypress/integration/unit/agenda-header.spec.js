@@ -82,7 +82,7 @@ context('Agenda-Header actions tests', () => {
     // verify delete agenda A works
     cy.deleteAgenda(true);
     // verify subcase can be proposed for different agenda
-    cy.visit('/dossiers/5EB287A9F359DD0009000005/deeldossiers/5EB287BBF359DD0009000007/overzicht');
+    cy.visit('/dossiers/E14FB460-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/5EB287BBF359DD0009000007/overzicht');
     cy.get(cases.subcaseHeader.showProposedAgendas);
   });
 

@@ -77,12 +77,12 @@ context('Create case as Admin user', () => {
     cy.get(route.subcaseOverview.confidentialityCheckBox).should('be.checked');
   });
 
-  it('Een dossier maken zonder korte titel geeft een error', () => {
+  it('Een dossier maken zonder korte titel kan niet', () => {
     cy.visit('/dossiers');
 
     cy.get(cases.casesHeader.addCase).click();
-    cy.get(cases.newCase.save).click();
-    cy.get(cases.newCase.shorttitleError).should('be.visible')
-      .contains('Kijk het formulier na');
+    cy.get(cases.newCase.save).should('be.disabled');
+    cy.get(cases.newCase.shorttitle).type('Dossier X');
+    cy.get(cases.newCase.save).should('not.be.disabled');
   });
 });

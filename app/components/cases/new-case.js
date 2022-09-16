@@ -1,49 +1,40 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import moment from 'moment';
 import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
+import { task } from 'ember-concurrency';
+import { isBlank } from '@ember/utils';
 
+/**
+  * @argument didSave: action, passes down the newly created decisionmakingFlow
+  * @argument onCancel: action
+  */
 export default class NewCase extends Component {
-  title = null;
-  shortTitle = null;
   @service store;
-  @tracked hasError = false;
-  @tracked isLoading = false;
 
-  async createCase() {
-    const newDate = moment().utc().toDate();
-    const { shortTitle } = this;
-    const caze = this.store.createRecord('case', {
-      shortTitle,
+  @tracked shortTitle;
+
+  get isCreateDisabled() {
+    return isBlank(this.shortTitle);
+  }
+
+  get isLoading() {
+    return this.createCase.isRunning;
+  }
+
+  @task
+  *createCase() {
+    const now = new Date();
+    const _case = this.store.createRecord('case', {
+      shortTitle: this.shortTitle,
       isArchived: false,
-      created: newDate,
+      created: now,
     });
-    await caze.save();
-    this.isLoading = false;
-    return this.args.close(caze);
-  }
-
-  get getClassForShortTitle() {
-    if (this.hasError) {
-      return 'auk-form-group--error';
-    }
-    return null;
-  }
-
-  @action
-  async createCaseAction() {
-    const { shortTitle } = this;
-    if (shortTitle === null || shortTitle.trim().length === 0) {
-      this.hasError = true;
-    } else {
-      this.isLoading = true;
-      await this.createCase();
-    }
-  }
-
-  @action
-  closeAction() {
-    this.args.close();
+    yield _case.save();
+    const decisionmakingFlow = this.store.createRecord('decisionmaking-flow', {
+      case: _case,
+      opened: now,
+    });
+    yield decisionmakingFlow.save();
+    return this.args.didSave(decisionmakingFlow);
   }
 }

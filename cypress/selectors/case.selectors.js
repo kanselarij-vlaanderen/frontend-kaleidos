@@ -8,7 +8,7 @@ const selectors = {
   // new-case
   newCase: {
     shorttitle: '[data-test-new-case-shorttitle]',
-    shorttitleError: '[data-test-new-case-shorttitle-error]',
+    form: '[data-test-new-case-form]',
     cancel: '[data-test-new-case-cancel]',
     save: '[data-test-new-case-save]',
   },
