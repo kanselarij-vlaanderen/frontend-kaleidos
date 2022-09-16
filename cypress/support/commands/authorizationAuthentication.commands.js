@@ -42,7 +42,6 @@ function login(name, retries = 0) {
   cy.intercept('GET', '/concepts?filter**').as('loadConcepts');
   cy.visit('/overzicht?size=2').wait('@getCurrentSession')
     .then((responseBody) => {
-      console.log(responseBody);
       if (responseBody.error || responseBody.response?.statusCode === 400) {
         if (retries < 5) {
           cy.log('login failed, trying again');

@@ -51,8 +51,8 @@ export default class CasesNewSubcase extends Component {
   *loadLatestSubcase() {
     this.latestSubcase = yield this.store.queryOne('subcase', {
       filter: {
-        case: {
-          ':id:': this.args.case.id,
+        'decisionmaking-flow': {
+          ':id:': this.args.decisionmakingFlow.id,
         },
       },
       sort: '-created',
@@ -67,8 +67,9 @@ export default class CasesNewSubcase extends Component {
       this.shortTitle = this.latestSubcase.shortTitle;
       this.confidential = this.latestSubcase.confidential;
     } else {
-      this.title = this.args.case.title;
-      this.shortTitle = this.args.case.shortTitle;
+      const _case = yield this.args.decisionmakingFlow.case;
+      this.title = _case.title;
+      this.shortTitle = _case.shortTitle;
       this.confidential = false;
     }
   }
@@ -112,7 +113,7 @@ export default class CasesNewSubcase extends Component {
       title: trimText(this.title),
       confidential: this.confidential,
       agendaItemType: this.agendaItemType,
-      case: this.args.case,
+      decisionmakingFlow: this.args.decisionmakingFlow,
       created: date,
       modified: date,
       isArchived: false,
@@ -134,7 +135,7 @@ export default class CasesNewSubcase extends Component {
     // We save here in order to set the belongsTo relation between submission-activity and subcase
     await subcase.save();
     // reload the list of subcases on case, list is not updated automatically
-    await this.args.case.hasMany('subcases').reload();
+    await this.args.decisionmakingFlow.hasMany('subcases').reload();
 
     if (this.latestSubcase && fullCopy) {
       await this.copySubcaseSubmissions(subcase, piecesFromSubmissions);

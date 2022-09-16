@@ -24,7 +24,7 @@
                   @iconAlignment="right"
                   @disabled={{this.loadCase.isRunning}}
                   @route="cases.case.subcases.subcase.overview"
-                  @models={{array this.case.id @subcase.id}}
+                  @models={{array this.decisionmakingFlow.id @subcase.id}}
                 >
                   {{t "to-subcase"}}
                 </AuButton>

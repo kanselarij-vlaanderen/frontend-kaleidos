@@ -44,7 +44,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   @task
   *loadCase() {
     this.case = yield this.store.queryOne('case', {
-      'filter[subcases][agenda-activities][agendaitems][:id:]':
+      'filter[decisionmaking-flow][subcases][agenda-activities][agendaitems][:id:]':
         this.args.agendaitem.id,
     });
   }

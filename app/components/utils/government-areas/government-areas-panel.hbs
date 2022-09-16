@@ -10,7 +10,7 @@
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
-          {{#if @allowEditing}}
+          {{#if (and @allowEditing this.groupGovernmentFieldsByDomain.isIdle)}}
             <Auk::Toolbar::Item>
               <Auk::Button
                 data-test-government-areas-panel-edit

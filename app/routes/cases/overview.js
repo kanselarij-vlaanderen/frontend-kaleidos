@@ -23,15 +23,16 @@ export default class OverviewCaseRoute extends Route.extend(DataTableRouteMixin)
     },
   };
 
-  modelName = 'case';
+  modelName = 'decisionmaking-flow';
 
-  // eslint-disable-next-line class-methods-use-this
   mergeQueryOptions(params) {
+    const opts = {
+      include: 'case'
+    };
     if (!params.showArchived) {
-      return {
-        'filter[is-archived]': false,
-      };
+      opts['filter[case][is-archived]'] = false;
     }
+    return opts;
   }
 
   @action
