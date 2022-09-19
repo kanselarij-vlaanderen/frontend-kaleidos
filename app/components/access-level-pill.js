@@ -32,7 +32,7 @@ export default class AccessLevelPillComponent extends Component {
         case CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE:
           icon = 'users-single';
           break;
-        case CONSTANTS.ACCESS_LEVELS.MINISTERRAAD:
+        case CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK:
           icon = 'users-one-of-four';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
@@ -57,7 +57,7 @@ export default class AccessLevelPillComponent extends Component {
         case CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE:
           skin = 'warning';
           break;
-        case CONSTANTS.ACCESS_LEVELS.MINISTERRAAD:
+        case CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK:
           skin = 'warning';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
