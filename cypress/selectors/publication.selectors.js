@@ -7,6 +7,9 @@ const selectors = {
   // publications\index\template
   publicationsIndex: {
     title: '[data-test-route-publications-index-title]',
+    tabs: {
+      urgent: '[data-test-route-publications-index-tabs-urgent]',
+    },
     newPublication: '[data-test-route-publications-index-new-publication]',
     dataTable: '[data-test-route-publications-index-data-table]',
     loading: '[data-test-route-publications-index-loading]',
@@ -278,6 +281,7 @@ const selectors = {
     panel: '[data-test-translation-received-panel]',
     endDate: '[data-test-translation-received-panel-end-date]',
     dropdown: '[data-test-translation-received-panel-dropdown]',
+    proofRequest: '[data-test-translation-received-panel-proof-request]',
     edit: '[data-test-translation-received-panel-edit]',
   },
 

@@ -377,8 +377,10 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     const filename1 = 'Rij 1 test pdf';
     const accesLevelOption1 = 'Intern Regering';
     const accesLevelOption3 = 'Publiek';
+    const accesLevelOption4 = 'Ministerraad';
     const typeOption = 'IF';
     const typeOption2 = 'BVR';
+    const typeOption3 = 'VOD';
     const typeSearchOption = 'Advies AgO';
 
     // *Setup of this test:
@@ -500,5 +502,58 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .parents(document.documentCard.card)
       .find(document.documentCard.type)
       .contains(typeSearchOption);
+
+    // use top row to edit multiple rows at once
+    openAgendaitemDocumentBatchEdit();
+    cy.get(document.batchDocumentsDetails.selectAll).parent()
+      .click();
+    cy.get(document.batchEditingRow.type)
+      .click();
+    cy.get(dependency.emberPowerSelect.option).contains(typeOption3)
+      .click();
+
+    cy.get(document.documentDetailsRow.row).eq(0)
+      .find(document.documentDetailsRow.type)
+      .contains(typeOption3);
+    cy.get(document.documentDetailsRow.row).eq(1)
+      .find(document.documentDetailsRow.type)
+      .contains(typeOption3);
+
+    cy.get(document.batchEditingRow.accesLevel)
+      .click();
+    cy.get(dependency.emberPowerSelect.option).contains(accesLevelOption4)
+      .click();
+
+    cy.get(document.documentDetailsRow.row).eq(0)
+      .find(document.documentDetailsRow.accessLevel)
+      .contains(accesLevelOption4);
+    cy.get(document.documentDetailsRow.row).eq(1)
+      .find(document.documentDetailsRow.accessLevel)
+      .contains(accesLevelOption4);
+
+    cy.intercept('PATCH', '/pieces/**').as('patchPieces5');
+    cy.intercept('PATCH', '/document-containers/**').as('patchdocumentContainers5');
+    cy.intercept('GET', '/pieces**').as('getPieces5');
+    cy.get(document.batchDocumentsDetails.save).click();
+    cy.wait('@patchPieces5');
+    cy.wait('@patchdocumentContainers5');
+    cy.wait('@getPieces5');
+    cy.get(document.documentCard.name.value).contains(filename1)
+      .parents(document.documentCard.card)
+      .find(document.documentCard.type)
+      .contains(typeOption3);
+    cy.get(document.documentCard.name.value).contains(fileName2)
+      .parents(document.documentCard.card)
+      .find(document.documentCard.type)
+      .contains(typeOption3);
+
+    cy.get(document.documentCard.name.value).contains(filename1)
+      .parents(document.documentCard.card)
+      .find(document.accessLevelPill.pill)
+      .contains(accesLevelOption4);
+    cy.get(document.documentCard.name.value).contains(fileName2)
+      .parents(document.documentCard.card)
+      .find(document.accessLevelPill.pill)
+      .contains(accesLevelOption4);
   });
 });

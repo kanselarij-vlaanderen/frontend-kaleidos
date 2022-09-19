@@ -232,7 +232,7 @@ context('Publications proofs tests', () => {
     // Make sure the page transitioned
     cy.url().should('contain', '/drukproeven');
 
-    // upload proofwithout request
+    // upload proof without request
     cy.get(publication.proofsIndex.upload).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.intercept('GET', '/pieces/**').as('getPieces');
@@ -266,5 +266,32 @@ context('Publications proofs tests', () => {
     cy.get('@panels').eq(1)
       .find(publication.proofReceivedPanel.panel)
       .contains('Drukproef ontvangen');
+  });
+
+  it('should start a proofrequest from a translation', () => {
+    const fields = {
+      number: 1662,
+      shortTitle: 'test drukproefaanvraag via vertaling',
+    };
+    const file = {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf',
+    };
+
+    // setup
+    cy.createPublication(fields);
+    cy.get(publication.publicationNav.translations).click();
+    cy.get(publication.translationsIndex.upload).click();
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.intercept('PATCH', '/translation-subcases/**').as('patchtranslationSubcase');
+    cy.get(publication.translationUpload.save).click()
+      .wait('@patchtranslationSubcase');
+
+    // open upload modal via received translation
+    cy.get(publication.translationReceivedPanel.dropdown).click();
+    cy.get(publication.translationReceivedPanel.proofRequest).click();
+
+    // check data
+    cy.get(auk.modal.header.title).contains(`Drukproef aanvragen voor publicatie ${fields.number}`);
+    cy.get(publication.proofRequest.subject).contains(`Drukproefaanvraag VO-dossier: ${fields.number} - ${fields.shortTitle}`);
   });
 });
