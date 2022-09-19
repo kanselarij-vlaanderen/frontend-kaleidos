@@ -47,27 +47,28 @@
         />
       </Auk::KeyValue>
       <Auk::KeyValue
-        data-test-details-tab-access-level
-        @key={{t "source-file"}}
+        @key={{t "word-document"}}
       >
         <div class="au-u-flex au-u-flex--between">
-          <p>
-            {{! Note that showing this composed name as "source file name" might be confusing.
-            Better show original source file (not document) name?}}
-            {{@piece.name}}.{{@piece.file.extension}}
-          </p>
+          {{#if @piece.file.primarySource}}
+            <p>
+              {{! Note that showing this composed name as "source file name" might be confusing.
+              Better show original source file (not document) name?}}
+              {{@piece.name}}.{{@piece.file.primarySource.extension}}
+            </p>
+          {{/if}}
           <AuButton
             @icon="upload"
             @iconAlignment="left"
             @skin="secondary"
-            {{on "click" (toggle "isUploadingReplacementFile" this)}}
+            {{on "click" (toggle "isUploadingReplacementSourceFile" this)}}
           >
-            {{t "replace"}}
+            {{t (if @piece.file.primarySource "replace" "upload")}}
           </AuButton>
         </div>
       </Auk::KeyValue>
-      {{#if this.isUploadingReplacementFile}}
-        <Auk::FileUploader @onUpload={{set this "replacementFile"}} />
+      {{#if this.isUploadingReplacementSourceFile}}
+        <Auk::FileUploader @onUpload={{set this "replacementSourceFile"}} />
       {{/if}}
     </Auk::Panel::Body>
     <Auk::Panel::Footer>
@@ -157,10 +158,17 @@
         />
       </Auk::KeyValue>
       <Auk::KeyValue
-        data-test-details-tab-access-level
-        @key={{t "source-file"}}
+        @key={{t (if (eq @piece.file.primarySource.extension "docx") "word-document" "source-file")}}
       >
-        {{#if @piece.file}}
+        {{#if @piece.file.primarySource}}
+          <AuLink
+            href={{@piece.file.primarySource.namedDownloadLink}}
+            @skin="primary"
+            @icon="download"
+            @iconAlignment="left"
+            download
+          >{{@piece.name}}.{{@piece.file.primarySource.extension}}</AuLink>
+        {{else if @piece.file}}
           <AuLink
             href={{@piece.file.namedDownloadLink}}
             @skin="primary"
@@ -168,7 +176,7 @@
             @iconAlignment="left"
             download
           >{{@piece.name}}.{{@piece.file.extension}}</AuLink>
-        {{else}}
+          {{else}}
           {{@piece.name}}
         {{/if}}
       </Auk::KeyValue>
