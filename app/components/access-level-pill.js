@@ -30,16 +30,16 @@ export default class AccessLevelPillComponent extends Component {
     if (this.args.accessLevel) {
       switch (this.args.accessLevel.get('uri')) {
         case CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE:
-          icon = 'users-single';
+          icon = 'user';
           break;
         case CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK:
-          icon = 'users-one-of-four';
+          icon = 'lock-closed';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
-          icon = 'users-two-of-four';
+          icon = 'circle';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID:
-          icon = 'users-three-of-four';
+          icon = 'circle-full';
           break;
         case CONSTANTS.ACCESS_LEVELS.PUBLIEK:
           icon = 'users-four-of-four';
@@ -61,7 +61,7 @@ export default class AccessLevelPillComponent extends Component {
           skin = 'warning';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
-          skin = 'border';
+          skin = 'warning';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID:
           skin = 'border';
