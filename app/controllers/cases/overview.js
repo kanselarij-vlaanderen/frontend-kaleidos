@@ -35,7 +35,7 @@ export default class CasesCaseSubcasesOverview extends Controller {
   page = 0;
   size = 20;
 
-  sort = '-created';
+  sort = '-opened';
   showArchived = false;
   @tracked selectedCase = null;
   @tracked caseToEdit = null;
@@ -49,8 +49,8 @@ export default class CasesCaseSubcasesOverview extends Controller {
   }
 
   @action
-  openEditCaseModal(caze) {
-    this.caseToEdit = caze;
+  async openEditCaseModal(_case) {
+    this.caseToEdit = await _case;
     this.showEditCaseModal = true;
   }
 
@@ -61,8 +61,8 @@ export default class CasesCaseSubcasesOverview extends Controller {
   }
 
   @action
-  async saveEditCase(caseData) {
-    await caseData.save();
+  async saveEditCase(_case) {
+    await _case.save();
     this.closeEditCaseModal();
   }
 
@@ -84,19 +84,20 @@ export default class CasesCaseSubcasesOverview extends Controller {
   }
 
   @action
-  async unarchiveCase(caze) {
-    caze.isArchived = false;
-    const subcases = await caze.subcases;
+  async unarchiveCase(_case) {
+    _case.isArchived = false;
+    const decisionmakingFlow = await _case.decisionmakingFlow;
+    const subcases = await decisionmakingFlow.subcases;
     await Promise.all(subcases.map(async(subcase) => {
       subcase.isArchived = false;
       return await subcase.save();
     }));
-    await caze.save();
+    await _case.save();
   }
 
   @action
-  requestArchiveCase(caze) {
-    this.selectedCase = caze;
+  requestArchiveCase(_case) {
+    this.selectedCase = _case;
     this.isArchivingCase = true;
   }
 
@@ -107,15 +108,7 @@ export default class CasesCaseSubcasesOverview extends Controller {
   }
 
   @action
-  close(caze) {
-    if (!caze) {
-      return;
-    }
-    this.router.transitionTo('cases.case.subcases', caze.id);
-  }
-
-  @action
-  navigateToCase(_case) {
-    this.router.transitionTo('cases.case.subcases', _case.id);
+  navigateToDecisionmakingFlow(decisionmakingFlow) {
+    this.router.transitionTo('cases.case.subcases', decisionmakingFlow.id);
   }
 }

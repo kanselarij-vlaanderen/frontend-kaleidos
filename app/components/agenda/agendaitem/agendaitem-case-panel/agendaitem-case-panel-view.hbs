@@ -22,7 +22,7 @@
                 @icon="chevron-right"
                 @route="cases.case.subcases.subcase.overview"
                 @disabled={{this.loadCase.isRunning}}
-                @models={{array this.case.id @subcase.id}}
+                @models={{array this.decisionmakingFlow.id @subcase.id}}
                 data-test-agendaitem-titles-link-to-subcase={{true}}
               >
                 {{t "to-subcase"}}

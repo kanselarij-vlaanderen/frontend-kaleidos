@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
-import moment from 'moment';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
@@ -34,7 +33,6 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked isOpenUploadModal = false;
   @tracked isOpenVerifyDeleteModal = false;
   @tracked isEditingPiece = false;
-  @tracked isUploadingReplacementFile = false;
 
   @tracked piece;
   @tracked accessLevel;
@@ -42,9 +40,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked signMarkingActivity;
 
   @tracked uploadedFile;
-  @tracked replacingFile;
   @tracked newPiece;
-  @tracked pieceNameBuffer;
   @tracked defaultAccessLevel;
   @tracked pieces = A();
 
@@ -142,21 +138,12 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.isOpenUploadModal = true;
   }
 
-  @action
-  async toggleUploadReplacementFile() {
-    if (this.replacingFile) {
-      await this.replacingFile.destroyRecord();
-    }
-    this.replacingFile = null;
-    this.isUploadingReplacementFile = !this.isUploadingReplacementFile;
-  }
-
   @task
   *uploadPiece(file) {
     yield this.loadVersionHistory.perform();
     const previousPiece = this.sortedPieces.lastObject;
     const previousAccessLevel = yield previousPiece.accessLevel;
-    const now = moment().utc().toDate();
+    const now = new Date();
     this.newPiece = this.store.createRecord('piece', {
       created: now,
       modified: now,
@@ -168,11 +155,6 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.newPiece.name = new VRDocumentName(
       previousPiece.name
     ).withOtherVersionSuffix(this.sortedPieces.length + 1);
-  }
-
-  @action
-  uploadReplacementFile(file) {
-    this.replacingFile = file;
   }
 
   @task
@@ -203,40 +185,6 @@ export default class DocumentsDocumentCardComponent extends Component {
   *cancelUploadPiece() {
     yield this.deleteUploadedPiece.perform();
     this.isOpenUploadModal = false;
-  }
-
-  @action
-  enableEditPieceName() {
-    this.pieceNameBuffer = this.piece.name;
-    this.isEditingPiece = true;
-  }
-
-  @action
-  async cancelEditPieceName() {
-    if (this.replacingFile && this.isUploadingReplacementFile) {
-      await this.replacingFile.destroyRecord();
-    }
-    this.isEditingPiece = false;
-    this.pieceNameBuffer = null;
-    this.isUploadingReplacementFile = false;
-    this.replacingFile = null;
-  }
-
-  @task
-  *savePieceName() {
-    const now = moment().toDate();
-    this.piece.set('modified', now);
-    this.piece.set('name', this.pieceNameBuffer);
-    if (this.replacingFile) {
-      const oldFile = yield this.piece.file;
-      yield oldFile.destroyRecord();
-      this.piece.file = this.replacingFile;
-    }
-    yield this.piece.save();
-    this.isEditingPiece = false;
-    this.pieceNameBuffer = null;
-    this.isUploadingReplacementFile = false;
-    this.replacingFile = null;
   }
 
   @task
@@ -290,9 +238,9 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   @action
-  changeAccessLevel(al) {
-    this.piece.set('accessLevel', al);
-    this.accessLevel = al;
+  changeAccessLevel(accessLevel) {
+    this.piece.accessLevel = accessLevel;
+    this.accessLevel = accessLevel;
   }
 
   @action

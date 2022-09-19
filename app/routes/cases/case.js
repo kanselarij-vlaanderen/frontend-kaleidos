@@ -5,7 +5,7 @@ export default class CasesCaseRoute extends Route {
   @service store;
 
   model(params) {
-    return this.store.findRecord('case', params.id, {
+    return this.store.findRecord('decisionmaking-flow', params.id, {
       reload: true,
     });
   }

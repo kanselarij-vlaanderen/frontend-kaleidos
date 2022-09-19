@@ -21,6 +21,7 @@ reset-elastic-and-cache:
 	- unzip -o ${PROJECT_PATH}/testdata.zip -d ${PROJECT_PATH}
 	- unzip -o ${PROJECT_PATH}/testdata-elasticsearch.zip -d ${PROJECT_PATH}
 	- mv ${PROJECT_PATH}/testdata-elasticsearch/* ${PROJECT_PATH}/testdata
+	- rm -rf ${PROJECT_PATH}/testdata-elasticsearch
 	- docker-compose ${COMPOSE_FILE} up -d
 	- sleep 60
 

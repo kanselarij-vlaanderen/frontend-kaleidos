@@ -11,7 +11,7 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
   @tracked page = 0;
   @tracked size = 25;
 
-  @tracked case;
+  @tracked decisionmakingFlow;
   @tracked mandatees;
   @tracked submitter;
   @tracked meeting;

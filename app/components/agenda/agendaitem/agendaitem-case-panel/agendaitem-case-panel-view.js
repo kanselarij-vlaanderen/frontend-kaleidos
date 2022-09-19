@@ -11,17 +11,17 @@ import { task } from 'ember-concurrency';
  * @argument onClickEdit
  */
 export default class AgendaitemCasePanelView extends Component {
-  @tracked case;
+  @tracked decisionmakingFlow;
 
   constructor() {
     super(...arguments);
-    this.loadCase.perform();
+    this.loadDecisionmakingFlow.perform();
   }
 
   @task
-  *loadCase() {
+  *loadDecisionmakingFlow() {
     if (this.args.subcase) {
-      this.case = yield this.args.subcase.case;
+      this.decisionmakingFlow = yield this.args.subcase.decisionmakingFlow;
     }
   }
 }

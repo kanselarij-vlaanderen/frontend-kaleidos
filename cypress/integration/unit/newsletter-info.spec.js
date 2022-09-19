@@ -289,7 +289,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
 
     const subcaseTitleShort = 'Cypress test: KB defaults 6 - Nota switch type - 1651588681';
     const subcaseTitleLong = 'Cypress test: KB defaults 6 - Nota switch type lange titel- 1651588681';
-    const subcaseLink = 'dossiers/62713DE36C41DEA869521DFB/deeldossiers/62713E586C41DEA869521E02/overzicht';
+    const subcaseLink = 'dossiers/E14FB551-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/62713E586C41DEA869521E02/overzicht';
 
     changeSubcaseType(subcaseLink, 'Mededeling');
     cy.visitAgendaWithLink(agendaitemKBLink);

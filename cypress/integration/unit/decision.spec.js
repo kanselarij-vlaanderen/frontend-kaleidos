@@ -216,7 +216,7 @@ context('Decision tests', () => {
   });
 
   it('should test if changing subcase to confidential sets correct access rights', () => {
-    cy.visit('/dossiers/628392747A5496079478E275/deeldossiers/6283927B7A5496079478E276/beslissing');
+    cy.visit('/dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6283927B7A5496079478E276/beslissing');
     cy.get(document.accessLevelPill.pill).contains('Intern Regering');
     cy.get(cases.subcaseDetailNav.overview).click();
     cy.get(cases.subcaseTitlesView.edit).click();
@@ -239,7 +239,7 @@ context('Decision tests', () => {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     };
 
-    cy.visit('dossiers/628392747A5496079478E275/deeldossiers/628392827A5496079478E277/overzicht');
+    cy.visit('dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/628392827A5496079478E277/overzicht');
     cy.get(cases.subcaseTitlesView.edit).click();
     cy.get(cases.subcaseTitlesEdit.confidential).click();
     cy.intercept('PATCH', '/subcases/*').as('patchSubcases');
