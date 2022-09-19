@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 
 /**
- * @argument size {String}: "regular", "large" ("regular" is the default size)
+ * @argument size {String}: "regular", "large" or "auto" ("regular" is the default size)
  * @argument borderless {Boolean}
  */
 export default class Header extends Component {
