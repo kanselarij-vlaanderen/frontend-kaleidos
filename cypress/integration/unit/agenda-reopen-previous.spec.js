@@ -27,7 +27,7 @@ context('Agenda reopen previous tests', () => {
   const reopenPreviousVersion = 'Vorige versie heropenen';
 
   it('should delete current design agenda and reopen previous accepted agenda', () => {
-    cy.createAgenda('Elektronische procedure', dateToCreateAgenda, 'Reopen previous test');
+    cy.createAgenda(null, dateToCreateAgenda, 'Reopen previous test');
     cy.openAgendaForDate(dateToCreateAgenda);
     cy.setFormalOkOnItemWithIndex(0);
     cy.get(agenda.agendaSideNav.agenda).should('have.length', 1);
