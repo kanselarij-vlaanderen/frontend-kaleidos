@@ -152,3 +152,10 @@ table tr.lt-expanded-row {
     background-color: var(--au-gray-100);
   }
 }
+
+
+// Overflow-wrap helper
+
+.auk-u-overflow-wrap-anywhere {
+  overflow-wrap: anywhere;
+}
