@@ -66,13 +66,6 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     this.isUploadingReplacementSourceFile = !this.isUploadingReplacementSourceFile;
   }
 
-  // @action
-  // async toggleUploadReplacementFile() {
-  //   await this.replacementSourceFile?.destroyRecord();
-  //   this.replacementSourceFile = null;
-  //   this.isUploadingReplacementSourceFile = !this.isUploadingReplacementSourceFile;
-  // }
-
   @action
   openEditDetails() {
     this.isEditingDetails = true;
