@@ -53,7 +53,7 @@ context('Subcase tests', () => {
 
   before(() => {
     cy.login('Admin');
-    cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
+    cy.createAgenda(null, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logoutFlow();
   });
 
