@@ -13,8 +13,8 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @service pieceAccessLevelService;
   @tracked isEditingDetails = false;
   @tracked isOpenVerifyDeleteModal = false;
-  @tracked isUploadingReplacementFile = false;
-  @tracked replacementFile;
+  @tracked isUploadingReplacementSourceFile = false;
+  @tracked replacementSourceFile;
   @tracked documentType;
   @tracked accessLevel;
   @tracked isLastVersionOfPiece;
@@ -39,18 +39,20 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   *cancelEditDetails() {
     this.args.piece.rollbackAttributes(); // in case of piece name change
     yield this.loadDetailsData.perform();
-    yield this.replacementFile?.destroyRecord();
-    this.isUploadingReplacementFile = false;
-    this.replacementFile = null;
+    yield this.replacementSourceFile?.destroyRecord();
+    this.isUploadingReplacementSourceFile = false;
+    this.replacementSourceFile = null;
     this.isEditingDetails = false;
   }
 
   @task
   *saveDetails() {
-    if (this.replacementFile) {
-      const oldFile = yield this.args.piece.file;
-      yield oldFile.destroyRecord();
-      this.args.piece.file = this.replacementFile;
+    if (this.replacementSourceFile) {
+      const file = yield this.args.piece.file;
+      const oldSourceFile = yield file.primarySource;
+      yield oldSourceFile?.destroyRecord();
+      file.primarySource = this.replacementSourceFile;
+      yield file.save();
     }
     this.args.piece.accessLevel = this.accessLevel;
     yield this.args.piece.save();
@@ -60,15 +62,8 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     this.args.documentContainer.type = this.documentType;
     yield this.args.documentContainer.save();
     this.isEditingDetails = false;
-    this.replacementFile = null;
-    this.isUploadingReplacementFile = !this.isUploadingReplacementFile;
-  }
-
-  @action
-  async toggleUploadReplacementFile() {
-    await this.replacementFile?.destroyRecord();
-    this.replacementFile = null;
-    this.isUploadingReplacementFile = !this.isUploadingReplacementFile;
+    this.replacementSourceFile = null;
+    this.isUploadingReplacementSourceFile = !this.isUploadingReplacementSourceFile;
   }
 
   @action
