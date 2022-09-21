@@ -97,7 +97,10 @@
               >
                 <p>{{this.currentSession.user.fullName}}</p>
                 <p class="auk-u-text-muted auk-u-text-size--small">
-                  {{this.currentSession.group.name}}
+                  {{or this.currentSession.organization.name this.currentSession.organization.identifier}}
+                </p>
+                <p class="au-u-margin-top-tiny auk-u-text-muted auk-u-text-size--small">
+                  {{this.currentSession.role.label}}
                 </p>
               </Auk::Avatar>
             </Menu.Item>
