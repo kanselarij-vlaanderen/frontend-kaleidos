@@ -107,7 +107,7 @@ context('Decision tests', () => {
     // advance agendaitem
     cy.intercept('PATCH', '/agendaitems/**').as('patchAgendaitem2');
     cy.get(agenda.agendaitemControls.actions).click();
-    cy.get(agenda.agendaitemControls.action.advance).click();
+    cy.get(agenda.agendaitemControls.action.postponeRevert).click();
     cy.wait('@patchAgendaitem2');
     cy.get(utils.vlModal.dialogWindow).should('not.exist');
     cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 2);

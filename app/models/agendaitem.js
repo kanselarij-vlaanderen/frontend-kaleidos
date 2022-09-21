@@ -17,7 +17,7 @@ export default ModelWithModifier.extend({
   store: inject(),
   number: attr('number'),
   created: attr('datetime'),
-  retracted: attr('boolean'), // TODO 1420 TRUE = postponed, move to treatment
+  retracted: attr('boolean'), // TODO 1562 remove
   modified: attr('datetime'),
   titlePress: attr('string'),
   textPress: attr('string'),

@@ -200,7 +200,7 @@ const selectors = {
     actions: '[data-test-agendaitem-controls-actions]',
     action: {
       delete: '[data-test-agendaitem-controls-action-delete]',
-      advance: '[data-test-agendaitem-controls-action-advance]',
+      postponeRevert: '[data-test-agendaitem-controls-action-postpone-revert]',
       postpone: '[data-test-agendaitem-controls-action-postpone]',
     },
   },

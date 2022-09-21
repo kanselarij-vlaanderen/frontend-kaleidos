@@ -9,4 +9,8 @@ export default class DecisionResultCode extends Model {
   get isPostponed() {
     return this.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD;
   }
+
+  get isRetracted() {
+    return this.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN;
+  }
 }

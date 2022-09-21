@@ -273,7 +273,7 @@
   "not-agreed": "Niet Akkoord",
   "not-decided": "Niet beslist",
   "not-finished": "Niet afgewerkt",
-  "not-postpone": "Uitstellen ongedaan maken",
+  "postpone-revert": "Uitstellen ongedaan maken",
   "not-public-press": "Niet publiek",
   "not-yet-approval-mandatee": "Nog niet akkoord",
   "not-yet-decided": "Nog niet beslist",
@@ -675,8 +675,8 @@
   "option-others": "Andere",
   "saving-agendaitem-title-message": "Aanpassen van agendapunten",
   "saving-change-message": "Uw aanpassing wordt opgeslagen.",
-  "saving-retracted-agendaitem-title": "Aanpassen van uitstelling",
-  "saving-retracted-agendaitem-message": "Uw aanpassing wordt opgeslagen.",
+  "saving-decision-result-title": "Aanpassen van resultaat beslissing",
+  "saving-decision-result-message": "Uw aanpassing wordt opgeslagen. Het resultaat van de beslissing wordt aangepast",
   "agenda-activity": "Agendering",
   "show-more": "Toon meer",
   "show-less": "Toon minder",
@@ -1074,5 +1074,7 @@
   "word-document": "Word document",
   "as": "als",
   "limited-access": "Beperkte toegang",
-  "upload": "Opladen"
+  "upload": "Opladen",
+  "retract": "Intrekken",
+  "retract-revert": "Intrekken ongedaan maken"
 }

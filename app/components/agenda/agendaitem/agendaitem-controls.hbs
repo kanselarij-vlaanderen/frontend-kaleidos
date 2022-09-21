@@ -1,6 +1,6 @@
 {{#if @currentAgenda.status.isDesignAgenda}}
   {{#if
-    (and (not (is-pending this.isDeletable)) (not (is-pending this.isPostPonable)))
+    (or this.isDeletable this.areDecisionActionsEnabled)
   }}
     <WebComponents::AuButtonToolbar>
       <Auk::DropdownMenu
@@ -8,16 +8,28 @@
         class="auk-u-hidden@print"
         data-test-agendaitem-controls-actions={{true}}
       as |Menu|>
-        {{#if this.isPostPonable}}
-          {{#if @agendaitem.retracted}}
-            <Menu.Item {{on "click" (fn this.advanceAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-advance>
-              {{t "not-postpone"}}
-            </Menu.Item>
-          {{else}}
-            <Menu.Item {{on "click" (fn this.postponeAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-postpone>
-              {{t "postpone"}}
-            </Menu.Item>
-          {{/if}}
+        {{#if this.areDecisionActionsEnabled}}
+          {{#let this.decisionActivity.decisionResultCode as |drc| }}
+            {{#if drc.isPostponed}}
+              <Menu.Item {{on "click" this.advanceAgendaitem}} data-test-agendaitem-controls-action-postpone-revert>
+                {{t "postpone-revert"}}
+              </Menu.Item>
+            {{else}}
+              <Menu.Item {{on "click" this.postponeAgendaitem}} data-test-agendaitem-controls-action-postpone>
+                {{t "postpone"}}
+              </Menu.Item>
+            {{/if}}
+
+            {{#if drc.isRetracted}}
+              <Menu.Item {{on "click" this.advanceAgendaitem}}>
+                {{t "retract-revert"}}
+              </Menu.Item>
+            {{else}}
+              <Menu.Item {{on "click" this.retractAgendaitem}}>
+                {{t "retract"}}
+              </Menu.Item>
+            {{/if}}
+          {{/let}}
         {{/if}}
         {{#if (or this.currentSession.isAdmin (await this.isDeletable))}}
           <Menu.Item
@@ -33,24 +45,26 @@
   {{else}}
     <div class="auk-loader" role="alert" aria-busy="true"></div>
   {{/if}}
-  {{#if this.isVerifying}}
-    <WebComponents::VlModalVerify
-      @title={{t "delete-agendaitem"}}
-      @message={{this.deleteWarningText}}
-      @cancel={{this.toggleIsVerifying}}
-      @verify={{fn this.verifyDelete @agendaitem}}/>
-  {{/if}}
 {{/if}}
-{{#if this.isSavingRetracted}}
+
+{{#if this.isVerifying}}
+  <WebComponents::VlModalVerify
+    @title={{t "delete-agendaitem"}}
+    @message={{this.deleteWarningText}}
+    @cancel={{this.toggleIsVerifying}}
+    @verify={{fn this.verifyDelete @agendaitem}}/>
+{{/if}}
+
+{{#if this.isSavingDecisionResult}}
   <WebComponents::VlModal
     @isOverlay={{true}}
     @showCloseButton={{false}}
-    @title={{t "saving-retracted-agendaitem-title"}}
+    @title={{t "saving-decision-result-title"}}
   >
     <Auk::Modal::Body>
       <WebComponents::VlLoader
         @text={{concat
-          (t "saving-retracted-agendaitem-message")
+          (t "saving-decision-result-message")
           " "
           (t "please-be-patient")
         }}
@@ -58,6 +72,7 @@
     </Auk::Modal::Body>
   </WebComponents::VlModal>
 {{/if}}
+
 {{#if this.showLoader}}
   <WebComponents::LoadingOverlay />
 {{/if}}
