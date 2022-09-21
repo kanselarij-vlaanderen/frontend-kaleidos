@@ -231,7 +231,7 @@ context('Decision tests', () => {
       .wait('@patchAgenda')
       .wait('@patchPieces');
     cy.get(cases.subcaseDetailNav.decisions).click();
-    cy.get(document.accessLevelPill.pill).contains('Ministerraad');
+    cy.get(document.accessLevelPill.pill).contains('Vertrouwelijk');
   });
 
   it('should test if adding decision to confidential subcase sets correct default access rights', () => {
@@ -261,6 +261,6 @@ context('Decision tests', () => {
       .wait('@patchDecisionActivity');
     cy.get(auk.loader).should('not.exist');
     cy.wait('@getAccessLevel');
-    cy.get(document.accessLevelPill.pill).contains('Ministerraad');
+    cy.get(document.accessLevelPill.pill).contains('Vertrouwelijk');
   });
 });

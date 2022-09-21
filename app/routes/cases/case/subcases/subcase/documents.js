@@ -46,7 +46,7 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     this.defaultAccessLevel = await this.store.findRecordByUri(
       'concept',
       this.subcase.confidential
-        ? CONSTANTS.ACCESS_LEVELS.MINISTERRAAD
+        ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
 

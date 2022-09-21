@@ -13,12 +13,12 @@ export default class PieceAccessLevelService extends Service {
  *
  * - When the access level is changed to "Intern secretarie", the previous access
  *   level is set to "Intern secretarie".
- * - When the access level is changed to "Ministerraad", the previous access
- *   level is set to "Ministerraad", unless it was "Intern secretarie", then it
+ * - When the access level is changed to "Vertrouwelijk", the previous access
+ *   level is set to "Vertrouwelijk", unless it was "Intern secretarie", then it
  *   is not changed.
  * - When the access level is changed to any other access level, the previous
  *   access level is set to "Intern regering", unless an it was
- *   "Intern secretarie" or "Ministerraad", then it is not changed.
+ *   "Intern secretarie" or "Vertrouwelijk", then it is not changed.
  *
  * Or in a table:
  * +----------------------------------------------+------------------------------------------+
@@ -27,7 +27,7 @@ export default class PieceAccessLevelService extends Service {
  * | Publiek                                      | Intern Regering                          |
  * | Intern Overheid                              | Intern Regering                          |
  * | Intern Regering                              | Intern Regering                          |
- * | Ministerraad                                 | Ministerraad                             |
+ * | Vertrouwelijk                                | Vertrouwelijk                             |
  * | Intern Secretarie                            | Intern Secretarie                        |
  * +----------------------------------------------+------------------------------------------+
  *
@@ -37,7 +37,7 @@ export default class PieceAccessLevelService extends Service {
  */
   async updatePreviousAccessLevel(piece) {
     const internSecretarie = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE);
-    const ministerraad = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.MINISTERRAAD);
+    const vertrouwelijk = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK);
     const internRegering = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
 
     const accessLevel = await piece.accessLevel;
@@ -52,7 +52,7 @@ export default class PieceAccessLevelService extends Service {
       return false;
     }
 
-    if (previousAccessLevel.uri === CONSTANTS.ACCESS_LEVELS.MINISTERRAAD
+    if (previousAccessLevel.uri === CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
         && !(accessLevel.uri === CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE)) {
       return false;
     }
@@ -61,8 +61,8 @@ export default class PieceAccessLevelService extends Service {
       case CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE:
         previousPiece.accessLevel = internSecretarie;
         break;
-      case CONSTANTS.ACCESS_LEVELS.MINISTERRAAD:
-        previousPiece.accessLevel = ministerraad;
+      case CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK:
+        previousPiece.accessLevel = vertrouwelijk;
         break;
       default:
         previousPiece.accessLevel = internRegering;
@@ -86,10 +86,10 @@ export default class PieceAccessLevelService extends Service {
   /*
    * This method is used to update the access levels of the reports related to of a subcase's decision-activity.
    * When a subcase has been updated to being confidential, all the reports of the decision-activity get the
-   * "Ministerraad" access level.
+   * "Vertrouwelijk" access level.
    */
   async updateDecisionsAccessLevelOfSubcase(subcase) {
-    const ministerraad = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.MINISTERRAAD);
+    const vertrouwelijk = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK);
     const pieces = await this.store.query('piece', {
       'filter[decision-activity][subcase][:id:]': subcase.id,
       include: 'access-level',
@@ -97,8 +97,8 @@ export default class PieceAccessLevelService extends Service {
 
     await Promise.all(pieces.toArray().map(async (piece) => {
       const accessLevel = await piece.accessLevel;
-      if (accessLevel.uri !== ministerraad.uri) {
-        piece.accessLevel = ministerraad;
+      if (accessLevel.uri !== vertrouwelijk.uri) {
+        piece.accessLevel = vertrouwelijk;
         return piece.save();
       }
     }));

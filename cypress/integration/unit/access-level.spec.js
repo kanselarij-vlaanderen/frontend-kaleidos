@@ -207,7 +207,7 @@ context('Decision tests', () => {
     cy.get(route.agendaitemDocuments.batchEdit).click();
     cy.get(document.documentDetailsRow.accessLevel).eq(0)
       .click();
-    cy.get(dependency.emberPowerSelect.option).contains('Ministerraad')
+    cy.get(dependency.emberPowerSelect.option).contains('Vertrouwelijk')
       .click();
     cy.intercept('PATCH', '/pieces/**').as('patchPieces1');
     cy.intercept('GET', '/document-containers/**').as('getDocumentContainers1');
@@ -215,8 +215,8 @@ context('Decision tests', () => {
       .wait('@patchPieces1')
       .wait('@getDocumentContainers1');
 
-    checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreetBIS', 'Ministerraad');
-    checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreet.pdf', 'Ministerraad');
+    checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreetBIS', 'Vertrouwelijk');
+    checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreet.pdf', 'Vertrouwelijk');
 
     // change access level on BatchDocumentEdit on multiple documents
     cy.get(route.agendaitemDocuments.batchEdit).click();
