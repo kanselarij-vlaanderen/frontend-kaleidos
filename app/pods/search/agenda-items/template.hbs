@@ -1,80 +1,78 @@
 {{ page-title
   (t "agendaitems")
 }}
-<div class="auk-o-grid auk-u-mb-2">
-  <div class="auk-o-grid-col-2">
-    <div class="au-u-margin-top-tiny">
-      <AuHeading @level="3" @skin="6" class="au-u-hidden-visually">Inhoud</AuHeading>
-      <AuList as |Item|>
-        <Item><AuLink @route="search.agenda-items" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact" @active={{true}}>Agendapunt</AuLink></Item>
-        <Item><AuLink @route="search.cases" @skin="button-naked" @icon="arrow-right" @iconAlignment="right" class="au-c-button--naked-compact">Dossier</AuLink></Item>
-      </AuList>
-    </div>
-    <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-small">
-      <div class="auk-form-group auk-u-position-relative au-u-margin-bottom-small">
-        <Auk::Label>{{t "from"}}</Auk::Label>
-        <WebComponents::VlDatepicker
-          @selectedDate={{array this.dateFromBuffer}}
-          @dateChanged={{fn (mut this.dateFromBuffer)}}
-          @enableClear={{this.dateFromBuffer}}
-          @onClear={{fn (mut this.dateFromBuffer) null}}
-          @allowInput={{true}}
-        />
+<div class="auk-o-grid au-o-grid--stretch">
+  <div class="auk-o-grid-col-2 au-c-sidebar">
+    <div class="au-c-sidebar__content">
+      <div>
+        <AuHeading @level="3" @skin="6" class="au-u-hidden-visually">Inhoud</AuHeading>
+        <ul class="au-c-list-navigation">
+          <li class="au-c-list-navigation__item">
+            <AuNavigationLink
+              @route="search.agenda-items"
+            >
+              Agendapunt
+            </AuNavigationLink>
+          </li>
+          <li class="au-c-list-navigation__item">
+            <AuNavigationLink
+              @route="search.cases"
+            >
+              Dossier
+            </AuNavigationLink>
+          </li>
+        </ul>
       </div>
-      <div class="auk-form-group auk-u-position-relative">
-        <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
-        <WebComponents::VlDatepicker
-          @selectedDate={{array this.dateToBuffer}}
-          @dateChanged={{fn (mut this.dateToBuffer)}}
-          @enableClear={{this.dateToBuffer}}
-          @onClear={{fn (mut this.dateToBuffer) null}}
-          @allowInput={{true}}
-        />
+      <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny">
+        <div class="au-c-card au-o-box au-o-box--small">
+          <div class="auk-form-group auk-u-position-relative au-u-margin-bottom-small">
+            <Auk::Label>{{t "from"}}</Auk::Label>
+            <WebComponents::VlDatepicker
+              @selectedDate={{array this.dateFromBuffer}}
+              @dateChanged={{fn (mut this.dateFromBuffer)}}
+              @enableClear={{this.dateFromBuffer}}
+              @onClear={{fn (mut this.dateFromBuffer) null}}
+              @allowInput={{true}}
+            />
+          </div>
+          <div class="auk-form-group auk-u-position-relative">
+            <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
+            <WebComponents::VlDatepicker
+              @selectedDate={{array this.dateToBuffer}}
+              @dateChanged={{fn (mut this.dateToBuffer)}}
+              @enableClear={{this.dateToBuffer}}
+              @onClear={{fn (mut this.dateToBuffer) null}}
+              @allowInput={{true}}
+            />
+          </div>
+        </div>
+        <div class="au-c-card au-o-box au-o-box--small">
+          <div class="auk-form-group">
+            <Auk::Label for="ministerName">
+              Minister/bevoegdheid
+            </Auk::Label>
+            <Auk::Input
+              data-test-route-search-mandatee-input
+              @block={{true}}
+              @value=""
+              @enter=""
+              id="ministerName"
+            />
+          </div>
+        </div>
+        <div class="au-c-card au-o-box au-o-box--small">
+          <Auk::Label>Agenda versie</Auk::Label>
+          <Auk::Checkbox
+            @checked={{this.latestOnly}}
+            @label="{{t "only-on-final-agenda"}}"
+            {{on "input" this.toggleLatestOnly}}
+          />
+        </div>
       </div>
     </div>
-    <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-tiny">
-      <div class="auk-form-group">
-        <Auk::Label for="ministerName">
-          Minister/bevoegdheid
-        </Auk::Label>
-        <Auk::Input
-          data-test-route-search-mandatee-input
-          @block={{true}}
-          @value=""
-          @enter=""
-          id="ministerName"
-        />
-      </div>
-    </div>
-    <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-tiny">
-      <Auk::Label>Agenda versie</Auk::Label>
-      <Auk::Checkbox
-        @checked={{this.latestOnly}}
-        @label="{{t "only-on-final-agenda"}}"
-        {{on "input" this.toggleLatestOnly}}
-      />
-    </div>
-
-    {{!-- <div class="auk-box au-u-margin-top-small"> --}}
-      {{!-- <div class="auk-u-mb-2">
-        <Auk::Label>{{t "type"}}</Auk::Label>
-        <Auk::Checkbox
-          @checked={{this.includeNotas}}
-          @label={{t "note"}}
-          {{on "input" this.toggleIncludeNotas}}
-        />
-        <Auk::Checkbox
-          @checked={{this.includeMededelingen}}
-          @label={{capitalize (t "announcement")}}
-          {{on "input" this.toggleIncludeMededelingen}}
-        />
-      </div> --}}
-
-    {{!-- </div> --}}
-
   </div>
   <div class="auk-o-grid-col-10">
-    <div>
+    <div class="au-o-box au-o-box--small au-u-padding-left-none">
       {{#if this.model.length}}
         <div class="au-u-flex au-u-flex--no-wrap au-u-flex--spaced au-u-flex--between au-u-flex--vertical-center au-u-margin-bottom-small">
           <p class="au-u-muted">
