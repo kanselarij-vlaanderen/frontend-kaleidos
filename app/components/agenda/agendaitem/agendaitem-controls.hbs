@@ -14,17 +14,14 @@
               <Menu.Item {{on "click" this.advanceAgendaitem}} data-test-agendaitem-controls-action-postpone-revert>
                 {{t "postpone-revert"}}
               </Menu.Item>
-            {{else}}
-              <Menu.Item {{on "click" this.postponeAgendaitem}} data-test-agendaitem-controls-action-postpone>
-                {{t "postpone"}}
-              </Menu.Item>
-            {{/if}}
-
-            {{#if drc.isRetracted}}
+            {{else if drc.isRetracted}}
               <Menu.Item {{on "click" this.advanceAgendaitem}}>
                 {{t "retract-revert"}}
               </Menu.Item>
             {{else}}
+              <Menu.Item {{on "click" this.postponeAgendaitem}} data-test-agendaitem-controls-action-postpone>
+                {{t "postpone"}}
+              </Menu.Item>
               <Menu.Item {{on "click" this.retractAgendaitem}}>
                 {{t "retract"}}
               </Menu.Item>

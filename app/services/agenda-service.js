@@ -161,7 +161,6 @@ export default class AgendaService extends Service {
       submittedPieces = submittedPieces.concat((await submissionActivity2.pieces).toArray());
     }
     const agendaitem = await this.store.createRecord('agendaitem', {
-      retracted: false,
       titlePress: subcase.shortTitle,
       textPress: pressText,
       created: now,

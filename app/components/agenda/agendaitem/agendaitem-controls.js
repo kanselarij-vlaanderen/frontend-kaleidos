@@ -76,14 +76,9 @@ export default class AgendaitemControls extends Component {
 
   @task
   *loadDecisionActivity() {
-    this.decisionActivity = yield this.store.queryOne(
-      'decision-activity',
-      {
-        'filter[treatment][agendaitems][:id:]': this.args.agendaitem.id,
-        sort: '-start-date',
-      }
-    );
-    yield this.decisionActivity.decisionResultCode;
+    const treatment = yield this.args.agendaitem.treatment;
+    this.decisionActivity = yield treatment?.decisionActivity;
+    yield this.decisionActivity?.decisionResultCode;
   }
 
   async deleteItem(agendaitem) {

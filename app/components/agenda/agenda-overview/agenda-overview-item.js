@@ -37,6 +37,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   @tracked agendaitemDocuments;
   @tracked newAgendaitemDocuments;
 
+  @tracked isAgendaitemPostponedOrRetracted = false;
   @tracked isShowingAllDocuments = false;
   @tracked documentsAreVisible = false;
 
@@ -45,6 +46,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
     this.agendaitemDocuments = [];
     this.newAgendaitemDocuments = [];
     this.loadDocuments.perform();
+    this.loadDecisionActivity.perform();
     this.loadDocumentsPublicationStatus.perform();
   }
 
@@ -97,6 +99,14 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
       sortedPieces = sortPieces(pieces);
     }
     this.agendaitemDocuments = sortedPieces;
+  }
+
+  @task
+  *loadDecisionActivity() {
+    const treatment = yield this.args.agendaitem.treatment;
+    const decisionActivity = yield treatment?.decisionActivity;
+    const drc = yield decisionActivity?.decisionResultCode;
+    this.isAgendaitemPostponedOrRetracted = drc?.isPostponed || drc?.isRetracted;
   }
 
   @dropTask

@@ -1076,5 +1076,8 @@
   "limited-access": "Beperkte toegang",
   "upload": "Opladen",
   "retract": "Intrekken",
-  "retract-revert": "Intrekken ongedaan maken"
+  "retracted": "Ingetrokken",
+  "retract-revert": "Intrekken ongedaan maken",
+  "retracted-item": "Dit punt is ingetrokken.",
+  "retracted-subcase": "Deze procedurestap is ingetrokken op "
 }

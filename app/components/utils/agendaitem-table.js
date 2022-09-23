@@ -112,6 +112,7 @@ export default class AgendaitemTable extends Component {
    */
   setRowsPostponed(tableRows, model) {
     const rowsCurrentlyInTable = tableRows;
+    // TODO KAS-1652 retracted refactor
     const postponedItems = model.filter((agendaitem) => agendaitem.get('retracted'));
     postponedItems.forEach((postponedItem) => {
       const postponedRowInTable = rowsCurrentlyInTable.find(

@@ -22,7 +22,7 @@ export default class SidebarItem extends Component {
   @tracked currentRouteName;
   @tracked subcase;
   @tracked newsletterIsVisible;
-  @tracked decisionActivityResultCode;
+  @tracked isRetractedOrPostponed = false;
 
   constructor() {
     super(...arguments);
@@ -40,11 +40,6 @@ export default class SidebarItem extends Component {
         this.currentRouteName = this.defaultAgendaitemSubroute;
       }
     });
-  }
-
-  get isRetractedOrPostponed() {
-    const drc = this.decisionActivityResultCode;
-      return drc?.isPostponed | drc?.isRetracted;
   }
 
   get class() {
@@ -96,8 +91,9 @@ export default class SidebarItem extends Component {
   @task
   *loadDecisionActivity() {
     const treatment = yield this.args.agendaitem.treatment;
-    const decisionActivity = yield treatment.decisionActivity;
-    this.decisionActivityResultCode = yield decisionActivity.decisionResultCode;
+    const decisionActivity = yield treatment?.decisionActivity;
+    const drc = yield decisionActivity?.decisionResultCode;
+    this.isRetractedOrPostponed = drc?.isPostponed | drc?.isRetracted;
   }
 
   @action

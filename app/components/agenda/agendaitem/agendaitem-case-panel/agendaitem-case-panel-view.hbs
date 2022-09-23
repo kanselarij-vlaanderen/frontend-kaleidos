@@ -124,7 +124,7 @@
               </AuPill>
             </div>
           {{/if}}
-          {{#if @agendaitem.retracted}}
+          {{#if this.agendaitemDecisionResult.isPostponed}}
             <div class="auk-u-mt-2">
               <AuPill @size="small">
                 {{t "postponed-item"}}

@@ -20,6 +20,8 @@ export default class SubcaseDescriptionView extends Component {
   @tracked latestAgenda = null;
   @tracked latestAgendaitem = null;
   @tracked approved = null;
+  @tracked isPostponed = null;
+  @tracked isRetracted = null;
 
   constructor() {
     super(...arguments);
@@ -47,5 +49,9 @@ export default class SubcaseDescriptionView extends Component {
       });
     }
     this.approved = yield this.subcaseIsApproved.isApproved(this.args.subcase);
+    if (!this.approved) {
+      this.isPostponed = yield this.subcaseIsApproved.isPostponed(this.args.subcase);
+      this.isRetracted = yield this.subcaseIsApproved.isRetracted(this.args.subcase);
+    }
   }
 }

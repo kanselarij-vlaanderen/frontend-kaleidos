@@ -81,8 +81,11 @@
             <div class="auk-loader" role="alert" aria-busy="true"></div>
           {{else}}
             {{#if this.latestMeeting.plannedStart}}
-              {{#if this.latestAgendaitem.retracted}}
+              {{#if this.isPostponed}}
                 {{t "postponed-subcase"}}
+              {{/if}}
+              {{#if this.isRetracted}}
+                {{t "retracted-subcase"}}
               {{/if}}
               <Auk::ButtonLink
                 data-test-subcase-description-agenda-link

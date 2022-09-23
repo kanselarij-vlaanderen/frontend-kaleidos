@@ -12,10 +12,12 @@ import { task } from 'ember-concurrency';
  */
 export default class AgendaitemCasePanelView extends Component {
   @tracked decisionmakingFlow;
+  @tracked agendaitemDecisionResult;
 
   constructor() {
     super(...arguments);
     this.loadDecisionmakingFlow.perform();
+    this.loadDecisionActivity.perform();
   }
 
   @task
@@ -23,5 +25,12 @@ export default class AgendaitemCasePanelView extends Component {
     if (this.args.subcase) {
       this.decisionmakingFlow = yield this.args.subcase.decisionmakingFlow;
     }
+  }
+
+  @task
+  *loadDecisionActivity() {
+    const treatment = yield this.args.agendaitem.treatment;
+    const decisionActivity = yield treatment?.decisionActivity;
+    this.agendaitemDecisionResult = yield decisionActivity?.decisionResultCode;
   }
 }

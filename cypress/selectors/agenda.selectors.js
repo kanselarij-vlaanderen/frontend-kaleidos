@@ -46,7 +46,7 @@ const selectors = {
       notYetFormallyOk: '[data-test-agenda-detail-sidebar-item-status-pill] > .au-c-icon--circle-question',
     },
     // Test tag is not possible, CSS is added conditionally
-    retracted: '.auk-u-opacity--1\\/3',
+    postponed: '.auk-u-opacity--1\\/3',
   },
 
   // agendaitem-group-header

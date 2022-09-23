@@ -102,7 +102,7 @@ context('Decision tests', () => {
     cy.wait('@patchAgendaitem1');
     cy.get(utils.vlModal.dialogWindow).should('not.exist');
     cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 2);
-    cy.get(agenda.agendaDetailSidebarItem.retracted).should('have.length', 1);
+    cy.get(agenda.agendaDetailSidebarItem.postponed).should('have.length', 1);
 
     // advance agendaitem
     cy.intercept('PATCH', '/agendaitems/**').as('patchAgendaitem2');
@@ -111,7 +111,7 @@ context('Decision tests', () => {
     cy.wait('@patchAgendaitem2');
     cy.get(utils.vlModal.dialogWindow).should('not.exist');
     cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 2);
-    cy.get(agenda.agendaDetailSidebarItem.retracted).should('have.length', 0);
+    cy.get(agenda.agendaDetailSidebarItem.postponed).should('have.length', 0);
 
     // change decision result
     cy.get(agenda.agendaitemNav.decisionTab).click();
@@ -128,12 +128,10 @@ context('Decision tests', () => {
     cy.get(agenda.agendaitemDecisionEdit.save).click()
       .wait('@patchDecisionActivity');
 
-    // NOTE: right now, changing the status of the treatment does not change the retracted attribute of agendaitem
-    // so clicking "uitstellen" should be followed by manually setting the "uitgesteld" status on treatment
-    // perhaps in the future this will be a feature
+    // check if the sidebar item is now greyed out because the decision is "postponed"
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.get(agenda.agendaDetailSidebar.subitem).find(agenda.agendaDetailSidebarItem.retracted)
-      .should('not.exist');
+    cy.get(agenda.agendaDetailSidebar.subitem).find(agenda.agendaDetailSidebarItem.postponed)
+      .should('exist');
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
     cy.get(cases.subcaseDescription.timelineItem).eq(0)
       .contains(/Ingediend voor agendering op/);
