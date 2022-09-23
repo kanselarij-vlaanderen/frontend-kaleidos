@@ -42,6 +42,8 @@
         <Auk::Datepicker
           @date={{this.dateFromBuffer}}
           @onChange={{set this "dateFromBuffer"}}
+          @enableClear={{this.dateFromBuffer}}
+          @onClear={{set this "dateFromBuffer" undefined}}
         />
       </div>
       <div class="auk-form-group au-u-margin-bottom-none auk-u-position-relative au-u-1-6" data-test-route-search-date-to>
@@ -49,6 +51,8 @@
         <Auk::Datepicker
           @date={{this.dateToBuffer}}
           @onChange={{set this "dateToBuffer"}}
+          @enableClear={{this.dateToBuffer}}
+          @onClear={{set this "dateToBuffer" undefined}}
         />
       </div>
       <div class="auk-form-group au-u-margin-bottom-none au-u-1-6">
