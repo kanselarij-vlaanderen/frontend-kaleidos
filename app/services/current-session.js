@@ -34,19 +34,6 @@ export default class CurrentSessionService extends Service {
   }
   /* eslint-enable ember/no-get */
 
-  requireAuthorization(transition, roleName) {
-    let isAuthenticated = this.session.requireAuthentication(transition, 'login');
-    if (!isAuthenticated) {
-      return false;
-    }
-    let isAuthorized = this.may(roleName);
-    if (!isAuthorized) {
-      this.router.transitionTo('agendas');
-      return false;
-    }
-    return true;
-  }
-
   may(permission) {
     return this.userGroup?.permissions.includes(permission);
   }

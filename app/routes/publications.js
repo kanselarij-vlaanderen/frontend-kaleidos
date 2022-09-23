@@ -4,10 +4,10 @@ import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class PublicationsRoute extends Route {
   @service store;
-  @service currentSession;
+  @service('session') simpleAuthSession;
 
   beforeModel(transition) {
-    this.currentSession.requireAuthorization(transition, 'manage-publication-flows');
+    this.simpleAuthSession.requireAuthentication(transition, 'login');
   }
 
   async afterModel() {
