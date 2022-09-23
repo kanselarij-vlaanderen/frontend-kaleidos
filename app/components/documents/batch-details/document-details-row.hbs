@@ -54,8 +54,8 @@
   <td>
     <WebComponents::AuButtonToolbar>
       {{#if (not @isEditingEnabled)}}
-        <AuButton
-          @skin="naked"
+        <AuLink
+          @skin="button-naked"
           @icon="book"
           @hideText={{true}}
           @href={{@row.piece.viewDocumentURL}}

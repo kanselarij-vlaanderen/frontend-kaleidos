@@ -49,13 +49,16 @@
               as |organization|>
               {{ organization.name }}
             </PowerSelect>
-            <Auk::Button
+            <AuButton
               data-test-contact-person-add-organization
-              @layout="icon-only" @icon="plus"
-              class="auk-u-ml-2"
-              {{on "click" this.openOrganizationAddModal}}>
+              @skin="primary"
+              @icon="plus"
+              @hideText={{true}}
+              class="auk-o-flex__item--fix auk-u-ml-2"
+              {{on "click" this.openOrganizationAddModal}}
+            >
               {{t "add-organization"}}
-            </Auk::Button>
+            </AuButton>
           </div>
         </div>
       </div>
@@ -65,23 +68,27 @@
     <Auk::Toolbar @size="large">
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
-          <Auk::ButtonLink
-            disabled={{this.save.isRunning}}
-            {{on "click" @onCancel}}>
+          <AuButton
+            @skin="naked"
+            @disabled={{this.save.isRunning}}
+            {{on "click" @onCancel}}
+          >
             {{t "cancel"}}
-          </Auk::ButtonLink>
+          </AuButton>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          <Auk::Button
-            @skin="primary" @icon="plus" @size="small"
-            {{on "click" (perform this.save)}}
-            disabled={{not this.validators.areValid}}
+          <AuButton
+            data-test-contact-person-add-submit
+            @skin="primary"
+            @icon="plus"
+            @disabled={{not this.validators.areValid}}
             @loading={{this.save.isRunning}}
-            data-test-contact-person-add-submit>
+            {{on "click" (perform this.save)}}
+          >
             {{t "add"}}
-          </Auk::Button>
+          </AuButton>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>

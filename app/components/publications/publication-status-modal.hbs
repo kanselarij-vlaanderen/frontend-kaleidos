@@ -38,14 +38,14 @@
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
-    <Auk::Button
+    <AuButton
       data-test-publication-status-save
       @skin="primary"
       @loading={{this.savePublicationStatus.isRunning}}
-      disabled={{this.isDisabledSave}}
+      @disabled={{this.isDisabledSave}}
       {{on "click" (perform this.savePublicationStatus)}}
     >
       {{t "save"}}
-    </Auk::Button>
+    </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>

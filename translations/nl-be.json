@@ -1079,5 +1079,7 @@
   "minimize": "Minimaliseren",
   "maximize": "Maximaliseren",
   "show": "Weergeven",
-  "hide": "Verbergen"
+  "hide": "Verbergen",
+  "open-agendaitem": "Agendapunt openen",
+  "open-publication": "Publicatie openen"
 }

@@ -145,12 +145,18 @@
       </Auk::Panel::Body>
       <Auk::Panel::Body class="au-u-background-gray-100">
         <Auk::Toolbar>
-          <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
-              <Auk::ButtonLink data-test-newsletter-edit-item-cancel {{on "click" @onCancel}}>
+              <AuButton
+                data-test-newsletter-edit-item-cancel
+                @skin="naked"
+                {{on "click" @onCancel}}
+              >
                 {{t "cancel"}}
-              </Auk::ButtonLink>
+              </AuButton>
             </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <AuButton
                 @loading={{this.confirmSave.isRunning}}

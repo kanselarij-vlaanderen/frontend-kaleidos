@@ -157,7 +157,7 @@ table tr.lt-expanded-row {
 // Overflow-wrap helper
 
 .auk-u-overflow-wrap-anywhere {
-  overflow-wrap: anywhere;
+  overflow-wrap: anywhere !important;
 }
 
 
@@ -165,6 +165,11 @@ table tr.lt-expanded-row {
 
 .auk-o-flex__item--fix {
   flex: 0 0 auto !important;
+}
+
+.auk-o-flex--no-wrap {
+  flex-wrap: nowrap !important;
+  white-space: nowrap !important;
 }
 
 
