@@ -7,7 +7,6 @@ import { findGroupByRole } from 'frontend-kaleidos/config/permissions';
 export default class CurrentSessionService extends Service {
   @service session;
   @service store;
-  @service router;
 
   @tracked user;
   @tracked role;
@@ -33,6 +32,12 @@ export default class CurrentSessionService extends Service {
     }
   }
   /* eslint-enable ember/no-get */
+
+  clear() {
+    this.user = null;
+    this.role = null;
+    this.organization = null;
+  }
 
   may(permission) {
     return this.userGroup?.permissions.includes(permission);
