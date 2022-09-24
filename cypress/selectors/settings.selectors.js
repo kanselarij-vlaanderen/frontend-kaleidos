@@ -8,12 +8,11 @@ const selectors = {
 
   // route settings/users/index
   usersIndex: {
-    importCSV: '[data-test-route-settings-users-import-csv]',
     searchInput: '[data-test-route-settings-users-search-input]',
     searchButton: '[data-test-route-settings-users-search-button]',
     table: '[data-test-route-settings-users-table]',
     row: {
-      firstname: '[data-test-route-settings-users-row-first-name]',
+      name: '[data-test-route-settings-users-row-name]',
       group: '[data-test-route-settings-users-row-group]',
     },
   },
