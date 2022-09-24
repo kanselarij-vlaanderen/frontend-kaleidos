@@ -32,6 +32,7 @@ const {
 // - manage-agendaitems: Approve all agendaitems, add new agendaitems to an agenda, ...
 // - manage-decisions: Open the decisions print-overview of an agenda. TBD if this is a useful permission
 // - manage-cases: Create and update cases
+// - manage-users: Block and archive users
 
 const groups = [
   {
@@ -54,6 +55,7 @@ const groups = [
       'manage-document-publications',
       'manage-themis-publications',
       'manage-settings',
+      'manage-users',
       'view-document-version-info',
     ]
   },
