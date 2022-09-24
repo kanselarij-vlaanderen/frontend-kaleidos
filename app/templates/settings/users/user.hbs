@@ -1,9 +1,21 @@
-<Utils::SettingsHeader
-  @showBackButton={{true}}
-  @title={{t 'manage-user'
-    firstName=this.model.firstName
-    lastName=this.model.lastName}}
-/>
+<Auk::Navbar @skin="gray-100">
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Button @route="settings.users.index" @skin="borderless" data-test-auk-back-button>
+        <Auk::Icon @name="hierarchical-back" />
+        <span class="au-u-hidden-visually">{{t "back"}}</span>
+      </Auk::Button>
+      <Auk::Toolbar::Item>
+        <h4 data-test-settings-header-title class="auk-toolbar-complex__title">
+          {{t "manage-user" firstName=this.model.firstName lastName=this.model.lastName}}
+        </h4>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
+      {{yield}}
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
+</Auk::Navbar>
 
 <div class="au-o-grid">
   <div class="au-o-grid__item au-u-3-4@medium au-u-2-3@large">
