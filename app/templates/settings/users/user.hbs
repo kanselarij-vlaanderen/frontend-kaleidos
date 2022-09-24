@@ -5,48 +5,26 @@
     lastName=this.model.lastName}}
 />
 
-<div class="auk-o-grid">
-  <div class="auk-o-grid-col-6 auk-u-m">
+<div class="au-o-grid">
+  <div class="au-o-grid__item au-u-3-4@medium au-u-2-3@large">
     <div class="auk-u-m-4 auk-u-mr-2 auk-u-ml-2">
       <Auk::Panel>
         <Auk::Panel::Header>
-          <h4 data-test-route-settings---user-general-info class="auk-panel__title">{{t 'manage-users-general-info'}}</h4>
+          <AuToolbar class="auk-u-maximize-width" as |Group|>
+            <Group>
+              <h4 data-test-route-settings---user-general-info class="auk-panel__title">
+                {{t "manage-users-general-info"}}
+              </h4>
+            </Group>
+          </AuToolbar>
         </Auk::Panel::Header>
         <Auk::Panel::Body>
           <dl>
-            <Auk::KeyValue
-              @key={{t 'manage-users-full-name'}}
-              @value={{this.model.fullName}}
-              @layout="horizontal"
-            />
-          </dl>
-          <dl>
-            <Auk::KeyValue
-              @key={{t 'manage-users-email'}}
-              @value={{if this.model.email this.model.email "-"}}
-              @layout="horizontal"
-            />
-          </dl>
-          <dl>
-            <Auk::KeyValue
-              @key={{t 'manage-users-telephone'}}
-              @value={{if this.model.phone this.model.phone "-"}}
-              @layout="horizontal"
-            />
-          </dl>
-          <dl>
             <div class="auk-key-value-item auk-key-value-item--horizontal">
-              <dt class="auk-key-value-item__label">{{t 'manage-users-group'}}</dt>
-              <dd class="auk-key-value-item__value">
-                <Utils::ModelSelector
-                  @modelName="account-group"
-                  @searchField="name"
-                  @displayField="name"
-                  @sortField="name"
-                  @selected={{this.model.group}}
-                  @onChange={{this.setAndSaveGroup}}
-                />
-              </dd>
+              <div class="auk-key-value-item__label">{{t "manage-users-full-name"}}</div>
+              <div class="auk-key-value-item__value au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+                {{this.model.fullName}}
+              </div>
             </div>
           </dl>
         </Auk::Panel::Body>
@@ -55,23 +33,31 @@
     <div class="auk-u-m-4 auk-u-mr-2 auk-u-ml-2">
       <Auk::Panel>
         <Auk::Panel::Header>
-          <h4 data-test-route-settings---user-technical-info class="auk-panel__title">{{t 'manage-users-technical-info'}}</h4>
+          <h4 data-test-route-settings---user-technical-info class="auk-panel__title">
+            {{t "user-rights"}}
+          </h4>
         </Auk::Panel::Header>
-        <Auk::Panel::Body>
-          <dl>
-            <Auk::KeyValue
-              @key={{t 'manage-users-void'}}
-              @value={{this.model.account.voId}}
-              @layout="horizontal"
-            />
-          </dl>
-          <dl>
-            <Auk::KeyValue
-              @key={{t 'manage-users-ovo'}}
-              @value={{if this.model.organization.identifier this.model.organization.identifier "-"}}
-              @layout="horizontal"
-            />
-          </dl>
+        <Auk::Panel::Body class="au-u-padding-none">
+          <AuTable>
+            <:header>
+              <tr>
+                <th>{{capitalize (t "organization")}}</th>
+                <th>{{t "ovo-code"}}</th>
+                <th>{{capitalize (t "group")}}</th>
+                <th></th>
+              </tr>
+            </:header>
+            <:body>
+              {{#each this.model.memberships as |membership|}}
+                <tr class="au-u-muted">
+                  <td>{{membership.organization.name}}</td>
+                  <td>{{membership.organization.identifier}}</td>
+                  <td>{{membership.role.label}}</td>
+                  <td class="au-u-text-right">{{!-- actions --}}</td>
+                </tr>
+              {{/each}}
+            </:body>
+          </AuTable>
         </Auk::Panel::Body>
       </Auk::Panel>
     </div>

@@ -1,8 +1,11 @@
 import Route from '@ember/routing/route';
 import { isPresent } from '@ember/utils';
+import { inject as service } from '@ember/service';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 
 export default class SettingsUsersIndexRoute extends Route {
+  @service store;
+
   queryParams = {
     filter: {
       refreshModel: true,
