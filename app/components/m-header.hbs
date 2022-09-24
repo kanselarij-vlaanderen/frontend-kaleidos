@@ -45,7 +45,11 @@
               </Auk::Tab>
             {{/if}}
             {{#if (user-may "manage-settings")}}
-              <Auk::Tab @route="settings.overview" data-test-m-header-settings>
+              <Auk::Tab
+                @route="settings.overview"
+                @current-when="settings"
+                data-test-m-header-settings
+              >
                 {{t "settings"}}
               </Auk::Tab>
             {{/if}}
