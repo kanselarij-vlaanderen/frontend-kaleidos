@@ -1,5 +1,10 @@
-<div class="auk-input-with-icon {{@class}}" {{did-update this.updateEnable this.enable}}>
-  <Auk::Icon @name="calendar"/>
+<div
+  class="auk-input-with-icon
+    {{@class}}
+    {{if @enableClear "auk-input-with-clear-action"}}"
+  {{did-update this.updateEnable this.enable}}
+>
+  <Auk::Icon @name="calendar" />
   <EmberFlatpickr
     data-test-auk-datepickr
     class="auk-input auk-input--block {{this.error}}"
@@ -25,4 +30,12 @@
     @defaultHour={{@defaultHour}}
     @defaultMinute={{@defaultMinute}}
   />
+  {{#if @enableClear}}
+    <Auk::Button
+      @skin="muted-borderless"
+      @layout="icon-only"
+      @icon="x"
+      {{on "click" @onClear}}
+    />
+  {{/if}}
 </div>

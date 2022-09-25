@@ -53,7 +53,7 @@ context('Subcase tests', () => {
 
   before(() => {
     cy.login('Admin');
-    cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
+    cy.createAgenda(null, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logoutFlow();
   });
 
@@ -195,7 +195,7 @@ context('Subcase tests', () => {
     // Index view
     // TODO-BUG, page is loading, the new sidenav for agendas has pills and we only get those
     cy.wait(1500); // waiting for now, remove this fix with a proper selector after merge of agenda design
-    cy.get(agenda.agendaitemTitlesView.confidential).contains('Vertrouwelijk');
+    cy.get(agenda.agendaitemTitlesView.confidential).contains('Beperkte toegang');
 
     // Click the "wijzigen link.
     cy.get(agenda.agendaitemTitlesView.edit).click();

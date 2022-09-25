@@ -14,7 +14,7 @@ export default class AccessLevelColorBadge extends Component {
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
         case CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE:
-        case CONSTANTS.ACCESS_LEVELS.MINISTERRAAD:
+        case CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK:
           modifier = 'error';
           break;
       }

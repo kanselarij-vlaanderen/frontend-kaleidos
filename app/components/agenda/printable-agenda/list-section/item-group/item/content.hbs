@@ -20,7 +20,7 @@
   >
     {{#if (await @item.agendaActivity.subcase.confidential)}}
       <AuPill @size="small" @skin="danger" @icon="lock-closed">
-        {{t "confidential"}}
+        {{t "limited-access"}}
       </AuPill>
     {{/if}}
     {{#if @item.retracted}}
