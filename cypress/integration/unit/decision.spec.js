@@ -96,19 +96,19 @@ context('Decision tests', () => {
     // TODO-bug, cypress cannot press button right after page load, getters are async and not awaited
     cy.wait(2000);
     // postpone agendaitem on agenda B
-    cy.intercept('PATCH', '/agendaitems/**').as('patchAgendaitem1');
+    cy.intercept('PATCH', '/decision-activities/**').as('patchActivity1');
     cy.get(agenda.agendaitemControls.actions).click();
     cy.get(agenda.agendaitemControls.action.postpone).click();
-    cy.wait('@patchAgendaitem1');
+    cy.wait('@patchActivity1');
     cy.get(utils.vlModal.dialogWindow).should('not.exist');
     cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 2);
     cy.get(agenda.agendaDetailSidebarItem.postponed).should('have.length', 1);
 
     // advance agendaitem
-    cy.intercept('PATCH', '/agendaitems/**').as('patchAgendaitem2');
+    cy.intercept('PATCH', '/decision-activities/**').as('patchActivity2');
     cy.get(agenda.agendaitemControls.actions).click();
     cy.get(agenda.agendaitemControls.action.postponeRevert).click();
-    cy.wait('@patchAgendaitem2');
+    cy.wait('@patchActivity2');
     cy.get(utils.vlModal.dialogWindow).should('not.exist');
     cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 2);
     cy.get(agenda.agendaDetailSidebarItem.postponed).should('have.length', 0);
