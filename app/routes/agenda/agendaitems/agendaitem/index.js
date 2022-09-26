@@ -31,6 +31,8 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     }
     const agendaItemTreatment = await model.treatment;
     this.newsletterInfo = await agendaItemTreatment?.newsletterInfo;
+    this.decisionActivity = await agendaItemTreatment?.decisionActivity;
+    await this.decisionActivity?.decisionResultCode;
     // When routing here from agenda overview with stale data, we need to reload several relations
     // The reload in model refreshes only the attributes and includes relations, makes saves with stale relation data possible
     await model.hasMany('mandatees').reload();

@@ -1,3 +1,23 @@
+{{#let this.model.treatment.decisionActivity.decisionResultCode as |drc|}}
+  {{#if drc.isRetracted}}
+    <Auk::Alert @skin="warning" @message={{t "retracted-item"}}/>
+  {{/if}}
+  {{#if drc.isPostponed}}
+    <div class="auk-alert auk-alert--warning">
+      <div class="auk-alert__body">
+        <Auk::Badge @icon="alert-triangle" @skin={{"warning"}}/>
+        <div class="auk-alert__text">
+          <p class="auk-u-text-pre-line auk-alert__message">{{t "postponed-item"}}</p>
+        </div>
+      </div>
+      {{!-- <Auk::dropdownMenu
+        @skin="primary"
+        @label={{"Opnieuw agenderen"}}
+      /> --}}
+    </div>
+  {{/if}}
+{{/let}}
+
 <Auk::Toolbar class="auk-u-mb-4" as |Toolbar|>
   <Toolbar.Group @position="left" as |Group|>
     <Group.Item>

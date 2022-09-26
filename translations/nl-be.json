@@ -291,7 +291,7 @@
   "overview": "Overzicht",
   "phases": "Fases",
   "postpone": "Uitstellen",
-  "postponed-item": "Dit punt is uitgesteld.",
+  "postponed-item": "Dit agendapunt is uitgesteld.",
   "postponed-subcase": "Deze procedurestap is uitgesteld op ",
   "preparation-text": "Voorbereidende tekst voor de persagenda",
   "press-agenda": "Persagenda voor",
@@ -1078,6 +1078,6 @@
   "retract": "Intrekken",
   "retracted": "Ingetrokken",
   "retract-revert": "Intrekken ongedaan maken",
-  "retracted-item": "Dit punt is ingetrokken.",
+  "retracted-item": "Dit agendapunt is ingetrokken.",
   "retracted-subcase": "Deze procedurestap is ingetrokken op "
 }
