@@ -294,4 +294,39 @@ context('Publications proofs tests', () => {
     cy.get(auk.modal.header.title).contains(`Drukproef aanvragen voor publicatie ${fields.number}`);
     cy.get(publication.proofRequest.subject).contains(`Drukproefaanvraag VO-dossier: ${fields.number} - ${fields.shortTitle}`);
   });
+
+  it('should check the duedate field in proofs', () => {
+    const lateDueDate = Cypress.dayjs().subtract(5, 'days');
+    const formattedLateDueDate = lateDueDate.format('DD-MM-YYYY');
+
+    cy.visit('/publicaties/626FBC3BCB00108193DC4361/drukproeven');
+
+    // set duedate
+    cy.get(publication.proofInfoPanel.edit).click();
+    cy.get(publication.proofInfoPanel.editView.dueDate).find(auk.datepicker)
+      .click();
+    cy.setDateInFlatpickr(lateDueDate);
+    cy.get(publication.proofInfoPanel.save).click();
+    // check if warning shows
+    cy.get(publication.proofInfoPanel.view.dueDate).contains(formattedLateDueDate);
+    cy.get(auk.formHelpText).contains('Datum verstreken');
+
+    // go to publicationinfopanel and check duedate field
+    cy.get(publication.publicationNav.case).click();
+    cy.get(publication.publicationCaseInfo.dueDate).contains(formattedLateDueDate);
+    // remove duedate
+    cy.get(publication.publicationCaseInfo.edit).click();
+    cy.get(publication.publicationCaseInfo.editView.dueDate).find(auk.datepicker)
+      .click()
+      .clear();
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    cy.intercept('PATCH', '/publication-subcases/**').as('patchPublicationSubcase');
+    cy.get(publication.publicationCaseInfo.editView.save).click();
+    cy.wait('@patchPublicationFlow');
+    cy.wait('@patchPublicationSubcase');
+    // check if proofinfopanel duedate is updated correctly
+    cy.get(publication.publicationNav.proofs).click();
+    cy.get(publication.proofInfoPanel.view.dueDate).contains('-');
+    cy.get(auk.formHelpText).should('not.exist');
+  });
 });
