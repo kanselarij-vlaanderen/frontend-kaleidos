@@ -32,7 +32,6 @@ export default class AgendaitemControls extends Component {
   }
 
   get areDecisionActionsEnabled() {
-    // TODO KAS-1652 any special rules for when postponing or retracted should be disabled?
     const agendaActivity = this.args.agendaActivity;
     if (!agendaActivity) {
       // In case of legacy agendaitems without a link to subcase (old) or agenda-activity
