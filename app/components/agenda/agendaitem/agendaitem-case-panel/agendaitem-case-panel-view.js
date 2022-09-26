@@ -12,7 +12,7 @@ import { task } from 'ember-concurrency';
  */
 export default class AgendaitemCasePanelView extends Component {
   @tracked decisionmakingFlow;
-  @tracked agendaitemDecisionResult;
+  @tracked decisionActivity;
 
   constructor() {
     super(...arguments);
@@ -30,7 +30,7 @@ export default class AgendaitemCasePanelView extends Component {
   @task
   *loadDecisionActivity() {
     const treatment = yield this.args.agendaitem.treatment;
-    const decisionActivity = yield treatment?.decisionActivity;
-    this.agendaitemDecisionResult = yield decisionActivity?.decisionResultCode;
+    this.decisionActivity = yield treatment?.decisionActivity;
+    yield this.decisionActivity?.decisionResultCode;
   }
 }

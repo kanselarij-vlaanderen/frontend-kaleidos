@@ -1,5 +1,11 @@
 <div
-  class={{if this.isAgendaitemPostponedOrRetracted "auk-u-opacity--1/3"}}
+  class={{if
+    (or
+      this.decisionActivity.decisionResultCode.isPostponed
+      this.decisionActivity.decisionResultCode.isRetracted
+    )
+    "auk-u-opacity--1/3"
+  }}
   {{in-viewport
     onEnter=(perform this.lazyLoadSideData)
     onExit=this.cancelLazyLoad

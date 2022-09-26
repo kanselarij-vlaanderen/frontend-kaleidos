@@ -37,7 +37,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   @tracked agendaitemDocuments;
   @tracked newAgendaitemDocuments;
 
-  @tracked isAgendaitemPostponedOrRetracted = false;
+  @tracked decisionActivity;
   @tracked isShowingAllDocuments = false;
   @tracked documentsAreVisible = false;
 
@@ -104,9 +104,8 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   @task
   *loadDecisionActivity() {
     const treatment = yield this.args.agendaitem.treatment;
-    const decisionActivity = yield treatment?.decisionActivity;
-    const drc = yield decisionActivity?.decisionResultCode;
-    this.isAgendaitemPostponedOrRetracted = drc?.isPostponed || drc?.isRetracted;
+    this.decisionActivity = yield treatment?.decisionActivity;
+    yield this.decisionActivity?.decisionResultCode;
   }
 
   @dropTask
