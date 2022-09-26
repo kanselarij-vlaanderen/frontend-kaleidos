@@ -22,7 +22,6 @@ export default class SidebarItem extends Component {
   @tracked currentRouteName;
   @tracked subcase;
   @tracked newsletterIsVisible;
-  @tracked isRetractedOrPostponed = false;
   @tracked decisionActivity;
 
   constructor() {
