@@ -60,6 +60,8 @@
           <Auk::Datepicker
             @date={{this.dateFromBuffer}}
             @onChange={{set this "dateFromBuffer"}}
+            @enableClear={{this.dateFromBuffer}}
+            @onClear={{set this "dateFromBuffer" undefined}}
           />
         </div>
       </div>
@@ -69,6 +71,8 @@
           <Auk::Datepicker
             @date={{this.dateToBuffer}}
             @onChange={{set this "dateToBuffer"}}
+            @enableClear={{this.dateToBuffer}}
+            @onClear={{set this "dateToBuffer" undefined}}
           />
         </div>
       </div>
