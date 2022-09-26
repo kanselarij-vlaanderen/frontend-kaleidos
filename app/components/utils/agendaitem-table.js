@@ -100,26 +100,28 @@ export default class AgendaitemTable extends Component {
       sortColumn.set('sorted', true);
     }
 
-    this.setRowsPostponed(table.rows, this.model);
+    this.setRowsNotApproved(table.rows, this.model);
     return table;
   }
 
   /**
-   * Will set the postponed classes on all actual table rows that should get the postponed class
+   * Will set the greyed classes on all actual table rows that have postponed or retracted decisions
    * It does so based on the current model and table rows that you supply
    * @param {Table} tableRows       Table object containing rows
    * @param {EmberArray} model      Model from the route currently active used as a lookup
    */
-  setRowsPostponed(tableRows, model) {
+  setRowsNotApproved(tableRows, model) {
     const rowsCurrentlyInTable = tableRows;
     // relations are included in route
     const postponedItems = model.filter((agendaitem) => agendaitem.get('treatment.decisionActivity.decisionResultCode.isPostponed'));
-    postponedItems.forEach((postponedItem) => {
-      const postponedRowInTable = rowsCurrentlyInTable.find(
-        (rowFromTable) => rowFromTable.content.get('id') === postponedItem.get('id')
+    const retractedItems = model.filter((agendaitem) => agendaitem.get('treatment.decisionActivity.decisionResultCode.isRetracted'));
+    const combinedItems = [...postponedItems, ...retractedItems];
+    combinedItems.forEach((combinedItem) => {
+      const rowInTable = rowsCurrentlyInTable.find(
+        (rowFromTable) => rowFromTable.content.get('id') === combinedItem.get('id')
       );
-      if (postponedRowInTable) {
-        postponedRowInTable.set('classNames', 'auk-u-opacity--1/2');
+      if (rowInTable) {
+        rowInTable.set('classNames', 'auk-u-opacity--1/2');
       }
     });
   }
