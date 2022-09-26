@@ -15,8 +15,8 @@ export default class CasesCaseSubcasesSubcaseOverviewRoute extends Route {
     },
   };
 
-  async beforeModel() {
-    this.case = this.modelFor('cases.case');
+  beforeModel() {
+    this.decisionmakingFlow = this.modelFor('cases.case');
   }
 
   async model(params) {
@@ -25,11 +25,7 @@ export default class CasesCaseSubcasesSubcaseOverviewRoute extends Route {
     //  We want to sort descending on date the subcase was concluded.
     //  In practice, reverse sorting on created will be close
     const siblingSubcases = await this.store.query('subcase', {
-      filter: {
-        case: {
-          id: this.case.id,
-        },
-      },
+      'filter[decisionmaking-flow][:id:]': this.decisionmakingFlow.id,
       page: {
         number: params.page,
         size: params.size,
@@ -54,7 +50,7 @@ export default class CasesCaseSubcasesSubcaseOverviewRoute extends Route {
     super.setupController(...arguments);
     controller.mandatees = this.mandatees;
     controller.submitter = this.submitter;
-    controller.case = this.case;
+    controller.decisionmakingFlow = this.decisionmakingFlow;
     controller.meeting = this.meeting;
     controller.governmentAreas = this.governmentAreas;
   }

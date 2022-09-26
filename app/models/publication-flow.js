@@ -38,4 +38,5 @@ export default class PublicationFlow extends Model {
     serialize: true,
   }) mandatees;
   @hasMany('piece') referenceDocuments;
+  @hasMany('concept') governmentAreas;
 }

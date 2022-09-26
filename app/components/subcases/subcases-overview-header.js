@@ -7,18 +7,20 @@ import { task } from 'ember-concurrency';
 export default class SubCasesOverviewHeader extends Component {
   @service currentSession;
 
+  @tracked case;
   @tracked showAddSubcaseModal = false;
   @tracked showEditCaseModal = false;
   @tracked publicationFlows;
 
   constructor() {
     super(...arguments);
-    this.loadPublicationFlows.perform();
+    this.loadData.perform();
   }
 
   @task
-  *loadPublicationFlows() {
-    this.publicationFlows = yield this.args.case.publicationFlows;
+  *loadData() {
+    this.case = yield this.args.decisionmakingFlow.case;
+    this.publicationFlows = yield this.case.publicationFlows;
   }
 
   @action
@@ -49,7 +51,7 @@ export default class SubCasesOverviewHeader extends Component {
 
   @action
   async onCreateSubcase() {
-    this.args.onCreateSubcase();
+    await this.args.onCreateSubcase();
     this.closeAddSubcaseModal();
   }
 }

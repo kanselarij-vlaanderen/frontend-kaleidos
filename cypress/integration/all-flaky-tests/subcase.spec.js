@@ -53,7 +53,7 @@ context('Subcase tests', () => {
 
   before(() => {
     cy.login('Admin');
-    cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
+    cy.createAgenda(null, agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logoutFlow();
   });
 
@@ -66,7 +66,7 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor het aanmaken van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
+    cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, subcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
 
@@ -105,7 +105,7 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor het aanmaken en verwijderen van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
+    cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.wait(2000);
@@ -118,7 +118,7 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor niet kunnen verwijderen van een procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
+    cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.proposeSubcaseForAgenda(agendaDate);
@@ -134,7 +134,7 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor te klikken op de link naar agenda vanuit procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
+    cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.proposeSubcaseForAgenda(agendaDate);
@@ -195,7 +195,7 @@ context('Subcase tests', () => {
     // Index view
     // TODO-BUG, page is loading, the new sidenav for agendas has pills and we only get those
     cy.wait(1500); // waiting for now, remove this fix with a proper selector after merge of agenda design
-    cy.get(agenda.agendaitemTitlesView.confidential).contains('Vertrouwelijk');
+    cy.get(agenda.agendaitemTitlesView.confidential).contains('Beperkte toegang');
 
     // Click the "wijzigen link.
     cy.get(agenda.agendaitemTitlesView.edit).click();
@@ -345,7 +345,7 @@ context('Subcase tests', () => {
     cy.setAllItemsFormallyOk(5);
     cy.approveAndCloseDesignAgenda();
 
-    cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
+    cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.get(cases.subcaseItem.approved).should('have.length', 3);
     cy.openSubcase(2);
     cy.get(cases.subcaseDescription.decidedOn).contains(agendaDate.format('DD-MM-YYYY'));
@@ -357,11 +357,9 @@ context('Subcase tests', () => {
     const type = 'Nota';
     const caseTitle1 = `Cypress test ${randomInt1}: move subcases`;
     const caseTitle2 = `Cypress test ${randomInt2}: move subcases`;
-    const caseTitle3 = 'Besluitvorming Vlaamse Regering hoed';
     const subcaseShortTitle1 = 'Short title 1 for moving subcase';
     const subcaseShortTitle2 = 'Short title 2 for moving subcase';
     const subcaseShortTitle3 = 'Short title 3 for moving subcase';
-    const subcaseShortTitle4 = 'Short title 4 for moving subcase';
 
     // setup
     cy.createCase(caseTitle1);
@@ -376,7 +374,7 @@ context('Subcase tests', () => {
     cy.openSubcase(0);
     cy.get(cases.subcaseHeader.actionsDropdown).click();
     cy.get(cases.subcaseHeader.actions.moveSubcase).click();
-    cy.intercept('GET', 'cases/search?**').as('searchCall1');
+    cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall1');
     cy.get(utils.caseSearch.input).type(caseTitle2)
       .wait('@searchCall1')
       .wait(1000);
@@ -395,7 +393,7 @@ context('Subcase tests', () => {
     cy.openSubcase(0);
     cy.get(cases.subcaseHeader.actionsDropdown).click();
     cy.get(cases.subcaseHeader.actions.moveSubcase).click();
-    cy.intercept('GET', 'cases/search?**').as('searchCall2');
+    cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall2');
     cy.get(utils.caseSearch.input).type(caseTitle2)
       .wait('@searchCall2')
       .wait(1000);
@@ -417,7 +415,7 @@ context('Subcase tests', () => {
     cy.openSubcase(0);
     cy.get(cases.subcaseHeader.actionsDropdown).click();
     cy.get(cases.subcaseHeader.actions.moveSubcase).click();
-    cy.intercept('GET', 'cases/search?**').as('searchCall3');
+    cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall3');
     cy.get(utils.caseSearch.input).type(caseTitle2)
       .wait('@searchCall3')
       .wait(1000);
@@ -431,24 +429,6 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseItem.container).should('have.length', 3)
       .find(cases.subcaseItem.link)
       .contains(subcaseShortTitle3);
-
-    // use case 4
-    cy.openCase(caseTitle3);
-    cy.addSubcase(type, subcaseShortTitle4);
-    cy.openSubcase(0);
-    cy.get(cases.subcaseHeader.actionsDropdown).click();
-    cy.get(cases.subcaseHeader.actions.moveSubcase).click();
-    cy.intercept('GET', 'cases/search?**').as('searchCall4');
-    cy.get(utils.caseSearch.input).type(caseTitle2)
-      .wait('@searchCall4')
-      .wait(1000);
-    cy.intercept('PATCH', 'subcases/**').as('patchSubcases4');
-    cy.get(utils.caseSearch.row).contains(caseTitle2)
-      .click()
-      .wait('@patchSubcases4');
-    cy.get(utils.vlModalVerify.container).should('not.exist');
-    cy.get(cases.subcaseOverviewHeader.titleContainer).contains(caseTitle3);
-    cy.get(cases.subcaseItem.container).should('not.exist');
   });
 
   it('check capital letters of subcase name', () => {
@@ -486,7 +466,7 @@ context('Subcase tests', () => {
       .click();
     cy.get(agenda.agendaitemTitlesView.subcaseName).contains(capital);
 
-    cy.visit('dossiers/5EBA9528751CF7000800000A/deeldossiers');
+    cy.visit('dossiers/E14FB500-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.get(cases.subcaseItem.link).contains(nonCapital);
     cy.get(cases.subcaseOverviewHeader.createSubcase).click();
     cy.get(cases.newSubcase.procedureName).click();

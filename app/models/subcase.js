@@ -6,7 +6,7 @@ export default class Subcase extends ModelWithModifier {
   @attr('datetime') modified;
   @attr shortTitle;
   @attr title;
-  @attr('boolean') confidential;
+  @attr('boolean') confidential; // this is now "limited access"
   @attr('boolean') isArchived;
   @attr subcaseName;
 
@@ -15,7 +15,7 @@ export default class Subcase extends ModelWithModifier {
   }
 
   @belongsTo('subcase-type') type;
-  @belongsTo('case') case;
+  @belongsTo('decisionmaking-flow') decisionmakingFlow;
   @belongsTo('meeting', { inverse: null }) requestedForMeeting;
   @belongsTo('mandatee', { inverse: null }) requestedBy;
   @belongsTo('concept') agendaItemType;

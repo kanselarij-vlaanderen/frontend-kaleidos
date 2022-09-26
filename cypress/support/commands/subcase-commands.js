@@ -59,13 +59,11 @@ function getTranslatedMonth(month) {
 function openSubcase(index = 0) {
   cy.log('openSubcase');
   // cy.intercept('GET', '/subcases?**').as('getSubcases');
-  // cy.intercept('GET', '/cases/**/subcases').as('getCaseSubcases');
   // cy.wait('@getSubcases', { timeout: 12000 });
   cy.wait(2000); // link does not always work (not visible or click does nothing unless we wait)
   cy.get(cases.subcaseItem.container).eq(index)
     .find(cases.subcaseItem.link)
     .click();
-  // cy.wait('@getCaseSubcases', { timeout: 12000 });
   cy.log('/openSubcase');
 }
 

@@ -142,7 +142,7 @@ context('Agenda tests', () => {
     const privateComment = 'Dit is de interne opmerking';
     const whitespace = '\n';
 
-    cy.visit('dossiers/627E5BEB896D8E189787BAF6/deeldossiers');
+    cy.visit('dossiers/E14FB528-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     // keep this setup because we want to validate the trimming of text on creation of subcase
     cy.addSubcase(typeNota, subcaseTitleShort + whitespace, subcaseTitleLong + whitespace);
     cy.openSubcase(0);
@@ -201,14 +201,14 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaitemTitlesView.comment).contains(`Opmerking: ${whitespace + comment + whitespace}`);
     // privatec comment is not trimmed
     cy.get(agenda.agendaitemTitlesView.privateComment).contains(`Interne opmerking: ${whitespace + privateComment + whitespace}`);
-    cy.get(agenda.agendaitemTitlesView.confidential).contains('Vertrouwelijk');
+    cy.get(agenda.agendaitemTitlesView.confidential).contains('Beperkte toegang');
 
     // rollback confidentiality should work
     cy.get(agenda.agendaitemTitlesView.edit).click();
     cy.get(agenda.agendaitemTitlesEdit.confidential).click();
     cy.get(agenda.agendaitemTitlesView.confidential).should('not.exist');
     cy.get(agenda.agendaitemTitlesEdit.actions.cancel).click();
-    cy.get(agenda.agendaitemTitlesView.confidential).contains('Vertrouwelijk');
+    cy.get(agenda.agendaitemTitlesView.confidential).contains('Beperkte toegang');
   });
 
   it('It should be automatically get the next meetingID assigned in the UI', () => {

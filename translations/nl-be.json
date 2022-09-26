@@ -1069,5 +1069,10 @@
   "replace": "Vervangen",
   "source-file": "Bronbestand",
   "newsletters-tabs-search": "Bericht zoeken",
-  "newsletters-tabs-overview": "Alle berichten"
+  "newsletters-tabs-overview": "Alle berichten",
+  "source-file-lowercase": "bronbestand",
+  "word-document": "Word document",
+  "as": "als",
+  "limited-access": "Beperkte toegang",
+  "upload": "Opladen"
 }

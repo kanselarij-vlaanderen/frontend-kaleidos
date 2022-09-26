@@ -1,17 +1,15 @@
 import Controller from '@ember/controller';
-import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
 export default class CaseController extends Controller {
-  @tracked isViaCouncilOfMinisters;
-  @tracked _case;
+  governmentAreas;
 
   @action
   async saveGovernmentAreas(newGovernmentAreas) {
-    const governmentAreas = await this._case.governmentAreas;
+    const governmentAreas = await this.model.governmentAreas;
 
     governmentAreas.clear();
     governmentAreas.pushObjects(newGovernmentAreas);
-    await this._case.save();
+    await this.model.save();
   }
 }

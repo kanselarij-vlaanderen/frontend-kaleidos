@@ -66,10 +66,14 @@ context('Testing the application as Kort bestek user', () => {
     cy.visitAgendaWithLink('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten');
 
     cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.navigateToDecisions).should('exist');
+    // Allowed actions
     cy.get(agenda.agendaActions.navigateToNewsletter).should('exist');
     cy.get(agenda.agendaActions.navigateToPrintablePressAgenda).should('exist');
     cy.get(agenda.agendaActions.navigateToPrintableAgenda).should('exist');
     cy.get(agenda.agendaActions.downloadDocuments).should('exist');
+    // TODO Plan publication / withdraw publication should not be done by KB?
+    // Restricted actions
+    // TODO can KB manage desisions?
+    cy.get(agenda.agendaActions.navigateToDecisions).should('not.exist');
   });
 });

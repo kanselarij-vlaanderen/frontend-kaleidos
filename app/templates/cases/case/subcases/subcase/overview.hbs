@@ -13,7 +13,7 @@
           <div class="confidential">
             <Auk::Checkbox
               @checked={{@model.subcase.confidential}}
-              @label={{t "confidential"}}
+              @label={{t "limited-access"}}
               @disabled={{true}}
               data-test-cases---subcase-overview-confidentiality-checkbox={{true}}
             />
@@ -42,7 +42,7 @@
         @onSave={{this.saveGovernmentAreas}}
       />
       <Subcases::SubcasesHistory
-        @case={{this.case}}
+        @decisionmakingFlow={{this.decisionmakingFlow}}
         @subcases={{@model.siblingSubcases}}
         @page={{this.page}}
         @size={{this.size}}

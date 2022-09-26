@@ -13,7 +13,7 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
 
   async model() {
     this.subcase = this.modelFor('cases.case.subcases.subcase');
-    // 2-step procees (submission-activity -> pieces). Querying pieces directly doesn't
+    // 2-step process (submission-activity -> pieces). Querying pieces directly doesn't
     // work since the inverse isn't present in API config
     const submissionActivities = await this.store.query('submission-activity', {
       'filter[subcase][:id:]': this.subcase.id,
@@ -46,7 +46,7 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     this.defaultAccessLevel = await this.store.findRecordByUri(
       'concept',
       this.subcase.confidential
-        ? CONSTANTS.ACCESS_LEVELS.MINISTERRAAD
+        ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
 
@@ -62,14 +62,15 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     } else {
       this.documentsAreVisible = true;
     }
+    const decisionmakingFlow = this.modelFor('cases.case');
+    this.case = await decisionmakingFlow.case;
   }
 
   setupController(controller) {
     super.setupController(...arguments);
     const subcase = this.modelFor('cases.case.subcases.subcase');
     controller.subcase = subcase;
-    const _case = this.modelFor('cases.case');
-    controller.case = _case;
+    controller.case = this.case;
     controller.documentsAreVisible = this.documentsAreVisible;
     controller.defaultAccessLevel = this.defaultAccessLevel;
   }

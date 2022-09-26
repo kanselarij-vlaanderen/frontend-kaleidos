@@ -7,7 +7,7 @@
 </div>
 {{#if @subcases.length}}
   {{#each @subcases as |subcase|}}
-    <Subcases::SubcaseItem @case={{@case}} @subcase={{subcase}}>
+    <Subcases::SubcaseItem @decisionmakingFlow={{@decisionmakingFlow}} @subcase={{subcase}}>
       <div class="auk-hr">
         <hr />
       </div>
