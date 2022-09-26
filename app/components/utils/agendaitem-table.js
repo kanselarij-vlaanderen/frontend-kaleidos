@@ -112,8 +112,8 @@ export default class AgendaitemTable extends Component {
    */
   setRowsPostponed(tableRows, model) {
     const rowsCurrentlyInTable = tableRows;
-    // TODO KAS-1652 retracted refactor
-    const postponedItems = model.filter((agendaitem) => agendaitem.get('retracted'));
+    // relations are included in route
+    const postponedItems = model.filter((agendaitem) => agendaitem.get('treatment.decisionActivity.decisionResultCode.isPostponed'));
     postponedItems.forEach((postponedItem) => {
       const postponedRowInTable = rowsCurrentlyInTable.find(
         (rowFromTable) => rowFromTable.content.get('id') === postponedItem.get('id')
