@@ -112,21 +112,6 @@ export default class AgendaitemControls extends Component {
   }
 
   @action
-  async advanceAgendaitem() {
-    // Advancing agendaitem could be read as "reverting postponed or retracted status"
-    this.isSavingDecisionResult = true;
-    const type = await this.args.agendaitem.type;
-    if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
-      this.setDecisionResultCode(CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME);
-    }
-    // any other type, only NOTA exists right now bu
-    else {
-      this.setDecisionResultCode(CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD);
-    }
-    this.isSavingDecisionResult = false;
-  }
-
-  @action
   toggleIsVerifying() {
     this.isVerifying = !this.isVerifying;
   }
@@ -134,6 +119,18 @@ export default class AgendaitemControls extends Component {
   @action
   verifyDelete(agendaitem) {
     this.deleteItem(agendaitem);
+  }
+  @action
+  async resetDecisionResultCode() {
+    this.isSavingDecisionResult = true;
+    const agendaItemType = await this.args.agendaitem.type;
+    const isAnnouncement =
+      agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
+    const defaultDecisionResultCodeUri = isAnnouncement
+      ? CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
+      : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
+    this.setDecisionResultCode(defaultDecisionResultCodeUri);
+    this.isSavingDecisionResult = false;
   }
 
   async setDecisionResultCode(DRC_URI) {

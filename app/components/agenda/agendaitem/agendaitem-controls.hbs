@@ -11,11 +11,11 @@
         {{#if this.areDecisionActionsEnabled}}
           {{#let this.decisionActivity.decisionResultCode as |drc| }}
             {{#if drc.isPostponed}}
-              <Menu.Item {{on "click" this.advanceAgendaitem}} data-test-agendaitem-controls-action-postpone-revert>
+              <Menu.Item {{on "click" this.resetDecisionResultCode}} data-test-agendaitem-controls-action-postpone-revert>
                 {{t "postpone-revert"}}
               </Menu.Item>
             {{else if drc.isRetracted}}
-              <Menu.Item {{on "click" this.advanceAgendaitem}}>
+              <Menu.Item {{on "click" this.resetDecisionResultCode}}>
                 {{t "retract-revert"}}
               </Menu.Item>
             {{else}}
