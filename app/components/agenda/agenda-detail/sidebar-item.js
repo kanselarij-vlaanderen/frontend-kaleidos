@@ -23,6 +23,7 @@ export default class SidebarItem extends Component {
   @tracked subcase;
   @tracked newsletterIsVisible;
   @tracked isRetractedOrPostponed = false;
+  @tracked decisionActivity;
 
   constructor() {
     super(...arguments);
@@ -47,7 +48,11 @@ export default class SidebarItem extends Component {
     if (this.args.isActive) {
       classes.push('vlc-agenda-detail-sidebar__sub-item--active');
     }
-    if (this.isRetractedOrPostponed) {
+    // Needed in order to change the sidebar classes when editing in the agendaitem detail route
+    if (this.decisionActivity?.get('decisionResultCode.isPostponed')) {
+      classes.push('auk-u-opacity--1/3');
+    }
+    if (this.decisionActivity?.get('decisionResultCode.isRetracted')) {
       classes.push('auk-u-opacity--1/3');
     }
     return classes.join(' ');
@@ -91,9 +96,8 @@ export default class SidebarItem extends Component {
   @task
   *loadDecisionActivity() {
     const treatment = yield this.args.agendaitem.treatment;
-    const decisionActivity = yield treatment?.decisionActivity;
-    const drc = yield decisionActivity?.decisionResultCode;
-    this.isRetractedOrPostponed = drc?.isPostponed | drc?.isRetracted;
+    this.decisionActivity = yield treatment?.decisionActivity;
+    yield this.decisionActivity?.decisionResultCode;
   }
 
   @action
