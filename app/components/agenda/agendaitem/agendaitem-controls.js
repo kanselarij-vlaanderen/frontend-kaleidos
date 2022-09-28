@@ -18,7 +18,6 @@ export default class AgendaitemControls extends Component {
   @service agendaService;
   @service currentSession;
 
-  @tracked isSavingDecisionResult = false;
   @tracked isVerifying = false;
   @tracked showLoader = false;
   @tracked isDesignAgenda;
@@ -95,19 +94,15 @@ export default class AgendaitemControls extends Component {
     this.showLoader = false;
   }
 
-  @action
-  async postponeAgendaitem() {
-    this.isSavingDecisionResult = true;
-    this.setDecisionResultCode(CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD);
-    this.isSavingDecisionResult = false;
+  @task
+  *postponeAgendaitem() {
+    yield this.setDecisionResultCode(CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD);
   }
 
 
-  @action
-  async retractAgendaitem() {
-    this.isSavingDecisionResult = true;
-    this.setDecisionResultCode(CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN);
-    this.isSavingDecisionResult = false;
+  @task
+  *retractAgendaitem() {
+    yield this.setDecisionResultCode(CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN);
   }
 
   @action
@@ -119,24 +114,22 @@ export default class AgendaitemControls extends Component {
   verifyDelete(agendaitem) {
     this.deleteItem(agendaitem);
   }
-  @action
-  async resetDecisionResultCode() {
-    this.isSavingDecisionResult = true;
-    const agendaItemType = await this.args.agendaitem.type;
+
+  @task
+  *resetDecisionResultCode() {
+    const agendaItemType = yield this.args.agendaitem.type;
     const isAnnouncement =
       agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
     const defaultDecisionResultCodeUri = isAnnouncement
       ? CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
       : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
-    this.setDecisionResultCode(defaultDecisionResultCodeUri);
-    this.isSavingDecisionResult = false;
+    yield this.setDecisionResultCode(defaultDecisionResultCodeUri);
   }
 
-  async setDecisionResultCode(DRC_URI) {
-    // DRC_URI should come from CONSTANTS.DECISION_RESULT_CODE_URIS
+  async setDecisionResultCode(decisionResultCodeUri) {
     const decisionResultCode = await this.store.findRecordByUri(
       'decision-result-code',
-      DRC_URI
+      decisionResultCodeUri
     );
     this.decisionActivity.decisionResultCode = decisionResultCode;
     await this.decisionActivity.save();
