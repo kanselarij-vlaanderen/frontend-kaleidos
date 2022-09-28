@@ -69,6 +69,8 @@
             min={{this.publicationYearMin}}
             max={{this.publicationYearMax}}
             {{on "focusout" this.loadMandateePersons}}
+            {{on "focusout" (perform this.loadGovernmentDomains)}}
+            {{on "change" (perform this.loadGovernmentDomains)}}
           />
         </div>
       {{/if}}
