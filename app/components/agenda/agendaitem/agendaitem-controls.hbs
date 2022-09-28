@@ -9,12 +9,12 @@
         data-test-agendaitem-controls-actions={{true}}
       as |Menu|>
         {{#if this.areDecisionActionsEnabled}}
-          {{#let this.decisionActivity.decisionResultCode as |drc| }}
-            {{#if drc.isPostponed}}
+          {{#let this.decisionActivity.decisionResultCode as |resultCode| }}
+            {{#if resultCode.isPostponed}}
               <Menu.Item {{on "click" this.resetDecisionResultCode}} data-test-agendaitem-controls-action-postpone-revert>
                 {{t "postpone-revert"}}
               </Menu.Item>
-            {{else if drc.isRetracted}}
+            {{else if resultCode.isRetracted}}
               <Menu.Item {{on "click" this.resetDecisionResultCode}}>
                 {{t "retract-revert"}}
               </Menu.Item>
@@ -52,7 +52,7 @@
     @verify={{fn this.verifyDelete @agendaitem}}/>
 {{/if}}
 
-{{#if this.isSavingDecisionResult}}
+{{#if this.setDecisionResultCode.isRunning}}
   <WebComponents::VlModal
     @isOverlay={{true}}
     @showCloseButton={{false}}

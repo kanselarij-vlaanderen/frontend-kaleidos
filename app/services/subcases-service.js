@@ -58,18 +58,18 @@ export default class SubcasesService extends Service {
             // We already have the decision-result resource in the backend query,
             // we could just send the label to the frontend as well and shave off a request here.
             // See: https://github.com/kanselarij-vlaanderen/custom-subcases-service/blob/d5ba54049ecd0ae80d73d4c1875bc5855a394dbd/repository/index.js#L69
-            const drc = await this.store.findRecord(
+            const resultCode = await this.store.findRecord(
               'decision-result-code',
               phaseData.decisionResultId
             );
-            if (drc) {
+            if (resultCode) {
               phases.push({
-                label: `${drc.label} ${this.intl.t(
+                label: `${resultCode.label} ${this.intl.t(
                   'decision-activity-result'
                 )}`,
                 date: geplandeStart,
               });
-              if (drc.isPostponed) {
+              if (resultCode.isPostponed) {
                 phases.push({
                   label: this.intl.t('decision-activity-result-postponed'),
                 });

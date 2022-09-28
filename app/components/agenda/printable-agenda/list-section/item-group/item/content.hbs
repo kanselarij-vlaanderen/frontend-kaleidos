@@ -12,10 +12,10 @@
     {{! prettier-ignore }}
     <p class="auk-u-m-0 l-printable-agenda__description auk-u-text-pre-line"><SanitizeHtml @raw={{true}} @value={{@item.title}} /></p>
   {{/if}}
-  {{#let (await @item.treatment.decisionActivity.decisionResultCode) as |drc| }}
+  {{#let (await @item.treatment.decisionActivity.decisionResultCode) as |resultCode| }}
     <div
       class="{{if
-          (or drc.isPostponed drc.isRetracted (await @item.agendaActivity.subcase.confidential))
+          (or resultCode.isPostponed resultCode.isRetracted (await @item.agendaActivity.subcase.confidential))
           "auk-u-mt-2"
         }}"
     >
@@ -24,10 +24,10 @@
           {{t "limited-access"}}
         </AuPill>
       {{/if}}
-      {{#if drc.isPostponed}}
+      {{#if resultCode.isPostponed}}
         <AuPill @size="small">{{t "postponed"}}</AuPill>
       {{/if}}
-      {{#if drc.isRetracted}}
+      {{#if resultCode.isRetracted}}
         <AuPill @size="small">{{t "retracted"}}</AuPill>
       {{/if}}
     </div>

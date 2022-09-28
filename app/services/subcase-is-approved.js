@@ -33,14 +33,9 @@ export default class SubcaseIsApprovedService extends Service {
     const meeting = await subcase?.requestedForMeeting;
 
     if (meeting?.isFinal) {
-      const retractedDecisionResultCode = await this.store.findRecordByUri(
-        'decision-result-code',
-        CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN
-      );
-
       const nrDecisionActivities = await this.store.count('decision-activity', {
         'filter[subcase][:id:]': subcase.id,
-        'filter[decision-result-code][:id:]': retractedDecisionResultCode.id,
+        'filter[decision-result-code][:uri:]': CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN,
       });
       return nrDecisionActivities > 0;
     }
@@ -51,14 +46,9 @@ export default class SubcaseIsApprovedService extends Service {
     const meeting = await subcase?.requestedForMeeting;
 
     if (meeting?.isFinal) {
-      const postponedDecisionResultCode = await this.store.findRecordByUri(
-        'decision-result-code',
-        CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD
-      );
-
       const nrDecisionActivities = await this.store.count('decision-activity', {
         'filter[subcase][:id:]': subcase.id,
-        'filter[decision-result-code][:id:]': postponedDecisionResultCode.id,
+        'filter[decision-result-code][:uri:]': CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD,
       });
       return nrDecisionActivities > 0;
     }
