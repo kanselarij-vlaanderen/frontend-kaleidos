@@ -11,18 +11,18 @@
         {{#if this.areDecisionActionsEnabled}}
           {{#let this.decisionActivity.decisionResultCode as |resultCode| }}
             {{#if resultCode.isPostponed}}
-              <Menu.Item {{on "click" this.resetDecisionResultCode}} data-test-agendaitem-controls-action-postpone-revert>
+              <Menu.Item {{on "click" this.resetDecisionResultCode.perform}} data-test-agendaitem-controls-action-postpone-revert>
                 {{t "postpone-revert"}}
               </Menu.Item>
             {{else if resultCode.isRetracted}}
-              <Menu.Item {{on "click" this.resetDecisionResultCode}}>
+              <Menu.Item {{on "click" this.resetDecisionResultCode.perform}}>
                 {{t "retract-revert"}}
               </Menu.Item>
             {{else}}
-              <Menu.Item {{on "click" this.postponeAgendaitem}} data-test-agendaitem-controls-action-postpone>
+              <Menu.Item {{on "click" this.postponeAgendaitem.perform}} data-test-agendaitem-controls-action-postpone>
                 {{t "postpone"}}
               </Menu.Item>
-              <Menu.Item {{on "click" this.retractAgendaitem}}>
+              <Menu.Item {{on "click" this.retractAgendaitem.perform}}>
                 {{t "retract"}}
               </Menu.Item>
             {{/if}}
