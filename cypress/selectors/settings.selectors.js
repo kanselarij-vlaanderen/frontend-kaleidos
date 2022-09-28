@@ -59,7 +59,6 @@ const selectors = {
   },
 
   // component next-button
-  // TODO-selector this component is just a linkTo, refactor to au component
-  goToUserDetail: '[data-test-next-button-user-detail]',
+  goToUserDetail: '[data-test-button-user-detail]',
 };
 export default selectors;
