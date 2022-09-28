@@ -98,9 +98,9 @@
             </:floater>
           </Auk::Button>
         {{/if}}
-        <AuButton
+        <AuLink
           data-test-newsletter-table-button-toolbar-link-to-agendaitem
-          @skin="naked"
+          @skin="button-naked"
           @icon="chevron-right"
           @hideText={{true}}
           @route="agendaitem"
@@ -108,7 +108,7 @@
           target="_blank"
         >
           {{t "open-agendaitem"}}
-        </AuButton>
+        </AuLink>
       </AuButtonGroup>
     </div>
   </td>

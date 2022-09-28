@@ -17,9 +17,9 @@
           <Group.Item>
             <AuButtonGroup>
               {{#if @subcase}}
-                <AuButton
+                <AuLink
                   data-test-agendaitem-titles-link-to-subcase={{true}}
-                  @skin="naked"
+                  @skin="button-naked"
                   @icon="chevron-right"
                   @iconAlignment="right"
                   @disabled={{this.loadCase.isRunning}}
@@ -27,7 +27,7 @@
                   @models={{array this.decisionmakingFlow.id @subcase.id}}
                 >
                   {{t "to-subcase"}}
-                </AuButton>
+                </AuLink>
               {{/if}}
               {{#if @allowEditing}}
                 <AuButton

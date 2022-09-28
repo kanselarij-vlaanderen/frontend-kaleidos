@@ -21,8 +21,8 @@
       <Auk::Toolbar::Item>
         <AuButtonGroup>
           <AuButton
-            @skin="naked"
             data-test-agenda-overview-show-changes={{true}}
+            @skin="naked"
             {{on "click" @toggleShowModifiedOnly}}
           >
             {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
@@ -30,9 +30,9 @@
           {{#if this.canEdit}}
             {{#unless this.isEditingOverview}}
               <AuButton
+                data-test-agenda-overview-formally-ok-edit={{true}}
                 @skin="naked"
                 @icon="pencil"
-                data-test-agenda-overview-formally-ok-edit={{true}}
                 {{on "click" this.toggleIsEditingOverview}}
               >
                 {{t "edit"}}

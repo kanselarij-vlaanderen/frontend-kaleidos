@@ -31,10 +31,10 @@
             <Auk::Toolbar::Group @position="right">
               <Auk::Toolbar::Item>
                 <AuButton
+                  data-test-new-subcase-clone-previous-subcase
                   @skin="secondary"
                   @icon="copy-paste"
                   {{on "click" (perform this.copyFullSubcase)}}
-                  data-test-new-subcase-clone-previous-subcase
                 >
                   {{t "clone-previous-subcase"}}
                 </AuButton>

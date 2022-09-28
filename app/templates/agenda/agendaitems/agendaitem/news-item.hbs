@@ -24,10 +24,10 @@
             {{t "edit-text"}}
           </AuButton>
           <AuButton
+            data-test-route-agenda---news-item-edit
             @icon="pencil"
             @iconAlignment="left"
             @skin="link"
-            data-test-route-agenda---news-item-edit
             {{on "click" this.openEdit}}
           >
             {{t "edit"}}
@@ -35,10 +35,10 @@
         </AuButtonGroup>
       {{else}}
         <AuButton
+          data-test-route-agenda---news-item-create
           @icon="add"
           @iconAlignment="left"
           @skin="secondary"
-          data-test-route-agenda---news-item-create
           {{on "click" this.openEdit}}
         >
           {{t "create"}}

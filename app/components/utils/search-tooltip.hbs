@@ -22,13 +22,14 @@
           </Toolbar.Group>
           <Toolbar.Group @position="right" as |Group|>
             <Group.Item>
-              <Auk::Button
+              <AuButton
+                @skin="naked"
                 @icon="x"
-                @layout="icon-only"
-                @skin="muted"
+                @hideText={{true}}
                 {{on "click" this.closeModal}}
               >
-              </Auk::Button>
+                {{t "close"}}
+              </AuButton>
             </Group.Item>
           </Toolbar.Group>
         </Auk::Toolbar>

@@ -16,13 +16,13 @@
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
-    <Auk::Button
+    <AuButton
       data-test-translation-activity-edit-save
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
       {{on "click" (perform this.save)}}
     >
       {{t "save"}}
-    </Auk::Button>
+    </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>

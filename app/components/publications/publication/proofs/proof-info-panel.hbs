@@ -11,12 +11,13 @@
       {{#unless this.isEditing}}
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <Auk::Button
-              @skin="tertiary"
+            <AuButton
+              @skin="naked"
               @icon="pencil"
-              @layout="icon-only"
               {{on "click" this.openEditingPanel}}
-            />
+            >
+              {{t "edit"}}
+            </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       {{/unless}}
@@ -64,20 +65,24 @@
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
-            <Auk::Button
-              @skin="borderless"
+            <AuButton
+              @skin="naked"
               @disabled={{this.save.isRunning}}
               {{on "click" this.closeEditingPanel}}
             >
               {{t "cancel"}}
-            </Auk::Button>
+            </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <Auk::Button @skin="primary" @loading={{this.save.isRunning}} {{on "click" (perform this.save)}}>
+            <AuButton
+              @skin="primary"
+              @loading={{this.save.isRunning}}
+              {{on "click" (perform this.save)}}
+            >
               {{t "save"}}
-            </Auk::Button>
+            </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       </Auk::Toolbar>

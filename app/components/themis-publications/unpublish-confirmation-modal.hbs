@@ -21,12 +21,12 @@
     </fieldset>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
-    <Auk::Button
+    <AuButton
       @skin="primary"
       @loading={{this.confirmUnpublish.isRunning}}
       {{on "click" (perform this.confirmUnpublish)}}
     >
       {{t "retract-from-public"}}
-    </Auk::Button>
+    </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>

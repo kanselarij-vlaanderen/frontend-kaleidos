@@ -34,22 +34,22 @@
         />
       </div>
       <AuButton
+        data-test-access-level-pill-save
         @skin="naked"
         @icon="check"
         @hideText={{true}}
         {{on "click" (perform this.confirmChangeAccessLevel @accessLevel)}}
         class="auk-o-flex__item--fix auk-u-ml"
-        data-test-access-level-pill-save
       >
         {{t "save"}}
       </AuButton>
       <AuButton
+        data-test-access-level-pill-cancel
         @skin="naked"
         @icon="x"
         @hideText={{true}}
         {{on "click" (perform this.cancelChangeAccessLevel)}}
         class="auk-o-flex__item--fix"
-        data-test-access-level-pill-cancel
       >
         {{t "cancel"}}
       </AuButton>

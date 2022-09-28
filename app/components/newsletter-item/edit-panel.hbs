@@ -95,9 +95,9 @@
                     {{t "close-fullscreen"}}
                   </AuButton>
                   <AuButton
+                    data-test-newsletter-edit-item-save
                     @loading={{this.confirmSave.isRunning}}
                     {{on "click" this.save}}
-                    data-test-newsletter-edit-item-save
                   >
                     {{t "save"}}
                   </AuButton>
@@ -159,9 +159,9 @@
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <AuButton
+                data-test-newsletter-edit-item-save
                 @loading={{this.confirmSave.isRunning}}
                 {{on "click" this.save}}
-                data-test-newsletter-edit-item-save
               >
                 {{t "save"}}
               </AuButton>

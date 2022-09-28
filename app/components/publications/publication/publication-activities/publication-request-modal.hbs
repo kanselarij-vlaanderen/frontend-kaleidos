@@ -68,7 +68,7 @@
     @onCancel={{perform this.cancel}}
     @cancelDisabled={{this.isCancelDisabled}}
   >
-    <Auk::Button
+    <AuButton
       data-test-publication-request-save
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
@@ -76,6 +76,6 @@
       {{on "click" (perform this.save)}}
     >
       {{t "request-it"}}
-    </Auk::Button>
+    </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>

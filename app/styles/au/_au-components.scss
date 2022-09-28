@@ -58,6 +58,7 @@ $au-button-height: 3.4rem;
   cursor: pointer;
 }
 
+.au-c-link,
 .au-c-button--link,
 .au-c-button--link-secondary { // change button link to Kaleidos style
   text-decoration: none;
@@ -67,6 +68,10 @@ $au-button-height: 3.4rem;
   &:focus {
     text-decoration: none;
   }
+}
+
+.au-c-link {
+  border-radius: $au-button-border-radius;
 }
 
 .au-c-modal__header {

@@ -9,13 +9,13 @@
     @onChange={{this.changeDecisionResultCode}}
   />
   <AuButton
-    class="auk-u-ml"
     data-test-agendaitem-decision-edit-save
     @skin="naked"
     @icon="check"
     @hideText={{true}}
     @loading={{this.saveDecisionActivity.isRunning}}
     {{on "click" (perform this.saveDecisionActivity)}}
+    class="auk-u-ml"
   >
     {{t "save"}}
   </AuButton>
