@@ -3,6 +3,8 @@ import { action } from '@ember/object';
 
 export default class CaseController extends Controller {
   governmentAreas;
+  meeting;
+  agenda;
 
   @action
   async saveGovernmentAreas(newGovernmentAreas) {

@@ -16,6 +16,7 @@
     />
 
     <Utils::GovernmentAreas::GovernmentAreasPanel
+      @datetimeForGovernmentAreas={{or this.agenda.created this.meeting.plannedStart this.model.created}}
       @governmentAreas={{this.governmentAreas}}
       @allowEditing={{true}}
       @onSave={{this.saveGovernmentAreas}}
