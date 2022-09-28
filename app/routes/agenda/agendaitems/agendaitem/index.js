@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import addWeeks from 'date-fns/addWeeks';
 
 export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
   @service store;
@@ -38,6 +39,20 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     await model.hasMany('mandatees').reload();
     await model.hasMany('pieces').reload();
     this.mandatees = (await model.mandatees).sortBy('priority');
+
+    const futureDate = addWeeks(new Date(), 20);
+
+    // TODO-KAS-3459 this.meeting is via subcase and as of now will only be the latest one.
+    // this might be subject to change
+    this.proposableMeetings = await this.store.query('meeting', {
+      filter: {
+        // ':gte:planned-start': this.meeting.plannedStart.toISOString(),
+        ':gte:planned-start': new Date().toISOString(), // for local testing, too many agendas exist
+        ':lte:planned-start': futureDate.toISOString(),
+        'is-final': false,
+      },
+      sort: 'planned-start',
+    });
   }
 
   async setupController(controller) {
@@ -52,5 +67,7 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.mandatees = this.mandatees;
     controller.submitter = this.submitter;
     controller.meeting = this.meeting;
+    controller.decisionActivity = this.decisionActivity;
+    controller.proposableMeetings = this.proposableMeetings;
   }
 }

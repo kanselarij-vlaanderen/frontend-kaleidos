@@ -9,6 +9,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @service currentSession;
   @service router;
   @service agendaitemAndSubcasePropertiesSync;
+  @service agendaService;
 
   @controller('agenda.agendaitems') agendaitemsController;
   @controller('agenda') agendaController;
@@ -21,8 +22,10 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @tracked newsletterInfo;
   @tracked mandatees;
   @tracked decisionActivity;
+  @tracked proposableMeetings;
 
   @tracked isEditingAgendaItemTitles = false;
+  @tracked isReProposingForAgenda = false;
 
   async navigateToNeighbouringItem(agendaitem) {
     // try transitioning to previous or next item, called on the delete of an agendaitem
@@ -97,5 +100,28 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     governmentAreas.clear();
     governmentAreas.pushObjects(newGovernmentAreas);
     await this.subcase.save();
+  }
+
+  @action
+  async reProposeForAgenda(meeting) {
+    this.isReProposingForAgenda = true;
+    let submissionActivities = await this.store.query('submission-activity', {
+      'filter[subcase][:id:]': this.subcase.id,
+      'filter[agenda-activity][:id:]': this.agendaActivity.id,
+    });
+    submissionActivities = submissionActivities.toArray();
+    if (!submissionActivities.length) {
+      const now = new Date();
+      const submissionActivity = this.store.createRecord('submission-activity', {
+        startDate: now,
+        subcase: this.subcase,
+      });
+      await submissionActivity.save();
+      submissionActivities = [submissionActivity];
+    }
+    await this.agendaService.putSubmissionOnAgenda(meeting, submissionActivities);
+    // this.toggleAllPropertiesBackToDefault();
+    // this.loadData.perform();
+    this.isReProposingForAgenda = false;
   }
 }
