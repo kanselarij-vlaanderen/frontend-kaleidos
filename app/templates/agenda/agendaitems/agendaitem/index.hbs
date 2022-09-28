@@ -2,46 +2,11 @@
   {{#if resultCode.isRetracted}}
     <Auk::Alert @skin="warning" @message={{t "retracted-item"}}/>
   {{else if resultCode.isPostponed}}
-    <div class="auk-alert auk-alert--warning">
-      <div class="auk-alert__body">
-        <Auk::Badge @icon="alert-triangle" @skin={{"warning"}}/>
-        <div class="auk-alert__text">
-          <p class="auk-u-text-pre-line auk-alert__message">{{t "postponed-item"}}</p>
-        </div>
-      </div>
-      {{!-- TODO KAS-3565 figure out a way to know if already reproposed--}}
-      {{!-- Maybe if there is only 1 activity then always ok , with multiple ones,
-        check if there is a activity with a startdate greater then meeting planned start? 
-        or just the last thing? should always work.
-      --}}
-      {{!-- {{#if this.meeting.internalDecisionPublicationActivity.startDate}} --}}
-      {{#if true}}
-        <Auk::DropdownMenu
-          @skin="primary"
-          @label={{"Opnieuw agenderen"}}
-        as |Menu|>
-        {{#if this.proposableMeetings.length}}
-          {{#each this.proposableMeetings as |meeting|}}
-            <Menu.Item
-              {{on "click" (fn this.reProposeForAgenda meeting)}}
-            >
-              {{t "agenda-for"}}
-              {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
-              {{concat " - " meeting.numberRepresentation}}
-            </Menu.Item>
-          {{/each}}
-          {{else}}
-          laden
-          {{/if}}
-          {{!-- {{#if (gt this.proposableMeetings.length 0)}}
-            <Menu.Divider />
-          {{/if}} --}}
-          {{!-- <Menu.Item {{on "click" (fn this.proposeForOtherAgenda this.subcase)}}>
-            {{t "other-agenda"}}
-          </Menu.Item> --}}
-        </Auk::DropdownMenu>
-      {{/if}}
-    </div>
+    <Agenda::Agendaitem::AgendaitemPostponed
+      @meeting={{this.meeting}}
+      @subcase={{this.subcase}}
+      @agendaActivity={{this.agendaActivity}}
+    />
   {{/if}}
 {{/let}}
 

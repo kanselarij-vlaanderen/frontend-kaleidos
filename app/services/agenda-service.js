@@ -153,6 +153,7 @@ export default class AgendaService extends Service {
     await agendaItemTreatment.save();
 
     let submittedPieces = [];
+    // TODO KAS-3565 there could be multiple submissions when reproposing
     for (const submissionActivity of submissionActivities) {
       const submissionActivity2 = await this.store.queryOne('submission-activity', {
         'filter[:id:]': submissionActivity.id,

@@ -1079,5 +1079,7 @@
   "retracted": "Ingetrokken",
   "retract-revert": "Intrekken ongedaan maken",
   "retracted-item": "Dit agendapunt is ingetrokken.",
-  "retracted-subcase": "Deze procedurestap is ingetrokken op "
+  "retracted-subcase": "Deze procedurestap is ingetrokken op ",
+  "propose-again": "Opnieuw agenderen",
+  "open-agenda": "Open agenda"
 }
