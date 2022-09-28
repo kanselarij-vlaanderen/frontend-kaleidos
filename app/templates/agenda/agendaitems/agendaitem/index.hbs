@@ -1,8 +1,7 @@
-{{#let this.model.treatment.decisionActivity.decisionResultCode as |drc|}}
-  {{#if drc.isRetracted}}
+{{#let this.model.treatment.decisionActivity.decisionResultCode as |resultCode|}}
+  {{#if resultCode.isRetracted}}
     <Auk::Alert @skin="warning" @message={{t "retracted-item"}}/>
-  {{/if}}
-  {{#if drc.isPostponed}}
+  {{else if resultCode.isPostponed}}
     <div class="auk-alert auk-alert--warning">
       <div class="auk-alert__body">
         <Auk::Badge @icon="alert-triangle" @skin={{"warning"}}/>
