@@ -198,7 +198,10 @@ export default class GenerateReportModalComponent extends Component {
       'filter[top-concept-schemes][:uri:]':
         CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN,
       'filter[:has-no:broader]': true, // only top-level government-domains
-      ...((this.publicationYear >= 2022) && { 'filter[deprecated]': false }), // Exclude deprecated government domains when generating modern reports
+      ...(this.publicationYear >=
+        CONFIG.PUBLICATIONS_IN_KALEIDOS_START_DATE.getFullYear() && {
+        'filter[deprecated]': false,
+      }), // Exclude deprecated government domains when generating modern reports
       'page[size]': 100,
     });
     this.governmentDomains = governmentDomains.toArray().sortBy('label');
