@@ -33,6 +33,7 @@ const {
 // - manage-decisions: Open the decisions print-overview of an agenda. TBD if this is a useful permission
 // - manage-cases: Create and update cases
 // - manage-users: Block and archive users
+// - manage-system-alerts: Manage systeem notifications to be shown in the application
 
 const groups = [
   {
@@ -56,6 +57,7 @@ const groups = [
       'manage-themis-publications',
       'manage-settings',
       'manage-users',
+      'manage-alerts',
       'view-document-version-info',
     ]
   },
