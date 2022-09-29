@@ -88,17 +88,15 @@ export default class PieceAccessLevelService extends Service {
    * access level was already higher) and then update all the previous access
    * levels.
    */
-  async strengthenAccessLevel(piece) {
+  async strengthenAccessLevelToInternRegering(piece) {
     const accessLevel = await piece.accessLevel;
-    if ([CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE, CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK].includes(accessLevel.uri)) {
-      return;
+    if (![CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE, CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK].includes(accessLevel.uri)) {
+      const internRegering = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
+      piece.accessLevel = internRegering;
+      await piece.save();
+
+      await this.updatePreviousAccessLevels(piece);
     }
-
-    const internRegering = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
-    piece.accessLevel = internRegering;
-    await piece.save();
-
-    await this.updatePreviousAccessLevels(piece);
   }
 
   /*

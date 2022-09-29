@@ -137,7 +137,7 @@ export default class AgendaitemControls extends Component {
     if ([CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD, CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN].includes(decisionResultCodeUri)) {
       const pieces = await this.args.agendaitem.pieces;
       for (const piece of pieces.toArray()) {
-        await this.pieceAccessLevelService.strengthenAccessLevel(piece);
+        await this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(piece);
       }
     }
   }
