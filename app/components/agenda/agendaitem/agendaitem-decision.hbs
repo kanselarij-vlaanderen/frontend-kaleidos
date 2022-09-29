@@ -15,7 +15,7 @@
           {{else}}
             <Agenda::Agendaitem::AgendaitemDecisionEdit
               @decisionActivity={{@decisionActivity}}
-              @onSave={{this.onSaveDecisionResultCode}}
+              @onSave={{this.updateAgendaitemPiecesAccessLevels}}
               @onCancel={{this.toggleEdit}}
             />
           {{/if}}

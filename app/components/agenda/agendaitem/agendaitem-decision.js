@@ -50,7 +50,7 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   @action
-  async onSaveDecisionResultCode() {
+  async updateAgendaitemPiecesAccessLevels() {
     const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
     if ([CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD, CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN].includes(decisionResultCode.uri)) {
       const pieces = await this.args.agendaitem.pieces;
