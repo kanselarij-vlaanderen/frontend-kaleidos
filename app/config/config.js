@@ -3,6 +3,7 @@ export const PAGE_SIZE = {
   NOTAS: 50,
   PUBLICATION_FLOW_PIECES: 200,
   CODE_LISTS: 100,
+  GOVERNMENT_FIELDS: 1000, // Currently there's 636 government fields
   AGENDAITEMS: 300,
   PIECES: 500,
   ACTIVITIES: 500,

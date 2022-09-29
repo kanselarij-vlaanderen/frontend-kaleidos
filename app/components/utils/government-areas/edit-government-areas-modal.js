@@ -21,30 +21,18 @@ export default class EditGovernmentAreasModal extends Component {
 
   @task
   *loadGovernmentAreas() {
-    this.governmentFields = yield this.store.query('concept', {
-      filter: {
-        'top-concept-schemes': {
-          ':uri:': CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD,
-        },
-        ':lte:start-date': this.args.datetimeForGovernmentAreas.toISOString(),
-        ':gte:end-date': this.args.datetimeForGovernmentAreas.toISOString(),
-      },
-      include: 'broader,narrower',
-      'page[size]': 100,
-    });
-    if (!this.governmentFields.length) {
-      this.governmentFields = yield this.store.query('concept', {
-        filter: {
-          'top-concept-schemes': {
-            ':uri:': CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD,
-          },
-          ':lte:start-date': this.args.datetimeForGovernmentAreas.toISOString(),
-          ':has-no:end-date': true,
-        },
-        include: 'broader,narrower',
-        'page[size]': 100,
-      });
+    const concepts = this.store.peekAll('concept');
+    const governmentFields = [];
+    for (const concept of concepts.toArray()) {
+      const topConceptSchemes = yield concept.topConceptSchemes;
+      const isGovernmentField = topConceptSchemes.any((conceptScheme) => conceptScheme.uri === CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD);
+      const isInDateRange = concept.startDate <= this.args.datetimeForGovernmentAreas && (this.args.datetimeForGovernmentAreas <= concept.endDate || concept.endDate === undefined);
+
+      if (isGovernmentField && isInDateRange) {
+        governmentFields.push(concept);
+      }
     }
+    this.governmentFields = governmentFields;
   }
 
   @task
