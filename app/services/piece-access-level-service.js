@@ -83,6 +83,24 @@ export default class PieceAccessLevelService extends Service {
     }
   }
 
+  /**
+   * Strengthen the access level of the piece to intern regering (unless the
+   * access level was already higher) and then update all the previous access
+   * levels.
+   */
+  async strengthenAccessLevel(piece) {
+    const accessLevel = await piece.accessLevel;
+    if ([CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE, CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK].includes(accessLevel.uri)) {
+      return;
+    }
+
+    const internRegering = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
+    piece.accessLevel = internRegering;
+    await piece.save();
+
+    await this.updatePreviousAccessLevels(piece);
+  }
+
   /*
    * This method is used to update the access levels of the reports related to of a subcase's decision-activity.
    * When a subcase has been updated to being confidential, all the reports of the decision-activity get the
