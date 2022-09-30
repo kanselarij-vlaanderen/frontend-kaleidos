@@ -19,7 +19,8 @@ export const PUBLICATION_EMAIL = {
   OUTBOX: 'http://themis.vlaanderen.be/id/mail-folders/4296e6af-7d4f-423d-ba89-ed4cbbb33ae7',
 };
 
-export const KALEIDOS_START_DATE = new Date(2019, 9 /* =october */, 1);
+export const KALEIDOS_START_DATE = new Date(2019, 9 /* October */, 1);
+export const PUBLICATIONS_IN_KALEIDOS_START_DATE = new Date(2022, 2 /* March */, 2);
 
 // Number of milliseconds it takes to release a publication via Yggdrasil/Themis
 export const ESTIMATED_PUBLICATION_DURATION = 30 * 60 * 1000;
