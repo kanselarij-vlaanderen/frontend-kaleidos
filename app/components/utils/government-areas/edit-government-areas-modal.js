@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class EditGovernmentAreasModal extends Component {
   @service store;
@@ -21,14 +22,22 @@ export default class EditGovernmentAreasModal extends Component {
 
   @task
   *loadGovernmentAreas() {
-    const concepts = this.store.peekAll('concept');
+    const concepts = yield this.store.query('concept', {
+      filter: {
+        'top-concept-schemes': {
+          ':uri:': CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD,
+        },
+      },
+      'page[size]': PAGE_SIZE.GOVERNMENT_FIELDS,
+    });
     const governmentFields = [];
     for (const concept of concepts.toArray()) {
-      const topConceptSchemes = yield concept.topConceptSchemes;
-      const isGovernmentField = topConceptSchemes.any((conceptScheme) => conceptScheme.uri === CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD);
-      const isInDateRange = concept.startDate <= this.args.datetimeForGovernmentAreas && (this.args.datetimeForGovernmentAreas <= concept.endDate || concept.endDate === undefined);
+      const isInDateRange =
+        concept.startDate <= this.args.datetimeForGovernmentAreas &&
+        (this.args.datetimeForGovernmentAreas <= concept.endDate ||
+          concept.endDate === undefined);
 
-      if (isGovernmentField && isInDateRange) {
+      if (isInDateRange) {
         governmentFields.push(concept);
       }
     }

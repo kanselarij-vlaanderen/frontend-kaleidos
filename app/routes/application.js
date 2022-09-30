@@ -60,16 +60,6 @@ export default class ApplicationRoute extends Route {
       'page[size]': PAGE_SIZE.CODE_LISTS,
       sort: 'position',
     });
-
-    await this.store.query('concept', {
-      filter: {
-        'top-concept-schemes': {
-          ':uri:': CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD,
-        },
-      },
-      include: 'broader,narrower,top-concept-schemes',
-      'page[size]': PAGE_SIZE.GOVERNMENT_FIELDS,
-    });
   }
 
   get isSupportedBrowser() {
