@@ -9,7 +9,6 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @service currentSession;
   @service router;
   @service agendaitemAndSubcasePropertiesSync;
-  @service agendaService;
 
   @controller('agenda.agendaitems') agendaitemsController;
   @controller('agenda') agendaController;

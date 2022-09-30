@@ -1,6 +1,9 @@
-{{#let this.model.treatment.decisionActivity.decisionResultCode as |resultCode|}}
+{{#let
+  this.model.treatment.decisionActivity.decisionResultCode
+  as |resultCode|
+}}
   {{#if resultCode.isRetracted}}
-    <Auk::Alert @skin="warning" @message={{t "retracted-item"}}/>
+    <Auk::Alert @skin="warning" @message={{t "retracted-item"}} />
   {{else if resultCode.isPostponed}}
     <Agenda::Agendaitem::AgendaitemPostponed
       @meeting={{this.meeting}}

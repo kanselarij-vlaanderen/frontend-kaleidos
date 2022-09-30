@@ -1,26 +1,28 @@
 <div class="auk-alert auk-alert--warning">
   <div class="auk-alert__body">
-    <Auk::Badge @icon="alert-triangle" @skin={{"warning"}}/>
+    <Auk::Badge @icon="alert-triangle" @skin={{"warning"}} />
     <div class="auk-alert__text">
-      <p class="auk-u-text-pre-line auk-alert__message">{{t "postponed-item"}}</p>
+      <p class="auk-u-text-pre-line auk-alert__message">
+        {{t "postponed-item"}}
+      </p>
     </div>
   </div>
   {{#if @meeting.internalDecisionPublicationActivity.startDate}}
     {{#if this.canPropose}}
-      <Auk::DropdownMenu
-        @skin="primary"
-        @label={{t "propose-again"}}
-      as |Menu|>
-      {{#if this.loadProposableMeetings.isIdle}}
-        {{#each this.loadProposableMeetings.lastSuccessful.value as |meeting|}}
-          <Menu.Item
-            {{on "click" (fn this.reProposeForAgenda.perform meeting)}}
-          >
-            {{t "agenda-for"}}
-            {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
-            {{concat " - " meeting.numberRepresentation}}
-          </Menu.Item>
-        {{/each}}
+      <Auk::DropdownMenu @skin="primary" @label={{t "propose-again"}} as |Menu|>
+        {{#if this.loadProposableMeetings.isIdle}}
+          {{#each
+            this.loadProposableMeetings.lastSuccessful.value
+            as |meeting|
+          }}
+            <Menu.Item
+              {{on "click" (fn this.reProposeForAgenda.perform meeting)}}
+            >
+              {{t "agenda-for"}}
+              {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
+              {{concat " - " meeting.numberRepresentation}}
+            </Menu.Item>
+          {{/each}}
         {{else}}
           {{t "agenda-loading"}}
         {{/if}}

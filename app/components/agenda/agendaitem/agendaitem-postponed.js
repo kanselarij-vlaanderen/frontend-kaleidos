@@ -5,7 +5,6 @@ import { task } from 'ember-concurrency';
 import addWeeks from 'date-fns/addWeeks';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
-
 /**
  * @argument subcase
  * @argument meeting
@@ -32,12 +31,13 @@ export default class AgendaitemPostponed extends Component {
     // filtering on meeting.plannedStart will not find any if reProposing happened before the meeting "started" at 10 am
     let agendaActivities = yield this.store.query('agenda-activity', {
       'filter[subcase][:id:]': this.args.subcase.id,
-      'filter[:gt:start-date]': this.args.agendaActivity.startDate.toISOString(),
+      'filter[:gt:start-date]':
+        this.args.agendaActivity.startDate.toISOString(),
       sort: '-start-date',
     });
     // If any agenda-activities exist that are created after this one we can assume the subcase is already proposed again.
     this.canPropose = agendaActivities.length ? false : true;
-    if(!this.canPropose) {
+    if (!this.canPropose) {
       // load the latest agenda link
       const latestActivity = agendaActivities.firstObject;
       const latestAgendaitem = yield this.store.queryOne('agendaitem', {
@@ -45,10 +45,14 @@ export default class AgendaitemPostponed extends Component {
         'filter[:has-no:next-version]': 't',
         sort: '-created',
       });
-      const agenda =  yield latestAgendaitem.agenda;
+      const agenda = yield latestAgendaitem.agenda;
       const meeting = yield agenda.createdFor;
       this.newMeeting = meeting;
-      this.modelsForProposedAgenda = [meeting.id, agenda.id, latestAgendaitem.id];
+      this.modelsForProposedAgenda = [
+        meeting.id,
+        agenda.id,
+        latestAgendaitem.id,
+      ];
     }
   }
   @task
@@ -83,11 +87,11 @@ export default class AgendaitemPostponed extends Component {
       startDate: new Date(),
       subcase: this.args.subcase,
       pieces: pieces,
-
     });
     yield submissionActivity.save();
-    yield this.agendaService.putSubmissionOnAgenda(meeting, [submissionActivity]);
+    yield this.agendaService.putSubmissionOnAgenda(meeting, [
+      submissionActivity,
+    ]);
     yield this.loadProposedStatus.perform();
   }
-
 }
