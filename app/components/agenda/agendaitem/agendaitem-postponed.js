@@ -29,12 +29,11 @@ export default class AgendaitemPostponed extends Component {
   *loadProposedStatus() {
     // We have to check if the proposed agendaitem is already proposed for a new meeting before showing the button
     // we have to generate a link to the latest meeting (not the next if multiple).
-    // filtering on meeting.plannedStart will not find any if reProposing happened before the meeting ended
+    // filtering on meeting.plannedStart will not find any if reProposing happened before the meeting "started" at 10 am
     let agendaActivities = yield this.store.query('agenda-activity', {
       'filter[subcase][:id:]': this.args.subcase.id,
       'filter[:gt:start-date]': this.args.agendaActivity.startDate.toISOString(),
       sort: '-start-date',
-      // 'filter[agendaitems][agenda][created-for][is-final]': false,
     });
     // If any agenda-activities exist that are created after this one we can assume the subcase is already proposed again.
     this.canPropose = agendaActivities.length ? false : true;
