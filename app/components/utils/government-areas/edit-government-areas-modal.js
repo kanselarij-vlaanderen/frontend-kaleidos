@@ -33,8 +33,8 @@ export default class EditGovernmentAreasModal extends Component {
     const governmentFields = [];
     for (const concept of concepts.toArray()) {
       const isInDateRange =
-        concept.startDate <= this.args.datetimeForGovernmentAreas &&
-        (this.args.datetimeForGovernmentAreas <= concept.endDate ||
+        concept.startDate <= this.args.referenceDate &&
+        (this.args.referenceDate <= concept.endDate ||
           concept.endDate === undefined);
 
       if (isInDateRange) {
