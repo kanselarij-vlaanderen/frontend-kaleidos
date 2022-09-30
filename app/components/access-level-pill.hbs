@@ -4,7 +4,6 @@
   {{#if (not this.isEditing)}}
     {{#if (not this.canEdit)}}
       <AuPill
-        @size="small"
         @skin={{this.pillSkin}}
         @icon={{this.pillIcon}}
         data-test-access-level-pill
@@ -13,7 +12,6 @@
       </AuPill>
     {{else}}
       <AuPill
-        @size="small"
         @skin={{this.pillSkin}}
         @icon={{this.pillIcon}}
         @onClickAction={{this.openEditMode}}

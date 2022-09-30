@@ -40,7 +40,7 @@ context('Propagation to other graphs', () => {
       'Cypress test voor het propageren naar overheid',
       'In voorbereiding',
       'Principiële goedkeuring m.h.o. op adviesaanvraag');
-    cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
+    cy.createAgenda(null, agendaDate, 'Zaal oxford bij Cronos Leuven');
 
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitle1);

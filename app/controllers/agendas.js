@@ -106,9 +106,9 @@ export default class AgendasController extends Controller {
       sort: '-planned-start',
     });
     const kind = await this.newMeeting.kind;
-    const broader = await kind?.broader;
-    const isAnnexMeeting = broader?.uri === CONSTANTS.MEETING_KINDS.ANNEX;
-    if (!isAnnexMeeting && closestMeeting) {
+    const isRegularMeeting = kind.uri === CONSTANTS.MEETING_KINDS.MINISTERRAAD;
+    // Only a regular meeting should get an approval agendaitem
+    if (isRegularMeeting && closestMeeting) {
       await this.createAgendaitemToApproveMinutes(
         agenda,
         this.newMeeting,

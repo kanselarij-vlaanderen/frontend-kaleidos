@@ -60,7 +60,7 @@ export default class AgendaitemDecisionComponent extends Component {
 
     const defaultAccessLevel = await this.store.findRecordByUri(
       'concept', subcaseIsConfidential
-        ? CONSTANTS.ACCESS_LEVELS.MINISTERRAAD
+        ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
 
