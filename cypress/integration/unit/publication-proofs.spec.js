@@ -292,6 +292,6 @@ context('Publications proofs tests', () => {
 
     // check data
     cy.get(auk.modal.header.title).contains(`Drukproef aanvragen voor publicatie ${fields.number}`);
-    cy.get(publication.proofRequest.subject).contains(`Drukproefaanvraag VO-dossier: ${fields.number} - ${fields.shortTitle}`);
+    cy.get(publication.proofRequest.subject).should('have.value', `Drukproefaanvraag VO-dossier: ${fields.number} - ${fields.shortTitle}`);
   });
 });
