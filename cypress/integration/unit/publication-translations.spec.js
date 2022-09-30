@@ -252,7 +252,7 @@ context('Publications translation tests', () => {
       .contains('Vertaling ontvangen');
   });
 
-  it('should set duedate, check expiration warning then check if duedate is prefilled in uploadmodal', () => {
+  it.only('should set duedate, check expiration warning then check if duedate is prefilled in uploadmodal', () => {
     const lateDueDate = Cypress.dayjs().subtract(5, 'days');
     const formattedLateDueDate = lateDueDate.format('DD-MM-YYYY');
 
@@ -274,7 +274,8 @@ context('Publications translation tests', () => {
     cy.get(publication.translationsInfoPanel.edit).click();
     cy.get(publication.translationsInfoPanel.editView.dueDate).find(auk.datepicker)
       .click()
-      .clear();
+      .clear()
+      .type('{enter}');
     cy.get(publication.translationsInfoPanel.save).click();
     cy.get(auk.loader).should('not.exist');
     cy.get(auk.formHelpText).should('not.exist');

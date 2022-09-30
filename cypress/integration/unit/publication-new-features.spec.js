@@ -78,7 +78,7 @@ context('Publications new features tests', () => {
     cy.get(auk.emptyState.message).contains(emptyStateMessage);
   });
 
-  it('should check number of extracts default, docs removable, uploaded docs inherited when making new publication and registration updates correctly', () => {
+  it.only('should check number of extracts default, docs removable, uploaded docs inherited when making new publication and registration updates correctly', () => {
     const previousStatus = 'Publicatie gevraagd';
     const endStatus = 'Gepubliceerd';
     const today = Cypress.dayjs().format('DD-MM-YYYY');
@@ -155,10 +155,11 @@ context('Publications new features tests', () => {
     cy.get(publication.proofsIndex.upload).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.intercept('PATCH', '/publication-subcases/**').as('patchPublicationSubcase2');
+    cy.intercept('GET', '/proofing-activities?filter**').as('getActivities');
     cy.get(publication.proofUpload.save).click()
-      .wait('@patchPublicationSubcase2');
-    cy.get(auk.loader).should('not.exist');
-    //  TODO-waits no wait here causes publication request modal to close before cypress is able to click save
+      .wait('@patchPublicationSubcase2')
+      .wait('@getActivities');
+    //  TODO-waits there's a page reload here?
     cy.wait(2000);
     cy.get(publication.proofReceivedPanel.dropdown).click();
     cy.get(publication.proofReceivedPanel.publicationRequest).click();
@@ -166,10 +167,9 @@ context('Publications new features tests', () => {
       .should('have.length', 1)
       // TODO can't make filename unique, needs a way to ensure this is checking for the correct file to be inherited
       .contains(file.fileName);
-    cy.intercept('PATCH', '/publication-subcases/**').as('patchPublicationSubcase2');
+    cy.intercept('PATCH', '/publication-subcases/**').as('patchPublicationSubcase3');
     cy.get(publication.publicationRequest.save).click()
-      .wait('@patchPublicationSubcase2');
-    cy.get(auk.loader).should('not.exist');
+      .wait('@patchPublicationSubcase3');
     cy.wait(2000);
 
     // check proofs docs not removable once used in publication request
@@ -218,8 +218,6 @@ context('Publications new features tests', () => {
     cy.get(publication.contactPersonAdd.submit).click();
     cy.wait('@postPerson');
     cy.wait('@postContactPerson');
-
-    cy.visit('publicaties/6324293DBAE2614F72CFB97C/dossier');
 
     cy.get(publication.publicationNav.translations).click();
     cy.get(publication.translationsIndex.requestTranslation).click();
