@@ -13,16 +13,16 @@
           {{#if this.model.length}}
             <Group.Item>
               {{#if (user-may "manage-documents")}}
-                <Auk::Button
+                <AuButton
                   @icon="pencil"
                   {{on "click" this.openBatchDetails}}
                 >
                   {{t "batch-edit"}}
-                </Auk::Button>
+                </AuButton>
               {{else}}
-                <Auk::Button {{on "click" this.openBatchDetails}}>
+                <AuButton {{on "click" this.openBatchDetails}}>
                   {{t "view-documents-details"}}
-                </Auk::Button>
+                </AuButton>
               {{/if}}
             </Group.Item>
           {{/if}}
@@ -37,14 +37,14 @@
 
       {{#if (user-may "manage-documents")}}
         <div class="auk-u-mb-4">
-          <Auk::Button
+          <AuButton
             data-test-route-agenda-documents-add-documents
-            @skin="tertiary"
+            @skin="naked"
             @icon="plus"
             {{on "click" this.openPieceUploadModal}}
           >
             {{t "documents-add"}}
-          </Auk::Button>
+          </AuButton>
         </div>
       {{/if}}
     </div>

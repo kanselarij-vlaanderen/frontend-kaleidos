@@ -47,15 +47,15 @@
         />
       </div>
       <div class="auk-form-group au-u-margin-bottom-none au-u-1-6">
-        <Auk::Button
+        <AuButton
+          data-test-route-search-trigger
           @skin="primary"
           @icon="search"
-          @block="true"
-          data-test-route-search-trigger
+          @block={{true}}
           type="submit"
         >
           {{t "search"}}
-        </Auk::Button>
+        </AuButton>
       </div>
     </form>
   </Auk::Navbar>
@@ -127,17 +127,19 @@
                     class="auk-u-text-align--right"
                   >
                     {{#if latestAgendaitem}}
-                      <Auk::Button
-                        @skin="borderless"
-                        @layout="icon-only"
+                      <AuLink
+                        @skin="button-naked"
                         @icon="chevron-right"
+                        @hideText={{true}}
                         @route="agenda.agendaitems.agendaitem.news-item"
                         @models={{array
                           latestAgendaitem.meetingId
                           latestAgendaitem.agendaId
                           latestAgendaitem.id
                         }}
-                      />
+                      >
+                        {{t "open"}}
+                      </AuLink>
                     {{/if}}
                   </td>
                 {{/let}}

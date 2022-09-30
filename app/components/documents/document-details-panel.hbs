@@ -118,22 +118,26 @@
               <Group.Item>
                 <AuButton
                   data-test-details-tab-delete
-                  @skin="secondary"
+                  @skin="naked"
                   @alert={{true}}
                   @icon="trash"
                   @hideText={{true}}
                   {{on "click" (fn (mut this.isOpenVerifyDeleteModal) true)}}
-                />
+                >
+                  {{t "delete"}}
+                </AuButton>
               </Group.Item>
             {{/if}}
             <Group.Item>
               <AuButton
                 data-test-details-tab-edit
-                @skin="secondary"
+                @skin="naked"
                 @icon="pencil"
                 @hideText={{true}}
                 {{on "click" this.openEditDetails}}
-              />
+              >
+                {{t "edit"}}
+              </AuButton>
             </Group.Item>
           </Toolbar.Group>
         {{/if}}

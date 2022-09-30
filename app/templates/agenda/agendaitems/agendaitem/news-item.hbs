@@ -16,18 +16,16 @@
       {{else if this.model}}
         <AuButtonGroup>
           <AuButton
-            @icon="expand"
-            @iconAlignment="left"
             @skin="link"
+            @icon="expand"
             {{on "click" this.openFullscreenEdit}}
           >
             {{t "edit-text"}}
           </AuButton>
           <AuButton
             data-test-route-agenda---news-item-edit
-            @icon="pencil"
-            @iconAlignment="left"
             @skin="link"
+            @icon="pencil"
             {{on "click" this.openEdit}}
           >
             {{t "edit"}}
@@ -36,9 +34,8 @@
       {{else}}
         <AuButton
           data-test-route-agenda---news-item-create
-          @icon="add"
-          @iconAlignment="left"
           @skin="secondary"
+          @icon="add"
           {{on "click" this.openEdit}}
         >
           {{t "create"}}

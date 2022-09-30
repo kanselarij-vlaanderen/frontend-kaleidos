@@ -71,11 +71,13 @@
                         <div class="auk-u-mx-2">
                           <span>{{account.user.firstName}} {{account.user.lastName}}</span>
                         </div>
-                        <Auk::Button
-                          @skin="borderless"
-                          @layout="icon-only"
+                        <AuButton
+                          @skin="naked"
                           @icon="chevron-right"
-                        />
+                          @hideText={{true}}
+                        >
+                          {{t "login"}}
+                        </AuButton>
                       </Auk::List::Item>
                     </login.each-account>
                   </ul>

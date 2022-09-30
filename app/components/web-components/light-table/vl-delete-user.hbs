@@ -1,14 +1,15 @@
 {{!-- TODO: octane-refactor --}}
 {{!-- template-lint-disable no-action --}}
-<Auk::Button
-  @skin="danger-borderless"
-  @layout="icon-only"
-  @icon="trash"
-  {{action "toggleIsVerifying" bubbles=false}}
+<AuButton
   data-test-vl-delete-user
+  @skin="naked"
+  @alert={{true}}
+  @icon="trash"
+  @hideText={{true}}
+  {{action "toggleIsVerifying" bubbles=false}}
 >
   {{t "delete"}}
-</Auk::Button>
+</AuButton>
 {{#if this.isVerifying}}
   <WebComponents::VlModalVerify
     @title={{t "delete-account"}}

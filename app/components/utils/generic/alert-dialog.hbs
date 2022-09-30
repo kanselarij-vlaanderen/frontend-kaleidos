@@ -13,15 +13,16 @@
     @cancelDisabled={{this.isLoading}}
     @onCancel={{perform this.cancel}}
   >
-    <Auk::Button
+    <AuButton
       data-test-alert-dialog-confirm
-      @skin={{this.confirmSkin}}
+      @skin="primary"
+      @alert={{this.isAlertConfirm}}
       @icon={{this.confirmIcon}}
       @disabled={{this.isLoading}}
       @loading={{this.confirm.isRunning}}
       {{on "click" (perform this.confirm)}}
     >
       {{this.confirmText}}
-    </Auk::Button>
+    </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>

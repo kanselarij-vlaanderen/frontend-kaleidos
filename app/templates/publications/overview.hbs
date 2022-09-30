@@ -40,14 +40,14 @@
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
-        <Auk::Button
+        <AuButton
           data-test-route-publications-index-new-publication
-          @icon="plus"
           @skin="primary"
+          @icon="plus"
           {{on "click" this.showPublicationModal}}
         >
           {{t "publications-new"}}
-        </Auk::Button>
+        </AuButton>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>

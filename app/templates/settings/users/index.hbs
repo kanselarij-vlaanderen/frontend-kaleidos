@@ -5,13 +5,13 @@
         {{#let (file-queue name="user-upload" onFileAdded=(perform this.uploadUserFile)) as |queue|}}
           {{!-- refactored the structure below a bit to remove redundant nesting (vl-refactor), but is still unintuitive --}}
           {{#if queue.files.length}}
-            <Auk::Button
+            <AuButton
               @skin="secondary"
               @icon="import"
               @disabled={{true}}
             >
               {{t "import-users-text"}}
-            </Auk::Button>
+            </AuButton>
           {{else}}
             <label>
               <input
@@ -49,13 +49,15 @@
           @type="search"
           @value={{this.filter}}
         />
-        <Auk::Button
+        <AuButton
           data-test-route-settings-users-search-button
           @skin="secondary"
-          @layout="icon-only"
           @icon="search"
+          @hideText={{true}}
           {{on "click" this.refresh}}
-        />
+        >
+          {{t "search"}}
+        </AuButton>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
