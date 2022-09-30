@@ -15,11 +15,8 @@
       @publicationFlow={{this.model}}
     />
 
-    <Utils::GovernmentAreas::GovernmentAreasPanel
-      @datetimeForGovernmentAreas={{or this.meeting.plannedStart this.agenda.created this.model.created}}
-      @governmentAreas={{this.governmentAreas}}
-      @allowEditing={{true}}
-      @onSave={{this.saveGovernmentAreas}}
+    <Publications::Publication::Case::GovernmentAreas::GovernmentAreasPanel
+      @publicationFlow={{this.model}}
     />
 
     <Publications::Publication::Case::ContactPersons::ContactPersonsPanel
