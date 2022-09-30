@@ -5,42 +5,48 @@
       <p class="auk-u-text-pre-line auk-alert__message">{{t "postponed-item"}}</p>
     </div>
   </div>
-  {{!-- TODO KAS-3565 figure out a way to know if already reproposed--}}
-  {{!-- Maybe if there is only 1 activity then always ok , with multiple ones,
-    check if there is a activity with a startdate greater then meeting planned start? 
-    or just the last thing? should always work.
-  --}}
-  {{#if (and this.meeting.internalDecisionPublicationActivity.startDate this.canPropose)}}
-    <Auk::DropdownMenu
-      @skin="primary"
-      @label={{t "propose-again"}}
-    as |Menu|>
-    {{#if this.loadProposableMeetings.isIdle}}
-      {{#each this.loadProposableMeetings.lastSuccessful.value as |meeting|}}
-        <Menu.Item
-          {{on "click" (fn this.reProposeForAgenda.perform meeting)}}
-        >
-          {{t "agenda-for"}}
-          {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
-          {{concat " - " meeting.numberRepresentation}}
-        </Menu.Item>
-      {{/each}}
-      {{else}}
-        {{t "agenda-loading"}}
-      {{/if}}
-    </Auk::DropdownMenu>
-  {{else}}
-    {{#if this.modelsForProposedAgenda}}
-      <Auk::Button
+  {{#if @meeting.internalDecisionPublicationActivity.startDate}}
+    {{#if this.canPropose}}
+      <Auk::DropdownMenu
         @skin="primary"
-        @layout="icon-right"
-        @icon="chevron-right"
-        @route="agenda.agendaitems.agendaitem"
-        @models={{this.modelsForProposedAgenda}}
-      >
-        {{t "open-agenda"}}
-        {{moment-format this.newMeeting.plannedStart "DD MMMM YYYY"}}
-      </Auk::Button>
+        @label={{t "propose-again"}}
+      as |Menu|>
+      {{#if this.loadProposableMeetings.isIdle}}
+        {{#each this.loadProposableMeetings.lastSuccessful.value as |meeting|}}
+          <Menu.Item
+            {{on "click" (fn this.reProposeForAgenda.perform meeting)}}
+          >
+            {{t "agenda-for"}}
+            {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
+            {{concat " - " meeting.numberRepresentation}}
+          </Menu.Item>
+        {{/each}}
+        {{else}}
+          {{t "agenda-loading"}}
+        {{/if}}
+      </Auk::DropdownMenu>
+    {{else}}
+      {{#if this.modelsForProposedAgenda}}
+        <Auk::Button
+          @skin="primary"
+          @layout="icon-right"
+          @icon="chevron-right"
+          @route="agenda.agendaitems.agendaitem"
+          @models={{this.modelsForProposedAgenda}}
+        >
+          {{t "open-agenda"}}
+          {{moment-format this.newMeeting.plannedStart "DD MMMM YYYY"}}
+        </Auk::Button>
+      {{/if}}
     {{/if}}
   {{/if}}
 </div>
+
+{{#if this.reProposeForAgenda.isRunning}}
+  <Auk::Modal @size="medium">
+    <Auk::Modal::Header @title={{t "propose-again"}} @closeable={{false}} />
+    <Auk::Modal::Body>
+      <Auk::Loader @message={{t "please-be-patient"}} />
+    </Auk::Modal::Body>
+  </Auk::Modal>
+{{/if}}

@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import addWeeks from 'date-fns/addWeeks';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 
 /**
@@ -14,7 +15,6 @@ export default class AgendaitemPostponed extends Component {
   @service store;
   @service agendaService;
 
-  @tracked isEditing = false;
   @tracked canPropose = false;
   @tracked modelsForProposedAgenda;
   @tracked newMeeting;
@@ -29,13 +29,13 @@ export default class AgendaitemPostponed extends Component {
   *loadProposedStatus() {
     // We have to check if the proposed agendaitem is already proposed for a new meeting before showing the button
     // we have to generate a link to the latest meeting (not the next if multiple).
-    const agendaActivities = yield this.store.query('agenda-activity', {
+    // filtering on meeting.plannedStart will not find any if reProposing happened before the meeting ended
+    let agendaActivities = yield this.store.query('agenda-activity', {
       'filter[subcase][:id:]': this.args.subcase.id,
-      'filter[:gt:start-date]': this.args.meeting.plannedStart.toISOString(),
+      'filter[:gt:start-date]': this.args.agendaActivity.startDate.toISOString(),
       sort: '-start-date',
       // 'filter[agendaitems][agenda][created-for][is-final]': false,
     });
-    console.log('agendaActivities', agendaActivities)
     // If any agenda-activities exist that are created after this one we can assume the subcase is already proposed again.
     this.canPropose = agendaActivities.length ? false : true;
     if(!this.canPropose) {
@@ -59,7 +59,6 @@ export default class AgendaitemPostponed extends Component {
     return yield this.store.query('meeting', {
       filter: {
         ':gt:planned-start': this.args.meeting.plannedStart.toISOString(),
-        // ':gte:planned-start': new Date().toISOString(), // for local testing, too many agendas exist
         ':lte:planned-start': futureDate.toISOString(),
         'is-final': false,
       },
@@ -72,19 +71,24 @@ export default class AgendaitemPostponed extends Component {
     let submissionActivities = yield this.store.query('submission-activity', {
       'filter[subcase][:id:]': this.args.subcase.id,
       'filter[agenda-activity][:id:]': this.args.agendaActivity.id,
+      'page[size]': PAGE_SIZE.ACTIVITIES,
+      include: 'pieces', // Make sure we have all pieces, unpaginated
     });
-    submissionActivities = submissionActivities.toArray();
-    if (!submissionActivities.length) {
-      const now = new Date();
-      const submissionActivity = this.store.createRecord('submission-activity', {
-        startDate: now,
-        subcase: this.subcase,
-      });
-      yield submissionActivity.save();
-      submissionActivities = [submissionActivity];
+    const pieces = [];
+    for (const submissionActivity of submissionActivities.toArray()) {
+      let submissionPieces = yield submissionActivity.pieces;
+      submissionPieces = submissionPieces.toArray();
+      pieces.push(...submissionPieces);
     }
-    yield this.agendaService.putSubmissionOnAgenda(meeting, submissionActivities);
-    this.canPropose = false;
+    const submissionActivity = this.store.createRecord('submission-activity', {
+      startDate: new Date(),
+      subcase: this.args.subcase,
+      pieces: pieces,
+
+    });
+    yield submissionActivity.save();
+    yield this.agendaService.putSubmissionOnAgenda(meeting, [submissionActivity]);
+    yield this.loadProposedStatus.perform();
   }
 
 }
