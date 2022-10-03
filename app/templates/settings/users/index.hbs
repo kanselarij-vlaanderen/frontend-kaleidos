@@ -22,16 +22,12 @@
               >
               <span
                 data-test-route-settings-users-import-csv
-                class="auk-button auk-button--secondary auk-u-block"
+                class="au-c-button au-c-button--secondary"
               >
-                <span class="auk-button__content">
-                  <span class="auk-icon auk-icon--default">
-                    <i class="ki ki-import"></i>
-                  </span>
-                  <span class="auk-button__label">
-                    {{t "import-users"}}
-                  </span>
-                </span>
+                <AuIcon
+                  @icon="import"
+                />
+                {{t "import-users"}}
               </span>
             </label>
           {{/if}}
