@@ -27,7 +27,7 @@
           {{#if (user-may "manage-newsletter-infos")}}
             <Auk::Tab
               @route="newsletters"
-              @current-when="newsletters newsletter print-overviews.newsletter"
+              @current-when="newsletters newsletter"
               data-test-m-header-newsletters
             >
               {{t "newsletter"}}
