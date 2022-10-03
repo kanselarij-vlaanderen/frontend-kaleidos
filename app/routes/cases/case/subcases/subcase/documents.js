@@ -29,8 +29,11 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     }
 
     let sortedPieces;
-    this.meeting = await this.subcase.requestedForMeeting;
-    if (this.meeting?.isPreKaleidos) {
+    this.latestMeeting = await this.store.queryOne('meeting', {
+      'filter[agendas][agendaitems][agenda-activity][subcase][:id:]': this.args.subcase.id,
+      sort: '-planned-start',
+    });
+    if (this.latestMeeting?.isPreKaleidos) {
       sortedPieces = sortPieces(pieces, VrLegacyDocumentName, compareLegacyDocuments);
     } else {
       sortedPieces = sortPieces(pieces);

@@ -36,7 +36,10 @@ export default class SubcaseDescriptionView extends Component {
   *loadAgendaData() {
     this.phases = yield this.subcasesService.getSubcasePhases(this.args.subcase);
     this.subcaseType = yield this.args.subcase.type;
-    this.latestMeeting = yield this.args.subcase.requestedForMeeting;
+    this.latestMeeting = yield this.store.queryOne('meeting', {
+      'filter[agendas][agendaitems][agenda-activity][subcase][:id:]': this.args.subcase.id,
+      sort: '-planned-start',
+    });
     if (this.latestMeeting) {
       this.latestAgenda = yield this.store.queryOne('agenda', {
         'filter[created-for][:id:]': this.latestMeeting.id,

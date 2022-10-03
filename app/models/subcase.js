@@ -16,7 +16,6 @@ export default class Subcase extends ModelWithModifier {
 
   @belongsTo('subcase-type') type;
   @belongsTo('decisionmaking-flow') decisionmakingFlow;
-  @belongsTo('meeting', { inverse: null }) requestedForMeeting;
   @belongsTo('mandatee', { inverse: null }) requestedBy;
   @belongsTo('concept') agendaItemType;
 

@@ -5,7 +5,6 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 import VrLegacyDocumentName,
 { compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
 
@@ -18,6 +17,7 @@ export default class SubcaseItemSubcasesComponent extends Component {
   @service store;
   @service intl;
   @service subcasesService;
+  @service subcaseIsApproved;
 
   @tracked isShowingAllDocuments = false;
   @tracked hasDocumentsToShow = false;
@@ -76,7 +76,10 @@ export default class SubcaseItemSubcasesComponent extends Component {
 
   @task
   *loadRelatedMeeting() {
-    yield this.args.subcase.requestedForMeeting;
+    this.latestMeeting = yield this.store.queryOne('meeting', {
+      'filter[agendas][agendaitems][agenda-activity][subcase][:id:]': this.args.subcase.id,
+      sort: '-planned-start',
+    });
   }
 
   @task
@@ -96,8 +99,12 @@ export default class SubcaseItemSubcasesComponent extends Component {
       pieces.push(...submissionPieces);
     }
 
-    const meeting = yield this.args.subcase?.requestedForMeeting;
-    if (meeting?.isPreKaleidos) {
+    const latestMeeting = yield this.store.queryOne('meeting', {
+      'filter[agendas][agendaitems][agenda-activity][subcase][:id:]': this.args.subcase.id,
+      sort: '-planned-start',
+    });
+
+    if (latestMeeting?.isPreKaleidos) {
       this.subcaseDocuments = sortPieces(pieces, VrLegacyDocumentName, compareLegacyDocuments);
     } else {
       this.subcaseDocuments = sortPieces(pieces);
@@ -113,26 +120,7 @@ export default class SubcaseItemSubcasesComponent extends Component {
 
   @task
   *loadSubcaseIsApproved() {
-    const meeting = yield this.args.subcase.requestedForMeeting;
-    if (meeting?.isFinal) {
-      const approvedDecisionResultCode = yield this.store.findRecordByUri(
-        'decision-result-code',
-        CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
-      );
-      const acknowledgedDecisionResultCode = yield this.store.findRecordByUri(
-        'decision-result-code',
-        CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
-      );
-      this.approved = !!(yield this.store.queryOne('decision-activity', {
-        'filter[subcase][id]': this.args.subcase.id,
-        'filter[decision-result-code][:id:]': [
-          approvedDecisionResultCode.id,
-          acknowledgedDecisionResultCode.id,
-        ].join(','),
-      }));
-    } else {
-      this.approved = false;
-    }
+    this.approved = yield this.subcaseIsApproved.isApproved(this.args.subcase);
   }
 
   @action

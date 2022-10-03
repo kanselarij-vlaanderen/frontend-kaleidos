@@ -5,9 +5,15 @@ export default class SubcaseIsApprovedService extends Service {
   @service store;
 
   async isApproved(subcase) {
-    const meeting = await subcase?.requestedForMeeting;
+    // we need to see if the last meeting isFinal
+    const latestMeeting = await this.store.queryOne('meeting', {
+      'filter[agendas][agendaitems][treatment][decision-activity][subcase][:id:]': subcase.id,
+      sort: '-planned-start',
+    });
 
-    if (meeting?.isFinal) {
+    // TODO KAS-3667 I think the isFinal is a check so that we don't show the approved status unless the meeting is approved
+    // Not sure how this should work with multiple meetings (postponed)
+    if (latestMeeting?.isFinal) {
       const approvedDecisionResultCode = await this.store.findRecordByUri(
         'decision-result-code',
         CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
@@ -30,9 +36,12 @@ export default class SubcaseIsApprovedService extends Service {
   }
 
   async isRetracted(subcase) {
-    const meeting = await subcase?.requestedForMeeting;
+    const latestMeeting = await this.store.queryOne('meeting', {
+      'filter[agendas][agendaitems][treatment][decision-activity][subcase][:id:]': subcase.id,
+      sort: '-planned-start',
+    });
 
-    if (meeting?.isFinal) {
+    if (latestMeeting?.isFinal) {
       const nrDecisionActivities = await this.store.count('decision-activity', {
         'filter[subcase][:id:]': subcase.id,
         'filter[decision-result-code][:uri:]': CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN,
@@ -43,9 +52,12 @@ export default class SubcaseIsApprovedService extends Service {
   }
 
   async isPostponed(subcase) {
-    const meeting = await subcase?.requestedForMeeting;
+    const latestMeeting = await this.store.queryOne('meeting', {
+      'filter[agendas][agendaitems][treatment][decision-activity][subcase][:id:]': subcase.id,
+      sort: '-planned-start',
+    });
 
-    if (meeting?.isFinal) {
+    if (latestMeeting?.isFinal) {
       const nrDecisionActivities = await this.store.count('decision-activity', {
         'filter[subcase][:id:]': subcase.id,
         'filter[decision-result-code][:uri:]': CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD,

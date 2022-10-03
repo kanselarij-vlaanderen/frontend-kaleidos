@@ -180,8 +180,7 @@ export default class AgendaService extends Service {
     await lastAgenda.hasMany('agendaitems').reload();
     await subcase.hasMany('agendaActivities').reload();
     await subcase.hasMany('submissionActivities').reload();
-    subcase.set('requestedForMeeting', meeting);
-    await subcase.save();
+    await subcase.save(); // TODO KAS-3667 do we need to save without requestedForMeeting? maybe for concurrency setting of modified
     updateModifiedProperty(lastAgenda);
 
     // Create default newsletterInfo for announcements with inNewsLetter = true
@@ -253,7 +252,6 @@ export default class AgendaService extends Service {
         await agenda.hasMany('agendaitems').reload();
       }));
       await agendaActivity.destroyRecord();
-      await subcase.set('requestedForMeeting', null);
       await subcase.save();
       await subcase.hasMany('agendaActivities').reload();
       await subcase.hasMany('decisionActivities').reload();
