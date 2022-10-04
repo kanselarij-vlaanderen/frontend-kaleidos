@@ -69,10 +69,6 @@ Router.map(function() {
       this.route('overview', { path: '/klad', });
       this.route('agendaitems', { path: '/agendapunten', });
     });
-    this.route('newsletter', { path: '/kort-bestek/:agenda_id', }, function() {
-      this.route('overview', { path: '/klad', });
-      this.route('loading', { path: '/laden', });
-    });
     this.route('loading', { path: '/laden', });
   });
 
