@@ -24,6 +24,7 @@ export default class EditGovernmentAreasModal extends Component {
     this.governmentFields = yield this.store.query('concept', {
       'filter[top-concept-schemes][:uri:]':
         CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD,
+      'filter[:has-no:end-date]': true,
       include: 'broader,narrower',
       'page[size]': 100,
     });
