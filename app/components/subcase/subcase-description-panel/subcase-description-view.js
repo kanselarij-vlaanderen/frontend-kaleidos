@@ -22,6 +22,7 @@ export default class SubcaseDescriptionView extends Component {
   @tracked approved = null;
   @tracked isPostponed = null;
   @tracked isRetracted = null;
+  @tracked allMeetings = null;
 
   constructor() {
     super(...arguments);
@@ -36,11 +37,13 @@ export default class SubcaseDescriptionView extends Component {
   *loadAgendaData() {
     this.phases = yield this.subcasesService.getSubcasePhases(this.args.subcase);
     this.subcaseType = yield this.args.subcase.type;
-    this.latestMeeting = yield this.store.queryOne('meeting', {
+    this.allMeetings = yield this.store.query('meeting', {
       'filter[agendas][agendaitems][agenda-activity][subcase][:id:]': this.args.subcase.id,
-      sort: '-planned-start',
+      sort: 'planned-start',
     });
+    this.latestMeeting = this.allMeetings?.lastObject;
     if (this.latestMeeting) {
+      yield this.latestMeeting.kind;
       this.latestAgenda = yield this.store.queryOne('agenda', {
         'filter[created-for][:id:]': this.latestMeeting.id,
         sort: '-serialnumber',

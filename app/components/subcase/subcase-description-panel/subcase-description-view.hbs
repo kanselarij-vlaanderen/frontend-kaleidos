@@ -47,16 +47,20 @@
           data-test-subcase-description-meeting-number
           class="auk-key-value-item__value"
         >
-          {{#if this.latestMeeting.number}}
-            {{this.latestMeeting.number}}
+          {{#if this.allMeetings}}
+            {{#each this.allMeetings as |meeting|}}
+              {{meeting.number}}{{if (has-next meeting this.allMeetings) ", "}}
+            {{/each}}
           {{else}}
             {{t "no-number-yet"}}
           {{/if}}
         </div>
       </div>
       <div class="auk-key-value-item">
-        <div class="auk-key-value-item__label">
-          {{t "requested-for-session"}}
+        <div class="auk-key-value-item__label auk-u-max-width-xlarge">
+          {{#if this.loadAgendaData.isIdle}}
+            {{t "requested-for-session" kind=(kind-print-label this.latestMeeting.kind)}}
+          {{/if}}
         </div>
         <div
           data-test-subcase-description-meeting-planned-start
