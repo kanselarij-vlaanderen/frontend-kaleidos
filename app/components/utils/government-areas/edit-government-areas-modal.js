@@ -4,7 +4,6 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class EditGovernmentAreasModal extends Component {
   @service store;
@@ -22,13 +21,12 @@ export default class EditGovernmentAreasModal extends Component {
 
   @task
   *loadGovernmentAreas() {
-    const concepts = yield this.store.query('concept', {
+    const concepts = yield this.store.queryAll('concept', {
       filter: {
         'top-concept-schemes': {
           ':uri:': CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD,
         },
       },
-      'page[size]': PAGE_SIZE.GOVERNMENT_FIELDS,
     });
     const governmentFields = [];
     for (const concept of concepts.toArray()) {
