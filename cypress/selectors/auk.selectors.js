@@ -83,5 +83,8 @@ const selectors = {
 
   formHelpText: '.auk-form-help-text',
   formGroup: '.auk-form-group',
+  icon: {
+    warning: '.auk-icon--warning',
+  },
 };
 export default selectors;

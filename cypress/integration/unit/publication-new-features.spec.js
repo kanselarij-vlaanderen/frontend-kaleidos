@@ -155,10 +155,11 @@ context('Publications new features tests', () => {
     cy.get(publication.proofsIndex.upload).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.intercept('PATCH', '/publication-subcases/**').as('patchPublicationSubcase2');
+    cy.intercept('GET', '/proofing-activities?filter**').as('getActivities');
     cy.get(publication.proofUpload.save).click()
-      .wait('@patchPublicationSubcase2');
-    cy.get(auk.loader).should('not.exist');
-    //  TODO-waits no wait here causes publication request modal to close before cypress is able to click save
+      .wait('@patchPublicationSubcase2')
+      .wait('@getActivities');
+    //  TODO-waits there's a page reload here?
     cy.wait(2000);
     cy.get(publication.proofReceivedPanel.dropdown).click();
     cy.get(publication.proofReceivedPanel.publicationRequest).click();
@@ -166,10 +167,9 @@ context('Publications new features tests', () => {
       .should('have.length', 1)
       // TODO can't make filename unique, needs a way to ensure this is checking for the correct file to be inherited
       .contains(file.fileName);
-    cy.intercept('PATCH', '/publication-subcases/**').as('patchPublicationSubcase2');
+    cy.intercept('PATCH', '/publication-subcases/**').as('patchPublicationSubcase3');
     cy.get(publication.publicationRequest.save).click()
-      .wait('@patchPublicationSubcase2');
-    cy.get(auk.loader).should('not.exist');
+      .wait('@patchPublicationSubcase3');
     cy.wait(2000);
 
     // check proofs docs not removable once used in publication request
