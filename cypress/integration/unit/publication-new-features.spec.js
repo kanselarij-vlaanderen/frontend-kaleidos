@@ -219,8 +219,6 @@ context('Publications new features tests', () => {
     cy.wait('@postPerson');
     cy.wait('@postContactPerson');
 
-    cy.visit('publicaties/6324293DBAE2614F72CFB97C/dossier');
-
     cy.get(publication.publicationNav.translations).click();
     cy.get(publication.translationsIndex.requestTranslation).click();
     cy.get(publication.translationRequest.message).invoke('val')
