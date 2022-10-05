@@ -78,7 +78,7 @@ context('Publications new features tests', () => {
     cy.get(auk.emptyState.message).contains(emptyStateMessage);
   });
 
-  it.only('should check number of extracts default, docs removable, uploaded docs inherited when making new publication and registration updates correctly', () => {
+  it('should check number of extracts default, docs removable, uploaded docs inherited when making new publication and registration updates correctly', () => {
     const previousStatus = 'Publicatie gevraagd';
     const endStatus = 'Gepubliceerd';
     const today = Cypress.dayjs().format('DD-MM-YYYY');

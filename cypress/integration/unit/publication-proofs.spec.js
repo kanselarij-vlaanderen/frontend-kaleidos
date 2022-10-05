@@ -318,7 +318,8 @@ context('Publications proofs tests', () => {
     cy.get(publication.publicationCaseInfo.edit).click();
     cy.get(publication.publicationCaseInfo.editView.dueDate).find(auk.datepicker)
       .click()
-      .clear();
+      .clear()
+      .type('{enter}');
     cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
     cy.intercept('PATCH', '/publication-subcases/**').as('patchPublicationSubcase');
     cy.get(publication.publicationCaseInfo.editView.save).click();

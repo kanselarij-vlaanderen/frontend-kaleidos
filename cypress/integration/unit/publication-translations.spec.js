@@ -252,7 +252,7 @@ context('Publications translation tests', () => {
       .contains('Vertaling ontvangen');
   });
 
-  it.only('should set duedate, check expiration warning then check if duedate is prefilled in uploadmodal', () => {
+  it('should set duedate, check expiration warning then check if duedate is prefilled in uploadmodal', () => {
     const lateDueDate = Cypress.dayjs().subtract(5, 'days');
     const formattedLateDueDate = lateDueDate.format('DD-MM-YYYY');
 
