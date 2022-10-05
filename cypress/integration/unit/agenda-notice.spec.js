@@ -44,9 +44,11 @@ context('agenda notice test', () => {
     // add fields
     cy.intercept('GET', '/concepts**').as('getConceptSchemes');
     cy.get(utils.governmentAreasPanel.edit).click();
-    cy.wait('@getConceptSchemes', {
-      timeout: 600000,
-    }); // This call can take up to a minute
+    // await retrieval of government-fields in multiple pages
+    cy.wait('@getConceptSchemes');
+    cy.wait('@getConceptSchemes');
+    cy.wait('@getConceptSchemes');
+    cy.wait('@getConceptSchemes');
     cy.get(utils.governmentAreaSelectorForm.container).contains(labelName1)
       .find(utils.governmentAreaSelectorForm.field)
       .contains(fieldsName1)
