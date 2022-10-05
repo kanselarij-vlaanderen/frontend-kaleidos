@@ -1,4 +1,4 @@
-/* global context, it, cy, beforeEach, afterEach, Cypress*/
+/* global context, expect, it, cy, beforeEach, afterEach, Cypress*/
 
 // / <reference types="Cypress" />
 import publication from '../../selectors/publication.selectors';
@@ -52,6 +52,30 @@ context('Publications new features tests', () => {
     // cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow2');
     // cy.get(publication.publicationCaseInfo.editView.save).click()
     //   .wait('@patchPublicationFlow2');
+  });
+
+  it('should check urgent tab', () => {
+    const emptyStateMessage = 'Geen resultaten gevonden';
+
+    // there should be one record in urgent tab from previous test
+    cy.get(publication.publicationsIndex.tabs.urgent).click();
+    cy.get(auk.loader).should('not.exist');
+    cy.get(publication.publicationTableRow.rows).should('have.length', 1);
+
+    // uncheck
+    cy.visit('/publicaties/626FBC3BCB00108193DC4361/dossier');
+    cy.get(publication.publicationCaseInfo.edit).click();
+    cy.get(publication.urgencyLevelCheckbox).parent()
+      .click();
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    cy.get(publication.publicationCaseInfo.editView.save).click()
+      .wait('@patchPublicationFlow');
+
+    // there should be no records now
+    cy.get(publication.publicationNav.goBack).click();
+    cy.get(publication.publicationsIndex.tabs.urgent).click();
+    cy.get(auk.loader).should('not.exist');
+    cy.get(auk.emptyState.message).contains(emptyStateMessage);
   });
 
   it('should check number of extracts default, docs removable, uploaded docs inherited when making new publication and registration updates correctly', () => {
@@ -166,5 +190,108 @@ context('Publications new features tests', () => {
     cy.get(auk.loader).should('not.exist');
     cy.get(publication.publicationsInfoPanel.view.publicationDate).contains(today);
     cy.get(publication.statusPill.contentLabel).contains(endStatus);
+  });
+
+  it('should check if contactpersons are added to mail', () => {
+    const fields = {
+      number: 2100,
+      shortTitle: 'test nieuwe features',
+    };
+    const contactperson = {
+      fin: 'Marcus',
+      lan: 'Testerson',
+      eml: 'NothingToSeeHere@gmail.com',
+    };
+
+    // setup
+    cy.createPublication(fields);
+    cy.get(publication.contactPersons.add).click();
+    cy.get(auk.modal.container).should('exist');
+    cy.get(publication.contactPersonAdd.firstName).clear()
+      .type(contactperson.fin);
+    cy.get(publication.contactPersonAdd.lastName).clear()
+      .type(contactperson.lan);
+    cy.get(publication.contactPersonAdd.email).clear()
+      .type(contactperson.eml);
+    cy.intercept('POST', '/persons').as('postPerson');
+    cy.intercept('POST', '/contact-persons').as('postContactPerson');
+    cy.get(publication.contactPersonAdd.submit).click();
+    cy.wait('@postPerson');
+    cy.wait('@postContactPerson');
+
+    cy.get(publication.publicationNav.translations).click();
+    cy.get(publication.translationsIndex.requestTranslation).click();
+    cy.get(publication.translationRequest.message).invoke('val')
+      .as('value');
+    cy.get('@value').should(($p) => {
+      expect($p).to.contain(contactperson.fin);
+      expect($p).to.contain(contactperson.lan);
+      expect($p).to.contain(contactperson.eml);
+    });
+  });
+
+  it('should test longtitle fallback in mail', () => {
+    const longTitle = 'test long title fallback';
+
+    cy.visit('publicaties/626FBC3BCB00108193DC4361/dossier');
+
+    // Check shorttitle in translationrequest mail
+    cy.get(publication.publicationNav.translations).click();
+    cy.get(publication.translationsIndex.requestTranslation).click();
+    cy.get(publication.translationRequest.message).invoke('val')
+      .as('value');
+    cy.get('@value').should(($p) => {
+      expect($p).to.contain('Titel: Besluitvorming Vlaamse Regering hoed');
+    });
+    cy.get(auk.modal.footer.cancel).click();
+
+    // Check shorttitle in proofrequest mail
+    cy.get(publication.publicationNav.proofs).click();
+    cy.get(publication.proofsIndex.newRequest).click();
+    cy.get(publication.proofRequest.message).invoke('val')
+      .as('value');
+    cy.get('@value').should(($p) => {
+      expect($p).to.contain('Titel: Besluitvorming Vlaamse Regering hoed');
+    });
+    cy.get(auk.modal.footer.cancel).click();
+
+    // add longtitle
+    cy.get(publication.publicationNav.case).click();
+    cy.get(publication.inscription.view.edit).click();
+    cy.get(publication.inscription.edit.longTitle).click()
+      .clear()
+      .type(longTitle);
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    cy.get(publication.inscription.edit.save).click();
+    cy.wait('@patchPublicationFlow');
+
+    // Check longtitle in translationrequest mail
+    cy.get(publication.publicationNav.translations).click();
+    cy.get(publication.translationsIndex.requestTranslation).click();
+    cy.get(publication.translationRequest.message).invoke('val')
+      .as('value');
+    cy.get('@value').should(($p) => {
+      expect($p).to.contain(`Titel: ${longTitle}`);
+    });
+    cy.get(auk.modal.footer.cancel).click();
+
+    // Check longtitle in proofrequest mail
+    cy.get(publication.publicationNav.proofs).click();
+    cy.get(publication.proofsIndex.newRequest).click();
+    cy.get(publication.proofRequest.message).invoke('val')
+      .as('value');
+    cy.get('@value').should(($p) => {
+      expect($p).to.contain(`Titel: ${longTitle}`);
+    });
+    cy.get(auk.modal.footer.cancel).click();
+
+    // remove longtitle (to prevent failing other tests that use this publication)
+    cy.get(publication.publicationNav.case).click();
+    cy.get(publication.inscription.view.edit).click();
+    cy.get(publication.inscription.edit.longTitle).click()
+      .clear();
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    cy.get(publication.inscription.edit.save).click();
+    cy.wait('@patchPublicationFlow');
   });
 });

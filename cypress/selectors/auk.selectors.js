@@ -67,6 +67,10 @@ const selectors = {
     next: '.auk-pagination__element:nth-child(3) > .auk-button-link',
   },
 
+  header: {
+    title: '[data-test-modal-header-title]',
+  },
+
   /** Section single selector AUK components **/
 
   checkbox: {
