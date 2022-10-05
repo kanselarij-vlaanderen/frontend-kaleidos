@@ -89,6 +89,14 @@ context('Publications via MR tests', () => {
       .contains('Via Ministerraad');
     cy.get('@row').find(publication.publicationTableRow.row.decisionDate)
       .contains(formattedAgendaDate);
+
+    // check if decisiondate is shown in publicationsInfoPanel and if links works correctly
+    cy.get('@row').click();
+    cy.get(publication.publicationCaseInfo.decisionDate).contains(formattedAgendaDate);
+    cy.get(publication.publicationCaseInfo.startDate).invoke('removeAttr', 'target')
+      .scrollIntoView()
+      .click();
+    cy.url().should('include', agendaitemDetailLink);
   });
 
   it('should open the new publication and check if data was inherited correctly', () => {

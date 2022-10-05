@@ -29,7 +29,7 @@
       <div class="auk-o-grid">
         <div class="auk-o-grid-col-3">
           <div
-            data-test-publications-info-panel-target-end-date
+            data-test-publications-info-panel-edit-view-target-end-date
             class="auk-form-group"
           >
             <Auk::Label>{{t "publication-target-end-date"}}</Auk::Label>
@@ -99,6 +99,7 @@
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <Auk::Button
+              data-test-publications-info-panel-save
               @skin="primary"
               @loading={{this.save.isRunning}}
               {{on "click" (perform this.save)}}
@@ -115,7 +116,10 @@
         <div class="auk-o-grid-col-3">
           <div class="auk-content">
             <h4 class="auk-u-m-0">{{t "publication-target-end-date"}}</h4>
-            <p class="auk-u-m-0">
+            <p
+              data-test-publications-info-panel-view-target-end-date
+              class="auk-u-m-0"
+            >
               {{#if @publicationSubcase.targetEndDate}}
                 {{moment-format @publicationSubcase.targetEndDate}}
               {{else}}

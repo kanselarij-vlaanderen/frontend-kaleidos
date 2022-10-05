@@ -108,7 +108,7 @@ function checkPublicationSearchForRegulationType(regulationType, pubNumber) {
 // TODO-publication make Test to register publication
 // cy.get(publication.publicationNav.publications).click();
 // cy.get(publication.publicationsInfoPanel.edit).click();
-// cy.get(publication.publicationsInfoPanel.targetEndDate).find(auk.datepicker)
+// cy.get(publication.publicationsInfoPanel.editView.targetEndDate).find(auk.datepicker)
 //   .click();
 // cy.setDateInFlatpickr(fields.publicationTargetEndDate);
 // cy.get(publication.publicationActivities.register).click();
