@@ -14,10 +14,10 @@ context('Settings overview page tests', () => {
   });
 
   // TODO-settings test 2-9 are duplicated in their own specs
-  // disabled these tests in light of upcoming refactor (rights/groups come from ACMIDM)
+  // disabled some of these tests in light of upcoming refactor (rights/groups come from ACMIDM)
   // Change and reenable later
 
-  it.skip('Should open settings page and see all fields from the general settings tab', () => {
+  it('Should open settings page and see all fields from the general settings tab', () => {
     cy.get(settings.settings.generalSettings).should('be.visible');
     cy.get(settings.settings.manageMinisters).should('be.visible');
     cy.get(settings.settings.manageUsers).should('be.visible');
@@ -29,25 +29,25 @@ context('Settings overview page tests', () => {
     cy.get(settings.overview.manageSubcaseTypes).should('be.visible');
   });
 
-  it.skip('Should open the model behind manage alerts and close it', () => {
+  it('Should open the model behind manage alerts and close it', () => {
     cy.openSettingsModal(settings.overview.manageAlerts);
     cy.get(utils.vlModal.container).should('contain', 'Systeemberichten beheer');
     cy.closeSettingsModal();
   });
 
-  it.skip('Should open the model behind manage document types and close it', () => {
+  it('Should open the model behind manage document types and close it', () => {
     cy.openSettingsModal(settings.overview.manageDocumentTypes);
     cy.get(utils.vlModal.container).should('contain', 'Document-types beheer');
     cy.closeSettingsModal();
   });
 
-  it.skip('Should open the model behind manage case types and close it', () => {
+  it('Should open the model behind manage case types and close it', () => {
     cy.openSettingsModal(settings.overview.manageCaseTypes);
     cy.get(utils.vlModal.container).should('contain', 'Dossier-types beheer');
     cy.closeSettingsModal();
   });
 
-  it.skip('Should open the model behind manage subcase types and close it', () => {
+  it('Should open the model behind manage subcase types and close it', () => {
     cy.openSettingsModal(settings.overview.manageSubcaseTypes);
     cy.get(utils.vlModal.container).should('contain', 'Procedurestap types beheer');
     cy.closeSettingsModal();
