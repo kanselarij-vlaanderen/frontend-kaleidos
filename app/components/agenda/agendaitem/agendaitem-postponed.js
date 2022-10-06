@@ -38,7 +38,6 @@ export default class AgendaitemPostponed extends Component {
     
     if (latestAagendaActivity) {
       // load the latest agenda link
-      // const latestActivity = latestAagendaActivity.lastObject;
       const latestAgendaitem = yield this.store.queryOne('agendaitem', {
         'filter[agenda-activity][:id:]': latestAagendaActivity.id,
         'filter[:has-no:next-version]': 't',
@@ -57,7 +56,6 @@ export default class AgendaitemPostponed extends Component {
   @task
   *loadProposableMeetings() {
     const futureDate = addWeeks(new Date(), 20);
-    // this might be subject to change
     return yield this.store.query('meeting', {
       filter: {
         ':gt:planned-start': this.args.meeting.plannedStart.toISOString(),
