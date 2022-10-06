@@ -16,7 +16,7 @@ export default class AgendaitemPostponed extends Component {
 
   @tracked canPropose = false;
   @tracked modelsForProposedAgenda;
-  @tracked newMeeting;
+  @tracked latestMeeting;
 
   constructor() {
     super(...arguments);
@@ -26,28 +26,27 @@ export default class AgendaitemPostponed extends Component {
 
   @task
   *loadProposedStatus() {
-    // We have to check if the proposed agendaitem is already proposed for a new meeting before showing the button
+    // If any agenda-activities exist that are created after this one we can assume the subcase is already proposed again.
     // we have to generate a link to the latest meeting (not the next if multiple).
     // filtering on meeting.plannedStart will not find any if reProposing happened before the meeting "started" at 10 am
-    let agendaActivities = yield this.store.query('agenda-activity', {
+    const latestAagendaActivity = yield this.store.queryOne('agenda-activity', {
       'filter[subcase][:id:]': this.args.subcase.id,
       'filter[:gt:start-date]':
         this.args.agendaActivity.startDate.toISOString(),
-      sort: '-start-date',
+      sort: 'start-date',
     });
-    // If any agenda-activities exist that are created after this one we can assume the subcase is already proposed again.
-    this.canPropose = agendaActivities.length ? false : true;
-    if (!this.canPropose) {
+    
+    if (latestAagendaActivity) {
       // load the latest agenda link
-      const latestActivity = agendaActivities.firstObject;
+      // const latestActivity = latestAagendaActivity.lastObject;
       const latestAgendaitem = yield this.store.queryOne('agendaitem', {
-        'filter[agenda-activity][:id:]': latestActivity.id,
+        'filter[agenda-activity][:id:]': latestAagendaActivity.id,
         'filter[:has-no:next-version]': 't',
         sort: '-created',
       });
       const agenda = yield latestAgendaitem.agenda;
       const meeting = yield agenda.createdFor;
-      this.newMeeting = meeting;
+      this.latestMeeting = meeting;
       this.modelsForProposedAgenda = [
         meeting.id,
         agenda.id,
@@ -71,7 +70,7 @@ export default class AgendaitemPostponed extends Component {
 
   @task
   *reProposeForAgenda(meeting) {
-    let submissionActivities = yield this.store.query('submission-activity', {
+    const submissionActivities = yield this.store.query('submission-activity', {
       'filter[subcase][:id:]': this.args.subcase.id,
       'filter[agenda-activity][:id:]': this.args.agendaActivity.id,
       'page[size]': PAGE_SIZE.ACTIVITIES,
