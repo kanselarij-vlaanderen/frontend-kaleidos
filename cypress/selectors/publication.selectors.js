@@ -7,6 +7,9 @@ const selectors = {
   // publications\index\template
   publicationsIndex: {
     title: '[data-test-route-publications-index-title]',
+    tabs: {
+      urgent: '[data-test-route-publications-index-tabs-urgent]',
+    },
     newPublication: '[data-test-route-publications-index-new-publication]',
     dataTable: '[data-test-route-publications-index-data-table]',
     loading: '[data-test-route-publications-index-loading]',
@@ -189,6 +192,16 @@ const selectors = {
   //   save: '[data-test-publication-documents-upload-save]',
   // },
 
+  // translations-info-panel
+  translationsInfoPanel: {
+    edit: '[data-test-publication-translations-info-panel-edit]',
+    editView: {
+      dueDate: '[data-test-publication-translations-info-panel-edit-due-date]',
+    },
+    dueDate: '[data-test-publication-translations-info-panel-due-date]',
+    save: '[data-test-publication-translations-info-panel-save]',
+  },
+
   // translation-request-modal
   translationRequest: {
     numberOfPages: '[data-test-publication-translation-request-number-of-pages]',
@@ -225,13 +238,18 @@ const selectors = {
       publicationNumber: '[data-test-publication-case-info-panel-edit-publication-number]',
       suffix: '[data-test-publication-case-info-panel-edit-publication-number-suffix]',
       numacNumber: '[data-test-publication-case-info-panel-edit-numac-number]',
+      publicationMode: '[data-test-publication-case-info-panel-edit-publication-mode]',
+      decisionDate: '[data-test-publication-case-info-panel-edit-decision-date]',
       openingDate: '[data-test-publication-case-info-panel-edit-opening-date]',
       dueDate: '[data-test-publication-case-info-panel-edit-publication-due-date]',
       save: '[data-test-publication-case-info-panel-save]',
       cancel: '[data-test-publication-case-info-panel-cancel]',
     },
+    urgencyLevel: '[data-test-publication-case-info-panel-urgency-level]',
     publicationNumber: '[data-test-publication-case-info-panel-publication-number]',
     numacNumber: '[data-test-publication-case-info-panel-numac-number]',
+    publicationMode: '[data-test-publication-case-info-panel-publication-mode]',
+    decisionDate: '[data-test-publication-case-info-panel-decision-date]',
     startDate: '[data-test-publication-case-info-panel-start-date]',
     openingDate: '[data-test-publication-case-info-panel-opening-date]',
     dueDate: '[data-test-publication-case-info-panel-due-date]',
@@ -259,9 +277,13 @@ const selectors = {
   // publications-info-panel
   publicationsInfoPanel: {
     edit: '[data-test-publications-info-panel-edit]',
-    targetEndDate: '[data-test-publications-info-panel-target-end-date]',
     view: {
+      targetEndDate: '[data-test-publications-info-panel-view-target-end-date]',
       publicationDate: '[data-test-publications-info-panel-view-publication-date]',
+    },
+    editView: {
+      targetEndDate: '[data-test-publications-info-panel-edit-view-target-end-date]',
+      save: '[data-test-publications-info-panel-save]',
     },
   },
 
@@ -278,6 +300,7 @@ const selectors = {
     panel: '[data-test-translation-received-panel]',
     endDate: '[data-test-translation-received-panel-end-date]',
     dropdown: '[data-test-translation-received-panel-dropdown]',
+    proofRequest: '[data-test-translation-received-panel-proof-request]',
     edit: '[data-test-translation-received-panel-edit]',
   },
 
@@ -320,9 +343,15 @@ const selectors = {
 
   // proof-info-panel
   proofInfoPanel: {
+    edit: '[data-test-proof-info-panel-edit]',
     view: {
+      dueDate: '[data-test-publication-proof-info-panel-view-due-date]',
       corrector: '[data-test-proof-info-panel-view-corrector]',
     },
+    editView: {
+      dueDate: '[data-test-proof-info-panel-edit-due-date]',
+    },
+    save: '[data-test-publication-proof-info-panel-save]',
   },
 
   // decisions-info-panel
@@ -359,6 +388,7 @@ const selectors = {
   publicationRequest: {
     body: '[data-test-publication-request-body]',
     subject: '[data-test-publication-request-subject]',
+    message: '[data-test-publication-request-message]',
     save: '[data-test-publication-request-save]',
   },
 };

@@ -67,6 +67,10 @@ const selectors = {
     next: '.auk-pagination__element:nth-child(3) > .au-c-button',
   },
 
+  header: {
+    title: '[data-test-modal-header-title]',
+  },
+
   /** Section single selector AUK components **/
 
   checkbox: {
@@ -79,5 +83,8 @@ const selectors = {
 
   formHelpText: '.auk-form-help-text',
   formGroup: '.auk-form-group',
+  icon: {
+    warning: '.auk-icon--warning',
+  },
 };
 export default selectors;

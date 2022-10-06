@@ -26,7 +26,14 @@ const selectors = {
   // New batch editing modal (agendaitem)
   // batch-documents-details-modal
   batchDocumentsDetails: {
+    selectAll: '[data-test-batch-documents-details-select-all]',
     save: '[data-test-batch-documents-details-save]',
+  },
+
+  // batch-editing-row
+  batchEditingRow: {
+    type: '[data-test-batch-editing-row-type]',
+    accesLevel: '[data-test-batch-editing-row-access-level]',
   },
 
   // edit-document-row

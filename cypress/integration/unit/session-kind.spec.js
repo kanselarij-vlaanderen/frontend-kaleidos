@@ -204,4 +204,37 @@ context('Different session kinds should show different titles', () => {
     cy.get(agenda.agendaDetailSidebarItem.shortTitle).contains(newCaseTitle);
     cy.get(agenda.agendaDetailSidebarItem.shortTitle).should('not.contain', 'verslag');
   });
+
+  it('Should create all types of agendas and check default no report on PVV, BM and EP', () => {
+    const approvalTitle = 'Goedkeuring van het verslag';
+    const alertMessage = 'Er zijn nog geen agendapunten in deze agenda.';
+    const agendaDate = Cypress.dayjs().add(2, 'weeks')
+      .day(5);
+    const formattedAgendaDate = agendaDate.format('DD-MM-YYYY');
+    const relatedMainMeeting = `Ministerraad van ${formattedAgendaDate}`;
+
+    cy.createAgenda('Ministerraad', agendaDate).then((result) => {
+      cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
+      cy.get(agenda.agendaOverviewItem.subitem).contains(approvalTitle);
+    });
+
+    cy.createAgenda('Ministerraad - Plan Vlaamse Veerkracht', agendaDate, null, null, null, null, relatedMainMeeting).then((result) => {
+      cy.log(result);
+      cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
+      cy.get(utils.vlAlert.message).eq(0)
+        .contains(alertMessage);
+    });
+
+    cy.createAgenda('Bijzondere ministerraad', agendaDate).then((result) => {
+      cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
+      cy.get(utils.vlAlert.message).eq(0)
+        .contains(alertMessage);
+    });
+
+    cy.createAgenda('Elektronische procedure', agendaDate).then((result) => {
+      cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
+      cy.get(utils.vlAlert.message).eq(0)
+        .contains(alertMessage);
+    });
+  });
 });
