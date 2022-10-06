@@ -17,6 +17,7 @@ export default class AgendaitemControls extends Component {
   @service intl;
   @service agendaService;
   @service currentSession;
+  @service pieceAccessLevelService;
 
   @tracked isVerifying = false;
   @tracked showLoader = false;
@@ -133,5 +134,11 @@ export default class AgendaitemControls extends Component {
     );
     this.decisionActivity.decisionResultCode = decisionResultCode;
     await this.decisionActivity.save();
+    if ([CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD, CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN].includes(decisionResultCodeUri)) {
+      const pieces = await this.args.agendaitem.pieces;
+      for (const piece of pieces.toArray()) {
+        await this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(piece);
+      }
+    }
   }
 }
