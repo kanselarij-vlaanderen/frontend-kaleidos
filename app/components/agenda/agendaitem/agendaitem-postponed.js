@@ -14,21 +14,18 @@ export default class AgendaitemPostponed extends Component {
   @service store;
   @service agendaService;
 
-  @tracked canPropose = false;
   @tracked modelsForProposedAgenda;
   @tracked latestMeeting;
 
   constructor() {
     super(...arguments);
     this.loadProposedStatus.perform();
-    this.loadProposableMeetings.perform();
   }
 
   @task
   *loadProposedStatus() {
     // If any agenda-activities exist that are created after this one we can assume the subcase is already proposed again.
-    // we have to generate a link to the latest meeting (not the next if multiple).
-    // filtering on meeting.plannedStart will not find any if reProposing happened before the meeting "started" at 10 am
+    // Filtering on agenda-activities that are more recent than the agenda-activity of the postponed agendaitem
     const latestAagendaActivity = yield this.store.queryOne('agenda-activity', {
       'filter[subcase][:id:]': this.args.subcase.id,
       'filter[:gt:start-date]':
@@ -37,7 +34,8 @@ export default class AgendaitemPostponed extends Component {
     });
     
     if (latestAagendaActivity) {
-      // load the latest agenda link
+      // we have to generate a link to the latest meeting
+      // The subcase could be postponed on multipe meetings, but we show only the latest one
       const latestAgendaitem = yield this.store.queryOne('agendaitem', {
         'filter[agenda-activity][:id:]': latestAagendaActivity.id,
         'filter[:has-no:next-version]': 't',
@@ -51,6 +49,8 @@ export default class AgendaitemPostponed extends Component {
         agenda.id,
         latestAgendaitem.id,
       ];
+    } else {
+      yield this.loadProposableMeetings.perform();
     }
   }
   @task
