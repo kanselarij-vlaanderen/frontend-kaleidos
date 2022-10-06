@@ -14,8 +14,10 @@ context('Settings overview page tests', () => {
   });
 
   // TODO-settings test 2-9 are duplicated in their own specs
+  // disabled these tests in light of upcoming refactor (rights/groups come from ACMIDM)
+  // Change and reenable later
 
-  it('Should open settings page and see all fields from the general settings tab', () => {
+  it.skip('Should open settings page and see all fields from the general settings tab', () => {
     cy.get(settings.settings.generalSettings).should('be.visible');
     cy.get(settings.settings.manageMinisters).should('be.visible');
     cy.get(settings.settings.manageUsers).should('be.visible');
@@ -27,31 +29,31 @@ context('Settings overview page tests', () => {
     cy.get(settings.overview.manageSubcaseTypes).should('be.visible');
   });
 
-  it('Should open the model behind manage alerts and close it', () => {
+  it.skip('Should open the model behind manage alerts and close it', () => {
     cy.openSettingsModal(settings.overview.manageAlerts);
     cy.get(utils.vlModal.container).should('contain', 'Systeemberichten beheer');
     cy.closeSettingsModal();
   });
 
-  it('Should open the model behind manage document types and close it', () => {
+  it.skip('Should open the model behind manage document types and close it', () => {
     cy.openSettingsModal(settings.overview.manageDocumentTypes);
     cy.get(utils.vlModal.container).should('contain', 'Document-types beheer');
     cy.closeSettingsModal();
   });
 
-  it('Should open the model behind manage case types and close it', () => {
+  it.skip('Should open the model behind manage case types and close it', () => {
     cy.openSettingsModal(settings.overview.manageCaseTypes);
     cy.get(utils.vlModal.container).should('contain', 'Dossier-types beheer');
     cy.closeSettingsModal();
   });
 
-  it('Should open the model behind manage subcase types and close it', () => {
+  it.skip('Should open the model behind manage subcase types and close it', () => {
     cy.openSettingsModal(settings.overview.manageSubcaseTypes);
     cy.get(utils.vlModal.container).should('contain', 'Procedurestap types beheer');
     cy.closeSettingsModal();
   });
 
-  it('Upload a CSV and delete a user', () => {
+  it.skip('Upload a CSV and delete a user', () => {
     cy.get(settings.settings.manageUsers).contains('Gebruikersbeheer')
       .click();
     cy.url().should('include', 'instellingen/gebruikers');
@@ -94,7 +96,7 @@ context('Settings overview page tests', () => {
       .contains('kanselarij');
   });
 
-  it('Should test the search of a user when typing', () => {
+  it.skip('Should test the search of a user when typing', () => {
     cy.intercept('GET', '/users?filter=Minister**').as('filterUsersMinister');
     cy.get(settings.settings.manageUsers).click();
     cy.url().should('include', 'instellingen/gebruikers');
@@ -104,7 +106,7 @@ context('Settings overview page tests', () => {
       .should('contain', 'Minister');
   });
 
-  it('Should trigger search when clicking on search icon', () => {
+  it.skip('Should trigger search when clicking on search icon', () => {
     cy.intercept('GET', '/users?filter=Minister**').as('filterUsersMinister');
 
     cy.get(settings.settings.manageUsers).click();
@@ -117,7 +119,7 @@ context('Settings overview page tests', () => {
     cy.get(settings.usersIndex.row.firstname).should('contain', 'Minister');
   });
 
-  it('Should navigate to detailview from user', () => {
+  it.skip('Should navigate to detailview from user', () => {
     cy.intercept('GET', '/users?filter=Minister**').as('filterUsersMinister');
 
     cy.get(settings.settings.manageUsers).click();
@@ -134,7 +136,7 @@ context('Settings overview page tests', () => {
     // TODO-users check all fields for a user ?
   });
 
-  it('Should change the group of the user from the detailpage', () => {
+  it.skip('Should change the group of the user from the detailpage', () => {
     cy.intercept('GET', '/users?**').as('getUsers');
     cy.intercept('GET', '/users?filter=Minister**').as('filterUsersMinister');
     cy.intercept('PATCH', '/users/*').as('patchUsers');
