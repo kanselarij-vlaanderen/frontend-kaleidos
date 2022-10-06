@@ -30,7 +30,7 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
 
     let sortedPieces;
     this.latestMeeting = await this.store.queryOne('meeting', {
-      'filter[agendas][agendaitems][agenda-activity][subcase][:id:]': this.args.subcase.id,
+      'filter[agendas][agendaitems][agenda-activity][subcase][:id:]': this.subcase.id,
       sort: '-planned-start',
     });
     if (this.latestMeeting?.isPreKaleidos) {
