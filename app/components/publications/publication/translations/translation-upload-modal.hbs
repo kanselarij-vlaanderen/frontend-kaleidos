@@ -22,7 +22,10 @@
         {{on "input" this.setTranslationReceivedStatus}}
       />
     </div>
-    <div class="auk-form-group">
+    <div
+      data-test-translation-upload-received-date
+      class="auk-form-group"
+    >
       <Auk::Label for="translationUploadReceivedAtDate">
         {{t "date-received"}}
       </Auk::Label>

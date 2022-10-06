@@ -12,6 +12,7 @@
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <AuButton
+              data-test-proof-info-panel-edit
               @skin="naked"
               @icon="pencil"
               {{on "click" this.openEditingPanel}}
@@ -28,7 +29,10 @@
     <Auk::Panel::Body>
       <div class="auk-o-grid">
         <div class="auk-o-grid-col-3">
-          <div class="auk-form-group">
+          <div
+            data-test-proof-info-panel-edit-due-date
+            class="auk-form-group"
+          >
             <Auk::Label>{{t "publication-flow-publication-due-date"}}</Auk::Label>
             <Auk::Datepicker
               @date={{@publicationSubcase.dueDate}}
@@ -77,6 +81,7 @@
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <AuButton
+              data-test-publication-proof-info-panel-save
               @skin="primary"
               @loading={{this.save.isRunning}}
               {{on "click" (perform this.save)}}
@@ -93,7 +98,10 @@
         <div class="auk-o-grid-col-3">
           <div class="auk-content">
             <h4 class="auk-u-m-0">{{t "publication-flow-publication-due-date"}}</h4>
-            <p class="auk-u-m-0">
+            <p
+              data-test-publication-proof-info-panel-view-due-date
+              class="auk-u-m-0"
+            >
               {{#if @publicationSubcase.dueDate}}
                 {{moment-format @publicationSubcase.dueDate}}
               {{else}}
