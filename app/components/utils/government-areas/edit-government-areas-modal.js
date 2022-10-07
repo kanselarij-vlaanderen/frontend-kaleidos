@@ -21,12 +21,25 @@ export default class EditGovernmentAreasModal extends Component {
 
   @task
   *loadGovernmentAreas() {
-    this.governmentFields = yield this.store.query('concept', {
-      'filter[top-concept-schemes][:uri:]':
-        CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD,
-      include: 'broader,narrower',
-      'page[size]': 100,
+    const concepts = yield this.store.queryAll('concept', {
+      filter: {
+        'top-concept-schemes': {
+          ':uri:': CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD,
+        },
+      },
     });
+    const governmentFields = [];
+    for (const concept of concepts.toArray()) {
+      const isInDateRange =
+        concept.startDate <= this.args.referenceDate &&
+        (this.args.referenceDate <= concept.endDate ||
+          concept.endDate === undefined);
+
+      if (isInDateRange) {
+        governmentFields.push(concept);
+      }
+    }
+    this.governmentFields = governmentFields;
   }
 
   @task

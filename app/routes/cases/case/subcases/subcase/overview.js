@@ -43,6 +43,7 @@ export default class CasesCaseSubcasesSubcaseOverviewRoute extends Route {
     this.mandatees = (await model.subcase.mandatees).sortBy('priority');
     this.submitter = await model.subcase.requestedBy;
     this.meeting = await model.subcase.requestedForMeeting;
+    this.agenda = await this.meeting?.agenda;
     await model.subcase.governmentAreas;
   }
 
@@ -52,6 +53,7 @@ export default class CasesCaseSubcasesSubcaseOverviewRoute extends Route {
     controller.submitter = this.submitter;
     controller.decisionmakingFlow = this.decisionmakingFlow;
     controller.meeting = this.meeting;
+    controller.agenda = this.agenda;
     controller.governmentAreas = this.governmentAreas;
   }
 }

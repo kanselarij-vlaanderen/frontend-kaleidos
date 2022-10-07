@@ -8,6 +8,7 @@
             {{#if (user-may "manage-documents")}}
               <th class="auk-table-checkbox-col">
                 <Auk::Checkbox
+                  data-test-batch-documents-details-select-all
                   @checked={{this.areAllSelected}}
                   {{on "input" this.toggleAllSelection}}
                 />
