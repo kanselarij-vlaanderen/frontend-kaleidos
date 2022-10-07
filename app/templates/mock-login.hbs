@@ -15,35 +15,31 @@
         </Auk::Toolbar::Item>
       {{/if}}
       <Auk::Toolbar::Item class="auk-u-mr-3">
-        <Auk::ButtonLink
-          @skin="muted"
-          @padded="padded"
+        <AuDropdown
+          @title={{t "help"}}
+          @alignment="right"
           @icon="circle-question"
+          @iconAlignment="left"
         >
-          {{t "help"}}
-        </Auk::ButtonLink>
-        <AttachPopover
-          @renderInPlace={{true}}
-          @hideOn="clickout click"
-          @showOn="click"
-          @animation="shift"
-          @placement="bottom-end"
-        >
-          <Auk::Menu>
-            <Auk::Menu::Item
-              @route="manual"
-              target="_blank"
-            >
-              {{t "look-at-documentation"}}
-            </Auk::Menu::Item>
-            <Auk::Menu::Item @href="mailto:kaleidos.servicedesk@vlaanderen.be">
-              <div>
-                <span>{{t "contact-us"}}</span>
-                <span class="auk-u-text-muted auk-u-text-size--small">{{t "email-servicedesk"}}</span>
-              </div>
-            </Auk::Menu::Item>
-          </Auk::Menu>
-        </AttachPopover>
+          <AuLink
+            @route="manual"
+            role="menuitem"
+            target="_blank"
+          >
+            {{t "look-at-documentation"}}
+          </AuLink>
+          <AuHr />
+          <AuLink
+            href="mailto:kaleidos.servicedesk@vlaanderen.be"
+            target="_blank"
+            role="menuitem"
+          >
+            <span class="auk-u-text-nowrap">{{t "contact-us"}}</span>
+            <span class="auk-u-text-muted auk-u-text-size--small">
+              {{t "email-servicedesk"}}
+            </span>
+          </AuLink>
+        </AuDropdown>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
