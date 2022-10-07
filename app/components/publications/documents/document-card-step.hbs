@@ -27,18 +27,21 @@
           <Toolbar.Group @position="right" as |Group|>
             <Group.Item class="auk-o-flex">
               {{#if (and @isEnabledDelete @piece.file)}}
-                <Auk::DropdownMenu
-                  @skin="borderless"
+                <AuDropdown
                   @icon="three-dots"
-                  as |Menu|
+                  @title={{t "more"}}
+                  @hideText={{true}}
+                  @alignment="right"
                 >
-                  <Menu.Item
-                    @skin="danger"
+                  <AuButton
+                    @skin="link"
+                    @alert={{true}}
                     {{on "click" (perform this.deletePiece)}}
+                    role="menuitem"
                   >
                     {{t "document-delete"}}
-                  </Menu.Item>
-                </Auk::DropdownMenu>
+                  </AuButton>
+                </AuDropdown>
               {{/if}}
             </Group.Item>
           </Toolbar.Group>
