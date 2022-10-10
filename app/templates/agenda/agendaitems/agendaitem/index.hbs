@@ -62,6 +62,7 @@
     @onSave={{this.saveMandateeData}}
   />
   <Utils::GovernmentAreas::GovernmentAreasPanel
+    @referenceDate={{or this.meeting.plannedStart this.agenda.created}}
     @governmentAreas={{this.subcase.governmentAreas}}
     @allowEditing={{user-may "manage-agendaitems"}}
     @onSave={{this.saveGovernmentAreas}}

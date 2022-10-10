@@ -6,12 +6,6 @@ export default class IndexRoute extends Route {
   @service currentSession;
 
   beforeModel() {
-    if (this.currentSession.isKortBestek) {
-      this.router.transitionTo('newsletters');
-    } else if (this.currentSession.isOvrb) {
-      this.router.transitionTo('publications');
-    } else {
-      this.router.transitionTo('agendas');
-    }
+    this.router.transitionTo(this.currentSession.userGroup?.defaultRoute || 'agendas');
   }
 }

@@ -12,7 +12,7 @@ export default class MockLoginRoute extends Route {
 
   model() {
     return this.store.query('account', {
-      include: 'user,user.group',
+      include: 'user',
       filter: {
         provider: CONSTANTS.SERVICE_PROVIDERS.MOCK_LOGIN,
       },
