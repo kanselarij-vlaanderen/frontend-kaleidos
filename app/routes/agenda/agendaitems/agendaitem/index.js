@@ -26,13 +26,12 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     this.submitter = undefined;
     if (this.subcase) {
       this.submitter = await this.subcase.requestedBy;
-      this.meeting = await this.subcase.requestedForMeeting;
       await this.subcase.governmentAreas;
     }
     const agendaItemTreatment = await model.treatment;
     this.newsletterInfo = await agendaItemTreatment?.newsletterInfo;
-    this.decisionActivity = await agendaItemTreatment?.decisionActivity;
-    await this.decisionActivity?.decisionResultCode;
+    const decisionActivity = await agendaItemTreatment?.decisionActivity;
+    await decisionActivity.decisionResultCode;
     // When routing here from agenda overview with stale data, we need to reload several relations
     // The reload in model refreshes only the attributes and includes relations, makes saves with stale relation data possible
     await model.hasMany('mandatees').reload();
@@ -51,6 +50,5 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.newsletterInfo = this.newsletterInfo;
     controller.mandatees = this.mandatees;
     controller.submitter = this.submitter;
-    controller.meeting = this.meeting;
   }
 }

@@ -1,19 +1,15 @@
-{{#let this.model.treatment.decisionActivity.decisionResultCode as |resultCode|}}
+{{#let
+  this.model.treatment.decisionActivity.decisionResultCode
+  as |resultCode|
+}}
   {{#if resultCode.isRetracted}}
-    <Auk::Alert @skin="warning" @message={{t "retracted-item"}}/>
+    <Auk::Alert @skin="warning" @message={{t "retracted-item"}} />
   {{else if resultCode.isPostponed}}
-    <div class="auk-alert auk-alert--warning">
-      <div class="auk-alert__body">
-        <Auk::Badge @icon="alert-triangle" @skin={{"warning"}}/>
-        <div class="auk-alert__text">
-          <p class="auk-u-text-pre-line auk-alert__message">{{t "postponed-item"}}</p>
-        </div>
-      </div>
-      {{!-- <Auk::dropdownMenu
-        @skin="primary"
-        @label={{"Opnieuw agenderen"}}
-      /> --}}
-    </div>
+    <Agenda::Agendaitem::AgendaitemPostponed
+      @meeting={{this.meeting}}
+      @subcase={{this.subcase}}
+      @agendaActivity={{this.agendaActivity}}
+    />
   {{/if}}
 {{/let}}
 
