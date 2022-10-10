@@ -13,10 +13,9 @@
         />
         <AuButton
           data-test-route-settings-users-search-button
-          @skin="secondary"
+          @skin="primary"
           @icon="search"
-          @hideText={{true}}
-          {{on "click" this.refresh}}
+          class="auk-o-flex__item--fix"
         >
           {{t "search"}}
         </AuButton>
