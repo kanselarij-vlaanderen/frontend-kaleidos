@@ -14,51 +14,48 @@ export default class AgendaitemPostponed extends Component {
   @service store;
   @service agendaService;
 
-  @tracked canPropose = false;
   @tracked modelsForProposedAgenda;
-  @tracked newMeeting;
+  @tracked latestMeeting;
 
   constructor() {
     super(...arguments);
     this.loadProposedStatus.perform();
-    this.loadProposableMeetings.perform();
   }
 
   @task
   *loadProposedStatus() {
-    // We have to check if the proposed agendaitem is already proposed for a new meeting before showing the button
-    // we have to generate a link to the latest meeting (not the next if multiple).
-    // filtering on meeting.plannedStart will not find any if reProposing happened before the meeting "started" at 10 am
-    let agendaActivities = yield this.store.query('agenda-activity', {
+    // If any agenda-activities exist that are created after this one we can assume the subcase is already proposed again.
+    // Filtering on agenda-activities that are more recent than the agenda-activity of the postponed agendaitem
+    const latestAagendaActivity = yield this.store.queryOne('agenda-activity', {
       'filter[subcase][:id:]': this.args.subcase.id,
       'filter[:gt:start-date]':
         this.args.agendaActivity.startDate.toISOString(),
-      sort: '-start-date',
+      sort: 'start-date',
     });
-    // If any agenda-activities exist that are created after this one we can assume the subcase is already proposed again.
-    this.canPropose = agendaActivities.length ? false : true;
-    if (!this.canPropose) {
-      // load the latest agenda link
-      const latestActivity = agendaActivities.firstObject;
+    
+    if (latestAagendaActivity) {
+      // we have to generate a link to the latest meeting
+      // The subcase could be postponed on multipe meetings, but we show only the latest one
       const latestAgendaitem = yield this.store.queryOne('agendaitem', {
-        'filter[agenda-activity][:id:]': latestActivity.id,
+        'filter[agenda-activity][:id:]': latestAagendaActivity.id,
         'filter[:has-no:next-version]': 't',
         sort: '-created',
       });
       const agenda = yield latestAgendaitem.agenda;
       const meeting = yield agenda.createdFor;
-      this.newMeeting = meeting;
+      this.latestMeeting = meeting;
       this.modelsForProposedAgenda = [
         meeting.id,
         agenda.id,
         latestAgendaitem.id,
       ];
+    } else {
+      yield this.loadProposableMeetings.perform();
     }
   }
   @task
   *loadProposableMeetings() {
     const futureDate = addWeeks(new Date(), 20);
-    // this might be subject to change
     return yield this.store.query('meeting', {
       filter: {
         ':gt:planned-start': this.args.meeting.plannedStart.toISOString(),
@@ -71,7 +68,7 @@ export default class AgendaitemPostponed extends Component {
 
   @task
   *reProposeForAgenda(meeting) {
-    let submissionActivities = yield this.store.query('submission-activity', {
+    const submissionActivities = yield this.store.query('submission-activity', {
       'filter[subcase][:id:]': this.args.subcase.id,
       'filter[agenda-activity][:id:]': this.args.agendaActivity.id,
       'page[size]': PAGE_SIZE.ACTIVITIES,

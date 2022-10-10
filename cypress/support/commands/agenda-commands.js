@@ -24,9 +24,10 @@ import utils from '../../selectors/utils.selectors';
  * @param {number} meetingNumber The number of the meeting to enter as input
  * @param {string} meetingNumberVisualRepresentation The visual representation of the meetingnumber to enter as input
  * @param {*} plannedRelease The Cypress.dayjs object with the date and time to set for the planned release of the documents
+ * @param {string} relatedMainMeeting the agenda to link to the PVV
  * @returns {Promise<String>} the id of the created agenda
  */
-function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRepresentation, plannedRelease) {
+function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRepresentation, plannedRelease, relatedMainMeeting) {
   cy.log('createAgenda');
   cy.intercept('POST', '/meetings').as('createNewMeeting');
   cy.intercept('POST', '/agendas').as('createNewAgenda');
@@ -55,15 +56,34 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
     }).should('not.exist');
   }
 
+  // set related main meeting
+  if (kind === 'Ministerraad - Plan Vlaamse Veerkracht') {
+    cy.get(agenda.editMeeting.relatedMainMeeting).click();
+    cy.get(dependency.emberPowerSelect.option, {
+      timeout: 5000,
+    }).wait(500)
+      .contains(relatedMainMeeting)
+      .scrollIntoView()
+      .trigger('mouseover')
+      .click({
+        force: true,
+      });
+    cy.get(dependency.emberPowerSelect.option, {
+      timeout: 15000,
+    }).should('not.exist');
+  }
+
   // Set the start date
-  cy.get(agenda.editMeeting.datepicker).find(auk.datepicker)
-    .click();
-  cy.setDateAndTimeInFlatpickr(date);
-  // At this point, the flatpickr is still open and covers the other fields
-  // To negate this, we click once with force:true on the next input field to close it
-  cy.get(agenda.editMeeting.meetingNumber).click({
-    force: true,
-  });
+  if (!kind || kind !== 'Ministerraad - Plan Vlaamse Veerkracht') {
+    cy.get(agenda.editMeeting.datepicker).find(auk.datepicker)
+      .click();
+    cy.setDateAndTimeInFlatpickr(date);
+    // At this point, the flatpickr is still open and covers the other fields
+    // To negate this, we click once with force:true on the next input field to close it
+    cy.get(agenda.editMeeting.meetingNumber).click({
+      force: true,
+    });
+  }
 
   // Set the planned document release
   if (plannedRelease) {
@@ -81,11 +101,13 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
       .clear()
       .type(meetingNumber);
   } else {
-    // 1 test in agenda.spec uses this value
-    cy.get(agenda.editMeeting.meetingNumber).click()
-      .invoke('val')
+    if (!kind || kind !== 'Ministerraad - Plan Vlaamse Veerkracht') {
+      // 1 test in agenda.spec uses this value
+      cy.get(agenda.editMeeting.meetingNumber).click()
+        .invoke('val')
       // eslint-disable-next-line
       .then((sometext) => meetingNumber = sometext);
+    }
   }
 
   // Set the meetingNumber representation
@@ -131,13 +153,26 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
       agendaId = responseBody.data.id;
     });
   cy.log('/createAgenda');
-  cy.wait('@createAgendaitem', {
-    timeout: 60000,
-  }).then(() => new Cypress.Promise((resolve) => {
-    resolve({
-      meetingId, meetingNumber, agendaId, meetingNumberRep,
-    });
-  }));
+
+  if (!kind || kind === 'Ministerraad') {
+    cy.wait('@createAgendaitem', {
+      timeout: 60000,
+    }).then(() => new Cypress.Promise((resolve) => {
+      resolve({
+        meetingId, meetingNumber, agendaId, meetingNumberRep,
+      });
+    }));
+  } else {
+    // only one call happens, so cypress will not wait twice, but we can still reuse the call to send our response
+    // resolving promise from a responsebody returns the responsebody instead of our promise
+    cy.wait('@createNewAgenda', {
+      timeout: 60000,
+    }).then(() => new Cypress.Promise((resolve) => {
+      resolve({
+        meetingId, meetingNumber, agendaId, meetingNumberRep,
+      });
+    }));
+  }
 }
 
 /**

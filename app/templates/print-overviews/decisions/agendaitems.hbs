@@ -12,10 +12,15 @@
     @columns={{this.columns}}
     as |agendaitemRow|
   >
-    {{#let (await agendaitemRow.agendaActivity.subcase) (await agendaitemRow.treatment.decisionActivity) as |subcase decisionActivity|}}
+    {{#let
+      (await agendaitemRow.agendaActivity.subcase)
+      (await agendaitemRow.treatment.decisionActivity)
+      as |subcase decisionActivity|
+    }}
       {{#if (and subcase decisionActivity)}}
         <div class="auk-u-m-8">
           <Agenda::Agendaitem::AgendaitemDecision
+            @agendaitem={{agendaitemRow.content}}
             @decisionActivity={{decisionActivity}}
           />
         </div>

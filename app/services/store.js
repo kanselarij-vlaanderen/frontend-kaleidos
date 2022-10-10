@@ -1,4 +1,5 @@
 import Store from '@ember-data/store';
+import ArrayProxy from '@ember/array/proxy';
 
 export default class ExtendedStoreService extends Store {
   /*
@@ -14,6 +15,30 @@ export default class ExtendedStoreService extends Store {
       return results.firstObject;
     }
     return null;
+  }
+
+  async queryAll(modelName, query, options) {
+    query = query || {}; // eslint-disable-line no-param-reassign
+    const count = await this.count(modelName, query, options);
+    const batchSize = query.page?.size || 100;
+    const nbOfBatches = Math.ceil(count / batchSize);
+    const batches = [];
+    for (let i = 0; i < nbOfBatches; i++) {
+      const queryForBatch = Object.assign({}, query, {
+        'page[size]': batchSize,
+        'page[number]': i,
+      });
+      const batch = this.query(modelName, queryForBatch, options);
+      batches.push(batch);
+    }
+
+    const results = await Promise.all(batches);
+    return ArrayProxy.create({
+      content: results.map((result) => result.toArray()).flat(),
+      meta: {
+        count
+      }
+    });
   }
 
   async count(modelName, query, options) {
