@@ -19,6 +19,7 @@ export default class SubcaseDescriptionView extends Component {
   @tracked latestMeeting = null;
   @tracked latestAgenda = null;
   @tracked latestAgendaitem = null;
+  @tracked latestDecisionResultCode = null;
   @tracked approved = null;
   @tracked isPostponed = null;
   @tracked isRetracted = null;
@@ -58,8 +59,13 @@ export default class SubcaseDescriptionView extends Component {
       // TODO KAS-3612 the resultCode is not used yet. We might need it to determine if we can show to other profiles
       // agenda-activities are propagated by yggdrail on agenda approval, treatments/decision-activities only when decisions are released
       const treatment = yield agendaitem?.treatment;
-      this.decisionActivity = yield treatment?.decisionActivity;
-      const resultCode = yield this.decisionActivity?.decisionResultCode;
+      const decisionActivity = yield treatment?.decisionActivity;
+      const resultCode = yield decisionActivity.decisionResultCode;
+      // Other profiles should not have the latest decision when decisions have not been released yet
+      if (decisionActivity) {
+        // the last decision might be null, keep only the last one that exists
+        this.latestDecisionResultCode = resultCode;
+      }
 
       this.modelsOfMeetings.push([meeting, agenda, agendaitem, resultCode]);
       // we need this multiple times in the template and navigating the nested array each time is bothersome
