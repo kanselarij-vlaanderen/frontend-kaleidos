@@ -1,8 +1,8 @@
-/* global context, it, cy, beforeEach, afterEach */
+/* global context, it, expect, cy, Cypress, beforeEach, afterEach */
 
 // / <reference types="Cypress" />
 import publication from '../../selectors/publication.selectors';
-// import auk from '../../selectors/auk.selectors';
+import auk from '../../selectors/auk.selectors';
 // import utils from '../../selectors/utils.selectors';
 
 context('Publications proofs tests', () => {
@@ -34,5 +34,29 @@ context('Publications proofs tests', () => {
     cy.get(publication.publicationRegistration.save).click()
       .wait('@reloadPublicationModel');
     cy.get(publication.publicationRegisteredPanel.panel).should('have.length', 1);
+  });
+
+  it('should check the targetEndDate field', () => {
+    const lateEndDate = Cypress.dayjs().subtract(5, 'days');
+    const formattedLateEndDate = lateEndDate.format('DD-MM-YYYY');
+
+    cy.visit('/publicaties/626FBC3BCB00108193DC4361/publicatie');
+
+    // set targetEndDate
+    cy.get(publication.publicationsInfoPanel.edit).click();
+    cy.get(publication.publicationsInfoPanel.editView.targetEndDate).find(auk.datepicker)
+      .click();
+    cy.setDateInFlatpickr(lateEndDate);
+    cy.get(publication.publicationsInfoPanel.editView.save).click();
+    // check if field is updated and warning shows
+    cy.get(publication.publicationsInfoPanel.view.targetEndDate).contains(formattedLateEndDate);
+    cy.get(auk.formHelpText).contains('Datum verstreken');
+    // check if requestmessage contains the targetEndDate
+    cy.get(publication.publicationActivities.request).click();
+    cy.get(publication.publicationRequest.message).invoke('val')
+      .as('value');
+    cy.get('@value').should(($p) => {
+      expect($p).to.contain(formattedLateEndDate);
+    });
   });
 });

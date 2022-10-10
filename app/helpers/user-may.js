@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 export default class UserMay extends Helper {
   @service currentSession;
 
-  compute([roleKey]) {
-    return this.currentSession.may(roleKey);
+  compute([permission]) {
+    return this.currentSession.may(permission);
   }
 }

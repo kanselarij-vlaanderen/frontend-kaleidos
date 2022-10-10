@@ -46,6 +46,7 @@ export default class CasesCaseSubcasesSubcaseOverviewRoute extends Route {
       'filter[agendas][agendaitems][agenda-activity][subcase][:id:]': model.subcase.id,
       sort: '-planned-start',
     });
+    this.agenda = await this.meeting?.agenda;
     await model.subcase.governmentAreas;
   }
 
@@ -55,6 +56,7 @@ export default class CasesCaseSubcasesSubcaseOverviewRoute extends Route {
     controller.submitter = this.submitter;
     controller.decisionmakingFlow = this.decisionmakingFlow;
     controller.meeting = this.meeting;
+    controller.agenda = this.agenda;
     controller.governmentAreas = this.governmentAreas;
   }
 }

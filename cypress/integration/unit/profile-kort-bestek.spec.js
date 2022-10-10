@@ -10,13 +10,13 @@ import utils from '../../selectors/utils.selectors';
 
 context('Testing the application as Kort bestek user', () => {
   beforeEach(() => {
-    cy.loginFlow('Kort Bestek');
+    cy.loginFlow('Kort bestek');
     cy.wait(1000);
   });
 
   // M-header toolbar tests
 
-  it('Should have publications, case, search and newsletter in toolbar', () => {
+  it('Should have agenda, case, search and newsletter in toolbar', () => {
     cy.get(utils.mHeader.agendas).should('exist');
     cy.get(utils.mHeader.cases).should('exist');
     cy.get(utils.mHeader.newsletters).should('exist');

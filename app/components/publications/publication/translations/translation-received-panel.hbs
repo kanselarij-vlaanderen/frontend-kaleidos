@@ -15,6 +15,7 @@
         <Auk::Toolbar::Item>
           <Auk::DropdownMenu data-test-translation-received-panel-dropdown @skin="borderless" @icon="three-dots" as |Menu|>
             <Menu.Item
+              data-test-translation-received-panel-proof-request
               @skin="primary"
               {{on "click" this.openProofRequestModal}}
             >

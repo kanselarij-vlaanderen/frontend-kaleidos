@@ -1,0 +1,6 @@
+<Utils::GovernmentAreas::GovernmentAreasPanel
+  @referenceDate={{or this.meeting.plannedStart this.agenda.created @publicationFlow.created}}
+  @governmentAreas={{this.governmentAreas}}
+  @allowEditing={{true}}
+  @onSave={{this.saveGovernmentAreas}}
+/>

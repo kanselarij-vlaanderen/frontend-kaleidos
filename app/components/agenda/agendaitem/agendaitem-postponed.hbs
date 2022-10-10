@@ -8,42 +8,37 @@
     </div>
   </div>
   {{#if @meeting.internalDecisionPublicationActivity.startDate}}
-    {{#if this.canPropose}}
-      <Auk::DropdownMenu @skin="primary" @label={{t "propose-again"}} as |Menu|>
-        {{#if this.loadProposableMeetings.isIdle}}
-          {{#each
-            this.loadProposableMeetings.lastSuccessful.value
-            as |meeting|
-          }}
-            <Menu.Item
-              {{on "click" (fn this.reProposeForAgenda.perform meeting)}}
-            >
-              {{t "agenda-for"}}
-              {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
-              {{concat " - " meeting.numberRepresentation}}
-            </Menu.Item>
-          {{/each}}
-        {{else}}
-          {{t "agenda-loading"}}
-        {{/if}}
-      </Auk::DropdownMenu>
+    {{#if this.modelsForProposedAgenda}}
+      <Auk::Button
+        @skin="primary"
+        @layout="icon-right"
+        @icon="chevron-right"
+        @route="agenda.agendaitems.agendaitem"
+        @models={{this.modelsForProposedAgenda}}
+      >
+        {{t "open-agenda"}}
+        {{moment-format this.latestMeeting.plannedStart "DD MMMM YYYY"}}
+      </Auk::Button>
     {{else}}
-      {{#if this.modelsForProposedAgenda}}
-        <Auk::Button
-          @skin="primary"
-          @layout="icon-right"
-          @icon="chevron-right"
-          @route="agenda.agendaitems.agendaitem"
-          @models={{this.modelsForProposedAgenda}}
-        >
-          {{t "open-agenda"}}
-          {{moment-format this.newMeeting.plannedStart "DD MMMM YYYY"}}
-        </Auk::Button>
+      {{#if (user-may "manage-agendaitems")}}
+        <Auk::DropdownMenu @skin="primary" @label={{t "propose-again"}} as |Menu|>
+          {{#if this.loadProposableMeetings.isRunning}}
+            {{t "agenda-loading"}}
+          {{else}}
+            {{#each this.loadProposableMeetings.lastSuccessful.value as |meeting|
+            }}
+              <Menu.Item {{on "click" (perform this.reProposeForAgenda meeting)}}>
+                {{t "agenda-for"}}
+                {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
+                {{concat " - " meeting.numberRepresentation}}
+              </Menu.Item>
+            {{/each}}
+          {{/if}}
+        </Auk::DropdownMenu>
       {{/if}}
     {{/if}}
   {{/if}}
 </div>
-
 {{#if this.reProposeForAgenda.isRunning}}
   <Auk::Modal @size="medium">
     <Auk::Modal::Header @title={{t "propose-again"}} @closeable={{false}} />

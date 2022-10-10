@@ -188,7 +188,6 @@ function proposeSubcaseForAgenda(agendaDate, numberRep = '') {
   cy.log('proposeSubcaseForAgenda');
   cy.intercept('POST', '/agendaitems').as('createNewAgendaitem');
   cy.intercept('PATCH', '/agendas/*').as('patchAgenda');
-  cy.intercept('PATCH', '/subcases/*').as('patchSubcase');
   cy.intercept('POST', '/agenda-activities').as('createAgendaActivity');
   const monthDutch = getTranslatedMonth(agendaDate.month());
   let formattedDate = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
@@ -204,9 +203,6 @@ function proposeSubcaseForAgenda(agendaDate, numberRep = '') {
     .should('not.exist');
   cy.wait('@createAgendaActivity')
     .wait('@createNewAgendaitem')
-    .wait('@patchSubcase', {
-      timeout: 24000,
-    })
     .wait('@patchAgenda', {
       timeout: 24000,
     });
