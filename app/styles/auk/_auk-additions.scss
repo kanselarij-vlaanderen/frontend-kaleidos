@@ -62,6 +62,20 @@
   }
 }
 
+.auk-table--noactions {
+  .data-table tbody tr:hover {
+    background-color: transparent !important;
+  }
+}
+
+.auk-panel .au-c-table-wrapper {
+  border: 0;
+
+  tr:last-child {
+    border-bottom: 0;
+  }
+}
+
 .data-table__actions--top {
   border-bottom: none;
 }
@@ -71,7 +85,6 @@ table tr.lt-expanded-row {
     background-color: $auk-white !important;
   }
 }
-
 
 // When using auk-modal, the ember power select wormhole is behind the modal
 // auk-modal has z-index of 1600;

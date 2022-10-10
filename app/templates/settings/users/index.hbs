@@ -1,49 +1,15 @@
-<Utils::SettingsHeader @title={{t "manage-users"}}>
-  <Auk::Toolbar>
-    <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
-        {{#let (file-queue name="user-upload" onFileAdded=(perform this.uploadUserFile)) as |queue|}}
-          {{!-- refactored the structure below a bit to remove redundant nesting (vl-refactor), but is still unintuitive --}}
-          {{#if queue.files.length}}
-            <AuButton
-              @skin="secondary"
-              @icon="import"
-              @disabled={{true}}
-            >
-              {{t "import-users-text"}}
-            </AuButton>
-          {{else}}
-            <label>
-              <input
-                type="file"
-                accept=".csv"
-                hidden
-                {{queue.selectFile}}
-              >
-              <span
-                data-test-route-settings-users-import-csv
-                class="au-c-button au-c-button--secondary"
-              >
-                <AuIcon
-                  @icon="import"
-                />
-                {{t "import-users"}}
-              </span>
-            </label>
-          {{/if}}
-        {{/let}}
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-  </Auk::Toolbar>
-</Utils::SettingsHeader>
-<div class="auk-u-m-8">
-  <Auk::Toolbar>
-    <Auk::Toolbar::Group @position="left">
-      <Auk::Toolbar::Item>
+<div class="auk-scroll-wrapper__body au-u-background-gray-100">
+  <div class="auk-o-grid au-o-grid--stretch">
+    <div class="auk-o-grid-col-2">
+    </div>
+    <div class="auk-o-grid-col-10">
+      <form {{on "submit" this.search}} class="auk-navbar auk-navbar--bordered-bottom au-u-padding-left-none au-u-padding-right-small au-u-padding-top-small au-u-padding-bottom-small au-u-flex--between au-u-flex--spaced-tiny">
         <Auk::Input
           data-test-route-settings-users-search-input
+          class="auk-u-maximize-width"
+          placeholder={{t "user-search"}}
           @type="search"
-          @value={{this.filter}}
+          @value={{this.searchTextBuffer}}
         />
         <AuButton
           data-test-route-settings-users-search-button
@@ -54,82 +20,74 @@
         >
           {{t "search"}}
         </AuButton>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-  </Auk::Toolbar>
-
-  <DataTable
-    data-test-route-settings-users-table={{true}}
-    @content={{await this.model}}
-    @class="auk-table auk-table--striped"
-    @isLoading={{this.isLoadingModel}}
-    @page={{this.page}}
-    @size={{this.size}}
-    @sort={{this.sort}}
-    @noDataMessage={{t "no-results-found"}}
-    as |table|
-  >
-    <table.content as |c|>
-      <c.header>
-        <ThSortable
-          @class="auk-table__col--3"
-          @currentSorting={{this.sort}}
-          @field="first-name"
-          @label={{t "first-name"}}
-        />
-        <ThSortable
-          @class="auk-table__col--2"
-          @currentSorting={{this.sort}}
-          @field="last-name"
-          @label={{t "last-name"}}
-        />
-        <th
-                class="auk-table__col--2"
-        >
-          {{t "email"}}
-        </th>
-        <ThSortable
-          @class="auk-table__col--2"
-          @currentSorting={{this.sort}}
-          @field="organization.identifier"
-          @label={{t "ovo-code"}}
-        />
-        <ThSortable
-          @class="auk-table__col--2"
-          @currentSorting={{this.sort}}
-          @field="group.name"
-          @label={{t "group"}}
-        />
-        <th class="auk-table__col--1"></th>
-      </c.header>
-      <c.body as |user|>
-        <td data-test-route-settings-users-row-first-name>
-          {{user.firstName}}
-        </td>
-        <td>
-          {{user.lastName}}
-        </td>
-        <td>
-          {{if user.email user.email "-"}}
-        </td>
-        <td>
-          {{if user.organization.identifier user.organization.identifier "-"}}
-        </td>
-        <td data-test-route-settings-users-row-group>
-          {{#if user.group}}
-            {{user.group.name}}
-          {{else}}
-            -
-          {{/if}}
-        </td>
-        <td>
-          {{!-- TODO: this action-bar component triggers seemingly unnecessary new requests for a user --}}
-          <WebComponents::LightTable::VlcUserTableActionbar
-            @row={{user}}
-            @goToRoute={{this.goToRoute}}
-          />
-        </td>
-      </c.body>
-    </table.content>
-  </DataTable>
+      </form>
+      <DataTable
+        data-test-route-settings-users-table
+        @content={{this.model}}
+        @class="auk-table auk-table--styled auk-table--bordered auk-table--noactions"
+        @isLoading={{this.isLoadingModel}}
+        @page={{this.page}}
+        @size={{this.size}}
+        @sort={{this.sort}}
+        @noDataMessage={{t "no-results-found"}}
+        as |table|
+      >
+        <table.content as |c|>
+          <c.header>
+            <ThSortable
+              @currentSorting={{this.sort}}
+              @field="first-name"
+              @label={{t "name"}}
+            />
+            <th>{{t "organization"}}</th>
+            <th>{{t "group"}}</th>
+            <th></th>
+          </c.header>
+          <c.body as |user|>
+            <td data-test-route-settings-users-row-name>
+              <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+                {{user.fullName}}
+              </span>
+            </td>
+            <td class="au-o-flow au-o-flow--tiny">
+              {{#each user.memberships as |membership|}}
+                <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+                  <div>
+                    <p class="au-u-muted au-u-h-functional">
+                      {{membership.organization.identifier}}
+                    </p>
+                    <p class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+                      {{membership.organization.name}}
+                    </p>
+                  </div>
+                </div>
+              {{/each}}
+            </td>
+            <td data-test-route-settings-users-row-group>
+              <div class="au-u-flex au-u-flex--column au-u-flex--spaced">
+                {{#each user.memberships as |membership|}}
+                  <p>{{membership.role.label}}</p>
+                {{/each}}
+              </div>
+            </td>
+            <td class="auk-u-text-align--right">
+              <div class="auk-o-flex auk-o-flex--justify-end">
+                {{#if (lte user.memberships.length 1)}}
+                  {{!-- Show more options --}}
+                {{/if}}
+                <Auk::Button
+                  @skin="borderless"
+                  @layout="icon-only"
+                  @icon="chevron-right"
+                  @route="settings.users.user"
+                  @model={{user.id}}
+                  data-test-button-user-detail
+                />
+              </div>
+            </td>
+          </c.body>
+        </table.content>
+      </DataTable>
+    </div>
+  </div>
 </div>

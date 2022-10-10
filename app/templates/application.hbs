@@ -8,7 +8,7 @@
     @onClose={{fn this.systemAlert.confirmAlert alert}}
   />
 {{/each}}
-{{#if this.currentSession.group}}
+{{#if this.currentSession.hasAccessToApplication}}
   <MHeader />
 {{/if}}
 {{outlet}}
