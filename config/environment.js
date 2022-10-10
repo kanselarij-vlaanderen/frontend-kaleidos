@@ -55,8 +55,7 @@ module.exports = function (environment) {
             'vo',
             'profile',
             'openid',
-            'dkbkaleidos',
-            'phone'
+            'dkbkaleidos'
           ].join(' '),
         },
       },

@@ -1,4 +1,5 @@
 {{page-title (t "settings")}}
+
 <div class="auk-u-maximize-height auk-scroll-wrapper">
   <Auk::Navbar @skin="gray-100">
     <Auk::Toolbar>
@@ -17,20 +18,18 @@
             >
               {{t "manage-ministers"}}
             </Auk::Tab>
-            <Auk::Tab
-              @route="settings.users"
-              data-test-route-settings-manage-users
-            >
-              {{t "manage-users"}}
-            </Auk::Tab>
+            {{#if (user-may "manage-users")}}
+              <Auk::Tab
+                @route="settings.users"
+                data-test-route-settings-manage-users
+              >
+                {{t "manage-users"}}
+              </Auk::Tab>
+            {{/if}}
           </Auk::Tabs>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
   </Auk::Navbar>
-  <div class="auk-scroll-wrapper__body">
-    <div>
-      {{outlet}}
-    </div>
-  </div>
+  {{outlet}}
 </div>

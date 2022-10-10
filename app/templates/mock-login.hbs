@@ -1,49 +1,4 @@
 {{!-- template-lint-disable no-bare-strings --}}
-<Auk::Navbar @skin="white" @noPadding={{true}}>
-  <Auk::Toolbar>
-    <Auk::Toolbar::Group @position="left">
-      <Auk::Toolbar::Item>
-        <Auk::Brand @logotype="Kaleidos" />
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-    <Auk::Toolbar::Group @position="right">
-      {{#if this.showEnvironmentName}}
-        <Auk::Toolbar::Item class="auk-u-mr-3">
-          <div class="vlc-environment-pill {{this.environmentClass}}">
-            {{this.environmentName}}
-          </div>
-        </Auk::Toolbar::Item>
-      {{/if}}
-      <Auk::Toolbar::Item class="auk-u-mr-3">
-        <AuDropdown
-          @title={{t "help"}}
-          @alignment="right"
-          @icon="circle-question"
-          @iconAlignment="left"
-        >
-          <AuLink
-            @route="manual"
-            role="menuitem"
-            target="_blank"
-          >
-            {{t "look-at-documentation"}}
-          </AuLink>
-          <AuHr />
-          <AuLink
-            href="mailto:kaleidos.servicedesk@vlaanderen.be"
-            target="_blank"
-            role="menuitem"
-          >
-            <span class="auk-u-text-nowrap">{{t "contact-us"}}</span>
-            <span class="auk-u-text-muted auk-u-text-size--small">
-              {{t "email-servicedesk"}}
-            </span>
-          </AuLink>
-        </AuDropdown>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-  </Auk::Toolbar>
-</Auk::Navbar>
 <div class="auk-scroll-wrapper">
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-p-4">

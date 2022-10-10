@@ -14,19 +14,23 @@ $au-button-height: 3.4rem;
 @import 'ember-appuniversum/c-button-group';
 @import 'ember-appuniversum/c-card';
 @import 'ember-appuniversum/c-content';
+@import 'ember-appuniversum/c-control';
+@import 'ember-appuniversum/c-dropdown';
 @import 'ember-appuniversum/c-heading';
 @import 'ember-appuniversum/c-help-text';
 @import 'ember-appuniversum/c-hr';
+@import 'ember-appuniversum/c-fieldset';
 @import 'ember-appuniversum/c-icon';
+@import 'ember-appuniversum/c-input';
 @import 'ember-appuniversum/c-link';
 @import 'ember-appuniversum/c-list';
 @import 'ember-appuniversum/c-list-horizontal';
+@import 'ember-appuniversum/c-loader';
 @import 'ember-appuniversum/c-pill';
 @import 'ember-appuniversum/c-modal';
+@import 'ember-appuniversum/c-table';
 @import 'ember-appuniversum/c-toolbar';
-@import 'ember-appuniversum/c-input';
-@import 'ember-appuniversum/c-dropdown';
-@import 'ember-appuniversum/c-loader';
+@import 'ember-appuniversum/c-toggle-switch';
 
 
 // CSS variables (to override)

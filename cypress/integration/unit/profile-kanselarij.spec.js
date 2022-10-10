@@ -51,7 +51,6 @@ context('Testing the application as Kanselarij user', () => {
     cy.get(utils.mHeader.settings).click();
     cy.get(settings.settings.generalSettings).should('exist');
     cy.get(settings.settings.manageMinisters).should('exist');
-    cy.get(settings.settings.manageUsers).should('exist');
     cy.url().should('include', '/instellingen/overzicht');
   });
 });
