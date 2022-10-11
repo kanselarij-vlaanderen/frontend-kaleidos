@@ -60,7 +60,7 @@ function checkPreviousVersionAccesLevel(docName, previousVersionName, accesLevel
     .click();
 }
 
-context('Decision tests', () => {
+context('Access level tests', () => {
   const agendaDate = Cypress.dayjs('2022-04-18');
   const subcaseTitle = 'Cypress test: Publications via MR - 1652967454';
   const file = {
