@@ -3,32 +3,46 @@
     (and (not (is-pending this.isDeletable)) (not (is-pending this.isPostPonable)))
   }}
     <WebComponents::AuButtonToolbar>
-      <Auk::DropdownMenu
-        @label={{t "actions"}}
-        class="auk-u-hidden@print"
+      <AuDropdown
         data-test-agendaitem-controls-actions={{true}}
-      as |Menu|>
+        @skin="secondary"
+        @title={{t "actions"}}
+        @alignment="right"
+        class="auk-u-hidden@print"
+      >
         {{#if this.isPostPonable}}
           {{#if @agendaitem.retracted}}
-            <Menu.Item {{on "click" (fn this.advanceAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-advance>
+            <AuButton
+              data-test-agendaitem-controls-action-advance
+              @skin="link"
+              {{on "click" (fn this.advanceAgendaitem @agendaitem)}}
+              role="menuitem"
+            >
               {{t "not-postpone"}}
-            </Menu.Item>
+            </AuButton>
           {{else}}
-            <Menu.Item {{on "click" (fn this.postponeAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-postpone>
+            <AuButton
+              data-test-agendaitem-controls-action-postpone
+              @skin="link"
+              {{on "click" (fn this.postponeAgendaitem @agendaitem)}}
+              role="menuitem"
+            >
               {{t "postpone"}}
-            </Menu.Item>
+            </AuButton>
           {{/if}}
         {{/if}}
         {{#if (or this.currentSession.isAdmin (await this.isDeletable))}}
-          <Menu.Item
-            @skin="danger"
+          <AuButton
             data-test-agendaitem-controls-action-delete
+            @skin="link"
+            @alert={{true}}
             {{on "click" this.toggleIsVerifying}}
+            role="menuitem"
           >
             {{t "delete"}}
-          </Menu.Item>
+          </AuButton>
         {{/if}}
-      </Auk::DropdownMenu>
+      </AuDropdown>
     </WebComponents::AuButtonToolbar>
   {{else}}
     <div class="auk-loader" role="alert" aria-busy="true"></div>
