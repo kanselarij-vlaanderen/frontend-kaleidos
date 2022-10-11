@@ -82,7 +82,7 @@
       {{/each}}
     </ul>
 
-    {{#if (gt (get @reverseSortedAgendas "length") 1)}}
+    {{#if (and @isOpen (gt (get @reverseSortedAgendas "length") 1))}}
       <Auk::Navbar @skin="gray-200" class="auk-u-border-top">
         <AuHeading @level="3" @skin="functional">
           {{t "previous-agendas"}}

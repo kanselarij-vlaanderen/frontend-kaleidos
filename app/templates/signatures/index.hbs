@@ -86,38 +86,51 @@
                     >
                       {{t "read"}}
                     </AuLink>
-                    <Auk::DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
-                      <Menu.Item
+
+                    <AuDropdown
+                      @icon="three-dots"
+                      @title={{t "more"}}
+                      @hideText={{true}}
+                      @alignment="right"
+                    >
+                      <AuButton
+                        @skin="link"
                         {{on
                           "click"
                           (fn this.navigateToDecision signFlow.decisionActivity)
                         }}
+                        role="menuitem"
                       >
                         {{t "consult-agendaitem-decision"}}
-                      </Menu.Item>
-                      <Menu.Item
+                      </AuButton>
+                      <AuButton
+                        @skin="link"
                         {{on
                           "click"
                           (fn this.uploadPiecesToSigninghub signFlow)
                         }}
+                        role="menuitem"
                       >
                         {{t "send-to-signinghub"}}
-                      </Menu.Item>
-                      <Menu.Item
+                      </AuButton>
+                      <AuLink
                         @route="signatures.signing-flow.documents"
                         @model={{signFlow}}
+                        role="menuitem"
                       >
                         {{t "view-in-signinghub"}}
-                      </Menu.Item>
-                      <Menu.Item
+                      </AuLink>
+                      <AuButton
+                        @skin="link"
                         {{on
                           "click"
                           (fn this.startSigning signFlow)
                         }}
+                        role="menuitem"
                       >
                         {{t "present-for-signing"}}
-                      </Menu.Item>
-                    </Auk::DropdownMenu>
+                      </AuButton>
+                    </AuDropdown>
                   </WebComponents::AuButtonToolbar>
                 </td>
               </tr>

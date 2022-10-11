@@ -16,52 +16,64 @@
           {{#if (or this.loadData.isRunning this.isLoading)}}
             <div class="auk-loader" role="alert" aria-busy="true"></div>
           {{else if this.canPropose}}
-            <Auk::DropdownMenu
-              @skin="primary"
-              @label={{t "propose-for-agenda"}}
+            <AuDropdown
               data-test-subcase-header-show-proposed-agendas={{true}}
-            as |Menu|>
+              @skin="primary"
+              @title={{t "propose-for-agenda"}}
+              @alignment="right"
+            >
               {{#each this.meetings as |meeting|}}
-                <Menu.Item
+                <AuButton
                   data-test-subcase-header-propose-for-agenda
+                  @skin="link"
                   {{on "click" (fn this.proposeForAgenda @subcase meeting)}}
+                  role="menuitem"
                 >
                   {{t "agenda-for"}}
                   {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
                   {{concat " - " meeting.numberRepresentation}}
-                </Menu.Item>
+                </AuButton>
               {{/each}}
               {{#if (gt this.meetings.length 0)}}
-                <Menu.Divider />
+                <AuHr />
               {{/if}}
-              <Menu.Item {{on "click" (fn this.proposeForOtherAgenda @subcase)}}>
+              <AuButton
+                @skin="link"
+                {{on "click" (fn this.proposeForOtherAgenda @subcase)}}
+                role="menuitem"
+              >
                 {{t "other-agenda"}}
-              </Menu.Item>
-            </Auk::DropdownMenu>
+              </AuButton>
+            </AuDropdown>
           {{/if}}
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
-          <Auk::DropdownMenu
-            @skin="secondary"
-            @label={{t "actions"}}
+          <AuDropdown
             data-test-subcase-header-actions-dropdown={{true}}
-          as |Menu|>
+            @skin="secondary"
+            @title={{t "actions"}}
+            @alignment="right"
+          >
             {{#if this.canDelete}}
-              <Menu.Item
-                @skin="danger"
+              <AuButton
                 data-test-subcase-header-action-delete-subcase
+                @skin="link"
+                @alert={{true}}
                 {{on "click" (fn this.requestDeleteSubcase @subcase)}}
+                role="menuitem"
               >
                 {{t "delete-subcase"}}
-              </Menu.Item>
+              </AuButton>
             {{/if}}
-            <Menu.Item
+            <AuButton
               data-test-subcase-header-action-move-subcase
+              @skin="link"
               {{on "click" this.triggerMoveSubcaseDialog}}
+              role="menuitem"
             >
               {{t "move-subcase"}}
-            </Menu.Item>
-          </Auk::DropdownMenu>
+            </AuButton>
+          </AuDropdown>
         </Auk::Toolbar::Item>
       {{/if}}
     </Auk::Toolbar::Group>

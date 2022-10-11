@@ -12,27 +12,31 @@
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
-        <Auk::DropdownMenu
+        <AuDropdown
           data-test-proof-received-panel-dropdown
-          @skin="borderless"
           @icon="three-dots"
-          as |Menu|
+          @title={{t "more"}}
+          @hideText={{true}}
+          @alignment="right"
         >
-          <Menu.Item
-            @skin="primary"
+          <AuButton
             data-test-proof-received-panel-publication-request
+            @skin="link"
             @disabled={{@isCreatePublicationRequestDisabled}}
             {{on "click" this.openPublicationRequestModal}}
+            role="menuitem"
           >
             {{t "request-publication"}}
-          </Menu.Item>
-          <Menu.Item
+          </AuButton>
+          <AuButton
             data-test-proof-received-panel-edit
-            @skin="primary" {{on "click" this.openEditProofModal}}
+            @skin="link"
+            {{on "click" this.openEditProofModal}}
+            role="menuitem"
           >
             {{t "edit-2"}}
-          </Menu.Item>
-        </Auk::DropdownMenu>
+          </AuButton>
+        </AuDropdown>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
   </Auk::Panel::Header>

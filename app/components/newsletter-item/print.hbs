@@ -33,12 +33,12 @@
                 </div>
               </div>
             {{/if}}
-            {{#if (and (not @newsletterItem) @agendaitem.title)}}
-              <div class="auk-u-mt auk-u-border-left l-printable-newsletter__title">
-                {{@agendaitem.title}}
-              </div>
-            {{/if}}
           </div>
+          {{#if (and (not @newsletterItem) @agendaitem.title)}}
+            <div class="auk-u-mt auk-u-border-left l-printable-newsletter__title">
+              {{@agendaitem.title}}
+            </div>
+          {{/if}}
         {{else}}
           <h4 data-test-newsletter-item-print-title class="auk-h4 auk-u-m-0">
             {{@newsletterItem.title}}

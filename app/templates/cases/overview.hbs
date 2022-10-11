@@ -61,11 +61,22 @@
           </td>
           <td class="auk-u-text-align--right">
             {{#if (user-may "manage-cases")}}
-              <Auk::DropdownMenu @skin="borderless" @icon="three-dots" as |Menu|>
-                <Menu.Item {{on "click" (fn this.openEditCaseModal row.case)}}>
+              <AuDropdown
+                @icon="three-dots"
+                @title={{t "more"}}
+                @hideText={{true}}
+                @alignment="right"
+              >
+                <AuButton
+                  @skin="link"
+                  {{on "click" (fn this.openEditCaseModal row.case)}}
+                  role="menuitem"
+                >
                   {{t "edit-case"}}
-                </Menu.Item>
-                <Menu.Item
+                </AuButton>
+                <AuButton
+                  @skin="link"
+                  @alert={{true}}
                   {{on
                     "click"
                     (fn
@@ -77,10 +88,11 @@
                       row.case
                     )
                   }}
+                  role="menuitem"
                 >
                   {{t (if row.case.isArchived "unarchive-case" "archive-case")}}
-                </Menu.Item>
-              </Auk::DropdownMenu>
+                </AuButton>
+              </AuDropdown>
             {{/if}}
             <AuLink
               @skin="button-naked"
