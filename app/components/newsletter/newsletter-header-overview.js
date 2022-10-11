@@ -6,6 +6,7 @@ import { tracked } from '@glimmer/tracking';
 import { isPresent } from '@ember/utils';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 /**
  * @argument {Meeting} meeting
@@ -190,31 +191,37 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   }
 
   async canSendMailCampaign() {
-    const documentPublicationActivity = await this.args.meeting.internalDocumentPublicationActivity;
+    let themisPublicationActivities = await this.args.meeting.themisPublicationActivities;
+    let themisPublicationActivity = themisPublicationActivities.find((activity) => activity.scope.includes('documents'));
 
-    let hasDocumentPublicationDate = isPresent(documentPublicationActivity.plannedDate);
+    let hasDocumentPublicationPlanned = isPresent(themisPublicationActivity?.plannedDate);
     let hasNotas = false;
     let hasThemes = false;
 
-    const agendaitems = await this.args.agenda.agendaitems;
+    const agendaitems = await this.store.query('agendaitem', {
+      filter: {
+        agenda: {
+          ':id:': this.args.agenda.id,
+        },
+        'type': {
+          ':uri:': CONSTANTS.AGENDA_ITEM_TYPES.NOTA,
+        },
+      },
+      'page[size]': PAGE_SIZE.AGENDAITEMS,
+    });
     for (const agendaitem of agendaitems.toArray()) {
+      hasNotas = true;
+
       const agendaitemTreatment = await agendaitem.treatment;
       const newsletterItem = await agendaitemTreatment.newsletterInfo;
       const themes = await newsletterItem?.themes;
       if (themes?.length) {
         hasThemes = true;
-      } else {
-        hasThemes = false;
-        break
-      }
-
-      const type = await agendaitem.type;
-      if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {
-        hasNotas = true;
+        break;
       }
     }
 
-    return hasDocumentPublicationDate && hasNotas && hasThemes;
+    return hasDocumentPublicationPlanned && hasNotas && hasThemes;
   }
 
   async validateMailCampaign() {
