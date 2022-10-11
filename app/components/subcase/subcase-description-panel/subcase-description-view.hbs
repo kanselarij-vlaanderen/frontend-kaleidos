@@ -92,14 +92,6 @@
           {{else if this.modelsOfMeetings}}
             {{#each this.modelsOfMeetings as |models| }}
               {{#let models.[0] models.[1] models.[2] as |meeting agenda agendaitem|}}
-              {{!-- TODO KAS-3612 this used to be shown, but seems a bit much with multiple meetings --}}
-              {{!-- {{#let models.[0] models.[1] models.[2] models.[3] as |meeting agenda agendaitem resultCode|}} --}}
-                {{!-- {{#if resultCode.isPostponed}}
-                  {{t "postponed-subcase"}}
-                {{/if}}
-                {{#if resultCode.isRetracted}}
-                  {{t "retracted-subcase"}}
-                {{/if}} --}}
                 <Auk::ButtonLink
                   data-test-subcase-description-agenda-link
                   @route="agenda.agendaitems.agendaitem"

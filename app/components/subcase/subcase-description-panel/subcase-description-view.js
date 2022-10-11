@@ -42,7 +42,6 @@ export default class SubcaseDescriptionView extends Component {
     const sortedAgendaActivities = agendaActivities?.sortBy('startDate');
     // const decisionActivities = yield this.args.subcase.hasMany('decisionActivities').reload();
     // const sortedDecisionActivities = decisionActivities?.sortBy('startDate');
-    // debugger;
 
     this.modelsOfMeetings = [];
     for (const [index, agendaActivity] of sortedAgendaActivities.toArray().entries()) {
@@ -56,11 +55,10 @@ export default class SubcaseDescriptionView extends Component {
       const meeting = yield agenda.createdFor;
       yield meeting?.kind;
       // load decisionActivity
-      // TODO KAS-3612 the resultCode is not used yet. We might need it to determine if we can show to other profiles
       // agenda-activities are propagated by yggdrail on agenda approval, treatments/decision-activities only when decisions are released
       const treatment = yield agendaitem?.treatment;
       const decisionActivity = yield treatment?.decisionActivity;
-      const resultCode = yield decisionActivity.decisionResultCode;
+      const resultCode = yield decisionActivity?.decisionResultCode;
       // Other profiles should not have the latest decision when decisions have not been released yet
       if (decisionActivity) {
         // the last decision might be null, keep only the last one that exists
@@ -76,10 +74,5 @@ export default class SubcaseDescriptionView extends Component {
     }
     // TODO KAS-3612 could change to resultCode.isApproved or resultCode.isNoticeTaken
     this.approved = yield this.subcaseIsApproved.isApproved(this.args.subcase);
-    // TODO KAS-3612 no longer used, cleanup util?
-    // if (!this.approved) {
-    //   this.isPostponed = yield this.subcaseIsApproved.isPostponed(this.args.subcase);
-    //   this.isRetracted = yield this.subcaseIsApproved.isRetracted(this.args.subcase);
-    // }
   }
 }

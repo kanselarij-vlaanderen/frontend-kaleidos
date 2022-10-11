@@ -173,12 +173,13 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
 
   @task
   *getAgendaActivity() {
-    const agendaActivity = yield this.store.queryOne('agenda-activity', {
+    const latestAgendaActivity = yield this.store.queryOne('agenda-activity', {
       'filter[subcase][:id:]': this.subcase.id,
       'filter[agendaitems][agenda][created-for][is-final]': false,
+      sort: '-start-date',
     });
 
-    return agendaActivity;
+    return latestAgendaActivity;
   }
 
   @task
