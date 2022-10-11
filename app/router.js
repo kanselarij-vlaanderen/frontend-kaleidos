@@ -123,6 +123,7 @@ Router.map(function() {
     this.route('document-types', () => {});
     this.route('case-types', () => {});
     this.route('subcase-types', () => {});
+    this.route('organizations', function() {});
   });
 
   this.route('document', { path: '/document/:piece_id', });
