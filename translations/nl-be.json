@@ -1080,5 +1080,11 @@
   "as": "als",
   "limited-access": "Beperkte toegang",
   "upload": "Opladen",
-  "more": "Meer"
+  "more": "Meer",
+  "block-user": "Gebruiker blokkeren",
+  "block-user-explanation": "Door een persoon te blokkeren kan deze niet meer inloggen. Alle toegangen worden ontzegd.",
+  "block-user-are-you-sure": "Ben je zeker dat je <strong>{user}</strong> wil blokkeren uit Kaleidos?",
+  "block-membership": "Werkrelatie blokkeren",
+  "block-membership-explanation": "Door de werkrelatie van een gebruiker te blokkeren ontzeg je enkel deze toegang. De gebruiker kan inloggen via andere werkrelaties indien deze beschikbaar zijn.",
+  "block-membership-which-one": "Welke werkrelatie wil je blokkeren?"
 }

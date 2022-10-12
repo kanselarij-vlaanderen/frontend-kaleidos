@@ -11,6 +11,10 @@ export default class UsersSettingsController extends Controller {
 
   @tracked searchTextBuffer;
 
+  @tracked userBeingBlocked;
+  @tracked showBlockMembership = false;
+  @tracked showBlockUser = false;
+
   @action
   selectSize(size) {
     this.size = size;
