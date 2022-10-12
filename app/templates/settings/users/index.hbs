@@ -44,13 +44,18 @@
           </c.header>
           <c.body as |user|>
             <td data-test-route-settings-users-row-name>
-              <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+              <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small {{if user.isBlocked "au-u-muted"}}">
                 {{user.fullName}}
+                {{#if user.isBlocked}}
+                  <AuPill @icon="circle-x" @skin="error" @size="small">
+                    {{t "blocked-user"}}
+                  </AuPill>
+                {{/if}}
               </span>
             </td>
             <td class="au-o-flow au-o-flow--tiny">
               {{#each user.memberships as |membership|}}
-                <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+                <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small {{if membership.isBlocked "au-u-muted"}}">
                   <div>
                     <p class="au-u-muted au-u-h-functional">
                       {{membership.organization.identifier}}
@@ -59,6 +64,11 @@
                       {{membership.organization.name}}
                     </p>
                   </div>
+                  {{#if membership.isBlocked}}
+                    <AuPill @icon="circle-x" @skin="error" @size="small">
+                      {{t "blocked-membership"}}
+                    </AuPill>
+                  {{/if}}
                 </div>
               {{/each}}
             </td>
@@ -80,22 +90,28 @@
                   @alignment="right"
                   @icon="three-dots"
                 >
-                  <AuButton
-                    @skin="naked"
-                    @alert={{true}}
-                    role="menuitem"
-                    {{on "click" (queue (toggle "showBlockMembership" this) (set this "userBeingBlocked" user))}}
-                  >
-                    {{t "block-membership"}}
-                  </AuButton>
-                  <AuButton
-                    @skin="naked"
-                    @alert={{true}}
-                    role="menuitem"
-                    {{on "click" (queue (toggle "showBlockUser" this) (set this "userBeingBlocked" user))}}
-                  >
-                    {{t "block-user"}}
-                  </AuButton>
+                  {{#if (is-empty (reject-by "isBlocked" user.memberships))}}
+                  {{else}}
+                    <AuButton
+                      @skin="naked"
+                      @alert={{true}}
+                      role="menuitem"
+                      {{on "click" (queue this.toggleShowBlockMembership (set this "userBeingBlocked" user))}}
+                    >
+                      {{t "block-membership"}}
+                    </AuButton>
+                  {{/if}}
+                  {{#if user.isBlocked}}
+                  {{else}}
+                    <AuButton
+                      @skin="naked"
+                      @alert={{true}}
+                      role="menuitem"
+                      {{on "click" (queue (toggle "showBlockUser" this) (set this "userBeingBlocked" user))}}
+                    >
+                      {{t "block-user"}}
+                    </AuButton>
+                  {{/if}}
                 </AuDropdown>
                 <AuLink
                   @skin="button-naked"
@@ -116,7 +132,7 @@
 
 <AuModal
   @modalOpen={{this.showBlockMembership}}
-  @closeModal={{toggle "showBlockMembership" this}}
+  @closeModal={{this.toggleShowBlockMembership}}
 >
   <:title>
     {{t "block-membership"}}
@@ -132,6 +148,7 @@
               <AuControlCheckbox
                 @label={{membershipLabel}}
                 @identifier={{membershipLabel}}
+                @onChange={{fn this.toggleMembershipBeingBlocked membership}}
               />
             {{/let}}
           {{/each}}
@@ -146,7 +163,7 @@
       <Group>
         <AuButton
           @skin="naked"
-          {{on "click" (toggle "showBlockMembership" this)}}
+          {{on "click" this.toggleShowBlockMembership}}
         >
           {{t "cancel"}}
         </AuButton>
@@ -154,6 +171,8 @@
       <Group>
         <AuButton
           @alert={{true}}
+          @disabled={{is-empty this.membershipsBeingBlocked}}
+          {{on "click" (queue this.blockMemberships this.toggleShowBlockMembership)}}
         >
           {{t "block-membership"}}
         </AuButton>
@@ -190,6 +209,7 @@
       <Group>
         <AuButton
           @alert={{true}}
+          {{on "click" (queue this.blockUser (toggle "showBlockUser" this))}}
         >
           {{t "block-user"}}
         </AuButton>
