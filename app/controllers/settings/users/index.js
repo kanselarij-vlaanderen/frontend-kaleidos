@@ -16,11 +16,6 @@ export default class UsersSettingsController extends Controller {
   @tracked showBlockUser = false;
 
   @action
-  selectSize(size) {
-    this.size = size;
-  }
-
-  @action
   search(e) {
     e.preventDefault();
     this.filter = this.searchTextBuffer;
