@@ -4,4 +4,5 @@ export default class Membership extends Model {
   @belongsTo('user') user;
   @belongsTo('user-organization') organization;
   @belongsTo('role') role;
+  @belongsTo('concept') status;
 }

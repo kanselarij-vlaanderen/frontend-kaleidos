@@ -6,6 +6,7 @@ export default class User extends Model {
   @attr('string') identifier;
 
   @belongsTo('account') account;
+  @belongsTo('concept') status;
 
   @hasMany('membership') memberships;
 
