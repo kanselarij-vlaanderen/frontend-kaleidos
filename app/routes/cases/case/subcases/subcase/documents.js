@@ -64,14 +64,12 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     // Additional failsafe check on document visibility. Strictly speaking this check
     // is not necessary since documents are not propagated by Yggdrasil if they
     // should not be visible yet for a specific profile.
-    if (this.currentSession.isOverheid) {
-      const documentPublicationActivity = await this.latestMeeting?.internalDocumentPublicationActivity;
-      if (documentPublicationActivity) {
-        const documentPublicationStatus = await documentPublicationActivity?.status;
-        this.documentsAreVisible = documentPublicationStatus.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
-      }
-    } else {
+    if (this.currentSession.may('view-documents-before-release')) {
       this.documentsAreVisible = true;
+    } else {
+      const documentPublicationActivity = await this.latestMeeting?.internalDocumentPublicationActivity;
+      const documentPublicationStatus = await documentPublicationActivity?.status;
+      this.documentsAreVisible = documentPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
     }
     const decisionmakingFlow = this.modelFor('cases.case');
     this.case = await decisionmakingFlow.case;

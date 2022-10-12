@@ -81,10 +81,12 @@ export default class SubcaseItemSubcasesComponent extends Component {
     // There is however a different situation when a subcase has been postponed.
     // In that case no documents should be showing (as the subcase in still progress)
     // but those from the first meeting are already propagated and are visible. 
-    if (this.currentSession.isOverheid) {
+    if (!this.currentSession.may('view-documents-before-release')) {
       const documentPublicationActivity = yield this.latestMeeting?.internalDocumentPublicationActivity;
       const documentPublicationStatus = yield documentPublicationActivity?.status;
-      this.hasDocumentsToShow = documentPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
+      if (documentPublicationStatus?.uri !== CONSTANTS.RELEASE_STATUSES.RELEASED) {
+        this.hasDocumentsToShow = false;
+      }
     };
   }
 

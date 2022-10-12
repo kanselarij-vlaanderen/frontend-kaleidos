@@ -69,36 +69,34 @@
   {{yield}}
 
   {{#if this.hasDocumentsToShow}}
-    {{#if this.documentsAreVisible}}
-      <Auk::Accordion>
-        <Auk::Accordion::Item
-          @title={{t "documents"}}
-          @expandTask={{this.loadSubcaseDocuments}}
-        >
-          {{#if this.loadSubcaseDocuments.isRunning}}
-            <div class="auk-u-p-3">
-              <Auk::Loader />
-            </div>
-          {{else}}
-            <Documents::DocumentBadgeList
-              @pieces={{this.limitedSubcaseDocuments}}
-            />
-            {{#if this.enableShowMore}}
-              <Auk::ButtonLink
-                @icon={{if this.isShowingAllDocuments "dash" "plus"}}
-                {{on "click" this.toggleShowingAllDocuments}}
-                class="auk-u-mt-2"
-              >
-                {{#if this.isShowingAllDocuments}}
-                  {{t "show-less"}}
-                {{else}}
-                  {{t "show-more"}}
-                {{/if}}
-              </Auk::ButtonLink>
-            {{/if}}
+    <Auk::Accordion>
+      <Auk::Accordion::Item
+        @title={{t "documents"}}
+        @expandTask={{this.loadSubcaseDocuments}}
+      >
+        {{#if this.loadSubcaseDocuments.isRunning}}
+          <div class="auk-u-p-3">
+            <Auk::Loader />
+          </div>
+        {{else}}
+          <Documents::DocumentBadgeList
+            @pieces={{this.limitedSubcaseDocuments}}
+          />
+          {{#if this.enableShowMore}}
+            <Auk::ButtonLink
+              @icon={{if this.isShowingAllDocuments "dash" "plus"}}
+              {{on "click" this.toggleShowingAllDocuments}}
+              class="auk-u-mt-2"
+            >
+              {{#if this.isShowingAllDocuments}}
+                {{t "show-less"}}
+              {{else}}
+                {{t "show-more"}}
+              {{/if}}
+            </Auk::ButtonLink>
           {{/if}}
-        </Auk::Accordion::Item>
-      </Auk::Accordion>
-    {{/if}}
+        {{/if}}
+      </Auk::Accordion::Item>
+    </Auk::Accordion>
   {{/if}}
 </div>
