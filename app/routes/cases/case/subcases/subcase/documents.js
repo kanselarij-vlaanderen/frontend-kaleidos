@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import VrLegacyDocumentName,
@@ -85,10 +84,5 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     controller.case = this.case;
     controller.documentsAreVisible = this.documentsAreVisible;
     controller.defaultAccessLevel = this.defaultAccessLevel;
-  }
-
-  @action
-  reloadModel() {
-    this.refresh();
   }
 }

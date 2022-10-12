@@ -19,6 +19,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
   @service currentSession;
   @service intl;
   @service store;
+  @service router;
 
   case;
   subcase;
@@ -272,6 +273,6 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
 
   @action
   refresh() {
-    this.send('reloadModel');
+    this.router.refresh();
   }
 }
