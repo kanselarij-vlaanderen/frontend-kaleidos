@@ -53,3 +53,6 @@ lint-html:
 
 drc-up-d:
 	- docker-compose ${COMPOSE_FILE} up -d
+
+drc-kill:
+	- docker-compose kill && docker-compose rm -f
