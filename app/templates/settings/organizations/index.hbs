@@ -21,23 +21,62 @@
             />
             <th>{{t "ovo-code"}}</th>
             <th>{{t "number-of-users"}}</th>
+            <th></th>
           </c.header>
-          <c.body as |organization|>
-            <td>
+          <c.body class="hello" as |organization|>
+            <td class={{if organization.isBlocked "au-u-muted"}}>
               <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
                 {{organization.name}}
+                {{#if organization.isBlocked}}
+                <AuPill
+                  @icon="circle-x"
+                  @skin="error"
+                  @size="small"
+                >
+                  {{t "blocked"}}
+                </AuPill>
+                {{/if}}
               </span>
             </td>
-            <td>
+            <td class={{if organization.isBlocked "au-u-muted"}}>
               <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
                 {{organization.identifier}}
               </span>
             </td>
-            <td>
+            <td class={{if organization.isBlocked "au-u-muted"}}>
               <div>
                 <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
                   {{organization.memberships.length}} {{t "users"}}
                 </span>
+              </div>
+            </td>
+            <td class="auk-u-text-align--right">
+              <div class="auk-o-flex auk-o-flex--justify-end">
+                <AuDropdown
+                  @skin="naked"
+                  @hideText={{true}}
+                  @alignment="right"
+                  @icon="three-dots"
+                >
+                  {{#if organization.isBlocked}}
+                    <AuButton
+                      @skin="naked"
+                      role="menuitem"
+                      {{on "click" (queue (toggle "showUnblockOrganization" this) (set this "organizationBeingBlocked" organization))}}
+                    >
+                      {{t "unblock-organization"}}
+                    </AuButton>
+                  {{else}}
+                    <AuButton
+                      @skin="naked"
+                      @alert={{true}}
+                      role="menuitem"
+                      {{on "click" (queue (toggle "showBlockOrganization" this) (set this "organizationBeingBlocked" organization))}}
+                    >
+                      {{t "block-organization"}}
+                    </AuButton>
+                  {{/if}}
+                </AuDropdown>
               </div>
             </td>
           </c.body>
@@ -46,3 +85,77 @@
     </div>
   </div>
 </div>
+
+<AuModal
+  @modalOpen={{this.showBlockOrganization}}
+  @closeModal={{toggle "showBlockOrganization" this}}
+>
+  <:title>
+    {{t "block-organization"}}
+  </:title>
+  <:body>
+    <div class="au-o-flow au-o-flow--small">
+      <p>{{t "block-organization-explanation"}}</p>
+      <p>{{t "block-organization-are-you-sure" user=this.organizationBeingBlocked.name htmlSafe=true}}</p>
+    </div>
+  </:body>
+  <:footer>
+    <AuToolbar
+      as |Group|
+    >
+      <Group>
+        <AuButton
+          @skin="naked"
+          {{on "click" (toggle "showBlockOrganization" this)}}
+        >
+          {{t "cancel"}}
+        </AuButton>
+      </Group>
+      <Group>
+        <AuButton
+          @alert={{true}}
+          {{on "click" (queue this.blockOrganization (toggle "showBlockOrganization" this))}}
+        >
+          {{t "block-organization"}}
+        </AuButton>
+      </Group>
+    </AuToolbar>
+  </:footer>
+</AuModal>
+
+<AuModal
+  @modalOpen={{this.showUnblockOrganization}}
+  @closeModal={{toggle "showUnblockOrganization" this}}
+>
+  <:title>
+    {{t "unblock-organization"}}
+  </:title>
+  <:body>
+    <div class="au-o-flow au-o-flow--small">
+      <p>{{t "unblock-organization-explanation"}}</p>
+      <p>{{t "unblock-organization-are-you-sure" user=this.organizationBeingBlocked.fullName htmlSafe=true}}</p>
+    </div>
+  </:body>
+  <:footer>
+    <AuToolbar
+      as |Group|
+    >
+      <Group>
+        <AuButton
+          @skin="naked"
+          {{on "click" (toggle "showUnblockOrganization" this)}}
+        >
+          {{t "cancel"}}
+        </AuButton>
+      </Group>
+      <Group>
+        <AuButton
+          @alert={{true}}
+          {{on "click" (queue this.unblockOrganization (toggle "showUnblockOrganization" this))}}
+        >
+          {{t "unblock-organization"}}
+        </AuButton>
+      </Group>
+    </AuToolbar>
+  </:footer>
+</AuModal>
