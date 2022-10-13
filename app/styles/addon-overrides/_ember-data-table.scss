@@ -1,3 +1,7 @@
 td, th {
   border-radius: 0;
 }
+
+.auk-table > *[data-table], .auk-table .data-table-content {
+  overflow: visible;
+}
