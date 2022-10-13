@@ -161,21 +161,21 @@
         @key={{t (if (eq @piece.file.primarySource.extension "docx") "word-document" "source-file")}}
       >
         {{#if @piece.file.primarySource}}
-          <AuLink
+          <AuLinkExternal
             href={{@piece.file.primarySource.namedDownloadLink}}
             @skin="primary"
             @icon="download"
             @iconAlignment="left"
             download
-          >{{@piece.name}}.{{@piece.file.primarySource.extension}}</AuLink>
+          >{{@piece.name}}.{{@piece.file.primarySource.extension}}</AuLinkExternal>
         {{else if @piece.file}}
-          <AuLink
+          <AuLinkExternal
             href={{@piece.file.namedDownloadLink}}
             @skin="primary"
             @icon="download"
             @iconAlignment="left"
             download
-          >{{@piece.name}}.{{@piece.file.extension}}</AuLink>
+          >{{@piece.name}}.{{@piece.file.extension}}</AuLinkExternal>
           {{else}}
           {{@piece.name}}
         {{/if}}
