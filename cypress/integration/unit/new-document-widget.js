@@ -1,9 +1,7 @@
 /* global context, it, cy, Cypress, beforeEach, afterEach */
 // / <reference types="Cypress" />
 
-// import agenda from '../../selectors/agenda.selectors';
 import utils from '../../selectors/utils.selectors';
-// import auk from '../../selectors/auk.selectors';
 import document from '../../selectors/document.selectors';
 
 context('check the functions of the new document widget', () => {
