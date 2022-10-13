@@ -38,13 +38,14 @@
                 </p>
               {{/if}}
               {{#if this.piece.file.primarySource.created}}
-                <p>
+                <p data-test-document-card-primary-source-created>
                   {{t "uploaded-at"}}
                   {{moment-format this.piece.file.primarySource.created}}
                   {{t "at"}}
                   {{moment-format this.piece.file.primarySource.created "HH:mm"}}
                   {{t "as"}}
                   <AuLinkExternal
+                    data-test-document-card-primary-source-link
                     href={{this.piece.file.primarySource.namedDownloadLink}}
                     download
                   >

@@ -1,8 +1,10 @@
 /* global context, it, cy, beforeEach, afterEach, Cypress, before */
 // / <reference types="Cypress" />
 
+import auk from '../../selectors/auk.selectors';
 import document from '../../selectors/document.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import utils from '../../selectors/utils.selectors';
 
 context('new document viewer tests', () => {
   function fillInEditDetails(newName, newDocumentType, newAccessLevel) {
@@ -23,6 +25,23 @@ context('new document viewer tests', () => {
   //   cy.visit(`/document/${this.documentId}`);
   //   cy.get(document.documentPreviewSidebar.tabs.details);
   // }
+
+  function openEditAndAddDocument(folder, fileName, fileExtension) {
+    const randomInt = Math.floor(Math.random() * Math.floor(10000));
+
+    cy.get(document.previewDetailsTab.edit).click();
+    cy.get(document.previewDetailsTab.editing.upload).click();
+    cy.get(auk.fileUpload).within(() => {
+      cy.uploadFile(folder, fileName, fileExtension);
+    });
+    cy.intercept('PATCH', '/files/*').as(`patchFiles_${randomInt}`);
+    cy.intercept('PATCH', '/pieces/*').as(`patchPieces_${randomInt}`);
+    cy.intercept('PATCH', '/document-containers/*').as(`patchDocumentContainers_${randomInt}`);
+    cy.get(document.previewDetailsTab.save).click();
+    cy.wait(`@patchFiles_${randomInt}`);
+    cy.wait(`@patchPieces_${randomInt}`);
+    cy.wait(`@patchDocumentContainers_${randomInt}`);
+  }
 
   const fileName = 'test pdf';
   const agendaKind = 'Ministerraad';
@@ -153,5 +172,54 @@ context('new document viewer tests', () => {
     cy.get(document.previewDetailsTab.name).should('contain', `${fileName}.pdf`);
     cy.get(document.previewDetailsTab.documentType).should('contain', searchDocumentType);
     cy.get(document.previewDetailsTab.accessLevel).should('contain', defaultAccessLevel);
+  });
+
+  it.only('should check sourcefile upload and delete', () => {
+    const pdfFile = {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf',
+    };
+    const newPdfFile = {
+      folder: 'files', fileName: 'replace', fileExtension: 'pdf',
+    };
+    const wordFile = {
+      folder: 'files', fileName: 'test', fileExtension: 'docx',
+    };
+    const newWordFile = {
+      folder: 'files', fileName: 'replace', fileExtension: 'docx',
+    };
+
+    // cy.visit('document/62C596F403A74CBB92D2169A');
+    cy.get(document.documentPreviewSidebar.open).click();
+
+    // check, upload source pdf, check again
+    cy.get(document.previewDetailsTab.sourceFile).contains('test pdfBIS.pdf');
+    openEditAndAddDocument(pdfFile.folder, pdfFile.fileName, pdfFile.fileExtension);
+    cy.get(document.previewDetailsTab.sourceFile).contains('Bronbestand');
+    cy.get(document.previewDetailsTab.sourceFile).contains('test pdfBIS.pdf');
+
+    // replace pdf with new pdf, check again
+    openEditAndAddDocument(newPdfFile.folder, newPdfFile.fileName, newPdfFile.fileExtension);
+    cy.get(document.previewDetailsTab.sourceFile).contains('Bronbestand');
+    cy.get(document.previewDetailsTab.sourceFile).contains('test pdfBIS.pdf');
+
+    // replace pdf with word file and check again
+    openEditAndAddDocument(wordFile.folder, wordFile.fileName, wordFile.fileExtension);
+    cy.get(document.previewDetailsTab.sourceFile).contains('Word document');
+    cy.get(document.previewDetailsTab.sourceFile).contains('test pdfBIS.docx');
+
+    // replace word file with new word file and check again
+    openEditAndAddDocument(newWordFile.folder, newWordFile.fileName, newWordFile.fileExtension);
+    cy.get(document.previewDetailsTab.sourceFile).contains('Word document');
+    cy.get(document.previewDetailsTab.sourceFile).contains('test pdfBIS.docx');
+
+    // replace word file with new pdf file and check again
+    openEditAndAddDocument(newWordFile.folder, newWordFile.fileName, newWordFile.fileExtension);
+    cy.get(document.previewDetailsTab.sourceFile).contains('Word document');
+    cy.get(document.previewDetailsTab.sourceFile).contains('test pdfBIS.docx');
+
+    // delete document and check
+    cy.get(document.previewDetailsTab.delete).click();
+    cy.get(utils.alertDialog.save).click();
+    cy.get(document.previewDetailsTab.name).contains('test pdf.pdf');
   });
 });
