@@ -1083,10 +1083,16 @@
   "more": "Meer",
   "blocked-user": "Gebruiker geblokkeerd",
   "block-user": "Gebruiker blokkeren",
-  "block-user-explanation": "Door een persoon te blokkeren kan deze niet meer inloggen. Alle toegangen worden ontzegd.",
+  "block-user-explanation": "Door een gebruiker te blokkeren kan deze niet meer inloggen. Alle toegangen worden ontzegd.",
   "block-user-are-you-sure": "Ben je zeker dat je <strong>{user}</strong> wil blokkeren uit Kaleidos?",
+  "unblock-user": "Gebruiker deblokkeren",
+  "unblock-user-explanation": "Door een gebruiker te deblokkeren kan deze weer inloggen, als er beschikbare werkrelaties zijn.",
+  "unblock-user-are-you-sure": "Ben je zeker dat je <strong>{user}</strong> wil deblokkeren?",
   "blocked-membership": "Werkrelatie geblokkeerd",
   "block-membership": "Werkrelatie blokkeren",
   "block-membership-explanation": "Door de werkrelatie van een gebruiker te blokkeren ontzeg je enkel deze toegang. De gebruiker kan inloggen via andere werkrelaties indien deze beschikbaar zijn.",
-  "block-membership-which-one": "Welke werkrelatie wil je blokkeren?"
+  "block-membership-which-one": "Welke werkrelatie wil je blokkeren?",
+  "unblock-membership-explanation": "Door de werkrelatie van een gebruiker te deblokkeren geef je enkel hiermee toegang. De gebruiker kan niet inloggen via andere geblokkeerde werkrelaties.",
+  "unblock-membership-which-one": "Welke werkrelatie wil je deblokkeren?",
+  "unblock-membership": "Werkrelatie deblokkeren"
 }

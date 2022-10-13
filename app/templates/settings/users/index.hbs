@@ -91,6 +91,13 @@
                   @icon="three-dots"
                 >
                   {{#if (is-empty (reject-by "isBlocked" user.memberships))}}
+                    <AuButton
+                      @skin="naked"
+                      role="menuitem"
+                      {{on "click" (queue this.toggleShowUnblockMembership (set this "userBeingBlocked" user))}}
+                    >
+                      {{t "unblock-membership"}}
+                    </AuButton>
                   {{else}}
                     <AuButton
                       @skin="naked"
@@ -102,6 +109,13 @@
                     </AuButton>
                   {{/if}}
                   {{#if user.isBlocked}}
+                    <AuButton
+                      @skin="naked"
+                      role="menuitem"
+                      {{on "click" (queue (toggle "showUnblockUser" this) (set this "userBeingBlocked" user))}}
+                    >
+                      {{t "unblock-user"}}
+                    </AuButton>
                   {{else}}
                     <AuButton
                       @skin="naked"
@@ -182,6 +196,57 @@
 </AuModal>
 
 <AuModal
+  @modalOpen={{this.showUnblockMembership}}
+  @closeModal={{this.toggleShowUnblockMembership}}
+>
+  <:title>
+    {{t "unblock-membership"}}
+  </:title>
+  <:body>
+    <div class="au-o-flow au-o-flow--small">
+      <p>{{t "unblock-membership-explanation"}}</p>
+      <AuFieldset as |f|>
+        <f.legend>{{t "unblock-membership-which-one"}}</f.legend>
+        <f.content>
+          {{#each this.userBeingBlocked.memberships as |membership|}}
+            {{#let (concat membership.organization.name " - " membership.role.label) as |membershipLabel|}}
+              <AuControlCheckbox
+                @label={{membershipLabel}}
+                @identifier={{membershipLabel}}
+                @onChange={{fn this.toggleMembershipBeingBlocked membership}}
+              />
+            {{/let}}
+          {{/each}}
+        </f.content>
+      </AuFieldset>
+    </div>
+  </:body>
+  <:footer>
+    <AuToolbar
+      as |Group|
+    >
+      <Group>
+        <AuButton
+          @skin="naked"
+          {{on "click" this.toggleShowUnblockMembership}}
+        >
+          {{t "cancel"}}
+        </AuButton>
+      </Group>
+      <Group>
+        <AuButton
+          @alert={{true}}
+          @disabled={{is-empty this.membershipsBeingBlocked}}
+          {{on "click" (queue this.unblockMemberships this.toggleShowUnblockMembership)}}
+        >
+          {{t "unblock-membership"}}
+        </AuButton>
+      </Group>
+    </AuToolbar>
+  </:footer>
+</AuModal>
+
+<AuModal
   @modalOpen={{this.showBlockUser}}
   @closeModal={{toggle "showBlockUser" this}}
 >
@@ -212,6 +277,43 @@
           {{on "click" (queue this.blockUser (toggle "showBlockUser" this))}}
         >
           {{t "block-user"}}
+        </AuButton>
+      </Group>
+    </AuToolbar>
+  </:footer>
+</AuModal>
+
+<AuModal
+  @modalOpen={{this.showUnblockUser}}
+  @closeModal={{toggle "showUnblockUser" this}}
+>
+  <:title>
+    {{t "unblock-user"}}
+  </:title>
+  <:body>
+    <div class="au-o-flow au-o-flow--small">
+      <p>{{t "unblock-user-explanation"}}</p>
+      <p>{{t "unblock-user-are-you-sure" user=this.userBeingBlocked.fullName htmlSafe=true}}</p>
+    </div>
+  </:body>
+  <:footer>
+    <AuToolbar
+      as |Group|
+    >
+      <Group>
+        <AuButton
+          @skin="naked"
+          {{on "click" (toggle "showUnblockUser" this)}}
+        >
+          {{t "cancel"}}
+        </AuButton>
+      </Group>
+      <Group>
+        <AuButton
+          @alert={{true}}
+          {{on "click" (queue this.unblockUser (toggle "showUnblockUser" this))}}
+        >
+          {{t "unblock-user"}}
         </AuButton>
       </Group>
     </AuToolbar>
