@@ -20,7 +20,7 @@
               @label={{t "organization"}}
             />
             <th>{{t "ovo-code"}}</th>
-            <th>{{t "number-of-users"}}</th>
+            <th>{{t "users-seen"}}</th>
             <th></th>
           </c.header>
           <c.body class="hello" as |organization|>
@@ -46,7 +46,7 @@
             <td class={{if organization.isBlocked "au-u-muted"}}>
               <div>
                 <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
-                  {{organization.memberships.length}} {{t "users"}}
+                  {{t "users-seen-amount" amount=organization.memberships.length}}
                 </span>
               </div>
             </td>
