@@ -19,7 +19,11 @@
               @field="name"
               @label={{t "organization"}}
             />
-            <th>{{t "ovo-code"}}</th>
+            <ThSortable
+              @currentSorting={{this.sort}}
+              @field="identifier"
+              @label={{t "ovo-code"}}
+            />
             <th>{{t "users-seen"}}</th>
             <th></th>
           </c.header>
