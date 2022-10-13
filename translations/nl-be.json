@@ -1092,7 +1092,9 @@
   "block-membership": "Werkrelatie blokkeren",
   "block-membership-explanation": "Door de werkrelatie van een gebruiker te blokkeren ontzeg je enkel deze toegang. De gebruiker kan inloggen via andere werkrelaties indien deze beschikbaar zijn.",
   "block-membership-which-one": "Welke werkrelatie wil je blokkeren?",
-  "unblock-membership-explanation": "Door de werkrelatie van een gebruiker te deblokkeren geef je enkel hiermee toegang. De gebruiker kan niet inloggen via andere geblokkeerde werkrelaties.",
+  "block-membership-are-you-sure": "Ben je zeker dat je deze werkrelatie van <strong>{user}</strong> wil blokkeren?",
+  "unblock-membership-explanation": "Door de werkrelatie van een gebruiker te deblokkeren geef je deze opnieuw toegang.",
   "unblock-membership-which-one": "Welke werkrelatie wil je deblokkeren?",
+  "unblock-membership-are-you-sure": "Ben je zeker dat je deze werkrelatie van <strong>{user}</strong> wil deblokkeren?",
   "unblock-membership": "Werkrelatie deblokkeren"
 }
