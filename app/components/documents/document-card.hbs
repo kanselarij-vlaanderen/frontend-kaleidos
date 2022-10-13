@@ -116,34 +116,41 @@
           {{/if}}
           {{#if (user-may "manage-documents")}}
             <Group.Item>
-              <Auk::DropdownMenu
-                @skin="borderless"
-                @icon="three-dots"
-                @disabled={{this.loadPieceRelatedData.isRunning}}
+              <AuDropdown
                 data-test-document-card-actions={{true}}
-                as |Menu|
+                @icon="three-dots"
+                @title={{t "more"}}
+                @hideText={{true}}
+                @disabled={{this.loadPieceRelatedData.isRunning}}
+                @alignment="right"
               >
-                <Menu.Item
+                <AuButton
                   data-test-document-upload-new-piece
+                  @skin="link"
                   {{on "click" this.openUploadModal}}
+                  role="menuitem"
                 >
                   {{t "new-version"}}
-                </Menu.Item>
-                <Menu.Item
+                </AuButton>
+                <AuButton
                   data-test-document-edit-piece
+                  @skin="link"
                   {{on "click" (toggle "isEditingPiece" this)}}
+                  role="menuitem"
                 >
                   {{t "edit"}}
-                </Menu.Item>
-                <Menu.Divider />
-                <Menu.Item
-                  @skin="danger"
+                </AuButton>
+                <AuHr />
+                <AuButton
                   data-test-document-card-delete
+                  @skin="link"
+                  @alert={{true}}
                   {{on "click" this.deleteDocumentContainer}}
+                  role="menuitem"
                 >
                   {{t "document-delete"}}
-                </Menu.Item>
-              </Auk::DropdownMenu>
+                </AuButton>
+              </AuDropdown>
             </Group.Item>
           {{/if}}
         </Toolbar.Group>

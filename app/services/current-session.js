@@ -1,89 +1,61 @@
 import Service, { inject as service } from '@ember/service';
 import { get } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
-import groupRoles from 'frontend-kaleidos/config/roles';
-
-const {
-  ADMIN,
-  OVRB,
-  KORT_BESTEK,
-  MINISTER,
-  KABINET,
-  OVERHEID,
-  USER,
-} = CONSTANTS.ACCOUNT_GROUPS;
+import { isPresent } from '@ember/utils';
+import { findGroupByRole } from 'frontend-kaleidos/config/permissions';
 
 export default class CurrentSessionService extends Service {
   @service session;
   @service store;
-  @service router;
 
-  @tracked account;
   @tracked user;
-  @tracked group;
+  @tracked role;
+  @tracked organization;
 
   /* eslint-disable ember/no-get */
   async load() {
     if (this.session.isAuthenticated) {
-      const accountId = get(this.session, 'data.authenticated.relationships.account.data.id');
-      this.account = await this.store.find('account', accountId);
-      this.user = await this.account.user;
-
-      const groupId = get(this.session, 'data.authenticated.relationships.group.data.id');
-      if (groupId) {
-        this.group = await this.store.find('account-group', groupId);
+      const membershipId = get(this.session, 'data.authenticated.data.relationships.membership.data.id');
+      if (membershipId) {
+        const membership = await this.store.findRecord('membership', membershipId, {
+          include: 'role,organization,user'
+        });
+        const [role, organization, user] = await Promise.all([
+          membership.role,
+          membership.organization,
+          membership.user
+        ]);
+        this.role = role;
+        this.organization = organization;
+        this.user = user;
       }
     }
   }
   /* eslint-enable ember/no-get */
 
-  requireAuthorization(transition, roleName) {
-    let isAuthenticated = this.session.requireAuthentication(transition, 'login');
-    if (!isAuthenticated) {
-      return false;
-    }
-    let isAuthorized = this.may(roleName);
-    if (!isAuthorized) {
-      this.router.transitionTo('agendas');
-      return false;
-    }
-    return true;
+  clear() {
+    this.user = null;
+    this.role = null;
+    this.organization = null;
   }
 
-  may(roleName) {
-    return groupRoles.get(this.groupUri)?.includes(roleName);
+  may(permission) {
+    return this.userGroup?.permissions.includes(permission);
   }
 
-  get groupUri() {
-    return this.group && this.group.uri;
+  hasAccessToApplication() {
+    return isPresent(this.role);
   }
 
-  get hasValidGroup() {
-    return this.groupUri && this.groupUri !== USER;
+  get userGroup() {
+    return this.role && findGroupByRole(this.role.uri);
   }
 
   get isAdmin() {
-    return [ADMIN].includes(this.groupUri);
-  }
-
-  get isKabinet() {
-    return [KABINET].includes(this.groupUri);
-  }
-
-  get isMinister() {
-    return [MINISTER].includes(this.groupUri);
-  }
-
-  get isOvrb() {
-    return [OVRB].includes(this.groupUri);
-  }
-
-  get isKortBestek() {
-    return [KORT_BESTEK].includes(this.groupUri);
+    return this.userGroup.name == 'ADMIN';
   }
 
   get isOverheid() {
-    return [OVERHEID].includes(this.groupUri);
+    return this.userGroup.name == 'OVERHEID';
   }
 }
