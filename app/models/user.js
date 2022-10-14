@@ -10,6 +10,7 @@ export default class User extends Model {
   @belongsTo('concept') status;
 
   @hasMany('membership') memberships;
+  @hasMany('login-activity') loginActivities;
 
   get fullName() {
     return `${this.firstName} ${this.lastName}`;
