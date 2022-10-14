@@ -112,6 +112,7 @@ Router.map(function() {
     this.route('users', { path: '/gebruikers', }, function() {
       this.route('user', { path: '/:id', });
     });
+    this.route('organizations', { path: '/organisaties' }, () => {});
     this.route('system-alerts', { path: '/systeemmeldingen', }, function() {
       this.route('edit', { path: '/:alert_id', });
       this.route('new', { path: '/nieuw', });
@@ -123,7 +124,6 @@ Router.map(function() {
     this.route('document-types', () => {});
     this.route('case-types', () => {});
     this.route('subcase-types', () => {});
-    this.route('organizations', function() {});
   });
 
   this.route('document', { path: '/document/:piece_id', });

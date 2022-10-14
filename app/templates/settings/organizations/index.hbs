@@ -50,7 +50,9 @@
             <td class={{if organization.isBlocked "au-u-muted"}}>
               <div>
                 <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
-                  {{t "users-seen-amount" amount=organization.memberships.length}}
+                  <Settings::Organizations::MembershipsCount
+                    @organization={{organization}}
+                  />
                 </span>
               </div>
             </td>
