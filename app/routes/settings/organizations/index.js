@@ -52,4 +52,13 @@ export default class SettingsOrganizationsIndexRoute extends Route {
 
     return this.store.query('user-organization', options);
   }
+
+  setupController(controller) {
+    super.setupController(...arguments);
+
+    if (controller.page !== this.lastParams.committed.page) {
+      controller.page = this.lastParams.committed.page;
+    }
+    controller.searchTextBuffer = this.lastParams.committed.filter;
+  }
 }
