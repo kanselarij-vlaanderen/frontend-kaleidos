@@ -120,7 +120,8 @@
       <Group>
         <AuButton
           @alert={{true}}
-          {{on "click" (queue this.blockOrganization (toggle "showBlockOrganization" this))}}
+          @loading={{this.blockOrganization.isRunning}}
+          {{on "click" (queue (perform this.blockOrganization) (toggle "showBlockOrganization" this))}}
         >
           {{t "block-organization"}}
         </AuButton>
@@ -157,7 +158,8 @@
       <Group>
         <AuButton
           @alert={{true}}
-          {{on "click" (queue this.unblockOrganization (toggle "showUnblockOrganization" this))}}
+          @loading={{this.unblockOrganization.isRunning}}
+          {{on "click" (queue (perform this.unblockOrganization) (toggle "showUnblockOrganization" this))}}
         >
           {{t "unblock-organization"}}
         </AuButton>
