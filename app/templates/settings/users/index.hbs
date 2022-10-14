@@ -81,11 +81,11 @@
               </div>
             </td>
             <td>
-              {{#let (object-at 0 (sort-by "startDate:desc" user.loginActivities)) as |lastLoginActivity|}}
-                {{#if lastLoginActivity.startDate}}
-                  {{moment-format lastLoginActivity.startDate}}
+              {{#let user.loginActivity.startDate as |lastLoginDate|}}
+                {{#if lastLoginDate}}
+                  {{moment-format lastLoginDate}}
                   {{t "at"}}
-                  {{moment-format lastLoginActivity.startDate "HH:mm"}}
+                  {{moment-format lastLoginDate "HH:mm"}}
                 {{/if}}
               {{/let}}
             </td>

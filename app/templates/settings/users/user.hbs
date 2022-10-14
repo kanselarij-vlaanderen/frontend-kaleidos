@@ -55,6 +55,23 @@
               </div>
             </div>
           </dl>
+          <dl>
+            <Auk::KeyValue
+              @key={{t "last-seen"}}
+              @value={{if
+                @model.loginActivity.startDate
+                (concat
+                  (moment-format @model.loginActivity.startDate)
+                  " "
+                  (t "at")
+                  " "
+                  (moment-format @model.loginActivity.startDate "HH:mm")
+                )
+                "-"
+              }}
+              @layout="horizontal"
+            />
+          </dl>
         </Auk::Panel::Body>
       </Auk::Panel>
     </div>

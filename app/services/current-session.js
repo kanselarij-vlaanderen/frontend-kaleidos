@@ -28,12 +28,6 @@ export default class CurrentSessionService extends Service {
         this.role = role;
         this.organization = organization;
         this.user = user;
-
-        const loginActivity = this.store.createRecord('login-activity', {
-          startDate: new Date(),
-          user: this.user,
-        });
-        await loginActivity.save();
       }
     }
   }

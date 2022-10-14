@@ -8,9 +8,9 @@ export default class User extends Model {
 
   @belongsTo('account') account;
   @belongsTo('concept') status;
+  @belongsTo('login-activity') loginActivity;
 
   @hasMany('membership') memberships;
-  @hasMany('login-activity') loginActivities;
 
   get fullName() {
     return `${this.firstName} ${this.lastName}`;
