@@ -133,8 +133,11 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
         const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
         if (latestActivity) {
           const agendaitems = await latestActivity.hasMany('agendaitems').reload(); // This fixes a case where approving an agenda did not update latestAgendaitem
-          const meeting = await this.subcase.requestedForMeeting;
-          const agendas = await meeting.agendas;
+          const latestMeeting = await this.store.queryOne('meeting', {
+            'filter[agendas][agendaitems][agenda-activity][subcase][:id:]': this.subcase.id,
+            sort: '-planned-start',
+          });
+          const agendas = await latestMeeting.agendas;
           const sortedAgendas = agendas.sortBy('serialnumber').reverse();
           const latestAgenda = sortedAgendas.firstObject;
           for (let index = 0; index < agendaitems.length; index++) {

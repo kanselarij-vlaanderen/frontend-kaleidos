@@ -42,7 +42,10 @@ export default class CasesCaseSubcasesSubcaseOverviewRoute extends Route {
   async afterModel(model) {
     this.mandatees = (await model.subcase.mandatees).sortBy('priority');
     this.submitter = await model.subcase.requestedBy;
-    this.meeting = await model.subcase.requestedForMeeting;
+    this.meeting = await this.store.queryOne('meeting', {
+      'filter[agendas][agendaitems][agenda-activity][subcase][:id:]': model.subcase.id,
+      sort: '-planned-start',
+    });
     this.agenda = await this.meeting?.agenda;
     await model.subcase.governmentAreas;
   }

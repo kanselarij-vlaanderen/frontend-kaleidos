@@ -39,10 +39,10 @@
             {{t "latest-modified"}}
             {{moment-format @subcase.modified}}
           </p>
-          {{#if @subcase.requestedForMeeting.plannedStart}}
+          {{#if this.latestMeeting.plannedStart}}
             <p>
               {{t "on-agenda-for-meeting"}}
-              {{moment-format @subcase.requestedForMeeting.plannedStart}}
+              {{moment-format this.latestMeeting.plannedStart}}
             </p>
           {{/if}}
         </div>

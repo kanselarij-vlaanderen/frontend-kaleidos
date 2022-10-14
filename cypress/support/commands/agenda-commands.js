@@ -409,7 +409,6 @@ function addAgendaitemToAgenda(subcaseTitle) {
   cy.intercept('GET', '/subcases?**sort**').as('getSubcasesFiltered');
   cy.intercept('POST', '/agendaitems').as('createNewAgendaitem');
   cy.intercept('POST', '/agenda-activities').as('createAgendaActivity');
-  cy.intercept('PATCH', '/subcases/**').as('patchSubcase');
   cy.intercept('PATCH', '/agendas/**').as('patchAgenda');
 
   cy.get(auk.loader).should('not.exist');
@@ -461,9 +460,6 @@ function addAgendaitemToAgenda(subcaseTitle) {
   cy.wait('@createNewAgendaitem', {
     timeout: 30000,
   })
-    .wait('@patchSubcase', {
-      timeout: 20000,
-    })
     .wait('@patchAgenda', {
       timeout: 20000,
     });

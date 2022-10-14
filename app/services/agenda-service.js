@@ -180,8 +180,6 @@ export default class AgendaService extends Service {
     await lastAgenda.hasMany('agendaitems').reload();
     await subcase.hasMany('agendaActivities').reload();
     await subcase.hasMany('submissionActivities').reload();
-    subcase.set('requestedForMeeting', meeting);
-    await subcase.save();
     updateModifiedProperty(lastAgenda);
 
     // Create default newsletterInfo for announcements with inNewsLetter = true
@@ -253,8 +251,6 @@ export default class AgendaService extends Service {
         await agenda.hasMany('agendaitems').reload();
       }));
       await agendaActivity.destroyRecord();
-      await subcase.set('requestedForMeeting', null);
-      await subcase.save();
       await subcase.hasMany('agendaActivities').reload();
       await subcase.hasMany('decisionActivities').reload();
     } else {
