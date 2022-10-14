@@ -64,11 +64,7 @@
                       {{membership.organization.name}}
                     </p>
                   </div>
-                  {{#if membership.organization.isBlocked}}
-                    <AuPill @icon="circle-x" @skin="error" @size="small">
-                      {{t "blocked-organization"}}
-                    </AuPill>
-                  {{else if membership.isBlocked}}
+                  {{#if membership.isBlocked}}
                     <AuPill @icon="circle-x" @skin="error" @size="small">
                       {{t "blocked-membership"}}
                     </AuPill>
