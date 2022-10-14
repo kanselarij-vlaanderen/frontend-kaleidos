@@ -27,7 +27,7 @@
             <th>{{t "users-seen"}}</th>
             <th></th>
           </c.header>
-          <c.body class="hello" as |organization|>
+          <c.body as |organization|>
             <td class={{if organization.isBlocked "au-u-muted"}}>
               <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
                 {{organization.name}}
