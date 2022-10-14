@@ -40,6 +40,7 @@
             />
             <th>{{t "organization"}}</th>
             <th>{{t "group"}}</th>
+            <th>{{t "last-seen"}}</th>
             <th></th>
           </c.header>
           <c.body as |user|>
@@ -82,6 +83,15 @@
                   <p>{{membership.role.label}}</p>
                 {{/each}}
               </div>
+            </td>
+            <td>
+              {{#let (object-at 0 (sort-by "startDate:desc" user.loginActivities)) as |lastLoginActivity|}}
+                {{#if lastLoginActivity.startDate}}
+                  {{moment-format lastLoginActivity.startDate}}
+                  {{t "at"}}
+                  {{moment-format lastLoginActivity.startDate "HH:mm"}}
+                {{/if}}
+              {{/let}}
             </td>
             <td class="auk-u-text-align--right">
               <div class="auk-o-flex auk-o-flex--justify-end">

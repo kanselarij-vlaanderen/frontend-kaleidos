@@ -42,7 +42,7 @@ export default class SettingsUsersIndexRoute extends Route {
         number: params.page,
         size: params.size,
       },
-      include: 'memberships.organization,memberships.role',
+      include: 'status,memberships.organization,memberships.role,memberships.status,login-activities',
     };
 
     if (isPresent(params.filter)) {
