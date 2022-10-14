@@ -1,0 +1,52 @@
+<AuModal
+  @modalOpen={{@modalOpen}}
+  @closeModal={{@onCancel}}
+>
+  <:title>
+    {{#if (has-block "title")}}
+      {{yield to="title"}}
+    {{/if}}
+  </:title>
+
+  <:body>
+    {{#if (has-block "body")}}
+      {{yield to="body"}}
+    {{/if}}
+  </:body>
+
+  <:footer>
+    {{#if (has-block "footer")}}
+      {{yield to="footer"}}
+    {{else}}
+        <AuToolbar
+          as |Group|
+        >
+          <Group>
+            <AuButton
+              @skin="naked"
+              {{on "click" @onCancel}}
+            >
+              {{#if @cancelMessage}}
+                {{@cancelMessage}}
+              {{else}}
+                {{t "cancel"}}
+              {{/if}}
+            </AuButton>
+          </Group>
+          <Group>
+            <AuButton
+              @alert={{@alert}}
+              @loading={{@loading}}
+              {{on "click" @onConfirm}}
+            >
+              {{#if @confirmMessage}}
+                {{@confirmMessage}}
+              {{else}}
+                {{t "confirm"}}
+              {{/if}}
+            </AuButton>
+          </Group>
+        </AuToolbar>
+    {{/if}}
+  </:footer>
+</AuModal>

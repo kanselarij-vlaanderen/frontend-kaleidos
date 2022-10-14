@@ -27,7 +27,7 @@
             <th>{{t "users-seen"}}</th>
             <th></th>
           </c.header>
-          <c.body class="hello" as |organization|>
+          <c.body as |organization|>
             <td class={{if organization.isBlocked "au-u-muted"}}>
               <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
                 {{organization.name}}
@@ -50,7 +50,9 @@
             <td class={{if organization.isBlocked "au-u-muted"}}>
               <div>
                 <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
-                  {{t "users-seen-amount" amount=organization.memberships.length}}
+                  <Settings::Organizations::MembershipsCount
+                    @organization={{organization}}
+                  />
                 </span>
               </div>
             </td>
@@ -90,9 +92,13 @@
   </div>
 </div>
 
-<AuModal
+<ConfirmationModal
   @modalOpen={{this.showBlockOrganization}}
-  @closeModal={{toggle "showBlockOrganization" this}}
+  @onConfirm={{queue (perform this.blockOrganization) (toggle "showBlockOrganization" this)}}
+  @onCancel={{toggle "showBlockOrganization" this}}
+  @confirmMessage={{t "block-organization"}}
+  @alert={{true}}
+  @loading={{this.blockOrganization.isRunning}}
 >
   <:title>
     {{t "block-organization"}}
@@ -103,33 +109,15 @@
       <p>{{t "block-organization-are-you-sure" user=this.organizationBeingBlocked.name htmlSafe=true}}</p>
     </div>
   </:body>
-  <:footer>
-    <AuToolbar
-      as |Group|
-    >
-      <Group>
-        <AuButton
-          @skin="naked"
-          {{on "click" (toggle "showBlockOrganization" this)}}
-        >
-          {{t "cancel"}}
-        </AuButton>
-      </Group>
-      <Group>
-        <AuButton
-          @alert={{true}}
-          {{on "click" (queue this.blockOrganization (toggle "showBlockOrganization" this))}}
-        >
-          {{t "block-organization"}}
-        </AuButton>
-      </Group>
-    </AuToolbar>
-  </:footer>
-</AuModal>
+</ConfirmationModal>
 
-<AuModal
+
+<ConfirmationModal
   @modalOpen={{this.showUnblockOrganization}}
-  @closeModal={{toggle "showUnblockOrganization" this}}
+  @onConfirm={{queue (perform this.unblockOrganization) (toggle "showUnblockOrganization" this)}}
+  @onCancel={{toggle "showUnblockOrganization" this}}
+  @confirmMessage={{t "unblock-organization"}}
+  @loading={{this.unblockOrganization.isRunning}}
 >
   <:title>
     {{t "unblock-organization"}}
@@ -140,26 +128,4 @@
       <p>{{t "unblock-organization-are-you-sure" user=this.organizationBeingBlocked.fullName htmlSafe=true}}</p>
     </div>
   </:body>
-  <:footer>
-    <AuToolbar
-      as |Group|
-    >
-      <Group>
-        <AuButton
-          @skin="naked"
-          {{on "click" (toggle "showUnblockOrganization" this)}}
-        >
-          {{t "cancel"}}
-        </AuButton>
-      </Group>
-      <Group>
-        <AuButton
-          @alert={{true}}
-          {{on "click" (queue this.unblockOrganization (toggle "showUnblockOrganization" this))}}
-        >
-          {{t "unblock-organization"}}
-        </AuButton>
-      </Group>
-    </AuToolbar>
-  </:footer>
-</AuModal>
+</ConfirmationModal>

@@ -42,6 +42,7 @@ export default class SettingsOrganizationsIndexRoute extends Route {
         number: params.page,
         size: params.size,
       },
+      include: 'status',
     };
 
     if (isPresent(params.filter)) {
@@ -51,5 +52,14 @@ export default class SettingsOrganizationsIndexRoute extends Route {
     this.lastParams.commit();
 
     return this.store.query('user-organization', options);
+  }
+
+  setupController(controller) {
+    super.setupController(...arguments);
+
+    if (controller.page !== this.lastParams.committed.page) {
+      controller.page = this.lastParams.committed.page;
+    }
+    controller.searchTextBuffer = this.lastParams.committed.filter;
   }
 }
