@@ -230,53 +230,53 @@ context('Publications tests', () => {
   });
 
   // Beleidsvelden are no longer in publications, only in dossier
-  // it('publications:dossier: Add and delete beleidsdomein', () => {
-  //   const noGovernmentFields = 'Er zijn nog geen beleidsvelden toegevoegd';
-  //   const labelName = 'Cultuur, Jeugd, Sport en Media';
-  //   const fieldsName = 'Media';
+  it('publications:dossier: Add and delete beleidsdomein', () => {
+    const noGovernmentFields = 'Er zijn nog geen beleidsvelden toegevoegd';
+    const labelName = 'Cultuur, Jeugd, Sport en Media';
+    const fieldsName = 'Media';
 
-  //   cy.intercept('GET', '/publication-flows**').as('getNewPublicationDetail');
-  //   cy.get(publication.publicationTableRow.row.goToPublication).first()
-  //     .click();
-  //   cy.wait('@getNewPublicationDetail');
+    cy.intercept('GET', '/publication-flows**').as('getNewPublicationDetail');
+    cy.get(publication.publicationTableRow.row.goToPublication).first()
+      .click();
+    cy.wait('@getNewPublicationDetail');
 
-  //   // Assert empty.
-  //   cy.get(auk.emptyState.message).contains(noGovernmentFields);
+    // Assert empty.
+    cy.get(auk.emptyState.message).contains(noGovernmentFields);
 
-  //   // reset after cancel
-  //   cy.intercept('GET', '/concepts**').as('getConceptSchemes');
-  //   cy.get(utils.governmentAreasPanel.edit).click();
-  //   cy.wait('@getConceptSchemes');
-  //   cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
-  //     .find(utils.governmentAreaSelectorForm.field)
-  //     .contains(fieldsName)
-  //     .click();
-  //   cy.get(auk.modal.footer.cancel).click();
-  //   cy.get(auk.emptyState.message).contains(noGovernmentFields);
+    // reset after cancel
+    cy.intercept('GET', '/concepts**').as('getConceptSchemes');
+    cy.get(utils.governmentAreasPanel.edit).click();
+    cy.wait('@getConceptSchemes');
+    cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
+      .find(utils.governmentAreaSelectorForm.field)
+      .contains(fieldsName)
+      .click();
+    cy.get(auk.modal.footer.cancel).click();
+    cy.get(auk.emptyState.message).contains(noGovernmentFields);
 
 
-  //   // link government field
-  //   cy.intercept('PATCH', '/cases/**').as('patchCase');
-  //   cy.get(utils.governmentAreasPanel.edit).click();
-  //   cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
-  //     .find(utils.governmentAreaSelectorForm.field)
-  //     .contains(fieldsName)
-  //     .click();
-  //   cy.get(utils.editGovernmentFieldsModal.save).click();
-  //   cy.wait('@patchCase');
-  //   cy.get(utils.governmentAreasPanel.rows).should('have.length', 1);
-  //   cy.get(utils.governmentAreasPanel.row.label).contains(labelName);
-  //   cy.get(utils.governmentAreasPanel.row.fields).contains(fieldsName);
-  //   // unlink government field
-  //   cy.get(utils.governmentAreasPanel.edit).click();
-  //   cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
-  //     .find(utils.governmentAreaSelectorForm.field)
-  //     .contains(fieldsName)
-  //     .click();
-  //   cy.get(utils.editGovernmentFieldsModal.save).click();
-  //   cy.wait('@patchCase');
-  //   cy.get(auk.emptyState.message).contains(noGovernmentFields);
-  // });
+    // link government field
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlows');
+    cy.get(utils.governmentAreasPanel.edit).click();
+    cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
+      .find(utils.governmentAreaSelectorForm.field)
+      .contains(fieldsName)
+      .click();
+    cy.get(utils.editGovernmentFieldsModal.save).click();
+    cy.wait('@patchPublicationFlows');
+    cy.get(utils.governmentAreasPanel.rows).should('have.length', 1);
+    cy.get(utils.governmentAreasPanel.row.label).contains(labelName);
+    cy.get(utils.governmentAreasPanel.row.fields).contains(fieldsName);
+    // unlink government field
+    cy.get(utils.governmentAreasPanel.edit).click();
+    cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
+      .find(utils.governmentAreaSelectorForm.field)
+      .contains(fieldsName)
+      .click();
+    cy.get(utils.editGovernmentFieldsModal.save).click();
+    cy.wait('@patchPublicationFlows');
+    cy.get(auk.emptyState.message).contains(noGovernmentFields);
+  });
 
   it('publications:dossier:Add and delete contact person', () => {
     const noContactPersons = 'Er zijn nog geen contactpersonen toegevoegd';
