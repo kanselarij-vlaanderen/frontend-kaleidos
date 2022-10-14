@@ -42,6 +42,7 @@ export default class SettingsOrganizationsIndexRoute extends Route {
         number: params.page,
         size: params.size,
       },
+      include: 'status',
     };
 
     if (isPresent(params.filter)) {
