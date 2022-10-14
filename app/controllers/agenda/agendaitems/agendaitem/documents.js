@@ -22,9 +22,11 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
   documentsAreVisible;
   defaultAccessLevel;
+  meeting;
   @tracked isOpenBatchDetailsModal = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenPublicationModal = false;
+  @tracked isOpenVerifyUploadOnApproved = false;
   @tracked newPieces = A([]);
   @tracked newAgendaitemPieces;
   @tracked agendaitem;
@@ -53,6 +55,27 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @action
   async openPieceUploadModal() {
     await this.ensureFreshData.perform();
+    // TODO KAS-3631 refresh status? could be stale
+    if (this.currentAgenda.isDesignAgenda || this.meeting.isPreKaleidos) {
+      this.isOpenPieceUploadModal = true;
+    } else {
+      this.openVerifyUploadOnApproved();
+    }
+  }
+
+  @action
+  openVerifyUploadOnApproved() {
+    this.isOpenVerifyUploadOnApproved = true;
+  }
+
+  @action
+  verifyUploadOnApproved() {
+    this.isOpenVerifyUploadOnApproved = false;
+    this.isOpenPieceUploadModal = true;
+  }
+
+  @action
+  async () {
     this.isOpenPieceUploadModal = true;
   }
 

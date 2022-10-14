@@ -77,6 +77,7 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.previousAgenda = this.previousAgenda;
     controller.agendaActivity = this.agendaActivity;
     controller.documentsAreVisible = this.documentsAreVisible;
+    controller.meeting = this.meeting;
     controller.loadNewPieces.perform();
   }
 

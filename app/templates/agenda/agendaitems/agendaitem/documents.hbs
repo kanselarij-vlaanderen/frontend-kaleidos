@@ -119,4 +119,25 @@
   </WebComponents::VlModal>
 {{/if}}
 
+
+{{#if this.isOpenVerifyUploadOnApproved}}
+  <Auk::Modal @size="small">
+    <Auk::Modal::Header
+      @title={{t "documents-on-approved-agenda-title"}}
+      @onClose={{set this.isOpenVerifyUploadOnApproved false}}
+    />
+    <Auk::Modal::Body>
+      <p>{{t "documents-on-approved-agenda-message"}}</p>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{set this.isOpenVerifyUploadOnApproved false}}>
+      <Auk::Button
+        @skin="primary"
+        {{on "click" this.verifyUploadOnApproved}}
+      >
+        {{t "confirm"}}
+      </Auk::Button>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
+{{/if}}
+
 <Documents::LinkedDocuments @agendaitemOrSubcase={{this.agendaitem}} />
