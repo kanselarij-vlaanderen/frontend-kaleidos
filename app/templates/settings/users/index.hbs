@@ -141,9 +141,12 @@
   </div>
 </div>
 
-<AuModal
+<ConfirmationModal
   @modalOpen={{this.showBlockMembership}}
-  @closeModal={{this.toggleShowBlockMembership}}
+  @onConfirm={{queue this.blockMemberships this.toggleShowBlockMembership}}
+  @onCancel={{this.toggleShowBlockMembership}}
+  @confirmMessage={{t "block-membership"}}
+  @alert={{true}}
 >
   <:title>
     {{t "block-membership"}}
@@ -167,34 +170,13 @@
       </AuFieldset>
     </div>
   </:body>
-  <:footer>
-    <AuToolbar
-      as |Group|
-    >
-      <Group>
-        <AuButton
-          @skin="naked"
-          {{on "click" this.toggleShowBlockMembership}}
-        >
-          {{t "cancel"}}
-        </AuButton>
-      </Group>
-      <Group>
-        <AuButton
-          @alert={{true}}
-          @disabled={{is-empty this.membershipsBeingBlocked}}
-          {{on "click" (queue this.blockMemberships this.toggleShowBlockMembership)}}
-        >
-          {{t "block-membership"}}
-        </AuButton>
-      </Group>
-    </AuToolbar>
-  </:footer>
-</AuModal>
+</ConfirmationModal>
 
-<AuModal
+<ConfirmationModal
   @modalOpen={{this.showUnblockMembership}}
-  @closeModal={{this.toggleShowUnblockMembership}}
+  @onConfirm={{queue this.unblockMemberships this.toggleShowUnblockMembership}}
+  @onCancel={{this.toggleShowUnblockMembership}}
+  @confirmMessage={{t "unblock-membership"}}
 >
   <:title>
     {{t "unblock-membership"}}
@@ -218,34 +200,14 @@
       </AuFieldset>
     </div>
   </:body>
-  <:footer>
-    <AuToolbar
-      as |Group|
-    >
-      <Group>
-        <AuButton
-          @skin="naked"
-          {{on "click" this.toggleShowUnblockMembership}}
-        >
-          {{t "cancel"}}
-        </AuButton>
-      </Group>
-      <Group>
-        <AuButton
-          @alert={{true}}
-          @disabled={{is-empty this.membershipsBeingBlocked}}
-          {{on "click" (queue this.unblockMemberships this.toggleShowUnblockMembership)}}
-        >
-          {{t "unblock-membership"}}
-        </AuButton>
-      </Group>
-    </AuToolbar>
-  </:footer>
-</AuModal>
+</ConfirmationModal>
 
-<AuModal
+<ConfirmationModal
   @modalOpen={{this.showBlockUser}}
-  @closeModal={{toggle "showBlockUser" this}}
+  @onConfirm={{queue this.blockUser (toggle "showBlockUser" this)}}
+  @onCancel={{toggle "showBlockUser" this}}
+  @confirmMessage={{t "block-user"}}
+  @alert={{true}}
 >
   <:title>
     {{t "block-user"}}
@@ -256,33 +218,13 @@
       <p>{{t "block-user-are-you-sure" user=this.userBeingBlocked.fullName htmlSafe=true}}</p>
     </div>
   </:body>
-  <:footer>
-    <AuToolbar
-      as |Group|
-    >
-      <Group>
-        <AuButton
-          @skin="naked"
-          {{on "click" (toggle "showBlockUser" this)}}
-        >
-          {{t "cancel"}}
-        </AuButton>
-      </Group>
-      <Group>
-        <AuButton
-          @alert={{true}}
-          {{on "click" (queue this.blockUser (toggle "showBlockUser" this))}}
-        >
-          {{t "block-user"}}
-        </AuButton>
-      </Group>
-    </AuToolbar>
-  </:footer>
-</AuModal>
+</ConfirmationModal>
 
-<AuModal
+<ConfirmationModal
   @modalOpen={{this.showUnblockUser}}
-  @closeModal={{toggle "showUnblockUser" this}}
+  @onConfirm={{queue this.unblockUser (toggle "showUnblockUser" this)}}
+  @onCancel={{toggle "showUnblockUser" this}}
+  @confirmMessage={{t "unblock-user"}}
 >
   <:title>
     {{t "unblock-user"}}
@@ -293,26 +235,4 @@
       <p>{{t "unblock-user-are-you-sure" user=this.userBeingBlocked.fullName htmlSafe=true}}</p>
     </div>
   </:body>
-  <:footer>
-    <AuToolbar
-      as |Group|
-    >
-      <Group>
-        <AuButton
-          @skin="naked"
-          {{on "click" (toggle "showUnblockUser" this)}}
-        >
-          {{t "cancel"}}
-        </AuButton>
-      </Group>
-      <Group>
-        <AuButton
-          @alert={{true}}
-          {{on "click" (queue this.unblockUser (toggle "showUnblockUser" this))}}
-        >
-          {{t "unblock-user"}}
-        </AuButton>
-      </Group>
-    </AuToolbar>
-  </:footer>
-</AuModal>
+</ConfirmationModal>
