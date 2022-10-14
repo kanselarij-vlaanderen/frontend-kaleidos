@@ -36,7 +36,9 @@
             <td>
               <div>
                 <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
-                  {{organization.memberships.length}} {{t "users"}}
+                  <Settings::Organizations::MembershipsCount
+                    @organization={{organization}}
+                  />
                 </span>
               </div>
             </td>
