@@ -4,54 +4,60 @@
       <Auk::Toolbar::Item>
         <Auk::Brand @logotype="Kaleidos" />
       </Auk::Toolbar::Item>
-      <Auk::Toolbar::Item>
-        <Auk::Tabs>
-          <Auk::Tab
-            @route="search.index"
-            @current-when="search"
-            data-test-m-header-search
-          >
-            <Auk::Icon @name="search" />
-            {{capitalize (t "search")}}
-          </Auk::Tab>
-          <Auk::Tab
-            @route="agendas"
-            @current-when="agendas agenda print-overviews.decisions print-overviews.press-agenda"
-            data-test-m-header-agendas
-          >
-            {{t "agendas"}}
-          </Auk::Tab>
-          <Auk::Tab @route="cases" data-test-m-header-cases>
-            {{t "cases"}}
-          </Auk::Tab>
-          {{#if (user-may "manage-newsletter-infos")}}
+      {{#if this.session.isAuthenticated}}
+        <Auk::Toolbar::Item>
+          <Auk::Tabs>
             <Auk::Tab
-              @route="newsletters"
-              @current-when="newsletters newsletter print-overviews.newsletter"
-              data-test-m-header-newsletters
+              @route="search.index"
+              @current-when="search"
+              data-test-m-header-search
             >
-              {{t "newsletter"}}
+              <Auk::Icon @name="search" />
+              {{capitalize (t "search")}}
             </Auk::Tab>
-          {{/if}}
-          {{#if (user-may "manage-publication-flows")}}
-            <Auk::Tab @route="publications" data-test-m-header-publications>
-              {{t "publications"}}
+            <Auk::Tab
+              @route="agendas"
+              @current-when="agendas agenda print-overviews.decisions print-overviews.press-agenda"
+              data-test-m-header-agendas
+            >
+              {{t "agendas"}}
             </Auk::Tab>
-          {{/if}}
-          {{#if this.isShownSignatureFolder}}
-            <Auk::Tab @route="signatures" data-test-m-header-signatures>
-              {{t "signature-folder"}}
+            <Auk::Tab @route="cases" data-test-m-header-cases>
+              {{t "cases"}}
             </Auk::Tab>
-          {{/if}}
-          {{#if (user-may "manage-settings")}}
-            <Auk::Tab @route="settings.overview" data-test-m-header-settings>
-              {{t "settings"}}
-            </Auk::Tab>
-          {{/if}}
-        </Auk::Tabs>
-      </Auk::Toolbar::Item>
+            {{#if (user-may "manage-newsletter-infos")}}
+              <Auk::Tab
+                @route="newsletters"
+                @current-when="newsletters newsletter"
+                data-test-m-header-newsletters
+              >
+                {{t "newsletter"}}
+              </Auk::Tab>
+            {{/if}}
+            {{#if (user-may "manage-publication-flows")}}
+              <Auk::Tab @route="publications" data-test-m-header-publications>
+                {{t "publications"}}
+              </Auk::Tab>
+            {{/if}}
+            {{#if this.isShownSignatureFolder}}
+              <Auk::Tab @route="signatures" data-test-m-header-signatures>
+                {{t "signature-folder"}}
+              </Auk::Tab>
+            {{/if}}
+            {{#if (user-may "manage-settings")}}
+              <Auk::Tab
+                @route="settings.overview"
+                @current-when="settings"
+                data-test-m-header-settings
+              >
+                {{t "settings"}}
+              </Auk::Tab>
+            {{/if}}
+          </Auk::Tabs>
+        </Auk::Toolbar::Item>
+      {{/if}}
     </Auk::Toolbar::Group>
-    <Auk::Toolbar::Group @position="right">
+    <Auk::Toolbar::Group @position="right" class="auk-u-mr-3">
       {{#if this.environmentName}}
         <Auk::Toolbar::Item class="auk-u-mr-3">
           <div class="vlc-environment-pill {{this.environmentClass}}">
@@ -60,55 +66,63 @@
         </Auk::Toolbar::Item>
       {{/if}}
       <Auk::Toolbar::Item>
-        <Auk::DropdownMenu
-          @type="button-link"
-          @skin="muted"
-          @layout="icon-left"
-          @padded="padded"
+        <AuDropdown
+          @title={{t "help"}}
+          @alignment="right"
           @icon="circle-question"
-          @label={{t "help"}}
-        as |Menu|>
-          <Menu.Item @route="manual" target="_blank">
+          @iconAlignment="left"
+        >
+          <AuLink
+            @route="manual"
+            role="menuitem"
+            target="_blank"
+          >
             {{t "look-at-documentation"}}
-          </Menu.Item>
-          <Menu.Item @href="mailto:kaleidos.servicedesk@vlaanderen.be">
-            <div>
-              <span>{{t "contact-us"}}</span>
-              <span class="auk-u-text-muted auk-u-text-size--small">
-                {{t "email-servicedesk"}}
-              </span>
-            </div>
-          </Menu.Item>
-        </Auk::DropdownMenu>
+          </AuLink>
+          <AuHr />
+          <AuLink
+            href="mailto:kaleidos.servicedesk@vlaanderen.be"
+            target="_blank"
+            role="menuitem"
+          >
+            <span class="auk-u-text-nowrap">{{t "contact-us"}}</span>
+            <span class="auk-u-text-muted auk-u-text-size--small">
+              {{t "email-servicedesk"}}
+            </span>
+          </AuLink>
+        </AuDropdown>
       </Auk::Toolbar::Item>
-      <Auk::Toolbar::Item class="auk-u-mr-3">
+      <Auk::Toolbar::Item>
         {{#if this.currentSession.user}}
-          <Auk::DropdownMenu
-            @type="button-link"
-            @skin="muted"
-            @padded="padded"
-            @label={{this.currentSession.user.firstName}}
+          <AuDropdown
+            @title={{this.currentSession.user.firstName}}
+            @alignment="right"
             data-test-m-header-user-actions
-          as |Menu|>
-            <Menu.Item @textOnly={{true}}>
+          >
+            <div role="menuitem">
               <Auk::Avatar
                 @icon="user"
                 @name={{this.currentSession.user.fullName}}
               >
                 <p>{{this.currentSession.user.fullName}}</p>
                 <p class="auk-u-text-muted auk-u-text-size--small">
-                  {{this.currentSession.group.name}}
+                  {{or this.currentSession.organization.name this.currentSession.organization.identifier}}
+                </p>
+                <p class="au-u-margin-top-tiny auk-u-text-muted auk-u-text-size--small">
+                  {{this.currentSession.role.label}}
                 </p>
               </Auk::Avatar>
-            </Menu.Item>
-            <Auk::Menu::Divider />
-            <Menu.Item
-              {{on "click" this.logout}}
+            </div>
+            <AuHr />
+            <AuButton
               data-test-m-header-user-action-logout
+              @skin="link"
+              {{on "click" this.logout}}
+              role="menuitem"
             >
               {{t "sign-out"}}
-            </Menu.Item>
-          </Auk::DropdownMenu>
+            </AuButton>
+          </AuDropdown>
         {{else}}
           <Auk::ButtonLink
             @route="login"

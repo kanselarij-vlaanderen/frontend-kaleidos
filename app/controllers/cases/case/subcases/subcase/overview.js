@@ -15,6 +15,7 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
   @tracked mandatees;
   @tracked submitter;
   @tracked meeting;
+  @tracked agenda;
   @tracked siblingSubcasesCount;
 
   get showMandateesNotApplicableMessage() {

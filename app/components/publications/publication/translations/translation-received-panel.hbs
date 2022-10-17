@@ -13,21 +13,30 @@
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          <Auk::DropdownMenu data-test-translation-received-panel-dropdown @skin="borderless" @icon="three-dots" as |Menu|>
-            <Menu.Item
-              @skin="primary"
+          <AuDropdown
+            data-test-translation-received-panel-dropdown
+            @icon="three-dots"
+            @title={{t "more"}}
+            @hideText={{true}}
+            @alignment="right"
+          >
+            <AuButton
+              data-test-translation-received-panel-proof-request
+              @skin="link"
               {{on "click" this.openProofRequestModal}}
+              role="menuitem"
             >
               {{t "request-proof"}}
-            </Menu.Item>
-            <Menu.Item
+            </AuButton>
+            <AuButton
               data-test-translation-received-panel-edit
-              @skin="primary"
+              @skin="link"
               {{on "click" this.openTranslationEditModal}}
+              role="menuitem"
             >
               {{t "edit-2"}}
-            </Menu.Item>
-          </Auk::DropdownMenu>
+            </AuButton>
+          </AuDropdown>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>

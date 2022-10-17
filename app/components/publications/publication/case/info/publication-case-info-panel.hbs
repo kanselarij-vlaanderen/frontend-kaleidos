@@ -110,7 +110,10 @@
 
               {{! wijze van publicatie }}
               <div class="auk-o-grid-col-3">
-                <div class="auk-form-group">
+                <div
+                  data-test-publication-case-info-panel-edit-publication-mode
+                  class="auk-form-group"
+                >
                   <Auk::Label>
                     {{t "kind-of-publication"}}
                   </Auk::Label>
@@ -157,7 +160,10 @@
 
               {{! Datum ontvangst }}
               <div class="auk-o-grid-col-3">
-                <div class="auk-form-group">
+                <div
+                  data-test-publication-case-info-panel-edit-opening-date
+                  class="auk-form-group"
+                >
                   <Auk::Label>{{t "publication-flow-opening-date"}}</Auk::Label>
                   <Auk::Datepicker
                     @date={{@publicationFlow.openingDate}}
@@ -205,7 +211,10 @@
           <div class="auk-o-grid-col-3">
             <div class="auk-content">
               <h4 class="auk-u-m-0">{{t "publication-urgent"}}</h4>
-              <p class="auk-u-m-0">
+              <p
+                data-test-publication-case-info-panel-urgency-level
+                class="auk-u-m-0"
+              >
                 {{#if @publicationFlow.urgencyLevel.isUrgent}}
                   <Auk::Icon @name="alert-triangle" @skin="warning" />
                 {{else}}
@@ -249,7 +258,10 @@
           <div class="auk-o-grid-col-3">
             <div class="auk-content">
               <h4 class="auk-u-m-0">{{t "kind-of-publication"}}</h4>
-              <p class="auk-u-m-0">
+              <p
+                data-test-publication-case-info-panel-publication-mode
+                class="auk-u-m-0"
+              >
                 {{#if @publicationFlow.mode}}
                   {{@publicationFlow.mode.label}}
                 {{else}}
@@ -263,7 +275,10 @@
           <div class="auk-o-grid-col-3">
             <div class="auk-content">
               <h4 class="auk-u-m-0">{{t "decision-date"}}</h4>
-              <p class="auk-u-m-0">
+              <p
+                data-test-publication-case-info-panel-decision-date
+                class="auk-u-m-0"
+              >
                 {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
                   <Auk::ButtonLink
                     data-test-publication-case-info-panel-start-date

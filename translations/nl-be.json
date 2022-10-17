@@ -261,6 +261,7 @@
   "no-ministers": "Geen ministers",
   "no-newsletter-info": "Nog geen kort bestek voor dit agendapunt.",
   "no-number-yet": "Nog geen nummer",
+  "user-rights": "Rechten",
   "no-rights": "Geen rechten",
   "no-rights-message": "U heeft zich aangemeld om binnen Kaleidos gebruiksrechten te bekomen.  De diensten van de kanselarij van de Vlaamse Regering behandelen uw aanvraag zo snel als mogelijk.  Dank voor uw begrip.",
   "page-not-found-title": "We kunnen de pagina niet vinden.",
@@ -323,6 +324,7 @@
   "search": "Zoeken",
   "search-placeholder": "Vul uw zoekterm in...",
   "case-search-placeholder": "Dossier zoeken...",
+  "user-search": "Gebruiker zoeken",
   "select": "Selecteer",
   "select-agenda": "Selecteer een agenda",
   "select-meeting": "Selecteer de vergadering",
@@ -1075,5 +1077,6 @@
   "word-document": "Word document",
   "as": "als",
   "limited-access": "Beperkte toegang",
-  "upload": "Opladen"
+  "upload": "Opladen",
+  "more": "Meer"
 }

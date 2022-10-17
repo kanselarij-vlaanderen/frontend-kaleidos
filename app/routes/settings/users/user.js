@@ -1,12 +1,12 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes
-export default Route.extend({
-  store: service(),
+export default class SettingsUsersUserRoute extends Route {
+  @service store;
 
   model(params) {
-    return this.store.findRecord('user', params.id);
-  },
-});
+    return this.store.findRecord('user', params.id, {
+      include: 'memberships.organization,memberships.role'
+    });
+  }
+}
