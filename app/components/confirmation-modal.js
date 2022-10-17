@@ -6,6 +6,7 @@ import templateOnly from '@ember/component/template-only';
  * @param confirmMessage {string} Text to display in the confirm button
  * @param cancelMessage {string} Text to display in the cancel button
  * @param alert {boolean} Whether the confirm button is in an alert state (i.e. red or blue)
+ * @param alert {boolean} Whether the confirm button is in a disabled state
  * @param loading {boolean} Whether the confirm button is in a loading state
  */
 export default templateOnly();
