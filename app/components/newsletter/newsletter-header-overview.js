@@ -82,7 +82,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       if (yield this.canSendMailCampaign()) {
         yield this.ensureMailCampaign();
 
-        if (this.mailCampaign?.isSent) {
+        if (this.mailCampaign.isSent) {
           this.toaster.error(this.intl.t('error-already-sent-newsletter'));
         } else {
           if (yield this.validateMailCampaign()) {
@@ -191,37 +191,38 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   }
 
   async canSendMailCampaign() {
-    let themisPublicationActivities = await this.args.meeting.themisPublicationActivities;
-    let themisPublicationActivity = themisPublicationActivities.find((activity) => activity.scope.includes('documents'));
+    const agenda = await this.store.queryOne('agenda', {
+      'filter[created-for][:id:]': this.args.meeting.id,
+      sort: '-created', // serialnumber
+    });
+    const themisPublicationActivities = await this.store.queryAll('themis-publication-activity', {
+      filter: {
+        meeting: {
+          ':id:': this.args.meeting.id,
+        },
+      },
+    });
+    const themisPublicationActivity = themisPublicationActivities.find((activity) => activity.scope.includes(CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS));
 
-    let hasDocumentPublicationPlanned = isPresent(themisPublicationActivity?.plannedDate);
-    let hasNotas = false;
-    let hasThemes = false;
-
-    const agendaitems = await this.store.query('agendaitem', {
+    const hasDocumentPublicationPlanned = isPresent(themisPublicationActivity?.plannedDate);
+    const hasThemesOrNotas = (await this.store.count('agendaitem', {
       filter: {
         agenda: {
-          ':id:': this.args.agenda.id,
+          ':id:': agenda.id,
         },
-        'type': {
+        type: {
           ':uri:': CONSTANTS.AGENDA_ITEM_TYPES.NOTA,
+        },
+        treatment: {
+          'newsletter-info': {
+            ':has:themes': true,
+          },
         },
       },
       'page[size]': PAGE_SIZE.AGENDAITEMS,
-    });
-    for (const agendaitem of agendaitems.toArray()) {
-      hasNotas = true;
+    })) > 0;
 
-      const agendaitemTreatment = await agendaitem.treatment;
-      const newsletterItem = await agendaitemTreatment.newsletterInfo;
-      const themes = await newsletterItem?.themes;
-      if (themes?.length) {
-        hasThemes = true;
-        break;
-      }
-    }
-
-    return hasDocumentPublicationPlanned && hasNotas && hasThemes;
+    return hasDocumentPublicationPlanned && hasThemesOrNotas;
   }
 
   async validateMailCampaign() {
