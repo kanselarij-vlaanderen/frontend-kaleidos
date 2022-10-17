@@ -56,7 +56,8 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   async openPieceUploadModal() {
     await this.ensureFreshData.perform();
     // TODO KAS-3631 refresh status? could be stale
-    if (this.currentAgenda.isDesignAgenda || this.meeting.isPreKaleidos) {
+    const agendaStatus = await this.currentAgenda.status;
+    if (agendaStatus.isDesignAgenda || this.meeting.isPreKaleidos) {
       this.isOpenPieceUploadModal = true;
     } else {
       this.openVerifyUploadOnApproved();
