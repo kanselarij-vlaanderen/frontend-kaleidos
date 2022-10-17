@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import chunk from 'frontend-kaleidos/utils/chunk';
 
 export default class SettingsOrganizationsIndexController extends Controller {
   @service store;
@@ -37,14 +36,13 @@ export default class SettingsOrganizationsIndexController extends Controller {
     });
 
     // Block all memberships, 10 at a time
-    for (const chonk of chunk(memberships.toArray(), 10)) {
-      yield Promise.all(
-        chonk.map((membership) => {
-          membership.status = blocked;
-          return membership.save();
-        })
-      )
-    }
+    yield Promise.all(
+      memberships
+        .toArray()
+        .map((membership) =>
+          this.updateMembershipStatus.perform(membership, blocked)
+        )
+    );
   }
 
   @task
@@ -66,13 +64,18 @@ export default class SettingsOrganizationsIndexController extends Controller {
     });
 
     // Unblock all memberships, 10 at a time
-    for (const chonk of chunk(memberships.toArray(), 10)) {
-      yield Promise.all(
-        chonk.map((membership) => {
-          membership.status = allowed;
-          return membership.save();
-        })
-      )
-    }
+    yield Promise.all(
+      memberships
+        .toArray()
+        .map((membership) =>
+          this.updateMembershipStatus.perform(membership, allowed)
+        )
+    );
+  }
+
+  @task({ maxConcurrency: 10, enqueue: true })
+  *updateMembershipStatus(membership, status) {
+    membership.status = status;
+    yield membership.save();
   }
 }
