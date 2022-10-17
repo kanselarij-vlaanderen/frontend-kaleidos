@@ -1079,5 +1079,5 @@
   "upload": "Opladen",
   "more": "Meer",
   "documents-on-approved-agenda-title": "Documenten wijzigen op een goedgekeurde agenda",
-  "documents-on-approved-agenda-warning": "Er is een recentere versie van deze agenda. Bent U zeker dat U de documenten wilt wijzigen op deze goedgekeurde agendaversie?"
+  "documents-on-approved-agenda-message": "Er is een recentere versie van deze agenda. Bent U zeker dat U de documenten wilt wijzigen op deze goedgekeurde agendaversie?"
 }
