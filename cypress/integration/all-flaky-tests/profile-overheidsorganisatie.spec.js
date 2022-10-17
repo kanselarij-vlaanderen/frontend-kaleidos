@@ -9,7 +9,7 @@ import utils from '../../selectors/utils.selectors';
 
 context('Testing the application as Overheid user', () => {
   beforeEach(() => {
-    cy.login('Overheid');
+    cy.login('Overheidsorganisatie');
   });
 
   // M-header toolbar tests
@@ -20,6 +20,7 @@ context('Testing the application as Overheid user', () => {
     cy.get(utils.mHeader.cases).should('exist');
     cy.get(utils.mHeader.newsletters).should('not.exist');
     cy.get(utils.mHeader.search).should('exist');
+    cy.get(utils.mHeader.signatures).should('not.exist');
     cy.get(utils.mHeader.settings).should('not.exist');
   });
 
