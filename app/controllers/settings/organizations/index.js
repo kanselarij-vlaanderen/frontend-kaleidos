@@ -1,4 +1,5 @@
 import Controller from '@ember/controller';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
@@ -17,6 +18,15 @@ export default class SettingsOrganizationsIndexController extends Controller {
 
   @tracked showBlockOrganization = false;
   @tracked showUnblockOrganization = false;
+
+  @tracked organizations = [];
+  @tracked selectedOrganizations = [];
+
+  @action
+  setOrganizations(organizations) {
+    this.organizations = organizations.map((organization) => organization.id);
+    this.selectedOrganizations = organizations;
+  }
 
   @task
   *blockOrganization() {
