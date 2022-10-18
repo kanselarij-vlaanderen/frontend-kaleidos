@@ -8,6 +8,27 @@
             @onChange={{this.setOrganizations}}
           />
         </div>
+        <div class="au-c-card au-o-box au-o-box--small">
+          <Auk::Label>{{t "filter-on-last-seen"}}</Auk::Label>
+          <div class="auk-form-group auk-u-position-relative au-u-margin-bottom-small">
+            <Auk::Label>{{t "from"}}</Auk::Label>
+            <Auk::Datepicker
+              @date={{this.dateFromBuffer}}
+              @onChange={{set this "dateFromBuffer"}}
+              @enableClear={{this.dateFromBuffer}}
+              @onClear={{set this "dateFromBuffer" null}}
+            />
+          </div>
+          <div class="auk-form-group auk-u-position-relative">
+            <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
+            <Auk::Datepicker
+              @date={{this.dateToBuffer}}
+              @onChange={{set this "dateToBuffer"}}
+              @enableClear={{this.dateToBuffer}}
+              @onClear={{set this "dateToBuffer" null}}
+            />
+          </div>
+        </div>
       </div>
     </div>
     <div class="auk-o-grid-col-10">

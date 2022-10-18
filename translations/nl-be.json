@@ -1107,6 +1107,7 @@
   "unblock-organization-explanation": "Gebruikers die een werkrelatie hebben met deze organisatie krijgen opnieuw toegang tot Kaleidos.",
   "unblock-organization-are-you-sure": "Ben je zeker dat je deze organisatie wil deblokkeren?",
   "last-seen": "Laatst gezien",
+  "filter-on-last-seen": "Filteren op laatst gezien",
   "filter-on-organization": "Filteren op organisatie",
   "ovo-or-organization": "OVO of organisatie",
   "list-of-ovo-codes": "Lijst met OVO codes",

@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import formatDate from 'frontend-kaleidos/utils/format-date-search-param';
 
 export default class UsersSettingsController extends Controller {
   @service store;
@@ -25,6 +26,28 @@ export default class UsersSettingsController extends Controller {
 
   @tracked organizations = [];
   @tracked selectedOrganizations = [];
+  @tracked dateFrom;
+  @tracked _dateFromBuffer;
+  @tracked dateTo;
+  @tracked _dateToBuffer;
+
+  get dateToBuffer() {
+    return this._dateToBuffer;
+  }
+
+  set dateToBuffer(date) {
+    this._dateToBuffer = date;
+    this.dateTo = formatDate(date);
+  }
+
+  get dateFromBuffer() {
+    return this._dateFromBuffer;
+  }
+
+  set dateFromBuffer(date) {
+    this._dateFromBuffer = date;
+    this.dateFrom = formatDate(date);
+  }
 
   @action
   async setOrganizations(organizations) {

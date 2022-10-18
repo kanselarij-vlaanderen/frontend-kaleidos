@@ -2,6 +2,9 @@ import Route from '@ember/routing/route';
 import { isPresent } from '@ember/utils';
 import { inject as service } from '@ember/service';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
+import parseDate from 'frontend-kaleidos/utils/parse-date-search-param';
+import startOfDay from 'date-fns/startOfDay';
+import endOfDay from 'date-fns/endOfDay';
 
 export default class SettingsUsersIndexRoute extends Route {
   @service store;
@@ -26,6 +29,14 @@ export default class SettingsUsersIndexRoute extends Route {
       refreshModel: true,
       as: 'organisaties',
     },
+    dateFrom: {
+      refreshModel: true,
+      as: 'vanaf',
+    },
+    dateTo: {
+      refreshModel: true,
+      as: 'tot',
+    },
   };
 
   constructor() {
@@ -47,6 +58,18 @@ export default class SettingsUsersIndexRoute extends Route {
         organization: {
           ':id:': params.organizations.join(','),
         },
+      };
+    }
+
+    if (params.dateFrom) {
+      filter['login-activity'] = {
+        ':gte:start-date': startOfDay(parseDate(params.dateFrom)).toISOString(),
+      };
+    }
+
+    if (params.dateTo) {
+      filter['login-activity'] = {
+        ':lte:start-date': endOfDay(parseDate(params.dateTo)).toISOString(),
       };
     }
 
@@ -79,5 +102,8 @@ export default class SettingsUsersIndexRoute extends Route {
 
     const organizationIds = this.lastParams.committed.organizations;
     controller.selectedOrganizations = await Promise.all(organizationIds.map((id) => this.store.findRecord('user-organization', id)));
+
+    controller.dateFromBuffer = parseDate(this.lastParams.committed.dateFrom);
+    controller.dateToBuffer = parseDate(this.lastParams.committed.dateTo);
   }
 }
