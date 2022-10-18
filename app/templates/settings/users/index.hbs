@@ -1,6 +1,14 @@
 <div class="auk-scroll-wrapper__body au-u-background-gray-100">
   <div class="auk-o-grid au-o-grid--stretch">
     <div class="auk-o-grid-col-2">
+      <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny au-u-padding-right-none">
+        <div class="au-c-card au-o-box au-o-box--small">
+          <OrganizationFilter
+            @selected={{this.selectedOrganizations}}
+            @onChange={{this.setOrganizations}}
+          />
+        </div>
+      </div>
     </div>
     <div class="auk-o-grid-col-10">
       <form {{on "submit" this.search}} class="auk-navbar auk-navbar--bordered-bottom au-u-padding-left-none au-u-padding-right-small au-u-padding-top-small au-u-padding-bottom-small au-u-flex--between au-u-flex--spaced-tiny">

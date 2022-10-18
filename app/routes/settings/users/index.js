@@ -22,6 +22,10 @@ export default class SettingsUsersIndexRoute extends Route {
       refreshModel: true,
       as: 'sorteer',
     },
+    organizations: {
+      refreshModel: true,
+      as: 'organisaties',
+    },
   };
 
   constructor() {
@@ -36,7 +40,18 @@ export default class SettingsUsersIndexRoute extends Route {
       params.page = 0;
     }
 
+    const filter = {};
+
+    if (params.organizations.length) {
+      filter.memberships = {
+        organization: {
+          ':id:': params.organizations.join(','),
+        },
+      };
+    }
+
     const options = {
+      filter,
       sort: params.sort,
       page: {
         number: params.page,
@@ -54,12 +69,15 @@ export default class SettingsUsersIndexRoute extends Route {
     return this.store.query('user', options);
   }
 
-  setupController(controller) {
+  async setupController(controller) {
     super.setupController(...arguments);
 
     if (controller.page !== this.lastParams.committed.page) {
       controller.page = this.lastParams.committed.page;
     }
     controller.searchTextBuffer = this.lastParams.committed.filter;
+
+    const organizationIds = this.lastParams.committed.organizations;
+    controller.selectedOrganizations = await Promise.all(organizationIds.map((id) => this.store.findRecord('user-organization', id)));
   }
 }

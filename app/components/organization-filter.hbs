@@ -1,0 +1,53 @@
+<Auk::Label>{{t "filter-on-organization"}}</Auk::Label>
+<div class="au-u-flex au-u-flex--spaced-tiny">
+  <div class="au-u-1-1">
+    <PowerSelectMultiple
+      @placeholder={{t "ovo-or-organization"}}
+      @search={{perform this.search}}
+      @searchMessage={{t "ovo-or-organization"}}
+      @searchEnabled={{true}}
+      @noMatchesMessage={{t "no-results-found"}}
+      @loadingMessage={{t "please-be-patient"}}
+      @onChange={{this.toggleSelected}}
+      class="au-u-1-1"
+      as |organization|
+    >
+      {{organization.name}} - {{organization.identifier}}
+    </PowerSelectMultiple>
+  </div>
+</div>
+<p class="au-u-h-functional au-u-margin-top-tiny">
+  <AuLinkExternal
+    @icon="external"
+    @iconAlignment="right"
+    href="https://wegwijs.vlaanderen.be/#/organisations"
+  >
+    {{t "list-of-ovo-codes"}}
+  </AuLinkExternal>
+</p>
+{{#if @selected}}
+  <AuHr />
+{{/if}}
+<div class="au-u-flex au-u-flex--column">
+  {{#each @selected as |organization|}}
+    <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--between au-u-flex--vertical-center">
+      <div>
+        <p class="au-u-muted">
+          {{organization.identifier}}
+        </p>
+        <p>
+          {{organization.name}}
+        </p>
+      </div>
+      <div>
+        <Auk::Button
+          @skin="muted-borderless"
+          @layout="icon-only"
+          @icon="x"
+          class="au-u-1-1"
+          {{on "click" (fn this.toggleSelected (array organization))}}
+        />
+      </div>
+    </div>
+  {{/each}}
+</div>

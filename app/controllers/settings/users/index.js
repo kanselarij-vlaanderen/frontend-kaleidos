@@ -23,6 +23,15 @@ export default class UsersSettingsController extends Controller {
   @tracked showUnblockMembership = false;
   @tracked showUnblockUser = false;
 
+  @tracked organizations = [];
+  @tracked selectedOrganizations = [];
+
+  @action
+  async setOrganizations(organizations) {
+    this.organizations = organizations.map((organization) => organization.id);
+    this.selectedOrganizations = organizations;
+  }
+
   @action
   search(e) {
     e.preventDefault();
