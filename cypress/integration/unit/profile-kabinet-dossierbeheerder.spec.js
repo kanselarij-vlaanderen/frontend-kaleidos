@@ -10,7 +10,7 @@ import utils from '../../selectors/utils.selectors';
 
 context('Testing the application as Kabinetdossierbeheerder', () => {
   beforeEach(() => {
-    cy.loginFlow('Kabinetdossierbeheerder');
+    cy.login('Kabinetdossierbeheerder');
     cy.wait(1000);
   });
 

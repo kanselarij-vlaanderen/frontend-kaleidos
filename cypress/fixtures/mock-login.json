@@ -69,7 +69,7 @@
       "relationships": {
         "account": {
           "data": {
-            "id": "c076573e-a252-4358-b3b3-23f63eb946ba7",
+            "id": "c076573e-a252-4358-b3b3-23f63eb946ba",
             "type": "accounts"
           }
         }

@@ -10,7 +10,7 @@ import utils from '../../selectors/utils.selectors';
 
 context('Testing the application as Overlegcomité raadgever', () => {
   beforeEach(() => {
-    cy.loginFlow('Overlegcomité raadgever');
+    cy.login('Overlegcomité raadgever');
     cy.wait(1000);
   });
 

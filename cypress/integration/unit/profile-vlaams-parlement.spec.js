@@ -10,7 +10,7 @@ import utils from '../../selectors/utils.selectors';
 
 context('Testing the application as Vlaams Parlement', () => {
   beforeEach(() => {
-    cy.loginFlow('Vlaams Parlement');
+    cy.login('Vlaams Parlement');
     cy.wait(1000);
   });
 

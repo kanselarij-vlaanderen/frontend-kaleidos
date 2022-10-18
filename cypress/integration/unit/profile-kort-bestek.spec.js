@@ -10,7 +10,7 @@ import utils from '../../selectors/utils.selectors';
 
 context('Testing the application as Kort bestek user', () => {
   beforeEach(() => {
-    cy.loginFlow('Kort bestek');
+    cy.login('Kort bestek');
     cy.wait(1000);
   });
 

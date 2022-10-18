@@ -10,7 +10,7 @@ import utils from '../../selectors/utils.selectors';
 
 context('Testing the application as OVRB', () => {
   beforeEach(() => {
-    cy.loginFlow('OVRB');
+    cy.login('OVRB');
     cy.wait(1000);
   });
 
