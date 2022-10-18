@@ -5,7 +5,7 @@ import publication from '../../selectors/publication.selectors';
 import auk from '../../selectors/auk.selectors';
 
 beforeEach(() => {
-  cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
+  cy.login('OVRB');
   cy.intercept('GET', '/regulation-types?**').as('getRegulationTypes');
   cy.visit('/publicaties');
   cy.wait('@getRegulationTypes');

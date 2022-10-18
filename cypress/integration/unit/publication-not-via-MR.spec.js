@@ -63,7 +63,7 @@ context('link publication not via MR to MR', () => {
   };
 
   beforeEach(() => {
-    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
+    cy.login('OVRB');
     cy.intercept('GET', '/regulation-types?**').as('getRegulationTypes');
     cy.visit('/publicaties');
     cy.wait('@getRegulationTypes');
