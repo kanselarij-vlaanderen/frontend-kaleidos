@@ -6,7 +6,6 @@ import { tracked } from '@glimmer/tracking';
 import { isPresent } from '@ember/utils';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 /**
  * @argument {Meeting} meeting
@@ -196,33 +195,22 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       sort: '-created', // serialnumber
     });
     const themisPublicationActivities = await this.store.queryAll('themis-publication-activity', {
-      filter: {
-        meeting: {
-          ':id:': this.args.meeting.id,
-        },
-      },
+      'filter[meeting][:id:]': this.args.meeting.id,
     });
     const themisPublicationActivity = themisPublicationActivities.find((activity) => activity.scope.includes(CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS));
 
     const hasDocumentPublicationPlanned = isPresent(themisPublicationActivity?.plannedDate);
-    const hasThemesOrNotas = (await this.store.count('agendaitem', {
-      filter: {
-        agenda: {
-          ':id:': agenda.id,
-        },
-        type: {
-          ':uri:': CONSTANTS.AGENDA_ITEM_TYPES.NOTA,
-        },
-        treatment: {
-          'newsletter-info': {
-            ':has:themes': true,
-          },
-        },
-      },
-      'page[size]': PAGE_SIZE.AGENDAITEMS,
+    const hasNotas = (await this.store.count('agendaitem', {
+      'filter[agenda][:id:]': agenda.id,
+      'filter[type][:uri:]': CONSTANTS.AGENDA_ITEM_TYPES.NOTA,
     })) > 0;
 
-    return hasDocumentPublicationPlanned && hasThemesOrNotas;
+    const hasThemes = (await this.store.count('newsletter-info', {
+      'filter[agenda-item-treatment][agendaitems][agenda][:id:]': agenda.id,
+      'filter[:has:themes]': true,
+    })) > 0;
+
+    return hasDocumentPublicationPlanned && hasThemes && hasNotas;
   }
 
   async validateMailCampaign() {
