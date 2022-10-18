@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 import { isPresent } from '@ember/utils';
 import { inject as service } from '@ember/service';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
@@ -143,5 +144,16 @@ export default class SettingsUsersIndexRoute extends Route {
 
     const roleIds = this.lastParams.committed.roles;
     controller.selectedRoles = await Promise.all(roleIds.map((id) => this.store.findRecord('role', id)));
+  }
+
+  @action
+  loading(transition) {
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const controller = this.controllerFor(this.routeName);
+    controller.isLoadingModel = true;
+    transition.promise.finally(() => {
+      controller.isLoadingModel = false;
+    });
+    return true;
   }
 }

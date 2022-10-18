@@ -36,6 +36,8 @@ export default class UsersSettingsController extends Controller {
   @tracked showBlockedUsers = false;
   @tracked showBlockedMemberships = false;
 
+  @tracked isLoadingModel = false;
+
   get dateToBuffer() {
     return this._dateToBuffer;
   }
