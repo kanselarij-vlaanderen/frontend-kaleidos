@@ -29,6 +29,13 @@
             />
           </div>
         </div>
+        <div class="au-c-card au-o-box au-o-box--small">
+          <UserRoleFilter
+            @selected={{this.selectedRoles}}
+            @onChange={{perform this.setRoles}}
+            @defaultEnableAllRoles={{is-empty this.selectedRoles}}
+          />
+        </div>
       </div>
     </div>
     <div class="auk-o-grid-col-10">

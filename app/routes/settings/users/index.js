@@ -37,6 +37,10 @@ export default class SettingsUsersIndexRoute extends Route {
       refreshModel: true,
       as: 'tot',
     },
+    roles: {
+      refreshModel: true,
+      as: 'rollen',
+    },
   };
 
   constructor() {
@@ -54,10 +58,9 @@ export default class SettingsUsersIndexRoute extends Route {
     const filter = {};
 
     if (params.organizations.length) {
-      filter.memberships = {
-        organization: {
-          ':id:': params.organizations.join(','),
-        },
+      filter.memberships ??= {};
+      filter.memberships.organization = {
+        ':id:': params.organizations.join(','),
       };
     }
 
@@ -71,6 +74,16 @@ export default class SettingsUsersIndexRoute extends Route {
       filter['login-activity'] = {
         ':lte:start-date': endOfDay(parseDate(params.dateTo)).toISOString(),
       };
+    }
+
+    if (params.roles.length) {
+      filter.memberships ??= {};
+      filter.memberships.role = {
+        ':id:': params.roles.join(','),
+      };
+    } else {
+      filter.memberships ??= {};
+      filter.memberships[':has-no:role'] = true;
     }
 
     const options = {
@@ -105,5 +118,8 @@ export default class SettingsUsersIndexRoute extends Route {
 
     controller.dateFromBuffer = parseDate(this.lastParams.committed.dateFrom);
     controller.dateToBuffer = parseDate(this.lastParams.committed.dateTo);
+
+    const roleIds = this.lastParams.committed.roles;
+    controller.selectedRoles = await Promise.all(roleIds.map((id) => this.store.findRecord('role', id)));
   }
 }

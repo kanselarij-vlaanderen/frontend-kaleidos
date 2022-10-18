@@ -19,7 +19,7 @@ export default class OrganizationFilterComponent extends Component {
 
   @action
   toggleSelected([organization]) {
-    if (this.args.selected.includes(organization)) {
+    if (this.selected.includes(organization)) {
       this.selected.splice(this.selected.indexOf(organization), 1);
     } else {
       this.selected.push(organization);

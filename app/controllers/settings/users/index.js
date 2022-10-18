@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { task, timeout } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import formatDate from 'frontend-kaleidos/utils/format-date-search-param';
 
@@ -30,6 +31,8 @@ export default class UsersSettingsController extends Controller {
   @tracked _dateFromBuffer;
   @tracked dateTo;
   @tracked _dateToBuffer;
+  @tracked roles = [];
+  @tracked selectedRoles = [];
 
   get dateToBuffer() {
     return this._dateToBuffer;
@@ -50,9 +53,16 @@ export default class UsersSettingsController extends Controller {
   }
 
   @action
-  async setOrganizations(organizations) {
+  setOrganizations(organizations) {
     this.organizations = organizations.map((organization) => organization.id);
     this.selectedOrganizations = organizations;
+  }
+
+  @task
+  *setRoles(roles) {
+    yield timeout(500);
+    this.roles = roles.map((role) => role.id);
+    this.selectedRoles = roles;
   }
 
   @action
