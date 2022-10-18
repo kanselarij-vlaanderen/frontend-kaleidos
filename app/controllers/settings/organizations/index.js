@@ -23,8 +23,21 @@ export default class SettingsOrganizationsIndexController extends Controller {
       'concept',
       CONSTANTS.USER_ACCESS_STATUSES.BLOCKED
     );
+    yield this.updateOrganizationStatus.perform(blocked);
+  }
 
-    this.organizationBeingBlocked.status = blocked;
+  @task
+  *unblockOrganization() {
+    const allowed = yield this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.USER_ACCESS_STATUSES.ALLOWED
+    );
+    yield this.updateOrganizationStatus.perform(allowed);
+  }
+
+  @task
+  *updateOrganizationStatus(status) {
+    this.organizationBeingBlocked.status = status;
     yield this.organizationBeingBlocked.save();
 
     const memberships = yield this.store.queryAll('membership', {
@@ -40,35 +53,7 @@ export default class SettingsOrganizationsIndexController extends Controller {
       memberships
         .toArray()
         .map((membership) =>
-          this.updateMembershipStatus.perform(membership, blocked)
-        )
-    );
-  }
-
-  @task
-  *unblockOrganization() {
-    const allowed = yield this.store.findRecordByUri(
-      'concept',
-      CONSTANTS.USER_ACCESS_STATUSES.ALLOWED
-    );
-
-    this.organizationBeingBlocked.status = allowed;
-    yield this.organizationBeingBlocked.save();
-
-    const memberships = yield this.store.queryAll('membership', {
-      filter: {
-        organization: {
-          ':id:': this.organizationBeingBlocked.id,
-        },
-      },
-    });
-
-    // Unblock all memberships, 10 at a time
-    yield Promise.all(
-      memberships
-        .toArray()
-        .map((membership) =>
-          this.updateMembershipStatus.perform(membership, allowed)
+          this.updateMembershipStatus.perform(membership, status)
         )
     );
   }
