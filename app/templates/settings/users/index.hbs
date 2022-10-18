@@ -36,6 +36,19 @@
             @defaultEnableAllRoles={{is-empty this.selectedRoles}}
           />
         </div>
+        <div class="au-c-card au-o-box au-o-box--small">
+          <Auk::Label>{{t "blocked-on"}}</Auk::Label>
+          <Auk::Checkbox
+            @checked={{this.showBlockedMemberships}}
+            @label={{t "membership"}}
+            {{on "click" (toggle "showBlockedMemberships" this)}}
+          />
+          <Auk::Checkbox
+            @checked={{this.showBlockedUsers}}
+            @label={{t "user"}}
+            {{on "click" (toggle "showBlockedUsers" this)}}
+          />
+        </div>
       </div>
     </div>
     <div class="auk-o-grid-col-10">

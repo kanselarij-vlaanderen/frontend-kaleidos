@@ -33,6 +33,8 @@ export default class UsersSettingsController extends Controller {
   @tracked _dateToBuffer;
   @tracked roles = [];
   @tracked selectedRoles = [];
+  @tracked showBlockedUsers = false;
+  @tracked showBlockedMemberships = false;
 
   get dateToBuffer() {
     return this._dateToBuffer;
