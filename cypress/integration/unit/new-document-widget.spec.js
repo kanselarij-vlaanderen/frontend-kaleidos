@@ -13,7 +13,7 @@ context('check the functions of the new document widget', () => {
     cy.logout();
   });
 
-  it.only('should check pdf replace, word upload, replace and delete', () => {
+  it('should check pdf replace, word upload, replace and delete', () => {
     const fileName = 'test pdf to replace';
     const agendaKind = 'Ministerraad';
     const agendaPlace = 'Cypress Room';
@@ -40,8 +40,8 @@ context('check the functions of the new document widget', () => {
     cy.get(document.documentCard.actions).should('not.be.disabled')
       .click();
     cy.get(document.documentCard.editPiece).click();
-    cy.get(document.edit.replace).click();
-    cy.get(document.edit.pdfFileUploader).within(() => {
+    cy.get(document.documentEdit.replace).click();
+    cy.get(document.documentEdit.pdfFileUploader).within(() => {
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     });
     cy.intercept('DELETE', '/files/**').as('deleteFile1');
@@ -54,7 +54,7 @@ context('check the functions of the new document widget', () => {
     cy.get(document.documentCard.actions).should('not.be.disabled')
       .click();
     cy.get(document.documentCard.editPiece).click();
-    cy.get(document.edit.sourceFileUploader).within(() => {
+    cy.get(document.documentEdit.sourceFileUploader).within(() => {
       cy.uploadFile(file.folder, file.fileName, wordExtension);
     });
     cy.intercept('PATCH', '/pieces/**').as('patchPieces2');
@@ -67,8 +67,8 @@ context('check the functions of the new document widget', () => {
     cy.get(document.documentCard.actions).should('not.be.disabled')
       .click();
     cy.get(document.documentCard.editPiece).click();
-    cy.get(document.edit.sourceFileReplace).click();
-    cy.get(document.edit.sourceFileReplacer).within(() => {
+    cy.get(document.documentEdit.sourceFileReplace).click();
+    cy.get(document.documentEdit.sourceFileReplacer).within(() => {
       cy.uploadFile(file.folder, replaceFilename, wordExtension);
     });
     cy.intercept('PATCH', '/pieces/**').as('patchPieces3');
@@ -81,7 +81,7 @@ context('check the functions of the new document widget', () => {
     cy.get(document.documentCard.actions).should('not.be.disabled')
       .click();
     cy.get(document.documentCard.editPiece).click();
-    cy.get(document.edit.sourceFileDelete).click();
+    cy.get(document.documentEdit.sourceFileDelete).click();
     cy.intercept('PATCH', '/pieces/**').as('patchPieces4');
     cy.get(utils.vlModalFooter.save).click()
       .wait('@patchPieces4');

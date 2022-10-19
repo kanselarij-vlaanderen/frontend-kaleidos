@@ -17,7 +17,7 @@ const selectors = {
   },
 
   // document-edit-modal
-  edit: {
+  documentEdit: {
     nameInput: '[data-test-document-edit-name-input]',
     replace: '[data-test-document-edit-replace]',
     sourceFileReplace: '[data-test-document-edit-source-file-replace]',
