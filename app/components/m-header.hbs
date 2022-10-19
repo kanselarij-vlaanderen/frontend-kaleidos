@@ -57,7 +57,7 @@
         </Auk::Toolbar::Item>
       {{/if}}
     </Auk::Toolbar::Group>
-    <Auk::Toolbar::Group @position="right">
+    <Auk::Toolbar::Group @position="right" class="auk-u-mr-3">
       {{#if this.environmentName}}
         <Auk::Toolbar::Item class="auk-u-mr-3">
           <div class="vlc-environment-pill {{this.environmentClass}}">
@@ -66,37 +66,40 @@
         </Auk::Toolbar::Item>
       {{/if}}
       <Auk::Toolbar::Item>
-        <Auk::DropdownMenu
-          @type="button-link"
-          @skin="muted"
-          @layout="icon-left"
-          @padded="padded"
+        <AuDropdown
+          @title={{t "help"}}
+          @alignment="right"
           @icon="circle-question"
-          @label={{t "help"}}
-        as |Menu|>
-          <Menu.Item @route="manual" target="_blank">
+          @iconAlignment="left"
+        >
+          <AuLink
+            @route="manual"
+            role="menuitem"
+            target="_blank"
+          >
             {{t "look-at-documentation"}}
-          </Menu.Item>
-          <Menu.Item @href="mailto:kaleidos.servicedesk@vlaanderen.be">
-            <div>
-              <span>{{t "contact-us"}}</span>
-              <span class="auk-u-text-muted auk-u-text-size--small">
-                {{t "email-servicedesk"}}
-              </span>
-            </div>
-          </Menu.Item>
-        </Auk::DropdownMenu>
+          </AuLink>
+          <AuHr />
+          <AuLink
+            href="mailto:kaleidos.servicedesk@vlaanderen.be"
+            target="_blank"
+            role="menuitem"
+          >
+            <span class="auk-u-text-nowrap">{{t "contact-us"}}</span>
+            <span class="auk-u-text-muted auk-u-text-size--small">
+              {{t "email-servicedesk"}}
+            </span>
+          </AuLink>
+        </AuDropdown>
       </Auk::Toolbar::Item>
-      <Auk::Toolbar::Item class="auk-u-mr-3">
+      <Auk::Toolbar::Item>
         {{#if this.currentSession.user}}
-          <Auk::DropdownMenu
-            @type="button-link"
-            @skin="muted"
-            @padded="padded"
-            @label={{this.currentSession.user.firstName}}
+          <AuDropdown
+            @title={{this.currentSession.user.firstName}}
+            @alignment="right"
             data-test-m-header-user-actions
-            as |Menu|>
-            <Menu.Item @textOnly={{true}}>
+          >
+            <div role="menuitem">
               <Auk::Avatar
                 @icon="user"
                 @name={{this.currentSession.user.fullName}}
@@ -109,15 +112,17 @@
                   {{this.currentSession.role.label}}
                 </p>
               </Auk::Avatar>
-            </Menu.Item>
-            <Auk::Menu::Divider />
-            <Menu.Item
-              {{on "click" this.logout}}
+            </div>
+            <AuHr />
+            <AuButton
               data-test-m-header-user-action-logout
+              @skin="link"
+              {{on "click" this.logout}}
+              role="menuitem"
             >
               {{t "sign-out"}}
-            </Menu.Item>
-          </Auk::DropdownMenu>
+            </AuButton>
+          </AuDropdown>
         {{else}}
           <Auk::ButtonLink
             @route="login"
