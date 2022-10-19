@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
@@ -65,15 +66,23 @@ export default class SettingsOrganizationsIndexRoute extends Route {
     return this.store.query('user-organization', options);
   }
 
-  async setupController(controller) {
+  setupController(controller) {
     super.setupController(...arguments);
 
     if (controller.page !== this.lastParams.committed.page) {
       controller.page = this.lastParams.committed.page;
     }
     controller.searchTextBuffer = this.lastParams.committed.filter;
+  }
 
-    const organizationIds = this.lastParams.committed.organizations;
-    controller.selectedOrganizations = await Promise.all(organizationIds.map((id) => this.store.findRecord('user-organization', id)));
+  @action
+  loading(transition) {
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const controller = this.controllerFor(this.routeName);
+    controller.isLoadingModel = true;
+    transition.promise.finally(() => {
+      controller.isLoadingModel = false;
+    });
+    return true;
   }
 }

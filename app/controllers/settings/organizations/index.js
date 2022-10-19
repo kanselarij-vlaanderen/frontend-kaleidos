@@ -14,6 +14,8 @@ export default class SettingsOrganizationsIndexController extends Controller {
   @tracked sort = 'identifier';
   @tracked filter;
 
+  @tracked isLoadingModel = false;
+
   @tracked organizationBeingBlocked = null;
 
   @tracked showBlockOrganization = false;
@@ -22,10 +24,20 @@ export default class SettingsOrganizationsIndexController extends Controller {
   @tracked organizations = [];
   @tracked selectedOrganizations = [];
 
+  constructor() {
+    super(...arguments);
+    this.loadSelectedOrganizations.perform();
+  }
+
   @action
   setOrganizations(organizations) {
     this.organizations = organizations.map((organization) => organization.id);
     this.selectedOrganizations = organizations;
+  }
+
+  @task
+  *loadSelectedOrganizations() {
+    this.selectedOrganizations = yield Promise.all(this.organizations.map((id) => this.store.findRecord('user-organization', id)));
   }
 
   @task
