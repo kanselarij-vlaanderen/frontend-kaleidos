@@ -127,6 +127,9 @@
       @onClose={{set this "isOpenVerifyUploadOnApproved" false}}
     />
     <Auk::Modal::Body>
+      {{#if this.currentAgenda.nextVersion}}
+        <p>{{t "documents-on-approved-agenda-with-next-version"}}</p>
+      {{/if}}
       <p>{{t "documents-on-approved-agenda-message"}}</p>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{set this "isOpenVerifyUploadOnApproved" false}}>
