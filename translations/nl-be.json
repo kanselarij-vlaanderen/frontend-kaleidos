@@ -555,6 +555,7 @@
   "success-unpublish-from-web": "Publicatie zal teruggetrokken worden van de website.",
   "error-publish-to-web": "Er ging iets mis bij het publiceren naar de website",
   "error-unpublish-from-web": "Er ging iets mis bij het terugtrekken van de publicatie van de website",
+  "error-cannot-send-newsletter": "De nieuwsbrief kan niet verzonden worden. Kijk de data van de vergadering na (nota's, thema's, datum vrijgave documenten).",
   "error-send-newsletter": "Er ging iets mis tijdens het versturen van de nieuwsbrief. Contacteer de administrator of probeer het opnieuw.",
   "error-send-belga": "Er ging iets mis tijdens het versturen van de nieuwsbrief naar Belga. Contacteer de administrator of probeer het opnieuw.",
   "error-old-newsletter": "De nieuwsbrief die u probeerde te verzenden was meer dan 10 minuten oud. Maak een nieuwe aan.",
