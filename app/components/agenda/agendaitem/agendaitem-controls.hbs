@@ -1,57 +1,76 @@
 {{#if @currentAgenda.status.isDesignAgenda}}
-  {{#if
-    (or this.isDeletable this.areDecisionActionsEnabled)
-  }}
+  {{#if (or this.isDeletable this.areDecisionActionsEnabled)}}
     <WebComponents::AuButtonToolbar>
-      <Auk::DropdownMenu
-        @label={{t "actions"}}
-        class="auk-u-hidden@print"
+      <AuDropdown
         data-test-agendaitem-controls-actions={{true}}
-      as |Menu|>
+        @skin="secondary"
+        @title={{t "actions"}}
+        @alignment="right"
+        class="auk-u-hidden@print"
+      >
         {{#if this.areDecisionActionsEnabled}}
-          {{#let this.decisionActivity.decisionResultCode as |resultCode| }}
+          {{#let this.decisionActivity.decisionResultCode as |resultCode|}}
             {{#if resultCode.isPostponed}}
-              <Menu.Item {{on "click" this.resetDecisionResultCode.perform}} data-test-agendaitem-controls-action-postpone-revert>
+              <AuButton
+                data-test-agendaitem-controls-action-postpone-revert
+                @skin="link"
+                {{on "click" this.resetDecisionResultCode.perform}}
+                role="menuitem"
+              >
                 {{t "postpone-revert"}}
-              </Menu.Item>
+              </AuButton>
             {{else if resultCode.isRetracted}}
-              <Menu.Item {{on "click" this.resetDecisionResultCode.perform}}>
+              <AuButton
+                @skin="link"
+                {{on "click" this.resetDecisionResultCode.perform}}
+                role="menuitem"
+              >
                 {{t "retract-revert"}}
-              </Menu.Item>
+              </AuButton>
             {{else}}
-              <Menu.Item {{on "click" this.postponeAgendaitem.perform}} data-test-agendaitem-controls-action-postpone>
+              <AuButton
+                data-test-agendaitem-controls-action-postpone
+                @skin="link"
+                {{on "click" this.postponeAgendaitem.perform}}
+                role="menuitem"
+              >
                 {{t "postpone"}}
-              </Menu.Item>
-              <Menu.Item {{on "click" this.retractAgendaitem.perform}}>
+              </AuButton>
+              <AuButton
+                @skin="link"
+                {{on "click" this.retractAgendaitem.perform}}
+                role="menuitem"
+              >
                 {{t "retract"}}
-              </Menu.Item>
+              </AuButton>
             {{/if}}
           {{/let}}
         {{/if}}
         {{#if (or this.currentSession.isAdmin (await this.isDeletable))}}
-          <Menu.Item
-            @skin="danger"
+          <AuButton
             data-test-agendaitem-controls-action-delete
+            @skin="link"
+            @alert={{true}}
+            role="menuitem"
             {{on "click" this.toggleIsVerifying}}
           >
             {{t "delete"}}
-          </Menu.Item>
+          </AuButton>
         {{/if}}
-      </Auk::DropdownMenu>
+      </AuDropdown>
     </WebComponents::AuButtonToolbar>
   {{else}}
     <div class="auk-loader" role="alert" aria-busy="true"></div>
   {{/if}}
 {{/if}}
-
 {{#if this.isVerifying}}
   <WebComponents::VlModalVerify
     @title={{t "delete-agendaitem"}}
     @message={{this.deleteWarningText}}
     @cancel={{this.toggleIsVerifying}}
-    @verify={{fn this.verifyDelete @agendaitem}}/>
+    @verify={{fn this.verifyDelete @agendaitem}}
+  />
 {{/if}}
-
 {{#if this.setDecisionResultCode.isRunning}}
   <WebComponents::VlModal
     @isOverlay={{true}}
@@ -69,7 +88,6 @@
     </Auk::Modal::Body>
   </WebComponents::VlModal>
 {{/if}}
-
 {{#if this.showLoader}}
   <WebComponents::LoadingOverlay />
 {{/if}}

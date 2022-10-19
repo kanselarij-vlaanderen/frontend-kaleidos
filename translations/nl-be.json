@@ -130,6 +130,8 @@
   "number-of-words": "Aantal woorden",
   "number-of-pages-to-translate": "Aantal te vertalen bladzijden",
   "number-of-words-to-translate": "Aantal te vertalen woorden",
+  "number-of-users": "Aantal gebruikers",
+  "users": "gebruikers",
   "document-add": "Document toevoegen",
   "document-link-old": "Reeds bezorgde documenten koppelen",
   "document-delete": "Document verwijderen",
@@ -214,6 +216,7 @@
   "manage-subcase-types": "Procedurestap types beheer",
   "manage-user-roles": "Gebruikersbeheer",
   "manage-users": "Gebruikersbeheer",
+  "manage-organizations": "Organisatiebeheer",
   "mandatee": "Mandataris",
   "mandatee-approval": "Goedkeuring co-agendering",
   "meeting-new": "nieuwe vergadering",
@@ -552,6 +555,7 @@
   "success-unpublish-from-web": "Publicatie zal teruggetrokken worden van de website.",
   "error-publish-to-web": "Er ging iets mis bij het publiceren naar de website",
   "error-unpublish-from-web": "Er ging iets mis bij het terugtrekken van de publicatie van de website",
+  "error-cannot-send-newsletter": "De nieuwsbrief kan niet verzonden worden. Kijk de data van de vergadering na (nota's, thema's, datum vrijgave documenten).",
   "error-send-newsletter": "Er ging iets mis tijdens het versturen van de nieuwsbrief. Contacteer de administrator of probeer het opnieuw.",
   "error-send-belga": "Er ging iets mis tijdens het versturen van de nieuwsbrief naar Belga. Contacteer de administrator of probeer het opnieuw.",
   "error-old-newsletter": "De nieuwsbrief die u probeerde te verzenden was meer dan 10 minuten oud. Maak een nieuwe aan.",
@@ -1083,5 +1087,6 @@
   "retracted-item": "Dit agendapunt is ingetrokken.",
   "retracted-subcase": "Deze procedurestap is ingetrokken op ",
   "propose-again": "Opnieuw agenderen",
-  "open-agenda": "Open agenda"
+  "open-agenda": "Open agenda",
+  "more": "Meer"
 }

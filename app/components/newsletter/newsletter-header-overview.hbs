@@ -44,67 +44,106 @@
     </Toolbar.Group>
     <Toolbar.Group @position="right" as |Group|>
       <Group.Item>
-        <Auk::DropdownMenu
+        <AuDropdown
           @skin="secondary"
-          @label={{t "actions"}}
+          @title={{t "actions"}}
+          @alignment="right"
           class="auk-u-hidden@print"
-          as |Menu|
         >
           {{#if (user-may "manage-newsletter-infos")}}
             {{#if this.loadMailCampaign.isRunning}}
-              <Menu.Item @textOnly={{true}}>
+              <div role="menuitem">
                 <Auk::Loader @message={{t "newsletter-loading-text"}} />
-              </Menu.Item>
+              </div>
             {{else}}
-              <Menu.Item {{on "click" this.openConfirmPublishAll}}>
+              <AuButton
+                @skin="link"
+                {{on "click" this.openConfirmPublishAll}}
+                role="menuitem"
+              >
                 {{t "send-newsitem-to-all"}}
-              </Menu.Item>
-              <Menu.Item {{on "click" this.openConfirmPublishMail}}>
+              </AuButton>
+              <AuButton
+                @skin="link"
+                {{on "click" this.openConfirmPublishMail}}
+                role="menuitem"
+              >
                 {{t "send-newsitem-to-mail"}}
-              </Menu.Item>
-              <Menu.Item {{on "click" this.openConfirmPublishBelga}}>
+              </AuButton>
+              <AuButton
+                @skin="link"
+                {{on "click" this.openConfirmPublishBelga}}
+                role="menuitem"
+              >
                 {{t "send-newsitem-to-belga"}}
-              </Menu.Item>
+              </AuButton>
             {{/if}}
           {{/if}}
           {{#if (user-may "manage-themis-publications")}}
-            <Menu.Item {{on "click" this.openConfirmPublishThemis}}>
+            <AuButton
+              @skin="link"
+              {{on "click" this.openConfirmPublishThemis}}
+              role="menuitem"
+            >
               {{t "send-newsitem-to-web"}}
-            </Menu.Item>
+            </AuButton>
           {{/if}}
           {{#if this.shouldShowPrintButton}}
-            <Menu.Divider />
-            <Menu.Item {{on "click" this.print}}>
+            <AuHr />
+            <AuButton
+              @skin="link"
+              {{on "click" this.print}}
+              role="menuitem"
+            >
               {{t "print"}}
-            </Menu.Item>
+            </AuButton>
           {{/if}}
-          {{#if (user-may "manage-newsletter-infos")}}
-            {{! TODO These are for developers use - in comments for follow up }}
-            {{!-- <Menu.Divider />  --}}
+          {{! TODO These are for developers use - in comments for follow up }}
+            {{!-- <AuHr />  --}}
             {{!--
-            <Menu.Item {{on "click" (perform this.loadNewsletterHTML)}}>
+            <AuButton
+              @skin="link"
+              {{on "click" (perform this.loadNewsletterHTML)}}
+              role="menuitem"
+            >
               {{t "show-newsletter"}}
-            </Menu.Item>
-            <Menu.Item {{on "click" (perform this.downloadBelgaXML)}}>
+            </AuButton>
+
+            <AuButton
+              @skin="link"
+              {{on "click" (perform this.downloadBelgaXML)}}
+              role="menuitem"
+            >
               {{t "generate-xml"}}
-            </Menu.Item>
+            </AuButton>
             --}}
+          {{#if (user-may "manage-newsletter-infos")}}
             {{#if this.mailCampaign}}
-              <Menu.Divider />
-              <Menu.Item @skin="danger" {{on "click" (perform this.deleteCampaign)}}>
+              <AuHr />
+              <AuButton
+                @skin="link"
+                @alert={{true}}
+                {{on "click" (perform this.deleteCampaign)}}
+                role="menuitem"
+              >
                 {{t "delete-campaign"}}
-              </Menu.Item>
+              </AuButton>
             {{/if}}
           {{/if}}
           {{#if (user-may "manage-themis-publications")}}
             {{#if this.isAlreadyPublished}}
-              <Menu.Divider />
-              <Menu.Item @skin="danger" {{on "click" this.openConfirmUnpublishThemis}}>
+              <AuHr />
+              <AuButton
+                @skin="link"
+                @alert={{true}}
+                {{on "click" this.openConfirmUnpublishThemis}}
+                role="menuitem"
+              >
                 {{t "retract-newsitem-from-web"}}
-              </Menu.Item>
+              </AuButton>
             {{/if}}
           {{/if}}
-        </Auk::DropdownMenu>
+        </AuDropdown>
       </Group.Item>
     </Toolbar.Group>
   </Auk::Toolbar>
