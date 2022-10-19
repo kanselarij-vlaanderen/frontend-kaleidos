@@ -161,6 +161,7 @@
   @onCancel={{this.toggleShowBlockMembership}}
   @confirmMessage={{t "block-membership"}}
   @alert={{true}}
+  @disabled={{is-empty this.membershipsBeingBlocked}}
 >
   <:title>
     {{t "block-membership"}}
@@ -191,6 +192,7 @@
   @onConfirm={{queue this.unblockMemberships this.toggleShowUnblockMembership}}
   @onCancel={{this.toggleShowUnblockMembership}}
   @confirmMessage={{t "unblock-membership"}}
+  @disabled={{is-empty this.membershipsBeingBlocked}}
 >
   <:title>
     {{t "unblock-membership"}}

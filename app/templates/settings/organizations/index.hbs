@@ -32,13 +32,13 @@
               <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
                 {{organization.name}}
                 {{#if organization.isBlocked}}
-                <AuPill
-                  @icon="circle-x"
-                  @skin="error"
-                  @size="small"
-                >
-                  {{t "blocked"}}
-                </AuPill>
+                  <AuPill
+                    @icon="circle-x"
+                    @skin="error"
+                    @size="small"
+                  >
+                    {{t "blocked"}}
+                  </AuPill>
                 {{/if}}
               </span>
             </td>
@@ -50,7 +50,7 @@
             <td class={{if organization.isBlocked "au-u-muted"}}>
               <div>
                 <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
-                  <Settings::Organizations::MembershipsCount
+                  <OrganizationMembershipsCount
                     @organization={{organization}}
                   />
                 </span>
