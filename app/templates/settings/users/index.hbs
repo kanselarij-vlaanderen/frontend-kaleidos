@@ -40,7 +40,11 @@
             />
             <th>{{t "organization"}}</th>
             <th>{{t "group"}}</th>
-            <th>{{t "last-seen"}}</th>
+            <ThSortable
+              @currentSorting={{this.sort}}
+              @field="login-activity.start-date"
+              @label={{t "last-seen"}}
+            />
             <th></th>
           </c.header>
           <c.body as |user|>
