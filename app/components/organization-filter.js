@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action  } from '@ember/object';
 import { task, timeout } from 'ember-concurrency';
+import { LIVE_SEARCH_DEBOUNCE_TIME } from 'frontend-kaleidos/config/config';
 
 /**
  * @param selected {UserOrganization[]} List of organizations that are selected for filtering
@@ -18,7 +19,7 @@ export default class OrganizationFilterComponent extends Component {
   }
 
   @action
-  toggleSelected([organization]) {
+  toggleSelected(organization) {
     if (this.selected.includes(organization)) {
       this.selected.splice(this.selected.indexOf(organization), 1);
     } else {
@@ -30,7 +31,7 @@ export default class OrganizationFilterComponent extends Component {
   @task
   *search(query) {
     if (query) {
-      yield timeout(500);
+      yield timeout(LIVE_SEARCH_DEBOUNCE_TIME);
     }
 
     return (yield this.store.query('user-organization', {

@@ -1,7 +1,7 @@
 <Auk::Label>{{t "filter-on-organization"}}</Auk::Label>
 <div class="au-u-flex au-u-flex--spaced-tiny">
   <div class="au-u-1-1">
-    <PowerSelectMultiple
+    <PowerSelect
       @placeholder={{t "ovo-or-organization"}}
       @search={{perform this.search}}
       @searchMessage={{t "ovo-or-organization"}}
@@ -13,7 +13,7 @@
       as |organization|
     >
       {{organization.name}} - {{organization.identifier}}
-    </PowerSelectMultiple>
+    </PowerSelect>
   </div>
 </div>
 <p class="au-u-h-functional au-u-margin-top-tiny">
@@ -45,7 +45,7 @@
           @layout="icon-only"
           @icon="x"
           class="au-u-1-1"
-          {{on "click" (fn this.toggleSelected (array organization))}}
+          {{on "click" (fn this.toggleSelected organization)}}
         />
       </div>
     </div>
