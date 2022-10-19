@@ -1,0 +1,50 @@
+<div class="auk-scroll-wrapper__body au-u-background-gray-100">
+  <div class="auk-o-grid au-o-grid--stretch">
+    <div class="auk-o-grid-col-2">
+    </div>
+    <div class="auk-o-grid-col-10">
+      <DataTable
+        @content={{@model}}
+        @class="auk-table auk-table--styled auk-table--bordered auk-table--noactions"
+        @page={{this.page}}
+        @size={{this.size}}
+        @sort={{this.sort}}
+        @noDataMessage={{t "no-results-found"}}
+        as |table|
+      >
+        <table.content as |c|>
+          <c.header>
+            <ThSortable
+              @currentSorting={{this.sort}}
+              @field="name"
+              @label={{t "organization"}}
+            />
+            <th>{{t "ovo-code"}}</th>
+            <th>{{t "number-of-users"}}</th>
+          </c.header>
+          <c.body as |organization|>
+            <td>
+              <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+                {{organization.name}}
+              </span>
+            </td>
+            <td>
+              <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+                {{organization.identifier}}
+              </span>
+            </td>
+            <td>
+              <div>
+                <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+                  <OrganizationMembershipsCount
+                    @organization={{organization}}
+                  />
+                </span>
+              </div>
+            </td>
+          </c.body>
+        </table.content>
+      </DataTable>
+    </div>
+  </div>
+</div>
