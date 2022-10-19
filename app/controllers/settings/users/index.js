@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { task, timeout } from 'ember-concurrency';
+import { LIVE_SEARCH_DEBOUNCE_TIME } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import formatDate from 'frontend-kaleidos/utils/format-date-search-param';
 
@@ -38,6 +39,13 @@ export default class UsersSettingsController extends Controller {
 
   @tracked isLoadingModel = false;
 
+  constructor() {
+    super(...arguments);
+
+    this.loadSelectedOrganizations.perform();
+    this.loadSelectedRoles.perform();
+  }
+
   get dateToBuffer() {
     return this._dateToBuffer;
   }
@@ -64,7 +72,7 @@ export default class UsersSettingsController extends Controller {
 
   @task
   *setRoles(roles) {
-    yield timeout(500);
+    yield timeout(LIVE_SEARCH_DEBOUNCE_TIME);
     this.roles = roles.map((role) => role.id);
     this.selectedRoles = roles;
   }
@@ -73,6 +81,16 @@ export default class UsersSettingsController extends Controller {
   search(e) {
     e.preventDefault();
     this.filter = this.searchTextBuffer;
+  }
+
+  @task
+  *loadSelectedOrganizations() {
+    this.selectedOrganizations = yield Promise.all(this.organizations.map((id) => this.store.findRecord('user-organization', id)));
+  }
+
+  @task
+  *loadSelectedRoles() {
+    this.selectedRoles = yield Promise.all(this.roles.map((id) => this.store.findRecord('role', id)));
   }
 
   @action

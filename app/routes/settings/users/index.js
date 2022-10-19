@@ -128,22 +128,15 @@ export default class SettingsUsersIndexRoute extends Route {
     return this.store.query('user', options);
   }
 
-  async setupController(controller) {
+  setupController(controller) {
     super.setupController(...arguments);
 
     if (controller.page !== this.lastParams.committed.page) {
       controller.page = this.lastParams.committed.page;
     }
     controller.searchTextBuffer = this.lastParams.committed.filter;
-
-    const organizationIds = this.lastParams.committed.organizations;
-    controller.selectedOrganizations = await Promise.all(organizationIds.map((id) => this.store.findRecord('user-organization', id)));
-
     controller.dateFromBuffer = parseDate(this.lastParams.committed.dateFrom);
     controller.dateToBuffer = parseDate(this.lastParams.committed.dateTo);
-
-    const roleIds = this.lastParams.committed.roles;
-    controller.selectedRoles = await Promise.all(roleIds.map((id) => this.store.findRecord('role', id)));
   }
 
   @action
