@@ -42,18 +42,14 @@ export default class UserRoleFilterComponent extends Component {
 
   @task
   *loadData() {
-    this.roles = yield Promise.all([
-      this.store.findRecordByUri('role', CONSTANTS.USER_ROLES.ADMIN),
-      this.store.findRecordByUri('role', CONSTANTS.USER_ROLES.SECRETARIE),
-      this.store.findRecordByUri('role', CONSTANTS.USER_ROLES.OVRB),
-      this.store.findRecordByUri('role', CONSTANTS.USER_ROLES.KORT_BESTEK),
-      this.store.findRecordByUri('role', CONSTANTS.USER_ROLES.MINISTER),
-      this.store.findRecordByUri('role', CONSTANTS.USER_ROLES.KABINET_DOSSIERBEHEERDER),
-      this.store.findRecordByUri('role', CONSTANTS.USER_ROLES.KABINET_MEDEWERKER),
-      this.store.findRecordByUri('role', CONSTANTS.USER_ROLES.OVERHEIDSORGANISATIE),
-      this.store.findRecordByUri('role', CONSTANTS.USER_ROLES.OVERLEGCOMITE_RAADGEVER),
-      this.store.findRecordByUri('role', CONSTANTS.USER_ROLES.VLAAMS_PARLEMENT),
-    ]);
+    this.roles = yield this.store.query('role', {
+      filter: {
+        'concept-scheme': {
+          ':uri:': CONSTANTS.CONCEPT_SCHEMES.USER_ROLES,
+        },
+      },
+      sort: 'position',
+    });
     if (this.args.defaultEnableAllRoles) {
       this.selected = this.roles;
       this.args.onChange?.(this.selected);

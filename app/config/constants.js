@@ -7,6 +7,7 @@ export default {
     ACCESS_LEVELS: 'http://themis.vlaanderen.be/id/concept-scheme/9b354d36-250b-43d7-887c-db28fe2fc6fb',
     RELEASE_STATUSES: 'http://themis.vlaanderen.be/id/concept-scheme/49c93ef8-ca21-4ff9-b6d3-8351b410b563',
     AGENDA_ITEM_TYPES: 'http://themis.vlaanderen.be/id/concept-scheme/55c9120c-6a3d-49c4-80c8-ed01e9b92a9b',
+    USER_ROLES: 'http://themis.vlaanderen.be/id/concept-scheme/b18acf1a-2a37-4b42-a549-b158d0065092',
   },
   ACCESS_LEVELS: {
     INTERN_SECRETARIE: 'http://themis.vlaanderen.be/id/concept/toegangsniveau/66804c35-4652-4ff4-b927-16982a3b6de8',
