@@ -3,14 +3,14 @@
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item class="auk-u-maximize-width">
         <div class="auk-form-group">
-          <Auk::Input
-            @icon="search"
-            @block={{true}}
+          <AuInput
             data-test-agendaitem-search-input
-            placeholder={{t "search-placeholder"}}
+            @icon="search"
+            @width="block"
             @value={{this.searchText}}
             @enter={{perform this.search}}
             {{on "input" (perform this.debouncedSearch)}}
+            placeholder={{t "search-placeholder"}}
           />
         </div>
       </Auk::Toolbar::Item>

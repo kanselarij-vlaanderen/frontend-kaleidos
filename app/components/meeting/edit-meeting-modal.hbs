@@ -71,14 +71,13 @@
         </Auk::Label>
         <div class="auk-o-flex">
           {{#unless this.isAnnexMeeting}}
-            <Auk::Input
+            <AuInput
               data-test-edit-meeting-meeting-number
               @type="number"
               @value={{this.meetingNumber}}
+              @disabled={{this.initializeMeetingNumber.isRunning}}
               id="meetingNumberInput"
-              disabled={{this.initializeMeetingNumber.isRunning}}
-              @width="medium"
-              class="auk-u-mr-2"
+              class="auk-input-group--w-medium auk-u-mr-2" {{! TODO: replace `auk-input-group--w-medium` with matching @width argument when it is implemented }}
             />
           {{/unless}}
           <div class="auk-o-flex__item">
@@ -100,11 +99,10 @@
       </div>
       {{#if this.isEditingNumberRepresentation}}
         <div class="auk-o-flex">
-          <Auk::Input
-            @width="medium"
-            @value={{this.numberRepresentation}}
-            class="auk-u-mr-2"
+          <AuInput
             data-test-edit-meeting-number-representation-input
+            @value={{this.numberRepresentation}}
+            class="auk-input-group--w-medium auk-u-mr-2" {{! TODO: replace `auk-input-group--w-medium` with matching @width argument when it is implemented }}
           />
           <Auk::Button
             @skin="primary"
@@ -122,10 +120,10 @@
           <Auk::Label>
             {{t "meeting-location"}}
           </Auk::Label>
-          <Auk::Input
-            @block={{true}}
-            @value={{this.extraInfo}}
+          <AuInput
             data-test-edit-meeting-meeting-location
+            @width="block"
+            @value={{this.extraInfo}}
           />
         </div>
       </div>

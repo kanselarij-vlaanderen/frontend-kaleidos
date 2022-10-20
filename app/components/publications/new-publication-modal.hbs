@@ -30,22 +30,22 @@
             {{t "publication-number"}}
           </Auk::Label>
           <div class="auk-u-mb">
-            <Auk::Input
+            <AuInput
               data-test-new-publication-number
               @type="number"
-              id="publicationNumberInput"
-              value={{this.number}}
+              @value={{this.number}}
               @error={{not this.isPublicationNumberValid}}
-              disabled={{this.initPublicationNumber.isRunning}}
+              @disabled={{this.initPublicationNumber.isRunning}}
               {{on "input" (perform this.setPublicationNumber)}}
+              id="publicationNumberInput"
             />
-            <Auk::Input
+            <AuInput
               data-test-new-publication-suffix
-              id="publicationSuffixInput"
-              @width="xsmall"
-              value={{this.suffix}}
+              @value={{this.suffix}}
               @error={{not this.isPublicationNumberValid}}
               {{on "input" (perform this.setPublicationNumberSuffix)}}
+              id="publicationSuffixInput"
+              class="auk-input-group--w-xsmall" {{! TODO: replace `auk-input-group--w-xsmall` with matching @width argument when it is implemented }}
             />
             <Utils::Generic::TooltipHelp class="auk-u-mx">
               {{t "publication-flow-publication-number-help"}}

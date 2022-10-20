@@ -12,7 +12,11 @@
   {{/if}}
   <td>
     {{#if @isEditingEnabled}}
-      <Auk::Input data-test-document-details-input type="text" @block={{true}} @value={{mut @row.name}} />
+      <AuInput
+        data-test-document-details-input
+        @block={{true}}
+        @value={{mut @row.name}}
+      />
     {{else}}
       {{@row.name}}
     {{/if}}

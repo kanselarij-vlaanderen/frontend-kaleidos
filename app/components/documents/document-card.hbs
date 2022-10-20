@@ -245,7 +245,7 @@
     <Auk::Modal::Body>
       {{#if this.newPiece}}
         <Auk::Label>{{t "name"}}</Auk::Label>
-        <Auk::Input @block={{true}} @value={{this.newPiece.name}} />
+        <AuInput @width="block" @value={{this.newPiece.name}} />
         <Documents::UploadedDocument
           @piece={{this.newPiece}}
           @onDelete={{perform this.deleteUploadedPiece}}
