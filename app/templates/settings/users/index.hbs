@@ -97,7 +97,11 @@
             />
             <th>{{t "organization"}}</th>
             <th>{{t "group"}}</th>
-            <th>{{t "last-seen"}}</th>
+            <ThSortable
+              @currentSorting={{this.sort}}
+              @field="login-activity.start-date"
+              @label={{t "last-seen"}}
+            />
             <th></th>
           </c.header>
           <c.body as |user|>
@@ -214,6 +218,7 @@
   @onCancel={{this.toggleShowBlockMembership}}
   @confirmMessage={{t "block-membership"}}
   @alert={{true}}
+  @disabled={{is-empty this.membershipsBeingBlocked}}
 >
   <:title>
     {{t "block-membership"}}
@@ -244,6 +249,7 @@
   @onConfirm={{queue this.unblockMemberships this.toggleShowUnblockMembership}}
   @onCancel={{this.toggleShowUnblockMembership}}
   @confirmMessage={{t "unblock-membership"}}
+  @disabled={{is-empty this.membershipsBeingBlocked}}
 >
   <:title>
     {{t "unblock-membership"}}

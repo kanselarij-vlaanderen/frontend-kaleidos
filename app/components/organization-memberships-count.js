@@ -6,7 +6,7 @@ import { task } from 'ember-concurrency';
 /**
  * @param organization {UserOrganization} The organization whose memberships we will count
  */
-export default class SettingsOrganizationsMembershipsCountComponent extends Component {
+export default class OrganizationMembershipsCountComponent extends Component {
   @service store;
 
   @tracked membershipsCount;

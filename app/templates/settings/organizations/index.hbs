@@ -45,13 +45,13 @@
               <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
                 {{organization.name}}
                 {{#if organization.isBlocked}}
-                <AuPill
-                  @icon="circle-x"
-                  @skin="error"
-                  @size="small"
-                >
-                  {{t "blocked"}}
-                </AuPill>
+                  <AuPill
+                    @icon="circle-x"
+                    @skin="error"
+                    @size="small"
+                  >
+                    {{t "blocked"}}
+                  </AuPill>
                 {{/if}}
               </span>
             </td>
@@ -64,7 +64,7 @@
               <div>
                 <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
                   <LinkTo @route="settings.users" @query={{hash organizations=(array organization.id)}}>
-                    <Settings::Organizations::MembershipsCount
+                    <OrganizationMembershipsCount
                       @organization={{organization}}
                     />
                   </LinkTo>

@@ -4,7 +4,6 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import chunk from 'frontend-kaleidos/utils/chunk';
 
 export default class SettingsOrganizationsIndexController extends Controller {
   @service store;
@@ -46,8 +45,21 @@ export default class SettingsOrganizationsIndexController extends Controller {
       'concept',
       CONSTANTS.USER_ACCESS_STATUSES.BLOCKED
     );
+    yield this.updateOrganizationStatus.perform(blocked);
+  }
 
-    this.organizationBeingBlocked.status = blocked;
+  @task
+  *unblockOrganization() {
+    const allowed = yield this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.USER_ACCESS_STATUSES.ALLOWED
+    );
+    yield this.updateOrganizationStatus.perform(allowed);
+  }
+
+  @task
+  *updateOrganizationStatus(status) {
+    this.organizationBeingBlocked.status = status;
     yield this.organizationBeingBlocked.save();
 
     const memberships = yield this.store.queryAll('membership', {
@@ -59,42 +71,18 @@ export default class SettingsOrganizationsIndexController extends Controller {
     });
 
     // Block all memberships, 10 at a time
-    for (const chonk of chunk(memberships.toArray(), 10)) {
-      yield Promise.all(
-        chonk.map((membership) => {
-          membership.status = blocked;
-          return membership.save();
-        })
-      )
-    }
+    yield Promise.all(
+      memberships
+        .toArray()
+        .map((membership) =>
+          this.updateMembershipStatus.perform(membership, status)
+        )
+    );
   }
 
-  @task
-  *unblockOrganization() {
-    const allowed = yield this.store.findRecordByUri(
-      'concept',
-      CONSTANTS.USER_ACCESS_STATUSES.ALLOWED
-    );
-
-    this.organizationBeingBlocked.status = allowed;
-    yield this.organizationBeingBlocked.save();
-
-    const memberships = yield this.store.queryAll('membership', {
-      filter: {
-        organization: {
-          ':id:': this.organizationBeingBlocked.id,
-        },
-      },
-    });
-
-    // Unblock all memberships, 10 at a time
-    for (const chonk of chunk(memberships.toArray(), 10)) {
-      yield Promise.all(
-        chonk.map((membership) => {
-          membership.status = allowed;
-          return membership.save();
-        })
-      )
-    }
+  @task({ maxConcurrency: 10, enqueue: true })
+  *updateMembershipStatus(membership, status) {
+    membership.status = status;
+    yield membership.save();
   }
 }

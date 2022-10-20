@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { isPresent } from '@ember/utils';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 
 export default class SettingsOrganizationsIndexRoute extends Route {
@@ -57,10 +56,6 @@ export default class SettingsOrganizationsIndexRoute extends Route {
       include: 'status',
     };
 
-    if (isPresent(params.filter)) {
-      options['filter'] = params.filter;
-    }
-
     this.lastParams.commit();
 
     return this.store.query('user-organization', options);
@@ -72,7 +67,6 @@ export default class SettingsOrganizationsIndexRoute extends Route {
     if (controller.page !== this.lastParams.committed.page) {
       controller.page = this.lastParams.committed.page;
     }
-    controller.searchTextBuffer = this.lastParams.committed.filter;
   }
 
   @action
