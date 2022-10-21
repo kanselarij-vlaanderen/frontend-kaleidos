@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 
@@ -21,6 +22,10 @@ export default class SettingsOrganizationsIndexRoute extends Route {
       refreshModel: true,
       as: 'sorteer',
     },
+    organizations: {
+      refreshModel: true,
+      as: 'organisaties',
+    },
   };
 
   constructor() {
@@ -35,7 +40,14 @@ export default class SettingsOrganizationsIndexRoute extends Route {
       params.page = 0;
     }
 
+    const filter = {};
+
+    if (params.organizations.length) {
+      filter[':id:'] = params.organizations.join(',');
+    }
+
     const options = {
+      filter,
       sort: params.sort,
       page: {
         number: params.page,
@@ -55,5 +67,16 @@ export default class SettingsOrganizationsIndexRoute extends Route {
     if (controller.page !== this.lastParams.committed.page) {
       controller.page = this.lastParams.committed.page;
     }
+  }
+
+  @action
+  loading(transition) {
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const controller = this.controllerFor(this.routeName);
+    controller.isLoadingModel = true;
+    transition.promise.finally(() => {
+      controller.isLoadingModel = false;
+    });
+    return true;
   }
 }
