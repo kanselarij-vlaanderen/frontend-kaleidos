@@ -22,6 +22,7 @@ export default class SettingsOrganizationsIndexController extends Controller {
 
   @tracked organizations = [];
   @tracked selectedOrganizations = [];
+  @tracked showBlockedOrganizations = false;
 
   @action
   setOrganizations(organizations) {

@@ -8,6 +8,13 @@
             @onChange={{this.setOrganizations}}
           />
         </div>
+        <div class="au-c-card au-o-box au-o-box--small">
+          <AuToggleSwitch
+            @label={{t "show-only-blocked"}}
+            @identifier="blocked"
+            @name="blocked"
+            @checked={{this.showBlockedOrganizations}}
+          />
         </div>
       </div>
     </div>
