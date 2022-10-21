@@ -294,4 +294,10 @@ context('Publications new features tests', () => {
     cy.get(publication.inscription.edit.save).click();
     cy.wait('@patchPublicationFlow');
   });
+
+  it('should test naar dossier button', () => {
+    cy.visit('publicaties/62C597CD03A74CBB92D216B3/dossier');
+    cy.get(publication.inscription.view.toSubcase).click();
+    cy.url().should('contain', 'dossiers/E1503C64-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+  });
 });

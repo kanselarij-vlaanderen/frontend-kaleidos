@@ -44,7 +44,7 @@ context('Publications proofs tests', () => {
 
     // set targetEndDate
     cy.get(publication.publicationsInfoPanel.edit).click();
-    cy.get(publication.publicationsInfoPanel.editView.targetEndDate).find(auk.datepicker)
+    cy.get(publication.publicationsInfoPanel.editView.targetEndDate).find(auk.datepicker.datepicker)
       .click();
     cy.setDateInFlatpickr(lateEndDate);
     cy.get(publication.publicationsInfoPanel.editView.save).click();

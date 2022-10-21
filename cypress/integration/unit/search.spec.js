@@ -325,4 +325,10 @@ context('Search tests', () => {
       });
     });
   });
+
+  it('sort by relevance', () => {
+    cy.visit('zoeken/agendapunten');
+    cy.get(route.search.input).clear();
+    // cy.get(route.search.input).type(searchTerm);
+  });
 });

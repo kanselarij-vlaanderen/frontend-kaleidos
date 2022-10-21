@@ -27,18 +27,18 @@ function fillInNewPublicationFields(fields) {
       .type(fields.suffix);
   }
   if (fields.decisionDate) {
-    cy.get(auk.datepicker).eq(0)
+    cy.get(auk.datepicker.datepicker).eq(0)
       .click();
     cy.setDateInFlatpickr(fields.decisionDate);
   }
   if (fields.receptionDate) {
-    cy.get(auk.datepicker).eq(1)
+    cy.get(auk.datepicker.datepicker).eq(1)
       .click();
     cy.setDateInFlatpickr(fields.receptionDate);
   }
   // Limiet publicatie
   if (fields.publicationDueDate) {
-    cy.get(auk.datepicker).eq(2)
+    cy.get(auk.datepicker.datepicker).eq(2)
       .click();
     cy.setDateInFlatpickr(fields.publicationDueDate);
   }
