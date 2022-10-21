@@ -22,12 +22,14 @@
             {{#if (and @newsletterItem (user-may "manage-newsletter-infos"))}}
               <div class="auk-o-flex auk-o-flex--justify-between ">
                 <div class="auk-u-ml-2">
-                  <Auk::ButtonLink
+                  <AuButton
                     data-test-newsletter-item-print-edit
+                    @skin="link"
+                    @icon="pencil"
                     {{on "click" this.openEdit}}
                   >
                     {{t "edit"}}
-                  </Auk::ButtonLink>
+                  </AuButton>
                 </div>
               </div>
             {{/if}}

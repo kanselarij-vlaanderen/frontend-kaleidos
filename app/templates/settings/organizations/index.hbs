@@ -1,6 +1,18 @@
 <div class="auk-scroll-wrapper__body au-u-background-gray-100">
   <div class="auk-o-grid au-o-grid--stretch">
     <div class="auk-o-grid-col-2">
+      <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny au-u-padding-right-none">
+        <div class="au-c-card au-o-box au-o-box--small">
+          {{#if this.loadSelectedOrganizations.isRunning}}
+            <Auk::Loader />
+          {{else}}
+            <OrganizationFilter
+              @selected={{this.selectedOrganizations}}
+              @onChange={{this.setOrganizations}}
+            />
+          {{/if}}
+        </div>
+      </div>
     </div>
     <div class="auk-o-grid-col-10">
       <DataTable
@@ -10,6 +22,7 @@
         @size={{this.size}}
         @sort={{this.sort}}
         @noDataMessage={{t "no-results-found"}}
+        @isLoading={{this.isLoadingModel}}
         as |table|
       >
         <table.content as |c|>
@@ -19,27 +32,72 @@
               @field="name"
               @label={{t "organization"}}
             />
-            <th>{{t "ovo-code"}}</th>
-            <th>{{t "number-of-users"}}</th>
+            <ThSortable
+              @currentSorting={{this.sort}}
+              @field="identifier"
+              @label={{t "ovo-code"}}
+            />
+            <th>{{t "users-seen"}}</th>
+            <th></th>
           </c.header>
           <c.body as |organization|>
-            <td>
+            <td class={{if organization.isBlocked "au-u-muted"}}>
               <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
                 {{organization.name}}
+                {{#if organization.isBlocked}}
+                  <AuPill
+                    @icon="circle-x"
+                    @skin="error"
+                    @size="small"
+                  >
+                    {{t "blocked"}}
+                  </AuPill>
+                {{/if}}
               </span>
             </td>
-            <td>
+            <td class={{if organization.isBlocked "au-u-muted"}}>
               <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
                 {{organization.identifier}}
               </span>
             </td>
-            <td>
+            <td class={{if organization.isBlocked "au-u-muted"}}>
               <div>
                 <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
-                  <OrganizationMembershipsCount
-                    @organization={{organization}}
-                  />
+                  <LinkTo @route="settings.users" @query={{hash organizations=(array organization.id)}}>
+                    <OrganizationMembershipsCount
+                      @organization={{organization}}
+                    />
+                  </LinkTo>
                 </span>
+              </div>
+            </td>
+            <td class="auk-u-text-align--right">
+              <div class="auk-o-flex auk-o-flex--justify-end">
+                <AuDropdown
+                  @skin="naked"
+                  @hideText={{true}}
+                  @alignment="right"
+                  @icon="three-dots"
+                >
+                  {{#if organization.isBlocked}}
+                    <AuButton
+                      @skin="naked"
+                      role="menuitem"
+                      {{on "click" (queue (toggle "showUnblockOrganization" this) (set this "organizationBeingBlocked" organization))}}
+                    >
+                      {{t "unblock-organization"}}
+                    </AuButton>
+                  {{else}}
+                    <AuButton
+                      @skin="naked"
+                      @alert={{true}}
+                      role="menuitem"
+                      {{on "click" (queue (toggle "showBlockOrganization" this) (set this "organizationBeingBlocked" organization))}}
+                    >
+                      {{t "block-organization"}}
+                    </AuButton>
+                  {{/if}}
+                </AuDropdown>
               </div>
             </td>
           </c.body>
@@ -48,3 +106,41 @@
     </div>
   </div>
 </div>
+
+<ConfirmationModal
+  @modalOpen={{this.showBlockOrganization}}
+  @onConfirm={{queue (perform this.blockOrganization) (toggle "showBlockOrganization" this)}}
+  @onCancel={{toggle "showBlockOrganization" this}}
+  @confirmMessage={{t "block-organization"}}
+  @alert={{true}}
+  @loading={{this.blockOrganization.isRunning}}
+>
+  <:title>
+    {{t "block-organization"}}
+  </:title>
+  <:body>
+    <div class="au-o-flow au-o-flow--small">
+      <p>{{t "block-organization-explanation"}}</p>
+      <p>{{t "block-organization-are-you-sure" user=this.organizationBeingBlocked.name htmlSafe=true}}</p>
+    </div>
+  </:body>
+</ConfirmationModal>
+
+
+<ConfirmationModal
+  @modalOpen={{this.showUnblockOrganization}}
+  @onConfirm={{queue (perform this.unblockOrganization) (toggle "showUnblockOrganization" this)}}
+  @onCancel={{toggle "showUnblockOrganization" this}}
+  @confirmMessage={{t "unblock-organization"}}
+  @loading={{this.unblockOrganization.isRunning}}
+>
+  <:title>
+    {{t "unblock-organization"}}
+  </:title>
+  <:body>
+    <div class="au-o-flow au-o-flow--small">
+      <p>{{t "unblock-organization-explanation"}}</p>
+      <p>{{t "unblock-organization-are-you-sure" user=this.organizationBeingBlocked.fullName htmlSafe=true}}</p>
+    </div>
+  </:body>
+</ConfirmationModal>

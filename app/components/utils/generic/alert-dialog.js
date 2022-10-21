@@ -22,11 +22,8 @@ export default class AlertDialog extends Component {
     return this.cancel.isRunning || this.confirm.isRunning;
   }
 
-  get confirmSkin() {
-    if (this.args.use === 'delete') {
-      return 'danger-primary';
-    }
-    return 'primary';
+  get isAlertConfirm() {
+    return this.args.use === 'delete';
   }
 
   get confirmIcon() {

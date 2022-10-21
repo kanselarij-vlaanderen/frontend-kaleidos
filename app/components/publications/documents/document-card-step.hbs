@@ -13,7 +13,7 @@
                   {{@piece.documentContainer.type.label}}
                 </span>
               </div>
-              <LinkTo @route="document" @model={{@piece.id}} target="_blank" class="auk-h4">
+              <LinkTo @route="document" @model={{@piece.id}} class="auk-h4">
                 {{@piece.name}}{{#if @piece.file}}.{{@piece.file.extension}}{{/if}}
               </LinkTo>
               <div class="vlc-document-card-content__meta">

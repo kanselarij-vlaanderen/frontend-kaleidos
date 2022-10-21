@@ -29,32 +29,37 @@
           @onChange={{perform this.selectPublicationFlow}}
         />
       {{else}}
-        <Auk::Button
+        <AuButton
           data-test-batch-documents-publication-row-new
+          @skin="primary"
           @icon="plus"
           {{on "click" (fn @onOpenNewPublicationModal @piece)}}
         >
           {{t "publications-new"}}
-        </Auk::Button>
+        </AuButton>
       {{/if}}
     </td>
   {{/if}}
   <td>
-    <WebComponents::AuButtonToolbar>
-      <Auk::Button
-        @layout="icon-only"
+    <AuButtonGroup>
+      <AuLink
+        @skin="button-naked"
         @icon="download"
-        @skin="borderless"
+        @hideText={{true}}
         @href={{@piece.file.namedDownloadLink}}
         download
-      />
-      <Auk::Button
-        @layout="icon-only"
+      >
+        {{t "download"}}
+      </AuLink>
+      <AuLink
+        @skin="button-naked"
         @icon="book"
-        @skin="borderless"
+        @hideText={{true}}
         @href={{@piece.viewDocumentURL}}
         target="_blank"
-      />
-    </WebComponents::AuButtonToolbar>
+      >
+        {{t "view-document-details"}}
+      </AuLink>
+    </AuButtonGroup>
   </td>
 </tr>

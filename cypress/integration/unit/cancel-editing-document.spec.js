@@ -147,13 +147,13 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.documentCard.name.value).contains(fileName);
     cy.get(document.documentCard.actions).click();
     cy.get(document.documentCard.editPiece).click();
-    cy.get(document.documentCard.name.input).type(extraName);
+    cy.get(document.documentEdit.nameInput).type(extraName);
     cy.get(utils.vlModalFooter.cancel).click();
     // assert old value is back
     cy.get(document.documentCard.name.value).contains(fileName);
     cy.get(document.documentCard.actions).click();
     cy.get(document.documentCard.editPiece).click();
-    cy.get(document.documentCard.name.input).type(extraName);
+    cy.get(document.documentEdit.nameInput).type(extraName);
     cy.get(utils.vlModalFooter.save).click();
     cy.wait('@patchPieces');
     // assert new value is set
