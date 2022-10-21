@@ -119,4 +119,20 @@
   </WebComponents::VlModal>
 {{/if}}
 
+<ConfirmationModal
+  @modalOpen={{this.isOpenVerifyUploadOnApproved}}
+  @onConfirm={{this.verifyUploadOnApproved}}
+  @onCancel={{set this "isOpenVerifyUploadOnApproved" false}}
+>
+  <:title>
+    {{t "documents-on-approved-agenda-title"}}
+  </:title>
+  <:body>
+      {{#if this.currentAgenda.nextVersion}}
+        <p>{{t "documents-on-approved-agenda-with-next-version"}}</p>
+      {{/if}}
+      <p>{{t "documents-on-approved-agenda-message"}}</p>
+  </:body>
+</ConfirmationModal>
+
 <Documents::LinkedDocuments @agendaitemOrSubcase={{this.agendaitem}} />
