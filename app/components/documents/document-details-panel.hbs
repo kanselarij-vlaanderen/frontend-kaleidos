@@ -47,6 +47,7 @@
         />
       </Auk::KeyValue>
       <Auk::KeyValue
+        data-test-document-details-panel-source-file
         @key={{t "source-file"}}
       >
         <div class="au-u-flex au-u-flex--between">
@@ -58,6 +59,7 @@
             </p>
           {{/if}}
           <AuButton
+            data-test-document-details-panel-upload
             @icon="upload"
             @iconAlignment="left"
             @skin="secondary"
@@ -75,19 +77,19 @@
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
-            <Auk::Button
+            <AuButton
               data-test-details-tab-cancel
-              @skin="borderless"
+              @skin="naked"
               @disabled={{this.isProcessing}}
               {{on "click" (perform this.cancelEditDetails)}}
             >
               {{t "cancel"}}
-            </Auk::Button>
+            </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <Auk::Button
+            <AuButton
               data-test-details-tab-save
               @skin="primary"
               @disabled={{this.isProcessing}}
@@ -95,7 +97,7 @@
               {{on "click" (perform this.saveDetails)}}
             >
               {{t "save"}}
-            </Auk::Button>
+            </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
@@ -118,22 +120,26 @@
               <Group.Item>
                 <AuButton
                   data-test-details-tab-delete
-                  @skin="secondary"
+                  @skin="naked"
                   @alert={{true}}
                   @icon="trash"
                   @hideText={{true}}
                   {{on "click" (fn (mut this.isOpenVerifyDeleteModal) true)}}
-                />
+                >
+                  {{t "delete"}}
+                </AuButton>
               </Group.Item>
             {{/if}}
             <Group.Item>
               <AuButton
                 data-test-details-tab-edit
-                @skin="secondary"
+                @skin="naked"
                 @icon="pencil"
                 @hideText={{true}}
                 {{on "click" this.openEditDetails}}
-              />
+              >
+                {{t "edit"}}
+              </AuButton>
             </Group.Item>
           </Toolbar.Group>
         {{/if}}
@@ -158,6 +164,7 @@
         />
       </Auk::KeyValue>
       <Auk::KeyValue
+        data-test-document-details-panel-source-file
         @key={{t (if (eq @piece.file.primarySource.extension "docx") "word-document" "source-file")}}
       >
         {{#if @piece.file.primarySource}}

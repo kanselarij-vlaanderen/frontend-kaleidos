@@ -9,15 +9,16 @@
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
-        <Auk::Button
+        <AuButton
           data-test-publications-table-display-config-close
-          @skin="muted"
-          @layout="icon-only"
+          @skin="naked"
           @icon="x"
+          @hideText={{true}}
+          disabled={{@closeDisabled}}
           {{on "click" @onClose}}
         >
-          <span class="auk-u-sr-only">{{t "close"}}</span>
-        </Auk::Button>
+          {{t "close"}}
+        </AuButton>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
@@ -45,7 +46,11 @@
       {{/each}}
     </Auk::CheckboxList>
   {{/each}}
-  <Auk::ButtonLink @skin="secondary" class="auk-u-mt-2" {{on "click" this.reset}}>
+  <AuButton
+    class="auk-u-mt-2"
+    @skin="link-secondary"
+    {{on "click" this.reset}}
+  >
     {{t "reset-display"}}
-  </Auk::ButtonLink>
+  </AuButton>
 </div>

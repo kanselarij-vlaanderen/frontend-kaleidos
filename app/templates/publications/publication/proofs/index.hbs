@@ -11,24 +11,24 @@
         </Toolbar.Group>
         <Toolbar.Group @position="right" as |Group|>
           <Group.Item>
-            <Auk::Button
+            <AuButton
               data-test-route-publications---proofs-upload
               @skin="secondary"
               @icon="plus"
               {{on "click" this.openProofUploadModal}}
             >
               {{t "upload-proof"}}
-            </Auk::Button>
+            </AuButton>
           </Group.Item>
           <Group.Item>
-            <Auk::Button
+            <AuButton
               data-test-route-publications---proofs-new-request
               @skin="primary"
               @icon="plus"
               {{on "click" this.openProofRequestModal}}
             >
               {{t "request-proof"}}
-            </Auk::Button>
+            </AuButton>
           </Group.Item>
         </Toolbar.Group>
       </Auk::Toolbar>

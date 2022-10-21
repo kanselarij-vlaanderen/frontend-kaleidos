@@ -5,12 +5,12 @@
     {{this.message}}
   </p>
   <div class="button-container">
-    <Auk::Button
-      @skin="tertiary"
-      {{action "clearAction"}}
+    <AuButton
       data-test-changes-alert-close
+      @skin="secondary"
+      {{action "clearAction"}}
     >
       {{this.buttonText}}
-    </Auk::Button>
+    </AuButton>
   </div>
 </div>

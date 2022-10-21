@@ -13,13 +13,14 @@
           {{#unless this.isEditing}}
             <Auk::Toolbar::Group @position="right">
               <Auk::Toolbar::Item>
-                <Auk::Button
+                <AuButton
                   data-test-publication-case-info-panel-edit
-                  @skin="tertiary"
+                  @skin="naked"
                   @icon="pencil"
-                  @layout="icon-only"
                   {{on "click" this.openEditingPanel}}
-                />
+                >
+                  {{t "edit"}}
+                </AuButton>
               </Auk::Toolbar::Item>
             </Auk::Toolbar::Group>
           {{/unless}}
@@ -136,19 +137,20 @@
                 >
                   <Auk::Label>{{t "decision-date"}}</Auk::Label>
                   {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
-                    <Auk::ButtonLink
-                      target="_blank"
+                    <AuLink
+                      @skin="primary"
                       @icon="chevron-right"
-                      @layout="icon-right"
+                      @iconAlignment="right"
                       @route="agenda.agendaitems.agendaitem"
                       @models={{this.modelsForAgendaitemRoute}}
+                      target="_blank"
                     >
                       {{#if @publicationFlow.decisionActivity.startDate}}
                         {{moment-format  @publicationFlow.decisionActivity.startDate}}
                       {{else}}
                         {{t "to-agenda"}}
                       {{/if}}
-                    </Auk::ButtonLink>
+                    </AuLink>
                   {{else}}
                     <Auk::Datepicker
                       @date={{this.decisionActivity.startDate}}
@@ -280,20 +282,22 @@
                 class="auk-u-m-0"
               >
                 {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
-                  <Auk::ButtonLink
+
+                  <AuLink
                     data-test-publication-case-info-panel-start-date
-                    target="_blank"
+                    @skin="primary"
                     @icon="chevron-right"
-                    @layout="icon-right"
+                    @iconAlignment="right"
                     @route="agenda.agendaitems.agendaitem"
                     @models={{this.modelsForAgendaitemRoute}}
+                    target="_blank"
                   >
                     {{#if @publicationFlow.decisionActivity.startDate}}
                       {{moment-format @publicationFlow.decisionActivity.startDate}}
                     {{else}}
                       {{t "to-agenda"}}
                     {{/if}}
-                  </Auk::ButtonLink>
+                  </AuLink>
                 {{else}}
                   {{#if @publicationFlow.decisionActivity.startDate}}
                     {{moment-format @publicationFlow.decisionActivity.startDate}}
@@ -359,20 +363,20 @@
         <Auk::Toolbar>
           <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
-              <Auk::Button
+              <AuButton
                 data-test-publication-case-info-panel-cancel
-                @skin="borderless"
+                @skin="naked"
                 @loading={{this.closeEditingPanel.isRunning}}
                 @disable={{this.save.isRunning}}
                 {{on "click" (perform this.closeEditingPanel)}}
               >
                 {{t "cancel"}}
-              </Auk::Button>
+              </AuButton>
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
-              <Auk::Button
+              <AuButton
                 data-test-publication-case-info-panel-save
                 @skin="primary"
                 @loading={{this.save.isRunning}}
@@ -383,7 +387,7 @@
                 {{on "click" (perform this.save)}}
               >
                 {{t "save"}}
-              </Auk::Button>
+              </AuButton>
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
         </Auk::Toolbar>

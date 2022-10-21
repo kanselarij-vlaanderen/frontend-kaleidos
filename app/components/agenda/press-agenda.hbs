@@ -39,11 +39,13 @@
                   {{#if (eq this.definite "false")}}
                     {{#if (user-may "manage-agendaitems")}}
                       <div class="auk-u-ml-2">
-                        <Auk::ButtonLink
+                        <AuButton
+                          @skin="link"
+                          @icon="pencil"
                           {{action "toggleIsEditing" agendaitem}}
                         >
                           {{t "edit"}}
-                        </Auk::ButtonLink>
+                        </AuButton>
                       </div>
                     {{/if}}
                   {{/if}}
@@ -58,10 +60,12 @@
                 <p></p>
               </div>
             {{else}}
-              <AgendaitemPressEdit
-                @agendaitem={{agendaitem}}
-                @isEditing={{agendaitem.isEditing}}
-              />
+              <div class="auk-u-mb-4">
+                <AgendaitemPressEdit
+                  @agendaitem={{agendaitem}}
+                  @isEditing={{agendaitem.isEditing}}
+                />
+              </div>
             {{/if}}
           {{/each}}
           <div class="auk-u-mb-8">

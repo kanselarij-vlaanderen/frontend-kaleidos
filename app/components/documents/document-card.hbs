@@ -38,13 +38,14 @@
                 </p>
               {{/if}}
               {{#if this.piece.file.primarySource.created}}
-                <p>
+                <p data-test-document-card-primary-source-created>
                   {{t "uploaded-at"}}
                   {{moment-format this.piece.file.primarySource.created}}
                   {{t "at"}}
                   {{moment-format this.piece.file.primarySource.created "HH:mm"}}
                   {{t "as"}}
                   <AuLinkExternal
+                    data-test-document-card-primary-source-link
                     href={{this.piece.file.primarySource.namedDownloadLink}}
                     download
                   >
@@ -76,15 +77,13 @@
           {{/if}}
           <Group.Item class="auk-o-flex">
             {{#unless this.loadPieceRelatedData.isRunning}}
-              <div class="auk-o-flex auk-o-flex--vertical-center">
-                <AccessLevelPill
-                  @accessLevel={{this.accessLevel}}
-                  @isEditable={{true}}
-                  @onChangeAccessLevel={{this.changeAccessLevel}}
-                  @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
-                  @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
-                />
-              </div>
+              <AccessLevelPill
+                @accessLevel={{this.accessLevel}}
+                @isEditable={{true}}
+                @onChangeAccessLevel={{this.changeAccessLevel}}
+                @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
+                @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
+              />
             {{/unless}}
           </Group.Item>
           {{#if this.signaturesEnabled}} {{! feature flag }}
@@ -196,15 +195,13 @@
                         </h6>
                       {{/if}}
                       <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"></div>
-                      <div class="auk-o-flex auk-o-flex--vertical-center">
-                        <AccessLevelPill
-                          @accessLevel={{piece.accessLevel}}
-                          @isEditable={{true}}
-                          @onChangeAccessLevel={{fn this.changeAccessLevelOfPiece piece}}
-                          @onConfirmChangeAccessLevel={{fn this.saveAccessLevelOfPiece piece}}
-                          @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
-                        />
-                      </div>
+                      <AccessLevelPill
+                        @accessLevel={{piece.accessLevel}}
+                        @isEditable={{true}}
+                        @onChangeAccessLevel={{fn this.changeAccessLevelOfPiece piece}}
+                        @onConfirmChangeAccessLevel={{fn this.saveAccessLevelOfPiece piece}}
+                        @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
+                      />
                     </div>
                     <div class="vlc-document-card-item__meta au-u-muted">
                       {{!-- no piece.created in legacy data --}}

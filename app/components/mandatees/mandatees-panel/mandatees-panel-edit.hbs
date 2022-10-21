@@ -1,6 +1,27 @@
-<div class="auk-box">
-  <div class="auk-form-group">
-    <div class="auk-u-mb-8">
+<Auk::Panel class="auk-panel--editing">
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title">{{t "ministers"}}</h4>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <AuButton
+            @skin="naked"
+            @icon="plus"
+            {{on "click" this.openSelectMandatee}}
+            data-test-mandatee-panel-edit-add-mandatee
+          >
+            {{t "add-minister"}}
+          </AuButton>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    <div class="auk-form-group">
       <table class="auk-table">
         <thead>
           <tr>
@@ -26,56 +47,49 @@
                 />
               </td>
               <td class="auk-u-text-align--right auk-o-flex--vertical-center">
-                <Auk::Button
-                  @skin="danger-borderless"
-                  @layout="icon-only"
-                  @icon="trash"
-                  {{on "click" (fn this.removeMandatee mandatee)}}
+                <AuButton
                   data-test-mandatee-panel-edit-row-delete
+                  @skin="naked"
+                  @alert={{true}}
+                  @icon="trash"
+                  @hideText={{true}}
+                  {{on "click" (fn this.removeMandatee mandatee)}}
                 >
                   {{t "delete"}}
-                </Auk::Button>
+                </AuButton>
               </td>
             </tr>
           {{/each}}
         </tbody>
       </table>
     </div>
-  </div>
-  <Auk::Toolbar @auto={{true}}>
-    <Auk::Toolbar::Group @position="left">
-      <Auk::Toolbar::Item>
-        <Auk::Button
-          @skin="tertiary"
-          @icon="plus"
-          {{on "click" this.openSelectMandatee}}
-          data-test-mandatee-panel-edit-add-mandatee
-        >
-          {{t "add-minister"}}
-        </Auk::Button>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-    <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
-        <Auk::Button
-          @skin="tertiary"
-          {{on "click" @onCancel}}
-          data-test-mandatee-panel-edit-cancel
-        >
-          {{t "cancel"}}
-        </Auk::Button>
-      </Auk::Toolbar::Item>
-      <Auk::Toolbar::Item>
-        <WebComponents::VlSaveButton
-          data-test-mandatee-panel-edit-save={{true}}
-          @text={{t "save"}}
-          @isLoading={{this.save.isRunning}}
-          @saveAction={{perform this.save}}
-        />
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-  </Auk::Toolbar>
-</div>
+  </Auk::Panel::Body>
+  <Auk::Panel::Footer>
+    <Auk::Toolbar @auto={{true}}>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <AuButton
+            @skin="naked"
+            {{on "click" @onCancel}}
+            data-test-mandatee-panel-edit-cancel
+          >
+            {{t "cancel"}}
+          </AuButton>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <WebComponents::VlSaveButton
+            data-test-mandatee-panel-edit-save={{true}}
+            @text={{t "save"}}
+            @isLoading={{this.save.isRunning}}
+            @saveAction={{perform this.save}}
+          />
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Footer>
+</Auk::Panel>
 {{#if this.showSelectMandateeModal}}
   <Mandatees::MandateesSelectorModal
     @referenceDate={{@referenceDate}}

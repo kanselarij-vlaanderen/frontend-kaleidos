@@ -8,8 +8,9 @@
       </h2>
       <div class="auk-o-flex">
         <div class="auk-u-ml-2">
-          <Auk::ButtonLink
+          <AuButton
             data-test-compare-show-changes
+            @skin="naked"
             {{on "click" this.toggleChangesOnly}}
           >
             {{#if this.isShowingChanges}}
@@ -17,7 +18,7 @@
             {{else}}
               {{t "show-changes"}}
             {{/if}}
-          </Auk::ButtonLink>
+          </AuButton>
         </div>
       </div>
     </div>

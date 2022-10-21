@@ -188,6 +188,7 @@ context('Publications new features tests', () => {
       .wait('@patchPublicationFlow')
       .wait('@deleteStatus');
     cy.get(auk.loader).should('not.exist');
+    cy.get(auk.modal.container).should('not.exist'); // wait for popup to be done
     cy.get(publication.publicationsInfoPanel.view.publicationDate).contains(today);
     cy.get(publication.statusPill.contentLabel).contains(endStatus);
   });

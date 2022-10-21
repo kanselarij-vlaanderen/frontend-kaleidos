@@ -29,13 +29,13 @@
     @cancelDisabled={{this.save.isRunning}}
     @onCancel={{@onCancel}}
   >
-    <Auk::Button
+    <AuButton
       data-test-edit-government-fields-modal-save
       @skin="primary"
       @loading={{this.save.isRunning}}
       {{on "click" (perform this.save)}}
     >
       {{t "save"}}
-    </Auk::Button>
+    </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>
