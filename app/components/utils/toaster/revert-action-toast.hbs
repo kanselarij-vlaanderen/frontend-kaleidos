@@ -9,13 +9,13 @@
     <p>
       {{@message}}
     </p>
-    <Auk::Button
-      @skin="borderless"
-      @layout="icon-only"
-      @icon="redo"
+    <AuButton
+      @skin="naked"
+      @icon="undo"
+      @hideText={{true}}
       {{on "click" @options.onUndo}}
     >
       {{t "undo"}}
-    </Auk::Button>
+    </AuButton>
   </div>
 </WebComponents::VlAlert>

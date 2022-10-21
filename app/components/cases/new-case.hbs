@@ -11,22 +11,26 @@
   <Auk::Toolbar @size="large" as |Toolbar|>
     <Toolbar.Group @position="left" as |Group|>
       <Group.Item>
-        <Auk::ButtonLink {{on "click" @onCancel}} data-test-new-case-cancel>
+        <AuButton
+          data-test-new-case-cancel
+          @skin="naked"
+          {{on "click" @onCancel}}
+        >
           {{t "cancel"}}
-        </Auk::ButtonLink>
+        </AuButton>
       </Group.Item>
     </Toolbar.Group>
     <Toolbar.Group @position="right" as |Group|>
       <Group.Item>
-        <Auk::Button
+        <AuButton
+          data-test-new-case-save={{true}}
           @skin="primary"
           @disabled={{this.isCreateDisabled}}
           @loading={{this.isLoading}}
-          data-test-new-case-save={{true}}
           {{on "click" (perform this.createCase)}}
         >
           {{t "create-case"}}
-        </Auk::Button>
+        </AuButton>
       </Group.Item>
     </Toolbar.Group>
   </Auk::Toolbar>

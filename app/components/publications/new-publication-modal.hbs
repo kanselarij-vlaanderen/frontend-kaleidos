@@ -136,26 +136,27 @@
     <Auk::Toolbar @size="large">
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
-          <Auk::ButtonLink
+          <AuButton
             data-test-new-publication-cancel
+            @skin="naked"
             @disabled={{this.save.isRunning}}
             {{on "click" @onCancel}}
           >
             {{t "cancel"}}
-          </Auk::ButtonLink>
+          </AuButton>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          <Auk::Button
+          <AuButton
+            data-test-new-publication-create
             @skin="primary"
             @loading={{this.save.isRunning}}
             @disabled={{or (not this.isValid) this.save.isRunning}}
-            data-test-new-publication-create
             {{on "click" (perform this.save)}}
           >
             {{t "publications-new-button-text"}}
-          </Auk::Button>
+          </AuButton>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>

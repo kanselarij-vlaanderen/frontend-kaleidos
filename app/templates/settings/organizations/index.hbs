@@ -1,6 +1,18 @@
 <div class="auk-scroll-wrapper__body au-u-background-gray-100">
   <div class="auk-o-grid au-o-grid--stretch">
     <div class="auk-o-grid-col-2">
+      <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny au-u-padding-right-none">
+        <div class="au-c-card au-o-box au-o-box--small">
+          {{#if this.loadSelectedOrganizations.isRunning}}
+            <Auk::Loader />
+          {{else}}
+            <OrganizationFilter
+              @selected={{this.selectedOrganizations}}
+              @onChange={{this.setOrganizations}}
+            />
+          {{/if}}
+        </div>
+      </div>
     </div>
     <div class="auk-o-grid-col-10">
       <DataTable
@@ -10,6 +22,7 @@
         @size={{this.size}}
         @sort={{this.sort}}
         @noDataMessage={{t "no-results-found"}}
+        @isLoading={{this.isLoadingModel}}
         as |table|
       >
         <table.content as |c|>
@@ -50,9 +63,11 @@
             <td class={{if organization.isBlocked "au-u-muted"}}>
               <div>
                 <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
-                  <OrganizationMembershipsCount
-                    @organization={{organization}}
-                  />
+                  <LinkTo @route="settings.users" @query={{hash organizations=(array organization.id)}}>
+                    <OrganizationMembershipsCount
+                      @organization={{organization}}
+                    />
+                  </LinkTo>
                 </span>
               </div>
             </td>

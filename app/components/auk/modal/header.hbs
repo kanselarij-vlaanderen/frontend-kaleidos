@@ -7,23 +7,33 @@
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
-        {{#if @resizeable}}
-          <Auk::Button
-            @icon={{if @isExpanded 'minimize' 'expand'}}
-            @skin="borderless"
-            @layout="icon-only"
-            {{on "click" @onResize}}
-          />
-        {{/if}}
-        {{#if this.closeable}}
-          <Auk::Button
-            @icon="x"
-            @skin="borderless"
-            @layout="icon-only"
-            disabled={{@closeDisabled}}
-            {{on "click" @onClose}}
-          />
-        {{/if}}
+        <AuButtonGroup>
+          {{#if @resizeable}}
+            <AuButton
+              @skin="naked"
+              @icon={{if @isExpanded "minimize" "expand"}}
+              @hideText={{true}}
+              {{on "click" @onResize}}
+            >
+              {{#if @isExpanded}}
+                {{t "minimize"}}
+              {{else}}
+                {{t "maximize"}}
+              {{/if}}
+            </AuButton>
+          {{/if}}
+          {{#if this.closeable}}
+            <AuButton
+              @skin="naked"
+              @icon="x"
+              @hideText={{true}}
+              disabled={{@closeDisabled}}
+              {{on "click" @onClose}}
+            >
+              {{t "close"}}
+            </AuButton>
+          {{/if}}
+        </AuButtonGroup>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>

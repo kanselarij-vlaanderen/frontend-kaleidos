@@ -7,12 +7,12 @@
     {{this.confirmationMessage}}
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
-    <Auk::Button
+    <AuButton
       @skin="primary"
       @loading={{this.confirmPublish.isRunning}}
       {{on "click" (perform this.confirmPublish)}}
     >
       {{t "publish-to-public"}}
-    </Auk::Button>
+    </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>

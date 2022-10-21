@@ -118,25 +118,25 @@
         <Auk::Toolbar as |Toolbar|>
           <Toolbar.Group @position="left" as |Group|>
             <Group.Item>
-              <Auk::ButtonLink
-                @skin="borderless"
+              <AuButton
+                @skin="naked"
                 @disable={{this.save.isRunning}}
                 {{on "click" this.cancel}}
               >
                 {{t "cancel"}}
-              </Auk::ButtonLink>
+              </AuButton>
             </Group.Item>
           </Toolbar.Group>
           <Toolbar.Group @position="right" as |Group|>
             <Group.Item>
-              <Auk::Button
+              <AuButton
                 @skin="primary"
                 @disabled={{this.isDisabled}}
                 @loading={{this.save.isRunning}}
                 {{on "click" (perform this.save)}}
               >
                 {{t "save"}}
-              </Auk::Button>
+              </AuButton>
             </Group.Item>
           </Toolbar.Group>
         </Auk::Toolbar>

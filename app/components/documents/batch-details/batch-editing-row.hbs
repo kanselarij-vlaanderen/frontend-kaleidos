@@ -32,21 +32,26 @@
   <td>
     <WebComponents::AuButtonToolbar>
       {{#if this.isToBeDeleted}}
-        <Auk::Button
-          @icon="redo"
-          @layout="icon-only"
-          @skin="borderless"
+        <AuButton
+          @skin="naked"
+          @icon="undo"
+          @hideText={{true}}
           @disabled={{this.isDisabled}}
           {{on "click" (fn this.setToBeDeleted false)}}
-        />
+        >
+          {{t "undo"}}
+        </AuButton>
       {{else}}
-        <Auk::Button
+        <AuButton
+          @skin="naked"
+          @alert={{true}}
           @icon="trash"
-          @layout="icon-only"
-          @skin="danger-borderless"
+          @hideText={{true}}
           @disabled={{this.isDisabled}}
           {{on "click" (fn this.setToBeDeleted true)}}
-        />
+        >
+          {{t "delete"}}
+        </AuButton>
       {{/if}}
     </WebComponents::AuButtonToolbar>
   </td>

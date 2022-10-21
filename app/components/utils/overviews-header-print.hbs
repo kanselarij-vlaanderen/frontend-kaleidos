@@ -39,13 +39,13 @@
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
         {{#if this.shouldShowPrintButton}}
-          <Auk::Button
-            @skin="tertiary"
+          <AuButton
+            @skin="naked"
             @icon="printer-view"
             {{action "print"}}
           >
             {{t "print"}}
-          </Auk::Button>
+          </AuButton>
         {{/if}}
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>

@@ -1,10 +1,16 @@
 <Auk::Navbar @skin="gray-100">
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="left">
-      <Auk::Button @route="settings.users.index" @skin="borderless" data-test-auk-back-button>
-        <Auk::Icon @name="hierarchical-back" />
-        <span class="au-u-hidden-visually">{{t "back"}}</span>
-      </Auk::Button>
+      <AuLink
+        data-test-auk-back-button
+        @skin="button-naked"
+        @icon="hierarchical-back"
+        @hideText={{true}}
+        @route="settings.users.index"
+        class="auk-u-mr-2"
+      >
+        {{t "back"}}
+      </AuLink>
       <Auk::Toolbar::Item>
         <h4 data-test-settings-header-title class="auk-toolbar-complex__title">
           {{t "manage-user" firstName=this.model.firstName lastName=this.model.lastName}}
@@ -54,6 +60,23 @@
                 {{this.model.fullName}}
               </div>
             </div>
+          </dl>
+          <dl>
+            <Auk::KeyValue
+              @key={{t "last-seen"}}
+              @value={{if
+                @model.loginActivity.startDate
+                (concat
+                  (moment-format @model.loginActivity.startDate)
+                  " "
+                  (t "at")
+                  " "
+                  (moment-format @model.loginActivity.startDate "HH:mm")
+                )
+                "-"
+              }}
+              @layout="horizontal"
+            />
           </dl>
         </Auk::Panel::Body>
       </Auk::Panel>

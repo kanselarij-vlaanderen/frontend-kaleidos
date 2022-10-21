@@ -2,12 +2,14 @@
   <Auk::Toolbar @size="large">
     <Auk::Toolbar::Group>
       <Auk::Toolbar::Item>
-        <Auk::Button
-          @skin="borderless"
+        <AuLink
+          @skin="button-naked"
           @icon="chevron-left"
-          @layout="icon-only"
+          @hideText={{true}}
           @route="cases"
-        />
+        >
+          {{t "back"}}
+        </AuLink>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
         <div data-test-subcase-overview-header-title-container class="auk-u-my">
@@ -50,23 +52,23 @@
     {{#if (user-may "manage-cases")}}
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          <Auk::Button
+          <AuButton
             @skin="primary"
             @icon="pencil"
             {{on "click" this.openEditCaseModal}}
           >
             {{t "edit-case"}}
-          </Auk::Button>
+          </AuButton>
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
-          <Auk::Button
+          <AuButton
             data-test-subcase-overview-header-create-subcase
             @skin="primary"
             @icon="plus"
             {{on "click" this.openAddSubcaseModal}}
           >
             {{t "create-subcase"}}
-          </Auk::Button>
+          </AuButton>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     {{/if}}

@@ -1,11 +1,12 @@
-<span class="auk-button__content">
-  {{#if (not this.isLoading)}}
-    {{#if this.text}}
-      {{this.text}}
-    {{else}}
-      {{yield}}
-    {{/if}}
+{{#if (not this.isLoading)}}
+  {{#if this.text}}
+    {{this.text}}
   {{else}}
-    <div class="auk-loader" role="alert" aria-busy="true"></div>
+    {{yield}}
   {{/if}}
-</span>
+{{else}}
+  <span class="au-u-hidden-visually">
+    {{t "loading"}}
+  </span>
+  <AuLoader @padding="small" />
+{{/if}}
