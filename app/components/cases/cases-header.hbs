@@ -10,14 +10,14 @@
       <Toolbar.Group @position="right" as |Group|>
         <Group.Item>
           {{#if (user-may "manage-cases")}}
-            <Auk::Button
+            <AuButton
               data-test-cases-header-add-case
               @skin="primary"
               @icon="plus"
               {{on "click" this.toggleIsOpenNewCaseModal}}
             >
               {{t "add-case"}}
-            </Auk::Button>
+            </AuButton>
           {{/if}}
         </Group.Item>
       </Toolbar.Group>

@@ -17,7 +17,10 @@
   </div>
 </Auk::Modal::Body>
 <Auk::Modal::Footer @onCancel={{action "cancel"}}>
-  <Auk::Button @skin="primary" {{action "assignToMeeting" this.subcase}}>
+  <AuButton
+    @skin="primary"
+    {{action "assignToMeeting" this.subcase}}
+  >
     {{t "propose"}}
-  </Auk::Button>
+  </AuButton>
 </Auk::Modal::Footer>

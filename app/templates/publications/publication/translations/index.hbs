@@ -11,24 +11,24 @@
         </Toolbar.Group>
         <Toolbar.Group @position="right" as |Group|>
           <Group.Item>
-            <Auk::Button
+            <AuButton
               data-test-route-publications---translations-upload-translation
               @skin="secondary"
               @icon="plus"
               {{on "click" this.openTranslationUploadModal}}
             >
               {{t "upload-translation"}}
-            </Auk::Button>
+            </AuButton>
           </Group.Item>
           <Group.Item>
-            <Auk::Button
+            <AuButton
               data-test-route-publications---translations-request-translation
               @skin="primary"
               @icon="plus"
               {{on "click" this.openTranslationRequestModal}}
             >
               {{t "request-translations"}}
-            </Auk::Button>
+            </AuButton>
           </Group.Item>
         </Toolbar.Group>
       </Auk::Toolbar>

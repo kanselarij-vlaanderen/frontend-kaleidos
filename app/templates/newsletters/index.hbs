@@ -86,13 +86,15 @@
                 {{/let}}
               </td>
               <td class="auk-u-text-align--center">
-                <Auk::Button
-                  @skin="borderless"
-                  @layout="icon-only"
+                <AuLink
+                  @skin="button-naked"
                   @icon="chevron-right"
+                  @hideText={{true}}
                   @route="newsletter"
                   @model={{meeting.id}}
-                />
+                >
+                  {{t "open"}}
+                </AuLink>
               </td>
             </c.body>
           </table.content>

@@ -10,7 +10,7 @@
       </Toolbar.Group>
       <Toolbar.Group @position="right" as |Group|>
         <Group.Item>
-          <Auk::Button
+          <AuButton
             data-test-route-publications---publication-activities-register
             @skin="secondary"
             @icon="plus"
@@ -18,10 +18,10 @@
             {{on "click" this.openRegistrationModal}}
           >
             {{t "publication-publication-register-action"}}
-          </Auk::Button>
+          </AuButton>
         </Group.Item>
         <Group.Item>
-          <Auk::Button
+          <AuButton
             data-test-route-publications---publication-activities-request
             @skin="primary"
             @icon="plus"
@@ -29,7 +29,7 @@
             {{on "click" this.openRequestModal}}
           >
             {{t "publication-publication-request-action"}}
-          </Auk::Button>
+          </AuButton>
         </Group.Item>
       </Toolbar.Group>
     </Auk::Toolbar>

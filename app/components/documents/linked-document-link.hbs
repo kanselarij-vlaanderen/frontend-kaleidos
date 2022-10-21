@@ -33,25 +33,26 @@
         </Toolbar.Group>
         <Toolbar.Group @position="right" as |Group|>
           <Group.Item class="auk-o-flex">
-            <div class="auk-o-flex auk-o-flex--vertical-center">
-              {{#if this.lastPiece}}
-                <AccessLevelPill
-                  @accessLevel={{this.accessLevel}}
-                  @onChangeAccessLevel={{this.changeAccessLevel}}
-                  @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
-                  @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
-                />
-              {{/if}}
-            </div>
+            {{#if this.lastPiece}}
+              <AccessLevelPill
+                @accessLevel={{this.accessLevel}}
+                @onChangeAccessLevel={{this.changeAccessLevel}}
+                @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
+                @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
+              />
+            {{/if}}
           </Group.Item>
           <Group.Item>
             {{#if (user-may "manage-documents")}}
-              <Auk::Button
-                @skin="danger-borderless"
-                @layout="icon-only"
+              <AuButton
+                @skin="naked"
+                @alert={{true}}
                 @icon="link-broken"
+                @hideText={{true}}
                 {{on "click" this.deletePieceLink}}
-              />
+              >
+                {{t "delete"}}
+              </AuButton>
             {{/if}}
           </Group.Item>
         </Toolbar.Group>

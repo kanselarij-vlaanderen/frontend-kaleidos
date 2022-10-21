@@ -57,23 +57,27 @@
                 </p>
               </td>
               <td class="auk-u-text-align--right">
-                <Auk::Button
-                  @skin="borderless"
-                  @layout="icon-only"
+                <AuButton
+                  @skin="naked"
                   @icon="book"
+                  @hideText={{true}}
                   {{on "click" (fn this.showPieceViewer row.documentId)}}
-                />
-                <Auk::Button
-                  @skin="borderless"
-                  @layout="icon-only"
+                >
+                  {{t "open-note"}}
+                </AuButton>
+                <AuLink
+                  @skin="button-naked"
                   @icon="chevron-right"
+                  @hideText={{true}}
                   @route="agenda.agendaitems.agendaitem.documents"
                   @models={{array
                     (await row.meetingId)
                     (await row.agendaId)
                     (await row.agendaitemId)
                   }}
-                />
+                >
+                  {{t "open"}}
+                </AuLink>
               </td>
             </c.body>
           </table.content>

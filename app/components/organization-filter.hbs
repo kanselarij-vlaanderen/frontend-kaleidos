@@ -39,14 +39,15 @@
           {{organization.name}}
         </p>
       </div>
-      <div>
-        <Auk::Button
-          @skin="muted-borderless"
-          @layout="icon-only"
+      <div class="auk-o-flex__item--fix">
+        <AuButton
+          @skin="naked"
           @icon="x"
-          class="au-u-1-1"
+          @hideText={{true}}
           {{on "click" (fn this.toggleSelected organization)}}
-        />
+        >
+          {{t "delete"}}
+        </AuButton>
       </div>
     </div>
   {{/each}}

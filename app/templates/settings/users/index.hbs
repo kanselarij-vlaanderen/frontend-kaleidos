@@ -68,14 +68,15 @@
           @type="search"
           @value={{this.searchTextBuffer}}
         />
-        <Auk::Button
+        <AuButton
           data-test-route-settings-users-search-button
           @skin="primary"
           @icon="search"
           type="submit"
+          class="auk-o-flex__item--fix"
         >
           {{t "search"}}
-        </Auk::Button>
+        </AuButton>
       </form>
       <DataTable
         data-test-route-settings-users-table
