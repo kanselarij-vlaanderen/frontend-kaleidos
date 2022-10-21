@@ -39,13 +39,6 @@ export default class UsersSettingsController extends Controller {
 
   @tracked isLoadingModel = false;
 
-  constructor() {
-    super(...arguments);
-
-    this.loadSelectedOrganizations.perform();
-    this.loadSelectedRoles.perform();
-  }
-
   get dateToBuffer() {
     return this._dateToBuffer;
   }
@@ -81,16 +74,6 @@ export default class UsersSettingsController extends Controller {
   search(e) {
     e.preventDefault();
     this.filter = this.searchTextBuffer;
-  }
-
-  @task
-  *loadSelectedOrganizations() {
-    this.selectedOrganizations = yield Promise.all(this.organizations.map((id) => this.store.findRecord('user-organization', id)));
-  }
-
-  @task
-  *loadSelectedRoles() {
-    this.selectedRoles = yield Promise.all(this.roles.map((id) => this.store.findRecord('role', id)));
   }
 
   @action

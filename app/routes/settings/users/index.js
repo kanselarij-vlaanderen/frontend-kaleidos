@@ -133,6 +133,11 @@ export default class SettingsUsersIndexRoute extends Route {
     return this.store.query('user', options);
   }
 
+  async afterModel() {
+    this.selectedOrganizations = (await Promise.all(this.lastParams.committed.organizations.map((id) => this.store.findRecord('user-organization', id)))).toArray();
+    this.selectedRoles = (await Promise.all(this.lastParams.committed.roles.map((id) => this.store.findRecord('role', id)))).toArray();
+  }
+
   setupController(controller) {
     super.setupController(...arguments);
 
@@ -142,6 +147,8 @@ export default class SettingsUsersIndexRoute extends Route {
     controller.searchTextBuffer = this.lastParams.committed.filter;
     controller.dateFromBuffer = parseDate(this.lastParams.committed.dateFrom);
     controller.dateToBuffer = parseDate(this.lastParams.committed.dateTo);
+    controller.selectedOrganizations = this.selectedOrganizations;
+    controller.selectedRoles = this.selectedRoles;
   }
 
   @action

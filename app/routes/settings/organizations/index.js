@@ -61,12 +61,17 @@ export default class SettingsOrganizationsIndexRoute extends Route {
     return this.store.query('user-organization', options);
   }
 
+  async afterModel() {
+    this.selectedOrganizations = (await Promise.all(this.lastParams.committed.organizations.map((id) => this.store.findRecord('user-organization', id)))).toArray();
+  }
+
   setupController(controller) {
     super.setupController(...arguments);
 
     if (controller.page !== this.lastParams.committed.page) {
       controller.page = this.lastParams.committed.page;
     }
+    controller.selectedOrganizations = this.selectedOrganizations;
   }
 
   @action
