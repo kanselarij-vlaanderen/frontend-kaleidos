@@ -23,7 +23,7 @@
                 {{/unless}}
               </span>
             </div>
-            <LinkTo @route="document" @model={{this.piece.id}} target="_blank"
+            <LinkTo @route="document" @model={{this.piece.id}}
               class="auk-h4" data-test-document-card-name-value>
               {{this.piece.name}}{{#if this.piece.file}}.{{this.piece.file.extension}}{{/if}}
             </LinkTo>
@@ -179,7 +179,7 @@
                   <div class="vlc-document-card-item" data-test-vl-document-piece>
                     <div class="vlc-document-card-item__title">
                       {{#if piece.file}}
-                        <LinkTo @route="document" @model={{piece.id}} target="_blank"
+                        <LinkTo @route="document" @model={{piece.id}}
                           class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
                           data-test-vl-document-name>
                           {{piece.name}}{{#if piece.file}}.{{piece.file.extension}}{{/if}}
