@@ -83,6 +83,9 @@ const selectors = {
 
   formHelpText: '.auk-form-help-text',
   formGroup: '.auk-form-group',
+
+  fileUpload: '.auk-file-upload',
+
   icon: {
     warning: '.auk-icon--warning',
   },
