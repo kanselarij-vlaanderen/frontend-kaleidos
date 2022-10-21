@@ -88,13 +88,17 @@
             >
               {{this.numberRepresentation}}
             </div>
-            <Auk::ButtonLink
+            {{!-- TODO: this button needs to be displayed in a smaller size --}}
+            <AuButton
               data-test-edit-meeting-number-representation-edit
-              disabled={{this.initializeMeetingNumber.isRunning}}
+              class="auk-u-p-0"
+              @skin="link"
+              @icon="pencil"
+              @disabled={{this.initializeMeetingNumber.isRunning}}
               {{on "click" this.toggleEditingNumberRepresentation}}
             >
-              <small>{{t "edit"}}</small>
-            </Auk::ButtonLink>
+              {{t "edit"}}
+            </AuButton>
           </div>
         </div>
       </div>
@@ -106,13 +110,13 @@
             class="auk-u-mr-2"
             data-test-edit-meeting-number-representation-input
           />
-          <Auk::Button
+          <AuButton
+            data-test-edit-meeting-number-representation-save
             @skin="primary"
             {{on "click" this.toggleEditingNumberRepresentation}}
-            data-test-edit-meeting-number-representation-save
           >
             {{t "save"}}
-          </Auk::Button>
+          </AuButton>
         </div>
       {{/if}}
     </div>
@@ -132,17 +136,17 @@
     {{/unless}}
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
-    <Auk::Button
-      @skin="primary"
-      {{on "click" (perform this.saveMeeting)}}
-      disabled={{this.savingIsDisabled}}
+    <AuButton
       data-test-edit-meeting-save
+      @skin="primary"
+      @disabled={{this.savingIsDisabled}}
+      {{on "click" (perform this.saveMeeting)}}
     >
       {{#if this.isNew}}
         {{t "add"}}
       {{else}}
         {{t "edit"}}
       {{/if}}
-    </Auk::Button>
+    </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>

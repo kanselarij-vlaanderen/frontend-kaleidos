@@ -12,8 +12,8 @@ export default Component.extend({
   // eslint-disable-next-line ember/require-tagless-components
   tagName: 'button',
   type: 'button',
-  attributeBindings: ['isLoading:disabled'],
-  classNameBindings: ['isLoading::auk-button', 'isLoading::auk-button--primary', 'isLoading:auk-button-loading'],
+  classNames: ['au-c-button', 'au-c-button--primary'],
+  classNameBindings: ['isLoading:is-loading'],
 
   focus: not('isLoading'),
 

@@ -12,12 +12,13 @@
   <Auk::Modal::Footer
     @cancelDisabled={{this.save.isRunning}}
     @onCancel={{this.close}}>
-    <Auk::Button
+    <AuButton
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
       @loading={{this.save.isRunning}}
-      {{on "click" (perform this.save)}}>
+      {{on "click" (perform this.save)}}
+    >
       {{t "save"}}
-    </Auk::Button>
+    </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>

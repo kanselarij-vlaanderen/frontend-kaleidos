@@ -19,39 +19,44 @@
     <Auk::Toolbar @size="large">
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
-          <Auk::ButtonLink @route="settings.overview">
+          <AuLink
+            @skin="button-naked"
+            @route="settings.overview"
+          >
             {{t "cancel"}}
-          </Auk::ButtonLink>
+          </AuLink>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          <Auk::Button
-            @skin="tertiary"
-            @icon="plus"
-            @route="settings.system-alerts.new"
-            data-test-route-settings-system-alerts-index-add
-          >
-            {{t "add"}}
-          </Auk::Button>
           {{#if this.selectedAlert}}
-            <Auk::Button
-              @skin="tertiary"
+            <AuLink
+              @skin="button-secondary"
               @icon="pencil"
               @route="settings.system-alerts.edit"
               @model={{this.selectedAlert.id}}
             >
               {{t "edit"}}
-            </Auk::Button>
-            <Auk::Button
-              @skin="tertiary"
+            </AuLink>
+            <AuButton
+              data-test-route-settings-system-alerts-index-remove
+              @skin="secondary"
+              @alert={{true}}
               @icon="trash"
               {{on "click" (perform this.remove this.selectedAlert)}}
-              data-test-route-settings-system-alerts-index-remove
             >
               {{t "delete"}}
-            </Auk::Button>
+            </AuButton>
           {{/if}}
+          <AuLink
+            data-test-route-settings-system-alerts-index-add
+            @skin="button"
+            @icon="plus"
+            @route="settings.system-alerts.new"
+            class="auk-u-ml-2"
+          >
+            {{t "add"}}
+          </AuLink>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
