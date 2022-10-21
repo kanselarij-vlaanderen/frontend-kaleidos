@@ -128,4 +128,12 @@ export default class UsersSettingsController extends Controller {
     }
     await Promise.all(this.membershipsBeingBlocked.map((membership) => membership.save()));
   }
+
+  @action
+  filterMemberships(memberships) {
+    return memberships.filter((membership) => {
+      const shouldShow = !this.showBlockedMemberships || membership.get('isBlocked');
+      return this.roles.includes(membership.get('role.id')) && shouldShow;
+    });
+  }
 }
