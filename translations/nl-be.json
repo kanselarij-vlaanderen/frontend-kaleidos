@@ -1083,6 +1083,7 @@
   "more": "Meer",
   "users-seen": "Gebruikers gezien",
   "users-seen-amount": "{amount, plural, =1 {1 gebruiker} other { # gebruikers}}",
+  "membership": "Werkrelatie",
   "blocked": "Geblokkeerd",
   "blocked-user": "Gebruiker geblokkeerd",
   "block-user": "Gebruiker blokkeren",
@@ -1106,5 +1107,13 @@
   "block-organization-are-you-sure": "Ben je zeker dat je deze organisatie wil blokkeren uit Kaleidos?",
   "unblock-organization": "Organisatie deblokkeren",
   "unblock-organization-explanation": "Gebruikers die een werkrelatie hebben met deze organisatie krijgen opnieuw toegang tot Kaleidos.",
-  "unblock-organization-are-you-sure": "Ben je zeker dat je deze organisatie wil deblokkeren?"
+  "unblock-organization-are-you-sure": "Ben je zeker dat je deze organisatie wil deblokkeren?",
+  "last-seen": "Laatst gezien",
+  "filter-on-rights": "Filteren op rechtengroep",
+  "filter-on-last-seen": "Filteren op laatst gezien",
+  "blocked-on": "Geblokkeerd op",
+  "filter-on-organization": "Filteren op organisatie",
+  "ovo-or-organization": "OVO of organisatie",
+  "list-of-ovo-codes": "Lijst met OVO codes",
+  "search-on-ovo-or-organization": "Zoek op organisatienaam of OVO-code"
 }

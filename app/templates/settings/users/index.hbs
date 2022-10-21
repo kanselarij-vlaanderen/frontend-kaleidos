@@ -1,6 +1,63 @@
 <div class="auk-scroll-wrapper__body au-u-background-gray-100">
   <div class="auk-o-grid au-o-grid--stretch">
     <div class="auk-o-grid-col-2">
+      <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny au-u-padding-right-none">
+        <div class="au-c-card au-o-box au-o-box--small">
+          {{#if this.loadSelectedOrganizations.isRunning}}
+            <Auk::Loader />
+          {{else}}
+            <OrganizationFilter
+              @selected={{this.selectedOrganizations}}
+              @onChange={{this.setOrganizations}}
+            />
+          {{/if}}
+        </div>
+        <div class="au-c-card au-o-box au-o-box--small">
+          <Auk::Label>{{t "filter-on-last-seen"}}</Auk::Label>
+          <div class="auk-form-group auk-u-position-relative au-u-margin-bottom-small">
+            <Auk::Label>{{t "from"}}</Auk::Label>
+            <Auk::Datepicker
+              @date={{this.dateFromBuffer}}
+              @onChange={{set this "dateFromBuffer"}}
+              @enableClear={{this.dateFromBuffer}}
+              @onClear={{set this "dateFromBuffer" null}}
+            />
+          </div>
+          <div class="auk-form-group auk-u-position-relative">
+            <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
+            <Auk::Datepicker
+              @date={{this.dateToBuffer}}
+              @onChange={{set this "dateToBuffer"}}
+              @enableClear={{this.dateToBuffer}}
+              @onClear={{set this "dateToBuffer" null}}
+            />
+          </div>
+        </div>
+        <div class="au-c-card au-o-box au-o-box--small">
+          {{#if this.loadSelectedRoles.isRunning}}
+            <Auk::Loader />
+          {{else}}
+            <UserRoleFilter
+              @selected={{this.selectedRoles}}
+              @onChange={{perform this.setRoles}}
+              @defaultEnableAllRoles={{is-empty this.selectedRoles}}
+            />
+          {{/if}}
+        </div>
+        <div class="au-c-card au-o-box au-o-box--small">
+          <Auk::Label>{{t "blocked-on"}}</Auk::Label>
+          <Auk::Checkbox
+            @checked={{this.showBlockedMemberships}}
+            @label={{t "membership"}}
+            {{on "click" (toggle "showBlockedMemberships" this)}}
+          />
+          <Auk::Checkbox
+            @checked={{this.showBlockedUsers}}
+            @label={{t "user"}}
+            {{on "click" (toggle "showBlockedUsers" this)}}
+          />
+        </div>
+      </div>
     </div>
     <div class="auk-o-grid-col-10">
       <form {{on "submit" this.search}} class="auk-navbar auk-navbar--bordered-bottom au-u-padding-left-none au-u-padding-right-small au-u-padding-top-small au-u-padding-bottom-small au-u-flex--between au-u-flex--spaced-tiny">
@@ -40,6 +97,11 @@
             />
             <th>{{t "organization"}}</th>
             <th>{{t "group"}}</th>
+            <ThSortable
+              @currentSorting={{this.sort}}
+              @field="login-activity.start-date"
+              @label={{t "last-seen"}}
+            />
             <th></th>
           </c.header>
           <c.body as |user|>
@@ -78,6 +140,15 @@
                   <p>{{membership.role.label}}</p>
                 {{/each}}
               </div>
+            </td>
+            <td>
+              {{#let user.loginActivity.startDate as |lastLoginDate|}}
+                {{#if lastLoginDate}}
+                  {{moment-format lastLoginDate}}
+                  {{t "at"}}
+                  {{moment-format lastLoginDate "HH:mm"}}
+                {{/if}}
+              {{/let}}
             </td>
             <td class="auk-u-text-align--right">
               <div class="auk-o-flex auk-o-flex--justify-end">

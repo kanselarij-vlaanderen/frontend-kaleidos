@@ -384,37 +384,6 @@ function uploadFile(folder, fileName, extension, mimeType = 'application/pdf') {
 }
 
 /**
- * @description Uploads a csv file with users..
- * @name uploadUsersFile
- * @memberOf Cypress.Chainable#
- * @function
- * @param {String} folder - The relative path to the file in the cypress/fixtures folder excluding the fileName
- * @param {String} fileName - The name of the file without the extension
- * @param {String} extension - The extension of the file
- */
-function uploadUsersFile(folder, fileName, extension) {
-  cy.log('uploadUsersFile');
-  cy.intercept('POST', 'user-management/import-users').as('createNewFile');
-  cy.intercept('GET', 'users?include**').as('getNewFile');
-  const fileFullName = `${fileName}.${extension}`;
-  const filePath = `${folder}/${fileFullName}`;
-
-  cy.fixture(filePath).then((fileContent) => {
-    cy.get('[type=file]').attachFile(
-      {
-        fileContent, fileName: fileFullName, mimeType: 'application/pdf',
-      },
-      {
-        uploadType: 'input',
-      }
-    );
-  });
-  cy.wait('@createNewFile');
-  cy.wait('@getNewFile');
-  cy.log('/uploadUsersFile');
-}
-
-/**
  * @description Add a new piece to a decision.
  * @name addNewPieceToDecision
  * @memberOf Cypress.Chainable#
@@ -600,7 +569,6 @@ Cypress.Commands.add('addNewPieceToApprovalItem', addNewPieceToApprovalItem);
 Cypress.Commands.add('addNewPieceToSubcase', addNewPieceToSubcase);
 Cypress.Commands.add('addNewPieceToDecision', addNewPieceToDecision);
 Cypress.Commands.add('uploadFile', uploadFile);
-Cypress.Commands.add('uploadUsersFile', uploadUsersFile);
 Cypress.Commands.add('openAgendaitemDocumentTab', openAgendaitemDocumentTab);
 Cypress.Commands.add('openAgendaitemDossierTab', openAgendaitemDossierTab);
 Cypress.Commands.add('addLinkedDocument', addLinkedDocument);
