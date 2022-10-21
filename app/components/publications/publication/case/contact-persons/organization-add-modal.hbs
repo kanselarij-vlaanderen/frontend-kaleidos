@@ -31,24 +31,28 @@
     <Auk::Toolbar @size="large">
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
-          <Auk::ButtonLink
+          <AuButton
             data-test-organization-add-cancel
-            disabled={{this.save.isRunning}}
-            {{on "click" @onCancel}}>
+            @skin="naked"
+            @disabled={{this.save.isRunning}}
+            {{on "click" @onCancel}}
+          >
             {{t "cancel"}}
-          </Auk::ButtonLink>
+          </AuButton>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          <Auk::Button
-            @skin="primary" @icon="plus" @size="small"
-            disabled={{not this.validators.areValid}}
+          <AuButton
+            data-test-organization-add-submit
+            @skin="primary"
+            @icon="plus"
+            @disabled={{not this.validators.areValid}}
             @loading={{this.save.isRunning}}
             {{on "click" (perform this.save)}}
-            data-test-organization-add-submit>
+          >
             {{t "add"}}
-          </Auk::Button>
+          </AuButton>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>

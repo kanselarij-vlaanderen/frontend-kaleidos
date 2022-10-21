@@ -95,7 +95,7 @@ context('Propagation of confidentiality setup', () => {
     checkAccess(docNameLocked5);
     cy.releaseDocuments();
     // wait for yggie a bit, the next 2 profiles will succeed, enough time should have passed for overheid profile
-    cy.wait(60000);
+    cy.wait(80000);
   });
 
   it('login as minister and check access', () => {

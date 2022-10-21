@@ -18,13 +18,15 @@
             <Auk::Toolbar::Group @position="right">
               <Auk::Toolbar::Item>
                 {{#if this.showCloseButton}}
-                  <Auk::Button
-                    @icon="x"
-                    @skin="borderless"
-                    @layout="icon-only"
-                    {{action "close"}}
+                  <AuButton
                     data-test-vl-modal-close
-                  />
+                    @skin="naked"
+                    @icon="x"
+                    @hideText={{true}}
+                    {{action "close"}}
+                  >
+                    {{t "close"}}
+                  </AuButton>
                 {{/if}}
               </Auk::Toolbar::Item>
             </Auk::Toolbar::Group>

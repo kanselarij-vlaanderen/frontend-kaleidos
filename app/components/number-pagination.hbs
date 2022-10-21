@@ -9,23 +9,25 @@
     </li>
     {{#if this.hasMultiplePages}}
       <li class="auk-pagination__element">
-        <Auk::ButtonLink
+        <AuButton
+          @skin="link"
           @icon="chevron-left"
           @disabled={{this.isFirstPage}}
           {{action "changePage" this.links.prev}}
         >
           {{t "previous"}}
-        </Auk::ButtonLink>
+        </AuButton>
       </li>
       <li class="auk-pagination__element">
-        <Auk::ButtonLink
+        <AuButton
+          @skin="link"
           @icon="chevron-right"
-          @layout="icon-right"
+          @iconAlignment="right"
           @disabled={{this.isLastPage}}
           {{action "changePage" this.links.next}}
         >
           {{t "next"}}
-        </Auk::ButtonLink>
+        </AuButton>
       </li>
     {{/if}}
   </ul>

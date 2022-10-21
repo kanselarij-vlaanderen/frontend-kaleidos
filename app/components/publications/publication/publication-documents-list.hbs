@@ -18,37 +18,40 @@
           </div>
         {{/if}}
         <div>
-          <WebComponents::AuButtonToolbar>
-            <Auk::Button
-              @layout="icon-only"
+          <AuButtonGroup>
+            <AuLink
+              @skin="button-naked"
               @icon="download"
+              @hideText={{true}}
               @href={{piece.file.namedDownloadLink}}
-              @skin="borderless"
               download={{piece.file.downloadFilename}}
             >
               {{t "download"}}
-            </Auk::Button>
+            </AuLink>
             {{#if @viewable}}
-              <Auk::Button
-                @layout="icon-only"
+              <AuLink
+                @skin="button-naked"
                 @icon="book"
-                @skin="borderless"
+                @hideText={{true}}
                 @href={{piece.viewDocumentURL}}
                 target="_blank"
               >
                 {{t "read"}}
-              </Auk::Button>
+              </AuLink>
             {{/if}}
             {{#if @onDeletePiece}}
-              <Auk::Button
+              <AuButton
                 data-test-publication-document-list-delete-piece
+                @skin="naked"
+                @alert={{true}}
                 @icon="trash"
-                @layout="icon-only"
-                @skin="danger-borderless"
+                @hideText={{true}}
                 {{on "click" (fn @onDeletePiece piece)}}
-              />
+              >
+                {{t "delete"}}
+              </AuButton>
             {{/if}}
-          </WebComponents::AuButtonToolbar>
+          </AuButtonGroup>
         </div>
       </div>
     </Auk::List::Item>

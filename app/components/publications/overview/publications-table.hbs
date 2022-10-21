@@ -91,13 +91,15 @@
         />
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
-        <Auk::Button
+        <AuButton
           data-test-route-publications-index-config-modal-icon
+          @skin="naked"
           @icon="gear"
-          @skin="borderless"
-          @layout="icon-only"
+          @hideText={{true}}
           {{on "click" this.toggleColumnsDisplayConfigPanel}}
-        />
+        >
+          {{t "config"}}
+        </AuButton>
         <AttachPopover
           @class="auk-popover"
           @showOn=""

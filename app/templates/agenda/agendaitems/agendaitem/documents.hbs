@@ -10,26 +10,26 @@
     {{#if this.model.pieces.length}}
       <Group.Item>
         {{#if (user-may "manage-documents")}}
-          <Auk::Button
+          <AuButton
             data-test-route-agenda---agendaitem-documents-batch-edit
             @icon="pencil"
             @loading={{this.ensureFreshData.isRunning}}
             {{on "click" this.openBatchDetails}}
           >
             {{t "batch-edit"}}
-          </Auk::Button>
+          </AuButton>
         {{/if}}
       </Group.Item>
     {{/if}}
     {{#if this.isShownOpenPublicationModal}}
       <Group.Item>
-        <Auk::Button
+        <AuButton
           data-test-route-agenda---agendaitem-documents-open-publication
           @icon="copy"
           {{on "click" this.openPublicationModal}}
         >
           {{t "agendaitem-documents-documents-for-publication"}}
-        </Auk::Button>
+        </AuButton>
       </Group.Item>
     {{/if}}
   </Toolbar.Group>
@@ -53,14 +53,14 @@
 {{/unless}}
 {{#if (user-may "manage-documents")}}
   <div class="auk-u-mb-4">
-    <Auk::Button
-      @skin="tertiary"
+    <AuButton
+      data-test-route-agenda---agendaitem-documents-add
+      @skin="naked"
       @icon="plus"
       {{on "click" this.openPieceUploadModal}}
-      data-test-route-agenda---agendaitem-documents-add
     >
       {{t "documents-add"}}
-    </Auk::Button>
+    </AuButton>
   </div>
 {{/if}}
 
