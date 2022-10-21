@@ -1,0 +1,12 @@
+{{#if this.loadRoles.isRunning}}
+  <Auk::Loader />
+{{else}}
+  <Auk::Label>{{t "filter-on-rights"}}</Auk::Label>
+  {{#each this.roles as |role|}}
+    <Auk::Checkbox
+      @checked={{includes role this.selected}}
+      @label={{role.label}}
+      {{on "click" (fn this.toggleRole role)}}
+    />
+  {{/each}}
+{{/if}}

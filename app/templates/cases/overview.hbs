@@ -94,13 +94,15 @@
                 </AuButton>
               </AuDropdown>
             {{/if}}
-            <Auk::Button
-              @skin="borderless"
-              @layout="icon-only"
+            <AuLink
+              @skin="button-naked"
               @icon="chevron-right"
+              @hideText={{true}}
               @route="cases.case.subcases"
               @model={{row.id}}
-            />
+            >
+              {{t "open"}}
+            </AuLink>
           </td>
         </c.body>
         {{! template-lint-enable no-invalid-interactive }}

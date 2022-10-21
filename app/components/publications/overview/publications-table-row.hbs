@@ -262,13 +262,15 @@ request the whole row and not only the arrow at the end to be clickable }}
     </td>
   {{/if}}
   <td>
-    <Auk::Button
-      @skin="borderless"
-      @layout="icon-only"
+    <AuLink
+      data-test-publication-table-row-go-to-publication
+      @skin="button-naked"
       @icon="chevron-right"
+      @hideText={{true}}
       @route="publications.publication"
       @model={{@publicationFlow.id}}
-      data-test-publication-table-row-go-to-publication
-    />
+    >
+      {{t "open-publication"}}
+    </AuLink>
   </td>
 </tr>

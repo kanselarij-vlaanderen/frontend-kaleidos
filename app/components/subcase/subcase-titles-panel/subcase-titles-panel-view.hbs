@@ -10,12 +10,13 @@
       </h2>
       {{#if @allowEditing}}
         <div class="auk-u-ml-2">
-          <Auk::ButtonLink
+          <AuButton
             data-test-subcase-titles-edit
+            @skin="link"
             {{on "click" @onClickEdit}}
           >
             {{t "edit"}}
-          </Auk::ButtonLink>
+          </AuButton>
         </div>
       {{/if}}
     </div>

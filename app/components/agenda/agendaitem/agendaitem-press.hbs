@@ -8,10 +8,10 @@
     {{#if (not this.currentSession.isEditing)}}
       {{#if (user-may "manage-agendaitems")}}
         <AuButton
-          @skin="secondary"
+          @skin="naked"
           @icon="pencil"
-          @iconAlignment="left"
-          {{on "click" this.toggleIsEditing}}>
+          {{on "click" this.toggleIsEditing}}
+        >
           {{t "edit"}}
         </AuButton>
       {{/if}}

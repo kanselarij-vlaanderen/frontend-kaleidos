@@ -20,28 +20,29 @@
       </div>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{action "close"}}>
-      <Auk::Button
-        @skin="tertiary"
+      <AuButton
+        @skin="naked"
         @icon="plus"
         {{action "toggleIsAdding"}}
       >
         {{t "add"}}
-      </Auk::Button>
+      </AuButton>
       {{#if this.item}}
-        <Auk::Button
-          @skin="tertiary"
+        <AuButton
+          @skin="naked"
           @icon="pencil"
           {{action "toggleIsEditing"}}
         >
           {{t "edit"}}
-        </Auk::Button>
-        <Auk::Button
-          @skin="tertiary"
+        </AuButton>
+        <AuButton
+          @skin="naked"
+          @alert={{true}}
           @icon="trash"
           {{action "removeModel"}}
         >
           {{t "delete"}}
-        </Auk::Button>
+        </AuButton>
       {{/if}}
     </Auk::Modal::Footer>
   {{/if}}

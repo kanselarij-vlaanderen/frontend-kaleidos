@@ -89,16 +89,16 @@
           />
         </div>
       </div>
-      <div class="auk-o-grid-col-1">
-        <Auk::Button
+      <div class="auk-o-grid-col-2">
+        <AuButton
+          data-test-route-search-trigger
           @skin="primary"
           @icon="search"
-          @block="true"
-          data-test-route-search-trigger
+          @width="block"
           type="submit"
         >
           {{t "search"}}
-        </Auk::Button>
+        </AuButton>
       </div>
     </form>
   </Auk::Navbar>
