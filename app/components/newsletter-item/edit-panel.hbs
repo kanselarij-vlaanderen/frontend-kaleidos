@@ -95,9 +95,9 @@
                     {{t "close-fullscreen"}}
                   </AuButton>
                   <AuButton
+                    data-test-newsletter-edit-item-save
                     @loading={{this.confirmSave.isRunning}}
                     {{on "click" this.save}}
-                    data-test-newsletter-edit-item-save
                   >
                     {{t "save"}}
                   </AuButton>
@@ -145,17 +145,23 @@
       </Auk::Panel::Body>
       <Auk::Panel::Body class="au-u-background-gray-100">
         <Auk::Toolbar>
-          <Auk::Toolbar::Group @position="right">
-            <Auk::Toolbar::Item>
-              <Auk::ButtonLink data-test-newsletter-edit-item-cancel {{on "click" @onCancel}}>
-                {{t "cancel"}}
-              </Auk::ButtonLink>
-            </Auk::Toolbar::Item>
+          <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
               <AuButton
+                data-test-newsletter-edit-item-cancel
+                @skin="naked"
+                {{on "click" @onCancel}}
+              >
+                {{t "cancel"}}
+              </AuButton>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <AuButton
+                data-test-newsletter-edit-item-save
                 @loading={{this.confirmSave.isRunning}}
                 {{on "click" this.save}}
-                data-test-newsletter-edit-item-save
               >
                 {{t "save"}}
               </AuButton>

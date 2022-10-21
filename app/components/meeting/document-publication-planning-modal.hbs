@@ -22,14 +22,15 @@
               @onChange={{set this "documentPublicationPlannedDate"}}
               @disabled={{this.isDisabledDocumentPublication}}
             />
-            <Auk::Button
+            <AuButton
               data-test-publication-planning-release-documents-now
               class="auk-u-ml-2"
-              disabled={{this.isDisabledDocumentPublication}}
+              @skin="primary"
+              @disabled={{this.isDisabledDocumentPublication}}
               {{on "click" this.setDocumentPublicationDateNow}}
             >
               {{t "now"}}
-            </Auk::Button>
+            </AuButton>
           </div>
         </div>
         <div class="auk-form-group">
@@ -44,13 +45,14 @@
               @onChange={{set this "themisPublicationPlannedDate"}}
               @disabled={{this.isDisabledThemisPublication}}
             />
-            <Auk::Button
+            <AuButton
               class="auk-u-ml-2"
-              disabled={{this.isDisabledThemisPublication}}
+              @skin="primary"
+              @disabled={{this.isDisabledThemisPublication}}
               {{on "click" this.setThemisPublicationDateNow}}
             >
               {{t "now"}}
-            </Auk::Button>
+            </AuButton>
           </div>
         </div>
       </div>
@@ -60,7 +62,7 @@
     @onCancel={{@onCancel}}
     @cancelDisabled={{this.save.isRunning}}
   >
-    <Auk::Button
+    <AuButton
       data-test-publication-planning-release-documents-confirm
       @skin="primary"
       @disabled={{this.isDisabledSave}}
@@ -68,6 +70,6 @@
       {{on "click" (perform this.save)}}
     >
       {{t "confirm"}}
-    </Auk::Button>
+    </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>

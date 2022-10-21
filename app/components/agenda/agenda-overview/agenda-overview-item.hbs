@@ -15,10 +15,11 @@
     <h4 class="vlc-agenda-items__subject">
       {{#if @showDragHandle}}
         <div class="vlc-agenda-items__cursor">
-          {{! TODO: grab-hand shows over the whole parent height instead of only over the grab-handle icon }}
-          <Auk::Button class="auk-u-p-0 auk-u-cursor-grab" @skin="borderless">
-            <Auk::Icon @name="drag-handle-2" />
-          </Auk::Button>
+          <AuIcon
+            class="auk-u-cursor-grab auk-u-text-muted"
+            @icon="drag-handle-2"
+            @size="large"
+          />
         </div>
       {{/if}}
       <span class="vlc-agenda-items-sub-item__numbering">
@@ -124,17 +125,18 @@
           />
         </div>
         {{#if this.enableShowMore}}
-          <Auk::ButtonLink
+          <AuButton
+            class="auk-u-mt-2"
+            @skin="link"
             @icon={{if this.isShowingAllDocuments "dash" "plus"}}
             {{on "click" this.toggleShowingAllDocuments}}
-            class="auk-u-mt-2"
           >
             {{#if this.isShowingAllDocuments}}
               {{t "show-less"}}
             {{else}}
               {{t "show-more"}}
             {{/if}}
-          </Auk::ButtonLink>
+          </AuButton>
         {{/if}}
       {{/if}}
       {{#unless @isEditingFormallyOkStatus}}

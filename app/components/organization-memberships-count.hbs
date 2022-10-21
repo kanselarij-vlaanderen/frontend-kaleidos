@@ -1,5 +1,5 @@
 {{#if this.loadMemberships.isRunning}}
   <Auk::Loader />
 {{else}}
-  {{this.membershipsCount}} {{t "users"}}
+  {{t "users-seen-amount" amount=this.membershipsCount}}
 {{/if}}

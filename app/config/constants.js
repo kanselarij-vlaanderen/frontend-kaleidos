@@ -7,6 +7,7 @@ export default {
     ACCESS_LEVELS: 'http://themis.vlaanderen.be/id/concept-scheme/9b354d36-250b-43d7-887c-db28fe2fc6fb',
     RELEASE_STATUSES: 'http://themis.vlaanderen.be/id/concept-scheme/49c93ef8-ca21-4ff9-b6d3-8351b410b563',
     AGENDA_ITEM_TYPES: 'http://themis.vlaanderen.be/id/concept-scheme/55c9120c-6a3d-49c4-80c8-ed01e9b92a9b',
+    USER_ROLES: 'http://themis.vlaanderen.be/id/concept-scheme/b18acf1a-2a37-4b42-a549-b158d0065092',
   },
   ACCESS_LEVELS: {
     INTERN_SECRETARIE: 'http://themis.vlaanderen.be/id/concept/toegangsniveau/66804c35-4652-4ff4-b927-16982a3b6de8',
@@ -24,7 +25,12 @@ export default {
     KABINET_DOSSIERBEHEERDER: 'http://themis.vlaanderen.be/id/gebruikersrol/6bcebe59-0cb5-4c5e-ab40-ca98b65887a4',
     KABINET_MEDEWERKER: 'http://themis.vlaanderen.be/id/gebruikersrol/33dbca4a-7e57-41d2-a26c-aedef422ff84',
     OVERHEIDSORGANISATIE: 'http://themis.vlaanderen.be/id/gebruikersrol/06cfd67b-1637-47d3-811f-97aa23a83644',
+    OVERLEGCOMITE_RAADGEVER: 'http://themis.vlaanderen.be/id/gebruikersrol/a12965ec-e95a-4f7b-8911-7bbb41ce29d9',
     VLAAMS_PARLEMENT: 'http://themis.vlaanderen.be/id/gebruikersrol/12543581-7f02-4166-87d2-ab15ddfce642',
+  },
+  USER_ACCESS_STATUSES: {
+    ALLOWED: 'http://themis.vlaanderen.be/id/concept/43ba4953-3484-4ec7-9741-6e709befc531',
+    BLOCKED: 'http://themis.vlaanderen.be/id/concept/ffd0d21a-3beb-44c4-b3ff-06fe9561282a',
   },
   SERVICE_PROVIDERS: {
     MOCK_LOGIN: 'https://github.com/kanselarij-vlaanderen/mock-login-service',

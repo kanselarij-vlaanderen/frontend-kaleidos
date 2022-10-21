@@ -1,43 +1,52 @@
 {{!-- TODO: octane-refactor --}}
 {{!-- template-lint-disable no-action --}}
-<div class="auk-u-mb-4">
-  <div class="auk-form-group">
-    <Auk::Label>{{t "title"}}</Auk::Label>
-    <Auk::Input
-      @block={{true}}
-      @value={{this.agendaitem.titlePress}}
-    />
-  </div>
-  <div class="auk-form-group">
-    <Auk::Label id="content">{{t "content"}}</Auk::Label>
-    <Textarea
-      class="auk-textarea"
-      rows="10"
-      aria-labelledby="content"
-      @value={{this.agendaitem.textPress}}
-    />
-  </div>
-  <div class="auk-form-group">
-    <Auk::Label for="for-press">{{t "for-press"}}</Auk::Label>
-    <Auk::Toggle
-      id="for-press"
-      @checked={{this.agendaitem.forPress}}
-    />
-  </div>
-</div>
-<Auk::Toolbar>
-  <Auk::Toolbar::Group @position="right">
-    <Auk::Toolbar::Item>
-      <Auk::ButtonLink {{action "cancelEditing" this.agendaitem}}>
-        {{t "cancel"}}
-      </Auk::ButtonLink>
-    </Auk::Toolbar::Item>
-    <Auk::Toolbar::Item>
-      <WebComponents::VlSaveButton
-        @text={{t "save"}}
-        @isLoading={{this.isLoading}}
-        @saveAction={{action "saveChanges" this.agendaitem}}
+<Auk::Panel class="auk-panel--editing">
+  <Auk::Panel::Body>
+    <div class="auk-form-group">
+      <Auk::Label>{{t "title"}}</Auk::Label>
+      <Auk::Input
+        @block={{true}}
+        @value={{this.agendaitem.titlePress}}
       />
-    </Auk::Toolbar::Item>
-  </Auk::Toolbar::Group>
-</Auk::Toolbar>
+    </div>
+    <div class="auk-form-group">
+      <Auk::Label id="content">{{t "content"}}</Auk::Label>
+      <Textarea
+        class="auk-textarea"
+        rows="10"
+        aria-labelledby="content"
+        @value={{this.agendaitem.textPress}}
+      />
+    </div>
+    <div class="auk-form-group">
+      <Auk::Label for="for-press">{{t "for-press"}}</Auk::Label>
+      <Auk::Toggle
+        id="for-press"
+        @checked={{this.agendaitem.forPress}}
+      />
+    </div>
+  </Auk::Panel::Body>
+  <Auk::Panel::Footer>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <AuButton
+            @skin="naked"
+            {{action "cancelEditing" this.agendaitem}}
+          >
+            {{t "cancel"}}
+          </AuButton>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <WebComponents::VlSaveButton
+            @text={{t "save"}}
+            @isLoading={{this.isLoading}}
+            @saveAction={{action "saveChanges" this.agendaitem}}
+          />
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Footer>
+</Auk::Panel>

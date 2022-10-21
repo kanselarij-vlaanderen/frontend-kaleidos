@@ -9,13 +9,13 @@
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
-        <Auk::ButtonLink
-          @skin="light"
-          @size="small"
+        {{!-- TODO: this button needs to be displayed in a smaller size --}}
+        <AuButton
+          @skin="link"
           {{on "click" @toggleShowModifiedOnly}}
         >
           {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
-        </Auk::ButtonLink>
+        </AuButton>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>

@@ -1,4 +1,5 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class User extends Model {
   @attr('string') firstName;
@@ -6,10 +7,16 @@ export default class User extends Model {
   @attr('string') identifier;
 
   @belongsTo('account') account;
+  @belongsTo('concept') status;
+  @belongsTo('login-activity') loginActivity;
 
   @hasMany('membership') memberships;
 
   get fullName() {
     return `${this.firstName} ${this.lastName}`;
+  }
+
+  get isBlocked() {
+    return this.status.get('uri') === CONSTANTS.USER_ACCESS_STATUSES.BLOCKED;
   }
 }

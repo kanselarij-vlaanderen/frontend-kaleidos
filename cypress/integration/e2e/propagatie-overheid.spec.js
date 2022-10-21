@@ -125,7 +125,7 @@ context('Propagation to other graphs', () => {
       cy.get(appuniversum.pill).eq(1)
         .contains(`Publicatie documenten gepland op ${todayFormatted}`);
     });
-    cy.wait(60000);
+    cy.wait(80000);
     cy.get(agenda.publicationPills.container).within(() => {
       cy.get(appuniversum.pill).eq(1)
         .contains(`Documenten zijn vrijgegeven op ${todayFormatted}`);

@@ -26,11 +26,11 @@ as |tab|
   </tab.body>
 {{/light-table}}
 {{#if this.isScrolling}}
-  <Auk::Button
+  <AuButton
     @skin="secondary"
-    @layout="icon-only"
     @icon="plus"
+    @hideText={{true}}
   >
-    {{t "back"}}
-  </Auk::Button>
+    {{t "show-more"}}
+  </AuButton>
 {{/if}}

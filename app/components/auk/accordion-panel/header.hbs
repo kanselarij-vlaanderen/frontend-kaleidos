@@ -2,13 +2,15 @@
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
-        <Auk::Button
-          @skin="tertiary"
-          @icon="chevron-right"
-          @layout="icon-only"
+        <AuButton
           aria-controls={{@accordionPanelId}}
+          @skin="naked"
+          @icon={{if @isActive "chevron-down" "chevron-right"}}
+          @hideText={{true}}
           {{on "click" @onToggleClick}}
-        />
+        >
+          {{t "save"}}
+        </AuButton>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
         <div class="auk-accordion-panel__title-container">
