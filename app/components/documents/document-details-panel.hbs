@@ -47,6 +47,7 @@
         />
       </Auk::KeyValue>
       <Auk::KeyValue
+        data-test-document-details-panel-source-file
         @key={{t "source-file"}}
       >
         <div class="au-u-flex au-u-flex--between">
@@ -58,6 +59,7 @@
             </p>
           {{/if}}
           <AuButton
+            data-test-document-details-panel-upload
             @icon="upload"
             @iconAlignment="left"
             @skin="secondary"
@@ -158,6 +160,7 @@
         />
       </Auk::KeyValue>
       <Auk::KeyValue
+        data-test-document-details-panel-source-file
         @key={{t (if (eq @piece.file.primarySource.extension "docx") "word-document" "source-file")}}
       >
         {{#if @piece.file.primarySource}}
