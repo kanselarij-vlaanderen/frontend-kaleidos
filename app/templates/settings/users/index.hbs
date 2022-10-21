@@ -150,7 +150,7 @@
                   @alignment="right"
                   @icon="three-dots"
                 >
-                  {{#if (is-empty (reject-by "isBlocked" user.memberships))}}
+                  {{#if (not (is-empty (filter-by "isBlocked" user.memberships)))}}
                     <AuButton
                       @skin="naked"
                       role="menuitem"
@@ -158,7 +158,8 @@
                     >
                       {{t "unblock-membership"}}
                     </AuButton>
-                  {{else}}
+                  {{/if}}
+                  {{#if (not (is-empty (reject-by "isBlocked" user.memberships)))}}
                     <AuButton
                       @skin="naked"
                       @alert={{true}}
@@ -221,7 +222,7 @@
       <AuFieldset as |f|>
         <f.legend>{{t "block-membership-which-one"}}</f.legend>
         <f.content>
-          {{#each this.userBeingBlocked.memberships as |membership|}}
+          {{#each (reject-by "isBlocked" this.userBeingBlocked.memberships) as |membership|}}
             {{#let (concat membership.organization.name " - " membership.role.label) as |membershipLabel|}}
               <AuControlCheckbox
                 @label={{membershipLabel}}
@@ -252,7 +253,7 @@
       <AuFieldset as |f|>
         <f.legend>{{t "unblock-membership-which-one"}}</f.legend>
         <f.content>
-          {{#each this.userBeingBlocked.memberships as |membership|}}
+          {{#each (filter-by "isBlocked" this.userBeingBlocked.memberships) as |membership|}}
             {{#let (concat membership.organization.name " - " membership.role.label) as |membershipLabel|}}
               <AuControlCheckbox
                 @label={{membershipLabel}}
