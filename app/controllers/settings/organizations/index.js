@@ -17,12 +17,12 @@ export default class SettingsOrganizationsIndexController extends Controller {
 
   @tracked organizationBeingBlocked = null;
 
-  @tracked showBlockOrganization = false;
-  @tracked showUnblockOrganization = false;
+  @tracked showBlockOrganizationConfirmationModal = false;
+  @tracked showUnblockOrganizationConfirmationModal = false;
 
   @tracked organizations = [];
   @tracked selectedOrganizations = [];
-  @tracked showBlockedOrganizations = false;
+  @tracked showBlockedOrganizationsOnly = false;
 
   @action
   setOrganizations(organizations) {

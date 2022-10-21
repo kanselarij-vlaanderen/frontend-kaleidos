@@ -21,10 +21,10 @@ export default class UsersSettingsController extends Controller {
   @tracked userBeingBlocked = null;
   @tracked membershipsBeingBlocked = [];
 
-  @tracked showBlockMembership = false;
-  @tracked showBlockUser = false;
-  @tracked showUnblockMembership = false;
-  @tracked showUnblockUser = false;
+  @tracked showBlockMembershipsConfirmationModal = false;
+  @tracked showBlockUserConfirmationModal = false;
+  @tracked showUnblockMembershipsConfirmationModal = false;
+  @tracked showUnblockUserConfirmationModal = false;
 
   @tracked organizations = [];
   @tracked selectedOrganizations = [];
@@ -34,8 +34,8 @@ export default class UsersSettingsController extends Controller {
   @tracked _dateToBuffer;
   @tracked roles = [];
   @tracked selectedRoles = [];
-  @tracked showBlockedUsers = false;
-  @tracked showBlockedMemberships = false;
+  @tracked showBlockedUsersOnly = false;
+  @tracked showBlockedMembershipsOnly = false;
 
   @tracked isLoadingModel = false;
 
@@ -87,14 +87,14 @@ export default class UsersSettingsController extends Controller {
   }
 
   @action
-  toggleShowBlockMembership() {
-    this.showBlockMembership = !this.showBlockMembership;
+  toggleShowBlockMembershipsConfirmationModal() {
+    this.showBlockMembershipsConfirmationModal = !this.showBlockMembershipsConfirmationModal;
     this.membershipsBeingBlocked = [];
   }
 
   @action
-  toggleShowUnblockMembership() {
-    this.showUnblockMembership = !this.showUnblockMembership;
+  toggleShowUnblockMembershipsConfirmationModal() {
+    this.showUnblockMembershipsConfirmationModal = !this.showUnblockMembershipsConfirmationModal;
     this.membershipsBeingBlocked = [];
   }
 
@@ -147,7 +147,7 @@ export default class UsersSettingsController extends Controller {
   @action
   filterMemberships(memberships) {
     return memberships.filter((membership) => {
-      const shouldShow = !this.showBlockedMemberships || membership.get('isBlocked');
+      const shouldShow = !this.showBlockedMembershipsOnly || membership.get('isBlocked');
       return this.roles.includes(membership.get('role.id')) && shouldShow;
     });
   }

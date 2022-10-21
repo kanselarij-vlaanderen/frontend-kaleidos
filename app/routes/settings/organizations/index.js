@@ -27,7 +27,7 @@ export default class SettingsOrganizationsIndexRoute extends Route {
       refreshModel: true,
       as: 'organisaties',
     },
-    showBlockedOrganizations: {
+    showBlockedOrganizationsOnly: {
       refreshModel: true,
       as: 'toon_geblokkeerde_organisaties',
     }
@@ -51,7 +51,7 @@ export default class SettingsOrganizationsIndexRoute extends Route {
       filter[':id:'] = params.organizations.join(',');
     }
 
-    if (params.showBlockedOrganizations) {
+    if (params.showBlockedOrganizationsOnly) {
       filter.status = {
         ':uri:': CONSTANTS.USER_ACCESS_STATUSES.BLOCKED,
       };

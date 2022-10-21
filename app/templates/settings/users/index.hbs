@@ -47,14 +47,14 @@
         <div class="au-c-card au-o-box au-o-box--small">
           <Auk::Label>{{t "blocked-on"}}</Auk::Label>
           <Auk::Checkbox
-            @checked={{this.showBlockedMemberships}}
+            @checked={{this.showBlockedMembershipsOnly}}
             @label={{t "membership"}}
-            {{on "click" (toggle "showBlockedMemberships" this)}}
+            {{on "click" (toggle "showBlockedMembershipsOnly" this)}}
           />
           <Auk::Checkbox
-            @checked={{this.showBlockedUsers}}
+            @checked={{this.showBlockedUsersOnly}}
             @label={{t "user"}}
-            {{on "click" (toggle "showBlockedUsers" this)}}
+            {{on "click" (toggle "showBlockedUsersOnly" this)}}
           />
         </div>
       </div>
@@ -162,7 +162,7 @@
                     <AuButton
                       @skin="naked"
                       role="menuitem"
-                      {{on "click" (queue this.toggleShowUnblockMembership (set this "userBeingBlocked" user))}}
+                      {{on "click" (queue this.toggleShowUnblockMembershipsConfirmationModal (set this "userBeingBlocked" user))}}
                     >
                       {{t "unblock-membership"}}
                     </AuButton>
@@ -172,7 +172,7 @@
                       @skin="naked"
                       @alert={{true}}
                       role="menuitem"
-                      {{on "click" (queue this.toggleShowBlockMembership (set this "userBeingBlocked" user))}}
+                      {{on "click" (queue this.toggleShowBlockMembershipsConfirmationModal (set this "userBeingBlocked" user))}}
                     >
                       {{t "block-membership"}}
                     </AuButton>
@@ -181,7 +181,7 @@
                     <AuButton
                       @skin="naked"
                       role="menuitem"
-                      {{on "click" (queue (toggle "showUnblockUser" this) (set this "userBeingBlocked" user))}}
+                      {{on "click" (queue (toggle "showUnblockUserConfirmationModal" this) (set this "userBeingBlocked" user))}}
                     >
                       {{t "unblock-user"}}
                     </AuButton>
@@ -190,7 +190,7 @@
                       @skin="naked"
                       @alert={{true}}
                       role="menuitem"
-                      {{on "click" (queue (toggle "showBlockUser" this) (set this "userBeingBlocked" user))}}
+                      {{on "click" (queue (toggle "showBlockUserConfirmationModal" this) (set this "userBeingBlocked" user))}}
                     >
                       {{t "block-user"}}
                     </AuButton>
@@ -214,9 +214,9 @@
 </div>
 
 <ConfirmationModal
-  @modalOpen={{this.showBlockMembership}}
-  @onConfirm={{queue this.blockMemberships this.toggleShowBlockMembership}}
-  @onCancel={{this.toggleShowBlockMembership}}
+  @modalOpen={{this.showBlockMembershipsConfirmationModal}}
+  @onConfirm={{queue this.blockMemberships this.toggleShowBlockMembershipsConfirmationModal}}
+  @onCancel={{this.toggleShowBlockMembershipsConfirmationModal}}
   @confirmMessage={{t "block-membership"}}
   @alert={{true}}
   @disabled={{is-empty this.membershipsBeingBlocked}}
@@ -246,9 +246,9 @@
 </ConfirmationModal>
 
 <ConfirmationModal
-  @modalOpen={{this.showUnblockMembership}}
-  @onConfirm={{queue this.unblockMemberships this.toggleShowUnblockMembership}}
-  @onCancel={{this.toggleShowUnblockMembership}}
+  @modalOpen={{this.showUnblockMembershipsConfirmationModal}}
+  @onConfirm={{queue this.unblockMemberships this.toggleShowUnblockMembershipsConfirmationModal}}
+  @onCancel={{this.toggleShowUnblockMembershipsConfirmationModal}}
   @confirmMessage={{t "unblock-membership"}}
   @disabled={{is-empty this.membershipsBeingBlocked}}
 >
@@ -277,9 +277,9 @@
 </ConfirmationModal>
 
 <ConfirmationModal
-  @modalOpen={{this.showBlockUser}}
-  @onConfirm={{queue this.blockUser (toggle "showBlockUser" this)}}
-  @onCancel={{toggle "showBlockUser" this}}
+  @modalOpen={{this.showBlockUserConfirmationModal}}
+  @onConfirm={{queue this.blockUser (toggle "showBlockUserConfirmationModal" this)}}
+  @onCancel={{toggle "showBlockUserConfirmationModal" this}}
   @confirmMessage={{t "block-user"}}
   @alert={{true}}
 >
@@ -295,9 +295,9 @@
 </ConfirmationModal>
 
 <ConfirmationModal
-  @modalOpen={{this.showUnblockUser}}
-  @onConfirm={{queue this.unblockUser (toggle "showUnblockUser" this)}}
-  @onCancel={{toggle "showUnblockUser" this}}
+  @modalOpen={{this.showUnblockUserConfirmationModal}}
+  @onConfirm={{queue this.unblockUser (toggle "showUnblockUserConfirmationModal" this)}}
+  @onCancel={{toggle "showUnblockUserConfirmationModal" this}}
   @confirmMessage={{t "unblock-user"}}
 >
   <:title>

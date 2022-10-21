@@ -17,7 +17,7 @@
             @label={{t "show-only-blocked"}}
             @identifier="blocked"
             @name="blocked"
-            @checked={{this.showBlockedOrganizations}}
+            @checked={{this.showBlockedOrganizationsOnly}}
           />
         </div>
       </div>
@@ -103,7 +103,7 @@
                     <AuButton
                       @skin="naked"
                       role="menuitem"
-                      {{on "click" (queue (toggle "showUnblockOrganization" this) (set this "organizationBeingBlocked" organization))}}
+                      {{on "click" (queue (toggle "showUnblockOrganizationConfirmationModal" this) (set this "organizationBeingBlocked" organization))}}
                     >
                       {{t "unblock-organization"}}
                     </AuButton>
@@ -112,7 +112,7 @@
                       @skin="naked"
                       @alert={{true}}
                       role="menuitem"
-                      {{on "click" (queue (toggle "showBlockOrganization" this) (set this "organizationBeingBlocked" organization))}}
+                      {{on "click" (queue (toggle "showBlockOrganizationConfirmationModal" this) (set this "organizationBeingBlocked" organization))}}
                     >
                       {{t "block-organization"}}
                     </AuButton>
@@ -128,9 +128,9 @@
 </div>
 
 <ConfirmationModal
-  @modalOpen={{this.showBlockOrganization}}
-  @onConfirm={{queue (perform this.blockOrganization) (toggle "showBlockOrganization" this)}}
-  @onCancel={{toggle "showBlockOrganization" this}}
+  @modalOpen={{this.showBlockOrganizationConfirmationModal}}
+  @onConfirm={{queue (perform this.blockOrganization) (toggle "showBlockOrganizationConfirmationModal" this)}}
+  @onCancel={{toggle "showBlockOrganizationConfirmationModal" this}}
   @confirmMessage={{t "block-organization"}}
   @alert={{true}}
   @loading={{this.blockOrganization.isRunning}}
@@ -148,9 +148,9 @@
 
 
 <ConfirmationModal
-  @modalOpen={{this.showUnblockOrganization}}
-  @onConfirm={{queue (perform this.unblockOrganization) (toggle "showUnblockOrganization" this)}}
-  @onCancel={{toggle "showUnblockOrganization" this}}
+  @modalOpen={{this.showUnblockOrganizationConfirmationModal}}
+  @onConfirm={{queue (perform this.unblockOrganization) (toggle "showUnblockOrganizationConfirmationModal" this)}}
+  @onCancel={{toggle "showUnblockOrganizationConfirmationModal" this}}
   @confirmMessage={{t "unblock-organization"}}
   @loading={{this.unblockOrganization.isRunning}}
 >
