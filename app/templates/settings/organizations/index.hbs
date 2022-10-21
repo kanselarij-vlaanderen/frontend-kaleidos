@@ -3,10 +3,14 @@
     <div class="auk-o-grid-col-2">
       <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny au-u-padding-right-none">
         <div class="au-c-card au-o-box au-o-box--small">
-          <OrganizationFilter
-            @selected={{this.selectedOrganizations}}
-            @onChange={{this.setOrganizations}}
-          />
+          {{#if this.loadSelectedOrganizations.isRunning}}
+            <Auk::Loader />
+          {{else}}
+            <OrganizationFilter
+              @selected={{this.selectedOrganizations}}
+              @onChange={{this.setOrganizations}}
+            />
+          {{/if}}
         </div>
         <div class="au-c-card au-o-box au-o-box--small">
           <AuToggleSwitch

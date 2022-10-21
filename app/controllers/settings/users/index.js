@@ -76,6 +76,16 @@ export default class UsersSettingsController extends Controller {
     this.filter = this.searchTextBuffer;
   }
 
+  @task
+  *loadSelectedOrganizations() {
+    this.selectedOrganizations = (yield Promise.all(this.organizations.map((id) => this.store.findRecord('user-organization', id)))).toArray();
+  }
+
+  @task
+  *loadSelectedRoles() {
+    this.selectedRoles = (yield Promise.all(this.roles.map((id) => this.store.findRecord('role', id)))).toArray();
+  }
+
   @action
   toggleShowBlockMembership() {
     this.showBlockMembership = !this.showBlockMembership;

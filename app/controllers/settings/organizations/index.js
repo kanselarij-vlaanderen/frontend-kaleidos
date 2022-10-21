@@ -31,6 +31,11 @@ export default class SettingsOrganizationsIndexController extends Controller {
   }
 
   @task
+  *loadSelectedOrganizations() {
+    this.selectedOrganizations = (yield Promise.all(this.organizations.map((id) => this.store.findRecord('user-organization', id)))).toArray();
+  }
+
+  @task
   *blockOrganization() {
     const blocked = yield this.store.findRecordByUri(
       'concept',

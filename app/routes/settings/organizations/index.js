@@ -82,7 +82,7 @@ export default class SettingsOrganizationsIndexRoute extends Route {
     if (controller.page !== this.lastParams.committed.page) {
       controller.page = this.lastParams.committed.page;
     }
-    controller.selectedOrganizations = this.selectedOrganizations;
+    controller.loadSelectedOrganizations.perform();
   }
 
   @action
