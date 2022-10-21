@@ -7,6 +7,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class SettingsOrganizationsIndexController extends Controller {
   @service store;
+  @service currentSession;
 
   @tracked size = 10;
   @tracked page = 0;
@@ -66,10 +67,12 @@ export default class SettingsOrganizationsIndexController extends Controller {
       },
     });
 
-    // Block all memberships, 10 at a time
+    // Block all memberships, 10 at a time, except for the membership used to log
+    // in. We don't want to let users block themselves from the system accidentally.
     yield Promise.all(
       memberships
         .toArray()
+        .filter((membership) => membership.id != this.currentSession.membership.id)
         .map((membership) =>
           this.updateMembershipStatus.perform(membership, status)
         )
