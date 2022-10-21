@@ -67,7 +67,19 @@
             <td class={{if organization.isBlocked "au-u-muted"}}>
               <div>
                 <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
-                  <LinkTo @route="settings.users" @query={{hash organizations=(array organization.id)}}>
+                  <LinkTo
+                    @route="settings.users"
+                    @query={{hash
+                      organizations=(array organization.id)
+                      filter=null
+                      page=0
+                      dateFrom=null
+                      dateTo=null
+                      roles=(array)
+                      showBlockedUsers=false
+                      showBlockedMembership=false
+                    }}
+                  >
                     <OrganizationMembershipsCount
                       @organization={{organization}}
                     />
