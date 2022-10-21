@@ -139,6 +139,11 @@ export default class UsersSettingsController extends Controller {
     await Promise.all(this.membershipsBeingBlocked.map((membership) => membership.save()));
   }
 
+  /* Takes in a list of memberships (from a user's hasMany relation) and filters
+   * them based on the user-set filters on this page, i.e. the roles and blocked
+   * status. We use this in the template to only show the memberships which
+   * currently match the filtering options.
+   */
   @action
   filterMemberships(memberships) {
     return memberships.filter((membership) => {
