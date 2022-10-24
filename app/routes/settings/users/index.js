@@ -43,11 +43,11 @@ export default class SettingsUsersIndexRoute extends Route {
       refreshModel: true,
       as: 'rollen',
     },
-    showBlockedUsers: {
+    showBlockedUsersOnly: {
       refreshModel: true,
       as: 'toon_geblokkeerde_gebuikers',
     },
-    showBlockedMemberships: {
+    showBlockedMembershipsOnly: {
       refreshModel: true,
       as: 'toon_geblokkeerde_werkrelaties',
     },
@@ -96,13 +96,13 @@ export default class SettingsUsersIndexRoute extends Route {
       filter.memberships[':has-no:role'] = true;
     }
 
-    if (params.showBlockedUsers) {
+    if (params.showBlockedUsersOnly) {
       filter.status = {
         ':uri:': CONSTANTS.USER_ACCESS_STATUSES.BLOCKED,
       };
     }
 
-    if (params.showBlockedMemberships) {
+    if (params.showBlockedMembershipsOnly) {
       filter.memberships ??= {};
       filter.memberships.status = {
         ':uri:': CONSTANTS.USER_ACCESS_STATUSES.BLOCKED,
@@ -142,6 +142,8 @@ export default class SettingsUsersIndexRoute extends Route {
     controller.searchTextBuffer = this.lastParams.committed.filter;
     controller.dateFromBuffer = parseDate(this.lastParams.committed.dateFrom);
     controller.dateToBuffer = parseDate(this.lastParams.committed.dateTo);
+    controller.loadSelectedOrganizations.perform();
+    controller.loadSelectedRoles.perform();
   }
 
   @action

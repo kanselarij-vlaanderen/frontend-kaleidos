@@ -21,10 +21,10 @@ export default class UsersSettingsController extends Controller {
   @tracked userBeingBlocked = null;
   @tracked membershipsBeingBlocked = [];
 
-  @tracked showBlockMembership = false;
-  @tracked showBlockUser = false;
-  @tracked showUnblockMembership = false;
-  @tracked showUnblockUser = false;
+  @tracked showBlockMembershipsConfirmationModal = false;
+  @tracked showBlockUserConfirmationModal = false;
+  @tracked showUnblockMembershipsConfirmationModal = false;
+  @tracked showUnblockUserConfirmationModal = false;
 
   @tracked organizations = [];
   @tracked selectedOrganizations = [];
@@ -34,17 +34,10 @@ export default class UsersSettingsController extends Controller {
   @tracked _dateToBuffer;
   @tracked roles = [];
   @tracked selectedRoles = [];
-  @tracked showBlockedUsers = false;
-  @tracked showBlockedMemberships = false;
+  @tracked showBlockedUsersOnly = false;
+  @tracked showBlockedMembershipsOnly = false;
 
   @tracked isLoadingModel = false;
-
-  constructor() {
-    super(...arguments);
-
-    this.loadSelectedOrganizations.perform();
-    this.loadSelectedRoles.perform();
-  }
 
   get dateToBuffer() {
     return this._dateToBuffer;
@@ -85,23 +78,23 @@ export default class UsersSettingsController extends Controller {
 
   @task
   *loadSelectedOrganizations() {
-    this.selectedOrganizations = yield Promise.all(this.organizations.map((id) => this.store.findRecord('user-organization', id)));
+    this.selectedOrganizations = (yield Promise.all(this.organizations.map((id) => this.store.findRecord('user-organization', id)))).toArray();
   }
 
   @task
   *loadSelectedRoles() {
-    this.selectedRoles = yield Promise.all(this.roles.map((id) => this.store.findRecord('role', id)));
+    this.selectedRoles = (yield Promise.all(this.roles.map((id) => this.store.findRecord('role', id)))).toArray();
   }
 
   @action
-  toggleShowBlockMembership() {
-    this.showBlockMembership = !this.showBlockMembership;
+  toggleShowBlockMembershipsConfirmationModal() {
+    this.showBlockMembershipsConfirmationModal = !this.showBlockMembershipsConfirmationModal;
     this.membershipsBeingBlocked = [];
   }
 
   @action
-  toggleShowUnblockMembership() {
-    this.showUnblockMembership = !this.showUnblockMembership;
+  toggleShowUnblockMembershipsConfirmationModal() {
+    this.showUnblockMembershipsConfirmationModal = !this.showUnblockMembershipsConfirmationModal;
     this.membershipsBeingBlocked = [];
   }
 
@@ -144,5 +137,18 @@ export default class UsersSettingsController extends Controller {
       membership.status = allowed;
     }
     await Promise.all(this.membershipsBeingBlocked.map((membership) => membership.save()));
+  }
+
+  /* Takes in a list of memberships (from a user's hasMany relation) and filters
+   * them based on the user-set filters on this page, i.e. the roles and blocked
+   * status. We use this in the template to only show the memberships which
+   * currently match the filtering options.
+   */
+  @action
+  filterMemberships(memberships) {
+    return memberships.filter((membership) => {
+      const shouldShow = !this.showBlockedMembershipsOnly || membership.get('isBlocked');
+      return this.roles.includes(membership.get('role.id')) && shouldShow;
+    });
   }
 }

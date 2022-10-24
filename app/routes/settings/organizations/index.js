@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class SettingsOrganizationsIndexRoute extends Route {
   @service store;
@@ -26,6 +27,10 @@ export default class SettingsOrganizationsIndexRoute extends Route {
       refreshModel: true,
       as: 'organisaties',
     },
+    showBlockedOrganizationsOnly: {
+      refreshModel: true,
+      as: 'toon_geblokkeerde_organisaties',
+    }
   };
 
   constructor() {
@@ -46,6 +51,12 @@ export default class SettingsOrganizationsIndexRoute extends Route {
       filter[':id:'] = params.organizations.join(',');
     }
 
+    if (params.showBlockedOrganizationsOnly) {
+      filter.status = {
+        ':uri:': CONSTANTS.USER_ACCESS_STATUSES.BLOCKED,
+      };
+    }
+
     const options = {
       filter,
       sort: params.sort,
@@ -61,12 +72,17 @@ export default class SettingsOrganizationsIndexRoute extends Route {
     return this.store.query('user-organization', options);
   }
 
+  async afterModel() {
+    this.selectedOrganizations = (await Promise.all(this.lastParams.committed.organizations.map((id) => this.store.findRecord('user-organization', id)))).toArray();
+  }
+
   setupController(controller) {
     super.setupController(...arguments);
 
     if (controller.page !== this.lastParams.committed.page) {
       controller.page = this.lastParams.committed.page;
     }
+    controller.loadSelectedOrganizations.perform();
   }
 
   @action
