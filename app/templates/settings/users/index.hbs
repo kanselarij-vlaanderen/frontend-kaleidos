@@ -61,12 +61,12 @@
     </div>
     <div class="auk-o-grid-col-10">
       <form {{on "submit" this.search}} class="auk-navbar auk-navbar--bordered-bottom au-u-padding-left-none au-u-padding-right-small au-u-padding-top-small au-u-padding-bottom-small au-u-flex--between au-u-flex--spaced-tiny">
-        <Auk::Input
+        <AuInput
           data-test-route-settings-users-search-input
-          class="auk-u-maximize-width"
-          placeholder={{t "user-search"}}
           @type="search"
           @value={{this.searchTextBuffer}}
+          class="auk-u-maximize-width"
+          placeholder={{t "user-search"}}
         />
         <AuButton
           data-test-route-settings-users-search-button

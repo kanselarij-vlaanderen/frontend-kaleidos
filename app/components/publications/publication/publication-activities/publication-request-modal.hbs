@@ -43,11 +43,11 @@
           <Auk::Label for="publicationRequestModal_subject" @required={{true}}>
             {{t "subject"}}
           </Auk::Label>
-          <Auk::Input
+          <AuInput
             data-test-publication-request-subject
-            id="publicationRequestModal_subject"
-            @block={{true}}
+            @width="block"
             @value={{mut this.subject}}
+            id="publicationRequestModal_subject"
           />
         </div>
         <div class="auk-form-group">
