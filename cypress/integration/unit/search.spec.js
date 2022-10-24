@@ -1,4 +1,4 @@
-/* global context, it, cy, beforeEach, afterEach, it */
+/* global context, it, cy, Cypress, beforeEach, afterEach, it */
 // / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
 import dependency from '../../selectors/dependency.selectors';
@@ -325,20 +325,20 @@ context('Search tests', () => {
       });
     });
 
-    it.only('Sort by relevance', () => {
-      // const agendaDate = Cypress.dayjs('2021-03-12');
-      // const currentTimestamp = Cypress.dayjs().unix();
-      // const subcaseTitleShort = `Cypress test: add subcase with accenten in title - ${currentTimestamp}`;
-      // const type = 'Nota';
-      // const subcaseTitleLong = 'Cypress test met accenten in title';
-      // const subcaseType = 'In voorbereiding';
-      // const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+    it('Sort by relevance', () => {
+      const agendaDate = Cypress.dayjs('2021-03-12');
+      const currentTimestamp = Cypress.dayjs().unix();
+      const subcaseTitleShort = `Cypress test: add subcase with accenten in title - ${currentTimestamp}`;
+      const type = 'Nota';
+      const subcaseTitleLong = 'Cypress test met accenten in title';
+      const subcaseType = 'In voorbereiding';
+      const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
 
-      // cy.createAgenda(null, agendaDate, null);
-      // cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
-      // cy.addSubcase(type, subcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
-      // cy.openAgendaForDate(agendaDate);
-      // cy.addAgendaitemToAgenda(subcaseTitleShort);
+      cy.createAgenda(null, agendaDate, null);
+      cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+      cy.addSubcase(type, subcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
+      cy.openAgendaForDate(agendaDate);
+      cy.addAgendaitemToAgenda(subcaseTitleShort);
 
       cy.visit('/zoeken/agendapunten');
       cy.get(route.search.input).clear();
@@ -353,18 +353,15 @@ context('Search tests', () => {
       cy.get(route.searchAgendaitems.row.shortTitle).eq(1)
         .contains('accenten');
 
-      cy.get(route.searchAgendaitems.sidebar.sortOptions).select(1);
+      cy.intercept('GET', '/agendaitems/search?**').as('searchCall2');
+      cy.get(route.searchAgendaitems.sidebar.sortOptions).select('Relevantie');
+      cy.wait('@searchCall2');
+      cy.url().should('contain', 'sorteer=&');
 
       cy.get(route.searchAgendaitems.row.shortTitle).eq(0)
         .contains('accenten');
       cy.get(route.searchAgendaitems.row.shortTitle).eq(1)
         .contains('Hawaï');
     });
-  });
-
-  it('sort by relevance', () => {
-    cy.visit('zoeken/agendapunten');
-    cy.get(route.search.input).clear();
-    // cy.get(route.search.input).type(searchTerm);
   });
 });
