@@ -1122,5 +1122,9 @@
   "filter-on-organization": "Filteren op organisatie",
   "ovo-or-organization": "OVO of organisatie",
   "list-of-ovo-codes": "Lijst met OVO codes",
-  "search-on-ovo-or-organization": "Zoek op organisatienaam of OVO-code"
+  "search-on-ovo-or-organization": "Zoek op organisatienaam of OVO-code",
+  "show-only-blocked": "Toon enkel geblokkeerde",
+  "documents-on-approved-agenda-title": "Documenten wijzigen op een goedgekeurde agenda",
+  "documents-on-approved-agenda-with-next-version": "Er is een recentere versie van deze agenda.",
+  "documents-on-approved-agenda-message": "Bent U zeker dat U de documenten wilt wijzigen op deze goedgekeurde agendaversie?"
 }

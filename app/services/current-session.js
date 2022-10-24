@@ -11,19 +11,20 @@ export default class CurrentSessionService extends Service {
   @tracked user;
   @tracked role;
   @tracked organization;
+  @tracked membership;
 
   /* eslint-disable ember/no-get */
   async load() {
     if (this.session.isAuthenticated) {
       const membershipId = get(this.session, 'data.authenticated.data.relationships.membership.data.id');
       if (membershipId) {
-        const membership = await this.store.findRecord('membership', membershipId, {
+        this.membership = await this.store.findRecord('membership', membershipId, {
           include: 'role,organization,user'
         });
         const [role, organization, user] = await Promise.all([
-          membership.role,
-          membership.organization,
-          membership.user
+          this.membership.role,
+          this.membership.organization,
+          this.membership.user
         ]);
         this.role = role;
         this.organization = organization;
