@@ -1,255 +1,137 @@
-// TODO: octane-refactor
-/* eslint-disable ember/no-get */
-// eslint-disable-next-line ember/no-classic-components
-import Component from '@ember/component';
-import { inject } from '@ember/service';
-import { computed, set } from '@ember/object';
+import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 import {
-  task, timeout
+  task, timeout, restartableTask
 } from 'ember-concurrency';
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
-export default Component.extend({
-  /**
-   * @argument meeting
-   * @argument isAddingAgendaitems
-   * @argument onCreate
-   */
-  meeting: null,
-  onCreate: null, // argument. Function that is triggered after agenda-item creation.
-  availableSubcases: null,
-  showPostponed: false,
-  noItemsSelected: true,
 
-  store: inject(),
-  subcasesService: inject(),
-  agendaService: inject(),
+/**
+ * @argument meeting
+ * @argument onClose
+ * @argument onCreate
+ */
 
-  page: 0,
-  size: 10,
-  filter: '',
-  sort: 'short-title',
-  queryOptions: computed('sort', 'filter', 'page', 'size', function() {
-    const {
-      page, filter, size, sort,
-    } = this;
+export default class CreateAgendaitem extends Component {
+  @service store;
+  @service subcasesService;
+  @service agendaService;
+
+  @tracked selectedSubcases = [];
+  @tracked subcases = [];
+  @tracked loader = false;
+
+  @tracked page = 0;
+  @tracked size = 10;
+  @tracked filter = '';
+  @tracked sort = 'short-title';
+
+  constructor() {
+    super(...arguments);
+
+    this.findAll.perform();
+  }
+
+  get queryOptions() {
     const options = {
-      sort,
+      sort: this.sort,
       page: {
-        number: page,
-        size,
+        number: this.page,
+        size: this.size,
       },
       filter: {
-        ':has-no:agenda-activities': 'yes',
-      },
+        ':has-no:agenda-activities' : 'yes',
+      }
     };
-
-    if (filter) {
-      options.filter['short-title'] = filter;
+    if (this.filter) {
+      options.filter['short-title'] = this.filter;
     }
     return options;
-  }),
+  }
 
-  get pageParam() {
-    return this.page;
-  },
-
-  get sizeParam() {
-    return this.size;
-  },
-
-  set pageParam(page) {
-    this.set('page', page);
-    this.findAll.perform();
-  },
-
-  set sizeParam(size) {
-    this.set('size', size);
-    this.findAll.perform();
-  },
-
-  get filterParam() {
-    return this.filter;
-  },
-
-  set filterParam(filter) {
-    this.set('filter', filter);
-    this.set('page', 0);
-    this.set('size', 10);
-  },
-
-  get sortParam() {
-    return this.sort;
-  },
-
-  set sortParam(sort) {
-    this.set('sort', sort);
-    this.findAll.perform();
-  },
-
-  model: computed('items.[]', function() {
-    (this.get('items') || []).map((item) => item.set('selected', false));
-    return this.items;
-  }),
+  get isSaveDisabled() {
+    return this.selectedSubcases.length === 0;
+  }
 
   setFocus() {
     const element = document.getElementById('searchId');
     if (element) {
       element.focus();
     }
-  },
+  };
 
-  findAll: task(function *() {
-    const {
-      queryOptions,
-    } = this;
-    const items = yield this.store.query('subcase', queryOptions);
-    this.set('items', items);
+  @task
+  *findAll() {
+    this.subcases = yield this.store.query('subcase', this.queryOptions);
     yield timeout(100);
     this.setFocus();
-  }),
+  };
 
-  findPostponed: task(function *() {
-    const ids = yield this.get('subcasesService').getPostPonedSubcaseIds();
-    let postPonedSubcases = [];
-
-    if (ids && ids.length > 0) {
-      postPonedSubcases = yield this.store.query('subcase', {
-        filter: {
-          id: ids.toString(),
-        },
-      });
-    }
-    this.set('items', postPonedSubcases);
-  }),
-
-  searchTask: task(function *() {
+  @restartableTask()
+  *searchTask() {
     yield timeout(300);
-    const {
-      queryOptions,
-    } = this;
-    const items = yield this.store.query('subcase', queryOptions);
-    this.set('items', items);
-    yield timeout(100);
-    this.setFocus();
-  }).restartable(),
+    yield this.findAll.perform();
+  };
 
-  // TODO: octane-refactor
-  // eslint-disable-next-line ember/no-component-lifecycle-hooks
-  async didInsertElement() {
-    this._super(...arguments);
-    this.set('availableSubcases', []);
-    this.set('postponedSubcases', []);
-    this.findAll.perform();
-  },
-
-  // TODO: octane-refactor
-  // eslint-disable-next-line ember/no-actions-hash
-  actions: {
-    selectSize(size) {
-      set(this, 'size', size);
-    },
-
-    close() {
-      this.set('isAddingAgendaitems', false);
-    },
-
-    checkShowPostponedValue(event) {
-      this.set('showPostponed', event.target.checked);
-      if (this.showPostponed) {
-        this.findPostponed.perform();
-      } else {
-        this.findAll.perform();
-      }
-    },
-
-    async selectPostponed(subcase, event) {
-      if (event) {
-        event.stopPropagation();
-      }
-      let action = 'add';
-      if (subcase.selected) {
-        subcase.set('selected', false);
-        action = 'remove';
-      } else {
-        subcase.set('selected', true);
-        action = 'add';
-        this.set('noItemsSelected', false);
-      }
-      const postponed = await this.get('postponedSubcases');
-
-      if (action === 'add') {
-        postponed.pushObject(subcase);
-      } else if (action === 'remove') {
-        const index = postponed.indexOf(subcase);
-        if (index > -1) {
-          postponed.splice(index, 1);
-        }
-        if (!postponed.length) {
-          this.set('noItemsSelected', true);
-        }
-      }
-    },
-
-    // eslint-disable-next-line no-unused-vars
-    async selectAvailableSubcase(subcase, destination, event) {
-      if (event) {
-        event.stopPropagation();
-      }
-
-      let action = 'add';
-      if (subcase.selected) {
-        subcase.set('selected', false);
-        action = 'remove';
-      } else {
-        subcase.set('selected', true);
-        action = 'add';
-      }
-
-      const available = await this.get('availableSubcases');
-
-      if (action === 'add') {
-        available.pushObject(subcase);
-      } else if (action === 'remove') {
-        const index = available.indexOf(subcase);
-        if (index > -1) {
-          available.splice(index, 1);
-        }
-      }
-    },
-
-    async addSubcasesToAgenda() {
-      this.set('loading', true);
-      const {
-        availableSubcases,
-        postponedSubcases,
-      } = this;
-      const subcasesToAdd = [...new Set([...postponedSubcases, ...availableSubcases])];
-      const agendaItems = [];
-      for (const subcase of subcasesToAdd) {
-        let submissionActivities = await this.store.query('submission-activity', {
-          'filter[subcase][:id:]': subcase.id,
-          'filter[:has-no:agenda-activity]': true,
+  @task
+  *addSubcasesToAgenda() {
+    const subcasesToAdd = new Set([...this.selectedSubcases]);
+    const agendaItems = [];
+    for (const subcase of subcasesToAdd) {
+      let submissionActivities = yield this.store.query('submission-activity', {
+        'filter[subcase][:id:]': subcase.id,
+        'filter[:has-no:agenda-activity]': true,
+      });
+      submissionActivities = submissionActivities.toArray();
+      if (!submissionActivities.length) {
+        const now = new Date();
+        const submissionActivity = this.store.createRecord('submission-activity', {
+          startDate: now,
+          subcase,
         });
-        submissionActivities = submissionActivities.toArray();
-        if (!submissionActivities.length) {
-          const now = new Date();
-          const submissionActivity = this.store.createRecord('submission-activity', {
-            startDate: now,
-            subcase,
-          });
-          await submissionActivity.save();
-          submissionActivities = [submissionActivity];
-        }
-        const newItem = await this.agendaService.putSubmissionOnAgenda(this.meeting, submissionActivities);
-        agendaItems.push(newItem);
+        yield submissionActivity.save();
+        submissionActivities = [submissionActivity];
       }
+      const newItem = yield this.agendaService.putSubmissionOnAgenda(this.args.meeting, submissionActivities);
+      agendaItems.push(newItem);
+    }
 
-      this.set('loading', false);
-      this.set('isAddingAgendaitems', false);
-      if (this.onCreate) {
-        this.onCreate(agendaItems);
-      }
-    },
-  },
-});
+    this.args.onCreate(agendaItems);
+  };
+
+  @action
+  selectSize(size) {
+    this.page = 0;
+    this.size = size;
+    this.findAll.perform();
+  }
+
+  @action
+  prevPage() {
+    if (this.page > 0) {
+      this.page = this.page - 1;
+      this.findAll.perform();
+    }
+  }
+
+  @action
+  nextPage() {
+    this.page = this.page + 1;
+    this.findAll.perform();
+  }
+
+  @action
+  onSortChange(sortField) {
+    this.sort = sortField;
+    this.findAll.perform();
+  }
+
+  @action
+  async selectSubcase(subcase) {
+    if (this.selectedSubcases.includes(subcase)) {
+      this.selectedSubcases.removeObject(subcase);
+    } else {
+      this.selectedSubcases.pushObject(subcase);
+    }
+  };
+}
