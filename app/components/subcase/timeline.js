@@ -1,14 +1,25 @@
-import Service, { inject as service } from '@ember/service';
+import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 import moment from 'moment';
+import { dropTask } from 'ember-concurrency';
 
-export default class SubcasesService extends Service {
+export default class SubcaseTimeline extends Component {
   @service store;
   @service intl;
 
-  async getSubcasePhases(subcase) {
+  @tracked phases;
+
+  constructor() {
+    super(...arguments);
+    this.loadSubcasePhases.perform();
+  }
+
+  @dropTask
+  *loadSubcasePhases() {
     const phases = [];
-    const sortedAgendaActivities = await this.store.query('agenda-activity', {
-      'filter[subcase][:id:]': subcase.id,
+    const sortedAgendaActivities = yield this.store.query('agenda-activity', {
+      'filter[subcase][:id:]': this.args.subcase.id,
       sort: 'start-date',
     });
 
@@ -21,23 +32,23 @@ export default class SubcasesService extends Service {
         });
       }
       // phase 2: Is the subcase on an approved agenda
-      const firstAgendaitemOfActivity = await this.store.queryOne('agendaitem', {
+      const firstAgendaitemOfActivity = yield this.store.queryOne('agendaitem', {
         'filter[agenda-activity][:id:]': activity.id,
         'filter[:has-no:previous-version]': 't',
         sort: 'created',
       });
-      const agenda = await firstAgendaitemOfActivity.agenda;
-      const agendaStatus = await agenda.belongsTo('status').reload();
+      const agenda = yield firstAgendaitemOfActivity.agenda;
+      const agendaStatus = yield agenda.belongsTo('status').reload();
       if (!agendaStatus.isDesignAgenda) {
-        const meeting = await agenda.createdFor;
+        const meeting = yield agenda.createdFor;
         phases.push({
           label: this.intl.t('activity-phase-approved-on-agenda'),
           date: moment.utc(meeting.plannedStart).toDate(),
         });
         // phase 3: if on approved, what is the decision
-        const treatment = await firstAgendaitemOfActivity.treatment;
-        const decisionActivity = await treatment.decisionActivity;
-        const decisionResultCode = await decisionActivity.belongsTo('decisionResultCode').reload();
+        const treatment = yield firstAgendaitemOfActivity.treatment;
+        const decisionActivity = yield treatment.decisionActivity;
+        const decisionResultCode = yield decisionActivity.belongsTo('decisionResultCode').reload();
 
         if (decisionResultCode) {
           phases.push({
@@ -55,6 +66,6 @@ export default class SubcasesService extends Service {
         }
       }
     }
-    return phases;
+    this.phases = phases;
   }
 }

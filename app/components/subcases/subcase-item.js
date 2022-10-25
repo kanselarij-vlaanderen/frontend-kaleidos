@@ -24,14 +24,12 @@ export default class SubcaseItemSubcasesComponent extends Component {
   @tracked isShowingAllDocuments = false;
   @tracked hasDocumentsToShow = false;
   @tracked subcaseDocuments;
-  @tracked phases;
   @tracked approved;
   @tracked documentsAreVisible = false;
 
   constructor() {
     super(...arguments);
     this.updateHasDocumentsToShow.perform();
-    this.loadSubcasePhases.perform();
     this.loadSubcaseIsApproved.perform();
   }
 
@@ -130,13 +128,6 @@ export default class SubcaseItemSubcasesComponent extends Component {
     } else {
       this.subcaseDocuments = sortPieces(pieces);
     }
-  }
-
-  @task
-  *loadSubcasePhases() {
-    this.phases = yield this.subcasesService.getSubcasePhases(
-      this.args.subcase
-    );
   }
 
   @task
