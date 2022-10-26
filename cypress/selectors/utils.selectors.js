@@ -66,6 +66,7 @@ const selectors = {
       label: '[data-test-government-areas-panel-row-label]',
       fields: '[data-test-government-areas-panel-row-fields]',
     },
+    emptyState: '[data-test-government-areas-empty-state]',
   },
 
   // edit-government-fields-modal

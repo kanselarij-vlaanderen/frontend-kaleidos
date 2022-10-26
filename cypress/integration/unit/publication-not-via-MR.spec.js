@@ -4,6 +4,7 @@
 import dependency from '../../selectors/dependency.selectors';
 import publication from '../../selectors/publication.selectors';
 import route from '../../selectors/route.selectors';
+import utils from '../../selectors/utils.selectors';
 
 function selectFromDropdown(item) {
   cy.get(dependency.emberPowerSelect.option, {
@@ -121,24 +122,13 @@ context('link publication not via MR to MR', () => {
     cy.get(route.search.trigger).click();
     cy.get(route.searchPublications.row.number).contains(fields3.number)
       .click();
+
     // check if source changed to MR
     cy.get(publication.publicationHeader.number).contains('VIA MINISTERRAAD');
-    // check if publication inherited mandatee
-    // TODO-BUG mandatee not inherited?
-    // cy.get(publication.mandateesPanel.rows).should('have.length', 1)
-    //   .eq(0)
-    //   .find(publication.mandateesPanel.row.fullName)
-    //   .should('contain', nameToCheck);
 
-    // Publications should no longer have government areas, as these are no
-    // longer part of a case (now they're on decisionmaking-flow).
-    // check if publication inherited field
-    // cy.get(utils.governmentAreasPanel.rows).as('listItems');
-    // cy.get('@listItems').should('have.length', 1, {
-    //   timeout: 5000,
-    // });
-    // cy.get('@listItems').contains(domain1.name);
-    // cy.get('@listItems').contains(domain1.fields[0]);
+    // Government areas are not copied when linking to an existing MR
+    cy.get(utils.governmentAreasPanel.emptyState);
+
     // check if document linked
     cy.intercept('GET', '/pieces?filter**publication-flow**').as('getPieces');
     cy.get(publication.publicationNav.decisions).click()
