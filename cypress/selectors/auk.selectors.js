@@ -79,7 +79,10 @@ const selectors = {
   loader: '.auk-loader',
   input: '.auk-input',
 
-  datepicker: '[data-test-auk-datepickr]',
+  datepicker: {
+    datepicker: '[data-test-auk-datepickr]',
+    clear: '[data-test-auk-datepickr-clear]',
+  },
 
   formHelpText: '.auk-form-help-text',
   formGroup: '.auk-form-group',

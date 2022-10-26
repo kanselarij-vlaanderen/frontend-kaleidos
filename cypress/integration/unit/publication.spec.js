@@ -14,13 +14,13 @@ context('Publications tests', () => {
   function checkIfNewPublicationFieldsAreEmpty(number, currentDate) {
     cy.get(publication.newPublication.number).should('not.contain', number);
     // "beslissingsdatum"
-    cy.get(auk.datepicker).eq(0)
+    cy.get(auk.datepicker.datepicker).eq(0)
       .should('be.empty');
     // "ontvangstdatum"
-    cy.get(auk.datepicker).eq(1)
+    cy.get(auk.datepicker.datepicker).eq(1)
       .should('have.value', currentDate);
     // "uiterste datum publicatie"
-    cy.get(auk.datepicker).eq(2)
+    cy.get(auk.datepicker.datepicker).eq(2)
       .should('be.empty');
     cy.get(publication.newPublication.shortTitle).should('be.empty');
     cy.get(publication.newPublication.longTitle).should('be.empty');
@@ -475,7 +475,7 @@ context('Publications tests', () => {
     // add later date
     cy.get(publication.decisionsIndex.uploadReference).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(auk.datepicker).click();
+    cy.get(auk.datepicker.datepicker).click();
     cy.setDateInFlatpickr(laterDate);
     cy.get(publication.referenceUpload.save).click();
     cy.get(publication.documentCardStep.card).contains(laterDate.format('DD-MM-YYYY'));
@@ -483,7 +483,7 @@ context('Publications tests', () => {
     // add earlier date
     cy.get(publication.decisionsIndex.uploadReference).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(auk.datepicker).click();
+    cy.get(auk.datepicker.datepicker).click();
     cy.setDateInFlatpickr(earlierDate);
     cy.get(publication.referenceUpload.save).click();
     cy.get(publication.documentCardStep.card).should('have.length', 2)
@@ -512,7 +512,7 @@ context('Publications tests', () => {
       .click();
     cy.get(publication.publicationCaseInfo.editView.publicationMode).click();
     selectFromDropdown(publicationMode1);
-    cy.get(publication.publicationCaseInfo.editView.decisionDate).find(auk.datepicker)
+    cy.get(publication.publicationCaseInfo.editView.decisionDate).find(auk.datepicker.datepicker)
       .click();
     cy.setDateInFlatpickr(decisionDate);
     cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
@@ -531,7 +531,7 @@ context('Publications tests', () => {
     // change other values to default again
     cy.get(publication.urgencyLevelCheckbox).parent()
       .click();
-    cy.get(publication.publicationCaseInfo.editView.decisionDate).find(auk.datepicker)
+    cy.get(publication.publicationCaseInfo.editView.decisionDate).find(auk.datepicker.datepicker)
       .click()
       .clear();
     cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
