@@ -230,7 +230,8 @@ context('Publications tests', () => {
   });
 
   // Beleidsvelden are no longer in publications, only in dossier
-  it('publications:dossier: Add and delete beleidsdomein', () => {
+  // TODO reenable after cache warmup implements pre-loading the cache for conceptschemens
+  it.skip('publications:dossier: Add and delete beleidsdomein', () => {
     const noGovernmentFields = 'Er zijn nog geen beleidsvelden toegevoegd';
     const labelName = 'Cultuur, Jeugd, Sport en Media';
     const fieldsName = 'Media';
