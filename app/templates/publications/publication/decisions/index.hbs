@@ -10,14 +10,14 @@
       </Toolbar.Group>
       <Toolbar.Group @position="right" as |Group|>
         <Group.Item>
-          <Auk::Button
+          <AuButton
             data-test-route-publications---decisions-upload-reference
             @skin="primary"
             @icon="plus"
             {{on "click" this.openReferenceDocumentUploadModal}}
           >
             {{t "document-add"}}
-          </Auk::Button>
+          </AuButton>
         </Group.Item>
       </Toolbar.Group>
     </Auk::Toolbar>

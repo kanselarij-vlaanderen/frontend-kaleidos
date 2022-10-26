@@ -124,13 +124,13 @@
             </AuButton>
           </AuDropdown>
         {{else}}
-          <Auk::ButtonLink
+          <AuLink
+            @skin="secondary"
             @route="login"
-            @skin="muted"
             @data-menu-samewidth="true"
           >
             {{t "login"}}
-          </Auk::ButtonLink>
+          </AuLink>
         {{/if}}
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>

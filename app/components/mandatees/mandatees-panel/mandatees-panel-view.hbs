@@ -9,13 +9,14 @@
       {{#if @showEditButton}}
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <Auk::Button
-              @skin="tertiary"
-              @icon="pencil"
-              @layout="icon-only"
+            <AuButton
               data-test-mandatee-panel-view-edit={{true}}
+              @skin="naked"
+              @icon="pencil"
               {{on "click" @onClickEdit}}
-            />
+            >
+              {{t "edit"}}
+            </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       {{/if}}

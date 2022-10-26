@@ -5,7 +5,7 @@
   class={{if @isOpen "auk-scroll-wrapper"}}
   @isCollapsed={{not @isOpen}}
 >
-  <Auk::Navbar @skin="gray-200">
+  <Auk::Navbar @skin="gray-200" @noPadding={{not @isOpen}}>
     <Auk::Toolbar as |Toolbar|>
       {{#if @isOpen}}
         <Toolbar.Group @position="left">
@@ -16,14 +16,18 @@
         <Group.Item
           class={{if (not @isOpen) "auk-o-flex auk-o-flex--horizontal-center"}}
         >
-          <Auk::Button
-            @skin="borderless"
-            @layout="icon-only"
+          <AuButton
+            @skin="naked"
             @icon={{if @isOpen "chevron-left" "chevron-right"}}
+            @hideText={{true}}
             {{on "click" (if @isOpen @onCollapse @onOpen)}}
           >
-            {{t "toggle"}}
-          </Auk::Button>
+            {{#if @isOpen}}
+              {{t "hide"}}
+            {{else}}
+              {{t "show"}}
+            {{/if}}
+          </AuButton>
         </Group.Item>
       </Toolbar.Group>
     </Auk::Toolbar>

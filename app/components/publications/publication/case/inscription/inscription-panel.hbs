@@ -44,25 +44,27 @@
         <Auk::Toolbar>
           <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
-              <Auk::Button
+              <AuButton
                 data-test-inscription-edit-cancel
-                @skin="borderless"
+                @skin="naked"
                 @disabled={{this.save.isRunning}}
-                {{on "click" this.closeEditingPanel}}>
+                {{on "click" this.closeEditingPanel}}
+              >
                 {{t "cancel"}}
-              </Auk::Button>
+              </AuButton>
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
-              <Auk::Button
+              <AuButton
                 data-test-inscription-edit-save
                 @skin="primary"
                 @loading={{this.save.isRunning}}
                 @disabled={{not this.isShortTitleValid}}
-                {{on "click" (perform this.save)}}>
+                {{on "click" (perform this.save)}}
+              >
                 {{t "save"}}
-              </Auk::Button>
+              </AuButton>
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
         </Auk::Toolbar>
@@ -82,26 +84,27 @@
           <Auk::Toolbar::Group @position="right">
             {{#if this.isViaCouncilOfMinisters}}
               <Auk::Toolbar::Item>
-                <Auk::Button
+                <AuLink
                   data-test-inscription-view-to-case
-                  @skin="tertiary"
-                  @layout="icon-right"
+                  @skin="button-naked"
                   @icon="chevron-right"
+                  @iconAlignment="right"
                   @route="cases.case.subcases"
                   @model={{@publicationFlow.case.decisionmakingFlow.id}}
                 >
                   {{t "to-case"}}
-                </Auk::Button>
+                </AuLink>
               </Auk::Toolbar::Item>
             {{/if}}
             <Auk::Toolbar::Item>
-              <Auk::Button
+              <AuButton
                 data-test-inscription-view-edit
-                @skin="tertiary"
+                @skin="naked"
                 @icon="pencil"
-                @layout="icon-only"
                 {{on "click" this.openEditingPanel}}
-              />
+              >
+                {{t "edit"}}
+              </AuButton>
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
         </Auk::Toolbar>

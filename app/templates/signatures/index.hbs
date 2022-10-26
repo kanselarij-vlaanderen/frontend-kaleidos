@@ -77,15 +77,15 @@
                 </td>
                 <td>
                   <WebComponents::AuButtonToolbar>
-                    <Auk::Button
-                      @skin="borderless"
-                      @layout="icon-only"
+                    <AuLink
+                      @skin="button-naked"
                       @icon="book"
+                      @hideText={{true}}
                       @href={{signFlow.signSubcase.signMarkingActivity.piece.viewDocumentURL}}
                       target="_blank"
                     >
                       {{t "read"}}
-                    </Auk::Button>
+                    </AuLink>
 
                     <AuDropdown
                       @icon="three-dots"

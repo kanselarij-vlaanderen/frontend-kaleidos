@@ -1,59 +1,64 @@
-<div class="auk-box auk-u-mt-4 auk-u-mb-8">
-  <div class="auk-u-mb-4">
-    <div class="auk-form-group">
-      <Auk::Label for="subcase-confidential">{{t "limited-access"}}</Auk::Label>
-      <Auk::Toggle
-        id="subcase-confidential"
-        @checked={{@subcase.confidential}}
-        data-test-subcase-titles-edit-confidential={{true}}
-      />
+<Auk::Panel class="auk-panel--editing auk-u-mb-8">
+  <Auk::Panel::Body>
+    <div class="auk-u-mb-4">
+      <div class="auk-form-group">
+        <Auk::Label for="subcase-confidential">{{t "limited-access"}}</Auk::Label>
+        <Auk::Toggle
+          id="subcase-confidential"
+          @checked={{@subcase.confidential}}
+          data-test-subcase-titles-edit-confidential={{true}}
+        />
+      </div>
     </div>
-  </div>
-  <div class="auk-u-mb-4">
-    <div class="auk-form-group">
-      <Auk::Label id="name-subcase">{{t "name-subcase"}}</Auk::Label>
-      <Textarea
-        data-test-subcase-titles-edit-shorttitle={{true}}
-        aria-labelledby="name-subcase"
-        rows="2"
-        class="auk-textarea"
-        @value={{@subcase.shortTitle}}
-      />
+    <div class="auk-u-mb-4">
+      <div class="auk-form-group">
+        <Auk::Label id="name-subcase">{{t "name-subcase"}}</Auk::Label>
+        <Textarea
+          data-test-subcase-titles-edit-shorttitle={{true}}
+          aria-labelledby="name-subcase"
+          rows="2"
+          class="auk-textarea"
+          @value={{@subcase.shortTitle}}
+        />
+      </div>
     </div>
-  </div>
-  <div class="auk-u-mb-4">
-    <div class="auk-form-group">
-      <Auk::Label id="title-subcase">{{t "title-subcase"}}</Auk::Label>
-      <Textarea
-        data-test-subcase-titles-edit-title={{true}}
-        aria-labelledby="name-subcase"
-        rows="4"
-        class="auk-textarea"
-        @value={{@subcase.title}}
-      />
+    <div class="auk-u-mb-4">
+      <div class="auk-form-group">
+        <Auk::Label id="title-subcase">{{t "title-subcase"}}</Auk::Label>
+        <Textarea
+          data-test-subcase-titles-edit-title={{true}}
+          aria-labelledby="name-subcase"
+          rows="4"
+          class="auk-textarea"
+          @value={{@subcase.title}}
+        />
+      </div>
     </div>
-  </div>
-
-  <Auk::Toolbar>
-    <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
-        <Auk::Button
-          @skin="tertiary"
-          {{on "click" this.cancelEditing}}
-        >
-          {{t "cancel"}}
-        </Auk::Button>
-      </Auk::Toolbar::Item>
-      <Auk::Toolbar::Item>
-        <Auk::Button
-          data-test-subcase-titles-edit-save={{true}}
-          @skin="primary"
-          @loading={{this.saveChanges.isRunning}}
-          {{on "click" (perform this.saveChanges)}}
-        >
-          {{t "save"}}
-        </Auk::Button>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-  </Auk::Toolbar>
-</div>
+  </Auk::Panel::Body>
+  <Auk::Panel::Footer>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <AuButton
+            @skin="naked"
+            {{on "click" this.cancelEditing}}
+          >
+            {{t "cancel"}}
+          </AuButton>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <AuButton
+            data-test-subcase-titles-edit-save={{true}}
+            @skin="primary"
+            @loading={{this.saveChanges.isRunning}}
+            {{on "click" (perform this.saveChanges)}}
+          >
+            {{t "save"}}
+          </AuButton>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Footer>
+</Auk::Panel>
