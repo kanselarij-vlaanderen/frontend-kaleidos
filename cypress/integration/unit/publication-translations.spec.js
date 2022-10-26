@@ -7,7 +7,7 @@ import utils from '../../selectors/utils.selectors';
 
 context('Publications translation tests', () => {
   beforeEach(() => {
-    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
+    cy.login('OVRB');
     cy.visit('/publicaties');
   });
 

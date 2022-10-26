@@ -32,9 +32,9 @@ context('meeting actions tests', () => {
     cy.get(agenda.agendaitemTitlesView.linkToSubcase);
   });
 
-  it('should not be able to delete approved agendaitem from designagenda with profile: Kanselarij', () => {
+  it('should not be able to delete approved agendaitem from designagenda with profile: Secretarie', () => {
     const subcaseTitleShort = 'Cypress test: delete approve agenda Kanselarij - 1588775768';
-    cy.login('Kanselarij');
+    cy.login('Secretarie');
     cy.visitAgendaWithLink('/vergadering/5EB2CB8FF5E126000900000D/agenda/cd6b8ae7-0f00-451c-b4ad-fa236d5e6a20/agendapunten');
     cy.openDetailOfAgendaitem(subcaseTitleShort);
     // verify this profile does not have the option to delete approved agendaitems

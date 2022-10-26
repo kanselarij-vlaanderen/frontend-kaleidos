@@ -37,7 +37,7 @@ context('Publications via MR tests', () => {
   // 1 nota, 1 BVR, 1 MB, 1 Decreet
 
   beforeEach(() => {
-    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
+    cy.login('OVRB');
   });
 
   afterEach(() => {

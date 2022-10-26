@@ -8,6 +8,7 @@ const selectors = {
     newsletters: '[data-test-m-header-newsletters]',
     search: '[data-test-m-header-search]',
     publications: '[data-test-m-header-publications]',
+    signatures: '[data-test-m-header-signatures]',
     settings: '[data-test-m-header-settings]',
     userActions: '[data-test-m-header-user-actions]',
     userAction: {

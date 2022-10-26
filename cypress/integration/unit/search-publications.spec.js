@@ -181,7 +181,7 @@ context('Search tests', () => {
   };
 
   beforeEach(() => {
-    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
+    cy.login('OVRB');
   });
 
   afterEach(() => {
