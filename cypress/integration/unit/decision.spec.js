@@ -133,13 +133,15 @@ context('Decision tests', () => {
     cy.get(agenda.agendaDetailSidebar.subitem).find(agenda.agendaDetailSidebarItem.postponed)
       .should('exist');
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
-    cy.get(cases.subcaseDescription.timelineItem).eq(0)
+    cy.get(cases.subcaseDescription.panel).find(cases.subcaseTimeline.item)
+      .as('phases');
+    cy.get('@phases').eq(0)
       .contains(/Ingediend voor agendering op/);
-    cy.get(cases.subcaseDescription.timelineItem).eq(1)
+    cy.get('@phases').eq(1)
       .contains(/Geagendeerd op de agenda van/);
-    cy.get(cases.subcaseDescription.timelineItem).eq(2)
+    cy.get('@phases').eq(2)
       .contains(/Uitgesteld op de agenda van/);
-    cy.get(cases.subcaseDescription.timelineItem).eq(3)
+    cy.get('@phases').eq(3)
       .contains(/Er is beslist om dit agendapunt uit te stellen/);
     cy.get(auk.loader).should('not.exist');
   });

@@ -45,7 +45,7 @@
             </thead>
             <tbody class="auk-table--clickable-rows">
               {{#each this.subcases as |subcase|}}
-                <tr>
+                <tr data-test-create-agendaitem-row>
                   <td class="auk-table__col--1">
                     <Auk::Checkbox
                       data-test-create-agendaitem-row-subcase-checkbox={{true}}
@@ -100,6 +100,7 @@
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onClose}}>
     <AuButton
+      data-test-create-agendaitem-save
       @skin="primary"
       @loading={{this.addSubcasesToAgenda.isRunning}}
       @disabled={{this.isSaveDisabled}}

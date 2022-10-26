@@ -230,6 +230,8 @@ const selectors = {
   createAgendaitem: {
     input: '[data-test-create-agendaitem-input]',
     dataTable: '[data-test-create-agendaitem-data-table]',
+    save: '[data-test-create-agendaitem-save]',
+    rows: '[data-test-create-agendaitem-row]',
     row: {
       checkBox: '[data-test-create-agendaitem-row-subcase-checkbox]',
       subcaseName: '[data-test-create-agendaitem-row-subcase-name]',

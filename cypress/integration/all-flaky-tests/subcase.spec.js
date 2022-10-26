@@ -80,7 +80,8 @@ context('Subcase tests', () => {
     const dateFormat = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
     const dateRegex = new RegExp(`.?${Cypress.dayjs(agendaDate).date()}.\\w+.${Cypress.dayjs(agendaDate).year()}`);
 
-    cy.get(cases.subcaseDescription.timelineItem).eq(0)
+    cy.get(cases.subcaseDescription.panel).find(cases.subcaseTimeline.item)
+      .eq(0)
       .contains(/Ingediend voor agendering/);
 
     cy.get(cases.subcaseDescription.meetingNumber);
