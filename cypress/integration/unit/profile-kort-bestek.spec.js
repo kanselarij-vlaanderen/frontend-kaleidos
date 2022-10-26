@@ -10,7 +10,8 @@ import utils from '../../selectors/utils.selectors';
 
 context('Testing the application as Kort bestek user', () => {
   beforeEach(() => {
-    cy.login('Kort bestek');
+    // cy.login does not trigger the transtition to the default route for this profile for some reason
+    cy.loginFlow('Kort bestek');
     cy.wait(1000);
   });
 
