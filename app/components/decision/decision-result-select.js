@@ -17,11 +17,6 @@ export default class DecisionResultSelect extends Component {
   @task
   *loadDecisionResultCodes() {
     const codes = yield this.store.query('concept', {
-      // filter: {
-      //   'concept-schemes': {
-      //     ':uri:': CONSTANTS.CONCEPT_SCHEMES.DECISION_RESULT_CODES,
-      //   }
-      // },
       'filter[concept-schemes][:uri:]': CONSTANTS.CONCEPT_SCHEMES.DECISION_RESULT_CODES,
       reload: true,
       sort: 'position',
