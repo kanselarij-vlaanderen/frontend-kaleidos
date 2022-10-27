@@ -23,7 +23,7 @@ function uploadFileToCancel(file) {
 }
 
 function openAgendaitemDocumentBatchEdit() {
-  cy.intercept('GET', '/document-types?**').as('getDocumentTypes');
+  cy.intercept('GET', '/concepts?filter[concept-schemes][:uri:]=http://themis.vlaanderen.be/id/concept-scheme/559774e3-061c-4f4b-a758-57228d4b68cd**').as('getDocumentTypes');
   cy.intercept('GET', '/concepts?**').as('getAccessLevels');
   cy.get(route.agendaitemDocuments.batchEdit).click();
   cy.wait('@getDocumentTypes');
@@ -485,7 +485,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.documentDetailsRow.row).eq(1)
       .find(document.documentDetailsRow.type)
       .click();
-    cy.intercept('GET', '/document-types?filter**Advies**').as('getDocumentType');
+    cy.intercept('GET', '/concepts?filter[concept-schemes][:uri:]=http://themis.vlaanderen.be/id/concept-scheme/559774e3-061c-4f4b-a758-57228d4b68cd**Advies**').as('getDocumentType');
     cy.get(dependency.emberPowerSelect.searchInput).type(typeSearchOption);
     cy.wait('@getDocumentType');
     cy.get(dependency.emberPowerSelect.option).eq(0)
