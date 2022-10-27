@@ -132,6 +132,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     await this.agendaService.putSubmissionOnAgenda(meeting, submissionActivities);
     this.toggleAllPropertiesBackToDefault();
     this.loadData.perform();
+    this.args.onProposedForAgenda();
   }
 
   @action

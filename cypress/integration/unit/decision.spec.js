@@ -141,6 +141,7 @@ context('Decision tests', () => {
       .contains(/Uitgesteld op de agenda van/);
     cy.get(cases.subcaseDescription.timelineItem).eq(3)
       .contains(/Er is beslist om dit agendapunt uit te stellen/);
+    cy.get(auk.loader).should('not.exist');
   });
 
   it('should test the decision CRUD', () => {

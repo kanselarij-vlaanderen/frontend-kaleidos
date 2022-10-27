@@ -19,9 +19,11 @@ export default class SubcaseDescriptionView extends Component {
   @tracked latestMeeting = null;
   @tracked latestAgenda = null;
   @tracked latestAgendaitem = null;
+  @tracked latestDecisionResultCode = null;
   @tracked approved = null;
   @tracked isPostponed = null;
   @tracked isRetracted = null;
+  @tracked modelsOfMeetings = [];
 
   constructor() {
     super(...arguments);
@@ -36,25 +38,41 @@ export default class SubcaseDescriptionView extends Component {
   *loadAgendaData() {
     this.phases = yield this.subcasesService.getSubcasePhases(this.args.subcase);
     this.subcaseType = yield this.args.subcase.type;
-    this.latestMeeting = yield this.store.queryOne('meeting', {
-      'filter[agendas][agendaitems][agenda-activity][subcase][:id:]': this.args.subcase.id,
-      sort: '-planned-start',
-    });
-    if (this.latestMeeting) {
-      this.latestAgenda = yield this.store.queryOne('agenda', {
-        'filter[created-for][:id:]': this.latestMeeting.id,
-        sort: '-serialnumber',
-      });
-      this.latestAgendaitem = yield this.store.queryOne('agendaitem', {
-        'filter[agenda-activity][subcase][:id:]': this.args.subcase.id,
+    const agendaActivities = yield this.args.subcase.hasMany('agendaActivities').reload();
+    const sortedAgendaActivities = agendaActivities?.sortBy('startDate');
+    // const decisionActivities = yield this.args.subcase.hasMany('decisionActivities').reload();
+    // const sortedDecisionActivities = decisionActivities?.sortBy('startDate');
+
+    this.modelsOfMeetings = [];
+    for (const [index, agendaActivity] of sortedAgendaActivities.toArray().entries()) {
+      // load models for linkTo and other uses
+      const agendaitem = yield this.store.queryOne('agendaitem', {
+        'filter[agenda-activity][:id:]': agendaActivity.id,
         'filter[:has-no:next-version]': 't',
         sort: '-created',
       });
+      const agenda = yield agendaitem.agenda;
+      const meeting = yield agenda.createdFor;
+      yield meeting?.kind;
+      // load decisionActivity
+      // agenda-activities are propagated by yggdrail on agenda approval, treatments/decision-activities only when decisions are released
+      const treatment = yield agendaitem?.treatment;
+      const decisionActivity = yield treatment?.decisionActivity;
+      const resultCode = yield decisionActivity?.decisionResultCode;
+      // Other profiles should not have the latest decision when decisions have not been released yet
+      if (decisionActivity) {
+        // the last decision might be null, keep only the last one that exists
+        this.latestDecisionResultCode = resultCode;
+      }
+
+      this.modelsOfMeetings.push([meeting, agenda, agendaitem, resultCode]);
+      // we need this multiple times in the template and navigating the nested array each time is bothersome
+      if (index === agendaActivities.length -1) {
+        this.latestMeeting = meeting;
+      }
+
     }
+    // TODO KAS-3612 could change to resultCode.isApproved or resultCode.isNoticeTaken
     this.approved = yield this.subcaseIsApproved.isApproved(this.args.subcase);
-    if (!this.approved) {
-      this.isPostponed = yield this.subcaseIsApproved.isPostponed(this.args.subcase);
-      this.isRetracted = yield this.subcaseIsApproved.isRetracted(this.args.subcase);
-    }
   }
 }

@@ -364,6 +364,7 @@ context('Subcase tests', () => {
     // setup
     cy.createCase(caseTitle1);
     cy.addSubcase(type, subcaseShortTitle1);
+    cy.get(cases.subcaseItem.container).should('have.length', 1);
     cy.addSubcase(type, subcaseShortTitle2);
     cy.createCase(caseTitle2);
     // wait for search index

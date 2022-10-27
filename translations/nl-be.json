@@ -318,6 +318,7 @@
   "move-subcase-to-other-case": "Verplaats procedurestap naar ander dossier",
   "requested-for-agenda": "Ingediend voor de agenda van",
   "requested-for-session": "Aangevraagd voor Ministerraad:",
+  "requested-for-session-kind": "Aangevraagd voor {kind}:",
   "resign": "Mandaat beëindigen",
   "results": "resultaten",
   "row": "Rij",

@@ -1,6 +1,7 @@
 /* global  cy, Cypress */
 // / <reference types="Cypress" />
 
+import auk from '../../selectors/auk.selectors';
 import cases from '../../selectors/case.selectors';
 import utils from '../../selectors/utils.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
@@ -189,6 +190,7 @@ function proposeSubcaseForAgenda(agendaDate, numberRep = '') {
   cy.intercept('POST', '/agendaitems').as('createNewAgendaitem');
   cy.intercept('PATCH', '/agendas/*').as('patchAgenda');
   cy.intercept('POST', '/agenda-activities').as('createAgendaActivity');
+  cy.intercept('GET', '/agendaitems?filter**').as('loadAgendaData');
   const monthDutch = getTranslatedMonth(agendaDate.month());
   let formattedDate = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
   if (numberRep) {
@@ -206,6 +208,10 @@ function proposeSubcaseForAgenda(agendaDate, numberRep = '') {
     .wait('@patchAgenda', {
       timeout: 24000,
     });
+  // refresh happens
+  cy.wait('@loadAgendaData');
+  cy.get(cases.subcaseDescription.timelineItem); // when this succeeds the refresh happened
+  cy.get(auk.loader).should('not.exist');
   cy.log('/proposeSubcaseForAgenda');
 }
 
