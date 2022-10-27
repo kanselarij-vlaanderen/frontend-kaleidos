@@ -31,24 +31,6 @@ context('Settings overview page tests', () => {
     cy.closeSettingsModal();
   });
 
-  it('Should open the model behind manage document types and close it', () => {
-    cy.openSettingsModal(settings.overview.manageDocumentTypes);
-    cy.get(utils.vlModal.container).should('contain', 'Document-types beheer');
-    cy.closeSettingsModal();
-  });
-
-  it('Should open the model behind manage case types and close it', () => {
-    cy.openSettingsModal(settings.overview.manageCaseTypes);
-    cy.get(utils.vlModal.container).should('contain', 'Dossier-types beheer');
-    cy.closeSettingsModal();
-  });
-
-  it('Should open the model behind manage subcase types and close it', () => {
-    cy.openSettingsModal(settings.overview.manageSubcaseTypes);
-    cy.get(utils.vlModal.container).should('contain', 'Procedurestap types beheer');
-    cy.closeSettingsModal();
-  });
-
   it('Should trigger search when clicking on search icon', () => {
     cy.intercept('GET', '/users?filter=Minister**').as('filterUsersMinister');
 
