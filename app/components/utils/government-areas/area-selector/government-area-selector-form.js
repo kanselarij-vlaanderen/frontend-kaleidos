@@ -31,7 +31,6 @@ export default class GovernmentAreaSelectorForm extends Component {
     );
 
     let uniqueDomains = domainsFromAvailableFields
-      .filterBy('deprecated', false)
       .uniq()
       .sortBy('label');
 
