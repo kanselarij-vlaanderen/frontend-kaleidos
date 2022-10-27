@@ -13,4 +13,12 @@ export default class DecisionResultCode extends Model {
   get isRetracted() {
     return this.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN;
   }
+
+  get isApproved() {
+    return this.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
+  }
+
+  get isAcknowledged() {
+    return this.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME;
+  }
 }

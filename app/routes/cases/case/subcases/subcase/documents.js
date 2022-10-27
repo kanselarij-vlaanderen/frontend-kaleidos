@@ -23,6 +23,10 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     const agendaActivities = await this.subcase.agendaActivities;
     const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
     if (latestActivity) {
+      this.latestMeeting = await this.store.queryOne('meeting', {
+        'filter[agendas][agendaitems][agenda-activity][:id:]': latestActivity.id,
+        sort: '-planned-start',
+      });
       queryParams['filter[agenda-activity][:id:]'] = latestActivity.id;
     }
     // 2-step process (submission-activity -> pieces). Querying pieces directly doesn't
@@ -37,10 +41,6 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     }
 
     let sortedPieces;
-    this.latestMeeting = await this.store.queryOne('meeting', {
-      'filter[agendas][agendaitems][agenda-activity][subcase][:id:]': this.subcase.id,
-      sort: '-planned-start',
-    });
     if (this.latestMeeting?.isPreKaleidos) {
       sortedPieces = sortPieces(pieces, VrLegacyDocumentName, compareLegacyDocuments);
     } else {

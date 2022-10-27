@@ -127,14 +127,16 @@
               data-test-subcase-description-decided-on
               class="auk-key-value-item__value"
             >
-              {{#if (is-empty this.approved)}}
+              {{#if this.loadAgendaData.isRunning}}
                 <div class="auk-skeleton auk-skeleton--rectangle" role="alert" aria-busy="true"></div>
-              {{else if this.approved}}
-                {{moment-format this.latestMeeting.plannedStart}}
-              {{else if this.latestDecisionResultCode.isPostponed}}
-                {{t "postponed"}}
-              {{else if this.latestDecisionResultCode.isRetracted}}
-                {{t "retracted"}}
+              {{else if this.canShowDecisionStatus}}
+                {{#if (or this.latestDecisionResultCode.isApproved this.latestDecisionResultCode.isAcknowledged)}}
+                  {{moment-format this.latestMeeting.plannedStart}}
+                {{else if this.latestDecisionResultCode.isPostponed}}
+                  {{t "postponed"}}
+                {{else if this.latestDecisionResultCode.isRetracted}}
+                  {{t "retracted"}}
+                {{/if}}
               {{else}}
                 {{t "not-yet-decided"}}
               {{/if}}

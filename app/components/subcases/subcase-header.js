@@ -36,13 +36,8 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
 
   @task
   *loadData() {
-    const latestMeeting = yield this.store.queryOne('meeting', {
-      'filter[agendas][agendaitems][agenda-activity][subcase][:id:]': this.args.subcase.id,
-      sort: '-planned-start',
-    });
-    const activities = yield this.args.subcase.agendaActivities;
-
-    this.canPropose = !(activities?.length || latestMeeting || this.isAssigningToOtherAgenda || this.isLoading);
+    const activities = yield this.args.subcase.hasMany('agendaActivities').reload();
+    this.canPropose = !(activities?.length || this.isAssigningToOtherAgenda || this.isLoading);
     this.canDelete = (this.canPropose && !this.isAssigningToOtherAgenda);
 
     const dateOfToday = moment().utc()

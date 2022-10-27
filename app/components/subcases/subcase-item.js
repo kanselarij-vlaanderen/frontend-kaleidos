@@ -24,7 +24,8 @@ export default class SubcaseItemSubcasesComponent extends Component {
   @tracked isShowingAllDocuments = false;
   @tracked hasDocumentsToShow = false;
   @tracked subcaseDocuments;
-  @tracked approved;
+  @tracked phases;
+  @tracked approved; // or acknowledged
   @tracked documentsAreVisible = false;
 
   constructor() {
@@ -90,10 +91,13 @@ export default class SubcaseItemSubcasesComponent extends Component {
 
   @task
   *loadRelatedMeeting() {
-    this.latestMeeting = yield this.store.queryOne('meeting', {
-      'filter[agendas][agendaitems][agenda-activity][subcase][:id:]': this.args.subcase.id,
-      sort: '-planned-start',
+    const latestAgendaitem = yield this.store.queryOne('agendaitem', {
+      'filter[agenda-activity][subcase][:id:]': this.args.subcase.id,
+      'filter[:has-no:next-version]': 't',
+      sort: '-created',
     });
+    const agenda = yield latestAgendaitem?.agenda;
+    this.latestMeeting = yield agenda?.createdFor;
   }
 
   @task

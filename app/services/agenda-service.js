@@ -226,16 +226,16 @@ export default class AgendaService extends Service {
       reload: true,
     });
     agendaitemToDelete.set('aboutToDelete', true);
-    const agendaActivity = await agendaitemToDelete.get('agendaActivity');
+    const agendaActivity = await agendaitemToDelete.agendaActivity;
     const treatment = await agendaitemToDelete.treatment;
 
     if (agendaActivity) {
-      const subcase = await agendaActivity.get('subcase');
+      const subcase = await agendaActivity.subcase;
       await agendaActivity.hasMany('agendaitems').reload();
-      const agendaitemsFromActivity = await agendaActivity.get('agendaitems');
+      const agendaitemsFromActivity = await agendaActivity.agendaitems;
       if (treatment) {
         const decisionActivity = await treatment.decisionActivity;
-        const newsletter = await treatment.get('newsletterInfo');
+        const newsletter = await treatment.newsletterInfo;
         if (newsletter) {
           await newsletter.destroyRecord();
         }
@@ -246,7 +246,7 @@ export default class AgendaService extends Service {
         await treatment.destroyRecord();
       }
       await Promise.all(agendaitemsFromActivity.map(async(agendaitem) => {
-        const agenda = await agendaitem.get('agenda');
+        const agenda = await agendaitem.agenda;
         await agendaitem.destroyRecord();
         await agenda.hasMany('agendaitems').reload();
       }));
