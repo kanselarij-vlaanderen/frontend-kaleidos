@@ -1,5 +1,5 @@
 <div {{did-update (perform this.loadAgendaData)}}>
-  <Auk::Panel>
+  <Auk::Panel data-test-subcase-description-panel>
     <Auk::Panel::Header>
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="left">
@@ -26,27 +26,11 @@
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body>
-       <div class="auk-u-mb-4">
+      <div class="auk-u-mb-4">
         <p data-test-subcase-description-subcase-name class="auk-u-text-capitalize">
           {{@subcase.subcaseName}}
         </p>
-        <ul class="vlc-status-timeline">
-          {{#each this.phases as |phase|}}
-            <li
-              class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
-              data-test-subcase-description-timeline-item
-            >
-              <div class="vlc-status-timeline__dot"></div>
-              {{#if (is-pending phase)}}
-                <div class="auk-skeleton auk-skeleton--rectangle" role="alert" aria-busy="true"></div>
-              {{else}}
-                <div class="vlc-status-timeline__text">
-                  {{subcase-timeline-item-text phase=phase}}
-                </div>
-              {{/if}}
-            </li>
-          {{/each}}
-        </ul>
+        <Subcase::Timeline @subcase={{@subcase}}/>
       </div>
       <div class="auk-o-grid">
         <div class="auk-o-grid-col-4">
