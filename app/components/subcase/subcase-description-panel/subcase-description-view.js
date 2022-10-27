@@ -43,8 +43,6 @@ export default class SubcaseDescriptionView extends Component {
     this.subcaseType = yield this.args.subcase.type;
     const agendaActivities = yield this.args.subcase.hasMany('agendaActivities').reload();
     const sortedAgendaActivities = agendaActivities?.sortBy('startDate');
-    // const decisionActivities = yield this.args.subcase.hasMany('decisionActivities').reload();
-    // const sortedDecisionActivities = decisionActivities?.sortBy('startDate');
 
     this.modelsOfMeetings = [];
     for (const [index, agendaActivity] of sortedAgendaActivities.toArray().entries()) {
