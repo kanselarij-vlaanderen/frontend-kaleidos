@@ -9,11 +9,11 @@ export default class SubcaseIsApprovedService extends Service {
 
     if (meeting?.isFinal) {
       const approvedDecisionResultCode = await this.store.findRecordByUri(
-        'decision-result-code',
+        'concept',
         CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
       );
       const acknowledgedDecisionResultCode = await this.store.findRecordByUri(
-        'decision-result-code',
+        'concept',
         CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
       );
 
