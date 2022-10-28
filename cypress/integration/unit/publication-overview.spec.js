@@ -7,7 +7,7 @@ import auk from '../../selectors/auk.selectors';
 
 context('Publications overview tests', () => {
   beforeEach(() => {
-    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
+    cy.login('OVRB');
     cy.visit('/publicaties');
   });
 

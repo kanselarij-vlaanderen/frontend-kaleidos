@@ -10,6 +10,7 @@ import utils from '../../selectors/utils.selectors';
 
 context('Testing the application as Kort bestek user', () => {
   beforeEach(() => {
+    // cy.login does not trigger the transtition to the default route for this profile for some reason
     cy.loginFlow('Kort bestek');
     cy.wait(1000);
   });
@@ -22,6 +23,7 @@ context('Testing the application as Kort bestek user', () => {
     cy.get(utils.mHeader.newsletters).should('exist');
     cy.get(utils.mHeader.search).should('exist');
 
+    cy.get(utils.mHeader.signatures).should('not.exist');
     cy.get(utils.mHeader.publications).should('not.exist');
     cy.get(utils.mHeader.settings).should('not.exist');
   });
