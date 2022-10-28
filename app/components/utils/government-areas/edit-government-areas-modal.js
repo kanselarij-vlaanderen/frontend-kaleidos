@@ -23,7 +23,7 @@ export default class EditGovernmentAreasModal extends Component {
   *loadGovernmentAreas() {
     const concepts = yield this.store.queryAll('concept', {
       filter: {
-        'top-concept-schemes': {
+        'concept-schemes': {
           ':uri:': CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD,
         },
       },

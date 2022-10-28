@@ -37,6 +37,8 @@ export default class PublicationsRoute extends Route {
       'page[size]': PAGE_SIZE.CODE_LISTS,
       sort: 'priority',
     });
+    // const documentTypePromise = this.store.queryConceptsForConceptScheme(CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES);
+    // TODO: Enable when https://github.com/kanselarij-vlaanderen/frontend-kaleidos/pull/1520 gets merged
 
     return Promise.all([
       publicationStatusPromise,

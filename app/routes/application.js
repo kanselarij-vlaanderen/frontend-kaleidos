@@ -2,7 +2,6 @@ import { action } from '@ember/object';
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class ApplicationRoute extends Route {
   @service store;
@@ -39,27 +38,9 @@ export default class ApplicationRoute extends Route {
       this.transitionTo('accountless-users');
     }
 
-    await this.store.query('concept', {
-      filter: {
-        'concept-schemes': {
-          ':uri:': CONSTANTS.CONCEPT_SCHEMES.VERGADERACTIVITEIT,
-        },
-        ':has-no:narrower': true, // Only the most specific concepts, i.e. the actual meeting kinds (so no "Annex")
-      },
-      include: 'broader,narrower',
-      'page[size]': PAGE_SIZE.CODE_LISTS,
-      sort: 'position',
-    });
+    await this.store.queryConceptsForConceptScheme(CONSTANTS.CONCEPT_SCHEMES.VERGADERACTIVITEIT);
 
-    await this.store.query('concept', {
-      filter: {
-        'concept-schemes': {
-          ':uri:': CONSTANTS.CONCEPT_SCHEMES.ACCESS_LEVELS,
-        },
-      },
-      'page[size]': PAGE_SIZE.CODE_LISTS,
-      sort: 'position',
-    });
+    await this.store.queryConceptsForConceptScheme(CONSTANTS.CONCEPT_SCHEMES.ACCESS_LEVELS);
   }
 
   get isSupportedBrowser() {
