@@ -14,13 +14,13 @@ context('Publications tests', () => {
   function checkIfNewPublicationFieldsAreEmpty(number, currentDate) {
     cy.get(publication.newPublication.number).should('not.contain', number);
     // "beslissingsdatum"
-    cy.get(auk.datepicker).eq(0)
+    cy.get(auk.datepicker.datepicker).eq(0)
       .should('be.empty');
     // "ontvangstdatum"
-    cy.get(auk.datepicker).eq(1)
+    cy.get(auk.datepicker.datepicker).eq(1)
       .should('have.value', currentDate);
     // "uiterste datum publicatie"
-    cy.get(auk.datepicker).eq(2)
+    cy.get(auk.datepicker.datepicker).eq(2)
       .should('be.empty');
     cy.get(publication.newPublication.shortTitle).should('be.empty');
     cy.get(publication.newPublication.longTitle).should('be.empty');
@@ -42,7 +42,7 @@ context('Publications tests', () => {
   }
 
   beforeEach(() => {
-    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
+    cy.login('OVRB');
     cy.intercept('GET', '/regulation-types?**').as('getRegulationTypes');
     cy.visit('/publicaties');
     cy.wait('@getRegulationTypes');
@@ -230,53 +230,54 @@ context('Publications tests', () => {
   });
 
   // Beleidsvelden are no longer in publications, only in dossier
-  // it('publications:dossier: Add and delete beleidsdomein', () => {
-  //   const noGovernmentFields = 'Er zijn nog geen beleidsvelden toegevoegd';
-  //   const labelName = 'Cultuur, Jeugd, Sport en Media';
-  //   const fieldsName = 'Media';
+  // TODO reenable after cache warmup implements pre-loading the cache for conceptschemens
+  it.skip('publications:dossier: Add and delete beleidsdomein', () => {
+    const noGovernmentFields = 'Er zijn nog geen beleidsvelden toegevoegd';
+    const labelName = 'Cultuur, Jeugd, Sport en Media';
+    const fieldsName = 'Media';
 
-  //   cy.intercept('GET', '/publication-flows**').as('getNewPublicationDetail');
-  //   cy.get(publication.publicationTableRow.row.goToPublication).first()
-  //     .click();
-  //   cy.wait('@getNewPublicationDetail');
+    cy.intercept('GET', '/publication-flows**').as('getNewPublicationDetail');
+    cy.get(publication.publicationTableRow.row.goToPublication).first()
+      .click();
+    cy.wait('@getNewPublicationDetail');
 
-  //   // Assert empty.
-  //   cy.get(auk.emptyState.message).contains(noGovernmentFields);
+    // Assert empty.
+    cy.get(auk.emptyState.message).contains(noGovernmentFields);
 
-  //   // reset after cancel
-  //   cy.intercept('GET', '/concepts**').as('getConceptSchemes');
-  //   cy.get(utils.governmentAreasPanel.edit).click();
-  //   cy.wait('@getConceptSchemes');
-  //   cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
-  //     .find(utils.governmentAreaSelectorForm.field)
-  //     .contains(fieldsName)
-  //     .click();
-  //   cy.get(auk.modal.footer.cancel).click();
-  //   cy.get(auk.emptyState.message).contains(noGovernmentFields);
+    // reset after cancel
+    cy.intercept('GET', '/concepts**').as('getConceptSchemes');
+    cy.get(utils.governmentAreasPanel.edit).click();
+    cy.wait('@getConceptSchemes');
+    cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
+      .find(utils.governmentAreaSelectorForm.field)
+      .contains(fieldsName)
+      .click();
+    cy.get(auk.modal.footer.cancel).click();
+    cy.get(auk.emptyState.message).contains(noGovernmentFields);
 
 
-  //   // link government field
-  //   cy.intercept('PATCH', '/cases/**').as('patchCase');
-  //   cy.get(utils.governmentAreasPanel.edit).click();
-  //   cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
-  //     .find(utils.governmentAreaSelectorForm.field)
-  //     .contains(fieldsName)
-  //     .click();
-  //   cy.get(utils.editGovernmentFieldsModal.save).click();
-  //   cy.wait('@patchCase');
-  //   cy.get(utils.governmentAreasPanel.rows).should('have.length', 1);
-  //   cy.get(utils.governmentAreasPanel.row.label).contains(labelName);
-  //   cy.get(utils.governmentAreasPanel.row.fields).contains(fieldsName);
-  //   // unlink government field
-  //   cy.get(utils.governmentAreasPanel.edit).click();
-  //   cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
-  //     .find(utils.governmentAreaSelectorForm.field)
-  //     .contains(fieldsName)
-  //     .click();
-  //   cy.get(utils.editGovernmentFieldsModal.save).click();
-  //   cy.wait('@patchCase');
-  //   cy.get(auk.emptyState.message).contains(noGovernmentFields);
-  // });
+    // link government field
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlows');
+    cy.get(utils.governmentAreasPanel.edit).click();
+    cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
+      .find(utils.governmentAreaSelectorForm.field)
+      .contains(fieldsName)
+      .click();
+    cy.get(utils.editGovernmentFieldsModal.save).click();
+    cy.wait('@patchPublicationFlows');
+    cy.get(utils.governmentAreasPanel.rows).should('have.length', 1);
+    cy.get(utils.governmentAreasPanel.row.label).contains(labelName);
+    cy.get(utils.governmentAreasPanel.row.fields).contains(fieldsName);
+    // unlink government field
+    cy.get(utils.governmentAreasPanel.edit).click();
+    cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
+      .find(utils.governmentAreaSelectorForm.field)
+      .contains(fieldsName)
+      .click();
+    cy.get(utils.editGovernmentFieldsModal.save).click();
+    cy.wait('@patchPublicationFlows');
+    cy.get(auk.emptyState.message).contains(noGovernmentFields);
+  });
 
   it('publications:dossier:Add and delete contact person', () => {
     const noContactPersons = 'Er zijn nog geen contactpersonen toegevoegd';
@@ -474,7 +475,7 @@ context('Publications tests', () => {
     // add later date
     cy.get(publication.decisionsIndex.uploadReference).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(auk.datepicker).click();
+    cy.get(auk.datepicker.datepicker).click();
     cy.setDateInFlatpickr(laterDate);
     cy.get(publication.referenceUpload.save).click();
     cy.get(publication.documentCardStep.card).contains(laterDate.format('DD-MM-YYYY'));
@@ -482,7 +483,7 @@ context('Publications tests', () => {
     // add earlier date
     cy.get(publication.decisionsIndex.uploadReference).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(auk.datepicker).click();
+    cy.get(auk.datepicker.datepicker).click();
     cy.setDateInFlatpickr(earlierDate);
     cy.get(publication.referenceUpload.save).click();
     cy.get(publication.documentCardStep.card).should('have.length', 2)
@@ -511,7 +512,7 @@ context('Publications tests', () => {
       .click();
     cy.get(publication.publicationCaseInfo.editView.publicationMode).click();
     selectFromDropdown(publicationMode1);
-    cy.get(publication.publicationCaseInfo.editView.decisionDate).find(auk.datepicker)
+    cy.get(publication.publicationCaseInfo.editView.decisionDate).find(auk.datepicker.datepicker)
       .click();
     cy.setDateInFlatpickr(decisionDate);
     cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
@@ -530,7 +531,7 @@ context('Publications tests', () => {
     // change other values to default again
     cy.get(publication.urgencyLevelCheckbox).parent()
       .click();
-    cy.get(publication.publicationCaseInfo.editView.decisionDate).find(auk.datepicker)
+    cy.get(publication.publicationCaseInfo.editView.decisionDate).find(auk.datepicker.datepicker)
       .click()
       .clear();
     cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');

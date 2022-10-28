@@ -129,6 +129,7 @@ const selectors = {
       shortTitle: '[data-test-inscription-view-short-title]',
       longTitle: '[data-test-inscription-view-long-title]',
       edit: '[data-test-inscription-view-edit]',
+      toSubcase: '[data-test-inscription-view-to-case]',
     },
     edit: {
       shortTitle: '[data-test-inscription-edit-short-title]',

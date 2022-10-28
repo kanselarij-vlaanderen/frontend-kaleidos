@@ -22,6 +22,7 @@ context('Testing the application as Admin user', () => {
     cy.get(utils.mHeader.cases).should('exist');
     cy.get(utils.mHeader.newsletters).should('exist');
     cy.get(utils.mHeader.search).should('exist');
+    cy.get(utils.mHeader.signatures).should('exist');
     cy.get(utils.mHeader.settings).should('exist');
   });
 
