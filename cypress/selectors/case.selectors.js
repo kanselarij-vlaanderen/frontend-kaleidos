@@ -26,6 +26,11 @@ const selectors = {
     createSubcase: '[data-test-subcase-overview-header-create-subcase]',
   },
 
+  // subcase-process
+  subcaseProcess: {
+    shorttitle: '[data-test-subcases-process-shorttitle]',
+  },
+
   // new-subcase
   newSubcase: {
     clonePreviousSubcase: '[data-test-new-subcase-clone-previous-subcase]',

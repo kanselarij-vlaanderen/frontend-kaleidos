@@ -33,9 +33,9 @@ export default class SubcaseDescriptionView extends Component {
   }
 
   get canShowDecisionStatus() {
-    return this.currentSession.may('view-decisions-before-release') ||
-      this.meeting?.internalDecisionPublicationActivity?.startDate &&
-      this.meeting?.isFinal
+    return this.meeting?.isFinal &&
+      this.currentSession.may('view-decisions-before-release') ||
+      this.meeting?.internalDecisionPublicationActivity?.startDate
   }
 
   @task

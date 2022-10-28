@@ -21,9 +21,9 @@ export default class SubcaseTitlesPanelView extends Component {
   }
 
   get canShowDecisionStatus() {
-    return this.currentSession.may('view-decisions-before-release') ||
-      this.args.meeting?.internalDecisionPublicationActivity?.startDate &&
-      this.args.meeting?.isFinal
+    return this.meeting?.isFinal &&
+      this.currentSession.may('view-decisions-before-release') ||
+      this.meeting?.internalDecisionPublicationActivity?.startDate
   }
 
   @task
