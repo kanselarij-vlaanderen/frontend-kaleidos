@@ -34,7 +34,6 @@ export default class CasesNewSubcase extends Component {
   @task
   *loadAgendaItemTypes() {
     this.agendaItemTypes = yield this.store.query('concept', {
-      sort: '-label',
       filter: {
         'concept-schemes': {
           ':uri:': CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES,
@@ -43,6 +42,7 @@ export default class CasesNewSubcase extends Component {
       page: {
         size: PAGE_SIZE.CODE_LISTS,
       },
+      sort: '-label',
     });
     this.agendaItemType = yield this.store.findRecordByUri('concept', CONSTANTS.AGENDA_ITEM_TYPES.NOTA);
   }

@@ -34,9 +34,9 @@ export default class AgendaAgendaitemsRoute extends Route {
     // *NOTE* Do not change this query, this call is pre-cached by cache-warmup-service
     let agendaitems = await this.store.query('agendaitem', {
       'filter[agenda][:id:]': agenda.id,
+      include: 'type',
       'page[size]': PAGE_SIZE.AGENDAITEMS,
       sort: 'type,number',
-      include: 'type',
     });
 
     // Ensure mandatee data for each agendaitem is loaded
