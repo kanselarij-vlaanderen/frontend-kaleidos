@@ -38,9 +38,8 @@ export default class ApplicationRoute extends Route {
       this.transitionTo('accountless-users');
     }
 
-    await this.store.queryConceptsForConceptScheme(CONSTANTS.CONCEPT_SCHEMES.VERGADERACTIVITEIT);
-
-    await this.store.queryConceptsForConceptScheme(CONSTANTS.CONCEPT_SCHEMES.ACCESS_LEVELS);
+    this.store.queryConceptsForConceptScheme(CONSTANTS.CONCEPT_SCHEMES.VERGADERACTIVITEIT);
+    this.store.queryConceptsForConceptScheme(CONSTANTS.CONCEPT_SCHEMES.ACCESS_LEVELS);
   }
 
   get isSupportedBrowser() {
