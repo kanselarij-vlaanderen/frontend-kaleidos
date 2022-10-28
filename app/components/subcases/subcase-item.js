@@ -116,11 +116,11 @@ export default class SubcaseItemSubcasesComponent extends Component {
     const meeting = yield this.args.subcase.requestedForMeeting;
     if (meeting?.isFinal) {
       const approvedDecisionResultCode = yield this.store.findRecordByUri(
-        'decision-result-code',
+        'concept',
         CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
       );
       const acknowledgedDecisionResultCode = yield this.store.findRecordByUri(
-        'decision-result-code',
+        'concept',
         CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
       );
       this.approved = !!(yield this.store.queryOne('decision-activity', {
