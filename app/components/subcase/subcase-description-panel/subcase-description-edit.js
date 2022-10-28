@@ -4,6 +4,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class SubcaseDescriptionEdit extends Component {
   /**
@@ -43,12 +44,15 @@ export default class SubcaseDescriptionEdit extends Component {
   @task
   *loadAgendaItemTypes() {
     this.agendaItemTypes = yield this.store.query('concept', {
-      sort: '-label',
       filter: {
         'concept-schemes': {
           ':uri:': CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES,
         }
       },
+      page: {
+        size: PAGE_SIZE.CODE_LISTS,
+      },
+      sort: '-label',
     });
   }
 
