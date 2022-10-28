@@ -44,13 +44,7 @@ export default class AgendaAgendaitemsRoute extends Route {
     await Promise.all(agendaitems.map((agendaitem) => {
       this.store.findRecord('agendaitem', agendaitem.id, {
         reload: true, // without reload the async operation will be resolved too early by ember-data's cache
-        include: [
-          'mandatees'
-        ].join(','),
-        'fields[mandatees]': [
-          'title', // Display group header per agendaitems group
-          'priority' // Sorting agendaitems on minister protocol order
-        ].join(','),
+        include: 'mandatees',
       });
     }));
 
