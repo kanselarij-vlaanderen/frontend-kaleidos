@@ -4,6 +4,7 @@
 import publication from '../../selectors/publication.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 
 // ***********************************************
 // Functions
@@ -153,7 +154,7 @@ function addPublicationDocuments(files) {
         .within(() => {
           if (file.newFileName) {
             cy.get('.auk-form-group').eq(0)
-              .find('.auk-input')
+              .find(appuniversum.input)
               .clear()
               .type(file.newFileName);
           }
