@@ -50,3 +50,8 @@ services:
   document-release:
     environment:
       RELEASE_CRON_PATTERN: "0/30 * * * * *"
+  cache-warmup:
+    image: kanselarij/cache-warmup-service:feature-KAS-3663-concepts-cache-warmup
+    environment:
+      ENABLE_CONCEPTS_CACHE: "true"
+      AUTO_RUN: "true"
