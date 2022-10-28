@@ -20,9 +20,6 @@ context('Settings overview page tests', () => {
     // settings in this view
     cy.get(settings.overview.manageEmails).should('be.visible');
     cy.get(settings.overview.manageAlerts).should('be.visible');
-    cy.get(settings.overview.manageDocumentTypes).should('be.visible');
-    cy.get(settings.overview.manageCaseTypes).should('be.visible');
-    cy.get(settings.overview.manageSubcaseTypes).should('be.visible');
   });
 
   it('Should open the model behind manage alerts and close it', () => {
