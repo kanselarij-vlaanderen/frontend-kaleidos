@@ -21,7 +21,6 @@ export default ModelWithModifier.extend({
   modified: attr('datetime'),
   titlePress: attr('string'),
   textPress: attr('string'),
-  forPress: attr('boolean'),
   shortTitle: attr('string'),
   title: attr('string'),
   formallyOk: attr('string'),

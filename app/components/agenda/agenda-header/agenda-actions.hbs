@@ -16,16 +16,6 @@
     </AuButton>
     <AuHr />
   {{/if}}
-  {{#if (user-may "manage-decisions")}}
-    <AuLink
-      data-test-agenda-actions-navigate-to-decisions
-      @route="print-overviews.decisions.agendaitems"
-      @models={{array @meeting.id @currentAgenda.id}}
-      role="menuitem"
-    >
-      {{t "print-decisions"}}
-    </AuLink>
-  {{/if}}
   <AuLink
     data-test-agenda-actions-navigate-to-newsletter
     @route="newsletter"
@@ -34,17 +24,6 @@
   >
     {{t "print-newsletter"}}
   </AuLink>
-  <AuLink
-    data-test-agenda-actions-printable-press-agenda
-    @route="print-overviews.press-agenda.agendaitems"
-    @models={{array @meeting.id @currentAgenda.id}}
-    role="menuitem"
-  >
-    {{t "printable-press-agenda"}}
-  </AuLink>
-
-
-
   {{#if this.showPrintButton}}
     <AuLink
       @route="agenda.agendaitems"
