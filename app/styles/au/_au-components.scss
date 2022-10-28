@@ -238,6 +238,10 @@ $au-button-height: 3.4rem;
   border-top: none;
 }
 
+.au-c-control__indicator {
+  margin-top: 0.4rem; // TODO: delete when global line height from AU is applied here in Kaleidos
+}
+
 // Fix icons in menu
 .auk-menu__item {
   display: flex;
