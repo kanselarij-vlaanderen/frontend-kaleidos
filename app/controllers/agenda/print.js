@@ -1,5 +1,4 @@
 import Controller from '@ember/controller';
-import { computed } from '@ember/object';
 import { A } from '@ember/array';
 
 function equalContentArrays(array1, array2) {
@@ -9,13 +8,10 @@ function equalContentArrays(array1, array2) {
   return false;
 }
 
-// TODO: octane-refactor
-/* eslint-disable ember/no-get */
-// eslint-disable-next-line ember/no-classic-classes
-export default Controller.extend({
+export default class AgendaPrintController extends Controller {
 
-  notaGroups: computed('model.notas.@each.sortedMandatees', function() {
-    const agendaitems = this.get('model.notas');
+  get notaGroups() {
+    const agendaitems = this.model.notas;
     if (agendaitems.length > 0) {
       let currentSubmittersArray = agendaitems.firstObject.sortedMandatees;
       let currentItemArray = A([]);
@@ -35,6 +31,5 @@ export default Controller.extend({
       return groups;
     }
     return A([]);
-  }),
-
-});
+  }
+}
