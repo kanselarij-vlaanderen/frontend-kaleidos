@@ -1,7 +1,55 @@
 <div class="auk-scroll-wrapper auk-u-maximize-width auk-u-scroll-scrollable vlc-hide-scrollbar-on-print">
-  <Agenda::PrintableAgenda
-    @meeting={{@model.meeting}}
-    @notas={{this.notaGroups}}
-    @announcements={{@model.announcements}}
-  />
+  <div class="auk-u-m-8 auk-u-m-0@print">
+    <div
+      class="auk-container auk-container--center l-printable-agenda"
+      data-test-printable-agenda-container
+    >
+      <Utils::LogoHeader />
+      <h2
+        class="auk-h2 auk-u-text-family-serif auk-u-text-align--center auk-u-mt-5 auk-u-mb-10"
+        data-test-printable-agenda-header-title
+      >
+        {{t "agenda-of"}}
+        {{moment-format
+          @model.meeting.plannedStart
+          (if
+            @model.meeting.isPreKaleidos
+            "dddd DD MMMM YYYY"
+            "dddd DD MMMM YYYY \o\m HH:mm"
+          )
+        }}
+        -
+        {{kind-print-label @model.meeting.kind}}
+      </h2>
+
+      <div class="auk-content">
+        {{#if (gt this.notaGroups.length 0)}}
+          <Agenda::PrintableAgenda::ListSection
+            @letter="A"
+            @title={{t "agendaitems"}}
+          >
+            {{#each this.notaGroups as |notaGroup|}}
+              <Agenda::PrintableAgenda::ListSection::ItemGroup
+                @items={{notaGroup}}
+              />
+            {{/each}}
+          </Agenda::PrintableAgenda::ListSection>
+        {{/if}}
+
+        {{#if (gt @model.announcements.length 0)}}
+          <Agenda::PrintableAgenda::ListSection
+            @letter="B"
+            @title={{t "announcements-subtitle"}}
+            @onNewPage={{true}}
+          >
+            {{#each @model.announcements as |announcement|}}
+              <Agenda::PrintableAgenda::ListSection::ItemGroup::Item
+                @item={{announcement}}
+              />
+            {{/each}}
+          </Agenda::PrintableAgenda::ListSection>
+        {{/if}}
+      </div>
+    </div>
+  </div>
 </div>

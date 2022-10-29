@@ -6,9 +6,23 @@
 <div class="l-printable-agenda__item-group">
   <div class="l-printable-agenda__faux-item">
     <div class="auk-u-non-breakable-group@print">
-      <Agenda::PrintableAgenda::ListSection::ItemGroup::ItemGroupHeader
-        @mandatees={{@items.firstObject.sortedMandatees}}
-      />
+      {{#let this.items.first.sortedMandatees as |mandatees|}}
+        <h3
+          class="auk-u-mb-3 auk-u-text-uppercase l-printable-agenda__item-group-header
+            {{if (not mandatees) "l-printable-agenda__item-group-header--muted auk-u-keep-colors@print"}}"
+        >{{! auk-u-text-decoration-underline }}
+          {{#if mandatees}}
+            {{#each mandatees as |mandatee|}}
+              {{mandatee.title}}
+              {{#if (not-eq mandatee mandatees.lastObject)}}
+                <br />&
+              {{/if}}
+            {{/each}}
+          {{else}}
+            {{t "no-mandatee-assigned"}}
+          {{/if}}
+        </h3>
+      {{/let}}
       <div value={{this.items.first.number}}>
         <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
           @item={{this.items.first}}
