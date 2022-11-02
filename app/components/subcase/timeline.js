@@ -47,7 +47,7 @@ export default class SubcaseTimeline extends Component {
         });
         // phase 3: if on approved, what is the decision
         const treatment = yield firstAgendaitemOfActivity.treatment;
-        const decisionActivity = yield treatment.decisionActivity;
+        const decisionActivity = yield treatment?.decisionActivity;
 
         if (decisionActivity) {
           const decisionResultCode = yield decisionActivity.belongsTo('decisionResultCode').reload();
