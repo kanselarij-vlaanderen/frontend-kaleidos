@@ -6,6 +6,7 @@ import document from '../../selectors/document.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
 import publication from '../../selectors/publication.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
@@ -319,7 +320,7 @@ context('Publications via MR tests', () => {
       .scrollIntoView()
       .trigger('mouseover')
       .click();
-    cy.get(publication.decisionsInfoPanel.edit.numberOfPages).find(auk.input)
+    cy.get(publication.decisionsInfoPanel.edit.numberOfPages).find(appuniversum.input)
       .click()
       .type(numberOfPages);
     cy.get(publication.decisionsInfoPanel.cancel).click();
@@ -333,7 +334,7 @@ context('Publications via MR tests', () => {
       .scrollIntoView()
       .trigger('mouseover')
       .click();
-    cy.get(publication.decisionsInfoPanel.edit.numberOfPages).find(auk.input)
+    cy.get(publication.decisionsInfoPanel.edit.numberOfPages).find(appuniversum.input)
       .click()
       .type(numberOfPages);
     cy.get(publication.decisionsInfoPanel.save).click();

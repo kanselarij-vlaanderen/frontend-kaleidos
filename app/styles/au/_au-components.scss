@@ -37,6 +37,7 @@ $au-button-height: 3.4rem;
 
 :root {
   --au-outline: 0.3rem solid #{$auk-yellow-500};
+  --au-outline-color: #{$auk-yellow-500};
 
   --au-icon-size: 1.6rem;
   --au-icon-size-medium: 1.8rem;
@@ -236,6 +237,14 @@ $au-button-height: 3.4rem;
 .au-c-dropdown__menu > [role="group"] + [role="menuitem"],
 .au-c-dropdown__menu > [role="menuitem"] + [role="group"] {
   border-top: none;
+}
+
+.au-c-input:focus {
+  border-color: $au-input-border-color !important;
+  box-shadow: none !important;
+
+  outline: var(--au-outline);
+  outline-offset: var(--au-outline-offset);
 }
 
 // Fix icons in menu

@@ -9,12 +9,12 @@
           </Auk::Label>
           <Utils::SearchTooltip />
         </div>
-        <Auk::Input
-          @block={{true}}
-          placeholder={{t "search-placeholder"}}
+        <AuInput
+          data-test-route-search-input
+          @width="block"
           @value={{this.searchTextBuffer}}
           id="keyword"
-          data-test-route-search-input
+          placeholder={{t "search-placeholder"}}
         />
       </div>
       <div class="auk-form-group au-u-margin-bottom-none auk-u-position-relative au-u-1-6">
