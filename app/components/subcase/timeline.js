@@ -48,9 +48,9 @@ export default class SubcaseTimeline extends Component {
         // phase 3: if on approved, what is the decision
         const treatment = yield firstAgendaitemOfActivity.treatment;
         const decisionActivity = yield treatment.decisionActivity;
-        const decisionResultCode = yield decisionActivity.belongsTo('decisionResultCode').reload();
+        const decisionResultCode = yield decisionActivity?.belongsTo('decisionResultCode').reload();
 
-        if (decisionResultCode) {
+        if (decisionActivity) {
           phases.push({
             label: `${decisionResultCode.label} ${this.intl.t(
               'decision-activity-result'
@@ -58,7 +58,7 @@ export default class SubcaseTimeline extends Component {
             date: moment.utc(meeting.plannedStart).toDate(),
           });
           // phase 4: add an extra fase in case of a postponed subcase
-          if (decisionResultCode.isPostponed) {
+          if (decisionActivity?.isPostponed) {
             phases.push({
               label: this.intl.t('decision-activity-result-postponed'),
             });
