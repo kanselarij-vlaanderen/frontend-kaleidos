@@ -56,12 +56,16 @@ function getTranslatedMonth(month) {
  * @name openSubcase
  * @function
  * @param {number} [index] The list index of the subcase to select, default 0
+ * @param {string} - the short title to check if a new subcase is fully created before trying to open the latest one
  */
-function openSubcase(index = 0) {
+function openSubcase(index = 0, shortTitle) {
   cy.log('openSubcase');
   // cy.intercept('GET', '/subcases?**').as('getSubcases');
   // cy.wait('@getSubcases', { timeout: 12000 });
   cy.wait(2000); // link does not always work (not visible or click does nothing unless we wait)
+  if (shortTitle) {
+    cy.get(cases.subcaseProcess.shorttitle).should('contain', shortTitle);
+  }
   cy.get(cases.subcaseItem.container).eq(index)
     .find(cases.subcaseItem.link)
     .click();

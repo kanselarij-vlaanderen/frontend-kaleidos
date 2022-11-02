@@ -12,7 +12,6 @@ export default class SubcaseDescriptionView extends Component {
   @service store;
   @service currentSession;
   @service subcasesService;
-  @service subcaseIsApproved;
 
   @tracked subcaseType = null;
   @tracked latestMeeting = null;
@@ -31,13 +30,19 @@ export default class SubcaseDescriptionView extends Component {
     return ![CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING].includes(this.subcaseType?.uri);
   }
 
+  get canShowDecisionStatus() {
+    return (
+      this.meeting?.isFinal &&
+      (this.currentSession.may('view-decisions-before-release') ||
+        this.meeting?.internalDecisionPublicationActivity?.startDate)
+    );
+  }
+
   @task
   *loadAgendaData() {
     this.subcaseType = yield this.args.subcase.type;
     const agendaActivities = yield this.args.subcase.hasMany('agendaActivities').reload();
     const sortedAgendaActivities = agendaActivities?.sortBy('startDate');
-    // const decisionActivities = yield this.args.subcase.hasMany('decisionActivities').reload();
-    // const sortedDecisionActivities = decisionActivities?.sortBy('startDate');
 
     this.modelsOfMeetings = [];
     for (const [index, agendaActivity] of sortedAgendaActivities.toArray().entries()) {
@@ -50,6 +55,8 @@ export default class SubcaseDescriptionView extends Component {
       const agenda = yield agendaitem.agenda;
       const meeting = yield agenda.createdFor;
       yield meeting?.kind;
+      const decisionPublicationActivity = yield meeting.belongsTo('internalDecisionPublicationActivity').reload();
+      yield decisionPublicationActivity?.status; // used in get-functions above
       // load decisionActivity
       // agenda-activities are propagated by yggdrail on agenda approval, treatments/decision-activities only when decisions are released
       const treatment = yield agendaitem?.treatment;
@@ -68,7 +75,5 @@ export default class SubcaseDescriptionView extends Component {
       }
 
     }
-    // TODO KAS-3612 could change to resultCode.isApproved or resultCode.isNoticeTaken
-    this.approved = yield this.subcaseIsApproved.isApproved(this.args.subcase);
   }
 }

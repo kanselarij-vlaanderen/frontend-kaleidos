@@ -20,12 +20,12 @@ export default class Subcase extends ModelWithModifier {
   @belongsTo('concept') agendaItemType;
 
   // inverse: null or serialize: false is used for possible concurrency issues when saving without reloading possible stale relations.
-  @hasMany('agenda-activity', { inverse: null, serialize: false })
+  @hasMany('agenda-activity', { serialize: false })
   agendaActivities;
   @hasMany('submission-activity', { serialize: false }) submissionActivities;
   @hasMany('piece') linkedPieces;
   @hasMany('mandatee') mandatees;
-  @hasMany('decision-activity', { inverse: null, serialize: false })
+  @hasMany('decision-activity', { serialize: false })
   decisionActivities;
   @hasMany('concept') governmentAreas;
 }

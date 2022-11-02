@@ -42,8 +42,9 @@ context('Tests on pieces and page-sizes of agendaitems and subcase', () => {
 
     // all documents of current subcase are "linked documents" of newly created subcase
     cy.get(auk.tab.hierarchicalBack).click();
-    cy.addSubcase(null, 'cypress test: 20+ documents linked subcase - 1589286110 part 2');
-    cy.openSubcase(0);
+    const subcaseShortTitle = 'cypress test: 20+ documents linked subcase - 1589286110 part 2';
+    cy.addSubcase(null, subcaseShortTitle);
+    cy.openSubcase(0, subcaseShortTitle);
 
     cy.intercept('GET', '/document-containers?filter**pieces**page**size**20').as('getLinkedContainers');
     cy.clickReverseTab('Documenten');

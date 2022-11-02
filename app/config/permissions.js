@@ -35,6 +35,7 @@ const {
 // - manage-system-alerts: Manage systeem notifications to be shown in the application
 // - view-document-version-info: View info related to document versioning. Is this this a recent addition? Older versions, ...
 // - view-documents-before-release: allow the viewing of documents before they are released internally
+// - view-decisions-before-release: allow the viewing of decisions before they are released internally
 
 const groups = [
   {
@@ -61,6 +62,7 @@ const groups = [
       'manage-alerts',
       'view-document-version-info',
       'view-documents-before-release',
+      'view-decisions-before-release',
     ]
   },
   {
@@ -83,6 +85,7 @@ const groups = [
       'manage-settings',
       'view-document-version-info',
       'view-documents-before-release',
+      'view-decisions-before-release',
     ]
   },
   {
@@ -95,6 +98,7 @@ const groups = [
       'search-publication-flows',
       'view-document-version-info',
       'view-documents-before-release',
+      'view-decisions-before-release',
     ]
   },
   {
@@ -105,6 +109,7 @@ const groups = [
       'manage-newsletter-infos',
       'manage-themis-publications',
       'view-documents-before-release',
+      'view-decisions-before-release',
     ],
   },
   {

@@ -19,4 +19,12 @@ export default class decisionActivity extends Model {
   get isRetracted() {
     return this.decisionResultCode?.get('uri') === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN;
   }
+
+  get isApproved() {
+    return this.decisionResultCode?.get('uri') === CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
+  }
+
+  get isAcknowledged() {
+    return this.decisionResultCode?.get('uri') === CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME;
+  }
 }
