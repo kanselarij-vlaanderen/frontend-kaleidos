@@ -46,7 +46,7 @@ const selectors = {
       notYetFormallyOk: '[data-test-agenda-detail-sidebar-item-status-pill] > .au-c-icon--circle-question',
     },
     // Test tag is not possible, CSS is added conditionally
-    retracted: '.auk-u-opacity--1\\/3',
+    postponed: '.auk-u-opacity--1\\/3',
   },
 
   // agendaitem-group-header
@@ -200,7 +200,7 @@ const selectors = {
     actions: '[data-test-agendaitem-controls-actions]',
     action: {
       delete: '[data-test-agendaitem-controls-action-delete]',
-      advance: '[data-test-agendaitem-controls-action-advance]',
+      postponeRevert: '[data-test-agendaitem-controls-action-postpone-revert]',
       postpone: '[data-test-agendaitem-controls-action-postpone]',
     },
   },
@@ -230,6 +230,8 @@ const selectors = {
   createAgendaitem: {
     input: '[data-test-create-agendaitem-input]',
     dataTable: '[data-test-create-agendaitem-data-table]',
+    save: '[data-test-create-agendaitem-save]',
+    rows: '[data-test-create-agendaitem-row]',
     row: {
       checkBox: '[data-test-create-agendaitem-row-subcase-checkbox]',
       subcaseName: '[data-test-create-agendaitem-row-subcase-name]',

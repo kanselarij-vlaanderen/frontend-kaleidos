@@ -26,7 +26,6 @@ const {
 // - manage-decision-publications: Publishing agenda-item decisions to other Kaleidos profiles
 // - manage-document-publications: Publishing agenda-item related documents to other Kaleidos profiles
 // - manage-themis-publications: Publishing newsletter-info and related documents to Themis (general public).
-// - view-document-version-info: View info related to document versioning. Is this this a recent addition? Older versions, ...
 // - manage-meetings: Create and update meetings
 // - manage-agenda-versions: Create new agenda versions, close agenda versions, reopen old agenda versions, ...
 // - manage-agendaitems: Approve all agendaitems, add new agendaitems to an agenda, ...
@@ -34,6 +33,9 @@ const {
 // - manage-cases: Create and update cases
 // - manage-users: Block and archive users
 // - manage-system-alerts: Manage systeem notifications to be shown in the application
+// - view-document-version-info: View info related to document versioning. Is this this a recent addition? Older versions, ...
+// - view-documents-before-release: allow the viewing of documents before they are released internally
+// - view-decisions-before-release: allow the viewing of decisions before they are released internally
 
 const groups = [
   {
@@ -59,6 +61,8 @@ const groups = [
       'manage-users',
       'manage-alerts',
       'view-document-version-info',
+      'view-documents-before-release',
+      'view-decisions-before-release',
     ]
   },
   {
@@ -80,6 +84,8 @@ const groups = [
       'manage-themis-publications',
       'manage-settings',
       'view-document-version-info',
+      'view-documents-before-release',
+      'view-decisions-before-release',
     ]
   },
   {
@@ -91,6 +97,8 @@ const groups = [
       'manage-publication-flows',
       'search-publication-flows',
       'view-document-version-info',
+      'view-documents-before-release',
+      'view-decisions-before-release',
     ]
   },
   {
@@ -100,6 +108,8 @@ const groups = [
     permissions: [
       'manage-newsletter-infos',
       'manage-themis-publications',
+      'view-documents-before-release',
+      'view-decisions-before-release',
     ],
   },
   {
@@ -109,6 +119,7 @@ const groups = [
     permissions: [
       'manage-signatures',
       'view-document-version-info',
+      'view-documents-before-release',
     ],
   },
   {
@@ -117,6 +128,7 @@ const groups = [
     defaultRoute: 'agendas',
     permissions: [
       'view-document-version-info',
+      'view-documents-before-release',
     ],
   },
   {

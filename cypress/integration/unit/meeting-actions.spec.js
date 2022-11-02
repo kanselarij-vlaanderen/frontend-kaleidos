@@ -63,10 +63,8 @@ context('meeting actions tests', () => {
 
     cy.intercept('DELETE', 'agendaitems/**').as('deleteAgendaitem');
     cy.intercept('DELETE', 'agenda-activities/**').as('deleteAgendaActivity');
-    cy.intercept('PATCH', 'subcases/**').as('patchSubcase');
     cy.wait('@deleteAgendaitem'); // 2 of these happen
     cy.wait('@deleteAgendaActivity');
-    cy.wait('@patchSubcase');
     cy.get(auk.modal.container).should('not.exist');
     cy.get(auk.loader, {
       timeout: 60000,

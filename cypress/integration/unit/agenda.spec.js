@@ -145,7 +145,7 @@ context('Agenda tests', () => {
     cy.visit('dossiers/E14FB528-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     // keep this setup because we want to validate the trimming of text on creation of subcase
     cy.addSubcase(typeNota, subcaseTitleShort + whitespace, subcaseTitleLong + whitespace);
-    cy.openSubcase(0);
+    cy.openSubcase(0, subcaseTitleShort);
     cy.visitAgendaWithLink('vergadering/627E52D589C002BE724F77C3/agenda/627E52D689C002BE724F77C4/agendapunten');
     cy.addAgendaitemToAgenda(subcaseTitleShort);
 

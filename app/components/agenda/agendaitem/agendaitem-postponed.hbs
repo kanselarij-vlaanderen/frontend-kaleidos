@@ -1,0 +1,49 @@
+<div class="auk-alert auk-alert--warning">
+  <div class="auk-alert__body">
+    <Auk::Badge @icon="alert-triangle" @skin={{"warning"}} />
+    <div class="auk-alert__text">
+      <p class="auk-alert__message">
+        {{t "postponed-item"}}
+      </p>
+    </div>
+  </div>
+  {{#if @meeting.internalDecisionPublicationActivity.startDate}}
+    {{#if this.modelsForProposedAgenda}}
+      <Auk::Button
+        @skin="primary"
+        @layout="icon-right"
+        @icon="chevron-right"
+        @route="agenda.agendaitems.agendaitem"
+        @models={{this.modelsForProposedAgenda}}
+      >
+        {{t "open-agenda"}}
+        {{moment-format this.latestMeeting.plannedStart "DD MMMM YYYY"}}
+      </Auk::Button>
+    {{else}}
+      {{#if (user-may "manage-agendaitems")}}
+        <Auk::DropdownMenu @skin="primary" @label={{t "propose-again"}} as |Menu|>
+          {{#if this.loadProposableMeetings.isRunning}}
+            {{t "agenda-loading"}}
+          {{else}}
+            {{#each this.loadProposableMeetings.lastSuccessful.value as |meeting|
+            }}
+              <Menu.Item {{on "click" (perform this.reProposeForAgenda meeting)}}>
+                {{t "agenda-for"}}
+                {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
+                {{concat " - " meeting.numberRepresentation}}
+              </Menu.Item>
+            {{/each}}
+          {{/if}}
+        </Auk::DropdownMenu>
+      {{/if}}
+    {{/if}}
+  {{/if}}
+</div>
+{{#if this.reProposeForAgenda.isRunning}}
+  <Auk::Modal @size="medium">
+    <Auk::Modal::Header @title={{t "propose-again"}} @closeable={{false}} />
+    <Auk::Modal::Body>
+      <Auk::Loader @message={{t "please-be-patient"}} />
+    </Auk::Modal::Body>
+  </Auk::Modal>
+{{/if}}
