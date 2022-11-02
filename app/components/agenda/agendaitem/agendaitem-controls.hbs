@@ -9,42 +9,40 @@
         class="auk-u-hidden@print"
       >
         {{#if this.areDecisionActionsEnabled}}
-          {{#let this.decisionActivity.decisionResultCode as |resultCode|}}
-            {{#if resultCode.isPostponed}}
-              <AuButton
-                data-test-agendaitem-controls-action-postpone-revert
-                @skin="link"
-                {{on "click" this.resetDecisionResultCode.perform}}
-                role="menuitem"
-              >
-                {{t "postpone-revert"}}
-              </AuButton>
-            {{else if resultCode.isRetracted}}
-              <AuButton
-                @skin="link"
-                {{on "click" this.resetDecisionResultCode.perform}}
-                role="menuitem"
-              >
-                {{t "retract-revert"}}
-              </AuButton>
-            {{else}}
-              <AuButton
-                data-test-agendaitem-controls-action-postpone
-                @skin="link"
-                {{on "click" this.postponeAgendaitem.perform}}
-                role="menuitem"
-              >
-                {{t "postpone"}}
-              </AuButton>
-              <AuButton
-                @skin="link"
-                {{on "click" this.retractAgendaitem.perform}}
-                role="menuitem"
-              >
-                {{t "retract"}}
-              </AuButton>
-            {{/if}}
-          {{/let}}
+          {{#if this.decisionActivity.isPostponed}}
+            <AuButton
+              data-test-agendaitem-controls-action-postpone-revert
+              @skin="link"
+              {{on "click" this.resetDecisionResultCode.perform}}
+              role="menuitem"
+            >
+              {{t "postpone-revert"}}
+            </AuButton>
+          {{else if this.decisionActivity.isRetracted}}
+            <AuButton
+              @skin="link"
+              {{on "click" this.resetDecisionResultCode.perform}}
+              role="menuitem"
+            >
+              {{t "retract-revert"}}
+            </AuButton>
+          {{else}}
+            <AuButton
+              data-test-agendaitem-controls-action-postpone
+              @skin="link"
+              {{on "click" this.postponeAgendaitem.perform}}
+              role="menuitem"
+            >
+              {{t "postpone"}}
+            </AuButton>
+            <AuButton
+              @skin="link"
+              {{on "click" this.retractAgendaitem.perform}}
+              role="menuitem"
+            >
+              {{t "retract"}}
+            </AuButton>
+          {{/if}}
         {{/if}}
         {{#if (or this.currentSession.isAdmin (await this.isDeletable))}}
           <AuButton
