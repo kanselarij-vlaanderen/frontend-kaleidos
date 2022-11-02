@@ -1,6 +1,7 @@
 import Service, { inject as service } from '@ember/service';
 import moment from 'moment';
 import fetch from 'fetch';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class SubcasesService extends Service {
   @service store;
@@ -58,18 +59,18 @@ export default class SubcasesService extends Service {
             // We already have the decision-result resource in the backend query,
             // we could just send the label to the frontend as well and shave off a request here.
             // See: https://github.com/kanselarij-vlaanderen/custom-subcases-service/blob/d5ba54049ecd0ae80d73d4c1875bc5855a394dbd/repository/index.js#L69
-            const resultCode = await this.store.findRecord(
-              'decision-result-code',
+            const decisionResultCode = await this.store.findRecord(
+              'concept',
               phaseData.decisionResultId
             );
-            if (resultCode) {
+            if (decisionResultCode) {
               phases.push({
-                label: `${resultCode.label} ${this.intl.t(
+                label: `${decisionResultCode.label} ${this.intl.t(
                   'decision-activity-result'
                 )}`,
                 date: geplandeStart,
               });
-              if (resultCode.isPostponed) {
+              if (decisionResultCode.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD) {
                 phases.push({
                   label: this.intl.t('decision-activity-result-postponed'),
                 });

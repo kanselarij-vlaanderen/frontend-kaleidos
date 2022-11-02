@@ -7,7 +7,7 @@ import utils from '../../selectors/utils.selectors';
 
 context('Publications translation tests', () => {
   beforeEach(() => {
-    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
+    cy.login('OVRB');
     cy.visit('/publicaties');
   });
 
@@ -42,7 +42,7 @@ context('Publications translation tests', () => {
     // check rollback after cancel request
     cy.get(publication.translationsIndex.requestTranslation).click();
     cy.get(publication.translationRequest.save).should('be.disabled');
-    cy.get(auk.datepicker).click();
+    cy.get(auk.datepicker.datepicker).click();
     // TODO-publication get datepicker in specific modal or in div
     cy.setDateInFlatpickr(translationEndDate);
     cy.get(publication.translationRequest.numberOfPages).should('be.empty')
@@ -62,7 +62,7 @@ context('Publications translation tests', () => {
     // new request to delete
     cy.get(publication.translationsIndex.requestTranslation).click();
     cy.get(publication.translationRequest.save).should('be.disabled');
-    cy.get(auk.datepicker).click();
+    cy.get(auk.datepicker.datepicker).click();
     cy.setDateInFlatpickr(translationEndDate);
     cy.get(publication.translationRequest.numberOfPages).should('be.empty')
       .type(numberOfPages);
@@ -112,7 +112,7 @@ context('Publications translation tests', () => {
     cy.get(publication.translationsIndex.requestTranslation).click();
     cy.get(publication.translationRequest.save).should('be.disabled');
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(auk.datepicker).click();
+    cy.get(auk.datepicker.datepicker).click();
     cy.setDateInFlatpickr(translationEndDate);
     cy.get(publication.translationRequest.numberOfPages).should('be.empty')
       .type(numberOfPages);
@@ -154,13 +154,13 @@ context('Publications translation tests', () => {
     cy.get(publication.translationReceivedPanel.endDate).contains(translationEndDate.format('DD-MM-YYYY'));
     cy.get(publication.translationReceivedPanel.dropdown).click();
     cy.get(publication.translationReceivedPanel.edit).click();
-    cy.get(auk.datepicker).click();
+    cy.get(auk.datepicker.datepicker).click();
     cy.setDateInFlatpickr(editedTranslationEndDate);
     cy.get(auk.modal.footer.cancel).click();
     cy.get(publication.translationReceivedPanel.endDate).contains(translationEndDate.format('DD-MM-YYYY'));
     cy.get(publication.translationReceivedPanel.dropdown).click();
     cy.get(publication.translationReceivedPanel.edit).click();
-    cy.get(auk.datepicker).click();
+    cy.get(auk.datepicker.datepicker).click();
     cy.setDateInFlatpickr(editedTranslationEndDate);
     cy.intercept('GET', '/translation-activities?filter**subcase**').as('reloadTranslationModel2');
     cy.get(publication.translationActivityEdit.save).click()
@@ -224,7 +224,7 @@ context('Publications translation tests', () => {
 
     // request translation
     cy.get(publication.translationsIndex.requestTranslation).click();
-    cy.get(auk.datepicker).click();
+    cy.get(auk.datepicker.datepicker).click();
     cy.setDateInFlatpickr(translationEndDate);
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.intercept('POST', 'pieces').as('createNewPiece');
@@ -260,19 +260,19 @@ context('Publications translation tests', () => {
 
     // set duedate
     cy.get(publication.translationsInfoPanel.edit).click();
-    cy.get(publication.translationsInfoPanel.editView.dueDate).find(auk.datepicker)
+    cy.get(publication.translationsInfoPanel.editView.dueDate).find(auk.datepicker.datepicker)
       .click();
     cy.setDateInFlatpickr(lateDueDate);
     cy.get(publication.translationsInfoPanel.save).click();
     // check if warning shows and autofill happens
     cy.get(auk.formHelpText).contains('Datum verstreken');
     cy.get(publication.translationsIndex.requestTranslation).click();
-    cy.get(auk.datepicker).should('have.value', formattedLateDueDate);
+    cy.get(auk.datepicker.datepicker).should('have.value', formattedLateDueDate);
     cy.get(auk.modal.footer.cancel).click();
 
     // remove duedate
     cy.get(publication.translationsInfoPanel.edit).click();
-    cy.get(publication.translationsInfoPanel.editView.dueDate).find(auk.datepicker)
+    cy.get(publication.translationsInfoPanel.editView.dueDate).find(auk.datepicker.datepicker)
       .click()
       .clear()
       .type('{enter}');
@@ -280,6 +280,6 @@ context('Publications translation tests', () => {
     cy.get(auk.loader).should('not.exist');
     cy.get(auk.formHelpText).should('not.exist');
     cy.get(publication.translationsIndex.requestTranslation).click();
-    cy.get(auk.datepicker).should('have.value', '');
+    cy.get(auk.datepicker.datepicker).should('have.value', '');
   });
 });
