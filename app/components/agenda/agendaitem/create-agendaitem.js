@@ -127,7 +127,7 @@ export default class CreateAgendaitem extends Component {
   }
 
   @action
-  async selectSubcase(subcase) {
+  selectSubcase(subcase) {
     if (this.selectedSubcases.includes(subcase)) {
       this.selectedSubcases.removeObject(subcase);
     } else {
