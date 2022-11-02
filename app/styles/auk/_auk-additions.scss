@@ -326,8 +326,43 @@ table tr.lt-expanded-row {
   }
 }
 
+.auk-button--muted {
+  &.au-c-button--naked {
+    &,
+    &:visited {
+      color: $auk-gray-600;
+    }
+
+    &:hover,
+    &:focus-visible,
+    &:active {
+      color: $auk-gray-800;
+    }
+
+    &.is-disabled,
+    &.is-disabled:hover,
+    &.is-disabled:focus-visible,
+    &.is-disabled:active {
+      color: $auk-gray-700;
+    }
+
+    &.is-loading,
+    &.is-loading:hover,
+    &.is-loading:focus-visible {
+      color: $auk-gray-700;
+    }
+  }
+}
+
 // Input with clear action
 
-.auk-input-with-clear-action > .auk-button {
-  outline-offset: calc(var(--au-outline-offset) * -1);
+.auk-input-with-clear-action {
+  > .au-c-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    outline-offset: calc(var(--au-outline-offset) * -1);
+  }
 }

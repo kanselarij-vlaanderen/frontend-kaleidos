@@ -108,11 +108,11 @@ function checkPublicationSearchForRegulationType(regulationType, pubNumber) {
 // TODO-publication make Test to register publication
 // cy.get(publication.publicationNav.publications).click();
 // cy.get(publication.publicationsInfoPanel.edit).click();
-// cy.get(publication.publicationsInfoPanel.editView.targetEndDate).find(auk.datepicker)
+// cy.get(publication.publicationsInfoPanel.editView.targetEndDate).find(auk.datepicker.datepicker)
 //   .click();
 // cy.setDateInFlatpickr(fields.publicationTargetEndDate);
 // cy.get(publication.publicationActivities.register).click();
-// cy.get(publication.publicationRegistration.publicationDate).find(auk.datepicker)
+// cy.get(publication.publicationRegistration.publicationDate).find(auk.datepicker.datepicker)
 //   .click();
 // cy.setDateInFlatpickr(fields.publicationDate);
 // cy.intercept('PATCH', '/publication-flows/*').as('patchPublicationFlow');
@@ -181,7 +181,7 @@ context('Search tests', () => {
   };
 
   beforeEach(() => {
-    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
+    cy.login('OVRB');
   });
 
   afterEach(() => {
@@ -269,11 +269,11 @@ context('Search tests', () => {
     cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall3');
     cy.get(route.searchPublications.dateType).select('Datum beslissing');
     cy.get(route.search.from)
-      .find(auk.datepicker)
+      .find(auk.datepicker.datepicker)
       .click();
     cy.setDateInFlatpickr(fields.decisionDate);
     cy.get(route.search.to)
-      .find(auk.datepicker)
+      .find(auk.datepicker.datepicker)
       .click();
     cy.setDateInFlatpickr(fields.decisionDate);
     cy.get(route.search.trigger).click();

@@ -7,7 +7,7 @@ import auk from '../../selectors/auk.selectors';
 
 context('Publications proofs tests', () => {
   beforeEach(() => {
-    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
+    cy.login('OVRB');
     cy.visit('/publicaties');
   });
 
@@ -44,7 +44,7 @@ context('Publications proofs tests', () => {
 
     // set targetEndDate
     cy.get(publication.publicationsInfoPanel.edit).click();
-    cy.get(publication.publicationsInfoPanel.editView.targetEndDate).find(auk.datepicker)
+    cy.get(publication.publicationsInfoPanel.editView.targetEndDate).find(auk.datepicker.datepicker)
       .click();
     cy.setDateInFlatpickr(lateEndDate);
     cy.get(publication.publicationsInfoPanel.editView.save).click();

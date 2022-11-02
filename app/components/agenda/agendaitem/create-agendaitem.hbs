@@ -18,7 +18,7 @@
                   id="searchId"
                   placeholder={{t "search-placeholder"}}
                   data-test-create-agendaitem-input={{true}}
-                  {{on "input" this.searchTask.perform}}
+                  {{on "input" (perform this.searchTask)}}
                 />
               </Auk::Toolbar::Item>
             </Auk::Toolbar::Group>
@@ -104,7 +104,7 @@
       @skin="primary"
       @loading={{this.addSubcasesToAgenda.isRunning}}
       @disabled={{this.isSaveDisabled}}
-      {{on "click" this.addSubcasesToAgenda.perform}}
+      {{on "click" (perform this.addSubcasesToAgenda)}}
     >
       {{t "add-to-agenda"}}
     </AuButton>

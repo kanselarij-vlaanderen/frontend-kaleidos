@@ -173,7 +173,7 @@ export default class AgendasController extends Controller {
     const now = new Date();
 
     const decisionResultCode = await this.store.findRecordByUri(
-      'decision-result-code',
+      'concept',
       CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
     );
 

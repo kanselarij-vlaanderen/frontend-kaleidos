@@ -113,8 +113,8 @@ export default class AgendaitemTable extends Component {
   setRowsNotApproved(tableRows, model) {
     const rowsCurrentlyInTable = tableRows;
     // relations are included in route
-    const postponedItems = model.filter((agendaitem) => agendaitem.get('treatment.decisionActivity.decisionResultCode.isPostponed'));
-    const retractedItems = model.filter((agendaitem) => agendaitem.get('treatment.decisionActivity.decisionResultCode.isRetracted'));
+    const postponedItems = model.filter((agendaitem) => agendaitem.get('treatment.decisionActivity.isPostponed'));
+    const retractedItems = model.filter((agendaitem) => agendaitem.get('treatment.decisionActivity.isRetracted'));
     const combinedItems = [...postponedItems, ...retractedItems];
     combinedItems.forEach((combinedItem) => {
       const rowInTable = rowsCurrentlyInTable.find(

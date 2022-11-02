@@ -128,11 +128,11 @@ export default class AgendaitemControls extends Component {
   }
 
   async setDecisionResultCode(decisionResultCodeUri) {
-    const decisionResultCode = await this.store.findRecordByUri(
-      'decision-result-code',
+    const decisionResultCodeConcept = await this.store.findRecordByUri(
+      'concept',
       decisionResultCodeUri
     );
-    this.decisionActivity.decisionResultCode = decisionResultCode;
+    this.decisionActivity.decisionResultCode = decisionResultCodeConcept;
     await this.decisionActivity.save();
     if ([CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD, CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN].includes(decisionResultCodeUri)) {
       const pieces = await this.args.agendaitem.pieces;

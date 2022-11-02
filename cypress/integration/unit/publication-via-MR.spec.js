@@ -37,7 +37,7 @@ context('Publications via MR tests', () => {
   // 1 nota, 1 BVR, 1 MB, 1 Decreet
 
   beforeEach(() => {
-    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
+    cy.login('OVRB');
   });
 
   afterEach(() => {
@@ -161,7 +161,7 @@ context('Publications via MR tests', () => {
     cy.get(publication.publicationCaseInfo.editView.numacNumber).find(dependency.emberTagInput.input)
       .click()
       .type(`${numacNumber}{enter}`);
-    cy.get(publication.publicationCaseInfo.editView.dueDate).find(auk.datepicker)
+    cy.get(publication.publicationCaseInfo.editView.dueDate).find(auk.datepicker.datepicker)
       .click();
     cy.setDateInFlatpickr(dueDate);
     cy.get(publication.publicationCaseInfo.editView.cancel).click();
@@ -177,7 +177,7 @@ context('Publications via MR tests', () => {
     cy.get(publication.publicationCaseInfo.editView.numacNumber).find(dependency.emberTagInput.input)
       .click()
       .type(`${numacNumber}{enter}`);
-    cy.get(publication.publicationCaseInfo.editView.dueDate).find(auk.datepicker)
+    cy.get(publication.publicationCaseInfo.editView.dueDate).find(auk.datepicker.datepicker)
       .click();
     cy.setDateInFlatpickr(dueDate);
     cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');

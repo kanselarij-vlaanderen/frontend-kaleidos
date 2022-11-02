@@ -97,7 +97,8 @@
                         agendaitem.id
                       }}
                     >
-                      {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
+                      {{! prettier-ignore}}
+                      {{moment-format meeting.plannedStart "DD MMMM YYYY"}}{{if (has-next models this.modelsOfMeetings) ", "}}
                     </AuLink>
                   {{/let}}
                 {{/each}}
@@ -130,11 +131,11 @@
               {{#if this.loadAgendaData.isRunning}}
                 <div class="auk-skeleton auk-skeleton--rectangle" role="alert" aria-busy="true"></div>
               {{else if this.canShowDecisionStatus}}
-                {{#if (or this.latestDecisionResultCode.isApproved this.latestDecisionResultCode.isAcknowledged)}}
+                {{#if (or this.latestDecisionActivity.isApproved this.latestDecisionActivity.isAcknowledged)}}
                   {{moment-format this.latestMeeting.plannedStart}}
-                {{else if this.latestDecisionResultCode.isPostponed}}
+                {{else if this.latestDecisionActivity.isPostponed}}
                   {{t "postponed"}}
-                {{else if this.latestDecisionResultCode.isRetracted}}
+                {{else if this.latestDecisionActivity.isRetracted}}
                   {{t "retracted"}}
                 {{/if}}
               {{else}}
