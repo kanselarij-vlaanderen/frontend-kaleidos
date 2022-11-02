@@ -20,7 +20,7 @@ export default Model.extend({
 
   pieces: hasMany('piece'),
 
-  type: belongsTo('document-type'),
+  type: belongsTo('concept'),
   agendaItemTreatment: belongsTo('agenda-item-treatment'),
 
   // TODO this computed property is used in:
