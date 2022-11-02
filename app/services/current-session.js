@@ -55,8 +55,4 @@ export default class CurrentSessionService extends Service {
   get isAdmin() {
     return this.userGroup.name == 'ADMIN';
   }
-
-  get isOverheid() {
-    return this.userGroup.name == 'OVERHEID';
-  }
 }

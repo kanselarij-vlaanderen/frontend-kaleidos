@@ -5,9 +5,13 @@ export default class SubcaseIsApprovedService extends Service {
   @service store;
 
   async isApproved(subcase) {
-    const meeting = await subcase?.requestedForMeeting;
+    // we need to see if the last meeting isFinal
+    const latestMeeting = await this.store.queryOne('meeting', {
+      'filter[agendas][agendaitems][treatment][decision-activity][subcase][:id:]': subcase.id,
+      sort: '-planned-start',
+    });
 
-    if (meeting?.isFinal) {
+    if (latestMeeting?.isFinal) {
       const approvedDecisionResultCode = await this.store.findRecordByUri(
         'concept',
         CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD

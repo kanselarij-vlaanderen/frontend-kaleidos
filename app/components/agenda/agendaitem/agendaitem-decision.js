@@ -6,11 +6,13 @@ import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /**
+ * @argument agendaitem
  * @argument decisionActivity
  */
 export default class AgendaitemDecisionComponent extends Component {
   @service currentSession;
   @service store;
+  @service pieceAccessLevelService;
 
   @tracked report;
   @tracked previousReport;
@@ -45,6 +47,18 @@ export default class AgendaitemDecisionComponent extends Component {
   *loadReport() {
     this.report = yield this.args.decisionActivity.report;
     this.previousReport = yield this.report?.previousPiece;
+  }
+
+  @action
+  async updateAgendaitemPiecesAccessLevels() {
+    const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
+    if ([CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD, CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN].includes(decisionResultCode.uri)) {
+      const pieces = this.args.agendaitem.pieces;
+      for (const piece of pieces.toArray()) {
+        await this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(piece);
+      }
+    }
+    this.toggleEdit();
   }
 
   @action

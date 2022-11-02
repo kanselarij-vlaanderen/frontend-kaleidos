@@ -68,7 +68,7 @@ context('Subcase tests', () => {
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, subcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
-    cy.openSubcase(0);
+    cy.openSubcase(0, subcaseTitleShort);
 
     cy.changeSubcaseAccessLevel(true, subcaseTitleShort, 'Cypress test nieuwere lange titel');
     cy.addSubcaseMandatee(2, 'Crevits');
@@ -80,7 +80,8 @@ context('Subcase tests', () => {
     const dateFormat = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
     const dateRegex = new RegExp(`.?${Cypress.dayjs(agendaDate).date()}.\\w+.${Cypress.dayjs(agendaDate).year()}`);
 
-    cy.get(cases.subcaseDescription.timelineItem).eq(0)
+    cy.get(cases.subcaseDescription.panel).find(cases.subcaseTimeline.item)
+      .eq(0)
       .contains(/Ingediend voor agendering/);
 
     cy.get(cases.subcaseDescription.meetingNumber);
@@ -107,7 +108,7 @@ context('Subcase tests', () => {
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
-    cy.openSubcase(0);
+    cy.openSubcase(0, shortSubcaseTitle);
     cy.wait(2000);
     cy.deleteSubcase();
   });
@@ -120,7 +121,7 @@ context('Subcase tests', () => {
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
-    cy.openSubcase(0);
+    cy.openSubcase(0, shortSubcaseTitle);
     cy.proposeSubcaseForAgenda(agendaDate);
     cy.get(cases.subcaseHeader.actionsDropdown)
       .click();
@@ -136,7 +137,7 @@ context('Subcase tests', () => {
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
-    cy.openSubcase(0);
+    cy.openSubcase(0, shortSubcaseTitle);
     cy.proposeSubcaseForAgenda(agendaDate);
 
     const monthDutch = getTranslatedMonth(agendaDate.month());
@@ -364,6 +365,7 @@ context('Subcase tests', () => {
     // setup
     cy.createCase(caseTitle1);
     cy.addSubcase(type, subcaseShortTitle1);
+    cy.get(cases.subcaseItem.container).should('have.length', 1);
     cy.addSubcase(type, subcaseShortTitle2);
     cy.createCase(caseTitle2);
     // wait for search index
@@ -412,7 +414,7 @@ context('Subcase tests', () => {
     // use case 3
     cy.openCase(caseTitle1);
     cy.addSubcase(type, subcaseShortTitle3);
-    cy.openSubcase(0);
+    cy.openSubcase(0, subcaseShortTitle3);
     cy.get(cases.subcaseHeader.actionsDropdown).click();
     cy.get(cases.subcaseHeader.actions.moveSubcase).click();
     cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall3');
@@ -492,7 +494,7 @@ context('Subcase tests', () => {
     // TODO-setup
     cy.createCase(caseTitle);
     cy.addSubcase(null, subcaseTitleShort);
-    cy.openSubcase(0);
+    cy.openSubcase(0, subcaseTitleShort);
     cy.addDocumentsToSubcase([
       {
         folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 1212 DOC.0001-1', fileType: 'Nota',

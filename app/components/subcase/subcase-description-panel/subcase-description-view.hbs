@@ -1,5 +1,5 @@
-<div {{did-update (perform this.loadAgendaData) @subcase.requestedForMeeting}}>
-  <Auk::Panel>
+<div {{did-update (perform this.loadAgendaData)}}>
+  <Auk::Panel data-test-subcase-description-panel>
     <Auk::Panel::Header>
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="left">
@@ -26,27 +26,11 @@
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body>
-       <div class="auk-u-mb-4">
+      <div class="auk-u-mb-4">
         <p data-test-subcase-description-subcase-name class="auk-u-text-capitalize">
           {{@subcase.subcaseName}}
         </p>
-        <ul class="vlc-status-timeline">
-          {{#each this.phases as |phase|}}
-            <li
-              class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
-              data-test-subcase-description-timeline-item
-            >
-              <div class="vlc-status-timeline__dot"></div>
-              {{#if (is-pending phase)}}
-                <div class="auk-skeleton auk-skeleton--rectangle" role="alert" aria-busy="true"></div>
-              {{else}}
-                <div class="vlc-status-timeline__text">
-                  {{subcase-timeline-item-text phase=phase}}
-                </div>
-              {{/if}}
-            </li>
-          {{/each}}
-        </ul>
+        <Subcase::Timeline @subcase={{@subcase}}/>
       </div>
       <div class="auk-o-grid">
         <div class="auk-o-grid-col-4">
@@ -59,8 +43,14 @@
               data-test-subcase-description-meeting-number
               class="auk-key-value-item__value"
             >
-              {{#if this.latestMeeting.number}}
-                {{this.latestMeeting.number}}
+              {{#if this.loadAgendaData.isRunning}}
+                  <div class="auk-loader" role="alert" aria-busy="true"></div>
+              {{else if this.modelsOfMeetings}}
+                {{#each this.modelsOfMeetings as |models|}}
+                  {{#let models.[0] as |meeting|}}
+                    {{meeting.number}}{{if (has-next models this.modelsOfMeetings) ", "}}
+                  {{/let}}
+                {{/each}}
               {{else}}
                 {{t "no-number-yet"}}
               {{/if}}
@@ -68,7 +58,11 @@
           </div>
           <div class="auk-key-value-item">
             <div class="auk-key-value-item__label">
-              {{t "requested-for-session"}}
+              {{#if (and this.loadAgendaData.isIdle this.latestMeeting)}}
+                {{t "requested-for-session-kind" kind=(kind-print-label this.latestMeeting.kind)}}:
+              {{else}}
+                {{t "requested-for-session"}}
+              {{/if}}
             </div>
             <div
               data-test-subcase-description-meeting-planned-start
@@ -91,26 +85,25 @@
             <div class="auk-key-value-item__value">
               {{#if this.loadAgendaData.isRunning}}
                 <div class="auk-loader" role="alert" aria-busy="true"></div>
+              {{else if this.modelsOfMeetings}}
+                {{#each this.modelsOfMeetings as |models| }}
+                  {{#let models.[0] models.[1] models.[2] as |meeting agenda agendaitem|}}
+                    <AuLink
+                      data-test-subcase-description-agenda-link
+                      @route="agenda.agendaitems.agendaitem"
+                      @models={{array
+                        meeting.id
+                        agenda.id
+                        agendaitem.id
+                      }}
+                    >
+                      {{! prettier-ignore}}
+                      {{moment-format meeting.plannedStart "DD MMMM YYYY"}}{{if (has-next models this.modelsOfMeetings) ", "}}
+                    </AuLink>
+                  {{/let}}
+                {{/each}}
               {{else}}
-                {{#if this.latestMeeting.plannedStart}}
-                  {{#if this.latestAgendaitem.retracted}}
-                    {{t "postponed-subcase"}}
-                  {{/if}}
-                  <AuLink
-                    data-test-subcase-description-agenda-link
-                    @skin="primary"
-                    @route="agenda.agendaitems.agendaitem"
-                    @models={{array
-                      this.latestMeeting.id
-                      this.latestAgenda.id
-                      this.latestAgendaitem.id
-                    }}
-                  >
-                    {{moment-format this.latestMeeting.plannedStart "DD MMMM YYYY"}}
-                  </AuLink>
-                {{else}}
-                  {{t "not-yet-on-agenda"}}
-                {{/if}}
+                {{t "not-yet-on-agenda"}}
               {{/if}}
             </div>
           </div>
@@ -135,10 +128,16 @@
               data-test-subcase-description-decided-on
               class="auk-key-value-item__value"
             >
-              {{#if (is-empty this.approved)}}
+              {{#if this.loadAgendaData.isRunning}}
                 <div class="auk-skeleton auk-skeleton--rectangle" role="alert" aria-busy="true"></div>
-              {{else if this.approved}}
-                {{moment-format this.latestMeeting.plannedStart}}
+              {{else if this.canShowDecisionStatus}}
+                {{#if (or this.latestDecisionActivity.isApproved this.latestDecisionActivity.isAcknowledged)}}
+                  {{moment-format this.latestMeeting.plannedStart}}
+                {{else if this.latestDecisionActivity.isPostponed}}
+                  {{t "postponed"}}
+                {{else if this.latestDecisionActivity.isRetracted}}
+                  {{t "retracted"}}
+                {{/if}}
               {{else}}
                 {{t "not-yet-decided"}}
               {{/if}}
