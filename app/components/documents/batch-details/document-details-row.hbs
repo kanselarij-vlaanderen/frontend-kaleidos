@@ -23,14 +23,9 @@
   </td>
   <td>
     {{#if @isEditingEnabled}}
-      <Utils::ModelSelector
+      <Utils::DocumentTypeSelector
         data-test-document-details-row-type
-        @modelName="document-type"
-        @allowClear={{true}}
-        @searchField="label"
-        @displayField="label"
-        @sortField="priority"
-        @selected={{@row.documentType}}
+        @selectedDocumentType={{@row.documentType}}
         @onChange={{@row.setDocumentType}}
       />
     {{else}}

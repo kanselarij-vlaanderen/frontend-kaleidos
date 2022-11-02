@@ -28,7 +28,7 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @task
   *loadCodelists() {
-    this.decisionDocType = yield this.store.findRecordByUri('document-type', CONSTANTS.DOCUMENT_TYPES.DECISION);
+    this.decisionDocType = yield this.store.findRecordByUri('concept', CONSTANTS.DOCUMENT_TYPES.DECISION);
   }
 
   @action
