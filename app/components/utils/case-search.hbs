@@ -1,12 +1,12 @@
 <Auk::Modal::Body>
   <div class="auk-o-flex auk-o-flex--vertical-center">
-    <Auk::Input
+    <AuInput
       data-test-utils-case-search-input
       @value={{this.searchText}}
-      placeholder={{t "search-placeholder"}}
-      @block={{true}}
+      @width="block"
       {{on "input" this.updateSearchText}}
       class="auk-u-maximize-width"
+      placeholder={{t "search-placeholder"}}
     />
   </div>
 
