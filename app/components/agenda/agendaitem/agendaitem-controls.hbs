@@ -13,7 +13,7 @@
             <AuButton
               data-test-agendaitem-controls-action-postpone-revert
               @skin="link"
-              {{on "click" this.resetDecisionResultCode.perform}}
+              {{on "click" (perform this.resetDecisionResultCode)}}
               role="menuitem"
             >
               {{t "postpone-revert"}}
@@ -21,7 +21,7 @@
           {{else if this.decisionActivity.isRetracted}}
             <AuButton
               @skin="link"
-              {{on "click" this.resetDecisionResultCode.perform}}
+              {{on "click" (perform this.resetDecisionResultCode)}}
               role="menuitem"
             >
               {{t "retract-revert"}}
@@ -30,14 +30,14 @@
             <AuButton
               data-test-agendaitem-controls-action-postpone
               @skin="link"
-              {{on "click" this.postponeAgendaitem.perform}}
+              {{on "click" (perform this.postponeAgendaitem)}}
               role="menuitem"
             >
               {{t "postpone"}}
             </AuButton>
             <AuButton
               @skin="link"
-              {{on "click" this.retractAgendaitem.perform}}
+              {{on "click" (perform this.retractAgendaitem)}}
               role="menuitem"
             >
               {{t "retract"}}

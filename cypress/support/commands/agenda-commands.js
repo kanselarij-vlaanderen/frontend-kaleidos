@@ -421,7 +421,7 @@ function addAgendaitemToAgenda(subcaseTitle) {
 
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
-  cy.get(utils.vlModal.dialogWindow).within(() => {
+  cy.get(auk.modal.container).within(() => {
     cy.get(auk.loader, {
       timeout: 12000,
     }).should('not.exist');
@@ -440,17 +440,15 @@ function addAgendaitemToAgenda(subcaseTitle) {
     }).should('not.exist');
     cy.get(dependency.emberDataTable.isLoading).should('not.exist');
     // select the found row (title should always match only 1 result to avoid using the wrong subcase)
-    cy.get(agenda.createAgendaitem.dataTable).find('tbody')
-      .children('tr')
-      .as('rows');
-
-    cy.get('@rows', {
+    cy.get(agenda.createAgendaitem.rows, {
       timeout: 12000,
     }).eq(0)
-      .click()
       .get(agenda.createAgendaitem.row.checkBox)
-      .should('be.checked');
-    cy.get(utils.vlModalFooter.save).click();
+      .as('checkbox')
+      .parent()
+      .click();
+    cy.get('@checkbox').should('be.checked');
+    cy.get(agenda.createAgendaitem.save).click();
   });
 
   cy.wait('@createAgendaActivity', {

@@ -37,9 +37,13 @@ const selectors = {
     save: '[data-test-new-subcase-save]',
   },
 
+  subcaseTimeline: {
+    item: '[data-test-subcase-timeline-item]',
+  },
+
   // subcase-description
   subcaseDescription: {
-    timelineItem: '[data-test-subcase-description-timeline-item]',
+    panel: '[data-test-subcase-description-panel]',
     decidedOn: '[data-test-subcase-description-decided-on]',
     requestedBy: '[data-test-subcase-description-requested-by]',
     meetingNumber: '[data-test-subcase-description-meeting-number]',

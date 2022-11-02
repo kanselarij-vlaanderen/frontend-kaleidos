@@ -14,7 +14,6 @@ export default class SubcaseDescriptionView extends Component {
   @service subcasesService;
   @service subcaseIsApproved;
 
-  @tracked phases = null;
   @tracked subcaseType = null;
   @tracked latestMeeting = null;
   @tracked latestAgenda = null;
@@ -34,7 +33,6 @@ export default class SubcaseDescriptionView extends Component {
 
   @task
   *loadAgendaData() {
-    this.phases = yield this.subcasesService.getSubcasePhases(this.args.subcase);
     this.subcaseType = yield this.args.subcase.type;
     const agendaActivities = yield this.args.subcase.hasMany('agendaActivities').reload();
     const sortedAgendaActivities = agendaActivities?.sortBy('startDate');

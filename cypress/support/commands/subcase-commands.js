@@ -190,7 +190,6 @@ function proposeSubcaseForAgenda(agendaDate, numberRep = '') {
   cy.intercept('POST', '/agendaitems').as('createNewAgendaitem');
   cy.intercept('PATCH', '/agendas/*').as('patchAgenda');
   cy.intercept('POST', '/agenda-activities').as('createAgendaActivity');
-  cy.intercept('GET', '/agendaitems?filter**').as('loadAgendaData');
   const monthDutch = getTranslatedMonth(agendaDate.month());
   let formattedDate = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
   if (numberRep) {
@@ -199,6 +198,9 @@ function proposeSubcaseForAgenda(agendaDate, numberRep = '') {
 
   cy.get(cases.subcaseHeader.showProposedAgendas).click();
 
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('GET', '/agendaitems?filter**').as(`loadAgendaData_${randomInt}`);
+  cy.intercept('GET', '/subcases?filter**decisionmaking-flow**').as(`loadSubcase_${randomInt}`);
   cy.get(cases.subcaseHeader.actions.proposeForAgenda).contains(formattedDate)
     .click();
   cy.get(cases.subcaseHeader.showProposedAgendas)
@@ -209,9 +211,10 @@ function proposeSubcaseForAgenda(agendaDate, numberRep = '') {
       timeout: 24000,
     });
   // refresh happens
-  cy.wait('@loadAgendaData');
-  cy.get(cases.subcaseDescription.timelineItem); // when this succeeds the refresh happened
+  cy.wait(`@loadAgendaData_${randomInt}`);
+  cy.wait(`@loadSubcase_${randomInt}`);
   cy.get(auk.loader).should('not.exist');
+  cy.get(cases.subcaseDescription.panel).find(cases.subcaseTimeline.item); // when this succeeds the refresh happened
   cy.log('/proposeSubcaseForAgenda');
 }
 
