@@ -18,10 +18,8 @@ export default class SubcaseDescriptionView extends Component {
   @tracked latestMeeting = null;
   @tracked latestAgenda = null;
   @tracked latestAgendaitem = null;
-  @tracked latestDecisionResultCode = null;
+  @tracked latestDecisionActivity = null;
   @tracked approved = null;
-  @tracked isPostponed = null;
-  @tracked isRetracted = null;
   @tracked modelsOfMeetings = [];
 
   constructor() {
@@ -60,7 +58,7 @@ export default class SubcaseDescriptionView extends Component {
       // Other profiles should not have the latest decision when decisions have not been released yet
       if (decisionActivity) {
         // the last decision might be null, keep only the last one that exists
-        this.latestDecisionResultCode = resultCode;
+        this.latestDecisionActivity = decisionActivity;
       }
 
       this.modelsOfMeetings.push([meeting, agenda, agendaitem, resultCode]);

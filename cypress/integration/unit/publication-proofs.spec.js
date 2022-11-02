@@ -7,7 +7,7 @@ import utils from '../../selectors/utils.selectors';
 
 context('Publications proofs tests', () => {
   beforeEach(() => {
-    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
+    cy.login('OVRB');
     cy.visit('/publicaties');
   });
 
@@ -40,7 +40,7 @@ context('Publications proofs tests', () => {
     // new request
     cy.get(publication.translationsIndex.requestTranslation).click();
     cy.get(publication.translationRequest.save).should('be.disabled');
-    cy.get(auk.datepicker).click();
+    cy.get(auk.datepicker.datepicker).click();
     cy.setDateInFlatpickr(translationEndDate);
     cy.get(publication.translationRequest.numberOfPages).should('be.empty')
       .type(numberOfPages);
@@ -173,7 +173,7 @@ context('Publications proofs tests', () => {
     cy.wait(1000);
     cy.get(publication.proofReceivedPanel.dropdown).click();
     cy.get(publication.proofReceivedPanel.edit).click();
-    cy.get(auk.datepicker).click();
+    cy.get(auk.datepicker.datepicker).click();
     cy.setDateInFlatpickr(editedProofEndDate);
     cy.get(publication.proofReceivedPanel.corrector).click()
       .type(corrector);
@@ -183,7 +183,7 @@ context('Publications proofs tests', () => {
     // save
     cy.get(publication.proofReceivedPanel.dropdown).click();
     cy.get(publication.proofReceivedPanel.edit).click();
-    cy.get(auk.datepicker).click();
+    cy.get(auk.datepicker.datepicker).click();
     cy.setDateInFlatpickr(editedProofEndDate);
     cy.get(publication.proofReceivedPanel.corrector).click()
       .type(corrector);
@@ -303,7 +303,7 @@ context('Publications proofs tests', () => {
 
     // set duedate
     cy.get(publication.proofInfoPanel.edit).click();
-    cy.get(publication.proofInfoPanel.editView.dueDate).find(auk.datepicker)
+    cy.get(publication.proofInfoPanel.editView.dueDate).find(auk.datepicker.datepicker)
       .click();
     cy.setDateInFlatpickr(lateDueDate);
     cy.get(publication.proofInfoPanel.save).click();
@@ -316,7 +316,7 @@ context('Publications proofs tests', () => {
     cy.get(publication.publicationCaseInfo.dueDate).contains(formattedLateDueDate);
     // remove duedate
     cy.get(publication.publicationCaseInfo.edit).click();
-    cy.get(publication.publicationCaseInfo.editView.dueDate).find(auk.datepicker)
+    cy.get(publication.publicationCaseInfo.editView.dueDate).find(auk.datepicker.datepicker)
       .click()
       .clear()
       .type('{enter}');

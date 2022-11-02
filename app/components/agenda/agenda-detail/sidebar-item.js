@@ -48,10 +48,10 @@ export default class SidebarItem extends Component {
       classes.push('vlc-agenda-detail-sidebar__sub-item--active');
     }
     // Needed in order to change the sidebar classes when editing in the agendaitem detail route
-    if (this.decisionActivity?.get('decisionResultCode.isPostponed')) {
+    if (this.decisionActivity?.get('isPostponed')) {
       classes.push('auk-u-opacity--1/3');
     }
-    if (this.decisionActivity?.get('decisionResultCode.isRetracted')) {
+    if (this.decisionActivity?.get('isRetracted')) {
       classes.push('auk-u-opacity--1/3');
     }
     return classes.join(' ');

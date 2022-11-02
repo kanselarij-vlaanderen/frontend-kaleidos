@@ -1,10 +1,10 @@
 {{#let
-  this.model.treatment.decisionActivity.decisionResultCode
-  as |resultCode|
+  this.model.treatment.decisionActivity
+  as |decisionActivity|
 }}
-  {{#if resultCode.isRetracted}}
+  {{#if decisionActivity.isRetracted}}
     <Auk::Alert @skin="warning" @message={{t "retracted-item"}} />
-  {{else if resultCode.isPostponed}}
+  {{else if decisionActivity.isPostponed}}
     <Agenda::Agendaitem::AgendaitemPostponed
       @meeting={{this.meeting}}
       @subcase={{this.subcase}}

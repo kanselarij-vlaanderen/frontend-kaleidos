@@ -1,8 +1,8 @@
 <div
   class={{if
     (or
-      this.decisionActivity.decisionResultCode.isPostponed
-      this.decisionActivity.decisionResultCode.isRetracted
+      this.decisionActivity.isPostponed
+      this.decisionActivity.isRetracted
     )
     "auk-u-opacity--1/3"
   }}

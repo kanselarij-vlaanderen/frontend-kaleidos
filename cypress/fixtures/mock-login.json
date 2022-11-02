@@ -12,6 +12,45 @@
       "type": "sessions"
     }
   },
+  "Secretarie": {
+    "data": {
+      "relationships": {
+        "account": {
+          "data": {
+            "id": "33924ed8-ceab-42d7-8855-92aef3d15437",
+            "type": "accounts"
+          }
+        }
+      },
+      "type": "sessions"
+    }
+  },
+  "OVRB": {
+    "data": {
+      "relationships": {
+        "account": {
+          "data": {
+            "id": "f19a2d90-c3a6-4be2-882e-79b5b25deaee",
+            "type": "accounts"
+          }
+        }
+      },
+      "type": "sessions"
+    }
+  },
+  "Kort bestek": {
+    "data": {
+      "relationships": {
+        "account": {
+          "data": {
+            "id": "404b7c2c-8037-4db6-9792-117f840fda03",
+            "type": "accounts"
+          }
+        }
+      },
+      "type": "sessions"
+    }
+  },
   "Minister": {
     "data": {
       "relationships": {
@@ -25,12 +64,12 @@
       "type": "sessions"
     }
   },
-  "Overheid": {
+  "Kabinetdossierbeheerder": {
     "data": {
       "relationships": {
         "account": {
           "data": {
-            "id": "a335add2-c129-46aa-9e5b-a97496d11757",
+            "id": "c076573e-a252-4358-b3b3-23f63eb946ba",
             "type": "accounts"
           }
         }
@@ -38,20 +77,7 @@
       "type": "sessions"
     }
   },
-  "Kanselarij": {
-    "data": {
-      "relationships": {
-        "account": {
-          "data": {
-            "id": "33924ed8-ceab-42d7-8855-92aef3d15437",
-            "type": "accounts"
-          }
-        }
-      },
-      "type": "sessions"
-    }
-  },
-  "Kabinet": {
+  "Kabinetmedewerker": {
     "data": {
       "relationships": {
         "account": {
@@ -64,12 +90,38 @@
       "type": "sessions"
     }
   },
-  "Ondersteuning Vlaamse Regering en Betekeningen": {
+  "Overheidsorganisatie": {
     "data": {
       "relationships": {
         "account": {
           "data": {
-            "id": "f19a2d90-c3a6-4be2-882e-79b5b25deaee",
+            "id": "a335add2-c129-46aa-9e5b-a97496d11757",
+            "type": "accounts"
+          }
+        }
+      },
+      "type": "sessions"
+    }
+  },
+  "Overlegcomité raadgever": {
+    "data": {
+      "relationships": {
+        "account": {
+          "data": {
+            "id": "1adf0580-3779-4123-9f36-2186c99c94a8",
+            "type": "accounts"
+          }
+        }
+      },
+      "type": "sessions"
+    }
+  },
+  "Vlaams Parlement": {
+    "data": {
+      "relationships": {
+        "account": {
+          "data": {
+            "id": "5eb1f49e-1c32-417b-9432-6d8b7f7afc12",
             "type": "accounts"
           }
         }
