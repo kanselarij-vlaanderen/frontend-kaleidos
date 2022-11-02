@@ -44,11 +44,11 @@
           <Auk::Label for="proofRequestSubject" @required={{true}}>
             {{t "subject"}}
           </Auk::Label>
-          <Auk::Input
+          <AuInput
             data-test-proof-request-subject
-            id="proofRequestSubject"
-            @block={{true}}
+            @width="block"
             @value={{mut this.subject}}
+            id="proofRequestSubject"
           />
         </div>
         <div class="auk-form-group">

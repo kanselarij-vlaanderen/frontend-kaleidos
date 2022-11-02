@@ -24,14 +24,14 @@
             {{t "clear-filter"}}
           </AuButton>
         {{/if}}
-        <Auk::Input
+        <AuInput
           data-test-route-agendas-overview-filter-input
-          @block={{true}}
+          @width="block"
           @icon="search"
-          placeholder={{t "date-example"}}
-          value={{this.filterAgendas}}
-          {{on "input" (perform this.debouncedSetFilter)}}
+          @value={{this.filterAgendas}}
           @enter={{this.setFilter}}
+          {{on "input" (perform this.debouncedSetFilter)}}
+          placeholder={{t "date-example"}}
           autocomplete="off"
         />
       </Group.Item>
