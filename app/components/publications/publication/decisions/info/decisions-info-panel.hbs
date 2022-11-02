@@ -90,9 +90,9 @@
                   class="auk-form-group"
                 >
                   <Auk::Label>{{t "number-of-pages"}}</Auk::Label>
-                  <Auk::Input
+                  <AuInput
                     @type="number"
-                    @block={{true}}
+                    @width="block"
                     @value={{@publicationFlow.numberOfPages}}
                   />
                 </div>
@@ -104,10 +104,10 @@
                   class="auk-form-group"
                 >
                   <Auk::Label>{{t "publication-flow-number-of-extracts"}}</Auk::Label>
-                  <Auk::Input
+                  <AuInput
                     data-test-decisions-info-panel-edit-number-of-extracts
                     @type="number"
-                    @block={{true}}
+                    @width="block"
                     @value={{@publicationFlow.numberOfExtracts}}
                   />
                 </div>

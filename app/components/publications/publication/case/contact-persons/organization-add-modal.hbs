@@ -11,18 +11,23 @@
             @required={{true}}>
             {{t "name"}}
           </Auk::Label>
-          <Auk::Input data-test-organization-add-name id="organizationNameInput"
-            @block={{true}}
+          <AuInput
+            data-test-organization-add-name
+            @width="block"
             @value={{this.name}}
-            {{on "input" this.validators.name.enableError}} />
+            {{on "input" this.validators.name.enableError}}
+            id="organizationNameInput"
+          />
         </div>
         <div class="auk-form-group">
           <Auk::Label for="organizationIdentifierInput">
             {{t "identifier"}} ({{t "ovo-code"}})
           </Auk::Label>
-          <Auk::Input id="organizationIdentifierInput"
-            @block={{true}}
-            @value={{this.identifier}} />
+          <AuInput
+            @width="block"
+            @value={{this.identifier}}
+            id="organizationIdentifierInput"
+          />
         </div>
       </div>
     </Utils::LoadableContent>

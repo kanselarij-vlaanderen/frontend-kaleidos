@@ -11,13 +11,14 @@
           <Auk::Toolbar @auto={{true}}>
             <Auk::Toolbar::Group @position="left">
               <Auk::Toolbar::Item class="auk-u-maximize-width">
-                <Auk::Input
+                <AuInput
+                  data-test-create-agendaitem-input={{true}}
                   @icon="search"
-                  @block={{true}}
+                  @width="block"
                   @value={{this.filter}}
+                  @disabled={{this.showPostponed}}
                   id="searchId"
                   placeholder={{t "search-placeholder"}}
-                  data-test-create-agendaitem-input={{true}}
                   {{on "input" (perform this.searchTask)}}
                 />
               </Auk::Toolbar::Item>
