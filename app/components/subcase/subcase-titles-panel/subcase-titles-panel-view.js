@@ -24,7 +24,7 @@ export default class SubcaseTitlesPanelView extends Component {
     return (
       this.meeting?.isFinal &&
       (this.currentSession.may('view-decisions-before-release') ||
-        this.meeting?.internalDecisionPublicationActivity?.startDate)
+        this.meeting?.internalDecisionPublicationActivity?.get('startDate'))
     );
   }
 

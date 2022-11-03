@@ -34,7 +34,7 @@ export default class SubcaseDescriptionView extends Component {
     return (
       this.latestMeeting?.isFinal &&
       (this.currentSession.may('view-decisions-before-release') ||
-        this.latestMeeting?.internalDecisionPublicationActivity?.startDate)
+        this.latestMeeting?.internalDecisionPublicationActivity?.get('startDate'))
     );
   }
 
