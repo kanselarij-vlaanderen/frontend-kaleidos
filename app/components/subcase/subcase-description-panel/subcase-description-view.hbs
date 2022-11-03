@@ -59,7 +59,7 @@
           <div class="auk-key-value-item">
             <div class="auk-key-value-item__label">
               {{#if (and this.loadAgendaData.isIdle this.latestMeeting)}}
-                {{t "requested-for-session-kind" kind=(kind-print-label this.latestMeeting.kind)}}:
+                {{t "requested-for-session-kind" kind=(kind-print-label this.latestMeeting.kind)}}
               {{else}}
                 {{t "requested-for-session"}}
               {{/if}}

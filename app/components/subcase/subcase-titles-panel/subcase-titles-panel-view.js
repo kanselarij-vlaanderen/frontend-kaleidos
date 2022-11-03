@@ -22,9 +22,9 @@ export default class SubcaseTitlesPanelView extends Component {
 
   get canShowDecisionStatus() {
     return (
-      this.meeting?.isFinal &&
+      this.args.meeting?.isFinal &&
       (this.currentSession.may('view-decisions-before-release') ||
-        this.meeting?.internalDecisionPublicationActivity?.get('startDate'))
+        this.args.meeting?.internalDecisionPublicationActivity?.get('startDate'))
     );
   }
 
