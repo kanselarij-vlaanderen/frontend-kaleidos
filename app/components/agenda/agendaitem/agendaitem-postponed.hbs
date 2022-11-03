@@ -7,7 +7,7 @@
       </p>
     </div>
   </div>
-  {{#if @meeting.internalDecisionPublicationActivity.startDate}}
+  {{#if (and @meeting.internalDecisionPublicationActivity.startDate this.loadProposedStatus.isIdle)}}
     {{#if this.modelsForProposedAgenda}}
       <Auk::Button
         @skin="primary"
