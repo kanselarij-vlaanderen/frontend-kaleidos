@@ -299,8 +299,9 @@ context('Agenda tests', () => {
     const agendaDatePVV = agendaDateMR.add(1, 'days');
 
     const monthDutchMR = getTranslatedMonth(agendaDateMR.month());
+    const monthDutchPVV = getTranslatedMonth(agendaDatePVV.month());
     const dateFormatMR = `${agendaDateMR.date()} ${monthDutchMR} ${agendaDateMR.year()}`;
-    const dateFormatPVV = `${agendaDatePVV.date()} ${monthDutchMR} ${agendaDateMR.year()}`;
+    const dateFormatPVV = `${agendaDatePVV.date()} ${monthDutchPVV} ${agendaDateMR.year()}`;
 
     cy.createAgenda(null, agendaDateMR, null, agendaNumberMR);
     cy.createAgenda(null, agendaDatePVV, null, agendaNumberPVV);
