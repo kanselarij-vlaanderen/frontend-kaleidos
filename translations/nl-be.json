@@ -636,6 +636,7 @@
   "file-viewer-type-unsupported": "Bestanden van het bestandstype \"{fileType}\" worden momenteel niet ondersteund om in de applicatie te bekijken. Gelieve het bestand te downloaden.",
   "document-unauthorized": "Geen toegang",
   "document-unauthorized-message": "U hebt geen toegang tot dit document",
+  "application-unauthorized-message": "U hebt geen toegang tot de applicatie",
   "style-guide-basic": "Basics",
   "style-guide-typography": "Typography",
   "style-guide-components": "Components",
