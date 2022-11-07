@@ -10,7 +10,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
  * @argument {boolean} disabled
  */
 export default class UtilsKindSelector extends Component {
-  @service store;
+  @service conceptStore;
 
   @tracked options;
 
@@ -26,6 +26,6 @@ export default class UtilsKindSelector extends Component {
 
   @task
   *loadKinds() {
-    this.options = yield this.store.queryConceptsForConceptScheme(CONSTANTS.CONCEPT_SCHEMES.VERGADERACTIVITEIT);
+    this.options = yield this.conceptStore.allForConceptScheme(CONSTANTS.CONCEPT_SCHEMES.VERGADERACTIVITEIT);
   }
 }

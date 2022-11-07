@@ -5,6 +5,7 @@ import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class PublicationsRoute extends Route {
   @service store;
+  @service conceptStore;
   @service currentSession;
   @service router;
   @service('session') simpleAuthSession;
@@ -34,13 +35,7 @@ export default class PublicationsRoute extends Route {
       'page[size]': PAGE_SIZE.CODE_LISTS,
       sort: 'position',
     });
-    const documentTypePromise =  this.store.query('concept', {
-      'filter[concept-schemes][:uri:]': CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES,
-      'page[size]': PAGE_SIZE.CODE_LISTS,
-      sort: 'position',
-    });
-    // const documentTypePromise = this.store.queryConceptsForConceptScheme(CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES);
-    // TODO: Enable when https://github.com/kanselarij-vlaanderen/frontend-kaleidos/pull/1518 gets merged
+    const documentTypePromise = this.conceptStore.allForConceptScheme(CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES);
 
     return Promise.all([
       publicationStatusPromise,

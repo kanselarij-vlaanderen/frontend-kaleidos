@@ -6,7 +6,7 @@ import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class UploadedDocument extends Component {
-  @service store;
+  @service conceptStore;
 
   @tracked documentTypes = [];
   @tracked documentContainer;
@@ -19,7 +19,7 @@ export default class UploadedDocument extends Component {
 
   @task
   *loadData() {
-    this.documentTypes = yield this.store.queryConceptsForConceptScheme(CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES);
+    this.documentTypes = yield this.conceptStore.allForConceptScheme(CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES);
 
     this.documentContainer = yield this.args.piece.documentContainer;
     this.selectedDocumentType = yield this.documentContainer.type;

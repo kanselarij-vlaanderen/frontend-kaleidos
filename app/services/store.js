@@ -1,6 +1,5 @@
 import Store from '@ember-data/store';
 import ArrayProxy from '@ember/array/proxy';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class ExtendedStoreService extends Store {
   /*
@@ -59,19 +58,6 @@ export default class ExtendedStoreService extends Store {
     }
     return this.queryOne(modelName, {
       'filter[:uri:]': uri,
-    });
-  }
-
-  // TODO: Move this to a concept-service where we bundle logic for getting
-  // all concepts of a scheme/specific concepts? Might cut down some of the
-  // repetition across the codebase.
-  queryConceptsForConceptScheme(conceptSchemeUri) {
-    return this.query('concept', {
-      'filter[concept-schemes][:uri:]': conceptSchemeUri,
-      'filter[:has-no:narrower]': true,
-      include: 'broader,narrower',
-      'page[size]': PAGE_SIZE.CODE_LISTS,
-      sort: 'position',
     });
   }
 }

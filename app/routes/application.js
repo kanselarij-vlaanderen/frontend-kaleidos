@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class ApplicationRoute extends Route {
-  @service store;
+  @service conceptStore;
   @service moment;
   @service intl;
   @service session;
@@ -38,8 +38,11 @@ export default class ApplicationRoute extends Route {
       this.transitionTo('accountless-users');
     }
 
-    this.store.queryConceptsForConceptScheme(CONSTANTS.CONCEPT_SCHEMES.VERGADERACTIVITEIT);
-    this.store.queryConceptsForConceptScheme(CONSTANTS.CONCEPT_SCHEMES.ACCESS_LEVELS);
+    this.conceptStore.allForConceptScheme(CONSTANTS.CONCEPT_SCHEMES.VERGADERACTIVITEIT, {
+      'filter[:has-no:narrower]': true,
+      include: 'broader,narrower',
+    });
+    this.conceptStore.allForConceptScheme(CONSTANTS.CONCEPT_SCHEMES.ACCESS_LEVELS);
   }
 
   get isSupportedBrowser() {
