@@ -10,28 +10,30 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
   @service store;
   @service currentSession;
 
+  // Query for pieces of submission-activity is a 2-step process (submission-activity -> pieces). 
+  // Querying pieces directly doesn't work since the inverse isn't present in API config
   async model() {
     this.subcase = this.modelFor('cases.case.subcases.subcase');
-    const queryParams = {
-      page: {
-        size: PAGE_SIZE.ACTIVITIES,
-      },
-      include: 'pieces,pieces.document-container', // Make sure we have all pieces, unpaginated
+    // Get any submission that is not yet on a meeting
+    const submissionActivitiesWithoutActivity = await this.store.query('submission-activity', {
       'filter[subcase][:id:]': this.subcase.id,
-    };
-    // only get the documents on latest meeting if applicable
+      'filter[:has-no:agenda-activity]': true,
+      'page[size]': PAGE_SIZE.ACTIVITIES,
+      include: 'pieces,pieces.document-container', // Make sure we have all pieces, unpaginated
+    });
+    let submissionActivities = [...submissionActivitiesWithoutActivity.toArray()];
+    // Get the submission from latest meeting if applicable
     const agendaActivities = await this.subcase.agendaActivities;
     const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
     if (latestActivity) {
-      this.latestMeeting = await this.store.queryOne('meeting', {
-        'filter[agendas][agendaitems][agenda-activity][:id:]': latestActivity.id,
-        sort: '-planned-start',
+      const submissionActivitiesFromLatestMeeting = await this.store.query('submission-activity', {
+        'filter[subcase][:id:]': this.subcase.id,
+        'filter[agenda-activity][:id:]': latestActivity.id,
+        'page[size]': PAGE_SIZE.ACTIVITIES,
+        include: 'pieces,pieces.document-container', // Make sure we have all pieces, unpaginated
       });
-      queryParams['filter[agenda-activity][:id:]'] = latestActivity.id;
+      submissionActivities.addObjects(submissionActivitiesFromLatestMeeting.toArray());
     }
-    // 2-step process (submission-activity -> pieces). Querying pieces directly doesn't
-    // work since the inverse isn't present in API config
-    const submissionActivities = await this.store.query('submission-activity', queryParams);
 
     const pieces = [];
     for (const submissionActivity of submissionActivities.toArray()) {

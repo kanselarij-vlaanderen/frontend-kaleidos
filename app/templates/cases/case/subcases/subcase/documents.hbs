@@ -8,6 +8,15 @@
               {{t "documents"}}
             </h4>
           </Group.Item>
+          <AuPill
+            @size="small"
+            @skin="border"
+            @icon="comment"
+          >
+            <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+              {{t "filtered-subcase-documents"}}
+            </EmberTooltip>
+          </AuPill>
         </Toolbar.Group>
         <Toolbar.Group @position="right" as |Group|>
           {{#if this.model.pieces.length}}
