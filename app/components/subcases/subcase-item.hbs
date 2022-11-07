@@ -39,29 +39,14 @@
             {{t "latest-modified"}}
             {{moment-format @subcase.modified}}
           </p>
-          {{#if @subcase.requestedForMeeting.plannedStart}}
+          {{#if this.latestMeeting.plannedStart}}
             <p>
               {{t "on-agenda-for-meeting"}}
-              {{moment-format @subcase.requestedForMeeting.plannedStart}}
+              {{moment-format this.latestMeeting.plannedStart}}
             </p>
           {{/if}}
         </div>
-        <ul class="vlc-status-timeline">
-          {{#unless this.loadSubcasePhases.isRunning}}
-            {{#each this.phases as |phase|}}
-              {{#if phase.label}}
-                <li
-                  class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
-                >
-                  <div class="vlc-status-timeline__dot"></div>
-                  <div class="vlc-status-timeline__text">
-                    {{subcase-timeline-item-text phase=phase}}
-                  </div>
-                </li>
-              {{/if}}
-            {{/each}}
-          {{/unless}}
-        </ul>
+        <Subcase::Timeline @subcase={{@subcase}}/>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>

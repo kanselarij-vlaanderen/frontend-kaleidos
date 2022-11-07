@@ -375,4 +375,9 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   openAddAgendaitemsModal() {
     this.isAddingAgendaitems = true;
   }
+
+  @action
+  closeAddAgendaitemsModal() {
+    this.isAddingAgendaitems = false;
+  }
 }

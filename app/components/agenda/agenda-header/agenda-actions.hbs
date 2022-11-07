@@ -144,7 +144,7 @@
 {{#if this.isAddingAgendaitems}}
   <Agenda::Agendaitem::CreateAgendaitem
     @meeting={{@meeting}}
-    @isAddingAgendaitems={{this.isAddingAgendaitems}}
+    @onClose={{this.closeAddAgendaitemsModal}}
     @onCreate={{@didApproveAgendaitems}}
   />
 {{/if}}

@@ -77,7 +77,6 @@ const selectors = {
     checkbox: '.auk-checkbox__toggle',
   },
   loader: '.auk-loader',
-  input: '.auk-input',
 
   datepicker: {
     datepicker: '[data-test-auk-datepickr]',

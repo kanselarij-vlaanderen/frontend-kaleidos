@@ -22,6 +22,7 @@ export default class SidebarItem extends Component {
   @tracked currentRouteName;
   @tracked subcase;
   @tracked newsletterIsVisible;
+  @tracked decisionActivity;
 
   constructor() {
     super(...arguments);
@@ -41,16 +42,16 @@ export default class SidebarItem extends Component {
     });
   }
 
-  get isRetracted() {
-      return this.args.agendaitem.retracted;
-  }
-
   get class() {
     const classes = [];
     if (this.args.isActive) {
       classes.push('vlc-agenda-detail-sidebar__sub-item--active');
     }
-    if (this.isRetracted) {
+    // Needed in order to change the sidebar classes when editing in the agendaitem detail route
+    if (this.decisionActivity?.get('isPostponed')) {
+      classes.push('auk-u-opacity--1/3');
+    }
+    if (this.decisionActivity?.get('isRetracted')) {
       classes.push('auk-u-opacity--1/3');
     }
     return classes.join(' ');
@@ -61,7 +62,8 @@ export default class SidebarItem extends Component {
     yield timeout(350);
     const tasks = [
       this.loadNewsletterVisibility,
-      this.loadSubcase
+      this.loadSubcase,
+      this.loadDecisionActivity
     ].filter((task) => task.performCount === 0);
     yield Promise.all(tasks.map((task) => task.perform()));
   }
@@ -88,6 +90,13 @@ export default class SidebarItem extends Component {
     } else {
       this.newsletterIsVisible = false;
     }
+  }
+
+  @task
+  *loadDecisionActivity() {
+    const treatment = yield this.args.agendaitem.treatment;
+    this.decisionActivity = yield treatment?.decisionActivity;
+    yield this.decisionActivity?.decisionResultCode;
   }
 
   @action

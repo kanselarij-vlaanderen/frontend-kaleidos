@@ -8,7 +8,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default Route.extend({
   routeNamePrefix: 'decisions',
   sort: 'number',
-  include: 'agenda-activity,agenda-activity.subcase,treatment,treatment.decision-activity',
+  include: 'agenda-activity,agenda-activity.subcase,treatment,treatment.decision-activity,treatment.decision-activity.decision-result-code',
   currentSession: service(),
   store: service(),
   router: service(),
