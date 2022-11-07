@@ -68,12 +68,20 @@ export default class AgendaitemPostponed extends Component {
 
   @task
   *reProposeForAgenda(meeting) {
-    const submissionActivities = yield this.store.query('submission-activity', {
+    const submissionActivitiesFromAgendaActivity = yield this.store.query('submission-activity', {
       'filter[subcase][:id:]': this.args.subcase.id,
       'filter[agenda-activity][:id:]': this.args.agendaActivity.id,
       'page[size]': PAGE_SIZE.ACTIVITIES,
       include: 'pieces', // Make sure we have all pieces, unpaginated
     });
+    // there could be new submission-activities after finalizing agenda
+    const newSubmissionActivities = yield this.store.query('submission-activity', {
+      'filter[subcase][:id:]': this.args.subcase.id,
+      'filter[:has-no:agenda-activity]': true,
+      'page[size]': PAGE_SIZE.ACTIVITIES,
+      include: 'pieces', // Make sure we have all pieces, unpaginated
+    });
+    const submissionActivities = [...submissionActivitiesFromAgendaActivity.toArray(), ...newSubmissionActivities.toArray()];
     const pieces = [];
     for (const submissionActivity of submissionActivities.toArray()) {
       let submissionPieces = yield submissionActivity.pieces;
