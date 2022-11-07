@@ -9,12 +9,6 @@ import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
-function checkDecisionPage(headerText) {
-  cy.get(agenda.agendaActions.showOptions).click();
-  cy.get(agenda.agendaActions.navigateToDecisions).click();
-  cy.get(utils.overviewsHeaderDecision.title).contains(headerText);
-}
-
 function checkNewsletterPage(headerText, newsletterTitle) {
   cy.get(agenda.agendaActions.showOptions).click();
   cy.get(agenda.agendaActions.navigateToNewsletter).click();
@@ -54,24 +48,6 @@ context('Different session kinds should show different titles', () => {
   });
 
   // TODO-printableAgenda shows session-kind
-
-  it('should show the correct translations for normal session in decision print overview', () => {
-    const headerText = 'Beslissingen van de Vlaamse Regering - Ministerraad van';
-    cy.visit(regular);
-    checkDecisionPage(headerText);
-  });
-
-  it('should show the correct translations for special session in decision print overview', () => {
-    const headerText = 'Beslissingen van de Vlaamse Regering - Bijzondere ministerraad van';
-    cy.visit(special);
-    checkDecisionPage(headerText);
-  });
-
-  it('should show the correct translations for electronic session in decision print overview', () => {
-    const headerText = 'Beslissingen van de Vlaamse Regering - Ministerraad via elektronische procedure van';
-    cy.visit(electronic);
-    checkDecisionPage(headerText);
-  });
 
   it('should show the correct translations for all kinds of sessions in newsletter overview', () => {
     cy.visit('/kort-bestek?size=100');
@@ -114,7 +90,6 @@ context('Different session kinds should show different titles', () => {
       .minute(0);
     const formattedAgendaDate = agendaDate.format('DD-MM-YYYY');
     const vvKind = 'Ministerraad - Plan Vlaamse Veerkracht';
-    const decisionHeader = `Beslissingen van de Vlaamse Regering - ${vvKind}`;
     const newsletterHeader = `Beslissingen van de Vlaamse Regering - ${vvKind}`;
     const formattedMeetingDateDots = agendaDate.format('DD-MM-YYYY');
     // TODO-BUG KAS-3056 numbering not correct when creating agenda in different year
@@ -157,8 +132,6 @@ context('Different session kinds should show different titles', () => {
 
     // check if different views show correct header
     cy.get(agenda.agendaHeader.kind).contains(vvKind);
-    checkDecisionPage(decisionHeader);
-    cy.get(auk.tab.hierarchicalBack).click();
     checkNewsletterPage(vvKind, newsletterHeader);
 
     // check kort bestek overview and order
