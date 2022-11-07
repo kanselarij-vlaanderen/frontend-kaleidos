@@ -1,20 +1,6 @@
 /* Framework & external component fixes
    ========================================================================== */
 
-// Auk icons font styling placeholder
-
-%auk-icons-font-style {
-  font-family: auk-icons !important;
-  font-style: normal;
-  font-weight: normal !important;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-
 // Modal
 
 .auk-modal-backdrop > .ember-view {
@@ -110,13 +96,6 @@ table tr.lt-expanded-row {
 }
 
 
-// Ember tooltip
-
-.auk-tooltip {
-  z-index: $z-index-tooltip !important;
-}
-
-
 // Simplified document-card. Publication reference-documents.
 
 // Note that despite its name, "vlc-procedure-step" is used for displaying
@@ -155,37 +134,6 @@ table tr.lt-expanded-row {
 }
 
 
-// Addition coming from prototype which needs to be ported to auk css library
-
-.auk-document-card--clickable {
-  cursor: pointer;
-
-  &:hover,
-  &:focus {
-    background-color: var(--au-gray-100);
-  }
-}
-
-
-// Overflow-wrap helper
-
-.auk-u-overflow-wrap-anywhere {
-  overflow-wrap: anywhere !important;
-}
-
-
-// Flex helpers
-
-.auk-o-flex__item--fix {
-  flex: 0 0 auto !important;
-}
-
-.auk-o-flex--no-wrap {
-  flex-wrap: nowrap !important;
-  white-space: nowrap !important;
-}
-
-
 // File uploader
 
 .auk-file-upload input[type="file"] {
@@ -202,13 +150,6 @@ table tr.lt-expanded-row {
       }
     }
   }
-}
-
-
-// Accordion panel
-
-.auk-accordion-panel__title-container {
-  padding: 0;
 }
 
 
@@ -326,8 +267,43 @@ table tr.lt-expanded-row {
   }
 }
 
+.auk-button--muted {
+  &.au-c-button--naked {
+    &,
+    &:visited {
+      color: $auk-gray-600;
+    }
+
+    &:hover,
+    &:focus-visible,
+    &:active {
+      color: $auk-gray-800;
+    }
+
+    &.is-disabled,
+    &.is-disabled:hover,
+    &.is-disabled:focus-visible,
+    &.is-disabled:active {
+      color: $auk-gray-700;
+    }
+
+    &.is-loading,
+    &.is-loading:hover,
+    &.is-loading:focus-visible {
+      color: $auk-gray-700;
+    }
+  }
+}
+
 // Input with clear action
 
-.auk-input-with-clear-action > .auk-button {
-  outline-offset: calc(var(--au-outline-offset) * -1);
+.auk-input-with-clear-action {
+  > .au-c-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    outline-offset: calc(var(--au-outline-offset) * -1);
+  }
 }

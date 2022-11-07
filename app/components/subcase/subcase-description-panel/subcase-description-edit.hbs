@@ -42,7 +42,10 @@
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "subcase-name"}}</Auk::Label>
-        <Auk::Input @block={{true}} @value={{mut this.subcaseName}} />
+        <AuInput
+          @width="block"
+          @value={{mut this.subcaseName}}
+        />
       </div>
     </div>
   </Auk::Panel::Body>

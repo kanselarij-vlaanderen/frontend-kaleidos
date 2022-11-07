@@ -60,19 +60,19 @@
                     {{t "publication-number"}}
                   </Auk::Label>
                   <div class="auk-u-mb">
-                    <Auk::Input
+                    <AuInput
                       data-test-publication-case-info-panel-edit-publication-number
                       @type="number"
-                      value={{this.publicationNumber}}
+                      @value={{this.publicationNumber}}
                       @error={{this.publicationNumberErrorTranslationKey}}
                       {{on "input" (perform this.setPublicationNumber)}}
                     />
-                    <Auk::Input
+                    <AuInput
                       data-test-publication-case-info-panel-edit-publication-number-suffix
-                      @width="xsmall"
-                      value={{this.publicationNumberSuffix}}
+                      @value={{this.publicationNumberSuffix}}
                       @error={{this.publicationNumberErrorTranslationKey}}
                       {{on "input" (perform this.setPublicationNumberSuffix)}}
+                      class="auk-input-group--w-xsmall" {{! TODO: replace `auk-input-group--w-xsmall` with matching @width argument when it is implemented }}
                     />
                     <Utils::Generic::TooltipHelp class="auk-u-mx">
                       {{t "publication-flow-publication-number-help"}}

@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class AgendaitemControls extends Component {
   /**
@@ -16,19 +17,21 @@ export default class AgendaitemControls extends Component {
   @service intl;
   @service agendaService;
   @service currentSession;
+  @service pieceAccessLevelService;
 
-  @tracked isSavingRetracted = false;
   @tracked isVerifying = false;
   @tracked showLoader = false;
   @tracked isDesignAgenda;
+  @tracked decisionActivity;
 
   constructor() {
     super(...arguments);
 
     this.loadAgendaData.perform();
+    this.loadDecisionActivity.perform();
   }
 
-  get isPostPonable() {
+  get areDecisionActionsEnabled() {
     const agendaActivity = this.args.agendaActivity;
     if (!agendaActivity) {
       // In case of legacy agendaitems without a link to subcase (old) or agenda-activity
@@ -65,9 +68,16 @@ export default class AgendaitemControls extends Component {
   }
 
   @task
-  *loadAgendaData () {
+  *loadAgendaData() {
     const status = yield this.args.currentAgenda.status;
     this.isDesignAgenda = status.isDesignAgenda;
+  }
+
+  @task
+  *loadDecisionActivity() {
+    const treatment = yield this.args.agendaitem.treatment;
+    this.decisionActivity = yield treatment?.decisionActivity;
+    yield this.decisionActivity?.decisionResultCode;
   }
 
   async deleteItem(agendaitem) {
@@ -85,20 +95,15 @@ export default class AgendaitemControls extends Component {
     this.showLoader = false;
   }
 
-  @action
-  async postponeAgendaitem(agendaitem) {
-    this.isSavingRetracted = true;
-    agendaitem.set('retracted', true);
-    await agendaitem.save();
-    this.isSavingRetracted = false;
+  @task
+  *postponeAgendaitem() {
+    yield this.setDecisionResultCode(CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD);
   }
 
-  @action
-  async advanceAgendaitem(agendaitem) {
-    this.isSavingRetracted = true;
-    agendaitem.set('retracted', false);
-    await agendaitem.save();
-    this.isSavingRetracted = false;
+
+  @task
+  *retractAgendaitem() {
+    yield this.setDecisionResultCode(CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN);
   }
 
   @action
@@ -109,5 +114,31 @@ export default class AgendaitemControls extends Component {
   @action
   verifyDelete(agendaitem) {
     this.deleteItem(agendaitem);
+  }
+
+  @task
+  *resetDecisionResultCode() {
+    const agendaItemType = yield this.args.agendaitem.type;
+    const isAnnouncement =
+      agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
+    const defaultDecisionResultCodeUri = isAnnouncement
+      ? CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
+      : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
+    yield this.setDecisionResultCode(defaultDecisionResultCodeUri);
+  }
+
+  async setDecisionResultCode(decisionResultCodeUri) {
+    const decisionResultCodeConcept = await this.store.findRecordByUri(
+      'concept',
+      decisionResultCodeUri
+    );
+    this.decisionActivity.decisionResultCode = decisionResultCodeConcept;
+    await this.decisionActivity.save();
+    if ([CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD, CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN].includes(decisionResultCodeUri)) {
+      const pieces = await this.args.agendaitem.pieces;
+      for (const piece of pieces.toArray()) {
+        await this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(piece);
+      }
+    }
   }
 }

@@ -16,9 +16,9 @@
           {{uppercase @piece.file.extension}}
         </p>
         <div class="au-u-flex au-u-flex--spaced-small">
-          <Auk::Input
+          <AuInput
             data-test-document-edit-name-input
-            @block={{true}}
+            @width="block"
             @value={{this.name}}
           />
           <AuButtonGroup class="au-u-flex--no-wrap">

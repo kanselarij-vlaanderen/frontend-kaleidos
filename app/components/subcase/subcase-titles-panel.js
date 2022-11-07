@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 /**
  * @argument subcase
+ * @argument meeting
  * @argument allowEditing
  */
 export default class SubcaseTitlesPanel extends Component {

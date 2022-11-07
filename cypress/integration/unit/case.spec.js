@@ -57,7 +57,7 @@ context('Create case as Admin user', () => {
     cy.visit('/dossiers');
     cy.createCase(newShortTitle);
     cy.addSubcase('Mededeling', newShortTitle, '', null, null);
-    cy.openSubcase(0);
+    cy.openSubcase(0, newShortTitle);
     cy.changeSubcaseAccessLevel(true);
     cy.get(route.subcaseOverview.confidentialityCheckBox).should('be.checked');
     // TODO-BUG, saving and then moving away too soon (going back, closing browser) could leave the editor open
