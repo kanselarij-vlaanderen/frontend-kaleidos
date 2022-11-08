@@ -1,5 +1,5 @@
 {{page-title (t "search")}}
-<div class="auk-u-maximize-height auk-scroll-wrapper">
+<div class="au-c-search-container">
   <Auk::Navbar>
     {{!-- template-lint-disable no-redundant-fn --}}
     {{!-- TODO: Using plain decorated action for Input's @enter doesn't work for some reason --}}
@@ -80,44 +80,6 @@
           </div>
         </div>
       {{else}}
-        {{!-- <div class="auk-o-grid-col-2">
-          <div class="auk-form-group auk-u-position-relative">
-            <Auk::Label>{{t "from"}}</Auk::Label>
-            <WebComponents::VlDatepicker
-              @selectedDate={{array this.dateFromBuffer}}
-              @dateChanged={{fn (mut this.dateFromBuffer)}}
-              @enableClear={{this.dateFromBuffer}}
-              @onClear={{fn (mut this.dateFromBuffer) null}}
-              @allowInput={{true}}
-            />
-          </div>
-        </div>
-        <div class="auk-o-grid-col-2">
-          <div class="auk-form-group auk-u-position-relative">
-            <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
-            <WebComponents::VlDatepicker
-              @selectedDate={{array this.dateToBuffer}}
-              @dateChanged={{fn (mut this.dateToBuffer)}}
-              @enableClear={{this.dateToBuffer}}
-              @onClear={{fn (mut this.dateToBuffer) null}}
-              @allowInput={{true}}
-            />
-          </div>
-        </div>
-        <div class="auk-o-grid-col-2">
-          <div class="auk-form-group">
-            <Auk::Label for="ministerName">
-              {{t "minister"}}
-            </Auk::Label>
-            <Auk::Input
-              data-test-route-search-mandatee-input
-              @block={{true}}
-              @value={{this.mandateesBuffer}}
-              @enter={{fn this.search}}
-              id="ministerName"
-            />
-          </div>
-        </div> --}}
       {{/if}}
       <div class="auk-form-group au-u-margin-bottom-none au-u-1-4">
         <Auk::Button
@@ -138,7 +100,7 @@
     </div>
     {{!-- template-lint-enable no-redundant-fn --}}
   </Auk::Navbar>
-  <div class="auk-scroll-wrapper__body au-u-background-gray-100">
+  <div class="au-c-search-container__content au-u-background-gray-100">
     {{outlet}}
   </div>
 </div>

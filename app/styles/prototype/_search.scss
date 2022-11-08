@@ -37,3 +37,28 @@
 .au-c-list-item__divider {
   border-bottom: .1rem dotted var(--au-gray-300);
 }
+
+.au-c-search-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 50px);
+}
+
+.au-c-search-container__header {
+
+}
+
+.au-c-search-container__content {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+
+  .au-c-main-container {
+    height: 100%;
+  }
+}
+
+.au-c-search-overflow {
+  height: 100%;
+  overflow: visible;
+}
