@@ -42,6 +42,7 @@ services:
   # The DELTA_INTERVAL_MS is the value that yggdrasil waits between runs in milliseconds
   # Default is 5 minutes but results in 10 minutes between runs
   yggdrasil:
+    image: kanselarij/yggdrasil:feature-KAS-3658-source-file-as-main-file
     user: ${HOST_UID_GID}
     environment:
       DELTA_INTERVAL_MS: 10000
