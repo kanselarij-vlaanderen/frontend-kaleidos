@@ -11,13 +11,13 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
    */
 
   @tracked isUploadingReplacementFile = false;
-  @tracked isUploadingReplacementSourceFile = false;
-  @tracked isDeletingSourceFile = false;
+  @tracked isUploadingReplacementDerivedFile = false;
+  @tracked isDeletingDerivedFile = false;
 
   @tracked name;
-  @tracked uploadedSourceFile;
+  @tracked uploadedDerivedFile;
   @tracked replacementFile;
-  @tracked replacementSourceFile;
+  @tracked replacementDerivedFile;
 
   constructor() {
     super(...arguments);
@@ -33,10 +33,10 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
   }
 
   @action
-  async toggleUploadReplacementSourceFile() {
-    await this.replacementSourceFile?.destroyRecord();
-    this.replacementSourceFile = null;
-    this.isUploadingReplacementSourceFile = !this.isUploadingReplacementSourceFile;
+  async toggleUploadReplacementDerivedFile() {
+    await this.replacementDerivedFile?.destroyRecord();
+    this.replacementDerivedFile = null;
+    this.isUploadingReplacementDerivedFile = !this.isUploadingReplacementDerivedFile;
   }
 
   @action
@@ -47,14 +47,14 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
     this.isUploadingReplacementFile = false;
     this.replacementFile = null;
 
-    await this.replacementSourceFile?.destroyRecord();
-    this.isUploadingReplacementSourceFile = false;
-    this.replacementSourceFile = null;
+    await this.replacementDerivedFile?.destroyRecord();
+    this.isUploadingReplacementDerivedFile = false;
+    this.replacementDerivedFile = null;
 
-    await this.uploadedSourceFile?.destroyRecord();
-    this.uploadedSourceFile = null;
+    await this.uploadedDerivedFile?.destroyRecord();
+    this.uploadedDerivedFile = null;
 
-    this.isDeletingSourceFile = false;
+    this.isDeletingDerivedFile = false;
 
     this.args.onCancel?.();
   }
@@ -69,22 +69,24 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
       yield oldFile.destroyRecord();
       this.args.piece.file = this.replacementFile;
     }
-    if (this.replacementSourceFile) {
+    if (this.replacementDerivedFile) {
       const file = yield this.args.piece.file;
-      const oldSource = yield file.primarySource;
-      yield oldSource.destroyRecord();
-      file.primarySource = this.replacementSourceFile;
+      const oldDerived = yield file.derived;
+      file.derived = this.replacementDerivedFile;
       yield file.save();
+      yield oldDerived.destroyRecord();
     }
-    if (this.uploadedSourceFile) {
+    if (this.uploadedDerivedFile) {
       const file = yield this.args.piece.file;
-      file.primarySource = this.uploadedSourceFile;
+      file.derived = this.uploadedDerivedFile;
       yield file.save()
     }
-    if (this.isDeletingSourceFile) {
+    if (this.isDeletingDerivedFile) {
       const file = yield this.args.piece.file;
-      const sourceFile = yield file.primarySource;
-      yield sourceFile.destroyRecord();
+      const derivedFile = yield file.derived;
+      file.derived = null;
+      yield file.save();
+      yield derivedFile.destroyRecord();
     }
     yield this.args.piece.save();
 
@@ -93,11 +95,11 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
     this.isUploadingReplacementFile = false;
     this.replacementFile = null;
 
-    this.isUploadingReplacementSourceFile = false;
-    this.replacementSourceFile = false;
+    this.isUploadingReplacementDerivedFile = false;
+    this.replacementDerivedFile = false;
 
-    this.uploadedSourceFile = null;
-    this.isDeletingSourceFile = false;
+    this.uploadedDerivedFile = null;
+    this.isDeletingDerivedFile = false;
 
     this.args.onSave?.();
   }
