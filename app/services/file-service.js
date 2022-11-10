@@ -59,6 +59,8 @@ export default class FileService extends Service {
     if (!fileToDelete) {
       return;
     }
+    const derivedFileToDelete = await file.derived;
+    await derivedFileToDelete?.destroyRecord();
     return fileToDelete.destroyRecord();
   }
 
