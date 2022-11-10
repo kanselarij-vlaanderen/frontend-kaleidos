@@ -81,7 +81,7 @@ export default class NewsletterItemEditPanelComponent extends Component {
       // See also: https://github.com/lblod/ember-rdfa-editor/issues/317
       //
       const richtext = this.editorInstance.htmlContent;
-      const cleanedHtml = richtext.replaceAll(/(?<!>)&nbsp;(?!<)/gm, ' ');
+      const cleanedHtml = richtext.replaceAll(/&nbsp;/gm, ' ');
       this.newsletterItem.richtext = cleanedHtml;
     } catch {
       // pass
