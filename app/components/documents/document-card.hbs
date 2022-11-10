@@ -29,7 +29,9 @@
               class="auk-h4"
               data-test-document-card-name-value
             >
-              {{this.piece.name}}
+              {{#let (or this.piece.file.derived.extension this.piece.file.extension) as |extension|}}
+                {{this.piece.name}}.{{extension}}
+              {{/let}}
             </LinkTo>
             <div class="vlc-document-card-content__meta">
               {{! no piece.created in legacy data }}
@@ -181,7 +183,9 @@
                         <LinkTo @route="document" @model={{piece.id}}
                           class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
                           data-test-vl-document-name>
-                          {{piece.name}}
+                          {{#let (or piece.file.derived.extension piece.file.extension) as |extension|}}
+                            {{piece.name}}.{{extension}}
+                          {{/let}}
                         </LinkTo>
                       {{else}}
                         <h6
