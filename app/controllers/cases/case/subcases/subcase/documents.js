@@ -128,7 +128,12 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
     // TODO: Assess if we need to go over container. `previousVersion` (if existant) might suffice?
     const documentContainer = await deletedPiece.documentContainer;
     if (documentContainer) {
-      const lastPiece = await documentContainer.lastPiece; // TODO: what is the purpose of getting lastPiece here
+      const lastPiece = await this.store.queryOne('piece', {
+        'filter[document-container][:id:]': documentContainer.id,
+        sort: '-created',
+      })
+      // TODO: what is the purpose of getting lastPiece here
+      // deletedPiece.previousPiece stops working after delete, lastPiece query should return the same piece.
       if (this.subcase && lastPiece) {
         const agendaActivities = await this.subcase.agendaActivities;
         const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
