@@ -11,6 +11,7 @@ const selectors = {
     documentsTab: '[data-test-agendaitem-nav-documents-tab]',
     decisionTab: '[data-test-agendaitem-nav-decision-tab]',
     newsletterTab: '[data-test-agendaitem-nav-newsletter-tab]',
+    pressagendaTab: '[data-test-agendaitem-nav-pressagenda-tab]',
     activeTab: '[data-test-agendaitem-nav-tabs] .auk-tabs__tab--active > *',
   },
 
@@ -234,6 +235,12 @@ const selectors = {
       checkBox: '[data-test-create-agendaitem-row-subcase-checkbox]',
       subcaseName: '[data-test-create-agendaitem-row-subcase-name]',
     },
+  },
+
+  // agendaitem-press
+  agendaitemPress: {
+    edit: '[data-test-agendaitem-press-edit]',
+    title: '[data-test-agendaitem-press-title]',
   },
 };
 export default selectors;

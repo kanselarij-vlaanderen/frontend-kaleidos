@@ -6,6 +6,7 @@ const selectors = {
 
   // route agenda/agendaitems/agendaitem/news-item
   newsItem: {
+    fullscreenEdit: '[data-test-route-agenda---news-item-fullscreen-edit]',
     edit: '[data-test-route-agenda---news-item-edit]',
     create: '[data-test-route-agenda---news-item-create]',
     alert: '[data-test-route-agenda---news-item-alert]',

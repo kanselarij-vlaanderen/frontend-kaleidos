@@ -8,6 +8,7 @@
     {{#if (not this.currentSession.isEditing)}}
       {{#if (user-may "manage-agendaitems")}}
         <AuButton
+          data-test-agendaitem-press-edit
           @skin="naked"
           @icon="pencil"
           {{on "click" this.toggleIsEditing}}
@@ -24,7 +25,7 @@
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
-            <h4 class="auk-h4 auk-u-my-2">{{@agendaitem.titlePress}}</h4>
+            <h4 data-test-agendaitem-press-title class="auk-h4 auk-u-my-2">{{@agendaitem.titlePress}}</h4>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">

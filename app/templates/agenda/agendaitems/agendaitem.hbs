@@ -33,6 +33,7 @@
         {{#if this.canShowPressAgendaTab}}
           <Auk::Tab
             @route="agenda.agendaitems.agendaitem.press-agenda"
+            data-test-agendaitem-nav-pressagenda-tab
           >
             {{capitalize (t "agendaitem-press-agenda")}}
           </Auk::Tab>
