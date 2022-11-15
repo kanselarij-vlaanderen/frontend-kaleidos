@@ -6,15 +6,10 @@
     {{/if}}
   </td>
   <td>
-    <Utils::ModelSelector
+    <Utils::DocumentTypeSelector
       data-test-batch-editing-row-type
-      @modelName="document-type"
-      @allowClear={{true}}
-      @searchField="label"
-      @displayField="label"
-      @sortField="priority"
       @disabled={{this.isDisabled}}
-      @selected={{this.documentType}}
+      @selectedDocumentType={{this.documentType}}
       @onChange={{this.setDocumentType}}
     />
   </td>

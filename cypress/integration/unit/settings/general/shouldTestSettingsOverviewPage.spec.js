@@ -20,32 +20,11 @@ context('Settings overview page tests', () => {
     // settings in this view
     cy.get(settings.overview.manageEmails).should('be.visible');
     cy.get(settings.overview.manageAlerts).should('be.visible');
-    cy.get(settings.overview.manageDocumentTypes).should('be.visible');
-    cy.get(settings.overview.manageCaseTypes).should('be.visible');
-    cy.get(settings.overview.manageSubcaseTypes).should('be.visible');
   });
 
   it('Should open the model behind manage alerts and close it', () => {
     cy.openSettingsModal(settings.overview.manageAlerts);
     cy.get(utils.vlModal.container).should('contain', 'Systeemberichten beheer');
-    cy.closeSettingsModal();
-  });
-
-  it('Should open the model behind manage document types and close it', () => {
-    cy.openSettingsModal(settings.overview.manageDocumentTypes);
-    cy.get(utils.vlModal.container).should('contain', 'Document-types beheer');
-    cy.closeSettingsModal();
-  });
-
-  it('Should open the model behind manage case types and close it', () => {
-    cy.openSettingsModal(settings.overview.manageCaseTypes);
-    cy.get(utils.vlModal.container).should('contain', 'Dossier-types beheer');
-    cy.closeSettingsModal();
-  });
-
-  it('Should open the model behind manage subcase types and close it', () => {
-    cy.openSettingsModal(settings.overview.manageSubcaseTypes);
-    cy.get(utils.vlModal.container).should('contain', 'Procedurestap types beheer');
     cy.closeSettingsModal();
   });
 

@@ -44,7 +44,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
-    cy.openSubcase(0);
+    cy.openSubcase(0, SubcaseTitleShort);
 
     cy.addSubcaseMandatee(1);
     cy.addSubcaseMandatee(2);
@@ -82,7 +82,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
-    cy.openSubcase(0);
+    cy.openSubcase(0, SubcaseTitleShort);
     cy.proposeSubcaseForAgenda(agendaDate);
 
     // Dependency: We should already have 2 mandatees that we inherit from previous subcase, now we add 1 more

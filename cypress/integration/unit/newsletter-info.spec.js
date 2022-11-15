@@ -18,9 +18,7 @@ function pressRdfaButton(buttonName) {
 // TODO-command, might not have any other usages
 function changeSubcaseType(subcaseLink, type) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
-  // cy.intercept('GET', '/custom-subcases/**').as(`loadSubcasePhases${randomInt}`);
   cy.visit(subcaseLink);
-  // cy.wait(`@loadSubcasePhases${randomInt}`);
   cy.get(cases.subcaseDescription.edit).click();
   cy.get(cases.subcaseDescriptionEdit.type).contains(type)
     .click();

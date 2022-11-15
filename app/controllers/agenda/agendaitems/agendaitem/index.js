@@ -20,6 +20,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @tracked submitter;
   @tracked newsletterInfo;
   @tracked mandatees;
+  @tracked decisionActivity;
 
   @tracked isEditingAgendaItemTitles = false;
 

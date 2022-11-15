@@ -16,16 +16,11 @@
         data-test-details-tab-document-type
         @key={{t "document-type"}}
       >
-        <Utils::ModelSelector
+        <Utils::DocumentTypeSelector
           data-test-details-tab-edit-document-type
-          @modelName="document-type"
-          @allowClear={{true}}
-          @searchField="label"
-          @displayField="label"
-          @sortField="priority"
-          @selected={{this.documentType}}
+          @selectedDocumentType={{this.documentType}}
           @onChange={{this.setDocumentType}}
-          @renderInPlace={{true}} {{! Required to make the seach box focusable }}
+          @renderInPlace={{true}}
         />
       </Auk::KeyValue>
       <Auk::KeyValue data-test-details-tab-name @key={{t "document-name"}}>

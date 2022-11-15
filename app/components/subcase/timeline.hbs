@@ -1,0 +1,15 @@
+{{#unless this.loadSubcasePhases.isRunning}}
+  <ul class="vlc-status-timeline">
+    {{#each this.phases as |phase|}}
+      <li
+        class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+        data-test-subcase-timeline-item
+      >
+        <div class="vlc-status-timeline__dot"></div>
+          <div class="vlc-status-timeline__text">
+            {{subcase-timeline-item-text phase=phase}}
+          </div>
+      </li>
+    {{/each}}
+  </ul>
+{{/unless}}
