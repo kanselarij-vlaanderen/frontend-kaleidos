@@ -132,9 +132,7 @@ export default class AgendaService extends Service {
 
     // load code-list item
     const defaultDecisionResultCodeUri = isAnnouncement ? CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
-    const decisionResultCode = await this.store.queryOne('decision-result-code', {
-      'filter[:uri:]': defaultDecisionResultCodeUri,
-    });
+    const decisionResultCode = await this.store.findRecordByUri('concept', defaultDecisionResultCodeUri);
 
     // decision-activity
     const decisionActivity = await this.store.createRecord('decision-activity', {
@@ -161,7 +159,6 @@ export default class AgendaService extends Service {
       submittedPieces = submittedPieces.concat((await submissionActivity2.pieces).toArray());
     }
     const agendaitem = await this.store.createRecord('agendaitem', {
-      retracted: false,
       titlePress: subcase.shortTitle,
       textPress: pressText,
       created: now,
@@ -181,8 +178,6 @@ export default class AgendaService extends Service {
     await lastAgenda.hasMany('agendaitems').reload();
     await subcase.hasMany('agendaActivities').reload();
     await subcase.hasMany('submissionActivities').reload();
-    subcase.set('requestedForMeeting', meeting);
-    await subcase.save();
     updateModifiedProperty(lastAgenda);
 
     // Create default newsletterInfo for announcements with inNewsLetter = true
@@ -229,16 +224,16 @@ export default class AgendaService extends Service {
       reload: true,
     });
     agendaitemToDelete.set('aboutToDelete', true);
-    const agendaActivity = await agendaitemToDelete.get('agendaActivity');
+    const agendaActivity = await agendaitemToDelete.agendaActivity;
     const treatment = await agendaitemToDelete.treatment;
 
     if (agendaActivity) {
-      const subcase = await agendaActivity.get('subcase');
+      const subcase = await agendaActivity.subcase;
       await agendaActivity.hasMany('agendaitems').reload();
-      const agendaitemsFromActivity = await agendaActivity.get('agendaitems');
+      const agendaitemsFromActivity = await agendaActivity.agendaitems;
       if (treatment) {
         const decisionActivity = await treatment.decisionActivity;
-        const newsletter = await treatment.get('newsletterInfo');
+        const newsletter = await treatment.newsletterInfo;
         if (newsletter) {
           await newsletter.destroyRecord();
         }
@@ -249,13 +244,11 @@ export default class AgendaService extends Service {
         await treatment.destroyRecord();
       }
       await Promise.all(agendaitemsFromActivity.map(async(agendaitem) => {
-        const agenda = await agendaitem.get('agenda');
+        const agenda = await agendaitem.agenda;
         await agendaitem.destroyRecord();
         await agenda.hasMany('agendaitems').reload();
       }));
       await agendaActivity.destroyRecord();
-      await subcase.set('requestedForMeeting', null);
-      await subcase.save();
       await subcase.hasMany('agendaActivities').reload();
       await subcase.hasMany('decisionActivities').reload();
     } else {

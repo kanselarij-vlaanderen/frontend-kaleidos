@@ -12,21 +12,20 @@
   {{/if}}
   <td>
     {{#if @isEditingEnabled}}
-      <Auk::Input data-test-document-details-input type="text" @block={{true}} @value={{mut @row.name}} />
+      <AuInput
+        data-test-document-details-input
+        @width="block"
+        @value={{mut @row.name}}
+      />
     {{else}}
       {{@row.name}}
     {{/if}}
   </td>
   <td>
     {{#if @isEditingEnabled}}
-      <Utils::ModelSelector
+      <Utils::DocumentTypeSelector
         data-test-document-details-row-type
-        @modelName="document-type"
-        @allowClear={{true}}
-        @searchField="label"
-        @displayField="label"
-        @sortField="priority"
-        @selected={{@row.documentType}}
+        @selectedDocumentType={{@row.documentType}}
         @onChange={{@row.setDocumentType}}
       />
     {{else}}
@@ -54,11 +53,10 @@
   <td>
     <WebComponents::AuButtonToolbar>
       {{#if (not @isEditingEnabled)}}
-        <AuLink
-          @skin="button-naked"
+        <AuLinkExternal
           @icon="book"
           @hideText={{true}}
-          @href={{@row.piece.viewDocumentURL}}
+          href={{@row.piece.viewDocumentURL}}
           target="_blank"
         />
       {{else if @row.isToBeDeleted}}

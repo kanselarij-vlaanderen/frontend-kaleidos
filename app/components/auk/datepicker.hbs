@@ -31,12 +31,15 @@
     @defaultMinute={{@defaultMinute}}
   />
   {{#if @enableClear}}
-    <Auk::Button
+    <AuButton
       data-test-auk-datepickr-clear
-      @skin="muted-borderless"
-      @layout="icon-only"
+      @skin="naked"
       @icon="x"
+      @hideText={{true}}
       {{on "click" @onClear}}
-    />
+      class="auk-button--muted"
+    >
+      {{t "reset"}}
+    </AuButton>
   {{/if}}
 </div>

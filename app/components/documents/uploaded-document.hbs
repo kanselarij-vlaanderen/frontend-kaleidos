@@ -9,9 +9,9 @@
     <div class="metadata-container">
       <div class="auk-form-group">
         <Auk::Label>{{t "document-name"}}</Auk::Label>
-        <Auk::Input
+        <AuInput
           data-test-uploaded-document-name-input={{true}}
-          @block={{true}}
+          @width="block"
           @value={{mut @piece.name}}
         />
       </div>

@@ -42,24 +42,22 @@
   {{/if}}
   <td>
     <AuButtonGroup>
-      <AuLink
-        @skin="button-naked"
+      <AuLinkExternal
         @icon="download"
         @hideText={{true}}
-        @href={{@piece.file.namedDownloadLink}}
+        href={{@piece.file.namedDownloadLink}}
         download
       >
         {{t "download"}}
-      </AuLink>
-      <AuLink
-        @skin="button-naked"
+      </AuLinkExternal>
+      <AuLinkExternal
         @icon="book"
         @hideText={{true}}
-        @href={{@piece.viewDocumentURL}}
+        href={{@piece.viewDocumentURL}}
         target="_blank"
       >
         {{t "view-document-details"}}
-      </AuLink>
+      </AuLinkExternal>
     </AuButtonGroup>
   </td>
 </tr>

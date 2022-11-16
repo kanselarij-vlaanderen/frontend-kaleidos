@@ -15,7 +15,7 @@
           {{else}}
             <Agenda::Agendaitem::AgendaitemDecisionEdit
               @decisionActivity={{@decisionActivity}}
-              @onSave={{this.toggleEdit}}
+              @onSave={{perform this.updateAgendaitemPiecesAccessLevels}}
               @onCancel={{this.toggleEdit}}
             />
           {{/if}}
@@ -57,4 +57,13 @@
     @onSave={{this.attachReport}}
     @onCancel={{this.toggleIsAddingReport}}
   />
+{{/if}}
+
+{{#if this.updateAgendaitemPiecesAccessLevels.isRunning}}
+  <Auk::Modal @size="medium">
+    <Auk::Modal::Header @title={{t "saving-decision-result-title"}} @closeable={{false}} />
+    <Auk::Modal::Body>
+      <Auk::Loader @message={{t "saving-decision-result-message"}} />
+    </Auk::Modal::Body>
+  </Auk::Modal>
 {{/if}}

@@ -19,7 +19,6 @@ export default class Meeting extends Model {
   @hasMany('agenda', {
     inverse: null, serialize: false,
   }) agendas;
-  @hasMany('subcase') requestedSubcases;
   @hasMany('piece') pieces;
   @hasMany('themis-publication-activity') themisPublicationActivities;
 

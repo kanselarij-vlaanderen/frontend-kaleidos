@@ -45,7 +45,7 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     cy.createCase(caseName);
     cy.openCase(caseName);
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, null, null);
-    cy.openSubcase(0);
+    cy.openSubcase(0, SubcaseTitleShort);
 
     // check rollback after cancel
     cy.intercept('GET', '/concepts**').as('getConceptSchemes');
@@ -142,7 +142,7 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     const domains2 = [domain5];
     cy.openCase(caseName);
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, null, null);
-    cy.openSubcase(0);
+    cy.openSubcase(0, SubcaseTitleShort);
     cy.get(utils.governmentAreasPanel.rows).as('listItems');
     cy.get('@listItems').should('have.length', 3, {
       timeout: 5000,
@@ -183,7 +183,7 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
 
   it('should edit domains and fields and show correct domains and fields when switching agendaitems before, during and after edits', () => {
     const type = 'Nota';
-    const SubcaseTitleShort = `Cypress test: assign fields - ${currentTimestamp()}`;
+    const subcaseTitleShort = `Cypress test: assign fields - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een domein en beleidsvelden voor agendering vanuit procedurestap 2';
     const domain4 = {
       name: 'Kanselarij, Bestuur, Buitenlandse Zaken en Justitie',
@@ -194,12 +194,12 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
 
     cy.createCase(caseName2);
     cy.openCase(caseName2);
-    cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, null, null);
-    cy.openSubcase(0);
+    cy.addSubcase(type, subcaseTitleShort, subcaseTitleLong, null, null);
+    cy.openSubcase(0, subcaseTitleShort);
     cy.addDomainsAndFields(domains);
     cy.openAgendaForDate(agendaDate);
-    cy.addAgendaitemToAgenda(SubcaseTitleShort);
-    cy.openDetailOfAgendaitem(SubcaseTitleShort);
+    cy.addAgendaitemToAgenda(subcaseTitleShort);
+    cy.openDetailOfAgendaitem(subcaseTitleShort);
     cy.get(auk.loader, {
       timeout: 60000,
     }).should('not.exist');
