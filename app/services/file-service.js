@@ -1,6 +1,7 @@
 import Service, { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task, timeout } from 'ember-concurrency';
+import fetch from 'fetch';
 import { DOCUMENT_DELETE_UNDO_TIME_MS } from 'frontend-kaleidos/config/config';
 
 export default class FileService extends Service {
@@ -72,6 +73,24 @@ export default class FileService extends Service {
       id
     );
     record.aboutToDelete = false;
+  }
+
+  async convertSourceFile(sourceFile) {
+    const response = await fetch(`/files-conversion/${sourceFile.id}/convert`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+      },
+    });
+    const result = await response.json();
+    if (!response.ok) {
+      console.warn(`Couldn't convert file with id ${sourceFile.id}`);
+      throw new Error('An exception occurred while converting a file: ' + JSON.stringify(result.errors));
+    } else {
+      const derivedFile = await this.store.findRecord('file', result.data[0].id)
+      sourceFile.derived = derivedFile;
+      await sourceFile.save();
+    }
   }
 
   findObjectToDelete(id) {

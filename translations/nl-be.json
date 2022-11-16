@@ -561,6 +561,7 @@
   "error-delete-newsletter": "Er ging iets mis tijdens het verwijderen van de nieuwsbrief. Contacteer de administrator of probeer het opnieuw.",
   "error-fetch-newsletter": "Er ging iets mis tijdens het ophalen van de nieuwsbrief. Contacteer de administrator of probeer het opnieuw.",
   "error-download-XML": "Er ging iets mis bij het ophalen van de Belga XML",
+  "error-convert-file": "Er ging iets mis bij het converteren van het opgeladen bestand.\nDetail: {message}",
   "newsletter-loading-text": "De nieuwsbrief wordt aangemaakt. Dit kan even duren..",
   "not-applicable": "Niet van toepassing",
   "active": "Actieve",

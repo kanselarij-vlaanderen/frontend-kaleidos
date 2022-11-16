@@ -16,9 +16,11 @@ import { isPresent } from '@ember/utils';
 export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service currentSession;
   @service intl;
+  @service toaster;
   @service store;
   @service agendaService;
   @service signatureService;
+  @service fileService;
 
   documentsAreVisible;
   defaultAccessLevel;
@@ -122,6 +124,15 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.save();
     yield piece.save();
+    try {
+      const sourceFile = yield piece.file;
+      yield this.fileService.convertSourceFile(sourceFile);
+    } catch (error) {
+      this.toaster.error(
+        this.intl.t('error-convert-file', { message: error.message }),
+        this.intl.t('warning-title'),
+      );
+    }
   }
 
   /**
