@@ -16,7 +16,7 @@ export default class Subcase extends ModelWithModifier {
 
   @belongsTo('subcase-type') type;
   @belongsTo('decisionmaking-flow') decisionmakingFlow;
-  @belongsTo('mandatee', { inverse: null }) requestedBy;
+  @belongsTo('mandatee', { inverse: 'requestedSubcases' }) requestedBy;
   @belongsTo('concept') agendaItemType;
 
   // inverse: null or serialize: false is used for possible concurrency issues when saving without reloading possible stale relations.
@@ -24,7 +24,7 @@ export default class Subcase extends ModelWithModifier {
   agendaActivities;
   @hasMany('submission-activity', { serialize: false }) submissionActivities;
   @hasMany('piece') linkedPieces;
-  @hasMany('mandatee') mandatees;
+  @hasMany('mandatee', { inverse: 'subcases' }) mandatees;
   @hasMany('decision-activity', { serialize: false })
   decisionActivities;
   @hasMany('concept') governmentAreas;

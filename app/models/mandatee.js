@@ -10,8 +10,8 @@ export default class Mandatee extends Model {
   @belongsTo('person') person;
   @belongsTo('mandate') mandate;
 
-  @hasMany('subcase') subcases;
-  @hasMany('subcase') requestedSubcases;
+  @hasMany('subcase', { inverse: 'mandatees' }) subcases;
+  @hasMany('subcase', { inverse: 'requestedBy' }) requestedSubcases;
   @hasMany('agendaitem') agendaitems;
   @hasMany('publication-flow') publicationFlows;
   @hasMany('sign-signing-activity') signSigningActivities;
