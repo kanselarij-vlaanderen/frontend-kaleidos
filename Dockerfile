@@ -1,4 +1,4 @@
-FROM madnificent/ember:3.26.1 as builder
+FROM madnificent/ember:3.28.5 as builder
 
 LABEL maintainer="info@redpencil.io"
 
@@ -9,13 +9,12 @@ COPY . .
 
 RUN ember build -prod
 
-FROM semtech/ember-proxy-service:1.5.1
+FROM semtech/static-file-service:0.2.0
 
-ENV STATIC_FOLDERS_REGEX="^/(assets|fonts|files|@appuniversum)/"
 ENV EMBER_ENABLE_SIGNATURES=""
 
-COPY ./proxy/torii-authorization.conf /config/torii-authorization.conf
+COPY ./proxy/compression.conf /config/compression.conf
 COPY ./proxy/file-upload.conf /config/file-upload.conf
 COPY ./proxy/file-download.conf /config/file-download.conf
 
-COPY --from=builder /app/dist /app
+COPY --from=builder /app/dist /data
