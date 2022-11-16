@@ -27,3 +27,9 @@ export const ESTIMATED_PUBLICATION_DURATION = 30 * 60 * 1000;
 export const PUBLICATION_ACTIVITY_REFRESH_INTERVAL_MS = 60 * 1000;
 
 export const DOCUMENT_DELETE_UNDO_TIME_MS = 15000;
+
+export const SUPPORTED_MIME_TYPES = [
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/octet-stream',
+];

@@ -2,7 +2,10 @@ import Service, { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task, timeout } from 'ember-concurrency';
 import fetch from 'fetch';
-import { DOCUMENT_DELETE_UNDO_TIME_MS } from 'frontend-kaleidos/config/config';
+import {
+  DOCUMENT_DELETE_UNDO_TIME_MS,
+  SUPPORTED_MIME_TYPES,
+} from 'frontend-kaleidos/config/config';
 
 export default class FileService extends Service {
   @service store;
@@ -76,6 +79,11 @@ export default class FileService extends Service {
   }
 
   async convertSourceFile(sourceFile) {
+    if (!SUPPORTED_MIME_TYPES.some((mimeType) => sourceFile.format.includes(mimeType))) {
+      // The source file MIME type is unsupported, don't try to send it to the backend
+      return
+    }
+
     const response = await fetch(`/files-conversion/${sourceFile.id}/convert`, {
       method: 'POST',
       headers: {
