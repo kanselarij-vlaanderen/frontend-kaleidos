@@ -23,31 +23,49 @@
       </h2>
 
       <div class="auk-content">
-        {{#if (gt this.notaGroups.length 0)}}
-          <Agenda::PrintableAgenda::ListSection
-            @letter="A"
-            @title={{t "agendaitems"}}
-          >
-            {{#each this.notaGroups as |notaGroup|}}
-              <Agenda::PrintableAgenda::ListSection::ItemGroup
-                @items={{notaGroup}}
-              />
-            {{/each}}
-          </Agenda::PrintableAgenda::ListSection>
+        {{#if this.notaGroups}}
+          <div>
+            <div class="auk-o-flex auk-u-mb-4 l-printable-agenda__section-header">
+              <div class="l-printable-agenda__header-prefix">A.</div>
+              <h3
+                class="auk-u-text-uppercase auk-u-m-0 auk-u-text-decoration-underline"
+                >{{t "agendaitems"}}</h3>
+            </div>
+            <div class="l-printable-agenda__section-content">
+              {{#each this.notaGroups as |notaGroup|}}
+                <Agenda::PrintableAgenda::ListSection::ItemGroup
+                  @items={{notaGroup}}
+                />
+              {{/each}}
+            </div>
+          </div>
         {{/if}}
 
-        {{#if (gt @model.announcements.length 0)}}
-          <Agenda::PrintableAgenda::ListSection
-            @letter="B"
-            @title={{t "announcements-subtitle"}}
-            @onNewPage={{true}}
-          >
-            {{#each @model.announcements as |announcement|}}
-              <Agenda::PrintableAgenda::ListSection::ItemGroup::Item
-                @item={{announcement}}
-              />
-            {{/each}}
-          </Agenda::PrintableAgenda::ListSection>
+        {{#if @model.announcements}}
+          <div class="auk-u-on-fresh-page@print">
+            <div class="auk-o-flex auk-u-mb-4 l-printable-agenda__section-header">
+              <div class="l-printable-agenda__header-prefix">B.</div>
+              <h3
+                class="auk-u-text-uppercase auk-u-m-0 auk-u-text-decoration-underline"
+                >{{t "announcements-subtitle"}}</h3>
+            </div>
+            <div class="l-printable-agenda__section-content">
+              {{#each @model.announcements as |announcement|}}
+                <div class="l-printable-agenda__item">
+                  <div class="auk-u-non-breakable-group@print">
+                    <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
+                      @item={{announcement}}
+                    />
+                  </div>
+                  {{#if @item.sortedPieces}}
+                    <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
+                      @pieces={{announcement.sortedPieces}}
+                    />
+                  {{/if}}
+                </div>
+              {{/each}}
+            </div>
+          </div>
         {{/if}}
       </div>
     </div>
