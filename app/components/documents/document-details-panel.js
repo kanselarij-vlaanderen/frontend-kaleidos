@@ -11,6 +11,8 @@ import { task } from 'ember-concurrency';
 export default class DocumentsDocumentDetailsPanel extends Component {
   @service currentSession;
   @service pieceAccessLevelService;
+  @service fileService;
+
   @tracked isEditingDetails = false;
   @tracked isOpenVerifyDeleteModal = false;
   @tracked isUploadingReplacementSourceFile = false;
@@ -52,6 +54,8 @@ export default class DocumentsDocumentDetailsPanel extends Component {
       yield oldFile.destroyRecord();
       this.args.piece.file = this.replacementSourceFile;
       yield this.args.piece.save();
+      const sourceFile = yield this.args.piece.file;
+      yield this.fileService.convertSourceFile(sourceFile);
     }
     this.args.piece.accessLevel = this.accessLevel;
     yield this.args.piece.save();
