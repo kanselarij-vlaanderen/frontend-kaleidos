@@ -28,6 +28,7 @@
       {{#if this.report}}
         <Documents::DocumentCard
           @piece={{this.report}}
+          @isEditable={{true}}
           @hideNewerVersions={{true}}
           @onOpenUploadModal={{@onOpenUploadModal}}
           @onAddPiece={{this.attachNewReportVersion}}

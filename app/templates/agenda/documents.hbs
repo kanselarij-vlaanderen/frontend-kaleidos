@@ -29,6 +29,7 @@
         @pieces={{this.model}}
         @onAddPiece={{perform this.addPiece}}
         @didDeleteContainer={{this.refresh}}
+        @isEditable={{true}}
       />
 
       {{#if (user-may "manage-documents")}}

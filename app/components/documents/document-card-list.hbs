@@ -4,6 +4,7 @@
       <Documents::DocumentCard
         @piece={{doc}}
         @isHighlighted={{includes doc @highlightedPieces}}
+        @isEditable={{@isEditable}}
         @hideNewerVersions={{false}}
         @didDeleteContainer={{@didDeleteContainer}}
         @onOpenUploadModal={{@onOpenUploadModal}}

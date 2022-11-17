@@ -81,7 +81,7 @@
             {{#unless this.loadPieceRelatedData.isRunning}}
               <AccessLevelPill
                 @accessLevel={{this.accessLevel}}
-                @isEditable={{true}}
+                @isEditable={{@isEditable}}
                 @onChangeAccessLevel={{this.changeAccessLevel}}
                 @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
                 @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
@@ -91,6 +91,7 @@
           {{#if this.signaturesEnabled}} {{! feature flag }}
             {{#if
               (and
+                @isEditable
                 (user-may "manage-signatures")
                 (not this.loadSignatureRelatedData.isRunning)
                 (not this.loadPieceRelatedData.isRunning)
@@ -114,7 +115,12 @@
               </Group.Item>
             {{/if}}
           {{/if}}
-          {{#if (user-may "manage-documents")}}
+          {{#if
+              (and
+                @isEditable
+                (user-may "manage-documents")
+              )
+          }}
             <Group.Item>
               <AuDropdown
                 data-test-document-card-actions={{true}}
@@ -201,7 +207,7 @@
                       <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"></div>
                       <AccessLevelPill
                         @accessLevel={{piece.accessLevel}}
-                        @isEditable={{true}}
+                        @isEditable={{@isEditable}}
                         @onChangeAccessLevel={{fn this.changeAccessLevelOfPiece piece}}
                         @onConfirmChangeAccessLevel={{fn this.saveAccessLevelOfPiece piece}}
                         @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
