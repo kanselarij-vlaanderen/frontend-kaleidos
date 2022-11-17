@@ -35,7 +35,7 @@ export default class PublicationsRoute extends Route {
       'page[size]': PAGE_SIZE.CODE_LISTS,
       sort: 'position',
     });
-    const documentTypePromise = this.conceptStore.allForConceptScheme(CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES);
+    const documentTypePromise = this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES);
 
     return Promise.all([
       publicationStatusPromise,

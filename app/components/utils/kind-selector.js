@@ -26,9 +26,9 @@ export default class UtilsKindSelector extends Component {
 
   @task
   *loadKinds() {
-    this.options = yield this.conceptStore.allForConceptScheme(CONSTANTS.CONCEPT_SCHEMES.VERGADERACTIVITEIT, {
+    this.options = yield this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.VERGADERACTIVITEIT, {
       'filter[:has-no:narrower]': true,
-      include: 'broader,narrower',
+      include: 'broader',
     });
   }
 }

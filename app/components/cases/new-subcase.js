@@ -34,7 +34,7 @@ export default class CasesNewSubcase extends Component {
 
   @task
   *loadAgendaItemTypes() {
-    this.agendaItemTypes = yield this.conceptStore.allForConceptScheme(CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES);
+    this.agendaItemTypes = yield this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES);
     this.agendaItemType = yield this.store.findRecordByUri('concept', CONSTANTS.AGENDA_ITEM_TYPES.NOTA);
   }
 

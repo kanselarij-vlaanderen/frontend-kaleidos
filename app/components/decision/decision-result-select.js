@@ -16,6 +16,6 @@ export default class DecisionResultSelect extends Component {
 
   @task
   *loadDecisionResultCodes() {
-    this.decisionResultCodes = yield this.conceptStore.allForConceptScheme(CONSTANTS.CONCEPT_SCHEMES.DECISION_RESULT_CODES);
+    this.decisionResultCodes = yield this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.DECISION_RESULT_CODES);
   }
 }

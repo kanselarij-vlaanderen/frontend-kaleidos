@@ -3,7 +3,16 @@ import Service, { inject as service } from '@ember/service';
 export default class ConceptStoreService extends Service {
   @service store;
 
-  allForConceptScheme(conceptSchemeUri, query) {
+  /** Fetches all concepts that are part of the given concept scheme.
+   *
+   * @param {string} conceptSchemeUri
+   * @param {Object} query: query options passed store.queryAll
+   *
+   * Note that this call, without any extra query options, is pre-loaded
+   * by the cache-warmup-service. If you make changes to this call, make sure
+   * to also update the cache-warmup-service.
+   */
+  queryAllByConceptScheme(conceptSchemeUri, query) {
     query = query || {}; // eslint-disable-line no-param-reassign
 
     // Remove any keys that filter on [concept-scheme][:uri:]

@@ -21,7 +21,7 @@ export default class EditGovernmentAreasModal extends Component {
 
   @task
   *loadGovernmentAreas() {
-    const concepts = yield this.conceptStore.allForConceptScheme(CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD);
+    const concepts = yield this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD);
     const governmentFields = [];
     for (const concept of concepts.toArray()) {
       const isInDateRange =
