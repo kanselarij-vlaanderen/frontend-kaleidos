@@ -63,6 +63,7 @@ const selectors = {
     subcaseName: '[data-test-agenda-overview-item-subcase-name]',
     formallyOk: '[data-test-agenda-overview-item-formally-ok]',
     status: '[data-test-agenda-overview-item-status]',
+    dragging: '[data-test-agenda-overview-item-dragging]',
   },
 
   // agenda-overview
@@ -89,8 +90,10 @@ const selectors = {
     downloadDocuments: '[data-test-agenda-actions-download-documents]',
     toggleEditingMeeting: '[data-test-agenda-actions-toggle-editing-meeting]',
     releaseDecisions: '[data-test-agenda-actions-release-decisions]',
-    releaseDocuments: '[data-test-agenda-actions-release-documents]',
+    planReleaseDocuments: '[data-test-agenda-actions-release-documents-planning]',
     approveAllAgendaitems: '[data-test-agenda-actions-approve-all-agendaitems]',
+    publishToWeb: '[data-test-agenda-actions-publish-to-web]',
+    unpublishFromWeb: '[data-test-agenda-actions-unpublish-from-web]',
     confirm: {
       releaseDecisions: '[data-test-agenda-actions-release-decisions-confirm]',
       approveAllAgendaitems: '[data-test-agenda-actions-approve-all-agendaitems-confirm]',

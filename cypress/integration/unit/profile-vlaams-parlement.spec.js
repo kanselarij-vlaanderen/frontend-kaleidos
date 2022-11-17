@@ -72,7 +72,7 @@ context('Testing the application as Vlaams Parlement', () => {
       cy.get(agenda.agendaActions.showOptions).click();
       cy.get(agenda.agendaActions.navigateToNewsletter);
       cy.get(agenda.agendaActions.releaseDecisions).should('not.exist');
-      cy.get(agenda.agendaActions.releaseDocuments).should('not.exist');
+      cy.get(agenda.agendaActions.planReleaseDocuments).should('not.exist');
     });
 
     it('check agenda overview', () => {

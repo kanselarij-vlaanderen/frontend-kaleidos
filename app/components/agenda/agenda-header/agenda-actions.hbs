@@ -110,7 +110,7 @@
   {{/if}}
   {{#if this.canPlanDocumentPublication}}
     <AuButton
-      data-test-agenda-actions-release-documents
+      data-test-agenda-actions-release-documents-planning
       @skin="link"
       {{on "click" this.openPlanDocumentPublicationModal}}
       role="menuitem"
@@ -121,6 +121,7 @@
   {{#if this.canPublishThemis}}
     <AuHr />
     <AuButton
+      data-test-agenda-actions-publish-to-web
       @skin="link"
       {{on "click" this.openConfirmPublishThemis}}
       role="menuitem"
@@ -131,6 +132,7 @@
   {{#if this.canUnpublishThemis}}
     <AuHr />
     <AuButton
+      data-test-agenda-actions-unpublish-from-web
       @skin="link"
       @alert={{true}}
       {{on "click" this.openConfirmUnpublishThemis}}

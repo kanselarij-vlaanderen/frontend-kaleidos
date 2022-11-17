@@ -89,7 +89,7 @@ context('Testing the application as Overheid user', () => {
       cy.get(agenda.agendaActions.showOptions).click();
       cy.get(agenda.agendaActions.navigateToNewsletter);
       cy.get(agenda.agendaActions.releaseDecisions).should('not.exist');
-      cy.get(agenda.agendaActions.releaseDocuments).should('not.exist');
+      cy.get(agenda.agendaActions.planReleaseDocuments).should('not.exist');
     });
 
     it('check agenda overview', () => {
@@ -111,7 +111,7 @@ context('Testing the application as Overheid user', () => {
       cy.get(utils.governmentAreasPanel.edit).should('not.exist');
     });
 
-    it.only('check agenda detail documents', () => {
+    it('check agenda detail documents', () => {
       cy.openAgendaForDate(agendaDate);
       cy.openAgendaitemDocumentTab(subcaseTitleShort1);
       cy.get(auk.loader).should('not.exist');
