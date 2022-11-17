@@ -84,9 +84,10 @@ export default class FileService extends Service {
       return
     }
 
-    const response = await fetch(`/files-conversion/${sourceFile.id}/convert`, {
+    const response = await fetch(`/files/${sourceFile.id}/convert`, {
       method: 'POST',
       headers: {
+        'Accept': 'application/vnd.api+json',
         'Content-Type': 'application/vnd.api+json',
       },
     });
