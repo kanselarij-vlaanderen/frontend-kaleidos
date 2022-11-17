@@ -38,11 +38,13 @@ export default class ApplicationRoute extends Route {
       this.transitionTo('accountless-users');
     }
 
-    this.conceptStore.allForConceptScheme(CONSTANTS.CONCEPT_SCHEMES.VERGADERACTIVITEIT, {
+    // Fire and forget these two calls so we load in the concepts without blocking loading of the routes
+    // These calls are pre-loaded in the cache by the cache-warmup-service so they should be quite quick to resolve
+    this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.VERGADERACTIVITEIT, {
       'filter[:has-no:narrower]': true,
-      include: 'broader,narrower',
+      include: 'broader',
     });
-    this.conceptStore.allForConceptScheme(CONSTANTS.CONCEPT_SCHEMES.ACCESS_LEVELS);
+    this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.ACCESS_LEVELS);
   }
 
   get isSupportedBrowser() {
