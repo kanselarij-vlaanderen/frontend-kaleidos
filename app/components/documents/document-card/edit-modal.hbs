@@ -27,7 +27,7 @@
           />
           <AuButtonGroup class="au-u-flex--no-wrap">
             <AuButton
-              data-test-document-edit-replace
+              data-test-document-edit-source-file-replace
               @skin="secondary"
               {{on "click" this.toggleUploadReplacementFile}}
             >
@@ -45,7 +45,7 @@
         {{/if}}
       </c.header>
       {{#if this.isUploadingReplacementFile}}
-        <c.content data-test-document-edit-pdf-file-uploader>
+        <c.content data-test-document-edit-source-file-replacer>
           <Auk::FileUploader
             @onUpload={{set this "replacementFile"}}
           />
@@ -75,14 +75,14 @@
             </p>
             <AuButtonGroup class="au-u-flex--no-wrap">
               <AuButton
-                data-test-document-edit-source-file-replace
+                data-test-document-edit-derived-file-replace
                 @skin="secondary"
                 {{on "click" this.toggleUploadReplacementDerivedFile}}
               >
                 {{t "replace"}}
               </AuButton>
               <AuButton
-                data-test-document-edit-source-file-delete
+                data-test-document-edit-derived-file-delete
                 @skin="secondary"
                 @alert={{true}}
                 @icon="trash"
@@ -102,7 +102,7 @@
           {{/if}}
         </c.header>
         {{#if this.isUploadingReplacementDerivedFile}}
-          <c.content data-test-document-edit-source-file-replacer>
+          <c.content data-test-document-edit-derived-file-replacer>
             <Auk::FileUploader
               @onUpload={{set this "replacementDerivedFile"}}
             />
@@ -123,7 +123,7 @@
             <AuHeading @skin="5" @level="3">{{t "upload-derived-document"}}</AuHeading>
           </div>
         </c.header>
-        <c.content data-test-document-edit-source-file-uploader>
+        <c.content data-test-document-edit-derived-file-uploader>
           <Auk::FileUploader
             @onUpload={{set this "uploadedDerivedFile"}}
           />

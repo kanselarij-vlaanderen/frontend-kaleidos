@@ -19,6 +19,7 @@ context('check the functions of the new document widget', () => {
     const agendaPlace = 'Cypress Room';
     const replaceFilename = 'replace';
     const wordExtension = 'docx';
+    const pdfExtension = 'pdf';
 
     const agendaDate = Cypress.dayjs().add(3, 'weeks')
       .day(1);
@@ -40,8 +41,8 @@ context('check the functions of the new document widget', () => {
     cy.get(document.documentCard.actions).should('not.be.disabled')
       .click();
     cy.get(document.documentCard.editPiece).click();
-    cy.get(document.documentEdit.replace).click();
-    cy.get(document.documentEdit.pdfFileUploader).within(() => {
+    cy.get(document.documentEdit.sourceFileReplace).click();
+    cy.get(document.documentEdit.sourceFileReplacer).within(() => {
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     });
     cy.intercept('DELETE', '/files/**').as('deleteFile1');
@@ -50,11 +51,11 @@ context('check the functions of the new document widget', () => {
       .wait('@deleteFile1')
       .wait('@patchPieces1');
 
-    // upload wordFile
+    // upload word file as derived file
     cy.get(document.documentCard.actions).should('not.be.disabled')
       .click();
     cy.get(document.documentCard.editPiece).click();
-    cy.get(document.documentEdit.sourceFileUploader).within(() => {
+    cy.get(document.documentEdit.derivedFileUploader).within(() => {
       cy.uploadFile(file.folder, file.fileName, wordExtension);
     });
     cy.intercept('PATCH', '/pieces/**').as('patchPieces2');
@@ -63,26 +64,40 @@ context('check the functions of the new document widget', () => {
     cy.get(document.documentCard.primarySourceLink).invoke('attr', 'href')
       .should('contain', `${file.fileName}.${wordExtension}`);
 
-    // replace wordFile
+    // upload word file as source file and ensure derived pdf file is generated
     cy.get(document.documentCard.actions).should('not.be.disabled')
       .click();
     cy.get(document.documentCard.editPiece).click();
     cy.get(document.documentEdit.sourceFileReplace).click();
     cy.get(document.documentEdit.sourceFileReplacer).within(() => {
-      cy.uploadFile(file.folder, replaceFilename, wordExtension);
+      cy.uploadFile(file.folder, file.fileName, wordExtension);
     });
     cy.intercept('PATCH', '/pieces/**').as('patchPieces3');
     cy.get(utils.vlModalFooter.save).click()
       .wait('@patchPieces3');
     cy.get(document.documentCard.primarySourceLink).invoke('attr', 'href')
-      .should('contain', `${replaceFilename}.${wordExtension}`);
+      .should('contain', `${file.fileName}.${pdfExtension}`);
 
-    // delete wordFile
+    // replace derived file
     cy.get(document.documentCard.actions).should('not.be.disabled')
       .click();
     cy.get(document.documentCard.editPiece).click();
-    cy.get(document.documentEdit.sourceFileDelete).click();
+    cy.get(document.documentEdit.derivedFileReplace).click();
+    cy.get(document.documentEdit.derivedFileReplacer).within(() => {
+      cy.uploadFile(file.folder, replaceFilename, wordExtension);
+    });
     cy.intercept('PATCH', '/pieces/**').as('patchPieces4');
+    cy.get(utils.vlModalFooter.save).click()
+      .wait('@patchPieces4');
+    cy.get(document.documentCard.primarySourceLink).invoke('attr', 'href')
+      .should('contain', `${replaceFilename}.${wordExtension}`);
+
+    // delete derived file
+    cy.get(document.documentCard.actions).should('not.be.disabled')
+      .click();
+    cy.get(document.documentCard.editPiece).click();
+    cy.get(document.documentEdit.derivedFileDelete).click();
+    cy.intercept('PATCH', '/pieces/**').as('patchPieces5');
     cy.get(utils.vlModalFooter.save).click()
       .wait('@patchPieces4');
     cy.get(document.documentCard.primarySourceCreated).should('not.exist');
