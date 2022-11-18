@@ -12,7 +12,7 @@ export default class IndexSearchRoute extends Route {
      * of the "search" route, even though the queryParams are marked `refreshModel: true`.
      * As a result "searchTextBuffer" doesn't get cleared.
      */
-    this.transitionTo('search.agenda-items', {
+    this.transitionTo('search.cases', {
       queryParams: {
         searchText: null,
         mandatees: null,
