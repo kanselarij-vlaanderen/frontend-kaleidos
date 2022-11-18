@@ -134,9 +134,7 @@ context('Testing the application as Admin user', () => {
       // Main view - Actions
       cy.get(agenda.agendaActions.showOptions).click();
       cy.get(agenda.agendaActions.addAgendaitems);
-      cy.get(agenda.agendaActions.navigateToDecisions);
       cy.get(agenda.agendaActions.navigateToNewsletter);
-      cy.get(agenda.agendaActions.navigateToPrintablePressAgenda);
       cy.get(agenda.agendaActions.navigateToPrintableAgenda);
       cy.get(agenda.agendaActions.downloadDocuments);
       cy.get(agenda.agendaActions.toggleEditingMeeting);
@@ -251,9 +249,7 @@ context('Testing the application as Admin user', () => {
       // Main view - Actions
       cy.get(agenda.agendaActions.showOptions).click();
       cy.get(agenda.agendaActions.addAgendaitems).should('not.exist');
-      cy.get(agenda.agendaActions.navigateToDecisions);
       cy.get(agenda.agendaActions.navigateToNewsletter);
-      cy.get(agenda.agendaActions.navigateToPrintablePressAgenda);
       cy.get(agenda.agendaActions.navigateToPrintableAgenda);
       cy.get(agenda.agendaActions.downloadDocuments); // TODO KAS-3696 overheid shouldn't get this button before doc release
       cy.get(agenda.agendaActions.toggleEditingMeeting);
@@ -282,9 +278,7 @@ context('Testing the application as Admin user', () => {
       // Main view - Actions
       cy.get(agenda.agendaActions.showOptions).click();
       cy.get(agenda.agendaActions.addAgendaitems).should('not.exist');
-      cy.get(agenda.agendaActions.navigateToDecisions);
       cy.get(agenda.agendaActions.navigateToNewsletter);
-      cy.get(agenda.agendaActions.navigateToPrintablePressAgenda);
       cy.get(agenda.agendaActions.navigateToPrintableAgenda);
       cy.get(agenda.agendaActions.downloadDocuments);
       cy.get(agenda.agendaActions.toggleEditingMeeting);

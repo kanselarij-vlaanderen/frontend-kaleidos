@@ -86,9 +86,7 @@ context('Testing the application as OVRB', () => {
       // Main view - Actions
       cy.get(agenda.agendaActions.showOptions).click();
       cy.get(agenda.agendaActions.addAgendaitems).should('not.exist');
-      cy.get(agenda.agendaActions.navigateToDecisions).should('not.exist');
       cy.get(agenda.agendaActions.navigateToNewsletter);
-      cy.get(agenda.agendaActions.navigateToPrintablePressAgenda);
       cy.get(agenda.agendaActions.navigateToPrintableAgenda);
       cy.get(agenda.agendaActions.downloadDocuments);
       cy.get(agenda.agendaActions.toggleEditingMeeting).should('not.exist');
@@ -157,9 +155,7 @@ context('Testing the application as OVRB', () => {
       // Main view - Actions
       cy.get(agenda.agendaActions.showOptions).click();
       cy.get(agenda.agendaActions.addAgendaitems).should('not.exist');
-      cy.get(agenda.agendaActions.navigateToDecisions).should('not.exist');
       cy.get(agenda.agendaActions.navigateToNewsletter);
-      cy.get(agenda.agendaActions.navigateToPrintablePressAgenda);
       cy.get(agenda.agendaActions.navigateToPrintableAgenda);
       cy.get(agenda.agendaActions.downloadDocuments);
       cy.get(agenda.agendaActions.toggleEditingMeeting).should('not.exist');
@@ -183,9 +179,7 @@ context('Testing the application as OVRB', () => {
       // Main view - Actions
       cy.get(agenda.agendaActions.showOptions).click();
       cy.get(agenda.agendaActions.addAgendaitems).should('not.exist');
-      cy.get(agenda.agendaActions.navigateToDecisions).should('not.exist');
       cy.get(agenda.agendaActions.navigateToNewsletter);
-      cy.get(agenda.agendaActions.navigateToPrintablePressAgenda);
       cy.get(agenda.agendaActions.navigateToPrintableAgenda);
       cy.get(agenda.agendaActions.downloadDocuments);
       cy.get(agenda.agendaActions.toggleEditingMeeting).should('not.exist');

@@ -11,7 +11,6 @@ const selectors = {
     documentsTab: '[data-test-agendaitem-nav-documents-tab]',
     decisionTab: '[data-test-agendaitem-nav-decision-tab]',
     newsletterTab: '[data-test-agendaitem-nav-newsletter-tab]',
-    pressagendaTab: '[data-test-agendaitem-nav-pressagenda-tab]',
     activeTab: '[data-test-agendaitem-nav-tabs] .auk-tabs__tab--active > *',
   },
 
@@ -83,9 +82,7 @@ const selectors = {
   agendaActions: {
     showOptions: '[data-test-agenda-actions-show-options]',
     addAgendaitems: '[data-test-agenda-actions-add-agendaitems]',
-    navigateToDecisions: '[data-test-agenda-actions-navigate-to-decisions]',
     navigateToNewsletter: '[data-test-agenda-actions-navigate-to-newsletter]',
-    navigateToPrintablePressAgenda: '[data-test-agenda-actions-printable-press-agenda]',
     navigateToPrintableAgenda: '[data-test-agenda-actions-navigate-to-printable-agenda]',
     downloadDocuments: '[data-test-agenda-actions-download-documents]',
     toggleEditingMeeting: '[data-test-agenda-actions-toggle-editing-meeting]',
@@ -240,12 +237,6 @@ const selectors = {
       checkBox: '[data-test-create-agendaitem-row-subcase-checkbox]',
       subcaseName: '[data-test-create-agendaitem-row-subcase-name]',
     },
-  },
-
-  // agendaitem-press
-  agendaitemPress: {
-    edit: '[data-test-agendaitem-press-edit]',
-    title: '[data-test-agendaitem-press-title]',
   },
 };
 export default selectors;
