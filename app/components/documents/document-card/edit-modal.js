@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 
@@ -9,6 +10,9 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
    * @param {Function} onSave: the action to execute after saving changes
    * @param {Function} onCancel: the action to execute after cancelling the edit
    */
+  @service intl;
+  @service toaster;
+  @service fileService;
 
   @tracked isUploadingReplacementFile = false;
   @tracked isUploadingReplacementDerivedFile = false;
@@ -68,6 +72,14 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
       const oldFile = yield this.args.piece.file;
       yield oldFile.destroyRecord();
       this.args.piece.file = this.replacementFile;
+      try {
+        yield this.fileService.convertSourceFile(this.replacementFile);
+      } catch (error) {
+        this.toaster.error(
+          this.intl.t('error-convert-file', { message: error.message }),
+          this.intl.t('warning-title'),
+        );
+      }
     }
     if (this.replacementDerivedFile) {
       const file = yield this.args.piece.file;
