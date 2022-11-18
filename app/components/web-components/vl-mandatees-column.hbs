@@ -5,7 +5,7 @@
     {{#if (is-pending mandatee.person)}}
       <div class="auk-skeleton auk-skeleton--rectangle" role="alert" aria-busy="true"></div>
     {{/if}}
-    {{await mandatee.person.fullName}}
+    {{mandatee.person.fullName}}
     <br />
   {{/each}}
 {{else}}
