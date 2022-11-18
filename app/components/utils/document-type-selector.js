@@ -1,9 +1,8 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { task, timeout } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { LIVE_SEARCH_DEBOUNCE_TIME } from 'frontend-kaleidos/config/config';
 
 /**
  * @argument {Concept} selectedDocumentType The document type to set the dropdown to
@@ -12,7 +11,6 @@ import { LIVE_SEARCH_DEBOUNCE_TIME } from 'frontend-kaleidos/config/config';
  * @argument {boolean} renderInPlace
  */
 export default class UtilsDocumentTypeSelectorComponent extends Component {
-  @service store;
   @service conceptStore;
 
   @tracked options;
@@ -33,13 +31,5 @@ export default class UtilsDocumentTypeSelectorComponent extends Component {
       'filter[:has-no:narrower]': true,
       include: 'broader',
     });
-  }
-
-  @task
-  *searchTask (searchValue) {
-    yield timeout(LIVE_SEARCH_DEBOUNCE_TIME);
-    console.debug(searchValue);
-    console.debug(this.options.filter((documentType) => documentType.label.includes(searchValue)));
-    return this.options.filter((documentType) => documentType.label.includes(searchValue));
   }
 }
