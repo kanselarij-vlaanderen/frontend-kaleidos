@@ -78,6 +78,7 @@ Router.map(function() {
   this.route('publications', { path: '/publicaties', }, function() {
     this.route('overview', { path: '/overzicht' }, function () {
       this.route('all', { path: '/alle-dossiers' });
+      this.route('start', { path: '/op-te-starten' });
       this.route('urgent', { path: '/dringend' });
       this.route('translation', { path: '/in-vertaling' });
       this.route('proof', { path: '/aanvraag-drukproef' });
