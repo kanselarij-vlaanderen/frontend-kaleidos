@@ -103,6 +103,7 @@ context('Testing the application as Admin user', () => {
     // const agendaitemLinkOnReleased2 = 'vergadering/6374FA85D9A98BD0A2288576/agenda/6374FA87D9A98BD0A228857A/agendapunten/6374FAB4D9A98BD0A2288586';
 
     it('check agendas route', () => {
+      cy.get(route.agendas.title);
       cy.get(route.agendas.action.newMeeting);
     });
 
