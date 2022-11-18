@@ -125,7 +125,8 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
       cy.get(document.accessLevelPill.edit).should('not.exist');
       cy.get(document.documentCard.pubLink).should('not.exist');
       cy.get(document.documentCard.actions).should('not.exist');
-      cy.get(document.documentCard.versionHistory).click();
+      cy.get(document.documentCard.versionHistory).should('not.be.disabled')
+        .click();
       // Detail Tab - Document tab - Document Card history
       cy.get(document.vlDocument.piece)
         .find(document.accessLevelPill.pill);
@@ -239,7 +240,8 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
 
       // TODO-bug
       // ! doc history viewing is allowed for this profile, but only latest version is visible
-      // cy.get(document.documentCard.versionHistory).click();
+      // cy.get(document.documentCard.versionHistory).should('not.be.disabled')
+      //   .click();
       // Detail Tab - Decisions tab - Document Card history
       // cy.get(document.vlDocument.piece)
       //   .find(document.accessLevelPill.pill);
@@ -288,7 +290,8 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit).should('not.exist');
       cy.get(document.documentCard.actions).should('not.exist');
-      cy.get(document.documentCard.versionHistory).click();
+      cy.get(document.documentCard.versionHistory).should('not.be.disabled')
+        .click();
 
       cy.get(document.vlDocument.piece)
         .find(document.accessLevelPill.pill);

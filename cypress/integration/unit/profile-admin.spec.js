@@ -192,7 +192,8 @@ context('Testing the application as Admin user', () => {
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
       cy.get(document.documentCard.delete);
-      cy.get(document.documentCard.versionHistory).click();
+      cy.get(document.documentCard.versionHistory).should('not.be.disabled')
+        .click();
       // Detail Tab - Document tab - Document Card history
       cy.get(document.vlDocument.piece)
         .find(document.accessLevelPill.pill);
@@ -215,7 +216,8 @@ context('Testing the application as Admin user', () => {
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
       cy.get(document.documentCard.delete);
-      cy.get(document.documentCard.versionHistory).click();
+      cy.get(document.documentCard.versionHistory).should('not.be.disabled')
+        .click();
       // Detail Tab - Decisions tab - Document Card history
       cy.get(document.vlDocument.piece)
         .find(document.accessLevelPill.pill);
@@ -353,7 +355,8 @@ context('Testing the application as Admin user', () => {
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
       cy.get(document.documentCard.delete);
-      cy.get(document.documentCard.versionHistory).click();
+      cy.get(document.documentCard.versionHistory).should('not.be.disabled')
+        .click();
       // Detail Tab - Decisions tab - Document Card history
       cy.get(document.vlDocument.piece)
         .find(document.accessLevelPill.pill);
@@ -449,7 +452,8 @@ context('Testing the application as Admin user', () => {
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
       cy.get(document.documentCard.delete);
-      cy.get(document.documentCard.versionHistory).click();
+      cy.get(document.documentCard.versionHistory).should('not.be.disabled')
+        .click();
 
       cy.get(document.vlDocument.piece)
         .find(document.accessLevelPill.pill);
