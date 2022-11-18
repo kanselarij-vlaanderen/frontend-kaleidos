@@ -1,5 +1,5 @@
 {{page-title (t "search")}}
-<div class="auk-u-maximize-height auk-scroll-wrapper">
+<div class="au-c-search-container au-c-search-container--publications">
   <Auk::Navbar>
     {{!-- template-lint-disable no-redundant-fn --}}
     {{!-- TODO: Using plain decorated action for Input's @enter doesn't work for some reason --}}
@@ -93,9 +93,7 @@
     </div>
     {{!-- template-lint-enable no-redundant-fn --}}
   </Auk::Navbar>
-  <div class="auk-scroll-wrapper__body">
-    <div class="auk-u-m-4">
-      {{outlet}}
-    </div>
+  <div class="au-c-search-container__content au-u-background-gray-100">
+    {{outlet}}
   </div>
 </div>
