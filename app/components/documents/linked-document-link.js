@@ -22,12 +22,13 @@ export default class LinkedDocumentLink extends Component {
 
   @task
   *loadData() {
-    const containerPieces = yield this.args.documentContainer.sortedPieces;
+    const containerPieces = yield this.args.documentContainer.pieces;
+    const sortedContainerPieces = containerPieces.sortBy('created');
     if (this.args.lastPiece) {
-      const idx = containerPieces.indexOf(this.args.lastPiece);
-      this.sortedPieces = A(containerPieces.slice(0, idx + 1));
+      const idx = sortedContainerPieces.indexOf(this.args.lastPiece);
+      this.sortedPieces = A(sortedContainerPieces.slice(0, idx + 1));
     } else {
-      this.sortedPieces = A(containerPieces);
+      this.sortedPieces = A(sortedContainerPieces);
     }
     this.accessLevel = yield this.lastPiece.accessLevel;
   }

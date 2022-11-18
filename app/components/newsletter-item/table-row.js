@@ -25,8 +25,9 @@ export default class NewsletterItemTableRowComponent extends Component {
   async openNota() {
     const nota = await this.args.agendaitem.notaOrVisienota;
     if (nota) {
-      const piece = await nota.get('lastPiece');
-      window.open(`/document/${piece.get('id')}`);
+      const pieces = await nota.pieces;
+      const lastPiece = pieces.sortBy('created').lastObject;
+      window.open(`/document/${lastPiece.id}`);
     }
   }
 

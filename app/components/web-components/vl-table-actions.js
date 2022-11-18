@@ -37,8 +37,9 @@ export default Component.extend({
       if (!nota) {
         return;
       }
-      const piece = await nota.get('lastPiece');
-      window.open(`/document/${piece.get('id')}`);
+      const pieces = await nota.get('pieces');
+      const lastPiece = pieces.sortBy('created').lastObject;
+      window.open(`/document/${lastPiece.get('id')}`);
     },
   },
 });
