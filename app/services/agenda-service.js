@@ -110,13 +110,7 @@ export default class AgendaService extends Service {
     const agendaItemType = await subcase.agendaItemType;
     const isAnnouncement = agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
     const numberToAssign = await this.computeNextItemNumber(lastAgenda, agendaItemType);
-
-    // Generate press text
     const mandatees = await subcase.get('mandatees');
-    const sortedMandatees = await mandatees.sortBy('priority');
-    const titles = sortedMandatees.map((mandatee) => mandatee.get('title'));
-    const pressText = `${subcase.get('shortTitle')}\n${titles.join('\n')}`;
-
     const now = new Date();
 
     // Placement on agenda activity
@@ -159,8 +153,6 @@ export default class AgendaService extends Service {
       submittedPieces = submittedPieces.concat((await submissionActivity2.pieces).toArray());
     }
     const agendaitem = await this.store.createRecord('agendaitem', {
-      titlePress: subcase.shortTitle,
-      textPress: pressText,
       created: now,
       number: numberToAssign,
       agenda: lastAgenda,
