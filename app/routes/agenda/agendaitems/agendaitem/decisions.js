@@ -16,6 +16,10 @@ export default class DecisionsAgendaitemAgendaitemsAgendaRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
     controller.agendaitem = this.agendaitem;
+    const meeting = this.modelFor('agenda').meeting;
+    controller.meeting = meeting;
+    const agenda = this.modelFor('agenda').agenda;
+    controller.agenda = agenda;
   }
 
   @action

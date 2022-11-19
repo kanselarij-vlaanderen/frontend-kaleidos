@@ -6,6 +6,7 @@
       <AuPill
         @skin={{this.pillSkin}}
         @icon={{this.pillIcon}}
+        @draft={{@isDraft}}
         data-test-access-level-pill
       >
         {{this.accessLevelLabel}}
@@ -14,6 +15,7 @@
       <AuPill
         @skin={{this.pillSkin}}
         @icon={{this.pillIcon}}
+        @draft={{@isDraft}}
         @onClickAction={{this.openEditMode}}
         @actionIcon="pencil"
         data-test-access-level-pill
