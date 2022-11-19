@@ -75,8 +75,14 @@
               </AuPill>
             {{/if}}
           {{/if}}
-          <Group.Item class="auk-o-flex">
-            {{#unless this.loadPieceRelatedData.isRunning}}
+          <Group.Item
+            class="auk-o-flex"
+            {{did-update (perform this.loadAccessLevelRelatedData) @agendaContext.meeting.internalDecisionPublicationActivity.status}}
+            {{did-update (perform this.loadAccessLevelRelatedData) @agendaContext.meeting.internalDocumentPublicationActivity.status}}
+            {{did-update (perform this.loadAccessLevelRelatedData) @agendaContext.agenda.status}}
+            {{did-update (perform this.loadAccessLevelRelatedData) @agendaContext.agenda.previousVersion}}
+          >
+            {{#unless this.loadAccessLevelRelatedData.isRunning}}
               <AccessLevelPill
                 @accessLevel={{this.piece.accessLevel}}
                 @isDraft={{this.isDraftAccessLevel}}
