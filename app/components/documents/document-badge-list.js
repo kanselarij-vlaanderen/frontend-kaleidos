@@ -7,6 +7,9 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
  */
 export default class DcoumentsDocumentBadgeListComponent extends Component {
   shouldShowAccessLevel(accessLevel) {
-    return (accessLevel?.uri === CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK) || (accessLevel?.uri === CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE);
+    return [
+      CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK,
+      CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE
+    ].includes(accessLevel?.uri);
   }
 }

@@ -122,6 +122,7 @@
           <Documents::DocumentBadgeList
             @pieces={{this.limitedAgendaitemDocuments}}
             @highlightedPieces={{this.newAgendaitemDocuments}}
+            @agendaContext={{hash meeting=@meeting agenda=@currentAgenda agendaitem=@agendaitem}}
           />
         </div>
         {{#if this.enableShowMore}}

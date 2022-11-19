@@ -5,7 +5,7 @@ import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class DecisionResultSelect extends Component {
-  @service store;
+  @service conceptStore;
 
   @tracked decisionResultCodes;
 
@@ -16,11 +16,6 @@ export default class DecisionResultSelect extends Component {
 
   @task
   *loadDecisionResultCodes() {
-    const codes = yield this.store.query('concept', {
-      'filter[concept-schemes][:uri:]': CONSTANTS.CONCEPT_SCHEMES.DECISION_RESULT_CODES,
-      reload: true,
-      sort: 'position',
-    });
-    this.decisionResultCodes = codes;
+    this.decisionResultCodes = yield this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.DECISION_RESULT_CODES);
   }
 }

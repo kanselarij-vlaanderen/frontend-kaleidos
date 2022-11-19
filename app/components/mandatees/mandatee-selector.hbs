@@ -18,7 +18,7 @@
       @onChange={{@onSelectMandatee}}
       as |mandatee|
     >
-      {{await mandatee.fullDisplayName}}
+      {{mandatee.fullDisplayName}}
       <span class="auk-u-text-muted auk-u-text-size--small">
         {{moment-format mandatee.start}}
         {{t "until"}}
@@ -40,7 +40,7 @@
       @onChange={{@onSelectMandatee}}
       as |mandatee|
     >
-      {{await mandatee.fullDisplayName}}
+      {{mandatee.fullDisplayName}}
       <span class="auk-u-text-muted auk-u-text-size--small">
         {{moment-format mandatee.start}}
         {{t "until"}}

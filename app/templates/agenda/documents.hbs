@@ -27,6 +27,7 @@
 
       <Documents::DocumentCardList
         @pieces={{this.model}}
+        @agendaContext={{hash meeting=this.meeting agenda=this.agenda}}
         @onAddPiece={{perform this.addPiece}}
         @didDeleteContainer={{this.refresh}}
       />

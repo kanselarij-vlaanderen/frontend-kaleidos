@@ -160,7 +160,7 @@
               }}
                 <div class="auk-skeleton auk-skeleton--rectangle" role="alert" aria-busy="true"></div>
               {{else if @subcase.requestedBy}}
-                {{@subcase.requestedBy.person.nameToDisplay}}
+                {{@subcase.requestedBy.person.fullName}}
               {{else if this.showNotYetRequestedMessage}}
                 {{t "not-yet-requested"}}
               {{/if}}

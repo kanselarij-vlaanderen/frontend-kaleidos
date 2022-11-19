@@ -31,7 +31,7 @@ export default class AgendaitemSearchRoute extends Route {
     },
   };
 
-  textSearchFields = ['title^3', 'shortTitle^3', 'data.content', 'titlePress', 'textPress'];
+  textSearchFields = ['title^3', 'shortTitle^3', 'data.content'];
 
   constructor() {
     super(...arguments);

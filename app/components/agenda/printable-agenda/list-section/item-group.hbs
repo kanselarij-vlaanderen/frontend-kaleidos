@@ -4,27 +4,53 @@
     - The remaining items are generated as default
 }}
 <div class="l-printable-agenda__item-group">
-  <div class="l-printable-agenda__faux-item">
-    <div class="auk-u-non-breakable-group@print">
-      <Agenda::PrintableAgenda::ListSection::ItemGroup::ItemGroupHeader
-        @mandatees={{@items.firstObject.sortedMandatees}}
-      />
-      <div value={{this.items.first.number}}>
-        <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
-          @item={{this.items.first}}
+  {{#let (object-at 0 @items) as |first|}}
+    <div class="l-printable-agenda__faux-item">
+      <div class="auk-u-non-breakable-group@print">
+        {{#let first.sortedMandatees as |mandatees|}}
+          <h3
+            class="auk-u-mb-3 auk-u-text-uppercase l-printable-agenda__item-group-header
+              {{if (not mandatees) "l-printable-agenda__item-group-header--muted auk-u-keep-colors@print"}}"
+          >{{! auk-u-text-decoration-underline }}
+            {{#if mandatees}}
+              {{#each mandatees as |mandatee|}}
+                {{mandatee.title}}
+                {{#if (not-eq mandatee mandatees.lastObject)}}
+                  <br />&
+                {{/if}}
+              {{/each}}
+            {{else}}
+              {{t "no-mandatee-assigned"}}
+            {{/if}}
+          </h3>
+        {{/let}}
+        <div value={{first.number}}>
+          <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
+            @item={{first}}
+          />
+        </div>
+      </div>
+      {{#if first.sortedPieces}}
+        <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
+          @pieces={{first.sortedPieces}}
         />
+      {{/if}}
+    </div>
+  {{/let}}
+  {{#each (drop 1 @items) as |agendaitem|}}
+    <div value={{agendaitem.number}}>
+      <div class="l-printable-agenda__item">
+        <div class="auk-u-non-breakable-group@print">
+          <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
+            @item={{agendaitem}}
+          />
+        </div>
+        {{#if @item.sortedPieces}}
+          <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
+            @pieces={{agendaitem.sortedPieces}}
+          />
+        {{/if}}
       </div>
     </div>
-    {{#if this.items.first.sortedPieces}}
-      <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
-        @pieces={{this.items.first.sortedPieces}}
-      />
-    {{/if}}
-  </div>
-  {{#each this.items.remainder as |agendaitem|}}
-    <Agenda::PrintableAgenda::ListSection::ItemGroup::Item
-      @item={{agendaitem}}
-      value={{agendaitem.number}}
-    />
   {{/each}}
 </div>
