@@ -4,9 +4,12 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import formatDate from '../../utils/format-date-search-param';
+import sanitizeHtml from 'ember-cli-sanitize-html';
 
 export default class NewsletterInfosSearchController extends Controller {
   @service router;
+  @service toaster;
+  @service intl;
 
   queryParams = {
     searchText: {
@@ -83,5 +86,29 @@ export default class NewsletterInfosSearchController extends Controller {
         latestAgendaitem['id']
       );
     }
+  }
+
+  @action
+  copyText(row, event) {
+    if (event) {
+      event.stopPropagation();
+    }
+
+    let copyText = '';
+
+    if (row.title) {
+      copyText += `${row.title}\n\n`;
+    }
+
+    copyText +=
+      sanitizeHtml(
+        row.richtext
+          .replace(/<p>(.*?)<\/p>/g, '$1\n\n') // Replace p-tags with \n line breaks
+          .trim() // Trim whitespaces at start & end of the string
+        , {allowedTags: [], allowedAttributes: {}} // Remove all remaining tags from the string
+      );
+
+    navigator.clipboard.writeText(copyText);
+    this.toaster.success(this.intl.t('text-copied'));
   }
 }
