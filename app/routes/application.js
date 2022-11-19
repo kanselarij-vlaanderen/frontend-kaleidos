@@ -2,10 +2,9 @@ import { action } from '@ember/object';
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class ApplicationRoute extends Route {
-  @service store;
+  @service conceptStore;
   @service moment;
   @service intl;
   @service session;
@@ -39,27 +38,13 @@ export default class ApplicationRoute extends Route {
       this.transitionTo('accountless-users');
     }
 
-    await this.store.query('concept', {
-      filter: {
-        'concept-schemes': {
-          ':uri:': CONSTANTS.CONCEPT_SCHEMES.VERGADERACTIVITEIT,
-        },
-        ':has-no:narrower': true, // Only the most specific concepts, i.e. the actual meeting kinds (so no "Annex")
-      },
-      include: 'broader,narrower',
-      'page[size]': PAGE_SIZE.CODE_LISTS,
-      sort: 'position',
+    // Fire and forget these two calls so we load in the concepts without blocking loading of the routes
+    // These calls are pre-loaded in the cache by the cache-warmup-service so they should be quite quick to resolve
+    this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.VERGADERACTIVITEIT, {
+      'filter[:has-no:narrower]': true,
+      include: 'broader',
     });
-
-    await this.store.query('concept', {
-      filter: {
-        'concept-schemes': {
-          ':uri:': CONSTANTS.CONCEPT_SCHEMES.ACCESS_LEVELS,
-        },
-      },
-      'page[size]': PAGE_SIZE.CODE_LISTS,
-      sort: 'position',
-    });
+    this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.ACCESS_LEVELS);
   }
 
   get isSupportedBrowser() {

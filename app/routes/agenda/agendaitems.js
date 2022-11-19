@@ -34,9 +34,9 @@ export default class AgendaAgendaitemsRoute extends Route {
     // *NOTE* Do not change this query, this call is pre-cached by cache-warmup-service
     let agendaitems = await this.store.query('agendaitem', {
       'filter[agenda][:id:]': agenda.id,
+      include: 'type',
       'page[size]': PAGE_SIZE.AGENDAITEMS,
       sort: 'type,number',
-      include: 'type',
     });
 
     // Ensure mandatee data for each agendaitem is loaded
@@ -44,13 +44,7 @@ export default class AgendaAgendaitemsRoute extends Route {
     await Promise.all(agendaitems.map((agendaitem) => {
       this.store.findRecord('agendaitem', agendaitem.id, {
         reload: true, // without reload the async operation will be resolved too early by ember-data's cache
-        include: [
-          'mandatees'
-        ].join(','),
-        'fields[mandatees]': [
-          'title', // Display group header per agendaitems group
-          'priority' // Sorting agendaitems on minister protocol order
-        ].join(','),
+        include: 'mandatees',
       });
     }));
 
