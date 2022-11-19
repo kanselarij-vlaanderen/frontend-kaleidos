@@ -63,33 +63,6 @@ export const groupAgendaitemsByGroupname = (agendaitems) => {
 };
 
 /**
- * For a set of agendaitems, will fetch the drafts, and will group them by number
- * @param  {Array}  agendaitems   Agenda items to parse from
- * @return {Object}               An object containing drafts and groups
- */
-// TODO KAS-3470 remove after press-agenda is removed in KAS-3678
-// only used in routes/print-overviews/press-agenda/overview.js
-export const parseDraftsAndGroupsFromAgendaitems = async(agendaitems) => {
-  // Drafts are items without an approval or remark
-  const draftAgendaitems = [];
-  for (const agendaitem of agendaitems.toArray()) {
-    const type = await agendaitem.type;
-    if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA && !agendaitem.isApproval) {
-      draftAgendaitems.push(agendaitem);
-    }
-  }
-
-  // Calculate the priorities on the drafts
-  await setCalculatedGroupNumbers(draftAgendaitems);
-
-  const groupedAgendaitems = Object.values(groupAgendaitemsByGroupname(draftAgendaitems));
-  return {
-    draftAgendaitems,
-    groupedAgendaitems,
-  };
-};
-
-/**
  * Given a set of grouped agendaitems, sort them by number
  * @param  {Array}   groupedAgendaitems   A set containing all agendaitems grouped (see above functions)
  * @param  {Boolean} allowEmptyGroups     When true, empty groups are allowed
