@@ -18,11 +18,7 @@
       {{#each this.model as |mandatee|}}
         <tr>
           <td class="mandatee-draggable-row">
-            {{#if (is-pending mandatee.fullDisplayName)}}
-              <div class="auk-skeleton auk-skeleton--rectangle" role="alert" aria-busy="true"></div>
-            {{else}}
-              {{await mandatee.fullDisplayName}}
-            {{/if}}
+            {{mandatee.fullDisplayName}}
           </td>
           <td class="mandatee-draggable-row">
             {{mandatee.newsletterTitle}}
