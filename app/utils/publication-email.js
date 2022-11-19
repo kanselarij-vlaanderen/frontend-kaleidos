@@ -35,7 +35,7 @@ async function buildContactInformation(contactPersons) {
 }
 async function translationRequestEmail(params) {
   const dueDate = params.dueDate ? moment(params.dueDate).format('DD-MM-YYYY') : '-';
-  const subject = `${params.identifier} - Vertaalaanvraag`;
+  const subject = `${params.identifier} - Vertaalaanvraag - ${params.shortTitle}`;
   let message= '';
 
   if (params.isUrgent) {
@@ -78,7 +78,9 @@ function proofRequestEmail(params) {
    const message = 'Beste,\n'
       + '\n'
       + 'In bijlage voor drukproef:\n'
+      + '\n'
       + `Titel: ${params.longTitle}\t\n`
+      + '\n'
       + `VO-dossier: ${params.identifier}\n`
       + '\n'
       + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand emailadres.\t\n';

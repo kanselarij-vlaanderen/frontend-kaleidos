@@ -10,10 +10,17 @@
             <div class="auk-panel auk-u-mb-8">
               <MockLogin as |login|>
                 {{#if login.errorMessage}}
-                  <Auk::Alert
-                    @skin="error"
-                    @message={{login.errorMessage}}
-                  />
+                  {{#if (includes "403" (w (lowercase login.errorMessage)))}}
+                    <Auk::Alert
+                      @skin="error"
+                      @message={{t "application-unauthorized-message"}}
+                    />
+                  {{else}}
+                    <Auk::Alert
+                      @skin="error"
+                      @message={{login.errorMessage}}
+                    />
+                  {{/if}}
                 {{/if}}
                 {{#if this.model.length}}
                   <ul class="auk-list auk-list--view" data-test-mock-login-list>

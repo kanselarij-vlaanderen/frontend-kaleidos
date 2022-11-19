@@ -33,7 +33,7 @@
   </td>
   <td class="lt-cell align-left">
     {{#each (await @agendaitem.mandatees) as |mandatee|}}
-      {{await mandatee.person.nameToDisplay}}<br />
+      {{mandatee.person.fullName}}<br />
     {{else}}
       <p class="auk-u-text-muted auk-u-italic">
         {{t "no-ministers"}}

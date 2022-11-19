@@ -12,6 +12,7 @@ export default class SubcaseDescriptionEdit extends Component {
    * @argument onSave
    */
   @service store;
+  @service conceptStore;
   @service newsletterService;
   @service agendaitemAndSubcasePropertiesSync;
 
@@ -42,14 +43,7 @@ export default class SubcaseDescriptionEdit extends Component {
 
   @task
   *loadAgendaItemTypes() {
-    this.agendaItemTypes = yield this.store.query('concept', {
-      sort: '-label',
-      filter: {
-        'concept-schemes': {
-          ':uri:': CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES,
-        }
-      },
-    });
+    this.agendaItemTypes = yield this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES);
   }
 
   @action

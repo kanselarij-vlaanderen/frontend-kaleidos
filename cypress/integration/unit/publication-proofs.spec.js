@@ -81,7 +81,7 @@ context('Publications proofs tests', () => {
     cy.get(auk.modal.container).find(publication.documentsList.piece)
       .should('have.length', 3);
     cy.get(publication.proofRequest.message).scrollIntoView()
-      .should('have.value', `Beste,\n\nIn bijlage voor drukproef:\nTitel: test drukproefaanvraag\t\nVO-dossier: ${fields.number}\n\nVragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand emailadres.\t\n\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n`);
+      .should('have.value', `Beste,\n\nIn bijlage voor drukproef:\n\nTitel: test drukproefaanvraag\t\n\nVO-dossier: ${fields.number}\n\nVragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand emailadres.\t\n\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n`);
     cy.intercept('DELETE', 'files/*').as('deleteFile');
     cy.get(auk.modal.footer.cancel).click();
     // these p

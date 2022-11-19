@@ -9,6 +9,7 @@ import { task } from 'ember-concurrency';
 
 export default class CasesNewSubcase extends Component {
   @service store;
+  @service conceptStore;
 
   @tracked filter = Object.freeze({
     type: 'subcase-name',
@@ -33,17 +34,7 @@ export default class CasesNewSubcase extends Component {
 
   @task
   *loadAgendaItemTypes() {
-    this.agendaItemTypes = yield this.store.query('concept', {
-      sort: '-label',
-      filter: {
-        'concept-schemes': {
-          ':uri:': CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES,
-        }
-      },
-      page: {
-        size: PAGE_SIZE.CODE_LISTS,
-      },
-    });
+    this.agendaItemTypes = yield this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES);
     this.agendaItemType = yield this.store.findRecordByUri('concept', CONSTANTS.AGENDA_ITEM_TYPES.NOTA);
   }
 
