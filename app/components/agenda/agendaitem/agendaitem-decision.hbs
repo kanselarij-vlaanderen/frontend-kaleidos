@@ -35,7 +35,6 @@
       <Toolbar.Group @position="left" as |Group|>
         <Group.Item class="auk-content">
           <h4 class="auk-u-mb-2">{{t "result-decision"}}</h4>
-          {{#if this.isEditing}}
           {{#if (not this.isEditingPill)}}
             <Decision::DecisionResultPill
               @decisionResultCode={{@decisionActivity.decisionResultCode}}
@@ -47,13 +46,6 @@
               @decisionActivity={{@decisionActivity}}
               @onSave={{perform this.updateAgendaitemPiecesAccessLevels}}
               @onCancel={{this.toggleEditPill}}
-            />
-          {{/if}}
-          {{else}}
-            <Decision::DecisionResultPill
-              @decisionResultCode={{@decisionActivity.decisionResultCode}}
-              @isEditable={{false}}
-              @onEdit={{this.toggleEdit}}
             />
           {{/if}}
         </Group.Item>
