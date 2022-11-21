@@ -4,7 +4,6 @@
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
 import cases from '../../selectors/case.selectors';
-import dependency from '../../selectors/dependency.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
@@ -18,22 +17,6 @@ function checkNewsletterPage(headerText, newsletterTitle) {
   cy.clickReverseTab('Definitief');
   cy.get(newsletter.newsletterMeeting.title).contains(newsletterTitle);
 }
-
-function selectFromDropdown(item) {
-  cy.get(dependency.emberPowerSelect.option, {
-    timeout: 5000,
-  }).wait(500)
-    .contains(item)
-    .scrollIntoView()
-    .trigger('mouseover')
-    .click({
-      force: true,
-    });
-  cy.get(dependency.emberPowerSelect.option, {
-    timeout: 15000,
-  }).should('not.exist');
-}
-
 context('Different session kinds should show different titles', () => {
   const regular = '/vergadering/5EC5258C5B08050008000001/agenda/5EC5258D5B08050008000002/agendapunten';
   const special = '/vergadering/5EC525AC5B08050008000005/agenda/5EC525AD5B08050008000006/agendapunten';
@@ -108,10 +91,10 @@ context('Different session kinds should show different titles', () => {
     // set kind to PVV
     cy.get(route.agendas.action.newMeeting).click();
     cy.get(utils.kindSelector.kind).click();
-    selectFromDropdown(vvKind);
+    cy.selectFromDropdown(vvKind);
     // select related main meeting
     cy.get(agenda.editMeeting.relatedMainMeeting).click();
-    selectFromDropdown(formattedAgendaDate);
+    cy.selectFromDropdown(formattedAgendaDate);
     cy.get(agenda.editMeeting.numberRep.view).should('contain', fullmeetingNumberVV);
     cy.intercept('POST', '/meetings').as('createMeeting');
     cy.intercept('POST', '/agendas').as('createAgenda');
