@@ -33,6 +33,7 @@ Router.map(function() {
     });
     this.route('compare', { path: '/vergelijken', });
     this.route('documents', { path: '/documenten', });
+    this.route('notes', { path: '/notulen', });
   });
 
   this.route('cases', { path: '/dossiers', }, function() {

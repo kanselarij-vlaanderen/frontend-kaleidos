@@ -1,0 +1,78 @@
+<div class="auk-panel-layout__main-content">
+  <div class="auk-scroll-wrapper__body">
+    <div class="auk-u-m-8">
+      <Auk::Toolbar class="auk-u-mb-4" as |Toolbar|>
+        <Toolbar.Group @position="left" as |Group|>
+          <Group.Item>
+            <h4 class="auk-toolbar__title">
+              Notulen
+            </h4>
+          </Group.Item>
+        </Toolbar.Group>
+        <Toolbar.Group @position="right" as |Group|>
+          <Group.Item>
+            <AuButton
+              @icon="pdf"
+              @skin="secondary"
+            >
+              Exporteren als pdf
+            </AuButton>
+          </Group.Item>
+        </Toolbar.Group>
+      </Auk::Toolbar>
+      <div class="au-o-flow">
+        <div class="auk-rdfa-holder {{if this.isFullscreen "auk-rdfa-fullscreen au-u-margin-top-none"}}">
+          <div class="auk-rdfa-holder__header au-u-flex au-u-flex--between au-u-flex--vertical-center">
+            {{#if this.isFullscreen}}
+              <AuToggleSwitch
+                @label="Ondertekend"
+                @identifier="signature"
+                @name="signature"
+                @checked={{false}}
+              />
+              <AuButtonGroup>
+                <AuButton
+                  @skin="naked"
+                  @icon="minimize"
+                  @iconAlignment="left"
+                  {{on "click" this.toggleFullscreen}}
+                >
+                  {{t "close-fullscreen"}}
+                </AuButton>
+                <AuButton
+                  @icon="pdf"
+                  @skin="secondary"
+                >
+                  Exporteren als pdf
+                </AuButton>
+              </AuButtonGroup>
+            {{else}}
+              <span></span>
+              <AuButton
+                @skin="naked"
+                @icon="expand"
+                @iconAlignment="left"
+                {{on "click" this.toggleFullscreen}}
+              >
+                {{t "fullscreen"}}
+              </AuButton>
+            {{/if}}
+          </div>
+          <WebComponents::VlRdfaEditor
+            data-test-newsletter-edit-item-rdfa-editor
+            @richtext="{{this.richtext}}"
+            @handleRdfaEditorInit={{this.handleRdfaEditorInit}}
+          />
+        </div>
+        <div>
+          <AuToggleSwitch
+            @label="Ondertekend"
+            @identifier="signature"
+            @name="signature"
+            @checked={{false}}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
