@@ -1,5 +1,5 @@
 {{page-title (t "publications-tabs-search") }}
-<div class="auk-u-maximize-height auk-scroll-wrapper">
+<div class="au-c-search-container au-c-search-container--publications">
   <Auk::Navbar>
     <form {{on "submit" this.search}} class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-end auk-u-maximize-width auk-u-mb-4 auk-u-mt-4">
       <div class="auk-form-group au-u-margin-bottom-none au-u-2-6">
@@ -68,143 +68,396 @@
       </div>
     </form>
   </Auk::Navbar>
-  <div class="auk-scroll-wrapper__body">
-    <div class="auk-u-m-4">
-      <div class="auk-o-grid auk-u-mb-2">
-        <div class="auk-o-grid-col-2">
-          <div class="auk-box">
-            <div class="auk-u-mb-2">
-              <Auk::CheckboxTree
-                @label={{t "regulation-type"}}
-                @items={{this.regulationTypes}}
-                @selectedItems={{this.selectedRegulationTypes}}
-                @didUpdate={{this.updateSelectedRegulationTypes}}
-              />
+  <div class="au-c-search-container__content au-u-background-gray-100">
+    <AuMainContainer as |m|>
+      <m.sidebar>
+        <div class="au-c-sidebar">
+          <div class="au-c-sidebar__content">
+            <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny">
+              <div class="au-c-card au-o-box au-o-box--small">
+                <div class="auk-form-group">
+                  <Auk::Label for="ministerName">
+                    Minister
+                  </Auk::Label>
+                  <select
+                    name="login"
+                    id="ministerName"
+                    class="auk-select auk-select--block"
+                  >
+                    <option value="alleministers">Alle ministers</option>
+                    <optgroup label="Huidige ministers">
+                      <option id="ember148">
+                        Jan Jambo
+                      </option>
+                      <option id="ember149">
+                        Hilde Crevit
+                      </option>
+                      <option id="ember150">
+                        Bart Somer
+                      </option>
+                      <option id="ember151">
+                        Ben Weyt
+                      </option>
+                      <option id="ember152">
+                        Zuhal Demi
+                      </option>
+                      <option id="ember153">
+                        Matthias Diependael
+                      </option>
+                      <option id="ember154">
+                        Lydia Peeter
+                      </option>
+                      <option id="ember155">
+                        Benjamin Dall
+                      </option>
+                      <option id="ember156">
+                        Jo Broun
+                      </option>
+                    </optgroup>
+                    <optgroup label="Huidige ministers">
+                      <option id="ember265">
+                        Paul Akkermans
+                      </option>
+                      <option id="ember266">
+                        Bert Anciaux
+                      </option>
+                      <option id="ember267">
+                        Eddy Baldewijns
+                      </option>
+                      <option id="ember268">
+                        Wouter Beke
+                      </option>
+                      <option id="ember269">
+                        Edward Beysen
+                      </option>
+                      <option id="ember270">
+                        Gilbert Bossuyt
+                      </option>
+                      <option id="ember271">
+                        Geert Bourgeois
+                      </option>
+                      <option id="ember272">
+                        Paul Breyne
+                      </option>
+                      <option id="ember273">
+                        Jacky Buchmann
+                      </option>
+                      <option id="ember274">
+                        Adelheid Byttebier
+                      </option>
+                      <option id="ember275">
+                        Patricia Ceysens
+                      </option>
+                      <option id="ember276">
+                        Daniël Coens
+                      </option>
+                      <option id="ember277">
+                        Norbert De Batselier
+                      </option>
+                      <option id="ember278">
+                        Roger De Wulf
+                      </option>
+                      <option id="ember279">
+                        Wivina Demeester-De Meyer
+                      </option>
+                      <option id="ember280">
+                        Paul Deprez
+                      </option>
+                      <option id="ember281">
+                        Leona Detiège
+                      </option>
+                      <option id="ember282">
+                        Patrick Dewael
+                      </option>
+                      <option id="ember283">
+                        Vera Dua
+                      </option>
+                      <option id="ember284">
+                        Jos Dupré
+                      </option>
+                      <option id="ember285">
+                        Jaak Gabriëls
+                      </option>
+                      <option id="ember286">
+                        Mark Galle
+                      </option>
+                      <option id="ember287">
+                        Sven Gatz
+                      </option>
+                      <option id="ember288">
+                        Gaston Geens
+                      </option>
+                      <option id="ember289">
+                        Brigitte Grouwels
+                      </option>
+                      <option id="ember290">
+                        Veerle Heeren
+                      </option>
+                      <option id="ember291">
+                        Liesbeth Homans
+                      </option>
+                      <option id="ember292">
+                        Theo Kelchtermans
+                      </option>
+                      <option id="ember293">
+                        Marino Keulen
+                      </option>
+                      <option id="ember294">
+                        Renaat Landuyt
+                      </option>
+                      <option id="ember295">
+                        Jan Lenssens
+                      </option>
+                      <option id="ember296">
+                        Yves Leterme
+                      </option>
+                      <option id="ember297">
+                        Ingrid Lieten
+                      </option>
+                      <option id="ember298">
+                        Luc Martens
+                      </option>
+                      <option id="ember299">
+                        Fientje Moerman
+                      </option>
+                      <option id="ember300">
+                        Philippe Muyters
+                      </option>
+                      <option id="ember301">
+                        Jean Pede
+                      </option>
+                      <option id="ember302">
+                        Leo Peeters
+                      </option>
+                      <option id="ember303">
+                        Kris Peeters
+                      </option>
+                      <option id="ember304">
+                        Karel Poma
+                      </option>
+                      <option id="ember305">
+                        Ludo Sannen
+                      </option>
+                      <option id="ember306">
+                        Johan Sauwens
+                      </option>
+                      <option id="ember307">
+                        Joke Schauvliege
+                      </option>
+                      <option id="ember308">
+                        Hugo Schiltz
+                      </option>
+                      <option id="ember309">
+                        Pascal Smet
+                      </option>
+                      <option id="ember310">
+                        Steve Stevaert
+                      </option>
+                      <option id="ember311">
+                        Rika Steyaert
+                      </option>
+                      <option id="ember312">
+                        Jef Tavernier
+                      </option>
+                      <option id="ember313">
+                        Bart Tommelein
+                      </option>
+                      <option id="ember314">
+                        Annemie Turtelboom
+                      </option>
+                      <option id="ember315">
+                        Anne Van Asbroeck
+                      </option>
+                      <option id="ember316">
+                        Kathleen Van Brempt
+                      </option>
+                      <option id="ember317">
+                        Freya Van den Bossche
+                      </option>
+                      <option id="ember318">
+                        Luc Van den Bossche
+                      </option>
+                      <option id="ember319">
+                        Luc Van den Brande
+                      </option>
+                      <option id="ember320">
+                        Koen Van den Heuvel
+                      </option>
+                      <option id="ember321">
+                        Paul Van Grembergen
+                      </option>
+                      <option id="ember322">
+                        Dirk Van Mechelen
+                      </option>
+                      <option id="ember323">
+                        Eric Van Rompuy
+                      </option>
+                      <option id="ember324">
+                        Steven Vanackere
+                      </option>
+                      <option id="ember325">
+                        Frank Vandenbroucke
+                      </option>
+                      <option id="ember326">
+                        Marleen Vanderpoorten
+                      </option>
+                      <option id="ember327">
+                        Jo Vandeurzen
+                      </option>
+                      <option id="ember328">
+                        Guy Vanhengel
+                      </option>
+                      <option id="ember329">
+                        Inge Vervotte
+                      </option>
+                      <option id="ember330">
+                        Mieke Vogels
+                      </option>
+                      <option id="ember331">
+                        Louis Waltniel
+                      </option>
+                      <option id="ember332">
+                        Hugo Weckx
+                      </option>
+                    </optgroup>
+                  </select>
+                </div>
+              </div>
+              <div class="au-c-card au-o-box au-o-box--small">
+                <Auk::CheckboxTree
+                  @label={{t "regulation-type"}}
+                  @items={{this.regulationTypes}}
+                  @selectedItems={{this.selectedRegulationTypes}}
+                  @didUpdate={{this.updateSelectedRegulationTypes}}
+                />
+              </div>
+              <div class="au-c-card au-o-box au-o-box--small">
+                <Auk::CheckboxTree
+                  @label={{t "status"}}
+                  @items={{this.publicationStatuses}}
+                  @selectedItems={{this.selectedPublicationStatuses}}
+                  @didUpdate={{this.updateSelectedPublicationStatuses}}
+                />
+              </div>
+              <div class="au-c-card au-o-box au-o-box--small">
+                <Auk::Checkbox
+                  @checked={{this.urgentOnly}}
+                  @label={{t "publication-urgent"}}
+                  @labelSkin="bold"
+                  {{on "input" this.toggleUrgentOnly}}
+                />
+              </div>
             </div>
-            <div class="auk-u-mb-2">
-              <Auk::CheckboxTree
-                @label={{t "status"}}
-                @items={{this.publicationStatuses}}
-                @selectedItems={{this.selectedPublicationStatuses}}
-                @didUpdate={{this.updateSelectedPublicationStatuses}}
-              />
-            </div>
-            <Auk::Checkbox
-              @checked={{this.urgentOnly}}
-              @label={{t "publication-urgent"}}
-              @labelSkin="bold"
-              {{on "input" this.toggleUrgentOnly}}
+          </div>
+        </div>
+       </m.sidebar>
+      <m.content @scroll={{true}}>
+        <div class="au-o-box au-o-box--small">
+          {{#if this.model.length}}
+            <DataTable
+              data-test-route-search-publication-data-table
+              @content={{await this.model}}
+              @page={{this.page}}
+              @noDataMessage={{t "no-results-found"}}
+              @size={{this.size}}
+              @sort={{this.sort}}
+              @class="auk-table auk-table--striped auk-table--vertical-align-top auk-table--noactions"
+              @isLoading={{this.isLoadingModel}}
+              @onClickRow={{this.navigateToPublicationFlow}}
+              as |table|
+            >
+              <table.content as |c|>
+                <c.header>
+                  <ThSortable
+                    @class="auk-table__col--1"
+                    @currentSorting={{this.sort}}
+                    @field="urgencyLevelId"
+                    @label={{t "publication-urgent"}}
+                  />
+                  <ThSortable
+                    @class="auk-table__col--1"
+                    @currentSorting={{this.sort}}
+                    @field="identificationKeyword"
+                    @label={{t "publication-number-small"}}
+                  />
+                  <th class="auk-table__col--7">{{t "short-title"}}</th>
+                  <th class="auk-table__col--1">
+                    {{t "publication-flow-numac-number"}}
+                  </th>
+                  <ThSortable
+                    @class="auk-table__col--1"
+                    @currentSorting={{this.sort}}
+                    @field="openingDate"
+                    @label={{t "date-received"}}
+                  />
+                  <ThSortable
+                    @class="auk-table__col--2"
+                    @currentSorting={{this.sort}}
+                    @field="statusId"
+                    @label={{t "status"}}
+                  />
+                  <th class="auk-table__col--1"></th>
+                </c.header>
+                <c.body class="auk-table--clickable-rows" as |row|>
+                  <td>
+                    {{#if row.urgent}}
+                      <Auk::Icon @skin="warning" @name="alert-triangle" />
+                    {{else}}
+                      {{t "dash"}}
+                    {{/if}}
+                  </td>
+                  <td data-test-route-search-publication-row-number>
+                    {{row.identification}}
+                  </td>
+                  <td>
+                    <p>
+                      {{#if row.shortTitle}}
+                        {{row.shortTitle}}
+                      {{else}}
+                        {{row.title}}
+                      {{/if}}
+                    </p>
+                  </td>
+                  <td>
+                    {{#if row.numacNumbers.length}}
+                      {{join ", " (sort row.numacNumbers)}}
+                    {{else}}
+                      {{t "dash"}}
+                    {{/if}}
+                  </td>
+                  <td>
+                    {{moment-format row.openingDate}}
+                  </td>
+                  <td>
+                    <Auk::StatusPill
+                      @step={{row.statusPillStep}}
+                      @status={{row.statusPillKey}}
+                    >
+                      {{row.status.label}}
+                    </Auk::StatusPill>
+                  </td>
+                  <td class="auk-u-text-align--right">
+                    <AuLink
+                      @skin="button-naked"
+                      @icon="chevron-right"
+                      @hideText={{true}}
+                      @route="publications.publication.index"
+                      @model={{row.id}}
+                    >
+                      {{t "open"}}
+                    </AuLink>
+                  </td>
+                </c.body>
+              </table.content>
+            </DataTable>
+          {{else}}
+            <Auk::EmptyState
+              @bordered={{true}}
+              @message={{t "no-results-found-modify-term"}}
             />
-          </div>
+          {{/if}}
         </div>
-        <div class="auk-o-grid-col-10">
-          <div>
-            {{#if this.model.length}}
-              <DataTable
-                data-test-route-search-publication-data-table
-                @content={{await this.model}}
-                @page={{this.page}}
-                @noDataMessage={{t "no-results-found"}}
-                @size={{this.size}}
-                @sort={{this.sort}}
-                @class="auk-table auk-table--striped auk-table--vertical-align-top auk-table--noactions"
-                @isLoading={{this.isLoadingModel}}
-                @onClickRow={{this.navigateToPublicationFlow}}
-                as |table|
-              >
-                <table.content as |c|>
-                  <c.header>
-                    <ThSortable
-                      @class="auk-table__col--1"
-                      @currentSorting={{this.sort}}
-                      @field="urgencyLevelId"
-                      @label={{t "publication-urgent"}}
-                    />
-                    <ThSortable
-                      @class="auk-table__col--1"
-                      @currentSorting={{this.sort}}
-                      @field="identificationKeyword"
-                      @label={{t "publication-number-small"}}
-                    />
-                    <th class="auk-table__col--7">{{t "short-title"}}</th>
-                    <th class="auk-table__col--1">
-                      {{t "publication-flow-numac-number"}}
-                    </th>
-                    <ThSortable
-                      @class="auk-table__col--1"
-                      @currentSorting={{this.sort}}
-                      @field="openingDate"
-                      @label={{t "date-received"}}
-                    />
-                    <ThSortable
-                      @class="auk-table__col--2"
-                      @currentSorting={{this.sort}}
-                      @field="statusId"
-                      @label={{t "status"}}
-                    />
-                    <th class="auk-table__col--1"></th>
-                  </c.header>
-                  <c.body class="auk-table--clickable-rows" as |row|>
-                    <td>
-                      {{#if row.urgent}}
-                        <Auk::Icon @skin="warning" @name="alert-triangle" />
-                      {{else}}
-                        {{t "dash"}}
-                      {{/if}}
-                    </td>
-                    <td data-test-route-search-publication-row-number>
-                      {{row.identification}}
-                    </td>
-                    <td>
-                      <p>
-                        {{#if row.shortTitle}}
-                          {{row.shortTitle}}
-                        {{else}}
-                          {{row.title}}
-                        {{/if}}
-                      </p>
-                    </td>
-                    <td>
-                      {{#if row.numacNumbers.length}}
-                        {{join ", " (sort row.numacNumbers)}}
-                      {{else}}
-                        {{t "dash"}}
-                      {{/if}}
-                    </td>
-                    <td>
-                      {{moment-format row.openingDate}}
-                    </td>
-                    <td>
-                      <Auk::StatusPill
-                        @step={{row.statusPillStep}}
-                        @status={{row.statusPillKey}}
-                      >
-                        {{row.status.label}}
-                      </Auk::StatusPill>
-                    </td>
-                    <td class="auk-u-text-align--right">
-                      <AuLink
-                        @skin="button-naked"
-                        @icon="chevron-right"
-                        @hideText={{true}}
-                        @route="publications.publication.index"
-                        @model={{row.id}}
-                      >
-                        {{t "open"}}
-                      </AuLink>
-                    </td>
-                  </c.body>
-                </table.content>
-              </DataTable>
-            {{else}}
-              <Auk::EmptyState
-                @bordered={{true}}
-                @message={{t "no-results-found-modify-term"}}
-              />
-            {{/if}}
-          </div>
-        </div>
-      </div>
-    </div>
+      </m.content>
+    </AuMainContainer>
   </div>
 </div>
