@@ -44,6 +44,7 @@ const selectors = {
   // agenda/documents/template
   agendaDocuments: {
     addDocuments: '[data-test-route-agenda-documents-add-documents]',
+    batchEdit: '[data-test-route-agenda-documents-batch-edit]',
   },
 
   // agenda/agendaitems/agendaitem/documents/template
