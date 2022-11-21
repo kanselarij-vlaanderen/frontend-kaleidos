@@ -1,50 +1,350 @@
 {{ page-title
   (t "cases")
 }}
-<div class="auk-o-grid auk-u-mb-2">
-  <div class="auk-o-grid-col-2">
-    <div class="auk-box">
-      <div class="auk-u-mb-2">
-        <Auk::Label for="sort-type">
-          {{t "sort-by"}}
-        </Auk::Label>
-        <select
-          name="sort-type"
-          id="sort-type"
-          class="auk-select auk-select--block"
-          {{on "input" this.selectSort}}
-        >
-          {{#each this.sortOptions as |sortType|}}
-            <option
-              value={{sortType.value}}
-              selected={{eq sortType.value this.sort}}>
-              {{sortType.label}}
-            </option>
-          {{/each}}
-        </select>
-      </div>
-      <div class="auk-u-mb-2">
-        <Auk::Label>{{t "type"}}</Auk::Label>
-        <Auk::Checkbox
-          @checked={{this.decisionsOnly}}
-          @label={{t "search-in-decisions-only"}}
-          data-test-route-search-cases-toggle-decisions={{true}}
-          {{on "input" this.toggleDecisionsOnly}}
-        />
-      </div>
-      <div>
-        <Auk::Label>{{t "archive"}}</Auk::Label>
-        <Auk::Checkbox
-          @checked={{this.includeArchived}}
-          @label={{t "search-include-archived"}}
-          {{on "input" this.toggleIncludeArchived}}
-        />
+<AuMainContainer as |m|>
+  <m.sidebar>
+    <div class="au-c-sidebar">
+      <div class="au-c-sidebar__content">
+        <div>
+          <AuHeading @level="3" @skin="6" class="au-u-hidden-visually">Inhoud</AuHeading>
+          <ul class="au-c-list-navigation">
+            <li class="au-c-list-navigation__item">
+              <AuNavigationLink
+                @route="search.cases"
+              >
+                Dossier
+              </AuNavigationLink>
+            </li>
+            <li class="au-c-list-navigation__item">
+              <AuNavigationLink
+                @route="search.agenda-items"
+              >
+                Agendapunt
+              </AuNavigationLink>
+            </li>
+          </ul>
+        </div>
+        <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny">
+          <div class="au-c-card au-o-box au-o-box--small">
+            <div class="auk-form-group auk-u-position-relative au-u-margin-bottom-small">
+              <Auk::Label>{{t "from"}}</Auk::Label>
+              <Auk::Datepicker
+                @date={{this.dateFromBuffer}}
+                @onChange={{set this "dateFromBuffer"}}
+                @enableClear={{this.dateFromBuffer}}
+                @onClear={{set this "dateFromBuffer" undefined}}
+              />
+            </div>
+            <div class="auk-form-group auk-u-position-relative">
+              <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
+              <Auk::Datepicker
+                @date={{this.dateToBuffer}}
+                @onChange={{set this "dateToBuffer"}}
+                @enableClear={{this.dateToBuffer}}
+                @onClear={{set this "dateToBuffer" undefined}}
+              />
+            </div>
+          </div>
+          <div class="au-c-card au-o-box au-o-box--small">
+            <div class="auk-form-group">
+              <Auk::Label for="ministerName">
+                Minister
+              </Auk::Label>
+              <select
+                name="login"
+                id="ministerName"
+                class="auk-select auk-select--block"
+                value={{this.mandateesBuffer}}
+              >
+                <option value="alleministers">Alle ministers</option>
+                <optgroup label="Huidige ministers">
+                  <option id="ember148">
+                    Jan Jambo
+                  </option>
+                  <option id="ember149">
+                    Hilde Crevit
+                  </option>
+                  <option id="ember150">
+                    Bart Somer
+                  </option>
+                  <option id="ember151">
+                    Ben Weyt
+                  </option>
+                  <option id="ember152">
+                    Zuhal Demi
+                  </option>
+                  <option id="ember153">
+                    Matthias Diependael
+                  </option>
+                  <option id="ember154">
+                    Lydia Peeter
+                  </option>
+                  <option id="ember155">
+                    Benjamin Dall
+                  </option>
+                  <option id="ember156">
+                    Jo Broun
+                  </option>
+                </optgroup>
+                <optgroup label="Huidige ministers">
+                  <option id="ember265">
+                    Paul Akkermans
+                  </option>
+                  <option id="ember266">
+                    Bert Anciaux
+                  </option>
+                  <option id="ember267">
+                    Eddy Baldewijns
+                  </option>
+                  <option id="ember268">
+                    Wouter Beke
+                  </option>
+                  <option id="ember269">
+                    Edward Beysen
+                  </option>
+                  <option id="ember270">
+                    Gilbert Bossuyt
+                  </option>
+                  <option id="ember271">
+                    Geert Bourgeois
+                  </option>
+                  <option id="ember272">
+                    Paul Breyne
+                  </option>
+                  <option id="ember273">
+                    Jacky Buchmann
+                  </option>
+                  <option id="ember274">
+                    Adelheid Byttebier
+                  </option>
+                  <option id="ember275">
+                    Patricia Ceysens
+                  </option>
+                  <option id="ember276">
+                    Daniël Coens
+                  </option>
+                  <option id="ember277">
+                    Norbert De Batselier
+                  </option>
+                  <option id="ember278">
+                    Roger De Wulf
+                  </option>
+                  <option id="ember279">
+                    Wivina Demeester-De Meyer
+                  </option>
+                  <option id="ember280">
+                    Paul Deprez
+                  </option>
+                  <option id="ember281">
+                    Leona Detiège
+                  </option>
+                  <option id="ember282">
+                    Patrick Dewael
+                  </option>
+                  <option id="ember283">
+                    Vera Dua
+                  </option>
+                  <option id="ember284">
+                    Jos Dupré
+                  </option>
+                  <option id="ember285">
+                    Jaak Gabriëls
+                  </option>
+                  <option id="ember286">
+                    Mark Galle
+                  </option>
+                  <option id="ember287">
+                    Sven Gatz
+                  </option>
+                  <option id="ember288">
+                    Gaston Geens
+                  </option>
+                  <option id="ember289">
+                    Brigitte Grouwels
+                  </option>
+                  <option id="ember290">
+                    Veerle Heeren
+                  </option>
+                  <option id="ember291">
+                    Liesbeth Homans
+                  </option>
+                  <option id="ember292">
+                    Theo Kelchtermans
+                  </option>
+                  <option id="ember293">
+                    Marino Keulen
+                  </option>
+                  <option id="ember294">
+                    Renaat Landuyt
+                  </option>
+                  <option id="ember295">
+                    Jan Lenssens
+                  </option>
+                  <option id="ember296">
+                    Yves Leterme
+                  </option>
+                  <option id="ember297">
+                    Ingrid Lieten
+                  </option>
+                  <option id="ember298">
+                    Luc Martens
+                  </option>
+                  <option id="ember299">
+                    Fientje Moerman
+                  </option>
+                  <option id="ember300">
+                    Philippe Muyters
+                  </option>
+                  <option id="ember301">
+                    Jean Pede
+                  </option>
+                  <option id="ember302">
+                    Leo Peeters
+                  </option>
+                  <option id="ember303">
+                    Kris Peeters
+                  </option>
+                  <option id="ember304">
+                    Karel Poma
+                  </option>
+                  <option id="ember305">
+                    Ludo Sannen
+                  </option>
+                  <option id="ember306">
+                    Johan Sauwens
+                  </option>
+                  <option id="ember307">
+                    Joke Schauvliege
+                  </option>
+                  <option id="ember308">
+                    Hugo Schiltz
+                  </option>
+                  <option id="ember309">
+                    Pascal Smet
+                  </option>
+                  <option id="ember310">
+                    Steve Stevaert
+                  </option>
+                  <option id="ember311">
+                    Rika Steyaert
+                  </option>
+                  <option id="ember312">
+                    Jef Tavernier
+                  </option>
+                  <option id="ember313">
+                    Bart Tommelein
+                  </option>
+                  <option id="ember314">
+                    Annemie Turtelboom
+                  </option>
+                  <option id="ember315">
+                    Anne Van Asbroeck
+                  </option>
+                  <option id="ember316">
+                    Kathleen Van Brempt
+                  </option>
+                  <option id="ember317">
+                    Freya Van den Bossche
+                  </option>
+                  <option id="ember318">
+                    Luc Van den Bossche
+                  </option>
+                  <option id="ember319">
+                    Luc Van den Brande
+                  </option>
+                  <option id="ember320">
+                    Koen Van den Heuvel
+                  </option>
+                  <option id="ember321">
+                    Paul Van Grembergen
+                  </option>
+                  <option id="ember322">
+                    Dirk Van Mechelen
+                  </option>
+                  <option id="ember323">
+                    Eric Van Rompuy
+                  </option>
+                  <option id="ember324">
+                    Steven Vanackere
+                  </option>
+                  <option id="ember325">
+                    Frank Vandenbroucke
+                  </option>
+                  <option id="ember326">
+                    Marleen Vanderpoorten
+                  </option>
+                  <option id="ember327">
+                    Jo Vandeurzen
+                  </option>
+                  <option id="ember328">
+                    Guy Vanhengel
+                  </option>
+                  <option id="ember329">
+                    Inge Vervotte
+                  </option>
+                  <option id="ember330">
+                    Mieke Vogels
+                  </option>
+                  <option id="ember331">
+                    Louis Waltniel
+                  </option>
+                  <option id="ember332">
+                    Hugo Weckx
+                  </option>
+                </optgroup>
+              </select>
+            </div>
+          </div>
+          <div class="au-c-card au-o-box au-o-box--small">
+            <Auk::Label>{{t "type"}}</Auk::Label>
+            <Auk::Checkbox
+              @checked={{this.decisionsOnly}}
+              @label={{t "search-in-decisions-only"}}
+              data-test-route-search-cases-toggle-decisions={{true}}
+              {{on "input" this.toggleDecisionsOnly}}
+            />
+          </div>
+          <div class="au-c-card au-o-box au-o-box--small">
+            <Auk::Label>{{t "archive"}}</Auk::Label>
+            <Auk::Checkbox
+              @checked={{this.includeArchived}}
+              @label={{t "search-include-archived"}}
+              {{on "input" this.toggleIncludeArchived}}
+            />
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="auk-o-grid-col-10">
-    <div>
+  </m.sidebar>
+  <m.content
+    @scroll={{true}}
+  >
+    <div class="au-o-box au-o-box--small">
       {{#if this.model.length}}
+        <div class="au-u-flex au-u-flex--no-wrap au-u-flex--spaced au-u-flex--between au-u-flex--vertical-center au-u-margin-bottom-small">
+          <p class="au-u-muted">
+            <strong class="au-u-medium">1-{{this.size}}</strong> resultaten voor <strong class="au-u-medium">"{{this.searchTextBuffer}}"</strong> in <strong>dossiers</strong>
+          </p>
+          <div>
+            <AuLabel for="sort-type" class="au-u-hidden-visually">
+              {{t "sort-by"}}
+            </AuLabel>
+            <select
+              name="sort-type"
+              id="sort-type"
+              class="auk-select auk-select--block"
+              {{on "input" this.selectSort}}
+            >
+              {{#each this.sortOptions as |sortType|}}
+                <option
+                  value={{sortType.value}}
+                  selected={{eq sortType.value this.sort}}>
+                  {{sortType.label}}
+                </option>
+              {{/each}}
+            </select>
+          </div>
+        </div>
         <DataTable
           data-test-route-search-cases-data-table={{true}}
           @content={{await this.model}}
@@ -52,13 +352,13 @@
           @noDataMessage={{t "no-results-found"}}
           @size={{this.size}}
           @sort={{this.sort}}
-          @class="auk-table auk-table--striped"
+          @class="auk-card-table"
           @isLoading={{this.isLoadingModel}}
           @onClickRow={{this.navigateToCase}}
         as |table|
         >
           <table.content as |c|>
-            <c.header>
+            {{!-- <c.header>
               <th class="auk-table__col--8">
                 {{t "case-name"}}
               </th>
@@ -75,33 +375,37 @@
                 @label={{t "on-agenda-of"}}
               />
               <th class="auk-table__col--1"></th>
-            </c.header>
+            </c.header> --}}
             <c.body class="auk-table--clickable-rows" as |row|>
               <td>
-                <p>
-                  {{#if row.shortTitle}}
-                    {{row.shortTitle}}
-                  {{else}}
-                    {{row.title}}
-                  {{/if}}
-                </p>
-              </td>
-              <td>
-                {{moment-format row.created "DD-MM-YYYY HH:mm"}}
-              </td>
-              <td>
-                {{moment-format row.sessionDates}}
-              </td>
-              <td class="auk-u-text-align--right">
-                <AuLink
-                  @skin="button-naked"
-                  @icon="chevron-right"
-                  @hideText={{true}}
-                  @route="cases.case.subcases"
-                  @model={{row.id}}
+                <AuCard
+                  @shadow={{true}}
+                  @size="small"
+                  as |card|
                 >
-                  {{t "open"}}
-                </AuLink>
+                  <card.header>
+                    <p class="au-u-para-small au-u-muted au-u-medium">
+                      {{t "on-agenda-of"}} {{moment-format row.sessionDates}}
+                    </p>
+                    <AuHeading @level="3" @skin="4">
+                      <AuLink
+                        class="au-u-padding-none"
+                        @route="cases.case.subcases"
+                        @model={{row.id}}>
+                        {{#if row.shortTitle}}
+                          {{row.shortTitle}}
+                        {{else}}
+                          {{row.title}}
+                        {{/if}}
+                      </AuLink>
+                    </AuHeading>
+                  </card.header>
+                  <card.content>
+                    <p class="au-u-para-small au-u-muted">
+                      {{t "created-on"}} {{moment-format row.created "DD-MM-YYYY HH:mm"}}
+                    </p>
+                  </card.content>
+                </AuCard>
               </td>
             </c.body>
           </table.content>
@@ -120,5 +424,5 @@
         {{/if}}
       {{/if}}
     </div>
-  </div>
-</div>
+  </m.content>
+</AuMainContainer>

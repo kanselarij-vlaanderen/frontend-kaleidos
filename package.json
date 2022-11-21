@@ -22,6 +22,7 @@
     "prestart": "npm-run-all lint:hbs lint:js",
     "build": "ember build --environment=production",
     "design": "ember serve --proxy=https://kaleidos-dev.vlaanderen.be",
+    "prototype": "ember serve --proxy=https://usertest.kanselarij.org",
     "design-all": "npm-run-all lint:hbs lint:js design",
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel 'lint:!(fix)'",
     "lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*:fix",
