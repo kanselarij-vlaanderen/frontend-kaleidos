@@ -3,10 +3,7 @@
   " "
   this.model.agenda.agendaName
   " van "
-  (moment-format
-    this.model.meeting.plannedStart
-    (if this.model.meeting.isPreKaleidos "DD-MM-YYYY" "DD-MM-YYYY HH:mm")
-  )
+  (if this.model.meeting.isPreKaleidos (date this.model.meeting.plannedStart) (datetime this.model.meeting.plannedStart))
 }}
 <Agenda::AgendaHeader
   @meeting={{this.model.meeting}}
