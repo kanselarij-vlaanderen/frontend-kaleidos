@@ -1,0 +1,71 @@
+{{page-title (t "search")}}
+<div class="au-c-search-container">
+  <Auk::Navbar>
+    <form {{on "submit" this.search}} class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-end auk-u-maximize-width auk-u-mb-4 auk-u-mt-4">
+      <div class="auk-form-group au-u-margin-bottom-none au-u-3-4">
+        <div class="auk-o-flex auk-o-flex--align-baseline">
+          <Auk::Label for="keyword" class="auk-u-mr">
+            {{capitalize (t "keyword")}}
+          </Auk::Label>
+          <Utils::SearchTooltip />
+        </div>
+        <AuInput
+          data-test-route-search-input
+          @width="block"
+          @value={{this.searchTextBuffer}}
+          id="keyword"
+          placeholder={{t "search-placeholder"}}
+        />
+      </div>
+      {{!-- <div class="auk-o-grid-col-2">
+        <div class="auk-form-group auk-u-position-relative" data-test-route-search-date-from>
+          <Auk::Label>{{t "from"}}</Auk::Label>
+          <Auk::Datepicker
+            @date={{this.dateFromBuffer}}
+            @onChange={{set this "dateFromBuffer"}}
+            @enableClear={{this.dateFromBuffer}}
+            @onClear={{set this "dateFromBuffer" undefined}}
+          />
+        </div>
+      </div>
+      <div class="auk-o-grid-col-2">
+        <div class="auk-form-group auk-u-position-relative" data-test-route-search-date-to>
+          <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
+          <Auk::Datepicker
+            @date={{this.dateToBuffer}}
+            @onChange={{set this "dateToBuffer"}}
+            @enableClear={{this.dateToBuffer}}
+            @onClear={{set this "dateToBuffer" undefined}}
+          />
+        </div>
+      </div>
+      <div class="auk-o-grid-col-2">
+        <div class="auk-form-group">
+          <Auk::Label for="ministerName">
+            {{t "minister"}}
+          </Auk::Label>
+          <AuInput
+            data-test-route-search-mandatee-input
+            @width="block"
+            @value={{this.mandateesBuffer}}
+            id="ministerName"
+          />
+        </div>
+      </div> --}}
+      <div class="auk-form-group au-u-margin-bottom-none au-u-1-4">
+        <AuButton
+          data-test-route-search-trigger
+          @skin="primary"
+          @icon="search"
+          @width="block"
+          type="submit"
+        >
+          {{t "search"}}
+        </AuButton>
+      </div>
+    </form>
+  </Auk::Navbar>
+  <div class="au-c-search-container__content au-u-background-gray-100">
+    {{outlet}}
+  </div>
+</div>

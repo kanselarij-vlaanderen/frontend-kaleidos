@@ -96,6 +96,16 @@ Router.map(function() {
     this.route('agenda-items', { path: '/agendapunten', });
   });
 
+  this.route('search-future', { path: '/zoeken-toekomst', }, function() {
+    this.route('all', { path: '/alle-types', });
+    this.route('agenda-items', { path: '/agendapunten', });
+    this.route('cases', { path: '/dossiers', });
+    this.route('documents', { path: '/documenten', });
+    this.route('decisions', { path: '/beslissingen', });
+    this.route('newsletter-infos', { path: '/kort-bestek', });
+    this.route('announcements', { path: '/mededelingen', });
+  });
+
   this.route('settings', { path: '/instellingen', }, function() {
     this.route('ministers');
     this.route('overview', { path: '/overzicht', });
